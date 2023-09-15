@@ -91,9 +91,9 @@
                             <div class="col-md-4">
                                 <!-- Pasar a livewire -->
                                 <label>Firma funcionario</label>
-                                <button class="btn btn-warning form-control">
+                                <button class="btn btn-warning form-control" wire:click="">
                                     <i class="fas fa-paper-plane"></i>
-                                    Pervisualizar y enviar para firma
+                                        Previsualizar y enviar para firma
                                     <i class="fas fa-signature"></i>
                                 </button>
                             </div>

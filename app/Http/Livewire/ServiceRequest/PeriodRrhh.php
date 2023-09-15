@@ -12,6 +12,25 @@ class PeriodRrhh extends Component
 {
     public Fulfillment $fulfillment;
 
+    protected $rules = [
+        'fulfillment.total_hours_paid' => 'required',
+        'fulfillment.total_to_pay' => 'required',
+        'fulfillment.illness_leave' => '',
+        'fulfillment.leave_of_absence' => '',
+        'fulfillment.assistance' => '',
+    ];
+
+    protected $messages = [
+        'fulfillment.total_hours_paid.required' => 'El campo es requerido.',
+        'fulfillment.total_to_pay.required' => 'El campo es requerido.',
+    ];
+
+    public function save(){
+        $this->validate();
+        $this->fulfillment->save();
+        session()->flash("period-rrhh", "Datos actualizados correctamente");
+    }
+
     public function confirmFulfillment(Fulfillment $fulfillment)
     {
         // dd(Auth::user()->can('Service Request: fulfillments rrhh'));

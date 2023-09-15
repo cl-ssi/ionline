@@ -25,5 +25,8 @@
     </div>
 
     @include('layouts.partials.errors')
-    @include('layouts.partials.flash_message')
+    @include('layouts.partials.flash_message_custom',[
+        'name' => 'personal-email-input',  // debe ser único
+        'type' => 'primary' // optional: 'primary' (default), 'danger', 'warning', 'success', 'info'
+    ])
 </div>

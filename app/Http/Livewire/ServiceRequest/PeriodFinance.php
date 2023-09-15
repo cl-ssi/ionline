@@ -12,6 +12,28 @@ class PeriodFinance extends Component
 {
     public Fulfillment $fulfillment;
 
+    protected $rules = [
+        'fulfillment.bill_number' => 'required',
+        'fulfillment.total_hours_paid' => 'required',
+        'fulfillment.total_paid' => 'required',
+        'fulfillment.payment_date' => 'required',
+        'fulfillment.contable_month' => 'required',
+    ];
+
+    protected $messages = [
+        'fulfillment.bill_number.required' => 'El campo es requerido.',
+        'fulfillment.total_hours_paid.required' => 'El campo es requerido.',
+        'fulfillment.total_paid.required' => 'El campo es requerido.',
+        'fulfillment.payment_date.required' => 'El campo es requerido.',
+        'fulfillment.contable_month.required' => 'El campo es requerido.',
+    ];
+
+    public function save(){
+        $this->validate();
+        $this->fulfillment->save();
+        session()->flash("period-finance", "Datos actualizados correctamente");
+    }
+
     public function confirmFulfillment(Fulfillment $fulfillment)
     {
         // dd(Auth::user()->can('Service Request: fulfillments rrhh'));
@@ -34,17 +56,17 @@ class PeriodFinance extends Component
 
         if (Auth::user()->can('Service Request: fulfillments rrhh')) {
           if ($fulfillment->responsable_approver_id == NULL) {
-            session()->flash("message", "No es posible aprobar, puesto que falta aprobación de Responsable.");
+            session()->flash("period-finance", "No es posible aprobar, puesto que falta aprobación de Responsable.");
             $this->fulfillment->refresh();
             return 0;
           }
           if ($fulfillment->total_hours_to_pay == NULL) {
-            session()->flash("message", 'No es posible aprobar, puesto que falta ingresar total de horas a pagar.');
+            session()->flash("period-finance", 'No es posible aprobar, puesto que falta ingresar total de horas a pagar.');
             $this->fulfillment->refresh();
             return 0;
           }
           if ($fulfillment->total_to_pay == NULL) {
-            session()->flash("message", 'No es posible aprobar, puesto que falta ingresar total a pagar.');
+            session()->flash("period-finance", 'No es posible aprobar, puesto que falta ingresar total a pagar.');
             $this->fulfillment->refresh();
             return 0;
           }
@@ -68,31 +90,31 @@ class PeriodFinance extends Component
 
         if (Auth::user()->can('Service Request: fulfillments finance')) {
           if ($fulfillment->rrhh_approver_id == NULL) {
-            session()->flash("message", 'No es posible aprobar, puesto que falta aprobación de RRHH');
+            session()->flash("period-finance", 'No es posible aprobar, puesto que falta aprobación de RRHH');
             $this->fulfillment->refresh();
             return 0;
           }
 
           if ($fulfillment->bill_number == NULL) {
-            session()->flash("message", 'No es posible aprobar, puesto que falta ingresar boleta.');
+            session()->flash("period-finance", 'No es posible aprobar, puesto que falta ingresar boleta.');
             $this->fulfillment->refresh();
             return 0;
           }
 
           if ($fulfillment->total_hours_paid == NULL) {
-            session()->flash("message", 'No es posible aprobar, puesto que falta ingresar horas totales a pagar.');
+            session()->flash("period-finance", 'No es posible aprobar, puesto que falta ingresar horas totales a pagar.');
             $this->fulfillment->refresh();
             return 0;
           }
 
           if ($fulfillment->total_paid == NULL) {
-            session()->flash("message", 'No es posible aprobar, puesto que falta ingresar total a pagar.');
+            session()->flash("period-finance", 'No es posible aprobar, puesto que falta ingresar total a pagar.');
             $this->fulfillment->refresh();
             return 0;
           }
 
           if ($fulfillment->payment_date == NULL) {
-            session()->flash("message", 'No es posible aprobar, puesto que falta ingresar fecha de pago.');
+            session()->flash("period-finance", 'No es posible aprobar, puesto que falta ingresar fecha de pago.');
             $this->fulfillment->refresh();
             return 0;
           }
@@ -113,7 +135,7 @@ class PeriodFinance extends Component
           }
         }
 
-        session()->flash("message", 'Se ha confirmado la información del período.');
+        session()->flash("period-finance", 'Se ha confirmado la información del período.');
         $this->fulfillment->refresh();
     }
 

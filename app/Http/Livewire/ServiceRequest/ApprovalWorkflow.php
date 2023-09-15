@@ -62,7 +62,7 @@ class ApprovalWorkflow extends Component
         $this->edit_signatureFlow->observation = $this->edit_observation;
         $this->edit_signatureFlow->save();
 
-        Session::flash('message', 'Se ha modificado el flujo de firmas.');
+        Session::flash('approval-workflow', 'Se ha modificado el flujo de firmas.');
 
         $this->showDiv = false;
         $this->serviceRequest->refresh();
@@ -74,7 +74,7 @@ class ApprovalWorkflow extends Component
         $signatureFlow = SignatureFlow::find($signatureFlowId);
 
         if($signatureFlow->responsable_id != Auth::user()->id){
-            Session::flash('warning', 'El usuario específicado para la visación no corresponde con el usuario logeado en el sistema.');
+            Session::flash('approval-workflow', 'El usuario específicado para la visación no corresponde con el usuario logeado en el sistema.');
             return;
         }
 
@@ -82,7 +82,7 @@ class ApprovalWorkflow extends Component
         $signatureFlow->observation = $this->observation;
         $signatureFlow->signature_date = now();
         $signatureFlow->save();
-        Session::flash('message', 'La firma se ha guardado correctamente.');
+        Session::flash('approval-workflow', 'La firma se ha guardado correctamente.');
 
         $this->serviceRequest->refresh();
         $this->render();

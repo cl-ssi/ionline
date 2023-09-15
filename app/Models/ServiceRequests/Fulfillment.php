@@ -680,6 +680,7 @@ class Fulfillment extends Model implements Auditable
 
     protected $casts = [
         'start_date' => 'date:Y-m-d',
-        'end_date' => 'date:Y-m-d'
+        'end_date' => 'date:Y-m-d',
+        'payment_date' => 'date:Y-m-d',
     ];
 }

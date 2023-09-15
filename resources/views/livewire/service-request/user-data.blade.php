@@ -58,7 +58,10 @@
             </div>
 
             @include('layouts.partials.errors')
-            @include('layouts.partials.flash_message')
+            @include('layouts.partials.flash_message_custom',[
+                'name' => 'user-data',  // debe ser único
+                'type' => 'primary' // optional: 'primary' (default), 'danger', 'warning', 'success', 'info'
+            ])
         </div>
     </div>
 </div>

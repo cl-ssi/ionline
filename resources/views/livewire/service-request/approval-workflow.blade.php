@@ -113,7 +113,10 @@
     </table>
 
     @include('layouts.partials.errors')
-    @include('layouts.partials.flash_message')
+    @include('layouts.partials.flash_message_custom',[
+        'name' => 'approval-workflow',  // debe ser único
+        'type' => 'primary' // optional: 'primary' (default), 'danger', 'warning', 'success', 'info'
+    ])
 
     @if($showDiv)
         <table class="table table-sm table-bordered small">

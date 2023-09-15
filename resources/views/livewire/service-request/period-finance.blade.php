@@ -4,23 +4,27 @@
         <div class="form-row">
             <fieldset class="form-group col-6 col-md-2">
                 <label for="for_bill_number">N° Boleta</label>
-                <input type="text" class="form-control" name="bill_number" value="{{ $fulfillment->bill_number }}">
+                <input type="text" class="form-control" wire:model.defer="fulfillment.bill_number">
+                @error('fulfillment.bill_number') <span class="danger">{{ $message }}</span> @enderror
             </fieldset>
             <fieldset class="form-group col-6 col-md-2">
                 <label for="for_total_hours_paid">Tot. hrs a pagar</label>
-                <input type="text" class="form-control" name="total_hours_paid" value="{{ $fulfillment->total_hours_paid }}">
+                <input type="text" class="form-control" wire:model.defer="fulfillment.total_hours_paid">
+                @error('fulfillment.total_hours_paid') <span class="danger">{{ $message }}</span> @enderror
             </fieldset>
             <fieldset class="form-group col-6 col-md-2">
                 <label for="for_total_paid">Total a pagar</label>
-                <input type="text" class="form-control" name="total_paid" value="{{ $fulfillment->total_paid }}">
+                <input type="text" class="form-control" wire:model.defer="fulfillment.total_paid">
+                @error('fulfillment.total_paid') <span class="danger">{{ $message }}</span> @enderror
             </fieldset>
             <fieldset class="form-group col-6 col-md-2">
                 <label for="for_payment_date">Fecha pago*</label>
-                <input type="date" class="form-control" name="payment_date" required="required" value="{{ optional($fulfillment->payment_date)->format('Y-m-d') }}">
+                <input type="date" class="form-control" wire:model.defer="fulfillment.payment_date">
+                @error('fulfillment.payment_date') <span class="danger">{{ $message }}</span> @enderror
             </fieldset>
             <fieldset class="form-group col-6 col-md-3">
                 <label for="for_contable_month">Mes contable pago*</label>
-                <select name="contable_month" class="form-control" required="required">
+                <select class="form-control" wire:model.defer="fulfillment.contable_month">
                     <option value=""></option>
                     <option value="1" @selected($fulfillment->month == 1)>Enero</option>
                     <option value="2" @selected($fulfillment->month == 2)>Febrero</option>
@@ -36,6 +40,7 @@
                     <option value="12" @selected($fulfillment->month == 12)>Diciembre</option>
                 </select>
             </fieldset>
+            @error('fulfillment.contable_month') <span class="danger">{{ $message }}</span> @enderror
         </div>
         <!-- solo se pueden confirmar periodos mensuales, y horas médicas/turnos de reemplazo -->
         @if($fulfillment->serviceRequest->program_contract_type == "Mensual" || 
@@ -44,7 +49,7 @@
             )
             <div class="form-row">
                 <div class="col-3">
-                    <button class="btn btn-primary" type="submit" @disabled(!Auth::user()->can('Service Request: fulfillments finance') || $fulfillment->finances_approbation)>Guardar</button>
+                    <button class="btn btn-primary" wire:click="save()" @disabled(!Auth::user()->can('Service Request: fulfillments finance') || $fulfillment->finances_approbation)>Guardar</button>
                 </div>
                 <div class="col align-self-end">
                     @if($fulfillment->finances_approbation_date)
@@ -68,4 +73,8 @@
         <i>{!! $fulfillment->payment_rejection_detail !!}</i>
         @endif
     </div>
+    @include('layouts.partials.flash_message_custom',[
+        'name' => 'period-finance',  // debe ser único
+        'type' => 'primary' // optional: 'primary' (default), 'danger', 'warning', 'success', 'info'
+    ])
 </div>
