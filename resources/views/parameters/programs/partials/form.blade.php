@@ -168,9 +168,10 @@
 
 <br><br>
 
-<hr />
-<div style="height: 300px; overflow-y: scroll;">
-    @if ($program->audits())
-        @include('partials.audit', ['audits' => $program->audits()])
-    @endif
-</div>
+@if($program && $program->audits())
+    <hr />
+    <div style="height: 300px; overflow-y: scroll;">
+        @include('partials.audit', ['audits' => $program->audits()])    
+    </div>
+@endif
+
