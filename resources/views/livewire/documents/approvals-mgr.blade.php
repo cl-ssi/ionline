@@ -64,16 +64,42 @@
                     {{ $approval->reject_observation }}
                 </td>
                 <td>
-                    <a class="btn btn-sm btn-outline-danger" target="_blank" 
-                        href="{{ route($approval->document_route_name,json_decode($approval->document_route_params)) }}">
-                        <i class="fas fa-fw fa-file-pdf"></i>
-                    </a>
-                    <button
-                        class="btn btn-primary btn-sm"
-                        wire:click='show({{$approval}})'
-                    >
-                        <i class="fas fa-fw fa-eye"></i> <i class="fas fa-fw {{ $approval->approver_ou_id ? 'fa-chess-king' : 'fa-user' }}"></i>
-                    </button>
+                    @if($approval->digital_signature)
+
+                        @livewire('sign.sign-to-document', [
+                            'btn_title' => 'Aceptar',
+                            'btn_class' => 'btn btn-success',
+                            'btn_icon'  => 'fas fa-fw fa-thumbs-up',
+                    
+                            'view' => $approval->document_route_name,
+                            'viewData' => json_decode($approval->document_route_params),
+                    
+                            'signer' => auth()->user(),
+                            'position' => 'center',
+                            'startY' => 80,
+                    
+                            'folder' => '/ionline/dte/confirmation/',
+                            'filename' => 'confirmation.pdf',
+                    
+                            'callback' => 'finance.dtes.confirmation.store',
+                            'callbackParams' => [
+                                'folder' => '/ionline/dte/confirmation/',
+                            ]
+                        ])
+
+
+                    @else
+                        <a class="btn btn-sm btn-outline-danger" target="_blank" 
+                            href="{{ route($approval->document_route_name,json_decode($approval->document_route_params)) }}">
+                            <i class="fas fa-fw fa-file-pdf"></i>
+                        </a>
+                        <button
+                            class="btn btn-primary btn-sm"
+                            wire:click='show({{$approval}})'
+                        >
+                            <i class="fas fa-fw fa-eye"></i> <i class="fas fa-fw {{ $approval->approver_ou_id ? 'fa-chess-king' : 'fa-user' }}"></i>
+                        </button>
+                    @endif
                 </td>
             </tr>
             @endforeach
