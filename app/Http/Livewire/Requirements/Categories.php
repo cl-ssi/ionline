@@ -20,7 +20,7 @@ class Categories extends Component
     */
     public function mount()
     {
-        $this->categories = auth()->user()->organizationalUnit->categories;
+        $this->categories = auth()->user()->organizationalUnit->categories->sortBy('name');;
     }
 
     protected function rules()

@@ -7,20 +7,17 @@ use App\Models\Finance\Dte;
 
 class SigfeFolioCompromiso extends Component
 {
-    
-    public $nuevoFolioCompromiso = null; 
-    public $dteId;
+
+    public $nuevoFolioCompromiso = null;
+    public $dte;
     public $successMessage = '';
     public $editing = false;
 
     // Recibe el ID del DTE cuando se carga el componente
-    public function mount($dteId)
+    public function mount($dte)
     {
-        $this->dteId = $dteId;
-        $dte = Dte::find($this->dteId);
-        if ($dte) {
-            $this->nuevoFolioCompromiso = $dte->folio_compromiso_sigfe;
-        }
+        $this->dte = $dte;
+        $this->nuevoFolioCompromiso = $dte->folio_compromiso_sigfe;
     }
 
     public function render()
@@ -29,14 +26,11 @@ class SigfeFolioCompromiso extends Component
     }
 
     public function guardarFolioCompromiso()
-    {
-        // Aquí obtienes el Dte correspondiente y actualizas el campo
-        $dte = Dte::find($this->dteId);
-        if ($dte) {
-            $dte->folio_compromiso_sigfe = $this->nuevoFolioCompromiso;
-            $dte->save();
+    {        
+        if ($this->dte) {
+            $this->dte->folio_compromiso_sigfe = $this->nuevoFolioCompromiso;
+            $this->dte->save();
             $this->successMessage = 'Folio compromiso sigfe guardado exitosamente.';
-            
         }
     }
 
@@ -44,6 +38,4 @@ class SigfeFolioCompromiso extends Component
     {
         $this->editing = !$this->editing;
     }
-
-
 }

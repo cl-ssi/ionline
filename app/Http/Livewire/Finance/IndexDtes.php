@@ -158,7 +158,7 @@ class IndexDtes extends Component
     }
 
     /**
-    * Toggle Cenabaste
+    * Set establishment
     */
     public function setEstablishment()
     {

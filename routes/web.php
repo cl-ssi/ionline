@@ -52,9 +52,12 @@ use App\Http\Livewire\Inventory\CreateTransfer;
 use App\Http\Livewire\Inventory\CheckTransfer;
 use App\Http\Livewire\Inventory\AssignedProducts;
 use App\Http\Livewire\InventoryLabel\InventoryLabelIndex;
+use App\Http\Livewire\His\NewModification;
+use App\Http\Livewire\His\ModificationMgr;
 use App\Http\Livewire\Finance\UploadDtes;
 use App\Http\Livewire\Finance\IndexDtes;
 use App\Http\Livewire\Finance\DteConfirmation;
+use App\Http\Livewire\Documents\ApprovalsMgr;
 use App\Http\Controllers\Welfare\WelfareController;
 use App\Http\Controllers\Welfare\LoanController;
 use App\Http\Controllers\Welfare\AmipassController;
@@ -1263,6 +1266,8 @@ Route::prefix('documents')->as('documents.')->middleware(['auth', 'must.change.p
     Route::get('signatures/signModal/{pendingSignaturesFlowId}', [SignatureController::class, 'signModal'])->name('signatures.signModal');
     Route::get('signatures/massSignModal/{pendingSignaturesFlowIds}', [SignatureController::class, 'massSignModal'])->name('signatures.massSignModal');
     Route::get('/callback_firma/{message}/{modelId}/{signaturesFile?}', [SignatureController::class, 'callbackFirma'])->name('callbackFirma');
+
+    Route::get('/approvals/{approval?}', ApprovalsMgr::class)->name('approvals');
 });
 
 Route::resource('documents', DocumentController::class)->middleware(['auth', 'must.change.password']);
@@ -1295,6 +1300,7 @@ Route::prefix('requirements')->as('requirements.')->middleware(['auth', 'must.ch
     Route::post('/directorStore', [RequirementController::class, 'director_store'])->name('directorStore');
     Route::get('/{requirement}', [RequirementController::class, 'show'])->name('show');
     Route::delete('/{requirement}', [RequirementController::class, 'destroy'])->name('destroy');
+
 });
 
 Route::view('calendars', 'calendars.index')->name('calendars');
@@ -2422,6 +2428,12 @@ Route::prefix('v2/documents')->as('v2.documents.')->middleware('auth')->group(fu
         Route::get('/index', SignatureIndex::class)->name('index');
         Route::get('/signature/{signature}/user/{user}/filename/{filename}/update', [SignSignatureController::class, 'update'])->name('update');
     });
+});
+
+/** Rutas de solicitudes de Rayen */
+Route::prefix('his')->as('his.')->middleware('auth')->group(function () {
+    Route::get('/new-modification', NewModification::class)->name('new-modification');
+    Route::get('/modification-mgr', ModificationMgr::class)->name('modification-mgr');
 });
 
 

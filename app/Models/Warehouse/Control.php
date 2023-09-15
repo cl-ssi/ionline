@@ -58,6 +58,13 @@ class Control extends Model
         'visation_contract_manager_at',
         'visation_contract_manager_status',
         'visation_contract_manager_rejection_observation',
+
+        //Datos del jefe de bodega
+        'visation_warehouse_manager_user_id',
+        'visation_warehouse_manager_ou',
+        'visation_warehouse_manager_at',
+        'visation_warehouse_manager_status',
+        'visation_warehouse_manager_rejection_observation',
     ];
 
     protected $dates = [

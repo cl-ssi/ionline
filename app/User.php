@@ -784,6 +784,16 @@ class User extends Authenticatable implements Auditable
         return $users;
     }
 
+    /** Devuelve todas los modelos authoritys junto con la ou de la que es manager el usuario */
+    public function getAmIAuthorityFromOuAttribute() 
+    {
+        return Authority::with('organizationalUnit')
+            ->where('user_id',$this->id)
+            ->where('date',today())
+            ->where('type','manager')
+            ->get();
+    }
+
     /** Devuelve si soy subrogante de alguien, que no es un subrogancia
      * de autoridad, si no subrogancia de simple persona,
      * ej: C. Caronna con Pricilla

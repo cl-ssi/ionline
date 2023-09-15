@@ -498,19 +498,25 @@ class GenerateReception extends Component
 
         ]);
 
-        if ($control->require_contract_manager_visation == 1 and $this->request_form) {
-            $control->visation_contract_manager_user_id = $control->requestForm->contract_manager_id;
-            $control->visation_contract_manager_ou = $control->requestForm->contract_manager_ou_id;
-            $control->save();
 
-            // Notificación al Usuaro administrador de contrato
-            $user = User::findOrFail($control->visation_contract_manager_user_id);
+        // Realizar la prueba cuando vuelva MP        
+        // if ($control->require_contract_manager_visation == 1 and $this->request_form) {
+        //     $control->visation_contract_manager_user_id = $control->requestForm->contract_manager_id;
+        //     $control->visation_contract_manager_ou = $control->requestForm->contract_manager_ou_id;
+        //     $control->save();
 
-            $user->notify(new \App\Notifications\Warehouse\VisationContractManager);
+        //     // Notificación al Usuaro administrador de contrato
+        //     $user = User::findOrFail($control->visation_contract_manager_user_id);
+        //     $user->notify(new \App\Notifications\Warehouse\VisationContractManager);
+        // }
 
-
-            
-        }
+        // Proceso para notificar y guardar al jefe de bodega
+        // Probar cuando vuelva MP
+        
+        // $user_warehouse = auth()->user()->boss;
+        // $control->visation_warehouse_manager_user_id = $user_warehouse->id;
+        // $control->visation_warehouse_manager_ou = $user_warehouse->id;
+        // $user_warehouse->notify(new \App\Notifications\Warehouse\VisationContractManager);
 
         foreach ($this->po_items as $item) {
             if ($item['wre_product_id'] == null && $item['quantity'] > 0) {

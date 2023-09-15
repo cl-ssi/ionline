@@ -12,19 +12,16 @@ class SigfeArchivoCompromiso extends Component
 
     use WithFileUploads;
 
-    public $dteId;
+    public $dte;
     public $file;
     public $successMessage = '';
     public $folder = 'ionline/finances/sigfe/compromiso';
-    public $archivoCompromiso = null; 
+    public $archivoCompromiso = null;
 
-    public function mount($dteId)
+    public function mount($dte)
     {
-        $this->dteId = $dteId;
-        $dte = Dte::find($this->dteId);
-        if ($dte) {
-            $this->archivoCompromiso = $dte->archivo_compromiso_sigfe;
-        }
+        $this->dte = $dte;
+        $this->archivoCompromiso = $dte->archivo_compromiso_sigfe;
     }
 
     public function render()
@@ -37,15 +34,14 @@ class SigfeArchivoCompromiso extends Component
         $this->validate([
             'file' => 'required|mimes:pdf', // Change the allowed file types as needed
         ]);
-
-        $dte = Dte::find($this->dteId);
-        if ($dte && $this->file) {
-            $filename = $this->file->getClientOriginalName(); 
+        if ($this->dte && $this->file) {
+            $filename = $this->file->getClientOriginalName();
             $filePath = $this->file->storeAs($this->folder, $filename, 'gcs');
-            $dte->archivo_compromiso_sigfe = $filePath;
-            $dte->save();
+            $this->dte->archivo_compromiso_sigfe = $filePath;
+            $this->dte->save();
             $this->successMessage = 'Archivo Compromiso Sigfe subido exitosamente.';
         }
+        
     }
 
     public function downloadFile($filename)
@@ -56,10 +52,9 @@ class SigfeArchivoCompromiso extends Component
     public function deleteFile($filename)
     {
         Storage::disk('gcs')->delete($filename);
-        $dte = Dte::find($this->dteId);
-        if ($dte) {
-            $dte->archivo_compromiso_sigfe = null;
-            $dte->save();
+        if ($this->dte) {
+            $this->dte->archivo_compromiso_sigfe = null;
+            $this->dte->save();
             $this->successMessage = 'Archivo eliminado exitosamente.';
         }
     }

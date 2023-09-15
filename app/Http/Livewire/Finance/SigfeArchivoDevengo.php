@@ -12,20 +12,17 @@ class SigfeArchivoDevengo extends Component
 
     use WithFileUploads;
 
-    public $dteId;
+    public $dte;
     public $file;
     public $successMessage = '';
     public $folder = 'ionline/finances/sigfe/devengo';
-    public $archivoDevengo = null; 
+    public $archivoDevengo = null;
 
 
-    public function mount($dteId)
+    public function mount($dte)
     {
-        $this->dteId = $dteId;
-        $dte = Dte::find($this->dteId);
-        if ($dte) {
-            $this->archivoDevengo = $dte->archivo_devengo_sigfe;
-        }
+        $this->dte = $dte;
+        $this->archivoDevengo = $dte->archivo_devengo_sigfe;
     }
 
 
@@ -40,13 +37,12 @@ class SigfeArchivoDevengo extends Component
         $this->validate([
             'file' => 'required|mimes:pdf', // Change the allowed file types as needed
         ]);
-
-        $dte = Dte::find($this->dteId);
-        if ($dte && $this->file) {
-            $filename = $this->file->getClientOriginalName(); 
+        
+        if ($this->dte && $this->file) {
+            $filename = $this->file->getClientOriginalName();
             $filePath = $this->file->storeAs($this->folder, $filename, 'gcs');
-            $dte->archivo_devengo_sigfe = $filePath;
-            $dte->save();
+            $this->dte->archivo_devengo_sigfe = $filePath;
+            $this->dte->save();
             $this->successMessage = 'Archivo Devengo Sigfe subido exitosamente.';
         }
     }
@@ -59,11 +55,10 @@ class SigfeArchivoDevengo extends Component
     public function deleteFile($filename)
     {
         Storage::disk('gcs')->delete($filename);
-        $dte = Dte::find($this->dteId);
-        if ($dte) {
-            $dte->archivo_devengo_sigfe = null;
-            $dte->save();
+        if ($this->dte) {
+            $this->dte->archivo_devengo_sigfe = null;
+            $this->dte->save();
             $this->successMessage = 'Archivo eliminado exitosamente.';
-        }
+        }        
     }
 }
