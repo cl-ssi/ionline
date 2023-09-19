@@ -74,7 +74,7 @@
                             @if($enCopia[$key]==0)
                                 <select name="category{{$key}}" id="" class="form-control">
                                     <option value=""></option>
-                                    @foreach($user_key->organizationalUnit->categories as $category)
+                                    @foreach($user_key->organizationalUnit->categories->sortBy('name') as $category)
                                         <option value="{{$category->id}}">{{$category->name}}</option>
                                     @endforeach
                                 </select>

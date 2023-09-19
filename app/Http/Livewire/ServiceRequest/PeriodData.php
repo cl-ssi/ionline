@@ -19,19 +19,19 @@ class PeriodData extends Component
 
     public function save(){
         $this->fulfillment->save();
-        session()->flash("success", "Datos actualizados correctamente");
+        session()->flash("period-data", "Datos actualizados correctamente");
     }
 
     // public function delete(){
     //     dd(url()->current());
     //     // no se puede dejar un service request con cero periodos
     //     if($this->fulfillment->serviceRequest->fulfillments->count()==1){
-    //         session()->flash("warning", "No se puede eliminar el período. Como mínimo debe existir un período de la solicitud.");
+    //         session()->flash("period-data", "No se puede eliminar el período. Como mínimo debe existir un período de la solicitud.");
     //         return;
     //     }
 
     //     $this->fulfillment->delete();
-    //     session()->flash("success", "Se ha eliminado el período");
+    //     session()->flash("period-data", "Se ha eliminado el período");
     // }
 
     public function render()

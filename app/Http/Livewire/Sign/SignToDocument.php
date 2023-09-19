@@ -17,30 +17,29 @@ class SignToDocument extends Component
      * Ejemplo de uso:
      *
      *   @livewire('sign.sign-to-document', [
-     *       'btn_title' => 'Aceptar',
-     *       'btn_class' => 'btn btn-success',
-     *       'btn_icon'  => 'fas fa-fw fa-thumbs-up',
-     *
+     *       'signer' => auth()->user(),
+     * 
      *       'view' => 'dte.reception-certificate',
      *       'viewData' => [
      *           'dte' => $dte,
      *           'type' => ''
      *       ],
      * 
-     *       'fileLink' => 'https://www.scdigestologia.org/docs/patologies/es/anatomia_fisio_es.pdf',
+     *       'filename' => '/ionline/dte/confirmation/confirmation-'.$dte->id,
+     * 
+     *       'fileLink' => 'http://localhost/pdf/x.pdf',
      *
-     *       'signer' => auth()->user(),
      *       'position' => 'center',
      *       'startY' => 80,
-     *
-     *       'folder' => '/ionline/dte/confirmation/',
-     *       'filename' => 'confirmation-'.$dte->id,
+     * 
+     *       'btn_title' => 'Aceptar',
+     *       'btn_class' => 'btn btn-success',
+     *       'btn_icon'  => 'fas fa-fw fa-thumbs-up',
      *
      *       'callback' => 'finance.dtes.confirmation.store',
      *       'callbackParams' => [
      *           'dte' => $dte->id,
-     *           'folder' => '/ionline/dte/confirmation/',
-     *           'filename' => 'confirmation-'.$dte->id,
+     *           'filename' => '/ionline/dte/confirmation-'.$dte->id,
      *           'confirmation_observation' => $confirmation_observation,// Probar
      *       ]
      *   ])

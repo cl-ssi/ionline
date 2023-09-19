@@ -111,132 +111,52 @@
     	@foreach($serviceRequests->SortByDesc('id') as $serviceRequest)
     		<tr>
     			<td>{{ $serviceRequest->id }}</td>
-          <td>{{ $serviceRequest->resolution_number }}</td>
+                <td>{{ $serviceRequest->resolution_number }}</td>
     			<td>{{ $serviceRequest->type }}</td>
-          <td>{{ $serviceRequest->program_contract_type }}</td>
-          <td>{{ $serviceRequest->responsabilityCenter->name }}</td>
+                <td>{{ $serviceRequest->program_contract_type }}</td>
+                <td>{{ $serviceRequest->responsabilityCenter->name }}</td>
     			<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->request_date)->format('d-m-Y') }}</td>
     			<td nowrap>{{ $serviceRequest->employee->runNotFormat() }}</td>
-    			<td nowrap>{{ $serviceRequest->employee->getFullNameAttribute() }}</td>
+    			<td nowrap>{{ $serviceRequest->employee->shortName }}</td>
     			<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->start_date)->format('d-m-Y') }}</td>
     			<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->end_date)->format('d-m-Y') }}</td>
-    			<!-- <td>@if($serviceRequest->SignatureFlows->where('status','===',0)->count() > 0) Rechazada
-              @elseif($serviceRequest->SignatureFlows->whereNull('status')->count() > 0) Pendiente
-              @else Finalizada @endif</td> -->
     			<td nowrap class="text-center">
-          @if($serviceRequest->program_contract_type == "Mensual")
-    				<a href="{{ route('rrhh.service-request.fulfillment.edit',[$serviceRequest]) }}"
-    					class="btn btn-sm btn-outline-secondary">
-    					<span class="fas fa-edit" aria-hidden="true"></span>
-    				</a>
+                    <a href="{{ route('rrhh.service-request.fulfillment.edit',[$serviceRequest]) }}"
+                        class="btn btn-sm btn-outline-secondary">
+                        <span class="fas fa-edit" aria-hidden="true"></span>
+                    </a>
+                    @can('Service Request: fulfillments rrhh')
+                        <form method="POST" action="{{ route('rrhh.service-request.show.post') }}">
+                            @csrf
+                            <input type="hidden" class="form-control" name="id" value="{{$serviceRequest->id}}">
+                            <button type="submit" class="btn btn-sm btn-outline-success"
+                                    data-toggle="tooltip" data-placement="top" 
+                                    title="Nueva vista de cumplimientos disponible!"> 
+                                <span class="fas fa-edit" aria-hidden="true"></span>
+                            </button>
+                        </form>
+                    @endcan
+                </td>
 
-
-
-          @endif
-
-          @if($serviceRequest->program_contract_type == "Horas")
-              <!-- @if($serviceRequest->SignatureFlows->where('status','===',0)->count() > 0)
-                <a data-toggle="modal" class="btn btn-outline-secondary btn-sm" id="a_modal_flow_incomplete">
-                <i class="fas fa-file" style="color:#B9B9B9"></i></a>
-
-              @else
-
-                  class="btn btn-outline-secondary btn-sm" target="_blank">
-                <span class="fas fa-file" aria-hidden="true"></span></a>
-              @endif -->
-              <a href="{{ route('rrhh.service-request.fulfillment.edit',[$serviceRequest]) }}"
-      					class="btn btn-sm btn-outline-secondary">
-      					<span class="fas fa-edit" aria-hidden="true"></span>
-      				</a>
-          @endif
-
-    			</td>
-
-          <!-- mensual -->
-          @if($serviceRequest->program_contract_type == "Mensual")
-          <td nowrap class="text-center">
-            <!-- @if($serviceRequest->Fulfillments->count() > 0)
-              @if($serviceRequest->Fulfillments->whereNull('responsable_approver_id')->count() > 0)
-                <i class="fas fa-circle" style="color:yellow"></i>
-              @elseif($serviceRequest->Fulfillments->where('responsable_approbation',1)->count() > 0)
-                <i class="fas fa-circle" style="color:green"></i>
-              @elseif($serviceRequest->Fulfillments->where('responsable_approbation',0)->count() > 0)
-                <i class="fas fa-times" style="color:red"></i>
-              @endif
-            @else
-              <i class="far fa-circle" style="color:black"></i>
-            @endif -->
-            {{$serviceRequest->Fulfillments->whereNotNull('responsable_approver_id')->count()}} / {{$serviceRequest->Fulfillments->count()}}
-    			</td>
-
-          <td nowrap class="text-center">
-            <!-- @if($serviceRequest->Fulfillments->count() > 0)
-              @if($serviceRequest->Fulfillments->whereNull('rrhh_approver_id')->count() > 0)
-                <i class="fas fa-circle" style="color:yellow"></i>
-                @elseif($serviceRequest->Fulfillments->where('rrhh_approbation',1)->count() > 0)
-                  <i class="fas fa-circle" style="color:green"></i>
-                @elseif($serviceRequest->Fulfillments->where('rrhh_approbation',0)->count() > 0)
-                  <i class="fas fa-times" style="color:red"></i>
-              @endif
-            @else
-              <i class="far fa-circle" style="color:black"></i>
-            @endif -->
-            {{$serviceRequest->Fulfillments->whereNotNull('rrhh_approver_id')->count()}} / {{$serviceRequest->Fulfillments->count()}}
-    			</td>
-
-          <td nowrap class="text-center">
-            <!-- @if($serviceRequest->Fulfillments->count() > 0)
-              @if($serviceRequest->Fulfillments->whereNull('finances_approver_id')->count() > 0)
-                <i class="fas fa-circle" style="color:yellow"></i>
-                @elseif($serviceRequest->Fulfillments->where('finances_approbation',1)->count() > 0)
-                  <i class="fas fa-circle" style="color:green"></i>
-                @elseif($serviceRequest->Fulfillments->where('finances_approbation',0)->count() > 0)
-                  <i class="fas fa-times" style="color:red"></i>
-              @endif
-            @else
-              <i class="far fa-circle" style="color:black"></i>
-            @endif -->
-            {{$serviceRequest->Fulfillments->whereNotNull('finances_approver_id')->count()}} / {{$serviceRequest->Fulfillments->count()}}
-    			</td>
-          @endif
-
-          <!-- x horas -->
-          @if($serviceRequest->program_contract_type == "Horas")
-            <!-- <td nowrap class="text-center">
-              <i class="fas fa-circle" style="color:green"></i>
-            </td>
-
-            @if($serviceRequest->SignatureFlows->where('status','===',0)->count() > 0)
-              <td colspan="2" class="text-center"><i class="fas fa-times" style="color:red"></i></td>
-            @else
-              <td nowrap class="text-center">
-                @if($serviceRequest->SignatureFlows->where('ou_id',86)->count() > 0)
-                  @if($serviceRequest->SignatureFlows->where('ou_id',86)->first()->status == NULL)
-                    <i class="fas fa-circle" style="color:yellow"></i>
-                  @elseif($serviceRequest->SignatureFlows->where('ou_id',86)->first()->status == 1)
-                    <i class="fas fa-circle" style="color:green"></i>
-                  @elseif($serviceRequest->SignatureFlows->where('ou_id',86)->first()->status == 0)
-                    <i class="fas fa-times" style="color:red"></i>
-                  @endif
+                <!-- mensual -->
+                @if($serviceRequest->program_contract_type == "Mensual")
+                    <td nowrap class="text-center">
+                        {{$serviceRequest->Fulfillments->whereNotNull('responsable_approver_id')->count()}} / {{$serviceRequest->Fulfillments->count()}}
+                    </td>
+                    <td nowrap class="text-center">
+                        {{$serviceRequest->Fulfillments->whereNotNull('rrhh_approver_id')->count()}} / {{$serviceRequest->Fulfillments->count()}}
+                    </td>
+                    <td nowrap class="text-center">
+                        {{$serviceRequest->Fulfillments->whereNotNull('finances_approver_id')->count()}} / {{$serviceRequest->Fulfillments->count()}}
+                    </td>
                 @endif
-              </td>
 
-              <td nowrap class="text-center">
-                @if($serviceRequest->SignatureFlows->where('ou_id',111)->count() > 0)
-                  @if($serviceRequest->SignatureFlows->where('ou_id',111)->first()->status == NULL)
-                    <i class="fas fa-circle" style="color:yellow"></i>
-                  @elseif($serviceRequest->SignatureFlows->where('ou_id',111)->first()->status == 1)
-                    <i class="fas fa-circle" style="color:green"></i>
-                  @elseif($serviceRequest->SignatureFlows->where('ou_id',111)->first()->status == 0)
-                    <i class="fas fa-times" style="color:red"></i>
-                  @endif
+                <!-- x horas -->
+                @if($serviceRequest->program_contract_type == "Horas")
+                    <td nowrap class="text-center" colspan="3">
+                        {{$serviceRequest->SignatureFlows->whereNotNull('status')->count()}} / {{$serviceRequest->SignatureFlows->count()}}
+                    </td>
                 @endif
-              </td>
-            @endif -->
-            <td nowrap class="text-center" colspan="3">
-              {{$serviceRequest->SignatureFlows->whereNotNull('status')->count()}} / {{$serviceRequest->SignatureFlows->count()}}
-            </td>
-          @endif
     		</tr>
     	@endforeach
     	</tbody>

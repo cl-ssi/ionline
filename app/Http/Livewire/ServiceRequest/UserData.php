@@ -35,7 +35,7 @@ class UserData extends Component
 
     public function save() {
         $this->user->save();
-        session()->flash("success", "Datos actualizados correctamente");
+        session()->flash("user-data", "Datos actualizados correctamente");
     }
 
     /**
@@ -44,7 +44,7 @@ class UserData extends Component
     public function sendEmailVerification()
     {
         $this->user->sendEmailVerificationNotification();
-        session()->flash("info", "Solicitud de confirmación de email enviada");
+        session()->flash("user-data", "Solicitud de confirmación de email enviada");
     }
 
     public function render()

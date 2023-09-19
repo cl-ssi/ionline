@@ -19,7 +19,7 @@ class PersonalEmailInput extends Component
     public function sendEmailVerification()
     {
         $this->user->sendEmailVerificationNotification();
-        session()->flash("info", "Solicitud de confirmación de email enviada");
+        session()->flash("personal-email-input", "Solicitud de confirmación de email enviada");
     }
 
     public function render()
