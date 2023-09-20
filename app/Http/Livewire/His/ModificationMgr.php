@@ -30,6 +30,7 @@ class ModificationMgr extends Component
         'modrequest.subject' => 'required|min:4',
         'modrequest.body' => 'nullable',
         'modrequest.status' => 'nullable',
+        'modrequest.observation' => 'nullable',
     ];
 
     protected $messages = [
@@ -45,9 +46,6 @@ class ModificationMgr extends Component
         $this->param_types = explode(',',Parameter::get('his_modifications','tipos_de_solicitudes'));
         $this->param_ous = explode(',',Parameter::get('his_modifications','ids_unidades_vb'));
         $this->ous = OrganizationalUnit::whereIn('id', $this->param_ous)->get();
-        foreach($this->param_ous as $ous) {
-            $this->vb[$ous] = true;
-        }
     }
 
     public function index()
@@ -83,7 +81,10 @@ class ModificationMgr extends Component
     {
         $this->modrequest = ModificationRequest::firstOrNew([ 'id' => $modrequest->id]);
         $this->creator = $this->modrequest->creator->shortName;
-        $this->form = true;        
+        foreach($this->param_ous as $ous) {
+            $this->vb[$ous] = true;
+        }
+        $this->form = true;
         // app('debugbar')->log($this->modrequest);
     }
 
@@ -96,7 +97,14 @@ class ModificationMgr extends Component
 
     public function render()
     {
-        $modifications = ModificationRequest::latest()->paginate(25);
+        $modifications = ModificationRequest::with([
+                'creator',
+                'approvals',
+                'approvals.organizationalUnit',
+            ])
+            ->latest()
+            ->paginate(25);
+
         return view('livewire.his.modification-mgr', [
             'modifications' => $modifications,
         ]);

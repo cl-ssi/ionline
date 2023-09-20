@@ -42,4 +42,16 @@ class ModificationRequest extends Model
     {
         return $this->morphMany(Approval::class, 'approvable');
     }
+
+    /**
+    * Get Color With status
+    */
+    public function getColorAttribute()
+    {
+        switch($this->status) {
+            case '0': return 'danger'; break;
+            case '1': return 'success'; break;
+            default: return ''; break;
+        }
+    }
 }

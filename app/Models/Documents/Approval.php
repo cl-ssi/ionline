@@ -202,6 +202,18 @@ class Approval extends Model
         }
     }
 
+    /**
+    * Get Status Icon
+    */
+    public function getIconAttribute()
+    {
+        switch($this->status) {
+            case '0': return 'fa-thumbs-down'; break;
+            case '1': return 'fa-thumbs-up'; break;
+            default: return 'fa-clock'; break;
+        }
+    }
+
     protected static function boot()
     {
         parent::boot();
