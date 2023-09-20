@@ -141,7 +141,7 @@ class IndexDtes extends Component
         $this->filter['folio_oc'] = null;
         $this->filter['folio_sigfe'] = 'Sin Folio SIGFE';
         $this->filter['sender_status'] = 'Todas';
-        $this->filter['establishment'] = auth()->user()->organizationalUnit?->establishment_id;
+        $this->filter['establishment'] = auth()->user()->organizationalUnit->establishment_id;
 
         $establishments_ids = explode(',', env('APP_SS_ESTABLISHMENTS'));
 
