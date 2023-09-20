@@ -10,8 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\User;
 use App\Rrhh\OrganizationalUnit;
 use App\Notifications\Documents\NewApproval;
-use App\Models\His\ModificationRequest; // Solo para el test
-use App\Models\Documents\Approval;
+use App\Models\Finance\Dte; // Sólo para el ejemplo, no tiene uso
 
 class Approval extends Model
 {
@@ -24,8 +23,12 @@ class Approval extends Model
      * App\Models\Documents\Approval::ejemplo_de_uso();
      */
     public static function ejemplo_de_uso() {
-        $his = ModificationRequest::first();
-        $approval = $his->approvals()->create([
+        /** Se puede crear el approval sólo con Approval::create(['module' => 'xxx', ...]) */
+
+        /** o crear y asociar a un modelo a través de su relación, como el siguente ejemplo */
+        $dte = Dte::first();
+
+        $approval = $dte->approvals()->create([
             /* Nombre del Módulo que está enviando la solicitud de aprobación */
             "module" => "Estado de Pago",
 
