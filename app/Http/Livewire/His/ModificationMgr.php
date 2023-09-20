@@ -44,6 +44,10 @@ class ModificationMgr extends Component
     {
         $this->param_types = explode(',',Parameter::get('his_modifications','tipos_de_solicitudes'));
         $this->param_ous = explode(',',Parameter::get('his_modifications','ids_unidades_vb'));
+        $this->ous = OrganizationalUnit::whereIn('id', $this->param_ous)->get();
+        foreach($this->param_ous as $ous) {
+            $this->vb[$ous] = true;
+        }
     }
 
     public function index()
@@ -57,10 +61,9 @@ class ModificationMgr extends Component
     */
     public function setApprovals(ModificationRequest $modrequest)
     {
-        $array = [];
         foreach($this->vb as $ou_id => $status) {
             if($status) {
-                $approval = Approval::create([
+                $modrequest->approvals()->create([
                     "module" => "Ficha APS",
                     "module_icon" => "fas fa-notes-medical",
                     "subject" => "Solicitud de tipo " . $modrequest->type,
@@ -68,23 +71,19 @@ class ModificationMgr extends Component
                     "document_route_params" => json_encode(["1272565-444-AG23"]),
                     "approver_ou_id" => $ou_id,
                 ]);
-                $array[$ou_id] = $approval->id;
+
             }
         }
-        $modrequest->approvals = json_encode($array);
         $modrequest->save();
+
+        $this->index();
     }
 
     public function form(ModificationRequest $modrequest)
     {
         $this->modrequest = ModificationRequest::firstOrNew([ 'id' => $modrequest->id]);
         $this->creator = $this->modrequest->creator->shortName;
-        $this->form = true;
-        $this->vb = [];
-
-        $ous = $this->param_ous;
-        array_unshift($ous, $this->modrequest->creator->organizationalUnit->currentManager->organizational_unit_id);
-        $this->ous = OrganizationalUnit::whereIn('id', $ous)->get();
+        $this->form = true;        
         // app('debugbar')->log($this->modrequest);
     }
 
