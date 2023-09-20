@@ -67,27 +67,38 @@
 
         <div class="row">
 
-            <div class="col-9">
-
-                @foreach($ous as $ou)
-                <div class="custom-control custom-switch">
-                    <input type="checkbox" 
-                        class="custom-control-input" 
-                        id="for_switch_{{$ou->id}}" 
-                        wire:model.defer="vb.{{$ou->id}}"
-                        checked>
-                    <label class="custom-control-label" for="for_switch_{{$ou->id}}">
-                        {{ $ou->name }}
-                        ({{ $ou->currentManager?->user->shortName }})
-                    </label>
+            @if($modrequest->approvals->isEmpty()) 
+                <div class="col-9">
+                    @foreach($ous as $ou)
+                    <div class="custom-control custom-switch">
+                        <input type="checkbox" 
+                            class="custom-control-input" 
+                            id="for_switch_{{$ou->id}}" 
+                            wire:model="vb.{{$ou->id}}"
+                            >
+                        <label class="custom-control-label" for="for_switch_{{$ou->id}}">
+                            {{ $ou->name }}
+                            ({{ $ou->currentManager?->user->shortName }})
+                        </label>
+                    </div>
+                    @endforeach
                 </div>
-                @endforeach
+                <div class="col-3">
+                    <button type="button" class="btn btn-primary" wire:click="setApprovals({{$modrequest}})">
+                        <i class="fas fa-paper-plane"></i> Enviar para VB</button>
+                </div>
+            @else
+                <div class="col-12">
+                    @foreach($modrequest->approvals as $approval)
+                        <li>
+                            {{ $approval->organizationalUnit->name }}
+                            ({{ $approval->organizationalUnit->currentManager?->user->shortName }}) 
+                        </li>
+                    @endforeach
+                </div>
+            @endif
 
-            </div>
-            <div class="col-3">
-                <button type="button" class="btn btn-primary" wire:click="setApprovals({{$modrequest}})">
-                    <i class="fas fa-paper-plane"></i> Enviar para VB</button>
-            </div>
+
         </div>
 
         <div class="form-group mt-3">
@@ -114,7 +125,6 @@
             </div>
         </div>
 
-        {{ print_r($vb) }}
     @else
 
         <h3 class="mb-3">Listado de modificaciones</h3>

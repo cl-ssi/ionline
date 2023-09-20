@@ -83,6 +83,9 @@ class ApprovalsMgr extends Component
 
         $query = Approval::query();
 
+        /** Sólo mostrar los activos */
+        $query->whereActive(true);
+
         /** Filtrar los que son dirigidos a mi lista de ous o mi persona */
         $query->where(function ($query) use($ous) {
             $query->whereIn('approver_ou_id',$ous)
