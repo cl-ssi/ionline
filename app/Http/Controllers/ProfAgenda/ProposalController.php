@@ -181,7 +181,10 @@ class ProposalController extends Controller
                                     $newOpenHour->proposal_detail_id = $detail->id;
                                     $newOpenHour->start_date = $date->format('Y-m-d') . " " . $hour->format('H:i');
                                     $newOpenHour->end_date = Carbon::parse($date->format('Y-m-d') . " " . $hour->format('H:i'))->addMinutes($detail->duration)->format('Y-m-d H:i');
-                                    // dd($newOpenHour);
+                                    
+                                    $newOpenHour->profesional_id = $proposal->user_id;
+                                    $newOpenHour->profession_id = $proposal->profession_id; 
+                                    $newOpenHour->activity_type_id = $detail->activity_type_id;
                                     $newOpenHour->save();
                                     
                                     $count += 1;

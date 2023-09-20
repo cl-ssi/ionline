@@ -1826,7 +1826,7 @@ Route::prefix('prof_agenda')->as('prof_agenda.')->middleware(['auth'])->group(fu
         Route::get('/change_hour/{id}/{start_date}', [OpenHourController::class, 'change_hour'])->name('change_hour');
         Route::post('/block', [OpenHourController::class, 'block'])->name('block');
         Route::post('/unblock', [OpenHourController::class, 'unblock'])->name('unblock');
-        
+        Route::post('/saveBlock', [OpenHourController::class, 'saveBlock'])->name('saveBlock');
         // Route::delete('/{openHour}/delete_reservation', [OpenHourController::class, 'delete_reservation'])->name('delete_reservation');  
     });
 

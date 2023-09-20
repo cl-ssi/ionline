@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 
 use App\Models\ProfAgenda\OpenHour;
 use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 
 class OpenHourController extends Controller
 {
@@ -73,5 +74,29 @@ class OpenHourController extends Controller
         session()->flash('success', 'Se guardó la información.');
         return redirect()->back();
 
+    }
+
+    public function saveBlock(Request $request){
+        // dd($request);
+        $date = Carbon::parse($request->date);
+        $start_date = Carbon::parse($date->format('Y-m-d') . " " . $request->start_hour);
+        $end_date = Carbon::parse($date->format('Y-m-d') . " " . $request->end_hour);
+        // dd($start_date, $end_date);
+
+        // dd($request);
+        if($start_date <= $end_date){
+            foreach (CarbonPeriod::create($start_date, $request->duration . " minutes", $end_date)->excludeEndDate() as $key => $hour) {
+                $newOpenHour = new OpenHour();
+                $newOpenHour->start_date = $date->format('Y-m-d') . " " . $hour->format('H:i');
+                $newOpenHour->end_date = Carbon::parse($date->format('Y-m-d') . " " . $hour->format('H:i'))->addMinutes($request->duration)->format('Y-m-d H:i');
+                $newOpenHour->profesional_id = $request->profesional_id;
+                $newOpenHour->profession_id = $request->profession_id; 
+                $newOpenHour->activity_type_id = $request->activity_type_id;
+                $newOpenHour->save();
+            }
+        }
+        // dd("");
+        session()->flash('success', 'Se agregó el bloque.');
+        return redirect()->back();
     }
 }

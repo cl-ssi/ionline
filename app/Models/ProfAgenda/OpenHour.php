@@ -15,7 +15,8 @@ class OpenHour extends Model implements Auditable
 
     //
     protected $fillable = [
-        'id','proposal_detail_id','start_date','end_date','patient_id','contact_number','observation','blocked','deleted_bloqued_observation'
+        'id','proposal_detail_id','start_date','end_date','patient_id','contact_number','observation','blocked','deleted_bloqued_observation',
+        'profesional_id','profession_id','activity_type_id'
     ];
 
     protected $table = 'prof_agenda_open_hours';
@@ -29,5 +30,9 @@ class OpenHour extends Model implements Auditable
 
     public function patient(){
         return $this->belongsTo('App\User');
+    }
+
+    public function activityType(){
+        return $this->belongsTo('App\Models\ProfAgenda\ActivityType');
     }
 }
