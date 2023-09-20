@@ -6,6 +6,7 @@ use App\Http\Requests\Warehouse\Control\AddProductRequest;
 use App\Http\Requests\Warehouse\Control\GenerationReceptionRequest;
 use App\Models\Parameters\Program;
 use App\Models\ClCommune;
+use App\Models\Documents\Approval;
 use App\Models\Parameters\Supplier;
 use App\Models\RequestForms\ImmediatePurchase;
 use App\Models\RequestForms\PurchasingProcess;
@@ -22,6 +23,7 @@ use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Str;
 use Livewire\Component;
 use App\User;
+
 
 class GenerateReception extends Component
 {
@@ -517,6 +519,17 @@ class GenerateReception extends Component
         // $control->visation_warehouse_manager_user_id = $user_warehouse->id;
         // $control->visation_warehouse_manager_ou = $user_warehouse->id;
         // $user_warehouse->notify(new \App\Notifications\Warehouse\VisationContractManager);
+
+        
+        // Nueva versión Probar cuando llegue MP
+        // if ($control->require_contract_manager_visation == 1 and $this->request_form){
+        //     $approval_contract_manager = Approval::create([
+        //         "module" => "Modulo Bodega",
+        //         "module_icon" => "fas fa-rocket",
+        //         "subject" => "Nueva Solicitud de Visación de  Administrador de Contrato por parte de Bodega",                
+        //         "approver_id" => $control->requestForm->contract_manager_id, 
+        //     ]);
+        // }
 
         foreach ($this->po_items as $item) {
             if ($item['wre_product_id'] == null && $item['quantity'] > 0) {
