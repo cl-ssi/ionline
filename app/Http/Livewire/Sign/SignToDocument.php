@@ -11,27 +11,25 @@ use Livewire\Component;
 
 class SignToDocument extends Component
 {
-
-
     /**
      * Ejemplo de uso:
      *
      *   @livewire('sign.sign-to-document', [
      *       'signer' => auth()->user(),
-     * 
+     *
      *       'view' => 'dte.reception-certificate',
      *       'viewData' => [
-     *           'dte' => $dte,
-     *           'type' => ''
+     *           'param1' => 1,
+     *           'param2' => '2',
      *       ],
-     * 
+     *
      *       'filename' => '/ionline/dte/confirmation/confirmation-'.$dte->id,
-     * 
-     *       'fileLink' => 'http://localhost/pdf/x.pdf',
+     *
+     *       'fileLink' => 'http://localhost/pdf/filename.pdf',
      *
      *       'position' => 'center',
      *       'startY' => 80,
-     * 
+     *
      *       'btn_title' => 'Aceptar',
      *       'btn_class' => 'btn btn-success',
      *       'btn_icon'  => 'fas fa-fw fa-thumbs-up',
@@ -44,8 +42,6 @@ class SignToDocument extends Component
      *       ]
      *   ])
      */
-
-
 
     public $btn_title = 'Firmar';
     public $btn_class = 'btn btn-primary';
@@ -62,9 +58,9 @@ class SignToDocument extends Component
 
     public $pdfBase64;
 
-    public $position;
+    public $position = 'center';
     public $row = 1;
-    public $startY;
+    public $startY = 80;
 
     public $signer;
     public $folder;
@@ -193,8 +189,7 @@ class SignToDocument extends Component
         /**
          * Obtiene el archivo, la carpeta y el nombre del archivo
          */
-        $filename = $this->folder . $this->filename;
-        $file = $filename.".pdf";
+        $file = $this->filename.".pdf";
         $contentFile = base64_decode($json['files'][0]['content']);
 
         /**
