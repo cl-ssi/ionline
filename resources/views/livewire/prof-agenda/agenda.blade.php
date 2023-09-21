@@ -26,9 +26,12 @@
     </div>
 
     <!-- modal para registrar una nueva reserva -->
-    <div class="modal fade" id="newHour" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog">
+    <div class="modal fade bd-example-modal-lg" id="newHour" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
+    <!-- <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content"> -->
             <div class="modal-header">
                 <h5 class="modal-title modalTitle" id="">Modal title</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -54,7 +57,9 @@
                         </fieldset>
                     </div>
 
-                    <div class="row">
+                    @livewire('prof-agenda.employee-data')
+
+                    {{--<!-- <div class="row">
                         <fieldset class="form-group col-12 col-md-6">
                             <label for="for_users">Funcionario</label>
                             <div>
@@ -68,7 +73,9 @@
                             <input class="form-control" type="text" id="" name="contact_number" placeholder="+569">
                         </fieldset>
                         
-                    </div>
+                    </div> -->--}}
+
+                    
 
                     <div class="row">
                         <fieldset class="form-group col-12 col-md-12">

@@ -109,4 +109,15 @@
 
 @section('custom_js')
 
+<script src='{{asset("js/jquery.rut.chileno.js")}}'></script>
+<script type="text/javascript">
+	$(document).ready(function() {
+        //obtiene digito verificador
+        $('input[name=user_id]').keyup(function(e) {
+			var str = $("#for_user_id").val();
+			$('#for_dv').val($.rut.dv(str));
+		});
+    });
+</script>
+
 @endsection

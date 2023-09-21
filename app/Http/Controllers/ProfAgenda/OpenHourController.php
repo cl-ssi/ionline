@@ -8,13 +8,56 @@ use App\Http\Controllers\Controller;
 use App\Models\ProfAgenda\OpenHour;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
+use App\User;
 
 class OpenHourController extends Controller
 {
     public function store(Request $request){
+
+        // dd($request);
+
+        // si el usuario se encuentra eliminado, se vuelve a dejar activo
+        if(User::withTrashed()->find($request->user_id)){
+            if(User::withTrashed()->find($request->user_id)->trashed()){
+                User::withTrashed()->find($request->user_id)->restore();
+            }
+        }
+
+        //devuelve user o lo crea
+        if($request->new_user == 1){
+            $user = User::updateOrCreate(
+            ['id' => $request->user_id],
+            [
+                'dv' =>  $request->dv,
+                'name' =>  $request->name,
+                'fathers_family' =>  $request->fathers_family,
+                'mothers_family' =>  $request->mothers_family,
+                'commune_id' => $request->commune_id,
+                'address' =>  $request->address,
+                'phone_number' =>  $request->phone_number,
+                'email' =>  $request->email,
+                'organizational_unit_id' =>  $request->organizational_unit_id
+            ]
+            );
+        }else{
+            $user = User::updateOrCreate(
+            ['id' => $request->user_id],
+            [
+                'dv' =>  $request->dv,
+                'name' =>  $request->name,
+                'fathers_family' =>  $request->fathers_family,
+                'mothers_family' =>  $request->mothers_family,
+                'commune_id' => $request->commune_id,
+                'address' =>  $request->address,
+                'phone_number' =>  $request->phone_number,
+                'email' =>  $request->email
+            ]
+            );
+        }        
+
         $openHour = OpenHour::find($request->openHours_id);
-        $openHour->contact_number = $request->contact_number;
-        $openHour->patient_id = $request->patient_id;
+        $openHour->contact_number = $request->phone_number;
+        $openHour->patient_id = $user->id;
         $openHour->observation = $request->observation;
         $openHour->save();
         
