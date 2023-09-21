@@ -161,7 +161,6 @@ class ProposalController extends Controller
                             $duration = $detail->duration . ' minutes';
                             
                             foreach (CarbonPeriod::create($detail->start_hour, $duration, $detail->end_hour)->excludeEndDate() as $key => $hour) {
-                                // dd($hour);
         
                                 $block_dates[$date->format('Y-m-d') . " " . $hour->format('H:i')]['start_date'] = $date->format('Y-m-d') . " " . $hour->format('H:i');
                                 $block_dates[$date->format('Y-m-d') . " " . $hour->format('H:i')]['end_date'] = Carbon::parse($date->format('Y-m-d') . " " . $hour->format('H:i'))->addMinutes($detail->duration)->format('Y-m-d H:i');
@@ -173,10 +172,10 @@ class ProposalController extends Controller
                                                     ->where('end_date',Carbon::parse($date->format('Y-m-d') . " " . $hour->format('H:i'))->addMinutes($detail->duration)->format('Y-m-d H:i'))
                                                     ->get();
         
-                                // dd($openHour);
+
                                 if($openHour->count()==0){
                                     // bloques nuevos
-                                    $block_dates[$date->format('Y-m-d') . " " . $hour->format('H:i')]['color'] = '#85C1E9';
+                                    $block_dates[$date->format('Y-m-d') . " " . $hour->format('H:i')]['color'] = '#85C1E9'; //azul
                                     $newOpenHour = new OpenHour();
                                     $newOpenHour->proposal_detail_id = $detail->id;
                                     $newOpenHour->start_date = $date->format('Y-m-d') . " " . $hour->format('H:i');
@@ -193,7 +192,7 @@ class ProposalController extends Controller
                                     $proposal->save();
                                 }else{
                                     // bloques ya existentes
-                                    $block_dates[$date->format('Y-m-d') . " " . $hour->format('H:i')]['color'] = '#f5c6bf';
+                                    $block_dates[$date->format('Y-m-d') . " " . $hour->format('H:i')]['color'] = '#f5c6bf'; //rojo
                                 }
                             }
                         }
