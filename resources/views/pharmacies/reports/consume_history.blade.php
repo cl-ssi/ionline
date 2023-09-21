@@ -70,13 +70,13 @@
 
 @if ($request->get('year') <> 0)
 <button type="button" class="btn btn-sm btn-outline-primary mb-3"
-    onclick="tableToExcel('tabla_consumos', 'Bincard')">
+onclick="exportTableToExcel('tblData')">
     <i class="fas fa-download"></i>
 </button>
 @endif
 
 <div class="table-responsive">
-	<table class="table table-striped table-sm small" id="tabla_consumos">
+	<table class="table table-striped table-sm small" id="tblData">
 		<thead>
 			<tr>
 				<th scope="col">PRODUCTO</th>
@@ -120,17 +120,36 @@
 @endsection
 
 @section('custom_js')
-<!-- <script type="text/javascript">
-	var tableToExcel = (function() {
-	    var uri = 'data:application/vnd.ms-excel;base64,'
-	    , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8"></head><body><table>{table}</table></body></html>'
-	    , base64 = function(s) { return window.btoa(unescape(encodeURIComponent(s))) }
-	    , format = function(s, c) { return s.replace(/{(\w+)}/g, function(m, p) { return c[p]; }) }
-	    return function(table, name) {
-	    if (!table.nodeType) table = document.getElementById(table)
-	    var ctx = {worksheet: name || 'Worksheet', table: table.innerHTML}
-	    window.location.href = uri + base64(format(template, ctx))
-	    }
-	})()
-</script> -->
+<script type="text/javascript">
+	function exportTableToExcel(tableID, filename = ''){
+    var downloadLink;
+    var dataType = 'application/vnd.ms-excel';
+    var tableSelect = document.getElementById(tableID);
+    var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
+    
+    // Specify file name
+    filename = filename?filename+'.xls':'excel_data.xls';
+    
+    // Create download link element
+    downloadLink = document.createElement("a");
+    
+    document.body.appendChild(downloadLink);
+    
+    if(navigator.msSaveOrOpenBlob){
+        var blob = new Blob(['ufeff', tableHTML], {
+            type: dataType
+        });
+        navigator.msSaveOrOpenBlob( blob, filename);
+    }else{
+        // Create a link to the file
+        downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
+    
+        // Setting the file name
+        downloadLink.download = filename;
+        
+        //triggering the function
+        downloadLink.click();
+    }
+}
+</script>
 @endsection
