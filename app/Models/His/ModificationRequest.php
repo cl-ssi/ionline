@@ -2,9 +2,11 @@
 
 namespace App\Models\His;
 
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\User;
+use App\Models\Documents\Approval;
 
 class ModificationRequest extends Model
 {
@@ -31,5 +33,25 @@ class ModificationRequest extends Model
     public function creator()
     {
         return $this->belongsTo(User::class,'creator_id')->withTrashed();
+    }
+
+    /**
+     * Get all of the ModificationRequest's approvations.
+     */
+    public function approvals(): MorphMany
+    {
+        return $this->morphMany(Approval::class, 'approvable');
+    }
+
+    /**
+    * Get Color With status
+    */
+    public function getColorAttribute()
+    {
+        switch($this->status) {
+            case '0': return 'danger'; break;
+            case '1': return 'success'; break;
+            default: return ''; break;
+        }
     }
 }

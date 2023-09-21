@@ -30,6 +30,7 @@ class ModificationMgr extends Component
         'modrequest.subject' => 'required|min:4',
         'modrequest.body' => 'nullable',
         'modrequest.status' => 'nullable',
+        'modrequest.observation' => 'nullable',
     ];
 
     protected $messages = [
@@ -44,6 +45,7 @@ class ModificationMgr extends Component
     {
         $this->param_types = explode(',',Parameter::get('his_modifications','tipos_de_solicitudes'));
         $this->param_ous = explode(',',Parameter::get('his_modifications','ids_unidades_vb'));
+        $this->ous = OrganizationalUnit::whereIn('id', $this->param_ous)->get();
     }
 
     public function index()
@@ -57,34 +59,32 @@ class ModificationMgr extends Component
     */
     public function setApprovals(ModificationRequest $modrequest)
     {
-        $array = [];
         foreach($this->vb as $ou_id => $status) {
             if($status) {
-                $approval = Approval::create([
-                    "module" => "Ficha APS",
+                $modrequest->approvals()->create([
+                    "module" => "Modificaciones Ficha APS",
                     "module_icon" => "fas fa-notes-medical",
-                    "subject" => "Solicitud de tipo " . $modrequest->type,
-                    "document_route_name" => "finance.purchase-orders.showByCode",
-                    "document_route_params" => json_encode(["1272565-444-AG23"]),
+                    "subject" => $modrequest->subject,
+                    "document_route_name" => "his.modification-request.show",
+                    "document_route_params" => json_encode([$modrequest->id]),
                     "approver_ou_id" => $ou_id,
                 ]);
-                $array[$ou_id] = $approval->id;
+
             }
         }
-        $modrequest->approvals = json_encode($array);
         $modrequest->save();
+
+        $this->index();
     }
 
     public function form(ModificationRequest $modrequest)
     {
         $this->modrequest = ModificationRequest::firstOrNew([ 'id' => $modrequest->id]);
         $this->creator = $this->modrequest->creator->shortName;
+        foreach($this->param_ous as $ous) {
+            $this->vb[$ous] = true;
+        }
         $this->form = true;
-        $this->vb = [];
-
-        $ous = $this->param_ous;
-        array_unshift($ous, $this->modrequest->creator->organizationalUnit->currentManager->organizational_unit_id);
-        $this->ous = OrganizationalUnit::whereIn('id', $ous)->get();
         // app('debugbar')->log($this->modrequest);
     }
 
@@ -97,7 +97,14 @@ class ModificationMgr extends Component
 
     public function render()
     {
-        $modifications = ModificationRequest::latest()->paginate(25);
+        $modifications = ModificationRequest::with([
+                'creator',
+                'approvals',
+                'approvals.organizationalUnit',
+            ])
+            ->latest()
+            ->paginate(25);
+
         return view('livewire.his.modification-mgr', [
             'modifications' => $modifications,
         ]);

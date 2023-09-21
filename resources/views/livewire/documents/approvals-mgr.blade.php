@@ -25,6 +25,7 @@
         <thead>
             <tr>
                 <th width="35px"></th>
+                <th></th>
                 <th width="140px">Fecha Solicitud</th>
                 <th>Módulo</th>
                 <th>Asunto</th>
@@ -42,9 +43,11 @@
                             style="scale: 1.5;"
                             type="checkbox" 
                             id="ids.{{$approval->id}}" 
-                            wire:model.defer="ids.{{$approval->id}}">
+                            wire:model.defer="ids.{{$approval->id}}"
+                            @disabled(! is_null($approval->status) )>
                     </div>
                 </td>
+                <td class="small">{{ $approval->id }}</td>
                 <td class="small">
                     {{ $approval->created_at }}
                 </td>
@@ -67,11 +70,11 @@
                     @if($approval->digital_signature)
 
                         @livewire('sign.sign-to-document', [
-                            'btn_title' => 'Aceptar',
-                            'btn_class' => 'btn btn-success',
-                            'btn_icon'  => 'fas fa-fw fa-thumbs-up',
+                            'btn_title' => '',
+                            'btn_class' => 'btn btn-sm btn-success',
+                            'btn_icon'  => 'fa-fw fas fa-signature',
                     
-                            'view' => $approval->document_route_name,
+                            'fileLink' => 'http://localhost:8000/finance/purchase-orders/by-code/1272565-444-AG23',
                             'viewData' => json_decode($approval->document_route_params),
                     
                             'signer' => auth()->user(),
@@ -97,7 +100,8 @@
                             class="btn btn-primary btn-sm"
                             wire:click='show({{$approval}})'
                         >
-                            <i class="fas fa-fw fa-eye"></i> <i class="fas fa-fw {{ $approval->approver_ou_id ? 'fa-chess-king' : 'fa-user' }}"></i>
+                            <i class="fas fa-fw fa-eye"></i> 
+                            <i class="fas fa-fw {{ $approval->approver_ou_id ? 'fa-chess-king' : 'fa-user' }}"></i>
                         </button>
                     @endif
                 </td>

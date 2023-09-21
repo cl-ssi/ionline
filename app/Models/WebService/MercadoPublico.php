@@ -91,7 +91,12 @@ class MercadoPublico extends Model
             else
             {
                 $response = json_decode($response->body());
-                return $response->message;
+                if($response) {
+                    return $response->message;
+                }
+                else {
+                    return "No existe en nuestros registros y no se pudo conectar con MercadoPublico.";
+                }
             }
         }
         else {

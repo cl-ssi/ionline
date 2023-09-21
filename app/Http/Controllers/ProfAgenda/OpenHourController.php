@@ -7,13 +7,57 @@ use App\Http\Controllers\Controller;
 
 use App\Models\ProfAgenda\OpenHour;
 use Carbon\Carbon;
+use Carbon\CarbonPeriod;
+use App\User;
 
 class OpenHourController extends Controller
 {
     public function store(Request $request){
+
+        // dd($request);
+
+        // si el usuario se encuentra eliminado, se vuelve a dejar activo
+        if(User::withTrashed()->find($request->user_id)){
+            if(User::withTrashed()->find($request->user_id)->trashed()){
+                User::withTrashed()->find($request->user_id)->restore();
+            }
+        }
+
+        //devuelve user o lo crea
+        if($request->new_user == 1){
+            $user = User::updateOrCreate(
+            ['id' => $request->user_id],
+            [
+                'dv' =>  $request->dv,
+                'name' =>  $request->name,
+                'fathers_family' =>  $request->fathers_family,
+                'mothers_family' =>  $request->mothers_family,
+                'commune_id' => $request->commune_id,
+                'address' =>  $request->address,
+                'phone_number' =>  $request->phone_number,
+                'email' =>  $request->email,
+                'organizational_unit_id' =>  $request->organizational_unit_id
+            ]
+            );
+        }else{
+            $user = User::updateOrCreate(
+            ['id' => $request->user_id],
+            [
+                'dv' =>  $request->dv,
+                'name' =>  $request->name,
+                'fathers_family' =>  $request->fathers_family,
+                'mothers_family' =>  $request->mothers_family,
+                'commune_id' => $request->commune_id,
+                'address' =>  $request->address,
+                'phone_number' =>  $request->phone_number,
+                'email' =>  $request->email
+            ]
+            );
+        }        
+
         $openHour = OpenHour::find($request->openHours_id);
-        $openHour->contact_number = $request->contact_number;
-        $openHour->patient_id = $request->patient_id;
+        $openHour->contact_number = $request->phone_number;
+        $openHour->patient_id = $user->id;
         $openHour->observation = $request->observation;
         $openHour->save();
         
@@ -73,5 +117,29 @@ class OpenHourController extends Controller
         session()->flash('success', 'Se guardó la información.');
         return redirect()->back();
 
+    }
+
+    public function saveBlock(Request $request){
+        // dd($request);
+        $date = Carbon::parse($request->date);
+        $start_date = Carbon::parse($date->format('Y-m-d') . " " . $request->start_hour);
+        $end_date = Carbon::parse($date->format('Y-m-d') . " " . $request->end_hour);
+        // dd($start_date, $end_date);
+
+        // dd($request);
+        if($start_date <= $end_date){
+            foreach (CarbonPeriod::create($start_date, $request->duration . " minutes", $end_date)->excludeEndDate() as $key => $hour) {
+                $newOpenHour = new OpenHour();
+                $newOpenHour->start_date = $date->format('Y-m-d') . " " . $hour->format('H:i');
+                $newOpenHour->end_date = Carbon::parse($date->format('Y-m-d') . " " . $hour->format('H:i'))->addMinutes($request->duration)->format('Y-m-d H:i');
+                $newOpenHour->profesional_id = $request->profesional_id;
+                $newOpenHour->profession_id = $request->profession_id; 
+                $newOpenHour->activity_type_id = $request->activity_type_id;
+                $newOpenHour->save();
+            }
+        }
+        // dd("");
+        session()->flash('success', 'Se agregó el bloque.');
+        return redirect()->back();
     }
 }

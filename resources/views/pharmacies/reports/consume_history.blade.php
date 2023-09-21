@@ -15,9 +15,11 @@
     		<span class="input-group-text">Año</span>
     	</div>
     	<select name="year" class="form-control">
-    		<option value="{{Carbon\Carbon::now()->format('Y')-1}}">{{Carbon\Carbon::now()->format('Y')-1}}</option>
-    		<option value="{{Carbon\Carbon::now()->format('Y')}}" selected>{{Carbon\Carbon::now()->format('Y')}}</option>
-    		<option value="{{Carbon\Carbon::now()->format('Y')+1}}">{{Carbon\Carbon::now()->format('Y')+1}}</option>
+            <option value="{{Carbon\Carbon::now()->format('Y')-3}}" @selected($request->get('year')==Carbon\Carbon::now()->format('Y')-3)>{{Carbon\Carbon::now()->format('Y')-3}}</option>
+            <option value="{{Carbon\Carbon::now()->format('Y')-2}}" @selected($request->get('year')==Carbon\Carbon::now()->format('Y')-2)>{{Carbon\Carbon::now()->format('Y')-2}}</option>
+    		<option value="{{Carbon\Carbon::now()->format('Y')-1}}" @selected($request->get('year')==Carbon\Carbon::now()->format('Y')-1)>{{Carbon\Carbon::now()->format('Y')-1}}</option>
+    		<option value="{{Carbon\Carbon::now()->format('Y')}}" @selected($request->get('year')==Carbon\Carbon::now()->format('Y'))>{{Carbon\Carbon::now()->format('Y')}}</option>
+    		<option value="{{Carbon\Carbon::now()->format('Y')+1}}" @selected($request->get('year')==Carbon\Carbon::now()->format('Y')+1)>{{Carbon\Carbon::now()->format('Y')+1}}</option>
     	</select>
     </div>
     <div class="input-group mb-3">
@@ -30,6 +32,19 @@
         		<option value="{{$category->id}}" @if ($category->id == $request->get('category_id'))
         		selected
         		@endif >{{$category->name}}</option>
+    		@endforeach
+    	</select>
+    </div>
+    <div class="input-group mb-3">
+    	<div class="input-group-prepend">
+    		<span class="input-group-text">Programas</span>
+    	</div>
+    	<select name="program_id" class="form-control">
+    		<option value="0">Todos</option>
+    		@foreach ($programs as $key => $program)
+        		<option value="{{$program->id}}" @if ($program->id == $request->get('program_id'))
+        		selected
+        		@endif >{{$program->name}}</option>
     		@endforeach
     	</select>
     </div>
@@ -55,13 +70,13 @@
 
 @if ($request->get('year') <> 0)
 <button type="button" class="btn btn-sm btn-outline-primary mb-3"
-    onclick="tableToExcel('tabla_consumos', 'Bincard')">
+onclick="exportTableToExcel('tblData')">
     <i class="fas fa-download"></i>
 </button>
 @endif
 
 <div class="table-responsive">
-	<table class="table table-striped table-sm small" id="tabla_consumos">
+	<table class="table table-striped table-sm small" id="tblData">
 		<thead>
 			<tr>
 				<th scope="col">PRODUCTO</th>
@@ -105,17 +120,36 @@
 @endsection
 
 @section('custom_js')
-<!-- <script type="text/javascript">
-	var tableToExcel = (function() {
-	    var uri = 'data:application/vnd.ms-excel;base64,'
-	    , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8"></head><body><table>{table}</table></body></html>'
-	    , base64 = function(s) { return window.btoa(unescape(encodeURIComponent(s))) }
-	    , format = function(s, c) { return s.replace(/{(\w+)}/g, function(m, p) { return c[p]; }) }
-	    return function(table, name) {
-	    if (!table.nodeType) table = document.getElementById(table)
-	    var ctx = {worksheet: name || 'Worksheet', table: table.innerHTML}
-	    window.location.href = uri + base64(format(template, ctx))
-	    }
-	})()
-</script> -->
+<script type="text/javascript">
+	function exportTableToExcel(tableID, filename = ''){
+    var downloadLink;
+    var dataType = 'application/vnd.ms-excel';
+    var tableSelect = document.getElementById(tableID);
+    var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
+    
+    // Specify file name
+    filename = filename?filename+'.xls':'excel_data.xls';
+    
+    // Create download link element
+    downloadLink = document.createElement("a");
+    
+    document.body.appendChild(downloadLink);
+    
+    if(navigator.msSaveOrOpenBlob){
+        var blob = new Blob(['ufeff', tableHTML], {
+            type: dataType
+        });
+        navigator.msSaveOrOpenBlob( blob, filename);
+    }else{
+        // Create a link to the file
+        downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
+    
+        // Setting the file name
+        downloadLink.download = filename;
+        
+        //triggering the function
+        downloadLink.click();
+    }
+}
+</script>
 @endsection

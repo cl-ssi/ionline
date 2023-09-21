@@ -22,7 +22,7 @@ class PaymentController extends Controller
     }
 
     public function search(Request $request)
-    {        
+    {
         $id = $request->input('id');
         $folio = $request->input('folio');
         $oc = $request->input('oc');
@@ -113,23 +113,26 @@ class PaymentController extends Controller
         return redirect()->back()->with('success', 'Se ha enviado a bandeja Pendiente para Pagos exitosamente');
     }
 
-    public function ready()
+    public function ready(Request $request)
     {
-        $dtes = Dte::where('confirmation_status', 1)
+        $query = Dte::where('confirmation_status', 1)
             ->where('fin_status', 'Enviado a Pendiente Para Pago')
-            ->where('establishment_id', auth()->user()->organizationalUnit->establishment_id)
-            ->get();
-        return view('finance.payments.ready', compact('dtes'));
+            ->where('establishment_id', auth()->user()->organizationalUnit->establishment_id);
+            
+
+        $dtes = $query->paginate(100);
+        $request->flash();
+        return view('finance.payments.ready', compact('dtes', 'request'));
     }
 
 
     public function rejected()
     {
         $dtes = Dte::with([
-                'establishment',
-                'confirmationUser'
-            ])
-            ->where('confirmation_status',0)
+            'establishment',
+            'confirmationUser'
+        ])
+            ->where('confirmation_status', 0)
             ->where('establishment_id', auth()->user()->organizationalUnit->establishment_id)
             ->orderByDesc('fecha_recepcion_sii')
             ->paginate(100);

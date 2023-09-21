@@ -173,6 +173,7 @@ class RoleAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Job Position Profile: audit', 'description' => 'Permite acceder al registro de auditoría del módulo']);
         
         Permission::create(['name' => 'Payments', 'description' => 'Acceso al módulo Estados de Pago']);
+        Permission::create(['name' => 'Payments: viewer', 'description' => 'Permite acceso al módulo de Estados de pago, pero solamente puede ver y no modificar nada']);
 
         Permission::create(['name' => 'Summary: user', 'description' => 'Usuario del módulo de Sumarios']);
         Permission::create(['name' => 'Summary: admin', 'description' => 'Administrador del módulo de sumarios']);
@@ -182,6 +183,9 @@ class RoleAndPermissionSeeder extends Seeder
 
 
         Permission::create(['name' => 'Store: Cenabast', 'description' => 'Permiso para acceso a bodega de CENABAST donde se sube el Acta firmada de acuerdo a un DTE']);
+
+        Permission::create(['name' => 'HIS Modification Request: User', 'description' => 'Permite hacer solicitudes de modificación al HIS APS']);
+        Permission::create(['name' => 'HIS Modification Request: Manager', 'description' => 'Administrador de solicitudes de modificación del HIS APS (Referente SIDRA)']);
 
         // @role(
         //   'Replacement Staff: admin |

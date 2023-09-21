@@ -95,3 +95,22 @@ br {
     display: inline-block;
     font-size: 24.0pt;
 }
+
+.signature-container {
+    border: 3px solid #fff;
+}
+
+.signature {
+    float: left;
+    padding-right: 3px;
+}
+
+.danger {
+    color: #dc3545!important;
+}
+.success {
+    color: #198754!important;
+}
+.secondary {
+    color: #6c757d!important;
+}

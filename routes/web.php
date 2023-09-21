@@ -54,6 +54,8 @@ use App\Http\Livewire\Inventory\AssignedProducts;
 use App\Http\Livewire\InventoryLabel\InventoryLabelIndex;
 use App\Http\Livewire\His\NewModification;
 use App\Http\Livewire\His\ModificationMgr;
+use App\Http\Livewire\His\ModificationRequestIndex;
+use App\Http\Controllers\His\ModificationRequestController;
 use App\Http\Livewire\Finance\UploadDtes;
 use App\Http\Livewire\Finance\IndexDtes;
 use App\Http\Livewire\Finance\DteConfirmation;
@@ -1829,7 +1831,7 @@ Route::prefix('prof_agenda')->as('prof_agenda.')->middleware(['auth'])->group(fu
         Route::get('/change_hour/{id}/{start_date}', [OpenHourController::class, 'change_hour'])->name('change_hour');
         Route::post('/block', [OpenHourController::class, 'block'])->name('block');
         Route::post('/unblock', [OpenHourController::class, 'unblock'])->name('unblock');
-
+        Route::post('/saveBlock', [OpenHourController::class, 'saveBlock'])->name('saveBlock');
         // Route::delete('/{openHour}/delete_reservation', [OpenHourController::class, 'delete_reservation'])->name('delete_reservation');
     });
 
@@ -2435,8 +2437,13 @@ Route::prefix('v2/documents')->as('v2.documents.')->middleware('auth')->group(fu
 
 /** Rutas de solicitudes de Rayen */
 Route::prefix('his')->as('his.')->middleware('auth')->group(function () {
-    Route::get('/new-modification', NewModification::class)->name('new-modification');
-    Route::get('/modification-mgr', ModificationMgr::class)->name('modification-mgr');
+    Route::prefix('modification-request')->as('modification-request.')->group(function () {
+        Route::get('/', ModificationRequestIndex::class)->name('index');
+        Route::get('/new', NewModification::class)->name('new');
+        Route::get('/mgr', ModificationMgr::class)->name('mgr');
+        Route::get('/{modificationRequest}/show', ModificationRequestController::class)->name('show');
+        Route::view('/parameters', 'his.parameters')->name('parameters');
+    });
 });
 
 

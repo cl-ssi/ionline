@@ -1,6 +1,6 @@
 <head>
     <meta charset="utf-8">
-    <title>{{ $document->type->name }} - {{ $document->subject }}</title>
+    <title>{{ $title ?? 'iOnline' }}</title>
     <meta name="description" content="Documento">
     <meta name="author" content="Sistemas SSI <sistemas.ssi@redsalud.gob.cl>">
 

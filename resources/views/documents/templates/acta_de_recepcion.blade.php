@@ -1,6 +1,8 @@
 <html lang="es">
 
-@include('documents.templates.partials.head')
+@include('documents.templates.partials.head', [ 
+    'title' => $document->type->name . ' - ' . $document->subject,
+])
 
 <body>
     <!-- Define header and footer blocks before your content -->
@@ -11,7 +13,9 @@
         'logo_pluma' => true
     ])
 
-    @include('documents.templates.partials.footer')
+    @include('documents.templates.partials.footer', [
+        'establishment' => $document->establishment
+    ])
 
     <!-- Define main for content -->
     <main>

@@ -312,12 +312,14 @@ class ProductController extends Controller
 
         $matrix = Product::SearchConsumosHistoricos($request->get('year'),
                                                     $request->get('category_id'),
+                                                    $request->get('program_id'),
                                                     $request->get('establishment_id'));
 
         $categories = Category::orderBy('name','ASC')->get();
         $establishments = Establishment::where('pharmacy_id',session('pharmacy_id'))
                                      ->orderBy('name','ASC')->get();
-      return view('pharmacies.reports.consume_history', compact('request','establishments','categories','matrix'));
+        $programs = Program::orderBy('name','ASC')->get();
+      return view('pharmacies.reports.consume_history', compact('request','establishments','categories','matrix','programs'));
     }
 
     public function repProduct(Request $request){

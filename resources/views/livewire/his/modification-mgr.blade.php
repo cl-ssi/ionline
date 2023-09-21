@@ -1,18 +1,7 @@
 <div>
     @section('title', 'Solicitudes Rayen')
     
-    <ul class="nav nav-tabs mb-3">
-        <li class="nav-item">
-            <a class="nav-link {{ active('his.new-modification') }}" 
-                href="{{ route('his.new-modification') }}">
-                <i class="fas fa-plus"></i> Nueva solicitud</a>
-        </li>    
-        <li class="nav-item">
-            <a class="nav-link {{ active('his.modification-mgr') }}" 
-                href="{{ route('his.modification-mgr') }}">
-                <i class="fas fa-list"></i> Listado de solicitudes</a>
-        </li>
-    </ul>
+    @include('his.partials.nav')
 
     @if ($form)
         <h3>Editar Solicitud</h3>
@@ -67,27 +56,60 @@
 
         <div class="row">
 
-            <div class="col-9">
-
-                @foreach($ous as $ou)
-                <div class="custom-control custom-switch">
-                    <input type="checkbox" 
-                        class="custom-control-input" 
-                        id="for_switch_{{$ou->id}}" 
-                        wire:model.defer="vb.{{$ou->id}}"
-                        checked>
-                    <label class="custom-control-label" for="for_switch_{{$ou->id}}">
-                        {{ $ou->name }}
-                        ({{ $ou->currentManager?->user->shortName }})
-                    </label>
+            @if($modrequest->approvals->isEmpty()) 
+                <div class="col-9">
+                    @foreach($ous as $ou)
+                    <div class="custom-control custom-switch">
+                        <input type="checkbox" 
+                            class="custom-control-input" 
+                            id="for_switch_{{$ou->id}}" 
+                            wire:model.defer="vb.{{$ou->id}}"
+                            >
+                        <label class="custom-control-label" for="for_switch_{{$ou->id}}">
+                            {{ $ou->name }}
+                            ({{ $ou->currentManager?->user->shortName }})
+                        </label>
+                    </div>
+                    @endforeach
                 </div>
-                @endforeach
+                <div class="col-3">
+                    <button type="button" class="btn btn-primary" wire:click="setApprovals({{$modrequest}})">
+                        <i class="fas fa-paper-plane"></i> Enviar para VB</button>
+                </div>
+            @else
+                <div class="col-12">
+                    <table class="table table-sm table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Unidad Organizacional</th>
+                                <th>Autoridad</th>
+                                <th>Fecha</th>
+                                <th>Observación</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($modrequest->approvals as $approval)
+                            <tr class="table-{{ $approval->color }}">
+                                <td>
+                                    {{ $approval->organizationalUnit->name }}
+                                </td>
+                                <td>
+                                    {{ $approval->organizationalUnit->currentManager?->user->shortName }} 
+                                </td>
+                                <td>
+                                    {{ $approval->approver_at }}
+                                </td>
+                                <td>
+                                    {{ $approval->reject_observation }}
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            @endif
 
-            </div>
-            <div class="col-3">
-                <button type="button" class="btn btn-primary" wire:click="setApprovals({{$modrequest}})">
-                    <i class="fas fa-paper-plane"></i> Enviar para VB</button>
-            </div>
+
         </div>
 
         <div class="form-group mt-3">
@@ -98,10 +120,10 @@
 
         <div class="form-row mt-3">
             <div class="form-group col-3">
-                <label for="for_type">Estado de la wea</label>
+                <label for="for_type">Estado de la solicitud</label>
                 <select class="form-control" id="for_type" wire:model.defer="modrequest.status">
                     <option value="">Pendiente VBs</option>
-                    <option value="1">Ta lista la wea</option>
+                    <option value="1">Realizado</option>
                     <option value="0">Rechazada</option>
                 </select>
             </div>
@@ -114,7 +136,6 @@
             </div>
         </div>
 
-        {{ print_r($vb) }}
     @else
 
         <h3 class="mb-3">Listado de modificaciones</h3>
@@ -123,6 +144,7 @@
             <thead>
                 <tr>
                     <th>id</th>
+                    <th>VBs</th>
                     <th>Solicitante</th>
                     <th>Tipo</th>
                     <th>Asunto</th>
@@ -133,8 +155,14 @@
             </thead>
             <tbody>
                 @foreach($modifications as $modification)
-                <tr>
+                <tr class="table-{{ $modification->color }}">
                     <td>{{ $modification->id }}</td>
+                    <td>
+                        @foreach($modification->approvals as $approval)
+                            <i class="fa fa-fw fa-lg {{ $approval->icon }} text-{{ $approval->color }}" 
+                                title="{{ $approval->organizationalUnit->name }}"></i>
+                        @endforeach
+                    </td>
                     <td>{{ $modification->creator->shortName }}</td>
                     <td>{{ $modification->type }}</td>
                     <td>{{ $modification->subject }}</td>
@@ -148,11 +176,21 @@
                                 Rechazado
                             @break
                             @default
-                                Pendiente VBs
+                                
                             @break
                         @endswitch
-                        </td>
+
+                        @foreach($modification->approvals as $approval)
+                            @if($approval->reject_observation)
+                                <br><span class="smal text-danger">{{ $approval->reject_observation }} </span> 
+                            @endif
+                        @endforeach
+                    </td>
                     <td>
+                        <a class="btn btn-sm btn-outline-danger" target="_blank" 
+                            href="{{ route('his.modification-request.show', $modification->id) }}">
+                            <i class="fas fa-fw fa-file-pdf"></i>
+                        </a>
                         <button type="button" class="btn btn-sm btn-primary" 
                             wire:click="form({{$modification}})"><i class="fas fa-edit"></i></button>
                     </td>
@@ -162,29 +200,6 @@
         </table>
 
         {{ $modifications->links() }}
-        
-        
-        <h5>Pendientes:</h5>
-        <ol>
-            <li>Agregar campo observación en la BD</li>
-            <li>Crear modelo para arhivos, una solicitud puede tener n archivos</li>
-            <li>Habilitar la subida de archivos al crear la solicitud</li>
-            <li>En el mgr (manager) listar los archivos asociados a la solicitud</li>
-            <li>Crear las aprobaciones (Atorres)</li>
-        </ol>
-
-        @livewire('parameters.parameter.single-manager',[
-            'module'=>'his_modifications',
-            'parameterName' => 'tipos_de_solicitudes',
-            'type' => 'value'
-        ])
-
-        <label for="for-unidades">Ids de las unidades que vendrán después de la jefatura de la persona que hizo la solicitud</label>
-        @livewire('parameters.parameter.single-manager',[
-            'module'=>'his_modifications',
-            'parameterName' => 'ids_unidades_vb',
-            'type' => 'value'
-        ])
 
     @endif
 
