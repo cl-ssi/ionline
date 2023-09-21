@@ -7,6 +7,7 @@
         <div class="col-6">
             <h3 class="mb-3">Listado de dtes cargadas en sistema</h3>
         </div>
+        @cannot('Payments: viewer')
         <div class="col">
             <button class="btn btn-sm btn-success" type="button" wire:click="loadManualDTE">
                 <i class="fas fa-plus"></i> Cargar DTE individual</button>
@@ -15,6 +16,7 @@
             <a class="btn btn-sm btn-success" href="{{ route('finance.dtes.upload') }}">
                 <i class="fas fa-plus"></i> Cargar DTEs desde archivo</a>
         </div>
+        @endcannot
     </div>
 
 
@@ -97,6 +99,7 @@
                     <td class="text-center">
                         {{ $dte->id }}
                         <br>
+                        @cannot('Payments: viewer')
                         <div class="form-check">
                             <input class="form-check-input position-static" 
                                 style="scale: 1.5;"
@@ -104,6 +107,7 @@
                                 id="ids.{{$dte->id}}" 
                                 wire:model.defer="ids.{{$dte->id}}">
                         </div>
+                        @endcannot
                     </td>
                     <td>
                         {{ $dte->establishment?->alias }}
@@ -117,7 +121,11 @@
                                 wire:loading.attr="disabled"
                                 wire:loading.class="spinner-border"
                                 wire:target="toggleCenabast({{$dte->id}})"
-                                {{ $dte->cenabast ? 'checked' : '' }}>
+                                {{ $dte->cenabast ? 'checked' : '' }}
+                                @can('Payments: viewer')
+                                disabled
+                                @endcan
+                                >
                             <label class="custom-control-label" for="customSwitch{{$dte->id}}"></label>
                         </div>
                     </td>
@@ -228,9 +236,11 @@
                     </td>
 
                     <td class="small">
-                        <button class="btn btn-sm btn-primary" wire:click="show({{$dte->id}})">
-                            <i class="fas fa-edit"></i>
-                        </button>
+                        @cannot('Payments: viewer')
+                            <button class="btn btn-sm btn-primary" wire:click="show({{$dte->id}})">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                        @endcannot
                     </td>
 
                 </tr>
@@ -303,6 +313,7 @@
     </div>
 
     <div class="row">
+    @cannot('Payments: viewer')
         <div class="col">
             <div class="form-row">
                 <div class="col-3">
@@ -318,6 +329,8 @@
                 </button>
             </div>
         </div>
+    @endcannot
+
         <div class="col-3">
             <div class="mb-3">
                 <div class="d-flex align-items-center">

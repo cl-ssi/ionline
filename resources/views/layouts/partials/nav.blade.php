@@ -169,16 +169,18 @@
                                 </a>
                             @endcanany
 
-                            @can('Payments')
+                            @canany([
+                            'Payments', 'be god', 'Payments: viewer',
+                            ])
                             <a class="dropdown-item {{ active('finance.dtes.index') }}" href="{{ route('finance.dtes.index') }}">
                                 <i class="fas fa-fw fa-money-bill"></i> Estados de pago
                             </a>
-                            @endcan
+                            @endcanany
 
                             @can('Store')
                             <div class="dropdown-divider"></div>
                             <h6 class="dropdown-header">Bodegas</h6>
-                            @endcan                            
+                            @endcan
 
 
                             @canany([

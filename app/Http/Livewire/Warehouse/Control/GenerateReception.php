@@ -514,15 +514,16 @@ class GenerateReception extends Component
 
         // Proceso para notificar y guardar al jefe de bodega
         // Probar cuando vuelva MP
-        
+
         // $user_warehouse = auth()->user()->boss;
         // $control->visation_warehouse_manager_user_id = $user_warehouse->id;
         // $control->visation_warehouse_manager_ou = $user_warehouse->id;
         // $user_warehouse->notify(new \App\Notifications\Warehouse\VisationContractManager);
 
-        
+
         // Nueva versión Probar cuando llegue MP
         // if ($control->require_contract_manager_visation == 1 and $this->request_form){
+        // $this->chainApprovals($control->requestForm->contract_manager_id);
         //     $approval_contract_manager = Approval::create([
         //         "module" => "Modulo Bodega",
         //         "module_icon" => "fas fa-rocket",
@@ -530,6 +531,7 @@ class GenerateReception extends Component
         //         "approver_id" => $control->requestForm->contract_manager_id, 
         //     ]);
         // }
+
 
         foreach ($this->po_items as $item) {
             if ($item['wre_product_id'] == null && $item['quantity'] > 0) {
@@ -567,6 +569,45 @@ class GenerateReception extends Component
 
         session()->flash('success', 'El nuevo ingreso fue guardado exitosamente.');
     }
+
+    public function chainApprovals(Control $control, $contract_manager_visation_id = null)
+    {
+        $approval_contract_manager = null;
+        if ($contract_manager_visation_id) {
+            $approval_contract_manager = Approval::create([
+                "module" => "Modulo Bodega",
+                "module_icon" => "fas fa-rocket",
+                "subject" => "Nueva Solicitud de Visación de  Administrador de Contrato por parte de Bodega",
+                "approver_id" => $control->requestForm->contract_manager_id,
+            ]);
+        }
+
+        if ($approval_contract_manager) {
+            $approval_warehouse_manager = Approval::create([
+                "module" => "Modulo Bodega",
+                "module_icon" => "fas fa-rocket",
+                "subject" => "Nueva Solicitud de Visación de  Administrador de Contrato por parte de Bodega",
+                "approver_id" => auth()->user()->boss->id,
+                "active" => false,
+                "previous_approval_id" => $approval_contract_manager->id,
+            ]);
+        }
+        else{
+            $approval_warehouse_manager = Approval::create([
+                "module" => "Modulo Bodega",
+                "module_icon" => "fas fa-rocket",
+                "subject" => "Nueva Solicitud de Visación de  Administrador de Contrato por parte de Bodega",
+                "approver_id" => auth()->user()->boss->id,
+            ]);
+
+        }
+
+
+        // Chequeo de si existe aprobacion de administrador de contrato
+
+    }
+
+
 
     public function clearAll()
     {
