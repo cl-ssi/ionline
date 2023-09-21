@@ -334,14 +334,17 @@ class Product extends Model
         return strtotime($a["due_date"]) - strtotime($b["due_date"]);
     }
 
-    public function scopeSearchConsumosHistoricos($query, $year, $category_id, $establishment_id) {
-      //obtiene lista de productos
-      $products = Product::where('pharmacy_id',session('pharmacy_id'))
-                         ->when($category_id, function ($query, $category_id) {
-                              return $query->where('category_id', $category_id);
-                           })
-                           ->with('category')
-                           ->get();
+    public function scopeSearchConsumosHistoricos($query, $year, $category_id, $program_id, $establishment_id) {
+        //obtiene lista de productos
+        $products = Product::where('pharmacy_id',session('pharmacy_id'))
+                            ->when($category_id, function ($query, $category_id) {
+                                return $query->where('category_id', $category_id);
+                            })
+                            ->when($program_id, function ($query, $program_id) {
+                                return $query->where('program_id', $program_id);
+                            })
+                            ->with('category','program')
+                            ->get();
 
       //obtiene entregas
       $dispatchItems= DispatchItem::whereHas('dispatch', function ($query) use ($year, $establishment_id) {
@@ -355,6 +358,11 @@ class Product extends Model
                                                         return $query->where('category_id', $category_id);
                                                      });
                                     })
+                                    ->whereHas('product', function ($query) use ($program_id) {
+                                        $query->when($program_id, function ($query, $program_id) {
+                                                   return $query->where('program_id', $program_id);
+                                                });
+                               })
                                     ->with('dispatch','product')
                                     ->get();
       $matrix = null;

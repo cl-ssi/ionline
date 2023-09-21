@@ -15,9 +15,11 @@
     		<span class="input-group-text">Año</span>
     	</div>
     	<select name="year" class="form-control">
-    		<option value="{{Carbon\Carbon::now()->format('Y')-1}}">{{Carbon\Carbon::now()->format('Y')-1}}</option>
-    		<option value="{{Carbon\Carbon::now()->format('Y')}}" selected>{{Carbon\Carbon::now()->format('Y')}}</option>
-    		<option value="{{Carbon\Carbon::now()->format('Y')+1}}">{{Carbon\Carbon::now()->format('Y')+1}}</option>
+            <option value="{{Carbon\Carbon::now()->format('Y')-3}}" @selected($request->get('year')==Carbon\Carbon::now()->format('Y')-3)>{{Carbon\Carbon::now()->format('Y')-3}}</option>
+            <option value="{{Carbon\Carbon::now()->format('Y')-2}}" @selected($request->get('year')==Carbon\Carbon::now()->format('Y')-2)>{{Carbon\Carbon::now()->format('Y')-2}}</option>
+    		<option value="{{Carbon\Carbon::now()->format('Y')-1}}" @selected($request->get('year')==Carbon\Carbon::now()->format('Y')-1)>{{Carbon\Carbon::now()->format('Y')-1}}</option>
+    		<option value="{{Carbon\Carbon::now()->format('Y')}}" @selected($request->get('year')==Carbon\Carbon::now()->format('Y'))>{{Carbon\Carbon::now()->format('Y')}}</option>
+    		<option value="{{Carbon\Carbon::now()->format('Y')+1}}" @selected($request->get('year')==Carbon\Carbon::now()->format('Y')+1)>{{Carbon\Carbon::now()->format('Y')+1}}</option>
     	</select>
     </div>
     <div class="input-group mb-3">
@@ -30,6 +32,19 @@
         		<option value="{{$category->id}}" @if ($category->id == $request->get('category_id'))
         		selected
         		@endif >{{$category->name}}</option>
+    		@endforeach
+    	</select>
+    </div>
+    <div class="input-group mb-3">
+    	<div class="input-group-prepend">
+    		<span class="input-group-text">Programas</span>
+    	</div>
+    	<select name="program_id" class="form-control">
+    		<option value="0">Todos</option>
+    		@foreach ($programs as $key => $program)
+        		<option value="{{$program->id}}" @if ($program->id == $request->get('program_id'))
+        		selected
+        		@endif >{{$program->name}}</option>
     		@endforeach
     	</select>
     </div>
