@@ -48,7 +48,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach ($dtes as $dte)
+            @forelse ($dtes as $dte)
                 <tr>
                     <td width="120px" class="text-center">
                         @if(isset($dte->confirmation_signature_file) && !$dte->block_signature && !$dte->cenabast_signed_pharmacist && isset($dte->pharmacist) && $dte->pharmacist->id == auth()->id()
@@ -200,7 +200,15 @@
                         @endif
                     </td>
                 </tr>
-            @endforeach
+            @empty
+                <tr class="text-center">
+                    <td colspan="10">
+                        <em>
+                            No hay DTE que mostrar
+                        </em>
+                    </td>
+                </tr>
+            @endforelse
 
         </tbody>
     </table>

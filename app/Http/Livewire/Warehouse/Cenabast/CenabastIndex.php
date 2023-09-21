@@ -28,7 +28,7 @@ class CenabastIndex extends Component
     {
         $dtes = Dte::query()
             ->where('cenabast', 1)
-            ->where('establishment_id',auth()->user()->organizationalUnit->establishment->id);
+            ->where('establishment_id',auth()->user()->organizationalUnit->establishment->id)
             ->when($this->filter_by == 'without-attached', function($query) {
                 $query->whereNull('confirmation_signature_file');
             })
