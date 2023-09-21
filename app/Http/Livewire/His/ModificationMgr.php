@@ -62,9 +62,9 @@ class ModificationMgr extends Component
         foreach($this->vb as $ou_id => $status) {
             if($status) {
                 $modrequest->approvals()->create([
-                    "module" => "Ficha APS",
+                    "module" => "Modificaciones Ficha APS",
                     "module_icon" => "fas fa-notes-medical",
-                    "subject" => "Solicitud de tipo " . $modrequest->type,
+                    "subject" => $modrequest->subject,
                     "document_route_name" => "his.modification-request.show",
                     "document_route_params" => json_encode([$modrequest->id]),
                     "approver_ou_id" => $ou_id,

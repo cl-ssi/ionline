@@ -82,7 +82,7 @@
                 <li class="nav-item dropdown">
 
                     <a class="nav-link dropdown-toggle
-                    {{ active(['documents.*','documents.*','agreements.*','quality_aps.*','health_plan.*']) }}" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    {{ active(['documents.*','documents.*','agreements.*','quality_aps.*','health_plan.*','his.*']) }}" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fas fa-file-alt"></i> Docs
                     </a>
 
@@ -114,6 +114,13 @@
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item {{ active('agreements.tracking.*') }}" href="{{ route('agreements.tracking.index') }}">
                             <i class="fas fa-fw fa-file"></i> Convenios
+                        </a>
+                        @endcan
+
+                        @can('HIS Modification Request: User')
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item {{ active('his.modification-request.*') }}" href="{{ route('his.modification-request.index') }}">
+                            <i class="fas fa-fw fa-file-medical"></i> Solicitudes Ficha Clínica APS
                         </a>
                         @endcan
 
