@@ -250,6 +250,7 @@ use App\Http\Controllers\Agreements\AgreementController;
 use App\Http\Controllers\Agreements\AddendumController;
 use App\Http\Controllers\Agreements\AccountabilityDetailController;
 use App\Http\Controllers\Agreements\AccountabilityController;
+use App\Http\Livewire\Warehouse\Cenabast\CenabastIndex;
 
 
 /*
@@ -1732,10 +1733,12 @@ Route::prefix('warehouse')->as('warehouse.')->middleware(['auth', 'must.change.p
     });
 
     Route::prefix('cenabast')->as('cenabast.')->group(function () {
-        Route::get('index/{tray?}', [StoreController::class, 'indexCenabast'])->name('index');
+        Route::get('index/{tray?}', CenabastIndex::class)->name('index');
         Route::post('/save-file/{dte}', [StoreController::class, 'saveFile'])->name('saveFile');
         Route::get('/download-file/{dte}', [StoreController::class, 'downloadFile'])->name('downloadFile');
+        Route::get('/download-signed/{dte}/dte', [StoreController::class, 'downloadSigned'])->name('download.signed');
         Route::delete('/delete-file/{dte}', [StoreController::class, 'deleteFile'])->name('deleteFile');
+        Route::get('/callback/{dte}/dte', [StoreController::class, 'callback'])->name('callback');
     });
 
     Route::prefix('visation_contract_manager')->as('visation_contract_manager.')->group(function () {
@@ -1801,9 +1804,9 @@ Route::prefix('prof_agenda')->as('prof_agenda.')->middleware(['auth'])->group(fu
         Route::put('/update/{proposal}', [ProposalController::class, 'update'])->name('update');
         Route::get('/create', [ProposalController::class, 'create'])->name('create');
         Route::post('/store', [ProposalController::class, 'store'])->name('store');
-        Route::delete('/{proposal}/destroy', [ProposalController::class, 'destroy'])->name('destroy');  
+        Route::delete('/{proposal}/destroy', [ProposalController::class, 'destroy'])->name('destroy');
 
-        Route::get('/open_calendar', [ProposalController::class, 'open_calendar'])->name('open_calendar');  
+        Route::get('/open_calendar', [ProposalController::class, 'open_calendar'])->name('open_calendar');
     });
 
     Route::prefix('agenda')->as('agenda.')->middleware(['auth'])->group(function () {
@@ -1812,7 +1815,7 @@ Route::prefix('prof_agenda')->as('prof_agenda.')->middleware(['auth'])->group(fu
         // Route::put('/update/{proposal}', [ProposalController::class, 'update'])->name('update');
         // Route::get('/create', [ProposalController::class, 'create'])->name('create');
         // Route::post('/store', [ProposalController::class, 'store'])->name('store');
-        // Route::delete('/{proposal}/destroy', [ProposalController::class, 'destroy'])->name('destroy');  
+        // Route::delete('/{proposal}/destroy', [ProposalController::class, 'destroy'])->name('destroy');
     });
 
     Route::prefix('open_hour')->as('open_hour.')->middleware(['auth'])->group(function () {
@@ -1826,8 +1829,8 @@ Route::prefix('prof_agenda')->as('prof_agenda.')->middleware(['auth'])->group(fu
         Route::get('/change_hour/{id}/{start_date}', [OpenHourController::class, 'change_hour'])->name('change_hour');
         Route::post('/block', [OpenHourController::class, 'block'])->name('block');
         Route::post('/unblock', [OpenHourController::class, 'unblock'])->name('unblock');
-        
-        // Route::delete('/{openHour}/delete_reservation', [OpenHourController::class, 'delete_reservation'])->name('delete_reservation');  
+
+        // Route::delete('/{openHour}/delete_reservation', [OpenHourController::class, 'delete_reservation'])->name('delete_reservation');
     });
 
     Route::prefix('activity_types')->as('activity_types.')->middleware(['auth'])->group(function () {
@@ -1836,10 +1839,10 @@ Route::prefix('prof_agenda')->as('prof_agenda.')->middleware(['auth'])->group(fu
         Route::put('/update/{activityType}', [ActivityTypeController::class, 'update'])->name('update');
         Route::get('/create', [ActivityTypeController::class, 'create'])->name('create');
         Route::post('/store', [ActivityTypeController::class, 'store'])->name('store');
-        Route::delete('/{activityType}/destroy', [ActivityTypeController::class, 'destroy'])->name('destroy');    
+        Route::delete('/{activityType}/destroy', [ActivityTypeController::class, 'destroy'])->name('destroy');
     });
-    
-    
+
+
 });
 
 // Inventories
