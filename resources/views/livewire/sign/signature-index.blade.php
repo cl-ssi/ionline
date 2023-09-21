@@ -54,7 +54,9 @@
             tabindex="0"
             data-toggle="tooltip"
             title="Obligatorio en Cadena de Responsabilidad"
-        >AB</span>
+        >
+            AB
+        </span>
 
         <span
             class="img-thumbnail border-dark
@@ -66,7 +68,9 @@
             tabindex="0"
             data-toggle="tooltip"
             title="Obligatorio sin Cadena de Responsabilidad"
-        >BC</span>
+        >
+            BC
+        </span>
 
         <span
             class="img-thumbnail border-dark
@@ -78,7 +82,10 @@
             tabindex="0"
             data-toggle="tooltip"
             title="Opcional"
-        >CD</span>
+        >
+            CD
+        </span>
+
         -
         Leyenda colores:
         <span
@@ -91,7 +98,9 @@
             tabindex="0"
             data-toggle="tooltip"
             title="Pendiente por firmar"
-        >AA</span>
+        >
+            AA
+        </span>
 
         <span
             class="img-thumbnail border-dark
@@ -103,7 +112,9 @@
             tabindex="0"
             data-toggle="tooltip"
             title="Firmado"
-        >BB</span>
+        >
+            BB
+        </span>
 
         <span
             class="img-thumbnail border-dark
@@ -115,7 +126,10 @@
             tabindex="0"
             data-toggle="tooltip"
             title="Rechazado"
-        >CC</span>
+        >
+            CC
+        </span>
+        
         <div class="my-2"></div>
     </div>
 
