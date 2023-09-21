@@ -12,6 +12,11 @@
                 href="{{ route('his.modification-mgr') }}">
                 <i class="fas fa-list"></i> Listado de solicitudes</a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link {{ active('his.parameters') }}" 
+                href="{{ route('his.parameters') }}">
+                <i class="fas fa-cog"></i> Parametros</a>
+        </li>
     </ul>
 
     @if ($form)
@@ -89,12 +94,34 @@
                 </div>
             @else
                 <div class="col-12">
-                    @foreach($modrequest->approvals as $approval)
-                        <li>
-                            {{ $approval->organizationalUnit->name }}
-                            ({{ $approval->organizationalUnit->currentManager?->user->shortName }}) 
-                        </li>
-                    @endforeach
+                    <table class="table table-sm table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Unidad Organizacional</th>
+                                <th>Autoridad</th>
+                                <th>Fecha</th>
+                                <th>Observación</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($modrequest->approvals as $approval)
+                            <tr class="table-{{ $approval->color }}">
+                                <td>
+                                    {{ $approval->organizationalUnit->name }}
+                                </td>
+                                <td>
+                                    {{ $approval->organizationalUnit->currentManager?->user->shortName }} 
+                                </td>
+                                <td>
+                                    {{ $approval->approver_at }}
+                                </td>
+                                <td>
+                                    {{ $approval->reject_observation }}
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
             @endif
 
@@ -133,6 +160,7 @@
             <thead>
                 <tr>
                     <th>id</th>
+                    <th>VBs</th>
                     <th>Solicitante</th>
                     <th>Tipo</th>
                     <th>Asunto</th>
@@ -143,8 +171,14 @@
             </thead>
             <tbody>
                 @foreach($modifications as $modification)
-                <tr>
+                <tr class="table-{{ $modification->color }}">
                     <td>{{ $modification->id }}</td>
+                    <td>
+                        @foreach($modification->approvals as $approval)
+                            <i class="fa fa-fw fa-lg {{ $approval->icon }} text-{{ $approval->color }}" 
+                                title="{{ $approval->organizationalUnit->name }}"></i>
+                        @endforeach
+                    </td>
                     <td>{{ $modification->creator->shortName }}</td>
                     <td>{{ $modification->type }}</td>
                     <td>{{ $modification->subject }}</td>
@@ -158,10 +192,10 @@
                                 Rechazado
                             @break
                             @default
-                                Pendiente VBs
+                                
                             @break
                         @endswitch
-                        </td>
+                    </td>
                     <td>
                         <button type="button" class="btn btn-sm btn-primary" 
                             wire:click="form({{$modification}})"><i class="fas fa-edit"></i></button>
@@ -172,29 +206,6 @@
         </table>
 
         {{ $modifications->links() }}
-        
-        
-        <h5>Pendientes:</h5>
-        <ol>
-            <li>Agregar campo observación en la BD</li>
-            <li>Crear modelo para arhivos, una solicitud puede tener n archivos</li>
-            <li>Habilitar la subida de archivos al crear la solicitud</li>
-            <li>En el mgr (manager) listar los archivos asociados a la solicitud</li>
-            <li>Crear las aprobaciones (Atorres)</li>
-        </ol>
-
-        @livewire('parameters.parameter.single-manager',[
-            'module'=>'his_modifications',
-            'parameterName' => 'tipos_de_solicitudes',
-            'type' => 'value'
-        ])
-
-        <label for="for-unidades">Ids de las unidades que vendrán después de la jefatura de la persona que hizo la solicitud</label>
-        @livewire('parameters.parameter.single-manager',[
-            'module'=>'his_modifications',
-            'parameterName' => 'ids_unidades_vb',
-            'type' => 'value'
-        ])
 
     @endif
 

@@ -2434,6 +2434,7 @@ Route::prefix('v2/documents')->as('v2.documents.')->middleware('auth')->group(fu
 Route::prefix('his')->as('his.')->middleware('auth')->group(function () {
     Route::get('/new-modification', NewModification::class)->name('new-modification');
     Route::get('/modification-mgr', ModificationMgr::class)->name('modification-mgr');
+    Route::view('/parameters', 'his.parameters')->name('parameters');
 });
 
 
