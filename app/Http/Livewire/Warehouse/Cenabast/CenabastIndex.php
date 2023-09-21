@@ -188,8 +188,8 @@ class CenabastIndex extends Component
 
         }
 
-        // session()->flash('info', 'Los archivos están en proceso de firma, esto tomará unos segundos.');
-        // return redirect()->route('warehouse.cenabast.index');
+        session()->flash('info', 'Los archivos están en proceso de firma, esto tomará unos segundos.');
+        return redirect()->route('warehouse.cenabast.index');
     }
 
 
