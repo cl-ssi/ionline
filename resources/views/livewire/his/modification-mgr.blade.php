@@ -1,23 +1,7 @@
 <div>
     @section('title', 'Solicitudes Rayen')
     
-    <ul class="nav nav-tabs mb-3">
-        <li class="nav-item">
-            <a class="nav-link {{ active('his.new-modification') }}" 
-                href="{{ route('his.new-modification') }}">
-                <i class="fas fa-plus"></i> Nueva solicitud</a>
-        </li>    
-        <li class="nav-item">
-            <a class="nav-link {{ active('his.modification-mgr') }}" 
-                href="{{ route('his.modification-mgr') }}">
-                <i class="fas fa-list"></i> Listado de solicitudes</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link {{ active('his.parameters') }}" 
-                href="{{ route('his.parameters') }}">
-                <i class="fas fa-cog"></i> Parametros</a>
-        </li>
-    </ul>
+    @include('his.partials.nav')
 
     @if ($form)
         <h3>Editar Solicitud</h3>
@@ -79,7 +63,7 @@
                         <input type="checkbox" 
                             class="custom-control-input" 
                             id="for_switch_{{$ou->id}}" 
-                            wire:model="vb.{{$ou->id}}"
+                            wire:model.defer="vb.{{$ou->id}}"
                             >
                         <label class="custom-control-label" for="for_switch_{{$ou->id}}">
                             {{ $ou->name }}
@@ -136,10 +120,10 @@
 
         <div class="form-row mt-3">
             <div class="form-group col-3">
-                <label for="for_type">Estado de la wea</label>
+                <label for="for_type">Estado de la solicitud</label>
                 <select class="form-control" id="for_type" wire:model.defer="modrequest.status">
                     <option value="">Pendiente VBs</option>
-                    <option value="1">Ta lista la wea</option>
+                    <option value="1">Realizado</option>
                     <option value="0">Rechazada</option>
                 </select>
             </div>
@@ -195,8 +179,18 @@
                                 
                             @break
                         @endswitch
+
+                        @foreach($modification->approvals as $approval)
+                            @if($approval->reject_observation)
+                                <br><span class="smal text-danger">{{ $approval->reject_observation }} </span> 
+                            @endif
+                        @endforeach
                     </td>
                     <td>
+                        <a class="btn btn-sm btn-outline-danger" target="_blank" 
+                            href="{{ route('his.modification-request.show', $modification->id) }}">
+                            <i class="fas fa-fw fa-file-pdf"></i>
+                        </a>
                         <button type="button" class="btn btn-sm btn-primary" 
                             wire:click="form({{$modification}})"><i class="fas fa-edit"></i></button>
                     </td>

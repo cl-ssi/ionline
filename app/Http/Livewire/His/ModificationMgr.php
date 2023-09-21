@@ -65,8 +65,8 @@ class ModificationMgr extends Component
                     "module" => "Ficha APS",
                     "module_icon" => "fas fa-notes-medical",
                     "subject" => "Solicitud de tipo " . $modrequest->type,
-                    "document_route_name" => "finance.purchase-orders.showByCode",
-                    "document_route_params" => json_encode(["1272565-444-AG23"]),
+                    "document_route_name" => "his.modification-request.show",
+                    "document_route_params" => json_encode([$modrequest->id]),
                     "approver_ou_id" => $ou_id,
                 ]);
 

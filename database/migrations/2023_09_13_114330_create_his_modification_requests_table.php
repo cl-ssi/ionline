@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('type');
             $table->string('subject');
             $table->text('body')->nullable();
-            $table->foreignId('creator_id');
+            $table->foreignId('creator_id')->constrained('users');
             $table->string('approvals')->nullable();
             $table->boolean('status')->default(null)->nullable();
             $table->timestamps();

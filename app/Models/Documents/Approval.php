@@ -154,12 +154,21 @@ class Approval extends Model
         'approvable_type',
     ];
 
+    /**
+    * The attributes that should be cast.
+    *
+    * @var array
+    */
+    protected $casts = [
+        'approver_at' => 'datetime',
+    ];
+
     public function organizationalUnit()
     {
         return $this->belongsTo(OrganizationalUnit::class,'approver_ou_id')->withTrashed();
     }
 
-    public function aprover()
+    public function approver()
     {
         return $this->belongsTo(User::class,'approver_id')->withTrashed();
     }
@@ -199,6 +208,18 @@ class Approval extends Model
             case '0': return 'danger'; break;
             case '1': return 'success'; break;
             default: return ''; break;
+        }
+    }
+
+    /**
+    * Get Color With status
+    */
+    public function getStatusInWordsAttribute()
+    {
+        switch($this->status) {
+            case '0': return 'Rechazado'; break;
+            case '1': return 'Aprobado'; break;
+            default: return 'Pendiente'; break;
         }
     }
 
