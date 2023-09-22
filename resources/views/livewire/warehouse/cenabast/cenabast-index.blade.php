@@ -53,7 +53,7 @@
                 <th>Documento</th>
                 <th>Bod</th>
                 <th>Fecha Aceptación SII (días)</th>
-                <th>Establecimiento</th>
+                <th>Estab.</th>
                 <th>Cargar Acta</th>
                 <th class="text-center">Firma Farmaceutico</th>
                 <th class="text-center">Firma Jefe</th>
@@ -116,18 +116,26 @@
                         {{ $dte->fecha_recepcion_sii ?? '' }} <br>
                         ({{ $dte->fecha_recepcion_sii ? $dte->fecha_recepcion_sii->diffInDays(now()) : '' }} días)
                     </td>
-                    <td>{{ $dte->establishment->name ?? '' }}</td>
-                    <td>
+                    <td>{{ $dte->establishment->alias ?? '' }}</td>
+                    <td width="300">
                         @if(!isset($dte->confirmation_signature_file))
                             <form
                                 action="{{ route('warehouse.cenabast.saveFile', ['dte' => $dte->id]) }}"
                                 method="POST"
                                 enctype="multipart/form-data"
-                                class="form-control"
                             >
                                 @csrf
-                                <input type="file" name="acta_{{ $dte->id }}">
-                                <button class="btn btn-primary btn-sm">Guardar</button>
+                                <div class="input-group">
+                                    <div class="custom-file">
+                                        <input type="file" name="acta_{{ $dte->id }}" class="custom-file-input" id="for-file">
+                                        <label class="custom-file-label" for="customFileLangHTML" data-browse="Examinar"></label>
+                                    </div>
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary" type="button" id="inputGroupFileAddon04">
+                                            <i class="fas fa-upload"></i>
+                                        </button>
+                                    </div>
+                                </div>
                             </form>
                         @endif
                     </td>
@@ -231,5 +239,16 @@
     </table>
 
     {{ $dtes->links() }}
+
+    @section('custom_js')
+        <script>
+            $('#for-file').on('change',function(e){
+                //get the file name
+                var fileName = e.target.files[0].name;
+                //replace the "Choose a file" label
+                $(this).next('.custom-file-label').html(fileName);
+            })
+        </script>
+    @endsection
 
 </div>
