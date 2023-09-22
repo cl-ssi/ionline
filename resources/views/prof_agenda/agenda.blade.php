@@ -17,7 +17,7 @@
 <hr>
 
 <!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg">Agregar bloque de horario</button>
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addBlock">Agregar bloque de horario</button>
 
 {{--<!-- @livewire('prof-agenda.add-agenda-block',['profession_id' => $request->profession_id, 'profesional_id' => $request->user_id]) -->--}}
 
@@ -34,7 +34,7 @@
 <input type="hidden" name="profesional_id" value="{{$request->user_id}}">
 <input type="hidden" name="profession_id" value="{{$request->profession_id}}">
 
-<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+<div class="modal fade bd-example-modal-lg" tabindex="-1" id="addBlock" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
