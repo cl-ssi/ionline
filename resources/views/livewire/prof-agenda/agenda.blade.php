@@ -57,8 +57,6 @@
                         </fieldset>
                     </div>
 
-                    @livewire('prof-agenda.employee-data')
-
                     {{--<!-- <div class="row">
                         <fieldset class="form-group col-12 col-md-6">
                             <label for="for_users">Funcionario</label>
@@ -75,7 +73,7 @@
                         
                     </div> -->--}}
 
-                    
+                    @livewire('prof-agenda.employee-data')
 
                     <div class="row">
                         <fieldset class="form-group col-12 col-md-12">
