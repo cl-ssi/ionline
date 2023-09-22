@@ -1,15 +1,14 @@
 <div>
 
-    <div class="row">
-        <div class="col-md-9">
-            <h3>Dtes de Cenabast</h3>
-        </div>
-        <div class="col-md-3 text-right">
+    <h3 class="mb-3">Dtes de Cenabast</h3>
+
+    <div class="form-row">
+        <div class="col-md-4">
             <div class="input-group mb-3">
                 <div class="input-group-prepend">
                     <label class="input-group-text" for="inputGroupSelect01">Filtrar por</label>
                 </div>
-                <select wire:model="filter_by" id="filter-by" class="custom-select" required>
+                <select wire:model.defer="filter_by" id="filter-by" class="custom-select" required>
                     <option value="all">Todos</option>
                     <option value="without-attached">Sin adjuntar acta</option>
                     <option value="with-attached">Con acta adjuntada</option>
@@ -17,22 +16,22 @@
             </div>
         </div>
 
-        <form wire:submit.prevent="getCenabast">
-            <div class="form-row mb-3">
-                <div class="col-md-4">
-                    <input type="text" class="form-control" name="id" wire:model.defer="filter.id" placeholder="id" value="{{ old('id') }}" autocomplete="off">
-                </div>
-                <div class="col-md-4">
-                    <input type="text" class="form-control" name="folio" wire:model.defer="filter.folio" placeholder="folio" value="{{ old('folio') }}" autocomplete="off">
-                </div>
-                <div class="col-md-2">
-                    <input class="btn btn-outline-secondary" type="submit" value="Buscar">
-                </div>
-            </div>
-        </form>
+        <div class="col-md-1">
+            <input type="text" class="form-control" name="id" wire:model.defer="filter.id" placeholder="id" value="{{ old('id') }}" autocomplete="off">
+        </div>
+        <div class="col-md-2">
+            <input type="text" class="form-control" name="folio" wire:model.defer="filter.folio" placeholder="folio" value="{{ old('folio') }}" autocomplete="off">
+        </div>
+        <div class="col-md-1">
+            <butoon class="btn btn-outline-secondary" wire:click="getCenabast">Buscar</button>
+        </div>
     </div>
 
-    <table class="table table-sm table-bordered">
+    <div class="text-center d-none" wire:loading.class.remove="d-none">
+        <i class="fas fa-spinner fa-spin"></i>
+    </div>
+
+    <table class="table table-sm table-bordered" wire:loading.class="d-none">
         <thead>
             <tr>
                 <th>
