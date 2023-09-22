@@ -50,14 +50,14 @@
                     </button>
                 </th>
                 <th>ID</th>
+                <th>Estb.</th>
                 <th>Documento</th>
                 <th>Bod</th>
                 <th>Fecha Aceptación SII (días)</th>
-                <th>Estab.</th>
                 <th>Cargar Acta</th>
                 <th class="text-center">Firma Farmaceutico</th>
                 <th class="text-center">Firma Jefe</th>
-                <th nowrap></th>
+                <th nowrap>Acciones</th>
             </tr>
         </thead>
         <tbody>
@@ -82,6 +82,7 @@
                         @endif
                     </td>
                     <td>{{ $dte->id }}</td>
+                    <td>{{ $dte->establishment->alias ?? '' }}</td>
                     <td>
                         @if ($dte->tipo_documento != 'boleta_honorarios')
                             <a
@@ -116,7 +117,6 @@
                         {{ $dte->fecha_recepcion_sii ?? '' }} <br>
                         ({{ $dte->fecha_recepcion_sii ? $dte->fecha_recepcion_sii->diffInDays(now()) : '' }} días)
                     </td>
-                    <td>{{ $dte->establishment->alias ?? '' }}</td>
                     <td width="300">
                         @if(!isset($dte->confirmation_signature_file))
                             <form
