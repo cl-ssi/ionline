@@ -57,21 +57,15 @@
                         </fieldset>
                     </div>
 
-                    {{--<!-- <div class="row">
+                    <div class="row">
                         <fieldset class="form-group col-12 col-md-6">
-                            <label for="for_users">Funcionario</label>
+                            <label for="for_users">Buscar funcionario</label>
                             <div>
                                 @livewire('search-select-user', ['selected_id' => 'patient_id', 
-                                                                 'required' => 'required'])
+                                                                 'emit_name' => 'loadUserData'])
                             </div>
                         </fieldset>
-
-                        <fieldset class="form-group col-12 col-md-6">
-                            <label for="for_contact_number">Teléfono de contacto</label>
-                            <input class="form-control" type="text" id="" name="contact_number" placeholder="+569">
-                        </fieldset>
-                        
-                    </div> -->--}}
+                    </div>
 
                     @livewire('prof-agenda.employee-data')
 
