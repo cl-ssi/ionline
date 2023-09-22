@@ -12,8 +12,8 @@ use Illuminate\Support\Facades\Storage;
 
 class StoreController extends Controller
 {
-
     public $filePath = '/ionline/cenabast';
+
     /**
      * Display a listing of the resource.
      *
@@ -92,11 +92,18 @@ class StoreController extends Controller
         return view('warehouse.stores.manage-users', compact('store', 'nav'));
     }
 
+    /**
+     * @return \Illuminate\Contracts\Support\Arrayable
+     */
     public function welcome()
     {
         return view('warehouse.stores.welcome');
     }
 
+    /**
+     * @param  Store $store
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function activateStore(Store $store)
     {
         $storeActive = Auth::user()->active_store;
@@ -130,7 +137,9 @@ class StoreController extends Controller
 
     public function indexCenabast(Request $request, $tray = null)
     {
-        $query = Dte::where('cenabast', 1)->where('establishment_id', auth()->user()->organizationalUnit->establishment->id);
+        $query = Dte::query()
+            ->where('cenabast', 1)
+            ->where('establishment_id', auth()->user()->organizationalUnit->establishment->id);
 
         if ($tray === 'sin_adjuntar') {
             $query->whereNull('confirmation_signature_file');
@@ -148,7 +157,13 @@ class StoreController extends Controller
         return view('warehouse.stores.cenabast.index', compact('dtes', 'tray', 'request'));
     }
 
-
+    /**
+     * Save confirmation file
+     *
+     * @param  Request $request
+     * @param  mixed $dte
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function saveFile(Request $request, $dte)
     {
         $file = $request->file('acta_' . $dte);
@@ -167,31 +182,69 @@ class StoreController extends Controller
         return redirect()->route('warehouse.cenabast.index');
     }
 
-
+    /**
+     * Download a confirmation file
+     *
+     * @param  mixed $dte
+     * @return mixed
+     */
     public function downloadFile($dte)
     {
         $dte = Dte::findOrFail($dte);
 
-        if ($dte->confirmation_signature_file) {
+        if (isset($dte->confirmation_signature_file)) {
             return Storage::disk('gcs')->download($dte->confirmation_signature_file);
         }
     }
 
+    /**
+     * Function for the callback
+     *
+     * @param Dte $dte
+     * @param Request $request
+     * @return void
+     */
+    public function callback(Dte $dte, Request $request)
+    {
+        if($request->is_pharmacist == true)
+        {
+            $dte->update([
+                'cenabast_signed_pharmacist' => true,
+            ]);
+        }
 
-    public function deleteFile($dte)
+        if($request->is_boss)
+        {
+            $dte->update([
+                'cenabast_signed_boss' => true,
+            ]);
+        }
+
+        if(! isset($dte->cenabast_reception_file))
+        {
+            $dte->update([
+                'cenabast_reception_file' => $request->cenabast_reception_file,
+            ]);
+        }
+
+        session()->flash('success', 'La DTE fue firmada exitosamente.');
+        return redirect()->route('warehouse.cenabast.index');
+    }
+
+
+    /**
+     * Download the signed document
+     *
+     * @param  mixed $dte
+     * @return mixed
+     */
+    public function downloadSigned($dte)
     {
         $dte = Dte::findOrFail($dte);
 
-        if ($dte->confirmation_signature_file) {
-            Storage::disk('gcs')->delete($dte->confirmation_signature_file);
-            $dte->confirmation_signature_file = null;
-            $dte->save();
-
-            session()->flash('info', 'Se borró el archivo con éxito');
-        } else {
-            session()->flash('error', 'El archivo no existe');
+        if(isset($dte->cenabast_reception_file))
+        {
+            return Storage::disk('gcs')->download($dte->cenabast_reception_file);
         }
-
-        return redirect()->route('warehouse.cenabast.index');
     }
 }

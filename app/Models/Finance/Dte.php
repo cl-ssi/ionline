@@ -11,6 +11,7 @@ use App\Models\Finance\PurchaseOrder;
 use App\Models\Finance\File;
 use App\Models\Establishment;
 use App\User;
+use Illuminate\Support\Facades\Storage;
 use OwenIt\Auditing\Contracts\Auditable;
 
 class Dte extends Model implements Auditable
@@ -97,8 +98,12 @@ class Dte extends Model implements Auditable
 
 
         'dte_id',
-        'cenabast',
 
+        'cenabast',
+        'cenabast_reception_file',
+        'cenabast_signed_pharmacist',
+        'cenabast_signed_boss',
+        'block_signature',
 
         'folio_compromiso_sigfe',
         'archivo_compromiso_sigfe',
@@ -135,9 +140,6 @@ class Dte extends Model implements Auditable
         'fecha',
         'payer_at',
         'confirmation_at',
-        
-        
-        
     ];
 
     public function purchaseOrder()
@@ -189,7 +191,7 @@ class Dte extends Model implements Auditable
     //     // }
     // }
 
-    /** 
+    /**
     * El semaforo
     * Obtener el color de la fila, en base a la fecha de aceptación
     */
@@ -202,19 +204,19 @@ class Dte extends Model implements Auditable
                 case 1:
                 case 2:
                 case 3:
-                case 4: 
-                    $rowClass = 'table-success'; 
+                case 4:
+                    $rowClass = 'table-success';
                     break;
-                case 5: 
-                    $rowClass = 'table-info'; 
+                case 5:
+                    $rowClass = 'table-info';
                     break;
                 case 6:
                 case 7:
-                case 8: 
+                case 8:
                     $rowClass = 'table-warning';
                     break;
-                default: 
-                    $rowClass = 'table-danger'; 
+                default:
+                    $rowClass = 'table-danger';
                     break;
             }
         }
@@ -246,12 +248,11 @@ class Dte extends Model implements Auditable
     {
         return $this->hasMany(Dte::class,'id','dte_id');
     }
-    
+
 
     /** Creo que ya no se utiliza */
     public function scopeSearch($query, $filter)
     {
-  
         if (!empty($filter)) {
             foreach ($filter as $column => $value) {
                 if (!empty($value)) {
@@ -264,7 +265,7 @@ class Dte extends Model implements Auditable
                             break;
                         case 'folio_sigfe':
                             switch ($value) {
-                                case 'con_folio':                                    
+                                case 'con_folio':
                                     $query->whereNotNull('folio_sigfe');
                                     break;
                                 case 'sin_folio':
@@ -306,5 +307,25 @@ class Dte extends Model implements Auditable
                 }
             }
         }
+    }
+
+    public function getConfirmationSignatureFileUrlAttribute()
+    {
+        return Storage::disk('gcs')->url($this->confirmation_signature_file);
+    }
+
+    public function getCenabastReceptionFileUrlAttribute()
+    {
+        return Storage::disk('gcs')->url($this->cenabast_reception_file);
+    }
+
+    public function getPharmacistAttribute()
+    {
+        return $this->confirmationUser->organizationalUnit->currentManager->user ?? null;
+    }
+
+    public function getBossAttribute()
+    {
+        return $this->confirmationUser->organizationalUnit->father->currentManager->user ?? null;
     }
 }

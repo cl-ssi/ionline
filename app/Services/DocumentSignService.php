@@ -7,6 +7,7 @@ use App\Models\Documents\Sign\Signature;
 use App\User;
 use Firebase\JWT\JWT;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class DocumentSignService
@@ -40,14 +41,14 @@ class DocumentSignService
     public $user;
 
     /**
-     * X para ubicar la firma
+     * Coordenada en X para ubicar la firma
      *
      * @var int
      */
     public $xCoordinate;
 
     /**
-     * Y para ubicar la firma
+     * Coordenada en Y para ubicar la firma
      *
      * @var string
      */
@@ -61,7 +62,7 @@ class DocumentSignService
     public $base64Image;
 
     /**
-     * Pagina
+     * Pagina donde se ubica la firma
      *
      * @var [type]
      */
@@ -91,13 +92,13 @@ class DocumentSignService
     public function __construct()
     {
         /**
-         *
+         * Setea el page por defecto en LAST
          */
         $this->page = 'LAST';
     }
 
     /**
-     * @param  string $document
+     * @param  string  $document
      * @return void
      */
     public function setDocument(string $document)
@@ -106,7 +107,7 @@ class DocumentSignService
     }
 
     /**
-     * @param  string $folder
+     * @param  string  $folder
      * @return void
      */
     public function setFolder(string $folder)
@@ -115,7 +116,7 @@ class DocumentSignService
     }
 
     /**
-     * @param  string $filename
+     * @param  string  $filename
      * @return void
      */
     public function setFilename(string $filename)
@@ -124,7 +125,7 @@ class DocumentSignService
     }
 
     /**
-     * @param  User $user
+     * @param  User  $user
      * @return void
      */
     public function setUser(User $user)
@@ -133,7 +134,7 @@ class DocumentSignService
     }
 
     /**
-     * @param  integer $xCoordinate
+     * @param  integer  $xCoordinate
      * @return void
      */
     public function setXCoordinate(int $xCoordinate)
@@ -142,7 +143,7 @@ class DocumentSignService
     }
 
     /**
-     * @param  integer $yCoordinate
+     * @param  int  $yCoordinate
      * @return void
      */
     public function setYCoordinate(int $yCoordinate)
@@ -151,7 +152,7 @@ class DocumentSignService
     }
 
     /**
-     * @param  string $base64Image
+     * @param  string  $base64Image
      * @return void
      */
     public function setBase64Image(string $base64Image)
@@ -160,16 +161,16 @@ class DocumentSignService
     }
 
     /**
-     * @param  string $page
+     * @param  string  $page
      * @return void
      */
-    public function setPage(string $page = 'LAST')
+    public function setPage(string $page)
     {
         $this->page = $page;
     }
 
     /**
-     * @param  string $otp
+     * @param  string  $otp
      * @return void
      */
     public function setOtp(string $otp)
@@ -178,7 +179,7 @@ class DocumentSignService
     }
 
     /**
-     * @param  string $environment
+     * @param  string  $environment
      * @return void
      */
     public function setEnvironment(string $environment)
@@ -187,7 +188,7 @@ class DocumentSignService
     }
 
     /**
-     * @param  string $modo
+     * @param  string  $modo
      * @return void
      */
     public function setModo(string $modo)
@@ -198,7 +199,7 @@ class DocumentSignService
     /**
      * Firma el documento
      *
-     * @return void
+     * @return bool
      */
     public function sign()
     {
@@ -248,7 +249,7 @@ class DocumentSignService
         /**
          * Set the file data
          */
-        $data = app(Signature::class)->getData($this->document, $jwt, $this->base64Image, $apiToken, $this->xCoordinate, $this->yCoordinate, false);
+        $data = app(Signature::class)->getData($this->document, $jwt, $this->base64Image, $apiToken, $this->xCoordinate, $this->yCoordinate, false, $this->page);
 
         /**
          * Peticion a la api para firmar
@@ -282,6 +283,11 @@ class DocumentSignService
          */
         $filename = $this->folder . $this->filename;
         $file = $filename.".pdf";
-        Storage::disk('gcs')->put($file, base64_decode($json['files'][0]['content']), ['CacheControl' => 'no-store']);
+
+        Storage::disk('gcs')->put(
+            $file,
+            base64_decode($json['files'][0]['content']),
+            ['CacheControl' => 'no-store']
+        );
     }
 }
