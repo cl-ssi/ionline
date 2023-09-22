@@ -66,9 +66,7 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 # Update to Laravel 9.0
 
 - composer update
-
 - composer remove and require after update:
-
 - barryvdh/laravel-dompdf
 - firebase/php-jwt
 - guzzlehttp/guzzle
