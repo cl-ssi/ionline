@@ -95,6 +95,8 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 - composer remove fideloper/proxy
 - Update archivo Kernel.php, TrustProxies y AuthServiceProvider
 
+
+
 ## Contribuir
 - Seleccionar issue
 - Hacer modificaciones y commits
