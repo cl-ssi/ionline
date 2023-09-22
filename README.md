@@ -102,3 +102,5 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 - Hacer modificaciones y commits
 - Crear el pull request
 - Detener issue en el que se estaba trabajando
+
+
