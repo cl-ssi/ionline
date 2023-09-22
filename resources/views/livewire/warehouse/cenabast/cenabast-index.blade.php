@@ -16,6 +16,20 @@
                 </select>
             </div>
         </div>
+
+        <form wire:submit.prevent="getCenabast">
+            <div class="form-row mb-3">
+                <div class="col-md-4">
+                    <input type="text" class="form-control" name="id" wire:model.defer="filter.id" placeholder="id" value="{{ old('id') }}" autocomplete="off">
+                </div>
+                <div class="col-md-4">
+                    <input type="text" class="form-control" name="folio" wire:model.defer="filter.folio" placeholder="folio" value="{{ old('folio') }}" autocomplete="off">
+                </div>
+                <div class="col-md-2">
+                    <input class="btn btn-outline-secondary" type="submit" value="Buscar">
+                </div>
+            </div>
+        </form>
     </div>
 
     <table class="table table-sm table-bordered">
