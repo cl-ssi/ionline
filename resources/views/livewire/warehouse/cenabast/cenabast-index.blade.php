@@ -127,8 +127,13 @@
                                 @csrf
                                 <div class="input-group">
                                     <div class="custom-file">
-                                        <input type="file" name="acta_{{ $dte->id }}" class="custom-file-input" id="for-file">
-                                        <label class="custom-file-label" for="customFileLangHTML" data-browse="Examinar"></label>
+                                        <input type="file" 
+                                            name="acta_{{ $dte->id }}" 
+                                            class="custom-file-input" 
+                                            id="for-file-{{$dte->id}}"
+                                            accept=".pdf"
+                                            >
+                                        <label class="custom-file-label" for="for-file" wire:model.defer="formFile.{{$dte->id}}" data-browse="Examinar"></label>
                                     </div>
                                     <div class="input-group-append">
                                         <button class="btn btn-outline-secondary" type="submit" id="for-upload-button">
@@ -242,7 +247,7 @@
 
     @section('custom_js')
         <script>
-            $('#for-file').on('change',function(e){
+            $('.custom-file-input').on('change',function(e){
                 //get the file name
                 var fileName = e.target.files[0].name;
                 //replace the "Choose a file" label

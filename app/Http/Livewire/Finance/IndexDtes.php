@@ -175,8 +175,8 @@ class IndexDtes extends Component
         $this->confirmation_status = $dte->confirmation_status;
         $this->confirmation_observation = $dte->confirmation_observation;
         $this->monto_total = '$ '.number_format($dte->monto_total, 0, '', '.');
-        $this->facturasEmisor = Dte::whereEmisor($dte->emisor)
-            ->whereTipoDocumento('factura_electronica')
+        $this->facturasEmisor = Dte::where('emisor', 'like', '%' . $dte->emisor . '%')
+            ->whereIn('tipo_documento', ['factura_electronica', 'factura_exenta'])
             ->get();
     }
 

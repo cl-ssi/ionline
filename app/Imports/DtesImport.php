@@ -31,7 +31,7 @@ class DtesImport implements ToModel, WithStartRow, WithHeadingRow
                 'tipo' => $row['tipo'],
                 'tipo_documento' => $row['tipo_documento'],
                 'folio' => $row['folio'],
-                'emisor' => $row['emisor'],
+                'emisor' => trim($row['emisor']),
             ],
             [
             'razon_social_emisor' => $row['razon_social_emisor'],
