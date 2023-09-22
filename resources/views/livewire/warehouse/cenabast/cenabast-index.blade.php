@@ -131,7 +131,7 @@
                                         <label class="custom-file-label" for="customFileLangHTML" data-browse="Examinar"></label>
                                     </div>
                                     <div class="input-group-append">
-                                        <button class="btn btn-outline-secondary" type="button" id="inputGroupFileAddon04">
+                                        <button class="btn btn-outline-secondary" type="submit" id="for-upload-button">
                                             <i class="fas fa-upload"></i>
                                         </button>
                                     </div>
