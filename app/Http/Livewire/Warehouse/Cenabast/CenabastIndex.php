@@ -36,7 +36,7 @@ class CenabastIndex extends Component
                 $query->whereNotNull('confirmation_signature_file');
             });
 
-        $dtes = $dtes->paginate(100);
+        $dtes = $dtes->latest()->paginate(100);
 
         return $dtes;
     }
