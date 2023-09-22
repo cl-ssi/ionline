@@ -157,7 +157,7 @@
                         @elseif($dte->cenabast_signed_pharmacist)
                             <i class="fas fa-check text-success"></i> Firmado
                         @else
-                            Pendiente {{ $dte->pharmacist->initials }}
+                            Pendiente {{ $dte->pharmacist?->initials }}
                         @endif
                     </td>
                     <td class="text-center" nowrap>
@@ -185,7 +185,7 @@
                         @elseif($dte->cenabast_signed_boss)
                             <i class="fas fa-check text-success"></i> Firmado
                         @else
-                            Pendiente {{ $dte->boss->initials }}
+                            Pendiente {{ $dte->boss?->initials }}
                         @endif
                     </td>
                     <td class="text-center" nowrap>
