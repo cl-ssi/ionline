@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\User;
+use App\Models\Documents\Approval;
 use App\Rrhh\OrganizationalUnit;
 use App\Models\RequestForms\RequestForm;
 use App\Models\RequestForms\PurchaseOrder;
@@ -15,6 +16,7 @@ use App\Models\Parameters\Supplier;
 use App\Models\Parameters\Program;
 use App\Models\Finance\Dte;
 use App\Models\Documents\Signature;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Control extends Model
 {
@@ -283,6 +285,12 @@ class Control extends Model
     public function getTotalAttribute()
     {
         return $this->net_total + $this->total_tax;
+    }
+
+        
+    public function approvals(): MorphMany
+    {
+        return $this->morphMany(Approval::class, 'approvable');
     }
 
     public function getFormatDateAttribute()

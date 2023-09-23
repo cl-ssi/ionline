@@ -13,7 +13,7 @@ class PeriodRrhh extends Component
     public Fulfillment $fulfillment;
 
     protected $rules = [
-        'fulfillment.total_hours_paid' => 'required',
+        'fulfillment.total_hours_to_pay' => 'required',
         'fulfillment.total_to_pay' => 'required',
         'fulfillment.illness_leave' => '',
         'fulfillment.leave_of_absence' => '',
@@ -21,7 +21,7 @@ class PeriodRrhh extends Component
     ];
 
     protected $messages = [
-        'fulfillment.total_hours_paid.required' => 'El campo es requerido.',
+        'fulfillment.total_hours_to_pay.required' => 'El campo es requerido.',
         'fulfillment.total_to_pay.required' => 'El campo es requerido.',
     ];
 

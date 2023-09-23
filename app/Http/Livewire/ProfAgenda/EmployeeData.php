@@ -12,6 +12,17 @@ class EmployeeData extends Component
     public $user_id = 0;
     public $email;
 
+    // public function mount(){
+    //     dd($this->user_id);
+    // }
+
+    protected $listeners = ['loadUserData' => 'loadUserData'];
+
+    public function loadUserData(User $User){
+        $this->user_id = $User->id;
+        $this->render();
+    }
+
     public function render()
     {
         $banks = Bank::all();

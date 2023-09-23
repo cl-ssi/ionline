@@ -23,12 +23,17 @@ class Approval extends Model
      * App\Models\Documents\Approval::ejemplo_de_uso();
      */
     public static function ejemplo_de_uso() {
-        /** Se puede crear el approval sólo con Approval::create(['module' => 'xxx', ...]) */
+        /** 
+         * Hay dos formas de crear un Approval
+         * - Approval::create(['module' => 'xxx',...])
+         * - A través de una relación:
+         *      $approval = $requestForms->approvals()->create(['module' => 'xxx', ...])
+         **/
 
         /** o crear y asociar a un modelo a través de su relación, como el siguente ejemplo */
         $dte = Dte::first();
 
-        $approval = $dte->approvals()->create([
+        $approval = Approval::create([
             /* Nombre del Módulo que está enviando la solicitud de aprobación */
             "module" => "Estado de Pago",
 
@@ -119,7 +124,7 @@ class Approval extends Model
              **/
 
             /* (Opcional) True or False(default), se requiere firma electrónica en vez de aprobación simple */
-            //"digital_signature" => false,
+            //"digital_signature" => true,
         ]);
     }
 

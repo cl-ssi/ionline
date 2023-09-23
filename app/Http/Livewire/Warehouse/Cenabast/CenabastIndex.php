@@ -19,12 +19,17 @@ class CenabastIndex extends Component
 
     public $otp;
 
+    public $filter = [
+        'id' => '',
+        'folio' => '',
+    ];
+
     public function mount()
     {
         $this->selectedDte = [];
     }
 
-    public function getCenabast($tray)
+    public function getCenabast()
     {
         $dtes = Dte::query()
             ->where('cenabast', 1)
@@ -35,8 +40,16 @@ class CenabastIndex extends Component
             ->when($this->filter_by == 'with-attached', function($query) {
                 $query->whereNotNull('confirmation_signature_file');
             });
+        
+        if (!empty($this->filter['id'])) {
+                $dtes->where('id', $this->filter['id']);
+        }
+    
+        if (!empty($this->filter['folio'])) {
+                $dtes->where('folio', $this->filter['folio']);
+            }
 
-        $dtes = $dtes->paginate(100);
+        $dtes = $dtes->latest()->paginate(100);
 
         return $dtes;
     }

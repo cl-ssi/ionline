@@ -3,9 +3,9 @@
         <h5 class="card-title">Recursos Humanos</h5>
         <div class="form-row mb-3">
             <div class="col-md-2">
-                <label for="for_total_hours_paid">Total de horas a pagar</label>
-                <input type="text" class="form-control" wire:model.defer="fulfillment.total_hours_paid">
-                @error('fulfillment.total_hours_paid') <span class="text-danger">{{ $message }}</span> @enderror
+                <label for="for_total_hours_to_pay">Total de horas a pagar</label>
+                <input type="text" class="form-control" wire:model.defer="fulfillment.total_hours_to_pay">
+                @error('fulfillment.total_hours_to_pay') <span class="text-danger">{{ $message }}</span> @enderror
             </div>
             <div class="col-md-2">
                 <label for="for_total_to_pay">Total a pagar</label>

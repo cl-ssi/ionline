@@ -1,24 +1,37 @@
 <div>
 
-    <div class="row">
-        <div class="col-md-9">
-            <h3>Dtes de Cenabast</h3>
-        </div>
-        <div class="col-md-3 text-right">
+    <h3 class="mb-3">Dtes de Cenabast</h3>
+
+    <div class="form-row">
+        <div class="col-md-4">
             <div class="input-group mb-3">
                 <div class="input-group-prepend">
                     <label class="input-group-text" for="inputGroupSelect01">Filtrar por</label>
                 </div>
-                <select wire:model="filter_by" id="filter-by" class="custom-select" required>
+                <select wire:model.defer="filter_by" id="filter-by" class="custom-select" required>
                     <option value="all">Todos</option>
                     <option value="without-attached">Sin adjuntar acta</option>
                     <option value="with-attached">Con acta adjuntada</option>
                 </select>
             </div>
         </div>
+
+        <div class="col-md-1">
+            <input type="text" class="form-control" name="id" wire:model.defer="filter.id" placeholder="id" value="{{ old('id') }}" autocomplete="off">
+        </div>
+        <div class="col-md-2">
+            <input type="text" class="form-control" name="folio" wire:model.defer="filter.folio" placeholder="folio" value="{{ old('folio') }}" autocomplete="off">
+        </div>
+        <div class="col-md-1">
+            <butoon class="btn btn-outline-secondary" wire:click="getCenabast">Buscar</button>
+        </div>
     </div>
 
-    <table class="table table-sm table-bordered">
+    <div class="text-center d-none" wire:loading.class.remove="d-none">
+        <i class="fas fa-spinner fa-spin"></i>
+    </div>
+
+    <table class="table table-sm table-bordered" wire:loading.class="d-none">
         <thead>
             <tr>
                 <th>
@@ -37,14 +50,14 @@
                     </button>
                 </th>
                 <th>ID</th>
+                <th>Estb.</th>
                 <th>Documento</th>
                 <th>Bod</th>
                 <th>Fecha Aceptación SII (días)</th>
-                <th>Establecimiento</th>
                 <th>Cargar Acta</th>
                 <th class="text-center">Firma Farmaceutico</th>
                 <th class="text-center">Firma Jefe</th>
-                <th nowrap></th>
+                <th nowrap>Acciones</th>
             </tr>
         </thead>
         <tbody>
@@ -69,6 +82,7 @@
                         @endif
                     </td>
                     <td>{{ $dte->id }}</td>
+                    <td>{{ $dte->establishment->alias ?? '' }}</td>
                     <td>
                         @if ($dte->tipo_documento != 'boleta_honorarios')
                             <a
@@ -103,18 +117,30 @@
                         {{ $dte->fecha_recepcion_sii ?? '' }} <br>
                         ({{ $dte->fecha_recepcion_sii ? $dte->fecha_recepcion_sii->diffInDays(now()) : '' }} días)
                     </td>
-                    <td>{{ $dte->establishment->name ?? '' }}</td>
-                    <td>
+                    <td width="300">
                         @if(!isset($dte->confirmation_signature_file))
                             <form
                                 action="{{ route('warehouse.cenabast.saveFile', ['dte' => $dte->id]) }}"
                                 method="POST"
                                 enctype="multipart/form-data"
-                                class="form-control"
                             >
                                 @csrf
-                                <input type="file" name="acta_{{ $dte->id }}">
-                                <button class="btn btn-primary btn-sm">Guardar</button>
+                                <div class="input-group">
+                                    <div class="custom-file">
+                                        <input type="file" 
+                                            name="acta_{{ $dte->id }}" 
+                                            class="custom-file-input" 
+                                            id="for-file-{{$dte->id}}"
+                                            accept=".pdf"
+                                            >
+                                        <label class="custom-file-label" for="for-file" wire:model.defer="formFile.{{$dte->id}}" data-browse="Examinar"></label>
+                                    </div>
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary" type="submit" id="for-upload-button">
+                                            <i class="fas fa-upload"></i>
+                                        </button>
+                                    </div>
+                                </div>
                             </form>
                         @endif
                     </td>
@@ -142,6 +168,8 @@
                             ], $dte->id)
                         @elseif($dte->cenabast_signed_pharmacist)
                             <i class="fas fa-check text-success"></i> Firmado
+                        @else
+                            Pendiente {{ $dte->pharmacist?->initials }}
                         @endif
                     </td>
                     <td class="text-center" nowrap>
@@ -168,6 +196,8 @@
                             ], $dte->id)
                         @elseif($dte->cenabast_signed_boss)
                             <i class="fas fa-check text-success"></i> Firmado
+                        @else
+                            Pendiente {{ $dte->boss?->initials }}
                         @endif
                     </td>
                     <td class="text-center" nowrap>
@@ -214,5 +244,16 @@
     </table>
 
     {{ $dtes->links() }}
+
+    @section('custom_js')
+        <script>
+            $('.custom-file-input').on('change',function(e){
+                //get the file name
+                var fileName = e.target.files[0].name;
+                //replace the "Choose a file" label
+                $(this).next('.custom-file-label').html(fileName);
+            })
+        </script>
+    @endsection
 
 </div>

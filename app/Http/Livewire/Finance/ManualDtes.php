@@ -8,7 +8,8 @@ use App\Models\Finance\Dte;
 class ManualDtes extends Component
 {
 
-    public $tipoDocumento = 'boleta_honorarios';
+    //public $tipoDocumento = 'boleta_honorarios';
+    public $tipoDocumento;
     public $folio;
     public $emisor;
     public $razonSocial;
@@ -16,9 +17,19 @@ class ManualDtes extends Component
     public $folioOC;
     public $barCode;
     public $showSuccessMessage = false;
+    public $tipoDocumentoMap = [
+        'factura_exenta' => 34,
+        'factura_electronica' => 33,
+        'guias_despacho' => 52,
+        'nota_credito' => 61,
+        //hacer un distinct o algo para buscar los demas o buscar en la documentacion del SII
+    ];
 
     public function saveDte()
     {
+        
+        $tipo = $this->tipoDocumentoMap[$this->tipoDocumento];
+        
         // Validar los campos antes de guardarlos
         $this->validate([
             'tipoDocumento' => 'required',
@@ -27,7 +38,7 @@ class ManualDtes extends Component
             'razonSocial' => 'required',
             'montoTotal' => 'required|numeric',
             'folioOC' => 'required',
-            'barCode' => 'required|size:7',
+            //'barCode' => 'size:7',
         ]);
 
         // Generar el último campo de la URI
@@ -39,15 +50,23 @@ class ManualDtes extends Component
         $uri_last_field = $user_id . $boleta_numero . $codigo_barra;
 
         // Guardar los campos en el modelo Dte
-        Dte::create([
+        $dte_manual = Dte::create([
             'tipo_documento' => $this->tipoDocumento,
             'folio' => $this->folio,
             'emisor' => $this->emisor,
             'razon_social' => $this->razonSocial,
             'monto_total' => $this->montoTotal,
             'folio_oc' => $this->folioOC,
-            'uri' => 'https://loa.sii.cl/cgi_IMT/TMBCOT_ConsultaBoletaPdf.cgi?origen=TERCEROS&txt_codigobarras=' . $uri_last_field,
+            'tipo' => $tipo,
+            // 'uri' => 'https://loa.sii.cl/cgi_IMT/TMBCOT_ConsultaBoletaPdf.cgi?origen=TERCEROS&txt_codigobarras=' . $uri_last_field,
         ]);
+
+        if ($this->tipoDocumento =='boleta_honorarios')
+        {
+            // Solo guardo el URI si es boleta de honorario
+            $dte_manual->uri ='https://loa.sii.cl/cgi_IMT/TMBCOT_ConsultaBoletaPdf.cgi?origen=TERCEROS&txt_codigobarras=' . $uri_last_field;
+            $dte_manual->save();
+        }
 
         // Reiniciar los campos del formulario después de guardar
         $this->resetFields();
@@ -60,6 +79,11 @@ class ManualDtes extends Component
     {
         // Ocultar el formulario
         $this->emitUp('dteAdded');
+    }
+
+    public function getDistinctTipoDocumento()
+    {
+        return Dte::distinct('tipo_documento')->pluck('tipo_documento');
     }
 
     public function resetFields()

@@ -52,6 +52,7 @@
                     <th>Facturas</th>
                     <th>Enviado Firma</th>
                     <th>Firmado</th>
+                    <th>VBs</th>
                 </tr>
             </thead>
             <tbody>
@@ -159,6 +160,12 @@
                                 <i class="fas fa-file-pdf"></i>
                             </a>
                         @endif
+                    </td>
+                    <td>
+                        @foreach($control->approvals as $approval)
+                            <i class="fa fa-fw fa-lg {{ $approval->icon }} text-{{ $approval->color }}" 
+                                title="{{ $approval->organizationalUnit->name }}"></i>
+                        @endforeach
                     </td>
                 </tr>
                 @empty
