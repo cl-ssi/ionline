@@ -14,7 +14,11 @@ class OpenHourController extends Controller
 {
     public function store(Request $request){
 
-        // dd($request);
+        // validación para dv de rut
+        if(!$request->dv){
+            session()->flash('warning', 'El campo dv no puede ser vacío.');
+            return redirect()->back();
+        }
 
         // si el usuario se encuentra eliminado, se vuelve a dejar activo
         if(User::withTrashed()->find($request->user_id)){
