@@ -20,6 +20,19 @@ class PurchasePlan extends Model implements Auditable
         'approved_estimated_expense', 'status', 'period'
     ];
 
+    public function userResponsible() {
+        return $this->belongsTo('App\User', 'user_responsible_id')->withTrashed();
+    }
+
+    public function organizationalUnit() {
+        return $this->belongsTo('App\Rrhh\OrganizationalUnit', 'organizational_unit_id');
+    }
+
+    public function program()
+    {
+        return $this->belongsTo('App\Models\Parameters\Program', 'program_id');
+    }
+
     public function purchasePlanItems() {
         return $this->hasMany('App\Models\PurchasePlan\PurchasePlanItem', 'purchase_plan_id');
     }
