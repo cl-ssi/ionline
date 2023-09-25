@@ -253,6 +253,8 @@ use App\Http\Controllers\Agreements\AddendumController;
 use App\Http\Controllers\Agreements\AccountabilityDetailController;
 use App\Http\Controllers\Agreements\AccountabilityController;
 use App\Http\Livewire\Warehouse\Cenabast\CenabastIndex;
+use App\Http\Controllers\PurchasePlan\PurchasePlanController;
+
 
 
 /*
@@ -1961,6 +1963,14 @@ Route::prefix('finance')->as('finance.')->middleware(['auth', 'must.change.passw
         Route::get('/{purchaseOrder}', [PurchaseOrderController::class, 'show'])->name('show');
         Route::get('/by-code/{po_code}', [PurchaseOrderController::class, 'showByCode'])->name('showByCode');
     });
+});
+
+/* */
+Route::prefix('purchase_plan')->as('purchase_plan.')->middleware(['auth', 'must.change.password'])->group(function () {
+    Route::get('/own_index', [PurchasePlanController::class, 'own_index'])->name('own_index');
+    Route::get('/all_purchase_plan', [PurchasePlanController::class, 'all_purchase_plan'])->name('all_purchase_plan');
+    Route::get('/create', [PurchasePlanController::class, 'create'])->name('create');
+    Route::get('/{purchasePlan}/show', [PurchasePlanController::class, 'show'])->name('show');
 });
 
 /*formulario de requerimiento compra o servicio */
