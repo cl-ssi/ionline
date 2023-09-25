@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\User;
 use App\Models\Documents\Approval;
+use App\Models\His\ModificationRequestFile;
 
 class ModificationRequest extends Model
 {
@@ -25,6 +26,7 @@ class ModificationRequest extends Model
     * @var array
     */
     protected $fillable = [
+        'id',
         'type',
         'subject',
         'body',
@@ -41,6 +43,11 @@ class ModificationRequest extends Model
     public function approvals(): MorphMany
     {
         return $this->morphMany(Approval::class, 'approvable');
+    }
+
+    public function files()
+    {
+        return $this->hasMany(ModificationRequestFile::class,'request_id');
     }
 
     /**

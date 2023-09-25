@@ -43,12 +43,11 @@
         </div>
 
         <ul>
-            <li>
-                <a href="#">Archivo 1</a> (pendiente vincular con modelo archivos)
-            </li>
-            <li>
-                <a href="#">Archivo 2</a>
-            </li>
+            @foreach($modrequest->files as $file)
+                <li>
+                    <a href="{{ route('his.modification-request.files.download', $file) }}" target="_blank">{{$file->name}}</a>
+                </li>
+            @endforeach
         </ul>
         <hr>
 

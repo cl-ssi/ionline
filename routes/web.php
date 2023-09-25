@@ -2453,6 +2453,13 @@ Route::prefix('his')->as('his.')->middleware('auth')->group(function () {
         Route::get('/mgr', ModificationMgr::class)->name('mgr');
         Route::get('/{modificationRequest}/show', ModificationRequestController::class)->name('show');
         Route::view('/parameters', 'his.parameters')->name('parameters');
+
+        Route::prefix('files')->as('files.')->group(function () {
+            // Route::post('/store', [SummaryFileController::class, 'store'])->name('store');
+            // Route::get('/{file}/delete', [SummaryFileController::class, 'deleteFile'])->name('delete');
+            Route::get('/{file}/download', [ModificationRequestController::class, 'download'])->name('download');
+        });
+    
     });
 });
 
