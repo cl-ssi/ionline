@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Parameters\Subtitle;
 use App\Models\Parameters\ProgramBudget;
 use OwenIt\Auditing\Contracts\Auditable;
+use Carbon\Carbon;
 
 class Program extends Model implements Auditable
 {
@@ -71,5 +72,19 @@ class Program extends Model implements Auditable
     public function scopeOnlyValid($query)
     {
         return $query->whereIn('period', [now()->year, now()->year - 1]);
+    }
+
+    public static function getProgramsBySearch($searchText)
+    {
+        $programs = Program::query();
+        $array_search = explode(' ', $searchText);
+        foreach($array_search as $word){
+            $programs->where(function($q) use($word){
+                $q->where('name', 'LIKE', '%'.$word.'%')
+                ->where('period', Carbon::now()->year);
+            });
+        }
+
+        return $programs;
     }
 }

@@ -11,13 +11,18 @@
     <form wire:submit.prevent="saveDte">
         <div class="form-row">
             <div class="form-group col-2">
-                <label for="tipoDocumento">Tipo de documento</label>
-                <input type="text" class="form-control" id="tipoDocumento" wire:model.defer="tipoDocumento"
-                    value="boleta_honorarios" disabled>
+                <label for="tipoDocumento">Tipo de documento*</label>
+                <select class="form-control" id="tipoDocumento" wire:model.defer="tipoDocumento" required>
+                    <option value="">Seleccionar Tipo Documento</option>
+                    @foreach ($this->getDistinctTipoDocumento() as $tipo)
+                        <option value="{{ $tipo }}">{{ $tipo }}</option>
+                    @endforeach
+                </select>
                 @error('tipoDocumento')
                     <span class="text-danger">{{ $message }}</span>
                 @enderror
             </div>
+
             <div class="form-group col-2">
                 <label for="emisor">RUT</label>
                 <input type="text" class="form-control" id="emisor" wire:model.defer="emisor"
@@ -62,12 +67,13 @@
             </div>
 
             <div class="form-group col-4">
-                <label for="barCode">7 Últimos dígitos código de barra</label>
+                <label for="barCode">7 Últimos dígitos código de barra <small>(Solo para boletas)</small></label>
                 <div class="input-group">
                     <input type="text" class="form-control" id="barCode" wire:model.defer="barCode"
-                        placeholder="ej: 6A86963" required maxlength="7" autocomplete="off">
+                        placeholder="ej: 6A86963" maxlength="7" autocomplete="off">
                     <div class="input-group-append">
-                        <a class="btn btn-outline-secondary" href="#" wire:click.prevent="verBoleta" target="_blank">
+                        <a class="btn btn-outline-secondary" href="#" wire:click.prevent="verBoleta"
+                            target="_blank">
                             <i class="fas fa-file-pdf" aria-hidden="true"></i> Ver boleta
                         </a>
                     </div>
