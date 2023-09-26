@@ -29,25 +29,25 @@ class CreateHbHotelsTable extends Migration
             $table->softDeletes();
         });
 
-        Hotel::create([
-            'region_id' => 1,
-            'commune_id' => 5,
-            'name' => 'Hotel Ibis',
-            'address' => 'Orella 462',
-            'description' => 'El hotel ibis es un hotal 3 estrellas, que proporciona un servicio inmejorable en la ciudad de Iquique. Todos los funcionarios del servicio de salud de Iquique están invitados a nuestras instalaciones.',
-            'latitude' => '1.1',
-            'longitude' => '2.2'
-        ]);
+        // Hotel::create([
+        //     'region_id' => 1,
+        //     'commune_id' => 5,
+        //     'name' => 'Hotel Ibis',
+        //     'address' => 'Orella 462',
+        //     'description' => 'El hotel ibis es un hotal 3 estrellas, que proporciona un servicio inmejorable en la ciudad de Iquique. Todos los funcionarios del servicio de salud de Iquique están invitados a nuestras instalaciones.',
+        //     'latitude' => '1.1',
+        //     'longitude' => '2.2'
+        // ]);
 
-        Hotel::create([
-            'region_id' => 1,
-            'commune_id' => 5,
-            'name' => 'Hotel Tantakui',
-            'address' => 'La huaica',
-            'description' => 'El hotel tantakui es un hotel holistico que ofrece distinto tipo de servicios para un excelente fin de semana para toda la familia. Todos los funcionarios del servicio de salud de Iquique están invitados a nuestras instalaciones.',
-            'latitude' => '12.22',
-            'longitude' => '54.112'
-        ]);
+        // Hotel::create([
+        //     'region_id' => 1,
+        //     'commune_id' => 5,
+        //     'name' => 'Hotel Tantakui',
+        //     'address' => 'La huaica',
+        //     'description' => 'El hotel tantakui es un hotel holistico que ofrece distinto tipo de servicios para un excelente fin de semana para toda la familia. Todos los funcionarios del servicio de salud de Iquique están invitados a nuestras instalaciones.',
+        //     'latitude' => '12.22',
+        //     'longitude' => '54.112'
+        // ]);
     }
 
     /**
