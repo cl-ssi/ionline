@@ -6,9 +6,9 @@ use App\Models\Documents\Sign\Signature;
 use App\Services\ImageService;
 use Firebase\JWT\JWT;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
-
 class SignToDocument extends Component
 {
     /**
@@ -26,6 +26,9 @@ class SignToDocument extends Component
      *       'filename' => '/ionline/dte/confirmation/confirmation-'.$dte->id,
      *
      *       'fileLink' => 'http://localhost/pdf/filename.pdf',
+     *
+     *       'routeName' => 'my.route.name',
+     *       'routeParams' => json_decode([]),
      *
      *       'position' => 'center',
      *       'startY' => 80,
@@ -56,6 +59,9 @@ class SignToDocument extends Component
 
     public $fileLink;
 
+    public $routeName;
+    public $routeParams;
+
     public $pdfBase64;
 
     public $position = 'center';
@@ -75,15 +81,38 @@ class SignToDocument extends Component
 
     public function show()
     {
-        /**
-         * Obtiene el base64 del pdf
-         */
         if(isset($this->fileLink))
         {
+            /**
+             * Si esta seteado el fileLink, se obtiene el base64 del link
+             */
             $this->pdfBase64 = base64_encode(file_get_contents($this->fileLink));
+        }
+        elseif(isset($this->routeName)) {
+            /**
+             * Si esta seteado el routeName se consulta la ruta, y se obtiene el base64
+             */
+            $url = route($this->routeName, $this->routeParams);
+
+            /**
+             * Si esta en local, remplaza el https por http
+             */
+            if(env('APP_ENV') == 'local')
+            {
+                $url = Str::replace('https', 'http', $url);
+            }
+
+            $response = Http::get($url);
+
+            $content = $response->getBody();
+
+            $this->pdfBase64 = chunk_split(base64_encode($content));
         }
         elseif(isset($this->view))
         {
+            /**
+             * Si esta seteado el view, se carga la vista y se obtiene el base64
+             */
             $documentFile = \PDF::loadView($this->view, $this->viewData);
             $this->pdfBase64 = base64_encode($documentFile->output());
         }
