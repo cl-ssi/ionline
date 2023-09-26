@@ -33,18 +33,18 @@ class CenabastIndex extends Component
     {
         $dtes = Dte::query()
             ->where('cenabast', 1)
-            ->where('establishment_id',auth()->user()->organizationalUnit->establishment->id)
+            ->where('establishment_id', auth()->user()->organizationalUnit->establishment->id)
             ->when($this->filter_by == 'without-attached', function($query) {
                 $query->whereNull('confirmation_signature_file');
             })
             ->when($this->filter_by == 'with-attached', function($query) {
                 $query->whereNotNull('confirmation_signature_file');
             });
-        
+
         if (!empty($this->filter['id'])) {
                 $dtes->where('id', $this->filter['id']);
         }
-    
+
         if (!empty($this->filter['folio'])) {
                 $dtes->where('folio', $this->filter['folio']);
             }
@@ -145,7 +145,7 @@ class CenabastIndex extends Component
                 $documentSignService->setPage('LAST');
                 $documentSignService->setOtp($this->otp);
                 $documentSignService->setEnvironment('TEST');
-                $documentSignService->setModo('DESATENDIDO');
+                $documentSignService->setModo('ATENDIDO');
                 $documentSignService->sign();
 
                 /**
@@ -197,7 +197,7 @@ class CenabastIndex extends Component
                 $dte->update([
                     'block_signature' => false,
                 ]);
-            })->onQueue('default');
+            });
 
         }
 
