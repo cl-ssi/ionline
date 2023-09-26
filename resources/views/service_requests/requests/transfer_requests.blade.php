@@ -6,7 +6,7 @@
 
 @include('service_requests.partials.nav')
 
-<h3>Transferencia de solicitudes</h3><br>
+<h3>Transferencia de solicitudes (pendientes por visar)</h3><br>
 
 @livewire('service-request.derive')
 

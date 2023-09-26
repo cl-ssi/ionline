@@ -1,5 +1,18 @@
 <div class="row">
     <div class="col">
+
+        <fieldset class="form-group col">
+            <label for="for_type">Tipo</label>
+            <div id="for-picker-t">
+                <select class="form-control" wire:model="type" required>
+                    <option value=""></option>
+                    <option value="Responsable">Responsable</option>
+                    <option value="Supervisor">Supervisor</option>
+                    <option value="Todas">Responsable/Supervisor</option>
+                </select>
+            </div>
+        </fieldset>
+    
         <fieldset class="form-group col">
             <label for="for_type">Usuario origen</label>
             <div id="for-picker-t">
@@ -19,6 +32,8 @@
                     ])
             </div>
         </fieldset>
+
+        
 
         <fieldset class="form-group col">
             <button
