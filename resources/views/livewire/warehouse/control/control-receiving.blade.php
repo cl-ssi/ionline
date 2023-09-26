@@ -50,8 +50,8 @@
                     <!-- <th class="text-center">Estado</th> -->
                     <th class="text-center">Ingreso Bodega</th>
                     <th>Facturas</th>
-                    <th>Enviado Firma</th>
-                    <th>Firmado</th>
+                    {{-- <th>Enviado Firma</th> --}}
+                    {{-- <th>Firmado</th> --}}
                     <th>VBs</th>
                 </tr>
             </thead>
@@ -145,9 +145,11 @@
                             </a>
                         @endforeach
                     </td>
+                    {{-- Comentado Enviado a Firma
                     <td class="text-center font-weight-bold text-success">
                         {{ $control->completed_invoices ? '✓' : ''}}
-                    </td>
+                    </td> --}}
+                    {{-- Comentado el Firmado
                     <td class="text-center">
                         @if($control->technicalSignature && $control->technicalSignature->signaturesFlows->first()->isSigned())
                             <a
@@ -160,7 +162,7 @@
                                 <i class="fas fa-file-pdf"></i>
                             </a>
                         @endif
-                    </td>
+                    </td> --}}
                     <td>
                         @foreach($control->approvals as $approval)
                             <i class="fa fa-fw fa-lg {{ $approval->icon }} text-{{ $approval->color }}" 
