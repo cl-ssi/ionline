@@ -6,7 +6,9 @@
         <div class="col-md-4">
             <div class="input-group mb-3">
                 <div class="input-group-prepend">
-                    <label class="input-group-text" for="inputGroupSelect01">Filtrar por</label>
+                    <label class="input-group-text" for="filter-by">
+                        Filtrar por
+                    </label>
                 </div>
                 <select wire:model.defer="filter_by" id="filter-by" class="custom-select" required>
                     <option value="all">Todos</option>
