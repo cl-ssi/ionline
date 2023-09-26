@@ -1716,7 +1716,7 @@ Route::prefix('warehouse')->as('warehouse.')->middleware(['auth', 'must.change.p
     Route::get('download-invoice/{invoice}', [ControlController::class, 'downloadInvoice'])->name('download-invoice');
 
     /** Para ver el acta de ingresos sin el middleware de store */
-    Route::get('control/{control}/show', [ControlController::class, 'pdf'])->name('control.show');    
+    Route::get('control/{control}/show', [ControlController::class, 'pdf'])->name('control.show');
     Route::get('control/{control}/showPdf', [ControlController::class, 'showPdf'])->name('control.showPdf');
 
     
