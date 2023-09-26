@@ -224,7 +224,7 @@
                                 
 						</fieldset>
                         <i class="fa-regular fa-clipboard"></i>
-						<fieldset class="form-group col-6 col-md-2" data-toggle="tooltip" data-placement="right" title="Valor sugerido por el sistema.">
+						<fieldset class="form-group col-6 col-md-2">
 							<label for="for_total_paid">Total a pagar</label>
                             
                                  
@@ -232,7 +232,7 @@
                                     @if($fulfillment->total_to_pay) 
                                         <input type="text" class="form-control" name="total_to_pay" value="{{$fulfillment->total_to_pay}}">
                                     @else 
-                                        <div class="input-group">
+                                        <div class="input-group" data-toggle="tooltip" data-placement="right" title="Valor sugerido por el sistema.">
                                             <input type="text" class="form-control" name="total_to_pay" value="{{$fulfillment->getValueMonthlyQuoteValue()}}">
                                             <div class="input-group-append">
                                                 <span class="input-group-text" id="basic-addon2">
