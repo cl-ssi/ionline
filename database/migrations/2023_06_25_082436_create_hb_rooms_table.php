@@ -29,34 +29,34 @@ class CreateHbRoomsTable extends Migration
             $table->softDeletes();
         });
 
-        Room::create([
-            'hotel_id' => 1,
-            'room_type_id' => 2,
-            'identifier' => 'Habitación 202',
-            'description' => 'Corresponde a una habitación para dos personas.',
-            'max_days_avaliable' => 3,
-            'double_bed' => 1
-        ]);
+        // Room::create([
+        //     'hotel_id' => 1,
+        //     'room_type_id' => 2,
+        //     'identifier' => 'Habitación 202',
+        //     'description' => 'Corresponde a una habitación para dos personas.',
+        //     'max_days_avaliable' => 3,
+        //     'double_bed' => 1
+        // ]);
 
-        Room::create([
-            'hotel_id' => 1,
-            'room_type_id' => 2,
-            'identifier' => 'Habitación 502',
-            'description' => 'Corresponde a una habitación para cuatro personas.',
-            'max_days_avaliable' => 2,
-            'single_bed' => 2,
-            'double_bed' => 1
-        ]);
+        // Room::create([
+        //     'hotel_id' => 1,
+        //     'room_type_id' => 2,
+        //     'identifier' => 'Habitación 502',
+        //     'description' => 'Corresponde a una habitación para cuatro personas.',
+        //     'max_days_avaliable' => 2,
+        //     'single_bed' => 2,
+        //     'double_bed' => 1
+        // ]);
 
-        Room::create([
-            'hotel_id' => 2,
-            'room_type_id' => 1,
-            'identifier' => 'Cabaña 01',
-            'description' => 'Corresponde a cabaña con capacidad para 5 personas. Tiene quincho y vista a la piscina del complejo.',
-            'max_days_avaliable' => 3,
-            'single_bed' => 1,
-            'double_bed' => 2
-        ]);
+        // Room::create([
+        //     'hotel_id' => 2,
+        //     'room_type_id' => 1,
+        //     'identifier' => 'Cabaña 01',
+        //     'description' => 'Corresponde a cabaña con capacidad para 5 personas. Tiene quincho y vista a la piscina del complejo.',
+        //     'max_days_avaliable' => 3,
+        //     'single_bed' => 1,
+        //     'double_bed' => 2
+        // ]);
     }
 
     /**

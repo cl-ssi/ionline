@@ -10,6 +10,7 @@ use App\Models\ProfAgenda\OpenHour;
 use App\Models\Parameters\Profession;
 use App\User;
 
+use App\Models\Parameters\Holiday;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 
@@ -160,41 +161,53 @@ class ProposalController extends Controller
                             // crea bloques de horarios
                             $duration = $detail->duration . ' minutes';
                             
-                            foreach (CarbonPeriod::create($detail->start_hour, $duration, $detail->end_hour)->excludeEndDate() as $key => $hour) {
+                            $holiday = Holiday::where('date', $date)->first();
+                            
+                            // si no es feriado
+                            if(!$holiday){
+                                foreach (CarbonPeriod::create($detail->start_hour, $duration, $detail->end_hour)->excludeEndDate() as $key => $hour) {
         
-                                $block_dates[$date->format('Y-m-d') . " " . $hour->format('H:i')]['start_date'] = $date->format('Y-m-d') . " " . $hour->format('H:i');
-                                $block_dates[$date->format('Y-m-d') . " " . $hour->format('H:i')]['end_date'] = Carbon::parse($date->format('Y-m-d') . " " . $hour->format('H:i'))->addMinutes($detail->duration)->format('Y-m-d H:i');
-                                $block_dates[$date->format('Y-m-d') . " " . $hour->format('H:i')]['activity_name'] = $detail->activityType->name;
-        
-                                // verifica si existe el bloque, si no existe, lo crea.
-                                $openHour = OpenHour::where('proposal_detail_id',$detail->id)
-                                                    ->where('start_date',$date->format('Y-m-d') . " " . $hour->format('H:i'))
-                                                    ->where('end_date',Carbon::parse($date->format('Y-m-d') . " " . $hour->format('H:i'))->addMinutes($detail->duration)->format('Y-m-d H:i'))
-                                                    ->get();
-        
-
-                                if($openHour->count()==0){
-                                    // bloques nuevos
-                                    $block_dates[$date->format('Y-m-d') . " " . $hour->format('H:i')]['color'] = '#85C1E9'; //azul
-                                    $newOpenHour = new OpenHour();
-                                    $newOpenHour->proposal_detail_id = $detail->id;
-                                    $newOpenHour->start_date = $date->format('Y-m-d') . " " . $hour->format('H:i');
-                                    $newOpenHour->end_date = Carbon::parse($date->format('Y-m-d') . " " . $hour->format('H:i'))->addMinutes($detail->duration)->format('Y-m-d H:i');
-                                    
-                                    $newOpenHour->profesional_id = $proposal->user_id;
-                                    $newOpenHour->profession_id = $proposal->profession_id; 
-                                    $newOpenHour->activity_type_id = $detail->activity_type_id;
-                                    $newOpenHour->save();
-                                    
-                                    $count += 1;
-        
-                                    $proposal->status = "Aperturado";
-                                    $proposal->save();
-                                }else{
-                                    // bloques ya existentes
-                                    $block_dates[$date->format('Y-m-d') . " " . $hour->format('H:i')]['color'] = '#f5c6bf'; //rojo
+                                    $block_dates[$date->format('Y-m-d') . " " . $hour->format('H:i')]['start_date'] = $date->format('Y-m-d') . " " . $hour->format('H:i');
+                                    $block_dates[$date->format('Y-m-d') . " " . $hour->format('H:i')]['end_date'] = Carbon::parse($date->format('Y-m-d') . " " . $hour->format('H:i'))->addMinutes($detail->duration)->format('Y-m-d H:i');
+                                    $block_dates[$date->format('Y-m-d') . " " . $hour->format('H:i')]['activity_name'] = $detail->activityType->name;
+            
+                                    // verifica si existe el bloque, si no existe, lo crea.
+                                    $openHour = OpenHour::where('proposal_detail_id',$detail->id)
+                                                        ->where('start_date',$date->format('Y-m-d') . " " . $hour->format('H:i'))
+                                                        ->where('end_date',Carbon::parse($date->format('Y-m-d') . " " . $hour->format('H:i'))->addMinutes($detail->duration)->format('Y-m-d H:i'))
+                                                        ->get();
+            
+    
+                                    if($openHour->count()==0){
+                                        // bloques nuevos
+                                        $block_dates[$date->format('Y-m-d') . " " . $hour->format('H:i')]['color'] = '#85C1E9'; //azul
+                                        $newOpenHour = new OpenHour();
+                                        $newOpenHour->proposal_detail_id = $detail->id;
+                                        $newOpenHour->start_date = $date->format('Y-m-d') . " " . $hour->format('H:i');
+                                        $newOpenHour->end_date = Carbon::parse($date->format('Y-m-d') . " " . $hour->format('H:i'))->addMinutes($detail->duration)->format('Y-m-d H:i');
+                                        
+                                        $newOpenHour->profesional_id = $proposal->user_id;
+                                        $newOpenHour->profession_id = $proposal->profession_id; 
+                                        $newOpenHour->activity_type_id = $detail->activity_type_id;
+                                        $newOpenHour->save();
+                                        
+                                        $count += 1;
+            
+                                        $proposal->status = "Aperturado";
+                                        $proposal->save();
+                                    }else{
+                                        // bloques ya existentes
+                                        $block_dates[$date->format('Y-m-d') . " " . $hour->format('H:i')]['color'] = '#f5c6bf'; //rojo
+                                    }
                                 }
+                            }else{
+                                // si es feriado
+                                $block_dates[$date->format('Y-m-d') . " 00:00"]['start_date'] = $date->format('Y-m-d') . " 00:00";
+                                $block_dates[$date->format('Y-m-d') . " 00:00"]['end_date'] = $date->format('Y-m-d') . " 23:59";
+                                $block_dates[$date->format('Y-m-d') . " 00:00"]['activity_name'] = "Feriado: " . $holiday->name;
+                                $block_dates[$date->format('Y-m-d') . " 00:00"]['color'] = '#E7EB89'; //amarillo
                             }
+                            
                         }
                     }
                 }

@@ -253,6 +253,8 @@ use App\Http\Controllers\Agreements\AddendumController;
 use App\Http\Controllers\Agreements\AccountabilityDetailController;
 use App\Http\Controllers\Agreements\AccountabilityController;
 use App\Http\Livewire\Warehouse\Cenabast\CenabastIndex;
+use App\Http\Controllers\PurchasePlan\PurchasePlanController;
+
 
 
 /*
@@ -1832,6 +1834,7 @@ Route::prefix('prof_agenda')->as('prof_agenda.')->middleware(['auth'])->group(fu
         Route::post('/block', [OpenHourController::class, 'block'])->name('block');
         Route::post('/unblock', [OpenHourController::class, 'unblock'])->name('unblock');
         Route::post('/saveBlock', [OpenHourController::class, 'saveBlock'])->name('saveBlock');
+        Route::post('/deleteBlocks', [OpenHourController::class, 'deleteBlocks'])->name('deleteBlocks');
         // Route::delete('/{openHour}/delete_reservation', [OpenHourController::class, 'delete_reservation'])->name('delete_reservation');
     });
 
@@ -1961,6 +1964,14 @@ Route::prefix('finance')->as('finance.')->middleware(['auth', 'must.change.passw
         Route::get('/{purchaseOrder}', [PurchaseOrderController::class, 'show'])->name('show');
         Route::get('/by-code/{po_code}', [PurchaseOrderController::class, 'showByCode'])->name('showByCode');
     });
+});
+
+/* */
+Route::prefix('purchase_plan')->as('purchase_plan.')->middleware(['auth', 'must.change.password'])->group(function () {
+    Route::get('/own_index', [PurchasePlanController::class, 'own_index'])->name('own_index');
+    Route::get('/all_purchase_plan', [PurchasePlanController::class, 'all_purchase_plan'])->name('all_purchase_plan');
+    Route::get('/create', [PurchasePlanController::class, 'create'])->name('create');
+    Route::get('/{purchasePlan}/show', [PurchasePlanController::class, 'show'])->name('show');
 });
 
 /*formulario de requerimiento compra o servicio */
@@ -2443,6 +2454,13 @@ Route::prefix('his')->as('his.')->middleware('auth')->group(function () {
         Route::get('/mgr', ModificationMgr::class)->name('mgr');
         Route::get('/{modificationRequest}/show', ModificationRequestController::class)->name('show');
         Route::view('/parameters', 'his.parameters')->name('parameters');
+
+        Route::prefix('files')->as('files.')->group(function () {
+            // Route::post('/store', [SummaryFileController::class, 'store'])->name('store');
+            // Route::get('/{file}/delete', [SummaryFileController::class, 'deleteFile'])->name('delete');
+            Route::get('/{file}/download', [ModificationRequestController::class, 'download'])->name('download');
+        });
+    
     });
 });
 

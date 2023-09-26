@@ -156,6 +156,11 @@
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
 
                         @if(auth()->user()->organizationalUnit->establishment_id != 1)
+                            {{--
+                            <a class="dropdown-item {{ active('purchase_plan.own_index') }}" href="{{ route('purchase_plan.own_index') }}">
+                                <i class="fas fa-fw fa-shopping-cart"></i> Plan de Compras
+                            </a>
+                            --}}
 
                             @php($ouSearch = App\Models\Parameters\Parameter::where('module', 'nav')->where('parameter', 'accessRF')->first()->value)
                             @if(auth()->user()->organizationalUnit && in_array(auth()->user()->organizationalUnit->establishment_id, explode(',', $ouSearch)))

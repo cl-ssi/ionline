@@ -14,7 +14,11 @@ class OpenHourController extends Controller
 {
     public function store(Request $request){
 
-        // dd($request);
+        // validación para dv de rut
+        if(!$request->dv){
+            session()->flash('warning', 'El campo dv no puede ser vacío.');
+            return redirect()->back();
+        }
 
         // si el usuario se encuentra eliminado, se vuelve a dejar activo
         if(User::withTrashed()->find($request->user_id)){
@@ -142,4 +146,13 @@ class OpenHourController extends Controller
         session()->flash('success', 'Se agregó el bloque.');
         return redirect()->back();
     }
+
+    public function deleteBlocks(Request $request){
+        $date = Carbon::parse($request->date);
+        $start_date = Carbon::parse($date->format('Y-m-d') . " " . $request->start_hour);
+        $end_date = Carbon::parse($date->format('Y-m-d') . " " . $request->end_hour);
+        OpenHour::whereBetween('start_date',[$start_date,$end_date])->delete();
+        session()->flash('success', 'Se eliminaron los bloques.');
+        return redirect()->back();
+    }   
 }

@@ -55,7 +55,7 @@
             @foreach ($dtes as $dte)
                 <tr>
                     <td class="small">{{ $dte->id }}</td>
-                    <td class="small">{{ $dte->establishment->name }}</td>
+                    <td class="small">{{ $dte->establishment?->name }}</td>
                     <td class="small">
                         @if ($dte->tipo_documento != 'boleta_honorarios')
                             <a href="http://dipres2303.acepta.com/ca4webv3/PdfView?url={{ $dte->uri }}" target="_blank"

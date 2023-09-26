@@ -2,7 +2,96 @@
     <div class="card">
         <div class="card-body">
             <h5 class="card-title"><i class="fas fa-cart-plus"></i> {{ $title }}</h5>
+            <!-- EXCLUSIVO PARA PLAN DE COMPRA (FUNCIONA CON BOOTSTRAP V5) -->
+            @if($bootstrap == 'v5')
+            <form class="row g-3">
+                <fieldset class="form-group col-sm-4">
+                    <label class="form-label" for="product-search">Buscar Producto o Servicio</label>
+                    <input wire:model.debounce.500ms="search_product" id="product-search" class="form-control form-control-sm" type="text">
+                </fieldset>
+
+                <fieldset class="form-group col-sm-8">
+                    <label class="form-label" for="product-id">Producto o Servicio</label>
+                    @livewire('unspsc.product-search', ['smallInput' => true, 'showCode' => true])
+                </fieldset>
+            </form>
             
+            <br>
+
+            <form class="row g-3">
+                <div class="col-md-6">
+                    <fieldset class="form-group col-12">
+                        <label class="form-label" for="technicalSpecifications" >Especificaciones Técnicas</label>
+                        <textarea class="form-control form-control-sm" wire:model.defer="technicalSpecifications" name="technicalSpecifications" rows="4"></textarea>
+                    </fieldset>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="row g-3">
+                        <fieldset class="form-group col-4 mb-2">
+                            <label class="form-label">Unidad de Medida</label>
+                            <select wire:model.defer="unitOfMeasurement" name="unitOfMeasurement" class="form-select form-select-sm" required>
+                                <option value="">Seleccione...</option>
+                                @foreach($lstUnitOfMeasurement as $val)
+                                    <option value="{{$val->name}}">{{$val->name}}</option>
+                                @endforeach
+                            </select>
+                        </fieldset>
+
+                        <fieldset class="form-group col-4">
+                            <label class="form-label" for="forRut">Cantidad</label>
+                            <input wire:model.defer="quantity" name="quantity" class="form-control form-control-sm" type="text">
+                        </fieldset>
+
+                        <fieldset class="form-group col-4">
+                            <label class="form-label" for="for_unit_value">Valor Unitario Neto</label>
+                            <input wire:model.defer="unitValue" name="unitValue" class="form-control form-control-sm" type="text">
+                        </fieldset>
+                    </div>
+
+                    <div class="row g-3">
+                        <fieldset class="form-group col-4">
+                            <label class="form-label">Tipo de Impuestos</label>
+                            <select wire:model.defer="taxes" name="taxes" class="form-select form-select-sm" required>
+                                <option value="">Seleccione...</option>
+                                <option value="iva">I.V.A. 19%</option>
+                                <option value="bh">Boleta de Honorarios {{isset($this->withholding_tax[date('Y')]) ? $this->withholding_tax[date('Y')] * 100 : end($this->withholding_tax) * 100 }}%</option>
+                                <option value="srf">S.R.F Zona Franca 0%</option>
+                                <option value="e">Exento 0%</option>
+                                <option value="nd">No Definido</option>
+                            </select>
+                        </fieldset>
+
+                        <fieldset class="form-group col-8">
+                            <label class="form-label">Documento Informativo (optativo)
+                                @if($savedArticleFile)
+                                <a class="text-info" href="#items" wire:click="deleteFile({{$key}})">Borrar <i class="fas fa-paperclip"></i></a>
+                                @endif
+                            </label>
+                            <input class="form-control form-control-sm" type="file" style="padding:2px 0px 0px 2px;" wire:model.defer="articleFile" name="articleFile" id="upload{{ $iteration }}" @if($savedArticleFile) disabled @endif>
+                            <div wire:loading wire:target="articleFile">Cargando archivo...</div>
+                        </fieldset>
+                    </div>
+                </div>
+            </form>
+
+            <br>
+
+            <form class="row g-3">
+                <div class="col-12">
+                    @if($edit)
+                        <button type="button" wire:click="updateItem" class="btn btn-primary btn-sm float-end" wire:target="articleFile" wire:loading.attr="disabled">Editar Item</button>
+                    @else
+                        <button type="button" wire:click="addItem" class="btn btn-primary btn-sm float-end" wire:target="articleFile" wire:loading.attr="disabled"><i class="fas fa-cart-plus"></i> Agregar</button>
+                    @endif
+                </div>
+                <div class="col-12">
+                    <button type="button" wire:click="cleanItem" class="btn btn-outline-secondary btn-sm float-end">Cancelar</button>
+                </div>
+            </form>
+
+            @else
+            <!-- EXCLUSIVO PARA ABASTECIMIENTO (FUNCIONA CON BOOTSTRAP V4.6) -->
             <div class="form-row">
                 <fieldset class="form-group col-sm-4">
                     <label for="product-search">Buscar Producto o Servicio</label>
@@ -98,7 +187,7 @@
                     <button type="button" wire:click="cleanItem" class="btn btn-outline-secondary btn-sm float-right">Cancelar</button>
                 </div>
             </div><!-- FILA 5 --><!--Valida la variable error para que solo contenga validación de los Items-->
-
+            @endif
         </div>
     </div>
 
