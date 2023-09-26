@@ -6,6 +6,7 @@ use Livewire\Component;
 
 use App\Models\ProfAgenda\OpenHour;
 use App\User;
+use App\Models\Parameters\Holiday;
 
 class Agenda extends Component
 {
@@ -22,7 +23,11 @@ class Agenda extends Component
         $count = 0;
 
         $openHours = OpenHour::where('profesional_id',$this->profesional_id)->where('profession_id',$this->profession_id)->get();
-        // dd($openHours);
+
+        $min_date=$openHours->min('start_date');
+        $max_date=$openHours->max('end_date');
+        $holidays = Holiday::whereBetween('date', [$min_date, $max_date])->get();
+
         foreach($openHours as $hour){
             $array[$count]['id'] = $hour->id;
             $array[$count]['observation'] = $hour->observation;
@@ -51,6 +56,19 @@ class Agenda extends Component
             $count += 1;
         }
 
+        foreach($holidays as $holiday){
+            $array[$count]['id'] = 0;
+            $array[$count]['observation'] = null;
+            $array[$count]['contact_number'] = null;
+            $array[$count]['start'] = $holiday->date->format('Y-m-d') . " 00:00";
+            $array[$count]['end'] = $holiday->date->format('Y-m-d') . " 23:59";
+            $array[$count]['color'] = '#E7EB89'; //amarillo
+            $array[$count]['title'] = "Feriado: " . $holiday->name;
+            $array[$count]['status'] = "Feriado: " . $holiday->name;
+            $array[$count]['deleted_bloqued_observation'] = null;
+        }
+
+        // dd($array);
 
         $this->events = json_encode($array);
 

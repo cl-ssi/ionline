@@ -40,11 +40,9 @@
     </div>
 
     <div class="form-group">
-        <label for="for-files">Adjuntar archivos opcional (ej: norma)</label>
-        <div class="custom-file">
-            <input type="file" class="custom-file-input" id="customFileLang" lang="es" disabled>
-            <label class="custom-file-label" for="customFileLang" data-browse="Examinar">Seleccionar Archivo</label>
-        </div>
+        <label for="for_files">Adjuntar archivos opcional (ej: norma)</label>
+        <input type="file" class="form-control" id="for_files" wire:model="files" multiple>
+        @error('files.*') <span class="error">{{ $message }}</span> @enderror
     </div>
 
     @include('layouts.partials.flash_message')

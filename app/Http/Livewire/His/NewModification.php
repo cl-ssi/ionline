@@ -2,14 +2,21 @@
 
 namespace App\Http\Livewire\His;
 
+use Livewire\WithFileUploads;
 use Livewire\Component;
 use App\Models\Parameters\Parameter;
 use App\Models\His\ModificationRequest;
+use App\Models\His\ModificationRequestFile;
 
 class NewModification extends Component
 {
+    use WithFileUploads;
+
     public $modrequest;
     public $types;
+
+    public $storage_path = '/ionline/his/files';
+    public $files = [];
 
     protected $rules = [
         'modrequest.type' => 'required',
@@ -36,11 +43,27 @@ class NewModification extends Component
     */
     public function save()
     {
+        $this->validate([
+            'files.*' => 'file', // 2MB Max
+        ]);
+        
         $this->validate();
         $modrequest = ModificationRequest::make($this->modrequest);
         $modrequest->creator_id = auth()->id();
 
         $modrequest->save();
+
+        foreach($this->files as $file){
+            $filename = $file->getClientOriginalName();
+            $filePath = $file->storeAs($this->storage_path, $filename, ['disk' => 'gcs']);
+
+            ModificationRequestFile::create([
+                'file' => $filePath,
+                'name' => $filename,
+                'request_id' => $modrequest->id,
+            ]);
+        }
+
         session()->flash('success', 'Se ha creado la nueva solicitud.');
     }
 

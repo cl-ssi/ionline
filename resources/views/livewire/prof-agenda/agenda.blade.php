@@ -17,6 +17,7 @@
         <div style="color:#EB9489">&#9632;</div>&nbsp;<p>Reservado</p>&nbsp;&nbsp;
         <div style="color:#85C1E9">&#9632;</div>&nbsp;<p>Bloqueado</p>
         <div style="color:#C4F7BF">&#9632;</div>&nbsp;<p>Mis reservas</p>
+        <div style="color:#E7EB89">&#9632;</div>&nbsp;<p>Feriado</p>
     </div>
 
     <div>

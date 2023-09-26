@@ -11,10 +11,12 @@ use App\User;
 use App\Rrhh\OrganizationalUnit;
 use App\Notifications\Documents\NewApproval;
 use App\Models\Finance\Dte; // Sólo para el ejemplo, no tiene uso
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Approval extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
     /**
      * Ejemplo de uso
@@ -152,6 +154,8 @@ class Approval extends Model
         'approver_at',
         'callback_controller_method',
         'callback_controller_params',
+        'status',
+        'reject_observation',
         'digital_signature',
         'active',
         'previous_approval_id',
@@ -251,7 +255,7 @@ class Approval extends Model
             }
             /** Si tiene un aprobador en particular envia la notificación al usuario específico */
             if($approval->approver_id) {
-                $approval->aprover->notify(new NewApproval($approval));
+                $approval->approver->notify(new NewApproval($approval));
             }
 
             /** Agregar el approval_id al comienzo de los parámetros del callback */

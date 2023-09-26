@@ -16,6 +16,8 @@ class RequestFormItems extends Component
     public $article, $unitOfMeasurement, $technicalSpecifications, $quantity, $articleFile, $savedArticleFile, $editRF, $savedItems, $deletedItems, $iteration,
             $unitValue, $taxes, $fileItem, $totalValue, $lstUnitOfMeasurement, $title, $edit, $key, $items, $totalDocument, $withholding_tax, $precision_currency,
                 $product_id, $product_name, $search_product;
+    
+    public $bootstrap;
 
     protected $listeners = [
         'savedTypeOfCurrency',
