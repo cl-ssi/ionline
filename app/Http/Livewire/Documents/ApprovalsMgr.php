@@ -2,9 +2,9 @@
 
 namespace App\Http\Livewire\Documents;
 
-use Livewire\Component;
 use App\Models\Documents\Approval;
 use App\Jobs\ProcessApproval;
+use Livewire\Component;
 
 class ApprovalsMgr extends Component
 {
@@ -15,8 +15,9 @@ class ApprovalsMgr extends Component
     public $filter = [];
 
     /**
-    * mount
-    */
+     * @param  Approval $approval
+     * @return void
+     */
     public function mount(Approval $approval)
     {
         /** Si se pasa un modelo por parametro, se carga la hoja con el modal abierto */
@@ -26,6 +27,10 @@ class ApprovalsMgr extends Component
         $this->filter['status'] = '';
     }
 
+    /**
+     * @param  Approval $approval
+     * @return void
+     */
     public function show(Approval $approval)
     {
         /**
@@ -43,9 +48,13 @@ class ApprovalsMgr extends Component
     }
 
     /**
-    * Approve or reject
-    */
-    public function approveOrReject(Approval $approvalSelected, $status)
+     * Approve or reject
+     *
+     * @param  Approval $approvalSelected
+     * @param  bool $status
+     * @return void
+     */
+    public function approveOrReject(Approval $approvalSelected, bool $status)
     {
         $approvalSelected->approver_id = auth()->id();
         $approvalSelected->approver_at = now();
@@ -62,20 +71,23 @@ class ApprovalsMgr extends Component
     }
 
     /**
-    * Bulk Approvation
-    */
+     * Bulk Approvation
+     *
+     * @param  bool $status
+     * @return void
+     */
     public function bulkProcess($status)
     {
         foreach($this->ids as $id => $value) {
-            $approvalSelected = Approval::find($id); 
+            $approvalSelected = Approval::find($id);
             $this->approveOrReject($approvalSelected, $status);
         }
         $this->ids = [];
     }
 
     /**
-    * Get Approvals
-    */
+     * @return void
+     */
     public function getApprovals()
     {
         /** Soy manager de alguna OU hoy? */
@@ -102,6 +114,9 @@ class ApprovalsMgr extends Component
         return $query->latest()->paginate(100);
     }
 
+    /**
+     * @return \Illuminate\Contracts\Support\Arrayable|array
+     */
     public function render()
     {
         $approvals = $this->getApprovals();
