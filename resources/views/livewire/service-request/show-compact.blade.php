@@ -1,8 +1,26 @@
 <div>
+
+    <div class="form-row mb-3">
+        <div class="col">
+            <h4 class="card-title">
+                Contrato id: <a href="{{ route('rrhh.service-request.edit', $serviceRequest) }}">{{ $serviceRequest->id }}</a>
+            </h4>
+        </div>
+        <div class="col-1">
+
+        </div>
+        <div class="col-2"></div>
+
+        <div class="col-2">
+        <button class="btn btn-danger" wire:click="deleteRequest({{$serviceRequest}})" 
+            onclick="confirm('¿Está seguro de eliminar la solicitud?') || event.stopImmediatePropagation()"
+            @disabled(!Auth::user()->can('Service Request: fulfillments rrhh'))>
+            Eliminar solicitud
+        </button>
+        </div>
+    </div>
+
     
-    <h4 class="card-title">
-        Contrato id: <a href="{{ route('rrhh.service-request.edit', $serviceRequest) }}">{{ $serviceRequest->id }}</a>
-    </h4>
 
     <div class="form-row mb-3">
         <div class="col-md-3">

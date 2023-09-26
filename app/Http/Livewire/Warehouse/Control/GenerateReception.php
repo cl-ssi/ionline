@@ -522,14 +522,14 @@ class GenerateReception extends Component
 
 
         // Nueva versión Probar cuando llegue MP
-        // if ($control->require_contract_manager_visation == 1 and $this->request_form){
-        // $this->chainApprovals($control->requestForm->contract_manager_id);
+        // if ($control->require_contract_manager_visation == 1 and $this->request_form){        
         //     $approval_contract_manager = Approval::create([
         //         "module" => "Modulo Bodega",
         //         "module_icon" => "fas fa-rocket",
         //         "subject" => "Nueva Solicitud de Visación de  Administrador de Contrato por parte de Bodega",                
         //         "approver_id" => $control->requestForm->contract_manager_id, 
         //     ]);
+        // $this->chainApprovals($control->requestForm->contract_manager_id);
         // }
 
 

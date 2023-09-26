@@ -25,8 +25,7 @@ class ControlController extends Controller
      */
     public function index(Store $store, Request $request)
     {
-        if($request->type == 'receiving' || $request->type == 'dispatch')
-        {
+        if ($request->type == 'receiving' || $request->type == 'dispatch') {
             $type = $request->type;
             $nav = $request->nav;
             return view('warehouse.controls.index', compact('store', 'type', 'nav'));
@@ -43,8 +42,7 @@ class ControlController extends Controller
      */
     public function create(Store $store, Request $request)
     {
-        if($request->type == 'receiving' || $request->type == 'dispatch')
-        {
+        if ($request->type == 'receiving' || $request->type == 'dispatch') {
             $type = $request->type;
             $nav = $request->nav;
             return view('warehouse.controls.create', compact('store', 'type', 'nav'));
@@ -63,7 +61,7 @@ class ControlController extends Controller
     public function edit(Store $store, Control $control, Request $request)
     {
         $nav = $request->nav;
-        if($control->isReceiveFromStore() && !$control->isConfirmed())
+        if ($control->isReceiveFromStore() && !$control->isConfirmed())
             return view('warehouse.controls.review-product', compact('store', 'control', 'nav'));
         else
             return view('warehouse.controls.edit', compact('store', 'control', 'nav'));
@@ -93,14 +91,41 @@ class ControlController extends Controller
      */
     public function pdf(Store $store, Control $control, Request $request)
     {
+
         $type = '/';
         $act_type = $request->act_type;
 
-        if($control->isReceiving())
+        if ($control->isReceiving())
             return view('warehouse.pdf.report-reception', compact('store', 'control', 'type', 'act_type'));
         else
             return view('warehouse.pdf.report-dispatch', compact('store', 'control', 'type'));
     }
+
+
+    // Algo asi debo implementar
+    public function showPdf(Store $store, Control $control, Request $request)
+    {
+
+        $type = '/';
+        $act_type = $request->act_type;
+        
+
+        if ($control->isReceiving()) {
+            $documentFile = \PDF::loadView('warehouse.pdf.report-reception', compact('store', 'control', 'type', 'act_type'));
+            
+        } 
+        else {
+            
+            $documentFile = \PDF::loadView('warehouse.pdf.report-dispatch', compact('store', 'control', 'type'));
+            
+        }
+        return $documentFile->stream();
+        
+    }
+
+
+
+
 
     /**
      * Generate Reception
@@ -130,13 +155,13 @@ class ControlController extends Controller
 
 
     /**
-    * Download Invoice
-    */
+     * Download Invoice
+     */
     public function downloadInvoice(Invoice $invoice)
     {
-        if(Storage::disk('gcs')->exists($invoice->url)) {
+        if (Storage::disk('gcs')->exists($invoice->url)) {
             return Storage::disk('gcs')->response($invoice->url);
-        }else{
+        } else {
             return redirect()->back()->with('warning', 'El archivo no se ha encontrado.');
         }
     }

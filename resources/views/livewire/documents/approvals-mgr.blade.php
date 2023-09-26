@@ -19,17 +19,22 @@
                 <i class="fas fa-filter"></i>
             </button>
         </div>
+        <div class="form-group col-md-1">
+            <label for="for_filter">&nbsp;</label>
+            <a href="{{ route('documents.approvals') }}" class="btn btn-outline-secondary form-control">
+                Actualizar
+            </a>
+        </div>
     </div>
 
     <table class="table table-sm table-bordered">
         <thead>
             <tr>
                 <th width="35px"></th>
-                <th></th>
-                <th width="140px">Fecha Solicitud</th>
+                <th width="86px">Fecha Solicitud</th>
                 <th>Módulo</th>
                 <th>Asunto</th>
-                <th width="140px">Fecha Acción</th>
+                <th width="86px">Fecha Acción</th>
                 <th>Observación</th>
                 <th width="110px"></th>
             </tr>
@@ -47,11 +52,10 @@
                             @disabled(! is_null($approval->status) )>
                     </div>
                 </td>
-                <td class="small">{{ $approval->id }}</td>
                 <td class="small">
                     {{ $approval->created_at }}
                 </td>
-                <td>
+                <td nowrap>
                     @if( $approval->module_icon )
                     <i class="fa-fw {{$approval->module_icon}}"></i>
                     @endif

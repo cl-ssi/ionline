@@ -110,6 +110,7 @@ use App\Http\Controllers\Rrhh\RoleController;
 use App\Http\Controllers\Rrhh\OrganizationalUnitController;
 use App\Http\Controllers\Rrhh\AuthorityController;
 use App\Http\Controllers\Rrhh\AttendanceController;
+use App\Http\Controllers\Rrhh\NoAttendanceRecordController;
 use App\Http\Controllers\Rrhh\AbsenteeismTypeController;
 use App\Http\Controllers\Resources\WingleController;
 use App\Http\Controllers\Resources\TelephoneController;
@@ -835,8 +836,10 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
         Route::get('/', [AttendanceController::class, 'index'])->name('index');
         Route::get('/import', [AttendanceController::class, 'import'])->name('import');
         Route::post('/store', [AttendanceController::class, 'store'])->name('store');
+
         Route::get('no-records', NoAttendanceRecordIndex::class)->name('no-records.index');
         Route::get('no-records-mgr', NoAttendanceRecordMgr::class)->name('no-records.mgr');
+        Route::get('no-records/{noAttendanceRecord}', [NoAttendanceRecordController::class,'show'])->name('no-records.show');
         Route::get('no-records/{noAttendanceRecord}/confirmation', NoAttendanceRecordConfirmation::class)->name('no-records.confirmation');
         Route::get('reasons', ReasonMgr::class)->name('reason.mgr');
     });
@@ -1713,7 +1716,10 @@ Route::prefix('warehouse')->as('warehouse.')->middleware(['auth', 'must.change.p
     Route::get('download-invoice/{invoice}', [ControlController::class, 'downloadInvoice'])->name('download-invoice');
 
     /** Para ver el acta de ingresos sin el middleware de store */
-    Route::get('control/{control}/show', [ControlController::class, 'pdf'])->name('control.show');
+    Route::get('control/{control}/show', [ControlController::class, 'pdf'])->name('control.show');    
+    Route::get('control/{control}/showPdf', [ControlController::class, 'showPdf'])->name('control.showPdf');
+
+    
 
     Route::prefix('store')->group(function () {
         Route::get('welcome', [StoreController::class, 'welcome'])->name('store.welcome');

@@ -8,6 +8,7 @@ use App\Models\Warehouse\Store;
 use App\Models\Warehouse\TypeDispatch;
 use App\Models\Warehouse\TypeReception;
 use Livewire\Component;
+use App\Models\Documents\Approval;
 
 class ControlCreate extends Component
 {
@@ -43,7 +44,7 @@ class ControlCreate extends Component
         'origin_id'         => 'required|integer|exists:wre_origins,id',
         'type_reception_id' => 'required|integer|exists:wre_type_receptions,id',
         'technical_signer_id' => 'required|integer|exists:users,id',
-        'require_contract_manager_visation' =>'nullable|boolean',
+        'require_contract_manager_visation' => 'nullable|boolean',
     ];
 
     public $rulesDispatch = [
@@ -54,7 +55,7 @@ class ControlCreate extends Component
         'destination_id'        => 'nullable|required_if:type_dispatch_id,4|exists:wre_destinations,id',
         'store_destination_id'  => 'nullable|required_if:type_dispatch_id,3|exists:wre_type_receptions,id',
         'organizational_unit_id' => 'nullable|required_if:type_dispatch_id,1|exists:organizational_units,id',
-        'require_contract_manager_visation' =>'nullable|boolean',
+        'require_contract_manager_visation' => 'nullable|boolean',
     ];
 
     public function mount()
@@ -88,9 +89,23 @@ class ControlCreate extends Component
         $dataValidated['completed_invoices'] = false;
         //$dataValidated['require_contract_manager_visation'] = $this->require_contract_manager_visation?$dataValidated['require_contract_manager_visation'] : null;
         $dataValidated['require_contract_manager_visation'] = $this->require_contract_manager_visation ? 1 : 0;
-        
+
 
         $control = Control::create($dataValidated);
+
+
+
+        if ($this->require_contract_manager_visation) {
+            $yo = 16055586;
+            $approval_contract_manager = Approval::create([
+                "module" => "Modulo Bodega",
+                "module_icon" => "fas fa-rocket",
+                "subject" => "Nueva Solicitud de Visación de  Administrador de Contrato por parte de Bodega",
+                "approver_id" => $yo,
+                "document_route_name" => "warehouse.control.showPdf",
+                "document_route_params" => json_encode($control->id),
+            ]);
+        }
 
         session()->flash('success', "Se ha guardado el encabezado del $control->type_format.");
 
@@ -101,6 +116,9 @@ class ControlCreate extends Component
             'nav' => $this->nav,
         ]);
     }
+
+
+
 
     public function getPrograms()
     {

@@ -2,11 +2,13 @@
 
 namespace App\Models\Rrhh;
 
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\User;
 use App\Models\Rrhh\Attendance\Reason;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\Documents\Approval;
 
 class NoAttendanceRecord extends Model
 {
@@ -65,6 +67,14 @@ class NoAttendanceRecord extends Model
     public function authority()
     {
         return $this->belongsTo(User::class)->withTrashed();
+    }
+
+    /**
+     * Get the approval model.
+     */
+    public function approval(): MorphOne
+    {
+        return $this->morphOne(Approval::class, 'approvable');
     }
 
     public function rrhhUser()

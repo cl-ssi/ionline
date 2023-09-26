@@ -187,6 +187,9 @@ class RoleAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'HIS Modification Request: User', 'description' => 'Permite hacer solicitudes de modificación al HIS APS']);
         Permission::create(['name' => 'HIS Modification Request: Manager', 'description' => 'Administrador de solicitudes de modificación del HIS APS (Referente SIDRA)']);
 
+        Permission::create(['name' => 'Purchase Plan: create', 'description' => 'Permite crear planes de compras']);
+        Permission::create(['name' => 'Purchase Plan: all',    'description' => 'Permite visualizar todos los planes de compras']);
+
         // @role(
         //   'Replacement Staff: admin |
         //   Replacement Staff: user'

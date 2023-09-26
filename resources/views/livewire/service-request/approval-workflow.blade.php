@@ -28,13 +28,15 @@
         <tbody>
             @foreach ($serviceRequest->SignatureFlows->sortBy('sign_position') as $key => $SignatureFlow)
                 @if($SignatureFlow->status === null)
-                  <tr class="table-light">
+                    <tr class="table-light">
                 @elseif($SignatureFlow->status === 0)
-                  <tr class="table-danger">
+                    <tr class="table-danger">
                 @elseif($SignatureFlow->status === 1)
-                  <tr>
+                    <tr>
                 @elseif($SignatureFlow->status === 2)
-                  <tr class="table-warning">
+                    <tr class="table-warning">
+                @else
+                    <tr>
                 @endif
 
                     <td>{!! optional($SignatureFlow->user->organizationalUnit)->name ??
@@ -70,8 +72,7 @@
                             value="{{ $SignatureFlow->observation }}" wire:model.defer="observation">
                         </td>
                         <td>
-                            <button class="btn btn-sm btn-primary"
-                            wire:click="saveSignatureFlow({{ $SignatureFlow->id }})">Guardar</button>
+                            <button class="btn btn-sm btn-primary" wire:click="saveSignatureFlow({{ $SignatureFlow->id }})">Guardar</button>
                         </td>
                     @else
                         <td>
@@ -138,9 +139,8 @@
                     value="{{ $SignatureFlow->observation }}" wire:model.defer="edit_observation">
                 </td>
                 <td>
-                    <button class="btn btn-sm btn-outline-primary" wire:click="save()">
-                        Guardar
-                    </button>
+                    <button class="btn btn-sm btn-outline-primary" wire:click="save()">Guardar</button>
+                    <button class="btn btn-sm btn-outline-danger" wire:click="delete()">Eliminar</button>
                 </td>
             </tr>
             </tbody>

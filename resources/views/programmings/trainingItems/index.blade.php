@@ -19,16 +19,19 @@
             <th class="text-center align-middle table-dark" colspan="18">PROGRAMA  ANUAL DE CAPACITACION  PERSONAL ESTATUTO ATENCIÓN PRIMARIA (LEY 19.378) SERVCIO DE SALUD TARAPACÁ   </th>
         </tr>
         <tr style="font-size:60%;">
-            <th class="text-center align-middle" colspan="3"></th>
+            <th class="text-center align-middle" rowspan="2">LINEAMIENTOS ESTRATEGICOS</th>
+            <th class="text-center align-middle" rowspan="2">ACTIVIDADES DE CAPACITACION (TEMAS)</th>
+            <th class="text-center align-middle" rowspan="2">OBJETIVOS EDUCATIVOS</th>
             <th class="text-center align-middle" colspan="7">NUMERO DE PARTICIPANTES POR CATEGORIA</th>
-            <th class="text-center align-middle"></th>
-            <th class="text-center align-middle" colspan="4">CAPACITACION</th>
-            <th class="text-center align-middle"colspan="3"></th>
+            <th class="text-center align-middle" rowspan="2">NUMERO DE HORAS PEDAGOGICAS </th>
+            <th class="text-center align-middle" colspan="4">FINANCIAMIENTO</th>
+            <th class="text-center align-middle" rowspan="2">ORGANISMO EJECUTOR</th>
+            <th class="text-center align-middle" rowspan="2">COORDINADOR</th>
+            <th class="text-center align-middle" rowspan="2">FECHA DE EJECUCIÓN</th>
+            @if(Auth::user()->can('TrainingItem: edit') && $programming_status == 'active')<th class="text-center align-middle" rowspan="2">EDITAR</th> @endif
+            @if(Auth::user()->can('TrainingItem: delete') && $programming_status == 'active')<th class="text-center align-middle" rowspan="2">ELIMINAR</th> @endif
         </tr>
         <tr style="font-size:45%;">
-            <th class="text-center align-middle">LINEAMIENTOS ESTRATEGICOS</th>
-            <th class="text-center align-middle">OBJETIVOS EDUCATIVOS</th>
-            <th class="text-center align-middle">ACTIVIDADES DE CAPACITACION (TEMAS)</th>
             <th class="text-center align-middle">A (Médicos, Odont, QF,etc.)</th>
             <th class="text-center align-middle">B (Otros Profesio-nales)</th>
             <th class="text-center align-middle">C (Técnicos Nivel Superior) </th>
@@ -36,24 +39,22 @@
             <th class="text-center align-middle">E (Adminis-trativos Salud)</th>
             <th class="text-center align-middle">F (Auxiliares servicios Salud)</th>
             <th class="text-center align-middle">TOTAL</th>
-            <th class="text-center align-middle">NUMERO DE HORAS PEDAGOGICAS </th>
             <th class="text-center align-middle">ITEM CAPACITACION</th>
             <th class="text-center align-middle">FONDOS MUNICIPALES (SI-NO)</th>
             <th class="text-center align-middle">OTROS FONDOS (ESPECIFICAR CUALES)</th>
             <th class="text-center align-middle">TOTAL PRESUPUESTO ESTIMADO </th>
-            <th class="text-center align-middle">ORGANISMO EJECUTOR</th>
-            <th class="text-center align-middle">COORDINADOR</th>
-            <th class="text-center align-middle">FECHA DE EJECUCIÓN</th>
-            @if(Auth::user()->can('TrainingItem: edit') && $programming_status == 'active')<th class="text-center align-middle">EDITAR</th> @endif
-            @if(Auth::user()->can('TrainingItem: delete') && $programming_status == 'active')<th class="text-center align-middle">ELIMINAR</th> @endif
         </tr>
     </thead>
     <tbody style="font-size:60%;">
+        @php($lineamiento_temp = null)
         @foreach($trainingItems as $trainingItem)
         <tr class="small">
-            <td class="text-center align-middle"><strong>{{ $trainingItem->linieamiento_estrategico}}</strong></td>
-            <td class="text-center align-middle">{{ $trainingItem->objetivos_educativos }}</td>
+            @if($trainingItem->linieamiento_estrategico != $lineamiento_temp)
+            <td class="text-center" rowspan="{{$trainingItems->where('linieamiento_estrategico', $trainingItem->linieamiento_estrategico)->count()}}"><strong>{{ $trainingItem->linieamiento_estrategico}}</strong></td>
+            @php($lineamiento_temp = $trainingItem->linieamiento_estrategico)
+            @endif
             <td class="text-center align-middle">{{ $trainingItem->temas }}</td>
+            <td class="text-center align-middle">{{ $trainingItem->objetivos_educativos }}</td>
             <td class="text-center align-middle">{{ $trainingItem->med_odont_qf }}</td>
             <td class="text-center align-middle">{{ $trainingItem->otros_profesionales }}</td>
             <td class="text-center align-middle">{{ $trainingItem->tec_nivel_superior }}</td>
@@ -65,14 +66,14 @@
             <td class="text-center align-middle">{{ $trainingItem->item_cap }}</td>
             <td class="text-center align-middle">{{ $trainingItem->fondo_muni }}</td>
             <td class="text-center align-middle">{{ $trainingItem->otro_fondo }}</td>
-            <td class="text-center align-middle">{{ $trainingItem->total_presupuesto_est }}</td>
+            <td class="text-center align-middle">{{ number_format($trainingItem->total_presupuesto_est, 0, ',', '.') }}</td>
             <td class="text-center align-middle">{{ $trainingItem->org_ejecutor }}</td>
             <td class="text-center align-middle">{{ $trainingItem->coordinador }}</td>
             <td class="text-center align-middle">{{ $trainingItem->fecha_ejecucion }}</td>
 
             @if(Auth::user()->can('TrainingItem: edit') && $programming_status == 'active')
-                <td class="text-center align-middle"><a href="{{ route('trainingitems.show', $trainingItem->id) }}" class="btn btb-flat btn-xs  btn-light" >
-                    <i class="fas fa-edit"></i></a>
+                <td class="text-center align-middle"><a href="{{ route('trainingitems.show', $trainingItem->id) }}" class="btn btb-sm btn-light small" >
+                    <span class="fas fa-edit" aria-hidden="true"></span></a>
                 </td>
             @endif
             @if(Auth::user()->can('TrainingItem: delete') && $programming_status == 'active')
@@ -99,7 +100,7 @@
             <td  class="text-center">{{ $trainingItems->sum('auxiliares_salud') ? $trainingItems->sum('auxiliares_salud') : '0'  }}</td>
             <td  class="text-center">{{ $trainingItems->sum('total') ? $trainingItems->sum('total') : '0'  }}</td>
             <td class="text-center" colspan="4"></td>
-            <td  class="text-center">{{ $trainingItems ? $trainingItems->sum('total_presupuesto_est') : '0'}}</td>
+            <td  class="text-center">{{ $trainingItems ? number_format($trainingItems->sum('total_presupuesto_est'), 0, ',', '.') : '0'}}</td>
             <td class="text-center" colspan="3"></td>
         </tr>
     </tfoot>

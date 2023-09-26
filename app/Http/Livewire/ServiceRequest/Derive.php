@@ -25,6 +25,7 @@ class Derive extends Component
     public $userFromSelected;
     public $userToSelected;
 
+    public $type;
     
 
     protected $listeners = ['userFromSelected', 'userToSelected'];
@@ -42,13 +43,28 @@ class Derive extends Component
         $sender_name = User::find($user_from_id)->getFullNameAttribute();
         $receiver_name = User::find($user_to_id)->getFullNameAttribute();
         $receiver_email = User::find($user_to_id)->email;
+        $type = $this->type;
 
-        $serviceRequests = ServiceRequest::whereHas("SignatureFlows", function ($subQuery) use ($user_from_id) {
-            $subQuery->whereNull('status');
-            $subQuery->where('responsable_id', $user_from_id);
-        })
-            ->orderBy('id', 'asc')
-            ->get();
+        $serviceRequests = ServiceRequest::
+                                            // whereHas("SignatureFlows", function ($subQuery) use ($user_from_id) {
+                                            //     $subQuery->whereNull('status');
+                                            //     $subQuery->where('responsable_id', $user_from_id);
+                                            // })
+                                            when($type != "Todas", function ($q) use ($type, $user_from_id) {
+                                                return $q->whereHas("SignatureFlows", function ($subQuery) use ($type, $user_from_id) {
+                                                            $subQuery->whereNull('status');
+                                                            $subQuery->where('type',$type)
+                                                                     ->where('responsable_id', $user_from_id);
+                                                        });
+                                            })
+                                            ->when($type == "Todas", function ($q) use ($user_from_id) {
+                                                return $q->whereHas("SignatureFlows", function ($subQuery) use ($user_from_id) {
+                                                            $subQuery->whereNull('status');
+                                                            $subQuery->where('responsable_id', $user_from_id);
+                                                        });
+                                            })
+                                            ->orderBy('id', 'asc')
+                                            ->get();
 
         $cont = 0;
         $cant_rechazados = 0;
@@ -80,8 +96,7 @@ class Derive extends Component
     {
         if ($this->user_from_id != NULL) {
             $user_id = $this->user_from_id;
-            //$user_id = $this->user_from_id;
-            
+            $type = $this->type;
 
             $serviceRequestsOthersPendings = [];
             $serviceRequestsMyPendings = [];
@@ -89,12 +104,23 @@ class Derive extends Component
             $serviceRequestsCreated = [];
             $serviceRequestsRejected = [];
 
-            $serviceRequests = ServiceRequest::whereHas("SignatureFlows", function ($subQuery) use ($user_id) {
-                $subQuery->where('responsable_id', $user_id);
-                $subQuery->orwhere('user_id', $user_id);
-            })
-                ->orderBy('id', 'asc')
-                ->get();
+            $serviceRequests = ServiceRequest::
+                                when($type != "Todas", function ($q) use ($type,$user_id) {
+                                    return $q->whereHas("SignatureFlows", function ($subQuery) use ($type,$user_id) {
+                                                $subQuery->whereNull('status');
+                                                $subQuery->where('type',$type)
+                                                        ->where('responsable_id', $user_id);
+                                            });
+                                })
+                                ->when($type == "Todas", function ($q) use ($user_id) {
+                                    return $q->whereHas("SignatureFlows", function ($subQuery) use ($user_id) {
+                                                $subQuery->whereNull('status');
+                                                $subQuery->where('responsable_id', $user_id);
+                                            });
+                                })
+                                ->orderBy('id', 'asc')
+                                ->with('SignatureFlows')
+                                ->get();
 
             foreach ($serviceRequests as $key => $serviceRequest) {
                 //not rejected

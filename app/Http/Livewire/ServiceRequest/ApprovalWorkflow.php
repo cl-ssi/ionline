@@ -59,10 +59,20 @@ class ApprovalWorkflow extends Component
         // dd($this->edit_user_id);
         $this->edit_signatureFlow->responsable_id = $this->edit_user->id;
         $this->edit_signatureFlow->status = $this->edit_status;
+        $this->edit_signatureFlow->signature_date = now();
         $this->edit_signatureFlow->observation = $this->edit_observation;
         $this->edit_signatureFlow->save();
 
         Session::flash('approval-workflow', 'Se ha modificado el flujo de firmas.');
+
+        $this->showDiv = false;
+        $this->serviceRequest->refresh();
+        $this->render();
+    }
+
+    public function delete(){
+        $this->edit_signatureFlow->delete();
+        Session::flash('approval-workflow', 'Se ha eliminado el flujo de firmas.');
 
         $this->showDiv = false;
         $this->serviceRequest->refresh();

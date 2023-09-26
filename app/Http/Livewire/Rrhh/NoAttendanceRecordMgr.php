@@ -83,18 +83,35 @@ class NoAttendanceRecordMgr extends Component
         $this->noAttendanceRecord->authority_id = $this->authority->id;
         $this->noAttendanceRecord->establishment_id = auth()->user()->organizationalUnit->establishment_id;
         $this->noAttendanceRecord->save();
-        
-        $this->authority->notify(new NewNoAttendanceRecord($this->noAttendanceRecord));
+
+        if ( !$this->noAttendanceRecord->approval ) {
+            $this->noAttendanceRecord->approval()->create([
+                "module" => "Asistencia",
+                "module_icon" => "fas fa-clock",
+                "subject" => $this->noAttendanceRecord->date . ' : ' . $this->noAttendanceRecord->user->shortName,
+                "document_route_name" => "rrhh.attendance.no-records.show",
+                "document_route_params" => json_encode([$this->noAttendanceRecord->id]),
+                "approver_ou_id" => auth()->user()->boss->organizational_unit_id,
+                "callback_controller_method" => "App\Http\Controllers\Rrhh\NoAttendanceRecordController@approval",
+                "callback_controller_params" => json_encode([
+                    //'approval_id' => xxx  <= este parámetro se agregará automáticamente al comienzo
+                    'no_attendance_record_id' => $this->noAttendanceRecord->id, 
+                ]), 
+            ]);
+        }
+
+        // $this->authority->notify(new NewNoAttendanceRecord($this->noAttendanceRecord));
         $this->index();
     }
 
     public function render()
     {
+        
         $myRecords = NoAttendanceRecord::with(['reason'])->whereUserId(auth()->id())->latest()->paginate(25);
         $authorityRecrods = NoAttendanceRecord::with(['reason'])
             ->whereAuthorityId(auth()->id())->latest()
             ->whereNull('rrhh_status')
-            ->paginate(25);
+            ->paginate(50);
 
         return view('livewire.rrhh.no-attendance-record-mgr',[
             'myRecords' => $myRecords,
