@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Http\Response;
 
 class MercadoPublico extends Model
 {
@@ -32,7 +33,7 @@ class MercadoPublico extends Model
             $purchaseOrder = $purchaseOrder->first();
         else
         {
-            $response = Http::get(env('WSSSI_CHILE_URL')."/purchase-order/$code");
+            $response = Http::withToken(env('WSSSI_AUTH_TOKEN'))->get(env('WSSSI_CHILE_URL')."/purchase-order/$code");
 
             $oc = json_decode($response);
 
@@ -61,13 +62,12 @@ class MercadoPublico extends Model
         if(!$purchaseOrder OR $purchaseOrder->json->Listado[0]->Estado != "Recepción Conforme"){
 
             try {
-                $response = Http::get(env('WSSSI_CHILE_URL')."/purchase-order-v2/$code");
+                $response = Http::withToken(env('WSSSI_AUTH_TOKEN'))->get(env('WSSSI_CHILE_URL')."/purchase-order-v2/$code");
             } catch(\Illuminate\Http\Client\ConnectionException $e) {
                 if($purchaseOrder) {
                     return true;
                 }
                 else {
-                    // dd($e->getMessage());
                     return "No existe en nuestros registros y no se pudo conectar con MercadoPublico.";
                 }
             }
