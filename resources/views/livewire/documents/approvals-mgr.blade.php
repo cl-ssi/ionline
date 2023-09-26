@@ -39,10 +39,10 @@
             <tr class="table-{{ $approval->color }}">
                 <td class="text-center">
                     <div class="form-check">
-                        <input class="form-check-input position-static" 
+                        <input class="form-check-input position-static"
                             style="scale: 1.5;"
-                            type="checkbox" 
-                            id="ids.{{$approval->id}}" 
+                            type="checkbox"
+                            id="ids.{{$approval->id}}"
                             wire:model.defer="ids.{{$approval->id}}"
                             @disabled(! is_null($approval->status) )>
                     </div>
@@ -67,32 +67,36 @@
                     {{ $approval->reject_observation }}
                 </td>
                 <td>
+
                     @if($approval->digital_signature)
+                        <a class="btn btn-sm btn-outline-danger" target="_blank"
+                            href="{{ route($approval->document_route_name,json_decode($approval->document_route_params)) }}">
+                            <i class="fas fa-fw fa-file-pdf"></i>
+                        </a>
 
                         @livewire('sign.sign-to-document', [
                             'btn_title' => '',
                             'btn_class' => 'btn btn-sm btn-success',
                             'btn_icon'  => 'fa-fw fas fa-signature',
-                    
-                            'fileLink' => 'http://localhost:8000/finance/purchase-orders/by-code/1272565-444-AG23',
-                            'viewData' => json_decode($approval->document_route_params),
-                    
+
+                            'routeName' =>  "finance.purchase-orders.showByCode",
+                            'routeParams' => json_decode($approval->document_route_params),
+
                             'signer' => auth()->user(),
                             'position' => 'center',
                             'startY' => 80,
-                    
+
                             'folder' => '/ionline/dte/confirmation/',
                             'filename' => 'confirmation.pdf',
-                    
+
                             'callback' => 'finance.dtes.confirmation.store',
                             'callbackParams' => [
                                 'folder' => '/ionline/dte/confirmation/',
                             ]
                         ])
 
-
                     @else
-                        <a class="btn btn-sm btn-outline-danger" target="_blank" 
+                        <a class="btn btn-sm btn-outline-danger" target="_blank"
                             href="{{ route($approval->document_route_name,json_decode($approval->document_route_params)) }}">
                             <i class="fas fa-fw fa-file-pdf"></i>
                         </a>
@@ -100,7 +104,7 @@
                             class="btn btn-primary btn-sm"
                             wire:click='show({{$approval}})'
                         >
-                            <i class="fas fa-fw fa-eye"></i> 
+                            <i class="fas fa-fw fa-eye"></i>
                             <i class="fas fa-fw {{ $approval->approver_ou_id ? 'fa-chess-king' : 'fa-user' }}"></i>
                         </button>
                     @endif
@@ -115,13 +119,13 @@
     <div class="row">
         <div class="col">
             <button class="btn btn-success" wire:click="bulkProcess(true)">
-                <i class="fas fa-thumbs-up"></i> 
+                <i class="fas fa-thumbs-up"></i>
                 Aprobar seleccionados
             </button>
         </div>
         <div class="col text-right">
             <button class="btn btn-danger" wire:click="bulkProcess(false)">
-                <i class="fas fa-thumbs-down"></i> 
+                <i class="fas fa-thumbs-down"></i>
                 Rechazar seleccionados
             </button>
         </div>
@@ -140,8 +144,8 @@
 
                                 <div class="col-6 text-left">
                                     <h5 class="modal-title">
-                                        Aprobará como 
-                                            <i class="fas fa-fw {{ $approvalSelected->approver_ou_id ? 'fa-chess-king' : 'fa-user' }}"></i> 
+                                        Aprobará como
+                                            <i class="fas fa-fw {{ $approvalSelected->approver_ou_id ? 'fa-chess-king' : 'fa-user' }}"></i>
                                             @if($approvalSelected->approver_ou_id)
                                                 de {{ $approvalSelected->organizationalUnit->name }}
                                             @else
@@ -149,7 +153,7 @@
                                             @endif
                                     </h5>
                                 </div>
-    
+
                                 <div class="col-6">
                                     <div class="row text-right">
                                         <div class="col-2 text-right">
@@ -163,13 +167,13 @@
                                         <div class="col-8 text-right">
                                             @if( is_null($approvalSelected->status) )
                                             <div class="input-group mb-3">
-                                                <input type="text" 
-                                                    class="form-control" placeholder="Motivo rechazo" 
+                                                <input type="text"
+                                                    class="form-control" placeholder="Motivo rechazo"
                                                     aria-label="Motivod e rechazo" aria-describedby="button-addon"
                                                     wire:model.defer="reject_observation"
                                                     value="{{ $approvalSelected->reject_observation}}">
                                                 <div class="input-group-append">
-                                                    <button class="btn btn-danger" type="button" id="button-addon" 
+                                                    <button class="btn btn-danger" type="button" id="button-addon"
                                                         wire:click="approveOrReject({{$approvalSelected}},false)">
                                                         <i class="fas fa-thumbs-down"></i>
                                                     </button>
@@ -200,12 +204,12 @@
                         </div>
                     </div>
                     <div class="modal-body">
-                        <object data="{{ route($approvalSelected->document_route_name,json_decode($approvalSelected->document_route_params)) }}" 
-                            type="application/pdf" 
-                            width="100%" 
+                        <object data="{{ route($approvalSelected->document_route_name,json_decode($approvalSelected->document_route_params)) }}"
+                            type="application/pdf"
+                            width="100%"
                             height="700px">
-                            
-                            <p>No se puede mostrar el PDF. 
+
+                            <p>No se puede mostrar el PDF.
                                 <a href="{{ route($approvalSelected->document_route_name,json_decode($approvalSelected->document_route_params)) }}">Descargar</a>.</p>
                         </object>
                     </div>
