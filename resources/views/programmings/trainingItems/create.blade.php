@@ -34,6 +34,7 @@ Nuevo Item de Capacitación </h4>
                     <option value="EJE ESTRATÉGICO 5: Funcionamiento y discapacidad">EJE ESTRATÉGICO 5: Funcionamiento y discapacidad</option>
                     <option value="EJE ESTRATÉGICO 6: Emergencias y desastres">EJE ESTRATÉGICO 6: Emergencias y desastres</option>
                     <option value="EJE ESTRATÉGICO 7: Gestión, calidad e innovación">EJE ESTRATÉGICO 7: Gestión, calidad e innovación</option>
+                    <option value="EJE ESTRATÉGICO 8: Equidad">EJE ESTRATÉGICO 8: Equidad</option>
                 @else
                     <option value="EJE ESTRATEGICO 1: Enfermedades Transminisibles">EJE ESTRATEGICO 1: Enfermedades Transminisibles</option>
                     <option value="EJE ESTRATEGICO 2: Enfermedades crónicas, violencia y discapacidad">EJE ESTRATEGICO 2: Enfermedades crónicas, violencia y discapacidad</option>
