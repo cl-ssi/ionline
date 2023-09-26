@@ -23,10 +23,10 @@ return new class extends Migration
             $table->foreignId('approver_ou_id')->nullable()->constrained('organizational_units');
             $table->foreignId('approver_id')->nullable()->constrained('users');
             $table->datetime('approver_at')->nullable();
-            $table->string('callback_controller_method')->nullable();
-            $table->string('callback_controller_params')->nullable();
             $table->boolean('status')->nullable();
             $table->string('reject_observation')->nullable();
+            $table->string('callback_controller_method')->nullable();
+            $table->string('callback_controller_params')->nullable();
             $table->boolean('digital_signature')->default(0);
             $table->timestamps();
             $table->softDeletes();

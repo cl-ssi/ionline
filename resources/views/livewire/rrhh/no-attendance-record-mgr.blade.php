@@ -113,7 +113,11 @@
                             <td>
                                 @if(is_null($record->status))
                                 <button type="button" class="btn btn-sm btn-primary" 
-                                    wire:click="form({{$record}})"><i class="fas fa-edit"></i></button>
+                                    wire:click="form({{$record}})"><i class="fas fa-fw fa-edit"></i></button>
+                                @elseif($record->status == TRUE)
+                                    <a class="btn btn-sm btn-outline-success" target="_blank" href="{{ route('rrhh.attendance.no-records.show',$record) }}">
+                                        <i class="fas fa-fw fa-file"></i>
+                                    </a>
                                 @endif
                             </td>
                         </tr>

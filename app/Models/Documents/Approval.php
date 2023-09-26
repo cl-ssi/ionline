@@ -105,7 +105,7 @@ class Approval extends Model
              * Agregar esta relación al modelo que quieres que tenga approvals 
              * Ejemplo: Modelo RequestForm, y luego podrías llamrla así:
              * $requestForm->approvals (tendría una colección de approvals)
-             * 
+             * Para one to many
              **/
             
              /**
@@ -114,6 +114,15 @@ class Approval extends Model
             // public function approvals(): MorphMany
             // {
             //     return $this->morphMany(Approval::class, 'approvable');
+            // }
+
+            /** Para One to One */
+            /**
+             * Get the approval model.
+             */
+            // public function approval(): MorphOne
+            // {
+            //     return $this->morphOne(Approval::class, 'approvable');
             // }
 
             /**

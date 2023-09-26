@@ -93,7 +93,7 @@
                         <td colspan="8">
                             <div class="input-group">
                                 <input type="text" class="form-control" wire:model.defer="rrhh_observation"
-                                    placeholder="Mensaje de rechazo para devolver el registro">
+                                    placeholder="Mensaje de rechazo del registro">
                                 <div class="input-group-append" id="button-rejected">
                                     <button class="btn btn-outline-primary" title="Guardar" type="button"
                                         wire:click="saveRejectForm({{ $record }})">

@@ -55,7 +55,11 @@ class NoAttendanceRecordIndex extends Component
         $noAttendanceRecord->rrhh_at = now();
         $noAttendanceRecord->rrhh_observation = $this->rrhh_observation;
         $noAttendanceRecord->rrhh_status = 0;
-        $noAttendanceRecord->status = null;
+        /** 
+         * Ya no vamos a devolver las justificaciones de asistencia, se crearan nuevas
+         * Por lo tanto el status queda en el estado que estaba 
+         */
+        // $noAttendanceRecord->status = null;
         $noAttendanceRecord->save();
         $this->closeRejectForm();
     }
