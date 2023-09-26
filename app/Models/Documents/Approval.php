@@ -11,10 +11,12 @@ use App\User;
 use App\Rrhh\OrganizationalUnit;
 use App\Notifications\Documents\NewApproval;
 use App\Models\Finance\Dte; // Sólo para el ejemplo, no tiene uso
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Approval extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
     /**
      * Ejemplo de uso
