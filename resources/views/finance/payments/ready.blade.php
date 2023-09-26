@@ -4,6 +4,29 @@
     @include('finance.nav')
     <h3 class="mb-3">Bandeja de Pendientes de Pago</h3>
 
+    <form action="{{ route('finance.payments.ready') }}" method="GET">
+        <div class="form-row mb-3">
+            <div class="col-md-2">
+                <input type="text" class="form-control" name="id" placeholder="id" value="{{ old('id') }}" autocomplete="off">
+            </div>
+            <div class="col-md-2">
+                <input type="text" class="form-control" name="folio" placeholder="folio" value="{{ old('folio') }}" autocomplete="off">
+            </div>
+            <div class="col-md-2">
+                <input type="text" class="form-control" name="oc" placeholder="oc" value="{{ old('oc') }}" autocomplete="off">
+            </div>
+            {{-- <div class="col-md-2">
+                <input type="text" class="form-control" name="folio_compromiso" placeholder="folio compromiso SIGFE" value="{{ old('folio_compromiso') }}" autocomplete="off">
+            </div>
+            <div class="col-md-2">
+                <input type="text" class="form-control" name="folio_devengo" placeholder="folio devengo SIGFE" value="{{ old('folio_devengo') }}" autocomplete="off">
+            </div> --}}
+            <div class="col-md-1">
+                <input class="btn btn-outline-secondary" type="submit" value="Buscar">
+            </div>
+        </div>
+    </form>
+
     <div class="table-responsive">
         <table class="table table-sm table-bordered">
             <thead>

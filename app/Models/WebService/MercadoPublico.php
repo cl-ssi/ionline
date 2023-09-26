@@ -32,7 +32,7 @@ class MercadoPublico extends Model
             $purchaseOrder = $purchaseOrder->first();
         else
         {
-            $response = Http::get(env('WSSSI_CHILE_URL')."/purchase-order/$code");
+            $response = Http::withToken(env('WSSSI_AUTH_TOKEN'))->get(env('WSSSI_CHILE_URL')."/purchase-order/$code");
 
             $oc = json_decode($response);
 
@@ -61,13 +61,12 @@ class MercadoPublico extends Model
         if(!$purchaseOrder OR $purchaseOrder->json->Listado[0]->Estado != "Recepción Conforme"){
 
             try {
-                $response = Http::get(env('WSSSI_CHILE_URL')."/purchase-order-v2/$code");
+                $response = Http::withToken(env('WSSSI_AUTH_TOKEN'))->get(env('WSSSI_CHILE_URL')."/purchase-order-v2/$code");
             } catch(\Illuminate\Http\Client\ConnectionException $e) {
                 if($purchaseOrder) {
                     return true;
                 }
                 else {
-                    // dd($e->getMessage());
                     return "No existe en nuestros registros y no se pudo conectar con MercadoPublico.";
                 }
             }

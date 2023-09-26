@@ -118,7 +118,10 @@ class PaymentController extends Controller
         $query = Dte::where('confirmation_status', 1)
             ->where('fin_status', 'Enviado a Pendiente Para Pago')
             ->where('establishment_id', auth()->user()->organizationalUnit->establishment_id);
-            
+
+            if ($request->filled('id') || $request->filled('folio') || $request->filled('oc') || $request->filled('folio_compromiso') || $request->filled('folio_devengo')) {
+                $query = $this->search($request);
+            }
 
         $dtes = $query->paginate(100);
         $request->flash();
