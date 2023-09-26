@@ -17,6 +17,10 @@ class SearchSelectProgram extends Component
         * 
         * Se puede definir el nombre del listener del metodo
         * @livewire('search-select-program', ['emit_name' => 'searchedProgram'])
+        *
+        * Si necesitas que aparezca precargado el programa
+        * @livewire('search-select-program', ['program' => $program])
+        *
     */
 
     public $query;

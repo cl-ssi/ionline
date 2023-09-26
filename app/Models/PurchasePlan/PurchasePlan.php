@@ -28,7 +28,7 @@ class PurchasePlan extends Model implements Auditable
         return $this->belongsTo('App\Rrhh\OrganizationalUnit', 'organizational_unit_id');
     }
 
-    public function program()
+    public function programName()
     {
         return $this->belongsTo('App\Models\Parameters\Program', 'program_id');
     }
@@ -36,6 +36,10 @@ class PurchasePlan extends Model implements Auditable
     public function purchasePlanItems() {
         return $this->hasMany('App\Models\PurchasePlan\PurchasePlanItem', 'purchase_plan_id');
     }
+
+    protected $hidden = [
+        'created_at', 'updated_at'
+    ];
 
     protected $table = 'ppl_purchase_plans';
 }

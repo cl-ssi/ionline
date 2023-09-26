@@ -1975,9 +1975,10 @@ Route::prefix('finance')->as('finance.')->middleware(['auth', 'must.change.passw
 /* */
 Route::prefix('purchase_plan')->as('purchase_plan.')->middleware(['auth', 'must.change.password'])->group(function () {
     Route::get('/own_index', [PurchasePlanController::class, 'own_index'])->name('own_index');
-    Route::get('/all_purchase_plan', [PurchasePlanController::class, 'all_purchase_plan'])->name('all_purchase_plan');
+    Route::get('/all_index', [PurchasePlanController::class, 'all_index'])->name('all_index');
     Route::get('/create', [PurchasePlanController::class, 'create'])->name('create');
     Route::get('/{purchasePlan}/show', [PurchasePlanController::class, 'show'])->name('show');
+    Route::get('/{purchasePlan}/edit', [PurchasePlanController::class, 'edit'])->name('edit');
 });
 
 /*formulario de requerimiento compra o servicio */

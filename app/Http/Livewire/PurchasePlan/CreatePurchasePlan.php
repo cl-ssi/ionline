@@ -23,6 +23,11 @@ class CreatePurchasePlan extends Component
 
     public $readonly = "readonly";
 
+    public $purchase_plan_status;
+
+    /* PurchasePlan to edit */
+    public $purchasePlanToEdit;
+
     protected function messages(){
         return [
             /* Mensajes para Allowance */
@@ -31,7 +36,7 @@ class CreatePurchasePlan extends Component
             'email.required'                => 'Debe ingresar un correo electrónico.',
             'position.required'             => 'Debe ingresar un cargo o función.',
             'subject.required'              => 'Debe ingresar un asunto.',
-            'period.required'              => 'Debe ingresar un periodo item',
+            'period.required'               => 'Debe ingresar un periodo',
             'items.required'                => 'Debe ingresar al menos un item'
         ];
     }
@@ -62,7 +67,9 @@ class CreatePurchasePlan extends Component
       $this->items = $items;
     }
 
-    public function savePurchasePlan(){
+    public function savePurchasePlan($purchase_plan_status){
+        $this->purchase_plan_status = $purchase_plan_status;
+
         $this->validateMessage = 'description';
 
         $validatedData = $this->validate([
@@ -93,7 +100,7 @@ class CreatePurchasePlan extends Component
                     'subject'                   => $this->subject,
                     'program_id'                => $this->searchedProgram->id,
                     'program'                   => $this->searchedProgram->name,
-                    'status'                    => 'pending',
+                    'status'                    => ($this->purchase_plan_status == 'save') ? 'save' : 'sent',
                     'period'                    => $this->period
                 ]
             );
@@ -122,5 +129,26 @@ class CreatePurchasePlan extends Component
         }
 
         return redirect()->route('purchase_plan.show', $purchasePlan->id);
+    }
+
+    private function setPurchasePlan(){
+        if($this->purchasePlanToEdit){
+            $this->idPurchasePlan       = $this->purchasePlanToEdit->id;
+            $this->userResponsibleId    = $this->purchasePlanToEdit->user_responsible_id;
+            $this->position             = $this->purchasePlanToEdit->position;
+            $this->telephone            = $this->purchasePlanToEdit->telephone;
+            $this->email                = $this->purchasePlanToEdit->email;
+            $this->organizationalUnit   = $this->purchasePlanToEdit->organizationalUnit->name;
+            $this->program_id           = $this->purchasePlanToEdit->program_id;
+            $this->subject              = $this->purchasePlanToEdit->subject;
+            $this->period               = $this->purchasePlanToEdit->period;
+        }
+    }
+
+    public function mount($purchasePlanToEdit){
+        if(!is_null($purchasePlanToEdit)){
+            $this->purchasePlanToEdit = $purchasePlanToEdit;
+            $this->setPurchasePlan();
+        }
     }
 }

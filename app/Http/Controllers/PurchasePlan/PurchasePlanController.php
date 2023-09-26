@@ -24,6 +24,11 @@ class PurchasePlanController extends Controller
         return view('purchase_plan.own_index');
     }
 
+    public function all_index()
+    {
+        return view('purchase_plan.all_index');
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -64,7 +69,7 @@ class PurchasePlanController extends Controller
      */
     public function edit(PurchasePlan $purchasePlan)
     {
-        //
+        return view('purchase_plan.edit', compact('purchasePlan'));
     }
 
     /**
