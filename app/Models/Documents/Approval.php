@@ -25,7 +25,7 @@ class Approval extends Model
      * App\Models\Documents\Approval::ejemplo_de_uso();
      */
     public static function ejemplo_de_uso() {
-        /** 
+        /**
          * Hay dos formas de crear un Approval
          * - Approval::create(['module' => 'xxx',...])
          * - A través de una relación:
@@ -47,7 +47,7 @@ class Approval extends Model
 
             /* Nombre de la ruta que se mostrará al hacer click en el documento */
             "document_route_name" => "finance.purchase-orders.showByCode",
-            
+
             /* (Opcional) Parametros que reciba esa ruta */
             "document_route_params" => json_encode(["1272565-444-AG23"]),
 
@@ -58,7 +58,7 @@ class Approval extends Model
 
 
             /* (Opcional) Se puede enviar directo a una persona (es el user_id), pero hay que evitarlo */
-            //"approver_id" => 15287582, 
+            //"approver_id" => 15287582,
 
             /* (Opcional) Metodo que se ejecutará al realizar la aprobación o rechazo */
             //"callback_controller_method" => "App\Http\Controllers\Finance\DteController@process",
@@ -66,11 +66,11 @@ class Approval extends Model
             /* (Opcional) Parámetros que se le pasarán al método callback */
             // "callback_controller_params" => json_encode([
             //         //'approval_id' => xxx  <= este parámetro se agregará automáticamente al comienzo
-            //         'param1' => 15, 
+            //         'param1' => 15,
             //         'param2' => 'abc'
-            //     ]), 
-            
-            /** 
+            //     ]),
+
+            /**
              * Ejemplo de método del controlador que procesa el callback
              * Este bloque de código va en el DteController, según el ejemplo de arriba.
              **/
@@ -79,18 +79,18 @@ class Approval extends Model
             // }
 
 
-            /** 
+            /**
              * (Opcional) True(default) or False, setear en false si queremos desactivar la aprobación
-             * Esto es necesario principalmente cuando es en cadena, se deja activa sólo la primera 
+             * Esto es necesario principalmente cuando es en cadena, se deja activa sólo la primera
              * y todas las demás quedan en false, más abajo hay un ejemplo de aprobaciones en cadena
              **/
             //"active" => true,
 
-            /** 
+            /**
              * (Opcional) el id de el Approval anterior, es para cuando es en cadena
              * Este se debe combinar con la propiedad active, dejar active == true sólo al primero
              * y todos los demás en false. Ej de cadena, id: 17 luego 18 luego 19, sería así:
-             * 
+             *
              * id  |  previous_approval_id  | active
              * =====================================
              * 17  |       null             |  true
@@ -100,14 +100,14 @@ class Approval extends Model
             //"previous_approval_id" => 17,
 
 
-            /** 
+            /**
              * Relación polimórfica
-             * Agregar esta relación al modelo que quieres que tenga approvals 
+             * Agregar esta relación al modelo que quieres que tenga approvals
              * Ejemplo: Modelo RequestForm, y luego podrías llamrla así:
              * $requestForm->approvals (tendría una colección de approvals)
-             * 
+             *
              **/
-            
+
              /**
              * Get all of the approvations of a model.
              */
@@ -118,7 +118,7 @@ class Approval extends Model
 
             /**
              * Ejemplo para crear y asociar al mismo tiempo:
-             * 
+             *
              * $requestForm->approvals()->create([
              *      "module" => "Formulario de Req..",
              *       ...
@@ -201,7 +201,7 @@ class Approval extends Model
     /**
      * Get the polymorphic  parent approvable model:
      * - ModificationRequest
-     * - 
+     * -
      */
     public function approvable(): MorphTo
     {
@@ -274,7 +274,7 @@ class Approval extends Model
                 if ($approval->nextApproval) {
                     /** Activar el NextApproval */
                     $approval->nextApproval->update(['active' => true]);
-                    
+
                     /** Notificar al jefe de unidad o persona */
                     /** Enviar notificación al jefe de la unidad  */
                     if($approval->nextApproval->approver_ou_id) {
