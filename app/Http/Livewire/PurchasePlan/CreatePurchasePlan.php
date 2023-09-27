@@ -67,6 +67,20 @@ class CreatePurchasePlan extends Component
       $this->items = $items;
     }
 
+    private function setItems($item){
+        $this->items[]=[
+              'id'                       => $item->id,
+              'product_id'               => $item->product_id,
+              'unitOfMeasurement'        => $item->unit_of_measurement,
+              'technicalSpecifications'  => $item->specification,
+              'quantity'                 => $item->quantity,
+              'unitValue'                => $item->unit_value,
+              'taxes'                    => $item->tax,
+              'totalValue'               => $item->expense,
+              'articleFile'              => $item->article_file
+        ];
+      }
+
     public function savePurchasePlan($purchase_plan_status){
         $this->purchase_plan_status = $purchase_plan_status;
 
@@ -94,9 +108,7 @@ class CreatePurchasePlan extends Component
                     'telephone'                 => $this->telephone, 
                     'email'                     => $this->email,            
                     'organizational_unit_id'    => $this->searchedUser->organizationalUnit->id,
-                    'organizational_unit'       => $this->searchedUser->organizationalUnit->name, 
-                    'subdirectorate_id'         => 2, 
-                    'subdirectorate'            => 'Subdirección de Gestión Asistencial',
+                    'organizational_unit'       => $this->searchedUser->organizationalUnit->name,
                     'subject'                   => $this->subject,
                     'program_id'                => $this->searchedProgram->id,
                     'program'                   => $this->searchedProgram->name,
@@ -142,6 +154,10 @@ class CreatePurchasePlan extends Component
             $this->program_id           = $this->purchasePlanToEdit->program_id;
             $this->subject              = $this->purchasePlanToEdit->subject;
             $this->period               = $this->purchasePlanToEdit->period;
+
+            foreach($this->purchasePlanToEdit->purchasePlanItems as $item){
+                $this->setItems($item);
+            }
         }
     }
 

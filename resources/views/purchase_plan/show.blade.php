@@ -7,14 +7,13 @@
 @include('purchase_plan.partials.nav')
 
 <div class="row">
-    <div class="col-md-3">
-        <h5 class="mb-3"><i class="fas fa-shopping-cart"></i> Plan de Compra: ID {{ $purchasePlan->id }}</h5>
-    </div>
-    <div class="col-md-9">
-        <a class="btn btn-primary btn-sm"
-            href="{{-- route('request_forms.edit', $requestForm) --}}">
-            <i class="fas fa-edit"></i> Editar
-        </a>
+    <div class="col-12">
+        <h5 class="mb-3">
+            <i class="fas fa-shopping-cart"></i> Plan de Compra: ID {{ $purchasePlan->id }}
+            @if($purchasePlan->status == "save")
+                <span class="badge bg-primary badge-sm">Guardado</span>
+            @endif
+        </h5>
     </div>
 </div>
 
@@ -25,8 +24,12 @@
     <table class="table table-bordered table-sm small">
         <thead>
             <tr>
+                <th width="30%" class="table-secondary">Asunto</th>
+                <td class="text-left">{{ $purchasePlan->subject }}</td>
+            </tr>
+            <tr>
                 <th width="30%" class="table-secondary">Funcionario Responsable</th>
-                <td class="text-left">{{ $purchasePlan->user_responsible_id }}</td>
+                <td class="text-left">{{ $purchasePlan->userResponsible->FullName }}</td>
             </tr>
             <tr>
                 <th class="table-secondary">Cargo</th>
@@ -41,12 +44,8 @@
                 <td>{{ $purchasePlan->email }}</td>
             </tr>
             <tr>
-                <th class="table-secondary">Subdirección</th>
-                <td></td>
-            </tr>
-            <tr>
                 <th class="table-secondary">Depto./Unidad</th>
-                <td></td>
+                <td class="text-left">{{ $purchasePlan->organizationalUnit->name }}</td>
             </tr>
             <tr>
                 <th class="table-secondary">Nombre del Programa o Presupuesto Designado</th>
@@ -62,6 +61,13 @@
             </tr>
         </thead>
     </table>
+</div>
+
+<div class="col"> 
+    <a class="btn btn-primary btn-sm float-end"
+        href="{{-- route('request_forms.edit', $requestForm) --}}">
+        <i class="fas fa-edit"></i> Editar
+    </a>
 </div>
 
 <br>

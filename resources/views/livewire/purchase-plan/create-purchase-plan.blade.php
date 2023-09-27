@@ -80,12 +80,20 @@
     <hr>
 
     <h6 class="small"><b>2. Ítems a comprar</b></h6> <br>
-
-    @livewire('request-form.item.request-form-items', [
-        'savedItems'            => $purchasePlanToEdit->purchasePlanItems, 
-        'savedTypeOfCurrency'   => null,
-        'bootstrap'             => 'v5'
-    ])
+    
+    @if($purchasePlanToEdit)
+        @livewire('request-form.item.request-form-items', [
+            'savedItems'            => $purchasePlanToEdit->purchasePlanItems, 
+            'savedTypeOfCurrency'   => null,
+            'bootstrap'             => 'v5'
+        ])
+    @else
+        @livewire('request-form.item.request-form-items', [
+            'savedItems'            => null, 
+            'savedTypeOfCurrency'   => null,
+            'bootstrap'             => 'v5'
+        ])
+    @endif
     <br>
 
     @if(count($errors) > 0 && $validateMessage == "description")

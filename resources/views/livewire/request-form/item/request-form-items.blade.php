@@ -4,6 +4,8 @@
             <h5 class="card-title"><i class="fas fa-cart-plus"></i> {{ $title }}</h5>
             <!-- EXCLUSIVO PARA PLAN DE COMPRA (FUNCIONA CON BOOTSTRAP V5) -->
             @if($bootstrap == 'v5')
+            {{-- dd($savedItems) --}}
+
             <form class="row g-3">
                 <fieldset class="form-group col-sm-4">
                     <label class="form-label" for="product-search">Buscar Producto o Servicio</label>
@@ -93,6 +95,7 @@
             @else
             <!-- EXCLUSIVO PARA ABASTECIMIENTO (FUNCIONA CON BOOTSTRAP V4.6) -->
             <div class="form-row">
+                {{-- dd($savedItems) --}}
                 <fieldset class="form-group col-sm-4">
                     <label for="product-search">Buscar Producto o Servicio</label>
                     <input wire:model.debounce.500ms="search_product" id="product-search" class="form-control form-control-sm" type="text">

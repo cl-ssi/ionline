@@ -37,6 +37,10 @@ class PurchasePlan extends Model implements Auditable
         return $this->hasMany('App\Models\PurchasePlan\PurchasePlanItem', 'purchase_plan_id');
     }
 
+    public function unspscProduct() {
+        return $this->belongsTo('App\Models\Unspsc\Product', 'unspsc_product_id');
+    }
+
     protected $hidden = [
         'created_at', 'updated_at'
     ];

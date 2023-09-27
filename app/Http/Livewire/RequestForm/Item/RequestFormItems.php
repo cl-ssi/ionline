@@ -198,8 +198,8 @@ class RequestFormItems extends Component
             $this->items[] = [
                 'id'                       => $item->id,
                 'article'                  => $item->article,
-                'product_id'               => $item->product_id,
-                'product_name'             => optional($item->product)->name,
+                'product_id'               => ($item->product_id) ? $item->product_id : $item->unspsc_product_id,
+                'product_name'             => ($item->product_id) ? optional($item->product)->name : optional($item->unspscProduct)->name,
                 'unitOfMeasurement'        => $item->unit_of_measurement,
                 'technicalSpecifications'  => $item->specification,
                 'quantity'                 => $item->quantity,
@@ -208,7 +208,6 @@ class RequestFormItems extends Component
                 'totalValue'               => $item->expense,
                 'articleFile'              => $item->article_file
             ];
-
             $this->estimateExpense();
         }
     }
