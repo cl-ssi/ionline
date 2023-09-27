@@ -39,7 +39,7 @@ class ReportByDates extends Component
                         ->whereDate('fecha_termino_contrato', '>=', $startDate);
                 });
             })
-            ->where('id',10314472)
+            // ->where('id',10314472)
             ->get();
 
         foreach($userWithContracts as $user) {
