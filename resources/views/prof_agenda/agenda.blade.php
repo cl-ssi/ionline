@@ -16,13 +16,12 @@
 
 <hr>
 
-<!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addBlock">Agregar bloque de horario</button>
-<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteBlocks">Eliminar bloques</button>
-
-{{--<!-- @livewire('prof-agenda.add-agenda-block',['profession_id' => $request->profession_id, 'profesional_id' => $request->user_id]) -->--}}
-
 @if($proposals->count()>0)
+
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addBlock">Agregar bloque de horario</button>
+    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteBlocks">Eliminar bloques</button>
+
     @livewire('prof-agenda.agenda',['profession_id' => $request->profession_id, 'profesional_id' => $request->user_id])
     @stack('scripts')
 @endif

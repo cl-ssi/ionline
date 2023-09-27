@@ -31,6 +31,7 @@ class Agenda extends Component
         foreach($openHours as $hour){
             $array[$count]['id'] = $hour->id;
             $array[$count]['observation'] = $hour->observation;
+            $array[$count]['rut'] = $hour->patient_id;
             $array[$count]['contact_number'] = $hour->contact_number;
             $array[$count]['start'] = $hour->start_date;
             $array[$count]['end'] = $hour->end_date;
@@ -59,6 +60,7 @@ class Agenda extends Component
         foreach($holidays as $holiday){
             $array[$count]['id'] = 0;
             $array[$count]['observation'] = null;
+            $array[$count]['rut'] = null;
             $array[$count]['contact_number'] = null;
             $array[$count]['start'] = $holiday->date->format('Y-m-d') . " 00:00";
             $array[$count]['end'] = $holiday->date->format('Y-m-d') . " 23:59";

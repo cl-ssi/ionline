@@ -146,14 +146,21 @@
 
                     <div class="row">
                         <fieldset class="form-group col-12 col-md-6">
-                            <label for="for_users">Funcionario</label>
+                            <label for="for_rut">Rut</label>
+                            <div>
+                                <input type="text" class="form-control" id="rut" disabled>
+                            </div>
+                        </fieldset>
+
+                        <fieldset class="form-group col-12 col-md-6">
+                            <label for="for_patient">Funcionario</label>
                             <div>
                                 <input type="text" class="form-control" id="patient" disabled>
                             </div>
                         </fieldset>
 
                         <fieldset class="form-group col-12 col-md-6">
-                            <label for="for_users">Telefono de contacto</label>
+                            <label for="for_contact_number">Telefono de contacto</label>
                             <div>
                                 <input type="text" class="form-control" id="contact_number" disabled>
                             </div>
@@ -276,6 +283,7 @@
                         if(info.event.extendedProps.status=="Disponible"){
                             $('#newHour').modal();
                         }else if(info.event.extendedProps.status=="Reservado"){
+                            $('#rut').val(info.event.extendedProps.rut);
                             $('#reservedHour').modal();
                         }
                         else if(info.event.extendedProps.status=="Bloqueado"){
