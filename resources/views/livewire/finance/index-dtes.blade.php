@@ -131,10 +131,14 @@
                     </td>
                     <td class="small">
                         @if ($dte->tipo_documento != 'boleta_honorarios')
+                            @if($dte->uri)
                             <a href="http://dipres2303.acepta.com/ca4webv3/PdfView?url={{ $dte->uri }}"
                                 target="_blank" class="btn btn-sm mb-1 btn-outline-secondary">
                                 <i class="fas fa-file-pdf text-danger"></i> {{ $dte->folio }}
                             </a>
+                            @else
+                                Es un documento cargado manualmente
+                            @endif
                         @else
                             <a href="{{ $dte->uri }}" target="_blank"
                                 class="btn btn-sm mb-1 btn-outline-secondary">
