@@ -18,7 +18,6 @@ class ReportByDates extends Component
         $startDate = Carbon::createFromDate('2023-06-01');
         $endDate = Carbon::createFromDate('2023-06-30');
 
-
         /* Obtener los usuarios que tienen contratos en un rango de fecha con sus ausentismos */
         $userWithContracts = User::with([
                 'contracts' => function ($query) use ($startDate, $endDate) {
@@ -40,6 +39,7 @@ class ReportByDates extends Component
                         ->whereDate('fecha_termino_contrato', '>=', $startDate);
                 });
             })
+            ->where('id',10314472)
             ->get();
 
         foreach($userWithContracts as $user) {
@@ -91,10 +91,18 @@ class ReportByDates extends Component
              */
             $user->totalAbsenteeisms = 0;
 
-            foreach($user->absenteeisms as $absenteeism) {
+            $lastdate=null;
+            foreach($user->absenteeisms as $key => $absenteeism) {
                 $absenteeismStartDate = $absenteeism->finicio->isBefore($startDate) ? $startDate : $absenteeism->finicio;
                 $absenteeismEndDate = $absenteeism->ftermino->isAfter($endDate) ? $endDate : $absenteeism->ftermino;
-
+                
+                // solapamiento de contratos.
+                // si fecha de contrato anterior es mayor a la de inicio actual, se comienza desde el dia siguiente de fecha anterior.
+                if($lastdate>=$absenteeismStartDate){
+                    $absenteeismStartDate = $lastdate->addDays(1);
+                }
+                $lastdate= $absenteeismEndDate;
+                
                 $absenteeism->totalDays = DateHelper::getBusinessDaysByDateRange($absenteeismStartDate, $absenteeismEndDate)->count();
                 $user->totalAbsenteeisms += $absenteeism->totalDays;
             }
