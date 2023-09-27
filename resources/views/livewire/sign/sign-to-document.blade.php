@@ -1,4 +1,4 @@
-<div>
+<div class="d-inline">
     <button
         class="{{ $btn_class }}"
         wire:click='show'
@@ -17,7 +17,7 @@
                             <div class="row">
                                 <div class="col-8 text-left">
                                     <h5 class="modal-title">
-                                        Firmará como {{ $signer->shortName }} 
+                                        Firmará como {{ $signer->shortName }}
                                     </h5>
                                 </div>
                                 <div class="col-4">
