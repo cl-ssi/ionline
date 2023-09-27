@@ -260,6 +260,7 @@
 
                     editable: true,
                     selectable: true,
+                    slotDuration: '00:20',
                     
                     eventClick: function(info) {
                         console.info(info.event.extendedProps);

@@ -70,6 +70,7 @@
             slotMinTime: "08:00:00",
             locale: 'es',
             displayEventTime: false,
+            slotDuration: '00:20',
 
             events: [
 

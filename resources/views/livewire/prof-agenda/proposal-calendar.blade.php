@@ -47,6 +47,7 @@
                     locale: 'es',
                     displayEventTime: false,
                     events: JSON.parse(@this.events),
+                    slotDuration: '00:20',
 
                 });
                 
