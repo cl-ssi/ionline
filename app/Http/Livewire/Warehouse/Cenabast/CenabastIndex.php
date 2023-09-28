@@ -13,6 +13,9 @@ use Livewire\Component;
 
 class CenabastIndex extends Component
 {
+    use WithPagination;
+    protected $paginationTheme = 'bootstrap';
+
     public $filter_by = 'all';
 
     public $selectedDte;
