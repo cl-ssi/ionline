@@ -48,9 +48,11 @@
         @switch($approval->status)
             @case('1')
                 {{ $approval->approver->shortName }}
+                <small>{{ $approval->approver->organizationalUnit->name }}</small>
             @break
             @case('0')
                 {{ $approval->approver->shortName }}
+                <small>{{ $approval->approver->organizationalUnit->name }}</small>
             @break
             @default
                 <span style="color: #ccc"><i>PENDIENTE </i></span>

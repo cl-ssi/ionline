@@ -96,7 +96,7 @@ class ControlController extends Controller
         $act_type = $request->act_type;
 
         if ($control->isReceiving())
-            return view('warehouse.pdf.report-reception', compact('store', 'control', 'type', 'act_type'));            
+            return view('warehouse.pdf.report-reception', compact('store', 'control', 'type', 'act_type'));
         else
             return view('warehouse.pdf.report-dispatch', compact('store', 'control', 'type'));
     }
