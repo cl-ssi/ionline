@@ -93,7 +93,7 @@
         <tbody>
             @foreach($purchasePlan->purchasePlanItems as $item)
             <tr class="text-center">
-                <td>{{ $item->id }}</td>
+                <td>{{ $loop->iteration }}</td>
                 <td>{{ $item->unspscProduct->name }}</td>
                 <td>{{ $item->unit_of_measurement }}</td>
                 <td>{{ $item->specification }}</td>
