@@ -24,8 +24,10 @@ return new class extends Migration
         if(Absenteeism::count()>0){
             $absenteeisms = Absenteeism::all();
             foreach($absenteeisms as $absenteeism){
-                $absenteeism->absenteeism_type_id = AbsenteeismType::where('name',$absenteeism->tipo_de_ausentismo)->first()->id;
-                $absenteeism->save();
+                if(AbsenteeismType::where('name',$absenteeism->tipo_de_ausentismo)->count()>0){
+                    $absenteeism->absenteeism_type_id = AbsenteeismType::where('name',$absenteeism->tipo_de_ausentismo)->first()->id;
+                    $absenteeism->save();
+                }
             }
         }
     }
