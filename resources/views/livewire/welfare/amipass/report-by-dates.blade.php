@@ -92,10 +92,18 @@
                 <td class="small">
                     <ul>
                         @foreach($user->absenteeisms as $absenteeism)
-                        <li>
-                            {{ $absenteeism->finicio->format('Y-m-d') }} - {{ $absenteeism->ftermino->format('Y-m-d') }} 
-                            <small>({{ $absenteeism->tipo_de_ausentismo }})</small> 
-                            Dias: {{ $absenteeism->total_dias_ausentismo }} => {{ $absenteeism->totalDays}}
+                        <li> 
+                            @if($absenteeism->totalDays==0)
+                                {{ $absenteeism->finicio->format('Y-m-d') }} - {{ $absenteeism->ftermino->format('Y-m-d') }} 
+                                <small>({{ $absenteeism->tipo_de_ausentismo }})</small> 
+                                Dias: {{ $absenteeism->total_dias_ausentismo }} => {{ $absenteeism->totalDays}}
+                            @else 
+                                <p style="color:red;display: inline;">
+                                    {{ $absenteeism->finicio->format('Y-m-d') }} - {{ $absenteeism->ftermino->format('Y-m-d') }} 
+                                    <small>({{ $absenteeism->tipo_de_ausentismo }})</small> 
+                                    Dias: {{ $absenteeism->total_dias_ausentismo }} => {{ $absenteeism->totalDays}}
+                                </p>
+                            @endif
                         </li>
                         @endforeach
                     </ul>

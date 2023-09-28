@@ -2,8 +2,11 @@
 
 namespace App\Models\Rrhh;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+
+use App\Models\Rrhh\AbsenteeismType;
 
 class Absenteeism extends Model
 {
@@ -36,6 +39,7 @@ class Absenteeism extends Model
         'ausentismo_en_el_periodo',
         'costo_de_licencia',
         'tipo_de_ausentismo',
+        'absenteeism_type_id',
         'codigo_de_establecimiento',
         'nombre_de_establecimiento',
         'saldo_dias_no_reemplazados',
@@ -63,4 +67,9 @@ class Absenteeism extends Model
     {
         return $this->belongsTo(User::class,'rut');
     }
+
+    public function type(): BelongsTo
+{
+    return $this->belongsTo(AbsenteeismType::class, 'absenteeism_type_id');
+}
 }

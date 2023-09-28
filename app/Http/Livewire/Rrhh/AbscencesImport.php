@@ -6,6 +6,7 @@ use Livewire\Component;
 use Livewire\WithFileUploads;
 
 use App\models\Rrhh\Absenteeism;
+use App\models\Rrhh\AbsenteeismType;
 use App\Imports\AbscencesImport as AbscencesImportFile;
 use Maatwebsite\Excel\Facades\Excel;
 use Carbon\Carbon;
@@ -32,6 +33,12 @@ class AbscencesImport extends Component
 
         $total_count = $collection->first()->count()+1;
         $count_inserts = 0;
+
+        $absenteeismTypes = AbsenteeismType::all();
+        $arrayTypes = [];
+        foreach($absenteeismTypes as $absenteeismType){
+            $arrayTypes[$absenteeismType->name] = $absenteeismType->id;
+        }
 
         foreach($collection as $row){
 
@@ -83,6 +90,7 @@ class AbscencesImport extends Component
                             'ausentismo_en_el_periodo' => $column['ausentismo_en_el_periodo'],
                             'costo_de_licencia' => $column['costo_de_licencia'],
                             'tipo_de_ausentismo' => $column['tipo_de_ausentismo'],
+                            'absenteeism_type_id' => $arrayTypes[trim($column['tipo_de_ausentismo'])],
                             'codigo_de_establecimiento' => $column['codigo_de_establecimiento'],
                             'nombre_de_establecimiento' => $column['nombre_de_establecimiento'],
                             'saldo_dias_no_reemplazados' => $column['saldo_dias_no_reemplazados'],
@@ -97,7 +105,7 @@ class AbscencesImport extends Component
             
         }
 
-        $this->message2 = 'Se ha cargado correctamente el archivo (' . $count_inserts . ' registros).';
+        $this->message2 = $this->message2 . 'Se ha cargado correctamente el archivo (' . $count_inserts . ' registros).';
     }
 
     public function render()

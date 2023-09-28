@@ -6,6 +6,7 @@ use Livewire\Component;
 use Carbon\Carbon;
 use App\User;
 use App\Helpers\DateHelper;
+use App\Models\Parameters\Holiday;
 
 class ReportByDates extends Component
 {
@@ -17,6 +18,8 @@ class ReportByDates extends Component
         /* Definir las fechas de inicio y término */
         $startDate = Carbon::createFromDate('2023-06-01');
         $endDate = Carbon::createFromDate('2023-06-30');
+
+        $holidays = Holiday::whereBetween('date', [$startDate, $endDate])->get();
 
         /* Obtener los usuarios que tienen contratos en un rango de fecha con sus ausentismos */
         $userWithContracts = User::with([
@@ -30,7 +33,7 @@ class ReportByDates extends Component
                     $query->where(function ($query) use ($startDate, $endDate) {
                         $query->whereDate('finicio', '<=', $endDate)
                             ->whereDate('ftermino', '>=', $startDate);
-                    });
+                        });
                 }
             ])
             ->whereHas('contracts', function ($query) use ($startDate, $endDate) {
@@ -39,8 +42,16 @@ class ReportByDates extends Component
                         ->whereDate('fecha_termino_contrato', '>=', $startDate);
                 });
             })
-            // ->where('id',10314472)
+            // // solo se consideran usuarios que tengan ausentismos con descuentos
+            // ->whereHas('absenteeisms', function ($query) {
+            //     $query->whereHas('type', function ($query) {
+            //                 $query->where('discount', 1);
+            //             });
+            // })
+            // ->where('id',6811637)
             ->get();
+
+            // dd($userWithContracts->count());
 
         foreach($userWithContracts as $user) {
             /** 
@@ -92,7 +103,15 @@ class ReportByDates extends Component
             $user->totalAbsenteeisms = 0;
 
             $lastdate=null;
-            foreach($user->absenteeisms as $key => $absenteeism) {
+            foreach($user->absenteeisms->sortBy('finicio') as $key => $absenteeism) {
+                // dd($absenteeism);
+
+                // si el tipo de ausentismo no considera descuento, se sigue en la siguiente iteración
+                if(!$absenteeism->type->discount){
+                    $absenteeism->totalDays = 0;
+                    continue;
+                }
+
                 $absenteeismStartDate = $absenteeism->finicio->isBefore($startDate) ? $startDate : $absenteeism->finicio;
                 $absenteeismEndDate = $absenteeism->ftermino->isAfter($endDate) ? $endDate : $absenteeism->ftermino;
                 
@@ -103,7 +122,7 @@ class ReportByDates extends Component
                 }
                 $lastdate= $absenteeismEndDate;
                 
-                $absenteeism->totalDays = DateHelper::getBusinessDaysByDateRange($absenteeismStartDate, $absenteeismEndDate)->count();
+                $absenteeism->totalDays = DateHelper::getBusinessDaysByDateRange($absenteeismStartDate, $absenteeismEndDate, $holidays)->count();
                 $user->totalAbsenteeisms += $absenteeism->totalDays;
             }
 
@@ -114,7 +133,8 @@ class ReportByDates extends Component
                 $contract->businessDays = 
                     DateHelper::getBusinessDaysByDateRange(
                             $contract->fecha_inicio_contrato->isAfter($startDate) ? $contract->fecha_inicio_contrato : $startDate, 
-                            $contract->fecha_termino_contrato->isBefore($endDate) ? $contract->fecha_termino_contrato : $endDate
+                            $contract->fecha_termino_contrato->isBefore($endDate) ? $contract->fecha_termino_contrato : $endDate,
+                            $holidays
                         )->count();
 
                 /** Calcular monto de amipass a transferir */

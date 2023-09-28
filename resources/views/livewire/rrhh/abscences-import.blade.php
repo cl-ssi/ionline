@@ -2,6 +2,10 @@
 
     <h3 class="mb-3">Importar ausencias SIRH</h3>
 
+    <div class="alert alert-info" role="alert">
+        El archivo debe contener información solo de un mes.
+    </div>
+
     <div class="form-row">
         <fieldset class="form-group col-6">
             <label>Archivo</label>

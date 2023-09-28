@@ -14,11 +14,11 @@ class DateHelper
      * @param  \Illuminate\Support\Carbon  $endDate
      * @return \Illuminate\Support\Collection
      */
-    public static function getBusinessDaysByDateRange($startDate, $endDate)
+    public static function getBusinessDaysByDateRange($startDate, $endDate, $holidays)
     {
-        $holidays = Cache::remember('holidays', 600, function () use($startDate, $endDate) {
-            return Holiday::whereBetween('date', [$startDate, $endDate])->get();
-        });
+        // $holidays = Cache::remember('holidays', 600, function () use($startDateHoliday, $endDateHoliday) {
+        //     return Holiday::whereBetween('date', [$startDateHoliday, $endDateHoliday])->get();
+        // });
 
         // $holidays = Holiday::whereBetween('date', [$startDate, $endDate])->get();
 
