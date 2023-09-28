@@ -140,6 +140,10 @@ class CreatePurchasePlan extends Component
             );
         }
 
+        /* SE CALCULA MONTO SOLICITADO */
+        $purchasePlan->estimated_expense = $this->totalForm();
+        $purchasePlan->save();
+
         return redirect()->route('purchase_plan.show', $purchasePlan->id);
     }
 
@@ -159,6 +163,16 @@ class CreatePurchasePlan extends Component
                 $this->setItems($item);
             }
         }
+    }
+
+    public function totalForm(){
+        $total = 0;
+
+        foreach($this->items as $item){
+            $total += round($item['totalValue']);
+        }
+
+        return $total;
     }
 
     public function mount($purchasePlanToEdit){

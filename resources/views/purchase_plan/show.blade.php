@@ -53,7 +53,7 @@
             </tr>
             <tr>
                 <th class="table-secondary">Monto Solicitado (Aproximado)</th>
-                <td></td>
+                <td>${{ number_format($purchasePlan->estimated_expense, 0, ",", ".") }}</td>
             </tr>
             <tr>
                 <th class="table-secondary">Monto aprobado</th>
@@ -65,7 +65,7 @@
 
 <div class="col"> 
     <a class="btn btn-primary btn-sm float-end"
-        href="{{-- route('request_forms.edit', $requestForm) --}}">
+        href="{{ route('purchase_plan.edit', $purchasePlan) }}">
         <i class="fas fa-edit"></i> Editar
     </a>
 </div>

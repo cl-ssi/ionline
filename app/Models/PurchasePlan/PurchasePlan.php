@@ -24,6 +24,10 @@ class PurchasePlan extends Model implements Auditable
         return $this->belongsTo('App\User', 'user_responsible_id')->withTrashed();
     }
 
+    public function userCreator() {
+        return $this->belongsTo('App\User', 'user_creator_id')->withTrashed();
+    }
+
     public function organizationalUnit() {
         return $this->belongsTo('App\Rrhh\OrganizationalUnit', 'organizational_unit_id');
     }

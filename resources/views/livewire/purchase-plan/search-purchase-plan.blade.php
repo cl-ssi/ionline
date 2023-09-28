@@ -24,7 +24,7 @@
                             {{ $purchasePlan->id }}<br>
                             <span class="badge bg-info text-dark">{{ $purchasePlan->period }}</span><br>
                         </th>
-                        <td class="text-center align-middle">
+                        <td class="text-center">
                             @if($purchasePlan->status == 'save')
                                 <span class="badge bg-primary">Guardado</span>
                             @endif
@@ -32,18 +32,20 @@
                         <td>{{ $purchasePlan->created_at->format('d-m-Y H:i:s') }}<br></td>
                         <td>{{ $purchasePlan->subject }}</td>
                         <td>
-                            <b>{{ $purchasePlan->userResponsible->TinnyName }}</b><br>
-                            {{ $purchasePlan->organizationalUnit->name }}
+                            <b>{{ $purchasePlan->userResponsible->FullName }}</b><br>
+                            {{ $purchasePlan->organizationalUnit->name }}<br><br>
+                            
+                            creado por: <b>{{ $purchasePlan->userCreator->TinnyName }}</b>
                         </td>
                         <td>{{ $purchasePlan->program }}</td>
-                        <td class="text-center align-middle">
+                        <td class="text-center">
                             @if($purchasePlan->status == 'save')
                                 <i class="fas fa-save fa-2x"></i>
                             @else
 
                             @endif
                         </td>
-                        <td class="text-center align-middle">
+                        <td class="text-center">
                             <a href="{{ route('purchase_plan.show', $purchasePlan->id) }}"
                                 class="btn btn-outline-secondary btn-sm me-1"><i class="fas fa-eye"></i>
                             <a href="{{ route('purchase_plan.edit', $purchasePlan->id) }}"
