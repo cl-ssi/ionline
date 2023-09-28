@@ -72,6 +72,9 @@ class IndexDtes extends Component
                             $query->where('establishment_id', $value);
                         }
                         break;
+                    case 'tipo_documento':
+                            $query->where('tipo_documento', $value);
+                            break;
                 }
             }
         }

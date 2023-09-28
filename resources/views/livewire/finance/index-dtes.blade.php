@@ -51,12 +51,19 @@
             </select>
         </div>
         <div class="col-md-2">
-            <select class="form-control" wire:model.defer="filter.sender_status" disabled>
+            {{-- <select class="form-control" wire:model.defer="filter.sender_status" disabled>
                 <option value="Todas">Todas</option>
                 <option value="No Confirmadas">No Confirmadas</option>
                 <option value="Confirmadas">Confirmadas</option>
                 <option value="Rechazadas">Rechazadas</option>
                 <option value="Sin Envío">Sin Envío</option>
+            </select> --}}
+            <select class="form-control" wire:model.defer="filter.tipo_documento">
+                <option value="">Todas</option>
+                <option value="factura_electronica">Factura Electrónica</option>
+                <option value="factura_exenta">Factura Exenta</option>
+                <option value="guias_despachos">Guias Despacho</option>
+                <option value="nota_credito">Nota Crédito</option>
             </select>
         </div>
         <div class="col-md-1">
