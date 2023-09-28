@@ -96,7 +96,7 @@ class PaymentController extends Controller
         }
 
 
-        $dtes = $query->paginate(10);
+        $dtes = $query->paginate(50);
         $request->flash();
 
         return view('finance.payments.review', compact('dtes', 'request'));
