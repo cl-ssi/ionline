@@ -87,9 +87,12 @@ class Approval extends Model
             //"active" => true,
 
             /**
-             * (Opcional) el id de el Approval anterior, es para cuando es en cadena
-             * Este se debe combinar con la propiedad active, dejar active == true sólo al primero
-             * y todos los demás en false. Ej de cadena, id: 17 luego 18 luego 19, sería así:
+             * (Opcional) Se utiliza el previous_approval_id (id de el Approval anterior)
+             * para cuando es en cadena de responsabilidad. Se debe utilizar en conjunto con
+             * la propiedad active.
+             * Dejar active == true sólo al primero y todos los demás en false. 
+             * 
+             * Ej de cadena, id: 17 luego se ejecuta el id 18, luego el id 19
              *
              * id  |  previous_approval_id  | active
              * =====================================
@@ -134,8 +137,19 @@ class Approval extends Model
              * ]);
              **/
 
-            /* (Opcional) True or False(default), se requiere firma electrónica en vez de aprobación simple */
+
+            /**
+             * Opciones para utilizar firma electrónica avanzada en vez de aprobación simple 
+             * ============================================================================
+             */
+            /* (Opcional) True or False(default), Si requiere firma electrónica en vez de aprobación simple */
             //"digital_signature" => true,
+
+            /* (Opcional) Posición ("columna") de la firma en el documento: center, left, right */
+            //"position" => "center",
+
+            /* (Opcional) ruta absoluta con nombre del archivo que se guardará en el storage, ej: ionline/documents/modulo/id.pdf */
+            //"filename" => "ionline/documents/approvals/archivo.pdf",
         ]);
     }
 
