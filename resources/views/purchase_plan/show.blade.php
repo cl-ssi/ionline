@@ -99,9 +99,9 @@
                 <td>{{ $item->specification }}</td>
                 <td></td>
                 <td>{{ $item->quantity }}</td>
-                <td>${{ number_format($item->unit_value,2,",",".") }}</td>
+                <td class="text-end">${{ number_format($item->unit_value, 0, ",", ".") }}</td>
                 <td>{{ $item->tax }}</td>
-                <td>${{ number_format($item->expense,2,",",".") }}</td>
+                <td class="text-end">${{ number_format($item->expense, 0, ",", ".") }}</td>
                 <td>
                     {{--
                     <a href="{{ route('replacement_staff.request.technical_evaluation.show', $requestReplacementStaff) }}"
@@ -119,6 +119,14 @@
             </tr>
             @endforeach
         </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="7"></td>
+                <th class="text-end">Total</th>
+                <th class="text-end">${{ number_format($purchasePlan->estimated_expense, 0, ",", ".") }}</th>
+                <td></td>
+            </tr>
+        </tfoot>
     </table>
 </div>
 
