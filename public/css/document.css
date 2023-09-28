@@ -116,3 +116,19 @@ br {
 .secondary {
     color: #6c757d!important;
 }
+
+.tabla th, .tabla td {
+    border: 1px solid black;
+    padding: 8px; /* Ajusta el espacio entre el texto y los bordes según tus preferencias */
+}
+
+.tabla {
+    border: 1px solid black;
+    border-collapse: collapse;
+    width: 100%; /* Opcional: Ajusta el ancho de la tabla según tus necesidades */
+}
+
+
+.monospace {
+    font-family: "Lucida Console", Monaco, monospace;
+}

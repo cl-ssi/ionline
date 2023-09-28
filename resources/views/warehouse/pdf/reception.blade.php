@@ -20,12 +20,16 @@
         <div style="clear: both;padding-top: 170px;"></div>
 
         <div class="center" style="text-transform: uppercase;">
-            <strong style="text-transform: uppercase;">
-                ACTA DE INGRESO Y RECEPCIÓN CONFORME N° {{ $control->id }}
-            </strong>
+            <h2>
+                <strong style="text-transform: uppercase;">
+                    ACTA DE INGRESO Y RECEPCIÓN CONFORME N° {{ $control->id }}
+                </strong>
+            </h2>
         </div>
 
         <div style="clear: both; padding-bottom: 20px"></div>
+        <br>
+        <br>
         <br>
 
         <table class="ocho">
@@ -58,7 +62,7 @@
                             <td><strong>Bodega Origen:</strong></td>
                             <td>{{ optional($control->originStore)->name }}</td>
                         @break
-                        
+
                         @case(\App\Models\Warehouse\TypeReception::purchaseOrder())
                             <td><strong>Código OC:</strong></td>
                             <td>{{ $control->po_code }}</td>
@@ -85,6 +89,56 @@
                 </tr>
             </tbody>
         </table>
+
+        <table class="ocho tabla">
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Cant.</th>
+                    <th>Producto</th>
+                    <th>Precio</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse($control->items as $item)
+                    <tr>
+                        <td style="width: 1rem; vertical-align: top; center;">
+                            <span class="siete">
+                                {{ optional($item->product->product)->code }}
+                            </span>
+                        </td>
+                        <td style="width: 1rem; vertical-align: top; center;">
+                            {{ $item->quantity }}
+                        </td>
+                    </tr>
+
+                @empty
+                    <tr>
+                        <td style="center" colspan="4">
+                            <strong>No hay productos</strong>
+                        </td>
+                    </tr>
+                @endforelse
+            </tbody>
+
+        </table>
+
+
+        <div style="clear: both;padding-top: 156px;"></div>
+
+
+        <!-- Sección de las aprobaciones -->
+        <div class="signature-container">
+            @foreach ($control->approvals as $approval)
+                <div class="signature">
+                    @include('sign.approvation', [
+                        'approval' => $approval,
+                    ])
+                </div>
+            @endforeach
+        </div>
+
 
     </main>
 
