@@ -1,11 +1,28 @@
 <div>
-    {{-- The Master doesn't talk, he acts. --}}
     @if ($editing)
-        <input wire:model.defer="nuevoFolioCompromiso" type="text" placeholder="Ingrese el folio compromiso sigfe">
-        <button wire:click="guardarFolioCompromiso">Guardar</button>
+            <input wire:model.defer="nuevoFolioCompromiso" 
+                type="text" 
+                placeholder="Ingrese el folio compromiso sigfe"
+                class="form-control form-control-sm">
+                <button class="btn btn-sm btn-primary" 
+                    type="button" 
+                    wire:click="guardarFolioCompromiso">
+                    <i class="fas fa-fw fa-save"></i>
+                </button>
+
     @else
-        <span>{{ $nuevoFolioCompromiso }}</span>
-        <button wire:click="toggleEditing"><i class="fas fa-pencil-alt"></i></button>
+        <div class="input-group mb-3">
+            <input value="{{ $dte->folio_compromiso_sigfe }}" 
+                type="text" 
+                class="form-control form-control-sm" disabled>
+            <div class="input-group-append">
+                <button 
+                    class="btn btn-sm btn-outline-primary" 
+                    wire:click="toggleEditing">
+                    <i class="fas fa-fw fa-edit"></i>
+                </button>
+            </div>
+        </div>
     @endif
 
     @if ($successMessage)

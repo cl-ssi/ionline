@@ -86,7 +86,7 @@
                 <th>Documento</th>
                 <th width="140px">OC</th>
                 <th>FR</th>
-                <th>Bod</th>
+                <th>Bod/Recep</th>
                 <th width="190">Admin C.</th>
                 <th width="90">Fecha Aceptación SII (días)</th>
                 <th>Devengo</th>
@@ -211,6 +211,28 @@
                         @endif
                     </td>
                     <td class="small">
+                        <!-- 
+                            Acá deben ir tres cosas. 
+                            1. Actas de recepción emitidas en el módulo de cenabast
+                            2. Actas de recepción emitidas y firmadas en bodega
+                            3. Actas de recepción de servicios emitidas en abastecimiento
+                        -->
+
+                        <!-- Punto 1 -->
+                        @if($dte->cenabast_reception_file)
+                            <a
+                                class="btn btn-sm btn-outline-primary" target="_blank" 
+                                href="{{ route('warehouse.cenabast.download.signed', $dte) }}"
+                                title="Acta de recepción CENABAST"
+                            >
+                                <i class="fas fa-file"></i> CNB
+                            </a>
+                        @endif
+
+                        <!-- Punto 2 -->
+                        <!-- Punto 3 -->
+
+                        <!-- Esto ya no debería ir -->
                         @foreach ($dte->controls as $control)
                             <a class="btn btn-sm btn-outline-primary"
                                 href="{{ route('warehouse.control.show', $control) }}" target="_blank">

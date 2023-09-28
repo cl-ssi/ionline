@@ -7,7 +7,6 @@ use App\Models\Finance\Dte;
 
 class SigfeFolioCompromiso extends Component
 {
-
     public $nuevoFolioCompromiso = null;
     public $dte;
     public $successMessage = '';
@@ -26,12 +25,13 @@ class SigfeFolioCompromiso extends Component
     }
 
     public function guardarFolioCompromiso()
-    {        
+    {
         if ($this->dte) {
             $this->dte->folio_compromiso_sigfe = $this->nuevoFolioCompromiso;
             $this->dte->save();
             $this->successMessage = 'Folio compromiso sigfe guardado exitosamente.';
         }
+        $this->toggleEditing();
     }
 
     public function toggleEditing()

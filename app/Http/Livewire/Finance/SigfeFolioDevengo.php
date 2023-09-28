@@ -12,6 +12,7 @@ class SigfeFolioDevengo extends Component
     public $successMessage = '';
     public $editing = false;
 
+    // Recibe el ID del DTE cuando se carga el componente
     public function mount($dte)
     {
         $this->dte = $dte;
@@ -30,6 +31,7 @@ class SigfeFolioDevengo extends Component
             $this->dte->save();
             $this->successMessage = 'Folio devengo sigfe guardado exitosamente.';
         }
+        $this->toggleEditing();
     }
 
     public function toggleEditing()

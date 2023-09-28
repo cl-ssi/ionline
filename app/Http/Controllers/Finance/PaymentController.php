@@ -74,7 +74,13 @@ class PaymentController extends Controller
 
         $query = Dte::with([
             'controls',
+            'controls.store',
+            'purchaseOrder',
+            'establishment',
             'requestForm',
+            'requestForm.father',
+            'requestForm.requestFormFiles',
+            'requestForm.father.requestFormFiles',
             'requestForm.contractManager',
         ])
             ->where('confirmation_status', 1)
@@ -90,7 +96,7 @@ class PaymentController extends Controller
         }
 
 
-        $dtes = $query->paginate(100);
+        $dtes = $query->paginate(10);
         $request->flash();
 
         return view('finance.payments.review', compact('dtes', 'request'));
