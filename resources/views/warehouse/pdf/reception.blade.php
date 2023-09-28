@@ -132,7 +132,7 @@
 
                 @empty
                     <tr>
-                        <td style="center" colspan="4">
+                        <td style="center;" colspan="5">
                             <strong>No hay productos</strong>
                         </td>
                     </tr>

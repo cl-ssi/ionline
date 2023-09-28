@@ -51,12 +51,19 @@
             </select>
         </div>
         <div class="col-md-2">
-            <select class="form-control" wire:model.defer="filter.sender_status" disabled>
+            {{-- <select class="form-control" wire:model.defer="filter.sender_status" disabled>
                 <option value="Todas">Todas</option>
                 <option value="No Confirmadas">No Confirmadas</option>
                 <option value="Confirmadas">Confirmadas</option>
                 <option value="Rechazadas">Rechazadas</option>
                 <option value="Sin Envío">Sin Envío</option>
+            </select> --}}
+            <select class="form-control" wire:model.defer="filter.tipo_documento">
+                <option value="">Todas</option>
+                <option value="factura_electronica">Factura Electrónica</option>
+                <option value="factura_exenta">Factura Exenta</option>
+                <option value="guias_despachos">Guias Despacho</option>
+                <option value="nota_credito">Nota Crédito</option>
             </select>
         </div>
         <div class="col-md-1">
@@ -86,7 +93,7 @@
                 <th>Documento</th>
                 <th width="140px">OC</th>
                 <th>FR</th>
-                <th>Bod</th>
+                <th>Bod/Recep</th>
                 <th width="190">Admin C.</th>
                 <th width="90">Fecha Aceptación SII (días)</th>
                 <th>Devengo</th>
@@ -211,6 +218,28 @@
                         @endif
                     </td>
                     <td class="small">
+                        <!-- 
+                            Acá deben ir tres cosas. 
+                            1. Actas de recepción emitidas en el módulo de cenabast
+                            2. Actas de recepción emitidas y firmadas en bodega
+                            3. Actas de recepción de servicios emitidas en abastecimiento
+                        -->
+
+                        <!-- Punto 1 -->
+                        @if($dte->cenabast_reception_file)
+                            <a
+                                class="btn btn-sm btn-outline-primary" target="_blank" 
+                                href="{{ route('warehouse.cenabast.download.signed', $dte) }}"
+                                title="Acta de recepción CENABAST"
+                            >
+                                <i class="fas fa-file"></i> CNB
+                            </a>
+                        @endif
+
+                        <!-- Punto 2 -->
+                        <!-- Punto 3 -->
+
+                        <!-- Esto ya no debería ir -->
                         @foreach ($dte->controls as $control)
                             <a class="btn btn-sm btn-outline-primary"
                                 href="{{ route('warehouse.control.show', $control) }}" target="_blank">

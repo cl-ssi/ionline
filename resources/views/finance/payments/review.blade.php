@@ -42,12 +42,9 @@
                 <th width="140px">OC</th>
                 <th>FR</th>
                 <th>Adjuntos</th>
-                <th>Bod</th>
-                <th>Documento Firmado</th>
-                <th>Folio Compromiso SIGFE</th>
-                <th>Archivo Compromiso SIGFE</th>
-                <th>Folio Devengo SIGFE</th>
-                <th>Archivo Devengo SIGFE</th>
+                <th>Bod/Recep</th>
+                <th>Compromiso SIGFE</th>
+                <th>Devengo SIGFE</th>
                 <th>Revisar</th>
             </tr>
         </thead>
@@ -105,8 +102,30 @@
                         @endif
                     </td>
                     <td class="small">
+                        <!-- 
+                            Acá deben ir tres cosas. 
+                            1. Actas de recepción emitidas en el módulo de cenabast
+                            2. Actas de recepción emitidas y firmadas en bodega
+                            3. Actas de recepción de servicios emitidas en abastecimiento
+                        -->
+
+                        <!-- Punto 1 -->
+                        @if($dte->cenabast_reception_file)
+                            <a
+                                class="btn btn-sm btn-outline-primary" target="_blank" 
+                                href="{{ route('warehouse.cenabast.download.signed', $dte) }}"
+                                title="Acta de recepción CENABAST"
+                            >
+                                <i class="fas fa-file"></i> CNB
+                            </a>
+                        @endif
+
+                        <!-- Punto 2 -->
+                        <!-- Punto 3 -->
+
+                        <!-- Esto ya no debería ir -->
                         @foreach ($dte->controls as $control)
-                            <a href="{{ route('warehouse.control.show', [
+                        <a href="{{ route('warehouse.control.show', [
                                 'store' => $control->store->id,
                                 'control' => $control->id,
                                 'act_type' => 'reception',
@@ -116,24 +135,14 @@
                             </a>
                         @endforeach
                     </td>
-                    <td class="small" nowrap>
-                        @if ($dte->confirmation_signature_file)
-                            <a href="{{ route('warehouse.cenabast.downloadFile', ['dte' => $dte->id]) }}"
-                                class="btn btn-sm btn-success"><i class="fas fa-download"></i> Descargar
-                            </a>
-                        @endif
-                    </td>
                     <td class="small">
                         @livewire('finance.sigfe-folio-compromiso', ['dte' => $dte], key($dte->id))
-                    </td>
-                    <td class="small">
+                        <hr>
                         @livewire('finance.sigfe-archivo-compromiso', ['dte' => $dte], key($dte->id))
                     </td>
                     <td class="small">
                         @livewire('finance.sigfe-folio-devengo', ['dte' => $dte], key($dte->id))
-                    </td>
-
-                    <td class="small">
+                        <hr>
                         @livewire('finance.sigfe-archivo-devengo', ['dte' => $dte], key($dte->id))
                     </td>
                     <td class="small">

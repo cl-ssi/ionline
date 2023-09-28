@@ -95,16 +95,33 @@ class ControlCreate extends Component
 
 
 
+
         if ($this->require_contract_manager_visation) {
-            $yo = 16055586;
+            $warehouse_user = auth()->id();
             $approval_contract_manager = Approval::create([
                 "module" => "Modulo Bodega",
                 "module_icon" => "fas fa-rocket",
                 "subject" => "Nueva Solicitud de Visación de  Administrador de Contrato por parte de Bodega",
-                "approver_id" => $yo,
+                "approver_id" => $warehouse_user,
                 "document_route_name" => "warehouse.control.showPdf",
                 "document_route_params" => json_encode($control->id),
             ]);
+
+
+            $approval_warehouse_manager =
+                Approval::create([
+                    "module" => "Modulo Bodega",
+                    "module_icon" => "fas fa-rocket",
+                    "subject" => "Nueva Solicitud de Visación de  Administrador de Contrato por parte de Bodega",
+                    "approver_ou_id" => auth()->user()->organizational_unit_id,
+                    "document_route_name" => "warehouse.control.showPdf",
+                    "active" => false,
+                    "previous_approval_id" => $approval_contract_manager->id,
+                    "document_route_params" => json_encode($control->id),
+                ]);
+
+            // Asociar aprobaciones al control
+            $control->approvals()->saveMany([$approval_contract_manager, $approval_warehouse_manager]);
         }
 
         session()->flash('success', "Se ha guardado el encabezado del $control->type_format.");
