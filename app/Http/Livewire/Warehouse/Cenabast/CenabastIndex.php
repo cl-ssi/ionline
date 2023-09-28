@@ -36,6 +36,12 @@ class CenabastIndex extends Component
     public function getCenabast()
     {
         $dtes = Dte::query()
+            ->with([
+                'controls',
+                'establishment',
+                'confirmationUser',
+                'confirmationUser.organizationalUnit',
+            ])
             ->where('cenabast', 1)
             ->where('establishment_id', auth()->user()->organizationalUnit->establishment->id)
             ->when($this->filter_by == 'without-attached', function($query) {
