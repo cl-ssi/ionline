@@ -11,7 +11,7 @@
             <i class="fas fa-file-medical"></i>  Mis solicitudes</a>
     </li>
     @endcan
-    @canany(['HIS Modification Request: User','HIS Modification Request: Manager'])
+    @canany(['HIS Modification Request: Manager'])
     <li class="nav-item">
         <a class="nav-link {{ active('his.modification-request.mgr') }}" 
             href="{{ route('his.modification-request.mgr') }}">

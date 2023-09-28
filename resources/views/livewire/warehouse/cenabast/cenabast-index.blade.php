@@ -195,7 +195,7 @@
                                     'is_boss' => true,
                                     'cenabast_reception_file' => '/ionline/cenabast/signature/dte-' . $dte->id . '.pdf'
                                 ],
-                            ], $dte->id)
+                            ], key($dte->id))
                         @elseif($dte->cenabast_signed_boss)
                             <i class="fas fa-check text-success"></i> Firmado
                         @else

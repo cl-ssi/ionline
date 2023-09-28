@@ -5,9 +5,11 @@
 
 body,
 table {
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    /* font-family: Arial, Helvetica, sans-serif; */
     /*font-family: "Lucida Console", Monaco, monospace;*/
-    font-size: 0.8rem;
+    font-size: 11px;
+    /* font-size: 0.8rem; */
 }
 
 .content-block,
@@ -113,4 +115,20 @@ br {
 }
 .secondary {
     color: #6c757d!important;
+}
+
+.tabla th, .tabla td {
+    border: 1px solid black;
+    padding: 8px; /* Ajusta el espacio entre el texto y los bordes según tus preferencias */
+}
+
+.tabla {
+    border: 1px solid black;
+    border-collapse: collapse;
+    width: 100%; /* Opcional: Ajusta el ancho de la tabla según tus necesidades */
+}
+
+
+.monospace {
+    font-family: "Lucida Console", Monaco, monospace;
 }

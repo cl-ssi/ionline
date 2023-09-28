@@ -17,13 +17,21 @@ class ManualDtes extends Component
     public $folioOC;
     public $barCode;
     public $showSuccessMessage = false;
+    /*
+    NOTA 
+    No hay representacion para el tipo de documento boleta_electronica 
+    nosotros de manera interna estamos informando como codigo 77 para llevar cierto control.
+    Se verifica en la documentacion del SII que no existe este código para algo que ellos manejen, por eso se tomó ese número*/
+
     public $tipoDocumentoMap = [
         'factura_exenta' => 34,
         'factura_electronica' => 33,
         'guias_despacho' => 52,
         'nota_credito' => 61,
+        'boleta_electronica' => 77,
         //hacer un distinct o algo para buscar los demas o buscar en la documentacion del SII
     ];
+
 
     public function saveDte()
     {
@@ -121,6 +129,7 @@ class ManualDtes extends Component
         // Redirigir a la URL de la boleta
         return redirect()->to($boleta_url);
     }
+
 
 
 

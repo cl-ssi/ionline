@@ -51,7 +51,7 @@
         </ul>
         <hr>
 
-        <h3 class="mb-2">Herramienta de Papá Cristian</h3>
+        <h3 class="mb-2">La poderosa herramienta</h3>
 
         <div class="row">
 

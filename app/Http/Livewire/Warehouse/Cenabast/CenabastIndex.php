@@ -2,17 +2,21 @@
 
 namespace App\Http\Livewire\Warehouse\Cenabast;
 
-use App\Models\Documents\Sign\Signature;
-use App\Models\Finance\Dte;
-use App\Services\DocumentSignService;
-use App\Services\ImageService;
-use App\User;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
+use Livewire\WithPagination;
 use Livewire\Component;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
+use App\User;
+use App\Services\ImageService;
+use App\Services\DocumentSignService;
+use App\Models\Finance\Dte;
+use App\Models\Documents\Sign\Signature;
 
 class CenabastIndex extends Component
 {
+    use WithPagination;
+    protected $paginationTheme = 'bootstrap';
+
     public $filter_by = 'all';
 
     public $selectedDte;
@@ -32,6 +36,12 @@ class CenabastIndex extends Component
     public function getCenabast()
     {
         $dtes = Dte::query()
+            ->with([
+                'controls',
+                'establishment',
+                'confirmationUser',
+                'confirmationUser.organizationalUnit',
+            ])
             ->where('cenabast', 1)
             ->where('establishment_id', auth()->user()->organizationalUnit->establishment->id)
             ->when($this->filter_by == 'without-attached', function($query) {

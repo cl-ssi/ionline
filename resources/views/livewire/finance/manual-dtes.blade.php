@@ -17,6 +17,7 @@
                     @foreach ($this->getDistinctTipoDocumento() as $tipo)
                         <option value="{{ $tipo }}">{{ $tipo }}</option>
                     @endforeach
+                    <option value="boleta_electronica">boleta_electronica</option>
                 </select>
                 @error('tipoDocumento')
                     <span class="text-danger">{{ $message }}</span>
@@ -67,7 +68,7 @@
             </div>
 
             <div class="form-group col-4">
-                <label for="barCode">7 Últimos dígitos código de barra <small>(Solo para boletas)</small></label>
+                <label for="barCode">7 Últimos dígitos código de barra <small>(Solo para BHE)</small></label>
                 <div class="input-group">
                     <input type="text" class="form-control" id="barCode" wire:model.defer="barCode"
                         placeholder="ej: 6A86963" maxlength="7" autocomplete="off">

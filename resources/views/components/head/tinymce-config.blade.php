@@ -11,6 +11,7 @@
     ],
     toolbar: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | print preview media fullpage | forecolor backcolor emoticons | removeformat ',
     browser_spellcheck: true,
-    contextmenu: false
+    contextmenu: false,
+    content_style: "body { font-size: 10pt; font-family: Verdana; }"
   });
 </script>

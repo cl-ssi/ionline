@@ -18,7 +18,7 @@
     <!-- Define main for content -->
     <main>
 
-        <div style="float: right; width: 300px; padding-top: 76px;">
+        <div style="float: right; width: 300px; padding-top: 66px;">
             
             <div class="left quince" style="padding-left: 2px; padding-bottom: 10px;">
                 <strong style="text-transform: uppercase; padding-right: 30px;">
