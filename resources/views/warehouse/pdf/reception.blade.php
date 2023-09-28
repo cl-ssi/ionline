@@ -8,7 +8,7 @@
     @include('documents.templates.partials.header', [
         'establishment' => auth()->user()->organizationalUnit->establishment,
         'linea1' => auth()->user()->organizationalUnit->establishment->name,
-        'linea2' => 'Departamento de Teconologías de la Información y Comunicaciones',
+        //'linea2' => 'Departamento de Teconologías de la Información y Comunicaciones',
     ])
 
     @include('documents.templates.partials.footer', [
@@ -111,6 +111,23 @@
                         <td style="width: 1rem; vertical-align: top; center;">
                             {{ $item->quantity }}
                         </td>
+                        <td style="vertical-align: top;">
+                            {{ optional($item->product->product)->name }}
+                            <br>
+                            <small>
+                                @if ($item->product->barcode)
+                                    {{ $item->product->barcode }}
+                                    -
+                                @endif
+                                {{ optional($item->product)->name }}
+                            </small>
+                        </td>
+                        <td class="right" style="vertical-align: top;">
+                            {{ money($item->unit_price) }}
+                        </td>
+                        <td class="right" style="vertical-align: top;">
+                            {{ money($item->unit_price * $item->quantity) }}
+                        </td>
                     </tr>
 
                 @empty
@@ -120,9 +137,50 @@
                         </td>
                     </tr>
                 @endforelse
+
+
+                @if ($control->isPurchaseOrder())
+                    <tr>
+                        <td colspan="3"></td>
+                        <td class="right">
+                            <strong>NETO</strong>
+                        </td>
+                        <td class="right">
+                            <strong>{{ money($control->net_total) }}</strong>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3"></td>
+                        <td class="right" nowrap>
+                            @if ($control->purchaseOrder)
+                                <strong>
+                                    IVA {{ optional($control->purchaseOrder)->tax_percentage }}%
+                                </strong>
+                            @endif
+                        </td>
+                        <td class="right">
+                            <strong>{{ money($control->total_tax) }}</strong>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3"></td>
+                        <td class="right">
+                            <strong>TOTAL</strong>
+                        </td>
+                        <td class="right">
+                            <strong>{{ money($control->total) }}</strong>
+                        </td>
+                    </tr>
+                @endif
             </tbody>
 
         </table>
+
+
+        <p>Se deja constancia que los bienes/servicios se recepcionan conforme de acuerdo a especificaciones técnicas,
+            cumple con la calidad técnica, oportunidad y operatividad.</p>
+
+        <p>Para constancia firman/visan:</p>
 
 
         <div style="clear: both;padding-top: 156px;"></div>
