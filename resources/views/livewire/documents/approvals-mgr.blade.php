@@ -19,7 +19,7 @@
                 <i class="fas fa-filter"></i>
             </button>
         </div>
-        <div class="form-group col-md-1">
+        <div class="form-group col-md-2">
             <label for="for_filter">&nbsp;</label>
             <a href="{{ route('documents.approvals') }}" class="btn btn-outline-secondary form-control">
                 Actualizar
@@ -71,10 +71,9 @@
                     {{ $approval->reject_observation }}
                 </td>
                 <td>
-
                     @if($approval->digital_signature)
                         <a class="btn btn-sm btn-outline-danger" target="_blank"
-                            href="{{ route($approval->document_route_name,json_decode($approval->document_route_params)) }}">
+                            href="{{ route($approval->document_route_name, json_decode($approval->document_route_params,true)) }}">
                             <i class="fas fa-fw fa-file-pdf"></i>
                         </a>
 
@@ -83,25 +82,24 @@
                             'btn_class' => 'btn btn-sm btn-success',
                             'btn_icon'  => 'fa-fw fas fa-signature',
 
-                            'routeName' =>  "finance.purchase-orders.showByCode",
-                            'routeParams' => json_decode($approval->document_route_params),
+                            'routeName' =>  $approval->document_route_name,
+                            'routeParams' => json_decode($approval->document_route_params,true),
 
                             'signer' => auth()->user(),
                             'position' => 'center',
                             'startY' => 80,
 
-                            'folder' => '/ionline/dte/confirmation/',
-                            'filename' => 'confirmation.pdf',
+                            'filename' => $approval->filename,
 
                             'callback' => 'finance.dtes.confirmation.store',
                             'callbackParams' => [
                                 'folder' => '/ionline/dte/confirmation/',
                             ]
-                        ])
+                        ], key($approval->id))
 
                     @else
                         <a class="btn btn-sm btn-outline-danger" target="_blank"
-                            href="{{ route($approval->document_route_name,json_decode($approval->document_route_params)) }}">
+                            href="{{ route($approval->document_route_name, json_decode($approval->document_route_params,true)) }}">
                             <i class="fas fa-fw fa-file-pdf"></i>
                         </a>
                         <button
@@ -208,13 +206,13 @@
                         </div>
                     </div>
                     <div class="modal-body">
-                        <object data="{{ route($approvalSelected->document_route_name,json_decode($approvalSelected->document_route_params)) }}"
+                        <object data="{{ route($approvalSelected->document_route_name,json_decode($approvalSelected->document_route_params,true)) }}"
                             type="application/pdf"
                             width="100%"
                             height="700px">
 
                             <p>No se puede mostrar el PDF.
-                                <a href="{{ route($approvalSelected->document_route_name,json_decode($approvalSelected->document_route_params)) }}">Descargar</a>.</p>
+                                <a href="{{ route($approvalSelected->document_route_name,json_decode($approvalSelected->document_route_params,true)) }}">Descargar</a>.</p>
                         </object>
                     </div>
                     <div class="modal-footer">
