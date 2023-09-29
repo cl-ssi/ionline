@@ -117,6 +117,10 @@ class LogStatistics extends Component
                 $log->module = 'Programación';
                 $log->save();
             }
+            elseif (preg_match('/professionalhours/', $log->uri)) {
+                $log->module = 'Programación';
+                $log->save();
+            }
             elseif (preg_match('/subrogations/', $log->uri)) {
                 $log->module = 'Subrogantes';
                 $log->save();
@@ -135,6 +139,50 @@ class LogStatistics extends Component
             }
             elseif (preg_match('/unspsc/', $log->uri)) {
                 $log->module = 'UNSPSC';
+                $log->save();
+            }
+            elseif (preg_match('/prof_agenda/', $log->uri)) {
+                $log->module = 'Agenda UST';
+                $log->save();
+            }
+            elseif (preg_match('/prof-agenda/', $log->uri)) {
+                $log->module = 'Agenda UST';
+                $log->save();
+            }
+            elseif (preg_match('/handle-task/', $log->uri)) {
+                $log->module = 'OTP Inválido';
+                $log->save();
+            }
+            elseif (preg_match('/finance\/payments/', $log->uri)) {
+                $log->module = 'Estados de Pago';
+                $log->save();
+            }
+            elseif (preg_match('/finance./', $log->uri)) {
+                $log->module = 'Estados de Pago';
+                $log->save();
+            }
+            elseif (preg_match('/no-attendance-record/', $log->uri)) {
+                $log->module = 'Asistencia';
+                $log->save();
+            }
+            elseif (preg_match('/summary/', $log->uri)) {
+                $log->module = 'Sumarios';
+                $log->save();
+            }
+            elseif (preg_match('/amipass/', $log->uri)) {
+                $log->module = 'AmiPass';
+                $log->save();
+            }
+            elseif (preg_match('/inventory/', $log->uri)) {
+                $log->module = 'Inventario';
+                $log->save();
+            }
+            elseif (preg_match('/hotel/', $log->uri)) {
+                $log->module = 'Cabañas';
+                $log->save();
+            }
+            elseif (preg_match('/login-external/', $log->uri)) {
+                $log->module = 'Login externo';
                 $log->save();
             }
         }
