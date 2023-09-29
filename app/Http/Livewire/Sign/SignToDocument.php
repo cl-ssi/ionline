@@ -2,13 +2,15 @@
 
 namespace App\Http\Livewire\Sign;
 
-use App\Models\Documents\Sign\Signature;
-use App\Services\ImageService;
-use Firebase\JWT\JWT;
-use Illuminate\Support\Facades\Http;
+use Livewire\Component;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
-use Livewire\Component;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Http;
+use Firebase\JWT\JWT;
+use App\Services\ImageService;
+use App\Models\Documents\Sign\Signature;
+
 class SignToDocument extends Component
 {
     /**
@@ -92,21 +94,9 @@ class SignToDocument extends Component
             /**
              * Si esta seteado el routeName se consulta la ruta, y se obtiene el base64
              */
-            $url = route($this->routeName, $this->routeParams);
-
-            /**
-             * Si esta en local, remplaza el https por http
-             */
-            if(env('APP_ENV') == 'local')
-            {
-                $url = Str::replace('https', 'http', $url);
-            }
-
-            $response = Http::get($url);
-
-            $content = $response->getBody();
-
-            $this->pdfBase64 = chunk_split(base64_encode($content));
+            $show_controller_method = Route::getRoutes()->getByName($this->routeName)->getActionName();
+            $response = app()->call($show_controller_method, $this->routeParams);
+            $this->pdfBase64 = base64_encode($response->original);
         }
         elseif(isset($this->view))
         {
@@ -214,6 +204,7 @@ class SignToDocument extends Component
         {
             return redirect()->back()->with('danger', "Error: $message");
         }
+
 
         /**
          * Obtiene el archivo, la carpeta y el nombre del archivo

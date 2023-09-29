@@ -66,7 +66,7 @@ class ModificationMgr extends Component
                     "module_icon" => "fas fa-notes-medical",
                     "subject" => $modrequest->subject,
                     "document_route_name" => "his.modification-request.show",
-                    "document_route_params" => json_encode([$modrequest->id]),
+                    "document_route_params" => json_encode(["modification_request_id" => $modrequest->id]),
                     "approver_ou_id" => $ou_id,
                 ]);
 

@@ -839,7 +839,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
 
         Route::get('no-records', NoAttendanceRecordIndex::class)->name('no-records.index');
         Route::get('no-records-mgr', NoAttendanceRecordMgr::class)->name('no-records.mgr');
-        Route::get('no-records/{noAttendanceRecord}', [NoAttendanceRecordController::class,'show'])->name('no-records.show');
+        Route::get('no-records/{no_attendance_record_id}', [NoAttendanceRecordController::class,'show'])->name('no-records.show');
         Route::get('no-records/{noAttendanceRecord}/confirmation', NoAttendanceRecordConfirmation::class)->name('no-records.confirmation');
         Route::get('reasons', ReasonMgr::class)->name('reason.mgr');
     });
@@ -2461,7 +2461,7 @@ Route::prefix('his')->as('his.')->middleware('auth')->group(function () {
         Route::get('/', ModificationRequestIndex::class)->name('index');
         Route::get('/new', NewModification::class)->name('new');
         Route::get('/mgr', ModificationMgr::class)->name('mgr');
-        Route::get('/{modificationRequest}/show', ModificationRequestController::class)->name('show');
+        Route::get('/{modification_request_id}/show', [ModificationRequestController::class,'show'])->name('show');
         Route::view('/parameters', 'his.parameters')->name('parameters');
 
         Route::prefix('files')->as('files.')->group(function () {

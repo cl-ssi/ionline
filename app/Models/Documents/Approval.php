@@ -49,11 +49,14 @@ class Approval extends Model
             "document_route_name" => "finance.purchase-orders.showByCode",
 
             /* (Opcional) Parametros que reciba esa ruta */
-            "document_route_params" => json_encode(["1272565-444-AG23"]),
+            "document_route_params" => json_encode([
+                "po_code" => "1272565-444-AG23"
+            ]),
 
             /** Quien firma: Utilizar uno de los dos */
             /* (Opcional) De preferncia enviar la aprobación a la OU */
             "approver_ou_id" => 20,
+
 
 
 
@@ -87,9 +90,12 @@ class Approval extends Model
             //"active" => true,
 
             /**
-             * (Opcional) el id de el Approval anterior, es para cuando es en cadena
-             * Este se debe combinar con la propiedad active, dejar active == true sólo al primero
-             * y todos los demás en false. Ej de cadena, id: 17 luego 18 luego 19, sería así:
+             * (Opcional) Se utiliza el previous_approval_id (id de el Approval anterior)
+             * para cuando es en cadena de responsabilidad. Se debe utilizar en conjunto con
+             * la propiedad active.
+             * Dejar active == true sólo al primero y todos los demás en false. 
+             * 
+             * Ej de cadena, id: 17 luego se ejecuta el id 18, luego el id 19
              *
              * id  |  previous_approval_id  | active
              * =====================================
@@ -105,8 +111,10 @@ class Approval extends Model
              * Agregar esta relación al modelo que quieres que tenga approvals
              * Ejemplo: Modelo RequestForm, y luego podrías llamrla así:
              * $requestForm->approvals (tendría una colección de approvals)
-             * Para one to many
              **/
+
+
+             /** Para one to many **/
 
              /**
              * Get all of the approvations of a model.
@@ -117,6 +125,7 @@ class Approval extends Model
             // }
 
             /** Para One to One */
+
             /**
              * Get the approval model.
              */
@@ -134,8 +143,22 @@ class Approval extends Model
              * ]);
              **/
 
-            /* (Opcional) True or False(default), se requiere firma electrónica en vez de aprobación simple */
+
+            /**
+             * Opciones para utilizar firma electrónica avanzada en vez de aprobación simple 
+             * ==============================================================================
+             */
+            /* (Opcional) True or False(default), Si requiere firma electrónica en vez de aprobación simple */
             //"digital_signature" => true,
+
+            /* (Opcional) Posición ("columna") de la firma en el documento: center, left, right */
+            //"position" => "center",
+
+            /* (Opcional) Margen inferior: Distancia desde el final de la hoja hacia arriba usualmente 80 */
+            //"startY" => 80,
+
+            /* (Opcional) ruta con nombre del archivo que se guardará en el storage, ej: ionline/documents/modulo/id (sin extensión)*/
+            //"filename" => "ionline/documents/approvals/archivo",
         ]);
     }
 
@@ -159,17 +182,20 @@ class Approval extends Model
         'document_route_name',
         'document_route_params',
         'approver_ou_id',
-        'approver_id',
-        'approver_at',
+        'approver_id', //  user_id, asignar en caso de aprobación o rechazo
+        'status', // True or False, asignar en caso de aprobación o rechazo
+        'approver_at', // Datetime, asignar en caso de aprobación o rechazo
         'callback_controller_method',
         'callback_controller_params',
-        'status',
         'reject_observation',
-        'digital_signature',
         'active',
         'previous_approval_id',
         'approvable_id',
         'approvable_type',
+        'digital_signature',
+        'position',
+        'startY',
+        'filename',
     ];
 
     /**
@@ -210,7 +236,7 @@ class Approval extends Model
     /**
      * Get the polymorphic  parent approvable model:
      * - ModificationRequest
-     * -
+     * - NoAttendanceRecord
      */
     public function approvable(): MorphTo
     {

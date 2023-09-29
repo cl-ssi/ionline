@@ -43,16 +43,14 @@
             &nbsp;
         @endif
     </p>
-    
+
     <p class="text big bold {{ $approval->color }}">
         @switch($approval->status)
             @case('1')
                 {{ $approval->approver->shortName }}
-                <small>{{ $approval->approver->organizationalUnit->name }}</small>
             @break
             @case('0')
                 {{ $approval->approver->shortName }}
-                <small>{{ $approval->approver->organizationalUnit->name }}</small>
             @break
             @default
                 <span style="color: #ccc"><i>PENDIENTE </i></span>
@@ -60,6 +58,12 @@
         @endswitch
 
     </p>
-    <p class="text small">{{ substr($approval->organizationalUnit?->name, 0, 50) }}</p>
+    <p class="text small">
+        @if($approval->approver_ou_id)
+            {{ substr($approval->organizationalUnit->name, 0, 50) }}
+        @else
+            {{ substr($approval->approver->organizationalUnit?->name, 0, 50) }}
+        @endif
+    </p>
 </div>
 <p class="text small center {{ $approval->color }}">{{ $approval->reject_observation }}</p>

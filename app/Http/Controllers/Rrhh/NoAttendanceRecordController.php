@@ -9,8 +9,9 @@ use App\Http\Controllers\Controller;
 
 class NoAttendanceRecordController extends Controller
 {
-    public function show(NoAttendanceRecord $noAttendanceRecord)
+    public function show($no_attendance_record_id)
     {
+        $noAttendanceRecord = NoAttendanceRecord::find($no_attendance_record_id);
         $documentFile = \PDF::loadView('rrhh.attendances.no-attendance-record', compact('noAttendanceRecord'));
         return $documentFile->stream();
     }

@@ -21,7 +21,7 @@ class PaymentController extends Controller
         return view('finance.payments.index');
     }
 
-    public function search(Request $request)
+    public function search(Request $request, $query)
     {
         $id = $request->input('id');
         $folio = $request->input('folio');
@@ -29,7 +29,7 @@ class PaymentController extends Controller
         $folio_compromiso = $request->input('folio_compromiso');
         $folio_devengo = $request->input('folio_devengo');
 
-        $query = Dte::query();
+        // $query = Dte::query();
 
         if ($id) {
             $query->where('id', $id);
@@ -92,7 +92,8 @@ class PaymentController extends Controller
 
 
         if ($request->filled('id') || $request->filled('folio') || $request->filled('oc') || $request->filled('folio_compromiso') || $request->filled('folio_devengo')) {
-            $query = $this->search($request);
+            //$query = $this->search($request);
+            $query = $this->search($request, $query);
         }
 
 
@@ -126,7 +127,7 @@ class PaymentController extends Controller
             ->where('establishment_id', auth()->user()->organizationalUnit->establishment_id);
 
             if ($request->filled('id') || $request->filled('folio') || $request->filled('oc') || $request->filled('folio_compromiso') || $request->filled('folio_devengo')) {
-                $query = $this->search($request);
+                $query = $this->search($request, $query);
             }
 
         $dtes = $query->paginate(100);
