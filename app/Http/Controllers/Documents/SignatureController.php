@@ -631,17 +631,22 @@ class SignatureController extends Controller
 
     public function rejectSignature(Request $request, $idSignatureFlow)
     {
-        $signatureFlow = SignaturesFlow::find($idSignatureFlow);
-        $user_signer_id = $signatureFlow->user_id;
-        $signatureFlow->update([
-            'status' => 0,
-            'observation' => $request->observacion,
-            'real_signer_id' => (Auth::user()->id == $user_signer_id) ? null : Auth::user()->id,
-        ]);
-        $signatureFlow->signature()->update([
-            'status'        => 'rejected',
-            'rejected_at'   => now()
-        ]);
+        $signatureFlow = SignaturesFlow::withTrashed()->find($idSignatureFlow);
+        if($signatureFlow->trashed()) {
+            session()->flash('danger', "No se pudo rechazar la solicitud de firma, el creador la eliminó");
+        }
+        else {
+            $user_signer_id = $signatureFlow->user_id;
+            $signatureFlow->update([
+                'status' => 0,
+                'observation' => $request->observacion,
+                'real_signer_id' => (Auth::user()->id == $user_signer_id) ? null : Auth::user()->id,
+            ]);
+            $signatureFlow->signature()->update([
+                'status'        => 'rejected',
+                'rejected_at'   => now()
+            ]);
+        }
 
         session()->flash('success', "La solicitud ha sido rechazada");
         return redirect()->route('documents.signatures.index', ['pendientes']);
