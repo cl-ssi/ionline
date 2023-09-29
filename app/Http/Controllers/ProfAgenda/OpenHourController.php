@@ -155,4 +155,25 @@ class OpenHourController extends Controller
         session()->flash('success', 'Se eliminaron los bloques.');
         return redirect()->back();
     }   
+
+    public function assistance_confirmation(Request $request){
+        $openHour = OpenHour::find($request->openHours_id);
+        $openHour->assistance = true;
+        $openHour->save();
+
+        session()->flash('success', 'Se guardó la información.');
+        return redirect()->back();
+    }
+
+    public function absence_confirmation(Request $request){
+        $openHour = OpenHour::find($request->openHours_id);
+        $openHour->assistance = false;
+        $openHour->absence_reason = $request->absence_reason;
+        $openHour->save();
+
+        session()->flash('success', 'Se guardó la información.');
+        return redirect()->back();
+    }
+
+    
 }
