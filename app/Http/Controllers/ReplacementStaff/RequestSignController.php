@@ -17,6 +17,10 @@ use App\Models\ReplacementStaff\RequestReplacementStaff;
 // use App\Mail\NotificationEndSigningProcess;
 use App\User;
 use App\Models\Parameters\Parameter;
+use App\Models\Profile\Subrogation;
+use App\Services\SignatureService;
+use App\Notifications\ReplacementStaff\NotificationFinanceElectronicSign;
+use App\Models\Documents\Signature;
 
 class RequestSignController extends Controller
 {
@@ -93,10 +97,70 @@ class RequestSignController extends Controller
                 $requestReplacementStaff->save();
             }
 
-            $nextRequestSign = $requestSign->requestReplacementStaff->requestSign->where('position', $requestSign->position + 1);
-            
-            if(!$nextRequestSign->isEmpty()){
-                $nextRequestSign = $requestSign->requestReplacementStaff->requestSign->where('position', $requestSign->position + 1)->first();
+            $nextRequestSign = $requestSign->requestReplacementStaff->requestSign->where('position', $requestSign->position + 1)->first();
+
+            if($nextRequestSign && 
+                $nextRequestSign->ou_alias == 'finance' && 
+                    $requestReplacementStaff->form_type == 'replacement'){
+                /* Se crea solicitu de firma electrónica */
+                $signature = Subrogation::
+                    where('organizational_unit_id',  Parameter::where('parameter', 'FinanzasSSI')->first()->value)
+                    ->where('type', 'manager')
+                    ->where('level', 1)
+                    ->orderBy('level', 'asc')
+                    ->first();
+                
+                if($signature){
+                    /* SE REGISTRA COMO PENDIENTE LA PROXIMA APROBACION DE FINANZAS */     
+                    $nextRequestSign->request_status = 'not valid';
+                    $nextRequestSign->save();
+
+                    /* SE CREAN FIRMAS DIGITALES */
+                    $signatureFinance = new SignatureService();
+
+                    $signatureFinance->addResponsible($requestSign->requestReplacementStaff->requesterUser);
+
+                    $signatureFinance->addSignature(
+                        5,
+                        'Certificado de disponibilidad presupuestaria',
+                        'Solicitud de reemplazo ID '. $requestSign->requestReplacementStaff->id,
+                        'No requiere visación',
+                        true
+                    );
+
+                    $signatureFinance->addView('replacement_staff.request.documents.budget_availability_certificate', [
+                        'requestReplacementStaff' => $requestSign->requestReplacementStaff
+                    ]);
+
+                    $signatureFinance->addVisators(collect([]));
+                    $signatureFinance->addSignatures(collect([$signature->user]));
+                    
+                    $signatureFinance = $signatureFinance->sendRequest();
+
+                    /* CONSULTA POR SIGNATURE RECIENTE */
+                    $currentSignatureId = Signature::where('id', $signatureFinance->id)->first()->signaturesFiles->first()->id;
+
+                    $requestSign->requestReplacementStaff->signaturesFile()->associate($currentSignatureId);
+
+                    $requestSign->requestReplacementStaff->save();
+
+                    /* SE ENVÍA NOTIFIACIÓN SOBRE FIRMAS ELECTRÓNICAS */
+                    $signature->user->notify(new NotificationFinanceElectronicSign($nextRequestSign->requestReplacementStaff));
+                    
+                    session()->flash('success', 'Su solicitud ha sido Aceptada con exito.');
+                    return redirect()->route('replacement_staff.request.to_sign_index');
+                }
+                else{
+                    session()->flash('danger', 'Estimado Usuario: No es posible aprobar solicitudes debido a que no se 
+                    encuentra configurada la autoridad de Departamento de Gestión Financiera');
+                    return redirect()->route('replacement_staff.request.to_sign_index');
+                }
+            }
+            if(($nextRequestSign && 
+                $nextRequestSign->ou_alias != 'finance' &&
+                    $requestReplacementStaff->form_type == 'replacement') || 
+                        ($nextRequestSign && $requestReplacementStaff->form_type == 'announcement')){
+                // $nextRequestSign = $requestSign->requestReplacementStaff->requestSign->where('position', $requestSign->position + 1)->first();
                 $nextRequestSign->request_status = 'pending';
                 $nextRequestSign->save();
 
@@ -123,7 +187,7 @@ class RequestSignController extends Controller
                 session()->flash('success', 'Su solicitud ha sido Aceptada con exito.');
                 return redirect()->route('replacement_staff.request.to_sign_index');
             }
-            else{
+            if(!$nextRequestSign){
                 // NOTIFICACION PARA RECLUTAMIENTO
                 $notification_reclutamiento_manager = Authority::getAuthorityFromDate(Parameter::where('module', 'ou')->where('parameter', 'ReclutamientoSSI')->first()->value, today(), 'manager');
                 if($notification_reclutamiento_manager){
@@ -132,7 +196,6 @@ class RequestSignController extends Controller
                 session()->flash('success', 'Su solicitud ha sido Aceptada en su totalidad.');
                 return redirect()->route('replacement_staff.request.to_sign_index');
             }
-
         }
         else{
             $requestSign->user_id = Auth::user()->id;
@@ -162,30 +225,74 @@ class RequestSignController extends Controller
 
     public function massive_update(Request $request)
     {
-        foreach($request->sign_id as $sign_id){
-            $sign = RequestSign::where('id', $sign_id)->first();
-            if($sign->ou_alias == "sub_rrhh"){
-                $sign->user_id = Auth::user()->id;
-                $sign->request_status = 'accepted';
-                $sign->date_sign = now();
-                $sign->save();
-            }
+        $signature = Subrogation::
+            where('organizational_unit_id',  Parameter::where('parameter', 'FinanzasSSI')->first()->value)
+            ->where('type', 'manager')
+            ->where('level', 1)
+            ->orderBy('level', 'asc')
+            ->first();
+        
+        if($signature){
+            foreach($request->sign_id as $sign_id){
+                $sign = RequestSign::where('id', $sign_id)->first();
+                if($sign->ou_alias == "sub_rrhh"){
+                    $sign->user_id = Auth::user()->id;
+                    $sign->request_status = 'accepted';
+                    $sign->date_sign = now();
+                    $sign->save();
+                }
+    
+                $nextRequestSign = $sign->requestReplacementStaff->requestSign->where('position', $sign->position + 1)->first();
+                
+                if($nextRequestSign){
+                    /* SE REGISTRA COMO PENDIENTE LA PROXIMA APROBACION DE FINANZAS */       
+                    $nextRequestSign->request_status = 'not valid';
+                    $nextRequestSign->save();
+    
+                    /* SE CREAN FIRMAS DIGITALES */
+                    $signatureFinance = new SignatureService();
+    
+                    $signatureFinance->addResponsible($sign->requestReplacementStaff->requesterUser);
+    
+                    $signatureFinance->addSignature(
+                        5,
+                        'Certificado de disponibilidad presupuestaria',
+                        'Solicitud de reemplazo ID '. $sign->requestReplacementStaff->id,
+                        'No requiere visación',
+                        true
+                    );
+    
+                    $signatureFinance->addView('replacement_staff.request.documents.budget_availability_certificate', [
+                        'requestReplacementStaff' => $sign->requestReplacementStaff
+                    ]);
+    
+                    $signatureFinance->addVisators(collect([]));
+                    $signatureFinance->addSignatures(collect([$signature->user]));
+                    
+                    $signatureFinance = $signatureFinance->sendRequest();
 
-            $nextRequestSign = $sign->requestReplacementStaff->requestSign->where('position', $sign->position + 1);
+                    /* CONSULTA POR SIGNATURE RECIENTE */
+                    $currentSignatureId = Signature::where('id', $signatureFinance->id)->first()->signaturesFiles->first()->id;
 
-            if(!$nextRequestSign->isEmpty()){
-                $nextRequestSign->first()->request_status = 'pending';
-                $nextRequestSign->first()->save();
+                    // dd($currentSignatureId);
+    
+                    $sign->requestReplacementStaff->signaturesFile()->associate($currentSignatureId);
 
-                $notification_ou_manager = Authority::getAuthorityFromDate($nextRequestSign->first()->organizational_unit_id, now(), 'manager');
-                if($notification_ou_manager){
-                    $notification_ou_manager->user->notify(new NotificationSign($nextRequestSign->first()->requestReplacementStaff));
+                    $sign->requestReplacementStaff->save();
+
+                    /* SE ENVÍA NOTIFIACIÓN SOBRE FIRMAS ELECTRÓNICAS */
+                    $signature->user->notify(new NotificationFinanceElectronicSign($nextRequestSign->requestReplacementStaff));
                 }
             }
+    
+            session()->flash('success', 'Estimado Usuario: Sus solicitud(es) ha(n) sido Aceptada(s).');
+            return redirect()->route('replacement_staff.request.to_sign_index');
         }
-
-        session()->flash('success', 'Estimado Usuario: Sus solicitud(es) ha(n) sido Aceptada(s) en su totalidad.');
-        return redirect()->route('replacement_staff.request.to_sign_index');
+        else{
+            session()->flash('danger', 'Estimado Usuario: No es posible aprobar solicitudes debido a que no se 
+            encuentra configurada la autoridad de Departamento de Gestión Financiera');
+            return redirect()->route('replacement_staff.request.to_sign_index');
+        }
     }
 
     /**

@@ -649,6 +649,6 @@ class RequestReplacementStaffController extends Controller
 
     public function show_budget_availability_certificate_signed(RequestReplacementStaff $requestReplacementStaff)
     {
-        return Storage::disk('gcs')->response($requestReplacementStaff->budgetAvailabilityCertificateSignature->signed_file);
+        return Storage::disk('gcs')->response($requestReplacementStaff->signaturesFile->signed_file);
     }
 }

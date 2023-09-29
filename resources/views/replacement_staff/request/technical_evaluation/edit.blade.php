@@ -263,6 +263,7 @@
 <br />
 @endif
 
+{{-- 
 <h6 class="small"><i class="fas fa-signature"></i> El proceso debe contener las aprobaciones de las personas que dan autorización para que la Unidad Selección inicie el proceso de Llamado de presentación de antecedentes.</h6>
 <div class="table-responsive">
     <table class="table table-sm table-striped table-bordered">
@@ -318,6 +319,62 @@
                       @endif
                   </td>
                 @endforeach
+            </tr>
+        </tbody>
+    </table>
+</div>
+--}}
+
+<h6 class="small"><i class="fas fa-signature"></i> El proceso debe contener las aprobaciones de las personas que dan autorización para que la Unidad Selección inicie el proceso de Llamado de presentación de antecedentes.</h6>
+
+<div class="table-responsive">
+    <table class="table table-sm table-bordered">
+        <tbody class="small">
+            <tr>
+                @foreach($requestReplacementStaff->RequestSign as $sign)
+                  <td class="table-active text-center">
+                      <strong>{{ $sign->organizationalUnit->name }}</strong><br>
+                  </td>
+                @endforeach
+            </tr>
+            <tr>
+                @foreach($requestReplacementStaff->RequestSign->where('request_status', '!=', 'not valid') as $requestSign)
+                    <td align="center">
+                        @if($requestSign->request_status == 'accepted')
+                            <span style="color: green;">
+                                <i class="fas fa-check-circle"></i> {{ $requestSign->StatusValue }} </span><br>
+                            <i class="fas fa-user"></i> {{ $requestSign->user->FullName }}<br>
+                            <i class="fas fa-calendar-alt"></i> {{ ($requestSign->date_sign) ? $requestSign->date_sign->format('d-m-Y H:i:s') : '' }}<br>
+                        @endif
+                        @if($requestSign->request_status == 'rejected')
+                            <span style="color: Tomato;">
+                                <i class="fas fa-times-circle"></i> {{ $requestSign->StatusValue }} </span><br>
+                            <i class="fas fa-user"></i> {{ $requestSign->user->FullName }}<br>
+                            <i class="fas fa-calendar-alt"></i> {{ $requestSign->date_sign->format('d-m-Y H:i:s') }}<br>
+                            <hr>
+                            {{ $requestSign->observation }}<br>
+                        @endif
+                        @if($requestSign->request_status == 'pending' || $requestSign->request_status == NULL)
+                            <i class="fas fa-clock"></i> Pendiente.<br>
+                        @endif
+                    </td>
+                @endforeach
+                @if($sign->request_status == 'not valid')
+                <td align="center">
+                    @foreach($requestReplacementStaff->signaturesFile->signaturesFlows as $flow)
+                        @if($flow->status == NULL)
+                            <i class="fas fa-clock"></i> Pendiente.<br>
+                        @endif
+                        @if($flow->status == 1)
+                            <span style="color: green;">
+                                <i class="fas fa-check-circle"></i> Aceptada 
+                            </span><br>
+                            <i class="fas fa-user"></i> {{ $flow->userSigner->FullName }}<br>
+                            <i class="fas fa-calendar-alt"></i> {{ $flow->signature_date->format('d-m-Y H:i:s') }}<br>
+                        @endif
+                    @endforeach
+                </td>
+                @endif
             </tr>
         </tbody>
     </table>
