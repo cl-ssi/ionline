@@ -90,7 +90,7 @@ class NoAttendanceRecordMgr extends Component
                 "module_icon" => "fas fa-clock",
                 "subject" => $this->noAttendanceRecord->date . ' : ' . $this->noAttendanceRecord->user->shortName,
                 "document_route_name" => "rrhh.attendance.no-records.show",
-                "document_route_params" => json_encode([$this->noAttendanceRecord->id]),
+                "document_route_params" => json_encode([ "no_attendance_record_id" => $this->noAttendanceRecord->id]),
                 "approver_ou_id" => auth()->user()->boss->organizational_unit_id,
                 "callback_controller_method" => "App\Http\Controllers\Rrhh\NoAttendanceRecordController@approval",
                 "callback_controller_params" => json_encode([
