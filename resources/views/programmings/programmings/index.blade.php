@@ -159,9 +159,7 @@
         </tbody>
     </table>
 </div>
-</div> <!-- close main div -->
 
-<div class="container">
 @can('TrainingItem: view')
 <div class="table-responsive">
     <table class="table table-sm table-hover mx-auto w-auto">
