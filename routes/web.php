@@ -678,7 +678,7 @@ Route::prefix('agreements')->as('agreements.')->middleware(['auth', 'must.change
 Route::middleware(['auth', 'must.change.password'])->group(function () {
     Route::resource('programmings', ProgrammingController::class)->middleware('auth');
     Route::put('programmingStatus/{id}', [ProgrammingController::class, 'updateStatus'])->middleware('auth')->name('programmingStatus.update');
-    Route::get('programming/{programming}/show_total_rrhh', [ProgrammingController::class, 'show_total_rrhh'])->middleware('auth')->name('programming.show_total_rrhh');
+    // Route::get('programming/{programming}/show_total_rrhh', [ProgrammingController::class, 'show_total_rrhh'])->middleware('auth')->name('programming.show_total_rrhh');
 
     Route::resource('programmingitems', ProgrammingItemController::class)->middleware('auth');
     Route::post('/programmingitemsclone/{id}', [ProgrammingItemController::class, 'clone'])->name('programmingitems.clone');
@@ -735,7 +735,7 @@ Route::middleware(['auth', 'must.change.password'])->group(function () {
     Route::get('reportConsolidated', [ProgrammingReportController::class, 'reportConsolidated'])->middleware('auth')->name('programming.reportConsolidated');
     Route::get('reportConsolidatedSep', [ProgrammingReportController::class, 'reportConsolidatedSep'])->middleware('auth')->name('programming.reportConsolidatedSep');
     Route::get('reportUsers', [ProgrammingReportController::class, 'reportUsers'])->middleware('auth')->name('programming.reportUsers');
-
+    Route::get('reportTotalRrhh', [ProgrammingReportController::class, 'reportTotalRrhh'])->middleware('auth')->name('programming.reportTotalRrhh');
     //Reportes Observaciones de Programación Númerica APS
     Route::get('reportObservation', [ProgrammingReportController::class, 'reportObservation'])->middleware('auth')->name('programming.reportObservation');
 });

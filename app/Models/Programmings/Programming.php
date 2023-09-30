@@ -83,19 +83,21 @@ class Programming extends Model implements Auditable
         return $this->items->where('activity_type','Indirecta')->where('activity_subtype', $subtype);
     }
 
-    public function getValueAcumSinceScheduled($type, $professional_hour_id)
+    public function getValueAcumSinceScheduled($type, $professional_hour_id, $activities)
     {
         $total = 0;
-        foreach($this->items as $item) $total += $item->professionalHours->where('id', $professional_hour_id)->sum('pivot.'.$type);
+        foreach($this->items as $item)
+            if(in_array($item->activity_type, $activities))
+                $total += $item->professionalHours->where('id', $professional_hour_id)->sum('pivot.'.$type);
         return $total;
     }
 
-    public function getCountActivitiesByPrapFinanced($answer, $professional_hour_id)
+    public function getHoursYearAcumByPrapFinanced($answer, $professional_hour_id)
     {
         $total = 0;
         foreach($this->items as $item)
             if($item->prap_financed == $answer)
-                $total += $item->professionalHours->where('id', $professional_hour_id)->count();
+                $total += $item->professionalHours->where('id', $professional_hour_id)->sum('pivot.hours_required_year');
         return $total;
     }
 

@@ -6,10 +6,8 @@
 
 @include('programmings/nav')
 
-
-<button onclick="tableExcel('xlsx')" class="btn btn-success float-right btn-sm">Exportar Excel</button>
-
 <h4 class="mb-3"> Reporte de usuarios</h4>
+
 <form method="GET" class="form-horizontal small" action="{{ route('programming.reportUsers') }}" enctype="multipart/form-data">
 
     <div class="form-row">
@@ -39,8 +37,8 @@
     </div>
 </form>
 
-
 @if($users->count() > 0)
+<button onclick="tableExcel('xlsx')" class="btn btn-success mb-2 float-right btn-sm"><i class="fas fa-file-excel"></i> Exportar</button>
 <table id="tblData" class="table table-striped  table-sm table-bordered table-condensed fixed_headers table-hover  ">
     <thead>
         <tr class="small ">

@@ -39,6 +39,7 @@
             <a class="dropdown-item" href="{{ route('programming.reportConsolidated') }}">Reporte Consolidado</a>
             <a class="dropdown-item" href="{{ route('programming.reportConsolidatedSep') }}">Reporte Consolidado Sep</a>
             <a class="dropdown-item" href="{{ route('programming.reportUsers') }}">Reporte Usuarios</a>
+            <a class="dropdown-item" href="{{ route('programming.reportTotalRrhh') }}">Reporte Total RRHH</a>
         </div>
     </div>
     @endcan
