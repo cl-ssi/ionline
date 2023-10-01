@@ -27,6 +27,8 @@ use App\Models\Establishment;
 use App\Models\Country;
 use App\Models\ClCommune;
 use App\Models\ProfAgenda\Proposal;
+// Para resetear contraseñas
+use Illuminate\Contracts\Auth\CanResetPassword;
 
 class User extends Authenticatable implements Auditable
 {
