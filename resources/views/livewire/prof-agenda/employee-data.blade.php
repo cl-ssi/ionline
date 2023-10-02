@@ -18,17 +18,17 @@
 
     <fieldset class="form-group col-12 col-md-3">
         <label for="for_name">Nombres</label>
-        <input type="text" class="form-control" id="for_name" name="name" required="required" @disabled($user) @if($user) value="{{$user->name}}" @endif>
+        <input type="text" class="form-control" id="for_name" name="name" required="required" @if($user) value="{{$user->name}}" @endif>
     </fieldset>
 
     <fieldset class="form-group col-12 col-md">
         <label for="for_name">Apellido Paterno</label>
-        <input type="text" class="form-control" id="for_fathers_family" name="fathers_family" @disabled($user) required="required" @if($user) value="{{$user->fathers_family}}" @endif>
+        <input type="text" class="form-control" id="for_fathers_family" name="fathers_family" required="required" @if($user) value="{{$user->fathers_family}}" @endif>
     </fieldset>
 
     <fieldset class="form-group col-12 col-md">
         <label for="for_name">Apellido Materno</label>
-        <input type="text" class="form-control" id="for_mothers_family" name="mothers_family" @disabled($user) required="required" @if($user) value="{{$user->mothers_family}}" @endif>
+        <input type="text" class="form-control" id="for_mothers_family" name="mothers_family" required="required" @if($user) value="{{$user->mothers_family}}" @endif>
     </fieldset>
 
     </div>
