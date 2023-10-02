@@ -256,8 +256,7 @@ use App\Http\Controllers\Agreements\AccountabilityController;
 use App\Http\Livewire\Warehouse\Cenabast\CenabastIndex;
 use App\Http\Controllers\PurchasePlan\PurchasePlanController;
 
-
-
+use App\Http\Controllers\PasswordResetController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -2582,3 +2581,13 @@ Route::get('/attendances/unregistered', function () {
 Route::get('/attendances/main', function() {
     return view('attendances.main');
 })->name('attendances.main');
+
+## OLVIDO CONTRASEÑA
+
+Route::get('/forgot-password', [PasswordResetController::class, 'startPasswordReset'])->middleware('guest')->name('password.request');
+
+Route::post('/forgot-password', [PasswordResetController::class, 'forgotPassword'])->middleware('guest')->name('password.email');
+
+Route::get('/reset-password/{token}', [PasswordResetController::class, 'resetPasswordToken'])->middleware('guest')->name('password.reset');
+
+Route::post('/reset-password', [PasswordResetController::class, 'resetPassword'])->middleware('guest')->name('password.update');
