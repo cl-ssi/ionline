@@ -47,4 +47,12 @@ class PasswordResetController extends Controller
                     ? redirect()->route('login')->with('status', __($status))
                     : back()->withErrors(['email' => [__($status)]]);
     }
+
+    public function resetPasswordToken($token){
+        return view('auth.reset-password', ['token' => $token]);
+    }
+
+    public function startPasswordReset() {
+        return view('auth.forgot-password');
+    }
 }
