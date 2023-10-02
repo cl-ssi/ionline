@@ -257,7 +257,9 @@ class RequestSignController extends Controller
                     $signatureFinance->addSignature(
                         5,
                         'Certificado de disponibilidad presupuestaria',
-                        'Solicitud de reemplazo ID '. $sign->requestReplacementStaff->id,
+                        'Solicitud de reemplazo ID: '. $sign->requestReplacementStaff->id.'<br><br>'.
+                        '<small><b>Periodo</b>: '. $sign->requestReplacementStaff->start_date->format('d-m-Y').' - '.$sign->requestReplacementStaff->end_date->format('d-m-Y').'<br>'.
+                        '<b>Funcionario</b>: '. $sign->requestReplacementStaff->name_to_replace.'</small>',
                         'No requiere visación',
                         true
                     );
@@ -268,6 +270,8 @@ class RequestSignController extends Controller
     
                     $signatureFinance->addVisators(collect([]));
                     $signatureFinance->addSignatures(collect([$signature->user]));
+
+                    //$signatureFinance->url = route('replacement_staff.request.show', $sign->requestReplacementStaff->id);
                     
                     $signatureFinance = $signatureFinance->sendRequest();
 
