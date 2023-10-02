@@ -4,7 +4,6 @@
 
 <link href="{{ asset('css/bootstrap-select.min.css') }}" rel="stylesheet" type="text/css" />
 
-{{-- 
 <div class="alert alert-info alert-sm" role="alert">
     <div class="row">
         <div class="col-sm">
@@ -14,19 +13,18 @@
     <div class="row">
         <div class="col-sm-8">
             <br />
-            <b>31 de agosto año 2022</b>, fecha máxima para presentar Requerimientos.<br />
-            (Se eximen adquisiciones subtitulo 31 y contratos vigentes de suministro de bienes y servicios).
+            <b>02 de octubre año 2023</b>, fecha máxima para presentar formularios de requerimiento de solicitud nueva de adquisiciones de bienes y/o servicios
+            (se eximen adquisiciones subtitulo 31 y contratos vigentes de suministro de bienes y servicios).
         </div>
         <div class="col-sm-4">
             <br />
-            <a class="btn btn-light btn-sm float-right" href="{{ route('request_forms.info_circular_n2_2022') }}"
+            <a class="btn btn-light btn-sm float-right" href="{{ route('request_forms.info_circular_n75_2023') }}"
                 target="blank">
                 <i class="far fa-file-pdf"></i> Descargar circular aquí
             </a>
         </div>
     </div>
 </div>
---}}
 
 <h4 class="mb-3">Formularios de Requerimiento - Bandeja de Entrada</h4>
 
