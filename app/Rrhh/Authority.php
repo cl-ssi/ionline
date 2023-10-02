@@ -61,8 +61,11 @@ class Authority extends Model implements Auditable
      * The attributes that should be mutated to dates.
      *
      * @var array
-     */
-    protected $dates = ['date'];
+     */ 
+
+     protected $casts = [
+        'date' => 'date:Y-m-d'
+    ];
 
 
     public static function getAuthorityFromDate($ou_id, $date, $type) {

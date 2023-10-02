@@ -28,8 +28,10 @@ class RemFile extends Model
     *
     * @var array
     */
-    protected $dates = [
-        'period',
+    
+
+    protected $casts = [
+        'period' => 'date:Y-m-d',
     ];
 
     public function establishment() {

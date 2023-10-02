@@ -41,10 +41,16 @@ class Parte extends Model
      *
      * @var array
      */
-    protected $dates = [
-        'date',
-        'deleted_at',
-        'viewed_at',
+    // protected $dates = [
+    //     'date',
+    //     'deleted_at',
+    //     'viewed_at',
+    // ];
+
+    protected $casts = [
+        'date' => 'date:Y-m-d',
+        'deleted_at' => 'datetime',
+        'viewed_at' => 'datetime',
     ];
 
     public function events()

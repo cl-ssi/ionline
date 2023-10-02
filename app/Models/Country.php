@@ -13,7 +13,10 @@ class Country extends Model
     protected $fillable = [
         'id','id_minsal','name'
     ];
+    
+    protected $casts = [
+        'deleted_at' => 'datetime'
+    ];
 
-
-    protected $dates = ['deleted_at'];
+    
 }
