@@ -255,12 +255,7 @@ use App\Http\Controllers\Agreements\AccountabilityController;
 use App\Http\Livewire\Warehouse\Cenabast\CenabastIndex;
 use App\Http\Controllers\PurchasePlan\PurchasePlanController;
 
-use Illuminate\Support\Facades\Password;
-use Illuminate\Auth\Events\PasswordReset;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 use App\Http\Controllers\PasswordResetController;
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -2572,14 +2567,10 @@ Route::get('/attendances/main', function() {
 
 ## OLVIDO CONTRASEÑA
 
-Route::get('/forgot-password', function () {
-    return view('auth.forgot-password');
-})->middleware('guest')->name('password.request');
+Route::get('/forgot-password', [PasswordResetController::class, 'startPasswordReset'])->middleware('guest')->name('password.request');
 
 Route::post('/forgot-password', [PasswordResetController::class, 'forgotPassword'])->middleware('guest')->name('password.email');
 
-Route::get('/reset-password/{token}', function ($token) {
-    return view('auth.reset-password', ['token' => $token]);
-})->middleware('guest')->name('password.reset');
+Route::get('/reset-password/{token}', [PasswordResetController::class, 'resetPasswordToken'])->middleware('guest')->name('password.reset');
 
 Route::post('/reset-password', [PasswordResetController::class, 'resetPassword'])->middleware('guest')->name('password.update');
