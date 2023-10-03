@@ -38,7 +38,27 @@ class EmployeeInformation extends Model implements Auditable
      *
      * @var array
      */
-    protected $dates = ['fecha_ingreso_grado', 'fecha_ingreso_servicio', 'fecha_ingreso_adm_publica', 'fecha_inicio_en_el_nivel', 'fecha_pago',
-    'fecha_nacimiento', 'fecha_inicio_contrato', 'fecha_termino_contrato', 'fecha_alejamiento', 'fecha_resolucion', 'fecha_ingreso', 
-    'fecha_inicio_ausentismo', 'fecha_termino_ausentismo', 'fecha_primer_contrato', 'created_at', 'deleted_at'];
+    // protected $dates = ['fecha_ingreso_grado', 'fecha_ingreso_servicio', 'fecha_ingreso_adm_publica', 'fecha_inicio_en_el_nivel', 'fecha_pago',
+    // 'fecha_nacimiento', 'fecha_inicio_contrato', 'fecha_termino_contrato', 'fecha_alejamiento', 'fecha_resolucion', 'fecha_ingreso', 
+    // 'fecha_inicio_ausentismo', 'fecha_termino_ausentismo', 'fecha_primer_contrato', 'created_at', 'deleted_at'];
+
+
+    protected $casts = [
+        'fecha_ingreso_grado' => 'date:Y-m-d',
+        'fecha_ingreso_servicio' => 'date:Y-m-d',
+        'fecha_ingreso_adm_publica' => 'date:Y-m-d',
+        'fecha_inicio_en_el_nivel' => 'date:Y-m-d',
+        'fecha_pago' => 'date:Y-m-d',
+        'fecha_nacimiento' => 'date:Y-m-d',
+        'fecha_inicio_contrato' => 'date:Y-m-d',
+        'fecha_termino_contrato' => 'date:Y-m-d',
+        'fecha_alejamiento' => 'date:Y-m-d',
+        'fecha_resolucion' => 'date:Y-m-d',
+        'fecha_ingreso' => 'date:Y-m-d',
+        'fecha_inicio_ausentismo' => 'date:Y-m-d',
+        'fecha_termino_ausentismo' => 'date:Y-m-d',
+        'fecha_primer_contrato' => 'date:Y-m-d',
+        'created_at' => 'datetime',
+        'deleted_at' => 'datetime',
+    ];
 }
