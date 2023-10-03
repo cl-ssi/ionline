@@ -18,6 +18,7 @@ class CenabastIndex extends Component
     protected $paginationTheme = 'bootstrap';
 
     public $filter_by = 'all';
+    public $filter_by_signature = 'all';
 
     public $selectedDte;
 
@@ -44,12 +45,22 @@ class CenabastIndex extends Component
             ])
             ->where('cenabast', 1)
             ->where('establishment_id', auth()->user()->organizationalUnit->establishment->id)
+            ->when($this->filter_by_signature == 'without-pharmacist', function($query) {
+                $query->where('cenabast_signed_pharmacist', 0);
+            })
+            ->when($this->filter_by_signature == 'without-boss', function($query) {
+                $query->where('cenabast_signed_boss', 0);
+            })
+            ->when($this->filter_by_signature == 'with-pharmacist-without-boss', function($query) {
+                $query->where('cenabast_signed_pharmacist', 'LIKE', '1%')->where('cenabast_signed_boss', 0);
+            })
             ->when($this->filter_by == 'without-attached', function($query) {
                 $query->whereNull('confirmation_signature_file');
             })
             ->when($this->filter_by == 'with-attached', function($query) {
                 $query->whereNotNull('confirmation_signature_file');
             });
+            
 
         if (!empty($this->filter['id'])) {
                 $dtes->where('id', $this->filter['id']);
@@ -58,6 +69,13 @@ class CenabastIndex extends Component
         if (!empty($this->filter['folio'])) {
                 $dtes->where('folio', $this->filter['folio']);
             }
+
+    
+        if (!empty($this->filter['id'])) {
+                $dtes->where('id', $this->filter['id']);
+        }
+
+
 
         $dtes = $dtes->latest()->paginate(100);
 
