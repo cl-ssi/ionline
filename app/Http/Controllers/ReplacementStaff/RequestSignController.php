@@ -259,7 +259,8 @@ class RequestSignController extends Controller
                         'Certificado de disponibilidad presupuestaria',
                         'Solicitud de reemplazo ID: '. $sign->requestReplacementStaff->id.'<br><br>'.
                         '<small><b>Periodo</b>: '. $sign->requestReplacementStaff->start_date->format('d-m-Y').' - '.$sign->requestReplacementStaff->end_date->format('d-m-Y').'<br>'.
-                        '<b>Funcionario</b>: '. $sign->requestReplacementStaff->name_to_replace.'</small>',
+                        '<b>Funcionario</b>: '. $sign->requestReplacementStaff->name_to_replace.'<br>'.
+                        '<b>'.$sign->requestReplacementStaff->budgetItem->code.'</b> - '.$sign->requestReplacementStaff->budgetItem->name.'</small>',
                         'No requiere visación',
                         true
                     );
