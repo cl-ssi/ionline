@@ -76,7 +76,7 @@
 
 
         <div style="border-top: 1px solid #CCC; margin: 14px 0px 14px;"></div>
-        <div>
+        <div class="content">
             {!! $document->contentHtml !!}
         </div>
 

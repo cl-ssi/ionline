@@ -38,7 +38,7 @@
 
         <div style="clear: both; padding-bottom: 46px"></div>
 
-        <div>
+        <div class="content">
             {!! $document->contentHtml !!}
         </div>
 
