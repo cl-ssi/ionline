@@ -22,8 +22,8 @@ class Programming extends Model implements Auditable
         return $this->hasMany('App\Models\Programmings\ProgrammingItem')->orderBy('activity_id', 'ASC');
     }
 
-    public function days(){
-        return $this->hasMany('App\Models\Programmings\ProgrammingDay');
+    public function programmingDay(){
+        return $this->hasOne('App\Models\Programmings\ProgrammingDay');
     }
 
     public function emergencies(){
