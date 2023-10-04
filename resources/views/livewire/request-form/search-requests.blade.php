@@ -36,7 +36,16 @@
                     placeholder="2022-17" wire:model.debounce.500ms="selectedFolio">
             </fieldset>
 
-            <fieldset class="form-group col-12 col-md-3">
+            <fieldset class="form-group col-12 col-md-1">
+                <label for="for_mecanism">Tipo de Compra</label>
+                <select name="subtype_search" class="form-control form-control-sm" wire:model.debounce.500ms="selectedSubType">
+                    <option value="">Todos</option>
+                    <option value="bienes">Bienes</option>
+                    <option value="servicios">Servicios</option>                    
+                </select>
+            </fieldset>
+
+            <fieldset class="form-group col-12 col-md-2">
                 <label for="for_name">Descripción</label>
                 <input class="form-control form-control-sm" type="text" autocomplete="off"
                     name="name_search" wire:model.debounce.500ms="selectedName">
