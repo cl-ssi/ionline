@@ -40,6 +40,7 @@ class SearchRequests extends Component
     public $selectedPo = null;
     public $selectedTender = null;
     public $selectedSupplier = null;
+    public $selectedSubType = null;
     public $result = null;
     public $inbox;
 
@@ -53,7 +54,7 @@ class SearchRequests extends Component
 
     protected $queryString = ['selectedStatus', 'selectedStatusPurchase', 'selectedId', 'selectedFolio',
         'selectedName', 'selectedStartDate', 'selectedEndDate', 'selectedRequester', 'selectedRequesterOuName',
-        'selectedAdmin', 'selectedAdminOuName', 'selectedPurchaser', 'selectedProgram', 'selectedPo', 'selectedSupplier'
+        'selectedAdmin', 'selectedAdminOuName', 'selectedPurchaser', 'selectedProgram', 'selectedPo', 'selectedSupplier', 'selectedSubType'
     ];
 
     public function mount() {
@@ -104,7 +105,9 @@ class SearchRequests extends Component
         $this->selectedProgram,
         $this->selectedPo,
         $this->selectedTender,
-        $this->selectedSupplier
+        $this->selectedSupplier,
+        $this->selectedSubType
+
         );
 
         if($this->inbox == 'report: form-items'){
@@ -222,6 +225,11 @@ class SearchRequests extends Component
     public function updatingSelectedStatusPurchase(){
         $this->resetPage();
     }
+
+    public function updatingSelectedSubType(){
+        $this->resetPage();
+    }
+
 
     public function updatingSelectedId(){
         $this->resetPage();
