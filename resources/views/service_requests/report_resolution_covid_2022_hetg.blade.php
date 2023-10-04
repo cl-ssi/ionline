@@ -17,6 +17,7 @@
       /*border: 1px solid #F2F2F2;*/
       width: 724px;
       /*height: 1100px;*/
+      margin-bottom: 10%;
     }
 
     .monospace {
@@ -125,7 +126,18 @@
       page-break-after: always;
     }
 
-    footer { position: fixed; bottom: -60px; left: 0px; right: 0px; background-color: #eff8fa; height: 50px; }
+    /* footer { position: fixed; bottom: -60px; left: 0px; right: 0px; background-color: #eff8fa; height: 50px; } */
+
+    footer  {
+        position: fixed; 
+        bottom: -40px; 
+        left: 0px; 
+        right: 0px;
+        height: 50px; 
+        text-align: center;
+        clear: both;
+    }
+
     footer .pagenum:before {
         content: counter(page);
     }
@@ -133,9 +145,30 @@
 </head>
 
 <body>
-  <footer>
-      <div class="pagenum-container">ID Phuqhaña {{$ServiceRequest->id}} - Página <span class="pagenum"></span></div>
-  </footer>
+    <!-- <footer>
+        <div class="pagenum-container">ID Phuqhaña {{$ServiceRequest->id}} - Página <span class="pagenum"></span></div>
+    </footer> -->
+
+    <footer>
+        <table width="100%" style="border: 0px;">
+            <tr>
+                <td width="20%" style="padding-left: 80px; vertical-align: bottom; border: 0px;">
+                    <div style="width: 120px;">
+                        <div style="float: left; width: 41%; height: 6px; background-color: #0168B3;"></div>
+                        <div style="float: right; width: 59%; height: 6px; background-color: #EE3A43;"></div>
+                        <div style="clear: both;"></div>
+                    </div>
+                </td>
+                <td class="center" style="font-size: 8px; vertical-align: bottom; border: 0px;">
+                    ID Phuqhaña {{$ServiceRequest->id}} - Página <span class="pagenum"></span>
+                </td>
+                <td width="20%" class="right;" style="border: 0px;">
+                <img src="{{ public_path('/images/footer-gob.png') }}" width="100" alt="Logo de la institución" style="border: 0px;">
+                </td>
+            </tr>
+        </table>
+    </footer>
+    
   <main>
   <div class="content">
 
