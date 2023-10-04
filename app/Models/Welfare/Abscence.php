@@ -30,7 +30,14 @@ class Abscence extends Model implements Auditable
      * The attributes that should be mutated to dates.
      *
      * @var array
-     */
-    protected $dates = ['fecha_resolucion', 'fecha_inicio', 'fecha_termino', 'created_at', 'deleted_at'];
+     */    
+
+    protected $casts = [
+        'fecha_resolucion' => 'date:Y-m-d',
+        'fecha_inicio' => 'date:Y-m-d',
+        'fecha_termino' => 'date:Y-m-d',
+        'created_at' => 'datetime',
+        'deleted_at' => 'datetime',
+    ];
 
 }

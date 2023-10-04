@@ -15,9 +15,11 @@ class BeneficiaryRequest extends Model
     *
     * @var array
     */
-    protected $dates = [
-        'fecha_inicio_contrato',
-        'fecha_nacimiento',
+    
+
+    protected $casts = [
+        'fecha_inicio_contrato' => 'date:Y-m-d',
+        'fecha_nacimiento' => 'date:Y-m-d',
     ];
 
     protected $fillable = [

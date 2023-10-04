@@ -37,7 +37,7 @@ class OrganizationalUnit extends Model implements Auditable
      *
      * @var array
      */
-    protected $dates = [];
+    
 
     public function users()
     {
