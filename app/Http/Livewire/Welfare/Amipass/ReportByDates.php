@@ -122,7 +122,7 @@ class ReportByDates extends Component
                 }
                 $lastdate= $absenteeismEndDate;
                 
-                $absenteeism->totalDays = DateHelper::getBusinessDaysByDateRange($absenteeismStartDate, $absenteeismEndDate, $holidays)->count();
+                $absenteeism->totalDays = DateHelper::getBusinessDaysByDateRangeHolidays($absenteeismStartDate, $absenteeismEndDate, $holidays)->count();
                 $user->totalAbsenteeisms += $absenteeism->totalDays;
             }
 
@@ -131,7 +131,7 @@ class ReportByDates extends Component
             foreach($user->contracts as $contract) {
                 /** Días laborales */
                 $contract->businessDays = 
-                    DateHelper::getBusinessDaysByDateRange(
+                    DateHelper::getBusinessDaysByDateRangeHolidays(
                             $contract->fecha_inicio_contrato->isAfter($startDate) ? $contract->fecha_inicio_contrato : $startDate, 
                             $contract->fecha_termino_contrato->isBefore($endDate) ? $contract->fecha_termino_contrato : $endDate,
                             $holidays

@@ -47,6 +47,45 @@ class DateHelper
     }
 
     /**
+     * Gets the business days for a date range
+     *
+     * @param  \Illuminate\Support\Carbon  $startDate
+     * @param  \Illuminate\Support\Carbon  $endDate
+     * @param  \Illuminate\Support\Holiday  $endDate
+     * @return \Illuminate\Support\Collection
+     */
+    public static function getBusinessDaysByDateRangeHolidays($startDate, $endDate, $holidays)
+    {
+        // $holidays = Cache::remember('holidays', 600, function () use($startDate, $endDate) {
+        //     return Holiday::whereBetween('date', [$startDate, $endDate])->get();
+        // });
+
+        // $holidays = Holiday::whereBetween('date', [$startDate, $endDate])->get();
+
+        $holidays = $holidays->map(function($holiday) {
+            return $holiday->date->format('Y-m-d');
+        });
+
+        $weekend = collect([0, 6]);
+
+        $startDate = $startDate->copy()->startOfDay();
+
+        $businessDays = collect();
+
+        while($startDate->lessThanOrEqualTo($endDate))
+        {
+            if($holidays->doesntContain($startDate->format('Y-m-d')) && $weekend->doesntContain($startDate->dayOfWeek))
+            {
+                $businessDays->push($startDate->format('Y-m-d'));
+            }
+
+            $startDate = $startDate->copy()->addDay();
+        }
+
+        return $businessDays;
+    }
+
+    /**
      * Gets the business days given a start and a duration
      *
      * @param  \Illuminate\Support\Carbon  $startDate

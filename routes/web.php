@@ -2369,6 +2369,7 @@ Route::prefix('welfare')->as('welfare.')->middleware(['auth', 'must.change.passw
         Route::get('/report-by-dates', ReportByDates::class)->name('report-by-dates');
         Route::prefix('value')->as('value.')->group(function () {
             Route::get('/', [AmipassController::class, 'indexValue'])->name('indexValue');
+            Route::get('reportByDates', [AmipassController::class, 'reportByDates'])->name('reportByDates');
             Route::get('/create', [AmipassController::class, 'createValue'])->name('createValue');
             Route::post('/store', [AmipassController::class, 'storeValue'])->name('storeValue');
         });

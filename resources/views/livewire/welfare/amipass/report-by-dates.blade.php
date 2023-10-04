@@ -1,4 +1,6 @@
 <div>
+@include('welfare.nav')
+
     <h4>{{ $startDate->format('Y-m-d') }} - {{ $endDate->format('Y-m-d') }}</h4>
 
 
@@ -96,7 +98,7 @@
                             @if($absenteeism->totalDays==0)
                                 {{ $absenteeism->finicio->format('Y-m-d') }} - {{ $absenteeism->ftermino->format('Y-m-d') }} 
                                 <small>({{ $absenteeism->tipo_de_ausentismo }})</small> 
-                                Dias: {{ $absenteeism->total_dias_ausentismo }} => {{ $absenteeism->totalDays}}
+                                Dias: {{ $absenteeism->total_dias_ausentismo }} => {{ $absenteeism->totalDays}}repor
                             @else 
                                 <p style="color:red;display: inline;">
                                     {{ $absenteeism->finicio->format('Y-m-d') }} - {{ $absenteeism->ftermino->format('Y-m-d') }} 
