@@ -8,6 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Contracts\Auditable;
 
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use App\Models\Documents\Approval;
+
+
 class PurchasePlan extends Model implements Auditable
 {
     use HasFactory;
@@ -43,6 +47,13 @@ class PurchasePlan extends Model implements Auditable
 
     public function unspscProduct() {
         return $this->belongsTo('App\Models\Unspsc\Product', 'unspsc_product_id');
+    }
+
+    /**
+     * Get all of the ModificationRequest's approvations.
+     */
+    public function approvals(): MorphMany{
+        return $this->morphMany(Approval::class, 'approvable');
     }
 
     protected $hidden = [

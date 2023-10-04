@@ -11,6 +11,11 @@ use App\Models\PurchasePlan\PurchasePlanItem;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use App\Rrhh\Authority;
+use Carbon\Carbon;
+
+use App\Models\Documents\Approval;
+use App\Models\Parameters\Parameter;
 
 class CreatePurchasePlan extends Component
 {
@@ -70,7 +75,7 @@ class CreatePurchasePlan extends Component
     private function setItems($item){
         $this->items[]=[
               'id'                       => $item->id,
-              'product_id'               => $item->product_id,
+              'product_id'               => $item->unspsc_product_id,
               'unitOfMeasurement'        => $item->unit_of_measurement,
               'technicalSpecifications'  => $item->specification,
               'quantity'                 => $item->quantity,
@@ -144,11 +149,49 @@ class CreatePurchasePlan extends Component
         $purchasePlan->estimated_expense = $this->totalForm();
         $purchasePlan->save();
 
+
+        if($this->purchase_plan_status == 'sent'){
+            /* SE ENVÍA AL MODULOS DE APROBACIONES */
+
+            /* APROBACION CORRESPONDIENTE A ABASTECIMIENTO */
+            $purchasePlan->approvals()->create([
+                "module"                => "Plan de Compras",
+                "module_icon"           => "fas fa-shopping-cart",
+                "subject"               => "Solicitud de Aprobación Abastecimiento",
+                "approver_ou_id"        => Parameter::where('module', 'ou')->where('parameter', 'AbastecimientoSSI')->first()->value,
+                "document_route_name"   => "purchase_plan.show",
+                "document_route_params" => json_encode(["purchasePlan" => $purchasePlan])
+            ]);
+
+            /* APROBACION CORRESPONDIENTE A FINANZAS */
+            $purchasePlan->approvals()->create([
+                "module"                => "Plan de Compras",
+                "module_icon"           => "fas fa-shopping-cart",
+                "subject"               => "Solicitud de Aprobación Depto. Gestión Financiera",
+                "approver_ou_id"        => Parameter::where('module', 'ou')->where('parameter', 'FinanzasSSI')->first()->value,
+                "document_route_name"   => "purchase_plan.show",
+                "document_route_params" => json_encode(["purchasePlan" => $purchasePlan])
+            ]);
+
+            /* APROBACION CORRESPONDIENTE A SDA */
+            $purchasePlan->approvals()->create([
+                "module"                => "Plan de Compras",
+                "module_icon"           => "fas fa-shopping-cart",
+                "subject"               => "Solicitud de Aprobación Subdir. Recursos Físicos y Financieros",
+                "approver_ou_id"        => Parameter::where('module', 'ou')->where('parameter', 'SDASSI')->first()->value,
+                "document_route_name"   => "purchase_plan.show",
+                "document_route_params" => json_encode(["purchasePlan" => $purchasePlan])
+            ]);
+        }
+
         return redirect()->route('purchase_plan.show', $purchasePlan->id);
     }
 
     private function setPurchasePlan(){
         if($this->purchasePlanToEdit){
+            $this->searchedUser     = $this->purchasePlanToEdit->userResponsible;
+            $this->searchedProgram  = $this->purchasePlanToEdit->programName;
+
             $this->idPurchasePlan       = $this->purchasePlanToEdit->id;
             $this->userResponsibleId    = $this->purchasePlanToEdit->user_responsible_id;
             $this->position             = $this->purchasePlanToEdit->position;
