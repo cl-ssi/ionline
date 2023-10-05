@@ -36,7 +36,7 @@ class IndexDtes extends Component
 
     public $facturasEmisor;
 
-    public $asociate_dte_id;
+    public $asociate_invoices;
 
     public function searchDtes()
     {
@@ -118,6 +118,8 @@ class IndexDtes extends Component
             'controls',
             'requestForm',
             'requestForm.contractManager',
+            'dtes',
+            'invoices',
         ])
             // ->whereNull('confirmation_status')
             // ->orWhere('confirmation_status',true)
@@ -177,6 +179,7 @@ class IndexDtes extends Component
         $this->folio_oc = $dte->folio_oc;
         $this->confirmation_status = $dte->confirmation_status;
         $this->confirmation_observation = $dte->confirmation_observation;
+        $this->asociate_invoices = $dte->invoices->pluck('id');
         $this->monto_total = '$ '.number_format($dte->monto_total, 0, '', '.');
         $this->facturasEmisor = Dte::where('emisor', 'like', '%' . trim($dte->emisor) . '%')
             ->whereIn('tipo_documento', ['factura_electronica', 'factura_exenta'])
@@ -191,15 +194,17 @@ class IndexDtes extends Component
 
     public function save($dte_id)
     {
-        Dte::whereId($dte_id)->update([
-            'folio_oc' => str_replace(' ', '', $this->folio_oc),
+        $dte = Dte::find($dte_id);
+        $dte->update([
+            'folio_oc' => trim($this->folio_oc),
             'confirmation_status' => $this->confirmation_status,
             'confirmation_user_id' => auth()->id(),
             'confirmation_ou_id' => auth()->user()->organizational_unit_id,
             'confirmation_at' => now(),
             'confirmation_observation' => $this->confirmation_observation,
-            'dte_id' => $this->asociate_dte_id,
         ]);
+
+        $dte->invoices()->sync($this->asociate_invoices);
         $this->showEdit = null;
     }
 
