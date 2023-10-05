@@ -1,10 +1,4 @@
-@extends('layouts.app-bootstrap-5')
-
-@section('title', 'Plan de Compras')
-
-@section('content')
-
-@include('purchase_plan.partials.nav')
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
 
 <div class="row">
     <div class="col-12">
@@ -71,17 +65,6 @@
     </table>
 </div>
 
-@if($purchasePlan->status == "save")
-<div class="row">
-    <div class="col">
-        <a class="btn btn-primary float-end"
-            href="{{ route('purchase_plan.edit', $purchasePlan) }}">
-            <i class="fas fa-edit"></i> Editar
-        </a>
-    </div>
-</div>
-@endif
-
 <br>
 
 <div class="row"> 
@@ -104,7 +87,6 @@
                 <th width="" class="table-secondary">Valor U.</th>
                 <th width="" class="table-secondary">Impuestos</th>
                 <th width="" class="table-secondary">Total Item</th>
-                <th width="" class="table-secondary"></th>
             </tr>
         </thead>
         <tbody>
@@ -119,20 +101,6 @@
                 <td class="text-end">${{ number_format($item->unit_value, 0, ",", ".") }}</td>
                 <td>{{ $item->tax }}</td>
                 <td class="text-end">${{ number_format($item->expense, 0, ",", ".") }}</td>
-                <td>
-                    {{--
-                    <a href="{{ route('replacement_staff.request.technical_evaluation.show', $requestReplacementStaff) }}"
-                        class="btn btn-outline-secondary btn-sm"><i class="fas fa-calendar-alt"></i>
-                    --}}
-                    <!-- Button trigger modal -->
-                    <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#modal-ppl-{{ $item->id }}">
-                        <i class="fas fa-calendar-alt"></i>
-                    </button>
-
-                    @include('purchase_plan.modals.detail_month', [
-                        'item' => $item
-                    ])
-                </td>
             </tr>
             @endforeach
         </tbody>
@@ -141,7 +109,6 @@
                 <td colspan="7"></td>
                 <th class="text-end">Total</th>
                 <th class="text-end">${{ number_format($purchasePlan->estimated_expense, 0, ",", ".") }}</th>
-                <td></td>
             </tr>
         </tfoot>
     </table>
@@ -183,8 +150,6 @@
     </table>
 </div>
 
+{{--
 @endsection
-
-@section('custom_js')
-
-@endsection
+--}}

@@ -115,10 +115,10 @@ class ApsController extends Controller
                                     ->when($establishment_type == 'reyno', function($query){
                                         return $query->where('IdEstablecimiento', 102307);
                                     })
-                                    ->when($establishment_type == 'hospital' && $indicator->id == 310, function($query) use ($factor){
+                                    ->when($establishment_type == 'hospital' && in_array($indicator->id, [310,390,732]), function($query) use ($factor){
                                         return $factor == 'denominador' ? $query->whereIn('IdEstablecimiento', array(102300,102301,102302,102303,102308,102305,102306,102307,102308,102309,102310,102400,102402,102403,102406,200474,102407,102408,102409,102410,102411,102412,102413,102414,102415,102416,102701,102705,200335,200557)) : $query->where('IdEstablecimiento', 102100);
                                     })
-                                    ->when($establishment_type == 'hospital' && $indicator->id != 310, function($query){
+                                    ->when($establishment_type == 'hospital' && !in_array($indicator->id, [310,390,732]), function($query){
                                         return $query->where('IdEstablecimiento', 102100);
                                     })
                                     ->when($establishment_type == 'ssi', function($query){
@@ -151,10 +151,10 @@ class ApsController extends Controller
                                     ->when($establishment_type == 'reyno', function($query){
                                         return $query->where('IdEstablecimiento', 102307);
                                     })
-                                    ->when($establishment_type == 'hospital' && $indicator->id == 310, function($query) use ($factor){
+                                    ->when($establishment_type == 'hospital' && in_array($indicator->id, [310,390,732]), function($query) use ($factor){
                                         return $factor == 'denominador' ? $query->whereIn('IdEstablecimiento', array(102300,102301,102302,102303,102308,102305,102306,102307,102308,102309,102310,102400,102402,102403,102406,200474,102407,102408,102409,102410,102411,102412,102413,102414,102415,102416,102701,102705,200335,200557)) : $query->where('IdEstablecimiento', 102100);
                                     })
-                                    ->when($establishment_type == 'hospital' && $indicator->id != 310, function($query){
+                                    ->when($establishment_type == 'hospital' && !in_array($indicator->id, [310,390,732]), function($query){
                                         return $query->where('IdEstablecimiento', 102100);
                                     })
                                     ->when($establishment_type == 'ssi', function($query){

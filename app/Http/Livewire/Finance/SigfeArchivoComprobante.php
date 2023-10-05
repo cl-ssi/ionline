@@ -6,27 +6,32 @@ use Livewire\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Storage;
 
-class SigfeArchivoCompromiso extends Component
+class SigfeArchivoComprobante extends Component
 {
 
     use WithFileUploads;
+    
+
 
     public $dte;
     public $file;
     public $successMessage = '';
-    public $folder = 'ionline/finances/sigfe/compromiso';
-    public $archivoCompromiso = null;
+    public $folder = 'ionline/finances/sigfe/comprobante';
+    public $archivoComprobante = null;
+
 
     public function mount($dte)
     {
         $this->dte = $dte;
-        $this->archivoCompromiso = $dte->archivo_compromiso_sigfe;
+        $this->archivoComprobante = $dte->archivo_comprobante_pago_sigfe;
     }
+
 
     public function render()
     {
-        return view('livewire.finance.sigfe-archivo-compromiso');
+        return view('livewire.finance.sigfe-archivo-comprobante');
     }
+
 
     public function uploadFile()
     {
@@ -36,12 +41,13 @@ class SigfeArchivoCompromiso extends Component
         if ($this->dte && $this->file) {
             $filename = $this->file->getClientOriginalName();
             $filePath = $this->file->storeAs($this->folder, $filename, 'gcs');
-            $this->dte->archivo_compromiso_sigfe = $filePath;
+            $this->dte->archivo_comprobante_pago_sigfe = $filePath;
             $this->dte->save();
-            $this->successMessage = 'Archivo Compromiso Sigfe subido exitosamente.';
+            $this->successMessage = 'Archivo Comprobante Liquidación de fondos subido exitosamente.';
         }
         
     }
+
 
     public function downloadFile($filename)
     {
@@ -52,9 +58,11 @@ class SigfeArchivoCompromiso extends Component
     {
         Storage::disk('gcs')->delete($filename);
         if ($this->dte) {
-            $this->dte->archivo_compromiso_sigfe = null;
+            $this->dte->archivo_comprobante_sigfe = null;
             $this->dte->save();
             $this->successMessage = 'Archivo eliminado exitosamente.';
         }
     }
+
+
 }

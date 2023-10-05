@@ -1955,6 +1955,8 @@ Route::prefix('finance')->as('finance.')->middleware(['auth', 'must.change.passw
     Route::get('dte/{dte}/store', [DteController::class, 'store'])->name('dtes.confirmation.store');
     Route::get('dte/{dte}/confirmation-signature-file', [DteController::class, 'pdf'])->name('dtes.confirmation.pdf');
 
+    Route::get('/{dte}/download', [DteController::class, 'downloadManualDteFile'])->name('dtes.downloadManualDteFile');
+
     Route::get('dtes/upload', UploadDtes::class)->name('dtes.upload');
     Route::get('dtes/{dte}/confirmation', DteConfirmation::class)->name('dtes.confirmation');
     Route::prefix('payments')->as('payments.')->group(function () {
@@ -1979,6 +1981,7 @@ Route::prefix('purchase_plan')->as('purchase_plan.')->middleware(['auth', 'must.
     Route::get('/all_index', [PurchasePlanController::class, 'all_index'])->name('all_index');
     Route::get('/create', [PurchasePlanController::class, 'create'])->name('create');
     Route::get('/{purchasePlan}/show', [PurchasePlanController::class, 'show'])->name('show');
+    Route::get('/{purchase_plan_id}/show_approval', [PurchasePlanController::class, 'show_approval'])->name('show_approval');
     Route::get('/{purchasePlan}/edit', [PurchasePlanController::class, 'edit'])->name('edit');
 });
 
