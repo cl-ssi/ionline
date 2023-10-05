@@ -157,6 +157,24 @@ class Dte extends Model implements Auditable
     }
 
     /**
+     * Una factura puede tener muchas dtes
+     * y las DTES deberían ser del tipo guia, notas de crédito o débito
+     */
+    public function dtes()
+    {
+        return $this->belongsToMany(Dte::class,'fin_invoice_dtes','invoice_id','dte_id')->withTimestamps();
+    }
+
+    /** 
+     * Y por el contrario, una DTE de tipo guia de despacho, nota de crédito o débito
+     * podría pertenecer a una o muchas facturas
+     */
+    public function invoices()
+    {
+        return $this->belongsToMany(Dte::class,'fin_invoice_dtes','dte_id','invoice_id')->withTimestamps();
+    }
+
+    /**
      * Relación con RequestForm a través de ImmediatePurchase
      */
     public function requestForm()
@@ -247,10 +265,10 @@ class Dte extends Model implements Auditable
         return $this->belongsTo(User::class, 'confirmation_user_id');
     }
 
-    public function dtes()
-    {
-        return $this->hasMany(Dte::class,'id','dte_id');
-    }
+    // public function dtes()
+    // {
+    //     return $this->hasMany(Dte::class,'id','dte_id');
+    // }
 
 
     /** Creo que ya no se utiliza */

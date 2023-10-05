@@ -62,6 +62,7 @@
                 <option value="">Todas</option>
                 <option value="factura_electronica">Factura Electrónica</option>
                 <option value="factura_exenta">Factura Exenta</option>
+                <option value="guias_despacho">Guias Despacho</option>
                 <option value="nota_credito">Nota Crédito</option>
                 <option value="boleta_electronica">Boleta Electrónica</option>
             </select>
@@ -129,6 +130,9 @@
                         </div>
                     </td>
                     <td class="small">
+                        Emisor: {{ $dte->emisor }}
+                        <br>
+
                         @if ($dte->tipo_documento != 'boleta_honorarios' or $dte->tipo_documento != 'boleta_electronica')
                             @if ($dte->uri)
                                 <a href="http://dipres2303.acepta.com/ca4webv3/PdfView?url={{ $dte->uri }}"
@@ -152,23 +156,73 @@
                         <br>
                         {{ $dte->tipo_documento }}
 
+                        <hr>
+
                         @foreach ($dte->dtes as $dteAsociate)
-                            @if ($dteAsociate->tipo_documento != 'boleta_honorarios')
-                                <a href="http://dipres2303.acepta.com/ca4webv3/PdfView?url={{ $dteAsociate->uri }}"
-                                    target="_blank" class="btn btn-sm mb-1 btn-outline-secondary">
-                                    <i class="fas fa-file-pdf text-danger"></i> {{ $dteAsociate->folio }}
-                                </a>
-                            @else
-                                <a href="{{ $dteAsociate->uri }}" target="_blank"
-                                    class="btn btn-sm mb-1 btn-outline-secondary">
-                                    <i class="fas fa-file-pdf text-danger"></i> {{ $dteAsociate->folio }}
-                                </a>
-                            @endif
+                            @switch($dteAsociate->tipo_documento)
+                                {{-- @case('factura_electronica') --}}
+                                {{-- @case('factura_exenta') --}}
+                                @case('guias_despacho')
+                                @case('nota_debito')
+                                @case('nota_credito')
+                                    <a href="http://dipres2303.acepta.com/ca4webv3/PdfView?url={{ $dteAsociate->uri }}"
+                                        target="_blank" class="btn btn-sm mb-1 btn-outline-secondary">
+                                        <i class="fas fa-file-pdf text-danger"></i> {{ $dteAsociate->folio }}
+                                    </a>
+                                    @break
+                                @case('boleta_honorarios')
+                                    <a href="{{ $dteAsociate->uri }}" target="_blank"
+                                        class="btn btn-sm mb-1 btn-outline-secondary">
+                                        <i class="fas fa-file-pdf text-danger"></i> {{ $dteAsociate->folio }}
+                                    </a>
+                                    @break
+                                @case('boleta_electronica')
+                                    @if($dteAsociate->archivo_carga_manual)
+                                        <a  href="{{ route('finance.dtes.downloadManualDteFile', $dteAsociate) }}" target="_blank"
+                                            target="_blank" class="btn btn-sm mb-1 btn-outline-secondary">
+                                            <i class="fas fa-file-pdf text-danger"></i> {{ $dteAsociate->folio }}
+                                        </a>
+                                    @endif
+                                    @break
+                            @endswitch
                             <br>
                             {{ $dteAsociate->tipo_documento }}
                         @endforeach
-                        <br>
-                        {{ $dte->emisor }}
+
+                        @foreach ($dte->invoices as $invoiceAsociate)
+                            @switch($invoiceAsociate->tipo_documento)
+                                @case('factura_electronica')
+                                @case('factura_exenta')
+                                @case('guias_despacho')
+                                @case('nota_debito')
+                                @case('nota_credito')
+                                    <a href="http://dipres2303.acepta.com/ca4webv3/PdfView?url={{ $invoiceAsociate->uri }}"
+                                        target="_blank" class="btn btn-sm mb-1 btn-outline-secondary">
+                                        <i class="fas fa-file-pdf text-danger"></i> {{ $invoiceAsociate->folio }}
+                                    </a>
+                                    @break
+                                @case('boleta_honorarios')
+                                    @if($invoiceAsociate->uri)
+                                    <a href="{{ $invoiceAsociate->uri }}" target="_blank"
+                                        class="btn btn-sm mb-1 btn-outline-secondary">
+                                        <i class="fas fa-file-pdf text-danger"></i> {{ $invoiceAsociate->folio }}
+                                    </a>
+                                    @endif
+                                    @break
+                                @case('boleta_electronica')
+                                    @if($invoiceAsociate->uri)
+                                    <a  href="{{ route('finance.dtes.downloadManualDteFile', $invoiceAsociate) }}" target="_blank"
+                                        target="_blank" class="btn btn-sm mb-1 btn-outline-secondary">
+                                        <i class="fas fa-file-pdf text-danger"></i> {{ $invoiceAsociate->folio }}
+                                    </a>
+                                    @endif
+                                    @break
+                            @endswitch
+                            <br> 
+                            {{ $invoiceAsociate->tipo_documento }}
+                            <br> 
+                        @endforeach
+
                     </td>
                     <td class="small">
                         {{-- $dte->folio_oc --}}
@@ -286,30 +340,31 @@
 
                                 <div class="form-group col-md-2">
                                     <label for="for_monto_total">Monto Total</label>
-                                    <input type="text" class="form-control" id="for_folio_oc"
-                                        wire:model.defer="monto_total" disabled>
+                                    <input type="text" class="form-control" id="for_folio_oc" wire:model.defer="monto_total" disabled>
                                 </div>
                                 @switch($dte->tipo_documento)
                                     @case('guias_despacho')
                                     @case('nota_credito')
-
                                     @case('nota_debito')
+                                        <!-- TODO: Si es guia, se puede asociar a multiple
+                                            si es nota de crédito o débito se debería poder asociar sólo a una 
+                                            preguntar a gina o juan toro -->
                                         <div class="form-group col-md-5">
                                             <label for="for_asociate">Asociar a Factura</label>
-                                            <select class="form-control" id="for_asociate"
-                                                wire:model.defer="asociate_dte_id">
-                                                <option></option>
-                                                @foreach ($facturasEmisor as $factura)
-                                                    <option value="{{ $factura->id }}">
-                                                        {{ $factura->folio }} ( $ {{ money($factura->monto_total) }} )
-                                                    </option>
+                                            <select multiple  class="form-control" id="for_asociate" wire:model.defer="asociate_invoices">
+                                                @foreach($facturasEmisor as $factura)
+                                                <option value="{{ $factura->id }}">
+                                                    {{ $factura->folio }} ( $ {{ money($factura->monto_total) }} ) </option>
                                                 @endforeach
                                             </select>
                                         </div>
-                                    @break
+                                        @break
+                                    @case('factura_electronica')
+                                    @case('factura_exenta')
+                                    @case('boleta_honorarios')
+                                    @case('boleta_electronica')
+                                        @break
                                 @endswitch
-
-
 
                             </div>
 
