@@ -12,6 +12,14 @@ use App\User;
 
 class OpenHourController extends Controller
 {
+
+    public function index(Request $request)
+    {
+        $user_id_param = $request->user_id;
+        $openHours = OpenHour::whereNotNull('patient_id')->orderBy('start_date', 'DESC')->where('profesional_id',$user_id_param)->get();
+        return view('prof_agenda.open_hours.index',compact('openHours','request'));
+    }
+
     public function store(Request $request){
 
         

@@ -1828,6 +1828,7 @@ Route::prefix('prof_agenda')->as('prof_agenda.')->middleware(['auth'])->group(fu
     });
 
     Route::prefix('open_hour')->as('open_hour.')->middleware(['auth'])->group(function () {
+        Route::get('/', [OpenHourController::class, 'index'])->name('index');
         // Route::get('/', [OpenHourController::class, 'index'])->name('index');
         // Route::get('/edit/{proposal}', [OpenHourController::class, 'edit'])->name('edit');
         // Route::put('/update/{proposal}', [OpenHourController::class, 'update'])->name('update');

@@ -15,6 +15,13 @@
     </li>
 
     <li class="nav-item">
+        <a class="nav-link {{ active('prof_agenda.open_hour.index') }}"
+            href="{{ route('prof_agenda.open_hour.index') }}">
+            <i class="fa fa-book"></i> Reservas
+        </a>
+    </li>
+
+    <li class="nav-item">
         <a class="nav-link {{ active('prof_agenda.proposals.index') }}"
             href="{{ route('prof_agenda.proposals.index') }}">
             <i class="fa fa-list"></i> Propuestas
