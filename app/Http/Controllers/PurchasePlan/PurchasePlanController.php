@@ -56,9 +56,15 @@ class PurchasePlanController extends Controller
      * @param  \App\Models\PurchasePlan\PurchasePlan  $purchasePlan
      * @return \Illuminate\Http\Response
      */
-    public function show(PurchasePlan $purchasePlan)
+    public function show($purchasePlan)
     {
         return view('purchase_plan.show', compact('purchasePlan'));
+    }
+
+    public function show_approval($purchase_plan_id)
+    {
+        $purchasePlan = PurchasePlan::find($purchase_plan_id);
+        return view('purchase_plan.show_approval', compact('purchasePlan'));
     }
 
     /**

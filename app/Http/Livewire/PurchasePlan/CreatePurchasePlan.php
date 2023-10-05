@@ -159,8 +159,8 @@ class CreatePurchasePlan extends Component
                 "module_icon"           => "fas fa-shopping-cart",
                 "subject"               => "Solicitud de Aprobación Abastecimiento",
                 "approver_ou_id"        => Parameter::where('module', 'ou')->where('parameter', 'AbastecimientoSSI')->first()->value,
-                "document_route_name"   => "purchase_plan.show",
-                "document_route_params" => json_encode(["purchasePlan" => $purchasePlan])
+                "document_route_name"   => "purchase_plan.show_approval",
+                "document_route_params" => json_encode(["purchase_plan_id" => $purchasePlan->id])
             ]);
 
             /* APROBACION CORRESPONDIENTE A FINANZAS */
@@ -169,8 +169,8 @@ class CreatePurchasePlan extends Component
                 "module_icon"           => "fas fa-shopping-cart",
                 "subject"               => "Solicitud de Aprobación Depto. Gestión Financiera",
                 "approver_ou_id"        => Parameter::where('module', 'ou')->where('parameter', 'FinanzasSSI')->first()->value,
-                "document_route_name"   => "purchase_plan.show",
-                "document_route_params" => json_encode(["purchasePlan" => $purchasePlan])
+                "document_route_name"   => "purchase_plan.show_approval",
+                "document_route_params" => json_encode(["purchase_plan_id" => $purchasePlan->id])
             ]);
 
             /* APROBACION CORRESPONDIENTE A SDA */
@@ -179,8 +179,8 @@ class CreatePurchasePlan extends Component
                 "module_icon"           => "fas fa-shopping-cart",
                 "subject"               => "Solicitud de Aprobación Subdir. Recursos Físicos y Financieros",
                 "approver_ou_id"        => Parameter::where('module', 'ou')->where('parameter', 'SDASSI')->first()->value,
-                "document_route_name"   => "purchase_plan.show",
-                "document_route_params" => json_encode(["purchasePlan" => $purchasePlan])
+                "document_route_name"   => "purchase_plan.show_approval",
+                "document_route_params" => json_encode(["purchase_plan_id" => $purchasePlan->id])
             ]);
         }
 
