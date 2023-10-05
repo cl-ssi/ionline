@@ -40,10 +40,30 @@
                     <span class="text-danger">{{ $message }}</span>
                 @enderror
             </div>
+
             <div class="form-group col-4">
                 <label for="cargarPdf">Cargar PDF Boleta</label>
-                <input type="file" id="forfile" name="file" wire:model.defer="archivoManual">
+                <div class="input-group mb-3">
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="inputGroupFile01"
+                            aria-describedby="inputGroupFileAddon01" wire:model.defer="archivoManual"
+                            placeholder="Seleccionar Archivo" accept="application/pdf">
+                        <label class="custom-file-label" for="inputGroupFile01" data-browse="Examinar">
+                            @if ($archivoManual)
+                            {{ $archivoManual->getClientOriginalName() }}
+                            @else
+                                Seleccionar PDF
+                            @endif
+                        </label>
+                    </div>
+                </div>                
             </div>
+
+
+            {{-- <div class="form-group col-4">
+                <label for="cargarPdf">Cargar PDF Boleta</label>
+                <input type="file" id="forfile" name="file" wire:model.defer="archivoManual">
+            </div> --}}
         </div>
 
         <div class="form-row">
@@ -106,6 +126,21 @@
             });
         });
     </script>
+
+    <script>
+    document.addEventListener('livewire:load', function () {
+        Livewire.on('fileSelected', function () {
+            var input = document.getElementById('inputGroupFile01');
+            var label = input.nextElementSibling;
+            var labelText = input.value.split('\\').pop();
+            label.textContent = labelText || 'Seleccionar PDF';
+        });
+    });
+</script>
+
+
+
+    
 
 
 </div>

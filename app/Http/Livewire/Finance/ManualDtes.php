@@ -22,6 +22,8 @@ class ManualDtes extends Component
     public $showSuccessMessage = false;
     public $storage_path = '/ionline/finances/dte/carga_manual';
     public $comprobante_liquidacion_fondo;
+    public $archivoManual;
+    
     /*
     NOTA 
     No hay representacion para el tipo de documento boleta_electronica 
@@ -51,7 +53,8 @@ class ManualDtes extends Component
             'razonSocial' => 'required',
             'montoTotal' => 'required|numeric',
             'folioOC' => 'required',
-            //'barCode' => 'size:7',
+            'archivoManual' => 'file|pdf|max:4096',
+            
         ]);
 
         // Generar el último campo de la URI
@@ -119,8 +122,8 @@ class ManualDtes extends Component
         $this->razonSocial = '';
         $this->montoTotal = '';
         $this->folioOC = '';
-        $this->barCode = '';
-        $this->comprobante_liquidacion_fondo = '';
+        $this->barCode = '';        
+        $this->archivoManual = '';
     }
 
     public function verBoleta()
