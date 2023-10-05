@@ -18,6 +18,7 @@ use App\Models\ServiceRequests\ServiceRequest;
 use App\Models\Rrhh\NoAttendanceRecord;
 use App\Models\Rrhh\Contract;
 use App\Models\Rrhh\Absenteeism;
+use App\Models\Rrhh\AmiLoad;
 use App\Models\RequestForms\RequestForm;
 use App\Models\Profile\Subrogation;
 use App\Models\Parameters\AccessLog;
@@ -196,6 +197,11 @@ class User extends Authenticatable implements Auditable
     public function absenteeisms()
     {
         return $this->hasMany(Absenteeism::class,'rut');
+    }
+
+    public function amiLoads()
+    {
+        return $this->hasMany(AmiLoad::class,'run');
     }
 
 

@@ -7,22 +7,54 @@ use Carbon\Carbon;
 use App\User;
 use App\Helpers\DateHelper;
 use App\Models\Parameters\Holiday;
+use App\Models\Rrhh\AmiLoad;
 
 class ReportByDates extends Component
 {
-    public function render()
-    {
+
+    public $finicio;
+    public $ftermino;
+    public $userWithContracts;
+    // public $array = [];
+
+    protected $rules = [
+        'finicio' => 'required',
+        'ftermino' => 'required',
+    ];
+
+    // public function mount(){
+    //     $this->finicio = Carbon::createFromDate('2023-06-01');
+    //     $this->ftermino = Carbon::createFromDate('2023-06-30');
+    // }
+
+    // public function trClick($row){
+    //     $this->search();
+    //     $this->array[$row] = true;
+    // }
+
+    public function search(){
+
+        $this->validate();
+
         /* Valor de amipass */
-        $dailyAmmount = 4800;
+        $dailyAmmount = 4480;
+        $shiftAmmount = 5840;
 
         /* Definir las fechas de inicio y término */
-        $startDate = Carbon::createFromDate('2023-06-01');
-        $endDate = Carbon::createFromDate('2023-06-30');
+        // $startDate = Carbon::createFromDate('2023-06-01');
+        // $endDate = Carbon::createFromDate('2023-06-30');
+
+        if($this->finicio && $this->ftermino){
+            $startDate = Carbon::createFromDate($this->finicio);
+            $endDate = Carbon::createFromDate($this->ftermino);
+        }
+        
+        // dd($startDate, $endDate);
 
         $holidays = Holiday::whereBetween('date', [$startDate, $endDate])->get();
 
         /* Obtener los usuarios que tienen contratos en un rango de fecha con sus ausentismos */
-        $userWithContracts = User::with([
+        $this->userWithContracts = User::with([
                 'contracts' => function ($query) use ($startDate, $endDate) {
                     $query->where(function ($query) use ($startDate, $endDate) {
                         $query->whereDate('fecha_inicio_contrato', '<=', $endDate)
@@ -36,6 +68,7 @@ class ReportByDates extends Component
                         });
                 }
             ])
+            ->with('absenteeisms.type','amiLoads')
             ->whereHas('contracts', function ($query) use ($startDate, $endDate) {
                 $query->where(function ($query) use ($startDate, $endDate) {
                     $query->whereDate('fecha_inicio_contrato', '<=', $endDate)
@@ -51,9 +84,14 @@ class ReportByDates extends Component
             // ->where('id',6811637)
             ->get();
 
-            // dd($userWithContracts->count());
+        // obtiene cargas del mes y usuarios buscados 
+        $amiLoads = AmiLoad::whereMonth('fecha',$startDate->month)
+                            ->whereIn('run',$this->userWithContracts->pluck('id')->toArray())
+                            ->get();
 
-        foreach($userWithContracts as $user) {
+        foreach($this->userWithContracts as $row => $user) {
+
+            // $this->array[$row] = "none";
             /** 
              * TODO: ausentismos
              * Que hacer con los medios días, 0.5, 1.5, etc en total_dias_ausentismo
@@ -144,12 +182,23 @@ class ReportByDates extends Component
                  * Todo: Pendiente resolver los contratos de 11, 22, 33 horas, ya que esas personas salen repetidas en el reporte
                  */
             }
-        }
 
-        return view('livewire.welfare.amipass.report-by-dates', [
-            'startDate' => $startDate,
-            'endDate' => $endDate,
-            'userWithContracts' => $userWithContracts
-        ]);
+        // obtiene monto pagado y cargado en tabla ami_loads
+        $mes = $startDate->month;
+        $user->AmiLoadMount = $amiLoads->where('run',$user->id)->sum('monto');
+        $user->amiLoads = $amiLoads->where('run',$user->id);
+        // $user->AmiLoadMount = AmiLoad::where('run',$user->id)
+        //                             ->whereMonth('fecha',$startDate->month)
+        //                             ->sum('monto');
+
+        // obtiene diferencia
+        $user->diff = $user->contracts->sum('ammount') - $user->AmiLoadMount;
+        }
+        // dd($user);
+    }
+
+    public function render()
+    {
+        return view('livewire.welfare.amipass.report-by-dates');
     }
 }
