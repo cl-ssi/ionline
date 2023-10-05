@@ -32,13 +32,17 @@
                     <span class="text-danger">{{ $message }}</span>
                 @enderror
             </div>
-            <div class="form-group col">
+            <div class="form-group col-4">
                 <label for="razonSocial">Razón Social</label>
                 <input type="text" class="form-control" id="razonSocial" wire:model.defer="razonSocial"
                     autocomplete="off">
                 @error('razonSocial')
                     <span class="text-danger">{{ $message }}</span>
                 @enderror
+            </div>
+            <div class="form-group col-4">
+                <label for="cargarPdf">Cargar PDF Boleta</label>
+                <input type="file" id="forfile" name="file" wire:model.defer="archivoManual">
             </div>
         </div>
 

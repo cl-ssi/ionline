@@ -1955,6 +1955,8 @@ Route::prefix('finance')->as('finance.')->middleware(['auth', 'must.change.passw
     Route::get('dte/{dte}/store', [DteController::class, 'store'])->name('dtes.confirmation.store');
     Route::get('dte/{dte}/confirmation-signature-file', [DteController::class, 'pdf'])->name('dtes.confirmation.pdf');
 
+    Route::get('/{dte}/download', [DteController::class, 'downloadManualDteFile'])->name('dtes.downloadManualDteFile');
+
     Route::get('dtes/upload', UploadDtes::class)->name('dtes.upload');
     Route::get('dtes/{dte}/confirmation', DteConfirmation::class)->name('dtes.confirmation');
     Route::prefix('payments')->as('payments.')->group(function () {

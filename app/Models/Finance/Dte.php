@@ -117,7 +117,10 @@ class Dte extends Model implements Auditable
         'rejected',
         'reason_rejection',
         'rejected_user_id',
-        'rejected_at'
+        'rejected_at',
+
+        'comprobante_liquidacion_fondo',
+        'archivo_carga_manual',
     ];
 
     /**
