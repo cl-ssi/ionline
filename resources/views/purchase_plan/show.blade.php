@@ -82,6 +82,8 @@
 </div>
 @endif
 
+<br>
+
 <div class="row"> 
     <div class="col">
         <h6><i class="fas fa-info-circle"></i> 2. Ítems a comprar</h6>
@@ -142,6 +144,42 @@
                 <td></td>
             </tr>
         </tfoot>
+    </table>
+</div>
+
+<br>
+
+<div class="row"> 
+    <div class="col">
+        <h6><i class="fas fa-info-circle"></i> 3. Aprobaciones</h6>
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-bordered table-sm small">
+        <thead>
+            <tr class="text-center">
+                @foreach($purchasePlan->approvals as $approval)
+                <th width="" class="table-secondary">{{ $approval->organizationalUnit->name }}</th>
+                @endforeach
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="text-center">
+                @foreach($purchasePlan->approvals as $approval)
+                <td>
+                    @switch($approval->StatusInWords)
+                        @case('Pendiente')
+                            <i class="fas fa-clock"></i> {{ $approval->StatusInWords }}
+                            @break
+                    @endswitch
+
+                    {{ ($approval->approver) ? $approval->approver->FullName : '' }} <br>
+                    {{ ($approval->approver_at) ? $approval->approver_at->format('d-m-Y H:i:s') : '' }}
+                </td>           
+                @endforeach
+            </tr>
+        <tbody>
     </table>
 </div>
 
