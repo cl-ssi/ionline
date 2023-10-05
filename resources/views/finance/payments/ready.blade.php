@@ -7,13 +7,16 @@
     <form action="{{ route('finance.payments.ready') }}" method="GET">
         <div class="form-row mb-3">
             <div class="col-md-2">
-                <input type="text" class="form-control" name="id" placeholder="id" value="{{ old('id') }}" autocomplete="off">
+                <input type="text" class="form-control" name="id" placeholder="id" value="{{ old('id') }}"
+                    autocomplete="off">
             </div>
             <div class="col-md-2">
-                <input type="text" class="form-control" name="folio" placeholder="folio" value="{{ old('folio') }}" autocomplete="off">
+                <input type="text" class="form-control" name="folio" placeholder="folio" value="{{ old('folio') }}"
+                    autocomplete="off">
             </div>
             <div class="col-md-2">
-                <input type="text" class="form-control" name="oc" placeholder="oc" value="{{ old('oc') }}" autocomplete="off">
+                <input type="text" class="form-control" name="oc" placeholder="oc" value="{{ old('oc') }}"
+                    autocomplete="off">
             </div>
             {{-- <div class="col-md-2">
                 <input type="text" class="form-control" name="folio_compromiso" placeholder="folio compromiso SIGFE" value="{{ old('folio_compromiso') }}" autocomplete="off">
@@ -37,12 +40,14 @@
                     <th>FR</th>
                     <th>Doc. de Pago</th>
                     <th>Adjuntos</th>
-                    <th>Anexos</th>
+                    {{-- Sin Anexos hasta averiguar si son necesarios
+                    <th>Anexos</th> --}}
                     <th>Bod</th>
                     <th>Estado</th>
                     <th>Folio Sigfe</th>
                     <th>Observaciones</th>
-                    <th>Guardar</th>
+                    <th>Comprobante de licitación de Fondos</th>
+                    {{-- <th>Guardar</th> --}}
                 </tr>
             </thead>
             <tbody>
@@ -114,6 +119,9 @@
                                 @endif
                             @endif
                         </td>
+                        {{-- 
+                        Se comenta la linea de Anexos
+                        
                         <td>
                             @if ($dte->requestform && $dte->requestform->purchasingProcess)
                                 @foreach ($dte->requestform->purchasingProcess->details->count() > 0 ? $dte->requestform->purchasingProcess->details : $dte->requestform->purchasingProcess->detailsPassenger as $key => $detail)
@@ -176,7 +184,7 @@
                                     @endforeach
                                 @endif
                             @endif
-                        </td>
+                        </td> --}}
                         <td>
                             @foreach ($dte->controls as $control)
                                 <a href="{{ route('warehouse.control.show', [
@@ -205,9 +213,12 @@
                                     <option value="Pagado" @if ($dte->estado == 'Pagado') selected @endif>Pagado
                                     </option>
                                 </select>
+
+                                <button type="submit" class="btn btn-sm btn-primary">Guardar</button>
+                            </form>
                         </td>
                         <td>
-                            <input type="number" name="folio_sigfe" class="form-input"
+                            <input type="number" name="folio_sigfe" class="form-input small"
                                 value={{ $dte->folio_sigfe }}required>
                         </td>
                         <td>
@@ -221,10 +232,8 @@
                             </textarea>
                         </td>
                         <td>
-                            <button type="submit" class="btn btn-sm btn-primary">Guardar</button>
-                            </form>
+                            @livewire('finance.sigfe-archivo-comprobante', ['dte' => $dte], key($dte->id))
                         </td>
-
                     </tr>
                 @endforeach
 
