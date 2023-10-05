@@ -4,11 +4,14 @@ namespace App\Http\Livewire\Finance;
 
 use Livewire\Component;
 use App\Models\Finance\Dte;
+use Livewire\WithFileUploads;
+
 
 class ManualDtes extends Component
 {
 
     //public $tipoDocumento = 'boleta_honorarios';
+    use WithFileUploads;
     public $tipoDocumento;
     public $folio;
     public $emisor;
@@ -17,6 +20,8 @@ class ManualDtes extends Component
     public $folioOC;
     public $barCode;
     public $showSuccessMessage = false;
+    public $storage_path = '/ionline/finances/dte/carga_manual';
+    public $archivoManual;
     /*
     NOTA 
     No hay representacion para el tipo de documento boleta_electronica 
@@ -35,9 +40,9 @@ class ManualDtes extends Component
 
     public function saveDte()
     {
-        
+
         $tipo = $this->tipoDocumentoMap[$this->tipoDocumento];
-        
+
         // Validar los campos antes de guardarlos
         $this->validate([
             'tipoDocumento' => 'required',
@@ -62,17 +67,29 @@ class ManualDtes extends Component
             'tipo_documento' => $this->tipoDocumento,
             'folio' => $this->folio,
             'emisor' => $this->emisor,
-            'razon_social' => $this->razonSocial,
+            'razon_social_emisor' => $this->razonSocial,
             'monto_total' => $this->montoTotal,
             'folio_oc' => $this->folioOC,
             'tipo' => $tipo,
             // 'uri' => 'https://loa.sii.cl/cgi_IMT/TMBCOT_ConsultaBoletaPdf.cgi?origen=TERCEROS&txt_codigobarras=' . $uri_last_field,
         ]);
 
-        if ($this->tipoDocumento =='boleta_honorarios')
-        {
+
+        $filePath = null;
+        if ($this->archivoManual) {
+            $file = $this->archivoManual;
+            $filename = $file->getClientOriginalName();
+            $filePath = $file->storeAs($this->storage_path, $filename, ['disk' => 'gcs']);
+        }
+
+        if ($filePath) {
+            $dte_manual->archivo_carga_manual = $filePath;
+            $dte_manual->save();
+        }
+
+        if ($this->tipoDocumento == 'boleta_honorarios') {
             // Solo guardo el URI si es boleta de honorario
-            $dte_manual->uri ='https://loa.sii.cl/cgi_IMT/TMBCOT_ConsultaBoletaPdf.cgi?origen=TERCEROS&txt_codigobarras=' . $uri_last_field;
+            $dte_manual->uri = 'https://loa.sii.cl/cgi_IMT/TMBCOT_ConsultaBoletaPdf.cgi?origen=TERCEROS&txt_codigobarras=' . $uri_last_field;
             $dte_manual->save();
         }
 
@@ -103,6 +120,7 @@ class ManualDtes extends Component
         $this->montoTotal = '';
         $this->folioOC = '';
         $this->barCode = '';
+        $this->archivoManual = '';
     }
 
     public function verBoleta()

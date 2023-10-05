@@ -8,14 +8,14 @@
             <h3 class="mb-3">Listado de dtes cargadas en sistema</h3>
         </div>
         @cannot('Payments: viewer')
-        <div class="col">
-            <button class="btn btn-sm btn-success" type="button" wire:click="loadManualDTE">
-                <i class="fas fa-plus"></i> Cargar DTE individual</button>
-        </div>
-        <div class="col">
-            <a class="btn btn-sm btn-success" href="{{ route('finance.dtes.upload') }}">
-                <i class="fas fa-plus"></i> Cargar DTEs desde archivo</a>
-        </div>
+            <div class="col">
+                <button class="btn btn-sm btn-success" type="button" wire:click="loadManualDTE">
+                    <i class="fas fa-plus"></i> Cargar DTE individual</button>
+            </div>
+            <div class="col">
+                <a class="btn btn-sm btn-success" href="{{ route('finance.dtes.upload') }}">
+                    <i class="fas fa-plus"></i> Cargar DTEs desde archivo</a>
+            </div>
         @endcannot
     </div>
 
@@ -32,7 +32,7 @@
             <select class="form-control" wire:model.defer="filter.establishment">
                 <option value="">Todos los Establecimientos</option>
                 @foreach ($establishments as $name => $id)
-                <option value="{{ $name }}">{{ $id }}</option>
+                    <option value="{{ $name }}">{{ $id }}</option>
                 @endforeach
                 <option value="?">Sin establecimiento</option>
             </select>
@@ -62,8 +62,8 @@
                 <option value="">Todas</option>
                 <option value="factura_electronica">Factura Electrónica</option>
                 <option value="factura_exenta">Factura Exenta</option>
-                <option value="guias_despachos">Guias Despacho</option>
                 <option value="nota_credito">Nota Crédito</option>
+                <option value="boleta_electronica">Boleta Electrónica</option>
             </select>
         </div>
         <div class="col-md-1">
@@ -107,13 +107,10 @@
                         {{ $dte->id }}
                         <br>
                         @cannot('Payments: viewer')
-                        <div class="form-check">
-                            <input class="form-check-input position-static" 
-                                style="scale: 1.5;"
-                                type="checkbox" 
-                                id="ids.{{$dte->id}}" 
-                                wire:model.defer="ids.{{$dte->id}}">
-                        </div>
+                            <div class="form-check">
+                                <input class="form-check-input position-static" style="scale: 1.5;" type="checkbox"
+                                    id="ids.{{ $dte->id }}" wire:model.defer="ids.{{ $dte->id }}">
+                            </div>
                         @endcannot
                     </td>
                     <td>
@@ -121,30 +118,30 @@
                     </td>
                     <td>
                         <div class="custom-control custom-switch">
-                            <input type="checkbox" 
-                                class="custom-control-input" 
-                                id="customSwitch{{$dte->id}}"
-                                wire:click="toggleCenabast({{$dte->id}})"
-                                wire:loading.attr="disabled"
-                                wire:loading.class="spinner-border"
-                                wire:target="toggleCenabast({{$dte->id}})"
+                            <input type="checkbox" class="custom-control-input" id="customSwitch{{ $dte->id }}"
+                                wire:click="toggleCenabast({{ $dte->id }})" wire:loading.attr="disabled"
+                                wire:loading.class="spinner-border" wire:target="toggleCenabast({{ $dte->id }})"
                                 {{ $dte->cenabast ? 'checked' : '' }}
                                 @can('Payments: viewer')
                                 disabled
-                                @endcan
-                                >
-                            <label class="custom-control-label" for="customSwitch{{$dte->id}}"></label>
+                                @endcan>
+                            <label class="custom-control-label" for="customSwitch{{ $dte->id }}"></label>
                         </div>
                     </td>
                     <td class="small">
-                        @if ($dte->tipo_documento != 'boleta_honorarios')
-                            @if($dte->uri)
-                            <a href="http://dipres2303.acepta.com/ca4webv3/PdfView?url={{ $dte->uri }}"
-                                target="_blank" class="btn btn-sm mb-1 btn-outline-secondary">
-                                <i class="fas fa-file-pdf text-danger"></i> {{ $dte->folio }}
-                            </a>
+                        @if ($dte->tipo_documento != 'boleta_honorarios' or $dte->tipo_documento != 'boleta_electronica')
+                            @if ($dte->uri)
+                                <a href="http://dipres2303.acepta.com/ca4webv3/PdfView?url={{ $dte->uri }}"
+                                    target="_blank" class="btn btn-sm mb-1 btn-outline-secondary">
+                                    <i class="fas fa-file-pdf text-danger"></i> {{ $dte->folio }}
+                                </a>
                             @else
-                                Es un documento cargado manualmente
+                                @if ($dte->archivo_carga_manual)
+                                    <a  href="{{ route('finance.dtes.downloadManualDteFile', $dte) }}" target="_blank"
+                                        target="_blank" class="btn btn-sm mb-1 btn-outline-secondary">
+                                        <i class="fas fa-file-pdf text-danger"></i> {{ $dte->folio }}
+                                    </a>
+                                @endif
                             @endif
                         @else
                             <a href="{{ $dte->uri }}" target="_blank"
@@ -155,7 +152,7 @@
                         <br>
                         {{ $dte->tipo_documento }}
 
-                        @foreach($dte->dtes as $dteAsociate)
+                        @foreach ($dte->dtes as $dteAsociate)
                             @if ($dteAsociate->tipo_documento != 'boleta_honorarios')
                                 <a href="http://dipres2303.acepta.com/ca4webv3/PdfView?url={{ $dteAsociate->uri }}"
                                     target="_blank" class="btn btn-sm mb-1 btn-outline-secondary">
@@ -218,20 +215,18 @@
                         @endif
                     </td>
                     <td class="small">
-                        <!-- 
-                            Acá deben ir tres cosas. 
+                        <!--
+                            Acá deben ir tres cosas.
                             1. Actas de recepción emitidas en el módulo de cenabast
                             2. Actas de recepción emitidas y firmadas en bodega
                             3. Actas de recepción de servicios emitidas en abastecimiento
                         -->
 
                         <!-- Punto 1 -->
-                        @if($dte->cenabast_reception_file)
-                            <a
-                                class="btn btn-sm btn-outline-primary" target="_blank" 
+                        @if ($dte->cenabast_reception_file)
+                            <a class="btn btn-sm btn-outline-primary" target="_blank"
                                 href="{{ route('warehouse.cenabast.download.signed', $dte) }}"
-                                title="Acta de recepción CENABAST"
-                            >
+                                title="Acta de recepción CENABAST">
                                 <i class="fas fa-file"></i> CNB
                             </a>
                         @endif
@@ -270,7 +265,7 @@
 
                     <td class="small">
                         @cannot('Payments: viewer')
-                            <button class="btn btn-sm btn-primary" wire:click="show({{$dte->id}})">
+                            <button class="btn btn-sm btn-primary" wire:click="show({{ $dte->id }})">
                                 <i class="fas fa-edit"></i>
                             </button>
                         @endcannot
@@ -278,64 +273,68 @@
 
                 </tr>
 
-                @if($showEdit == $dte->id)
-                <tr>
-                    <td colspan="11">
+                @if ($showEdit == $dte->id)
+                    <tr>
+                        <td colspan="11">
 
-                        <div class="form-row">
-                            <div class="form-group col-md-3">
-                                <label for="for_folio_oc">Folio OC</label>
-                                <input type="text" class="form-control" id="for_folio_oc" wire:model.defer="folio_oc">
-                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-3">
+                                    <label for="for_folio_oc">Folio OC</label>
+                                    <input type="text" class="form-control" id="for_folio_oc"
+                                        wire:model.defer="folio_oc">
+                                </div>
 
-                            <div class="form-group col-md-2">
-                                <label for="for_monto_total">Monto Total</label>
-                                <input type="text" class="form-control" id="for_folio_oc" wire:model.defer="monto_total" disabled>
-                            </div>
-                            @switch($dte->tipo_documento)
-                                @case('guias_despacho')
-                                @case('nota_credito')
-                                @case('nota_debito')
-                                    <div class="form-group col-md-5">
-                                        <label for="for_asociate">Asociar a Factura</label>
-                                        <select class="form-control" id="for_asociate" wire:model.defer="asociate_dte_id">
-                                            <option></option>
-                                            @foreach($facturasEmisor as $factura)
-                                            <option value="{{ $factura->id }}">
-                                                {{ $factura->folio }} ( $ {{ money($factura->monto_total) }} ) </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
+                                <div class="form-group col-md-2">
+                                    <label for="for_monto_total">Monto Total</label>
+                                    <input type="text" class="form-control" id="for_folio_oc"
+                                        wire:model.defer="monto_total" disabled>
+                                </div>
+                                @switch($dte->tipo_documento)
+                                    @case('guias_despacho')
+                                    @case('nota_credito')
+
+                                    @case('nota_debito')
+                                        <div class="form-group col-md-5">
+                                            <label for="for_asociate">Asociar a Factura</label>
+                                            <select class="form-control" id="for_asociate"
+                                                wire:model.defer="asociate_dte_id">
+                                                <option></option>
+                                                @foreach ($facturasEmisor as $factura)
+                                                    <option value="{{ $factura->id }}">
+                                                        {{ $factura->folio }} ( $ {{ money($factura->monto_total) }} )
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
                                     @break
-                            @endswitch
-                            
-                            
-                            
-                        </div>
-        
-                        <div class="form-row">
-                            <div class="form-group col-md-3">
-                                <label for="for_confirmation_status">Estado de confirmación</label>
-                                <select class="form-control" id="for_confirmation_status" 
-                                    wire:model.defer="confirmation_status">
-                                    <option value=""></option>
-                                    <option value="0">Rechazar</option>
-                                </select>
+                                @endswitch
+
+
+
                             </div>
 
-                            <div class="form-group col-md-9">
-                                <label for="for_confirmation_observation">Observación</label>
-                                <textarea class="form-control" wire:model.defer="confirmation_observation" rows="3"></textarea>
-                            </div>
-                        </div>
-                        <button type="submit" 
-                            class="btn btn-outline-secondary"
-                            wire:click="dismiss">Cancelar</button>
-                        <button type="submit" class="btn btn-primary"
-                            wire:click="save({{$dte->id}})">Guardar</button>
+                            <div class="form-row">
+                                <div class="form-group col-md-3">
+                                    <label for="for_confirmation_status">Estado de confirmación</label>
+                                    <select class="form-control" id="for_confirmation_status"
+                                        wire:model.defer="confirmation_status">
+                                        <option value=""></option>
+                                        <option value="0">Rechazar</option>
+                                    </select>
+                                </div>
 
-                    </td>
-                </tr>
+                                <div class="form-group col-md-9">
+                                    <label for="for_confirmation_observation">Observación</label>
+                                    <textarea class="form-control" wire:model.defer="confirmation_observation" rows="3"></textarea>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-outline-secondary"
+                                wire:click="dismiss">Cancelar</button>
+                            <button type="submit" class="btn btn-primary"
+                                wire:click="save({{ $dte->id }})">Guardar</button>
+
+                        </td>
+                    </tr>
                 @endif
             @endforeach
         </tbody>
@@ -346,23 +345,23 @@
     </div>
 
     <div class="row">
-    @cannot('Payments: viewer')
-        <div class="col">
-            <div class="form-row">
-                <div class="col-3">
-                    <select class="form-control" wire:model.defer="establishment_id">
-                        <option value=""></option>
-                        @foreach ($establishments as $name => $id)
-                        <option value="{{ $name }}">{{ $id }}</option>
-                        @endforeach
-                    </select>
+        @cannot('Payments: viewer')
+            <div class="col">
+                <div class="form-row">
+                    <div class="col-3">
+                        <select class="form-control" wire:model.defer="establishment_id">
+                            <option value=""></option>
+                            @foreach ($establishments as $name => $id)
+                                <option value="{{ $name }}">{{ $id }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <button class="btn btn-primary" wire:click="setEstablishment">
+                        Asignar establecimiento
+                    </button>
                 </div>
-                <button class="btn btn-primary" wire:click="setEstablishment">
-                    Asignar establecimiento
-                </button>
             </div>
-        </div>
-    @endcannot
+        @endcannot
 
         <div class="col-3">
             <div class="mb-3">
