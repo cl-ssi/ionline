@@ -53,11 +53,12 @@
         <div class="col-md-2">
             <select class="form-control" wire:model.defer="filter.tipo_documento">
                 <option value="">Todas</option>
-                <option value="factura_electronica">Factura Electrónica</option>
-                <option value="factura_exenta">Factura Exenta</option>
-                <option value="guias_despacho">Guias Despacho</option>
-                <option value="nota_credito">Nota Crédito</option>
-                <option value="boleta_electronica">Boleta Electrónica</option>
+                <option value="factura_electronica">FE: Factura Electrónica</option>
+                <option value="factura_exenta">FE: Factura Exenta</option>
+                <option value="guias_despacho">GD: Guias Despacho</option>
+                <option value="nota_credito">NC: Nota Crédito</option>
+                <option value="boleta_honorarios">BH: Boleta Honorarios</option>
+                <option value="boleta_electronica">BE: Boleta Electrónica</option>
             </select>
         </div>
         <div class="col-md-1">
@@ -84,7 +85,7 @@
                 <th>ID</th>
                 <th width="55px">Estb.</th>
                 <th>CNB.</th>
-                <th>Documento</th>
+                <th width="140px">Documento</th>
                 <th width="140px">OC</th>
                 <th>FR</th>
                 <th>Bod/Recep</th>
