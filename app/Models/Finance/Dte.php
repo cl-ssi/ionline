@@ -145,6 +145,18 @@ class Dte extends Model implements Auditable
         'confirmation_at',
     ];
 
+    /**
+     * tipo_documento
+     * ==============
+     * factura_electronica
+     * factura_exenta
+     * guias_despacho
+     * nota_debito
+     * nota_credito
+     * boleta_honorarios
+     * boleta_electronica
+     */
+
     public function purchaseOrder()
     {
         return $this->belongsTo(PurchaseOrder::class, 'folio_oc', 'code');
@@ -265,10 +277,10 @@ class Dte extends Model implements Auditable
         return $this->belongsTo(User::class, 'confirmation_user_id');
     }
 
-    // public function dtes()
-    // {
-    //     return $this->hasMany(Dte::class,'id','dte_id');
-    // }
+    public function getTipoDocumentoInicialesAttribute()
+    {
+        return strtoupper(implode('', array_map(fn($s) => substr($s, 0, 1), explode("_", $this->tipo_documento))));
+    }
 
 
     /** Creo que ya no se utiliza */

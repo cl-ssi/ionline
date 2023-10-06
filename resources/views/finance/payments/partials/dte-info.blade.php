@@ -9,25 +9,25 @@ Emisor: {{ $dte->emisor }}
     @case('nota_credito')
         <a href="http://dipres2303.acepta.com/ca4webv3/PdfView?url={{ $dte->uri }}"
             target="_blank" class="btn btn-sm mb-1 btn-outline-secondary">
-            <i class="fas fa-file-pdf text-danger"></i> {{ $dte->folio }}
+            <i class="fas fa-file-pdf text-danger"></i> 
+            {{ $dte->tipo_documento_iniciales }} {{ $dte->folio }}
         </a>
         @break
     @case('boleta_honorarios')
         <a href="{{ $dte->uri }}" target="_blank"
             class="btn btn-sm mb-1 btn-outline-secondary">
-            <i class="fas fa-file-pdf text-danger"></i> {{ $dte->folio }}
+            <i class="fas fa-file-pdf text-danger"></i>
+            {{ $dte->tipo_documento_iniciales }} {{ $dte->folio }}
         </a>
         @break
     @case('boleta_electronica')
         <a  href="{{ route('finance.dtes.downloadManualDteFile', $dte) }}" target="_blank"
             target="_blank" class="btn btn-sm mb-1 btn-outline-secondary">
-            <i class="fas fa-file-pdf text-danger"></i> {{ $dte->folio }}
+            <i class="fas fa-file-pdf text-danger"></i>
+            {{ $dte->tipo_documento_iniciales }} {{ $dte->folio }}
         </a>
         @break
 @endswitch
-
-<br>
-{{ $dte->tipo_documento }}
 
 <hr>
 
@@ -40,26 +40,28 @@ Emisor: {{ $dte->emisor }}
         @case('nota_credito')
             <a href="http://dipres2303.acepta.com/ca4webv3/PdfView?url={{ $dteAsociate->uri }}"
                 target="_blank" class="btn btn-sm mb-1 btn-outline-secondary">
-                <i class="fas fa-file-pdf text-danger"></i> {{ $dteAsociate->folio }}
+                <i class="fas fa-file-pdf text-danger"></i>
+                {{ $dteAsociate->tipo_documento_iniciales }} {{ $dteAsociate->folio }}
             </a>
             @break
         @case('boleta_honorarios')
             <a href="{{ $dteAsociate->uri }}" target="_blank"
                 class="btn btn-sm mb-1 btn-outline-secondary">
-                <i class="fas fa-file-pdf text-danger"></i> {{ $dteAsociate->folio }}
+                <i class="fas fa-file-pdf text-danger"></i>
+                {{ $dteAsociate->tipo_documento_iniciales }} {{ $dteAsociate->folio }}
             </a>
             @break
         @case('boleta_electronica')
             @if($dteAsociate->archivo_carga_manual)
                 <a  href="{{ route('finance.dtes.downloadManualDteFile', $dteAsociate) }}" target="_blank"
                     target="_blank" class="btn btn-sm mb-1 btn-outline-secondary">
-                    <i class="fas fa-file-pdf text-danger"></i> {{ $dteAsociate->folio }}
+                    <i class="fas fa-file-pdf text-danger"></i>
+                    {{ $dteAsociate->tipo_documento_iniciales }} {{ $dteAsociate->folio }}
                 </a>
             @endif
             @break
     @endswitch
     <br>
-    {{ $dteAsociate->tipo_documento }}
 @endforeach
 
 <!-- Mostrar las facturas asociadas, sólo para algunos tipos de documentos: guias y notas -->
@@ -75,11 +77,9 @@ Emisor: {{ $dte->emisor }}
             <!-- Siempre deberían ser facturas de acepta, de lo contrario habrá que poner el switch que está arriba -->
             <a href="http://dipres2303.acepta.com/ca4webv3/PdfView?url={{ $invoiceAsociate->uri }}"
                 target="_blank" class="btn btn-sm mb-1 btn-outline-secondary">
-                <i class="fas fa-file-pdf text-danger"></i> {{ $invoiceAsociate->folio }}
+                <i class="fas fa-file-pdf text-danger"></i> 
+                {{ $invoiceAsociate->tipo_documento_iniciales }} {{ $invoiceAsociate->folio }}
             </a>
-
-            <br> 
-            {{ $invoiceAsociate->tipo_documento }}
             <br> 
         @empty
             <span class="text-danger">Sin factura asociada</span>
