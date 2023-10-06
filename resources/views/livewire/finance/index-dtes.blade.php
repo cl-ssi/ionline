@@ -194,19 +194,34 @@
                             {{ $dteAsociate->tipo_documento }}
                         @endforeach
 
-                        @forelse ($dte->invoices as $invoiceAsociate)
-                            <!-- Siempre deberían ser facturas de acepta, de lo contrario habrá que poner el switch que está arriba -->
-                            <a href="http://dipres2303.acepta.com/ca4webv3/PdfView?url={{ $invoiceAsociate->uri }}"
-                                target="_blank" class="btn btn-sm mb-1 btn-outline-secondary">
-                                <i class="fas fa-file-pdf text-danger"></i> {{ $invoiceAsociate->folio }}
-                            </a>
-                
-                            <br> 
-                            {{ $invoiceAsociate->tipo_documento }}
-                            <br> 
-                        @empty
-                            <span class="text-danger">Sin factura asociada</span>
-                        @endforelse
+                        <!-- Mostrar las facturas asociadas, sólo para algunos tipos de documentos: guias y notas -->
+                        @switch($dte->tipo_documento)
+                            @case('factura_electronica')
+                            @case('factura_exenta')
+                                @break
+
+                            @case('guias_despacho')
+                            @case('nota_debito')
+                            @case('nota_credito')
+                                @forelse ($dte->invoices as $invoiceAsociate)
+                                    <!-- Siempre deberían ser facturas de acepta, de lo contrario habrá que poner el switch que está arriba -->
+                                    <a href="http://dipres2303.acepta.com/ca4webv3/PdfView?url={{ $invoiceAsociate->uri }}"
+                                        target="_blank" class="btn btn-sm mb-1 btn-outline-secondary">
+                                        <i class="fas fa-file-pdf text-danger"></i> {{ $invoiceAsociate->folio }}
+                                    </a>
+                        
+                                    <br> 
+                                    {{ $invoiceAsociate->tipo_documento }}
+                                    <br> 
+                                @empty
+                                    <span class="text-danger">Sin factura asociada</span>
+                                @endforelse
+                                @break
+
+                            @case('boleta_honorarios')
+                            @case('boleta_electronica')
+                                @break
+                        @endswitch
 
                     </td>
                     <td class="small">
