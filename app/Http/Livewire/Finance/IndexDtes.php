@@ -129,7 +129,7 @@ class IndexDtes extends Component
             })
             ->orderByDesc('fecha_recepcion_sii');
 
-        return $query->paginate(100);
+        return $query->paginate(50);
     }
 
 
