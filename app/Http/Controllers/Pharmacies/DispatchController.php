@@ -419,8 +419,14 @@ class DispatchController extends Controller
 
     public function openFile(Dispatch $dispatch)
     {
-      $file = $dispatch->files->first();
-      return Storage::disk('gcs')->response($file->file, mb_convert_encoding($file->name,'ASCII'));
+        if($dispatch->files){
+            $file = $dispatch->files->first();
+            return Storage::disk('gcs')->response($file->file, mb_convert_encoding($file->name,'ASCII'));
+        }else{
+            session()->flash('warning', 'No existe el archivo.');
+            return redirect()->back();
+        }
+        
     }
 
     public function exportExcel(){
