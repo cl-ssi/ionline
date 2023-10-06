@@ -263,119 +263,68 @@
 <br />
 @endif
 
-{{-- 
-<h6 class="small"><i class="fas fa-signature"></i> El proceso debe contener las aprobaciones de las personas que dan autorización para que la Unidad Selección inicie el proceso de Llamado de presentación de antecedentes.</h6>
-<div class="table-responsive">
-    <table class="table table-sm table-striped table-bordered">
-        <tbody class="small">
-            <tr>
-                @foreach($requestReplacementStaff->RequestSign as $sign)
-                  <td class="table-active text-center">
-                      <strong>{{ $sign->organizationalUnit->name }}</strong>
-                  </td>
-                @endforeach
-            </tr>
-            <tr>
-                @foreach($requestReplacementStaff->RequestSign as $requestSign)
-                  <td align="center">
-                      @if($requestSign->request_status == 'pending' && $requestSign->organizational_unit_id == Auth::user()->organizationalUnit->id)
-                          Estado: {{ $requestSign->StatusValue }} <br><br>
-                          <div class="row">
-                              <div class="col-sm">
-                                  <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.request.sign.update', [$requestSign, 'status' => 'accepted']) }}">
-                                      @csrf
-                                      @method('PUT')
-                                      <button type="submit" class="btn btn-success btn-sm"
-                                          onclick="return confirm('¿Está seguro que desea Aceptar la solicitud?')"
-                                          title="Aceptar">
-                                          <i class="fas fa-check-circle"></i>
-                                      </button>
-                                  </form>
-                              </div>
-                              <div class="col-sm">
-                                  <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.request.sign.update', [$requestSign, 'status' => 'rejected']) }}">
-                                      @csrf
-                                      @method('PUT')
-                                      <button type="submit" class="btn btn-danger btn-sm"
-                                          onclick="return confirm('¿Está seguro que desea Reachazar la solicitud?')"
-                                          title="Rechazar">
-                                          <i class="fas fa-times-circle"></i>
-                                      </button>
-                                  </form>
-                              </div>
-                          </div>
-                      @elseif($requestSign->request_status == 'accepted' || $requestSign->request_status == 'rejected')
-                        <span style="color: green;">
-                          <i class="fas fa-check-circle"></i> {{ $requestSign->StatusValue }} <br>
-                        </span>
-                        <i class="fas fa-user"></i> {{ $requestSign->user->FullName }}<br>
-                        <i class="fas fa-calendar-alt"></i> {{ Carbon\Carbon::parse($requestSign->date_sign)->format('d-m-Y H:i:s') }}<br>
-                      @else
-                          @if($requestSign->request_status == NULL)
-                              <i class="fas fa-ban"></i> No disponible para Aprobación.<br>
-                          @else
-                              <i class="fas fa-clock"></i> {{ $requestSign->StatusValue }}<br>
-                          @endif
-                      @endif
-                  </td>
-                @endforeach
-            </tr>
-        </tbody>
-    </table>
-</div>
---}}
 
 <h6 class="small"><i class="fas fa-signature"></i> El proceso debe contener las aprobaciones de las personas que dan autorización para que la Unidad Selección inicie el proceso de Llamado de presentación de antecedentes.</h6>
 
 <div class="table-responsive">
     <table class="table table-sm table-bordered">
+        <thead class="small">
+            <tr>
+                @foreach($requestReplacementStaff->RequestSign as $sign)
+                  <th class="table-active text-center">
+                      {{ $sign->organizationalUnit->name }}
+                  </th>
+                @endforeach
+            </tr>
+        </thead>
         <tbody class="small">
             <tr>
                 @foreach($requestReplacementStaff->RequestSign as $sign)
-                  <td class="table-active text-center">
-                      <strong>{{ $sign->organizationalUnit->name }}</strong><br>
-                  </td>
-                @endforeach
-            </tr>
-            <tr>
-                @foreach($requestReplacementStaff->RequestSign->where('request_status', '!=', 'not valid') as $requestSign)
-                    <td align="center">
-                        @if($requestSign->request_status == 'accepted')
+                    @if($sign->ou_alias != 'finance')
+                    <td class="text-center">
+                        @if($sign->request_status == 'accepted')
                             <span style="color: green;">
-                                <i class="fas fa-check-circle"></i> {{ $requestSign->StatusValue }} </span><br>
-                            <i class="fas fa-user"></i> {{ $requestSign->user->FullName }}<br>
-                            <i class="fas fa-calendar-alt"></i> {{ ($requestSign->date_sign) ? $requestSign->date_sign->format('d-m-Y H:i:s') : '' }}<br>
+                                <i class="fas fa-check-circle"></i> {{ $sign->StatusValue }} 
+                            </span><br>
+                            <i class="fas fa-user"></i> {{ $sign->user->TinnyName }}<br>
+                            <i class="fas fa-calendar-alt"></i> {{ ($sign->date_sign) ? $sign->date_sign->format('d-m-Y H:i:s') : '' }}<br>
                         @endif
-                        @if($requestSign->request_status == 'rejected')
+                        @if($sign->request_status == 'rejected')
                             <span style="color: Tomato;">
-                                <i class="fas fa-times-circle"></i> {{ $requestSign->StatusValue }} </span><br>
-                            <i class="fas fa-user"></i> {{ $requestSign->user->FullName }}<br>
-                            <i class="fas fa-calendar-alt"></i> {{ $requestSign->date_sign->format('d-m-Y H:i:s') }}<br>
+                                <i class="fas fa-times-circle"></i> {{ $sign->StatusValue }} 
+                            </span><br>
+                            <i class="fas fa-user"></i> {{ $sign->user->FullName }}<br>
+                            <i class="fas fa-calendar-alt"></i> {{ $sign->date_sign->format('d-m-Y H:i:s') }}<br>
                             <hr>
-                            {{ $requestSign->observation }}<br>
+                            {{ $sign->observation }}<br>
                         @endif
-                        @if($requestSign->request_status == 'pending' || $requestSign->request_status == NULL)
-                            <i class="fas fa-clock"></i> Pendiente.<br>
+                        @if($sign->request_status == 'pending' || $sign->request_status == NULL)
+                            <i class="fas fa-clock"></i> Pendiente<br>
                         @endif
                     </td>
+                    @endif
                 @endforeach
-                @if($sign->request_status == 'not valid')
-                <td align="center">
-                    @foreach($requestReplacementStaff->signaturesFile->signaturesFlows as $flow)
-                        @if($flow->status == NULL)
-                            <i class="fas fa-clock"></i> Pendiente.<br>
-                        @endif
-                        @if($flow->status == 1)
-                            <span style="color: green;">
-                                <i class="fas fa-check-circle"></i> Aceptada 
-                            </span><br>
-                            <i class="fas fa-user"></i> {{ $flow->userSigner->FullName }}<br>
-                            <i class="fas fa-calendar-alt"></i> {{ $flow->signature_date->format('d-m-Y H:i:s') }}<br>
-                        @endif
-                    @endforeach
-                </td>
+
+                @if($requestReplacementStaff->signaturesFile )
+                @foreach($requestReplacementStaff->signaturesFile->signaturesFlows as $flow)
+                    @if($flow->status == 1)
+                    <td class="text-center">
+                        <span style="color: green;">
+                            <i class="fas fa-signature"></i> Aceptada
+                        </span><br>
+                        <i class="fas fa-user"></i> {{ $flow->signerName }}<br>
+                        <i class="fas fa-calendar-alt"></i> {{ $flow->signature_date->format('d-m-Y H:i:s') }}<br>
+                    </td>
+                    @endif
+                @endforeach
+                @else
+                    @if($sign->ou_alias == 'finance')
+                        <td class="text-center">
+                            <i class="fas fa-clock"></i> Pendiente<br>
+                        </td>
+                    @endif
                 @endif
-            </tr>
+            <tr>
         </tbody>
     </table>
 </div>

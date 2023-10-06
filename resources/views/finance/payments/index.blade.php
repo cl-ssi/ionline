@@ -4,7 +4,7 @@
 
 @section('content')
 
-@include('finance.nav')
+@include('finance.payments.partials.nav')
 
 <h3 class="mb-3">Estados de pago</h3>
 

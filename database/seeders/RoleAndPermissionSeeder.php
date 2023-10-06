@@ -173,6 +173,7 @@ class RoleAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Job Position Profile: audit', 'description' => 'Permite acceder al registro de auditoría del módulo']);
         
         Permission::create(['name' => 'Payments', 'description' => 'Acceso al módulo Estados de Pago']);
+        Permission::create(['name' => 'Payments: cenabast bypass', 'description' => 'permiso para poder hacer bypass cuando se sube un documento ya firmado anteriormente por ende no deberia entrar al proceso de firma por farmaceutico-jefe (carga retroactiva)']);
         Permission::create(['name' => 'Payments: viewer', 'description' => 'Permite acceso al módulo de Estados de pago, pero solamente puede ver y no modificar nada']);
 
         Permission::create(['name' => 'Summary: user', 'description' => 'Usuario del módulo de Sumarios']);

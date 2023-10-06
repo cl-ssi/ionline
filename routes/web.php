@@ -1748,6 +1748,7 @@ Route::prefix('warehouse')->as('warehouse.')->middleware(['auth', 'must.change.p
         Route::get('/download-signed/{dte}/dte', [StoreController::class, 'downloadSigned'])->name('download.signed');
         Route::delete('/delete-file/{dte}', [StoreController::class, 'deleteFile'])->name('deleteFile');
         Route::get('/callback/{dte}/dte', [StoreController::class, 'callback'])->name('callback');
+        Route::post('/bypass/{dte}', [StoreController::class, 'bypass'])->name('bypass');
     });
 
     Route::prefix('visation_contract_manager')->as('visation_contract_manager.')->group(function () {

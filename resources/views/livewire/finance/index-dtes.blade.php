@@ -1,6 +1,6 @@
 <div>
 
-    @include('finance.nav')
+    @include('finance.payments.partials.nav')
 
 
     <div class="row mb-3">
@@ -51,13 +51,6 @@
             </select>
         </div>
         <div class="col-md-2">
-            {{-- <select class="form-control" wire:model.defer="filter.sender_status" disabled>
-                <option value="Todas">Todas</option>
-                <option value="No Confirmadas">No Confirmadas</option>
-                <option value="Confirmadas">Confirmadas</option>
-                <option value="Rechazadas">Rechazadas</option>
-                <option value="Sin Envío">Sin Envío</option>
-            </select> --}}
             <select class="form-control" wire:model.defer="filter.tipo_documento">
                 <option value="">Todas</option>
                 <option value="factura_electronica">Factura Electrónica</option>
@@ -130,143 +123,13 @@
                         </div>
                     </td>
                     <td class="small">
-                        Emisor: {{ $dte->emisor }}
-                        <br>
-
-                        @if ($dte->tipo_documento != 'boleta_honorarios' or $dte->tipo_documento != 'boleta_electronica')
-                            @if ($dte->uri)
-                                <a href="http://dipres2303.acepta.com/ca4webv3/PdfView?url={{ $dte->uri }}"
-                                    target="_blank" class="btn btn-sm mb-1 btn-outline-secondary">
-                                    <i class="fas fa-file-pdf text-danger"></i> {{ $dte->folio }}
-                                </a>
-                            @else
-                                @if ($dte->archivo_carga_manual)
-                                    <a  href="{{ route('finance.dtes.downloadManualDteFile', $dte) }}" target="_blank"
-                                        target="_blank" class="btn btn-sm mb-1 btn-outline-secondary">
-                                        <i class="fas fa-file-pdf text-danger"></i> {{ $dte->folio }}
-                                    </a>
-                                @endif
-                            @endif
-                        @else
-                            <a href="{{ $dte->uri }}" target="_blank"
-                                class="btn btn-sm mb-1 btn-outline-secondary">
-                                <i class="fas fa-file-pdf text-danger"></i> {{ $dte->folio }}
-                            </a>
-                        @endif
-                        <br>
-                        {{ $dte->tipo_documento }}
-
-                        <hr>
-
-                        @foreach ($dte->dtes as $dteAsociate)
-                            @switch($dteAsociate->tipo_documento)
-                                {{-- @case('factura_electronica') --}}
-                                {{-- @case('factura_exenta') --}}
-                                @case('guias_despacho')
-                                @case('nota_debito')
-                                @case('nota_credito')
-                                    <a href="http://dipres2303.acepta.com/ca4webv3/PdfView?url={{ $dteAsociate->uri }}"
-                                        target="_blank" class="btn btn-sm mb-1 btn-outline-secondary">
-                                        <i class="fas fa-file-pdf text-danger"></i> {{ $dteAsociate->folio }}
-                                    </a>
-                                    @break
-                                @case('boleta_honorarios')
-                                    <a href="{{ $dteAsociate->uri }}" target="_blank"
-                                        class="btn btn-sm mb-1 btn-outline-secondary">
-                                        <i class="fas fa-file-pdf text-danger"></i> {{ $dteAsociate->folio }}
-                                    </a>
-                                    @break
-                                @case('boleta_electronica')
-                                    @if($dteAsociate->archivo_carga_manual)
-                                        <a  href="{{ route('finance.dtes.downloadManualDteFile', $dteAsociate) }}" target="_blank"
-                                            target="_blank" class="btn btn-sm mb-1 btn-outline-secondary">
-                                            <i class="fas fa-file-pdf text-danger"></i> {{ $dteAsociate->folio }}
-                                        </a>
-                                    @endif
-                                    @break
-                            @endswitch
-                            <br>
-                            {{ $dteAsociate->tipo_documento }}
-                        @endforeach
-
-                        @foreach ($dte->invoices as $invoiceAsociate)
-                            @switch($invoiceAsociate->tipo_documento)
-                                @case('factura_electronica')
-                                @case('factura_exenta')
-                                @case('guias_despacho')
-                                @case('nota_debito')
-                                @case('nota_credito')
-                                    <a href="http://dipres2303.acepta.com/ca4webv3/PdfView?url={{ $invoiceAsociate->uri }}"
-                                        target="_blank" class="btn btn-sm mb-1 btn-outline-secondary">
-                                        <i class="fas fa-file-pdf text-danger"></i> {{ $invoiceAsociate->folio }}
-                                    </a>
-                                    @break
-                                @case('boleta_honorarios')
-                                    @if($invoiceAsociate->uri)
-                                    <a href="{{ $invoiceAsociate->uri }}" target="_blank"
-                                        class="btn btn-sm mb-1 btn-outline-secondary">
-                                        <i class="fas fa-file-pdf text-danger"></i> {{ $invoiceAsociate->folio }}
-                                    </a>
-                                    @endif
-                                    @break
-                                @case('boleta_electronica')
-                                    @if($invoiceAsociate->uri)
-                                    <a  href="{{ route('finance.dtes.downloadManualDteFile', $invoiceAsociate) }}" target="_blank"
-                                        target="_blank" class="btn btn-sm mb-1 btn-outline-secondary">
-                                        <i class="fas fa-file-pdf text-danger"></i> {{ $invoiceAsociate->folio }}
-                                    </a>
-                                    @endif
-                                    @break
-                            @endswitch
-                            <br> 
-                            {{ $invoiceAsociate->tipo_documento }}
-                            <br> 
-                        @endforeach
-
+                        @include('finance.payments.partials.dte-info')
                     </td>
                     <td class="small">
-                        {{-- $dte->folio_oc --}}
                         @livewire('finance.get-purchase-order', ['dte' => $dte], key($dte->id))
                     </td>
                     <td class="small">
-                        @if ($dte->requestForm)
-                            <a href="{{ route('request_forms.show', $dte->requestForm->id) }}" target="_blank">
-                                {{ $dte->requestForm->folio }}
-                            </a>
-                            <br>
-                            @if ($dte->requestForm->signatures_file_id)
-                                <a class="btn btn-info btn-sm" title="Ver Formulario de Requerimiento firmado"
-                                    href="{{ $dte->requestForm->signatures_file_id == 11
-                                        ? route('request_forms.show_file', $dte->requestForm->requestFormFiles->first() ?? 0)
-                                        : route('request_forms.signedRequestFormPDF', [$dte->requestForm, 1]) }}"
-                                    target="_blank" title="Certificado">
-                                    <i class="fas fa-file-contract"></i>
-                                </a>
-                            @endif
-
-                            @if ($dte->requestForm->old_signatures_file_id)
-                                <a class="btn btn-secondary btn-sm"
-                                    title="Ver Formulario de Requerimiento Anterior firmado"
-                                    href="{{ $dte->requestForm->old_signatures_file_id == 11
-                                        ? route('request_forms.show_file', $dte->requestForm->requestFormFiles->first() ?? 0)
-                                        : route('request_forms.signedRequestFormPDF', [$dte->requestForm, 0]) }}"
-                                    target="_blank" title="Certificado">
-                                    <i class="fas fa-file-contract"></i>
-                                </a>
-                            @endif
-
-                            @if ($dte->requestForm->signedOldRequestForms->isNotEmpty())
-                                <a class="btn btn-secondary btn-sm"
-                                    title="Ver Formulario de Requerimiento Anteriores firmados"
-                                    href="{{ $dte->requestForm->old_signatures_file_id == 11
-                                        ? route('request_forms.show_file', $dte->requestForm->requestFormFiles->first() ?? 0)
-                                        : route('request_forms.signedRequestFormPDF', [$dte->requestForm, 0]) }}"
-                                    target="_blank" data-toggle="modal"
-                                    data-target="#history-fr-{{ $dte->requestForm->id }}">
-                                    <i class="fas fa-file-contract"></i>
-                                </a>
-                            @endif
-                        @endif
+                        @include('finance.payments.partials.fr-info')
                     </td>
                     <td class="small">
                         <!--

@@ -140,6 +140,22 @@
                                 </div>
                             </form>
                         @endif
+
+                        @canany(['be god', 'Payments: cenabast bypass'])
+                        @if (($dte->confirmation_signature_file) and (!$dte->confirmation_status))
+                            <form action="{{ route('warehouse.cenabast.bypass', ['dte' => $dte->id]) }}" method="POST">
+                                @csrf
+                                <button
+                                    id="bypassButton"
+                                    class="btn btn-warning"
+                                    onclick="return confirm('¿Está seguro que desea omitir el proceso de firma?. Esto solamente deberá realizarlo con documentos que ya se encuentran firmados o con carga retroactiva')">
+                                    Bypass
+                                    Firma 
+                                </button>
+                            </form>
+                        @endif
+                        @endcanany
+
                     </td>
                     <td class="text-center" nowrap>
                         @if (isset($dte->confirmation_signature_file) &&
