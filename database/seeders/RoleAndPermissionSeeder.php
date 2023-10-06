@@ -190,6 +190,10 @@ class RoleAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Purchase Plan: create', 'description' => 'Permite crear planes de compras']);
         Permission::create(['name' => 'Purchase Plan: all',    'description' => 'Permite visualizar todos los planes de compras']);
 
+        Permission::create(['name' => 'Agenda UST: Administrador', 'description' => 'Rol de administrador del módulo agendamiento UST']);
+        Permission::create(['name' => 'Agenda UST: Funcionario', 'description' => 'Rol de funcionario del módulo agendamiento UST']);
+        Permission::create(['name' => 'Agenda UST: Secretaria', 'description' => 'Rol de secretaria del módulo agendamiento UST']);
+
         // @role(
         //   'Replacement Staff: admin |
         //   Replacement Staff: user'
