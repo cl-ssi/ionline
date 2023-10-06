@@ -112,7 +112,7 @@
                     <td class="small">
                         <a href="{{ route('finance.payments.sendToReadyInbox', ['dte' => $dte->id]) }}"
                             class="btn btn-sm btn-outline-success">
-                            <i class="fas fa-hand-holding-usd"></i> Enviar a Bandeja Pendiente para Pago
+                            <i class="fas fa-hand-holding-usd"></i> Enviar a Listos para Pago
                         </a>
                     </td>
                 </tr>
