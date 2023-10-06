@@ -17,7 +17,7 @@
             /*border: 1px solid #F2F2F2;*/
             width: 724px;
             /*height: 1100px;*/
-            margin-bottom: 10%;
+            margin-bottom: 8%;
         }
 
         .monospace {
