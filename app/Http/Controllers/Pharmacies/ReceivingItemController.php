@@ -96,14 +96,20 @@ class ReceivingItemController extends Controller
      */
     public function destroy(ReceivingItem $receivingItem)
     {
-      $product = Product::find($receivingItem->product_id);
-      $product->stock = $product->stock - $receivingItem->amount;
-      $product->save();
+        $product = Product::find($receivingItem->product_id);
+        if($product){
+            $product->stock = $product->stock - $receivingItem->amount;
+            $product->save();
 
-      $receiving = $receivingItem->receiving;
-      $receivingItem->delete();
+            $receiving = $receivingItem->receiving;
+            $receivingItem->delete();
 
-      session()->flash('success', 'Se ha eliminado el ítem.');
-      return redirect()->route('pharmacies.products.receiving.show', $receiving);
+            session()->flash('success', 'Se ha eliminado el ítem.');
+            return redirect()->route('pharmacies.products.receiving.show', $receiving);
+        }else{
+            session()->flash('warning', 'No se ha encontrado el producto que se intenta eliminar.');
+            return redirect()->route('pharmacies.products.receiving.show', $receiving);
+        }
+        
     }
 }
