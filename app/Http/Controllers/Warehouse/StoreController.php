@@ -252,4 +252,25 @@ class StoreController extends Controller
             return Storage::disk('gcs')->download($dte->cenabast_reception_file);
         }
     }
+
+
+
+    public function bypass(Request $request, $dte)
+    {
+        
+        $dte = Dte::findorFail($dte);
+        $dte->confirmation_status = 1;
+        $dte->confirmation_user_id = auth()->id();
+        $dte->confirmation_ou_id = auth()->user()->organizational_unit_id;
+        $dte->confirmation_at = now();
+        $dte->cenabast_signed_pharmacist = 1;
+        $dte->cenabast_signed_boss =1;
+        $dte->save();
+
+        session()->flash('info', 'Se realizo bypass con exito');
+        return redirect()->route('warehouse.cenabast.index');
+    }
+
+
+
 }
