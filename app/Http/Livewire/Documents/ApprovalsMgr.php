@@ -125,7 +125,7 @@ class ApprovalsMgr extends Component
 
     /**
      * Obtiene los approvals
-     * 
+     *
      * @return void
      */
     public function getApprovals()
