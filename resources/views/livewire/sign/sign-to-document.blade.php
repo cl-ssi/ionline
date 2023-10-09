@@ -15,16 +15,17 @@
                     <div class="modal-header">
                         <div class="container">
                             <div class="row">
-                                <div class="col-8 text-left">
+                                <div class="col-7 text-left">
                                     <h5 class="modal-title">
                                         Firmará como {{ $signer->shortName }}
                                     </h5>
                                 </div>
-                                <div class="col-4">
+                                <div class="col-5">
                                     <div class="row text-right">
-                                        <div class="col-9 text-right">
+                                        <div class="col-10 text-right">
                                             <div class="input-group ">
                                                 <input
+                                                    id="otp"
                                                     type="text"
                                                     class="form-control form-control-sm"
                                                     placeholder="OTP"
@@ -62,8 +63,15 @@
                                                     </button>
                                                 </div>
                                             </div>
+                                            <div class="text-left mt-1" style="line-height: 15px; font-height: 10px">
+                                                @if(isset($message))
+                                                    <small id="otp" class="text-danger">
+                                                        {{ $message }}
+                                                    </small>
+                                                @endif
+                                            </div>
                                         </div>
-                                        <div class="col-3 text-right">
+                                        <div class="col-2 text-right">
                                             <button
                                                 type="button"
                                                 class="close text-right"
