@@ -153,19 +153,31 @@
                             </button>
                             @include('replacement_staff.modals.modal_to_sign')
                             --}}
-                            
-                            <a class="btn btn-outline-secondary btn-sm" 
-                                href="{{ route('replacement_staff.request.to_sign', $requestReplacementStaff) }}">
-                                <i class="fas fa-signature"></i>
-                            </a>
-                            <br>
+
+                            @if($requestReplacementStaff->signatures_file_id != null)
+                                <span class="d-inline-block" 
+                                    tabindex="0" 
+                                    data-toggle="tooltip" 
+                                    title="La aprobación de Departamento de Gestión Financiera se trasladó al módulo Solicitud de Firmas">
+                                    <i class="fas fa-info-circle fa-2x"></i>
+                                </span>
+                            @else
+                                <a class="btn btn-outline-secondary btn-sm" 
+                                    href="{{ route('replacement_staff.request.to_sign', $requestReplacementStaff) }}">
+                                    <i class="fas fa-signature"></i>
+                                </a>
+                                <br>
+                            @endif
+
                             
                             @foreach($requestReplacementStaff->RequestSign as $sign)
                                 @if($sign->ou_alias == 'sub_rrhh' && $sign->request_status == "pending")
                                     @php $flagButton = 1; @endphp
-                                    <div class="form-check float-right">
-                                        <input class="form-check-input" type="checkbox" name="sign_id[]" value="{{ $sign->id }}" onclick="myFunction()" id="for_sign_id">
-                                    </div>
+                                    @if($requestReplacementStaff->form_type == "replacement")
+                                        <div class="form-check float-right">
+                                            <input class="form-check-input" type="checkbox" name="sign_id[]" value="{{ $sign->id }}" onclick="myFunction()" id="for_sign_id">
+                                        </div>
+                                    @endif
                                 @endif
                             @endforeach
                         </td>
@@ -185,10 +197,6 @@
             <br><br>
         @endif
     </form>
-    
-
-    
-    
 </div>
 
 <div class="col">
@@ -316,6 +324,15 @@
                             <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="{{ $sign->organizationalUnit->name }}" style="color: Tomato;">
                                 <i class="fas fa-times-circle fa-2x"></i>
                             </span>
+                            @endif
+                            @if($sign->request_status == 'not valid')
+                                @foreach($requestReplacementStaff->signaturesFile->signaturesFlows as $flow)
+                                    @if($flow->status == NULL)
+                                        <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="{{ $sign->organizationalUnit->name }}">
+                                            <i class="fas fa-clock fa-2x"></i>
+                                        </span>
+                                    @endif
+                                @endforeach
                             @endif
                         @endforeach
                         </br>

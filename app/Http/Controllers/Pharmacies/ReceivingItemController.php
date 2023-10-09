@@ -37,21 +37,25 @@ class ReceivingItemController extends Controller
      */
     public function store(Request $request)
     {
-      $this->validate($request, [
-          'barcode' => 'required|integer',
-          'amount' => 'required|numeric'
-      ]);
+        $this->validate($request, [
+            'barcode' => 'required|integer',
+            'amount' => 'required|numeric'
+        ]);
 
+        if(!$request->unity){
+            session()->flash('warning', 'Algunos datos no han sido reconocidos para registrar el movimiento. Actualice e intente nuevamente.');
+            return redirect()->back();
+        }
+        
+        $ReceivingItem = new ReceivingItem($request->all());
+        $ReceivingItem->save();
 
-      $ReceivingItem = new ReceivingItem($request->all());
-      $ReceivingItem->save();
+        $product = Product::find($request->product_id);
+        $product->stock = $product->stock + $request->amount;
+        $product->save();
 
-      $product = Product::find($request->product_id);
-      $product->stock = $product->stock + $request->amount;
-      $product->save();
-
-      session()->flash('success', 'Se ha guardado el detalle del ingreso.');
-      return redirect()->route('pharmacies.products.receiving.show', $ReceivingItem->receiving);
+        session()->flash('success', 'Se ha guardado el detalle del ingreso.');
+        return redirect()->route('pharmacies.products.receiving.show', $ReceivingItem->receiving);
     }
 
     /**
@@ -96,14 +100,20 @@ class ReceivingItemController extends Controller
      */
     public function destroy(ReceivingItem $receivingItem)
     {
-      $product = Product::find($receivingItem->product_id);
-      $product->stock = $product->stock - $receivingItem->amount;
-      $product->save();
+        $product = Product::find($receivingItem->product_id);
+        if($product){
+            $product->stock = $product->stock - $receivingItem->amount;
+            $product->save();
 
-      $receiving = $receivingItem->receiving;
-      $receivingItem->delete();
+            $receiving = $receivingItem->receiving;
+            $receivingItem->delete();
 
-      session()->flash('success', 'Se ha eliminado el ítem.');
-      return redirect()->route('pharmacies.products.receiving.show', $receiving);
+            session()->flash('success', 'Se ha eliminado el ítem.');
+            return redirect()->route('pharmacies.products.receiving.show', $receiving);
+        }else{
+            session()->flash('warning', 'No se ha encontrado el producto que se intenta eliminar.');
+            return redirect()->route('pharmacies.products.receiving.show', $receiving);
+        }
+        
     }
 }

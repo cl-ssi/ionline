@@ -109,7 +109,7 @@
                         @endif
                         {{ $pendingSignaturesFlow->signature->subject }}
                     </td>
-                    <td>{{ $pendingSignaturesFlow->signature->description }}</td>
+                    <td>{!! $pendingSignaturesFlow->signature->description !!}</td>
                     <td>{{ $pendingSignaturesFlow->signature->responsable->tinnyName }}</td>
                     <td>
                         @can('Documents: signatures and distribution')

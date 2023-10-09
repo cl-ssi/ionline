@@ -21,7 +21,7 @@ class PaymentController extends Controller
         return view('finance.payments.index');
     }
 
-    public function search(Request $request)
+    public function search(Request $request, $query)
     {
         $id = $request->input('id');
         $folio = $request->input('folio');
@@ -29,7 +29,7 @@ class PaymentController extends Controller
         $folio_compromiso = $request->input('folio_compromiso');
         $folio_devengo = $request->input('folio_devengo');
 
-        $query = Dte::query();
+        // $query = Dte::query();
 
         if ($id) {
             $query->where('id', $id);
@@ -71,17 +71,20 @@ class PaymentController extends Controller
 
     public function review(Request $request)
     {
-
         $query = Dte::with([
             'controls',
             'controls.store',
             'purchaseOrder',
             'establishment',
+            'dtes',
+            'invoices',
+            
             'requestForm',
-            'requestForm.father',
             'requestForm.requestFormFiles',
-            'requestForm.father.requestFormFiles',
             'requestForm.contractManager',
+
+            'requestForm.father',
+            'requestForm.father.requestFormFiles'
         ])
             ->where('confirmation_status', 1)
             ->where('establishment_id', auth()->user()->organizationalUnit->establishment->id)
@@ -92,7 +95,8 @@ class PaymentController extends Controller
 
 
         if ($request->filled('id') || $request->filled('folio') || $request->filled('oc') || $request->filled('folio_compromiso') || $request->filled('folio_devengo')) {
-            $query = $this->search($request);
+            //$query = $this->search($request);
+            $query = $this->search($request, $query);
         }
 
 
@@ -121,15 +125,31 @@ class PaymentController extends Controller
 
     public function ready(Request $request)
     {
-        $query = Dte::where('confirmation_status', 1)
+        $query = Dte::with([
+                'purchaseOrder',
+                'establishment',
+                'controls',
+                'controls.store',
+                'dtes',
+                'invoices',
+                'paymentFlows',
+
+                'requestForm',
+                'requestForm.requestFormFiles',
+                'requestForm.contractManager',
+    
+                'requestForm.father',
+                'requestForm.father.requestFormFiles'
+            ])
+            ->where('confirmation_status', 1)
             ->where('fin_status', 'Enviado a Pendiente Para Pago')
             ->where('establishment_id', auth()->user()->organizationalUnit->establishment_id);
 
             if ($request->filled('id') || $request->filled('folio') || $request->filled('oc') || $request->filled('folio_compromiso') || $request->filled('folio_devengo')) {
-                $query = $this->search($request);
+                $query = $this->search($request, $query);
             }
 
-        $dtes = $query->paginate(100);
+        $dtes = $query->paginate(50);
         $request->flash();
         return view('finance.payments.ready', compact('dtes', 'request'));
     }
@@ -139,12 +159,16 @@ class PaymentController extends Controller
     {
         $dtes = Dte::with([
             'establishment',
-            'confirmationUser'
+            'confirmationUser',
+            'purchaseOrder',
+            'requestForm',
+            'dtes',
+            'invoices'
         ])
             ->where('confirmation_status', 0)
             ->where('establishment_id', auth()->user()->organizationalUnit->establishment_id)
             ->orderByDesc('fecha_recepcion_sii')
-            ->paginate(100);
+            ->paginate(50);
         return view('finance.payments.rejected', compact('dtes'));
     }
 

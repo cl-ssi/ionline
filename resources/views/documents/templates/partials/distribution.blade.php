@@ -1,6 +1,10 @@
-@if($document->distributionHtml != null)
-<div class="firma seis" style="padding-top: 6px; padding-bottom: 8px; display: inline-block; vertical-align:top; width: 49%;">
-    <div style="padding-bottom: 4px;"><strong>DISTRIBUCIÓN:</strong></div>
-    <div style="padding-bottom: 4px;">{!! $document->distributionHtml !!}</div>
-</div>
-@endif
+<td style="width: 60%;">
+    @if($document->distribution)
+        <strong>DISTRIBUCIÓN:</strong>
+        @foreach(explode("\n", $document->distribution) as $distribution)
+        <li style="margin-left: 10px;">
+            {{ strtolower(str_replace("\r", "", $distribution)) }}
+        </li>
+        @endforeach
+    @endif
+</td>

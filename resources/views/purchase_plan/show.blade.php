@@ -10,9 +10,17 @@
     <div class="col-12">
         <h5 class="mb-3">
             <i class="fas fa-shopping-cart"></i> Plan de Compra: ID {{ $purchasePlan->id }}
-            @if($purchasePlan->status == "save")
-                <span class="badge bg-primary badge-sm">Guardado</span>
-            @endif
+            @switch($purchasePlan->status)
+                @case('save')
+                    <span class="badge bg-primary badge-sm">Guardado</span>
+                    @break
+            
+                @case('sent')
+                    <span class="badge bg-secondary badge-sm">Enviado</span>
+                    @break
+                @default
+                    ''
+            @endswitch
         </h5>
     </div>
 </div>
@@ -63,16 +71,25 @@
     </table>
 </div>
 
-<div class="col"> 
-    <a class="btn btn-primary btn-sm float-end"
-        href="{{ route('purchase_plan.edit', $purchasePlan) }}">
-        <i class="fas fa-edit"></i> Editar
-    </a>
+@if($purchasePlan->status == "save")
+<div class="row">
+    <div class="col">
+        <a class="btn btn-primary float-end"
+            href="{{ route('purchase_plan.edit', $purchasePlan) }}">
+            <i class="fas fa-edit"></i> Editar
+        </a>
+    </div>
 </div>
+@endif
 
 <br>
 
-<h6><i class="fas fa-info-circle"></i> 2. Ítems a comprar</h6>
+<div class="row"> 
+    <div class="col">
+        <h6><i class="fas fa-info-circle"></i> 2. Ítems a comprar</h6>
+    </div>
+</div>
+
 <div class="table-responsive">
     <table class="table table-bordered table-sm small">
         <thead>
@@ -127,6 +144,42 @@
                 <td></td>
             </tr>
         </tfoot>
+    </table>
+</div>
+
+<br>
+
+<div class="row"> 
+    <div class="col">
+        <h6><i class="fas fa-info-circle"></i> 3. Aprobaciones</h6>
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-bordered table-sm small">
+        <thead>
+            <tr class="text-center">
+                @foreach($purchasePlan->approvals as $approval)
+                <th width="" class="table-secondary">{{ $approval->organizationalUnit->name }}</th>
+                @endforeach
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="text-center">
+                @foreach($purchasePlan->approvals as $approval)
+                <td>
+                    @switch($approval->StatusInWords)
+                        @case('Pendiente')
+                            <i class="fas fa-clock"></i> {{ $approval->StatusInWords }}
+                            @break
+                    @endswitch
+
+                    {{ ($approval->approver) ? $approval->approver->FullName : '' }} <br>
+                    {{ ($approval->approver_at) ? $approval->approver_at->format('d-m-Y H:i:s') : '' }}
+                </td>           
+                @endforeach
+            </tr>
+        <tbody>
     </table>
 </div>
 

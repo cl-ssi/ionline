@@ -125,24 +125,4 @@ class ProgrammingController extends Controller
 
         return redirect()->back();
     }
-
-    public function show_total_rrhh(Programming $programming)
-    {
-        $professionalHours = ProfessionalHour::select(  
-            'pro_professional_hours.id'
-            ,'pro_professional_hours.professional_id'
-            ,'pro_professional_hours.programming_id'
-            ,'pro_professional_hours.value'
-            ,'T1.alias')
-        ->leftjoin('pro_professionals AS T1', 'pro_professional_hours.professional_id', '=', 'T1.id')
-        ->Where('programming_id',$programming->id)
-        ->orderBy('T1.alias','ASC')
-        ->get();
-
-        $programming->load('items.professionalHours');
-
-        // return $programming;
-
-        return view('programmings.programmings.show_total_rrhh', compact('programming', 'professionalHours'));
-    }
 }

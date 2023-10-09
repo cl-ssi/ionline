@@ -39,13 +39,11 @@
 
         <div style="clear: both; padding-bottom: 36px"></div>
 
-        <div>
+        <div class="content">
             {!! $document->contentHtml !!}
         </div>
 
-        @include('documents.templates.partials.distribution')
-
-        @include('documents.templates.partials.responsible')
+        @include('documents.templates.partials.distribution_and_responsible')
 
     </main>
 

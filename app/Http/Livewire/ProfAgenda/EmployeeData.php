@@ -10,6 +10,7 @@ use App\Models\Parameters\Bank;
 class EmployeeData extends Component
 {
     public $user_id = 0;
+    public $dv;
     public $email;
 
     // public function mount(){
@@ -20,6 +21,7 @@ class EmployeeData extends Component
 
     public function loadUserData(User $User){
         $this->user_id = $User->id;
+        $this->dv = $User->dv;
         $this->render();
     }
 

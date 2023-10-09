@@ -505,12 +505,13 @@ class RequestForm extends Model implements Auditable
         $program_search,
         $purchase_order_search,
         $tender_search,
-        $supplier_search
+        $supplier_search,
+        $subtype_search
     ) {
         if (
             $status_search or $status_purchase_search or $id_search or $folio_search or $name_search
             or $start_date_search or $end_date_search or $requester_search or $requester_ou_id or $admin_search
-            or $admin_ou_id or $purchaser_search or $program_search or $purchase_order_search or $tender_search or $supplier_search
+            or $admin_ou_id or $purchaser_search or $program_search or $purchase_order_search or $tender_search or $supplier_search or $subtype_search
         ) {
             if ($status_search != '') {
                 $query->where(function ($q) use ($status_search) {
@@ -626,6 +627,7 @@ class RequestForm extends Model implements Auditable
                     });
 
 
+
                 // ->join('cfg_suppliers', function ($join) use ($supplier_search) {
                 //     $join->on('arq_internal_purchase_orders.supplier_id', '=', 'cfg_suppliers.id')
                 //         ->where('arq_immediate_purchases.po_supplier_name', 'LIKE', '%'.$supplier_search.'%');
@@ -633,6 +635,13 @@ class RequestForm extends Model implements Auditable
 
 
                 /* Proveedores de las OC Interna */
+            }
+
+            // dd($status_subtype_search);
+            if ($subtype_search != '') {
+                $query->where(function ($q) use ($subtype_search) {
+                    $q->where('subtype', 'LIKE', $subtype_search.'%');
+                });
             }
         }
     }

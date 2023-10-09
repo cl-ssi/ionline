@@ -12,13 +12,22 @@ use App\User;
 
 class OpenHourController extends Controller
 {
+
+    public function index(Request $request)
+    {
+        $user_id_param = $request->user_id;
+        $openHours = OpenHour::whereNotNull('patient_id')->where('blocked',0)->orderBy('start_date', 'DESC')->where('profesional_id',$user_id_param)->get();
+        return view('prof_agenda.open_hours.index',compact('openHours','request'));
+    }
+
     public function store(Request $request){
 
-        // validación para dv de rut
-        if(!$request->dv){
-            session()->flash('warning', 'El campo dv no puede ser vacío.');
-            return redirect()->back();
-        }
+        
+        // // validación para dv de rut
+        // if($request->dv!=null){
+        //     session()->flash('warning', 'El campo dv no puede ser vacío.');
+        //     return redirect()->back();
+        // }
 
         // si el usuario se encuentra eliminado, se vuelve a dejar activo
         if(User::withTrashed()->find($request->user_id)){
@@ -155,4 +164,25 @@ class OpenHourController extends Controller
         session()->flash('success', 'Se eliminaron los bloques.');
         return redirect()->back();
     }   
+
+    public function assistance_confirmation(Request $request){
+        $openHour = OpenHour::find($request->openHours_id);
+        $openHour->assistance = true;
+        $openHour->save();
+
+        session()->flash('success', 'Se guardó la información.');
+        return redirect()->back();
+    }
+
+    public function absence_confirmation(Request $request){
+        $openHour = OpenHour::find($request->openHours_id);
+        $openHour->assistance = false;
+        $openHour->absence_reason = $request->absence_reason;
+        $openHour->save();
+
+        session()->flash('success', 'Se guardó la información.');
+        return redirect()->back();
+    }
+
+    
 }

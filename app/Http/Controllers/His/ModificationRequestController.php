@@ -10,8 +10,9 @@ use App\Models\His\ModificationRequestFile;
 
 class ModificationRequestController extends Controller
 {
-    public function __invoke(Request $request, ModificationRequest $modificationRequest)
+    public function show($modification_request_id)
     {
+        $modificationRequest = ModificationRequest::find($modification_request_id);
         $documentFile = \PDF::loadView('his.modification-request-show', compact('modificationRequest'));
         return $documentFile->stream();
     }

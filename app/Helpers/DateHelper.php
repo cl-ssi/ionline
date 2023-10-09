@@ -4,6 +4,7 @@ namespace App\Helpers;
 
 use Illuminate\Support\Facades\Cache;
 use App\Models\Parameters\Holiday;
+// use App\Models\Parameters\Holiday;
 
 class DateHelper
 {
@@ -14,10 +15,49 @@ class DateHelper
      * @param  \Illuminate\Support\Carbon  $endDate
      * @return \Illuminate\Support\Collection
      */
-    public static function getBusinessDaysByDateRange($startDate, $endDate, $holidays)
+    public static function getBusinessDaysByDateRange($startDate, $endDate)
     {
-        // $holidays = Cache::remember('holidays', 600, function () use($startDateHoliday, $endDateHoliday) {
-        //     return Holiday::whereBetween('date', [$startDateHoliday, $endDateHoliday])->get();
+        $holidays = Cache::remember('holidays', 600, function () use($startDate, $endDate) {
+            return Holiday::whereBetween('date', [$startDate, $endDate])->get();
+        });
+
+        // $holidays = Holiday::whereBetween('date', [$startDate, $endDate])->get();
+
+        $holidays = $holidays->map(function($holiday) {
+            return $holiday->date->format('Y-m-d');
+        });
+
+        $weekend = collect([0, 6]);
+
+        $startDate = $startDate->copy()->startOfDay();
+
+        $businessDays = collect();
+
+        while($startDate->lessThanOrEqualTo($endDate))
+        {
+            if($holidays->doesntContain($startDate->format('Y-m-d')) && $weekend->doesntContain($startDate->dayOfWeek))
+            {
+                $businessDays->push($startDate->format('Y-m-d'));
+            }
+
+            $startDate = $startDate->copy()->addDay();
+        }
+
+        return $businessDays;
+    }
+
+    /**
+     * Gets the business days for a date range
+     *
+     * @param  \Illuminate\Support\Carbon  $startDate
+     * @param  \Illuminate\Support\Carbon  $endDate
+     * @param  \Illuminate\Support\Holiday  $endDate
+     * @return \Illuminate\Support\Collection
+     */
+    public static function getBusinessDaysByDateRangeHolidays($startDate, $endDate, $holidays)
+    {
+        // $holidays = Cache::remember('holidays', 600, function () use($startDate, $endDate) {
+        //     return Holiday::whereBetween('date', [$startDate, $endDate])->get();
         // });
 
         // $holidays = Holiday::whereBetween('date', [$startDate, $endDate])->get();

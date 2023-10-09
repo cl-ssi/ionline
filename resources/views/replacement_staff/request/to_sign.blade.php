@@ -343,8 +343,10 @@
     </table>
 </div>
 
+{{--
+
 @if($requestReplacementStaff->budget_item_id != NULL)
-    <object type="application/pdf" data="{{ route('replacement_staff.request.create_budget_availability_certificate_view', [ $requestReplacementStaff ]) }}" width="100%" height="100%" style="height: 193vh;"><a href="{{-- route('request_forms.supply.fund_to_be_settled.download', $detail->pivot->fundToBeSettled->id) --}}" target="_blank">
+    <object type="application/pdf" data="{{ route('replacement_staff.request.create_budget_availability_certificate_view', [ $requestReplacementStaff ]) }}" width="100%" height="100%" style="height: 193vh;"><a href="" target="_blank">
         <i class="fas fa-file"></i> Ver documento</a>
     </object>
 @endif
@@ -368,6 +370,8 @@ $requestReplacementStaff->requestSign->where('ou_alias', 'finance')->first()->re
 
     <br><br>
 @endif
+
+--}}
 
 @endsection
 

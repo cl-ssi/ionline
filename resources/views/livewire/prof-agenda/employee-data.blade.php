@@ -8,7 +8,7 @@
 
     <fieldset class="form-group col-3 col-md-1">
         <label for="for_dv">Digito</label>
-        <input type="text" class="form-control" id="for_dv" name="dv" required>
+        <input type="text" class="form-control" id="for_dv" name="dv" wire:model.lazy="dv" required>
     </fieldset>
 
     <!-- <fieldset class="form-group col-3 col-md-1">

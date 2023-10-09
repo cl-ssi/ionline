@@ -4,7 +4,6 @@ namespace App\Http\Livewire\Finance;
 
 use Livewire\Component;
 use Livewire\WithFileUploads;
-use App\Models\Finance\Dte;
 use Illuminate\Support\Facades\Storage;
 
 class SigfeArchivoCompromiso extends Component

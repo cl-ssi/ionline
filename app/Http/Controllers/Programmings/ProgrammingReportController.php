@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 use App\Models\Programmings\Programming;
 use App\Models\Programmings\ProgrammingItem;
+use App\Models\Programmings\ProfessionalHour;
 use App\Models\Establishment;
 use App\Models\Commune;
 use App\User;
@@ -150,5 +151,60 @@ class ProgrammingReportController extends Controller
         // return $users;
 
         return view('programmings/reports/reportUsers', compact('users', 'role', 'commune'));
+    }
+
+    public function reportTotalRrhh(Request $request)
+    {
+        $year = $request->year ?? date("Y");
+        $establishments = collect();
+        $programming = $professionalHours = $establishment_id = null;
+        if(Auth()->user()->hasAllRoles('Programming: Comunal')){
+            $last_year = Programming::latest()->first()->year;
+            $last_programmings = Programming::with('establishment:id,type,name')->where('year', $last_year)->get();
+            //El usuario tiene acceso por establecimientos?
+            foreach($last_programmings as $programming){
+                if(Str::contains($programming->access, Auth()->user()->id))
+                    $establishments->push($programming->establishment);
+            }
+
+            $programmings = Programming::with('establishment:id,type,name')
+                ->where('year', $year)
+                ->when($establishments != null, function($q) use($establishments){
+                    $q->whereIn('establishment_id', $establishments->pluck('id')->toArray());
+                })
+                ->get();
+        }elseif(Auth()->user()->hasAllRoles('Programming: Admin') || Auth()->user()->hasAllRoles('Programming: Review')){
+            $programmings = Programming::with('establishment:id,type,name')->where('year', $year)->get();
+            foreach($programmings as $programming)
+                $establishments->push($programming->establishment);
+        }else{
+            session()->flash('warning', 'Estimado Usuario/a: no tiene los permisos para acceso a los reportes.');
+            return redirect()->back();
+        }
+
+        if($programmings->isEmpty()){
+            session()->flash('warning', 'Estimado Usuario/a: no existe programación numérica para el año seleccionado.');
+            return redirect()->route('programming.reportTotalRrhh');
+        }
+        // return $establishments;
+        $establishment_id = $request->has('establishment_id') ? $request->establishment_id : $establishments->first()->id;
+        if(count($request->all()) > 0){
+            $programming = Programming::where('year', $year)->where('establishment_id', $establishment_id)->first();
+            $professionalHours = ProfessionalHour::select(  
+                'pro_professional_hours.id'
+                ,'pro_professional_hours.professional_id'
+                ,'pro_professional_hours.programming_id'
+                ,'pro_professional_hours.value'
+                ,'T1.alias')
+            ->leftjoin('pro_professionals AS T1', 'pro_professional_hours.professional_id', '=', 'T1.id')
+            ->Where('programming_id',$programming->id)
+            ->orderBy('T1.alias','ASC')
+            ->get();
+
+            $programming->load('items.professionalHours');
+            // return $programming;
+        }
+
+        return view('programmings.reports.reportTotalRrhh', compact('programming', 'professionalHours', 'establishments', 'establishment_id', 'year'));
     }
 }

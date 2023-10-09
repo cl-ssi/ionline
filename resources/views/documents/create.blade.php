@@ -151,6 +151,7 @@
             }
             /* Oficio */
             if ("2" === this.value) {
+                $("#forDate").val("");
             }
             /* Carta */
             if ("3" === this.value) {
@@ -167,6 +168,9 @@
                 $("#forFor").removeAttr("required");
                 $("#forSubject").removeAttr("required");
                 $("#collapse").hide();
+                $("#forDate").val("");
+                var contenido = '<h4>VISTOS</h4><div style="text-align: justify;">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fugit eligendi officia veritatis doloremque dolore harum necessitatibus, ad, natus accusantium quaerat quisquam amet eos, nihil ab dicta soluta numquam temporibus deleniti ad, natus accusantium quaerat quisquam amet eos, nihil ab dicta soluta numquam temporibus deleniti!</div><h4>CONSIDERANDO</h4><ol><li><span style="text-align: justify;">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fugit eligendi officia veritatis doloremque dolore harum necessitatibus, ad, natus accusantium quaerat quisquam amet eos, nihil ab dicta soluta numquam temporibus deleniti! </span></li><li><span style="text-align: justify;">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fugit eligendi officia veritatis doloremque dolore harum necessitatibus, ad, natus accusantium quaerat quisquam amet eos, nihil ab dicta soluta numquam temporibus deleniti!</span></li></ol><h4>RESUELVO</h4><ol><li>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fugit eligendi officia veritatis doloremque dolore harum necessitatibus, ad, natus accusantium quaerat quisquam amet eos, nihil ab dicta soluta numquam temporibus deleniti!</li><li>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fugit eligendi officia veritatis doloremque dolore harum necessitatibus, ad, natus accusantium quaerat quisquam amet eos, nihil ab dicta soluta numquam temporibus deleniti!</li><li>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fugit eligendi officia veritatis doloremque dolore harum necessitatibus, ad, natus accusantium quaerat quisquam amet eos, nihil ab dicta soluta numquam temporibus deleniti!</li></ol><h4 style="text-align: center;">&nbsp;</h4><h4 style="text-align: center;"><strong>AN&Oacute;TESE, COMUN&Iacute;QUESE, ARCH&Iacute;VESE.</strong></h4>';
+                tinyMCE.activeEditor.setContent(contenido);
             }
             /* Convenio */
             if ("6" === this.value) {

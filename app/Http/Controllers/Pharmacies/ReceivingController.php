@@ -123,18 +123,33 @@ class ReceivingController extends Controller
     {
         //se modifica el stock del producto
         $amount = 0;
+        $flag = 0;
         foreach ($receiving->receivingItems as $key => $receivingItem){
-          $product = Product::find($receivingItem->product_id);
-          $product->stock = $product->stock - $receivingItem->amount;
-          $product->save();
+            $product = Product::find($receivingItem->product_id);
 
-          $receivingItem->delete();
+            if($product){
+                $product->stock = $product->stock - $receivingItem->amount;
+                $product->save();
+
+                $receivingItem->delete();
+            }else{
+                $flag=1;
+            }
         }
 
-        //se elimina la cabecera y detalles
-        $receiving->delete();
-        session()->flash('success', 'El ingreso se ha sido eliminado');
-        return redirect()->route('pharmacies.products.receiving.index');
+        if($flag==0)
+        {
+            //se elimina la cabecera y detalles
+            $receiving->delete();
+            session()->flash('success', 'El ingreso se ha sido eliminado');
+            return redirect()->route('pharmacies.products.receiving.index');
+        }
+        else
+        {
+            session()->flash('warning', 'Se han eliminad detalles, pero no se ha eliminado el ingreso por que no se encontró uno de los productos. Intente nuevamente.');
+            return redirect()->route('pharmacies.products.receiving.index');
+        }
+        
     }
 
     public function record(Receiving $receiving)

@@ -49,9 +49,9 @@
                 <th class="text-left align-middle table-dark" >Id</th> 
                 <th class="text-left align-middle table-dark" >Comuna</th>
                 <th class="text-left align-middle table-dark" >Establecimiento</th>
-                @if($request->year >= 2023 || $year >= 2023)
+                {{--@if($request->year >= 2023 || $year >= 2023)
                 <th class="text-left align-middle table-dark" ></th>
-                @endif
+                @endif--}}
                 <th class="text-left align-middle table-dark" >Año</th>
                 <th class="text-center align-middle table-dark">Productos de Programación</th>
             </tr>
@@ -89,14 +89,14 @@
                 {{ $programming->id }}</td>
                 <td>{{ $programming->establishment->commune->name}}</td>
                 <td>{{ $programming->establishment->type }} {{ $programming->establishment->name }}</td>
-                @if($request->year >= 2023 || $year >= 2023)
+                {{--@if($request->year >= 2023 || $year >= 2023)
                 <!-- Falta especificar los permisos para qienes pueden tener acceso a RRHH -->
                 <td>
                     <a href="{{ route('programming.show_total_rrhh', $programming->id) }}" class="btn btb-flat btn-sm btn-success">
                         <span class="small d-none d-sm-none d-md-inline">Total RRHH</span> 
                     </a>
                 </td>
-                @endif
+                @endif--}}
                 <td>{{ $programming->year }}</td>
                 <td class="text-right ">
                 <!-- Permiso para asignar profesionales a la programación númerica en proceso -->
@@ -159,9 +159,7 @@
         </tbody>
     </table>
 </div>
-</div> <!-- close main div -->
 
-<div class="container">
 @can('TrainingItem: view')
 <div class="table-responsive">
     <table class="table table-sm table-hover mx-auto w-auto">

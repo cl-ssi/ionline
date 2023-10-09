@@ -33,6 +33,10 @@ main {
     margin-left: 50px;
 }
 
+.content {
+    padding-bottom: 30px;
+}
+
 .seis {
     font-size: 0.6rem;
 }

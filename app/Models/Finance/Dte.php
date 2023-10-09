@@ -117,7 +117,10 @@ class Dte extends Model implements Auditable
         'rejected',
         'reason_rejection',
         'rejected_user_id',
-        'rejected_at'
+        'rejected_at',
+
+        'comprobante_liquidacion_fondo',
+        'archivo_carga_manual',
     ];
 
     /**
@@ -142,6 +145,18 @@ class Dte extends Model implements Auditable
         'confirmation_at',
     ];
 
+    /**
+     * tipo_documento
+     * ==============
+     * factura_electronica
+     * factura_exenta
+     * guias_despacho
+     * nota_debito
+     * nota_credito
+     * boleta_honorarios
+     * boleta_electronica
+     */
+
     public function purchaseOrder()
     {
         return $this->belongsTo(PurchaseOrder::class, 'folio_oc', 'code');
@@ -151,6 +166,24 @@ class Dte extends Model implements Auditable
     public function controls()
     {
         return $this->hasMany(Control::class, 'po_code', 'folio_oc');
+    }
+
+    /**
+     * Una factura puede tener muchas dtes
+     * y las DTES deberían ser del tipo guia, notas de crédito o débito
+     */
+    public function dtes()
+    {
+        return $this->belongsToMany(Dte::class,'fin_invoice_dtes','invoice_id','dte_id')->withTimestamps();
+    }
+
+    /** 
+     * Y por el contrario, una DTE de tipo guia de despacho, nota de crédito o débito
+     * podría pertenecer a una o muchas facturas
+     */
+    public function invoices()
+    {
+        return $this->belongsToMany(Dte::class,'fin_invoice_dtes','dte_id','invoice_id')->withTimestamps();
     }
 
     /**
@@ -244,9 +277,9 @@ class Dte extends Model implements Auditable
         return $this->belongsTo(User::class, 'confirmation_user_id');
     }
 
-    public function dtes()
+    public function getTipoDocumentoInicialesAttribute()
     {
-        return $this->hasMany(Dte::class,'id','dte_id');
+        return strtoupper(implode('', array_map(fn($s) => substr($s, 0, 1), explode("_", $this->tipo_documento))));
     }
 
 

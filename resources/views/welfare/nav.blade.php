@@ -54,6 +54,10 @@
                 <a class="dropdown-item" href="{{ route('welfare.amipass.value.indexValue') }}">
                     <i class="fas fa-calendar-alt"></i> Valor de Carga Amipass Anual
                 </a>
+                
+                <a class="dropdown-item" href="{{ route('welfare.amipass.report-by-dates') }}">
+                    <i class="fas fa-calendar-alt"></i> Reporte por fechas
+                </a>
             </div>
         </li>
     @endcanany

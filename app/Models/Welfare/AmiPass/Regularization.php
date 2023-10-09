@@ -25,9 +25,7 @@ class Regularization extends Model
     *
     * @var array
     */
-    // protected $dates = [
-    //     'fecha',
-    // ];
+    
 
     /**
     * The primary key associated with the table.

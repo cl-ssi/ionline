@@ -37,19 +37,36 @@ class Agenda extends Component
             $array[$count]['end'] = $hour->end_date;
             // reservado
             if($hour->patient_id){
-                $array[$count]['color'] = "#EB9489";
-                $array[$count]['title'] = $hour->patient->shortName;
-                $array[$count]['status'] = "Reservado";
+                // hora reservada
+                if($hour->assistance === null){
+                    $array[$count]['color'] = "#E7EB89"; //amarillo
+                    $array[$count]['title'] = $hour->patient->shortName;
+                    $array[$count]['status'] = "Reservado";
+                }else{
+                    // paciente asistió
+                    if($hour->assistance == 1){
+                        $array[$count]['color'] = "#C4F7BF"; // verde
+                        $array[$count]['title'] = $hour->patient->shortName;
+                        $array[$count]['status'] = "Asistió";
+                    }
+                    if($hour->assistance == 0){
+                        $array[$count]['color'] = "#EB9489"; // rojo
+                        $array[$count]['title'] = $hour->patient->shortName;
+                        $array[$count]['status'] = "No asistió";
+                        $array[$count]['absence_reason'] = $hour->absence_reason;
+                    }
+                }
+                
             }
             // sin reserva
             else{
-                $array[$count]['color'] = "#CACACA";
+                $array[$count]['color'] = "#CACACA"; //plomo
                 $array[$count]['title'] = $hour->activityType->name;
                 $array[$count]['status'] = "Disponible";
             }
             // bloqueado
             if($hour->blocked){
-                $array[$count]['color'] = "#85C1E9";
+                $array[$count]['color'] = "#85C1E9"; //celeste
                 $array[$count]['title'] = "Bloqueado";
                 $array[$count]['status'] = "Bloqueado";
                 $array[$count]['deleted_bloqued_observation'] = $hour->deleted_bloqued_observation;
@@ -64,7 +81,7 @@ class Agenda extends Component
             $array[$count]['contact_number'] = null;
             $array[$count]['start'] = $holiday->date->format('Y-m-d') . " 00:00";
             $array[$count]['end'] = $holiday->date->format('Y-m-d') . " 23:59";
-            $array[$count]['color'] = '#E7EB89'; //amarillo
+            $array[$count]['color'] = '#444444'; //amarillo
             $array[$count]['title'] = "Feriado: " . $holiday->name;
             $array[$count]['status'] = "Feriado: " . $holiday->name;
             $array[$count]['deleted_bloqued_observation'] = null;

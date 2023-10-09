@@ -130,6 +130,15 @@
                         </div>
                     </div>
 
+
+                    <div class="form-group row">
+                        <div class="col-8 offset-2">
+                            <div class="form-check">
+                                <a class="card-link" href="{{route('password.request')}}">{{ __('¿Olvido su contraseña?') }}</a>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="form-group row">
                         <div class="col-8 offset-4">
                             <div class="form-check">

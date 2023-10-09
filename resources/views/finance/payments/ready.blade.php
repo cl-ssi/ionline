@@ -1,26 +1,23 @@
 @extends('layouts.app')
 @section('title', 'Flujos de Pago')
 @section('content')
-    @include('finance.nav')
-    <h3 class="mb-3">Bandeja de Pendientes de Pago</h3>
+    @include('finance.payments.partials.nav')
+    <h3 class="mb-3">Bandeja listos para pago</h3>
 
     <form action="{{ route('finance.payments.ready') }}" method="GET">
         <div class="form-row mb-3">
             <div class="col-md-2">
-                <input type="text" class="form-control" name="id" placeholder="id" value="{{ old('id') }}" autocomplete="off">
+                <input type="text" class="form-control" name="id" placeholder="id" value="{{ old('id') }}"
+                    autocomplete="off">
             </div>
             <div class="col-md-2">
-                <input type="text" class="form-control" name="folio" placeholder="folio" value="{{ old('folio') }}" autocomplete="off">
+                <input type="text" class="form-control" name="folio" placeholder="folio" value="{{ old('folio') }}"
+                    autocomplete="off">
             </div>
             <div class="col-md-2">
-                <input type="text" class="form-control" name="oc" placeholder="oc" value="{{ old('oc') }}" autocomplete="off">
+                <input type="text" class="form-control" name="oc" placeholder="oc" value="{{ old('oc') }}"
+                    autocomplete="off">
             </div>
-            {{-- <div class="col-md-2">
-                <input type="text" class="form-control" name="folio_compromiso" placeholder="folio compromiso SIGFE" value="{{ old('folio_compromiso') }}" autocomplete="off">
-            </div>
-            <div class="col-md-2">
-                <input type="text" class="form-control" name="folio_devengo" placeholder="folio devengo SIGFE" value="{{ old('folio_devengo') }}" autocomplete="off">
-            </div> --}}
             <div class="col-md-1">
                 <input class="btn btn-outline-secondary" type="submit" value="Buscar">
             </div>
@@ -37,12 +34,14 @@
                     <th>FR</th>
                     <th>Doc. de Pago</th>
                     <th>Adjuntos</th>
-                    <th>Anexos</th>
+                    {{-- Sin Anexos hasta averiguar si son necesarios
+                    <th>Anexos</th> --}}
                     <th>Bod</th>
                     <th>Estado</th>
                     <th>Folio Sigfe</th>
                     <th>Observaciones</th>
-                    <th>Guardar</th>
+                    <th>Comprobante de licitación de Fondos</th>
+                    {{-- <th>Guardar</th> --}}
                 </tr>
             </thead>
             <tbody>
@@ -50,33 +49,13 @@
                     <tr>
                         <td class="small">{{ $dte->id }}</td>
                         <td>
-                            {{ $dte->tipo_documento }}
-                            <br>
-                            {{ $dte->emisor }}
-                            <br>
-                            @if ($dte->tipo_documento != 'boleta_honorarios')
-                                <a href="http://dipres2303.acepta.com/ca4webv3/PdfView?url={{ $dte->uri }}"
-                                    target="_blank" class="btn btn-sm mb-1 btn-outline-secondary">
-                                    <i class="fas fa-file-pdf text-danger"></i> {{ $dte->folio }}
-                                </a>
-                            @else
-                                <a href="{{ $dte->uri }}" target="_blank" class="btn btn-sm mb-1 btn-outline-secondary">
-                                    <i class="fas fa-file-pdf text-danger"></i> {{ $dte->folio }}
-                                </a>
-                            @endif
+                            @include('finance.payments.partials.dte-info')
                         </td>
                         <td class="small">
                             {{ $dte->folio_oc }}
                         </td>
                         <td>
-                            @if ($dte->requestform)
-                                <a
-                                    href="{{ route('request_forms.show', $dte->requestform->id) }}">{{ $dte->requestform->folio }}</a>
-                                @if ($dte->requestform->father)
-                                    <br>(<a
-                                        href="{{ route('request_forms.show', $dte->requestform->father->id) }}">{{ $dte->requestform->father->folio }}</a>)
-                                @endif
-                            @endif
+                            @include('finance.payments.partials.fr-info')
                         </td>
                         <td>
                             <ul>
@@ -85,35 +64,20 @@
                                         @foreach ($dte->requestform->father->paymentDocs as $paymentDoc)
                                             <li>{{ $paymentDoc->name ?? '' }}</li>
                                         @endforeach
-                                    @else
-                                        @foreach ($dte->requestform->paymentDocs as $paymentDoc)
-                                            <li>{{ $paymentDoc->name ?? '' }}</li>
-                                        @endforeach
                                     @endif
+
+                                    @foreach ($dte->requestform->paymentDocs as $paymentDoc)
+                                        <li>{{ $paymentDoc->name ?? '' }}</li>
+                                    @endforeach
                                 @endif
                             </ul>
                         </td>
                         <td>
-                            @if ($dte->requestform)
-                                @if ($dte->requestform->father)
-                                    @foreach ($dte->requestform->father->requestFormFiles as $requestFormFile)
-                                        <a href="{{ route('request_forms.show_file', $requestFormFile) }}"
-                                            class="list-group-item list-group-item-action py-2 small" target="_blank">
-                                            <i class="fas fa-file"></i> {{ $requestFormFile->name }} -
-                                            <i class="fas fa-calendar-day"></i>
-                                            {{ $requestFormFile->created_at->format('d-m-Y H:i') }}</a>
-                                    @endforeach
-                                @else
-                                    @foreach ($dte->requestform->requestFormFiles as $requestFormFile)
-                                        <a href="{{ route('request_forms.show_file', $requestFormFile) }}"
-                                            class="list-group-item list-group-item-action py-2 small" target="_blank">
-                                            <i class="fas fa-file"></i> {{ $requestFormFile->name }} -
-                                            <i class="fas fa-calendar-day"></i>
-                                            {{ $requestFormFile->created_at->format('d-m-Y H:i') }}</a>
-                                    @endforeach
-                                @endif
-                            @endif
+                            @include('finance.payments.partials.fr-files')
                         </td>
+                        {{-- 
+                        Se comenta la linea de Anexos
+                        
                         <td>
                             @if ($dte->requestform && $dte->requestform->purchasingProcess)
                                 @foreach ($dte->requestform->purchasingProcess->details->count() > 0 ? $dte->requestform->purchasingProcess->details : $dte->requestform->purchasingProcess->detailsPassenger as $key => $detail)
@@ -176,7 +140,7 @@
                                     @endforeach
                                 @endif
                             @endif
-                        </td>
+                        </td> --}}
                         <td>
                             @foreach ($dte->controls as $control)
                                 <a href="{{ route('warehouse.control.show', [
@@ -205,9 +169,12 @@
                                     <option value="Pagado" @if ($dte->estado == 'Pagado') selected @endif>Pagado
                                     </option>
                                 </select>
+
+                                <button type="submit" class="btn btn-sm btn-primary">Guardar</button>
+                            </form>
                         </td>
                         <td>
-                            <input type="number" name="folio_sigfe" class="form-input"
+                            <input type="number" name="folio_sigfe" class="form-input small"
                                 value={{ $dte->folio_sigfe }}required>
                         </td>
                         <td>
@@ -221,10 +188,8 @@
                             </textarea>
                         </td>
                         <td>
-                            <button type="submit" class="btn btn-sm btn-primary">Guardar</button>
-                            </form>
+                            @livewire('finance.sigfe-archivo-comprobante', ['dte' => $dte], key($dte->id))
                         </td>
-
                     </tr>
                 @endforeach
 

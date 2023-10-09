@@ -21,7 +21,7 @@
                 <i class="fas fa-filter"></i>
             </button>
         </div>
-        <div class="form-group col-md-1">
+        <div class="form-group col-md-2">
             <label for="for_filter">&nbsp;</label>
             <a href="{{ route('documents.approvals') }}" class="btn btn-outline-secondary form-control">
                 Actualizar

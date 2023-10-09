@@ -122,9 +122,11 @@ class ProductDuedateBatchStock extends Component
     }
 
     public function foo(){
-      $product = Product::where('barcode',$this->barcode)->first();
-      $this->product_id = $product->id;
-      $this->setProduct($product);
+        $product = Product::where('barcode',$this->barcode)->first();
+        if($product){
+            $this->product_id = $product->id;
+            $this->setProduct($product);
+        }
     }
 
     public function render()

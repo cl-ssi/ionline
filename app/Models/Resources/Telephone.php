@@ -22,7 +22,11 @@ class Telephone extends Model
      *
      * @var array
      */
-    protected $dates = ['deleted_at'];
+
+     protected $casts = [
+        'deleted_at' => 'datetime'
+    ];    
+     
 
     /**
      * The attributes that are mass assignable.

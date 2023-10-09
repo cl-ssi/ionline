@@ -9,6 +9,7 @@ use App\Models\ProfAgenda\Proposal;
 use App\Models\ProfAgenda\OpenHour;
 use App\Models\Parameters\Profession;
 use App\User;
+use Illuminate\Support\Facades\Auth;
 
 use App\Models\Parameters\Holiday;
 use Carbon\Carbon;
@@ -23,7 +24,13 @@ class ProposalController extends Controller
      */
     public function index()
     {
-        $proposals = Proposal::all();
+        if(Auth::user()->can('Agenda UST: Administrador')){
+            $proposals = Proposal::all();
+        }
+        if(Auth::user()->can('Agenda UST: Funcionario')){
+            $proposals = Proposal::where('user_id',Auth::user()->id)->get();
+        }
+        
         return view('prof_agenda.proposals.index', compact('proposals'));
     }
 
@@ -214,8 +221,15 @@ class ProposalController extends Controller
             }
         }
 
-        $users = User::whereHas('agendaProposals')->get();
+        // se devuelve usuarios según rol asignado
+        if(Auth::user()->can('Agenda UST: Administrador')){
+            $users = User::whereHas('agendaProposals')->get();
+        }
+        if(Auth::user()->can('Agenda UST: Funcionario')){
+            $users = User::whereHas('agendaProposals')->where('id',Auth::user()->id)->get();
+        }
 
+        // validación para msg
         if($count>0){
             session()->flash('success', 'Se han creado ' . $count . ' bloques.');
         }

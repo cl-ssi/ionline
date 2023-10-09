@@ -256,8 +256,7 @@ use App\Http\Controllers\Agreements\AccountabilityController;
 use App\Http\Livewire\Warehouse\Cenabast\CenabastIndex;
 use App\Http\Controllers\PurchasePlan\PurchasePlanController;
 
-
-
+use App\Http\Controllers\PasswordResetController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -678,7 +677,7 @@ Route::prefix('agreements')->as('agreements.')->middleware(['auth', 'must.change
 Route::middleware(['auth', 'must.change.password'])->group(function () {
     Route::resource('programmings', ProgrammingController::class)->middleware('auth');
     Route::put('programmingStatus/{id}', [ProgrammingController::class, 'updateStatus'])->middleware('auth')->name('programmingStatus.update');
-    Route::get('programming/{programming}/show_total_rrhh', [ProgrammingController::class, 'show_total_rrhh'])->middleware('auth')->name('programming.show_total_rrhh');
+    // Route::get('programming/{programming}/show_total_rrhh', [ProgrammingController::class, 'show_total_rrhh'])->middleware('auth')->name('programming.show_total_rrhh');
 
     Route::resource('programmingitems', ProgrammingItemController::class)->middleware('auth');
     Route::post('/programmingitemsclone/{id}', [ProgrammingItemController::class, 'clone'])->name('programmingitems.clone');
@@ -735,7 +734,7 @@ Route::middleware(['auth', 'must.change.password'])->group(function () {
     Route::get('reportConsolidated', [ProgrammingReportController::class, 'reportConsolidated'])->middleware('auth')->name('programming.reportConsolidated');
     Route::get('reportConsolidatedSep', [ProgrammingReportController::class, 'reportConsolidatedSep'])->middleware('auth')->name('programming.reportConsolidatedSep');
     Route::get('reportUsers', [ProgrammingReportController::class, 'reportUsers'])->middleware('auth')->name('programming.reportUsers');
-
+    Route::get('reportTotalRrhh', [ProgrammingReportController::class, 'reportTotalRrhh'])->middleware('auth')->name('programming.reportTotalRrhh');
     //Reportes Observaciones de Programación Númerica APS
     Route::get('reportObservation', [ProgrammingReportController::class, 'reportObservation'])->middleware('auth')->name('programming.reportObservation');
 });
@@ -839,7 +838,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
 
         Route::get('no-records', NoAttendanceRecordIndex::class)->name('no-records.index');
         Route::get('no-records-mgr', NoAttendanceRecordMgr::class)->name('no-records.mgr');
-        Route::get('no-records/{noAttendanceRecord}', [NoAttendanceRecordController::class,'show'])->name('no-records.show');
+        Route::get('no-records/{no_attendance_record_id}', [NoAttendanceRecordController::class,'show'])->name('no-records.show');
         Route::get('no-records/{noAttendanceRecord}/confirmation', NoAttendanceRecordConfirmation::class)->name('no-records.confirmation');
         Route::get('reasons', ReasonMgr::class)->name('reason.mgr');
     });
@@ -1749,6 +1748,7 @@ Route::prefix('warehouse')->as('warehouse.')->middleware(['auth', 'must.change.p
         Route::get('/download-signed/{dte}/dte', [StoreController::class, 'downloadSigned'])->name('download.signed');
         Route::delete('/delete-file/{dte}', [StoreController::class, 'deleteFile'])->name('deleteFile');
         Route::get('/callback/{dte}/dte', [StoreController::class, 'callback'])->name('callback');
+        Route::post('/bypass/{dte}', [StoreController::class, 'bypass'])->name('bypass');
     });
 
     Route::prefix('visation_contract_manager')->as('visation_contract_manager.')->group(function () {
@@ -1829,12 +1829,15 @@ Route::prefix('prof_agenda')->as('prof_agenda.')->middleware(['auth'])->group(fu
     });
 
     Route::prefix('open_hour')->as('open_hour.')->middleware(['auth'])->group(function () {
+        Route::get('/', [OpenHourController::class, 'index'])->name('index');
         // Route::get('/', [OpenHourController::class, 'index'])->name('index');
         // Route::get('/edit/{proposal}', [OpenHourController::class, 'edit'])->name('edit');
         // Route::put('/update/{proposal}', [OpenHourController::class, 'update'])->name('update');
         // Route::get('/create', [OpenHourController::class, 'create'])->name('create');
         Route::post('/store', [OpenHourController::class, 'store'])->name('store');
         Route::post('/delete_reservation', [OpenHourController::class, 'delete_reservation'])->name('delete_reservation');
+        Route::post('/assistance_confirmation', [OpenHourController::class, 'assistance_confirmation'])->name('assistance_confirmation');
+        Route::post('/absence_confirmation', [OpenHourController::class, 'absence_confirmation'])->name('absence_confirmation');  
         Route::post('/destroy', [OpenHourController::class, 'destroy'])->name('destroy');
         Route::get('/change_hour/{id}/{start_date}', [OpenHourController::class, 'change_hour'])->name('change_hour');
         Route::post('/block', [OpenHourController::class, 'block'])->name('block');
@@ -1954,6 +1957,8 @@ Route::prefix('finance')->as('finance.')->middleware(['auth', 'must.change.passw
     Route::get('dte/{dte}/store', [DteController::class, 'store'])->name('dtes.confirmation.store');
     Route::get('dte/{dte}/confirmation-signature-file', [DteController::class, 'pdf'])->name('dtes.confirmation.pdf');
 
+    Route::get('/{dte}/download', [DteController::class, 'downloadManualDteFile'])->name('dtes.downloadManualDteFile');
+
     Route::get('dtes/upload', UploadDtes::class)->name('dtes.upload');
     Route::get('dtes/{dte}/confirmation', DteConfirmation::class)->name('dtes.confirmation');
     Route::prefix('payments')->as('payments.')->group(function () {
@@ -1978,6 +1983,7 @@ Route::prefix('purchase_plan')->as('purchase_plan.')->middleware(['auth', 'must.
     Route::get('/all_index', [PurchasePlanController::class, 'all_index'])->name('all_index');
     Route::get('/create', [PurchasePlanController::class, 'create'])->name('create');
     Route::get('/{purchasePlan}/show', [PurchasePlanController::class, 'show'])->name('show');
+    Route::get('/{purchase_plan_id}/show_approval', [PurchasePlanController::class, 'show_approval'])->name('show_approval');
     Route::get('/{purchasePlan}/edit', [PurchasePlanController::class, 'edit'])->name('edit');
 });
 
@@ -2009,9 +2015,9 @@ Route::prefix('request_forms'])->name('request_forms.')->group(function () {
 */
 
 Route::prefix('request_forms')->as('request_forms.')->middleware(['auth', 'must.change.password'])->group(function () {
-    Route::get('/info/info_circular_n2_2022', function () {
-        return Storage::disk('gcs')->response('ionline/request_forms/info/circular_n2_2022.pdf');
-    })->name('info_circular_n2_2022');
+    Route::get('/info/info_circular_n75_2023', function () {
+        return Storage::disk('gcs')->response('ionline/request_forms/info/info_circular_n75_2023.pdf');
+    })->name('info_circular_n75_2023');
 
     Route::get('/my_forms', [RequestFormController::class, 'my_forms'])->name('my_forms');
     Route::get('/all_forms', [RequestFormController::class, 'all_forms'])->name('all_forms');
@@ -2368,6 +2374,7 @@ Route::prefix('welfare')->as('welfare.')->middleware(['auth', 'must.change.passw
         Route::get('/report-by-dates', ReportByDates::class)->name('report-by-dates');
         Route::prefix('value')->as('value.')->group(function () {
             Route::get('/', [AmipassController::class, 'indexValue'])->name('indexValue');
+            Route::get('reportByDates', [AmipassController::class, 'reportByDates'])->name('reportByDates');
             Route::get('/create', [AmipassController::class, 'createValue'])->name('createValue');
             Route::post('/store', [AmipassController::class, 'storeValue'])->name('storeValue');
         });
@@ -2459,7 +2466,7 @@ Route::prefix('his')->as('his.')->middleware('auth')->group(function () {
         Route::get('/', ModificationRequestIndex::class)->name('index');
         Route::get('/new', NewModification::class)->name('new');
         Route::get('/mgr', ModificationMgr::class)->name('mgr');
-        Route::get('/{modificationRequest}/show', ModificationRequestController::class)->name('show');
+        Route::get('/{modification_request_id}/show', [ModificationRequestController::class,'show'])->name('show');
         Route::view('/parameters', 'his.parameters')->name('parameters');
 
         Route::prefix('files')->as('files.')->group(function () {
@@ -2580,3 +2587,13 @@ Route::get('/attendances/unregistered', function () {
 Route::get('/attendances/main', function() {
     return view('attendances.main');
 })->name('attendances.main');
+
+## OLVIDO CONTRASEÑA
+
+Route::get('/forgot-password', [PasswordResetController::class, 'startPasswordReset'])->middleware('guest')->name('password.request');
+
+Route::post('/forgot-password', [PasswordResetController::class, 'forgotPassword'])->middleware('guest')->name('password.email');
+
+Route::get('/reset-password/{token}', [PasswordResetController::class, 'resetPasswordToken'])->middleware('guest')->name('password.reset');
+
+Route::post('/reset-password', [PasswordResetController::class, 'resetPassword'])->middleware('guest')->name('password.update');
