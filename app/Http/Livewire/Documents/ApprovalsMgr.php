@@ -4,15 +4,26 @@ namespace App\Http\Livewire\Documents;
 
 use App\Models\Documents\Approval;
 use App\Jobs\ProcessApproval;
+use App\Traits\SingleSignature;
+use App\User;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Livewire\Component;
 
 class ApprovalsMgr extends Component
 {
+    use SingleSignature;
+
     public $showModal = false;
     public $reject_observation;
     public $approvalSelected;
     public $ids = [];
     public $filter = [];
+    public $otp;
+    public $message;
 
     /**
      * @param  Approval $approval
@@ -20,7 +31,9 @@ class ApprovalsMgr extends Component
      */
     public function mount(Approval $approval)
     {
-        /** Si se pasa un modelo por parametro, se carga la hoja con el modal abierto */
+        /**
+         * Si se pasa un modelo por parametro, se carga la hoja con el modal abierto
+         */
         if($approval->exists) {
             $this->show($approval);
         }
@@ -39,11 +52,17 @@ class ApprovalsMgr extends Component
         $this->showModal = 'd-block';
         $this->approvalSelected = $approval;
         $this->reject_observation = null;
+        $this->otp = null;
+        $this->message = null;
     }
 
+    /**
+     * Funcion para al cerrar el modal
+     *
+     * @return void
+     */
     public function dismiss()
     {
-        /** Codigo al cerrar el modal */
         $this->showModal = null;
     }
 
@@ -56,22 +75,41 @@ class ApprovalsMgr extends Component
      */
     public function approveOrReject(Approval $approvalSelected, bool $status)
     {
+        $show_controller_method = Route::getRoutes()->getByName($approvalSelected->document_route_name)->getActionName();
+        $response = app()->call($show_controller_method, json_decode($approvalSelected->document_route_params,true));
+        $pdfBase64 = base64_encode($response->original);
+
+        if($approvalSelected->digital_signature && $status == true) {
+            try {
+                $this->signFile(auth()->user(), 'center', 1, 80, $pdfBase64, $this->otp, $approvalSelected->filename);
+            } catch (\Throwable $th) {
+                $this->message = $th->getMessage();
+                return;
+            }
+        }
+
+        $approvalSelected->approver_ou_id = auth()->user()->organizational_unit_id;
         $approvalSelected->approver_id = auth()->id();
         $approvalSelected->approver_at = now();
         $approvalSelected->status = $status;
         $approvalSelected->reject_observation = $this->reject_observation;
         $approvalSelected->save();
 
-        /** Si tiene un callback, se ejecuta en cola */
+        /*
+         * Si tiene un callback, se ejecuta en cola
+         */
         if($approvalSelected->callback_controller_method) {
             ProcessApproval::dispatch($approvalSelected);
         }
 
+        /**
+         * Cierra el modal
+         */
         $this->dismiss();
     }
 
     /**
-     * Bulk Approvation
+     * Bulk Process
      *
      * @param  bool $status
      * @return void
@@ -86,6 +124,8 @@ class ApprovalsMgr extends Component
     }
 
     /**
+     * Obtiene los approvals
+     * 
      * @return void
      */
     public function getApprovals()
