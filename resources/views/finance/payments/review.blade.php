@@ -28,7 +28,9 @@
                 <input type="text" class="form-control" name="folio_devengo" placeholder="folio devengo SIGFE" value="{{ old('folio_devengo') }}" autocomplete="off">
             </div>
             <div class="col-md-1">
-                <input class="btn btn-outline-secondary" type="submit" value="Buscar">
+                <button class="btn btn-outline-secondary" type="submit">
+                    <i class="fas fa-search"></i>
+                </button>
             </div>
         </div>
     </form>
