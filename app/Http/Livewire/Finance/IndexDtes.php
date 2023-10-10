@@ -48,6 +48,9 @@ class IndexDtes extends Component
             if($value) {
                 // app('debugbar')->log($filter);
                 switch($filter) {
+                    case 'id':
+                        $query->where('id', $value);
+                        break;
                     case 'folio':
                         $query->where('folio', $value);
                         break;

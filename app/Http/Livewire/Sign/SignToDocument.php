@@ -10,9 +10,12 @@ use Illuminate\Support\Facades\Http;
 use Firebase\JWT\JWT;
 use App\Services\ImageService;
 use App\Models\Documents\Sign\Signature;
+use App\Traits\SingleSignature;
 
 class SignToDocument extends Component
 {
+    use SingleSignature;
+
     /**
      * Ejemplo de uso:
      *
@@ -73,14 +76,28 @@ class SignToDocument extends Component
     public $signer;
     public $folder;
     public $filename;
-    public $callback;
+
+    public $callbackRoute;
     public $callbackParams;
+
+    public $dispatchEvent;
+    public $dispatchParams;
+
+    public $callbackControllerMethods;
+    public $callbackControllerParams;
+
+    public $message;
 
     public function render()
     {
         return view('livewire.sign.sign-to-document');
     }
 
+    /**
+     * Muestra el modal
+     *
+     * @return void
+     */
     public function show()
     {
         if(isset($this->fileLink))
@@ -96,6 +113,7 @@ class SignToDocument extends Component
              */
             $show_controller_method = Route::getRoutes()->getByName($this->routeName)->getActionName();
             $response = app()->call($show_controller_method, $this->routeParams);
+
             $this->pdfBase64 = base64_encode($response->original);
         }
         elseif(isset($this->view))
@@ -114,14 +132,25 @@ class SignToDocument extends Component
         $this->showModal = 'd-block';
     }
 
+    /**
+     * Cierra el model
+     *
+     * @return void
+     */
     public function dismiss()
     {
-        /** Codigo al cerrar el modal */
         $this->showModal = null;
     }
 
+    /**
+     * Firma un archivo
+     *
+     * @return void
+     */
     public function signDocument()
     {
+        // $this->signFile($this->signer, $this->position, $this->row, $this->startY, $this->pdfBase64, $this->otp, $this->filename);
+
         /**
          * Obtiene la imagen de la firma
          */
@@ -178,56 +207,77 @@ class SignToDocument extends Component
 
         $json = $response->json();
 
+        $this->message = null;
+
         /**
          * Verifica si existe un error
          */
         if (array_key_exists('error', $json))
         {
-            $message = $json['error'];
+            $this->message = $json['error'];
         }
         elseif(!array_key_exists('content', $json['files'][0]))
         {
             if (array_key_exists('error', $json))
             {
-                $message = $json['error'];
+                $this->message = $json['error'];
             }
             else
             {
-                $message = $json['files'][0]['status'];
+                $this->message = $json['files'][0]['status'];
             }
         }
 
         /**
          * Muestra el mensaje de error
          */
-        if(isset($message))
+        if(isset($this->message))
         {
-            return redirect()->back()->with('danger', "Error: $message");
+            return;
         }
 
+        if(isset($json['files'][0]))
+        {
+            /**
+             * Obtiene el archivo, la carpeta y el nombre del archivo
+             */
+            $file = $this->filename.".pdf";
+            $contentFile = base64_decode($json['files'][0]['content']);
 
-        /**
-         * Obtiene el archivo, la carpeta y el nombre del archivo
-         */
-        $file = $this->filename.".pdf";
-        $contentFile = base64_decode($json['files'][0]['content']);
+            /**
+             * Guarda el archivo en el storage
+             */
+            Storage::disk('gcs')->put($file, $contentFile, ['CacheControl' => 'no-store']);
 
-        /**
-         * Guarda el archivo en el storage
-         */
-        Storage::disk('gcs')->put($file, $contentFile, ['CacheControl' => 'no-store']);
+            /**
+             * Redirige a la route, definida en callbackRoute
+             */
+            if(isset($this->callbackRoute)) {
+                return redirect()->route($this->callbackRoute, $this->callbackParams);
+            }
 
-        /**
-         * Setea los inputs
-         */
-        $this->resetInputs();
+            /**
+             * Ejecuta dispatch, definido en callbackControllerMethods y emit al dispatchEvent
+             */
+            if(isset($this->dispatchEvent) && isset($this->callbackControllerMethods)) {
+                app()->call($this->callbackControllerMethods,
+                json_decode($this->callbackControllerParams, true));
 
-        /**
-         * Redirige al callback
-         */
-        return redirect()->route($this->callback, $this->callbackParams);
+                $this->emit($this->dispatchEvent, $this->dispatchParams);
+            }
+
+            /**
+             * Setea los inputs
+             */
+            $this->resetInputs();
+        }
     }
 
+    /**
+     * Resetea los inputs
+     *
+     * @return void
+     */
     public function resetInputs()
     {
         $this->showModal = null;
