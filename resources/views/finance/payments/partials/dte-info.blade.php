@@ -1,4 +1,4 @@
-Emisor: {{ $dte->emisor }}
+{{ $dte->emisor }}
 <br>
 
 @switch($dte->tipo_documento)

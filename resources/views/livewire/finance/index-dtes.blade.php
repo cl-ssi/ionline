@@ -2,7 +2,6 @@
 
     @include('finance.payments.partials.nav')
 
-
     <div class="row mb-3">
         <div class="col-6">
             <h3 class="mb-3">Listado de dtes cargadas en sistema</h3>
@@ -85,7 +84,7 @@
                 <th>ID</th>
                 <th width="55px">Estb.</th>
                 <th>CNB.</th>
-                <th width="140px">Documento</th>
+                <th>Documento</th>
                 <th width="140px">OC</th>
                 <th>FR</th>
                 <th>Bod/Recep</th>
