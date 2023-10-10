@@ -60,7 +60,6 @@ class CenabastIndex extends Component
             ->when($this->filter_by == 'with-attached', function($query) {
                 $query->whereNotNull('confirmation_signature_file');
             });
-            
 
         if (!empty($this->filter['id'])) {
                 $dtes->where('id', $this->filter['id']);
@@ -70,7 +69,6 @@ class CenabastIndex extends Component
                 $dtes->where('folio', $this->filter['folio']);
             }
 
-    
         if (!empty($this->filter['id'])) {
                 $dtes->where('id', $this->filter['id']);
         }
