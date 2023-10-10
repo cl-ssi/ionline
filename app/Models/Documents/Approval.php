@@ -12,6 +12,8 @@ use App\Rrhh\OrganizationalUnit;
 use App\Notifications\Documents\NewApproval;
 use App\Models\Finance\Dte; // Sólo para el ejemplo, no tiene uso
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class Approval extends Model
 {
@@ -93,8 +95,8 @@ class Approval extends Model
              * (Opcional) Se utiliza el previous_approval_id (id de el Approval anterior)
              * para cuando es en cadena de responsabilidad. Se debe utilizar en conjunto con
              * la propiedad active.
-             * Dejar active == true sólo al primero y todos los demás en false. 
-             * 
+             * Dejar active == true sólo al primero y todos los demás en false.
+             *
              * Ej de cadena, id: 17 luego se ejecuta el id 18, luego el id 19
              *
              * id  |  previous_approval_id  | active
@@ -145,7 +147,7 @@ class Approval extends Model
 
 
             /**
-             * Opciones para utilizar firma electrónica avanzada en vez de aprobación simple 
+             * Opciones para utilizar firma electrónica avanzada en vez de aprobación simple
              * ==============================================================================
              */
             /* (Opcional) True or False(default), Si requiere firma electrónica en vez de aprobación simple */
@@ -277,6 +279,27 @@ class Approval extends Model
             case '1': return 'fa-thumbs-up'; break;
             default: return 'fa-clock'; break;
         }
+    }
+
+    public function getFilenameLinkAttribute()
+    {
+        $filename = $this->filename.'.pdf';
+
+        $link = null;
+
+        if(Storage::disk('gcs')->exists($filename))
+        {
+            $link = Storage::disk('gcs')->url($filename);
+        }
+
+        return $link;
+    }
+
+    public function getFilenameBase64Attribute()
+    {
+        $documentBase64Pdf = base64_encode(file_get_contents($this->filename_link));
+
+        return $documentBase64Pdf;
     }
 
     protected static function boot()
