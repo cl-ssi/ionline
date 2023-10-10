@@ -12,7 +12,7 @@
 
     <form action="{{ route('finance.payments.review') }}" method="GET">
         <div class="form-row mb-3">
-            <div class="col-md-2">
+            <div class="col-md-1">
                 <input type="text" class="form-control" name="id" placeholder="id" value="{{ old('id') }}" autocomplete="off">
             </div>
             <div class="col-md-2">

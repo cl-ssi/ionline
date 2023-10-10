@@ -78,7 +78,7 @@ class PaymentController extends Controller
             'establishment',
             'dtes',
             'invoices',
-            
+
             'requestForm',
             'requestForm.requestFormFiles',
             'requestForm.contractManager',
@@ -86,6 +86,7 @@ class PaymentController extends Controller
             'requestForm.father',
             'requestForm.father.requestFormFiles'
         ])
+            ->whereNotIn('tipo_documento', ['guias_despacho','nota_debito','nota_credito'])
             ->where('confirmation_status', 1)
             ->where('establishment_id', auth()->user()->organizationalUnit->establishment->id)
             ->where(function (Builder $query) {
@@ -93,6 +94,17 @@ class PaymentController extends Controller
                     ->orWhere('fin_status', 'rechazado');
             });
 
+        /**
+         * tipo_documento
+         * ==============
+         * factura_electronica
+         * factura_exenta
+         * guias_despacho
+         * nota_debito
+         * nota_credito
+         * boleta_honorarios
+         * boleta_electronica
+         */
 
         if ($request->filled('id') || $request->filled('folio') || $request->filled('oc') || $request->filled('folio_compromiso') || $request->filled('folio_devengo')) {
             //$query = $this->search($request);

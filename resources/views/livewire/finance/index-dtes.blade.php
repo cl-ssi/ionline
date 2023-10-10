@@ -4,7 +4,7 @@
 
     <div class="row mb-3">
         <div class="col-6">
-            <h3 class="mb-3">Listado de dtes cargadas en sistema</h3>
+            <h3>Dtes cargadas en sistema</h3>
         </div>
         @cannot('Payments: viewer')
             <div class="col">
@@ -35,6 +35,9 @@
                 @endforeach
                 <option value="?">Sin establecimiento</option>
             </select>
+        </div>
+        <div class="col-md-1">
+            <input type="text" class="form-control" wire:model.defer="filter.id" placeholder="id" autocomplete="off">
         </div>
         <div class="col-md-2">
             <input type="text" class="form-control" wire:model.defer="filter.folio" placeholder="folio">
