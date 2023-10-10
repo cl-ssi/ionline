@@ -73,56 +73,25 @@
                     {{ $approval->reject_observation }}
                 </td>
                 <td>
-                    {{-- @if($approval->digital_signature)
-                        <a
-                            class="btn btn-sm btn-outline-danger"
-                            target="_blank"
+
+                    <a
+                        class="btn btn-sm btn-outline-danger"
+                        target="_blank"
+                        @if($approval->digital_signature && $approval->status)
+                            href="{{ route('documents.signed.approval.pdf', $approval) }}"
+                        @else
                             href="{{ route($approval->document_route_name, json_decode($approval->document_route_params, true)) }}"
-                        >
-                            <i class="fas fa-fw fa-file-pdf"></i>
-                        </a>
-
-                        @livewire('sign.sign-to-document', [
-                            'btn_title' => '',
-                            'btn_class' => 'btn btn-sm btn-success',
-                            'btn_icon'  => 'fa-fw fas fa-signature',
-
-                            'routeName' =>  $approval->document_route_name,
-                            'routeParams' => json_decode($approval->document_route_params, true),
-
-                            'signer' => auth()->user(),
-                            'position' => 'center',
-                            'startY' => 80,
-
-                            'filename' => $approval->filename,
-
-                            'dispatchEvent' => 'reloadApprovals',
-                            'dispatchParams' => $approval->id,
-
-                            'callbackControllerMethods' => $approval->callback_controller_method,
-                            'callbackControllerParams' => $approval->callback_controller_params,
-
-                            // 'callbackRoute' => 'finance.dtes.confirmation.store',
-                            // 'callbackParams' => [
-                            //     'folder' => '/ionline/dte/confirmation/',
-                            // ]
-                        ], key($approval->id))
-                    @else --}}
-                        <a
-                            class="btn btn-sm btn-outline-danger"
-                            target="_blank"
-                            href="{{ route($approval->document_route_name, json_decode($approval->document_route_params, true)) }}"
-                        >
-                            <i class="fas fa-fw fa-file-pdf"></i>
-                        </a>
-                        <button
-                            class="btn btn-primary btn-sm"
-                            wire:click='show({{ $approval }})'
-                        >
-                            <i class="fas fa-fw fa-eye"></i>
-                            <i class="fas fa-fw {{ $approval->approver_ou_id ? 'fa-chess-king' : 'fa-user' }}"></i>
-                        </button>
-                    {{-- @endif --}}
+                        @endif
+                    >
+                        <i class="fas fa-fw fa-file-pdf"></i>
+                    </a>
+                    <button
+                        class="btn btn-primary btn-sm"
+                        wire:click='show({{ $approval }})'
+                    >
+                        <i class="fas fa-fw fa-eye"></i>
+                        <i class="fas fa-fw {{ $approval->approver_ou_id ? 'fa-chess-king' : 'fa-user' }}"></i>
+                    </button>
                 </td>
             </tr>
             @endforeach
@@ -265,13 +234,28 @@
                         </div>
                     </div>
                     <div class="modal-body">
-                        <object data="{{ route($approvalSelected->document_route_name,json_decode($approvalSelected->document_route_params, true)) }}"
+                        <object
+                            @if($approvalSelected->digital_signature && $approvalSelected->status)
+                                data="{{ $approvalSelected->filename_link }}"
+                            @else
+                                data="{{ route($approvalSelected->document_route_name, json_decode($approvalSelected->document_route_params, true)) }}"
+                            @endif
                             type="application/pdf"
                             width="100%"
-                            height="700px">
+                            height="700px"
+                        >
 
                             <p>No se puede mostrar el PDF.
-                                <a href="{{ route($approvalSelected->document_route_name,json_decode($approvalSelected->document_route_params, true)) }}">Descargar</a>.</p>
+                                <a
+                                    target="_blank"
+                                    @if($approvalSelected->digital_signature && $approvalSelected->status)
+                                        href="{{ $approvalSelected->filename_link }}"
+                                    @else
+                                        href="{{ route($approvalSelected->document_route_name, json_decode($approvalSelected->document_route_params, true)) }}"
+                                    @endif
+                                >Descargar
+                                </a>.
+                            </p>
                         </object>
                     </div>
                     <div class="modal-footer">

@@ -75,11 +75,17 @@ class ApprovalsMgr extends Component
      */
     public function approveOrReject(Approval $approvalSelected, bool $status)
     {
-        $show_controller_method = Route::getRoutes()->getByName($approvalSelected->document_route_name)->getActionName();
-        $response = app()->call($show_controller_method, json_decode($approvalSelected->document_route_params,true));
-        $pdfBase64 = base64_encode($response->original);
-
         if($approvalSelected->digital_signature && $status == true) {
+            /*
+             * Consulto el archivo desde la ruta y obtengo el base64
+             */
+            $show_controller_method = Route::getRoutes()->getByName($approvalSelected->document_route_name)->getActionName();
+            $response = app()->call($show_controller_method, json_decode($approvalSelected->document_route_params, true));
+            $pdfBase64 = base64_encode($response->original);
+
+            /**
+             * Firmo el archivo con el trait
+             */
             try {
                 $this->signFile(auth()->user(), 'center', 1, 80, $pdfBase64, $this->otp, $approvalSelected->filename);
             } catch (\Throwable $th) {
@@ -88,6 +94,9 @@ class ApprovalsMgr extends Component
             }
         }
 
+        /**
+         * Guardar los datos del aprobacion o rechazo
+         */
         $approvalSelected->approver_ou_id = auth()->user()->organizational_unit_id;
         $approvalSelected->approver_id = auth()->id();
         $approvalSelected->approver_at = now();
