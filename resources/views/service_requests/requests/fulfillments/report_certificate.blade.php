@@ -265,7 +265,9 @@
             Mediante el presente certifico que <b><span class="uppercase">{{$fulfillment->serviceRequest->employee->fullName}}</span></b> ha desempeñado las     actividades estipuladas en su convenio de prestación de servicios con el <b>{{$fulfillment->serviceRequest->establishment->name ?? ''}}</b> del periodo del
             <b>
             {{$fulfillment->start_date->format('d/m/Y')}}
-            al {{$fulfillment->FulfillmentItems->where('type','Término de contrato anticipado')->first()->end_date->sub(1, 'day')->format('d/m/Y')}}
+            <!-- samantha solicita que al día de término no se le reste un día -->
+            <!-- al {{$fulfillment->FulfillmentItems->where('type','Término de contrato anticipado')->first()->end_date->sub(1, 'day')->format('d/m/Y')}} -->
+            al {{$fulfillment->FulfillmentItems->where('type','Término de contrato anticipado')->first()->end_date->format('d/m/Y')}}
             </b>
             <br>
             <br>

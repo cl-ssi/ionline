@@ -99,6 +99,15 @@ class RequirementController extends Controller
             ->whereHas('events', function ($query) use ($user) {
                 $query->where('from_user_id', $user->id)->orWhere('to_user_id', $user->id);
             });
+
+        // obener total pendientes
+        $total_pending_requirements = 0;
+        $req_query = clone $requirements_query;
+        $total_pending_requirements = $req_query->whereDoesntHave('archived', function ($query) use ($user,$auth_user) {
+            $query->whereIn('user_id', [$user->id,$auth_user->id]);
+        })->latest()->paginate(100)->withQueryString()->total();
+        
+        // devuelve requerimientos a bandeja
         if($request->has('archived'))
         {
             $requirements_query->whereHas('archived', function ($query) use ($user,$auth_user) {
@@ -148,6 +157,9 @@ class RequirementController extends Controller
         $counters['replyed'] = $counters_query->clone()->where('status','respondido')->count();
         $counters['derived'] = $counters_query->clone()->where('status','derivado')->count();
         $counters['closed'] = $counters_query->clone()->where('status','cerrado')->count();
+        $counters['pending'] = $total_pending_requirements;
+
+        // dd($requirements->total());
 
         /** Retorno a la vista */
         return view('requirements.inbox', compact('requirements','user','allowed_users','counters'));
