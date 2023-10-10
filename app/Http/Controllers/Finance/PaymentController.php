@@ -203,4 +203,17 @@ class PaymentController extends Controller
 
         return redirect()->back()->with('success', 'Flujo de pago actualizado exitosamente');
     }
+
+
+    public function returnToReview(Dte $dte, Request $request)
+    {
+        $dte->fin_status = null;
+        $dte->sender_id = null;
+        $dte->sender_ou = null;
+        $dte->sender_at = null;
+        $dte->save();
+        return redirect()->back()->with('success', 'Dte se regreso a Revisión');
+    }
+
+
 }
