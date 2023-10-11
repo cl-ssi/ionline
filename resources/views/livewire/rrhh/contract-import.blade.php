@@ -17,6 +17,16 @@
     @if($message2 != "")
         <div class="alert alert-success" role="alert">
             {{ $message2 }}
+
+            <br>
+            <p>A continuación, listado de usuarios que no se encontraron registrados en Ionline.</p>
+            <ol>
+                @if($non_existent_users)
+                    @foreach($non_existent_users as $user)
+                        <li>{{$user}}</li>
+                    @endforeach
+                @endif
+            </ol>
         </div>
     @endif
 

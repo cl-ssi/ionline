@@ -10,6 +10,8 @@ use App\Imports\EmployeeInformationImport;
 use Maatwebsite\Excel\Facades\Excel;
 use Carbon\Carbon;
 use App\User;
+use App\Rrhh\OrganizationalUnit;
+use App\Http\Controllers\WebserviceController;
 
 use App\Models\Rrhh\SirhActiveUser;
 
@@ -19,6 +21,7 @@ class ContractImport extends Component
 
     public $file;
     public $message2;
+    public $non_existent_users;
 
     public function save()
     {
@@ -90,12 +93,36 @@ class ContractImport extends Component
                             if($column['fecha_primer_contrato']!=null){
                                 $fecha_primer_contrato = Carbon::createFromFormat('d/m/Y',$column['fecha_primer_contrato']);
                             }else{$fecha_primer_contrato = null;}
+
+                            // si no existe usuario, se crea
+                            $rut = trim($column['rut']);
+                            if(!User::find($rut)){
+                                // Aquí se verifica si existe la unidad organizacional según id sirth de archivo importado, si existe: se crea nuevo usuario con esa ou_id
+                                // FALTA: obtener nombre del usuario desde fonasa
+
+                                // if(OrganizationalUnit::where('sirh_ou_id',$column['cdigo_unidad'])->count()>0){
+                                
+                                // $rut <-- obtener nombres y apellidos desde con fonasa con rut.
+
+                                //     $ou_id = OrganizationalUnit::where('sirh_ou_id',$column['cdigo_unidad'])->first()->id;
+                                //     $user = new User();
+                                //     $user->id = $rut;
+                                //     $user->dv = $column['dv'];
+                                //     $user->mothers_family = ;
+                                //     $user->fathers_family = ;
+                                //     $user->name = ;
+                                //     $user->organizational_unit_id = $ou_id;
+                                //     dd($user);
+                                //     $user->save();
+                                // }
+                                $this->non_existent_users[$rut] = $column['nombre_funcionario'];
+                            }
                             
                             Contract::updateOrCreate([
-                                'rut' => $column['rut'],
+                                'rut' => $rut,
                                 'correlativo' => $column['correlativo']
                             ],[
-                                'rut' => $column['rut'],
+                                'rut' => $rut,
                                 'dv' => $column['dv'],
                                 'correlativo' => $column['correlativo'],
                                 'nombre_funcionario' => $column['nombre_funcionario'],
