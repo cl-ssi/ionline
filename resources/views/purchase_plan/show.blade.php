@@ -172,10 +172,22 @@
                         @case('Pendiente')
                             <i class="fas fa-clock"></i> {{ $approval->StatusInWords }}
                             @break
+                        @case('Aprobado')
+                            <span class="d-inline-block" style="color: green;">
+                                <i class="fas fa-check-circle"></i> {{ $approval->StatusInWords }}
+                            </span>
+                            @break
+                        @case('Rechazado')
+                            <span class="d-inline-block" style="color: tomato;">
+                                <i class="fas fa-check-circle"></i> {{ $approval->StatusInWords }}
+                            </span>
+                            @break
                     @endswitch
-
-                    {{ ($approval->approver) ? $approval->approver->FullName : '' }} <br>
-                    {{ ($approval->approver_at) ? $approval->approver_at->format('d-m-Y H:i:s') : '' }}
+                    <br>
+                    @if($approval->StatusInWords == 'Aprobado' || $approval->StatusInWords == 'Rechazado')
+                        <i class="fas fa-user"></i> {{ ($approval->approver) ? $approval->approver->FullName : '' }} <br>
+                        <i class="fas fa-calendar-alt"></i> {{ ($approval->approver_at) ? $approval->approver_at->format('d-m-Y H:i:s') : '' }}
+                    @endif
                 </td>           
                 @endforeach
             </tr>

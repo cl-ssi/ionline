@@ -56,7 +56,7 @@ class PurchasePlanController extends Controller
      * @param  \App\Models\PurchasePlan\PurchasePlan  $purchasePlan
      * @return \Illuminate\Http\Response
      */
-    public function show($purchasePlan)
+    public function show(PurchasePlan $purchasePlan)
     {
         return view('purchase_plan.show', compact('purchasePlan'));
     }
