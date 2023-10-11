@@ -304,13 +304,11 @@
                         @if($requestReplacementStaff->signaturesFile)
                             @foreach($requestReplacementStaff->signaturesFile->signaturesFlows as $flow)
                                 @if($flow->status == 1)
-                                <td class="text-center">
                                     <span style="color: green;">
                                         <i class="fas fa-signature"></i> Aceptada
                                     </span><br>
                                     <i class="fas fa-user"></i> {{ $flow->signerName }}<br>
-                                    <i class="fas fa-calendar-alt"></i> {{ $flow->signature_date->format('d-m-Y H:i:s') }}<br>
-                                </td>
+                                    <i class="fas fa-calendar-alt"></i> {{ $flow->signature_date->format('d-m-Y H:i:s') }}
                                 @else
                                     <i class="fas fa-clock"></i> Pendiente<br>
                                 @endif
