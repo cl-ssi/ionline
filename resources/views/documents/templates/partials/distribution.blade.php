@@ -3,7 +3,7 @@
         <strong>DISTRIBUCIÓN:</strong>
         @foreach(explode("\n", $document->distribution) as $distribution)
         <li style="margin-left: 10px;">
-            {{ strtolower(str_replace("\r", "", $distribution)) }}
+            {{ str_replace("\r", "", $distribution) }}
         </li>
         @endforeach
     @endif
