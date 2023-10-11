@@ -279,7 +279,6 @@
         </thead>
         <tbody class="small">
             <tr>
-                
                 @foreach($requestReplacementStaff->RequestSign as $sign)
                 <td class="text-center">
                     @if($sign->request_status == 'accepted')
@@ -322,77 +321,6 @@
                     @endif
                 </td>
                 @endforeach
-                {{-- 
-                <td class="text-center">
-                    @if($sign->request_status == 'accepted')
-                        <span style="color: green;">
-                            <i class="fas fa-check-circle"></i> {{ $sign->StatusValue }} 
-                        </span><br>
-                        <i class="fas fa-user"></i> {{ $sign->user->TinnyName }}<br>
-                        <i class="fas fa-calendar-alt"></i> {{ ($sign->date_sign) ? $sign->date_sign->format('d-m-Y H:i:s') : '' }}<br>
-                    @endif
-                    @if($sign->request_status == 'rejected')
-                        <span style="color: Tomato;">
-                            <i class="fas fa-times-circle"></i> {{ $sign->StatusValue }} 
-                        </span><br>
-                        <i class="fas fa-user"></i> {{ $sign->user->FullName }}<br>
-                        <i class="fas fa-calendar-alt"></i> {{ $sign->date_sign->format('d-m-Y H:i:s') }}<br>
-                        <hr>
-                        {{ $sign->observation }}<br>
-                    @endif
-                    @if($sign->request_status == 'pending' || $sign->request_status == NULL)
-                        <i class="fas fa-clock"></i> Pendiente<br>
-                    @endif
-                </td>
-                --}}
-
-                {{--
-                @foreach($requestReplacementStaff->RequestSign as $sign)
-                    @if($sign->ou_alias != 'finance')
-                    <td class="text-center">
-                        @if($sign->request_status == 'accepted')
-                            <span style="color: green;">
-                                <i class="fas fa-check-circle"></i> {{ $sign->StatusValue }} 
-                            </span><br>
-                            <i class="fas fa-user"></i> {{ $sign->user->TinnyName }}<br>
-                            <i class="fas fa-calendar-alt"></i> {{ ($sign->date_sign) ? $sign->date_sign->format('d-m-Y H:i:s') : '' }}<br>
-                        @endif
-                        @if($sign->request_status == 'rejected')
-                            <span style="color: Tomato;">
-                                <i class="fas fa-times-circle"></i> {{ $sign->StatusValue }} 
-                            </span><br>
-                            <i class="fas fa-user"></i> {{ $sign->user->FullName }}<br>
-                            <i class="fas fa-calendar-alt"></i> {{ $sign->date_sign->format('d-m-Y H:i:s') }}<br>
-                            <hr>
-                            {{ $sign->observation }}<br>
-                        @endif
-                        @if($sign->request_status == 'pending' || $sign->request_status == NULL)
-                            <i class="fas fa-clock"></i> Pendiente<br>
-                        @endif
-                    </td>
-                    @endif
-                @endforeach
-
-                @if($requestReplacementStaff->signaturesFile )
-                @foreach($requestReplacementStaff->signaturesFile->signaturesFlows as $flow)
-                    @if($flow->status == 1)
-                    <td class="text-center">
-                        <span style="color: green;">
-                            <i class="fas fa-signature"></i> Aceptada
-                        </span><br>
-                        <i class="fas fa-user"></i> {{ $flow->signerName }}<br>
-                        <i class="fas fa-calendar-alt"></i> {{ $flow->signature_date->format('d-m-Y H:i:s') }}<br>
-                    </td>
-                    @endif
-                @endforeach
-                @else
-                    @if($sign->ou_alias == 'finance')
-                        <td class="text-center">
-                            <i class="fas fa-clock"></i> Pendiente<br>
-                        </td>
-                    @endif
-                @endif
-                --}}
             <tr>
         </tbody>
     </table>
