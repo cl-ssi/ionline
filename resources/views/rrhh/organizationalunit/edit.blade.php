@@ -12,7 +12,11 @@
 
     @cannot(['Service Request', 'Service Request: export sirh mantenedores'])
         <div class="form-row">
-            <fieldset class="form-group col-12">
+            <fieldset class="form-group col-1">
+                <label for="forLevel">Nivel</label>
+                <input type="text" class="form-control" id="forLevel" value="{{ $organizationalUnit->level }}" disabled>
+            </fieldset>
+            <fieldset class="form-group col-11">
                 <label for="forName">Nombre</label>
                 <input type="text" class="form-control" id="forName" name="name" value="{{ $organizationalUnit->name }}">
             </fieldset>
@@ -32,7 +36,11 @@
         @endif
     @else
         <div class="form-row">
-            <fieldset class="form-group col-12">
+            <fieldset class="form-group col-1">
+                <label for="forLevel">Nivel</label>
+                <input type="text" class="form-control" id="forLevel" value="{{ $organizationalUnit->level }}" disabled>
+            </fieldset>
+            <fieldset class="form-group col-11">
                 <label for="forName">Nombre</label>
                 <input type="text" class="form-control" id="forName" name="name" value="{{ $organizationalUnit->name }}" readonly>
             </fieldset>
