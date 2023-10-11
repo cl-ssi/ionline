@@ -1275,6 +1275,8 @@ Route::prefix('documents')->as('documents.')->middleware(['auth', 'must.change.p
     Route::get('/callback_firma/{message}/{modelId}/{signaturesFile?}', [SignatureController::class, 'callbackFirma'])->name('callbackFirma');
 
     Route::get('/approvals/{approval?}', ApprovalsMgr::class)->name('approvals');
+    Route::get('/approvals/{approval}/pdf', [NoAttendanceRecordController::class,'signedApproval'])->name('signed.approval.pdf');
+
 });
 
 Route::resource('documents', DocumentController::class)->middleware(['auth', 'must.change.password']);
@@ -1718,7 +1720,7 @@ Route::prefix('warehouse')->as('warehouse.')->middleware(['auth', 'must.change.p
     Route::get('control/{control}/show', [ControlController::class, 'pdf'])->name('control.show');
     Route::get('control/{control}/showPdf', [ControlController::class, 'showPdf'])->name('control.showPdf');
 
-    
+
 
     Route::prefix('store')->group(function () {
         Route::get('welcome', [StoreController::class, 'welcome'])->name('store.welcome');
@@ -1837,7 +1839,7 @@ Route::prefix('prof_agenda')->as('prof_agenda.')->middleware(['auth'])->group(fu
         Route::post('/store', [OpenHourController::class, 'store'])->name('store');
         Route::post('/delete_reservation', [OpenHourController::class, 'delete_reservation'])->name('delete_reservation');
         Route::post('/assistance_confirmation', [OpenHourController::class, 'assistance_confirmation'])->name('assistance_confirmation');
-        Route::post('/absence_confirmation', [OpenHourController::class, 'absence_confirmation'])->name('absence_confirmation');  
+        Route::post('/absence_confirmation', [OpenHourController::class, 'absence_confirmation'])->name('absence_confirmation');
         Route::post('/destroy', [OpenHourController::class, 'destroy'])->name('destroy');
         Route::get('/change_hour/{id}/{start_date}', [OpenHourController::class, 'change_hour'])->name('change_hour');
         Route::post('/block', [OpenHourController::class, 'block'])->name('block');
@@ -1967,6 +1969,7 @@ Route::prefix('finance')->as('finance.')->middleware(['auth', 'must.change.passw
         Route::get('/review', [PaymentController::class, 'review'])->name('review');
         Route::get('/{dte}/send-to-ready-inbox', [PaymentController::class, 'sendToReadyInbox'])->name('sendToReadyInbox');
         Route::get('/ready', [PaymentController::class, 'ready'])->name('ready');
+        Route::put('/{dte}/return-to-review', [PaymentController::class, 'returnToReview'])->name('returnToReview');
         Route::get('/rejected', [PaymentController::class, 'rejected'])->name('rejected');
         Route::put('/{dte}/update', [PaymentController::class, 'update'])->name('update');
     });
@@ -2474,7 +2477,7 @@ Route::prefix('his')->as('his.')->middleware('auth')->group(function () {
             // Route::get('/{file}/delete', [SummaryFileController::class, 'deleteFile'])->name('delete');
             Route::get('/{file}/download', [ModificationRequestController::class, 'download'])->name('download');
         });
-    
+
     });
 });
 

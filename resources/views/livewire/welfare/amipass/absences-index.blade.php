@@ -10,8 +10,8 @@
                 <th scope="col">Mes ausentismo</th>
                 <th scope="col">Fecha inicio ausentismo</th>
                 <th scope="col">Fecha termino ausentismo</th>
-                <th scope="col">Fecha termino ausentismo al 30-08-2023</th>
-                <th scope="col">Ausentismo calculado al 30-08-2023</th>
+                <th scope="col">Fecha termino ausentismo al 30-09-2023</th>
+                <th scope="col">Ausentismo calculado al 30-09-2023</th>
                 <th scope="col">Total días ausentismo</th>
                 <th scope="col">Ausentismo en el periodo</th>
                 <th scope="col">Tipo de ausentismo</th>

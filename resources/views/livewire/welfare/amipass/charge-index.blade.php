@@ -88,7 +88,7 @@
     <table class="table table-sm table-bordered table-hover" style="font-size: 12px;">
         <thead>
             <tr>
-                <th colspan="10">Mis cargas de Sept-23 a la fecha</th>
+                <th colspan="10">Mis cargas de Oct-23 a la fecha</th>
             </tr>
             <tr>
                 <th width="95px" scope="col">Rut</th>

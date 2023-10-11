@@ -2,21 +2,34 @@
 
 namespace App\Http\Controllers\Rrhh;
 
-use Illuminate\Http\Request;
 use App\Models\Rrhh\NoAttendanceRecord;
 use App\Models\Documents\Approval;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
 
 class NoAttendanceRecordController extends Controller
 {
+    /**
+     * Retorna vista
+     *
+     * @param  int  $no_attendance_record_id
+     * @return mixed
+     */
     public function show($no_attendance_record_id)
     {
         $noAttendanceRecord = NoAttendanceRecord::find($no_attendance_record_id);
         $documentFile = \PDF::loadView('rrhh.attendances.no-attendance-record', compact('noAttendanceRecord'));
+
         return $documentFile->stream();
     }
 
-    /** Pocesa las aprobaciones del módulo approvals */
+    /**
+     * Procesa las aprobaciones del módulo approvals
+     *
+     * @param  int  $approval_id
+     * @param  int  $no_attendance_record_id
+     * @return void
+     */
     public function approval($approval_id, $no_attendance_record_id)
     {
         $approval = Approval::find($approval_id);
@@ -27,5 +40,17 @@ class NoAttendanceRecordController extends Controller
         $noAttendanceRecord->authority_observation = $approval->reject_observation;
         $noAttendanceRecord->status = $approval->status;
         $noAttendanceRecord->save();
+    }
+
+    /**
+     * Retorna archivo firmado
+     *
+     * @param  Approval  $approval
+     * @return void
+     */
+    public function signedApproval(Approval $approval)
+    {
+        header('Content-Type: application/pdf');
+        echo base64_decode($approval->filename_base64);
     }
 }
