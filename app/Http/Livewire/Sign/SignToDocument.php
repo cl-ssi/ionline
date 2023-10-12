@@ -3,7 +3,6 @@
 namespace App\Http\Livewire\Sign;
 
 use Livewire\Component;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Http;

@@ -5,12 +5,7 @@ namespace App\Http\Livewire\Documents;
 use App\Models\Documents\Approval;
 use App\Jobs\ProcessApproval;
 use App\Traits\SingleSignature;
-use App\User;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 use Livewire\Component;
 
 class ApprovalsMgr extends Component
@@ -26,7 +21,7 @@ class ApprovalsMgr extends Component
     public $message;
 
     /**
-     * @param  Approval $approval
+     * @param  Approval  $approval
      * @return void
      */
     public function mount(Approval $approval)
@@ -41,7 +36,7 @@ class ApprovalsMgr extends Component
     }
 
     /**
-     * @param  Approval $approval
+     * @param  Approval  $approval
      * @return void
      */
     public function show(Approval $approval)
@@ -69,8 +64,8 @@ class ApprovalsMgr extends Component
     /**
      * Approve or reject
      *
-     * @param  Approval $approvalSelected
-     * @param  bool $status
+     * @param  Approval  $approvalSelected
+     * @param  bool  $status
      * @return void
      */
     public function approveOrReject(Approval $approvalSelected, bool $status)
@@ -120,7 +115,7 @@ class ApprovalsMgr extends Component
     /**
      * Bulk Process
      *
-     * @param  bool $status
+     * @param  bool  $status
      * @return void
      */
     public function bulkProcess($status)
