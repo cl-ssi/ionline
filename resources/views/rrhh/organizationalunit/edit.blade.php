@@ -10,11 +10,23 @@
     {{ method_field('PUT') }}
     {{ csrf_field() }}
 
+    <input
+        type="hidden"
+        name="organizationalUnitId"
+        value="{{ $organizationalUnit->id }}"
+    >
+
     @cannot(['Service Request', 'Service Request: export sirh mantenedores'])
     <div class="form-row">
         <fieldset class="form-group col-12">
             <label for="forName">Nombre</label>
-            <input type="text" class="form-control" id="forName" name="name" value="{{ $organizationalUnit->name }}">
+            <input
+                type="text"
+                class="form-control"
+                id="forName"
+                name="name"
+                value="{{ old('name', $organizationalUnit->name) }}"
+            >
         </fieldset>
     </div>
 
@@ -33,7 +45,14 @@
         <div class="form-row">
             <fieldset class="form-group col-12">
                 <label for="forName">Nombre</label>
-                <input type="text" class="form-control" id="forName" name="name" value="{{ $organizationalUnit->name }}" readonly>
+                <input
+                    type="text"
+                    class="form-control"
+                    id="forName"
+                    name="name"
+                    value="{{ $organizationalUnit->name }}"
+                    readonly
+                >
             </fieldset>
         </div>
 
@@ -51,28 +70,46 @@
 
     <div class="form-row">
         <fieldset class="form-group col-4">
-            <label for="forName">Id Función (SIRH)</label>
-            <input type="number" class="form-control" id="forsirh_function"
-                name="sirh_function" value="{{$organizationalUnit->sirh_function}}">
+            <label for="forSirhFunction">Id Función (SIRH)</label>
+            <input
+                type="number"
+                class="form-control"
+                id="forSirhFunction"
+                name="sirh_function"
+                value="{{ old('sirh_function', $organizationalUnit->sirh_function) }}"
+
+            >
         </fieldset>
 
         <fieldset class="form-group col-4">
-            <label for="forName">Id Unid.Org. (SIRH)</label>
-            <input type="number" class="form-control" id="forsirh_ou_id"
-                name="sirh_ou_id" value="{{$organizationalUnit->sirh_ou_id}}">
+            <label for="forSirhOuId">Id Unid.Org. (SIRH)</label>
+            <input
+                type="number"
+                class="form-control"
+                id="forSirhOuId"
+                name="sirh_ou_id"
+                value="{{ old('sirh_ou_id', $organizationalUnit->sirh_ou_id) }}"
+
+            >
         </fieldset>
 
         <fieldset class="form-group col-4">
-            <label for="forName">C.Costos (SIRH)</label>
-            <input type="number" class="form-control" id="forsirh_cost_center"
-                name="sirh_cost_center" value="{{$organizationalUnit->sirh_cost_center}}">
+            <label for="forSirhCostCenter">C.Costos (SIRH)</label>
+            <input
+                type="number"
+                class="form-control"
+                id="forSirhCostCenter"
+                name="sirh_cost_center"
+                value="{{ old('sirh_cost_center', $organizationalUnit->sirh_cost_center) }}"
+            >
         </fieldset>
     </div>
 
     <div class="form-row">
         <fieldset class="form-group col-12">
             <button type="submit" class="btn btn-primary">
-                <span class="fas fa-save" aria-hidden="true"></span> Actualizar</button>
+                <span class="fas fa-save" aria-hidden="true"></span> Actualizar
+            </button>
 
             </form>
 
