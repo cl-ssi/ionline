@@ -3,8 +3,9 @@
 namespace App\Http\Controllers\Rrhh;
 
 use App\Rrhh\OrganizationalUnit;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Parameters\OrganizationalUnit\StoreOrganizationalUnitRequest;
+use App\Http\Requests\Parameters\OrganizationalUnit\UpdateOrganizationalUnitRequest;
 use Illuminate\Support\Facades\Auth;
 
 class OrganizationalUnitController extends Controller
@@ -35,12 +36,12 @@ class OrganizationalUnitController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  StoreOrganizationalUnitRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreOrganizationalUnitRequest $request)
     {
-        $organizationalUnit = new OrganizationalUnit($request->All());
+        $organizationalUnit = new OrganizationalUnit($request->validated());
         $father = OrganizationalUnit::find($request->input('organizational_unit_id'));
         $organizationalUnit->father()->associate($father);
         $organizationalUnit->level = $father->level + 1;
@@ -54,20 +55,9 @@ class OrganizationalUnitController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  \App\OrganizationalUnit  $organizationalUnit
-     * @return \Illuminate\Http\Response
-     */
-    public function show(OrganizationalUnit $organizationalUnit)
-    {
-        //
-    }
-
-    /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\OrganizationalUnit  $organizationalUnit
+     * @param  OrganizationalUnit  $organizationalUnit
      * @return \Illuminate\Http\Response
      */
     public function edit(OrganizationalUnit $organizationalUnit)
@@ -79,16 +69,16 @@ class OrganizationalUnitController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\OrganizationalUnit  $organizationalUnit
+     * @param  UpdateOrganizationalUnitRequest  $request
+     * @param  OrganizationalUnit  $organizationalUnit
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, OrganizationalUnit $organizationalUnit)
+    public function update(UpdateOrganizationalUnitRequest $request, OrganizationalUnit $organizationalUnit)
     {
-        $organizationalUnit->fill($request->all());
+        $organizationalUnit->fill($request->validated());
         /** Limpia que no tenga doble espacios */
         $organizationalUnit->name = preg_replace('/\s+/', ' ', $organizationalUnit->name);
-        
+
         $father = OrganizationalUnit::find($request->input('organizational_unit_id'));
         $organizationalUnit->father()->associate($father);
         $organizationalUnit->level = $father->level + 1;
@@ -103,7 +93,7 @@ class OrganizationalUnitController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\OrganizationalUnit  $organizationalUnit
+     * @param  OrganizationalUnit  $organizationalUnit
      * @return \Illuminate\Http\Response
      */
     public function destroy(OrganizationalUnit $organizationalUnit)
