@@ -34,7 +34,6 @@
                             @default
                                 ''
                         @endswitch
-        </h5>
                         </td>
                         <td>
                             {{ $purchasePlan->created_at->format('d-m-Y H:i:s') }}
@@ -62,7 +61,7 @@
                             @endif
                         </td>
                         <td class="text-center">
-                            <a href="{{ route('purchase_plan.show', $purchasePlan->id) }}"
+                            <a href="{{ route('purchase_plan.show', $purchasePlan) }}"
                                 class="btn btn-outline-secondary btn-sm me-1"><i class="fas fa-eye"></i>
                             @if($purchasePlan->status == "save")
                             <a href="{{ route('purchase_plan.edit', $purchasePlan->id) }}"

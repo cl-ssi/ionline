@@ -12,4 +12,8 @@
 
 @livewire('rrhh.abscences-import')
 
+<hr>
+
+@livewire('rrhh.ami-loads-import')
+
 @endsection

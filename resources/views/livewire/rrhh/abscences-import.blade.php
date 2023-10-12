@@ -28,6 +28,16 @@
     @if($message2 != "")
         <div class="alert alert-success" role="alert">
             {{ $message2 }}
+
+            <br>
+            <p>A continuación, listado de usuarios de los que no se pudo importar información (No se encuentran registrados en Ionline). Favor regularizar.</p>
+            <ol>
+                @if($non_existent_users)
+                    @foreach($non_existent_users as $user)
+                        <li>{{$user}}</li>
+                    @endforeach
+                @endif
+            </ol>
         </div>
     @endif
 

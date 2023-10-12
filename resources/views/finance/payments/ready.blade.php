@@ -42,6 +42,9 @@
                     <th>Observaciones</th>
                     <th>Comprobante de licitación de Fondos</th>
                     {{-- <th>Guardar</th> --}}
+                    @canany(['be god', 'Payments: return to review'])
+                        <th>Retornar a Bandeja </th>
+                    @endcanany
                 </tr>
             </thead>
             <tbody>
@@ -190,7 +193,21 @@
                         <td>
                             @livewire('finance.sigfe-archivo-comprobante', ['dte' => $dte], key($dte->id))
                         </td>
+                        @canany(['be god', 'Payments: return to review'])
+                            <td>
+                                <form action="{{ route('finance.payments.returnToReview', ['dte' => $dte->id]) }}"
+                                    method="POST">
+                                    @csrf
+                                    @method('PUT')
+                                    <button type="submit" class="btn btn-primary"
+                                        onclick="return confirm('¿Está seguro que regresar a la bandeja de revisión?, esto solamente deberá realizarlo en caso de error en los datos del DTE')">
+                                        <i class="fas fa-arrow-circle-left"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        @endcanany
                     </tr>
+
                 @endforeach
 
             </tbody>

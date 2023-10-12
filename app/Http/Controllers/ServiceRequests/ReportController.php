@@ -30,7 +30,12 @@ class ReportController extends Controller
 {
   public function toPay(Request $request)
   {
-    $establishment_id = $request->establishment_id;
+    if($request->establishment_id){
+        $establishment_id = $request->establishment_id;
+    }else{
+        $establishment_id = Auth::user()->organizationalUnit->establishment_id;
+    }
+    
     $type = $request->type;
     $programm_name = $request->programm_name;
 
@@ -57,6 +62,7 @@ class ReportController extends Controller
     //                  $subQuery->where('establishment_id',38);
     //                });
     //   })
+    ->with('serviceRequest','serviceRequest.employee','serviceRequest.responsabilityCenter','serviceRequest.establishment','serviceRequest.employee.bankAccount')
     ->where('has_invoice_file', 1)
     ->whereNotNull('signatures_file_id')
     ->whereIn('type', ['Mensual', 'Parcial', 'Horas Médicas'])
@@ -64,7 +70,7 @@ class ReportController extends Controller
     ->where('rrhh_approbation', 1)
     ->where('finances_approbation', 1)
     ->whereNull('total_paid')
-    ->paginate(25);
+    ->get();
 
     $topay_fulfillments2 = Fulfillment::whereHas("ServiceRequest", function ($subQuery) {
       $subQuery->where('has_resolution_file', 1);
@@ -89,15 +95,18 @@ class ReportController extends Controller
     //                  $subQuery->where('establishment_id',38);
     //                });
     //   })
+    ->with('serviceRequest','serviceRequest.employee','serviceRequest.responsabilityCenter','serviceRequest.establishment','serviceRequest.employee.bankAccount')
     ->where('has_invoice_file', 1)
     ->whereNotNull('signatures_file_id')
     ->whereNotIn('type', ['Mensual', 'Parcial', 'Horas Médicas'])
     ->whereNull('total_paid')
-    ->paginate(25);
+    ->get();
 
-    // $topay_fulfillments = $topay_fulfillments1->merge($topay_fulfillments2);
+    $topay_fulfillments = $topay_fulfillments1->merge($topay_fulfillments2);
+    // dd($topay_fulfillments);
 
-    return view('service_requests.reports.to_pay', compact('topay_fulfillments1', 'topay_fulfillments2', 'request'));
+    // return view('service_requests.reports.to_pay', compact('topay_fulfillments1', 'topay_fulfillments2', 'request'));
+    return view('service_requests.reports.to_pay', compact('topay_fulfillments', 'request'));
   }
 
   public function payed(Request $request)
@@ -618,6 +627,7 @@ class ReportController extends Controller
 
   public function pending(Request $request, $who)
   {
+    // servicio
     if (Auth::user()->organizationalUnit->establishment_id == 38) {
       $responsabilityCenters = OrganizationalUnit::where('establishment_id', 38)->orderBy('name', 'ASC')->get();
     }

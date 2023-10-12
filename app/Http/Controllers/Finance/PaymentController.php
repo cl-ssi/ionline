@@ -78,7 +78,7 @@ class PaymentController extends Controller
             'establishment',
             'dtes',
             'invoices',
-            
+
             'requestForm',
             'requestForm.requestFormFiles',
             'requestForm.contractManager',
@@ -86,6 +86,7 @@ class PaymentController extends Controller
             'requestForm.father',
             'requestForm.father.requestFormFiles'
         ])
+            ->whereNotIn('tipo_documento', ['guias_despacho','nota_debito','nota_credito'])
             ->where('confirmation_status', 1)
             ->where('establishment_id', auth()->user()->organizationalUnit->establishment->id)
             ->where(function (Builder $query) {
@@ -93,6 +94,17 @@ class PaymentController extends Controller
                     ->orWhere('fin_status', 'rechazado');
             });
 
+        /**
+         * tipo_documento
+         * ==============
+         * factura_electronica
+         * factura_exenta
+         * guias_despacho
+         * nota_debito
+         * nota_credito
+         * boleta_honorarios
+         * boleta_electronica
+         */
 
         if ($request->filled('id') || $request->filled('folio') || $request->filled('oc') || $request->filled('folio_compromiso') || $request->filled('folio_devengo')) {
             //$query = $this->search($request);
@@ -191,4 +203,17 @@ class PaymentController extends Controller
 
         return redirect()->back()->with('success', 'Flujo de pago actualizado exitosamente');
     }
+
+
+    public function returnToReview(Dte $dte, Request $request)
+    {
+        $dte->fin_status = null;
+        $dte->sender_id = null;
+        $dte->sender_ou = null;
+        $dte->sender_at = null;
+        $dte->save();
+        return redirect()->back()->with('success', 'Dte se regreso a Revisión');
+    }
+
+
 }

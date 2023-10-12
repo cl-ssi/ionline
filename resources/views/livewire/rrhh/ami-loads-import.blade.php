@@ -1,6 +1,5 @@
 <div>
-
-    <h3 class="mb-3">Importar contratos SIRH</h3>
+    <h3 class="mb-3">Importar Cargas Amipass</h3>
 
     <div class="form-row">
         <fieldset class="form-group col-6">
@@ -26,7 +25,7 @@
             {{ $message2 }}
 
             <br>
-            <p>A continuación, listado de usuarios que no se pudieron registrar en ionline. (Posible causa: no se encuentra registrada Unidad organizacional Sirh en Ionline). Favor regularizar de forma manual.</p>
+            <p>A continuación, listado de usuarios de los que no se pudo importar información (No se encuentran registrados en Ionline). Favor regularizar.</p>
             <ol>
                 @if($non_existent_users)
                     @foreach($non_existent_users as $user)
@@ -36,5 +35,5 @@
             </ol>
         </div>
     @endif
-    
+
 </div>

@@ -79,9 +79,11 @@ class OrganizationalUnitController extends Controller
         /** Limpia que no tenga doble espacios */
         $organizationalUnit->name = preg_replace('/\s+/', ' ', $organizationalUnit->name);
 
-        $father = OrganizationalUnit::find($request->input('organizational_unit_id'));
-        $organizationalUnit->father()->associate($father);
-        $organizationalUnit->level = $father->level + 1;
+        if($request->input('organizational_unit_id')) {
+            $father = OrganizationalUnit::find($request->input('organizational_unit_id'));
+            $organizationalUnit->father()->associate($father);
+            $organizationalUnit->level = $father->level + 1;
+        }
 
         $organizationalUnit->save();
 
