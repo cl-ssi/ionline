@@ -20,6 +20,7 @@ class AbscencesImport extends Component
 
     public $file;
     public $message2;
+    public $non_existent_users;
 
     public function save()
     {
@@ -42,6 +43,8 @@ class AbscencesImport extends Component
         foreach($absenteeismTypes as $absenteeismType){
             $arrayTypes[$absenteeismType->name] = $absenteeismType->id;
         }
+
+        // $users = User::all()->pluck('name','id')->toArray();
 
         // si es csv
         if(pathinfo($file->getClientOriginalName(), PATHINFO_EXTENSION) == "csv"){
@@ -80,42 +83,48 @@ class AbscencesImport extends Component
                             $val = explode("/",$val)[2]."-".explode("/",$val)[1]."-".explode("/",$val)[0];
                             $ftermino = new Carbon($val);
     
-                            Absenteeism::updateOrCreate([
-                                'rut' => $column['rut'],
-                                'finicio' => $finicio,
-                                'ftermino' => $ftermino,
-                                'absenteeism_type_id' => $absenteeismType_id,
-                            ],[
-                                'rut' => $column['rut'],
-                                'dv' => $column['dv'],
-                                'nombre' => $column['nombre'],
-                                'ley' => $column['ley'],
-                                'edadanos' => $column['edadaos'],
-                                'edadmeses' => $column['edadmeses'],
-                                'afp' => $column['afp'],
-                                'salud' => $column['salud'],
-                                'codigo_unidad' => $column['codigo_unidad'],
-                                'nombre_unidad' => $column['nombre_unidad'],
-                                'genero' => $column['genero'],
-                                'cargo' => $column['cargo'],
-                                'calidad_juridica' => $column['calidad_juridica'],
-                                'planta' => $column['planta'],
-                                'n_resolucion' => $column['n_resolucion'],
-                                'fresolucion' => $fresolucion,
-                                'finicio' => $finicio,
-                                'ftermino' => $ftermino,
-                                'total_dias_ausentismo' => $column['total_dias_ausentismo'],
-                                'ausentismo_en_el_periodo' => $column['ausentismo_en_el_periodo'],
-                                'costo_de_licencia' => $column['costo_de_licencia'],
-                                'tipo_de_ausentismo' => $column['tipo_de_ausentismo'],
-                                'absenteeism_type_id' => $arrayTypes[trim($column['tipo_de_ausentismo'])],
-                                'codigo_de_establecimiento' => $column['codigo_de_establecimiento'],
-                                'nombre_de_establecimiento' => $column['nombre_de_establecimiento'],
-                                'saldo_dias_no_reemplazados' => $column['saldo_dias_no_reemplazados'],
-                                'tipo_de_contrato' => $column['tipo_de_contrato']
-                            ]);
-    
-                            $count_inserts += 1;
+                            // solo se crean ausentismos de usuarios que existen en ionline
+                            if(!User::find($column['rut'])){
+                                $this->non_existent_users[$column['rut']] = $column['rut'] . "-" . trim($column['dv']) . ": " . trim($column['nombre']);
+                            }else{
+                                Absenteeism::updateOrCreate([
+                                    'rut' => $column['rut'],
+                                    'finicio' => $finicio,
+                                    'ftermino' => $ftermino,
+                                    'absenteeism_type_id' => $absenteeismType_id,
+                                ],[
+                                    'rut' => $column['rut'],
+                                    'dv' => trim($column['dv']),
+                                    'nombre' => trim($column['nombre']),
+                                    'ley' => $column['ley'],
+                                    'edadanos' => $column['edadaos'],
+                                    'edadmeses' => $column['edadmeses'],
+                                    'afp' => $column['afp'],
+                                    'salud' => $column['salud'],
+                                    'codigo_unidad' => $column['codigo_unidad'],
+                                    'nombre_unidad' => $column['nombre_unidad'],
+                                    'genero' => $column['genero'],
+                                    'cargo' => $column['cargo'],
+                                    'calidad_juridica' => $column['calidad_juridica'],
+                                    'planta' => $column['planta'],
+                                    'n_resolucion' => $column['n_resolucion'],
+                                    'fresolucion' => $fresolucion,
+                                    'finicio' => $finicio,
+                                    'ftermino' => $ftermino,
+                                    'total_dias_ausentismo' => $column['total_dias_ausentismo'],
+                                    'ausentismo_en_el_periodo' => $column['ausentismo_en_el_periodo'],
+                                    'costo_de_licencia' => $column['costo_de_licencia'],
+                                    'tipo_de_ausentismo' => $column['tipo_de_ausentismo'],
+                                    'absenteeism_type_id' => $arrayTypes[trim($column['tipo_de_ausentismo'])],
+                                    'codigo_de_establecimiento' => $column['codigo_de_establecimiento'],
+                                    'nombre_de_establecimiento' => $column['nombre_de_establecimiento'],
+                                    'saldo_dias_no_reemplazados' => $column['saldo_dias_no_reemplazados'],
+                                    'tipo_de_contrato' => $column['tipo_de_contrato']
+                                ]);
+        
+                                $count_inserts += 1;
+                            }
+                            
                             
                         }
                     }
@@ -160,44 +169,49 @@ class AbscencesImport extends Component
                             $val = trim($column['ftermino']);
                             $val = explode("/",$val)[2]."-".explode("/",$val)[1]."-".explode("/",$val)[0];
                             $ftermino = new Carbon($val);
-    
-                            Absenteeism::updateOrCreate([
-                                'rut' => $column['rut'],
-                                'finicio' => $finicio->format('Y-m-d'),
-                                'ftermino' => $ftermino->format('Y-m-d'),
-                                'absenteeism_type_id' => $absenteeismType_id,
-                            ],[
-                                'rut' => $column['rut'],
-                                'dv' => $column['dv'],
-                                'nombre' => $column['nombre'],
-                                'ley' => $column['ley'],
-                                'edadanos' => $column['edadanos'],
-                                'edadmeses' => $column['edadmeses'],
-                                'afp' => $column['afp'],
-                                'salud' => $column['salud'],
-                                'codigo_unidad' => $column['codigo_unidad'],
-                                'nombre_unidad' => $column['nombre_unidad'],
-                                'genero' => $column['genero'],
-                                'cargo' => $column['cargo'],
-                                'calidad_juridica' => $column['calidad_juridica'],
-                                'planta' => $column['planta'],
-                                'n_resolucion' => $column['n_resolucion'],
-                                'fresolucion' => $fresolucion,
-                                'finicio' => $finicio,
-                                'ftermino' => $ftermino,
-                                'total_dias_ausentismo' => $column['total_dias_ausentismo'],
-                                'ausentismo_en_el_periodo' => $column['ausentismo_en_el_periodo'],
-                                'costo_de_licencia' => $column['costo_de_licencia'],
-                                'tipo_de_ausentismo' => $column['tipo_de_ausentismo'],
-                                'absenteeism_type_id' => $absenteeismType_id,
-                                'codigo_de_establecimiento' => $column['codigo_de_establecimiento'],
-                                'nombre_de_establecimiento' => $column['nombre_de_establecimiento'],
-                                'saldo_dias_no_reemplazados' => $column['saldo_dias_no_reemplazados'],
-                                'tipo_de_contrato' => $column['tipo_de_contrato']
-                            ]);
-    
-                            $count_inserts += 1;
-                            
+
+                            // solo se crean ausentismos de usuarios que existen en ionline
+                            if(!User::find($column['rut'])){
+                            // if(array_key_exists($column['rut'],$users)){
+                                $this->non_existent_users[$column['rut']] = $column['rut'] . "-" . trim($column['dv']) . ": " . trim($column['nombre']);
+                            }else{
+                                Absenteeism::updateOrCreate([
+                                    'rut' => $column['rut'],
+                                    'finicio' => $finicio->format('Y-m-d'),
+                                    'ftermino' => $ftermino->format('Y-m-d'),
+                                    'absenteeism_type_id' => $absenteeismType_id,
+                                ],[
+                                    'rut' => $column['rut'],
+                                    'dv' => trim($column['dv']),
+                                    'nombre' => trim($column['nombre']),
+                                    'ley' => $column['ley'],
+                                    'edadanos' => $column['edadanos'],
+                                    'edadmeses' => $column['edadmeses'],
+                                    'afp' => $column['afp'],
+                                    'salud' => $column['salud'],
+                                    'codigo_unidad' => $column['codigo_unidad'],
+                                    'nombre_unidad' => $column['nombre_unidad'],
+                                    'genero' => $column['genero'],
+                                    'cargo' => $column['cargo'],
+                                    'calidad_juridica' => $column['calidad_juridica'],
+                                    'planta' => $column['planta'],
+                                    'n_resolucion' => $column['n_resolucion'],
+                                    'fresolucion' => $fresolucion,
+                                    'finicio' => $finicio,
+                                    'ftermino' => $ftermino,
+                                    'total_dias_ausentismo' => $column['total_dias_ausentismo'],
+                                    'ausentismo_en_el_periodo' => $column['ausentismo_en_el_periodo'],
+                                    'costo_de_licencia' => $column['costo_de_licencia'],
+                                    'tipo_de_ausentismo' => $column['tipo_de_ausentismo'],
+                                    'absenteeism_type_id' => $absenteeismType_id,
+                                    'codigo_de_establecimiento' => $column['codigo_de_establecimiento'],
+                                    'nombre_de_establecimiento' => $column['nombre_de_establecimiento'],
+                                    'saldo_dias_no_reemplazados' => $column['saldo_dias_no_reemplazados'],
+                                    'tipo_de_contrato' => $column['tipo_de_contrato']
+                                ]);
+        
+                                $count_inserts += 1;
+                            }
                         }
                     }
                 }
