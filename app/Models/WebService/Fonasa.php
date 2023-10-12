@@ -16,8 +16,7 @@ class Fonasa extends Model
         list($id, $dv) = explode('-', $run);
         $url = env('WSSSI_URL') . "/fonasa?run=$id&dv=$dv";
         $response = Http::get($url);
-        $fonasaUser = json_decode($response);
-        return $fonasaUser;
+        return json_decode($response);
     }
 
     // public static function find($rut) {
