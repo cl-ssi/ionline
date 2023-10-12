@@ -12,7 +12,7 @@ use Carbon\Carbon;
 use App\User;
 use App\Rrhh\OrganizationalUnit;
 use App\Http\Controllers\WebserviceController;
-
+use App\Models\WebService\Fonasa;
 use App\Models\Rrhh\SirhActiveUser;
 
 class ContractImport extends Component
@@ -96,26 +96,31 @@ class ContractImport extends Component
 
                             // si no existe usuario, se crea
                             $rut = trim($column['rut']);
-                            if(!User::find($rut)){
+                            $dv = trim($column['dv']);
+                            // verifica si existe usuario, inclusive eliminados
+                            if(!User::withTrashed()->find($rut)){
                                 // Aquí se verifica si existe la unidad organizacional según id sirth de archivo importado, si existe: se crea nuevo usuario con esa ou_id
-                                // FALTA: obtener nombre del usuario desde fonasa
-
-                                // if(OrganizationalUnit::where('sirh_ou_id',$column['cdigo_unidad'])->count()>0){
+                                if(OrganizationalUnit::where('sirh_ou_id',$column['cdigo_unidad'])->count()>0){
                                 
-                                // $rut <-- obtener nombres y apellidos desde con fonasa con rut.
+                                    // Se obtienen datos del funcionario desde fonasa
+                                    if(!isset(Fonasa::find($rut."-".$dv)->message)){
+                                        $fonasaUser = Fonasa::find($rut."-".$dv);
+                                        $ou_id = OrganizationalUnit::where('sirh_ou_id',$column['cdigo_unidad'])->first()->id;
 
-                                //     $ou_id = OrganizationalUnit::where('sirh_ou_id',$column['cdigo_unidad'])->first()->id;
-                                //     $user = new User();
-                                //     $user->id = $rut;
-                                //     $user->dv = $column['dv'];
-                                //     $user->mothers_family = ;
-                                //     $user->fathers_family = ;
-                                //     $user->name = ;
-                                //     $user->organizational_unit_id = $ou_id;
-                                //     dd($user);
-                                //     $user->save();
-                                // }
-                                $this->non_existent_users[$rut] = $column['nombre_funcionario'];
+                                        $user = new User();
+                                        $user->id = $rut;
+                                        $user->dv = $dv;
+                                        $user->mothers_family = $fonasaUser->mothers_family;
+                                        $user->fathers_family = $fonasaUser->fathers_family;
+                                        $user->name = $fonasaUser->name;
+                                        $user->organizational_unit_id = $ou_id;
+                                        $user->save();
+                                    } else{
+                                        $this->non_existent_users[$rut] = $column['nombre_funcionario'];
+                                    }
+                                }else{
+                                    $this->non_existent_users[$rut] = $column['nombre_funcionario'];
+                                }
                             }
                             
                             Contract::updateOrCreate([
