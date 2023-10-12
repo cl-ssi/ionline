@@ -11,32 +11,42 @@
     {{ csrf_field() }}
 
     @cannot(['Service Request', 'Service Request: export sirh mantenedores'])
-    <div class="form-row">
-        <fieldset class="form-group col-12">
-            <label for="forName">Nombre</label>
-            <input type="text" class="form-control" id="forName" name="name" value="{{ $organizationalUnit->name }}">
-        </fieldset>
-    </div>
-
-    <div class="form-row">
-        <fieldset class="form-group col-12">
-            <label for="forFather">Depende de</label>
-            @livewire('select-organizational-unit', [
-                'establishment_id' => optional($organizationalUnit->father)->establishment_id,
-                'organizational_unit_id' => optional($organizationalUnit->father)->id,
-                'readonlyEstablishment' => true,
-            ])
-        </fieldset>
-
-    </div>
-    @else
+        <div class="form-row">
+            <fieldset class="form-group col-1">
+                <label for="forLevel">Nivel</label>
+                <input type="text" class="form-control" id="forLevel" value="{{ $organizationalUnit->level }}" disabled>
+            </fieldset>
+            <fieldset class="form-group col-11">
+                <label for="forName">Nombre</label>
+                <input type="text" class="form-control" id="forName" name="name" value="{{ $organizationalUnit->name }}">
+            </fieldset>
+        </div>
+        
+        @if($organizationalUnit->level != 1)
         <div class="form-row">
             <fieldset class="form-group col-12">
+                <label for="forFather">Depende de</label>
+                @livewire('select-organizational-unit', [
+                    'establishment_id' => optional($organizationalUnit->father)->establishment_id,
+                    'organizational_unit_id' => optional($organizationalUnit->father)->id,
+                    'readonlyEstablishment' => true,
+                ])
+            </fieldset>
+        </div>
+        @endif
+    @else
+        <div class="form-row">
+            <fieldset class="form-group col-1">
+                <label for="forLevel">Nivel</label>
+                <input type="text" class="form-control" id="forLevel" value="{{ $organizationalUnit->level }}" disabled>
+            </fieldset>
+            <fieldset class="form-group col-11">
                 <label for="forName">Nombre</label>
                 <input type="text" class="form-control" id="forName" name="name" value="{{ $organizationalUnit->name }}" readonly>
             </fieldset>
         </div>
-
+        
+        @if($organizationalUnit->level != 1)
         <div class="form-row">
             <fieldset class="form-group col-9">
                 <label for="forFather">Depende de</label>
@@ -47,6 +57,7 @@
                 ])
             </fieldset>
         </div>
+        @endif
     @endcan
 
     <div class="form-row">

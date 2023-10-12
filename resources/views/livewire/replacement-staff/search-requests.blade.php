@@ -205,52 +205,42 @@
                         </p>
                     </td>
                     <td class="text-center">
-                        @if($requestReplacementStaff->signaturesFile)
-                            @foreach($requestReplacementStaff->RequestSign as $sign)
-                                @if($sign->ou_alias != 'finance')
-                                    @if($sign->request_status == 'pending' || $sign->request_status == NULL)
+                        @foreach($requestReplacementStaff->RequestSign as $sign)
+                            @if($sign->request_status == 'pending' || $sign->request_status == NULL)
+                                <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="{{ $sign->organizationalUnit->name }}">
+                                    <i class="fas fa-clock fa-2x"></i>
+                                </span>
+                            @endif
+                            @if($sign->request_status == 'accepted')
+                                <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="{{ $sign->organizationalUnit->name }}" style="color: green;">
+                                    <i class="fas fa-check-circle fa-2x"></i>
+                                </span>
+                            @endif
+                            @if($sign->request_status == 'rejected')
+                                <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="{{ $sign->organizationalUnit->name }}" style="color: Tomato;">
+                                    <i class="fas fa-times-circle fa-2x"></i>
+                                </span>
+                            @endif
+                            @if($sign->request_status == 'not valid')
+                                @if($requestReplacementStaff->signaturesFile)
+                                    @foreach($requestReplacementStaff->signaturesFile->signaturesFlows as $flow)
+                                        @if($flow->status == 1)
+                                        <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="{{ $sign->organizationalUnit->name }}" style="color: green;">
+                                            <i class="fas fa-signature fa-2x"></i>
+                                        </span>
+                                        @else
                                         <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="{{ $sign->organizationalUnit->name }}">
                                             <i class="fas fa-clock fa-2x"></i>
                                         </span>
-                                    @endif
-                                    @if($sign->request_status == 'accepted')
-                                        <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="{{ $sign->organizationalUnit->name }}" style="color: green;">
-                                            <i class="fas fa-check-circle fa-2x"></i>
-                                        </span>
-                                    @endif
-                                    @if($sign->request_status == 'rejected')
-                                        <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="{{ $sign->organizationalUnit->name }}" style="color: Tomato;">
-                                            <i class="fas fa-times-circle fa-2x"></i>
-                                        </span>
-                                    @endif
-                                @endif
-                            @endforeach
-                            @foreach($requestReplacementStaff->signaturesFile->signaturesFlows as $flow)
-                                @if($flow->status == 1)
-                                    <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="{{ $sign->organizationalUnit->name }}" style="color: green;">
-                                        <i class="fas fa-signature fa-2x"></i>
-                                    </span>
-                                @endif
-                            @endforeach
-                        @else
-                            @foreach($requestReplacementStaff->RequestSign as $sign)
-                                @if($sign->request_status == 'pending' || $sign->request_status == NULL)
+                                        @endif
+                                    @endforeach
+                                @else
                                     <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="{{ $sign->organizationalUnit->name }}">
                                         <i class="fas fa-clock fa-2x"></i>
                                     </span>
                                 @endif
-                                @if($sign->request_status == 'accepted')
-                                    <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="{{ $sign->organizationalUnit->name }}" style="color: green;">
-                                        <i class="fas fa-check-circle fa-2x"></i>
-                                    </span>
-                                @endif
-                                @if($sign->request_status == 'rejected')
-                                    <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="{{ $sign->organizationalUnit->name }}" style="color: Tomato;">
-                                        <i class="fas fa-times-circle fa-2x"></i>
-                                    </span>
-                                @endif
-                            @endforeach
-                        @endif
+                            @endif
+                        @endforeach
 
                         </br>
                         @if($requestReplacementStaff->request_id != NULL)
