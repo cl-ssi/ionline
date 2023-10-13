@@ -16,7 +16,22 @@ class OpenHourController extends Controller
     public function index(Request $request)
     {
         $user_id_param = $request->user_id;
-        $openHours = OpenHour::whereNotNull('patient_id')->where('blocked',0)->orderBy('start_date', 'DESC')->where('profesional_id',$user_id_param)->get();
+        $patient_id_param = $request->patient_id;
+        $assistance_param = $request->assistance;
+        // dd($assistance_param);
+
+        $openHours = OpenHour::whereNotNull('patient_id')
+                            ->where('blocked',0)
+                            ->orderBy('start_date', 'DESC')
+                            ->where('profesional_id',$user_id_param)
+                            ->when($assistance_param!=-1, function ($q) use ($assistance_param) {
+                                return $q->where('assistance',intval($assistance_param));
+                            })
+                            ->when($patient_id_param, function ($q) use ($patient_id_param) {
+                                return $q->where('patient_id',$patient_id_param);
+                            })
+                            
+                            ->get();
         return view('prof_agenda.open_hours.index',compact('openHours','request'));
     }
 
