@@ -16,11 +16,17 @@ class PurchasePlanItem extends Model implements Auditable
 
     protected $fillable = [
         'article', 'unit_of_measurement', 'quantity', 'unit_value', 'specification',
-        'tax','expense', 'article_file', 'unspsc_product_id', 'purchase_plan_id'
+        'tax','expense', 'article_file', 'unspsc_product_id', 'purchase_plan_id',
+        'january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september',
+        'october', 'november', 'december'
     ];
 
     public function unspscProduct() {
         return $this->belongsTo('App\Models\Unspsc\Product', 'unspsc_product_id');
+    }
+
+    public function purchasePlan() {
+        return $this->belongsTo('App\Models\PurchasePlan\PurchasePlan', 'purchase_plan_id');
     }
 
     protected $table = 'ppl_purchase_plan_items';
