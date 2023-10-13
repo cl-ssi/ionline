@@ -115,6 +115,10 @@
                                     <span class="fas fa-redo" aria-hidden="true"></span></a>
                             @endif
                         @endunless
+
+                        @if ($user->trashed())
+                            @livewire('rrhh.undo-user-deletion', ['user' => $user], key($user->id))
+                        @endif
                 </td>
             </tr>
         @endforeach
