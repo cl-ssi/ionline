@@ -12,8 +12,15 @@
     <div class="form-row">
         <fieldset class="form-group col-12">
             <label for="forName">Nombre</label>
-            <input type="text" class="form-control" id="forName"
-                placeholder="Nombre de la unidad organizacional" name="name" required="required">
+            <input
+                type="text"
+                class="form-control"
+                id="forName"
+                placeholder="Nombre de la unidad organizacional"
+                name="name"
+                required="required"
+                value="{{ old('name') }}"
+            >
         </fieldset>
     </div>
 
@@ -28,21 +35,39 @@
 
     <div class="form-row">
         <fieldset class="form-group col-4">
-            <label for="forName">Id Función (SIRH)</label>
-            <input type="number" class="form-control" id="forsirh_function"
-                placeholder="Código SIRH de la función" name="sirh_function">
+            <label for="forSirhFunction">Id Función (SIRH)</label>
+            <input
+                type="number"
+                class="form-control"
+                id="forSirhFunction"
+                placeholder="Código SIRH de la función"
+                name="sirh_function"
+                value="{{ old('sirh_function') }}"
+            >
         </fieldset>
 
         <fieldset class="form-group col-4">
-            <label for="forName">Id Unid.Org. (SIRH)</label>
-            <input type="number" class="form-control" id="forsirh_ou_id"
-                placeholder="Código SIRH de la unidad organizacional" name="sirh_ou_id">
+            <label for="forSirhOuId">Id Unid.Org. (SIRH)</label>
+            <input
+                type="number"
+                class="form-control"
+                id="forSirhOuId"
+                placeholder="Código SIRH de la unidad organizacional"
+                name="sirh_ou_id"
+                value="{{ old('sirh_ou_id') }}"
+            >
         </fieldset>
 
         <fieldset class="form-group col-4">
-            <label for="forName">C.Costos (SIRH)</label>
-            <input type="number" class="form-control" id="forsirh_cost_center"
-                placeholder="Código SIRH de la unidad organizacional" name="sirh_cost_center">
+            <label for="forSirhCostCenter">C.Costos (SIRH)</label>
+            <input
+                type="number"
+                class="form-control"
+                id="forSirhCostCenter"
+                placeholder="Código SIRH de la unidad organizacional"
+                name="sirh_cost_center"
+                value="{{ old('sirh_cost_center') }}"
+            >
         </fieldset>
     </div>
 
