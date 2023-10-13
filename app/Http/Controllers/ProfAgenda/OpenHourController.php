@@ -35,9 +35,21 @@ class OpenHourController extends Controller
         return view('prof_agenda.open_hours.index',compact('openHours','request'));
     }
 
-    public function store(Request $request){
+    public function store(Request $request)
+    {
+        $openHour = OpenHour::find($request->openHours_id);
 
-        
+        // dd($openHour->start_date, $openHour->end_date);
+        // valida si existen del paciente con otros funcionarios en la misma hora
+        $othersReservationsCount = OpenHour::where('patient_id',$request->user_id)
+                                            ->whereBetween('start_date',[$openHour->start_date, $openHour->end_date])
+                                            ->orWhereBetween('end_date',[$openHour->start_date, $openHour->end_date])
+                                            ->count(); 
+        if($othersReservationsCount>0){
+            session()->flash('warning', 'No es posible realizar la reserva del paciente, porque otra a la misma hora con otro funcionario.');
+            return redirect()->back();
+        }
+
         // // validación para dv de rut
         // if($request->dv!=null){
         //     session()->flash('warning', 'El campo dv no puede ser vacío.');
@@ -83,7 +95,7 @@ class OpenHourController extends Controller
             );
         }        
 
-        $openHour = OpenHour::find($request->openHours_id);
+        // $openHour = OpenHour::find($request->openHours_id);
         $openHour->contact_number = $request->phone_number;
         $openHour->patient_id = $user->id;
         $openHour->observation = $request->observation;
