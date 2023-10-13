@@ -256,10 +256,9 @@
 
     @section('custom_js')
         <script>
+            /* Permite ver el nombre del archivo en el file input */
             $('.custom-file-input').on('change', function(e) {
-                //get the file name
                 var fileName = e.target.files[0].name;
-                //replace the "Choose a file" label
                 $(this).next('.custom-file-label').html(fileName);
             })
         </script>
