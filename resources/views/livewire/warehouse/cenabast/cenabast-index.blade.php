@@ -92,20 +92,7 @@
                     <td>{{ $dte->id }}</td>
                     <td>{{ $dte->establishment->alias ?? '' }}</td>
                     <td>
-                        @if ($dte->tipo_documento != 'boleta_honorarios')
-                            <a href="http://dipres2303.acepta.com/ca4webv3/PdfView?url={{ $dte->uri }}"
-                                target="_blank" class="btn btn-sm mb-1 btn-outline-secondary">
-                                <i class="fas fa-file-pdf text-danger"></i> {{ $dte->folio }}
-                            </a>
-                        @else
-                            <a href="{{ $dte->uri }}" target="_blank" class="btn btn-sm mb-1 btn-outline-secondary">
-                                <i class="fas fa-file-pdf text-danger"></i> {{ $dte->folio }}
-                            </a>
-                        @endif
-                        <br>
-                        {{ $dte->tipo_documento }}
-                        <br>
-                        {{ $dte->emisor }}
+                        @include('finance.payments.partials.dte-info')
                     </td>
                     <td class="small">
                         @foreach ($dte->controls as $control)
