@@ -76,11 +76,21 @@
                         -->
 
                         <!-- Punto 1 -->
-                        @if($dte->cenabast_reception_file)
-                            <a
-                                class="btn btn-sm btn-outline-primary" target="_blank" 
+                        @if (isset($dte->confirmation_signature_file) && !isset($dte->cenabast_reception_file))
+                            <a 
+                                href="{{ route('warehouse.cenabast.downloadFile', ['dte' => $dte->id]) }}"
+                                class="btn btn-sm btn-outline-success" 
+                                title="Descargar Acta Original"
+                                target="_blank"
+                            >
+                                <i class="fas fa-file"></i> CNB
+                            </a>
+                        @elseif(isset($dte->cenabast_reception_file))
+                            <a 
+                                class="btn btn-sm btn-success"
                                 href="{{ route('warehouse.cenabast.download.signed', $dte) }}"
-                                title="Acta de recepción CENABAST"
+                                title="Descargar Acta Firmada"
+                                target="_blank"
                             >
                                 <i class="fas fa-file"></i> CNB
                             </a>

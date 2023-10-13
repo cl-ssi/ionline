@@ -74,7 +74,6 @@ class CenabastIndex extends Component
         }
 
 
-
         $dtes = $dtes->latest()->paginate(100);
 
         return $dtes;
