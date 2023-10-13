@@ -155,6 +155,7 @@
     </div>
 </div>
 
+@if($purchasePlan->approvals->count() > 0)
 <div class="table-responsive">
     <table class="table table-bordered table-sm small">
         <thead>
@@ -194,6 +195,13 @@
         <tbody>
     </table>
 </div>
+@else
+
+<div class="alert alert-info" role="alert">
+    Estimado Usuario: El Plan de Compras aún no ha sido enviado para aprobaciones.
+</div>
+
+@endif
 
 @endsection
 
