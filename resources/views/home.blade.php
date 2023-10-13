@@ -89,14 +89,14 @@
             <h6>Pasos para solicitud de Firma Electrónica del Gobierno (OTP) para Funcionarios Visadores y Firmantes</h6>
             <ol>
                 <li>
-                    Solicitar a Gabriela Aliaga del Departamento Tic (dtic.sst@redsalud.gob.cl), Yeannett Valdivia (sda.ssi@redsalud.gob.cl)
-                    o Pamela Villagrán (sdga.ssi@redsalud.gob.cl) la creación del usuario firma.digital.gob.cl indicando los siguientes datos:
+                    Solicitar mediante un requerimiento en iOnline/SGR, dirigido a Gabriela Aliaga del Departamento de Tecnologías de la Información y Comunicaciones, la creación del usuario firma.digital.gob.cl. Indicar los siguientes datos:
                 </li>
                 <ul>
                     <li>Run</li>
                     <li>Nombre completo</li>
                     <li>Correo electrónico</li>
                     <li>Cargo</li>
+                    <li>Telefono</li>
                 </ul>
                 <li>
                     Ingresar al link <a href="https://firma.digital.gob.cl/ra/" target="_blank">firma.digital.gob.cl</a>
@@ -114,6 +114,10 @@
                 <a href="https://apps.apple.com/cl/app/google-authenticator/id388497605">iPhone</a>
                 </li>
             </ol>
+
+            <p>
+                En caso de consultas, no dude en llamarnos. Teléfono: +56 572409403 / Anexo: 579403
+            </p>
 
             <hr class="my-4">
             <p class="text-right">Contacto:
