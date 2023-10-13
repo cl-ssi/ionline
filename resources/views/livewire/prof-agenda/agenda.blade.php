@@ -146,21 +146,21 @@
                         <fieldset class="form-group col-12 col-md-4">
                             <label for="for_rut">Rut</label>
                             <div>
-                                <input type="text" class="form-control" id="rut" disabled>
+                                <input type="text" class="form-control rut" id="" disabled>
                             </div>
                         </fieldset>
 
                         <fieldset class="form-group col-12 col-md-4">
                             <label for="for_patient">Funcionario</label>
                             <div>
-                                <input type="text" class="form-control" id="patient" disabled>
+                                <input type="text" class="form-control patient" id="" disabled>
                             </div>
                         </fieldset>
 
                         <fieldset class="form-group col-12 col-md-4">
                             <label for="for_contact_number">Telefono de contacto</label>
                             <div>
-                                <input type="text" class="form-control" id="contact_number" disabled>
+                                <input type="text" class="form-control contact_number" disabled>
                             </div>
                         </fieldset>
                     </div>
@@ -207,6 +207,69 @@
                     <fieldset class="form-group col-12 col-md-6">
                         <label for="for_profesion_id"><br></label>
                         <button type="submit" class="form-control btn btn-danger" data-dismiss="modal" data-toggle="modal" data-target="#put_absence_reason">No asistió</button>
+                    </fieldset>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- modal para mostrar info de reserva confirmada -->
+    <div class="modal fade bd-example-modal-lg" id="confirmedHour" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title modalTitle" id=""></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <div class="row">
+                    <input class="openHours_id" type="hidden" id="" name="openHours_id">
+                    <fieldset class="form-group col-12 col-md-6">
+                        <label for="for_users">F.Inicio</label>
+                        <input class="form-control finicio" type="datetime" id="" disabled>
+                    </fieldset>
+
+                    <fieldset class="form-group col-12 col-md-6">
+                        <label for="for_profesion_id">F.Término</label>
+                        <input class="form-control ftermino" type="datetime" id="" disabled>
+                    </fieldset>
+                </div>
+
+                <div class="row">
+                    <fieldset class="form-group col-12 col-md-4">
+                        <label for="for_rut">Rut</label>
+                        <div>
+                            <input type="text" class="form-control rut" id="" disabled>
+                        </div>
+                    </fieldset>
+
+                    <fieldset class="form-group col-12 col-md-4">
+                        <label for="for_patient">Funcionario</label>
+                        <div>
+                            <input type="text" class="form-control patient" id="" disabled>
+                        </div>
+                    </fieldset>
+
+                    <fieldset class="form-group col-12 col-md-4">
+                        <label for="for_contact_number">Telefono de contacto</label>
+                        <div>
+                            <input type="text" class="form-control contact_number" disabled>
+                        </div>
+                    </fieldset>
+                </div>
+
+                <div class="row">
+                    <fieldset class="form-group col-12 col-md-12">
+                        <label for="for_observation">Motivo consulta</label>
+                        <textarea class="form-control observation" name="observation" id="" cols="30" rows="3" disabled></textarea>
                     </fieldset>
                 </div>
 
@@ -366,8 +429,8 @@
                     eventClick: function(info) {
                         console.info(info.event.extendedProps);
                         $('.modalTitle').html(info.event.title);
-                        $('#patient').val(info.event.title);
-                        $('#contact_number').val(info.event.extendedProps.contact_number);
+                        $('.patient').val(info.event.title);
+                        $('.contact_number').val(info.event.extendedProps.contact_number);
                         $('.openHours_id').val(info.event.id);
                         $('.finicio').val(info.event.start.toLocaleString());
                         $('.ftermino').val(info.event.end.toLocaleString());
@@ -377,8 +440,12 @@
                         if(info.event.extendedProps.status=="Disponible"){
                             $('#newHour').modal();
                         }else if(info.event.extendedProps.status=="Reservado"){
-                            $('#rut').val(info.event.extendedProps.rut);
+                            $('.rut').val(info.event.extendedProps.rut);
                             $('#reservedHour').modal();
+                        }
+                        else if(info.event.extendedProps.status=="Asistió"){
+                            $('.rut').val(info.event.extendedProps.rut);
+                            $('#confirmedHour').modal();
                         }
                         else if(info.event.extendedProps.status=="Bloqueado"){
                             $('#deleted_bloqued_observation').val(info.event.extendedProps.deleted_bloqued_observation);

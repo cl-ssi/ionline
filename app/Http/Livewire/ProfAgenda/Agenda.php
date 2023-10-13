@@ -45,6 +45,7 @@ class Agenda extends Component
                 }else{
                     // paciente asistió
                     if($hour->assistance == 1){
+                        $array[$count]['rut'] = $hour->patient_id;
                         $array[$count]['color'] = "#C4F7BF"; // verde
                         $array[$count]['title'] = $hour->patient->shortName;
                         $array[$count]['status'] = "Asistió";
