@@ -19,6 +19,8 @@
                     <button class="btn btn-sm btn-outline-success" disabled>
                         <i class="fas fa-envelope" title="Correo electrónico personal verificado"></i>
                     </button>
+
+                    @livewire('rrhh.unverify-personal-email', ['user' => $user], key($user->id))
                 @endif
             </div>
         @endcan
