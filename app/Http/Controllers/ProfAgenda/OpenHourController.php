@@ -39,11 +39,12 @@ class OpenHourController extends Controller
     {
         $openHour = OpenHour::find($request->openHours_id);
 
-        // dd($openHour->start_date, $openHour->end_date);
         // valida si existen del paciente con otros funcionarios en la misma hora
         $othersReservationsCount = OpenHour::where('patient_id',$request->user_id)
-                                            ->whereBetween('start_date',[$openHour->start_date, $openHour->end_date])
-                                            ->orWhereBetween('end_date',[$openHour->start_date, $openHour->end_date])
+                                            ->where(function($query) use ($openHour){
+                                                $query->whereBetween('start_date',[$openHour->start_date, $openHour->end_date])
+                                                        ->orWhereBetween('end_date',[$openHour->start_date, $openHour->end_date]);
+                                            })
                                             ->count(); 
         if($othersReservationsCount>0){
             session()->flash('warning', 'No es posible realizar la reserva del paciente, porque otra a la misma hora con otro funcionario.');
