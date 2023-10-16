@@ -3,7 +3,7 @@
 @section('content')
 
     <div class="container">
-        <h3 class="mb-3">Detalles de Pregunta/Sugerencia AmiPass</h3>
+        <h3 class="mb-3">Detalles de Pregunta/Sugerencia Amipass</h3>
 
         <div class="form-group">
             <label for="nombre">Nombre Completo Funcionario:</label>

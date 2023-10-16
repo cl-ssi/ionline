@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Welfare\AmiPass;
+namespace App\Models\Welfare\Amipass;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;

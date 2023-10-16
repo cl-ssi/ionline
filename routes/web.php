@@ -13,8 +13,8 @@ use App\Models\Pharmacies\Purchase;
 
 
 use App\Http\Livewire\Welfare\Amipass\ReportByDates;
-use App\Http\Livewire\Welfare\AmiPass\RequestMgr;
-use App\Http\Livewire\Welfare\AmiPass\NewBeneficiaryRequest;
+use App\Http\Livewire\Welfare\Amipass\RequestMgr;
+use App\Http\Livewire\Welfare\Amipass\NewBeneficiaryRequest;
 use App\Http\Livewire\Warehouse\Invoices\InvoiceManagement;
 use App\Http\Livewire\TicResources;
 use App\Http\Livewire\Summary\Template\ShowTemplate;

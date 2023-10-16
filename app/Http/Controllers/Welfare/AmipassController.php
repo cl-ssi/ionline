@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\Welfare\Abscence;
 use App\Models\Welfare\EmployeeInformation;
 use App\Models\Welfare\Doubt;
-use App\Models\Welfare\AmiPass\Value;
+use App\Models\Welfare\Amipass\Value;
 use App\User;
 
 class AmipassController extends Controller
@@ -74,7 +74,7 @@ class AmipassController extends Controller
             'answer_at' => null, // Dejarlo como null inicialmente
         ]);
 
-        session()->flash('success', 'Consulta de AmiPass ingresada exitosamente');
+        session()->flash('success', 'Consulta de Amipass ingresada exitosamente');
 
 
         return redirect()->route('welfare.amipass.question-my-index');

@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Livewire\Welfare\AmiPass;
+namespace App\Http\Livewire\Welfare\Amipass;
 
-use App\Models\Welfare\AmiPass\Absence;
+use App\Models\Welfare\Amipass\Absence;
 use Livewire\Component;
 
 class AbsencesIndex extends Component

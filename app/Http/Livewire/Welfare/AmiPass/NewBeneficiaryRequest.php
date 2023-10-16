@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Livewire\Welfare\AmiPass;
+namespace App\Http\Livewire\Welfare\Amipass;
 
 use Livewire\Component;
 use App\Models\Establishment;
-use App\Models\Welfare\AmiPass\BeneficiaryRequest;
+use App\Models\Welfare\Amipass\BeneficiaryRequest;
 
 class NewBeneficiaryRequest extends Component
 {

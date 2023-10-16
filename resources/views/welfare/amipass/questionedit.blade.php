@@ -4,7 +4,7 @@
 @include('welfare.nav')
 
     <div class="container">
-        <h3 class="mb-3">Responder Pregunta/Sugerencia AmiPass</h3>
+        <h3 class="mb-3">Responder Pregunta/Sugerencia Amipass</h3>
 
         <form action="{{ route('welfare.amipass.question-update', $doubt->id) }}" method="POST">
             @csrf

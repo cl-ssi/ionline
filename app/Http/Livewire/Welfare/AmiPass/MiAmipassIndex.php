@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Welfare\AmiPass;
+namespace App\Http\Livewire\Welfare\Amipass;
 
 use Livewire\Component;
 

@@ -8,12 +8,12 @@
 <div style="margin-bottom: 10px;" class="row">
     <div class="col-lg-12">
         <a class="btn btn-success" href="{{ route('welfare.amipass.new-beneficiary-request') }}" target="blank">
-            Agregar Solicitud de Beneficio AmiPass
+            Agregar Solicitud de Beneficio Amipass
         </a>
     </div>
 </div>
     
-    <h3 class="mb-3">Solicitudes de beneficio AmiPass</h3>
+    <h3 class="mb-3">Solicitudes de beneficio Amipass</h3>
 
     <div class="row mb-3">
         <div class="col-lg-6">
@@ -38,7 +38,7 @@
                 <th>Unidad Organizacional</th>
                 <th>Inicio Contrato</th>
                 <th>Término Contrato</th>
-                <th>AmiPass</th>
+                <th>Amipass</th>
                 <th></th>
                 <th></th>
             </tr>

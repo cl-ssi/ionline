@@ -170,7 +170,7 @@ class LogStatistics extends Component
                 $log->save();
             }
             elseif (preg_match('/amipass/', $log->uri)) {
-                $log->module = 'AmiPass';
+                $log->module = 'Amipass';
                 $log->save();
             }
             elseif (preg_match('/inventory/', $log->uri)) {

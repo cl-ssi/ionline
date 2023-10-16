@@ -766,11 +766,11 @@
                         </a>
 
                         <a class="dropdown-item" href="{{ route('welfare.amipass.mi-amipass') }}">
-                            <i class="fas fa-question-circle"></i> Mi AmiPass
+                            <i class="fas fa-question-circle"></i> Mi Amipass
                         </a>
 
                         <a class="dropdown-item" href="{{ route('welfare.amipass.question-my-index') }}">
-                            <i class="fas fa-question-circle"></i> {{ __('Consultas/Sugerencia AmiPass') }}
+                            <i class="fas fa-question-circle"></i> {{ __('Consultas/Sugerencia Amipass') }}
                         </a>
 
                         @role('god')

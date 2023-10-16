@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Livewire\Welfare\AmiPass;
+namespace App\Http\Livewire\Welfare\Amipass;
 
 use Livewire\WithPagination;
 use Livewire\Component;
-use App\Models\Welfare\AmiPass\BeneficiaryRequest;
+use App\Models\Welfare\Amipass\BeneficiaryRequest;
 
 class RequestMgr extends Component
 {
@@ -36,7 +36,7 @@ class RequestMgr extends Component
     }
 
     /**
-     * Set AmiPass Ok
+     * Set Amipass Ok
      */
     public function amiOk($id)
     {

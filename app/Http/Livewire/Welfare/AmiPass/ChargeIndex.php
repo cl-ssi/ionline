@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Livewire\Welfare\AmiPass;
+namespace App\Http\Livewire\Welfare\Amipass;
 
-use App\Models\Welfare\AmiPass\Charge;
-use App\Models\Welfare\AmiPass\NewCharge;
-use App\Models\Welfare\AmiPass\Regularization;
+use App\Models\Welfare\Amipass\Charge;
+use App\Models\Welfare\Amipass\NewCharge;
+use App\Models\Welfare\Amipass\Regularization;
 use Livewire\Component;
 
 class ChargeIndex extends Component
