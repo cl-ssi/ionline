@@ -27,7 +27,7 @@ class InventoryEdit extends Component
     public function render()
     {
         return view('livewire.inventory.inventory-edit')
-            ->extends('layouts.app');
+            ->extends('layouts.bt4.app');
     }
 
     public function mount(Inventory $inventory, Establishment $establishment)

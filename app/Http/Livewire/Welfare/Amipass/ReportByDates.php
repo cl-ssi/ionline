@@ -48,7 +48,7 @@ class ReportByDates extends Component
             $startDate = Carbon::createFromDate($this->finicio);
             $endDate = Carbon::createFromDate($this->ftermino);
         }
-        
+
         // dd($startDate, $endDate);
 
         $holidays = Holiday::whereBetween('date', [$startDate, $endDate])->get();
@@ -84,7 +84,7 @@ class ReportByDates extends Component
             // ->where('id',6811637)
             ->get();
 
-        // obtiene cargas del mes y usuarios buscados 
+        // obtiene cargas del mes y usuarios buscados
         $amiLoads = AmiLoad::whereMonth('fecha',$startDate->month)
                             ->whereIn('run',$this->userWithContracts->pluck('id')->toArray())
                             ->get();
@@ -92,10 +92,10 @@ class ReportByDates extends Component
         foreach($this->userWithContracts as $row => $user) {
 
             // $this->array[$row] = "none";
-            /** 
+            /**
              * TODO: ausentismos
              * Que hacer con los medios días, 0.5, 1.5, etc en total_dias_ausentismo
-             * 
+             *
              * Cosas que analizar:
              * - Cargar personas con turno (Estefania tiene un listado de las personas con truno)
              * - Hay permisos adminsitrativos los sabados o domingos (para los que tienen turno si afecta)
@@ -108,14 +108,14 @@ class ReportByDates extends Component
              *   11 horas           1....................30
              *   22 horas                     15.........30
              *   contrato_calculo             15.........30
-             *   ausentismo              x          x 
+             *   ausentismo              x          x
              *                                   AMIPASS
              *  Tiene mas de un contrato? funcion calcular inico y termino de contrato
-             * 
+             *
              *  Archivo de salida
              *  run       |   monto
              *  14105981  |   108.000
-             * 
+             *
              * tipo_de_ausentismo
              * L.M. ENFERMEDAD  si se descuenta
              * COMISION DE SERVICIO sobre 1
@@ -152,14 +152,14 @@ class ReportByDates extends Component
 
                 $absenteeismStartDate = $absenteeism->finicio->isBefore($startDate) ? $startDate : $absenteeism->finicio;
                 $absenteeismEndDate = $absenteeism->ftermino->isAfter($endDate) ? $endDate : $absenteeism->ftermino;
-                
+
                 // solapamiento de contratos.
                 // si fecha de contrato anterior es mayor a la de inicio actual, se comienza desde el dia siguiente de fecha anterior.
                 if($lastdate>=$absenteeismStartDate){
                     $absenteeismStartDate = $lastdate->addDays(1);
                 }
                 $lastdate= $absenteeismEndDate;
-                
+
                 $absenteeism->totalDays = DateHelper::getBusinessDaysByDateRangeHolidays($absenteeismStartDate, $absenteeismEndDate, $holidays)->count();
                 $user->totalAbsenteeisms += $absenteeism->totalDays;
             }
@@ -168,9 +168,9 @@ class ReportByDates extends Component
 
             foreach($user->contracts as $contract) {
                 /** Días laborales */
-                $contract->businessDays = 
+                $contract->businessDays =
                     DateHelper::getBusinessDaysByDateRangeHolidays(
-                            $contract->fecha_inicio_contrato->isAfter($startDate) ? $contract->fecha_inicio_contrato : $startDate, 
+                            $contract->fecha_inicio_contrato->isAfter($startDate) ? $contract->fecha_inicio_contrato : $startDate,
                             $contract->fecha_termino_contrato->isBefore($endDate) ? $contract->fecha_termino_contrato : $endDate,
                             $holidays
                         )->count();
@@ -199,6 +199,6 @@ class ReportByDates extends Component
 
     public function render()
     {
-        return view('livewire.welfare.amipass.report-by-dates');
+        return view('livewire.welfare.amipass.report-by-dates')->extends('layouts.bt4.app');
     }
 }

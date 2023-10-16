@@ -3,7 +3,7 @@
         Gestión de Facturas: {{ $store->name }}
     </h4>
 
-    @include('layouts.partials.flash_message')
+    @include('layouts.bt5.partials.flash_message')
 
     <div class="form-row mb-3">
         <fieldset class="form-group col-sm-5 mb-0">
@@ -73,7 +73,7 @@
                     wire:target="searchPurchaseOrder"
                 >
                     <td class="text-center" colspan="6">
-                        @include('layouts.partials.spinner')
+                        @include('layouts.bt4.partials.spinner')
                     </td>
                 </tr>
                 @forelse($controls as $control)

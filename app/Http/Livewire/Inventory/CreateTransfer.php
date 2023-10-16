@@ -17,7 +17,7 @@ class CreateTransfer extends Component
     public function render()
     {
         return view('livewire.inventory.create-transfer')
-            ->extends('layouts.app');
+            ->extends('layouts.bt4.app');
     }
 
     public function myUserUsingId($value)

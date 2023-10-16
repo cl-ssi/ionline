@@ -59,7 +59,7 @@ class ComputerCreate extends Component
 
     public function render()
     {
-        return view('livewire.resources.computer-create')->extends('layouts.app');
+        return view('livewire.resources.computer-create')->extends('layouts.bt4.app');
     }
 
     public function create()

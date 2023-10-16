@@ -227,7 +227,7 @@ class CenabastIndex extends Component
         }
 
         session()->flash('info', 'Los archivos están en proceso de firma, esto tomará unos segundos.');
-        return redirect()->route('warehouse.cenabast.index');
+        return redirect()->route('warehouse.cenabast.index')->extends('layouts.bt4.app');
     }
 
 

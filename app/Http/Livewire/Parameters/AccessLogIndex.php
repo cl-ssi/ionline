@@ -15,6 +15,6 @@ class AccessLogIndex extends Component
 
         return view('livewire.parameters.access-log-index', [
             'accessLogs' => $accessLogs->latest()->paginate(10)
-        ])->extends('layouts.app');
+        ])->extends('layouts.bt4.app');
     }
 }

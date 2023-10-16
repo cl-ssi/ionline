@@ -359,7 +359,7 @@ class DispatchController extends Controller
       if($flag == 1){
         //envia información a servidor
         // $url_base = "http://127.0.0.1:80/endpoint/receiveDispatchC19";
-        $url_base = "https://i.saludiquique.cl/monitor/endpoint/receiveDispatchC19";
+        $url_base = "https://i.saludtarapaca.gob.cl/monitor/endpoint/receiveDispatchC19";
         $client = new \GuzzleHttp\Client();
         $request = $client->get($url_base, [
                                 'query' => ['dispatch' => urldecode(json_encode($array_dispatch, true)),
@@ -386,7 +386,7 @@ class DispatchController extends Controller
     {
       //envia información a servidor
       // $url_base = "http://127.0.0.1:80/endpoint/deleteDispatchC19";
-      $url_base = "https://i.saludiquique.cl/monitor/endpoint/deleteDispatchC19";
+      $url_base = "https://i.saludtarapaca.gob.cl/monitor/endpoint/deleteDispatchC19";
       $client = new \GuzzleHttp\Client();
       $request = $client->get($url_base, [
                               'query' => ['dispatch_id' => $dispatch->id]

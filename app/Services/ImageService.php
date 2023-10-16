@@ -110,7 +110,7 @@ class ImageService
      * @param  string $verificationLink TODO: usar app_url
      * @return string
      */
-    public function createDocumentNumber($validationCode, $documentNumber, $verificationLink = "https://i.saludiquique.gob.cl/validador")
+    public function createDocumentNumber($validationCode, $documentNumber, $verificationLink = "https://i.saludtarapaca.gob.gob.cl/validador")
     {
         /**
          * Define the parameters

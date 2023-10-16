@@ -15,6 +15,6 @@ class IndexActPrecursor extends Component
     {
         return view('livewire.drugs.index-act-precursor', [
             'acts' => ActPrecursor::orderByDesc('id')->paginate(10)
-        ]);
+        ])->extends('layouts.bt4.app');
     }
 }

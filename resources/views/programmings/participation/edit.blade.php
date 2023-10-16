@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.bt4.app')
 
 @section('title', 'Editar actividad de participación '.$programming->establishment->type.' '.$programming->establishment->name.' '.$programming->year)
 

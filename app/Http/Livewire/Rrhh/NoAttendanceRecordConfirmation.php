@@ -41,6 +41,6 @@ class NoAttendanceRecordConfirmation extends Component
     }
     public function render()
     {
-        return view('livewire.rrhh.no-attendance-record-confirmation');
+        return view('livewire.rrhh.no-attendance-record-confirmation')->extends('layouts.bt4.app');
     }
 }

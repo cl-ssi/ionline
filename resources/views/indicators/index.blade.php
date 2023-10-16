@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.bt4.app')
 
 @section('title', 'Metas')
 
@@ -158,7 +158,7 @@
 </div>
 <br>
 <a class="btn btn-outline-primary" href="{{ route('indicators.rems.index') }}" role="button">Años anteriores</a>
-<!-- <a class="btn btn-outline-primary" href="http://intranet.saludiquique.cl/estadistica/index.html" role="button">Años anteriores (Intranet)</a> -->
+<!-- <a class="btn btn-outline-primary" href="http://intranet.saludtarapaca.gob.cl/estadistica/index.html" role="button">Años anteriores (Intranet)</a> -->
 <br>
 <br>
 <br>

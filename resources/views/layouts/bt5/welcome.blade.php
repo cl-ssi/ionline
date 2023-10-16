@@ -63,7 +63,7 @@
     <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm container bg-nav-gobierno">
         <h5 class="my-0 mr-md-auto font-weight-normal"> <img src="{{ asset('images/gob-header.svg') }}" alt="Logo del gobierno de chile"> </h5>
         <nav class="my-2 my-md-0 mr-md-3">
-            <a class="p-2 text-dark" href="http://www.saludiquique.cl"></a>
+            <a class="p-2 text-dark" href="http://www.saludtarapaca.gob.cl"></a>
         </nav>
 
     </div>
@@ -79,8 +79,8 @@
             </table>
         </div>
         <p class="text-muted mt-4">Bienvenido a la intranet del Servicio de Salud de Tarapacá.</p>
-        @include('layouts.partials.errors')
-        @include('layouts.partials.flash_message')
+        @include('layouts.bt5.partials.errors')
+        @include('layouts.bt5.partials.flash_message')
 
     </div>
 

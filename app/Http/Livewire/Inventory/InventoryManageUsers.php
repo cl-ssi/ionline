@@ -38,7 +38,7 @@ class InventoryManageUsers extends Component
     {
         return view('livewire.inventory.inventory-manage-users',[
             'users' => $this->getUsers()
-        ]);
+        ])->extends('layouts.bt4.app');
     }
 
     public function myUserId($value)

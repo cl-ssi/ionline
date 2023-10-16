@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.bt4.app')
 @section('title', 'Estados de pago de mis solicitudes')
 @section('content')
     <h3 class="mb-3">Dte Asociados a Mis Formularios de Requerimientos como Gestor o Administrador</h3>

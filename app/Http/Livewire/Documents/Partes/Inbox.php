@@ -80,6 +80,6 @@ class Inbox extends Component
                 ])
             ->latest()->paginate('100');
 
-        return view('livewire.documents.partes.inbox', ['partes' => $partes]);
+        return view('livewire.documents.partes.inbox', ['partes' => $partes])->extends('layouts.bt4.app');
     }
 }

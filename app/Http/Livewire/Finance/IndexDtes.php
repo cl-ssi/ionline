@@ -230,6 +230,6 @@ class IndexDtes extends Component
         return view('livewire.finance.index-dtes', [
             'dtes' => $dtes,
             //'establishments' => $establishments,
-        ]);
+        ])->extends('layouts.bt4.app');
     }
 }

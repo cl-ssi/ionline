@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.bt4.app')
 
 @section('title', 'Editar item de Emergencias y desastres '.$programming->establishment->type.' '.$programming->establishment->name.' '.$programming->year)
 

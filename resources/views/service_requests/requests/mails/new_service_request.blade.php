@@ -12,7 +12,7 @@
   <p> <strong>Fecha inicio:</strong> {{ \Carbon\Carbon::parse($serviceRequest->start_date)->format('d-m-Y') }}</p>
   <p> <strong>Fecha término:</strong> {{ \Carbon\Carbon::parse($serviceRequest->end_date)->format('d-m-Y') }}</p>
   <br>
-  Para acceder y visar la solicitud, haga click <a href="https://i.saludiquique.cl/rrhh/service_requests/{{$serviceRequest->id}}/edit"><i class="far fa-hand-point-right"></i> Aquí</a>
+  Para acceder y visar la solicitud, haga click <a href="https://i.saludtarapaca.gob.cl/rrhh/service_requests/{{$serviceRequest->id}}/edit"><i class="far fa-hand-point-right"></i> Aquí</a>
   <br>
   <br>
   Saludos cordiales.

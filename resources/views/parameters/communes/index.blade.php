@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.bt5.app')
 
 @section('title', 'Lista de Comunas')
 

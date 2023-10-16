@@ -45,7 +45,7 @@
         @error('files.*') <span class="error">{{ $message }}</span> @enderror
     </div>
 
-    @include('layouts.partials.flash_message')
+    @include('layouts.bt5.partials.flash_message')
     
     <button class="btn btn-primary" wire:click="save">Crear</button>
 </div>

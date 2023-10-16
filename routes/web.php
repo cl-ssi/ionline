@@ -269,7 +269,7 @@ use App\Http\Controllers\PasswordResetController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('layouts.bt4.welcome');
 })->name('welcome');
 
 
@@ -2295,7 +2295,6 @@ Route::prefix('suitability')->as('suitability.')->middleware(['auth', 'must.chan
         // Route::post('/store', [OptionsController::class, 'store'])->name('store');
     });
 
-    Route::post('/livewire/message/rrhh.change-shift-day-status', [\App\Http\Livewire\Rrhh\ChangeShiftDayStatus::class]);
     Route::post('/livewire/message/rrhh/change-shift-day-status', [\App\Http\Livewire\Rrhh\ChangeShiftDayStatus::class]);
     // Route::post('livewire/message/rrhh.change-shift-day-status', [\App\Livewire\Rrhh\ChangeShiftDayStatus::class]);+
 

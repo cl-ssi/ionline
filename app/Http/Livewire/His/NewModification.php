@@ -69,6 +69,6 @@ class NewModification extends Component
 
     public function render()
     {
-        return view('livewire.his.new-modification');
+        return view('livewire.his.new-modification')->extends('layouts.bt4.app');
     }
 }

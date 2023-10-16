@@ -78,7 +78,7 @@ class DteConfirmation extends Component
 
     public function render()
     {
-        return view('livewire.finance.dte-confirmation');
+        return view('livewire.finance.dte-confirmation')->extends('layouts.bt4.app');
     }
 
     public function rejectedDte()

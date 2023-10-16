@@ -7,7 +7,7 @@
 
     <h4>Seleccionar Excel para cargar inventarios</h4>
 
-    @include('layouts.partials.flash_message')
+    @include('layouts.bt5.partials.flash_message')
 
     <form wire:submit.prevent="processExcel" enctype="multipart/form-data">
         <div class="form-row">
