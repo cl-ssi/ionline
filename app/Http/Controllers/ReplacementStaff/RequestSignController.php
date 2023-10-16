@@ -123,11 +123,14 @@ class RequestSignController extends Controller
                     $signatureFinance->addSignature(
                         5,
                         'Certificado de disponibilidad presupuestaria',
-                        'Solicitud de reemplazo ID '. $requestSign->requestReplacementStaff->id,
+                        'Solicitud de reemplazo ID: '. $requestSign->requestReplacementStaff->id.'<br><br>'.
+                        '<small><b>Periodo</b>: '. $requestSign->requestReplacementStaff->start_date->format('d-m-Y').' - '.$requestSign->requestReplacementStaff->end_date->format('d-m-Y').'<br>'.
+                        '<b>Funcionario</b>: '. $requestSign->requestReplacementStaff->name_to_replace.'<br>'.
+                        '<b>'.$requestSign->requestReplacementStaff->budgetItem->code.'</b> - '.$requestSign->requestReplacementStaff->budgetItem->name.'</small>',
                         'No requiere visación',
                         true
                     );
-
+                    
                     $signatureFinance->addView('replacement_staff.request.documents.budget_availability_certificate', [
                         'requestReplacementStaff' => $requestSign->requestReplacementStaff
                     ]);
