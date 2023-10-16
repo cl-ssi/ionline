@@ -17,7 +17,7 @@ class TicResources extends Component
     {
         return view('livewire.tic-resources', [
             'inventories' => $this->getInventories()
-        ])->extends('layouts.app');
+        ])->extends('layouts.bt4.app');
     }
 
     public function getInventories()

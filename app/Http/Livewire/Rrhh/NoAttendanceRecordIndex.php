@@ -5,7 +5,7 @@ namespace App\Http\Livewire\Rrhh;
 use Livewire\WithPagination;
 use Livewire\Component;
 use App\Models\Rrhh\NoAttendanceRecord;
-use App\User; 
+use App\User;
 
 class NoAttendanceRecordIndex extends Component
 {
@@ -15,7 +15,7 @@ class NoAttendanceRecordIndex extends Component
     public $rejectForm;
     public $rrhh_observation;
     public $filter = '';
-    
+
 
 
 
@@ -55,9 +55,9 @@ class NoAttendanceRecordIndex extends Component
         $noAttendanceRecord->rrhh_at = now();
         $noAttendanceRecord->rrhh_observation = $this->rrhh_observation;
         $noAttendanceRecord->rrhh_status = 0;
-        /** 
+        /**
          * Ya no vamos a devolver las justificaciones de asistencia, se crearan nuevas
-         * Por lo tanto el status queda en el estado que estaba 
+         * Por lo tanto el status queda en el estado que estaba
          */
         // $noAttendanceRecord->status = null;
         $noAttendanceRecord->save();
@@ -85,6 +85,6 @@ class NoAttendanceRecordIndex extends Component
                 })
                 ->latest()
                 ->paginate(50),
-        ]);
+        ])->extends('layouts.bt4.app');
     }
 }

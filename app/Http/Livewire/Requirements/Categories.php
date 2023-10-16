@@ -63,6 +63,6 @@ class Categories extends Component
 
     public function render()
     {
-        return view('livewire.requirements.categories');
+        return view('livewire.requirements.categories')->extends('layouts.bt4.app');
     }
 }

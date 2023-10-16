@@ -48,7 +48,7 @@ class InvoiceManagement extends Component
 
     public function render()
     {
-        return view('livewire.warehouse.invoices.invoice-management');
+        return view('livewire.warehouse.invoices.invoice-management')->extends('layouts.bt4.app');
     }
 
     public function searchPurchaseOrder()
@@ -126,7 +126,7 @@ class InvoiceManagement extends Component
             $technicalSignature->addResponsible($this->store->visator);
 
             $subject = "Acta de Recepción Técnica #$control->id";
-            
+
             $technicalSignature->addSignature(
                 10,
                 $subject,
