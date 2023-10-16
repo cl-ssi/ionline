@@ -58,7 +58,7 @@
                 </nav>
                 <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
                     @include('layouts.bt4.partials.errors')
-                    @include('layouts.bt5.partials.flash_message')
+                    @include('layouts.bt4.partials.flash_message')
                     @yield('content')
                 </main>
             </div>

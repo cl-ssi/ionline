@@ -50,7 +50,7 @@
                     Ministerio de Salud
                 </div>
                 @include('layouts.bt5.partials.errors')
-                @include('layouts.bt5.partials.flash_message')
+                @include('layouts.bt4.partials.flash_message')
                 @yield('content', $slot ?? '')
             </main>
 

@@ -1,5 +1,5 @@
 <div>
-    @include('layouts.bt5.partials.flash_message')
+    @include('layouts.bt4.partials.flash_message')
 
     <div class="mt-2">
         <h5>Nuevo Ingreso: {{ $store->name }}</h5>

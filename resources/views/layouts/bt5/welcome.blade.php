@@ -80,7 +80,7 @@
         </div>
         <p class="text-muted mt-4">Bienvenido a la intranet del Servicio de Salud de Tarapacá.</p>
         @include('layouts.bt5.partials.errors')
-        @include('layouts.bt5.partials.flash_message')
+        @include('layouts.bt4.partials.flash_message')
 
     </div>
 
