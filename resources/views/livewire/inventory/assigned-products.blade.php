@@ -58,7 +58,7 @@
         <tbody>
             <tr class="d-none" wire:loading.class.remove="d-none">
                 <td class="text-center" colspan="6">
-                    @include('layouts.partials.spinner')
+                    @include('layouts.bt4.partials.spinner')
                 </td>
             </tr>
             @forelse($inventories as $inventory)

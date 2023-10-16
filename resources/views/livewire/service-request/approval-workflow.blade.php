@@ -114,7 +114,7 @@
     </table>
 
     @include('layouts.bt4.partials.errors')
-    @include('layouts.partials.flash_message_custom',[
+    @include('layouts.bt4.partials.flash_message_custom',[
         'name' => 'approval-workflow',  // debe ser único
         'type' => 'primary' // optional: 'primary' (default), 'danger', 'warning', 'success', 'info'
     ])

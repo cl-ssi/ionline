@@ -39,7 +39,7 @@
             <tbody>
                 <tr class="d-none" wire:loading.class.remove="d-none" wire:target="search, delete">
                     <td class="text-center" colspan="5">
-                        @include('layouts.partials.spinner')
+                        @include('layouts.bt4.partials.spinner')
                     </td>
                 </tr>
                 @forelse($programs as $program)

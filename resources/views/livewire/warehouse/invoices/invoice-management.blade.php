@@ -73,7 +73,7 @@
                     wire:target="searchPurchaseOrder"
                 >
                     <td class="text-center" colspan="6">
-                        @include('layouts.partials.spinner')
+                        @include('layouts.bt4.partials.spinner')
                     </td>
                 </tr>
                 @forelse($controls as $control)
