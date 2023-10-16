@@ -38,7 +38,7 @@ class ParameterIndex extends Component
 
         return view('livewire.parameters.parameter.parameter-index', [
             'parameters' => $parameters
-        ]);
+        ])->extends('layouts.bt4.app');
     }
 
     public function filter()

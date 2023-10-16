@@ -11,6 +11,6 @@ class MailSignature extends Component
 
     public function render()
     {
-        return view('livewire.profile.mail-signature');
+        return view('livewire.profile.mail-signature')->extends('layouts.bt4.app');
     }
 }

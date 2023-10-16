@@ -80,7 +80,7 @@ class ComputerFusion extends Component
 
     public function render()
     {
-        return view('livewire.resources.computer-fusion')->extends('layouts.app');
+        return view('livewire.resources.computer-fusion')->extends('layouts.bt4.app');
     }
 
     public function update()

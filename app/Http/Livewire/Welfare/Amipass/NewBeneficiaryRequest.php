@@ -17,7 +17,7 @@ class NewBeneficiaryRequest extends Component
     public $selectedEstablishmentId = '';
 
 
-    //Campos del BeneficiaryRequest       
+    //Campos del BeneficiaryRequest
     public $motivoRequerimiento = '';
     public $nombreFuncionarioReemplazar = '';
     public $nombreCompleto = '';
@@ -30,7 +30,7 @@ class NewBeneficiaryRequest extends Component
     public $jornadaLaboral = '';
     public $residencia = '';
     public $haUtilizadoAmipass = '';
-    public $fechaNacimiento = '';    
+    public $fechaNacimiento = '';
     public $estado = '';
     public $amiManagerId = '';
     public $amiManagerAt = '';
@@ -48,7 +48,7 @@ class NewBeneficiaryRequest extends Component
         } else {
             $this->resetFields();
         }
-        return view('livewire.welfare.amipass.new-beneficiary-request');
+        return view('livewire.welfare.amipass.new-beneficiary-request')->extends('layouts.bt4.app');
     }
 
     public function mount()

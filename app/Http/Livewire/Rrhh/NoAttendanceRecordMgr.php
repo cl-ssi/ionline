@@ -95,8 +95,8 @@ class NoAttendanceRecordMgr extends Component
                 "callback_controller_method" => "App\Http\Controllers\Rrhh\NoAttendanceRecordController@approval",
                 "callback_controller_params" => json_encode([
                     //'approval_id' => xxx  <= este parámetro se agregará automáticamente al comienzo
-                    'no_attendance_record_id' => $this->noAttendanceRecord->id, 
-                ]), 
+                    'no_attendance_record_id' => $this->noAttendanceRecord->id,
+                ]),
             ]);
         }
 
@@ -106,7 +106,7 @@ class NoAttendanceRecordMgr extends Component
 
     public function render()
     {
-        
+
         $myRecords = NoAttendanceRecord::with(['reason'])->whereUserId(auth()->id())->latest()->paginate(25);
         $authorityRecrods = NoAttendanceRecord::with(['reason'])
             ->whereAuthorityId(auth()->id())->latest()
@@ -116,6 +116,6 @@ class NoAttendanceRecordMgr extends Component
         return view('livewire.rrhh.no-attendance-record-mgr',[
             'myRecords' => $myRecords,
             'authorityRecrods' => $authorityRecrods
-        ]);
+        ])->extends('layouts.bt4.app');
     }
 }

@@ -94,7 +94,7 @@ class RequestSignature extends Component
 
     public function render()
     {
-        return view('livewire.sign.request-signature');
+        return view('livewire.sign.request-signature')->extends('layouts.bt4.app');
     }
 
     public function save()

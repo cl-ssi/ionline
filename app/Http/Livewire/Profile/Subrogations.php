@@ -244,6 +244,6 @@ class Subrogations extends Component
 
     public function render()
     {
-        return view('livewire.profile.subrogations')->extends('layouts.app');;
+        return view('livewire.profile.subrogations')->extends('layouts.bt4.app');
     }
 }
