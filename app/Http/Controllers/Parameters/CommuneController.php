@@ -16,7 +16,7 @@ class CommuneController extends Controller
     public function index()
     {
         $communes = Commune::All();
-        return view('parameters/communes/index')->withCommunes($communes);
+        return view('parameters.communes.index')->withCommunes($communes);
     }
 
     /**
