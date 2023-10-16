@@ -279,7 +279,7 @@
                         {{ $signedSignaturesFlow->signature ? $signedSignaturesFlow->type : '' }}
                     </td>
                     <td>{{ $signedSignaturesFlow->signature->subject??'' }}</td>
-                    <td>{{ $signedSignaturesFlow->signature->description??'' }}</td>
+                    <td>{!! $signedSignaturesFlow->signature->description??'' !!}</td>
                     <td>
                         @if($signedSignaturesFlow->signature)
                             {{ $signedSignaturesFlow->signature->responsable->tinnyName }}
