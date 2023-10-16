@@ -48,7 +48,7 @@ class NewBeneficiaryRequest extends Component
         } else {
             $this->resetFields();
         }
-        return view('livewire.welfare.ami-pass.new-beneficiary-request');
+        return view('livewire.welfare.amipass.new-beneficiary-request');
     }
 
     public function mount()
