@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.bt4.app')
 
 @section('title', ($type == 'receiving') ? 'Crear Ingreso' : 'Crear Egreso')
 

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.bt4.app')
 @section('title', 'Gestion de Turnos')
 @section('content')
 <style type="text/css">

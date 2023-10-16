@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.bt4.app')
 @section('title', 'Responder Pregunta/Sugerencia Amipass')
 @section('content')
 @include('welfare.nav')

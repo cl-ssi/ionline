@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.bt4.app')
 @section('title', 'Visación Administrador de Contrato')
 @section('content')
     @include('warehouse.visations.contract_manager.nav')

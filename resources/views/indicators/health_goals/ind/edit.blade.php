@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.bt4.app')
 @php
     $months = array (1=>'Ene',2=>'Feb',3=>'Mar',4=>'Abr',5=>'May',6=>'Jun',7=>'Jul',8=>'Ago',9=>'Sep',10=>'Oct',11=>'Nov',12=>'Dic');
     $sources_type = array('REM', 'Programación médica', 'Programación anual', 'Datamart', 'Reporte RRHH', 'Certificado Hospital', 'SIGTE', 'UGCC Minsal', 'GRD Minsal');

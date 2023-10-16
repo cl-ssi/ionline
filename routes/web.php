@@ -269,7 +269,7 @@ use App\Http\Controllers\PasswordResetController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('layouts.bt4.welcome');
 })->name('welcome');
 
 
