@@ -10,6 +10,6 @@ class ModificationRequestIndex extends Component
     public function render()
     {
         $modificationRequests = ModificationRequest::latest()->whereCreatorId(auth()->id())->paginate(50);
-        return view('livewire.his.modification-request-index', [ 'modifications' => $modificationRequests]);
+        return view('livewire.his.modification-request-index', [ 'modifications' => $modificationRequests])->extends('layouts.bt4.app');
     }
 }

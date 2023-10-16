@@ -16,6 +16,6 @@ class MaintainerPlaces extends Component
 
     public function render()
     {
-        return view('livewire.inventory.maintainer-places')->extends('layouts.app');
+        return view('livewire.inventory.maintainer-places')->extends('layouts.bt4.app');
     }
 }

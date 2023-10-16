@@ -21,7 +21,7 @@ class CheckTransfer extends Component
     public function render()
     {
         return view('livewire.inventory.check-transfer')
-            ->extends('layouts.app');
+            ->extends('layouts.bt4.app');
     }
 
     public function rules()

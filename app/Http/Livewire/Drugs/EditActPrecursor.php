@@ -52,7 +52,7 @@ class EditActPrecursor extends Component
 
     public function render()
     {
-        return view('livewire.drugs.edit-act-precursor');
+        return view('livewire.drugs.edit-act-precursor')->extends('layouts.bt4.app');
     }
 
     public function getPrecursors()

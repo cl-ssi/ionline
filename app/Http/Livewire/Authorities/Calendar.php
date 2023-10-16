@@ -161,7 +161,7 @@ class Calendar extends Component
             $this->data[$authority->date->format('Y-m-d')]['authority_id'] = $authority->id;
         }
 
-        return view('livewire.authorities.calendar');
+        return view('livewire.authorities.calendar')->extends('layouts.bt4.app');
     }
 
     public function delete($id)

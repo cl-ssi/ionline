@@ -171,7 +171,7 @@ class MeetingMgr extends Component
 
         return view('livewire.lobby.meeting-mgr', [
             'meetings' => $meetings
-        ]);
+        ])->extends('layouts.bt4.app');
     }
 
     public function search()

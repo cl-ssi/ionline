@@ -29,7 +29,7 @@ class InventoryLastReceptions extends Component
     {
         return view('livewire.inventory.inventory-last-receptions', [
             'controlItems' => $this->getControlItems(),
-        ])->extends('layouts.app');
+        ])->extends('layouts.bt4.app');
     }
 
     public function getControlItems()

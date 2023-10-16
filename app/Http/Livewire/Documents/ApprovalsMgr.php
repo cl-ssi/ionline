@@ -167,6 +167,6 @@ class ApprovalsMgr extends Component
 
         return view('livewire.documents.approvals-mgr', [
             'approvals' => $approvals,
-        ]);
+        ])->extends('layouts.bt4.app');
     }
 }

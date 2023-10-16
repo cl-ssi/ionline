@@ -44,6 +44,6 @@ class ReportByDates extends Component
 
         return view('livewire.documents.partes.report-by-dates', [
             'partes' => $partes,
-        ])->extends('layouts.app');
+        ])->extends('layouts.bt4.app');
     }
 }

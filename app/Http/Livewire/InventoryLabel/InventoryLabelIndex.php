@@ -19,7 +19,7 @@ class InventoryLabelIndex extends Component
     {
         return view('livewire.inventory-label.inventory-label-index', [
             'labels' => $this->getLabels()
-        ])->extends('layouts.app');
+        ])->extends('layouts.bt4.app');
     }
 
     public function getLabels()

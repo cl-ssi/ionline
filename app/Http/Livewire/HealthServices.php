@@ -64,6 +64,6 @@ class HealthServices extends Component
         $healthServices = HealthService::with('region')->get();
         return view('livewire.health-services', [
             'healthServices' => $healthServices,
-        ]);
+        ])->extends('layouts.bt4.app');
     }
 }

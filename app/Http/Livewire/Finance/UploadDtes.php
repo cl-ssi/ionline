@@ -30,6 +30,6 @@ class UploadDtes extends Component
     
     public function render()
     {
-        return view('livewire.finance.upload-dtes');
+        return view('livewire.finance.upload-dtes')->extends('layouts.bt4.app');
     }
 }

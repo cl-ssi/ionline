@@ -107,6 +107,6 @@ class ModificationMgr extends Component
 
         return view('livewire.his.modification-mgr', [
             'modifications' => $modifications,
-        ]);
+        ])->extends('layouts.bt4.app');
     }
 }
