@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Welfare\Amipass;
+namespace App\Http\Livewire\Welfare\AmiPass;
 
 use App\Models\Welfare\AmiPass\Charge;
 use App\Models\Welfare\AmiPass\NewCharge;

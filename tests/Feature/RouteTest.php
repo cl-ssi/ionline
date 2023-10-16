@@ -5,7 +5,7 @@ namespace Tests\Feature;
 use Tests\TestCase;
 use App\User; // Asegúrate de importar el modelo de usuario si aún no lo has hecho
 
-class RutasTest extends TestCase
+class RouteTest extends TestCase
 {
     protected $rutas = [
         '/home',
