@@ -64,6 +64,6 @@
     </div>
 
     <!-- Mensaje de éxito -->
-    @include('layouts.partials.flash_message')
+    @include('layouts.bt5.partials.flash_message')
 
 </div>

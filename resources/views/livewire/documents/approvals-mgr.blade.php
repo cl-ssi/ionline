@@ -1,7 +1,7 @@
 <div>
     @section('title', "Solicitudes de aprobación")
 
-    @include('layouts.partials.flash_message')
+    @include('layouts.bt5.partials.flash_message')
 
     <h3 class="mb-3">Solicitudes de aprobación</h3>
 

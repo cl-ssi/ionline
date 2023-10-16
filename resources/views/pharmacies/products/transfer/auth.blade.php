@@ -79,7 +79,7 @@ PROGRAMA DE REHABILITACIÓN INTEGRAL </title>
             <div class="left seis" style="padding-bottom: 6px; color: #999">N° interno AATT: _________</div>
 
             <p class="right">Iquique, {{\Carbon\Carbon::now()->formatLocalized('%d de %B de %Y')}}.</p>
-            <p>Mediante el presente documento y en marco a los problemas de <b>salud 36, piloto GES y decreto 22</b>, y a la evaluación de información de solicitud y entrega de ayudas técnicas ingresada por su establecimiento en plataforma i.saludiquique.cl, mediante el presente se informa a usted que las siguientes ayudas técnicas de encuentran disponible para ser retiradas en bodega del servicio de salud tarapacá:</p>
+            <p>Mediante el presente documento y en marco a los problemas de <b>salud 36, piloto GES y decreto 22</b>, y a la evaluación de información de solicitud y entrega de ayudas técnicas ingresada por su establecimiento en plataforma i.saludtarapaca.gob.cl, mediante el presente se informa a usted que las siguientes ayudas técnicas de encuentran disponible para ser retiradas en bodega del servicio de salud tarapacá:</p>
             <p>Entrega para establecimiento <b>{{$establishment->name}}</b></p>
 			<table>
 				<thead>

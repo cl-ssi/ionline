@@ -5,7 +5,7 @@
         'establishment' => $establishment
     ])
 
-    @include('layouts.partials.flash_message')
+    @include('layouts.bt5.partials.flash_message')
 
     <div class="row">
         <div class="col">
