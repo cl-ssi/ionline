@@ -1,4 +1,4 @@
-@extends('layouts.guest')
+@extends('layouts.bt4.guest')
 
 @section('title', 'Boleta de Honorario')
 
