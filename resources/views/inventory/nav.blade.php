@@ -62,6 +62,12 @@
                 >
                     <i class="fas fa-file-alt"></i> Lugares
                 </a>
+                <a
+                    class="dropdown-item"
+                    href="{{ route('parameters.accounting-codes') }}"
+                >
+                    <i class="fas fa-file-alt"></i> Cuentas Contables
+                </a>
             </div>
         </li>
     @endcan
