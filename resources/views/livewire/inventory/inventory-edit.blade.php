@@ -304,7 +304,6 @@
 
     <div class="form-row mb-3">
 
-
         @if($inventory->control)
             <fieldset class="col-md-5">
                 <label for="supplier" class="form-label">
@@ -374,6 +373,12 @@
         @endif
     </div>
 
+    @if($inventory->po_code)
+        <div >
+            <h5 class="mt-3">Facturas relacionadas con la OC</h5>
+            @livewire('warehouse.invoices.list-invoices', ['inventory' => $inventory])
+        </div>
+    @endif
 
     <div class="form-row mb-3">
         <fieldset class="col-md-12">
@@ -419,12 +424,7 @@
             <h5 class="mt-3">Historial del ítem</h5>
             @livewire('inventory.movement-index', ['inventory' => $inventory])
         </div>
-        @if($inventory->po_code)
-            <div class="col">
-                <h5 class="mt-3">Facturas relacionadas con la OC</h5>
-                @livewire('warehouse.invoices.list-invoices', ['inventory' => $inventory])
-            </div>
-        @endif
+
     </div>
 
 </div>
