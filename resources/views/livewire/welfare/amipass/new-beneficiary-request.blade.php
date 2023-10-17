@@ -1,7 +1,7 @@
 <div>
     
-    @include('layouts.partials.errors')
-    @include('layouts.partials.flash_message')
+    @include('layouts.bt4.partials.errors')
+    @include('layouts.bt4.partials.flash_message')
 
     <h3 class="mb-3">Solicitud de Beneficio de Alimentación - AMIPASS</h3>
 

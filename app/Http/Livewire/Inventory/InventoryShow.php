@@ -20,6 +20,6 @@ class InventoryShow extends Component
     public function render()
     {
         if(is_null($this->inventory)) abort(404, "No existe el item");
-        return view('livewire.inventory.inventory-show')->layout('layouts.inventory');
+        return view('livewire.inventory.inventory-show')->layout('layouts.bt4.inventory');
     }
 }

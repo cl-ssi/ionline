@@ -17,7 +17,7 @@ class ParameterEdit extends Component
 
     public function render()
     {
-        return view('livewire.parameters.parameter.parameter-edit')->extends('layouts.app');
+        return view('livewire.parameters.parameter.parameter-edit')->extends('layouts.bt4.app');
     }
 
     public function mount($parameter)

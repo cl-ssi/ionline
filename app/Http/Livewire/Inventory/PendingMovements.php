@@ -24,7 +24,7 @@ class PendingMovements extends Component
     {
         return view('livewire.inventory.pending-movements', [
             'movements' => $this->getMovements(),
-        ])->extends('layouts.app');
+        ])->extends('layouts.bt4.app');
     }
 
     public function getMovements()

@@ -1,10 +1,8 @@
-@extends('layouts.app')
+@extends('layouts.bt4.app')
 
 @section('title', 'Inicio')
 
 @section('content')
-
-
 
 
 <!-- <style>

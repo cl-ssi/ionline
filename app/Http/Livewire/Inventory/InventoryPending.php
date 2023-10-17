@@ -21,7 +21,7 @@ class InventoryPending extends Component
     {
         return view('livewire.inventory.inventory-pending', [
             'inventories' => $this->getInventories()
-        ])->extends('layouts.app');
+        ])->extends('layouts.bt4.app');
     }
 
     public function mount(Establishment $establishment)

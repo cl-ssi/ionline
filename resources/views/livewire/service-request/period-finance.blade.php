@@ -73,7 +73,7 @@
         <i>{!! $fulfillment->payment_rejection_detail !!}</i>
         @endif
     </div>
-    @include('layouts.partials.flash_message_custom',[
+    @include('layouts.bt4.partials.flash_message_custom',[
         'name' => 'period-finance',  // debe ser único
         'type' => 'primary' // optional: 'primary' (default), 'danger', 'warning', 'success', 'info'
     ])

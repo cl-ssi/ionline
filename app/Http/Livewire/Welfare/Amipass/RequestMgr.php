@@ -62,6 +62,6 @@ class RequestMgr extends Component
         $requests = BeneficiaryRequest::search($this->filter)->latest()->paginate(100);
         return view('livewire.welfare.amipass.request-mgr', [
             'requests' => $requests,
-        ]);
+        ])->extends('layouts.bt4.app');
     }
 }

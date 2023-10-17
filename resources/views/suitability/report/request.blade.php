@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.bt4.app')
 @section('title', 'Reporte de Solicitudes de Idoneidad')
 @section('content')
     @include('suitability.nav')

@@ -101,6 +101,6 @@ class BudgetMgr extends Component
         $budgets = ProgramBudget::latest()->paginate(25);
         return view('livewire.parameters.program.budget-mgr', [
             'budgets' => $budgets,
-        ]);
+        ])->extends('layouts.bt4.app');
     }
 }

@@ -6,16 +6,14 @@ use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
 /** ¿Un modelo? */
-
 use App\User;
 use App\Models\WebService\MercadoPublico;
 use App\Models\Pharmacies\Purchase;
-
-
-use App\Http\Livewire\Welfare\Amipass\ReportByDates;
 use App\Http\Livewire\Welfare\Amipass\RequestMgr;
+use App\Http\Livewire\Welfare\Amipass\ReportByDates;
 use App\Http\Livewire\Welfare\Amipass\NewBeneficiaryRequest;
 use App\Http\Livewire\Warehouse\Invoices\InvoiceManagement;
+use App\Http\Livewire\Warehouse\Cenabast\CenabastIndex;
 use App\Http\Livewire\TicResources;
 use App\Http\Livewire\Summary\Template\ShowTemplate;
 use App\Http\Livewire\Sign\SignatureIndex;
@@ -35,6 +33,8 @@ use App\Http\Livewire\Parameters\Parameter\ParameterIndex;
 use App\Http\Livewire\Parameters\Parameter\ParameterEdit;
 use App\Http\Livewire\Parameters\Parameter\ParameterCreate;
 use App\Http\Livewire\Parameters\MaintainerPlaces;
+use App\Http\Livewire\Parameters\Holidays;
+use App\Http\Livewire\Parameters\AccessLogIndex;
 use App\Http\Livewire\Lobby\MeetingShow;
 use App\Http\Livewire\Lobby\MeetingMgr;
 use App\Http\Livewire\Inventory\RegisterInventory;
@@ -53,26 +53,30 @@ use App\Http\Livewire\Inventory\CheckTransfer;
 use App\Http\Livewire\Inventory\AssignedProducts;
 use App\Http\Livewire\InventoryLabel\InventoryLabelIndex;
 use App\Http\Livewire\His\NewModification;
-use App\Http\Livewire\His\ModificationMgr;
 use App\Http\Livewire\His\ModificationRequestIndex;
-use App\Http\Controllers\His\ModificationRequestController;
+use App\Http\Livewire\His\ModificationMgr;
+use App\Http\Livewire\HealthServices;
 use App\Http\Livewire\Finance\UploadDtes;
 use App\Http\Livewire\Finance\IndexDtes;
 use App\Http\Livewire\Finance\DteConfirmation;
+use App\Http\Livewire\Drugs\IndexActPrecursor;
+use App\Http\Livewire\Drugs\EditActPrecursor;
+use App\Http\Livewire\Drugs\CreateActPrecursor;
+use App\Http\Livewire\Documents\Partes\Inbox;
+use App\Http\Livewire\Documents\Partes\ReportByDates as PartesReportByDates;
 use App\Http\Livewire\Documents\ApprovalsMgr;
+use App\Http\Livewire\Authorities\Calendar;
 use App\Http\Controllers\Welfare\WelfareController;
 use App\Http\Controllers\Welfare\LoanController;
 use App\Http\Controllers\Welfare\AmipassController;
 use App\Http\Controllers\WebserviceController;
+use App\Http\Controllers\Warehouse\VisationContractManager;
 use App\Http\Controllers\Warehouse\StoreController;
 use App\Http\Controllers\Warehouse\ProductController as WarehouseProductController;
 use App\Http\Controllers\Warehouse\OriginController;
 use App\Http\Controllers\Warehouse\DestinationController;
 use App\Http\Controllers\Warehouse\ControlController;
 use App\Http\Controllers\Warehouse\CategoryController as WarehouseCategoryController;
-//todas las visaciones para confirma y visto bueno de proceso de inventario-finanza-fr
-use App\Http\Controllers\Warehouse\VisationContractManager;
-
 use App\Http\Controllers\VaccinationController;
 use App\Http\Controllers\Unspsc\SegmentController;
 use App\Http\Controllers\Unspsc\ProductController;
@@ -108,9 +112,9 @@ use App\Http\Controllers\Rrhh\UserController;
 use App\Http\Controllers\Rrhh\SubrogationController;
 use App\Http\Controllers\Rrhh\RoleController;
 use App\Http\Controllers\Rrhh\OrganizationalUnitController;
+use App\Http\Controllers\Rrhh\NoAttendanceRecordController;
 use App\Http\Controllers\Rrhh\AuthorityController;
 use App\Http\Controllers\Rrhh\AttendanceController;
-use App\Http\Controllers\Rrhh\NoAttendanceRecordController;
 use App\Http\Controllers\Rrhh\AbsenteeismTypeController;
 use App\Http\Controllers\Resources\WingleController;
 use App\Http\Controllers\Resources\TelephoneController;
@@ -159,11 +163,13 @@ use App\Http\Controllers\Rem\RemPeriodController;
 use App\Http\Controllers\Rem\RemFileController;
 use App\Http\Controllers\RNIdb\RNIdbController;
 use App\Http\Controllers\QualityAps\QualityApsController;
+use App\Http\Controllers\PurchasePlan\PurchasePlanController;
 use App\Http\Controllers\Programmings\TrainingsItemController;
 use App\Http\Controllers\Programmings\TaskReschedulingController;
 use App\Http\Controllers\Programmings\TaskController;
 use App\Http\Controllers\Programmings\ReviewItemController;
 use App\Http\Controllers\Programmings\ProgrammingReviewController;
+//use App\Http\Controllers\RequestForms\SupplyPurchaseController;
 use App\Http\Controllers\Programmings\ProgrammingReportController;
 use App\Http\Controllers\Programmings\ProgrammingItemController;
 use App\Http\Controllers\Programmings\ProgrammingDayController;
@@ -173,14 +179,18 @@ use App\Http\Controllers\Programmings\ProfessionalHourController;
 use App\Http\Controllers\Programmings\ProfessionalController;
 use App\Http\Controllers\Programmings\ParticipationController;
 use App\Http\Controllers\Programmings\MinisterialProgramController;
-//use App\Http\Controllers\RequestForms\SupplyPurchaseController;
 use App\Http\Controllers\Programmings\EmergenciesController;
 use App\Http\Controllers\Programmings\CommuneFileController;
 use App\Http\Controllers\Programmings\ActivitiesProgramController;
 use App\Http\Controllers\Programmings\ActivitiesItemController;
 use App\Http\Controllers\Programmings\ActionTypeController;
+use App\Http\Controllers\ProfAgenda\ProposalController;
+use App\Http\Controllers\ProfAgenda\OpenHourController;
+use App\Http\Controllers\ProfAgenda\AgendaController;
+use App\Http\Controllers\ProfAgenda\ActivityTypeController;
 use App\Http\Controllers\Pharmacies\PurchaseController;
 use App\Http\Controllers\Pharmacies\PharmacyController;
+use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\Parameters\UnitOfMeasurementController;
 use App\Http\Controllers\Parameters\PurchaseUnitController;
 use App\Http\Controllers\Parameters\PurchaseTypeController;
@@ -214,11 +224,8 @@ use App\Http\Controllers\HotelBooking\RoomController;
 use App\Http\Controllers\HotelBooking\RoomBookingConfigurationController;
 use App\Http\Controllers\HotelBooking\HotelController;
 use App\Http\Controllers\HotelBooking\HotelBookingController;
-use App\Http\Controllers\ProfAgenda\ProposalController;
-use App\Http\Controllers\ProfAgenda\AgendaController;
-use App\Http\Controllers\ProfAgenda\OpenHourController;
-use App\Http\Controllers\ProfAgenda\ActivityTypeController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\His\ModificationRequestController;
 use App\Http\Controllers\HealthPlan\HealthPlanController;
 use App\Http\Controllers\Finance\PurchaseOrderController;
 use App\Http\Controllers\Finance\PaymentController;
@@ -237,6 +244,7 @@ use App\Http\Controllers\DigitalSignatureController;
 use App\Http\Controllers\ClaveUnicaController;
 use App\Http\Controllers\Auth\VerificationController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Attendances\PeopleController;
 use App\Http\Controllers\AssigmentController;
 use App\Http\Controllers\Allowances\AllowanceSignController;
 use App\Http\Controllers\Allowances\AllowanceFileController;
@@ -244,19 +252,7 @@ use App\Http\Controllers\Allowances\AllowanceController;
 use App\Http\Controllers\Agreements\WordWithdrawalAgreeController;
 use App\Http\Controllers\Agreements\WordTestController;
 use App\Http\Controllers\Agreements\WordMandatePFCAgreeController;
-use App\Http\Controllers\Agreements\WordMandateAgreeController;
-use App\Http\Controllers\Agreements\WordCollaborationAgreeController;
-use App\Http\Controllers\Agreements\StageController;
-use App\Http\Controllers\Agreements\SignerController;
-use App\Http\Controllers\Agreements\ProgramResolutionController;
-use App\Http\Controllers\Agreements\AgreementController;
-use App\Http\Controllers\Agreements\AddendumController;
-use App\Http\Controllers\Agreements\AccountabilityDetailController;
-use App\Http\Controllers\Agreements\AccountabilityController;
-use App\Http\Livewire\Warehouse\Cenabast\CenabastIndex;
-use App\Http\Controllers\PurchasePlan\PurchasePlanController;
 
-use App\Http\Controllers\PasswordResetController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -269,7 +265,7 @@ use App\Http\Controllers\PasswordResetController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('layouts.bt4.welcome');
 })->name('welcome');
 
 
@@ -1008,7 +1004,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
     Route::prefix('authorities')->name('new-authorities.')->middleware(['auth', 'must.change.password'])->group(function () {
         Route::get('/test', [AuthorityController::class, 'test'])->name('test');
         Route::get('/', [AuthorityController::class, 'index'])->name('index');
-        Route::get('/calendar/{organizationalUnit}', App\Http\Livewire\Authorities\Calendar::class);
+        Route::get('/calendar/{organizationalUnit}', Calendar::class);
         Route::get('/{organizationalUnit}/create', [AuthorityController::class, 'create'])->name('create');
         Route::get('/{organizationalUnit}/calendar', [AuthorityController::class, 'calendar'])->name('calendar');
         Route::post('/store', [AuthorityController::class, 'store'])->name('store');
@@ -1053,7 +1049,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
         Route::put('/{user}', [UserController::class, 'update'])->name('update');
         Route::delete('/{user}', [UserController::class, 'destroy'])->name('destroy');
 
-        Route::get('/{user}/access-logs', App\Http\Livewire\Parameters\AccessLogIndex::class)->name('access-logs');
+        Route::get('/{user}/access-logs', AccessLogIndex::class)->name('access-logs');
 
         Route::get('/last-access', [UserController::class, 'lastAccess'])->name('last-access');
 
@@ -1125,8 +1121,8 @@ Route::prefix('parameters')->as('parameters.')->middleware(['auth', 'must.change
         Route::put('/{establishmentType}/update', [EstablishmentTypeController::class, 'update'])->name('update');
     });
 
-    Route::get('/holidays', App\Http\Livewire\Parameters\Holidays::class)->name('holidays');
-    Route::get('/health-services', App\Http\Livewire\HealthServices::class)->name('health-services');
+    Route::get('/holidays', Holidays::class)->name('holidays');
+    Route::get('/health-services', HealthServices::class)->name('health-services');
 
     Route::prefix('establishment/{establishment}/locations')->as('locations.')->group(function () {
         Route::get('/', [LocationController::class, 'index'])->name('index');
@@ -1251,9 +1247,9 @@ Route::prefix('documents')->as('documents.')->middleware(['auth', 'must.change.p
         Route::delete('/files/{file}', [ParteFileController::class, 'destroy'])->name('files.destroy');
         Route::get('/inbox', [ParteController::class, 'inbox'])->name('inbox');
 
-        Route::get('/', App\Http\Livewire\Documents\Partes\Inbox::class)->name('index');
+        Route::get('/', Inbox::class)->name('index');
         Route::get('/outbox', [ParteController::class, 'outbox'])->name('outbox');
-        Route::get('report-by-dates', App\Http\Livewire\Documents\Partes\ReportByDates::class)->name('report-by-dates');
+        Route::get('report-by-dates', PartesReportByDates::class)->name('report-by-dates');
         Route::get('/view/{parte}', [ParteController::class, 'view'])->name('view');
         Route::get('/{parte}', [ParteController::class, 'show'])->name('show');
         Route::put('/{parte}', [ParteController::class, 'update'])->name('update');
@@ -1673,9 +1669,9 @@ Route::prefix('drugs')->as('drugs.')->middleware('can:Drugs', 'auth', 'drugs')->
     Route::get('rosters/analisis_to_admin', [App\Http\Controllers\Drugs\RosterAnalisisToAdminController::class, 'index'])->name('roster.analisis_to_admin.index');
     Route::get('rosters/analisis_to_admin/{id}', [App\Http\Controllers\Drugs\RosterAnalisisToAdminController::class, 'show'])->name('roster.analisis_to_admin.show');
 
-    Route::get('precursors', App\Http\Livewire\Drugs\IndexActPrecursor::class)->name('precursors');
-    Route::get('precursors/create', App\Http\Livewire\Drugs\CreateActPrecursor::class)->name('precursors.create');
-    Route::get('precursors/{actPrecursor}/create', App\Http\Livewire\Drugs\EditActPrecursor::class)->name('precursors.edit');
+    Route::get('precursors', IndexActPrecursor::class)->name('precursors');
+    Route::get('precursors/create', CreateActPrecursor::class)->name('precursors.create');
+    Route::get('precursors/{actPrecursor}/create', EditActPrecursor::class)->name('precursors.edit');
     Route::get('precursors/{actPrecursor}/pdf', ActPrecursorController::class)->name('precursors.pdf');
 });
 
@@ -2295,7 +2291,6 @@ Route::prefix('suitability')->as('suitability.')->middleware(['auth', 'must.chan
         // Route::post('/store', [OptionsController::class, 'store'])->name('store');
     });
 
-    Route::post('/livewire/message/rrhh.change-shift-day-status', [\App\Http\Livewire\Rrhh\ChangeShiftDayStatus::class]);
     Route::post('/livewire/message/rrhh/change-shift-day-status', [\App\Http\Livewire\Rrhh\ChangeShiftDayStatus::class]);
     // Route::post('livewire/message/rrhh.change-shift-day-status', [\App\Livewire\Rrhh\ChangeShiftDayStatus::class]);+
 
@@ -2576,7 +2571,15 @@ Route::get('/maquetas/vista', function () {
 
 
 /* Registro asistencia cena SST 2023 */
-use App\Http\Controllers\Attendances\PeopleController;
+use App\Http\Controllers\Agreements\WordMandateAgreeController;
+use App\Http\Controllers\Agreements\WordCollaborationAgreeController;
+use App\Http\Controllers\Agreements\StageController;
+use App\Http\Controllers\Agreements\SignerController;
+use App\Http\Controllers\Agreements\ProgramResolutionController;
+use App\Http\Controllers\Agreements\AgreementController;
+use App\Http\Controllers\Agreements\AddendumController;
+use App\Http\Controllers\Agreements\AccountabilityDetailController;
+use App\Http\Controllers\Agreements\AccountabilityController;
 
 Route::get('/attendances/', function () {
     return view('attendances.principal');

@@ -1,6 +1,6 @@
 <div class="card mt-3 small">
 
-    @include('layouts.partials.flash_message')
+    @include('layouts.bt4.partials.flash_message')
 
     <div style="{{ $edit ? '' : 'display:none' }}">
 

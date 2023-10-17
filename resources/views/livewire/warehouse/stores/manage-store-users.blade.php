@@ -137,7 +137,7 @@
                     <tbody>
                         <tr class="d-none" wire:loading.class.remove="d-none" wire:target="search_user">
                             <td class="text-center" colspan="3">
-                                @include('layouts.partials.spinner')
+                                @include('layouts.bt4.partials.spinner')
                             </td>
                         </tr>
                         @forelse($addedUsers as $itemUser)

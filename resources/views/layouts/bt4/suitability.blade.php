@@ -27,7 +27,6 @@
         crossorigin="anonymous">
     <!-- <link href="{{ asset('css/app.css') }}" rel="stylesheet"> -->
     <link href="{{ asset('css/intranet.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/cu.min.css') }}" rel="stylesheet">
 
     <style media="screen">
         .bg-nav-gobierno {
@@ -42,41 +41,18 @@
     <!-- Place your kit's code here -->
     <script src="https://kit.fontawesome.com/7c4f606aba.js" SameSite="None"
         crossorigin="anonymous"></script>
-    @livewireStyles
 </head>
 <body>
     <div id="app">
-
-        <nav class="navbar navbar-expand-md navbar-dark shadow-sm bg-nav-gobierno">
-            <div class="container">
-                <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Laravel') }}
-                </a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav mr-auto">
-
-                    </ul>
-
-                    <!-- Right Side Of Navbar -->
-                    <ul class="navbar-nav ml-auto">
-
-                    </ul>
-                </div>
-            </div>
-        </nav>
+        @include('layouts.partials.app')
 
         <main class="container pt-3">
             <div class="d-none d-print-block">
                 <strong>{{ env('APP_SS') }}</strong><br>
                 Ministerio de Salud
             </div>
-            @include('layouts.partials.errors')
-            @include('layouts.partials.flash_message')
+            @include('layouts.bt4.partials.errors')
+            @include('layouts.bt4.partials.flash_message')
             @yield('content')
         </main>
 
@@ -109,7 +85,6 @@
             integrity="sha512-yDlE7vpGDP7o2eftkCiPZ+yuUyEcaBwoJoIhdXv71KZWugFqEphIS3PU60lEkFaz8RxaVsMpSvQxMBaKVwA5xg=="
             crossorigin="anonymous"></script>
 
-
     @yield('custom_js')
     <script>
     function logout(){
@@ -120,6 +95,6 @@
         setTimeout(function(){ window.location.href= "/logout"; }, 1000);
     }
     </script>
-    @livewireScripts
+
 </body>
 </html>

@@ -27,7 +27,7 @@ class SignatureIndex extends Component
     {
         return view('livewire.sign.signature-index', [
             'signatures' => $this->getSignatures()
-        ]);
+        ])->extends('layouts.bt4.app');
     }
 
     public function mount()

@@ -45,7 +45,7 @@
                 @error('payment_type') <span class="text-danger">{{ $message }}</span> @enderror
 
                 <!-- Mensaje de éxito -->
-                @include('layouts.partials.flash_message')
+                @include('layouts.bt4.partials.flash_message')
             </div>
 
         </div>

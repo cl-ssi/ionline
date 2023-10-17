@@ -1,5 +1,5 @@
 <div>
-    @include('layouts.partials.flash_message')
+    @include('layouts.bt4.partials.flash_message')
 
     @switch($view)
         @case('index')

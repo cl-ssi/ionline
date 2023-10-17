@@ -24,7 +24,7 @@ class AssignedProducts extends Component
     {
         return view('livewire.inventory.assigned-products', [
             'inventories' => $this->getInventories()
-        ])->extends('layouts.app');
+        ])->extends('layouts.bt4.app');
     }
 
     public function getInventories()

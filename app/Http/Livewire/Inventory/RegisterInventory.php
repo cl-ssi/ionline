@@ -75,7 +75,7 @@ class RegisterInventory extends Component
 
     public function render()
     {
-        return view('livewire.inventory.register-inventory')->extends('layouts.app');
+        return view('livewire.inventory.register-inventory')->extends('layouts.bt4.app');
     }
 
     public function updatedSearchProduct()

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.bt4.app')
 
 @section('title', 'Compromiso de Gestión ' . $comges->year . '- Editar Comges')
 

@@ -53,6 +53,6 @@ class ReasonMgr extends Component
     {
         return view('livewire.rrhh.attendance.reason-mgr', [
             'reasons' => Reason::with('noAttendanceRecords')->get(),
-        ]);
+        ])->extends('layouts.bt4.app');
     }
 }

@@ -20,8 +20,8 @@ class ReportGlobalBudget extends Component
 
     public function updatedSelectedYear()
     {
-        
-        
+
+
         //Trae todos los de un año
         $this->programs = Program::where('period', $this->selectedYear)->orderBy('name')->get();
 
@@ -48,7 +48,7 @@ class ReportGlobalBudget extends Component
             $requestForms = RequestForm::with('father:id,folio,has_increased_expense', 'purchasingProcess.details', 'purchasingProcess.detailsPassenger', 'immediatePurchases.dtes')->where('program_id', $program->id)->where('status', 'approved')->get();
 
             foreach ($requestForms as $requestForm) {
-                if ($requestForm->purchasingProcess && ($requestForm->purchasingProcess->details->count() > 0 || $requestForm->purchasingProcess->detailsPassenger->count() > 0)) 
+                if ($requestForm->purchasingProcess && ($requestForm->purchasingProcess->details->count() > 0 || $requestForm->purchasingProcess->detailsPassenger->count() > 0))
                 {
                     $program->totalCompras += $requestForm->purchasingProcess->getExpense();
                 }
@@ -63,7 +63,6 @@ class ReportGlobalBudget extends Component
 
     public function render()
     {
-        
-        return view('livewire.request-form.report-global-budget');
+        return view('livewire.request-form.report-global-budget')->extends('layouts.bt4.app');
     }
 }

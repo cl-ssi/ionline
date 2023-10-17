@@ -11,7 +11,7 @@ class InventoryManager extends Component
     {
         return view('livewire.inventory.inventory-manager', [
             'establishments' => $this->getEstablishments(),
-        ])->extends('layouts.app');
+        ])->extends('layouts.bt4.app');
     }
 
     public function getEstablishments()

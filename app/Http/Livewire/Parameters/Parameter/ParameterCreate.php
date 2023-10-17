@@ -15,7 +15,7 @@ class ParameterCreate extends Component
 
     public function render()
     {
-        return view('livewire.parameters.parameter.parameter-create')->extends('layouts.app');
+        return view('livewire.parameters.parameter.parameter-create')->extends('layouts.bt4.app');
     }
 
     public function rules()

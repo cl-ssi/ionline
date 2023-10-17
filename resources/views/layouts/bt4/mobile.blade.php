@@ -56,8 +56,8 @@
                 <strong>{{ env('APP_SS') }}</strong><br>
                 Ministerio de Salud
             </div>
-            @include('layouts.partials.errors')
-            @include('layouts.partials.flash_message')
+            @include('layouts.bt4.partials.errors')
+            @include('layouts.bt4.partials.flash_message')
 
             @yield('content', $slot ?? '')
         </main>

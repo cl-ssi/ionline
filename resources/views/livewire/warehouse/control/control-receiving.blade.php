@@ -1,5 +1,5 @@
 <div>
-    @include('layouts.partials.flash_message')
+    @include('layouts.bt4.partials.flash_message')
 
     <div class="row">
         <div class="col my-2">
@@ -58,7 +58,7 @@
             <tbody>
                 <tr class="d-none" wire:loading.class.remove="d-none" wire:target="search">
                     <td class="text-center" colspan="9">
-                        @include('layouts.partials.spinner')
+                        @include('layouts.bt4.partials.spinner')
                     </td>
                 </tr>
                 @forelse($controls as $control)

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.bt4.app')
 @section('title', 'Cenabast')
 @section('content')
     @include('warehouse.stores.cenabast.nav')

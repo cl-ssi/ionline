@@ -41,7 +41,7 @@
                     wire:target="search, deleteOrigin"
                 >
                     <td class="text-center" colspan="3">
-                        @include('layouts.partials.spinner')
+                        @include('layouts.bt4.partials.spinner')
                     </td>
                 </tr>
                 @forelse($origins as $origin)

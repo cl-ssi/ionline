@@ -1,5 +1,5 @@
 <div class="form-row">
-@include('layouts.partials.flash_message')
+@include('layouts.bt4.partials.flash_message')
 
     <fieldset class="form-group col-6">
         <label>Archivo</label>

@@ -41,7 +41,7 @@ class CreateActPrecursor extends Component
 
     public function render()
     {
-        return view('livewire.drugs.create-act-precursor');
+        return view('livewire.drugs.create-act-precursor')->extends('layouts.bt4.app');
     }
 
     public function getPrecursors()

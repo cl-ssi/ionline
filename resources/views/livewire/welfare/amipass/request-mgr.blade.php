@@ -2,8 +2,8 @@
 
     @include('welfare.nav')
 
-    @include('layouts.partials.errors')
-    @include('layouts.partials.flash_message')
+    @include('layouts.bt4.partials.errors')
+    @include('layouts.bt4.partials.flash_message')
 
 <div style="margin-bottom: 10px;" class="row">
     <div class="col-lg-12">

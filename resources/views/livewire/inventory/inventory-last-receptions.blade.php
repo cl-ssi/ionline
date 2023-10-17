@@ -55,7 +55,7 @@
                     wire:target="createInventory, discardInventory, search"
                 >
                     <td class="text-center" colspan="7">
-                        @include('layouts.partials.spinner')
+                        @include('layouts.bt4.partials.spinner')
                     </td>
                 </tr>
                 @forelse($controlItems as $controlItem)

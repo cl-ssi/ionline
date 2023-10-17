@@ -44,7 +44,7 @@
                     wire:loading.class.remove="d-none"
                 >
                     <td class="text-center" colspan="8">
-                        @include('layouts.partials.spinner')
+                        @include('layouts.bt4.partials.spinner')
                     </td>
                 </tr>
                 @forelse($computers as $key => $computer)

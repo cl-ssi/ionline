@@ -1,11 +1,11 @@
 <div>
     @section('title', "Solicitudes de aprobación")
 
-    @include('layouts.partials.flash_message')
+    @include('layouts.bt4.partials.flash_message')
 
     <h3 class="mb-3">Solicitudes de aprobación</h3>
 
-    <div class="form-row">
+    <div class="row mb-3">
         <div class="form-group col-md-4">
             <label for="inputState">Estado</label>
             <select id="inputState" class="form-control" wire:model.defer="filter.status">
@@ -51,7 +51,7 @@
                             type="checkbox"
                             id="ids.{{$approval->id}}"
                             wire:model.defer="ids.{{$approval->id}}"
-                            @disabled(! is_null($approval->status) )>
+                            @disabled(! is_null($approval->status) OR $approval->digital_signature)>
                     </div>
                 </td>
                 <td class="small">
@@ -89,7 +89,7 @@
                         class="btn btn-primary btn-sm"
                         wire:click='show({{ $approval }})'
                     >
-                        <i class="fas fa-fw fa-eye"></i>
+                        <i class="fas fa-fw {{ $approval->digital_signature ? 'fas fa-signature' : 'fas fa-certificate' }}"></i>
                         <i class="fas fa-fw {{ $approval->approver_ou_id ? 'fa-chess-king' : 'fa-user' }}"></i>
                     </button>
                 </td>
@@ -107,7 +107,7 @@
                 Aprobar seleccionados
             </button>
         </div>
-        <div class="col text-right">
+        <div class="col text-end">
             <button class="btn btn-danger" wire:click="bulkProcess(false)">
                 <i class="fas fa-thumbs-down"></i>
                 Rechazar seleccionados
@@ -122,116 +122,26 @@
         <div class="modal {{ $showModal }}" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-dialog-scrollable modal-xl">
                 <div class="modal-content">
+
                     <div class="modal-header">
-                        <div class="container">
-                            <div class="row">
+                        <h6 class="modal-title">
+                            Aprobará como
+                            <i class="fas fa-fw {{ $approvalSelected->approver_ou_id ? 'fa-chess-king' : 'fa-user' }}"></i>
+                            @if($approvalSelected->approver_ou_id)
+                                de {{ $approvalSelected->organizationalUnit->name }}
+                            @else
+                                {{ auth()->user()->tinnyName }}
+                            @endif
+                        </h6>
 
-                                <div class="col-5 text-left">
-                                    <h6 class="modal-title">
-                                        Aprobará como
-                                        <i class="fas fa-fw {{ $approvalSelected->approver_ou_id ? 'fa-chess-king' : 'fa-user' }}"></i>
-                                        @if($approvalSelected->approver_ou_id)
-                                            de {{ $approvalSelected->organizationalUnit->name }}
-                                        @else
-                                            {{ auth()->user()->tinnyName }}
-                                        @endif
-                                    </h6>
-                                </div>
+                        <button 
+                            type="button" 
+                            class="btn-close" 
+                            data-bs-dismiss="modal" 
+                            aria-label="Close"
+                            wire:click="dismiss">
+                        </button>
 
-                                <div class="col-7">
-                                    <div class="row text-right">
-                                        <div class="col-4 text-right">
-                                            @if( is_null($approvalSelected->status) )
-                                            <div class="input-group mb-3">
-                                                <input
-                                                    type="text"
-                                                    class="form-control"
-                                                    placeholder="OTP"
-                                                    aria-label="OTP"
-                                                    aria-describedby="button-addon"
-                                                    wire:model.defer="otp"
-                                                >
-                                                <div class="input-group-append">
-                                                    <button
-                                                        class="btn btn-success"
-                                                        wire:loading.attr="disabled"
-                                                        wire:click="approveOrReject({{ $approvalSelected }}, true)"
-                                                    >
-                                                        <span
-                                                            wire:loading.remove
-                                                            wire:target="otp"
-                                                        >
-                                                            <i class="fas fa-thumbs-up"></i>
-                                                        </span>
-
-                                                        <span
-                                                            class="spinner-border spinner-border-sm"
-                                                            role="status"
-                                                            wire:loading
-                                                            wire:target="otp"
-                                                            aria-hidden="true"
-                                                        >
-                                                        </span>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                            <div class="text-left mt-1" style="line-height: 15px; font-height: 10px">
-                                                @if(isset($message))
-                                                    <small id="otp" class="text-danger">
-                                                        {{ $message }}
-                                                    </small>
-                                                @endif
-                                            </div>
-                                            @endif
-                                        </div>
-
-                                        <div class="col-6 text-right">
-                                            @if( is_null($approvalSelected->status) )
-                                            <div class="input-group mb-3">
-                                                <input
-                                                    type="text"
-                                                    class="form-control"
-                                                    placeholder="Motivo rechazo"
-                                                    aria-label="Motivo de rechazo"
-                                                    aria-describedby="button-addon"
-                                                    wire:model.defer="reject_observation"
-                                                    value="{{ $approvalSelected->reject_observation }}"
-                                                >
-                                                <div class="input-group-append">
-                                                    <button
-                                                        class="btn btn-danger"
-                                                        type="button"
-                                                        id="button-addon"
-                                                        wire:click="approveOrReject({{ $approvalSelected }}, false)"
-                                                    >
-                                                        <i class="fas fa-thumbs-down"></i>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                            @else
-                                                <div class="text-{{ $approvalSelected->color }}">
-                                                    El documento se encuentra {{ $approvalSelected->status ? 'Aprobado' : 'Rechazado' }}
-                                                    <br> <i> <small>{{ $approvalSelected->reject_observation }}</small> </i>
-                                                </div>
-                                            @endif
-                                        </div>
-
-                                        <div class="col-1 text-right">
-                                            <button
-                                                type="button"
-                                                class="close text-right"
-                                                data-dismiss="modal"
-                                                aria-label="Close"
-                                                wire:click="dismiss"
-                                            >
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
                     </div>
                     <div class="modal-body">
                         <object
@@ -259,6 +169,84 @@
                         </object>
                     </div>
                     <div class="modal-footer">
+                        <div class="row">
+
+                            @if( is_null($approvalSelected->status) )
+                            <div class="col-8">
+                                <div class="input-group">
+                                    <input
+                                        type="text"
+                                        class="form-control"
+                                        placeholder="Motivo rechazo"
+                                        aria-label="Motivo de rechazo"
+                                        aria-describedby="button-addon"
+                                        wire:model.defer="reject_observation"
+                                        value="{{ $approvalSelected->reject_observation }}"
+                                    >
+                                    <button
+                                        class="btn btn-danger"
+                                        type="button"
+                                        id="button-addon"
+                                        wire:click="approveOrReject({{ $approvalSelected }}, false)"
+                                    >
+                                        <i class="fas fa-thumbs-down"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            @else
+                                <div class="text-{{ $approvalSelected->color }}">
+                                    El documento se encuentra {{ $approvalSelected->status ? 'Aprobado' : 'Rechazado' }}
+                                    <i> <small>{{ $approvalSelected->reject_observation }}</small> </i>
+                                </div>
+                            @endif
+
+                            @if( is_null($approvalSelected->status) )
+                                <div class="col-4">
+                                    <div class="input-group">
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            placeholder="OTP"
+                                            aria-label="OTP"
+                                            aria-describedby="button-addon"
+                                            wire:model.defer="otp"
+                                            @disabled( !$approvalSelected->digital_signature)
+                                        >
+                                        <button
+                                            class="btn btn-success"
+                                            wire:loading.attr="disabled"
+                                            wire:click="approveOrReject({{ $approvalSelected }}, true)"
+                                        >
+                                            <span
+                                                wire:loading.remove
+                                                wire:target="otp"
+                                            >
+                                                <i class="fas fa-thumbs-up"></i>
+                                            </span>
+
+                                            <span
+                                                class="spinner-border spinner-border-sm"
+                                                role="status"
+                                                wire:loading
+                                                wire:target="otp"
+                                                aria-hidden="true"
+                                            >
+                                            </span>
+                                        </button>
+
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        @if(isset($message))
+                                            <small id="otp" class="text-danger">
+                                                {{ $message }}
+                                            </small>
+                                        @endif
+                                    </div>
+                                </div>
+                            @endif
+                        </div>
+
+                    <!-- End Footer -->
                     </div>
                 </div>
             </div>
