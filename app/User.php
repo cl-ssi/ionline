@@ -117,10 +117,11 @@ class User extends Authenticatable implements Auditable
         return $this->belongsTo(OrganizationalUnit::class);
     }
 
-    public function establishment()
-    {
-        return $this->organizationalUnit?->establishment() ?? $this->belongsTo(new Establishment());
-    }
+    /** No pude hacer eagger loading con esta relación */
+    // public function establishment()
+    // {
+    //     return $this->organizationalUnit?->establishment() ?? $this->belongsTo(new Establishment());
+    // }
 
     public function telephones()
     {
