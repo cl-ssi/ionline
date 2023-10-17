@@ -83,7 +83,7 @@ class CenabastIndex extends Component
     {
         return view('livewire.warehouse.cenabast.cenabast-index', [
             'dtes' => $this->getCenabast('sin_adjuntar'),
-        ]);
+        ])->extends('layouts.bt4.app');
     }
 
     public function signMultiple()
