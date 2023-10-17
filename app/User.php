@@ -114,7 +114,12 @@ class User extends Authenticatable implements Auditable
 
     public function organizationalUnit()
     {
-        return $this->belongsTo('\App\Rrhh\OrganizationalUnit');
+        return $this->belongsTo(OrganizationalUnit::class);
+    }
+
+    public function establishment()
+    {
+        return $this->organizationalUnit?->establishment() ?? $this->belongsTo(new Establishment());
     }
 
     public function telephones()
