@@ -1,4 +1,4 @@
-@extends('layouts.external')
+@extends('layouts.bt4.external')
 
 @section('title', 'Editar Mi Staff')
 

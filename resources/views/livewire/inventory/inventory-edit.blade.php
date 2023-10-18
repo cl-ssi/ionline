@@ -78,7 +78,8 @@
                 type="text"
                 class="form-control @error('number_inventory') is-invalid @enderror"
                 id="number-inventory"
-                wire:model.debounce.1500ms="number_inventory"
+                wire:model.defer="number_inventory"
+                autocomplete="off"
             >
             @error('number_inventory')
                 <span class="invalid-feedback" role="alert">
@@ -95,7 +96,8 @@
                 type="text"
                 class="form-control @error('brand') is-invalid @enderror"
                 id="brand"
-                wire:model.debounce.1500ms="brand"
+                wire:model.defer="brand"
+                autocomplete="off"
             >
             @error('brand')
                 <span class="invalid-feedback" role="alert">
@@ -112,7 +114,8 @@
                 type="text"
                 class="form-control @error('model') is-invalid @enderror"
                 id="model"
-                wire:model.debounce.1500ms="model"
+                wire:model.defer="model"
+                autocomplete="off"
             >
             @error('model')
                 <span class="invalid-feedback" role="alert">
@@ -129,7 +132,8 @@
                 type="text"
                 class="form-control @error('serial_number') is-invalid @enderror"
                 id="serial-number"
-                wire:model.debounce.1500ms="serial_number"
+                wire:model.defer="serial_number"
+                autocomplete="off"
             >
             @error('serial_number')
                 <span class="invalid-feedback" role="alert">
@@ -145,7 +149,7 @@
             <select
                 class="form-control @error('status') is-invalid @enderror"
                 id="status"
-                wire:model.debounce.1500ms="status"
+                wire:model="status"
                 >
                 <option value="">Seleccione un estado</option>
                 <option value="1">Bueno</option>
@@ -172,7 +176,8 @@
                 type="text"
                 class="form-control @error('useful_life') is-invalid @enderror"
                 id="useful-life"
-                wire:model.debounce.1500ms="useful_life"
+                wire:model.defer="useful_life"
+                autocomplete="off"
             >
             @error('useful_life')
                 <span class="invalid-feedback" role="alert">
@@ -189,7 +194,8 @@
                 type="text"
                 class="form-control @error('depreciation') is-invalid @enderror"
                 id="depreciation"
-                wire:model.debounce.1500ms="depreciation"
+                wire:model.defer="depreciation"
+                autocomplete="off"
             >
             @error('depreciation')
                 <span class="invalid-feedback" role="alert">
@@ -206,12 +212,12 @@
                 type="text"
                 class="form-control @error('accounting_code_id') is-invalid @enderror"
                 id="cost-center"
-                wire:model.1500ms="accounting_code_id"
+                wire:model="accounting_code_id"
             >
                 <option value="">Seleccione cuenta contable</option>
                 @foreach($accountingCodes as $accountingCode)
                     <option value="{{ $accountingCode->id }}">
-                        {{ $accountingCode->description }}
+                    {{ $accountingCode->id }} - {{ $accountingCode->description }}
                     </option>
                 @endforeach
             </select>
@@ -304,7 +310,6 @@
 
     <div class="form-row mb-3">
 
-
         @if($inventory->control)
             <fieldset class="col-md-5">
                 <label for="supplier" class="form-label">
@@ -374,6 +379,12 @@
         @endif
     </div>
 
+    @if($inventory->po_code)
+        <div >
+            <h5 class="mt-3">Facturas relacionadas con la OC</h5>
+            @livewire('warehouse.invoices.list-invoices', ['inventory' => $inventory])
+        </div>
+    @endif
 
     <div class="form-row mb-3">
         <fieldset class="col-md-12">
@@ -419,12 +430,7 @@
             <h5 class="mt-3">Historial del ítem</h5>
             @livewire('inventory.movement-index', ['inventory' => $inventory])
         </div>
-        @if($inventory->po_code)
-            <div class="col">
-                <h5 class="mt-3">Facturas relacionadas con la OC</h5>
-                @livewire('warehouse.invoices.list-invoices', ['inventory' => $inventory])
-            </div>
-        @endif
+
     </div>
 
 </div>

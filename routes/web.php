@@ -59,11 +59,12 @@ use App\Http\Livewire\HealthServices;
 use App\Http\Livewire\Finance\UploadDtes;
 use App\Http\Livewire\Finance\IndexDtes;
 use App\Http\Livewire\Finance\DteConfirmation;
+use App\Http\Livewire\Finance\AccountingCodesMgr;
 use App\Http\Livewire\Drugs\IndexActPrecursor;
 use App\Http\Livewire\Drugs\EditActPrecursor;
 use App\Http\Livewire\Drugs\CreateActPrecursor;
-use App\Http\Livewire\Documents\Partes\Inbox;
 use App\Http\Livewire\Documents\Partes\ReportByDates as PartesReportByDates;
+use App\Http\Livewire\Documents\Partes\Inbox;
 use App\Http\Livewire\Documents\ApprovalsMgr;
 use App\Http\Livewire\Authorities\Calendar;
 use App\Http\Controllers\Welfare\WelfareController;
@@ -168,8 +169,8 @@ use App\Http\Controllers\Programmings\TrainingsItemController;
 use App\Http\Controllers\Programmings\TaskReschedulingController;
 use App\Http\Controllers\Programmings\TaskController;
 use App\Http\Controllers\Programmings\ReviewItemController;
-use App\Http\Controllers\Programmings\ProgrammingReviewController;
 //use App\Http\Controllers\RequestForms\SupplyPurchaseController;
+use App\Http\Controllers\Programmings\ProgrammingReviewController;
 use App\Http\Controllers\Programmings\ProgrammingReportController;
 use App\Http\Controllers\Programmings\ProgrammingItemController;
 use App\Http\Controllers\Programmings\ProgrammingDayController;
@@ -252,6 +253,15 @@ use App\Http\Controllers\Allowances\AllowanceController;
 use App\Http\Controllers\Agreements\WordWithdrawalAgreeController;
 use App\Http\Controllers\Agreements\WordTestController;
 use App\Http\Controllers\Agreements\WordMandatePFCAgreeController;
+use App\Http\Controllers\Agreements\WordMandateAgreeController;
+use App\Http\Controllers\Agreements\WordCollaborationAgreeController;
+use App\Http\Controllers\Agreements\StageController;
+use App\Http\Controllers\Agreements\SignerController;
+use App\Http\Controllers\Agreements\ProgramResolutionController;
+use App\Http\Controllers\Agreements\AgreementController;
+use App\Http\Controllers\Agreements\AddendumController;
+use App\Http\Controllers\Agreements\AccountabilityDetailController;
+use App\Http\Controllers\Agreements\AccountabilityController;
 
 /*
 |--------------------------------------------------------------------------
@@ -1219,6 +1229,8 @@ Route::prefix('parameters')->as('parameters.')->middleware(['auth', 'must.change
         Route::get('/edit/{inventoryLabel}', [InventoryLabelController::class, 'edit'])->name('edit');
         Route::put('/{inventoryLabel}/label', [InventoryLabelController::class, 'update'])->name('update');
     });
+
+    Route::get('/accounting-codes', AccountingCodesMgr::class)->name('accounting-codes');
 });
 /** Fin de rutas de parametros */
 
@@ -2571,15 +2583,7 @@ Route::get('/maquetas/vista', function () {
 
 
 /* Registro asistencia cena SST 2023 */
-use App\Http\Controllers\Agreements\WordMandateAgreeController;
-use App\Http\Controllers\Agreements\WordCollaborationAgreeController;
-use App\Http\Controllers\Agreements\StageController;
-use App\Http\Controllers\Agreements\SignerController;
-use App\Http\Controllers\Agreements\ProgramResolutionController;
-use App\Http\Controllers\Agreements\AgreementController;
-use App\Http\Controllers\Agreements\AddendumController;
-use App\Http\Controllers\Agreements\AccountabilityDetailController;
-use App\Http\Controllers\Agreements\AccountabilityController;
+
 
 Route::get('/attendances/', function () {
     return view('attendances.principal');

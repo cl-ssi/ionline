@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\User;
 use App\Models\Requirements\Category;
 use App\Models\Profile\Subrogation;
+use App\Models\Establishment;
 
 class OrganizationalUnit extends Model implements Auditable
 {
@@ -71,7 +72,7 @@ class OrganizationalUnit extends Model implements Auditable
 
     public function establishment()
     {
-        return $this->belongsTo('\App\Models\Establishment', 'establishment_id');
+        return $this->belongsTo(Establishment::class);
     }
 
     public function requestForms()

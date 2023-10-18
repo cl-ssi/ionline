@@ -114,7 +114,7 @@
                 <div style="border: 1px solid #CCC;">
                     <p class="firma-header">
                         Firmado electrónicamente de acuerdo a la ley Nº 19.799<br>
-                        https://i.saludtarapaca.gob.gob.cl/validador ID:2342-Xdf4 <br>
+                        https://i.saludtarapaca.gob.cl/validador ID:2342-Xdf4 <br>
                     </p>
                     <div class="numero-partes" style="padding-top: 40px;">23.423</div>
                 </div>
