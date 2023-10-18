@@ -100,7 +100,7 @@
                         </a>
 
                         <a class="dropdown-item {{ active('documents.approvals') }}" href="{{ route('documents.approvals') }}">
-                            <i class="fas fa-fw fa-thumbs-up"></i> Solicitudes de aprobacion
+                            <i class="fas fa-fw fa-thumbs-up"></i> Solicitudes de aprobación
                         </a>
                         @endcan
 
@@ -145,14 +145,24 @@
                 @endcan
 
 
-                @if(auth()->user()->organizationalUnit && auth()->user()->organizationalUnit->establishment_id != 1)
+                @if(auth()->user()->organizationalUnit->establishment_id != 1)
                 <li class="nav-item dropdown {{ active(['request_forms.*','warehouse.*','pharmacies.*','resources.*','inventories.*','allowances.*']) }}">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Subdirección Administrativa">
                             <i class="fas fa-money-check"></i> SDA
                         </span>
                     </a>
+
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+
+                        @if(auth()->user()->organizationalUnit->establishment_id != 1)
+
+                        @canany(['Purchase Plan: create', 'Purchase Plan: all'])
+                        <a class="dropdown-item {{ active('purchase_plan.own_index') }}" href="{{ route('purchase_plan.own_index') }}">
+                            <i class="fas fa-fw fa-shopping-cart"></i> Plan de Compras
+                        </a>
+                        @endcanany
+
                         @php($ouSearch = App\Models\Parameters\Parameter::where('module', 'nav')->where('parameter', 'accessRF')->first()->value)
                         @if(auth()->user()->organizationalUnit && in_array(auth()->user()->organizationalUnit->establishment_id, explode(',', $ouSearch)))
                         <a class="dropdown-item {{ active('request_forms.my_forms') }}" href="{{ route('request_forms.my_forms') }}">
@@ -160,11 +170,21 @@
                         </a>
                         @endif
 
-                        <!-- <a class="dropdown-item {{ active('hotel_booking.index') }}" href="{{ route('hotel_booking.index') }}">
-                            <i class="fas fa-fw fa-user"></i> Reserva Cabañas
-                        </a> -->
+                        @canany(['HotelBooking: Administrador', 'HotelBooking: User'])
+                            <a class="dropdown-item {{ active('hotel_booking.index') }}" href="{{ route('hotel_booking.index') }}">
+                                <i class="fas fa-fw fa-user"></i> Reserva Cabañas
+                            </a>
+                        @endcanany
 
-                        @can('Payments')
+                        @canany(['Agenda UST: Administrador','Agenda UST: Funcionario','Agenda UST: Secretaria'])
+                            <a class="dropdown-item {{ active('prof_agenda.home') }}" href="{{ route('prof_agenda.home') }}">
+                                <i class="fas fa-fw fa-user"></i> Agenda UST
+                            </a>
+                        @endcanany
+
+                        @canany([
+                            'Payments', 'be god', 'Payments: viewer',
+                            ])
                         <a class="dropdown-item {{ active('finance.payments.index') }}" href="{{ route('finance.payments.index') }}">
                             <i class="fas fa-fw fa-money-bill"></i> Estados de pago
                         </a>
@@ -174,6 +194,7 @@
                         <div class="dropdown-divider"></div>
                         <h6 class="dropdown-header">Bodegas</h6>
                         @endcan
+
 
                         @canany([
                         'Store', 'Store: admin', 'Store: index', 'Store: list receptions',
@@ -213,6 +234,15 @@
                         @endcanany
 
 
+
+                        @canany(['Store: Cenabast'])
+                        <a class="dropdown-item {{ active('warehouse.cenabast.index') }}" href="{{ route('warehouse.cenabast.index') }}">
+                            <i class="fas fa-pills"></i> Cenabast
+                        </a>
+                        @endcanany
+
+
+
                         @can('Inventory')
                         <div class="dropdown-divider"></div>
                         <h6 class="dropdown-header">Inventario</h6>
@@ -232,7 +262,9 @@
                             <i class="fas fa-fw fa-cog"></i> Administrar Inventarios
                         </a>
                         @endcan
+                    @endif
 
+                        <!-- módulo de farmacias -->
                         @canany(['Pharmacy'])
                         <div class="dropdown-divider"></div>
 
@@ -258,6 +290,7 @@
                         @endcan
 
 
+                    @if(auth()->user()->organizationalUnit->establishment_id != 1)
                         @canany(['Resources: create', 'Resources: edit', 'Resources: delete'])
 
                         <div class="dropdown-divider"></div>
@@ -300,8 +333,9 @@
                             <i class="fas fa-wallet"></i> Viáticos
                         </a>
                         {{-- @endcan --}}
-
+                    @endif
                     </ul>
+
                 </li>
                 @endif
 
@@ -606,6 +640,12 @@
                         </a>
                         @endcanany
 
+                        @canany(['be god'])
+                        <a class="dropdown-item {{active('rrhh.absence-types.*')}}" href="{{ route('rrhh.absence-types.index') }}">
+                            <i class="fas fa-fw fa-calendar-alt"></i> Tipos de Ausencias
+                        </a>
+                        @endcanany
+
                         @canany(['be god','Parameters: UNSPSC'])
                         <li>
                             <hr class="dropdown-divider">
@@ -645,14 +685,11 @@
 
 
 
-                <li class="nav-item dropdown ">
-
+                <li class="nav-item dropdown">
                     <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" v-pre>
                         <i class="fas fa-bell" title="Notificaciones"></i>
                         @if(count(auth()->user()->unreadNotifications))
-                            <span class="badge badge-secondary">
-                                {{ count(auth()->user()->unreadNotifications) }}
-                            </span>
+                        <span class="badge badge-secondary">{{ count(auth()->user()->unreadNotifications) }}</span>
                         @endif
                     </a>
 
@@ -665,10 +702,10 @@
 
                         @if(count(auth()->user()->unreadNotifications))
                         @foreach(auth()->user()->unreadNotifications as $notification)
-                        <a class="dropdown-item small" href="{{ route('openNotification',$notification) }}">
+                        <a class="dropdown-item small" href="{{ route('openNotification', $notification) }}">
                             {!! $notification->data['icon'] ?? null !!}
                             <b>{{ $notification->data['module'] ?? '' }}</b>
-                            {{ substr($notification->data['subject'],0,100) }}
+                            {{ substr($notification->data['subject'], 0, 100) }}
                         </a>
                         @endforeach
                         @else
@@ -677,7 +714,6 @@
                         </div>
                         @endif
                     </ul>
-
                 </li>
 
                 <li class="nav-item dropdown">
@@ -716,8 +752,21 @@
                             <i class="fas fa-fw fa-boxes"></i> {{ __('Inventario') }}
                         </a>
 
+                        @canany(['be god'])
+                            <a class="dropdown-item" href="{{ route('warehouse.visation_contract_manager.index') }}">
+                                <i class="fas fa-tasks"></i> Mis Visaciones Pendiente
+                            </a>
+                        @endcan
+
+
+
+
                         <a class="dropdown-item" href="{{ route('rrhh.attendance.no-records.mgr') }}">
                             <i class="fas fa-fw fa-clock"></i> {{ __('Justificar asistencia') }}
+                        </a>
+
+                        <a class="dropdown-item" href="{{ route('welfare.amipass.mi-amipass') }}">
+                            <i class="fas fa-question-circle"></i> Mi Amipass
                         </a>
 
                         <a class="dropdown-item" href="{{ route('welfare.amipass.question-my-index') }}">
