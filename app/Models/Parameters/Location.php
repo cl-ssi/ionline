@@ -2,8 +2,9 @@
 
 namespace App\Models\Parameters;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Model;
+use App\Models\Establishment;
 
 class Location extends Model
 {
@@ -43,6 +44,6 @@ class Location extends Model
 
     public function establishment()
     {
-        return $this->hasMany(Place::class);
+        return $this->belongsTo(Establishment::class);
     }
 }

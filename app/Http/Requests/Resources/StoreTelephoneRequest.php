@@ -8,6 +8,10 @@ use Illuminate\Validation\Rule;
 
 class StoreTelephoneRequest extends FormRequest
 {
+    public function response(array $errors){
+        return \Redirect::back()->withErrors($errors)->withInput();
+    }
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -25,11 +29,13 @@ class StoreTelephoneRequest extends FormRequest
      */
     public function rules()
     {
-      return [
-          'number' => ['required', Rule::unique('res_telephones','number' )->ignore($this->telephone)],
-          'mac'    => Rule::unique('res_telephones','mac' )->ignore($this->telephone),
-          'minsal' => ['required', Rule::unique('res_telephones','minsal' )->ignore($this->telephone)]
-      ];
+        // $this->redirect = redirect()->back()->withImput();
+
+        return [
+            'number' => ['required', Rule::unique('res_telephones','number' )->ignore($this->telephone)],
+            'mac'    => Rule::unique('res_telephones','mac' )->ignore($this->telephone),
+            'minsal' => ['required', Rule::unique('res_telephones','minsal' )->ignore($this->telephone)]
+        ];
     }
 
     public function messages()
