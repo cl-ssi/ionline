@@ -44,7 +44,7 @@
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
 
                 <a class="dropdown-item" href="{{ route('welfare.amipass.upload') }}">
-                    <i class="fas fa-file-upload"></i> Carga archivo
+                    <i class="fas fa-file-upload"></i> Carga Archivos
                 </a>
 
                 <a class="dropdown-item" href="{{ route('welfare.amipass.dashboard') }}">

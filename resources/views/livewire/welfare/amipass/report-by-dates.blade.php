@@ -36,6 +36,7 @@
                 <th>Cargado en AMIPASS</th>
                 <th>Calculo Sistema</th>
                 <th>Diferencia</th>
+                <th>Revisión</th>
             </tr>
         </thead>
         <tbody>
@@ -56,6 +57,7 @@
                             {{$user->diff}}
                         @endif
                     </td>
+                    <td>@if($user->charges->first()){{$user->charges->first()['total_real_cargado']}}@endif</td>
                     <td>
                     <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#demo{{$ct}}" aria-expanded="false" aria-controls="collapseExample">
                         Detalles
@@ -70,7 +72,7 @@
                         <ul>
                             @foreach($user->amiLoads as $amiLoad)
                                 <li> 
-                                {{$amiLoad->fecha->format('Y-m-d')}} - {{$amiLoad->monto}} 
+                                {{$amiLoad->fecha}} - {{$amiLoad->monto}} 
                                 </li>
                             @endforeach
                         </ul>
