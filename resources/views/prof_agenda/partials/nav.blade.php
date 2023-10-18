@@ -34,7 +34,7 @@
         </li>
     @endcanany
 
-    @canany(['Agenda UST: Administrador','Agenda UST: Funcionario'])
+    @canany(['Agenda UST: Administrador','Agenda UST: Funcionario','Agenda UST: Secretaria'])
         <li class="nav-item">
             <a class="nav-link {{ active('prof_agenda.proposals.open_calendar') }}"
                 href="{{ route('prof_agenda.proposals.open_calendar') }}">

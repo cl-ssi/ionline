@@ -1,4 +1,4 @@
-@extends('layouts.mobile')
+@extends('layouts.bt4.mobile')
 
 @section('title', 'Crear requerimiento')
 

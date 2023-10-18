@@ -13,7 +13,7 @@
     </div>
 
     <!-- Mensaje de éxito -->
-    @include('layouts.bt5.partials.flash_message')
+    @include('layouts.bt4.partials.flash_message')
 
     <!-- Muestra el form para editar una autoridad -->
     @if($editForm)

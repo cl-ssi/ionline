@@ -3,7 +3,7 @@
         Gestión de Facturas: {{ $store->name }}
     </h4>
 
-    @include('layouts.bt5.partials.flash_message')
+    @include('layouts.bt4.partials.flash_message')
 
     <div class="form-row mb-3">
         <fieldset class="form-group col-sm-5 mb-0">

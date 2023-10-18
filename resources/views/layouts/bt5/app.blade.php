@@ -35,6 +35,9 @@
 
         @yield('custom_css')
 
+        <!-- Bootstrap icons -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
         <!-- Place your kit's code here -->
         <script src="https://use.fontawesome.com/releases/v5.15.4/js/all.js" data-mutate-approach="sync"></script>
 
@@ -50,7 +53,7 @@
                     Ministerio de Salud
                 </div>
                 @include('layouts.bt5.partials.errors')
-                @include('layouts.bt5.partials.flash_message')
+                @include('layouts.bt4.partials.flash_message')
                 @yield('content', $slot ?? '')
             </main>
 

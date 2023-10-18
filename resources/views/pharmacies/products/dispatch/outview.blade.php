@@ -1,4 +1,4 @@
-@extends('layouts.integrity')
+@extends('layouts.bt4.integrity')
 
 @section('content')
 

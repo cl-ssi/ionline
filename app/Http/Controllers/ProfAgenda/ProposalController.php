@@ -222,7 +222,7 @@ class ProposalController extends Controller
         }
 
         // se devuelve usuarios según rol asignado
-        if(Auth::user()->can('Agenda UST: Administrador')){
+        if(Auth::user()->can('Agenda UST: Administrador') || Auth::user()->can('Agenda UST: Secretaria')){
             $users = User::whereHas('agendaProposals')->get();
         }
         if(Auth::user()->can('Agenda UST: Funcionario')){
