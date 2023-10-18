@@ -252,6 +252,16 @@ use App\Http\Controllers\Allowances\AllowanceFileController;
 use App\Http\Controllers\Allowances\AllowanceController;
 use App\Http\Controllers\Agreements\WordWithdrawalAgreeController;
 use App\Http\Controllers\Agreements\WordTestController;
+use App\Http\Controllers\Agreements\WordMandatePFCAgreeController;
+use App\Http\Controllers\Agreements\WordMandateAgreeController;
+use App\Http\Controllers\Agreements\WordCollaborationAgreeController;
+use App\Http\Controllers\Agreements\StageController;
+use App\Http\Controllers\Agreements\SignerController;
+use App\Http\Controllers\Agreements\ProgramResolutionController;
+use App\Http\Controllers\Agreements\AgreementController;
+use App\Http\Controllers\Agreements\AddendumController;
+use App\Http\Controllers\Agreements\AccountabilityDetailController;
+use App\Http\Controllers\Agreements\AccountabilityController;
 
 /*
 |--------------------------------------------------------------------------
@@ -2573,16 +2583,7 @@ Route::get('/maquetas/vista', function () {
 
 
 /* Registro asistencia cena SST 2023 */
-use App\Http\Controllers\Agreements\WordMandatePFCAgreeController;
-use App\Http\Controllers\Agreements\WordMandateAgreeController;
-use App\Http\Controllers\Agreements\WordCollaborationAgreeController;
-use App\Http\Controllers\Agreements\StageController;
-use App\Http\Controllers\Agreements\SignerController;
-use App\Http\Controllers\Agreements\ProgramResolutionController;
-use App\Http\Controllers\Agreements\AgreementController;
-use App\Http\Controllers\Agreements\AddendumController;
-use App\Http\Controllers\Agreements\AccountabilityDetailController;
-use App\Http\Controllers\Agreements\AccountabilityController;
+
 
 Route::get('/attendances/', function () {
     return view('attendances.principal');
