@@ -100,7 +100,7 @@
                         </a>
 
                         <a class="dropdown-item {{ active('documents.approvals') }}" href="{{ route('documents.approvals') }}">
-                            <i class="fas fa-fw fa-thumbs-up"></i> Solicitudes de aprobacion
+                            <i class="fas fa-fw fa-thumbs-up"></i> Solicitudes de aprobación
                         </a>
                         @endcan
 
@@ -156,7 +156,7 @@
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
 
                         @if(auth()->user()->organizationalUnit->establishment_id != 1)
-                            
+
                             @canany(['Purchase Plan: create', 'Purchase Plan: all'])
                             <a class="dropdown-item {{ active('purchase_plan.own_index') }}" href="{{ route('purchase_plan.own_index') }}">
                                 <i class="fas fa-fw fa-shopping-cart"></i> Plan de Compras
@@ -234,13 +234,13 @@
                             @endcanany
 
 
-                            
+
                             @canany(['Store: Cenabast'])
                             <a class="dropdown-item {{ active('warehouse.cenabast.index') }}" href="{{ route('warehouse.cenabast.index') }}">
                                 <i class="fas fa-pills"></i> Cenabast
                             </a>
                             @endcanany
-                            
+
 
 
                             @can('Inventory')
@@ -335,7 +335,7 @@
                             {{-- @endcan --}}
                         @endif
                     </div>
-                    
+
                 </li>
                 @endif
 
@@ -382,7 +382,7 @@
                         @endcan
 
                         @can('Users: no attendance record manager')
-                        <a class="dropdown-item {{ active('rrhh.attendance.no-records.index') }}" 
+                        <a class="dropdown-item {{ active('rrhh.attendance.no-records.index') }}"
                             href="{{ route('rrhh.attendance.no-records.index') }}">
                             <i class="fas fa-clock fa-fw"></i> Justificaciones de asistencia
                         </a>
@@ -474,7 +474,7 @@
 
                             <div class="dropdown-divider"></div>
                             <h6 class="dropdown-header">Depto. Desarrollo y Gestión del Talento</h6>
-                            
+
                             @if(Auth::user()->manager->count() > 0 ||
                                 Auth::user()->hasRole('Replacement Staff: personal') ||
                                 Auth::user()->hasRole('Replacement Staff: personal sign') ||
@@ -484,7 +484,7 @@
                                     <i class="far fa-id-card fa-fw"></i> Solicitudes de Contratación
                                 </a>
                             @endif
-                        
+
                             @if(Auth::user()->manager->count() > 0 ||
                                 Auth::user()->can('Job Position Profile: create') ||
                                 Auth::user()->can('Job Position Profile: all') ||
@@ -702,10 +702,10 @@
 
                         @if(count(auth()->user()->unreadNotifications))
                         @foreach(auth()->user()->unreadNotifications as $notification)
-                        <a class="dropdown-item small" href="{{ route('openNotification',$notification) }}">
+                        <a class="dropdown-item small" href="{{ route('openNotification', $notification) }}">
                             {!! $notification->data['icon'] ?? null !!}
                             <b>{{ $notification->data['module'] ?? '' }}</b>
-                            {{ substr($notification->data['subject'],0,100) }}
+                            {{ substr($notification->data['subject'], 0 , 100) }}
                         </a>
                         @endforeach
                         @else
@@ -757,8 +757,8 @@
                                 <i class="fas fa-tasks"></i> Mis Visaciones Pendiente
                             </a>
                         @endcan
-                        
-                        
+
+
 
 
                         <a class="dropdown-item" href="{{ route('rrhh.attendance.no-records.mgr') }}">
