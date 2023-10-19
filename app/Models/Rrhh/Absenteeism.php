@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 use App\Models\Rrhh\AbsenteeismType;
+use App\User;
 
 class Absenteeism extends Model
 {
@@ -69,7 +70,7 @@ class Absenteeism extends Model
     }
 
     public function type(): BelongsTo
-{
-    return $this->belongsTo(AbsenteeismType::class, 'absenteeism_type_id');
-}
+    {
+        return $this->belongsTo(AbsenteeismType::class, 'absenteeism_type_id');
+    }
 }

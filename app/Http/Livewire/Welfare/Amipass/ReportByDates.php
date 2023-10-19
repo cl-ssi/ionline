@@ -15,6 +15,7 @@ class ReportByDates extends Component
     public $finicio;
     public $ftermino;
     public $userWithContracts;
+    // public $absenteeisms = [];
     // public $array = [];
 
     protected $rules = [
@@ -58,7 +59,8 @@ class ReportByDates extends Component
                 'contracts' => function ($query) use ($startDate, $endDate) {
                     $query->where(function ($query) use ($startDate, $endDate) {
                         $query->whereDate('fecha_inicio_contrato', '<=', $endDate)
-                            ->whereDate('fecha_termino_contrato', '>=', $startDate);
+                                ->whereDate('fecha_termino_contrato', '>=', $startDate)
+                                ->where('shift',0);
                     });
                 },
                 'absenteeisms' => function ($query) use ($startDate, $endDate) {
@@ -66,9 +68,14 @@ class ReportByDates extends Component
                         $query->whereDate('finicio', '<=', $endDate)
                             ->whereDate('ftermino', '>=', $startDate);
                         });
+                },
+                'amiLoads' => function ($query) use ($startDate, $endDate) {
+                    $query->where(function ($query) use ($startDate, $endDate) {
+                        $query->whereMonth('fecha',$startDate->month);
+                        });
                 }
             ])
-            ->with('absenteeisms.type','amiLoads')
+            ->with('charges','newCharges','regularizations') //solo para revisión, quitar!
             ->whereHas('contracts', function ($query) use ($startDate, $endDate) {
                 $query->where(function ($query) use ($startDate, $endDate) {
                     $query->whereDate('fecha_inicio_contrato', '<=', $endDate)
@@ -81,13 +88,16 @@ class ReportByDates extends Component
             //                 $query->where('discount', 1);
             //             });
             // })
-            // ->where('id',6811637)
+            // ->where('id',6454817)
             ->get();
 
-        // obtiene cargas del mes y usuarios buscados
-        $amiLoads = AmiLoad::whereMonth('fecha',$startDate->month)
-                            ->whereIn('run',$this->userWithContracts->pluck('id')->toArray())
-                            ->get();
+            // dd($this->userWithContracts);
+
+        // // obtiene cargas del mes y usuarios buscados
+        // $amiLoads = AmiLoad::whereMonth('fecha',$startDate->month)
+        //                     ->whereIn('run',$this->userWithContracts->pluck('id')->toArray())
+        //                     ->get();
+                            
 
         foreach($this->userWithContracts as $row => $user) {
 
@@ -137,17 +147,30 @@ class ReportByDates extends Component
              * PERMISO GREMIAL no se descuenta
              * L.M. ENFERMEDAD GRAVE HIJO MENOR DE UN AÑO  si se descuenta
              * FALLECIMIENTO HERMANO/A si se descuenta
+             * 
+             * No incluir funcionarios con contrato y que sean turno (shift = 1)
              */
             $user->totalAbsenteeisms = 0;
 
             $lastdate=null;
-            foreach($user->absenteeisms->sortBy('finicio') as $key => $absenteeism) {
-                // dd($absenteeism);
 
+            // ->where('finicio','>=',$startDate)->where('ftermino','<=',$endDate)
+            foreach($user->absenteeisms->sortBy('finicio') as $key => $absenteeism) {
+                
                 // si el tipo de ausentismo no considera descuento, se sigue en la siguiente iteración
                 if(!$absenteeism->type->discount){
                     $absenteeism->totalDays = 0;
                     continue;
+                }
+
+                // si se debe hacer descuento, se verifica si existe algúna condición
+                if($absenteeism->type->discountCondition){
+                    if($absenteeism->total_dias_ausentismo >= $absenteeism->type->discountCondition->from){
+
+                    }else{
+                        $absenteeism->totalDays = 0;
+                        continue;
+                    }
                 }
 
                 $absenteeismStartDate = $absenteeism->finicio->isBefore($startDate) ? $startDate : $absenteeism->finicio;
@@ -162,6 +185,8 @@ class ReportByDates extends Component
 
                 $absenteeism->totalDays = DateHelper::getBusinessDaysByDateRangeHolidays($absenteeismStartDate, $absenteeismEndDate, $holidays)->count();
                 $user->totalAbsenteeisms += $absenteeism->totalDays;
+
+                // $this->absenteeisms[$user->id] = $absenteeism;
             }
 
             $user->totalAbsenteeismsEnBd = $user->absenteeisms->sum('total_dias_ausentismo');
@@ -183,18 +208,17 @@ class ReportByDates extends Component
                  */
             }
 
-        // obtiene monto pagado y cargado en tabla ami_loads
-        $mes = $startDate->month;
-        $user->AmiLoadMount = $amiLoads->where('run',$user->id)->sum('monto');
-        $user->amiLoads = $amiLoads->where('run',$user->id);
-        // $user->AmiLoadMount = AmiLoad::where('run',$user->id)
-        //                             ->whereMonth('fecha',$startDate->month)
-        //                             ->sum('monto');
+        
+
+            foreach($user->amiLoads as $amiLoad) {
+                // obtiene monto pagado y cargado en tabla ami_loads
+                $user->AmiLoadMount += $amiLoad->monto;
+                // $user->amiLoads = $amiLoad;
+            }
 
         // obtiene diferencia
         $user->diff = $user->contracts->sum('ammount') - $user->AmiLoadMount;
         }
-        // dd($user);
     }
 
     public function render()

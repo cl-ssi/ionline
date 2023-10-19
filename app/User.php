@@ -19,6 +19,11 @@ use App\Models\Rrhh\NoAttendanceRecord;
 use App\Models\Rrhh\Contract;
 use App\Models\Rrhh\Absenteeism;
 use App\Models\Rrhh\AmiLoad;
+
+use App\Models\Welfare\Amipass\Charge;
+use App\Models\Welfare\Amipass\NewCharge;
+use App\Models\Welfare\Amipass\Regularization;
+
 use App\Models\RequestForms\RequestForm;
 use App\Models\Profile\Subrogation;
 use App\Models\Parameters\AccessLog;
@@ -210,9 +215,20 @@ class User extends Authenticatable implements Auditable
         return $this->hasMany(AmiLoad::class,'run');
     }
 
+    public function charges()
+    {
+        return $this->hasMany(Charge::class,'rut');
+    }
 
+    public function newCharges()
+    {
+        return $this->hasMany(NewCharge::class,'rut');
+    }
 
-
+    public function regularizations()
+    {
+        return $this->hasMany(Regularization::class,'rut');
+    }
 
     /* Authority relation: Is Manager from ou */
     public function manager()

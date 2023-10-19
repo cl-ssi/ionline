@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers\Resources;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Resources\Telephone;
 use App\User;
-use App\Models\Parameters\Place;
+use App\Models\Resources\Telephone;
 use App\Http\Requests\Resources\UpdateTelephoneRequest;
 use App\Http\Requests\Resources\StoreTelephoneRequest;
+use App\Http\Controllers\Controller;
 
 class TelephoneController extends Controller
 {
@@ -19,7 +18,13 @@ class TelephoneController extends Controller
      */
     public function index(Request $request)
     {
-        $telephones = Telephone::Search($request->get('search'))->with('place')->paginate(100);
+        $telephones = Telephone::with([
+                'users',
+                'place',
+            ])
+            ->search($request->get('search'))
+            ->paginate(300);
+
         return view('resources.telephone.index', compact('telephones'));
     }
 
@@ -30,9 +35,7 @@ class TelephoneController extends Controller
      */
     public function create()
     {
-        $users = User::doesnthave('Telephones')->get();
-        $places = Place::with('location')->get();
-        return view('resources.telephone.create', compact('users', 'places'));
+        return view('resources.telephone.create');
     }
 
     /**
@@ -69,9 +72,7 @@ class TelephoneController extends Controller
      */
     public function edit(Telephone $telephone)
     {
-        $users = User::OrderBy('name')->get();
-        $places = Place::with('location')->get();
-        return view('resources.telephone.edit', compact('telephone', 'users', 'places'));
+        return view('resources.telephone.edit', compact('telephone'));
     }
 
     /**

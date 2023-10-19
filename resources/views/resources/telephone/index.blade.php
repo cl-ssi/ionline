@@ -29,30 +29,28 @@
 </form>
 
 <div class="table-responsive">
-	<table class="table table-striped table-sm" id="TableFilter">
-		<thead>
-			<tr>
-				<th scope="col"></th>
-				<th scope="col">Número</th>
-				<th scope="col">Minsal</th>
-                <th scope="col">Mac</th>
-				<th scope="col">Asociado a</th>
+    <table class="table table-striped table-sm" id="TableFilter">
+        <thead>
+            <tr>
+                <th scope="col"></th>
+                <th scope="col">Número</th>
+                <th scope="col">Minsal</th>
+                <th scope="col">Asociado a</th>
                 <th scope="col">Ubicación</th>
                 <th scope="col">Lugar</th>
-				<th scope="col">Accion</th>
-			</tr>
-		</thead>
-		<tbody>
-			@foreach($telephones as $key => $telephone)
-			<tr>
-				<td>{{ $telephones->firstItem() + $key }} </td>
-				<td>{{ $telephone->number }} </td>
-				<td>{{ $telephone->minsal }}</td>
-                <td><small> {{ $telephone->mac }}</small></td>
+                <th scope="col">Accion</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($telephones as $key => $telephone)
+            <tr>
+                <td>{{ ++$key }} </td>
+                <td>{{ $telephone->number }} </td>
+                <td>{{ $telephone->minsal }}</td>
                 <td>
                     @if($telephone->users->count() > 0)
                         @foreach($telephone->users as $user)
-                            {{ $user->FullName }} <br>
+                            {{ $user->shortName }} <br>
                         @endforeach
                     @endif
                 </td>
@@ -67,10 +65,10 @@
                         <span class="fas fa-edit" aria-hidden="true"></span>
                     </a>
                 </td>
-			</tr>
-			@endforeach
-		</tbody>
-	</table>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
 </div>
 
 {{ $telephones->links() }}
