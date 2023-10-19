@@ -33,8 +33,7 @@ class AbscencesImport extends Component
         ]);
 
         $file = $this->file;
-        $collection = Excel::toCollection(new AbscencesImportFile, $file);
-        dd($collection);
+        $collection = Excel::toCollection(new AbscencesImportFile, $file, 'gcs');
 
         $total_count = $collection->first()->count()+1;
         $count_inserts = 0;
