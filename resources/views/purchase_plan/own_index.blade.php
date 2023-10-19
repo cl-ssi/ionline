@@ -1,4 +1,4 @@
-@extends('layouts.app-bootstrap-5')
+@extends('layouts.bt5.app')
 
 @section('title', 'Plan de Compras')
 
