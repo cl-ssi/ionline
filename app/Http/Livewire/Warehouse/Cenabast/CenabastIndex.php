@@ -2,15 +2,15 @@
 
 namespace App\Http\Livewire\Warehouse\Cenabast;
 
-use Livewire\WithPagination;
-use Livewire\Component;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Storage;
 use App\User;
 use App\Services\ImageService;
 use App\Services\DocumentSignService;
 use App\Models\Finance\Dte;
 use App\Models\Documents\Sign\Signature;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
+use Livewire\WithPagination;
+use Livewire\Component;
 
 class CenabastIndex extends Component
 {
@@ -34,6 +34,11 @@ class CenabastIndex extends Component
         $this->selectedDte = [];
     }
 
+    /**
+     * Obtiene los DTEs
+     *
+     * @return void
+     */
     public function getCenabast()
     {
         $dtes = Dte::query()
@@ -44,7 +49,7 @@ class CenabastIndex extends Component
                 'confirmationUser.organizationalUnit',
             ])
             ->where('cenabast', 1)
-            ->where('establishment_id', auth()->user()->organizationalUnit->establishment->id)
+            // ->where('establishment_id', auth()->user()->organizationalUnit->establishment->id)
             ->when($this->filter_by_signature == 'without-pharmacist', function($query) {
                 $query->where('cenabast_signed_pharmacist', 0);
             })
@@ -86,6 +91,11 @@ class CenabastIndex extends Component
         ])->extends('layouts.bt4.app');
     }
 
+    /**
+     * Firma multiples DTe
+     *
+     * @return void
+     */
     public function signMultiple()
     {
         if(Str::length($this->otp) != 6)
@@ -230,7 +240,12 @@ class CenabastIndex extends Component
         return redirect()->route('warehouse.cenabast.index')->extends('layouts.bt4.app');
     }
 
-
+    /**
+     * Elimina el acta cargada
+     *
+     * @param  Dte  $dte
+     * @return void
+     */
     public function deleteFile(Dte $dte)
     {
         if (isset($dte->confirmation_signature_file))
@@ -251,4 +266,41 @@ class CenabastIndex extends Component
         return redirect()->route('warehouse.cenabast.index');
     }
 
+    /**
+     * Elimina acta carga y firmadas
+     *
+     * @param  Dte  $dte
+     * @return void
+     */
+    public function deleteFileSignature(Dte $dte)
+    {
+        /**
+         * Elimina el acta cargada
+         */
+        if (isset($dte->cenabast_reception_file))
+        {
+            Storage::disk('gcs')->delete($dte->cenabast_reception_file);
+        }
+
+        /**
+         * Elimina el acta firmada
+         */
+        if (isset($dte->confirmation_signature_file))
+        {
+            Storage::disk('gcs')->delete($dte->confirmation_signature_file);
+        }
+
+        /**
+         * Setea los campos del DTE
+         */
+        $dte->update([
+            'cenabast_reception_file' => null,
+            'confirmation_signature_file' => null,
+            'cenabast_signed_pharmacist' => false,
+            'cenabast_signed_boss' => false,
+        ]);
+
+        session()->flash('sucess', 'El acta cargada y firmada fue eliminada con éxito');
+        return redirect()->route('warehouse.cenabast.index');
+    }
 }
