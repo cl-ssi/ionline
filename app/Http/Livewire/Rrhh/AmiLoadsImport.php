@@ -5,7 +5,7 @@ namespace App\Http\Livewire\Rrhh;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
-use App\models\Rrhh\AmiLoad;
+use App\Models\Rrhh\AmiLoad;
 use App\Imports\AbscencesImport as AbscencesImportFile;
 use Maatwebsite\Excel\Facades\Excel;
 use Carbon\Carbon;

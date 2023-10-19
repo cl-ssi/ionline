@@ -5,7 +5,7 @@ namespace App\Http\Livewire\Rrhh;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
-use App\models\Rrhh\Contract;
+use App\Models\Rrhh\Contract;
 use App\Imports\EmployeeInformationImport;
 use Maatwebsite\Excel\Facades\Excel;
 use Carbon\Carbon;
