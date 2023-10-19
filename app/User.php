@@ -19,6 +19,7 @@ use App\Models\Rrhh\NoAttendanceRecord;
 use App\Models\Rrhh\Contract;
 use App\Models\Rrhh\Absenteeism;
 use App\Models\Rrhh\AmiLoad;
+use App\Models\Rrhh\Shift;
 
 use App\Models\Welfare\Amipass\Charge;
 use App\Models\Welfare\Amipass\NewCharge;
@@ -229,6 +230,12 @@ class User extends Authenticatable implements Auditable
     {
         return $this->hasMany(Regularization::class,'rut');
     }
+
+    public function shifts()
+    {
+        return $this->hasMany(Shift::class,'user_id');
+    }
+
 
     /* Authority relation: Is Manager from ou */
     public function manager()
