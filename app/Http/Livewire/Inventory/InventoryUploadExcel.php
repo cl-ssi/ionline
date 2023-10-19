@@ -23,7 +23,6 @@ class InventoryUploadExcel extends Component
 
     public function processExcel()
     {
-        
         $this->validate([
             'excelFile' => 'required|mimes:xlsx,xls',
         ]);
@@ -139,7 +138,7 @@ class InventoryUploadExcel extends Component
             InventoryMovement::updateOrCreate([
                 'inventory_id' => $inventory->id,
             ],[
-                'reception_confirmation' => 1,
+                'reception_confirmation' => ($row[16]) ? 1 : 0,
                 'reception_date' => ($row[16]) ? \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row[16]) : null,
                 // 'installation_date',
                 'observations' => $row[12],
