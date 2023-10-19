@@ -326,13 +326,15 @@
                             </span>
                             @endif
                             @if($sign->request_status == 'not valid')
-                                @foreach($requestReplacementStaff->signaturesFile->signaturesFlows as $flow)
-                                    @if($flow->status == NULL)
-                                        <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="{{ $sign->organizationalUnit->name }}">
-                                            <i class="fas fa-clock fa-2x"></i>
-                                        </span>
-                                    @endif
-                                @endforeach
+                                @if($requestReplacementStaff->signaturesFile)
+                                    @foreach($requestReplacementStaff->signaturesFile->signaturesFlows as $flow)
+                                        @if($flow->status == NULL)
+                                            <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="{{ $sign->organizationalUnit->name }}">
+                                                <i class="fas fa-clock fa-2x"></i>
+                                            </span>
+                                        @endif
+                                    @endforeach
+                                @endif
                             @endif
                         @endforeach
                         </br>

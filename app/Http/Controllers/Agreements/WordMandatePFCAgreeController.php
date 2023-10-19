@@ -154,7 +154,7 @@ class WordMandatePFCAgreeController extends Controller
         //email referente
         $emailReferrer = $agreements->referrer != null ? $agreements->referrer->email : '';
 
-        $mainTemplateProcessor->setValue('directorDecreto',$director->decree);
+        $mainTemplateProcessor->setValue('directorDecreto', Str::contains($director->appellative, '(S)') ? Str::after($director->decree, 'de los Servicios de Salud;') : $director->decree);
         $mainTemplateProcessor->setValue('art8', !Str::contains($director->appellative, '(S)') ? 'Art. 8 del ' : '');
         $mainTemplateProcessor->setValue('numResolucion',$numResolucion);
         $mainTemplateProcessor->setValue('yearResolucion',$yearResolucion);
