@@ -8,11 +8,11 @@
 
   <br>
 
-  <p>A través del presente, se informa ingreso de nuevo formulario de requerimiento de compras:</p>
+  <p>A través del presente, se informa {{$req->edited ? 're-ingreso de' : 'ingreso de nuevo'}} formulario de requerimiento de compras:</p>
 
   <ul>
       <li><strong>Nº Solicitud</strong>: {{ $req->id }}</li>
-      <li><strong>Fecha Solicitud</strong>: {{ $req->created_at->format('d-m-Y H:i:s') }}</li>
+      <li><strong>Fecha Solicitud</strong>: {{ $req->edited ? $req->updated_at->format('d-m-Y H:i:s') : $req->created_at->format('d-m-Y H:i:s') }}</li>
       <li><strong>Nombre Solicitud</strong>: {{ $req->name }}</li>
   </ul>
 
