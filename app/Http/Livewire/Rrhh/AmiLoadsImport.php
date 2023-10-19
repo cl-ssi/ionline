@@ -30,7 +30,7 @@ class AmiLoadsImport extends Component
         ]);
 
         $file = $this->file;
-        $collection = Excel::toCollection(new AbscencesImportFile, $file);
+        $collection = Excel::toCollection(new AbscencesImportFile, $this->file->path());
 
         $total_count = $collection->first()->count()+1;
         $count_inserts = 0;

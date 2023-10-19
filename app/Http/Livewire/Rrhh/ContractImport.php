@@ -31,7 +31,7 @@ class ContractImport extends Component
         ]);
 
         $file = $this->file;
-        $collection = Excel::toCollection(new EmployeeInformationImport, $file);
+        $collection = Excel::toCollection(new EmployeeInformationImport, $this->file->path());
 
         // se modifican todos los usuarios a inactivos
         User::where('id','>',0)->update(['active' => 0]);
