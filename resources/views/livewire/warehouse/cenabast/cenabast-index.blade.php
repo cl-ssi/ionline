@@ -38,7 +38,7 @@
                 placeholder="folio" value="{{ old('folio') }}" autocomplete="off">
         </div>
         <div class="col-md-1">
-            <butoon class="btn btn-outline-secondary" wire:click="getCenabast">Buscar</button>
+            <button class="btn btn-outline-secondary" wire:click="getCenabast">Buscar</button>
         </div>
     </div>
 
@@ -137,7 +137,7 @@
                                     class="btn btn-warning"
                                     onclick="return confirm('¿Está seguro que desea omitir el proceso de firma?. Esto solamente deberá realizarlo con documentos que ya se encuentran firmados o con carga retroactiva')">
                                     Bypass
-                                    Firma 
+                                    Firma
                                 </button>
                             </form>
                         @endif
@@ -156,14 +156,14 @@
                                     'btn_title' => 'Firmar',
                                     'btn_class' => 'btn btn-sm btn-success',
                                     'btn_icon' => 'fas fa-signature',
-                            
+
                                     'fileLink' => $dte->confirmation_signature_file_url,
-                            
+
                                     'signer' => auth()->user(),
                                     'position' => 'left',
-                            
+
                                     'filename' => '/ionline/cenabast/signature/dte-' . $dte->id,
-                            
+
                                     'callback' => 'warehouse.cenabast.callback',
                                     'callbackParams' => [
                                         'dte' => $dte->id,
@@ -193,14 +193,14 @@
                                     'btn_title' => 'Firmar',
                                     'btn_class' => 'btn btn-sm btn-success',
                                     'btn_icon' => 'fas fa-signature',
-                            
+
                                     'fileLink' => $dte->cenabast_reception_file_url,
-                            
+
                                     'signer' => auth()->user(),
                                     'position' => 'right',
-                            
+
                                     'filename' => '/ionline/cenabast/signature/dte-' . $dte->id,
-                            
+
                                     'callback' => 'warehouse.cenabast.callback',
                                     'callbackParams' => [
                                         'dte' => $dte->id,
@@ -232,8 +232,22 @@
                         @endif
 
                         @if ($dte->confirmation_signature_file && !$dte->cenabast_signed_pharmacist && !$dte->cenabast_signed_boss)
-                            <button class="btn btn-sm btn-danger" wire:click="deleteFile({{ $dte }})"
-                                title="Borrar Acta">
+                            <button
+                                class="btn btn-sm btn-outline-danger"
+                                wire:click="deleteFile({{ $dte }})"
+                                title="Borrar Acta Cargada"
+                            >
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        @endif
+
+                        @if ($dte->cenabast_reception_file && ($dte->cenabast_signed_pharmacist || $dte->cenabast_signed_boss))
+
+                            <button
+                                class="btn btn-sm btn-danger"
+                                wire:click="deleteFileSignature({{ $dte }})"
+                                title="Borrar Acta Cargada y firmadas"
+                            >
                                 <i class="fas fa-trash"></i>
                             </button>
                         @endif
