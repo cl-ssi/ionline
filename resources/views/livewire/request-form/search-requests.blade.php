@@ -247,10 +247,6 @@
                         <td>
                             <a href="{{ route('request_forms.show', $requestForm->id) }}" class="btn btn-outline-secondary btn-sm" title="Mostrar"><i class="fas fa-eye"></i>
                             </a>
-                            @if(Auth()->user()->hasPermissionTo('Request Forms: all'))
-                            <a href="{{ route('request_forms.edit', $requestForm->id) }}" class="btn btn-outline-secondary btn-sm" title="Edición"><i class="fas fa-edit"></i>
-                            </a>
-                            @endif
                             @if(Auth()->user()->hasPermissionTo('Request Forms: all') and $requestForm->status == 'approved')
                             <!-- Button trigger modal -->            
                             <button type="button" class="btn btn-outline-secondary btn-sm" data-toggle="modal" data-target="#exampleModal-{{ $requestForm->id }}" title="Reasignar comprador">
@@ -351,7 +347,11 @@
                         <td>
                             <a href="{{ route('request_forms.show', $requestForm->id) }}" class="btn btn-outline-secondary btn-sm" title="Selección">
                                 <i class="fas fa-eye"></i>
+                            </a> 
+                            @if($requestForm->canEdit())
+                            <a href="{{ route('request_forms.edit', $requestForm->id) }}" class="btn btn-outline-secondary btn-sm" title="Edición"><i class="fas fa-edit"></i>
                             </a>
+                            @endif
                             @if($requestForm->signatures_file_id)
                             <a class="btn btn-info btn-sm" title="Ver Formulario de Requerimiento firmado" href="{{ $requestForm->signatures_file_id == 11 ? route('request_forms.show_file', $requestForm->requestFormFiles->first() ?? 0) : route('request_forms.signedRequestFormPDF', [$requestForm, 1]) }}" target="_blank" title="Certificado">
                                 <i class="fas fa-file-contract"></i>

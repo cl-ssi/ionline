@@ -79,7 +79,7 @@ class Authorization extends Component
           $this->title = 'Autorización Jefatura';
       }elseif($eventType=='superior_leader_ship_event'){
           $this->title = 'Autorización Dirección';
-      }elseif(in_array($eventType, ['pre_budget_event', 'budget_event'])){
+      }elseif(in_array($eventType, ['pre_budget_event', 'pre_finance_budget_event', 'budget_event'])){
           $this->title = 'Autorización nuevo presupuesto';
           $this->estimated_expense = $requestForm->symbol_currency.number_format($requestForm->estimated_expense, $requestForm->precision_currency, ',', '.');
           $this->new_estimated_expense = $requestForm->symbol_currency.number_format($requestForm->new_estimated_expense, $requestForm->precision_currency, ',', '.');
@@ -223,7 +223,7 @@ class Authorization extends Component
       $this->validate();
       $event = $this->requestForm->eventRequestForms()->where('event_type', $this->eventType)->where('status', 'pending')->first();
       if(!is_null($event)){
-          if(!in_array($this->eventType, ['pre_budget_event', 'budget_event'])){
+          if(!in_array($this->eventType, ['pre_budget_event', 'pre_finance_budget_event', 'budget_event'])){
             $this->requestForm->status = 'rejected';
             $this->requestForm->save();
           } else {
@@ -232,6 +232,8 @@ class Authorization extends Component
               if($item->latestPendingItemChangedRequestForms)
                 $item->latestPendingItemChangedRequestForms->update(['status' => 'rejected']);
             $nextEvent = $event->requestForm->eventRequestForms->where('cardinal_number', $event->cardinal_number + 1);
+            if(!$nextEvent->isEmpty()) $nextEvent->last()->update(['status' => 'does_not_apply']);
+            $nextEvent = $event->requestForm->eventRequestForms->where('cardinal_number', $event->cardinal_number + 2);
             if(!$nextEvent->isEmpty()) $nextEvent->last()->update(['status' => 'does_not_apply']);
           }
            $event->signature_date = Carbon::now();
