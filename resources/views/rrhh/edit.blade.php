@@ -1,4 +1,4 @@
-@extends('layouts.bt4.app')
+@extends('layouts.bt5.app')
 
 @section('title', 'Editar Usuario')
 
@@ -11,7 +11,7 @@
     @csrf
     @method('PUT')
 
-    <div class="form-row">
+    <div class="row gx-2">
         <div class="form-group col-md-3">
             <label for="run">RUN</label>
             <input type="text" readonly class="form-control-plaintext" id="staticRUN" value="{{$user->runFormat()}}">
@@ -37,7 +37,7 @@
 
     </div>
 
-    <div class="form-row">
+    <div class="row gx-2">
         <fieldset class="form-group col-md-12">
             <label for="forOrganizationalUnit">Establecimiento / Unidad Organizacional</label>
                 @livewire('select-organizational-unit', [
@@ -48,7 +48,7 @@
         </fieldset>
     </div>
 
-    <div class="form-row">
+    <div class="row gx-2">
         <fieldset class="form-group col-12 col-md-6">
             <label for="forPosition">Función que desempeña</label>
             <input type="text" class="form-control" id="forPosition" placeholder="Subdirector(S), Enfermera, Referente..., Jefe." 
@@ -62,7 +62,7 @@
     </div>
 
 
-    <div class="form-row">
+    <div class="row gx-2">
         <fieldset class="form-group col-12 col-md-6">
             <label for="form-vc-link">Link VC</label>
             <input type="link" class="form-control" name="vc_link" value="{{ $user->vc_link }}">
@@ -77,14 +77,14 @@
 
     <hr>
     <h5>Datos de contacto</h5>
-    <div class="form-row">
+    <div class="row gx-2">
         <div class="form-group col-11 col-md-4">
             <label for="for-address">Dirección</label>
             <input type="text" class="form-control" name="address" value="{{ $user->address }}">
         </div>
         <div class="form-group col-11 col-md-2">
             <label for="for-commune_id">Comuna</label>
-            <select name="commune_id" class="form-control">
+            <select name="commune_id" class="form-control form-select">
                 <option value=""></option>
                 @foreach($communes->sort() as $key => $name)
                     <option value="{{ $key }}" @selected($user->commune_id == $key)>{{ $name }}</option>
@@ -102,21 +102,21 @@
 
     <div class="form-group d-inline">
         <button type="submit" class="btn btn-sm btn-primary">
-        <span class="fas fa-save" aria-hidden="true"></span> Actualizar</button>
+        <i class="bi bi-floppy-fill" aria-hidden="true"></i> Actualizar</button>
 
         </form>
 
         @can('Users: reset password option')
         <form method="POST" action="{{ route('rrhh.users.password.reset', $user->id) }}" class="d-inline">
             {{ method_field('PUT') }} {{ csrf_field() }}
-            <button class="btn btn-sm btn-outline-secondary"><span class="fas fa-redo" aria-hidden="true"></span> Restaurar clave</button>
+            <button class="btn btn-sm btn-outline-secondary"><i class="bi bi-arrow-clockwise" aria-hidden="true"></i> Restaurar clave</button>
         </form>
         @endcan
 
         @can('Users: delete')
         <form method="POST" action="{{ route('rrhh.users.destroy', $user->id) }}" class="d-inline">
             {{ method_field('DELETE') }} {{ csrf_field() }}
-            <button class="btn btn-sm btn-danger"><span class="fas fa-trash" aria-hidden="true"></span> Eliminar</button>
+            <button class="btn btn-sm btn-danger"><i class="bi bi-trash-fill" aria-hidden="true"></i> Eliminar</button>
         </form>
         @endcan
 
@@ -124,10 +124,10 @@
         <!--TODO: Revisar un código decente para utilizar este método, -->
         <!-- quizá sólo un link en vez de un formulario, -->
         <!-- chequear en el controller que tenga el rol god() -->
-        <form method="GET" action="{{ route('rrhh.users.switch', $user->id) }}" class="d-inline float-right">
+        <form method="GET" action="{{ route('rrhh.users.switch', $user->id) }}" class="d-inline float-end">
             {{ csrf_field() }}
             <button class="btn btn-sm btn-outline-warning" @disabled(auth()->user()->godMode)>
-                <i class="fas fa-redo"></i> Switch
+                <i class="bi bi-arrow-clockwise"></i> Switch
             </button>
         </form>
         @endcan

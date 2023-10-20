@@ -47,7 +47,7 @@
         <div id="app">
             @include('layouts.bt5.partials.nav')
 
-            <main class="container pt-3">
+            <main class="container pt-3 px-5">
                 <div class="d-none d-print-block">
                     <strong>{{ env('APP_SS') }}</strong><br>
                     Ministerio de Salud
