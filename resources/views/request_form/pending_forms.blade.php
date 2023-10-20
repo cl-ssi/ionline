@@ -220,7 +220,7 @@
     @endif
     @endif
 
-    @if(array_intersect($events_type, ['finance_event', 'supply_event']))
+    @if(array_intersect($events_type, ['pre_finance_event', 'finance_event', 'supply_event']))
     @if(count($new_budget_pending_to_sign) > 0)
     </div>
         <div class="col">

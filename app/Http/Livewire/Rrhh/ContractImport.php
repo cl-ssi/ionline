@@ -5,7 +5,7 @@ namespace App\Http\Livewire\Rrhh;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
-use App\models\Rrhh\Contract;
+use App\Models\Rrhh\Contract;
 use App\Imports\EmployeeInformationImport;
 use Maatwebsite\Excel\Facades\Excel;
 use Carbon\Carbon;
@@ -31,7 +31,7 @@ class ContractImport extends Component
         ]);
 
         $file = $this->file;
-        $collection = Excel::toCollection(new EmployeeInformationImport, $file);
+        $collection = Excel::toCollection(new EmployeeInformationImport, $this->file->path());
 
         // se modifican todos los usuarios a inactivos
         User::where('id','>',0)->update(['active' => 0]);

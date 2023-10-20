@@ -51,13 +51,13 @@ class RequestFormController extends Controller {
             ->latest('id')
             ->get();
 
-        $my_requests = RequestForm::with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'eventRequestForms.signerOrganizationalUnit', 'father:id,folio,has_increased_expense', 'signedOldRequestForms')
+        $my_requests = RequestForm::with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'eventRequestForms.signerOrganizationalUnit', 'father:id,folio,has_increased_expense', 'signedOldRequestForms', 'purchasers')
             ->where('request_user_id', Auth::user()->id)
             ->whereIn('status', ['approved', 'rejected'])
             ->latest('id')
             ->get();
 
-        $my_ou = RequestForm::with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'eventRequestForms.signerOrganizationalUnit', 'father:id,folio,has_increased_expense', 'signedOldRequestForms')
+        $my_ou = RequestForm::with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'eventRequestForms.signerOrganizationalUnit', 'father:id,folio,has_increased_expense', 'signedOldRequestForms', 'purchasers')
             ->where('request_user_ou_id', Auth::user()->OrganizationalUnit->id)
             ->latest('id')
             ->get();
@@ -184,12 +184,12 @@ class RequestFormController extends Controller {
         }
 
         foreach($events_type as $event_type){
-            if(in_array($event_type, ['finance_event', 'supply_event'])){
-                $prev_event_type = $event_type == 'finance_event' ? 'pre_budget_event' : null;
+            if(in_array($event_type, ['pre_finance_event', 'finance_event', 'supply_event'])){
+                $prev_event_type = $event_type == 'finance_event' ? 'pre_finance_budget_event' : ($event_type == 'pre_finance_event' ? 'pre_budget_event' : null);
                 $result = RequestForm::with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'eventRequestForms.signerOrganizationalUnit')
                     ->where('status', 'approved')
                     ->whereHas('eventRequestForms', function($q) use ($event_type){
-                        return $q->where('status', 'pending')->where('ou_signer_user', Auth::user()->organizationalUnit->id)->where('event_type', $event_type == 'finance_event' ? 'budget_event' : 'pre_budget_event');
+                        return $q->where('status', 'pending')->where('ou_signer_user', Auth::user()->organizationalUnit->id)->where('event_type', $event_type == 'finance_event' ? 'budget_event' : ($event_type == 'supply_event' ? 'pre_budget_event' : 'pre_finance_budget_event'));
                     })->when($prev_event_type, function($q) use ($prev_event_type) {
                         return $q->whereDoesntHave('eventRequestForms', function ($f) use ($prev_event_type) {
                             return $f->where('event_type', $prev_event_type)->where('status', 'pending');
@@ -264,8 +264,10 @@ class RequestFormController extends Controller {
     public function sign(RequestForm $requestForm, $eventType)
     {
         $eventTypeBudget = null;
-        if(in_array($eventType, ['pre_budget_event', 'budget_event'])){
-            $eventTypeBudget = $eventType == 'pre_budget_event' ? 'supply_event' : 'finance_event';
+        if(in_array($eventType, ['pre_budget_event', 'pre_finance_budget_event', 'budget_event'])){
+            $manager = Authority::getAuthorityFromDate(Auth::user()->organizationalUnit->id, Carbon::now(), 'manager');
+            $ouSearch = Parameter::where('module', 'ou')->whereIn('parameter', ['FinanzasSSI', 'RefrendacionHAH'])->pluck('value')->toArray();
+            $eventTypeBudget = $eventType == 'pre_budget_event' ? 'supply_event' : (in_array(Auth::user()->organizational_unit_id, $ouSearch) && $manager->user_id != Auth::user()->id ? 'pre_finance_event' : 'finance_event');
             $requestForm->has_increased_expense = true;
             $requestForm->new_estimated_expense = $requestForm->estimated_expense + $requestForm->eventRequestForms()->where('status', 'pending')->where('event_type', 'budget_event')->first()->purchaser_amount;
             $requestForm->load('itemRequestForms.latestPendingItemChangedRequestForms', 'passengers.latestPendingPassengerChanged');
@@ -278,6 +280,7 @@ class RequestFormController extends Controller {
             'finance_event'                 => 'Finanzas', 
             'supply_event'                  => 'Abastecimiento', 
             'pre_budget_event'              => 'Nuevo presupuesto', 
+            'pre_finance_budget_event'      => 'Nuevo presupuesto', 
             'budget_event'                  => 'Nuevo presupuesto',
             'technical_review_event'        => 'Revisión técnica'
         ];
@@ -297,6 +300,7 @@ class RequestFormController extends Controller {
         }
 
         $requestForm->load('itemRequestForms', 'user', 'userOrganizationalUnit', 'purchaseMechanism', 'eventRequestForms.signerOrganizationalUnit');
+        $requestForm->load(['eventRequestForms' => fn($q) => $q->withTrashed()]);
 
         $title = 'Formularios de Requerimiento - Autorización ' . $eventTitles[$eventType];
 
@@ -442,6 +446,8 @@ class RequestFormController extends Controller {
     {
         $eventType = 'supply_event';
         $requestForm->load('user', 'userOrganizationalUnit', 'contractManager', 'requestFormFiles', 'purchasingProcess.details', 'purchasingProcess.detailsPassenger', 'eventRequestForms.signerOrganizationalUnit', 'eventRequestForms.signerUser', 'purchaseMechanism', 'purchaseType', 'children', 'father.requestFormFiles', 'associateProgram');
+        $requestForm->load(['eventRequestForms' => fn($q) => $q->withTrashed()]);
+        // return $requestForm;
         return view('request_form.show', compact('requestForm', 'eventType'));
     }
 

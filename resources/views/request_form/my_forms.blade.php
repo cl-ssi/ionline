@@ -47,7 +47,7 @@
 @if(count($my_pending_requests) > 0)
 </div>
 <div class="col">
-  <h6><i class="fas fa-inbox"></i> Formularios pendientes de aprobación</h6>
+  <h6><i class="fas fa-inbox"></i> Mis formularios pendientes de aprobación</h6>
   <div class="table-responsive">
     <table class="table table-sm table-hover table-bordered small">
       <thead>
@@ -133,20 +133,14 @@
             @endif
           </td>
           <td>
-            @if($requestForm->eventRequestForms->count() > 0)
-              @if($requestForm->eventRequestForms->first()->status == 'pending')
-              <a href="{{ route('request_forms.edit', $requestForm->id) }}" class="btn btn-outline-secondary btn-sm" title="Selección"><i class="fas fa-edit"></i></a>
-              <a href="#" data-href="{{ route('request_forms.destroy', $requestForm->id) }}" data-id="{{ $requestForm->id }}" class="btn btn-outline-secondary btn-sm text-danger" title="Eliminar" data-toggle="modal" data-target="#confirm" role="button">
-                <i class="fas fa-trash"></i></a>
-              @else
-              <a href="{{ route('request_forms.show', $requestForm->id) }}" class="btn btn-outline-secondary btn-sm" title="Selección"><i class="fas fa-eye"></i></a>
-              @endif
+            @if($requestForm->canEdit())
+            <a href="{{ route('request_forms.edit', $requestForm->id) }}" class="btn btn-outline-secondary btn-sm" title="Selección"><i class="fas fa-edit"></i></a>
+            @else
+            <a href="{{ route('request_forms.show', $requestForm->id) }}" class="btn btn-outline-secondary btn-sm" title="Selección"><i class="fas fa-eye"></i></a>
             @endif
-            @if($requestForm->status == 'saved')
-              <a href="{{ route('request_forms.edit', $requestForm->id) }}" class="btn btn-outline-secondary btn-sm" title="Selección"><i class="fas fa-edit"></i></a>
-              <a href="#" data-href="{{ route('request_forms.destroy', $requestForm->id) }}" data-id="{{ $requestForm->id }}" class="btn btn-outline-secondary btn-sm text-danger" title="Eliminar" data-toggle="modal" data-target="#confirm" role="button">
-                <i class="fas fa-trash"></i>
-              </a>
+            @if($requestForm->canDelete())
+            <a href="#" data-href="{{ route('request_forms.destroy', $requestForm->id) }}" data-id="{{ $requestForm->id }}" class="btn btn-outline-secondary btn-sm text-danger" title="Eliminar" data-toggle="modal" data-target="#confirm" role="button">
+              <i class="fas fa-trash"></i></a>
             @endif
           </td>
         </tr>
@@ -158,7 +152,7 @@
 @else
 </div>
 <div class="col">
-  <h6><i class="fas fa-inbox"></i> Formularios en Progreso</h6>
+  <h6><i class="fas fa-inbox"></i> Mis formularios pendientes de aprobación</h6>
   <div class="card mb-3 bg-light">
     <div class="card-body">
       No hay formularios de requerimiento en progreso.
@@ -170,7 +164,7 @@
 @if(count($my_requests) > 0)
 </div>
 <div class="col">
-  <h6><i class="fas fa-archive"></i> Formularios aprobados, cerrados o rechazados</h6>
+  <h6><i class="fas fa-archive"></i> Mis formularios aprobados, cerrados o rechazados</h6>
   <div class="table-responsive">
     <table class="table table-sm table-hover table-bordered small">
       <thead>
@@ -269,6 +263,10 @@
           <td>
             <a href="{{ route('request_forms.show', $requestForm->id) }}" class="btn btn-outline-secondary btn-sm" title="Selección"><i class="fas fa-eye"></i>
             </a>
+            @if($requestForm->canEdit())
+            <a href="{{ route('request_forms.edit', $requestForm->id) }}" class="btn btn-outline-secondary btn-sm" title="Selección"><i class="fas fa-edit"></i></a>
+            @endif
+            
             @if($requestForm->signatures_file_id)
             <a class="btn btn-info btn-sm" title="Ver Formulario de Requerimiento firmado" href="{{ $requestForm->signatures_file_id == 11 ? route('request_forms.show_file', $requestForm->requestFormFiles->first() ?? 0) : route('request_forms.signedRequestFormPDF', [$requestForm, 1]) }}" target="_blank" title="Certificado">
               <i class="fas fa-file-contract"></i>
@@ -303,7 +301,7 @@
 @else
 </div>
 <div class="col">
-  <h6><i class="fas fa-inbox"></i> Formularios aprobados, cerrados o rechazados</h6>
+  <h6><i class="fas fa-inbox"></i> Mis formularios aprobados, cerrados o rechazados</h6>
   <div class="card mb-3 bg-light">
     <div class="card-body">
       No hay formularios de requerimiento aprobados, finalizados o rechazados.
@@ -315,7 +313,7 @@
 @if(count($my_ou) > 0)
 </div>
 <div class="col">
-  <h6><i class="fa fa-sitemap"></i> Formularios de mi unidad organizacional</h6>
+  <h6><i class="fa fa-sitemap"></i> Formularios desde mi unidad organizacional</h6>
   <div class="table-responsive">
     <table class="table table-sm table-hover table-bordered small">
       <thead>

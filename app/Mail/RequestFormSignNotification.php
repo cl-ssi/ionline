@@ -35,6 +35,6 @@ class RequestFormSignNotification extends Mailable
     public function build()
     {
         return $this->view('request_form.mail.requestformsignnotification')
-          ->subject('Formulario disponible para firma');
+          ->subject('Formulario '.($this->req->edited ? 're-ingresado ' : '').'disponible para firma');
     }
 }

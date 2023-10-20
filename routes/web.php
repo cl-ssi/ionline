@@ -12,6 +12,7 @@ use App\Models\Pharmacies\Purchase;
 use App\Http\Livewire\Welfare\Amipass\RequestMgr;
 use App\Http\Livewire\Welfare\Amipass\ReportByDates;
 use App\Http\Livewire\Welfare\Amipass\NewBeneficiaryRequest;
+use App\Http\Livewire\Rrhh\ShiftsIndex;
 use App\Http\Livewire\Warehouse\Invoices\InvoiceManagement;
 use App\Http\Livewire\Warehouse\Cenabast\CenabastIndex;
 use App\Http\Livewire\TicResources;
@@ -2381,6 +2382,7 @@ Route::prefix('welfare')->as('welfare.')->middleware(['auth', 'must.change.passw
         Route::get('/new-beneficiary-request', NewBeneficiaryRequest::class)->name('new-beneficiary-request');
         Route::get('/requests-manager', RequestMgr::class)->name('requests-manager');
 
+        Route::get('/shifts-index', ShiftsIndex::class)->name('shifts-index');
         Route::get('/report-by-dates', ReportByDates::class)->name('report-by-dates');
         Route::prefix('value')->as('value.')->group(function () {
             Route::get('/', [AmipassController::class, 'indexValue'])->name('indexValue');

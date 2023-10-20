@@ -125,13 +125,13 @@
   <table class="table table-sm table-striped table-bordered">
     <tbody class="text-center small">
       <tr>
-        @foreach($requestForm->eventRequestForms as $event)
+        @foreach($requestForm->eventRequestForms->whereNull('deleted_at') as $event)
         <td><strong>{{ $event->EventTypeValue }}</strong>
         </td>
         @endforeach
       </tr>
       <tr>
-        @foreach($requestForm->eventRequestForms as $event)
+        @foreach($requestForm->eventRequestForms->whereNull('deleted_at') as $event)
         <td>
           @if($event->StatusValue == 'Pendiente')
           <span>
@@ -183,6 +183,32 @@
     </tbody>
   </table>
 </div>
+
+@if($requestForm->getTrashedEventsWithComments()->count() > 0)
+<div class="table-responsive">
+    <h6><i class="fas fa-eye"></i> Observaciones previas</h6>
+    <table class="table table-sm table-striped table-bordered">
+        <tbody class="small">
+            @foreach($requestForm->getTrashedEventsWithComments() as $event)
+            <tr>
+                <td>@if($event->StatusValue == 'Aprobado')
+                    <span style="color: green;">
+                        <i class="fas fa-check-circle text-left"></i> {{ $event->StatusValue }} <br>
+                    </span>
+                    @else
+                    <span style="color: Tomato;">
+                        <i class="fas fa-times-circle"></i> {{ $event->StatusValue }} <br>
+                    </span> 
+                    @endif
+                </td>
+                <td><i class="fas fa-calendar"></i> {{ $event->signature_date?->format('d-m-Y H:i:s') }} por: {{ $event->signerUser?->FullName }} en calidad de {{ $event->EventTypeValue }}</td>
+                <td class="text-left font-italic"><i class="fas fa-comment"></i> "{{ $event->comment }}"</td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
+</div>
+@endif
 
 @if($eventType == 'pre_finance_event')
 

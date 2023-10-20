@@ -85,6 +85,9 @@ class EventRequestForm extends Model implements Auditable
             case "pre_budget_event":
                 return 'Solicitud Nuevo Presupuesto';
                 break;
+            case "pre_finance_budget_event":
+                return 'Solicitud Nuevo Presupuesto';
+                break;
             case "budget_event":
                 return 'Solicitud Nuevo Presupuesto';
                 break;
@@ -169,9 +172,11 @@ class EventRequestForm extends Model implements Auditable
 
     public static function createNewBudgetEvent(RequestForm $requestForm)
     {
-        $parameter = $requestForm->associateProgram->Subtitle->name != 31 && $requestForm->contractOrganizationalUnit->establishment_id == Parameter::where('parameter', 'HospitalAltoHospicio')->first()->value ? 'AbastecimientoHAH' : 'AbastecimientoSSI';
+        $result = $requestForm->associateProgram->Subtitle->name != 31 && $requestForm->contractOrganizationalUnit->establishment_id == Parameter::where('parameter', 'HospitalAltoHospicio')->first()->value;
+
+        $parameter = $result ? 'AbastecimientoHAH' : 'AbastecimientoSSI';
         $ouSearch = Parameter::where('module', 'ou')->where('parameter', $parameter)->first()->value;
-        $event = new EventRequestForm();
+        $event                      = new EventRequestForm();
         $event->ou_signer_user      =   $ouSearch; // Abastecimiento SSI o HAH
         $event->cardinal_number     =   $requestForm->superior_chief == 1 ? 6 : 5;
         $event->status              =   'pending';
@@ -184,11 +189,26 @@ class EventRequestForm extends Model implements Auditable
 
         self::createFile($event);
 
-        $parameter = $requestForm->associateProgram->Subtitle->name != 31 && $requestForm->contractOrganizationalUnit->establishment_id == Parameter::where('parameter', 'HospitalAltoHospicio')->first()->value ? 'FinanzasHAH' : 'FinanzasSSI';
+        $parameter = $result ? 'RefrendacionHAH' : 'FinanzasSSI';
         $ouSearch = Parameter::where('module', 'ou')->where('parameter', $parameter)->first()->value;
-        $event = new EventRequestForm();
-        $event->ou_signer_user      =   $ouSearch; //Finanzas
+        $event                      =   new EventRequestForm();
+        $event->ou_signer_user      =   $ouSearch; // Refrendacion SSI o HAH
         $event->cardinal_number     =   $requestForm->superior_chief == 1 ? 7 : 6;
+        $event->status              =   'pending';
+        $event->event_type          =   'pre_finance_budget_event';
+        $event->purchaser_amount    =   $requestForm->newBudget - $requestForm->estimated_expense;
+        $event->purchaser_observation = request()->purchaser_observation;
+        $event->purchaser_id        =   Auth()->user()->id;
+        $event->requestForm()->associate($requestForm);
+        $event->save();
+
+        self::createFile($event);
+
+        $parameter = $result ? 'FinanzasHAH' : 'FinanzasSSI';
+        $ouSearch = Parameter::where('module', 'ou')->where('parameter', $parameter)->first()->value;
+        $event                      = new EventRequestForm();
+        $event->ou_signer_user      =   $ouSearch; //Finanzas
+        $event->cardinal_number     =   $requestForm->superior_chief == 1 ? 8 : 7;
         $event->status              =   'pending';
         $event->event_type          =   'budget_event';
         $event->purchaser_amount    =   $requestForm->newBudget - $requestForm->estimated_expense;

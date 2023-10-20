@@ -5,8 +5,8 @@ namespace App\Http\Livewire\Rrhh;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
-use App\models\Rrhh\Absenteeism;
-use App\models\Rrhh\AbsenteeismType;
+use App\Models\Rrhh\Absenteeism;
+use App\Models\Rrhh\AbsenteeismType;
 use App\Imports\AbscencesImport as AbscencesImportFile;
 use Maatwebsite\Excel\Facades\Excel;
 use Carbon\Carbon;
@@ -33,7 +33,7 @@ class AbscencesImport extends Component
         ]);
 
         $file = $this->file;
-        $collection = Excel::toCollection(new AbscencesImportFile, $file);
+        $collection = Excel::toCollection(new AbscencesImportFile, $this->file->path());
 
         $total_count = $collection->first()->count()+1;
         $count_inserts = 0;

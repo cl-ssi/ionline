@@ -98,7 +98,7 @@
             </div>
             @endif
 
-            @if(in_array($eventType, ['pre_budget_event', 'budget_event']))
+            @if(in_array($eventType, ['pre_budget_event', 'pre_finance_budget_event', 'budget_event']))
             <div class="form-row">
                 <fieldset class="form-group col-sm">
                     <label>Presupuesto actual:</label><br>

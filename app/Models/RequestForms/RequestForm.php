@@ -738,4 +738,28 @@ class RequestForm extends Model implements Auditable
     {
         //return number_format($this->available_balance, 0, ',', '.');
     }
+
+    public function canEdit()
+    {
+        $hasBudgetEvents = $this->eventRequestForms->where('event_type', 'budget_event')->count() > 0;
+        return in_array($this->status, ['saved', 'pending', 'rejected']) || ($this->status == 'approved' && !$this->purchasingProcess && !$hasBudgetEvents);
+    }
+
+    public function canDelete()
+    {
+        return $this->status == 'saved';
+    }
+
+    public function hasEventRequestForms(){
+        return $this->eventRequestForms->count() > 0;
+    }
+
+    public function hasFirstEventRequestFormSigned(){
+        return $this->hasEventRequestForms() && $this->eventRequestForms->first()->status != 'pending';
+    }
+
+    public function getTrashedEventsWithComments()
+    {
+        return $this->eventRequestForms->whereNotNull('deleted_at')->whereNotNull('comment'); //where( fn($q) => $q->where('comment', '!=', null)->orWhere('comment', '!=', ' '));
+    }
 }

@@ -167,12 +167,12 @@
                                 $width = 100 / $signsCount;
                             @endphp
 
-                            @foreach($requestForm->eventRequestForms as $event)
+                            @foreach($requestForm->eventRequestForms->whereNull('deleted_at') as $event)
                             <td width="{{ $width }}%"><strong>{{ $event->EventTypeValue }}</strong></td>
                             @endforeach
                         </tr>
                         <tr>
-                            @foreach($requestForm->eventRequestForms as $event)
+                            @foreach($requestForm->eventRequestForms->whereNull('deleted_at') as $event)
                             <td width="{{ $width }}%">
                                 @if($event->StatusValue == 'Pendiente')
                                 <span>
@@ -213,6 +213,40 @@
         </div>
     </div>
 </div>
+
+@if($requestForm->eventRequestForms->whereNotNull('deleted_at')->count() > 0)
+<div class="container-fluid">
+    <div class="row">
+        <div class="col">
+            <div class="table-responsive">
+                <h6><i class="fas fa-eye"></i> Observaciones previas</h6>
+                <table class="table table-sm table-striped table-bordered">
+                    <tbody class="small">
+                        @foreach($requestForm->eventRequestForms->whereNotNull('deleted_at') as $event)
+                        @if($event->comment != null)
+                        <tr>
+                            <td>@if($event->StatusValue == 'Aprobado')
+                                <span style="color: green;">
+                                    <i class="fas fa-check-circle text-left"></i> {{ $event->StatusValue }} <br>
+                                </span>
+                                @else
+                                <span style="color: Tomato;">
+                                    <i class="fas fa-times-circle"></i> {{ $event->StatusValue }} <br>
+                                </span> 
+                                @endif
+                            </td>
+                            <td><i class="fas fa-calendar"></i> {{ $event->signature_date->format('d-m-Y H:i:s') }} por: {{ $event->signerUser->FullName }} en calidad de {{ $event->EventTypeValue }}</td>
+                            <td class="text-left font-italic"><i class="fas fa-comment"></i> "{{ $event->comment }}"</td>
+                        </tr>
+                        @endif
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+@endif
 
 <br>
 
