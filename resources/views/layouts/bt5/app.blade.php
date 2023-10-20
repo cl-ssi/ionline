@@ -25,8 +25,8 @@
                     @case('production')
                         @if(env('APP_DEBUG') == true)
                             background-color: rgb(255, 0, 0);
-                        @elseif(!env('OLD_SERVER'))
-                            background-color: rgb(2, 82, 0);
+                        @else
+                            background-color: rgb(0,108,183);
                         @endif
                         @break;
                 @endswitch
