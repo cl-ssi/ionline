@@ -1,4 +1,4 @@
-@extends('layouts.bt4.app')
+@extends('layouts.bt5.app')
 
 @section('title', 'Lista de Usuarios')
 
@@ -27,7 +27,7 @@
         <div class="col-6">
             <h3>Usuarios</h3>
         </div>
-        <div class="col-6 text-right">
+        <div class="col-6 text-end">
             @can('Users: create')
                 <a href="{{ route('rrhh.users.create') }}" class="btn btn-primary">Crear</a>
             @endcan
@@ -36,7 +36,7 @@
 
 
     <form method="GET" action="{{ route('rrhh.users.index') }}">
-        <div class="form-row">
+        <div class="row gx-2">
             <fieldset class="col-7">
                 @livewire('select-organizational-unit', [
                     'establishment_id' => auth()->user()->organizationalUnit->establishment->id,
@@ -45,7 +45,7 @@
             </fieldset>
             @if ($can['be god'])
                 <fieldset class="col-2">
-                    <select class="form-control" name="permission">
+                    <select class="form-control form-select" name="permission">
                         <option value="">Permisos</option>
                         @foreach ($permissions as $permission)
                             <option>{{ $permission }}</option>
@@ -59,7 +59,7 @@
                         autofocus autocomplete="off">
                     <div class="input-group-append">
                         <button class="btn btn-outline-secondary" type="submit">
-                            <i class="fas fa-search" aria-hidden="true"></i>
+                            <i class="bi bi-search" aria-hidden="true"></i>
                         </button>
                     </div>
                 </div>
@@ -72,7 +72,7 @@
 
     Total de registros: {{ $users->total() }}
     <table class="table table-responsive-xl table-striped table-sm">
-        <thead class="thead-dark">
+        <thead class="table-dark">
             <tr>
                 @if ($can['be god'])
                     <th scope="col"></th>
@@ -94,7 +94,7 @@
                             {!! $user->can('Users: delete') ? '<i class="fas fa-user-slash" title="Users: delete"></i>' : '' !!}
                             {!! $user->can('Partes: director') ? '<i class="fas fa-file-import" title="Partes: director"></i>' : '' !!}
                             {!! $user->can('Requirements: delete')
-                                ? '<i class="text-danger fas fa-rocket" title="Requirements: delete"></i>'
+                                ? '<i class="text-danger bi bi-rocket-fill" title="Requirements: delete"></i>'
                                 : '' !!}
                         </th>
                     @endif
@@ -107,12 +107,12 @@
                         @unless ($user->trashed())
                             @if ($can['Users: edit'])
                                 <a href="{{ route('rrhh.users.edit', $user->id) }}" class="btn btn-outline-primary">
-                                    <span class="fas fa-edit" aria-hidden="true"></span></a>
+                                    <i class="bi bi-pencil-square"></i></a>
                             @endcan
 
                             @if ($can['be god'] and !auth()->user()->godMode)
                                 <a href="{{ route('rrhh.users.switch', $user->id) }}" class="btn btn-outline-warning" @disabled(auth()->user()->godMode)>
-                                    <span class="fas fa-redo" aria-hidden="true"></span></a>
+                                    <i class="bi bi-arrow-clockwise"></i></a>
                             @endif
                         @endunless
 
