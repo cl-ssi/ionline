@@ -50,7 +50,7 @@
                             class="btn btn-outline-primary"
                             href="{{ route('inventories.check-transfer', $movement) }}"
                         >
-							<i class="fas fa-eye"></i>
+                            <i class="fas fa-eye"></i>
                             Completar el traspaso
                         </a>
                     </td>

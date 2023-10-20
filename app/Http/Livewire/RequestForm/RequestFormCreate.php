@@ -366,6 +366,70 @@ class RequestFormCreate extends Component
         }
 
         if($this->editRF){
+          // Editar formulario que ya tenga aprobaciones hechas
+          if($this->form_status == 'save' && $this->requestForm && $this->requestForm->hasFirstEventRequestFormSigned()){
+            if(in_array($this->requestForm->status, ['pending', 'rejected'])){
+              $this->requestForm->eventRequestForms()->delete();
+              $this->requestForm->update(['status' => 'pending']);
+              if($this->technicalReviewOuId){
+                $req->technical_review_ou_id = $this->technicalReviewOuId;
+                EventRequestform::createTechnicalReviewEvent($req);
+              }
+              EventRequestform::createLeadershipEvent($req);
+              EventRequestform::createPreFinanceEvent($req);
+              EventRequestform::createFinanceEvent($req);
+              EventRequestform::createSupplyEvent($req);
+
+              $req->edited = true; //se informa re-ingreso formulario a notificaciones
+
+              //Envío de notificación a Adm de Contrato y abastecimiento.
+              $mail_contract_manager = User::select('email')
+                ->where('id', $req->contract_manager_id)
+                ->first();
+
+              if($mail_contract_manager){
+                  $emails = [$mail_contract_manager];
+                  Mail::to($emails)
+                    ->cc(env('APP_RF_MAIL'))
+                    ->send(new NewRequestFormNotification($req));
+              }
+              //---------------------------------------------------------
+
+              //Envío de notificación para visación.
+              $now = Carbon::now();
+              //manager
+              $type = 'manager';
+              $mail_notification_ou_manager = Authority::getAuthorityFromDate($req->eventRequestForms->first()->ou_signer_user, Carbon::now(), $type);
+              //secretary
+              // $type_adm = 'secretary';
+              // $mail_notification_ou_secretary = Authority::getAuthorityFromDate($req->eventRequestForms->first()->ou_signer_user, Carbon::now(), $type_adm);
+
+              $emails = [$mail_notification_ou_manager->user->email];
+
+              if (env('APP_ENV') == 'production' OR env('APP_ENV') == 'testing') {
+                if($mail_notification_ou_manager){
+                    Mail::to($emails)
+                      ->cc(env('APP_RF_MAIL'))
+                      ->send(new RequestFormSignNotification($req, $req->eventRequestForms->first()));
+                }
+              }
+            }
+
+            if($this->requestForm->status == 'approved'){
+              $idsToDelete =$this->requestForm->eventRequestForms->whereIn('event_type', ['pre_finance_event', 'finance_event', 'supply_event'])->pluck('id');
+              EventRequestForm::destroy($idsToDelete);
+              //Se vuelve a generar solicitudes de firma para refrendacion en adelante
+              EventRequestform::createPreFinanceEvent($req);
+              EventRequestform::createFinanceEvent($req);
+              EventRequestform::createSupplyEvent($req);
+              $this->requestForm->update(['status' => 'pending', 'signatures_file_id' => null, 'approved_at' => null]);
+              $this->requestForm->purchasers()->detach();
+            }
+            //---------------------------------------------------------
+
+            session()->flash('info', 'Formulario de requerimiento N° '.$req->folio.' fue editado con exito.');
+          }
+
           if($this->form_status == 'sent'){
               if($this->technicalReviewOuId){
                   $req->technical_review_ou_id = $this->technicalReviewOuId;

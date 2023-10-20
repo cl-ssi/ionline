@@ -31,8 +31,11 @@ class InventoryMovement extends Model implements Auditable
     ];
 
     protected $dates = [
-        'reception_date',
         'installation_date',
+    ];
+
+    protected $casts = [
+        'reception_date' => 'date:Y-m-d H:i:s'
     ];
 
     public function inventory()

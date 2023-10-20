@@ -32,6 +32,6 @@ class NewRequestFormNotification extends Mailable
     public function build()
     {
         return $this->view('request_form.mail.newrequestformnotification')
-          ->subject('Ingreso de Nuevo Formulario');
+          ->subject($this->req->edited ? 'Re-ingreso de Formulario' : 'Ingreso de Nuevo Formulario');
     }
 }

@@ -36,85 +36,123 @@
                 <th>Cargado en AMIPASS</th>
                 <th>Calculo Sistema</th>
                 <th>Diferencia</th>
-                <th>Revisión</th>
+                <th>Tipo</th>
             </tr>
         </thead>
         <tbody>
             @if($userWithContracts)
                 @foreach ($userWithContracts as $ct => $user)
-                
-                <tr >
-                    <td>{{ $user->id }}</td>
-                    <td>{{ $user->shortName }}</td>
-                    <td>{{ money($user->AmiLoadMount) }}</td>
-                    <td>{{ money($user->contracts->sum('ammount')) }}</td>
-                    <td>
-                        @if($user->diff < 0)
-                            <p style="color:red;display: inline;">
-                                {{$user->diff}}
-                            </p>
-                        @else
-                            {{$user->diff}}
-                        @endif
-                    </td>
-                    <td>@if($user->charges->first()){{$user->charges->first()['total_real_cargado']}}@endif</td>
-                    <td>
-                    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#demo{{$ct}}" aria-expanded="false" aria-controls="collapseExample">
-                        Detalles
-                    </button>
-                    </td>
-                </tr>
-                
-                <tr class="collapse" id="demo{{$ct}}">
-                    <td></td>
-                    <td></td>
-                    <td>
-                        <ul>
-                            @foreach($user->amiLoads as $amiLoad)
-                                <li> 
-                                {{$amiLoad->fecha}} - {{$amiLoad->monto}} 
-                                </li>
-                            @endforeach
-                        </ul>
-                    </td>
-                    <td class="small">
-                        <ul>
-                            @foreach($user->absenteeisms as $absenteeism)
-                            <li> 
-                                @if($absenteeism->totalDays==0)
-                                    {{ $absenteeism->finicio->format('Y-m-d') }} - {{ $absenteeism->ftermino->format('Y-m-d') }} 
-                                    <small>({{ $absenteeism->tipo_de_ausentismo }})</small> 
-                                    Dias: {{ $absenteeism->total_dias_ausentismo }} => {{ $absenteeism->totalDays}}repor
-                                @else 
+                    @if($user->shifts->count()==0)
+                        <tr >
+                            <td>{{ $user->id }}</td>
+                            <td>{{ $user->shortName }}</td>
+                            <td>{{ money($user->AmiLoadMount) }}</td>
+                            <td>{{ money($user->contracts->sum('ammount')) }}</td>
+                            <td>
+                                @if($user->diff < 0)
                                     <p style="color:red;display: inline;">
-                                        {{ $absenteeism->finicio->format('Y-m-d') }} - {{ $absenteeism->ftermino->format('Y-m-d') }} 
-                                        <small>({{ $absenteeism->tipo_de_ausentismo }})</small> 
-                                        Dias: {{ $absenteeism->total_dias_ausentismo }} => {{ $absenteeism->totalDays}}
+                                        {{$user->diff}}
                                     </p>
+                                @else
+                                    {{$user->diff}}
                                 @endif
-                            </li>
-                            @endforeach
-                        </ul>
-                        Total días: {{ $user->totalAbsenteeismsEnBd }} =>  {{ $user->totalAbsenteeisms }}
+                            </td>
+                            <td>--</td>
+                            <td>
+                                <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#demo{{$ct}}" aria-expanded="false" aria-controls="collapseExample">
+                                    Detalles
+                                </button>
+                            </td>
+                        </tr>
+                        
+                        <tr class="collapse" id="demo{{$ct}}">
+                            <td></td>
+                            <td></td>
+                            <td>
+                                <ul>
+                                    @foreach($user->amiLoads as $amiLoad)
+                                        <li> 
+                                        {{$amiLoad->fecha}} - {{$amiLoad->monto}} 
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </td>
+                            <td class="small">
+                                <ul>
+                                    @foreach($user->absenteeisms as $absenteeism)
+                                    <li> 
+                                        @if($absenteeism->totalDays==0)
+                                            {{ $absenteeism->finicio->format('Y-m-d') }} - {{ $absenteeism->ftermino->format('Y-m-d') }} 
+                                            <small>({{ $absenteeism->tipo_de_ausentismo }})</small> 
+                                            Dias: {{ $absenteeism->total_dias_ausentismo }} => {{ $absenteeism->totalDays}}repor
+                                        @else 
+                                            <p style="color:red;display: inline;">
+                                                {{ $absenteeism->finicio->format('Y-m-d') }} - {{ $absenteeism->ftermino->format('Y-m-d') }} 
+                                                <small>({{ $absenteeism->tipo_de_ausentismo }})</small> 
+                                                Dias: {{ $absenteeism->total_dias_ausentismo }} => {{ $absenteeism->totalDays}}
+                                            </p>
+                                        @endif
+                                    </li>
+                                    @endforeach
+                                </ul>
+                                Total días: {{ $user->totalAbsenteeismsEnBd }} =>  {{ $user->totalAbsenteeisms }}
 
-                        <hr>
+                                <hr>
 
-                        <ul>
-                        @foreach($user->contracts as $contract)
-                            <li>
-                            {{ $contract->id }} - 
-                            {{ optional($contract->fecha_inicio_contrato)->format('Y-m-d') }} - 
-                            {{ optional($contract->fecha_termino_contrato)->format('Y-m-d') }}<br>
-                            Horas: {{ $contract->numero_horas }} - 
-                            Días Hábiles {{ $contract->businessDays }} <br>
-                            Monto a cargar $ {{ money($contract->ammount) }}
-                            </li>
-                        @endforeach
-                        </ul>
-                    </td>
-                    <td></td>
-                </tr>
-                
+                                <ul>
+                                @foreach($user->contracts as $contract)
+                                    <li>
+                                    {{ $contract->id }} - 
+                                    {{ optional($contract->fecha_inicio_contrato)->format('Y-m-d') }} - 
+                                    {{ optional($contract->fecha_termino_contrato)->format('Y-m-d') }}<br>
+                                    Horas: {{ $contract->numero_horas }} - 
+                                    Días Hábiles {{ $contract->businessDays }} <br>
+                                    Monto a cargar $ {{ money($contract->ammount) }}
+                                    </li>
+                                @endforeach
+                                </ul>
+                            </td>
+                            <td></td>
+                        </tr>
+                    @else
+                        <tr class="table-info">
+                            <td>{{ $user->id }}</td>
+                            <td>{{ $user->shortName }}</td>
+                            <td>{{ money($user->AmiLoadMount) }}</td>
+                            <td>{{ money($user->shifts->sum('ammount')) }}</td>
+                            <td>
+                                @if($user->diff < 0)
+                                    <p style="color:red;display: inline;">
+                                        {{$user->diff}}
+                                    </p>
+                                @else
+                                    {{$user->diff}}
+                                @endif
+                            </td>
+                            <td>Turno</td>
+                            <td>
+                                <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#demo{{$ct}}" aria-expanded="false" aria-controls="collapseExample">
+                                    Detalles
+                                </button>
+                            </td>
+                        </tr>
+
+                        <tr class="collapse" id="demo{{$ct}}">
+                            <td></td>
+                            <td></td>
+                            <td>
+
+                            </td>
+                            <td class="small">
+                                @foreach($user->shifts as $shift)
+                                    <li>
+                                    {{ $shift->year }} - {{ $shift->monthName() }}: {{ $shift->quantity }} días * {{ money($shiftAmmount) }}
+                                    </li>
+                                @endforeach
+                            </td>
+                            <td></td>
+                        </tr>
+                    @endif
                 @endforeach
             @endif
         </tbody>

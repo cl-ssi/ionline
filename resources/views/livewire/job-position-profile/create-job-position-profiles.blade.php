@@ -144,6 +144,7 @@
                     <option value="33" {{ ($jobPositionProfile && $jobPositionProfile->working_day == 33)?'selected':'' }} {{ $lawStateOption }}>33 horas</option>
                     <option value="22" {{ ($jobPositionProfile && $jobPositionProfile->working_day == 22)?'selected':'' }}>22 horas</option>
                     <option value="11" {{ ($jobPositionProfile && $jobPositionProfile->working_day == 11)?'selected':'' }} {{ $lawStateOption }}>11 horas</option>
+                    <option value="shift" {{ ($jobPositionProfile && $jobPositionProfile->working_day == 'shift')?'selected':'' }}>Turno</option>
                 </select>
             </fieldset>
         </div>

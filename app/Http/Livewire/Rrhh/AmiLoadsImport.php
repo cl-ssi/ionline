@@ -5,7 +5,7 @@ namespace App\Http\Livewire\Rrhh;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
-use App\models\Rrhh\AmiLoad;
+use App\Models\Rrhh\AmiLoad;
 use App\Imports\AbscencesImport as AbscencesImportFile;
 use Maatwebsite\Excel\Facades\Excel;
 use Carbon\Carbon;
@@ -30,7 +30,7 @@ class AmiLoadsImport extends Component
         ]);
 
         $file = $this->file;
-        $collection = Excel::toCollection(new AbscencesImportFile, $file);
+        $collection = Excel::toCollection(new AbscencesImportFile, $this->file->path());
 
         $total_count = $collection->first()->count()+1;
         $count_inserts = 0;

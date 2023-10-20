@@ -20,29 +20,6 @@
                         @endif
                     @endif
 
-                    @if($requestForm->eventRequestForms->count() > 0)
-                        @if($requestForm->eventRequestForms->first()->status == 'pending'
-                          && Auth()->user()->organizational_unit_id != 40 &&
-                          $requestForm->request_user_id == auth()->user()->id ||
-                          Auth()->user()->hasPermissionTo('Request Forms: all'))
-                            <a class="btn btn-link btn-sm float-right font-weight-bold align-top"
-                               href="{{route('request_forms.edit', $requestForm)}}">
-                                <i class="fas fa-edit"></i> Editar formulario
-                            </a>
-                        @endif
-                    @endif
-
-                    @if($requestForm->status == 'saved' &&
-                        Auth()->user()->organizational_unit_id != 40 &&
-                        $requestForm->request_user_id == auth()->user()->id ||
-                        ($requestForm->status == 'saved' &&
-                        Auth()->user()->hasPermissionTo('Request Forms: all')))
-                        <a class="btn btn-link btn-sm float-right font-weight-bold align-top"
-                           href="{{route('request_forms.edit', $requestForm)}}">
-                            <i class="fas fa-edit"></i> Editar formulario
-                        </a>
-                    @endif
-
                     @if(Auth()->user()->hasPermissionTo('Request Forms: all') && Str::contains($requestForm->subtype, 'tiempo') && !$requestForm->isBlocked() && $requestForm->status == 'approved')
                     <a onclick="return confirm('¿Está seguro/a de crear nuevo formulario de ejecución inmediata?') || event.stopImmediatePropagation()" data-toggle="modal" data-target="#processClosure-{{$requestForm->id}}" class="btn btn-link btn-sm float-right font-weight-bold align-top" title="Nuevo formulario de ejecución inmediata"><i class="fas fa-plus"></i> Crear suministro
                     </a>
@@ -177,13 +154,13 @@
         <table class="table table-sm table-striped table-bordered">
             <tbody class="text-center small">
             <tr>
-                @foreach($requestForm->eventRequestForms as $event)
+                @foreach($requestForm->eventRequestForms->whereNull('deleted_at') as $event)
                     <td><strong>{{ $event->EventTypeValue }}</strong>
                     </td>
                 @endforeach
             </tr>
             <tr>
-                @foreach($requestForm->eventRequestForms as $event)
+                @foreach($requestForm->eventRequestForms->whereNull('deleted_at') as $event)
                     <td>
                         @if($event->StatusValue == 'Pendiente')
                             <span>
@@ -243,6 +220,34 @@
             </tbody>
         </table>
     </div>
+
+    @if($requestForm->eventRequestForms->whereNotNull('deleted_at')->whereNotNull('comment')->count() > 0)
+    <div class="table-responsive">
+        <h6><i class="fas fa-eye"></i> Observaciones previas</h6>
+        <table class="table table-sm table-striped table-bordered">
+            <tbody class="small">
+                @foreach($requestForm->eventRequestForms->whereNotNull('deleted_at') as $event)
+                @if($event->comment != null)
+                <tr>
+                    <td>@if($event->StatusValue == 'Aprobado')
+                        <span style="color: green;">
+                            <i class="fas fa-check-circle text-left"></i> {{ $event->StatusValue }} <br>
+                        </span>
+                        @else
+                        <span style="color: Tomato;">
+                            <i class="fas fa-times-circle"></i> {{ $event->StatusValue }} <br>
+                        </span> 
+                        @endif
+                    </td>
+                    <td><i class="fas fa-calendar"></i> {{ $event->signature_date->format('d-m-Y H:i:s') }} por: {{ $event->signerUser->FullName }} en calidad de {{ $event->EventTypeValue }}</td>
+                    <td class="text-left font-italic"><i class="fas fa-comment"></i> "{{ $event->comment }}"</td>
+                </tr>
+                @endif
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+    @endif
 
     @if($requestForm->type_form == 'bienes y/o servicios')
         <div class="table-responsive">
@@ -667,7 +672,7 @@
                                                         @if(isset($modified['old']) OR isset($modified['new']))
                                                             <strong>{{ $attribute }}</strong>
                                                             :  {{ isset($modified['old']) ? $modified['old'] : '' }}
-                                                            => {{ $modified['new'] }};
+                                                            => {{ $modified['new'] ?? '' }};
                                                         @endif
                                                     @endforeach
                                                 </td>
@@ -714,7 +719,7 @@
                                                         @if(isset($modified['old']) OR isset($modified['new']))
                                                             <strong>{{ $attribute }}</strong>
                                                             :  {{ isset($modified['old']) ? $modified['old'] : '' }}
-                                                            => {{ $modified['new'] }};
+                                                            => {{ $modified['new'] ?? '' }};
                                                         @endif
                                                     @endforeach
                                                 </td>
@@ -764,7 +769,7 @@
                                                             @if(isset($modified['old']) OR isset($modified['new']))
                                                                 <strong>{{ $attribute }}</strong>
                                                                 :  {{ isset($modified['old']) ? $modified['old'] : '' }}
-                                                                => {{ $modified['new'] }};
+                                                                => {{ $modified['new'] ?? '' }};
                                                             @endif
                                                         @endforeach
                                                     </td>
@@ -813,7 +818,7 @@
                                                             @if(isset($modified['old']) OR isset($modified['new']))
                                                                 <strong>{{ $attribute }}</strong>
                                                                 :  {{ isset($modified['old']) ? $modified['old'] : '' }}
-                                                                => {{ $modified['new'] }};
+                                                                => {{ $modified['new'] ?? '' }};
                                                             @endif
                                                         @endforeach
                                                     </td>

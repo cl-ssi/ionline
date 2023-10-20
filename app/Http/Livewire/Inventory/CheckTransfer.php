@@ -34,6 +34,9 @@ class CheckTransfer extends Component
         $dataValidated = $this->validate();
         $inventory = $this->movement->inventory;
 
+        /** Si quieres que al recepcionar no se modifique la fecha que está cargada, cambiar 42 por esta */
+        // 'reception_date' => $this->movement->reception_date ?? now(),
+
         $this->movement->update([
             'reception_confirmation' => true,
             'reception_date' => now(),

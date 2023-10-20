@@ -216,6 +216,7 @@
               <th align="left">Justificación</th>
               <td colspan="2">{{ $requestForm->justification }}</td>
           </tr>
+          {{--
           <tr>
               <th align="left" rowspan="5">Mecanismo de adquisición</th>
               <td>Menores a 3 UTM</td>
@@ -252,6 +253,7 @@
                   @endif
               </td>
           </tr>
+          --}}
       </table>
 
       <div style="clear: both; padding-bottom: 20px">&nbsp;</div>
@@ -298,9 +300,9 @@
           <thead>
           <tr>
               <th>#</th>
-              <th style="width:70px">RUT</th>
-              <th>Nombres</th>
-              <th>Apellidos</th>
+              <!-- <th style="width:70px">RUT</th> -->
+              <th>Nombre</th>
+              <th>Apellido</th>
               <th>Item Pres.</th>
               <th>Tipo viaje</th>
               <th>Origen</th>
@@ -315,15 +317,15 @@
           @foreach($requestForm->passengers as $key => $passenger)
               <tr>
                   <td>{{ $key+1 }}</td>
-                  <td>{{ number_format($passenger->run, 0, ",", ".") }}-{{ $passenger->dv }}</td>
-                  <td>{{ $passenger->name }}</td>
-                  <td>{{ $passenger->fathers_family }} {{ $passenger->mothers_family }}</td>
+                  {{--<td>{{ number_format($passenger->run, 0, ",", ".") }}-{{ $passenger->dv }}</td>--}}
+                  <td>{{ strtok($passenger->name, ' ') }}</td>
+                  <td>{{ $passenger->fathers_family }}</td>
                   <td>{{ $passenger->budgetItem ? $passenger->budgetItem->fullName() : '' }}</td>
                   <td>{{ isset($round_trips[$passenger->round_trip]) ? $round_trips[$passenger->round_trip] : '' }}</td>
                   <td>{{ $passenger->origin }}</td>
                   <td>{{ $passenger->destination }}</td>
-                  <td>{{ $passenger->departure_date->format('d-m-Y H:i') }}</td>
-                  <td>{{ $passenger->return_date ? $passenger->return_date->format('d-m-Y H:i') : '' }}</td>
+                  <td>{{ $passenger->departure_date->format('d-m-Y') }}</td>
+                  <td>{{ $passenger->return_date ? $passenger->return_date->format('d-m-Y') : '' }}</td>
                   <td>{{ isset($baggages[$passenger->baggage]) ? $baggages[$passenger->baggage] : '' }}</td>
                   <td align="right">{{ number_format($passenger->latestPendingPassengerChanged->unit_value ?? $passenger->unit_value, $requestForm->precision_currency, ",", ".") }}</td>
               </tr>
@@ -331,7 +333,7 @@
           </tbody>
           <tfoot>
           <tr align="right">
-              <th colspan="11">
+              <th colspan="10">
                   Valor Total
               </th>
               <th>{{$requestForm->symbol_currency}}{{ number_format($requestForm->new_estimated_expense ?? $requestForm->estimated_expense, $requestForm->precision_currency,",",".") }}</th>
