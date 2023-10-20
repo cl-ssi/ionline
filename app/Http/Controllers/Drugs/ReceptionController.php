@@ -242,19 +242,21 @@ class ReceptionController extends Controller
         $items = $items->filter(function($item) {
             return $item->total_sample > 0;
         });
-
         /**
-         * Suma el total a destruir agrupados por sustancias
+         * Suma el total a destruir agrupados por sustancias, cada sustancia con su unidad de medida.
          */
-        $items_sin_destruir = $items->groupBy('substance.name')->map(function ($row) {
-            return $row->sum('destruct');
+        $items_sin_destruir = $items->groupBy('substance.name')->map(function ($item, $key) {
+            return [
+                'sum' => $item->sum('destruct'),
+                'unit' => $item->pluck('substance.unit')->unique()->first(),
+            ];
         });
 
         /**
          * Filtro para mostrar solo las sustancias donde la suma a destruir sea mayor a cero
          */
-        $items_sin_destruir = $items_sin_destruir->filter(function($item) {
-            return $item > 0;
+        $items_sin_destruir = $items_sin_destruir->filter(function($item, $key) {
+            return $item['sum'] > 0;
         });
 
         /**
