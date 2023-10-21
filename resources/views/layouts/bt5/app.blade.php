@@ -31,6 +31,10 @@
                         @break;
                 @endswitch
             }
+
+            .container {
+                max-width: 1200px;
+            }
         </style>
 
         @yield('custom_css')
