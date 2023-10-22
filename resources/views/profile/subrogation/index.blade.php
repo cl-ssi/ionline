@@ -1,5 +1,5 @@
 <table class="table table-sm table-bordered small">
-    <thead class="thead-light">
+    <thead class="table-secondary">
         <tr>
             <th width="120"></th>
             <th>Estado</th>

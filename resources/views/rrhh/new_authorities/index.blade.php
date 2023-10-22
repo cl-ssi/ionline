@@ -1,4 +1,4 @@
-@extends('layouts.bt4.app')
+@extends('layouts.bt5.app')
 
 @section('title', 'Autoridades')
 
@@ -10,7 +10,7 @@
                 @if($ouTopLevel->establishment && $ouTopLevel->establishment->name)
                     <h2 class="mb-3">{{ $ouTopLevel->establishment->name }}</h2>
                     <table class="table table-striped table-sm">
-                        <thead class="thead-light">
+                        <thead class="table-secondary">
                             <tr>
                                 <th scope="col">Nombre</th>
                                 <th scope="col">Calendario de Autoridades de la U.O.</th>

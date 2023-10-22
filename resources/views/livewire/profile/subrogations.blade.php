@@ -7,14 +7,14 @@
             @if($organizationalUnit)
                 <h5 class="mb-3">
                     <i class="fas fa-chess"></i> Subrogantes de Autoridad {{$organizationalUnit->name?? ''}} de tipo @if($type) {{$type}} @endif
-                    <button class="btn btn-success float-right"
+                    <button class="btn btn-success float-end"
                         wire:click="create"><i class="fas fa-plus"></i> Agregar nuevo</button>
                 </h5>
                 @include('profile.subrogation.index')
             @else
                 <h5 class="mb-3">
                     <i class="fas fa-chess"></i> ¿Quienes son mis subrogantes? 
-                    <button class="btn btn-success float-right"
+                    <button class="btn btn-success float-end"
                         wire:click="create"><i class="fas fa-plus"></i> Agregar nueva persona que me subrogaría</button>
                 </h5>
                 @include('profile.subrogation.index')
