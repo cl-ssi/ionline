@@ -3,7 +3,7 @@
         <div class="col">
             <h3 class="mb-3">Justificaciones de "asistencia no registrada"</h3>
         </div>
-        <div class="col-3 text-right">
+        <div class="col-3 text-end">
             <a href="{{ route('rrhh.attendance.reason.mgr') }}" class="btn btn-info"> <i class="fas fa-cog"></i> Mantenedor
                 de Motivos </a>
         </div>
