@@ -1,6 +1,6 @@
 <div>
     <!-- Muestra como título el nombre de la OU y el selector de mes -->
-    <div class="form-row mb-4">
+    <div class="row mb-4">
         <div class="col-12 col-md-9">
             <!-- Muestra el nombre del mes seleccionado (Ej: Febrero 2023) -->
             <h5 clas="mb-3">
@@ -21,8 +21,8 @@
         <div class="card-body">
             <h5 class="card-title">Editar autoridad para la fecha {{ $date }} y tipo {{ $type }}</h5>
 
-            <div class="form-row">
-                <div class="col-12 col-md-4">
+            <div class="row">
+                <div class="col-12 col-md-4 mt-3">
                     <div class="form-group">
                         <label for="for_user_id">Usuario*</label>
                         <select wire:model="user_id" class="form-control" required>
@@ -35,7 +35,7 @@
                     </div>
                 </div>
 
-                <div class="col-4 col-md-3">
+                <div class="col-4 col-md-3 mt-3">
                     <div class="form-group">
                         <label for="Cargo">Cargo*</label>
                         <select wire:model="position" id="for_position" class="form-control" required>
@@ -66,7 +66,7 @@
                 </div>
 
 
-                <div class="col-4 col-md-2">
+                <div class="col-4 col-md-2 mt-3">
                     <div class="form-group">
                         <label for="">Desde*</label>
                         <input type="date" wire:model="startDate" class="form-control" disabled required>
@@ -74,7 +74,7 @@
                     </div>
                 </div>
 
-                <div class="col-4 col-md-2">
+                <div class="col-4 col-md-2 mt-3">
                     <div class="form-group">
                         <label for="">Hasta*</label>
                         <input type="date" wire:model="endDate" class="form-control" required>
@@ -82,14 +82,14 @@
                     </div>
                 </div>
 
-                <div class="col-12 col-md-7">
+                <div class="col-12 col-md-7 mt-3">
                     <div class="form-group">
                         <label for="for_decree">Decreto (opcional)</label>
                         <input type="text" class="form-control" wire:model="decree">
                     </div>
                 </div>
 
-                <div class="col-12 col-md-4">
+                <div class="col-12 col-md-4 mt-3">
                     <div class="form-group">
                         <label for="">En representación de (opcional)</label>
                         @livewire('search-select-user', ['selected_id' => 'representation_id'])
@@ -98,11 +98,11 @@
                 </div>
             </div>
 
-            <button class="btn btn-primary" wire:click="save()">
+            <button class="btn btn-primary mt-3" wire:click="save()">
                 <i class="fas fa-save"></i> Guardar
             </button>
 
-            <button class="btn btn-outline-secondary" wire:click="cancel()">
+            <button class="btn btn-outline-secondary mt-3" wire:click="cancel()">
                 Cancelar
             </button>
 
@@ -130,7 +130,7 @@
         </a>
         @if($authority['manager'])
         <a href="#" class="link-danger ml-2" onclick="confirm('¿Está seguro que desea eliminar el registro de {{$authority['manager']->tinnyName}}? Esto eliminará este registro desde la fecha: {{$date}} y lo que queda del año') || event.stopImmediatePropagation()" wire:click="delete({{ $authority['authority_id'] }})" >
-            <i class="fas fa-trash-alt text-danger"></i>
+            <i class="fas fa-trash-alt text-danger mx-2"></i>
         </a>
         @endif
         <br>

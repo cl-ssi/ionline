@@ -1,4 +1,4 @@
-@extends('layouts.bt4.app')
+@extends('layouts.bt5.app')
 
 @section('title', 'Calendario de Autoridades de la Unidad Organizacional')
 
