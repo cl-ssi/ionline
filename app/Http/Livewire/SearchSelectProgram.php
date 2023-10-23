@@ -44,7 +44,7 @@ class SearchSelectProgram extends Component
         $this->selectedProgramName = null;
         
         $this->program = $program;
-        $this->selectedProgramName = $program->name;
+        $this->selectedProgramName = $program->name.' subtítulo '.$program->Subtitle->name;
     }
 
     public function resetx()
@@ -79,6 +79,7 @@ class SearchSelectProgram extends Component
     {
         $this->programs = Program::getProgramsBySearch($this->query)
             ->orderBy('name','Asc')
+            ->orderBy('period', 'Desc')
             ->get();
 
         /** Más de 50 resultados  */

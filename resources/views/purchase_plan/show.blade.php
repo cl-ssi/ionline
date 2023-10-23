@@ -107,7 +107,7 @@
                 <th width="" class="table-secondary">Artículo</th>
                 <th width="" class="table-secondary">UM</th>
                 <th width="" class="table-secondary">Especificaciones Técnicas</th>
-                <th width="" class="table-secondary">Archivo</th>
+                {{--<th width="" class="table-secondary">Archivo</th>--}}
                 <th width="" class="table-secondary">Cantidad</th>
                 <th width="" class="table-secondary">Valor U.</th>
                 <th width="" class="table-secondary">Impuestos</th>
@@ -122,7 +122,7 @@
                 <td>{{ $item->unspscProduct->name }}</td>
                 <td>{{ $item->unit_of_measurement }}</td>
                 <td>{{ $item->specification }}</td>
-                <td></td>
+                {{--<td></td>--}}
                 <td>{{ $item->quantity }}</td>
                 <td class="text-end">${{ number_format($item->unit_value, 0, ",", ".") }}</td>
                 <td>{{ $item->tax }}</td>
@@ -146,7 +146,7 @@
         </tbody>
         <tfoot>
             <tr>
-                <td colspan="7"></td>
+                <td colspan="6"></td>
                 <th class="text-end">Total</th>
                 <th class="text-end">${{ number_format($purchasePlan->estimated_expense, 0, ",", ".") }}</th>
                 <td></td>

@@ -1997,6 +1997,7 @@ Route::prefix('purchase_plan')->as('purchase_plan.')->middleware(['auth', 'must.
     Route::get('/{purchasePlan}/show', [PurchasePlanController::class, 'show'])->name('show');
     Route::get('/{purchase_plan_id}/show_approval', [PurchasePlanController::class, 'show_approval'])->name('show_approval');
     Route::get('/{purchasePlan}/edit', [PurchasePlanController::class, 'edit'])->name('edit');
+    Route::delete('/{purchasePlan}/destroy', [PurchasePlanController::class, 'destroy'])->name('destroy');
 });
 
 /*formulario de requerimiento compra o servicio */
