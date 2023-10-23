@@ -162,8 +162,7 @@
                             @endif
                         </td>
                         <td class="text-center">
-                            @if($jobPositionProfile->status == 'saved' || 
-                                $jobPositionProfile->status == 'sent')
+                            @if(in_array($jobPositionProfile->status, ['saved', 'sent', 'pending']))
                                 <form method="POST" style="display:inline-block;"
                                     action="{{ route('job_position_profile.destroy', $jobPositionProfile) }}">
                                     @csrf
