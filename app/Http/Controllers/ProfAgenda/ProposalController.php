@@ -146,7 +146,7 @@ class ProposalController extends Controller
         // valida no mas de 30 dias
         if($start_date_param && $end_date_param){
             $diff = $start_date_param->diffInDays($end_date_param);
-            if($diff>30){
+            if($diff>60){
                 session()->flash('warning', 'Se permite un máximo de 30 días para aperturar.');
                 $request->flash();
                 return redirect()->back();
