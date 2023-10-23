@@ -1,4 +1,4 @@
-@extends('layouts.app-bootstrap-5')
+@extends('layouts.bt5.app')
 
 @section('title', 'Plan de Compras')
 
@@ -36,7 +36,15 @@
                 <td class="text-left">{{ $purchasePlan->subject }}</td>
             </tr>
             <tr>
-                <th width="30%" class="table-secondary">Funcionario Responsable</th>
+                <th class="table-secondary">Descripción general del proyecto o adquisición</th>
+                <td class="text-left">{{ $purchasePlan->description }}</td>
+            </tr>
+            <tr>
+                <th class="table-secondary">Propósito general del proyecto o adquisición</th>
+                <td class="text-left">{{ $purchasePlan->purpose }}</td>
+            </tr>
+            <tr>
+                <th class="table-secondary">Funcionario Responsable</th>
                 <td class="text-left">{{ $purchasePlan->userResponsible->FullName }}</td>
             </tr>
             <tr>

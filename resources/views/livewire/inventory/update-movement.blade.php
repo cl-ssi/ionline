@@ -84,5 +84,6 @@
             </button>
         </div>
     </div>
+    @livewire('inventory.movement-mgr', ['inventoryMovement' => $movement])
     @endforeach
 </div>

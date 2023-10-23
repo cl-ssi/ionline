@@ -5,7 +5,6 @@
                 <thead>
                     <tr class="text-center align-top table-secondary">
                         <th width="6%">ID</th>
-                        <th width="7%">Estado</th>
                         <th width="7%">
                             Fecha Creación
                             <span class="badge bg-info text-dark">Periodo</span>
@@ -13,8 +12,8 @@
                         <th width="">Asunto</th>
                         <th width="">Responsable</th>
                         <th width="">Programa</th>
-                        <th width="">Aprobaciones</th>
-                        <th width=""></th>
+                        <th width="120px">Estado</th>
+                        <th width="85px"></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -23,18 +22,6 @@
                         <th class="text-center">
                             {{ $purchasePlan->id }}<br>
                         </th>
-                        <td class="text-center">
-                        @switch($purchasePlan->status)
-                            @case('save')
-                                <span class="badge bg-primary badge-sm">Guardado</span>
-                                @break
-                            @case('sent')
-                                <span class="badge bg-secondary badge-sm">Enviado</span>
-                                @break
-                            @default
-                                ''
-                        @endswitch
-                        </td>
                         <td>
                             {{ $purchasePlan->created_at->format('d-m-Y H:i:s') }}
                             <span class="badge bg-info text-dark">{{ $purchasePlan->period }}</span><br>
@@ -59,8 +46,21 @@
                                     @endif
                                 @endforeach
                             @endif
+
+                            <br>
+
+                            @switch($purchasePlan->status)
+                                @case('save')
+                                    <span class="badge bg-primary badge-sm">Guardado</span>
+                                    @break
+                                @case('sent')
+                                    <span class="badge bg-secondary badge-sm">Enviado</span>
+                                    @break
+                                @default
+                                    ''
+                            @endswitch
                         </td>
-                        <td class="text-center">
+                        <td class="text-left">
                             <a href="{{ route('purchase_plan.show', $purchasePlan) }}"
                                 class="btn btn-outline-secondary btn-sm me-1"><i class="fas fa-eye"></i>
                             @if($purchasePlan->status == "save")

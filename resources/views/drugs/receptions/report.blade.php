@@ -20,10 +20,10 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach($items_sin_destruir as $nombre => $cantidad)
+                @foreach($items_sin_destruir as $nombre => $data)
                 <tr>
                     <td>{{ $nombre }}</td>
-                    <td class="text-center">{{ $cantidad }} g</td>
+                    <td class="text-center">{{ $data['sum'] }} {{ $data['unit'] }}</td>
                 </tr>
                 @endforeach
             </tbody>

@@ -19,9 +19,24 @@ class PurchasePlan extends Model implements Auditable
     use \OwenIt\Auditing\Auditable;
 
     protected $fillable = [
-        'user_creator_id', 'user_responsible_id', 'position', 'telephone', 'email', 'organizational_unit_id',
-        'organizational_unit', 'subdirectorate_id', 'subdirectorate', 'subject', 'program_id', 'program', 'estimated_expense',
-        'approved_estimated_expense', 'status', 'period'
+        'user_creator_id', 
+        'user_responsible_id',
+        'position',
+        'telephone',
+        'email',
+        'organizational_unit_id',
+        'organizational_unit',
+        'subdirectorate_id',
+        'subdirectorate',
+        'subject',
+        'description',
+        'purpose',
+        'program_id',
+        'program',
+        'estimated_expense',
+        'approved_estimated_expense',
+        'status',
+        'period'
     ];
 
     public function userResponsible() {

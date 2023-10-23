@@ -19,8 +19,18 @@ use App\Models\Parameters\Parameter;
 
 class CreatePurchasePlan extends Component
 {
-    public $idPurchasePlan, $userResponsibleId, $telephone, $email, $position, $subdirectorate, $organizationalUnit, 
-        $subject, $period;
+    public $idPurchasePlan, 
+        $userResponsibleId, 
+        $telephone, 
+        $email, 
+        $position,
+        $description,
+        $purpose,
+        $subdirectorate, 
+        $organizationalUnit, 
+        $subject,
+        $program_id,
+        $period;
 
     /* Listeners */
     public $searchedUser, $searchedProgram, $items;
@@ -40,9 +50,12 @@ class CreatePurchasePlan extends Component
             'telephone.required'            => 'Debe ingresar un teléfono.',
             'email.required'                => 'Debe ingresar un correo electrónico.',
             'position.required'             => 'Debe ingresar un cargo o función.',
+            'description.required'          => 'Debe ingresar una descripción.',
+            'purpose.required'              => 'Debe ingresar un propósito.',
             'subject.required'              => 'Debe ingresar un asunto.',
             'period.required'               => 'Debe ingresar un periodo',
-            'items.required'                => 'Debe ingresar al menos un item'
+            'items.required'                => 'Debe ingresar al menos un item',
+            'program_id.required'           => 'Debe ingresar un programa'
         ];
     }
 
@@ -65,6 +78,7 @@ class CreatePurchasePlan extends Component
 
     public function searchedProgram(Program $program){
         $this->searchedProgram = $program;
+        $this->program_id = $program->id;
     }
 
     public function savedItems($items)
@@ -96,8 +110,11 @@ class CreatePurchasePlan extends Component
             'telephone'         => 'required',
             'email'             => 'required',
             'position'          => 'required',
+            'description'       => 'required',
+            'purpose'           => 'required',
             'subject'           => 'required',
             'period'            => 'required',
+            'program_id'        => 'required',
             'items'             => 'required'
         ]);
 
@@ -115,6 +132,8 @@ class CreatePurchasePlan extends Component
                     'organizational_unit_id'    => $this->searchedUser->organizationalUnit->id,
                     'organizational_unit'       => $this->searchedUser->organizationalUnit->name,
                     'subject'                   => $this->subject,
+                    'description'               => $this->description,
+                    'purpose'                   => $this->purpose,
                     'program_id'                => $this->searchedProgram->id,
                     'program'                   => $this->searchedProgram->name,
                     'status'                    => ($this->purchase_plan_status == 'save') ? 'save' : 'sent',

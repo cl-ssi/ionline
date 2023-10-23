@@ -99,7 +99,7 @@
             <tr>
                 <th class="table-active" width="25%">HORARIO DE TRABAJO</th>
                 <td colspan="3">
-                    {{ $jobPositionProfile->working_day }} hrs.
+                    {{ $jobPositionProfile->working_day == 'shift' ? 'Turno' : $jobPositionProfile->working_day.' hrs.' }}
                 </td>
             </tr>
         </tbody>
