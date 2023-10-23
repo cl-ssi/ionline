@@ -63,7 +63,7 @@
                                 <option value="nd">No Definido</option>
                             </select>
                         </fieldset>
-
+                        @if($form != 'purchase_plan')
                         <fieldset class="form-group col-8">
                             <label class="form-label">Documento Informativo (optativo)
                                 @if($savedArticleFile)
@@ -73,6 +73,7 @@
                             <input class="form-control form-control-sm" type="file" style="padding:2px 0px 0px 2px;" wire:model.defer="articleFile" name="articleFile" id="upload{{ $iteration }}" @if($savedArticleFile) disabled @endif>
                             <div wire:loading wire:target="articleFile">Cargando archivo...</div>
                         </fieldset>
+                        @endif
                     </div>
                 </div>
             </form>

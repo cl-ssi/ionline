@@ -79,6 +79,7 @@ class CreatePurchasePlan extends Component
     public function searchedProgram(Program $program){
         $this->searchedProgram = $program;
         $this->program_id = $program->id;
+        $this->period = $program->period;
     }
 
     public function savedItems($items)
@@ -135,7 +136,7 @@ class CreatePurchasePlan extends Component
                     'description'               => $this->description,
                     'purpose'                   => $this->purpose,
                     'program_id'                => $this->searchedProgram->id,
-                    'program'                   => $this->searchedProgram->name,
+                    'program'                   => $this->searchedProgram->name.' '.$this->searchedProgram->period. ' subtítulo '.$this->searchedProgram->Subtitle->name,
                     'status'                    => ($this->purchase_plan_status == 'save') ? 'save' : 'sent',
                     'period'                    => $this->period
                 ]
@@ -220,6 +221,8 @@ class CreatePurchasePlan extends Component
             $this->program_id           = $this->purchasePlanToEdit->program_id;
             $this->subject              = $this->purchasePlanToEdit->subject;
             $this->period               = $this->purchasePlanToEdit->period;
+            $this->description          = $this->purchasePlanToEdit->description;
+            $this->purpose              = $this->purchasePlanToEdit->purpose;
 
             foreach($this->purchasePlanToEdit->purchasePlanItems as $item){
                 $this->setItems($item);
