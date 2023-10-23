@@ -83,7 +83,7 @@
                             <b>Ley</b>:   N°{{ number_format($jobPositionProfile->law, 0, ",", ".") }} <br>
                             @if($jobPositionProfile->dfl3) DFL N°3/17 <br> @endif
                             @if($jobPositionProfile->dfl29) DFL N°29 <br> @endif
-                            {{ $jobPositionProfile->working_day }} Horas
+                            {{ $jobPositionProfile->working_day == 'shift' ? 'Turno' : $jobPositionProfile->working_day.' Horas' }}
                         </td>
                         <td class="text-center">
                             @if($jobPositionProfile->status == 'saved')
@@ -252,7 +252,7 @@
                             <b>Ley</b>:   N°{{ number_format($jobPositionProfile->law, 0, ",", ".") }} <br>
                             @if($jobPositionProfile->dfl3) DFL N°3/17 <br> @endif
                             @if($jobPositionProfile->dfl29) DFL N°29 <br> @endif
-                            {{ $jobPositionProfile->working_day }} Horas
+                            {{ $jobPositionProfile->working_day == 'shift' ? 'Turno' : $jobPositionProfile->working_day.' Horas' }}
                         </td>
                         <td class="text-center">
                             @if($jobPositionProfile->status == 'saved')
