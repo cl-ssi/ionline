@@ -23,7 +23,7 @@ class DteController extends Controller
             'confirmation_ou_id' => auth()->user()->organizational_unit_id,
             'confirmation_observation' => '',
             'confirmation_at' => now(),
-            'confirmation_signature_file' => $request->folder.$request->filename.'.pdf',
+            'confirmation_signature_file' => $request->folder . $request->filename . '.pdf',
         ]);
 
         return redirect()->back()->with('success', 'El dte fue aceptado exitosamente.');
@@ -41,10 +41,28 @@ class DteController extends Controller
     }
 
 
+    public function pendingReceiptCertificate($tray = null)
+    {
+        $dtesQuery = Dte::where('confirmation_status', 0);
+
+        if ($tray) {
+            $dtesQuery->whereHas('requestForm', function ($query) use ($tray) {
+                $query->where('subtype','like', $tray.'%');
+            });
+        }
+
+        $dtes = $dtesQuery->get();
+
+        return view('dte.pending-receipt-certificate', compact('dtes', 'tray'));
+    }
+
+
+
 
 
     /** Testing, para probar el modulo de aprobaciones */
-    public function process($approval_id, $param1, $param2) {
-        logger()->info('Prueba de callback modulo aprobaciones: id ' . $approval_id. ' param1: '. $param1);
+    public function process($approval_id, $param1, $param2)
+    {
+        logger()->info('Prueba de callback modulo aprobaciones: id ' . $approval_id . ' param1: ' . $param1);
     }
 }
