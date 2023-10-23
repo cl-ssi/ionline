@@ -36,7 +36,7 @@ class OpenHourCancelation extends Mailable
     public function envelope()
     {
         return new Envelope(
-            from: new Address('contacto@saludtarapaca.gob.cl', 'Servicio de Salud Tarapacá'),
+            from: new Address('', 'Servicio de Salud Tarapacá'),
             subject: 'Cancelación de reserva - Agenda UST',
         );
     }

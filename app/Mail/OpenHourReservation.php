@@ -36,7 +36,7 @@ class OpenHourReservation extends Mailable
     public function envelope()
     {
         return new Envelope(
-            from: new Address('contacto@saludtarapaca.gob.cl', 'Servicio de Salud Tarapacá'),
+            from: new Address(ENV('MAIL_USERNAME'), 'Servicio de Salud Tarapacá'),
             subject: 'Nueva Reserva - Agenda UST',
         );
     }
