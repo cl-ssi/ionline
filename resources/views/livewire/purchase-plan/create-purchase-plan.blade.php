@@ -1,7 +1,7 @@
 <div>
-    <h6 class="small"><b>1. Descripción</b></h6> <br>
+    <h6 class="small mb-4"><b>1. Descripción</b></h6>
     
-    <form class="row g-3">
+    <div class="row g-3 mb-3">
         <fieldset class="form-group col-4">
             <label for="for_user_responsible_id">Funcionario Responsable</label>
             @if($purchasePlanToEdit)
@@ -34,11 +34,20 @@
             <label for="for_position">Cargo / Función</label>
             <input class="form-control" type="text" autocomplete="off" wire:model="position">
         </fieldset>
-    </form>
-    
-    <br>
+    </div>
 
-    <form class="row g-3">
+    <div class="row g-3 mb-3">
+        <div class="form-group col-6">
+            <label for="for_description">Descripción general del proyecto o adquisición</label>
+            <input class="form-control" type="text" autocomplete="off" wire:model="description" >
+        </div>
+        <div class="form-group col-6">
+            <label for="for_purpose">Propósito general del proyecto o adquisición</label>
+            <input class="form-control" type="text" autocomplete="off" wire:model="purpose" >
+        </div>
+    </div>
+
+    <div class="row g-3 mb-3">
         <fieldset class="form-group col-6">
             <label for="for_user_allowance_id">Unidad Organizacional</label>
             <input class="form-control" type="text" autocomplete="off" wire:model="organizationalUnit" {{ $readonly }} >
@@ -57,11 +66,9 @@
                 ])
             @endif
         </fieldset>
-    </form>
+    </div>
 
-    <br>
-
-    <form class="row g-3">
+    <div class="row g-3">
         <fieldset class="form-group col-6">
             <label for="for_user_allowance_id">Asunto</label>
             <input class="form-control" type="text" autocomplete="off" wire:model="subject">
@@ -74,7 +81,7 @@
                 <option value="2024">2024</option>
             </select>
         </fieldset>
-    </form>
+    </div>
     
     <br>
     <hr>
@@ -107,7 +114,7 @@
         </div>
     @endif
 
-    <form class="row g-3">
+    <div class="row g-3">
         <div class="col-12">
             <button wire:click="savePurchasePlan('save')" class="btn btn-primary float-end" type="button">
                 <i class="fas fa-save"></i> Guardar
@@ -117,7 +124,7 @@
                 <i class="fas fa-paper-plane"></i> Guardar y Enviar
             </button>
         </div>
-    </form>
+    </div>
 
     <br>
     <br>
