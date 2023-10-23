@@ -41,6 +41,8 @@ class OpenHourController extends Controller
 
     public function store(Request $request)
     {
+        $openHour = OpenHour::find($request->openHours_id);
+        
         // valida si existen del paciente con otros funcionarios en la misma hora
         $othersReservationsCount = OpenHour::where('patient_id',$request->user_id)
                                             ->where(function($query) use ($openHour){
