@@ -33,8 +33,8 @@ class CreatePurchasePlan extends Component
         $period;
 
     /* Listeners */
-    public $searchedUser, $searchedProgram, $items;
-    protected $listeners = ['searchedUser', 'searchedProgram', 'savedItems'];
+    public $searchedUser, $searchedProgram, $items, $deletedItems;
+    protected $listeners = ['searchedUser', 'searchedProgram', 'savedItems', 'deletedItems'];
 
     public $readonly = "readonly";
 
@@ -85,6 +85,11 @@ class CreatePurchasePlan extends Component
     public function savedItems($items)
     {
       $this->items = $items;
+    }
+
+    public function deletedItems($items)
+    {
+      $this->deletedItems = $items;
     }
 
     private function setItems($item){
@@ -170,6 +175,9 @@ class CreatePurchasePlan extends Component
         $purchasePlan->estimated_expense = $this->totalForm();
         $purchasePlan->save();
 
+        if($this->deletedItems != null){
+            PurchasePlanItem::destroy($this->deletedItems);
+        }
 
         if($this->purchase_plan_status == 'sent'){
             /* SE ENVÍA AL MODULOS DE APROBACIONES */

@@ -29,5 +29,10 @@ class PurchasePlanItem extends Model implements Auditable
         return $this->belongsTo('App\Models\PurchasePlan\PurchasePlan', 'purchase_plan_id');
     }
 
+    public function getScheduledQuantityAttribute(){
+        return $this->january + $this->february + $this->march + $this->april + $this->may +  $this->june +
+        $this->july + $this->august + $this->september + $this->october + $this->november + $this->december;
+    }
+
     protected $table = 'ppl_purchase_plan_items';
 }

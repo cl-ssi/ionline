@@ -104,17 +104,21 @@
     <table class="table table-bordered table-sm small">
         <thead>
             <tr class="text-center">
-                <th width="" class="table-secondary">#</th>
-                {{-- <th width="" class="table-secondary">Item</th> --}}
-                <th width="" class="table-secondary">Artículo</th>
-                <th width="" class="table-secondary">UM</th>
-                <th width="" class="table-secondary">Especificaciones Técnicas</th>
-                {{--<th width="" class="table-secondary">Archivo</th>--}}
-                <th width="" class="table-secondary">Cantidad</th>
-                <th width="" class="table-secondary">Valor U.</th>
-                <th width="" class="table-secondary">Impuestos</th>
-                <th width="" class="table-secondary">Total Item</th>
-                <th width="" class="table-secondary"></th>
+                <th width="" class="table-secondary" rowspan="2">#</th>
+                {{-- <th width="" class="table-secondary" rowspan="2">Item</th> --}}
+                <th width="" class="table-secondary" rowspan="2">Artículo</th>
+                <th width="" class="table-secondary" rowspan="2">UM</th>
+                <th width="" class="table-secondary" rowspan="2">Especificaciones Técnicas</th>
+                {{--<th width="" class="table-secondary" rowspan="2">Archivo</th>--}}
+                <th width="" class="table-secondary" colspan="2">Cantidad</th>
+                <th width="" class="table-secondary" rowspan="2">Valor U.</th>
+                <th width="" class="table-secondary" rowspan="2">Impuestos</th>
+                <th width="" class="table-secondary" rowspan="2">Total Item</th>
+                <th width="" class="table-secondary" rowspan="2"></th>
+            </tr>
+            <tr>
+                <th class="table-secondary">Solicitados</th>
+                <th class="table-secondary">Programados</th>
             </tr>
         </thead>
         <tbody>
@@ -126,6 +130,7 @@
                 <td>{{ $item->specification }}</td>
                 {{--<td></td>--}}
                 <td>{{ $item->quantity }}</td>
+                <td class="{{ $item->quantity > $item->scheduled_quantity ? 'text-danger' : 'text-success' }}">{{ $item->scheduled_quantity }}</td>
                 <td class="text-end">${{ number_format($item->unit_value, 0, ",", ".") }}</td>
                 <td>{{ $item->tax }}</td>
                 <td class="text-end">${{ number_format($item->expense, 0, ",", ".") }}</td>
