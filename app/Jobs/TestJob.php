@@ -35,7 +35,7 @@ class TestJob implements ShouldQueue
      */
     public function handle()
     {
-        Mail::to($this->user->email_personal)
+        Mail::to($this->user->email)
             ->send(new TestMail($this->user));
     }
 }

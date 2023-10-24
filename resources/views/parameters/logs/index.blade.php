@@ -12,6 +12,8 @@
 
 <h3 class="mb-3">Logs <small> registros totales: {{ $logs->total() }}</small></h3>
 
+@livewire('parameters.mail.test')
+
 @livewire('parameters.log-statistics')
 
 <table class="table table-sm">
