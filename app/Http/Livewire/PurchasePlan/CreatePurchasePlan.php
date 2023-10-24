@@ -182,34 +182,50 @@ class CreatePurchasePlan extends Component
         if($this->purchase_plan_status == 'sent'){
             /* SE ENVÍA AL MODULOS DE APROBACIONES */
 
+            /* APROBACION CORRESPONDIENTE A JEFATURA DEPARTAMENTO O UNIDAD */
+            $prev_approval = $purchasePlan->approvals()->create([
+                "module"                => "Plan de Compras",
+                "module_icon"           => "fas fa-shopping-cart",
+                "subject"               => "Solicitud de Aprobación Jefatura",
+                "approver_ou_id"        => $purchasePlan->organizational_unit_id,
+                "document_route_name"   => "purchase_plan.show_approval",
+                "document_route_params" => json_encode(["purchase_plan_id" => $purchasePlan->id])
+            ]);
+
             /* APROBACION CORRESPONDIENTE A ABASTECIMIENTO */
-            $purchasePlan->approvals()->create([
+            $prev_approval = $purchasePlan->approvals()->create([
                 "module"                => "Plan de Compras",
                 "module_icon"           => "fas fa-shopping-cart",
                 "subject"               => "Solicitud de Aprobación Abastecimiento",
                 "approver_ou_id"        => Parameter::where('module', 'ou')->where('parameter', 'AbastecimientoSSI')->first()->value,
                 "document_route_name"   => "purchase_plan.show_approval",
-                "document_route_params" => json_encode(["purchase_plan_id" => $purchasePlan->id])
+                "document_route_params" => json_encode(["purchase_plan_id" => $purchasePlan->id]),
+                "previous_approval_id"  => $prev_approval->id,
+                "active"                => false
             ]);
 
             /* APROBACION CORRESPONDIENTE A FINANZAS */
-            $purchasePlan->approvals()->create([
+            $prev_approval = $purchasePlan->approvals()->create([
                 "module"                => "Plan de Compras",
                 "module_icon"           => "fas fa-shopping-cart",
                 "subject"               => "Solicitud de Aprobación Depto. Gestión Financiera",
                 "approver_ou_id"        => Parameter::where('module', 'ou')->where('parameter', 'FinanzasSSI')->first()->value,
                 "document_route_name"   => "purchase_plan.show_approval",
-                "document_route_params" => json_encode(["purchase_plan_id" => $purchasePlan->id])
+                "document_route_params" => json_encode(["purchase_plan_id" => $purchasePlan->id]),
+                "previous_approval_id"  => $prev_approval->id,
+                "active"                => false
             ]);
 
             /* APROBACION CORRESPONDIENTE A SDA */
-            $purchasePlan->approvals()->create([
+            $prev_approval = $purchasePlan->approvals()->create([
                 "module"                => "Plan de Compras",
                 "module_icon"           => "fas fa-shopping-cart",
                 "subject"               => "Solicitud de Aprobación Subdir. Recursos Físicos y Financieros",
                 "approver_ou_id"        => Parameter::where('module', 'ou')->where('parameter', 'SDASSI')->first()->value,
                 "document_route_name"   => "purchase_plan.show_approval",
-                "document_route_params" => json_encode(["purchase_plan_id" => $purchasePlan->id])
+                "document_route_params" => json_encode(["purchase_plan_id" => $purchasePlan->id]),
+                "previous_approval_id"  => $prev_approval->id,
+                "active"                => false
             ]);
         }
 

@@ -153,7 +153,7 @@
         </tbody>
         <tfoot>
             <tr>
-                <td colspan="6"></td>
+                <td colspan="7"></td>
                 <th class="text-end">Total</th>
                 <th class="text-end">${{ number_format($purchasePlan->estimated_expense, 0, ",", ".") }}</th>
                 <td></td>

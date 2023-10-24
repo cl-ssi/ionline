@@ -30,7 +30,15 @@
                 <td class="text-left">{{ $purchasePlan->subject }}</td>
             </tr>
             <tr>
-                <th width="30%" class="table-secondary">Funcionario Responsable</th>
+                <th class="table-secondary">Descripción general del proyecto o adquisición</th>
+                <td class="text-left">{{ $purchasePlan->description }}</td>
+            </tr>
+            <tr>
+                <th class="table-secondary">Propósito general del proyecto o adquisición</th>
+                <td class="text-left">{{ $purchasePlan->purpose }}</td>
+            </tr>
+            <tr>
+                <th class="table-secondary">Funcionario Responsable</th>
                 <td class="text-left">{{ $purchasePlan->userResponsible->FullName }}</td>
             </tr>
             <tr>
@@ -75,18 +83,20 @@
 
 <div class="table-responsive">
     <table class="table table-bordered table-sm small">
-        <thead>
+    <thead>
             <tr class="text-center">
-                <th width="" class="table-secondary">#</th>
-                {{-- <th width="" class="table-secondary">Item</th> --}}
-                <th width="" class="table-secondary">Artículo</th>
-                <th width="" class="table-secondary">UM</th>
-                <th width="" class="table-secondary">Especificaciones Técnicas</th>
-                <th width="" class="table-secondary">Archivo</th>
-                <th width="" class="table-secondary">Cantidad</th>
-                <th width="" class="table-secondary">Valor U.</th>
-                <th width="" class="table-secondary">Impuestos</th>
-                <th width="" class="table-secondary">Total Item</th>
+                <th width="" class="table-secondary" rowspan="2">#</th>
+                <th width="" class="table-secondary" rowspan="2">Artículo</th>
+                <th width="" class="table-secondary" rowspan="2">UM</th>
+                <th width="" class="table-secondary" rowspan="2">Especificaciones Técnicas</th>
+                <th width="" class="table-secondary" colspan="2">Cantidad</th>
+                <th width="" class="table-secondary" rowspan="2">Valor U.</th>
+                <th width="" class="table-secondary" rowspan="2">Impuestos</th>
+                <th width="" class="table-secondary" rowspan="2">Total Item</th>
+            </tr>
+            <tr>
+                <th class="table-secondary">Solicitados</th>
+                <th class="table-secondary">Programados</th>
             </tr>
         </thead>
         <tbody>
@@ -96,8 +106,8 @@
                 <td>{{ $item->unspscProduct->name }}</td>
                 <td>{{ $item->unit_of_measurement }}</td>
                 <td>{{ $item->specification }}</td>
-                <td></td>
                 <td>{{ $item->quantity }}</td>
+                <td class="{{ $item->quantity > $item->scheduled_quantity ? 'text-danger' : 'text-success' }}">{{ $item->scheduled_quantity }}</td>
                 <td class="text-end">${{ number_format($item->unit_value, 0, ",", ".") }}</td>
                 <td>{{ $item->tax }}</td>
                 <td class="text-end">${{ number_format($item->expense, 0, ",", ".") }}</td>
@@ -111,6 +121,58 @@
                 <th class="text-end">${{ number_format($purchasePlan->estimated_expense, 0, ",", ".") }}</th>
             </tr>
         </tfoot>
+    </table>
+</div>
+
+<br>
+
+<div class="table-responsive">
+    <table class="table table-bordered table-sm small">
+        <thead>
+            <tr class="text-center">
+                <th class="table-secondary" rowspan="2">#</th>
+                <th class="table-secondary" rowspan="2">Artículo</th>
+                <th class="table-secondary" rowspan="2">UM</th>
+                <th class="table-secondary" rowspan="2">Cantidad</th>
+                <th class="table-secondary" colspan="12">Cantidad programadas por meses</th>
+            </tr>
+            <tr class="text-center">
+                <th class="table-secondary">Ene</th>
+                <th class="table-secondary">Feb</th>
+                <th class="table-secondary">Mar</th>
+                <th class="table-secondary">Abr</th>
+                <th class="table-secondary">May</th>
+                <th class="table-secondary">Jun</th>
+                <th class="table-secondary">Jul</th>
+                <th class="table-secondary">Ago</th>
+                <th class="table-secondary">Sep</th>
+                <th class="table-secondary">Oct</th>
+                <th class="table-secondary">Nov</th>
+                <th class="table-secondary">Dic</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($purchasePlan->purchasePlanItems as $item)
+            <tr class="text-center">
+                <td>{{ $loop->iteration }}</td>
+                <td>{{ $item->unspscProduct->name }}</td>
+                <td>{{ $item->unit_of_measurement }}</td>
+                <td>{{ $item->quantity }}</td>
+                <td>{{ $item->january ?? 0 }}</td>
+                <td>{{ $item->february ?? 0 }}</td>
+                <td>{{ $item->march ?? 0 }}</td>
+                <td>{{ $item->april ?? 0 }}</td>
+                <td>{{ $item->may ?? 0 }}</td>
+                <td>{{ $item->june ?? 0 }}</td>
+                <td>{{ $item->july ?? 0 }}</td>
+                <td>{{ $item->august ?? 0 }}</td>
+                <td>{{ $item->september ?? 0 }}</td>
+                <td>{{ $item->october ?? 0 }}</td>
+                <td>{{ $item->november ?? 0 }}</td>
+                <td>{{ $item->december ?? 0 }}</td>
+            </tr>
+            @endforeach
+        </tbody>
     </table>
 </div>
 
