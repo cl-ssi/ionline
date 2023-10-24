@@ -977,6 +977,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
             Route::get('/budget-availability/{serviceRequest}', [ReportController::class, 'budgetAvailability'])->name('budget-availability');
             Route::get('/compliance', [ReportController::class, 'compliance'])->name('compliance');
             Route::get('/compliance-export', [ReportController::class, 'complianceExport'])->name('compliance-export');
+            Route::get('/my-signatures', [ReportController::class, 'mySignatures'])->name('my-signatures');
 
             Route::get('/fulfillment/pending/{who}', [ReportController::class, 'pending'])->name('fulfillment-pending');
             // Route::get('/fulfillment/rrhh', [ReportController::class, 'pendingRrhh'])->name('pending-rrhh');

@@ -264,6 +264,13 @@
               </a>
             @endcan
 
+            @canany(['Service Request: my signatures','Service Request: fulfillments','Service Request: fulfillments finance',
+                    'Service Request: fulfillments responsable','Service Request: fulfillments rrhh'])
+                <a class="dropdown-item {{ active('rrhh.service-request.report.my-signatures') }}"
+                    href="{{ route('rrhh.service-request.report.my-signatures') }}">
+                    <i class="fas fa-clone"></i> Mis visaciones
+                </a>
+            @endcan
 
             <!-- <div class="dropdown-divider"></div>
 
