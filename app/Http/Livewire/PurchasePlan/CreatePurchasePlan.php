@@ -137,7 +137,8 @@ class CreatePurchasePlan extends Component
                     'purpose'                   => $this->purpose,
                     'program_id'                => $this->searchedProgram->id,
                     'program'                   => $this->searchedProgram->name.' '.$this->searchedProgram->period. ' subtítulo '.$this->searchedProgram->Subtitle->name,
-                    'status'                    => ($this->purchase_plan_status == 'save') ? 'save' : 'sent',
+                    // 'status'                    => ($this->purchase_plan_status == 'save') ? 'save' : 'sent',
+                    'status'                    => $this->purchasePlanToEdit ? $this->purchasePlanToEdit->status : 'save',
                     'period'                    => $this->period
                 ]
             );

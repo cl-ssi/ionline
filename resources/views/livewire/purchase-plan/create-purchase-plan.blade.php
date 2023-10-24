@@ -98,8 +98,7 @@
             <button wire:click="savePurchasePlan('save')" class="btn btn-primary float-end" type="button">
                 <i class="fas fa-save"></i> Guardar
             </button>
-            
-            <button wire:click="savePurchasePlan('sent')" class="btn btn-success float-end me-2" type="button">
+            <button wire:click="savePurchasePlan('sent')" class="btn btn-success float-end me-2" type="button" @if($purchasePlanToEdit->hasApprovals()) disabled @endif>
                 <i class="fas fa-paper-plane"></i> Guardar y Enviar
             </button>
         </div>

@@ -79,16 +79,18 @@
     </table>
 </div>
 
-@if($purchasePlan->status == "save")
+
+
+{{--@if($purchasePlan->canEdit())
 <div class="row">
     <div class="col">
-        <a class="btn btn-primary float-end"
+        <a class="btn btn-primary float-end btn-sm"
             href="{{ route('purchase_plan.edit', $purchasePlan) }}">
             <i class="fas fa-edit"></i> Editar
         </a>
     </div>
 </div>
-@endif
+@endif--}}
 
 <br>
 

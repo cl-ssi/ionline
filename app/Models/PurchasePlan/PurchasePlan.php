@@ -71,6 +71,22 @@ class PurchasePlan extends Model implements Auditable
         return $this->morphMany(Approval::class, 'approvable');
     }
 
+    public function hasApprovals(){
+        return $this->approvals->count() > 0;
+    }
+
+    public function hasFirstApprovalSigned(){
+        return $this->hasApprovals() && $this->approvals->first()->status == true;
+    }
+
+    public function canEdit(){
+        return $this->status == 'save' || !$this->hasFirstApprovalSigned();
+    }
+
+    public function canDelete(){
+        return $this->status == 'save';
+    }
+
     protected $hidden = [
         'created_at', 'updated_at'
     ];
