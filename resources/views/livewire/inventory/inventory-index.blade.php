@@ -9,11 +9,13 @@
         {{ $establishment->name }}: Inventario
     </h4>
 
+    {{-- 
     @livewire('parameters.parameter.single-manager',[
         'module' => 'inventory',
         'parameterName' => 'Encargado de inventario',
         'type' => 'user'
     ])
+    --}}
 
     <div class="form-row g-2 my-3 d-print-none">
         <fieldset class="form-group col-md-3">
