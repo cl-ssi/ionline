@@ -1817,4 +1817,41 @@ class ReportController extends Controller
     $request->flash();
     return view('service_requests.reports.service_request_continuity', compact('request', 'results'));
   }
+
+  public function mySignatures(Request $request){
+    $auth_user_id = Auth::user()->id;
+    $type = $request->type;
+    $user_id = $request->user_id;
+
+    $serviceRequests = null;
+    if($request->year){
+        $serviceRequests = ServiceRequest::whereHas("SignatureFlows", function ($subQuery) use ($auth_user_id) {
+            $subQuery->where('responsable_id', $auth_user_id);
+        })
+        ->when($type == "Pendientes", function ($q) use ($auth_user_id){
+            return $q->whereHas("SignatureFlows", function ($subQuery) use ($auth_user_id) {
+                $subQuery->where('responsable_id', $auth_user_id);
+                $subQuery->whereNull('status');
+            });
+        })
+        ->when($type == "Visadas", function ($q) use ($auth_user_id){
+            return $q->whereHas("SignatureFlows", function ($subQuery) use ($auth_user_id) {
+                $subQuery->where('responsable_id', $auth_user_id);
+                $subQuery->where('status',1);
+            });
+        })
+        ->when($user_id != null, function ($q) use ($user_id){
+            return $q->where('user_id',$user_id);
+        })
+        ->orderBy('id', 'desc')
+        ->whereYear('start_date',$request->year)
+        ->paginate(100);
+    }
+
+    $user = null;
+    if($user_id){$user=User::find($user_id);}
+
+    return view('service_requests.reports.my_signatures', compact('request', 'serviceRequests','user'));
+    
+  }
 }
