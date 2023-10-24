@@ -8,7 +8,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Bus\Queueable;
 use App\User;
 
-class TestMail extends Mailable
+class TestMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
@@ -31,7 +31,6 @@ class TestMail extends Mailable
      */
     public function build()
     {
-        //return $this->from('sistemas.ssi@redsalud.gob.cl')->view('emails.test');
         return $this->view('mails.test');
     }
 }

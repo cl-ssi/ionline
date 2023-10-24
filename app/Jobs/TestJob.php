@@ -35,7 +35,11 @@ class TestJob implements ShouldQueue
      */
     public function handle()
     {
-        Mail::to($this->user->email)
-            ->send(new TestMail($this->user));
+        // try {
+            Mail::to($this->user->email)
+                ->send(new TestMail($this->user));
+        // } catch (\Exception $exception) {
+        //     logger()->info($exception->getMessage());
+        // }
     }
 }
