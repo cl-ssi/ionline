@@ -1,4 +1,4 @@
-@extends('layouts.bt4.app')
+@extends('layouts.bt5.app')
 
 @section('title', 'Crear Usuario')
 
@@ -10,7 +10,7 @@
 <form method="POST" action="{{ route('rrhh.users.store') }}" enctype="multipart/form-data">
     @csrf
 
-    <div class="form-row">
+    <div class="row gx-2">
         <fieldset class="form-group col-2">
             <label for="formGroupIDInput">ID*</label>
             <input type="number" class="form-control" id="formGroupIDInput" name="id" required="required" min="6" max="99999999" step="" autocomplete="off">
@@ -42,7 +42,7 @@
         </fieldset>
     </div>
 
-    <div class="form-row">
+    <div class="form-row row gx-2">
         <fieldset class="form-group col-md-12">
             <label for="forOrganizationalUnit">Establecimiento / Unidad Organizacional</label>
                 @livewire('select-organizational-unit', [
@@ -52,7 +52,7 @@
         </fieldset>
     </div>
 
-    <div class="form-row">
+    <div class="row gx-2">
         <fieldset class="form-group col-12 col-md-6">
             <label for="forPosition">Función que desempeña</label>
             <input type="text" class="form-control" id="forPosition" placeholder="Subdirector(S), Enfermera, Referente..., Jefe." name="position">

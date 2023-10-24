@@ -438,7 +438,7 @@
         }
 
         .card-2 .card-heading {
-            background: url("../images/dinner.jpg") top left/cover no-repeat;
+            background: url("../images/Cuidados-paliativos.jpg") center/cover no-repeat;
             width: 50.1%;
             display: table-cell
         }
