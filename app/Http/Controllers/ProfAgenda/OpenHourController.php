@@ -107,7 +107,7 @@ class OpenHourController extends Controller
         $openHour->save();
 
         //envía correo de confirmación
-        Mail::to($request->user())->send(new OpenHourReservation($openHour));
+        Mail::to($openHour->patient)->send(new OpenHourReservation($openHour));
         
         session()->flash('success', 'Se guardó la información.');
         return redirect()->back();
@@ -122,7 +122,6 @@ class OpenHourController extends Controller
     }
 
     public function delete_reservation(Request $request){
-
         $openHour = OpenHour::find($request->openHours_id);
         $openHour->deleted_bloqued_observation = now() . ": Se eliminó la reserva de " . $openHour->patient->shortName . ". Motivo: " . $request->deleted_bloqued_observation;
         $openHour->patient_id = null;
@@ -130,7 +129,7 @@ class OpenHourController extends Controller
         $openHour->save();
 
         //envía correo de cancelación
-        Mail::to($request->user())->send(new OpenHourCancelation($openHour));
+        Mail::to($openHour->patient)->send(new OpenHourCancelation($openHour));
         
         session()->flash('success', 'Se guardó la información.');
         return redirect()->back();
