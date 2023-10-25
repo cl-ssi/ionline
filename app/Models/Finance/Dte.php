@@ -277,6 +277,11 @@ class Dte extends Model implements Auditable
         return $this->belongsTo(User::class, 'confirmation_user_id');
     }
 
+    public function uploadUser()
+    {
+        return $this->belongsTo(User::class, 'upload_user_id');
+    }
+
     public function getTipoDocumentoInicialesAttribute()
     {
         return strtoupper(implode('', array_map(fn($s) => substr($s, 0, 1), explode("_", $this->tipo_documento))));
@@ -354,11 +359,12 @@ class Dte extends Model implements Auditable
 
     public function getPharmacistAttribute()
     {
-        return $this->confirmationUser->organizationalUnit->currentManager->user ?? null;
+        return $this->uploadUser->organizationalUnit->currentManager->user ?? null;
+        
     }
 
     public function getBossAttribute()
     {
-        return $this->confirmationUser->organizationalUnit->father->currentManager->user ?? null;
+        return $this->uploadUser->organizationalUnit->father->currentManager->user ?? null;
     }
 }
