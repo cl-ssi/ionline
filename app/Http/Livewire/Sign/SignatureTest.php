@@ -67,7 +67,7 @@ class SignatureTest extends Component
             $documentSignService->setBase64Image($base64Image);
             $documentSignService->setPage('LAST');
             $documentSignService->setOtp($this->otp);
-            $documentSignService->setEnvironment('TEST');
+            // $documentSignService->setEnvironment('TEST');
             $documentSignService->setModo('ATENDIDO');
             $documentSignService->sign();
 

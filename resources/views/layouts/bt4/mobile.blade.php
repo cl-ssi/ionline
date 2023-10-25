@@ -50,7 +50,7 @@
 </head>
 <body>
     <div id="app">
-        @include('layouts.partials.nav')
+        @include('layouts.bt4.partials.nav')
         <main class="container-fluid">
             <div class="d-none d-print-block">
                 <strong>{{ env('APP_SS') }}</strong><br>
