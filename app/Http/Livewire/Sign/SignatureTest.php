@@ -15,6 +15,12 @@ class SignatureTest extends Component
     public $message;
     public $type_message;
 
+    /**
+     * How to use
+     *
+     * @livewire('sign.signature-test')
+     */
+
     public function render()
     {
         return view('livewire.sign.signature-test');
