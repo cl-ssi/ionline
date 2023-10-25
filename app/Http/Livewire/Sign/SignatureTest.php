@@ -31,7 +31,7 @@ class SignatureTest extends Component
         /**
          * Setea el user
          */
-        $user = User::find(16966444);
+        $user = auth()->user();
 
         /**
          * Setea el base64Image
@@ -41,7 +41,7 @@ class SignatureTest extends Component
         /**
          * Setea el base64 del pdf
          */
-        $documentBase64Pdf = base64_encode(file_get_contents('http://ionline.test/samples/sample.pdf'));
+        $documentBase64Pdf = base64_encode(file_get_contents(public_path('samples/sample.pdf')));
 
         /**
          * Calculate el eje X
