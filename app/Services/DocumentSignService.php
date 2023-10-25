@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Exceptions\ExceptionSignService;
 use App\Models\Documents\Sign\Signature;
 use App\User;
+use Exception;
 use Firebase\JWT\JWT;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -199,7 +200,7 @@ class DocumentSignService
     /**
      * Firma el documento
      *
-     * @return bool
+     * @return mixed
      */
     public function sign()
     {
@@ -254,7 +255,11 @@ class DocumentSignService
         /**
          * Peticion a la api para firmar
          */
-        $response = Http::withHeaders(['otp' => $this->otp])->post($url, $data);
+        try {
+            $response = Http::withHeaders(['otp' => $this->otp])->post($url, $data);
+        } catch (\Throwable $th) {
+            throw new Exception("No se pudo conectar a firma gobierno.", $th->getCode());
+        }
 
         $json = $response->json();
 
@@ -289,5 +294,7 @@ class DocumentSignService
             base64_decode($json['files'][0]['content']),
             ['CacheControl' => 'no-store']
         );
+
+        return $json;
     }
 }
