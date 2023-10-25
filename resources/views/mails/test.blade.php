@@ -17,7 +17,7 @@
 
             <div class="card">
                 <div class="card-body">
-                    Enviado a: {{ $user->email_personal }}
+                    Enviado a: {{ $user->email }}
                 </div>
             </div>
 

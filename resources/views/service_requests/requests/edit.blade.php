@@ -895,7 +895,7 @@
         <fieldset class="form-group col-12 col-md-2">
           <label for="for_button"><br></label>
             <div>
-            <button type="submit" id="for_button" class="btn btn-primary">Guardar</button>
+            <button type="submit" id="for_button" class="btn btn-primary" @disabled(auth()->user()->godMode)>Guardar</button>
           </div>
         </fieldset>
     </div>

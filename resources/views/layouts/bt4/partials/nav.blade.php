@@ -766,7 +766,7 @@
                         </a>
 
                         <a class="dropdown-item" href="{{ route('welfare.amipass.mi-amipass') }}">
-                            <i class="fas fa-question-circle"></i> Mi Amipass
+                            <i class="fas fa-fw fa-question-circle"></i> Mi Amipass
                         </a>
 
                         <a class="dropdown-item" href="{{ route('welfare.amipass.question-my-index') }}">
@@ -777,7 +777,7 @@
                         <div class="dropdown-divider"></div>
 
                         <a class="dropdown-item" href="{{ route('parameters.logs.index') }}">
-                            <i class="fas fa-cog fa-bomb"></i> Log de errores
+                            <i class="fas fa-fw fa-bomb"></i> Log de errores
                         </a>
                         @endrole
 

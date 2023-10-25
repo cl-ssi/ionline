@@ -1,5 +1,5 @@
 <div class="{{ !$mobile ? 'input-group' : '' }} mb-3">
-    <select class="custom-select" id="establishment_id" name="establishment_id" wire:model="establishment_id"
+    <select class="custom-select form-select" id="establishment_id" name="establishment_id" wire:model="establishment_id"
         wire:change="loadOus" required {{ $readonlyEstablishment ? 'disabled' : '' }}>
         <option value="0"></option>
         @foreach ($establishments->sortBy('official_name') as $establishment)
@@ -7,7 +7,7 @@
         @endforeach
     </select>
 
-    <select class="form-control {{ $selectpicker ? 'selectpicker' : '' }}" id="{{ $selected_id }}"
+    <select class="form-control form-select {{ $selectpicker ? 'selectpicker' : '' }}" id="{{ $selected_id }}"
         name="{{ $selected_id }}" wire:model="organizational_unit_id" style="font-family:monospace;"
         data-live-search="true" id="ou" name="to_ou_id" data-size="10" {{ $required ? 'required' : '' }}>
 

@@ -28,7 +28,7 @@
                 @foreach($programs as $program)
                     <a wire:click="setProgram({{ $program->id }})" wire:click.prevent="addSearchedProgram({{ $program }})"
                         class="list-group-item list-group-item-action"
-                    >{{ $program->name }} </a>
+                    >{{ $program->name }} {{$program->period}} subtítulo {{$program->Subtitle->name}} </a>
                 @endforeach
             @elseif($msg_too_many)
                 <div class="list-group-item list-group-item-info">Hemos encontrado muchas coincidencias</div>

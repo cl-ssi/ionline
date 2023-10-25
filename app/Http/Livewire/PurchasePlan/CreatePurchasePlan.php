@@ -19,12 +19,22 @@ use App\Models\Parameters\Parameter;
 
 class CreatePurchasePlan extends Component
 {
-    public $idPurchasePlan, $userResponsibleId, $telephone, $email, $position, $subdirectorate, $organizationalUnit, 
-        $subject, $period;
+    public $idPurchasePlan, 
+        $userResponsibleId, 
+        $telephone, 
+        $email, 
+        $position,
+        $description,
+        $purpose,
+        $subdirectorate, 
+        $organizationalUnit, 
+        $subject,
+        $program_id,
+        $period;
 
     /* Listeners */
-    public $searchedUser, $searchedProgram, $items;
-    protected $listeners = ['searchedUser', 'searchedProgram', 'savedItems'];
+    public $searchedUser, $searchedProgram, $items, $deletedItems;
+    protected $listeners = ['searchedUser', 'searchedProgram', 'savedItems', 'deletedItems'];
 
     public $readonly = "readonly";
 
@@ -40,9 +50,12 @@ class CreatePurchasePlan extends Component
             'telephone.required'            => 'Debe ingresar un teléfono.',
             'email.required'                => 'Debe ingresar un correo electrónico.',
             'position.required'             => 'Debe ingresar un cargo o función.',
+            'description.required'          => 'Debe ingresar una descripción.',
+            'purpose.required'              => 'Debe ingresar un propósito.',
             'subject.required'              => 'Debe ingresar un asunto.',
             'period.required'               => 'Debe ingresar un periodo',
-            'items.required'                => 'Debe ingresar al menos un item'
+            'items.required'                => 'Debe ingresar al menos un item',
+            'program_id.required'           => 'Debe ingresar un programa'
         ];
     }
 
@@ -65,11 +78,18 @@ class CreatePurchasePlan extends Component
 
     public function searchedProgram(Program $program){
         $this->searchedProgram = $program;
+        $this->program_id = $program->id;
+        $this->period = $program->period;
     }
 
     public function savedItems($items)
     {
       $this->items = $items;
+    }
+
+    public function deletedItems($items)
+    {
+      $this->deletedItems = $items;
     }
 
     private function setItems($item){
@@ -96,8 +116,11 @@ class CreatePurchasePlan extends Component
             'telephone'         => 'required',
             'email'             => 'required',
             'position'          => 'required',
+            'description'       => 'required',
+            'purpose'           => 'required',
             'subject'           => 'required',
             'period'            => 'required',
+            'program_id'        => 'required',
             'items'             => 'required'
         ]);
 
@@ -115,9 +138,12 @@ class CreatePurchasePlan extends Component
                     'organizational_unit_id'    => $this->searchedUser->organizationalUnit->id,
                     'organizational_unit'       => $this->searchedUser->organizationalUnit->name,
                     'subject'                   => $this->subject,
+                    'description'               => $this->description,
+                    'purpose'                   => $this->purpose,
                     'program_id'                => $this->searchedProgram->id,
-                    'program'                   => $this->searchedProgram->name,
-                    'status'                    => ($this->purchase_plan_status == 'save') ? 'save' : 'sent',
+                    'program'                   => $this->searchedProgram->name.' '.$this->searchedProgram->period. ' subtítulo '.$this->searchedProgram->Subtitle->name,
+                    // 'status'                    => ($this->purchase_plan_status == 'save') ? 'save' : 'sent',
+                    'status'                    => $this->purchasePlanToEdit ? $this->purchasePlanToEdit->status : 'save',
                     'period'                    => $this->period
                 ]
             );
@@ -149,38 +175,57 @@ class CreatePurchasePlan extends Component
         $purchasePlan->estimated_expense = $this->totalForm();
         $purchasePlan->save();
 
+        if($this->deletedItems != null){
+            PurchasePlanItem::destroy($this->deletedItems);
+        }
 
         if($this->purchase_plan_status == 'sent'){
             /* SE ENVÍA AL MODULOS DE APROBACIONES */
 
+            /* APROBACION CORRESPONDIENTE A JEFATURA DEPARTAMENTO O UNIDAD */
+            $prev_approval = $purchasePlan->approvals()->create([
+                "module"                => "Plan de Compras",
+                "module_icon"           => "fas fa-shopping-cart",
+                "subject"               => "Solicitud de Aprobación Jefatura",
+                "approver_ou_id"        => $purchasePlan->organizational_unit_id,
+                "document_route_name"   => "purchase_plan.show_approval",
+                "document_route_params" => json_encode(["purchase_plan_id" => $purchasePlan->id])
+            ]);
+
             /* APROBACION CORRESPONDIENTE A ABASTECIMIENTO */
-            $purchasePlan->approvals()->create([
+            $prev_approval = $purchasePlan->approvals()->create([
                 "module"                => "Plan de Compras",
                 "module_icon"           => "fas fa-shopping-cart",
                 "subject"               => "Solicitud de Aprobación Abastecimiento",
                 "approver_ou_id"        => Parameter::where('module', 'ou')->where('parameter', 'AbastecimientoSSI')->first()->value,
                 "document_route_name"   => "purchase_plan.show_approval",
-                "document_route_params" => json_encode(["purchase_plan_id" => $purchasePlan->id])
+                "document_route_params" => json_encode(["purchase_plan_id" => $purchasePlan->id]),
+                "previous_approval_id"  => $prev_approval->id,
+                "active"                => false
             ]);
 
             /* APROBACION CORRESPONDIENTE A FINANZAS */
-            $purchasePlan->approvals()->create([
+            $prev_approval = $purchasePlan->approvals()->create([
                 "module"                => "Plan de Compras",
                 "module_icon"           => "fas fa-shopping-cart",
                 "subject"               => "Solicitud de Aprobación Depto. Gestión Financiera",
                 "approver_ou_id"        => Parameter::where('module', 'ou')->where('parameter', 'FinanzasSSI')->first()->value,
                 "document_route_name"   => "purchase_plan.show_approval",
-                "document_route_params" => json_encode(["purchase_plan_id" => $purchasePlan->id])
+                "document_route_params" => json_encode(["purchase_plan_id" => $purchasePlan->id]),
+                "previous_approval_id"  => $prev_approval->id,
+                "active"                => false
             ]);
 
             /* APROBACION CORRESPONDIENTE A SDA */
-            $purchasePlan->approvals()->create([
+            $prev_approval = $purchasePlan->approvals()->create([
                 "module"                => "Plan de Compras",
                 "module_icon"           => "fas fa-shopping-cart",
                 "subject"               => "Solicitud de Aprobación Subdir. Recursos Físicos y Financieros",
                 "approver_ou_id"        => Parameter::where('module', 'ou')->where('parameter', 'SDASSI')->first()->value,
                 "document_route_name"   => "purchase_plan.show_approval",
-                "document_route_params" => json_encode(["purchase_plan_id" => $purchasePlan->id])
+                "document_route_params" => json_encode(["purchase_plan_id" => $purchasePlan->id]),
+                "previous_approval_id"  => $prev_approval->id,
+                "active"                => false
             ]);
         }
 
@@ -201,6 +246,8 @@ class CreatePurchasePlan extends Component
             $this->program_id           = $this->purchasePlanToEdit->program_id;
             $this->subject              = $this->purchasePlanToEdit->subject;
             $this->period               = $this->purchasePlanToEdit->period;
+            $this->description          = $this->purchasePlanToEdit->description;
+            $this->purpose              = $this->purchasePlanToEdit->purpose;
 
             foreach($this->purchasePlanToEdit->purchasePlanItems as $item){
                 $this->setItems($item);

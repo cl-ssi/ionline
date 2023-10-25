@@ -218,7 +218,7 @@ class StoreController extends Controller
         {
             $dte->update([
                 'confirmation_status' => 1,
-                'cenabast_signed_boss' => true,
+                'cenabast_signed_boss' => 1,
                 'confirmation_user_id' => auth()->id(),
                 'confirmation_ou_id' => auth()->user()->organizational_unit_id,
                 'confirmation_at' => now(),

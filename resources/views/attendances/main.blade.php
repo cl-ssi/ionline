@@ -442,7 +442,7 @@
         }
 
         .card-2 .card-heading {
-            background: url('../images/dinner.jpg') top left/cover no-repeat;
+            background: url('../images/Cuidados-paliativos.png') center/cover no-repeat;
             width: 50.1%;
             display: table-cell
         }
@@ -478,17 +478,27 @@
         Gracias por confirmar su asistencia a la fiesta
     </div> --}}
 
-
         <div class="page-wrapper bg-green p-t-180 p-b-100 font-robo">
             <div class="wrapper wrapper--w960">
                 <div class="card card-2">
                     <div class="card-heading"></div>
                     <div class="card-body">
-                        <h2 class="title">Gracias por su Confirmación, {{ $nombre }}</h2>
+                        <h2 class="title">Gracias por marcar su asistencia, {{ $nombre }}</h2>
+
+                        <h4>Asistencia 2 Noviembre</h4>
+                        <p>Asistencia Mañana: {{ $persona->asistencia_dia_1 ? 'MARCADO' : 'NO MARCADO' }}</p>
+
+                        <hr>
+                        <br>
+
+                        <h4>Asistencia 3 Noviembre</h4>
+                        <p>Asistencia Mañana: {{ $persona->asistencia_dia_2 ? 'MARCADO' : 'NO MARCADO' }}</p>
+                        <p>Asistencia Tarde: {{ $persona->asistencia_tarde_2 ? 'MARCADO' : 'NO MARCADO' }} </p>
                     </div>
                 </div>
             </div>
         </div>
+
 </body>
 
 </html>

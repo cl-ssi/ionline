@@ -85,6 +85,6 @@ class NoAttendanceRecordIndex extends Component
                 })
                 ->latest()
                 ->paginate(50),
-        ])->extends('layouts.bt4.app');
+        ])->extends('layouts.bt5.app');
     }
 }

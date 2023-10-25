@@ -14,6 +14,11 @@ class SearchPurchasePlan extends Component
 
     public $index;
 
+    public function delete(PurchasePlan $purchasePlan)
+    {
+        $purchasePlan->delete();
+    }
+
     public function render()
     {
         if($this->index == 'own'){

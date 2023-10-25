@@ -80,11 +80,11 @@ class Program extends Model implements Auditable
         $array_search = explode(' ', $searchText);
         foreach($array_search as $word){
             $programs->where(function($q) use($word){
-                $q->where('name', 'LIKE', '%'.$word.'%')
-                ->where('period', Carbon::now()->year);
+                $q->where('name', 'LIKE', '%'.$word.'%');
+                // ->where('period', Carbon::now()->year);
             });
         }
 
-        return $programs;
+        return $programs->where('period', '>=', 2024);
     }
 }
