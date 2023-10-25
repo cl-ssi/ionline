@@ -100,10 +100,10 @@
 				@can('Service Request: fulfillments responsable')
 				@if(Auth::user()->id == $serviceRequest->signatureFlows->where('sign_position',2)->first()->responsable_id or App\Rrhh\Authority::getAmIAuthorityFromOu(now(),['manager'],Auth::user()->id))
 				@if($fulfillment->responsable_approver_id == NULL)
-				<a type="button" class="btn btn-danger" onclick="return confirm('Una vez confirmado, no podrá modificar la información. ¿Está seguro de rechazar?');" href="{{ route('rrhh.service-request.fulfillment.refuse-Fulfillment',$fulfillment) }}">
+				<a type="button" class="btn btn-danger" @disabled(auth()->user()->godMode) onclick="return confirm('Una vez confirmado, no podrá modificar la información. ¿Está seguro de rechazar?');" href="{{ route('rrhh.service-request.fulfillment.refuse-Fulfillment',$fulfillment) }}">
 					Rechazar
 				</a>
-				<a type="button" class="btn btn-success" onclick="return confirm('Una vez confirmado, no podrá modificar la información. ¿Está seguro de confirmar?');" href="{{ route('rrhh.service-request.fulfillment.confirm-Fulfillment',$fulfillment) }}">
+				<a type="button" class="btn btn-success" @disabled(auth()->user()->godMode) onclick="return confirm('Una vez confirmado, no podrá modificar la información. ¿Está seguro de confirmar?');" href="{{ route('rrhh.service-request.fulfillment.confirm-Fulfillment',$fulfillment) }}">
 					Confirmar
 				</a>
 				@else
@@ -271,10 +271,10 @@
 						</div>
 						<div class="col-3 text-right">
 							@if($fulfillment->rrhh_approver_id == NULL)
-							<a type="button" class="btn btn-danger" onclick="return confirm('Una vez rechazado, no podrá modificar la información. ¿Está seguro de rechazar?');" href="{{ route('rrhh.service-request.fulfillment.refuse-Fulfillment',$fulfillment) }}">
+							<a type="button" class="btn btn-danger" @disabled(auth()->user()->godMode) onclick="return confirm('Una vez rechazado, no podrá modificar la información. ¿Está seguro de rechazar?');" href="{{ route('rrhh.service-request.fulfillment.refuse-Fulfillment',$fulfillment) }}">
 								Rechazar
 							</a>
-							<a type="button" class="btn btn-success" onclick="return confirm('Una vez confirmado, no podrá modificar la información. ¿Está seguro de confirmar?');" href="{{ route('rrhh.service-request.fulfillment.confirm-Fulfillment',$fulfillment) }}">
+							<a type="button" class="btn btn-success" @disabled(auth()->user()->godMode) onclick="return confirm('Una vez confirmado, no podrá modificar la información. ¿Está seguro de confirmar?');" href="{{ route('rrhh.service-request.fulfillment.confirm-Fulfillment',$fulfillment) }}">
 								Confirmar
 							</a>
 							@else
@@ -384,10 +384,10 @@
 						</div>
 						<div class="col-3 text-right">
 							@if($fulfillment->finances_approver_id == NULL)
-							<a type="button" class="btn btn-danger" onclick="return confirm('Una vez confirmado, no podrá modificar la información. ¿Está seguro de rechazar?');" href="{{ route('rrhh.service-request.fulfillment.refuse-Fulfillment',$fulfillment) }}">
+							<a type="button" class="btn btn-danger" @disabled(auth()->user()->godMode) onclick="return confirm('Una vez confirmado, no podrá modificar la información. ¿Está seguro de rechazar?');" href="{{ route('rrhh.service-request.fulfillment.refuse-Fulfillment',$fulfillment) }}">
 								Rechazar
 							</a>
-							<a type="button" class="btn btn-success" onclick="return confirm('Una vez confirmado, no podrá modificar la información. ¿Está seguro de confirmar?');" href="{{ route('rrhh.service-request.fulfillment.confirm-Fulfillment',$fulfillment) }}">
+							<a type="button" class="btn btn-success" @disabled(auth()->user()->godMode) onclick="return confirm('Una vez confirmado, no podrá modificar la información. ¿Está seguro de confirmar?');" href="{{ route('rrhh.service-request.fulfillment.confirm-Fulfillment',$fulfillment) }}">
 								Confirmar
 							</a>
 							@else

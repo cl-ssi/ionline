@@ -72,7 +72,7 @@
                             value="{{ $SignatureFlow->observation }}" wire:model.defer="observation">
                         </td>
                         <td>
-                            <button class="btn btn-sm btn-primary" wire:click="saveSignatureFlow({{ $SignatureFlow->id }})">Guardar</button>
+                            <button class="btn btn-sm btn-primary" @disabled(auth()->user()->godMode) wire:click="saveSignatureFlow({{ $SignatureFlow->id }})">Guardar</button>
                         </td>
                     @else
                         <td>
@@ -101,7 +101,7 @@
                     @canany(['Service Request: additional data rrhh'])
                         <td>
                             @if($SignatureFlow->serviceRequest->SignatureFlows->whereNull('status')->count() > 0)
-                            <button class="btn btn-sm btn-outline-primary" wire:click="edit({{$SignatureFlow}})">
+                            <button class="btn btn-sm btn-outline-primary" wire:click="edit({{$SignatureFlow}})" @disabled(auth()->user()->godMode)>
                                 <span class="fas fa-edit" aria-hidden="true"></span>
                             </button>
                             @endif
@@ -139,8 +139,8 @@
                     value="{{ $SignatureFlow->observation }}" wire:model.defer="edit_observation">
                 </td>
                 <td>
-                    <button class="btn btn-sm btn-outline-primary" wire:click="save()">Guardar</button>
-                    <button class="btn btn-sm btn-outline-danger" wire:click="delete()">Eliminar</button>
+                    <button class="btn btn-sm btn-outline-primary" wire:click="save()" @disabled(auth()->user()->godMode)>Guardar</button>
+                    <button class="btn btn-sm btn-outline-danger" wire:click="delete()" @disabled(auth()->user()->godMode)>Eliminar</button>
                 </td>
             </tr>
             </tbody>

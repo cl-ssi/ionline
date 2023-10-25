@@ -434,8 +434,8 @@
         }
 
         .card-2 .card-heading {
-            background: url('../images/dinner.jpg') top left/cover no-repeat;
-            width: 50.1%;
+            background: url('../images/Cuidados-paliativos.png') center/cover no-repeat;
+            width: 50%;
             display: table-cell
         }
 
@@ -485,13 +485,30 @@
             <div class="card card-2">
                 <div class="card-heading"></div>
                 <div class="card-body">
-                    <h2 class="title">Confirmación Asistencia</h2>
+                    <h2 class="title">Asistencia II Jornada en Cuidados Paliativos</h2>
                     <form method="POST" action="{{ route('attendances.login') }}">
                         @csrf
 
                         <div class="input-group">
                             <input class="input--style-2" type="text" placeholder="Digite su RUN" maxlength="12" name="rut" id="rut" required autocomplete="off">
                         </div>
+
+                        <div class="input-group">
+                            <select class="form-select" aria-label=".form-select-lg example" name="fecha">
+                                <option selected>Escoga la Fecha</option>
+                                <option value="2">02 Noviembre</option>
+                                <option value="3">03 Noviembre</option>
+                            </select>
+                        </div>
+
+                        <div class="input-group">
+                            <select class="form-select" aria-label=".form-select-lg example" name="jornada">
+                                <option selected>Escoga la Jornada</option>
+                                <option value="dia">Mañana</option>
+                                <option value="tarde">Tarde</option>
+                            </select>
+                        </div>
+
                         <div class="p-t-30">
                             <button class="btn btn--radius btn--green" type="submit">Enviar</button>
                         </div>

@@ -977,6 +977,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
             Route::get('/budget-availability/{serviceRequest}', [ReportController::class, 'budgetAvailability'])->name('budget-availability');
             Route::get('/compliance', [ReportController::class, 'compliance'])->name('compliance');
             Route::get('/compliance-export', [ReportController::class, 'complianceExport'])->name('compliance-export');
+            Route::get('/my-signatures', [ReportController::class, 'mySignatures'])->name('my-signatures');
 
             Route::get('/fulfillment/pending/{who}', [ReportController::class, 'pending'])->name('fulfillment-pending');
             // Route::get('/fulfillment/rrhh', [ReportController::class, 'pendingRrhh'])->name('pending-rrhh');
@@ -1970,6 +1971,10 @@ Route::prefix('finance')->as('finance.')->middleware(['auth', 'must.change.passw
 
     Route::get('/{dte}/download', [DteController::class, 'downloadManualDteFile'])->name('dtes.downloadManualDteFile');
 
+    Route::get('/{dte}/download', [DteController::class, 'downloadManualDteFile'])->name('dtes.downloadManualDteFile');
+
+    Route::get('dte/pending-receipt-certificate/{tray?}', [DteController::class, 'pendingReceiptCertificate'])->name('dtes.pendingReceiptCertificate');
+
     Route::get('dtes/upload', UploadDtes::class)->name('dtes.upload');
     Route::get('dtes/{dte}/confirmation', DteConfirmation::class)->name('dtes.confirmation');
     Route::prefix('payments')->as('payments.')->group(function () {
@@ -1997,6 +2002,7 @@ Route::prefix('purchase_plan')->as('purchase_plan.')->middleware(['auth', 'must.
     Route::get('/{purchasePlan}/show', [PurchasePlanController::class, 'show'])->name('show');
     Route::get('/{purchase_plan_id}/show_approval', [PurchasePlanController::class, 'show_approval'])->name('show_approval');
     Route::get('/{purchasePlan}/edit', [PurchasePlanController::class, 'edit'])->name('edit');
+    Route::delete('/{purchasePlan}/destroy', [PurchasePlanController::class, 'destroy'])->name('destroy');
 });
 
 /*formulario de requerimiento compra o servicio */

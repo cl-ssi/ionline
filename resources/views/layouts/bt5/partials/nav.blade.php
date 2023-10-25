@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-lg navbar-dark shadow-sm bg-nav-gobierno">
-    <div class="container">
+    <div class="container px-5">
         <a class="navbar-brand" href="{{ route('home') }}">
             {{ config('app.name', 'Laravel') }}
         </a>
@@ -766,18 +766,18 @@
                         </a>
 
                         <a class="dropdown-item" href="{{ route('welfare.amipass.mi-amipass') }}">
-                            <i class="fas fa-question-circle"></i> Mi Amipass
+                            <i class="fas fa-fw fa-question-circle"></i> Mi Amipass
                         </a>
 
                         <a class="dropdown-item" href="{{ route('welfare.amipass.question-my-index') }}">
-                            <i class="fas fa-question-circle"></i> {{ __('Consultas/Sugerencia Amipass') }}
+                            <i class="fas fa-fw fa-question-circle"></i> {{ __('Consultas/Sugerencia Amipass') }}
                         </a>
 
                         @role('god')
                         <div class="dropdown-divider"></div>
 
                         <a class="dropdown-item" href="{{ route('parameters.logs.index') }}">
-                            <i class="fas fa-cog fa-bomb"></i> Log de errores
+                            <i class="fas fa-fw fa-bomb"></i> Log de errores
                         </a>
                         @endrole
 

@@ -340,7 +340,14 @@ class JobPositionProfileController extends Controller
      */
     public function destroy(JobPositionProfile $jobPositionProfile)
     {
-        dd('hola');
+        $jobPositionProfile->roles()->delete();
+        $jobPositionProfile->jppLiabilities()->delete();
+        $jobPositionProfile->jppExpertises()->delete();
+        $jobPositionProfile->jobPositionProfileSigns()->delete();
+        $jobPositionProfile->delete();
+
+        session()->flash('success', 'Estimado Usuario, se ha eliminado exitosamente el perfil de cargo');
+        return redirect()->route('job_position_profile.index');
     }
 
     public function create_document(JobPositionProfile $jobPositionProfile){

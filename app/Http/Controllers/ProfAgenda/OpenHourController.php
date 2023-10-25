@@ -5,16 +5,20 @@ namespace App\Http\Controllers\ProfAgenda;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-use App\Models\ProfAgenda\OpenHour;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use App\User;
+use Illuminate\Support\Facades\Mail;
+
+use App\Models\ProfAgenda\OpenHour;
+use App\Mail\OpenHourReservation;
+use App\Mail\OpenHourCancelation;
 
 class OpenHourController extends Controller
 {
 
     public function index(Request $request)
-    {
+    {   
         $user_id_param = $request->user_id;
         $patient_id_param = $request->patient_id;
         $assistance_param = $request->assistance;
@@ -38,7 +42,7 @@ class OpenHourController extends Controller
     public function store(Request $request)
     {
         $openHour = OpenHour::find($request->openHours_id);
-
+        
         // valida si existen del paciente con otros funcionarios en la misma hora
         $othersReservationsCount = OpenHour::where('patient_id',$request->user_id)
                                             ->where(function($query) use ($openHour){
@@ -101,6 +105,9 @@ class OpenHourController extends Controller
         $openHour->patient_id = $user->id;
         $openHour->observation = $request->observation;
         $openHour->save();
+
+        //envía correo de confirmación
+        Mail::to($openHour->patient)->send(new OpenHourReservation($openHour));
         
         session()->flash('success', 'Se guardó la información.');
         return redirect()->back();
@@ -120,6 +127,9 @@ class OpenHourController extends Controller
         $openHour->patient_id = null;
         $openHour->observation = null;
         $openHour->save();
+
+        //envía correo de cancelación
+        Mail::to($openHour->patient)->send(new OpenHourCancelation($openHour));
         
         session()->flash('success', 'Se guardó la información.');
         return redirect()->back();

@@ -98,6 +98,8 @@ class PurchasePlanController extends Controller
      */
     public function destroy(PurchasePlan $purchasePlan)
     {
-        //
+        $purchasePlan->delete();
+        session()->flash('success', 'Estimado Usuario, se ha eliminado exitosamente el plan de compra');
+        return redirect()->back();
     }
 }
