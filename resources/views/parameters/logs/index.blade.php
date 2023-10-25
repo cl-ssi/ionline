@@ -14,6 +14,8 @@
 
 @livewire('parameters.mail.test')
 
+@livewire('sign.signature-test')
+
 @livewire('parameters.log-statistics')
 
 <table class="table table-sm">

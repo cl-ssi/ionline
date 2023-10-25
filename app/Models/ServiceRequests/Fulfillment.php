@@ -2,17 +2,19 @@
 
 namespace App\Models\ServiceRequests;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use OwenIt\Auditing\Contracts\Auditable;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Http\Request;
-use App\Models\ServiceRequests\Denomination1121;
-use App\Models\ServiceRequests\DenominationFormula;
 use app\User;
-use Carbon\Carbon;
+use OwenIt\Auditing\Contracts\Auditable;
+use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use DatePeriod;
 use DateInterval;
+use Carbon\Carbon;
+use App\Models\ServiceRequests\DenominationFormula;
+use App\Models\ServiceRequests\Denomination1121;
+use App\Models\Documents\Approval;
 
 class Fulfillment extends Model implements Auditable
 {
@@ -119,6 +121,14 @@ class Fulfillment extends Model implements Auditable
   public function attachments() {
     return $this->hasMany('App\Models\ServiceRequests\Attachment');
 }
+
+    /**
+     * Get the approval model.
+     */
+    public function approval(): MorphOne
+    {
+        return $this->morphOne(Approval::class, 'approvable');
+    }
 
   public function scopeSearch($query, Request $request)
   {

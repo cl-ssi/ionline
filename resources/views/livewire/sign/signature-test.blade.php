@@ -1,5 +1,5 @@
 <div>
-    <div class="row">
+    <div class="row mb-3">
         <div class="col-4">
             <div class="input-group">
                 <input
@@ -11,7 +11,7 @@
                 >
                 <div class="input-group-append">
                     <button
-                        class="btn btn-sm btn-primary"
+                        class="btn btn-primary"
                         wire:click="sign"
                         wire:target="sign"
                         wire:loading.attr="disabled"
@@ -29,9 +29,8 @@
                             wire:loading.remove
                             wire:target="sign"
                         >
-                            <i class="fas fa-check"></i>
                         </span>
-                        Prueba Firma Gobierno
+                        Prueba Firma
                     </button>
                 </div>
             </div>
