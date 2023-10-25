@@ -1,17 +1,10 @@
 <div>
-    <div class="row">
+    <div class="row mb-3">
         <div class="col-4">
             <div class="input-group">
-                <input
-                    type="text"
-                    class="form-control"
-                    placeholder="OTP"
-                    aria-label="OTP"
-                    wire:model.defer="otp"
-                >
-                <div class="input-group-append">
+                <div class="input-group-prepend">
                     <button
-                        class="btn btn-sm btn-primary"
+                        class="btn btn-primary"
                         wire:click="sign"
                         wire:target="sign"
                         wire:loading.attr="disabled"
@@ -29,11 +22,17 @@
                             wire:loading.remove
                             wire:target="sign"
                         >
-                            <i class="fas fa-check"></i>
                         </span>
-                        Prueba Firma Gobierno
+                        Prueba Firma
                     </button>
                 </div>
+                <input
+                    type="text"
+                    class="form-control"
+                    placeholder="OTP"
+                    aria-label="OTP"
+                    wire:model.defer="otp"
+                >
             </div>
         </div>
         <div class="col-8">
