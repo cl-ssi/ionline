@@ -29,6 +29,11 @@ class SignatureTest extends Component
     public function sign()
     {
         /**
+         * Setea el message en null;
+         */
+        $this->message = null;
+
+        /**
          * Setea el user
          */
         $user = auth()->user();
