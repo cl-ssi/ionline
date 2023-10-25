@@ -2,7 +2,14 @@
     <div class="row mb-3">
         <div class="col-4">
             <div class="input-group">
-                <div class="input-group-prepend">
+                <input
+                    type="text"
+                    class="form-control"
+                    placeholder="OTP"
+                    aria-label="OTP"
+                    wire:model.defer="otp"
+                >                
+                <div class="input-group-append">
                     <button
                         class="btn btn-primary"
                         wire:click="sign"
@@ -26,13 +33,6 @@
                         Prueba Firma
                     </button>
                 </div>
-                <input
-                    type="text"
-                    class="form-control"
-                    placeholder="OTP"
-                    aria-label="OTP"
-                    wire:model.defer="otp"
-                >
             </div>
         </div>
         <div class="col-8">
