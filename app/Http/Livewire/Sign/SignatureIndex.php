@@ -107,7 +107,6 @@ class SignatureIndex extends Component
                 $documentSignService->setBase64Image($base64Image);
                 $documentSignService->setPage($signature->page);
                 $documentSignService->setOtp($this->otp);
-                $documentSignService->setEnvironment('TEST');
                 $documentSignService->setModo('ATENDIDO');
                 $documentSignService->sign();
 
