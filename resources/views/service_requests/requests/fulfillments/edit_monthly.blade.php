@@ -93,6 +93,10 @@
 							<button type="button" data-toggle="modal" class="btn btn-outline-info" data-target="#signPdfModal{{$idModelModal}}" title="Firmar">
 								Firmar certificado <i class="fas fa-signature"></i>
 							</button>
+
+                            @if($fulfillment->approval)
+                                @livewire('documents.approval-button',['approval' => $fulfillment->approval])
+                            @endif
 						@endif
 					@else
 						<div class="alert alert-warning" role="alert">
@@ -102,24 +106,24 @@
 			</fieldset>
 			<fieldset class="form-group col text-right">
 				@can('Service Request: fulfillments responsable')
-				@if(Auth::user()->id == $serviceRequest->signatureFlows->where('sign_position',2)->first()->responsable_id or App\Rrhh\Authority::getAmIAuthorityFromOu(now(),['manager'],Auth::user()->id))
-				@if($fulfillment->responsable_approver_id == NULL)
-				<a type="button" class="btn btn-danger" @disabled(auth()->user()->godMode) onclick="return confirm('Una vez confirmado, no podrá modificar la información. ¿Está seguro de rechazar?');" href="{{ route('rrhh.service-request.fulfillment.refuse-Fulfillment',$fulfillment) }}">
-					Rechazar
-				</a>
-				<a type="button" class="btn btn-success" @disabled(auth()->user()->godMode) onclick="return confirm('Una vez confirmado, no podrá modificar la información. ¿Está seguro de confirmar?');" href="{{ route('rrhh.service-request.fulfillment.confirm-Fulfillment',$fulfillment) }}">
-					Confirmar
-				</a>
-				@else
-				<button class="btn btn-danger" disabled>Rechazar</button>
-				<button class="btn btn-success" disabled>Confirmar</button>
-				@endif
-				@endif
+                    @if(Auth::user()->id == $serviceRequest->signatureFlows->where('sign_position',2)->first()->responsable_id or App\Rrhh\Authority::getAmIAuthorityFromOu(now(),['manager'],Auth::user()->id))
+                        @if($fulfillment->responsable_approver_id == NULL)
+                        <a type="button" class="btn btn-danger" @disabled(auth()->user()->godMode) onclick="return confirm('Una vez confirmado, no podrá modificar la información. ¿Está seguro de rechazar?');" href="{{ route('rrhh.service-request.fulfillment.refuse-Fulfillment',$fulfillment) }}">
+                            Rechazar
+                        </a>
+                        <a type="button" class="btn btn-success" @disabled(auth()->user()->godMode) onclick="return confirm('Una vez confirmado, no podrá modificar la información. ¿Está seguro de confirmar?');" href="{{ route('rrhh.service-request.fulfillment.confirm-Fulfillment',$fulfillment) }}">
+                            Confirmar
+                        </a>
+                        @else
+                        <button class="btn btn-danger" disabled>Rechazar</button>
+                        <button class="btn btn-success" disabled>Confirmar</button>
+                        @endif
+                    @endif
 				@endcan
 				@can('Service Request: delete signed certificate')
-        		<a class="btn btn-outline-danger" href="{{ route('rrhh.service-request.fulfillment.delete-responsable-vb',$fulfillment) }}" title="Borrar Aprobación Responsable" onclick="return confirm('¿Está seguro que desea eliminar las aprobaciones del cumplimiento, deberá contactar a responsable para que vuelva a dar VB')">
-					<i class="fas fa-trash"></i> Aprobación
-				</a>
+                    <a class="btn btn-outline-danger" href="{{ route('rrhh.service-request.fulfillment.delete-responsable-vb',$fulfillment) }}" title="Borrar Aprobación Responsable" onclick="return confirm('¿Está seguro que desea eliminar las aprobaciones del cumplimiento, deberá contactar a responsable para que vuelva a dar VB')">
+                        <i class="fas fa-trash"></i> Aprobación
+                    </a>
         		@endcan
 			</fieldset>
 		</div>
