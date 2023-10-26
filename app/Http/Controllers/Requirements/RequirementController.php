@@ -1220,11 +1220,15 @@ class RequirementController extends Controller
         }
 
 
-        /** Manda correso a el listado de emails */
+        /** Manda correos a el listado de emails */
         if (env('APP_ENV') == 'production') {
             preg_match_all("/[\._a-zA-Z0-9-]+@[\._a-zA-Z0-9-]+/i", $emails, $emails_validos);
-            Mail::to($emails_validos[0])
-                ->send(new RequirementNotification($requirement));
+            try {
+                Mail::to($emails_validos[0])
+                    ->send(new RequirementNotification($requirement));
+            } catch (\Exception $exception) {
+                logger()->error($exception->getMessage());
+            }
         }
 
         session()->flash('info', 'Los requerimientos han sido creados.');
@@ -1392,11 +1396,16 @@ class RequirementController extends Controller
         }
 
         /** Manda correso a el listado de emails */
-        // if (env('APP_ENV') == 'production') {
+        if (env('APP_ENV') == 'production') {
             preg_match_all("/[\._a-zA-Z0-9-]+@[\._a-zA-Z0-9-]+/i", $emails, $emails_validos);
-            Mail::to($emails_validos[0])
-                ->send(new RequirementNotification($requirement));
-        // }
+            try {
+                Mail::to($emails_validos[0])
+                    ->send(new RequirementNotification($requirement));
+            } catch (\Exception $exception) {
+                logger()->error($exception->getMessage());
+            }
+
+        }
 
         session()->flash('info', 'Los requerimientos han sido creados.');
 
