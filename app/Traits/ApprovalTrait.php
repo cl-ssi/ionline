@@ -70,7 +70,7 @@ trait ApprovalTrait
              * Firmo el archivo con el trait
              */
             try {
-                $this->signFile(auth()->user(), 'center', 1, 80, $pdfBase64, $this->otp, $approvalSelected->filename);
+                $this->signFile(auth()->user(), $this->position, $row = 1, $this->start_y, $pdfBase64, $this->otp, $approvalSelected->filename);
             } catch (\Throwable $th) {
                 $this->message = $th->getMessage();
                 return;
@@ -78,12 +78,11 @@ trait ApprovalTrait
         }
 
         /**
-         * Si viene un nombre de archivo y no es de firma electrónica, 
-         * entonces geenramos 
+         * Si viene un nombre de archivo y no es de firma electrónica, generar el pdf y guardar en storage
          */
         if ($approvalSelected->filename AND !$approvalSelected->digital_signature) {
             /**
-             * Obtiene el archivo desde el controller y sus parametros
+             * Obtiene el archivo desde el controller y sus parametros y genera el PDF
              */
             $show_controller_method = Route::getRoutes()->getByName($approvalSelected->document_route_name)->getActionName();
             $response = app()->call($show_controller_method, json_decode($approvalSelected->document_route_params, true));
