@@ -105,6 +105,10 @@ trait ApprovalTrait
          */
         $this->dismiss();
 
+        /**
+         * Si se especificó una ruta de redirección, entones luego de aprobaro o rechazar
+         * se redirecionará a la ruta
+         */
         if($this->redirect_route){
             return redirect()->route($this->redirect_route);
         }

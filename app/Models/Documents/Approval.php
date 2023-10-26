@@ -75,7 +75,12 @@ class Approval extends Model
          *
          *
          *  5. (Opcional) Puedes incorporar un botón de Aprobación en tu módulo con este livewire:
-         *      @livewire('documents.approval-button', ['approval' => $approval, 'redirect_route' => null, 'button_label' => null])
+         *      @livewire('documents.approval-button', [
+         *          'approval' => $approval, 
+         *          'redirect_route' => null, // (opcional) Redireccionar a una ruta despues de aprobar/rechazar
+         *          'button_text' => null, // (Opcional) Texto del boton
+         *          'button_size' => null, // (Opcional) Tamaño del boton: btn-sm, btn-lg, etc.
+         *      ])
          * 
          **/
 

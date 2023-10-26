@@ -74,9 +74,11 @@
                             Debido a la intermitencia de firma digital del gobierno si ud. no consigue firmar el certificado de forma tradicional,
                             le rogamos aprobar el certificado de con el botón "Aprobación Alternativa".
                             <br><br>
-                            @livewire('documents.approval-button',['approval' => $fulfillment->approval, 
-                                                                    'redirect_route' => 'home',
-                                                                    'button_text' => 'Aprobación Alternativa'])
+                            @livewire('documents.approval-button', [
+                                'approval' => $fulfillment->approval, 
+                                'redirect_route' => 'home',
+                                'button_text' => 'Aprobación Alternativa',
+                            ])
                             
                         @else
                             Debido a la intermitencia de firma digital del gobierno si ud. no consigue firmar el certificado de forma tradicional, 
