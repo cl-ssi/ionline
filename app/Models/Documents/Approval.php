@@ -124,6 +124,7 @@ class Approval extends Model
 
             /**
              * Ejemplo de método del controlador que procesa el callback
+             * ============================================================
              * Este bloque de código va en el DteController, según el ejemplo de arriba.
              **/
             // public function process($approval_id, $param1, $param2) {
@@ -131,26 +132,17 @@ class Approval extends Model
             // }
 
 
+
             /**
              * Relación polimórfica
+             * ==============================================================
              * Agregar esta relación al modelo que quieres que tenga approvals
              * Ejemplo: Modelo RequestForm, y luego podrías llamrla así:
              * $requestForm->approvals (tendría una colección de approvals)
              **/
 
-
-             /** Para one to many **/
-
-             /**
-             * Get all of the approvations of a model.
-             */
-            // public function approvals(): MorphMany
-            // {
-            //     return $this->morphMany(Approval::class, 'approvable');
-            // }
-
-
-            /** Para One to One */
+            /**      Para One to One     */
+            /* ========================= */
 
             /**
              * Get the approval model.
@@ -158,6 +150,17 @@ class Approval extends Model
             // public function approval(): MorphOne
             // {
             //     return $this->morphOne(Approval::class, 'approvable');
+            // }
+
+            /**     Para one to many    **/
+            /* ========================= */
+
+            /**
+             * Get all of the approvations of a model.
+             */
+            // public function approvals(): MorphMany
+            // {
+            //     return $this->morphMany(Approval::class, 'approvable');
             // }
 
 
@@ -292,6 +295,21 @@ class Approval extends Model
             default: return 'fa-clock'; break;
         }
     }
+
+    /**
+    * Reset approval a su estado pendiente
+    */
+    public function resetStatus()
+    {
+        $this->status = null;
+        $this->approver_at = null;
+
+        if($this->approver_ou_id) {
+            $this->approver_id = null;
+        }
+        $this->save();
+    }
+
 
     public function getFilenameLinkAttribute()
     {
