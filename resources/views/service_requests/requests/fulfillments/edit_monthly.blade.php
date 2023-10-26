@@ -65,6 +65,33 @@
 			@livewire('service-request.fulfillment-absences', ['fulfillment' => $fulfillment])
 		@endif
 
+        <!-- Aprobación alternativa de certificados de cumplimiento - vía módulo de solicitud de aprobaciones. -->
+        @if(!$fulfillment->signatures_file_id && $fulfillment->responsable_approbation)
+            <div class="form-row">
+                <fieldset class="form-group col">
+                    <div class="alert alert-primary" role="alert">
+                        @if($fulfillment->approval)
+                            Debido a la intermitencia de firma digital del gobierno si ud. no consigue firmar el certificado de forma tradicional,
+                            le rogamos aprobar el certificado de con el botón "Aprobación Alternativa".
+                            <br><br>
+                            @livewire('documents.approval-button',['approval' => $fulfillment->approval, 
+                                                                    'redirect_route' => 'home',
+                                                                    'button_text' => 'Aprobación Alternativa'])
+                            
+                        @else
+                            Debido a la intermitencia de firma digital del gobierno si ud. no consigue firmar el certificado de forma tradicional, 
+                            le rogamos presionar el botón "Activar Aprobación Alternativa", con el cual se visualizará botón para realizar dicho proceso.
+                            <br><br>
+                            <a type="button" class="btn btn-warning" href="{{ route('rrhh.service-request.fulfillment.approval-activation',$fulfillment) }}">
+                                Activar Aprobación Alternativa <i class="fas fa-signature"></i>
+                            </a>
+                        @endif
+                        
+                    </div>
+                </fieldset>   
+            </div>
+        @endif
+
 		<div class="form-row">
 			<fieldset class="form-group col">
 					@if($fulfillment->responsable_approbation != NULL)
@@ -80,7 +107,7 @@
 
 							@can('Service Request: delete signed certificate')
 								<a class="btn btn-outline-danger" href="{{ route('rrhh.service-request.fulfillment.delete-signed-certificate-pdf',$fulfillment) }}" title="Borrar Certificado" onclick="return confirm('¿Está seguro que desea eliminar el certificado de cumplimiento firmado?')">
-								<i class="fas fa-trash"></i> Certificado
+								    <i class="fas fa-trash"></i> Certificado
 								</a>
 							@endcan
 						@else
@@ -93,10 +120,6 @@
 							<button type="button" data-toggle="modal" class="btn btn-outline-info" data-target="#signPdfModal{{$idModelModal}}" title="Firmar">
 								Firmar certificado <i class="fas fa-signature"></i>
 							</button>
-
-                            @if($fulfillment->approval)
-                                @livewire('documents.approval-button',['approval' => $fulfillment->approval])
-                            @endif
 						@endif
 					@else
 						<div class="alert alert-warning" role="alert">
@@ -104,6 +127,7 @@
 						</div>
 				  @endif
 			</fieldset>
+
 			<fieldset class="form-group col text-right">
 				@can('Service Request: fulfillments responsable')
                     @if(Auth::user()->id == $serviceRequest->signatureFlows->where('sign_position',2)->first()->responsable_id or App\Rrhh\Authority::getAmIAuthorityFromOu(now(),['manager'],Auth::user()->id))
@@ -127,7 +151,6 @@
         		@endcan
 			</fieldset>
 		</div>
-
 
 		<!--archivos adjuntos-->
 		<div class="card">

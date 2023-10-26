@@ -105,6 +105,11 @@ trait ApprovalTrait
          * Cierra el modal
          */
         $this->dismiss();
+
+        if($this->redirect_route){
+            return redirect()->route($this->redirect_route);
+        }
+ 
     }
 
 }

@@ -11,6 +11,8 @@ class ApprovalButton extends Component
     use ApprovalTrait;
 
     public Approval $approval;
+    public $redirect_route = null;
+    public $button_text = null;
 
     public $showModal = false;
     public $reject_observation;
