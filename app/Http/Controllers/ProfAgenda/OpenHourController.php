@@ -107,7 +107,9 @@ class OpenHourController extends Controller
         $openHour->save();
 
         //envía correo de confirmación
-        Mail::to($openHour->patient)->send(new OpenHourReservation($openHour));
+        if($openHour->patient){
+            Mail::to($openHour->patient)->send(new OpenHourReservation($openHour));
+        }
         
         session()->flash('success', 'Se guardó la información.');
         return redirect()->back();
@@ -129,7 +131,9 @@ class OpenHourController extends Controller
         $openHour->save();
 
         //envía correo de cancelación
-        Mail::to($openHour->patient)->send(new OpenHourCancelation($openHour));
+        if($openHour->patient){
+            Mail::to($openHour->patient)->send(new OpenHourCancelation($openHour));
+        }
         
         session()->flash('success', 'Se guardó la información.');
         return redirect()->back();
