@@ -2,7 +2,9 @@
 
 namespace App\Traits;
 
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Route;
+use App\Traits\SingleSignature;
 use App\Models\Documents\Approval;
 use App\Jobs\ProcessApproval;
 
@@ -43,6 +45,19 @@ trait ApprovalTrait
      */
     public function approveOrReject(Approval $approvalSelected, bool $status)
     {
+        /**
+         * Guardar los datos del aprobacion o rechazo
+         */
+        $approvalSelected->approver_ou_id = $approvalSelected->approver_ou_id ?? auth()->user()->organizational_unit_id;
+        $approvalSelected->approver_id = auth()->id();
+        $approvalSelected->approver_at = now();
+        $approvalSelected->status = $status;
+        $approvalSelected->reject_observation = $this->reject_observation;
+        $approvalSelected->save();
+
+        /**
+         * Si el approval es de tipo firma digital y fue aprobado
+         */
         if($approvalSelected->digital_signature && $status == true) {
             /*
              * Consulto el archivo desde la ruta y obtengo el base64
@@ -63,14 +78,21 @@ trait ApprovalTrait
         }
 
         /**
-         * Guardar los datos del aprobacion o rechazo
+         * Si viene un nombre de archivo y no es de firma electrónica, 
+         * entonces geenramos 
          */
-        $approvalSelected->approver_ou_id = auth()->user()->organizational_unit_id;
-        $approvalSelected->approver_id = auth()->id();
-        $approvalSelected->approver_at = now();
-        $approvalSelected->status = $status;
-        $approvalSelected->reject_observation = $this->reject_observation;
-        $approvalSelected->save();
+        if ($approvalSelected->filename AND !$approvalSelected->digital_signature) {
+            /**
+             * Obtiene el archivo desde el controller y sus parametros
+             */
+            $show_controller_method = Route::getRoutes()->getByName($approvalSelected->document_route_name)->getActionName();
+            $response = app()->call($show_controller_method, json_decode($approvalSelected->document_route_params, true));
+
+            /**
+             * Guarda el archivo en el storage
+             */
+            Storage::disk('gcs')->put($approvalSelected->filename, $response->original, ['CacheControl' => 'no-store']);
+        }
 
         /*
          * Si tiene un callback, se ejecuta en cola

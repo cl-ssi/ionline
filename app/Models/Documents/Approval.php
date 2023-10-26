@@ -75,15 +75,6 @@ class Approval extends Model
             //     ]),
 
             /**
-             * Ejemplo de método del controlador que procesa el callback
-             * Este bloque de código va en el DteController, según el ejemplo de arriba.
-             **/
-            // public function process($approval_id, $param1, $param2) {
-            //     logger()->info('Prueba de callback modulo aprobaciones: id ' . $approval_id. ' param1: '. $param1);
-            // }
-
-
-            /**
              * (Opcional) True(default) or False, setear en false si queremos desactivar la aprobación
              * Esto es necesario principalmente cuando es en cadena, se deja activa sólo la primera
              * y todas las demás quedan en false, más abajo hay un ejemplo de aprobaciones en cadena
@@ -108,6 +99,39 @@ class Approval extends Model
 
 
             /**
+             * (Opcional / obligatorio) ruta con nombre del archivo que se guardará en el storage, 
+             * Es obligatorio para cuando tiene la opción digital_signature en true
+             * y opcional para cuando está en false
+             * ej: ionline/documents/modulo/id (sin extensión)
+             */ 
+            //"filename" => "ionline/documents/approvals/archivo",
+
+            /**
+             * Opciones para utilizar firma electrónica avanzada en vez de aprobación simple
+             * ==============================================================================
+             */
+            /* (Opcional) True or False(default), Si requiere firma electrónica en vez de aprobación simple */
+            //"digital_signature" => true,
+
+            /* (Opcional) Posición ("columna") de la firma en el documento: center, left, right */
+            //"position" => "center",
+
+            /* (Opcional) Margen inferior: Distancia desde el final de la hoja hacia arriba usualmente 80 */
+            //"startY" => 80,
+
+
+
+
+            /**
+             * Ejemplo de método del controlador que procesa el callback
+             * Este bloque de código va en el DteController, según el ejemplo de arriba.
+             **/
+            // public function process($approval_id, $param1, $param2) {
+            //     logger()->info('Prueba de callback modulo aprobaciones: id ' . $approval_id. ' param1: '. $param1);
+            // }
+
+
+            /**
              * Relación polimórfica
              * Agregar esta relación al modelo que quieres que tenga approvals
              * Ejemplo: Modelo RequestForm, y luego podrías llamrla así:
@@ -125,6 +149,7 @@ class Approval extends Model
             //     return $this->morphMany(Approval::class, 'approvable');
             // }
 
+
             /** Para One to One */
 
             /**
@@ -134,6 +159,7 @@ class Approval extends Model
             // {
             //     return $this->morphOne(Approval::class, 'approvable');
             // }
+
 
             /**
              * Ejemplo para crear y asociar al mismo tiempo:
@@ -145,21 +171,8 @@ class Approval extends Model
              **/
 
 
-            /**
-             * Opciones para utilizar firma electrónica avanzada en vez de aprobación simple
-             * ==============================================================================
-             */
-            /* (Opcional) True or False(default), Si requiere firma electrónica en vez de aprobación simple */
-            //"digital_signature" => true,
 
-            /* (Opcional) Posición ("columna") de la firma en el documento: center, left, right */
-            //"position" => "center",
 
-            /* (Opcional) Margen inferior: Distancia desde el final de la hoja hacia arriba usualmente 80 */
-            //"startY" => 80,
-
-            /* (Opcional) ruta con nombre del archivo que se guardará en el storage, ej: ionline/documents/modulo/id (sin extensión)*/
-            //"filename" => "ionline/documents/approvals/archivo",
         ]);
     }
 
