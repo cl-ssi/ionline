@@ -620,7 +620,7 @@ class DigitalSignatureController extends Controller
             return [
                 'statusOk' => false,
                 'content' => '',
-                'errorMsg' => $response->reason(),
+                'errorMsg' => 'FirmaGob está presentando inestabilidad - ' . $response->reason(),
             ];
         }
 
