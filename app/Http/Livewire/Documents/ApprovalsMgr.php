@@ -21,6 +21,9 @@ class ApprovalsMgr extends Component
     public $otp;
     public $message;
 
+    /** Utilizada por el approval-button */
+    public $redirect_route;
+
     /**
      * @param  Approval  $approval
      * @return void
