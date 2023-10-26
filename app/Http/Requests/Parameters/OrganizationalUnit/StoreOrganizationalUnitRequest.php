@@ -27,9 +27,9 @@ class StoreOrganizationalUnitRequest extends FormRequest
             'name'                      => 'required|string|max:255',
             'establishment_id'          => 'required|exists:establishments,id',
             'organizational_unit_id'    => 'required|exists:organizational_units,id',
-            'sirh_function'             => 'required|integer',
-            'sirh_ou_id'                => 'required|unique:organizational_units,sirh_ou_id',
-            'sirh_cost_center'          => 'required|integer'
+            'sirh_function'             => 'nullable|integer',
+            'sirh_ou_id'                => 'nullable|unique:organizational_units,sirh_ou_id',
+            'sirh_cost_center'          => 'nullable|integer'
         ];
     }
 }
