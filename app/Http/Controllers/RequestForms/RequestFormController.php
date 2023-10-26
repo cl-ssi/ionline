@@ -34,6 +34,7 @@ use App\Models\RequestForms\ItemRequestForm;
 use App\Models\RequestForms\OldSignatureFile;
 use App\Models\RequestForms\Passenger;
 use App\Models\RequestForms\PassengerChanged;
+use App\Models\RequestForms\RequestFormFile;
 use Illuminate\Http\Response;
 use Illuminate\Support\Arr;
 use Maatwebsite\Excel\Facades\Excel;
@@ -387,7 +388,7 @@ class RequestFormController extends Controller {
 
     public function create_view_document(RequestForm $requestForm, $has_increased_expense){
 
-        if($has_increased_expense){
+        if($has_increased_expense && $has_increased_expense != 11){ // has_increased_expense = 11 => upload by user
             $requestForm->has_increased_expense = true;
             $requestForm->new_estimated_expense = $requestForm->estimated_expense + $requestForm->eventRequestForms()->where('status', 'pending')->where('event_type', 'budget_event')->first()->purchaser_amount;
             $requestForm->load('itemRequestForms.latestPendingItemChangedRequestForms', 'passengers.latestPendingPassengerChanged');
@@ -783,6 +784,60 @@ class RequestFormController extends Controller {
 
     public function show_amounts_by_program(){
         return view('request_form.reports.show_amounts_by_program');
+    }
+
+    public function upload_form_document(Request $request, RequestForm $requestForm){
+        // return $requestForm;
+        $requestForm->load('eventRequestForms');
+        $event = $requestForm->eventRequestForms->where('event_type', 'finance_event')->where('status', 'pending')->first();
+        $currentFinanceManager = OrganizationalUnit::find($event->ou_signer_user)->currentManager;
+        if(!is_null($event)){
+          $event->signature_date = Carbon::now();
+          $event->position_signer_user = $currentFinanceManager->position;
+          $event->status  = 'approved';
+          $event->comment = 'Formulario cargado por el solicitante';
+          $event->signerUser()->associate($currentFinanceManager->user_id);
+          $event->save();
+
+          //Subir al storage archivo pdf con firmas a mano
+          $reqFile = new RequestFormFile();
+          $file_name = Carbon::now()->format('Y_m_d_H_i_s')." FR_".$requestForm->folio;
+          $reqFile->name = $file_name;
+          $reqFile->file = $request->docSigned->storeAs('/ionline/request_forms/request_files', $file_name.'.'.$request->docSigned->extension(), 'gcs');
+          $reqFile->request_form_id = $requestForm->id;
+          $reqFile->user_id = Auth()->user()->id;
+          $reqFile->save();
+
+          $requestForm->signatures_file_id = 11;
+          $requestForm->save();
+      
+          $nextEvent = $event->requestForm->eventRequestForms->where('cardinal_number', $event->cardinal_number + 1);
+
+          if(!$nextEvent->isEmpty()){
+            //Envío de notificación para visación.
+            $now = Carbon::now();
+            //manager
+            $type = 'manager';
+            /* FIX: @mirandaljorge si no hay manager en Authority, se va a caer */
+            $mail_notification_ou_manager = Authority::getAuthorityFromDate($nextEvent->first()->ou_signer_user, Carbon::now(), $type);
+
+            $emails = [$mail_notification_ou_manager->user->email];
+
+            if (env('APP_ENV') == 'production' OR env('APP_ENV') == 'testing') {
+              if($mail_notification_ou_manager){
+                  Mail::to($emails)
+                  ->cc(env('APP_RF_MAIL'))
+                  ->send(new RequestFormSignNotification($requestForm, $nextEvent->first()));
+              }
+            }
+          }
+
+          session()->flash('info', 'Formulario de Requerimientos Nro.'.$requestForm->folio.' AUTORIZADO correctamente!');
+          return redirect()->route('request_forms.my_forms');
+        }
+
+      session()->flash('danger', 'Formulario de Requerimientos Nro.'.$requestForm->folio.' NO se puede Autorizar!');
+      return redirect()->route('request_forms.my_forms');
     }
 
 }

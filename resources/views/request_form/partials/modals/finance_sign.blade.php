@@ -1,5 +1,5 @@
 <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div wire:ignore.self class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
@@ -25,12 +25,19 @@
         @endphp
 
         @include('documents.signatures.partials.sign_file')
-
+        
+        {{--@if(auth()->user()->OrganizationalUnit->establishment_id == App\Models\Parameters\Parameter::where('parameter', 'SSTarapaca')->first()->value)
+        <input type="file" wire:model.defer="docSigned" name="docSigned" id="docSigned" wire:click="resetError">
+        <div wire:loading wire:target="docSigned">Cargando archivo...</div>
+        @error('docSigned') <span class="error text-danger">{{ $message }}</span> @enderror
+        <button type="button" wire:click="acceptRequestFormByFinance" class="btn btn-primary btn-sm float-right" wire:loading.attr="disabled">Autorizar</button>
+        @else--}}
         <button type="button" data-toggle="modal" class="btn btn-primary btn-sm float-right"
             title="Firma Digital"
             data-target="#signPdfModal{{$idModelModal}}" title="Firmar">
               Firmar Form. <i class="fas fa-signature"></i>
         </button>
+        {{--@endif--}}
       </div>
     </div>
   </div>

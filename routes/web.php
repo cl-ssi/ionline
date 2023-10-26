@@ -2107,6 +2107,7 @@ Route::prefix('request_forms')->as('request_forms.')->middleware(['auth', 'must.
     /* DOCUMENTS */
     Route::get('/create_form_document/{requestForm}/{has_increased_expense}', [RequestFormController::class, 'create_form_document'])->name('create_form_document');
     Route::get('/create_view_document/{requestForm}/{has_increased_expense}', [RequestFormController::class, 'create_view_document'])->name('create_view_document');
+    Route::post('/upload_form_document/{requestForm}', [RequestFormController::class, 'upload_form_document'])->name('upload_form_document');
     Route::get('/create_internal_purchase_order_document/{purchasingProcessDetail}', [InternalPurchaseOrderController::class, 'create_internal_purchase_order_document'])->name('create_internal_purchase_order_document');
 
     Route::get('/{requestForm}/edit', [RequestFormController::class, 'edit'])->name('edit');
