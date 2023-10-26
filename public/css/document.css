@@ -107,8 +107,9 @@ br {
 }
 
 .signature {
-    float: left;
+    display: inline-block;
     padding-right: 3px;
+    padding-bottom: 4px;
 }
 
 .danger {
