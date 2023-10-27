@@ -8,7 +8,7 @@
                     placeholder="OTP"
                     aria-label="OTP"
                     wire:model.defer="otp"
-                >                
+                >
                 <div class="input-group-append">
                     <button
                         class="btn btn-primary"
