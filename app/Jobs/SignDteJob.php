@@ -36,6 +36,9 @@ class SignDteJob implements ShouldQueue
     /**
      * Create a new job instance.
      *
+     * @param  mixed  $user_id
+     * @param  mixed  $dte_id
+     * @param  string  $otp
      * @return void
      */
     public function __construct($user_id, $dte_id, string $otp)
@@ -152,7 +155,8 @@ class SignDteJob implements ShouldQueue
             }
         } catch (Exception $e) {
             /**
-             * Si se produce un error, elimino el job. No tiene sentido dejar el job en fallidos porque el OTP ya vencio.-//
+             * Si se produce un error, se elimina el job.
+             * No tiene sentido dejar el job en fallidos porque el OTP ya vencio.-//
              */
             $this->failed($e);
 
