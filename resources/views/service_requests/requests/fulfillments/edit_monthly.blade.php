@@ -76,7 +76,8 @@
                             <br><br>
                             @livewire('documents.approval-button', [
                                 'approval' => $fulfillment->approval, 
-                                'redirect_route' => 'home',
+                                'redirect_route' => 'rrhh.service-request.fulfillment.edit',
+                                'redirect_parameter' => $fulfillment->serviceRequest->id,
                                 'button_text' => 'Aprobación Alternativa',
                             ])
                             

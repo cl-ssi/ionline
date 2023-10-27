@@ -23,6 +23,7 @@ class ApprovalsMgr extends Component
 
     /** Utilizada por el approval-button */
     public $redirect_route;
+    public $redirect_parameter;
 
     /**
      * @param  Approval  $approval

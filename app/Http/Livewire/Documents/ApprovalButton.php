@@ -17,11 +17,13 @@ class ApprovalButton extends Component
      *      @livewire('documents.approval-button', [
      *          'approval' => $approval, 
      *          'redirect_route' => null, // (opcional) Redireccionar a una ruta despues de aprobar/rechazar
+     *          'redirect_parameter' => null, // (opcional) Corresponde al id de la ruta 
      *          'button_text' => null, // (Opcional) Texto del boton, ej: "Boton de aprobación"
      *          'button_size' => null, // (Opcional) Tamaño del boton, ej: 'btn-sm', 'btn-lg', etc.
      *      ])
      */
     public $redirect_route = null;
+    public $redirect_parameter = null;
     public $button_text = null;
     public $button_size = null;
 

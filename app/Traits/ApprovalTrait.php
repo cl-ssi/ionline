@@ -110,9 +110,8 @@ trait ApprovalTrait
          * se redirecionará a la ruta
          */
         if($this->redirect_route){
-            return redirect()->route($this->redirect_route);
+            return redirect()->route($this->redirect_route, $this->redirect_parameter);
         }
- 
     }
 
 }
