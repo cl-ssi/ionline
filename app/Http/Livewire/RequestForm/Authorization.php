@@ -14,17 +14,24 @@ use Carbon\Carbon;
 use App\User;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\RequestFormSignNotification;
+use App\Mail\RfEndNewBudgetSignNotification;
 use App\Mail\RfEndSignNotification;
 use App\Models\Parameters\Parameter;
 use App\Models\Parameters\Program;
+use App\Models\RequestForms\OldSignatureFile;
+use App\Models\RequestForms\RequestFormFile;
+use App\Rrhh\OrganizationalUnit;
 use Illuminate\Support\Facades\Auth;
+use Livewire\WithFileUploads;
 
 class Authorization extends Component
 {
+    use WithFileUploads;
+
     public $organizationalUnit, $userAuthority, $position, $requestForm, $eventType, $comment, $program, $program_id, $lstProgram;
     public $lstSupervisorUser, $supervisorUser, $title, $route, $sigfe, $financial_type;
     public $purchaseUnit, $purchaseType, $lstPurchaseType, $lstPurchaseUnit, $lstPurchaseMechanism, $purchaseMechanism;
-    public $estimated_expense, $new_estimated_expense, $purchaser_observation, $files;
+    public $estimated_expense, $new_estimated_expense, $purchaser_observation, $files, $docSigned;
 
     protected $rules = [
         'comment' => 'required|min:6',
@@ -218,6 +225,129 @@ class Authorization extends Component
       return redirect()->route($this->route);
     }
 
+    public function acceptRequestFormByFinance()
+    {
+      $this->validate(
+        [ 'docSigned' => 'required|mimes:pdf'], [ 'docSigned.required' => 'Seleccione archivo PDF.' ]
+      );
+
+      if($this->eventType == 'budget_event'){ // Form. solicitud aumento de presupuesto
+        $this->requestForm->load('eventRequestForms', 'itemRequestForms.latestPendingItemChangedRequestForms', 'passengers.latestPendingPassengerChanged');
+        // Modificar items
+        if($this->requestForm->itemRequestForms){
+          foreach($this->requestForm->itemRequestForms as $item){
+            if($item->latestPendingItemChangedRequestForms){
+                $fieldsToChange = array_filter($item->latestPendingItemChangedRequestForms->only(['quantity', 'unit_value', 'specification', 'tax', 'expense']));
+                $item->update($fieldsToChange);
+                $item->latestPendingItemChangedRequestForms->update(['status' => 'approved']);
+            }
+          }
+        }
+        //Modificar pasajeros
+        if($this->requestForm->passengers){
+          foreach($this->requestForm->passengers as $passenger){
+            if($passenger->latestPendingPassengerChanged){
+                $fieldsToChange = array_filter($passenger->latestPendingPassengerChanged->only(['unit_value']));
+                $passenger->update($fieldsToChange);
+                $passenger->latestPendingPassengerChanged->update(['status' => 'approved']);
+            }
+          }
+        }
+
+        //ACTUALIZAO EVENTO DE FINANZAS
+        $event = $this->requestForm->eventRequestForms->where('event_type', 'budget_event')->where('status', 'pending')->first();
+        $event->update([
+          'signature_date'       => Carbon::now(),
+          'position_signer_user' => $this->position,
+          'status'               => 'approved',
+          'signer_user_id'       => auth()->id(),
+          'comment'              => $this->comment
+        ]);
+
+        $oldSignatureFile = new OldSignatureFile();
+        $oldSignatureFile->request_form_id = $this->requestForm->id;
+        $oldSignatureFile->old_signature_file_id = $this->requestForm->signatures_file_id;
+        $oldSignatureFile->save();
+
+        $this->requestForm->has_increased_expense = true;
+        $this->requestForm->estimated_expense = $this->requestForm->estimated_expense + $event->purchaser_amount;
+        // $requestForm->old_signatures_file_id = $requestForm->signatures_file_id;
+        $this->requestForm->signatures_file_id = 11;
+        $this->requestForm->save();
+
+        //Subir al storage archivo pdf con firmas a mano
+        $reqFile = new RequestFormFile();
+        $file_name = Carbon::now()->format('Y_m_d_H_i_s')."_FR_".$this->requestForm->folio;
+        $reqFile->name = $file_name;
+        $reqFile->file = $this->docSigned->storeAs('/ionline/request_forms/request_files', $file_name.'.'.$this->docSigned->extension(), 'gcs');
+        $reqFile->request_form_id = $this->requestForm->id;
+        $reqFile->user_id = Auth()->user()->id;
+        $reqFile->save();
+
+        $emails = [$this->requestForm->user->email,
+                  $this->requestForm->contractManager->email,
+                  $this->requestForm->eventPurchaserNewBudget()->email
+              ];
+
+        Mail::to($emails)
+        ->cc(env('APP_RF_MAIL'))
+        ->send(new RfEndNewBudgetSignNotification($this->requestForm));
+
+        session()->flash('info', 'Formulario de Requerimientos Nro.'.$this->requestForm->folio.' AUTORIZADO correctamente!');
+        return redirect()->route($this->route);
+        
+      }else{ // Form. normal
+        $event = $this->requestForm->eventRequestForms()->where('event_type', 'finance_event')->where('status', 'pending')->first();
+        if(!is_null($event)){
+          $event->signature_date = Carbon::now();
+          $event->position_signer_user = $this->position;
+          $event->status  = 'approved';
+          $event->comment = $this->comment;
+          $event->signerUser()->associate(auth()->user());
+          $event->save();
+
+          //Subir al storage archivo pdf con firmas a mano
+          $reqFile = new RequestFormFile();
+          $file_name = Carbon::now()->format('Y_m_d_H_i_s')."_FR_".$this->requestForm->folio;
+          $reqFile->name = $file_name;
+          $reqFile->file = $this->docSigned->storeAs('/ionline/request_forms/request_files', $file_name.'.'.$this->docSigned->extension(), 'gcs');
+          $reqFile->request_form_id = $this->requestForm->id;
+          $reqFile->user_id = Auth()->user()->id;
+          $reqFile->save();
+
+          $this->requestForm->signatures_file_id = 11;
+          $this->requestForm->save();
+      
+          $nextEvent = $event->requestForm->eventRequestForms->where('cardinal_number', $event->cardinal_number + 1);
+
+          if(!$nextEvent->isEmpty()){
+            //Envío de notificación para visación.
+            $now = Carbon::now();
+            //manager
+            $type = 'manager';
+            /* FIX: @mirandaljorge si no hay manager en Authority, se va a caer */
+            $mail_notification_ou_manager = Authority::getAuthorityFromDate($nextEvent->first()->ou_signer_user, Carbon::now(), $type);
+
+            $emails = [$mail_notification_ou_manager->user->email];
+
+            if (env('APP_ENV') == 'production' OR env('APP_ENV') == 'testing') {
+              if($mail_notification_ou_manager){
+                  Mail::to($emails)
+                  ->cc(env('APP_RF_MAIL'))
+                  ->send(new RequestFormSignNotification($this->requestForm, $nextEvent->first()));
+              }
+            }
+          }
+
+          session()->flash('info', 'Formulario de Requerimientos Nro.'.$this->requestForm->folio.' AUTORIZADO correctamente!');
+          return redirect()->route($this->route);
+        }
+      }
+
+      session()->flash('danger', 'Formulario de Requerimientos Nro.'.$this->requestForm->folio.' NO se puede Autorizar!');
+      return redirect()->route($this->route);
+    }
+
 
     public function rejectRequestForm() {
       $this->validate();
@@ -249,6 +379,10 @@ class Authorization extends Component
       return redirect()->route($this->route);
     }
 
+    public function updatedDocSigned($value)
+    {
+      $this->docSigned = $value;
+    }
 
     public function render() {
         return view('livewire.request-form.authorization');

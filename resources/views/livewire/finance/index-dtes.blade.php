@@ -198,7 +198,7 @@
                         <td colspan="11">
 
                             <div class="form-row">
-                                <div class="form-group col-md-3">
+                                <div class="form-group col-md-2">
                                     <label for="for_folio_oc">Folio OC</label>
                                     <input type="text" class="form-control" id="for_folio_oc"
                                         wire:model.defer="folio_oc">
@@ -206,34 +206,58 @@
 
                                 <div class="form-group col-md-2">
                                     <label for="for_monto_total">Monto Total</label>
-                                    <input type="text" class="form-control" id="for_folio_oc" wire:model.defer="monto_total" disabled>
+                                    <input type="text" class="form-control" id="for_folio_oc"
+                                        wire:model.defer="monto_total" disabled>
                                 </div>
                                 @switch($dte->tipo_documento)
                                     @case('guias_despacho')
                                     @case('nota_credito')
+
                                     @case('nota_debito')
                                         <!-- TODO: Si es guia, se puede asociar a multiple
-                                            si es nota de crédito o débito se debería poder asociar sólo a una 
-                                            preguntar a gina o juan toro -->
-                                        <div class="form-group col-md-5">
-                                            <label for="for_asociate">Asociar a Factura</label>
-                                            <select multiple  class="form-control" id="for_asociate" wire:model.defer="asociate_invoices">
-                                                @foreach($facturasEmisor as $factura)
-                                                <option value="{{ $factura->id }}">
-                                                    {{ $factura->folio }} ( $ {{ money($factura->monto_total) }} ) </option>
+                                                                            si es nota de crédito o débito se debería poder asociar sólo a una
+                                                                            preguntar a gina o juan toro -->
+                                        <div class="form-group col-md-4">
+                                            <label for="for_asociate">Asociar a Factura - ID DTE:</label>
+                                            <select multiple class="form-control" id="for_asociate"
+                                                wire:model.defer="asociate_invoices">
+                                                @foreach ($facturasEmisor as $factura)
+                                                    <option value="{{ $factura->id }}">
+                                                        {{ $factura->folio }} ( $ {{ money($factura->monto_total) }} ) - ID
+                                                        DTE: {{ $factura->id }}
+                                                    </option>
                                                 @endforeach
                                             </select>
                                         </div>
-                                        @break
+                                    @break
+
                                     @case('factura_electronica')
                                     @case('factura_exenta')
+
                                     @case('boleta_honorarios')
                                     @case('boleta_electronica')
-                                        @break
+                                    @break
                                 @endswitch
+
+
+
+                                <div class="form-group col-md-4">
+                                    <label for="for_asociate">Operaciones:</label>
+                                    <button type="submit" class="btn btn-primary"
+                                        wire:click="save({{ $dte->id }})">Guardar </button>
+                                    <button type="button" class="btn btn-outline-secondary"
+                                        wire:click="dismiss">Cancelar </button>
+                                </div>
+
+
 
                             </div>
 
+                            {{-- 
+
+                            TODO
+                            
+                            
                             <div class="form-row">
                                 <div class="form-group col-md-3">
                                     <label for="for_confirmation_status">Estado de confirmación</label>
@@ -252,7 +276,7 @@
                             <button type="submit" class="btn btn-outline-secondary"
                                 wire:click="dismiss">Cancelar</button>
                             <button type="submit" class="btn btn-primary"
-                                wire:click="save({{ $dte->id }})">Guardar</button>
+                                wire:click="save({{ $dte->id }})">Guardar</button> --}}
 
                         </td>
                     </tr>

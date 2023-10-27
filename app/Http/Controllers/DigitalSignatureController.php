@@ -616,6 +616,14 @@ class DigitalSignatureController extends Controller
             ];
         }
 
+        if($response->failed()) {
+            return [
+                'statusOk' => false,
+                'content' => '',
+                'errorMsg' => 'FirmaGob está presentando inestabilidad - ' . $response->reason(),
+            ];
+        }
+
         $json = isset($response) ? $response->json() : [];
 
         if (array_key_exists('error', $json)) {

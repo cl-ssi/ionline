@@ -77,6 +77,20 @@ class NoAttendanceRecord extends Model
         return $this->morphOne(Approval::class, 'approvable');
     }
 
+    /**
+     * Simular un approval model.
+     */
+    public function getApprovalLegacyAttribute()
+    {
+        $approval = new Approval();
+        $approval->status = $this->status;
+        $approval->approver_id = $this->authority_id;
+        $approval->approver_at = $this->authority_at;
+        $approval->approver_ou_id = $this->approver_ou_id;
+        $approval->reject_observation = $this->authority_observation;
+        return $approval;
+    }
+
     public function rrhhUser()
     {
         return $this->belongsTo(User::class,'rrhh_user_id')->withTrashed();

@@ -32,7 +32,7 @@
                             @if ($control->requestForm->signatures_file_id)
                                 <a class="btn btn-info btn-sm" title="Ver Formulario de Requerimiento firmado"
                                     href="{{ $control->requestForm->signatures_file_id == 11
-                                        ? route('request_forms.show_file', $control->requestForm->requestFormFiles->first() ?? 0)
+                                        ? route('request_forms.show_file', $control->requestForm->requestFormFiles->last() ?? 0)
                                         : route('request_forms.signedRequestFormPDF', [$control->requestForm, 1]) }}"
                                     target="_blank" title="Certificado">
                                     <i class="fas fa-file-contract"></i>
@@ -42,7 +42,7 @@
                             @if ($control->requestForm->old_signatures_file_id)
                                 <a class="btn btn-secondary btn-sm" title="Ver Formulario de Requerimiento Anterior firmado"
                                     href="{{ $control->requestForm->old_signatures_file_id == 11
-                                        ? route('request_forms.show_file', $control->requestForm->requestFormFiles->first() ?? 0)
+                                        ? route('request_forms.show_file', $control->requestForm->requestFormFiles->last() ?? 0)
                                         : route('request_forms.signedRequestFormPDF', [$control->requestForm, 0]) }}"
                                     target="_blank" title="Certificado">
                                     <i class="fas fa-file-contract"></i>
@@ -53,7 +53,7 @@
                                 <a class="btn btn-secondary btn-sm"
                                     title="Ver Formulario de Requerimiento Anteriores firmados"
                                     href="{{ $control->requestForm->old_signatures_file_id == 11
-                                        ? route('request_forms.show_file', $control->requestForm->requestFormFiles->first() ?? 0)
+                                        ? route('request_forms.show_file', $control->requestForm->requestFormFiles->last() ?? 0)
                                         : route('request_forms.signedRequestFormPDF', [$control->requestForm, 0]) }}"
                                     target="_blank" data-toggle="modal"
                                     data-target="#history-fr-{{ $control->requestForm->id }}">

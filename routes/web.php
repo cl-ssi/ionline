@@ -926,9 +926,11 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
             Route::get('/edit/{serviceRequest}', [FulfillmentController::class, 'edit_fulfillment'])->name('edit');
             Route::get('/save-approbed-fulfillment/{serviceRequest}', [FulfillmentController::class, 'save_approbed_fulfillment'])->name('save_approbed_fulfillment');
             Route::get('/confirm-fulfillment-by-sign-position/{Fulfillment}/{approbed?}', [FulfillmentController::class, 'confirmFulfillmentBySignPosition'])->name('confirm_Fulfillment_By_SignPosition');
+            Route::get('/approval-activation/{fulfillment}', [FulfillmentController::class, 'ApprovalActivation'])->name('approval-activation');
             Route::get('/download-invoice/{fulfillment}/{timestamp?}', [FulfillmentController::class, 'downloadInvoice'])->name('download_invoice');
             Route::get('/download-resolution/{serviceRequest}', [FulfillmentController::class, 'downloadResolution'])->name('download_resolution');
             Route::get('/certificate-pdf/{fulfillment}/{user?}', [FulfillmentController::class, 'certificatePDF'])->name('certificate-pdf');
+            Route::get('/certificate-pdf-signed/{fulfillment_id}', [FulfillmentController::class, 'certificatePDFSigned'])->name('certificate-pdf-signed');
             Route::get('/signed-certificate-pdf/{fulfillment}/{timestamp?}', [FulfillmentController::class, 'signedCertificatePDF'])->name('signed-certificate-pdf');
             Route::get('/delete-signed-certificate-pdf/{fulfillment}', [FulfillmentController::class, 'deletesignedCertificatePDF'])->name('delete-signed-certificate-pdf');
             Route::get('/delete-responsable-vb/{fulfillment}', [FulfillmentController::class, 'deleteResponsableVB'])->name('delete-responsable-vb');
@@ -2106,6 +2108,7 @@ Route::prefix('request_forms')->as('request_forms.')->middleware(['auth', 'must.
     /* DOCUMENTS */
     Route::get('/create_form_document/{requestForm}/{has_increased_expense}', [RequestFormController::class, 'create_form_document'])->name('create_form_document');
     Route::get('/create_view_document/{requestForm}/{has_increased_expense}', [RequestFormController::class, 'create_view_document'])->name('create_view_document');
+    Route::post('/upload_form_document/{requestForm}', [RequestFormController::class, 'upload_form_document'])->name('upload_form_document');
     Route::get('/create_internal_purchase_order_document/{purchasingProcessDetail}', [InternalPurchaseOrderController::class, 'create_internal_purchase_order_document'])->name('create_internal_purchase_order_document');
 
     Route::get('/{requestForm}/edit', [RequestFormController::class, 'edit'])->name('edit');

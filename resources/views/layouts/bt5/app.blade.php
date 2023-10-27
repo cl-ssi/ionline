@@ -51,13 +51,13 @@
         <div id="app">
             @include('layouts.bt5.partials.nav')
 
-            <main class="container pt-3 px-5">
+            <main class="container pt-3">
                 <div class="d-none d-print-block">
                     <strong>{{ env('APP_SS') }}</strong><br>
                     Ministerio de Salud
                 </div>
                 @include('layouts.bt5.partials.errors')
-                @include('layouts.bt4.partials.flash_message')
+                @include('layouts.bt5.partials.flash_message')
                 @yield('content', $slot ?? '')
             </main>
 

@@ -1,7 +1,7 @@
 <html lang="es">
 
 @include('documents.templates.partials.head', [
-    'title' => "Justificación de marca de asistencia"
+    'title' => 'Justificación de marca de asistencia',
 ])
 
 <body>
@@ -13,23 +13,23 @@
     ])
 
     @include('documents.templates.partials.footer', [
-        'establishment' => auth()->user()->organizationalUnit->establishment
+        'establishment' => auth()->user()->organizationalUnit->establishment,
     ])
 
     <!-- Define main for content -->
     <main>
-        
-    <div style="clear: both;padding-top: 170px;"></div>
 
-        <div class="center" style="text-transform: uppercase;">
+        <div style="clear: both;padding-top: 170px;"></div>
+
+        <div class="center"
+            style="text-transform: uppercase;">
             <strong style="text-transform: uppercase;">
-            JUSTIFICACIÓN DE REGISTRO DE ASISTENCIA Nº {{ $noAttendanceRecord->id }}
+                JUSTIFICACIÓN DE REGISTRO DE ASISTENCIA Nº {{ $noAttendanceRecord->id }}
             </strong>
         </div>
 
-        
         <div style="clear: both; padding-bottom: 20px"></div>
-        
+
         <br>
 
         <table class="ocho">
@@ -47,7 +47,8 @@
                     <td>{{ $noAttendanceRecord->date }}</td>
                 </tr>
                 <tr>
-                    <td width="120" style="vertical-align: top;"><strong>Fundamento:</strong></td>
+                    <td width="120"
+                        style="vertical-align: top;"><strong>Fundamento:</strong></td>
                     <td>
                         {{ $noAttendanceRecord->reason->name }} <br>
                         {{ $noAttendanceRecord->observation }}
@@ -57,22 +58,27 @@
             </tbody>
         </table>
 
-
         <div style="clear: both;padding-top: 156px;"></div>
 
         <!-- Sección de las aprobaciones -->
         <div class="signature-container">
-            @if($noAttendanceRecord->approval)
-
-                <div class="signature">
+            <div class="signature">
+                @if ($noAttendanceRecord->approval)
                     @include('sign.approvation', [
-                        'approval' => $noAttendanceRecord->approval
+                        'approval' => $noAttendanceRecord->approval,
                     ])
-                </div>
-
-            @endif
+                @else
+                    <!--
+                        Este código es porque antes no existía approval, es solo retro compatibilidad
+                        crea un modelo approval que no está persistido en le BD
+                        las nuevas solicitudese no entran en este else
+                    -->
+                    @include('sign.approvation', [
+                        'approval' => $noAttendanceRecord->approvalLegacy,
+                    ])
+                @endif
+            </div>
         </div>
-
 
     </main>
 

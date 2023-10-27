@@ -26,7 +26,7 @@ class IndexDtes extends Component
     public $ids = array();
 
     public $establishment_id;
-    
+
     public $showEdit = null;
 
     public $folio_oc = null;
@@ -44,10 +44,10 @@ class IndexDtes extends Component
 
         // app('debugbar')->log($this->filter);
 
-        foreach($this->filter as $filter => $value) {
-            if($value) {
+        foreach ($this->filter as $filter => $value) {
+            if ($value) {
                 // app('debugbar')->log($filter);
-                switch($filter) {
+                switch ($filter) {
                     case 'id':
                         $query->where('id', $value);
                         break;
@@ -58,7 +58,7 @@ class IndexDtes extends Component
                         $query->where('folio_oc', $value);
                         break;
                     case 'folio_sigfe':
-                        switch($value) {
+                        switch ($value) {
                             case 'Con Folio SIGFE':
                                 $query->whereNotNull('folio_sigfe');
                                 break;
@@ -68,16 +68,15 @@ class IndexDtes extends Component
                         }
                         break;
                     case 'establishment':
-                        if($value == '?') {
+                        if ($value == '?') {
                             $query->whereNull('establishment_id');
-                        }
-                        else {
+                        } else {
                             $query->where('establishment_id', $value);
                         }
                         break;
                     case 'tipo_documento':
-                            $query->where('tipo_documento', $value);
-                            break;
+                        $query->where('tipo_documento', $value);
+                        break;
                 }
             }
         }
@@ -127,7 +126,7 @@ class IndexDtes extends Component
             // ->whereNull('confirmation_status')
             // ->orWhere('confirmation_status',true)
             ->where(function ($query) {
-                $query->where('confirmation_status',true)
+                $query->where('confirmation_status', true)
                     ->orWhereNull('confirmation_status');
             })
             ->orderByDesc('fecha_recepcion_sii');
@@ -153,12 +152,12 @@ class IndexDtes extends Component
 
         $establishments_ids = explode(',', env('APP_SS_ESTABLISHMENTS'));
 
-        $this->establishments = Establishment::whereIn('id', $establishments_ids)->pluck('alias','id');
+        $this->establishments = Establishment::whereIn('id', $establishments_ids)->pluck('alias', 'id');
     }
 
     /**
-    * Toggle Cenabaste
-    */
+     * Toggle Cenabaste
+     */
     public function toggleCenabast(Dte $dte)
     {
         $dte->cenabast = !$dte->cenabast;
@@ -166,12 +165,12 @@ class IndexDtes extends Component
     }
 
     /**
-    * Set establishment
-    */
+     * Set establishment
+     */
     public function setEstablishment()
     {
-        foreach($this->ids as $id => $value) {
-            Dte::whereId($id)->update(['establishment_id'=>$this->establishment_id]);
+        foreach ($this->ids as $id => $value) {
+            Dte::whereId($id)->update(['establishment_id' => $this->establishment_id]);
         }
         $this->ids = array();
     }
@@ -183,7 +182,7 @@ class IndexDtes extends Component
         $this->confirmation_status = $dte->confirmation_status;
         $this->confirmation_observation = $dte->confirmation_observation;
         $this->asociate_invoices = $dte->invoices->pluck('id');
-        $this->monto_total = '$ '.number_format($dte->monto_total, 0, '', '.');
+        $this->monto_total = '$ ' . number_format($dte->monto_total, 0, '', '.');
         $this->facturasEmisor = Dte::where('emisor', 'like', '%' . trim($dte->emisor) . '%')
             ->whereIn('tipo_documento', ['factura_electronica', 'factura_exenta'])
             ->get();
@@ -200,14 +199,66 @@ class IndexDtes extends Component
         $dte = Dte::find($dte_id);
         $dte->update([
             'folio_oc' => trim($this->folio_oc),
-            'confirmation_status' => $this->confirmation_status,
-            'confirmation_user_id' => auth()->id(),
-            'confirmation_ou_id' => auth()->user()->organizational_unit_id,
-            'confirmation_at' => now(),
-            'confirmation_observation' => $this->confirmation_observation,
+            // 'confirmation_status' => $this->confirmation_status, //¿?
+            // 'confirmation_user_id' => auth()->id(), //¿
+            // 'confirmation_ou_id' => auth()->user()->organizational_unit_id, //¿?
+            // 'confirmation_at' => now(), //¿?
+            // 'confirmation_observation' => $this->confirmation_observation, //¿?
         ]);
-
         $dte->invoices()->sync($this->asociate_invoices);
+
+
+        if (
+            $dte->confirmation_status !== null &&
+            $dte->confirmation_user_id !== null &&
+            $dte->confirmation_at !== null &&
+            $dte->confirmation_signature_file !== null &&
+            $dte->upload_user_id !== null &&
+            $dte->cenabast_signed_pharmacist !== null &&
+            $dte->cenabast_signed_boss !== null
+
+        ) 
+        
+        {
+            foreach ($this->asociate_invoices as $invoice_id) {
+                $invoice = Dte::find($invoice_id);
+                $invoice->update([
+                    'confirmation_status' => $dte->confirmation_status,
+                    'confirmation_user_id' => $dte->confirmation_user_id,
+                    'confirmation_ou_id' => $dte->confirmation_ou_id,
+                    'confirmation_at' => $dte->confirmation_at,
+                    'confirmation_signature_file' => $dte->confirmation_signature_file,
+                    'upload_user_id' => $dte->upload_user_id,
+                    'cenabast_signed_pharmacist' => $dte->cenabast_signed_pharmacist,
+                    'cenabast_signed_boss' => $dte->cenabast_signed_boss,
+
+                ]);
+            }
+        }
+
+        // if (
+        //     $dte->confirmation_status !== null &&
+        //     $dte->confirmation_user_id !== null &&
+        //     $dte->confirmation_at !== null &&
+        //     $dte->confirmation_signature_file !== null
+        // )
+
+        //     $dte->invoices()->sync($this->asociate_invoices);
+        // foreach ($this->asociate_invoices as $invoice_id) {
+        //     $invoice = Dte::find($invoice_id);
+        //     $invoice->update([
+        //         'confirmation_status' => $dte->confirmation_status,
+        //         'confirmation_user_id' => $dte->confirmation_user_id,
+        //         'confirmation_ou_id' => $dte->confirmation_ou_id,
+        //         'confirmation_at' => $dte->confirmation_at,
+        //         'confirmation_signature_file' => $dte->confirmation_signature_file,
+        //         'upload_user_id' => $dte->upload_user_id,
+        //         'cenabast_signed_pharmacist' => $dte->cenabast_signed_pharmacist,
+        //         'cenabast_signed_boss' => $dte->cenabast_signed_boss,
+
+        //     ]);
+        // }
+
         $this->showEdit = null;
     }
 

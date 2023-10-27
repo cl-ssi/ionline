@@ -762,4 +762,11 @@ class RequestForm extends Model implements Auditable
     {
         return $this->eventRequestForms->whereNotNull('deleted_at')->whereNotNull('comment'); //where( fn($q) => $q->where('comment', '!=', null)->orWhere('comment', '!=', ' '));
     }
+
+    public function hasFinanceEventPending()
+    {
+        $financePending = $this->eventRequestForms->where('event_type', 'finance_event')->where('status', 'pending')->count() > 0;
+        $prefinanceApproved = $this->eventRequestForms->where('event_type', 'pre_finance_event')->where('status', 'approved')->count() > 0;
+        return $this->hasEventRequestForms() && $financePending && $prefinanceApproved;
+    }
 }

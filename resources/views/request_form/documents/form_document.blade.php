@@ -417,13 +417,24 @@
           <tbody>
               <tr>
                   <th align="left" style="width: 50%">Nombre</th>
+                  @if(request()->has_increased_expense == 11)
+                  @php($currentFinanceManager = App\Rrhh\OrganizationalUnit::find($requestForm->eventSigner('finance_event', 'pending')->ou_signer_user)->currentManager)
+                  <td>{{ $currentFinanceManager->user->FullName }}</td>
+                  @else
                   <td>{{ auth()->user()->FullName }}</td>
+                  @endif
               </tr>
               <tr>
                   <th align="left" style="width: 50%">Cargo</th>
+                  @if(request()->has_increased_expense == 11)
+                  <td>{{ $currentFinanceManager->position }}
+                      {{ $currentFinanceManager->organizationalUnit->name }}
+                  </td>
+                  @else
                   <td>{{ App\Rrhh\Authority::getAmIAuthorityFromOu(Carbon\Carbon::now(), 'manager', auth()->id())[0]->position }}
                       {{ App\Rrhh\Authority::getAmIAuthorityFromOu(Carbon\Carbon::now(), 'manager', auth()->id())[0]->organizationalUnit->name }}
                   </td>
+                  @endif
               </tr>
               <tr>
                   <th align="left" style="width: 50%">Fecha</th>
@@ -436,7 +447,7 @@
           </tbody>
       </table>
 
-      <div style="clear: both; padding-bottom: 100px;">&nbsp;</div>
+      <div style="clear: both; padding-bottom: 50px;">&nbsp;</div>
 
       {{-- <table class="siete">
           <thead>

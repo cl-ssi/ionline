@@ -171,6 +171,7 @@ class StoreController extends Controller
         if ($file and $dte) {
             $fileName = 'acta_' . $dte->id . '.' . $file->getClientOriginalExtension();
             $dte->confirmation_signature_file = $file->storeAs($this->filePath, $fileName, 'gcs');
+            $dte->upload_user_id = auth()->id();
             //  Se comenta ya que ahora al jefe poner la firma se da por confirmada
             // $dte->confirmation_status = 1;
             // $dte->confirmation_user_id = auth()->id();
@@ -259,6 +260,7 @@ class StoreController extends Controller
     {
         
         $dte = Dte::findorFail($dte);
+        $dte->upload_user_id = auth()->id();
         $dte->confirmation_status = 1;
         $dte->confirmation_user_id = auth()->id();
         $dte->confirmation_ou_id = auth()->user()->organizational_unit_id;

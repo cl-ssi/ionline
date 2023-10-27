@@ -8,7 +8,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class RequirementNotification extends Mailable
+class RequirementNotification extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
     public $requirement;

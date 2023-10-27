@@ -448,5 +448,20 @@
     </div>
 </div>
 
+<div style="clear: both;padding-top: 156px;"></div>
+
+<!-- Sección de las aprobaciones -->
+<div class="signature-container">
+    @if($fulfillment->approval)
+
+        <div class="signature">
+            @include('sign.approvation', [
+                'approval' => $fulfillment->approval
+            ])
+        </div>
+
+    @endif
+</div>
+
 </body>
 </html>

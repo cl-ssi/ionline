@@ -244,6 +244,10 @@ class DocumentSignService
             throw new Exception("No se pudo conectar a firma gobierno.", $th->getCode());
         }
 
+        if($response->failed()) {
+            throw new ExceptionSignService($response->reason(), $response->getStatusCode());
+        }
+
         $json = $response->json();
 
         /**

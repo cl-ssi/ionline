@@ -16,6 +16,8 @@ use DatePeriod;
 use DateInterval;
 use App\User;
 use Redirect;
+use App\Models\Documents\Approval;
+use App\Models\Documents\SignaturesFile;
 
 use Illuminate\Support\Facades\Auth;
 use App\Rrhh\Authority;
@@ -518,31 +520,103 @@ class FulfillmentController extends Controller
         return $pdf->stream('mi-archivo.pdf');
     }
 
-    public function confirmFulfillment(Fulfillment $fulfillment)
+    /**
+     * Función para generar archivo pdf con parámetro integer (no modelo)
+     */
+    public function certificatePDFSigned($fulfillment_id)
     {
-//        if ($request->hasFile('invoice')){
-//            $invoiceFile = $request->file('invoice');
-//        };
-//
-//        Storage::disk('local')->put("invoices/$fulfillment->id.pdf", $invoiceFile);
-//        $fulfillment->invoice_path = '';
+        $fulfillment = Fulfillment::find($fulfillment_id);
 
-        // dd($fulfillment);
-        if (Auth::user()->can('Service Request: fulfillments responsable')) {
-          if ($fulfillment->responsable_approver_id == NULL) {
-            $fulfillment->responsable_approbation = 1;
-            $fulfillment->responsable_approbation_date = Carbon::now();
-            $fulfillment->responsable_approver_id = Auth::user()->id;
-            $fulfillment->save();
-
-            //items
-            foreach ($fulfillment->FulfillmentItems as $key => $FulfillmentItem) {
-              $FulfillmentItem->responsable_approbation = 1;
-              $FulfillmentItem->responsable_approbation_date = Carbon::now();
-              $FulfillmentItem->responsable_approver_id = Auth::user()->id;
-              $FulfillmentItem->save();
+        // validacion items
+        if ($fulfillment->FulfillmentItems) {
+          foreach ($fulfillment->FulfillmentItems as $key => $fulfillmentItem) {
+            if ($fulfillmentItem->type == "Renuncia voluntaria") {
+              if ($fulfillmentItem->end_date == null) {
+                session()->flash('danger', 'La fecha de la renuncia involuntaria no está ingresada. Regularice esto antes de generar el certificado.');
+                return redirect()->back();
+              }
             }
           }
+        }
+
+        /* Siempre firma el que está logeado */
+        $signer = auth()->user();
+        $pdf = app('dompdf.wrapper');
+        $pdf->loadView('service_requests.requests.fulfillments.report_certificate',compact('fulfillment','signer'));
+
+        return $pdf->stream('mi-archivo.pdf');
+    }
+
+    /**
+     * Función callback para solicitud de firma 
+     */
+    public function process($approval_id){
+        $approval = Approval::find($approval_id);
+        $fulfillment = $approval->approvable;
+
+        if($approval->status==1){
+            $signaturesFile = new SignaturesFile();
+            $signaturesFile->signer_id = auth()->id();
+            $signaturesFile->verification_code = str()->random(6);
+            $signaturesFile->file = $approval->filename;
+            $signaturesFile->signed_file = $approval->filename;
+            $signaturesFile->save();
+    
+            $fulfillment->signatures_file_id = $signaturesFile->id;
+            $fulfillment->save();
+        }
+
+        if($approval->status==0){
+            $approval->status = null;
+            $approval->reject_observation = null;
+            $approval->save();
+        }
+    }
+
+    public function ApprovalActivation(Fulfillment $fulfillment){
+        // crear una solicitud de aprobación
+        $fulfillment->approval()->create(['module' => 'Honorarios',
+                                        "module_icon" => "fas fa-rocket", 
+                                        "subject" => "Nuevo cumplimiento para aprobación",
+                                        "digital_signature" => false,
+                                        "document_route_name" => "rrhh.service-request.fulfillment.certificate-pdf-signed", 
+                                        "document_route_params" => json_encode(["fulfillment_id" => $fulfillment->id]),
+                                        "approver_id" => Auth::user()->id,
+                                        "callback_controller_method" => "App\Http\Controllers\ServiceRequests\FulfillmentController@process",
+                                        "callback_controller_params" => json_encode(['fulfillment_id' => $fulfillment->id]),
+                                        "filename" => "ionline/approvals/servicerequest/".$fulfillment->id.".pdf"]);
+    }
+
+    public function confirmFulfillment(Fulfillment $fulfillment)
+    {
+        if (Auth::user()->can('Service Request: fulfillments responsable')) {
+
+            if ($fulfillment->responsable_approver_id == NULL) {
+                $fulfillment->responsable_approbation = 1;
+                $fulfillment->responsable_approbation_date = Carbon::now();
+                $fulfillment->responsable_approver_id = Auth::user()->id;
+                $fulfillment->save();
+
+                //items
+                foreach ($fulfillment->FulfillmentItems as $key => $FulfillmentItem) {
+                    $FulfillmentItem->responsable_approbation = 1;
+                    $FulfillmentItem->responsable_approbation_date = Carbon::now();
+                    $FulfillmentItem->responsable_approver_id = Auth::user()->id;
+                    $FulfillmentItem->save();
+                }
+            }
+
+            // crear una solicitud de aprobación
+            $fulfillment->approval()->create(['module' => 'Honorarios',
+                                                "module_icon" => "fas fa-rocket", 
+                                                "subject" => "Nuevo cumplimiento para aprobación",
+                                                "digital_signature" => false,
+                                                "document_route_name" => "rrhh.service-request.fulfillment.certificate-pdf-signed", 
+                                                "document_route_params" => json_encode(["fulfillment_id" => $fulfillment->id]),
+                                                "approver_id" => Auth::user()->id,
+                                                "callback_controller_method" => "App\Http\Controllers\ServiceRequests\FulfillmentController@process",
+                                                "callback_controller_params" => json_encode(['fulfillment_id' => $fulfillment->id]),
+                                                "filename" => "ionline/approvals/servicerequest/".$fulfillment->id.".pdf"]);
         }
 
         if (Auth::user()->can('Service Request: fulfillments rrhh')) {
@@ -781,6 +855,14 @@ class FulfillmentController extends Controller
       Storage::disk('gcs')->delete($fulfillment->signedCertificate->signed_file);
       $fulfillment->signatures_file_id = null;
       $fulfillment->save();
+
+        if($fulfillment->approval){
+            $fulfillment->approval->approver_id = null;
+            $fulfillment->approval->approver_at = null;
+            $fulfillment->approval->status = null;
+            $fulfillment->approval->save();
+        }
+
       session()->flash('success', 'Se ha borrado exitosamente el certificado de cumplimiento.');
       return redirect()->back();
 

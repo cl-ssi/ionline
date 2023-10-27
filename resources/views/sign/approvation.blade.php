@@ -66,4 +66,6 @@
         @endif
     </p>
 </div>
-<p class="text small center {{ $approval->color }}">{{ $approval->reject_observation }}</p>
+<p class="text small {{ $approval->color }}" style="padding-left: 6;">
+    {{ $approval->reject_observation }}
+</p>

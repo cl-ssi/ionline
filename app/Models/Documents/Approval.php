@@ -20,38 +20,90 @@ class Approval extends Model
     use SoftDeletes;
 
     /**
-     * Ejemplo de uso
-     * Esta funcion no se usa, es sólo para ejemplo del código
-     * Se puede correr en tinker:
+     * Funcion de ejemplo de creación de un approval, se puede correr en tinker:
      * App\Models\Documents\Approval::ejemplo_de_uso();
      */
     public static function ejemplo_de_uso() {
         /**
-         * Hay dos formas de crear un Approval
-         * - Approval::create(['module' => 'xxx',...])
-         * - A través de una relación:
-         *      $approval = $requestForms->approvals()->create(['module' => 'xxx', ...])
+         * COMO IMPLEMENTAR APPROVALS A UN MÓDULO
+         * ======================================
+         * Requisitos:
+         *  1. Una ruta que genere un documento que se mostrará al usuario para que lo apruebe
+         *     puede ser una vista o un pdf, se le pueden pasar parámetros (no pueden ser objetos)
+         *     ej ruta: 'rrhh.attendance.no-records.show' parametros: [ "no_attendance_record_id" => "2863" ]
+         * 
+         * 
+         *  2. Relación polimórfica al modelo que tendrá uno o más approvals, puede ser MorphOne o MorphMany.
+         *     y luego podrías llamrla así: $modelo->approval(s) (tendrá uno o varios approvals)
+         */
+                /**
+                 * Get the approval model.
+                 */
+                // public function approval(): MorphOne
+                // {
+                //     return $this->morphOne(Approval::class, 'approvable');
+                // }
+
+                /**
+                 * Get all of the approvations of a model.
+                 */
+                // public function approvals(): MorphMany
+                // {
+                //     return $this->morphMany(Approval::class, 'approvable');
+                // }
+
+        /* 
+         *  3. (Opcional) Un metodo en un controller que se ejecutará después de aprobar o rechazar 
+         *      Ejemplo: App\Http\Controllers\Rrhh\NoAttendanceRecordController@approvalCallback
+         */
+
+                // public function approvalCallback($approval_id, $param1) {
+                //     $approval = Approval::find($approval_id);
+                //     if($approval->status === true) {
+                //         logger()->info('Aprobado: id ' . $approval->id. ' param1: '. $param1);
+                //     }
+                //     else {
+                //         logger()->info('Rechazado: id ' . $approval->id. ' motivo '. $approval->reject_observation);
+                //     }
+                // }
+           
+         /*
+         *  4. Crear la instancia del approval y guardarla, ejemplo:
+         *      Opción A: $modelo->approval()->create([...])
+         *      Opción B: Approval::create([...]) y después asociarlo a un modelo
+         *      (Hay un ejemplo con todos los parametros del create más abajo)
+         *
+         *
+         *  5. (Opcional) Puedes incorporar un botón de Aprobación en tu módulo con este livewire:
+         *      @livewire('documents.approval-button', [
+         *          'approval' => $approval, 
+         *          'redirect_route' => null, // (opcional) Redireccionar a una ruta despues de aprobar/rechazar
+         *          'button_text' => null, // (Opcional) Texto del boton
+         *          'button_size' => null, // (Opcional) Tamaño del boton: btn-sm, btn-lg, etc.
+         *      ])
+         * 
          **/
 
-        /** o crear y asociar a un modelo a través de su relación, como el siguente ejemplo */
-        $dte = Dte::first();
 
+        /** 
+         * EJEMPLO DE CREACIÓN DE UN APPROVAL Y TODOS LOS PARÁMETROS */
         $approval = Approval::create([
+
             /* Nombre del Módulo que está enviando la solicitud de aprobación */
-            "module" => "Estado de Pago",
+            "module" => "Asistencia",
 
             /* Ícono del módulo para que aparezca en la bandeja de aprobación */
-            "module_icon" => "fas fa-rocket",
+            "module_icon" => "fas fa-clock",
 
             /* Asunto de la aprobación */
-            "subject" => "Nueva orden de compra",
+            "subject" => "Nuevo registro de asistencia",
 
             /* Nombre de la ruta que se mostrará al hacer click en el documento */
-            "document_route_name" => "finance.purchase-orders.showByCode",
+            "document_route_name" => "rrhh.attendance.no-records.show",
 
             /* (Opcional) Parametros que reciba esa ruta */
             "document_route_params" => json_encode([
-                "po_code" => "1272565-444-AG23"
+                "no_attendance_record_id" => "2863"
             ]),
 
             /** Quien firma: Utilizar uno de los dos */
@@ -59,13 +111,11 @@ class Approval extends Model
             "approver_ou_id" => 20,
 
 
-
-
             /* (Opcional) Se puede enviar directo a una persona (es el user_id), pero hay que evitarlo */
             //"approver_id" => 15287582,
 
             /* (Opcional) Metodo que se ejecutará al realizar la aprobación o rechazo */
-            //"callback_controller_method" => "App\Http\Controllers\Finance\DteController@process",
+            //"callback_controller_method" => "App\Http\Controllers\Rrhh\NoAttendanceRecordController@approvalCallback",
 
             /* (Opcional) Parámetros que se le pasarán al método callback */
             // "callback_controller_params" => json_encode([
@@ -74,16 +124,11 @@ class Approval extends Model
             //         'param2' => 'abc'
             //     ]),
 
-            /**
-             * Ejemplo de método del controlador que procesa el callback
-             * Este bloque de código va en el DteController, según el ejemplo de arriba.
-             **/
-            // public function process($approval_id, $param1, $param2) {
-            //     logger()->info('Prueba de callback modulo aprobaciones: id ' . $approval_id. ' param1: '. $param1);
-            // }
-
 
             /**
+             * Opciones para utilizar en cadena de responsabilidad
+             * ==============================================================================
+             *
              * (Opcional) True(default) or False, setear en false si queremos desactivar la aprobación
              * Esto es necesario principalmente cuando es en cadena, se deja activa sólo la primera
              * y todas las demás quedan en false, más abajo hay un ejemplo de aprobaciones en cadena
@@ -108,44 +153,6 @@ class Approval extends Model
 
 
             /**
-             * Relación polimórfica
-             * Agregar esta relación al modelo que quieres que tenga approvals
-             * Ejemplo: Modelo RequestForm, y luego podrías llamrla así:
-             * $requestForm->approvals (tendría una colección de approvals)
-             **/
-
-
-             /** Para one to many **/
-
-             /**
-             * Get all of the approvations of a model.
-             */
-            // public function approvals(): MorphMany
-            // {
-            //     return $this->morphMany(Approval::class, 'approvable');
-            // }
-
-            /** Para One to One */
-
-            /**
-             * Get the approval model.
-             */
-            // public function approval(): MorphOne
-            // {
-            //     return $this->morphOne(Approval::class, 'approvable');
-            // }
-
-            /**
-             * Ejemplo para crear y asociar al mismo tiempo:
-             *
-             * $requestForm->approvals()->create([
-             *      "module" => "Formulario de Req..",
-             *       ...
-             * ]);
-             **/
-
-
-            /**
              * Opciones para utilizar firma electrónica avanzada en vez de aprobación simple
              * ==============================================================================
              */
@@ -156,10 +163,16 @@ class Approval extends Model
             //"position" => "center",
 
             /* (Opcional) Margen inferior: Distancia desde el final de la hoja hacia arriba usualmente 80 */
-            //"startY" => 80,
+            //"start_y" => 80,
 
-            /* (Opcional) ruta con nombre del archivo que se guardará en el storage, ej: ionline/documents/modulo/id (sin extensión)*/
-            //"filename" => "ionline/documents/approvals/archivo",
+            /**
+             * Ruta con nombre del archivo que se generará y guardará en el storage
+             * - Si "digital_signature" => true, : Firma Digital (Obligatorio) 
+             * - Si "digital_signature" => false,: Aprobación Simple (Opcional) 
+             * ej: ionline/modulo/approvals/documento.pdf
+             */ 
+            //"filename" => "ionline/modulo/approvals/documento.pdf",
+
         ]);
     }
 
@@ -195,7 +208,7 @@ class Approval extends Model
         'approvable_type',
         'digital_signature',
         'position',
-        'startY',
+        'start_y',
         'filename',
     ];
 
@@ -279,6 +292,21 @@ class Approval extends Model
             default: return 'fa-clock'; break;
         }
     }
+
+    /**
+    * Reset approval a su estado pendiente
+    */
+    public function resetStatus()
+    {
+        $this->status = null;
+        $this->approver_at = null;
+
+        if($this->approver_ou_id) {
+            $this->approver_id = null;
+        }
+        $this->save();
+    }
+
 
     public function getFilenameLinkAttribute()
     {
