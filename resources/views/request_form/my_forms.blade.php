@@ -142,7 +142,7 @@
             <a href="#" data-href="{{ route('request_forms.destroy', $requestForm->id) }}" data-id="{{ $requestForm->id }}" class="btn btn-outline-secondary btn-sm text-danger" title="Eliminar" data-toggle="modal" data-target="#confirm" role="button">
               <i class="fas fa-trash"></i></a>
             @endif
-            @if($requestForm->hasFinanceEventPending())
+            @if($requestForm->hasFinanceEventPending() && App\Models\Parameters\Parameter::where('module', 'app')->where('parameter', 'legacyModeESign')->first()->value)
             <a href="{{ route('request_forms.create_view_document', [$requestForm->id, 11]) }}" class="btn btn-outline-secondary btn-sm" title="Selección" target="_blank"><i class="fas fa-file"></i></a> 
             <form method="POST" action="{{ route('request_forms.upload_form_document', $requestForm->id)}}" enctype="multipart/form-data">
                 @csrf
