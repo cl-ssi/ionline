@@ -46,7 +46,7 @@ class SignatureTest extends Component
         /**
          * Setea el base64 del pdf
          */
-        $documentBase64Pdf = base64_encode(file_get_contents(public_path('samples/sample.pdf')));
+        $documentBase64Pdf = base64_encode(file_get_contents(public_path('samples/dummy.pdf')));
 
         /**
          * Calculate el eje X
@@ -65,7 +65,7 @@ class SignatureTest extends Component
             $documentSignService = new DocumentSignService;
             $documentSignService->setDocument($documentBase64Pdf);
             $documentSignService->setFolder('/ionline/sign/test/');
-            $documentSignService->setFilename('test-signature-1');
+            $documentSignService->setFilename('test-signature');
             $documentSignService->setUser($user);
             $documentSignService->setXCoordinate($coordinateX);
             $documentSignService->setYCoordinate($coordinateY);

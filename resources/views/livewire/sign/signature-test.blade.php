@@ -8,6 +8,9 @@
                     placeholder="OTP"
                     aria-label="OTP"
                     wire:model.defer="otp"
+                    maxlength="6"
+                    minlength="6"
+                    required="required"
                 >
                 <div class="input-group-append">
                     <button

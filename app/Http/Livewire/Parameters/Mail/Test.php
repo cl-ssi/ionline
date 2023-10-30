@@ -17,13 +17,10 @@ class Test extends Component
     */
     public function sendMail()
     {
-        //dispatch(new TestJob(auth()->user()));
 
         try {
             Mail::to(auth()->user())
                 ->send(new TestMail(auth()->user()));
-                // ->later(now()->addMinutes(5), new TestMail(auth()->user()));
-                // ->queue(new TestMail(auth()->user()));
             $this->mailResponse = "Correo envíado";
             $this->status = 'success';
         } catch (\Exception $exception) {

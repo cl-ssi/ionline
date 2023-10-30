@@ -8,7 +8,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Bus\Queueable;
 use App\User;
 
-class TestMail extends Mailable implements ShouldQueue
+class TestMail extends Mailable
 {
     use Queueable, SerializesModels;
 
