@@ -113,7 +113,7 @@ class ControlCreate extends Component
                     "module" => "Modulo Bodega",
                     "module_icon" => "fas fa-rocket",
                     "subject" => "Nueva Solicitud de Visación de  Administrador de Contrato por parte de Bodega",
-                    "approver_ou_id" => auth()->user()->organizational_unit_id,
+                    "sent_to_ou_id" => auth()->user()->organizational_unit_id,
                     "document_route_name" => "warehouse.control.showPdf",
                     "active" => false,
                     "previous_approval_id" => $approval_contract_manager->id,

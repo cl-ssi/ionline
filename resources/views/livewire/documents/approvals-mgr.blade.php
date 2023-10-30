@@ -71,7 +71,7 @@
                     {{ $approval->approver_at }}
                 </td>
                 <td>
-                    {{ $approval->reject_observation }}
+                    {{ $approval->approver_observation }}
                 </td>
                 <td>
 

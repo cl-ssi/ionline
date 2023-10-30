@@ -21,7 +21,7 @@ trait ApprovalTrait
          */
         $this->showModal = 'd-block';
         $this->approvalSelected = $approval;
-        $this->reject_observation = null;
+        $this->approver_observation = null;
         $this->otp = null;
         $this->message = null;
     }
@@ -46,16 +46,6 @@ trait ApprovalTrait
     public function approveOrReject(Approval $approvalSelected, bool $status)
     {
         /**
-         * Guardar los datos del aprobacion o rechazo
-         */
-        $approvalSelected->approver_ou_id = $approvalSelected->approver_ou_id ?? auth()->user()->organizational_unit_id;
-        $approvalSelected->approver_id = auth()->id();
-        $approvalSelected->approver_at = now();
-        $approvalSelected->status = $status;
-        $approvalSelected->reject_observation = $this->reject_observation;
-        $approvalSelected->save();
-
-        /**
          * Si el approval es de tipo firma digital y fue aprobado
          */
         if($approvalSelected->digital_signature && $status == true) {
@@ -76,6 +66,17 @@ trait ApprovalTrait
                 return;
             }
         }
+
+        /**
+         * Guardar los datos del aprobacion o rechazo
+         */
+        $approvalSelected->approver_ou_id = $approvalSelected->sent_to_ou_id ?? auth()->user()->organizational_unit_id;
+        $approvalSelected->approver_id = auth()->id();
+        $approvalSelected->approver_observation = $this->approver_observation;
+        $approvalSelected->approver_at = now();
+        $approvalSelected->status = $status;
+        $approvalSelected->save();
+
 
         /**
          * Si viene un nombre de archivo y no es de firma electrónica, generar el pdf y guardar en storage

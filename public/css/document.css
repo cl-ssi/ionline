@@ -107,6 +107,7 @@ br {
 }
 
 .signature {
+    vertical-align: top;
     display: inline-block;
     padding-right: 3px;
     padding-bottom: 4px;

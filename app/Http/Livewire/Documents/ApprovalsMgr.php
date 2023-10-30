@@ -14,7 +14,7 @@ class ApprovalsMgr extends Component
     use ApprovalTrait;
 
     public $showModal = false;
-    public $reject_observation;
+    public $approver_observation;
     public $approvalSelected;
     public $ids = [];
     public $filter = [];
@@ -72,8 +72,8 @@ class ApprovalsMgr extends Component
 
         /** Filtrar los que son dirigidos a mi lista de ous o mi persona */
         $query->where(function ($query) use($ous) {
-            $query->whereIn('approver_ou_id',$ous)
-                  ->orWhere('approver_id',auth()->id());
+            $query->whereIn('sent_to_ou_id',$ous)
+                  ->orWhere('sent_to_user_id',auth()->id());
         });
 
         /** Filtro */

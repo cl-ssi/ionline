@@ -7,9 +7,9 @@
                 <div class="modal-header">
                     <h6 class="modal-title">
                         Aprobará como
-                        <i class="fas fa-fw {{ $approvalSelected->approver_ou_id ? 'fa-chess-king' : 'fa-user' }}"></i>
-                        @if($approvalSelected->approver_ou_id)
-                            de {{ $approvalSelected->organizationalUnit->name }}
+                        <i class="fas fa-fw {{ $approvalSelected->sent_to_ou_id ? 'fa-chess-king' : 'fa-user' }}"></i>
+                        @if($approvalSelected->sent_to_ou_id)
+                            de {{ $approvalSelected->sentToOu->name }}
                         @else
                             {{ auth()->user()->tinnyName }}
                         @endif
@@ -61,8 +61,8 @@
                                     placeholder="Motivo rechazo"
                                     aria-label="Motivo de rechazo"
                                     aria-describedby="button-addon"
-                                    wire:model.defer="reject_observation"
-                                    value="{{ $approvalSelected->reject_observation }}"
+                                    wire:model.defer="approver_observation"
+                                    value="{{ $approvalSelected->approver_observation }}"
                                 >
                                 <button
                                     class="btn btn-danger"
@@ -77,7 +77,7 @@
                         @else
                             <div class="text-{{ $approvalSelected->color }}">
                                 El documento se encuentra {{ $approvalSelected->status ? 'Aprobado' : 'Rechazado' }}
-                                <i> <small>{{ $approvalSelected->reject_observation }}</small> </i>
+                                <i> <small>{{ $approvalSelected->approver_observation }}</small> </i>
                             </div>
                         @endif
 

@@ -568,7 +568,7 @@ class FulfillmentController extends Controller
 
         if($approval->status==0){
             $approval->status = null;
-            $approval->reject_observation = null;
+            $approval->approver_observation = null;
             $approval->save();
         }
     }
@@ -581,7 +581,7 @@ class FulfillmentController extends Controller
                                         "digital_signature" => false,
                                         "document_route_name" => "rrhh.service-request.fulfillment.certificate-pdf-signed", 
                                         "document_route_params" => json_encode(["fulfillment_id" => $fulfillment->id]),
-                                        "approver_id" => Auth::user()->id,
+                                        "sent_to_user_id" => Auth::user()->id,
                                         "callback_controller_method" => "App\Http\Controllers\ServiceRequests\FulfillmentController@process",
                                         "callback_controller_params" => json_encode(['fulfillment_id' => $fulfillment->id]),
                                         "filename" => "ionline/approvals/servicerequest/".$fulfillment->id.".pdf"]);
@@ -613,7 +613,7 @@ class FulfillmentController extends Controller
                                                 "digital_signature" => false,
                                                 "document_route_name" => "rrhh.service-request.fulfillment.certificate-pdf-signed", 
                                                 "document_route_params" => json_encode(["fulfillment_id" => $fulfillment->id]),
-                                                "approver_id" => Auth::user()->id,
+                                                "sent_to_user_id" => Auth::user()->id,
                                                 "callback_controller_method" => "App\Http\Controllers\ServiceRequests\FulfillmentController@process",
                                                 "callback_controller_params" => json_encode(['fulfillment_id' => $fulfillment->id]),
                                                 "filename" => "ionline/approvals/servicerequest/".$fulfillment->id.".pdf"]);

@@ -43,7 +43,7 @@
                     <td>{{ $noAttendanceRecord->user->organizationalUnit->name }}</td>
                 </tr>
                 <tr>
-                    <td width="120"><strong>Fecha y hora del registro:</strong></td>
+                    <td width="120"><strong>Fecha de la inasistencia:</strong></td>
                     <td>{{ $noAttendanceRecord->date }}</td>
                 </tr>
                 <tr>
@@ -54,7 +54,10 @@
                         {{ $noAttendanceRecord->observation }}
                     </td>
                 </tr>
-
+                <tr>
+                    <td width="120"><strong>Fecha del registro:</strong></td>
+                    <td>{{ $noAttendanceRecord->created_at }}</td>
+                </tr>
             </tbody>
         </table>
 

@@ -27,13 +27,17 @@
             </strong>
         </div>
 
-        
+
         <div style="clear: both; padding-bottom: 20px"></div>
         
         <br>
 
         <table class="ocho">
             <tbody>
+                <tr>
+                    <td width="100"><strong>Fecha registro:</strong></td>
+                    <td>{{ $modificationRequest->created_at }}</td>
+                </tr>
                 <tr>
                     <td width="100"><strong>Solicitante:</strong></td>
                     <td>{{ $modificationRequest->creator->shortName }}</td>
@@ -47,7 +51,7 @@
                     <td>{{ $modificationRequest->subject }}</strong></td>
                 </tr>
                 <tr>
-                    <td><strong>Detalle:</td>
+                    <td style="vertical-align: top;"><strong>Detalle:</td>
                     <td>{{ $modificationRequest->body }}</strong></td>
                 </tr>
             </tbody>

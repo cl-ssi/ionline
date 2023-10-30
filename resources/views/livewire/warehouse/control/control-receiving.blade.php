@@ -166,7 +166,7 @@
                     <td>
                         @foreach($control->approvals as $approval)
                             <i class="fa fa-fw fa-lg {{ $approval->icon }} text-{{ $approval->color }}" 
-                                title="{{ $approval->organizationalUnit?$approval->organizationalUnit->name:$approval->approver->shortName }}"></i>
+                                title="{{ $approval->sentToOu?$approval->sentToOu->name:$approval->approver->shortName }}"></i>
                         @endforeach
                     </td>
                 </tr>

@@ -37,7 +37,7 @@ class NoAttendanceRecordController extends Controller
 
         $noAttendanceRecord->authority_id = $approval->approver_id;
         $noAttendanceRecord->authority_at = $approval->approver_at;
-        $noAttendanceRecord->authority_observation = $approval->reject_observation;
+        $noAttendanceRecord->authority_observation = $approval->approver_observation;
         $noAttendanceRecord->status = $approval->status;
         $noAttendanceRecord->save();
     }
