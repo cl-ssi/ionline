@@ -18,7 +18,7 @@ return new class extends Migration
             $table->boolean('asistencia_tarde_2')->nullable();
             $table->boolean('asistencia_dia_1')->nullable();
             $table->dropColumn('asistencia');
-            $table->dropColumn('es_funcionario');
+            $table->dropColumn('esFuncionario');
         });
     }
 
@@ -30,6 +30,11 @@ return new class extends Migration
     public function down()
     {
         Schema::table('att_people', function (Blueprint $table) {
+            $table->dropColumn('asistencia_dia_1');
+            $table->dropColumn('asistencia_dia_2');
+            $table->dropColumn('asistencia_tarde_2');
+            $table->string('esFuncionario');
+            $table->boolean('asistencia');
         });
     }
 };
