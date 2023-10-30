@@ -1,6 +1,6 @@
 <ul class="nav nav-tabs mb-3 d-print-none">
 
-    @canany(['amiPASS'])
+    @canany(['amiPASS', 'Rrhh: wellfair'])
         <li class="nav-item">
             <a class="nav-link" href="{{ route('welfare.index') }}">
                 <i class="fas fa-home"></i> home
@@ -9,7 +9,7 @@
     @endcanany
 
 
-    @canany(['amiPASS'])
+    @canany(['Rrhh: wellfair'])
         <li class="nav-item">
             <a class="nav-link" href="{{ route('welfare.balances') }}">
                 <i class="fas fa-balance-scale"></i> Balance
@@ -67,7 +67,7 @@
         </li>
     @endcanany
 
-    @canany(['amiPASS'])
+    @canany(['amiPASS', 'Rrhh: wellfair'])
         <li class="nav-item">
             <a class="nav-link" href="{{ route('welfare.amipass.requests-manager') }}">
                 <i class="fas fa-utensils"></i> Solicitudes Amipass
@@ -80,7 +80,5 @@
                 <i class="fas fa-question-circle"></i> Consultas/Sugerencia Amipass
             </a>
         </li>
-
-
     @endcanany
     </ul>
