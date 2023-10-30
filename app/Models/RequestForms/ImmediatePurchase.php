@@ -11,6 +11,7 @@ use App\Models\Parameters\Supplier;
 use App\Models\Parameters\PurchaseType;
 use App\Models\Finance\Dte;
 use App\Models\RequestForms\RequestForm;
+use Illuminate\Support\Str;
 
 class ImmediatePurchase extends Model implements Auditable
 {
@@ -113,4 +114,9 @@ class ImmediatePurchase extends Model implements Auditable
     //         $immediatePurchase->save();
     //     });
     // }
+
+    public function setPoIdAttribute($value)
+    {
+        $this->attributes['po_id'] = Str::upper($value);
+    }
 }
