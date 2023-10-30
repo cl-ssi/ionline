@@ -17,26 +17,13 @@
             <br />
             Para efectos de consultas a población preliminar en su totalidad se dispone de enlaces a archivos excel para su descarga según año de interés.
         </div>
-        <div class="col-sm-2">
-            <br />
-            <a class="btn btn-secondary btn-sm float-right" href="{{ route('indicators.population.percapita', 2021) }}"
-                target="blank">
-                <i class="far fa-file-pdf"></i> Descargar preliminar 2021
-            </a>
-        </div>
-        <div class="col-sm-2">
-            <br />
-            <a class="btn btn-secondary btn-sm float-right" href="{{ route('indicators.population.percapita', 2022) }}"
-                target="blank">
-                <i class="far fa-file-pdf"></i> Descargar preliminar 2022
-            </a>
-        </div>
-        <div class="col-sm-2">
-            <br />
-            <a class="btn btn-secondary btn-sm float-right" href="{{ route('indicators.population.percapita', 2023) }}"
-                target="blank">
-                <i class="far fa-file-pdf"></i> Descargar preliminar 2023
-            </a>
+        <div class="col-sm-6">
+          <ul class="list-group list-group-horizontal">
+            <li class="list-group-item"><a href="{{ route('indicators.population.percapita', 2024) }}"><i class="far fa-file-excel"></i> Descargar preliminar 2024</li></a>
+            <li class="list-group-item"><a href="{{ route('indicators.population.percapita', 2023) }}"><i class="far fa-file-excel"></i> Descargar preliminar 2023</li></a>
+            <li class="list-group-item"><a href="{{ route('indicators.population.percapita', 2022) }}"><i class="far fa-file-excel"></i> Descargar preliminar 2022</li></a>
+            <li class="list-group-item"><a href="{{ route('indicators.population.percapita', 2021) }}"><i class="far fa-file-excel"></i> Descargar preliminar 2021</li></a>
+          </ul>
         </div>
     </div>
 </div>

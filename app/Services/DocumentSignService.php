@@ -8,7 +8,6 @@ use App\User;
 use Exception;
 use Firebase\JWT\JWT;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class DocumentSignService
@@ -75,13 +74,6 @@ class DocumentSignService
      * @var string
      */
     public $otp;
-
-    /**
-     * Ambiente
-     *
-     * @var string
-     */
-    public $environment;
 
     /**
      * Modo
@@ -180,15 +172,6 @@ class DocumentSignService
     }
 
     /**
-     * @param  string  $environment
-     * @return void
-     */
-    public function setEnvironment(string $environment)
-    {
-        $this->environment = $environment;
-    }
-
-    /**
      * @param  string  $modo
      * @return void
      */
@@ -214,7 +197,7 @@ class DocumentSignService
         /**
          * Setea el modo para el payload
          */
-        if(env('FIRMA_MODO') == 'test')
+        if(env('FIRMA_MODO') == 'TEST')
         {
             if($this->modo = 'ATENDIDO')
             {

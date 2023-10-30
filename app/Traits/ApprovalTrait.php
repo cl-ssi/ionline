@@ -70,7 +70,7 @@ trait ApprovalTrait
              * Firmo el archivo con el trait
              */
             try {
-                $this->signFile(auth()->user(), $this->position, $row = 1, $this->start_y, $pdfBase64, $this->otp, $approvalSelected->filename);
+                $this->signFile(auth()->user(), $approvalSelected->position, $row = 1, $approvalSelected->start_y, $pdfBase64, $this->otp, $approvalSelected->filename);
             } catch (\Throwable $th) {
                 $this->message = $th->getMessage();
                 return;
