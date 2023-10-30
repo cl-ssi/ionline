@@ -232,25 +232,8 @@ class ReportByDates extends Component
     }
 
     public function export()
-    {
-        // dd($this->finicio, $this->ftermino);
-        // $array = array();
-        // if($this->userWithContracts){
-        //     foreach($this->userWithContracts as $ct => $user){
-        //         if($user->shifts->count()==0){
-        //             // dd($user);
-        //             $array[$user->id] = $user->contracts->sum('ammount');
-        //         }
-        //         else{
-        //             // dd($user->shifts);
-        //             $array[$user->id] = $user->shifts->sum('ammount');
-        //         }
-        //     }
-        // }
-        // dd($array);
-        
+    {   
         return response()->streamDownload(function () {
-            // echo 'CSV Contents...';
             foreach($this->output as $key => $row){
                 echo $key.";".$row.";\r\n";
             }
