@@ -12,6 +12,7 @@ use App\Models\PurchasePlan\PurchasePlanItem;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Rrhh\Authority;
+// @mirandaljorge TODO: Para que importar Carbon?
 use Carbon\Carbon;
 
 use App\Models\Documents\Approval;

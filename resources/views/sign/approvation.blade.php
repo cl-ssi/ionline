@@ -62,7 +62,7 @@
         @if($approval->sent_to_ou_id)
             {{ substr($approval->sentToOu->name, 0, 50) }}
         @else
-            {{ substr($approval->approver->organizationalUnit?->name, 0, 50) }}
+            {{ substr($approval->approverOu?->name, 0, 50) }}
         @endif
     </p>
 </div>
