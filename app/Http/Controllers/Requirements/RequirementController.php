@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use App\User;
 use App\Rrhh\OrganizationalUnit;
 use App\Rrhh\Authority;
+use App\Notifications\Requirements\NewSgr;
 use App\Models\Requirements\RequirementStatus;
 use App\Models\Requirements\RequirementCategory;
 use App\Models\Requirements\Requirement;
@@ -1210,26 +1211,36 @@ class RequirementController extends Controller
                 }
             }
 
+            /** Notifica por correo al destinatario, en cola */
+            $toUser->notify(new NewSgr($requirement, $event));
+
+            /** 
+             * Eliminado, porque ya no se mandarán email de forma tradaicional
+             * sino que a través de notify()
+             */
             /** Cadena con correos de los destinatarios separados por "," */
-            if($toUser->email) {
-                $emails .= $toUser->email . ',';
-            }
+            // if($toUser->email) {
+            //     $emails .= $toUser->email . ',';
+            // }
 
             /** Marca los eventos como vistos */
             $requirement->setEventsAsViewed;
         }
 
 
-        /** Manda correos a el listado de emails */
-        if (env('APP_ENV') == 'production') {
-            preg_match_all("/[\._a-zA-Z0-9-]+@[\._a-zA-Z0-9-]+/i", $emails, $emails_validos);
-            try {
-                Mail::to($emails_validos[0])
-                    ->send(new RequirementNotification($requirement));
-            } catch (\Exception $exception) {
-                logger()->error($exception->getMessage());
-            }
-        }
+        /** 
+         * Manda correos a el listado de emails 
+         * ELIMINADO; porque ahora se envían los mails con notify() y en cola
+         */
+        // if (env('APP_ENV') == 'production') {
+        //     preg_match_all("/[\._a-zA-Z0-9-]+@[\._a-zA-Z0-9-]+/i", $emails, $emails_validos);
+        //     try {
+        //         Mail::to($emails_validos[0])
+        //             ->send(new RequirementNotification($requirement));
+        //     } catch (\Exception $exception) {
+        //         logger()->error($exception->getMessage());
+        //     }
+        // }
 
         session()->flash('info', 'Los requerimientos han sido creados.');
 
@@ -1386,26 +1397,33 @@ class RequirementController extends Controller
                 }
             }
 
+            /**
+             * Ahoras los mails se envían con Notify y en cola
+             */
+            $toUser->notify(new NewSgr($requirement, $event));
+
             /** Cadena con correos de los destinatarios separados por "," */
-            if($toUser->email) {
-                $emails .= $toUser->email . ',';
-            }
+            // if($toUser->email) {
+            //     $emails .= $toUser->email . ',';
+            // }
 
             /** Marca los eventos como vistos */
             $requirement->setEventsAsViewed;
         }
 
-        /** Manda correso a el listado de emails */
-        if (env('APP_ENV') == 'production') {
-            preg_match_all("/[\._a-zA-Z0-9-]+@[\._a-zA-Z0-9-]+/i", $emails, $emails_validos);
-            try {
-                Mail::to($emails_validos[0])
-                    ->send(new RequirementNotification($requirement));
-            } catch (\Exception $exception) {
-                logger()->error($exception->getMessage());
-            }
-
-        }
+        /**
+         * ELIMINADO: Ahora los email se envian con Notify y en cola 
+         * Manda correso a el listado de emails 
+         */
+        // if (env('APP_ENV') == 'production') {
+        //     preg_match_all("/[\._a-zA-Z0-9-]+@[\._a-zA-Z0-9-]+/i", $emails, $emails_validos);
+        //     try {
+        //         Mail::to($emails_validos[0])
+        //             ->send(new RequirementNotification($requirement));
+        //     } catch (\Exception $exception) {
+        //         logger()->error($exception->getMessage());
+        //     }
+        // }
 
         session()->flash('info', 'Los requerimientos han sido creados.');
 

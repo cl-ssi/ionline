@@ -682,10 +682,10 @@ class User extends Authenticatable implements Auditable
      * @param  \Illuminate\Notifications\Notification  $notification
      * @return array|string
      */
-    public function routeNotificationForMail($notification)
-    {
-        return $this->email_personal;
-    }
+    // public function routeNotificationForMail($notification)
+    // {
+    //     return $this->email_personal;
+    // }
 
     public function runFormat()
     {
