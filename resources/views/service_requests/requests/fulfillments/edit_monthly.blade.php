@@ -66,7 +66,7 @@
 		@endif
 
         <!-- Aprobación alternativa de certificados de cumplimiento - vía módulo de solicitud de aprobaciones. -->
-        @if(!$fulfillment->signatures_file_id && $fulfillment->responsable_approbation)
+        <!-- @if(!$fulfillment->signatures_file_id && $fulfillment->responsable_approbation)
             <div class="form-row">
                 <fieldset class="form-group col">
                     <div class="alert alert-primary" role="alert">
@@ -93,7 +93,7 @@
                     </div>
                 </fieldset>   
             </div>
-        @endif
+        @endif -->
 
 		<div class="form-row">
 			<fieldset class="form-group col">
