@@ -18,6 +18,7 @@ class ReportByDates extends Component
     // public $absenteeisms = [];
     // public $array = [];
     public $shiftAmmount;
+    public $output = [];
 
     protected $rules = [
         'finicio' => 'required',
@@ -98,6 +99,10 @@ class ReportByDates extends Component
             {
                 foreach($user->shifts as $shift){
                     $shift->ammount = $shift->quantity * $this->shiftAmmount;
+                    
+                    // se genera array para exportación de montos
+                    if(!array_key_exists($user->id,$this->output)){$this->output[$user->id] = 0;}
+                    $this->output[$user->id] += $shift->ammount;
                 }
             }
             else
@@ -204,6 +209,10 @@ class ReportByDates extends Component
                     /** Calcular monto de amipass a transferir */
                     $contract->ammount = $dailyAmmount * ($contract->businessDays - $user->totalAbsenteeisms);
 
+                    // se genera array para exportación de montos
+                    if(!array_key_exists($user->id,$this->output)){$this->output[$user->id] = 0;}
+                    $this->output[$user->id] += $contract->ammount;
+
                     /**
                      * Todo: Pendiente resolver los contratos de 11, 22, 33 horas, ya que esas personas salen repetidas en el reporte
                      */
@@ -220,6 +229,33 @@ class ReportByDates extends Component
             if($user->shifts->count() > 0){$user->diff = $user->shifts->sum('ammount') - $user->AmiLoadMount;}
             else{$user->diff = $user->contracts->sum('ammount') - $user->AmiLoadMount;}
         }
+    }
+
+    public function export()
+    {
+        // dd($this->finicio, $this->ftermino);
+        // $array = array();
+        // if($this->userWithContracts){
+        //     foreach($this->userWithContracts as $ct => $user){
+        //         if($user->shifts->count()==0){
+        //             // dd($user);
+        //             $array[$user->id] = $user->contracts->sum('ammount');
+        //         }
+        //         else{
+        //             // dd($user->shifts);
+        //             $array[$user->id] = $user->shifts->sum('ammount');
+        //         }
+        //     }
+        // }
+        // dd($array);
+        
+        return response()->streamDownload(function () {
+            // echo 'CSV Contents...';
+            foreach($this->output as $key => $row){
+                echo $key.";".$row.";\r\n";
+            }
+        }, 'export.txt');
+
     }
 
     public function render()
