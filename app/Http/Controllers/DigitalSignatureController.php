@@ -217,7 +217,7 @@ class DigitalSignatureController extends Controller
                     /**
                      * Utilizando notify y con colas
                      */
-                    Notification::send($emails[0], new SignedDocument($signaturesFlow->signature));
+                    // Notification::send($emails[0], new SignedDocument($signaturesFlow->signature));
 
                     // Mail::to($emails[0])
                     // ->send(new SignedDocument($signaturesFlow->signature));
