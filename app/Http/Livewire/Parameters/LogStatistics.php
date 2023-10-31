@@ -150,7 +150,7 @@ class LogStatistics extends Component
                 $log->save();
             }
             elseif (preg_match('/handle-task/', $log->uri)) {
-                $log->module = 'OTP Inválido';
+                $log->module = 'Colas';
                 $log->save();
             }
             elseif (preg_match('/finance\/payments/', $log->uri)) {
