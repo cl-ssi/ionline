@@ -15,17 +15,17 @@ use Illuminate\Contracts\Filesystem\FileNotFoundException;
 /* No sé si son necesarias, las puse para el try catch */
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Exception\ConnectException;
-use Exception;
 use Firebase\JWT\JWT;
+use Exception;
 use Carbon\Carbon;
 use Auth;
-use App\Notifications\Signatures\SignedDocument;
 use App\Notifications\Signatures\NewSignatureRequest;
 use App\Models\Establishment;
 use App\Models\Documents\SignaturesFlow;
 use App\Models\Documents\SignaturesFile;
 use App\Models\Documents\ParteFile;
 use App\Models\Documents\Parte;
+use App\Mail\SignedDocument;
 
 
 class DigitalSignatureController extends Controller
@@ -219,8 +219,8 @@ class DigitalSignatureController extends Controller
                      */
                     // Notification::send($emails[0], new SignedDocument($signaturesFlow->signature));
 
-                    // Mail::to($emails[0])
-                    // ->send(new SignedDocument($signaturesFlow->signature));
+                    Mail::to($emails[0])
+                    ->send(new SignedDocument($signaturesFlow->signature));
                 }
 
                 $destinatarios = $signaturesFlow->signature->recipients;

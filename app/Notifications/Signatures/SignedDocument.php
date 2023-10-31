@@ -71,7 +71,7 @@ class SignedDocument extends Notification implements ShouldQueue
         $email
             ->level('info')
             ->subject('Distribución de documento: ' . $this->signature->subject)
-            ->greeting('Hola ' . $notifiable->shortName ?? '')
+            ->greeting('Hola ')
             ->line('Adjunto encontrará el documento: ' . $this->signature->subject)
             ->line('Para su conocimiento y fines.')
             ->line('Tipo:  ' . $this->signature->type->name)
