@@ -24,6 +24,8 @@ class ShowTotalHours extends Component
     public $hoursDetailArray = array();
     public $forCertificate = false;
     public $forResolution = false;
+    public $totalHoursDayString;
+    public $totalHoursNightString;
     //public $flag = null;
 
     //    protected $listeners = ['listener_shift_control'];
@@ -565,6 +567,8 @@ class ShowTotalHours extends Component
                 $totalAmountNight = floor($this->totalHoursNight) * $value;
                 $this->totalAmount = ($totalAmountNight + $totalAmountDayRefund);
                 
+                $this->totalHoursDayString = $this->totalHoursDay;
+                $this->totalHoursNightString = $this->totalHoursNight;
                 $this->totalHoursDay = $this->totalHoursDay . " x " . $value;
                 $this->totalHoursNight = $this->totalHoursNight . " x " . $value;
                 // $this->totalHoursDay = $this->totalHoursDay;

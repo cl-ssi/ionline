@@ -1,10 +1,15 @@
 <span>
 @if(!$errorMsg)
-  @if($forResolution)
-    {{floor($totalHoursDay)}} Horas diurnas y {{floor($totalHoursNight)}} horas nocturnas en turno extras en el mes de {{$fulfillment->serviceRequest->start_date->monthName}},
-    cuya suma alzada total es de ${{number_format($fulfillment->total_to_pay)}}.- ({{$fulfillment->total_to_pay_description}}) impuesto incluido, en conformidad a lo dispuesto en el inciso segundo del Art.
-    2º del Decreto Nº 98 de 1991 del Ministerio de Hacienda y se cancelará en una cuota de ${{number_format($fulfillment->total_to_pay)}} el mes de {{$fulfillment->serviceRequest->start_date->monthName}}
-  @else
+    @if($forResolution)
+        @if(!$fulfillment->serviceRequest->working_day_type == "HORA EXTRA")
+            {{floor($totalHoursDay)}} Horas diurnas y {{floor($totalHoursNight)}} horas nocturnas en turno extras en el mes de {{$fulfillment->serviceRequest->start_date->monthName}},
+            cuya suma alzada total es de ${{number_format($fulfillment->total_to_pay)}}.- ({{$fulfillment->total_to_pay_description}}) impuesto incluido, en conformidad a lo dispuesto en el inciso segundo del Art.
+            2º del Decreto Nº 98 de 1991 del Ministerio de Hacienda y se cancelará en una cuota de ${{number_format($fulfillment->total_to_pay)}} el mes de {{$fulfillment->serviceRequest->start_date->monthName}}
+        @else
+        
+            {{floor($totalHoursDayString)}} Horas diurnas y {{floor($totalHoursNightString)}} horas nocturnas
+        @endif
+    @else
     @if(!$forCertificate)
         @if(!count($hoursDetailArray) == 0)
             <table class="table table-sm">
