@@ -2,37 +2,37 @@
 
 namespace App\Http\Controllers\Documents;
 
-use App\Models\Agreements\Addendum;
-use App\Models\Agreements\Agreement;
-use App\Models\Documents\Document;
-use App\Http\Controllers\Controller;
-use App\Mail\NewSignatureRequest;
-use App\Mail\SignedDocument;
-use App\Models\Documents\SignaturesFile;
-use App\Models\Documents\SignaturesFlow;
-use App\Models\ServiceRequests\Fulfillment;
-use App\Models\ServiceRequests\SignatureFlow;
-use App\Rules\CommaSeparatedEmails;
-use Exception;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Contracts\View\View;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use App\Models\Documents\Signature;
-use App\User;
-use App\Rrhh\OrganizationalUnit;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Storage;
-use App\Rrhh\Authority;
 use Throwable;
-use App\Models\Documents\Parte;
-use App\Models\Documents\ParteFile;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Response;
+use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Contracts\View\View;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\Foundation\Application;
+use Exception;
 use Carbon\Carbon;
+use App\User;
+use App\Rules\CommaSeparatedEmails;
+use App\Rrhh\OrganizationalUnit;
+use App\Rrhh\Authority;
+use App\Notifications\Signatures\NewSignatureRequest;
+use App\Models\ServiceRequests\SignatureFlow;
+use App\Models\ServiceRequests\Fulfillment;
+use App\Models\Documents\SignaturesFlow;
+use App\Models\Documents\SignaturesFile;
+use App\Models\Documents\Signature;
+use App\Models\Documents\ParteFile;
+use App\Models\Documents\Parte;
+use App\Models\Documents\Document;
+use App\Models\Agreements\Agreement;
+use App\Models\Agreements\Addendum;
+use App\Mail\SignedDocument;
+use App\Http\Controllers\Controller;
 
 class SignatureController extends Controller
 {
@@ -315,16 +315,16 @@ class SignatureController extends Controller
             //Envía los correos correspondientes
             if ($request->endorse_type != 'Visación en cadena de responsabilidad') {
                 foreach ($signature->signaturesFlows as $signaturesFlow) {
-                    Mail::to($signaturesFlow->userSigner->email)
-                        ->send(new NewSignatureRequest($signaturesFlow));
+                    /** Enviar mail de notificación de nuevo documento para firmar */
+                    $signaturesFlow->userSigner->notify(new NewSignatureRequest($signaturesFlow));
                 }
             } elseif ($signature->signaturesFlowVisator->where('sign_position', 1)->count() === 1) {
                 $firstVisatorFlow = $signature->signaturesFlowVisator->where('sign_position', 1)->first();
-                Mail::to($firstVisatorFlow->userSigner->email)
-                    ->send(new NewSignatureRequest($firstVisatorFlow));
+                /** Enviar mail de notificación de nuevo documento para firmar */
+                $firstVisatorFlow->userSigner->notify(new NewSignatureRequest($firstVisatorFlow));
             } elseif ($signature->signaturesFlowSigner) {
-                Mail::to($signature->signaturesFlowSigner->userSigner->email)
-                    ->send(new NewSignatureRequest($signature->signaturesFlowSigner));
+                /** Enviar mail de notificación de nuevo documento para firmar */
+                $signature->signaturesFlowSigner->userSigner->notify(new NewSignatureRequest($signature->signaturesFlowSigner));
             }
 
 

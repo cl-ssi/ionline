@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\NewSignatureRequest;
 use App\Mail\SignedDocument;
 use App\Models\Documents\SignaturesFile;
 use App\Models\Documents\SignaturesFlow;
@@ -18,7 +17,7 @@ use SimpleSoftwareIO\QrCode\Generator;
 use App\Models\Documents\Parte;
 use App\Models\Documents\ParteFile;
 use Carbon\Carbon;
-
+use App\Notifications\Signatures\NewSignatureRequest;
 use App\Models\Establishment;
 
 /* No sé si son necesarias, las puse para el try catch */
@@ -27,6 +26,7 @@ use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Exception\ConnectException;
 use Storage;
 use Str;
+
 
 class DigitalSignatureController extends Controller
 {
@@ -317,11 +317,9 @@ class DigitalSignatureController extends Controller
                         ->first();
 
                     if ($nextSignaturesFlowVisation) {
-                        Mail::to($nextSignaturesFlowVisation->userSigner->email)
-                            ->send(new NewSignatureRequest($signaturesFlow));
+                        $nextSignaturesFlowVisation->userSigner->notify(new NewSignatureRequest($signaturesFlow));
                     } elseif ($signaturesFlow->signature->signaturesFlowSigner && $signaturesFlow->signature->signaturesFlowSigner->status === null) {
-                        Mail::to($signaturesFlow->signature->signaturesFlowSigner->userSigner->email)
-                            ->send(new NewSignatureRequest($signaturesFlow));
+                        $signaturesFlow->signature->signaturesFlowSigner->userSigner->notify(new NewSignatureRequest($signaturesFlow));
                     }
                 }
             }
@@ -612,7 +610,7 @@ class DigitalSignatureController extends Controller
             return [
                 'statusOk' => false,
                 'content' => '',
-                'errorMsg' => 'Disculpe, se produjo un error con firma electrónica, intente nuevamente.',
+                'errorMsg' => 'Disculpe, se produjo un error con firma electrónica, intente nuevamente: ' . $e->getMessage(),
             ];
         }
 

@@ -279,6 +279,10 @@ Route::get('/', function () {
     return view('layouts.bt4.welcome');
 })->name('welcome');
 
+// Route::get('/mailable', function () {
+//     return (new App\Notifications\TestMail())
+//     ->toMail(auth()->user());
+// });
 
 Route::get('/claveunica/callback', [ClaveUnicaController::class, 'callback'])->name('claveunica.callback');
 Route::get('/claveunica/callback-testing', [ClaveUnicaController::class, 'callback']);

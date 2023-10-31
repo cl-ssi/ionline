@@ -12,16 +12,14 @@ class TestMail extends Notification
 {
     use Queueable;
 
-    protected $user;
-
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct(User $user)
+    public function __construct()
     {
-        $this->user = $user;
+
     }
 
     /**
@@ -46,7 +44,7 @@ class TestMail extends Notification
         return (new MailMessage)
             ->level('success')
             ->subject('Correo de prueba')
-            ->greeting('Hola ' . $this->user->name)
+            ->greeting('Hola ' . $notifiable->name)
             ->line('Probado el envío de correos')
             ->action('iOnline', route('home') )
             ->salutation('Saludos cordiales.');

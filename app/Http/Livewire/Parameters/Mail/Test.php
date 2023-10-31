@@ -19,7 +19,7 @@ class Test extends Component
     {
 
         try {
-            auth()->user()->notify(new TestMail(auth()->user()));
+            auth()->user()->notify(new TestMail());
             $this->mailResponse = "Correo envíado";
             $this->status = 'success';
         } catch (\Exception $exception) { //TransportException
