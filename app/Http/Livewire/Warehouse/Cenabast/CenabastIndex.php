@@ -138,7 +138,7 @@ class CenabastIndex extends Component
             $isBoss = $dte->boss->id == auth()->id();
 
             /**
-             * Bloque el DTE
+             * Bloquea el DTE
              */
             $dte->update([
                 'block_signature' => true,
@@ -213,7 +213,7 @@ class CenabastIndex extends Component
                 }
 
                 /**
-                 * Desbloque el DTE
+                 * Desbloquea el DTE
                  */
                 $dte->update([
                     'block_signature' => false,
