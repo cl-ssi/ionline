@@ -31,7 +31,6 @@ use App\Models\Documents\Parte;
 use App\Models\Documents\Document;
 use App\Models\Agreements\Agreement;
 use App\Models\Agreements\Addendum;
-use App\Mail\SignedDocument;
 use App\Http\Controllers\Controller;
 
 class SignatureController extends Controller

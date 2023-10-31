@@ -2,30 +2,30 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\SignedDocument;
-use App\Models\Documents\SignaturesFile;
-use App\Models\Documents\SignaturesFlow;
-use Auth;
-use Illuminate\Contracts\Filesystem\FileNotFoundException;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Http;
-use Firebase\JWT\JWT;
-use Illuminate\Support\Facades\Mail;
+use Str;
+use Storage;
 use SimpleSoftwareIO\QrCode\Generator;
-use App\Models\Documents\Parte;
-use App\Models\Documents\ParteFile;
-use Carbon\Carbon;
-use App\Notifications\Signatures\NewSignatureRequest;
-use App\Models\Establishment;
-
+use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
 /* No sé si son necesarias, las puse para el try catch */
-use Exception;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Exception\ConnectException;
-use Storage;
-use Str;
+use Exception;
+use Firebase\JWT\JWT;
+use Carbon\Carbon;
+use Auth;
+use App\Notifications\Signatures\SignedDocument;
+use App\Notifications\Signatures\NewSignatureRequest;
+use App\Models\Establishment;
+use App\Models\Documents\SignaturesFlow;
+use App\Models\Documents\SignaturesFile;
+use App\Models\Documents\ParteFile;
+use App\Models\Documents\Parte;
 
 
 class DigitalSignatureController extends Controller
@@ -214,8 +214,13 @@ class DigitalSignatureController extends Controller
                 preg_match_all("/[\._a-zA-Z0-9-]+@[\._a-zA-Z0-9-]+/i", $allEmails, $emails);
 
                 if(!empty($emails[0])) {
-                    Mail::to($emails[0])
-                    ->send(new SignedDocument($signaturesFlow->signature));
+                    /**
+                     * Utilizando notify y con colas
+                     */
+                    Notification::send($emails[0], new SignedDocument($signaturesFlow->signature));
+
+                    // Mail::to($emails[0])
+                    // ->send(new SignedDocument($signaturesFlow->signature));
                 }
 
                 $destinatarios = $signaturesFlow->signature->recipients;

@@ -58,32 +58,38 @@ class SignedDocument extends Notification implements ShouldQueue
         //         ['mime' => 'application/pdf']);
         // }
 
-        $attachment = Attachment::fromStorage($this->signature->signaturesFileDocument->signed_file)
-            ->as($this->signature->id . '.pdf')
+        $attachments = [];
+
+        /**
+         * Documento principal
+         */
+        $document = Attachment::fromStorage($this->signature->signaturesFileDocument->signed_file)
+            ->as('documento_' . $this->signature->id . '.pdf')
             ->withMime('application/pdf');
 
-        return (new MailMessage)
-                    ->level('info')
-                    ->subject($this->signature->type->name . ' - ' . $this->signature->subject)
-                    ->greeting('Junto con saludar cordialmente.')
-                    ->line('Adjunto documento indicado para su conocimiento y fines.')
-                    ->line('Tipo:  ' . $this->signature->type->name)
-                    ->line('Asunto: ' . $this->signature->subject)
-                    ->attach($attachment)
-                    // ->action('Notification Action', url('/'))
-                    ->salutation('Saludos cordiales.');
+        $email = new MailMessage();
+        $email
+            ->level('info')
+            ->subject('Distribución de documento: ' . $this->signature->subject)
+            ->greeting('Hola ' . $notifiable->shortName ?? '')
+            ->line('Adjunto encontrará el documento: ' . $this->signature->subject)
+            ->line('Para su conocimiento y fines.')
+            ->line('Tipo:  ' . $this->signature->type->name)
+            ->line('Creador: ' . $this->signature->responsable->shortName)
+            ->attach($document)
+            ->salutation('Saludos cordiales.');
 
-                    // ->level('info')
-                    // ->subject('Requerimiento Nº: ' . $this->signature->id)
-                    // ->greeting('Hola ' . $this->event->to_user->name)
-                    // ->line('Nuevo requerimiento Nº: ' . $this->signature->id)
-                    // ->line('Asunto: ' . $this->signature->subject)
-                    // ->line('Detalle: ' . $this->event->body)
-                    // ->line('Creador: ' . $this->signature->user->shortName)
-                    // ->lineIf( !is_null($this->signature->user->organizational_unit_id), 'Unidad Organizacional: ' . $this->signature->user->organizationalUnit?->name)
-                    // ->action('Ver Requerimiento (SGR) ' . $this->signature->id, route('requirements.show', $this->signature->id) )
-                    // ->lineIf(!is_null($this->signature->limit_at),'Fecha límite: : '. $this->signature->limit_at)
-                    // ->salutation('Saludos cordiales.');
+        /**
+         * Anexos
+         */
+        foreach ($this->signature->signaturesFileAnexos as $key => $signaturesFileAnexo) {
+            $anexo = Attachment::fromStorage($signaturesFileAnexo->file)
+                ->as('anexo_' . $key . '.pdf')
+                ->withMime('application/pdf');
+            $email->attach($anexo);
+        }
+
+        return $email;
     }
 
     /**
@@ -95,7 +101,7 @@ class SignedDocument extends Notification implements ShouldQueue
     public function toArray($notifiable)
     {
         return [
-            //
-        ];
+                //
+            ];
     }
 }
