@@ -2,7 +2,10 @@
 
 namespace App\Models\Parameters;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Model;
+
+use App\Models\Establishment;
 
 class Parameter extends Model
 {
@@ -18,7 +21,7 @@ class Parameter extends Model
         'parameter',
         'value',
         'description',
-        /* TODO: #148 #147 Incoporar el id_establecimiento, podrían haber parametros iguales en dos establecimientos distintos */
+        'establishment_id',
     ];
 
     public static function get($module, $parameter)
@@ -26,5 +29,10 @@ class Parameter extends Model
         $parameter = Parameter::where('module', $module)->where('parameter', $parameter)->first();
         if(isset($parameter)) return $parameter->value;
         else return null;
+    }
+
+    public function establishment(): BelongsTo
+    {
+        return $this->belongsTo(Establishment::class);
     }
 }

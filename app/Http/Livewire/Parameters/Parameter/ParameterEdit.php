@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Parameters\Parameter;
 use App\Http\Requests\Parameters\Parameter\UpdateParameterRequest;
 use App\Models\Parameters\Parameter;
 use Livewire\Component;
+use App\Models\Establishment;
 
 class ParameterEdit extends Component
 {
@@ -14,6 +15,8 @@ class ParameterEdit extends Component
     public $parameter_field;
     public $value;
     public $description;
+    public $establishment_id;
+    public $establishments;
 
     public function render()
     {
@@ -22,11 +25,13 @@ class ParameterEdit extends Component
 
     public function mount($parameter)
     {
+        $this->establishments = Establishment::all();
         $this->parameterEdit = Parameter::find($parameter);
         $this->module = $this->parameterEdit->module;
         $this->parameter_field = $this->parameterEdit->parameter;
         $this->value = $this->parameterEdit->value;
         $this->description = $this->parameterEdit->description;
+        $this->establishment_id = $this->parameterEdit->establishment_id;
     }
 
     public function rules()
@@ -38,7 +43,6 @@ class ParameterEdit extends Component
     {
         $dataValidated = $this->validate();
         $dataValidated['parameter'] = $dataValidated['parameter_field'];
-
         $this->parameterEdit->update($dataValidated);
 
         session()->flash('success', 'El parámetro fue actualizado exitosamente.');

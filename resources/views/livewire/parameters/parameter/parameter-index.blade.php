@@ -49,6 +49,7 @@
         <table class="table table-bordered">
             <thead>
                 <tr>
+                    <th>Establecimiento</th>
                     <th>Módulo</th>
                     <th>Parámetro</th>
                     <th>Clave</th>
@@ -63,6 +64,9 @@
                 </tr>
                 @forelse($parameters as $parameter)
                 <tr wire:loading.remove>
+                    <td>
+                        @if($parameter->establishment){{ $parameter->establishment->name }}@endif
+                    </td>
                     <td>
                         {{ $parameter->module }}
                     </td>

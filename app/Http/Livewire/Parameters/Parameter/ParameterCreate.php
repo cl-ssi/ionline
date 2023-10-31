@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Parameters\Parameter;
 use App\Http\Requests\Parameters\Parameter\CreateParameterRequest;
 use App\Models\Parameters\Parameter;
 use Livewire\Component;
+use App\Models\Establishment;
 
 class ParameterCreate extends Component
 {
@@ -12,6 +13,13 @@ class ParameterCreate extends Component
     public $parameter_field;
     public $value;
     public $description;
+    public $establishment_id;
+    public $establishments;
+
+    public function mount()
+    {
+        $this->establishments = Establishment::all();
+    }
 
     public function render()
     {
