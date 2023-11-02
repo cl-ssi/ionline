@@ -190,6 +190,14 @@
                             </a>
                             @endcanany
 
+                            @canany([
+                            'be god',                            
+                            ])
+                            <a class="dropdown-item {{ active('finance.dtes.pendingReceiptCertificate') }}" href="{{ route('finance.dtes.pendingReceiptCertificate') }}">
+                                <i class="fas fa-fw fa-file-signature"></i> Dte pendiente de acta
+                            </a>
+                            @endcanany
+
                             @can('Store')
                             <div class="dropdown-divider"></div>
                             <h6 class="dropdown-header">Bodegas</h6>

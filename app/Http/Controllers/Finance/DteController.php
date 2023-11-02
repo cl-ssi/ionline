@@ -43,17 +43,28 @@ class DteController extends Controller
 
     public function pendingReceiptCertificate($tray = null)
     {
-        $dtesQuery = Dte::where('confirmation_status', 0);
+        $dtesQuery = Dte::where('confirmation_status', 0)->whereNull('cenabast')->whereHas('requestForm');
 
         if ($tray) {
             $dtesQuery->whereHas('requestForm', function ($query) use ($tray) {
-                $query->where('subtype','like', $tray.'%');
+                $query->where('subtype', 'like', $tray . '%');
             });
         }
 
         $dtes = $dtesQuery->get();
 
         return view('dte.pending-receipt-certificate', compact('dtes', 'tray'));
+    }
+
+    public function saveFile(Request $request, $dte)
+    {
+        $file = $request->file('acta_' . $dte);
+        $dte = Dte::findorFail($dte);
+        if ($request->tray == 'servicios') {
+            dd('soy servicio');
+        } elseif ($request->tray == 'bienes') {
+            dd('soy bien');
+        }
     }
 
 
