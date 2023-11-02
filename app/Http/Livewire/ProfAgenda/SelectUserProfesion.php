@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Parameters\Profession;
 use App\Models\ProfAgenda\Proposal;
 use App\User;
+use App\Models\Parameters\Parameter;
 
 class SelectUserProfesion extends Component
 {
