@@ -145,7 +145,7 @@
                 @endcan
 
 
-                @if(auth()->user()->organizationalUnit->establishment_id != 1)
+                @if(auth()->user()->organizationalUnit)
                 <li class="nav-item dropdown {{ active(['request_forms.*','warehouse.*','pharmacies.*','resources.*','inventories.*','allowances.*']) }}">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Subdirección Administrativa">
