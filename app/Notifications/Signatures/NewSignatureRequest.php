@@ -6,22 +6,22 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Bus\Queueable;
-use App\Models\Documents\SignaturesFlow;
+use App\Models\Documents\Signature;
 
 class NewSignatureRequest extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    protected $signaturesFlow;
+    protected $signature;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct(SignaturesFlow $signaturesFlow)
+    public function __construct(Signature $signature)
     {
-        $this->signaturesFlow = $signaturesFlow;
+        $this->signature = $signature;
     }
 
     /**
@@ -45,12 +45,12 @@ class NewSignatureRequest extends Notification implements ShouldQueue
     {
         return (new MailMessage)
                     ->level('info')
-                    ->subject('Solicitud de firma: ' . $this->signaturesFlow->signaturesFile->signature->subject)
+                    ->subject('Solicitud de firma: ' . $this->signature->subject)
                     ->greeting('Hola ' . $notifiable->shortName)
                     ->line('Se encuentra disponible un nuevo documento para su firma en iOnline.')
-                    ->line('Número solicitud:  ' . $this->signaturesFlow->signaturesFile->signature->id)
-                    ->line('Tipo:  ' . $this->signaturesFlow->signaturesFile->signature->type->name)
-                    ->line('Asunto: ' . $this->signaturesFlow->signaturesFile->signature->subject)
+                    ->line('Número solicitud:  ' . $this->signature->id)
+                    ->line('Tipo:  ' . $this->signature->type->name)
+                    ->line('Asunto: ' . $this->signature->subject)
                     ->action('Solicitudes de firma', route('documents.signatures.index', 'pendientes'))
                     ->salutation('Saludos cordiales.');
     }

@@ -323,15 +323,15 @@ class SignatureController extends Controller
         if ($request->endorse_type != 'Visación en cadena de responsabilidad') {
             foreach ($signature->signaturesFlows as $signaturesFlow) {
                 /** Enviar mail de notificación de nuevo documento para firmar */
-                $signaturesFlow->userSigner->notify(new NewSignatureRequest($signaturesFlow));
+                $signaturesFlow->userSigner->notify(new NewSignatureRequest($signature));
             }
         } elseif ($signature->signaturesFlowVisator->where('sign_position', 1)->count() === 1) {
             $firstVisatorFlow = $signature->signaturesFlowVisator->where('sign_position', 1)->first();
             /** Enviar mail de notificación de nuevo documento para firmar */
-            $firstVisatorFlow->userSigner->notify(new NewSignatureRequest($firstVisatorFlow));
+            $firstVisatorFlow->userSigner->notify(new NewSignatureRequest($signature));
         } elseif ($signature->signaturesFlowSigner) {
             /** Enviar mail de notificación de nuevo documento para firmar */
-            $signature->signaturesFlowSigner->userSigner->notify(new NewSignatureRequest($signature->signaturesFlowSigner));
+            $signature->signaturesFlowSigner->userSigner->notify(new NewSignatureRequest($signature));
         }
 
         //se crea documento si va de Destinatarios del documento al director
