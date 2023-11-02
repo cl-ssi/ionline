@@ -19,13 +19,15 @@ use Firebase\JWT\JWT;
 use Exception;
 use Carbon\Carbon;
 use Auth;
+use App\User;
+use App\Notifications\Signatures\SignedDocument;
 use App\Notifications\Signatures\NewSignatureRequest;
 use App\Models\Establishment;
 use App\Models\Documents\SignaturesFlow;
 use App\Models\Documents\SignaturesFile;
 use App\Models\Documents\ParteFile;
 use App\Models\Documents\Parte;
-use App\Mail\SignedDocument;
+// use App\Mail\SignedDocument;
 
 
 class DigitalSignatureController extends Controller
@@ -213,15 +215,22 @@ class DigitalSignatureController extends Controller
 
                 preg_match_all("/[\._a-zA-Z0-9-]+@[\._a-zA-Z0-9-]+/i", $allEmails, $emails);
 
-                if(!empty($emails[0])) {
-                    /**
-                     * Utilizando notify y con colas
-                     */
-                    // Notification::send($emails[0], new SignedDocument($signaturesFlow->signature));
-
-                    Mail::to($emails[0])
-                    ->send(new SignedDocument($signaturesFlow->signature));
+                foreach($emails[0] as $email) {
+                    // Crea un usuario en memoria para enviar la notificación
+                    $user = new User();
+                    $user->email = $email;
+                    $user->notify(new SignedDocument($signaturesFlow->signature));
                 }
+
+                // if(!empty($emails[0])) {
+                //     /**
+                //      * Utilizando notify y con colas
+                //      */
+                //     // Notification::send($emails[0], new SignedDocument($signaturesFlow->signature));
+
+                //     Mail::to($emails[0])
+                //     ->send(new SignedDocument($signaturesFlow->signature));
+                // }
 
                 $destinatarios = $signaturesFlow->signature->recipients;
 

@@ -58,15 +58,6 @@ class SignedDocument extends Notification implements ShouldQueue
         //         ['mime' => 'application/pdf']);
         // }
 
-        $attachments = [];
-
-        /**
-         * Documento principal
-         */
-        $document = Attachment::fromStorage($this->signature->signaturesFileDocument->signed_file)
-            ->as('documento_' . $this->signature->id . '.pdf')
-            ->withMime('application/pdf');
-
         $email = new MailMessage();
         $email
             ->level('info')
@@ -78,6 +69,15 @@ class SignedDocument extends Notification implements ShouldQueue
             ->line('Creador: ' . $this->signature->responsable->shortName)
             ->attach($document)
             ->salutation('Saludos cordiales.');
+
+        /**
+         * Documento principal
+         */
+        $document = Attachment::fromStorage($this->signature->signaturesFileDocument->signed_file)
+            ->as('documento_' . $this->signature->id . '.pdf')
+            ->withMime('application/pdf');
+
+        $email->attach($documet);
 
         /**
          * Anexos
