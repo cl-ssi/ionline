@@ -19,7 +19,6 @@ class SelectUserProfesion extends Component
 
     public function mount(){
         $profession_id = $this->profession_id;
-
         $professions = explode(',',Parameter::where('parameter','profesiones_ust')->pluck('value')->toArray()[0]);
 
         // se devuelve usuarios según rol asignado
@@ -44,6 +43,8 @@ class SelectUserProfesion extends Component
 
     public function change(){
         $profession_id = $this->profession_id;
+        $professions = explode(',',Parameter::where('parameter','profesiones_ust')->pluck('value')->toArray()[0]);
+        
         // se devuelve usuarios según rol asignado
         if(Auth::user()->can('Agenda UST: Administrador') || Auth::user()->can('Agenda UST: Secretaria')){
             $this->professions = Profession::whereIn('id',$professions)->get();
