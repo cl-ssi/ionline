@@ -215,19 +215,20 @@ class DigitalSignatureController extends Controller
 
                 preg_match_all("/[\._a-zA-Z0-9-]+@[\._a-zA-Z0-9-]+/i", $allEmails, $emails);
 
+                /**
+                 * Utilizando notify y con colas
+                 */
                 foreach($emails[0] as $email) {
                     // Crea un usuario en memoria para enviar la notificación
-                    $user = new User();
-                    $user->email = $email;
+                    $user = new User([ 'email' => $email]);
                     $user->notify(new SignedDocument($signaturesFlow->signature));
                 }
 
+                /** 
+                 * Antes se enviaba el mail on the fly, cuando el correo estaba caido, 
+                 * Generaba un error 500
+                 */
                 // if(!empty($emails[0])) {
-                //     /**
-                //      * Utilizando notify y con colas
-                //      */
-                //     // Notification::send($emails[0], new SignedDocument($signaturesFlow->signature));
-
                 //     Mail::to($emails[0])
                 //     ->send(new SignedDocument($signaturesFlow->signature));
                 // }
