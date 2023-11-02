@@ -45,12 +45,12 @@ class NewSignatureRequest extends Notification implements ShouldQueue
     {
         return (new MailMessage)
                     ->level('info')
-                    ->subject('Nueva solicitud de firma: ' . $this->signaturesFlow->signature->subject)
-                    ->greeting('Hola ' . $this->notifiable->shortName)
+                    ->subject('Solicitud de firma: ' . $this->signaturesFlow->signaturesFile->signature->subject)
+                    ->greeting('Hola ' . $notifiable->shortName)
                     ->line('Se encuentra disponible un nuevo documento para su firma en iOnline.')
-                    ->line('Número solicitud:  ' . $this->signaturesFlow->signature->id)
-                    ->line('Tipo:  ' . $this->signaturesFlow->signature->type->name)
-                    ->line('Asunto: ' . $this->signaturesFlow->signature->subject)
+                    ->line('Número solicitud:  ' . $this->signaturesFlow->signaturesFile->signature->id)
+                    ->line('Tipo:  ' . $this->signaturesFlow->signaturesFile->signature->type->name)
+                    ->line('Asunto: ' . $this->signaturesFlow->signaturesFile->signature->subject)
                     ->action('Solicitudes de firma', route('documents.signatures.index', 'pendientes'))
                     ->salutation('Saludos cordiales.');
     }

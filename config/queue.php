@@ -78,6 +78,7 @@ return [
             // does not respond by this deadline then the request is cancelled and the attempt
             // is marked as a DEADLINE_EXCEEDED failure.
             'dispatch_deadline' => null,
+            'after_commit' => true,
         ],
 
     ],

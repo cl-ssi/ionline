@@ -31,7 +31,6 @@ use App\Models\Documents\Parte;
 use App\Models\Documents\Document;
 use App\Models\Agreements\Agreement;
 use App\Models\Agreements\Addendum;
-use App\Mail\SignedDocument;
 use App\Http\Controllers\Controller;
 
 class SignatureController extends Controller
@@ -312,27 +311,27 @@ class SignatureController extends Controller
                 $request->signature_type == 'visators' ? $addendum->update(['file_to_endorse_id' => $signaturesFileDocumentId, 'file_to_sign_id' => null]) : $addendum->update(['file_to_sign_id' => $signaturesFileDocumentId]);
             }
 
-            //Envía los correos correspondientes
-            if ($request->endorse_type != 'Visación en cadena de responsabilidad') {
-                foreach ($signature->signaturesFlows as $signaturesFlow) {
-                    /** Enviar mail de notificación de nuevo documento para firmar */
-                    $signaturesFlow->userSigner->notify(new NewSignatureRequest($signaturesFlow));
-                }
-            } elseif ($signature->signaturesFlowVisator->where('sign_position', 1)->count() === 1) {
-                $firstVisatorFlow = $signature->signaturesFlowVisator->where('sign_position', 1)->first();
-                /** Enviar mail de notificación de nuevo documento para firmar */
-                $firstVisatorFlow->userSigner->notify(new NewSignatureRequest($firstVisatorFlow));
-            } elseif ($signature->signaturesFlowSigner) {
-                /** Enviar mail de notificación de nuevo documento para firmar */
-                $signature->signaturesFlowSigner->userSigner->notify(new NewSignatureRequest($signature->signaturesFlowSigner));
-            }
-
-
+            // dd();
             DB::commit();
 
         } catch (Throwable $e) {
             DB::rollBack();
             throw $e;
+        }
+
+        //Envía los correos correspondientes
+        if ($request->endorse_type != 'Visación en cadena de responsabilidad') {
+            foreach ($signature->signaturesFlows as $signaturesFlow) {
+                /** Enviar mail de notificación de nuevo documento para firmar */
+                $signaturesFlow->userSigner->notify(new NewSignatureRequest($signaturesFlow));
+            }
+        } elseif ($signature->signaturesFlowVisator->where('sign_position', 1)->count() === 1) {
+            $firstVisatorFlow = $signature->signaturesFlowVisator->where('sign_position', 1)->first();
+            /** Enviar mail de notificación de nuevo documento para firmar */
+            $firstVisatorFlow->userSigner->notify(new NewSignatureRequest($firstVisatorFlow));
+        } elseif ($signature->signaturesFlowSigner) {
+            /** Enviar mail de notificación de nuevo documento para firmar */
+            $signature->signaturesFlowSigner->userSigner->notify(new NewSignatureRequest($signature->signaturesFlowSigner));
         }
 
         //se crea documento si va de Destinatarios del documento al director

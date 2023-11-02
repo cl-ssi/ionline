@@ -126,7 +126,7 @@ class Calendar extends Component
     public function render()
     {
         $this->data = [];
-        $this->startOfMonth = Carbon::createFromFormat('Y-m', $this->monthSelection)->startOfMonth();
+        $this->startOfMonth = Carbon::createFromFormat('!Y-m', $this->monthSelection)->startOfMonth();
         $this->endOfMonth = $this->startOfMonth->copy()->endOfMonth();
 
         $this->blankDays = ($this->startOfMonth->dayOfWeek == 0) ? 7 : $this->startOfMonth->dayOfWeek;

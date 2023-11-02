@@ -279,10 +279,16 @@ Route::get('/', function () {
     return view('layouts.bt4.welcome');
 })->name('welcome');
 
-// Route::get('/mailable', function () {
-//     return (new App\Notifications\TestMail())
-//     ->toMail(auth()->user());
-// });
+Route::get('/mailable', function () {
+    // Mail::to($emails[0])
+    // ->send(new SignedDocument($signaturesFlow->signature));
+
+    
+    // auth()->user()->notify(new App\Notifications\Signatures\SignedDocument(App\Models\Documents\Signature::find(24587)));
+
+    // return (new App\Notifications\TestMail())
+    // ->toMail(auth()->user());
+});
 
 Route::get('/claveunica/callback', [ClaveUnicaController::class, 'callback'])->name('claveunica.callback');
 Route::get('/claveunica/callback-testing', [ClaveUnicaController::class, 'callback']);
