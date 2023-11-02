@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Parameters\Profession;
 use App\Models\ProfAgenda\Proposal;
 use App\User;
+use App\Models\Parameters\Parameter;
 
 class SelectUserProfesion extends Component
 {
@@ -18,10 +19,11 @@ class SelectUserProfesion extends Component
 
     public function mount(){
         $profession_id = $this->profession_id;
+        $professions = explode(',',Parameter::where('parameter','profesiones_ust')->pluck('value')->toArray()[0]);
 
         // se devuelve usuarios según rol asignado
         if(Auth::user()->can('Agenda UST: Administrador') || Auth::user()->can('Agenda UST: Secretaria')){
-            $this->professions = Profession::whereIn('id',[1,4,5,6,7])->get();
+            $this->professions = Profession::whereIn('id',$professions)->get();
             $this->users = User::whereHas('agendaProposals', function($q) use ($profession_id){
                                     $q->where('profession_id',$profession_id);
                                 })->get();
@@ -41,9 +43,11 @@ class SelectUserProfesion extends Component
 
     public function change(){
         $profession_id = $this->profession_id;
+        $professions = explode(',',Parameter::where('parameter','profesiones_ust')->pluck('value')->toArray()[0]);
+        
         // se devuelve usuarios según rol asignado
         if(Auth::user()->can('Agenda UST: Administrador') || Auth::user()->can('Agenda UST: Secretaria')){
-            $this->professions = Profession::whereIn('id',[1,4,5,6,7])->get();
+            $this->professions = Profession::whereIn('id',$professions)->get();
             $this->users = User::whereHas('agendaProposals', function($q) use ($profession_id){
                                     $q->where('profession_id',$profession_id);
                                 })->get();
