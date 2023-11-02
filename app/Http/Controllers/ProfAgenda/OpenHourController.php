@@ -108,7 +108,11 @@ class OpenHourController extends Controller
 
         //envía correo de confirmación
         if($openHour->patient){
-            Mail::to($openHour->patient)->send(new OpenHourReservation($openHour));
+            if($openHour->patient->email != null){
+                if (filter_var($openHour->patient->email, FILTER_VALIDATE_EMAIL)) {
+                    Mail::to($openHour->patient)->send(new OpenHourReservation($openHour));
+                }
+            } 
         }
         
         session()->flash('success', 'Se guardó la información.');
@@ -132,7 +136,11 @@ class OpenHourController extends Controller
 
         //envía correo de cancelación
         if($openHour->patient){
-            Mail::to($openHour->patient)->send(new OpenHourCancelation($openHour));
+            if($openHour->patient->email != null){
+                if (filter_var($openHour->patient->email, FILTER_VALIDATE_EMAIL)) {
+                    Mail::to($openHour->patient)->send(new OpenHourCancelation($openHour));
+                } 
+            }
         }
         
         session()->flash('success', 'Se guardó la información.');
