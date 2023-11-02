@@ -21,7 +21,7 @@ class SelectUserProfesion extends Component
 
         // se devuelve usuarios según rol asignado
         if(Auth::user()->can('Agenda UST: Administrador') || Auth::user()->can('Agenda UST: Secretaria')){
-            $this->professions = Profession::whereIn('id',[1,4,5,6])->get();
+            $this->professions = Profession::whereIn('id',[1,4,5,6,7])->get();
             $this->users = User::whereHas('agendaProposals', function($q) use ($profession_id){
                                     $q->where('profession_id',$profession_id);
                                 })->get();
@@ -43,7 +43,7 @@ class SelectUserProfesion extends Component
         $profession_id = $this->profession_id;
         // se devuelve usuarios según rol asignado
         if(Auth::user()->can('Agenda UST: Administrador') || Auth::user()->can('Agenda UST: Secretaria')){
-            $this->professions = Profession::whereIn('id',[1,4,5,6])->get();
+            $this->professions = Profession::whereIn('id',[1,4,5,6,7])->get();
             $this->users = User::whereHas('agendaProposals', function($q) use ($profession_id){
                                     $q->where('profession_id',$profession_id);
                                 })->get();

@@ -41,7 +41,7 @@ class ProposalController extends Controller
      */
     public function create()
     {
-        $professions = Profession::whereIn('id',[1,4,5,6])->get();
+        $professions = Profession::whereIn('id',[1,4,5,6,7])->get();
         return view('prof_agenda.proposals.create',compact('professions'));
     }
 
@@ -70,7 +70,7 @@ class ProposalController extends Controller
      */
     public function show(Proposal $proposal)
     {
-        $professions = Profession::whereIn('id',[1,4,5,6])->get();
+        $professions = Profession::whereIn('id',[1,4,5,6,7])->get();
         return view('prof_agenda.proposals.show', compact('proposal','professions'));
     }
 
@@ -82,7 +82,7 @@ class ProposalController extends Controller
      */
     public function edit(Proposal $proposal)
     {
-        $professions = Profession::whereIn('id',[1,4,5,6])->get();
+        $professions = Profession::whereIn('id',[1,4,5,6,7])->get();
         return view('prof_agenda.proposals.edit', compact('proposal','professions'));
     }
 
