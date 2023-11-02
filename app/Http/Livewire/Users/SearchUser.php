@@ -16,6 +16,7 @@ class SearchUser extends Component
     public $smallInput = false;
     public $placeholder;
     public $idsExceptUsers = [];
+    public $bt = '5';
 
     protected $listeners = [
         'clearSearchUser' => 'clearSearch',

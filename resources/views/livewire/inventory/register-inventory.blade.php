@@ -426,6 +426,7 @@
                     'placeholder' => 'Ingrese un nombre',
                     'eventName' => 'myUserUsingId',
                     'tagId' => 'user-using-id',
+                    'bt' => 4,
                 ])
 
                 <input
@@ -444,6 +445,7 @@
                     'placeholder' => 'Ingrese un nombre',
                     'eventName' => 'myUserUsingId',
                     'tagId' => 'user-using-id',
+                    'bt' => 4,
                 ])
 
                 <input
@@ -478,6 +480,7 @@
                     'placeholder' => 'Ingrese un nombre',
                     'eventName' => 'myUserResponsibleId',
                     'tagId' => 'user-responsible-id',
+                    'bt' => 4,
                 ])
 
                 <input
@@ -496,6 +499,7 @@
                     'placeholder' => 'Ingrese un nombre',
                     'eventName' => 'myUserResponsibleId',
                     'tagId' => 'user-responsible-id',
+                    'bt' => 4,
                 ])
 
                 <input
