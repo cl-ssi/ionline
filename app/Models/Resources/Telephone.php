@@ -23,9 +23,9 @@ class Telephone extends Model
      * @var array
      */
 
-     protected $casts = [
+    protected $casts = [
         'deleted_at' => 'datetime'
-    ];    
+    ];
      
 
     /**
@@ -42,13 +42,23 @@ class Telephone extends Model
         return $this->belongsToMany('\App\User', 'res_telephone_user')->withTimestamps();
     }
 
-    public function scopeSearch($query, $search)
+    public function scopeSearch($query, $field, $value)
     {
-        if ($search != "")
-        {
-            return $query->where('number', 'LIKE', '%' . $search . '%')
-                ->orWhere('minsal', 'LIKE', '%' . $search . '%');
+        switch($field) {
+            case 'minsal':
+                $query->where('number', 'LIKE', '%' . $value . '%')
+                    ->orWhere('minsal', 'LIKE', '%' . $value . '%');
+                break;
+            case 'establishment_id':
+                if($value) {
+                    $query->whereRelation('place','establishment_id', $value);
+                }
+                else {
+                    $query->whereDoesntHave('place.establishment');
+                }
+                break;
         }
+        return $query;
     }
 
     public function place()

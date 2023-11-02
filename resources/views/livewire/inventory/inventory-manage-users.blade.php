@@ -20,7 +20,8 @@
                                 'placeholder' => 'Ingrese un nombre',
                                 'eventName' => 'myUserId',
                                 'tagId' => 'user-id',
-                                'idsExceptUsers' => $establishment->usersInventories->pluck('id')
+                                'idsExceptUsers' => $establishment->usersInventories->pluck('id'),
+                                'bt' => 4,
                             ])
                             <input
                                 class="@error('user_id') is-invalid @enderror"

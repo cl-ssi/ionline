@@ -91,6 +91,7 @@
             'eventName' => 'technicalSignerId',
             'tagId' => 'technical-signer-id',
             'smallInput' => true,
+            'bt' => 4,
         ])
 
         <input class="form-control @error('technical_signer_id') is-invalid @enderror" type="hidden">
