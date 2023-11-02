@@ -168,13 +168,12 @@ class OpenHourController extends Controller
     }
 
     public function change_hour($id, $start_date){
-        // dd($start_date);
         $start_date = Carbon::parse($start_date);
-        // dd($start_date);
-        
+
         $openHour = OpenHour::find($id);
+        $duration = $openHour->start_date->diffInMinutes($openHour->end_date);
         $openHour->start_date = $start_date;
-        $openHour->end_date = $start_date->addMinutes($openHour->detail->duration);
+        $openHour->end_date = $start_date->addMinutes($duration);
         $openHour->save();
 
         session()->flash('success', 'Se guardó la información.');
