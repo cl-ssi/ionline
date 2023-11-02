@@ -322,7 +322,7 @@ class DigitalSignatureController extends Controller
                         ->first();
 
                     if ($nextSignaturesFlowVisation) {
-                        $nextSignaturesFlowVisation->userSigner->notify(new NewSignatureRequest($signaturesFlow));
+                        $nextSignaturesFlowVisation->userSigner->notify(new NewSignatureRequest($signaturesFlow->signature));
                     } elseif ($signaturesFlow->signature->signaturesFlowSigner && $signaturesFlow->signature->signaturesFlowSigner->status === null) {
                         $signaturesFlow->signature->signaturesFlowSigner->userSigner->notify(new NewSignatureRequest($signaturesFlow->signature));
                     }
