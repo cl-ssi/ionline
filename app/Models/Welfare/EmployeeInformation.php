@@ -5,13 +5,13 @@ namespace App\Models\Welfare;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
-use Illuminate\Database\Eloquent\SoftDeletes;
+// use Illuminate\Database\Eloquent\SoftDeletes;
 
 class EmployeeInformation extends Model implements Auditable
 {
     use \OwenIt\Auditing\Auditable;
     use HasFactory;
-    use SoftDeletes;
+    // use SoftDeletes;
     
     protected $table = 'well_ami_employee_information';
 
@@ -59,6 +59,6 @@ class EmployeeInformation extends Model implements Auditable
         'fecha_termino_ausentismo' => 'date:Y-m-d',
         'fecha_primer_contrato' => 'date:Y-m-d',
         'created_at' => 'datetime',
-        'deleted_at' => 'datetime',
+        // 'deleted_at' => 'datetime',
     ];
 }
