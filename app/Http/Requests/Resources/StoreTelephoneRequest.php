@@ -32,9 +32,9 @@ class StoreTelephoneRequest extends FormRequest
         // $this->redirect = redirect()->back()->withImput();
 
         return [
-            'number' => ['required', Rule::unique('res_telephones','number' )->ignore($this->telephone)],
-            'mac'    => Rule::unique('res_telephones','mac' )->ignore($this->telephone),
-            'minsal' => ['required', Rule::unique('res_telephones','minsal' )->ignore($this->telephone)]
+            'number' => 'required|unique:res_telephones,number',
+            'mac'    => 'nullable|unique:res_telephones,mac',
+            'minsal' => 'required|unique:res_telephones,minsal',
         ];
     }
 
