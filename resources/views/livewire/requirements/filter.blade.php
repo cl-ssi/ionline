@@ -17,7 +17,7 @@
             <select wire:model.debounce.defer="label"
                 class="form-control"
                 placeholder="Etiqueta">
-                <option value="">[Seleccione una categoría]</option>
+                <option value="">[Seleccione una etiqueta]</option>
                 @foreach (auth()->user()->reqLabels->pluck('name') as $label)
                     <option value="{{ $label }}">{{ $label }}</option>
                 @endforeach
