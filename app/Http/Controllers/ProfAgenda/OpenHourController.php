@@ -9,6 +9,7 @@ use Carbon\CarbonPeriod;
 use Carbon\Carbon;
 use App\User;
 use App\Notifications\ProfAgenda\NewReservation;
+use App\Notifications\ProfAgenda\CancelReservation;
 
 use App\Models\ProfAgenda\OpenHour;
 use App\Mail\OpenHourReservation;
@@ -148,7 +149,15 @@ class OpenHourController extends Controller
         if($openHour->patient){
             if($openHour->patient->email != null){
                 if (filter_var($openHour->patient->email, FILTER_VALIDATE_EMAIL)) {
-                    Mail::to($openHour->patient)->send(new OpenHourCancelation($openHour));
+                    /*
+                    * Utilizando Notify
+                    */ 
+                    $openHour->patient->notify(new CancelReservation($openHour));
+
+                    /*
+                    * Utilizando Mail
+                    */ 
+                    // Mail::to($openHour->patient)->send(new OpenHourCancelation($openHour));
                 } 
             }
         }
