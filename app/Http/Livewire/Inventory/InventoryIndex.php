@@ -32,6 +32,7 @@ class InventoryIndex extends Component
     public $user_responsible_id;
     public $place_id;
     public $location_id;
+    public $number;
 
     public $unspscProduct;
     public $userUsing;
@@ -82,6 +83,9 @@ class InventoryIndex extends Component
                 $query->whereHas('place', function($query) {
                     $query->whereRelation('location', 'id', '=', $this->location_id);
                 });
+            })
+            ->when($this->number, function($query) {
+                $query->where('number', $this->number);
             })
             ->whereEstablishmentId($this->establishment->id)
             ->whereNotNull('number')

@@ -22,6 +22,24 @@
     @endif
 </h3>
 
+<div class="alert alert-info small" role="alert">
+    <ul>
+        <li>
+            Los SGR <strong>tienen un comportamiento diferente al correo electrónico.</strong>
+        </li>
+        <li>
+            Si se envía a más de un destinatario <i class="fas fa-user-plus"></i>, se creará uno para cada persona.<br>
+            Por ejemplo: Al enviar un SGR para Jurídico y SDGA, <strong>se crearán 2 SGRs</strong>, que cada uno tendrá que responder por separado.
+        </li>
+        <li>
+            Si desea informar a otra persona, puede utilizar la opción de copia <i class="far fa-copy"></i>, 
+            esto no creará otro SGR (esta opción si funciona como el correo electrónico).
+        </li>
+        <li>
+            Los SGRs van dirigidos a las jefaturas de las unidades, no es necesario copiar a las secretarías, ya que éstas siempre pueden ver y gestionar los SGRs de sus jefaturas.
+        </li>
+    </ul>
+</div>
 
 <div class="form-row">
     @if($parte->id <> 0)
