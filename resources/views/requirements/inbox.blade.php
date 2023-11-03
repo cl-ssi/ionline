@@ -6,21 +6,15 @@
 
 @include('requirements.partials.nav')
 
-<div class="alert alert-info" role="alert">
-    Recuerda siempre cerrar los requerimientos y archivarlos si ya están terminados.
-</div>
 
-@livewire('requirements.filter',[$user])
 
 <div class="row">
 
-    <div class="col">
+    <div class="col-7">
         <h3 class="mb-3">
-        @if(request()->has('archived'))
-            Archivados
-        @else
-            Pendientes por atender
-        @endif
+           <i class="fas fa-rocket text-danger fa-spin" 
+           title="Hola {{ auth()->user()->firstName }}! :D, te cuento que ahora la bandeja es más rápida. Que tengas un lindo {{ now()->dayName }}"></i> 
+           Requerimientos de {{ $user->tinnyName }}
         </h3>
     </div>
 
@@ -45,8 +39,6 @@
 
 </div>
 
-
-
 <table class="table table-sm table-bordered">
     <tr>
         <td class="alert-light text-center">Recibidos ({{ $counters['created'] }})</td>
@@ -54,32 +46,13 @@
         <td class="alert-primary text-center">Derivados ({{ $counters['derived'] }})</td>
         <td class="alert-success text-center">Cerrados ({{ $counters['closed'] }})</td>
         <td class="alert-secondary text-center">En copia</td>
-        <td class="alert-light text-center">
-            <a href="{{ route('requirements.inbox',$user) }}" class="btn-link {{ request()->has('archived') ? '':'disabled' }}">
-                Pendientes ({{ $counters['pending'] }})
-            </a>
-        </td>
-        <td class="alert-light text-center">
-            <a href="{{ route('requirements.inbox',$user) }}?archived=true" class="btn-link {{ request()->has('archived') ? 'disabled':'' }}">
-                Archivados ({{ $counters['archived'] }})
-            </a>
-        </td>
-        <td>
-            <!-- <a href="{{ route('requirements.inbox',$user) }}?unreadedEvents=false" class="btn btn-sm btn-light">
-                <i class="fas fa-envelope"></i> <span class='badge badge-secondary'></span>
-            </a> -->
-            <a href="{{ route('requirements.inbox',$user) }}?unreadedEvents=true" class="btn btn-sm btn-success">
-                <i class="fas fa-envelope"></i> <span class='badge badge-secondary'>º</span>
-            </a>
-        </td>
+        <td class="alert-light text-center">Pendientes ({{ $counters['pending'] }})</td>
+        <td class="alert-light text-center">Archivados ({{ $counters['archived'] }})</td>
     </tr>
 </table>
 
 
-@include('requirements.partials.list')
-
-
-{{ $requirements->links() }}
+@livewire('requirements.filter',['user'=> $user, 'auth_user' => $auth_user])
 
 
 @endsection

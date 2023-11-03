@@ -96,7 +96,7 @@ class RequirementController extends Controller
         /** Construyo la query de requerimientos */
         $requirements_query = Requirement::query();
         $requirements_query
-            ->with('archived','labels','category','events','ccEvents','parte','eventsViewed','events.from_user','events.to_user','events.from_ou', 'events.to_ou')
+            ->with('archived','labels','category','events','ccEvents','parte','eventsViewed','events.from_user','events.to_user','events.from_ou', 'events.to_ou','eventsWithoutCC','eventsViewed')
             ->whereHas('events', function ($query) use ($user) {
                 $query->where('from_user_id', $user->id)->orWhere('to_user_id', $user->id);
             });
@@ -106,37 +106,37 @@ class RequirementController extends Controller
         $req_query = clone $requirements_query;
         $total_pending_requirements = $req_query->whereDoesntHave('archived', function ($query) use ($user,$auth_user) {
             $query->whereIn('user_id', [$user->id,$auth_user->id]);
-        })->latest()->paginate(100)->withQueryString()->total();
+        })->count();
         
         // devuelve requerimientos a bandeja
-        if($request->has('archived'))
-        {
-            $requirements_query->whereHas('archived', function ($query) use ($user,$auth_user) {
-                $query->whereIn('user_id', [$user->id,$auth_user->id]);
-            });
-        }
-        else
-        {
-            $requirements_query->whereDoesntHave('archived', function ($query) use ($user,$auth_user) {
-                $query->whereIn('user_id', [$user->id,$auth_user->id]);
-            });
-        }        
+        // if($request->has('archived'))
+        // {
+        //     $requirements_query->whereHas('archived', function ($query) use ($user,$auth_user) {
+        //         $query->whereIn('user_id', [$user->id,$auth_user->id]);
+        //     });
+        // }
+        // else
+        // {
+        //     $requirements_query->whereDoesntHave('archived', function ($query) use ($user,$auth_user) {
+        //         $query->whereIn('user_id', [$user->id,$auth_user->id]);
+        //     });
+        // }
 
-        $requirements = $requirements_query->latest()->paginate(100)->withQueryString();
+        //$requirements = $requirements_query->latest()->paginate(100)->withQueryString();
         /** Fin de la query de requerimientos */
 
         //18/01/2023: directora solicita filtro para solo ver los requerimientos no aperturados
-        if($request->has('unreadedEvents'))
-        {
-            if($request['unreadedEvents']=="true"){
-                foreach($requirements as $key => $requirement){
-                    if(!$requirement->unreadedEvents){
-                        $requirements->forget($key);
-                    }
-                }
-            }
-        }
-        
+        // if($request->has('unreadedEvents'))
+        // {
+        //     if($request['unreadedEvents']=="true"){
+        //         foreach($requirements as $key => $requirement){
+        //             if(!$requirement->unreadedEvents){
+        //                 $requirements->forget($key);
+        //             }
+        //         }
+        //     }
+        // }
+
 
         /* Query para los contadores */
         $counters_query = Requirement::query();
@@ -163,9 +163,9 @@ class RequirementController extends Controller
         // dd($requirements->total());
 
         /** Retorno a la vista */
-        return view('requirements.inbox', compact('requirements','user','allowed_users','counters'));
+        return view('requirements.inbox', compact('user','auth_user','allowed_users','counters'));
     }
-    
+
 
     public function outbox(Request $request)
     {

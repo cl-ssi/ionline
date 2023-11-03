@@ -1,35 +1,90 @@
 <div>
-    
-    <div class="input-group mb-3">
-        <input type="number" wire:model.debounce.600ms="req_id" class="form-control" placeholder="N°">
-        <input type="text" wire:model.debounce.600ms="subject" class="form-control" placeholder="Asunto">
-        <select wire:model.debounce.600ms="label" class="form-control">
-            <option></option>
-            @foreach(auth()->user()->reqLabels->pluck('name') as $label)
-            <option>{{ $label }}</option>
-            @endforeach
-        </select>
-        <input type="text" wire:model.debounce.600ms="user_involved" class="form-control" placeholder="Usuario involucrado">
-        <input type="text" wire:model.debounce.600ms="parte" class="form-control" placeholder="Origen, N°Origen">
-        <div class="input-group-append">
-            <button class="btn btn-outline-secondary" wire:click="search">
-                <i class="fas fa-search" aria-hidden="true"></i></button>
-            </div>
+    <div class="form-row mb-3">
+
+        <div class="col-2">
+            <input type="number"
+                wire:model.debounce.defer="req_id"
+                class="form-control"
+                placeholder="N°">
+        </div>
+        <div class="col-3">
+            <input type="text"
+                wire:model.debounce.defer="subject"
+                class="form-control"
+                placeholder="Asunto">
+        </div>
+        <div class="col-3">
+            <select wire:model.debounce.defer="label"
+                class="form-control"
+                placeholder="Etiqueta">
+                <option value="">[Seleccione una categoría]</option>
+                @foreach (auth()->user()->reqLabels->pluck('name') as $label)
+                    <option value="{{ $label }}">{{ $label }}</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="col-3">
+        <select wire:model.debounce.defer="status"
+                class="form-control">
+                <option>Todos</option>
+                <option>Pendientes</option>
+                <option>Archivados</option>
+            </select>
+
+        </div>
+        <div class="col-1">
+            <button class="btn btn-secondary"
+                wire:click="search"
+                wire:loading.class="d-none">
+                <i class="fas fa-search"
+                    aria-hidden="true"></i>
+            </button>
+            <button class="btn btn-outline-secondary d-none"
+                wire:loading.class.remove="d-none">
+                <i class="fa fa-spinner fa-spin"
+                    aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+    <div class="form-row mb-3">
+        <div class="col-2">
+
+            <input type="text"
+                wire:model.debounce.defer="parte"
+                class="form-control"
+                placeholder="Origen, N°Origen">
+        </div>
+        <div class="col-3">
+        <input type="text"
+                wire:model.debounce.defer="user_involved"
+                class="form-control"
+                placeholder="Usuario involucrado">
+        </div>
+
+        <div class="col-3">
+            <select wire:model.debounce.defer="readedStatus"
+                class="form-control">
+                <option>Todos</option>
+                <option>Sin leer</option>
+            </select>
+        </div>
+
+        <div class="col-4 text-center">
+            <span class="form-control-plaintext">
+                Total de resultados: {{ $requirements->total() }}
+            </span>
+        </div>
+
+
     </div>
 
-    @if($requirements)
-        
-        @if($requirements->isNotEmpty())
-        
-            <h4>Resultado de la busqueda</h4>
-            @include('requirements.partials.list')
 
-        @else
-
-            <h4 class="text-danger text-center">No se han encontrado resultados.</h4>
-            <hr>
-
-        @endif
-
+    @if ($requirements->isNotEmpty())
+        @include('requirements.partials.list')
+        {{ $requirements->links() }}
+    @else
+        <h4 class="text-danger text-center">No se han encontrado resultados.</h4>
+        <hr>
     @endif
+
 </div>
