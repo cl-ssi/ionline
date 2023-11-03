@@ -638,7 +638,7 @@ class ReportController extends Controller
     //hospital hospicio
     else
     {
-        $responsabilityCenters = OrganizationalUnit::where('establishment_id', uth::user()->organizationalUnit->establishment_id)->orderBy('name', 'ASC')->get();
+        $responsabilityCenters = OrganizationalUnit::where('establishment_id', Auth::user()->organizationalUnit->establishment_id)->orderBy('name', 'ASC')->get();
     }
 
     $establishments = Establishment::all();
