@@ -19,6 +19,7 @@ class Filter extends Component
     public $req_id;
     public $subject;
     public $label;
+    public $category_id;
     public $user_involved;
     public $parte;
     public $status = 'Pendientes';
@@ -59,12 +60,19 @@ class Filter extends Component
         {
             $requirements->where('subject','LIKE','%'.$this->subject.'%');
         }
+
         if($this->label)
         {
             $requirements->whereHas('labels', function ($query) {
                 $query->where('name','LIKE','%'.$this->label.'%');
             });
         }
+
+        if($this->category_id)
+        {
+            $requirements->where('category_id', $this->category_id);
+        }
+
         if($this->parte)
         {
             $requirements->whereHas('parte', function ($query) {

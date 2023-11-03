@@ -23,16 +23,15 @@
                 @endforeach
             </select>
         </div>
-        <div class="col-3">
+        <div class="col-2">
         <select wire:model.debounce.defer="status"
                 class="form-control">
                 <option>Todos</option>
                 <option>Pendientes</option>
                 <option>Archivados</option>
             </select>
-
         </div>
-        <div class="col-1">
+        <div class="col-2 text-center">
             <button class="btn btn-secondary"
                 wire:click="search"
                 wire:loading.class="d-none">
@@ -48,7 +47,6 @@
     </div>
     <div class="form-row mb-3">
         <div class="col-2">
-
             <input type="text"
                 wire:model.debounce.defer="parte"
                 class="form-control"
@@ -62,6 +60,16 @@
         </div>
 
         <div class="col-3">
+            <select wire:model.debounce.defer="category_id"
+                class="form-control">
+                <option value="">[Seleccione una categoría]</option>
+                @foreach(auth()->user()->organizationalUnit->categories->sortBy('name') as $category)
+                    <option value="{{ $category->id }}">{{ $category->name }}</option>
+                @endforeach
+            </select>
+        </div>
+
+        <div class="col-2">
             <select wire:model.debounce.defer="readedStatus"
                 class="form-control">
                 <option>Todos</option>
@@ -69,9 +77,9 @@
             </select>
         </div>
 
-        <div class="col-4 text-center">
+        <div class="col-2 text-center">
             <span class="form-control-plaintext">
-                Total de resultados: {{ $requirements->total() }}
+                Resultados: {{ $requirements->total() }}
             </span>
         </div>
 

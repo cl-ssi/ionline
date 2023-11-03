@@ -165,7 +165,7 @@
 
                                     'filename' => '/ionline/cenabast/signature/dte-' . $dte->id,
 
-                                    'callback' => 'warehouse.cenabast.callback',
+                                    'callbackRoute' => 'warehouse.cenabast.callback',
                                     'callbackParams' => [
                                         'dte' => $dte->id,
                                         'is_pharmacist' => true,
@@ -202,7 +202,7 @@
 
                                     'filename' => '/ionline/cenabast/signature/dte-' . $dte->id,
 
-                                    'callback' => 'warehouse.cenabast.callback',
+                                    'callbackRoute' => 'warehouse.cenabast.callback',
                                     'callbackParams' => [
                                         'dte' => $dte->id,
                                         'is_pharmacist' => false,
