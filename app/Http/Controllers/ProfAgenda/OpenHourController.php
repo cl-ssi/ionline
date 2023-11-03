@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers\ProfAgenda;
 
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-
-use Carbon\Carbon;
-use Carbon\CarbonPeriod;
-use App\User;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Http\Request;
+
+use Carbon\CarbonPeriod;
+use Carbon\Carbon;
+use App\User;
+use App\Notifications\ProfAgenda\NewReservation;
 
 use App\Models\ProfAgenda\OpenHour;
 use App\Mail\OpenHourReservation;
 use App\Mail\OpenHourCancelation;
+use App\Http\Controllers\Controller;
 
 class OpenHourController extends Controller
 {
@@ -108,7 +109,16 @@ class OpenHourController extends Controller
 
         //envía correo de confirmación
         if($openHour->patient){
+            
             if($openHour->patient->email != null){
+                /*
+                 * Utilizando Notify
+                 */ 
+                // $openHour->patient->notify(new NewReservation($openHour));
+
+                /** 
+                 * Utilizando mail tradicional
+                 */
                 if (filter_var($openHour->patient->email, FILTER_VALIDATE_EMAIL)) {
                     Mail::to($openHour->patient)->send(new OpenHourReservation($openHour));
                 }
