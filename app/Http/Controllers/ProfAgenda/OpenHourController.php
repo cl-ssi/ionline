@@ -114,14 +114,14 @@ class OpenHourController extends Controller
                 /*
                  * Utilizando Notify
                  */ 
-                // $openHour->patient->notify(new NewReservation($openHour));
+                $openHour->patient->notify(new NewReservation($openHour));
 
                 /** 
                  * Utilizando mail tradicional
                  */
-                if (filter_var($openHour->patient->email, FILTER_VALIDATE_EMAIL)) {
-                    Mail::to($openHour->patient)->send(new OpenHourReservation($openHour));
-                }
+                // if (filter_var($openHour->patient->email, FILTER_VALIDATE_EMAIL)) {
+                //     Mail::to($openHour->patient)->send(new OpenHourReservation($openHour));
+                // }
             } 
         }
         

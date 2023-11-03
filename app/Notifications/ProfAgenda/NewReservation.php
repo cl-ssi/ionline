@@ -52,7 +52,7 @@ class NewReservation extends Notification implements ShouldQueue
             ->line('La reserva se encuentra realizada para: ' . $this->openHour->start_date->format('Y-m-d'). ' a las: ' . $this->openHour->start_date->format('H:i'))
             ->line('Se solicita llegar puntual a su hora.')
             
-            // ->action('Ver Requerimiento (SGR) ' . $this->sgr->id, route('requirements.show', $this->sgr->id) )
+            // ->action('Texto del boton', route('requirements.show', $this->sgr->id) )
             ->line(' Si no puede asistir, rogamos contactar a la Unidad de Salud del Trabajador para reagendar o cancelar su hora.')
             ->salutation('Saludos cordiales.');
     }
