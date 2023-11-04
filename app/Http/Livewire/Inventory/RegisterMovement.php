@@ -52,12 +52,13 @@ class RegisterMovement extends Component
         $userResponsible = User::find($dataValidated['user_responsible_id']);
         $userUsing = User::find($dataValidated['user_using_id']);
         $dataValidated['user_responsible_ou_id'] = optional($userResponsible->organizationalUnit)->id;
+        $dataValidated['user_sender_id'] = auth()->id();
 
         if($userUsing)
             $dataValidated['user_using_ou_id'] = optional($userUsing->organizationalUnit)->id;
 
-        $movements = InventoryMovement::create($dataValidated);
-        $this->inventory->movements()->save($movements);
+        $movement = InventoryMovement::create($dataValidated);
+        $this->inventory->movements()->save($movement);
 
         $this->emit('clearSearchUser');
         $this->emit('clearSearchPlace');
