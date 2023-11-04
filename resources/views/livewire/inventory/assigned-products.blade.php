@@ -10,7 +10,7 @@
             </h4>
         </div>
         <div class="col text-right">
-            <a class="btn btn-primary" href="{{ route('inventories.register') }}">
+            <a class="btn btn-primary" href="{{ route('inventories.register', auth()->user()->organizationalUnit->establishment) }}">
                 <i class="fas fa-plus"></i> Registrar Inventario
             </a>
         </div>
@@ -108,6 +108,14 @@
                         >
                             <i class="fas fa-sync-alt"></i>
                             Traspaso
+                        </a>
+                        <a
+                            href="{{ route('inventories.act-transfer', $inventory) }}"
+                            target="_blank"
+                            class="btn btn-sm btn-outline-danger"
+                            title="Acta de Traspaso"
+                        >
+                            <i class="fas fa-file-pdf"></i>
                         </a>
                     </td>
                 </tr>
