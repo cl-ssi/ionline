@@ -5,11 +5,20 @@
         'establishment' => $establishment
     ])
 
-    <h4 class="mb-3">
-        {{ $establishment->name }}: Inventario
-    </h4>
+    <div class="row">
+        <div class="col">
+            <h4 class="mb-3">
+                {{ $establishment->name }}: Inventario
+            </h4>
+        </div>
+        <div class="col text-right">
+            <a class="btn btn-primary" href="{{ route('inventories.register', $establishment) }}">
+                <i class="fas fa-plus"></i> Registrar Inventario
+            </a>
+        </div>
+    </div>
 
-    {{-- 
+    {{--
     @livewire('parameters.parameter.single-manager',[
         'module' => 'inventory',
         'parameterName' => 'Encargado de inventario',
