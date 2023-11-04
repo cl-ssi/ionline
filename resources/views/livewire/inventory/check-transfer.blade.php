@@ -48,6 +48,49 @@
         </fieldset>
     </div>
 
+
+    <div class="form-row g-2 mb-2">
+        <div class="col-md-12">
+            <label for="place-location" class="form-label">
+                Ubicación
+            </label>
+            <input
+                type="text"
+                class="form-control"
+                id="place-location"
+                value="{{ $movement->place->location->name ?? 'Sin ubicación' }} - {{ $movement->place->name ?? 'Sin lugar' }}"
+                readonly
+            >
+        </div>
+    </div>
+
+    <div class="form-row g-2 mb-2">
+        <div class="col-md-6">
+            <label for="user-sender" class="form-label">
+                Quién Entrega
+            </label>
+            <input
+                type="text"
+                class="form-control"
+                id="user-sender"
+                value="{{ $movement->senderUser->short_name ?? 'Sin información' }}"
+                readonly
+            >
+        </div>
+        <div class="col-md-6">
+            <label for="user-reception" class="form-label">
+                Quién Recepciona
+            </label>
+            <input
+                type="text"
+                class="form-control"
+                id="user-reception"
+                value="{{ auth()->user()->short_name ?? 'Sin información' }}"
+                readonly
+            >
+        </div>
+    </div>
+
     <div class="form-row g-2 mb-2">
         <fieldset class="col-md-6">
             <label for="user" class="form-label">
