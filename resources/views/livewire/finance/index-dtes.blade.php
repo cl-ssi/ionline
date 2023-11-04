@@ -215,8 +215,8 @@
 
                                     @case('nota_debito')
                                         <!-- TODO: Si es guia, se puede asociar a multiple
-                                                                            si es nota de crédito o débito se debería poder asociar sólo a una
-                                                                            preguntar a gina o juan toro -->
+                                                                                                                                                            si es nota de crédito o débito se debería poder asociar sólo a una
+                                                                                                                                                            preguntar a gina o juan toro -->
                                         <div class="form-group col-md-4">
                                             <label for="for_asociate">Asociar a Factura - ID DTE:</label>
                                             <select multiple class="form-control" id="for_asociate"
@@ -249,8 +249,40 @@
                                         wire:click="dismiss">Cancelar </button>
                                 </div>
 
+                                <hr>
 
 
+
+                            </div>
+
+                            <div class="form-row">
+                                <div class="card col-md-12 mb-3">
+                                    <div class="card-header">
+                                        Estado/Rechazar
+                                    </div>
+                                    <form wire:submit.prevent="changeStatus({{ $dte->id }})">
+                                        <div class="card-body">
+                                            <div class="form-group col-md-3">
+                                                <label for="for_confirmation_status">Estado de confirmación</label>
+                                                <select class="form-control" id="for_confirmation_status"
+                                                    wire:model.defer="confirmation_status">
+                                                    <option value=""></option>
+                                                    <option value="1">Aceptar</option>
+                                                    <option value="0">Rechazar</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group col-md-9">
+                                                <label for="for_confirmation_observation">Observación</label>
+                                                <textarea class="form-control" wire:model.defer="confirmation_observation" rows="3"></textarea>
+                                            </div>
+
+
+                                            <button type="submit" class="btn btn-primary">Guardar</button>
+                                            <button type="button" class="btn btn-outline-secondary"
+                                                wire:click="dismiss">Cancelar</button>
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
 
                             {{-- 

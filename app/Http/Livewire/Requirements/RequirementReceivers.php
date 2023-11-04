@@ -135,7 +135,10 @@ class RequirementReceivers extends Component
         // se agrega para que deje todos los objetos del array del tipo User
         foreach($this->users_array as $key => $item){
             if(!$item instanceof Collection) {
-                $this->users_array[$key] = User::find($item['id']);  
+                if(array_key_exists($key,$this->users_array)){
+                    $this->users_array[$key] = User::find($item['id']);
+                }
+                  
             }
         }
         

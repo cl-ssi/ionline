@@ -1,6 +1,6 @@
 <ul class="nav nav-tabs mb-3 d-print-none">
 
-    @canany(['amiPASS', 'be god'])
+    @canany(['amiPASS', 'Rrhh: wellfair'])
         <li class="nav-item">
             <a class="nav-link" href="{{ route('welfare.index') }}">
                 <i class="fas fa-home"></i> home
@@ -9,7 +9,7 @@
     @endcanany
 
 
-    @canany(['be god'])
+    @canany(['Rrhh: wellfair'])
         <li class="nav-item">
             <a class="nav-link" href="{{ route('welfare.balances') }}">
                 <i class="fas fa-balance-scale"></i> Balance
@@ -36,7 +36,7 @@
         
     @endcanany
 
-    @canany(['be god'])
+    @canany(['amiPASS'])
         <li class="nav-item dropdown ">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" data-bs-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
@@ -67,20 +67,18 @@
         </li>
     @endcanany
 
-        @canany(['amiPASS', 'be god'])
-            <li class="nav-item">
-                <a class="nav-link" href="{{ route('welfare.amipass.requests-manager') }}">
-                    <i class="fas fa-utensils"></i> Solicitudes Amipass
-                </a>
-            </li>
+    @canany(['amiPASS', 'Rrhh: wellfair'])
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('welfare.amipass.requests-manager') }}">
+                <i class="fas fa-utensils"></i> Solicitudes Amipass
+            </a>
+        </li>
 
 
-            <li class="nav-item">
-                <a class="nav-link" href="{{ route('welfare.amipass.question-all-index') }}">
-                    <i class="fas fa-question-circle"></i> Consultas/Sugerencia Amipass
-                </a>
-            </li>
-
-
-        @endcanany
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('welfare.amipass.question-all-index') }}">
+                <i class="fas fa-question-circle"></i> Consultas/Sugerencia Amipass
+            </a>
+        </li>
+    @endcanany
     </ul>

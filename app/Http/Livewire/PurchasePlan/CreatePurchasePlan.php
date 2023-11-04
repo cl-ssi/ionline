@@ -12,6 +12,7 @@ use App\Models\PurchasePlan\PurchasePlanItem;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Rrhh\Authority;
+// @mirandaljorge TODO: Para que importar Carbon?
 use Carbon\Carbon;
 
 use App\Models\Documents\Approval;
@@ -187,7 +188,7 @@ class CreatePurchasePlan extends Component
                 "module"                => "Plan de Compras",
                 "module_icon"           => "fas fa-shopping-cart",
                 "subject"               => "Solicitud de Aprobación Jefatura",
-                "approver_ou_id"        => $purchasePlan->organizational_unit_id,
+                "sent_to_ou_id"        => $purchasePlan->organizational_unit_id,
                 "document_route_name"   => "purchase_plan.show_approval",
                 "document_route_params" => json_encode(["purchase_plan_id" => $purchasePlan->id])
             ]);
@@ -197,7 +198,7 @@ class CreatePurchasePlan extends Component
                 "module"                => "Plan de Compras",
                 "module_icon"           => "fas fa-shopping-cart",
                 "subject"               => "Solicitud de Aprobación Abastecimiento",
-                "approver_ou_id"        => Parameter::where('module', 'ou')->where('parameter', 'AbastecimientoSSI')->first()->value,
+                "sent_to_ou_id"        => Parameter::where('module', 'ou')->where('parameter', 'AbastecimientoSSI')->first()->value,
                 "document_route_name"   => "purchase_plan.show_approval",
                 "document_route_params" => json_encode(["purchase_plan_id" => $purchasePlan->id]),
                 "previous_approval_id"  => $prev_approval->id,
@@ -209,7 +210,7 @@ class CreatePurchasePlan extends Component
                 "module"                => "Plan de Compras",
                 "module_icon"           => "fas fa-shopping-cart",
                 "subject"               => "Solicitud de Aprobación Depto. Gestión Financiera",
-                "approver_ou_id"        => Parameter::where('module', 'ou')->where('parameter', 'FinanzasSSI')->first()->value,
+                "sent_to_ou_id"        => Parameter::where('module', 'ou')->where('parameter', 'FinanzasSSI')->first()->value,
                 "document_route_name"   => "purchase_plan.show_approval",
                 "document_route_params" => json_encode(["purchase_plan_id" => $purchasePlan->id]),
                 "previous_approval_id"  => $prev_approval->id,
@@ -221,7 +222,7 @@ class CreatePurchasePlan extends Component
                 "module"                => "Plan de Compras",
                 "module_icon"           => "fas fa-shopping-cart",
                 "subject"               => "Solicitud de Aprobación Subdir. Recursos Físicos y Financieros",
-                "approver_ou_id"        => Parameter::where('module', 'ou')->where('parameter', 'SDASSI')->first()->value,
+                "sent_to_ou_id"        => Parameter::where('module', 'ou')->where('parameter', 'SDASSI')->first()->value,
                 "document_route_name"   => "purchase_plan.show_approval",
                 "document_route_params" => json_encode(["purchase_plan_id" => $purchasePlan->id]),
                 "previous_approval_id"  => $prev_approval->id,

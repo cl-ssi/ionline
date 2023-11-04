@@ -63,10 +63,11 @@
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Fecha registro</th>
+                        <th>Fecha inasistencia</th>
                         <th>Motivo (fundamento)</th>
+                        <th>Fecha registro</th>
                         <th>Autoridad</th>
-                        <th>Estado</th>
+                        <th>E</th>
                         <th>Observación</th>
                         <th>Fecha revisión</th>
                         <th></th>
@@ -98,6 +99,10 @@
                                     </span>
                                 @endif
                             </td>
+                            <td>
+                                <small>
+                                    {{ $record->created_at->format('Y-m-d') }}</td>
+                                </small>
                             <td>{{ optional($record->authority)->shortName }}</td>
                             <td>
                                 @if(is_null($record->status))

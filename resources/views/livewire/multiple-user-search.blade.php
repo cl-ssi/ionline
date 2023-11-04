@@ -3,9 +3,9 @@
         <input type="checkbox" name="{{ $nameInput }}[]" value="{{ $id }}" style="display:none;" checked>
     @endforeach
 
-    <div class="row">
+    <div class="row g-2 mb-3">
         <div class="col">
-			<label for="search-user">Asignar a persona:</label>
+            <label for="search-user">Asignar a persona:</label>
             @livewire('users.search-user', [
                 'placeholder' => 'Ingrese un nombre',
                 'eventName' => 'myUserUsingId',
@@ -18,7 +18,7 @@
                             <div class="col-9">
                                 {{ $itemUser->full_name }}
                             </div>
-                            <div class="col-3 text-right">
+                            <div class="col-3 text-end">
                                 <button
                                     class="btn btn-sm btn-outline-danger"
                                     wire:click.prevent="deleteUser({{ $index }})"

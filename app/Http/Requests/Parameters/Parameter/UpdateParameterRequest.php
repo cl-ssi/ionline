@@ -45,7 +45,8 @@ class UpdateParameterRequest extends FormRequest
             ],
             'module'            => 'required|string|max:255',
             'value'             => 'required|string|max:255',
-            'description'       => 'nullable|string|max:255'
+            'description'       => 'nullable|string|max:255',
+            'establishment_id'  => 'nullable|integer'
         ];
     }
 }

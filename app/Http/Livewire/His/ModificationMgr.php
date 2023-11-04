@@ -67,7 +67,7 @@ class ModificationMgr extends Component
                     "subject" => $modrequest->subject,
                     "document_route_name" => "his.modification-request.show",
                     "document_route_params" => json_encode(["modification_request_id" => $modrequest->id]),
-                    "approver_ou_id" => $ou_id,
+                    "sent_to_ou_id" => $ou_id,
                 ]);
 
             }
@@ -100,7 +100,7 @@ class ModificationMgr extends Component
         $modifications = ModificationRequest::with([
                 'creator',
                 'approvals',
-                'approvals.organizationalUnit',
+                'approvals.sentToOu',
             ])
             ->latest()
             ->paginate(25);

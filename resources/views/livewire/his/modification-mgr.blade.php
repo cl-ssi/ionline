@@ -90,16 +90,16 @@
                             @foreach($modrequest->approvals as $approval)
                             <tr class="table-{{ $approval->color }}">
                                 <td>
-                                    {{ $approval->organizationalUnit->name }}
+                                    {{ $approval->sentToOu->name }}
                                 </td>
                                 <td>
-                                    {{ $approval->organizationalUnit->currentManager?->user->shortName }} 
+                                    {{ $approval->sentToOu->currentManager?->user->shortName }} 
                                 </td>
                                 <td>
                                     {{ $approval->approver_at }}
                                 </td>
                                 <td>
-                                    {{ $approval->reject_observation }}
+                                    {{ $approval->approver_observation }}
                                 </td>
                             </tr>
                             @endforeach
@@ -159,7 +159,7 @@
                     <td>
                         @foreach($modification->approvals as $approval)
                             <i class="fa fa-fw fa-lg {{ $approval->icon }} text-{{ $approval->color }}" 
-                                title="{{ $approval->organizationalUnit->name }}"></i>
+                                title="{{ $approval->sentToOu->name }}"></i>
                         @endforeach
                     </td>
                     <td>{{ $modification->creator->shortName }}</td>
@@ -180,8 +180,8 @@
                         @endswitch
 
                         @foreach($modification->approvals as $approval)
-                            @if($approval->reject_observation)
-                                <br><span class="smal text-danger">{{ $approval->reject_observation }} </span> 
+                            @if($approval->approver_observation)
+                                <br><span class="smal text-danger">{{ $approval->approver_observation }} </span> 
                             @endif
                         @endforeach
                     </td>

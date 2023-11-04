@@ -2,17 +2,19 @@
 
 namespace App\Http\Controllers\ProfAgenda;
 
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-
-use Carbon\Carbon;
-use Carbon\CarbonPeriod;
-use App\User;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Http\Request;
+
+use Carbon\CarbonPeriod;
+use Carbon\Carbon;
+use App\User;
+use App\Notifications\ProfAgenda\NewReservation;
+use App\Notifications\ProfAgenda\CancelReservation;
 
 use App\Models\ProfAgenda\OpenHour;
 use App\Mail\OpenHourReservation;
 use App\Mail\OpenHourCancelation;
+use App\Http\Controllers\Controller;
 
 class OpenHourController extends Controller
 {
@@ -108,7 +110,20 @@ class OpenHourController extends Controller
 
         //envía correo de confirmación
         if($openHour->patient){
-            Mail::to($openHour->patient)->send(new OpenHourReservation($openHour));
+            
+            if($openHour->patient->email != null){
+                /*
+                 * Utilizando Notify
+                 */ 
+                $openHour->patient->notify(new NewReservation($openHour));
+
+                /** 
+                 * Utilizando mail tradicional
+                 */
+                // if (filter_var($openHour->patient->email, FILTER_VALIDATE_EMAIL)) {
+                //     Mail::to($openHour->patient)->send(new OpenHourReservation($openHour));
+                // }
+            } 
         }
         
         session()->flash('success', 'Se guardó la información.');
@@ -132,7 +147,19 @@ class OpenHourController extends Controller
 
         //envía correo de cancelación
         if($openHour->patient){
-            Mail::to($openHour->patient)->send(new OpenHourCancelation($openHour));
+            if($openHour->patient->email != null){
+                if (filter_var($openHour->patient->email, FILTER_VALIDATE_EMAIL)) {
+                    /*
+                    * Utilizando Notify
+                    */ 
+                    $openHour->patient->notify(new CancelReservation($openHour));
+
+                    /*
+                    * Utilizando Mail
+                    */ 
+                    // Mail::to($openHour->patient)->send(new OpenHourCancelation($openHour));
+                } 
+            }
         }
         
         session()->flash('success', 'Se guardó la información.');
@@ -160,13 +187,12 @@ class OpenHourController extends Controller
     }
 
     public function change_hour($id, $start_date){
-        // dd($start_date);
         $start_date = Carbon::parse($start_date);
-        // dd($start_date);
-        
+
         $openHour = OpenHour::find($id);
+        $duration = $openHour->start_date->diffInMinutes($openHour->end_date);
         $openHour->start_date = $start_date;
-        $openHour->end_date = $start_date->addMinutes($openHour->detail->duration);
+        $openHour->end_date = $start_date->addMinutes($duration);
         $openHour->save();
 
         session()->flash('success', 'Se guardó la información.');

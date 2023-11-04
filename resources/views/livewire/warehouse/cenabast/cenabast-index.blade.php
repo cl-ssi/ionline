@@ -52,9 +52,10 @@
                 <th>
                     <input type="text" class="form-control" wire:model.defer="otp" placeholder="OTP"
                         width="100px">
-                    <button class="btn btn-sm btn-primary btn-block" wire:click="signMultiple">
+                        <small class="text-muted">Solo activada la firma individual hasta estabilidad de servicio</small>
+                    {{-- <button class="btn btn-sm btn-primary btn-block" wire:click="signMultiple">
                         Firmar Varios
-                    </button>
+                    </button> --}}
                 </th>
                 <th>ID</th>
                 <th>Estb.</th>
@@ -164,7 +165,7 @@
 
                                     'filename' => '/ionline/cenabast/signature/dte-' . $dte->id,
 
-                                    'callback' => 'warehouse.cenabast.callback',
+                                    'callbackRoute' => 'warehouse.cenabast.callback',
                                     'callbackParams' => [
                                         'dte' => $dte->id,
                                         'is_pharmacist' => true,
@@ -201,7 +202,7 @@
 
                                     'filename' => '/ionline/cenabast/signature/dte-' . $dte->id,
 
-                                    'callback' => 'warehouse.cenabast.callback',
+                                    'callbackRoute' => 'warehouse.cenabast.callback',
                                     'callbackParams' => [
                                         'dte' => $dte->id,
                                         'is_pharmacist' => false,

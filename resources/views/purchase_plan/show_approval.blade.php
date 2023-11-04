@@ -189,7 +189,7 @@
         <thead>
             <tr class="text-center">
                 @foreach($purchasePlan->approvals as $approval)
-                <th width="" class="table-secondary">{{ $approval->organizationalUnit->name }}</th>
+                <th width="" class="table-secondary">{{ $approval->sentToOu->name }}</th>
                 @endforeach
             </tr>
         </thead>

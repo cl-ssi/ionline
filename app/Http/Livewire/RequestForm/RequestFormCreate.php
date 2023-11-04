@@ -32,7 +32,7 @@ class RequestFormCreate extends Component
     public $article, $unitOfMeasurement, $technicalSpecifications, $quantity, $typeOfCurrency, $articleFile, $subtype,
             $unitValue, $taxes, $fileItem, $totalValue, $lstUnitOfMeasurement, $title, $edit, $key, $request_form_id;
 
-    public $name, $contractManagerId, $contractManager, $superiorChief, $purchaseMechanism, $messagePM, $isHAH,
+    public $name, $contractManagerId, $contractManagerOuId, $contractManager, $superiorChief, $purchaseMechanism, $messagePM, $isHAH,
             $program, $fileRequests = [], $justify, $totalDocument, $technicalReviewOuId;
 
     public $items, $lstBudgetItem, $requestForm, $editRF, $deletedItems, $idRF, $savedFiles;
@@ -132,6 +132,7 @@ class RequestFormCreate extends Component
       $this->subtype            =   $this->requestForm->subtype;
       $this->name               =   $this->requestForm->name;
       $this->contractManagerId  =   $this->requestForm->contract_manager_id;
+      $this->contractManagerOuId=   $this->requestForm->contract_manager_ou_id;
       $this->contractManager    =   $this->requestForm->contractManager;
       $this->superiorChief      =   $this->requestForm->superior_chief;
       $this->program            =   $this->requestForm->program;
@@ -140,7 +141,6 @@ class RequestFormCreate extends Component
       $this->justify            =   $this->requestForm->justification;
       $this->purchaseMechanism  =   $this->requestForm->purchase_mechanism_id;
       $this->typeOfCurrency     =   $this->requestForm->type_of_currency;
-      $this->estimated_expense  =   $this->requestForm->estimated_expense;
       $this->editRF             =   true;
       $this->idRF               =   $this->requestForm->id;
       $this->savedFiles         =   $this->requestForm->requestFormFiles;
@@ -272,16 +272,16 @@ class RequestFormCreate extends Component
                 'contract_manager_id'   =>  $this->contractManagerId,
                 //contractManagerId
                 //'contract_manager_id'   =>  Authority::getBossFromUser$this->contractManagerId,
-                //'contract_manager_ou_id' => User::with('organizationalUnit')->find($this->contractManagerId)->organizationalUnit->id,
-                'contract_manager_ou_id' => User::with('organizationalUnit')->find($this->contractManagerId)->organizationalUnit->establishment_id == Parameter::where('parameter', 'HospitalAltoHospicio')->first()->value 
-                                            ? User::find($this->contractManagerId)->organizational_unit_id
-                                            : Authority::getBossFromUser($this->contractManagerId,Carbon::now())->organizational_unit_id,
+                'contract_manager_ou_id' => $this->contractManagerOuId,
+                // 'contract_manager_ou_id' => User::with('organizationalUnit')->find($this->contractManagerId)->organizationalUnit->establishment_id == Parameter::where('parameter', 'HospitalAltoHospicio')->first()->value 
+                //                             ? User::find($this->contractManagerId)->organizational_unit_id
+                //                             : Authority::getBossFromUser($this->contractManagerId,Carbon::now())->organizational_unit_id,
                 'name'                  =>  $this->name,
                 'superior_chief'        =>  $this->superiorChief,
                 'justification'         =>  $this->justify,
                 'type_form'             =>  $this->isRFItems ? 'bienes y/o servicios' : 'pasajes aéreos',
                 'request_user_id'       =>  $this->editRF ? $this->requestForm->request_user_id : Auth()->user()->id,
-                'request_user_ou_id'    =>  $this->editRF ? $this->requestForm->request_user_ou_id : Auth()->user()->organizationalUnit->id,
+                'request_user_ou_id'    =>  $this->editRF ? $this->requestForm->request_user_ou_id : Auth()->user()->organizational_unit_id,
                 'estimated_expense'     =>  $this->totalForm(),
                 'type_of_currency'      =>  $this->typeOfCurrency,
                 'purchase_mechanism_id' =>  $this->purchaseMechanism,
@@ -300,14 +300,14 @@ class RequestFormCreate extends Component
                 'contract_manager_id'   =>  $this->contractManagerId,
                 //contractManagerId
                 //'contract_manager_id'   =>  Authority::getBossFromUser$this->contractManagerId,
-                //'contract_manager_ou_id' => User::with('organizationalUnit')->find($this->contractManagerId)->organizationalUnit->id,
-                'contract_manager_ou_id' => Authority::getBossFromUser($this->contractManagerId,Carbon::now())->organizational_unit_id,
+                // 'contract_manager_ou_id' => $this->editRF && $this->requestForm->contract_manager_id == $this->contractManagerId ? $this->requestForm->contract_manager_id : Authority::getBossFromUser($this->contractManagerId,Carbon::now())->organizational_unit_id,
+                'contract_manager_ou_id'=>  $this->contractManagerOuId,
                 'name'                  =>  $this->name,
                 'superior_chief'        =>  $this->superiorChief,
                 'justification'         =>  $this->justify,
                 'type_form'             =>  $this->isRFItems ? 'bienes y/o servicios' : 'pasajes aéreos',
                 'request_user_id'       =>  $this->editRF ? $this->requestForm->request_user_id : Auth()->user()->id,
-                'request_user_ou_id'    =>  $this->editRF ? $this->requestForm->request_user_ou_id : Auth()->user()->organizationalUnit->id,
+                'request_user_ou_id'    =>  $this->editRF ? $this->requestForm->request_user_ou_id : Auth()->user()->organizational_unit_id,
                 'estimated_expense'     =>  $this->editRF && $this->requestForm->has_increased_expense ? $this->requestForm->estimated_expense : $this->totalForm(),
                 'type_of_currency'      =>  $this->typeOfCurrency,
                 'purchase_mechanism_id' =>  $this->purchaseMechanism,
@@ -592,6 +592,7 @@ class RequestFormCreate extends Component
 
     public function searchedContractManager(User $user){
       $this->contractManagerId = $user->id;
+      $this->contractManagerOuId = $user->organizational_unit_id;
     }
 
     public function searchedTechnicalReviewOu(OrganizationalUnit $organizationalUnit){

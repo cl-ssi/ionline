@@ -2,31 +2,33 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\NewSignatureRequest;
-use App\Mail\SignedDocument;
-use App\Models\Documents\SignaturesFile;
-use App\Models\Documents\SignaturesFlow;
-use Auth;
-use Illuminate\Contracts\Filesystem\FileNotFoundException;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Http;
-use Firebase\JWT\JWT;
-use Illuminate\Support\Facades\Mail;
+use Str;
+use Storage;
 use SimpleSoftwareIO\QrCode\Generator;
-use App\Models\Documents\Parte;
-use App\Models\Documents\ParteFile;
-use Carbon\Carbon;
-
-use App\Models\Establishment;
-
+use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
 /* No sé si son necesarias, las puse para el try catch */
-use Exception;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Exception\ConnectException;
-use Storage;
-use Str;
+use Firebase\JWT\JWT;
+use Exception;
+use Carbon\Carbon;
+use Auth;
+use App\User;
+use App\Notifications\Signatures\SignedDocument;
+use App\Notifications\Signatures\NewSignatureRequest;
+use App\Models\Establishment;
+use App\Models\Documents\SignaturesFlow;
+use App\Models\Documents\SignaturesFile;
+use App\Models\Documents\ParteFile;
+use App\Models\Documents\Parte;
+// use App\Mail\SignedDocument;
+
 
 class DigitalSignatureController extends Controller
 {
@@ -213,10 +215,23 @@ class DigitalSignatureController extends Controller
 
                 preg_match_all("/[\._a-zA-Z0-9-]+@[\._a-zA-Z0-9-]+/i", $allEmails, $emails);
 
-                if(!empty($emails[0])) {
-                    Mail::to($emails[0])
-                    ->send(new SignedDocument($signaturesFlow->signature));
+                /**
+                 * Utilizando notify y con colas
+                 */
+                foreach($emails[0] as $email) {
+                    // Crea un usuario en memoria para enviar la notificación
+                    $user = new User([ 'email' => $email]);
+                    $user->notify(new SignedDocument($signaturesFlow->signature));
                 }
+
+                /** 
+                 * Antes se enviaba el mail on the fly, cuando el correo estaba caido, 
+                 * Generaba un error 500
+                 */
+                // if(!empty($emails[0])) {
+                //     Mail::to($emails[0])
+                //     ->send(new SignedDocument($signaturesFlow->signature));
+                // }
 
                 $destinatarios = $signaturesFlow->signature->recipients;
 
@@ -317,11 +332,9 @@ class DigitalSignatureController extends Controller
                         ->first();
 
                     if ($nextSignaturesFlowVisation) {
-                        Mail::to($nextSignaturesFlowVisation->userSigner->email)
-                            ->send(new NewSignatureRequest($signaturesFlow));
+                        $nextSignaturesFlowVisation->userSigner->notify(new NewSignatureRequest($signaturesFlow->signature));
                     } elseif ($signaturesFlow->signature->signaturesFlowSigner && $signaturesFlow->signature->signaturesFlowSigner->status === null) {
-                        Mail::to($signaturesFlow->signature->signaturesFlowSigner->userSigner->email)
-                            ->send(new NewSignatureRequest($signaturesFlow));
+                        $signaturesFlow->signature->signaturesFlowSigner->userSigner->notify(new NewSignatureRequest($signaturesFlow->signature));
                     }
                 }
             }
@@ -612,7 +625,7 @@ class DigitalSignatureController extends Controller
             return [
                 'statusOk' => false,
                 'content' => '',
-                'errorMsg' => 'Disculpe, se produjo un error con firma electrónica, intente nuevamente.',
+                'errorMsg' => 'Disculpe, se produjo un error con firma electrónica, intente nuevamente: ' . $e->getMessage(),
             ];
         }
 

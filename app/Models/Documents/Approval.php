@@ -63,7 +63,7 @@ class Approval extends Model
                 //         logger()->info('Aprobado: id ' . $approval->id. ' param1: '. $param1);
                 //     }
                 //     else {
-                //         logger()->info('Rechazado: id ' . $approval->id. ' motivo '. $approval->reject_observation);
+                //         logger()->info('Rechazado: id ' . $approval->id. ' motivo '. $approval->approver_observation);
                 //     }
                 // }
            
@@ -108,11 +108,11 @@ class Approval extends Model
 
             /** Quien firma: Utilizar uno de los dos */
             /* (Opcional) De preferncia enviar la aprobación a la OU */
-            "approver_ou_id" => 20,
+            "sent_to_ou_id" => 20,
 
 
             /* (Opcional) Se puede enviar directo a una persona (es el user_id), pero hay que evitarlo */
-            //"approver_id" => 15287582,
+            //"sent_to_user_id" => 15287582,
 
             /* (Opcional) Metodo que se ejecutará al realizar la aprobación o rechazo */
             //"callback_controller_method" => "App\Http\Controllers\Rrhh\NoAttendanceRecordController@approvalCallback",
@@ -195,13 +195,17 @@ class Approval extends Model
         'subject',
         'document_route_name',
         'document_route_params',
-        'approver_ou_id',
-        'approver_id', //  user_id, asignar en caso de aprobación o rechazo
-        'status', // True or False, asignar en caso de aprobación o rechazo
-        'approver_at', // Datetime, asignar en caso de aprobación o rechazo
+        'sent_to_ou_id',        // Enviado a una autoridad de una OU
+        'sent_to_user_id',      // Enviado a un usuario en particular
+
+        'approver_ou_id',       // ou_id, asignar en caso de aprobación/rechazo
+        'approver_id',          // user_id, asignar en caso de aprobación/rechazo
+        'approver_observation', // varchar, observación de aprobación/rechazo
+        'approver_at',          // Datetime, asignar en caso de aprobación/rechazo
+        'status',               // True or False, asignar en caso deaprobación/rechazo
+        
         'callback_controller_method',
         'callback_controller_params',
-        'reject_observation',
         'active',
         'previous_approval_id',
         'approvable_id',
@@ -221,7 +225,17 @@ class Approval extends Model
         'approver_at' => 'datetime',
     ];
 
-    public function organizationalUnit()
+    public function sentToOu()
+    {
+        return $this->belongsTo(OrganizationalUnit::class,'sent_to_ou_id')->withTrashed();
+    }
+
+    public function sentToUser()
+    {
+        return $this->belongsTo(User::class,'sent_to_user_id')->withTrashed();
+    }
+
+    public function approverOu()
     {
         return $this->belongsTo(OrganizationalUnit::class,'approver_ou_id')->withTrashed();
     }
@@ -251,6 +265,7 @@ class Approval extends Model
      * Get the polymorphic  parent approvable model:
      * - ModificationRequest
      * - NoAttendanceRecord
+     * - Fulfillment
      */
     public function approvable(): MorphTo
     {
@@ -298,12 +313,18 @@ class Approval extends Model
     */
     public function resetStatus()
     {
-        $this->status = null;
+        $this->approver_ou_id = null;
+        $this->approver_id = null;
+        $this->approver_observation = null;
         $this->approver_at = null;
+        $this->status = null;
 
-        if($this->approver_ou_id) {
-            $this->approver_id = null;
+        if($this->filename) {
+            if(Storage::disk('gcs')->exists($filename)) {
+                Storage::disk('gcs')->delete($this->filename);
+            }
         }
+
         $this->save();
     }
 
@@ -335,12 +356,13 @@ class Approval extends Model
 
         static::created(function ($approval) {
             /** Enviar notificación al jefe de la unidad  */
-            if($approval->approver_ou_id) {
-                $approval->organizationalUnit->currentManager?->user?->notify(new NewApproval($approval));
+            if($approval->sent_to_ou_id) {
+                $approval->sentToOu->currentManager?->user?->notify(new NewApproval($approval));
             }
+
             /** Si tiene un aprobador en particular envia la notificación al usuario específico */
-            if($approval->approver_id) {
-                $approval->approver->notify(new NewApproval($approval));
+            if($approval->sent_to_user_id) {
+                $approval->sentToUser->notify(new NewApproval($approval));
             }
 
             /** Agregar el approval_id al comienzo de los parámetros del callback */
@@ -362,12 +384,12 @@ class Approval extends Model
 
                     /** Notificar al jefe de unidad o persona */
                     /** Enviar notificación al jefe de la unidad  */
-                    if($approval->nextApproval->approver_ou_id) {
-                        $approval->nextApproval->organizationalUnit->currentManager?->user?->notify(new NewApproval($approval->nextApproval));
+                    if($approval->nextApproval->sent_to_ou_id) {
+                        $approval->nextApproval->sentToOu->currentManager?->user?->notify(new NewApproval($approval->nextApproval));
                     }
                     /** Si tiene un aprobador en particular envia la notificación al usuario específico */
-                    if($approval->nextApproval->approver_id) {
-                        $approval->nextApproval->aprover->notify(new NewApproval($approval->nextApproval));
+                    if($approval->nextApproval->sent_to_user_id) {
+                        $approval->nextApproval->sentToUser->notify(new NewApproval($approval->nextApproval));
                     }
                 }
             }

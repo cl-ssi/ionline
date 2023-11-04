@@ -12,17 +12,18 @@ use App\Models\Pharmacies\Purchase;
 use App\Http\Livewire\Welfare\Amipass\RequestMgr;
 use App\Http\Livewire\Welfare\Amipass\ReportByDates;
 use App\Http\Livewire\Welfare\Amipass\NewBeneficiaryRequest;
-use App\Http\Livewire\Rrhh\ShiftsIndex;
 use App\Http\Livewire\Warehouse\Invoices\InvoiceManagement;
 use App\Http\Livewire\Warehouse\Cenabast\CenabastIndex;
 use App\Http\Livewire\TicResources;
 use App\Http\Livewire\Summary\Template\ShowTemplate;
 use App\Http\Livewire\Sign\SignatureIndex;
 use App\Http\Livewire\Sign\RequestSignature;
+use App\Http\Livewire\Rrhh\ShiftsIndex;
 use App\Http\Livewire\Rrhh\NoAttendanceRecordMgr;
 use App\Http\Livewire\Rrhh\NoAttendanceRecordIndex;
 use App\Http\Livewire\Rrhh\NoAttendanceRecordConfirmation;
 use App\Http\Livewire\Rrhh\Attendance\ReasonMgr;
+use App\Http\Livewire\Resources\Telephones\TelephoneIndex;
 use App\Http\Livewire\Resources\ComputerFusion;
 use App\Http\Livewire\Resources\ComputerCreate;
 use App\Http\Livewire\Requirements\Categories;
@@ -169,8 +170,8 @@ use App\Http\Controllers\PurchasePlan\PurchasePlanController;
 use App\Http\Controllers\Programmings\TrainingsItemController;
 use App\Http\Controllers\Programmings\TaskReschedulingController;
 use App\Http\Controllers\Programmings\TaskController;
-use App\Http\Controllers\Programmings\ReviewItemController;
 //use App\Http\Controllers\RequestForms\SupplyPurchaseController;
+use App\Http\Controllers\Programmings\ReviewItemController;
 use App\Http\Controllers\Programmings\ProgrammingReviewController;
 use App\Http\Controllers\Programmings\ProgrammingReportController;
 use App\Http\Controllers\Programmings\ProgrammingItemController;
@@ -280,6 +281,9 @@ Route::get('/', function () {
     return view('layouts.bt4.welcome');
 })->name('welcome');
 
+Route::get('/mailable', function () {
+    // auth()->user()->notify(new App\Notifications\Signatures\SignedDocument(App\Models\Documents\Signature::find(24587)));
+});
 
 Route::get('/claveunica/callback', [ClaveUnicaController::class, 'callback'])->name('claveunica.callback');
 Route::get('/claveunica/callback-testing', [ClaveUnicaController::class, 'callback']);
@@ -575,7 +579,7 @@ Route::prefix('resources')->name('resources.')->middleware(['auth', 'must.change
     Route::get('tic', TicResources::class)->name('tic');
 
     Route::prefix('telephones')->name('telephone.')->group(function () {
-        Route::get('/', [TelephoneController::class, 'index'])->name('index');
+        Route::get('/', TelephoneIndex::class)->name('index');
         Route::get('create', [TelephoneController::class, 'create'])->name('create');
         Route::post('store', [TelephoneController::class, 'store'])->name('store');
         Route::get('{telephone}/edit', [TelephoneController::class, 'edit'])->name('edit');
@@ -1979,6 +1983,7 @@ Route::prefix('finance')->as('finance.')->middleware(['auth', 'must.change.passw
     Route::get('/{dte}/download', [DteController::class, 'downloadManualDteFile'])->name('dtes.downloadManualDteFile');
 
     Route::get('dte/pending-receipt-certificate/{tray?}', [DteController::class, 'pendingReceiptCertificate'])->name('dtes.pendingReceiptCertificate');
+    Route::post('dte/save-file/{dte}', [DteController::class, 'saveFile'])->name('dtes.saveFile');
 
     Route::get('dtes/upload', UploadDtes::class)->name('dtes.upload');
     Route::get('dtes/{dte}/confirmation', DteConfirmation::class)->name('dtes.confirmation');

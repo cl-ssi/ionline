@@ -262,6 +262,21 @@ class IndexDtes extends Component
         $this->showEdit = null;
     }
 
+    public function changeStatus($dte_id)
+{
+    $dte = Dte::find($dte_id);
+
+    // Actualizar el estado de confirmación y otros campos relacionados
+    $dte->update([
+        'confirmation_status' => $this->confirmation_status,
+        'confirmation_observation' => $this->confirmation_observation        
+    ]);
+
+    // Resto del código relacionado al cambio de estado...
+
+    $this->showEdit = null;
+}
+
 
     public function loadManualDTE()
     {

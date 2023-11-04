@@ -52,7 +52,30 @@
 </div>
 
 <div class="form-row">
-    <fieldset class="form-group col-md-12">
+
+    <fieldset class="form-group col-md-6">
+        <label for="establishment_id">Establecimiento</label>
+        <!-- <input
+            type="text"
+            class="form-control @error('establishment_id') is-invalid @enderror"
+            id="establishment_id"
+            wire:model.debounce.1500ms="establishment_id"
+            placeholder="Selecciona el establecimiento"
+            required
+        > -->
+        <select class="form-control" wire:model.defer="establishment_id">
+            @foreach($establishments as $establishment)
+                <option value="{{$establishment->id}}" @selected($establishment->id == $establishment_id) required>{{$establishment->name}}</option>
+            @endforeach
+        </select>
+        @error('establishment_id')
+            <span class="invalid-feedback" role="alert">
+                <strong>{{ $message }}</strong>
+            </span>
+        @enderror
+    </fieldset>
+
+    <fieldset class="form-group col-md-6">
         <label for="description">Descripción</label>
         <input
             type="text"

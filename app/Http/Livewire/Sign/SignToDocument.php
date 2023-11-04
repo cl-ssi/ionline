@@ -41,7 +41,7 @@ class SignToDocument extends Component
      *       'btn_class' => 'btn btn-success',
      *       'btn_icon'  => 'fas fa-fw fa-thumbs-up',
      *
-     *       'callback' => 'finance.dtes.confirmation.store',
+     *       'callbackRoute' => 'finance.dtes.confirmation.store',
      *       'callbackParams' => [
      *           'dte' => $dte->id,
      *           'filename' => '/ionline/dte/confirmation-'.$dte->id,

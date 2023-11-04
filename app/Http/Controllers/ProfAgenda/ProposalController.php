@@ -12,6 +12,7 @@ use App\User;
 use Illuminate\Support\Facades\Auth;
 
 use App\Models\Parameters\Holiday;
+use App\Models\Parameters\Parameter;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 
@@ -41,7 +42,8 @@ class ProposalController extends Controller
      */
     public function create()
     {
-        $professions = Profession::whereIn('id',[1,4,5,6])->get();
+        $professions = explode(',',Parameter::where('parameter','profesiones_ust')->pluck('value')->toArray()[0]);
+        $professions = Profession::whereIn('id',$professions)->get();
         return view('prof_agenda.proposals.create',compact('professions'));
     }
 
@@ -70,7 +72,8 @@ class ProposalController extends Controller
      */
     public function show(Proposal $proposal)
     {
-        $professions = Profession::whereIn('id',[1,4,5,6])->get();
+        $professions = explode(',',Parameter::where('parameter','profesiones_ust')->pluck('value')->toArray()[0]);
+        $professions = Profession::whereIn('id',$professions)->get();
         return view('prof_agenda.proposals.show', compact('proposal','professions'));
     }
 
@@ -82,7 +85,8 @@ class ProposalController extends Controller
      */
     public function edit(Proposal $proposal)
     {
-        $professions = Profession::whereIn('id',[1,4,5,6])->get();
+        $professions = explode(',',Parameter::where('parameter','profesiones_ust')->pluck('value')->toArray()[0]);
+        $professions = Profession::whereIn('id',$professions)->get();
         return view('prof_agenda.proposals.edit', compact('proposal','professions'));
     }
 

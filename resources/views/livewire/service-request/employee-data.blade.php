@@ -72,7 +72,7 @@
 
         <fieldset class="form-group col-12 col-md-3">
             <label for="for_email">Correo electrónico*</label>
-            <input type="text" class="form-control" id="for_email" required wire:model.lazy="email"
+            <input type="email" class="form-control" id="for_email" required wire:model.lazy="email"
               name="email" @if($user) value="{{$user->email}}" @endif>
         </fieldset>
 

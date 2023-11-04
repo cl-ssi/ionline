@@ -26,7 +26,9 @@
 
     @if($finicio!=null && $ftermino!=null)
 
-    <hr>
+    <button class="btn btn-outline-success float-right" wire:click="export">
+        Montos <i class="fas fa-download"></i>
+    </button><br><br>
 
     <table class="table table-bordered table-sm" style="border-collapse:collapse;">
         <thead>

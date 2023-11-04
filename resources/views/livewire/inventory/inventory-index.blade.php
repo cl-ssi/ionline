@@ -26,24 +26,8 @@
     ])
     --}}
 
-    <div class="form-row g-2 my-3 d-print-none">
-        <fieldset class="form-group col-md-3">
-            <label for="products">Productos</label>
-            <select
-                wire:model="unspsc_product_id"
-                id="products"
-                class="form-control form-control-sm"
-            >
-                <option value="">Todos</option>
-                @foreach($products as $product)
-                    <option value="{{ $product->id }}">
-                        {{ $product->name }}
-                    </option>
-                @endforeach
-            </select>
-        </fieldset>
-
-        <fieldset class="form-group col-md-2">
+    <div class="form-row g-2 d-print-none">
+        <fieldset class="form-group col-md-4">
             <label for="locations">Ubicaciones</label>
             <select
                 wire:model="location_id"
@@ -59,7 +43,7 @@
             </select>
         </fieldset>
 
-        <fieldset class="form-group col-md-2">
+        <fieldset class="form-group col-md-4">
             <label for="places">Lugares</label>
             <select
                 wire:model="place_id"
@@ -69,11 +53,32 @@
                 <option value="">Todos</option>
                 @foreach($places as $itemPlace)
                     <option value="{{ $itemPlace->id }}">
-                        {{ $itemPlace->name }}
+                        {{ $itemPlace->name }} {{ $itemPlace->description }} {{ $itemPlace->architectural_design_code }}
                     </option>
                 @endforeach
             </select>
         </fieldset>
+    </div>
+
+    <div class="form-row g-2 d-print-none">
+
+        <fieldset class="form-group col-md-4">
+            <label for="products">Productos</label>
+            <select
+                wire:model="unspsc_product_id"
+                id="products"
+                class="form-control form-control-sm"
+            >
+                <option value="">Todos</option>
+                @foreach($products as $product)
+                    <option value="{{ $product->id }}">
+                        {{ $product->name }}
+                    </option>
+                @endforeach
+            </select>
+        </fieldset>
+
+
 
         <fieldset class="form-group col-md-2">
             <label for="responsibles">Responsables</label>
@@ -107,6 +112,15 @@
             </select>
         </fieldset>
 
+        <fieldset class="form-group col-md-3">
+            <label for="number">Nro. Inventario</label>
+            <input
+                wire:model.defer="number"
+                id="number"
+                class="form-control form-control-sm"
+            >
+        </fieldset>
+    
         <fieldset class="form-group col-md-1">
             <label for="">Filtro</label>
             <button

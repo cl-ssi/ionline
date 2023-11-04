@@ -22,7 +22,10 @@ class Agenda extends Component
         $array = array();
         $count = 0;
 
-        $openHours = OpenHour::where('profesional_id',$this->profesional_id)->where('profession_id',$this->profession_id)->get();
+        $openHours = OpenHour::where('profesional_id',$this->profesional_id)
+                            ->where('profession_id',$this->profession_id)
+                            ->with('patient','activityType')
+                            ->get();
 
         $min_date=$openHours->min('start_date');
         $max_date=$openHours->max('end_date');

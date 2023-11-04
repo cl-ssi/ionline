@@ -34,7 +34,7 @@ class NoAttendanceRecordConfirmation extends Component
             $this->noAttendanceRecord->approval->status             = $this->noAttendanceRecord->status;
             $this->noAttendanceRecord->approval->approver_id        = $this->noAttendanceRecord->authority_id;
             $this->noAttendanceRecord->approval->approver_at        = $this->noAttendanceRecord->authority_at;
-            $this->noAttendanceRecord->approval->reject_observation = $this->noAttendanceRecord->authority_observation;
+            $this->noAttendanceRecord->approval->approver_observation = $this->noAttendanceRecord->authority_observation;
             $this->noAttendanceRecord->approval->save();
         }
 

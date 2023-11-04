@@ -197,7 +197,7 @@ class DocumentSignService
         /**
          * Setea el modo para el payload
          */
-        if(env('FIRMA_MODO') == 'TEST')
+        if(env('FIRMA_MODO') == 'test')
         {
             if($this->modo = 'ATENDIDO')
             {

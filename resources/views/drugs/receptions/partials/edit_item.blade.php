@@ -28,7 +28,7 @@
 
                 <fieldset class="form-group col-2">
                     <label for="for_sample_number">N° Muestras</label>
-                    <input type="text" class="form-control" id="for_sample_number"
+                    <input type="number" class="form-control" id="for_sample_number"
                         value="{{ $item->sample_number }}" name="sample_number" required="">
                 </fieldset>
 
@@ -63,13 +63,13 @@
 
                 <fieldset class="form-group col">
                     <label for="for_sample">Muestra *</label>
-                    <input type="text" class="form-control" id="for_sample"
+                    <input type="number" step="0.01" class="form-control" id="for_sample"
                         value="{{ $item->sample }}" name="sample" required="">
                 </fieldset>
 
                 <fieldset class="form-group col">
                     <label for="for_countersample">Contramuestra</label>
-                    <input type="text" class="form-control" id="for_countersample"
+                    <input type="number" step="0.01" class="form-control" id="for_countersample"
                         value="{{ $item->countersample }}" name="countersample" required="">
                 </fieldset>
 

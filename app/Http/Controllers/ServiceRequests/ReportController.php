@@ -629,11 +629,16 @@ class ReportController extends Controller
   {
     // servicio
     if (Auth::user()->organizationalUnit->establishment_id == 38) {
-      $responsabilityCenters = OrganizationalUnit::where('establishment_id', 38)->orderBy('name', 'ASC')->get();
+        $responsabilityCenters = OrganizationalUnit::where('establishment_id', 38)->orderBy('name', 'ASC')->get();
     }
-    //hospital
+    //hospital hetg
     elseif (Auth::user()->organizationalUnit->establishment_id == 1) {
-      $responsabilityCenters = OrganizationalUnit::where('establishment_id', 1)->orderBy('name', 'ASC')->get();
+        $responsabilityCenters = OrganizationalUnit::where('establishment_id', 1)->orderBy('name', 'ASC')->get();
+    }
+    //hospital hospicio
+    else
+    {
+        $responsabilityCenters = OrganizationalUnit::where('establishment_id', Auth::user()->organizationalUnit->establishment_id)->orderBy('name', 'ASC')->get();
     }
 
     $establishments = Establishment::all();
@@ -731,23 +736,15 @@ class ReportController extends Controller
 
   public function export_sirh(Request $request)
   {
-
-
     $filitas = null;
 
     $filitas = ServiceRequest::where('establishment_id', 1)->paginate(100);
-
-
 
     $run = $request->run;
     $id_from = $request->id_from;
     $id_to = $request->id_to;
     $from = $request->from;
     $to = $request->to;
-
-
-
-
 
     $filitas = ServiceRequest::where('establishment_id', 1)
       ->when($request->run != null, function ($q) use ($run) {
@@ -909,14 +906,11 @@ class ReportController extends Controller
 
     $filas = ServiceRequest::where('establishment_id', 1);
 
-
     $run = $request->run;
     $id_from = $request->id_from;
     $id_to = $request->id_to;
     $from = $request->from;
     $to = $request->to;
-
-
 
     $filas = ServiceRequest::where('establishment_id', 1)
       ->when($request->run != null, function ($q) use ($run) {

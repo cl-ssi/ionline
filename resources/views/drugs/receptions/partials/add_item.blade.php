@@ -25,7 +25,7 @@
 
                 <fieldset class="form-group col-2">
                     <label for="for_sample_number">N° Muestras *</label>
-                    <input type="text" class="form-control" id="for_sample_number" placeholder="Número de Muestras" name="sample_number" required="">
+                    <input type="number" class="form-control" id="for_sample_number" placeholder="Número de Muestras" name="sample_number" required="">
                 </fieldset>
 
                 <fieldset class="form-group col-2">
@@ -49,12 +49,12 @@
 
                 <fieldset class="form-group col">
                     <label for="for_sample">Muestra *</label>
-                    <input type="text" class="form-control" id="for_sample" placeholder="Peso Muestra" name="sample" required="">
+                    <input type="number" step="0.01" class="form-control" id="for_sample" placeholder="Peso Muestra" name="sample" required="">
                 </fieldset>
 
                 <fieldset class="form-group col">
                     <label for="for_countersample">Contramuestra *</label>
-                    <input type="text" class="form-control" id="for_countersample" placeholder="Peso Contramuestra" name="countersample" required="">
+                    <input type="number" step="0.01" class="form-control" id="for_countersample" placeholder="Peso Contramuestra" name="countersample" required="">
                 </fieldset>
 
                 <fieldset class="form-group col">

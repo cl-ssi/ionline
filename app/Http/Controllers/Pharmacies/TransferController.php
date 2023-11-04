@@ -54,7 +54,12 @@ class TransferController extends Controller
                                             })
                                             ->orderBy('name','ASC')->get();
 
-            $filter = $request->get('filter') != null ? $request->get('filter') : $establishments->first()->id;
+            // Se agrega porque hay casos en que no devuelve establecimientos
+            if($establishments->count()>0){
+                $establishment = $establishments->first()->id;
+            }
+
+            $filter = $request->get('filter') != null ? $request->get('filter') : $establishment;
             // return $filter;
             $filterEstablishment = function($query) use ($filter) {
                 $query->where('establishment_id', $filter);

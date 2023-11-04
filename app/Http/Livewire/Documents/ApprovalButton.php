@@ -29,7 +29,7 @@ class ApprovalButton extends Component
 
 
     public $showModal = false;
-    public $reject_observation;
+    public $approver_observation;
     public $approvalSelected;
     public $otp;
     public $message;

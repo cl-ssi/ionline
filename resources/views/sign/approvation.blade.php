@@ -58,13 +58,13 @@
 
     </p>
     <p class="text small">
-        @if($approval->approver_ou_id)
-            {{ substr($approval->organizationalUnit->name, 0, 50) }}
+        @if($approval->sent_to_ou_id)
+            {{ substr($approval->sentToOu->name, 0, 50) }}
         @else
-            {{ substr($approval->approver->organizationalUnit?->name, 0, 50) }}
+            {{ substr($approval->approverOu?->name, 0, 50) }}
         @endif
     </p>
 </div>
 <p class="text small {{ $approval->color }}" style="padding-left: 6;">
-    {{ $approval->reject_observation }}
+    {{ $approval->approver_observation }}
 </p>

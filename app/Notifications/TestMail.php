@@ -2,13 +2,13 @@
 
 namespace App\Notifications;
 
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use App\Models\Requirements\Requirement;
+use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Bus\Queueable;
+use App\User;
 
-class NewSgr extends Notification
+class TestMail extends Notification
 {
     use Queueable;
 
@@ -17,9 +17,9 @@ class NewSgr extends Notification
      *
      * @return void
      */
-    public function __construct(Requirement $sgr)
+    public function __construct()
     {
-        $this->sgr = $sgr;
+
     }
 
     /**
@@ -30,7 +30,7 @@ class NewSgr extends Notification
      */
     public function via($notifiable)
     {
-        return ['database'];
+        return ['mail'];
     }
 
     /**
@@ -42,9 +42,12 @@ class NewSgr extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+            ->level('success')
+            ->subject('Correo de prueba')
+            ->greeting('Hola ' . $notifiable->name)
+            ->line('Probado el envío de correos')
+            ->action('iOnline', route('home') )
+            ->salutation('Saludos cordiales.');
     }
 
     /**
@@ -56,8 +59,7 @@ class NewSgr extends Notification
     public function toArray($notifiable)
     {
         return [
-            'subject' => $this->sgr->subject,
-            'action' => route('requirements.show',[$this->sgr->id], false),
+            //
         ];
     }
 }

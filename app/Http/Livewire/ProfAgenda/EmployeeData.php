@@ -5,7 +5,6 @@ namespace App\Http\Livewire\ProfAgenda;
 use Livewire\Component;
 use App\Models\ClCommune;
 use App\User;
-use App\Models\Parameters\Bank;
 
 class EmployeeData extends Component
 {
@@ -27,7 +26,6 @@ class EmployeeData extends Component
 
     public function render()
     {
-        $banks = Bank::all();
         $communes = ClCommune::orderBy('name', 'ASC')->get();
         $user = new User();
 
@@ -47,6 +45,6 @@ class EmployeeData extends Component
           }
         }
 
-        return view('livewire.prof-agenda.employee-data',compact('banks','user','communes'));
+        return view('livewire.prof-agenda.employee-data',compact('user','communes'));
     }
 }

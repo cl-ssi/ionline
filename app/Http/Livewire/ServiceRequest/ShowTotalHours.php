@@ -24,6 +24,8 @@ class ShowTotalHours extends Component
     public $hoursDetailArray = array();
     public $forCertificate = false;
     public $forResolution = false;
+    public $totalHoursDayString;
+    public $totalHoursNightString;
     //public $flag = null;
 
     //    protected $listeners = ['listener_shift_control'];
@@ -241,7 +243,7 @@ class ShowTotalHours extends Component
 
                 $holidaysArray = array();
                 foreach ($holidays as $holiday) {
-                    array_push($holidaysArray, $holiday->date);
+                    array_push($holidaysArray, $holiday->date->toDateString());
                 }
 
                 $total_minutes = 0;
@@ -299,7 +301,7 @@ class ShowTotalHours extends Component
 
               $holidaysArray = array();
               foreach ($holidays as $holiday) {
-                  array_push($holidaysArray, $holiday->date);
+                  array_push($holidaysArray, $holiday->date->toDateString());
               }
               // dd($holidays);
 
@@ -374,7 +376,7 @@ class ShowTotalHours extends Component
 
               $holidaysArray = array();
               foreach ($holidays as $holiday) {
-                  array_push($holidaysArray, $holiday->date);
+                  array_push($holidaysArray, $holiday->date->toDateString());
               }
 
               $total_minutes = 0;
@@ -464,7 +466,7 @@ class ShowTotalHours extends Component
     
                 $holidaysArray = array();
                 foreach ($holidays as $holiday) {
-                    array_push($holidaysArray, $holiday->date);
+                    array_push($holidaysArray, $holiday->date->toDateString());
                 }
     
                 $total_minutes = 0;
@@ -524,9 +526,7 @@ class ShowTotalHours extends Component
                     $hoursDayString = 0;
                         $start_hour = $shiftControl->start_date;
                         while ($start_hour < $shiftControl->end_date) {
-                            if (in_array($start_hour->hour, [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]) && 
-                                $shiftControl->start_date->isWeekday() &&
-                                !in_array($shiftControl->start_date->toDateString(), $holidaysArray)) {
+                            if (in_array($start_hour->hour, [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]) && $shiftControl->start_date->isWeekday() && !in_array($shiftControl->start_date->toDateString(), $holidaysArray)) {
                                 $hoursDayString = $hoursDayString + 1;
                             }
                             $start_hour = $start_hour->addMinute();
@@ -536,8 +536,7 @@ class ShowTotalHours extends Component
                         $hoursNightString = 0;
                         $start_hour = $shiftControl->start_date;
                         while ($start_hour < $shiftControl->end_date) {
-                            if (in_array($start_hour->hour, [21, 22, 23, 0, 1, 2, 3, 4, 5, 6]) ||
-                            ($shiftControl->start_date->dayOfWeek == 6 || $shiftControl->start_date->dayOfWeek == 0 || in_array($shiftControl->start_date->toDateString(), $holidaysArray))) {
+                            if (in_array($start_hour->hour, [21, 22, 23, 0, 1, 2, 3, 4, 5, 6]) || ($shiftControl->start_date->dayOfWeek == 6 || $shiftControl->start_date->dayOfWeek == 0 || in_array($shiftControl->start_date->toDateString(), $holidaysArray))) {
                                 $hoursNightString = $hoursNightString + 1;
                             }
                             $start_hour = $start_hour->addMinute();
@@ -568,6 +567,8 @@ class ShowTotalHours extends Component
                 $totalAmountNight = floor($this->totalHoursNight) * $value;
                 $this->totalAmount = ($totalAmountNight + $totalAmountDayRefund);
                 
+                $this->totalHoursDayString = $this->totalHoursDay;
+                $this->totalHoursNightString = $this->totalHoursNight;
                 $this->totalHoursDay = $this->totalHoursDay . " x " . $value;
                 $this->totalHoursNight = $this->totalHoursNight . " x " . $value;
                 // $this->totalHoursDay = $this->totalHoursDay;
@@ -582,7 +583,7 @@ class ShowTotalHours extends Component
 
                 $holidaysArray = array();
                 foreach ($holidays as $holiday) {
-                    array_push($holidaysArray, $holiday->date);
+                    array_push($holidaysArray, $holiday->date->toDateString());
                 }
                 // dd($holidays);
 

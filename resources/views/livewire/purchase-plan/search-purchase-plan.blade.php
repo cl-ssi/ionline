@@ -41,17 +41,17 @@
                                 @foreach($purchasePlan->approvals as $approval)
                                     @switch($approval->StatusInWords)
                                         @case('Pendiente')
-                                            <span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ $approval->organizationalUnit->name }}">
+                                            <span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ $approval->sentToOu->name }}">
                                                 <i class="fas fa-clock fa-2x"></i>
                                             </span>
                                             @break
                                         @case('Aprobado')
-                                            <span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" style="color: green;" data-bs-placement="top" title="{{ $approval->organizationalUnit->name }}">
+                                            <span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" style="color: green;" data-bs-placement="top" title="{{ $approval->sentToOu->name }}">
                                                 <i class="fas fa-check-circle fa-2x"></i>
                                             </span>
                                             @break
                                         @case('Rechazado')
-                                            <span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" style="color: tomato;" data-bs-placement="top" title="{{ $approval->organizationalUnit->name }}">
+                                            <span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" style="color: tomato;" data-bs-placement="top" title="{{ $approval->sentToOu->name }}">
                                                 <i class="fas fa-ban-circle fa-2x"></i>
                                             </span>
                                             @break

@@ -490,7 +490,7 @@
                         @csrf
 
                         <div class="input-group">
-                            <input class="input--style-2" type="text" placeholder="Digite su RUN" maxlength="12" name="rut" id="rut" required autocomplete="off">
+                            <input class="input--style-2" type="text" placeholder="Digitar RUN los terminado en K poner 0" maxlength="12" name="rut" id="rut" required autocomplete="off">
                         </div>
 
                         <div class="input-group">
