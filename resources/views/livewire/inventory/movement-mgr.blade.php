@@ -1,7 +1,7 @@
 <div>
     <div class="form-row mb-3">
         <div class="col-3">
-                <strong class="text-danger">Utilizar con precaución</strong>
+            <strong class="text-danger">Utilizar con precaución</strong>
         </div>
         <div class="col-2">
             <select class="form-control" wire:model.defer="inventoryMovement.reception_confirmation">
