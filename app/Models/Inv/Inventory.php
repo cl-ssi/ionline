@@ -212,4 +212,9 @@ class Inventory extends Model implements Auditable
             case -1: return 'Malo'; break;
         }
     }
+
+    public function getFormatDateAttribute()
+    {
+        return now()->day . ' de ' . now()->monthName . ' del ' . now()->year;
+    }
 }
