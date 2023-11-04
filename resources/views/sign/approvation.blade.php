@@ -32,12 +32,11 @@
 
 </style>
 
-
 <div class="wrapper-div">
 
     <p class="text small {{ $approval->color }}">
         @if( ! is_null($approval->status) )
-            {{ strtoupper($approval->statusInWords) }} el 
+            {{ strtoupper($approval->statusInWords) }} el
             {{ $approval->approver_at->format('d-m-Y \a \l\a\s H:i') }} por:
         @else
             &nbsp;
