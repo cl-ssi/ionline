@@ -35,10 +35,10 @@ class InvoiceController extends Controller
                 } catch(ConnectionException $e) {
                     session()->flash('danger', 'Disculpe, no nos pudimos conectar con Clave Única, por favor intente más tarde.');
 
-                    logger()->info('Clave Única Time out en userinfo', [
-                        'cu_access_token' => $access_token,
-                        'error_de_cu' => $e->getMessage(),
-                    ]);
+                    // logger()->info('Clave Única Time out en userinfo', [
+                    //     'cu_access_token' => $access_token,
+                    //     'error_de_cu' => $e->getMessage(),
+                    // ]);
 
                     return redirect()->route('invoice.welcome');
                 }
@@ -57,10 +57,10 @@ class InvoiceController extends Controller
                     } catch(ConnectionException $e) {
                         session()->flash('danger', 'Disculpe, no nos pudimos conectar con Clave Única, por favor intente más tarde.');
 
-                        logger()->info('Clave Única Time out en bypass', [
-                            'cu_access_token' => $access_token,
-                            'error_de_cu' => $e->getMessage(),
-                        ]);
+                        // logger()->info('Clave Única Time out en bypass', [
+                        //     'cu_access_token' => $access_token,
+                        //     'error_de_cu' => $e->getMessage(),
+                        // ]);
 
                         return redirect()->route('invoice.welcome');
                     }

@@ -106,7 +106,7 @@ class LogStatistics extends Component
             } elseif (preg_match('~^/rem~', $log->uri)) {
                 $log->module = 'Carga de Rem';
                 $log->save();
-            } elseif (preg_match('Clave Única', $log->message)) {
+            } elseif (preg_match('/Clave Única/', $log->message)) {
                 $log->module = 'Clave Única';
                 $log->save();
             } elseif (preg_match('~^/invoice~', $log->uri)) {
