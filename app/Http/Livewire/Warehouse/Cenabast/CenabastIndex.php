@@ -46,6 +46,8 @@ class CenabastIndex extends Component
                 'confirmationUser.organizationalUnit',
             ])
             ->where('cenabast', 1)
+            ->whereNull('confirmation_user')
+            ->whereNull('confirmation_status')
             ->where('establishment_id', auth()->user()->organizationalUnit->establishment->id)
             ->when($this->filter_by_signature == 'without-pharmacist', function($query) {
                 $query->where('cenabast_signed_pharmacist', 0);
