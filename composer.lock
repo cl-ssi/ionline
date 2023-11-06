@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d80e037363b503c5b479efbdd90f04ed",
+    "content-hash": "5b3ade18b215777031e538ce324a5302",
     "packages": [
         {
             "name": "actived/microsoft-teams-notifier",

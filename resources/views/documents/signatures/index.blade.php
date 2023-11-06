@@ -290,6 +290,7 @@
                         <p class="text-success">Aceptada</p>
                         @elseif($signedSignaturesFlow->status === 0 or $signedSignaturesFlow->signature->rejected_at != null)
                         <p class="text-danger">Rechazada</p>
+                        <span class="small text-danger">{{ $signedSignaturesFlow->observation }}</span>
                         @else Pendiente @endif
                     </td>
                     <td class="text-center" nowrap>
