@@ -14,9 +14,6 @@
 <div class="alert alert-secondary mt-3 text-center" role="alert">
     <h4 class="alert-heading">Consultar sobre solicitudes de pago</h4>
 
-    @include('layouts.bt4.partials.errors')
-    @include('layouts.bt4.partials.flash_message')
-
     <!-- Código para visualizar botón oficial iniciar sesión con ClaveÚnica-->
     <div class="row justify-content-center">
         <a class="btn-cu btn-m btn-color-estandar" title="Este es el botón Iniciar sesión de ClaveÚnica"
