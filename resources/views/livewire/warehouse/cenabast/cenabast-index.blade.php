@@ -50,9 +50,9 @@
         <thead>
             <tr>
                 <th>
-                    <input type="text" class="form-control" wire:model.defer="otp" placeholder="OTP"
-                        width="100px">
-                        {{-- <small class="text-muted">Solo activada la firma individual hasta estabilidad de servicio</small> --}}
+                    {{-- <input type="text" class="form-control" wire:model.defer="otp" placeholder="OTP"
+                        width="100px"> --}}
+                        <small class="text-muted">Solo activada la firma individual hasta estabilidad de servicio</small>
                     <button class="btn btn-sm btn-primary btn-block" wire:click="signMultiple">
                         Firmar Varios
                     </button>
@@ -173,7 +173,7 @@
                                         'cenabast_reception_file' => '/ionline/cenabast/signature/dte-' . $dte->id . '.pdf',
                                     ],
                                 ],
-                                $dte->id
+                                key($dte->id)
                             )
                         @elseif($dte->cenabast_signed_pharmacist)
                             <i class="fas fa-check text-success"></i> Firmado
