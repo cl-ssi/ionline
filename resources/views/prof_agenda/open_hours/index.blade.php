@@ -10,15 +10,17 @@
 
 <form method="GET" class="form-horizontal" action="{{ route('prof_agenda.open_hour.index') }}">
 
+    @livewire('prof-agenda.select-user-profesion',['profession_id' => $request->profession_id, 'user_id' => $request->user_id])
+
     <div class="row">
-        <fieldset class="form-group col col-md-4">
+        <fieldset class="form-group col col-md-6">
             <label for="for_id_deis">Funcionario</label>
             @livewire('search-select-user', [
                 'selected_id' => 'patient_id'
             ])
         </fieldset>
 
-        <fieldset class="form-group col col-md-4">
+        <fieldset class="form-group col col-md-6">
             <label for="for_id_deis">Asistencia</label>
             <select class="form-control" name="assistance" id="">
                 <option value="-1" @selected(!$request->assistance == -1)>Todos</option>
@@ -27,8 +29,6 @@
             </select>
         </fieldset>
     </div>
-
-    @livewire('prof-agenda.select-user-profesion',['profession_id' => $request->profession_id, 'user_id' => $request->user_id])
 
 </form>
 
@@ -78,19 +78,4 @@
 	</tbody>
 </table>
 
-@endsection
-
-@section('custom_js')
-<script type="text/javascript">
-	//$(document).ready(function() {
-
-    $(document).on("click", ".open-AddBookDialog", function () {
-        alert($(this).data('id'));
-        var myBookId = $(this).data('id');
-        $(".modal-body #bookId").val( myBookId );
-        // As pointed out in comments, 
-        // it is unnecessary to have to manually call the modal.
-        // $('#addBookDialog').modal('show');
-    });
-</style>
 @endsection
