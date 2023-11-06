@@ -145,6 +145,9 @@ class LogStatistics extends Component
             } elseif (preg_match('/login-external/', $log->uri)) {
                 $log->module = 'Login externo';
                 $log->save();
+            } elseif (preg_match('Clave Única', $log->message)) {
+                $log->module = 'Clave Única';
+                $log->save();
             }
         }
 
