@@ -36,7 +36,8 @@ class OpenHourController extends Controller
                             ->when($patient_id_param, function ($q) use ($patient_id_param) {
                                 return $q->where('patient_id',$patient_id_param);
                             })
-                            
+                            ->with('profesional','activityType','patient')
+                            ->withTrashed()
                             ->get();
         return view('prof_agenda.open_hours.index',compact('openHours','request'));
     }
