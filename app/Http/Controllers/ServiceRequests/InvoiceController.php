@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers\ServiceRequests;
 
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use App\Models\Rrhh\UserBankAccount;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Http\Request;
+use Illuminate\Http\Client\ConnectionException;
+use App\User;
 use App\Models\ServiceRequests\ServiceRequest;
 use App\Models\ServiceRequests\Fulfillment;
-use App\User;
-use Illuminate\Support\Facades\Log;
+use App\Models\Rrhh\UserBankAccount;
+use App\Http\Controllers\Controller;
 
 
 class InvoiceController extends Controller
@@ -28,7 +29,19 @@ class InvoiceController extends Controller
 
             if (env('APP_ENV') == 'production' OR env('APP_ENV') == 'testing') {
                 $url_base = "https://accounts.claveunica.gob.cl/openid/userinfo";
-                $response = Http::withToken($access_token)->post($url_base);
+
+                try {
+                    $response = Http::withToken($access_token)->post($url_base);
+                } catch(ConnectionException $e) {
+                    session()->flash('danger', 'Disculpe, no nos pudimos conectar con Clave Única, por favor intente más tarde: ' . $e->getMessage());
+
+                    logger()->info('Clave Única Time out en userinfo', [
+                        'cu_access_token' => $access_token,
+                        'error_de_cu' => $e->getMessage(),
+                    ]);
+
+                    return redirect()->route('invoice.welcome');
+                }
 
                 if($response->getStatusCode() == 200) {
                     $user_cu = json_decode($response);
@@ -39,7 +52,18 @@ class InvoiceController extends Controller
 
                     /** Este fragmento es para logear en caso de bloqueo de CU a través de WSSI */
                     $url = env('WSSSI_CHILE_URL').'/claveunica/login/'.$access_token;
-                    $response_wssi = Http::get($url);
+                    try {
+                        $response_wssi = Http::get($url);
+                    } catch(ConnectionException $e) {
+                        session()->flash('danger', 'Disculpe, no nos pudimos conectar con Clave Única, por favor intente más tarde: ' . $e->getMessage());
+
+                        logger()->info('Clave Única Time out en bypass', [
+                            'cu_access_token' => $access_token,
+                            'error_de_cu' => $e->getMessage(),
+                        ]);
+
+                        return redirect()->route('invoice.welcome');
+                    }
 
                     $user_cu = json_decode($response_wssi);
 
