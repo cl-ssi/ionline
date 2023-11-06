@@ -352,9 +352,20 @@ class ClaveUnicaController extends Controller
             /* TODO: Esto no cierra clave única, buscar otra alternativa
              * Clave única se mantiene abierto por 60 segundos
              **/
-            $response = Http::withOptions([
-                'allow_redirects' => true,
-            ])->get($url);
+            try{
+                $response = Http::withOptions([
+                    'allow_redirects' => true,
+                ])->get($url);
+            }
+
+            catch(ConnectException | RequestException | Exception $e){
+                    session()->flash('danger', 'Disculpe, no nos pudimos conectar con Clave Única, por favor intente más tarde: ' . $e->getMessage());
+                    logger()->info('Clave Única Time out en userinfo', [
+                        'respuesta' => $response,
+                        'error_de_cu' => $e->getMessage(),
+                    ]);
+                
+            }
             /** Si ejecuto cualquiera de estas, al pasar los 60 segundos
              * Clave única no redirecciona al logout que se le pasó en redirect=xxxxx
              * Enviar una soliticud a clave unica para setear el uri de logout, 
