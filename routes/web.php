@@ -264,6 +264,7 @@ use App\Http\Controllers\Agreements\AgreementController;
 use App\Http\Controllers\Agreements\AddendumController;
 use App\Http\Controllers\Agreements\AccountabilityDetailController;
 use App\Http\Controllers\Agreements\AccountabilityController;
+use App\Http\Controllers\Inventory\InventoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -1899,16 +1900,18 @@ Route::prefix('inventories')->as('inventories.')->middleware(['auth', 'must.chan
         Route::get('/upload-excel', InventoryUploadExcel::class)->name('upload-excel');
     });
 
+    Route::get('{inventory}/act-transfer', [InventoryController::class, 'actTransfer'])->name('act-transfer');
     Route::get('pending-movements', PendingMovements::class)->name('pending-movements');
     Route::get('assigned-products', AssignedProducts::class)->name('assigned-products');
     Route::get('movement/{movement}/check-transfer', CheckTransfer::class)->name('check-transfer')
         ->middleware('ensure.movement');
     Route::get('{inventory}/create-transfer', CreateTransfer::class)->name('create-transfer')
         ->middleware('ensure.inventory');
-    Route::get('register', RegisterInventory::class)->name('register');
+    Route::get('register/{establishment}/establishment', RegisterInventory::class)->name('register');
 
     Route::get('/manager', InventoryManager::class)->name('manager')->middleware(['can:Inventory: manager']);
 });
+
 /* Bodega de Farmacia */
 Route::prefix('pharmacies')->as('pharmacies.')->middleware(['auth', 'must.change.password'])->group(function () {
     Route::get('/', [App\Http\Controllers\Pharmacies\PharmacyController::class, 'index'])->name('index');

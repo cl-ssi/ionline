@@ -28,6 +28,7 @@ class InventoryMovement extends Model implements Auditable
         'user_responsible_id',
         'user_using_ou_id',
         'user_using_id',
+        'user_sender_id',
     ];
 
     protected $dates = [
@@ -66,5 +67,10 @@ class InventoryMovement extends Model implements Auditable
     public function usingUser()
     {
         return $this->belongsTo(User::class, 'user_using_id');
+    }
+
+    public function senderUser()
+    {
+        return $this->belongsTo(User::class, 'user_sender_id');
     }
 }

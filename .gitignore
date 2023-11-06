@@ -25,3 +25,4 @@ docker-compose.yml
 .vscode
 .ws.http
 .env.save
+.tinkerun

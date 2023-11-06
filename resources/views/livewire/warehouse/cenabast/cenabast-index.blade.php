@@ -52,10 +52,10 @@
                 <th>
                     <input type="text" class="form-control" wire:model.defer="otp" placeholder="OTP"
                         width="100px">
-                        <small class="text-muted">Solo activada la firma individual hasta estabilidad de servicio</small>
-                    {{-- <button class="btn btn-sm btn-primary btn-block" wire:click="signMultiple">
+                        {{-- <small class="text-muted">Solo activada la firma individual hasta estabilidad de servicio</small> --}}
+                    <button class="btn btn-sm btn-primary btn-block" wire:click="signMultiple">
                         Firmar Varios
-                    </button> --}}
+                    </button>
                 </th>
                 <th>ID</th>
                 <th>Estb.</th>

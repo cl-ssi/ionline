@@ -134,7 +134,18 @@ class ClaveUnicaController extends Controller
             if (env('APP_ENV') == 'production' or env('APP_ENV') == 'testing') {
                 //$access_token = session()->get('access_token');
                 $url_base = "https://accounts.claveunica.gob.cl/openid/userinfo";
-                $response = Http::withToken($access_token)->post($url_base);
+                try {
+                    $response = Http::withToken($access_token)->post($url_base);
+                } catch (ConnectException | RequestException | Exception $e) {
+                    session()->flash('danger', 'Disculpe, no nos pudimos conectar con Clave Única, por favor intente más tarde: ' . $e->getMessage());
+                    logger()->info('Clave Única Time out en userinfo', [
+                        'cu_access_token' => $access_token,
+                        'error_de_cu' => $e->getMessage(),
+                    ]);
+
+                    return redirect()->route('welcome');
+                }
+
 
                 if ($response->getStatusCode() == 200) {
                     $user_cu = json_decode($response);
@@ -154,7 +165,18 @@ class ClaveUnicaController extends Controller
                 } else {
                     /** Este fragmento es para logear en caso de bloqueo de CU a través de WSSI */
                     $url = env('WSSSI_CHILE_URL') . '/claveunica/login/' . $access_token;
-                    $response_wssi = Http::get($url);
+                    try {
+                        $response_wssi = Http::get($url);
+                        //$response = Http::withToken($access_token)->post($url_base);
+                    } catch (ConnectException | RequestException | Exception $e) {
+                        session()->flash('danger', 'Disculpe, no nos pudimos conectar con Clave Única, por favor intente más tarde: ' . $e->getMessage());
+                        logger()->info('Clave Única Time out en userinfo', [
+                            'cu_access_token' => $access_token,
+                            'error_de_cu' => $e->getMessage(),
+                        ]);
+                        return redirect()->route('welcome');
+                    }
+
 
                     $user_cu = json_decode($response_wssi);
 
@@ -327,9 +349,17 @@ class ClaveUnicaController extends Controller
             /* TODO: Esto no cierra clave única, buscar otra alternativa
              * Clave única se mantiene abierto por 60 segundos
              **/
-            $response = Http::withOptions([
-                'allow_redirects' => true,
-            ])->get($url);
+            try {
+                $response = Http::withOptions([
+                    'allow_redirects' => true,
+                ])->get($url);
+            } catch (ConnectException | RequestException | Exception $e) {
+                session()->flash('danger', 'Disculpe, no nos pudimos conectar con Clave Única, por favor intente más tarde: ' . $e->getMessage());
+                logger()->info('Clave Única Time out en userinfo', [
+                    'respuesta' => $response,
+                    'error_de_cu' => $e->getMessage(),
+                ]);
+            }
             /** Si ejecuto cualquiera de estas, al pasar los 60 segundos
              * Clave única no redirecciona al logout que se le pasó en redirect=xxxxx
              * Enviar una soliticud a clave unica para setear el uri de logout, 

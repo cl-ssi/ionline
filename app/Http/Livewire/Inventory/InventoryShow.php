@@ -10,8 +10,10 @@ class InventoryShow extends Component
     public $inventory;
 
     /**
-    * Mount
-    */
+     * Mount
+     * @param  mixed  $number
+     * @return void
+     */
     public function mount($number)
     {
         $this->inventory = Inventory::where('number',$number)->first();
