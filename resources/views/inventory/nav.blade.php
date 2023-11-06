@@ -1,16 +1,4 @@
 <ul class="nav nav-tabs mb-3 d-print-none">
-    @can('Inventory: index')
-        <li class="nav-item">
-            <a
-                class="nav-link {{ active(['inventories.index', 'inventories.register']) }}"
-                aria-current="page"
-                href="{{ route('inventories.index', $establishment) }}"
-            >
-                <i class="fas fa-fw fa-clipboard-list"></i> Inventario
-            </a>
-        </li>
-    @endcan
-
     @can('Inventory: last receptions')
         <li class="nav-item">
             <a
@@ -29,6 +17,18 @@
                 href="{{ route('inventories.pending-inventory', $establishment) }}"
             >
                 <i class="fas fa-hourglass"></i> Bandeja Pendiente de Inventario
+            </a>
+        </li>
+    @endcan
+
+    @can('Inventory: index')
+        <li class="nav-item">
+            <a
+                class="nav-link {{ active(['inventories.index', 'inventories.register']) }}"
+                aria-current="page"
+                href="{{ route('inventories.index', $establishment) }}"
+            >
+                <i class="fas fa-fw fa-clipboard-list"></i> Inventario
             </a>
         </li>
     @endcan

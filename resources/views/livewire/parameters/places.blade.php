@@ -28,35 +28,35 @@
         @case('create')
             <h3>Crear nuevo lugar</h3>
             @include('parameters.places.form')
-                <button
-                    class="btn btn-primary"
-                    type="button"
+            <button
+                class="btn btn-primary"
+                type="button"
+                wire:target="store"
+                wire:loading.attr="disabled"
+                wire:click="store"
+            >
+                <span
+                    class="spinner-border spinner-border-sm"
+                    role="status"
+                    wire:loading
                     wire:target="store"
-                    wire:loading.attr="disabled"
-                    wire:click="store"
+                    aria-hidden="true"
                 >
-                    <span
-                        class="spinner-border spinner-border-sm"
-                        role="status"
-                        wire:loading
-                        wire:target="store"
-                        aria-hidden="true"
-                    >
-                    </span>
+                </span>
 
-                    <span wire:loading.remove wire:target="store">
-                        <i class="fas fa-save"></i>
-                    </span>
+                <span wire:loading.remove wire:target="store">
+                    <i class="fas fa-save"></i>
+                </span>
 
-                    Crear
-                </button>
-                <button
-                    type="button"
-                    class="btn btn-outline-secondary"
-                    wire:click="index"
-                >
-                    Cancelar
-                </button>
+                Crear
+            </button>
+            <button
+                type="button"
+                class="btn btn-outline-secondary"
+                wire:click="index"
+            >
+                Cancelar
+            </button>
             @break
 
         @case('edit')
