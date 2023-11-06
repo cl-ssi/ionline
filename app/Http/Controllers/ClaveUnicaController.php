@@ -138,10 +138,10 @@ class ClaveUnicaController extends Controller
                     $response = Http::withToken($access_token)->post($url_base);
                 } catch (ConnectException | RequestException | Exception $e) {
                     session()->flash('danger', 'Disculpe, no nos pudimos conectar con Clave Única, por favor intente más tarde: ' . $e->getMessage());
-                    logger()->info('Clave Única Time out en userinfo', [
-                        'cu_access_token' => $access_token,
-                        'error_de_cu' => $e->getMessage(),
-                    ]);
+                    // logger()->info('Clave Única Time out en userinfo', [
+                    //     'cu_access_token' => $access_token,
+                    //     'error_de_cu' => $e->getMessage(),
+                    // ]);
 
                     return redirect()->route('welcome');
                 }
@@ -170,10 +170,10 @@ class ClaveUnicaController extends Controller
                         //$response = Http::withToken($access_token)->post($url_base);
                     } catch (ConnectException | RequestException | Exception $e) {
                         session()->flash('danger', 'Disculpe, no nos pudimos conectar con Clave Única, por favor intente más tarde: ' . $e->getMessage());
-                        logger()->info('Clave Única Time out en userinfo', [
-                            'cu_access_token' => $access_token,
-                            'error_de_cu' => $e->getMessage(),
-                        ]);
+                        // logger()->info('Clave Única Time out en userinfo', [
+                        //     'cu_access_token' => $access_token,
+                        //     'error_de_cu' => $e->getMessage(),
+                        // ]);
                         return redirect()->route('welcome');
                     }
 
@@ -355,10 +355,10 @@ class ClaveUnicaController extends Controller
                 ])->get($url);
             } catch (ConnectException | RequestException | Exception $e) {
                 session()->flash('danger', 'Disculpe, no nos pudimos conectar con Clave Única, por favor intente más tarde: ' . $e->getMessage());
-                logger()->info('Clave Única Time out en userinfo', [
-                    'respuesta' => $response,
-                    'error_de_cu' => $e->getMessage(),
-                ]);
+                // logger()->info('Clave Única Time out en userinfo', [
+                //     'respuesta' => $response,
+                //     'error_de_cu' => $e->getMessage(),
+                // ]);
             }
             /** Si ejecuto cualquiera de estas, al pasar los 60 segundos
              * Clave única no redirecciona al logout que se le pasó en redirect=xxxxx
