@@ -2,11 +2,8 @@
 
 namespace App\Http\Livewire\Warehouse\Cenabast;
 
-use App\User;
-use App\Services\ImageService;
-use App\Services\DocumentSignService;
+use App\Jobs\SignDteJob;
 use App\Models\Finance\Dte;
-use App\Models\Documents\Sign\Signature;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 use Livewire\WithPagination;
@@ -78,7 +75,6 @@ class CenabastIndex extends Component
                 $dtes->where('id', $this->filter['id']);
         }
 
-
         $dtes = $dtes->latest()->paginate(100);
 
         return $dtes;
@@ -98,12 +94,18 @@ class CenabastIndex extends Component
      */
     public function signMultiple()
     {
+        /**
+         * Si el OTP no es de 6 digitos, muestra un error
+         */
         if(Str::length($this->otp) != 6)
         {
             session()->flash('danger', 'Disculpe, el OTP debe ser de 6 dígitos');
             return redirect()->route('warehouse.cenabast.index');
         }
 
+        /**
+         * Si no se ha seleccionado DTE, muestra un error
+         */
         if(count($this->selectedDte) == 0)
         {
             session()->flash('danger', 'Disculpe, debe seleccionar uno o mas archivos para firmar');
@@ -113,130 +115,13 @@ class CenabastIndex extends Component
         foreach($this->selectedDte as $dteId => $value)
         {
             /**
-             * Setea el user
+             * Dispatch el job SignDte
              */
-            $user = User::find(auth()->id());
-
-            /**
-             * Setea el base64Image
-             */
-            $base64Image = app(ImageService::class)->createSignature($user);
-
-            /**
-             * Obtiene el DTE dado el dteId
-             */
-            $dte = Dte::find($dteId);
-
-            /**
-             * Determina si es farmaceutico
-             */
-            $isPharmacist = $dte->pharmacist->id == auth()->id();
-
-            /**
-             * Determina si es el jefe
-             */
-            $isBoss = $dte->boss->id == auth()->id();
-
-            /**
-             * Bloquea el DTE
-             */
-            $dte->update([
-                'block_signature' => true,
-            ]);
-
-            dispatch(function () use ($dte, $user, $base64Image, $isPharmacist, $isBoss) {
-                /**
-                 *  Obtiene la url del archivo a firmar
-                 */
-                $fileToSign = ($isPharmacist) ? $dte->confirmation_signature_file_url : $dte->cenabast_reception_file_url;
-
-                /**
-                 * Parsing link confirmation_signature_file_url a base64
-                 */
-                $documentBase64Pdf = base64_encode(file_get_contents($fileToSign));
-
-                /**
-                 * Calculate el eje X
-                 */
-                $coordinateX = app(Signature::class)->calculateColumn($isPharmacist ? 'left' : 'right');
-
-                /**
-                 * Calculate el eje X
-                 */
-                $coordinateY = app(Signature::class)->calculateRow(1, 60);
-
-                /**
-                 * Firma el documento con el servicio DocumentSignService
-                 */
-
-                $documentSignService = new DocumentSignService;
-                $documentSignService->setDocument($documentBase64Pdf);
-                $documentSignService->setFolder('/ionline/cenabast/signature/');
-                $documentSignService->setFilename('dte-' . $dte->id);
-                $documentSignService->setUser($user);
-                $documentSignService->setXCoordinate($coordinateX);
-                $documentSignService->setYCoordinate($coordinateY);
-                $documentSignService->setBase64Image($base64Image);
-                $documentSignService->setPage('LAST');
-                $documentSignService->setOtp($this->otp);
-                $documentSignService->setModo('ATENDIDO');
-                $documentSignService->sign();
-
-                /**
-                 * Si es farmaceutico, setea que ya firmo
-                 */
-                if($isPharmacist == true)
-                {
-                    $dte->update([
-                        'cenabast_signed_pharmacist' => true,
-                    ]);
-                }
-
-                /**
-                 * Si es el jefe, setea que ya firmo
-                 */
-                if($isBoss)
-                {
-                    $dte->update([
-                        'cenabast_signed_boss' => true,
-                    ]);
-                }
-
-                if(! isset($dte->cenabast_reception_file))
-                {
-                    /**
-                     * Setea el campo con la ruta del archivo firmado
-                     */
-                    $dte->update([
-                        'cenabast_reception_file' => '/ionline/cenabast/signature/dte-' . $dte->id.'.pdf' ,
-                    ]);
-                }
-
-                /**
-                 * Desbloquea el DTE
-                 */
-                $dte->update([
-                    'block_signature' => false,
-                ]);
-
-            })->catch(function(\Throwable $th) use($dte) {
-                /**
-                 * Elimina el job porque el OTP seguramente ya vencio
-                 */
-                $this->delete();
-
-                /**
-                 * Desbloque el DTE
-                 */
-                $dte->update([
-                    'block_signature' => false,
-                ]);
-            });
-
+            dispatch(new SignDteJob(auth()->id(), $dteId, $this->otp));
         }
 
         session()->flash('info', 'Los archivos están en proceso de firma, esto tomará unos segundos.');
-        return redirect()->route('warehouse.cenabast.index')->extends('layouts.bt4.app');
+        return redirect()->route('warehouse.cenabast.index');
     }
 
     /**

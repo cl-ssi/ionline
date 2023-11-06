@@ -2,7 +2,7 @@
     @can('Inventory: index')
         <li class="nav-item">
             <a
-                class="nav-link {{ active('inventories.index', $establishment) }}"
+                class="nav-link {{ active(['inventories.index', 'inventories.register']) }}"
                 aria-current="page"
                 href="{{ route('inventories.index', $establishment) }}"
             >

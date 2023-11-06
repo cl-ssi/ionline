@@ -11,7 +11,7 @@
 
     <li class="nav-item">
         <a
-            class="nav-link {{ active(['inventories.assigned-products', 'inventories.create-transfer']) }}"
+            class="nav-link {{ active(['inventories.assigned-products', 'inventories.create-transfer', 'inventories.register']) }}"
             aria-current="page"
             href="{{ route('inventories.assigned-products') }}"
         >

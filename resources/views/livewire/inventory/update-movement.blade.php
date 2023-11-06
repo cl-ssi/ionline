@@ -84,6 +84,10 @@
             </button>
         </div>
     </div>
-    @livewire('inventory.movement-mgr', ['inventoryMovement' => $movement])
+
+    @can('Inventory: edit act reception confirmation')
+        @livewire('inventory.movement-mgr', ['inventoryMovement' => $movement])
+    @endcan
+
     @endforeach
 </div>

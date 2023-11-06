@@ -206,7 +206,7 @@ class ImageService
         /**
          * Obtain the Digital Signature Logo
          */
-        $digitalSignatureLogo = imagecreatefrompng('images/firma_gobierno170x177.png');
+        $digitalSignatureLogo = imagecreatefrompng(public_path('images/firma_gobierno170x177.png'));
 
         /**
          * Get image width

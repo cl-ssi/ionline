@@ -1,7 +1,13 @@
 <div>
     @section('title', 'Registrar Inventario')
 
-    @include('inventory.nav-user')
+    @can('Inventory: manager')
+        @include('inventory.nav', [
+            'establishment' => $establishment,
+        ])
+    @else
+        @include('inventory.nav-user')
+    @endcan
 
 	<h6>Revisa el listado con los productos más comunes en oficinas</h6>
 
@@ -179,7 +185,7 @@
     <hr>
 
     <h4 class="mb-3">
-        Registrar Inventario
+        {{ $establishment->name }}: Registrar Inventario
     </h4>
 
     <h6 class="mt-3">
@@ -190,7 +196,7 @@
 
     <div class="form-row g-2">
         <fieldset class="form-group col-sm-4">
-            <label for="description">
+            <label for="product-search">
                 Buscar Producto o Servicio
             </label>
             <input

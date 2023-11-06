@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Inventory;
 
 use App\Http\Requests\Inventory\RegisterInventoryRequest;
+use App\Models\Establishment;
 use App\Models\Inv\Inventory;
 use App\Models\Inv\InventoryMovement;
 use App\Models\WebService\MercadoPublico;
@@ -14,6 +15,8 @@ use Livewire\Component;
 
 class RegisterInventory extends Component
 {
+    public $establishment;
+
     public $search_product;
     public $type;
     public $description;
@@ -49,7 +52,7 @@ class RegisterInventory extends Component
         'myProductId',
     ];
 
-    public function mount()
+    public function mount(Establishment $establishment)
     {
         $this->collapse = false;
         $this->status = 1;
@@ -175,7 +178,7 @@ class RegisterInventory extends Component
         $dataValidated['po_code'] = $this->po_code;
         $dataValidated['request_user_ou_id'] = $this->request_form ? $this->request_form->request_user_ou_id : null;
         $dataValidated['request_user_id'] = $this->request_form ? $this->request_form->request_user_id : null;
-        $dataValidated['establishment_id'] = auth()->user()->organizationalUnit->establishment->id;
+        $dataValidated['establishment_id'] = $this->establishment->id;
         $responsibleUser = User::find($dataValidated['user_responsible_id']);
         $usingUser =  User::find($dataValidated['user_using_id']);
         $inventory = Inventory::create($dataValidated);
@@ -188,6 +191,7 @@ class RegisterInventory extends Component
             'user_responsible_id' => $dataValidated['user_responsible_id'],
             'user_using_ou_id' => ($usingUser != null) ? optional($usingUser->organizationalUnit)->id : null,
             'user_using_id' => $dataValidated['user_using_id'],
+            'user_sender_id' => auth()->id(),
             'reception_confirmation' => $this->getReceptionConfirmation(),
             'reception_date' => $this->getReceptionConfirmation() ? now() : null,
         ]);
@@ -209,7 +213,12 @@ class RegisterInventory extends Component
         $this->clearInputAdvantage(true);
 
         session()->flash('success', 'El inventario fue registrado exitosamente.');
-        return redirect()->route('inventories.assigned-products');
+
+        if(auth()->user()->can('Inventory: manager')) {
+            return redirect()->route('inventories.index', $this->establishment);
+        } else {
+            return redirect()->route('inventories.assigned-products');
+        }
     }
 
     public function clearInputProduct()
