@@ -33,7 +33,7 @@ class InvoiceController extends Controller
                 try {
                     $response = Http::withToken($access_token)->post($url_base);
                 } catch(ConnectionException $e) {
-                    session()->flash('danger', 'Disculpe, no nos pudimos conectar con Clave Única, por favor intente más tarde: ' . $e->getMessage());
+                    session()->flash('danger', 'Disculpe, no nos pudimos conectar con Clave Única, por favor intente más tarde.');
 
                     logger()->info('Clave Única Time out en userinfo', [
                         'cu_access_token' => $access_token,
@@ -55,7 +55,7 @@ class InvoiceController extends Controller
                     try {
                         $response_wssi = Http::get($url);
                     } catch(ConnectionException $e) {
-                        session()->flash('danger', 'Disculpe, no nos pudimos conectar con Clave Única, por favor intente más tarde: ' . $e->getMessage());
+                        session()->flash('danger', 'Disculpe, no nos pudimos conectar con Clave Única, por favor intente más tarde.');
 
                         logger()->info('Clave Única Time out en bypass', [
                             'cu_access_token' => $access_token,
