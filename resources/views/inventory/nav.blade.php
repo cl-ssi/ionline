@@ -5,7 +5,7 @@
                 class="nav-link {{ active('inventories.last-receptions') }}"
                 href="{{ route('inventories.last-receptions', $establishment) }}"
             >
-            <i class="fas fa-clock"></i> Últimos Ingresos a Bodega
+            <i class="fas fa-warehouse"></i> Últimos Ingresos a Bodega
             </a>
         </li>
     @endcan
@@ -16,7 +16,7 @@
                 class="nav-link {{ active(['inventories.pending-inventory', 'inventories.edit']) }}"
                 href="{{ route('inventories.pending-inventory', $establishment) }}"
             >
-                <i class="fas fa-hourglass"></i> Bandeja Pendiente de Inventario
+                <i class="fas fa-qrcode"></i> Pendientes de Inventariar
             </a>
         </li>
     @endcan

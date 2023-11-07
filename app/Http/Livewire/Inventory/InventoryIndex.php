@@ -67,6 +67,14 @@ class InventoryIndex extends Component
     public function getInventories()
     {
         $inventories = Inventory::query()
+            ->with([
+                'product',
+                'place',
+                'place.location',
+                'responsible',
+                'using',
+                'unspscProduct',
+            ])
             ->when($this->unspsc_product_id, function($query) {
                 $query->whereRelation('unspscProduct', 'id', '=', $this->unspsc_product_id);
             })
