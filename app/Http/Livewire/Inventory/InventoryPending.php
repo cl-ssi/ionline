@@ -34,6 +34,12 @@ class InventoryPending extends Component
         $search = "%$this->search%";
 
         $inventories = Inventory::query()
+            ->with([
+                'control',
+                'product',
+                'product.product',
+                'control.typeReception',
+            ])
             ->when($this->type_reception_id != '', function($query) {
                 $query->whereHas('control', function ($query) {
                     $query->whereTypeReceptionId($this->type_reception_id);
@@ -63,7 +69,7 @@ class InventoryPending extends Component
             ->whereEstablishmentId($this->establishment->id)
             ->whereNull('number')
             ->orderByDesc('id')
-            ->paginate(5);
+            ->paginate(25);
 
         return $inventories;
     }
