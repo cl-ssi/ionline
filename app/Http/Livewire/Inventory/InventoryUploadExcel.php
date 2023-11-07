@@ -49,13 +49,12 @@ class InventoryUploadExcel extends Component
                 $msg .= "El usuario de la fila " .  ($key+1) . " no se ha ingresado. <br>";$rows_fail+=1;
                 continue;
             }else{
-                $user_using = User::where('id',$row[10])->first();
-                if(!$user_using){
-                    $msg .= "El usuario de la fila " .  ($key+1) . " no se ha encontrado. <br>";$rows_fail+=1;
+                $user_sender = User::where('id',$row[10])->first();
+                if(!$user_sender){
+                    $msg .= "El usuario que entrega de la fila " .  ($key+1) . " no se ha encontrado. <br>";$rows_fail+=1;
                     continue;
                 }
             }
-            //verificar que los responsables del excel sean válidos.
             if(!$row[11]){
                 $msg .= "El responsable de la fila " .  ($key+1) . " no se ha ingresado. <br>";$rows_fail+=1;
                 continue;
@@ -63,6 +62,18 @@ class InventoryUploadExcel extends Component
                 $user_responsible = User::where('id',$row[11])->first();
                 if(!$user_responsible){
                     $msg .= "El responsable de la fila " .  ($key+1) . " no se ha encontrado. <br>";$rows_fail+=1;
+                    continue;
+                }
+            }
+            //verificar que los responsables del excel sean válidos.
+            if(!$row[12]){
+                $msg .= "El usuario de la fila " .  ($key+1) . " no se ha ingresado. <br>";$rows_fail+=1;
+                continue;
+            }else{
+                
+                $user_using = User::where('id',$row[12])->first();
+                if(!$user_responsible){
+                    $msg .= "El usuario de la fila " .  ($key+1) . " no se ha encontrado. <br>";$rows_fail+=1;
                     continue;
                 }
             }
@@ -129,26 +140,29 @@ class InventoryUploadExcel extends Component
                 'place_id' => $place->id, 
                 'user_using_id' => $user_using->id,
                 'user_responsible_id' => $user_responsible->id,
-                'observations' => $row[12],
-                'po_price' => $row[13],
-                'accounting_code_id' => $row[14],
-                'dte_number' => $row[15],
+                'observations' => $row[13],
+                'po_price' => $row[14],
+                'accounting_code_id' => $row[15],
+                'dte_number' => $row[16],
             ]);
 
-            InventoryMovement::updateOrCreate([
-                'inventory_id' => $inventory->id,
-            ],[
-                'reception_confirmation' => ($row[16]) ? 1 : 0,
-                'reception_date' => ($row[16]) ? \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row[16]) : null,
-                // 'installation_date',
-                'observations' => $row[12],
-                'inventory_id' => $inventory->id,
-                'place_id' => $place->id, 
-                'user_responsible_ou_id' => $user_responsible->organizational_unit_id,
-                'user_responsible_id' => $user_responsible->id,
-                'user_using_ou_id' => $user_using->organizational_unit_id,
-                'user_using_id' => $user_using->id
-            ]);
+            InventoryMovement::withoutEvents(function () use ($row, $inventory, $place, $user_using, $user_responsible, $user_sender) {
+                InventoryMovement::updateOrCreate([
+                    'inventory_id' => $inventory->id,
+                ],[
+                    'reception_confirmation' => ($row[17]) ? 1 : 0,
+                    'reception_date' => ($row[17]) ? \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row[17]) : null,
+                    // 'installation_date',
+                    'observations' => $row[13],
+                    'inventory_id' => $inventory->id,
+                    'place_id' => $place->id, 
+                    'user_responsible_ou_id' => $user_responsible->organizational_unit_id,
+                    'user_responsible_id' => $user_responsible->id,
+                    'user_using_ou_id' => $user_using->organizational_unit_id,
+                    'user_using_id' => $user_using->id,
+                    'user_sender_id' => $user_sender->id
+                ]);
+            });
             
             $rows_ok += 1;
         }

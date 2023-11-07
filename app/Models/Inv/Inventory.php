@@ -51,6 +51,7 @@ class Inventory extends Model implements Auditable
         'request_user_id',
         'user_responsible_id',
         'user_using_id',
+        'user_sender_id',
         'place_id',
         'product_id',
         'unspsc_product_id',
