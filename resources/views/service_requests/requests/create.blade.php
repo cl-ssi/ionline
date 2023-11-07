@@ -896,48 +896,6 @@
 	// 	$('#for_weekly_hours').selectpicker('refresh');
 	// });
 
-	$('#btn_fonasa').click(function() {
-		var btn = $(this);
-		btn.prop('disabled', true);
-
-		var run = $("#for_user_id").val();
-		var dv = $("#for_dv").val();
-		var url = '{{route('webservices.fonasa')}}/?run='+run+'&dv='+dv;
-
-		$.getJSON(url, function(data) {
-			if (data) {
-				document.getElementById("for_name").value = data.name;
-				document.getElementById("for_fathers_family").value = data.fathers_family;
-				document.getElementById("for_mothers_family").value = data.mothers_family;
-				// document.getElementById("for_birthday").value = data.birthday;
-
-				// //CALCULO DE FECHA EN CACHO QUE EXISTA EL DATO DE FECHA DE NACIMIENTO
-				// var birthDate =data.birthday;
-				// var d = new Date(birthDate);
-				// var mdate = birthDate.toString();
-				// var yearThen = parseInt(mdate.substring(0,4), 10);
-				// var monthThen = parseInt(mdate.substring(5,7), 10);
-				// var dayThen = parseInt(mdate.substring(8,10), 10);
-				// var today = new Date();
-				// var birthday = new Date(yearThen, monthThen-1, dayThen);
-				// var differenceInMilisecond = today.valueOf() - birthday.valueOf();
-				// var year_age = Math.floor(differenceInMilisecond / 31536000000);
-				// $("#for_age").val(year_age);
-				// //FIN DE CALCULO DE EDAD
-
-			} else {
-				document.getElementById("for_name").value = "";
-				document.getElementById("for_fathers_family").value = "";
-				document.getElementById("for_mothers_family").value = "";
-				// // document.getElementById("for_gender").value = "";
-				// document.getElementById("for_birthday").value = "";
-			}
-		}).done(function() {
-			btn.prop('disabled', false);
-		});
-	});
-
-
 	$(".add-row").click(function() {
 		var shift_start_date = $("#shift_start_date").val();
 		var start_hour = $("#start_hour").val();
