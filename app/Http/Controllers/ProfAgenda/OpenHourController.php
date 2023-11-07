@@ -36,7 +36,8 @@ class OpenHourController extends Controller
                             ->when($patient_id_param, function ($q) use ($patient_id_param) {
                                 return $q->where('patient_id',$patient_id_param);
                             })
-                            
+                            ->with('profesional','activityType','patient')
+                            ->withTrashed()
                             ->get();
         return view('prof_agenda.open_hours.index',compact('openHours','request'));
     }
@@ -228,7 +229,7 @@ class OpenHourController extends Controller
         $date = Carbon::parse($request->date);
         $start_date = Carbon::parse($date->format('Y-m-d') . " " . $request->start_hour);
         $end_date = Carbon::parse($date->format('Y-m-d') . " " . $request->end_hour);
-        OpenHour::whereBetween('start_date',[$start_date,$end_date])->delete();
+        OpenHour::whereBetween('start_date',[$start_date,$end_date])->where('profesional_id',$request->profesional_id)->delete();
         session()->flash('success', 'Se eliminaron los bloques.');
         return redirect()->back();
     }   

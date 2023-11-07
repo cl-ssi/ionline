@@ -1,10 +1,15 @@
 <form wire:submit.prevent="searchPlace">
     <div class="row mb-3">
         <div class="col-lg-11">
-            <input type="text" wire:model.defer="filter" class="form-control" placeholder="Buscar por nombre/descripción/ubicación/codigointerno/establecimiento">
+            <input type="text"
+                wire:model.defer="filter"
+                class="form-control"
+                placeholder="Buscar por nombre/descripción/ubicación/codigointerno/establecimiento"
+                autocomplete="off">
         </div>
         <div class="col-lg-1">
-            <button type="submit" class="btn btn-primary">
+            <button type="submit"
+                class="btn btn-primary">
                 <i class="fas fa-search"></i>
             </button>
         </div>
@@ -34,7 +39,8 @@
                     <td>{{ $place->architectural_design_code }}</td>
                     <td>{{ $place->establishment->name }}</td>
                     <td class="text-center">
-                        <button type="button" class="btn btn-sm btn-outline-primary"
+                        <button type="button"
+                            class="btn btn-sm btn-outline-primary"
                             wire:click="edit({{ $place }})">
                             <i class="fas fa-edit"></i>
                         </button>

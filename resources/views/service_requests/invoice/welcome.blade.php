@@ -12,8 +12,8 @@
 </ul>
 
 <div class="alert alert-secondary mt-3 text-center" role="alert">
-    @if(!env('OLD_SERVER'))
     <h4 class="alert-heading">Consultar sobre solicitudes de pago</h4>
+
     <!-- Código para visualizar botón oficial iniciar sesión con ClaveÚnica-->
     <div class="row justify-content-center">
         <a class="btn-cu btn-m btn-color-estandar" title="Este es el botón Iniciar sesión de ClaveÚnica"
@@ -23,10 +23,7 @@
         </a>
     <!--./ fin botón-->
     </div>
-    @else
-        <h4 class="alert-heading">Para cargar su boleta debe hacerlo a través de:</h4>
-        <h5>https://i.saludtarapaca.gob.cl/invoice/welcome</h5>
-    @endif
+
 </div>
 
 

@@ -90,7 +90,7 @@ class ReportByDates extends Component
                         // ->where('shift',0); se traen todos, abajo se hace el filtro
                 });
             })
-            // ->where('id',9994426)
+            // ->where('id',17798659)
             ->get();        
 
         foreach($this->userWithContracts as $row => $user) {
@@ -187,9 +187,9 @@ class ReportByDates extends Component
                     if($lastdate>=$absenteeismStartDate){
                         $absenteeismStartDate = $lastdate->addDays(1);
                     }
-                    $lastdate= $absenteeismEndDate;
+                    $lastdate = $absenteeismEndDate->copy();
 
-                    $absenteeism->totalDays = DateHelper::getBusinessDaysByDateRangeHolidays($absenteeismStartDate, $absenteeismEndDate, $holidays)->count();
+                    $absenteeism->totalDays = DateHelper::getBusinessDaysByDateRangeHolidays($absenteeismStartDate, $absenteeismEndDate, $holidays, $user->id)->count();
                     $user->totalAbsenteeisms += $absenteeism->totalDays;
 
                     // $this->absenteeisms[$user->id] = $absenteeism;
@@ -203,7 +203,7 @@ class ReportByDates extends Component
                         DateHelper::getBusinessDaysByDateRangeHolidays(
                                 $contract->fecha_inicio_contrato->isAfter($startDate) ? $contract->fecha_inicio_contrato : $startDate,
                                 $contract->fecha_termino_contrato->isBefore($endDate) ? $contract->fecha_termino_contrato : $endDate,
-                                $holidays
+                                $holidays, $user->id
                             )->count();
 
                     /** Calcular monto de amipass a transferir */
