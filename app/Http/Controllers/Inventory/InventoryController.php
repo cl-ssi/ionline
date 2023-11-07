@@ -4,25 +4,25 @@ namespace App\Http\Controllers\Inventory;
 
 use App\Http\Controllers\Controller;
 use App\Models\Documents\Approval;
-use App\Models\Inv\Inventory;
+use App\Models\Inv\InventoryMovement;
 
 class InventoryController extends Controller
 {
     /**
      * Create the inventory product transfer record
      *
-     * @param  Inventory  $inventory
+     * @param  Movement  $movement
      * @return \Illuminate\Contracts\Support\Arrayable
      */
-    public function actTransfer(Inventory $inventory)
+    public function actTransfer(InventoryMovement $movement)
     {
-        $approvalSender = $this->getApprovalLegacyAttribute($inventory->lastMovement->senderUser ?? null);
+        $approvalSender = $this->getApprovalLegacyAttribute($movement->senderUser ?? null);
 
-        $approvalResponsible = $this->getApprovalLegacyAttribute($inventory->responsible);
+        $approvalResponsible = $this->getApprovalLegacyAttribute($movement->inventory->responsible);
 
-        $approvalUsing = $this->getApprovalLegacyAttribute($inventory->using);
+        $approvalUsing = $this->getApprovalLegacyAttribute($movement->inventory->using);
 
-        return view('inventory.pdf.act-transfer', compact('inventory', 'approvalSender', 'approvalResponsible'));
+        return view('inventory.pdf.act-transfer', compact('movement', 'approvalSender', 'approvalResponsible'));
     }
 
     /**
@@ -42,6 +42,7 @@ class InventoryController extends Controller
         $approval->status = 1;
         $approval->approver_id = $approver->id;
         $approval->approver_at = now();
+        $approval->sent_to_ou_id = $approver->organizational_unit_id;
         return $approval;
     }
 

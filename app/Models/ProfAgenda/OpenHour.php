@@ -16,7 +16,7 @@ class OpenHour extends Model implements Auditable
     //
     protected $fillable = [
         'id','proposal_detail_id','start_date','end_date','patient_id','contact_number','observation','blocked','deleted_bloqued_observation',
-        'assistance', 'absence_reason','profesional_id','profession_id','activity_type_id'
+        'assistance', 'absence_reason','profesional_id','profession_id','activity_type_id','deleted_at'
     ];
 
     protected $table = 'prof_agenda_open_hours';

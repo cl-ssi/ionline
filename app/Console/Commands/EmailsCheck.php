@@ -5,7 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\User; // Asegúrate de importar el modelo User
 
-class CheckEmails extends Command
+class EmailsCheck extends Command
 {
     protected $signature = 'emails:check';
     protected $description = 'Verifica y corrige correos mal formados';

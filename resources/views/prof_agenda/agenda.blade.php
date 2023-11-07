@@ -100,6 +100,8 @@
 <form method="POST" class="form-horizontal" action="{{ route('prof_agenda.open_hour.deleteBlocks') }}">
     @csrf
     @method('POST')
+
+    <input type="hidden" name="profesional_id" value="{{$request->user_id}}">
     <div class="modal fade bd-example-modal-lg" tabindex="-1" id="deleteBlocks" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">

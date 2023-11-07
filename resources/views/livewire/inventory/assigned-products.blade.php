@@ -109,14 +109,16 @@
                             <i class="fas fa-sync-alt"></i>
                             Traspaso
                         </a>
+                        @if($inventory->lastMovement)
                         <a
-                            href="{{ route('inventories.act-transfer', $inventory) }}"
+                            href="{{ route('inventories.act-transfer', $inventory->lastMovement) }}"
                             target="_blank"
                             class="btn btn-sm btn-outline-danger"
                             title="Acta de Traspaso"
                         >
                             <i class="fas fa-file-pdf"></i>
                         </a>
+                        @endif
                     </td>
                 </tr>
             @empty
