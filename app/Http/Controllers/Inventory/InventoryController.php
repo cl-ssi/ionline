@@ -46,9 +46,9 @@ class InventoryController extends Controller
     }
 
     /**
-     * Undocumented function
+     * Discharge document
      *
-     * @param Inventory $inventory
+     * @param  Inventory  $inventory
      * @return void
      */
     public function dischargeDocument(Inventory $inventory)
