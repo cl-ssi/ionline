@@ -128,6 +128,11 @@ class Inventory extends Model implements Auditable
         return $this->hasMany(InventoryMovement::class);
     }
 
+    public function pendingMovements()
+    {
+        return $this->hasMany(InventoryMovement::class)->where('reception_confirmation', false);
+    }
+
     public function lastMovement()
     {
         return $this->hasOne(InventoryMovement::class)->latest();
