@@ -94,11 +94,14 @@
             </li>
         @endforeach
 
-        @if($inventory->discharge_date)
+        @if(isset($inventory->discharge_date) && isset($inventory->act_number))
             <li>
                 {{ $inventory->discharge_date->format('Y-m-d') }}
                 - De baja a través de acta
-                <a href="#">
+                <a
+                    href="{{ route('inventories.discharge-document', $inventory)}}"
+                    target="_blank"
+                >
                     {{ $inventory->act_number }}
                 </a>
             </li>

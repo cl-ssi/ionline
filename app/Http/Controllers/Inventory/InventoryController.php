@@ -45,4 +45,20 @@ class InventoryController extends Controller
         $approval->sent_to_ou_id = $approver->organizational_unit_id;
         return $approval;
     }
+
+    /**
+     * Discharge document
+     *
+     * @param  Inventory  $inventory
+     * @return void
+     */
+    public function dischargeDocument(Inventory $inventory)
+    {
+        if(isset($inventory->discharge_date) && isset($inventory->act_number))
+        {
+            return view('inventory.pdf.discharge-document', compact('inventory'));
+        }
+
+        return abort(404);
+    }
 }
