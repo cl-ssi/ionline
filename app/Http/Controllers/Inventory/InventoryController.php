@@ -44,4 +44,20 @@ class InventoryController extends Controller
         $approval->approver_at = now();
         return $approval;
     }
+
+    /**
+     * Undocumented function
+     *
+     * @param Inventory $inventory
+     * @return void
+     */
+    public function dischargeDocument(Inventory $inventory)
+    {
+        if(isset($inventory->discharge_date) && isset($inventory->act_number))
+        {
+            return view('inventory.pdf.discharge-document', compact('inventory'));
+        }
+
+        return abort(404);
+    }
 }

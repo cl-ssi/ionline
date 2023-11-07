@@ -1901,6 +1901,8 @@ Route::prefix('inventories')->as('inventories.')->middleware(['auth', 'must.chan
     });
 
     Route::get('{inventory}/act-transfer', [InventoryController::class, 'actTransfer'])->name('act-transfer');
+    Route::get('{inventory}/discharge-document', [InventoryController::class, 'dischargeDocument'])->name('discharge-document');
+
     Route::get('pending-movements', PendingMovements::class)->name('pending-movements');
     Route::get('assigned-products', AssignedProducts::class)->name('assigned-products');
     Route::get('movement/{movement}/check-transfer', CheckTransfer::class)->name('check-transfer')

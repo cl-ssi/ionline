@@ -4,34 +4,54 @@
             <label for="discharge-date" class="form-label">
                 Fecha de baja
             </label>
-            <input
-                type="date"
-                class="form-control @error('discharge_date') is-invalid @enderror"
-                id="discharge-date"
-                wire:model.debounce.1500ms="discharge_date"
-            >
-            @error('discharge_date')
-                <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                </span>
-            @enderror
+            @if(isset($inventory->discharge_date))
+                <input
+                    type="text"
+                    class="form-control @error('discharge_date') is-invalid @enderror"
+                    id="discharge-date"
+                    value="{{ $inventory->discharge_date->format('d/m/Y') }}"
+                    readonly
+                >
+            @else
+                <input
+                    type="date"
+                    class="form-control @error('discharge_date') is-invalid @enderror"
+                    id="discharge-date"
+                    wire:model.debounce.1500ms="discharge_date"
+                >
+                @error('discharge_date')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                @enderror
+            @endif
         </fieldset>
 
         <fieldset class="col-md-2">
             <label for="act-number" class="form-label">
                 Nº de acta
             </label>
-            <input
-                type="text"
-                class="form-control @error('act_number') is-invalid @enderror"
-                id="act-number"
-                wire:model.debounce.1500ms="act_number"
-            >
-            @error('act_number')
-                <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                </span>
-            @enderror
+            @if(isset($inventory->act_number))
+                <input
+                    type="text"
+                    class="form-control @error('act_number') is-invalid @enderror"
+                    id="act-number"
+                    value="{{ $inventory->act_number }}"
+                    readonly
+                >
+            @else
+                <input
+                    type="text"
+                    class="form-control @error('act_number') is-invalid @enderror"
+                    id="act-number"
+                    wire:model.debounce.1500ms="act_number"
+                >
+                @error('act_number')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                @enderror
+            @endif
         </fieldset>
 
         <div class="col-md-1">
