@@ -39,6 +39,7 @@ class FindPlace extends Component
         {
             $this->places = Place::query()
                 ->where('name', 'like', $search)
+                ->orWhere('id', $this->search)
                 ->orWhereHas('location', function($query) use($search) {
                     $query->where('name', 'like', $search);
                 })
