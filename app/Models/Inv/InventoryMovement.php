@@ -2,13 +2,14 @@
 
 namespace App\Models\Inv;
 
-use App\Models\Parameters\Place;
-use App\Rrhh\OrganizationalUnit;
-use App\User;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Contracts\Auditable;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\User;
+use App\Rrhh\OrganizationalUnit;
+use App\Notifications\Inventory\ItemReception;
+use App\Models\Parameters\Place;
 
 class InventoryMovement extends Model implements Auditable
 {
@@ -72,5 +73,17 @@ class InventoryMovement extends Model implements Auditable
     public function senderUser()
     {
         return $this->belongsTo(User::class, 'user_sender_id');
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::created(function ($movement) {
+            /** Enviar notificación al responsable  */
+            if($movement->user_responsible_id) {
+                $movement->responsibleUser?->notify(new ItemReception($movement));
+            }
+        });
     }
 }

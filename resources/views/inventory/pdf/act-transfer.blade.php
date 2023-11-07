@@ -1,6 +1,6 @@
 @extends('inventory.pdf.layouts')
 
-@section('title', "Acta de Traspaso " . $inventory->number)
+@section('title', "Acta de Traspaso " . $movement->inventory->number)
 
 @section('css')
 <style>
@@ -39,11 +39,11 @@
 
 
 <div class="right content-date">
-    Iquique, {{ $inventory->format_date }}<br>
+    Iquique, {{ $movement->inventory->format_date }}<br>
 </div>
 
 <div class="titulo" style="padding-top: 70px">
-    ACTA DE TRASPASO #{{ $inventory->number }}
+    ACTA DE TRASPASO #{{ $movement->id }}
 </div>
 
 <div style="padding-top: 40px">
@@ -58,7 +58,7 @@
                     <strong>Nro Inventario</strong>
                 </td>
                 <td>
-                    {{ $inventory->number }}
+                    {{ $movement->inventory->number }}
                 </td>
             </tr>
             <tr>
@@ -66,13 +66,21 @@
                     <strong>Producto</strong>
                 </td>
                 <td>
-                    {{ optional($inventory->unspscProduct)->name }}
+                    {{ optional($movement->inventory->unspscProduct)->name }}
                     <br>
-                    @if($inventory->product)
-                        {{ $inventory->product->name }}
+                    @if($movement->inventory->product)
+                        {{ $movement->inventory->product->name }}
                     @else
-                        {{ $inventory->description }}
+                        {{ $movement->inventory->description }}
                     @endif
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <strong>Estado</strong>
+                </td>
+                <td>
+                    {{ $movement->inventory->estado }}
                 </td>
             </tr>
             <tr>
@@ -80,16 +88,8 @@
                     <strong>Ubicación</strong>
                 </td>
                 <td>
-                    {{ $inventory->lastMovement->place->location->name }},
-                    {{ $inventory->lastMovement->place->name }}
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <strong>Usuario</strong>
-                </td>
-                <td>
-                    {{ optional($inventory->using)->tinny_name }}
+                    {{ $movement->inventory->lastMovement->place->location->name }},
+                    {{ $movement->inventory->lastMovement->place->name }}
                 </td>
             </tr>
             <tr>
@@ -97,7 +97,15 @@
                     <strong>Responsable</strong>
                 </td>
                 <td>
-                    {{ optional($inventory->responsible)->tinny_name }}
+                    {{ optional($movement->inventory->responsible)->tinny_name }}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <strong>Usuario</strong>
+                </td>
+                <td>
+                    {{ optional($movement->inventory->using)->tinny_name }}
                 </td>
             </tr>
             <tr>
@@ -105,9 +113,9 @@
                     <strong>Fecha de Instalación</strong>
                 </td>
                 <td>
-                    {{ ($inventory->lastMovement->installation_date)
-                    ? $inventory->lastMovement->installation_date->format('d/m/Y')
-                    : 'No Instalado' }}
+                    {{ ($movement->inventory->lastMovement->installation_date)
+                    ? $movement->inventory->lastMovement->installation_date->format('d/m/Y')
+                    : '' }}
                 </td>
             </tr>
         </tbody>
@@ -124,7 +132,7 @@
     <table>
         <tbody class="border-hidden">
             <tr>
-                <td class="border-hidden">
+                <td class="border-hidden" width="50%">
                     @if(isset($approvalSender))
                         <span class="text-bold content-sign">
                             QUIEN ENTREGA

@@ -48,54 +48,60 @@
                 </li>
             @endif
 
-            @if($movement->usingUser)
-                <li>
-                    {{ $movement->created_at->format('Y-m-d') }}
-                    - Usado por
-                    <b>{{ $movement->usingUser->full_name }}</b>
-                    en
-                    <b>{{ $movement->place->location->name }}</b>
-                    -
-                    <b>{{ $movement->place->name }}</b>
-                </li>
-            @endif
-
             <li>
-                {{ $movement->created_at->format('Y-m-d') }}
-                - Entrega a responsable
-                <b>{{ optional($movement->responsibleUser)->full_name }}</b>
-                en
-                <b>{{ $movement->place->location->name }}</b>
-                -
-                <b>{{ $movement->place->name }}</b>
-
+                {{ $movement->created_at->format('Y-m-d') }} 
+                - 
                 @if($movement->reception_confirmation)
-                    <ul>
-                        @if($movement->reception_date)
-                            <li>
-                                {{ $movement->reception_date }}
-                                - Confirmación recepción por responsable
-                                <b>{{ $movement->responsibleUser->full_name }}</b>
-                            </li>
-                        @endif
-
-                        @if($movement->observations)
-                            <li>
-                                {{ $movement->reception_date }}
-                                -
-                                Observación del responsable: {{ $movement->observations }}
-                            </li>
-                        @endif
-                    </ul>
+                    <a
+                        href="{{ route('inventories.act-transfer', $movement) }}"
+                        target="_blank"
+                        title="Acta de Traspaso"
+                    >
+                        Acta de recepción
+                    </a>
                 @endif
+                        
+                <br>
+                - Responsable: 
+                <b>{{ optional($movement->responsibleUser)->shortName }}</b>
+
+                - Recepción:
+                @if($movement->reception_confirmation)
+                    @if($movement->reception_date)
+                        <b>{{ $movement->reception_date }}</b>
+                    @endif
+                @else
+                    <span class="text-danger">Pendiente</span>
+                @endif
+
+                @if($movement->usingUser)
+                    - Usuario: 
+                    {{ $movement->usingUser->shortName }}
+                @endif
+                <br>
+
+                @if($movement->observations)
+                    - Observación: {{ $movement->observations }}
+                    <br>
+                @endif
+
+                - Ubicación: 
+                {{ $movement->place->location->name }}
+                -
+                {{ $movement->place->name }}
+
+
             </li>
         @endforeach
 
-        @if($inventory->discharge_date)
+        @if(isset($inventory->discharge_date) && isset($inventory->act_number))
             <li>
                 {{ $inventory->discharge_date->format('Y-m-d') }}
                 - De baja a través de acta
-                <a href="#">
+                <a
+                    href="{{ route('inventories.discharge-document', $inventory)}}"
+                    target="_blank"
+                >
                     {{ $inventory->act_number }}
                 </a>
             </li>

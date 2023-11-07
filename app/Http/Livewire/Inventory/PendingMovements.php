@@ -31,7 +31,7 @@ class PendingMovements extends Component
     {
         $movements = InventoryMovement::query()
             ->whereReceptionConfirmation(false)
-            ->whereUserResponsibleId(Auth::id())
+            ->whereUserResponsibleId(auth()->id())
             ->orderByDesc('id')
             ->paginate(10);
 
