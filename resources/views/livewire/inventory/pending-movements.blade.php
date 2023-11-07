@@ -28,17 +28,17 @@
                 <tr wire:loading.remove>
                     <td>
                         <small class="text-monospace">
-                            {{ $movement->inventory->number }}
+                            {{ $movement->inventory?->number }}
                         </small>
                     </td>
                     <td>
-                        {{ optional($movement->inventory->unspscProduct)->name }}
+                        {{ optional($movement->inventory?->unspscProduct)->name }}
                         <br>
                         <small>
-                            @if($movement->inventory->product)
+                            @if($movement->inventory?->product)
                                 {{ $movement->inventory->product->name }}
                             @else
-                                {{ $movement->inventory->description }}
+                                {{ $movement->inventory?->description }}
                             @endif
                         </small>
 
