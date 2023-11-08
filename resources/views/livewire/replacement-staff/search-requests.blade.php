@@ -105,7 +105,10 @@
     <p class="font-weight-lighter">Total de Registros: <b>{{ $requests->total() }}</b></p>
 
     @if($requests->count() > 0)
+
     <div class="table-responsive">
+        <br>
+        {{ $requests->links() }}
         <table class="table table-sm table-striped table-bordered">
             <thead class="text-center small">
                 <tr>
