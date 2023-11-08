@@ -88,6 +88,18 @@
                 </select>
             </fieldset>
             @endif
+
+            {{--
+            @if($typeIndex == 'assign')
+            <fieldset class="form-group col-12 col-md-3">
+                <label for="for_sub_search">Asignado</label>
+                <select name="sub_search" class="form-control" wire:model.debounce.500ms="selectedAssigned">
+                    <option value="si">Asignados</option>
+                    <option value="no">Sin asignar</option>
+                </select>
+            </fieldset>
+            @endif
+            --}}
         </div>
     </div>
     <p class="font-weight-lighter">Total de Registros: <b>{{ $requests->total() }}</b></p>
@@ -154,6 +166,7 @@
                         @endif
                     </td>
                     <td>
+                        {{--
                         @if($requestReplacementStaff->form_type == 'replacement' || $requestReplacementStaff->form_type == NULL)
                             {{ $requestReplacementStaff->legalQualityManage->NameValue ?? '' }} ({{ $requestReplacementStaff->profile_manage->name ?? '' }})
                         @else
@@ -161,6 +174,7 @@
                                 {{ $position->legalQualityManage->NameValue ?? '' }} ({{ $position->profile_manage->name ?? '' }})
                             @endforeach
                         @endif
+                        --}}
                     </td>
                     <td>
                         @if($requestReplacementStaff->form_type == 'replacement' || $requestReplacementStaff->form_type == NULL)
@@ -205,7 +219,7 @@
                         </p>
                     </td>
                     <td class="text-center">
-                        @foreach($requestReplacementStaff->RequestSign as $sign)
+                        @foreach($requestReplacementStaff->requestSign as $sign)
                             @if($sign->request_status == 'pending' || $sign->request_status == NULL)
                                 <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="{{ $sign->organizationalUnit->name }}">
                                     <i class="fas fa-clock fa-2x"></i>
@@ -261,7 +275,7 @@
                                         class="btn btn-outline-secondary btn-sm" title="Resumen"><i class="fas fa-eye"></i></a>
                                 @endif
                             <!-- PERMITE MOSTRAR EL BOTÓN PARA ASIGNAR SOLICITUD -->
-                            @elseif(($requestReplacementStaff->RequestSign->last()->request_status == "accepted" ||
+                            @elseif(($requestReplacementStaff->requestSign->last()->request_status == "accepted" ||
                                 $requestReplacementStaff->signaturesFile && $requestReplacementStaff->signaturesFile->signaturesFlows->first()-> status == 1) &&
                                     !$requestReplacementStaff->technicalEvaluation &&
                                         Auth::user()->hasPermissionTo('Replacement Staff: assign request'))

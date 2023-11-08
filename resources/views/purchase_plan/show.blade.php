@@ -213,7 +213,8 @@
 @else
 
 <div class="alert alert-info" role="alert">
-    Estimado Usuario: El Plan de Compras aún no ha sido enviado para aprobaciones.
+    Estimado Usuario: El Plan de Compras aún no ha sido enviado para aprobaciones. Procure completar detalle de distribucion por item.  
+    <a class="btn btn-sm btn-outline-success float-end pt-0" href="{{ route('purchase_plan.send', $purchasePlan) }}"><i class="fas fa-paper-plane"></i> Enviar</a>
 </div>
 
 @endif
