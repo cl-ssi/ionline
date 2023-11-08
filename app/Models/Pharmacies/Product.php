@@ -17,7 +17,7 @@ class Product extends Model
         'barcode', 'name', 'unit', 'expiration',
         //'batch',
         'price', 'stock',
-        'critic_stock','min_stock','max_stock',
+        'critic_stock','min_stock','max_stock','pharmacy_id',
         'storage_conditions', 'category_id', 'program_id', 'id'
     ];
 
