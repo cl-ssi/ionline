@@ -48,6 +48,8 @@ class DetailMonthPurchasePlan extends Component
             if($this->quantityDetail == 0 || $this->quantityDetail == NULL){
                 $this->quantityAvailable = $this->quantity;
             }
+
+            if($this->item->purchasePlan->hasFirstApprovalSigned()) $this->disabledSave = 'disabled';
         }
     }
     

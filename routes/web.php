@@ -2015,6 +2015,7 @@ Route::prefix('purchase_plan')->as('purchase_plan.')->middleware(['auth', 'must.
     Route::get('/{purchase_plan_id}/show_approval', [PurchasePlanController::class, 'show_approval'])->name('show_approval');
     Route::get('/{purchasePlan}/edit', [PurchasePlanController::class, 'edit'])->name('edit');
     Route::delete('/{purchasePlan}/destroy', [PurchasePlanController::class, 'destroy'])->name('destroy');
+    Route::get('/{purchasePlan}/send', [PurchasePlanController::class, 'send'])->name('send');
 });
 
 /*formulario de requerimiento compra o servicio */
