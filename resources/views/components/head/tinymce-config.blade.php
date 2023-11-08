@@ -12,6 +12,11 @@
     toolbar: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | print preview media fullpage | forecolor backcolor emoticons | removeformat ',
     browser_spellcheck: true,
     contextmenu: false,
+    style_formats: [
+        {title: 'Caracteres especiales', inline: 'span', classes: 'especial'},
+    ],
+    // The following option is used to append style formats rather than overwrite the default style formats.
+    style_formats_merge: true,
     content_style: "body { font-size: 10pt; font-family: Verdana; }"
   });
 </script>
