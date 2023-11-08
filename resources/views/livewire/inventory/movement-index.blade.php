@@ -108,9 +108,9 @@
         @endif
     </ul>
 
-    <div class="row text-center">
+    <!-- <div class="row text-center">
         <div class="col" wire:loading>
             @include('layouts.bt4.partials.spinner')
         </div>
-    </div>
+    </div> -->
 </div>

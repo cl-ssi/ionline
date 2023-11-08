@@ -21,6 +21,7 @@ use App\Models\Parameters\Place;
 use App\Models\Parameters\BudgetItem;
 use App\Models\Finance\Dte;
 use App\Models\Finance\AccountingCode;
+use App\Models\Establishment;
 
 class Inventory extends Model implements Auditable
 {
@@ -175,7 +176,11 @@ class Inventory extends Model implements Auditable
     }
 
     public function getQrAttribute() {
-        return QrCode::size(150)->generate(route('inventories.show', ['number' => $this->number]));
+        return QrCode::size(150)
+            ->generate(route('inventories.show', [
+                'establishment' => $this->establishment_id,
+                'number' => $this->number
+            ]));
     }
 
     public function getMyComputerAttribute()
