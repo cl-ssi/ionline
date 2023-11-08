@@ -69,7 +69,7 @@
                                     {{ $controlItem->control->po_code }}
                                 </span>
                             @else
-                                {{ $controlItem->control->origin->name }}
+                                {{ $controlItem->control->origin?->name }}
                             @endif
                             <br>
                             <small>
