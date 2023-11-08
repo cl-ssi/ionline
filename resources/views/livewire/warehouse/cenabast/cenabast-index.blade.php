@@ -50,9 +50,9 @@
         <thead>
             <tr>
                 <th>
-                    {{-- <input type="text" class="form-control" wire:model.defer="otp" placeholder="OTP"
-                        width="100px"> --}}
-                        <small class="text-muted">Solo activada la firma individual hasta estabilidad de servicio</small>
+                    <input type="text" class="form-control" wire:model.defer="otp" placeholder="OTP"
+                        width="100px">
+                        <small class="text-muted">(Max 5)</small>
                     <button class="btn btn-sm btn-primary btn-block" wire:click="signMultiple">
                         Firmar Varios
                     </button>
