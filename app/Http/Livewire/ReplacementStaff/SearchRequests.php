@@ -61,7 +61,7 @@ class SearchRequests extends Component
 
         if($this->typeIndex == 'own'){
             $requests = RequestReplacementStaff::
-                with(['user', 'organizationalUnit', 'requestSign', 'requesterUser', 
+                with(['user', 'organizationalUnit', 'requestSign.organizationalUnit', 'requesterUser', 'profile_manage',
                     'legalQualityManage', 'fundamentManage', 'fundamentDetailManage', 'technicalEvaluation',
                     'assignEvaluations'])   
                 ->latest()
@@ -83,7 +83,7 @@ class SearchRequests extends Component
 
         if($this->typeIndex == 'ou'){
             $requests = RequestReplacementStaff::
-                with(['user', 'organizationalUnit', 'requestSign', 'requesterUser', 
+                with(['user', 'organizationalUnit', 'requestSign.organizationalUnit', 'requesterUser', 'profile_manage',
                     'legalQualityManage', 'fundamentManage', 'fundamentDetailManage', 'technicalEvaluation',
                     'assignEvaluations'])
                 ->latest()
@@ -106,7 +106,7 @@ class SearchRequests extends Component
 
         if($this->typeIndex == 'personal'){
             $requests = RequestReplacementStaff::
-                with(['user', 'organizationalUnit', 'requestSign', 'requesterUser', 
+                with(['user', 'organizationalUnit', 'requestSign.organizationalUnit', 'requesterUser', 'profile_manage',
                     'legalQualityManage', 'fundamentManage', 'fundamentDetailManage', 'technicalEvaluation',
                     'assignEvaluations'])
                 ->latest()
@@ -126,9 +126,9 @@ class SearchRequests extends Component
 
         if($this->typeIndex == 'assigned_to'){
             $requests = RequestReplacementStaff::
-                with(['user', 'organizationalUnit', 'requestSign', 'requesterUser', 
+                with(['user', 'organizationalUnit', 'requestSign.organizationalUnit', 'requesterUser', 'profile_manage',
                     'legalQualityManage', 'fundamentManage', 'fundamentDetailManage', 'technicalEvaluation',
-                    'assignEvaluations'])
+                    'assignEvaluations.userAssigned'])
                 ->WhereHas('assignEvaluations', function($j) {
                     $j->Where('to_user_id', Auth::user()->id)
                     ->where('status', 'assigned');

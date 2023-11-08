@@ -166,6 +166,7 @@
                         @endif
                     </td>
                     <td>
+                        {{--
                         @if($requestReplacementStaff->form_type == 'replacement' || $requestReplacementStaff->form_type == NULL)
                             {{ $requestReplacementStaff->legalQualityManage->NameValue ?? '' }} ({{ $requestReplacementStaff->profile_manage->name ?? '' }})
                         @else
@@ -173,6 +174,7 @@
                                 {{ $position->legalQualityManage->NameValue ?? '' }} ({{ $position->profile_manage->name ?? '' }})
                             @endforeach
                         @endif
+                        --}}
                     </td>
                     <td>
                         @if($requestReplacementStaff->form_type == 'replacement' || $requestReplacementStaff->form_type == NULL)
