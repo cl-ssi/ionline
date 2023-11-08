@@ -41,7 +41,7 @@ class SearchRequests extends Component
     {   
         if($this->typeIndex == 'assign'){
             $requests = RequestReplacementStaff::
-                with(['user', 'organizationalUnit', 'requestSign', 'requesterUser', 
+                with(['user', 'organizationalUnit', 'requestSign.organizationalUnit', 'requesterUser', 'profile_manage', 
                     'legalQualityManage', 'fundamentManage', 'fundamentDetailManage', 'technicalEvaluation',
                     'assignEvaluations'])
                 ->latest()
