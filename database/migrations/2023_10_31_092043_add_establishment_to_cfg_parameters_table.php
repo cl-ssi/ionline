@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreignId('establishment_id')->after('description')->nullable()->constrained('establishments');
         });
         
-        Parameter::query()->update(['establishment_id' => 38]);
+        // Parameter::query()->update(['establishment_id' => 38]);
     }
 
     /**
