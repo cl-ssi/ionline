@@ -7,7 +7,7 @@
         Completar el traspaso
     </h4>
 
-    <div class="form-row g-2 mb-2">
+    <div class="row g-2 g-2 mb-2">
         <fieldset class="col-md-4">
             <label for="product" class="form-label">
                 Producto
@@ -49,7 +49,7 @@
     </div>
 
 
-    <div class="form-row g-2 mb-2">
+    <div class="row g-2 g-2 mb-2">
         <fieldset class="col-md-12">
             <label for="place-location" class="form-label">
                 Ubicación
@@ -64,7 +64,7 @@
         </fieldset>
     </div>
 
-    <div class="form-row g-2 mb-2">
+    <div class="row g-2 g-2 mb-2">
         <fieldset class="col-md-4">
             <label for="user-sender" class="form-label">
                 Quién Entrega
@@ -103,7 +103,7 @@
         </fieldset>
     </div>
 
-    <div class="form-row g-2 mb-2">
+    <div class="row g-2 g-2 mb-2">
         <fieldset class="col-md-4">
             <label for="status" class="form-label">
                 Estado

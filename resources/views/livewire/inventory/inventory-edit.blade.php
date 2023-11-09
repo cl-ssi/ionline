@@ -5,15 +5,16 @@
         'establishment' => $establishment
     ])
 
-    @include('layouts.bt4.partials.flash_message')
+    @include('layouts.bt5.partials.flash_message')
 
     <div class="row">
         <div class="col">
             <h3 class="mb-3">
-                Detalle del ítem
+                Detalle del ítem 
             </h3>
         </div>
-        <div class="col text-right">
+        <div class="col text-end">
+            @livewire('inventory.toggle-print',['inventory' => $inventory],key($inventory->id))
             <a
                 href="{{ route('inventories.pending-inventory', [
                     'establishment' => $establishment
@@ -25,7 +26,7 @@
         </div>
     </div>
 
-    <div class="form-row mb-3">
+    <div class="row g-2 mb-3">
         <fieldset class="col-md-2">
             <label for="code" class="form-label">
                 Código
@@ -69,18 +70,21 @@
         </fieldset>
     </div>
 
-    <div class="form-row mb-3">
-        <fieldset class="col-md-2">
+    <div class="row g-2 mb-3">
+        <fieldset class="col-md-3">
             <label for="number-inventory" class="form-label">
-                Nro. Inventario
+                Nro. Inventario {{ $number_inventory}}
             </label>
-            <input
-                type="text"
-                class="form-control @error('number_inventory') is-invalid @enderror"
-                id="number-inventory"
-                wire:model.defer="number_inventory"
-                autocomplete="off"
-            >
+            <div class="input-group">
+                <input
+                    type="text"
+                    class="form-control @error('number_inventory') is-invalid @enderror"
+                    id="number-inventory"
+                    wire:model.defer="number_inventory"
+                    autocomplete="off"
+                >
+                <button class="btn btn-primary" wire:click="generateCode">Generar</button>
+            </div>
             @error('number_inventory')
                 <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
@@ -106,7 +110,7 @@
             @enderror
         </fieldset>
 
-        <fieldset class="col-md-2">
+        <fieldset class="col-md-3">
             <label for="model" class="form-label">
                 Modelo
             </label>
@@ -142,12 +146,41 @@
             @enderror
         </fieldset>
 
+
+    </div>
+
+    <div class="row g-2 mb-3">
+
+        <fieldset class="col-md-3">
+            <label for="cost-center" class="form-label">
+                Cuenta contable
+            </label>
+            <select
+                type="text"
+                class="form-select @error('accounting_code_id') is-invalid @enderror"
+                id="cost-center"
+                wire:model="accounting_code_id"
+            >
+                <option value="">Seleccione cuenta contable</option>
+                @foreach($accountingCodes as $accountingCode)
+                    <option value="{{ $accountingCode->id }}">
+                    {{ $accountingCode->id }} - {{ $accountingCode->description }}
+                    </option>
+                @endforeach
+            </select>
+            @error('accounting_code_id')
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+            @enderror
+        </fieldset>
+
         <fieldset class="col-md-2">
             <label for="status" class="form-label">
                 Estado
             </label>
             <select
-                class="form-control @error('status') is-invalid @enderror"
+                class="form-select @error('status') is-invalid @enderror"
                 id="status"
                 wire:model="status"
                 >
@@ -164,10 +197,6 @@
         </fieldset>
 
 
-
-    </div>
-
-    <div class="form-row mb-3">
         <fieldset class="col-md-2">
             <label for="useful-life" class="form-label">
                 Vida útil
@@ -186,7 +215,7 @@
             @enderror
         </fieldset>
 
-        <fieldset class="col-md-3">
+        <fieldset class="col-md-2">
             <label for="depreciation" class="form-label">
                 Depreciación
             </label>
@@ -203,33 +232,9 @@
                 </span>
             @enderror
         </fieldset>
-
-        <fieldset class="col-md-2">
-            <label for="cost-center" class="form-label">
-                Cuenta contable
-            </label>
-            <select
-                type="text"
-                class="form-control @error('accounting_code_id') is-invalid @enderror"
-                id="cost-center"
-                wire:model="accounting_code_id"
-            >
-                <option value="">Seleccione cuenta contable</option>
-                @foreach($accountingCodes as $accountingCode)
-                    <option value="{{ $accountingCode->id }}">
-                    {{ $accountingCode->id }} - {{ $accountingCode->description }}
-                    </option>
-                @endforeach
-            </select>
-            @error('accounting_code_id')
-                <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                </span>
-            @enderror
-        </fieldset>
     </div>
 
-    <div class="form-row mb-3">
+    <div class="row g-2 mb-3">
         @if($inventory->control && $inventory->control->requestForm)
             <fieldset class="col-md-3">
                 <label for="date-reception" class="form-label">
@@ -308,7 +313,7 @@
     </div>
 
 
-    <div class="form-row mb-3">
+    <div class="row g-2 mb-3">
 
         @if($inventory->control)
             <fieldset class="col-md-5">
@@ -386,7 +391,7 @@
         </div>
     @endif
 
-    <div class="form-row mb-3">
+    <div class="row g-2 mb-3">
         <fieldset class="col-md-12">
             <label for="observations" class="form-label">
                 Observaciones
@@ -407,8 +412,8 @@
         </fieldset>
     </div>
 
-    <div class="form-row mb-3">
-        <div class="col text-right">
+    <div class="row g-2 mb-3">
+        <div class="col text-end">
             <button
                 class="btn btn-primary"
                 wire:click="update"

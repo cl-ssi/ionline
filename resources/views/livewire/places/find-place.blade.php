@@ -1,6 +1,6 @@
 <div>
     <div class="input-group @if($smallInput) input-group-sm @endif has-validation">
-        <div class="input-group-prepend">
+        <div class="input-group">
             <span class="input-group-text" wire:loading.remove wire:target="search">
                 @if($place_id == null)
                     <i class="fas fa-times text-danger"></i>
@@ -12,7 +12,6 @@
                 <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                 <span class="sr-only">...</span>
             </span>
-        </div>
 
         <input
             type="text"
@@ -23,7 +22,6 @@
             autocomplete="off"
             @if($place_id) disabled @endif
         >
-        <div class="input-group-append">
             <button
                 class="btn @if($smallInput) btn-sm @endif btn-secondary"
                 type="button"
@@ -35,7 +33,7 @@
         </div>
     </div>
 
-    <ul class="list-group col-12" style="z-index: 3; position: absolute;">
+    <ul class="list-group" style="z-index: 3; position: absolute;">
         @if($showResult)
             @forelse($places as $place)
                 <a

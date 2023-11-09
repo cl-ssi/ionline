@@ -61,7 +61,7 @@
                 @yield('content', $slot ?? '')
             </main>
 
-            <footer class="footer">
+            <footer class="footer d-print-none">
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-6 col-md-6 text-white"style="background-color: rgb(0,108,183);">

@@ -1,4 +1,4 @@
-<div class="form-row g-2">
+<div class="row g-2 mb-3">
     <fieldset class="form-group col-md-3 col-sm-12">
         <label for="for_name">Nombre*</label>
         <input type="text" class="form-control @error('name') is-invalid @enderror" id="for_name"

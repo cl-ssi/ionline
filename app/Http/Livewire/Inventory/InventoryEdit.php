@@ -26,8 +26,7 @@ class InventoryEdit extends Component
 
     public function render()
     {
-        return view('livewire.inventory.inventory-edit')
-            ->extends('layouts.bt4.app');
+        return view('livewire.inventory.inventory-edit');
     }
 
     public function mount(Inventory $inventory, Establishment $establishment)
@@ -50,6 +49,16 @@ class InventoryEdit extends Component
     public function rules()
     {
         return (new UpdateInventoryRequest($this->inventory))->rules();
+    }
+
+    /**
+    * Generate Code
+    */
+    public function generateCode()
+    {
+        app('debugbar')->log($this->number_inventory);
+        $this->number_inventory = $this->inventory->unspscProduct->code . str_pad($this->inventory->id, 7, '0', STR_PAD_LEFT);
+        app('debugbar')->log($this->number_inventory);
     }
 
     public function update()

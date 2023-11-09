@@ -36,6 +36,14 @@
     @can('Inventory: manager')
         <li class="nav-item">
             <a
+                class="nav-link {{ active(['inventories.print-code-queue']) }}"
+                href="{{ route('inventories.print-code-queue', $establishment) }}"
+            >
+                <i class="fas fa-print"></i> Cola de impresión
+            </a>
+        </li>
+        <li class="nav-item">
+            <a
                 class="nav-link {{ active(['inventories.upload-excel']) }}"
                 href="{{ route('inventories.upload-excel', $establishment) }}"
             >
@@ -45,10 +53,11 @@
     @endcan
 
     @can('Inventory: place maintainer')
-        <li class="nav-item dropdown">
+    <li class="nav-item dropdown">
             <a
                 class="nav-link dropdown-toggle  {{ active('inventories.places', $establishment) }}"
                 data-toggle="dropdown"
+                data-bs-toggle="dropdown"
                 href="#"
                 role="button"
                 aria-expanded="false"

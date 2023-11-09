@@ -16,11 +16,20 @@ class SearchReplacementStaff extends Component
 
     public $professionManage = null;
 
-    public $selectedProfile = null;
     public $selectedSearch = null;
+    public $selectedProfile = null;
     public $selectedProfession = null;
     public $selectedStaff = null;
     public $selectedStatus = 0;
+
+    public $profileId = null;
+
+    protected $queryString = ['selectedSearch', 
+        'selectedProfile',
+        'selectedProfession',
+        'selectedStaff', 
+        'selectedStatus' => ['except' => 0]
+    ];
 
     public function render()
     {
@@ -39,8 +48,46 @@ class SearchReplacementStaff extends Component
     }
 
     public function updatedselectedProfile($profile_id){
+        //$this->profileId = $profile_id;
+
         $this->professionManage = ProfessionManage::where('profile_manage_id', $profile_id)
             ->OrderBy('name')
             ->get();
+    }
+
+    /* Permite alamcenar parámetros de búsqueda con paginación */
+    public function updatingSelectedSearch(){
+        $this->resetPage();
+    }
+
+    public function updatingSelectedProfile(){
+        $this->resetPage();
+    }
+
+    public function updatingSelectedProfession(){
+        $this->resetPage();
+    }
+
+    public function updatingSelectedStaff(){
+        $this->resetPage();
+    }
+
+    public function updatingSelectedStatus(){
+        $this->resetPage();
+    }
+
+    public function clearForm(){
+        $this->selectedSearch = null;
+        $this->selectedProfile = null;
+        $this->selectedProfession = null;
+        $this->selectedStaff = null;
+        $this->selectedStatus = 0;
+    }
+
+    public function mount(){
+        // $this->professionManage = ProfessionManage::where('profile_manage_id', $this->profileId)
+        //     ->OrderBy('name')
+        //     ->get();
+        $this->updatedselectedProfile($this->profileId);
     }
 }

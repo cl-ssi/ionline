@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-dark shadow-sm bg-nav-gobierno">
+<nav class="navbar navbar-expand-lg navbar-dark shadow-sm bg-nav-gobierno  d-print-none ">
     <div class="container">
         <a class="navbar-brand" href="{{ route('home') }}">
             {{ config('app.name', 'Laravel') }}

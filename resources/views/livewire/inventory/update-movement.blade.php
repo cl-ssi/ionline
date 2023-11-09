@@ -1,6 +1,6 @@
 <div>
     @foreach($inventory->movements as $movement)
-    <div class="form-row mb-3">
+    <div class="row g-2 mb-3">
         <fieldset class="col-md-3" wire:ignore>
             <label for="responsible-{{ $movement->id }}" class="form-label">
                 Responsable

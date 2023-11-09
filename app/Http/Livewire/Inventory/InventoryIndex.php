@@ -61,7 +61,7 @@ class InventoryIndex extends Component
     {
         return view('livewire.inventory.inventory-index',[
             'inventories' => $this->getInventories(),
-        ])->extends('layouts.bt4.app');
+        ]);
     }
 
     public function getInventories()
@@ -74,6 +74,9 @@ class InventoryIndex extends Component
                 'responsible',
                 'using',
                 'unspscProduct',
+                'lastMovement',
+                'lastMovement.responsibleUser',
+                'lastMovement.usingUser',
             ])
             ->when($this->unspsc_product_id, function($query) {
                 $query->whereRelation('unspscProduct', 'id', '=', $this->unspsc_product_id);
