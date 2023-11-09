@@ -246,6 +246,7 @@
                     <th>Lugar</th>
                     <th>Responsable</th>
                     <th>Usuario</th>
+                    <th>QR</th>
                     <th class="d-print-none"></th>
                 </tr>
             </thead>
@@ -312,6 +313,9 @@
                                 {{ optional($inventory->using)->tinny_name }}
                             @endif
                         @endif
+                    </td>
+                    <td>
+                        @livewire('inventory.toggle-print',['inventory' => $inventory],key($inventory->id))
                     </td>
                     <td class="text-center d-print-none">
                         <a
