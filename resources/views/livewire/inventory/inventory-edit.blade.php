@@ -409,8 +409,30 @@
 
     <div class="form-row mb-3">
         <div class="col text-right">
-            <button class="btn btn-primary" wire:click="update">
-                <i class="fas fa-save"></i> Actualizar
+            <button
+                class="btn btn-primary"
+                wire:click="update"
+                wire:target="update"
+                wire:loading.attr="disabled"
+            >
+
+                <span
+                    wire:loading.remove
+                    wire:target="update"
+                >
+                    <i class="fas fa-save"></i>
+                </span>
+
+                <span
+                    class="spinner-border spinner-border-sm"
+                    role="status"
+                    wire:loading
+                    wire:target="update"
+                    aria-hidden="true"
+                >
+                </span>
+
+                Actualizar
             </button>
         </div>
     </div>
@@ -419,7 +441,7 @@
 
     @livewire('inventory.register-movement', ['inventory' => $inventory ])
 
-    @livewire('inventory.update-movement', ['inventory' => $inventory])
+    @livewire('inventory.update-movement', ['inventory' => $inventory], key($inventory->id))
 
     <h5 class="mt-3">Registrar baja del ítem</h5>
 

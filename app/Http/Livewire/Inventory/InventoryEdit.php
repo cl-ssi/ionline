@@ -15,14 +15,14 @@ class InventoryEdit extends Component
     public $accountingCodes;
 
     public $number_inventory;
-    public $useful_life;
     public $status;
-    public $depreciation;
     public $brand;
     public $model;
     public $serial_number;
-    public $observations;
+    public $useful_life;
+    public $depreciation;
     public $accounting_code_id;
+    public $observations;
 
     public function render()
     {

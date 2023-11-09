@@ -537,7 +537,8 @@
 
             @livewire('places.find-place', [
                 'tagId' => 'place-id',
-                'placeholder' => 'Ingrese una ubicación'
+                'placeholder' => 'Ingrese una ubicación',
+                'establishment' => $establishment,
             ])
 
             <input
@@ -658,25 +659,7 @@
         </div>
 
         <div class="form-row g-2 mb-2">
-            <fieldset class="col-md-4">
-                <label for="po-price" class="form-label">
-                    Precio del Producto
-                </label>
-                <input
-                    wire:model.debounce.500ms="po_price"
-                    type="text"
-                    class="form-control @error('po_price') is-invalid @enderror"
-                    id="po-price"
-                    placeholder="Ej: 1234.56"
-                >
-                @error('po_price')
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
-                @enderror
-            </fieldset>
-
-            <fieldset class="col-md-4">
+            <fieldset class="col-md-2">
                 <label for="useful-life" class="form-label">
                     Vida útil
                 </label>
@@ -694,7 +677,68 @@
                 @enderror
             </fieldset>
 
-            <fieldset class="col-md-4">
+            <fieldset class="col-md-2">
+                <label for="depreciation" class="form-label">
+                    Depreciación
+                </label>
+                <input
+                    type="text"
+                    class="form-control @error('depreciation') is-invalid @enderror"
+                    id="depreciation"
+                    wire:model.defer="depreciation"
+                    autocomplete="off"
+                >
+                @error('depreciation')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                @enderror
+            </fieldset>
+
+            <fieldset class="col-md-3">
+                <label for="cost-center" class="form-label">
+                    Cuenta contable
+                </label>
+                <select
+                    type="text"
+                    class="form-control @error('accounting_code_id') is-invalid @enderror"
+                    id="cost-center"
+                    wire:model="accounting_code_id"
+                >
+                    <option value="">Seleccione cuenta contable</option>
+                    @foreach($accountingCodes as $accountingCode)
+                        <option value="{{ $accountingCode->id }}">
+                        {{ $accountingCode->id }} - {{ $accountingCode->description }}
+                        </option>
+                    @endforeach
+                </select>
+                @error('accounting_code_id')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                @enderror
+            </fieldset>
+
+            <fieldset class="col-md-2">
+                <label for="po-price" class="form-label">
+                    Precio del Producto
+                </label>
+                <input
+                    wire:model.debounce.500ms="po_price"
+                    type="text"
+                    class="form-control @error('po_price') is-invalid @enderror"
+                    id="po-price"
+                    placeholder="Ej: 1234.56"
+                >
+                @error('po_price')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                @enderror
+            </fieldset>
+
+
+            <fieldset class="col-md-3">
                 <label for="deliver-date" class="form-label">
                     Fecha de Entrega
                 </label>
