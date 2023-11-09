@@ -20,6 +20,7 @@
             class="form-control @if($smallInput) form-control-sm @endif"
             wire:model.debounce.1500ms="search"
             placeholder="{{ $placeholder }}"
+            autocomplete="off"
             @if($place_id) disabled @endif
         >
         <div class="input-group-append">
@@ -41,7 +42,7 @@
                     wire:click.prevent="addSearchPlace({{ $place }})"
                     class="list-group-item list-group-item-action py-1"
                 >
-                    <small>{{ $place->location->name }}, {{ $place->name }}</small>
+                    <small>{{ $place->id }} {{ $place->location->name }}, {{ $place->name }}</small>
                 </a>
             @empty
                 <div class="list-group-item list-group-item-danger py-1">

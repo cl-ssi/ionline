@@ -7,8 +7,6 @@
         Generar Traspaso
     </h4>
 
-    {{-- dd($inventory) --}}
-
     <div class="form-row g-2 mb-2">
         <fieldset class="col-md-4">
             <label for="number" class="form-label">

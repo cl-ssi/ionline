@@ -6,7 +6,7 @@
     ])
 
     <h4 class="mb-3">
-        {{ $establishment->name }}: Bandeja Pendiente de Inventario
+        {{ $establishment->name }}: Pendientes de Inventariar
     </h4>
 
     <div class="form-row">

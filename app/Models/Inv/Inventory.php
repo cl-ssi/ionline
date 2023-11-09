@@ -21,6 +21,7 @@ use App\Models\Parameters\Place;
 use App\Models\Parameters\BudgetItem;
 use App\Models\Finance\Dte;
 use App\Models\Finance\AccountingCode;
+use App\Models\Establishment;
 
 class Inventory extends Model implements Auditable
 {
@@ -51,6 +52,7 @@ class Inventory extends Model implements Auditable
         'request_user_id',
         'user_responsible_id',
         'user_using_id',
+        'user_sender_id',
         'place_id',
         'product_id',
         'unspsc_product_id',
@@ -128,6 +130,11 @@ class Inventory extends Model implements Auditable
         return $this->hasMany(InventoryMovement::class);
     }
 
+    public function pendingMovements()
+    {
+        return $this->hasMany(InventoryMovement::class)->where('reception_confirmation', false);
+    }
+
     public function lastMovement()
     {
         return $this->hasOne(InventoryMovement::class)->latest();
@@ -169,7 +176,11 @@ class Inventory extends Model implements Auditable
     }
 
     public function getQrAttribute() {
-        return QrCode::size(150)->generate(route('inventories.show', ['number' => $this->number]));
+        return QrCode::size(150)
+            ->generate(route('inventories.show', [
+                'establishment' => $this->establishment_id,
+                'number' => $this->number
+            ]));
     }
 
     public function getMyComputerAttribute()

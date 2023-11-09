@@ -57,74 +57,77 @@
         </div>
     </div>
 
+    <br>
+
     <div class="table-responsive">
-      <table class="table table-sm table-striped table-bordered">
-          <thead class="text-center small">
-              <tr>
-                  <th>Ingreso Antecedentes</th>
-                  <th>Nombre Completo</th>
-                  <th>Run</th>
-                  <th>Estamento</th>
-                  <th>Título</th>
-                  <th>Experiencia</th>
-                  <th>Fecha Titulación</th>
-                  <th>Años Exp.</th>
-                  <th>Estado</th>
-                  <!-- <th>Periodo Efectivo</th> -->
-                  <th style="width: 8%">Más...</th>
-              </tr>
-          </thead>
-          <tbody class="small">
-              @foreach($replacementStaff as $staff)
-              <tr>
-                  <td>{{ $staff->created_at->format('d-m-Y H:i:s') }}</td>
-                  <td>{{ $staff->FullName }}</td>
-                  <td>{{ $staff->Identifier }}</td>
-                  <td>
-                      @foreach($staff->profiles as $title)
-                          <h6><span class="badge rounded-pill bg-light">{{ $title->profile_manage->name }}</span></h6>
-                      @endforeach
-                  </td>
-                  <td>
-                      @foreach($staff->profiles as $title)
-                          <h6><span class="badge rounded-pill bg-light">{{ ($title->profession_manage) ? $title->profession_manage->name : '' }}</span></h6>
-                      @endforeach
-                  </td>
-                  <td>
-                      @foreach($staff->profiles as $title)
-                          <h6><span class="badge rounded-pill bg-light">{{ $title->ExperienceValue }}</span></h6>
-                      @endforeach
-                  </td>
-                  <td class="text-center">
-                      @foreach($staff->profiles as $title)
-                          <h6><span class="badge rounded-pill bg-light">
-                              {{ ($title->degree_date) ? $title->degree_date->format('d-m-Y') : ''}}
-                          </span></h6>
-                      @endforeach
-                  </td>
-                  <td class="text-center">
-                      @foreach($staff->profiles as $title)
-                          <h6><span class="badge rounded-pill bg-light">{{ $title->YearsOfDegree }}</span></h6>
-                      @endforeach
-                  </td>
-                  <td>{{ $staff->StatusValue }}</td>
-                  <!-- <td>{{-- $staff->applicants->first()->start_date->format('d-m-Y') --}}</td> -->
-                  <td>
-                      <a href="{{ route('replacement_staff.show_replacement_staff', $staff) }}"
-                        class="btn btn-outline-secondary btn-sm"
-                        title="Ver Detalle"> <i class="far fa-eye"></i></a>
-                      <a href="{{ route('replacement_staff.view_file', $staff) }}"
-                        class="btn btn-outline-secondary btn-sm"
-                        title="Curriculum Vitae"
-                        target="_blank"> <i class="far fa-file-pdf"></i></a>
-                      <a href="{{ route('replacement_staff.contact_record.index', $staff) }}"
-                        class="btn btn-outline-secondary btn-sm"
-                        title="Registro de Contacto"> <i class="fas fa-address-book"></i></a>
-                  </td>
-              </tr>
-              @endforeach
-          </tbody>
-      </table>
-      {{ $replacementStaff->links() }}
+        {{ $replacementStaff->links() }}
+        <table class="table table-sm table-striped table-bordered">
+            <thead class="text-center small">
+                <tr>
+                    <th>Ingreso Antecedentes</th>
+                    <th>Nombre Completo</th>
+                    <th>Run</th>
+                    <th>Estamento</th>
+                    <th>Título</th>
+                    <th>Experiencia</th>
+                    <th>Fecha Titulación</th>
+                    <th>Años Exp.</th>
+                    <th>Estado</th>
+                    <!-- <th>Periodo Efectivo</th> -->
+                    <th style="width: 8%">Más...</th>
+                </tr>
+            </thead>
+            <tbody class="small">
+                @foreach($replacementStaff as $staff)
+                <tr>
+                    <td>{{ $staff->created_at->format('d-m-Y H:i:s') }}</td>
+                    <td>{{ $staff->FullName }}</td>
+                    <td>{{ $staff->Identifier }}</td>
+                    <td>
+                        @foreach($staff->profiles as $title)
+                            <h6><span class="badge rounded-pill bg-light">{{ $title->profile_manage->name }}</span></h6>
+                        @endforeach
+                    </td>
+                    <td>
+                        @foreach($staff->profiles as $title)
+                            <h6><span class="badge rounded-pill bg-light">{{ ($title->profession_manage) ? $title->profession_manage->name : '' }}</span></h6>
+                        @endforeach
+                    </td>
+                    <td>
+                        @foreach($staff->profiles as $title)
+                            <h6><span class="badge rounded-pill bg-light">{{ $title->ExperienceValue }}</span></h6>
+                        @endforeach
+                    </td>
+                    <td class="text-center">
+                        @foreach($staff->profiles as $title)
+                            <h6><span class="badge rounded-pill bg-light">
+                                {{ ($title->degree_date) ? $title->degree_date->format('d-m-Y') : ''}}
+                            </span></h6>
+                        @endforeach
+                    </td>
+                    <td class="text-center">
+                        @foreach($staff->profiles as $title)
+                            <h6><span class="badge rounded-pill bg-light">{{ $title->YearsOfDegree }}</span></h6>
+                        @endforeach
+                    </td>
+                    <td>{{ $staff->StatusValue }}</td>
+                    <!-- <td>{{-- $staff->applicants->first()->start_date->format('d-m-Y') --}}</td> -->
+                    <td>
+                        <a href="{{ route('replacement_staff.show_replacement_staff', $staff) }}"
+                            class="btn btn-outline-secondary btn-sm"
+                            title="Ver Detalle"> <i class="far fa-eye"></i></a>
+                        <a href="{{ route('replacement_staff.view_file', $staff) }}"
+                            class="btn btn-outline-secondary btn-sm"
+                            title="Curriculum Vitae"
+                            target="_blank"> <i class="far fa-file-pdf"></i></a>
+                        <a href="{{ route('replacement_staff.contact_record.index', $staff) }}"
+                            class="btn btn-outline-secondary btn-sm"
+                            title="Registro de Contacto"> <i class="fas fa-address-book"></i></a>
+                    </td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+        {{ $replacementStaff->links() }}
     </div>
 </div>
