@@ -11,7 +11,7 @@
                 {{ $establishment->name }}: Inventario
             </h4>
         </div>
-        <div class="col text-right">
+        <div class="col text-end">
             <a class="btn btn-primary" href="{{ route('inventories.register', $establishment) }}">
                 <i class="fas fa-plus"></i> Registrar Inventario
             </a>
@@ -256,14 +256,14 @@
                     wire:loading.class.remove="d-none"
                 >
                     <td class="text-center" colspan="7">
-                        @include('layouts.bt4.partials.spinner')
+                        @include('layouts.bt5.partials.spinner')
                     </td>
                 </tr>
                 @forelse($inventories as $inventory)
                 <tr wire:loading.remove>
                     <td class="text-center">
                         <small class="text-monospace">
-                            <a href="{{ route('inventories.show', ['number' => $inventory->number]) }}">
+                            <a href="{{ route('inventories.show', ['establishment' => $establishment, 'number' => $inventory->number]) }}">
                                 {{ $inventory->number }}
                             </a>
                         </small>

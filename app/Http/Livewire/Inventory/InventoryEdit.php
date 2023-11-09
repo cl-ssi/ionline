@@ -51,6 +51,16 @@ class InventoryEdit extends Component
         return (new UpdateInventoryRequest($this->inventory))->rules();
     }
 
+    /**
+    * Generate Code
+    */
+    public function generateCode()
+    {
+        app('debugbar')->log($this->number_inventory);
+        $this->number_inventory = $this->inventory->unspscProduct->code . str_pad($this->inventory->id, 7, '0', STR_PAD_LEFT);
+        app('debugbar')->log($this->number_inventory);
+    }
+
     public function update()
     {
         $dataValidated = $this->validate();

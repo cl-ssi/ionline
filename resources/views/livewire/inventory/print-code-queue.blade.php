@@ -3,7 +3,6 @@
         .bg-image-HAH {
             width: 340px;
             height: 340px;
-            border-bottom: 2px solid #ccc;
             background-image: url('{{ asset('images/inventario_HAH_nuevo.png') }}');
             background-size: 340px;
         }
@@ -11,7 +10,6 @@
         .bg-image-SST {
             width: 340px;
             height: 340px;
-            border-bottom: 2px solid #ccc;
             background-image: url('{{ asset('images/inventario_SST_nuevo.png') }}');
             background-size: 340px;
         }
@@ -22,10 +20,9 @@
         }
 
         .code {
-            padding-top: 16px;
-            padding-left: 6px;
+            padding-top: 8px;
             text-align: center;
-            font-size: 14px;
+            font-size: 19px;
             font-weight: bold;
         }
     </style>
