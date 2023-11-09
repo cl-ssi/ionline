@@ -275,6 +275,7 @@
                             <a href="{{ route('inventories.show', ['establishment' => $establishment, 'number' => $inventory->number]) }}">
                                 {{ $inventory->number }}
                             </a>
+                            <br>
                             {{ $inventory->old_number }}
                         </small>
                     </td>
