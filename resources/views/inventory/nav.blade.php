@@ -45,10 +45,11 @@
     @endcan
 
     @can('Inventory: place maintainer')
-        <li class="nav-item dropdown">
+    <li class="nav-item dropdown">
             <a
                 class="nav-link dropdown-toggle  {{ active('inventories.places', $establishment) }}"
                 data-toggle="dropdown"
+                data-bs-toggle="dropdown"
                 href="#"
                 role="button"
                 aria-expanded="false"
