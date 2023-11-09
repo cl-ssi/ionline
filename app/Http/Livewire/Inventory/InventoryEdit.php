@@ -52,8 +52,8 @@ class InventoryEdit extends Component
     }
 
     /**
-    * Generate Code
-    */
+     * Generate Code
+     */
     public function generateCode()
     {
         app('debugbar')->log($this->number_inventory);

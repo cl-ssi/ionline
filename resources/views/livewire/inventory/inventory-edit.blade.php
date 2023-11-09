@@ -10,11 +10,11 @@
     <div class="row">
         <div class="col">
             <h3 class="mb-3">
-                Detalle del ítem 
+                Detalle del ítem
             </h3>
         </div>
         <div class="col text-end">
-            @livewire('inventory.toggle-print',['inventory' => $inventory],key($inventory->id))
+            @livewire('inventory.toggle-print', ['inventory' => $inventory], key('print-'.$inventory->id))
             <a
                 href="{{ route('inventories.pending-inventory', [
                     'establishment' => $establishment
@@ -73,17 +73,39 @@
     <div class="row g-2 mb-3">
         <fieldset class="col-md-3">
             <label for="number-inventory" class="form-label">
-                Nro. Inventario {{ $number_inventory}}
+                Nro. Inventario
             </label>
             <div class="input-group">
                 <input
                     type="text"
                     class="form-control @error('number_inventory') is-invalid @enderror"
                     id="number-inventory"
-                    wire:model.defer="number_inventory"
+                    wire:model="number_inventory"
                     autocomplete="off"
                 >
-                <button class="btn btn-primary" wire:click="generateCode">Generar</button>
+                <button
+                    class="btn btn-primary"
+                    wire:click="generateCode"
+                    wire:target="generateCode"
+                    wire:loading.attr="disabled"
+                >
+                    <span
+                        wire:loading.remove
+                        wire:target="generateCode"
+                    >
+                        <i class="fas fa-list-ol"></i>
+                    </span>
+
+                    <span
+                        class="spinner-border spinner-border-sm"
+                        role="status"
+                        wire:loading
+                        wire:target="generateCode"
+                        aria-hidden="true"
+                    >
+                    </span>
+                    Generar
+                </button>
             </div>
             @error('number_inventory')
                 <span class="invalid-feedback" role="alert">
@@ -183,7 +205,7 @@
                 class="form-select @error('status') is-invalid @enderror"
                 id="status"
                 wire:model="status"
-                >
+            >
                 <option value="">Seleccione un estado</option>
                 <option value="1">Bueno</option>
                 <option value="0">Regular</option>
@@ -420,7 +442,6 @@
                 wire:target="update"
                 wire:loading.attr="disabled"
             >
-
                 <span
                     wire:loading.remove
                     wire:target="update"
@@ -446,18 +467,17 @@
 
     @livewire('inventory.register-movement', ['inventory' => $inventory ])
 
-    @livewire('inventory.update-movement', ['inventory' => $inventory], key($inventory->id))
+    @livewire('inventory.update-movement', ['inventory' => $inventory], key('update-movement-'.$inventory->id))
 
     <h5 class="mt-3">Registrar baja del ítem</h5>
 
-    @livewire('inventory.add-discharge-date', ['inventory' => $inventory])
+    @livewire('inventory.add-discharge-date', ['inventory' => $inventory], key('discharge-'.$inventory->id))
 
     <div class="row">
         <div class="col">
             <h5 class="mt-3">Historial del ítem</h5>
-            @livewire('inventory.movement-index', ['inventory' => $inventory])
+            @livewire('inventory.movement-index', ['inventory' => $inventory], key('movement-'.$inventory->id))
         </div>
-
     </div>
 
 </div>
