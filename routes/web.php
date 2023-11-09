@@ -39,7 +39,7 @@ use App\Http\Livewire\Parameters\Holidays;
 use App\Http\Livewire\Parameters\AccessLogIndex;
 use App\Http\Livewire\Lobby\MeetingShow;
 use App\Http\Livewire\Lobby\MeetingMgr;
-use App\Http\Livewire\Inventory\ClasificationMgr;
+use App\Http\Livewire\Inventory\ClassificationMgr;
 use App\Http\Livewire\Inventory\RegisterInventory;
 use App\Http\Livewire\Inventory\PrintCodeQueue;
 use App\Http\Livewire\Inventory\PendingMovements;
@@ -1905,7 +1905,7 @@ Route::prefix('inventories')->as('inventories.')->middleware(['auth', 'must.chan
         Route::get('/upload-excel', InventoryUploadExcel::class)->name('upload-excel');
     });
     
-    Route::get('clasification-mgr', ClasificationMgr::class)->name('clasification-mgr');
+    Route::get('clasification-mgr', ClassificationMgr::class)->name('clasification-mgr');
 
     Route::get('{inventory}/discharge-document', [InventoryController::class, 'dischargeDocument'])->name('discharge-document');
     Route::get('movement/{movement}/act-transfer', [InventoryController::class, 'actTransfer'])->name('act-transfer');

@@ -3,10 +3,10 @@
 namespace App\Http\Livewire\Inventory;
 
 use Livewire\Component;
-use App\Models\Inv\Clasification;
+use App\Models\Inv\Classification;
 use Illuminate\Support\Facades\Auth;
 
-class ClasificationMgr extends Component
+class ClassificationMgr extends Component
 {
     /** Mostrar o no el form, tanto para crear como para editar */
     public $form = false;
@@ -40,21 +40,21 @@ class ClasificationMgr extends Component
     }
 
 
-    public function form(Clasification $classification)
+    public function form(Classification $classification)
     {
-        $this->classification = Clasification::firstOrNew([ 'id' => $classification->id]);
+        $this->classification = Classification::firstOrNew([ 'id' => $classification->id]);
         $this->form = true;
     }
 
-    public function delete(Clasification $classification)
+    public function delete(Classification $classification)
     {
         $classification->delete();
     }
 
     public function render()
     {
-        $classifications = Clasification::where('establishment_id', auth()->user()->organizationalUnit->establishment_id)->latest()->paginate(25);
-        return view('livewire.inventory.clasification-mgr', [
+        $classifications = Classification::where('establishment_id', auth()->user()->organizationalUnit->establishment_id)->latest()->paginate(25);
+        return view('livewire.inventory.classification-mgr', [
             'classifications' => $classifications,
         ])->extends('layouts.bt4.app');
         
