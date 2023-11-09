@@ -6,6 +6,7 @@ use App\Http\Requests\Inventory\UpdateInventoryRequest;
 use App\Models\Establishment;
 use App\Models\Finance\AccountingCode;
 use App\Models\Inv\Inventory;
+use App\Models\Inv\Classification;
 use Livewire\Component;
 
 class InventoryEdit extends Component
@@ -27,7 +28,10 @@ class InventoryEdit extends Component
 
     public function render()
     {
-        return view('livewire.inventory.inventory-edit');
+        $classifications = CLassification::where('establishment_id', auth()->user()->organizationalUnit->establishment_id)->get();
+        return view('livewire.inventory.inventory-edit',
+        ['classifications' => $classifications,]
+    );
     }
 
     public function mount(Inventory $inventory, Establishment $establishment)
