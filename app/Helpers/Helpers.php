@@ -13,7 +13,7 @@ function active($route)
 
 function money($value)
 {
-    echo number_format($value, 0, '', '.');
+    echo number_format($value ?? 0, 0, '', '.');
 }
 
 function trashed($user)
