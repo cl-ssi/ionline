@@ -36,6 +36,14 @@
     @can('Inventory: manager')
         <li class="nav-item">
             <a
+                class="nav-link {{ active(['inventories.print-code-queue']) }}"
+                href="{{ route('inventories.print-code-queue', $establishment) }}"
+            >
+                <i class="fas fa-print"></i> Cola de impresión
+            </a>
+        </li>
+        <li class="nav-item">
+            <a
                 class="nav-link {{ active(['inventories.upload-excel']) }}"
                 href="{{ route('inventories.upload-excel', $establishment) }}"
             >

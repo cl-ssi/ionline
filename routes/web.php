@@ -40,6 +40,7 @@ use App\Http\Livewire\Parameters\AccessLogIndex;
 use App\Http\Livewire\Lobby\MeetingShow;
 use App\Http\Livewire\Lobby\MeetingMgr;
 use App\Http\Livewire\Inventory\RegisterInventory;
+use App\Http\Livewire\Inventory\PrintCodeQueue;
 use App\Http\Livewire\Inventory\PendingMovements;
 use App\Http\Livewire\Inventory\MaintainerPlaces as InventoryMaintainerPlaces;
 use App\Http\Livewire\Inventory\InventoryUploadExcel;
@@ -169,8 +170,8 @@ use App\Http\Controllers\QualityAps\QualityApsController;
 use App\Http\Controllers\PurchasePlan\PurchasePlanController;
 use App\Http\Controllers\Programmings\TrainingsItemController;
 use App\Http\Controllers\Programmings\TaskReschedulingController;
-use App\Http\Controllers\Programmings\TaskController;
 //use App\Http\Controllers\RequestForms\SupplyPurchaseController;
+use App\Http\Controllers\Programmings\TaskController;
 use App\Http\Controllers\Programmings\ReviewItemController;
 use App\Http\Controllers\Programmings\ProgrammingReviewController;
 use App\Http\Controllers\Programmings\ProgrammingReportController;
@@ -216,6 +217,7 @@ use App\Http\Controllers\Lobby\MeetingController;
 use App\Http\Controllers\JobPositionProfiles\MessageController;
 use App\Http\Controllers\JobPositionProfiles\JobPositionProfileSignController;
 use App\Http\Controllers\JobPositionProfiles\JobPositionProfileController;
+use App\Http\Controllers\Inventory\InventoryController;
 use App\Http\Controllers\Indicators\SingleParameterController;
 use App\Http\Controllers\Indicators\ProgramApsController;
 use App\Http\Controllers\Indicators\IaapsController;
@@ -264,7 +266,6 @@ use App\Http\Controllers\Agreements\AgreementController;
 use App\Http\Controllers\Agreements\AddendumController;
 use App\Http\Controllers\Agreements\AccountabilityDetailController;
 use App\Http\Controllers\Agreements\AccountabilityController;
-use App\Http\Controllers\Inventory\InventoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -1902,6 +1903,7 @@ Route::prefix('inventories')->as('inventories.')->middleware(['auth', 'must.chan
 
     Route::get('{inventory}/discharge-document', [InventoryController::class, 'dischargeDocument'])->name('discharge-document');
     Route::get('movement/{movement}/act-transfer', [InventoryController::class, 'actTransfer'])->name('act-transfer');
+    Route::get('establishment/{establishment}/print-code-queue', PrintCodeQueue::class)->name('print-code-queue');
     
     Route::get('pending-movements', PendingMovements::class)->name('pending-movements');
     Route::get('assigned-products', AssignedProducts::class)->name('assigned-products');

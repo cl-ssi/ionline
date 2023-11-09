@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('inv_inventories', function (Blueprint $table) {
-            $table->boolean('printed')->after('accounting_code_id')->default(false);
+            $table->boolean('printed')->after('accounting_code_id')->nullable()->default(false);
         });
     }
 
