@@ -62,9 +62,9 @@ class InventoryEdit extends Component
      */
     public function generateCode()
     {
-        app('debugbar')->log($this->number_inventory);
-        $this->number_inventory = $this->inventory->unspscProduct->code . str_pad($this->inventory->id, 7, '0', STR_PAD_LEFT);
-        app('debugbar')->log($this->number_inventory);
+        if($this->inventory->unspscProduct) {
+            $this->number_inventory = $this->inventory->unspscProduct->code . '-' . $this->inventory->id;
+        }
     }
 
     public function update()
