@@ -260,9 +260,9 @@
                 Clasificación
             </label>
               <select
-                class="form-select @error('classification') is-invalid @enderror"
+                class="form-select @error('classification_id') is-invalid @enderror"
                 id="classification"
-                wire:model="classification"
+                wire:model="classification_id"
                 >
                     <option value="">Seleccione una clasificación</option>
                 @foreach($classifications as $classification)

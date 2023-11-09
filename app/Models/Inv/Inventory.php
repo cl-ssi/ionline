@@ -63,6 +63,7 @@ class Inventory extends Model implements Auditable
         'budget_item_id',
         'accounting_code_id',
         'printed',
+        'classification_id',
     ];
 
     protected $dates = [
