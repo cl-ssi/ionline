@@ -60,6 +60,20 @@
                 @endforeach
             </select>
         </fieldset>
+
+        <fieldset class="form-group col-md-2">
+            <label for="pending">En Traspaso</label>
+            <select
+                wire:model.defer="pending"
+                id="pending"
+                class="form-control form-control-sm"
+            >
+        </fieldset>
+            <option value="">Todos</option>
+            <option value="pending">Pendientes</option>
+        </select>
+
+
     </div>
 
     <div class="row g-2 d-print-none mb-3">

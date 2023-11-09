@@ -40,6 +40,7 @@ class InventoryIndex extends Component
     public $userResponsible;
     public $place;
     public $location;
+    public $pending;
 
     public $managerInventory;
 
@@ -101,6 +102,9 @@ class InventoryIndex extends Component
             })
             ->when($this->inv_id, function($query) {
                 $query->where('id', $this->inv_id);
+            })
+            ->when($this->pending, function($query) {
+                $query->whereHas('pendingMovements');
             })
             ->whereEstablishmentId($this->establishment->id)
             ->whereNotNull('number')
