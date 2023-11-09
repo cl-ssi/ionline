@@ -40,10 +40,10 @@ class UpdateInventoryRequest extends FormRequest
                 'max:255',
                 Rule::unique('inv_inventories', 'number')->ignore($this->inventory)
             ],
-            'useful_life'       => 'required',
             'status'            => 'required',
-            'depreciation'      => 'required',
-            'accounting_code_id'=> 'required|exists:fin_accounting_codes,id',
+            'useful_life'       => 'nullable|integer',
+            'depreciation'      => 'nullable|string|min:0|max:255',
+            'accounting_code_id'=> 'nullable|exists:fin_accounting_codes,id',
             'brand'             => 'nullable|string|min:0|max:255',
             'model'             => 'nullable|string|min:0|max:255',
             'serial_number'     => 'nullable|string|min:0|max:255',
