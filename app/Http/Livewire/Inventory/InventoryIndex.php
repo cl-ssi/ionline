@@ -74,6 +74,9 @@ class InventoryIndex extends Component
                 'responsible',
                 'using',
                 'unspscProduct',
+                'lastMovement',
+                'lastMovement.responsibleUser',
+                'lastMovement.usingUser',
             ])
             ->when($this->unspsc_product_id, function($query) {
                 $query->whereRelation('unspscProduct', 'id', '=', $this->unspsc_product_id);
