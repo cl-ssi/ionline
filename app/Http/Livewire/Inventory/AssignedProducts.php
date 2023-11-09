@@ -47,6 +47,9 @@ class AssignedProducts extends Component
             ->when($this->search, function ($query)  use($search) {
                 $query->where('number', 'like', $search);
             })
+            ->whereHas('lastMovement', function($query) {
+                $query->whereNotNull('reception_date');
+            })
             ->orderByDesc('id')
             ->paginate(10);
 
