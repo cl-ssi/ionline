@@ -16,9 +16,6 @@ return new class extends Migration
         Schema::table('inv_inventories', function (Blueprint $table) {
             $table->string('old_number', 255)->after('number')->nullable();
         });
-        Schema::table('inv_inventory_movements', function (Blueprint $table) {
-            $table->unsignedBigInteger('inventory_id')->nullable(false)->change();
-        });
     }
 
     /**
@@ -30,10 +27,6 @@ return new class extends Migration
     {
         Schema::table('inv_inventories', function (Blueprint $table) {
             $table->dropColumn('old_number');
-        });
-
-        Schema::table('inv_inventory_movements', function (Blueprint $table) {
-            $table->unsignedBigInteger('inventory_id')->nullable()->change();
         });
     }
 };
