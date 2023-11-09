@@ -1881,19 +1881,22 @@ Route::prefix('prof_agenda')->as('prof_agenda.')->middleware(['auth'])->group(fu
 
 // Inventories
 Route::prefix('inventories')->as('inventories.')->middleware(['auth', 'must.change.password'])->group(function () {
-    /** Ruta para poder ver la hoja de inventario sin edición  */
-    Route::get('number/{number}', InventoryShow::class)->name('show');
-
+    
     Route::prefix('establishment/{establishment}')->group(function () {
+        /** Ruta para poder ver la hoja de inventario sin edición  */
+        Route::get('/number/{number}', InventoryShow::class)->name('show');
+
+        Route::get('/print-code-queue', PrintCodeQueue::class)->name('print-code-queue');
+
         Route::get('/', InventoryIndex::class)->name('index')
             ->middleware(['can:Inventory: index']);
-        Route::get('last-receptions', InventoryLastReceptions::class)->name('last-receptions')
+        Route::get('/last-receptions', InventoryLastReceptions::class)->name('last-receptions')
             ->middleware(['can:Inventory: last receptions']);
-        Route::get('pending-inventory', InventoryPending::class)->name('pending-inventory')
+        Route::get('/pending-inventory', InventoryPending::class)->name('pending-inventory')
             ->middleware(['can:Inventory: pending inventory']);
         Route::get('/inventory/{inventory}/edit', InventoryEdit::class)->name('edit')
             ->middleware(['can:Inventory: edit']);
-        Route::get('places', InventoryMaintainerPlaces::class)->name('places')
+        Route::get('/places', InventoryMaintainerPlaces::class)->name('places')
             ->middleware(['can:Inventory: place maintainer']);
 
         Route::get('/manage-users', InventoryManageUsers::class)->name('users.manager')->middleware(['can:Inventory: manager']);
@@ -1903,7 +1906,6 @@ Route::prefix('inventories')->as('inventories.')->middleware(['auth', 'must.chan
 
     Route::get('{inventory}/discharge-document', [InventoryController::class, 'dischargeDocument'])->name('discharge-document');
     Route::get('movement/{movement}/act-transfer', [InventoryController::class, 'actTransfer'])->name('act-transfer');
-    Route::get('establishment/{establishment}/print-code-queue', PrintCodeQueue::class)->name('print-code-queue');
     
     Route::get('pending-movements', PendingMovements::class)->name('pending-movements');
     Route::get('assigned-products', AssignedProducts::class)->name('assigned-products');
