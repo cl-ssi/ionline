@@ -50,7 +50,7 @@
 
 
     <div class="form-row g-2 mb-2">
-        <div class="col-md-12">
+        <fieldset class="col-md-12">
             <label for="place-location" class="form-label">
                 Ubicación
             </label>
@@ -61,11 +61,11 @@
                 value="{{ $movement->place->location->name ?? 'Sin ubicación' }} - {{ $movement->place->name ?? 'Sin lugar' }}"
                 readonly
             >
-        </div>
+        </fieldset>
     </div>
 
     <div class="form-row g-2 mb-2">
-        <div class="col-md-6">
+        <fieldset class="col-md-4">
             <label for="user-sender" class="form-label">
                 Quién Entrega
             </label>
@@ -76,43 +76,28 @@
                 value="{{ $movement->senderUser->short_name ?? 'Sin información' }}"
                 readonly
             >
-        </div>
-        <div class="col-md-6">
-            <label for="user-reception" class="form-label">
-                Quién Recepciona
-            </label>
-            <input
-                type="text"
-                class="form-control"
-                id="user-reception"
-                value="{{ auth()->user()->short_name ?? 'Sin información' }}"
-                readonly
-            >
-        </div>
-    </div>
-
-    <div class="form-row g-2 mb-2">
-        <fieldset class="col-md-6">
-            <label for="user" class="form-label">
-                Usuario
-            </label>
-            <input
-                type="text"
-                class="form-control"
-                id="user"
-                value="{{ optional($movement->inventory->using)->full_name }}"
-                readonly
-            >
         </fieldset>
-        <fieldset class="col-md-6">
-            <label for="responsible" class="form-label">
-                Responsable
+        <fieldset class="col-md-4">
+            <label for="user-reception-responsible" class="form-label">
+                Quién Recepciona / Responsable
             </label>
             <input
                 type="text"
                 class="form-control"
                 id="responsible"
-                value="{{ optional($movement->inventory->responsible)->full_name }}"
+                value="{{ optional($movement->responsibleUser)->short_name }}"
+                readonly
+            >
+        </fieldset>
+        <fieldset class="col-md-4">
+            <label for="user-reception-using" class="form-label">
+                Quién Recepciona / Usuario
+            </label>
+            <input
+                type="text"
+                class="form-control"
+                id="user-reception-using"
+                value="{{ optional($movement->usingUser)->short_name }}"
                 readonly
             >
         </fieldset>

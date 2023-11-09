@@ -53,7 +53,9 @@
                 <option value="">Todos</option>
                 @foreach($places as $itemPlace)
                     <option value="{{ $itemPlace->id }}">
-                        {{ $itemPlace->name }} {{ $itemPlace->description }} {{ $itemPlace->architectural_design_code }}
+                        {{ $itemPlace->name }}
+                        {{ $itemPlace->description }}
+                        {{ $itemPlace->architectural_design_code }}
                     </option>
                 @endforeach
             </select>
@@ -120,7 +122,7 @@
                 class="form-control form-control-sm"
             >
         </fieldset>
-    
+
         <fieldset class="form-group col-md-1">
             <label for="">Filtro</label>
             <button
@@ -260,7 +262,9 @@
                 <tr wire:loading.remove>
                     <td class="text-center">
                         <small class="text-monospace">
-                        <a href="{{ route('inventories.show', ['number' => $inventory->number]) }}">{{ $inventory->number }}</a>
+                            <a href="{{ route('inventories.show', ['number' => $inventory->number]) }}">
+                                {{ $inventory->number }}
+                            </a>
                         </small>
                     </td>
                     <td>
@@ -279,17 +283,31 @@
                     </td>
                     <td>
                         @if($inventory->place)
-                        {{ optional($inventory->place)->location->name }}
+                            {{ optional($inventory->place)->location->name }}
                         @endif
                     </td>
                     <td>
                         {{ optional($inventory->place)->name }}
                     </td>
                     <td class="text-center">
-                        {{ optional($inventory->responsible)->tinny_name }}
+                        @if($inventory->lastMovement->reception_date == null)
+                            {{ optional($inventory->lastMovement->responsibleUser)->tinny_name }}
+                            <span class="text-danger">
+                                Pendiente
+                            </span>
+                        @else
+                            {{ optional($inventory->responsible)->tinny_name }}
+                        @endif
                     </td>
                     <td class="text-center">
-                        {{ optional($inventory->using)->tinny_name }}
+                        @if($inventory->lastMovement->reception_date == null)
+                            {{ optional($inventory->lastMovement->usingUser)->tinny_name }}
+                            <span class="text-danger">
+                                Pendiente
+                            </span>
+                        @else
+                            {{ optional($inventory->using)->tinny_name }}
+                        @endif
                     </td>
                     <td class="text-center d-print-none">
                         <a

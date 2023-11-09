@@ -42,7 +42,9 @@
                     wire:click.prevent="addSearchPlace({{ $place }})"
                     class="list-group-item list-group-item-action py-1"
                 >
-                    <small>{{ $place->id }} {{ $place->location->name }}, {{ $place->name }}</small>
+                    <small>
+                        {{ $place->location->name }}, {{ $place->name }}
+                    </small>
                 </a>
             @empty
                 <div class="list-group-item list-group-item-danger py-1">

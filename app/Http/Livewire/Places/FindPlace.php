@@ -2,11 +2,14 @@
 
 namespace App\Http\Livewire\Places;
 
+use App\Models\Establishment;
 use App\Models\Parameters\Place;
 use Livewire\Component;
 
 class FindPlace extends Component
 {
+    public $establishment;
+
     public $places;
     public $place_id;
     public $search;
@@ -19,7 +22,7 @@ class FindPlace extends Component
         'clearSearchPlace' => 'clearSearch',
     ];
 
-    public function mount()
+    public function mount(Establishment $establishment)
     {
         $this->places = collect([]);
     }
@@ -38,10 +41,13 @@ class FindPlace extends Component
         if($this->search)
         {
             $this->places = Place::query()
-                ->where('name', 'like', $search)
-                ->orWhere('id', $this->search)
-                ->orWhereHas('location', function($query) use($search) {
-                    $query->where('name', 'like', $search);
+                ->whereEstablishmentId($this->establishment->id)
+                ->where(function($query) use($search) {
+                    $query->where('name', 'like', $search)
+                    ->orWhereHas('location', function($query) use($search) {
+                        $query->where('name', 'like', $search)
+                            ->whereEstablishmentId($this->establishment->id);
+                    });
                 })
                 ->limit(5)
                 ->get();
