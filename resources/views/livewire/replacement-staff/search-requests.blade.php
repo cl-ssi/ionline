@@ -89,17 +89,16 @@
             </fieldset>
             @endif
 
-            {{--
             @if($typeIndex == 'assign')
             <fieldset class="form-group col-12 col-md-3">
                 <label for="for_sub_search">Asignado</label>
                 <select name="sub_search" class="form-control" wire:model.debounce.500ms="selectedAssigned">
-                    <option value="si">Asignados</option>
+                    <option value="">Seleccione...</option>
+                    <option value="yes">Asignados</option>
                     <option value="no">Sin asignar</option>
                 </select>
             </fieldset>
             @endif
-            --}}
         </div>
     </div>
     <p class="font-weight-lighter">Total de Registros: <b>{{ $requests->total() }}</b></p>
