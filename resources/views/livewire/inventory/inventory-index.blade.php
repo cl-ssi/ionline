@@ -114,11 +114,20 @@
             </select>
         </fieldset>
 
-        <fieldset class="form-group col-md-3">
+        <fieldset class="form-group col-md-2">
             <label for="number">Nro. Inventario</label>
             <input
                 wire:model.defer="number"
                 id="number"
+                class="form-control form-control-sm"
+            >
+        </fieldset>
+
+        <fieldset class="form-group col-md-1">
+            <label for="inv_id">ID</label>
+            <input
+                wire:model.defer="inv_id"
+                id="inv_id"
                 class="form-control form-control-sm"
             >
         </fieldset>
@@ -261,8 +270,8 @@
                 </tr>
                 @forelse($inventories as $inventory)
                 <tr wire:loading.remove>
-                    <td class="text-center">
-                        <small class="text-monospace">
+                    <td class="text-center" nowrap>
+                        <small>
                             <a href="{{ route('inventories.show', ['establishment' => $establishment, 'number' => $inventory->number]) }}">
                                 {{ $inventory->number }}
                             </a>
