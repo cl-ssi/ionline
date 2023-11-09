@@ -7,11 +7,20 @@
         Movimientos pendientes por revisar
     </h4>
 
+    <p class="text-muted">
+        Listado de los productos asignados a ud y debe completar el traspaso.
+    </p>
+
     <table class="table table-bordered">
         <thead>
             <tr>
                 <th nowrap>Nro. Inventario</th>
-                <th>Producto</th>
+                <th>Producto/Especie</th>
+                <th>Estado</th>
+                <th>Ubicación</th>
+                <th>Lugar</th>
+                <th>Responsable</th>
+                <th>Usuario</th>
                 <th></th>
             </tr>
         </thead>
@@ -41,9 +50,27 @@
                                 {{ $movement->inventory?->description }}
                             @endif
                         </small>
-
-                        {{-- {{ $movement->inventory->product->product->name }} - --}}
-                        {{-- {{ $movement->inventory->product->name }} --}}
+                    </td>
+                    <td>
+                        {{ $movement->inventory->estado }}
+                    </td>
+                    <td>
+                        @if($movement->inventory->place)
+                            {{ optional($movement->inventory->place)->location->name }}
+                        @endif
+                    </td>
+                    <td>
+                        {{ optional($movement->inventory->place)->name }}
+                    </td>
+                    <td>
+                        @if($movement->reception_date == null)
+                            {{ optional($movement->responsibleUser)->tinny_name }}
+                        @endif
+                    </td>
+                    <td>
+                        @if($movement->reception_date == null)
+                            {{ optional($movement->usingUser)->tinny_name }}
+                        @endif
                     </td>
                     <td class="text-center" nowrap>
                         <a
@@ -57,7 +84,7 @@
                 </tr>
             @empty
                 <tr class="text-center" wire:loading.remove>
-                    <td colspan="2">
+                    <td colspan="8">
                         <em>No hay registros</em>
                     </td>
                 </tr>

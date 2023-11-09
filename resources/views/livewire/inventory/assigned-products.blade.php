@@ -10,8 +10,12 @@
             </h4>
         </div>
         <div class="col text-right">
-            <a class="btn btn-primary" href="{{ route('inventories.register', auth()->user()->organizationalUnit->establishment) }}">
-                <i class="fas fa-plus"></i> Registrar Inventario
+            <a
+                class="btn btn-primary"
+                href="{{ route('inventories.register', auth()->user()->organizationalUnit->establishment) }}"
+            >
+                <i class="fas fa-plus"></i>
+                Registrar Inventario
             </a>
         </div>
     </div>
@@ -50,9 +54,10 @@
         <thead>
             <th>Nro. Inventario</th>
             <th>Producto</th>
-            <th>Usuario</th>
-            <th>Responsable</th>
+            <th>Estado</th>
             <th>Ubicación</th>
+            <th>Responsable</th>
+            <th>Usuario</th>
             <th></th>
         </thead>
         <tbody>
@@ -93,13 +98,16 @@
                         @endif
                     </td>
                     <td>
-                        {{ optional($inventory->using)->tinny_name }}
+                        {{ $inventory->estado }}
+                    </td>
+                    <td>
+                        {{ $inventory->location }}
                     </td>
                     <td>
                         {{ optional($inventory->responsible)->tinny_name }}
                     </td>
                     <td>
-                        {{ $inventory->location }}
+                        {{ optional($inventory->using)->tinny_name }}
                     </td>
                     <td class="text-center" nowrap>
                         <a
