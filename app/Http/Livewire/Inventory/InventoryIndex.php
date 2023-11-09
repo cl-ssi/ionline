@@ -61,7 +61,7 @@ class InventoryIndex extends Component
     {
         return view('livewire.inventory.inventory-index',[
             'inventories' => $this->getInventories(),
-        ])->extends('layouts.bt4.app');
+        ]);
     }
 
     public function getInventories()

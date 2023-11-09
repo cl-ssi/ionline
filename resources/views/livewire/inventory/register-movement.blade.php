@@ -1,5 +1,5 @@
 <div>
-    <div class="form-row mb-3">
+    <div class="row g-2 mb-3">
         <fieldset class="col-md-3">
             <label for="user-responsible-id" class="form-label">Responsable</label>
 
@@ -8,7 +8,7 @@
                 'placeholder' => 'Ingrese un nombre',
                 'eventName' => 'myUserResponsibleId',
                 'tagId' => 'user-responsible-id',
-                'bt' => 4,
+                'bt' => 5,
             ])
 
             <input
@@ -31,7 +31,7 @@
                 'placeholder' => 'Ingrese un nombre',
                 'eventName' => 'myUserUsingId',
                 'tagId' => 'user-using-id',
-                'bt' => 4,
+                'bt' => 5,
             ])
 
             <input
@@ -89,10 +89,10 @@
 
         <div class="col-md-1">
             <label class="form-label">
-                &nbsp;
+                &nbsp; 
             </label>
             <button
-                class="btn btn-sm btn-primary btn-block"
+                class="btn btn-sm btn-primary form-control"
                 title="Agregar"
                 wire:click="addMovement"
                 wire:loading.attr="disabled"

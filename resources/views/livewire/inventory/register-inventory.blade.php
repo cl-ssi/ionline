@@ -194,7 +194,7 @@
         </strong>
     </h6>
 
-    <div class="form-row g-2">
+    <div class="row g-2">
         <fieldset class="form-group col-sm-4">
             <label for="product-search">
                 Buscar Producto o Servicio
@@ -225,7 +225,7 @@
         </fieldset>
     </div>
 
-    <div class="form-row g-2 mb-2">
+    <div class="row g-2 mb-2">
         <fieldset class="col-md-12">
             <label for="description" class="form-label">
                 Descripción <small>(especificaciones técnicas)</small>
@@ -245,7 +245,7 @@
         </fieldset>
     </div>
 
-    <div class="form-row g-2 mb-2">
+    <div class="row g-2 mb-2">
         <fieldset class="col-md-3">
             <label for="number-inventory" class="form-label">
                 *Nro. de Inventario
@@ -325,7 +325,7 @@
         </strong>
     </h6>
 
-    <div class="form-row g-2 mb-2">
+    <div class="row g-2 mb-2">
         <fieldset class="col-md-3">
             <label for="status" class="form-label">
                 *Estado
@@ -366,7 +366,7 @@
         </fieldset>
     </div>
 
-    <div class="form-row g-2 mt-4">
+    <div class="row g-2 mt-4">
         <div class="form-group col-md-12">
             <label for="type">Tipo:</label>
             <div class="form-check form-check-inline">
@@ -422,7 +422,7 @@
         </div>
     </div>
 
-    <div class="form-row g-2">
+    <div class="row g-2">
         <fieldset class="col-md-4">
             <label for="user-using-id" class="form-label">
                 *Usuario
@@ -561,7 +561,7 @@
     </h6>
 
     <div class="@if(!$collapse) d-none @endif">
-        <div class="form-row g-2 mb-2">
+        <div class="row g-2 mb-2">
             <fieldset class="col-md-6">
                 <label for="po-search" class="form-label">
                     Orden de Compra
@@ -658,7 +658,7 @@
             @endif
         </div>
 
-        <div class="form-row g-2 mb-2">
+        <div class="row g-2 mb-2">
             <fieldset class="col-md-2">
                 <label for="useful-life" class="form-label">
                     Vida útil
@@ -758,7 +758,7 @@
         </div>
     </div>
 
-    <div class="form-row mt-3">
+    <div class="row g-2 mt-3">
         <div class="col text-right">
             <button
                 class="btn btn-primary"

@@ -1,5 +1,5 @@
 <div>
-    <div class="form-row mb-3">
+    <div class="row g-2 mb-3">
         <div class="col-3">
             <strong class="text-danger">Utilizar con precaución</strong>
         </div>

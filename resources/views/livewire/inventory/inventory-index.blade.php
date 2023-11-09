@@ -26,7 +26,7 @@
     ])
     --}}
 
-    <div class="form-row g-2 d-print-none">
+    <div class="row g-2 d-print-none mb-3">
         <fieldset class="form-group col-md-4">
             <label for="locations">Ubicaciones</label>
             <select
@@ -62,7 +62,7 @@
         </fieldset>
     </div>
 
-    <div class="form-row g-2 d-print-none">
+    <div class="row g-2 d-print-none mb-3">
 
         <fieldset class="form-group col-md-4">
             <label for="products">Productos</label>
@@ -124,9 +124,9 @@
         </fieldset>
 
         <fieldset class="form-group col-md-1">
-            <label for="">Filtro</label>
+            <label for="">&nbsp;</label>
             <button
-                class="btn btn-sm btn-primary btn-block"
+                class="btn btn-sm btn-primary form-control"
                 wire:click="getInventories"
             >
                 <i class="fas fa-filter"></i>
@@ -290,23 +290,27 @@
                         {{ optional($inventory->place)->name }}
                     </td>
                     <td class="text-center">
-                        @if($inventory->lastMovement->reception_date == null)
-                            {{ optional($inventory->lastMovement->responsibleUser)->tinny_name }}
-                            <span class="text-danger">
-                                Pendiente
-                            </span>
-                        @else
-                            {{ optional($inventory->responsible)->tinny_name }}
+                        @if($inventory->lastMovement)
+                            @if($inventory->lastMovement->reception_date == null)
+                                {{ optional($inventory->lastMovement->responsibleUser)->tinny_name }}
+                                <span class="text-danger">
+                                    Pendiente
+                                </span>
+                            @else
+                                {{ optional($inventory->responsible)->tinny_name }}
+                            @endif
                         @endif
                     </td>
                     <td class="text-center">
-                        @if($inventory->lastMovement->reception_date == null)
-                            {{ optional($inventory->lastMovement->usingUser)->tinny_name }}
-                            <span class="text-danger">
-                                Pendiente
-                            </span>
-                        @else
-                            {{ optional($inventory->using)->tinny_name }}
+                        @if($inventory->lastMovement)
+                            @if($inventory->lastMovement->reception_date == null)
+                                {{ optional($inventory->lastMovement->usingUser)->tinny_name }}
+                                <span class="text-danger">
+                                    Pendiente
+                                </span>
+                            @else
+                                {{ optional($inventory->using)->tinny_name }}
+                            @endif
                         @endif
                     </td>
                     <td class="text-center d-print-none">

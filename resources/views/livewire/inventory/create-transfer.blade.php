@@ -7,7 +7,7 @@
         Generar Traspaso
     </h4>
 
-    <div class="form-row g-2 mb-2">
+    <div class="row g-2 g-2 mb-2">
         <fieldset class="col-md-4">
             <label for="number" class="form-label">
                 Nro. Inventario

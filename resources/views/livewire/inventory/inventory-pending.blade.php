@@ -9,7 +9,7 @@
         {{ $establishment->name }}: Pendientes de Inventariar
     </h4>
 
-    <div class="form-row">
+    <div class="row g-2 mb-3">
         <fieldset class="form-group col-md-3">
             <label for="type-reception-id">Tipo de Ingreso</label>
             <select wire:model="type_reception_id" id="type-reception-id" class="form-control">

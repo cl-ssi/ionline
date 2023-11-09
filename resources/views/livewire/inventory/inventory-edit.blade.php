@@ -5,7 +5,7 @@
         'establishment' => $establishment
     ])
 
-    @include('layouts.bt4.partials.flash_message')
+    @include('layouts.bt5.partials.flash_message')
 
     <div class="row">
         <div class="col">
@@ -13,7 +13,7 @@
                 Detalle del ítem
             </h3>
         </div>
-        <div class="col text-right">
+        <div class="col text-end">
             <a
                 href="{{ route('inventories.pending-inventory', [
                     'establishment' => $establishment
@@ -25,7 +25,7 @@
         </div>
     </div>
 
-    <div class="form-row mb-3">
+    <div class="row g-2 mb-3">
         <fieldset class="col-md-2">
             <label for="code" class="form-label">
                 Código
@@ -69,7 +69,7 @@
         </fieldset>
     </div>
 
-    <div class="form-row mb-3">
+    <div class="row g-2 mb-3">
         <fieldset class="col-md-2">
             <label for="number-inventory" class="form-label">
                 Nro. Inventario
@@ -167,7 +167,7 @@
 
     </div>
 
-    <div class="form-row mb-3">
+    <div class="row g-2 mb-3">
         <fieldset class="col-md-2">
             <label for="useful-life" class="form-label">
                 Vida útil
@@ -229,7 +229,7 @@
         </fieldset>
     </div>
 
-    <div class="form-row mb-3">
+    <div class="row g-2 mb-3">
         @if($inventory->control && $inventory->control->requestForm)
             <fieldset class="col-md-3">
                 <label for="date-reception" class="form-label">
@@ -308,7 +308,7 @@
     </div>
 
 
-    <div class="form-row mb-3">
+    <div class="row g-2 mb-3">
 
         @if($inventory->control)
             <fieldset class="col-md-5">
@@ -386,7 +386,7 @@
         </div>
     @endif
 
-    <div class="form-row mb-3">
+    <div class="row g-2 mb-3">
         <fieldset class="col-md-12">
             <label for="observations" class="form-label">
                 Observaciones
@@ -407,8 +407,8 @@
         </fieldset>
     </div>
 
-    <div class="form-row mb-3">
-        <div class="col text-right">
+    <div class="row g-2 mb-3">
+        <div class="col text-end">
             <button
                 class="btn btn-primary"
                 wire:click="update"

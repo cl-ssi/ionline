@@ -41,7 +41,7 @@
 
     <hr>
 
-    <div class="form-row">
+    <div class="row g-2">
         <div class="col-2 border-bottom">
             <label class="font-weight-bold" for="code">Código Producto</label>
             <div>
@@ -62,7 +62,7 @@
         </div>
     </div>
 
-    <div class="form-row">
+    <div class="row g-2">
         <div class="col-2 border-bottom">
             <label class="font-weight-bold" for="number">Nro. Inventario</label>
             <div>
@@ -95,7 +95,7 @@
         </div>
     </div>
 
-    <div class="form-row">
+    <div class="row g-2">
         <div class="col-2 border-bottom">
             <label class="font-weight-bold" for="useful_life">Vida útil</label>
             <div>
@@ -117,7 +117,7 @@
     </div>
 
     @if ($inventory->control && $inventory->control->requestForm)
-        <div class="form-row">
+        <div class="row g-2">
             <fieldset class="col-md-3">
                 <label class="font-weight-bold" for="date-reception"
                     class="form-label">
@@ -135,7 +135,7 @@
     @endif
 
     @if ($inventory->po_id)
-        <div class="form-row">
+        <div class="row g-2">
 
             <fieldset class="col-md-2 border-bottom">
                 <label class="font-weight-bold" for="oc"

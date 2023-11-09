@@ -4,7 +4,7 @@
     @switch($view)
         @case('index')
             <div class="row">
-                <div class="col">
+                <div class="col-8">
                     <h4 class="mb-3">
                         @if($establishment)
                             {{ $establishment->name }}:
@@ -12,9 +12,9 @@
                         Lugares
                     </h4>
                 </div>
-                <div class="col">
+                <div class="col  text-end">
                     <button
-                        class="btn btn-primary float-right"
+                        class="btn btn-primary"
                         wire:click="create"
                     >
                         <i class="fas fa-plus"></i>

@@ -12,7 +12,7 @@
         <div class="col">
             <div class="card">
                 <div class="card-body">
-                    <div class="form-row">
+                    <div class="row g-2">
                         <fieldset class="form-group col-md-12">
                             <label for="search">Buscar usuario</label>
                             @livewire('users.search-user', [
