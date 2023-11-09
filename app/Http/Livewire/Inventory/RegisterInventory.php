@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Inventory;
 
 use App\Http\Requests\Inventory\RegisterInventoryRequest;
 use App\Models\Establishment;
+use App\Models\Finance\AccountingCode;
 use App\Models\Inv\Inventory;
 use App\Models\Inv\InventoryMovement;
 use App\Models\WebService\MercadoPublico;
@@ -16,6 +17,7 @@ use Livewire\Component;
 class RegisterInventory extends Component
 {
     public $establishment;
+    public $accountingCodes;
 
     public $search_product;
     public $type;
@@ -40,6 +42,8 @@ class RegisterInventory extends Component
     public $request_form;
     public $deliver_date;
     public $useful_life;
+    public $depreciation;
+    public $accounting_code_id;
 
     public $error;
     public $msg;
@@ -69,6 +73,8 @@ class RegisterInventory extends Component
             $this->user_using_id = Auth::id();
             $this->user_responsible_id = null;
         }
+
+        $this->accountingCodes = AccountingCode::all();
     }
 
     public function rules()

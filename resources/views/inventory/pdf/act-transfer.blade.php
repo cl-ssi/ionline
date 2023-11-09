@@ -108,16 +108,18 @@
                     {{ optional($movement->inventory->using)->tinny_name }}
                 </td>
             </tr>
-            <tr>
-                <td>
-                    <strong>Fecha de Instalación</strong>
-                </td>
-                <td>
-                    {{ ($movement->inventory->lastMovement->installation_date)
-                    ? $movement->inventory->lastMovement->installation_date->format('d/m/Y')
-                    : '' }}
-                </td>
-            </tr>
+            @if(isset($movement->inventory->lastMovement->installation_date))
+                <tr>
+                    <td>
+                        <strong>Fecha de Instalación</strong>
+                    </td>
+                    <td>
+                        {{ ($movement->inventory->lastMovement->installation_date)
+                        ? $movement->inventory->lastMovement->installation_date->format('d/m/Y')
+                        : '' }}
+                    </td>
+                </tr>
+            @endif
         </tbody>
     </table>
 </div>
