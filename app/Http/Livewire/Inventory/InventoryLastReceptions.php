@@ -37,6 +37,13 @@ class InventoryLastReceptions extends Component
         $search = "%$this->search%";
 
         $controlItems = ControlItem::query()
+            ->with([
+                'control',
+                'control.requestForm',
+                'product',
+                'product.product',
+                'control.typeReception',
+                ])
             ->when($this->search, function ($query) use($search) {
                 $query->when($this->type_reception_id == TypeReception::receiving(), function ($query) use ($search) {
                     $query->whereHas('control', function ($query) use ($search) {
@@ -72,7 +79,7 @@ class InventoryLastReceptions extends Component
             })
             ->whereInventory(null)
             ->orderByDesc('created_at')
-            ->paginate(5);
+            ->paginate(25);
 
         return $controlItems;
     }

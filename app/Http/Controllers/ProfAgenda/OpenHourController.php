@@ -235,11 +235,15 @@ class OpenHourController extends Controller
     }   
 
     public function assistance_confirmation(Request $request){
-        $openHour = OpenHour::find($request->openHours_id);
-        $openHour->assistance = true;
-        $openHour->save();
-
-        session()->flash('success', 'Se guardó la información.');
+        if($request->openHours_id){
+            $openHour = OpenHour::find($request->openHours_id);
+            if($openHour){
+                $openHour->assistance = true;
+                $openHour->save();
+        
+                session()->flash('success', 'Se guardó la información.');
+            }
+        }
         return redirect()->back();
     }
 

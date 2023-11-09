@@ -142,6 +142,9 @@ class LogStatistics extends Component
             } elseif (preg_match('/inventory/', $log->uri)) {
                 $log->module = 'Inventario';
                 $log->save();
+            } elseif (preg_match('/inventories/', $log->uri)) {
+                $log->module = 'Inventario';
+                $log->save();
             } elseif (preg_match('/hotel/', $log->uri)) {
                 $log->module = 'Cabañas';
                 $log->save();

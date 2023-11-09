@@ -57,7 +57,7 @@ class FindPlace extends Component
     public function addSearchPlace(Place $place)
     {
         $this->showResult = false;
-        $this->search = $place->name . ", " . $place->location->name;
+        $this->search = $place->id. ",". $place->name . ", " . $place->location->name;
         $this->place_id = $place->id;
         $this->places = collect([]);
 

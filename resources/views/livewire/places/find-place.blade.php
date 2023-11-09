@@ -20,6 +20,7 @@
             class="form-control @if($smallInput) form-control-sm @endif"
             wire:model.debounce.1500ms="search"
             placeholder="{{ $placeholder }}"
+            autocomplete="off"
             @if($place_id) disabled @endif
         >
         <div class="input-group-append">

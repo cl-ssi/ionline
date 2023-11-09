@@ -396,10 +396,10 @@ class RequestFormCreate extends Component
               //---------------------------------------------------------
 
               //Envío de notificación para visación.
-              $now = Carbon::now();
+              // $now = Carbon::now();
               //manager
               $type = 'manager';
-              $mail_notification_ou_manager = Authority::getAuthorityFromDate($req->eventRequestForms->first()->ou_signer_user, Carbon::now(), $type);
+              $mail_notification_ou_manager = Authority::getAuthorityFromDate($req->eventRequestForms->first()->ou_signer_user, now(), $type);
               //secretary
               // $type_adm = 'secretary';
               // $mail_notification_ou_secretary = Authority::getAuthorityFromDate($req->eventRequestForms->first()->ou_signer_user, Carbon::now(), $type_adm);
@@ -454,10 +454,10 @@ class RequestFormCreate extends Component
               //---------------------------------------------------------
 
               //Envío de notificación para visación.
-              $now = Carbon::now();
+              // $now = Carbon::now();
               //manager
               $type = 'manager';
-              $mail_notification_ou_manager = Authority::getAuthorityFromDate($req->eventRequestForms->first()->ou_signer_user, Carbon::now(), $type);
+              $mail_notification_ou_manager = Authority::getAuthorityFromDate($req->eventRequestForms->first()->ou_signer_user, now(), $type);
               //secretary
               // $type_adm = 'secretary';
               // $mail_notification_ou_secretary = Authority::getAuthorityFromDate($req->eventRequestForms->first()->ou_signer_user, Carbon::now(), $type_adm);
@@ -505,10 +505,10 @@ class RequestFormCreate extends Component
               //---------------------------------------------------------
 
               //Envío de notificación para visación.
-              $now = Carbon::now();
+              // $now = Carbon::now();
               //manager
               $type = 'manager';
-              $mail_notification_ou_manager = Authority::getAuthorityFromDate($req->eventRequestForms->first()->ou_signer_user, Carbon::now(), $type);
+              $mail_notification_ou_manager = Authority::getAuthorityFromDate($req->eventRequestForms->first()->ou_signer_user, now(), $type);
               //secretary
               // $type_adm = 'secretary';
               // $mail_notification_ou_secretary = Authority::getAuthorityFromDate($req->eventRequestForms->first()->ou_signer_user, Carbon::now(), $type_adm);
