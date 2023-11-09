@@ -263,10 +263,11 @@
                 class="form-select @error('classification') is-invalid @enderror"
                 id="classification"
                 wire:model="classification"
-                <option value="">Seleccione una clasificación</option>
+                >
+                    <option value="">Seleccione una clasificación</option>
                 @foreach($classifications as $classification)
                     <option value="{{$classification->id}}">{{$classification->name}}</option>
-                @endforeach                
+                @endforeach
             </select>
             @error('classification')
             <span class="invalid-feedback" role="alert">
