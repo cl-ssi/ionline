@@ -13,12 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('inv_classifications', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->foreignId('establishment_id')->constrained('establishments');
-            $table->timestamps();
-            $table->softDeletes();
+        Schema::table('inv_inventories', function (Blueprint $table) {
+            $table->foreignId('classification_id')->after('accounting_code_id')->nullable()->constrained('inv_classifications');
         });
     }
 
@@ -29,6 +25,9 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('inv_classifications');
+        Schema::table('inv_inventories', function (Blueprint $table) {
+            $table->dropForeign(['classification_id']);
+            $table->dropColumn('classification_id');
+        });
     }
 };
