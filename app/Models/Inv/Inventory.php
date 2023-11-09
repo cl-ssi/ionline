@@ -32,6 +32,7 @@ class Inventory extends Model implements Auditable
 
     protected $fillable = [
         'number',
+        'old_number',
         'useful_life',
         'brand',
         'model',
