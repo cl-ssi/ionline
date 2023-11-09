@@ -28,7 +28,7 @@ class InventoryEdit extends Component
 
     public function render()
     {
-        $classifications = CLassification::where('establishment_id', auth()->user()->organizationalUnit->establishment_id)->get();
+        $classifications = CLassification::where('establishment_id',$this->establishment->id)->get();
         return view('livewire.inventory.inventory-edit',
         ['classifications' => $classifications,]
     );
@@ -37,6 +37,7 @@ class InventoryEdit extends Component
     public function mount(Inventory $inventory, Establishment $establishment)
     {
         $this->inventory = $inventory;
+        $this->establishment = $establishment;
 
         $this->number_inventory = $this->inventory->number;
         $this->useful_life = $this->inventory->useful_life;
