@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Inventory;
 
 use App\Http\Controllers\Controller;
 use App\Models\Documents\Approval;
+use App\Models\Inv\Inventory;
 use App\Models\Inv\InventoryMovement;
 
 class InventoryController extends Controller
