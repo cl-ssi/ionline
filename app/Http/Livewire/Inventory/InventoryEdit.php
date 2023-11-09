@@ -16,6 +16,7 @@ class InventoryEdit extends Component
 
     public $number_inventory;
     public $status;
+    public $classification;
     public $brand;
     public $model;
     public $serial_number;
@@ -42,6 +43,7 @@ class InventoryEdit extends Component
         $this->serial_number = $this->inventory->serial_number;
         $this->observations = $this->inventory->observations;
         $this->accounting_code_id = $this->inventory->accounting_code_id;
+        $this->classification = $this->inventory->classification;
 
         $this->accountingCodes = AccountingCode::all();
     }

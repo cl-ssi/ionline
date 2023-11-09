@@ -254,6 +254,24 @@
                 </span>
             @enderror
         </fieldset>
+
+        <fieldset class="col-md-2">
+            <label for="classification" class="form-label">
+                Clasificación
+            </label>
+              <select
+                class="form-select @error('classification') is-invalid @enderror"
+                id="classification"
+                wire:model="classification"
+                <option value="">Seleccione una clasificación</option>
+                
+            </select>
+            @error('classification')
+            <span class="invalid-feedback" role="alert">
+                <strong>{{ $message }}</strong>
+            </span>
+            @enderror
+        </fieldset>
     </div>
 
     <div class="row g-2 mb-3">
