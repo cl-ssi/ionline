@@ -9,7 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Bus\Queueable;
 use App\Models\Documents\Signature;
 
-class SignedDocument extends Notification implements ShouldQueue
+class SignedDocument extends Notification //implements ShouldQueue
 {
     use Queueable;
 
@@ -58,6 +58,9 @@ class SignedDocument extends Notification implements ShouldQueue
         //         ['mime' => 'application/pdf']);
         // }
 
+        logger()->info($notifiable);
+        // app('debugbar')->log($notifiable);
+
         $email = new MailMessage();
         $email
             ->level('info')
@@ -67,7 +70,6 @@ class SignedDocument extends Notification implements ShouldQueue
             ->line('Para su conocimiento y fines.')
             ->line('Tipo:  ' . $this->signature->type->name)
             ->line('Creador: ' . $this->signature->responsable->shortName)
-            ->attach($document)
             ->salutation('Saludos cordiales.');
 
         /**
@@ -77,7 +79,7 @@ class SignedDocument extends Notification implements ShouldQueue
             ->as('documento_' . $this->signature->id . '.pdf')
             ->withMime('application/pdf');
 
-        $email->attach($documet);
+        $email->attach($document);
 
         /**
          * Anexos
