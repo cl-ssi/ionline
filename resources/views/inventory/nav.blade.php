@@ -50,6 +50,14 @@
                 <i class="fas fa-file-excel"></i> Carga Excel
             </a>
         </li>
+        <li class="nav-item">
+            <a
+                class="nav-link {{ active(['inventories.transfer']) }}"
+                href="{{ route('inventories.transfer') }}"
+            >
+                <i class="fas fa-exchange-alt"></i> Traspaso de Inventario
+            </a>
+        </li>
     @endcan
 
     @can('Inventory: place maintainer')
