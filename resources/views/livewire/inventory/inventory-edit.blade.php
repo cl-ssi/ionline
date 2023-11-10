@@ -93,7 +93,7 @@
                         wire:loading.remove
                         wire:target="generateCode"
                     >
-                        <i class="fas fa-list-ol"></i>
+                        <i class="fas fa-qrcode"></i>
                     </span>
 
                     <span
