@@ -2566,7 +2566,7 @@ Route::prefix('test')->as('test.')->group(function () {
     Route::get('/ous', [TestController::class, 'ous']);
 
     Route::get('/loop-livewire', [TestController::class, 'loopLivewire']);
-    Route::get('/dev/get-ip',[TestController::class,'getIp']);
+    // Route::get('/dev/get-ip',[TestController::class,'getIp']);
     // Route::get('/log',[TestController::class,'log']);
     Route::get('/test-mercado-publico-api/{date}', [TestController::class, 'getMercadoPublicoTender']);
     // Route::get('/info',[TestController::class,'info']);
