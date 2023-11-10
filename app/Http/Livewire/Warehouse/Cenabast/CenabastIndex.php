@@ -182,6 +182,10 @@ class CenabastIndex extends Component
             'confirmation_signature_file' => null,
             'cenabast_signed_pharmacist' => false,
             'cenabast_signed_boss' => false,
+            'confirmation_status' => null,
+            'confirmation_user_id' => null,
+            'confirmation_ou_id' => null,
+            'confirmation_at' => null,
         ]);
 
         session()->flash('sucess', 'El acta cargada y firmada fue eliminada con éxito');
