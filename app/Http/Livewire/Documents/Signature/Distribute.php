@@ -16,19 +16,7 @@ class Distribute extends Component
     */
     public function distributeDocument(Signature $signature)
     {
-    
-        $allEmails = $signature->recipients . ',' . $signature->distribution;
-
-        preg_match_all("/[\._a-zA-Z0-9-]+@[\._a-zA-Z0-9-]+/i", $allEmails, $valid_emails);
-
-        /**
-         * Utilizando notify y con colas
-         */
-        foreach($valid_emails[0] as $email) {
-            // Crea un usuario en memoria para enviar la notificación
-            $user = new User([ 'email' => $email]);
-            $user->notify(new SignedDocument($signature));
-        }
+        $signature->distribute();
     }
 
     public function render()

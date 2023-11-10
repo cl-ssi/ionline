@@ -9,7 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Bus\Queueable;
 use App\Models\Documents\Signature;
 
-class SignedDocument extends Notification //implements ShouldQueue
+class SignedDocument extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -57,9 +57,6 @@ class SignedDocument extends Notification //implements ShouldQueue
         //     $email->attachFromStorageDisk('gcs', $signaturesFileAnexo->file, 'anexo_' . $key . '.pdf',
         //         ['mime' => 'application/pdf']);
         // }
-
-        logger()->info($notifiable);
-        // app('debugbar')->log($notifiable);
 
         $email = new MailMessage();
         $email
