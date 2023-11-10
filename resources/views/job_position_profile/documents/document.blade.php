@@ -449,6 +449,31 @@
     </table>
 </div>
 
+@if($jobPositionProfile->jobPositionProfileSigns)
+<br>
+
+<div style="text-align: left;">
+    <table class="siete">
+        <tbody>
+            <tr>
+                <th align="left" style="background-color: #2f5496; color: white" colspan="{{ $jobPositionProfile->jobPositionProfileSigns->count() }}">
+                    Aprobaciones
+                </th>
+            </tr>
+            <tr align="center">
+                @foreach($jobPositionProfile->jobPositionProfileSigns as $sign)
+                <td>
+                    <b>{{ $sign->organizationalUnit->name }}</b> <br>
+                    {{ ($sign->user) ? $sign->user->FullName : 'sin firmar' }} <br>
+                    {{ ($sign->date_sign) ? $sign->date_sign->format('d-m-Y H:i:s') : 'pendiente' }}
+                </td>
+                @endforeach
+            </tr>
+        </tbody>
+    </table>
+</div>
+@endif
+
 @endsection
 
 @section('custom_js')
