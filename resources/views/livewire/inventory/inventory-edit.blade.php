@@ -501,4 +501,42 @@
         </div>
     </div>
 
+    <hr>
+
+    <h3>Productos del mismo tipo</h3>
+
+    <table class="table table-sm table-bordered">
+        <thead>
+            <tr>
+                <th>Nº Inventario</th>
+                <th>Responsable</th>
+                <th>Ubicación</th>
+                <th>Descripción</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($sameProductItems as $sameProductItem)
+            <tr>
+                <td>{{  $sameProductItem->number ?? 'Sin número' }}</td>
+                <td>{{  $sameProductItem->responsible?->shortName ?? 'No asignado' }}</td>
+                <td>{{  $sameProductItem->place?->name ?? 'No asignado' }}</td>
+                <td>
+                {{ $inventory->product ? $inventory->product->name : $inventory->description }}
+                </td>
+                <td>
+                    <a
+                        class="btn btn-sm btn-primary @cannot('Inventory: edit') disabled @endcannot"
+                        href="{{ route('inventories.edit', [
+                            'inventory' => $inventory,
+                            'establishment' => $establishment,
+                        ]) }}"
+                    >
+                        <i class="fas fa-edit"></i>
+                    </a>
+                </td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
 </div>
