@@ -338,7 +338,7 @@
             </fieldset>
         @endif
 
-        @if($inventory->control && $inventory->control->requestForm)
+        @if($inventory->control && $inventory->control->requestForm && $inventory->control->requestForm->associateProgram)
             <fieldset class="col-md-3">
                 <label for="financing" class="form-label">
                     Programa
