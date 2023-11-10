@@ -1,6 +1,9 @@
 <div>
     {{-- To attain knowledge, add things every day; To attain wisdom, subtract things every day. --}}
     @section('title', 'Lista de Clasificaciones de Inventario')
+    @include('inventory.nav', [
+        'establishment' => auth()->user()->organizationalUnit->establishment
+    ])
     @if ($form)
         <h3>{{ $classification->id ? 'Editar' : 'Crear' }} Clasificación</h3>
 

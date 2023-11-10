@@ -670,7 +670,7 @@
 
                         @canany(['be god','Parameters: Classification'])
                         <a class="dropdown-item" href="{{ route('inventories.clasification-mgr') }}">
-                            <i class="fas fa-fw fa-tags"></i> Clasificacion de Productos
+                            <i class="fas fa-fw fa-tags"></i> Clasificación de Productos
                         </a>
                         @endcanany
 

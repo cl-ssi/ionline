@@ -69,13 +69,19 @@
                     class="dropdown-item"
                     href="{{ route('inventories.places', $establishment) }}"
                 >
-                    <i class="fas fa-file-alt"></i> Lugares
+                    <i class="fas fa-fw fa-file-alt"></i> Lugares
                 </a>
                 <a
                     class="dropdown-item"
                     href="{{ route('parameters.accounting-codes') }}"
                 >
-                    <i class="fas fa-file-alt"></i> Cuentas Contables
+                    <i class="fas fa-fw fa-file-alt"></i> Cuentas Contables
+                </a>
+                <a
+                    class="dropdown-item"
+                    href="{{ route('inventories.clasification-mgr') }}"
+                >
+                    <i class="fas fa-fw fa-tags"></i> Clasificación de productos
                 </a>
             </div>
         </li>
