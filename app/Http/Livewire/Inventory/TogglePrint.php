@@ -39,7 +39,6 @@ class TogglePrint extends Component
             $this->color = 'btn-success';
         }
 
-        $this->inventory->printed_state = 'on';
         return view('livewire.inventory.toggle-print');
     }
 }

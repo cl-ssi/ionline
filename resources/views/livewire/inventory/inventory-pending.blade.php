@@ -52,7 +52,7 @@
                     wire:loading.class.remove="d-none"
                 >
                     <td class="text-center" colspan="5">
-                        @include('layouts.bt4.partials.spinner')
+                        @include('layouts.bt5.partials.spinner')
                     </td>
                 </tr>
                 @forelse($inventories as $inventory)
@@ -66,10 +66,10 @@
                             </small>
                         </td>
                         <td>
-                            {{ $inventory->product->product->name }}
+                            <b>Estandard:</b> {{ $inventory->product->product->name }}
                             <br>
                             <small>
-                                {{ $inventory->product->name }}
+                                <b>Bodega:</b> {{ $inventory->product->name }}
                             </small>
                         </td>
                         <td>

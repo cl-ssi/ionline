@@ -25,11 +25,11 @@ class InventoryEdit extends Component
     public $depreciation;
     public $accounting_code_id;
     public $observations;
+    public $sameProductItems;
 
     public function render()
     {
-        $classifications = CLassification::where('establishment_id',$this->establishment->id)->get();
-        return view('livewire.inventory.inventory-edit', ['classifications' => $classifications,]);
+        return view('livewire.inventory.inventory-edit');
     }
 
     public function mount(Inventory $inventory, Establishment $establishment)
@@ -49,6 +49,16 @@ class InventoryEdit extends Component
         $this->classification_id = $this->inventory->classification_id;
 
         $this->accountingCodes = AccountingCode::all();
+        $this->classifications = CLassification::where('establishment_id',$this->establishment->id)->orderBy('name')->get();
+
+        /**
+         * Obtiene todos los productos que sean del mismo codigo onu
+         */
+        $this->sameProductItems = Inventory::where('establishment_id', $establishment->id)
+            ->with(['responsible','place','product'])
+            ->where('unspsc_product_id', $this->inventory->unspsc_product_id)
+            ->get();
+
     }
 
     public function rules()
