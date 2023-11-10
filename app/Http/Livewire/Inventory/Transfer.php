@@ -64,11 +64,11 @@ class Transfer extends Component
                     ]);
                 }
 
-                InventoryMovement::create([
-                    'inventory_id' => $inventory->id,
-                    'user_responsible_id' => $this->new_user_responsible_id,
-                    'user_sender_id' => $this->new_user_responsible_id,
-                ])
+                // InventoryMovement::create([
+                //     'inventory_id' => $inventory->id,
+                //     'user_responsible_id' => $this->new_user_responsible_id,
+                //     'user_sender_id' => $this->new_user_responsible_id,
+                // ])
 
             }
 
