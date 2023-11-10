@@ -9,6 +9,8 @@ use App\Helpers\DateHelper;
 use App\Models\Parameters\Holiday;
 use App\Models\Rrhh\AmiLoad;
 
+use App\Models\Welfare\Amipass\Charge;
+
 class ReportByDates extends Component
 {
 
@@ -25,10 +27,10 @@ class ReportByDates extends Component
         'ftermino' => 'required',
     ];
 
-    // public function mount(){
-    //     $this->finicio = Carbon::createFromDate('2023-06-01');
-    //     $this->ftermino = Carbon::createFromDate('2023-06-30');
-    // }
+    public function mount(){
+        $this->finicio = Carbon::createFromDate('2023-02-01');
+        $this->ftermino = Carbon::createFromDate('2023-02-28');
+    }
 
     // public function trClick($row){
     //     $this->search();
@@ -90,7 +92,7 @@ class ReportByDates extends Component
                         // ->where('shift',0); se traen todos, abajo se hace el filtro
                 });
             })
-            // ->where('id',17798659)
+            // ->where('id',19088113)
             ->get();        
 
         foreach($this->userWithContracts as $row => $user) {
@@ -162,13 +164,15 @@ class ReportByDates extends Component
 
                 // ->where('finicio','>=',$startDate)->where('ftermino','<=',$endDate)
                 foreach($user->absenteeisms->sortBy('finicio') as $key => $absenteeism) {
-                    
                     // si el tipo de ausentismo no considera descuento, se sigue en la siguiente iteración
                     if(!$absenteeism->type->discount){
                         $absenteeism->totalDays = 0;
                         continue;
                     }
 
+                    if($absenteeism->id == 3546){
+                        // dd($absenteeism->total_dias_ausentismo, $absenteeism->type->discountCondition->from);
+                    }
                     // si se debe hacer descuento, se verifica si existe algúna condición
                     if($absenteeism->type->discountCondition){
                         if($absenteeism->total_dias_ausentismo >= $absenteeism->type->discountCondition->from){
@@ -228,6 +232,23 @@ class ReportByDates extends Component
             // obtiene diferencia
             if($user->shifts->count() > 0){$user->diff = $user->shifts->sum('ammount') - $user->AmiLoadMount;}
             else{$user->diff = $user->contracts->sum('ammount') - $user->AmiLoadMount;}
+
+
+
+
+            // se agrega para realizar comparación con información de tabla 'Charges' (se debe eiminar dsps)
+            $charges = Charge::where('rut', $user->id)->get();
+            $meses[] = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+            foreach($charges as $key => $charge){
+                list($day, $month, $year) = explode('-', $charge->fecha);
+                $date_string = '2023-' . $day . "-" . str_pad((array_search($month, $meses)+1), 2, "0", STR_PAD_LEFT);
+                $charge->date = Carbon::parse($date_string);
+
+                if($charge->date >= $startDate && $charge->date <= $endDate){
+                    $user->valor_debia_cargarse = $charge->valor_debia_cargarse;
+                    break;
+                }
+            }
         }
     }
 
