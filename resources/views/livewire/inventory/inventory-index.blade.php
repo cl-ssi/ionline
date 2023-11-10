@@ -268,7 +268,6 @@
                     <th>Ubicación</th>
                     <th>Lugar</th>
                     <th>Responsable</th>
-                    <th>Usuario</th>
                     <th>QR</th>
                     <th class="d-print-none"></th>
                 </tr>
@@ -294,13 +293,15 @@
                         </small>
                     </td>
                     <td>
-                        {{ optional($inventory->unspscProduct)->name }}
+                        @if($inventory->unspscProduct)
+                            <b>Std:</b> {{ $inventory->unspscProduct->name }}
+                        @endif
                         <br>
                         <small>
                             @if($inventory->product)
-                                {{ $inventory->product->name }}
+                                <b>Bodega:</b> {{ $inventory->product->name }}
                             @else
-                                {{ $inventory->description }}
+                                <b>Desc:</b> {{ $inventory->description }}
                             @endif
                         </small>
                     </td>
@@ -324,18 +325,6 @@
                                 </span>
                             @else
                                 {{ optional($inventory->responsible)->tinny_name }}
-                            @endif
-                        @endif
-                    </td>
-                    <td class="text-center">
-                        @if($inventory->lastMovement)
-                            @if($inventory->lastMovement->reception_date == null)
-                                {{ optional($inventory->lastMovement->usingUser)->tinny_name }}
-                                <span class="text-danger">
-                                    Pendiente
-                                </span>
-                            @else
-                                {{ optional($inventory->using)->tinny_name }}
                             @endif
                         @endif
                     </td>
