@@ -9,7 +9,7 @@
         {{ $establishment->name }}: Pendientes de Inventariar
     </h4>
 
-    <div class="form-row">
+    <div class="row g-2 mb-3">
         <fieldset class="form-group col-md-3">
             <label for="type-reception-id">Tipo de Ingreso</label>
             <select wire:model="type_reception_id" id="type-reception-id" class="form-control">
@@ -52,7 +52,7 @@
                     wire:loading.class.remove="d-none"
                 >
                     <td class="text-center" colspan="5">
-                        @include('layouts.bt4.partials.spinner')
+                        @include('layouts.bt5.partials.spinner')
                     </td>
                 </tr>
                 @forelse($inventories as $inventory)
@@ -66,10 +66,10 @@
                             </small>
                         </td>
                         <td>
-                            {{ $inventory->product->product->name }}
+                            <b>Estandard:</b> {{ $inventory->product->product->name }}
                             <br>
                             <small>
-                                {{ $inventory->product->name }}
+                                <b>Bodega:</b> {{ $inventory->product->name }}
                             </small>
                         </td>
                         <td>

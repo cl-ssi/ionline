@@ -11,7 +11,7 @@
                 {{ $establishment->name }}: Inventario
             </h4>
         </div>
-        <div class="col text-right">
+        <div class="col text-end">
             <a class="btn btn-primary" href="{{ route('inventories.register', $establishment) }}">
                 <i class="fas fa-plus"></i> Registrar Inventario
             </a>
@@ -26,7 +26,7 @@
     ])
     --}}
 
-    <div class="form-row g-2 d-print-none">
+    <div class="row g-2 d-print-none mb-3">
         <fieldset class="form-group col-md-4">
             <label for="locations">Ubicaciones</label>
             <select
@@ -60,9 +60,23 @@
                 @endforeach
             </select>
         </fieldset>
+
+        <fieldset class="form-group col-md-2">
+            <label for="pending">En Traspaso</label>
+            <select
+                wire:model.defer="pending"
+                id="pending"
+                class="form-control form-control-sm"
+            >
+        </fieldset>
+            <option value="">Todos</option>
+            <option value="pending">Pendientes</option>
+        </select>
+
+
     </div>
 
-    <div class="form-row g-2 d-print-none">
+    <div class="row g-2 d-print-none mb-3">
 
         <fieldset class="form-group col-md-4">
             <label for="products">Productos</label>
@@ -114,7 +128,7 @@
             </select>
         </fieldset>
 
-        <fieldset class="form-group col-md-3">
+        <fieldset class="form-group col-md-2">
             <label for="number">Nro. Inventario</label>
             <input
                 wire:model.defer="number"
@@ -124,9 +138,18 @@
         </fieldset>
 
         <fieldset class="form-group col-md-1">
-            <label for="">Filtro</label>
+            <label for="inv_id">ID</label>
+            <input
+                wire:model.defer="inv_id"
+                id="inv_id"
+                class="form-control form-control-sm"
+            >
+        </fieldset>
+
+        <fieldset class="form-group col-md-1">
+            <label for="">&nbsp;</label>
             <button
-                class="btn btn-sm btn-primary btn-block"
+                class="btn btn-sm btn-primary form-control"
                 wire:click="getInventories"
             >
                 <i class="fas fa-filter"></i>
@@ -245,7 +268,7 @@
                     <th>Ubicación</th>
                     <th>Lugar</th>
                     <th>Responsable</th>
-                    <th>Usuario</th>
+                    <th>QR</th>
                     <th class="d-print-none"></th>
                 </tr>
             </thead>
@@ -255,26 +278,30 @@
                     wire:loading.class.remove="d-none"
                 >
                     <td class="text-center" colspan="7">
-                        @include('layouts.bt4.partials.spinner')
+                        @include('layouts.bt5.partials.spinner')
                     </td>
                 </tr>
                 @forelse($inventories as $inventory)
                 <tr wire:loading.remove>
-                    <td class="text-center">
-                        <small class="text-monospace">
-                            <a href="{{ route('inventories.show', ['number' => $inventory->number]) }}">
+                    <td class="text-center" nowrap>
+                        <small>
+                            <a href="{{ route('inventories.show', ['establishment' => $establishment, 'number' => $inventory->number]) }}">
                                 {{ $inventory->number }}
                             </a>
+                            <br>
+                            {{ $inventory->old_number }}
                         </small>
                     </td>
                     <td>
-                        {{ optional($inventory->unspscProduct)->name }}
+                        @if($inventory->unspscProduct)
+                            <b>Std:</b> {{ $inventory->unspscProduct->name }}
+                        @endif
                         <br>
                         <small>
                             @if($inventory->product)
-                                {{ $inventory->product->name }}
+                                <b>Bodega:</b> {{ $inventory->product->name }}
                             @else
-                                {{ $inventory->description }}
+                                <b>Desc:</b> {{ $inventory->description }}
                             @endif
                         </small>
                     </td>
@@ -290,24 +317,19 @@
                         {{ optional($inventory->place)->name }}
                     </td>
                     <td class="text-center">
-                        @if($inventory->lastMovement->reception_date == null)
-                            {{ optional($inventory->lastMovement->responsibleUser)->tinny_name }}
-                            <span class="text-danger">
-                                Pendiente
-                            </span>
-                        @else
-                            {{ optional($inventory->responsible)->tinny_name }}
+                        @if($inventory->lastMovement)
+                            @if($inventory->lastMovement->reception_date == null)
+                                {{ optional($inventory->lastMovement->responsibleUser)->tinny_name }}
+                                <span class="text-danger">
+                                    Pendiente
+                                </span>
+                            @else
+                                {{ optional($inventory->responsible)->tinny_name }}
+                            @endif
                         @endif
                     </td>
-                    <td class="text-center">
-                        @if($inventory->lastMovement->reception_date == null)
-                            {{ optional($inventory->lastMovement->usingUser)->tinny_name }}
-                            <span class="text-danger">
-                                Pendiente
-                            </span>
-                        @else
-                            {{ optional($inventory->using)->tinny_name }}
-                        @endif
+                    <td>
+                        @livewire('inventory.toggle-print',['inventory' => $inventory],key($inventory->id))
                     </td>
                     <td class="text-center d-print-none">
                         <a

@@ -49,6 +49,14 @@
                 </select>
             </fieldset>
         </div>
+
+        <div class="form-row">
+            <div class="col">
+                <a class="btn btn-primary float-right" wire:click="clearForm()">
+                    <i class="fas fa-eraser"></i> Limpiar Búsqueda
+                </a>
+            </div>
+        </div>
     </div>
 
     <div class="row">

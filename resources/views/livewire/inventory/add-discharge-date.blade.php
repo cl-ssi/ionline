@@ -1,5 +1,5 @@
 <div>
-    <div class="form-row mb-3">
+    <div class="row g-2 mb-3">
         <fieldset class="col-md-2">
             <label for="discharge-date" class="form-label">
                 Fecha de baja

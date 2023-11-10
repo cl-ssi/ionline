@@ -5,7 +5,7 @@
         'establishment' => $establishment
     ])
 
-    @include('layouts.bt4.partials.flash_message')
+    @include('layouts.bt5.partials.flash_message')
 
     <div class="row">
         <div class="col">
@@ -13,7 +13,8 @@
                 Detalle del ítem
             </h3>
         </div>
-        <div class="col text-right">
+        <div class="col text-end">
+            @livewire('inventory.toggle-print', ['inventory' => $inventory], key('print-'.$inventory->id))
             <a
                 href="{{ route('inventories.pending-inventory', [
                     'establishment' => $establishment
@@ -25,7 +26,7 @@
         </div>
     </div>
 
-    <div class="form-row mb-3">
+    <div class="row g-2 mb-3">
         <fieldset class="col-md-2">
             <label for="code" class="form-label">
                 Código
@@ -69,18 +70,43 @@
         </fieldset>
     </div>
 
-    <div class="form-row mb-3">
-        <fieldset class="col-md-2">
+    <div class="row g-2 mb-3">
+        <fieldset class="col-md-3">
             <label for="number-inventory" class="form-label">
                 Nro. Inventario
             </label>
-            <input
-                type="text"
-                class="form-control @error('number_inventory') is-invalid @enderror"
-                id="number-inventory"
-                wire:model.defer="number_inventory"
-                autocomplete="off"
-            >
+            <div class="input-group">
+                <input
+                    type="text"
+                    class="form-control @error('number_inventory') is-invalid @enderror"
+                    id="number-inventory"
+                    wire:model="number_inventory"
+                    autocomplete="off"
+                >
+                <button
+                    class="btn btn-primary"
+                    wire:click="generateCode"
+                    wire:target="generateCode"
+                    wire:loading.attr="disabled"
+                >
+                    <span
+                        wire:loading.remove
+                        wire:target="generateCode"
+                    >
+                        <i class="fas fa-qrcode"></i>
+                    </span>
+
+                    <span
+                        class="spinner-border spinner-border-sm"
+                        role="status"
+                        wire:loading
+                        wire:target="generateCode"
+                        aria-hidden="true"
+                    >
+                    </span>
+                    Generar
+                </button>
+            </div>
             @error('number_inventory')
                 <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
@@ -106,7 +132,7 @@
             @enderror
         </fieldset>
 
-        <fieldset class="col-md-2">
+        <fieldset class="col-md-3">
             <label for="model" class="form-label">
                 Modelo
             </label>
@@ -142,15 +168,44 @@
             @enderror
         </fieldset>
 
+
+    </div>
+
+    <div class="row g-2 mb-3">
+
+        <fieldset class="col-md-3">
+            <label for="cost-center" class="form-label">
+                Cuenta contable
+            </label>
+            <select
+                type="text"
+                class="form-select @error('accounting_code_id') is-invalid @enderror"
+                id="cost-center"
+                wire:model="accounting_code_id"
+            >
+                <option value="">Seleccione cuenta contable</option>
+                @foreach($accountingCodes as $accountingCode)
+                    <option value="{{ $accountingCode->id }}">
+                    {{ $accountingCode->id }} - {{ $accountingCode->description }}
+                    </option>
+                @endforeach
+            </select>
+            @error('accounting_code_id')
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+            @enderror
+        </fieldset>
+
         <fieldset class="col-md-2">
             <label for="status" class="form-label">
                 Estado
             </label>
             <select
-                class="form-control @error('status') is-invalid @enderror"
+                class="form-select @error('status') is-invalid @enderror"
                 id="status"
                 wire:model="status"
-                >
+            >
                 <option value="">Seleccione un estado</option>
                 <option value="1">Bueno</option>
                 <option value="0">Regular</option>
@@ -164,10 +219,6 @@
         </fieldset>
 
 
-
-    </div>
-
-    <div class="form-row mb-3">
         <fieldset class="col-md-2">
             <label for="useful-life" class="form-label">
                 Vida útil
@@ -186,7 +237,7 @@
             @enderror
         </fieldset>
 
-        <fieldset class="col-md-3">
+        <fieldset class="col-md-2">
             <label for="depreciation" class="form-label">
                 Depreciación
             </label>
@@ -205,31 +256,28 @@
         </fieldset>
 
         <fieldset class="col-md-2">
-            <label for="cost-center" class="form-label">
-                Cuenta contable
+            <label for="classification" class="form-label">
+                Clasificación
             </label>
-            <select
-                type="text"
-                class="form-control @error('accounting_code_id') is-invalid @enderror"
-                id="cost-center"
-                wire:model="accounting_code_id"
-            >
-                <option value="">Seleccione cuenta contable</option>
-                @foreach($accountingCodes as $accountingCode)
-                    <option value="{{ $accountingCode->id }}">
-                    {{ $accountingCode->id }} - {{ $accountingCode->description }}
-                    </option>
+              <select
+                class="form-select @error('classification_id') is-invalid @enderror"
+                id="classification"
+                wire:model="classification_id"
+                >
+                    <option value="">Seleccione una clasificación</option>
+                @foreach($classifications as $classification)
+                    <option value="{{$classification->id}}">{{$classification->name}}</option>
                 @endforeach
             </select>
-            @error('accounting_code_id')
-                <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                </span>
+            @error('classification')
+            <span class="invalid-feedback" role="alert">
+                <strong>{{ $message }}</strong>
+            </span>
             @enderror
         </fieldset>
     </div>
 
-    <div class="form-row mb-3">
+    <div class="row g-2 mb-3">
         @if($inventory->control && $inventory->control->requestForm)
             <fieldset class="col-md-3">
                 <label for="date-reception" class="form-label">
@@ -290,7 +338,7 @@
             </fieldset>
         @endif
 
-        @if($inventory->control && $inventory->control->requestForm)
+        @if($inventory->control && $inventory->control->requestForm && $inventory->control->requestForm->associateProgram)
             <fieldset class="col-md-3">
                 <label for="financing" class="form-label">
                     Programa
@@ -308,7 +356,7 @@
     </div>
 
 
-    <div class="form-row mb-3">
+    <div class="row g-2 mb-3">
 
         @if($inventory->control)
             <fieldset class="col-md-5">
@@ -386,7 +434,7 @@
         </div>
     @endif
 
-    <div class="form-row mb-3">
+    <div class="row g-2 mb-3">
         <fieldset class="col-md-12">
             <label for="observations" class="form-label">
                 Observaciones
@@ -407,15 +455,14 @@
         </fieldset>
     </div>
 
-    <div class="form-row mb-3">
-        <div class="col text-right">
+    <div class="row g-2 mb-3">
+        <div class="col text-end">
             <button
                 class="btn btn-primary"
                 wire:click="update"
                 wire:target="update"
                 wire:loading.attr="disabled"
             >
-
                 <span
                     wire:loading.remove
                     wire:target="update"
@@ -441,18 +488,55 @@
 
     @livewire('inventory.register-movement', ['inventory' => $inventory ])
 
-    @livewire('inventory.update-movement', ['inventory' => $inventory], key($inventory->id))
+    @livewire('inventory.update-movement', ['inventory' => $inventory], key('update-movement-'.$inventory->id))
 
     <h5 class="mt-3">Registrar baja del ítem</h5>
 
-    @livewire('inventory.add-discharge-date', ['inventory' => $inventory])
+    @livewire('inventory.add-discharge-date', ['inventory' => $inventory], key('discharge-'.$inventory->id))
 
     <div class="row">
         <div class="col">
             <h5 class="mt-3">Historial del ítem</h5>
-            @livewire('inventory.movement-index', ['inventory' => $inventory])
+            @livewire('inventory.movement-index', ['inventory' => $inventory], key('movement-'.$inventory->id))
         </div>
-
     </div>
 
+    <hr>
+
+    <h3>Productos del mismo tipo</h3>
+
+    <table class="table table-sm table-bordered">
+        <thead>
+            <tr>
+                <th>Nº Inventario</th>
+                <th>Responsable</th>
+                <th>Ubicación</th>
+                <th>Descripción</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($sameProductItems as $sameProductItem)
+            <tr>
+                <td>{{  $sameProductItem->number ?? 'Sin número' }}</td>
+                <td>{{  $sameProductItem->responsible?->shortName ?? 'No asignado' }}</td>
+                <td>{{  $sameProductItem->place?->name ?? 'No asignado' }}</td>
+                <td>
+                {{ $inventory->product ? $inventory->product->name : $inventory->description }}
+                </td>
+                <td>
+                    <a
+                        class="btn btn-sm btn-primary @cannot('Inventory: edit') disabled @endcannot"
+                        href="{{ route('inventories.edit', [
+                            'inventory' => $inventory,
+                            'establishment' => $establishment,
+                        ]) }}"
+                    >
+                        <i class="fas fa-edit"></i>
+                    </a>
+                </td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
 </div>

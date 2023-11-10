@@ -39,7 +39,9 @@ use App\Http\Livewire\Parameters\Holidays;
 use App\Http\Livewire\Parameters\AccessLogIndex;
 use App\Http\Livewire\Lobby\MeetingShow;
 use App\Http\Livewire\Lobby\MeetingMgr;
+use App\Http\Livewire\Inventory\ClassificationMgr;
 use App\Http\Livewire\Inventory\RegisterInventory;
+use App\Http\Livewire\Inventory\PrintCodeQueue;
 use App\Http\Livewire\Inventory\PendingMovements;
 use App\Http\Livewire\Inventory\MaintainerPlaces as InventoryMaintainerPlaces;
 use App\Http\Livewire\Inventory\InventoryUploadExcel;
@@ -53,6 +55,7 @@ use App\Http\Livewire\Inventory\InventoryEdit;
 use App\Http\Livewire\Inventory\CreateTransfer;
 use App\Http\Livewire\Inventory\CheckTransfer;
 use App\Http\Livewire\Inventory\AssignedProducts;
+use App\Http\Livewire\Inventory\Transfer;
 use App\Http\Livewire\InventoryLabel\InventoryLabelIndex;
 use App\Http\Livewire\His\NewModification;
 use App\Http\Livewire\His\ModificationRequestIndex;
@@ -169,8 +172,8 @@ use App\Http\Controllers\QualityAps\QualityApsController;
 use App\Http\Controllers\PurchasePlan\PurchasePlanController;
 use App\Http\Controllers\Programmings\TrainingsItemController;
 use App\Http\Controllers\Programmings\TaskReschedulingController;
-use App\Http\Controllers\Programmings\TaskController;
 //use App\Http\Controllers\RequestForms\SupplyPurchaseController;
+use App\Http\Controllers\Programmings\TaskController;
 use App\Http\Controllers\Programmings\ReviewItemController;
 use App\Http\Controllers\Programmings\ProgrammingReviewController;
 use App\Http\Controllers\Programmings\ProgrammingReportController;
@@ -216,6 +219,7 @@ use App\Http\Controllers\Lobby\MeetingController;
 use App\Http\Controllers\JobPositionProfiles\MessageController;
 use App\Http\Controllers\JobPositionProfiles\JobPositionProfileSignController;
 use App\Http\Controllers\JobPositionProfiles\JobPositionProfileController;
+use App\Http\Controllers\Inventory\InventoryController;
 use App\Http\Controllers\Indicators\SingleParameterController;
 use App\Http\Controllers\Indicators\ProgramApsController;
 use App\Http\Controllers\Indicators\IaapsController;
@@ -264,7 +268,6 @@ use App\Http\Controllers\Agreements\AgreementController;
 use App\Http\Controllers\Agreements\AddendumController;
 use App\Http\Controllers\Agreements\AccountabilityDetailController;
 use App\Http\Controllers\Agreements\AccountabilityController;
-use App\Http\Controllers\Inventory\InventoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -1880,25 +1883,32 @@ Route::prefix('prof_agenda')->as('prof_agenda.')->middleware(['auth'])->group(fu
 
 // Inventories
 Route::prefix('inventories')->as('inventories.')->middleware(['auth', 'must.change.password'])->group(function () {
-    /** Ruta para poder ver la hoja de inventario sin edición  */
-    Route::get('number/{number}', InventoryShow::class)->name('show');
-
+    
     Route::prefix('establishment/{establishment}')->group(function () {
+        /** Ruta para poder ver la hoja de inventario sin edición  */
+        Route::get('/number/{number}', InventoryShow::class)->name('show');
+
+        Route::get('/print-code-queue', PrintCodeQueue::class)->name('print-code-queue');
+
         Route::get('/', InventoryIndex::class)->name('index')
             ->middleware(['can:Inventory: index']);
-        Route::get('last-receptions', InventoryLastReceptions::class)->name('last-receptions')
+        Route::get('/last-receptions', InventoryLastReceptions::class)->name('last-receptions')
             ->middleware(['can:Inventory: last receptions']);
-        Route::get('pending-inventory', InventoryPending::class)->name('pending-inventory')
+        Route::get('/pending-inventory', InventoryPending::class)->name('pending-inventory')
             ->middleware(['can:Inventory: pending inventory']);
         Route::get('/inventory/{inventory}/edit', InventoryEdit::class)->name('edit')
             ->middleware(['can:Inventory: edit']);
-        Route::get('places', InventoryMaintainerPlaces::class)->name('places')
+        Route::get('/places', InventoryMaintainerPlaces::class)->name('places')
             ->middleware(['can:Inventory: place maintainer']);
 
         Route::get('/manage-users', InventoryManageUsers::class)->name('users.manager')->middleware(['can:Inventory: manager']);
 
         Route::get('/upload-excel', InventoryUploadExcel::class)->name('upload-excel');
     });
+    
+    Route::get('clasification-mgr', ClassificationMgr::class)->name('clasification-mgr');
+
+    Route::get('transfer', Transfer::class)->name('transfer');
 
     Route::get('{inventory}/discharge-document', [InventoryController::class, 'dischargeDocument'])->name('discharge-document');
     Route::get('movement/{movement}/act-transfer', [InventoryController::class, 'actTransfer'])->name('act-transfer');

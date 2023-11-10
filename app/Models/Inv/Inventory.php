@@ -32,6 +32,7 @@ class Inventory extends Model implements Auditable
 
     protected $fillable = [
         'number',
+        'old_number',
         'useful_life',
         'brand',
         'model',
@@ -62,6 +63,8 @@ class Inventory extends Model implements Auditable
         'request_form_id',
         'budget_item_id',
         'accounting_code_id',
+        'printed',
+        'classification_id',
     ];
 
     protected $dates = [
@@ -70,8 +73,21 @@ class Inventory extends Model implements Auditable
         'deliver_date',
     ];
 
+    /**
+     * TODO: cuando itero Inventory me hace una query por cada uno hacia computer
+     * Evaluar otra alternativa
+     */
     protected $appends = [
         'have_computer',
+    ];
+
+    /**
+    * The attributes that should be cast.
+    *
+    * @var array
+    */
+    protected $casts = [
+        'printed' => 'boolean',
     ];
 
     /** Documentos Tributarios */

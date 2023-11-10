@@ -24,7 +24,7 @@
         Listado de los productos en donde ud fue asignado como usuario y/o responsable.
     </p>
 
-    <div class="form-row">
+    <div class="row g-2">
         <fieldset class="form-group col-md-3">
             <label for="product-type">Productos donde</label>
             <select

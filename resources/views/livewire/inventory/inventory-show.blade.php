@@ -1,17 +1,15 @@
 <div>
     <style>
-        .bg-image-hah {
+        .bg-image-HAH {
             width: 340px;
             height: 340px;
-            border-bottom: 2px solid #ccc;
             background-image: url('{{ asset('images/inventario_HAH_nuevo.png') }}');
             background-size: 340px;
         }
 
-        .bg-image-sst {
+        .bg-image-SST {
             width: 340px;
             height: 340px;
-            border-bottom: 2px solid #ccc;
             background-image: url('{{ asset('images/inventario_SST_nuevo.png') }}');
             background-size: 340px;
         }
@@ -22,15 +20,14 @@
         }
 
         .code {
-            padding-top: 16px;
-            padding-left: 6px;
+            padding-top: 8px;
             text-align: center;
-            font-size: 14px;
+            font-size: 19px;
             font-weight: bold;
         }
     </style>
 
-    <div class="bg-image-{{ $inventory->establishment->alias }}">
+    <div class="bg-image-{{ $inventory->establishment->alias }} mb-3">
         <div class="qr text-center">
             {!! $inventory->qr !!}
         </div>
@@ -39,77 +36,77 @@
         </div>
     </div>
 
-    <hr>
 
-    <div class="form-row">
+
+    <div class="row mb-3 g-2">
         <div class="col-2 border-bottom">
-            <label class="font-weight-bold" for="code">Código Producto</label>
+            <label class="fw-bold" for="code">Código Producto</label>
             <div>
                 {{ $inventory->unspscProduct->code }}
             </div>
         </div>
         <div class="col-3 border-bottom">
-            <label class="font-weight-bold" for="product">Producto</label>
+            <label class="fw-bold" for="product">Producto</label>
             <div>
                 {{ $inventory->unspscProduct->name }}
             </div>
         </div>
         <div class="col-7 border-bottom">
-            <label class="font-weight-bold" for="description">Descripción <small>(especificación técnica)</small></label>
+            <label class="fw-bold" for="description">Descripción <small>(especificación técnica)</small></label>
             <div>
                 {{ $inventory->product ? $inventory->product->name : $inventory->description }}
             </div>
         </div>
     </div>
 
-    <div class="form-row">
+    <div class="row mb-3 g-2">
         <div class="col-2 border-bottom">
-            <label class="font-weight-bold" for="number">Nro. Inventario</label>
+            <label class="fw-bold" for="number">Nro. Inventario</label>
             <div>
                 {{ $inventory->number }}
             </div>
         </div>
         <div class="col-3 border-bottom">
-            <label class="font-weight-bold" for="brand">Marca</label>
+            <label class="fw-bold" for="brand">Marca</label>
             <div>
                 {{ $inventory->brand }}
             </div>
         </div>
         <div class="col-2 border-bottom">
-            <label class="font-weight-bold" for="model">Modelo</label>
+            <label class="fw-bold" for="model">Modelo</label>
             <div>
                 {{ $inventory->model }}
             </div>
         </div>
         <div class="col-3 border-bottom">
-            <label class="font-weight-bold" for="serial_number">Número de serie</label>
+            <label class="fw-bold" for="serial_number">Número de serie</label>
             <div>
                 {{ $inventory->serial_number }}
             </div>
         </div>
         <div class="col-2 border-bottom">
-            <label class="font-weight-bold" for="status">Estado</label>
+            <label class="fw-bold" for="status">Estado</label>
             <div>
                 {{ $inventory->estado }}
             </div>
         </div>
     </div>
 
-    <div class="form-row">
+    <div class="row mb-3 g-2">
         <div class="col-2 border-bottom">
-            <label class="font-weight-bold" for="useful_life">Vida útil</label>
+            <label class="fw-bold" for="useful_life">Vida útil</label>
             <div>
                 {{ $inventory->useful_life }}
             </div>
         </div>
         <div class="col-3 border-bottom">
-            <label class="font-weight-bold" for="depreciation">Depreciación</label>
+            <label class="fw-bold" for="depreciation">Depreciación</label>
             <div>
                 {{ $inventory->depreciation }}
             </div>
         </div>
         <div class="col-2 border-bottom">
-            <label class="font-weight-bold" for="accounting_code_id">Cuenta contable</label>
+            <label class="fw-bold" for="accounting_code_id">Cuenta contable</label>
             <div>
                 {{ $inventory->accounting_code_id }}
             </div>
@@ -117,9 +114,9 @@
     </div>
 
     @if ($inventory->control && $inventory->control->requestForm)
-        <div class="form-row">
+        <div class="row mb-3 g-2 ">
             <fieldset class="col-md-3">
-                <label class="font-weight-bold" for="date-reception"
+                <label class="fw-bold" for="date-reception"
                     class="form-label">
                     Formulario Requerimiento
                 </label>
@@ -135,10 +132,10 @@
     @endif
 
     @if ($inventory->po_id)
-        <div class="form-row">
+        <div class="row mb-3 g-2">
 
             <fieldset class="col-md-2 border-bottom">
-                <label class="font-weight-bold" for="oc"
+                <label class="fw-bold" for="oc"
                     class="form-label">
                     OC
                 </label>
@@ -147,7 +144,7 @@
                 </div>
             </fieldset>
             <fieldset class="col-md-3 border-bottom">
-                <label class="font-weight-bold" for="date-oc"
+                <label class="fw-bold" for="date-oc"
                     class="form-label">
                     Fecha OC
                 </label>
@@ -156,7 +153,7 @@
                 </div>
             </fieldset>
             <fieldset class="col-md-2 border-bottom">
-                <label class="font-weight-bold" for="value-oc"
+                <label class="fw-bold" for="value-oc"
                     class="form-label">
                     Valor
                 </label>

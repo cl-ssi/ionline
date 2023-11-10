@@ -33,12 +33,14 @@ class InventoryIndex extends Component
     public $place_id;
     public $location_id;
     public $number;
+    public $inv_id;
 
     public $unspscProduct;
     public $userUsing;
     public $userResponsible;
     public $place;
     public $location;
+    public $pending;
 
     public $managerInventory;
 
@@ -61,7 +63,7 @@ class InventoryIndex extends Component
     {
         return view('livewire.inventory.inventory-index',[
             'inventories' => $this->getInventories(),
-        ])->extends('layouts.bt4.app');
+        ]);
     }
 
     public function getInventories()
@@ -74,6 +76,9 @@ class InventoryIndex extends Component
                 'responsible',
                 'using',
                 'unspscProduct',
+                'lastMovement',
+                'lastMovement.responsibleUser',
+                'lastMovement.usingUser',
             ])
             ->when($this->unspsc_product_id, function($query) {
                 $query->whereRelation('unspscProduct', 'id', '=', $this->unspsc_product_id);
@@ -93,12 +98,18 @@ class InventoryIndex extends Component
                 });
             })
             ->when($this->number, function($query) {
-                $query->where('number', $this->number);
+                $query->where('number', 'LIKE', '%'.$this->number.'%');
+            })
+            ->when($this->inv_id, function($query) {
+                $query->where('id', $this->inv_id);
+            })
+            ->when($this->pending, function($query) {
+                $query->whereHas('pendingMovements');
             })
             ->whereEstablishmentId($this->establishment->id)
             ->whereNotNull('number')
             ->orderByDesc('id')
-            ->paginate(25);
+            ->paginate(50);
 
         return $inventories;
     }

@@ -143,6 +143,7 @@ class InventoryUploadExcel extends Component
                 'po_price' => $row[14],
                 'accounting_code_id' => $row[15],
                 'dte_number' => $row[16],
+                'old_number' => $row[18],
             ];
             
             if ($movement) {
@@ -194,6 +195,6 @@ class InventoryUploadExcel extends Component
 
     public function render()
     {
-        return view('livewire.inventory.inventory-upload-excel')->extends('layouts.bt4.app');
+        return view('livewire.inventory.inventory-upload-excel');
     }
 }

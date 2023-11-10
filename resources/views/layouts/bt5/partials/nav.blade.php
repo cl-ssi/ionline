@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-dark shadow-sm bg-nav-gobierno">
+<nav class="navbar navbar-expand-lg navbar-dark shadow-sm bg-nav-gobierno  d-print-none ">
     <div class="container">
         <a class="navbar-brand" href="{{ route('home') }}">
             {{ config('app.name', 'Laravel') }}
@@ -659,6 +659,15 @@
                             <i class="fas fa-fw fa-cube"></i> UNSPSC Productos
                         </a>
                         @endcanany
+
+                        @canany(['be god','Parameters: Classification'])
+                        <a class="dropdown-item" href="#">
+                            <i class="fas fa-fw fa-tags"></i> Clasificacion de Productos
+                        </a>
+                        @endcanany
+
+
+
 
                         @canany(['be god'])
                         <li>
