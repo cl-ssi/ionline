@@ -143,6 +143,7 @@ class InventoryUploadExcel extends Component
                 'po_price' => $row[14],
                 'accounting_code_id' => $row[15],
                 'dte_number' => $row[16],
+                'old_number' => $row[18],
             ];
             
             if ($movement) {

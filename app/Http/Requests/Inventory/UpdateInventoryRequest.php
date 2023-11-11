@@ -48,6 +48,7 @@ class UpdateInventoryRequest extends FormRequest
             'model'             => 'nullable|string|min:0|max:255',
             'serial_number'     => 'nullable|string|min:0|max:255',
             'observations'      => 'nullable|string|min:0|max:5000',
+            'classification_id' => 'nullable|exists:inv_classifications,id',
         ];
     }
 }

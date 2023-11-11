@@ -39,6 +39,7 @@ use App\Http\Livewire\Parameters\Holidays;
 use App\Http\Livewire\Parameters\AccessLogIndex;
 use App\Http\Livewire\Lobby\MeetingShow;
 use App\Http\Livewire\Lobby\MeetingMgr;
+use App\Http\Livewire\Inventory\ClassificationMgr;
 use App\Http\Livewire\Inventory\RegisterInventory;
 use App\Http\Livewire\Inventory\PrintCodeQueue;
 use App\Http\Livewire\Inventory\PendingMovements;
@@ -54,6 +55,7 @@ use App\Http\Livewire\Inventory\InventoryEdit;
 use App\Http\Livewire\Inventory\CreateTransfer;
 use App\Http\Livewire\Inventory\CheckTransfer;
 use App\Http\Livewire\Inventory\AssignedProducts;
+use App\Http\Livewire\Inventory\Transfer;
 use App\Http\Livewire\InventoryLabel\InventoryLabelIndex;
 use App\Http\Livewire\His\NewModification;
 use App\Http\Livewire\His\ModificationRequestIndex;
@@ -1903,6 +1905,10 @@ Route::prefix('inventories')->as('inventories.')->middleware(['auth', 'must.chan
 
         Route::get('/upload-excel', InventoryUploadExcel::class)->name('upload-excel');
     });
+    
+    Route::get('clasification-mgr', ClassificationMgr::class)->name('clasification-mgr');
+
+    Route::get('transfer', Transfer::class)->name('transfer');
 
     Route::get('{inventory}/discharge-document', [InventoryController::class, 'dischargeDocument'])->name('discharge-document');
     Route::get('movement/{movement}/act-transfer', [InventoryController::class, 'actTransfer'])->name('act-transfer');

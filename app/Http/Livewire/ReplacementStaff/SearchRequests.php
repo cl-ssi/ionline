@@ -28,6 +28,7 @@ class SearchRequests extends Component
     public $selectedNameToReplace   = null;
     public $selectedSub             = null;
     public $ou_dependents_array     = [];
+    public $selectedAssigned        = null;
 
     public $selectedFundamentInputStatus = '';
     public $selectedFundamentDetailInputStatus = '';
@@ -40,10 +41,12 @@ class SearchRequests extends Component
     public function render()
     {   
         if($this->typeIndex == 'assign'){
-            $requests = RequestReplacementStaff::
+            if($this->selectedAssigned == 'yes'){
+                $requests = RequestReplacementStaff::
                 with(['user', 'organizationalUnit', 'requestSign.organizationalUnit', 'requesterUser', 'profile_manage', 
                     'legalQualityManage', 'fundamentManage', 'fundamentDetailManage', 'technicalEvaluation',
                     'assignEvaluations'])
+                ->whereHas('technicalEvaluation')
                 ->latest()
                 ->search($this->selectedFormType,
                     $this->selectedStatus,
@@ -57,6 +60,49 @@ class SearchRequests extends Component
                     $this->ou_dependents_array
                 )
                 ->paginate(50);
+            }
+
+            if($this->selectedAssigned == ''){
+                $requests = RequestReplacementStaff::
+                    with(['user', 'organizationalUnit', 'requestSign.organizationalUnit', 'requesterUser', 'profile_manage', 
+                        'legalQualityManage', 'fundamentManage', 'fundamentDetailManage', 'technicalEvaluation',
+                        'assignEvaluations'])
+                    ->latest()
+                    ->search($this->selectedFormType,
+                        $this->selectedStatus,
+                        $this->selectedId,
+                        $this->selectedStartDate,
+                        $this->selectedEndDate,
+                        $this->selectedName,
+                        $this->selectedFundament,
+                        $this->selectedFundamentDetail,
+                        $this->selectedNameToReplace,
+                        $this->ou_dependents_array
+                    )
+                    ->paginate(50);
+            }
+
+            if($this->selectedAssigned == 'no'){
+                $requests = RequestReplacementStaff::
+                    with(['user', 'organizationalUnit', 'requestSign.organizationalUnit', 'requesterUser', 'profile_manage', 
+                        'legalQualityManage', 'fundamentManage', 'fundamentDetailManage', 'technicalEvaluation',
+                        'assignEvaluations'])
+                    ->whereDoesntHave('technicalEvaluation')
+                    ->whereRelation('signaturesFile.signature', 'status', 'completed')
+                    ->latest()
+                    ->search($this->selectedFormType,
+                        $this->selectedStatus,
+                        $this->selectedId,
+                        $this->selectedStartDate,
+                        $this->selectedEndDate,
+                        $this->selectedName,
+                        $this->selectedFundament,
+                        $this->selectedFundamentDetail,
+                        $this->selectedNameToReplace,
+                        $this->ou_dependents_array
+                    )
+                    ->paginate(50);
+            }
         }
 
         if($this->typeIndex == 'own'){

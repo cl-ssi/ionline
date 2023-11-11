@@ -33,12 +33,14 @@ class InventoryIndex extends Component
     public $place_id;
     public $location_id;
     public $number;
+    public $inv_id;
 
     public $unspscProduct;
     public $userUsing;
     public $userResponsible;
     public $place;
     public $location;
+    public $pending;
 
     public $managerInventory;
 
@@ -96,12 +98,18 @@ class InventoryIndex extends Component
                 });
             })
             ->when($this->number, function($query) {
-                $query->where('number', $this->number);
+                $query->where('number', 'LIKE', '%'.$this->number.'%');
+            })
+            ->when($this->inv_id, function($query) {
+                $query->where('id', $this->inv_id);
+            })
+            ->when($this->pending, function($query) {
+                $query->whereHas('pendingMovements');
             })
             ->whereEstablishmentId($this->establishment->id)
             ->whereNotNull('number')
             ->orderByDesc('id')
-            ->paginate(25);
+            ->paginate(50);
 
         return $inventories;
     }

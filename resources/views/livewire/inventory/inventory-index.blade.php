@@ -60,6 +60,20 @@
                 @endforeach
             </select>
         </fieldset>
+
+        <fieldset class="form-group col-md-2">
+            <label for="pending">En Traspaso</label>
+            <select
+                wire:model.defer="pending"
+                id="pending"
+                class="form-control form-control-sm"
+            >
+        </fieldset>
+            <option value="">Todos</option>
+            <option value="pending">Pendientes</option>
+        </select>
+
+
     </div>
 
     <div class="row g-2 d-print-none mb-3">
@@ -114,11 +128,20 @@
             </select>
         </fieldset>
 
-        <fieldset class="form-group col-md-3">
+        <fieldset class="form-group col-md-2">
             <label for="number">Nro. Inventario</label>
             <input
                 wire:model.defer="number"
                 id="number"
+                class="form-control form-control-sm"
+            >
+        </fieldset>
+
+        <fieldset class="form-group col-md-1">
+            <label for="inv_id">ID</label>
+            <input
+                wire:model.defer="inv_id"
+                id="inv_id"
                 class="form-control form-control-sm"
             >
         </fieldset>
@@ -245,7 +268,6 @@
                     <th>Ubicación</th>
                     <th>Lugar</th>
                     <th>Responsable</th>
-                    <th>Usuario</th>
                     <th>QR</th>
                     <th class="d-print-none"></th>
                 </tr>
@@ -261,21 +283,25 @@
                 </tr>
                 @forelse($inventories as $inventory)
                 <tr wire:loading.remove>
-                    <td class="text-center">
-                        <small class="text-monospace">
+                    <td class="text-center" nowrap>
+                        <small>
                             <a href="{{ route('inventories.show', ['establishment' => $establishment, 'number' => $inventory->number]) }}">
                                 {{ $inventory->number }}
                             </a>
+                            <br>
+                            {{ $inventory->old_number }}
                         </small>
                     </td>
                     <td>
-                        {{ optional($inventory->unspscProduct)->name }}
+                        @if($inventory->unspscProduct)
+                            <b>Std:</b> {{ $inventory->unspscProduct->name }}
+                        @endif
                         <br>
                         <small>
                             @if($inventory->product)
-                                {{ $inventory->product->name }}
+                                <b>Bodega:</b> {{ $inventory->product->name }}
                             @else
-                                {{ $inventory->description }}
+                                <b>Desc:</b> {{ $inventory->description }}
                             @endif
                         </small>
                     </td>
@@ -299,18 +325,6 @@
                                 </span>
                             @else
                                 {{ optional($inventory->responsible)->tinny_name }}
-                            @endif
-                        @endif
-                    </td>
-                    <td class="text-center">
-                        @if($inventory->lastMovement)
-                            @if($inventory->lastMovement->reception_date == null)
-                                {{ optional($inventory->lastMovement->usingUser)->tinny_name }}
-                                <span class="text-danger">
-                                    Pendiente
-                                </span>
-                            @else
-                                {{ optional($inventory->using)->tinny_name }}
                             @endif
                         @endif
                     </td>

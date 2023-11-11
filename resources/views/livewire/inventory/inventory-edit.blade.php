@@ -93,7 +93,7 @@
                         wire:loading.remove
                         wire:target="generateCode"
                     >
-                        <i class="fas fa-list-ol"></i>
+                        <i class="fas fa-qrcode"></i>
                     </span>
 
                     <span
@@ -254,6 +254,27 @@
                 </span>
             @enderror
         </fieldset>
+
+        <fieldset class="col-md-2">
+            <label for="classification" class="form-label">
+                Clasificación
+            </label>
+              <select
+                class="form-select @error('classification_id') is-invalid @enderror"
+                id="classification"
+                wire:model="classification_id"
+                >
+                    <option value="">Seleccione una clasificación</option>
+                @foreach($classifications as $classification)
+                    <option value="{{$classification->id}}">{{$classification->name}}</option>
+                @endforeach
+            </select>
+            @error('classification')
+            <span class="invalid-feedback" role="alert">
+                <strong>{{ $message }}</strong>
+            </span>
+            @enderror
+        </fieldset>
     </div>
 
     <div class="row g-2 mb-3">
@@ -317,7 +338,7 @@
             </fieldset>
         @endif
 
-        @if($inventory->control && $inventory->control->requestForm)
+        @if($inventory->control && $inventory->control->requestForm && $inventory->control->requestForm->associateProgram)
             <fieldset class="col-md-3">
                 <label for="financing" class="form-label">
                     Programa
@@ -480,4 +501,42 @@
         </div>
     </div>
 
+    <hr>
+
+    <h3>Productos del mismo tipo</h3>
+
+    <table class="table table-sm table-bordered">
+        <thead>
+            <tr>
+                <th>Nº Inventario</th>
+                <th>Responsable</th>
+                <th>Ubicación</th>
+                <th>Descripción</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($sameProductItems as $sameProductItem)
+            <tr>
+                <td>{{  $sameProductItem->number ?? 'Sin número' }}</td>
+                <td>{{  $sameProductItem->responsible?->shortName ?? 'No asignado' }}</td>
+                <td>{{  $sameProductItem->place?->name ?? 'No asignado' }}</td>
+                <td>
+                {{ $inventory->product ? $inventory->product->name : $inventory->description }}
+                </td>
+                <td>
+                    <a
+                        class="btn btn-sm btn-primary @cannot('Inventory: edit') disabled @endcannot"
+                        href="{{ route('inventories.edit', [
+                            'inventory' => $inventory,
+                            'establishment' => $establishment,
+                        ]) }}"
+                    >
+                        <i class="fas fa-edit"></i>
+                    </a>
+                </td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
 </div>

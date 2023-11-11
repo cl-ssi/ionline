@@ -6,6 +6,7 @@ use App\Http\Requests\Inventory\UpdateInventoryRequest;
 use App\Models\Establishment;
 use App\Models\Finance\AccountingCode;
 use App\Models\Inv\Inventory;
+use App\Models\Inv\Classification;
 use Livewire\Component;
 
 class InventoryEdit extends Component
@@ -16,6 +17,7 @@ class InventoryEdit extends Component
 
     public $number_inventory;
     public $status;
+    public $classification_id;
     public $brand;
     public $model;
     public $serial_number;
@@ -23,6 +25,7 @@ class InventoryEdit extends Component
     public $depreciation;
     public $accounting_code_id;
     public $observations;
+    public $sameProductItems;
 
     public function render()
     {
@@ -32,6 +35,7 @@ class InventoryEdit extends Component
     public function mount(Inventory $inventory, Establishment $establishment)
     {
         $this->inventory = $inventory;
+        $this->establishment = $establishment;
 
         $this->number_inventory = $this->inventory->number;
         $this->useful_life = $this->inventory->useful_life;
@@ -42,8 +46,19 @@ class InventoryEdit extends Component
         $this->serial_number = $this->inventory->serial_number;
         $this->observations = $this->inventory->observations;
         $this->accounting_code_id = $this->inventory->accounting_code_id;
+        $this->classification_id = $this->inventory->classification_id;
 
         $this->accountingCodes = AccountingCode::all();
+        $this->classifications = CLassification::where('establishment_id',$this->establishment->id)->orderBy('name')->get();
+
+        /**
+         * Obtiene todos los productos que sean del mismo codigo onu
+         */
+        $this->sameProductItems = Inventory::where('establishment_id', $establishment->id)
+            ->with(['responsible','place','product'])
+            ->where('unspsc_product_id', $this->inventory->unspsc_product_id)
+            ->get();
+
     }
 
     public function rules()
@@ -56,9 +71,9 @@ class InventoryEdit extends Component
      */
     public function generateCode()
     {
-        app('debugbar')->log($this->number_inventory);
-        $this->number_inventory = $this->inventory->unspscProduct->code . str_pad($this->inventory->id, 7, '0', STR_PAD_LEFT);
-        app('debugbar')->log($this->number_inventory);
+        if($this->inventory->unspscProduct) {
+            $this->number_inventory = $this->inventory->unspscProduct->code . '-' . $this->inventory->id;
+        }
     }
 
     public function update()

@@ -26,6 +26,8 @@
 
     @if($finicio!=null && $ftermino!=null)
 
+    <!-- {{$finicio}} - {{$ftermino}} -->
+
     <button class="btn btn-outline-success float-right" wire:click="export">
         Montos <i class="fas fa-download"></i>
     </button><br><br>
@@ -37,6 +39,7 @@
                 <th>Nombre</th>
                 <th>Cargado en AMIPASS</th>
                 <th>Calculo Sistema</th>
+                <th>Valor que debía cargarse</th>  <!-- debe eliminarse esta columna -->
                 <th>Diferencia</th>
                 <th>Tipo</th>
             </tr>
@@ -45,11 +48,15 @@
             @if($userWithContracts)
                 @foreach ($userWithContracts as $ct => $user)
                     @if($user->shifts->count()==0)
-                        <tr >
+                        
+                    @if($user->contracts->sum('ammount') == $user->valor_debia_cargarse) <tr >
+                        @else <tr class="table-warning"> @endif
+                        
                             <td>{{ $user->id }}</td>
                             <td>{{ $user->shortName }}</td>
                             <td>{{ money($user->AmiLoadMount) }}</td>
                             <td>{{ money($user->contracts->sum('ammount')) }}</td>
+                            <td>{{ money($user->valor_debia_cargarse) }}</td> <!-- debe eliminarse esta columna -->
                             <td>
                                 @if($user->diff < 0)
                                     <p style="color:red;display: inline;">
@@ -122,6 +129,7 @@
                             <td>{{ $user->shortName }}</td>
                             <td>{{ money($user->AmiLoadMount) }}</td>
                             <td>{{ money($user->shifts->sum('ammount')) }}</td>
+                            <td>{{ money($user->valor_debia_cargarse) }}</td>
                             <td>
                                 @if($user->diff < 0)
                                     <p style="color:red;display: inline;">

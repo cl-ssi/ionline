@@ -291,7 +291,9 @@
                         @elseif($signedSignaturesFlow->status === 0 or $signedSignaturesFlow->signature->rejected_at != null)
                         <p class="text-danger">Rechazada</p>
                         <span class="small text-danger">{{ $signedSignaturesFlow->observation }}</span>
-                        @else Pendiente @endif
+                        @else 
+                            Pendiente 
+                        @endif
                     </td>
                     <td class="text-center" nowrap>
                         {{--
@@ -406,6 +408,8 @@
                     <td class="text-center">
                         @if($signature->signaturesFlows->count() === $signature->signaturesFlows->where('status', 1)->count())
                         <p class="text-success">Aceptada</p>
+                        
+                        @livewire('documents.signature.distribute',['signature' => $signature])
                         @elseif($signature->signaturesFlows->where('status', '===' , 0)->count() > 0)
                         <p class="text-danger">Rechazo</p>
                         @else Pendiente</p> @endif

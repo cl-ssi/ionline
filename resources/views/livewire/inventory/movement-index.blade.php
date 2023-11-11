@@ -27,13 +27,19 @@
             <li>
                 {{ $inventory->control->date->format('Y-m-d') }}
                 -
-                <a href="{{ route('warehouse.controls.edit', [
-                        'store' => $inventory->control->store,
-                        'control' => $inventory->control
-                    ]) }}"
-                >
+                @if($inventory->control->isConfirmed())
+                    <a
+                        href="{{ route('warehouse.control.pdf', [
+                            'store' => $inventory->control->store,
+                            'control' => $inventory->control,
+                            'act_type' => 'reception'
+                        ]) }}"
+                        target="_blank"
+                        title="Acta Recepción Técnica"
+                    >
                     Recepción en bodega
-                </a>
+                    </a>
+                @endif
             </li>
         @endif
 

@@ -50,6 +50,14 @@
                 <i class="fas fa-file-excel"></i> Carga Excel
             </a>
         </li>
+        <li class="nav-item">
+            <a
+                class="nav-link {{ active(['inventories.transfer']) }}"
+                href="{{ route('inventories.transfer') }}"
+            >
+                <i class="fas fa-exchange-alt"></i> Traspaso de Inventario
+            </a>
+        </li>
     @endcan
 
     @can('Inventory: place maintainer')
@@ -69,13 +77,19 @@
                     class="dropdown-item"
                     href="{{ route('inventories.places', $establishment) }}"
                 >
-                    <i class="fas fa-file-alt"></i> Lugares
+                    <i class="fas fa-fw fa-file-alt"></i> Lugares
                 </a>
                 <a
                     class="dropdown-item"
                     href="{{ route('parameters.accounting-codes') }}"
                 >
-                    <i class="fas fa-file-alt"></i> Cuentas Contables
+                    <i class="fas fa-fw fa-file-alt"></i> Cuentas Contables
+                </a>
+                <a
+                    class="dropdown-item"
+                    href="{{ route('inventories.clasification-mgr') }}"
+                >
+                    <i class="fas fa-fw fa-tags"></i> Clasificación de productos
                 </a>
             </div>
         </li>

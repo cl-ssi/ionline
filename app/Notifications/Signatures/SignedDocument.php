@@ -67,7 +67,6 @@ class SignedDocument extends Notification implements ShouldQueue
             ->line('Para su conocimiento y fines.')
             ->line('Tipo:  ' . $this->signature->type->name)
             ->line('Creador: ' . $this->signature->responsable->shortName)
-            ->attach($document)
             ->salutation('Saludos cordiales.');
 
         /**
@@ -77,7 +76,7 @@ class SignedDocument extends Notification implements ShouldQueue
             ->as('documento_' . $this->signature->id . '.pdf')
             ->withMime('application/pdf');
 
-        $email->attach($documet);
+        $email->attach($document);
 
         /**
          * Anexos
