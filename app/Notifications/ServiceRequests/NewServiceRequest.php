@@ -46,7 +46,7 @@ class NewServiceRequest extends Notification implements ShouldQueue
     {
         return (new MailMessage)
             ->level('info')
-            ->subject("Se ha creado la solicitud de contratación de honorarios nro. ".$this->serviceRequest->id)
+            ->subject("Solicitud de contratación de honorarios:. ".$this->serviceRequest->id)
             ->greeting('Hola ' . $notifiable->shortName)
             ->line('Junto con saludar cordialmente.')
             ->line('Se informa que la solicitud de contratación de honorarios nro ' . $this->serviceRequest->id . ' se encuentra disponible para su visación.')
@@ -56,10 +56,9 @@ class NewServiceRequest extends Notification implements ShouldQueue
             ->line('Funcionario: ' . $this->serviceRequest->employee->getFullNameAttribute())
             ->line('Fecha inicio: ' . $this->serviceRequest->start_date->format('d-m-Y'))
             ->line('Fecha término: ' . $this->serviceRequest->end_date->format('d-m-Y'))
-            ->line('')
+            ->salutation('Saludos cordiales.');
 
             //Para acceder y visar la solicitud, haga click <a href="https://i.saludtarapaca.gob.cl/rrhh/service_requests/{{$this->serviceRequest->id}}/edit"><i class="far fa-hand-point-right"></i> Aquí</a>
-            ->salutation('Saludos cordiales.');
     }
 
     /**
