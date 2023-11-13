@@ -57,36 +57,40 @@ class SignedDocument extends Notification implements ShouldQueue
     public function toMail($notifiable)
     {
 
-        return (new MailMessage)
-            ->level('info')
-            ->subject('PRUEBA : ' . $this->signature->id)
-            ->line('Se encuentra disponible un nuevo documento para su firma en iOnline.')
-            ->line('Número solicitud:  ' . $this->signature->id)
-            ->line('Tipo:  ' . $this->signature->type->name)
-            ->line('Asunto: ' . $this->signature->subject)
-            ->salutation('Saludos cordiales.');
-
-
         /**
          * Documento principal
          */
-        // $document = Attachment::fromStorage($this->signature->signaturesFileDocument->signed_file)
-        //     ->as('documento_' . $this->signature->id . '.pdf')
-        //     ->withMime('application/pdf');
+        $document = Attachment::fromStorage($this->signature->signaturesFileDocument->signed_file)
+            ->as('documento_' . $this->signature->id . '.pdf')
+            ->withMime('application/pdf');
+
+        return (new MailMessage)
+            ->level('info')
+            ->subject('Documento: ' . $this->signature->id . ' - ' . $this->signature->subject)
+            ->greeting('Hola.')
+            ->line('Adjunto encontrará el documento: ' . $this->signature->subject)
+            ->line('Para su conocimiento y fines.')
+            ->line('Tipo: ' . $this->signature->type->name)
+            ->line('Creador: ' . $this->signature->responsable->shortName)
+            ->attach($document)
+            ->salutation('Saludos cordiales.');
+
+
+
 
         //$email->attach($document);
 
         // $email = new MailMessage();
         // $email
-        //     ->level('info')
-        //     ->subject('Documento: ' . $this->signature->id . ' - ' . $this->signature->subject)
-        //     ->greeting('Hola.')
-        //     ->line('Adjunto encontrará el documento: ' . $this->signature->subject)
-        //     ->line('Para su conocimiento y fines.')
-        //     ->line('Tipo: ' . $this->signature->type->name)
-        //     ->line('Creador: ' . $this->signature->responsable->shortName)
-        //     ->attach($document)
-        //     ->salutation('Saludos cordiales.');
+            // ->level('info')
+            // ->subject('Documento: ' . $this->signature->id . ' - ' . $this->signature->subject)
+            // ->greeting('Hola.')
+            // ->line('Adjunto encontrará el documento: ' . $this->signature->subject)
+            // ->line('Para su conocimiento y fines.')
+            // ->line('Tipo: ' . $this->signature->type->name)
+            // ->line('Creador: ' . $this->signature->responsable->shortName)
+            // ->attach($document)
+            // ->salutation('Saludos cordiales.');
 
 
 
