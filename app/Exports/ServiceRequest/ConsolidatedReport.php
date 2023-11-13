@@ -137,7 +137,9 @@ class ConsolidatedReport implements FromCollection, WithTitle, WithHeadings
                     $serviceRequest->employee->runNotFormat(),
                     $serviceRequest->employee->getFullNameAttribute(),
                     $birthday,
-                    $establishment_name,
+                    $serviceRequest->employee->country->name,
+                    $serviceRequest->employee->phone_number,
+                    $serviceRequest->employee->email,
                     $serviceRequest->programm_name,
                     $serviceRequest->digera_strategy,
                     $profession,
@@ -183,7 +185,7 @@ class ConsolidatedReport implements FromCollection, WithTitle, WithHeadings
     public function headings(): array
     {
         return  ['ID','N° CONTRATO','MES PAGO','COD. SIRH S.S.','SERVICIO DE SALUD','COD EST.','ESTABLECIMIENTO','RUT','APELLIDOS Y NOMBRES','FEC NAC.',
-                'NACIONALIDAD','NOMBRE DEL PROGRAMA SIRH','ESTRATEGIA DIGERA COVID','EQUIPO RRHH','HORAS SEMANALES CONTRATADAS','UNIDAD','ESTAMENTO',
+                'NACIONALIDAD','TELEFONO','CORREO','NOMBRE DEL PROGRAMA SIRH','ESTRATEGIA DIGERA COVID','EQUIPO RRHH','HORAS SEMANALES CONTRATADAS','UNIDAD','ESTAMENTO',
                 'FUNCIÓN','MONTO BRUTO','CONTRATO REGISTRADO EN SIRH','RESOLUCIÓN TRAMITADA','N° RESOLUCIÓN','FECHA INICIO','FECHA TÉRMINO','BOLETA Nº',
                 'TOTAL HORAS PAGADAS PERIODO','TOTAL PAGADO','FECHA PAGO','T.CONTRATO','ESTADO.SOLICITUD','JORNADA TRABAJO','TIPO','RENUNCIA'];
     }
