@@ -20,12 +20,13 @@ class SignedDocument extends Notification implements ShouldQueue
      *
      * @return array
      */
-    public function viaQueues()
-    {
-        return [
-            'mail' => 'testing',
-        ];
-    }
+    /** PARA QUE SE EJECUTEN EN UNA COLA CUSTOM */
+    // public function viaQueues()
+    // {
+    //     return [
+    //         'mail' => 'testing',
+    //     ];
+    // }
 
     /**
      * Create a new notification instance.
@@ -56,7 +57,6 @@ class SignedDocument extends Notification implements ShouldQueue
      */
     public function toMail($notifiable)
     {
-        
         $email = new MailMessage();
         $email
             ->level('info')
@@ -86,7 +86,6 @@ class SignedDocument extends Notification implements ShouldQueue
                 ->withMime('application/pdf');
             $email->attach($anexo);
         }
-
 
         return $email;
     }
