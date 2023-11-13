@@ -20,7 +20,7 @@ class SignedDocument extends Notification implements ShouldQueue
      *
      * @var string
      */
-    public $connection = 'cloudtasks-testing';
+    //public $connection = 'cloudtasks-testing';
 
     /**
      * Create a new notification instance.
