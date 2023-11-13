@@ -55,7 +55,7 @@
                 class="nav-link {{ active(['inventories.transfer']) }}"
                 href="{{ route('inventories.transfer') }}"
             >
-                <i class="fas fa-exchange-alt"></i> Traspaso de Inventario
+                <i class="fas fa-exchange-alt"></i> Traspaso Masivo
             </a>
         </li>
     @endcan
@@ -70,7 +70,7 @@
                 role="button"
                 aria-expanded="false"
             >
-                <i class="fas fa-cog"></i> Mantenedores
+                <i class="fas fa-cog"></i>
             </a>
             <div class="dropdown-menu">
                 <a

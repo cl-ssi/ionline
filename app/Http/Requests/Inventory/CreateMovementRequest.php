@@ -26,7 +26,7 @@ class CreateMovementRequest extends FormRequest
     {
         return [
             'installation_date'     => 'nullable|date_format:Y-m-d',
-            'place_id'              => 'required|exists:cfg_places,id',
+            'place_id'              => 'nullable|exists:cfg_places,id',
             'user_responsible_id'   => 'required|exists:users,id',
             'user_using_id'         => (Auth::user()->can('Inventory: manager')) ? 'nullable|exists:users,id' :  'required|exists:users,id',
         ];
