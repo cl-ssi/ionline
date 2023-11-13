@@ -130,19 +130,11 @@ class Signature extends Model implements Auditable
     */
     public function distribute()
     {
-        // $sign = Signature::find(24890);
-
         /**
          * Utilizando notify y con colas
          */
         foreach($valid_emails = $this->getMailsToDistribute() as $email) {
             Notification::route('mail', $email)->notify(new SignedDocument($this));
-
-
-            // Crea un usuario en memoria para enviar la notificación
-            // $user = new User([ 'email' => $email]);
-            // $user->notify(new SignedDocument($this));
-            logger()->info('3. Entro en new SignedDocument');
         }
     }
 }
