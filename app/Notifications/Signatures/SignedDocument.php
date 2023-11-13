@@ -16,6 +16,25 @@ class SignedDocument extends Notification implements ShouldQueue
     protected $signature;
 
     /**
+     * The name of the queue connection to use when queueing the notification.
+     *
+     * @var string
+     */
+    //public $connection = 'cloudtasks-testing';
+
+    /**
+     * Determine which queues should be used for each notification channel.
+     *
+     * @return array
+     */
+    public function viaQueues()
+    {
+        return [
+            'mail' => 'testing',
+        ];
+    }
+
+    /**
      * Create a new notification instance.
      *
      * @return void
@@ -44,20 +63,6 @@ class SignedDocument extends Notification implements ShouldQueue
      */
     public function toMail($notifiable)
     {
-        // $subject = "{$this->signature->type->name} - {$this->signature->subject}";
-        // $file = Storage::disk('gcs')->get($this->signature->signaturesFileDocument->signed_file);
-
-        // $email = $this->view('documents.signatures.mails.signed_notification_recipients')
-        //     ->subject($subject)
-        //     ->attachData($file,
-        //         "{$this->signature->type->name}.pdf",
-        //         ['mime' => 'application/pdf']);
-
-        // foreach ($this->signature->signaturesFileAnexos as $key => $signaturesFileAnexo) {
-        //     $email->attachFromStorageDisk('gcs', $signaturesFileAnexo->file, 'anexo_' . $key . '.pdf',
-        //         ['mime' => 'application/pdf']);
-        // }
-
         $email = new MailMessage();
         $email
             ->level('info')
