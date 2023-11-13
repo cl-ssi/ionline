@@ -174,19 +174,15 @@
                                 <td rowspan="2" class="text-center align-middle">{{number_format($indicator->getCompliance(), 2, ',', '.')}}%</td>
                                 <td class="text-center">{{number_format($indicator->numerator_source == 'REM P' ? $indicator->getLastValueByFactor('numerador') : $indicator->getValuesAcum('numerador'), 0, ',', '.')}}</td>
                                 @foreach($months as $number => $month)
-                                <td class="text-right">{{ $indicator->getValueByFactorAndMonth('numerador', $number) != null ? number_format($indicator->getValueByFactorAndMonth('numerador', $number), 0, ',', '.') : ''}}</td>
+                                <td class="text-right">{{ $indicator->getValueByFactorAndMonth2('numerador', $number, null, null) != null ? number_format($indicator->getValueByFactorAndMonth2('numerador', $number, null, null), 0, ',', '.') : ''}}</td>
                                 @endforeach
                             </tr>
                             <!-- denominador -->
                             <tr class="text-center">
                                 <td class="text-left glosa">{{$indicator->denominator}}. <span class="badge badge-secondary">{{ $indicator->getSourceAbbreviated('denominador') }}</span> @if($indicator->getSourceAbbreviated('denominador') != $indicator->denominator_source)<span class="badge badge-pill badge-dark" data-toggle="tooltip" data-placement="bottom" title="{{$indicator->denominator_source}}"><span class="fa fa-info"></span></span>@endif</td>
                                 <td class="text-center">{{number_format($indicator->denominator_source == 'REM P' ? $indicator->getLastValueByFactor('denominador') : $indicator->getValuesAcum('denominador'), 0, ',', '.')}}</td>
-                                @foreach($months as $number => $month)
-                                @if(in_array($indicator->id, [310,390,732]))
-                                <td class="text-right">{{ $indicator->getValueByFactorAndMonth2('denominador', $number, null, null) != null ? number_format($indicator->getValueByFactorAndMonth2('denominador', $number, null, null), 0, ',', '.') : ''}}</td>
-                                @else
-                                <td class="text-right">{{ $indicator->getValueByFactorAndMonth('denominador', $number) != null ? number_format($indicator->getValueByFactorAndMonth('denominador', $number), 0, ',', '.') : ''}}</td>
-                                @endif
+                                @foreach($months as $number => $month)                              
+                                <td class="text-right">{{ $indicator->getValueByFactorAndMonth2('denominador', $number, null, null) != null ? number_format($indicator->getValueByFactorAndMonth2('denominador', $number, null, null), 0, ',', '.') : ''}}</td>                           
                                 @endforeach
                             </tr>
                         </tbody>
