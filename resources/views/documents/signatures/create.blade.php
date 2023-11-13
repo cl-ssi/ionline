@@ -134,13 +134,13 @@
                                 'selected_id' => 'ou_id_signer',
                                 'emitToListener' => 'getOuId',
                                 'required' => false,
-                            ])
+                            ], key('signature-'.$signature->id))
                         </div>
                         <div class="col-12 col-md-4">
                             <label for="forUsers">Usuarios</label>
                             @livewire('rrhh.ou-users',[
                                 'required' => false,
-                                ])
+                            ], key('select-organizational-unit-'.$signature->id))
                         </div>
                     </div>
                 </div>
@@ -179,7 +179,7 @@
                             <label for="forUsers">Usuarios</label>
                             @livewire('rrhh.ou-users',[
                                 'required' => false,
-                                ])
+                            ])
                         </div>
                     </div>
                 </div>
