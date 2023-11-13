@@ -20,7 +20,6 @@ use Exception;
 use Carbon\Carbon;
 use Auth;
 use App\User;
-use App\Notifications\Signatures\SignedDocument;
 use App\Notifications\Signatures\NewSignatureRequest;
 use App\Models\Establishment;
 use App\Models\Documents\SignaturesFlow;
