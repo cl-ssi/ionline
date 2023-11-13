@@ -16,13 +16,6 @@ class SignedDocument extends Notification implements ShouldQueue
     protected $signature;
 
     /**
-     * The name of the queue connection to use when queueing the notification.
-     *
-     * @var string
-     */
-    //public $connection = 'cloudtasks-testing';
-
-    /**
      * Determine which queues should be used for each notification channel.
      *
      * @return array

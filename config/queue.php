@@ -81,17 +81,6 @@ return [
             'after_commit' => true,
         ],
 
-        'cloudtasks-testing' => [
-            'driver' => 'cloudtasks',
-            'project' => env('GOOGLE_CLOUD_PROJECT_ID', ''),
-            'location' => env('GOOGLE_CLOUD_LOCATION', ''),
-            'handler' => env('GOOGLE_CLOUD_TASKS_HANDLER', ''),
-            'queue' => 'testing',
-            'service_account_email' => env('GOOGLE_CLOUD_TASKS_SERVICE_EMAIL', ''),
-            'dispatch_deadline' => null,
-            'after_commit' => true,
-        ],
-
     ],
 
     /*
