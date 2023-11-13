@@ -3,6 +3,7 @@
 namespace App\Models\Documents;
 
 use OwenIt\Auditing\Contracts\Auditable;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -117,22 +118,31 @@ class Signature extends Model implements Auditable
         return $this->signaturesFiles->where('file_type', 'anexo');
     }
 
+    public function getMailsToDistribute()
+    {
+        $allEmails = $this->recipients . ',' . $this->distribution;
+        preg_match_all("/[\._a-zA-Z0-9-]+@[\._a-zA-Z0-9-]+/i", $allEmails, $valid_emails);
+        return $valid_emails[0] ?? array();
+    }
+
     /**
     * Distribute document to Recipients and Distribution
     */
     public function distribute()
     {
-        $allEmails = $this->recipients . ',' . $this->distribution;
-
-        preg_match_all("/[\._a-zA-Z0-9-]+@[\._a-zA-Z0-9-]+/i", $allEmails, $valid_emails);
+        // $sign = Signature::find(24890);
 
         /**
          * Utilizando notify y con colas
          */
-        foreach($valid_emails[0] as $email) {
+        foreach($valid_emails = $this->getMailsToDistribute() as $email) {
+            Notification::route('mail', $email)->notify(new SignedDocument($this));
+
+
             // Crea un usuario en memoria para enviar la notificación
-            $user = new User([ 'email' => $email]);
-            $user->notify(new SignedDocument($this));
+            // $user = new User([ 'email' => $email]);
+            // $user->notify(new SignedDocument($this));
+            logger()->info('3. Entro en new SignedDocument');
         }
     }
 }

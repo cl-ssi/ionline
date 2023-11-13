@@ -30,7 +30,7 @@ class DatabaseHandler extends AbstractProcessingHandler{
            'channel'       => $record['channel'],
            
            'extra'         => json_encode($record['extra']),
-           'remote_addr'   => $_SERVER['HTTP_X_FORWARDED_FOR'] ?? $_SERVER['REMOTE_ADDR'],
+           'remote_addr'   => $_SERVER['HTTP_X_FORWARDED_FOR'] ?? $_SERVER['REMOTE_ADDR'] ?? null,
            'user_agent'    => $_SERVER['HTTP_USER_AGENT'] ?? '',
            'record_datetime' => $record['datetime']->format('Y-m-d H:i:s'),
            'created_at'    => date("Y-m-d H:i:s"),
