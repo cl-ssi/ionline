@@ -56,6 +56,15 @@ class SignedDocument extends Notification implements ShouldQueue
      */
     public function toMail($notifiable)
     {
+        /**
+         * Documento principal
+         */
+        $document = Attachment::fromStorage($this->signature->signaturesFileDocument->signed_file)
+            ->as('documento_' . $this->signature->id . '.pdf')
+            ->withMime('application/pdf');
+
+        //$email->attach($document);
+
         $email = new MailMessage();
         $email
             ->level('info')
@@ -65,26 +74,20 @@ class SignedDocument extends Notification implements ShouldQueue
             ->line('Para su conocimiento y fines.')
             ->line('Tipo: ' . $this->signature->type->name)
             ->line('Creador: ' . $this->signature->responsable->shortName)
+            ->attach($document)
             ->salutation('Saludos cordiales.');
 
-        /**
-         * Documento principal
-         */
-        $document = Attachment::fromStorage($this->signature->signaturesFileDocument->signed_file)
-            ->as('documento_' . $this->signature->id . '.pdf')
-            ->withMime('application/pdf');
 
-        $email->attach($document);
 
         /**
          * Anexos
          */
-        foreach ($this->signature->signaturesFileAnexos as $key => $signaturesFileAnexo) {
-            $anexo = Attachment::fromStorage($signaturesFileAnexo->file)
-                ->as('anexo_' . $key . '.pdf')
-                ->withMime('application/pdf');
-            $email->attach($anexo);
-        }
+        // foreach ($this->signature->signaturesFileAnexos as $key => $signaturesFileAnexo) {
+        //     $anexo = Attachment::fromStorage($signaturesFileAnexo->file)
+        //         ->as('anexo_' . $key . '.pdf')
+        //         ->withMime('application/pdf');
+        //     $email->attach($anexo);
+        // }
 
         return $email;
     }
