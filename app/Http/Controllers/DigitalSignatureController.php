@@ -211,18 +211,23 @@ class DigitalSignatureController extends Controller
                 $signaturesFlow->signature->status = 'completed';
                 $signaturesFlow->signature->save();
 
-                $allEmails = $signaturesFlow->signature->recipients . ',' . $signaturesFlow->signature->distribution;
-
-                preg_match_all("/[\._a-zA-Z0-9-]+@[\._a-zA-Z0-9-]+/i", $allEmails, $emails);
-
                 /**
-                 * Utilizando notify y con colas
+                 * Esto distribuye el documento a los destinatarios
                  */
-                foreach($emails[0] as $email) {
-                    // Crea un usuario en memoria para enviar la notificación
-                    $user = new User([ 'email' => $email]);
-                    $user->notify(new SignedDocument($signaturesFlow->signature));
-                }
+                $signaturesFlow->signature->distribute();
+
+                // $allEmails = $signaturesFlow->signature->recipients . ',' . $signaturesFlow->signature->distribution;
+
+                // preg_match_all("/[\._a-zA-Z0-9-]+@[\._a-zA-Z0-9-]+/i", $allEmails, $emails);
+
+                // /**
+                //  * Utilizando notify y con colas
+                //  */
+                // foreach($emails[0] as $email) {
+                //     // Crea un usuario en memoria para enviar la notificación
+                //     $user = new User([ 'email' => $email]);
+                //     $user->notify(new SignedDocument($signaturesFlow->signature));
+                // }
 
                 /** 
                  * Antes se enviaba el mail on the fly, cuando el correo estaba caido, 

@@ -17,9 +17,15 @@ class OuUsers extends Component
         return view('livewire.rrhh.ou-users');
     }
 
-    public function getUsersFromOu(OrganizationalUnit $ou)
+    public function getUsersFromOu($organizationalUnitId = null)
     {
-        $this->users = $ou->users;
-        $this->authority_id = $ou->currentManager->user_id ?? null;
+        if(isset($organizationalUnitId) && $organizationalUnitId != '') {
+            $ou = OrganizationalUnit::find($organizationalUnitId);
+            $this->users = $ou->users;
+            $this->authority_id = $ou->currentManager->user_id ?? null;
+        } else {
+            $this->users = collect();
+            $this->authority_id = null;
+        }
     }
 }
