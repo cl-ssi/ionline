@@ -56,7 +56,6 @@ class SignedDocument extends Notification implements ShouldQueue
      */
     public function toMail($notifiable)
     {
-
         /**
          * Documento principal
          */
@@ -64,7 +63,25 @@ class SignedDocument extends Notification implements ShouldQueue
             ->as('documento_' . $this->signature->id . '.pdf')
             ->withMime('application/pdf');
 
-        return (new MailMessage)
+
+        // return (new MailMessage)
+        //     ->level('info')
+        //     ->subject('Documento: ' . $this->signature->id . ' - ' . $this->signature->subject)
+        //     ->greeting('Hola.')
+        //     ->line('Adjunto encontrará el documento: ' . $this->signature->subject)
+        //     ->line('Para su conocimiento y fines.')
+        //     ->line('Tipo: ' . $this->signature->type->name)
+        //     ->line('Creador: ' . $this->signature->responsable->shortName)
+        //     ->attach($document)
+        //     ->salutation('Saludos cordiales.');
+
+
+
+
+        //$email->attach($document);
+
+        $email = new MailMessage();
+        $email
             ->level('info')
             ->subject('Documento: ' . $this->signature->id . ' - ' . $this->signature->subject)
             ->greeting('Hola.')
@@ -74,24 +91,6 @@ class SignedDocument extends Notification implements ShouldQueue
             ->line('Creador: ' . $this->signature->responsable->shortName)
             ->attach($document)
             ->salutation('Saludos cordiales.');
-
-
-
-
-        //$email->attach($document);
-
-        // $email = new MailMessage();
-        // $email
-            // ->level('info')
-            // ->subject('Documento: ' . $this->signature->id . ' - ' . $this->signature->subject)
-            // ->greeting('Hola.')
-            // ->line('Adjunto encontrará el documento: ' . $this->signature->subject)
-            // ->line('Para su conocimiento y fines.')
-            // ->line('Tipo: ' . $this->signature->type->name)
-            // ->line('Creador: ' . $this->signature->responsable->shortName)
-            // ->attach($document)
-            // ->salutation('Saludos cordiales.');
-
 
 
         /**
@@ -104,7 +103,8 @@ class SignedDocument extends Notification implements ShouldQueue
         //     $email->attach($anexo);
         // }
 
-        // return $email;
+
+        return $email;
     }
 
     /**
