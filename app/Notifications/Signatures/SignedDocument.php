@@ -59,11 +59,11 @@ class SignedDocument extends Notification implements ShouldQueue
         $email = new MailMessage();
         $email
             ->level('info')
-            ->subject('Distribución de documento: ' . $this->signature->subject)
-            ->greeting('Hola ')
+            ->subject('Documento: ' . $this->signature->id . ' - ' . $this->signature->subject)
+            ->greeting('Hola.')
             ->line('Adjunto encontrará el documento: ' . $this->signature->subject)
             ->line('Para su conocimiento y fines.')
-            ->line('Tipo:  ' . $this->signature->type->name)
+            ->line('Tipo: ' . $this->signature->type->name)
             ->line('Creador: ' . $this->signature->responsable->shortName)
             ->salutation('Saludos cordiales.');
 
