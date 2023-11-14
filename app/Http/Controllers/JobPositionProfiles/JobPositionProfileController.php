@@ -199,7 +199,25 @@ class JobPositionProfileController extends Controller
      */
     public function update(Request $request, JobPositionProfile $jobPositionProfile)
     {
+        /* Cambio de U.O. */
         $jobPositionProfile->fill($request->all());
+
+        if($jobPositionProfile->organizationalUnit->id != $request->jpp_ou_id){
+            if($jobPositionProfile->StatusValue == "Guardado"){
+                /* O.U. DONDE SE DIRIGE EL PERFIL DE CARGO */
+                $jobPositionProfile->organizationalUnit()->associate($request->jpp_ou_id);
+            }
+            if($jobPositionProfile->StatusValue == "Enviado" || $jobPositionProfile->StatusValue == "En revisión" ||
+                $jobPositionProfile->StatusValue == "Pendiente"){
+                /* O.U. DONDE SE DIRIGE EL PERFIL DE CARGO */
+                $jobPositionProfile->organizationalUnit()->associate($request->jpp_ou_id);
+
+                /* SE ELIMINAN LAS APROBACIONES */
+                $jobPositionProfile->jobPositionProfileSigns()->delete();
+                $jobPositionProfile->status = 'saved';
+            }
+        }
+ 
         $jobPositionProfile->estament()->associate($request->estament_id);
         $jobPositionProfile->area()->associate($request->area_id);
         $jobPositionProfile->contractualCondition()->associate($request->contractual_condition_id);
