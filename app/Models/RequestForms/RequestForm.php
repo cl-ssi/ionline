@@ -747,7 +747,7 @@ class RequestForm extends Model implements Auditable
 
     public function canDelete()
     {
-        return $this->status == 'saved';
+        return $this->status == 'saved' || !$this->hasFirstEventRequestFormSigned();
     }
 
     public function hasEventRequestForms(){

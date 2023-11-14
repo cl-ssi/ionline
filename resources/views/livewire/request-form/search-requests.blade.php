@@ -246,13 +246,26 @@
 
                         <td>
                             <a href="{{ route('request_forms.show', $requestForm->id) }}" class="btn btn-outline-secondary btn-sm" title="Mostrar"><i class="fas fa-eye"></i>
-                            </a>
-                            @if(Auth()->user()->hasPermissionTo('Request Forms: all') and $requestForm->status == 'approved')
-                            <!-- Button trigger modal -->            
-                            <button type="button" class="btn btn-outline-secondary btn-sm" data-toggle="modal" data-target="#exampleModal-{{ $requestForm->id }}" title="Reasignar comprador">
-                            <i class="fas fa-redo"></i>
-                            </button>
-                            @include('request_form.purchase.modals.reasign_purchaser')
+                            </a> 
+
+                            @if(Auth()->user()->hasPermissionTo('Request Forms: all'))
+                                @if($requestForm->canEdit())
+                                <a href="{{ route('request_forms.edit', $requestForm->id) }}" class="btn btn-outline-secondary btn-sm" title="Edición"><i class="fas fa-edit"></i>
+                                </a>
+                                @endif
+
+                                @if($requestForm->canDelete())
+                                <a href="#" data-href="{{ route('request_forms.destroy', $requestForm->id) }}" data-id="{{ $requestForm->id }}" class="btn btn-outline-secondary btn-sm text-danger" title="Eliminar" data-toggle="modal" data-target="#confirm" role="button">
+                                <i class="fas fa-trash"></i></a>
+                                @endif
+
+                                @if($requestForm->status == 'approved')
+                                <!-- Button trigger modal -->            
+                                <button type="button" class="btn btn-outline-secondary btn-sm" data-toggle="modal" data-target="#exampleModal-{{ $requestForm->id }}" title="Reasignar comprador">
+                                <i class="fas fa-redo"></i>
+                                </button>
+                                @include('request_form.purchase.modals.reasign_purchaser')
+                                @endif
                             @endif
                             
                             @if($requestForm->signatures_file_id)
@@ -377,7 +390,7 @@
                             </a>
                             @include('request_form.partials.modals.old_signed_request_forms')
                             @endif
-                            
+
                             <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="">
                                 <a href="{{ route('request_forms.supply.purchase', $requestForm) }}" class="btn btn-outline-secondary btn-sm"><i class="fas fa-shopping-cart"></i></a>
                             </span>
@@ -667,5 +680,18 @@
             <b>Estimado usuario</b>: No se encuentran solicitudes bajo los parámetros consultados.
         </div>
     @endif
+
+    <!-- Modals -->
+    @include('request_form.partials.modals.confirm_delete')
     
 </div>
+
+@section('custom_js')
+<script>
+  $('#confirm').on('show.bs.modal', function(e) {
+    $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
+
+    $('.debug-url').html('<strong>Eliminar Formulario de Requerimiento ID ' + $(e.relatedTarget).data('id') + '</strong>');
+  });
+</script>
+@endsection

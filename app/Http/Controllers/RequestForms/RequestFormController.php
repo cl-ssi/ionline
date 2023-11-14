@@ -257,8 +257,14 @@ class RequestFormController extends Controller {
         $ouSearch = Parameter::where('module', 'ou')->whereIn('parameter', ['FinanzasSSI', 'RefrendacionHAH', 'FinanzasHAH'])->pluck('value')->toArray();
         if(!Auth()->user()->hasPermissionTo('Request Forms: all') && !in_array(Auth()->user()->organizational_unit_id, $ouSearch) && $requestForm->request_user_id != auth()->user()->id){
             session()->flash('danger', 'Estimado Usuario/a: no tiene los permisos necesarios para editar formulario N° '.$requestForm->folio);
-            return redirect()->route('request_forms.my_forms');
+            return redirect()->back();
         }
+
+        if(!$requestForm->canEdit()){
+            session()->flash('danger', 'Estimado Usuario/a: no se cumplen los criterios para editar formulario N° '.$requestForm->folio);
+            return redirect()->back();
+        }
+        
         return  view('request_form.create', compact('requestForm'));
     }
 
@@ -416,7 +422,7 @@ class RequestFormController extends Controller {
     {
         $requestForm->delete();
         session()->flash('info', 'El formulario de requerimiento N° '.$requestForm->folio.' ha sido eliminado correctamente.');
-        return redirect()->route('request_forms.my_forms');
+        return redirect()->back();
     }
 
 
