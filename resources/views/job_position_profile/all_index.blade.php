@@ -22,4 +22,9 @@
 
 @section('custom_js')
 
+<script>
+    $('[data-toggle="tooltip"]').tooltip()
+</script>
+
+
 @endsection
