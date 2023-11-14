@@ -27,7 +27,7 @@ return new class extends Migration
             $table->string('TotalCargos');
             $table->string('Total');
 
-            $table->foreign('reception_id')->references('id')->on('fin_receptions');
+            $table->foreignId('reception_id')->constrained('fin_receptions');
             $table->timestamps();
         });
     }

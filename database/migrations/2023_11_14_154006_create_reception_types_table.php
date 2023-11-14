@@ -15,7 +15,8 @@ return new class extends Migration
     {
         Schema::create('fin_reception_types', function (Blueprint $table) {
             $table->id();
-            $table->name('name');
+            $table->string('name');
+            $table->foreignId('establishment_id')->constrained('establishments');
             $table->timestamps();
         });
     }

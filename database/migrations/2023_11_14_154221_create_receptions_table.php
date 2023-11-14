@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('number'); // Correlatives
             $table->date('date');
-            $table->foreign('reception_type_id')->references('id')->on('fin_reception_types');
+            $table->foreignId('reception_type_id')->constrained('fin_reception_types');
 
             $table->string('purchase_order')->nullable();
             $table->text('header_observation')->nullable();
@@ -34,9 +34,9 @@ return new class extends Migration
             
             $table->text('footer_observation')->nullable();
             
-            $table->foreign('establishment_id')->references('id')->on('establishments');
-            $table->foreign('creator_id')->references('id')->on('users');
-            $table->foreign('creator_ou_id')->references('id')->on('organizational_units');
+            $table->foreignId('establishment_id')->constrained('establishments');
+            $table->foreignId('creator_id')->constrained('users');
+            $table->foreignId('creator_ou_id')->constrained('organizational_units');
 
             $table->timestamps();
         });
