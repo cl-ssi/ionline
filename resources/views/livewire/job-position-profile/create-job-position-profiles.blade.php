@@ -4,7 +4,7 @@
         <i class="fas fa-info-circle"></i> <b>Información importante</b> <br /><br />
 
         <b>Estimado Usuario</b>: En caso de editar la Unidad Organizacional el sistema reiniciará
-        el proceso de aprobaciones, esto devolverá el Perfil de Cargo al estado enviado.
+        el proceso de aprobaciones, esto devolverá el Perfil de Cargo al estado guardado.
     </div>
     @endif
 
