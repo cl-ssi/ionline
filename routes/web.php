@@ -39,7 +39,7 @@ use App\Http\Livewire\Parameters\Holidays;
 use App\Http\Livewire\Parameters\AccessLogIndex;
 use App\Http\Livewire\Lobby\MeetingShow;
 use App\Http\Livewire\Lobby\MeetingMgr;
-use App\Http\Livewire\Inventory\ClassificationMgr;
+use App\Http\Livewire\Inventory\Transfer;
 use App\Http\Livewire\Inventory\RegisterInventory;
 use App\Http\Livewire\Inventory\PrintCodeQueue;
 use App\Http\Livewire\Inventory\PendingMovements;
@@ -53,15 +53,16 @@ use App\Http\Livewire\Inventory\InventoryLastReceptions;
 use App\Http\Livewire\Inventory\InventoryIndex;
 use App\Http\Livewire\Inventory\InventoryEdit;
 use App\Http\Livewire\Inventory\CreateTransfer;
+use App\Http\Livewire\Inventory\ClassificationMgr;
 use App\Http\Livewire\Inventory\CheckTransfer;
 use App\Http\Livewire\Inventory\AssignedProducts;
-use App\Http\Livewire\Inventory\Transfer;
 use App\Http\Livewire\InventoryLabel\InventoryLabelIndex;
 use App\Http\Livewire\His\NewModification;
 use App\Http\Livewire\His\ModificationRequestIndex;
 use App\Http\Livewire\His\ModificationMgr;
 use App\Http\Livewire\HealthServices;
 use App\Http\Livewire\Finance\UploadDtes;
+use App\Http\Livewire\Finance\Receptions\CreateReception;
 use App\Http\Livewire\Finance\IndexDtes;
 use App\Http\Livewire\Finance\DteConfirmation;
 use App\Http\Livewire\Finance\AccountingCodesMgr;
@@ -171,8 +172,8 @@ use App\Http\Controllers\RNIdb\RNIdbController;
 use App\Http\Controllers\QualityAps\QualityApsController;
 use App\Http\Controllers\PurchasePlan\PurchasePlanController;
 use App\Http\Controllers\Programmings\TrainingsItemController;
-use App\Http\Controllers\Programmings\TaskReschedulingController;
 //use App\Http\Controllers\RequestForms\SupplyPurchaseController;
+use App\Http\Controllers\Programmings\TaskReschedulingController;
 use App\Http\Controllers\Programmings\TaskController;
 use App\Http\Controllers\Programmings\ReviewItemController;
 use App\Http\Controllers\Programmings\ProgrammingReviewController;
@@ -2013,6 +2014,10 @@ Route::prefix('finance')->as('finance.')->middleware(['auth', 'must.change.passw
     Route::prefix('purchase-orders')->as('purchase-orders.')->group(function () {
         Route::get('/{purchaseOrder}', [PurchaseOrderController::class, 'show'])->name('show');
         Route::get('/by-code/{po_code}', [PurchaseOrderController::class, 'showByCode'])->name('showByCode');
+    });
+
+    Route::prefix('receptions')->as('receptions.')->group(function () {
+        Route::get('/create', CreateReception::class)->name('create');
     });
 });
 
