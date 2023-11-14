@@ -13,8 +13,31 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('receptions', function (Blueprint $table) {
+        Schema::create('fin_receptions', function (Blueprint $table) {
             $table->id();
+            $table->string('number'); // Correlatives
+            $table->date('date');
+            $table->foreign('reception_type_id')->references('id')->on('fin_reception_types');
+
+            $table->string('purchase_order')->nullable();
+            $table->text('header_observation')->nullable();
+
+            $table->boolean('partial_reception')->nullable(); // Si se selecciono completa o parcial
+            $table->boolean('order_completed')->nullable(); // Marcar orden completada
+
+            $table->boolean('cenabast')->nullable();
+
+            $table->string('doc_type')->nullable();
+            $table->string('doc_number')->nullable();
+            $table->string('doc_date')->nullable();
+            $table->unsignedInteger('total')->nullable();
+            
+            $table->text('footer_observation')->nullable();
+            
+            $table->foreign('establishment_id')->references('id')->on('establishments');
+            $table->foreign('creator_id')->references('id')->on('users');
+            $table->foreign('creator_ou_id')->references('id')->on('organizational_units');
+
             $table->timestamps();
         });
     }
@@ -26,6 +49,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('receptions');
+        Schema::dropIfExists('fin_receptions');
     }
 };
