@@ -3,12 +3,24 @@
 namespace App\Http\Livewire\Finance\Receptions;
 
 use Livewire\Component;
+use App\Models\Finance\Receptions\Reception;
 use App\Models\Finance\PurchaseOrder;
 
 class CreateReception extends Component
 {
     public $purchaseOrderCode = '1272565-444-AG23';
     public $purchaseOrder;
+    public $reception;
+
+    protected $rules = [
+        'reception.number' => 'nullable',
+        'reception.date' => 'nullable',
+        'reception.doc_type' => 'nullable',
+        'reception.doc_number' => 'nullable',
+        'reception.doc_date' => 'nullable',
+        'reception.header' => 'nullable',
+        'reception.observation' => 'nullable',
+    ];
 
     /**
     * Mount
@@ -16,6 +28,8 @@ class CreateReception extends Component
     public function mount()
     {
         $this->purchaseOrder = PurchaseOrder::whereCode($this->purchaseOrderCode)->first();
+        $this->requestForm = $this->purchaseOrder->requestForm;
+        $this->reception = new Reception();
     }
 
     /**
@@ -25,7 +39,6 @@ class CreateReception extends Component
     {
         $this->purchaseOrder = PurchaseOrder::whereCode($this->purchaseOrderCode)->first();
         //1272565-444-AG23
-        app('debugbar')->log($this->purchaseOrder);
     }
 
     public function render()

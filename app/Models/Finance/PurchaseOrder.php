@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Carbon\Carbon;
+use App\Models\RequestForms\RequestForm;
+use App\Models\RequestForms\ImmediatePurchase;
 use App\Models\Finance\Dte;
 
 class PurchaseOrder extends Model
@@ -32,7 +34,22 @@ class PurchaseOrder extends Model
 
     public function dtes()
     {
-        return $this->hasMany(Dte::class);
+        return $this->hasMany(Dte::class,'folio_oc');
+    }
+
+    /**
+     * Relación con RequestForm a través de ImmediatePurchase
+     */
+    public function requestForm()
+    {
+        return $this->hasOneThrough(
+            RequestForm::class,
+            ImmediatePurchase::class,
+            'po_id', // Foreign key on the ImmediatePurchase table...
+            'id', // Foreign key on the RequestForm table...
+            'code', // Local key on the Dte table...
+            'request_form_id', // Local key on the ImmediatePurchase table...
+        );
     }
 
     /**

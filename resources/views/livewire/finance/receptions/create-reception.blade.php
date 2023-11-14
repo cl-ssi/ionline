@@ -1,4 +1,9 @@
 <div>
+    <style>
+        .parrafo {
+            white-space: pre-wrap;
+        }
+    </style>
     <h3 class="mb-3">Crear un acta de recepción conforme</h3>
 
     <ul class="nav nav-tabs mb-3">
@@ -9,16 +14,12 @@
         </li>
         <li class="nav-item">
             <a class="nav-link"
-                href="#">Cenabast</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link"
                 href="#">Sin Orden de Compra</a>
         </li>
     </ul>
 
     <div class="row mb-3 g-2">
-        <div class="col-md-4">
+        <div class="col-md-3">
             <label for="reception-date">Orden de compra</label>
             <div class="input-group">
                 <input type="text"
@@ -33,28 +34,19 @@
                 </button>
             </div>
         </div>
-
-        <div class="col-md-3">
-            <div class="form-group">
-                <label for="reception-date">Fecha Recepción</label>
-                <input type="datetime-local"
-                    class="form-control">
-            </div>
+        <div class="col-md-3 text-center">
+            <b>Formulario de Requerimiento</b><br>
+            @if ($requestForm)
+                <a href="{{ route('request_forms.show', $requestForm->id) }}"
+                    target="_blank">
+                    {{ $requestForm->folio }}
+                </a>
+            @else
+                <span class="text-danger">No se encuentra esta Orden de Compra registrada en Abastecimiento</span>
+            @endif
         </div>
-        <div class="col-md-3">
-            <div class="form-group">
-                <label for="number">Número de acta</label>
-                <input type="text"
-                    class="form-control">
-                <div class="form-text">Dejar en blanco para autogenerar</div>
-            </div>
-        </div>
-    </div>
-
-
-    @if ($purchaseOrder)
-        <div class="mb-3">
-            <h4>Actas creadas para esta OC:</h4>
+        <div class="col-md-3 text-center">
+            <b>Actas creadas para esta OC</b><br>
             <ul>
                 <li>
                     <a href="#">Acta ID: 2123 fecha: 2023-11-01</a>
@@ -64,8 +56,23 @@
                 </li>
             </ul>
         </div>
+        <div class="col-md-3 text-center">
+            <b>Facturas</b><br>
+            <ul>
+                @foreach ($purchaseOrder->dtes as $dte)
+                    <li>
+                        <a href="#">{{ $dte->id }}</a>
+                    </li>
+                @endforeach
+            </ul>
+        </div>
 
-        <h4>Tipo de recepción</h4>
+    </div>
+
+
+    @if ($purchaseOrder)
+
+        <h4>Recepción</h4>
         <div class="row mb-3">
             <div class="col-md-12">
                 <div class="form-check form-check-inline">
@@ -95,10 +102,80 @@
                         for="flexSwitchCheckDefault">Marcar la Orden de Compra como Completada</label>
                     <div class="form-text">No se recibirán más items de esta Orden de Compra</div>
                 </div>
+                <div class="form-check form-switch form-check-inline float-end">
+                    <input class="form-check-input"
+                        type="checkbox"
+                        role="switch"
+                        id="flexSwitchCheckDefault">
+                    <label class="form-check-label"
+                        for="flexSwitchCheckDefault">Cenabast</label>
+                </div>
             </div>
         </div>
 
+        <div class="row mb-3 g-2">
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label for="number">Número de acta</label>
+                    <input type="text"
+                        class="form-control"
+                        wire:model="reception.number">
+                    <div class="form-text">Dejar en blanco para autogenerar</div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label for="reception-date">Fecha Recepción</label>
+                    <input type="date"
+                        class="form-control"
+                        wire:model="reception.date">
+                </div>
+            </div>
+            <div class="col-md-2 offset-md-2">
+                <div class="form-group">
+                    <label for="reception-date">Tipo documento</label>
+                    <select name="document_type"
+                        id="document_type"
+                        class="form-select"
+                        wire:model="reception.doc_type">
+                        <option value=""></option>
+                        <option value="">Guía de despacho</option>
+                        <option value="">Factura</option>
+                        <option value="">Boleta</option>
+                        <option value="">Boleta Honorarios</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label for="reception-date">Número documento</label>
+                    <input type="text"
+                        class="form-control"
+                        wire:model.debounce.500ms="reception.doc_number">
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label for="reception-date">Fecha documento</label>
+                    <input type="date"
+                        class="form-control"
+                        wire:model="reception.doc_date">
+                </div>
+            </div>
+        </div>
 
+        <div class="row mb-3">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <Label>Encabezado</Label>
+                    <textarea name="""
+                        id=""
+                        rows="5"
+                        class="form-control"
+                        wire:model.debounse.500ms="reception.header"></textarea>
+                </div>
+            </div>
+        </div>
 
         <table class="table table-bordered table-sm">
             <thead>
@@ -126,6 +203,13 @@
                         <td>{{ $item->Producto }}</td>
                         <td style="text-align: right;">
                             {{ $item->Cantidad }} {{ $item->Unidad }}
+                            <select name=""
+                                id=""
+                                class="form-select">
+                                @for ($i = 1; $i <= $item->Cantidad; $i++)
+                                    <option>{{ $i }}</option>
+                                @endfor
+                            </select>
                         </td>
                         <td>{{ $item->EspecificacionComprador }}</td>
                         <td>{{ $item->EspecificacionProveedor }}</td>
@@ -139,13 +223,7 @@
                             Acta 2123
                         </td>
                         <td>
-                            <select name=""
-                                id=""
-                                class="form-select">
-                                @for ($i = 1; $i <= $item->Cantidad; $i++)
-                                    <option>{{ $i }}</option>
-                                @endfor
-                            </select>
+                            50
                         </td>
                         <td></td>
                         <td></td>
@@ -157,6 +235,19 @@
                 @endforeach
             </tbody>
         </table>
+
+        <div class="row mb-3">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <Label>Observaciones</Label>
+                    <textarea name=""
+                        id=""
+                        rows="5"
+                        class="form-control"
+                        wire:model.debounce.500ms="reception.observation"></textarea>
+                </div>
+            </div>
+        </div>
 
         <h4 class="mb-2">Firmantes</h4>
         <div class="row text-center">
@@ -222,21 +313,60 @@
             </div>
         </div>
 
+
+        <div class="row">
+            <div class="col-12">
+                <div class="form-group">
+                    <label for="">Adjuntar otros documentos</label>
+                    <input type="file" name="" id="" class="form-control">
+                </div>
+            </div>
+        </div>
+
         <hr>
 
+        <!----------------------------------->
+        <!-- Preview del acta de recepción -->
+        <!----------------------------------->
         <div class="row mb-3">
-            <div class="col-10">
+            <div class="col-9">
                 <img src="{{ asset('/images/logo_rgb_' . auth()->user()->organizationalUnit->establishment->alias . '.png') }}"
                     height="109"
                     alt="Logo de la institución">
             </div>
-            <div class="col-2 align-self-end fs-5">
-                Número: <b>123</b> <br>
-                Fecha: <b>12-11-2023</b>
+            <div class="col-3 align-self-end fs-5">
+                <table class="table">
+                    <tr>
+                        <th>Número: </th>
+                        <td>
+                            @if ($reception->number)
+                                {{ $reception->number }}
+                            @else
+                                <i>Autogenerado</i>
+                            @endif
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            Fecha:
+                        </th>
+                        <td>
+                            @if ($reception->date)
+                                {{ $reception->date }}
+                            @else
+                                <span class="text-danger">Falta la fecha</span>
+                            @endif
+                        </td>
+                    </tr>
+                </table>
             </div>
         </div>
 
+        <br>
+
         <h3 class="text-center">Acta de recepción conforme</h3>
+
+        <p style="white-space: pre-wrap;">{{ $reception->header }}</p>
 
         <table class="table table-sm table-bordered mb-3">
             <thead>
@@ -267,6 +397,7 @@
             </tbody>
         </table>
 
+        <p style="white-space: pre-wrap;">{{ $reception->observation }}</p>
         <br>
         <br>
         <br>
