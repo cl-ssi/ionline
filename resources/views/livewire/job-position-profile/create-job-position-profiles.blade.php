@@ -1,4 +1,13 @@
 <div>
+    @if($action == 'update')
+    <div class="alert alert-info" role="alert">
+        <i class="fas fa-info-circle"></i> <b>Información importante</b> <br /><br />
+
+        <b>Estimado Usuario</b>: En caso de editar la Unidad Organizacional el sistema reiniciará
+        el proceso de aprobaciones, esto devolverá el Perfil de Cargo al estado enviado.
+    </div>
+    @endif
+
     @if($action == 'store')
     <form method="POST" class="form-horizontal" action="{{ route('job_position_profile.store') }}" enctype="multipart/form-data"/>
         @csrf
