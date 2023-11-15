@@ -29,12 +29,13 @@
                 </button>
             </div>
         </div>
+        @if($purchaseOrder)
         <div class="col-md-3 text-center">
             <b>Formulario de Requerimiento</b><br>
-            @if ($requestForm)
-                <a href="{{ route('request_forms.show', $requestForm->id) }}"
+            @if ($purchaseOrder->requestForm)
+                <a href="{{ route('request_forms.show', $purchaseOrder->requestForm->id) }}"
                     target="_blank">
-                    {{ $requestForm->folio }}
+                    {{ $purchaseOrder->requestForm->folio }}
                 </a>
             @else
                 <span class="text-danger">No se encuentra esta Orden de Compra registrada en Abastecimiento</span>
@@ -61,6 +62,12 @@
                 @endforeach
             </ul>
         </div>
+        @elseif(is_null($purchaseOrder))
+        <div class="col-md-3 text-center">
+            <br>
+            <span class="text-danger">No se encontró la orden de compra</span>
+        </div>
+        @endif
 
     </div>
 
@@ -216,20 +223,24 @@
                     <tr class="table-secondary ">
                         <td class="text-center">
                             {{ $item->CodigoCategoria }}
-                            <button class="btn btn-sm btn-primary">
-                                <i class="bi bi-plus"></i>
-                            </button>
                         </td>
                         <td>{{ $item->Producto }}</td>
                         <td style="text-align: right;">
                             {{ $item->Cantidad }} {{ $item->Unidad }}
-                            <select name=""
-                                id=""
-                                class="form-select">
-                                @for ($i = 1; $i <= $item->Cantidad; $i++)
-                                    <option>{{ $i }}</option>
-                                @endfor
-                            </select>
+                            <div class="input-group">
+
+                                <select name=""
+                                    id=""
+                                    class="form-select">
+                                    <option value=""></option>
+                                    @for ($i = 1; $i <= $item->Cantidad; $i++)
+                                        <option>{{ $i }}</option>
+                                    @endfor
+                                </select>
+                                <button class="btn btn-sm btn-primary form-control">
+                                    <i class="bi bi-plus"></i>
+                                </button>
+                            </div>
                         </td>
                         <td>{{ $item->EspecificacionComprador }}</td>
                         <td>{{ $item->EspecificacionProveedor }}</td>
@@ -270,75 +281,140 @@
         </div>
 
         <h4 class="mb-2">Firmantes</h4>
-        <div class="row text-center">
-            <div class="col">
-                @livewire('search-select-user')
-                <div class="row mt-1 mb-2 g-2">
-                    <div class="col">
-                        <button class="btn btn-outline-primary form-control"
-                            wire:click="addApproval(0)"
-                            @disabled(is_null($signer_id))>
-                            <i class="bi bi-plus"></i>
-                            Agregar firmante
-                        </button>
-                    </div>
-                    <div class="col">
-                        <button class="btn btn-outline-success form-control"
-                            wire:click="addApproval(0,{{ auth()->id() }})">
-                            <i class="bi bi-plus"></i>
-                            Agregarme a mi
-                        </button>
-                    </div>
-                </div>
-
-                {{ array_key_exists(0, $this->approvals) ? $this->approvals[0]['sent_to_user_id'] : '' }}
-    
-                <button class="btn btn-sm btn-danger">
-                    <i class="bi bi-trash"></i>
-                </button>
+        <div class="row mb-3">
+            <div class="col-7">
+                <label for="forOrganizationalUnit">Establecimiento / Unidad Organizacional</label>
+                @livewire('select-organizational-unit', [
+                    'emitToListener' => 'ouSelected',
+                ])
+                <b>Autoridad: </b>
+                @if (is_null($authority))
+                    <span class="text-danger">La unidad organizacional no tiene una autoridad definida</span>
+                @else
+                    {{ $authority }}
+                @endif
+            </div>
+            <div class="col-1 text-center">
+                <br>
+                O
             </div>
             <div class="col">
+                <label for="forUsers">Usuario</label>
                 @livewire('search-select-user')
-                <div class="row mt-1 mb-2 g-2">
-                    <div class="col">
-                        <button class="btn btn-outline-primary form-control"
-                            wire:click="addApproval(1)"
-                            @disabled(is_null($signer_id))>
-                            <i class="bi bi-plus"></i>
-                            Agregar firmante
-                        </button>
-                    </div>
-                    <div class="col">
-                        <button class="btn btn-outline-success form-control"
-                            wire:click="addApproval(1,{{ auth()->id() }})">
-                            <i class="bi bi-plus"></i>
-                            Agregarme a mi
-                        </button>
-                    </div>
-                </div>
-
-
-            </div>
-            <div class="col">
-                @livewire('search-select-user')
-                <div class="row mt-1 mb-2 g-2">
-                    <div class="col">
-                        <button class="btn btn-outline-primary form-control">
-                            <i class="bi bi-plus"></i>
-                            Agregar firmante
-                        </button>
-                    </div>
-                    <div class="col">
-                        <button class="btn btn-outline-success form-control">
-                            <i class="bi bi-plus"></i>
-                            Agregarme a mi
-                        </button>
-                    </div>
-                </div>
-
-
             </div>
         </div>
+        <div class="row text-center">
+            <div class="col">
+                <b>Columna Izquierda <span class="text-danger">☭</span></b>
+                <div class="row mt-1 mb-2 g-2">
+                    <div class="col">
+                        <button class="btn btn-primary form-control"
+                            wire:click="addApproval('left')"
+                            @disabled(is_null($signer_id) and is_null($signer_ou_id))>
+                            <i class="bi bi-plus"></i>
+                            Agregar firmante
+                        </button>
+                    </div>
+                    <div class="col">
+                        <button class="btn btn-success form-control"
+                            wire:click="addApproval('left',{{ auth()->id() }})">
+                            <i class="bi bi-plus"></i>
+                            Agregarme a mi
+                        </button>
+                    </div>
+                </div>
+
+                <div style="height: 40px">
+                    @if (array_key_exists('left', $this->approvals))
+                        {{ $this->approvals['left']['signerShortName'] }}
+                        @if (array_key_exists('sent_to_ou_id', $approvals['left']))
+                            <i class="fas fa-chess-king"></i>
+                        @else
+                            <i class="fas fa-chess-pawn"></i>
+                        @endif
+                        <button class="btn btn-sm btn-danger"
+                            wire:click="removeApproval('left')">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    @endif
+                </div>
+
+            </div>
+            <div class="col">
+                <b>Columna Central</b>
+                <div class="row mt-1 mb-2 g-2">
+                    <div class="col">
+                        <button class="btn btn-primary form-control"
+                            wire:click="addApproval('center')"
+                            @disabled(is_null($signer_id) and is_null($signer_ou_id))>
+                            <i class="bi bi-plus"></i>
+                            Agregar firmante
+                        </button>
+                    </div>
+                    <div class="col">
+                        <button class="btn btn-success form-control"
+                            wire:click="addApproval('center',{{ auth()->id() }})">
+                            <i class="bi bi-plus"></i>
+                            Agregarme a mi
+                        </button>
+                    </div>
+                </div>
+
+                <div style="height: 40px">
+                    @if (array_key_exists('center', $this->approvals))
+                        {{ $this->approvals['center']['signerShortName'] }}
+                        @if (array_key_exists('sent_to_ou_id', $approvals['center']))
+                            <i class="fas fa-chess-king"></i>
+                        @else
+                            <i class="fas fa-chess-pawn"></i>
+                        @endif
+                        <button class="btn btn-sm btn-danger"
+                            wire:click="removeApproval('center')">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    @endif
+                </div>
+            </div>
+
+
+            <div class="col">
+                <b>Columna Derecha</b>
+                <div class="row mt-1 mb-2 g-2">
+                    <div class="col">
+                        <button class="btn btn-primary form-control"
+                            wire:click="addApproval('right')"
+                            @disabled(is_null($signer_id) and is_null($signer_ou_id))>
+                            <i class="bi bi-plus"></i>
+                            Agregar firmante
+                        </button>
+                    </div>
+                    <div class="col">
+                        <button class="btn btn-success form-control"
+                            wire:click="addApproval('right',{{ auth()->id() }})">
+                            <i class="bi bi-plus"></i>
+                            Agregarme a mi
+                        </button>
+                    </div>
+                </div>
+
+                <div style="height: 40px">
+                    @if (array_key_exists('right', $this->approvals))
+                        {{ $this->approvals['right']['signerShortName'] }}
+                        @if (array_key_exists('sent_to_ou_id', $approvals['right']))
+                            <i class="fas fa-chess-king"></i>
+                        @else
+                            <i class="fas fa-chess-pawn"></i>
+                        @endif
+                        <button class="btn btn-sm btn-danger"
+                            wire:click="removeApproval('right')">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    @endif
+                </div>
+            </div>
+
+        </div>
+
 
 
         <div class="row">
@@ -382,7 +458,7 @@
                         </th>
                         <td>
                             @if ($reception->date)
-                                {{ $reception->date }}
+                                {{ $reception->date?->format('d-m-Y') }}
                             @else
                                 <span class="text-danger">Falta la fecha</span>
                             @endif
@@ -394,9 +470,52 @@
 
         <br>
 
-        <h3 class="text-center">Acta de recepción conforme</h3>
+        <h3 class="text-center mb-3">Acta de recepción conforme</h3>
 
-        <p style="white-space: pre-wrap;">{{ $reception->header }}</p>
+        <p style="white-space: pre-wrap;">{{ $reception->header_notes }}</p>
+
+        <table class="table table-sm table-bordered">
+            <tr>
+                <th>
+                    Orden de Compra
+                </th>
+                <td>
+                    {{ $reception->purchase_order }}
+                </td>
+                <th>
+                    Proveedor
+                </th>
+                <td>
+                    {{ $purchaseOrder->json->Listado[0]->Proveedor->Nombre }}
+                </td>
+                <th>
+                    RUT Proveedor
+                </th>
+                <td>
+                    {{ $purchaseOrder->json->Listado[0]->Proveedor->RutSucursal }}
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    N° Documento
+                </th>
+                <td>
+                    {{ $reception->doc_number }}
+                </td>
+                <th>
+                    Tipo de documento
+                </th>
+                <td>
+                    {{ $reception->doc_type }}
+                </td>
+                <th>
+                    Fecha Emisón:
+                </th>
+                <td>
+                    {{ $reception->doc_date?->format('d-m-Y') }}
+                </td>
+            </tr>
+        </table>
 
         <table class="table table-sm table-bordered mb-3">
             <thead>
@@ -427,22 +546,29 @@
             </tbody>
         </table>
 
-        <p style="white-space: pre-wrap;">{{ $reception->observation }}</p>
+        <p style="white-space: pre-wrap;">{{ $reception->footer_notes }}</p>
         <br>
         <br>
         <br>
 
         <div class="row text-center mt-3">
             <div class="col">
-                <b>{{ auth()->user()->shortName }}</b><br>
-                {{ auth()->user()->organizationalUnit->name }}<br>
-                {{ auth()->user()->organizationalUnit->establishment->name }}<br>
+                @if (array_key_exists('left', $approvals))
+                    <b>{{ $this->approvals['left']['signerShortName'] }}</b><br>
+                    {{ auth()->user()->organizationalUnit->establishment->name }}<br>
+                @endif
             </div>
             <div class="col">
-
+                @if (array_key_exists('center', $approvals))
+                    <b>{{ $this->approvals['center']['signerShortName'] }}</b><br>
+                    {{ auth()->user()->organizationalUnit->establishment->name }}<br>
+                @endif
             </div>
             <div class="col">
-
+                @if (array_key_exists('right', $approvals))
+                    <b>{{ $approvals['right']['signerShortName'] }}</b><br>
+                    {{ auth()->user()->organizationalUnit->establishment->name }}<br>
+                @endif
             </div>
         </div>
 
