@@ -6,12 +6,22 @@ use Livewire\Component;
 
 use App\Models\JobPositionProfiles\JobPositionProfile;
 use Illuminate\Support\Facades\Auth;
+use Livewire\WithPagination;
 
 use App\Rrhh\Authority;
+use App\Models\Parameters\Estament;
 
 class SearchJobPositionProfiles extends Component
 {
+    use WithPagination;
+    protected $paginationTheme = 'bootstrap';
+
     public $index;
+
+    public $selectedStatus      = null;
+    public $selectedEstament    = null;
+
+    protected $queryString = ['selectedStatus', 'selectedEstament'];
 
     public function render()
     {
@@ -64,7 +74,7 @@ class SearchJobPositionProfiles extends Component
                             ->OrWhere('status', 'rejected');
                         });
                     })
-                    ->paginate(50)
+                    ->paginate(50),
             ]);
         }
 
@@ -74,8 +84,20 @@ class SearchJobPositionProfiles extends Component
                     with('organizationalUnit', 'jobPositionProfileSigns', 'jobPositionProfileSigns.organizationalUnit',
                     'user', 'estament', 'area', 'contractualCondition')
                     ->latest()
-                    ->paginate(50)
+                    ->search($this->selectedStatus,
+                    $this->selectedEstament)
+                    ->paginate(50),
+                'estaments' => Estament::orderBy('id')->get()
             ]);
         }
+    }
+
+    /* Permite alamcenar parámetros de búsqueda con paginación */
+    public function updatingSelectedStatus(){
+        $this->resetPage();
+    }
+
+    public function updatingSelectedEstament(){
+        $this->resetPage();
     }
 }

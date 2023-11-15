@@ -140,6 +140,22 @@ class JobPositionProfile extends Model implements Auditable
             break;
         }
     }
+
+    public function scopeSearch($query, $status_search, $estament_search){
+        if ($status_search OR $estament_search) {
+            if($status_search != ''){
+                $query->where(function($q) use($status_search){
+                    $q->where('status', $status_search);
+                });
+            }
+            if($estament_search != ''){
+                $query->where(function($q) use($estament_search){
+                    $q->where('estament_id', $estament_search);
+                });
+            }
+        }
+    }
+
     /**
      * The attributes that should be hidden for arrays.
      *
