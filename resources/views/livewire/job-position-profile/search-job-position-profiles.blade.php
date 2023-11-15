@@ -28,6 +28,12 @@
                         @endforeach
                 </select>
             </fieldset>
+
+            <fieldset class="form-group col-12 col-md-1">
+                <label for="for_name">ID</label>
+                <input class="form-control" type="number" name="id_search" autocomplete="off" 
+                    placeholder="001" wire:model.debounce.500ms="selectedId">
+            </fieldset>
         </div>
 
     </div>
@@ -213,7 +219,8 @@
                     <tr>
                     @endforeach
                 </tbody>
-            </table>    
+            </table>
+            {{ $jobPositionProfiles->links() }}    
         </div>
     @else
         @if($index == 'to_sign')
@@ -349,7 +356,8 @@
                     <tr>
                     @endforeach
                 </tbody>
-            </table>    
+            </table>
+            {{-- $jobPositionProfiles->links() --}}      
         </div>
         @endif
         @endif
