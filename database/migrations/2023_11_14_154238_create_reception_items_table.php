@@ -15,20 +15,23 @@ return new class extends Migration
     {
         Schema::create('fin_reception_items', function (Blueprint $table) {
             $table->id();
-
-            $table->string('CodigoCategoria');
-            $table->string('Producto');
-            $table->string('Cantidad');
-            $table->string('Unidad');
-            $table->string('EspecificacionComprador');
-            $table->string('EspecificacionProveedor');
-            $table->string('PrecioNeto');
-            $table->string('TotalDescuentos');
-            $table->string('TotalCargos');
-            $table->string('Total');
-
             $table->foreignId('reception_id')->constrained('fin_receptions');
+
+            $table->smallInteger('item_position')->nullable();
+
+            $table->string('CodigoCategoria')->nullable();
+            $table->string('Producto')->nullable();
+            $table->string('Cantidad')->nullable();
+            $table->string('Unidad')->nullable();
+            $table->string('EspecificacionComprador')->nullable();
+            $table->string('EspecificacionProveedor')->nullable();
+            $table->string('PrecioNeto')->nullable();
+            $table->string('TotalDescuentos')->nullable();
+            $table->string('TotalCargos')->nullable();
+            $table->string('Total')->nullable();
+
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

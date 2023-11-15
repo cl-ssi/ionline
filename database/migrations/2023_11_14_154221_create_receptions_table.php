@@ -20,25 +20,25 @@ return new class extends Migration
             $table->foreignId('reception_type_id')->constrained('fin_reception_types');
 
             $table->string('purchase_order')->nullable();
-            $table->text('header_observation')->nullable();
-
+            
             $table->boolean('partial_reception')->nullable(); // Si se selecciono completa o parcial
             $table->boolean('order_completed')->nullable(); // Marcar orden completada
-
             $table->boolean('cenabast')->nullable();
+            
+            $table->text('header_notes')->nullable();
+            $table->text('footer_notes')->nullable();
 
             $table->string('doc_type')->nullable();
             $table->string('doc_number')->nullable();
             $table->string('doc_date')->nullable();
             $table->unsignedInteger('total')->nullable();
-            
-            $table->text('footer_observation')->nullable();
-            
+
             $table->foreignId('establishment_id')->constrained('establishments');
             $table->foreignId('creator_id')->constrained('users');
             $table->foreignId('creator_ou_id')->constrained('organizational_units');
 
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
