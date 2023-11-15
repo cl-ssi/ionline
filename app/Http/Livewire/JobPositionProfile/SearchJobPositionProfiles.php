@@ -34,7 +34,8 @@ class SearchJobPositionProfiles extends Component
                     ->Where('user_creator_id', Auth::user()->id)
                     ->orWhere('jpp_ou_id', Auth::user()->organizationalUnit->id)
                     ->orWhere('ou_creator_id', Auth::user()->organizationalUnit->id)
-                    ->paginate(50)
+                    ->paginate(50),
+                'estaments' => Estament::orderBy('id')->get()
             ]);
         }
 
@@ -43,7 +44,8 @@ class SearchJobPositionProfiles extends Component
                 'jobPositionProfiles' => JobPositionProfile::
                     latest()
                     ->Where('status', 'review')
-                    ->paginate(50)
+                    ->paginate(50),
+                'estaments' => Estament::orderBy('id')->get()
             ]);
         }
 
@@ -75,6 +77,7 @@ class SearchJobPositionProfiles extends Component
                         });
                     })
                     ->paginate(50),
+                'estaments' => Estament::orderBy('id')->get()
             ]);
         }
 
