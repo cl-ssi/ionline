@@ -62,7 +62,7 @@
             <!-- Permiso para Activar o Desactivar programación númerica -->
             @if($canStatus)
                 <td >
-                    <button class="btn btb-flat  btn-light" data-toggle="modal"
+                    {{--<button class="btn btb-flat  btn-light" data-toggle="modal"
                         data-target="#updateModalRect"
                         data-programming_id="{{ $programming->id }}"
                         data-status="{{ $programming->status }}"
@@ -73,7 +73,8 @@
                             <i class="fas fa-circle text-danger "></i>
                         @endif
                     
-                    </button>
+                    </button>--}}
+                    @livewire('programmings.programming-status-toggle', ['programming' => $programming], key($programming->id))
                 </td>
             @endif
             <!-- Permiso para editar programación númerica -->
