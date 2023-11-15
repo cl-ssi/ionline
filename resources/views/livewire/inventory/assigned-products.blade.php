@@ -75,15 +75,12 @@
                         </small>
                     </td>
                     <td>
-                        {{ optional($inventory->unspscProduct)->name }}
-                        <br>
-                        <small>
                             @if($inventory->product)
                                 {{ $inventory->product->name }}
                             @else
                                 {{ $inventory->description }}
                             @endif
-                        </small>
+                        
                         <br>
 
                         @if($inventory->user_using_id == auth()->user()->id)
