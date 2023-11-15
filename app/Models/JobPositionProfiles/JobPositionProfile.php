@@ -141,8 +141,8 @@ class JobPositionProfile extends Model implements Auditable
         }
     }
 
-    public function scopeSearch($query, $status_search, $estament_search){
-        if ($status_search OR $estament_search) {
+    public function scopeSearch($query, $status_search, $estament_search, $id_search){
+        if ($status_search OR $estament_search OR $id_search) {
             if($status_search != ''){
                 $query->where(function($q) use($status_search){
                     $q->where('status', $status_search);
@@ -151,6 +151,11 @@ class JobPositionProfile extends Model implements Auditable
             if($estament_search != ''){
                 $query->where(function($q) use($estament_search){
                     $q->where('estament_id', $estament_search);
+                });
+            }
+            if($id_search != ''){
+                $query->where(function($q) use($id_search){
+                    $q->where('id', $id_search);
                 });
             }
         }

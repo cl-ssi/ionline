@@ -20,8 +20,9 @@ class SearchJobPositionProfiles extends Component
 
     public $selectedStatus      = null;
     public $selectedEstament    = null;
+    public $selectedId          = null;  
 
-    protected $queryString = ['selectedStatus', 'selectedEstament'];
+    protected $queryString = ['selectedStatus', 'selectedEstament', 'selectedId'];
 
     public function render()
     {
@@ -34,6 +35,8 @@ class SearchJobPositionProfiles extends Component
                     ->Where('user_creator_id', Auth::user()->id)
                     ->orWhere('jpp_ou_id', Auth::user()->organizationalUnit->id)
                     ->orWhere('ou_creator_id', Auth::user()->organizationalUnit->id)
+                    ->search($this->selectedStatus,
+                        $this->selectedEstament)
                     ->paginate(50),
                 'estaments' => Estament::orderBy('id')->get()
             ]);
@@ -88,7 +91,8 @@ class SearchJobPositionProfiles extends Component
                     'user', 'estament', 'area', 'contractualCondition')
                     ->latest()
                     ->search($this->selectedStatus,
-                    $this->selectedEstament)
+                        $this->selectedEstament,
+                        $this->selectedId)
                     ->paginate(50),
                 'estaments' => Estament::orderBy('id')->get()
             ]);
@@ -101,6 +105,10 @@ class SearchJobPositionProfiles extends Component
     }
 
     public function updatingSelectedEstament(){
+        $this->resetPage();
+    }
+
+    public function updatingSelectedId(){
         $this->resetPage();
     }
 }
