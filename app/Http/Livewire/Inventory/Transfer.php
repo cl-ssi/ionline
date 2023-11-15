@@ -84,6 +84,7 @@ class Transfer extends Component
         $place = Place::find($dataValidated['place_id']);
         $dataValidated['user_responsible_ou_id'] = optional($userResponsible->organizationalUnit)->id;
         $dataValidated['user_sender_id'] = auth()->id();
+        $dataValidated['observations'] = 'movimiento por traspaso masivo de inventario';
         foreach($this->has_inventories as $inventory)
         {
             if($userUsing)
