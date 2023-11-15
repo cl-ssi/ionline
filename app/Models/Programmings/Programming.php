@@ -11,7 +11,7 @@ class Programming extends Model implements Auditable
     use \OwenIt\Auditing\Auditable;
     protected $table = 'pro_programmings';
     protected $fillable = [
-        'id','year', 'description', 'access'
+        'id','year', 'description', 'access', 'status'
     ];
 
     public function user() {
