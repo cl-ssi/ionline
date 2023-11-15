@@ -260,10 +260,10 @@ class RequestFormController extends Controller {
             return redirect()->back();
         }
 
-        if(!$requestForm->canEdit()){
-            session()->flash('danger', 'Estimado Usuario/a: no se cumplen los criterios para editar formulario N° '.$requestForm->folio);
-            return redirect()->back();
-        }
+        // if(!$requestForm->canEdit()){
+        //     session()->flash('danger', 'Estimado Usuario/a: no se cumplen los criterios para editar formulario N° '.$requestForm->folio);
+        //     return redirect()->back();
+        // }
         
         return  view('request_form.create', compact('requestForm'));
     }
