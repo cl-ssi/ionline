@@ -1,9 +1,4 @@
 <div>
-    <style>
-        .parrafo {
-            white-space: pre-wrap;
-        }
-    </style>
     <h3 class="mb-3">Crear un acta de recepción conforme</h3>
 
     <ul class="nav nav-tabs mb-3">
@@ -27,7 +22,7 @@
                     placeholder="Orden de compra"
                     aria-label="Orden de compra"
                     aria-describedby="purchase-order"
-                    wire:model.debounce="purchaseOrderCode">
+                    wire:model.debounce="reception.purchase_order">
                 <button class="btn btn-outline-primary"
                     wire:click="getPurchaseOrder">
                     <i class="bi bi-search"></i>
@@ -73,31 +68,51 @@
     @if ($purchaseOrder)
 
         <h4>Recepción</h4>
+        <div class="row mb-3 g-2">
+            <div class="col-4">
+                <div class="form-group">
+                    <label for="form-reception-typeto ">Tipo de acta</label>
+                    <select class="form-select"
+                        wire:model="reception.reception_type_id">
+                        <option value=""></option>
+                        @foreach ($types as $id => $type)
+                            <option value="{{ $id }}">{{ $type }}</option>
+                        @endforeach
+                    </select>
+                    @error('reception.reception_type_id')
+                        <span class="text-danger">{{ $message }}</span>
+                    @enderror
+                </div>
+            </div>
+        </div>
         <div class="row mb-3">
             <div class="col-md-12">
                 <div class="form-check form-check-inline">
                     <input class="form-check-input"
                         type="radio"
-                        name="inlineRadioOptions"
-                        id="inlineRadio1"
-                        value="option1">
+                        wire:model.defer="reception.partial_reception"
+                        id="partial_reception_partial"
+                        value="1">
                     <label class="form-check-label"
-                        for="inlineRadio1">Recepcionar la OC Completa</label>
+                        for="for-parcial">Recepcionar la OC Parcial</label>
+                    <div class="form-text">&nbsp;</div>
                 </div>
                 <div class="form-check form-check-inline">
                     <input class="form-check-input"
                         type="radio"
-                        name="inlineRadioOptions"
-                        id="inlineRadio2"
-                        value="option2">
+                        wire:model.defer="reception.partial_reception"
+                        id="partial_reception_complete"
+                        value="0">
                     <label class="form-check-label"
-                        for="inlineRadio2">Recepcionar la OC Parcial</label>
+                        for="for-completa">Recepcionar la OC Completa</label>
+                    <div class="form-text">&nbsp;</div>
                 </div>
-                <div class="form-check form-switch form-check-inline float-end">
+                <div class="form-check form-switch form-check-inline">
                     <input class="form-check-input"
                         type="checkbox"
                         role="switch"
-                        id="flexSwitchCheckDefault">
+                        id="for-order_completed"
+                        wire:model.defer="reception.order_completed">
                     <label class="form-check-label"
                         for="flexSwitchCheckDefault">Marcar la Orden de Compra como Completada</label>
                     <div class="form-text">No se recibirán más items de esta Orden de Compra</div>
@@ -106,10 +121,12 @@
                     <input class="form-check-input"
                         type="checkbox"
                         role="switch"
-                        id="flexSwitchCheckDefault">
+                        wire:model.defer="reception.cenabast"
+                        id="for-cenabaste">
                     <label class="form-check-label"
                         for="flexSwitchCheckDefault">Cenabast</label>
                 </div>
+
             </div>
         </div>
 
@@ -129,6 +146,9 @@
                     <input type="date"
                         class="form-control"
                         wire:model="reception.date">
+                    @error('reception.date')
+                        <span class="text-danger">{{ $message }}</span>
+                    @enderror
                 </div>
             </div>
             <div class="col-md-2 offset-md-2">
@@ -138,11 +158,11 @@
                         id="document_type"
                         class="form-select"
                         wire:model="reception.doc_type">
-                        <option value=""></option>
-                        <option value="">Guía de despacho</option>
-                        <option value="">Factura</option>
-                        <option value="">Boleta</option>
-                        <option value="">Boleta Honorarios</option>
+                        <option></option>
+                        <option>Guía de despacho</option>
+                        <option>Factura</option>
+                        <option>Boleta</option>
+                        <option>Boleta Honorarios</option>
                     </select>
                 </div>
             </div>
@@ -168,11 +188,11 @@
             <div class="col-md-12">
                 <div class="form-group">
                     <Label>Encabezado</Label>
-                    <textarea name="""
-                        id=""
+                    <textarea name=""
+                        id="for-header_notes"
                         rows="5"
                         class="form-control"
-                        wire:model.debounse.500ms="reception.header"></textarea>
+                        wire:model.debounse.500ms="reception.header_notes"></textarea>
                 </div>
             </div>
         </div>
@@ -241,10 +261,10 @@
                 <div class="form-group">
                     <Label>Observaciones</Label>
                     <textarea name=""
-                        id=""
+                        id="for-footer_notes"
                         rows="5"
                         class="form-control"
-                        wire:model.debounce.500ms="reception.observation"></textarea>
+                        wire:model.debounce.500ms="reception.footer_notes"></textarea>
                 </div>
             </div>
         </div>
@@ -255,20 +275,24 @@
                 @livewire('search-select-user')
                 <div class="row mt-1 mb-2 g-2">
                     <div class="col">
-                        <button class="btn btn-outline-primary form-control">
+                        <button class="btn btn-outline-primary form-control"
+                            wire:click="addApproval(0)"
+                            @disabled(is_null($signer_id))>
                             <i class="bi bi-plus"></i>
                             Agregar firmante
                         </button>
                     </div>
                     <div class="col">
-                        <button class="btn btn-outline-success form-control">
+                        <button class="btn btn-outline-success form-control"
+                            wire:click="addApproval(0,{{ auth()->id() }})">
                             <i class="bi bi-plus"></i>
                             Agregarme a mi
                         </button>
                     </div>
                 </div>
 
-                {{ auth()->user()->shortName }}
+                {{ array_key_exists(0, $this->approvals) ? $this->approvals[0]['sent_to_user_id'] : '' }}
+    
                 <button class="btn btn-sm btn-danger">
                     <i class="bi bi-trash"></i>
                 </button>
@@ -277,13 +301,16 @@
                 @livewire('search-select-user')
                 <div class="row mt-1 mb-2 g-2">
                     <div class="col">
-                        <button class="btn btn-outline-primary form-control">
+                        <button class="btn btn-outline-primary form-control"
+                            wire:click="addApproval(1)"
+                            @disabled(is_null($signer_id))>
                             <i class="bi bi-plus"></i>
                             Agregar firmante
                         </button>
                     </div>
                     <div class="col">
-                        <button class="btn btn-outline-success form-control">
+                        <button class="btn btn-outline-success form-control"
+                            wire:click="addApproval(1,{{ auth()->id() }})">
                             <i class="bi bi-plus"></i>
                             Agregarme a mi
                         </button>
@@ -318,7 +345,10 @@
             <div class="col-12">
                 <div class="form-group">
                     <label for="">Adjuntar otros documentos</label>
-                    <input type="file" name="" id="" class="form-control">
+                    <input type="file"
+                        name=""
+                        id=""
+                        class="form-control">
                 </div>
             </div>
         </div>
@@ -418,7 +448,8 @@
 
         <div class="row mt-3">
             <div class="col-12 text-end">
-                <button class="btn btn-primary">Crear</button>
+                <button class="btn btn-primary"
+                    wire:click="save">Crear</button>
             </div>
         </div>
     @endif
