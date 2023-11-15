@@ -10,6 +10,8 @@ use Livewire\WithPagination;
 
 use App\Rrhh\Authority;
 use App\Models\Parameters\Estament;
+use App\Rrhh\OrganizationalUnit;
+use App\Models\Parameters\Parameter;
 
 class SearchJobPositionProfiles extends Component
 {
@@ -21,8 +23,11 @@ class SearchJobPositionProfiles extends Component
     public $selectedStatus      = null;
     public $selectedEstament    = null;
     public $selectedId          = null;  
+    public $selectedUserCreator = null;
+    public $ou_dependents_array = [];
+    public $selectedSub = null;
 
-    protected $queryString = ['selectedStatus', 'selectedEstament', 'selectedId'];
+    protected $queryString = ['selectedStatus', 'selectedEstament', 'selectedId', 'selectedUserCreator', 'selectedSub'];
 
     public function render()
     {
@@ -36,7 +41,10 @@ class SearchJobPositionProfiles extends Component
                     ->orWhere('jpp_ou_id', Auth::user()->organizationalUnit->id)
                     ->orWhere('ou_creator_id', Auth::user()->organizationalUnit->id)
                     ->search($this->selectedStatus,
-                        $this->selectedEstament)
+                        $this->selectedEstament,
+                        $this->selectedId,
+                        $this->selectedUserCreator,
+                        $this->ou_dependents_array)
                     ->paginate(50),
                 'estaments' => Estament::orderBy('id')->get()
             ]);
@@ -85,6 +93,11 @@ class SearchJobPositionProfiles extends Component
         }
 
         if($this->index == 'all'){
+            $subParams = Parameter::select('value')
+                ->whereIn('parameter', ['SubRRHH', 'SDASSI', 'SubSDGA'])
+                ->get()
+                ->toArray();
+
             return view('livewire.job-position-profile.search-job-position-profiles', [
                 'jobPositionProfiles' => JobPositionProfile::
                     with('organizationalUnit', 'jobPositionProfileSigns', 'jobPositionProfileSigns.organizationalUnit',
@@ -92,9 +105,12 @@ class SearchJobPositionProfiles extends Component
                     ->latest()
                     ->search($this->selectedStatus,
                         $this->selectedEstament,
-                        $this->selectedId)
+                        $this->selectedId,
+                        $this->selectedUserCreator,
+                        $this->ou_dependents_array)
                     ->paginate(50),
-                'estaments' => Estament::orderBy('id')->get()
+                'estaments' => Estament::orderBy('id')->get(),
+                'subs' => OrganizationalUnit::whereIn('id', $subParams)->get()
             ]);
         }
     }
@@ -110,5 +126,37 @@ class SearchJobPositionProfiles extends Component
 
     public function updatingSelectedId(){
         $this->resetPage();
+    }
+
+    public function updatingSelectedUserCreator(){
+        $this->resetPage();
+    }
+
+    public function updatingSelectedSub(){
+        $this->resetPage();
+    }
+
+    public function updatedselectedSub($sub_id)
+    {
+        $this->ou_dependents_array = [];
+        $ou_dependents = collect(new OrganizationalUnit);
+
+        $ou_dependents = OrganizationalUnit::
+            where('organizational_unit_id', $sub_id)
+            ->get();
+            
+        foreach($ou_dependents as $ou_dependent){
+            $ou_dependent_childs = OrganizationalUnit::
+                where('organizational_unit_id', $ou_dependent->id)
+                ->get();
+            
+            foreach($ou_dependent_childs as $ou_dependent_child){
+                $ou_dependents->push($ou_dependent_child);
+            }
+        }
+        
+        foreach($ou_dependents as $ou_dependent){
+            $this->ou_dependents_array[] = $ou_dependent->id;
+        }
     }
 }

@@ -141,8 +141,8 @@ class JobPositionProfile extends Model implements Auditable
         }
     }
 
-    public function scopeSearch($query, $status_search, $estament_search, $id_search){
-        if ($status_search OR $estament_search OR $id_search) {
+    public function scopeSearch($query, $status_search, $estament_search, $id_search, $user_creator_search, $sub_search){
+        if ($status_search OR $estament_search OR $id_search OR $user_creator_search OR $sub_search) {
             if($status_search != ''){
                 $query->where(function($q) use($status_search){
                     $q->where('status', $status_search);
@@ -156,6 +156,19 @@ class JobPositionProfile extends Model implements Auditable
             if($id_search != ''){
                 $query->where(function($q) use($id_search){
                     $q->where('id', $id_search);
+                });
+            }
+            $array_user_creator_search = explode(' ', $user_creator_search);
+            foreach ($array_user_creator_search as $word) {
+                $query->whereHas('user', function ($query) use ($word) {
+                    $query->where('name', 'LIKE', '%' . $word . '%')
+                        ->orwhere('fathers_family', 'LIKE', '%' . $word . '%')
+                        ->orwhere('mothers_family', 'LIKE', '%' . $word . '%');
+                });
+            }
+            if(!empty($sub_search)){
+                $query->where(function($q) use($sub_search){
+                    $q->whereIn('jpp_ou_id', $sub_search);
                 });
             }
         }
