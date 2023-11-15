@@ -4,7 +4,30 @@
         <h5 class="mb-3"><i class="fas fa-search"></i> Buscar:</h5>
         
         <div class="form-row">
+            <fieldset class="form-group col-12 col-md-2">
+                <label for="for_profile_search">Estado</label>
+                <select name="status_search" class="form-control" wire:model.debounce.500ms="selectedStatus">
+                    <option value="">Seleccione...</option>
+                    <option value="saved">Guardado</option>
+                    <option value="sent">Enviado</option>
+                    <option value="review">En revisión</option>
+                    <option value="pending">Pendiente</option>
+                    <option value="complete">Finalizado</option>
+                    <option value="rejected">Rechazado</option>
+                </select>
+            </fieldset>
 
+            <fieldset class="form-group col-12 col-md-2">
+                <label for="for_profile_search">Estado</label>
+                <select name="estament_search" id="for_estament_id" class="form-control" wire:model.debounce.500ms="selectedEstament" required>
+                    <option value="">Seleccione...</option>
+                        @foreach($estaments as $estament) 
+                            <option value="{{ $estament->id }}">
+                                {{ $estament->name }}
+                            </option>
+                        @endforeach
+                </select>
+            </fieldset>
         </div>
 
     </div>
