@@ -17,5 +17,16 @@
         >
             <i class="fas fa-boxes"></i> Mi inventario
         </a>
+    </li>    
+
+    <li class="nav-item">
+        <a
+            class="nav-link {{ active(['inventories.assigned-products', 'inventories.create-transfer', 'inventories.register']) }}"
+            aria-current="page"
+            target="_blank"
+            href="{{ route('parameters.places.index', auth()->user()->organizationalUnit->establishment) }}"
+        >
+            <i class="fas fa-fw fa-map-marker-alt"></i> Lugares (oficinas)
+        </a>
     </li>
 </ul>
