@@ -11,6 +11,7 @@ class EmployeeData extends Component
     public $user_id = 0;
     public $dv;
     public $email;
+    public $message;
 
     // public function mount(){
     //     dd($this->user_id);
@@ -29,6 +30,7 @@ class EmployeeData extends Component
         $communes = ClCommune::orderBy('name', 'ASC')->get();
         $user = new User();
 
+        $this->message = "";
         if ($this->user_id > 3000000) {
           $user = User::find($this->user_id);
           $this->emit('renderFromEmployeeData');
@@ -39,7 +41,7 @@ class EmployeeData extends Component
             if ($this->email != null) {
               $user = User::where('email',$this->email)->first();
               if ($user != null) {
-                dd("No es posible utilizar el coreo " . $this->email . ", ya está siendo utilizado por " . $user->getFullNameUpperAttribute());
+                $this->message = "No es posible utilizar el coreo " . $this->email . ", ya está siendo utilizado por " . $user->getFullNameUpperAttribute();
               }
             }
           }
