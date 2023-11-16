@@ -1,6 +1,7 @@
 <div>
     <h3 class="mb-3">Crear un acta de recepción conforme</h3>
 
+    <!-- MENU -->
     <ul class="nav nav-tabs mb-3">
         <li class="nav-item">
             <a class="nav-link {{ active('finance.receptions.create') }}"
@@ -17,6 +18,7 @@
         </li>
     </ul>
 
+    <!-- Orden de Compra -->
     <div class="row mb-3 g-2">
         <div class="col-md-3">
             <label for="reception-date">Orden de compra</label>
@@ -33,49 +35,57 @@
                 </button>
             </div>
         </div>
-        @if($purchaseOrder)
-        <div class="col-md-3 text-center">
-            <b>Formulario de Requerimiento</b><br>
-            @if ($purchaseOrder->requestForm)
-                <a href="{{ route('request_forms.show', $purchaseOrder->requestForm->id) }}"
-                    target="_blank">
-                    {{ $purchaseOrder->requestForm->folio }}
+        @if ($purchaseOrder)
+            <div class="col-md-2 text-center">
+                <b>Form. Requerimiento</b><br>
+                @if ($purchaseOrder->requestForm)
+                    <a href="{{ route('request_forms.show', $purchaseOrder->requestForm->id) }}"
+                        target="_blank">
+                        {{ $purchaseOrder->requestForm->folio }}
+                    </a>
+                @else
+                    <span class="text-danger">
+                        La Orden de Compra no está registrada
+                        <button class="btn btn-sm btn-danger">
+                            <i class="fas fa-biohazard"></i> Notificar a Abastecimiento
+                        </button>
+                    </span>
+                @endif
+            </div>
+            <div class="col-md-2 text-center">
+                <b>Orden de Compra</b><br>
+                <a target="_blank" href="{{ route('finance.purchase-orders.show', $purchaseOrder) }}">
+                    {{ $purchaseOrder->code }}
                 </a>
-            @else
-                <span class="text-danger">
-                    La Orden de Compra no está registrada 
-                    <button class="btn btn-sm btn-danger">
-                        <i class="fas fa-biohazard"></i> Notificar a Abastecimiento
-                    </button>
-                </span>
-            @endif
-        </div>
-        <div class="col-md-3 text-center">
-            <b>Actas creadas para esta OC</b><br>
-            <ul>
-                <li>
-                    <a href="#">Acta ID: 2123 fecha: 2023-11-01</a>
-                </li>
-                <li>
-                    <a href="#">Acta ID: 2234 fecha: 2023-11-02</a>
-                </li>
-            </ul>
-        </div>
-        <div class="col-md-3 text-center">
-            <b>Facturas</b><br>
-            <ul>
-                @foreach ($purchaseOrder->dtes as $dte)
+                <br>
+                {{ $purchaseOrder->json->Listado[0]->Estado }}
+            </div>
+            <div class="col-md-3 text-center">
+                <b>Actas creadas para esta OC</b><br>
+                <ul>
                     <li>
-                        <a href="#">{{ $dte->id }}</a>
+                        <a href="#">Acta ID: 2123 fecha: 2023-11-01</a>
                     </li>
-                @endforeach
-            </ul>
-        </div>
+                    <li>
+                        <a href="#">Acta ID: 2234 fecha: 2023-11-02</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-md-2 text-center">
+                <b>Facturas</b><br>
+                <ul>
+                    @foreach ($purchaseOrder->dtes as $dte)
+                        <li>
+                            <a href="#">{{ $dte->id }}</a>
+                        </li>
+                    @endforeach
+                </ul>
+            </div>
         @elseif(is_null($purchaseOrder))
-        <div class="col-md-3 text-center">
-            <br>
-            <span class="text-danger">No se encontró la orden de compra</span>
-        </div>
+            <div class="col-md-3 text-center">
+                <br>
+                <span class="text-danger">No se encontró la orden de compra</span>
+            </div>
         @endif
 
     </div>
@@ -216,6 +226,7 @@
             </div>
         </div>
 
+
         <table class="table table-bordered table-sm">
             <thead>
                 <tr>
@@ -231,7 +242,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($purchaseOrder->json->Listado[0]->Items->Listado as $item)
+                @foreach ($purchaseOrder->json->Listado[0]->Items->Listado as $key => $item)
                     <tr class="table-secondary ">
                         <td class="text-center">
                             {{ $item->CodigoCategoria }}
@@ -239,20 +250,17 @@
                         <td>{{ $item->Producto }}</td>
                         <td style="text-align: right;">
                             {{ $item->Cantidad }} {{ $item->Unidad }}
-                            <div class="input-group">
 
-                                <select name=""
-                                    id=""
-                                    class="form-select">
-                                    <option value=""></option>
-                                    @for ($i = 1; $i <= $item->Cantidad; $i++)
-                                        <option>{{ $i }}</option>
-                                    @endfor
-                                </select>
-                                <button class="btn btn-sm btn-primary form-control">
-                                    <i class="bi bi-plus"></i>
-                                </button>
-                            </div>
+                            <select name=""
+                                id="ct_{{ $key }}"
+                                class="form-select"
+                                wire:model="receptionItems.{{ $key }}.Cantidad"
+                                wire:change="calculateItemTotal({{ $key }})">
+                                <option value=""></option>
+                                @for ($i = 1; $i <= $item->Cantidad; $i++)
+                                    <option>{{ $i }}</option>
+                                @endfor
+                            </select>
                         </td>
                         <td>{{ $item->EspecificacionComprador }}</td>
                         <td>{{ $item->EspecificacionProveedor }}</td>
@@ -292,6 +300,7 @@
             </div>
         </div>
 
+        <!-- Firmantes -->
         <h4 class="mb-2">Firmantes</h4>
         <div class="row mb-3">
             <div class="col-7">
@@ -544,16 +553,28 @@
                 </tr>
             </thead>
             <tbody>
+                @foreach ($receptionItems as $item)
+                    @if ($item['Cantidad'])
+                        <tr>
+                            <td>{{ $item['CodigoCategoria'] }}</td>
+                            <td>{{ $item['Producto'] }}</td>
+                            <td>{{ $item['Cantidad'] }}</td>
+                            <td>{{ $item['EspecificacionComprador'] }}</td>
+                            <td>{{ $item['EspecificacionProveedor'] }}</td>
+                            <td style="text-align: right;">{{ money($item['PrecioNeto']) }}</td>
+                            <td style="text-align: right;">{{ money($item['TotalDescuentos']) }}</td>
+                            <td style="text-align: right;">{{ money($item['TotalCargos']) }}</td>
+                            <td style="text-align: right;">{{ money($item['Total']) }}</td>
+                        </tr>
+                    @endif
+                @endforeach
                 <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td colspan="9"
+                        class="text-end">
+                        <b>
+                            {{ money($reception->total) }}
+                        </b>
+                    </td>
                 </tr>
             </tbody>
         </table>

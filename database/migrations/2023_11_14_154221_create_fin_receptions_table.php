@@ -31,6 +31,12 @@ return new class extends Migration
             $table->string('doc_type')->nullable();
             $table->string('doc_number')->nullable();
             $table->string('doc_date')->nullable();
+
+            $table->unsignedInteger('neto')->nullable();
+            $table->unsignedInteger('descuentos')->nullable();
+            $table->unsignedInteger('cargos')->nullable();
+            $table->unsignedInteger('subtotal')->nullable();
+            $table->unsignedInteger('iva')->nullable();
             $table->unsignedInteger('total')->nullable();
 
             $table->foreignId('establishment_id')->constrained('establishments');

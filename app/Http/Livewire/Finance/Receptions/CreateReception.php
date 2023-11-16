@@ -14,7 +14,7 @@ use App\Models\Documents\Approval;
 
 class CreateReception extends Component
 {
-    // '1057448-598-SE23' '1272565-444-AG23'  1272565-737-SE23;
+    // 1057448-598-SE23  1272565-444-AG23 1272565-737-SE23;
     public $purchaseOrder = false;
     public $reception;
     public $receptionItems = [];
@@ -44,6 +44,11 @@ class CreateReception extends Component
         'reception.doc_type' => 'nullable',
         'reception.doc_number' => 'nullable',
         'reception.doc_date' => 'nullable|date_format:Y-m-d',
+        'reception.neto' => 'nullable',
+        'reception.descuentos' => 'nullable',
+        'reception.cargos' => 'nullable',
+        'reception.subtotal' => 'nullable',
+        'reception.iva' => 'nullable',
         'reception.total' => 'nullable',
         'reception.establishment_id' => 'nullable',
         'reception.creator_id' => 'nullable',
@@ -94,16 +99,42 @@ class CreateReception extends Component
         $status = MercadoPublico::getPurchaseOrderV2($this->reception->purchase_order);
 
         if($status === true) {
+            /**
+             * Limpiar las variables
+             */
+            $this->receptionItems = [];
+            $this->approvals = [];
+
             $this->purchaseOrder = PurchaseOrder::whereCode($this->reception->purchase_order)->first();
             foreach($this->purchaseOrder->json->Listado[0]->Items->Listado as $key => $item){
-                $this->receptionItems[$key] = ReceptionItem::make([]);
+                $this->receptionItems[$key] = ReceptionItem::make([
+                    'reception_id' => null,
+                    'item_position' => $key,
+                    'CodigoCategoria' => $item->CodigoCategoria,
+                    'Producto' => $item->Producto,
+                    'Cantidad' => null,
+                    'Unidad' => $item->Unidad,
+                    'EspecificacionComprador' => $item->EspecificacionComprador,
+                    'EspecificacionProveedor' => $item->EspecificacionProveedor,
+                    'PrecioNeto' => $item->PrecioNeto,
+                    'TotalDescuentos' => $item->TotalDescuentos,
+                    'TotalCargos' => $item->TotalCargos,
+                    'Total' => null,
+                ]);
             }
         }
         else {
             $this->purchaseOrder = null;
         }
+    }
 
-        //1272565-444-AG23
+    /**
+    * calculateItemTotal
+    */
+    public function calculateItemTotal($key)
+    {
+        $this->receptionItems[$key]['Total'] = $this->receptionItems[$key]['Cantidad'] * $this->receptionItems[$key]['PrecioNeto'];
+        $this->reception->total = array_sum(array_column($this->receptionItems, 'Total'));
     }
 
     /**
@@ -176,7 +207,8 @@ class CreateReception extends Component
     {
         // $this->validate();
         // TODO: obtener el correlativo si es que no se especificó un correlativo (numero)
-        app('debugbar')->log($this->reception->toArray());
+        // TODO: Marcar modelo PurchaseOrder como completada
+        // app('debugbar')->log($this->reception->toArray());
         app('debugbar')->log($this->receptionItems);
         app('debugbar')->log($this->approvals);
         // $this->reception->save();
