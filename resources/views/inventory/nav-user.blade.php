@@ -21,7 +21,7 @@
 
     <li class="nav-item">
         <a
-            class="nav-link {{ active(['inventories.assigned-products', 'inventories.create-transfer', 'inventories.register']) }}"
+            class="nav-link {{ active(['parameters.places.index']) }}"
             aria-current="page"
             target="_blank"
             href="{{ route('parameters.places.index', auth()->user()->organizationalUnit->establishment) }}"
