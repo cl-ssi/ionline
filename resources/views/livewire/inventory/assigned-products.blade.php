@@ -26,11 +26,11 @@
 
     <div class="row g-2">
         <fieldset class="form-group col-md-3">
-            <label for="product-type">Productos donde</label>
+            <label for="product-type" class="form-label">Productos donde</label>
             <select
                 wire:model.debounce.1500ms="product_type"
                 id="product-type"
-                class="form-control"
+                class="form-select"
             >
                 <option value="">Todos</option>
                 <option value="using">Soy Usuario</option>
@@ -50,6 +50,7 @@
             >
         </fieldset>
     </div>
+    <br>
 
     <table class="table table-bordered">
         <thead>
