@@ -185,9 +185,18 @@ class RequestForm extends Model implements Auditable
         return $this->hasMany(ImmediatePurchase::class);
     }
 
+    /**
+     * Devuelve los Payment Docs del propio formulario
+     * si tienen un padre, entonces devuelve los del padre
+     */
     public function paymentDocs()
     {
-        return $this->hasMany(PaymentDoc::class);
+        if($this->father) {
+            return $this->father->paymentDocs();
+        }
+        else {
+            return $this->hasMany(PaymentDoc::class);
+        }
     }
 
     public function control()

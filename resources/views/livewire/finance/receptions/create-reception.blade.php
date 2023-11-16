@@ -223,7 +223,7 @@
                                 class="form-select"
                                 wire:model="receptionItems.{{ $key }}.Cantidad"
                                 wire:change="calculateItemTotal({{ $key }})"
-                                @disabled( $maxItemQuantity[$key] == 0)>
+                                @disabled($maxItemQuantity[$key] == 0)>
                                 <option value=""></option>
                                 @for ($i = 1; $i <= $maxItemQuantity[$key]; $i++)
                                     <option>{{ $i }}</option>
@@ -237,7 +237,7 @@
                         <td style="text-align: right;">{{ money($item->TotalCargos) }}</td>
                         <td style="text-align: right;">{{ money($item->Cantidad * $item->PrecioNeto) }}</td>
                     </tr>
-                    @if(array_key_exists($key,$otherItems))
+                    @if (array_key_exists($key, $otherItems))
                         @foreach ($otherItems[$key] as $receptionNumber => $quantity)
                             <tr>
                                 <td colspan="2">
@@ -313,17 +313,24 @@
         </div>
 
 
-        <div class="row mb-4">
-            <div class="col-12">
-                <div class="form-group">
-                    <label for="">Adjuntar otros documentos</label>
-                    <input type="file"
-                        name=""
-                        id=""
-                        class="form-control">
+        <!-- Si tiene otros documentos necesarios para la recepción -->
+        @if ($purchaseOrder->requestForm)
+            @if ($purchaseOrder->requestForm->paymentDocs)
+                <div class="row mb-4">
+                    <h4>Adjuntar otros documentos</h4>
+                    @foreach ($purchaseOrder->requestForm->paymentDocs as $doc)
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label for="for_{{ $doc->id }}">{{ $doc->name }}</label>
+                                <input type="file"
+                                    id="for-{{ $doc->id }}"
+                                    class="form-control">
+                            </div>
+                        </div>
+                    @endforeach
                 </div>
-            </div>
-        </div>
+            @endif
+        @endif
 
 
         <!-- Firmantes -->

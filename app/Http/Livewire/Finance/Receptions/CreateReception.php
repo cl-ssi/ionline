@@ -98,6 +98,7 @@ class CreateReception extends Component
              */
             $this->receptionItems = [];
             $this->approvals = [];
+            $this->otherItems = [];
 
             $this->reception = new Reception([
                 'purchase_order' => $this->purchaseOrderCode,
@@ -242,6 +243,9 @@ class CreateReception extends Component
     public function save()
     {
         // $this->validate();
+        // Validar que tenga al menos un approval
+        // Validar que tenga por le menos un receptionItems con cantidad > 0
+
         // TODO: obtener el correlativo si es que no se especificó un correlativo (numero)
         // TODO: Marcar modelo PurchaseOrder como completada
         // TODO: Marcar modelo PurchaseOrder como cenabast
