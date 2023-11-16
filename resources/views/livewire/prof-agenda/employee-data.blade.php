@@ -40,7 +40,8 @@
                 <label for="forOrganizationalUnit">Establecimiento / Unidad Organizacional</label>
                     @livewire('select-organizational-unit', [
                         'establishment_id' => auth()->user()->organizationalUnit->establishment->id,
-                        'select_id' => 'organizationalunit'
+                        'select_id' => 'organizationalunit',
+                        'aditional_ous' => [53]
                     ])
             </fieldset>
         </div>

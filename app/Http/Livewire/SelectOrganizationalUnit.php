@@ -29,10 +29,12 @@ class SelectOrganizationalUnit extends Component
      * 'readonlyEstablishment' => true or false,
      * 'mobile' => true or false, // no agrupa los inputs
      * 'required' => true or false, // Campos requeridos o no obligatorio de selección del select
+     * 'aditional_ous' => [53,2] // array con id's de establecimientos
      */
 
     public $selected_id = 'organizational_unit_id';
     public $required = true;
+    public $aditional_ous = null;
     public $establishment_id;
     public $organizational_unit_id;
     public $readonlyEstablishment = false;
@@ -59,8 +61,11 @@ class SelectOrganizationalUnit extends Component
          * TODO: Esperando que la tabla de establecimientos se pueda filtrar por establecimientos dependientes del ss
          */
         $establishments_ids = explode(',',env('APP_SS_ESTABLISHMENTS'));
-
-        $this->establishments = Establishment::whereIn('id',$establishments_ids)->orderBy('official_name')->get();
+        $this->establishments = Establishment::whereIn('id',$establishments_ids)                                            
+                                            ->when($this->aditional_ous != null, function ($q)  {
+                                                return $q->orWhereIn('id',$this->aditional_ous);
+                                            })
+                                            ->orderBy('official_name')->get();
 
         //$this->establishments = Establishment::whereIn('id',[1,34,35,36,38,41])->get();
         //$this->establishments = Establishment::orderBy('official_name', 'asc')->get();
