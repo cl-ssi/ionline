@@ -30,7 +30,7 @@ return new class extends Migration
 
             $table->string('doc_type')->nullable();
             $table->string('doc_number')->nullable();
-            $table->string('doc_date')->nullable();
+            $table->date('doc_date')->nullable();
 
             $table->unsignedInteger('neto')->nullable();
             $table->unsignedInteger('descuentos')->nullable();

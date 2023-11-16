@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Carbon\Carbon;
 use App\Models\RequestForms\RequestForm;
 use App\Models\RequestForms\ImmediatePurchase;
+use App\Models\Finance\Receptions\Reception;
 use App\Models\Finance\Dte;
 
 class PurchaseOrder extends Model
@@ -35,6 +36,11 @@ class PurchaseOrder extends Model
     public function dtes()
     {
         return $this->hasMany(Dte::class,'folio_oc');
+    }
+
+    public function receptions()
+    {
+        return $this->hasMany(Reception::class,'purchase_order','code');
     }
 
     /**

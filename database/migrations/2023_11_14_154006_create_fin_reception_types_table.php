@@ -1,8 +1,9 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+use App\Models\Finance\Receptions\ReceptionType;
 
 return new class extends Migration
 {
@@ -19,6 +20,47 @@ return new class extends Migration
             $table->foreignId('establishment_id')->constrained('establishments');
             $table->timestamps();
         });
+
+        ReceptionType::create([
+            'name' => 'Bienes',
+            'establishment_id' => 38,
+        ]);
+        ReceptionType::create([
+            'name' => 'Servicios',
+            'establishment_id' => 38,
+        ]);
+        ReceptionType::create([
+            'name' => 'Obras',
+            'establishment_id' => 38,
+        ]);
+
+
+        ReceptionType::create([
+            'name' => 'Bienes',
+            'establishment_id' => 41,
+        ]);
+        ReceptionType::create([
+            'name' => 'Servicios',
+            'establishment_id' => 41,
+        ]);
+        ReceptionType::create([
+            'name' => 'Obras',
+            'establishment_id' => 41,
+        ]);
+
+
+        ReceptionType::create([
+            'name' => 'Bienes',
+            'establishment_id' => 1,
+        ]);
+        ReceptionType::create([
+            'name' => 'Servicios',
+            'establishment_id' => 1,
+        ]);
+        ReceptionType::create([
+            'name' => 'Obras',
+            'establishment_id' => 1,
+        ]);
     }
 
     /**

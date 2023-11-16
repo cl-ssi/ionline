@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\User;
 use App\Rrhh\OrganizationalUnit;
+use App\Models\Finance\Receptions\ReceptionItem;
 use App\Models\Establishment;
 use App\Models\Documents\Approval;
 
@@ -74,6 +75,11 @@ class Reception extends Model
         return $this->belongsTo(OrganizationalUnit::class);
     }
 
+    public function items()
+    {
+        return $this->hasMany(ReceptionItem::class);
+    }
+    
     /**
      * Get all of the approvations of a model.
      */

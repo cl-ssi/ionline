@@ -28,7 +28,7 @@
                     placeholder="Orden de compra"
                     aria-label="Orden de compra"
                     aria-describedby="purchase-order"
-                    wire:model.debounce="reception.purchase_order">
+                    wire:model.defer="purchaseOrderCode">
                 <button class="btn btn-outline-primary"
                     wire:click="getPurchaseOrder">
                     <i class="bi bi-search"></i>
@@ -54,7 +54,8 @@
             </div>
             <div class="col-md-2 text-center">
                 <b>Orden de Compra</b><br>
-                <a target="_blank" href="{{ route('finance.purchase-orders.show', $purchaseOrder) }}">
+                <a target="_blank"
+                    href="{{ route('finance.purchase-orders.show', $purchaseOrder) }}">
                     {{ $purchaseOrder->code }}
                 </a>
                 <br>
@@ -63,12 +64,13 @@
             <div class="col-md-3 text-center">
                 <b>Actas creadas para esta OC</b><br>
                 <ul>
-                    <li>
-                        <a href="#">Acta ID: 2123 fecha: 2023-11-01</a>
-                    </li>
-                    <li>
-                        <a href="#">Acta ID: 2234 fecha: 2023-11-02</a>
-                    </li>
+                    @foreach ($purchaseOrder->receptions as $otherReception)
+                        <li>
+                            <a href="#">
+                                Nº: {{ $otherReception->number }}
+                                Fecha: {{ $otherReception->date?->format('Y-m-d') }}</a>
+                        </li>
+                    @endforeach
                 </ul>
             </div>
             <div class="col-md-2 text-center">
@@ -95,56 +97,21 @@
 
         <h4>Recepción</h4>
         <div class="row mb-3 g-2">
-            <div class="col-4">
-                <div class="form-group">
-                    <label for="form-reception-typeto ">Tipo de acta</label>
-                    <select class="form-select"
-                        wire:model="reception.reception_type_id">
-                        <option value=""></option>
-                        @foreach ($types as $id => $type)
-                            <option value="{{ $id }}">{{ $type }}</option>
-                        @endforeach
-                    </select>
-                    @error('reception.reception_type_id')
-                        <span class="text-danger">{{ $message }}</span>
-                    @enderror
-                </div>
+            <div class="form-group col-md-2">
+                <label for="form-reception-typeto ">Tipo de acta</label>
+                <select class="form-select"
+                    wire:model="reception.reception_type_id">
+                    <option value=""></option>
+                    @foreach ($types as $id => $type)
+                        <option value="{{ $id }}">{{ $type }}</option>
+                    @endforeach
+                </select>
+                @error('reception.reception_type_id')
+                    <span class="text-danger">{{ $message }}</span>
+                @enderror
             </div>
-        </div>
-        <div class="row mb-3">
-            <div class="col-md-12">
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input"
-                        type="radio"
-                        name="partial_reception"
-                        wire:model.defer="reception.partial_reception"
-                        id="partial_reception_partial"
-                        value="1">
-                    <label class="form-check-label"
-                        for="for-parcial">Recepcionar la OC Parcial</label>
-                    <div class="form-text">&nbsp;</div>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input"
-                        type="radio"
-                        name="partial_reception"
-                        wire:model.defer="reception.partial_reception"
-                        id="partial_reception_complete"
-                        value="0">
-                    <label class="form-check-label"
-                        for="for-completa">Recepcionar la OC Completa</label>
-                    <div class="form-text">&nbsp;</div>
-                </div>
-                <div class="form-check form-switch form-check-inline">
-                    <input class="form-check-input"
-                        type="checkbox"
-                        role="switch"
-                        id="for-order_completed"
-                        wire:model.defer="reception.order_completed">
-                    <label class="form-check-label"
-                        for="flexSwitchCheckDefault">Marcar la Orden de Compra como Completada</label>
-                    <div class="form-text">No se recibirán más items de esta Orden de Compra</div>
-                </div>
+            <div class="form-group col-md-2">
+                <br>
                 <div class="form-check form-switch form-check-inline float-end">
                     <input class="form-check-input"
                         type="checkbox"
@@ -154,9 +121,9 @@
                     <label class="form-check-label"
                         for="flexSwitchCheckDefault">Cenabast</label>
                 </div>
-
             </div>
         </div>
+
 
         <div class="row mb-3 g-2">
             <div class="col-md-2">
@@ -243,7 +210,7 @@
             </thead>
             <tbody>
                 @foreach ($purchaseOrder->json->Listado[0]->Items->Listado as $key => $item)
-                    <tr class="table-secondary ">
+                    <tr class="{{ $maxItemQuantity[$key] == 0 ? 'table-secondary' : 'table-info' }}">
                         <td class="text-center">
                             {{ $item->CodigoCategoria }}
                         </td>
@@ -255,9 +222,10 @@
                                 id="ct_{{ $key }}"
                                 class="form-select"
                                 wire:model="receptionItems.{{ $key }}.Cantidad"
-                                wire:change="calculateItemTotal({{ $key }})">
+                                wire:change="calculateItemTotal({{ $key }})"
+                                @disabled( $maxItemQuantity[$key] == 0)>
                                 <option value=""></option>
-                                @for ($i = 1; $i <= $item->Cantidad; $i++)
+                                @for ($i = 1; $i <= $maxItemQuantity[$key]; $i++)
                                     <option>{{ $i }}</option>
                                 @endfor
                             </select>
@@ -269,23 +237,67 @@
                         <td style="text-align: right;">{{ money($item->TotalCargos) }}</td>
                         <td style="text-align: right;">{{ money($item->Cantidad * $item->PrecioNeto) }}</td>
                     </tr>
-                    <tr>
-                        <td colspan="2">
-                            Acta 2123
-                        </td>
-                        <td>
-                            50
-                        </td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
+                    @if(array_key_exists($key,$otherItems))
+                        @foreach ($otherItems[$key] as $receptionNumber => $quantity)
+                            <tr>
+                                <td colspan="2">
+                                    Acta {{ $receptionNumber }}
+                                </td>
+                                <td style="text-align: right;">
+                                    {{ $quantity }}
+                                </td>
+                                <td> recepcionados </td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        @endforeach
+                    @endif
                 @endforeach
             </tbody>
         </table>
+
+
+        <div class="row mb-3">
+            <div class="col-md-12">
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input"
+                        type="radio"
+                        name="partial_reception"
+                        wire:model.defer="reception.partial_reception"
+                        id="partial_reception_partial"
+                        value="1">
+                    <label class="form-check-label"
+                        for="for-parcial">Recepcionar la OC Parcial</label>
+                    <div class="form-text">&nbsp;</div>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input"
+                        type="radio"
+                        name="partial_reception"
+                        wire:model.defer="reception.partial_reception"
+                        id="partial_reception_complete"
+                        wire:change="setPurchaseOrderCompleted"
+                        value="0">
+                    <label class="form-check-label"
+                        for="for-completa">Recepcionar la OC Completa</label>
+                    <div class="form-text">&nbsp;</div>
+                </div>
+                <div class="form-check form-switch form-check-inline">
+                    <input class="form-check-input"
+                        type="checkbox"
+                        role="switch"
+                        id="for-order_completed"
+                        wire:model.defer="reception.order_completed">
+                    <label class="form-check-label"
+                        for="flexSwitchCheckDefault">Marcar la Orden de Compra como Completada</label>
+                    <div class="form-text">No se recibirán más items de esta Orden de Compra</div>
+                </div>
+            </div>
+        </div>
+
 
         <div class="row mb-3">
             <div class="col-md-12">
@@ -299,6 +311,20 @@
                 </div>
             </div>
         </div>
+
+
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="form-group">
+                    <label for="">Adjuntar otros documentos</label>
+                    <input type="file"
+                        name=""
+                        id=""
+                        class="form-control">
+                </div>
+            </div>
+        </div>
+
 
         <!-- Firmantes -->
         <h4 class="mb-2">Firmantes</h4>
@@ -324,6 +350,7 @@
                 @livewire('search-select-user')
             </div>
         </div>
+
         <div class="row text-center">
             <div class="col">
                 <b>Columna Izquierda <span class="text-danger">☭</span></b>
@@ -361,6 +388,7 @@
                 </div>
 
             </div>
+
             <div class="col">
                 <b>Columna Central</b>
                 <div class="row mt-1 mb-2 g-2">
@@ -396,7 +424,6 @@
                     @endif
                 </div>
             </div>
-
 
             <div class="col">
                 <b>Columna Derecha</b>
@@ -434,20 +461,6 @@
                 </div>
             </div>
 
-        </div>
-
-
-
-        <div class="row">
-            <div class="col-12">
-                <div class="form-group">
-                    <label for="">Adjuntar otros documentos</label>
-                    <input type="file"
-                        name=""
-                        id=""
-                        class="form-control">
-                </div>
-            </div>
         </div>
 
         <hr>
@@ -491,7 +504,7 @@
 
         <br>
 
-        <h3 class="text-center mb-3">Acta de recepción conforme</h3>
+        <h3 class="text-center mb-3">Acta de recepción conforme de {{ $types[$reception->reception_type_id] }}</h3>
 
         <p style="white-space: pre-wrap;">{{ $reception->header_notes }}</p>
 
@@ -569,10 +582,50 @@
                     @endif
                 @endforeach
                 <tr>
-                    <td colspan="9"
-                        class="text-end">
+                    <td colspan="6">
+                    </td>
+                    <td colspan="3">
+                        <table>
+                            <tr>
+                                <th width="100">Neto</th>
+                                <td>$</td>
+                                <td width="100"
+                                    style="text-align: right;">{{ money($reception->neto) }}</td>
+                            </tr>
+                            @if ($reception->descuentos and $reception->descuentos > 0)
+                                <tr>
+                                    <th>Dcto.</th>
+                                    <td>$</td>
+                                    <td style="text-align: right;">{{ money($reception->descuentos) }}</td>
+                                </tr>
+                            @endif
+                            @if ($reception->cargos and $reception->cargos > 0)
+                                <tr>
+                                    <th>Cargos</th>
+                                    <td>$</td>
+                                    <td style="text-align: right;">{{ money($reception->cargos) }}</td>
+                                </tr>
+                            @endif
+                            <tr>
+                                <th>Subtotal</th>
+                                <td>$</td>
+                                <td style="text-align: right;">{{ money($reception->subtotal) }}</td>
+                            </tr>
+                            <tr>
+                                <th>{{ $purchaseOrder->json->Listado[0]->PorcentajeIva }}% IVA</th>
+                                <td>$</td>
+                                <td style="text-align: right;">{{ money($reception->iva) }}</td>
+                            </tr>
+                            <tr>
+                                <th>Total</th>
+                                <td>$</td>
+                                <td style="text-align: right;">
+                                    <b>{{ money($reception->total) }}</b>
+                                </td>
+                            </tr>
+                        </table>
                         <b>
-                            {{ money($reception->total) }}
+
                         </b>
                     </td>
                 </tr>

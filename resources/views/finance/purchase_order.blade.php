@@ -262,7 +262,7 @@
                             <td>{{ money($purchaseOrder->json->Listado[0]->Total) }}</td>
                         </tr>
                     </table>
-                    </td>
+                </td>
             </tr>
         </table>
 

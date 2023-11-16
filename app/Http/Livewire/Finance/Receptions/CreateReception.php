@@ -14,10 +14,13 @@ use App\Models\Documents\Approval;
 
 class CreateReception extends Component
 {
-    // 1057448-598-SE23  1272565-444-AG23 1272565-737-SE23;
+    //   1272565-444-AG23 1057448-598-SE23 1272565-737-SE23;
+    public $purchaseOrderCode = '1272565-444-AG23';
     public $purchaseOrder = false;
     public $reception;
     public $receptionItems = [];
+    public $maxItemQuantity = [];
+    public $otherItems = [];
     public $types;
     public $signer_id;
     public $signer_ou_id;
@@ -30,7 +33,6 @@ class CreateReception extends Component
     /**
      * TODO:
      */
-
     protected $rules = [
         'reception.number' => 'nullable',
         'reception.date' => 'required|date_format:Y-m-d',
@@ -79,16 +81,8 @@ class CreateReception extends Component
     */
     public function mount()
     {
-        $this->types = ReceptionType::pluck('name','id');
-        $this->reception = new Reception([
-            // 'purchase_order' => '1057448-598-SE23',
-            'establishment_id' => auth()->user()->organizationalUnit->establishment_id,
-            'creator_id' => auth()->id(),
-            'creator_ou_id' => auth()->user()->organizational_unit_id,
-        ]);
-        // $status = MercadoPublico::getPurchaseOrderV2($this->reception->purchase_order);
-        // $this->purchaseOrder = PurchaseOrder::whereCode($this->reception->purchase_order)->first();
-        // $this->requestForm = $this->purchaseOrder?->requestForm;
+        $this->types = ReceptionType::where('establishment_id',auth()->user()->organizationalUnit->establishment_id)
+            ->pluck('name','id')->toArray();
     }
 
     /**
@@ -96,7 +90,7 @@ class CreateReception extends Component
     */
     public function getPurchaseOrder()
     {
-        $status = MercadoPublico::getPurchaseOrderV2($this->reception->purchase_order);
+        $status = MercadoPublico::getPurchaseOrderV2($this->purchaseOrderCode);
 
         if($status === true) {
             /**
@@ -105,10 +99,16 @@ class CreateReception extends Component
             $this->receptionItems = [];
             $this->approvals = [];
 
+            $this->reception = new Reception([
+                'purchase_order' => $this->purchaseOrderCode,
+                'establishment_id' => auth()->user()->organizationalUnit->establishment_id,
+                'creator_id' => auth()->id(),
+                'creator_ou_id' => auth()->user()->organizational_unit_id,
+            ]);
+
             $this->purchaseOrder = PurchaseOrder::whereCode($this->reception->purchase_order)->first();
             foreach($this->purchaseOrder->json->Listado[0]->Items->Listado as $key => $item){
                 $this->receptionItems[$key] = ReceptionItem::make([
-                    'reception_id' => null,
                     'item_position' => $key,
                     'CodigoCategoria' => $item->CodigoCategoria,
                     'Producto' => $item->Producto,
@@ -121,6 +121,25 @@ class CreateReception extends Component
                     'TotalCargos' => $item->TotalCargos,
                     'Total' => null,
                 ]);
+                $this->maxItemQuantity[$key] = $item->Cantidad;
+            }
+            $otherReceptionItems = ReceptionItem::whereRelation('reception','purchase_order',$this->reception->purchase_order)->get();
+            foreach($otherReceptionItems as $otherItems) {
+                $this->otherItems[$otherItems->item_position][$otherItems->reception->number] = $otherItems['Cantidad'];
+                $this->maxItemQuantity[$otherItems->item_position] -= $otherItems['Cantidad'];
+            }
+
+
+            /**
+             * Esto obtiene el tipo de formulario, si es un bien o un servicio
+             * luego lo busca en el array de tipos de documentos y 
+             * asigna el reception_type_id para que aparezca seleccionado
+             */
+            if($this->purchaseOrder->requestForm) {
+                $this->reception->reception_type_id = array_search(
+                    $this->purchaseOrder->requestForm->subTypeName, 
+                    $this->types
+                );
             }
         }
         else {
@@ -133,9 +152,26 @@ class CreateReception extends Component
     */
     public function calculateItemTotal($key)
     {
+        if(!$this->receptionItems[$key]['Cantidad']) {
+            $this->receptionItems[$key]['Cantidad'] = 0;
+        }
         $this->receptionItems[$key]['Total'] = $this->receptionItems[$key]['Cantidad'] * $this->receptionItems[$key]['PrecioNeto'];
-        $this->reception->total = array_sum(array_column($this->receptionItems, 'Total'));
+
+        $this->reception->neto = array_sum(array_column($this->receptionItems, 'Total'));
+        // TODO: Falta agregar cargos y descuentos
+        $this->reception->subtotal = $this->reception->neto; 
+        $this->reception->iva = $this->purchaseOrder->json->Listado[0]->PorcentajeIva / 100 * $this->reception->subtotal;
+        $this->reception->total = $this->reception->iva + $this->reception->subtotal;
     }
+
+    /**
+    * set purchase order Completed
+    */
+    public function setPurchaseOrderCompleted()
+    {
+        $this->reception->order_completed = true;
+    }
+
 
     /**
     * Add Approval
@@ -163,8 +199,8 @@ class CreateReception extends Component
             $this->approvals[$position]['sent_to_ou_id'] = $this->signer_ou_id;
             $this->approvals[$position]['signerShortName'] = $this->authority;
         }
-
     }
+
 
     /**
     * Remove Approval
@@ -208,12 +244,25 @@ class CreateReception extends Component
         // $this->validate();
         // TODO: obtener el correlativo si es que no se especificó un correlativo (numero)
         // TODO: Marcar modelo PurchaseOrder como completada
-        // app('debugbar')->log($this->reception->toArray());
+        // TODO: Marcar modelo PurchaseOrder como cenabast
+        app('debugbar')->log($this->reception->toArray());
         app('debugbar')->log($this->receptionItems);
         app('debugbar')->log($this->approvals);
-        // $this->reception->save();
-        // Guardar Items
-        // Guardar approvals
+
+        /* Guardar reception */
+        $this->reception->save();
+
+        /* Guardar Items */
+        foreach($this->receptionItems as $item) {
+            if($item['Cantidad'] > 0) {
+                $this->reception->items()->create($item);
+            }
+        }
+
+        /* Guardar approvals */
+        foreach($this->approvals as $approval) {
+            $this->reception->approvals()->create($approval);
+        }
     }
 
     public function render()

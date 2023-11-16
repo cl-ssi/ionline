@@ -20,5 +20,6 @@ class ReceptionType extends Model
     protected $fillable = [
         'id',
         'name',
+        'establishment_id',
     ];
 }

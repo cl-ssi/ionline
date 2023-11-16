@@ -17,18 +17,18 @@ return new class extends Migration
             $table->id();
             $table->foreignId('reception_id')->constrained('fin_receptions');
 
-            $table->smallInteger('item_position')->nullable();
+            $table->unsignedSmallInteger('item_position')->nullable();
 
             $table->string('CodigoCategoria')->nullable();
             $table->string('Producto')->nullable();
-            $table->string('Cantidad')->nullable();
+            $table->integer('Cantidad')->nullable();
             $table->string('Unidad')->nullable();
             $table->string('EspecificacionComprador')->nullable();
             $table->string('EspecificacionProveedor')->nullable();
-            $table->string('PrecioNeto')->nullable();
-            $table->string('TotalDescuentos')->nullable();
-            $table->string('TotalCargos')->nullable();
-            $table->string('Total')->nullable();
+            $table->integer('PrecioNeto')->nullable();
+            $table->integer('TotalDescuentos')->nullable();
+            $table->integer('TotalCargos')->nullable();
+            $table->integer('Total')->nullable();
 
             $table->timestamps();
             $table->softDeletes();

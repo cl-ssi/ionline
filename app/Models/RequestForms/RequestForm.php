@@ -769,4 +769,16 @@ class RequestForm extends Model implements Auditable
         $prefinanceApproved = $this->eventRequestForms->where('event_type', 'pre_finance_event')->where('status', 'approved')->count() > 0;
         return $this->hasEventRequestForms() && $financePending && $prefinanceApproved;
     }
+
+    /**
+     * Obtener el tipo de formulario de requerimiento, Bienes o Servicios
+     * Corta la primera palabra, le pasa la primera letra a minúsucla
+     * ej: 
+     * bienes ejecución inmediata => Bienes
+     * servicios ejecución tiempo => Servicios
+     **/
+    public function getSubTypeNameAttribute()
+    {
+        return ucfirst(strtok($this->subtype, " "));
+    }
 }
