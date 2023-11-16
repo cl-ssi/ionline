@@ -1,21 +1,14 @@
 # Autoría
 
-Sistema desarrollado el Departamento TIC del Servicio de Salud de Iquique.
+Sistema desarrollado el Departamento TIC del Servicio de Salud de Tarapacá.
 
-sistemas.ssi@redsalud.gob.cl
+sistemas.sst@redsalud.gob.cl
 
-## Cambio de rama de master a main
-
-```
-git branch -m master main
-git fetch origin
-git branch -u origin/main main
-git remote set-head origin -a
-```
+## Aceptamos contribuciones a través de Pull Request
 
 # Instalacion
 
-> Este proyecto está desarrollado en Laravel 8
+> Este proyecto está desarrollado en Laravel 9
 
 > Incluye Bootstrap 4, jQuery y Font Awesome
 
