@@ -7,16 +7,17 @@ use App\User;
 use App\Rrhh\OrganizationalUnit;
 use App\Models\WebService\MercadoPublico;
 use App\Models\Finance\Receptions\ReceptionType;
+use App\Models\Finance\Receptions\ReceptionItem;
 use App\Models\Finance\Receptions\Reception;
 use App\Models\Finance\PurchaseOrder;
 use App\Models\Documents\Approval;
 
 class CreateReception extends Component
 {
-    // public $purchaseOrderCode = '1057448-598-SE23';
-    // public $purchaseOrderCode = '1272565-444-AG23';
+    // '1057448-598-SE23' '1272565-444-AG23'  1272565-737-SE23;
     public $purchaseOrder = false;
     public $reception;
+    public $receptionItems = [];
     public $types;
     public $signer_id;
     public $signer_ou_id;
@@ -94,6 +95,9 @@ class CreateReception extends Component
 
         if($status === true) {
             $this->purchaseOrder = PurchaseOrder::whereCode($this->reception->purchase_order)->first();
+            foreach($this->purchaseOrder->json->Listado[0]->Items->Listado as $key => $item){
+                $this->receptionItems[$key] = ReceptionItem::make([]);
+            }
         }
         else {
             $this->purchaseOrder = null;
@@ -173,6 +177,7 @@ class CreateReception extends Component
         // $this->validate();
         // TODO: obtener el correlativo si es que no se especificó un correlativo (numero)
         app('debugbar')->log($this->reception->toArray());
+        app('debugbar')->log($this->receptionItems);
         app('debugbar')->log($this->approvals);
         // $this->reception->save();
         // Guardar Items

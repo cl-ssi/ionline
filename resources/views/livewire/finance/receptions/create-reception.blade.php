@@ -42,7 +42,12 @@
                     {{ $purchaseOrder->requestForm->folio }}
                 </a>
             @else
-                <span class="text-danger">No se encuentra esta Orden de Compra registrada en Abastecimiento</span>
+                <span class="text-danger">
+                    La Orden de Compra no está registrada 
+                    <button class="btn btn-sm btn-danger">
+                        <i class="fas fa-biohazard"></i> Notificar a Abastecimiento
+                    </button>
+                </span>
             @endif
         </div>
         <div class="col-md-3 text-center">
@@ -101,6 +106,7 @@
                 <div class="form-check form-check-inline">
                     <input class="form-check-input"
                         type="radio"
+                        name="partial_reception"
                         wire:model.defer="reception.partial_reception"
                         id="partial_reception_partial"
                         value="1">
@@ -111,6 +117,7 @@
                 <div class="form-check form-check-inline">
                     <input class="form-check-input"
                         type="radio"
+                        name="partial_reception"
                         wire:model.defer="reception.partial_reception"
                         id="partial_reception_complete"
                         value="0">
@@ -204,6 +211,7 @@
                         rows="5"
                         class="form-control"
                         wire:model.debounse.500ms="reception.header_notes"></textarea>
+                    <div>Plantillas: [ compra servicios ] [ boleta agua ] <i class="fas fa-cog"></i> </div>
                 </div>
             </div>
         </div>
