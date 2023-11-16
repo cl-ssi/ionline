@@ -26,11 +26,11 @@
 
     <div class="row g-2">
         <fieldset class="form-group col-md-3">
-            <label for="product-type">Productos donde</label>
+            <label for="product-type" class="form-label">Productos donde</label>
             <select
                 wire:model.debounce.1500ms="product_type"
                 id="product-type"
-                class="form-control"
+                class="form-select"
             >
                 <option value="">Todos</option>
                 <option value="using">Soy Usuario</option>
@@ -44,11 +44,13 @@
                 type="text"
                 id="search"
                 class="form-control"
-                placeholder="Ingresa un número inventario"
+                placeholder="Ingresa un número inventario o nombre de producto o nombre unspc o ubicación"
                 wire:model.debounce.1500ms="search"
+                autocomplete="off"
             >
         </fieldset>
     </div>
+    <br>
 
     <table class="table table-bordered">
         <thead>
@@ -74,15 +76,12 @@
                         </small>
                     </td>
                     <td>
-                        {{ optional($inventory->unspscProduct)->name }}
-                        <br>
-                        <small>
                             @if($inventory->product)
                                 {{ $inventory->product->name }}
                             @else
                                 {{ $inventory->description }}
                             @endif
-                        </small>
+                        
                         <br>
 
                         @if($inventory->user_using_id == auth()->user()->id)

@@ -214,7 +214,9 @@ class Inventory extends Model implements Auditable
 
     public function getLocationAttribute()
     {
-        return $this->place->name . ", " . $this->place->location->name;
+        if($this->place) {
+            return $this->place?->name . ", " . $this->place?->location?->name;
+        }
     }
 
     public function getSubtitleAttribute()
