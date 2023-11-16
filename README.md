@@ -10,7 +10,7 @@ sistemas.sst@redsalud.gob.cl
 
 > Este proyecto está desarrollado en Laravel 9
 
-> Incluye Bootstrap 4, jQuery y Font Awesome
+> Incluye Bootstrap 5 jQuery y Font Awesome
 
 ## Prerequisitos
 
