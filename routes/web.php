@@ -63,6 +63,7 @@ use App\Http\Livewire\His\ModificationMgr;
 use App\Http\Livewire\HealthServices;
 use App\Http\Livewire\Finance\UploadDtes;
 use App\Http\Livewire\Finance\Receptions\CreateReception;
+use App\Http\Livewire\Finance\Receptions\TypeMgr;
 use App\Http\Livewire\Finance\IndexDtes;
 use App\Http\Livewire\Finance\DteConfirmation;
 use App\Http\Livewire\Finance\AccountingCodesMgr;
@@ -2018,6 +2019,7 @@ Route::prefix('finance')->as('finance.')->middleware(['auth', 'must.change.passw
 
     Route::prefix('receptions')->as('receptions.')->group(function () {
         Route::get('/create', CreateReception::class)->name('create');
+        Route::get('/type', TypeMgr::class)->name('type');
     });
 });
 

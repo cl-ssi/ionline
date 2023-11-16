@@ -15,4 +15,10 @@ class ReceptionType extends Model
     * @var string
     */
     protected $table = 'fin_reception_types';
+    
+
+    protected $fillable = [
+        'id',
+        'name',
+    ];
 }
