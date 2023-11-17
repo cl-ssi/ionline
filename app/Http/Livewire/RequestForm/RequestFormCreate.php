@@ -182,8 +182,8 @@ class RequestFormCreate extends Component
             'round_trip'        =>  $passenger->round_trip,
             'origin'            =>  $passenger->origin,
             'destination'       =>  $passenger->destination,
-            'departure_date'    =>  $passenger->departure_date,
-            'return_date'       =>  $passenger->return_date,
+            'departure_date'    =>  $passenger->departure_date->format('Y-m-d\TH:i'),
+            'return_date'       =>  $passenger->return_date ? $passenger->return_date->format('Y-m-d\TH:i') : null,
             'baggage'           =>  $passenger->baggage,
             'unitValue'         =>  $passenger->unit_value
       ];
