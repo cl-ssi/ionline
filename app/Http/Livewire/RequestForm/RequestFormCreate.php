@@ -176,7 +176,7 @@ class RequestFormCreate extends Component
             'name'              =>  $passenger->name,
             'fathers_family'    =>  $passenger->fathers_family,
             'mothers_family'    =>  $passenger->mothers_family,
-            'birthday'          =>  $passenger->birthday,
+            'birthday'          =>  $passenger->birthday->format('Y-m-d'),
             'phone_number'      =>  $passenger->phone_number,
             'email'             =>  $passenger->email,
             'round_trip'        =>  $passenger->round_trip,
