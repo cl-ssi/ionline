@@ -72,6 +72,10 @@
                                                     wire:click="set({{ $textTemplates }})">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
+                                                <a class="btn btn-sm btn-outline-danger" 
+                                                    wire:click="delete({{ $textTemplates }})">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </a>
                                             </td>
                                         </tr>
                                         @endif
