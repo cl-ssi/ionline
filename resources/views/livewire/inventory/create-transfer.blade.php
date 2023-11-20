@@ -53,7 +53,9 @@
     @livewire('inventory.update-movement', ['inventory' => $inventory])
 
     <hr>
-    @livewire('inventory.removal-request', ['inventory' => $inventory])
+    @can('be god')
+        @livewire('inventory.removal-request', ['inventory' => $inventory])
+    @endcan
 
     <h5 class="mt-3">Historial del ítem</h5>
 
