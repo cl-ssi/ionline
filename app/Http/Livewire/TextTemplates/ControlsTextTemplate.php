@@ -85,6 +85,11 @@ class ControlsTextTemplate extends Component
         $this->template     = $textTemplates['template'];
     }
 
+    public function delete($textTemplates){
+        $template = TextTemplate::find($textTemplates['id']);
+        $template->delete();
+    }
+
     public function emitControls($textTemplates){
         $this->emit('textTemplateToEmit', $textTemplates['template'], $textTemplates['input']);
     }
