@@ -29,7 +29,7 @@ class CreateReception extends Component
     public $approvalUsers = [];
     public $authority = false;
 
-    protected $listeners = ['userSelected', 'ouSelected'];
+    protected $listeners = ['userSelected', 'ouSelected', 'textTemplateToEmit'];
 
     /**
      * TODO:
@@ -87,6 +87,10 @@ class CreateReception extends Component
         if( is_null(Parameter::get('Recepciones','doc_type_id')) ) {
             dd('Falta parametrizar el módulo "Recepciones" Parametro "doc_type_id" con el id del tipo de documento acta de recepción');
         }
+    }
+
+    public function textTemplateToEmit($template, $input){
+        $this->$input = $template;
     }
 
     /**

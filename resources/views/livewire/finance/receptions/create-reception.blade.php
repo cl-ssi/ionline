@@ -191,11 +191,17 @@
                         rows="5"
                         class="form-control"
                         wire:model.debounse.500ms="reception.header_notes"></textarea>
-                    <div>Plantillas: [ compra servicios ] [ boleta agua ] <i class="fas fa-cog"></i> </div>
+
+                    <div>
+
+                        @livewire('text-templates.controls-text-template', [
+                            'module'    => 'Receptions',
+                            'input'     => 'reception.header_notes'
+                        ], key('head_notes'))
+                    </div>
                 </div>
             </div>
         </div>
-
 
         <table class="table table-bordered table-sm">
             <thead>

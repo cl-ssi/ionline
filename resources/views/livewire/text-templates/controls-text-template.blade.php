@@ -13,11 +13,11 @@
             href="#" 
             role="button"
             data-bs-toggle="modal" 
-            data-bs-target="#createTextTemplateModal-{{ $input }}">
+            data-bs-target="#createTextTemplateModal-{{ str_replace('.', '_', $input) }}">
             <i class="fas fa-plus-square"></i> Mis Plantillas
         </a>
 
-        <div wire:ignore.self class="modal fade" id="createTextTemplateModal-{{ $input }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div wire:ignore.self class="modal fade" id="createTextTemplateModal-{{ str_replace('.', '_', $input) }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-xl">
                 <div class="modal-content">
                     <div class="modal-header">

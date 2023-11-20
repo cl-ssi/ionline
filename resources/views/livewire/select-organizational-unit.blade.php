@@ -40,7 +40,7 @@
         <input
             type="text"
             class="form-control"
-            placeholder="Filtrar listado de unidadesx"
+            placeholder="Filtrar listado de unidades"
             wire:model.lazy="filter"
         >
     @endif
