@@ -65,6 +65,9 @@ class Inventory extends Model implements Auditable
         'accounting_code_id',
         'printed',
         'classification_id',
+
+        // proceso de dar de baja a un inventario
+        'removal_request_reason',
     ];
 
     protected $dates = [
