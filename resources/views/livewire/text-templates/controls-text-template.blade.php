@@ -1,9 +1,11 @@
 <div>
     @foreach($myTextTemplates as $textTemplates)
-        <a class="btn btn-info btn-sm float-start me-2" 
-            wire:click="emitControls({{ $textTemplates }})">
-            <i class="fas fa-paste"></i> [ {{ $textTemplates->title }} ]
-        </a>
+        @if($textTemplates->module == $module && $textTemplates->input == $input)
+            <a class="btn btn-info btn-sm float-start me-2" 
+                wire:click="emitControls({{ $textTemplates }})">
+                <i class="fas fa-paste"></i> [ {{ $textTemplates->title }} ]
+            </a>
+        @endif
     @endforeach
     
     <div class="col-md-12 col-12">
@@ -15,14 +17,6 @@
             <i class="fas fa-plus-square"></i> Mis Plantillas
         </a>
 
-        {{--
-        @include('livewire.text-templates.modals.create', [
-                'module'            => $module,
-                'input'             => $input
-            ]
-        )
-        --}}
-
         <div wire:ignore.self class="modal fade" id="createTextTemplateModal-{{ $input }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-xl">
                 <div class="modal-content">
@@ -31,14 +25,6 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        {{--
-                        @livewire('text-templates.create-text-template', [
-                                'module'    => $module,
-                                'input'     => $input
-                            ]
-                        )
-                        --}}
-                        
                         <div class="row">
                             <div class="col">
                                 <div class="row g-3 mb-3">
@@ -77,6 +63,7 @@
                                     </thead>
                                     <tbody>
                                         @foreach($myTextTemplates as $textTemplates)
+                                        @if($textTemplates->module == $module && $textTemplates->input == $input)
                                         <tr>
                                             <td class="text-center">{{ $textTemplates->title }}</td>
                                             <td>{{ $textTemplates->template }}</td>
@@ -87,6 +74,7 @@
                                                 </a>
                                             </td>
                                         </tr>
+                                        @endif
                                         @endforeach
                                     </tbody>
                                 </table>
