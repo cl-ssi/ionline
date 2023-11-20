@@ -6,6 +6,7 @@ use Livewire\Component;
 use App\User;
 use App\Rrhh\OrganizationalUnit;
 use App\Models\WebService\MercadoPublico;
+use App\Models\Parameters\Parameter;
 use App\Models\Finance\Receptions\ReceptionType;
 use App\Models\Finance\Receptions\ReceptionItem;
 use App\Models\Finance\Receptions\Reception;
@@ -83,6 +84,11 @@ class CreateReception extends Component
     {
         $this->types = ReceptionType::where('establishment_id',auth()->user()->organizationalUnit->establishment_id)
             ->pluck('name','id')->toArray();
+
+        /** Esto es sólo para forzar que esté parametrizado el doc_type_id, antes de utilizar el módulo que se hace sólo una vez. */
+        if( is_null(Parameter::get('Recepciones','doc_type_id')) ) {
+            dd('Falta parametrizar el módulo "Recepciones" Parametro "doc_type_id" con el id del tipo de documento acta de recepción');
+        }
     }
 
     /**
@@ -246,7 +252,10 @@ class CreateReception extends Component
         // Validar que tenga al menos un approval
         // Validar que tenga por le menos un receptionItems con cantidad > 0
 
-        // TODO: obtener el correlativo si es que no se especificó un correlativo (numero)
+        // Obtener el correlativo si es que no se especificó un correlativo (numero)
+        if( !$this->reception->number ) {
+            $this->reception->number = Correlative::getCorrelativeFromType(Parameter::get('Recepciones','doc_type_id'));
+        }
         // TODO: Marcar modelo PurchaseOrder como completada
         // TODO: Marcar modelo PurchaseOrder como cenabast
         app('debugbar')->log($this->reception->toArray());
