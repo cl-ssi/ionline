@@ -41,26 +41,30 @@ class ControlsTextTemplate extends Component
 
     */
 
-
     public $module;
     public $input;
 
     public $title;
     public $template;
 
+    public $templateId;
+
     public function render()
     {
-        $myTextTemplates = TextTemplate::where('user_id', Auth::user()->id)->get();
-        return view('livewire.text-templates.controls-text-template', compact('myTextTemplates'));
+        $myTextTemplates = TextTemplate::
+            where('user_id', Auth::user()->id)->get();
+
+        return view('livewire.text-templates.controls-text-template', 
+            compact('myTextTemplates'));
     }
 
     public function save(){
         $textTemplate = new TextTemplate();
-        $editTextTemplate = null;
+        // $editTextTemplate = null;
 
         TextTemplate::updateOrCreate(
             [
-                'id'    =>  $editTextTemplate ? $editTextTemplate->id : '',
+                'id'    =>  $this->templateId ? $this->templateId : '',
             ],
             [
                 'title'         => $this->title,
@@ -73,6 +77,12 @@ class ControlsTextTemplate extends Component
 
         // return redirect()->route('purchase_plan.show', $purchasePlan->id);
         return redirect()->back(); 
+    }
+
+    public function set($textTemplates){
+        $this->templateId   = $textTemplates['id'];
+        $this->title        = $textTemplates['title'];
+        $this->template     = $textTemplates['template'];
     }
 
     public function emitControls($textTemplates){
