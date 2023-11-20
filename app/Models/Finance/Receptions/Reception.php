@@ -42,6 +42,10 @@ class Reception extends Model
         'doc_date',
         'total',
         'establishment_id',
+        'file',
+        'status',
+        'responsable_id',
+        'responsable_ou_id',
         'creator_id',
         'creator_ou_id',
     ];
@@ -57,12 +61,23 @@ class Reception extends Model
         'partial_reception' => 'boolean',
         'order_completed' => 'boolean',
         'cenabast' => 'boolean',
+        'status' => 'boolean',
     ];
 
 
     public function establishment()
     {
         return $this->belongsTo(Establishment::class);
+    }
+
+    public function responsable()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function responsableOu()
+    {
+        return $this->belongsTo(OrganizationalUnit::class);
     }
 
     public function creator()

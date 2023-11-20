@@ -511,7 +511,7 @@
 
         <br>
 
-        <h3 class="text-center mb-3">Acta de recepción conforme de {{ $types[$reception->reception_type_id] }}</h3>
+        <h3 class="text-center mb-3">Acta de recepción conforme de {{ ($reception->reception_type_id) ? $types[$reception->reception_type_id] : '' }}</h3>
 
         <p style="white-space: pre-wrap;">{{ $reception->header_notes }}</p>
 
