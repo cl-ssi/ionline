@@ -52,6 +52,7 @@
                     </span>
                 @endif
             </div>
+
             <div class="col-md-2 text-center">
                 <b>Orden de Compra</b><br>
                 <a target="_blank"
@@ -61,6 +62,7 @@
                 <br>
                 {{ $purchaseOrder->json->Listado[0]->Estado }}
             </div>
+
             <div class="col-md-3 text-center">
                 <b>Actas creadas para esta OC</b><br>
                 <ul>
@@ -116,8 +118,9 @@
                     <input class="form-check-input"
                         type="checkbox"
                         role="switch"
-                        wire:model.defer="reception.cenabast"
-                        id="for-cenabaste">
+                        wire:click="togglePoCenabast()"
+                        id="for-cenabast"
+                        {{ $purchaseOrder->cenabast ? 'checked' : '' }}>
                     <label class="form-check-label"
                         for="flexSwitchCheckDefault">Cenabast</label>
                 </div>
@@ -290,7 +293,8 @@
                         type="checkbox"
                         role="switch"
                         id="for-order_completed"
-                        wire:model.defer="reception.order_completed">
+                        wire:click="togglePoCompleted()"
+                        {{ $purchaseOrder->completed ? 'checked' : '' }}>
                     <label class="form-check-label"
                         for="flexSwitchCheckDefault">Marcar la Orden de Compra como Completada</label>
                     <div class="form-text">No se recibirán más items de esta Orden de Compra</div>
@@ -511,7 +515,8 @@
 
         <br>
 
-        <h3 class="text-center mb-3">Acta de recepción conforme de {{ ($reception->reception_type_id) ? $types[$reception->reception_type_id] : '' }}</h3>
+        <h3 class="text-center mb-3">Acta de recepción conforme de
+            {{ $reception->reception_type_id ? $types[$reception->reception_type_id] : '' }}</h3>
 
         <p style="white-space: pre-wrap;">{{ $reception->header_notes }}</p>
 

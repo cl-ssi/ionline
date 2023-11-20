@@ -21,6 +21,8 @@ class PurchaseOrder extends Model
         'code',
         'date',
         'data',
+        'completed',
+        'cenabast',
     ];
 
     /**
@@ -30,6 +32,8 @@ class PurchaseOrder extends Model
     */
     protected $casts = [
         'date' => 'datetime:Y-m-d H:i:s',
+        'completed' => 'boolean',
+        'cenabast' => 'boolean',
         // 'data' => 'object', // Para poder importar desde MP no puedo ocupar esto
     ];
 

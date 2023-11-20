@@ -42,8 +42,6 @@ class CreateReception extends Component
         'reception.header_notes' => 'nullable',
         'reception.footer_notes' => 'nullable',
         'reception.partial_reception' => 'boolean',
-        'reception.order_completed' => 'boolean',
-        'reception.cenabast' => 'boolean',
         'reception.doc_type' => 'nullable',
         'reception.doc_number' => 'nullable',
         'reception.doc_date' => 'nullable|date_format:Y-m-d',
@@ -176,7 +174,8 @@ class CreateReception extends Component
     */
     public function setPurchaseOrderCompleted()
     {
-        $this->reception->order_completed = true;
+        $this->purchaseOrder->completed = true;
+        $this->purchaseOrder->save();
     }
 
 
@@ -252,15 +251,22 @@ class CreateReception extends Component
         // Validar que tenga al menos un approval
         // Validar que tenga por le menos un receptionItems con cantidad > 0
 
-        // Obtener el correlativo si es que no se especificó un correlativo (numero)
+        /* Obtener el correlativo si es que no se especificó un correlativo (numero) */
         if( !$this->reception->number ) {
             $this->reception->number = Correlative::getCorrelativeFromType(Parameter::get('Recepciones','doc_type_id'));
         }
-        // TODO: Marcar modelo PurchaseOrder como completada
-        // TODO: Marcar modelo PurchaseOrder como cenabast
+
+        /* Marcar modelo PurchaseOrder como completada */
+        $this->purchaseOrder->completed = $this->reception->order_completed;
+        $this->purchaseOrder->save();
+
+
         app('debugbar')->log($this->reception->toArray());
         app('debugbar')->log($this->receptionItems);
         app('debugbar')->log($this->approvals);
+
+
+        $this->saveFile();
 
         /* Guardar reception */
         $this->reception->save();
@@ -277,6 +283,25 @@ class CreateReception extends Component
             $this->reception->approvals()->create($approval);
         }
     }
+
+    /**
+     * Toggle PurchaseOrder Cenabast
+     */
+    public function togglePoCenabast()
+    {
+        $this->purchaseOrder->cenabast = !$this->purchaseOrder->cenabast;
+        $this->purchaseOrder->save();
+    }
+
+    /**
+     * Toggle Purchase Order Complete
+     */
+    public function togglePoCompleted()
+    {
+        $this->purchaseOrder->completed = !$this->purchaseOrder->completed;
+        $this->purchaseOrder->save();
+    }
+
 
     public function render()
     {

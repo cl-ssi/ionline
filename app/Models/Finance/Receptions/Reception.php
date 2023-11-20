@@ -35,8 +35,6 @@ class Reception extends Model
         'header_notes',
         'footer_notes',
         'partial_reception',
-        'order_completed',
-        'cenabast',
         'doc_type',
         'doc_number',
         'doc_date',
@@ -59,8 +57,6 @@ class Reception extends Model
         'date' => 'date:Y-m-d',
         'doc_date' => 'date:Y-m-d',
         'partial_reception' => 'boolean',
-        'order_completed' => 'boolean',
-        'cenabast' => 'boolean',
         'status' => 'boolean',
     ];
 

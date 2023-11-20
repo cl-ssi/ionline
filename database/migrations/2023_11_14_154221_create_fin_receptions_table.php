@@ -21,8 +21,6 @@ return new class extends Migration {
             $table->string('purchase_order')->nullable();
 
             $table->boolean('partial_reception')->nullable(); // Si se selecciono completa o parcial
-            $table->boolean('order_completed')->nullable(); // Marcar orden completada
-            $table->boolean('cenabast')->nullable();
 
             $table->text('header_notes')->nullable();
             $table->text('footer_notes')->nullable();
