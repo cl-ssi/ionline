@@ -98,6 +98,8 @@ class AbsenteeismTypeController extends Controller
             'discount' => $request->has('discount'),
             'half_day' => $request->has('half_day'),
             'count_business_days' => $request->has('count_business_days'),
+            'over' => $request->input('over'),
+            'from' => $request->input('from'),
         ]);
 
         return redirect()->route('rrhh.absence-types.index')->with('success', 'Tipo de ausentismo actualizado exitosamente.');

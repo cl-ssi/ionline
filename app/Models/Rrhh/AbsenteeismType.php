@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-use App\Models\Rrhh\AbsenteeismDiscountCondition;
+// use App\Models\Rrhh\AbsenteeismDiscountCondition;
 
 class AbsenteeismType extends Model
 {
@@ -19,6 +19,8 @@ class AbsenteeismType extends Model
         'discount',
         'half_day',
         'count_business_days',
+        'over',
+        'from'
     ];
 
     // public function type(): BelongsTo
@@ -26,9 +28,9 @@ class AbsenteeismType extends Model
     //     return $this->belongsTo(AbsenteeismDiscountCondition::class, 'absenteeism_type_id');
     // }
 
-    public function discountCondition(): HasOne
-    {
-        return $this->hasOne(AbsenteeismDiscountCondition::class)->latestOfMany();
-    }
+    // public function discountCondition(): HasOne
+    // {
+    //     return $this->hasOne(AbsenteeismDiscountCondition::class)->latestOfMany();
+    // }
 
 }

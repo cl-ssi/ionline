@@ -11,6 +11,7 @@ use App\Models\WebService\MercadoPublico;
 use App\Models\Pharmacies\Purchase;
 use App\Http\Livewire\Welfare\Amipass\RequestMgr;
 use App\Http\Livewire\Welfare\Amipass\ReportByDates;
+use App\Http\Livewire\Welfare\Amipass\ReportByEmployee;
 use App\Http\Livewire\Welfare\Amipass\NewBeneficiaryRequest;
 use App\Http\Livewire\Warehouse\Invoices\InvoiceManagement;
 use App\Http\Livewire\Warehouse\Cenabast\CenabastIndex;
@@ -39,7 +40,7 @@ use App\Http\Livewire\Parameters\Holidays;
 use App\Http\Livewire\Parameters\AccessLogIndex;
 use App\Http\Livewire\Lobby\MeetingShow;
 use App\Http\Livewire\Lobby\MeetingMgr;
-use App\Http\Livewire\Inventory\ClassificationMgr;
+use App\Http\Livewire\Inventory\Transfer;
 use App\Http\Livewire\Inventory\RegisterInventory;
 use App\Http\Livewire\Inventory\PrintCodeQueue;
 use App\Http\Livewire\Inventory\PendingMovements;
@@ -53,15 +54,17 @@ use App\Http\Livewire\Inventory\InventoryLastReceptions;
 use App\Http\Livewire\Inventory\InventoryIndex;
 use App\Http\Livewire\Inventory\InventoryEdit;
 use App\Http\Livewire\Inventory\CreateTransfer;
+use App\Http\Livewire\Inventory\ClassificationMgr;
 use App\Http\Livewire\Inventory\CheckTransfer;
 use App\Http\Livewire\Inventory\AssignedProducts;
-use App\Http\Livewire\Inventory\Transfer;
 use App\Http\Livewire\InventoryLabel\InventoryLabelIndex;
 use App\Http\Livewire\His\NewModification;
 use App\Http\Livewire\His\ModificationRequestIndex;
 use App\Http\Livewire\His\ModificationMgr;
 use App\Http\Livewire\HealthServices;
 use App\Http\Livewire\Finance\UploadDtes;
+use App\Http\Livewire\Finance\Receptions\CreateReception;
+use App\Http\Livewire\Finance\Receptions\TypeMgr;
 use App\Http\Livewire\Finance\IndexDtes;
 use App\Http\Livewire\Finance\DteConfirmation;
 use App\Http\Livewire\Finance\AccountingCodesMgr;
@@ -171,8 +174,8 @@ use App\Http\Controllers\RNIdb\RNIdbController;
 use App\Http\Controllers\QualityAps\QualityApsController;
 use App\Http\Controllers\PurchasePlan\PurchasePlanController;
 use App\Http\Controllers\Programmings\TrainingsItemController;
-use App\Http\Controllers\Programmings\TaskReschedulingController;
 //use App\Http\Controllers\RequestForms\SupplyPurchaseController;
+use App\Http\Controllers\Programmings\TaskReschedulingController;
 use App\Http\Controllers\Programmings\TaskController;
 use App\Http\Controllers\Programmings\ReviewItemController;
 use App\Http\Controllers\Programmings\ProgrammingReviewController;
@@ -2014,6 +2017,11 @@ Route::prefix('finance')->as('finance.')->middleware(['auth', 'must.change.passw
         Route::get('/{purchaseOrder}', [PurchaseOrderController::class, 'show'])->name('show');
         Route::get('/by-code/{po_code}', [PurchaseOrderController::class, 'showByCode'])->name('showByCode');
     });
+
+    Route::prefix('receptions')->as('receptions.')->group(function () {
+        Route::get('/create', CreateReception::class)->name('create');
+        Route::get('/type', TypeMgr::class)->name('type');
+    });
 });
 
 /* */
@@ -2414,6 +2422,7 @@ Route::prefix('welfare')->as('welfare.')->middleware(['auth', 'must.change.passw
 
         Route::get('/shifts-index', ShiftsIndex::class)->name('shifts-index');
         Route::get('/report-by-dates', ReportByDates::class)->name('report-by-dates');
+        Route::get('/report-by-employee', ReportByEmployee::class)->name('report-by-employee');
         Route::prefix('value')->as('value.')->group(function () {
             Route::get('/', [AmipassController::class, 'indexValue'])->name('indexValue');
             Route::get('reportByDates', [AmipassController::class, 'reportByDates'])->name('reportByDates');

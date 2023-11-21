@@ -16,4 +16,8 @@
 
 @livewire('rrhh.ami-loads-import')
 
+<hr>
+
+@livewire('rrhh.compensatory-days-import')
+
 @endsection

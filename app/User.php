@@ -20,6 +20,7 @@ use App\Models\Rrhh\Contract;
 use App\Models\Rrhh\Absenteeism;
 use App\Models\Rrhh\AmiLoad;
 use App\Models\Rrhh\Shift;
+use App\Models\Rrhh\CompensatoryDay;
 
 use App\Models\Welfare\Amipass\Charge;
 use App\Models\Welfare\Amipass\NewCharge;
@@ -36,6 +37,8 @@ use App\Models\ClCommune;
 use App\Models\ProfAgenda\Proposal;
 // Para resetear contraseñas
 use Illuminate\Contracts\Auth\CanResetPassword;
+
+use Illuminate\Database\Eloquent\Relations\hasMany;
 
 class User extends Authenticatable implements Auditable
 {
@@ -231,9 +234,14 @@ class User extends Authenticatable implements Auditable
         return $this->hasMany(Regularization::class,'rut');
     }
 
-    public function shifts()
+    public function shifts(): HasMany
     {
         return $this->hasMany(Shift::class,'user_id');
+    }
+
+    public function compensatoryDays(): HasMany
+    {
+        return $this->hasMany(CompensatoryDay::class,'user_id');
     }
 
 

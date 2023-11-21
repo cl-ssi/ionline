@@ -36,6 +36,12 @@
                             {{ $absenteeismType->count_business_days == 1 ? 'checked' : '' }}>
                     </td>
                     <td>
+                        <input type="text" name="over" value="{{ $absenteeismType->over}}">
+                    </td>
+                    <td>
+                        <input type="text" name="from" value="{{ $absenteeismType->from}}">
+                    </td>
+                    <td>
                         <button type="submit" class="btn btn-primary">Actualizar</button>
                     </td>
                 </form>
