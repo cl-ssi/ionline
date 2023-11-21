@@ -11,6 +11,7 @@ use App\Models\WebService\MercadoPublico;
 use App\Models\Pharmacies\Purchase;
 use App\Http\Livewire\Welfare\Amipass\RequestMgr;
 use App\Http\Livewire\Welfare\Amipass\ReportByDates;
+use App\Http\Livewire\Welfare\Amipass\ReportByEmployee;
 use App\Http\Livewire\Welfare\Amipass\NewBeneficiaryRequest;
 use App\Http\Livewire\Warehouse\Invoices\InvoiceManagement;
 use App\Http\Livewire\Warehouse\Cenabast\CenabastIndex;
@@ -2414,6 +2415,7 @@ Route::prefix('welfare')->as('welfare.')->middleware(['auth', 'must.change.passw
 
         Route::get('/shifts-index', ShiftsIndex::class)->name('shifts-index');
         Route::get('/report-by-dates', ReportByDates::class)->name('report-by-dates');
+        Route::get('/report-by-employee', ReportByEmployee::class)->name('report-by-employee');
         Route::prefix('value')->as('value.')->group(function () {
             Route::get('/', [AmipassController::class, 'indexValue'])->name('indexValue');
             Route::get('reportByDates', [AmipassController::class, 'reportByDates'])->name('reportByDates');

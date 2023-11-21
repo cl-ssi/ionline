@@ -4,12 +4,16 @@ namespace App\Http\Livewire\Welfare\Amipass;
 
 use Livewire\Component;
 use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 use App\User;
 use App\Helpers\DateHelper;
+use Illuminate\Support\Facades\DB;
+
 use App\Models\Parameters\Holiday;
 use App\Models\Rrhh\AmiLoad;
-
 use App\Models\Welfare\Amipass\Charge;
+use App\Models\Rrhh\CompensatoryDay;
+use App\Models\Rrhh\AbsenteeismType;
 
 class ReportByDates extends Component
 {
@@ -17,8 +21,7 @@ class ReportByDates extends Component
     public $finicio;
     public $ftermino;
     public $userWithContracts;
-    // public $absenteeisms = [];
-    // public $array = [];
+    public $dailyAmmount;
     public $shiftAmmount;
     public $output = [];
 
@@ -28,25 +31,16 @@ class ReportByDates extends Component
     ];
 
     public function mount(){
-        $this->finicio = Carbon::createFromDate('2023-02-01');
-        $this->ftermino = Carbon::createFromDate('2023-02-28');
+        $this->finicio = Carbon::createFromDate('2023-03-01');
+        $this->ftermino = Carbon::createFromDate('2023-03-31');
     }
-
-    // public function trClick($row){
-    //     $this->search();
-    //     $this->array[$row] = true;
-    // }
-
-    // public function mount(){
-    //     $this->shiftAmmount = 5840;
-    // }
 
     public function search(){
 
         $this->validate();
 
         /* Valor de amipass */
-        $dailyAmmount = 4480;
+        $this->dailyAmmount = 4480;
         $this->shiftAmmount = 5840;
 
         // format fechas
@@ -56,7 +50,8 @@ class ReportByDates extends Component
         }
 
         $holidays = Holiday::whereBetween('date', [$startDate, $endDate])->get();
-
+        $compensatoryAbsenteeismType = AbsenteeismType::find(5);
+        
         /* Obtener los usuarios que tienen contratos en un rango de fecha con sus ausentismos */
         $this->userWithContracts = User::with([
                 'contracts' => function ($query) use ($startDate, $endDate) {
@@ -69,7 +64,8 @@ class ReportByDates extends Component
                 'absenteeisms' => function ($query) use ($startDate, $endDate) {
                     $query->where(function ($query) use ($startDate, $endDate) {
                         $query->whereDate('finicio', '<=', $endDate)
-                            ->whereDate('ftermino', '>=', $startDate);
+                            ->whereDate('ftermino', '>=', $startDate)
+                            ->where('absenteeism_type_id','!=',5);
                         });
                 },
                 'amiLoads' => function ($query) use ($startDate, $endDate) {
@@ -83,7 +79,13 @@ class ReportByDates extends Component
                                 ->where('month',$startDate->month);
                         });
                 },
-                'absenteeisms.type.discountCondition'
+                'compensatoryDays' => function ($query) use ($startDate, $endDate) {
+                    $query->where(function ($query) use ($startDate, $endDate) {
+                        $query->whereDate('start_date', '<=', $endDate)
+                            ->whereDate('end_date', '>=', $startDate);
+                        });
+                },
+                'absenteeisms.type'
             ])
             ->whereHas('contracts', function ($query) use ($startDate, $endDate) {
                 $query->where(function ($query) use ($startDate, $endDate) {
@@ -92,10 +94,14 @@ class ReportByDates extends Component
                         // ->where('shift',0); se traen todos, abajo se hace el filtro
                 });
             })
-            // ->where('id',19088113)
-            ->get();        
+            // ->whereIn('id',[9949268])
+            ->get();   
+
+
+
 
         foreach($this->userWithContracts as $row => $user) {
+
             // si tiene turnos
             if($user->shifts->count()>0)
             {
@@ -121,6 +127,7 @@ class ReportByDates extends Component
                  * - Incorporar calculo con valores 4.800 y 5.800 para los con turno
                  * - Almacenar el archivo de carga de amipass, para mostrar columna "Cargado en AMIPASS" wel_ami_recargas (ingles)
                  * - Que hacer con la fecha de alejamiento?  01-01-2023 -> 31-12-2023 fecha alejamiento (05-06-023)
+                 *   Sobre 33 hrs se considera para calculo amipass. 
                  * - Contratos que se suman, por ejemplo. dos contrtos de 22 horas, suman 44, cuando en el mismo instante del tiempo, tenga 44
                  *   ej: 14105981
                  *   11 horas           1....................30
@@ -161,8 +168,61 @@ class ReportByDates extends Component
                 $user->totalAbsenteeisms = 0;
 
                 $lastdate=null;
+                
+                $numero_horas = 0;
+                $businessDays = 0;
 
-                // ->where('finicio','>=',$startDate)->where('ftermino','<=',$endDate)
+                
+
+
+                // Obtiene array de días según contratos (ejemplo Contrato del 1 al 30, Contrato del 15 al 30, Result del 15 al 30)
+                // Intersectar horas de posibles contratos
+                $dateResult = array();
+                $contractDates = array();
+                foreach($user->contracts as $key => $contract) {
+                    // obtiene la suma de horas estupiladas en los contratos (para analisis más abajo)
+                    $numero_horas += $contract->numero_horas;
+
+                    // Se crea array con fechas del periodo de cada contrato
+                    $period = CarbonPeriod::create($contract->fecha_inicio_contrato->isAfter($startDate) ? $contract->fecha_inicio_contrato : $startDate, 
+                                                   $contract->fecha_termino_contrato->isBefore($endDate) ? $contract->fecha_termino_contrato : $endDate);
+                    $dateResult[$key] = $period->toArray();
+                    
+                    // se dejan solo fechas que se intercepten
+                    if($key > 0){
+                        $contractDates = array_intersect($dateResult[$key-1], $period->toArray());
+                    }else{
+                        $contractDates = $period->toArray();
+                    }
+
+                }
+
+                // se obtiene primera y ultima fecha (keys del array) del cruce (para analisis posterior)
+                $first_key = array_key_first($contractDates);
+                $last_key = array_key_last($contractDates);
+                
+                // días laborales reales (considerando cruze de contratos)
+                $businessDays = DateHelper::getBusinessDaysByDateRangeHolidays($contractDates[$first_key],$contractDates[$last_key],$holidays, $user->id)->toArray();
+                //cantidad de días laborales
+                $businessDays = count($businessDays);
+                $user->businessDays = $businessDays;
+                
+
+
+
+
+                // variable para mostrar horas en vista
+                $user->contract_hours = $numero_horas;
+                
+                // si es menor o igual a 33, no se sigue con el analisis para este usuario
+                if($numero_horas <= 33){
+                    continue;
+                }
+
+
+
+                
+
                 foreach($user->absenteeisms->sortBy('finicio') as $key => $absenteeism) {
                     // si el tipo de ausentismo no considera descuento, se sigue en la siguiente iteración
                     if(!$absenteeism->type->discount){
@@ -170,12 +230,18 @@ class ReportByDates extends Component
                         continue;
                     }
 
-                    if($absenteeism->id == 3546){
-                        // dd($absenteeism->total_dias_ausentismo, $absenteeism->type->discountCondition->from);
+                    // condición desde un valor
+                    if($absenteeism->type->from){
+                        if($absenteeism->total_dias_ausentismo >= $absenteeism->type->from){
+
+                        }else{
+                            $absenteeism->totalDays = 0;
+                            continue;
+                        }
                     }
-                    // si se debe hacer descuento, se verifica si existe algúna condición
-                    if($absenteeism->type->discountCondition){
-                        if($absenteeism->total_dias_ausentismo >= $absenteeism->type->discountCondition->from){
+                    // condición sobre un valor
+                    if($absenteeism->type->over){
+                        if($absenteeism->total_dias_ausentismo > $absenteeism->type->over){
 
                         }else{
                             $absenteeism->totalDays = 0;
@@ -197,30 +263,116 @@ class ReportByDates extends Component
                     $user->totalAbsenteeisms += $absenteeism->totalDays;
 
                     // $this->absenteeisms[$user->id] = $absenteeism;
+                    
                 }
 
                 $user->totalAbsenteeismsEnBd = $user->absenteeisms->sum('total_dias_ausentismo');
 
-                foreach($user->contracts as $contract) {
-                    /** Días laborales */
-                    $contract->businessDays =
-                        DateHelper::getBusinessDaysByDateRangeHolidays(
-                                $contract->fecha_inicio_contrato->isAfter($startDate) ? $contract->fecha_inicio_contrato : $startDate,
-                                $contract->fecha_termino_contrato->isBefore($endDate) ? $contract->fecha_termino_contrato : $endDate,
-                                $holidays, $user->id
-                            )->count();
+                
 
-                    /** Calcular monto de amipass a transferir */
-                    $contract->ammount = $dailyAmmount * ($contract->businessDays - $user->totalAbsenteeisms);
+                
 
-                    // se genera array para exportación de montos
-                    if(!array_key_exists($user->id,$this->output)){$this->output[$user->id] = 0;}
-                    $this->output[$user->id] += $contract->ammount;
 
-                    /**
-                     * Todo: Pendiente resolver los contratos de 11, 22, 33 horas, ya que esas personas salen repetidas en el reporte
-                     */
+                // dd($user->compensatoryDays);
+                // dias compensatorios
+                foreach($user->compensatoryDays as $key => $compensatoryDay){
+                    // genera array con inicio y termino de cada periodo del rango
+                    $start = $compensatoryDay->start_date;
+                    $end = $compensatoryDay->end_date;
+                    
+                    $dates = [];
+                    $datesArray = iterator_to_array(new \DatePeriod($start, new \DateInterval('P1D'), $end));
+                    array_walk($datesArray, function ($value, $key) use (&$dates, $start, $end) {
+                        $dates[$key]['start'] = (
+                            ($key == 0) ? $value->format('Y-m-d H:i:s') : $value->setTime(00, 0, 00)->format('Y-m-d H:i:s')
+                        );
+                        $endDate = $value->setTime(23, 59, 59);
+                        if ($endDate->getTimestamp() > $end->getTimestamp()) {
+                            $endDate = $end;
+                        }
+                        $dates[$key]['end'] = $endDate->format('Y-m-d H:i:s');
+                    });
+                    
+                    // verifica si el día compensatorio por día es mayor a 8
+                    $cant_dias = 0;
+                    $cant_dias_dias_compensatorios = 0;
+                    foreach($dates as $key => $date){
+                        $start = Carbon::parse($date['start']);
+                        $end = Carbon::parse($date['end']);
+
+                        if($compensatoryAbsenteeismType->over!=null){
+                            // sobre
+                            if($start->diffInHours($end) > $compensatoryAbsenteeismType->over){
+                                $cant_dias += 1;
+                                // si es que está dentro del rango
+                                if($start->between($this->finicio, $this->ftermino)){
+                                    $cant_dias_dias_compensatorios += 1;
+                                }
+                            }
+                        }elseif($compensatoryAbsenteeismType->from!=null){
+                            // desde
+                            if($start->diffInHours($end) >= $compensatoryAbsenteeismType->over){
+                                $cant_dias += 1;
+                                // si es que está dentro del rango
+                                if($start->between($this->finicio, $this->ftermino)){
+                                    $cant_dias_dias_compensatorios += 1;
+                                }
+                            }
+                        }
+                        
+                    }
+
+                    $compensatoryDay->total_dias_ausentismo = $cant_dias;
+                    $compensatoryDay->totalDays = $cant_dias_dias_compensatorios; 
                 }
+
+                // Se suma el valor a la cantidad de ausentismos (para suma calculo de cantidad total sumando ausentismos)
+                // dd($user->compensatoryDays);
+                if(count($user->compensatoryDays)>0){
+                    $user->totalAbsenteeismsEnBd += $user->compensatoryDays->sum('total_dias_ausentismo');
+                    $user->totalAbsenteeisms += $user->compensatoryDays->sum('totalDays');
+                }
+                
+
+
+
+
+
+
+                // obtiene monto a pagar de la ausencia y la asigna a usuario
+                $user->ammount = $this->dailyAmmount * ( $businessDays - $user->totalAbsenteeisms);
+                
+                // se genera array para exportación de montos
+                if(!array_key_exists($user->id,$this->output)){$this->output[$user->id] = 0;}
+                $this->output[$user->id] += $user->ammount;
+
+
+
+                // if($user->id == 15685556){
+                //     dd($dailyAmmount,$businessDays,$user->totalAbsenteeisms);
+                // }
+
+                // 
+                // foreach($user->contracts as $contract) {
+                //     /** Días laborales */
+                //     $contract->businessDays =
+                //         DateHelper::getBusinessDaysByDateRangeHolidays(
+                //                 $contract->fecha_inicio_contrato->isAfter($startDate) ? $contract->fecha_inicio_contrato : $startDate,
+                //                 $contract->fecha_termino_contrato->isBefore($endDate) ? $contract->fecha_termino_contrato : $endDate,
+                //                 $holidays, $user->id
+                //             )->count();
+
+                //     /** Calcular monto de amipass a transferir */
+                //     $contract->ammount = $dailyAmmount * ($contract->businessDays - $user->totalAbsenteeisms);
+
+                //     // se genera array para exportación de montos
+                //     if(!array_key_exists($user->id,$this->output)){$this->output[$user->id] = 0;}
+                //     $this->output[$user->id] += $contract->ammount;
+
+                //     /**
+                //      * Todo: Pendiente resolver los contratos de 11, 22, 33 horas, ya que esas personas salen repetidas en el reporte
+                //      */
+                // }
 
             }
 
@@ -245,6 +397,7 @@ class ReportByDates extends Component
                 $charge->date = Carbon::parse($date_string);
 
                 if($charge->date >= $startDate && $charge->date <= $endDate){
+                    $user->dias_ausentismo = $charge->dias_ausentismo;
                     $user->valor_debia_cargarse = $charge->valor_debia_cargarse;
                     break;
                 }
