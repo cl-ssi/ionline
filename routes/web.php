@@ -55,6 +55,7 @@ use App\Http\Livewire\Inventory\InventoryIndex;
 use App\Http\Livewire\Inventory\InventoryEdit;
 use App\Http\Livewire\Inventory\CreateTransfer;
 use App\Http\Livewire\Inventory\ClassificationMgr;
+use App\Http\Livewire\Inventory\RemovalRequestMgr;
 use App\Http\Livewire\Inventory\CheckTransfer;
 use App\Http\Livewire\Inventory\AssignedProducts;
 use App\Http\Livewire\InventoryLabel\InventoryLabelIndex;
@@ -1911,6 +1912,7 @@ Route::prefix('inventories')->as('inventories.')->middleware(['auth', 'must.chan
     });
     
     Route::get('clasification-mgr', ClassificationMgr::class)->name('clasification-mgr');
+    Route::get('removal-request-mgr', RemovalRequestMgr::class)->name('removal-request-mgr');
 
     Route::get('transfer', Transfer::class)->name('transfer');
 
