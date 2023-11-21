@@ -30,10 +30,10 @@ class ReportByDates extends Component
         'ftermino' => 'required',
     ];
 
-    public function mount(){
-        $this->finicio = Carbon::createFromDate('2023-03-01');
-        $this->ftermino = Carbon::createFromDate('2023-03-31');
-    }
+    // public function mount(){
+    //     $this->finicio = Carbon::createFromDate('2023-03-01');
+    //     $this->ftermino = Carbon::createFromDate('2023-03-31');
+    // }
 
     public function search(){
 
