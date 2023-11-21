@@ -12,10 +12,6 @@
             <a class="nav-link"
                 href="#">Sin Orden de Compra</a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link {{ active('finance.receptions.type') }}"
-                href="{{ route('finance.receptions.type') }}">Tipos de Acta</a>
-        </li>
     </ul>
 
     <!-- Orden de Compra -->
@@ -29,7 +25,7 @@
                     aria-label="Orden de compra"
                     aria-describedby="purchase-order"
                     wire:model.defer="purchaseOrderCode">
-                <button class="btn btn-outline-primary"
+                <button class="btn btn-primary"
                     wire:click="getPurchaseOrder">
                     <i class="bi bi-search"></i>
                 </button>
@@ -188,16 +184,15 @@
                     <Label>Encabezado</Label>
                     <textarea name=""
                         id="for-header_notes"
-                        rows="5"
+                        rows="6"
                         class="form-control"
-                        wire:model.debounse.500ms="reception.header_notes"></textarea>
+                        wire:model.defer="reception.header_notes"></textarea>
 
                     <div>
-
-                        @livewire('text-templates.controls-text-template', [
-                            'module'    => 'Receptions',
-                            'input'     => 'reception.header_notes'
-                        ], key('head_notes'))
+                    @livewire('text-templates.controls-text-template', [
+                        'module'    => 'Receptions',
+                        'input'     => 'reception.header_notes'
+                    ], key('head_notes'))
                     </div>
                 </div>
             </div>
@@ -315,9 +310,13 @@
                     <Label>Observaciones</Label>
                     <textarea name=""
                         id="for-footer_notes"
-                        rows="5"
+                        rows="6"
                         class="form-control"
-                        wire:model.debounce.500ms="reception.footer_notes"></textarea>
+                        wire:model.defer="reception.footer_notes"></textarea>
+                    @livewire('text-templates.controls-text-template', [
+                        'module'    => 'Receptions',
+                        'input'     => 'reception.footer_notes'
+                    ], key('footer_notes'))
                 </div>
             </div>
         </div>
@@ -678,8 +677,15 @@
 
         <div class="row mt-3">
             <div class="col-12 text-end">
+                <button class="btn btn-outline-primary"
+                    wire:click="preview()">
+                    <i class="bi bi-eye"></i>
+                    Actualizar previsualización</button>
+
                 <button class="btn btn-primary"
-                    wire:click="save">Crear</button>
+                    wire:click="save">
+                    <i class="bi bi-save"></i>
+                    Crear</button>
             </div>
         </div>
     @endif

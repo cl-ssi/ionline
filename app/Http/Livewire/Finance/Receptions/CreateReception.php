@@ -29,7 +29,7 @@ class CreateReception extends Component
     public $approvalUsers = [];
     public $authority = false;
 
-    protected $listeners = ['userSelected', 'ouSelected', 'textTemplateToEmit'];
+    protected $listeners = ['userSelected', 'ouSelected', 'setTemplate'];
 
     /**
      * TODO:
@@ -89,7 +89,7 @@ class CreateReception extends Component
         }
     }
 
-    public function textTemplateToEmit($template, $input){
+    public function setTemplate($input, $template){
         $this->$input = $template;
     }
 
@@ -306,6 +306,13 @@ class CreateReception extends Component
         $this->purchaseOrder->save();
     }
 
+    /**
+    * preview
+    */
+    public function preview()
+    {
+        
+    }
 
     public function render()
     {
