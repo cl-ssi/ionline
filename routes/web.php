@@ -243,6 +243,7 @@ use App\Http\Controllers\Finance\DteController;
 use App\Http\Controllers\Drugs\SubstanceController;
 use App\Http\Controllers\Drugs\RosterAnalisisToAdminController;
 use App\Http\Controllers\Drugs\ReceptionController;
+use App\Http\Controllers\Finance\Receptions\ReceptionController as FinReceptionController;
 use App\Http\Controllers\Drugs\CourtController;
 use App\Http\Controllers\Drugs\ActPrecursorController;
 use App\Http\Controllers\Documents\SignatureController;
@@ -2021,6 +2022,7 @@ Route::prefix('finance')->as('finance.')->middleware(['auth', 'must.change.passw
     Route::prefix('receptions')->as('receptions.')->group(function () {
         Route::get('/create', CreateReception::class)->name('create');
         Route::get('/type', TypeMgr::class)->name('type');
+        Route::get('/{reception}', [FinReceptionController::class,'show'])->name('show');
     });
 });
 

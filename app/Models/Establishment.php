@@ -224,4 +224,28 @@ class Establishment extends Model implements Auditable
         return $fnBuilder($grouped[0]);
     }
 
+    /**
+    * Get Establishment Logo public path
+    */
+    public function getLogoPublicPathAttribute()
+    {
+        /** Confeccionar URL pública del logo */
+        /** El código está acá para poder reutilizar este include en otro documento
+        * EJ:  
+        * '/images/logo_rgb_SSI.png'
+        * '/images/logo_pluma_SSI_HAH.png'
+        * 
+        */
+        $logo = '/images/logo_';
+
+        $logo .= 'rgb_';
+
+        if($this->mother) {
+            $logo .= $this->mother->alias . '_';
+        }
+
+        $logo .= $this->alias . '.png';
+        return public_path($logo);
+    }
+
 }

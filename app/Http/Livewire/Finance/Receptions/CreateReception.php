@@ -11,6 +11,7 @@ use App\Models\Finance\Receptions\ReceptionType;
 use App\Models\Finance\Receptions\ReceptionItem;
 use App\Models\Finance\Receptions\Reception;
 use App\Models\Finance\PurchaseOrder;
+use App\Models\Documents\Correlative;
 use App\Models\Documents\Approval;
 
 class CreateReception extends Component
@@ -253,6 +254,25 @@ class CreateReception extends Component
     {
         // $this->validate();
         // Validar que tenga al menos un approval
+        if(count($this->approvals) >= 1)
+        {
+            if(key_exists('right',$this->approvals)) {
+                $responsable = 'right';
+            }
+            else if(key_exists('center',$this->approvals)) {
+                $responsable = 'center';
+            }
+            else {
+                $responsable = 'left';
+            }
+        }
+        else {
+            dd('Debe tener al menos un firmante');
+        }
+        
+        $this->reception->responsable_id = $this->approvals[$responsable]['sent_to_user_id'] ?? null;
+        $this->reception->responsable_ou_id = $this->approvals[$responsable]['sent_to_ou_id'] ?? null;
+    
         // Validar que tenga por le menos un receptionItems con cantidad > 0
 
         /* Obtener el correlativo si es que no se especificó un correlativo (numero) */
@@ -260,17 +280,10 @@ class CreateReception extends Component
             $this->reception->number = Correlative::getCorrelativeFromType(Parameter::get('Recepciones','doc_type_id'));
         }
 
-        /* Marcar modelo PurchaseOrder como completada */
-        $this->purchaseOrder->completed = $this->reception->order_completed;
-        $this->purchaseOrder->save();
-
-
         app('debugbar')->log($this->reception->toArray());
         app('debugbar')->log($this->receptionItems);
         app('debugbar')->log($this->approvals);
 
-
-        $this->saveFile();
 
         /* Guardar reception */
         $this->reception->save();
@@ -286,6 +299,8 @@ class CreateReception extends Component
         foreach($this->approvals as $approval) {
             $this->reception->approvals()->create($approval);
         }
+
+
     }
 
     /**
