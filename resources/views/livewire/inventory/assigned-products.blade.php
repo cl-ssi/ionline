@@ -73,6 +73,8 @@
                     <td>
                         <small class="text-monospace">
                             {{ $inventory->number }}
+                            <br>
+                            {{ $inventory->old_number }}
                         </small>
                     </td>
                     <td>

@@ -23,7 +23,7 @@
             
             <div class="left quince" style="padding-left: 2px; padding-bottom: 10px;">
                 <strong style="text-transform: uppercase; padding-right: 30px;">
-                    {{ optional($document->type)->name }} N°:
+                    @if($document->number){{ optional($document->type)->name }} N°:@endif
                 </strong> 
                 <span class="catorce negrita">{{ $document->number }}</span>
             </div>

@@ -185,9 +185,18 @@ class RequestForm extends Model implements Auditable
         return $this->hasMany(ImmediatePurchase::class);
     }
 
+    /**
+     * Devuelve los Payment Docs del propio formulario
+     * si tienen un padre, entonces devuelve los del padre
+     */
     public function paymentDocs()
     {
-        return $this->hasMany(PaymentDoc::class);
+        if($this->father) {
+            return $this->father->paymentDocs();
+        }
+        else {
+            return $this->hasMany(PaymentDoc::class);
+        }
     }
 
     public function control()
@@ -768,5 +777,17 @@ class RequestForm extends Model implements Auditable
         $financePending = $this->eventRequestForms->where('event_type', 'finance_event')->where('status', 'pending')->count() > 0;
         $prefinanceApproved = $this->eventRequestForms->where('event_type', 'pre_finance_event')->where('status', 'approved')->count() > 0;
         return $this->hasEventRequestForms() && $financePending && $prefinanceApproved;
+    }
+
+    /**
+     * Obtener el tipo de formulario de requerimiento, Bienes o Servicios
+     * Corta la primera palabra, le pasa la primera letra a minúsucla
+     * ej: 
+     * bienes ejecución inmediata => Bienes
+     * servicios ejecución tiempo => Servicios
+     **/
+    public function getSubTypeNameAttribute()
+    {
+        return ucfirst(strtok($this->subtype, " "));
     }
 }

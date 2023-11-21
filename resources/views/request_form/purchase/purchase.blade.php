@@ -906,6 +906,7 @@
             </div>
         </div>
     </div>
+    @if($requestForm->itemRequestForms->count() > 0)
     <div class="card">
         <div class="card-header" id="headingTwo">
             <h2 class="mb-0">
@@ -950,6 +951,55 @@
             </div>
         </div>
     </div>
+    @else
+    <div class="card">
+        <div class="card-header" id="headingTwo">
+            <h2 class="mb-0">
+                <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse"
+                        data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                    Pasajes aéreos
+                </button>
+            </h2>
+        </div>
+        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+            <div class="card-body">
+                <h6 class="mt-3 mt-4">Historial de cambios</h6>
+                <div class="table-responsive-md">
+                    <table class="table table-sm small text-muted mt-3">
+                        <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Usuario</th>
+                            <th>Modificaciones</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach($requestForm->passengers as $passenger)
+                            @if($passenger->audits->count() > 0)
+                                @foreach($passenger->audits->sortByDesc('updated_at') as $audit)
+                                    <tr>
+                                        <td nowrap>{{ $audit->created_at }}</td>
+                                        <td nowrap>{{ optional($audit->user)->fullName }}</td>
+                                        <td>
+                                            @foreach($audit->getModified() as $attribute => $modified)
+                                                @if(isset($modified['old']) OR isset($modified['new']))
+                                                    <strong>{{ $attribute }}</strong>
+                                                    :  {{ isset($modified['old']) ? $modified['old'] : '' }}
+                                                    => {{ $modified['new'] ?? '' }};
+                                                @endif
+                                            @endforeach
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            @endif
+                        @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif
     <div class="card">
         <div class="card-header" id="headingThree">
             <h2 class="mb-0">

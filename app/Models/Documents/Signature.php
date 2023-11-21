@@ -133,8 +133,10 @@ class Signature extends Model implements Auditable
         /**
          * Utilizando notify y con colas
          */
-        foreach($valid_emails = $this->getMailsToDistribute() as $email) {
-            Notification::route('mail', $email)->notify(new SignedDocument($this));
+        $valid_emails = $this->getMailsToDistribute();
+
+        if( !empty($valid_emails) ) {
+            Notification::route('mail', $valid_emails)->notify(new SignedDocument($this));
         }
     }
 }
