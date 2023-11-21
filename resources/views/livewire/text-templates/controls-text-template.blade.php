@@ -64,7 +64,6 @@
                         <div class="col-8">
                             <div class="row g-3 mb-3">
                                 <fieldset class="form-group col-4">
-                                    <label for="for_title">Título</label>
                                     <input class="form-control"
                                         type="text"
                                         autocomplete="off"
@@ -75,8 +74,6 @@
                                 </fieldset>
 
                                 <fieldset class="form-group">
-                                    <label for="for_template"
-                                        class="form-label">Plantilla</label>
                                     <textarea class="form-control"
                                         id="for_template"
                                         rows="15"
