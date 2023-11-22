@@ -379,7 +379,7 @@ Route::middleware(['auth', 'must.change.password'])->group(function () {
 
 /* Replacepent Staff */
 Route::prefix('replacement_staff')->as('replacement_staff.')->middleware(['auth', 'must.change.password'])->group(function () {
-    Route::get('/', [ReplacementStaffController::class, 'index'])->name('index')->middleware(['role:Replacement Staff: admin|Replacement Staff: user rys']);
+    Route::get('/', [ReplacementStaffController::class, 'index'])->name('index')->middleware(['permission:Replacement Staff: list rrhh']);
     Route::get('/{replacement_staff}/show_replacement_staff', [ReplacementStaffController::class, 'show_replacement_staff'])->name('show_replacement_staff');
     Route::get('/download_file/{replacement_staff}', [ReplacementStaffController::class, 'download'])->name('download_file');
     Route::get('/view_file/{replacement_staff}', [ReplacementStaffController::class, 'show_file'])->name('view_file');
