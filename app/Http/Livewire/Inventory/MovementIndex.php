@@ -8,8 +8,11 @@ class MovementIndex extends Component
 {
     public $inventory;
 
+    public $data_preview;
+
     protected $listeners = [
-        'updateMovementIndex' => 'onUpdateMovementIndex'
+        'updateMovementIndex' => 'onUpdateMovementIndex',
+        'updateDataPreview'
     ];
 
     public function render()
@@ -20,5 +23,10 @@ class MovementIndex extends Component
     public function onUpdateMovementIndex()
     {
         $this->render();
+    }
+
+    public function updateDataPreview($data_preview)
+    {
+        $this->data_preview = $data_preview;
     }
 }
