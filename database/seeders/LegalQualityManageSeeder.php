@@ -14,7 +14,8 @@ class LegalQualityManageSeeder extends Seeder
      */
     public function run()
     {
-        LegalQualityManage::Create(['name'=>'to hire']);
-        LegalQualityManage::Create(['name'=>'fee']);
+        LegalQualityManage::Create(['name'  => 'to hire']);
+        LegalQualityManage::Create(['name'  => 'fee']);
+        LegalQualityManage::Create(['name'  => 'holder']);
     }
 }

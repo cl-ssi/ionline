@@ -44,6 +44,7 @@ class ShowLegalQualityRequest extends Component
 
     public $isDisabled = '';
     public $editModePosition = false;
+    public $isDisabledDetailFundament = '';
 
     protected $listeners = ['setPosition', 'setIsDisabled'];
 
@@ -159,10 +160,18 @@ class ShowLegalQualityRequest extends Component
             $this->otherFundamentInput = '';
             $this->emit('disabledRunDv');
             $this->emit('disabledNameToReplace');
+            $this->isDisabledDetailFundament = '';
+        }
+        elseif($selected_fundament_id == 6){
+            $this->otherFundamentInput = '';
+            $this->emit('disabledRunDv');
+            $this->emit('disabledNameToReplace');
+            $this->isDisabledDetailFundament = 'disabled';
         }
         else{
             $this->emit('enableRunDv');
             $this->emit('enableNameToReplace');
+            $this->isDisabledDetailFundament = '';
         }
     }
 
