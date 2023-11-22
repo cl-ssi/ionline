@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\User;
 use App\Rrhh\OrganizationalUnit;
 use App\Models\Finance\Receptions\ReceptionItem;
+use App\Models\Finance\PurchaseOrder;
 use App\Models\Establishment;
 use App\Models\Documents\Approval;
 
@@ -60,6 +61,10 @@ class Reception extends Model
         'status' => 'boolean',
     ];
 
+    public function purchaseOrder()
+    {
+        return $this->belongsTo(PurchaseOrder::class, 'purchase_order', 'code');
+    }
 
     public function establishment()
     {

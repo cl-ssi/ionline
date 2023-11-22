@@ -37,6 +37,10 @@ main {
     padding-bottom: 30px;
 }
 
+.cinco {
+    font-size: 0.5rem;
+}
+
 .seis {
     font-size: 0.6rem;
 }
@@ -51,6 +55,14 @@ main {
 
 .nueve {
     font-size: 0.9rem;
+}
+
+.diez {
+    font-size: 1.0rem;
+}
+
+.doce {
+    font-size: 1.2rem;
 }
 
 .catorce {
@@ -81,6 +93,10 @@ main {
     font-weight: bold;
 }
 
+.cursiva {
+    font-style: italic;
+}
+
 br {
     display: block;
     /* makes it have a width */
@@ -103,14 +119,18 @@ br {
 }
 
 .signature-container {
-    border: 3px solid #fff;
+    clear: both;
+    position: fixed;
+    height: 50px;
+    bottom: 50px; 
 }
 
 .signature {
     vertical-align: top;
     display: inline-block;
-    padding-right: 3px;
-    padding-bottom: 4px;
+    padding-top: 0px;
+    padding-right: 1px;
+    padding-bottom: 2px;
 }
 
 .danger {

@@ -19,6 +19,7 @@ class RemovalRequest extends Component
         $this->validate();
 
         $this->inventory->removal_request_reason = $this->motivo;
+        $this->inventory->removal_request_reason_at = now();
         $this->inventory->save();
 
         // Después de completar las acciones, puedes restablecer la variable reason

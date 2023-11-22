@@ -12,8 +12,6 @@
 
     <div class="col-7">
         <h3 class="mb-3">
-           <i class="fas fa-rocket text-danger fa-spin" 
-           title="Hola {{ auth()->user()->firstName }}! :D, te cuento que ahora la bandeja es más rápida. Que tengas un lindo {{ now()->dayName }}"></i> 
            Requerimientos de {{ $user->tinnyName }}
         </h3>
     </div>

@@ -75,6 +75,12 @@
             <div class="dropdown-menu">
                 <a
                     class="dropdown-item"
+                    href="{{ route('inventories.removal-request-mgr') }}"
+                >
+                    <i class="fas fa-fw fa-minus-circle"></i> Solicitudes de Baja de Inventario
+                </a>
+                <a
+                    class="dropdown-item"
                     href="{{ route('inventories.places', $establishment) }}"
                 >
                     <i class="fas fa-fw fa-file-alt"></i> Lugares

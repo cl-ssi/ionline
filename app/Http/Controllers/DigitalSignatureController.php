@@ -419,7 +419,7 @@ class DigitalSignatureController extends Controller
                 $yPading * 4 + $marginTop + 0.4,
                 $text_color,
                 $font_regular,
-                'Verificar autenticidad https://i.saludtarapaca.gob.cl/validador'
+                'Autenticidad https://i.saludtarapaca.gob.cl/validador'
             );
             imagettftext(
                 $im,
@@ -731,7 +731,7 @@ class DigitalSignatureController extends Controller
                 $yPading * 4 + $marginTop + 0.4,
                 $text_color,
                 $font_regular,
-                'Verificar autenticidad https://i.saludtarapaca.gob.cl/validador'
+                'Autenticidad https://i.saludtarapaca.gob.cl/validador'
             );
             imagettftext(
                 $im,

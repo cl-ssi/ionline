@@ -68,6 +68,10 @@ class Inventory extends Model implements Auditable
 
         // proceso de dar de baja a un inventario
         'removal_request_reason',
+        'removal_request_reason_at',
+        'is_removed',
+        'removed_user_id',
+        'removed_at',
     ];
 
     protected $dates = [
@@ -162,6 +166,11 @@ class Inventory extends Model implements Auditable
     public function responsible()
     {
         return $this->belongsTo(User::class, 'user_responsible_id')->withTrashed();
+    }
+
+    public function removedUser()
+    {
+        return $this->belongsTo(User::class, 'removed_user_id')->withTrashed();
     }
 
     public function using()

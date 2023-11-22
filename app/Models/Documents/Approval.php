@@ -320,7 +320,7 @@ class Approval extends Model
         $this->status = null;
 
         if($this->filename) {
-            if(Storage::disk('gcs')->exists($filename)) {
+            if(Storage::disk('gcs')->exists($this->filename)) {
                 Storage::disk('gcs')->delete($this->filename);
             }
         }

@@ -116,8 +116,9 @@ class ImageService
          * Define the parameters
          */
         $widthNumber = 100;
-        $widthImage = 1150;
-        $heightImage = 200;
+
+        $widthImage = 1100;
+        $heightImage = 280;
         $fontSize = 25;
         $xPading = 15;
         $yPading = 33;
@@ -142,17 +143,17 @@ class ImageService
          * Add text to image
          */
         $text = "Firmado electrónicamente de acuerdo a la ley Nº 19.799";
-        imagettftext($imagen, $fontSize + 2, 0, $xPading * 7, $yPading, $textColor, $this->fontLight, $text);
+        imagettftext($imagen, $fontSize + 3, 0, $xPading * 1, $yPading, $textColor, $this->fontLight, $text);
 
         /**
          * Add verification link to image
          */
-        imagettftext($imagen, $fontSize, 0, $xPading * 7, $yPading * 2.3, $textColor, $this->fontConsolas, "$verificationLink ID $validationCode");
+        imagettftext($imagen, $fontSize, 0, $xPading * 1, $yPading * 2.3, $textColor, $this->fontConsolas, "$verificationLink id:$validationCode");
 
         /**
          * Add the document number to image
          */
-        imagettftext($imagen, $fontSize + 35, 0, $xPading + $widthImage - $widthNumber - 400, $yPading * 6, $textColor, $this->fontConsolasBold, $documentNumber);
+        imagettftext($imagen, $fontSize + 35, 0, $xPading + $widthImage - $widthNumber - 600, $yPading * 8, $textColor, $this->fontConsolasBold, $documentNumber);
 
         /**
          *  Generate the image in base 64
@@ -180,10 +181,10 @@ class ImageService
          * Define the parameters
          */
         $width = 930;
-        $height = 180;
+        $height = 206;
         $fontSize = 20;
         $marginTop = 1;
-        $xAxis = 8;
+        $xAxis = 12;
         $yPading = 37;
 
         /**
@@ -200,8 +201,9 @@ class ImageService
         /**
          * Create the rectangle
          */
-        imagefilledrectangle($imagen, 1, 1, $width - 2, $height - 2, $white);
+        imagefilledrectangle($imagen, 3, 3, $width - 4, $height - 4, $white);
         $textColor = imagecolorallocate($imagen, 0, 0, 0);
+        $textColorAzul = imagecolorallocate($imagen, 0, 0, 144);
 
         /**
          * Obtain the Digital Signature Logo
@@ -216,27 +218,28 @@ class ImageService
         /**
          * Merge the logo with the image
          */
-        imagecopymerge($imagen, $digitalSignatureLogo, $width - $firmaDigitalWidth, 2, 0, 3, imagesx($digitalSignatureLogo) - 5, imagesy($digitalSignatureLogo) - 5, 100);
+        imagecopymerge($imagen, $digitalSignatureLogo, $width - $firmaDigitalWidth - 6, 12, 0, 0, imagesx($digitalSignatureLogo) - 5, imagesy($digitalSignatureLogo) - 5, 100);
 
-        /**
-         * Add the signer's name to the image
-         */
-        imagettftext($imagen, $fontSize + 15, 0, $xAxis, $yPading * 1.5 + $marginTop, $textColor, $this->fontBold, $user->shortName);
-
-        /**
-         * Add the organizational unit to the image
-         */
-        imagettftext($imagen, $fontSize + 1, 0, $xAxis, $yPading * 2.4 + $marginTop + 0.3, $textColor, $this->fontLight, $user->organizationalUnit->name);
-
-        /**
-         * Add the name of the app on the image
-         */
-        imagettftext($imagen, $fontSize + 1, 0, $xAxis, $yPading * 3.4 + $marginTop + 0.4, $textColor, $this->fontRegular, env('APP_SS'));
 
         /**
          * Add date and time of signing
          */
-        imagettftext($imagen, $fontSize - 1, 0, $xAxis, $yPading * 4.3 + $marginTop + 0.5, $textColor, $this->fontRegular, now());
+        imagettftext($imagen, $fontSize - 1, 0, $xAxis, $yPading * 1.0 + $marginTop, $textColorAzul, $this->fontRegular, 'FIRMADO el ' . now()->format('Y-m-d \a \l\a\s H:i'));
+
+        /**
+         * Add the signer's name to the image
+         */
+        imagettftext($imagen, $fontSize + 15, 0, $xAxis - 2, $yPading * 2.6 + $marginTop + 0.3, $textColorAzul, $this->fontBold, $user->shortName);
+
+        /**
+         * Add the organizational unit to the image
+         */
+        imagettftext($imagen, $fontSize + 1, 0, $xAxis, $yPading * 3.8 + $marginTop + 0.4, $textColor, $this->fontRegular, $user->organizationalUnit->name);
+
+        /**
+         * Add the name of the app on the image
+         */
+        imagettftext($imagen, $fontSize + 1, 0, $xAxis, $yPading * 5.0 + $marginTop + 0.5, $textColor, $this->fontRegular, env('APP_SS'));
 
         /**
          *  Generate the image in base 64

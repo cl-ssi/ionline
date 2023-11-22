@@ -55,6 +55,7 @@ use App\Http\Livewire\Inventory\InventoryIndex;
 use App\Http\Livewire\Inventory\InventoryEdit;
 use App\Http\Livewire\Inventory\CreateTransfer;
 use App\Http\Livewire\Inventory\ClassificationMgr;
+use App\Http\Livewire\Inventory\RemovalRequestMgr;
 use App\Http\Livewire\Inventory\CheckTransfer;
 use App\Http\Livewire\Inventory\AssignedProducts;
 use App\Http\Livewire\InventoryLabel\InventoryLabelIndex;
@@ -243,6 +244,7 @@ use App\Http\Controllers\Finance\DteController;
 use App\Http\Controllers\Drugs\SubstanceController;
 use App\Http\Controllers\Drugs\RosterAnalisisToAdminController;
 use App\Http\Controllers\Drugs\ReceptionController;
+use App\Http\Controllers\Finance\Receptions\ReceptionController as FinReceptionController;
 use App\Http\Controllers\Drugs\CourtController;
 use App\Http\Controllers\Drugs\ActPrecursorController;
 use App\Http\Controllers\Documents\SignatureController;
@@ -377,7 +379,7 @@ Route::middleware(['auth', 'must.change.password'])->group(function () {
 
 /* Replacepent Staff */
 Route::prefix('replacement_staff')->as('replacement_staff.')->middleware(['auth', 'must.change.password'])->group(function () {
-    Route::get('/', [ReplacementStaffController::class, 'index'])->name('index')->middleware(['role:Replacement Staff: admin|Replacement Staff: user rys']);
+    Route::get('/', [ReplacementStaffController::class, 'index'])->name('index')->middleware(['permission:Replacement Staff: list rrhh']);
     Route::get('/{replacement_staff}/show_replacement_staff', [ReplacementStaffController::class, 'show_replacement_staff'])->name('show_replacement_staff');
     Route::get('/download_file/{replacement_staff}', [ReplacementStaffController::class, 'download'])->name('download_file');
     Route::get('/view_file/{replacement_staff}', [ReplacementStaffController::class, 'show_file'])->name('view_file');
@@ -1910,6 +1912,7 @@ Route::prefix('inventories')->as('inventories.')->middleware(['auth', 'must.chan
     });
     
     Route::get('clasification-mgr', ClassificationMgr::class)->name('clasification-mgr');
+    Route::get('removal-request-mgr', RemovalRequestMgr::class)->name('removal-request-mgr');
 
     Route::get('transfer', Transfer::class)->name('transfer');
 
@@ -2021,6 +2024,7 @@ Route::prefix('finance')->as('finance.')->middleware(['auth', 'must.change.passw
     Route::prefix('receptions')->as('receptions.')->group(function () {
         Route::get('/create', CreateReception::class)->name('create');
         Route::get('/type', TypeMgr::class)->name('type');
+        Route::get('/{reception_id}', [FinReceptionController::class,'show'])->name('show');
     });
 });
 

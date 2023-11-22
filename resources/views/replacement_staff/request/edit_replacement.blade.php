@@ -161,7 +161,7 @@
 
         <fieldset class="form-group col-md-5">
             <div class="mb-3">
-                <label for="for_request_verification_file" class="form-label">Correo (Verificación Solicitud)</label>
+                <label for="for_request_verification_file" class="form-label">Correo de Respaldo <small>(Autorizaciones, VB de jefaturas superiores o directas)</small></label>
                 <input class="form-control" type="file" name="request_verification_file" accept="application/pdf">
             </div>
         </fieldset>

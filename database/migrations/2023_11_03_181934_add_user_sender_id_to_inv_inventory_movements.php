@@ -26,5 +26,7 @@ return new class extends Migration
     public function down()
     {
         //
+        $table->dropForeign(['user_sender_id']);
+        $table->dropColumn('user_sender_id');
     }
 };
