@@ -63,6 +63,10 @@
                 <a class="dropdown-item" href="{{ route('welfare.amipass.report-by-dates') }}">
                     <i class="fas fa-calendar-alt"></i> Reporte por fechas
                 </a>
+
+                <a class="dropdown-item" href="{{ route('welfare.amipass.report-by-employee') }}">
+                    <i class="fas fa-calendar-alt"></i> Reporte por funcionario
+                </a>
             </div>
         </li>
     @endcanany

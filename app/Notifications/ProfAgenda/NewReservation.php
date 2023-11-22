@@ -47,7 +47,7 @@ class NewReservation extends Notification implements ShouldQueue
             ->level('info')
             ->subject('UST - Cita con '. $this->openHour->activityType->name . ' el ' . $this->openHour->start_date->format('Y-m-d'))
             ->greeting('Hola ' . $notifiable->shortName)
-            ->line('Se ha reservado una hora de: ' . $this->openHour->activityType->name)
+            ->line('Se ha reservado una hora de: ' . $this->openHour->activityType->name . " - #" . $this->openHour->id)
             ->line('Con el profesional: ' . $this->openHour->profesional->shortName)
             ->line('La reserva se encuentra realizada para: ' . $this->openHour->start_date->format('Y-m-d'). ' a las: ' . $this->openHour->start_date->format('H:i'))
             ->line('Se solicita llegar puntual a su hora.')

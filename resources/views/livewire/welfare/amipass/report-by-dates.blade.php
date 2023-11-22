@@ -39,7 +39,7 @@
                 <th>Nombre</th>
                 <th>Cargado en AMIPASS</th>
                 <th>Calculo Sistema</th>
-                <th>Valor que debía cargarse</th>  <!-- debe eliminarse esta columna -->
+                <th>Valor (S.T)</th>  <!-- debe eliminarse esta columna -->
                 <th>Diferencia</th>
                 <th>Tipo</th>
             </tr>
@@ -49,13 +49,13 @@
                 @foreach ($userWithContracts as $ct => $user)
                     @if($user->shifts->count()==0)
                         
-                    @if($user->contracts->sum('ammount') == $user->valor_debia_cargarse) <tr >
+                    @if($user->ammount == $user->valor_debia_cargarse) <tr >
                         @else <tr class="table-warning"> @endif
                         
                             <td>{{ $user->id }}</td>
                             <td>{{ $user->shortName }}</td>
                             <td>{{ money($user->AmiLoadMount) }}</td>
-                            <td>{{ money($user->contracts->sum('ammount')) }}</td>
+                            <td>{{ money($user->ammount) }}</td>
                             <td>{{ money($user->valor_debia_cargarse) }}</td> <!-- debe eliminarse esta columna -->
                             <td>
                                 @if($user->diff < 0)
@@ -88,6 +88,7 @@
                             </td>
                             <td class="small">
                                 <ul>
+                                    <!-- ausentismos (sin condierar dias compensatorios) -->
                                     @foreach($user->absenteeisms as $absenteeism)
                                     <li> 
                                         @if($absenteeism->totalDays==0)
@@ -103,25 +104,58 @@
                                         @endif
                                     </li>
                                     @endforeach
+
+                                    <!-- solo dias compensatorios -->
+                                    @foreach($user->compensatoryDays as $compensatoryDay)
+                                    <li> 
+                                        @if($compensatoryDay->totalDays==0)
+                                            {{ $compensatoryDay->start_date->format('Y-m-d H:i') }} - {{ $compensatoryDay->end_date->format('Y-m-d H:i')}} => {{$compensatoryDay->start_date->diffInHours($compensatoryDay->end_date)}} Hrs. 
+                                            <small>(DÍA COMPENSATORIO)</small> 
+                                            Dias: {{ $compensatoryDay->total_dias_ausentismo }} => {{ $compensatoryDay->totalDays}}
+                                        @else 
+                                            <p style="color:red;display: inline;">
+                                                {{ $compensatoryDay->start_date->format('Y-m-d H:i') }} - {{ $compensatoryDay->end_date->format('Y-m-d H:i') }} => {{$compensatoryDay->start_date->diffInHours($compensatoryDay->end_date)}} Hrs. 
+                                                <small>(DÍA COMPENSATORIO)</small> 
+                                                Dias: {{ $compensatoryDay->total_dias_ausentismo }} => {{ $compensatoryDay->totalDays}}
+                                            </p>
+                                        @endif
+                                    </li>
+                                    @endforeach
+
+                                    <br>
+                                    <li>Días hábiles en búsqueda: {{$user->businessDays}}</li>
+                                    <li>Días descuento: {{ $user->totalAbsenteeismsEnBd }} => {{ $user->totalAbsenteeisms }}</li>
+                                    <li>Días a pagar: {{$user->businessDays - $user->totalAbsenteeisms}}</li>
+                                    <li>Valor día: {{$this->dailyAmmount}}</li>
                                 </ul>
-                                Total días: {{ $user->totalAbsenteeismsEnBd }} =>  {{ $user->totalAbsenteeisms }}
+
+                                
 
                                 <hr>
 
+                                
+                                <ul>
+                                    <li>
+                                    H.Totales contratos: {{$user->contract_hours}} 
+                                    @if($user->contract_hours<=33)
+                                        <p style="color:red;display: inline;">(Sin descuentos)</p>
+                                    @endif
+                                    </li>
+                                </ul>
+
+                                Contratos:
                                 <ul>
                                 @foreach($user->contracts as $contract)
                                     <li>
                                     {{ $contract->id }} - 
                                     {{ optional($contract->fecha_inicio_contrato)->format('Y-m-d') }} - 
                                     {{ optional($contract->fecha_termino_contrato)->format('Y-m-d') }}<br>
-                                    Horas: {{ $contract->numero_horas }} - 
-                                    Días Hábiles {{ $contract->businessDays }} <br>
-                                    Monto a cargar $ {{ money($contract->ammount) }}
+                                    Horas contrato: {{ $contract->numero_horas }} <br>
                                     </li>
                                 @endforeach
                                 </ul>
                             </td>
-                            <td></td>
+                            <td><small>D.Ausentismo: {{$user->dias_ausentismo}}</small> </td>
                         </tr>
                     @else
                         <tr class="table-info">

@@ -1,1 +1,1 @@
-@include('documents.templates.show')
+@include('documents.templates.circular')

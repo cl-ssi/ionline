@@ -6,10 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Parameters\BudgetItem;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class Passenger extends Model
+class Passenger extends Model implements Auditable
 {
     use SoftDeletes;
+    use \OwenIt\Auditing\Auditable;
+    
     protected $fillable = [
         'user_id', 'run', 'dv' ,'name' ,'fathers_family', 'mothers_family',
         'birthday', 'phone_number', 'email', 'round_trip', 'origin', 'destination',

@@ -39,11 +39,13 @@
                     <td>{{ $place->architectural_design_code }}</td>
                     <td>{{ $place->establishment->name }}</td>
                     <td class="text-center">
-                        <button type="button"
-                            class="btn btn-sm btn-outline-primary"
-                            wire:click="edit({{ $place }})">
-                            <i class="fas fa-edit"></i>
-                        </button>
+                        @can('Inventory: manager')
+                            <button type="button"
+                                class="btn btn-sm btn-outline-primary"
+                                wire:click="edit({{ $place }})">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                        @endcan
                     </td>
                 </tr>
             @empty

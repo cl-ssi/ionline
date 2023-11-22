@@ -445,54 +445,52 @@
                         </a>
                         @endcan
 
-                        {{-- @if(Auth::user()->hasRole('Replacement Staff: admin'))
-                            <div class="dropdown-divider"></div>
-
-                            <a class="dropdown-item {{ active('replacement_staff.request.index') }}"
-                        href="{{ route('replacement_staff.request.index') }}">
-                        <i class="far fa-id-card "></i> Solicitudes de Contratación
-                        </a>
-                        @endif --}}
-
-                        @if(Auth::user()->hasRole('Replacement Staff: user rys'))
+                        @if(Auth::user()->manager->count() > 0 ||
+                            Auth::user()->can('Replacement Staff: assign request') ||
+                            Auth::user()->can('Replacement Staff: create request') ||
+                            Auth::user()->can('Replacement Staff: create staff') ||
+                            Auth::user()->can('Replacement Staff: list rrhh') ||
+                            Auth::user()->can('Replacement Staff: manage') ||
+                            Auth::user()->can('Replacement Staff: personal sign') ||
+                            Auth::user()->can('Replacement Staff: staff manage') ||
+                            Auth::user()->can('Replacement Staff: technical evaluation') ||
+                            Auth::user()->can('Replacement Staff: view requests') ||
+                            Auth::user()->can('Job Position Profile: all') ||
+                            Auth::user()->can('Job Position Profile: audit') ||
+                            Auth::user()->can('Job Position Profile: create') ||
+                            Auth::user()->can('Job Position Profile: edit') ||
+                            Auth::user()->can('Job Position Profile: review')
+                        )
                         <div class="dropdown-divider"></div>
                         <h6 class="dropdown-header">Depto. Desarrollo y Gestión del Talento</h6>
-
-                        <a class="dropdown-item {{ active('replacement_staff.request.assign_index') }}" href="{{ route('replacement_staff.request.assign_index') }}">
+                        @if(Auth::user()->manager->count() > 0 ||
+                            Auth::user()->can('Replacement Staff: assign request') ||
+                            Auth::user()->can('Replacement Staff: create request') ||
+                            Auth::user()->can('Replacement Staff: create staff') ||
+                            Auth::user()->can('Replacement Staff: list rrhh') ||
+                            Auth::user()->can('Replacement Staff: manage') ||
+                            Auth::user()->can('Replacement Staff: personal sign') ||
+                            Auth::user()->can('Replacement Staff: staff manage') ||
+                            Auth::user()->can('Replacement Staff: technical evaluation') ||
+                            Auth::user()->can('Replacement Staff: view requests')
+                        )
+                        <a class="dropdown-item {{ active('replacement_staff.request.own_index') }}" href="{{ route('replacement_staff.request.own_index') }}">
                             <i class="far fa-id-card"></i> Solicitudes de Contratación
                         </a>
                         @endif
 
                         @if(Auth::user()->manager->count() > 0 ||
-                            Auth::user()->hasRole('Replacement Staff: personal') ||
-                            Auth::user()->hasRole('Replacement Staff: personal sign') ||
-                            Auth::user()->hasRole('Replacement Staff: admin') ||
-                            Auth::user()->hasRole('Replacement Staff: user') ||
-                            Auth::user()->can('Job Position Profile: create') ||
                             Auth::user()->can('Job Position Profile: all') ||
-                            Auth::user()->can('Job Position Profile: review'))
+                            Auth::user()->can('Job Position Profile: audit') ||
+                            Auth::user()->can('Job Position Profile: create') ||
+                            Auth::user()->can('Job Position Profile: edit') ||
+                            Auth::user()->can('Job Position Profile: review')
+                        )
+                        <a class="dropdown-item {{ active('job_position_profile.index') }}" href="{{ route('job_position_profile.index') }}">
+                            <i class="fas fa-id-badge fa-fw"></i> Perfil de Cargos
+                        </a>
+                        @endif
 
-                            <div class="dropdown-divider"></div>
-                            <h6 class="dropdown-header">Depto. Desarrollo y Gestión del Talento</h6>
-
-                            @if(Auth::user()->manager->count() > 0 ||
-                                Auth::user()->hasRole('Replacement Staff: personal') ||
-                                Auth::user()->hasRole('Replacement Staff: personal sign') ||
-                                Auth::user()->hasRole('Replacement Staff: admin') ||
-                                Auth::user()->hasRole('Replacement Staff: user'))
-                                <a class="dropdown-item {{ active('replacement_staff.request.own_index') }}" href="{{ route('replacement_staff.request.own_index') }}">
-                                    <i class="far fa-id-card fa-fw"></i> Solicitudes de Contratación
-                                </a>
-                            @endif
-
-                            @if(Auth::user()->manager->count() > 0 ||
-                                Auth::user()->can('Job Position Profile: create') ||
-                                Auth::user()->can('Job Position Profile: all') ||
-                                Auth::user()->can('Job Position Profile: review'))
-                                <a class="dropdown-item {{ active('job_position_profile.index') }}" href="{{ route('job_position_profile.index') }}">
-                                    <i class="fas fa-id-badge fa-fw"></i> Perfil de Cargos
-                                </a>
-                            @endif
                         @endif
 
                     </ul>

@@ -53,8 +53,8 @@
         @elseif($openHour->assistance === 0) <tr class="table-danger"> 
         @else <tr> @endif
             <td>{{$openHour->id}}</td>
-            <td>{{$openHour->start_date->format('Y-m-d h:i')}}</td>
-            <td>{{$openHour->end_date->format('Y-m-d h:i')}}</td>
+            <td>{{$openHour->start_date->format('Y-m-d H:i')}}</td>
+            <td>{{$openHour->end_date->format('Y-m-d H:i')}}</td>
             <td>@if($openHour->profesional){{$openHour->profesional->shortName}}@endif</td>
             <td>{{$openHour->activityType->name}}</td>
             <td>@if($openHour->patient){{$openHour->patient->shortName}}@endif</td>

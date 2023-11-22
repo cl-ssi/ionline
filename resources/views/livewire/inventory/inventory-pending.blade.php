@@ -79,13 +79,13 @@
                                         {{ $inventory->control->po_code }}
                                     </span>
                                 @else
-                                    {{ $inventory->control->origin->name }}
+                                    {{ $inventory->control->origin?->name }}
                                 @endif
                                 <br>
                                 <small>
                                     {{ optional($inventory->control->typeReception)->name }}
                                 </small>
-                                @else
+                            @else
                                 <small>
                                     No posee Origen/OC
                                 </small>

@@ -171,6 +171,7 @@ class RoleAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Job Position Profile: create', 'description' => 'Permite crear la creación de perfiles de cargo']);
         Permission::create(['name' => 'Job Position Profile: all', 'description' => 'Permite acceder a todo el listado de perfiles de cargo']);
         Permission::create(['name' => 'Job Position Profile: audit', 'description' => 'Permite acceder al registro de auditoría del módulo']);
+        Permission::create(['name' => 'Job Position Profile: edit', 'description' => 'Permite editar cualquier perfil de cargo']);
         
         Permission::create(['name' => 'Payments', 'description' => 'Acceso al módulo Estados de Pago']);
         Permission::create(['name' => 'Payments: cenabast bypass', 'description' => 'permiso para poder hacer bypass cuando se sube un documento ya firmado anteriormente por ende no deberia entrar al proceso de firma por farmaceutico-jefe (carga retroactiva)']);

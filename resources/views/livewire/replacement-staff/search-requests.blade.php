@@ -281,6 +281,17 @@
                                 $requestReplacementStaff->signaturesFile && $requestReplacementStaff->signaturesFile->signaturesFlows->first()-> status == 1) &&
                                     !$requestReplacementStaff->technicalEvaluation &&
                                         Auth::user()->hasPermissionTo('Replacement Staff: assign request'))
+
+                                <div class="form-check">
+                                    <input class="form-check-input" 
+                                        type="checkbox" {{-- name="sign_id[]" --}}
+                                        wire:model.debounce.500ms="checkToAssign"
+                                        value="{{ $requestReplacementStaff->id }}"
+                                        {{-- onclick="myFunction()" --}}
+                                        id="for_sign_id">
+                                </div>
+
+                                <br />
                                 
                                 <button type="button" class="btn btn-outline-secondary btn-sm" data-toggle="modal"
                                     data-target="#exampleModal-assign-{{ $requestReplacementStaff->id }}">
@@ -289,6 +300,7 @@
                                 @if($users_rys)
                                     @include('replacement_staff.modals.modal_to_assign')
                                 @endif
+
                             <!-- ACCESO A EVALUACIÓN TÉCNICA -->
                             @else
                                 <!-- BOTÓN PARA GESTIONAR EVALUACIÓN TÉCNICA -->
@@ -311,6 +323,44 @@
         </table>
         {{ $requests->links() }}
     </div>
+
+    @if(count($errors) > 0)
+        <div class="alert alert-danger">
+            <p>Corrige los siguientes errores:</p>
+            <ul>
+                @foreach ($errors->all() as $message)
+                    <li>{{ $message }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+    
+    @if(Auth::user()->hasPermissionTo('Replacement Staff: assign request'))
+    <div class="card">
+        <div class="card-body">
+            <h6 class="mb-3"><i class="fas fa-user-tag"></i> Asignar solicitudes a funcionarios</h6>
+
+            <fieldset class="form-group">
+                <label for="for_to_user_id">Funcionario</label>
+                <select wire:model="userToAssign" id="for_to_user_id" class="form-control">
+                    <option value="">Seleccione...</option>
+                    @foreach($users_rys as $user_rys)
+                        <option value="{{ $user_rys->id }}">{{ $user_rys->FullName }}</option>
+                    @endforeach
+                </select>
+            </fieldset>
+            
+            <button type="button" 
+                class="btn btn-primary float-right" 
+                {{-- data-toggle="modal"
+                data-target="#exampleModal-assign-{{ $requestReplacementStaff->id }}" --}}
+                wire:click="assign()">
+                    Asignar <i class="fas fa-user-tag"></i>
+            </button>
+
+        </div>
+    </div>
+    @endif
 
     @else
 

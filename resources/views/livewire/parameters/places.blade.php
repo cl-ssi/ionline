@@ -12,15 +12,17 @@
                         Lugares
                     </h4>
                 </div>
-                <div class="col  text-end">
-                    <button
-                        class="btn btn-primary"
-                        wire:click="create"
-                    >
-                        <i class="fas fa-plus"></i>
-                        Crear nuevo
-                    </button>
-                </div>
+                @can('Inventory: manager')
+                    <div class="col  text-end">
+                        <button
+                            class="btn btn-primary"
+                            wire:click="create"
+                        >
+                            <i class="fas fa-plus"></i>
+                            Crear nuevo
+                        </button>
+                    </div>
+                @endcan
             </div>
             @include('parameters.places.index')
             @break

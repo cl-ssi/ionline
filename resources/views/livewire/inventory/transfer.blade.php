@@ -27,12 +27,12 @@
                 </span>
             @enderror
         </fieldset>
-        
 
-        
-        
-        
-
+        @if($old_user_responsible_id)
+            <h4>
+                Total de Cantidad de Inventario de Responsable {{$inventories->total()}}
+            </h4>
+        @endif
     </div>
 
     @if($old_user_responsible_id)
@@ -44,7 +44,6 @@
                     <th>Lugar</th>
                     <th>Responsable</th>
                     <th>Usuario</th>
-                    <th class="text-center">Total</th>
                 </tr>
             </thead>
             <tbody>
@@ -75,18 +74,17 @@
                                 {{ $inventory->using->tinny_name }}
                             @endif
                         </td>
-                        <td class="text-center">
-                            {{ $inventories->total() }}
-                        </td>
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="6" align="center">No hay Productos asociado a este usuario</td>
+                        <td colspan="5" align="center">No hay Productos asociado a este usuario</td>
                     </tr>
 
                 @endforelse
             </tbody>
         </table>
+
+        {{ $inventories->links() }}
 
         <div class="row g-2 mb-3">
             @if($old_user_responsible_id and $has_product >=1)
@@ -104,11 +102,11 @@
                 </fieldset>
 
                 <fieldset class="col-md-3">
-                    <label for="user-using-id" class="form-label">Usuario</label>
+                    <label for="user-using-id" class="form-label">Usuario <small>(Vacio = se mantiene el Usuario)</small></label>
 
                     @livewire('users.search-user', [
                         'smallInput' => true,
-                        'placeholder' => 'Ingrese un nombre',
+                        'placeholder' => 'En caso de no ingresar se mantiene el Usuario anterior',
                         'eventName' => 'myUserUsingId',
                         'tagId' => 'user-using-id',
                         'bt' => 5,
@@ -129,13 +127,13 @@
 
                 <fieldset class="col-md-3">
                     <label for="place-id" class="form-label">
-                        Ubicación
+                        Ubicación <small>(Vacio = se mantiene la Ubicación)</small>
                     </label>
 
                     @livewire('places.find-place', [
                         'smallInput' => true,
                         'tagId' => 'place-id',
-                        'placeholder' => 'Ingrese una ubicación',
+                        'placeholder' => 'En caso de no ingresar se mantiene la ubicación anterior',
                         'establishment' => auth()->user()->organizationalUnit->establishment,
                     ])
 

@@ -20,14 +20,12 @@ use Exception;
 use Carbon\Carbon;
 use Auth;
 use App\User;
-use App\Notifications\Signatures\SignedDocument;
 use App\Notifications\Signatures\NewSignatureRequest;
 use App\Models\Establishment;
 use App\Models\Documents\SignaturesFlow;
 use App\Models\Documents\SignaturesFile;
 use App\Models\Documents\ParteFile;
 use App\Models\Documents\Parte;
-// use App\Mail\SignedDocument;
 
 
 class DigitalSignatureController extends Controller
@@ -211,27 +209,10 @@ class DigitalSignatureController extends Controller
                 $signaturesFlow->signature->status = 'completed';
                 $signaturesFlow->signature->save();
 
-                $allEmails = $signaturesFlow->signature->recipients . ',' . $signaturesFlow->signature->distribution;
-
-                preg_match_all("/[\._a-zA-Z0-9-]+@[\._a-zA-Z0-9-]+/i", $allEmails, $emails);
-
                 /**
-                 * Utilizando notify y con colas
+                 * Esto distribuye el documento a los destinatarios
                  */
-                foreach($emails[0] as $email) {
-                    // Crea un usuario en memoria para enviar la notificación
-                    $user = new User([ 'email' => $email]);
-                    $user->notify(new SignedDocument($signaturesFlow->signature));
-                }
-
-                /** 
-                 * Antes se enviaba el mail on the fly, cuando el correo estaba caido, 
-                 * Generaba un error 500
-                 */
-                // if(!empty($emails[0])) {
-                //     Mail::to($emails[0])
-                //     ->send(new SignedDocument($signaturesFlow->signature));
-                // }
+                $signaturesFlow->signature->distribute();
 
                 $destinatarios = $signaturesFlow->signature->recipients;
 
@@ -438,7 +419,7 @@ class DigitalSignatureController extends Controller
                 $yPading * 4 + $marginTop + 0.4,
                 $text_color,
                 $font_regular,
-                'Verificar autenticidad https://i.saludtarapaca.gob.cl/validador'
+                'Autenticidad https://i.saludtarapaca.gob.cl/validador'
             );
             imagettftext(
                 $im,
@@ -750,7 +731,7 @@ class DigitalSignatureController extends Controller
                 $yPading * 4 + $marginTop + 0.4,
                 $text_color,
                 $font_regular,
-                'Verificar autenticidad https://i.saludtarapaca.gob.cl/validador'
+                'Autenticidad https://i.saludtarapaca.gob.cl/validador'
             );
             imagettftext(
                 $im,

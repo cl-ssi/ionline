@@ -16,6 +16,19 @@ class SignedDocument extends Notification implements ShouldQueue
     protected $signature;
 
     /**
+     * Determine which queues should be used for each notification channel.
+     *
+     * @return array
+     */
+    /** PARA QUE SE EJECUTEN EN UNA COLA CUSTOM */
+    // public function viaQueues()
+    // {
+    //     return [
+    //         'mail' => 'testing',
+    //     ];
+    // }
+
+    /**
      * Create a new notification instance.
      *
      * @return void
@@ -44,31 +57,17 @@ class SignedDocument extends Notification implements ShouldQueue
      */
     public function toMail($notifiable)
     {
-        // $subject = "{$this->signature->type->name} - {$this->signature->subject}";
-        // $file = Storage::disk('gcs')->get($this->signature->signaturesFileDocument->signed_file);
-
-        // $email = $this->view('documents.signatures.mails.signed_notification_recipients')
-        //     ->subject($subject)
-        //     ->attachData($file,
-        //         "{$this->signature->type->name}.pdf",
-        //         ['mime' => 'application/pdf']);
-
-        // foreach ($this->signature->signaturesFileAnexos as $key => $signaturesFileAnexo) {
-        //     $email->attachFromStorageDisk('gcs', $signaturesFileAnexo->file, 'anexo_' . $key . '.pdf',
-        //         ['mime' => 'application/pdf']);
-        // }
-
         $email = new MailMessage();
         $email
             ->level('info')
-            ->subject('Distribución de documento: ' . $this->signature->subject)
-            ->greeting('Hola ')
+            ->subject('Documento: ' . $this->signature->id . ' - ' . $this->signature->subject)
+            ->greeting('Hola.')
             ->line('Adjunto encontrará el documento: ' . $this->signature->subject)
             ->line('Para su conocimiento y fines.')
-            ->line('Tipo:  ' . $this->signature->type->name)
+            ->line('Tipo: ' . $this->signature->type->name)
             ->line('Creador: ' . $this->signature->responsable->shortName)
             ->salutation('Saludos cordiales.');
-
+        
         /**
          * Documento principal
          */
