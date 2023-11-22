@@ -4,7 +4,7 @@
 
     <div class="form-row">
         <fieldset class="form-group col-6">
-            <label>Archivo</label>
+            <label>Archivo (csv,txt)</label>
             <input type="file" class="form-control" wire:model="file">
         </fieldset>
     </div>
@@ -34,6 +34,15 @@
                     @endforeach
                 @endif
             </ol>
+            <p>Códigos SIRH no encontrados de unidades organizacionales: </p>
+            <ol>
+                @if($non_existent_ous)
+                    @foreach($non_existent_ous as $key => $ou)
+                        <li>{{$key}}</li>
+                    @endforeach
+                @endif
+            </ol>
+            
         </div>
     @endif
     
