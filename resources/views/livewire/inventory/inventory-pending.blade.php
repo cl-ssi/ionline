@@ -62,28 +62,34 @@
                         </td>
                         <td class="text-center">
                             <small class="text-monospace">
-                                {{ $inventory->product->product->code }}
+                                {{ $inventory->product?->product?->code }}
                             </small>
                         </td>
                         <td>
-                            <b>Estandard:</b> {{ $inventory->product->product->name }}
+                            <b>Estandard:</b> {{ $inventory->product?->product?->name }}
                             <br>
                             <small>
-                                <b>Bodega:</b> {{ $inventory->product->name }}
+                                <b>Bodega:</b> {{ $inventory->product?->name }}
                             </small>
                         </td>
                         <td>
-                            @if($inventory->control->isPurchaseOrder())
-                                <span class="text-nowrap">
-                                    {{ $inventory->control->po_code }}
-                                </span>
-                            @else
-                                {{ $inventory->control->origin->name }}
+                            @if(isset($inventory->control))
+                                @if($inventory->control->isPurchaseOrder())
+                                    <span class="text-nowrap">
+                                        {{ $inventory->control->po_code }}
+                                    </span>
+                                @else
+                                    {{ $inventory->control->origin->name }}
+                                @endif
+                                <br>
+                                <small>
+                                    {{ optional($inventory->control->typeReception)->name }}
+                                </small>
+                                @else
+                                <small>
+                                    No posee Origen/OC
+                                </small>
                             @endif
-                            <br>
-                            <small>
-                                {{ optional($inventory->control->typeReception)->name }}
-                            </small>
                         </td>
                         <td class="text-center">
                             <a
