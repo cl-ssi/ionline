@@ -8,9 +8,9 @@
     }
 
     .wrapper-div {
-        border: 1px solid #999;
-        padding: 0.4rem;
-        width: 200px;
+        border: 0.01em solid #CCC;
+        padding: 0.1rem;
+        width: 204px;
     }
 
     .text {
@@ -23,26 +23,28 @@
     }
 
     .small {
-        font-size: 9px;
+        font-size: 6px;
+    }
+
+    .siete {
+        font-size: 7px;
     }
 
     .big {
-        font-size: 13px;
+        font-size: 11px;
     }
 
 </style>
 
 <div class="wrapper-div">
-
     <p class="text small {{ $approval->color }}">
         @if( ! is_null($approval->status) )
             {{ strtoupper($approval->statusInWords) }} el
-            {{ $approval->approver_at->format('d-m-Y \a \l\a\s H:i') }} por:
+            {{ $approval->approver_at->format('Y-m-d \a \l\a\s H:i') }}
         @else
             &nbsp;
         @endif
     </p>
-
     <p class="text big bold {{ $approval->color }}">
         @switch($approval->status)
             @case('1')
@@ -55,13 +57,19 @@
                 <span style="color: #ccc"><i>PENDIENTE </i></span>
             @break
         @endswitch
-
     </p>
-    <p class="text small" style="height: 10px;">
+    <p class="text siete">
         @if($approval->sent_to_ou_id)
-            {{ substr($approval->sentToOu->name, 0, 50) }}
+            {{ substr($approval->sentToOu->name, 0, 60) }}
         @else
-            {{ substr($approval->approverOu?->name, 0, 50) }}
+            {{ substr($approval->approverOu?->name, 0, 60) }}
+        @endif
+    </p>
+    <p class="text siete">
+        @if($approval->sent_to_ou_id)
+            {{ $approval->sentToOu->establishment->name }}
+        @else
+            {{ $approval->approverOu?->establishment->name }}
         @endif
     </p>
 </div>

@@ -26,8 +26,9 @@ class ReceptionController extends Controller
      * @param  \App\Models\Finance\Receptions\Reception  $reception
      * @return \Illuminate\Http\Response
      */
-    public function show(Reception $reception)
+    public function show($reception_id)
     {
+        $reception = Reception::find($reception_id);
         $establishment = $reception->creator->organizationalUnit->establishment;
         return Pdf::loadView('finance.receptions.show', [
             'reception' => $reception,

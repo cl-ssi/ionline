@@ -192,12 +192,12 @@ class CreateReception extends Component
         unset($this->approvals[$position]);
 
         $this->approvals[$position] = ([
-            "module" => "Asistencia",
-            "module_icon" => "fas fa-clock",
-            "subject" => "Nuevo registro de asistencia",
-            "document_route_name" => "rrhh.attendance.no-records.show",
+            "module" => "Recepcion",
+            "module_icon" => "fas fa-list",
+            "subject" => "Acta de recepción conforme",
+            "document_route_name" => "finance.receptions.show",
             "document_route_params" => json_encode([
-                "no_attendance_record_id" => "2863",
+                "reception_id" => $this->reception->id,
             ]),
             "position" => $position,
         ]);

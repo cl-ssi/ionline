@@ -2024,7 +2024,7 @@ Route::prefix('finance')->as('finance.')->middleware(['auth', 'must.change.passw
     Route::prefix('receptions')->as('receptions.')->group(function () {
         Route::get('/create', CreateReception::class)->name('create');
         Route::get('/type', TypeMgr::class)->name('type');
-        Route::get('/{reception}', [FinReceptionController::class,'show'])->name('show');
+        Route::get('/{reception_id}', [FinReceptionController::class,'show'])->name('show');
     });
 });
 

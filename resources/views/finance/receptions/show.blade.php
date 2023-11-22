@@ -173,17 +173,57 @@
 
     <p style="white-space: pre-wrap;">{{ $reception->footer_notes }}</p>
 
-    <div style="clear: both;padding-top: 50px;"></div>
+
+    Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum, earum perferendis! Aliquam eum perferendis, unde natus
+    tempora quas modi veritatis non, assumenda odit qui adipisci quidem expedita laborum maxime aperiam.
+    Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum, earum perferendis! Aliquam eum perferendis, unde natus
+    tempora quas modi veritatis non, assumenda odit qui adipisci quidem expedita laborum maxime aperiam.
+    Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum, earum perferendis! Aliquam eum perferendis, unde natus
+    tempora quas modi veritatis non, assumenda odit qui adipisci quidem expedita laborum maxime aperiam.
+    Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum, earum perferendis! Aliquam eum perferendis, unde natus
+    tempora quas modi veritatis non, assumenda odit qui adipisci quidem expedita laborum maxime aperiam.
+    Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum, earum perferendis! Aliquam eum perferendis, unde natus
+    tempora quas modi veritatis non, assumenda odit qui adipisci quidem expedita laborum maxime aperiam.
+    Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum, earum perferendis! Aliquam eum perferendis, unde natus
+    tempora quas modi veritatis non, assumenda odit qui adipisci quidem expedita laborum maxime aperiam.
+    Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum, earum perferendis! Aliquam eum perferendis, unde natus
+    tempora quas modi veritatis non, assumenda odit qui adipisci quidem expedita laborum maxime aperiam.
+    Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum, earum perferendis! Aliquam eum perferendis, unde natus
+    tempora quas modi veritatis non, assumenda odit qui adipisci quidem expedita laborum maxime aperiam.
+    Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum, earum perferendis! Aliquam eum perferendis, unde natus
+    tempora quas modi veritatis non, assumenda odit qui adipisci quidem expedita laborum maxime aperiam.
+    Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum, earum perferendis! Aliquam eum perferendis, unde natus
+    tempora quas modi veritatis non, assumenda odit qui adipisci quidem expedita laborum maxime aperiam.
+    Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum, earum perferendis! Aliquam eum perferendis, unde natus
+    tempora quas modi veritatis non, assumenda odit qui adipisci quidem expedita laborum maxime aperiam.
+
 
     <!-- Sección de las aprobaciones -->
     <div class="signature-container">
-        @foreach ($reception->approvals as $approval)
-            <div class="signature">
+        <div class="signature" style="padding-left: 32px;">
+            @if($approval = $reception->approvals->where('position', 'left')->first())
                 @include('sign.approvation', [
                     'approval' => $approval,
                 ])
-            </div>
-        @endforeach
+            @endif
+        </div>
+        <div class="signature"
+            style="padding-left: 6px; padding-right: 6px;">
+            @if($approval = $reception->approvals->where('position', 'center')->first())
+                @include('sign.approvation', [
+                    'approval' => $approval,
+                ])
+            @endif
+        </div>
+        <div class="signature">
+            @if($approval = $reception->approvals->where('position', 'right')->first())
+                @include('sign.approvation', [
+                    'approval' => $approval,
+                ])
+            @endif
+        </div>
+
+        <!-- <img style="margin-top: 11px;" width="204" src="data:image/png;base64, {{ app(App\Services\ImageService::class)->createSignature(App\User::find(15287582)) }}"> -->
     </div>
 
 @endsection
