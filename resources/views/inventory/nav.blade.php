@@ -13,7 +13,7 @@
     @can('Inventory: pending inventory')
         <li class="nav-item">
             <a
-                class="nav-link {{ active(['inventories.pending-inventory', 'inventories.edit']) }}"
+                class="nav-link"
                 href="{{ route('inventories.pending-inventory', $establishment) }}"
             >
                 <i class="fas fa-qrcode"></i> Pendientes de Inventariar

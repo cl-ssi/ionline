@@ -1,4 +1,5 @@
 <div>
+    <!-- START BASIC INFORMATION-->
     <ul wire:loading.remove>
         @if($inventory->requestForm)
             <li>
@@ -11,14 +12,45 @@
                     #{{ $inventory->request_form_id }}
                 </a>
             </li>
+        @elseif(isset($data_preview['request_form']))
+            <li>
+                <span class="badge rounded-pill text-bg-primary">
+                    Nuevo
+                </span>
+
+                {{ Carbon\Carbon::parse($data_preview['request_form']['created_at'])->format('Y-m-d') }}
+                - Formulario de solicitud de compra
+                <a
+                    href="{{ route('request_forms.show', $data_preview['request_form']['id']) }}"
+                    target="_blank"
+                >
+                    #{{ $data_preview['request_form']['id'] }}
+                </a>
+
+            </li>
         @endif
 
         @if($inventory->purchaseOrder)
             <li>
+
                 {{ $inventory->purchaseOrder->date->format('Y-m-d') }}
                 - Orden de compra <b>{{ $inventory->purchaseOrder->code }}</b>
                 @if($inventory->control)
                     (Ingreso #{{ $inventory->control->id }})
+                @endif
+            </li>
+        @elseif(isset($data_preview['purchase_order']))
+            <li>
+                <span class="badge rounded-pill text-bg-primary">
+                    Nuevo
+                </span>
+
+                {{ Carbon\Carbon::parse($data_preview['purchase_order']['date'])->format('Y-m-d') }}
+
+                - Orden de compra <b>{{ $data_preview['purchase_order']['code'] }}</b>
+
+                @if($data_preview['control'])
+                    (Ingreso #{{ $data_preview['control']['id'] }})
                 @endif
             </li>
         @endif
@@ -41,12 +73,37 @@
                     </a>
                 @endif
             </li>
+        @elseif(isset($data_preview['control']))
+        <li>
+            <span class="badge rounded-pill text-bg-primary">
+                Nuevo
+            </span>
+
+            {{ Carbon\Carbon::parse($data_preview['control']['date'])->format('Y-m-d') }}
+            -
+            @if($data_preview['control']['isConfirmed'])
+                <a
+                    href="{{ route('warehouse.control.pdf', [
+                        'store' => $data_preview['control']['store']['id'],
+                        'control' => $data_preview['control']['id'],
+                        'act_type' => 'reception'
+                    ]) }}"
+                    target="_blank"
+                    title="Acta Recepción Técnica"
+                >
+                Recepción en bodega
+                </a>
+            @endif
+        </li>
         @endif
 
         <li>
             {{ $inventory->created_at->format('Y-m-d')}} - Ingreso a inventario
         </li>
+        <!-- END BASIC INFORMATION-->
 
+
+        <!-- START MOVEMENTS -->
         @foreach($inventory->movements as $movement)
             @if($movement->installation_date)
                 <li>
@@ -55,8 +112,8 @@
             @endif
 
             <li>
-                {{ $movement->created_at->format('Y-m-d') }} 
-                - 
+                {{ $movement->created_at->format('Y-m-d') }}
+                -
                 @if($movement->reception_confirmation)
                     <a
                         href="{{ route('inventories.act-transfer', $movement) }}"
@@ -66,9 +123,9 @@
                         Acta de recepción
                     </a>
                 @endif
-                        
+
                 <br>
-                - Responsable: 
+                - Responsable:
                 <b>{{ optional($movement->responsibleUser)->shortName }}</b>
 
                 - Recepción:
@@ -81,7 +138,7 @@
                 @endif
 
                 @if($movement->usingUser)
-                    - Usuario: 
+                    - Usuario:
                     {{ $movement->usingUser->shortName }}
                 @endif
                 <br>
@@ -91,15 +148,17 @@
                     <br>
                 @endif
 
-                - Ubicación: 
-                {{ $movement->place->location->name }}
+                - Ubicación:
+                {{ isset($movement->place->location->name) ? $movement->place->location->name : 'Sin ubicación' }}
                 -
-                {{ $movement->place->name }}
-
+                {{ isset($movement->place->name) ? $movement->place->name : 'Sin ubicación' }}
 
             </li>
         @endforeach
+        <!-- START MOVEMENTS -->
 
+
+        <!-- START OF DISCHARGE -->
         @if(isset($inventory->discharge_date) && isset($inventory->act_number))
             <li>
                 {{ $inventory->discharge_date->format('Y-m-d') }}
@@ -112,6 +171,7 @@
                 </a>
             </li>
         @endif
+        <!-- END OF DISCHARGE -->
     </ul>
 
     <!-- <div class="row text-center">
