@@ -1,6 +1,34 @@
+@section('custom_css')
+<style>
+.modal {
+  padding: 0 !important;
+}
+
+.modal .full-width {
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+  margin: 0;
+}
+.modal .modal-content {
+  border: 0;
+  border-radius: 0;
+  max-height: 100%; 
+  height: 100%;
+}
+.modal .modal-body {
+  overflow-y: auto;
+}
+
+.modal-dialog.modal-dialog-scrollable { max-height: 100%; }
+
+.modal-dialog.modal-dialog-scrollable .modal-content { max-height: 100%; }
+
+</style>
+@endsection
 <!-- Modal -->
 <div class="modal fade" id="requestBudget" tabindex="-1" aria-labelledby="requestBudgetLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-dialog full-width modal-dialog-scrollable modal-xl">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="requestBudgetLabel">Solicitar cambio presupuesto</h5>

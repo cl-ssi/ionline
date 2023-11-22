@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Storage;
 use Luecano\NumeroALetras\NumeroALetras;
 use App\Mail\ServiceRequestNotification;
 use App\Mail\DerivationNotification;
+use App\Notifications\ServiceRequests\NewServiceRequest;
 use Illuminate\Support\Facades\Mail;
 use App\Rrhh\OrganizationalUnit;
 use App\Models\Establishment;
@@ -599,49 +600,49 @@ class ServiceRequestController extends Controller
     if ($serviceRequest->program_contract_type == "Mensual" || ($serviceRequest->program_contract_type == "Horas" && ($serviceRequest->working_day_type == "HORA MÉDICA" || $serviceRequest->working_day_type == "TURNO DE REEMPLAZO" ))  )
     {
       if ($serviceRequest->fulfillments->count() == 0) {
-        foreach ($periods as $key => $period) {
-          $program_contract_type = "Mensual";
-          $start_date_period = $period->format("d-m-Y");
-          $end_date_period = Carbon::createFromFormat('d-m-Y', $period->format("d-m-Y"))->endOfMonth()->format("d-m-Y");
-          if ($key == 0) {
-            $start_date_period = $serviceRequest->start_date->format("d-m-Y");
-          }
-          if (($cont_periods - 1) == $key) {
-            $end_date_period = $serviceRequest->end_date->format("d-m-Y");
-            $program_contract_type = "Parcial";
-          }
+            foreach ($periods as $key => $period) {
+            $program_contract_type = "Mensual";
+            $start_date_period = $period->format("d-m-Y");
+            $end_date_period = Carbon::createFromFormat('d-m-Y', $period->format("d-m-Y"))->endOfMonth()->format("d-m-Y");
+            if ($key == 0) {
+                $start_date_period = $serviceRequest->start_date->format("d-m-Y");
+            }
+            if (($cont_periods - 1) == $key) {
+                $end_date_period = $serviceRequest->end_date->format("d-m-Y");
+                $program_contract_type = "Parcial";
+            }
 
-          $fulfillment = new Fulfillment();
-          $fulfillment->service_request_id = $serviceRequest->id;
-          if ($serviceRequest->program_contract_type == "Mensual") {
-            $fulfillment->year = $period->format("Y");
-            $fulfillment->month = $period->format("m");
-          } else {
-            $program_contract_type = "Horas Médicas";
-            $fulfillment->year = $period->format("Y");
-            $fulfillment->month = $period->format("m");
-          }
-          $fulfillment->type = $program_contract_type;
-          $fulfillment->start_date = $start_date_period;
-          $fulfillment->end_date = $end_date_period;
-          $fulfillment->user_id = Auth::user()->id;
-          $fulfillment->save();
-        }
+            $fulfillment = new Fulfillment();
+            $fulfillment->service_request_id = $serviceRequest->id;
+            if ($serviceRequest->program_contract_type == "Mensual") {
+                $fulfillment->year = $period->format("Y");
+                $fulfillment->month = $period->format("m");
+            } else {
+                $program_contract_type = "Horas Médicas";
+                $fulfillment->year = $period->format("Y");
+                $fulfillment->month = $period->format("m");
+            }
+            $fulfillment->type = $program_contract_type;
+            $fulfillment->start_date = $start_date_period;
+            $fulfillment->end_date = $end_date_period;
+            $fulfillment->user_id = Auth::user()->id;
+            $fulfillment->save();
+            }
       }
     } elseif ($serviceRequest->program_contract_type == "Horas") {
-      if ($serviceRequest->fulfillments->count() == 0) {
-        $fulfillment = new Fulfillment();
-        $fulfillment->service_request_id = $serviceRequest->id;
-        $fulfillment->type = "Horas No Médicas";
-        $fulfillment->year = $serviceRequest->start_date->format("Y");
-        $fulfillment->month = $serviceRequest->start_date->format("m");
-        $fulfillment->start_date = $serviceRequest->start_date;
-        $fulfillment->end_date = $serviceRequest->end_date;
-        $fulfillment->user_id = Auth::user()->id;
-        $fulfillment->save();
-      } else {
-        $fulfillment = $serviceRequest->fulfillments->first();
-      }
+        if ($serviceRequest->fulfillments->count() == 0) {
+            $fulfillment = new Fulfillment();
+            $fulfillment->service_request_id = $serviceRequest->id;
+            $fulfillment->type = "Horas No Médicas";
+            $fulfillment->year = $serviceRequest->start_date->format("Y");
+            $fulfillment->month = $serviceRequest->start_date->format("m");
+            $fulfillment->start_date = $serviceRequest->start_date;
+            $fulfillment->end_date = $serviceRequest->end_date;
+            $fulfillment->user_id = Auth::user()->id;
+            $fulfillment->save();
+        } else {
+            $fulfillment = $serviceRequest->fulfillments->first();
+        }
     }
 
     // ################### fin guarda cumplimiento #######################
@@ -659,10 +660,10 @@ class ServiceRequestController extends Controller
     $authorities = Authority::getAmIAuthorityFromOu(Carbon::today(), 'manager', $request->responsable_id);
     $employee = User::find($request->responsable_id)->position;
     if ($authorities->isNotEmpty()) {
-      $employee = $authorities[0]->position; // . " - " . $authorities[0]->organizationalUnit->name;
-      $ou_id = $authorities[0]->organizational_unit_id;
+        $employee = $authorities[0]->position; // . " - " . $authorities[0]->organizationalUnit->name;
+        $ou_id = $authorities[0]->organizational_unit_id;
     } else {
-      $ou_id = User::find($request->responsable_id)->organizational_unit_id;
+        $ou_id = User::find($request->responsable_id)->organizational_unit_id;
     }
 
     //se crea la primera firma
@@ -680,64 +681,69 @@ class ServiceRequestController extends Controller
     //firmas seleccionadas en la vista
     $sign_position = 2;
     if ($request->users <> null) {
-      foreach ($request->users as $key => $user) {
+        foreach ($request->users as $key => $user) {
 
-        //saber la organizationalUnit que tengo a cargo
-        $authorities = Authority::getAmIAuthorityFromOu(Carbon::today(), 'manager', User::find($user)->id);
-        $employee = User::find($user)->position;
-        if ($authorities->isNotEmpty()) {
-          $employee = $authorities[0]->position;
-          $ou_id = $authorities[0]->organizational_unit_id;
-        } else {
-          $ou_id = User::find($user)->organizational_unit_id;
+            //saber la organizationalUnit que tengo a cargo
+            $authorities = Authority::getAmIAuthorityFromOu(Carbon::today(), 'manager', User::find($user)->id);
+            $employee = User::find($user)->position;
+            if ($authorities->isNotEmpty()) {
+            $employee = $authorities[0]->position;
+            $ou_id = $authorities[0]->organizational_unit_id;
+            } else {
+            $ou_id = User::find($user)->organizational_unit_id;
+            }
+
+            $SignatureFlow = new SignatureFlow($request->All());
+            $SignatureFlow->ou_id = $ou_id;
+            $SignatureFlow->responsable_id = User::find($user)->id;
+            $SignatureFlow->user_id = Auth::id(); //User::find($user)->id;
+            $SignatureFlow->service_request_id = $serviceRequest->id;
+            if ($sign_position == 2) {
+            $SignatureFlow->type = "Supervisor";
+            } else {
+            $SignatureFlow->type = "visador";
+            }
+            $SignatureFlow->employee = $employee;
+            $SignatureFlow->sign_position = $sign_position;
+            $SignatureFlow->save();
+
+            $sign_position = $sign_position + 1;
         }
-
-        $SignatureFlow = new SignatureFlow($request->All());
-        $SignatureFlow->ou_id = $ou_id;
-        $SignatureFlow->responsable_id = User::find($user)->id;
-        $SignatureFlow->user_id = Auth::id(); //User::find($user)->id;
-        $SignatureFlow->service_request_id = $serviceRequest->id;
-        if ($sign_position == 2) {
-          $SignatureFlow->type = "Supervisor";
-        } else {
-          $SignatureFlow->type = "visador";
-        }
-        $SignatureFlow->employee = $employee;
-        $SignatureFlow->sign_position = $sign_position;
-        $SignatureFlow->save();
-
-        $sign_position = $sign_position + 1;
-      }
     }
 
     //guarda control de turnos
     if ($request->shift_start_date) {
-      if ($request->shift_start_date != null) {
-        foreach ($request->shift_start_date as $key => $shift_start_date) {
-          $shiftControl = new ShiftControl($request->All());
-          // $shiftControl->service_request_id = $serviceRequest->id;
-          $shiftControl->fulfillment_id = $fulfillment->id;
-          $shiftControl->start_date = $shift_start_date . " " . $request->shift_start_hour[$key];
-          $shiftControl->end_date = $request->shift_end_date[$key] . " " . $request->shift_end_hour[$key];
-          $shiftControl->observation = $request->shift_observation[$key];
-          $shiftControl->save();
+        if ($request->shift_start_date != null) {
+            foreach ($request->shift_start_date as $key => $shift_start_date) {
+            $shiftControl = new ShiftControl($request->All());
+            // $shiftControl->service_request_id = $serviceRequest->id;
+            $shiftControl->fulfillment_id = $fulfillment->id;
+            $shiftControl->start_date = $shift_start_date . " " . $request->shift_start_hour[$key];
+            $shiftControl->end_date = $request->shift_end_date[$key] . " " . $request->shift_end_hour[$key];
+            $shiftControl->observation = $request->shift_observation[$key];
+            $shiftControl->save();
+            }
         }
-      }
     }
 
     //send emails (2 flow position)
-    if (env('APP_ENV') == 'production') {
-      $email = $serviceRequest->SignatureFlows->where('sign_position', 2)->first()->user->email;
-      Mail::to($email)->send(new ServiceRequestNotification($serviceRequest));
-      // if ( $serviceRequest->SignatureFlows->where('responsable_id', 9381231)->first())
-      // {
-      //   $emaildire = $serviceRequest->SignatureFlows->where('responsable_id', 9381231)->first()->user->email;
-      //   Mail::to($emaildire)->send(new ServiceRequestNotification($serviceRequest));
-      // }
-    }
+    // if (env('APP_ENV') == 'production') {
+        // $email = $serviceRequest->SignatureFlows->where('sign_position', 2)->first()->user->email;
+        // Mail::to($email)->send(new ServiceRequestNotification($serviceRequest));
+        
+        if($serviceRequest->employee){
+            if($serviceRequest->employee->email != null){
+                if (filter_var($serviceRequest->employee->email, FILTER_VALIDATE_EMAIL)) {
+                    /*
+                    * Utilizando Notify
+                    */ 
+                    $serviceRequest->employee->notify(new NewServiceRequest($serviceRequest));
+                } 
+            }
+        }  
+    // }
 
     session()->flash('info', 'La solicitud ' . $serviceRequest->id . ' ha sido creada.');
-    // session()->flash('info', 'La solicitud '.$serviceRequest->id.' ha sido creada. Para visualizar el certificado de confirmación, hacer click <a href="'. route('rrhh.service-request.certificate-pdf', $SignatureFlow) . '" target="_blank">Aquí.</a>');
     return redirect()->route('rrhh.service-request.index','pending');
   }
 

@@ -22,6 +22,7 @@ class ContractImport extends Component
     public $file;
     public $message2;
     public $non_existent_users;
+    public $non_existent_ous;
 
     public function save()
     {
@@ -32,6 +33,14 @@ class ContractImport extends Component
 
         $file = $this->file;
         $collection = Excel::toCollection(new EmployeeInformationImport, $this->file->path());
+        
+        // obtiene unidades organizacionales que vienen en archivo
+        $file_ous = array_unique(array_column($collection[0]->toArray(), 'cdigo_unidad'));
+        $ous = OrganizationalUnit::whereIn('sirh_ou_id',$file_ous)->get()->pluck('id','sirh_ou_id')->toArray();
+
+        // obtiene los usuarios que vienen en el archivo
+        $file_users = array_unique(array_column($collection[0]->toArray(), 'rut'));
+        $users = User::withTrashed()->whereIn('id',$file_users)->get()->pluck('id')->toArray();
 
         // se modifican todos los usuarios a inactivos
         User::where('id','>',0)->update(['active' => 0]);
@@ -97,29 +106,31 @@ class ContractImport extends Component
                             // si no existe usuario, se crea
                             $rut = trim($column['rut']);
                             $dv = trim($column['dv']);
-                            // verifica si existe usuario, inclusive eliminados
-                            if(!User::withTrashed()->find($rut)){
-                                // Aquí se verifica si existe la unidad organizacional según id sirth de archivo importado, si existe: se crea nuevo usuario con esa ou_id
-                                if(OrganizationalUnit::where('sirh_ou_id',$column['cdigo_unidad'])->count()>0){
-                                
-                                    // Se obtienen datos del funcionario desde fonasa
-                                    if(!isset(Fonasa::find($rut."-".$dv)->message)){
-                                        $fonasaUser = Fonasa::find($rut."-".$dv);
-                                        $ou_id = OrganizationalUnit::where('sirh_ou_id',$column['cdigo_unidad'])->first()->id;
+                            // verifica si existe usuario, inclusive eliminados (si no existe, se crea)
+                            if(!in_array($rut, $users)){
+                                // Aquí se verifica si existe la unidad organizacional según id sirth de archivo importado, 
+                                // si existe: se crea nuevo usuario con esa ou_id
+                                if(array_key_exists($column['cdigo_unidad'], $ous)){
 
+                                    // Se obtienen datos del funcionario desde fonasa
+                                    $fonasaUser = Fonasa::find($rut."-".$dv);
+                                    if(!isset($fonasaUser->message)){
                                         $user = new User();
                                         $user->id = $rut;
                                         $user->dv = $dv;
                                         $user->mothers_family = $fonasaUser->mothers_family;
                                         $user->fathers_family = $fonasaUser->fathers_family;
                                         $user->name = $fonasaUser->name;
-                                        $user->organizational_unit_id = $ou_id;
+                                        $user->organizational_unit_id = $ous[$column['cdigo_unidad']];
                                         $user->save();
+
+                                        array_push($users, $user->id);
                                     } else{
                                         $this->non_existent_users[$rut] = $column['nombre_funcionario'];
                                     }
                                 }else{
                                     $this->non_existent_users[$rut] = $column['nombre_funcionario'];
+                                    $this->non_existent_ous[$column['cdigo_unidad']] = "";
                                 }
                             }
                             

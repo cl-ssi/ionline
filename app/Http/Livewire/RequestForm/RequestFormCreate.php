@@ -176,14 +176,14 @@ class RequestFormCreate extends Component
             'name'              =>  $passenger->name,
             'fathers_family'    =>  $passenger->fathers_family,
             'mothers_family'    =>  $passenger->mothers_family,
-            'birthday'          =>  $passenger->birthday,
+            'birthday'          =>  $passenger->birthday->format('Y-m-d'),
             'phone_number'      =>  $passenger->phone_number,
             'email'             =>  $passenger->email,
             'round_trip'        =>  $passenger->round_trip,
             'origin'            =>  $passenger->origin,
             'destination'       =>  $passenger->destination,
-            'departure_date'    =>  $passenger->departure_date,
-            'return_date'       =>  $passenger->return_date,
+            'departure_date'    =>  $passenger->departure_date->format('Y-m-d\TH:i'),
+            'return_date'       =>  $passenger->return_date ? $passenger->return_date->format('Y-m-d\TH:i') : null,
             'baggage'           =>  $passenger->baggage,
             'unitValue'         =>  $passenger->unit_value
       ];

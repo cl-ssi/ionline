@@ -6,12 +6,28 @@ use Livewire\Component;
 
 use App\Models\JobPositionProfiles\JobPositionProfile;
 use Illuminate\Support\Facades\Auth;
+use Livewire\WithPagination;
 
 use App\Rrhh\Authority;
+use App\Models\Parameters\Estament;
+use App\Rrhh\OrganizationalUnit;
+use App\Models\Parameters\Parameter;
 
 class SearchJobPositionProfiles extends Component
 {
+    use WithPagination;
+    protected $paginationTheme = 'bootstrap';
+
     public $index;
+
+    public $selectedStatus      = null;
+    public $selectedEstament    = null;
+    public $selectedId          = null;  
+    public $selectedUserCreator = null;
+    public $ou_dependents_array = [];
+    public $selectedSub = null;
+
+    protected $queryString = ['selectedStatus', 'selectedEstament', 'selectedId', 'selectedUserCreator', 'selectedSub'];
 
     public function render()
     {
@@ -23,7 +39,14 @@ class SearchJobPositionProfiles extends Component
                     ->latest()
                     ->Where('user_creator_id', Auth::user()->id)
                     ->orWhere('jpp_ou_id', Auth::user()->organizationalUnit->id)
-                    ->paginate(50)
+                    ->orWhere('ou_creator_id', Auth::user()->organizationalUnit->id)
+                    ->search($this->selectedStatus,
+                        $this->selectedEstament,
+                        $this->selectedId,
+                        $this->selectedUserCreator,
+                        $this->ou_dependents_array)
+                    ->paginate(50),
+                'estaments' => Estament::orderBy('id')->get()
             ]);
         }
 
@@ -32,7 +55,8 @@ class SearchJobPositionProfiles extends Component
                 'jobPositionProfiles' => JobPositionProfile::
                     latest()
                     ->Where('status', 'review')
-                    ->paginate(50)
+                    ->paginate(50),
+                'estaments' => Estament::orderBy('id')->get()
             ]);
         }
 
@@ -63,18 +87,76 @@ class SearchJobPositionProfiles extends Component
                             ->OrWhere('status', 'rejected');
                         });
                     })
-                    ->paginate(50)
+                    ->paginate(50),
+                'estaments' => Estament::orderBy('id')->get()
             ]);
         }
 
         if($this->index == 'all'){
+            $subParams = Parameter::select('value')
+                ->whereIn('parameter', ['SubRRHH', 'SDASSI', 'SubSDGA'])
+                ->get()
+                ->toArray();
+
             return view('livewire.job-position-profile.search-job-position-profiles', [
                 'jobPositionProfiles' => JobPositionProfile::
                     with('organizationalUnit', 'jobPositionProfileSigns', 'jobPositionProfileSigns.organizationalUnit',
                     'user', 'estament', 'area', 'contractualCondition')
                     ->latest()
-                    ->paginate(50)
+                    ->search($this->selectedStatus,
+                        $this->selectedEstament,
+                        $this->selectedId,
+                        $this->selectedUserCreator,
+                        $this->ou_dependents_array)
+                    ->paginate(50),
+                'estaments' => Estament::orderBy('id')->get(),
+                'subs' => OrganizationalUnit::whereIn('id', $subParams)->get()
             ]);
+        }
+    }
+
+    /* Permite alamcenar parámetros de búsqueda con paginación */
+    public function updatingSelectedStatus(){
+        $this->resetPage();
+    }
+
+    public function updatingSelectedEstament(){
+        $this->resetPage();
+    }
+
+    public function updatingSelectedId(){
+        $this->resetPage();
+    }
+
+    public function updatingSelectedUserCreator(){
+        $this->resetPage();
+    }
+
+    public function updatingSelectedSub(){
+        $this->resetPage();
+    }
+
+    public function updatedselectedSub($sub_id)
+    {
+        $this->ou_dependents_array = [];
+        $ou_dependents = collect(new OrganizationalUnit);
+
+        $ou_dependents = OrganizationalUnit::
+            where('organizational_unit_id', $sub_id)
+            ->get();
+            
+        foreach($ou_dependents as $ou_dependent){
+            $ou_dependent_childs = OrganizationalUnit::
+                where('organizational_unit_id', $ou_dependent->id)
+                ->get();
+            
+            foreach($ou_dependent_childs as $ou_dependent_child){
+                $ou_dependents->push($ou_dependent_child);
+            }
+        }
+        
+        foreach($ou_dependents as $ou_dependent){
+            $this->ou_dependents_array[] = $ou_dependent->id;
         }
     }
 }

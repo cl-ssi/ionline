@@ -11,7 +11,7 @@ class Programming extends Model implements Auditable
     use \OwenIt\Auditing\Auditable;
     protected $table = 'pro_programmings';
     protected $fillable = [
-        'id','year', 'description', 'access'
+        'id','year', 'description', 'access', 'status'
     ];
 
     public function user() {
@@ -57,7 +57,7 @@ class Programming extends Model implements Auditable
     public function getCountActivities(){
         $activities=collect();
         foreach($this->items as $item){
-            if($item->activityItem && $item->activityItem->tracer == "SI"){
+            if($item->activityItem && $item->activityItem->int_code != null && $item->activityItem->tracer == "SI"){
                 $activities->add($item->activityItem);
             }
         }

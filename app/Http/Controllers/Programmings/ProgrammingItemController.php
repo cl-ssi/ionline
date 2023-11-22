@@ -228,6 +228,7 @@ class ProgrammingItemController extends Controller
         $programmingitem->load('professionalHours', 'programming');
         $programmingitem->fill($request->all());
         $programmingitem->prevalence_rate = $request->has('prevalence_rate') ? $request->prevalence_rate : null;
+        $programmingitem->user_id = Auth()->user()->id;
         $programmingitem->save();
 
         $programmingitem->professionalHours()->detach();

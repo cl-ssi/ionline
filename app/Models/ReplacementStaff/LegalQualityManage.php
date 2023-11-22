@@ -22,11 +22,14 @@ class LegalQualityManage extends Model
     public function getNameValueAttribute(){
         switch ($this->name) {
             case 'to hire':
-              return 'Contrata';
-              break;
+                return 'Contrata';
+                break;
             case 'fee':
-              return 'Honorarios';
-              break;
+                return 'Honorarios';
+                break;
+            case 'holder':
+                return 'Titular';
+                break;
             case '':
               return '';
               break;

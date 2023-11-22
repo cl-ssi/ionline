@@ -65,6 +65,13 @@ class Inventory extends Model implements Auditable
         'accounting_code_id',
         'printed',
         'classification_id',
+
+        // proceso de dar de baja a un inventario
+        'removal_request_reason',
+        'removal_request_reason_at',
+        'is_removed',
+        'removed_user_id',
+        'removed_at',
     ];
 
     protected $dates = [
@@ -161,6 +168,11 @@ class Inventory extends Model implements Auditable
         return $this->belongsTo(User::class, 'user_responsible_id')->withTrashed();
     }
 
+    public function removedUser()
+    {
+        return $this->belongsTo(User::class, 'removed_user_id')->withTrashed();
+    }
+
     public function using()
     {
         return $this->belongsTo(User::class, 'user_using_id')->withTrashed();
@@ -214,7 +226,9 @@ class Inventory extends Model implements Auditable
 
     public function getLocationAttribute()
     {
-        return $this->place->name . ", " . $this->place->location->name;
+        if($this->place) {
+            return $this->place?->name . ", " . $this->place?->location?->name;
+        }
     }
 
     public function getSubtitleAttribute()

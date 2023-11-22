@@ -38,6 +38,8 @@
                     <td>
                         <small class="text-monospace">
                             {{ $movement->inventory?->number }}
+                            <br>
+                            {{ $movement->inventory?->old_number }}
                         </small>
                     </td>
                     <td>

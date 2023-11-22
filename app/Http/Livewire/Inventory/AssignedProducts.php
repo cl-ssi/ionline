@@ -44,11 +44,25 @@ class AssignedProducts extends Component
                       ->orWhere('user_using_id', Auth::id());
                 });
             })
-            ->when($this->search, function ($query)  use($search) {
-                $query->where('number', 'like', $search);
-            })
             ->whereHas('lastMovement', function($query) {
                 $query->whereNotNull('reception_date');
+            })
+            ->where(function ($query) use ($search) {
+                $query->where('number', 'like', $search)
+                      ->orWhereHas('unspscProduct', function ($query) use ($search) {
+                          $query->where('name', 'like', $search);
+                      })
+                      ->orWhereHas('product', function ($query) use ($search) {
+                          $query->where('name', 'like', $search)
+                                ->orWhere('name', 'like', $search);
+                      })
+                      ->orWhere('description', 'like', $search)
+                      ->orWhereHas('place', function ($query) use ($search) {
+                          $query->where('name', 'like', $search)
+                                ->orWhereHas('location', function ($query) use ($search) {
+                                    $query->where('name', 'like', $search);
+                                });
+                      });
             })
             ->orderByDesc('id')
             ->paginate(10);

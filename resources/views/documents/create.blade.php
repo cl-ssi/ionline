@@ -32,7 +32,7 @@
             <select name="type_id" id="formType" class="form-control" required>
                 <option value=""></option>
                 @foreach($types as $id => $type)
-                <option value="{{ $id }}">{{ $type }}</option>
+                <option value="{{ $id }}" {{$document->type_id == $id ? 'selected': ''}}>{{ $type }}</option>
                 @endforeach
             </select>
         </div>

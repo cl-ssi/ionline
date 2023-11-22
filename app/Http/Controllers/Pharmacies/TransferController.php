@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Pharmacies;
 use App\Models\Documents\Document;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Documents\Type;
 use App\Models\Parameters\Parameter;
 use App\Models\Pharmacies\Deliver;
 use App\Models\Pharmacies\Product;
@@ -238,7 +239,9 @@ class TransferController extends Controller
         $document->for = 'SEGÚN DISTRIBUCIÓN';
         $document->responsible = 'Referente Técnico de Rehabilitación';
         $document->distribution = "APS.SSI@REDSALUD.GOV.CL\nOFICINA DE PARTES";
-        return view('documents.create', compact('document'));
+
+        $types = Type::whereNull('partes_exclusive')->pluck('name','id');
+        return view('documents.create', compact('document', 'types'));
     }
 
     /**

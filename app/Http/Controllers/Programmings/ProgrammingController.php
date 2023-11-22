@@ -45,7 +45,7 @@ class ProgrammingController extends Controller
 
         $total_tracers = ActivityItem::whereHas('program', function($q) use ($year) {
             return $q->where('year', $year);
-        })->whereNotNull('int_code')->distinct('int_code')->count('int_code');
+        })->whereNotNull('int_code')->where('tracer', 'SI')->distinct('int_code')->count('int_code');
 
         $communeFiles = CommuneFile::with('commune')->where('year', $year)->where('status', 'active')
             ->when($accessByCommune != null, function($q) use($accessByCommune){

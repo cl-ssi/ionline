@@ -151,11 +151,20 @@ class InventoryUploadExcel extends Component
                 $inventoryData['user_responsible_id'] = $user_responsible->id;
             }
             
-            $inventory = Inventory::updateOrCreate(
-                ['establishment_id' => $this->establishment->id, 'number' => $row[0]],
-                $inventoryData
-            );
-            
+            if (!empty($row[0])) {
+                $inventory = Inventory::updateOrCreate(
+                    ['establishment_id' => $this->establishment->id, 'number' => $row[0]],
+                    $inventoryData
+                );
+            } else {
+                // Si el número está vacío, realiza un create
+                $inventory = Inventory::create(
+                    ['establishment_id' => $this->establishment->id] + $inventoryData
+                );
+                $inventory->number = $inventory->unspscProduct->code.'-'.$inventory->id;
+                $inventory->save();
+            }
+         
 
             if($user_sender and $user_responsible and $user_using)
             {

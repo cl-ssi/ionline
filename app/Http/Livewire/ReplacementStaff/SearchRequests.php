@@ -12,6 +12,9 @@ use App\User;
 use App\Rrhh\OrganizationalUnit;
 use App\Models\Parameters\Parameter;
 
+use App\Models\ReplacementStaff\AssignEvaluation;
+use App\Models\ReplacementStaff\TechnicalEvaluation;
+
 class SearchRequests extends Component
 {
     use WithPagination;
@@ -37,6 +40,9 @@ class SearchRequests extends Component
 
     public $typeIndex;
     public $request;
+
+    public $userToAssign = null;
+    public $checkToAssign = [];
 
     public function render()
     {   
@@ -250,5 +256,41 @@ class SearchRequests extends Component
             $this->selectedFundamentInputStatus = '';
             $this->selectedFundamentDetailInputStatus = '';
         }
+    }
+
+    protected function messages(){
+        return [
+            /* Mensajes para asignación */
+            'userToAssign.required'    => 'Debe ingresar funcionario para asignar solicitud.',
+            'checkToAssign.required'   => 'Debe seleccionar una solicitud para asignar.'
+        ];
+    }
+
+    public function assign(){
+        $validatedData = $this->validate([
+            'userToAssign'  => 'required',
+            'checkToAssign' => 'required'
+        ]);
+
+        foreach($this->checkToAssign as $key_file => $id){
+            $request = RequestReplacementStaff::find($id);
+
+            $assign_evaluation = new AssignEvaluation();
+            $assign_evaluation->user()->associate(Auth::user());
+            $assign_evaluation->to_user_id = $this->userToAssign;
+            $assign_evaluation->requestReplacementStaff()->associate($request);
+            $assign_evaluation->status = 'assigned';
+            $assign_evaluation->save();
+
+            $technicalEvaluation = new TechnicalEvaluation();
+            $technicalEvaluation->technical_evaluation_status = 'pending';
+            $technicalEvaluation->user()->associate(Auth::user());
+            $technicalEvaluation->organizational_unit_id = Auth::user()->organizationalUnit->id;
+            $technicalEvaluation->request_replacement_staff_id = $request->id;
+            $technicalEvaluation->save();
+        }
+
+        session()->flash('success', 'Se ha asignado exitosamente el Proceso de Selección');
+        return redirect()->route('replacement_staff.request.index');
     }
 }
