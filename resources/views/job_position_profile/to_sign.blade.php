@@ -282,7 +282,7 @@
             <tr class="text-center">
                 <th width="5%">
                     4 <br>
-                    Desarrollo Insuficiente
+                    Desarrollo Bajo
                 </th>
                 <th width="5%">
                     3 <br>

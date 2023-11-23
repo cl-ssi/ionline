@@ -404,7 +404,7 @@
             <tr style="background-color: #b4c6e7">
                 <th width="5%">
                     4
-                    Desarrollo Insuficiente
+                    Desarrollo Bajo
                 </th>
                 <th width="5%">
                     3
