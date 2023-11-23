@@ -274,8 +274,10 @@ use App\Http\Controllers\Agreements\AddendumController;
 use App\Http\Controllers\Agreements\AccountabilityDetailController;
 use App\Http\Controllers\Agreements\AccountabilityController;
 
+/*
 use App\Http\Livewire\News\CreateNews;
 use App\Http\Livewire\News\SearchNews;
+*/
 
 /*
 |--------------------------------------------------------------------------
@@ -2539,10 +2541,12 @@ Route::prefix('his')->as('his.')->middleware('auth')->group(function () {
     });
 });
 
+/*
 Route::prefix('news')->as('news.')->middleware(['auth', 'must.change.password'])->group(function () {
     Route::get('/', CreateNews::class)->name('create');
     Route::get('/index', SearchNews::class)->name('index');
 });
+*/
 
 
 /** RUTAS PARA EXTERNAL  */
