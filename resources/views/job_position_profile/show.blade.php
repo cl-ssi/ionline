@@ -209,13 +209,15 @@
     <table class="table table-sm table-bordered small">
         <thead class="table-active text-center">
                 <th width="30%">Categorías de Responsabilidades</th>
-                <th>Si/No</th>
+                <th width="50%">Descripción</th>
+                <th width="20%">Si/No</th>
         </thead>
         <tbody>
             @foreach($jobPositionProfile->jppLiabilities as $Jppliability)
             <tr>
                 <td width="30%">{{ $Jppliability->liability->name }}</td>
-                <td class="text-center">{{ $Jppliability->YesNoValue }}</td>
+                <td width="50%">{{ $Jppliability->liability->description }}</td>
+                <td class="text-center" width="20%">{{ $Jppliability->YesNoValue }}</td>
             </tr>
             @endforeach
         </tbody>

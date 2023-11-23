@@ -304,10 +304,11 @@
 <table class="siete">
     <tbody>
         <tr>
-            <th align="left" style="background-color: #2f5496; color: white" colspan="2">V. RESPONSABILIDAD DEL CARGO</th>
+            <th align="left" style="background-color: #2f5496; color: white" colspan="3">V. RESPONSABILIDAD DEL CARGO</th>
         </tr>
         <tr>
             <th width="30%" style="background-color: #b4c6e7">Categorías de Responsabilidades</th>
+            <th style="background-color: #b4c6e7">Descripción</th>
             <th style="background-color: #b4c6e7">Si/No</th>
         </tr>
         @foreach($jobPositionProfile->jppLiabilities as $Jppliability)
@@ -315,7 +316,10 @@
                 <td style="background-color: #b4c6e7" width="30%">
                     {{ $Jppliability->liability->name }}
                 </td>
-                <td align="center">
+                <td style="background-color: #b4c6e7" width="50%">
+                    {{ $Jppliability->liability->description }}
+                </td>
+                <td align="center" width="20%">
                     {{ $Jppliability->YesNoValue }}
                 </td>
             </tr>

@@ -148,11 +148,12 @@
         @csrf
         @method('POST')
         <div class="table-responsive">
-            <table class="table">
+            <table class="table table-sm table-striped table-bordered">
                 <thead>
                     <tr class="text-center">
-                        <th width="60%">Categorías de responsabilidades</th>
-                        <th>SI/NO</th>
+                        <th width="30%">Categorías de responsabilidades</th>
+                        <th width="50%">Descripción</th>
+                        <th width="20%">SI/NO</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -160,6 +161,7 @@
                     <tr>
                         <!-- <th class="text-center">{{ $loop->iteration }}</th> -->
                         <td>{{ $liability->name }}</td>
+                        <td>{{ $liability->description }}</td>
                         <td>
                             <div class="text-center">
                                 <div class="form-check form-check-inline">
