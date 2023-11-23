@@ -31,12 +31,13 @@ class TestController extends Controller
     public function docDigital()
     {
         $doc = new DocDigital();
+
         $filtro = [
-            // 'nombreDestinatario' => 'Carla Andrea Cubillos Araya',
-            // 'runDestinatario' => '14107361',
-            'materia' => 'Rescate usuarios',
+            'idEntidad' => '121',
+            'nombre' => 'Miranda',
         ];
-        dd($doc->getDocumentosBuscar($filtro));
+
+        return $doc->getUsuarios($filtro);
     }
 
     /**
@@ -44,6 +45,19 @@ class TestController extends Controller
     */
     public function DigitalSignature()
     {
+
+        // - Tipo (Firma (default), Visación, Numerar)
+        // - Proposito (General (default), desatentdido, ionline)
+        // - Página ('Last' (default), 1,2,3...)
+        // - Usuario
+        // - OTP (opcional)
+        // - Posición (columnas y filas)
+        // $files[] = [
+        //     'content' => $documentBase64, 
+        //     'checksum' => md5($documentBase64)
+        // ];
+
+
         // $purpose = 'Propósito General';
         $purpose = 'Desatendido';
         // $purpose = 'iOnline';
@@ -53,61 +67,60 @@ class TestController extends Controller
 
         $page = 'LAST'; // 1,2,3 ... LAST
 
-        $signatureImageBase64 = app(ImageService::class)->createSignature($user);
-        // $signatureImageBase64 = app(ImageService::class)->createDocumentNumber("002342-Xdf4", "13.089");
+        // $signatureImageBase64 = app(ImageService::class)->createSignature($user);
+        $signatureImageBase64 = app(ImageService::class)->createDocumentNumber("002342-Xdf4", "13.089");
 
         /** Tamaño de la firma */
         // 160 39
-        $width = 930 * 0.172;
-        $height = 206 * 0.189;
+        // $width = 930 * 0.172;
+        // $height = 206 * 0.189;
 
         //dd($width, $height);
 
         /** Tamaño del foliado */
-        // $width = floor(1100 * 0.172);
-        // $height = floor(280 * 0.189);
+        $width = 1100 * 0.172;
+        $height = 280 * 0.189;
 
 
         /** Obtener el tamaño de la página */
-        // $fileContent = file_get_contents(public_path('samples/download.pdf'));
-        // $pdf = new Fpdi('P', 'mm');
-        // $pdf->setSourceFile(StreamReader::createByString($fileContent));
-        // $firstPage = $pdf->importPage(1);
-        // $size = $pdf->getTemplateSize($firstPage);
+        $pdf = new Fpdi('P', 'mm');
+        $pdf->setSourceFile(public_path('samples/oficio.pdf'));
+        $firstPage = $pdf->importPage(1);
+        $size = $pdf->getTemplateSize($firstPage);
 
-        // /**
-        //  * Calculo de milimetros a centimetros
-        //  */
-        // $widthFile = $size['width'] / 10;
-        // $heightFile = $size['height'] / 10;
+        /**
+         * Calculo de milimetros a centimetros
+         */
+        $widthFile = $size['width'] / 10;
+        $heightFile = $size['height'] / 10;
 
-        // /**
-        //  * Calculo de centimetros a pulgadas y cada pulgada son 72 ppp (dots per inch - dpi)
-        //  */
-        // $xCoordinate = ($widthFile * 0.393701) * 72;
-        // $yCoordinate = ($heightFile * 0.393701) * 72;
+        /**
+         * Calculo de centimetros a pulgadas y cada pulgada son 72 ppp (dots per inch - dpi)
+         */
+        $xCoordinate = ($widthFile * 0.393701) * 72;
+        $yCoordinate = ($heightFile * 0.393701) * 72;
 
-        // /**
-        //  * Resta 290 y 120 a las coordenadas
-        //  */
-        // $xCoordinate -= 218;
-        // $yCoordinate -= 84;
+        /**
+         * Resta 290 y 120 a las coordenadas
+         */
+        $xCoordinate -= 218;
+        $yCoordinate -= 84;
 
 
 
 
         // $xCoordinate = 93.3; // Left
         // $xCoordinate = 256.4; // Center
-        $xCoordinate = 418.8; // Right
+        // $xCoordinate = 418.8; // Right
 
-        $yCoordinate = 72.3; // Primer piso
+        // $yCoordinate = 72.3; // Primer piso
         // $yCoordinate = 110.4; // Segundo piso
 
 
         /**
          * Documentos a firmar
          */
-        $documentBase64 = base64_encode(file_get_contents(public_path('samples/download.pdf')));
+        $documentBase64 = base64_encode(file_get_contents(public_path('samples/oficio_firmado_2.pdf')));
 
         $files[] = [
             'content' => $documentBase64, 
