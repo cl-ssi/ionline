@@ -205,6 +205,7 @@
                 class="form-control"
                 type="text"
                 placeholder="Ej: Computador"
+                autocomplete="off"
             >
         </fieldset>
 
@@ -236,6 +237,7 @@
                 class="form-control @error('description') is-invalid @enderror"
                 id="description"
                 placeholder="Ej: 2GB de RAM y 256 Disco Duro"
+                autocomplete="off"
             >
             @error('description')
                 <span class="invalid-feedback" role="alert">
@@ -256,7 +258,22 @@
                 class="form-control @error('number_inventory') is-invalid @enderror"
                 id="number-inventory"
                 placeholder="Ej: 12345-67-89"
+                autocomplete="off"
             >
+            <button
+                    class="btn btn-primary"
+                    wire:click="generateCode"
+                    wire:target="generateCode"
+                    wire:loading.attr="disabled"
+                >
+                <span
+                        wire:loading.remove
+                        wire:target="generateCode"
+                    >
+                    <i class="fas fa-qrcode"></i>
+                </span>
+                Generar
+            </button>
             @error('number_inventory')
                 <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
@@ -274,6 +291,7 @@
                 class="form-control @error('brand') is-invalid @enderror"
                 id="brand"
                 placeholder="Ej: Lenovo"
+                autocomplete="off"
             >
             @error('brand')
                 <span class="invalid-feedback" role="alert">
@@ -292,6 +310,7 @@
                 class="form-control @error('model') is-invalid @enderror"
                 id="model"
                 placeholder="Ej: All In One"
+                autocomplete="off"
             >
             @error('model')
                 <span class="invalid-feedback" role="alert">
@@ -310,6 +329,7 @@
                 class="form-control @error('serial_number') is-invalid @enderror"
                 id="serial-number"
                 placeholder="Ej: 123456789-01234-56789"
+                autocomplete="off"
             >
             @error('serial_number')
                 <span class="invalid-feedback" role="alert">
@@ -357,6 +377,7 @@
                 class="form-control @error('observations') is-invalid @enderror"
                 id="observations"
                 placeholder="Ej: La computadora tiene un boton dañado"
+                autocomplete="off"
             >
             @error('observations')
                 <span class="invalid-feedback" role="alert">
