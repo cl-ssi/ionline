@@ -2594,6 +2594,7 @@ Route::group(['middleware' => 'auth:external'], function () {
 Route::view('/some', 'some');
 
 Route::prefix('test')->as('test.')->group(function () {
+    Route::get('/digital-signature', [TestController::class, 'DigitalSignature']);
     Route::get('/doc-digital', [TestController::class, 'docDigital']);
 
     Route::get('/ous', [TestController::class, 'ous']);

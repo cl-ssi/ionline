@@ -46,7 +46,7 @@ class SignatureTest extends Component
         /**
          * Setea el base64 del pdf
          */
-        $documentBase64Pdf = base64_encode(file_get_contents(public_path('samples/dummy.pdf')));
+        $documentBase64Pdf = base64_encode(file_get_contents(public_path('samples/oficio.pdf')));
 
         /**
          * Calculate el eje X
