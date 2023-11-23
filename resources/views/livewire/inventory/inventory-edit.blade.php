@@ -13,13 +13,52 @@
                 Detalle del ítem
             </h3>
         </div>
-        <div class="col text-end">
+
+        <div class="col-4">
+            @can('Inventory: manager')
+                <div class="input-group mb-3">
+                    <input
+                        type="text"
+                        class="form-control form-control-sm @error('observation_delete') is-invalid @enderror"
+                        placeholder="Observación de eliminación"
+                        wire:model.debounce.1500ms="observation_delete"
+                    >
+                    <button
+                        class="btn btn-sm btn-danger"
+                        type="button"
+                        id="button-addon2"
+                        wire:click="deleteItemInventory"
+                    >
+                        Eliminar Item
+                    </button>
+                    @error('observation_delete')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                    @enderror
+                </div>
+            @endif
+        </div>
+
+        <div class="col-3 text-end">
+            @can('Inventory: manager')
+                @if(isset($inventory->number))
+                    <button
+                        class="btn btn-sm btn-danger"
+                        wire:click="unInventory"
+                    >
+                        <i class="fas fa-trash"></i> Desinventariar
+                    </button>
+                @endif
+            @endcan
+
             @livewire('inventory.toggle-print', ['inventory' => $inventory], key('print-'.$inventory->id))
+
             <a
                 href="{{ route('inventories.pending-inventory', [
                     'establishment' => $establishment
                 ]) }}"
-                class="btn btn-primary"
+                class="btn btn-sm btn-primary"
             >
                 Atrás
             </a>
@@ -104,14 +143,27 @@
                         aria-hidden="true"
                     >
                     </span>
+
                     Generar
                 </button>
+
+                @can('Inventory: manager')
+                    <button
+                        class="btn btn-sm btn-info"
+                        wire:click="searchFusion"
+                    >
+                        <i class="fas fa-compress-alt"></i>
+                        Fusionar
+                    </button>
+                @endcan
+
+                @error('number_inventory')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                @enderror
             </div>
-            @error('number_inventory')
-                <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                </span>
-            @enderror
+
         </fieldset>
 
         <fieldset class="col-md-3">
@@ -123,6 +175,8 @@
                 class="form-control @error('brand') is-invalid @enderror"
                 id="brand"
                 wire:model.defer="brand"
+                wire:target="searchFusion"
+                wire:loading.attr="disabled"
                 autocomplete="off"
             >
             @error('brand')
@@ -266,7 +320,7 @@
                 >
                     <option value="">Seleccione una clasificación</option>
                 @foreach($classifications as $classification)
-                    <option value="{{$classification->id}}">{{$classification->name}}</option>
+                    <option value="{{ $classification->id }}">{{ $classification->name }}</option>
                 @endforeach
             </select>
             @error('classification')
@@ -497,7 +551,10 @@
     <div class="row">
         <div class="col">
             <h5 class="mt-3">Historial del ítem</h5>
-            @livewire('inventory.movement-index', ['inventory' => $inventory], key('movement-'.$inventory->id))
+            @livewire('inventory.movement-index', [
+                'inventory' => $inventory,
+                'data_preview' => $data_preview,
+            ], key('movement-'.$inventory->id))
         </div>
     </div>
 

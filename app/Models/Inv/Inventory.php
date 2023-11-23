@@ -64,6 +64,8 @@ class Inventory extends Model implements Auditable
         'budget_item_id',
         'accounting_code_id',
         'printed',
+        'observation_delete',
+        'user_delete_id',
         'classification_id',
 
         // proceso de dar de baja a un inventario
@@ -196,6 +198,11 @@ class Inventory extends Model implements Auditable
     public function accountingCode()
     {
         return $this->belongsTo(AccountingCode::class);
+    }
+
+    public function userDelete()
+    {
+        return $this->belongsTo(User::class, 'user_delete_id');
     }
 
     public function isComputer()

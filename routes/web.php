@@ -1749,21 +1749,24 @@ Route::prefix('warehouse')->as('warehouse.')->middleware(['auth', 'must.change.p
 
     Route::prefix('store')->group(function () {
         Route::get('welcome', [StoreController::class, 'welcome'])->name('store.welcome');
-        Route::prefix('{store}')->middleware('ensure.store')->group(function () {
-            Route::get('active', [StoreController::class, 'activateStore'])->name('store.active');
-            Route::get('users', [StoreController::class, 'users'])->name('stores.users');
-            Route::get('report', [StoreController::class, 'report'])->name('store.report');
-            Route::get('generate-reception', [ControlController::class, 'generateReception'])->name('generate-reception');
-            Route::get('invoice-management', [ControlController::class, 'invoiceManage'])->name('invoice-management');
+        Route::prefix('{store}')->group(function () {
+            Route::middleware('ensure.store')->group(function () {
+                Route::get('active', [StoreController::class, 'activateStore'])->name('store.active');
+                Route::get('users', [StoreController::class, 'users'])->name('stores.users');
+                Route::get('report', [StoreController::class, 'report'])->name('store.report');
+                Route::get('generate-reception', [ControlController::class, 'generateReception'])->name('generate-reception');
+                Route::get('invoice-management', [ControlController::class, 'invoiceManage'])->name('invoice-management');
 
-            Route::resource('controls', ControlController::class)->except(['store', 'update', 'show']);
-            Route::resource('products', WarehouseProductController::class)->only(['index', 'create', 'edit']);
-            Route::resource('categories', WarehouseCategoryController::class)->only(['index', 'create', 'edit']);
-            Route::resource('origins', OriginController::class)->only(['index', 'create', 'edit']);
-            Route::resource('destinations', DestinationController::class)->only(['index', 'create', 'edit']);
+                Route::resource('controls', ControlController::class)->except(['store', 'update', 'show']);
+                Route::resource('products', WarehouseProductController::class)->only(['index', 'create', 'edit']);
+                Route::resource('categories', WarehouseCategoryController::class)->only(['index', 'create', 'edit']);
+                Route::resource('origins', OriginController::class)->only(['index', 'create', 'edit']);
+                Route::resource('destinations', DestinationController::class)->only(['index', 'create', 'edit']);
+            });
+
             Route::prefix('control/{control}')->group(function () {
                 Route::get('pdf', [ControlController::class, 'pdf'])->name('control.pdf');
-                Route::get('add-products', [ControlController::class, 'addProduct'])->name('control.add-product');
+                Route::get('add-products', [ControlController::class, 'addProduct'])->name('control.add-product')->middleware('ensure.store');
             });
         });
     });
@@ -1888,7 +1891,7 @@ Route::prefix('prof_agenda')->as('prof_agenda.')->middleware(['auth'])->group(fu
 
 // Inventories
 Route::prefix('inventories')->as('inventories.')->middleware(['auth', 'must.change.password'])->group(function () {
-    
+
     Route::prefix('establishment/{establishment}')->group(function () {
         /** Ruta para poder ver la hoja de inventario sin edición  */
         Route::get('/number/{number}', InventoryShow::class)->name('show');
@@ -1910,7 +1913,7 @@ Route::prefix('inventories')->as('inventories.')->middleware(['auth', 'must.chan
 
         Route::get('/upload-excel', InventoryUploadExcel::class)->name('upload-excel');
     });
-    
+
     Route::get('clasification-mgr', ClassificationMgr::class)->name('clasification-mgr');
     Route::get('removal-request-mgr', RemovalRequestMgr::class)->name('removal-request-mgr');
 
@@ -1918,7 +1921,7 @@ Route::prefix('inventories')->as('inventories.')->middleware(['auth', 'must.chan
 
     Route::get('{inventory}/discharge-document', [InventoryController::class, 'dischargeDocument'])->name('discharge-document');
     Route::get('movement/{movement}/act-transfer', [InventoryController::class, 'actTransfer'])->name('act-transfer');
-    
+
     Route::get('pending-movements', PendingMovements::class)->name('pending-movements');
     Route::get('assigned-products', AssignedProducts::class)->name('assigned-products');
     Route::get('movement/{movement}/check-transfer', CheckTransfer::class)->name('check-transfer')
@@ -2579,6 +2582,8 @@ Route::group(['middleware' => 'auth:external'], function () {
 Route::view('/some', 'some');
 
 Route::prefix('test')->as('test.')->group(function () {
+    Route::get('/doc-digital', [TestController::class, 'docDigital']);
+
     Route::get('/ous', [TestController::class, 'ous']);
 
     Route::get('/loop-livewire', [TestController::class, 'loopLivewire']);
