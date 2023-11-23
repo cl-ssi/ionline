@@ -21,6 +21,7 @@ use App\Models\WebService\MercadoPublico;
 use App\Models\Establishment;
 use App\Models\Documents\Sign\Signature;
 use App\Models\Documents\DocDigital;
+use App\Models\Documents\DigitalSignature;
 use App\Jobs\TestJob;
 
 class TestController extends Controller
@@ -43,163 +44,35 @@ class TestController extends Controller
     /**
     * Digital Signature
     */
-    public function DigitalSignature()
+    public function DigitalSignature($otp = null)
     {
-
-        // - Tipo (Firma (default), Visación, Numerar)
-        // - Proposito (General (default), desatentdido, ionline)
-        // - Página ('Last' (default), 1,2,3...)
-        // - Usuario
-        // - OTP (opcional)
-        // - Posición (columnas y filas)
-        // $files[] = [
-        //     'content' => $documentBase64, 
-        //     'checksum' => md5($documentBase64)
-        // ];
-
-
-        // $purpose = 'Propósito General';
-        $purpose = 'Desatendido';
-        // $purpose = 'iOnline';
-
-        $user = User::find(15287582);
-        $otp = '322494'; // Sólo para Propósito General
-
-        $page = 'LAST'; // 1,2,3 ... LAST
-
-        // $signatureImageBase64 = app(ImageService::class)->createSignature($user);
-        $signatureImageBase64 = app(ImageService::class)->createDocumentNumber("002342-Xdf4", "13.089");
-
-        /** Tamaño de la firma */
-        // 160 39
-        // $width = 930 * 0.172;
-        // $height = 206 * 0.189;
-
-        //dd($width, $height);
-
-        /** Tamaño del foliado */
-        $width = 1100 * 0.172;
-        $height = 280 * 0.189;
-
-
-        /** Obtener el tamaño de la página */
-        $pdf = new Fpdi('P', 'mm');
-        $pdf->setSourceFile(public_path('samples/oficio.pdf'));
-        $firstPage = $pdf->importPage(1);
-        $size = $pdf->getTemplateSize($firstPage);
-
-        /**
-         * Calculo de milimetros a centimetros
-         */
-        $widthFile = $size['width'] / 10;
-        $heightFile = $size['height'] / 10;
-
-        /**
-         * Calculo de centimetros a pulgadas y cada pulgada son 72 ppp (dots per inch - dpi)
-         */
-        $xCoordinate = ($widthFile * 0.393701) * 72;
-        $yCoordinate = ($heightFile * 0.393701) * 72;
-
-        /**
-         * Resta 290 y 120 a las coordenadas
-         */
-        $xCoordinate -= 218;
-        $yCoordinate -= 84;
-
-
-
-
-        // $xCoordinate = 93.3; // Left
-        // $xCoordinate = 256.4; // Center
-        // $xCoordinate = 418.8; // Right
-
-        // $yCoordinate = 72.3; // Primer piso
-        // $yCoordinate = 110.4; // Segundo piso
-
-
-        /**
-         * Documentos a firmar
-         */
-        $documentBase64 = base64_encode(file_get_contents(public_path('samples/oficio_firmado_2.pdf')));
-
-        $files[] = [
-            'content' => $documentBase64, 
-            'checksum' => md5($documentBase64)
+        // $user = User::find(15287582);
+        $digitalSignature = new DigitalSignature(auth()->user(), 'signature');
+        $files[] = public_path('samples/oficio_firmado_1.pdf');
+        $files[] = public_path('samples/oficio_firmado_2.pdf');
+        $otp = '527878';
+        $position = [  // Opcional
+            'column'        => 'right',   // 'left','center','right'
+            'row'           => 'first',   // 'first','second'
+            'margin-bottom' => 20,         // 80 pixeles
         ];
+        $signed = $digitalSignature->signature($files, $otp, $position);
 
 
+        // $user = User::find(15287582);
+        // $digitalSignature = new DigitalSignature($user, 'numerate');
+        // $file = public_path('samples/oficio_firmado_1.pdf');
+        // $verificationCode = '002342-Xdf4';
+        // $number = '13.089';
+        // $signed = $digitalSignature->numerate($file, $verificationCode, $number);
 
 
-        /** Esto es fijo */
-        $url = env('FIRMA_URL');
-        $secret = env('FIRMA_SECRET');
-        $entity = 'Servicio de Salud Iquique';
-
-        $payload = [
-            "purpose" => $purpose,
-            "entity" => $entity,
-            "run" => $user->id,
-            "expiration" => now()->add(30, 'minutes')->format('Y-m-d\TH:i:s'),
-        ];
-
-        $data['api_token_key'] = env('FIRMA_API_TOKEN');
-        $data['token'] = JWT::encode($payload, $secret, 'HS256');
-
-        foreach($files as $file) {
-            $data['files'][] = [
-                'content-type' => 'application/pdf',
-                'content' => $file['content'],
-                'description' => 'str',
-                'checksum' => $file['checksum'],
-                'layout' => "
-                    <AgileSignerConfig>
-                        <Application id=\"THIS-CONFIG\">
-                            <pdfPassword/>
-                            <Signature>
-                                <Visible active=\"true\" layer2=\"false\" label=\"true\" pos=\"2\">
-                                    <llx>" . ($xCoordinate). "</llx>
-                                    <lly>" . ($yCoordinate). "</lly>
-                                    <urx>" . ($xCoordinate + $width) . "</urx>
-                                    <ury>" . ($yCoordinate + $height) . "</ury>
-                                    <page>" . $page . "</page>
-                                    <image>BASE64</image>
-                                    <BASE64VALUE>$signatureImageBase64</BASE64VALUE>
-                                </Visible>
-                            </Signature>
-                        </Application>
-                    </AgileSignerConfig>"
-            ];
+        if($signed) {
+            return $digitalSignature->streamFirstSignedFile();
         }
-
-        /**
-         * Peticion a la api para firmar
-         */
-        try {
-            $response = Http::withHeaders(['otp' => $otp])->post($url, $data);
-        } catch (\Throwable $th) {
-            dd("No se pudo conectar a firma gobierno.", $th->getCode());
+        else {
+            echo $digitalSignature->error;
         }
-
-        if($response->failed()) {
-            dd($response->reason());
-        }
-
-        $json = $response->json();
-
-        if(array_key_exists('error',$json)) {
-            dd($json['error']);
-        }
-
-        $decodedPdf = base64_decode($json['files'][0]['content']);
-
-        // Create a response with the correct headers for a PDF file
-        $response = response($decodedPdf, 200, [
-            'Content-Type' => 'application/pdf',
-            'Content-Disposition' => 'inline; filename="document.pdf"',
-        ]);
-
-        return $response;
-
 
         //$approval->resetStatus();
         // $img = app(ImageService::class)->createDocumentNumber("452342-Xdfgf4", "13.089");
