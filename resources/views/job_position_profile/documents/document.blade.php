@@ -329,7 +329,7 @@
     <tbody>
         <tr>
             <th align="left" style="background-color: #2f5496; color: white" colspan="2">
-                VI. MAPA DE COMPETENCIAS DEL SERVICIO DE SALUD TARAPACÁ
+                VI. DICCIONARIO DE COMPETENCIAS DEL SERVICIO DE SALUD TARAPACÁ
             </th>
         </tr>
     </tbody>

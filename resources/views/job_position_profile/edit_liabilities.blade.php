@@ -22,7 +22,7 @@
                 <th>III. PROPÓSITOS DEL CARGO</th>
                 <th>IV. ORGANIZACIÓN Y CONTEXTO DEL CARGO</th>
                 <th>V. RESPONSABILIDAD DEL CARGO</th>
-                <th>VI. MAPA DE COMPETENCIAS DEL S.S.T</th>
+                <th>VI. DICCIONARIO DE COMPETENCIAS DEL S.S.T</th>
             </tr>
         </thead>
         <tbody>
@@ -199,7 +199,7 @@
             <i class="fas fa-chevron-left"></i> IV. Organización y Contexto del Cargo
         </a>
         <a class="btn btn-info float-right" href="{{ route('job_position_profile.edit_expertise_map', $jobPositionProfile) }}">
-            <i class="fas fa-chevron-right"></i> VI. Mapa de Competencias del S.S.I.
+            <i class="fas fa-chevron-right"></i> VI. Diccionario de Competencias del S.S.I.
         </a>
     </div>
 </div>

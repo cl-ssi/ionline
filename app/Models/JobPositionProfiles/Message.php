@@ -48,7 +48,7 @@ class Message extends Model implements Auditable
                 break;
             
             case '6':
-                return 'VI. MAPA DE COMPETENCIAS DEL S.S.T';
+                return 'VI. DICCIONARIO DE COMPETENCIAS DEL S.S.T';
                 break;
         }
     }

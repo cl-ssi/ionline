@@ -224,7 +224,7 @@
 
 <br>
 
-<h6><i class="fas fa-info-circle"></i> VI. Mapa de Competencias del Servicio de Salud Tarapacá</h6>
+<h6><i class="fas fa-info-circle"></i> VI. Diccionario de Competencias del Servicio de Salud Tarapacá</h6>
 
 <br>
 
