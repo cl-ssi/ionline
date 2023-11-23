@@ -274,6 +274,9 @@ use App\Http\Controllers\Agreements\AddendumController;
 use App\Http\Controllers\Agreements\AccountabilityDetailController;
 use App\Http\Controllers\Agreements\AccountabilityController;
 
+use App\Http\Livewire\News\CreateNews;
+use App\Http\Livewire\News\SearchNews;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -466,7 +469,7 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->middleware(['auth'
         });
     });
 
-    Route::prefix('contact_record')->name('contact_record.')->middleware(['role:Replacement Staff: admin|Replacement Staff: user rys'])->group(function () {
+    Route::prefix('contact_record')->name('contact_record.')->group(function () {
         Route::get('/{staff}', [ContactRecordController::class, 'index'])->name('index');
         Route::get('/{staff}/create/', [ContactRecordController::class, 'create'])->name('create');
         Route::post('/{staff}/store', [ContactRecordController::class, 'store'])->name('store');
@@ -2534,6 +2537,11 @@ Route::prefix('his')->as('his.')->middleware('auth')->group(function () {
         });
 
     });
+});
+
+Route::prefix('news')->as('news.')->middleware(['auth', 'must.change.password'])->group(function () {
+    Route::get('/', CreateNews::class)->name('create');
+    Route::get('/index', SearchNews::class)->name('index');
 });
 
 
