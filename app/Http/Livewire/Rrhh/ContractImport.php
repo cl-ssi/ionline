@@ -43,7 +43,7 @@ class ContractImport extends Component
         $users = User::withTrashed()->whereIn('id',$file_users)->get()->pluck('id')->toArray();
 
         // se modifican todos los usuarios a inactivos
-        User::where('id','>',0)->update(['active' => 0]);
+        // User::where('id','>',0)->update(['active' => 0]);
 
         // $total_count = $collection->first()->count();
         $count_inserts = 0;
@@ -111,7 +111,6 @@ class ContractImport extends Component
                                 // Aquí se verifica si existe la unidad organizacional según id sirth de archivo importado, 
                                 // si existe: se crea nuevo usuario con esa ou_id
                                 if(array_key_exists($column['cdigo_unidad'], $ous)){
-
                                     // Se obtienen datos del funcionario desde fonasa
                                     $fonasaUser = Fonasa::find($rut."-".$dv);
                                     if(!isset($fonasaUser->message)){
@@ -221,7 +220,6 @@ class ContractImport extends Component
             }
         } catch (Exception $e) {
             echo 'Caught exception: ',  $e->getMessage(), "\n";
-            dd('Caught exception: ',  $e->getMessage(), "\n");
         }
 
         $this->message2 = 'Se ha cargado correctamente el archivo (' . $count_inserts . ' registros).';
