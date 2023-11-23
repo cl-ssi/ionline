@@ -67,13 +67,20 @@
                 wire:model.defer="pending"
                 id="pending"
                 class="form-control form-control-sm"
+            >        
+                <option value="">Todos</option>
+                <option value="pending">Pendientes</option>
+            </select>
+        </fieldset>
+
+        <fieldset class="form-group col-md-2">
+            <label for="oc">OC</label>
+            <input
+                wire:model.defer="oc"
+                id="oc"
+                class="form-control form-control-sm"
             >
         </fieldset>
-            <option value="">Todos</option>
-            <option value="pending">Pendientes</option>
-        </select>
-
-
     </div>
 
     <div class="row g-2 d-print-none mb-3">

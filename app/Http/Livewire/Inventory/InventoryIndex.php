@@ -41,6 +41,7 @@ class InventoryIndex extends Component
     public $place;
     public $location;
     public $pending;
+    public $oc;
 
     public $managerInventory;
 
@@ -105,6 +106,9 @@ class InventoryIndex extends Component
             })
             ->when($this->pending, function($query) {
                 $query->whereHas('pendingMovements');
+            })
+            ->when($this->oc, function($query) {
+                $query->where('po_code', 'LIKE', '%'.$this->oc.'%');
             })
             ->whereEstablishmentId($this->establishment->id)
             ->whereNotNull('number')
