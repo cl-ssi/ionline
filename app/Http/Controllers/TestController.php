@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use setasign\Fpdi\PdfParser\StreamReader;
+use setasign\Fpdi\Fpdi;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\DB;
+
 use Illuminate\Http\Request;
 use GuzzleHttp\Client;
-
 use Firebase\JWT\JWT;
 use Exception;
 use Carbon\Carbon;
@@ -18,12 +20,25 @@ use App\Rrhh\OrganizationalUnit;
 use App\Models\WebService\MercadoPublico;
 use App\Models\Establishment;
 use App\Models\Documents\Sign\Signature;
+use App\Models\Documents\DocDigital;
 use App\Jobs\TestJob;
-use setasign\Fpdi\Fpdi;
-use setasign\Fpdi\PdfParser\StreamReader;
 
 class TestController extends Controller
 {
+    /**
+    * DocDigital
+    */
+    public function docDigital()
+    {
+        $doc = new DocDigital();
+        $filtro = [
+            // 'nombreDestinatario' => 'Carla Andrea Cubillos Araya',
+            // 'runDestinatario' => '14107361',
+            'materia' => 'Rescate usuarios',
+        ];
+        dd($doc->getDocumentosBuscar($filtro));
+    }
+
     /**
     * Digital Signature
     */

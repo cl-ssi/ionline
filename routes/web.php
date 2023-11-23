@@ -2582,6 +2582,8 @@ Route::group(['middleware' => 'auth:external'], function () {
 Route::view('/some', 'some');
 
 Route::prefix('test')->as('test.')->group(function () {
+    Route::get('/doc-digital', [TestController::class, 'docDigital']);
+
     Route::get('/ous', [TestController::class, 'ous']);
 
     Route::get('/loop-livewire', [TestController::class, 'loopLivewire']);
