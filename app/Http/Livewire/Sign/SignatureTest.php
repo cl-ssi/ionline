@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Sign;
 
 use Livewire\Component;
+use Illuminate\Support\Facades\Storage;
 use App\Models\Documents\DigitalSignature;
 
 class SignatureTest extends Component
@@ -26,13 +27,12 @@ class SignatureTest extends Component
     {
         $this->message = null;
 
-        $digitalSignature = new DigitalSignature(auth()->user(), 'signature');
+        $files[] = Storage::get('ionline/samples/oficio.pdf');
+        
+        $digitalSignature = new DigitalSignature();
+        $success = $digitalSignature->signature(auth()->user(), $this->otp, $files);
 
-        $files[] = public_path('samples/oficio.pdf');
-
-        $signed = $digitalSignature->signature($files, $this->otp);
-
-        if($signed) {
+        if($success) {
             $this->message = "La firma fue realizada exitosamente.";
             $this->type_message = 'success';
         }

@@ -36,16 +36,16 @@ class DigitalSignature extends Model
      * =====================
      **/
     // $user = User::find(15287582);
-    // $digitalSignature = new DigitalSignature($user, 'signature');
     // $files[] = Storage::get('ionline/samples/oficio.pdf');
     // $files[] = Storage::get('ionline/samples/oficio_firmado_1.pdf');
     // $otp = '123456';
-    // $position = [
+    // $position = [ // opcional (Default: right, first, 0)
     //     'column'        => 'right',   // 'left','center','right'
     //     'row'           => 'first',   // 'first','second'
     //     'margin-bottom' => 20,        // 80 pixeles
     // ];
-    // $signed = $digitalSignature->signature($files, $otp, $position);
+    // $digitalSignature = new DigitalSignature();
+    // $success = $digitalSignature->signature($user, $otp, $files, $position);
 
 
     /** 
@@ -53,17 +53,17 @@ class DigitalSignature extends Model
      * =========================
      **/
     // $user = User::find(15287582);
-    // $digitalSignature = new DigitalSignature($user, 'numerate');
     // $file = Storage::get('ionline/samples/oficio_firmado_2.pdf');
     // $verificationCode = '002342-Xdf4';
     // $number = '13.089';
-    // $signed = $digitalSignature->numerate($file, $verificationCode, $number);
+    // $digitalSignature = new DigitalSignature();
+    // $success = $digitalSignature->numerate($user, $file, $verificationCode, $number);
 
     /** 
      * RESULTADO
      * ===============
      **/
-    // if($signed) {
+    // if($success) {
     //     return $digitalSignature->streamFirstSignedFile();
     // }
     // else {
@@ -100,10 +100,10 @@ class DigitalSignature extends Model
     private $factorHeight = 0.189;
 
     /**
-     * En el constructor se setean las variables comunes
-     * $type = 'signature','numerate'
+     * Configuración inicial
+     * Variables y token
     */
-    public function __construct($user, $type)
+    public function setConfig($user, $type)
     {
         $this->user = $user;
 
@@ -136,8 +136,10 @@ class DigitalSignature extends Model
     /**
     * Firma Normal
     */
-    public function signature($files, $otp, $position = null)
+    public function signature($user, $otp, $files, $position = null)
     {
+        $this->setConfig($user,'signature');
+
         /** En que página va la firma */
         $this->page = 'LAST';
 
@@ -158,8 +160,10 @@ class DigitalSignature extends Model
     /**
     * Numerar un PDF firmado
     */
-    public function numerate($file, $verificationCode, $number)
+    public function numerate($user, $file, $verificationCode, $number)
     {
+        $this->setConfig($user,'numerate');
+
         /** En que página va la firma */
         $this->page = '1';
 

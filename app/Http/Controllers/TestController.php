@@ -46,26 +46,26 @@ class TestController extends Controller
     */
     public function DigitalSignature($otp = null)
     {
-        // $digitalSignature = new DigitalSignature(auth()->user(), 'signature');
         // $files[] = Storage::get('ionline/samples/oficio.pdf');
         // $files[] = Storage::get('ionline/samples/oficio_firmado_1.pdf');
         // $position = [  // Opcional
-        //     'column'        => 'left',   // 'left','center','right'
+        //     'column'        => 'left',    // 'left','center','right'
         //     'row'           => 'first',   // 'first','second'
-        //     'margin-bottom' => 20,         // 80 pixeles
+        //     'margin-bottom' => 0,         // 80 pixeles
         // ];
-        // $signed = $digitalSignature->signature($files, $otp, $position);
+        // $digitalSignature = new DigitalSignature();
+        // $success = $digitalSignature->signature(auth()->user(), $otp, $files, $position);
 
 
         $user = User::find(15287582);
-        $digitalSignature = new DigitalSignature($user, 'numerate');
         $file = Storage::get('ionline/samples/oficio_firmado_2.pdf');
         $verificationCode = '002342-Xdf4';
         $number = '13.089';
-        $signed = $digitalSignature->numerate($file, $verificationCode, $number);
+        $digitalSignature = new DigitalSignature();
+        $success = $digitalSignature->numerate($user, $file, $verificationCode, $number);
 
 
-        if($signed) {
+        if($success) {
             return $digitalSignature->streamFirstSignedFile();
         }
         else {

@@ -56,18 +56,16 @@ trait ApprovalTrait
             $response = app()->call($show_controller_method, json_decode($approvalSelected->document_route_params, true));
             $files[] = $response->original;
 
-            
-            $digitalSignature = new DigitalSignature(auth()->user(), 'signature');
-
             $position = [  // Opcional
                 'column'        => $approvalSelected->position,     // 'left','center','right'
                 'row'           => 'first',                         // 'first','second'
                 'margin-bottom' => $approvalSelected->start_y ?? 0, // 0 pixeles
             ];
-            $signed = $digitalSignature->signature($files, $this->otp, $position);
 
+            $digitalSignature = new DigitalSignature();
+            $success = $digitalSignature->signature(auth()->user(), $this->otp, $files, $position);
 
-            if($signed) {
+            if($success) {
                 $digitalSignature->storeFirstSignedFile($approvalSelected->filename);
             }
             else {
