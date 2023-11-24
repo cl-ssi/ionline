@@ -47,8 +47,8 @@ class TestController extends Controller
     public function DigitalSignature($otp = null)
     {
         // $digitalSignature = new DigitalSignature(auth()->user(), 'signature');
-        // $files[] = public_path('samples/oficio_firmado_1.pdf');
-        // $files[] = public_path('samples/oficio_firmado_2.pdf');
+        // $files[] = Storage::get('ionline/samples/oficio.pdf');
+        // $files[] = Storage::get('ionline/samples/oficio_firmado_1.pdf');
         // $position = [  // Opcional
         //     'column'        => 'left',   // 'left','center','right'
         //     'row'           => 'first',   // 'first','second'
@@ -59,7 +59,7 @@ class TestController extends Controller
 
         $user = User::find(15287582);
         $digitalSignature = new DigitalSignature($user, 'numerate');
-        $file = public_path('samples/oficio_firmado_1.pdf');
+        $file = Storage::get('ionline/samples/oficio_firmado_2.pdf');
         $verificationCode = '002342-Xdf4';
         $number = '13.089';
         $signed = $digitalSignature->numerate($file, $verificationCode, $number);

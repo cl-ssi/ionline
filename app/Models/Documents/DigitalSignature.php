@@ -2,10 +2,12 @@
 
 namespace App\Models\Documents;
 
+use setasign\Fpdi\PdfParser\StreamReader;
+use setasign\Fpdi\Fpdi;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use setasign\Fpdi\Fpdi;
 use Firebase\JWT\JWT;
 use App\Services\ImageService;
 
@@ -32,39 +34,48 @@ class DigitalSignature extends Model
      * 
      * EJEMPLO FIRMA DIGITAL
      * =====================
-     * $user = User::find(15287582);
-     * $digitalSignature = new DigitalSignature($user, 'signature');
-     *
-     * $files[] = public_path('samples/oficio_firmado_1.pdf');
-     * $files[] = public_path('samples/oficio_firmado_2.pdf');
-     * $otp = '123456';
-     * $position = [
-     *     'column'        => 'right',   // 'left','center','right'
-     *     'row'           => 'first',   // 'first','second'
-     *     'margin-bottom' => 20,        // 80 pixeles
-     * ];
-     * $signed = $digitalSignature->signature($files, $otp, $position);
-     * 
-     * 
+     **/
+    // $user = User::find(15287582);
+    // $digitalSignature = new DigitalSignature($user, 'signature');
+    // $files[] = Storage::get('ionline/samples/oficio.pdf');
+    // $files[] = Storage::get('ionline/samples/oficio_firmado_1.pdf');
+    // $otp = '123456';
+    // $position = [
+    //     'column'        => 'right',   // 'left','center','right'
+    //     'row'           => 'first',   // 'first','second'
+    //     'margin-bottom' => 20,        // 80 pixeles
+    // ];
+    // $signed = $digitalSignature->signature($files, $otp, $position);
+
+
+    /** 
      * EJEMPLO NUMERAR DOCUMENTO
      * =========================
-     * $user = User::find(15287582);
-     * $digitalSignature = new DigitalSignature($user, 'numerate');
-     * $file = public_path('samples/oficio_firmado_1.pdf');
-     * $verificationCode = '002342-Xdf4';
-     * $number = '13.089';
-     * $signed = $digitalSignature->numerate($file, $verificationCode, $number);
-     * 
-     * 
+     **/
+    // $user = User::find(15287582);
+    // $digitalSignature = new DigitalSignature($user, 'numerate');
+    // $file = Storage::get('ionline/samples/oficio_firmado_2.pdf');
+    // $verificationCode = '002342-Xdf4';
+    // $number = '13.089';
+    // $signed = $digitalSignature->numerate($file, $verificationCode, $number);
+
+    /** 
      * RESULTADO
      * ===============
-     * if($signed) {
-     *     return $digitalSignature->streamFirstSignedFile();
-     * }
-     * else {
-     *     echo $digitalSignature->error;
-     * }
+     **/
+    // if($signed) {
+    //     return $digitalSignature->streamFirstSignedFile();
+    // }
+    // else {
+    //     echo $digitalSignature->error;
+    // }
+
+    /** 
+     * Stream una vista blade a una variable 
      */
+    // $file = Pdf::loadView('documents.templates.memo', [
+    //     'document' => $document
+    // ])->output();
 
     use HasFactory;
 
@@ -173,7 +184,7 @@ class DigitalSignature extends Model
     public function generateFilesData($files)
     {
         foreach($files as $file) {
-            $content = base64_encode(file_get_contents($file));
+            $content = base64_encode($file);
             $checksum = md5($content);
 
             $data['files'][] = [
@@ -238,7 +249,7 @@ class DigitalSignature extends Model
     {
         /** Obtener el tamaño de la página */
         $pdf = new Fpdi('P', 'mm');
-        $pdf->setSourceFile($file);
+        $pdf->setSourceFile(StreamReader::createByString($file));
         $firstPage = $pdf->importPage(1);
         $size = $pdf->getTemplateSize($firstPage);
     
@@ -303,11 +314,21 @@ class DigitalSignature extends Model
     */
     public function streamFirstSignedFile()
     {
-        $pdfBase64 = base64_decode($this->response['files'][0]['content']);
+        $pdfContent = base64_decode($this->response['files'][0]['content']);
 
-        return response($pdfBase64, 200, [
+        return response($pdfContent, 200, [
             'Content-Type' => 'application/pdf',
             'Content-Disposition' => 'inline; filename="document.pdf"',
         ]);
     }
+
+    /**
+    * Store first file to storage folder
+    */
+    public function storeFirstSignedFile($filename)
+    {
+        $pdfContent = base64_decode($this->response['files'][0]['content']);
+        return Storage::put($filename, $pdfContent, ['CacheControl' => 'no-store']);
+    }
+
 }
