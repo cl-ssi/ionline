@@ -104,8 +104,8 @@ class DigitalSignature extends Model
                 break;
             case 'numerate': 
                 $purpose = 'Desatendido';
-                $secret = env('FIRMA_SECRET_DESATENDIDO');
-                $this->data['api_token_key'] = env('FIRMA_API_TOKEN_DESATENDIDO');
+                $secret = env('FIRMA_SECRET_IONLINE');
+                $this->data['api_token_key'] = env('FIRMA_API_TOKEN_IONLINE');
                 break;
         }
 
