@@ -97,14 +97,14 @@ class DigitalSignature extends Model
      * Este nuevo tamaño se envia junto con la imagen a incrustar en el pdf,
      * esto hace que aparezca un rectangulo clickeable al rededor de la firma
      * proporcional al tamaño de la imágen.
-     **/
+     */
     private $factorWidth  = 0.172;
     private $factorHeight = 0.189;
 
     /**
      * Configuración inicial
      * Variables y token
-    */
+     */
     public function setConfig($user, $type)
     {
         $this->user = $user;
@@ -136,8 +136,8 @@ class DigitalSignature extends Model
     }
 
     /**
-    * Firma Normal
-    */
+     * Firma Normal
+     */
     public function signature($user, $otp, $files, $position = null)
     {
         $this->setConfig($user,'signature');
@@ -160,8 +160,8 @@ class DigitalSignature extends Model
     }
 
     /**
-    * Numerar un PDF firmado
-    */
+     * Numerar un PDF firmado
+     */
     public function numerate($user, $file, $verificationCode, $number)
     {
         $this->setConfig($user,'numerate');
@@ -185,8 +185,8 @@ class DigitalSignature extends Model
     }
 
     /**
-    * Generar el layout por cada archivo
-    */
+     * Generar el layout por cada archivo
+     */
     public function generateFilesData($files)
     {
         foreach($files as $file) {
@@ -235,13 +235,13 @@ class DigitalSignature extends Model
         } catch (\Throwable $th) {
             $this->error = "No se pudo conectar a firma gobierno. ". $th->getCode();
         }
-        
+
         if($response->failed()) {
             $this->error = $response->reason();
         }
-        
+
         $this->response = $response->json();
-        
+
         if(array_key_exists('error',$this->response)) {
             $this->error = $this->response['error'];
         }
@@ -250,8 +250,8 @@ class DigitalSignature extends Model
     }
 
     /**
-    * Get pdf page size para numerar
-    */
+     * Get pdf page size para numerar
+     */
     public function calculateNumeratePosition($file)
     {
         /** Obtener el tamaño de la página */
@@ -259,19 +259,19 @@ class DigitalSignature extends Model
         $pdf->setSourceFile(StreamReader::createByString($file));
         $firstPage = $pdf->importPage(1);
         $size = $pdf->getTemplateSize($firstPage);
-    
+
         /**
          * Calculo de milimetros a centimetros
          */
         $widthFile = $size['width'] / 10;
         $heightFile = $size['height'] / 10;
-    
+
         /**
          * Calculo de centimetros a pulgadas y cada pulgada son 72 ppp (dots per inch - dpi)
          */
         $xCoordinate = ($widthFile * 0.393701) * 72;
         $yCoordinate = ($heightFile * 0.393701) * 72;
-    
+
         /**
          * Resta 290 y 120 a las coordenadas
          */
@@ -316,8 +316,8 @@ class DigitalSignature extends Model
     }
 
     /**
-    * Stream first file to browser
-    */
+     * Stream first file to browser
+     */
     public function streamFirstSignedFile()
     {
         $pdfContent = base64_decode($this->response['files'][0]['content']);
@@ -329,8 +329,8 @@ class DigitalSignature extends Model
     }
 
     /**
-    * Store first file to storage path $filename = 'ionline/folder/file.pdf'
-    */
+     * Store first file to storage path $filename = 'ionline/folder/file.pdf'
+     */
     public function storeFirstSignedFile($filename)
     {
         $pdfContent = base64_decode($this->response['files'][0]['content']);
