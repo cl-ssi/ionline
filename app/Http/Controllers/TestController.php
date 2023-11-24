@@ -46,25 +46,23 @@ class TestController extends Controller
     */
     public function DigitalSignature($otp = null)
     {
-        // $user = User::find(15287582);
-        $digitalSignature = new DigitalSignature(auth()->user(), 'signature');
-        $files[] = public_path('samples/oficio_firmado_1.pdf');
-        $files[] = public_path('samples/oficio_firmado_2.pdf');
-        $otp = '527878';
-        $position = [  // Opcional
-            'column'        => 'right',   // 'left','center','right'
-            'row'           => 'first',   // 'first','second'
-            'margin-bottom' => 20,         // 80 pixeles
-        ];
-        $signed = $digitalSignature->signature($files, $otp, $position);
+        // $digitalSignature = new DigitalSignature(auth()->user(), 'signature');
+        // $files[] = public_path('samples/oficio_firmado_1.pdf');
+        // $files[] = public_path('samples/oficio_firmado_2.pdf');
+        // $position = [  // Opcional
+        //     'column'        => 'left',   // 'left','center','right'
+        //     'row'           => 'first',   // 'first','second'
+        //     'margin-bottom' => 20,         // 80 pixeles
+        // ];
+        // $signed = $digitalSignature->signature($files, $otp, $position);
 
 
-        // $user = User::find(15287582);
-        // $digitalSignature = new DigitalSignature($user, 'numerate');
-        // $file = public_path('samples/oficio_firmado_1.pdf');
-        // $verificationCode = '002342-Xdf4';
-        // $number = '13.089';
-        // $signed = $digitalSignature->numerate($file, $verificationCode, $number);
+        $user = User::find(15287582);
+        $digitalSignature = new DigitalSignature($user, 'numerate');
+        $file = public_path('samples/oficio_firmado_1.pdf');
+        $verificationCode = '002342-Xdf4';
+        $number = '13.089';
+        $signed = $digitalSignature->numerate($file, $verificationCode, $number);
 
 
         if($signed) {

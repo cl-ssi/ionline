@@ -99,14 +99,19 @@ class DigitalSignature extends Model
         switch($type) {
             case 'signature':
                 $purpose = 'Propósito General';
+                $secret = env('FIRMA_SECRET');
+                $this->data['api_token_key'] = env('FIRMA_API_TOKEN');
                 break;
             case 'numerate': 
                 $purpose = 'Desatendido';
+                $secret = env('FIRMA_SECRET_DESATENDIDO');
+                $this->data['api_token_key'] = env('FIRMA_API_TOKEN_DESATENDIDO');
                 break;
         }
 
+        $this->url = env('FIRMA_URL');
+
         $entity = env('FIRMA_ENTITY');
-        $secret = env('FIRMA_SECRET');
         $payload = [
             "purpose"   => $purpose,
             "entity"    => $entity,
@@ -114,8 +119,6 @@ class DigitalSignature extends Model
             "expiration"=> now()->add(30, 'minutes')->format('Y-m-d\TH:i:s'),
         ];
 
-        $this->url = env('FIRMA_URL');
-        $this->data['api_token_key'] = env('FIRMA_API_TOKEN');
         $this->data['token'] = JWT::encode($payload, $secret, 'HS256');
     }
 
