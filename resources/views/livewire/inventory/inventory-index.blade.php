@@ -32,7 +32,7 @@
             <select
                 wire:model="location_id"
                 id="locations"
-                class="form-control form-control-sm"
+                class="form-control form-select"
             >
                 <option value="">Todos</option>
                 @foreach($locations as $itemLocation)
@@ -48,7 +48,7 @@
             <select
                 wire:model="place_id"
                 id="places"
-                class="form-control form-control-sm"
+                class="form-select"
             >
                 <option value="">Todos</option>
                 @foreach($places as $itemPlace)
@@ -66,8 +66,8 @@
             <select
                 wire:model.defer="pending"
                 id="pending"
-                class="form-control form-control-sm"
-            >        
+                class="form-select"
+            >
                 <option value="">Todos</option>
                 <option value="pending">Pendientes</option>
             </select>
@@ -78,7 +78,7 @@
             <input
                 wire:model.defer="oc"
                 id="oc"
-                class="form-control form-control-sm"
+                class="form-control"
             >
         </fieldset>
     </div>
@@ -90,7 +90,7 @@
             <select
                 wire:model="unspsc_product_id"
                 id="products"
-                class="form-control form-control-sm"
+                class="form-control form-select"
             >
                 <option value="">Todos</option>
                 @foreach($products as $product)
@@ -108,7 +108,7 @@
             <select
                 wire:model="user_responsible_id"
                 id="responsibles"
-                class="form-control form-control-sm"
+                class="form-control form-control-sm form-select"
             >
                 <option value="">Todos</option>
                 @foreach($responsibles as $itemResponsible)
@@ -124,7 +124,7 @@
             <select
                 wire:model="user_using_id"
                 id="users"
-                class="form-control form-control-sm"
+                class="form-control form-control-sm form-select"
             >
                 <option value="">Todos</option>
                 @foreach($users as $itemUser)
@@ -140,7 +140,7 @@
             <input
                 wire:model.defer="number"
                 id="number"
-                class="form-control form-control-sm"
+                class="form-control"
             >
         </fieldset>
 
@@ -149,14 +149,14 @@
             <input
                 wire:model.defer="inv_id"
                 id="inv_id"
-                class="form-control form-control-sm"
+                class="form-control"
             >
         </fieldset>
 
         <fieldset class="form-group col-md-1">
             <label for="">&nbsp;</label>
             <button
-                class="btn btn-sm btn-primary form-control"
+                class="btn btn-primary form-control"
                 wire:click="getInventories"
             >
                 <i class="fas fa-filter"></i>
