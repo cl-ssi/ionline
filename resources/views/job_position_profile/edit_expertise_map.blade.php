@@ -22,7 +22,7 @@
                 <th>III. PROPÓSITOS DEL CARGO</th>
                 <th>IV. ORGANIZACIÓN Y CONTEXTO DEL CARGO</th>
                 <th>V. RESPONSABILIDAD DEL CARGO</th>
-                <th>VI. MAPA DE COMPETENCIAS DEL S.S.T</th>
+                <th>VI. DICCIONARIO DE COMPETENCIAS DEL S.S.T</th>
             </tr>
         </thead>
         <tbody>
@@ -111,7 +111,7 @@
             <b>V. RESPONSABILIDAD DEL CARGO</b><br>
         @endif
         @if($jobPositionProfile->jppExpertises->count() <= 0)
-            <b>VI. MAPA DE COMPETENCIAS DEL S.S.I</b><br>
+            <b>VI. DICCIONARIO DE COMPETENCIAS DEL S.S.I</b><br>
         @endif
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>
@@ -119,14 +119,14 @@
     </div>
 @endif
 
-<h6 class="small"><b>VI. MAPA DE COMPETENCIAS DEL SERVICIO DE SALUD TARAPACÁ</b></h6> 
+<h6 class="small"><b>VI. DICCIONARIO DE COMPETENCIAS DEL SERVICIO DE SALUD TARAPACÁ</b></h6> 
 
 <br>
 
 <h6 class="small"><b>Competencias Distintivas del Estamento</b></h6>
 
 <div class="alert alert-info" role="alert">
-  El mapa de competencias se presenta de acuerdo al estamento <b>{{ $jobPositionProfile->estament->name }}</b> y área <b>{{ $jobPositionProfile->area->name }}</b>
+  El diccionario de competencias se presenta de acuerdo al estamento <b>{{ $jobPositionProfile->estament->name }}</b> y área <b>{{ $jobPositionProfile->area->name }}</b>
 </div>
 
 {{-- dd($jobPositionProfile->jppExpertises->first()->expertise->name) --}}

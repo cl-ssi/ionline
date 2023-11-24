@@ -10,12 +10,13 @@ use App\User;
 use App\Models\WebService\MercadoPublico;
 use App\Models\Pharmacies\Purchase;
 use App\Http\Livewire\Welfare\Amipass\RequestMgr;
-use App\Http\Livewire\Welfare\Amipass\ReportByDates;
 use App\Http\Livewire\Welfare\Amipass\ReportByEmployee;
+use App\Http\Livewire\Welfare\Amipass\ReportByDates;
 use App\Http\Livewire\Welfare\Amipass\NewBeneficiaryRequest;
 use App\Http\Livewire\Warehouse\Invoices\InvoiceManagement;
 use App\Http\Livewire\Warehouse\Cenabast\CenabastIndex;
 use App\Http\Livewire\TicResources;
+use App\Http\Livewire\TestFileManager;
 use App\Http\Livewire\Summary\Template\ShowTemplate;
 use App\Http\Livewire\Sign\SignatureIndex;
 use App\Http\Livewire\Sign\RequestSignature;
@@ -38,9 +39,12 @@ use App\Http\Livewire\Parameters\Parameter\ParameterCreate;
 use App\Http\Livewire\Parameters\MaintainerPlaces;
 use App\Http\Livewire\Parameters\Holidays;
 use App\Http\Livewire\Parameters\AccessLogIndex;
+use App\Http\Livewire\News\SearchNews;
+use App\Http\Livewire\News\CreateNews;
 use App\Http\Livewire\Lobby\MeetingShow;
 use App\Http\Livewire\Lobby\MeetingMgr;
 use App\Http\Livewire\Inventory\Transfer;
+use App\Http\Livewire\Inventory\RemovalRequestMgr;
 use App\Http\Livewire\Inventory\RegisterInventory;
 use App\Http\Livewire\Inventory\PrintCodeQueue;
 use App\Http\Livewire\Inventory\PendingMovements;
@@ -55,7 +59,6 @@ use App\Http\Livewire\Inventory\InventoryIndex;
 use App\Http\Livewire\Inventory\InventoryEdit;
 use App\Http\Livewire\Inventory\CreateTransfer;
 use App\Http\Livewire\Inventory\ClassificationMgr;
-use App\Http\Livewire\Inventory\RemovalRequestMgr;
 use App\Http\Livewire\Inventory\CheckTransfer;
 use App\Http\Livewire\Inventory\AssignedProducts;
 use App\Http\Livewire\InventoryLabel\InventoryLabelIndex;
@@ -64,8 +67,8 @@ use App\Http\Livewire\His\ModificationRequestIndex;
 use App\Http\Livewire\His\ModificationMgr;
 use App\Http\Livewire\HealthServices;
 use App\Http\Livewire\Finance\UploadDtes;
-use App\Http\Livewire\Finance\Receptions\CreateReception;
 use App\Http\Livewire\Finance\Receptions\TypeMgr;
+use App\Http\Livewire\Finance\Receptions\CreateReception;
 use App\Http\Livewire\Finance\IndexDtes;
 use App\Http\Livewire\Finance\DteConfirmation;
 use App\Http\Livewire\Finance\AccountingCodesMgr;
@@ -172,10 +175,10 @@ use App\Http\Controllers\Rem\RemPeriodSerieController;
 use App\Http\Controllers\Rem\RemPeriodController;
 use App\Http\Controllers\Rem\RemFileController;
 use App\Http\Controllers\RNIdb\RNIdbController;
+//use App\Http\Controllers\RequestForms\SupplyPurchaseController;
 use App\Http\Controllers\QualityAps\QualityApsController;
 use App\Http\Controllers\PurchasePlan\PurchasePlanController;
 use App\Http\Controllers\Programmings\TrainingsItemController;
-//use App\Http\Controllers\RequestForms\SupplyPurchaseController;
 use App\Http\Controllers\Programmings\TaskReschedulingController;
 use App\Http\Controllers\Programmings\TaskController;
 use App\Http\Controllers\Programmings\ReviewItemController;
@@ -238,13 +241,13 @@ use App\Http\Controllers\HotelBooking\HotelBookingController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\His\ModificationRequestController;
 use App\Http\Controllers\HealthPlan\HealthPlanController;
+use App\Http\Controllers\Finance\Receptions\ReceptionController as FinReceptionController;
 use App\Http\Controllers\Finance\PurchaseOrderController;
 use App\Http\Controllers\Finance\PaymentController;
 use App\Http\Controllers\Finance\DteController;
 use App\Http\Controllers\Drugs\SubstanceController;
 use App\Http\Controllers\Drugs\RosterAnalisisToAdminController;
 use App\Http\Controllers\Drugs\ReceptionController;
-use App\Http\Controllers\Finance\Receptions\ReceptionController as FinReceptionController;
 use App\Http\Controllers\Drugs\CourtController;
 use App\Http\Controllers\Drugs\ActPrecursorController;
 use App\Http\Controllers\Documents\SignatureController;
@@ -270,9 +273,12 @@ use App\Http\Controllers\Agreements\StageController;
 use App\Http\Controllers\Agreements\SignerController;
 use App\Http\Controllers\Agreements\ProgramResolutionController;
 use App\Http\Controllers\Agreements\AgreementController;
+
+/*
 use App\Http\Controllers\Agreements\AddendumController;
 use App\Http\Controllers\Agreements\AccountabilityDetailController;
 use App\Http\Controllers\Agreements\AccountabilityController;
+*/
 
 /*
 |--------------------------------------------------------------------------
@@ -466,7 +472,7 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->middleware(['auth'
         });
     });
 
-    Route::prefix('contact_record')->name('contact_record.')->middleware(['role:Replacement Staff: admin|Replacement Staff: user rys'])->group(function () {
+    Route::prefix('contact_record')->name('contact_record.')->group(function () {
         Route::get('/{staff}', [ContactRecordController::class, 'index'])->name('index');
         Route::get('/{staff}/create/', [ContactRecordController::class, 'create'])->name('create');
         Route::post('/{staff}/store', [ContactRecordController::class, 'store'])->name('store');
@@ -2536,6 +2542,13 @@ Route::prefix('his')->as('his.')->middleware('auth')->group(function () {
     });
 });
 
+/*
+Route::prefix('news')->as('news.')->middleware(['auth', 'must.change.password'])->group(function () {
+    Route::get('/', CreateNews::class)->name('create');
+    Route::get('/index', SearchNews::class)->name('index');
+});
+*/
+
 
 /** RUTAS PARA EXTERNAL  */
 Route::group(['middleware' => 'auth:external'], function () {
@@ -2582,6 +2595,8 @@ Route::group(['middleware' => 'auth:external'], function () {
 Route::view('/some', 'some');
 
 Route::prefix('test')->as('test.')->group(function () {
+    Route::get('/files', TestFileManager::class);
+    Route::get('/digital-signature/{otp?}', [TestController::class, 'DigitalSignature']);
     Route::get('/doc-digital', [TestController::class, 'docDigital']);
 
     Route::get('/ous', [TestController::class, 'ous']);

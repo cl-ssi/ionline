@@ -82,7 +82,7 @@
 
             <fieldset class="form-group col-md-2">
                 <label for="for_button"><br></label>
-                <button class="btn btn-danger btn-block" wire:click.prevent="remove({{$key}})">Remover</button>
+                <button class="btn btn-danger btn-block" wire:click.prevent="remove({{$key}})">Eliminar</button>
             </fieldset>
         </div>
     @endforeach

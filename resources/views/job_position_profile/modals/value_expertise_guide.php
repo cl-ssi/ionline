@@ -24,7 +24,7 @@
                         </thead>
                         <tbody>
                             <tr class="text-center">
-                                <td>Desarrollo Insuficiente</td>
+                                <td>Desarrollo Bajo</td>
                                 <td>Desarrollo Regular</td>
                                 <td>Desarrollo Avanzado</td>
                                 <td>Desarrollo Óptimo</td>

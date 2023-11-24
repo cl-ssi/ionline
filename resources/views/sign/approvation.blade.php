@@ -1,78 +1,83 @@
-<style type="text/css">
+<!-- Si es una firma digital y fue aprobada, entonces no muestro el include ya que se mostrará la imagen de la firma -->
+@if( ! ($approval->digital_signature == true AND $approval->status == true) )
 
-    .image {
-        width: 70%;
-        padding-bottom: 0px;
-        padding-top: 0px;
-        padding-top: 0px;
-    }
+    <style type="text/css">
 
-    .wrapper-div {
-        border: 0.01em solid #CCC;
-        padding: 0.1rem;
-        width: 204px;
-    }
+        .image {
+            width: 70%;
+            padding-bottom: 0px;
+            padding-top: 0px;
+            padding-top: 0px;
+        }
 
-    .text {
-        margin-bottom: 1px;
-        margin-top: 1px;
-    }
+        .wrapper-div {
+            border: 0.01em solid #CCC;
+            padding: 0.1rem;
+            width: 204px;
+        }
 
-    .bold {
-        font-weight: bold;
-    }
+        .text {
+            margin-bottom: 1px;
+            margin-top: 1px;
+        }
 
-    .small {
-        font-size: 6px;
-    }
+        .bold {
+            font-weight: bold;
+        }
 
-    .siete {
-        font-size: 7px;
-    }
+        .small {
+            font-size: 6px;
+        }
 
-    .big {
-        font-size: 11px;
-    }
+        .siete {
+            font-size: 7px;
+        }
 
-</style>
+        .big {
+            font-size: 11px;
+        }
 
-<div class="wrapper-div">
-    <p class="text small {{ $approval->color }}">
-        @if( ! is_null($approval->status) )
-            {{ strtoupper($approval->statusInWords) }} el
-            {{ $approval->approver_at->format('Y-m-d \a \l\a\s H:i') }}
-        @else
-            &nbsp;
-        @endif
+    </style>
+
+    <div class="wrapper-div">
+        <p class="text small {{ $approval->color }}">
+            @if( ! is_null($approval->status) )
+                {{ strtoupper($approval->statusInWords) }} el
+                {{ $approval->approver_at->format('Y-m-d \a \l\a\s H:i') }}
+            @else
+                &nbsp;
+            @endif
+        </p>
+        <p class="text big bold {{ $approval->color }}">
+            @switch($approval->status)
+                @case('1')
+                    {{ $approval->approver->shortName }}
+                @break
+                @case('0')
+                    {{ $approval->approver->shortName }}
+                @break
+                @default
+                    <span style="color: #ccc"><i>PENDIENTE </i></span>
+                @break
+            @endswitch
+        </p>
+        <p class="text siete">
+            @if($approval->sent_to_ou_id)
+                {{ substr($approval->sentToOu->name, 0, 60) }}
+            @else
+                {{ substr($approval->approverOu?->name, 0, 60) }}
+            @endif
+        </p>
+        <p class="text siete">
+            @if($approval->sent_to_ou_id)
+                {{ $approval->sentToOu->establishment->name }}
+            @else
+                {{ $approval->approverOu?->establishment->name }}
+            @endif
+        </p>
+    </div>
+    <p class="text small {{ $approval->color }}" style="padding-left: 6;">
+        {{ $approval->approver_observation }}
     </p>
-    <p class="text big bold {{ $approval->color }}">
-        @switch($approval->status)
-            @case('1')
-                {{ $approval->approver->shortName }}
-            @break
-            @case('0')
-                {{ $approval->approver->shortName }}
-            @break
-            @default
-                <span style="color: #ccc"><i>PENDIENTE </i></span>
-            @break
-        @endswitch
-    </p>
-    <p class="text siete">
-        @if($approval->sent_to_ou_id)
-            {{ substr($approval->sentToOu->name, 0, 60) }}
-        @else
-            {{ substr($approval->approverOu?->name, 0, 60) }}
-        @endif
-    </p>
-    <p class="text siete">
-        @if($approval->sent_to_ou_id)
-            {{ $approval->sentToOu->establishment->name }}
-        @else
-            {{ $approval->approverOu?->establishment->name }}
-        @endif
-    </p>
-</div>
-<p class="text small {{ $approval->color }}" style="padding-left: 6;">
-    {{ $approval->approver_observation }}
-</p>
+
+@endif

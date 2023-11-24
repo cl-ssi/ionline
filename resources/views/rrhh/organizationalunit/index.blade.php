@@ -8,13 +8,13 @@
 <h4 class="mb-3">{{ auth()->user()->organizationalUnit->establishment->name }}</h4>
 
 <fieldset class="mb-3">
-    <div class="input-group">
-        <span class="input-group-text" id="basic-addon"><i class="fas fa-search"></i></span>
-        <input type="text" class="form-control" id="forsearch" onkeyup="filter(1)" placeholder="Ingrese Nombre" name="search" required="">
-        @cannot(['Service Request', 'Service Request: export sirh mantenedores'])
-            <a class="btn btn-primary" href="{{ route('rrhh.organizational-units.create') }}"><i class="fas fa-plus"></i> Agregar nuevo</a>
-        @endcan
-    </div>
+    <form action="{{ route('rrhh.organizational-units.index') }}" method="GET">
+        <div class="input-group">
+            <span class="input-group-text" id="basic-addon"><i class="fas fa-search"></i></span>
+            <input type="text" class="form-control" id="forsearch" placeholder="Ingrese Nombre" name="search" value="{{ request('search') }}" autocomplete="off">
+            <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Buscar</button>
+        </div>
+    </form>
 </fieldset>
 
 

@@ -19,7 +19,8 @@ return new class extends Migration
             $table->boolean('stored')->default(false); // Si el archivo se subio o no
             
             $table->string('name')->nullable(); // "Acta de recepción.pdf"
-            
+            $table->string('type')->nullable(); // "Tipo opcional para los moduelos ej: documento, anexos, etc."
+
             $table->string('input_title')->nullable(); // "Titulo para mostrar en el input"
             $table->string('input_name')->nullable(); // "nombre del input" o wire:model="input_name
             $table->boolean('required')->default(false); // Si el archivo es requerido o no

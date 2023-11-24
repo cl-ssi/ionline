@@ -14,7 +14,7 @@ class Liability extends Model implements Auditable
     use \OwenIt\Auditing\Auditable;
 
     protected $fillable = [
-        'name'
+        'name', 'description'
     ];
 
      /**

@@ -331,13 +331,11 @@ class Approval extends Model
 
     public function getFilenameLinkAttribute()
     {
-        $filename = $this->filename.'.pdf';
-
         $link = null;
 
-        if(Storage::disk('gcs')->exists($filename))
+        if(Storage::disk('gcs')->exists($this->filename))
         {
-            $link = Storage::disk('gcs')->url($filename);
+            $link = Storage::disk('gcs')->url($this->filename);
         }
 
         return $link;
@@ -345,7 +343,7 @@ class Approval extends Model
 
     public function getFilenameBase64Attribute()
     {
-        $documentBase64Pdf = base64_encode(file_get_contents($this->filename_link));
+        $documentBase64Pdf = base64_encode(Storage::disk('gcs')->get($this->filename));
 
         return $documentBase64Pdf;
     }
