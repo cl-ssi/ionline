@@ -48,10 +48,7 @@ class ApprovalsMgr extends Component
      */
     public function bulkProcess($status)
     {
-        foreach($this->ids as $id => $value) {
-            $approvalSelected = Approval::find($id);
-            $this->approveOrReject($approvalSelected, $status);
-        }
+        $this->approveOrReject(array_keys($this->ids), $status);
         $this->ids = [];
     }
 

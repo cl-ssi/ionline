@@ -96,7 +96,7 @@
                                     <button
                                         class="btn btn-success"
                                         wire:loading.attr="disabled"
-                                        wire:click="approveOrReject({{ $approvalSelected }}, true)"
+                                        wire:click="approveOrReject([{{ $approvalSelected->id }}], true)"
                                     >
                                         <span
                                             wire:loading.remove

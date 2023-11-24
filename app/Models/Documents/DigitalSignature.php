@@ -355,4 +355,13 @@ class DigitalSignature extends Model
         return Storage::put($filename, $pdfContent, ['CacheControl' => 'no-store']);
     }
 
+    /**
+     * Store file to storage: $key [0,1..] y $filename = 'ionline/folder/filename1.pdf'
+     */
+    public function storeSignedFile($key, $filename)
+    {
+        $pdfContent = base64_decode($this->response['files'][$key]['content']);
+        return Storage::put($filename, $pdfContent, ['CacheControl' => 'no-store']);
+    }
+
 }
