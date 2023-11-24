@@ -8,6 +8,10 @@ use Livewire\Component;
 
 class ReportByEmployee extends Component
 {
+    public function search(){
+        dd("");
+    }
+
     public function render()
     {
         return view('livewire.welfare.amipass.report-by-employee');

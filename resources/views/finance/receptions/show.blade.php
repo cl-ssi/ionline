@@ -207,8 +207,7 @@
                 ])
             @endif
         </div>
-        <div class="signature"
-            style="padding-left: 6px; padding-right: 6px;">
+        <div class="signature" style="padding-left: 6px; padding-right: 6px;">
             @if($approval = $reception->approvals->where('position', 'center')->first())
                 @include('sign.approvation', [
                     'approval' => $approval,
@@ -222,8 +221,5 @@
                 ])
             @endif
         </div>
-
-        <!-- <img style="margin-top: 11px;" width="204" src="data:image/png;base64, {{ app(App\Services\ImageService::class)->createSignature(App\User::find(15287582)) }}"> -->
     </div>
-
 @endsection

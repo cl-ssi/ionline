@@ -45,18 +45,19 @@ class File extends Model
     * @var array
     */
     protected $fillable = [
-        'storage_path',
-        'stored',
+        'storage_path', // 'ionline/reception/file.pdf'
+        'stored',       // false => muestro input, true = meustro el link al archivo
 
         'name',
+        'type',    // Docuento, Anexo, Acta
 
-        'input_title',
-        'input_name',
+        'input_title',  // <label<{{ $input_title }}</label>
+        'input_name',   // <input type="file" name="{{ $input_name }}>
         'required',
-        'valid_types',
-        'max_file_size',
+        'valid_types',  //pdf, xls
+        'max_file_size', // 20mb
 
-        'stored_by_id',
+        'stored_by_id', // user
 
         'fileable_type',
         'fileable_id',

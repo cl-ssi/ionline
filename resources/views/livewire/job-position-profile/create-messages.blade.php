@@ -8,7 +8,7 @@
             <option value="3">III. PROPÓSITOS DEL CARGO</option>
             <option value="4">IV. ORGANIZACIÓN Y CONTEXTO DEL CARGO</option>
             <option value="5">V. RESPONSABILIDAD DEL CARGO</option>
-            <option value="6">VI. MAPA DE COMPETENCIAS DEL S.S.T</option>	
+            <option value="6">VI. DICCIONARIO DE COMPETENCIAS DEL S.S.T</option>	
         </select>
     </fieldset>
 

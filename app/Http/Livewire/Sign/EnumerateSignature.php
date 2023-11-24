@@ -64,8 +64,8 @@ class EnumerateSignature extends Component
          * Setea las credenciales de la api desde el env
          */
         $url = env('FIRMA_URL');
-        $apiToken = env('FIRMA_API_TOKEN_DESATENDIDO');
-        $secret = env('FIRMA_SECRET_DESATENDIDO');
+        $apiToken = env('FIRMA_API_TOKEN_IONLINE');
+        $secret = env('FIRMA_SECRET_IONLINE');
 
         /**
          * Setea el modo para el payload

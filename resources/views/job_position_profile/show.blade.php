@@ -209,13 +209,15 @@
     <table class="table table-sm table-bordered small">
         <thead class="table-active text-center">
                 <th width="30%">Categorías de Responsabilidades</th>
-                <th>Si/No</th>
+                <th width="50%">Descripción</th>
+                <th width="20%">Si/No</th>
         </thead>
         <tbody>
             @foreach($jobPositionProfile->jppLiabilities as $Jppliability)
             <tr>
                 <td width="30%">{{ $Jppliability->liability->name }}</td>
-                <td class="text-center">{{ $Jppliability->YesNoValue }}</td>
+                <td width="50%">{{ $Jppliability->liability->description }}</td>
+                <td class="text-center" width="20%">{{ $Jppliability->YesNoValue }}</td>
             </tr>
             @endforeach
         </tbody>
@@ -224,7 +226,7 @@
 
 <br>
 
-<h6><i class="fas fa-info-circle"></i> VI. Mapa de Competencias del Servicio de Salud Tarapacá</h6>
+<h6><i class="fas fa-info-circle"></i> VI. Diccionario de Competencias del Servicio de Salud Tarapacá</h6>
 
 <br>
 
@@ -293,7 +295,7 @@
             <tr class="text-center">
                 <th width="5%">
                     4 <br>
-                    Desarrollo Insuficiente
+                    Desarrollo Bajo
                 </th>
                 <th width="5%">
                     3 <br>

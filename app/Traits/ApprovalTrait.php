@@ -4,7 +4,7 @@ namespace App\Traits;
 
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Route;
-use App\Traits\SingleSignature;
+use App\Models\Documents\DigitalSignature;
 use App\Models\Documents\Approval;
 use App\Jobs\ProcessApproval;
 
@@ -54,17 +54,25 @@ trait ApprovalTrait
              */
             $show_controller_method = Route::getRoutes()->getByName($approvalSelected->document_route_name)->getActionName();
             $response = app()->call($show_controller_method, json_decode($approvalSelected->document_route_params, true));
-            $pdfBase64 = base64_encode($response->original);
+            $files[] = $response->original;
 
-            /**
-             * Firmo el archivo con el trait
-             */
-            try {
-                $this->signFile(auth()->user(), $approvalSelected->position, $row = 1, $approvalSelected->start_y, $pdfBase64, $this->otp, $approvalSelected->filename);
-            } catch (\Throwable $th) {
-                $this->message = $th->getMessage();
+            $position = [  // Opcional
+                'column'        => $approvalSelected->position,     // 'left','center','right'
+                'row'           => 'first',                         // 'first','second'
+                'margin-bottom' => $approvalSelected->start_y ?? 0, // 0 pixeles
+            ];
+
+            $digitalSignature = new DigitalSignature();
+            $success = $digitalSignature->signature(auth()->user(), $this->otp, $files, $position);
+
+            if($success) {
+                $digitalSignature->storeFirstSignedFile($approvalSelected->filename);
+            }
+            else {
+                $this->message = $digitalSignature->error;
                 return;
             }
+
         }
 
         /**

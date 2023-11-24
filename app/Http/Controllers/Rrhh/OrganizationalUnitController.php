@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Parameters\OrganizationalUnit\StoreOrganizationalUnitRequest;
 use App\Http\Requests\Parameters\OrganizationalUnit\UpdateOrganizationalUnitRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 
 class OrganizationalUnitController extends Controller
 {
@@ -15,12 +16,26 @@ class OrganizationalUnitController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        $search = $request->input('search');
         $ouTree = auth()->user()->organizationalUnit->establishment->ouTree;
+    
+        // Aplicar la lógica de búsqueda si se proporciona un término de búsqueda
+        if ($search) {
+            $filteredOuTree = [];
+            foreach ($ouTree as $id => $ou) {
+                // Filtrar por el término de búsqueda en el nombre
+                if (stripos($ou, $search) !== false) {
+                    $filteredOuTree[$id] = $ou;
+                }
+            }
+            $ouTree = $filteredOuTree;
+        }
+    
         return view('rrhh.organizationalunit.index', compact('ouTree'));
     }
-
+    
     /**
      * Show the form for creating a new resource.
      *

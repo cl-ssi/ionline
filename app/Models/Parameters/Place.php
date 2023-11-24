@@ -3,6 +3,7 @@
 namespace App\Models\Parameters;
 
 use App\Models\Establishment;
+use App\Models\Inv\Inventory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -49,4 +50,11 @@ class Place extends Model
     {
         return $this->belongsTo(Establishment::class);
     }
+
+    public function inventories()
+    {
+        return $this->hasMany(Inventory::class, 'place_id');
+    }
+
+
 }

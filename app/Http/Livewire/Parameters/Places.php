@@ -109,8 +109,15 @@ class Places extends Component
 
     public function delete(Place $place)
     {
-        $place->delete();
-        $this->mount($this->establishment);
+        
+        if ($place->inventories->isEmpty()) {
+            $place->delete();
+            $this->mount($this->establishment);
+            session()->flash('info', 'El lugar fue borrado exitosamente');
+        } else {
+            // Tiene inventarios, mostrar un mensaje de advertencia
+            session()->flash('warning', 'No se puede borrar el lugar ya que tiene inventarios asociados.');
+        }
     }
 
     public function getPlaces()

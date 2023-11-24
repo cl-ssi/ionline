@@ -13,6 +13,8 @@ use App\User;
 use App\Notifications\InventoryNewItem;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
+use App\Models\Unspsc\Product as UnspscProduct;
+
 
 class RegisterInventory extends Component
 {
@@ -48,6 +50,7 @@ class RegisterInventory extends Component
     public $error;
     public $msg;
     public $collapse;
+    public $unspscProduct;
 
     protected $listeners = [
         'myUserUsingId',
@@ -137,6 +140,7 @@ class RegisterInventory extends Component
     public function myProductId($value)
     {
         $this->unspsc_product_id = $value;
+        $this->unspscProduct = UnspscProduct::find($this->unspsc_product_id);
     }
 
     public function getReceptionConfirmation()
@@ -180,7 +184,7 @@ class RegisterInventory extends Component
     public function register()
     {
         $dataValidated = $this->validate();
-        $dataValidated['number'] = $dataValidated['number_inventory'];
+        //$dataValidated['number'] = $dataValidated['number_inventory'];
         $dataValidated['po_code'] = $this->po_code;
         $dataValidated['request_user_ou_id'] = $this->request_form ? $this->request_form->request_user_ou_id : null;
         $dataValidated['request_user_id'] = $this->request_form ? $this->request_form->request_user_id : null;
@@ -188,6 +192,8 @@ class RegisterInventory extends Component
         $responsibleUser = User::find($dataValidated['user_responsible_id']);
         $usingUser =  User::find($dataValidated['user_using_id']);
         $inventory = Inventory::create($dataValidated);
+        $inventory->number = $this->unspscProduct->code . '-' . $inventory->id;
+        $inventory->save();
 
         $movement = InventoryMovement::create([
             'observations' => $dataValidated['observations'],
@@ -266,4 +272,14 @@ class RegisterInventory extends Component
     {
         $this->collapse = !$this->collapse;
     }
+
+
+    public function generateCode()
+    {
+        if($this->unspscProduct)
+        {
+            $this->number_inventory = $this->unspscProduct->code. '-' . (Inventory::latest('id')->first()->id+1);
+        }
+    }
+
 }

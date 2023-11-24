@@ -1,6 +1,8 @@
 <div>
 @include('welfare.nav')
 
+    <h4>Reporte Amipass - General</h4>
+
     <div class="form-row">
         <div class="form-group col-3">
             <label for="text11">Fecha de inicio</label>
