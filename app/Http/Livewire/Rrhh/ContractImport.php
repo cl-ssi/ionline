@@ -20,13 +20,20 @@ class ContractImport extends Component
     use WithFileUploads;
 
     public $file;
-    public $message2;
-    public $non_existent_users;
-    public $non_existent_ous;
+    public $message;
+    public $non_existent_users = array();
+    public $non_existent_ous = array();
+
+    public function mount(){
+        $this->non_existent_users = 0;
+        $this->non_existent_ous = [];
+    }
 
     public function save()
     {
-        $this->message2 = "";
+        $this->message = "";
+        $this->non_existent_ous = [];
+
         $this->validate([
             'file' => 'required|mimes:csv,txt|max:10240', // 10MB Max
         ]);
@@ -40,7 +47,9 @@ class ContractImport extends Component
 
         // obtiene los usuarios que vienen en el archivo
         $file_users = array_unique(array_column($collection[0]->toArray(), 'rut'));
-        $users = User::withTrashed()->whereIn('id',$file_users)->get()->pluck('id')->toArray();
+        $import_users = count($file_users);
+        $imported_users_in_ionline = User::whereIn('id',$file_users)->count();
+        $this->non_existent_users = $import_users - $imported_users_in_ionline;
 
         // se modifican todos los usuarios a inactivos
         // User::where('id','>',0)->update(['active' => 0]);
@@ -106,33 +115,17 @@ class ContractImport extends Component
                             // si no existe usuario, se crea
                             $rut = trim($column['rut']);
                             $dv = trim($column['dv']);
-                            // verifica si existe usuario, inclusive eliminados (si no existe, se crea)
-                            if(!in_array($rut, $users)){
-                                // Aquí se verifica si existe la unidad organizacional según id sirth de archivo importado, 
-                                // si existe: se crea nuevo usuario con esa ou_id
-                                if(array_key_exists($column['cdigo_unidad'], $ous)){
-                                    // Se obtienen datos del funcionario desde fonasa
-                                    $fonasaUser = Fonasa::find($rut."-".$dv);
-                                    if(!isset($fonasaUser->message)){
-                                        $user = new User();
-                                        $user->id = $rut;
-                                        $user->dv = $dv;
-                                        $user->mothers_family = $fonasaUser->mothers_family;
-                                        $user->fathers_family = $fonasaUser->fathers_family;
-                                        $user->name = $fonasaUser->name;
-                                        $user->organizational_unit_id = $ous[$column['cdigo_unidad']];
-                                        $user->save();
 
-                                        array_push($users, $user->id);
-                                    } else{
-                                        $this->non_existent_users[$rut] = $column['nombre_funcionario'];
-                                    }
-                                }else{
-                                    $this->non_existent_users[$rut] = $column['nombre_funcionario'];
-                                    $this->non_existent_ous[$column['cdigo_unidad']] = "";
-                                }
+                            // // cuantos usuarios no se han encontrado
+                            // if(!in_array($rut, $users)){
+                            //     $this->non_existent_users[$rut] = $column['nombre_funcionario'];
+                            // }
+
+                            // cuantas ou no se han encontrado
+                            if(!array_key_exists($column['cdigo_unidad'], $ous)){
+                                $this->non_existent_ous[$column['cdigo_unidad']] = "";    
                             }
-                            
+
                             Contract::updateOrCreate([
                                 'rut' => $rut,
                                 'correlativo' => $column['correlativo']
@@ -213,7 +206,6 @@ class ContractImport extends Component
                             ]);
     
                             $count_inserts += 1;
-    
                         }
                     }
                 }
@@ -222,7 +214,48 @@ class ContractImport extends Component
             echo 'Caught exception: ',  $e->getMessage(), "\n";
         }
 
-        $this->message2 = 'Se ha cargado correctamente el archivo (' . $count_inserts . ' registros).';
+        $this->message = 'Se ha cargado correctamente el archivo (' . $count_inserts . ' registros creados/actualizados).';
+    }
+
+    public function process(){
+        $this->message = "";
+        $this->non_existent_users = 0;
+        $this->non_existent_ous = [];
+
+        $count_inserts = 0;
+        $contracts = Contract::whereDoesntHave('user')->get();
+
+        foreach($contracts as $contract){
+            
+            $rut = $contract->rut;
+            $dv = $contract->dv;
+
+            $ou = OrganizationalUnit::where('sirh_ou_id',$contract->codigo_unidad)->first();
+
+            if($ou){
+                $fonasaUser = Fonasa::find($rut."-".$dv);
+                if(!isset($fonasaUser->message)){
+
+                    User::withTrashed()->updateOrCreate([
+                        'id' => $rut
+                    ],[
+                        'id' => $rut,
+                        'dv' => $dv,
+                        'mothers_family' => $fonasaUser->mothers_family,
+                        'fathers_family' => $fonasaUser->fathers_family,
+                        'name' => $fonasaUser->name,
+                        'organizational_unit_id' => $ou->id,
+                        'deleted_at' => null,
+                    ]);
+
+                    $count_inserts += 1;
+                }
+            }
+        }
+
+        $this->non_existent_ous = [];
+
+        $this->message = 'Procesamiento completado. Se han creado/actualizado ' . $count_inserts . ' usuarios en el sistema. Si no se han creado más funcionarios, la posible causa puede ser que tengan asignado en el archivo de importación un código sirh no parametrizado con unidades organizacionales del ionline.';
     }
 
     public function render()
