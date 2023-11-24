@@ -91,10 +91,12 @@ class DigitalSignature extends Model
 
     public $response;
     public $error = null;
+
     /** 
-     * Factor de reducción de imagen de firma.
-     * Es una proporción de la imagen, que permite que en el pdf 
-     * aparezca un rectangulo clickeable al rededor de la firma.
+     * Factor es una proporción fija para reducir la imagen de la firma
+     * Este nuevo tamaño se envia junto con la imagen a incrustar en el pdf,
+     * esto hace que aparezca un rectangulo clickeable al rededor de la firma
+     * proporcional al tamaño de la imágen.
      **/
     private $factorWidth  = 0.172;
     private $factorHeight = 0.189;
@@ -220,7 +222,8 @@ class DigitalSignature extends Model
     }
 
     /**
-     * Sign
+     * Enviar a firmar, esto devuelve un true or false en caso de error
+     * los mensajes de error quedan en $digitalSignature->error
      */
     public function sendToSign($otp = null)
     {
@@ -310,11 +313,10 @@ class DigitalSignature extends Model
                 $this->yCoordinate = 110.4 + $position['margin-bottom'];
                 break;
         }
-
     }
 
     /**
-    * stream first file to browser
+    * Stream first file to browser
     */
     public function streamFirstSignedFile()
     {
@@ -327,7 +329,7 @@ class DigitalSignature extends Model
     }
 
     /**
-    * Store first file to storage folder
+    * Store first file to storage path $filename = 'ionline/folder/file.pdf'
     */
     public function storeFirstSignedFile($filename)
     {
