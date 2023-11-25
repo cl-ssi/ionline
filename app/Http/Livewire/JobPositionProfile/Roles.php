@@ -16,18 +16,26 @@ class Roles extends Component
     public $editRoleIdRender = null;
     public $description = null;
 
+    public $messageMaxRoles = null;
+
     public function add($i)
     {
-        $i = $i + 1;
-        $this->i = $i;
-        array_push($this->inputs ,$i);
-        $this->count++;
+        if($this->count == 10){
+            $this->messageMaxRoles = 'Estimado Usuario: Ha alcanzado el número máximo de funciones. (10)';
+        }
+        else{
+            $i = $i + 1;
+            $this->i = $i;
+            array_push($this->inputs ,$i);
+            $this->count++;
+        }
     }
 
     public function remove($i)
     {
         unset($this->inputs[$i]);
         $this->count--;
+        $this->messageMaxRoles = null;
     }
 
     public function mount($jobPositionProfile)
