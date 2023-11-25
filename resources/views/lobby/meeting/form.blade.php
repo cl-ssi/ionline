@@ -1,4 +1,4 @@
-<div class="form-row mb-3">
+<div class="row g-2 mb-3">
     <fieldset class="col-12 col-md-5">
         <label for="">Responsable*</label>
         @livewire('search-select-user', [
@@ -33,7 +33,7 @@
     </fieldset>
 </div>
 
-<div class="form-row mb-3">
+<div class="row g-2 mb-3">
     <fieldset class="col-12 col-md-6">
         <label for="for-subject">Asunto*</label>
         <input type="text" wire:model.defer="meeting.subject"
@@ -68,13 +68,13 @@
     </fieldset>
 </div>
 
-<div class="form-row mb-3">
+<div class="row g-2 mb-3">
     <fieldset class="col-md-12 col-12">
         <label for="exponents" class="form-label">
             {{ __('Exponentes') }} (Relacionado con el solicitante)
         </label>
 
-        <textarea wire:model.defer="meeting.exponents" id="exponents"
+        <textarea wire:model.defer="meeting.exponents" id="exponents" rows="6"
             class="form-control @error('meeting.exponents') is-invalid @enderror" autocomplete="exponents"></textarea>
 
         @error('meeting.exponents')
@@ -85,7 +85,7 @@
     </fieldset>
 </div>
 
-<div class="form-row mb-3">
+<div class="row g-2 mb-3">
     <fieldset class="col-md-12 col-12">
         <label for="participants" class="form-label">
             {{ __('Participantes') }} (relacionado con el servicio)
@@ -121,13 +121,13 @@
     </fieldset>
 </div>
 
-<div class="form-row mb-3">
+<div class="row g-2 mb-3">
     <fieldset class="col-md-12 col-12">
         <label for="fot_details" class="form-label">
             {{ __('Detalle') }}
         </label>
 
-        <textarea id="details" wire:model.defer="meeting.details"
+        <textarea id="details" wire:model.defer="meeting.details" rows="7"
             class="form-control @error('meeting.details') is-invalid @enderror" autocomplete="details"></textarea>
 
         @error('meeting.details')
@@ -138,7 +138,7 @@
     </fieldset>
 </div>
 
-<div class="form-row mb-3">
+<div class="row g-2 mb-3">
     <fieldset class="col-md-12 col-12">
         <label for="compromises" class="form-label">
             {{ __('Compromisos') }}
@@ -191,7 +191,7 @@
 </div>
 
 
-<div class="form-row mb-3">
+<div class="row g-2 mb-3">
     <fieldset class="col-md-2 col-4">
         <label for="status" class="form-label">
             {{ __('Estado') }}
