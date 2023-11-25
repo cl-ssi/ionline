@@ -1,4 +1,4 @@
-<div class="form-row mb-3">
+<div class="row g-2 mb-3">
     <fieldset class="col-12 col-md-5">
         <label for="">Responsable*</label>
         @livewire('search-select-user', [
@@ -33,7 +33,7 @@
     </fieldset>
 </div>
 
-<div class="form-row mb-3">
+<div class="row g-2 mb-3">
     <fieldset class="col-12 col-md-6">
         <label for="for-subject">Asunto*</label>
         <input type="text" wire:model.defer="meeting.subject"
@@ -68,7 +68,7 @@
     </fieldset>
 </div>
 
-<div class="form-row mb-3">
+<div class="row g-2 mb-3">
     <fieldset class="col-md-12 col-12">
         <label for="exponents" class="form-label">
             {{ __('Exponentes') }} (Relacionado con el solicitante)
@@ -88,7 +88,7 @@
     </fieldset>
 </div>
 
-<div class="form-row mb-3">
+<div class="row g-2 mb-3">
     <fieldset class="col-md-12 col-12">
         <label for="participants" class="form-label">
             {{ __('Participantes') }} (relacionado con el servicio)
@@ -124,7 +124,7 @@
     </fieldset>
 </div>
 
-<div class="form-row mb-3">
+<div class="row g-2 mb-3">
     <fieldset class="col-md-12 col-12">
         <label for="fot_details" class="form-label">
             {{ __('Detalle') }}
@@ -145,7 +145,7 @@
     </fieldset>
 </div>
 
-<div class="form-row mb-3">
+<div class="row g-2 mb-3">
     <fieldset class="col-md-12 col-12">
         <label for="compromises" class="form-label">
             {{ __('Compromisos') }}

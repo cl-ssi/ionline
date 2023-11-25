@@ -84,6 +84,8 @@ class Meeting extends Model
     protected $casts = [
         'start_at' => 'datetime:H:i',
         'end_at' => 'datetime:H:i',
+        'status' => 'boolean',
+        'date' => 'date'
     ];
     
 }
