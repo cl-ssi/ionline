@@ -58,7 +58,7 @@
         <div class="form-row mb-3">
             <fieldset class="col-md-12 col-12">
                 <label for="exponents" class="form-label">
-                    {{ __('Exponentes') }} (Relacionado con el solicitante)
+                    {{ __('Exponentes') }} (Relacionado con el solicissstante)
                 </label>
 
                 <textarea name="exponents" id="exponents" class="form-control" autocomplete="off">{{ $meeting->exponents ?? '' }}</textarea>
