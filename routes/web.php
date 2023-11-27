@@ -41,7 +41,6 @@ use App\Http\Livewire\Parameters\Holidays;
 use App\Http\Livewire\Parameters\AccessLogIndex;
 use App\Http\Livewire\News\SearchNews;
 use App\Http\Livewire\News\CreateNews;
-use App\Http\Livewire\Lobby\MeetingShow;
 use App\Http\Livewire\Lobby\MeetingMgr;
 use App\Http\Livewire\Inventory\Transfer;
 use App\Http\Livewire\Inventory\RemovalRequestMgr;
@@ -1260,7 +1259,7 @@ Route::prefix('parameters')->as('parameters.')->middleware(['auth', 'must.change
 Route::prefix('documents')->as('documents.')->middleware(['auth', 'must.change.password'])->group(function () {
 
     Route::get('lobby', MeetingMgr::class)->name('lobby.manager');
-    Route::get('lobby/{meeting}', MeetingShow::class)->name('lobby.show');
+    Route::get('lobby/{meeting}', [MeetingController::class,'show'])->name('lobby.show');
 
     Route::post('/create_from_previous', [DocumentController::class, 'createFromPrevious'])->name('createFromPrevious');
     Route::get('/{document}/download', [DocumentController::class, 'download'])->name('download');

@@ -65,6 +65,7 @@
             <label for="pending">En Traspaso</label>
             <select
                 wire:model.defer="pending"
+                wire:change="updateResponsible"
                 id="pending"
                 class="form-select"
             >

@@ -47,14 +47,17 @@ class TestController extends Controller
     public function DigitalSignature($otp = null)
     {
         // $files[] = Storage::get('ionline/samples/oficio.pdf');
+        // $positions[] = [];
+
         // $files[] = Storage::get('ionline/samples/oficio_firmado_1.pdf');
-        // $position = [  // Opcional
+        // $positions[] = [  // Opcional
         //     'column'        => 'left',    // 'left','center','right'
         //     'row'           => 'first',   // 'first','second'
         //     'margin-bottom' => 0,         // 80 pixeles
         // ];
+
         // $digitalSignature = new DigitalSignature();
-        // $success = $digitalSignature->signature(auth()->user(), $otp, $files, $position);
+        // $success = $digitalSignature->signature(auth()->user(), $otp, $files, $positions);
 
 
         $user = User::find(15287582);

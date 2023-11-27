@@ -36,16 +36,20 @@ class DigitalSignature extends Model
      * =====================
      **/
     // $user = User::find(15287582);
+
     // $files[] = Storage::get('ionline/samples/oficio.pdf');
-    // $files[] = Storage::get('ionline/samples/oficio_firmado_1.pdf');
-    // $otp = '123456';
-    // $position = [ // opcional (Default: right, first, 0)
+    // $positions[] = [ // opcional (Default: right, first, 0)
     //     'column'        => 'right',   // 'left','center','right'
     //     'row'           => 'first',   // 'first','second'
-    //     'margin-bottom' => 20,        // 80 pixeles
+    //     'margin-bottom' => 20,        // subir 20 pixeles hacia arriba
     // ];
+
+    // $files[] = Storage::get('ionline/samples/oficio_firmado_1.pdf');
+    // $positions[] = []; // Puede ser un array vacio, por defecto será: Right, First, 0
+
+    // $otp = '123456';
     // $digitalSignature = new DigitalSignature();
-    // $success = $digitalSignature->signature($user, $otp, $files, $position);
+    // $success = $digitalSignature->signature($user, $otp, $files, $positions);
 
 
     /** 
@@ -86,8 +90,6 @@ class DigitalSignature extends Model
     private $signatureBase64;
     private $signatureWidth;
     private $signatureHeight;
-    private $xCoordinate;
-    private $yCoordinate;
 
     public $response;
     public $error = null;
@@ -138,8 +140,11 @@ class DigitalSignature extends Model
     /**
      * Firma Normal
      */
-    public function signature($user, $otp, $files, $position = null)
+    public function signature($user, $otp, $files, $positions)
     {
+        if(count($files) != count($positions)) {
+            abort( response()->json('Error: La cantidad de archivos a firmar no coincide la cantidad posiciones suministrada, informe esto a los desarrolladores', 406) );
+        } 
         $this->setConfig($user,'signature');
 
         /** En que página va la firma */
@@ -152,9 +157,9 @@ class DigitalSignature extends Model
         $this->signatureWidth = 930 * $this->factorWidth;   // = 160
         $this->signatureHeight = 206 * $this->factorHeight; // =  39
 
-        $this->calculateSignaturePosition($position);
+        $coordinates = $this->calculateSignaturesCoordinates($positions);
 
-        $this->data['files'] = $this->generateFilesData($files);
+        $this->data['files'] = $this->generateFilesData($files, $coordinates);
 
         return $this->sendToSign($otp);
     }
@@ -176,10 +181,13 @@ class DigitalSignature extends Model
         $this->signatureWidth = 1100 * $this->factorWidth;
         $this->signatureHeight = 280 * $this->factorHeight;
 
-        $this->calculateNumeratePosition($file);
+        $coordinate = $this->calculateNumerateCoordinates($file);
 
+        /** Pasar el archivo y la coordenada a un arreglo, ya que la siguiente funcion acepta solo arreglos */
         $files[] = $file;
-        $this->data['files'] = $this->generateFilesData($files);
+        $coordinates[] = $coordinate;
+
+        $this->data['files'] = $this->generateFilesData($files, $coordinates);
 
         return $this->sendToSign();
     }
@@ -187,9 +195,9 @@ class DigitalSignature extends Model
     /**
      * Generar el layout por cada archivo
      */
-    public function generateFilesData($files)
+    public function generateFilesData($files, $coordinates)
     {
-        foreach($files as $file) {
+        foreach($files as $key => $file) {
             $content = base64_encode($file);
             $checksum = md5($content);
 
@@ -204,10 +212,10 @@ class DigitalSignature extends Model
                             <pdfPassword/>
                             <Signature>
                                 <Visible active=\"true\" layer2=\"false\" label=\"true\" pos=\"2\">
-                                    <llx>" . ($this->xCoordinate). "</llx>
-                                    <lly>" . ($this->yCoordinate). "</lly>
-                                    <urx>" . ($this->xCoordinate + $this->signatureWidth) . "</urx>
-                                    <ury>" . ($this->yCoordinate + $this->signatureHeight) . "</ury>
+                                    <llx>" . ($coordinates[$key]['x']). "</llx>
+                                    <lly>" . ($coordinates[$key]['y']). "</lly>
+                                    <urx>" . ($coordinates[$key]['x'] + $this->signatureWidth) . "</urx>
+                                    <ury>" . ($coordinates[$key]['y'] + $this->signatureHeight) . "</ury>
                                     <page>" . $this->page . "</page>
                                     <image>BASE64</image>
                                     <BASE64VALUE>" . $this->signatureBase64 . "</BASE64VALUE>
@@ -250,9 +258,53 @@ class DigitalSignature extends Model
     }
 
     /**
+     * Calcula la posición de la firma
+     */
+    public function calculateSignaturesCoordinates($positions)
+    {
+        foreach($positions as $position) {
+            /** Posición por defecto,  */
+            if( !key_exists('column',$position) ) {
+                $position['column'] = 'right';
+            }
+            if( !key_exists('row',$position) ) {
+                $position['row'] = 'first';
+            }
+            if( !key_exists('margin-bottom',$position) ) {
+                $position['margin-bottom'] = 0;
+            }
+
+            switch($position['column']) {
+                case 'left':
+                    $coordinates['x'] = 93.3; // Left
+                    break;
+                case 'center':
+                    $coordinates['x'] = 256.4; // Center
+                    break;
+                case 'right':
+                    $coordinates['x'] = 418.8; // Right
+                    break;
+            }
+
+            switch($position['row']) {
+                case 'first':
+                    $coordinates['y'] = 72.3 + $position['margin-bottom'];
+                    break;
+                case 'second':
+                    $coordinates['y'] = 110.4 + $position['margin-bottom'];
+                    break;
+            }
+
+            $coordinates[] = $coordinates;
+        }
+        return $coordinates;
+    }
+
+
+    /**
      * Get pdf page size para numerar
      */
-    public function calculateNumeratePosition($file)
+    public function calculateNumerateCoordinates($file)
     {
         /** Obtener el tamaño de la página */
         $pdf = new Fpdi('P', 'mm');
@@ -273,46 +325,12 @@ class DigitalSignature extends Model
         $yCoordinate = ($heightFile * 0.393701) * 72;
 
         /**
-         * Resta 290 y 120 a las coordenadas
+         * Resta margenes 218 y 84 a las coordenadas
          */
-        $this->xCoordinate = $xCoordinate -= 218;
-        $this->yCoordinate = $yCoordinate -= 84;
-    }
+        $coordinates['x'] = $xCoordinate -= 218;
+        $coordinates['y'] = $yCoordinate -= 84;
 
-    /**
-     * Calcula la posición de la firma
-     */
-    public function calculateSignaturePosition($position = null)
-    {
-        if( !$position ) {
-            /** Posición por defecto,  */
-            $position = [
-                'column'        => 'right',   // 'left','center','right'
-                'row'           => 'first',   // 'first','second'
-                'margin-bottom' => 0,         // 80 pixeles
-            ];
-        }
-
-        switch($position['column']) {
-            case 'left':
-                $this->xCoordinate = 93.3; // Left
-                break;
-            case 'center':
-                $this->xCoordinate = 256.4; // Center
-                break;
-            case 'right':
-                $this->xCoordinate = 418.8; // Right
-                break;
-        }
-
-        switch($position['row']) {
-            case 'first':
-                $this->yCoordinate = 72.3 + $position['margin-bottom'];
-                break;
-            case 'second':
-                $this->yCoordinate = 110.4 + $position['margin-bottom'];
-                break;
-        }
+        return $coordinates;
     }
 
     /**
@@ -334,6 +352,15 @@ class DigitalSignature extends Model
     public function storeFirstSignedFile($filename)
     {
         $pdfContent = base64_decode($this->response['files'][0]['content']);
+        return Storage::put($filename, $pdfContent, ['CacheControl' => 'no-store']);
+    }
+
+    /**
+     * Store file to storage: $key [0,1..] y $filename = 'ionline/folder/filename1.pdf'
+     */
+    public function storeSignedFile($key, $filename)
+    {
+        $pdfContent = base64_decode($this->response['files'][$key]['content']);
         return Storage::put($filename, $pdfContent, ['CacheControl' => 'no-store']);
     }
 

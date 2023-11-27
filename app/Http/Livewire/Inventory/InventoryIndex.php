@@ -218,4 +218,28 @@ class InventoryIndex extends Component
         if($place_id)
             $this->place = Place::find($place_id);
     }
+
+
+    public function updateResponsible()
+    {
+        if ($this->pending === 'pending') {
+            $responsibleIdsWithPendingInventory = Inventory::query()
+                ->whereEstablishmentId($this->establishment->id)
+                ->whereHas('pendingMovements')
+                ->whereNotNull('user_responsible_id')
+                ->groupBy('user_responsible_id')
+                ->pluck('user_responsible_id');    
+            
+            $this->responsibles = User::query()
+                ->whereIn('id', $responsibleIdsWithPendingInventory)
+                ->orderBy('name')
+                ->get(['id', 'name', 'fathers_family']);
+        } else {            
+            $this->getResponsibles();
+        }
+    }
+    
+
+
+
 }

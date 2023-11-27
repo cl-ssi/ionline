@@ -131,7 +131,7 @@ class CreateJobPositionProfiles extends Component
         }
         //PROFESIONAL
         if($selectedEstamentId == 3){
-            $this->areas = Area::whereIn('id', [2,3,4,5])
+            $this->areas = Area::whereIn('id', [2,3,4])
                 ->orderBy('id')
                 ->get();
         }
