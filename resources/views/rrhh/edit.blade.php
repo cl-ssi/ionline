@@ -16,7 +16,7 @@
             <label for="run">RUN</label>
             <input type="text" readonly class="form-control-plaintext" id="staticRUN" value="{{$user->runFormat()}}">
         </div>
-        <div class="form-group col-md-3">
+        <div class="form-group col-md-2">
             <label for="name">Nombres*</label>
             <input type="text" class="form-control" name="name" value="{{$user->name}}" required>
         </div>
@@ -27,6 +27,15 @@
         <div class="form-group col-md-2">
             <label for="name">Apellido Materno*</label>
             <input type="text" class="form-control" name="mothers_family" value="{{ $user->mothers_family }}" required>
+        </div>
+
+        <div class="form-group col-md-1">
+            <label for="name">Sexo</label>
+            <select name="gender" class="form-control" required>
+                <option value=""></option>
+                <option value="male" @selected($user->gender == "male")>Masculino</option>
+                <option value="female" @selected($user->gender == "female")>Femenino</option>
+            </select>
         </div>
 
         <fieldset class="form-group col-md-2">
