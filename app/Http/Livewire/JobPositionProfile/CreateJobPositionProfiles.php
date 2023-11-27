@@ -125,7 +125,7 @@ class CreateJobPositionProfiles extends Component
         }
         //AUXILIAR
         if($selectedEstamentId == 2){
-            $this->areas = Area::whereIn('id', [2,5])
+            $this->areas = Area::whereIn('id', [2,5,6])
                 ->orderBy('id')
                 ->get();
         }
