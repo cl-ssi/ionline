@@ -55,7 +55,7 @@ class GetUsersGender extends Command
                     $count_inserts += 1;
                 }
             }
-            // sleep(1);
+            sleep(1);
             
             print((100 * $count_search / $total) . "% \n" );
         }
