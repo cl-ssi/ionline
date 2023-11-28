@@ -4,6 +4,7 @@ namespace App\Models\Documents;
 
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Model;
@@ -60,6 +61,7 @@ class Numeration extends Model
         'number',
         'internal_number',
         'date',
+        'numerator_id',
         'doc_type_id',
         'verification_code',
         'file_path',
@@ -100,7 +102,12 @@ class Numeration extends Model
 
     public function type(): BelongsTo
     {
-        return $this->belongsTo(Type::class);
+        return $this->belongsTo(Type::class,'doc_type_id');
+    }
+
+    public function numerator(): BelongsTo
+    {
+        return $this->belongsTo(User::class,'numerator_id')->withTrashed();
     }
 
     public function user(): BelongsTo
@@ -123,36 +130,49 @@ class Numeration extends Model
     */
     public function numerate()
     {
-        // $modelo->numeration()->create([
-        //     'automatic' => true,
-        //     'correlative' => null, // sólo enviar si automatic es falso, para numeros custom
-        //     'doc_type_id' => $file_type_id,
-        //     'file_path' => $file_path,
-        //     'subject' => $subject,
-        //     'user_id' => auth()->user()->id, // Responsable del documento numerado
-        //     'organizational_unit_id' => auth()->user()->organizationalUnit->id, // Ou del responsable
-        //     'establishment_id' => auth()->user()->establishment->id,
-        // ]);
+        $modelo->numeration()->create([
+            'automatic' => true,
+            'number' => null, // sólo enviar si automatic es falso, para numeros custom
+            'internal_number' => null, // sólo enviar si automatic es falso, para numeros custom
+            'doc_type_id' => $file_type_id,
+            'file_path' => $file_path,
+            'subject' => $subject,
+            'user_id' => auth()->user()->id, // Responsable del documento numerado
+            'organizational_unit_id' => auth()->user()->organizationalUnit->id, // Ou del responsable
+            'establishment_id' => auth()->user()->establishment->id,
+        ]);
 
-        $numerateUser = User::find(15287582); // Firma Desatendida iOnline
+        DB::transaction(function () {
+            /* Chequear que el correlativo exista, si no, crearlo */
+            $correlative = Correlative::firstOrCreate([
+                'type_id' => $this->doc_type_id,
+                'establishment_id' => $this->establishment_id
+            ],[
+                'correlative' => 1
+            ])->lockForUpdate();
 
-        /* Generar el codigo de verificacion ej: ej: '000123-sbK5np' */ 
-        $verificationCode = str_pad($this->id, 6, "0", STR_PAD_LEFT) . '-' . str()->random(6);
-        /* Si es automático, entonces obtiene el siguiente número del correlativo del tipo de documento */
-        if ($this->automatic == true) {
-            $number = Correlative::getCorrelativeFromType($this->doc_type_id);
-        } else {
-            $number = $this->correlative;
-        }
-        $file = Storage::get($this->file_path);
-        $digitalSignature = new DigitalSignature();
-        $success = $digitalSignature->numerate($numerateUser, $file, $verificationCode, $number);
-        if($success) {
-            return $digitalSignature->storeFirstSignedFile($this->file_path);
-        }
-        else {
-            echo $digitalSignature->error;
-        }
+            $numerateUser = auth()->user();
+            $file = Storage::get($this->file_path);
+            /* Generar el codigo de verificacion ej: ej: '000123-sbK5np' */ 
+            $verificationCode = str_pad($this->id, 6, "0", STR_PAD_LEFT) . '-' . str()->random(6);
+            $number = $correlative->correlative;
+
+            $digitalSignature = new DigitalSignature();
+            $success = $digitalSignature->numerate($numerateUser, $file, $verificationCode, $number);
+
+            if($success) {
+                /* Aumentar el correlativo y guardarlo */
+                $correlative->correlative += 1;
+                $correlative->save();
+                /* Guardar el documento numerado */
+                $digitalSignature->storeFirstSignedFile('ionline/documents/numeration/'.$this->id.'.pdf');
+                return true;
+            }
+            else {
+                return $digitalSignature->error;
+            }
+
+        });
 
     }
 

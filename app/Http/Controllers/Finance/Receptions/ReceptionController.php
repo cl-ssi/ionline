@@ -66,7 +66,6 @@ class ReceptionController extends Controller
                 'organizational_unit_id' => $approval->sent_to_ou_id ?? $approval->approverOu->id, // Ou del responsable
                 'establishment_id' => $approval->approverOu->establishment->id,
             ]);
-            $approval->approvable->numeration->numerate();
         }
         else {
             dd('buuom');

@@ -154,7 +154,7 @@
 
                 @empty
                     <tr>
-                        <td colspan="6"
+                        <td colspan="10"
                             class="text-center">No Hay Actas de Recepcion</td>
                     </tr>
                 @endforelse

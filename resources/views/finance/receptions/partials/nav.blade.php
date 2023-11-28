@@ -6,10 +6,10 @@
     <li class="nav-item">
         <a class="nav-link {{ active('finance.receptions.create') }}"
             aria-current="page"
-            href="{{ route('finance.receptions.create') }}">Nueva con Orden de Compra</a>
+            href="{{ route('finance.receptions.create') }}">Nueva acta con OC</a>
     </li>
     <li class="nav-item">
         <a class="nav-link"
-            href="#">Nueva Sin Orden de Compra</a>
+            href="#">Nueva acta sin OC</a>
     </li>
 </ul>
