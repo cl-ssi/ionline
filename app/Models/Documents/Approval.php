@@ -366,7 +366,7 @@ class Approval extends Model
             /** Agregar el approval_id al comienzo de los parámetros del callback */
             /** Solo si tiene un callback controller method */
             if($approval->callback_controller_method) {
-                $params = json_decode($approval->callback_controller_params,true);
+                $params = json_decode($approval->callback_controller_params,true) ?? [];
                 $approval->callback_controller_params = json_encode(array_merge(array('approval_id' => $approval->id), $params));
                 $approval->save();
             }

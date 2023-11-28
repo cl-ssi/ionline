@@ -37,6 +37,13 @@
                 Número:
             </strong>
             <span class="catorce negrita">{{ $reception->number }}</span>
+            @if($reception->internal_number)
+                <br>
+                <small class="secondary">
+                    <b style="padding-right: 20px;">Nº Interno:</b> 
+                    {{ $reception->internal_number }}
+                </small>
+            @endif
         </div>
 
         <div style="padding-top:5px; padding-left: 2px;">
@@ -173,30 +180,7 @@
 
     <p style="white-space: pre-wrap;">{{ $reception->footer_notes }}</p>
 
-
-    Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum, earum perferendis! Aliquam eum perferendis, unde natus
-    tempora quas modi veritatis non, assumenda odit qui adipisci quidem expedita laborum maxime aperiam.
-    Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum, earum perferendis! Aliquam eum perferendis, unde natus
-    tempora quas modi veritatis non, assumenda odit qui adipisci quidem expedita laborum maxime aperiam.
-    Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum, earum perferendis! Aliquam eum perferendis, unde natus
-    tempora quas modi veritatis non, assumenda odit qui adipisci quidem expedita laborum maxime aperiam.
-    Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum, earum perferendis! Aliquam eum perferendis, unde natus
-    tempora quas modi veritatis non, assumenda odit qui adipisci quidem expedita laborum maxime aperiam.
-    Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum, earum perferendis! Aliquam eum perferendis, unde natus
-    tempora quas modi veritatis non, assumenda odit qui adipisci quidem expedita laborum maxime aperiam.
-    Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum, earum perferendis! Aliquam eum perferendis, unde natus
-    tempora quas modi veritatis non, assumenda odit qui adipisci quidem expedita laborum maxime aperiam.
-    Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum, earum perferendis! Aliquam eum perferendis, unde natus
-    tempora quas modi veritatis non, assumenda odit qui adipisci quidem expedita laborum maxime aperiam.
-    Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum, earum perferendis! Aliquam eum perferendis, unde natus
-    tempora quas modi veritatis non, assumenda odit qui adipisci quidem expedita laborum maxime aperiam.
-    Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum, earum perferendis! Aliquam eum perferendis, unde natus
-    tempora quas modi veritatis non, assumenda odit qui adipisci quidem expedita laborum maxime aperiam.
-    Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum, earum perferendis! Aliquam eum perferendis, unde natus
-    tempora quas modi veritatis non, assumenda odit qui adipisci quidem expedita laborum maxime aperiam.
-    Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum, earum perferendis! Aliquam eum perferendis, unde natus
-    tempora quas modi veritatis non, assumenda odit qui adipisci quidem expedita laborum maxime aperiam.
-
+    <div style="height: 80px;"></div>
 
     <!-- Sección de las aprobaciones -->
     <div class="signature-container">

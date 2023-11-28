@@ -68,6 +68,7 @@ use App\Http\Livewire\HealthServices;
 use App\Http\Livewire\Finance\UploadDtes;
 use App\Http\Livewire\Finance\Receptions\TypeMgr;
 use App\Http\Livewire\Finance\Receptions\CreateReception;
+use App\Http\Livewire\Finance\Receptions\IndexReception;
 use App\Http\Livewire\Finance\IndexDtes;
 use App\Http\Livewire\Finance\DteConfirmation;
 use App\Http\Livewire\Finance\AccountingCodesMgr;
@@ -273,12 +274,7 @@ use App\Http\Controllers\Agreements\StageController;
 use App\Http\Controllers\Agreements\SignerController;
 use App\Http\Controllers\Agreements\ProgramResolutionController;
 use App\Http\Controllers\Agreements\AgreementController;
-
-/*
 use App\Http\Controllers\Agreements\AddendumController;
-use App\Http\Controllers\Agreements\AccountabilityDetailController;
-use App\Http\Controllers\Agreements\AccountabilityController;
-*/
 
 /*
 |--------------------------------------------------------------------------
@@ -2036,9 +2032,11 @@ Route::prefix('finance')->as('finance.')->middleware(['auth', 'must.change.passw
     });
 
     Route::prefix('receptions')->as('receptions.')->group(function () {
+        Route::get('/index', IndexReception::class)->name('index');
         Route::get('/create', CreateReception::class)->name('create');
         Route::get('/type', TypeMgr::class)->name('type');
         Route::get('/{reception_id}', [FinReceptionController::class,'show'])->name('show');
+        
     });
 });
 

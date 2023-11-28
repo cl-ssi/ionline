@@ -36,6 +36,7 @@ class DigitalSignature extends Model
      * =====================
      **/
     // $user = User::find(15287582);
+    // $otp = '123456';
 
     // $files[] = Storage::get('ionline/samples/oficio.pdf');
     // $positions[] = [ // opcional (Default: right, first, 0)
@@ -47,7 +48,6 @@ class DigitalSignature extends Model
     // $files[] = Storage::get('ionline/samples/oficio_firmado_1.pdf');
     // $positions[] = []; // Puede ser un array vacio, por defecto será: Right, First, 0
 
-    // $otp = '123456';
     // $digitalSignature = new DigitalSignature();
     // $success = $digitalSignature->signature($user, $otp, $files, $positions);
 
@@ -60,6 +60,7 @@ class DigitalSignature extends Model
     // $file = Storage::get('ionline/samples/oficio_firmado_2.pdf');
     // $verificationCode = '002342-Xdf4';
     // $number = '13.089';
+
     // $digitalSignature = new DigitalSignature();
     // $success = $digitalSignature->numerate($user, $file, $verificationCode, $number);
 

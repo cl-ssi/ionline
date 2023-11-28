@@ -71,7 +71,7 @@ trait ApprovalTrait
         }
         /**
          * ================================================ 
-         * APROBAR, evaluar ambas, firma digital o aprobación simple
+         * APROBAR, evaluar ambas: aprobaciones simples y firma digital
          * ================================================
          **/
         else {
@@ -82,21 +82,24 @@ trait ApprovalTrait
              **/
             $approvalsSimples = Approval::whereIn('id',$approval_ids)->where('digital_signature', false)->get();
 
-            foreach($approvalsSimples as $approval) {
-                $this->singleApprovation($approval, $status);
-                /**
-                 * Si viene un nombre de archivo, generar el pdf y guardar en storage
-                 */
-                if ($approval->filename) {
-                    $this->storeFile($approval);
-                }
-                /**
-                 * Si tiene un callback, se ejecuta en cola
-                 */
-                if($approval->callback_controller_method) {
-                    ProcessApproval::dispatch($approval);
+            if( $approvalsSimples->isNotEmpty() ) {
+                foreach($approvalsSimples as $approval) {
+                    $this->singleApprovation($approval, $status);
+                    /**
+                     * Si viene un nombre de archivo, generar el pdf y guardar en storage
+                     */
+                    if ($approval->filename) {
+                        $this->storeFile($approval);
+                    }
+                    /**
+                     * Si tiene un callback, se ejecuta en cola
+                     */
+                    if($approval->callback_controller_method) {
+                        ProcessApproval::dispatch($approval);
+                    }
                 }
             }
+
 
             /** 
              * ===========================================
@@ -105,10 +108,11 @@ trait ApprovalTrait
              */
 
             $approvalsSignatures = Approval::whereIn('id',$approval_ids)->where('digital_signature', true)->get();
-            if($approvalsSignatures) {
+
+            if( $approvalsSignatures->isNotEmpty() ) {
                 foreach($approvalsSignatures as $approval) {
                     /**
-                     * Obtiene el archivo desde el controller y sus parametros y genera el PDF
+                     * Obtiene el archivo desde el controller con sus parametros y genera el PDF
                      */
                     $show_controller_method = Route::getRoutes()->getByName($approval->document_route_name)->getActionName();
                     $response = app()->call($show_controller_method, json_decode($approval->document_route_params, true));
