@@ -273,12 +273,7 @@ use App\Http\Controllers\Agreements\StageController;
 use App\Http\Controllers\Agreements\SignerController;
 use App\Http\Controllers\Agreements\ProgramResolutionController;
 use App\Http\Controllers\Agreements\AgreementController;
-
-/*
 use App\Http\Controllers\Agreements\AddendumController;
-use App\Http\Controllers\Agreements\AccountabilityDetailController;
-use App\Http\Controllers\Agreements\AccountabilityController;
-*/
 
 /*
 |--------------------------------------------------------------------------
