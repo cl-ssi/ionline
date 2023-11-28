@@ -2,13 +2,14 @@
 
 namespace App\Http\Livewire;
 
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Livewire\Component;
-// use Livewire\WithFileUploads;
 
 class TestFileManager extends Component
 {
-
-    // use WithFileUploads;
+    public $fileReceived;
 
     protected $listeners = [
         'storeFiles',
@@ -19,20 +20,27 @@ class TestFileManager extends Component
         return view('livewire.test-file-manager');
     }
 
-
     /**
-    * Save
-    */
+     * Save
+     */
     public function save()
     {
         // guardar el archivo
     }
 
     /**
-    * storeFiles
-    */
-    public function storeFiles($file)
+     * storeFiles
+     */
+    public function storeFiles($temporaryFile)
     {
-        dd($file);
+        $folder = 'test';
+
+        $name = Str::random();
+
+        $extension = File::extension($temporaryFile);
+
+        Storage::disk('gcs')->put("$folder/$name.$extension" , File::get($temporaryFile));
+
+        dd('listo');
     }
 }

@@ -1,9 +1,12 @@
 <div>
     @livewire('file-mgr',
-    [ 
+    [
         'multiple' => true,
-        'valid_types' => 'pdf', 
-        'max_file_size' => 20,
+        'valid_types' => ['pdf', 'jpg'],
+        'max_file_size' => 2,
+        'input_title' => 'Anexos',
+        'storage_path' => 'test',
+        'stored' => '',
     ])
 
 
