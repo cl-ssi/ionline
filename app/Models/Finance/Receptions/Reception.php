@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\User;
 use App\Rrhh\OrganizationalUnit;
+use App\Models\Finance\Receptions\ReceptionType;
 use App\Models\Finance\Receptions\ReceptionItem;
 use App\Models\Finance\PurchaseOrder;
 use App\Models\Establishment;
@@ -66,6 +67,11 @@ class Reception extends Model
         'partial_reception' => 'boolean',
         'status'    => 'boolean',
     ];
+
+    public function receptionType(): BelongsTo
+    {
+        return $this->belongsTo(ReceptionType::class);
+    }
 
     public function purchaseOrder(): BelongsTo
     {
