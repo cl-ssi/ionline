@@ -190,7 +190,7 @@ class GenerateReception extends Component
              * Se debe relacionar el FR a la OC en caso de no tener FR.
              */
             if (!isset($this->request_form) && !$this->error) {
-                session()->flash('danger', 'La Orden de Compra no tiene un FR relacionado.');
+                session()->flash('danger', 'No existe ningún proceso de compra para la OC ingresada. Contácte a abastecimiento.');
             }
         }
     }

@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Finance\Receptions;
 
-use App\Http\Controllers\Controller;
-use App\Models\Finance\Receptions\Reception;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
+use App\Models\Finance\Receptions\Reception;
+use App\Models\Documents\Approval;
+use App\Http\Controllers\Controller;
 
 class ReceptionController extends Controller
 {
@@ -48,5 +49,27 @@ class ReceptionController extends Controller
     public function destroy(Reception $reception)
     {
         //
+    }
+
+    /**
+    * Approval Callback
+    */
+    public function approvalCallback($approval_id) {
+        $approval = Approval::find($approval_id);
+        if($approval->status == true) {
+            $approval->approvable->numeration()->create([
+                'automatic' => true,
+                'doc_type_id' => 11,
+                'file_path' => $approval->filename,
+                'subject' => $approval->subject,
+                'user_id' => $approval->approver->id, // Responsable del documento numerado
+                'organizational_unit_id' => $approval->sent_to_ou_id ?? $approval->approverOu->id, // Ou del responsable
+                'establishment_id' => $approval->approverOu->establishment->id,
+            ]);
+            $approval->approvable->numeration->numerate();
+        }
+        else {
+            dd('buuom');
+        }
     }
 }
