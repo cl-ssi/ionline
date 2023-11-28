@@ -58,6 +58,21 @@
 
             </div>
         </li>
+
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle {{active('prof_agenda.activity_types.*')}}"
+            data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-clipboard-check"></i> Reportes
+            </a>
+            <div class="dropdown-menu">
+
+                <a class="dropdown-item {{ active('prof_agenda.reports.sirsap') }}"
+                    href="{{ route('prof_agenda.reports.sirsap') }}">
+                    <i class="fas fa-clipboard-check"></i> SIRSAP
+                </a>
+
+            </div>
+        </li>
     @endcanany
 
 </ul>

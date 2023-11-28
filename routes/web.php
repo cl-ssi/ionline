@@ -78,6 +78,7 @@ use App\Http\Livewire\Documents\Partes\ReportByDates as PartesReportByDates;
 use App\Http\Livewire\Documents\Partes\Inbox;
 use App\Http\Livewire\Documents\ApprovalsMgr;
 use App\Http\Livewire\Authorities\Calendar;
+use App\Http\Livewire\ProfAgenda\Reports\SirsapReport;
 use App\Http\Controllers\Welfare\WelfareController;
 use App\Http\Controllers\Welfare\LoanController;
 use App\Http\Controllers\Welfare\AmipassController;
@@ -1889,6 +1890,11 @@ Route::prefix('prof_agenda')->as('prof_agenda.')->middleware(['auth'])->group(fu
         Route::get('/create', [ActivityTypeController::class, 'create'])->name('create');
         Route::post('/store', [ActivityTypeController::class, 'store'])->name('store');
         Route::delete('/{activityType}/destroy', [ActivityTypeController::class, 'destroy'])->name('destroy');
+    });
+
+    Route::prefix('reports')->as('reports.')->middleware(['auth'])->group(function () {
+        Route::get('/sirsap', SirsapReport::class)->name('sirsap');
+        
     });
 
 
