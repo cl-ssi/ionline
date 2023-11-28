@@ -2,17 +2,7 @@
     <h3 class="mb-3">Crear un acta de recepción conforme</h3>
 
     <!-- MENU -->
-    <ul class="nav nav-tabs mb-3">
-        <li class="nav-item">
-            <a class="nav-link {{ active('finance.receptions.create') }}"
-                aria-current="page"
-                href="{{ route('finance.receptions.create') }}">Con Orden de Compra</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link"
-                href="#">Sin Orden de Compra</a>
-        </li>
-    </ul>
+    @include('finance.receptions.partials.nav')
 
     <!-- Orden de Compra -->
     <div class="row mb-3 g-2">
