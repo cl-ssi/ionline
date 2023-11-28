@@ -273,8 +273,8 @@ class RequestFormController extends Controller {
         $eventTypeBudget = null;
         if(in_array($eventType, ['pre_budget_event', 'pre_finance_budget_event', 'budget_event'])){
             $manager = Authority::getAuthorityFromDate(Auth::user()->organizationalUnit->id, Carbon::now(), 'manager');
-            $ouSearch = Parameter::where('module', 'ou')->whereIn('parameter', ['FinanzasSSI', 'RefrendacionHAH'])->pluck('value')->toArray();
-            $eventTypeBudget = $eventType == 'pre_budget_event' ? 'supply_event' : (in_array(Auth::user()->organizational_unit_id, $ouSearch) && $manager->user_id != Auth::user()->id ? 'pre_finance_event' : 'finance_event');
+            $ouSearch = Parameter::where('module', 'ou')->where('parameter', 'FinanzasSSI')->first()->value;
+            $eventTypeBudget = $eventType == 'pre_budget_event' ? 'supply_event' : (Auth::user()->organizational_unit_id == $ouSearch && $manager->user_id == Auth::user()->id ? 'finance_event' : 'pre_finance_event');
             $requestForm->has_increased_expense = true;
             $requestForm->new_estimated_expense = $requestForm->estimated_expense + $requestForm->eventRequestForms()->where('status', 'pending')->where('event_type', 'budget_event')->first()->purchaser_amount;
             $requestForm->load('itemRequestForms.latestPendingItemChangedRequestForms', 'passengers.latestPendingPassengerChanged');
