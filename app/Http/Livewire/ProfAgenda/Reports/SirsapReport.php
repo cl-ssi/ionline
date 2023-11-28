@@ -15,10 +15,10 @@ class SirsapReport extends Component
     public $ftermino;
     public $data;
 
-     public function mount(){
-        $this->finicio = Carbon::createFromDate('2023-11-01');
-        $this->ftermino = Carbon::createFromDate('2023-11-15');
-    }
+    //  public function mount(){
+    //     $this->finicio = Carbon::createFromDate('2023-11-01');
+    //     $this->ftermino = Carbon::createFromDate('2023-11-15');
+    // }
 
     public function search(){
         $openHours = OpenHour::whereBetween('start_date',[$this->finicio,$this->ftermino])
