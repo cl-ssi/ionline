@@ -28,9 +28,10 @@ class SignatureTest extends Component
         $this->message = null;
 
         $files[] = Storage::get('ionline/samples/oficio.pdf');
-        
+        $positions[] = [];
+
         $digitalSignature = new DigitalSignature();
-        $success = $digitalSignature->signature(auth()->user(), $this->otp, $files);
+        $success = $digitalSignature->signature(auth()->user(), $this->otp, $files, $positions);
 
         if($success) {
             $this->message = "La firma fue realizada exitosamente.";

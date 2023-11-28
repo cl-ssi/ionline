@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\Lobby;
 
-use App\Http\Controllers\Controller;
-use App\Models\Lobby\Meeting;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
+use App\Models\Lobby\Meeting;
+use App\Http\Controllers\Controller;
 
 class MeetingController extends Controller
 {
@@ -13,6 +14,17 @@ class MeetingController extends Controller
     {
         $meetings = Meeting::latest()->paginate(100);
         return view('lobby.index', compact('meetings'));
+    }
+
+    /**
+    * Show
+    */
+    public function show(Meeting $meeting)
+    {
+        $establishment = $meeting->responsible->organizationalUnit->establishment;
+        return Pdf::loadView('lobby.meeting.show', compact('meeting','establishment'))
+            ->stream('meeting.pdf');
+
     }
 
     public function create()
@@ -30,7 +42,6 @@ class MeetingController extends Controller
 
     public function edit(Meeting $meeting)
     {
-
         return view('lobby.edit', compact('meeting'));
     }
 

@@ -2,17 +2,7 @@
     <h3 class="mb-3">Crear un acta de recepción conforme</h3>
 
     <!-- MENU -->
-    <ul class="nav nav-tabs mb-3">
-        <li class="nav-item">
-            <a class="nav-link {{ active('finance.receptions.create') }}"
-                aria-current="page"
-                href="{{ route('finance.receptions.create') }}">Con Orden de Compra</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link"
-                href="#">Sin Orden de Compra</a>
-        </li>
-    </ul>
+    @include('finance.receptions.partials.nav')
 
     <!-- Orden de Compra -->
     <div class="row mb-3 g-2">
@@ -96,6 +86,15 @@
         <h4>Recepción</h4>
         <div class="row mb-3 g-2">
             <div class="form-group col-md-2">
+                <div class="form-group">
+                    <label for="number">Número de acta</label>
+                    <input type="text"
+                        class="form-control"
+                        disabled
+                        placeholder="Automático">
+                </div>
+            </div>
+            <div class="form-group col-md-2">
                 <label for="form-reception-typeto ">Tipo de acta</label>
                 <select class="form-select"
                     wire:model="reception.reception_type_id">
@@ -110,7 +109,7 @@
             </div>
             <div class="form-group col-md-2">
                 <br>
-                <div class="form-check form-switch form-check-inline float-end">
+                <div class="form-check form-switch form-check-inline">
                     <input class="form-check-input"
                         type="checkbox"
                         role="switch"
@@ -125,18 +124,20 @@
 
 
         <div class="row mb-3 g-2">
+
             <div class="col-md-2">
                 <div class="form-group">
-                    <label for="number">Número de acta</label>
+                    <label for="internal_number">Número interno acta</label>
                     <input type="text"
                         class="form-control"
-                        wire:model="reception.number">
-                    <div class="form-text">Dejar en blanco para autogenerar</div>
+                        placeholder="opcional"
+                        wire:model="reception.internal_number">
+                    <div class="form-text">En caso que la unidad tenga su propio correlativo</div>
                 </div>
             </div>
             <div class="col-md-2">
                 <div class="form-group">
-                    <label for="reception-date">Fecha Recepción</label>
+                    <label for="reception-date">Fecha acta</label>
                     <input type="date"
                         class="form-control"
                         wire:model="reception.date">
@@ -147,7 +148,7 @@
             </div>
             <div class="col-md-2 offset-md-2">
                 <div class="form-group">
-                    <label for="reception-date">Tipo documento</label>
+                    <label for="reception-date">Tipo doc. recepción</label>
                     <select name="document_type"
                         id="document_type"
                         class="form-select"
@@ -162,7 +163,7 @@
             </div>
             <div class="col-md-2">
                 <div class="form-group">
-                    <label for="reception-date">Número documento</label>
+                    <label for="reception-date">Número doc. recepción</label>
                     <input type="text"
                         class="form-control"
                         wire:model.debounce.500ms="reception.doc_number">
@@ -170,7 +171,7 @@
             </div>
             <div class="col-md-2">
                 <div class="form-group">
-                    <label for="reception-date">Fecha documento</label>
+                    <label for="reception-date">Fecha doc. recepción</label>
                     <input type="date"
                         class="form-control"
                         wire:model="reception.doc_date">

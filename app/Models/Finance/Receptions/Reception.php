@@ -2,14 +2,20 @@
 
 namespace App\Models\Finance\Receptions;
 
+use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\User;
 use App\Rrhh\OrganizationalUnit;
+use App\Models\Finance\Receptions\ReceptionType;
 use App\Models\Finance\Receptions\ReceptionItem;
 use App\Models\Finance\PurchaseOrder;
 use App\Models\Establishment;
+use App\Models\Documents\Numeration;
 use App\Models\Documents\Approval;
 
 class Reception extends Model
@@ -30,6 +36,7 @@ class Reception extends Model
     */
     protected $fillable = [
         'number',
+        'internal_number',
         'date',
         'reception_type_id',
         'purchase_order',
@@ -55,43 +62,48 @@ class Reception extends Model
     * @var array
     */
     protected $casts = [
-        'date' => 'date:Y-m-d',
-        'doc_date' => 'date:Y-m-d',
+        'date'      => 'date:Y-m-d',
+        'doc_date'  => 'date:Y-m-d',
         'partial_reception' => 'boolean',
-        'status' => 'boolean',
+        'status'    => 'boolean',
     ];
 
-    public function purchaseOrder()
+    public function receptionType(): BelongsTo
+    {
+        return $this->belongsTo(ReceptionType::class);
+    }
+
+    public function purchaseOrder(): BelongsTo
     {
         return $this->belongsTo(PurchaseOrder::class, 'purchase_order', 'code');
     }
 
-    public function establishment()
+    public function establishment(): BelongsTo
     {
         return $this->belongsTo(Establishment::class);
     }
 
-    public function responsable()
+    public function responsable(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function responsableOu()
+    public function responsableOu(): BelongsTo
     {
         return $this->belongsTo(OrganizationalUnit::class);
     }
 
-    public function creator()
+    public function creator(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function creatorOu()
+    public function creatorOu(): BelongsTo
     {
         return $this->belongsTo(OrganizationalUnit::class);
     }
 
-    public function items()
+    public function items(): HasMany
     {
         return $this->hasMany(ReceptionItem::class);
     }
@@ -104,4 +116,11 @@ class Reception extends Model
         return $this->morphMany(Approval::class, 'approvable');
     }
 
+    /**
+     * Get the numeration of the model.
+     */
+    public function numeration(): MorphOne
+    {
+        return $this->morphOne(Numeration::class, 'numerable');
+    }
 }

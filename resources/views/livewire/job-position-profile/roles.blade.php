@@ -73,6 +73,12 @@
 
     <br>
 
+    @if($messageMaxRoles != NULL)
+        <div class="alert alert-danger" role="alert">
+            {{ $messageMaxRoles }}
+        </div>
+    @endif
+
     @foreach($inputs as $key => $value)
         <div class="form-row">
             <fieldset class="form-group col">

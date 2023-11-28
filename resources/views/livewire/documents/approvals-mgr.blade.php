@@ -8,7 +8,7 @@
     <div class="row mb-3">
         <div class="form-group col-md-4">
             <label for="inputState">Estado</label>
-            <select id="inputState" class="form-control" wire:model.defer="filter.status">
+            <select id="inputState" class="form-select wire:model.defer="filter.status">
                 <option value="?">Pendientes</option>
                 <option value="1">Aprobados</option>
                 <option value="0">Rechazados</option>
@@ -32,7 +32,8 @@
     <table class="table table-sm table-bordered">
         <thead>
             <tr>
-                <th width="35px"></th>
+                <th width="42"></th>
+                <th>Id</th>
                 <th width="86px">Fecha Solicitud</th>
                 <th>Módulo</th>
                 <th>Asunto</th>
@@ -45,15 +46,16 @@
             @foreach($approvals as $approval)
             <tr class="table-{{ $approval->color }}">
                 <td class="text-center">
+                    @if($approval->status != true)
+                    <input class="form-check-input"
+                        style="scale: 1.4;"
+                        type="checkbox"
+                        id="ids.{{$approval->id}}"
+                        wire:model.defer="ids.{{$approval->id}}">
+                    @endif
+                </td>
+                <td class="text-center">
                     <small>{{ $approval->id }}</small>
-                    <div class="form-check">
-                        <input class="form-check-input position-static"
-                            style="scale: 1.4;"
-                            type="checkbox"
-                            id="ids.{{$approval->id}}"
-                            wire:model.defer="ids.{{$approval->id}}"
-                            @disabled(! is_null($approval->status) OR $approval->digital_signature)>
-                    </div>
                 </td>
                 <td class="small">
                     {{ $approval->created_at }}
@@ -101,11 +103,21 @@
     {{ $approvals->links() }}
 
     <div class="row">
-        <div class="col">
-            <button class="btn btn-success" wire:click="bulkProcess(true)">
-                <i class="fas fa-thumbs-up"></i>
-                Aprobar seleccionados
-            </button>
+        <div class="col-4">
+            <div class="input-group">
+                <input type="text" 
+                    placeholder="OTP" 
+                    class="form-control"
+                    wire:model.defer="otp">
+                <button class="btn btn-success" wire:click="bulkProcess(true)" wire:loading.attr="disabled">
+                    <i class="fa fa-spinner fa-spin" wire:loading></i>
+                    <i class="fas fa-thumbs-up" wire:loading.class="d-none"></i> 
+                    Aprobar seleccionados
+                </button>
+            </div>
+            <div class="text-danger">
+                {{ $message ?? '' }}
+            </div>
         </div>
         <div class="col text-end">
             <button class="btn btn-danger" wire:click="bulkProcess(false)">

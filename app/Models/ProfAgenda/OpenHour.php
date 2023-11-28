@@ -36,6 +36,10 @@ class OpenHour extends Model implements Auditable
         return $this->belongsTo('App\User','profesional_id');
     }
 
+    public function profession(){
+        return $this->belongsTo('App\Models\Parameters\Profession','profession_id');
+    }
+
     public function activityType(){
         return $this->belongsTo('App\Models\ProfAgenda\ActivityType');
     }

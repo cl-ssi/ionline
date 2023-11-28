@@ -39,75 +39,114 @@ trait ApprovalTrait
     /**
      * Approve or reject
      *
-     * @param  Approval  $approvalSelected
+     * @param  array $approvals_ids
      * @param  bool  $status
      * @return void
      */
-    public function approveOrReject(Approval $approvalSelected, bool $status)
+    public function approveOrReject($approval_ids, bool $status)
     {
         /**
-         * Si el approval es de tipo firma digital y fue aprobado
-         */
-        if($approvalSelected->digital_signature && $status == true) {
-            /*
-             * Consulto el archivo desde la ruta y obtengo el base64
-             */
-            $show_controller_method = Route::getRoutes()->getByName($approvalSelected->document_route_name)->getActionName();
-            $response = app()->call($show_controller_method, json_decode($approvalSelected->document_route_params, true));
-            $files[] = $response->original;
+         * ================================================ 
+         * RECHAZAR: Tratar todas como aprobaciones simples
+         * ================================================
+         **/
+        if($status == false) {
+            $approvals = Approval::whereIn('id',$approval_ids)->get();
 
-            $position = [  // Opcional
-                'column'        => $approvalSelected->position,     // 'left','center','right'
-                'row'           => 'first',                         // 'first','second'
-                'margin-bottom' => $approvalSelected->start_y ?? 0, // 0 pixeles
-            ];
-
-            $digitalSignature = new DigitalSignature();
-            $success = $digitalSignature->signature(auth()->user(), $this->otp, $files, $position);
-
-            if($success) {
-                $digitalSignature->storeFirstSignedFile($approvalSelected->filename);
+            foreach($approvals as $approval) {
+                $this->singleApprovation($approval, $status);
+                /**
+                 * Si viene un nombre de archivo, generar el pdf y guardar en storage
+                 */
+                if ($approval->filename) {
+                    $this->storeFile($approval);
+                }
+                /**
+                 * Si tiene un callback, se ejecuta en cola
+                 */
+                if($approval->callback_controller_method) {
+                    ProcessApproval::dispatch($approval);
+                }
             }
-            else {
-                $this->message = $digitalSignature->error;
-                return;
+        }
+        /**
+         * ================================================ 
+         * APROBAR, evaluar ambas: aprobaciones simples y firma digital
+         * ================================================
+         **/
+        else {
+            /**
+             * ================================== 
+             * Aprobar: Aprobaciones simples 
+             * ================================== 
+             **/
+            $approvalsSimples = Approval::whereIn('id',$approval_ids)->where('digital_signature', false)->get();
+
+            if( $approvalsSimples->isNotEmpty() ) {
+                foreach($approvalsSimples as $approval) {
+                    $this->singleApprovation($approval, $status);
+                    /**
+                     * Si viene un nombre de archivo, generar el pdf y guardar en storage
+                     */
+                    if ($approval->filename) {
+                        $this->storeFile($approval);
+                    }
+                    /**
+                     * Si tiene un callback, se ejecuta en cola
+                     */
+                    if($approval->callback_controller_method) {
+                        ProcessApproval::dispatch($approval);
+                    }
+                }
             }
 
-        }
 
-        /**
-         * Guardar los datos del aprobacion o rechazo
-         */
-        $approvalSelected->approver_ou_id = $approvalSelected->sent_to_ou_id ?? auth()->user()->organizational_unit_id;
-        $approvalSelected->approver_id = auth()->id();
-        $approvalSelected->approver_observation = $this->approver_observation;
-        $approvalSelected->approver_at = now();
-        $approvalSelected->status = $status;
-        $approvalSelected->save();
-
-
-        /**
-         * Si viene un nombre de archivo y no es de firma electrónica, generar el pdf y guardar en storage
-         */
-        if ($approvalSelected->filename AND !$approvalSelected->digital_signature) {
-            /**
-             * Obtiene el archivo desde el controller y sus parametros y genera el PDF
+            /** 
+             * ===========================================
+             * Aprobar: Firmar con firma digital
+             * ===========================================
              */
-            $show_controller_method = Route::getRoutes()->getByName($approvalSelected->document_route_name)->getActionName();
-            $response = app()->call($show_controller_method, json_decode($approvalSelected->document_route_params, true));
 
-            /**
-             * Guarda el archivo en el storage
-             */
-            Storage::disk('gcs')->put($approvalSelected->filename, $response->original, ['CacheControl' => 'no-store']);
+            $approvalsSignatures = Approval::whereIn('id',$approval_ids)->where('digital_signature', true)->get();
+
+            if( $approvalsSignatures->isNotEmpty() ) {
+                foreach($approvalsSignatures as $approval) {
+                    /**
+                     * Obtiene el archivo desde el controller con sus parametros y genera el PDF
+                     */
+                    $show_controller_method = Route::getRoutes()->getByName($approval->document_route_name)->getActionName();
+                    $response = app()->call($show_controller_method, json_decode($approval->document_route_params, true));
+                    $files[] = $response->original;
+                    $positions[] = [  // Opcional
+                        'column'        => $approval->position,     // 'left','center','right'
+                        'row'           => 'first',                 // 'first','second'
+                        'margin-bottom' => $approval->start_y ?? 0, // 0 pixeles
+                    ];
+                }
+                $digitalSignature = new DigitalSignature();
+                $success = $digitalSignature->signature(auth()->user(), $this->otp, $files, $positions);
+
+                if($success) {
+                    foreach($digitalSignature->response['files'] as $key => $file) {
+                        if($file['status'] == 'OK') {
+                            $store = $digitalSignature->storeSignedFile($key, $approvalsSignatures[$key]->filename);
+                            $this->singleApprovation($approvalsSignatures[$key], $status);
+                            /**
+                             * Si tiene un callback, se ejecuta en cola
+                             */
+                            if($approvalsSignatures[$key]->callback_controller_method) {
+                                ProcessApproval::dispatch($approvalsSignatures[$key]);
+                            }
+                        }
+                    }
+                }
+                else {
+                    $this->message = $digitalSignature->error;
+                    return;
+                }
+            }
         }
 
-        /*
-         * Si tiene un callback, se ejecuta en cola
-         */
-        if($approvalSelected->callback_controller_method) {
-            ProcessApproval::dispatch($approvalSelected);
-        }
 
         /**
          * Cierra el modal
@@ -121,6 +160,31 @@ trait ApprovalTrait
         if($this->redirect_route){
             return redirect()->route($this->redirect_route, $this->redirect_parameter);
         }
+    }
+
+    function singleApprovation($approval, $status) {
+        /**
+         * Guardar los datos del aprobacion o rechazo
+         */
+        $approval->approver_ou_id = $approval->sent_to_ou_id ?? auth()->user()->organizational_unit_id;
+        $approval->approver_id = auth()->id();
+        $approval->approver_observation = $this->approver_observation;
+        $approval->approver_at = now();
+        $approval->status = $status;
+        $approval->save();
+    }
+
+    function storeFile($approval) {
+        /**
+         * Obtiene el archivo desde el controller y sus parametros y genera el PDF
+         */
+        $show_controller_method = Route::getRoutes()->getByName($approval->document_route_name)->getActionName();
+        $response = app()->call($show_controller_method, json_decode($approval->document_route_params, true));
+
+        /**
+         * Guarda el archivo en el storage
+         */
+        Storage::disk('gcs')->put($approval->filename, $response->original, ['CacheControl' => 'no-store']);
     }
 
 }

@@ -196,10 +196,8 @@ class CreateReception extends Component
             "module_icon" => "fas fa-list",
             "subject" => "Acta de recepción conforme",
             "document_route_name" => "finance.receptions.show",
-            "document_route_params" => json_encode([
-                "reception_id" => $this->reception->id,
-            ]),
             "position" => $position,
+            // "start_y" => 0,
         ]);
 
         if($user_id OR $this->signer_id) {
@@ -253,37 +251,28 @@ class CreateReception extends Component
     public function save()
     {
         // $this->validate();
-        // Validar que tenga al menos un approval
+
+        // Validar que tenga al menos un approval y los ordena por importancia
         if(count($this->approvals) >= 1)
         {
-            if(key_exists('right',$this->approvals)) {
-                $responsable = 'right';
-            }
-            else if(key_exists('center',$this->approvals)) {
-                $responsable = 'center';
-            }
-            else {
-                $responsable = 'left';
+            $priorityOrder = ['left', 'center', 'right'];
+            foreach($priorityOrder as $element) {
+                if(key_exists($element,$this->approvals)) {
+                    $approvalsOrderedByPriority[] = $this->approvals[$element];
+                }
             }
         }
         else {
             dd('Debe tener al menos un firmante');
         }
-        
-        $this->reception->responsable_id = $this->approvals[$responsable]['sent_to_user_id'] ?? null;
-        $this->reception->responsable_ou_id = $this->approvals[$responsable]['sent_to_ou_id'] ?? null;
-    
         // Validar que tenga por le menos un receptionItems con cantidad > 0
 
-        /* Obtener el correlativo si es que no se especificó un correlativo (numero) */
-        if( !$this->reception->number ) {
-            $this->reception->number = Correlative::getCorrelativeFromType(Parameter::get('Recepciones','doc_type_id'));
-        }
+        $this->reception->responsable_id    = end($approvalsOrderedByPriority)['sent_to_user_id'] ?? null;
+        $this->reception->responsable_ou_id = end($approvalsOrderedByPriority)['sent_to_ou_id']   ?? null;
 
         app('debugbar')->log($this->reception->toArray());
         app('debugbar')->log($this->receptionItems);
         app('debugbar')->log($this->approvals);
-
 
         /* Guardar reception */
         $this->reception->save();
@@ -295,12 +284,41 @@ class CreateReception extends Component
             }
         }
 
+
+        $ctApprovals = count($approvalsOrderedByPriority);
         /* Guardar approvals */
-        foreach($this->approvals as $approval) {
+        foreach($approvalsOrderedByPriority as $key => $approval) {
+            /* Setear el reception_id que se obtiene despues de hacer el reception->save();*/
+            $approval["document_route_params"] = json_encode([
+                "reception_id" => $this->reception->id
+            ]);
+
+            /* Setear el filename */
+            $approval["filename"] = 'ionline/finances/receptions/'.$this->reception->id.'.pdf';
+
+            /* Si hay mas de un approval y no es el primero */
+            if( count($approvalsOrderedByPriority) >= 1 AND $key != 0 ) {
+                /* Setea el previous_approval_id y active en false */
+                $approval["previous_approval_id"] = $this->reception->approvals->last()->id;
+                $approval["active"] = false;
+            }
+
+            /* Si es el último, entonces es el de firma electrónica */
+            if (0 === --$ctApprovals) {
+                $approval["digital_signature"] = true;
+                $approval["callback_controller_method"] = 'App\Http\Controllers\Finance\Receptions\ReceptionController@approvalCallback';
+            }
+
             $this->reception->approvals()->create($approval);
+
+            // right
+            // center
+            // center right 
+            // left
+            // left right 
+            // left center 
+            // left center right 
         }
-
-
     }
 
     /**

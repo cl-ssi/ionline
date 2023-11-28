@@ -21,7 +21,7 @@
             <input type="text" class="form-control" id="formGroupDVInput" name="dv" required="required" title="Digito verificador" autocomplete="off">
         </fieldset>
 
-        <fieldset class="form-group col-md-3">
+        <fieldset class="form-group col-md-2">
             <label for="formGroupNameInput">Nombre*</label>
             <input type="text" class="form-control" id="formGroupNameInput" placeholder="Nombre" name="name" required="required">
         </fieldset>
@@ -34,6 +34,15 @@
         <div class="form-group col-md-2">
             <label for="name">Apellido Materno*</label>
             <input type="text" class="form-control" name="mothers_family" required="required">
+        </div>
+        
+        <div class="form-group col-md-1">
+            <label for="name">Sexo</label>
+            <select name="gender" class="form-control" required>
+                <option value=""></option>
+                <option value="male">Masculino</option>
+                <option value="female">Femenino</option>
+            </select>
         </div>
 
         <fieldset class="form-group col-md-2">

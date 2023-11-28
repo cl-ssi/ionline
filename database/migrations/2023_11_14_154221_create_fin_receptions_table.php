@@ -14,7 +14,8 @@ return new class extends Migration {
     {
         Schema::create('fin_receptions', function (Blueprint $table) {
             $table->id();
-            $table->string('number'); // Correlatives
+            $table->unsignedInteger('number')->nullable(); // Correlatives
+            $table->string('internal_number')->nullable(); // Correlatives
             $table->date('date');
             $table->foreignId('reception_type_id')->constrained('fin_reception_types');
 
@@ -40,8 +41,8 @@ return new class extends Migration {
 
             $table->boolean('status')->nullable();
 
-            $table->foreignId('responsable_id')->constrained('users');
-            $table->foreignId('responsable_ou_id')->constrained('organizational_units');
+            $table->foreignId('responsable_id')->nullable()->constrained('users');
+            $table->foreignId('responsable_ou_id')->nullable()->constrained('organizational_units');
             
             $table->foreignId('creator_id')->constrained('users');
             $table->foreignId('creator_ou_id')->constrained('organizational_units');
