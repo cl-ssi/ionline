@@ -65,7 +65,7 @@ class IndexReception extends Component
             ->when($this->filter_date, function($query) {
                 $query->where('date', $this->filter_date);
             })
-            ->paginate(100);        
+            ->paginate(100);
         return $receptions;
     }
     

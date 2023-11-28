@@ -16,8 +16,9 @@ return new class extends Migration {
             $table->id();
             $table->boolean('automatic')->default(true);
             $table->unsignedInteger('number')->nullable(); // Correlatives
-            $table->string('internal_number')->nullable(); // Correlatives
+            $table->string('internal_number')->nullable();
             $table->datetime('date')->nullable();
+            $table->foreignId('numerator_id')->nullable()->constrained('users');
 
             $table->foreignId('doc_type_id')->nullable()->constrained('doc_types');
 
@@ -29,6 +30,7 @@ return new class extends Migration {
             $table->foreignId('user_id')->constrained('users');
             $table->foreignId('organizational_unit_id')->constrained('organizational_units');
             $table->foreignId('establishment_id')->constrained('establishments');
+            
 
             // Parte de morph para las relaciones
             $table->string('numerable_type')->nullable();
