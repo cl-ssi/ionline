@@ -124,13 +124,13 @@ class ApsController extends Controller
                                     ->when($establishment_type == 'ssi', function($query){
                                         return $query->where('IdEstablecimiento', 102010);
                                     })
-                                    ->when(Str::contains($factor_source, 'REM P'), function($query){
-                                        return $query->whereIn('Mes', [6,12]);
+                                    // ->when(Str::contains($factor_source, 'REM P'), function($query, $last_year){
+                                    //     return $query->whereIn('Mes', [6,12]);
+                                    // })
+                                    ->when($last_year && $year_counter == 1, function($query) use ($factor_source, $last_month_rem){
+                                        return $query->where('Mes', (Str::contains($factor_source, 'REM P') ? '>=' : '<='), $last_month_rem);
                                     })
-                                    ->when($last_year, function($query) use ($last_month_rem){
-                                        return $query->where('Mes', '<=', $last_month_rem);
-                                    })
-                                    ->whereIn('CodigoPrestacion', $cods)->groupBy('IdEstablecimiento','Mes')->orderBy('Mes')->get();
+                                    ->whereIn('CodigoPrestacion', $cods)->groupBy('IdEstablecimiento','Mes')->orderBy('Mes')->cursor();
 
                         foreach($result as $item){
                             $value = new Value(['month' => $item->Mes, 'factor' => $factor, 'value' => $item->valor * $dividedBy]);
@@ -160,22 +160,25 @@ class ApsController extends Controller
                                     ->when($establishment_type == 'ssi', function($query){
                                         return $query->where('IdEstablecimiento', 102010);
                                     })
-                                    ->when(Str::contains($factor_source, 'REM P'), function($query){
-                                        return $query->whereIn('Mes', [6,12]);
+                                    // ->when(Str::contains($factor_source, 'REM P'), function($query){
+                                    //     return $query->where('Mes', 12);
+                                    // })
+                                    // ->when($last_year, function($query) use ($last_month_rem){
+                                    //     return $query->where('Mes', '<=', $last_month_rem);
+                                    // })
+                                    ->when($last_year && $year_counter > 1, function($query) use ($factor_source){
+                                        return $query->where('Mes', (Str::contains($factor_source, 'REM P') ? '>=' : '<='), 12);
                                     })
-                                    ->when($last_year, function($query) use ($last_month_rem){
-                                        return $query->where('Mes', '<=', $last_month_rem);
-                                    })
-                                    ->whereIn('CodigoPrestacion', $cods)->groupBy('IdEstablecimiento','Mes')->orderBy('Mes')->get();
+                                    ->whereIn('CodigoPrestacion', $cods)->groupBy('IdEstablecimiento','Mes')->orderBy('Mes')->cursor();
 
-                        foreach($result as $item){
-                            $value = new Value(['month' => $item->Mes, 'factor' => $factor, 'value' => -$item->valor * $dividedBy]);
-                            if($establishment_type == 'aps') {
-                                $value->commune = $iaps->establishments->firstWhere('Codigo', $item->IdEstablecimiento)->comuna;
-                                $value->establishment = $iaps->establishments->firstWhere('Codigo', $item->IdEstablecimiento)->alias_estab;
+                            foreach($result as $item){
+                                $value = new Value(['month' => $item->Mes, 'factor' => $factor, 'value' => -$item->valor * $dividedBy]);
+                                if($establishment_type == 'aps') {
+                                    $value->commune = $iaps->establishments->firstWhere('Codigo', $item->IdEstablecimiento)->comuna;
+                                    $value->establishment = $iaps->establishments->firstWhere('Codigo', $item->IdEstablecimiento)->alias_estab;
+                                }
+                                $indicator->values->add($value);
                             }
-                            $indicator->values->add($value);
-                        }
                         }
                     }
                 }
