@@ -61,16 +61,26 @@
                     @endforeach
                 </ul>
             </div>
-            <div class="col-md-2 text-center">
+            <div class="col-md-2">
                 <b>Facturas</b><br>
                 <ul>
-                    @foreach ($purchaseOrder->dtes as $dte)
+                    <li>
+                        <label>
+                            <input type="radio" wire:model="selectedDteId" name="selectedDte" value="0">
+                            Ninguno
+                        </label>
+                    </li>
+                    @foreach ($purchaseOrder->dtes as $dte) 
                         <li>
-                            <a href="#">{{ $dte->id }}</a>
+                            <label>
+                                <input type="radio" wire:model="selectedDteId" name="selectedDte" value="{{ $dte->id }}">
+                                {{ $dte->id }}
+                            </label>
                         </li>
                     @endforeach
                 </ul>
             </div>
+
         @elseif(is_null($purchaseOrder))
             <div class="col-md-3 text-center">
                 <br>
@@ -154,10 +164,10 @@
                         class="form-select"
                         wire:model="reception.doc_type">
                         <option></option>
-                        <option>Guía de despacho</option>
-                        <option>Factura</option>
-                        <option>Boleta</option>
-                        <option>Boleta Honorarios</option>
+                        <option value ="guias_despacho">Guía de despacho</option>
+                        <option value ="factura_electronica">Factura Electronica Afecta</option>
+                        <option value ="factura_exenta">Factura Electronica Exenta</option>
+                        <option value ="boleta_honorarios">Boleta Honorarios</option>
                     </select>
                 </div>
             </div>

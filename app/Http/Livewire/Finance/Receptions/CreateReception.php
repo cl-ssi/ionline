@@ -7,12 +7,15 @@ use App\User;
 use App\Rrhh\OrganizationalUnit;
 use App\Models\WebService\MercadoPublico;
 use App\Models\Parameters\Parameter;
+use App\Models\Finance\Dte;
 use App\Models\Finance\Receptions\ReceptionType;
 use App\Models\Finance\Receptions\ReceptionItem;
 use App\Models\Finance\Receptions\Reception;
 use App\Models\Finance\PurchaseOrder;
 use App\Models\Documents\Correlative;
 use App\Models\Documents\Approval;
+
+
 
 class CreateReception extends Component
 {
@@ -29,6 +32,7 @@ class CreateReception extends Component
     public $approvals = [];
     public $approvalUsers = [];
     public $authority = false;
+    public $selectedDteId;
 
     protected $listeners = ['userSelected', 'ouSelected', 'setTemplate'];
 
@@ -351,4 +355,35 @@ class CreateReception extends Component
     {
         return view('livewire.finance.receptions.create-reception');
     }
+
+    public function updatedSelectedDteId()
+    {
+        if ($this->selectedDteId !== '0') {
+            $this->getSelectedDte();
+        } else {            
+            $this->resetReceptionValues();
+        }
+    }
+    
+    public function getSelectedDte()
+    {
+        $selectedDte = Dte::find($this->selectedDteId);    
+        
+        if ($selectedDte) {
+            // Actualizar los valores del modelo 'reception' con los valores de la DTE
+            $this->reception['doc_type'] = $selectedDte->tipo_documento;
+            $this->reception['doc_number'] = $selectedDte->folio;
+            $this->reception['doc_date'] = $selectedDte->emision;
+        } 
+    }
+    
+    public function resetReceptionValues()
+    {
+        $this->reception['doc_type'] = null;
+        $this->reception['doc_number'] = null;
+        $this->reception['doc_date'] = null;
+    }
+    
+
+
 }
