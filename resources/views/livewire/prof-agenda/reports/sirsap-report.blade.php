@@ -61,13 +61,13 @@
                         <td></td>
                         <td><b>{{$activity_type}}</b></td>
                         <td style="text-align: center;"><b>{{$item2['Total']}}</b></td>
-                        <td style="text-align: center;">@if(array_key_exists('male', $item2['Agendadas'])) {{$item2['Agendadas']['male']}} @endif</td>
-                        <td style="text-align: center;">@if(array_key_exists('female', $item2['Agendadas'])) {{$item2['Agendadas']['female']}} @endif</td>
-                        <td style="text-align: center;">@if(array_key_exists('No_agendadas', $item2)) {{$item2['No_agendadas']}} @endif</td>
-                        <td style="text-align: center;">@if(array_key_exists('male', $item2['Asiste'])) {{$item2['Asiste']['male']}} @endif</td>
-                        <td style="text-align: center;">@if(array_key_exists('female', $item2['Asiste'])) {{$item2['Asiste']['female']}} @endif</td>
-                        <td style="text-align: center;">@if(array_key_exists('male', $item2['No_asiste'])) {{$item2['No_asiste']['male']}} @endif</td>
-                        <td style="text-align: center;">@if(array_key_exists('female', $item2['No_asiste'])) {{$item2['No_asiste']['female']}} @endif</td>
+                        <td style="text-align: center;">@if(array_key_exists('Agendadas', $item2) && array_key_exists('male', $item2['Agendadas'])) {{$item2['Agendadas']['male']}} @endif</td>
+                        <td style="text-align: center;">@if(array_key_exists('Agendadas', $item2) && array_key_exists('female', $item2['Agendadas'])) {{$item2['Agendadas']['female']}} @endif</td>
+                        <td style="text-align: center;">@if(array_key_exists('No_agendadas', $item2) && array_key_exists('No_agendadas', $item2)) {{$item2['No_agendadas']}} @endif</td>
+                        <td style="text-align: center;">@if(array_key_exists('Asiste', $item2) && array_key_exists('male', $item2['Asiste'])) {{$item2['Asiste']['male']}} @endif</td>
+                        <td style="text-align: center;">@if(array_key_exists('Asiste', $item2) && array_key_exists('female', $item2['Asiste'])) {{$item2['Asiste']['female']}} @endif</td>
+                        <td style="text-align: center;">@if(array_key_exists('No_asiste', $item2) && array_key_exists('male', $item2['No_asiste'])) {{$item2['No_asiste']['male']}} @endif</td>
+                        <td style="text-align: center;">@if(array_key_exists('No_asiste', $item2) && array_key_exists('female', $item2['No_asiste'])) {{$item2['No_asiste']['female']}} @endif</td>
                     </tr>
                 @endforeach
             @endforeach
