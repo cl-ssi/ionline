@@ -67,8 +67,5 @@ class ReceptionController extends Controller
                 'establishment_id' => $approval->approverOu->establishment->id,
             ]);
         }
-        else {
-            dd('buuom');
-        }
     }
 }
