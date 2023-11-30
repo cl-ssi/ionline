@@ -68,7 +68,7 @@
                                     class="btn btn-danger"
                                     type="button"
                                     id="button-addon"
-                                    wire:click="approveOrReject({{ $approvalSelected }}, false)"
+                                    wire:click="approveOrReject([{{ $approvalSelected->id }}], false)"
                                 >
                                     <i class="fas fa-thumbs-down"></i>
                                 </button>
