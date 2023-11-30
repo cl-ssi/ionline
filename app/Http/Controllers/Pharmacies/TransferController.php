@@ -131,6 +131,10 @@ class TransferController extends Controller
     public function store(Request $request)
     {
         // return $request;
+        if($request->get('from') == $request->get('to')){
+            session()->flash('warning', 'No es posible trasladar productos hacia una mismo establecimiento.');
+            return redirect()->back();
+        }
         $transfer = new Transfer;
         $transfer->product_id = $request->get('product_id');
         $transfer->quantity = $request->get('quantity');
