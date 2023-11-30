@@ -138,17 +138,18 @@ class Numeration extends Model
     */
     public function numerate()
     {
-        $modelo->numeration()->create([
-            'automatic' => true,
-            'internal_number' => null, // sólo enviar si automatic es falso, para numeros custom
-            'doc_type_id' => $file_type_id,
-            'file_path' => $file_path,
-            'subject' => $subject,
-            'user_id' => auth()->user()->id, // Responsable del documento numerado
-            'organizational_unit_id' => auth()->user()->organizationalUnit->id, // Ou del responsable
-            'establishment_id' => auth()->user()->establishment->id,
-        ]);
+        // $modelo->numeration()->create([
+        //     'automatic' => true,
+        //     'internal_number' => null, // sólo enviar si automatic es falso, para numeros custom
+        //     'doc_type_id' => $file_type_id,
+        //     'file_path' => $file_path,
+        //     'subject' => $subject,
+        //     'user_id' => auth()->user()->id, // Responsable del documento numerado
+        //     'organizational_unit_id' => auth()->user()->organizationalUnit->id, // Ou del responsable
+        //     'establishment_id' => auth()->user()->establishment->id,
+        // ]);
 
+        $status = null;
         DB::transaction(function () {
             /* Chequear que el correlativo exista, si no, crearlo */
             $correlative = Correlative::firstOrCreate([
@@ -156,7 +157,10 @@ class Numeration extends Model
                 'establishment_id' => $this->establishment_id
             ],[
                 'correlative' => 1
-            ])->lockForUpdate();
+            ]);
+            //])->lockForUpdate();
+
+            // dd($correlative);
 
             $numerateUser = auth()->user();
             $file = Storage::get($this->file_path);
@@ -173,14 +177,18 @@ class Numeration extends Model
                 $correlative->save();
                 /* Guardar el documento numerado */
                 $digitalSignature->storeFirstSignedFile($this->storageFilePath);
-                return true;
+                $this->number = $number;
+                $this->date = now();
+                $this->verification_code = $verificationCode;
+                $this->numerator_id = auth()->id();
+                $this->save();
+                $status = true;
             }
             else {
-                return $digitalSignature->error;
+                $status = $digitalSignature->error;
             }
-
         });
-
+        return $status;
     }
 
     /**

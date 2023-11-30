@@ -14,6 +14,7 @@ class NumerationInbox extends Component
      */
     public function numerate(Numeration $numeration)
     {
+
         $this->message = null;
 
         $status = $numeration->numerate();

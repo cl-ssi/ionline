@@ -38,9 +38,10 @@
                         @if ($numeration->number)
                             {{ $numeration->number }}
                         @else
-                            <button class="btn btn-primary"
+                            <button class="btn btn-primary"  wire:loading.attr="disabled"
                                 wire:click="numerate( {{ $numeration->id }} )">
-                                <i class="bi bi-123"></i>
+                                <i class="fa fa-spinner fa-spin" wire:loading></i>
+                                <i class="bi bi-123" wire:loading.class="d-none"></i> 
                             </button>
                         @endif
                     </td>
