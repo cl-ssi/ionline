@@ -31,7 +31,7 @@
                     </a>
                 @else
                     <span class="text-danger">
-                        La Orden de Compra no está registrada
+                        No existe ningún proceso de compra para la OC ingresada. Contácte a abastecimiento.
                         <button class="btn btn-sm btn-danger">
                             <i class="fas fa-biohazard"></i> Notificar a Abastecimiento
                         </button>

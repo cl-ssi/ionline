@@ -100,7 +100,7 @@
                         <td class="text-center">
                             {{ $reception->items->count() }} 
                         </td>
-                        <td class="text-end">
+                        <td class="text-end" nowrap>
                             $ {{ money($reception->total) }}
                         </td>
                         <td class="text-center">
