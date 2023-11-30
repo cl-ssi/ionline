@@ -26,69 +26,125 @@ class ProgrammingReportController extends Controller
         
         $year = $request->year ?? date("Y");
         $isTracer = $request->isTracer ?? 'SI';
-        $option = $request->commune_filter ?? 'hospicio';
-        $establishment = array('hospicio' => [37, 10], 'iquique' => [2, 5, 4, 3], 'pica' => [26], 'huara' => [20], 'pozoalmonte' => [29], 'colchane' => [17], 'camiña' => [15], 'hectorreyno' => [12]);
+        // $option = $request->commune_filter ?? 'hospicio';
+        $establishments = Programming::with('establishment:id,name,type')->where('year', $year)->get()->pluck('establishment');
+        $options = $request->establishment_filter ?? [$establishments->first()->id];
+
+        // $hospicio = $year >= 2024 ? [37, 10, 12] : [37, 10];
+        // $establishment = array('hospicio' => $hospicio, 'iquique' => [2, 5, 4, 3], 'pica' => [26], 'huara' => [20], 'pozoalmonte' => [29], 'colchane' => [17], 'camiña' => [15], 'hectorreyno' => [12]);
+
+        // $programmingItems = ProgrammingItem::select(
+        //                          'T6.int_code'
+        //                         ,'pro_programming_items.activity_name'
+        //                         // ,'pro_programming_items.action_type' //2023
+        //                         , DB::raw('sum(pro_programming_items.activity_total) AS activity_total')
+        //                         , DB::raw('GROUP_CONCAT(DISTINCT T1.name) AS establishments'))
+        //                 ->leftjoin('pro_programmings AS T0', 'T0.id', '=', 'pro_programming_items.programming_id')
+        //                 ->leftjoin('establishments AS T1', 'T0.establishment_id', '=', 'T1.id')
+        //                 ->leftjoin('communes AS T2', 'T1.commune_id', '=', 'T2.id')
+        //                 ->leftjoin('pro_professional_hours AS T3','T3.id', '=', 'pro_programming_items.professional')
+        //                 ->leftjoin('pro_professionals AS T4', 'T3.professional_id', '=', 'T4.id')
+        //                 ->leftjoin('users AS T5', 'T0.user_id', '=', 'T5.id')
+        //                 ->leftjoin('pro_activity_items AS T6', 'pro_programming_items.activity_id', '=', 'T6.id')
+        //                 ->Where('T0.year','LIKE','%'.$year.'%')
+        //                 ->Where('T6.tracer','LIKE', $isTracer)
+        //                 ->WhereNotNull('T6.int_code')
+        //                 ->whereIn('T0.establishment_id',$establishment[$option])
+        //                 ->where('pro_programming_items.activity_type', 'Directa')
+        //                 // ->groupBy('T6.int_code','pro_programming_items.activity_name','pro_programming_items.action_type') // 2023
+        //                 ->groupBy('T6.int_code','pro_programming_items.activity_name')
+        //                 ->orderByRaw("CAST(T6.int_code as UNSIGNED) ASC")
+        //                 // ->orderBy('pro_programming_items.action_type','ASC') // 2023
+        //                 ->orderBy('pro_programming_items.activity_name','ASC')
+        //                 ->get();
 
         $programmingItems = ProgrammingItem::select(
                                  'T6.int_code'
                                 ,'pro_programming_items.activity_name'
-                                ,'pro_programming_items.action_type'
                                 , DB::raw('sum(pro_programming_items.activity_total) AS activity_total')
                                 , DB::raw('GROUP_CONCAT(DISTINCT T1.name) AS establishments'))
                         ->leftjoin('pro_programmings AS T0', 'T0.id', '=', 'pro_programming_items.programming_id')
                         ->leftjoin('establishments AS T1', 'T0.establishment_id', '=', 'T1.id')
-                        ->leftjoin('communes AS T2', 'T1.commune_id', '=', 'T2.id')
-                        ->leftjoin('pro_professional_hours AS T3','T3.id', '=', 'pro_programming_items.professional')
-                        ->leftjoin('pro_professionals AS T4', 'T3.professional_id', '=', 'T4.id')
-                        ->leftjoin('users AS T5', 'T0.user_id', '=', 'T5.id')
                         ->leftjoin('pro_activity_items AS T6', 'pro_programming_items.activity_id', '=', 'T6.id')
                         ->Where('T0.year','LIKE','%'.$year.'%')
                         ->Where('T6.tracer','LIKE', $isTracer)
-                        ->whereIn('T0.establishment_id',$establishment[$option])
-                        ->groupBy('T6.int_code','pro_programming_items.activity_name','pro_programming_items.action_type')
+                        ->when($isTracer == 'SI', fn($q) => $q->WhereNotNull('T6.int_code'))
+                        ->whereIn('T0.establishment_id',$options)
+                        ->where('pro_programming_items.activity_type', 'Directa')
+                        ->groupBy('T6.int_code','pro_programming_items.activity_name')
                         ->orderByRaw("CAST(T6.int_code as UNSIGNED) ASC")
-                        ->orderBy('pro_programming_items.action_type','ASC')
                         ->orderBy('pro_programming_items.activity_name','ASC')
                         ->get();
 
-        return view('programmings/reports/reportConsolidated', compact('programmingItems', 'year', 'option', 'isTracer'));
+        return view('programmings/reports/reportConsolidated', compact('programmingItems', 'year', 'options', 'isTracer', 'establishments'));
     }
 
     public function reportConsolidatedSep(request $request) 
     {
         $year = $request->year ?? date("Y");
         $isTracer = $request->isTracer ?? 'SI';
-        $option = $request->commune_filter ?? 'hospicio';
-        $establishment = array('hospicio' => [37, 10], 'iquique' => [2, 5, 4, 3], 'pica' => [26], 'huara' => [20], 'pozoalmonte' => [29], 'colchane' => [17], 'camiña' => [15], 'hectorreyno' => [12]);
+        // $option = $request->commune_filter ?? 'hospicio';
+        // $establishment = array('hospicio' => [37, 10], 'iquique' => [2, 5, 4, 3], 'pica' => [26], 'huara' => [20], 'pozoalmonte' => [29], 'colchane' => [17], 'camiña' => [15], 'hectorreyno' => [12]);
+        $programmings = Programming::with('establishment:id,name,type')->where('year', $year)->get();
+        $establishments = $programmings->pluck('establishment');
+        $options = $request->establishment_filter ?? [$establishments->first()->id];
+        $cycles = ProgrammingItem::whereIn('programming_id', $establishments->pluck('id')->toArray())->get()->pluck('cycle')->unique();
+        $cycles = $cycles->filter();
+        $cycle_selected = $request->cycle_filter ?? [];
+
+        // $programmingItems = ProgrammingItem::select(
+        //                          'T6.int_code'
+        //                         ,'pro_programming_items.activity_name'
+        //                         ,'pro_programming_items.cycle'
+        //                         ,'pro_programming_items.action_type'
+        //                         ,'pro_programming_items.def_target_population'
+        //                         ,'pro_programming_items.def_target_population'
+        //                         ,'T4.name AS professional'
+        //                         , DB::raw('sum(pro_programming_items.activity_total) AS activity_total')
+        //                         , DB::raw('GROUP_CONCAT(DISTINCT T1.name) AS establishments') )
+        //                 ->leftjoin('pro_programmings AS T0', 'T0.id', '=', 'pro_programming_items.programming_id')
+        //                 ->leftjoin('establishments AS T1', 'T0.establishment_id', '=', 'T1.id')
+        //                 ->leftjoin('communes AS T2', 'T1.commune_id', '=', 'T2.id')
+        //                 ->leftjoin('pro_professional_hours AS T3','T3.id', '=', 'pro_programming_items.professional')
+        //                 ->leftjoin('pro_professionals AS T4', 'T3.professional_id', '=', 'T4.id')
+        //                 ->leftjoin('users AS T5', 'T0.user_id', '=', 'T5.id')
+        //                 ->leftjoin('pro_activity_items AS T6', 'pro_programming_items.activity_id', '=', 'T6.id')
+        //                 ->Where('T0.year','LIKE','%'.$year.'%')
+        //                 ->Where('T6.tracer','LIKE', $isTracer)
+        //                 ->whereIn('T0.establishment_id',$options)
+        //                 ->groupBy('T6.int_code','pro_programming_items.activity_name','pro_programming_items.cycle','pro_programming_items.action_type','pro_programming_items.def_target_population','T4.name')
+        //                 ->orderByRaw("CAST(T6.int_code as UNSIGNED) ASC")
+        //                 ->orderBy('pro_programming_items.cycle','ASC')
+        //                 ->orderBy('pro_programming_items.action_type','ASC')
+        //                 ->orderBy('pro_programming_items.activity_name','ASC')
+        //                 ->get();
 
         $programmingItems = ProgrammingItem::select(
                                  'T6.int_code'
                                 ,'pro_programming_items.activity_name'
                                 ,'pro_programming_items.cycle'
-                                ,'pro_programming_items.action_type'
-                                ,'pro_programming_items.def_target_population'
-                                ,'pro_programming_items.def_target_population'
-                                ,'T4.name AS professional'
+                                // ,'T4.name AS professional'
                                 , DB::raw('sum(pro_programming_items.activity_total) AS activity_total')
                                 , DB::raw('GROUP_CONCAT(DISTINCT T1.name) AS establishments') )
                         ->leftjoin('pro_programmings AS T0', 'T0.id', '=', 'pro_programming_items.programming_id')
                         ->leftjoin('establishments AS T1', 'T0.establishment_id', '=', 'T1.id')
-                        ->leftjoin('communes AS T2', 'T1.commune_id', '=', 'T2.id')
-                        ->leftjoin('pro_professional_hours AS T3','T3.id', '=', 'pro_programming_items.professional')
-                        ->leftjoin('pro_professionals AS T4', 'T3.professional_id', '=', 'T4.id')
-                        ->leftjoin('users AS T5', 'T0.user_id', '=', 'T5.id')
+                        // ->leftjoin('pro_programming_item_pro_hour AS T2','T2.id', '=', 'pro_programming_items.professional')
+                        // ->leftjoin('pro_professional_hours AS T3','T3.id', '=', 'pro_programming_items.professional')
+                        // ->leftjoin('pro_professionals AS T4', 'T3.professional_id', '=', 'T4.id')
+                        // ->leftjoin('users AS T5', 'T0.user_id', '=', 'T5.id')
                         ->leftjoin('pro_activity_items AS T6', 'pro_programming_items.activity_id', '=', 'T6.id')
                         ->Where('T0.year','LIKE','%'.$year.'%')
                         ->Where('T6.tracer','LIKE', $isTracer)
-                        ->whereIn('T0.establishment_id',$establishment[$option])
-                        ->groupBy('T6.int_code','pro_programming_items.activity_name','pro_programming_items.cycle','pro_programming_items.action_type','pro_programming_items.def_target_population','T4.name')
+                        ->when($isTracer == 'SI', fn($q) => $q->WhereNotNull('T6.int_code'))
+                        ->when(!empty($cycle_selected), fn($q) => $q->whereIn('pro_programming_items.cycle', $cycle_selected))
+                        ->whereIn('T0.establishment_id',$options)
+                        ->where('pro_programming_items.activity_type', 'Directa')
+                        ->groupBy('T6.int_code','pro_programming_items.activity_name','pro_programming_items.cycle')
                         ->orderByRaw("CAST(T6.int_code as UNSIGNED) ASC")
                         ->orderBy('pro_programming_items.cycle','ASC')
-                        ->orderBy('pro_programming_items.action_type','ASC')
-                        ->orderBy('pro_programming_items.activity_name','ASC')
                         ->get();
 
-        return view('programmings/reports/reportConsolidatedSep', compact('programmingItems', 'year', 'option', 'isTracer'));
+        return view('programmings/reports/reportConsolidatedSep', compact('programmingItems', 'year', 'options', 'isTracer', 'establishments', 'cycles', 'cycle_selected'));
     }
 
 

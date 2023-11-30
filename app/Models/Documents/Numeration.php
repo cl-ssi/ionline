@@ -132,7 +132,6 @@ class Numeration extends Model
     {
         $modelo->numeration()->create([
             'automatic' => true,
-            'number' => null, // sólo enviar si automatic es falso, para numeros custom
             'internal_number' => null, // sólo enviar si automatic es falso, para numeros custom
             'doc_type_id' => $file_type_id,
             'file_path' => $file_path,
