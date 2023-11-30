@@ -14,8 +14,10 @@
                 <th>Tipo</th>
                 <th>Asunto</th>
                 <th>Autor</th>
+                <th>Doc</th>
                 <th>Número</th>
                 <th>Fecha</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -25,6 +27,10 @@
                     <td>{{ $numeration->type?->name }}</td>
                     <td>{{ $numeration->subject }}</td>
                     <td>{{ $numeration->user?->shortName }}</td>
+                    <td>
+                        <a href="{{ route('documents.partes.numeration.showOriginal',$numeration) }}">
+                            Doc
+                        </a>
                     <td>
                         @if ($numeration->number)
                             {{ $numeration->number }}
@@ -36,6 +42,13 @@
                         @endif
                     </td>
                     <td>{{ $numeration->date }}</td>
+                    <td>
+                        @if($numeration->number)
+                        <a href="{{ route('documents.partes.numeration.showNumerated',$numeration) }}">
+                            Doc
+                        </a>
+                        @endif
+                    <td>
                 </tr>
             @endforeach
         </tbody>

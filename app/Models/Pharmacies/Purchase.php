@@ -17,6 +17,7 @@ class Purchase extends Model
       'date',
       'supplier_id',
       'purchase_order',
+      'order_number',
       'notes',
       'invoice',
       'despatch_guide',

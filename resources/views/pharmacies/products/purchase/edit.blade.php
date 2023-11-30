@@ -14,12 +14,12 @@
 
   <div class="form-row">
     <fieldset class="form-group col-3">
-        <label for="for_date">Fecha de recepción</label>
+        <label for="for_date">Fecha de recepción (*)</label>
         <input type="date" class="form-control" id="for_date" name="date" required="required" value="{{$purchase->date->format('Y-m-d')}}">
     </fieldset>
 
     <fieldset class="form-group col">
-        <label for="for_origin">Proveedor</label>
+        <label for="for_origin">Proveedor (*)</label>
         <select name="supplier_id" class="form-control selectpicker" data-live-search="true" required="">
           @foreach ($suppliers as $key => $supplier)
             <option value="{{$supplier->id}}" @if ($purchase->supplier_id == $supplier->id)
@@ -32,19 +32,23 @@
 
   <div class="form-row">
     <fieldset class="form-group col-2">
-        <label for="for_text">OC</label>
+        <label for="for_text">OC (*)</label>
         <input type="text" class="form-control" id="for_text" placeholder="" required="required"  name="purchase_order" value="{{$purchase->purchase_order}}">
+    </fieldset>
+    <fieldset class="form-group col-2">
+        <label for="for_order_number">N° pedido (*) </label>
+        <input type="text" class="form-control" id="for_order_number" placeholder="" name="order_number" value="{{$purchase->order_number}}">
     </fieldset>
     <fieldset class="form-group col-2">
         <label for="for_text">Año</label>
         <input type="text" class="form-control" id="for_text" placeholder="" name="purchase_order_dato" value="{{$purchase->purchase_order_dato}}">
     </fieldset>
-    <fieldset class="form-group col-4">
-        <label for="for_date">Fecha de emisión factura</label>
+    <fieldset class="form-group col-3">
+        <label for="for_date">Fecha de emisión factura (*)</label>
         <input type="date" class="form-control" id="for_date" name="purchase_order_date" required="required" value="{{$purchase->purchase_order_date->format('Y-m-d')}}">
     </fieldset>
-    <fieldset class="form-group col-4">
-        <label for="for_text">Monto total neto</label>
+    <fieldset class="form-group col-3">
+        <label for="for_text">Monto total neto (*)</label>
         <input type="text" class="form-control" id="for_text" placeholder="" name="purchase_order_amount" value="{{$purchase->purchase_order_amount}}">
     </fieldset>
   </div>

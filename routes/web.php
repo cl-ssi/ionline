@@ -254,6 +254,7 @@ use App\Http\Controllers\Drugs\CourtController;
 use App\Http\Controllers\Drugs\ActPrecursorController;
 use App\Http\Controllers\Documents\SignatureController;
 use App\Http\Controllers\Documents\Sign\SignatureController as SignSignatureController;
+use App\Http\Controllers\Documents\Partes\NumerationController;
 use App\Http\Controllers\Documents\ParteFileController;
 use App\Http\Controllers\Documents\ParteController;
 use App\Http\Controllers\Documents\DocumentController;
@@ -1283,6 +1284,7 @@ Route::prefix('documents')->as('documents.')->middleware(['auth', 'must.change.p
         Route::get('report-by-dates', PartesReportByDates::class)->name('report-by-dates');
         Route::get('/view/{parte}', [ParteController::class, 'view'])->name('view');
         Route::get('/numeration', NumerationInbox::class)->name('numeration');
+        Route::get('/numeration/{numeration}', [NumerationController::class,'show'])->name('numeration.show');
         Route::get('/{parte}', [ParteController::class, 'show'])->name('show');
         Route::put('/{parte}', [ParteController::class, 'update'])->name('update');
         Route::delete('/{parte}', [ParteController::class, 'destroy'])->name('destroy');

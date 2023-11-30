@@ -21,15 +21,17 @@ return new class extends Migration {
 
             $table->string('purchase_order')->nullable();
 
-            $table->boolean('partial_reception')->nullable(); // Si se selecciono completa o parcial
+            $table->string('guia_id')->nullable();
+            $table->string('dte_id')->nullable();
+            $table->string('dte_type')->nullable();
+            $table->string('dte_number')->nullable();
+            $table->date('dte_date')->nullable();
 
             $table->text('header_notes')->nullable();
             $table->text('footer_notes')->nullable();
 
-            $table->string('doc_type')->nullable();
-            $table->string('doc_number')->nullable();
-            $table->date('doc_date')->nullable();
-            
+            $table->boolean('partial_reception')->nullable(); // Si se selecciono completa o parcial
+
             $table->unsignedInteger('neto')->nullable();
             $table->unsignedInteger('descuentos')->nullable();
             $table->unsignedInteger('cargos')->nullable();
@@ -37,7 +39,7 @@ return new class extends Migration {
             $table->unsignedInteger('iva')->nullable();
             $table->unsignedInteger('total')->nullable();
 
-            $table->string('file')->nullable();
+            // $table->string('file')->nullable();
 
             $table->boolean('status')->nullable();
 

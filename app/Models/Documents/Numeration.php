@@ -126,6 +126,14 @@ class Numeration extends Model
     }
 
     /**
+    * File path and name
+    */
+    public function getStorageFilePathAttribute()
+    {
+        return 'ionline/documents/numeration/'.$this->id.'.pdf';
+    }
+
+    /**
     * Numerate
     */
     public function numerate()
@@ -164,7 +172,7 @@ class Numeration extends Model
                 $correlative->correlative += 1;
                 $correlative->save();
                 /* Guardar el documento numerado */
-                $digitalSignature->storeFirstSignedFile('ionline/documents/numeration/'.$this->id.'.pdf');
+                $digitalSignature->storeFirstSignedFile($this->storageFilePath);
                 return true;
             }
             else {
