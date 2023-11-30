@@ -14,6 +14,7 @@ use App\Rrhh\OrganizationalUnit;
 use App\Models\Finance\Receptions\ReceptionType;
 use App\Models\Finance\Receptions\ReceptionItem;
 use App\Models\Finance\PurchaseOrder;
+use App\Models\File;
 use App\Models\Establishment;
 use App\Models\Documents\Numeration;
 use App\Models\Documents\Approval;
@@ -122,5 +123,13 @@ class Reception extends Model
     public function numeration(): MorphOne
     {
         return $this->morphOne(Numeration::class, 'numerable');
+    }
+
+    /**
+     * Get all of the files of a model.
+     */
+    public function files(): MorphMany
+    {
+        return $this->morphMany(File::class, 'fileable');
     }
 }
