@@ -39,7 +39,7 @@ class PurchaseOrder extends Model
 
     public function dtes()
     {
-        return $this->hasMany(Dte::class,'folio_oc');
+        return $this->hasMany(Dte::class,'folio_oc','code');
     }
 
     public function receptions()
