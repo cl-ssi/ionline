@@ -40,21 +40,36 @@ class Reception extends Model
         'internal_number',
         'date',
         'reception_type_id',
+
         'purchase_order',
+
+        'guia_id',
+        'dte_id',
+        'dte_type',
+        'dte_number',
+        'dte_date',
+
         'header_notes',
         'footer_notes',
+
         'partial_reception',
-        'doc_type',
-        'doc_number',
-        'doc_date',
+
+        'neto',
+        'descuentos',
+        'cargos',
+        'subtotal',
+        'iva',
         'total',
-        'establishment_id',
-        'file',
+
         'status',
+    
+        // 'file',
         'responsable_id',
         'responsable_ou_id',
         'creator_id',
         'creator_ou_id',
+    
+        'establishment_id',
     ];
     
     /**
@@ -64,7 +79,7 @@ class Reception extends Model
     */
     protected $casts = [
         'date'      => 'date:Y-m-d',
-        'doc_date'  => 'date:Y-m-d',
+        'dte_date'  => 'date:Y-m-d',
         'partial_reception' => 'boolean',
         'status'    => 'boolean',
     ];

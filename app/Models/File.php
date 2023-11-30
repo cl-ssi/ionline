@@ -29,14 +29,14 @@ class File extends Model
 
     // $modelo->file()->create([
     //     'storage_path' => 'ionline/documents/23234.pdf',
-    //     'stored' => true,
+    //     'stored' => false,
     //     'name' => 'Mi documento.pdf',
     //     'input_title' => 'Archivo pulento',
     //     'input_name' => 'reception',
     //     'required' => false,
     //     'valid_types' => json_encode(["pdf", "xls"]),
     //     'max_file_size' => 10,
-    //     'stored_by_id' => 1,
+    //     'stored_by_id' => 15287582,
     // ]);
 
     /**

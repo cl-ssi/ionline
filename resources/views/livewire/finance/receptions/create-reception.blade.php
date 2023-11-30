@@ -47,6 +47,16 @@
                 </a>
                 <br>
                 {{ $purchaseOrder->json->Listado[0]->Estado }}
+                <div class="form-check form-switch form-check-inline">
+                    <input class="form-check-input"
+                        type="checkbox"
+                        role="switch"
+                        wire:click="togglePoCenabast()"
+                        id="for-cenabast"
+                        {{ $purchaseOrder->cenabast ? 'checked' : '' }}>
+                    <label class="form-check-label"
+                        for="flexSwitchCheckDefault">Cenabast</label>
+                </div>
             </div>
 
             <div class="col-md-3 text-center">
@@ -66,21 +76,27 @@
                 <ul>
                     <li>
                         <label>
-                            <input type="radio" wire:model="selectedDteId" name="selectedDte" value="0">
+                            <input type="radio"
+                                wire:model="selectedDteId"
+                                name="selectedDte"
+                                value="0">
                             Ninguno
                         </label>
                     </li>
-                    @foreach ($purchaseOrder->dtes as $dte) 
+                    @foreach ($purchaseOrder->dtes as $dte)
                         <li>
                             <label>
-                                <input type="radio" wire:model="selectedDteId" name="selectedDte" value="{{ $dte->id }}">
-                                {{ $dte->id }}
+                                <input type="radio"
+                                    wire:model="selectedDteId"
+                                    name="selectedDte"
+                                    value="{{ $dte->id }}">
+                                {{ $dte->tipoDocumentoIniciales }}
+                                {{ $dte->folio }}
                             </label>
                         </li>
                     @endforeach
                 </ul>
             </div>
-
         @elseif(is_null($purchaseOrder))
             <div class="col-md-3 text-center">
                 <br>
@@ -93,7 +109,46 @@
 
     @if ($purchaseOrder)
 
+        <div class="row mb-3 g-2">
+            <div class="col-6">
+                <br>
+                <h5>Documento Tributario Asociado</h5>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label for="reception-date">Tipo doc. recepción</label>
+                    <select name="document_type"
+                        id="document_type"
+                        class="form-select"
+                        wire:model="reception.dte_type">
+                        <option></option>
+                        <option value ="guias_despacho">Guía de despacho</option>
+                        <option value ="factura_electronica">Factura Electronica Afecta</option>
+                        <option value ="factura_exenta">Factura Electronica Exenta</option>
+                        <option value ="boleta_honorarios">Boleta Honorarios</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label for="reception-date">Número doc. recepción</label>
+                    <input type="text"
+                        class="form-control"
+                        wire:model.debounce.defer="reception.dte_number">
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label for="reception-date">Fecha doc. recepción</label>
+                    <input type="date"
+                        class="form-control"
+                        wire:model="reception.dte_date">
+                </div>
+            </div>
+        </div>
+
         <h4>Recepción</h4>
+
         <div class="row mb-3 g-2">
             <div class="form-group col-md-2">
                 <div class="form-group">
@@ -102,6 +157,17 @@
                         class="form-control"
                         disabled
                         placeholder="Automático">
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label for="reception-date">Fecha acta</label>
+                    <input type="date"
+                        class="form-control"
+                        wire:model="reception.date">
+                    @error('reception.date')
+                        <span class="text-danger">{{ $message }}</span>
+                    @enderror
                 </div>
             </div>
             <div class="form-group col-md-2">
@@ -117,23 +183,6 @@
                     <span class="text-danger">{{ $message }}</span>
                 @enderror
             </div>
-            <div class="form-group col-md-2">
-                <br>
-                <div class="form-check form-switch form-check-inline">
-                    <input class="form-check-input"
-                        type="checkbox"
-                        role="switch"
-                        wire:click="togglePoCenabast()"
-                        id="for-cenabast"
-                        {{ $purchaseOrder->cenabast ? 'checked' : '' }}>
-                    <label class="form-check-label"
-                        for="flexSwitchCheckDefault">Cenabast</label>
-                </div>
-            </div>
-        </div>
-
-
-        <div class="row mb-3 g-2">
 
             <div class="col-md-2">
                 <div class="form-group">
@@ -145,48 +194,8 @@
                     <div class="form-text">En caso que la unidad tenga su propio correlativo</div>
                 </div>
             </div>
-            <div class="col-md-2">
-                <div class="form-group">
-                    <label for="reception-date">Fecha acta</label>
-                    <input type="date"
-                        class="form-control"
-                        wire:model="reception.date">
-                    @error('reception.date')
-                        <span class="text-danger">{{ $message }}</span>
-                    @enderror
-                </div>
-            </div>
-            <div class="col-md-2 offset-md-2">
-                <div class="form-group">
-                    <label for="reception-date">Tipo doc. recepción</label>
-                    <select name="document_type"
-                        id="document_type"
-                        class="form-select"
-                        wire:model="reception.doc_type">
-                        <option></option>
-                        <option value ="guias_despacho">Guía de despacho</option>
-                        <option value ="factura_electronica">Factura Electronica Afecta</option>
-                        <option value ="factura_exenta">Factura Electronica Exenta</option>
-                        <option value ="boleta_honorarios">Boleta Honorarios</option>
-                    </select>
-                </div>
-            </div>
-            <div class="col-md-2">
-                <div class="form-group">
-                    <label for="reception-date">Número doc. recepción</label>
-                    <input type="text"
-                        class="form-control"
-                        wire:model.debounce.500ms="reception.doc_number">
-                </div>
-            </div>
-            <div class="col-md-2">
-                <div class="form-group">
-                    <label for="reception-date">Fecha doc. recepción</label>
-                    <input type="date"
-                        class="form-control"
-                        wire:model="reception.doc_date">
-                </div>
-            </div>
+
+            
         </div>
 
         <div class="row mb-3">
@@ -200,10 +209,14 @@
                         wire:model.defer="reception.header_notes"></textarea>
 
                     <div>
-                    @livewire('text-templates.controls-text-template', [
-                        'module'    => 'Receptions',
-                        'input'     => 'reception.header_notes'
-                    ], key('head_notes'))
+                        @livewire(
+                            'text-templates.controls-text-template',
+                            [
+                                'module' => 'Receptions',
+                                'input' => 'reception.header_notes',
+                            ],
+                            key('head_notes')
+                        )
                     </div>
                 </div>
             </div>
@@ -324,10 +337,14 @@
                         rows="6"
                         class="form-control"
                         wire:model.defer="reception.footer_notes"></textarea>
-                    @livewire('text-templates.controls-text-template', [
-                        'module'    => 'Receptions',
-                        'input'     => 'reception.footer_notes'
-                    ], key('footer_notes'))
+                    @livewire(
+                        'text-templates.controls-text-template',
+                        [
+                            'module' => 'Receptions',
+                            'input' => 'reception.footer_notes',
+                        ],
+                        key('footer_notes')
+                    )
                 </div>
             </div>
         </div>
@@ -562,19 +579,19 @@
                     N° Documento
                 </th>
                 <td>
-                    {{ $reception->doc_number }}
+                    {{ $reception->dte_number }}
                 </td>
                 <th>
                     Tipo de documento
                 </th>
                 <td>
-                    {{ $reception->doc_type }}
+                    {{ $reception->dte_type }}
                 </td>
                 <th>
                     Fecha Emisón:
                 </th>
                 <td>
-                    {{ $reception->doc_date?->format('d-m-Y') }}
+                    {{ $reception->dte_date?->format('d-m-Y') }}
                 </td>
             </tr>
         </table>
