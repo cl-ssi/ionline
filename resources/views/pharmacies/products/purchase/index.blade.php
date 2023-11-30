@@ -24,11 +24,12 @@
 
 
 <div class="table-responsive">
-	<table class="table table-striped table-sm" id="tabla_purchase">
+	<table class="table table-striped table-sm" id="tabla_purchase" style="font-size: 13px;">
 		<thead>
 			<tr>
 				<th scope="col">id</th>
 				<th scope="col">OC</th>
+                <th scope="col">N.pedido</th>
 				<th scope="col">Factura</th>
 				<th scope="col">Fecha</th>
 				<th scope="col">Proveedor</th>
@@ -42,6 +43,7 @@
 			<tr>
 				<td>{{ $purchase->id }}</td>
 				<td>{{ $purchase->purchase_order }}</td>
+                <td>{{ $purchase->order_number }}</td>
 				<td>{{ $purchase->invoice }}</td>
 				<td>{{ Carbon\Carbon::parse($purchase->date)->format('d/m/Y')}}</td>
 				<td>{{ $purchase->supplier->name }}</td>
