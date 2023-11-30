@@ -47,9 +47,9 @@ class CreateReception extends Component
         'reception.header_notes' => 'nullable',
         'reception.footer_notes' => 'nullable',
         'reception.partial_reception' => 'boolean',
-        'reception.doc_type' => 'nullable',
-        'reception.doc_number' => 'nullable',
-        'reception.doc_date' => 'nullable|date_format:Y-m-d',
+        'reception.dte_type' => 'nullable',
+        'reception.dte_number' => 'nullable',
+        'reception.dte_date' => 'nullable|date_format:Y-m-d',
         'reception.neto' => 'nullable',
         'reception.descuentos' => 'nullable',
         'reception.cargos' => 'nullable',
@@ -71,9 +71,9 @@ class CreateReception extends Component
         // 'reception.partial_reception' => 'nullable',
         // 'reception.order_completed' => 'nullable',
         // 'reception.cenabast' => 'nullable',
-        // 'reception.doc_type' => 'nullable',
-        // 'reception.doc_number' => 'nullable',
-        // 'reception.doc_date' => 'nullable|date_format:Y-m-d',
+        // 'reception.dte_type' => 'nullable',
+        // 'reception.dte_number' => 'nullable',
+        // 'reception.dte_date' => 'nullable|date_format:Y-m-d',
         // 'reception.total' => 'nullable',
         // 'reception.establishment_id' => 'nullable',
         // 'reception.creator_id' => 'nullable',
@@ -120,7 +120,7 @@ class CreateReception extends Component
                 'creator_ou_id' => auth()->user()->organizational_unit_id,
             ]);
 
-            $this->purchaseOrder = PurchaseOrder::whereCode($this->reception->purchase_order)->first();
+            $this->purchaseOrder = PurchaseOrder::whereCode($this->reception->purchase_order)->with('dtes')->first();
             foreach($this->purchaseOrder->json->Listado[0]->Items->Listado as $key => $item){
                 $this->receptionItems[$key] = ReceptionItem::make([
                     'item_position' => $key,
@@ -360,30 +360,30 @@ class CreateReception extends Component
     {
         if ($this->selectedDteId !== '0') {
             $this->getSelectedDte();
-        } else {            
+        } else {
             $this->resetReceptionValues();
         }
     }
     
     public function getSelectedDte()
     {
-        $selectedDte = Dte::find($this->selectedDteId);    
+        // From $purchaseOrder->dtes relacion get, element with id in $selectedDte
+        // $selectedDte = Dte::find($this->selectedDteId);
+        $selectedDte = $this->purchaseOrder->dtes->where('id', $this->selectedDteId)->first();
         
         if ($selectedDte) {
             // Actualizar los valores del modelo 'reception' con los valores de la DTE
-            $this->reception['doc_type'] = $selectedDte->tipo_documento;
-            $this->reception['doc_number'] = $selectedDte->folio;
-            $this->reception['doc_date'] = $selectedDte->emision;
+            $this->reception['dte_type']    = $selectedDte->tipo_documento;
+            $this->reception['dte_number']  = $selectedDte->folio;
+            $this->reception['dte_date']    = $selectedDte->emision;
         } 
     }
     
     public function resetReceptionValues()
     {
-        $this->reception['doc_type'] = null;
-        $this->reception['doc_number'] = null;
-        $this->reception['doc_date'] = null;
+        $this->reception['dte_type']    = null;
+        $this->reception['dte_number']  = null;
+        $this->reception['dte_date']    = null;
     }
-    
-
 
 }
