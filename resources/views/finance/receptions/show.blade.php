@@ -57,7 +57,7 @@
 
     <div class="center diez">
         <strong style="text-transform: uppercase;">
-            Acta de recepción conforme
+            {{ $reception->receptionType->title }}
         </strong>
     </div>
 

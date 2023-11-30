@@ -2,7 +2,8 @@
     <h3 class="mb-3">Documentos pendientes de numerar</h3>
     @include('documents.partes.partials.nav')
 
-    <div class="alert alert-info" role="alert">
+    <div class="alert alert-info"
+        role="alert">
         <b>Importante:</b>
         Sólo funcionarios que tengan firma electrónica con propósito "iOnline" pueden numerar un documento.
     </div>
@@ -17,7 +18,7 @@
                 <th>Doc</th>
                 <th>Número</th>
                 <th>Fecha</th>
-                <th></th>
+                <th>Doc</th>
             </tr>
         </thead>
         <tbody>
@@ -28,9 +29,11 @@
                     <td>{{ $numeration->subject }}</td>
                     <td>{{ $numeration->user?->shortName }}</td>
                     <td>
-                        <a href="{{ route('documents.partes.numeration.showOriginal',$numeration) }}">
+                        <a href="{{ route('documents.partes.numeration.show_original', $numeration) }}">
                             Doc
                         </a>
+                    </td>
+
                     <td>
                         @if ($numeration->number)
                             {{ $numeration->number }}
@@ -41,14 +44,17 @@
                             </button>
                         @endif
                     </td>
+
                     <td>{{ $numeration->date }}</td>
+
                     <td>
-                        @if($numeration->number)
-                        <a href="{{ route('documents.partes.numeration.showNumerated',$numeration) }}">
-                            Doc
-                        </a>
+                        @if ($numeration->number)
+                            <a href="{{ route('documents.partes.numeration.show_numerated', $numeration) }}">
+                                Doc
+                            </a>
                         @endif
-                    <td>
+                    </td>
+
                 </tr>
             @endforeach
         </tbody>

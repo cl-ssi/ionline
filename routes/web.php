@@ -1283,12 +1283,16 @@ Route::prefix('documents')->as('documents.')->middleware(['auth', 'must.change.p
         Route::get('/outbox', [ParteController::class, 'outbox'])->name('outbox');
         Route::get('report-by-dates', PartesReportByDates::class)->name('report-by-dates');
         Route::get('/view/{parte}', [ParteController::class, 'view'])->name('view');
-        Route::get('/numeration', NumerationInbox::class)->name('numeration');
-        Route::get('/numeration/{numeration}', [NumerationController::class,'show'])->name('numeration.show');
         Route::get('/{parte}', [ParteController::class, 'show'])->name('show');
         Route::put('/{parte}', [ParteController::class, 'update'])->name('update');
         Route::delete('/{parte}', [ParteController::class, 'destroy'])->name('destroy');
         Route::get('/{parte}/edit', [ParteController::class, 'edit'])->name('edit');
+        
+        Route::prefix('numeration')->as('numeration.')->group(function () {
+            Route::get('/inbox', NumerationInbox::class)->name('inbox');
+            Route::get('/original/{numeration}', [NumerationController::class,'showOriginal'])->name('show_original');
+            Route::get('/numerado/{numeration}', [NumerationController::class,'showNumerated'])->name('show_numerated');
+        });
     });
 
     Route::get('signatures/index/{tab}', [SignatureController::class, 'index'])->name('signatures.index');

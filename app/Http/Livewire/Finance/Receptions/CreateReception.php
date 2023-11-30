@@ -323,6 +323,9 @@ class CreateReception extends Component
             // left center 
             // left center right 
         }
+
+        session()->flash('success', 'Su acta fue creada.');
+        return redirect()->route('finance.receptions.index');
     }
 
     /**
@@ -372,7 +375,13 @@ class CreateReception extends Component
         $selectedDte = $this->purchaseOrder->dtes->where('id', $this->selectedDteId)->first();
         
         if ($selectedDte) {
-            // Actualizar los valores del modelo 'reception' con los valores de la DTE
+            /* Si es de tipo guía de despacho */
+            if( $selectedDte->tipo_documento == "guias_despacho" ) {
+                $this->reception['guía_id'] = $selectedDte->id;
+            }
+            else {
+                $this->reception['dte_id']  = $selectedDte->id;
+            }
             $this->reception['dte_type']    = $selectedDte->tipo_documento;
             $this->reception['dte_number']  = $selectedDte->folio;
             $this->reception['dte_date']    = $selectedDte->emision;
@@ -381,6 +390,8 @@ class CreateReception extends Component
     
     public function resetReceptionValues()
     {
+        $this->reception['guia_id']    = null;
+        $this->reception['dte_id']    = null;
         $this->reception['dte_type']    = null;
         $this->reception['dte_number']  = null;
         $this->reception['dte_date']    = null;

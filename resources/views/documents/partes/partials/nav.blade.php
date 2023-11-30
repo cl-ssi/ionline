@@ -35,8 +35,8 @@
         </a>
     </li> -->
     <li class="nav-item">
-        <a class="nav-link {{ active('documents.partes.numeration') }}"
-            href="{{ route('documents.partes.numeration') }}">
+        <a class="nav-link {{ active('documents.partes.numeration.inbox') }}"
+            href="{{ route('documents.partes.numeration.inbox') }}">
             <i class="fas fa-certificate"></i> Numerar y distribuir
         </a>
     </li>
