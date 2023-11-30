@@ -56,14 +56,8 @@
                             @endif
                         </label>
                     </div>
-                </div>                
-            </div>
-
-
-            {{-- <div class="form-group col-4">
-                <label for="cargarPdf">Cargar PDF Boleta</label>
-                <input type="file" id="forfile" name="file" wire:model.defer="archivoManual">
-            </div> --}}
+                </div>
+            </div>            
         </div>
 
         <div class="form-row">
