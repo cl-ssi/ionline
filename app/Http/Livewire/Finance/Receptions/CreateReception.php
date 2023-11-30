@@ -166,16 +166,33 @@ class CreateReception extends Component
     */
     public function calculateItemTotal($key)
     {
+
         if(!$this->receptionItems[$key]['Cantidad']) {
             $this->receptionItems[$key]['Cantidad'] = 0;
         }
-        $this->receptionItems[$key]['Total'] = $this->receptionItems[$key]['Cantidad'] * $this->receptionItems[$key]['PrecioNeto'];
-
+        $this->receptionItems[$key]['Total'] = $this->receptionItems[$key]['Cantidad'] * $this->receptionItems[$key]['PrecioNeto'];        
         $this->reception->neto = array_sum(array_column($this->receptionItems, 'Total'));
         // TODO: Falta agregar cargos y descuentos
         $this->reception->subtotal = $this->reception->neto; 
-        $this->reception->iva = $this->purchaseOrder->json->Listado[0]->PorcentajeIva / 100 * $this->reception->subtotal;
-        $this->reception->total = $this->reception->iva + $this->reception->subtotal;
+
+        switch ($this->reception->dte_type) {
+            case 'factura_electronica':
+            case 'guias_despacho':
+            case 'factura_exenta':
+                $this->reception->iva = $this->purchaseOrder->json->Listado[0]->PorcentajeIva / 100 * $this->reception->subtotal;  
+                $this->reception->total = $this->reception->iva + $this->reception->subtotal;
+                break;            
+            case 'boleta_honorarios':
+                $factor = (100 - $this->purchaseOrder->json->Listado[0]->PorcentajeIva) / 100;
+                $this->reception->total = $this->reception->neto / $factor;
+                $this->reception->iva = $this->reception->total - $this->reception->neto;
+                break;
+            
+            default:
+                dd('valor no corresponde a ningun tipo de dte');
+        }
+        
+        
     }
 
     /**
