@@ -2,9 +2,10 @@
 
 namespace App\Models\Rrhh;
 
+use App\User;
+use App\Rrhh\OrganizationalUnit;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use App\User;
 
 class Contract extends Model
 {
@@ -126,6 +127,11 @@ class Contract extends Model
     public function user()
     {
         return $this->belongsTo(User::class,'rut');
+    }
+
+    public function organizationalUnit()
+    {
+        return $this->belongsTo(OrganizationalUnit::class,'codigo_unidad','sirh_ou_id');
     }
 
 }

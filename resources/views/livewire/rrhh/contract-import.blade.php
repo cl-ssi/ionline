@@ -30,7 +30,7 @@
             <ol>
                 @if($non_existent_ous)
                     @foreach($non_existent_ous as $key => $ou)
-                        <li>{{$key}}</li>
+                        <li>{{$ou}}</li>
                     @endforeach
                 @endif
             </ol>
