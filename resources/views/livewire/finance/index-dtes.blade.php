@@ -140,7 +140,26 @@
                             1. Actas de recepción emitidas en el módulo de cenabast
                             2. Actas de recepción emitidas y firmadas en bodega
                             3. Actas de recepción de servicios emitidas en abastecimiento
+
+                            Todo lo anterior se reemplaza por recepciones
                         -->
+                        @if($dte->purchaseOrder)
+                            @foreach($dte->purchaseOrder->receptions as $reception)
+                                @if($reception->numeration->number)
+                                <a class="btn btn-sm btn-outline-primary" target="_blank"
+                                    href="{{ route('documents.partes.numeration.show_numerated', $reception->numeration) }}"
+                                    title="Acta de recepción CENABAST">
+                                    <i class="fas fa-file"></i>
+                                </a>
+                                @else
+                                    <span class="btn btn-sm btn-outline-secondary" 
+                                        title="Pendiente de numerar">
+                                        <i class="fas fa-file"></i>
+                                    </span>
+                                @endif
+                            @endforeach
+                        @endif
+
 
                         <!-- Punto 1 -->
                         @if ($dte->cenabast_reception_file)
@@ -212,7 +231,6 @@
                                 @switch($dte->tipo_documento)
                                     @case('guias_despacho')
                                     @case('nota_credito')
-
                                     @case('nota_debito')
                                         <!-- TODO: Si es guia, se puede asociar a multiple
                                                                                                                                                             si es nota de crédito o débito se debería poder asociar sólo a una
@@ -233,7 +251,6 @@
 
                                     @case('factura_electronica')
                                     @case('factura_exenta')
-
                                     @case('boleta_honorarios')
                                     @case('boleta_electronica')
                                     @break
@@ -243,17 +260,16 @@
 
                                 <div class="form-group col-md-4">
                                     <label for="for_asociate">Operaciones:</label>
+                                    <br>
                                     <button type="submit" class="btn btn-primary"
                                         wire:click="save({{ $dte->id }})">Guardar </button>
                                     <button type="button" class="btn btn-outline-secondary"
                                         wire:click="dismiss">Cancelar </button>
                                 </div>
 
-                                <hr>
-
-
-
                             </div>
+
+                            <hr>
 
                             <div class="form-row">
                                 <div class="card col-md-12 mb-3">

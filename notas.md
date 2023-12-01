@@ -34,6 +34,7 @@
 [X] Agregar columnas a Receptions guia_id y dte_id (y relationes $dte->receptions $reception->guia $reception->dte)
 
 [X] Al numerar, no están saliendo los mensajes de error de firma electrónica, por ejemplo, que Vanessa no tiene firma desatendida
+[ ] Notificar a oficina de partes que tiene que numerar
 
 [ ] Desde bodega, al generar un ingreso crear una acta de recepción del modelo Reception o precargar el acta para luego crearlo
 [ ] Bodega, no debe permitir firmar ni generar actas de recepcion. (ya no lo están usando)

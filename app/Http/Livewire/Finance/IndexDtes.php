@@ -116,6 +116,7 @@ class IndexDtes extends Component
         // Aplicar relaciones y ordenamiento
         $query->with([
             'purchaseOrder',
+            'purchaseOrder.receptions',
             'establishment',
             'controls',
             'requestForm',
