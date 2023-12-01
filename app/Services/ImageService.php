@@ -148,7 +148,7 @@ class ImageService
         /**
          * Add verification link to image
          */
-        imagettftext($imagen, $fontSize, 0, $xPading * 1, $yPading * 2.3, $textColor, $this->fontConsolas, "$verificationLink id:$validationCode");
+        imagettftext($imagen, $fontSize, 0, $xPading * 1, round($yPading * 2.3), $textColor, $this->fontConsolas, "$verificationLink id:$validationCode");
 
         /**
          * Add the document number to image
