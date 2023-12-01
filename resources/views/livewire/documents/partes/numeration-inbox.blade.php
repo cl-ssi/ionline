@@ -8,6 +8,14 @@
         Sólo funcionarios que tengan firma electrónica con propósito "iOnline" pueden numerar un documento.
     </div>
 
+    @if($error_msg)
+    <div class="alert alert-danger"
+        role="alert">
+        {{ $error_msg }}
+    </div>
+    @endif
+
+
     <table class="table table-sm table-bordered">
         <thead>
             <tr>

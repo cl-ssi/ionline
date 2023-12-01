@@ -21,6 +21,8 @@ class Numeration extends Model
 {
     use HasFactory;
 
+    protected $status;
+
     /**
      * Get the numeration model.
      */
@@ -182,13 +184,13 @@ class Numeration extends Model
                 $this->verification_code = $verificationCode;
                 $this->numerator_id = auth()->id();
                 $this->save();
-                $status = true;
+                $this->status = true;
             }
             else {
-                $status = $digitalSignature->error;
+                $this->status = $digitalSignature->error;
             }
         });
-        return $status;
+        return $this->status;
     }
 
     /**
