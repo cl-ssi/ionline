@@ -14,6 +14,7 @@ use App\Rrhh\OrganizationalUnit;
 use App\Models\Finance\Receptions\ReceptionType;
 use App\Models\Finance\Receptions\ReceptionItem;
 use App\Models\Finance\PurchaseOrder;
+use App\Models\Finance\Dte;
 use App\Models\File;
 use App\Models\Establishment;
 use App\Models\Documents\Numeration;
@@ -92,6 +93,16 @@ class Reception extends Model
     public function purchaseOrder(): BelongsTo
     {
         return $this->belongsTo(PurchaseOrder::class, 'purchase_order', 'code');
+    }
+
+    public function guia(): BelongsTo
+    {
+        return $this->belongsTo(Dte::class, 'guia_id');
+    }
+
+    public function dte(): BelongsTo
+    {
+        return $this->belongsTo(Dte::class, 'dte_id');
     }
 
     public function establishment(): BelongsTo
