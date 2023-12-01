@@ -208,7 +208,7 @@
                     <tr>
                         <td colspan="11">
 
-                            <div class="form-row">
+                        <div class="form-row">
                                 <div class="form-group col-md-2">
                                     <label for="for_folio_oc">Folio OC</label>
                                     <input type="text" class="form-control" id="for_folio_oc"
@@ -263,33 +263,50 @@
 
                             <hr>
 
-                            <div class="form-row">
-                                <div class="card col-md-12 mb-3">
-                                    <div class="card-header">
-                                        Estado/Rechazar
-                                    </div>
-                                    <form wire:submit.prevent="changeStatus({{ $dte->id }})">
-                                        <div class="card-body">
-                                            <div class="form-group col-md-3">
-                                                <label for="for_confirmation_status">Estado de confirmación</label>
-                                                <select class="form-control" id="for_confirmation_status"
-                                                    wire:model.defer="confirmation_status">
-                                                    <option value=""></option>
-                                                    <option value="1">Aceptar</option>
-                                                    <option value="0">Rechazar</option>
-                                                </select>
-                                            </div>
-                                            <div class="form-group col-md-9">
-                                                <label for="for_reason_rejection">Observación</label>
-                                                <textarea class="form-control" wire:model.defer="reason_rejection" rows="3"></textarea>
-                                            </div>
-
-
-                                            <button type="submit" class="btn btn-primary">Guardar</button>
-                                            <button type="button" class="btn btn-outline-secondary"
-                                                wire:click="dismiss">Cancelar</button>
+                            @switch($dte->tipo_documento)
+                                @case('factura_electronica')
+                                @case('factura_exenta')
+                                @case('boleta_honorarios')
+                                @case('boleta_electronica')
+                                    <div class="form-row">
+                                        <div class="col-10">
+                                            @if($dte->purchaseOrder)
+                                                @foreach($dte->purchaseOrder->receptions as $reception)
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                                                    <label class="form-check-label" for="defaultCheck1">
+                                                        id: {{ $reception->id }} {{ $reception->date?->format('Y-m-d') }}
+                                                    </label>
+                                                </div>
+                                                @endforeach
+                                            @endif
                                         </div>
-                                    </form>
+                                        <div class="col-2">
+                                            <button class="btn btn-success form-control">
+                                                A revisión
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    @break
+                                @case('guias_despacho')
+                                @case('nota_credito')
+                                @case('nota_debito')
+                                    @break
+                            @endswitch
+
+
+    
+                            <div class="form-row">
+                                <div class="col-10">
+                                    <label for="">Motivo de rechazo</label>
+                                    <input type="text" class="form-control">
+                                </div>
+                                <div class="col-2">
+                                    <label for="">&nbsp;</label>
+                                    <button class="btn btn-danger form-control">
+                                        Rechazar
+                                    </button>
                                 </div>
                             </div>
                         </td>
