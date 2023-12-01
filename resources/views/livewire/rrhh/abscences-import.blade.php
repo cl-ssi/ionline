@@ -2,13 +2,13 @@
 
     <h3 class="mb-3">Importar ausencias SIRH</h3>
 
-    <div class="alert alert-info" role="alert">
+    <!-- <div class="alert alert-info" role="alert">
         El archivo debe contener información solo de un mes.
-    </div>
+    </div> -->
 
     <div class="form-row">
         <fieldset class="form-group col-6">
-            <label>Archivo</label>
+            <label>Archivo (csv,xls) - Máximo archivos con 2.000 filas.</label>
             <input type="file" class="form-control" wire:model="file">
         </fieldset>
     </div>
@@ -28,16 +28,6 @@
     @if($message2 != "")
         <div class="alert alert-success" role="alert">
             {{ $message2 }}
-
-            <br>
-            <p>A continuación, listado de usuarios de los que no se pudo importar información (No se encuentran registrados en Ionline). Favor regularizar.</p>
-            <ol>
-                @if($non_existent_users)
-                    @foreach($non_existent_users as $user)
-                        <li>{{$user}}</li>
-                    @endforeach
-                @endif
-            </ol>
         </div>
     @endif
 
