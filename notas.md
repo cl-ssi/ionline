@@ -1,15 +1,15 @@
 # Misión Final Finanzas:
 ## Database:
 [ ] Marcar como CNB las OC, y eliminar la columna "cenabast" de fin_dte, usando el criterio de OC 620 (no recuerdo el numero)
-[ ] Agregar columna "all_receptions" default (false) sin nullable a fin_dte (esta columna indica que la Factura tiene todas sus actas asociadas)
-[ ] Setear all_receptions en true, con todas las dtes que tenga confirmation_status true
-[ ] Setear rejected (default 0) en true con todos los confirmation_status false
+[X] Agregar columna "all_receptions" default (false) sin nullable a fin_dte (esta columna indica que la Factura tiene todas sus actas asociadas)
+[X] Setear all_receptions en true, con todas las dtes que tenga confirmation_status true
+[X] Setear rejected (default 0) en true con todos los confirmation_status false
 [X] Copiar todos los datos de columna "confirmation_observation" a "reason_rejected"
 [X] Eliminar columna "confirmation_observation"
 [X] Renombrar confirmation_user_id all_receptions_user_id
 [X] Renombrar confirmation_ou_id a all_receptions_ou_id
 [X] Renombrar confirmation_at a all_receptions_at
-[ ] Renombrar fin_status que es un varchar a boolean payment_ready = true
+[X] Renombrar fin_status que es un varchar a boolean payment_ready = true
 [ ] Eliminar columnas (depués) cenabast_reception_file, cenabast_signed_*, block_singature //depende del 16
 
 ## Comando
