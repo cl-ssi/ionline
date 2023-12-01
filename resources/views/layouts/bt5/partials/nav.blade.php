@@ -183,9 +183,12 @@
                         @endcanany
 
                         @canany([
-                            'Payments', 'be god', 'Payments: viewer',
-                            ])
-                        <a class="dropdown-item {{ active('finance.payments.index') }}" href="{{ route('finance.payments.index') }}">
+                            'Payments',
+                            'be god',
+                            'Payments: viewer',
+                        ])
+                        <a class="dropdown-item {{ active('finance.dtes.index') }}" 
+                            href="{{ route('finance.dtes.index') }}">
                             <i class="fas fa-fw fa-money-bill"></i> Estados de pago
                         </a>
                         @endif
