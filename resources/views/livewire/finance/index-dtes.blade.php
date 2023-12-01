@@ -164,15 +164,7 @@
                     </td>
                     <td class="small">
                         {{ $dte->requestForm?->contractManager?->tinnyName }} <br>
-                        {{ $dte->estado_reclamo }}
-                        {{-- 
-                            @if ($dte->requestForm)
-                                @if ($dte->requestForm->contractManager)
-                                    {{ $dte->requestForm->contractManager->shortName }} <br>
-                                    @livewire('finance.dte-send-confirmation', ['dte' => $dte->id, 'user_id' => $dte->requestForm->contract_manager_id], key($dte->id))
-                                @endif
-                            @endif
-                        --}}
+                        {{ $dte->estado_reclamo }}                        
                     </td>
                     <td class="small">
                         {{ $dte->fecha_recepcion_sii ?? '' }} <br>
@@ -272,8 +264,8 @@
                                                 </select>
                                             </div>
                                             <div class="form-group col-md-9">
-                                                <label for="for_confirmation_observation">Observación</label>
-                                                <textarea class="form-control" wire:model.defer="confirmation_observation" rows="3"></textarea>
+                                                <label for="for_reason_rejection">Observación</label>
+                                                <textarea class="form-control" wire:model.defer="reason_rejection" rows="3"></textarea>
                                             </div>
 
 
@@ -284,32 +276,6 @@
                                     </form>
                                 </div>
                             </div>
-
-                            {{-- 
-
-                            TODO
-                            
-                            
-                            <div class="form-row">
-                                <div class="form-group col-md-3">
-                                    <label for="for_confirmation_status">Estado de confirmación</label>
-                                    <select class="form-control" id="for_confirmation_status"
-                                        wire:model.defer="confirmation_status">
-                                        <option value=""></option>
-                                        <option value="0">Rechazar</option>
-                                    </select>
-                                </div>
-
-                                <div class="form-group col-md-9">
-                                    <label for="for_confirmation_observation">Observación</label>
-                                    <textarea class="form-control" wire:model.defer="confirmation_observation" rows="3"></textarea>
-                                </div>
-                            </div>
-                            <button type="submit" class="btn btn-outline-secondary"
-                                wire:click="dismiss">Cancelar</button>
-                            <button type="submit" class="btn btn-primary"
-                                wire:click="save({{ $dte->id }})">Guardar</button> --}}
-
                         </td>
                     </tr>
                 @endif

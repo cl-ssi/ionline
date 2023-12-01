@@ -91,11 +91,23 @@ class Dte extends Model implements Auditable
         'establishment_id',
 
         'confirmation_status',
-        'confirmation_user_id',
-        'confirmation_ou_id',
-        'confirmation_observation',
-        'confirmation_at',
+
+        // Nombre antiguos Campos
+        // 'confirmation_user_id',
+        // 'confirmation_ou_id',
+        // 'confirmation_at',
+
+        // Nombre nuevos campos
+        'completed_user_id',
+        'completed_ou_id',
+        'completed_at',
+
+
+        // Se reemplaza por el  reason_rejection confirmation_observation = reason_rejection
+        //'confirmation_observation',
         'confirmation_signature_file',
+
+
 
 
         'dte_id',

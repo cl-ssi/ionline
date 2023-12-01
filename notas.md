@@ -4,16 +4,16 @@
 [ ] Agregar columna "completed" default (false) sin nullable a fin_dte (esta columna indica que la Factura tiene todas sus actas asociadas)
 [ ] Setear completed en true, con todas las dtes que tenga confirmation_status true
 [ ] Setear rejected (default 0) en true con todos los confirmation_status false
-[ ] Copiar todos los datos de columna "confirmation_observation" a "reason_rejected"
-[ ] Eliminar columna "confirmation_observation"
-[ ] Renombrar confirmation_user_id completed_user_id
-[ ] Renombrar confirmation_ou_id a completed_ou_id
-[ ] Renombrar confirmation_at a completed_at
+[X] Copiar todos los datos de columna "confirmation_observation" a "reason_rejected"
+[X] Eliminar columna "confirmation_observation"
+[X] Renombrar confirmation_user_id completed_user_id
+[X] Renombrar confirmation_ou_id a completed_ou_id
+[X] Renombrar confirmation_at a completed_at
 [ ] Renombrar fin_status que es un varchar a boolean payment_ready = true
-[ ] Eliminar columnas (depués) cenabast_reception_file, cenabast_signed_*, block_singature
+[ ] Eliminar columnas (depués) cenabast_reception_file, cenabast_signed_*, block_singature //depende del 16
 
 ## Comando
-[ ] Acta de recepción, crear actas retroactivas solo con el archivo "cenabast_reception_file" archivos de recepción
+[ ] Acta de recepción, crear actas retroactivas solo con el archivo "cenabast_reception_file" archivos de recepción //depende del 13
 [ ] Asociar a acta de recepción $reception->files[] = [confirmation_signature_file, cenabast_reception_file]
 [ ] Estudiar el modulo de firmas actual, para ver si creamos una registro en la tabla numeration por cada documento que ya fue firmado en "Solicitud de firma"
     esto porque el modelo "Numeration" es nuevo, y se encargará de asociar el numero del documento, con su creador y su codigo de veificacion,
