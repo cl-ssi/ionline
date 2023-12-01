@@ -190,7 +190,7 @@ class AbscencesImport extends Component
         Absenteeism::upsert(
                     $insert_array, 
                     ['rut', 'finicio','ftermino','absenteeism_type_id'], 
-                    ['rut','dv','nombre','ley','edadanos','edadmeses','afp','salud','codigo_unidad','nombre_unidad','genero','cargo','calidad_juridica','planta','n_resolucion','fresolucion','finicio','ftermino','total_dias_ausentismo','ausentismo_en_el_periodo','costo_de_licencia','tipo_de_ausentismo','absenteeism_type_id','codigo_de_establecimiento','nombre_de_establecimiento','saldo_dias_no_reemplazados','tipo_de_contrato']
+                    ['dv','nombre','ley','edadanos','edadmeses','afp','salud','codigo_unidad','nombre_unidad','genero','cargo','calidad_juridica','planta','n_resolucion','fresolucion','total_dias_ausentismo','ausentismo_en_el_periodo','costo_de_licencia','tipo_de_ausentismo','codigo_de_establecimiento','nombre_de_establecimiento','saldo_dias_no_reemplazados','tipo_de_contrato']
         );
         
 
