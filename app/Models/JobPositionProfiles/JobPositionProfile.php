@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Contracts\Auditable;
 
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use App\Models\Documents\Approval;
+
 class JobPositionProfile extends Model implements Auditable
 {
     use HasFactory;
@@ -61,6 +64,13 @@ class JobPositionProfile extends Model implements Auditable
 
     public function jobPositionProfileSigns() {
         return $this->hasMany('App\Models\JobPositionProfiles\JobPositionProfileSign');
+    }
+
+    /**
+     * Get all of the ModificationRequest's approvations.
+     */
+    public function approvals(): MorphMany{
+        return $this->morphMany(Approval::class, 'approvable');
     }
 
     public function getStatusValueAttribute() {

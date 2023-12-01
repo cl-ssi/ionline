@@ -275,7 +275,14 @@
                                                 <div class="form-check">
                                                     <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
                                                     <label class="form-check-label" for="defaultCheck1">
-                                                        id: {{ $reception->id }} {{ $reception->date?->format('Y-m-d') }}
+                                                        <b>Nº:</b> {{ $reception->numeration->number ?? 'Pendiente' }} 
+                                                        <b>Fecha:</b> {{ $reception->date?->format('Y-m-d') }}
+                                                        @if($reception->numeration->number)
+                                                            <a class="text-link" target="_blank"
+                                                                href="{{ route('documents.partes.numeration.show_numerated', $reception->numeration) }}">
+                                                                [ Ver ]
+                                                            </a>
+                                                        @endif
                                                     </label>
                                                 </div>
                                                 @endforeach

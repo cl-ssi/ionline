@@ -12,4 +12,9 @@
         <a class="nav-link"
             href="#">Nueva acta sin OC</a>
     </li>
+    <li class="nav-item">
+        <a class="nav-link {{ active('finance.receptions.reject') }}"
+            aria-current="page"
+            href="{{ route('finance.receptions.reject') }}">Rechazar</a>
+    </li>
 </ul>

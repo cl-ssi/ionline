@@ -26,6 +26,7 @@
 
 [ ] Editar una recepción
 [ ] Actas de recepción, poder subir un archivo, ej: Escaneo de la factura con el timbre.
+[ ] Al numerar, setear el número en Reception.
 [ ] Modulo de recepcion, poder agregar un rechazo de mercaderia asociado a una OC
 [X] En crear recepcion, dejar por defecto el estableciento de quien está logeado
 [X] En recepciones, poner un indicador de "loading" cuando la OC se esté buscando en MP

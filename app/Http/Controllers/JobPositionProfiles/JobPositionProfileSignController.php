@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Rrhh\Authority;
 use App\Notifications\JobPositionProfile\EndSigningProcess;
 use App\Notifications\JobPositionProfile\Sign;
+use App\Models\Documents\Approval;
 
 class JobPositionProfileSignController extends Controller
 {
@@ -52,91 +53,106 @@ class JobPositionProfileSignController extends Controller
             return redirect()->route('job_position_profile.edit_expertise_map', $jobPositionProfile);
         }
         else{
-            $position = 1;
-            for ($i = $jobPositionProfile->organizationalUnit->level; $i >= 2; $i--) {
-                //SI LA U.O. SOLICITANTE ES MAYOR A NIVEL 2 
-                if ($i > 2) {
-                    $jpp_sing                           = new JobPositionProfileSign();
-                    $jpp_sing->position                 = $position;
-                    $jpp_sing->event_type               = 'leadership';
-                    if($i == $jobPositionProfile->organizationalUnit->level){
-                        $jpp_sing->organizational_unit_id   = $jobPositionProfile->organizationalUnit->id;
-                        $jpp_sing->status = 'pending';
+            /* SE CREAN APROBACIONES PARA LOS DEPTO. DEPENDIENTES */
+            $organizationalUnit = $jobPositionProfile->organizationalUnit;
+            $previousApprovalId = null;
 
-                        /* SE NOTIFICACA A LA UNIDAD ORGANIZACIONAL PARA INICIAR EL PROCESO DE FIRMAS */
-                        $notification_ou_manager = Authority::getAuthorityFromDate($jpp_sing->organizational_unit_id, today(), 'manager');
-                        if($notification_ou_manager){
-                            $notification_ou_manager->user->notify(new Sign($jobPositionProfile));
-                        }
-                    }
-                    else{
-                        $lastSign = JobPositionProfileSign::
-                            where('job_position_profile_id', $jobPositionProfile->id)
-                            ->latest()
-                            ->first();
+            for ($i = $jobPositionProfile->organizationalUnit->level; $i >= 3; $i--){
+                $approval = $jobPositionProfile->approvals()->create([
+                    "module"                        => "Perfil de Cargos",
+                    "module_icon"                   => "fas fa-id-badge fa-fw",
+                    "subject"                       => "Solicitud de Aprobación Jefatura Depto. o Unidad",
+                    "sent_to_ou_id"                 => $organizationalUnit->id,
+                    "document_route_name"           => "job_position_profile.show_approval",
+                    "document_route_params"         => json_encode(["job_position_profile_id" => $jobPositionProfile->id]),
+                    "active"                        => ($previousApprovalId == null) ? true : false,
+                    "previous_approval_id"          => $previousApprovalId,
+                    "callback_controller_method"    => "App\Http\Controllers\JobPositionProfiles\JobPositionProfileSignController@approvalCallback",
+                    "callback_controller_params"    => json_encode([
+                        'job_position_profile_id' => $jobPositionProfile->id,
+                        'process'                 => 'start'
+                    ])
+                ]);
+                $previousApprovalId = $approval->id;
 
-                        $jpp_sing->organizational_unit_id   = $lastSign->organizationalUnit->father->id;
-                    }
-
-                    $jpp_sing->job_position_profile_id = $jobPositionProfile->id;
-                    $jpp_sing->save();
+                if($organizationalUnit->level >= $i){
+                    $organizationalUnit = $organizationalUnit->father;
                 }
-                if ($i == 2) {
-                    //SI LA PRIMERA POSICIÓN ES LA U.O SOLICITANTE
-                    if($position == 1){
-                        $jpp_sing                               = new JobPositionProfileSign();
-                        $jpp_sing->position                     = $position;
-                        $jpp_sing->event_type                   = 'leadership';
-                        $jpp_sing->organizational_unit_id       = $jobPositionProfile->organizationalUnit->id;
-                        $jpp_sing->status                       = 'pending';
-                        $jpp_sing->job_position_profile_id      = $jobPositionProfile->id;
-                        $jpp_sing->save();
-
-                        /* SE NOTIFICACA A LA UNIDAD ORGANIZACIONAL PARA INICIAR EL PROCESO DE FIRMAS */
-                        $notification_ou_manager = Authority::getAuthorityFromDate($jpp_sing->organizational_unit_id, today(), 'manager');
-                        if($notification_ou_manager){
-                            $notification_ou_manager->user->notify(new Sign($jobPositionProfile));
-                        }
-
-                        $position++;
-                    }
-                    // U.O. GESTIÓN DEL TALENTO
-                    $jpp_review = new JobPositionProfileSign();
-                    $jpp_review->position = $position;
-                    $jpp_review->event_type = 'review';
-                    $jpp_review->organizational_unit_id = Parameter::where('module', 'ou')->where('parameter', 'GestionDesarrolloDelTalento')->first()->value;
-                    $jpp_review->job_position_profile_id = $jobPositionProfile->id;
-                    $jpp_review->save();
-
-                    $lastSign = JobPositionProfileSign::
-                        where('job_position_profile_id', $jobPositionProfile->id)
-                        ->where('event_type', 'leadership')
-                        ->orderBy('position', 'DESC')
-                        ->first();
-
-                    if($lastSign->organizationalUnit->father->level > 1){
-                        $jpp_esign = new JobPositionProfileSign();
-                        $jpp_esign->position = $position + 1;
-                        $jpp_esign->event_type = 'subdir o depto';
-                        $jpp_esign->organizational_unit_id   = $lastSign->organizationalUnit->father->id;
-                        $jpp_esign->job_position_profile_id = $jobPositionProfile->id;
-                        $jpp_esign->save();
-                    }
-                }
-                $position++;
             }
-            //SI LA PRIMERA POSICIÓN ES LA U.O SOLICITANTE, SE AGREGA AL FINAL SUB. RRHH.
-            if($jobPositionProfile->organizationalUnit->level == 2){
-                $jpp_subrrhh = new JobPositionProfileSign();
-                $jpp_subrrhh->position = $position;
-                $jpp_subrrhh->event_type = 'subrrhh';
-                $jpp_subrrhh->organizational_unit_id = Parameter::where('module', 'ou')->where('parameter', 'SubRRHH')->first()->value;
-                $jpp_subrrhh->job_position_profile_id = $jobPositionProfile->id;
-                $jpp_subrrhh->save();
+
+            /* SE CREA APROBACIÓN DEPTO. GESTIÓN DEL TALENTO */
+            $dgt_approval = $jobPositionProfile->approvals()->create([
+                "module"                => "Perfil de Cargos",
+                "module_icon"           => "fas fa-id-badge fa-fw",
+                "subject"               => "Solicitud de Aprobación Depto. Gestión del Talento",
+                "sent_to_ou_id"         => Parameter::get('ou','GestionDesarrolloDelTalento'),
+                "document_route_name"   => "job_position_profile.show_approval",
+                "document_route_params" => json_encode(["job_position_profile_id" => $jobPositionProfile->id]),
+                "active"                => false,
+                "previous_approval_id"  => $previousApprovalId,
+                "callback_controller_method"    => "App\Http\Controllers\JobPositionProfiles\JobPositionProfileSignController@approvalCallback",
+                "callback_controller_params"    => json_encode([
+                    'job_position_profile_id' => $jobPositionProfile->id,
+                    'process'                 => "dgt"
+                ])
+            ]);
+
+            /* AGREGO SUBDIRECCIONES EN ARRAY */
+            if($organizationalUnit->id != Parameter::get('ou','GestionDesarrolloDelTalento')){
+                /* SE CREA APROBACIÓN PARA S.D. AREA REQUIRENTE (EXCEPTO SDGP) */
+                $sdr_approval = $jobPositionProfile->approvals()->create([
+                    "module"                => "Perfil de Cargos",
+                    "module_icon"           => "fas fa-id-badge fa-fw",
+                    "subject"               => "Solicitud de Aprobación Subdirección O Depto.",
+                    "sent_to_ou_id"         => $organizationalUnit->id,
+                    "document_route_name"   => "job_position_profile.show_approval",
+                    "document_route_params" => json_encode(["job_position_profile_id" => $jobPositionProfile->id]),
+                    "active"                => false,
+                    "previous_approval_id"  => $dgt_approval->id,
+                    "callback_controller_method"    => "App\Http\Controllers\JobPositionProfiles\JobPositionProfileSignController@approvalCallback",
+                    "callback_controller_params"    => json_encode([
+                        'job_position_profile_id' => $jobPositionProfile->id,
+                        'process'                 => null
+                    ])
+                ]);
             }
-        }
+
+            /* SE CREA APROBACIÓN PARA S.D.G.P. */
+            $sdrgp_approval = $jobPositionProfile->approvals()->create([
+                "module"                => "Perfil de Cargos",
+                "module_icon"           => "fas fa-id-badge fa-fw",
+                "subject"               => "Solicitud de Aprobación Subdirección G.P.",
+                "sent_to_ou_id"         => Parameter::get('ou','SubRRHH'),
+                "document_route_name"   => "job_position_profile.show_approval",
+                "document_route_params" => json_encode(["job_position_profile_id" => $jobPositionProfile->id]),
+                "active"                => false,
+                "previous_approval_id"  => ($sdr_approval) ? $sdr_approval->id : $dgt_approval, 
+                "callback_controller_method"    => "App\Http\Controllers\JobPositionProfiles\JobPositionProfileSignController@approvalCallback",
+                "callback_controller_params"    => json_encode([
+                    'job_position_profile_id' => $jobPositionProfile->id,
+                    'process'                 => null
+                ])
+            ]);
+
+            /* SE CREA APROBACIÓN PARA S.D. AREA REQUIRENTE */
+            $dir_approval = $jobPositionProfile->approvals()->create([
+                "module"                => "Perfil de Cargos",
+                "module_icon"           => "fas fa-id-badge fa-fw",
+                "subject"               => "Solicitud de Aprobación Dirección",
+                "sent_to_ou_id"         => Parameter::get('ou','DireccionSSI'),
+                "document_route_name"   => "job_position_profile.show_approval",
+                "document_route_params" => json_encode(["job_position_profile_id" => $jobPositionProfile->id]),
+                "active"                => false,
+                "previous_approval_id"  => $sdrgp_approval->id,
+                "callback_controller_method"    => "App\Http\Controllers\JobPositionProfiles\JobPositionProfileSignController@approvalCallback",
+                "callback_controller_params"    => json_encode([
+                    'job_position_profile_id' => $jobPositionProfile->id,
+                    'process'                 => 'end'
+                ])
+            ]);
+        }    
         
-        $jobPositionProfile->status = 'sent';
+        $jobPositionProfile->status = 'review';
         $jobPositionProfile->save();
 
         session()->flash('success', 'Estimado Usuario, se ha enviado Exitosamente El Perfil de Cargo');
@@ -249,5 +265,36 @@ class JobPositionProfileSignController extends Controller
     public function destroy(JobPositionProfileSign $jobPositionProfileSign)
     {
         //
+    }
+
+    /**
+     * Función callback para aprobaciones 
+     */
+    public function approvalCallback($approval_id, $job_position_profile_id, $process){
+        $approval = Approval::find($approval_id);
+        $jobPositionProfile = JobPositionProfile::find($job_position_profile_id);
+        
+        /* Aprueba */
+        if($approval->status == 1){
+            if($process == 'start'){
+                $jobPositionProfile->status = 'review';
+                $jobPositionProfile->save();
+            }
+            if($process == 'dgt'){
+                $jobPositionProfile->status = 'pending';
+                $jobPositionProfile->save();
+            }
+            if($process == 'end'){
+                $jobPositionProfile->status = 'complete';
+                $jobPositionProfile->save();
+            }
+        }   
+
+        /* Rechaza */
+        if($approval->status == 0){
+            $jobPositionProfile->status = 'rejected';
+            $jobPositionProfile->save();
+
+        }
     }
 }
