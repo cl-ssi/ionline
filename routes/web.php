@@ -69,6 +69,7 @@ use App\Http\Livewire\HealthServices;
 use App\Http\Livewire\Finance\UploadDtes;
 use App\Http\Livewire\Finance\Receptions\TypeMgr;
 use App\Http\Livewire\Finance\Receptions\IndexReception;
+use App\Http\Livewire\Finance\Receptions\CreateRejection;
 use App\Http\Livewire\Finance\Receptions\CreateReception;
 use App\Http\Livewire\Finance\IndexDtes;
 use App\Http\Livewire\Finance\DteConfirmation;
@@ -175,8 +176,8 @@ use App\Http\Controllers\Rem\UserRemController;
 use App\Http\Controllers\Rem\RemSerieController;
 use App\Http\Controllers\Rem\RemPeriodSerieController;
 use App\Http\Controllers\Rem\RemPeriodController;
-use App\Http\Controllers\Rem\RemFileController;
 //use App\Http\Controllers\RequestForms\SupplyPurchaseController;
+use App\Http\Controllers\Rem\RemFileController;
 use App\Http\Controllers\RNIdb\RNIdbController;
 use App\Http\Controllers\QualityAps\QualityApsController;
 use App\Http\Controllers\PurchasePlan\PurchasePlanController;
@@ -2041,6 +2042,7 @@ Route::prefix('finance')->as('finance.')->middleware(['auth', 'must.change.passw
     Route::prefix('receptions')->as('receptions.')->group(function () {
         Route::get('/', IndexReception::class)->name('index');
         Route::get('/create/{reception_id?}', CreateReception::class)->name('create');
+        Route::get('/reject', CreateRejection::class)->name('reject');
         Route::get('/type', TypeMgr::class)->name('type');
         Route::get('/{reception_id}', [FinReceptionController::class,'show'])->name('show');
         
