@@ -136,28 +136,50 @@
                             @if($jobPositionProfile->status == 'saved')
                                 <i class="fas fa-save fa-2x"></i>
                             @else
-                                @foreach($jobPositionProfile->jobPositionProfileSigns as $sign)
-                                    @if($sign->status == 'pending' || $sign->status == NULL)
-                                        <span class="d-inline-block" tabindex="0" data-toggle="tooltip" 
-                                            title="{{ $sign->organizationalUnit->name }}">
-                                            <i class="fas fa-clock fa-2x"></i>
-                                        </span>
-                                    @endif
-                                    @if($sign->status == 'accepted')
-                                        <span class="d-inline-block" tabindex="0" data-toggle="tooltip" 
-                                            style="color: green;"
-                                            title="{{ $sign->organizationalUnit->name }}">
-                                            <i class="fas fa-check-circle fa-2x"></i>
-                                        </span>
-                                    @endif
-                                    @if($sign->status == 'rejected')
-                                        <span class="d-inline-block" tabindex="0" data-toggle="tooltip"
-                                            style="color: Tomato;"
-                                            title="{{ $sign->organizationalUnit->name }}">
-                                            <i class="fas fa-times-circle fa-2x"></i>
-                                        </span>
-                                    @endif
-                                @endforeach
+                                @if(!$jobPositionProfile->approvals->isEmpty())
+                                    @foreach($jobPositionProfile->approvals as $approval)
+                                        @switch($approval->StatusInWords)
+                                            @case('Pendiente')
+                                                <span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ $approval->sentToOu->name }}">
+                                                    <i class="fas fa-clock fa-2x"></i>
+                                                </span>
+                                                @break
+                                            @case('Aprobado')
+                                                <span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" style="color: green;" data-bs-placement="top" title="{{ $approval->sentToOu->name }}">
+                                                    <i class="fas fa-check-circle fa-2x"></i>
+                                                </span>
+                                                @break
+                                            @case('Rechazado')
+                                                <span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" style="color: tomato;" data-bs-placement="top" title="{{ $approval->sentToOu->name }}">
+                                                    <i class="fas fa-ban-circle fa-2x"></i>
+                                                </span>
+                                                @break
+                                        @endswitch
+                                    @endforeach
+                                @else
+                                    @foreach($jobPositionProfile->jobPositionProfileSigns as $sign)
+                                        @if($sign->status == 'pending' || $sign->status == NULL)
+                                            <span class="d-inline-block" tabindex="0" data-toggle="tooltip" 
+                                                title="{{ $sign->organizationalUnit->name }}">
+                                                <i class="fas fa-clock fa-2x"></i>
+                                            </span>
+                                        @endif
+                                        @if($sign->status == 'accepted')
+                                            <span class="d-inline-block" tabindex="0" data-toggle="tooltip" 
+                                                style="color: green;"
+                                                title="{{ $sign->organizationalUnit->name }}">
+                                                <i class="fas fa-check-circle fa-2x"></i>
+                                            </span>
+                                        @endif
+                                        @if($sign->status == 'rejected')
+                                            <span class="d-inline-block" tabindex="0" data-toggle="tooltip"
+                                                style="color: Tomato;"
+                                                title="{{ $sign->organizationalUnit->name }}">
+                                                <i class="fas fa-times-circle fa-2x"></i>
+                                            </span>
+                                        @endif
+                                    @endforeach
+                                @endif
                             @endif
                         </td>
                         <td class="text-center">
@@ -183,8 +205,8 @@
                                     <i class="fas fa-eye fa-fw"></i>
                                 </a>
                                 
-                                @if(($jobPositionProfile->status == 'saved' || $jobPositionProfile->status == "review" ||
-                                    $jobPositionProfile->status == 'sent') && 	Auth::user()->hasPermissionTo('Job Position Profile: edit'))
+                                @if(($jobPositionProfile->status == 'saved' || $jobPositionProfile->status == "review") 
+                                    && 	Auth::user()->hasPermissionTo('Job Position Profile: edit'))
                                     <br/><br/>
                                     <a href="{{ route('job_position_profile.edit', $jobPositionProfile) }}"
                                         class="btn btn-outline-secondary btn-sm" title="Editar">

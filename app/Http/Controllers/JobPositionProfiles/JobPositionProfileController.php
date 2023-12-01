@@ -98,6 +98,12 @@ class JobPositionProfileController extends Controller
         return view('job_position_profile.show', compact('jobPositionProfile'));
     }
 
+    public function show_approval($job_position_profile_id)
+    {
+        $jobPositionProfile = JobPositionProfile::find($job_position_profile_id);
+        return view('job_position_profile.show_approval', compact('jobPositionProfile'));
+    }
+
     public function to_sign(JobPositionProfile $jobPositionProfile)
     {   
         $authorities = Authority::getAmIAuthorityFromOu(today(), 'manager', Auth::user()->id);
