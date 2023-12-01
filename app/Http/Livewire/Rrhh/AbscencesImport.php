@@ -41,7 +41,6 @@ class AbscencesImport extends Component
             $this->message2 = "Sobrepasó el máximo de filas soportadas por el sistema (Máximo 2000).";
             return;
         }
-        return;
 
         // obtiene los tipos de ausentismos que no están creados en ionline.
         $absenteeismTypes = AbsenteeismType::pluck('name')->toArray();
