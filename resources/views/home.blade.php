@@ -22,13 +22,13 @@
         <ol class="carousel-indicators">
             <!-- <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li> -->
             <!-- <li data-target="#carouselExampleIndicators" data-slide-to="1" class="active"></li> -->
-            <!-- <li data-target="#carouselExampleIndicators" data-slide-to="2" class=""></li> -->
+            <li data-target="#carouselExampleIndicators" data-slide-to="2" class=""></li>
         </ol>
         <div class="carousel-inner">
 
-            <!-- <div class="carousel-item active">
+            <div class="carousel-item active">
                 <img src="{{ asset('images/news/new3.png') }}" alt="">
-            </div> -->
+            </div>
 
             <!-- <div class="carousel-item active"> -->
                 <!-- <img src="{{ asset('images/news/new2.png') }}" alt=""> -->
