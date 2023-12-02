@@ -1,4 +1,12 @@
 <div>
+    <h3>
+        Crear
+    </h3>
+
+    <br>
+
+    @include('layouts.bt5.partials.flash_message')
+
     @livewire('file-mgr',
     [
         'multiple' => true,
@@ -9,6 +17,10 @@
         'stored' => '',
     ])
 
+    <br>
+    <br>
 
-    <button class="btn btn-primary" wire:click="save()">Guardar</button>
+    <button class="btn btn-primary" wire:click="save()">
+        Guardar
+    </button>
 </div>
