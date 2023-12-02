@@ -278,6 +278,7 @@ use App\Http\Controllers\Agreements\SignerController;
 use App\Http\Controllers\Agreements\ProgramResolutionController;
 use App\Http\Controllers\Agreements\AgreementController;
 use App\Http\Controllers\Agreements\AddendumController;
+use App\Http\Livewire\TestFileUpdateManager;
 
 /*
 |--------------------------------------------------------------------------
@@ -1898,7 +1899,7 @@ Route::prefix('prof_agenda')->as('prof_agenda.')->middleware(['auth'])->group(fu
 
     Route::prefix('reports')->as('reports.')->middleware(['auth'])->group(function () {
         Route::get('/sirsap', SirsapReport::class)->name('sirsap');
-        
+
     });
 
 
@@ -2045,7 +2046,7 @@ Route::prefix('finance')->as('finance.')->middleware(['auth', 'must.change.passw
         Route::get('/reject', CreateRejection::class)->name('reject');
         Route::get('/type', TypeMgr::class)->name('type');
         Route::get('/{reception_id}', [FinReceptionController::class,'show'])->name('show');
-        
+
     });
 });
 
@@ -2607,7 +2608,9 @@ Route::group(['middleware' => 'auth:external'], function () {
 Route::view('/some', 'some');
 
 Route::prefix('test')->as('test.')->group(function () {
+    Route::get('/file/{receptionFinance}/update', TestFileUpdateManager::class);
     Route::get('/files', TestFileManager::class);
+
     Route::get('/digital-signature/{otp?}', [TestController::class, 'DigitalSignature']);
     Route::get('/doc-digital', [TestController::class, 'docDigital']);
 
