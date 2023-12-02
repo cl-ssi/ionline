@@ -31,7 +31,8 @@ class IndexDtes extends Component
 
     public $folio_oc = null;
     public $confirmation_status = null;
-    public $confirmation_observation = null;
+    //public $confirmation_observation = null;
+    public $reason_rejection = null;
     public $monto_total = null;
 
     public $facturasEmisor;
@@ -116,6 +117,7 @@ class IndexDtes extends Component
         // Aplicar relaciones y ordenamiento
         $query->with([
             'purchaseOrder',
+            'purchaseOrder.receptions',
             'establishment',
             'controls',
             'requestForm',
@@ -180,7 +182,7 @@ class IndexDtes extends Component
         $this->showEdit = $dte->id;
         $this->folio_oc = $dte->folio_oc;
         $this->confirmation_status = $dte->confirmation_status;
-        $this->confirmation_observation = $dte->confirmation_observation;
+        $this->confirmation_observation = $dte->reason_rejection;
         $this->asociate_invoices = $dte->invoices->pluck('id');
         $this->monto_total = '$ ' . number_format($dte->monto_total, 0, '', '.');
         $this->facturasEmisor = Dte::where('emisor', 'like', '%' . trim($dte->emisor) . '%')
@@ -269,7 +271,7 @@ class IndexDtes extends Component
     // Actualizar el estado de confirmación y otros campos relacionados
     $dte->update([
         'confirmation_status' => $this->confirmation_status,
-        'confirmation_observation' => $this->confirmation_observation        
+        'reason_rejection' => $this->confirmation_observation
     ]);
 
     // Resto del código relacionado al cambio de estado...

@@ -69,6 +69,7 @@ use App\Http\Livewire\HealthServices;
 use App\Http\Livewire\Finance\UploadDtes;
 use App\Http\Livewire\Finance\Receptions\TypeMgr;
 use App\Http\Livewire\Finance\Receptions\IndexReception;
+use App\Http\Livewire\Finance\Receptions\CreateRejection;
 use App\Http\Livewire\Finance\Receptions\CreateReception;
 use App\Http\Livewire\Finance\IndexDtes;
 use App\Http\Livewire\Finance\DteConfirmation;
@@ -175,8 +176,8 @@ use App\Http\Controllers\Rem\UserRemController;
 use App\Http\Controllers\Rem\RemSerieController;
 use App\Http\Controllers\Rem\RemPeriodSerieController;
 use App\Http\Controllers\Rem\RemPeriodController;
-use App\Http\Controllers\Rem\RemFileController;
 //use App\Http\Controllers\RequestForms\SupplyPurchaseController;
+use App\Http\Controllers\Rem\RemFileController;
 use App\Http\Controllers\RNIdb\RNIdbController;
 use App\Http\Controllers\QualityAps\QualityApsController;
 use App\Http\Controllers\PurchasePlan\PurchasePlanController;
@@ -254,6 +255,7 @@ use App\Http\Controllers\Drugs\CourtController;
 use App\Http\Controllers\Drugs\ActPrecursorController;
 use App\Http\Controllers\Documents\SignatureController;
 use App\Http\Controllers\Documents\Sign\SignatureController as SignSignatureController;
+use App\Http\Controllers\Documents\Partes\NumerationController;
 use App\Http\Controllers\Documents\ParteFileController;
 use App\Http\Controllers\Documents\ParteController;
 use App\Http\Controllers\Documents\DocumentController;
@@ -1282,11 +1284,16 @@ Route::prefix('documents')->as('documents.')->middleware(['auth', 'must.change.p
         Route::get('/outbox', [ParteController::class, 'outbox'])->name('outbox');
         Route::get('report-by-dates', PartesReportByDates::class)->name('report-by-dates');
         Route::get('/view/{parte}', [ParteController::class, 'view'])->name('view');
-        Route::get('/numeration', NumerationInbox::class)->name('numeration');
         Route::get('/{parte}', [ParteController::class, 'show'])->name('show');
         Route::put('/{parte}', [ParteController::class, 'update'])->name('update');
         Route::delete('/{parte}', [ParteController::class, 'destroy'])->name('destroy');
         Route::get('/{parte}/edit', [ParteController::class, 'edit'])->name('edit');
+        
+        Route::prefix('numeration')->as('numeration.')->group(function () {
+            Route::get('/inbox', NumerationInbox::class)->name('inbox');
+            Route::get('/original/{numeration}', [NumerationController::class,'showOriginal'])->name('show_original');
+            Route::get('/numerado/{numeration}', [NumerationController::class,'showNumerated'])->name('show_numerated');
+        });
     });
 
     Route::get('signatures/index/{tab}', [SignatureController::class, 'index'])->name('signatures.index');
@@ -2034,7 +2041,8 @@ Route::prefix('finance')->as('finance.')->middleware(['auth', 'must.change.passw
 
     Route::prefix('receptions')->as('receptions.')->group(function () {
         Route::get('/', IndexReception::class)->name('index');
-        Route::get('/create', CreateReception::class)->name('create');
+        Route::get('/create/{reception_id?}', CreateReception::class)->name('create');
+        Route::get('/reject', CreateRejection::class)->name('reject');
         Route::get('/type', TypeMgr::class)->name('type');
         Route::get('/{reception_id}', [FinReceptionController::class,'show'])->name('show');
         

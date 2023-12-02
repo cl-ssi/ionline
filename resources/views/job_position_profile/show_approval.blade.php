@@ -1,10 +1,4 @@
-@extends('layouts.bt4.app')
-
-@section('title', 'Nuevo Staff')
-
-@section('content')
-
-@include('job_position_profile.partials.nav')
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
 
 <h5><i class="fas fa-id-badge"></i> Perfil de Cargo</h5>
 <h6>ID: {{ $jobPositionProfile->id }} 
@@ -345,6 +339,7 @@
 <br>
 
 <h6><i class="fas fa-signature"></i> Proceso de aprobación.</h6>
+
 @if(!$jobPositionProfile->approvals->isEmpty())
 
 <div class="table-responsive">
@@ -380,19 +375,13 @@
                         <i class="fas fa-user"></i> {{ ($approval->approver) ? $approval->approver->FullName : '' }} <br>
                         <i class="fas fa-calendar-alt"></i> {{ ($approval->approver_at) ? $approval->approver_at->format('d-m-Y H:i:s') : '' }}
                     @endif
-                    @if($approval->approver_observation != NULL)
-                        <hr>
-                        <small>{{ $approval->approver_observation }}</small>
-                    @endif
                 </td>           
                 @endforeach
             </tr>
         <tbody>
     </table>
 </div>
-
 @else
-
 <div class="table-responsive">
     <table class="table table-sm table-bordered small">
         <tbody>
@@ -433,7 +422,6 @@
         </tbody>
     </table>
 </div>
-
 @endif
 
 <hr />
@@ -465,31 +453,24 @@
 </div>
 @endcan
 
-@endsection
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+    google.charts.load('current', {packages:["orgchart"]});
+    google.charts.setOnLoadCallback(drawChart);
 
-@section('custom_js')
-
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script type="text/javascript">
-        
-        google.charts.load('current', {packages:["orgchart"]});
-        google.charts.setOnLoadCallback(drawChart);
-
-        function drawChart() {
+    function drawChart() {
             
-            var data = new google.visualization.DataTable();
-            data.addColumn('string', 'Name');
-            data.addColumn('string', 'Manager');
-            data.addColumn('string', 'ToolTip');
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Name');
+        data.addColumn('string', 'Manager');
+        data.addColumn('string', 'ToolTip');
 
-            // For each orgchart box, provide the name, manager, and tooltip to show.
-            data.addRows({!! $jobPositionProfile->organizationalUnit->treeWithChilds->toJson() !!});
+        // For each orgchart box, provide the name, manager, and tooltip to show.
+        data.addRows({!! $jobPositionProfile->organizationalUnit->treeWithChilds->toJson() !!});
 
-            // Create the chart.
-            var chart = new google.visualization.OrgChart(document.getElementById('chart_div'));
-            // Draw the chart, setting the allowHtml option to true for the tooltips.
-            chart.draw(data, {'allowHtml':true});
-        }
-    </script>
-
-@endsection
+        // Create the chart.
+        var chart = new google.visualization.OrgChart(document.getElementById('chart_div'));
+        // Draw the chart, setting the allowHtml option to true for the tooltips.
+        chart.draw(data, {'allowHtml':true});
+    }
+</script>

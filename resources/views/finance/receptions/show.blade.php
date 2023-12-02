@@ -57,7 +57,7 @@
 
     <div class="center diez">
         <strong style="text-transform: uppercase;">
-            Acta de recepción conforme
+            {{ $reception->receptionType->title }}
         </strong>
     </div>
 
@@ -90,19 +90,19 @@
                 N° Documento
             </th>
             <td>
-                {{ $reception->doc_number }}
+                {{ $reception->dte_number }}
             </td>
             <th>
                 Tipo de documento
             </th>
             <td>
-                {{ $reception->doc_type }}
+                {{ $reception->dte_type }}
             </td>
             <th>
                 Fecha Emisón:
             </th>
             <td>
-                {{ $reception->doc_date?->format('d-m-Y') }}
+                {{ $reception->dte_date?->format('d-m-Y') }}
             </td>
         </tr>
     </table>

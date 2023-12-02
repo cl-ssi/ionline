@@ -7,15 +7,23 @@ use App\Models\Documents\Numeration;
 
 class NumerationInbox extends Component
 {
+    public $error_msg;
+
     /**
      * Numerate
      */
     public function numerate(Numeration $numeration)
     {
-        $numeration->numerate();
-        $numeration->numerator_id = auth()->id();
-        $numeration->date = now();
-        $numeration->save();
+        $this->error_msg = null;
+
+        $status = $numeration->numerate();
+        if ($status === true) {
+            $numeration->numerator_id = auth()->id();
+            $numeration->date = now();
+            $numeration->save();
+        } else {
+            $this->error_msg = $status;
+        }
     }
 
     public function render()

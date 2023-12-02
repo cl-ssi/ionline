@@ -36,6 +36,8 @@ class ManualDtes extends Component
         'guias_despacho' => 52,
         'nota_credito' => 61,
         'boleta_electronica' => 77,
+        'boleta_honorarios' => 69,
+
         //hacer un distinct o algo para buscar los demas o buscar en la documentacion del SII
     ];
 
@@ -53,7 +55,7 @@ class ManualDtes extends Component
             'razonSocial' => 'required',
             'montoTotal' => 'required|numeric',
             'folioOC' => 'required',
-            'archivoManual' => 'file|pdf|max:4096',
+            'archivoManual' => 'file|mimes:pdf|max:4096|nullable',
             
         ]);
 

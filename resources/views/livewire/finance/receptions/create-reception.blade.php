@@ -16,8 +16,12 @@
                     aria-describedby="purchase-order"
                     wire:model.defer="purchaseOrderCode">
                 <button class="btn btn-primary"
-                    wire:click="getPurchaseOrder">
-                    <i class="bi bi-search"></i>
+                    wire:click="getPurchaseOrder"
+                    wire:loading.attr="disabled">
+                    <i class="fa fa-spinner fa-spin"
+                        wire:loading></i>
+                    <i class="bi bi-search"
+                        wire:loading.class="d-none"></i>
                 </button>
             </div>
         </div>
@@ -31,7 +35,7 @@
                     </a>
                 @else
                     <span class="text-danger">
-                        La Orden de Compra no está registrada
+                        No existe ningún proceso de compra para la OC ingresada. Contácte a abastecimiento.
                         <button class="btn btn-sm btn-danger">
                             <i class="fas fa-biohazard"></i> Notificar a Abastecimiento
                         </button>
@@ -47,6 +51,16 @@
                 </a>
                 <br>
                 {{ $purchaseOrder->json->Listado[0]->Estado }}
+                <div class="form-check form-switch form-check-inline">
+                    <input class="form-check-input"
+                        type="checkbox"
+                        role="switch"
+                        wire:click="togglePoCenabast()"
+                        id="for-cenabast"
+                        {{ $purchaseOrder->cenabast ? 'checked' : '' }}>
+                    <label class="form-check-label"
+                        for="flexSwitchCheckDefault">Cenabast</label>
+                </div>
             </div>
 
             <div class="col-md-3 text-center">
@@ -61,15 +75,40 @@
                     @endforeach
                 </ul>
             </div>
-            <div class="col-md-2 text-center">
-                <b>Facturas</b><br>
+            <div class="col-md-2">
+                <b>Documento Tributario*</b><br>
                 <ul>
                     @foreach ($purchaseOrder->dtes as $dte)
                         <li>
-                            <a href="#">{{ $dte->id }}</a>
+                            <div class="form-check">
+                                <input class="form-check-input @error('selectedDteId') is-invalid @enderror"
+                                    type="radio"
+                                    wire:model="selectedDteId"
+                                    name="selectedDte"
+                                    value="{{ $dte->id }}">
+                                <label>
+                                    {{ $dte->tipoDocumentoIniciales }}
+                                    {{ $dte->folio }}
+                                </label>
+                            </div>
                         </li>
                     @endforeach
+                    <li>
+                        <div class="form-check">
+                            <input class="form-check-input @error('selectedDteId') is-invalid @enderror"
+                                type="radio"
+                                wire:model="selectedDteId"
+                                name="selectedDte"
+                                value="0">
+                            <label>
+                                Otro
+                            </label>
+                        </div>
+                    </li>
                 </ul>
+                @error('selectedDteId')
+                    <span class="text-danger">{{ $message }}</span>
+                @enderror
             </div>
         @elseif(is_null($purchaseOrder))
             <div class="col-md-3 text-center">
@@ -83,7 +122,48 @@
 
     @if ($purchaseOrder)
 
+        <div class="row mb-3 g-2">
+            <div class="col-6">
+                <br>
+                <h5>Documento Tributario Asociado</h5>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label for="reception-date">Tipo de documento*</label>
+                    <select id="document_type"
+                        class="form-select @error('reception.dte_type') is-invalid @enderror"
+                        wire:model="reception.dte_type">
+                        <option></option>
+                        <option value ="guias_despacho">Guía de despacho</option>
+                        <option value ="factura_electronica">Factura Electronica Afecta</option>
+                        <option value ="factura_exenta">Factura Electronica Exenta</option>
+                        <option value ="boleta_honorarios">Boleta Honorarios</option>
+                    </select>
+                    @error('reception.dte_type')
+                        <span class="text-danger">{{ $message }}</span>
+                    @enderror
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label for="reception-date">Número de documento</label>
+                    <input type="text"
+                        class="form-control"
+                        wire:model.debounce.defer="reception.dte_number">
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label for="reception-date">Fecha de documento</label>
+                    <input type="date"
+                        class="form-control"
+                        wire:model="reception.dte_date">
+                </div>
+            </div>
+        </div>
+
         <h4>Recepción</h4>
+
         <div class="row mb-3 g-2">
             <div class="form-group col-md-2">
                 <div class="form-group">
@@ -94,9 +174,20 @@
                         placeholder="Automático">
                 </div>
             </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label for="reception-date">Fecha acta*</label>
+                    <input type="date"
+                        class="form-control @error('reception.date') is-invalid @enderror"
+                        wire:model="reception.date">
+                    @error('reception.date')
+                        <span class="text-danger">{{ $message }}</span>
+                    @enderror
+                </div>
+            </div>
             <div class="form-group col-md-2">
-                <label for="form-reception-typeto ">Tipo de acta</label>
-                <select class="form-select"
+                <label for="form-reception-type">Tipo de acta*</label>
+                <select class="form-select @error('reception.reception_type_id') is-invalid @enderror"
                     wire:model="reception.reception_type_id">
                     <option value=""></option>
                     @foreach ($types as $id => $type)
@@ -107,23 +198,6 @@
                     <span class="text-danger">{{ $message }}</span>
                 @enderror
             </div>
-            <div class="form-group col-md-2">
-                <br>
-                <div class="form-check form-switch form-check-inline">
-                    <input class="form-check-input"
-                        type="checkbox"
-                        role="switch"
-                        wire:click="togglePoCenabast()"
-                        id="for-cenabast"
-                        {{ $purchaseOrder->cenabast ? 'checked' : '' }}>
-                    <label class="form-check-label"
-                        for="flexSwitchCheckDefault">Cenabast</label>
-                </div>
-            </div>
-        </div>
-
-
-        <div class="row mb-3 g-2">
 
             <div class="col-md-2">
                 <div class="form-group">
@@ -135,48 +209,8 @@
                     <div class="form-text">En caso que la unidad tenga su propio correlativo</div>
                 </div>
             </div>
-            <div class="col-md-2">
-                <div class="form-group">
-                    <label for="reception-date">Fecha acta</label>
-                    <input type="date"
-                        class="form-control"
-                        wire:model="reception.date">
-                    @error('reception.date')
-                        <span class="text-danger">{{ $message }}</span>
-                    @enderror
-                </div>
-            </div>
-            <div class="col-md-2 offset-md-2">
-                <div class="form-group">
-                    <label for="reception-date">Tipo doc. recepción</label>
-                    <select name="document_type"
-                        id="document_type"
-                        class="form-select"
-                        wire:model="reception.doc_type">
-                        <option></option>
-                        <option>Guía de despacho</option>
-                        <option>Factura</option>
-                        <option>Boleta</option>
-                        <option>Boleta Honorarios</option>
-                    </select>
-                </div>
-            </div>
-            <div class="col-md-2">
-                <div class="form-group">
-                    <label for="reception-date">Número doc. recepción</label>
-                    <input type="text"
-                        class="form-control"
-                        wire:model.debounce.500ms="reception.doc_number">
-                </div>
-            </div>
-            <div class="col-md-2">
-                <div class="form-group">
-                    <label for="reception-date">Fecha doc. recepción</label>
-                    <input type="date"
-                        class="form-control"
-                        wire:model="reception.doc_date">
-                </div>
-            </div>
+
+
         </div>
 
         <div class="row mb-3">
@@ -190,10 +224,14 @@
                         wire:model.defer="reception.header_notes"></textarea>
 
                     <div>
-                    @livewire('text-templates.controls-text-template', [
-                        'module'    => 'Receptions',
-                        'input'     => 'reception.header_notes'
-                    ], key('head_notes'))
+                        @livewire(
+                            'text-templates.controls-text-template',
+                            [
+                                'module' => 'Receptions',
+                                'input' => 'reception.header_notes',
+                            ],
+                            key('head_notes')
+                        )
                     </div>
                 </div>
             </div>
@@ -223,9 +261,8 @@
                         <td style="text-align: right;">
                             {{ $item->Cantidad }} {{ $item->Unidad }}
 
-                            <select name=""
-                                id="ct_{{ $key }}"
-                                class="form-select"
+                            <select id="ct_{{ $key }}"
+                                class="form-select @error('receptionItemsWithCantidad') is-invalid @enderror"
                                 wire:model="receptionItems.{{ $key }}.Cantidad"
                                 wire:change="calculateItemTotal({{ $key }})"
                                 @disabled($maxItemQuantity[$key] == 0)>
@@ -263,14 +300,19 @@
                 @endforeach
             </tbody>
         </table>
+        @error('receptionItemsWithCantidad')
+            <span class="text-danger">{{ $message }}</span>
+        @enderror
 
+
+        <br>
+        <br>
 
         <div class="row mb-3">
             <div class="col-md-12">
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input"
+                    <input class="form-check-input @error('reception.partial_reception') is-invalid @enderror"
                         type="radio"
-                        name="partial_reception"
                         wire:model.defer="reception.partial_reception"
                         id="partial_reception_partial"
                         value="1">
@@ -279,9 +321,8 @@
                     <div class="form-text">&nbsp;</div>
                 </div>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input"
+                    <input class="form-check-input @error('reception.partial_reception') is-invalid @enderror"
                         type="radio"
-                        name="partial_reception"
                         wire:model.defer="reception.partial_reception"
                         id="partial_reception_complete"
                         wire:change="setPurchaseOrderCompleted"
@@ -302,6 +343,9 @@
                     <div class="form-text">No se recibirán más items de esta Orden de Compra</div>
                 </div>
             </div>
+            @error('reception.partial_reception')
+                <span class="text-danger">{{ $message }}</span>
+            @enderror
         </div>
 
 
@@ -314,10 +358,14 @@
                         rows="6"
                         class="form-control"
                         wire:model.defer="reception.footer_notes"></textarea>
-                    @livewire('text-templates.controls-text-template', [
-                        'module'    => 'Receptions',
-                        'input'     => 'reception.footer_notes'
-                    ], key('footer_notes'))
+                    @livewire(
+                        'text-templates.controls-text-template',
+                        [
+                            'module' => 'Receptions',
+                            'input' => 'reception.footer_notes',
+                        ],
+                        key('footer_notes')
+                    )
                 </div>
             </div>
         </div>
@@ -350,6 +398,7 @@
                 <label for="forOrganizationalUnit">Establecimiento / Unidad Organizacional</label>
                 @livewire('select-organizational-unit', [
                     'emitToListener' => 'ouSelected',
+                    'establishment_id' => auth()->user()->organizationalUnit->establishment_id,
                 ])
                 <b>Autoridad: </b>
                 @if (is_null($authority))
@@ -370,7 +419,7 @@
 
         <div class="row text-center">
             <div class="col">
-                <b>Columna Izquierda <span class="text-danger">☭</span></b>
+                <b>Columna Izquierda</b>
                 <div class="row mt-1 mb-2 g-2">
                     <div class="col">
                         <button class="btn btn-primary form-control"
@@ -388,6 +437,10 @@
                         </button>
                     </div>
                 </div>
+
+                @error('approvals')
+                    <span class="text-danger">{{ $message }}</span>
+                @enderror
 
                 <div style="height: 40px">
                     @if (array_key_exists('left', $this->approvals))
@@ -426,6 +479,10 @@
                     </div>
                 </div>
 
+                @error('approvals')
+                    <span class="text-danger">{{ $message }}</span>
+                @enderror
+
                 <div style="height: 40px">
                     @if (array_key_exists('center', $this->approvals))
                         {{ $this->approvals['center']['signerShortName'] }}
@@ -462,6 +519,10 @@
                     </div>
                 </div>
 
+                @error('approvals')
+                    <span class="text-danger">{{ $message }}</span>
+                @enderror
+
                 <div style="height: 40px">
                     @if (array_key_exists('right', $this->approvals))
                         {{ $this->approvals['right']['signerShortName'] }}
@@ -496,11 +557,9 @@
                     <tr>
                         <th>Número: </th>
                         <td>
-                            @if ($reception->number)
-                                {{ $reception->number }}
-                            @else
+
                                 <i>Autogenerado</i>
-                            @endif
+
                         </td>
                     </tr>
                     <tr>
@@ -552,19 +611,19 @@
                     N° Documento
                 </th>
                 <td>
-                    {{ $reception->doc_number }}
+                    {{ $reception->dte_number }}
                 </td>
                 <th>
                     Tipo de documento
                 </th>
                 <td>
-                    {{ $reception->doc_type }}
+                    {{ $reception->dte_type }}
                 </td>
                 <th>
                     Fecha Emisón:
                 </th>
                 <td>
-                    {{ $reception->doc_date?->format('d-m-Y') }}
+                    {{ $reception->dte_date?->format('d-m-Y') }}
                 </td>
             </tr>
         </table>
@@ -575,7 +634,6 @@
                     <th>Código</th>
                     <th>Producto</th>
                     <th>Cantidad / Unidad</th>
-                    <th>Especificaciones Comprador</th>
                     <th>Especificaciones Proveedor</th>
                     <th>Precio Unitario</th>
                     <th>Descuento</th>
@@ -590,7 +648,6 @@
                             <td>{{ $item['CodigoCategoria'] }}</td>
                             <td>{{ $item['Producto'] }}</td>
                             <td>{{ $item['Cantidad'] }}</td>
-                            <td>{{ $item['EspecificacionComprador'] }}</td>
                             <td>{{ $item['EspecificacionProveedor'] }}</td>
                             <td style="text-align: right;">{{ money($item['PrecioNeto']) }}</td>
                             <td style="text-align: right;">{{ money($item['TotalDescuentos']) }}</td>
@@ -677,16 +734,24 @@
         </div>
 
         <div class="row mt-3">
-            <div class="col-12 text-end">
+            <div class="col-6 text-danger">
+
+            </div>
+            <div class="col-6 text-end">
                 <button class="btn btn-outline-primary"
                     wire:click="preview()">
                     <i class="bi bi-eye"></i>
                     Actualizar previsualización</button>
 
                 <button class="btn btn-primary"
-                    wire:click="save">
-                    <i class="bi bi-save"></i>
-                    Crear</button>
+                    wire:click="save"
+                    wire:loading.attr="disabled">
+                    <i class="fa fa-spinner fa-spin"
+                        wire:loading></i>
+                    <i class="bi bi-save"
+                        wire:loading.class="d-none"></i>
+                    Crear
+                </button>
             </div>
         </div>
     @endif

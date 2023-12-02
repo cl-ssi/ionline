@@ -140,7 +140,26 @@
                             1. Actas de recepción emitidas en el módulo de cenabast
                             2. Actas de recepción emitidas y firmadas en bodega
                             3. Actas de recepción de servicios emitidas en abastecimiento
+
+                            Todo lo anterior se reemplaza por recepciones
                         -->
+                        @if($dte->purchaseOrder)
+                            @foreach($dte->purchaseOrder->receptions as $reception)
+                                @if($reception->numeration->number)
+                                <a class="btn btn-sm btn-outline-primary" target="_blank"
+                                    href="{{ route('documents.partes.numeration.show_numerated', $reception->numeration) }}"
+                                    title="Acta de recepción CENABAST">
+                                    <i class="fas fa-file"></i>
+                                </a>
+                                @else
+                                    <span class="btn btn-sm btn-outline-secondary" 
+                                        title="Pendiente de numerar">
+                                        <i class="fas fa-file"></i>
+                                    </span>
+                                @endif
+                            @endforeach
+                        @endif
+
 
                         <!-- Punto 1 -->
                         @if ($dte->cenabast_reception_file)
@@ -164,15 +183,7 @@
                     </td>
                     <td class="small">
                         {{ $dte->requestForm?->contractManager?->tinnyName }} <br>
-                        {{ $dte->estado_reclamo }}
-                        {{-- 
-                            @if ($dte->requestForm)
-                                @if ($dte->requestForm->contractManager)
-                                    {{ $dte->requestForm->contractManager->shortName }} <br>
-                                    @livewire('finance.dte-send-confirmation', ['dte' => $dte->id, 'user_id' => $dte->requestForm->contract_manager_id], key($dte->id))
-                                @endif
-                            @endif
-                        --}}
+                        {{ $dte->estado_reclamo }}                        
                     </td>
                     <td class="small">
                         {{ $dte->fecha_recepcion_sii ?? '' }} <br>
@@ -197,7 +208,7 @@
                     <tr>
                         <td colspan="11">
 
-                            <div class="form-row">
+                        <div class="form-row">
                                 <div class="form-group col-md-2">
                                     <label for="for_folio_oc">Folio OC</label>
                                     <input type="text" class="form-control" id="for_folio_oc"
@@ -212,7 +223,6 @@
                                 @switch($dte->tipo_documento)
                                     @case('guias_despacho')
                                     @case('nota_credito')
-
                                     @case('nota_debito')
                                         <!-- TODO: Si es guia, se puede asociar a multiple
                                                                                                                                                             si es nota de crédito o débito se debería poder asociar sólo a una
@@ -233,7 +243,6 @@
 
                                     @case('factura_electronica')
                                     @case('factura_exenta')
-
                                     @case('boleta_honorarios')
                                     @case('boleta_electronica')
                                     @break
@@ -243,73 +252,70 @@
 
                                 <div class="form-group col-md-4">
                                     <label for="for_asociate">Operaciones:</label>
+                                    <br>
                                     <button type="submit" class="btn btn-primary"
                                         wire:click="save({{ $dte->id }})">Guardar </button>
                                     <button type="button" class="btn btn-outline-secondary"
                                         wire:click="dismiss">Cancelar </button>
                                 </div>
 
-                                <hr>
-
-
-
                             </div>
 
-                            <div class="form-row">
-                                <div class="card col-md-12 mb-3">
-                                    <div class="card-header">
-                                        Estado/Rechazar
-                                    </div>
-                                    <form wire:submit.prevent="changeStatus({{ $dte->id }})">
-                                        <div class="card-body">
-                                            <div class="form-group col-md-3">
-                                                <label for="for_confirmation_status">Estado de confirmación</label>
-                                                <select class="form-control" id="for_confirmation_status"
-                                                    wire:model.defer="confirmation_status">
-                                                    <option value=""></option>
-                                                    <option value="1">Aceptar</option>
-                                                    <option value="0">Rechazar</option>
-                                                </select>
-                                            </div>
-                                            <div class="form-group col-md-9">
-                                                <label for="for_confirmation_observation">Observación</label>
-                                                <textarea class="form-control" wire:model.defer="confirmation_observation" rows="3"></textarea>
-                                            </div>
+                            <hr>
 
-
-                                            <button type="submit" class="btn btn-primary">Guardar</button>
-                                            <button type="button" class="btn btn-outline-secondary"
-                                                wire:click="dismiss">Cancelar</button>
+                            @switch($dte->tipo_documento)
+                                @case('factura_electronica')
+                                @case('factura_exenta')
+                                @case('boleta_honorarios')
+                                @case('boleta_electronica')
+                                    <div class="form-row">
+                                        <div class="col-10">
+                                            @if($dte->purchaseOrder)
+                                                @foreach($dte->purchaseOrder->receptions as $reception)
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                                                    <label class="form-check-label" for="defaultCheck1">
+                                                        <b>Nº:</b> {{ $reception->numeration->number ?? 'Pendiente' }} 
+                                                        <b>Fecha:</b> {{ $reception->date?->format('Y-m-d') }}
+                                                        @if($reception->numeration->number)
+                                                            <a class="text-link" target="_blank"
+                                                                href="{{ route('documents.partes.numeration.show_numerated', $reception->numeration) }}">
+                                                                [ Ver ]
+                                                            </a>
+                                                        @endif
+                                                    </label>
+                                                </div>
+                                                @endforeach
+                                            @endif
                                         </div>
-                                    </form>
-                                </div>
-                            </div>
+                                        <div class="col-2">
+                                            <button class="btn btn-success form-control">
+                                                A revisión
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    @break
+                                @case('guias_despacho')
+                                @case('nota_credito')
+                                @case('nota_debito')
+                                    @break
+                            @endswitch
 
-                            {{-- 
 
-                            TODO
-                            
-                            
+    
                             <div class="form-row">
-                                <div class="form-group col-md-3">
-                                    <label for="for_confirmation_status">Estado de confirmación</label>
-                                    <select class="form-control" id="for_confirmation_status"
-                                        wire:model.defer="confirmation_status">
-                                        <option value=""></option>
-                                        <option value="0">Rechazar</option>
-                                    </select>
+                                <div class="col-10">
+                                    <label for="">Motivo de rechazo</label>
+                                    <input type="text" class="form-control">
                                 </div>
-
-                                <div class="form-group col-md-9">
-                                    <label for="for_confirmation_observation">Observación</label>
-                                    <textarea class="form-control" wire:model.defer="confirmation_observation" rows="3"></textarea>
+                                <div class="col-2">
+                                    <label for="">&nbsp;</label>
+                                    <button class="btn btn-danger form-control">
+                                        Rechazar
+                                    </button>
                                 </div>
                             </div>
-                            <button type="submit" class="btn btn-outline-secondary"
-                                wire:click="dismiss">Cancelar</button>
-                            <button type="submit" class="btn btn-primary"
-                                wire:click="save({{ $dte->id }})">Guardar</button> --}}
-
                         </td>
                     </tr>
                 @endif

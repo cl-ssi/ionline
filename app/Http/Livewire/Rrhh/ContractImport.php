@@ -40,16 +40,6 @@ class ContractImport extends Component
 
         $file = $this->file;
         $collection = Excel::toCollection(new EmployeeInformationImport, $this->file->path());
-        
-        // obtiene unidades organizacionales que vienen en archivo
-        $file_ous = array_unique(array_column($collection[0]->toArray(), 'cdigo_unidad'));
-        $ous = OrganizationalUnit::whereIn('sirh_ou_id',$file_ous)->get()->pluck('id','sirh_ou_id')->toArray();
-
-        // obtiene los usuarios que vienen en el archivo
-        $file_users = array_unique(array_column($collection[0]->toArray(), 'rut'));
-        $import_users = count($file_users);
-        $imported_users_in_ionline = User::whereIn('id',$file_users)->count();
-        $this->non_existent_users = $import_users - $imported_users_in_ionline;
 
         // se modifican todos los usuarios a inactivos
         // User::where('id','>',0)->update(['active' => 0]);
@@ -60,6 +50,7 @@ class ContractImport extends Component
         set_time_limit(7200);
         ini_set('memory_limit', '2048M');
 
+        $insert_array = [];
         try {
             foreach($collection as $row){
                 foreach($row as $key => $column){ 
@@ -116,105 +107,109 @@ class ContractImport extends Component
                             $rut = trim($column['rut']);
                             $dv = trim($column['dv']);
 
-                            // // cuantos usuarios no se han encontrado
-                            // if(!in_array($rut, $users)){
-                            //     $this->non_existent_users[$rut] = $column['nombre_funcionario'];
-                            // }
-
-                            // cuantas ou no se han encontrado
-                            if(!array_key_exists($column['cdigo_unidad'], $ous)){
-                                $this->non_existent_ous[$column['cdigo_unidad']] = "";    
-                            }
-
-                            Contract::updateOrCreate([
-                                'rut' => $rut,
-                                'correlativo' => $column['correlativo']
-                            ],[
-                                'rut' => $rut,
-                                'dv' => $column['dv'],
-                                'correlativo' => $column['correlativo'],
-                                'nombre_funcionario' => $column['nombre_funcionario'],
-                                'codigo_planta' => $column['cdigo_planta'],
-                                'descripcion_planta' => $column['descripcin_planta'],
-                                'codigo_calidad_juridica' => $column['cdigo_calidad_jurdica'],
-                                'descripcion_calidad_juridica' => $column['descripcin_calidad_jurdica'],
-                                'grado' => $column['grado'],
-                                'genero' => $column['gnero'],
-                                'estado_civil' => $column['estado_civil'],
-                                'direccion' => $column['direccin'],
-                                'ciudad' => $column['ciudad'],
-                                'comuna' => $column['comuna'],
-                                'nacionalidad' => $column['nacionalidad'],
-                                'fecha_ingreso_grado' => $fecha_ingreso_grado,
-                                'fecha_ingreso_servicio' => $fecha_ingreso_servicio,
-                                'fecha_ingreso_adm_publica' => $fecha_ingreso_adm_publica,
-                                'codigo_isapre' => $column['cdigo_isapre'],
-                                'descripcion_isapre' => $column['descripcin_isapre'],
-                                'codigo_afp' => $column['cdigo_afp'],
-                                'descripcion' => $column['descripcin'],
-                                'cargas_familiares' => $column['cargas_familiares'],
-                                'bieniotrienio' => $column['bieniotrienio'],
-                                'antiguedad' => $column['antiguedad'],
-                                'ley' => $column['ley'],
-                                'numero_horas' => $column['nmero_horas'],
-                                'etapa' => $column['etapa'],
-                                'nivel' => $column['nivel'],
-                                'fecha_inicio_en_el_nivel' => $fecha_inicio_en_el_nivel,
-                                'fecha_pago' => $fecha_pago,
-                                'antiguedad_en_nivel_anosmesesdias' => $column['antigedad_en_nivel_aos_meses_das'],
-                                'establecimiento' => $column['establecimiento'],
-                                'descripcion_establecimiento' => $column['descripcin_establecimiento'],
-                                'glosa_establecimiento_9999_contratos_historicos' => $column['glosa_establecimiento_9999_contratos_histricos'],
-                                'fecha_nacimiento' => $fecha_nacimiento,
-                                'codigo_unidad' => $column['cdigo_unidad'],
-                                'descripcion_unidad' => $column['descripcin_unidad'],
-                                'codigo_unidad_2' => $column['cdigo_unidad_2'],
-                                'descripcion_unidad_2' => $column['descripcin_unidad_2'],
-                                'c_costo' => $column['c_costo'],
-                                'codigo_turno' => $column['cdigo_turno'],
-                                'codigo_cargo' => $column['cdigo_cargo'],
-                                'descripcion_cargo' => $column['descripcin_cargo'],
-                                'correl_informe' => $column['correl_informe'],
-                                'codigo_funcion' => $column['cdigo_funcin'],
-                                'descripcion_funcion' => $column['descripcin_funcin'],
-                                'especcarrera' => $column['especcarrera'],
-                                'titulo' => $column['ttulo'],
-                                'fecha_inicio_contrato' => $fecha_inicio_contrato,
-                                'fecha_termino_contrato' => $fecha_termino_contrato,
-                                'fecha_alejamiento' => $fecha_alejamiento,
-                                'correl_planta' => $column['correl_planta'],
-                                '15076condicion' => $column['15076condicin'],
-                                'transitorio' => $column['transitorio'],
-                                'numero_resolucion' => $column['numero_resolucin'],
-                                'fecha_resolucion' => $fecha_resolucion,
-                                'tipo_documento' => $column['tipo_documento'],
-                                'tipo_movimiento' => $column['tipo_movimiento'],
-                                'total_haberes' => $column['total_haberes'],
-                                'remuneracion' => $column['remuneracin'],
-                                'sin_planillar' => $column['sin_planillar'],
-                                'servicio_de_salud' => $column['servicio_de_salud'],
-                                'usuario_ingreso' => $column['usuario_ingreso'],
-                                'fecha_ingreso' => $fecha_ingreso,
-                                'rut_del_reemplazado' => $column['rut_del_reemplazado'],
-                                'dv_del_reemplazado' => $column['dv_del_reemplazado'],
-                                'corr_contrato_del_reemplazado' => $column['corr_contrato_del_reemplazado'],
-                                'nombre_del_reemplazado' => $column['nombre_del_reemplazado'],
-                                'motivo_del_reemplazo' => $column['motivo_del_reemplazo'],
-                                'fecha_inicio_ausentismo' => $fecha_inicio_ausentismo,
-                                'fecha_termino_ausentismo' => $fecha_termino_ausentismo,
-                                'fecha_primer_contrato' => $fecha_primer_contrato
-                            ]);
+                            $insert_array[] = [
+                                        'rut' => $rut,
+                                        'dv' => $column['dv'],
+                                        'correlativo' => $column['correlativo'],
+                                        'nombre_funcionario' => $column['nombre_funcionario'],
+                                        'codigo_planta' => $column['cdigo_planta'],
+                                        'descripcion_planta' => $column['descripcin_planta'],
+                                        'codigo_calidad_juridica' => $column['cdigo_calidad_jurdica'],
+                                        'descripcion_calidad_juridica' => $column['descripcin_calidad_jurdica'],
+                                        'grado' => $column['grado'],
+                                        'genero' => $column['gnero'],
+                                        'estado_civil' => $column['estado_civil'],
+                                        'direccion' => $column['direccin'],
+                                        'ciudad' => $column['ciudad'],
+                                        'comuna' => $column['comuna'],
+                                        'nacionalidad' => $column['nacionalidad'],
+                                        'fecha_ingreso_grado' => $fecha_ingreso_grado,
+                                        'fecha_ingreso_servicio' => $fecha_ingreso_servicio,
+                                        'fecha_ingreso_adm_publica' => $fecha_ingreso_adm_publica,
+                                        'codigo_isapre' => $column['cdigo_isapre'],
+                                        'descripcion_isapre' => $column['descripcin_isapre'],
+                                        'codigo_afp' => $column['cdigo_afp'],
+                                        'descripcion' => $column['descripcin'],
+                                        'cargas_familiares' => $column['cargas_familiares'],
+                                        'bieniotrienio' => $column['bieniotrienio'],
+                                        'antiguedad' => $column['antiguedad'],
+                                        'ley' => $column['ley'],
+                                        'numero_horas' => $column['nmero_horas'],
+                                        'etapa' => $column['etapa'],
+                                        'nivel' => $column['nivel'],
+                                        'fecha_inicio_en_el_nivel' => $fecha_inicio_en_el_nivel,
+                                        'fecha_pago' => $fecha_pago,
+                                        'antiguedad_en_nivel_anosmesesdias' => $column['antigedad_en_nivel_aos_meses_das'],
+                                        'establecimiento' => $column['establecimiento'],
+                                        'descripcion_establecimiento' => $column['descripcin_establecimiento'],
+                                        'glosa_establecimiento_9999_contratos_historicos' => $column['glosa_establecimiento_9999_contratos_histricos'],
+                                        'fecha_nacimiento' => $fecha_nacimiento,
+                                        'codigo_unidad' => $column['cdigo_unidad'],
+                                        'descripcion_unidad' => $column['descripcin_unidad'],
+                                        'codigo_unidad_2' => $column['cdigo_unidad_2'],
+                                        'descripcion_unidad_2' => $column['descripcin_unidad_2'],
+                                        'c_costo' => $column['c_costo'],
+                                        'codigo_turno' => $column['cdigo_turno'],
+                                        'codigo_cargo' => $column['cdigo_cargo'],
+                                        'descripcion_cargo' => $column['descripcin_cargo'],
+                                        'correl_informe' => $column['correl_informe'],
+                                        'codigo_funcion' => $column['cdigo_funcin'],
+                                        'descripcion_funcion' => $column['descripcin_funcin'],
+                                        'especcarrera' => $column['especcarrera'],
+                                        'titulo' => $column['ttulo'],
+                                        'fecha_inicio_contrato' => $fecha_inicio_contrato,
+                                        'fecha_termino_contrato' => $fecha_termino_contrato,
+                                        'fecha_alejamiento' => $fecha_alejamiento,
+                                        'correl_planta' => $column['correl_planta'],
+                                        '15076condicion' => $column['15076condicin'],
+                                        'transitorio' => $column['transitorio'],
+                                        'numero_resolucion' => $column['numero_resolucin'],
+                                        'fecha_resolucion' => $fecha_resolucion,
+                                        'tipo_documento' => $column['tipo_documento'],
+                                        'tipo_movimiento' => $column['tipo_movimiento'],
+                                        'total_haberes' => $column['total_haberes'],
+                                        'remuneracion' => $column['remuneracin'],
+                                        'sin_planillar' => $column['sin_planillar'],
+                                        'servicio_de_salud' => $column['servicio_de_salud'],
+                                        'usuario_ingreso' => $column['usuario_ingreso'],
+                                        'fecha_ingreso' => $fecha_ingreso,
+                                        'rut_del_reemplazado' => $column['rut_del_reemplazado'],
+                                        'dv_del_reemplazado' => $column['dv_del_reemplazado'],
+                                        'corr_contrato_del_reemplazado' => $column['corr_contrato_del_reemplazado'],
+                                        'nombre_del_reemplazado' => $column['nombre_del_reemplazado'],
+                                        'motivo_del_reemplazo' => $column['motivo_del_reemplazo'],
+                                        'fecha_inicio_ausentismo' => $fecha_inicio_ausentismo,
+                                        'fecha_termino_ausentismo' => $fecha_termino_ausentismo,
+                                        'fecha_primer_contrato' => $fecha_primer_contrato
+                            ];
     
                             $count_inserts += 1;
                         }
                     }
                 }
             }
+
+            // dd($insert_array);
+            Contract::upsert($insert_array, 
+                    ['rut', 'correlativo'], 
+                    ['dv','nombre_funcionario','codigo_planta','descripcion_planta','codigo_calidad_juridica','descripcion_calidad_juridica','grado',
+                    'genero','estado_civil','direccion','ciudad','comuna','nacionalidad','fecha_ingreso_grado','fecha_ingreso_servicio','fecha_ingreso_adm_publica',
+                    'codigo_isapre','descripcion_isapre','codigo_afp','descripcion','cargas_familiares','bieniotrienio','antiguedad','ley','numero_horas','etapa',
+                    'nivel','fecha_inicio_en_el_nivel','fecha_pago','antiguedad_en_nivel_anosmesesdias','establecimiento','descripcion_establecimiento',
+                    'glosa_establecimiento_9999_contratos_historicos','fecha_nacimiento','codigo_unidad','descripcion_unidad','codigo_unidad_2',
+                    'descripcion_unidad_2','c_costo','codigo_turno','codigo_cargo','descripcion_cargo','correl_informe','codigo_funcion','descripcion_funcion',
+                    'especcarrera','titulo','fecha_inicio_contrato','fecha_termino_contrato','fecha_alejamiento','correl_planta','15076condicion','transitorio',
+                    'numero_resolucion','fecha_resolucion','tipo_documento','tipo_movimiento','total_haberes','remuneracion','sin_planillar','servicio_de_salud',
+                    'usuario_ingreso','fecha_ingreso','rut_del_reemplazado','dv_del_reemplazado','corr_contrato_del_reemplazado','nombre_del_reemplazado',
+                    'motivo_del_reemplazo','fecha_inicio_ausentismo','fecha_termino_ausentismo','fecha_primer_contrato'
+                    ]
+            );
+
         } catch (Exception $e) {
             echo 'Caught exception: ',  $e->getMessage(), "\n";
         }
 
-        $this->message = 'Se ha cargado correctamente el archivo (' . $count_inserts . ' registros creados/actualizados).';
+        $this->message = 'Se ha cargado correctamente el archivo (' . $count_inserts . ' filas procesadas).';
     }
 
     public function process(){
@@ -223,37 +218,35 @@ class ContractImport extends Component
         $this->non_existent_ous = [];
 
         $count_inserts = 0;
-        $contracts = Contract::whereDoesntHave('user')->get();
+        $contracts = Contract::whereDoesntHave('user')->with('organizationalUnit')->whereHas('organizationalUnit')->get();
+        $withoutOu = array_unique(Contract::whereDoesntHave('user')->whereDoesntHave('organizationalUnit')->pluck('codigo_unidad')->toArray());
+        $this->non_existent_users = Contract::whereDoesntHave('user')->whereDoesntHave('organizationalUnit')->count();
 
         foreach($contracts as $contract){
-            
+ 
             $rut = $contract->rut;
             $dv = $contract->dv;
 
-            $ou = OrganizationalUnit::where('sirh_ou_id',$contract->codigo_unidad)->first();
+            $fonasaUser = Fonasa::find($rut."-".$dv);
+            if(!isset($fonasaUser->message)){
 
-            if($ou){
-                $fonasaUser = Fonasa::find($rut."-".$dv);
-                if(!isset($fonasaUser->message)){
+                User::withTrashed()->updateOrCreate([
+                    'id' => $rut
+                ],[
+                    'id' => $rut,
+                    'dv' => $dv,
+                    'mothers_family' => $fonasaUser->mothers_family,
+                    'fathers_family' => $fonasaUser->fathers_family,
+                    'name' => $fonasaUser->name,
+                    'organizational_unit_id' => $contract->organizationalUnit->id,
+                    'deleted_at' => null,
+                ]);
 
-                    User::withTrashed()->updateOrCreate([
-                        'id' => $rut
-                    ],[
-                        'id' => $rut,
-                        'dv' => $dv,
-                        'mothers_family' => $fonasaUser->mothers_family,
-                        'fathers_family' => $fonasaUser->fathers_family,
-                        'name' => $fonasaUser->name,
-                        'organizational_unit_id' => $ou->id,
-                        'deleted_at' => null,
-                    ]);
-
-                    $count_inserts += 1;
-                }
+                $count_inserts += 1;
             }
         }
 
-        $this->non_existent_ous = [];
+        $this->non_existent_ous = $withoutOu;
 
         $this->message = 'Procesamiento completado. Se han creado/actualizado ' . $count_inserts . ' usuarios en el sistema. Si no se han creado más funcionarios, la posible causa puede ser que tengan asignado en el archivo de importación un código sirh no parametrizado con unidades organizacionales del ionline.';
     }

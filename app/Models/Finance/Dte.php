@@ -2,17 +2,18 @@
 
 namespace App\Models\Finance;
 
+use OwenIt\Auditing\Contracts\Auditable;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\User;
 use App\Models\Warehouse\Control;
 use App\Models\RequestForms\RequestForm;
 use App\Models\RequestForms\ImmediatePurchase;
+use App\Models\Finance\Receptions\Reception;
 use App\Models\Finance\PurchaseOrder;
 use App\Models\Finance\File;
 use App\Models\Establishment;
-use App\User;
-use Illuminate\Support\Facades\Storage;
-use OwenIt\Auditing\Contracts\Auditable;
 
 class Dte extends Model implements Auditable
 {
@@ -90,11 +91,23 @@ class Dte extends Model implements Auditable
         'establishment_id',
 
         'confirmation_status',
-        'confirmation_user_id',
-        'confirmation_ou_id',
-        'confirmation_observation',
-        'confirmation_at',
+
+        // Nombre antiguos Campos
+        // 'confirmation_user_id',
+        // 'confirmation_ou_id',
+        // 'confirmation_at',
+
+        // Nombre nuevos campos
+        'completed_user_id',
+        'completed_ou_id',
+        'completed_at',
+
+
+        // Se reemplaza por el  reason_rejection confirmation_observation = reason_rejection
+        //'confirmation_observation',
         'confirmation_signature_file',
+
+
 
 
         'dte_id',
@@ -167,6 +180,13 @@ class Dte extends Model implements Auditable
     {
         return $this->hasMany(Control::class, 'po_code', 'folio_oc');
     }
+
+    /** Tiene muchos receptions */
+    public function receptions()
+    {
+        return $this->hasMany(Reception::class);
+    }
+     
 
     /**
      * Una factura puede tener muchas dtes
@@ -270,7 +290,6 @@ class Dte extends Model implements Auditable
     {
         return $this->belongsTo(Establishment::class, 'establishment_id');
     }
-
 
     public function confirmationUser()
     {

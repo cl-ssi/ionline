@@ -25,6 +25,9 @@ class Regularization extends Model
     *
     * @var array
     */
+    // protected $casts = [
+    //     'fecha' => 'date:Y-m-d',
+    // ];
     
 
     /**

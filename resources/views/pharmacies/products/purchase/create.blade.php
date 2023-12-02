@@ -15,12 +15,12 @@
 
 		<div class="form-row">
 			<fieldset class="form-group col-3">
-				<label for="for_date">Fecha de recepción</label>
+				<label for="for_date">Fecha de recepción (*)</label>
 				<input type="date" class="form-control" id="for_date" name="date" required="required">
 			</fieldset>
 
 			<fieldset class="form-group col">
-				<label for="for_origin">Proveedor</label>
+				<label for="for_origin">Proveedor (*)</label>
 							<select name="supplier_id" class="form-control selectpicker" data-live-search="true" required="">
 								@foreach ($suppliers as $key => $supplier)
 									<option value="{{$supplier->id}}">{{$supplier->name}}</option>
@@ -31,19 +31,23 @@
 
 		<div class="form-row">
 			<fieldset class="form-group col-2">
-					<label for="for_text">OC</label>
+					<label for="for_text">OC (*)</label>
 					<input type="text" class="form-control" id="for_text" placeholder="" name="purchase_order" required="">
+			</fieldset>
+            <fieldset class="form-group col-2">
+					<label for="for_order_number">N° pedido (*)</label>
+					<input type="text" class="form-control" id="for_order_number" placeholder="" name="order_number" required="">
 			</fieldset>
 			<fieldset class="form-group col-2">
 					<label for="for_text">Año</label>
 					<input type="text" class="form-control" id="for_text" placeholder="" name="purchase_order_dato">
 			</fieldset>
-			<fieldset class="form-group col-4">
-          <label for="for_date">Fecha de emisión factura</label>
+			<fieldset class="form-group col-3">
+          <label for="for_date">Fecha de emisión factura (*)</label>
           <input type="date" class="form-control" id="for_date" name="purchase_order_date" required="required">
       </fieldset>
-			<fieldset class="form-group col-4">
-					<label for="for_text">Monto total neto</label>
+			<fieldset class="form-group col-3">
+					<label for="for_text">Monto total neto (*)</label>
 					<input type="number" class="form-control" id="for_text" placeholder="" name="purchase_order_amount" required="">
 			</fieldset>
 		</div>
@@ -66,7 +70,7 @@
 		<div class="form-row">
       <fieldset class="form-group col">
           <label for="for_note">Nota</label>
-          <input type="text" class="form-control" id="for_note" placeholder="" name="notes" required="">
+          <input type="text" class="form-control" id="for_note" placeholder="" name="notes">
       </fieldset>
 
 			<!--<fieldset class="form-group col">
@@ -83,12 +87,12 @@
 
 			<fieldset class="form-group col">
           <label for="for_note">Destino</label>
-          <input type="text" class="form-control" id="for_note" placeholder="" name="destination" required="">
+          <input type="text" class="form-control" id="for_note" placeholder="" name="destination" >
       </fieldset>
 
 			<fieldset class="form-group col">
           <label for="for_note">Fondos</label>
-          <input type="text" class="form-control" id="for_note" placeholder="" name="from" required="">
+          <input type="text" class="form-control" id="for_note" placeholder="" name="from">
       </fieldset>
     </div>
 

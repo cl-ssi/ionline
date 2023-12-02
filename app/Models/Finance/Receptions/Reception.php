@@ -14,6 +14,8 @@ use App\Rrhh\OrganizationalUnit;
 use App\Models\Finance\Receptions\ReceptionType;
 use App\Models\Finance\Receptions\ReceptionItem;
 use App\Models\Finance\PurchaseOrder;
+use App\Models\Finance\Dte;
+use App\Models\File;
 use App\Models\Establishment;
 use App\Models\Documents\Numeration;
 use App\Models\Documents\Approval;
@@ -39,21 +41,36 @@ class Reception extends Model
         'internal_number',
         'date',
         'reception_type_id',
+
         'purchase_order',
+
+        'guia_id',
+        'dte_id',
+        'dte_type',
+        'dte_number',
+        'dte_date',
+
         'header_notes',
         'footer_notes',
+
         'partial_reception',
-        'doc_type',
-        'doc_number',
-        'doc_date',
+
+        'neto',
+        'descuentos',
+        'cargos',
+        'subtotal',
+        'iva',
         'total',
-        'establishment_id',
-        'file',
+
         'status',
+    
+        // 'file',
         'responsable_id',
         'responsable_ou_id',
         'creator_id',
         'creator_ou_id',
+    
+        'establishment_id',
     ];
     
     /**
@@ -63,7 +80,7 @@ class Reception extends Model
     */
     protected $casts = [
         'date'      => 'date:Y-m-d',
-        'doc_date'  => 'date:Y-m-d',
+        'dte_date'  => 'date:Y-m-d',
         'partial_reception' => 'boolean',
         'status'    => 'boolean',
     ];
@@ -76,6 +93,16 @@ class Reception extends Model
     public function purchaseOrder(): BelongsTo
     {
         return $this->belongsTo(PurchaseOrder::class, 'purchase_order', 'code');
+    }
+
+    public function guia(): BelongsTo
+    {
+        return $this->belongsTo(Dte::class, 'guia_id');
+    }
+
+    public function dte(): BelongsTo
+    {
+        return $this->belongsTo(Dte::class, 'dte_id');
     }
 
     public function establishment(): BelongsTo
@@ -122,5 +149,13 @@ class Reception extends Model
     public function numeration(): MorphOne
     {
         return $this->morphOne(Numeration::class, 'numerable');
+    }
+
+    /**
+     * Get all of the files of a model.
+     */
+    public function files(): MorphMany
+    {
+        return $this->morphMany(File::class, 'fileable');
     }
 }

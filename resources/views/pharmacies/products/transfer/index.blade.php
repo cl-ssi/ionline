@@ -136,7 +136,7 @@
 			<label for="to">Destino</label>
 			<select name="to" class="form-control selectpicker" data-live-search="true" required="">
 				@foreach ($establishments as $key => $establishment)
-				<option value="{{$establishment->id}}" data-content="{{$establishment->name}}" @if($key == 0) disabled @endif></option>
+				<option value="{{$establishment->id}}" data-content="{{$establishment->name}}"></option>
 				@endforeach
 			</select>
 		</fieldset>
@@ -215,14 +215,6 @@
 			content: function() {
 				return $(this).next('.popover-list-content').html();
 			}
-		});
-
-		$("select[name=from]").change(function() {
-			var establishment_id = $(this).val()
-			$("select[name=to] option").each(function(){
-				$(this).val() == establishment_id ? $(this).prop('disabled', true) : $(this).prop('disabled', false)
-				$(this).selectpicker('refresh');
-			})
 		});
 
 		$('a.ref-product').click(function(e){
