@@ -90,8 +90,8 @@ class PaymentController extends Controller
             ->where('confirmation_status', 1)
             ->where('establishment_id', auth()->user()->organizationalUnit->establishment->id)
             ->where(function (Builder $query) {
-                $query->whereNull('fin_status')
-                    ->orWhere('fin_status', 'rechazado');
+                $query->whereNull('payment_ready')
+                    ->orWhere('payment_ready', 0);
             });
 
         /**
@@ -121,7 +121,7 @@ class PaymentController extends Controller
 
     public function sendToReadyInbox(Dte $dte)
     {
-        $dte->fin_status = 'Enviado a Pendiente Para Pago';
+        $dte->payment_ready = 1;
         $dte->sender_id = Auth::id();
         $dte->sender_ou = Auth::user()->organizational_unit_id;
         $dte->sender_at = now();
@@ -154,7 +154,7 @@ class PaymentController extends Controller
                 'requestForm.father.requestFormFiles'
             ])
             ->where('confirmation_status', 1)
-            ->where('fin_status', 'Enviado a Pendiente Para Pago')
+            ->where('payment_ready', 1)
             ->where('establishment_id', auth()->user()->organizationalUnit->establishment_id);
 
             if ($request->filled('id') || $request->filled('folio') || $request->filled('oc') || $request->filled('folio_compromiso') || $request->filled('folio_devengo')) {
@@ -184,30 +184,30 @@ class PaymentController extends Controller
         return view('finance.payments.rejected', compact('dtes'));
     }
 
+// Se va a Comentar ya que parece que no se utiliza
+//     public function update(Dte $dte, Request $request)
+//     {
+//         $dte->fin_status = $request->status;
+//         $dte->folio_sigfe = $request->folio_sigfe;
+//         $dte->payer_id = Auth::id();
+//         $dte->payer_ou = Auth::user()->organizational_unit_id;
+//         $dte->payer_at = now();
 
-    public function update(Dte $dte, Request $request)
-    {
-        $dte->fin_status = $request->status;
-        $dte->folio_sigfe = $request->folio_sigfe;
-        $dte->payer_id = Auth::id();
-        $dte->payer_ou = Auth::user()->organizational_unit_id;
-        $dte->payer_at = now();
+//         $dte->save();
+//         PaymentFlow::create([
+//             'dte_id' => $dte->id,
+//             'user_id' => Auth::id(),
+//             'status' => $request->status,
+//             'observation' => $request->observation,
+//         ]);
 
-        $dte->save();
-        PaymentFlow::create([
-            'dte_id' => $dte->id,
-            'user_id' => Auth::id(),
-            'status' => $request->status,
-            'observation' => $request->observation,
-        ]);
-
-        return redirect()->back()->with('success', 'Flujo de pago actualizado exitosamente');
-    }
+//         return redirect()->back()->with('success', 'Flujo de pago actualizado exitosamente');
+//     }
 
 
     public function returnToReview(Dte $dte, Request $request)
     {
-        $dte->fin_status = null;
+        $dte->payment_ready = null;
         $dte->sender_id = null;
         $dte->sender_ou = null;
         $dte->sender_at = null;
