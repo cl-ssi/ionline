@@ -36,24 +36,24 @@ class CreateReceptionsFromCenabast extends Command
             $reception = Reception::updateOrCreate(
                 ['dte_id' => $dte->id],
                 [
-                'date' => $dte->all_receptions_at ?? now(),
-                'responsable_id' => $dte->all_receptions_user_id,
-                'responsable_ou_id' => $dte->all_receptions_ou_id,
-                'creator_id' => $dte->all_receptions_user_id ?? 15287582,
-                'creator_ou_id' => $dte->all_receptions_ou_id ?? 20,
-                'reception_type_id' => 1,
-                'establishment_id' =>  $dte->establishment_id,
-                'purchase_order' =>  $dte->folio_oc,
+                    'date'              => $dte->all_receptions_at ?? now(),
+                    'responsable_id'    => $dte->all_receptions_user_id,
+                    'responsable_ou_id' => $dte->all_receptions_ou_id,
+                    'creator_id'        => $dte->all_receptions_user_id ?? 15287582,
+                    'creator_ou_id'     => $dte->all_receptions_ou_id ?? 20,
+                    'reception_type_id' => 1,
+                    'establishment_id'  =>  $dte->establishment_id,
+                    'purchase_order'    =>  $dte->folio_oc,
                 ]);
             
-            $reception->files()->updateOrCreate([
-                'type' => 'signed_file',
-            ],[
-                'storage_path' => $dte->cenabast_reception_file,
-                'stored' => true,
-                'type' => 'signed_file',
-                'stored_by_id' => $dte->all_receptions_user_id,
-            ]);
+            $reception->files()->updateOrCreate(
+                [ 'type' => 'signed_file' ],
+                [
+                    'storage_path'  => $dte->cenabast_reception_file,
+                    'stored'        => true,
+                    'type'          => 'signed_file',
+                    'stored_by_id'  => $dte->all_receptions_user_id,
+                ]);
         }
         return Command::SUCCESS;
     }

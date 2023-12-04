@@ -1313,8 +1313,8 @@
     $('input[type="file"]').bind('change', function(e) {
         //Validación de tamaño
         for (let i = 0; i < this.files.length; i++) {
-            if ((this.files[i].size / 1024 / 1024) > 3) {
-                alert('No puede cargar archivos de más de 3 MB.');
+            if ((this.files[i].size / 1024 / 1024) > 5) {
+                alert('No puede cargar archivos de más de 5 MB.');
                 $(this).val('');
                 break;
             }
