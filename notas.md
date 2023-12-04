@@ -26,7 +26,7 @@
 
 [X] Modulo de recepcion, poder agregar un rechazo de mercaderia asociado a una OC
 [ ] En rechazo, marcar aquellas dtes que tengan un acta de rechazo ya.
-[ ] Actas de recepción, poder subir un archivo, ej: Escaneo de la factura con el timbre.
+[X] Actas de recepción, poder subir un archivo, ej: Escaneo de la factura con el timbre.
 [ ] Editar una recepción
 [X] En crear recepcion, dejar por defecto el estableciento de quien está logeado
 [X] En recepciones, poner un indicador de "loading" cuando la OC se esté buscando en MP

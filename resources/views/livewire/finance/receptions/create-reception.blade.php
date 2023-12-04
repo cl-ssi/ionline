@@ -391,13 +391,14 @@
         @endif
 
 
-        @can('Receptions: ')
+        @can('Permite cargar actas firmadas retroactivamente')
         <div class="mb-3">
             <label for="file_signed" class="form-label">Subir acta firmada</label>
             <div class="input-group">
                 <input class="form-control" type="file" wire:model="file_signed" id="file_signed">
             </div>
         </div>
+        @endcan
 
 
         <!-- Firmantes -->
