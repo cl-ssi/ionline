@@ -10,7 +10,7 @@
         <form class="form-row mt-3">
             <div class="form-group col-md-3">
                 <label for="date">Fecha y hora a justificar</label>
-                <input type="datetime-local" class="form-control" wire:model.defer="noAttendanceRecord.date">
+                <input type="datetime-local" class="form-control" wire:model.defer="noAttendanceRecord.date" max ="{{ date('Y-m-d\T23:59') }}">
                 @error('noAttendanceRecord.date') <span class="text-danger">{{ $message }}</span> @enderror
             </div>
             <div class="form-group col-md-3">
