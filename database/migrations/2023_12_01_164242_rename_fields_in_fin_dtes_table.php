@@ -47,6 +47,18 @@ return new class extends Migration
         });
 
 
+        Schema::table('fin_purchase_orders', function (Blueprint $table) {
+        DB::table('fin_purchase_orders')->where('code', 'like', '621%')->update(['cenabast' => true]);
+        });
+
+
+        //se elimina la columna cenabast despues de haber puesto en true en la orden de compra
+        Schema::table('fin_dtes', function (Blueprint $table) {
+            $table->dropColumn('cenabast');
+        
+        });
+
+
 
 
 
@@ -83,6 +95,23 @@ return new class extends Migration
             $table->string('payment_ready')->change();
             $table->renameColumn('payment_ready', 'fin_status');
         });
+
+
+
+        Schema::table('fin_purchase_orders', function (Blueprint $table) {
+            DB::table('fin_purchase_orders')->where('code', 'like', '621%')->update(['cenabast' => false]);
+        });
+
+
+
+        Schema::table('fin_dtes', function (Blueprint $table) {
+            $table->boolean('cenabast')->after('establishment_id')->nullable();
+
+        });
+
+
+
+
     }
     
 };
