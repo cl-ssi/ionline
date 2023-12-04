@@ -177,33 +177,12 @@ class PaymentController extends Controller
             'dtes',
             'invoices'
         ])
-            ->where('confirmation_status', 0)
+            ->whereNotNull('rejected')
             ->where('establishment_id', auth()->user()->organizationalUnit->establishment_id)
             ->orderByDesc('fecha_recepcion_sii')
             ->paginate(50);
         return view('finance.payments.rejected', compact('dtes'));
     }
-
-// Se va a Comentar ya que parece que no se utiliza
-//     public function update(Dte $dte, Request $request)
-//     {
-//         $dte->fin_status = $request->status;
-//         $dte->folio_sigfe = $request->folio_sigfe;
-//         $dte->payer_id = Auth::id();
-//         $dte->payer_ou = Auth::user()->organizational_unit_id;
-//         $dte->payer_at = now();
-
-//         $dte->save();
-//         PaymentFlow::create([
-//             'dte_id' => $dte->id,
-//             'user_id' => Auth::id(),
-//             'status' => $request->status,
-//             'observation' => $request->observation,
-//         ]);
-
-//         return redirect()->back()->with('success', 'Flujo de pago actualizado exitosamente');
-//     }
-
 
     public function returnToReview(Dte $dte, Request $request)
     {

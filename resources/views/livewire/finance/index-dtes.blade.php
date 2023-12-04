@@ -86,7 +86,6 @@
             <tr>
                 <th>ID</th>
                 <th width="55px">Estb.</th>
-                <th>CNB.</th>
                 <th>Documento</th>
                 <th width="140px">OC</th>
                 <th>FR</th>
@@ -112,19 +111,7 @@
                     </td>
                     <td>
                         {{ $dte->establishment?->alias }}
-                    </td>
-                    <td>
-                        <div class="custom-control custom-switch">
-                            <input type="checkbox" class="custom-control-input" id="customSwitch{{ $dte->id }}"
-                                wire:click="toggleCenabast({{ $dte->id }})" wire:loading.attr="disabled"
-                                wire:loading.class="spinner-border" wire:target="toggleCenabast({{ $dte->id }})"
-                                {{ $dte->cenabast ? 'checked' : '' }}
-                                @can('Payments: viewer')
-                                disabled
-                                @endcan>
-                            <label class="custom-control-label" for="customSwitch{{ $dte->id }}"></label>
-                        </div>
-                    </td>
+                    </td>                    
                     <td class="small">
                         @include('finance.payments.partials.dte-info')
                     </td>
@@ -145,7 +132,7 @@
                         -->
                         @if($dte->purchaseOrder)
                             @foreach($dte->purchaseOrder->receptions as $reception)
-                                @if($reception->numeration->number)
+                                @if($reception->numeration?->number )
                                 <a class="btn btn-sm btn-outline-primary" target="_blank"
                                     href="{{ route('documents.partes.numeration.show_numerated', $reception->numeration) }}"
                                     title="Acta de recepción CENABAST">
@@ -273,11 +260,13 @@
                                             @if($dte->purchaseOrder)
                                                 @foreach($dte->purchaseOrder->receptions as $reception)
                                                 <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                                                    <input class="form-check-input" type="checkbox" value="" id="defaultCheck{{ $reception->id }}"
+                                                    wire:click="updateReceptionDteId({{ $reception->id }}, {{ $dte->id }})"
+                                                    >
                                                     <label class="form-check-label" for="defaultCheck1">
                                                         <b>Nº:</b> {{ $reception->numeration->number ?? 'Pendiente' }} 
                                                         <b>Fecha:</b> {{ $reception->date?->format('Y-m-d') }}
-                                                        @if($reception->numeration->number)
+                                                        @if($reception->numeration?->number)
                                                             <a class="text-link" target="_blank"
                                                                 href="{{ route('documents.partes.numeration.show_numerated', $reception->numeration) }}">
                                                                 [ Ver ]
@@ -289,7 +278,7 @@
                                             @endif
                                         </div>
                                         <div class="col-2">
-                                            <button class="btn btn-success form-control">
+                                            <button class="btn btn-success form-control" wire:click="updateAllReceptionsStatus({{ $dte->id }})">
                                                 A revisión
                                             </button>
                                         </div>
