@@ -258,22 +258,22 @@
                                     <div class="form-row">
                                         <div class="col-10">
                                             @if($dte->purchaseOrder)
-                                                @foreach($dte->purchaseOrder->receptions as $reception)
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="" id="defaultCheck{{ $reception->id }}"
-                                                    wire:click="updateReceptionDteId({{ $reception->id }}, {{ $dte->id }})"
-                                                    >
-                                                    <label class="form-check-label" for="defaultCheck1">
-                                                        <b>Nº:</b> {{ $reception->numeration->number ?? 'Pendiente' }} 
-                                                        <b>Fecha:</b> {{ $reception->date?->format('Y-m-d') }}
-                                                        @if($reception->numeration?->number)
-                                                            <a class="text-link" target="_blank"
-                                                                href="{{ route('documents.partes.numeration.show_numerated', $reception->numeration) }}">
-                                                                [ Ver ]
-                                                            </a>
-                                                        @endif
-                                                    </label>
-                                                </div>
+                                                @foreach($dte->purchaseOrder->receptions->where('rejected','<>', '1') as $reception)
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" value="" id="defaultCheck{{ $reception->id }}"
+                                                        wire:click="updateReceptionDteId({{ $reception->id }}, {{ $dte->id }})"
+                                                        >
+                                                        <label class="form-check-label" for="defaultCheck1">
+                                                            <b>Nº:</b> {{ $reception->numeration->number ?? 'Pendiente' }} 
+                                                            <b>Fecha:</b> {{ $reception->date?->format('Y-m-d') }}
+                                                            @if($reception->numeration?->number)
+                                                                <a class="text-link" target="_blank"
+                                                                    href="{{ route('documents.partes.numeration.show_numerated', $reception->numeration) }}">
+                                                                    [ Ver ]
+                                                                </a>
+                                                            @endif
+                                                        </label>
+                                                    </div>
                                                 @endforeach
                                             @endif
                                         </div>
@@ -293,9 +293,20 @@
 
 
     
+                            <hr>
+                            <h6>Rechazo</h6>
+                            <ul>
+                                @if($dte->purchaseOrder)
+                                    @foreach($dte->purchaseOrder->receptions->where('rejected', '1') as $reception)
+                                        <li><b>Acta ID:</b> {{ $reception->id }}</li>
+                                        <li><b>Motivo Rechazo:</b> {{ $reception->rejected_notes }}</li>
+                                    @endforeach
+                                @endif
+                            </ul>
                             <div class="form-row">
+
                                 <div class="col-10">
-                                    <label for="">Motivo de rechazo</label>
+                                    <label for="">Motivo de rechazo Dte</label>
                                     <input type="text" class="form-control" wire:model.defer="reason_rejection" 1>
                                 </div>
                                 <div class="col-2">
