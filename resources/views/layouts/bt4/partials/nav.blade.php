@@ -250,11 +250,11 @@
 
 
 
-                            @canany(['Store: Cenabast'])
+                            @can('be god')
                             <a class="dropdown-item {{ active('warehouse.cenabast.index') }}" href="{{ route('warehouse.cenabast.index') }}">
                                 <i class="fas fa-pills"></i> Cenabast
                             </a>
-                            @endcanany
+                            @endcan
 
 
 
