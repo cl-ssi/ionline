@@ -54,6 +54,7 @@ class IndexReception extends Component
                 'numeration',
                 'files',
             ])
+            ->where('creator_id', auth()->id())
             ->orderByDesc('id')
             ->when($this->filter_id, function($query) {
                 $query->where('id', $this->filter_id);
