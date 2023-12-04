@@ -10,6 +10,7 @@ use App\Models\Programmings\ProgrammingItem;
 use App\Models\Programmings\ProfessionalHour;
 use App\Models\Establishment;
 use App\Models\Commune;
+use App\Models\Programmings\ActivityItem;
 use App\User;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
@@ -85,11 +86,9 @@ class ProgrammingReportController extends Controller
         $isTracer = $request->isTracer ?? 'SI';
         // $option = $request->commune_filter ?? 'hospicio';
         // $establishment = array('hospicio' => [37, 10], 'iquique' => [2, 5, 4, 3], 'pica' => [26], 'huara' => [20], 'pozoalmonte' => [29], 'colchane' => [17], 'camiña' => [15], 'hectorreyno' => [12]);
-        $programmings = Programming::with('establishment:id,name,type')->where('year', $year)->get();
-        $establishments = $programmings->pluck('establishment');
+        $establishments = Programming::with('establishment:id,name,type')->where('year', $year)->get()->pluck('establishment');
         $options = $request->establishment_filter ?? [$establishments->first()->id];
-        $cycles = ProgrammingItem::whereIn('programming_id', $establishments->pluck('id')->toArray())->get()->pluck('cycle')->unique();
-        $cycles = $cycles->filter();
+        $cycles = ActivityItem::whereHas('program', fn($q) => $q->where('year', $year) )->get()->pluck('vital_cycle')->unique();
         $cycle_selected = $request->cycle_filter ?? [];
 
         // $programmingItems = ProgrammingItem::select(
@@ -145,6 +144,38 @@ class ProgrammingReportController extends Controller
                         ->get();
 
         return view('programmings/reports/reportConsolidatedSep', compact('programmingItems', 'year', 'options', 'isTracer', 'establishments', 'cycles', 'cycle_selected'));
+    }
+
+    public function reportConsolidatedSporadic(request $request) 
+    {
+        $year = $request->year ?? date("Y");
+        $programmings = Programming::with('establishment:id,name,type')->where('year', $year)->get();
+        $establishments = $programmings->pluck('establishment');
+        $options = $request->establishment_filter ?? [$establishments->first()->id];
+        $categorySelected = $request->activity_category ?? [];
+
+        $programmingItems = ProgrammingItem::select(
+                                 'pro_programming_items.activity_category'
+                                // ,'T4.name AS professional'
+                                , DB::raw('sum(pro_programming_items.activity_total) AS activity_total')
+                                , DB::raw('GROUP_CONCAT(DISTINCT T1.name) AS establishments') )
+                        ->leftjoin('pro_programmings AS T0', 'T0.id', '=', 'pro_programming_items.programming_id')
+                        ->leftjoin('establishments AS T1', 'T0.establishment_id', '=', 'T1.id')
+                        // ->leftjoin('pro_programming_item_pro_hour AS T2','T2.id', '=', 'pro_programming_items.professional')
+                        // ->leftjoin('pro_professional_hours AS T3','T3.id', '=', 'pro_programming_items.professional')
+                        // ->leftjoin('pro_professionals AS T4', 'T3.professional_id', '=', 'T4.id')
+                        // ->leftjoin('users AS T5', 'T0.user_id', '=', 'T5.id')
+                        ->leftjoin('pro_activity_items AS T6', 'pro_programming_items.activity_id', '=', 'T6.id')
+                        ->Where('T0.year','LIKE','%'.$year.'%')
+                        ->when(!empty($categorySelected), fn($q) => $q->whereIn('pro_programming_items.activity_category', $categorySelected))
+                        ->whereIn('T0.establishment_id',$options)
+                        ->where('pro_programming_items.activity_type', 'Indirecta')
+                        ->where('pro_programming_items.activity_subtype', 'Esporádicas')
+                        ->groupBy('pro_programming_items.activity_category')
+                        ->orderBy('pro_programming_items.activity_category','ASC')
+                        ->get();
+
+        return view('programmings/reports/reportConsolidatedSporadic', compact('programmingItems', 'year', 'options', 'establishments', 'categorySelected'));
     }
 
 
