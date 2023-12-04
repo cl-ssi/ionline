@@ -41,6 +41,9 @@ class IndexReception extends Component
         
         $receptions = Reception::query()
             ->with([
+                'items',
+                'purchaseOrder',
+                'receptionType',
                 'responsable',
                 'approvals',
                 'approvals.approver',
@@ -48,6 +51,7 @@ class IndexReception extends Component
                 'approvals.sentToOu.currentManager',
                 'approvals.sentToOu.currentManager.user',
                 'approvals.sentToUser',
+                'numeration',
             ])
             ->orderByDesc('id')
             ->when($this->filter_id, function($query) {
@@ -65,6 +69,7 @@ class IndexReception extends Component
             ->when($this->filter_date, function($query) {
                 $query->where('date', $this->filter_date);
             })
+            ->latest()
             ->paginate(100);
         return $receptions;
     }

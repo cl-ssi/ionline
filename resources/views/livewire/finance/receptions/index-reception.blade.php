@@ -92,7 +92,7 @@
                             {{ $reception->purchase_order }}
                         </td>
                         <td>
-                            {{ $reception->purchaseOrder->json->Listado[0]->Proveedor->Nombre }}
+                            {{ $reception->purchaseOrder?->json->Listado[0]->Proveedor->Nombre }}
                         </td>
                         <td>
                             {{ $reception->receptionType?->name }}
