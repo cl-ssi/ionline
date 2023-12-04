@@ -202,6 +202,7 @@ class RoleAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Receptions: user', 'description' => 'Usuario normal']);
         Permission::create(['name' => 'Receptions: admin', 'description' => 'Usuario administrador']);
         Permission::create(['name' => 'Receptions: load file retroactive', 'description' => 'Permite cargar actas firmadas retroactivamente']);
+        Permission::create(['name' => 'Receptions: load support file', 'description' => 'Permite cargar documentos de respaldo']);
 
         // @role(
         //   'Replacement Staff: admin |

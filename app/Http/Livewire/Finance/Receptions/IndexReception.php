@@ -52,6 +52,7 @@ class IndexReception extends Component
                 'approvals.sentToOu.currentManager.user',
                 'approvals.sentToUser',
                 'numeration',
+                'files',
             ])
             ->orderByDesc('id')
             ->when($this->filter_id, function($query) {

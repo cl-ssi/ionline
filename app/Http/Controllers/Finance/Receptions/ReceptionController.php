@@ -10,6 +10,8 @@ use App\Notifications\Documents\Partes\NewNumeration;
 use App\Models\Finance\Receptions\Reception;
 use App\Models\Documents\Approval;
 use App\Http\Controllers\Controller;
+use App\Models\File;
+use Illuminate\Support\Facades\Storage;
 
 class ReceptionController extends Controller
 {
@@ -40,6 +42,19 @@ class ReceptionController extends Controller
         ])->stream('download.pdf');
 
         // return view('finance.receptions.show', compact('reception'));
+    }
+
+    /**
+     * Download support document file
+     */
+    public function support_document_download(File $file)
+    {
+        if(Storage::disk('gcs')->exists($file->storage_path)){
+            return Storage::disk('gcs')->response($file->storage_path, mb_convert_encoding($file->name,'ASCII'));
+        }else{
+            return redirect()->back()->with('warning', 'El archivo no se ha encontrado.');
+        }
+        
     }
 
 

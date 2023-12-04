@@ -35,6 +35,7 @@ class CreateReception extends Component
     public $authority = false;
     public $selectedDteId;
     public $file_signed;
+    public $file_support_file;
 
     public $receptionItemsWithCantidad; //para validación
     // public $message;
@@ -67,6 +68,7 @@ class CreateReception extends Component
         'reception.creator_ou_id' => 'nullable',
         'receptionItemsWithCantidad' => 'required|array|min:1',
         'file_signed' => 'nullable|mimes:pdf|max:2048',
+        'file_support_file' => 'nullable|mimes:pdf|max:2048',
         'approvals' => 'required|array|min:1',
     ];
 
@@ -406,13 +408,21 @@ class CreateReception extends Component
 
         }
 
-        // @can(Reception: support documents)
-        // $this->reception->files()->create([
-        //     'storage_path' => $storage_path.'/support/'.$filename,
-        //     'stored' => true,
-        //     'type' => 'cenabast',
-        //     'stored_by_id' => auth()->id(),
-        // ]);
+        // support documents
+        if($this->file_support_file) {
+            $storage_path = 'ionline/finances/receptions/support_documents';
+            $filename = $reception->id.'.pdf';
+
+            $this->file_support_file->storeAs($storage_path, $filename, 'gcs');
+
+            $reception->files()->create([
+                'storage_path' => $storage_path.'/'.$filename,
+                'stored' => true,
+                'type' => 'support_documents',
+                'stored_by_id' => auth()->id(),
+            ]);
+
+        }
 
         session()->flash('success', 'Su acta fue creada.');
         return redirect()->route('finance.receptions.index');

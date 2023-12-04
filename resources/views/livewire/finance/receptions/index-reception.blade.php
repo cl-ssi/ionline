@@ -72,6 +72,7 @@
                     <th>Fecha Recepción</th>
                     <th>Aprobaciones</th>
                     <th>Número</th>
+                    <th></th>
                     <th width="100"></th>
                 </tr>
             </thead>
@@ -140,6 +141,14 @@
                             @if ($reception->numeration and $reception->numeration->number)
                                 {{ $reception->numeration->number }}
                             @endif
+                        </td>
+                        <td>
+                            @foreach($reception->files->where('type','support_documents') as $file)
+                                <a href="{{ route('finance.receptions.support_document_download', $file->id) }}"
+                                    target="_blank">
+                                    <i class="fas fa-paperclip"></i>
+                                </a>
+                            @endforeach
                         </td>
                         <td>
                             <a href="{{ route('finance.receptions.show', $reception->id) }}"

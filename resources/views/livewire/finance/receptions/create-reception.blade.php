@@ -400,6 +400,15 @@
         </div>
         @endcan
 
+        @can('Receptions: load support file')
+        <div class="mb-3">
+            <label for="file_support_file" class="form-label">Documento de respaldo</label>
+            <div class="input-group">
+                <input class="form-control" type="file" wire:model="file_support_file" id="file_support_file">
+            </div>
+        </div>
+        @endcan
+
 
         <!-- Firmantes -->
         <h4 class="mb-2">Firmantes</h4>
