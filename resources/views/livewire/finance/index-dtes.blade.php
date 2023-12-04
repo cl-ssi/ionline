@@ -89,7 +89,7 @@
                 <th>Documento</th>
                 <th width="140px">OC</th>
                 <th>FR</th>
-                <th>Bod/Recep</th>
+                <th>Recepción</th>
                 <th width="190">Admin C.</th>
                 <th width="90">Fecha Aceptación SII (días)</th>
                 <th>Devengo</th>
@@ -128,22 +128,24 @@
                             2. Actas de recepción emitidas y firmadas en bodega
                             3. Actas de recepción de servicios emitidas en abastecimiento
 
-                            Todo lo anterior se reemplaza por recepciones
+                            Todo lo anterior se reemplaza por recepciones (y)
                         -->
                         @if($dte->purchaseOrder)
                             @foreach($dte->purchaseOrder->receptions as $reception)
                                 @if($reception->numeration?->number )
                                 <a class="btn btn-sm btn-outline-primary" target="_blank"
                                     href="{{ route('documents.partes.numeration.show_numerated', $reception->numeration) }}"
-                                    title="Acta de recepción CENABAST">
+                                    title="Recepcion Numerada">
                                     <i class="fas fa-file"></i>
                                 </a>
-                                @else
-                                    <span class="btn btn-sm btn-outline-secondary" 
-                                        title="Pendiente de numerar">
-                                        <i class="fas fa-file"></i>
-                                    </span>
                                 @endif
+                                @foreach($reception->files as $file)
+                                    <a href="{{ route('finance.receptions.support_document_download', $file->id) }}"
+                                        target="_blank">
+                                        <i class="fas fa-paperclip"></i>
+                                    </a>
+                                @endforeach
+                                
                             @endforeach
                         @endif
 
@@ -160,13 +162,13 @@
                         <!-- Punto 2 -->
                         <!-- Punto 3 -->
 
-                        <!-- Esto ya no debería ir -->
-                        @foreach ($dte->controls as $control)
+                        <!-- Esto ya no debería ir, está comentado -->
+                        {{-- @foreach ($dte->controls as $control)
                             <a class="btn btn-sm btn-outline-primary"
                                 href="{{ route('warehouse.control.show', $control) }}" target="_blank">
                                 #{{ $control->id }}
                             </a>
-                        @endforeach
+                        @endforeach --}}
                     </td>
                     <td class="small">
                         {{ $dte->requestForm?->contractManager?->tinnyName }} <br>
