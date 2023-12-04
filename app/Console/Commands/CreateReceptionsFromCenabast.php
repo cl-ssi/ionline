@@ -38,6 +38,7 @@ class CreateReceptionsFromCenabast extends Command
                 [
                 'date' => $dte->all_receptions_at ?? now(),
                 'responsable_id' => $dte->all_receptions_user_id,
+                'responsable_ou_id' => $dte->all_receptions_ou_id,
                 'creator_id' => $dte->all_receptions_user_id ?? 15287582,
                 'creator_ou_id' => $dte->all_receptions_ou_id ?? 20,
                 'reception_type_id' => 1,
