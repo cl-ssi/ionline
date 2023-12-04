@@ -553,6 +553,11 @@
 
         <hr>
 
+
+
+
+
+
         <!----------------------------------->
         <!-- Preview del acta de recepción -->
         <!----------------------------------->
@@ -577,8 +582,8 @@
                             Fecha:
                         </th>
                         <td>
-                            @if ($reception->date)
-                                {{ $reception->date?->format('d-m-Y') }}
+                            @if (key_exists('date', $reception))
+                                {{ $reception['date'] }}
                             @else
                                 <span class="text-danger">Falta la fecha</span>
                             @endif
@@ -590,10 +595,9 @@
 
         <br>
 
-        <h3 class="text-center mb-3">Acta de recepción conforme de
-            {{ $reception->reception_type_id ? $types[$reception->reception_type_id] : '' }}</h3>
+        <h3 class="text-center mb-3">Acta de recepción conforme</h3>
 
-        <p style="white-space: pre-wrap;">{{ $reception->header_notes }}</p>
+        <p style="white-space: pre-wrap;">{{ $reception['header_notes'] ?? '' }}</p>
 
         <table class="table table-sm table-bordered">
             <tr>
@@ -601,7 +605,7 @@
                     Orden de Compra
                 </th>
                 <td>
-                    {{ $reception->purchase_order }}
+                    {{ $reception['purchase_order'] }}
                 </td>
                 <th>
                     Proveedor
@@ -621,19 +625,19 @@
                     N° Documento
                 </th>
                 <td>
-                    {{ $reception->dte_number }}
+                    {{ $reception['dte_number'] ?? '' }}
                 </td>
                 <th>
                     Tipo de documento
                 </th>
                 <td>
-                    {{ $reception->dte_type }}
+                    {{ $reception['dte_type'] ?? '' }}
                 </td>
                 <th>
                     Fecha Emisón:
                 </th>
                 <td>
-                    {{ $reception->dte_date?->format('d-m-Y') }}
+                    {{ $reception['dte_date'] ?? '' }}
                 </td>
             </tr>
         </table>
@@ -675,37 +679,37 @@
                                 <th width="100">Neto</th>
                                 <td>$</td>
                                 <td width="100"
-                                    style="text-align: right;">{{ money($reception->neto) }}</td>
+                                    style="text-align: right;">{{ money($reception['neto'] ?? 0) }}</td>
                             </tr>
-                            @if ($reception->descuentos and $reception->descuentos > 0)
+                            @if (key_exists('descuentos', $reception) and $reception['descuentos'] > 0)
                                 <tr>
                                     <th>Dcto.</th>
                                     <td>$</td>
-                                    <td style="text-align: right;">{{ money($reception->descuentos) }}</td>
+                                    <td style="text-align: right;">{{ money($reception['descuentos'] ?? 0 ) }}</td>
                                 </tr>
                             @endif
-                            @if ($reception->cargos and $reception->cargos > 0)
+                            @if ( key_exists('cargos', $reception) and $reception['cargos'] > 0)
                                 <tr>
                                     <th>Cargos</th>
                                     <td>$</td>
-                                    <td style="text-align: right;">{{ money($reception->cargos) }}</td>
+                                    <td style="text-align: right;">{{ money($reception['cargos'] ?? 0 ) }}</td>
                                 </tr>
                             @endif
                             <tr>
                                 <th>Subtotal</th>
                                 <td>$</td>
-                                <td style="text-align: right;">{{ money($reception->subtotal) }}</td>
+                                <td style="text-align: right;">{{ money($reception['subtotal'] ?? 0 ) }}</td>
                             </tr>
                             <tr>
                                 <th>{{ $purchaseOrder->json->Listado[0]->PorcentajeIva }}% IVA</th>
                                 <td>$</td>
-                                <td style="text-align: right;">{{ money($reception->iva) }}</td>
+                                <td style="text-align: right;">{{ money($reception['iva'] ?? 0) }}</td>
                             </tr>
                             <tr>
                                 <th>Total</th>
                                 <td>$</td>
                                 <td style="text-align: right;">
-                                    <b>{{ money($reception->total) }}</b>
+                                    <b>{{ money($reception['total'] ?? 0) }}</b>
                                 </td>
                             </tr>
                         </table>
@@ -717,7 +721,7 @@
             </tbody>
         </table>
 
-        <p style="white-space: pre-wrap;">{{ $reception->footer_notes }}</p>
+        <p style="white-space: pre-wrap;">{{ $reception['footer_notes'] ?? '' }}</p>
         <br>
         <br>
         <br>
