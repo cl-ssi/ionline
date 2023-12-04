@@ -45,32 +45,44 @@ class CreateReception extends Component
     /**
      * TODO:
      */
-    protected $rules = [
-        'selectedDteId' => 'required',
-        'reception.number' => 'nullable',
-        'reception.date' => 'required|date_format:Y-m-d',
-        'reception.reception_type_id' => 'required',
-        'reception.purchase_order' => 'nullable',
-        'reception.header_notes' => 'nullable',
-        'reception.footer_notes' => 'nullable',
-        'reception.partial_reception' => 'required|boolean',
-        'reception.dte_type' => 'required',
-        'reception.dte_number' => 'nullable',
-        'reception.dte_date' => 'nullable|date_format:Y-m-d',
-        'reception.neto' => 'nullable',
-        'reception.descuentos' => 'nullable',
-        'reception.cargos' => 'nullable',
-        'reception.subtotal' => 'nullable',
-        'reception.iva' => 'nullable',
-        'reception.total' => 'nullable',
-        'reception.establishment_id' => 'nullable',
-        'reception.creator_id' => 'nullable',
-        'reception.creator_ou_id' => 'nullable',
-        'receptionItemsWithCantidad' => 'required|array|min:1',
-        'file_signed' => 'nullable|mimes:pdf|max:2048',
-        'file_support_file' => 'nullable|mimes:pdf|max:2048',
-        'approvals' => 'required|array|min:1',
-    ];
+    public function rules()
+    {
+        $reception = [
+            'selectedDteId' => 'required',
+            'reception.number' => 'nullable',
+            'reception.date' => 'required|date_format:Y-m-d',
+            'reception.reception_type_id' => 'required',
+            'reception.purchase_order' => 'nullable',
+            'reception.header_notes' => 'nullable',
+            'reception.footer_notes' => 'nullable',
+            'reception.partial_reception' => 'required|boolean',
+            'reception.dte_type' => 'required',
+            'reception.dte_number' => 'nullable',
+            'reception.dte_date' => 'nullable|date_format:Y-m-d',
+            'reception.neto' => 'nullable',
+            'reception.descuentos' => 'nullable',
+            'reception.cargos' => 'nullable',
+            'reception.subtotal' => 'nullable',
+            'reception.iva' => 'nullable',
+            'reception.total' => 'nullable',
+            'reception.establishment_id' => 'nullable',
+            'reception.creator_id' => 'nullable',
+            'reception.creator_ou_id' => 'nullable',
+            'receptionItemsWithCantidad' => 'required|array|min:1',
+            'file_signed' => 'nullable|mimes:pdf|max:2048',
+            'approvals' => 'required|array|min:1',
+        ];
+
+
+        if( !empty($this->maxItemQuantity) ) {
+            foreach($this->receptionItems as $key => $item) {
+                $reception['receptionItems.'.$key.'.Cantidad'] = 'nullable|numeric|min:1|max:'.$this->maxItemQuantity[$key];
+            }
+        }
+
+        app('debugbar')->log($reception);
+        return $reception;
+    }
 
     protected $messages = [
         // 'reception.number' => 'nullable',
@@ -89,6 +101,7 @@ class CreateReception extends Component
         // 'reception.establishment_id' => 'nullable',
         // 'reception.creator_id' => 'nullable',
         // 'reception.creator_ou_id' => 'nullable',
+        'receptionItems.*.Cantidad' => 'La cantidad está fuera de rango',
         'receptionItemsWithCantidad.required' => 'Debe ingresar la cantidad de al menos un item',
         'approvals.required' => 'Debe ingresar al menos un firmante',
     ];
@@ -200,7 +213,7 @@ class CreateReception extends Component
             $otherReceptionItems = ReceptionItem::whereRelation('reception','purchase_order',$this->purchaseOrderCode)->get();
 
             foreach($otherReceptionItems as $otherItems) {
-                $this->otherItems[$otherItems->item_position][$otherItems->reception->number] = $otherItems['Cantidad'];
+                $this->otherItems[$otherItems->item_position][$otherItems->id] = $otherItems['Cantidad'];
                 $this->maxItemQuantity[$otherItems->item_position] -= $otherItems['Cantidad'];
             }
 
@@ -232,7 +245,7 @@ class CreateReception extends Component
             $this->receptionItems[$key]['Cantidad'] = 0;
         }
         $this->receptionItems[$key]['Total'] = $this->receptionItems[$key]['Cantidad'] * $this->receptionItems[$key]['PrecioNeto'];        
-        $this->reception['neto']               = array_sum(array_column($this->receptionItems, 'Total'));
+        $this->reception['neto']             = array_sum(array_column($this->receptionItems, 'Total'));
         // TODO: Falta agregar cargos y descuentos
         $this->reception['subtotal'] = $this->reception['neto']; 
 
@@ -459,6 +472,7 @@ class CreateReception extends Component
         app('debugbar')->log($this->reception);
         app('debugbar')->log($this->receptionItems);
         app('debugbar')->log($this->approvals);
+        app('debugbar')->log($this->otherItems);
         return view('livewire.finance.receptions.create-reception');
     }
 

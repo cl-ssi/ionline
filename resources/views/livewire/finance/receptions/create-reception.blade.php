@@ -260,17 +260,14 @@
                         <td>{{ $item->Producto }}</td>
                         <td style="text-align: right;">
                             {{ $item->Cantidad }} {{ $item->Unidad }}
-
-                            <select id="ct_{{ $key }}"
-                                class="form-select @error('receptionItemsWithCantidad') is-invalid @enderror"
-                                wire:model="receptionItems.{{ $key }}.Cantidad"
+                            <input type="number" 
+                                class="form-control @error('receptionItems.'. $key .'.Cantidad') is-invalid @enderror"
+                                id="quantity" 
+                                wire:model="receptionItems.{{ $key }}.Cantidad" 
+                                min="1" 
+                                max="{{ $maxItemQuantity[$key] }}"
                                 wire:change="calculateItemTotal({{ $key }})"
                                 @disabled($maxItemQuantity[$key] == 0)>
-                                <option value=""></option>
-                                @for ($i = 1; $i <= $maxItemQuantity[$key]; $i++)
-                                    <option>{{ $i }}</option>
-                                @endfor
-                            </select>
                         </td>
                         <td>{{ $item->EspecificacionComprador }}</td>
                         <td>{{ $item->EspecificacionProveedor }}</td>
@@ -280,10 +277,10 @@
                         <td style="text-align: right;">{{ money($item->Cantidad * $item->PrecioNeto) }}</td>
                     </tr>
                     @if (array_key_exists($key, $otherItems))
-                        @foreach ($otherItems[$key] as $receptionNumber => $quantity)
+                        @foreach ($otherItems[$key] as $id => $quantity)
                             <tr>
                                 <td colspan="2">
-                                    Acta {{ $receptionNumber }}
+                                    Acta id: {{ $id }}
                                 </td>
                                 <td style="text-align: right;">
                                     {{ $quantity }}
@@ -315,6 +312,7 @@
                         type="radio"
                         wire:model.defer="reception.partial_reception"
                         id="partial_reception_partial"
+                        name="partial_reception"
                         value="1">
                     <label class="form-check-label"
                         for="for-parcial">Recepcionar la OC Parcial</label>
@@ -323,6 +321,7 @@
                 <div class="form-check form-check-inline">
                     <input class="form-check-input @error('reception.partial_reception') is-invalid @enderror"
                         type="radio"
+                        name="partial_reception"
                         wire:model.defer="reception.partial_reception"
                         id="partial_reception_complete"
                         wire:change="setPurchaseOrderCompleted"
@@ -777,5 +776,7 @@
                 </button>
             </div>
         </div>
+
+        @include('layouts.bt5.partials.errors')
     @endif
 </div>

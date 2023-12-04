@@ -70,10 +70,10 @@
                     <th>Items</th>
                     <th>Total</th>
                     <th>Fecha Recepción</th>
+                    <th>Orig.</th>
                     <th>Aprobaciones</th>
                     <th>Número</th>
-                    <th></th>
-                    <th width="100"></th>
+                    <th width="55"></th>
                 </tr>
             </thead>
             <tbody>
@@ -108,6 +108,13 @@
                             {{ $reception->date?->format('Y-m-d') }}
                         </td>
                         <td>
+                            <a href="{{ route('finance.receptions.show', $reception->id) }}"
+                                class="btn btn-outline-success"
+                                target="_blank">
+                                <i class="bi bi-file-pdf-fill"></i>
+                            </a>
+                        </td>
+                        <td>
                             @if($reception->rejected)
                                 <span class="badge bg-danger">Rechazada</span>
                             @else
@@ -139,7 +146,10 @@
                         </td>
                         <td>
                             @if ($reception->numeration and $reception->numeration->number)
-                                {{ $reception->numeration->number }}
+                                <a class="btn btn-outline-danger" href="{{ route('documents.partes.numeration.show_numerated', $reception->numeration) }}" target="_blank">
+                                    <i class="bi bi-file-pdf"></i>  {{ $reception->numeration->number }}
+                                </a>
+                                
                             @endif
                         </td>
                         <td>
