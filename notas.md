@@ -24,15 +24,16 @@
 [ ] Index DTE, en la opción editar, permitir asociar una DTE de tipo facturas/boletas a una o más actas.
 [ ] Modificar bandeja de Revisión para que caigan ahí, las que tienen "completed" == true
 
-[ ] Editar una recepción
+[X] Modulo de recepcion, poder agregar un rechazo de mercaderia asociado a una OC
+[ ] En rechazo, marcar aquellas dtes que tengan un acta de rechazo ya.
 [ ] Actas de recepción, poder subir un archivo, ej: Escaneo de la factura con el timbre.
-[ ] Al numerar, setear el número en Reception.
-[ ] Modulo de recepcion, poder agregar un rechazo de mercaderia asociado a una OC
+[ ] Editar una recepción
 [X] En crear recepcion, dejar por defecto el estableciento de quien está logeado
 [X] En recepciones, poner un indicador de "loading" cuando la OC se esté buscando en MP
 [X] Validar obligatoriedad de radio de parcial o completa
 [-] Al presionar crear se demora, poner spinner o indicador de "loading"
 [X] Agregar columnas a Receptions guia_id y dte_id (y relationes $dte->receptions $reception->guia $reception->dte)
+[-] Al numerar, setear el número en Reception.
 
 [X] Al numerar, no están saliendo los mensajes de error de firma electrónica, por ejemplo, que Vanessa no tiene firma desatendida
 [ ] Notificar a oficina de partes que tiene que numerar

@@ -107,30 +107,34 @@
                             {{ $reception->date?->format('Y-m-d') }}
                         </td>
                         <td>
-                            @foreach ($reception->approvals as $approval)
-                                <span style="width=50px;"
-                                    @class([
-                                        'd-inline-bloc',
-                                        'img-thumbnail',
-                                        'rounded-circle',
-                                        'bg-success' => $approval->status,
-                                        'text-white' => $approval->status,
-                                        'border-dark',
-                                    ])
-                                    tabindex="0"
-                                    data-toggle="tooltip"
-                                    title="Fecha: ">
-                                    <small>
-                                        @if ($approval->approver)
-                                            {{ $approval->approver->initials }}
-                                        @elseif($approval->sentToOu)
-                                            {{ $approval->sentToOu->currentManager?->user->initials }}
-                                        @elseif($approval->sentToUser)
-                                            {{ $approval->sentToUser->initials }}
-                                        @endif
-                                    </small>
-                                </span> &nbsp;
-                            @endforeach
+                            @if($reception->rejected)
+                                <span class="badge bg-danger">Rechazada</span>
+                            @else
+                                @foreach ($reception->approvals as $approval)
+                                    <span style="width=50px;"
+                                        @class([
+                                            'd-inline-bloc',
+                                            'img-thumbnail',
+                                            'rounded-circle',
+                                            'bg-success' => $approval->status,
+                                            'text-white' => $approval->status,
+                                            'border-dark',
+                                        ])
+                                        tabindex="0"
+                                        data-toggle="tooltip"
+                                        title="Fecha: ">
+                                        <small>
+                                            @if ($approval->approver)
+                                                {{ $approval->approver->initials }}
+                                            @elseif($approval->sentToOu)
+                                                {{ $approval->sentToOu->currentManager?->user->initials }}
+                                            @elseif($approval->sentToUser)
+                                                {{ $approval->sentToUser->initials }}
+                                            @endif
+                                        </small>
+                                    </span> &nbsp;
+                                @endforeach
+                            @endif
                         </td>
                         <td>
                             @if ($reception->numeration and $reception->numeration->number)

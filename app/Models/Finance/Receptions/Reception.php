@@ -53,6 +53,9 @@ class Reception extends Model
         'header_notes',
         'footer_notes',
 
+        'rejected',
+        'rejected_notes',
+
         'partial_reception',
 
         'neto',
@@ -83,6 +86,7 @@ class Reception extends Model
         'dte_date'  => 'date:Y-m-d',
         'partial_reception' => 'boolean',
         'status'    => 'boolean',
+        'rejected'    => 'boolean',
     ];
 
     public function receptionType(): BelongsTo
