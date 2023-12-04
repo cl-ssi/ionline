@@ -21,8 +21,9 @@ return new class extends Migration {
 
             $table->string('purchase_order')->nullable();
 
-            $table->string('guia_id')->nullable();
-            $table->string('dte_id')->nullable();
+            $table->foreignId('guia_id')->nullable()->constrained('fin_dtes');
+            $table->foreignId('dte_id')->nullable()->constrained('fin_dtes');
+
             $table->string('dte_type')->nullable();
             $table->string('dte_number')->nullable();
             $table->date('dte_date')->nullable();
