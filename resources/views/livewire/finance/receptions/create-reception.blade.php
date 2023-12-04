@@ -258,16 +258,17 @@
                             {{ $item->CodigoCategoria }}
                         </td>
                         <td>{{ $item->Producto }}</td>
-                        <td style="text-align: right;">
+                        <td class="text-center">
                             {{ $item->Cantidad }} {{ $item->Unidad }}
                             <input type="number" 
                                 class="form-control @error('receptionItems.'. $key .'.Cantidad') is-invalid @enderror"
                                 id="quantity" 
-                                wire:model="receptionItems.{{ $key }}.Cantidad" 
+                                wire:model.debounce.500ms="receptionItems.{{ $key }}.Cantidad" 
                                 min="1" 
                                 max="{{ $maxItemQuantity[$key] }}"
                                 wire:change="calculateItemTotal({{ $key }})"
                                 @disabled($maxItemQuantity[$key] == 0)>
+                                <small class="text-secondary"> 0 - {{$maxItemQuantity[$key]}} </small>
                         </td>
                         <td>{{ $item->EspecificacionComprador }}</td>
                         <td>{{ $item->EspecificacionProveedor }}</td>
