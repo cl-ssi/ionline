@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers\Finance\Receptions;
 
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
+use App\User;
+use App\Notifications\Documents\Partes\NewNumeration;
 use App\Models\Finance\Receptions\Reception;
 use App\Models\Documents\Approval;
 use App\Http\Controllers\Controller;
@@ -66,6 +69,17 @@ class ReceptionController extends Controller
                 'organizational_unit_id' => $approval->sent_to_ou_id ?? $approval->approverOu->id, // Ou del responsable
                 'establishment_id' => $approval->approverOu->establishment->id,
             ]);
+
+            $establishment_id = $approval->approverOu->establishment->id;
+
+            /* Users wiwth permission Partes: numerator */
+            $users = User::permission('Partes: numerator')
+                ->whereHas('organizationalUnit', function ($query) use ($establishment_id) {
+                    $query->where('establishment_id', $establishment_id);
+                }
+            )->get();
+
+            Notification::send($users, new NewNumeration());
         }
     }
 }
