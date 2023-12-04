@@ -2,23 +2,25 @@
 
 namespace App\Http\Livewire\Finance\Receptions;
 
+use Livewire\WithFileUploads;
 use Livewire\Component;
 use App\User;
 use App\Rrhh\OrganizationalUnit;
 use App\Models\WebService\MercadoPublico;
 use App\Models\Parameters\Parameter;
-use App\Models\Finance\Dte;
 use App\Models\Finance\Receptions\ReceptionType;
 use App\Models\Finance\Receptions\ReceptionItem;
 use App\Models\Finance\Receptions\Reception;
 use App\Models\Finance\PurchaseOrder;
+use App\Models\Finance\Dte;
 use App\Models\Documents\Correlative;
 use App\Models\Documents\Approval;
 
 
-
 class CreateReception extends Component
 {
+    use WithFileUploads;
+
     //   1272565-444-AG23 1057448-598-SE23 1272565-737-SE23;
     public $purchaseOrderCode = '1272565-444-AG23';
     public $purchaseOrder = false;
@@ -30,9 +32,9 @@ class CreateReception extends Component
     public $signer_id;
     public $signer_ou_id;
     public $approvals = [];
-    // public $approvalUsers = [];
     public $authority = false;
     public $selectedDteId;
+    public $file_signed;
 
     public $receptionItemsWithCantidad; //para validación
     // public $message;
@@ -64,6 +66,7 @@ class CreateReception extends Component
         'reception.creator_id' => 'nullable',
         'reception.creator_ou_id' => 'nullable',
         'receptionItemsWithCantidad' => 'required|array|min:1',
+        'file_signed' => 'nullable|mimes:pdf|max:2048',
         'approvals' => 'required|array|min:1',
     ];
 
@@ -377,6 +380,22 @@ class CreateReception extends Component
             }
 
             $this->reception->approvals()->create($approval);
+        }
+
+
+        if($this->file_signed) {
+            $storage_path = 'ionline/finances/receptions/signed_files';
+            $filename = $this->reception->id.'.pdf';
+
+            $this->file_signed->storeAs($storage_path, $filename, 'gcs');
+
+            $this->reception->files()->create([
+                'storage_path' => $storage_path.'/'.$filename,
+                'stored' => true,
+                'type' => 'signed_file',
+                'stored_by_id' => auth()->id(),
+            ]);
+
         }
 
         session()->flash('success', 'Su acta fue creada.');

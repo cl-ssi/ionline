@@ -391,6 +391,15 @@
         @endif
 
 
+        @can('Receptions: ')
+        <div class="mb-3">
+            <label for="file_signed" class="form-label">Subir acta firmada</label>
+            <div class="input-group">
+                <input class="form-control" type="file" wire:model="file_signed" id="file_signed">
+            </div>
+        </div>
+
+
         <!-- Firmantes -->
         <h4 class="mb-2">Firmantes</h4>
         <div class="row mb-3">

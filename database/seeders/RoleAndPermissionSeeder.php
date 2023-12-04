@@ -197,6 +197,11 @@ class RoleAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Agenda UST: Funcionario', 'description' => 'Rol de funcionario del módulo agendamiento UST']);
         Permission::create(['name' => 'Agenda UST: Secretaria', 'description' => 'Rol de secretaria del módulo agendamiento UST']);
 
+
+        Permission::create(['name' => 'Receptions: user', 'description' => 'Usuario normal']);
+        Permission::create(['name' => 'Receptions: admin', 'description' => 'Usuario administrador']);
+        Permission::create(['name' => 'Receptions: load file retroactive', 'description' => 'Permite cargar actas firmadas retroactivamente']);
+
         // @role(
         //   'Replacement Staff: admin |
         //   Replacement Staff: user'

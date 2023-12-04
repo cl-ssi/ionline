@@ -194,15 +194,14 @@
                             @endcanany
 
                             @canany([
-                            'be god',
+                                'Receptions: user',
+                                'Receptions: admin',
+                                'Receptions: load file retroactive',
+                                'be god',
                             ])
-                            <a class="dropdown-item {{ active('finance.receptions.index') }}" href="{{ route('finance.receptions.index') }}">
-                                <i class="fas fa-fw fa-check-circle"></i> Recepción Conforme
-                            </a>
-
-                            <a class="dropdown-item {{ active('finance.dtes.pendingReceiptCertificate') }}" href="{{ route('finance.dtes.pendingReceiptCertificate') }}">
-                                <i class="fas fa-fw fa-file-signature"></i> Dte pendiente de acta
-                            </a>
+                                <a class="dropdown-item {{ active('finance.receptions.index') }}" href="{{ route('finance.receptions.index') }}">
+                                    <i class="fas fa-fw fa-check-circle"></i> Recepción Conforme
+                                </a>
                             @endcanany
 
                             @can('Store')
