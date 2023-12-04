@@ -337,9 +337,14 @@ class CreateReception extends Component
         }
 
         /* Si la ultima firma fue enviada a una persona */
-        $this->reception->responsable_id    = end($approvalsOrderedByPriority)['sent_to_user_id'] ?? null;
-        /* Si la ultima firma fue enviada a una OU */
-        $this->reception->responsable_ou_id = end($approvalsOrderedByPriority)['sent_to_ou_id']   ?? null;
+        if( array_key_exists('sent_to_user_id', end($approvalsOrderedByPriority) ) ) {
+            $this->reception->responsable_id = end($approvalsOrderedByPriority)['sent_to_user_id'];
+            $this->reception->responsable_ou_id = $this->reception->responsable->organizational_unit_id;
+        }
+        else {
+            /* Si la ultima firma fue enviada a una OU */
+            $this->reception->responsable_ou_id = end($approvalsOrderedByPriority)['sent_to_ou_id'];
+        }
 
         // app('debugbar')->log($this->reception->toArray());
         // app('debugbar')->log($this->receptionItems);
@@ -397,6 +402,14 @@ class CreateReception extends Component
             ]);
 
         }
+
+        // @can(Reception: support documents)
+        // $this->reception->files()->create([
+        //     'storage_path' => $storage_path.'/support/'.$filename,
+        //     'stored' => true,
+        //     'type' => 'cenabast',
+        //     'stored_by_id' => auth()->id(),
+        // ]);
 
         session()->flash('success', 'Su acta fue creada.');
         return redirect()->route('finance.receptions.index');

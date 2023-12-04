@@ -70,6 +70,9 @@ class ReceptionController extends Controller
                 'establishment_id' => $approval->approverOu->establishment->id,
             ]);
 
+            $approval->approvable->responsable_id = $approval->approver->id;
+            $approval->approvable->save();
+
             $establishment_id = $approval->approverOu->establishment->id;
 
             /* Users wiwth permission Partes: numerator */

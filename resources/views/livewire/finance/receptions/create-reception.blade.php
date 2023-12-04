@@ -391,7 +391,7 @@
         @endif
 
 
-        @can('Permite cargar actas firmadas retroactivamente')
+        @can('Receptions: load file retroactive')
         <div class="mb-3">
             <label for="file_signed" class="form-label">Subir acta firmada</label>
             <div class="input-group">
