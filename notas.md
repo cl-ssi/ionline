@@ -23,6 +23,7 @@
 ## Desarrollo
 [ ] Index DTE, en la opción editar, permitir asociar una DTE de tipo facturas/boletas a una o más actas.
 [ ] Modificar bandeja de Revisión para que caigan ahí, las que tienen "completed" == true
+[ ] Ponerle en alguna parte a Gina los archivos legacy
 
 [X] Modulo de recepcion, poder agregar un rechazo de mercaderia asociado a una OC
 [ ] En rechazo, marcar aquellas dtes que tengan un acta de rechazo ya.

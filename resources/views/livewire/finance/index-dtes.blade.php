@@ -296,11 +296,11 @@
                             <div class="form-row">
                                 <div class="col-10">
                                     <label for="">Motivo de rechazo</label>
-                                    <input type="text" class="form-control">
+                                    <input type="text" class="form-control" wire:model.defer="reason_rejection" 1>
                                 </div>
                                 <div class="col-2">
                                     <label for="">&nbsp;</label>
-                                    <button class="btn btn-danger form-control">
+                                    <button class="btn btn-danger form-control" wire:click="rejectDte({{ $dte->id }})">
                                         Rechazar
                                     </button>
                                 </div>

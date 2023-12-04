@@ -97,15 +97,8 @@ class IndexDtes extends Component
             'dtes',
             'invoices',
         ])
-            // ->whereNull('confirmation_status')
-            // ->orWhere('confirmation_status',true)
-            ->whereNotNull('rejected')
-            // ->where(function ($query) {
-            //     $query->where('confirmation_status', true)
-            //         ->orWhereNull('confirmation_status');
-            // })
+            ->whereNull('rejected')
             ->orderByDesc('fecha_recepcion_sii');
-
         return $query->paginate(50);
     }
 
@@ -210,30 +203,6 @@ class IndexDtes extends Component
                 ]);
             }
         }
-
-        // if (
-        //     $dte->confirmation_status !== null &&
-        //     $dte->confirmation_user_id !== null &&
-        //     $dte->confirmation_at !== null &&
-        //     $dte->confirmation_signature_file !== null
-        // )
-
-        //     $dte->invoices()->sync($this->asociate_invoices);
-        // foreach ($this->asociate_invoices as $invoice_id) {
-        //     $invoice = Dte::find($invoice_id);
-        //     $invoice->update([
-        //         'confirmation_status' => $dte->confirmation_status,
-        //         'confirmation_user_id' => $dte->confirmation_user_id,
-        //         'confirmation_ou_id' => $dte->confirmation_ou_id,
-        //         'confirmation_at' => $dte->confirmation_at,
-        //         'confirmation_signature_file' => $dte->confirmation_signature_file,
-        //         'upload_user_id' => $dte->upload_user_id,
-        //         'cenabast_signed_pharmacist' => $dte->cenabast_signed_pharmacist,
-        //         'cenabast_signed_boss' => $dte->cenabast_signed_boss,
-
-        //     ]);
-        // }
-
         $this->showEdit = null;
     }
 
@@ -294,9 +263,28 @@ class IndexDtes extends Component
     {
         $reception = Reception::find($receptionId);
         if ($reception) {
-            $reception->update(['dte_id' => $dteId]);            
+            $reception->update(['dte_id' => $dteId]);
         }
     }
+
+    public function rejectDte($dte_id)
+    {
+        $this->validate([
+            'reason_rejection' => 'required',
+        ]);   
+
+        $dte = Dte::find($dte_id);
+        $dte->update(
+            [
+                'rejected' => true, 
+                'reason_rejection' => $this->reason_rejection,
+                'rejected_user_id' => auth()->id(),
+                'rejected_at' => now(),
+            ]);
+        
+        $this->refresh();
+    }
+
 
 
 

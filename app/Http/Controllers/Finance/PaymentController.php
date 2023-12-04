@@ -87,7 +87,7 @@ class PaymentController extends Controller
             'requestForm.father.requestFormFiles'
         ])
             ->whereNotIn('tipo_documento', ['guias_despacho','nota_debito','nota_credito'])
-            ->where('confirmation_status', 1)
+            ->where('all_receptions', 1)
             ->where('establishment_id', auth()->user()->organizationalUnit->establishment->id)
             ->where(function (Builder $query) {
                 $query->whereNull('payment_ready')
@@ -153,7 +153,7 @@ class PaymentController extends Controller
                 'requestForm.father',
                 'requestForm.father.requestFormFiles'
             ])
-            ->where('confirmation_status', 1)
+            ->where('all_receptions', 1)
             ->where('payment_ready', 1)
             ->where('establishment_id', auth()->user()->organizationalUnit->establishment_id);
 
