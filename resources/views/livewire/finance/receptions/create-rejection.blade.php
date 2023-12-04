@@ -84,10 +84,15 @@
                                     type="radio"
                                     wire:model="selectedDteId"
                                     name="selectedDte"
-                                    value="{{ $dte->id }}">
-                                <label>
+                                    value="{{ $dte->id }}"
+                                    {{ $dte->rejectedReception ? 'disabled' : '' }}
+                                    >
+                                <label @if ($dte->rejectedReception) class="text-danger" @endif>
                                     {{ $dte->tipoDocumentoIniciales }}
                                     {{ $dte->folio }}
+                                    @if ($dte->rejectedReception)
+                                        <span class="text-danger">(Rechazo)</span>
+                                    @endif
                                 </label>
                             </div>
                         </li>

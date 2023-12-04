@@ -282,6 +282,10 @@ class Dte extends Model implements Auditable
         }
         return $rowClass;
     }
+    public function getRejectedReceptionAttribute()
+    {
+        return $this->receptions()->where('rejected', true)->exists();
+    }
 
     public function paymentFlows()
     {
