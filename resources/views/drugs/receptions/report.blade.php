@@ -50,8 +50,9 @@
             <th>P.Oficio</th>
             <th>P.Bruto</th>
             <th>P.Neto</th>
-            <th>Muestra</th>
-            <th>C.Muestra</th>
+            <th>Cant.Muestra</th>
+            <th>Peso.Muestra</th>
+            <th>Cant.CMuestra</th>
             <th>Autor</th>
             <th>Por Destruir</th>
             <th>Fecha</th>
@@ -83,6 +84,7 @@
             <td class="text-right">{{ $item->document_weight }}</td>
             <td class="text-right">{{ $item->gross_weight }}</td>
             <td class="text-right">{{ $item->net_weight }}</td>
+            <td class="text-right">{{ $item->sample_number }}</td>
             <td class="text-right">{{ $item->sample }}</td>
             <td class="text-right">{{ $item->countersample }}</td>
             <td class="text-center">{{ @$item->reception->destruction->user->Initials ?: '' }}</td>
