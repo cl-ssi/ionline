@@ -73,6 +73,7 @@
                     <th>Orig.</th>
                     <th>Aprobaciones</th>
                     <th>Número</th>
+                    <th>Adjuntos</th>
                     <th width="55"></th>
                 </tr>
             </thead>
@@ -143,13 +144,12 @@
                                     </span> &nbsp;
                                 @endforeach
                             @endif
-                        </td>                        
+                        </td>
                         <td>
                             @if ($reception->numeration and $reception->numeration->number)
                                 <a class="btn btn-outline-danger" href="{{ route('documents.partes.numeration.show_numerated', $reception->numeration) }}" target="_blank">
                                     <i class="bi bi-file-pdf"></i>  {{ $reception->numeration->number }}
                                 </a>
-                                
                             @endif
                         </td>
                         <td>
