@@ -30,9 +30,11 @@ class CreateReceptionsFromCenabast extends Command
     public function handle()
     {
         
-        $dtes = Dte::whereNotNull('cenabast_reception_file')->whereNotNull('all_receptions_user_id')->get();
+        $dtes = Dte::whereNotNull('cenabast_reception_file')
+            ->whereNotNull('all_receptions_user_id')
+            ->get();
+
         foreach($dtes as $dte) {
-            // dd($dte);
             $reception = Reception::updateOrCreate(
                 ['dte_id' => $dte->id],
                 [
