@@ -22,7 +22,7 @@ class CreateReception extends Component
     use WithFileUploads;
 
     //   1272565-444-AG23 1057448-598-SE23 1272565-737-SE23;
-    public $purchaseOrderCode = '1272565-444-AG23';
+    public $purchaseOrderCode = '';
     public $purchaseOrder = false;
     public $reception;
     public $receptionItems = [];
