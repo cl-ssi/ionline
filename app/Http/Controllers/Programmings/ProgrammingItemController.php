@@ -72,6 +72,11 @@ class ProgrammingItemController extends Controller
             $programming->items = collect();
         }
 
+        if($proFilter){
+            $filteredItems = $programming->items->filter(fn($item) => $item->professionalHours->contains(fn($pro) => $pro->professional_id == $proFilter));
+            $programming->items = $filteredItems;
+        }
+
         // return $programming;
 
         // $tracerNumbers = ActivityItem::whereHas('program', function($q) use ($programming) {
