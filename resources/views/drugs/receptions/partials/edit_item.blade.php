@@ -33,6 +33,12 @@
                 </fieldset>
 
                 <fieldset class="form-group col-2">
+                    <label for="for_countersample_number">N° C.Muestras</label>
+                    <input type="number" class="form-control" id="for_countersample_number"
+                        value="{{ $item->countersample_number }}" name="countersample_number" required="">
+                </fieldset>
+
+                <fieldset class="form-group col-2">
                     <label for="for_document_weight">Peso Oficio</label>
                     <input type="text" class="form-control" id="for_document_weight"
                         value="{{ $item->document_weight }}" name="document_weight" required="">

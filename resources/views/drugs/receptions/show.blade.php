@@ -83,6 +83,7 @@
             <th>Sustancia Presunta</th>
             <th>NUE</th>
             <th>N° Muestras</th>
+            <th>N° C.Muestras</th>
             <th>Peso Oficio</th>
             <th>Peso Bruto</th>
             <th>Peso Neto</th>
@@ -115,6 +116,7 @@
             </td>
             <td>{{ $i->nue }}</td>
             <td>{{ $i->sample_number }}</td>
+            <td>{{ $i->countersample_number }}</td>
             <td>{{ $i->document_weight }}</td>
             <td>{{ $i->gross_weight }}</td>
             <td>{{ $i->net_weight }}</td>
