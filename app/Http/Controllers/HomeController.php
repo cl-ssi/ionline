@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Parameters\PhraseOfTheDay;
+use App\Models\News\News;
 
 class HomeController extends Controller
 {
@@ -24,6 +25,10 @@ class HomeController extends Controller
     public function index()
     {
         $phrase = PhraseOfTheDay::inRandomOrder()->first();
-        return view('home', compact('phrase'));
+
+        /* NEWS: Noticias */
+        $allNews = News::all();
+
+        return view('layouts.bt5.home', compact('phrase', 'allNews'));
     }
 }
