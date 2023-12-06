@@ -31,8 +31,8 @@ class ReportByDates extends Component
     ];
 
     // public function mount(){
-    //     $this->finicio = Carbon::createFromDate('2023-03-01');
-    //     $this->ftermino = Carbon::createFromDate('2023-03-31');
+    //     $this->finicio = Carbon::createFromDate('2023-07-01');
+    //     $this->ftermino = Carbon::createFromDate('2023-07-31');
     // }
 
     public function search(){
@@ -200,9 +200,12 @@ class ReportByDates extends Component
                 // se obtiene primera y ultima fecha (keys del array) del cruce (para analisis posterior)
                 $first_key = array_key_first($contractDates);
                 $last_key = array_key_last($contractDates);
+                $businessDays = [];
+                if(count($contractDates) > 0){
+                    // días laborales reales (considerando cruze de contratos)
+                    $businessDays = DateHelper::getBusinessDaysByDateRangeHolidays($contractDates[$first_key],$contractDates[$last_key],$holidays, $user->id)->toArray();
+                }
                 
-                // días laborales reales (considerando cruze de contratos)
-                $businessDays = DateHelper::getBusinessDaysByDateRangeHolidays($contractDates[$first_key],$contractDates[$last_key],$holidays, $user->id)->toArray();
                 //cantidad de días laborales
                 $businessDays = count($businessDays);
                 $user->businessDays = $businessDays;
