@@ -261,25 +261,28 @@
                                         <div class="col-10">
                                             @if($dte->purchaseOrder)
                                                 @foreach($dte->purchaseOrder->receptions->where('rejected','<>', '1') as $reception)
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" value="" id="defaultCheck{{ $reception->id }}"
-                                                        wire:click="updateReceptionDteId({{ $reception->id }}, {{ $dte->id }})"
-                                                        >
-                                                        <label class="form-check-label" for="defaultCheck1">
-                                                            <a href="{{ route('finance.receptions.show', $reception->id) }}"
-                                                                
-                                                                target="_blank">
-                                                                <b>Nº:</b> {{ $reception->numeration->number ?? 'Pendiente' }} 
-                                                                <b>Fecha:</b> {{ $reception->date?->format('Y-m-d') }}
-                                                            </a>
-                                                            @if($reception->numeration?->number)
-                                                                <a class="text-link" target="_blank"
-                                                                    href="{{ route('documents.partes.numeration.show_numerated', $reception->numeration) }}">
-                                                                    [ Ver ]
+                                                    
+                                                        @if($reception->files->where('type', 'signed_file')->count() >= 1)
+                                                            <a href="{{ route('finance.receptions.support_document_download', $reception->files->first()->id) }}" target="_blank">Archivo Heredado de módulo Cenabast anterior</a><br>
+                                                        @else
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" value="" id="defaultCheck{{ $reception->id }}"
+                                                            wire:click="updateReceptionDteId({{ $reception->id }}, {{ $dte->id }})"
+                                                            >
+                                                            <label class="form-check-label" for="defaultCheck1">
+                                                            <a href="{{ route('finance.receptions.show', $reception->id) }}" target="_blank">
+                                                                    <b>Nº:</b> {{ $reception->numeration->number ?? 'Pendiente' }} 
+                                                                    <b>Fecha:</b> {{ $reception->date?->format('Y-m-d') }}
                                                                 </a>
-                                                            @endif
-                                                        </label>
-                                                    </div>
+                                                                @if($reception->numeration?->number)
+                                                                    <a class="text-link" target="_blank"
+                                                                        href="{{ route('documents.partes.numeration.show_numerated', $reception->numeration) }}">
+                                                                        [ Ver ]
+                                                                    </a>
+                                                                @endif
+                                                            </label>
+                                                            </div>
+                                                        @endif                                                    
                                                 @endforeach
                                             @endif
                                         </div>

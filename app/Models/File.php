@@ -26,7 +26,6 @@ class File extends Model
     //     return $this->morphMany(File::class, 'fileable');
     // }
 
-
     // $modelo->file()->create([
     //     'storage_path' => 'ionline/documents/23234.pdf',
     //     'stored' => false,
@@ -50,12 +49,12 @@ class File extends Model
         'stored',       // false => muestro input, true = meustro el link al archivo
 
         'name',
-        'type',    // Docuento, Anexo, Acta
+        'type',    // Documento, Anexo, Acta
 
         'input_title',  // <label<{{ $input_title }}</label>
         'input_name',   // <input type="file" name="{{ $input_name }}>
         'required',
-        'valid_types',  //pdf, xls
+        'valid_types',  // pdf, xls
         'max_file_size', // 20mb
 
         'stored_by_id', // user
@@ -67,8 +66,8 @@ class File extends Model
     /**
      * Get the polymorphic  parent fileable model:
      * - Reception
-     * - 
-     * - 
+     * -
+     * -
      */
     public function fileable(): MorphTo
     {

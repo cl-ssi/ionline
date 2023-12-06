@@ -279,6 +279,7 @@ use App\Http\Controllers\Agreements\SignerController;
 use App\Http\Controllers\Agreements\ProgramResolutionController;
 use App\Http\Controllers\Agreements\AgreementController;
 use App\Http\Controllers\Agreements\AddendumController;
+use App\Http\Livewire\TestFileUpdateManager;
 
 /*
 |--------------------------------------------------------------------------
@@ -1901,7 +1902,7 @@ Route::prefix('prof_agenda')->as('prof_agenda.')->middleware(['auth'])->group(fu
 
     Route::prefix('reports')->as('reports.')->middleware(['auth'])->group(function () {
         Route::get('/sirsap', SirsapReport::class)->name('sirsap');
-        
+
     });
 
 
@@ -2557,13 +2558,16 @@ Route::prefix('his')->as('his.')->middleware('auth')->group(function () {
     });
 });
 
-/*
 Route::prefix('news')->as('news.')->middleware(['auth', 'must.change.password'])->group(function () {
-    Route::get('/', CreateNews::class)->name('create');
+    //Route::get('/create', CreateNews::class)->name('create');
     Route::get('/index', SearchNews::class)->name('index');
+    Route::get('/own_index', SearchNews::class)->name('own_index')->middleware(['permission:News: create']);
+    // Route::get('/edit_news/{news_id}', CreateNews::class)->name('edit_news');
+    Route::get('/create', [NewsController::class, 'create'])->name('create')->middleware(['permission:News: create']);
     Route::get('/show/{news}', [NewsController::class, 'show'])->name('show');
+    Route::get('/edit/{news}', [NewsController::class, 'edit'])->name('edit')->middleware(['permission:News: create']);
+    Route::get('/view_image/{news}', [NewsController::class, 'view_image'])->name('view_image');
 });
-*/
 
 /** RUTAS PARA EXTERNAL  */
 Route::group(['middleware' => 'auth:external'], function () {
@@ -2610,7 +2614,9 @@ Route::group(['middleware' => 'auth:external'], function () {
 Route::view('/some', 'some');
 
 Route::prefix('test')->as('test.')->group(function () {
+    Route::get('/file/{receptionFinance}/update', TestFileUpdateManager::class);
     Route::get('/files', TestFileManager::class);
+
     Route::get('/digital-signature/{otp?}', [TestController::class, 'DigitalSignature']);
     Route::get('/doc-digital', [TestController::class, 'docDigital']);
 

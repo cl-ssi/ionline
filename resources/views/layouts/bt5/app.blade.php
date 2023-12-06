@@ -51,7 +51,11 @@
         <div id="app">
             @include('layouts.bt5.partials.nav')
 
-            <main class="container pt-3">
+            @if(Route::is('home') )
+            <main class="container">
+            @else  
+            <main class="container pt-3">  
+            @endif
                 <div class="d-none d-print-block">
                     <strong>{{ env('APP_SS') }}</strong><br>
                     Ministerio de Salud
