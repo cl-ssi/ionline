@@ -21,11 +21,13 @@
             <div class="carousel-inner">
                 @foreach($allNews as $news)
                 <div class="carousel-item @if($loop->index == 0) active @endif">
-                    <img src="{{ route('news.view_image', $news) }}" class="d-block w-100" alt="...">
-                    <div class="carousel-caption d-none d-md-block">
-                        <h5>{{ $news->title }}</h5>
-                        <p>{{ $news->subtitle }}.</p>
-                    </div>
+                    <a href="{{ route('news.show', $news) }}"> 
+                        <img src="{{ route('news.view_image', $news) }}" class="d-block w-100" alt="...">
+                        <div class="carousel-caption d-none d-md-block">
+                            <h5>{{ $news->title }}</h5>
+                            <p>{{ $news->subtitle }}.</p>
+                        </div>
+                    </a>
                 </div>
                 @endforeach
             </div>
