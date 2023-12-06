@@ -718,7 +718,7 @@
                         <div class="dropdown-divider"></div>
 
                         @if(count(auth()->user()->unreadNotifications))
-                        @foreach(auth()->user()->unreadNotifications as $notification)
+                        @foreach(auth()->user()->unreadNotifications->take(5) as $notification)
                         <a class="dropdown-item small" href="{{ route('openNotification', $notification) }}">
                             {!! $notification->data['icon'] ?? null !!}
                             <b>{{ $notification->data['module'] ?? '' }}</b>
@@ -798,6 +798,13 @@
                         </a>
                         @endrole
 
+                        @can('News: create')
+                        <div class="dropdown-divider"></div>
+
+                        <a class="dropdown-item" href="{{ route('news.create') }}">
+                            <i class="far fa-newspaper"></i> Noticias
+                        </a>
+                        @endcan
 
                         <div class="dropdown-divider"></div>
 

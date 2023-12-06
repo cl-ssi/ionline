@@ -803,6 +803,13 @@
                         </a>
                         @endrole
 
+                        @can('News: create')
+                        <div class="dropdown-divider"></div>
+
+                        <a class="dropdown-item" href="{{ route('news.create') }}">
+                            <i class="far fa-newspaper"></i> Noticias
+                        </a>
+                        @endcan
 
                         <div class="dropdown-divider"></div>
 
