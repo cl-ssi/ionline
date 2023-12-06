@@ -266,8 +266,12 @@
                                                         wire:click="updateReceptionDteId({{ $reception->id }}, {{ $dte->id }})"
                                                         >
                                                         <label class="form-check-label" for="defaultCheck1">
-                                                            <b>Nº:</b> {{ $reception->numeration->number ?? 'Pendiente' }} 
-                                                            <b>Fecha:</b> {{ $reception->date?->format('Y-m-d') }}
+                                                            <a href="{{ route('finance.receptions.show', $reception->id) }}"
+                                                                
+                                                                target="_blank">
+                                                                <b>Nº:</b> {{ $reception->numeration->number ?? 'Pendiente' }} 
+                                                                <b>Fecha:</b> {{ $reception->date?->format('Y-m-d') }}
+                                                            </a>
                                                             @if($reception->numeration?->number)
                                                                 <a class="text-link" target="_blank"
                                                                     href="{{ route('documents.partes.numeration.show_numerated', $reception->numeration) }}">
