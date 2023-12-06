@@ -25,12 +25,13 @@
     </div><br><br>
 
     @if($records && $records->count() > 0)
+    <h4>Información histórica</h4>
     <table class="table table-sm table-bordered table-hover" style="font-size: 12px;">
         <thead>
             <tr>
-                <th width="95px" scope="col">Rut</th>
+                <!-- <th width="95px" scope="col">Rut</th>
                 <th scope="col">Funcionario</th>
-                <th scope="col">Lugar desempeño</th>
+                <th scope="col">Lugar desempeño</th> -->
                 <th scope="col">Fecha registro</th>
                 <th scope="col">Total real cargado</th>
                 <th scope="col">Días de ausentismos</th>
@@ -44,9 +45,9 @@
         <tbody>
             @foreach($records as $record)
             <tr>
-                <td>{{ $record->rut }}-{{ $record->dv }}</td>
+                <!-- <td>{{ $record->rut }}-{{ $record->dv }}</td>
                 <td>{{ $record->nombre }}</td>
-                <td>{{ $record->lugar_desempeño }}</td>
+                <td>{{ $record->lugar_desempeño }}</td> -->
                 <td>{{ Str::after($record->fecha, '-') }}</td>
                 <td class="text-right">{{ number_format($record->total_real_cargado, 0, ",", ".") ?? '-' }}</td>
                 <td class="text-right">{{ $record->dias_ausentismo ?? '-' }}</td>
@@ -60,7 +61,7 @@
         </tbody>
         <tfoot>
             <tr class="font-weight-bold text-right">
-                <td colspan="4" class="text-right">Totales $</td>
+                <td class="text-right">Totales $</td>
                 <td>{{number_format($records->sum('total_real_cargado'), 0, ",", ".")}}</td>
                 <td>{{$records->sum('dias_ausentismo')}}</td>
                 <td>{{$records->sum('dias_habiles_mes')}}</td>
@@ -86,9 +87,9 @@
                 <th colspan="5">Regularizaciones registradas</th>
             </tr>
             <tr>
-                <th width="95px" scope="col">Rut</th>
+                <!-- <th width="95px" scope="col">Rut</th>
                 <th scope="col">Funcionario</th>
-                <th scope="col">Lugar desempeño</th>
+                <th scope="col">Lugar desempeño</th> -->
                 <th scope="col">Fecha registro</th>
                 <th scope="col">Total regularizado</th>
             </tr>
@@ -96,9 +97,9 @@
         <tbody>
             @foreach($regularizations as $record)
             <tr>
-                <td>{{ $record->rut }}-{{ $record->dv }}</td>
+                <!-- <td>{{ $record->rut }}-{{ $record->dv }}</td>
                 <td>{{ $record->nombre }}</td>
-                <td>{{ $record->lugar_desempeño }}</td>
+                <td>{{ $record->lugar_desempeño }}</td> -->
                 <td>{{ Str::after($record->fecha, '-') }}</td>
                 <td class="{{ $record->total_real_cargado > 0 ? 'text-success' : 'text-danger' }} font-weight-bold text-right">{{ number_format($record->total_real_cargado, 0, ",", ".") ?? '-' }}</td>
             </tr>
@@ -116,9 +117,9 @@
                 <th colspan="10">Mis cargas de Oct-23 a la fecha</th>
             </tr>
             <tr>
-                <th width="95px" scope="col">Rut</th>
+                <!-- <th width="95px" scope="col">Rut</th>
                 <th scope="col">Funcionario</th>
-                <th scope="col">Lugar desempeño</th>
+                <th scope="col">Lugar desempeño</th> -->
                 <th scope="col">Fecha registro</th>
                 <th scope="col">Días hábiles del mes</th>
                 <th scope="col">Días de ausentismos</th>
@@ -131,9 +132,9 @@
         <tbody>
             @foreach($new_records as $record)
             <tr>
-                <td>{{ $record->rut }}-{{ $record->dv }}</td>
+                <!-- <td>{{ $record->rut }}-{{ $record->dv }}</td>
                 <td>{{ $record->nombre }}</td>
-                <td>{{ $record->lugar_desempeño }}</td>
+                <td>{{ $record->lugar_desempeño }}</td> -->
                 <td>{{ Str::after($record->fecha, '-') }}</td>
                 <td class="text-right">{{ $record->dias_habiles_mes ?? '-' }}</td>
                 <td class="text-right">{{ $record->dias_ausentismo ?? '-' }}</td>

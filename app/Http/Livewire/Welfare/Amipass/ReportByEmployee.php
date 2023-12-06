@@ -56,6 +56,9 @@ class ReportByEmployee extends Component
             }
         }
 
+
+        // aqui obtener info como en report by dates
+
     }
 
     public function render()
