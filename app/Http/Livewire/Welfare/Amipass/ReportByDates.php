@@ -31,8 +31,8 @@ class ReportByDates extends Component
     ];
 
     // public function mount(){
-    //     $this->finicio = Carbon::createFromDate('2023-07-01');
-    //     $this->ftermino = Carbon::createFromDate('2023-07-31');
+    //     $this->finicio = Carbon::createFromDate('2023-02-01');
+    //     $this->ftermino = Carbon::createFromDate('2023-02-28');
     // }
 
     public function search(){
@@ -94,7 +94,7 @@ class ReportByDates extends Component
                         // ->where('shift',0); se traen todos, abajo se hace el filtro
                 });
             })
-            // ->whereIn('id',[9949268])
+            // ->whereIn('id',[9787020])
             ->get();   
 
 
@@ -203,7 +203,7 @@ class ReportByDates extends Component
                 $businessDays = [];
                 if(count($contractDates) > 0){
                     // días laborales reales (considerando cruze de contratos)
-                    $businessDays = DateHelper::getBusinessDaysByDateRangeHolidays($contractDates[$first_key],$contractDates[$last_key],$holidays, $user->id)->toArray();
+                    $businessDays = DateHelper::getBusinessDaysByDateRangeHolidays($contractDates[$first_key],$contractDates[$last_key],$holidays)->toArray();
                 }
                 
                 //cantidad de días laborales
@@ -262,7 +262,7 @@ class ReportByDates extends Component
                     }
                     $lastdate = $absenteeismEndDate->copy();
 
-                    $absenteeism->totalDays = DateHelper::getBusinessDaysByDateRangeHolidays($absenteeismStartDate, $absenteeismEndDate, $holidays, $user->id)->count();
+                    $absenteeism->totalDays = DateHelper::getBusinessDaysByDateRangeHolidays($absenteeismStartDate, $absenteeismEndDate, $holidays)->count();
                     $user->totalAbsenteeisms += $absenteeism->totalDays;
 
                     // $this->absenteeisms[$user->id] = $absenteeism;
@@ -282,18 +282,24 @@ class ReportByDates extends Component
                     // genera array con inicio y termino de cada periodo del rango
                     $start = $compensatoryDay->start_date;
                     $end = $compensatoryDay->end_date;
+
+                    // obtiene días hábiles (sin feriados ni fds)
+                    $habiles = DateHelper::getBusinessDaysByDateRangeHolidays($start, $end, $holidays)->toArray();
                     
                     $dates = [];
                     $datesArray = iterator_to_array(new \DatePeriod($start, new \DateInterval('P1D'), $end));
-                    array_walk($datesArray, function ($value, $key) use (&$dates, $start, $end) {
-                        $dates[$key]['start'] = (
-                            ($key == 0) ? $value->format('Y-m-d H:i:s') : $value->setTime(00, 0, 00)->format('Y-m-d H:i:s')
-                        );
-                        $endDate = $value->setTime(23, 59, 59);
-                        if ($endDate->getTimestamp() > $end->getTimestamp()) {
-                            $endDate = $end;
+                    array_walk($datesArray, function ($value, $key) use (&$dates, $start, $end, $habiles) {
+                        // solo se agrega si el día que se analiza existe en array de días hábiles
+                        if(in_array($value->format('Y-m-d'), $habiles)){
+                            $dates[$key]['start'] = (
+                                ($key == 0) ? $value->format('Y-m-d H:i:s') : $value->setTime(00, 0, 00)->format('Y-m-d H:i:s')
+                            );
+                            $endDate = $value->setTime(23, 59, 59);
+                            if ($endDate->getTimestamp() > $end->getTimestamp()) {
+                                $endDate = $end;
+                            }
+                            $dates[$key]['end'] = $endDate->format('Y-m-d H:i:s');
                         }
-                        $dates[$key]['end'] = $endDate->format('Y-m-d H:i:s');
                     });
                     
                     // verifica si el día compensatorio por día es mayor a 8
@@ -314,7 +320,7 @@ class ReportByDates extends Component
                             }
                         }elseif($compensatoryAbsenteeismType->from!=null){
                             // desde
-                            if($start->diffInHours($end) >= $compensatoryAbsenteeismType->over){
+                            if($start->diffInHours($end) >= $compensatoryAbsenteeismType->from){
                                 $cant_dias += 1;
                                 // si es que está dentro del rango
                                 if($start->between($this->finicio, $this->ftermino)){
