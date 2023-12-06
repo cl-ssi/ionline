@@ -193,6 +193,17 @@
                         </a>
                         @endif
 
+                        @canany([
+                            'Receptions: user',
+                            'Receptions: admin',
+                            'Receptions: load file retroactive',
+                            'be god',
+                        ])
+                            <a class="dropdown-item {{ active('finance.receptions.index') }}" href="{{ route('finance.receptions.index') }}">
+                                <i class="fas fa-fw fa-check-circle"></i> Recepción Conforme
+                            </a>
+                        @endcanany
+
                         @can('Store')
                         <div class="dropdown-divider"></div>
                         <h6 class="dropdown-header">Bodegas</h6>
@@ -238,11 +249,12 @@
 
 
 
-                        @canany(['Store: Cenabast'])
-                        <a class="dropdown-item {{ active('warehouse.cenabast.index') }}" href="{{ route('warehouse.cenabast.index') }}">
+                        @can('be god')
+                        <!-- <a class="dropdown-item {{ active('warehouse.cenabast.index') }}" href="{{ route('warehouse.cenabast.index') }}">
                             <i class="fas fa-pills"></i> Cenabast
-                        </a>
-                        @endcanany
+                        </a> -->
+                        @endcan
+                        
 
 
 

@@ -148,6 +148,7 @@ class RoleAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Partes: director']);
         Permission::create(['name' => 'Partes: oficina']);
         Permission::create(['name' => 'Partes: delete']);
+        Permission::create(['name' => 'Partes: numerator', 'description' => 'Aquellos que pueden numerar un documento, les llega un mail por cada documento a enumerar']);
 
         Permission::create(['name' => 'Rrhh: wellfair']);
 
@@ -196,6 +197,12 @@ class RoleAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Agenda UST: Administrador', 'description' => 'Rol de administrador del módulo agendamiento UST']);
         Permission::create(['name' => 'Agenda UST: Funcionario', 'description' => 'Rol de funcionario del módulo agendamiento UST']);
         Permission::create(['name' => 'Agenda UST: Secretaria', 'description' => 'Rol de secretaria del módulo agendamiento UST']);
+
+
+        Permission::create(['name' => 'Receptions: user', 'description' => 'Usuario normal']);
+        Permission::create(['name' => 'Receptions: admin', 'description' => 'Usuario administrador']);
+        Permission::create(['name' => 'Receptions: load file retroactive', 'description' => 'Permite cargar actas firmadas retroactivamente']);
+        Permission::create(['name' => 'Receptions: load support file', 'description' => 'Permite cargar documentos de respaldo']);
 
         // @role(
         //   'Replacement Staff: admin |

@@ -256,22 +256,22 @@ class StoreController extends Controller
 
 
 
-    public function bypass(Request $request, $dte)
-    {
+    // public function bypass(Request $request, $dte)
+    // {
         
-        $dte = Dte::findorFail($dte);
-        $dte->upload_user_id = auth()->id();
-        $dte->confirmation_status = 1;
-        $dte->confirmation_user_id = auth()->id();
-        $dte->confirmation_ou_id = auth()->user()->organizational_unit_id;
-        $dte->confirmation_at = now();
-        $dte->cenabast_signed_pharmacist = 1;
-        $dte->cenabast_signed_boss =1;
-        $dte->save();
+    //     $dte = Dte::findorFail($dte);
+    //     $dte->upload_user_id = auth()->id();
+    //     $dte->confirmation_status = 1;
+    //     $dte->confirmation_user_id = auth()->id();
+    //     $dte->confirmation_ou_id = auth()->user()->organizational_unit_id;
+    //     $dte->confirmation_at = now();
+    //     $dte->cenabast_signed_pharmacist = 1;
+    //     $dte->cenabast_signed_boss =1;
+    //     $dte->save();
 
-        session()->flash('info', 'Se realizo bypass con exito');
-        return redirect()->route('warehouse.cenabast.index');
-    }
+    //     session()->flash('info', 'Se realizo bypass con exito');
+    //     return redirect()->route('warehouse.cenabast.index');
+    // }
 
 
 

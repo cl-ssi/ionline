@@ -13,6 +13,8 @@
                 <td>Descuento</td>
                 <td>Medio Día</td>
                 <td>Cuenta Día Trabajados</td>
+                <td>Sobre</td>
+                <td>Desde</td>
             </tr>
         </thead>
 

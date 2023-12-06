@@ -42,6 +42,7 @@ use App\Http\Livewire\Parameters\Holidays;
 use App\Http\Livewire\Parameters\AccessLogIndex;
 use App\Http\Livewire\News\SearchNews;
 use App\Http\Livewire\News\CreateNews;
+use App\Http\Controllers\News\NewsController;
 use App\Http\Livewire\Lobby\MeetingMgr;
 use App\Http\Livewire\Inventory\Transfer;
 use App\Http\Livewire\Inventory\RemovalRequestMgr;
@@ -555,8 +556,9 @@ Route::prefix('job_position_profile')->as('job_position_profile.')->middleware([
         return Storage::disk('gcs')->response('ionline/job_position_profile/info/instructivo_2023.pdf');
     })->name('instructivo_2023');
     Route::post('/store', [JobPositionProfileController::class, 'store'])->name('store');
-    Route::get('{jobPositionProfile}/show/', [JobPositionProfileController::class, 'show'])->name('show');
-    Route::get('{jobPositionProfile}/to_sign/', [JobPositionProfileController::class, 'to_sign'])->name('to_sign');
+    Route::get('{jobPositionProfile}/show', [JobPositionProfileController::class, 'show'])->name('show');
+    Route::get('/{job_position_profile_id}/show_approval', [JobPositionProfileController::class, 'show_approval'])->name('show_approval');
+    Route::get('{jobPositionProfile}/to_sign', [JobPositionProfileController::class, 'to_sign'])->name('to_sign');
     Route::get('/{jobPositionProfile}/edit', [JobPositionProfileController::class, 'edit'])->name('edit');
     Route::put('{jobPositionProfile}/update', [JobPositionProfileController::class, 'update'])->name('update');
     Route::get('/{jobPositionProfile}/edit_formal_requirements', [JobPositionProfileController::class, 'edit_formal_requirements'])->name('edit_formal_requirements');
@@ -759,6 +761,7 @@ Route::middleware(['auth', 'must.change.password'])->group(function () {
     //Reportes de Programación Númerica APS
     Route::get('reportConsolidated', [ProgrammingReportController::class, 'reportConsolidated'])->middleware('auth')->name('programming.reportConsolidated');
     Route::get('reportConsolidatedSep', [ProgrammingReportController::class, 'reportConsolidatedSep'])->middleware('auth')->name('programming.reportConsolidatedSep');
+    Route::get('reportConsolidatedSporadic', [ProgrammingReportController::class, 'reportConsolidatedSporadic'])->middleware('auth')->name('programming.reportConsolidatedSporadic');
     Route::get('reportUsers', [ProgrammingReportController::class, 'reportUsers'])->middleware('auth')->name('programming.reportUsers');
     Route::get('reportTotalRrhh', [ProgrammingReportController::class, 'reportTotalRrhh'])->middleware('auth')->name('programming.reportTotalRrhh');
     //Reportes Observaciones de Programación Númerica APS
@@ -2046,7 +2049,7 @@ Route::prefix('finance')->as('finance.')->middleware(['auth', 'must.change.passw
         Route::get('/reject', CreateRejection::class)->name('reject');
         Route::get('/type', TypeMgr::class)->name('type');
         Route::get('/{reception_id}', [FinReceptionController::class,'show'])->name('show');
-
+        Route::get('/support_document_download/{file}',  [FinReceptionController::class, 'support_document_download'])->name('support_document_download');
     });
 });
 
@@ -2559,9 +2562,9 @@ Route::prefix('his')->as('his.')->middleware('auth')->group(function () {
 Route::prefix('news')->as('news.')->middleware(['auth', 'must.change.password'])->group(function () {
     Route::get('/', CreateNews::class)->name('create');
     Route::get('/index', SearchNews::class)->name('index');
+    Route::get('/show/{news}', [NewsController::class, 'show'])->name('show');
 });
 */
-
 
 /** RUTAS PARA EXTERNAL  */
 Route::group(['middleware' => 'auth:external'], function () {

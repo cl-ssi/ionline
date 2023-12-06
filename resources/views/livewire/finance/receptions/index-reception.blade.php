@@ -70,9 +70,11 @@
                     <th>Items</th>
                     <th>Total</th>
                     <th>Fecha Recepción</th>
+                    <th>Orig.</th>
                     <th>Aprobaciones</th>
                     <th>Número</th>
-                    <th width="100"></th>
+                    <th>Adjuntos</th>
+                    <th width="55"></th>
                 </tr>
             </thead>
             <tbody>
@@ -92,7 +94,7 @@
                             {{ $reception->purchase_order }}
                         </td>
                         <td>
-                            {{ $reception->purchaseOrder->json->Listado[0]->Proveedor->Nombre }}
+                            {{ $reception->purchaseOrder?->json->Listado[0]->Proveedor->Nombre }}
                         </td>
                         <td>
                             {{ $reception->receptionType?->name }}
@@ -107,42 +109,58 @@
                             {{ $reception->date?->format('Y-m-d') }}
                         </td>
                         <td>
-                            @foreach ($reception->approvals as $approval)
-                                <span style="width=50px;"
-                                    @class([
-                                        'd-inline-bloc',
-                                        'img-thumbnail',
-                                        'rounded-circle',
-                                        'bg-success' => $approval->status,
-                                        'text-white' => $approval->status,
-                                        'border-dark',
-                                    ])
-                                    tabindex="0"
-                                    data-toggle="tooltip"
-                                    title="Fecha: ">
-                                    <small>
-                                        @if ($approval->approver)
-                                            {{ $approval->approver->initials }}
-                                        @elseif($approval->sentToOu)
-                                            {{ $approval->sentToOu->currentManager?->user->initials }}
-                                        @elseif($approval->sentToUser)
-                                            {{ $approval->sentToUser->initials }}
-                                        @endif
-                                    </small>
-                                </span> &nbsp;
-                            @endforeach
-                        </td>
-                        <td>
-                            @if ($reception->numeration and $reception->numeration->number)
-                                {{ $reception->numeration->number }}
-                            @endif
-                        </td>
-                        <td>
                             <a href="{{ route('finance.receptions.show', $reception->id) }}"
-                                class="btn btn-danger"
+                                class="btn btn-outline-success"
                                 target="_blank">
                                 <i class="bi bi-file-pdf-fill"></i>
                             </a>
+                        </td>
+                        <td>
+                            @if($reception->rejected)
+                                <span class="badge bg-danger">Rechazada</span>
+                            @else
+                                @foreach ($reception->approvals as $approval)
+                                    <span style="width=50px;"
+                                        @class([
+                                            'd-inline-bloc',
+                                            'img-thumbnail',
+                                            'rounded-circle',
+                                            'bg-success' => $approval->status,
+                                            'text-white' => $approval->status,
+                                            'border-dark',
+                                        ])
+                                        tabindex="0"
+                                        data-toggle="tooltip"
+                                        title="Fecha: ">
+                                        <small>
+                                            @if ($approval->approver)
+                                                {{ $approval->approver->initials }}
+                                            @elseif($approval->sentToOu)
+                                                {{ $approval->sentToOu->currentManager?->user->initials }}
+                                            @elseif($approval->sentToUser)
+                                                {{ $approval->sentToUser->initials }}
+                                            @endif
+                                        </small>
+                                    </span> &nbsp;
+                                @endforeach
+                            @endif
+                        </td>
+                        <td>
+                            @if ($reception->numeration and $reception->numeration->number)
+                                <a class="btn btn-outline-danger" href="{{ route('documents.partes.numeration.show_numerated', $reception->numeration) }}" target="_blank">
+                                    <i class="bi bi-file-pdf"></i>  {{ $reception->numeration->number }}
+                                </a>
+                            @endif
+                        </td>
+                        <td>
+                            @foreach($reception->files->where('type','support_documents') as $file)
+                                <a href="{{ route('finance.receptions.support_document_download', $file->id) }}"
+                                    target="_blank">
+                                    <i class="fas fa-paperclip"></i>
+                                </a>
+                            @endforeach
+                        </td>
+                        <td>
                             <a href="{{ route('finance.receptions.create', $reception) }}"
                                 class="btn btn-primary">
                                 <i class="bi bi-pencil-square"></i>

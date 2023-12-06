@@ -1,5 +1,5 @@
 <div>
-
+@can('be god')
     <h3 class="mb-3">Dtes de Cenabast</h3>
 
     <div class="form-row">
@@ -278,5 +278,5 @@
             })
         </script>
     @endsection
-
+@endcan
 </div>

@@ -38,6 +38,7 @@
         <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
             <a class="dropdown-item" href="{{ route('programming.reportConsolidated') }}">Reporte act. directas Consolidado</a>
             <a class="dropdown-item" href="{{ route('programming.reportConsolidatedSep') }}">Reporte act. directas Consolidado Sep</a>
+            <a class="dropdown-item" href="{{ route('programming.reportConsolidatedSporadic') }}">Reporte act. indirectas esporádicas Consolidado</a>
             <a class="dropdown-item" href="{{ route('programming.reportUsers') }}">Reporte Usuarios</a>
             <a class="dropdown-item" href="{{ route('programming.reportTotalRrhh') }}">Reporte Total RRHH</a>
         </div>

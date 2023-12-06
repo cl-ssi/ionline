@@ -29,6 +29,11 @@
                 </fieldset>
 
                 <fieldset class="form-group col-2">
+                    <label for="for_countersample_number">N° Contramuestras *</label>
+                    <input type="number" class="form-control" id="for_countersample_number" placeholder="Número de Contramuestras" name="countersample_number" required="">
+                </fieldset>
+
+                <fieldset class="form-group col-2">
                     <label for="for_document_weight">Peso Oficio</label>
                     <input type="text" class="form-control" id="for_document_weight" placeholder="Peso Oficio" name="document_weight">
                 </fieldset>

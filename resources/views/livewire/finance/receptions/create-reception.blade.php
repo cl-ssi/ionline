@@ -258,19 +258,17 @@
                             {{ $item->CodigoCategoria }}
                         </td>
                         <td>{{ $item->Producto }}</td>
-                        <td style="text-align: right;">
+                        <td class="text-center">
                             {{ $item->Cantidad }} {{ $item->Unidad }}
-
-                            <select id="ct_{{ $key }}"
-                                class="form-select @error('receptionItemsWithCantidad') is-invalid @enderror"
-                                wire:model="receptionItems.{{ $key }}.Cantidad"
+                            <input type="number" 
+                                class="form-control @error('receptionItems.'. $key .'.Cantidad') is-invalid @enderror"
+                                id="quantity" 
+                                wire:model.debounce.500ms="receptionItems.{{ $key }}.Cantidad" 
+                                min="1" 
+                                max="{{ $maxItemQuantity[$key] }}"
                                 wire:change="calculateItemTotal({{ $key }})"
                                 @disabled($maxItemQuantity[$key] == 0)>
-                                <option value=""></option>
-                                @for ($i = 1; $i <= $maxItemQuantity[$key]; $i++)
-                                    <option>{{ $i }}</option>
-                                @endfor
-                            </select>
+                                <small class="text-secondary"> 0 - {{$maxItemQuantity[$key]}} </small>
                         </td>
                         <td>{{ $item->EspecificacionComprador }}</td>
                         <td>{{ $item->EspecificacionProveedor }}</td>
@@ -280,10 +278,10 @@
                         <td style="text-align: right;">{{ money($item->Cantidad * $item->PrecioNeto) }}</td>
                     </tr>
                     @if (array_key_exists($key, $otherItems))
-                        @foreach ($otherItems[$key] as $receptionNumber => $quantity)
+                        @foreach ($otherItems[$key] as $id => $quantity)
                             <tr>
                                 <td colspan="2">
-                                    Acta {{ $receptionNumber }}
+                                    Acta id: {{ $id }}
                                 </td>
                                 <td style="text-align: right;">
                                     {{ $quantity }}
@@ -315,6 +313,7 @@
                         type="radio"
                         wire:model.defer="reception.partial_reception"
                         id="partial_reception_partial"
+                        name="partial_reception"
                         value="1">
                     <label class="form-check-label"
                         for="for-parcial">Recepcionar la OC Parcial</label>
@@ -323,6 +322,7 @@
                 <div class="form-check form-check-inline">
                     <input class="form-check-input @error('reception.partial_reception') is-invalid @enderror"
                         type="radio"
+                        name="partial_reception"
                         wire:model.defer="reception.partial_reception"
                         id="partial_reception_complete"
                         wire:change="setPurchaseOrderCompleted"
@@ -389,6 +389,25 @@
                 </div>
             @endif
         @endif
+
+
+        @can('Receptions: load file retroactive')
+        <div class="mb-3">
+            <label for="file_signed" class="form-label">Subir acta firmada</label>
+            <div class="input-group">
+                <input class="form-control" type="file" wire:model="file_signed" id="file_signed">
+            </div>
+        </div>
+        @endcan
+
+        @can('Receptions: load support file')
+        <div class="mb-3">
+            <label for="file_support_file" class="form-label">Documento de respaldo</label>
+            <div class="input-group">
+                <input class="form-control" type="file" wire:model="file_support_file" id="file_support_file">
+            </div>
+        </div>
+        @endcan
 
 
         <!-- Firmantes -->
@@ -543,6 +562,11 @@
 
         <hr>
 
+
+
+
+
+
         <!----------------------------------->
         <!-- Preview del acta de recepción -->
         <!----------------------------------->
@@ -567,8 +591,8 @@
                             Fecha:
                         </th>
                         <td>
-                            @if ($reception->date)
-                                {{ $reception->date?->format('d-m-Y') }}
+                            @if (key_exists('date', $reception))
+                                {{ $reception['date'] }}
                             @else
                                 <span class="text-danger">Falta la fecha</span>
                             @endif
@@ -580,10 +604,9 @@
 
         <br>
 
-        <h3 class="text-center mb-3">Acta de recepción conforme de
-            {{ $reception->reception_type_id ? $types[$reception->reception_type_id] : '' }}</h3>
+        <h3 class="text-center mb-3">Acta de recepción conforme</h3>
 
-        <p style="white-space: pre-wrap;">{{ $reception->header_notes }}</p>
+        <p style="white-space: pre-wrap;">{{ $reception['header_notes'] ?? '' }}</p>
 
         <table class="table table-sm table-bordered">
             <tr>
@@ -591,7 +614,7 @@
                     Orden de Compra
                 </th>
                 <td>
-                    {{ $reception->purchase_order }}
+                    {{ $reception['purchase_order'] }}
                 </td>
                 <th>
                     Proveedor
@@ -611,19 +634,19 @@
                     N° Documento
                 </th>
                 <td>
-                    {{ $reception->dte_number }}
+                    {{ $reception['dte_number'] ?? '' }}
                 </td>
                 <th>
                     Tipo de documento
                 </th>
                 <td>
-                    {{ $reception->dte_type }}
+                    {{ $reception['dte_type'] ?? '' }}
                 </td>
                 <th>
                     Fecha Emisón:
                 </th>
                 <td>
-                    {{ $reception->dte_date?->format('d-m-Y') }}
+                    {{ $reception['dte_date'] ?? '' }}
                 </td>
             </tr>
         </table>
@@ -665,37 +688,37 @@
                                 <th width="100">Neto</th>
                                 <td>$</td>
                                 <td width="100"
-                                    style="text-align: right;">{{ money($reception->neto) }}</td>
+                                    style="text-align: right;">{{ money($reception['neto'] ?? 0) }}</td>
                             </tr>
-                            @if ($reception->descuentos and $reception->descuentos > 0)
+                            @if (key_exists('descuentos', $reception) and $reception['descuentos'] > 0)
                                 <tr>
                                     <th>Dcto.</th>
                                     <td>$</td>
-                                    <td style="text-align: right;">{{ money($reception->descuentos) }}</td>
+                                    <td style="text-align: right;">{{ money($reception['descuentos'] ?? 0 ) }}</td>
                                 </tr>
                             @endif
-                            @if ($reception->cargos and $reception->cargos > 0)
+                            @if ( key_exists('cargos', $reception) and $reception['cargos'] > 0)
                                 <tr>
                                     <th>Cargos</th>
                                     <td>$</td>
-                                    <td style="text-align: right;">{{ money($reception->cargos) }}</td>
+                                    <td style="text-align: right;">{{ money($reception['cargos'] ?? 0 ) }}</td>
                                 </tr>
                             @endif
                             <tr>
                                 <th>Subtotal</th>
                                 <td>$</td>
-                                <td style="text-align: right;">{{ money($reception->subtotal) }}</td>
+                                <td style="text-align: right;">{{ money($reception['subtotal'] ?? 0 ) }}</td>
                             </tr>
                             <tr>
                                 <th>{{ $purchaseOrder->json->Listado[0]->PorcentajeIva }}% IVA</th>
                                 <td>$</td>
-                                <td style="text-align: right;">{{ money($reception->iva) }}</td>
+                                <td style="text-align: right;">{{ money($reception['iva'] ?? 0) }}</td>
                             </tr>
                             <tr>
                                 <th>Total</th>
                                 <td>$</td>
                                 <td style="text-align: right;">
-                                    <b>{{ money($reception->total) }}</b>
+                                    <b>{{ money($reception['total'] ?? 0) }}</b>
                                 </td>
                             </tr>
                         </table>
@@ -707,7 +730,7 @@
             </tbody>
         </table>
 
-        <p style="white-space: pre-wrap;">{{ $reception->footer_notes }}</p>
+        <p style="white-space: pre-wrap;">{{ $reception['footer_notes'] ?? '' }}</p>
         <br>
         <br>
         <br>
@@ -754,5 +777,7 @@
                 </button>
             </div>
         </div>
+
+        @include('layouts.bt5.partials.errors')
     @endif
 </div>

@@ -30,6 +30,7 @@ class File extends Model
     //     'storage_path' => 'ionline/documents/23234.pdf',
     //     'stored' => false,
     //     'name' => 'Mi documento.pdf',
+    //     'type' => 'xxx', // es para cargar distinntos tipos en una misma relacion
     //     'input_title' => 'Archivo pulento',
     //     'input_name' => 'reception',
     //     'required' => false,

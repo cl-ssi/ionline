@@ -5,7 +5,9 @@ namespace App\Http\Livewire\Finance;
 use Livewire\WithPagination;
 use Livewire\Component;
 use App\Models\Finance\Dte;
+use App\Models\Finance\Receptions\Reception;
 use App\Models\Establishment;
+
 
 class IndexDtes extends Component
 {
@@ -82,37 +84,7 @@ class IndexDtes extends Component
             }
         }
 
-        // if (!empty($this->filter_sender_status)) {
-        //     switch ($this->filter_sender_status) {
-        //         case 'no confirmadas y enviadas a confirmación':
-        //             $query->whereNull('confirmation_status')->whereNotNull('confirmation_send_at');
-        //             break;
-        //         case 'Enviado a confirmación':
-        //             $query->whereNotNull('confirmation_send_at');
-        //             break;
-        //         case 'Confirmada':
-        //             $query->whereNotNull('confirmation_send_at')->where('confirmation_status', 1);
-        //             break;
-        //         case 'No Confirmadas':
-        //             $query->whereNotNull('confirmation_send_at')->whereNull('confirmation_status');
-        //             break;
-        //         case 'Confirmadas':
-        //             $query->whereNotNull('confirmation_send_at')->where('confirmation_status', 1);
-        //             break;
-        //         case 'Rechazadas':
-        //             $query->whereNotNull('confirmation_send_at')->where('confirmation_status', 0);
-        //             break;
-        //         case 'Sin Envío':
-        //             $query->whereNull('confirmation_send_at')->whereNull('confirmation_status');
-        //             break;
-        //     }
-        // }
 
-        // if (!empty($this->filter_selected_establishment)) {
-        //     $query->where('establishment_id', $this->filter_selected_establishment);
-        // }
-
-        // Rest of your searchDtes logic...
 
         // Aplicar relaciones y ordenamiento
         $query->with([
@@ -125,14 +97,8 @@ class IndexDtes extends Component
             'dtes',
             'invoices',
         ])
-            // ->whereNull('confirmation_status')
-            // ->orWhere('confirmation_status',true)
-            ->where(function ($query) {
-                $query->where('confirmation_status', true)
-                    ->orWhereNull('confirmation_status');
-            })
+            ->whereNull('rejected')
             ->orderByDesc('fecha_recepcion_sii');
-
         return $query->paginate(50);
     }
 
@@ -237,47 +203,20 @@ class IndexDtes extends Component
                 ]);
             }
         }
-
-        // if (
-        //     $dte->confirmation_status !== null &&
-        //     $dte->confirmation_user_id !== null &&
-        //     $dte->confirmation_at !== null &&
-        //     $dte->confirmation_signature_file !== null
-        // )
-
-        //     $dte->invoices()->sync($this->asociate_invoices);
-        // foreach ($this->asociate_invoices as $invoice_id) {
-        //     $invoice = Dte::find($invoice_id);
-        //     $invoice->update([
-        //         'confirmation_status' => $dte->confirmation_status,
-        //         'confirmation_user_id' => $dte->confirmation_user_id,
-        //         'confirmation_ou_id' => $dte->confirmation_ou_id,
-        //         'confirmation_at' => $dte->confirmation_at,
-        //         'confirmation_signature_file' => $dte->confirmation_signature_file,
-        //         'upload_user_id' => $dte->upload_user_id,
-        //         'cenabast_signed_pharmacist' => $dte->cenabast_signed_pharmacist,
-        //         'cenabast_signed_boss' => $dte->cenabast_signed_boss,
-
-        //     ]);
-        // }
-
         $this->showEdit = null;
     }
 
     public function changeStatus($dte_id)
-{
-    $dte = Dte::find($dte_id);
+    {
+        $dte = Dte::find($dte_id);
 
-    // Actualizar el estado de confirmación y otros campos relacionados
-    $dte->update([
-        'confirmation_status' => $this->confirmation_status,
-        'reason_rejection' => $this->confirmation_observation
-    ]);
-
-    // Resto del código relacionado al cambio de estado...
-
-    $this->showEdit = null;
-}
+        // Actualizar el estado de confirmación y otros campos relacionados
+        $dte->update([
+            'confirmation_status' => $this->confirmation_status,
+            'reason_rejection' => $this->confirmation_observation
+        ]);
+        $this->showEdit = null;
+    }
 
 
     public function loadManualDTE()
@@ -291,6 +230,24 @@ class IndexDtes extends Component
         $this->showManualDTE = false;
     }
 
+
+
+
+    public function updateAllReceptionsStatus($dte_id)
+    {
+        $dte = Dte::find($dte_id);
+        $dte->update([
+            'all_receptions' => true,
+            'all_receptions_user_id' => auth()->id(),
+            'all_receptions_ou_id' => auth()->user()->organizational_unit_id,
+            'all_receptions_at' => now(),
+        ]);
+        $this->showEdit = null;
+    }
+
+
+
+
     public function render()
     {
         $dtes = $this->searchDtes();
@@ -300,4 +257,35 @@ class IndexDtes extends Component
             //'establishments' => $establishments,
         ])->extends('layouts.bt4.app');
     }
+
+
+    public function updateReceptionDteId($receptionId, $dteId)
+    {
+        $reception = Reception::find($receptionId);
+        if ($reception) {
+            $reception->update(['dte_id' => $dteId]);
+        }
+    }
+
+    public function rejectDte($dte_id)
+    {
+        $this->validate([
+            'reason_rejection' => 'required',
+        ]);   
+
+        $dte = Dte::find($dte_id);
+        $dte->update(
+            [
+                'rejected' => true, 
+                'reason_rejection' => $this->reason_rejection,
+                'rejected_user_id' => auth()->id(),
+                'rejected_at' => now(),
+            ]);
+        
+        $this->refresh();
+    }
+
+
+
+
 }

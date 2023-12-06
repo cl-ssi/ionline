@@ -24,6 +24,7 @@ class ReceptionItem extends Model
         'net_weight',
         'estimated_net_weight',
         'sample',
+        'countersample_number',
         'countersample',
         'destruct',
         'equivalent',

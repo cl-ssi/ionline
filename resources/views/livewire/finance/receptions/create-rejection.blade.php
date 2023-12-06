@@ -84,10 +84,15 @@
                                     type="radio"
                                     wire:model="selectedDteId"
                                     name="selectedDte"
-                                    value="{{ $dte->id }}">
-                                <label>
+                                    value="{{ $dte->id }}"
+                                    {{ $dte->rejectedReception ? 'disabled' : '' }}
+                                    >
+                                <label @if ($dte->rejectedReception) class="text-danger" @endif>
                                     {{ $dte->tipoDocumentoIniciales }}
                                     {{ $dte->folio }}
+                                    @if ($dte->rejectedReception)
+                                        <span class="text-danger">(Rechazo)</span>
+                                    @endif
                                 </label>
                             </div>
                         </li>
@@ -119,7 +124,7 @@
     </div>
 
     @if ($purchaseOrder)
-    <div class="row mb-3 g-2">
+        <div class="row mb-3 g-2">
             <div class="col-6">
                 <br>
                 <h5>Documento Tributario Asociado</h5>
@@ -158,20 +163,89 @@
                 </div>
             </div>
         </div>
-        
+
+        <h4>Recepción</h4>
+
         <div class="row mb-3 g-2">
-            <div class="col-12">
-                <label for="">Motivo de rechazo</label>
-                <textarea class="form-control"
-                    id=""
-                    cols="30"
-                    rows="10"></textarea>
+            <div class="form-group col-md-2">
+                <div class="form-group">
+                    <label for="number">Número de acta</label>
+                    <input type="text"
+                        class="form-control"
+                        disabled
+                        placeholder="Automático">
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label for="reception-date">Fecha acta*</label>
+                    <input type="date"
+                        class="form-control @error('reception.date') is-invalid @enderror"
+                        wire:model="reception.date">
+                    @error('reception.date')
+                        <span class="text-danger">{{ $message }}</span>
+                    @enderror
+                </div>
+            </div>
+            <div class="form-group col-md-2">
+                <label for="form-reception-type">Tipo de acta*</label>
+                <select class="form-select @error('reception.reception_type_id') is-invalid @enderror"
+                    wire:model="reception.reception_type_id">
+                    <option value=""></option>
+                    @foreach ($types as $id => $type)
+                        <option value="{{ $id }}">{{ $type }}</option>
+                    @endforeach
+                </select>
+                @error('reception.reception_type_id')
+                    <span class="text-danger">{{ $message }}</span>
+                @enderror
+            </div>
+
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label for="internal_number">Número interno acta</label>
+                    <input type="text"
+                        class="form-control"
+                        placeholder="opcional"
+                        wire:model="reception.internal_number">
+                    <div class="form-text">En caso que la unidad tenga su propio correlativo</div>
+                </div>
+            </div>
+
+
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <Label>Motivo de rechazo</Label>
+                    <textarea name=""
+                        id="for-rejected_notes"
+                        rows="6"
+                        class="form-control"
+                        wire:model.defer="reception.rejected_notes"></textarea>
+                    @error('reception.rejected_notes')
+                        <span class="text-danger">{{ $message }}</span>
+                    @enderror
+                    <div>
+                        @livewire(
+                            'text-templates.controls-text-template',
+                            [
+                                'module' => 'Receptions',
+                                'input' => 'reception.rejected_notes',
+                            ],
+                            key('rejected_notes')
+                        )
+                    </div>
+                </div>
             </div>
             <div class="col-12">
-                <button class="btn btn-danger">
+                <button class="btn btn-danger" wire:click="save">
                     Rechazar
                 </button>
             </div>
         </div>
+
+
     @endif
 </div>

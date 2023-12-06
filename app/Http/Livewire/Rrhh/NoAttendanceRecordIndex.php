@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Rrhh;
 
+use Illuminate\Validation\Rule;
 use Livewire\WithPagination;
 use Livewire\Component;
 use App\Models\Rrhh\NoAttendanceRecord;
@@ -14,7 +15,11 @@ class NoAttendanceRecordIndex extends Component
 
     public $rejectForm;
     public $rrhh_observation;
-    public $filter = '';
+    public $name = '';
+    public $from;
+    public $to;
+    
+    
 
 
 
@@ -69,19 +74,41 @@ class NoAttendanceRecordIndex extends Component
     {
         $this->resetPage();
         $this->render();
+        
+        $this->validate([
+            'from' => [
+                'nullable',
+                'date',
+                Rule::requiredIf(function () {
+                    return !empty($this->to);
+                }), 
+            ],
+            'to' => [
+                'nullable',
+                'date',
+                'after_or_equal:from', 
+            ],
+        ]);
     }
+    
 
-
+    
 
     public function render()
     {
         return view('livewire.rrhh.no-attendance-record-index', [
             'records' => NoAttendanceRecord::whereNotNull('status')
                 ->where('establishment_id', auth()->user()->organizationalUnit->establishment_id)
-                ->when($this->filter, function ($query) {
+                ->when($this->name, function ($query) {
                     $query->whereHas('user', function ($userQuery) {
-                        $userQuery->findByUser($this->filter);
+                        $userQuery->findByUser($this->name);
                     });
+                })
+                ->when($this->from, function ($query) {
+                    $query->whereDate('date', '>=', $this->from);
+                })
+                ->when($this->to, function ($query) {
+                    $query->whereDate('date', '<=', $this->to);
                 })
                 ->latest()
                 ->paginate(50),

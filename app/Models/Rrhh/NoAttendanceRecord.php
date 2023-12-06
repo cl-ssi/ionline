@@ -32,6 +32,7 @@ class NoAttendanceRecord extends Model
         'rrhh_observation',
         'rrhh_status',
         'establishment_id',
+        'filter.name'
     ];
 
     /**

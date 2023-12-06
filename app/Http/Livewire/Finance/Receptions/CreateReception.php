@@ -2,25 +2,27 @@
 
 namespace App\Http\Livewire\Finance\Receptions;
 
+use Livewire\WithFileUploads;
 use Livewire\Component;
 use App\User;
 use App\Rrhh\OrganizationalUnit;
 use App\Models\WebService\MercadoPublico;
 use App\Models\Parameters\Parameter;
-use App\Models\Finance\Dte;
 use App\Models\Finance\Receptions\ReceptionType;
 use App\Models\Finance\Receptions\ReceptionItem;
 use App\Models\Finance\Receptions\Reception;
 use App\Models\Finance\PurchaseOrder;
+use App\Models\Finance\Dte;
 use App\Models\Documents\Correlative;
 use App\Models\Documents\Approval;
 
 
-
 class CreateReception extends Component
 {
+    use WithFileUploads;
+
     //   1272565-444-AG23 1057448-598-SE23 1272565-737-SE23;
-    public $purchaseOrderCode = '1272565-444-AG23';
+    public $purchaseOrderCode = '';
     public $purchaseOrder = false;
     public $reception;
     public $receptionItems = [];
@@ -30,9 +32,10 @@ class CreateReception extends Component
     public $signer_id;
     public $signer_ou_id;
     public $approvals = [];
-    // public $approvalUsers = [];
     public $authority = false;
     public $selectedDteId;
+    public $file_signed;
+    public $file_support_file;
 
     public $receptionItemsWithCantidad; //para validación
     // public $message;
@@ -42,30 +45,44 @@ class CreateReception extends Component
     /**
      * TODO:
      */
-    protected $rules = [
-        'selectedDteId' => 'required',
-        'reception.number' => 'nullable',
-        'reception.date' => 'required|date_format:Y-m-d',
-        'reception.reception_type_id' => 'required',
-        'reception.purchase_order' => 'nullable',
-        'reception.header_notes' => 'nullable',
-        'reception.footer_notes' => 'nullable',
-        'reception.partial_reception' => 'required|boolean',
-        'reception.dte_type' => 'required',
-        'reception.dte_number' => 'nullable',
-        'reception.dte_date' => 'nullable|date_format:Y-m-d',
-        'reception.neto' => 'nullable',
-        'reception.descuentos' => 'nullable',
-        'reception.cargos' => 'nullable',
-        'reception.subtotal' => 'nullable',
-        'reception.iva' => 'nullable',
-        'reception.total' => 'nullable',
-        'reception.establishment_id' => 'nullable',
-        'reception.creator_id' => 'nullable',
-        'reception.creator_ou_id' => 'nullable',
-        'receptionItemsWithCantidad' => 'required|array|min:1',
-        'approvals' => 'required|array|min:1',
-    ];
+    public function rules()
+    {
+        $reception = [
+            'selectedDteId' => 'required',
+            'reception.number' => 'nullable',
+            'reception.date' => 'required|date_format:Y-m-d',
+            'reception.reception_type_id' => 'required',
+            'reception.purchase_order' => 'nullable',
+            'reception.header_notes' => 'nullable',
+            'reception.footer_notes' => 'nullable',
+            'reception.partial_reception' => 'required|boolean',
+            'reception.dte_type' => 'required',
+            'reception.dte_number' => 'nullable',
+            'reception.dte_date' => 'nullable|date_format:Y-m-d',
+            'reception.neto' => 'nullable',
+            'reception.descuentos' => 'nullable',
+            'reception.cargos' => 'nullable',
+            'reception.subtotal' => 'nullable',
+            'reception.iva' => 'nullable',
+            'reception.total' => 'nullable',
+            'reception.establishment_id' => 'nullable',
+            'reception.creator_id' => 'nullable',
+            'reception.creator_ou_id' => 'nullable',
+            'receptionItemsWithCantidad' => 'required|array|min:1',
+            'file_signed' => 'nullable|mimes:pdf|max:2048',
+            'approvals' => 'required|array|min:1',
+        ];
+
+
+        if( !empty($this->maxItemQuantity) ) {
+            foreach($this->receptionItems as $key => $item) {
+                $reception['receptionItems.'.$key.'.Cantidad'] = 'nullable|numeric|min:1|max:'.$this->maxItemQuantity[$key];
+            }
+        }
+
+        app('debugbar')->log($reception);
+        return $reception;
+    }
 
     protected $messages = [
         // 'reception.number' => 'nullable',
@@ -84,6 +101,7 @@ class CreateReception extends Component
         // 'reception.establishment_id' => 'nullable',
         // 'reception.creator_id' => 'nullable',
         // 'reception.creator_ou_id' => 'nullable',
+        'receptionItems.*.Cantidad' => 'La cantidad está fuera de rango',
         'receptionItemsWithCantidad.required' => 'Debe ingresar la cantidad de al menos un item',
         'approvals.required' => 'Debe ingresar al menos un firmante',
     ];
@@ -166,33 +184,36 @@ class CreateReception extends Component
             $this->approvals = [];
             $this->otherItems = [];
 
-            $this->reception = new Reception([
-                'purchase_order' => $this->purchaseOrderCode,
-                'establishment_id' => auth()->user()->organizationalUnit->establishment_id,
-                'creator_id' => auth()->id(),
-                'creator_ou_id' => auth()->user()->organizational_unit_id,
-            ]);
+            $this->reception = [
+                'purchase_order'    => $this->purchaseOrderCode,
+                'establishment_id'  => auth()->user()->organizationalUnit->establishment_id,
+                'creator_id'        => auth()->id(),
+                'creator_ou_id'     => auth()->user()->organizational_unit_id,
+            ];
 
-            $this->purchaseOrder = PurchaseOrder::whereCode($this->reception->purchase_order)->with('dtes')->first();
-            foreach($this->purchaseOrder->json->Listado[0]->Items->Listado as $key => $item){
-                $this->receptionItems[$key] = ReceptionItem::make([
-                    'item_position' => $key,
-                    'CodigoCategoria' => $item->CodigoCategoria,
-                    'Producto' => $item->Producto,
-                    'Cantidad' => null,
-                    'Unidad' => $item->Unidad,
-                    'EspecificacionComprador' => $item->EspecificacionComprador,
-                    'EspecificacionProveedor' => $item->EspecificacionProveedor,
-                    'PrecioNeto' => $item->PrecioNeto,
-                    'TotalDescuentos' => $item->TotalDescuentos,
-                    'TotalCargos' => $item->TotalCargos,
-                    'Total' => null,
-                ]);
+            $this->purchaseOrder = PurchaseOrder::whereCode($this->purchaseOrderCode)->with('dtes')->first();
+
+            foreach( $this->purchaseOrder->json->Listado[0]->Items->Listado as $key => $item ){
+                $this->receptionItems[$key] = [
+                    'item_position'             => $key,
+                    'CodigoCategoria'           => $item->CodigoCategoria,
+                    'Producto'                  => $item->Producto,
+                    'Cantidad'                  => null,
+                    'Unidad'                    => $item->Unidad,
+                    'EspecificacionComprador'   => $item->EspecificacionComprador,
+                    'EspecificacionProveedor'   => $item->EspecificacionProveedor,
+                    'PrecioNeto'                => $item->PrecioNeto,
+                    'TotalDescuentos'           => $item->TotalDescuentos,
+                    'TotalCargos'               => $item->TotalCargos,
+                    'Total'                     => null,
+                ];
                 $this->maxItemQuantity[$key] = $item->Cantidad;
             }
-            $otherReceptionItems = ReceptionItem::whereRelation('reception','purchase_order',$this->reception->purchase_order)->get();
+
+            $otherReceptionItems = ReceptionItem::whereRelation('reception','purchase_order',$this->purchaseOrderCode)->get();
+
             foreach($otherReceptionItems as $otherItems) {
-                $this->otherItems[$otherItems->item_position][$otherItems->reception->number] = $otherItems['Cantidad'];
+                $this->otherItems[$otherItems->item_position][$otherItems->id] = $otherItems['Cantidad'];
                 $this->maxItemQuantity[$otherItems->item_position] -= $otherItems['Cantidad'];
             }
 
@@ -203,7 +224,7 @@ class CreateReception extends Component
              * asigna el reception_type_id para que aparezca seleccionado
              */
             if($this->purchaseOrder->requestForm) {
-                $this->reception->reception_type_id = array_search(
+                $this->reception['reception_type_id'] = array_search(
                     $this->purchaseOrder->requestForm->subTypeName, 
                     $this->types
                 );
@@ -224,22 +245,22 @@ class CreateReception extends Component
             $this->receptionItems[$key]['Cantidad'] = 0;
         }
         $this->receptionItems[$key]['Total'] = $this->receptionItems[$key]['Cantidad'] * $this->receptionItems[$key]['PrecioNeto'];        
-        $this->reception->neto = array_sum(array_column($this->receptionItems, 'Total'));
+        $this->reception['neto']             = array_sum(array_column($this->receptionItems, 'Total'));
         // TODO: Falta agregar cargos y descuentos
-        $this->reception->subtotal = $this->reception->neto; 
+        $this->reception['subtotal'] = $this->reception['neto']; 
 
-        switch ($this->reception->dte_type) {
+        switch ($this->reception['dte_type'] ?? 'factura_electronica') {
             case 'boleta_honorarios':
-                $factor = (100 - $this->purchaseOrder->json->Listado[0]->PorcentajeIva) / 100;
-                $this->reception->total = $this->reception->neto / $factor;
-                $this->reception->iva = $this->reception->total - $this->reception->neto;
+                $factor                 = (100 - $this->purchaseOrder->json->Listado[0]->PorcentajeIva) / 100;
+                $this->reception['total'] = $this->reception['neto'] / $factor;
+                $this->reception['iva']   = $this->reception['total'] - $this->reception['neto'];
                 break;
             case 'factura_electronica':
             case 'guias_despacho':
             case 'factura_exenta':
             default:
-                $this->reception->iva = $this->purchaseOrder->json->Listado[0]->PorcentajeIva / 100 * $this->reception->subtotal;  
-                $this->reception->total = $this->reception->iva + $this->reception->subtotal;
+                $this->reception['iva']   = $this->purchaseOrder->json->Listado[0]->PorcentajeIva / 100 * $this->reception['subtotal'];  
+                $this->reception['total'] = $this->reception['iva'] + $this->reception['subtotal'];
                 break;
         }
     }
@@ -262,12 +283,12 @@ class CreateReception extends Component
         unset($this->approvals[$position]);
 
         $this->approvals[$position] = ([
-            "module" => "Recepcion",
-            "module_icon" => "fas fa-list",
-            "subject" => "Acta de recepción conforme",
+            "module"        => "Recepcion",
+            "module_icon"   => "fas fa-list",
+            "subject"       => "Acta de recepción conforme",
             "document_route_name" => "finance.receptions.show",
-            "position" => $position,
-            // "start_y" => 0,
+            "position"      => $position,
+            // "start_y"       => 0,
         ]);
 
         if($user_id OR $this->signer_id) {
@@ -275,7 +296,7 @@ class CreateReception extends Component
             $this->approvals[$position]['signerShortName'] = User::find($user_id ?? $this->signer_id)->shortName;
         }
         else if($this->signer_ou_id) {
-            $this->approvals[$position]['sent_to_ou_id'] = $this->signer_ou_id;
+            $this->approvals[$position]['sent_to_ou_id']   = $this->signer_ou_id;
             $this->approvals[$position]['signerShortName'] = $this->authority;
         }
     }
@@ -325,7 +346,7 @@ class CreateReception extends Component
 
         $this->validate();
 
-        /* Rrdenar los approvals por importancia, left > center > right */
+        /* Ordenar los approvals por importancia, left > center > right */
         $priorityOrder = ['left', 'center', 'right'];
         foreach($priorityOrder as $element) {
             if(key_exists($element,$this->approvals)) {
@@ -334,39 +355,44 @@ class CreateReception extends Component
         }
 
         /* Si la ultima firma fue enviada a una persona */
-        $this->reception->responsable_id    = end($approvalsOrderedByPriority)['sent_to_user_id'] ?? null;
-        /* Si la ultima firma fue enviada a una OU */
-        $this->reception->responsable_ou_id = end($approvalsOrderedByPriority)['sent_to_ou_id']   ?? null;
+        if( array_key_exists('sent_to_user_id', end($approvalsOrderedByPriority) ) ) {
+            $this->reception['responsable_id'] = end($approvalsOrderedByPriority)['sent_to_user_id'];
+            $this->reception['responsable_ou_id'] = User::find($this->reception['responsable_id'])->organizational_unit_id;
+        }
+        else {
+            /* Si la ultima firma fue enviada a una OU */
+            $this->reception['responsable_ou_id'] = end($approvalsOrderedByPriority)['sent_to_ou_id'];
+        }
 
-        // app('debugbar')->log($this->reception->toArray());
+        // app('debugbar')->log($this->reception);
         // app('debugbar')->log($this->receptionItems);
         // app('debugbar')->log($this->approvals);
 
-        /* Guardar reception */
-        $this->reception->save();
+        /* Crea la reception */
+        $reception = Reception::create($this->reception);
 
         /* Guardar Items */
         foreach($this->receptionItems as $item) {
             if($item['Cantidad'] > 0) {
-                $this->reception->items()->create($item);
+                $reception->items()->create($item);
             }
         }
 
         /** Crear los Approvals */
         $ctApprovals = count($approvalsOrderedByPriority);
         foreach($approvalsOrderedByPriority as $key => $approval) {
-            /* Setear el reception_id que se obtiene despues de hacer el reception->save();*/
+            /* Setear el reception_id que se obtiene despues de hacer el Reception::create();*/
             $approval["document_route_params"] = json_encode([
-                "reception_id" => $this->reception->id
+                "reception_id" => $reception->id
             ]);
 
             /* Setear el filename */
-            $approval["filename"] = 'ionline/finances/receptions/'.$this->reception->id.'.pdf';
+            $approval["filename"] = 'ionline/finances/receptions/'.$reception->id.'.pdf';
 
             /* Si hay mas de un approval y no es el primero */
             if( count($approvalsOrderedByPriority) >= 1 AND $key != 0 ) {
                 /* Setea el previous_approval_id y active en false */
-                $approval["previous_approval_id"] = $this->reception->approvals->last()->id;
+                $approval["previous_approval_id"] = $reception->approvals->last()->id;
                 $approval["active"] = false;
             }
 
@@ -376,7 +402,39 @@ class CreateReception extends Component
                 $approval["callback_controller_method"] = 'App\Http\Controllers\Finance\Receptions\ReceptionController@approvalCallback';
             }
 
-            $this->reception->approvals()->create($approval);
+            $reception->approvals()->create($approval);
+        }
+
+
+        if($this->file_signed) {
+            $storage_path = 'ionline/finances/receptions/signed_files';
+            $filename = $reception->id.'.pdf';
+
+            $this->file_signed->storeAs($storage_path, $filename, 'gcs');
+
+            $reception->files()->create([
+                'storage_path' => $storage_path.'/'.$filename,
+                'stored' => true,
+                'type' => 'signed_file',
+                'stored_by_id' => auth()->id(),
+            ]);
+
+        }
+
+        // support documents
+        if($this->file_support_file) {
+            $storage_path = 'ionline/finances/receptions/support_documents';
+            $filename = $reception->id.'.pdf';
+
+            $this->file_support_file->storeAs($storage_path, $filename, 'gcs');
+
+            $reception->files()->create([
+                'storage_path' => $storage_path.'/'.$filename,
+                'stored' => true,
+                'type' => 'support_documents',
+                'stored_by_id' => auth()->id(),
+            ]);
+
         }
 
         session()->flash('success', 'Su acta fue creada.');
@@ -411,6 +469,10 @@ class CreateReception extends Component
 
     public function render()
     {
+        app('debugbar')->log($this->reception);
+        app('debugbar')->log($this->receptionItems);
+        app('debugbar')->log($this->approvals);
+        app('debugbar')->log($this->otherItems);
         return view('livewire.finance.receptions.create-reception');
     }
 
@@ -437,7 +499,7 @@ class CreateReception extends Component
             }
             $this->reception['dte_type']    = $selectedDte->tipo_documento;
             $this->reception['dte_number']  = $selectedDte->folio;
-            $this->reception['dte_date']    = $selectedDte->emision;
+            $this->reception['dte_date']    = $selectedDte->emision?->format('Y-m-d');
         } 
     }
     

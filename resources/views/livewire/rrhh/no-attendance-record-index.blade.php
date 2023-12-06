@@ -10,15 +10,42 @@
     </div>
 
     <form wire:submit.prevent="searchFuncionary">
-        <div class="row mb-3">
-            <div class="col-lg-6">
-                <input type="text" wire:model.defer="filter" class="form-control"
-                    placeholder="Buscar por Nombre o Apellido">
+        <div class="row mb-3 g-2">
+            <div class="form-group col-md-6">
+                <div class="form-group">
+                    <label for="number">Nombre o Apellido</label>
+                    <input type="text"
+                        class="form-control"
+                        wire:model.defer="name"
+                        placeholder="Buscar por Nombre o Apellido">
+                </div>
             </div>
-            <div class="col-lg-1">
-                <button type="submit" class="btn btn-primary">
-                    <i class="fas fa-search"></i>
-                </button>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label for="reception-date">Fecha Desde Registro</label>
+                    <input type="date"
+                        class="form-control"
+                        wire:model.defer="from">
+                    
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label for="reception-date">Fecha Hasta Registro</label>
+                    <input type="date"
+                        class="form-control"
+                        wire:model.defer="to">
+                </div>
+            </div>
+            
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label for="search">&nbsp;</label>
+                    <input type="submit"
+                        class="form-control btn btn-primary"
+                        value ="Buscar"
+                        >
+                </div>
             </div>
         </div>
     </form>

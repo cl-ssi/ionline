@@ -32,9 +32,9 @@
                     </td>
                     <td class="small">
                         {{ $dte->confirmation_at }} <br>
-                        {{ $dte->confirmationUser->shortName ?? '' }}:<br>
+                        {{ $dte->confirmationUser->shortName ?? '' }}<br>
                         <i class="text-danger">
-                            {{ $dte->confirmation_observation }}
+                            {{ $dte->reason_rejection }}
                         </i>
                     </td>
                 </tr>

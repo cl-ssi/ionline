@@ -134,6 +134,13 @@ class Dte extends Model implements Auditable
 
         'comprobante_liquidacion_fondo',
         'archivo_carga_manual',
+
+
+        // nombres mas adecuados a los campos
+        'all_receptions',
+        'all_receptions_user_id',
+        'all_receptions_ou_id',
+        'all_receptions_at',
     ];
 
     /**
@@ -274,6 +281,10 @@ class Dte extends Model implements Auditable
             }
         }
         return $rowClass;
+    }
+    public function getRejectedReceptionAttribute()
+    {
+        return $this->receptions()->where('rejected', true)->exists();
     }
 
     public function paymentFlows()
