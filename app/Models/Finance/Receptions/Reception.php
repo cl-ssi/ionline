@@ -82,11 +82,11 @@ class Reception extends Model
     * @var array
     */
     protected $casts = [
-        'date'      => 'date:Y-m-d',
-        'dte_date'  => 'date:Y-m-d',
+        'date'          => 'date:Y-m-d',
+        'dte_date'      => 'date:Y-m-d',
         'partial_reception' => 'boolean',
-        'status'    => 'boolean',
-        'rejected'    => 'boolean',
+        'status'        => 'boolean',
+        'rejected'      => 'boolean',
     ];
 
     public function receptionType(): BelongsTo

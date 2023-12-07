@@ -550,14 +550,13 @@
         @endcan
 
         @can('Receptions: load file retroactive')
-            <div class="alert alert-info"
+            <div class="alert alert-warning"
                 role="alert">
-                <h4>Actas retroactivas. (Sólo para contabilidad)</h4>
+                <h4>Actas firmadas retroactivas. (Sólo para contabilidad)</h4>
                 <p>
                     Al adjuntar un archivo en esta sección, no ocurrirá el flujo de firma, ni la numeración.
                     ya que se asumirá que el archivo adjunto fue firmado anteriormente.<br>
-                    Debe adjuntar el pdf con el acta firmada, y seleccionar UN SOLO firmante, 
-                    utilizando el buscandor por nombre de usuario.
+                    Debe adjuntar el pdf con el acta firmada, y seleccionar UN SOLO firmante.
                 </p>
                 <hr>
                 <div>

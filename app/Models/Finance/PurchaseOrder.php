@@ -44,7 +44,12 @@ class PurchaseOrder extends Model
 
     public function receptions()
     {
-        return $this->hasMany(Reception::class,'purchase_order','code');
+        return $this->hasMany(Reception::class,'purchase_order','code')->where('rejected',false);
+    }
+
+    public function rejections()
+    {
+        return $this->hasMany(Reception::class,'purchase_order','code')->where('rejected',true);
     }
 
     /**

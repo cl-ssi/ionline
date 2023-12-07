@@ -31,7 +31,7 @@ return new class extends Migration {
             $table->text('header_notes')->nullable();
             $table->text('footer_notes')->nullable();
 
-            $table->boolean('rejected')->nullable();
+            $table->boolean('rejected')->default(0);
             $table->text('rejected_notes')->nullable();
 
             $table->boolean('partial_reception')->nullable(); // Si se selecciono completa o parcial
