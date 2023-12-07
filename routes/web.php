@@ -2047,7 +2047,6 @@ Route::prefix('finance')->as('finance.')->middleware(['auth', 'must.change.passw
         Route::get('/reject', CreateRejection::class)->name('reject');
         Route::get('/type', TypeMgr::class)->name('type');
         Route::get('/{reception_id}', [FinReceptionController::class,'show'])->name('show');
-        Route::get('/support_document_download/{file}',  [FinReceptionController::class, 'support_document_download'])->name('support_document_download');
     });
 });
 

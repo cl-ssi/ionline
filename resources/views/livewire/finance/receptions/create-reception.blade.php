@@ -36,9 +36,6 @@
                 @else
                     <span class="text-danger">
                         No existe ningún proceso de compra para la OC ingresada. Contácte a abastecimiento.
-                        <button class="btn btn-sm btn-danger">
-                            <i class="fas fa-biohazard"></i> Notificar a Abastecimiento
-                        </button>
                     </span>
                 @endif
             </div>
@@ -260,15 +257,15 @@
                         <td>{{ $item->Producto }}</td>
                         <td class="text-center">
                             {{ $item->Cantidad }} {{ $item->Unidad }}
-                            <input type="number" 
-                                class="form-control @error('receptionItems.'. $key .'.Cantidad') is-invalid @enderror"
-                                id="quantity" 
-                                wire:model.debounce.500ms="receptionItems.{{ $key }}.Cantidad" 
-                                min="1" 
+                            <input type="number"
+                                class="form-control @error('receptionItems.' . $key . '.Cantidad') is-invalid @enderror"
+                                id="quantity"
+                                wire:model.debounce.500ms="receptionItems.{{ $key }}.Cantidad"
+                                min="1"
                                 max="{{ $maxItemQuantity[$key] }}"
                                 wire:change="calculateItemTotal({{ $key }})"
                                 @disabled($maxItemQuantity[$key] == 0)>
-                                <small class="text-secondary"> 0 - {{$maxItemQuantity[$key]}} </small>
+                            <small class="text-secondary"> 0 - {{ $maxItemQuantity[$key] }} </small>
                         </td>
                         <td>{{ $item->EspecificacionComprador }}</td>
                         <td>{{ $item->EspecificacionProveedor }}</td>
@@ -391,25 +388,6 @@
         @endif
 
 
-        @can('Receptions: load file retroactive')
-        <div class="mb-3">
-            <label for="file_signed" class="form-label">Subir acta firmada</label>
-            <div class="input-group">
-                <input class="form-control" type="file" wire:model="file_signed" id="file_signed">
-            </div>
-        </div>
-        @endcan
-
-        @can('Receptions: load support file')
-        <div class="mb-3">
-            <label for="file_support_file" class="form-label">Documento de respaldo</label>
-            <div class="input-group">
-                <input class="form-control" type="file" wire:model="file_support_file" id="file_support_file">
-            </div>
-        </div>
-        @endcan
-
-
         <!-- Firmantes -->
         <h4 class="mb-2">Firmantes</h4>
         <div class="row mb-3">
@@ -432,7 +410,7 @@
             </div>
             <div class="col">
                 <label for="forUsers">Usuario</label>
-                @livewire('search-select-user')
+                @livewire('search-select-user', [], key('firma'))
             </div>
         </div>
 
@@ -560,9 +538,45 @@
 
         </div>
 
+        @can('Receptions: load support file')
+            <div class="mb-3">
+                <label for="support_file"
+                    class="form-label">Documento de respaldo</label>
+                <input class="form-control"
+                    type="file"
+                    wire:model="support_file"
+                    id="support_file">
+            </div>
+        @endcan
+
+        @can('Receptions: load file retroactive')
+            <div class="alert alert-info"
+                role="alert">
+                <h4>Actas retroactivas. (Sólo para contabilidad)</h4>
+                <p>
+                    Al adjuntar un archivo en esta sección, no ocurrirá el flujo de firma, ni la numeración.
+                    ya que se asumirá que el archivo adjunto fue firmado anteriormente.<br>
+                    Debe adjuntar el pdf con el acta firmada, y seleccionar UN SOLO firmante, 
+                    utilizando el buscandor por nombre de usuario.
+                </p>
+                <hr>
+                <div>
+                    <label for="file_signed"
+                        class="form-label">Subir acta firmada</label>
+                    <input class="form-control"
+                        type="file"
+                        wire:model="file_signed"
+                        id="file_signed">
+                </div>
+                @error('file_signed')
+                    <span class="text-danger">{{ $message }}</span>
+                @enderror
+            </div>
+        @endcan
+
+
+
         <hr>
-
-
 
 
 
@@ -582,7 +596,7 @@
                         <th>Número: </th>
                         <td>
 
-                                <i>Autogenerado</i>
+                            <i>Autogenerado</i>
 
                         </td>
                     </tr>
@@ -694,20 +708,21 @@
                                 <tr>
                                     <th>Dcto.</th>
                                     <td>$</td>
-                                    <td style="text-align: right;">{{ money($reception['descuentos'] ?? 0 ) }}</td>
+                                    <td style="text-align: right;">{{ money($reception['descuentos'] ?? 0) }}
+                                    </td>
                                 </tr>
                             @endif
-                            @if ( key_exists('cargos', $reception) and $reception['cargos'] > 0)
+                            @if (key_exists('cargos', $reception) and $reception['cargos'] > 0)
                                 <tr>
                                     <th>Cargos</th>
                                     <td>$</td>
-                                    <td style="text-align: right;">{{ money($reception['cargos'] ?? 0 ) }}</td>
+                                    <td style="text-align: right;">{{ money($reception['cargos'] ?? 0) }}</td>
                                 </tr>
                             @endif
                             <tr>
                                 <th>Subtotal</th>
                                 <td>$</td>
-                                <td style="text-align: right;">{{ money($reception['subtotal'] ?? 0 ) }}</td>
+                                <td style="text-align: right;">{{ money($reception['subtotal'] ?? 0) }}</td>
                             </tr>
                             <tr>
                                 <th>{{ $purchaseOrder->json->Listado[0]->PorcentajeIva }}% IVA</th>

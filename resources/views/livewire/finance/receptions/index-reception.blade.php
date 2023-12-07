@@ -162,7 +162,7 @@
                         </td>
                         <td>
                             @foreach($reception->files->where('type','support_documents') as $file)
-                                <a href="{{ route('finance.receptions.support_document_download', $file->id) }}"
+                                <a href="{{ route('file.download', $file) }}"
                                     target="_blank">
                                     <i class="fas fa-paperclip"></i>
                                 </a>

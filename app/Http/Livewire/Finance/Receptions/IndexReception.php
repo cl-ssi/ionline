@@ -15,10 +15,9 @@ class IndexReception extends Component
     
     public $filter_id;
     public $filter_purchase_order;
-    public $filter_number;
-    public $filter_user_responsible_id;
-    public $filter_date;
     public $filter_reception_type_id;
+    public $filter_date;
+    public $filter_number;
     public $types;
 
     /**
@@ -68,9 +67,6 @@ class IndexReception extends Component
             })
             ->when($this->filter_number, function($query) { 
                 $query->where('number', $this->filter_number);
-            })
-            ->when($this->filter_user_responsible_id, function($query) {
-                $query->where('user_responsible_id', $this->filter_user_responsible_id);
             })
             ->when($this->filter_date, function($query) {
                 $query->where('date', $this->filter_date);

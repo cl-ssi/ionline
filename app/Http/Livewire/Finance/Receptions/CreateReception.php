@@ -35,7 +35,7 @@ class CreateReception extends Component
     public $authority = false;
     public $selectedDteId;
     public $file_signed;
-    public $file_support_file;
+    public $support_file;
 
     public $receptionItemsWithCantidad; //para validación
     // public $message;
@@ -399,38 +399,12 @@ class CreateReception extends Component
             }
         }
 
-        /** Crear los Approvals */
-        $ctApprovals = count($approvalsOrderedByPriority);
-        foreach($approvalsOrderedByPriority as $key => $approval) {
-            /* Setear el reception_id que se obtiene despues de hacer el Reception::create();*/
-            $approval["document_route_params"] = json_encode([
-                "reception_id" => $reception->id
-            ]);
-
-            /* Setear el filename */
-            $approval["filename"] = 'ionline/finances/receptions/'.$reception->id.'.pdf';
-
-            /* Si hay mas de un approval y no es el primero */
-            if( count($approvalsOrderedByPriority) >= 1 AND $key != 0 ) {
-                /* Setea el previous_approval_id y active en false */
-                $approval["previous_approval_id"] = $reception->approvals->last()->id;
-                $approval["active"] = false;
-            }
-
-            /* Si es el último, entonces es el de firma electrónica */
-            if (0 === --$ctApprovals) {
-                $approval["digital_signature"] = true;
-                $approval["callback_controller_method"] = 'App\Http\Controllers\Finance\Receptions\ReceptionController@approvalCallback';
-            }
-
-            $reception->approvals()->updateOrCreate(
-                ['position' => $approval['position']],
-                $approval
-            );
-        }
-
-
-        /* Storage Files */
+        /**
+         * Si tiene un archivo signed_file para actas ya firmadas,
+         * entonces no se crearn las aprobaciones porque el archivo aduntado
+         * viene con las firmas, archivos legacy de retrocompatibilidad con 
+         * el modulo de cenabast antiguo.
+         */
         if($this->file_signed) {
             $storage_path = 'ionline/finances/receptions/signed_files';
             $filename = $reception->id.'.pdf';
@@ -443,23 +417,55 @@ class CreateReception extends Component
                 'type' => 'signed_file',
                 'stored_by_id' => auth()->id(),
             ]);
+        }
+        else {
+            /** Crear los Approvals */
+            $ctApprovals = count($approvalsOrderedByPriority);
+            foreach($approvalsOrderedByPriority as $key => $approval) {
+                /* Setear el reception_id que se obtiene despues de hacer el Reception::create();*/
+                $approval["document_route_params"] = json_encode([
+                    "reception_id" => $reception->id
+                ]);
 
+                /* Setear el filename */
+                $approval["filename"] = 'ionline/finances/receptions/'.$reception->id.'.pdf';
+
+                /* Si hay mas de un approval y no es el primero */
+                if( count($approvalsOrderedByPriority) >= 1 AND $key != 0 ) {
+                    /* Setea el previous_approval_id y active en false */
+                    $approval["previous_approval_id"] = $reception->approvals->last()->id;
+                    $approval["active"] = false;
+                }
+
+                /* Si es el último, entonces es el de firma electrónica */
+                if (0 === --$ctApprovals) {
+                    $approval["digital_signature"] = true;
+                    $approval["callback_controller_method"] = 'App\Http\Controllers\Finance\Receptions\ReceptionController@approvalCallback';
+                }
+
+                $reception->approvals()->updateOrCreate(
+                    ['position' => $approval['position']],
+                    $approval
+                );
+            }
         }
 
-        // support documents
-        if($this->file_support_file) {
+
+
+
+        /* Documento de respaldo: Support File */
+        if($this->support_file) {
             $storage_path = 'ionline/finances/receptions/support_documents';
             $filename = $reception->id.'.pdf';
 
-            $this->file_support_file->storeAs($storage_path, $filename, 'gcs');
+            $this->support_file->storeAs($storage_path, $filename, 'gcs');
 
             $reception->files()->create([
                 'storage_path' => $storage_path.'/'.$filename,
                 'stored' => true,
-                'type' => 'support_documents',
+                'type' => 'support_file',
                 'stored_by_id' => auth()->id(),
             ]);
-
         }
 
         session()->flash('success', 'Su acta fue creada.');

@@ -13,6 +13,11 @@ class FileController extends Controller
     */
     public function download(File $file)
     {
-        return Storage::response($file->storage_path);
+        if( Storage::disk('gcs')->exists($file->storage_path) ) {
+            return Storage::response($file->storage_path);
+        } 
+        else {
+            return redirect()->back()->with('warning', 'El archivo no se ha encontrado.');
+        }
     }
 }

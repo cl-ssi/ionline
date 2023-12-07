@@ -140,7 +140,7 @@
                                 </a>
                                 @endif
                                 @foreach($reception->files as $file)
-                                    <a href="{{ route('finance.receptions.support_document_download', $file->id) }}"
+                                    <a href="{{ route('file.download', $file) }}"
                                         target="_blank">
                                         <i class="fas fa-paperclip"></i>
                                     </a>
@@ -263,7 +263,7 @@
                                                 @foreach($dte->purchaseOrder->receptions->where('rejected','<>', '1') as $reception)
                                                     
                                                         @if($reception->files->where('type', 'signed_file')->count() >= 1)
-                                                            <a href="{{ route('finance.receptions.support_document_download', $reception->files->first()->id) }}" target="_blank">Archivo Heredado de módulo Cenabast anterior</a><br>
+                                                            <a href="{{ route('file.download', $reception->files->first()) }}" target="_blank">Archivo Heredado de módulo Cenabast anterior</a><br>
                                                         @else
                                                         <div class="form-check">
                                                             <input class="form-check-input" type="checkbox" value="" id="defaultCheck{{ $reception->id }}"

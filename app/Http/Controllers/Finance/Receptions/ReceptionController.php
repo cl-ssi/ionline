@@ -45,20 +45,6 @@ class ReceptionController extends Controller
     }
 
     /**
-     * Download support document file
-     */
-    public function support_document_download(File $file)
-    {
-        if(Storage::disk('gcs')->exists($file->storage_path)){
-            return Storage::disk('gcs')->response($file->storage_path, mb_convert_encoding($file->name,'ASCII'));
-        }else{
-            return redirect()->back()->with('warning', 'El archivo no se ha encontrado.');
-        }
-        
-    }
-
-
-    /**
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\Finance\Receptions\Reception  $reception
