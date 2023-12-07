@@ -16,6 +16,7 @@ use App\Http\Livewire\Welfare\Amipass\NewBeneficiaryRequest;
 use App\Http\Livewire\Warehouse\Invoices\InvoiceManagement;
 use App\Http\Livewire\Warehouse\Cenabast\CenabastIndex;
 use App\Http\Livewire\TicResources;
+use App\Http\Livewire\TestFileUpdateManager;
 use App\Http\Livewire\TestFileManager;
 use App\Http\Livewire\Summary\Template\ShowTemplate;
 use App\Http\Livewire\Sign\SignatureIndex;
@@ -42,7 +43,6 @@ use App\Http\Livewire\Parameters\Holidays;
 use App\Http\Livewire\Parameters\AccessLogIndex;
 use App\Http\Livewire\News\SearchNews;
 use App\Http\Livewire\News\CreateNews;
-use App\Http\Controllers\News\NewsController;
 use App\Http\Livewire\Lobby\MeetingMgr;
 use App\Http\Livewire\Inventory\Transfer;
 use App\Http\Livewire\Inventory\RemovalRequestMgr;
@@ -224,6 +224,7 @@ use App\Http\Controllers\Parameters\EstablishmentTypeController;
 use App\Http\Controllers\Parameters\EstablishmentController;
 use App\Http\Controllers\Parameters\CommuneController;
 use App\Http\Controllers\Parameters\BudgetItemController;
+use App\Http\Controllers\News\NewsController;
 use App\Http\Controllers\MunicipalityController;
 use App\Http\Controllers\Mammography\MammographyController;
 use App\Http\Controllers\Lobby\MeetingController;
@@ -249,6 +250,7 @@ use App\Http\Controllers\Finance\Receptions\ReceptionController as FinReceptionC
 use App\Http\Controllers\Finance\PurchaseOrderController;
 use App\Http\Controllers\Finance\PaymentController;
 use App\Http\Controllers\Finance\DteController;
+use App\Http\Controllers\FileController;
 use App\Http\Controllers\Drugs\SubstanceController;
 use App\Http\Controllers\Drugs\RosterAnalisisToAdminController;
 use App\Http\Controllers\Drugs\ReceptionController;
@@ -279,7 +281,6 @@ use App\Http\Controllers\Agreements\SignerController;
 use App\Http\Controllers\Agreements\ProgramResolutionController;
 use App\Http\Controllers\Agreements\AgreementController;
 use App\Http\Controllers\Agreements\AddendumController;
-use App\Http\Livewire\TestFileUpdateManager;
 
 /*
 |--------------------------------------------------------------------------
@@ -296,9 +297,6 @@ Route::get('/', function () {
     return view('layouts.bt4.welcome');
 })->name('welcome');
 
-Route::get('/mailable', function () {
-    // auth()->user()->notify(new App\Notifications\Signatures\SignedDocument(App\Models\Documents\Signature::find(24587)));
-});
 
 Route::get('/claveunica/callback', [ClaveUnicaController::class, 'callback'])->name('claveunica.callback');
 Route::get('/claveunica/callback-testing', [ClaveUnicaController::class, 'callback']);
@@ -2608,7 +2606,8 @@ Route::group(['middleware' => 'auth:external'], function () {
 });
 
 
-
+/* Modelo File, para descarga generica */
+Route::get('/file/{file}/download', [FileController::class, 'download'])->name('file.download');
 
 /** Test Routes */
 Route::view('/some', 'some');

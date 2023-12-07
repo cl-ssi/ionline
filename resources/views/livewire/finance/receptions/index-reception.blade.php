@@ -109,11 +109,19 @@
                             {{ $reception->date?->format('Y-m-d') }}
                         </td>
                         <td>
-                            <a href="{{ route('finance.receptions.show', $reception->id) }}"
-                                class="btn btn-outline-success"
-                                target="_blank">
-                                <i class="bi bi-file-pdf-fill"></i>
-                            </a>
+                            @if($reception->has('signedFileLegacy'))
+                                <a href="{{ route('file.download', $reception->signedFileLegacy) }}"
+                                    class="btn btn-outline-secondary"
+                                    target="_blank">
+                                    <i class="bi bi-file-pdf-fill"></i>
+                                </a>
+                            @else
+                                <a href="{{ route('finance.receptions.show', $reception->id) }}"
+                                    class="btn btn-outline-success"
+                                    target="_blank">
+                                    <i class="bi bi-file-pdf-fill"></i>
+                                </a>
+                            @endif
                         </td>
                         <td>
                             @if($reception->rejected)

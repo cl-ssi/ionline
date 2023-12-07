@@ -162,4 +162,12 @@ class Reception extends Model
     {
         return $this->morphMany(File::class, 'fileable');
     }
+
+    /**
+     * Get signed file, legacy de cenabast.
+     */
+    public function signedFileLegacy(): MorphOne
+    {
+        return $this->morphOne(File::class, 'fileable')->where('type','signed_file');
+    }
 }
