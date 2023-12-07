@@ -36,13 +36,31 @@
 [X] Validar obligatoriedad de radio de parcial o completa
 [-] Al presionar crear se demora, poner spinner o indicador de "loading"
 [X] Agregar columnas a Receptions guia_id y dte_id (y relationes $dte->receptions $reception->guia $reception->dte)
+## Numerar
+[ ] No permitir numerar documentos que aún no están aprobados en su totalidad
 [-] Al numerar, setear el número en Reception.
-
 [X] Al numerar, no están saliendo los mensajes de error de firma electrónica, por ejemplo, que Vanessa no tiene firma desatendida
 [X] Notificar a oficina de partes que tiene que numerar
+
 
 [ ] Desde bodega, al generar un ingreso crear una acta de recepción del modelo Reception o precargar el acta para luego crearlo
 [ ] Bodega, no debe permitir firmar ni generar actas de recepcion. (ya no lo están usando)
 
 [ ] En cargar boleta manual no mostrar el input de PDF para el caso de boleta electrónica
 [ ] Agregar fecha de emisión de boleta al agregar una DTE manual
+
+
+## Inventario
+
+[ ] Ubicación (en las opciones de traspado), incorporar en el filtro el id o el codigo de arquitectura.
+[ ] No permitir crear un bien sin ubicación y con responsable, tiene que tener ubicacion y responsables para crear el registro de movimiento en el excel
+[ ] Mi inventario. Mostrar bienes que estén en traslado.
+[ ] Mi inventario: Separar código nuevo de antiguo. y en Modulo de admin de Inventario también
+[ ] Filtrar por código antiguo.
+[ ] Descarga de excel de la base de datos.
+[ ] No se ingresó a bodega 1057448-587-CM23
+[ ] Filtro por clasificación 
+[ ] En el excel agregar la columa de clasificiación también.
+[ ] Ultimos ingresos de bodega, cambiar ultimas recepciones.
+
+[ ] Acta traspado id 3187 ver actas de traspado (esto ya no va)

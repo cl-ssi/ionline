@@ -278,13 +278,13 @@
                         <td style="text-align: right;">{{ money($item->Cantidad * $item->PrecioNeto) }}</td>
                     </tr>
                     @if (array_key_exists($key, $otherItems))
-                        @foreach ($otherItems[$key] as $id => $quantity)
+                        @foreach ($otherItems[$key] as $otherItem)
                             <tr>
                                 <td colspan="2">
-                                    Acta id: {{ $id }}
+                                    Acta id: {{ $otherItem['reception_id'] }}
                                 </td>
                                 <td style="text-align: right;">
-                                    {{ $quantity }}
+                                    {{ $otherItem['Cantidad'] }}
                                 </td>
                                 <td> recepcionados </td>
                                 <td></td>

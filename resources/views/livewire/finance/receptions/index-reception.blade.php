@@ -90,7 +90,7 @@
                             nowrap>
                             {{ $reception->id }}
                         </td>
-                        <td>
+                        <td nowrap>
                             {{ $reception->purchase_order }}
                         </td>
                         <td>
@@ -145,7 +145,7 @@
                                 @endforeach
                             @endif
                         </td>
-                        <td>
+                        <td nowrap>
                             @if ($reception->numeration and $reception->numeration->number)
                                 <a class="btn btn-outline-danger" href="{{ route('documents.partes.numeration.show_numerated', $reception->numeration) }}" target="_blank">
                                     <i class="bi bi-file-pdf"></i>  {{ $reception->numeration->number }}
