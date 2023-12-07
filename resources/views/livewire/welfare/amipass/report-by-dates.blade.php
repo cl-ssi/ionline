@@ -52,7 +52,7 @@
                     @if($user->shifts->count()==0)
                         
                     @if($user->ammount == $user->valor_debia_cargarse) <tr >
-                        @else <tr class="table-warning"> @endif
+                    @else <tr class="table-warning"> @endif
                         
                             <td>{{ $user->id }}</td>
                             <td>{{ $user->shortName }}</td>

@@ -41,12 +41,12 @@ class ShiftsIndex extends Component
     {
         $this->validate();
 
-        if($this->user->contracts){
-            foreach($this->user->contracts as $contract){
-                $contract->shift = true;
-                $contract->save();
-            }
-        }
+        // if($this->user->contracts){
+        //     foreach($this->user->contracts as $contract){
+        //         $contract->shift = true;
+        //         $contract->save();
+        //     }
+        // }
 
         $shift = new Shift();
         $shift->user_id = $this->user->id;

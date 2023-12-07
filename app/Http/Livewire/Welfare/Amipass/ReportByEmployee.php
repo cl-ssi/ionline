@@ -8,6 +8,10 @@ use App\Models\Welfare\Amipass\Regularization;
 use App\User;
 
 use Carbon\Carbon;
+use Carbon\CarbonPeriod;
+use App\Helpers\DateHelper;
+use App\Models\Rrhh\AbsenteeismType;
+use App\Models\Parameters\Holiday;
 
 use Livewire\Component;
 
@@ -19,6 +23,7 @@ class ReportByEmployee extends Component
     public $regularizations;
     public $new_records;
     public $user_id;
+    public $calculatedData = [];
 
     protected $listeners = ['reportByEmployeeEmit', 'reportByEmployeeEmit'];
 
@@ -58,7 +63,70 @@ class ReportByEmployee extends Component
 
 
         // aqui obtener info como en report by dates
+        $start = now()->format('Y').'-01-01';
+        $end = now()->format('Y').'-12-31';
+        
+        $compensatoryAbsenteeismType = AbsenteeismType::find(5);
+        $periods = CarbonPeriod::create($start, '1 month', $end);
+        // dd($this->user_id);
 
+        foreach($periods as $period){
+            $startDate = $period->copy();
+            $endDate = $period->endOfMonth();
+
+            // dd($startDate, $endDate);
+
+            $holidays = Holiday::whereBetween('date', [$startDate, $endDate])->get();
+            
+            /* Obtener los usuarios que tienen contratos en un rango de fecha con sus ausentismos */
+            $this->userWithContracts = User::with([
+                'contracts' => function ($query) use ($startDate, $endDate) {
+                    $query->where(function ($query) use ($startDate, $endDate) {
+                        $query->whereDate('fecha_inicio_contrato', '<=', $endDate)
+                                ->whereDate('fecha_termino_contrato', '>=', $startDate);
+                                // ->where('shift',0);
+                    });
+                },
+                'absenteeisms' => function ($query) use ($startDate, $endDate) {
+                    $query->where(function ($query) use ($startDate, $endDate) {
+                        $query->whereDate('finicio', '<=', $endDate)
+                            ->whereDate('ftermino', '>=', $startDate)
+                            ->where('absenteeism_type_id','!=',5);
+                        });
+                },
+                'amiLoads' => function ($query) use ($startDate, $endDate) {
+                    $query->where(function ($query) use ($startDate, $endDate) {
+                        $query->whereMonth('fecha',$startDate->month);
+                        });
+                },
+                'shifts' => function ($query) use ($startDate, $endDate) {
+                    $query->where(function ($query) use ($startDate, $endDate) {
+                        $query->where('year',$startDate->year)
+                                ->where('month',$startDate->month);
+                        });
+                },
+                'compensatoryDays' => function ($query) use ($startDate, $endDate) {
+                    $query->where(function ($query) use ($startDate, $endDate) {
+                        $query->whereDate('start_date', '<=', $endDate)
+                            ->whereDate('end_date', '>=', $startDate);
+                        });
+                },
+                'absenteeisms.type'
+            ])
+            ->whereHas('contracts', function ($query) use ($startDate, $endDate) {
+                $query->where(function ($query) use ($startDate, $endDate) {
+                    $query->whereDate('fecha_inicio_contrato', '<=', $endDate)
+                        ->whereDate('fecha_termino_contrato', '>=', $startDate);
+                        // ->where('shift',0); se traen todos, abajo se hace el filtro
+                });
+            })
+            ->whereIn('id',[$this->user_id])
+            ->get();  
+            
+            // dd($this->userWithContracts);
+
+            $this->calculatedData[$startDate->format('Y-m')] = $this->userWithContracts->first()->getAmipassData($startDate,$endDate,$holidays,$compensatoryAbsenteeismType);   
+        }
     }
 
     public function render()

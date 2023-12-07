@@ -21,8 +21,6 @@ class ReportByDates extends Component
     public $finicio;
     public $ftermino;
     public $userWithContracts;
-    public $dailyAmmount;
-    public $shiftAmmount;
 
     protected $rules = [
         'finicio' => 'required',
@@ -52,8 +50,8 @@ class ReportByDates extends Component
                 'contracts' => function ($query) use ($startDate, $endDate) {
                     $query->where(function ($query) use ($startDate, $endDate) {
                         $query->whereDate('fecha_inicio_contrato', '<=', $endDate)
-                                ->whereDate('fecha_termino_contrato', '>=', $startDate)
-                                ->where('shift',0);
+                                ->whereDate('fecha_termino_contrato', '>=', $startDate);
+                                // ->where('shift',0);
                     });
                 },
                 'absenteeisms' => function ($query) use ($startDate, $endDate) {

@@ -928,15 +928,16 @@ class User extends Authenticatable implements Auditable
                                     $endDate, 
                                     $holidays, 
                                     $compensatoryAbsenteeismType){
-
         $output = [];
 
         /* Valor de amipass */
         $this->dailyAmmount = 4480;
         $this->shiftAmmount = 5840;
+        
+        // dd($this);
 
         // si tiene turnos
-        if($this->shifts->count()>0)
+        if($this->shifts->count()>0 && 1==0)
         {
             foreach($this->shifts as $shift){
                 $shift->ammount = $shift->quantity * $this->shiftAmmount;
@@ -948,6 +949,7 @@ class User extends Authenticatable implements Auditable
         }
         else
         {
+
             // $this->array[$row] = "none";
             /**
              * TODO: ausentismos
@@ -1044,9 +1046,9 @@ class User extends Authenticatable implements Auditable
             
             // si es menor o igual a 33, no se sigue con el analisis para este usuario
             if($numero_horas <= 33){
-                return;
+                return $this;
             }
-
+            
 
 
             
@@ -1207,8 +1209,8 @@ class User extends Authenticatable implements Auditable
         }
 
         // obtiene diferencia
-        if($this->shifts->count() > 0){$this->diff = $this->shifts->sum('ammount') - $this->AmiLoadMount;}
-        else{$this->diff = $this->contracts->sum('ammount') - $this->AmiLoadMount;}
+        // if($this->shifts->count() > 0){$this->diff = $this->shifts->sum('ammount') - $this->AmiLoadMount;}
+        // else{$this->diff = $this->contracts->sum('ammount') - $this->AmiLoadMount;}
 
 
 

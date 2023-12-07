@@ -150,4 +150,105 @@
     <fieldset>No presenta registros de cargas efectivas en Amipass</fieldset>
     @endif
 
+    <hr>
+
+    <h4>Información generada de forma automática</h4>
+
+    <table class="table table-bordered table-sm" style="border-collapse:collapse;">
+        <thead>
+            <tr>
+                <!-- <th>Run</th>
+                <th>Nombre</th> -->
+                <th>Fecha registro</th>
+                <th>Días hábiles</th>
+                <th>Días descuento</th>
+                <th>Valor día</th>  <!-- debe eliminarse esta columna -->
+                <th>Días a pagar</th>
+                <th>Valor a pagar</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if(count($calculatedData)>0)
+                @foreach ($calculatedData as $ct => $user)
+                    @if($user->shifts->count()==0)
+                        
+                        @if($user->ammount == $user->valor_debia_cargarse) <tr >
+                        @else <tr class="table-warning"> @endif
+                        
+                            <td>{{$ct}}</td>
+                            <td>{{$user->businessDays}}</td>
+                            <td>{{$user->totalAbsenteeisms }}</td>
+                            <td>{{$user->dailyAmmount}}</td>
+                            <td>{{$user->businessDays - $user->totalAbsenteeisms}}</td>
+                            <td>{{ money($user->ammount) }}</td>
+                            <td>
+                                <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#demo{{$ct}}" aria-expanded="false" aria-controls="collapseExample">
+                                    Detalles
+                                </button>
+                            </td>
+                        </tr>
+                        
+                        <tr class="collapse" id="demo{{$ct}}">
+                            <!-- <td></td> -->
+                            <td></td>
+                            <td></td>
+                            <td class="small">
+                                <ul>
+                                    <!-- ausentismos (sin considerar dias compensatorios) -->
+                                    @foreach($user->absenteeisms as $absenteeism)
+                                    <li> 
+                                        @if($absenteeism->totalDays==0)
+                                            {{ $absenteeism->finicio->format('Y-m-d') }} - {{ $absenteeism->ftermino->format('Y-m-d') }} 
+                                            <small>({{ $absenteeism->tipo_de_ausentismo }})</small> 
+                                            Dias: {{ $absenteeism->total_dias_ausentismo }} => {{ $absenteeism->totalDays}}
+                                        @else 
+                                            <p style="color:red;display: inline;">
+                                                {{ $absenteeism->finicio->format('Y-m-d') }} - {{ $absenteeism->ftermino->format('Y-m-d') }} 
+                                                <small>({{ $absenteeism->tipo_de_ausentismo }})</small> 
+                                                Dias: {{ $absenteeism->total_dias_ausentismo }} => {{ $absenteeism->totalDays}}
+                                            </p>
+                                        @endif
+                                    </li>
+                                    @endforeach
+
+                                    <!-- solo dias compensatorios -->
+                                    @foreach($user->compensatoryDays as $compensatoryDay)
+                                    <li> 
+                                        @if($compensatoryDay->totalDays==0)
+                                            {{ $compensatoryDay->start_date->format('Y-m-d H:i') }} - {{ $compensatoryDay->end_date->format('Y-m-d H:i')}} => {{$compensatoryDay->start_date->diffInHours($compensatoryDay->end_date)}} Hrs. 
+                                            <small>(DÍA COMPENSATORIO)</small> 
+                                            Dias: {{ $compensatoryDay->total_dias_ausentismo }} => {{ $compensatoryDay->totalDays}}
+                                        @else 
+                                            <p style="color:red;display: inline;">
+                                                {{ $compensatoryDay->start_date->format('Y-m-d H:i') }} - {{ $compensatoryDay->end_date->format('Y-m-d H:i') }} => {{$compensatoryDay->start_date->diffInHours($compensatoryDay->end_date)}} Hrs. 
+                                                <small>(DÍA COMPENSATORIO)</small> 
+                                                Dias: {{ $compensatoryDay->total_dias_ausentismo }} => {{ $compensatoryDay->totalDays}}
+                                            </p>
+                                        @endif
+                                    </li>
+                                    @endforeach
+                                </ul>
+                            </td>
+                            <td><small>D.Ausentismo: {{$user->dias_ausentismo}}</small> </td>
+                        </tr>
+                    @else
+                        <tr class="table-info">
+                            <td>{{$ct}} (Turno)</td>
+                            <td></td>
+                            <td></td>
+                            <td>{{ money($user->shiftAmmount) }}</td>
+                            <td>{{ $user->shifts->sum('quantity') }}</td>
+                            <td>{{ money($user->shiftAmmount * $user->shifts->sum('quantity')) }}</td>
+                            <td>
+                                <button class="btn btn-primary" type="button" data-toggle="collapse" aria-expanded="false" >
+                                    Detalles
+                                </button>
+                            </td>
+                        </tr>
+                    @endif
+                @endforeach
+            @endif
+        </tbody>
+    </table>
+
 </div>
