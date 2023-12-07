@@ -168,13 +168,11 @@
             </tr>
         </thead>
         <tbody>
-            @if(count($calculatedData)>0)
+            @if(count($calculatedData) > 0)
                 @foreach ($calculatedData as $ct => $user)
-                    @if($user->shifts->count()==0)
+                    @if($user->shifts->count() == 0)
                         
-                        @if($user->ammount == $user->valor_debia_cargarse) <tr >
-                        @else <tr class="table-warning"> @endif
-                        
+                        <tr >
                             <td>{{$ct}}</td>
                             <td>{{$user->businessDays}}</td>
                             <td>{{$user->totalAbsenteeisms }}</td>
@@ -240,10 +238,25 @@
                             <td>{{ $user->shifts->sum('quantity') }}</td>
                             <td>{{ money($user->shiftAmmount * $user->shifts->sum('quantity')) }}</td>
                             <td>
-                                <button class="btn btn-primary" type="button" data-toggle="collapse" aria-expanded="false" >
+                                <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#demo{{$ct}}" aria-expanded="false" aria-controls="collapseExample">
                                     Detalles
                                 </button>
                             </td>
+                        </tr>
+
+                        <tr class="collapse" id="demo{{$ct}}">
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>
+                                @foreach($user->shifts as $shift)
+                                    <ul>
+                                        <li>{{$shift->year}} - {{$shift->month}} => {{$shift->quantity}}</li>
+                                    </ul>
+                                @endforeach
+                            </td>
+                            <td></td>
                         </tr>
                     @endif
                 @endforeach

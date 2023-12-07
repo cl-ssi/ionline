@@ -131,6 +131,6 @@ class ReportByEmployee extends Component
 
     public function render()
     {
-        return view('livewire.welfare.amipass.report-by-employee');
+        return view('livewire.welfare.amipass.report-by-employee')->extends('layouts.bt4.app');
     }
 }
