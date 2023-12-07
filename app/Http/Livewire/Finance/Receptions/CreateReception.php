@@ -80,7 +80,7 @@ class CreateReception extends Component
             }
         }
 
-        app('debugbar')->log($reception);
+        // app('debugbar')->log($reception);
         return $reception;
     }
 
@@ -495,9 +495,9 @@ class CreateReception extends Component
     public function render()
     {
         // app('debugbar')->log($this->reception);
-        app('debugbar')->log($this->receptionItems);
-        app('debugbar')->log($this->approvals);
-        app('debugbar')->log($this->otherItems);
+        // app('debugbar')->log($this->receptionItems);
+        // app('debugbar')->log($this->approvals);
+        // app('debugbar')->log($this->otherItems);
         return view('livewire.finance.receptions.create-reception');
     }
 
