@@ -42,7 +42,7 @@ class SelectUserProfesion extends Component
     }
 
     public function change(){
-        /** TODO: @sickiqq porqué el código está dos veces? */
+        /* TODO: @sickiqq porqué el código está dos veces? */
         $profession_id = $this->profession_id;
         $professions = explode(',',Parameter::where('parameter','profesiones_ust')->pluck('value')->toArray()[0]);
         
