@@ -109,7 +109,7 @@
                             {{ $reception->date?->format('Y-m-d') }}
                         </td>
                         <td>
-                            @if($reception->has('signedFileLegacy'))
+                            @if($reception->signedFileLegacy)
                                 <a href="{{ route('file.download', $reception->signedFileLegacy) }}"
                                     class="btn btn-outline-secondary"
                                     target="_blank">
@@ -161,12 +161,12 @@
                             @endif
                         </td>
                         <td>
-                            @foreach($reception->files->where('type','support_documents') as $file)
-                                <a href="{{ route('file.download', $file) }}"
+                            @if($reception->supportFile)
+                                <a href="{{ route('file.download', $reception->supportFile) }}"
                                     target="_blank">
                                     <i class="fas fa-paperclip"></i>
                                 </a>
-                            @endforeach
+                            @endif
                         </td>
                         <td>
                             <a href="{{ route('finance.receptions.create', $reception) }}"

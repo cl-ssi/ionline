@@ -170,4 +170,11 @@ class Reception extends Model
     {
         return $this->morphOne(File::class, 'fileable')->where('type','signed_file');
     }
+    /**
+     * Get support file, archivo de respaldo.
+     */
+    public function supportFile(): MorphOne
+    {
+        return $this->morphOne(File::class, 'fileable')->where('type','support_file');
+    }
 }
