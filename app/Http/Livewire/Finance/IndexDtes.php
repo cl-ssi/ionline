@@ -260,7 +260,7 @@ class IndexDtes extends Component
     }
 
 
-    public function updateReceptionDteId($receptionId, $dteId)
+    public function updateReceptionDteId($receptionId, $dteId = null)
     {
         $reception = Reception::find($receptionId);
         if ($reception) {

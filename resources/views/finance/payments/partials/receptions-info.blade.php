@@ -1,8 +1,11 @@
 @if($dte->purchaseOrder)
-    @if($dte->all_receptions)
-        <span class="badge text-bg-success">A revisión</span>
-        <br>
+
+    @if($dte->payment_ready)
+        <span class="badge text-bg-success">Listo para pago</span>
+    @elseif($dte->all_receptions)
+        <span class="badge text-bg-warning">Revisión</span>
     @endif
+    <br>
 
     @foreach($dte->purchaseOrder->receptions->where('dte_id',$dte->id) as $reception)
         @if($reception->signedFileLegacy)

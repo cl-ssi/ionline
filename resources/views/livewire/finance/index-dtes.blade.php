@@ -109,7 +109,7 @@
                     </td>
                     <td>
                         {{ $dte->establishment?->alias }}
-                    </td>                    
+                    </td>
                     <td class="small">
                         @include('finance.payments.partials.dte-info')
                     </td>
@@ -161,7 +161,7 @@
                     </td>
                     <td class="small">
                         {{ $dte->requestForm?->contractManager?->tinnyName }} <br>
-                        {{ $dte->estado_reclamo }}                        
+                        {{ $dte->estado_reclamo }}
                     </td>
                     <td class="small">
                         {{ $dte->fecha_recepcion_sii ?? '' }} <br>
@@ -253,12 +253,20 @@
                                                     <div class="form-check">
                                                         <input class="form-check-input" 
                                                             type="checkbox" 
-                                                            @checked($dte->id == $reception->dte_id)
-
                                                             id="defaultCheck{{ $reception->id }}"
-                                                            wire:click="updateReceptionDteId({{ $reception->id }}, {{ $dte->id }})"
+                                                            @if($dte->id == $reception->dte_id)
+                                                                wire:click="updateReceptionDteId({{ $reception->id }}, null)"
+                                                                checked
+                                                            @else
+                                                                wire:click="updateReceptionDteId({{ $reception->id }}, {{ $dte->id }})"
+                                                            @endif
+                                                            @disabled($reception->dte_id AND $reception->dte_id != $dte->id)
                                                         >
                                                         <label class="form-check-label" for="defaultCheck1">
+                                                            @if($reception->dte_id AND $reception->dte_id != $dte->id)
+                                                                DTE: {{ $reception->dte_id }}
+                                                            @endif
+                                                
                                                             @if($reception->signedFileLegacy)
                                                                 <a class="link-primary" href="{{ route('file.download', $reception->signedFileLegacy) }}" target="_blank">
                                                                     id: {{ $reception->id }} Acta firmada (ex módulo Cenabast)
@@ -283,7 +291,9 @@
                                             @endif
                                         </div>
                                         <div class="col-2">
-                                            <button class="btn btn-success form-control" wire:click="updateAllReceptionsStatus({{ $dte->id }})">
+                                            <button class="btn btn-success form-control" 
+                                                wire:click="updateAllReceptionsStatus({{ $dte->id }})"
+                                                wire:loading.attr="disabled">
                                                 <i class="bi bi-currency-dollar"></i>
                                                 A revisión
                                             </button>
@@ -317,11 +327,14 @@
 
                                 <div class="col-10">
                                     <label for="">Motivo de rechazo DTE contabilidad</label>
-                                    <input type="text" class="form-control" wire:model.defer="reason_rejection" 1>
+                                    <input type="text" 
+                                        class="form-control" 
+                                        wire:model.defer="reason_rejection">
                                 </div>
                                 <div class="col-2">
                                     <label for="">&nbsp;</label>
-                                    <button class="btn btn-danger form-control" wire:click="rejectDte({{ $dte->id }})">
+                                    <button class="btn btn-danger form-control" 
+                                        wire:click="rejectDte({{ $dte->id }})">
                                         Rechazar
                                     </button>
                                 </div>
