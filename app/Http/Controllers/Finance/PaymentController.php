@@ -75,6 +75,8 @@ class PaymentController extends Controller
             'controls',
             'controls.store',
             'purchaseOrder',
+            'purchaseOrder.receptions',
+            'purchaseOrder.rejections',
             'establishment',
             'dtes',
             'invoices',
@@ -139,6 +141,8 @@ class PaymentController extends Controller
     {
         $query = Dte::with([
                 'purchaseOrder',
+                'purchaseOrder.receptions',
+                'purchaseOrder.rejections',
                 'establishment',
                 'controls',
                 'controls.store',

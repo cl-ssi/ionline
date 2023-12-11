@@ -32,8 +32,8 @@ class AssociateReceptionWithDte extends Command
     {
 
         $files = File::where('type','signed_file')
-        ->whereHas('fileable')
-        ->get();
+            ->whereHas('fileable')
+            ->get();
 
         foreach ($files as $file) {
             $path = $file->storage_path;
@@ -42,7 +42,7 @@ class AssociateReceptionWithDte extends Command
             if (preg_match('/\/dte-(\d+)\.pdf/', $path, $matches)) {
                 $dteId = $matches[1];
                 $this->info("ID del DTE para el archivo {$file->id}: $dteId");
-                                
+
                 $dte = DTE::find($dteId);
                 if($dte->tipo_documento =='factura_electronica' or $dte->tipo_documento =='factura_exenta' or $dte->tipo_documento =='boleta_honorarios')
                 {
@@ -52,7 +52,7 @@ class AssociateReceptionWithDte extends Command
                 if($dte->tipo_documento =='guias_despacho')
                 {
                     $file->fileable->guia_id = $dteId;
-                    $file->fileable->save();  
+                    $file->fileable->save();
                 }
 
             } else {

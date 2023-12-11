@@ -1,4 +1,4 @@
-@extends('layouts.bt4.app')
+@extends('layouts.bt5.app')
 
 @section('title', 'Flujos de Pago')
 
@@ -11,7 +11,7 @@
     </h3>
 
     <form action="{{ route('finance.payments.review') }}" method="GET">
-        <div class="form-row mb-3">
+        <div class="row g-2 mb-3">
             <div class="col-md-1">
                 <input type="text" class="form-control" name="id" placeholder="id" value="{{ old('id') }}" autocomplete="off">
             </div>
@@ -44,7 +44,7 @@
                 <th width="140px">OC</th>
                 <th>FR</th>
                 <th>Adjuntos</th>
-                <th>Bod/Recep</th>
+                <th>Recepción</th>
                 <th>Compromiso SIGFE</th>
                 <th>Devengo SIGFE</th>
                 <th>Revisar</th>
@@ -68,48 +68,8 @@
                         @include('finance.payments.partials.fr-files')
                     </td>
                     <td class="small">
-                        <!-- 
-                            Acá deben ir tres cosas. 
-                            1. Actas de recepción emitidas en el módulo de cenabast
-                            2. Actas de recepción emitidas y firmadas en bodega
-                            3. Actas de recepción de servicios emitidas en abastecimiento
-                        -->
-
-                        <!-- Punto 1 -->
-                        @if (isset($dte->confirmation_signature_file) && !isset($dte->cenabast_reception_file))
-                            <a 
-                                href="{{ route('warehouse.cenabast.downloadFile', ['dte' => $dte->id]) }}"
-                                class="btn btn-sm btn-outline-success" 
-                                title="Descargar Acta Original"
-                                target="_blank"
-                            >
-                                <i class="fas fa-file"></i> CNB
-                            </a>
-                        @elseif(isset($dte->cenabast_reception_file))
-                            <a 
-                                class="btn btn-sm btn-success"
-                                href="{{ route('warehouse.cenabast.download.signed', $dte) }}"
-                                title="Descargar Acta Firmada"
-                                target="_blank"
-                            >
-                                <i class="fas fa-file"></i> CNB
-                            </a>
-                        @endif
-
-                        <!-- Punto 2 -->
-                        <!-- Punto 3 -->
-
-                        <!-- Esto ya no debería ir -->
-                        @foreach ($dte->controls as $control)
-                        <a href="{{ route('warehouse.control.show', [
-                                'store' => $control->store->id,
-                                'control' => $control->id,
-                                'act_type' => 'reception',
-                            ]) }}"
-                                class="btn btn-sm btn-outline-secondary" target="_blank" title="Acta Recepción Técnica">
-                                <i class="fas fa-file-pdf"></i>
-                            </a>
-                        @endforeach
+                        <!-- Nuevo módulo de Recepciones -->
+                        @include('finance.payments.partials.receptions-info')
                     </td>
                     <td class="small">
                         @livewire('finance.sigfe-folio-compromiso', ['dte' => $dte], key($dte->id))
@@ -124,7 +84,7 @@
                     <td class="small">
                         <a href="{{ route('finance.payments.sendToReadyInbox', ['dte' => $dte->id]) }}"
                             class="btn btn-sm btn-outline-success">
-                            <i class="fas fa-hand-holding-usd"></i> Enviar a Listos para Pago
+                            <i class="fas fa-hand-holding-usd"></i> Listos para Pago
                         </a>
                     </td>
                 </tr>

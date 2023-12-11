@@ -9,7 +9,7 @@
     <h3 class="mb-3">Agregar una DTE manualmente</h3>
 
     <form wire:submit.prevent="saveDte">
-        <div class="form-row">
+        <div class="row g-2">
             <div class="form-group col-2">
                 <label for="tipoDocumento">Tipo de documento*</label>
                 <select class="form-control" id="tipoDocumento" wire:model.defer="tipoDocumento" required>
@@ -42,25 +42,14 @@
             </div>
 
             <div class="form-group col-4">
-                <label for="cargarPdf">Cargar PDF Boleta</label>
-                <div class="input-group mb-3">
-                    <div class="custom-file">
-                        <input type="file" class="custom-file-input" id="inputGroupFile01"
-                            aria-describedby="inputGroupFileAddon01" wire:model.defer="archivoManual"
-                            placeholder="Seleccionar Archivo" accept="application/pdf">
-                        <label class="custom-file-label" for="inputGroupFile01" data-browse="Examinar">
-                            @if ($archivoManual)
-                            {{ $archivoManual->getClientOriginalName() }}
-                            @else
-                                Seleccionar PDF
-                            @endif
-                        </label>
-                    </div>
-                </div>
-            </div>            
+                <label for="cargarPdf" class="form-label">Cargar PDF Boleta</label>
+                <input type="file" class="form-control" id="cargarPdf"
+                    aria-describedby="Cargar PDF" wire:model.defer="archivoManual"
+                    placeholder="Seleccionar Archivo" accept="application/pdf">
+            </div>
         </div>
 
-        <div class="form-row">
+        <div class="row g-2 mb-3">
             <div class="form-group col-2">
                 <label for="folio">Número</label>
                 <input type="number" class="form-control" id="folio" wire:model.defer="folio" autocomplete="off"
@@ -90,12 +79,10 @@
                 <div class="input-group">
                     <input type="text" class="form-control" id="barCode" wire:model.defer="barCode"
                         placeholder="ej: 6A86963" maxlength="7" autocomplete="off">
-                    <div class="input-group-append">
-                        <a class="btn btn-outline-secondary" href="#" wire:click.prevent="verBoleta"
-                            target="_blank">
-                            <i class="fas fa-file-pdf" aria-hidden="true"></i> Ver boleta
-                        </a>
-                    </div>
+                    <a class="btn btn-outline-secondary" href="#" wire:click.prevent="verBoleta"
+                        target="_blank">
+                        <i class="fas fa-file-pdf" aria-hidden="true"></i> Ver boleta
+                    </a>
                 </div>
                 @error('barCode')
                     <span class="text-danger">{{ $message }}</span>
@@ -103,7 +90,7 @@
             </div>
         </div>
 
-        <div class="form-row">
+        <div class="row g-2">
             <div class="col-12 text-right">
                 <button type="submit" class="btn btn-primary">
                     <i class="fas fa-save"></i> Agregar</button>
@@ -122,19 +109,15 @@
     </script>
 
     <script>
-    document.addEventListener('livewire:load', function () {
-        Livewire.on('fileSelected', function () {
-            var input = document.getElementById('inputGroupFile01');
-            var label = input.nextElementSibling;
-            var labelText = input.value.split('\\').pop();
-            label.textContent = labelText || 'Seleccionar PDF';
+        document.addEventListener('livewire:load', function () {
+            Livewire.on('fileSelected', function () {
+                var input = document.getElementById('inputGroupFile01');
+                var label = input.nextElementSibling;
+                var labelText = input.value.split('\\').pop();
+                label.textContent = labelText || 'Seleccionar PDF';
+            });
         });
-    });
-</script>
-
-
-
-    
+    </script>
 
 
 </div>

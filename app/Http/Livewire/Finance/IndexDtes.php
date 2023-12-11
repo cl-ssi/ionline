@@ -90,6 +90,7 @@ class IndexDtes extends Component
         $query->with([
             'purchaseOrder',
             'purchaseOrder.receptions',
+            'purchaseOrder.rejections',
             'establishment',
             'controls',
             'requestForm',
@@ -255,7 +256,7 @@ class IndexDtes extends Component
         return view('livewire.finance.index-dtes', [
             'dtes' => $dtes,
             //'establishments' => $establishments,
-        ])->extends('layouts.bt4.app');
+        ]);
     }
 
 

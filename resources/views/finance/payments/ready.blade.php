@@ -1,11 +1,11 @@
-@extends('layouts.bt4.app')
+@extends('layouts.bt5.app')
 @section('title', 'Flujos de Pago')
 @section('content')
     @include('finance.payments.partials.nav')
     <h3 class="mb-3">Bandeja listos para pago</h3>
 
     <form action="{{ route('finance.payments.ready') }}" method="GET">
-        <div class="form-row mb-3">
+        <div class="row g-2 mb-3">
             <div class="col-md-2">
                 <input type="text" class="form-control" name="id" placeholder="id" value="{{ old('id') }}"
                     autocomplete="off">
@@ -36,7 +36,7 @@
                     <th>Adjuntos</th>
                     {{-- Sin Anexos hasta averiguar si son necesarios
                     <th>Anexos</th> --}}
-                    <th>Bod</th>
+                    <th>Recepcion</th>
                     <th>Estado</th>
                     <th>Folio Sigfe</th>
                     <th>Observaciones</th>
@@ -145,22 +145,14 @@
                             @endif
                         </td> --}}
                         <td>
-                            @foreach ($dte->controls as $control)
-                                <a href="{{ route('warehouse.control.show', [
-                                    'store' => $control->store->id,
-                                    'control' => $control->id,
-                                    'act_type' => 'reception',
-                                ]) }}"
-                                    class="btn btn-sm btn-outline-secondary" target="_blank" title="Acta Recepción Técnica">
-                                    <i class="fas fa-file-pdf"></i>
-                                </a>
-                            @endforeach
+                            <!-- Nuevo módulo de Recepciones -->
+                            @include('finance.payments.partials.receptions-info')
                         </td>
                         <td>
                             <form action="{{ route('finance.payments.update', ['dte' => $dte->id]) }}" method="POST">
                                 @csrf
                                 @method('PUT')
-                                <select name="status" required>
+                                <select class="form-select" name="status" required>
                                     <option value="">Seleccionar Estado
                                     </option>
                                     <option value="Enviado a Pago" @if ($dte->estado == 'Enviado a Pago') selected @endif>
@@ -177,7 +169,7 @@
                             </form>
                         </td>
                         <td>
-                            <input type="number" name="folio_sigfe" class="form-input small"
+                            <input type="number" name="folio_sigfe" class="form-control small"
                                 value={{ $dte->folio_sigfe }}required>
                         </td>
                         <td>
