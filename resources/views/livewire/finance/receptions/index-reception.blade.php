@@ -109,18 +109,20 @@
                             {{ $reception->date?->format('Y-m-d') }}
                         </td>
                         <td>
-                            @if($reception->signedFileLegacy)
-                                <a href="{{ route('file.download', $reception->signedFileLegacy) }}"
-                                    class="btn btn-outline-secondary"
-                                    target="_blank">
-                                    <i class="bi bi-file-pdf-fill"></i>
-                                </a>
-                            @else
-                                <a href="{{ route('finance.receptions.show', $reception->id) }}"
-                                    class="btn btn-outline-success"
-                                    target="_blank">
-                                    <i class="bi bi-file-pdf-fill"></i>
-                                </a>
+                            @if($reception->rejected == false)
+                                @if($reception->signedFileLegacy)
+                                    <a href="{{ route('file.download', $reception->signedFileLegacy) }}"
+                                        class="btn btn-outline-secondary"
+                                        target="_blank">
+                                        <i class="bi bi-file-pdf-fill"></i>
+                                    </a>
+                                @else
+                                    <a href="{{ route('finance.receptions.show', $reception->id) }}"
+                                        class="btn btn-outline-success"
+                                        target="_blank">
+                                        <i class="bi bi-file-pdf-fill"></i>
+                                    </a>
+                                @endif
                             @endif
                         </td>
                         <td>
@@ -154,10 +156,12 @@
                             @endif
                         </td>
                         <td nowrap>
-                            @if ($reception->numeration and $reception->numeration->number)
-                                <a class="btn btn-outline-danger" href="{{ route('documents.partes.numeration.show_numerated', $reception->numeration) }}" target="_blank">
-                                    <i class="bi bi-file-pdf"></i>  {{ $reception->numeration->number }}
-                                </a>
+                            @if($reception->rejected == false)
+                                @if ($reception->numeration and $reception->numeration->number)
+                                    <a class="btn btn-outline-danger" href="{{ route('documents.partes.numeration.show_numerated', $reception->numeration) }}" target="_blank">
+                                        <i class="bi bi-file-pdf"></i>  {{ $reception->numeration->number }}
+                                    </a>
+                                @endif
                             @endif
                         </td>
                         <td>
@@ -169,10 +173,12 @@
                             @endif
                         </td>
                         <td>
-                            <a href="{{ route('finance.receptions.create', $reception) }}"
-                                class="btn btn-primary">
-                                <i class="bi bi-pencil-square"></i>
-                            </a>
+                            @if($reception->rejected == false)
+                                <a href="{{ route('finance.receptions.create', $reception) }}"
+                                    class="btn btn-primary">
+                                    <i class="bi bi-pencil-square"></i>
+                                </a>
+                            @endif
                         </td>
                     </tr>
 
