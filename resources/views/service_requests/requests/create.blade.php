@@ -37,19 +37,19 @@
 		<fieldset class="form-group col-6 col-md-3">
 			<label for="for_request_date">Fecha Solicitud</label>
             <!-- FIXME: @sick No dejar código estático -->
-			<input type="date" class="form-control" id="for_request_date" name="request_date" max="2023-12-31" required>
+			<input type="date" class="form-control" id="for_request_date" name="request_date" max="2025-12-31" required>
 		</fieldset>
 
 		<fieldset class="form-group col-12 col-md-3">
             <!-- FIXME: @sick No dejar código estático -->
 			<label for="for_start_date">Fecha Inicio de Contrato</label>
-			<input type="date" class="form-control" id="for_start_date" name="start_date" min="2020-01-01" max="2023-12-31" required>
+			<input type="date" class="form-control" id="for_start_date" name="start_date" min="2022-01-01" max="2025-12-31" required>
 		</fieldset>
 
 		<fieldset class="form-group col-12 col-md-3">
             <!-- FIXME: @sick No dejar código estático -->
 			<label for="for_end_date">Fecha Término de Contrato</label>
-			<input type="date" class="form-control" id="for_end_date" name="end_date" min="2020-01-01" max="2023-12-31" required>
+			<input type="date" class="form-control" id="for_end_date" name="end_date" min="2022-01-01" max="2025-12-31" required>
 		</fieldset>
 
 	</div>
