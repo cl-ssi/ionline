@@ -70,20 +70,20 @@
                 <th class="table-active">Calidad Jurídica / $ Honorarios</th>
                 <td style="width: 33%">{{ $requestReplacementStaff->legalQualityManage->NameValue }}</td>
                 <td style="width: 33%">
-                  @if($requestReplacementStaff->LegalQualityValue == 'Honorarios')
-                      ${{ number_format($requestReplacementStaff->salary,0,",",".") }}
-                  @endif
+                    @if($requestReplacementStaff->LegalQualityValue == 'Honorarios')
+                        ${{ number_format($requestReplacementStaff->salary,0,",",".") }}
+                    @endif
                 </td>
             </tr>
             <tr>
                 <th class="table-active">
-                  Fundamento de la Contratación / Detalle de Fundamento
+                    Fundamento de la Contratación / Detalle de Fundamento
                 </th>
                 <td style="width: 33%">
-                  {{ $requestReplacementStaff->fundamentManage->NameValue }}
+                    {{ $requestReplacementStaff->fundamentManage->NameValue }}
                 </td>
                 <td style="width: 33%">
-                  {{ $requestReplacementStaff->fundamentDetailManage->NameValue }}
+                    {{ ($requestReplacementStaff->fundamentDetailManage) ? $requestReplacementStaff->fundamentDetailManage->NameValue : '' }}
                 </td>
             </tr>
             <tr>
@@ -94,9 +94,9 @@
                 <th class="table-active">Funcionario a Reemplazar
                 </th>
                 <td style="width: 33%">
-                  @if($requestReplacementStaff->run)
-                      {{$requestReplacementStaff->run}}-{{$requestReplacementStaff->dv}}
-                  @endif
+                    @if($requestReplacementStaff->run)
+                        {{$requestReplacementStaff->run}}-{{$requestReplacementStaff->dv}}
+                    @endif
                 </td>
                 <td style="width: 33%">{{ $requestReplacementStaff->name_to_replace }}</td>
             </tr>
@@ -108,9 +108,9 @@
             <tr>
                 <th class="table-active">Archivos</th>
                 <td style="width: 33%">Perfil de Cargo
-                  @if($requestReplacementStaff->job_profile_file)
-                      <a href="{{ route('replacement_staff.request.show_file', $requestReplacementStaff) }}" target="_blank"> <i class="fas fa-paperclip"></i></a>
-                  @endif
+                    @if($requestReplacementStaff->job_profile_file)
+                        <a href="{{ route('replacement_staff.request.show_file', $requestReplacementStaff) }}" target="_blank"> <i class="fas fa-paperclip"></i></a>
+                    @endif
                 </td>
                 <td style="width: 33%">Correo (Verificación Solicitud) <a href="{{ route('replacement_staff.request.show_verification_file', $requestReplacementStaff) }}" target="_blank"> <i class="fas fa-paperclip"></i></a></td>
             </tr>
@@ -121,18 +121,18 @@
             <tr>
                 <th class="table-active">Staff Sugerido</th>
                 <td colspan="2">
-                  @if($requestReplacementStaff->replacementStaff)
-                      {{ $requestReplacementStaff->replacementStaff->FullName }}
-                  @endif
+                    @if($requestReplacementStaff->replacementStaff)
+                        {{ $requestReplacementStaff->replacementStaff->FullName }}
+                    @endif
                 </td>
             </tr>
             <tr>
                 <th class="table-active">Ítem Presupuestario</th>
                 <td colspan="2">
-                  @if($requestReplacementStaff->budgetItem)
-                      {{ $requestReplacementStaff->budgetItem->code }} <br>
-                      {{ $requestReplacementStaff->budgetItem->name }}
-                  @endif
+                    @if($requestReplacementStaff->budgetItem)
+                        {{ $requestReplacementStaff->budgetItem->code }} <br>
+                        {{ $requestReplacementStaff->budgetItem->name }}
+                    @endif
                 </td>
             </tr>
         </tbody>
