@@ -151,6 +151,11 @@ class AddendumController extends Controller
         //
     }
 
+    public function download(Addendum $addendum)
+    {
+        return Storage::disk('gcs')->response($addendum->file, mb_convert_encoding($addendum->name,'ASCII'));
+    }
+
     public function downloadRes(Addendum $addendum)
     {
         return Storage::disk('gcs')->response($addendum->res_file, mb_convert_encoding($addendum->name,'ASCII'));

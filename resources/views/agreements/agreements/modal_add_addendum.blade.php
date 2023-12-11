@@ -18,12 +18,11 @@
 
                     <div class="form-group">
                         <label for="forreferente">Referente</label>
-                        <!-- <input type="text" name="referente" class="form-control" id="forreferente" value="{{ $agreement->referente }}" > -->
-                        <select name="referrer_id" class="form-control selectpicker" data-live-search="true" title="Seleccione referente" required>
-                            @foreach($referrers as $referrer)
-                            <option value="{{$referrer->id}}" @if(isset($agreement->referrer->id) && $referrer->id == $agreement->referrer->id) selected @endif>{{$referrer->fullName}}</option>
-                            @endforeach
-                        </select>
+                        @livewire('search-select-user', [
+                            'user' => $agreement->referrer,
+                            'required' => 'required',
+                            'selected_id' => 'referrer_id',
+                        ])
                     </div>
 
                     <div class="form-group">

@@ -665,6 +665,7 @@ Route::prefix('agreements')->as('agreements.')->middleware(['auth', 'must.change
     Route::post('/addendum/createWord/{addendum}/type/{type}', [WordTestController::class, 'createWordDocxAddendum'])->name('addendum.createWord');
     Route::post('/addendum/createWordWithdrawal/{addendum}/type/{type}', [WordWithdrawalAgreeController::class, 'createWordDocxAddendum'])->name('addendum.createWordWithdrawal');
     Route::get('/addendum/downloadRes/{addendum}', [AddendumController::class, 'downloadRes'])->name('addendum.downloadRes');
+    Route::get('/addendum/download/{addendum}', [AddendumController::class, 'download'])->name('addendum.download');
     Route::get('/addendum/sign/{addendum}/type/{type}', [AddendumController::class, 'sign'])->name('addendum.sign');
     Route::get('/addendum/preview/{addendum}', [AddendumController::class, 'preview'])->name('addendum.preview');
     Route::resource('programs', App\Http\Controllers\Agreements\ProgramController::class);

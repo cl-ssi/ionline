@@ -24,6 +24,8 @@
 
 @include('agreements/nav')
 
+@php($canEdit = auth()->user()->can('Agreement: edit') || auth()->id() == $agreement->referrer_id)
+
 
 <h3 class="mb-3">Ver detalle de Convenio #{{$agreement->id}}
     @can('Agreement: delete')
@@ -56,6 +58,7 @@
 </div>
 
 <ol class="breadcrumb bg-light justify-content-end small">
+    @if($canEdit)
     <li class="nav-item">
         @if($agreement->program_id == 3) <!-- convenio retiro voluntario -->
         <a class="nav-link text-secondary" href="{{ route('agreements.createWordWithdrawal', $agreement) }}"><i class="fas fa-file-download"></i> Descargar borrador Convenio</a>
@@ -81,25 +84,32 @@
     </li>
     @endif
 
+    @endif
+
     @canany(['Documents: signatures and distribution'])
+    @if($canEdit)
     <li class="nav-item">
         <a class="nav-link text-secondary" href="{{ route('agreements.sign', [$agreement, 'visators']) }}"><i class="fas fa-file-signature"></i> Solicitar visación Convenio</a>
     </li>
+    @endif
 
     @if($agreement->fileToEndorse && $agreement->fileToEndorse->HasAllFlowsSigned)
     <li class="nav-item">
         <a class="nav-link text-secondary" href="{{route('documents.signatures.showPdf', [$agreement->file_to_endorse_id, time()])}}" target="blank"><i class="fas fa-eye"></i> Ver convenio visado</a>
     </li>
-    
+    @if($canEdit)
     <li class="nav-item">
         <a class="nav-link text-secondary" href="{{ route('agreements.sign', [$agreement, 'signer']) }}"><i class="fas fa-file-signature"></i> Solicitar firma Convenio</a>
     </li>
+    @endif
+    
     @endif
 
     @if($agreement->fileToSign && $agreement->fileToSign->HasAllFlowsSigned)
     <li class="nav-item">
         <a class="nav-link text-secondary" href="{{route('documents.signatures.showPdf', [$agreement->file_to_sign_id, time()])}}" target="blank"><i class="fas fa-eye"></i> Ver convenio firmado</a>
     </li>
+        @if($canEdit)
         @if($agreement->file)
         <li class="nav-item">
             <a href="#" class="nav-link text-secondary" data-toggle="modal"
@@ -113,6 +123,7 @@
                 <a href="#" class="nav-link text-secondary disabled"><i class="fas fa-file-download"></i> Descargar borrador Resolución</a>
             </div>
         </li>
+        @endif
         @endif
     @endif
 
@@ -164,7 +175,7 @@
                         @endif
                     </label>
                     
-                    <input type="file" class="form-control-file" id="forfile" name="file" accept=".doc,.docx">
+                    <input type="file" class="form-control-file" id="forfile" name="file" accept=".doc,.docx" @if(!$canEdit) disabled @endif>
                     <small class="form-text text-muted">* Adjuntar versión final de Convenio formato docx</small>
                     
                 </fieldset>
@@ -172,33 +183,32 @@
             <div class="form-row">
                 <fieldset class="form-group col-3">
                     <label for="fordate">Fecha</label>
-                    <input type="date" name="date" class="form-control" id="fordate" value="{{ $agreement->date }}" >
+                    <input type="date" name="date" class="form-control" id="fordate" value="{{ $agreement->date }}" @if(!$canEdit) disabled @endif>
                     <small class="form-text text-muted">* Fecha del convenio</small>
                 </fieldset>
 
                 <fieldset class="form-group col-4">
                     <label for="forreferente">Referente</label>
-                    <!-- <input type="text" name="referente" class="form-control" id="forreferente" value="{{ $agreement->referente }}" > -->
-                    <select name="referrer_id" class="form-control selectpicker" data-live-search="true" title="Seleccione referente" required>
-                        @foreach($referrers as $referrer)
-                        <option value="{{$referrer->id}}" @if(isset($agreement->referrer->id) && $referrer->id == $agreement->referrer->id) selected @endif>{{$referrer->fullName}}</option>
-                        @endforeach
-                    </select>
+                    @livewire('search-select-user', [
+                        'user' => $agreement->referrer,
+                        'required' => 'required',
+                        'selected_id' => 'referrer_id',
+                    ])
                 </fieldset>
 
                 @if($agreement->program_id == 3)
                 <fieldset class="form-group col-2">
                     <label for="forquotas">N° de cuotas</label>
-                    <input type="integer" class="form-control" id="forquotas" name="quotas" min="1" value="{{$agreement->quotas}}" required>
+                    <input type="integer" class="form-control" id="forquotas" name="quotas" min="1" value="{{$agreement->quotas}}" required @if(!$canEdit) disabled @endif>
                 </fieldset>
                 <fieldset class="form-group col-3">
                     <label for="fortotal_amount">Monto total</label>
-                    <input type="integer" class="form-control" id="fortotal_amount" name="total_amount" min="100" value="{{$agreement->total_amount}}" required>
+                    <input type="integer" class="form-control" id="fortotal_amount" name="total_amount" min="100" value="{{$agreement->total_amount}}" required @if(!$canEdit) disabled @endif>
                 </fieldset>
                 @else
                 <fieldset class="form-group col-5">
                     <label for="forestablishment">Centros de Atencion</label>
-                    <select id="establishment" class="selectpicker " name="establishment[]" title="Seleccionar" data-selected-text-format="count > 2" data-width="100%" multiple>
+                    <select id="establishment" class="selectpicker " name="establishment[]" title="Seleccionar" data-selected-text-format="count > 2" data-width="100%" multiple @if(!$canEdit) disabled @endif>
                     @foreach($agreement->commune->establishments as $key => $establishment)
                       <option value="{{ $establishment->id }}">{{ $establishment->type }} - {{ $establishment->name }}</option>
                     @endforeach
@@ -210,7 +220,7 @@
             <div class="form-row">
                 <fieldset class="form-group col-12">
                 <label for="forrepresentative">Director/a a cargo</label>
-                        <select name="director_signer_id" class="form-control selectpicker" title="Seleccione..." required>
+                        <select name="director_signer_id" class="form-control selectpicker" title="Seleccione..." required @if(!$canEdit) disabled @endif>
                             @foreach($signers as $signer)
                             <option value="{{$signer->id}}" @if($signer->id == $agreement->director_signer_id) selected @endif>{{$signer->appellative}} {{$signer->user->fullName}}, {{$signer->decree}}</option>
                             @endforeach
@@ -220,7 +230,7 @@
             <div class="form-row">
                 <fieldset class="form-group col-4">
                     <label for="forrepresentative">Representante alcalde</label>
-                    <select id="representative" class="selectpicker" name="representative" title="Seleccionar" data-width="100%">
+                    <select id="representative" class="selectpicker" name="representative" title="Seleccionar" data-width="100%" @if(!$canEdit) disabled @endif>
                       <option value="{{ $municipality->name_representative }}" @if($municipality->name_representative == $agreement->representative) selected @endif>{{ $municipality->name_representative }}</option>
                       @if($municipality->name_representative_surrogate != null) <option value="{{ $municipality->name_representative_surrogate }}" @if($municipality->name_representative_surrogate == $agreement->representative) selected @endif>{{ $municipality->name_representative_surrogate }}</option> @endif
                       @if($agreement->representative != null && $agreement->representative != $municipality->name_representative && $agreement->representative != $municipality->name_representative_surrogate) <option value="{{ $agreement->representative }}" selected>{{ $agreement->representative }}</option> @endif
@@ -257,25 +267,25 @@
             <div class="form-row">
                 <fieldset class="form-group col-3">
                     <label for="fornumber">Número Resolución del Programa Ministerial</label>
-                    <input type="integer" name="number" class="form-control" id="fornumber" value="{{ $agreement->number }}" >
+                    <input type="integer" name="number" class="form-control" id="fornumber" value="{{ $agreement->number }}" @if(!$canEdit) disabled @endif>
                     <small class="form-text text-muted">* Nro. Resolución, se puede agregar al final.</small>
                 </fieldset>
 
                 <fieldset class="form-group col-3">
                     <label for="fordate">Fecha Resolución del Programa Ministerial</label>
-                    <input type="date" name="resolution_date" class="form-control" id="fordate" value="{{ $agreement->resolution_date }}" >
+                    <input type="date" name="resolution_date" class="form-control" id="fordate" value="{{ $agreement->resolution_date }}" @if(!$canEdit) disabled @endif>
                 </fieldset>
 
                 @if($agreement->program_id != 3)
                 <fieldset class="form-group col-3">
                     <label for="fornumber">Número Resolución Distribuye Recursos</label>
-                    <input type="integer" name="res_resource_number" class="form-control" id="fornumber" value="{{ $agreement->res_resource_number }}" >
+                    <input type="integer" name="res_resource_number" class="form-control" id="fornumber" value="{{ $agreement->res_resource_number }}" @if(!$canEdit) disabled @endif>
                     <small class="form-text text-muted">* Nro. Resolución, se puede agregar al final.</small>
                 </fieldset>
 
                 <fieldset class="form-group col-3">
                     <label for="fordate">Fecha Resolución Distribuye Recursos</label>
-                    <input type="date" name="res_resource_date" class="form-control" id="fordate" value="{{ $agreement->res_resource_date }}" >
+                    <input type="date" name="res_resource_date" class="form-control" id="fordate" value="{{ $agreement->res_resource_date }}" @if(!$canEdit) disabled @endif>
                 </fieldset>
                 @endif
             </div>
@@ -284,13 +294,13 @@
             <div class="form-row">
                 <fieldset class="form-group col-3">
                     <label for="fornumber">Número Resolución Exenta del Convenio</label>
-                    <input type="integer" name="res_exempt_number" class="form-control" id="fornumber" value="{{ $agreement->res_exempt_number }}" >
+                    <input type="integer" name="res_exempt_number" class="form-control" id="fornumber" value="{{ $agreement->res_exempt_number }}" @if(!$canEdit) disabled @endif>
                     <small class="form-text text-muted">* Nro. Resolución Exenta, se puede agregar al final.</small>
                 </fieldset>
 
                 <fieldset class="form-group col-3">
                     <label for="fordate">Fecha Resolución Exenta del Convenio</label>
-                    <input type="date" name="res_exempt_date" class="form-control" id="fordate" value="{{ $agreement->res_exempt_date }}" >
+                    <input type="date" name="res_exempt_date" class="form-control" id="fordate" value="{{ $agreement->res_exempt_date }}" @if(!$canEdit) disabled @endif>
                 </fieldset>
 
                 <fieldset class="form-group col-3">
@@ -301,12 +311,14 @@
                             </a>
                         @endif
                     </label>
-                    <input type="file" class="form-control-file" id="forfileResEnd" name="fileResEnd" accept=".pdf">
+                    <input type="file" class="form-control-file" id="forfileResEnd" name="fileResEnd" accept=".pdf" @if(!$canEdit) disabled @endif>
                     <small class="form-text text-muted">* Adjuntar versión final de Resolución Función Exclusiva Encargado de Convenio</small>
                     
                 </fieldset>
             </div>
+            @if($canEdit)
             <button type="submit" class="btn btn-primary ">Actualizar</button>
+            @endif
         </form>
 
       </div>
@@ -325,7 +337,7 @@
                         <th>Componente</th>
                         <th>Subtítulo</th>
                         <th class="text-right">Monto $</th>
-                        <th></th>
+                        @if($canEdit)<th></th>@endif
                     </tr>
                 </thead>
                 <tbody>
@@ -335,6 +347,7 @@
                         <td>{{ $amount->program_component->name }}</td>
                         <td>{{ $amount->subtitle }}</td>
                         <td class="text-right">@numero($amount->amount)</td>
+                        @if($canEdit)
                         <td class="text-right">
                             <button class="btn btn-sm btn-outline-secondary" data-toggle="modal"
                                 data-target="#editModalAmount"
@@ -349,6 +362,7 @@
                                 <button class="btn btn-sm btn-outline-danger" onclick="return confirm('¿Desea eliminar el componente realmente?')"><i class="fas fa-trash-alt"></i></button></button>
                             </form>
                         </td>
+                        @endif
                     </tr>
                     @endforeach
                     <tr>
@@ -366,10 +380,14 @@
 
     <div class="card mt-3 small">
         <div class="card-body">
-            <h5>Cuotas <form method="POST" action="{{ route('agreements.quotaAutomatic.update', $agreement->id) }}" class="d-inline float-right small">
+            <h5>Cuotas 
+                @if($canEdit)
+                <form method="POST" action="{{ route('agreements.quotaAutomatic.update', $agreement->id) }}" class="d-inline float-right small">
                 {{ method_field('PUT') }} {{ csrf_field() }}
                 <button class="btn btn-sm btn-outline-primary" onclick="return confirm('¿Desea realmente calcular las cuotas automaticamente?')"><i class="fas fa-sync"></i> Calculo Automático</button></button> <!-- onclick="return confirm('¿Desea eliminar el componente realmente?')-->
-            </form></h5>
+                </form>
+                @endif
+            </h5>
 
             <table class="table table-sm table-hover">
                 <thead>
@@ -380,7 +398,7 @@
                         <th class="text-right">Monto $</th>
                         <th class="text-center">Fecha Transferencia</th>
                         <th>Comprobante</th>
-                        <th></th>
+                        @if($canEdit)<th></th>@endif
                     </tr>
                 </thead>
                 <tbody>
@@ -392,6 +410,7 @@
                         <td class="text-right">@numero($quota->amount)</td>
                         <td class="text-center">{{ $quota->transfer_at ? $quota->transfer_at->format('d-m-Y') : '' }}</td>
                         <td>{{ $quota->voucher_number }}</td>
+                        @if($canEdit)
                         <td class="text-right">
                             <button class="btn btn-sm btn-outline-secondary" data-toggle="modal"
                                 data-target="#editModalQuota"
@@ -402,6 +421,7 @@
                                 data-formaction="{{ route('agreements.quota.update', $quota->id)}}">
                             <i class="fas fa-edit"></i></button>
                         </td>
+                        @endif
                     </tr>
                     @endforeach
                 </tbody>
@@ -417,11 +437,14 @@
 @if($agreement->fileResEnd != null && $agreement->program_id != 50)
     <div class="card mt-3 small">
         <div class="card-body">
-            <h5>Addendums
+            <h5>Addendums 
+            @if($canEdit)
             <button class="btn btn-sm btn-outline-primary float-right" data-toggle="modal"
                                 data-target="#addModalAddendum"
                                 data-formaction="{{ route('agreements.addendums.store' )}}">
-                            <i class="fas fa-plus"></i> Nuevo Addendum</button></h5>
+                            <i class="fas fa-plus"></i> Nuevo Addendum</button>
+            @endif
+            </h5>
 
             <table class="table table-sm table-hover">
                 <thead>
@@ -452,40 +475,41 @@
                             </a>
                             @endif
                         </td>
-                        <td class="text-right">
-                            <button class="btn btn-sm btn-outline-secondary" data-toggle="modal"
-                                data-target="#editModalAddendum"
-                                data-referrer_id="{{$addendum->referrer_id}}"
-                                data-director_signer_id="{{$addendum->director_signer_id}}"
-                                data-representative="{{$addendum->representative}}"
-                                data-date="{{ $addendum->date ? $addendum->date->format('Y-m-d') : '' }}"
-                                data-res_number="{{ $addendum->res_number }}"
-                                data-res_date="{{ $addendum->res_date ? $addendum->res_date->format('Y-m-d') : '' }}"
-                                data-formaction="{{ route('agreements.addendums.update', $addendum )}}">
+                        <td>
+                            @if($canEdit)
+                            <button class="btn btn-sm btn-outline-secondary" data-toggle="modal" data-target="#editModalAddendum-{{$addendum->id}}">
                             <i class="fas fa-edit"></i></button>
+                            @include('agreements/agreements/modal_edit_addendum')
                             <a class="btn btn-sm btn-outline-secondary" href="#" data-toggle="tooltip" data-placement="top" title="Descargar borrador Addendum"
                                 onclick="event.preventDefault(); document.getElementById('submit-form-addendum-{{$addendum->id}}').submit();"><i class="fas fa-file-download"></i></a>
                             <form id="submit-form-addendum-{{$addendum->id}}" action="{{ route('agreements.addendum.createWord'.($agreement->program_id == 3 ? 'Withdrawal' : ''), [$addendum, 'addendum']) }}" method="POST" hidden>@csrf</form>
                             @if($addendum->file != null)
                             <a class="btn btn-sm btn-outline-secondary" href="{{ route('agreements.addendum.preview', $addendum) }}" target="blank" data-toggle="tooltip" data-placement="top" title="Previsualizar Addendum"><i class="fas fa-eye"></i></a>
                             @endif
+                            @endif <!-- canEdit fin -->
                             @canany(['Documents: signatures and distribution'])
+                            @if($canEdit)
                             <a class="btn btn-sm btn-outline-secondary" href="{{ route('agreements.addendum.sign', [$addendum, 'visators']) }}" data-toggle="tooltip" data-placement="top" title="Solicitar visación Addendum"><i class="fas fa-file-signature"></i></a>
+                            @endif
                             @if($addendum->fileToEndorse && $addendum->fileToEndorse->HasAllFlowsSigned)
                             <a class="btn btn-sm btn-outline-secondary" href="{{route('documents.signatures.showPdf', [$addendum->file_to_endorse_id, time()])}}" target="blank" data-toggle="tooltip" data-placement="top" title="Ver addendum visado"><i class="fas fa-eye"></i></a> 
-                            <a class="btn btn-sm btn-outline-secondary" href="{{ route('agreements.addendum.sign', [$addendum, 'signer']) }}" data-toggle="tooltip" data-placement="top" title="Solicitar firma Addendum"><i class="fas fa-file-signature"></i></a> 
+                            @if($canEdit)<a class="btn btn-sm btn-outline-secondary" href="{{ route('agreements.addendum.sign', [$addendum, 'signer']) }}" data-toggle="tooltip" data-placement="top" title="Solicitar firma Addendum"><i class="fas fa-file-signature"></i></a> @endif
                             @endif
                             {{--@if($addendum->fileToSign && $addendum->fileToSign->HasAllFlowsSigned)--}}
                             @if($addendum->fileToEndorse && $addendum->fileToEndorse->HasAllFlowsSigned)
                                 @if($addendum->file)
                                 @if($addendum->fileToSign && $addendum->fileToSign->HasAllFlowsSigned)<a class="btn btn-sm btn-outline-secondary" href="{{route('documents.signatures.showPdf', [$addendum->file_to_sign_id, time()])}}" target="blank" data-toggle="tooltip" data-placement="top" title="Ver addendum firmado"><i class="fas fa-eye"></i></a>@endif
+                                @if($canEdit)
                                 <span data-toggle="modal" data-target="#selectSignerRes" data-formaction="{{ route('agreements.addendum.createWord'.($agreement->program_id == 3 ? 'Withdrawal' : ''), [$addendum, 'res'] )}}">
                                     <a href="#" class="btn btn-sm btn-outline-secondary" data-toggle="tooltip" data-placement="top" title="Descargar borrador Resolución Addendum"><i class="fas fa-file-download"></i></a>
                                 </span>
+                                @endif
                                 @else
+                                @if($canEdit)
                                 <span class="tooltip-wrapper disabled" data-title="No existe registro de archivo docx versión final del Addendum, adjuntelo para habilitar esta opción">
                                     <a href="#" class="btn btn-sm btn-outline-secondary disabled"><i class="fas fa-file-download"></i></a>
                                 </span>
+                                @endif
                                 @endif
                             @endif
                             @endcan
@@ -498,7 +522,6 @@
     </div>
 
     @include('agreements/agreements/modal_add_addendum')
-    @include('agreements/agreements/modal_edit_addendum')
 @endif
     
     @include('agreements/agreements/modal_select_signer_res')
@@ -570,7 +593,7 @@
         var modal  = $(this)
 
         modal.find('input[name="date"]').val(button.data('date'))
-        modal.find('select[name="referrer_id"]').val(button.data('referrer_id'))
+        modal.find('input[name="referrer_id"]').val(button.data('referrer_id'))
         modal.find('select[name="director_signer_id"]').val(button.data('director_signer_id'))
         modal.find('select[name="representative"]').val(button.data('representative'))
         modal.find('input[name="res_number"]').val(button.data('res_number'))

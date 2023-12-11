@@ -154,12 +154,12 @@ class AgreementController extends Controller
      */
     public function show(Agreement $agreement)
     {
-        $agreement->load('director_signer.user', 'commune.establishments', 'referrer', 'fileToEndorse', 'fileToSign', 'addendums');
+        $agreement->load('director_signer.user', 'commune.establishments', 'referrer', 'fileToEndorse', 'fileToSign', 'addendums.referrer');
         $municipality = Municipality::where('commune_id', $agreement->commune->id)->first();
         $establishment_list = unserialize($agreement->establishment_list);
-        $referrers = User::all()->sortBy('name');
+        // $referrers = User::all()->sortBy('name');
         $signers = Signer::with('user')->get();
-        return view('agreements.agreements.show', compact('agreement', 'municipality', 'establishment_list', 'referrers', 'signers'));
+        return view('agreements.agreements.show', compact('agreement', 'municipality', 'establishment_list', 'signers'));
     }
 
     /**
