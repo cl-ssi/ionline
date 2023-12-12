@@ -26,6 +26,7 @@ class DtesImport implements ToModel, WithStartRow, WithHeadingRow
     */
     public function model(array $row)
     {
+        //TODO fixear cuando de acepta no traigan OC y no borre lo que ya se digitó
         return Dte::updateOrCreate(
             [
                 'tipo' => $row['tipo'],

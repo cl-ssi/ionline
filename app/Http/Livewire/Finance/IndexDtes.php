@@ -177,7 +177,7 @@ class IndexDtes extends Component
         $dte->invoices()->sync($this->asociate_invoices);
 
         
-        if($dte->receptions->first())
+        if($dte->receptions->first() and $dte->invoices->first())
         {            
             //Una guía tiene una o mas recepciones, buscar las facturas asociadas a esa guía y a esa factura asociarle la recepción de la guia
             $dte->receptions->first()->dte_id = $dte->invoices->first()->id;
