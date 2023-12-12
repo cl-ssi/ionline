@@ -76,7 +76,7 @@ class CreateReception extends Component
 
         if( !empty($this->maxItemQuantity) ) {
             foreach($this->receptionItems as $key => $item) {
-                $reception['receptionItems.'.$key.'.Cantidad'] = 'nullable|numeric|min:1|max:'.$this->maxItemQuantity[$key];
+                $reception['receptionItems.'.$key.'.Cantidad'] = 'nullable|numeric|min:0|max:'.$this->maxItemQuantity[$key];
             }
         }
 
