@@ -5,6 +5,8 @@ namespace App\Http\Livewire\IdentifyNeeds;
 use Livewire\Component;
 
 use App\Models\IdentifyNeeds\IdentifyNeed;
+use App\Models\IdentifyNeeds\LearningGoal;
+
 use Illuminate\Support\Facades\DB;
 
 class CreateIdentifyNeed extends Component
@@ -32,11 +34,12 @@ class CreateIdentifyNeed extends Component
     public $inputs = [];
     public $i = 1;
     public $count = 0;
-    // public $jobPositionProfile;
     public $learningGoals = null;
     public $learningGoal = null;
     public $editlearningGoalIdRender = null;
-    // public $description = null;
+    public $learningGoalsDescriptions;
+
+    public $learningGoalsDescriptionId = null;
 
     public $currentTrainingLevel;
     public $needTrainingLevel;
@@ -147,6 +150,21 @@ class CreateIdentifyNeed extends Component
                 return $identifyNeed;
             });
 
+            foreach($this->learningGoalsDescriptions as $learningGoalsDescription){
+                $lgDescription = DB::transaction(function () use ($learningGoalsDescription, $identifyNeed) {
+                    $lgDescription = LearningGoal::updateOrCreate(
+                        [
+                            'id'  =>  $this->learningGoalsDescriptionId,
+                        ],
+                        [
+                            'description'       => $learningGoalsDescription,
+                            'identify_need_id'  => $identifyNeed->id
+                        ]
+                    );
+    
+                    return $lgDescription;
+                });
+            }
         }
         else{
             $this->validateMessage = 'description';
@@ -156,7 +174,7 @@ class CreateIdentifyNeed extends Component
             ]);
         }
 
-        return redirect()->route('identify_need.own', $purchasePlan->id);
+        // return redirect()->route('identify_need.own', $purchasePlan->id);
     }
 
     public function mount($identifyNeedToEdit)
