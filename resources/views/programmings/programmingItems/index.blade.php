@@ -353,19 +353,19 @@
     <thead>
         <tr class="small " style="font-size:50%;">
             @hasanyrole('Programming: Review|Programming: Admin')
+            <th class="text-center align-middle no-print" >
             <form id="check-multi-items-form" method="POST" action="{{ route('reviewItems.acceptItems') }}" class="small d-inline">
             {{ method_field('POST') }} {{ csrf_field() }}
-            
-            <th class="text-center align-middle" >
             <button class="btn btn-sm btn-link small p-1" onclick="return confirm('¿Desea aceptar actividades seleccionadas?')" form="check-multi-items-form" title="Aceptar actividades seleccionadas">
             <i class="fas fa-clipboard-check text-primary"></i>
-            </button></th>
+            </button>
             </form>
+            </th>
             @endhasanyrole
             @if($canEvaluate)
-            <th class="text-center align-middle" > Evaluación</th>
+            <th class="text-center align-middle no-print" > Evaluación</th>
             @endif
-            @if($canEdit && $programming->status == 'active')<th class="text-center align-middle" >Editar</th>@endif
+            @if($canEdit && $programming->status == 'active')<th class="text-center align-middle no-print" >Editar</th>@endif
             <th class="text-center align-middle">T</th>
             <th class="text-center align-middle">Nº Trazadora</th>
             <th class="text-center align-middle">CICLO</th>
@@ -390,13 +390,13 @@
             <th class="text-center align-middle">Fuente Informacion </th>
             <th class="text-center align-middle">FINANCIADA POR PRAP</th>
             <th class="text-center align-middle">Registrado por 
-                <a tabindex="0"  role="button" data-toggle="popover" data-trigger="focus" data-html="true"
+                <a tabindex="0"  role="button" data-toggle="popover" data-trigger="focus" data-html="true" class="no-print"
                 title="Tip: Búsqueda por usuario" 
                 data-content="Usa las teclas <span class='badge badge-secondary'>CTRL</span> + <span class='badge badge-secondary'>F</span> para activar el buscador de tu navegador.">
                 <i class="fas fa-info-circle fa-lg"></i></a>
             </th>
-            @if($canDuplicate && $programming->status == 'active')<th class="text-center align-middle">DUPLICAR</th>@endif
-            @if($canDelete && $programming->status == 'active')<th class="text-left align-middle" >ELIMINAR</th>@endif
+            @if($canDuplicate && $programming->status == 'active')<th class="text-center align-middle no-print">DUPLICAR</th>@endif
+            @if($canDelete && $programming->status == 'active')<th class="text-left align-middle no-print" >ELIMINAR</th>@endif
 
         </tr>
     </thead>
@@ -405,7 +405,7 @@
         @foreach($directProgrammingItems as $programmingitem)
         <tr class="small">
             @hasanyrole('Programming: Review|Programming: Admin')
-            <td class="text-center align-middle" rowspan="{{ $programmingitem->rowspan() }}">
+            <td class="text-center align-middle no-print" rowspan="{{ $programmingitem->rowspan() }}">
                 @if($programmingitem->reviewItems->count() == 0)
                 <div class="form-check">
                     <input class="form-check-input position-static" type="checkbox" id="check_accept_item" name="check_accept_item[]" value="{{$programmingitem->id}}" aria-label="Aceptar actividad" form="check-multi-items-form">
@@ -414,7 +414,7 @@
             </td>
             @endhasanyrole
             @if($canEvaluate)
-            <td class="text-center align-middle" rowspan="{{ $programmingitem->rowspan() }}">
+            <td class="text-center align-middle no-print" rowspan="{{ $programmingitem->rowspan() }}">
                 <a href="{{ route('reviewItems.index', ['programmingItem_id' => $programmingitem->id]) }}" class="btn btb-flat btn-sm btn-light">
                     @if($programmingitem->reviewItems->count() != 0)
                         <i class="fas fa-clipboard-check text-secondary"></i>
@@ -438,7 +438,7 @@
             </td>
             @endif
             @if($canEdit && $programming->status == 'active')
-            <td class="text-center align-middle" rowspan="{{ $programmingitem->rowspan() }}"><a href="{{ route('programmingitems.show', $programmingitem->id) }}" class="btn btb-flat btn-sm btn-light"><i class="fas fa-edit"></i></a></td>
+            <td class="text-center align-middle no-print" rowspan="{{ $programmingitem->rowspan() }}"><a href="{{ route('programmingitems.show', $programmingitem->id) }}" class="btn btb-flat btn-sm btn-light"><i class="fas fa-edit"></i></a></td>
             @endif
             <td class="text-center align-middle" rowspan="{{ $programmingitem->rowspan() }}">{{ $programmingitem->activityItem->tracer ?? '' }}</td>
             <td class="text-center align-middle" rowspan="{{ $programmingitem->rowspan() }}">{{ $programmingitem->activityItem->int_code ?? '' }}</td>
@@ -473,7 +473,7 @@
             <td class="text-center align-middle" rowspan="{{ $programmingitem->rowspan() }}">{{ $programmingitem->prap_financed }}</td>
             <td class="text-center align-middle" rowspan="{{ $programmingitem->rowspan() }}">{{ $programmingitem->user->tinny_name }}</td>
             @if($canDuplicate && $programming->status == 'active')
-            <td class="text-center align-middle" rowspan="{{ $programmingitem->rowspan() }}">
+            <td class="text-center align-middle no-print" rowspan="{{ $programmingitem->rowspan() }}">
                 <form method="POST" action="{{ route('programmingitems.clone', $programmingitem->id) }}" class="small d-inline">
                     {{ method_field('POST') }} {{ csrf_field() }}
                     <button class="btn btn-sm btn-outline-secondary small" onclick="return confirm('¿Desea duplicar el registro realmente?')">
@@ -483,7 +483,7 @@
             </td>
             @endif
             @if($canDelete && $programming->status == 'active')
-            <td class="text-center align-middle" rowspan="{{ $programmingitem->rowspan() }}">
+            <td class="text-center align-middle no-print" rowspan="{{ $programmingitem->rowspan() }}">
                 <form method="POST" action="{{ route('programmingitems.destroy', $programmingitem->id) }}" class="small d-inline">
                     {{ method_field('DELETE') }} {{ csrf_field() }}
                     <button class="btn btn-sm btn-outline-danger small" onclick="return confirm('¿Desea eliminar el registro realmente?')">
@@ -526,20 +526,20 @@
 <table id="HorasIndirectas{{$activity_subtype}}" class="table table-striped  table-sm table-bordered table-condensed fixed_headers table-hover table-responsive  ">
     <thead>
         <tr class="small " style="font-size:50%;">
-            @hasanyrole('Programming: Review|Programming: Admin')
-            <form id="check-multi-items-form-{{$key}}" method="POST" action="{{ route('reviewItems.acceptItems') }}" class="small d-inline">
+            @hasanyrole('Programming: Review|Programming: Admin')                
+            <th class="text-center align-middle no-print" >
+                <form id="check-multi-items-form-{{$key}}" method="POST" action="{{ route('reviewItems.acceptItems') }}" class="small d-inline">
                 {{ method_field('POST') }} {{ csrf_field() }}
-                
-                <th class="text-center align-middle" >
-                    <button class="btn btn-sm btn-link small p-1" onclick="return confirm('¿Desea aceptar actividades seleccionadas?')" form="check-multi-items-form-{{$key}}" title="Aceptar actividades seleccionadas">
-                        <i class="fas fa-clipboard-check text-primary"></i>
-                    </button></th>
-            </form>
+                <button class="btn btn-sm btn-link small p-1" onclick="return confirm('¿Desea aceptar actividades seleccionadas?')" form="check-multi-items-form-{{$key}}" title="Aceptar actividades seleccionadas">
+                    <i class="fas fa-clipboard-check text-primary"></i>
+                </button>
+                </form>
+            </th>
             @endhasanyrole
             @if($canEvaluate)
-            <th class="text-center align-middle" > Evaluación</th>
+            <th class="text-center align-middle no-print" > Evaluación</th>
             @endif
-            @if($canEdit && $programming->status == 'active')<th class="text-left align-middle" >Editar</th>@endif
+            @if($canEdit && $programming->status == 'active')<th class="text-left align-middle no-print" >Editar</th>@endif
             <th class="text-center align-middle">CATEGORÍA</th>
             <th class="text-center align-middle">NOMBRE DE ACTIVIDAD</th>
             <th class="text-center align-middle">N° VECES AL MES</th>
@@ -557,13 +557,13 @@
             <th class="text-center align-middle">Fuente Informacion </th>
             <th class="text-center align-middle">FINANCIADA POR PRAP</th>
             <th class="text-center align-middle">Registrado por 
-                <a tabindex="0"  role="button" data-toggle="popover" data-trigger="focus" data-html="true"
+                <a tabindex="0"  role="button" data-toggle="popover" data-trigger="focus" data-html="true" class="no-print"
                 title="Tip: Búsqueda por usuario" 
                 data-content="Usa las teclas <span class='badge badge-secondary'>CTRL</span> + <span class='badge badge-secondary'>F</span> para activar el buscador de tu navegador.">
                 <i class="fas fa-info-circle fa-lg"></i></a>
             </th>
-            @if($canDuplicate && $programming->status == 'active')<th class="text-center align-middle">DUPLICAR</th>@endif
-            @if($canDelete && $programming->status == 'active')<th class="text-left align-middle" >ELIMINAR</th>@endif
+            @if($canDuplicate && $programming->status == 'active')<th class="text-center align-middle no-print">DUPLICAR</th>@endif
+            @if($canDelete && $programming->status == 'active')<th class="text-left align-middle no-print" >ELIMINAR</th>@endif
 
         </tr>
     </thead>
@@ -572,7 +572,7 @@
         @foreach($indirectProgrammingItems as $programmingitemsIndirect)
         <tr class="small">
             @hasanyrole('Programming: Review|Programming: Admin')
-            <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">
+            <td class="text-center align-middle no-print" rowspan="{{ $programmingitemsIndirect->rowspan() }}">
                 @if($programmingitemsIndirect->reviewItems->count() == 0)
                 <div class="form-check">
                     <input class="form-check-input position-static" type="checkbox" name="check_accept_item[]" value="{{$programmingitemsIndirect->id}}" aria-label="Aceptar actividad" form="check-multi-items-form-{{$key}}">
@@ -581,7 +581,7 @@
             </td>
             @endhasanyrole
             @if($canEvaluate)
-            <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">
+            <td class="text-center align-middle no-print" rowspan="{{ $programmingitemsIndirect->rowspan() }}">
                 <a href="{{ route('reviewItems.index', ['programmingItem_id' => $programmingitemsIndirect->id]) }}" class="btn btb-flat btn-sm btn-light">
                     @if($programmingitemsIndirect->reviewItems->count() != 0)
                         <i class="fas fa-clipboard-check text-secondary"></i>
@@ -605,7 +605,7 @@
             </td>
             @endif
             @if($canEdit && $programming->status == 'active')
-            <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}"><a href="{{ route('programmingitems.show', $programmingitemsIndirect->id) }}" class="btn btb-flat btn-sm btn-light"><i class="fas fa-edit"></i></a></td>
+            <td class="text-center align-middle no-print" rowspan="{{ $programmingitemsIndirect->rowspan() }}"><a href="{{ route('programmingitems.show', $programmingitemsIndirect->id) }}" class="btn btb-flat btn-sm btn-light"><i class="fas fa-edit"></i></a></td>
             @endif
             <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">{{ $programmingitemsIndirect->activity_category }}</td>
             <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">{{ $programmingitemsIndirect->activity_name }}</td>
@@ -627,7 +627,7 @@
             <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">{{ $programmingitemsIndirect->prap_financed }}</td>
             <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">{{ $programmingitemsIndirect->user->tinny_name }}</td>
             @if($canDuplicate && $programming->status == 'active')
-            <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">
+            <td class="text-center align-middle no-print" rowspan="{{ $programmingitemsIndirect->rowspan() }}">
                 <form method="POST" action="{{ route('programmingitems.clone', $programmingitemsIndirect->id) }}" class="small d-inline">
                     {{ method_field('POST') }} {{ csrf_field() }}
                     <button class="btn btn-sm btn-outline-secondary small" onclick="return confirm('¿Desea duplicar el registro realmente?')">
@@ -637,7 +637,7 @@
             </td>
             @endif
             @if($canDelete && $programming->status == 'active')
-            <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">
+            <td class="text-center align-middle no-print" rowspan="{{ $programmingitemsIndirect->rowspan() }}">
                 <form method="POST" action="{{ route('programmingitems.destroy', $programmingitemsIndirect->id) }}" class="small d-inline">
                     {{ method_field('DELETE') }} {{ csrf_field() }}
                     <button class="btn btn-sm btn-outline-danger small" onclick="return confirm('¿Desea eliminar el registro realmente?')">
@@ -680,20 +680,20 @@
 <table id="HorasIndirectas" class="table table-striped  table-sm table-bordered table-condensed fixed_headers table-hover table-responsive  ">
     <thead>
         <tr class="small " style="font-size:50%;">
-            @hasanyrole('Programming: Review|Programming: Admin')
-            <form id="check-multi-items-form-indirect" method="POST" action="{{ route('reviewItems.acceptItems') }}" class="small d-inline">
+            @hasanyrole('Programming: Review|Programming: Admin')    
+            <th class="text-center align-middle no-print" >
+                <form id="check-multi-items-form-indirect" method="POST" action="{{ route('reviewItems.acceptItems') }}" class="small d-inline">
                 {{ method_field('POST') }} {{ csrf_field() }}
-                
-                <th class="text-center align-middle" >
-                    <button class="btn btn-sm btn-link small p-1" onclick="return confirm('¿Desea aceptar actividades seleccionadas?')" form="check-multi-items-form-indirect" title="Aceptar actividades seleccionadas">
-                        <i class="fas fa-clipboard-check text-primary"></i>
-                    </button></th>
-            </form>
+                <button class="btn btn-sm btn-link small p-1" onclick="return confirm('¿Desea aceptar actividades seleccionadas?')" form="check-multi-items-form-indirect" title="Aceptar actividades seleccionadas">
+                    <i class="fas fa-clipboard-check text-primary"></i>
+                </button>
+                </form>
+            </th>
             @endhasanyrole
             @if($canEvaluate)
-            <th class="text-left align-middle" > Evaluación</th>
+            <th class="text-left align-middle no-print" > Evaluación</th>
             @endif
-            @if($canEdit && $programming->status == 'active')<th class="text-left align-middle" >Editar</th>@endif
+            @if($canEdit && $programming->status == 'active')<th class="text-left align-middle no-print" >Editar</th>@endif
             <th class="text-center align-middle">T</th>
             <th class="text-center align-middle">Nº Trazadora</th>
             <th class="text-center align-middle">CICLO</th>
@@ -717,13 +717,13 @@
             <th class="text-center align-middle">Fuente Informacion </th>
             <th class="text-center align-middle">FINANCIADA POR PRAP</th>
             <th class="text-center align-middle">Registrado por 
-                <a tabindex="0"  role="button" data-toggle="popover" data-trigger="focus" data-html="true"
+                <a tabindex="0"  role="button" data-toggle="popover" data-trigger="focus" data-html="true" class="no-print"
                 title="Tip: Búsqueda por usuario" 
                 data-content="Usa las teclas <span class='badge badge-secondary'>CTRL</span> + <span class='badge badge-secondary'>F</span> para activar el buscador de tu navegador.">
                 <i class="fas fa-info-circle fa-lg"></i></a>
             </th>
-            @if($canDuplicate && $programming->status == 'active')<th class="text-center align-middle">DUPLICAR</th>@endif
-            @if($canDelete && $programming->status == 'active')<th class="text-left align-middle" >ELIMINAR</th>@endif
+            @if($canDuplicate && $programming->status == 'active')<th class="text-center align-middle no-print">DUPLICAR</th>@endif
+            @if($canDelete && $programming->status == 'active')<th class="text-left align-middle no-print" >ELIMINAR</th>@endif
 
         </tr>
     </thead>
@@ -732,7 +732,7 @@
         @foreach($indirectProgrammingItems as $programmingitemsIndirect)
         <tr class="small">
             @hasanyrole('Programming: Review|Programming: Admin')
-            <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">
+            <td class="text-center align-middle no-print" rowspan="{{ $programmingitemsIndirect->rowspan() }}">
                 @if($programmingitemsIndirect->reviewItems->count() == 0)
                 <div class="form-check">
                     <input class="form-check-input position-static" type="checkbox" name="check_accept_item[]" value="{{$programmingitemsIndirect->id}}" aria-label="Aceptar actividad" form="check-multi-items-form-indirect">
@@ -741,7 +741,7 @@
             </td>
             @endhasanyrole
             @if($canEvaluate)
-            <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">
+            <td class="text-center align-middle no-print" rowspan="{{ $programmingitemsIndirect->rowspan() }}">
                 <a href="{{ route('reviewItems.index', ['programmingItem_id' => $programmingitemsIndirect->id]) }}" class="btn btb-flat btn-sm btn-light">
                     {{--@if($programmingitemsIndirect->getCountReviewsBy('Not rectified') > 0)
                     <i class="fas fa-clipboard-check text-danger"></i>
@@ -772,7 +772,7 @@
             </td>
             @endif
             @if($canEdit && $programming->status == 'active')
-            <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}"><a href="{{ route('programmingitems.show', $programmingitemsIndirect->id) }}" class="btn btb-flat btn-sm btn-light"><i class="fas fa-edit"></i></a></td>
+            <td class="text-center align-middle no-print" rowspan="{{ $programmingitemsIndirect->rowspan() }}"><a href="{{ route('programmingitems.show', $programmingitemsIndirect->id) }}" class="btn btb-flat btn-sm btn-light"><i class="fas fa-edit"></i></a></td>
             @endif
             <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">{{ $programmingitemsIndirect->activityItem->tracer ?? '' }}</td>
             <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">{{ $programmingitemsIndirect->activityItem->int_code ?? '' }}</td>
@@ -807,7 +807,7 @@
             <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">{{ $programmingitemsIndirect->prap_financed }}</td>
             <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">{{ $programmingitemsIndirect->user->tinny_name }}</td>
             @if($canDuplicate && $programming->status == 'active')
-            <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">
+            <td class="text-center align-middle no-print" rowspan="{{ $programmingitemsIndirect->rowspan() }}">
                 <form method="POST" action="{{ route('programmingitems.clone', $programmingitemsIndirect->id) }}" class="small d-inline">
                     {{ method_field('POST') }} {{ csrf_field() }}
                     <button class="btn btn-sm btn-outline-secondary small" onclick="return confirm('¿Desea duplicar el registro realmente?')">
@@ -817,7 +817,7 @@
             </td>
             @endif
             @if($canDelete && $programming->status == 'active')
-            <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">
+            <td class="text-center align-middle no-print" rowspan="{{ $programmingitemsIndirect->rowspan() }}">
                 <form method="POST" action="{{ route('programmingitems.destroy', $programmingitemsIndirect->id) }}" class="small d-inline">
                     {{ method_field('DELETE') }} {{ csrf_field() }}
                     <button class="btn btn-sm btn-outline-danger small" onclick="return confirm('¿Desea eliminar el registro realmente?')">
@@ -859,20 +859,20 @@
 <table id="HorasDirectasTaller" class="table table-striped  table-sm table-bordered table-condensed fixed_headers table-hover table-responsive  ">
     <thead>
         <tr class="small " style="font-size:55%;">
-            @hasanyrole('Programming: Review|Programming: Admin')
-            <form id="check-multi-items-form-talleres" method="POST" action="{{ route('reviewItems.acceptItems') }}" class="small d-inline">
-            {{ method_field('POST') }} {{ csrf_field() }}
-            
-            <th class="text-center align-middle" >
+            @hasanyrole('Programming: Review|Programming: Admin')    
+            <th class="text-center align-middle no-print" >
+                <form id="check-multi-items-form-talleres" method="POST" action="{{ route('reviewItems.acceptItems') }}" class="small d-inline">
+                {{ method_field('POST') }} {{ csrf_field() }}
                 <button class="btn btn-sm btn-link small p-1" onclick="return confirm('¿Desea aceptar actividades seleccionadas?')" form="check-multi-items-form-talleres" title="Aceptar actividades seleccionadas">
                     <i class="fas fa-clipboard-check text-primary"></i>
-                </button></th>
-            </form>
+                </button>
+                </form>
+            </th>
             @endhasanyrole
             @if($canEvaluate)
-            <th class="text-left align-middle" > Evaluación</th>
+            <th class="text-left align-middle no-print" > Evaluación</th>
             @endif
-            @if($canEdit && $programming->status == 'active')<th class="text-center align-middle" >Editar</th>@endif
+            @if($canEdit && $programming->status == 'active')<th class="text-center align-middle no-print" >Editar</th>@endif
             <th class="text-center align-middle">T</th>
             <th class="text-center align-middle">Nº Trazadora</th>
             <th class="text-center align-middle">TIPO</th>
@@ -899,13 +899,13 @@
             <th class="text-center align-middle">Fuente Informacion </th>
             <th class="text-center align-middle">FINANCIADA POR PRAP</th>
             <th class="text-center align-middle">Registrado por 
-                <a tabindex="0"  role="button" data-toggle="popover" data-trigger="focus" data-html="true"
+                <a tabindex="0"  role="button" data-toggle="popover" data-trigger="focus" data-html="true" class="no-print"
                 title="Tip: Búsqueda por usuario" 
                 data-content="Usa las teclas <span class='badge badge-secondary'>CTRL</span> + <span class='badge badge-secondary'>F</span> para activar el buscador de tu navegador.">
                 <i class="fas fa-info-circle fa-lg"></i></a>
             </th>
-            @if($canDuplicate && $programming->status == 'active')<th class="text-center align-middle">DUPLICAR</th>@endif
-            @if($canDelete && $programming->status == 'active')<th class="text-left align-middle" >ELIMINAR</th>@endif
+            @if($canDuplicate && $programming->status == 'active')<th class="text-center align-middle no-print">DUPLICAR</th>@endif
+            @if($canDelete && $programming->status == 'active')<th class="text-left align-middle no-print" >ELIMINAR</th>@endif
 
         </tr>
     </thead>
@@ -914,7 +914,7 @@
         @foreach($workshopProgrammingItems as $programmingItemworkshop)
         <tr class="small">
             @hasanyrole('Programming: Review|Programming: Admin')
-            <td class="text-center align-middle" rowspan="{{ $programmingItemworkshop->rowspan() }}">
+            <td class="text-center align-middle no-print" rowspan="{{ $programmingItemworkshop->rowspan() }}">
                 @if($programmingItemworkshop->reviewItems->count() == 0)
                 <div class="form-check">
                     <input class="form-check-input position-static" type="checkbox" name="check_accept_item[]" value="{{$programmingItemworkshop->id}}" aria-label="Aceptar actividad" form="check-multi-items-form-talleres">
@@ -923,7 +923,7 @@
             </td>
             @endhasanyrole
             @if($canEvaluate)
-            <td class="text-center align-middle" rowspan="{{ $programmingItemworkshop->rowspan() }}">
+            <td class="text-center align-middle no-print" rowspan="{{ $programmingItemworkshop->rowspan() }}">
                 <a href="{{ route('reviewItems.index', ['programmingItem_id' => $programmingItemworkshop->id]) }}" class="btn btb-flat btn-sm btn-light">
                     {{--@if($programmingItemworkshop->getCountReviewsBy('Not rectified') > 0)
                     <i class="fas fa-clipboard-check text-danger"></i>
@@ -954,7 +954,7 @@
             </td>
             @endif
             @if($canEdit && $programming->status == 'active')
-            <td class="text-center align-middle" rowspan="{{ $programmingItemworkshop->rowspan() }}"><a href="{{ route('programmingitems.show', $programmingItemworkshop->id) }}" class="btn btb-flat btn-sm btn-light"><i class="fas fa-edit"></i></a></td>
+            <td class="text-center align-middle no-print" rowspan="{{ $programmingItemworkshop->rowspan() }}"><a href="{{ route('programmingitems.show', $programmingItemworkshop->id) }}" class="btn btb-flat btn-sm btn-light"><i class="fas fa-edit"></i></a></td>
             @endif
             <td class="text-center align-middle" rowspan="{{ $programmingItemworkshop->rowspan() }}">{{ $programmingItemworkshop->activityItem->tracer ?? '' }}</td>
             <td class="text-center align-middle" rowspan="{{ $programmingItemworkshop->rowspan() }}">{{ $programmingItemworkshop->activityItem->int_code ?? '' }}</td>
@@ -990,7 +990,7 @@
             <td class="text-center align-middle" rowspan="{{ $programmingItemworkshop->rowspan() }}">{{ $programmingItemworkshop->prap_financed }}</td>
             <td class="text-center align-middle" rowspan="{{ $programmingItemworkshop->rowspan() }}">{{ $programmingItemworkshop->user->tinny_name }}</td>
             @if($canDuplicate && $programming->status == 'active')
-            <td class="text-center align-middle" rowspan="{{ $programmingItemworkshop->rowspan() }}">
+            <td class="text-center align-middle no-print" rowspan="{{ $programmingItemworkshop->rowspan() }}">
                 <form method="POST" action="{{ route('programmingitems.clone', $programmingItemworkshop->id) }}" class="small d-inline">
                     {{ method_field('POST') }} {{ csrf_field() }}
                     <button class="btn btn-sm btn-outline-secondary small" onclick="return confirm('¿Desea duplicar el registro realmente?')">
@@ -1000,7 +1000,7 @@
             </td>
             @endif
             @if($canDelete && $programming->status == 'active')
-            <td class="text-center align-middle" rowspan="{{ $programmingItemworkshop->rowspan() }}">
+            <td class="text-center align-middle no-print" rowspan="{{ $programmingItemworkshop->rowspan() }}">
                 <form method="POST" action="{{ route('programmingitems.destroy', $programmingItemworkshop->id) }}" class="small d-inline">
                     {{ method_field('DELETE') }} {{ csrf_field() }}
                     <button class="btn btn-sm btn-outline-danger small" onclick="return confirm('¿Desea eliminar el registro realmente?')">
@@ -1036,8 +1036,20 @@
 <script type="text/javascript" src="https://unpkg.com/xlsx@0.18.0/dist/xlsx.full.min.js"></script>  
 <script>
     function tableExcel(table, type, fn, dl) {
-        var elt = document.getElementById(`${table}`);
-        var wb = XLSX.utils.table_to_book(elt, {sheet:"Sheet JS"});
+        var elt = document.getElementById(`${table}`).cloneNode( true );
+
+        var rows = elt.getElementsByTagName('tr');
+        // iterate through rows
+        for (var i = 0; i < rows.length; i++) {
+            // get cells with className 'extra'
+            var cells = rows[i].getElementsByClassName('no-print');
+            // delete cells 
+            while (cells.length > 0) {
+                cells[0].parentNode.removeChild(cells[0]);
+            }
+        }
+
+        var wb = XLSX.utils.table_to_book(elt, {sheet:"Sheet JS", raw: false});
         return dl ?
         XLSX.write(wb, {bookType:type, bookSST:true, type: 'base64'}) :
         XLSX.writeFile(wb, `${table}.xlsx`)

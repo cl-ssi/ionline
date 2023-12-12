@@ -30,7 +30,7 @@
                 <label for="reception-date">Tipo de documento*</label>
                 <select id="document_type"
                     class="form-select @error('reception.dte_type') is-invalid @enderror"
-                    wire:model="reception.dte_type">
+                    wire:model.defer="reception.dte_type">
                     <option></option>
                     <option value ="factura_electronica">Factura Electronica Afecta</option>
                     <option value ="factura_exenta">Factura Electronica Exenta</option>
@@ -99,7 +99,7 @@
                         <label for="reception-date">Fecha acta*</label>
                         <input type="date"
                             class="form-control @error('reception.date') is-invalid @enderror"
-                            wire:model="reception.date">
+                            wire:model.defer="reception.date">
                         @error('reception.date')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -108,7 +108,7 @@
                 <div class="form-group col-md-2">
                     <label for="form-reception-type">Tipo de acta*</label>
                     <select class="form-select @error('reception.reception_type_id') is-invalid @enderror"
-                        wire:model="reception.reception_type_id">
+                        wire:model.defer="reception.reception_type_id">
                         <option value=""></option>
                         @foreach ($types as $id => $type)
                             <option value="{{ $id }}">{{ $type }}</option>
@@ -125,7 +125,7 @@
                         <input type="text"
                             class="form-control"
                             placeholder="opcional"
-                            wire:model="reception.internal_number">
+                            wire:model.defer="reception.internal_number">
                         <div class="form-text">En caso que la unidad tenga su propio correlativo</div>
                     </div>
                 </div>

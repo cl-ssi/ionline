@@ -75,7 +75,13 @@ class CreateReceptionNoOc extends Component
             'date' => $this->reception['date'],
             'creator_id' => auth()->user()->id,
             'creator_ou_id' => auth()->user()->organizational_unit_id,
-            'establishment_id' => auth()->user()->organizationalUnit->establishment_id
+            'responsable_id' => auth()->user()->id,
+            'responsable_ou_id' => auth()->user()->organizational_unit_id,
+            'establishment_id' => auth()->user()->organizationalUnit->establishment_id,
+            'dte_id' => $dte_manual->id,
+            'dte_type' => $this->reception['dte_type'],
+            'header_notes' => $this->reception['header_notes'],
+            'total' => $this->montoTotal,
         ]);
 
         session()->flash('success', 'Su acta sin OC fue creada exitosamente.');

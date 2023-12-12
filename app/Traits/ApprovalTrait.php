@@ -20,10 +20,28 @@ trait ApprovalTrait
          * Muestra el modal
          */
         $this->showModal = 'd-block';
-        $this->approvalSelected = $approval;
-        $this->approver_observation = null;
-        $this->otp = null;
-        $this->message = null;
+
+        /** Soy manager de alguna OU hoy? */
+        $ous = auth()->user()->amIAuthorityFromOu->pluck('organizational_unit_id')->toArray();
+
+        /** Mostrar sólo approvals activos */
+        if($approval->active ) {
+            /** Mostrar sólo approvals que me pertenecen */
+            if( auth()->id() == $approval->sent_to_user_id OR in_array($approval->sent_to_ou_id, $ous) ) {
+                $this->approvalSelected = $approval;
+                $this->approver_observation = null;
+                $this->otp = null;
+                $this->message = null;
+            }
+            else {
+                session()->flash('danger','La aprobación no le pertenece');
+                $this->dismiss();
+            }
+        }
+        else {
+            session()->flash('danger','La aprobación está inactiva');
+            $this->dismiss();
+        }
     }
 
     /**

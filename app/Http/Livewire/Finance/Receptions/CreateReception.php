@@ -47,36 +47,39 @@ class CreateReception extends Component
      */
     public function rules()
     {
+        /* Pasar a mayúsuculas la OC y hacerle un trim */
+        $this->reception['purchase_order'] = trim(strtoupper($this->reception['purchase_order']));
+
         $reception = [
-            'selectedDteId' => 'required',
-            'reception.number' => 'nullable',
-            'reception.date' => 'required|date_format:Y-m-d',
+            'selectedDteId'             => 'required',
+            'reception.number'          => 'nullable',
+            'reception.date'            => 'required|date_format:Y-m-d',
             'reception.reception_type_id' => 'required',
-            'reception.purchase_order' => 'nullable',
-            'reception.header_notes' => 'nullable',
-            'reception.footer_notes' => 'nullable',
+            'reception.purchase_order'  => 'nullable',
+            'reception.header_notes'    => 'nullable',
+            'reception.footer_notes'    => 'nullable',
             'reception.partial_reception' => 'required|boolean',
-            'reception.dte_type' => 'required',
-            'reception.dte_number' => 'nullable',
-            'reception.dte_date' => 'nullable|date_format:Y-m-d',
-            'reception.neto' => 'nullable',
-            'reception.descuentos' => 'nullable',
-            'reception.cargos' => 'nullable',
-            'reception.subtotal' => 'nullable',
-            'reception.iva' => 'nullable',
-            'reception.total' => 'nullable',
-            'reception.establishment_id' => 'nullable',
-            'reception.creator_id' => 'nullable',
-            'reception.creator_ou_id' => 'nullable',
-            'receptionItemsWithCantidad' => 'required|array|min:1',
-            'file_signed' => 'nullable|mimes:pdf|max:2048',
-            'approvals' => 'required|array|min:1',
+            'reception.dte_type'        => 'required',
+            'reception.dte_number'      => 'nullable',
+            'reception.dte_date'        => 'nullable|date_format:Y-m-d',
+            'reception.neto'            => 'nullable',
+            'reception.descuentos'      => 'nullable',
+            'reception.cargos'          => 'nullable',
+            'reception.subtotal'        => 'nullable',
+            'reception.iva'             => 'nullable',
+            'reception.total'           => 'nullable',
+            'reception.establishment_id'=> 'nullable',
+            'reception.creator_id'      => 'nullable',
+            'reception.creator_ou_id'   => 'nullable',
+            'receptionItemsWithCantidad'=> 'required|array|min:1',
+            'file_signed'               => 'nullable|mimes:pdf|max:2048',
+            'approvals'                 => 'required|array|min:1',
         ];
 
 
         if( !empty($this->maxItemQuantity) ) {
             foreach($this->receptionItems as $key => $item) {
-                $reception['receptionItems.'.$key.'.Cantidad'] = 'nullable|numeric|min:1|max:'.$this->maxItemQuantity[$key];
+                $reception['receptionItems.'.$key.'.Cantidad'] = 'nullable|numeric|min:0|max:'.$this->maxItemQuantity[$key];
             }
         }
 

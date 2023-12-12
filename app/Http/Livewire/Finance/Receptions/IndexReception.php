@@ -26,7 +26,7 @@ class IndexReception extends Component
     public function mount()
     {
         $this->types = ReceptionType::where('establishment_id',auth()->user()->organizationalUnit->establishment_id)
-        ->pluck('name','id')->toArray();
+            ->pluck('name','id')->toArray();
     }
 
     public function render()
@@ -43,7 +43,6 @@ class IndexReception extends Component
             ->with([
                 'items',
                 'purchaseOrder',
-                'receptionType',
                 'responsable',
                 'approvals',
                 'approvals.approver',
@@ -53,8 +52,11 @@ class IndexReception extends Component
                 'approvals.sentToUser',
                 'numeration',
                 'files',
+                'supportFile',
+                'signedFileLegacy',
             ])
-            ->where('creator_id', auth()->id())
+            //->where('creator_id', auth()->id())
+            ->where('establishment_id', auth()->user()->organizationalUnit->establishment_id)
             ->orderByDesc('id')
             ->when($this->filter_id, function($query) {
                 $query->where('id', $this->filter_id);
