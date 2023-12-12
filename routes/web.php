@@ -282,6 +282,7 @@ use App\Http\Controllers\Agreements\SignerController;
 use App\Http\Controllers\Agreements\ProgramResolutionController;
 use App\Http\Controllers\Agreements\AgreementController;
 use App\Http\Controllers\Agreements\AddendumController;
+use App\Http\Controllers\IdentifyNeeds\IdentifyNeedController;
 
 /*
 |--------------------------------------------------------------------------
@@ -429,6 +430,7 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->middleware(['auth'
         Route::get('/to_select/{requestReplacementStaff}', [RequestReplacementStaffController::class, 'to_select'])->name('to_select');
         Route::get('/to_sign_index', [RequestReplacementStaffController::class, 'to_sign_index'])->name('to_sign_index');
         Route::get('/to_sign/{requestReplacementStaff}', [RequestReplacementStaffController::class, 'to_sign'])->name('to_sign');
+        Route::get('/to_sign_approval/{request_replacement_staff_id}', [RequestReplacementStaffController::class, 'to_sign_approval'])->name('to_sign_approval');
         Route::get('/show_file/{requestReplacementStaff}', [RequestReplacementStaffController::class, 'show_file'])->name('show_file');
         Route::get('/download/{requestReplacementStaff}', [RequestReplacementStaffController::class, 'download'])->name('download');
         Route::get('/show_file_position/{position}', [RequestReplacementStaffController::class, 'show_file_position'])->name('show_file_position');
@@ -2567,6 +2569,13 @@ Route::prefix('news')->as('news.')->middleware(['auth', 'must.change.password'])
     Route::get('/show/{news}', [NewsController::class, 'show'])->name('show');
     Route::get('/edit/{news}', [NewsController::class, 'edit'])->name('edit')->middleware(['permission:News: create']);
     Route::get('/view_image/{news}', [NewsController::class, 'view_image'])->name('view_image');
+});
+
+Route::prefix('identify_need')->as('identify_need.')->middleware(['auth', 'must.change.password'])->group(function () {
+    Route::get('/', [IdentifyNeedController::class, 'index'])->name('index')->middleware(['permission:Identify Need: create']);
+    Route::get('/own_index', [IdentifyNeedController::class, 'own_index'])->name('own_index')->middleware(['permission:Identify Need: create']);
+    Route::get('/create', [IdentifyNeedController::class, 'create'])->name('create')->middleware(['permission:Identify Need: create']);
+    Route::get('/edit/{identifyNeed}', [IdentifyNeedController::class, 'edit'])->name('edit')->middleware(['permission:News: create']);
 });
 
 /** RUTAS PARA EXTERNAL  */
