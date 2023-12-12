@@ -2024,7 +2024,6 @@ Route::prefix('finance')->as('finance.')->middleware(['auth', 'must.change.passw
 
     Route::get('/{dte}/download', [DteController::class, 'downloadManualDteFile'])->name('dtes.downloadManualDteFile');
 
-    Route::get('dte/pending-receipt-certificate/{tray?}', [DteController::class, 'pendingReceiptCertificate'])->name('dtes.pendingReceiptCertificate');
     Route::post('dte/save-file/{dte}', [DteController::class, 'saveFile'])->name('dtes.saveFile');
 
     Route::get('dtes/upload', UploadDtes::class)->name('dtes.upload');

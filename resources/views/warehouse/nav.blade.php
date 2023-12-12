@@ -139,15 +139,4 @@
             </a>
         </li>
     @endcan
-    @can('be god')
-    <li class="nav-item">
-            <a
-                class="nav-link {{ active('finance.dtes.pendingReceiptCertificate') }}"
-                aria-current="page"
-                href="{{route('finance.dtes.pendingReceiptCertificate', ['tray' => 'bienes'])}}"
-            >
-                <i class="fas fa-tasks"></i> Dtes Pendiente de Asignar Acta
-            </a>
-        </li>
-    @endcan
 </ul>
