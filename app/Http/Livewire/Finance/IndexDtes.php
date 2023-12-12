@@ -176,6 +176,14 @@ class IndexDtes extends Component
         ]);
         $dte->invoices()->sync($this->asociate_invoices);
 
+        
+        if($dte->receptions->first())
+        {            
+            //Una guía tiene una o mas recepciones, buscar las facturas asociadas a esa guía y a esa factura asociarle la recepción de la guia
+            $dte->receptions->first()->dte_id = $dte->invoices->first()->id;
+            $dte->receptions->first()->save();
+        }
+
 
         if (
             $dte->confirmation_status !== null &&
@@ -200,8 +208,7 @@ class IndexDtes extends Component
                     'upload_user_id' => $dte->upload_user_id,
                     'cenabast_signed_pharmacist' => $dte->cenabast_signed_pharmacist,
                     'cenabast_signed_boss' => $dte->cenabast_signed_boss,
-
-                ]);
+                ]);                
             }
         }
         $this->showEdit = null;

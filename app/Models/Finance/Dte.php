@@ -191,8 +191,14 @@ class Dte extends Model implements Auditable
     /** Tiene muchos receptions */
     public function receptions()
     {
-        return $this->hasMany(Reception::class);
-    }
+        if($this->tipo_documento =='guias_despacho')
+        {
+            return $this->hasMany(Reception::class, 'guia_id');
+        }
+        else{
+            return $this->hasMany(Reception::class);
+        }
+    }    
      
 
     /**
