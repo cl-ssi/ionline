@@ -66,9 +66,9 @@
                     <th>ID</th>
                     <th>OC</th>
                     <th>Proveedor</th>
-                    <th>Tipo</th>
                     <th>Items</th>
                     <th>Total</th>
+                    <th>Responsable</th>
                     <th>Fecha Recepción</th>
                     <th>Orig.</th>
                     <th>Aprobaciones</th>
@@ -96,14 +96,14 @@
                         <td>
                             {{ $reception->purchaseOrder?->json->Listado[0]->Proveedor->Nombre }}
                         </td>
-                        <td>
-                            {{ $reception->receptionType?->name }}
-                        </td>
                         <td class="text-center">
                             {{ $reception->items->count() }} 
                         </td>
                         <td class="text-end" nowrap>
                             $ {{ money($reception->total) }}
+                        </td>
+                        <td>
+                            {{ $reception->responsable?->shortName }}
                         </td>
                         <td class="text-center">
                             {{ $reception->date?->format('Y-m-d') }}
