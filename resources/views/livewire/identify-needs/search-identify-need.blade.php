@@ -4,10 +4,10 @@
             <thead>
                 <tr class="text-center">
                     <th width="5%">ID</th>
-                    <th width="8%">Fecha Creación</th>
-                    <th width="8%">Estado</th>
-                    <th width="35%">Nombre de la Actividad</th>
-                    <th width="35%">Creador / Unidad Organizacional</th>
+                    <th width="9%">Fecha Creación</th>
+                    <th width="26%">Asunto</th>
+                    <th width="26%">Causa, Necesidad o Problemática</th>
+                    <th width="26%">Creador / Unidad Organizacional</th>
                     <th width="8%"></th>
                 </tr>
             </thead>
@@ -16,8 +16,8 @@
                 <tr>
                     <td class="text-center">{{ $identifyNeed->id }}</td>
                     <td class="text-center">{{ $identifyNeed->created_at->format('d-m-Y H:i:s') }}</td>
-                    <td></td>
-                    <td></td>
+                    <td>{{ $identifyNeed->subject }}</td>
+                    <td>{{ Str::limit($identifyNeed->reason, 120) }}</td>
                     <td class="text-center">
                         {{ $identifyNeed->user->FullName }} <br>
                         <b><small>{{ $identifyNeed->organizationalUnit->name }}</small></b>
