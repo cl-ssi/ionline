@@ -16,7 +16,7 @@ class IdentifyNeed extends Model implements Auditable
     use \OwenIt\Auditing\Auditable;
 
     protected $fillable = [
-        'reason', 'behaviors', 'performance_evaluation', 'observation_of_performance', 'report_from_other_users',
+        'subject', 'reason', 'behaviors', 'performance_evaluation', 'observation_of_performance', 'report_from_other_users',
         'organizational_unit_indicators', 'other',
         'goal', 'expected_results','longterm_impact','immediate_results','performance_goals',
         'current_training_level','need_training_level','expertise_required',
