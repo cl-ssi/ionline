@@ -78,6 +78,7 @@ class SignatureController extends Controller
                 ->whereIn('responsable_id', $users)
                 ->where(function($query) use ($request) {
                     $query->where('subject', 'LIKE', '%'.$request->search.'%')
+                        ->orWhere('id','=', $request->search)
                         ->orWhere('description','LIKE', '%'.$request->search.'%');
                 });
 
@@ -86,8 +87,9 @@ class SignatureController extends Controller
                 $authoritiesSignatures = Signature::where('responsable_id', $myAuthority->user_id)
                 ->whereBetween('created_at', [$myAuthority->from, $myAuthority->to])
                 ->where(function($query) use ($request) {
-                    $query->where('subject', 'LIKE', '%'.$request->search.'%')
-                        ->orWhere('description','LIKE', '%'.$request->search.'%');
+                    $query->where('subject', 'like', $search)
+                        ->orWhere('id','=', $request->search)
+                        ->orWhere('description', 'like', $search);
                 });
 
                 $mySignatures = $mySignatures->unionAll($authoritiesSignatures);
@@ -104,9 +106,10 @@ class SignatureController extends Controller
                     $q->whereNull('rejected_at');
                 })
 
-                ->when($request->search, function($query) use($search) {
-                    $query->whereHas('signaturesFile.signature', function ($query) use($search) {
+                ->when($request->search, function($query) use($search, $request) {
+                    $query->whereHas('signaturesFile.signature', function ($query) use($search, $request) {
                         $query->where('subject', 'like', $search)
+                            ->orWhere('id','=', $request->search)
                             ->orWhere('description', 'like', $search);
                     });
                 });
@@ -122,6 +125,7 @@ class SignatureController extends Controller
                     ->whereBetween('signature_date', [$myAuthority->from, $myAuthority->to])
                     ->whereHas('signaturesFile.signature', function ($q) use ($request){
                         $q->where('subject', 'LIKE', '%'.$request->search.'%')
+                            ->orWhere('id','=', $request->search)
                             ->orWhere('description','LIKE', '%'.$request->search.'%');
                     });
 
@@ -140,9 +144,10 @@ class SignatureController extends Controller
                             $q->whereNotNull('rejected_at');
                         });
                 })
-                ->when($request->search, function($query) use($search) {
-                    $query->whereHas('signaturesFile.signature', function ($query) use($search) {
+                ->when($request->search, function($query) use($search, $request) {
+                    $query->whereHas('signaturesFile.signature', function ($query) use($search, $request) {
                         $query->where('subject', 'like', $search)
+                            ->orWhere('id','=', $request->search)
                             ->orWhere('description', 'like', $search);
                     });
                 });
@@ -159,15 +164,17 @@ class SignatureController extends Controller
                 ->whereBetween('signature_date', [$myAuthority->from, $myAuthority->to])
                 ->whereHas('signaturesFile.signature', function ($q) use ($request){
                     $q->where('subject', 'LIKE', '%'.$request->search.'%')
+                        ->orWhere('id','=', $request->search)
                         ->orWhere('description','LIKE', '%'.$request->search.'%');
                 });
 
                 $signedSignaturesFlows = $signedSignaturesFlows->unionAll($authoritiesSignedSignaturesFlows);
             }
 
-            $signedSignaturesFlows = $signedSignaturesFlows->when($request->search, function($query) use($search) {
-                $query->whereHas('signaturesFile.signature', function ($query) use($search) {
+            $signedSignaturesFlows = $signedSignaturesFlows->when($request->search, function($query) use($search, $request) {
+                $query->whereHas('signaturesFile.signature', function ($query) use($search, $request) {
                     $query->where('subject', 'like', $search)
+                        ->orWhere('id','=', $request->search)
                         ->orWhere('description', 'like', $search);
                 });
             });
