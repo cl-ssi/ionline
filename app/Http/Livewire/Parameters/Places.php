@@ -110,7 +110,7 @@ class Places extends Component
     public function delete(Place $place)
     {
         
-        if ($place->inventories->isEmpty()) {
+        if ($place->inventories->isEmpty() and $place->inventoryMovements->isEmpty()) {
             $place->delete();
             $this->mount($this->establishment);
             session()->flash('info', 'El lugar fue borrado exitosamente');

@@ -4,6 +4,7 @@ namespace App\Models\Parameters;
 
 use App\Models\Establishment;
 use App\Models\Inv\Inventory;
+use App\Models\Inv\inventoryMovement;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -54,6 +55,11 @@ class Place extends Model
     public function inventories()
     {
         return $this->hasMany(Inventory::class, 'place_id');
+    }
+
+    public function inventoryMovements()
+    {
+        return $this->hasMany(InventoryMovement::class, 'place_id');
     }
 
 

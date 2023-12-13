@@ -35,7 +35,7 @@
                 type="text"
                 class="form-control form-control-sm"
                 id="place-{{ $movement->id }}"
-                value="{{ $movement->place->location->name }}, {{ $movement->place->name }}"
+                value="{{ $movement->place?->location->name }}, {{ $movement->place?->name }}"
                 readonly
             >
         </fieldset>
