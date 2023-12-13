@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Pharmacies;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Pharmacies\Batch;
 use App\Models\Pharmacies\Dispatch;
+use App\Models\Pharmacies\DispatchItem;
 use App\Models\Pharmacies\DispatchVerificationMailing;
 use App\Models\Pharmacies\Establishment;
 use App\Models\Pharmacies\File;
@@ -581,6 +583,123 @@ class DispatchController extends Controller
 
       session()->flash('success', 'La recepción fué ingresada.');
       return redirect()->back();
+    }
+
+    public function dispatchingProductsWs(Request $request){
+        try {
+
+            $dataArray = json_decode($request->getContent(), true);
+
+            // encabezado
+
+            // if (!isset($dataArray['dispatch']['notes']) || $dataArray['dispatch']['notes'] == '') {
+            //     $responseArray = ['status' => false,'message' => 'Debe ingresar "notes"'];
+            //     return json_encode($responseArray);
+            // }
+
+            if (!isset($dataArray['dispatch']['establishment_id']) || $dataArray['dispatch']['establishment_id'] == '') {
+                $responseArray = ['status' => false, 'message' => 'Debe ingresar "establishment_id" (Destino)'];
+                return json_encode($responseArray);
+            }
+
+            
+
+            foreach($dataArray['dispatch_items'] as $dispatch_item){
+                
+                // producto
+
+                if (!isset($dispatch_item['product']['experto_id']) || $dispatch_item['product']['experto_id'] == '') {
+                    $responseArray = ['status' => false,'message' => 'Debe ingresar "experto_id"'];
+                    return json_encode($responseArray);
+                }
+    
+                //se verifica existencia del producto de ingreso
+                $product = Product::where('experto_id',$dispatch_item['product']['experto_id'])->first();
+    
+                if(!$product){
+                    $responseArray = ['status' => false, 'message' => 'El producto (experto_id), no existe en Ionline.'];
+                    return json_encode($responseArray);
+                }
+
+                // detalle
+
+                if (!isset($dispatch_item['unity']) || $dispatch_item['unity'] == '') {
+                    $responseArray = ['status' => false,'message' => 'Debe ingresar "unity"'];
+                    return json_encode($responseArray);
+                }
+
+                if (!isset($dispatch_item['due_date']) || $dispatch_item['due_date'] == '') {
+                    $responseArray = ['status' => false,'message' => 'Debe ingresar "due_date"'];
+                    return json_encode($responseArray);
+                }
+
+                if (!isset($dispatch_item['batch']) || $dispatch_item['batch'] == '') {
+                    $responseArray = ['status' => false,'message' => 'Debe ingresar "batch"'];
+                    return json_encode($responseArray);
+                }
+
+                if (!isset($dispatch_item['amount']) || $dispatch_item['amount'] == '') {
+                    $responseArray = ['status' => false,'message' => 'Debe ingresar "amount"'];
+                    return json_encode($responseArray);
+                }
+
+                $batch = Batch::where('product_id',$product->id)
+                                ->where('due_date',$dispatch_item['due_date'])
+                                ->where('batch',$dispatch_item['batch'])
+                                ->first();
+                if(!$batch){
+                    $responseArray = ['status' => false,'message' => 'No existe stock creado para el producto-fvenc-lote ingresado.'];
+                    return json_encode($responseArray);
+                }else{
+                    if($batch->count < $dispatch_item['amount']){
+                        $responseArray = ['status' => false,'message' => 'No existe stock suficiente para realizar el despacho.'];
+                        return json_encode($responseArray);
+                    }
+                }
+            }
+
+            
+
+            // se guarda encabezado del ingreso
+            $dispatch = new Dispatch();
+            
+            $dispatch->date = now();
+            $dispatch->pharmacy_id = 10; //Recursos Físicos - HETG
+            $dispatch->establishment_id = $dataArray['dispatch']['establishment_id']; 
+            $dispatch->user_id = 11162352;
+            $dispatch->notes = isset($dataArray['dispatch']['notes']) ? $dataArray['dispatch']['notes'] : null;
+            $dispatch->save();
+
+
+            // se guarda detalle del ingres    
+            foreach($dataArray['dispatch_items'] as $dispatch_item){
+
+                if($product){
+                    $product->stock = $product->stock - $dispatch_item['amount'];
+                    $product->save();
+                }
+
+                $dispatchItem = new dispatchItem();
+                $dispatchItem->barcode = $product->barcode;
+                $dispatchItem->dispatch_id = $dispatch->id;
+                $dispatchItem->product_id = $product->id;
+                $dispatchItem->amount = $dispatch_item['amount'];
+                $dispatchItem->unity = $dispatch_item['unity'];
+                $dispatchItem->due_date = $dispatch_item['due_date'];
+                $dispatchItem->batch = $dispatch_item['batch'];
+                $dispatchItem->created_at = now();
+                $dispatchItem->save();
+            }    
+            
+
+            //Respuesta
+            $responseArray = ['status' => true,'dispatch_id' => $dispatch->id];
+            return json_encode($responseArray);
+
+        } catch (\Exception $e) {
+            $responseArray = ['status' => false,'message' => $e->getMessage()];
+            return json_encode($responseArray);
+        }
     }
 
 }

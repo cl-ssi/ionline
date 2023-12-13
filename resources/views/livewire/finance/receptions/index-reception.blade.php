@@ -114,7 +114,7 @@
                         </td>
                         <td>
                             @if($reception->rejected == false)
-                                @if($reception->purchaseOrder)
+                                @if($reception->purchase_order)
                                     @if($reception->signedFileLegacy)
                                         <a href="{{ route('file.download', $reception->signedFileLegacy) }}"
                                             class="btn btn-outline-secondary"

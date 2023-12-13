@@ -26,14 +26,18 @@ class DtesImport implements ToModel, WithStartRow, WithHeadingRow
     */
     public function model(array $row)
     {
-        return Dte::updateOrCreate(
-            [
-                'tipo' => $row['tipo'],
-                'tipo_documento' => $row['tipo_documento'],
-                'folio' => $row['folio'],
-                'emisor' => trim($row['emisor']),
-            ],
-            [
+        //TODO fixear cuando de acepta no traigan OC y no borre lo que ya se digitó
+
+        $array_clave =
+        [
+            'tipo' => $row['tipo'],
+            'tipo_documento' => $row['tipo_documento'],
+            'folio' => $row['folio'],
+            'emisor' => trim($row['emisor']),
+        ];
+
+        $array_variable =
+        [
             'razon_social_emisor' => $row['razon_social_emisor'],
             'receptor' => $row['receptor'],
             'publicacion' => Carbon::instance(Date::excelToDateTimeObject($row['publicacion'])),
@@ -65,8 +69,7 @@ class DtesImport implements ToModel, WithStartRow, WithHeadingRow
             'fecha_reclamo' => $row['fecha_reclamo'],
             'mensaje_reclamo' => $row['mensaje_reclamo'],
             'estado_devengo' => $row['estado_devengo'],
-            'codigo_devengo' => $row['codigo_devengo'],
-            'folio_oc' => trim(mb_strtoupper($row['folio_oc'])),
+            'codigo_devengo' => $row['codigo_devengo'],            
             'fecha_ingreso_oc' => $row['fecha_ingreso_oc'],
             'folio_rc' => $row['folio_rc'],
             'fecha_ingreso_rc' => $row['fecha_ingreso_rc'],
@@ -77,6 +80,15 @@ class DtesImport implements ToModel, WithStartRow, WithHeadingRow
             'fecha_ingreso' => $row['fecha_ingreso'],
             'fecha_aceptacion' => $row['fecha_aceptacion'],
             'fecha' => $row['fecha'],
-        ]);
+        ];
+
+        if( trim(mb_strtoupper($row['folio_oc'])) != '' AND !is_null($row['folio_oc']) ) 
+        {
+            $array_variable['folio_oc'] = trim(mb_strtoupper($row['folio_oc']));
+        }
+
+        return Dte::updateOrCreate($array_clave, $array_variable);
+
+        
     }
 }
