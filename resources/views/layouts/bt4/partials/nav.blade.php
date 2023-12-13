@@ -157,11 +157,12 @@
 
                         @if(auth()->user()->organizationalUnit->establishment_id != 1)
 
-                            @canany(['Purchase Plan: create', 'Purchase Plan: all'])
+                            @php($ouSearch = App\Models\Parameters\Parameter::where('module', 'nav')->where('parameter', 'accessPP')->first()->value)
+                            @if(auth()->user()->organizationalUnit && in_array(auth()->user()->organizationalUnit->establishment_id, explode(',', $ouSearch)))
                             <a class="dropdown-item {{ active('purchase_plan.own_index') }}" href="{{ route('purchase_plan.own_index') }}">
                                 <i class="fas fa-fw fa-shopping-cart"></i> Plan de Compras
                             </a>
-                            @endcanany
+                            @endif
 
                             @php($ouSearch = App\Models\Parameters\Parameter::where('module', 'nav')->where('parameter', 'accessRF')->first()->value)
                             @if(auth()->user()->organizationalUnit && in_array(auth()->user()->organizationalUnit->establishment_id, explode(',', $ouSearch)))
