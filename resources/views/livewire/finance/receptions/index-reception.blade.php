@@ -182,10 +182,11 @@
                         </td>
                         <td>
                             @if($reception->rejected == false)
-                                <a href="{{ route('finance.receptions.create', $reception) }}"
+                                <!--  Se comenta el Edit hasta que se vea el tema de los firmantes
+                                    <a href="{{ route('finance.receptions.create', $reception) }}"
                                     class="btn btn-primary">
                                     <i class="bi bi-pencil-square"></i>
-                                </a>
+                                </a> -->
                             @endif
                         </td>
                     </tr>
