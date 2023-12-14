@@ -48,6 +48,7 @@ class Inventory extends Model implements Auditable
         'depreciation',
         'deliver_date',
         'description',
+        'internal_description',
         'establishment_id',
         'request_user_ou_id',
         'request_user_id',

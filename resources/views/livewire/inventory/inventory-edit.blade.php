@@ -82,7 +82,7 @@
 
         <fieldset class="col-md-3">
             <label for="product" class="form-label">
-                Producto <small>(Artículo)</small>
+                Producto <small>(Artículo desc. cod. ONU)</small>
             </label>
             <input
                 type="text"
@@ -107,6 +107,36 @@
                 readonly
             >
         </fieldset>
+    </div>
+
+    <div class="row g-2 mb-3">
+        <fieldset class="col-md-2">
+            <label for="old_number" class="form-label">
+                Nro. Inventario Antiguo
+            </label>
+            <input
+                type="text"
+                class="form-control"
+                id="old_number"
+                value="{{ $inventory->old_number }}"
+                disabled
+                readonly
+            >
+        </fieldset>
+
+        <fieldset class="col-md-10">
+            <label for="internal_description" class="form-label">
+                Descripción Interna
+            </label>
+            <input
+                type="text"
+                class="form-control @error('internal_description') is-invalid @enderror"
+                id="internal_description"
+                wire:model.defer="internal_description"                
+                autocomplete="off"
+            >
+        </fieldset>
+
     </div>
 
     <div class="row g-2 mb-3">
