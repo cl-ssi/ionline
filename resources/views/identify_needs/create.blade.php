@@ -12,7 +12,6 @@
     <div class="col">
         @livewire('identify-needs.create-identify-need', [
             'identifyNeedToEdit'    => null,
-            'form'                  => 'create'
         ])
     </div>
 </div>

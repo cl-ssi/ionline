@@ -31,7 +31,7 @@
                             <i class="fas fa-edit"></i> 
                         
                         </a>
-                        <a href="{{-- route('purchase_plan.edit', $purchasePlan->id) --}}"
+                        <a href="{{ route('identify_need.project.create', $identifyNeed) }}"
                             class="btn btn-outline-secondary btn-sm mb-1"
                             data-bs-toggle="tooltip"
                             data-bs-placement="top"

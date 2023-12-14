@@ -507,11 +507,11 @@
                         </a>
                         @endif
 
-                        {{-- @if(Auth::user()->manager->count() > 0)
+                        {{-- @if(Auth::user()->manager->count() > 0) --}}
                         <a class="dropdown-item {{ active('identify_need.own_index') }}" href="{{ route('identify_need.own_index') }}">
                             <i class="fas fa-chalkboard-teacher fa-fw"></i> Detección de Necesidades
                         </a>
-                        @endif --}}
+                        {{-- @endif --}}
 
                         @endif
 

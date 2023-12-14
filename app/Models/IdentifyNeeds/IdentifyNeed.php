@@ -31,6 +31,10 @@ class IdentifyNeed extends Model implements Auditable
         return $this->belongsTo('App\User', 'user_id')->withTrashed();
     }
 
+    public function learningGoals() {
+        return $this->hasMany('App\Models\IdentifyNeeds\LearningGoal');
+    }
+
     protected $casts = [
         'created_at' => 'datetime'
     ];

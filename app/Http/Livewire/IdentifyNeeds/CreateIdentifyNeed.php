@@ -30,14 +30,15 @@ class CreateIdentifyNeed extends Component
     public $immediateResults;
     public $performanceGoals;
 
-    /* OBJETIVOS DE APRENDIZAJES $learningGoals; */
+    /* OBJETIVOS DE APRENDIZAJES $learningGoals; 
     public $inputs = [];
     public $i = 1;
     public $count = 0;
     public $learningGoals = null;
     public $learningGoal = null;
-    public $editlearningGoalIdRender = null;
+    public $editLearningGoalIdRender = null;
     public $learningGoalsDescriptions;
+    */
 
     public $learningGoalsDescriptionId = null;
 
@@ -49,6 +50,14 @@ class CreateIdentifyNeed extends Component
     public $canSolveTheNeed;
 
     public $identifyNeedId;
+
+    public $identifyNeedToEdit;
+
+    protected $listeners = [
+        'learningGoalsDescriptions'
+    ];
+
+    public $value;
     
     public function render()
     {
@@ -65,52 +74,6 @@ class CreateIdentifyNeed extends Component
             $this->otherDetail = null;
         }
     }
-
-    /* AGREGAR, ELIMINAR OBJETIVOS DE APRENDIZAJES */
-
-    public function add($i)
-    {
-        $i = $i + 1;
-        $this->i = $i;
-        array_push($this->inputs ,$i);
-        $this->count++;
-    }
-
-    public function remove($i)
-    {
-        unset($this->inputs[$i]);
-        $this->count--;
-        $this->messageMaxRoles = null;
-    }
-
-    /* ELIMINAR, EDITAR REGISTRO OBJETIVOS DE APRENDIZAJES */
-
-    public function deleteRole($role)
-    {
-        $this->role = Role::find($role['id']);
-        $this->role->delete();
-    }
-
-    public function editRole($role)
-    {
-        $this->editRoleIdRender = $role['id'];
-        $this->description      = $role['description'];
-    }
-
-    public function saveEditRole($role)
-    {
-        $this->role = Role::find($role['id']);
-        $this->role->description = $this->description;
-        
-        $this->role->save();
-        $this->editRoleIdRender = null;
-    }
-
-    public function cancelEdit(){
-        $this->editRoleIdRender = null;
-    }
-
-    /* ******************************************** */
 
     public function save($identify_need_status){
         $this->identify_need_status = $identify_need_status;
@@ -149,22 +112,6 @@ class CreateIdentifyNeed extends Component
     
                 return $identifyNeed;
             });
-
-            foreach($this->learningGoalsDescriptions as $learningGoalsDescription){
-                $lgDescription = DB::transaction(function () use ($learningGoalsDescription, $identifyNeed) {
-                    $lgDescription = LearningGoal::updateOrCreate(
-                        [
-                            'id'  =>  $this->learningGoalsDescriptionId,
-                        ],
-                        [
-                            'description'       => $learningGoalsDescription,
-                            'identify_need_id'  => $identifyNeed->id
-                        ]
-                    );
-    
-                    return $lgDescription;
-                });
-            }
         }
         else{
             $this->validateMessage = 'description';
@@ -174,19 +121,19 @@ class CreateIdentifyNeed extends Component
             ]);
         }
 
-        // return redirect()->route('identify_need.own', $purchasePlan->id);
+        return redirect()->route('identify_need.edit', $identifyNeed);
     }
 
     public function mount($identifyNeedToEdit)
     {   
         if(!is_null($identifyNeedToEdit)){
-            $this->identifyNeedToEdit = $identifyNeedToEdit;
+            $this->identifyNeed = $identifyNeedToEdit;
             $this->setIdentifyNeed();
         }
     }
 
     public function setIdentifyNeed(){
-        if($this->identifyNeedToEdit){
+        if($this->identifyNeed){
             $this->identifyNeedId               = $this->identifyNeedToEdit->id;
 
             $this->subject                      = $this->identifyNeedToEdit->subject;
@@ -216,5 +163,10 @@ class CreateIdentifyNeed extends Component
             $this->justification                = $this->identifyNeedToEdit->justification;
             $this->canSolveTheNeed              = $this->identifyNeedToEdit->can_solve_the_need;
         }
+    }
+
+    public function learningGoalsDescriptions($learningGoalsDescriptions)
+    {
+        $this->learningGoalsDescriptions = $learningGoalsDescriptions;
     }
 }
