@@ -22,6 +22,7 @@ class Purchase extends Model
       'invoice',
       'despatch_guide',
       'invoice_date',
+      'commission',
       'pharmacy_id',
       'destination' ,
       'from' ,

@@ -53,18 +53,22 @@
 		</div>
 
 		<div class="form-row">
-			<fieldset class="form-group col-4">
+			<fieldset class="form-group col-3">
 					<label for="for_text">Guía</label>
 					<input type="number" class="form-control" id="for_text" name="despatch_guide">
 			</fieldset>
-			<fieldset class="form-group col-4">
+			<fieldset class="form-group col-3">
 					<label for="for_text">Factura</label>
 					<input type="number" class="form-control" id="for_text" name="invoice">
 			</fieldset>
-			<fieldset class="form-group col-4">
-          <label for="for_text">Fecha vencimiento factura</label>
-          <input type="date" class="form-control" id="for_text" name="invoice_date">
-      </fieldset>
+			<fieldset class="form-group col-3">
+                <label for="for_text">Fecha vencimiento factura</label>
+                <input type="date" class="form-control" id="for_text" name="invoice_date">
+            </fieldset>
+            <fieldset class="form-group col-3">
+					<label for="for_commission">Comisión</label>
+					<input type="text" class="form-control" id="for_commission" placeholder="" name="commission">
+			</fieldset>
 		</div>
 
 		<div class="form-row">

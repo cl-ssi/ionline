@@ -106,6 +106,7 @@
 </table>
 
 <div class="right">
+    <!-- <strong>Comisión:</strong> @numero_decimal( $purchase->commission )<br> -->
     <strong>Monto neto:</strong> @numero_decimal( $purchase->purchase_order_amount )<br>
     <strong>IVA:</strong> @numero_decimal( $purchase->purchase_order_amount * 0.19 )<br>
     <strong>Monto total:</strong> @numero_decimal( $purchase->purchase_order_amount * 1.19 )<br>
