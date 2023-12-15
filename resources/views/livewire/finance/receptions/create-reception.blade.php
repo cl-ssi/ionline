@@ -368,26 +368,6 @@
         </div>
 
 
-        <!-- Si tiene otros documentos necesarios para la recepción -->
-        @if ($purchaseOrder->requestForm)
-            @if ($purchaseOrder->requestForm->paymentDocs)
-                <div class="row mb-4">
-                    <h4>Adjuntar otros documentos</h4>
-                    @foreach ($purchaseOrder->requestForm->paymentDocs as $doc)
-                        <div class="col-12">
-                            <div class="form-group">
-                                <label for="for_{{ $doc->id }}">{{ $doc->name }}</label>
-                                <input type="file"
-                                    id="for-{{ $doc->id }}"
-                                    class="form-control">
-                            </div>
-                        </div>
-                    @endforeach
-                </div>
-            @endif
-        @endif
-
-
         <!-- Firmantes -->
         <h4 class="mb-2">Firmantes</h4>
         <div class="row mb-3">
@@ -537,6 +517,26 @@
             </div>
 
         </div>
+
+
+                <!-- Si tiene otros documentos necesarios para la recepción -->
+        @if ($purchaseOrder->requestForm)
+            @if ($purchaseOrder->requestForm->paymentDocs)
+                <div class="row mb-4">
+                    <h4>Adjuntar otros documentos</h4>
+                    @foreach ($purchaseOrder->requestForm->paymentDocs as $doc)
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label for="for_{{ $doc->id }}">{{ $doc->name }}</label>
+                                <input type="file"
+                                    id="for-{{ $doc->id }}"
+                                    class="form-control">
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            @endif
+        @endif
 
         @can('Receptions: load support file')
             <div class="mb-3">
