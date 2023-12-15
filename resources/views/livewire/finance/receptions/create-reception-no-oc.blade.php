@@ -1,5 +1,4 @@
 <div>
-    {{-- Nothing in the world is as soft and yielding as water. --}}
     <h3 class="mb-3">Crear un acta de recepción conforme sin OC</h3>
 
     <!-- MENU -->
