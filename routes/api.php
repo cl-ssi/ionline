@@ -32,8 +32,8 @@ Route::prefix('service_request')->name('service_request.')->middleware('client')
 });
 
 Route::prefix('pharmacies')->name('pharmacies.')->middleware('client')->group(function (){
-    Route::get('/receivingProductsWs', [ReceivingController::class, 'receivingProductsWs']);
-    Route::get('/dispatchingProductsWs', [DispatchController::class, 'dispatchingProductsWs']);
+    Route::post('/receivingProductsWs', [ReceivingController::class, 'receivingProductsWs']);
+    Route::post('/dispatchingProductsWs', [DispatchController::class, 'dispatchingProductsWs']);
 });
 
 
