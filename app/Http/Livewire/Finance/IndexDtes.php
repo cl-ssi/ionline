@@ -58,7 +58,7 @@ class IndexDtes extends Component
                         $query->where('folio', $value);
                         break;
                     case 'folio_oc':
-                        $query->where('folio_oc', $value);
+                        $query->where('folio_oc', 'like', '%' . $value. '%');
                         break;
                     case 'folio_sigfe':
                         switch ($value) {
