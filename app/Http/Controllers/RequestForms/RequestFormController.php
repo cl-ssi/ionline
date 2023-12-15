@@ -102,7 +102,7 @@ class RequestFormController extends Controller {
                 $events_type[] = 'finance_event';
                 break;
             }
-
+            
           $ousSearch = Parameter::where('module', 'ou')->whereIn('parameter', ['AbastecimientoSSI', 'AbastecimientoHAH'])->pluck('value')->toArray();
           foreach($ousSearch as $ouSearch)
             if(in_array($ouSearch, $iam_authorities_in)){
@@ -273,7 +273,15 @@ class RequestFormController extends Controller {
         $eventTypeBudget = null;
         if(in_array($eventType, ['pre_budget_event', 'pre_finance_budget_event', 'budget_event'])){
             $manager = Authority::getAuthorityFromDate(Auth::user()->organizationalUnit->id, Carbon::now(), 'manager');
-            $ouSearch = Parameter::where('module', 'ou')->where('parameter', 'FinanzasSSI')->first()->value;
+
+            if(Auth::user()->organizationalUnit->establishment_id == Parameter::where('module', 'establishment')->where('parameter', 'SSTarapaca')->first()->value){
+                $ouSearch = Parameter::where('module', 'ou')->where('parameter', 'FinanzasSSI')->first()->value;
+            }
+
+            if(Auth::user()->organizationalUnit->establishment_id == Parameter::where('module', 'establishment')->where('parameter', 'HospitalAltoHospicio')->first()->value){
+                $ouSearch = Parameter::where('module', 'ou')->where('parameter', 'FinanzasHAH')->first()->value;
+            }
+
             $eventTypeBudget = $eventType == 'pre_budget_event' ? 'supply_event' : (Auth::user()->organizational_unit_id == $ouSearch && $manager->user_id == Auth::user()->id ? 'finance_event' : 'pre_finance_event');
             $requestForm->has_increased_expense = true;
             $requestForm->new_estimated_expense = $requestForm->estimated_expense + $requestForm->eventRequestForms()->where('status', 'pending')->where('event_type', 'budget_event')->first()->purchaser_amount;
@@ -293,6 +301,7 @@ class RequestFormController extends Controller {
         ];
 
         $events_type_user = $this->get_events_type_user();
+
         // return $events_type_user;
         $countEventsType = count($events_type_user);
         foreach($events_type_user as $event_type_user){

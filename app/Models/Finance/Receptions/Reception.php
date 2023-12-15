@@ -19,10 +19,12 @@ use App\Models\File;
 use App\Models\Establishment;
 use App\Models\Documents\Numeration;
 use App\Models\Documents\Approval;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class Reception extends Model
+class Reception extends Model implements Auditable
 {
     use HasFactory;
+    use \OwenIt\Auditing\Auditable;
 
     /**
     * The table associated with the model.

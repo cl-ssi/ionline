@@ -436,7 +436,7 @@ class CreateReception extends Component
                 /* Si hay mas de un approval y no es el primero */
                 if( count($approvalsOrderedByPriority) >= 1 AND $key != 0 ) {
                     /* Setea el previous_approval_id y active en false */
-                    $approval["previous_approval_id"] = $reception->approvals->last()->id;
+                    $approval["previous_approval_id"] = $reception->approvals()->latest('id')->value('id');
                     $approval["active"] = false;
                 }
 
@@ -445,6 +445,8 @@ class CreateReception extends Component
                     $approval["digital_signature"] = true;
                     $approval["callback_controller_method"] = 'App\Http\Controllers\Finance\Receptions\ReceptionController@approvalCallback';
                 }
+
+                //$reception->approvals()->create($approval);
 
                 $reception->approvals()->updateOrCreate(
                     ['position' => $approval['position']],
