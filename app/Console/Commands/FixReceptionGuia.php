@@ -29,21 +29,23 @@ class FixReceptionGuia extends Command
     public function handle()
     {
         $this->info('Iniciando el proceso...');
-        $dtes = DTE::all();
+        $dtes = Dte::with('receptions')->get();
         foreach ($dtes as $dte) {
-            if($dte->receptionsDte)
-            {
-                if($dte->tipo_documento =='guias_despacho')
-                {
-                    foreach ($dte->receptionsDte as $reception)
-                    {
-                        $this->info('Actualizando guia_id para el recepcions ' . $reception->id);
+            if ($dte->receptions->isNotEmpty()) {
+                if ($dte->tipo_documento == 'guias_despacho') {
+                    foreach ($dte->receptions as $reception) {
+                        $this->info('Actualizando guia_id para el recepcion ' . $reception->id);
                         $reception->guia_id = $dte->id;
+                    // Verificar si invoices no es null y tiene al menos un elemento
+                    if ($dte->invoices && $dte->invoices->isNotEmpty()) {
+                        $reception->dte_id = $dte->invoices->first()->id;
+                    }
+                        
                         $reception->save();
                     }
                 }
             }
-         }
+        }
 
         $this->info('Proceso completado.');
         return Command::SUCCESS;
