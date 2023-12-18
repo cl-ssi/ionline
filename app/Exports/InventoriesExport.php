@@ -14,6 +14,7 @@ class InventoriesExport implements FromCollection, WithHeadings
     public function collection()
     {
         return Inventory::where('establishment_id',auth()->user()->organizationalUnit->establishment_id)
+            ->whereNotNull('number')
             ->select(
                 'number',
                 'description',
