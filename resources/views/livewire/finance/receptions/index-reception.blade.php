@@ -133,7 +133,7 @@
                                 @endif
                             @endif
                         </td>
-                        <td>
+                        <td nowrap>
                             @if($reception->rejected)
                                 <span class="badge bg-danger">Rechazada</span>
                             @else

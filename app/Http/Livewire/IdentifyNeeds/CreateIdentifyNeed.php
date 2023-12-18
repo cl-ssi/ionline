@@ -30,16 +30,16 @@ class CreateIdentifyNeed extends Component
     public $immediateResults;
     public $performanceGoals;
 
-    /* OBJETIVOS DE APRENDIZAJES $learningGoals; 
+    /* OBJETIVOS DE APRENDIZAJES $learningGoals; */
     public $inputs = [];
     public $i = 1;
     public $count = 0;
     public $learningGoals = null;
     public $learningGoal = null;
     public $editLearningGoalIdRender = null;
-    public $learningGoalsDescriptions;
-    */
-
+    public $learningGoalsDescriptions = [];
+    public $learningGoalsSaved = [];
+    
     public $learningGoalsDescriptionId = null;
 
     public $currentTrainingLevel;
@@ -53,9 +53,11 @@ class CreateIdentifyNeed extends Component
 
     public $identifyNeedToEdit;
 
+    /*
     protected $listeners = [
         'learningGoalsDescriptions'
     ];
+    */
 
     public $value;
     
@@ -112,6 +114,21 @@ class CreateIdentifyNeed extends Component
     
                 return $identifyNeed;
             });
+
+            foreach($this->learningGoalsDescriptions as $description){
+                $lgDescription = DB::transaction(function () use ($identifyNeed, $description) {
+                    $lgDescription = LearningGoal::updateOrCreate(
+                        [
+                            'id'  =>  $this->learningGoalsDescriptionId
+                        ],
+                        [
+                            'description'       => $description,
+                            'identify_need_id'  => $identifyNeed->id
+                        ]
+                    );
+                    return $lgDescription;
+                });
+            }
         }
         else{
             $this->validateMessage = 'description';
@@ -129,6 +146,7 @@ class CreateIdentifyNeed extends Component
         if(!is_null($identifyNeedToEdit)){
             $this->identifyNeed = $identifyNeedToEdit;
             $this->setIdentifyNeed();
+            $this->setLearningGoals();
         }
     }
 
@@ -165,8 +183,75 @@ class CreateIdentifyNeed extends Component
         }
     }
 
+    public function setLearningGoals(){
+        foreach($this->identifyNeed->learningGoals as $key => $learningGoal){
+            $this->learningGoalsSaved[$key]['id'] = $learningGoal->id;
+            $this->learningGoalsSaved[$key]['description'] = $learningGoal->description;
+        }
+    }
+
+    /*
     public function learningGoalsDescriptions($learningGoalsDescriptions)
     {
         $this->learningGoalsDescriptions = $learningGoalsDescriptions;
+    }
+    */
+
+    /* AGREGAR, ELIMINAR OBJETIVOS DE APRENDIZAJES */
+
+    public function add($i)
+    {
+        $i = $i + 1;
+        $this->i = $i;
+        array_push($this->inputs ,$i);
+        $this->count++;
+    }
+
+    public function remove($i)
+    {
+        $this->learningGoalsDescriptions[$this->count] = null;
+        unset($this->inputs[$i]);
+        $this->count--;
+    }
+
+    /* ELIMINAR, EDITAR REGISTRO OBJETIVOS DE APRENDIZAJES */
+
+    public function deleteRole($learningGoal)
+    {
+        $this->learningGoal = LearningGoal::find($learningGoal['id']);
+        $this->learningGoal->delete();
+    }
+
+    public function editRole($learningGoalSaved)
+    {
+        $this->learningGoal = LearningGoal::find($learningGoalSaved);
+
+
+
+        $this->editLearningGoalIdRender = $this->learningGoal->id;
+        $this->description              = $this->learningGoal->description;
+    }
+
+    public function saveEditRole($learningGoal)
+    {
+        $this->learningGoal = LearningGoal::find($learningGoal['id']);
+        $this->learningGoal->description = $this->description;
+        
+        $this->learningGoal->save();
+        $this->editLearningGoalIdRender = null;
+
+        //$this->setLearningGoals();
+        $this->render();
+        //return redirect()->route('identify_need.edit', $this->identifyNeedToEdit);
+    }
+
+    public function cancelEdit(){
+        $this->editLearningGoalIdRender = null;
+    }
+
+    /* ******************************************** */
+
+    public function updatedLearningGoalsSaved(){
+        dd('hola');
     }
 }

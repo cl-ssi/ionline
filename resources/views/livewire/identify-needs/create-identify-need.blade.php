@@ -194,6 +194,64 @@
                             </div>
                         @endif
 
+                        --}}
+
+                        @if(count($learningGoalsSaved) > 0)
+                            <div class="form-row ms-2">
+                                <div class="col">
+                                    <h6><i class="fas fa-list-ol"></i> Listado de Obejtivos de Aprendizaje</h6> 
+                                </div>
+                            </div>
+                            <div class="table-responsive ms-2">
+                                <table class="table table-sm table-striped table-bordered small">
+                                    <thead>
+                                        <tr class="text-center table-info">
+                                            <th width="7%">#</th>
+                                            <th>Descripción</th>
+                                            <th width="14%" colspan="2"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    @foreach($learningGoalsSaved as $learningGoalSaved)
+                                        <tr>
+                                            <th>{{ $loop->iteration }}</th>
+                                            <td>
+                                                @if($editLearningGoalIdRender != $learningGoalSaved['id'])
+                                                    {{ $learningGoalSaved['description'] }}
+                                                @else
+                                                    <div class="row">
+                                                        <fieldset class="form-group col-md-8">
+                                                            <input type="text" class="form-control form-control-sm" name="description" id="for_description" wire:model="description" required>
+                                                        </fieldset>
+                                                        <fieldset class="form-group col-md-2">
+                                                            <a class="btn btn-primary btn-sm" wire:click="saveEditRole({{ $learningGoal }})"><i class="fas fa-save"></i></a>
+                                                        </fieldset>
+                                                        <fieldset class="form-group col-md-2">
+                                                            <a class="btn btn-danger btn-sm" wire:click="cancelEdit()">Cancelar</a>
+                                                        </fieldset>
+                                                    </div>
+                                                @endif
+                                            </td>
+                                            <td>
+                                                <a class="btn btn-secondary btn-sm"
+                                                    wire:click="editRole({{ $learningGoalSaved['id'] }})">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                            </td>
+                                            <td class="text-center">
+                                                <a class="btn btn-danger btn-sm"
+                                                    wire:click="deleteRole({{ $learningGoalSaved['id'] }})"
+                                                    onclick="return confirm('¿Está seguro que desea eliminar la función?')">
+                                                    <i class="fas fa-trash"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        @endif
+
                         <div class="form-row">
                             <div class="col-12">
                                 <button class="btn btn-sm text-white btn-primary" wire:click.prevent="add({{$i}})"><i class="fas fa-plus"></i> Agregar</button>
@@ -210,8 +268,8 @@
                                 </div>
                             </div>
                         @endforeach
-                        --}}
                         
+                        {{--
                         <div class="row mt-4">
                             <div class="col">
                                 @if($identifyNeedToEdit !=  null)
@@ -225,6 +283,7 @@
                                 @endif
                             </div>
                         </div>
+                        --}}
                     </td>
                 </tr>
                 @endif

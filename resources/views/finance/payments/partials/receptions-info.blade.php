@@ -7,7 +7,7 @@
     @endif
     <br>
 
-    @foreach($dte->purchaseOrder->receptions->where('dte_id',$dte->id) as $reception)
+    @foreach($dte->receptions as $reception)
         @if($reception->signedFileLegacy)
             <a class="btn btn-sm btn-outline-primary" 
                 href="{{ route('file.download', $reception->signedFileLegacy) }}" 

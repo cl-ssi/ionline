@@ -23,6 +23,7 @@ use App\Models\Parameters\BudgetItem;
 use App\Models\ReplacementStaff\Position;
 use Illuminate\Http\Response;
 use App\Models\Documents\SignaturesFile;
+use App\Models\Documents\Approval;
 
 class RequestReplacementStaffController extends Controller
 {
@@ -154,6 +155,11 @@ class RequestReplacementStaffController extends Controller
         return view('replacement_staff.request.to_sign', compact('requestReplacementStaff', 'iam_authorities_in', 'budgetItems'));
     }
 
+    public function to_sign_approval($request_replacement_staff_id){
+        $requestReplacementStaff = RequestReplacementStaff::find($request_replacement_staff_id);
+        return view('replacement_staff.request.to_sign_approval', compact('requestReplacementStaff'));
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -166,18 +172,28 @@ class RequestReplacementStaffController extends Controller
 
     public function create_replacement()
     {
-        return view('replacement_staff.request.create_replacement');
+        session()->flash('danger', 'Estimados Usuario: No es posible crear solicitudes debido a mantención programada, agradecemos su comprensión');
+        return redirect()->route('replacement_staff.request.own_index');
+
+        // return view('replacement_staff.request.create_replacement');
     }
 
     public function create_announcement()
     {
-        return view('replacement_staff.request.create_announcement');
+        session()->flash('danger', 'Estimados Usuario: No es posible crear solicitudes debido a mantención programada, agradecemos su comprensión');
+        return redirect()->route('replacement_staff.request.own_index');
+
+        // return view('replacement_staff.request.create_announcement');
     }
 
     public function create_extension(RequestReplacementStaff $requestReplacementStaff)
     {
+        session()->flash('danger', 'Estimados Usuario: No es posible crear solicitudes debido a mantención programada, agradecemos su comprensión');
+        return redirect()->route('replacement_staff.request.own_index');
+        /*
         $ouRoots = OrganizationalUnit::where('level', 1)->get();
         return view('replacement_staff.request.create_extension', compact('requestReplacementStaff', 'ouRoots'));
+        */
     }
 
     /**
@@ -228,106 +244,90 @@ class RequestReplacementStaffController extends Controller
 
             $request_replacement->save();
             if($formType == 'announcement') $request_replacement->positions()->save($position);
-
-            $position = 1;
             
-            for ($i = $request_replacement->organizationalUnit->level; $i >= 2; $i--) {
-                if ($i > 2) {
-                    $request_sing = new RequestSign();
+            /* PROCESO DE APROBACIONES */
+            $organizationalUnit = $request_replacement->organizationalUnit;
+            $previousApprovalId = null;
 
-                    $request_sing->position = $position;
-                    $request_sing->ou_alias = 'leadership';
-                    if($i == $request_replacement->organizationalUnit->level){
-                        $request_sing->organizationalUnit()->associate($request_replacement->organizational_unit_id);
-                        $request_sing->request_status = 'pending';
+            for ($i = $request_replacement->organizationalUnit->level; $i >= 2; $i--){
+                if($organizationalUnit->id != Parameter::get('ou','SubRRHH')){
+                    $approval = $request_replacement->approvals()->create([
+                        "module"                            => ($formType == "announcement") ? "Solicitudes de Contración: Convocatoria" : "Solicitudes de Contración: Reemplazo",
+                        "module_icon"                       => "bi bi-id-card",
+                        "subject"                           => "Solicitud de Aprobación Jefatura Depto. o Unidad",
+                        "sent_to_ou_id"                     => $organizationalUnit->id,
+                        "document_route_name"               => "replacement_staff.request.to_sign_approval",
+                        "document_route_params"             => json_encode(["request_replacement_staff_id" => $request_replacement->id]),
+                        "active"                            => ($previousApprovalId == null) ? true : false,
+                        "previous_approval_id"              => $previousApprovalId,
+                        "callback_controller_method"        => "App\Http\Controllers\ReplacementStaff\RequestReplacementStaffController@approvalCallback",
+                        "callback_controller_params"        => json_encode([
+                            'request_replacement_staff_id'  => $request_replacement->id,
+                            'process'                       => null
+                        ])
+                    ]);
+                    $previousApprovalId = $approval->id;
 
-                        //SE NOTIFICA PARA INICIAR EL PROCESO DE FIRMAS
-                        $notification_ou_manager = Authority::getAuthorityFromDate($request_sing->organizational_unit_id, today(), 'manager');
-                        if($notification_ou_manager){
-                            $notification_ou_manager->user->notify(new NotificationSign($request_replacement));
-                        }
+                    if($organizationalUnit->level >= $i){
+                        $organizationalUnit = $organizationalUnit->father;
                     }
-                    else{
-                        $lastSign = RequestSign::
-                            where('request_replacement_staff_id', $request_replacement->id)
-                            ->latest()
-                            ->first();
-                        
-                        $request_sing->organizationalUnit()->associate( $lastSign->organizationalUnit->father->id);
-                    }
-
-                    $request_sing->requestReplacementStaff()->associate($request_replacement->id);
-                    $request_sing->save();
-                    //dd($request_sing);
                 }
-                if ($i == 2){
-                    $lastSign = RequestSign::    
-                        where('request_replacement_staff_id', $request_replacement->id)
-                        ->where('ou_alias', 'leadership')
-                        ->orderBy('position', 'DESC')
-                        ->first();
-                    
-                    if($lastSign && $lastSign->organizationalUnit->father->id != Parameter::where('module', 'ou')->where('parameter', 'SubRRHH')->first()->value){
-                        $request_sing = new RequestSign();
-                        $request_sing->position = $position;
-                        $request_sing->ou_alias = 'sub';
-                        $request_sing->organizationalUnit()->associate($lastSign->organizationalUnit->father->id);
-                        $request_sing->requestReplacementStaff()->associate($request_replacement->id);
-                        $request_sing->save();
-                    }
-                    else{
-                        if($i == $request_replacement->organizationalUnit->level){
-                            $request_sing = new RequestSign();
-                            $request_sing->position = $position;
-                            $request_sing->ou_alias = 'sub';
-                            $request_sing->organizationalUnit()->associate(Auth::user()->organizationalUnit);
-                            $request_sing->request_status = 'pending';
-                            $request_sing->requestReplacementStaff()->associate($request_replacement->id);
-                            $request_sing->save();
-                        }
-                        else{
-                            $position = $position - 1;
-                        }
-                    }
-                    
-                    /*  APROBACION UNIDAD DE PERSONAL*/
-                    if($request_replacement->form_type == 'replacement'){
-                        $request_sing = new RequestSign();
-                        $request_sing->position = $position + 1;
-                        $request_sing->ou_alias = 'uni_per';
-                        $request_sing->organizationalUnit()->associate(Parameter::where('module', 'ou')->where('parameter', 'PersonalSSI')->first()->value);
-                        $request_sing->requestReplacementStaff()->associate($request_replacement->id);
-                        $request_sing->save();
-                    }
-
-                    /* APROBACIÓN RR.HH. */
-                    $request_sing = new RequestSign();
-                    if($request_replacement->form_type == 'replacement'){
-                        $request_sing->position = $position + 2;
-                    }
-                    else{
-                        $request_sing->position = $position + 1;
-                    }
-                    $request_sing->ou_alias = 'sub_rrhh';
-                    $request_sing->organizationalUnit()->associate(Parameter::where('module', 'ou')->where('parameter', 'SubRRHH')->first()->value);
-                    $request_sing->requestReplacementStaff()->associate($request_replacement->id);
-                    $request_sing->save();
-
-                    /* APROBACIÓN FINANZAS */
-                    $request_sing = new RequestSign();
-                    if($request_replacement->form_type == 'replacement'){
-                        $request_sing->position = $position + 3;
-                    }
-                    else{
-                        $request_sing->position = $position + 2;
-                    }
-                    $request_sing->ou_alias = 'finance';
-                    $request_sing->organizationalUnit()->associate(Parameter::where('module', 'ou')->where('parameter', 'FinanzasSSI')->first()->value);
-                    $request_sing->requestReplacementStaff()->associate($request_replacement->id);
-                    $request_sing->save();
-                }
-                $position++;
             }
+
+            /* SE CREA APROBACIÓN UNIDAD DE PERSONAL */
+            if($formType == 'replacement'){
+                $up_approval = $request_replacement->approvals()->create([
+                    "module"                            => ($formType == "announcement") ? "Solicitudes de Contración: Convocatoria" : "Solicitudes de Contración: Reemplazo",
+                    "module_icon"                       => "bi bi-id-card",
+                    "subject"                           => "Solicitud de Aprobación Unidad de Personal",
+                    "sent_to_ou_id"                     => Parameter::get('ou','PersonalSSI'),
+                    "document_route_name"               => "replacement_staff.request.to_sign_approval",
+                    "document_route_params"             => json_encode(["request_replacement_staff_id" => $request_replacement->id]),
+                    "active"                            => false,
+                    "previous_approval_id"              => $previousApprovalId,
+                    "callback_controller_method"        => "App\Http\Controllers\ReplacementStaff\RequestReplacementStaffController@approvalCallback",
+                    "callback_controller_params"        => json_encode([
+                        'request_replacement_staff_id'  => $request_replacement->id,
+                        'process'                       => null
+                    ])
+                ]);
+            }
+
+            /* SE CREA APROBACIÓN UNIDAD DE PLANIFICACION */
+            $prrhh_approval = $request_replacement->approvals()->create([
+                "module"                            => ($formType == "announcement") ? "Solicitudes de Contración: Convocatoria" : "Solicitudes de Contración: Reemplazo",
+                "module_icon"                       => "bi bi-id-card",
+                "subject"                           => "Solicitud de Aprobación Planificación",
+                "sent_to_ou_id"                     => Parameter::get('ou','PlanificacionRrhhSST'),
+                "document_route_name"               => "replacement_staff.request.to_sign_approval",
+                "document_route_params"             => json_encode(["request_replacement_staff_id" => $request_replacement->id]),
+                "active"                            => false,
+                "previous_approval_id"              => $up_approval->id,
+                "callback_controller_method"        => "App\Http\Controllers\ReplacementStaff\RequestReplacementStaffController@approvalCallback",
+                "callback_controller_params"        => json_encode([
+                    'request_replacement_staff_id'  => $request_replacement->id,
+                    'process'                       => null
+                ])
+            ]);
+
+            /* SE CREA APROBACIÓN SGDP */
+            $sdgp_approval = $request_replacement->approvals()->create([
+                "module"                            => ($formType == "announcement") ? "Solicitudes de Contración: Convocatoria" : "Solicitudes de Contración: Reemplazo",
+                "module_icon"                       => "bi bi-id-card",
+                "subject"                           => "Solicitud de Aprobación SDGP",
+                "sent_to_ou_id"                     => Parameter::get('ou','SubRRHH'),
+                "document_route_name"               => "replacement_staff.request.to_sign_approval",
+                "document_route_params"             => json_encode(["request_replacement_staff_id" => $request_replacement->id]),
+                "active"                            => false,
+                "previous_approval_id"              => $prrhh_approval->id,
+                "callback_controller_method"        => "App\Http\Controllers\ReplacementStaff\RequestReplacementStaffController@approvalCallback",
+                "callback_controller_params"        => json_encode([
+                    'request_replacement_staff_id'  => $request_replacement->id,
+                    'process'                       => null
+                ])
+            ]);
+
+            /* ----------------------------------------------------------------------- */
 
             //SE NOTIFICA A UNIDAD DE RECLUTAMIENTO
             $notification_reclutamiento_manager = Authority::getAuthorityFromDate(48, today(), 'manager');
@@ -336,6 +336,7 @@ class RequestReplacementStaffController extends Controller
             }
             //SE NOTIFICA A FUNCIONARIO SOLICITANTE
             $request_replacement->requesterUser->notify(new NotificationNewRequest($request_replacement, 'requester'));
+            /* ----------------------------------------------------------------------- */
 
             session()->flash('success', 'Estimados Usuario, se ha creado la Solicitud Exitosamente');
             return redirect()->route('replacement_staff.request.own_index');
@@ -650,5 +651,25 @@ class RequestReplacementStaffController extends Controller
     public function show_budget_availability_certificate_signed(RequestReplacementStaff $requestReplacementStaff)
     {
         return Storage::disk('gcs')->response($requestReplacementStaff->signaturesFile->signed_file);
+    }
+
+    public function approvalCallback($approval_id, $request_replacement_staff_id, $process){
+        $approval = Approval::find($approval_id);
+        $requestReplacementStaff = RequestReplacementStaff::find($request_replacement_staff_id);
+        
+        /* Aprueba */
+        if($approval->status == 1){
+            if($process == 'end'){
+                $requestReplacementStaff->request_status = 'complete';
+                $requestReplacementStaff->save();
+            }
+        }   
+
+        /* Rechaza */
+        if($approval->status == 0){
+            $requestReplacementStaff->request_status = 'rejected';
+            $requestReplacementStaff->save();
+
+        }
     }
 }
