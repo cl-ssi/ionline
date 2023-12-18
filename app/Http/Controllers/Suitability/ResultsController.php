@@ -116,6 +116,13 @@ class ResultsController extends Controller
         return redirect()->back();
     }
 
+    public function destroyResult(Result $result)
+    {
+        $result->delete();
+        session()->flash('danger', 'El resultado de test de idoneidad ha sido eliminado');
+        return redirect()->back();
+    }
+
 
     public function certificate($id)
     {

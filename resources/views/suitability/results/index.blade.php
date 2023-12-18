@@ -52,7 +52,8 @@
                 <th>Estado <a tabindex="0" role="button" data-toggle="popover" data-trigger="hover" data-html="true" title="" data-content="Aprobados:  {{$count['Aprobado'] ?? 0}} <br> Esperando Test: {{$count['Esperando Test'] ?? 0}} <br> Test Finalizados: {{$count['Test Finalizado'] ?? 0}}">
                         <i class="fas fa-info-circle" aria-hidden="true"></i></a></th>
                 <th>Ver Test</th>
-                <th>Eliminar Resultado</th>
+                <th>Eliminar Resultado y Solicitud</th>
+                <th>Eliminar Resultado Solamente</th>
                 <!-- <th>Ver Certificado (Aprobados)</th> -->
                 <!-- <th>Enviar a Firmar</th> -->
                 <!-- <th>Descargar PDF (Aprobados)</th> -->
@@ -84,7 +85,14 @@
                             <span class="fas fa-trash-alt" aria-hidden="true"></span>
                         </button>
                     </form>
-
+                </td>
+                <td>
+                    <form method="POST" action="{{ route('suitability.results.destroyResult', $result->id) }}" class="d-inline">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-outline-danger btn-sm" onclick="return confirm('¿Está seguro de eliminar este resultado, recuerde que solo debe de eliminar si el resultado se encuentra duplicado, a diferencia del otro borrado este no elimina la solicitud')">
+                            <span class="fas fa-exclamation-triangle" aria-hidden="true"></span>
+                        </button>
                 </td>
                 <!-- <td>@if($result->psirequest && $result->psirequest->status =="Aprobado")
                     <a href="{{ route('suitability.results.certificate', $result->id) }}" class="btn btn-outline-primary">

@@ -2296,7 +2296,7 @@ Route::prefix('suitability')->as('suitability.')->middleware(['auth', 'must.chan
     Route::get('/report/all/request', [SuitabilityController::class, 'reportAllRequest'])->name('reportAllRequest');
     Route::get('/report', [SuitabilityController::class, 'report'])->name('report');
     Route::get('/reportsigned', [SuitabilityController::class, 'reportsigned'])->name('reportsigned');
-    Route::delete('{psirequest}/destroy', [SuitabilityController::class, 'destroy'])->name('destroy');
+    Route::delete('{psirequest}/destroy', [SuitabilityController::class, 'destroy'])->name('destroy');    
     Route::put('{psirequest}/update', [SuitabilityController::class, 'update'])->name('update');
     Route::post('/', [SuitabilityController::class, 'store'])->name('store');
     Route::get('/own', [SuitabilityController::class, 'indexOwn'])->name('own');
@@ -2365,6 +2365,7 @@ Route::prefix('suitability')->as('suitability.')->middleware(['auth', 'must.chan
     Route::prefix('results')->as('results.')->middleware('auth')->group(function () {
         Route::get('/', [ResultsController::class, 'index'])->name('index');
         Route::delete('{result}/destroy', [ResultsController::class, 'destroy'])->name('destroy');
+        Route::delete('{result}/destroy-result', [ResultsController::class, 'destroyResult'])->name('destroyResult');
         Route::get('/{id}', [ResultsController::class, 'show'])->name('show');
         Route::get('/certificate/{id}', [ResultsController::class, 'certificate'])->name('certificate');
         Route::get('/certificatepdf/{id}', [ResultsController::class, 'certificatepdf'])->name('certificatepdf');
