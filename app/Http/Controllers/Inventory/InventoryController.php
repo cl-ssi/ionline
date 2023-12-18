@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Inventory;
 
-use App\Http\Controllers\Controller;
-use App\Models\Documents\Approval;
-use App\Models\Inv\Inventory;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Models\Inv\InventoryMovement;
+use App\Models\Inv\Inventory;
+use App\Models\Documents\Approval;
+use App\Http\Controllers\Controller;
+use App\Exports\InventoriesExport;
 
 class InventoryController extends Controller
 {
@@ -61,5 +63,11 @@ class InventoryController extends Controller
         }
 
         return abort(404);
+    }
+
+
+    public function export() 
+    {
+        return Excel::download(new InventoriesExport, 'inventarios.xlsx');
     }
 }

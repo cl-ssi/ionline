@@ -36,11 +36,16 @@ class FixReceptionGuia extends Command
                     foreach ($dte->receptions as $reception) {
                         $this->info('Actualizando guia_id para el recepcion ' . $reception->id);
                         $reception->guia_id = $dte->id;
-                    // Verificar si invoices no es null y tiene al menos un elemento
-                    if ($dte->invoices && $dte->invoices->isNotEmpty()) {
-                        $reception->dte_id = $dte->invoices->first()->id;
-                    }
-                        
+
+                        if($reception->guia_id == $reception->dte_id) {
+                            $reception->dte_id = null;
+                        }
+
+                        // Verificar si invoices no es null y tiene al menos un elemento
+                        if ($dte->invoices && $dte->invoices->isNotEmpty()) {
+                            $reception->dte_id = $dte->invoices->first()->id;
+                        }
+
                         $reception->save();
                     }
                 }

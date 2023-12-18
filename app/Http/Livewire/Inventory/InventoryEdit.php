@@ -16,7 +16,6 @@ class InventoryEdit extends Component
     public $establishment;
     public $accountingCodes;
     public $internal_description;
-    
 
     public $number_inventory;
     public $status;

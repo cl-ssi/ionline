@@ -87,9 +87,9 @@ class Inventory extends Model implements Auditable
      * TODO: cuando itero Inventory me hace una query por cada uno hacia computer
      * Evaluar otra alternativa
      */
-    protected $appends = [
-        'have_computer',
-    ];
+    // protected $appends = [
+    //     'have_computer',
+    // ];
 
     /**
     * The attributes that should be cast.

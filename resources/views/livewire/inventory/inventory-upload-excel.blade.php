@@ -48,4 +48,11 @@
         </p>
     </div>
 
+
+    <hr class="mb-3 mt-3">
+
+    <h3>Descargar Base de Datos</h3>
+
+    <a href="{{ route('inventories.export-excel',$establishment) }}">Base de datos</a>
+
 </div>

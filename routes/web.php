@@ -1934,6 +1934,7 @@ Route::prefix('inventories')->as('inventories.')->middleware(['auth', 'must.chan
         Route::get('/manage-users', InventoryManageUsers::class)->name('users.manager')->middleware(['can:Inventory: manager']);
 
         Route::get('/upload-excel', InventoryUploadExcel::class)->name('upload-excel');
+        Route::get('/export-excel', [InventoryController::class, 'export'])->name('export-excel');
     });
 
     Route::get('clasification-mgr', ClassificationMgr::class)->name('clasification-mgr');
