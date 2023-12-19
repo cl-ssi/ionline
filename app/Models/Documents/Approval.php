@@ -125,6 +125,28 @@ class Approval extends Model
             //     ]),
 
 
+            /* (Opcional) es posible capturar información al momento de aprobar/rechazar, ver ejemplos de inputs a continuación */ 
+            /* Estas no podrán ser firmadas en masa, ya que se requiere capturar la información por cada approval */
+            // "callback_feedback_inputs" = json_encode([
+            //     [
+            //         "type" => "text",
+            //         "label" => "Monto Neto",
+            //         "name" => "ammount",
+            //         "value" => null, // Acá se almacenará el resultado, no es necesario enviar
+            //     ],
+            //     [
+            //         "type" => "select",
+            //         "label" => "Cuenta Contable",
+            //         "name" => "account_id",
+            //         "options" => [
+            //             10 => "Cuenta Insumos",
+            //             30 => "Cuenta Medicamentos",
+            //         ],
+            //         "value" => null, // Acá se almacenará el resultado, no es necesario enviar
+            //     ],
+            // ]);
+
+
             /**
              * Opciones para utilizar en cadena de responsabilidad
              * ==============================================================================
@@ -206,6 +228,8 @@ class Approval extends Model
         
         'callback_controller_method',
         'callback_controller_params',
+        'callback_feedback_inputs',
+
         'active',
         'previous_approval_id',
         'approvable_id',

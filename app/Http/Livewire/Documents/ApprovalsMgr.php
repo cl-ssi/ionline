@@ -17,9 +17,11 @@ class ApprovalsMgr extends Component
     public $approver_observation;
     public $approvalSelected;
     public $ids = [];
+    public $bulk = false;
     public $filter = [];
     public $otp;
     public $message;
+    public $callback_feedback_inputs = [];
 
     /** Utilizada por el approval-button */
     public $redirect_route;
@@ -48,6 +50,7 @@ class ApprovalsMgr extends Component
      */
     public function bulkProcess($status)
     {
+        $this->bulk = true;
         $this->approveOrReject(array_keys($this->ids), $status);
         $this->ids = [];
     }
