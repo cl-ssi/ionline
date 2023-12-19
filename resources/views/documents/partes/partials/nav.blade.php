@@ -28,12 +28,13 @@
 
 
     @canany(['Partes: oficina'])
-    <!-- <li class="nav-item">
+    <li class="nav-item">
         <a class="nav-link"
             href="{{ route('documents.add_number') }}">
-            <i class="fas fa-certificate"></i> Numerar y distribuir
+            <i class="fas fa-certificate"></i> Editar
         </a>
-    </li> -->
+    </li>
+
     <li class="nav-item">
         <a class="nav-link {{ active('documents.partes.numeration.inbox') }}"
             href="{{ route('documents.partes.numeration.inbox') }}">
