@@ -89,12 +89,6 @@
                         <td class="text-center"
                             nowrap>
                             {{ $reception->id }}
-
-                            <hr>
-
-                            <button class="btn btn-sm btn-danger" wire:click="delete({{ $reception }})">
-                                <i class="bi bi-trash"></i>
-                            </button>
                         </td>
                         <td nowrap>
                             {{ $reception->purchase_order }}
