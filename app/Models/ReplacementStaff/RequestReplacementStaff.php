@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Rrhh\Authority;
 use Carbon\Carbon;
 use OwenIt\Auditing\Contracts\Auditable;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use App\Models\Documents\Approval;
 
 
 class RequestReplacementStaff extends Model implements Auditable
@@ -91,6 +93,13 @@ class RequestReplacementStaff extends Model implements Auditable
 
     public function signaturesFile(){
         return $this->belongsTo('App\Models\Documents\SignaturesFile');
+    }
+
+    /**
+     * Get all of the ModificationRequest's approvations.
+     */
+    public function approvals(): MorphMany{
+        return $this->morphMany(Approval::class, 'approvable');
     }
 
     public function getLegalQualityValueAttribute() {

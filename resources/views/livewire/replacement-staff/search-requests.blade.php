@@ -221,73 +221,91 @@
                         </p>
                     </td>
                     <td class="text-center">
-                        @foreach($requestReplacementStaff->requestSign as $sign)
-                            @if($sign->request_status == 'pending' || $sign->request_status == NULL)
-                                <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="{{ $sign->organizationalUnit->name }}">
-                                    <i class="fas fa-clock fa-2x"></i>
-                                </span>
-                            @endif
-                            @if($sign->request_status == 'accepted')
-                                <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="{{ $sign->organizationalUnit->name }}" style="color: green;">
-                                    <i class="fas fa-check-circle fa-2x"></i>
-                                </span>
-                            @endif
-                            @if($sign->request_status == 'rejected')
-                                <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="{{ $sign->organizationalUnit->name }}" style="color: Tomato;">
-                                    <i class="fas fa-times-circle fa-2x"></i>
-                                </span>
-                            @endif
-                            @if($sign->request_status == 'not valid')
-                                @if($requestReplacementStaff->signaturesFile)
-                                    @foreach($requestReplacementStaff->signaturesFile->signaturesFlows as $flow)
-                                        @if($flow->status == 1)
-                                        <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="{{ $sign->organizationalUnit->name }}" style="color: green;">
-                                            <i class="fas fa-signature fa-2x"></i>
-                                        </span>
-                                        @else
-                                        <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="{{ $sign->organizationalUnit->name }}">
+                        @if(count($requestReplacementStaff->approvals) > 0)
+                            @foreach($requestReplacementStaff->approvals as $approval)
+                                {{-- dd($approval->sentToOu) --}}
+                                @switch($approval->StatusInWords)
+                                    @case('Pendiente')
+                                        <span class="d-inline-block" tabindex="0" data-toggle="tooltip" data-placement="top" title="{{ $approval->sentToOu->name }}">
                                             <i class="fas fa-clock fa-2x"></i>
                                         </span>
-                                        @endif
-                                    @endforeach
-                                @else
+                                        @break
+                                    @case('Aprobado')
+                                        <span class="d-inline-block" tabindex="0" style="color: green;" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ $approval->sentToOu->name }}">
+                                            <i class="fas fa-check-circle fa-2x"></i>
+                                        </span>
+                                    @break
+                                    @case('Rechazado')
+                                        <span class="d-inline-block" tabindex="0" style="color: tomato;" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ $approval->sentToOu->name }}">
+                                            <i class="fas fa-ban-circle fa-2x"></i>
+                                        </span>
+                                    @break
+                                @endswitch
+                            @endforeach
+                        @else
+                            <!-- Antiguo Modelo Interno de Aprobaciones -->
+                            @foreach($requestReplacementStaff->requestSign as $sign)
+                                @if($sign->request_status == 'pending' || $sign->request_status == NULL)
                                     <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="{{ $sign->organizationalUnit->name }}">
                                         <i class="fas fa-clock fa-2x"></i>
                                     </span>
                                 @endif
-                            @endif
-                        @endforeach
-
+                                @if($sign->request_status == 'accepted')
+                                    <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="{{ $sign->organizationalUnit->name }}" style="color: green;">
+                                        <i class="fas fa-check-circle fa-2x"></i>
+                                    </span>
+                                @endif
+                                @if($sign->request_status == 'rejected')
+                                    <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="{{ $sign->organizationalUnit->name }}" style="color: Tomato;">
+                                        <i class="fas fa-times-circle fa-2x"></i>
+                                    </span>
+                                @endif
+                                @if($sign->request_status == 'not valid')
+                                    @if($requestReplacementStaff->signaturesFile)
+                                        @foreach($requestReplacementStaff->signaturesFile->signaturesFlows as $flow)
+                                            @if($flow->status == 1)
+                                            <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="{{ $sign->organizationalUnit->name }}" style="color: green;">
+                                                <i class="fas fa-signature fa-2x"></i>
+                                            </span>
+                                            @else
+                                            <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="{{ $sign->organizationalUnit->name }}">
+                                                <i class="fas fa-clock fa-2x"></i>
+                                            </span>
+                                            @endif
+                                        @endforeach
+                                    @else
+                                        <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="{{ $sign->organizationalUnit->name }}">
+                                            <i class="fas fa-clock fa-2x"></i>
+                                        </span>
+                                    @endif
+                                @endif
+                            @endforeach
+                        @endif
                         </br>
                         @if($requestReplacementStaff->request_id != NULL)
                             <span class="badge badge-info">Continuidad</span>
                         @endif
                     </td>
                     <td>
-                        @if($requestReplacementStaff->fundament_detail_manage_id != 6 && $requestReplacementStaff->fundament_detail_manage_id != 7)
+                        <!-- ACCIONES CON APPROVALS -->
+                        @if(count($requestReplacementStaff->approvals) > 0)
                             <!-- PERMITE EDITAR SOLICITUD ANTES DE LA PRIMERA APROBACIÓN -->
-                            @if(($requestReplacementStaff->user->id == Auth::user()->id || $requestReplacementStaff->organizational_unit_id == Auth::user()->organizationalUnit->id ||
-                                    ($requestReplacementStaff->requesterUser && $requestReplacementStaff->requesterUser->id == Auth::user()->id)) &&
-                                        $requestReplacementStaff->requestSign->first()->request_status == 'pending')
-                                @if($requestReplacementStaff->form_type != null)
+                            @if($requestReplacementStaff->approvals->first()->status == 0 && 
+                                ($requestReplacementStaff->user->id == Auth::user()->id || 
+                                $requestReplacementStaff->organizational_unit_id == Auth::user()->organizationalUnit->id ||
+                                ($requestReplacementStaff->requesterUser && $requestReplacementStaff->requesterUser->id == Auth::user()->id)))
                                     <a href="{{ route('replacement_staff.request.edit', $requestReplacementStaff) }}"
                                         class="btn btn-outline-secondary btn-sm" title="Selección"><i class="fas fa-edit"></i></a>
-                                @else
-                                    <a href="{{ route('replacement_staff.request.technical_evaluation.show', $requestReplacementStaff) }}"
-                                        class="btn btn-outline-secondary btn-sm" title="Resumen"><i class="fas fa-eye"></i></a>
-                                @endif
+                            @endif
                             <!-- PERMITE MOSTRAR EL BOTÓN PARA ASIGNAR SOLICITUD -->
-                            @elseif(($requestReplacementStaff->requestSign->last()->request_status == "accepted" ||
-                                $requestReplacementStaff->signaturesFile && $requestReplacementStaff->signaturesFile->signaturesFlows->first()-> status == 1) &&
-                                    !$requestReplacementStaff->technicalEvaluation &&
-                                        Auth::user()->hasPermissionTo('Replacement Staff: assign request'))
-
+                            @if($requestReplacementStaff->approvals->last()->status == 1 &&
+                                !$requestReplacementStaff->technicalEvaluation &&
+                                Auth::user()->hasPermissionTo('Replacement Staff: assign request'))
                                 <div class="form-check">
                                     <input class="form-check-input" 
-                                        type="checkbox" {{-- name="sign_id[]" --}}
+                                        type="checkbox"
                                         wire:model.debounce.500ms="checkToAssign"
                                         value="{{ $requestReplacementStaff->id }}"
-                                        {{-- onclick="myFunction()" --}}
                                         id="for_sign_id">
                                 </div>
 
@@ -300,19 +318,71 @@
                                 @if($users_rys)
                                     @include('replacement_staff.modals.modal_to_assign')
                                 @endif
-
-                            <!-- ACCESO A EVALUACIÓN TÉCNICA -->
+                            @endif
+                            <!-- PERMITE INGRESAR A LA EVALUACION TÉCNICA -->
+                            @if(($typeIndex == 'assign' || $typeIndex == 'assigned_to') 
+                                && $requestReplacementStaff->technicalEvaluation)
+                                <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Asignado a: {{ $requestReplacementStaff->assignEvaluations->last()->userAssigned->FullName }}">
+                                    <a href="{{ route('replacement_staff.request.technical_evaluation.edit', $requestReplacementStaff) }}"
+                                    class="btn btn-outline-secondary btn-sm"><i class="fas fa-edit"></i></a>
+                                </span>
+                                
+                            <!-- BOTÓN PARA SEGUIMIENTO DE EVALUACIÓN TÉCNICA -->
                             @else
-                                <!-- BOTÓN PARA GESTIONAR EVALUACIÓN TÉCNICA -->
-                                @if(($typeIndex == 'assign' || $typeIndex == 'assigned_to') && $requestReplacementStaff->technicalEvaluation)
-                                    <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Asignado a: {{ $requestReplacementStaff->assignEvaluations->last()->userAssigned->FullName }}">
-                                        <a href="{{ route('replacement_staff.request.technical_evaluation.edit', $requestReplacementStaff) }}"
-                                            class="btn btn-outline-secondary btn-sm"><i class="fas fa-edit"></i></a>
-                                    </span>
-                                <!-- BOTÓN PARA SEGUIMIENTO DE EVALUACIÓN TÉCNICA -->
+                                <a href="{{ route('replacement_staff.request.technical_evaluation.show', $requestReplacementStaff) }}"
+                                    class="btn btn-outline-secondary btn-sm" title="Evaluación Técnica"><i class="fas fa-eye"></i></a>
+                            @endif
+                        <!-- ACCIONES CON APROBACIONES DEL MODULO -->
+                        @else
+                            @if($requestReplacementStaff->fundament_detail_manage_id != 6 && $requestReplacementStaff->fundament_detail_manage_id != 7)
+                                <!-- PERMITE EDITAR SOLICITUD ANTES DE LA PRIMERA APROBACIÓN -->
+                                @if(($requestReplacementStaff->user->id == Auth::user()->id || $requestReplacementStaff->organizational_unit_id == Auth::user()->organizationalUnit->id ||
+                                        ($requestReplacementStaff->requesterUser && $requestReplacementStaff->requesterUser->id == Auth::user()->id)) &&
+                                            $requestReplacementStaff->requestSign->first()->request_status == 'pending')
+                                    @if($requestReplacementStaff->form_type != null)
+                                        <a href="{{ route('replacement_staff.request.edit', $requestReplacementStaff) }}"
+                                            class="btn btn-outline-secondary btn-sm" title="Selección"><i class="fas fa-edit"></i></a>
+                                    @else
+                                        <a href="{{ route('replacement_staff.request.technical_evaluation.show', $requestReplacementStaff) }}"
+                                            class="btn btn-outline-secondary btn-sm" title="Resumen"><i class="fas fa-eye"></i></a>
+                                    @endif
+                                <!-- PERMITE MOSTRAR EL BOTÓN PARA ASIGNAR SOLICITUD -->
+                                @elseif(($requestReplacementStaff->requestSign->last()->request_status == "accepted" ||
+                                    $requestReplacementStaff->signaturesFile && $requestReplacementStaff->signaturesFile->signaturesFlows->first()-> status == 1) &&
+                                        !$requestReplacementStaff->technicalEvaluation &&
+                                            Auth::user()->hasPermissionTo('Replacement Staff: assign request'))
+
+                                    <div class="form-check">
+                                        <input class="form-check-input" 
+                                            type="checkbox"
+                                            wire:model.debounce.500ms="checkToAssign"
+                                            value="{{ $requestReplacementStaff->id }}"
+                                            id="for_sign_id">
+                                    </div>
+
+                                    <br />
+                                    
+                                    <button type="button" class="btn btn-outline-secondary btn-sm" data-toggle="modal"
+                                        data-target="#exampleModal-assign-{{ $requestReplacementStaff->id }}">
+                                        <i class="fas fa-user-tag"></i>
+                                    </button>
+                                    @if($users_rys)
+                                        @include('replacement_staff.modals.modal_to_assign')
+                                    @endif
+
+                                <!-- ACCESO A EVALUACIÓN TÉCNICA -->
                                 @else
-                                    <a href="{{ route('replacement_staff.request.technical_evaluation.show', $requestReplacementStaff) }}"
-                                        class="btn btn-outline-secondary btn-sm" title="Evaluación Técnica"><i class="fas fa-eye"></i></a>
+                                    <!-- BOTÓN PARA GESTIONAR EVALUACIÓN TÉCNICA -->
+                                    @if(($typeIndex == 'assign' || $typeIndex == 'assigned_to') && $requestReplacementStaff->technicalEvaluation)
+                                        <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Asignado a: {{ $requestReplacementStaff->assignEvaluations->last()->userAssigned->FullName }}">
+                                            <a href="{{ route('replacement_staff.request.technical_evaluation.edit', $requestReplacementStaff) }}"
+                                                class="btn btn-outline-secondary btn-sm"><i class="fas fa-edit"></i></a>
+                                        </span>
+                                    <!-- BOTÓN PARA SEGUIMIENTO DE EVALUACIÓN TÉCNICA -->
+                                    @else
+                                        <a href="{{ route('replacement_staff.request.technical_evaluation.show', $requestReplacementStaff) }}"
+                                            class="btn btn-outline-secondary btn-sm" title="Evaluación Técnica"><i class="fas fa-eye"></i></a>
+                                    @endif
                                 @endif
                             @endif
                         @endif
