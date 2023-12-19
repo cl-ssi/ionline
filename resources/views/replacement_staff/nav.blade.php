@@ -43,6 +43,7 @@
                     <a class="dropdown-item" href="{{ route('replacement_staff.request.create_replacement') }}"><i class="fas fa-plus"></i> Formulario de Reemplazos</a>
                     <a class="dropdown-item" href="{{ route('replacement_staff.request.create_announcement') }}"><i class="fas fa-plus"></i> Formulario de Convocatorias</a>
                 @endif
+                {{--
                 @if(App\Rrhh\Authority::getAmIAuthorityFromOu(Carbon\Carbon::today(), 'manager', auth()->user()->id)->count() > 0 ||
                     Auth::user()->hasRole('Replacement Staff: personal sign'))
                 <div class="dropdown-divider"></div>
@@ -50,6 +51,7 @@
                     <i class="fas fa-check-circle"></i> Gestión de solicitudes
                 </a>
                 @endif
+                --}}
            </div>
        </li>
     @endif
@@ -65,7 +67,7 @@
             <a class="dropdown-item" href="{{ route('replacement_staff.request.index') }}"><i class="fas fa-user-tag"></i> Asignar Solicitud</a>
             @endcan
             @can('Replacement Staff: technical evaluation')
-            <a class="dropdown-item" href="{{ route('replacement_staff.request.assign_index') }}"><i class="fas fa-inbox"></i> Reclutamiento: Evaluación Técnica</a>
+            <a class="dropdown-item" href="{{ route('replacement_staff.request.assign_index') }}"><i class="fas fa-inbox"></i> Gestión de Solicitudes</a>
             @endcan
         </div>
     </li>
