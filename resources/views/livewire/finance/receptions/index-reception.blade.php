@@ -89,6 +89,12 @@
                         <td class="text-center"
                             nowrap>
                             {{ $reception->id }}
+
+                            <hr>
+
+                            <button class="btn btn-sm btn-danger" wire:click="delete({{ $reception }})">
+                                <i class="bi bi-trash"></i>
+                            </button>
                         </td>
                         <td nowrap>
                             {{ $reception->purchase_order }}
@@ -182,11 +188,12 @@
                         </td>
                         <td>
                             @if($reception->rejected == false)
-                                <!--  Se comenta el Edit hasta que se vea el tema de los firmantes
-                                    <a href="{{ route('finance.receptions.create', $reception) }}"
-                                    class="btn btn-primary">
-                                    <i class="bi bi-pencil-square"></i>
-                                </a> -->
+                                @if($reception->created_at->diffInDays(now()) < 7 AND $reception->creator_id == auth()->id())
+                                    <a href="{{ route('finance.receptions.edit', $reception) }}"
+                                        class="btn btn-primary">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </a>
+                                @endif
                             @endif
                         </td>
                     </tr>

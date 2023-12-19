@@ -70,9 +70,10 @@ use App\Http\Livewire\HealthServices;
 use App\Http\Livewire\Finance\UploadDtes;
 use App\Http\Livewire\Finance\Receptions\TypeMgr;
 use App\Http\Livewire\Finance\Receptions\IndexReception;
+use App\Http\Livewire\Finance\Receptions\EditReception;
 use App\Http\Livewire\Finance\Receptions\CreateRejection;
-use App\Http\Livewire\Finance\Receptions\CreateReception;
 use App\Http\Livewire\Finance\Receptions\CreateReceptionNoOc;
+use App\Http\Livewire\Finance\Receptions\CreateReception;
 use App\Http\Livewire\Finance\IndexDtes;
 use App\Http\Livewire\Finance\DteConfirmation;
 use App\Http\Livewire\Finance\AccountingCodesMgr;
@@ -177,8 +178,8 @@ use App\Http\Controllers\ReplacementStaff\ApplicantController;
 use App\Http\Controllers\Rem\UserRemController;
 use App\Http\Controllers\Rem\RemSerieController;
 use App\Http\Controllers\Rem\RemPeriodSerieController;
-use App\Http\Controllers\Rem\RemPeriodController;
 //use App\Http\Controllers\RequestForms\SupplyPurchaseController;
+use App\Http\Controllers\Rem\RemPeriodController;
 use App\Http\Controllers\Rem\RemFileController;
 use App\Http\Controllers\RNIdb\RNIdbController;
 use App\Http\Controllers\QualityAps\QualityApsController;
@@ -239,6 +240,8 @@ use App\Http\Controllers\Indicators\IaapsController;
 use App\Http\Controllers\Indicators\HealthGoalController;
 use App\Http\Controllers\Indicators\ComgesController;
 use App\Http\Controllers\Indicators\ApsController;
+use App\Http\Controllers\IdentifyNeeds\ProjectController;
+use App\Http\Controllers\IdentifyNeeds\IdentifyNeedController;
 use App\Http\Controllers\HotelBooking\ServiceController;
 use App\Http\Controllers\HotelBooking\RoomController;
 use App\Http\Controllers\HotelBooking\RoomBookingConfigurationController;
@@ -282,8 +285,6 @@ use App\Http\Controllers\Agreements\SignerController;
 use App\Http\Controllers\Agreements\ProgramResolutionController;
 use App\Http\Controllers\Agreements\AgreementController;
 use App\Http\Controllers\Agreements\AddendumController;
-use App\Http\Controllers\IdentifyNeeds\IdentifyNeedController;
-use App\Http\Controllers\IdentifyNeeds\ProjectController;
 
 /*
 |--------------------------------------------------------------------------
@@ -2051,6 +2052,7 @@ Route::prefix('finance')->as('finance.')->middleware(['auth', 'must.change.passw
         Route::get('/create/{reception_id?}', CreateReception::class)->name('create');
         Route::get('/create_no_oc/{reception_id?}', CreateReceptionNoOc::class)->name('create_no_oc');
         Route::get('/reject', CreateRejection::class)->name('reject');
+        Route::get('/edit/{reception}', EditReception::class)->name('edit');
         Route::get('/type', TypeMgr::class)->name('type');
         Route::get('/{reception_id}', [FinReceptionController::class,'show'])->name('show');
     });
