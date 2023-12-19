@@ -180,12 +180,11 @@ class RequestReplacementStaffController extends Controller
 
     public function create_announcement()
     {
-        /*
         session()->flash('danger', 'Estimados Usuario: No es posible crear solicitudes debido a mantención programada, agradecemos su comprensión');
         return redirect()->route('replacement_staff.request.own_index');
-        */
+        
 
-        return view('replacement_staff.request.create_announcement');
+        // return view('replacement_staff.request.create_announcement');
     }
 
     public function create_extension(RequestReplacementStaff $requestReplacementStaff)
@@ -644,7 +643,30 @@ class RequestReplacementStaffController extends Controller
         );
     }
 
+    public function create_budget_availability_certificate_approval_view($request_replacement_staff_id){
+        $requestReplacementStaff = RequestReplacementStaff::find($request_replacement_staff_id);
+
+        $pdf = app('dompdf.wrapper');
+
+        $pdf->loadView('replacement_staff.request.documents.budget_availability_certificate', compact('requestReplacementStaff'));
+
+        $output = $pdf->output();
+
+        return new Response($output, 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' =>  'inline; filename="certificado_disponibilidad_presupuestaria.pdf"']
+        );
+    }
+
     public function create_budget_availability_certificate_document(RequestReplacementStaff $requestReplacementStaff){
+        /*
+        
+        $noAttendanceRecord = NoAttendanceRecord::find($no_attendance_record_id);
+        $documentFile = \PDF::loadView('rrhh.attendances.no-attendance-record', compact('noAttendanceRecord'));
+
+        return $documentFile->stream();
+        */
+
         $pdf = app('dompdf.wrapper');
         $pdf->loadView('replacement_staff.request.documents.budget_availability_certificate', compact('requestReplacementStaff'));
 
