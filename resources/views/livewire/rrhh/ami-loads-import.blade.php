@@ -3,7 +3,7 @@
 
     <div class="form-row">
         <fieldset class="form-group col-6">
-            <label>Archivo</label>
+            <label>Archivo (xls) - Máximo archivos con 2.000 filas.</label>
             <input type="file" class="form-control" wire:model="file">
         </fieldset>
     </div>
