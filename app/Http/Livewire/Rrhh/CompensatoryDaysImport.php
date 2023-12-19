@@ -35,9 +35,10 @@ class CompensatoryDaysImport extends Component
         
         $csvData = file_get_contents($tmpPath);
         $lines = explode(PHP_EOL, $csvData);
-        // dd($lines);
+
         $array = array();
         $count_inserts = 0;
+        $insert_array = [];
         foreach ($lines as $key => $line) {
             $array[] = str_getcsv($line);
             if($array[$key][0]!=null){
@@ -59,28 +60,42 @@ class CompensatoryDaysImport extends Component
                 }
                 $hrs = $array[$key][53];
                 
-                if(!User::find($rut)){
-                    $this->non_existent_users[$rut] = $rut . "-" . $dv;
-                }else{
-                    CompensatoryDay::updateOrCreate([
-                        'user_id' => $rut,
-                        'request_date' => $request_date,
-                        'start_date' => $start_date,
-                        'end_date' => $end_date
-                    ],[
+                // if(!User::find($rut)){
+                //     $this->non_existent_users[$rut] = $rut . "-" . $dv;
+                // }else{
+                    // CompensatoryDay::updateOrCreate([
+                    //     'user_id' => $rut,
+                    //     'request_date' => $request_date,
+                    //     'start_date' => $start_date,
+                    //     'end_date' => $end_date
+                    // ],[
+                    //     'user_id' => $rut,
+                    //     'request_date' => $request_date,
+                    //     'start_date' => $start_date,
+                    //     'end_date' => $end_date,
+                    //     'hrs' => $hrs
+                    // ]);
+
+                    $insert_array[] = [
                         'user_id' => $rut,
                         'request_date' => $request_date,
                         'start_date' => $start_date,
                         'end_date' => $end_date,
                         'hrs' => $hrs
-                    ]);
+                    ];
     
                     $count_inserts += 1;
-                } 
+                // } 
             }
         }
 
-        $this->message2 = $this->message2 . 'Se ha cargado correctamente el archivo (' . $count_inserts . ' registros).';
+        CompensatoryDay::upsert(
+                    $insert_array, 
+                    ['user_id', 'request_date','start_date','end_date'], 
+                    ['hrs']
+        );
+
+        $this->message2 = $this->message2 . 'Se ha cargado correctamente el archivo (' . $count_inserts . ' filas procesadas).';
     }
 
     public function render()

@@ -53,42 +53,63 @@ class AmiLoadsImport extends Component
                         $dv = explode("-",$column['rut'])[1];
 
 
-                        if(!User::find($rut)){
-                            $this->non_existent_users[$rut] = $rut . "-" . $dv . ": " . $column['nombre_empleado'];
-                        }else{
-                            AmiLoad::updateOrCreate([
-                                'id_amipass' => $column['id'],
-                                'sucursal' => $column['sucursal'],
-                                'centro_de_costo' => $column['centro_de_costo'],
-                                'n_factura' => $column['no_factura'],
-                                'fecha' => $fecha,
-                                'n_tarjeta' => $column['no_tarjeta']
-                            ],[
-                                'id_amipass' => $column['id'],
-                                'sucursal' => $column['sucursal'],
-                                'centro_de_costo' => $column['centro_de_costo'],
-                                'n_factura' => $column['no_factura'],
-                                'tipo' => $column['tipo'],
-                                'fecha' => $fecha,
-                                'n_tarjeta' => $column['no_tarjeta'],
-                                'nombre_empleado' => $column['nombre_empleado'],
-                                'run' => $rut,
-                                'dv' => $dv,
-                                'tipo_empleado' => $column['tipo_empleado'],
-                                'monto' => $column['monto']
-                            ]);
+                        // if(!User::find($rut)){
+                        //     $this->non_existent_users[$rut] = $rut . "-" . $dv . ": " . $column['nombre_empleado'];
+                        // }else{
+                        //     AmiLoad::updateOrCreate([
+                        //         'id_amipass' => $column['id'],
+                        //         'sucursal' => $column['sucursal'],
+                        //         'centro_de_costo' => $column['centro_de_costo'],
+                        //         'n_factura' => $column['no_factura'],
+                        //         'fecha' => $fecha,
+                        //         'n_tarjeta' => $column['no_tarjeta']
+                        //     ],[
+                        //         'id_amipass' => $column['id'],
+                        //         'sucursal' => $column['sucursal'],
+                        //         'centro_de_costo' => $column['centro_de_costo'],
+                        //         'n_factura' => $column['no_factura'],
+                        //         'tipo' => $column['tipo'],
+                        //         'fecha' => $fecha,
+                        //         'n_tarjeta' => $column['no_tarjeta'],
+                        //         'nombre_empleado' => $column['nombre_empleado'],
+                        //         'run' => $rut,
+                        //         'dv' => $dv,
+                        //         'tipo_empleado' => $column['tipo_empleado'],
+                        //         'monto' => $column['monto']
+                        //     ]);
 
-                            $count_inserts += 1;
-                        } 
+                        //     $count_inserts += 1;
+                        // } 
+
+                        $insert_array[] = [
+                            'id_amipass' => $column['id'],
+                            'sucursal' => $column['sucursal'],
+                            'centro_de_costo' => $column['centro_de_costo'],
+                            'n_factura' => $column['no_factura'],
+                            'tipo' => $column['tipo'],
+                            'fecha' => $fecha,
+                            'n_tarjeta' => $column['no_tarjeta'],
+                            'nombre_empleado' => $column['nombre_empleado'],
+                            'run' => $rut,
+                            'dv' => $dv,
+                            'tipo_empleado' => $column['tipo_empleado'],
+                            'monto' => $column['monto']
+                        ];
+                        
                     }
                 }
             }
             
         }
 
+        AmiLoad::upsert(
+            $insert_array, 
+            ['id_amipass', 'sucursal','centro_de_costo','n_factura','fecha','n_tarjeta','run'], 
+            ['tipo','nombre_empleado','dv','tipo_empleado','monto']
+        );
         
 
-        $this->message2 = $this->message2 . 'Se ha cargado correctamente el archivo (' . $count_inserts . ' registros).';
+        $this->message2 = $this->message2 . 'Se ha cargado correctamente el archivo (' . $count_inserts . ' filas procesadas).';
     }
 
     public function render()

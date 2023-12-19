@@ -24,7 +24,7 @@
         <div class="alert alert-success" role="alert">
             {{ $message2 }}
 
-            <br>
+            <!-- <br>
             <p>A continuación, listado de usuarios de los que no se pudo importar información (No se encuentran registrados en Ionline). Favor regularizar.</p>
             <ol>
                 @if($non_existent_users)
@@ -32,7 +32,7 @@
                         <li>{{$user}}</li>
                     @endforeach
                 @endif
-            </ol>
+            </ol> -->
         </div>
     @endif
 

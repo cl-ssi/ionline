@@ -227,7 +227,9 @@
                                     @endforeach
                                 </ul>
                             </td>
-                            <td><small>D.Ausentismo: {{$user->dias_ausentismo}}</small> </td>
+                            <td>
+                                <!-- <small>D.Ausentismo: {{$user->dias_ausentismo}}</small>  -->
+                            </td>
                         </tr>
                     @else
                         <tr class="table-info">
