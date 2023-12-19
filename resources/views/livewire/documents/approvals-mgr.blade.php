@@ -67,7 +67,7 @@
                     {{ $approval->module }}
                 </td>
                 <td>
-                    {{ $approval->subject }}
+                    {!! $approval->subject !!}
                 </td>
                 <td class="small">
                     {{ $approval->approver_at }}
