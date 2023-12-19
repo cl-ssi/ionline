@@ -2055,6 +2055,7 @@ Route::prefix('finance')->as('finance.')->middleware(['auth', 'must.change.passw
         Route::get('/edit/{reception}', EditReception::class)->name('edit');
         Route::get('/type', TypeMgr::class)->name('type');
         Route::get('/{reception_id}', [FinReceptionController::class,'show'])->name('show');
+        Route::get('/show_no_oc/{reception_id}', [FinReceptionController::class,'showNoOc'])->name('show_no_oc');
     });
 });
 
@@ -2298,7 +2299,7 @@ Route::prefix('suitability')->as('suitability.')->middleware(['auth', 'must.chan
     Route::get('/report/all/request', [SuitabilityController::class, 'reportAllRequest'])->name('reportAllRequest');
     Route::get('/report', [SuitabilityController::class, 'report'])->name('report');
     Route::get('/reportsigned', [SuitabilityController::class, 'reportsigned'])->name('reportsigned');
-    Route::delete('{psirequest}/destroy', [SuitabilityController::class, 'destroy'])->name('destroy');    
+    Route::delete('{psirequest}/destroy', [SuitabilityController::class, 'destroy'])->name('destroy');
     Route::put('{psirequest}/update', [SuitabilityController::class, 'update'])->name('update');
     Route::post('/', [SuitabilityController::class, 'store'])->name('store');
     Route::get('/own', [SuitabilityController::class, 'indexOwn'])->name('own');

@@ -44,6 +44,20 @@ class ReceptionController extends Controller
         // return view('finance.receptions.show', compact('reception'));
     }
 
+
+
+    public function showNoOc($reception_id)
+    {
+        $reception = Reception::find($reception_id);
+        $establishment = $reception->creator->organizationalUnit->establishment;
+        return Pdf::loadView('finance.receptions.show_no_oc', [
+            'reception' => $reception,
+            'establishment' => $establishment
+        ])->stream('download.pdf');
+
+        // return view('finance.receptions.show', compact('reception'));
+    }
+
     /**
      * Remove the specified resource from storage.
      *

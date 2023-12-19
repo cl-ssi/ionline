@@ -129,7 +129,11 @@
                                         </a>
                                     @endif
                                     @else
-                                    <i class="bi bi-file-pdf-fill">soy sin OC</i>
+                                    <a href="{{ route('finance.receptions.show_no_oc', $reception->id) }}"
+                                            class="btn btn-outline-info"
+                                            target="_blank">
+                                    <i class="bi bi-file-pdf-fill"></i>
+                                    </a>
                                 @endif
                             @endif
                         </td>

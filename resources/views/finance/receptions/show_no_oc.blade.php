@@ -70,19 +70,19 @@
                 Orden de Compra
             </th>
             <td class="nowrap">
-                {{ $reception->purchase_order }}
+                N/A
             </td>
             <th>
                 Proveedor
             </th>
             <td>
-                {{ $reception->purchaseOrder->json->Listado[0]->Proveedor->Nombre }}
+                {{ $reception->dte?->razon_social_emisor }}
             </td>
             <th>
                 RUT Proveedor
             </th>
             <td class="nowrap">
-                {{ $reception->purchaseOrder->json->Listado[0]->Proveedor->RutSucursal }}
+                {{ $reception->dte?->emisor }}
             </td>
         </tr>
         <tr>
@@ -109,7 +109,7 @@
 
     <br>
 
-    <table class="tabla">
+    <!-- <table class="tabla">
         <thead>
             <tr>
                 <th>Producto</th>
@@ -136,7 +136,7 @@
                 @endif
             @endforeach
         </tbody>
-    </table>
+    </table> -->
 
     <table class="totales">
         <tr>
@@ -164,11 +164,11 @@
             <td>$</td>
             <td class="right">{{ money($reception->subtotal) }}</td>
         </tr>
-        <tr>
-            <th>{{ $reception->purchaseOrder->json->Listado[0]->PorcentajeIva }}% IVA</th>
+        <!-- <tr>
+            <th>19% IVA</th>
             <td>$</td>
             <td class="right">{{ money($reception->iva) }}</td>
-        </tr>
+        </tr> -->
         <tr>
             <th>Total</th>
             <td>$</td>
