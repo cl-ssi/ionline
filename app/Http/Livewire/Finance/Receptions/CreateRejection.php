@@ -34,7 +34,6 @@ class CreateRejection extends Component
 
     public function render()
     {
-        app('debugbar')->log($this->reception);
         return view('livewire.finance.receptions.create-rejection');
     }
 

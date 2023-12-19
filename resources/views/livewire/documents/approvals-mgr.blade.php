@@ -46,7 +46,7 @@
             @foreach($approvals as $approval)
             <tr class="table-{{ $approval->color }}">
                 <td class="text-center">
-                    @if($approval->status != true)
+                    @if($approval->status != true AND is_null($approval->callback_feedback_inputs))
                     <input class="form-check-input"
                         style="scale: 1.4;"
                         type="checkbox"
@@ -67,7 +67,7 @@
                     {{ $approval->module }}
                 </td>
                 <td>
-                    {{ $approval->subject }}
+                    {!! $approval->subject !!}
                 </td>
                 <td class="small">
                     {{ $approval->approver_at }}

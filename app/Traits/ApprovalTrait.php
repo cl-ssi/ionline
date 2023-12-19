@@ -21,6 +21,11 @@ trait ApprovalTrait
          */
         $this->showModal = 'd-block';
 
+        /**
+         * Resetear siempre a false para aprobaciones individuales
+         */
+        $this->bulk = false;
+
         /** Soy manager de alguna OU hoy? */
         $ous = auth()->user()->amIAuthorityFromOu->pluck('organizational_unit_id')->toArray();
 
@@ -52,6 +57,11 @@ trait ApprovalTrait
     public function dismiss()
     {
         $this->showModal = null;
+
+        /**
+         * Resetear siempre a false
+         */
+        $this->bulk = false;
     }
 
     /**
@@ -98,7 +108,9 @@ trait ApprovalTrait
              * Aprobar: Aprobaciones simples 
              * ================================== 
              **/
-            $approvalsSimples = Approval::whereIn('id',$approval_ids)->where('digital_signature', false)->get();
+            $approvalsSimples = Approval::whereIn('id',$approval_ids)
+                ->where('digital_signature', false)
+                ->get();
 
             if( $approvalsSimples->isNotEmpty() ) {
                 foreach($approvalsSimples as $approval) {
@@ -171,6 +183,7 @@ trait ApprovalTrait
          */
         $this->dismiss();
 
+
         /**
          * Si se especificó una ruta de redirección, entones luego de aprobaro o rechazar
          * se redirecionará a la ruta
@@ -189,6 +202,21 @@ trait ApprovalTrait
         $approval->approver_observation = $this->approver_observation;
         $approval->approver_at = now();
         $approval->status = $status;
+
+        /**
+         * Si no fue firma en masa, y el approval tiene callback_feedback_inputs
+         */
+        if($this->bulk == false AND $approval->callback_feedback_inputs) {
+            /**
+             * Añade los feedback inputs al final de array de parametros del callback
+             */
+            $inputs = json_decode($approval->callback_feedback_inputs,true);
+            foreach($inputs as $key => $input) {
+                $inputs[$key]['value'] = $this->callback_feedback_inputs[$input['name']];
+            }
+            $approval->callback_feedback_inputs = json_encode($inputs);
+        }
+
         $approval->save();
     }
 

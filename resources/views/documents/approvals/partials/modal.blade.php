@@ -25,6 +25,29 @@
 
                 </div>
                 <div class="modal-body">
+                    @if( is_null($approvalSelected->status) AND $approvalSelected->callback_feedback_inputs)
+                        <div class="row mb-3">
+                            @foreach(json_decode($approvalSelected->callback_feedback_inputs) as $input)
+                            <div class="col">
+                                <label for="input">{{ $input->label }}*</label>
+                                @switch($input->type)
+                                    @case('select')
+                                        <select class="form-select" wire:model.defer="callback_feedback_inputs.{{$input->name}}" required>
+                                            <option value=""></option>
+                                            @foreach($input->options as $key => $option)
+                                                <option value="{{ $key }}">{{ $option }}</option>
+                                            @endforeach
+                                        </select>
+                                    @break
+                                    @case('text')
+                                        <input type="text" class="form-control" wire:model.defer="callback_feedback_inputs.{{$input->name}}" required>
+                                    @break
+                                @endswitch
+                            </div>
+                            @endforeach
+                        </div>
+                    @endif
+
                     <object
                         @if($approvalSelected->digital_signature && $approvalSelected->status)
                             data="{{ $approvalSelected->filename_link }}"
