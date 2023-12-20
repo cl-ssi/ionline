@@ -140,7 +140,7 @@
     </div>
 
     <div class="row g-2 mb-3">
-        <fieldset class="col-md-3">
+        <fieldset class="col-md-4">
             <label for="number-inventory" class="form-label">
                 Nro. Inventario
             </label>
@@ -216,7 +216,7 @@
             @enderror
         </fieldset>
 
-        <fieldset class="col-md-3">
+        <fieldset class="col-md-2">
             <label for="model" class="form-label">
                 Modelo
             </label>
@@ -615,7 +615,7 @@
                     <a
                         class="btn btn-sm btn-primary @cannot('Inventory: edit') disabled @endcannot"
                         href="{{ route('inventories.edit', [
-                            'inventory' => $inventory,
+                            'inventory' => $sameProductItem,
                             'establishment' => $establishment,
                         ]) }}"
                     >
