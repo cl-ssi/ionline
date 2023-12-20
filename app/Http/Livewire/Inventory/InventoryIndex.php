@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Inventory;
 
 use App\Models\Establishment;
 use App\Models\Inv\Inventory;
+use App\Models\Inv\Classification;
 use App\Models\Parameters\Location;
 use App\Models\Parameters\Place;
 use App\Models\Unspsc\Product as UnspscProduct;
@@ -45,6 +46,9 @@ class InventoryIndex extends Component
 
     public $managerInventory;
 
+    public $classifications;
+    public $classification_id;
+
     public function mount(Establishment $establishment)
     {
         $this->getProducts();
@@ -52,6 +56,8 @@ class InventoryIndex extends Component
         $this->getResponsibles();
         $this->getLocations();
         $this->places = collect([]);
+
+        $this->classifications = Classification::orderBy('name')->get();
 
         $manager_inventory_id = Parameter::get('inventory','Encargado de inventario');
         if($manager_inventory_id)
@@ -107,6 +113,9 @@ class InventoryIndex extends Component
             
             ->when($this->inv_id, function($query) {
                 $query->where('id', $this->inv_id);
+            })
+            ->when($this->classification_id, function($query) {
+                $query->where('classification_id', $this->classification_id);
             })
             ->when($this->pending, function($query) {
                 $query->whereHas('pendingMovements');
@@ -242,6 +251,14 @@ class InventoryIndex extends Component
             $this->getResponsibles();
         }
     }
+
+    public function updatedClassificationId($classification_id)
+    {        
+        $this->getInventories();
+    }
+
+
+    
     
 
 

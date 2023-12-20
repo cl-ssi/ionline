@@ -43,7 +43,7 @@
             </select>
         </fieldset>
 
-        <fieldset class="form-group col-md-4">
+        <fieldset class="form-group col-md-3">
             <label for="places">Lugares</label>
             <select
                 wire:model="place_id"
@@ -61,7 +61,7 @@
             </select>
         </fieldset>
 
-        <fieldset class="form-group col-md-2">
+        <fieldset class="form-group col-md-1">
             <label for="pending">En Traspaso</label>
             <select
                 wire:model.defer="pending"
@@ -81,6 +81,22 @@
                 id="oc"
                 class="form-control"
             >
+        </fieldset>
+
+        <fieldset class="form-group col-md-2">
+            <label for="classifications">Clasificación</label>
+            <select
+                wire:model="classification_id"
+                id="classifications"
+                class="form-control form-select"
+            >
+                <option value="">Todas</option>
+                @foreach($classifications as $classification)
+                    <option value="{{ $classification->id }}">
+                        {{ $classification->name }}
+                    </option>
+                @endforeach
+            </select>
         </fieldset>
     </div>
 
