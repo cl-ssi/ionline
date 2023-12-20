@@ -6,6 +6,7 @@ use Livewire\WithFileUploads;
 use App\Models\Establishment;
 use App\Models\Inv\Inventory;
 use App\Models\Inv\InventoryMovement;
+use App\Models\Inv\Classification;
 use App\Models\Parameters\Place;
 use App\Models\Unspsc\Product;
 use Livewire\Component;
@@ -71,6 +72,18 @@ class InventoryUploadExcel extends Component
                     $msg .= "El usuario de la fila " .  ($key+1) . " no se ha ingresado. <br>";$rows_fail+=1;
                     continue;
                 }
+            }
+
+
+            //verificar que la clasificación sea valida
+            if($row[19])
+            {
+                $classification = Classification::where('id',$row[19])->first();
+                if(!$classification){
+                    $msg .= "La clasifcacióndel producto de la fila " . ($key+1) . " no se ha encontrado. <br>";$rows_fail+=1;
+                    continue;
+                }
+
             }
                             
 
@@ -144,6 +157,7 @@ class InventoryUploadExcel extends Component
                 'accounting_code_id' => $row[15],
                 'dte_number' => $row[16],
                 'old_number' => $row[18],
+                'classification_id' => $row[19],
             ];
             
             if ($movement) {
