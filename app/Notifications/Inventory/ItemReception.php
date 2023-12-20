@@ -45,7 +45,7 @@ class ItemReception extends Notification implements ShouldQueue
     {
         return (new MailMessage)
             ->level('info')
-            ->subject('Recepcionar Item Nº: ' . $this->movement->inventory->number??'')
+            ->subject('Recepcionar Item Nº: ' . $this->movement->inventory->number)
             ->greeting('Hola ' . $notifiable->shortName)
             ->line('Nuevo item de inventario para su recepción Nº: ' . $this->movement->inventory->number)
             // ->line('Item: ' . ($this->movement->inventory->product_id) ? $this->movement->inventory->product->name : $this->movement->inventory->unspscProduct->name)

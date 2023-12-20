@@ -53,7 +53,8 @@
     @livewire('inventory.update-movement', ['inventory' => $inventory])
 
     <hr>
-        @livewire('inventory.removal-request', ['inventory' => $inventory])
+
+    @livewire('inventory.removal-request', ['inventory' => $inventory])
     <h5 class="mt-3">Historial del ítem</h5>
 
     @livewire('inventory.movement-index', ['inventory' => $inventory])

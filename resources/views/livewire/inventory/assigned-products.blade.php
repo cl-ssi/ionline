@@ -55,6 +55,7 @@
     <table class="table table-bordered">
         <thead>
             <th>Nro. Inventario</th>
+            <th>Nro. Antiguo</th>
             <th>Producto</th>
             <th>Estado</th>
             <th>Ubicación</th>
@@ -73,16 +74,17 @@
                     <td>
                         <small class="text-monospace">
                             {{ $inventory->number }}
-                            <br>
-                            {{ $inventory->old_number }}
                         </small>
                     </td>
+                    <td class="small">
+                        {{ $inventory->old_number }}
+                    </td>
                     <td>
-                            @if($inventory->product)
-                                {{ $inventory->product->name }}
-                            @else
-                                {{ $inventory->description }}
-                            @endif
+                        @if($inventory->product)
+                            {{ $inventory->product->name }}
+                        @else
+                            {{ $inventory->description }}
+                        @endif
                         
                         <br>
 
@@ -127,6 +129,11 @@
                         >
                             <i class="fas fa-file-pdf"></i>
                         </a>
+                        @endif
+
+                        <br>
+                        @if($inventory->pendingMovements->isNotEmpty())
+                        <span class="badge bg-danger">En traspaso</span>
                         @endif
                     </td>
                 </tr>
