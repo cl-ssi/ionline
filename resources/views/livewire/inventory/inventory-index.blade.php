@@ -271,6 +271,7 @@
             <thead>
                 <tr>
                     <th class="text-center">Nro. Inv.</th>
+                    <th class="text-center">Nro. Ant.</th>
                     <th>Producto/Especie</th>
                     <th>Estado</th>
                     <th>Ubicación</th>
@@ -296,9 +297,10 @@
                             <a href="{{ route('inventories.show', ['establishment' => $establishment, 'number' => $inventory->number]) }}">
                                 {{ $inventory->number }}
                             </a>
-                            <br>
-                            {{ $inventory->old_number }}
                         </small>
+                    </td>
+                    <td nowrap>
+                        {{ $inventory->old_number }}
                     </td>
                     <td>
                         @if($inventory->unspscProduct)
