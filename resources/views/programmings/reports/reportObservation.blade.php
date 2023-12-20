@@ -32,7 +32,7 @@
             <th class="text-center align-middle table-dark">¿SE ACEPTA?</th>
             <th class="text-center align-middle table-dark">OBSERVACIÓN</th>
             <th class="text-center align-middle table-dark">EVALUADO POR</th>
-            <th class="text-center align-middle table-dark">REVISAR</th>
+            @if($programming->status == 'active')<th class="text-center align-middle table-dark">REVISAR</th>@endif
             @can('Reviews: delete')
             <th class="text-center align-middle table-dark">ELIMINAR</th>
             @endcan
