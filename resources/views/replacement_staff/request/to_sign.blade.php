@@ -239,9 +239,9 @@
                                     <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.request.sign.update', [$requestSign, 'status' => 'accepted', $requestReplacementStaff]) }}">
                                         @csrf
                                         @method('PUT')
-                                                            
+                
                                         @if($requestSign->ou_alias == 'uni_per' 
-                                            && Auth::user()->hasRole('Replacement Staff: personal sign') 
+                                            && (Auth::user()->hasRole('Replacement Staff: personal sign') || Auth::user()->id == App\Rrhh\Authority::getTodayAuthorityManagerFromDate(Auth::user()->organizational_unit_id)->user_id)
                                             && ($requestReplacementStaff->legalQualityManage && $requestReplacementStaff->legalQualityManage->NameValue == 'Contrata'))
                                             <fieldset class="form-group">
                                                 <label for="for_gender" >Subtítulo</label>
