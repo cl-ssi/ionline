@@ -99,8 +99,12 @@ class InventoryIndex extends Component
                 });
             })
             ->when($this->number, function($query) {
-                $query->where('number', 'LIKE', '%'.$this->number.'%');
+                $query->where(function($query) {
+                    $query->where('number', 'LIKE', '%'.$this->number.'%')
+                          ->orWhere('old_number', 'LIKE', '%'.$this->number.'%');
+                });
             })
+            
             ->when($this->inv_id, function($query) {
                 $query->where('id', $this->inv_id);
             })

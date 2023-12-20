@@ -137,7 +137,7 @@
         </fieldset>
 
         <fieldset class="form-group col-md-2">
-            <label for="number">Nro. Inventario</label>
+            <label for="number">Nro. Invt<small> (ant o nuevo)</small></label>
             <input
                 wire:model.defer="number"
                 id="number"
