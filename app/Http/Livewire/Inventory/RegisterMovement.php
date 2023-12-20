@@ -57,8 +57,7 @@ class RegisterMovement extends Component
         if($userUsing)
             $dataValidated['user_using_ou_id'] = optional($userUsing->organizationalUnit)->id;
 
-        $movement = InventoryMovement::create($dataValidated);
-        $this->inventory->movements()->save($movement);
+        $this->inventory->movements()->create($dataValidated);
 
         $this->emit('clearSearchUser');
         $this->emit('clearSearchPlace');
