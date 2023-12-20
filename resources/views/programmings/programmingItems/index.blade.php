@@ -81,7 +81,8 @@
                     <div class="form-row">
                         <div class="form-group col-md-12">
                             <select style="font-size:70%;" name="pendingItemSelectedId" id="pendingItem" class="form-control selectpicker " data-live-search="true" title="Seleccione actividad" data-width="100%" required>
-                                    <option style="font-size:70%;" value="">OTRA ACTIVIDAD INDIRECTA PENDIENTE</option>
+                                    <option style="font-size:70%;" value="Esporádicas">OTRA ACTIVIDAD INDIRECTA ESPORÁDICA PENDIENTE</option>
+                                    <option style="font-size:70%;" value="Designación">OTRA ACTIVIDAD INDIRECTA POR DESIGNACIÓN DE ROL PENDIENTE</option>
                                 @foreach($pendingActivities as $activity)
                                     <option style="font-size:70%;" value="{{ $activity->id }}">
                                         {{ Str::limit($activity->tracer.' - '.$activity->activity_name.' - '.$activity->def_target_population.' - '.$activity->professional, 300, '(...)') }}

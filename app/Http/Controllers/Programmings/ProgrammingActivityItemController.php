@@ -18,9 +18,10 @@ class ProgrammingActivityItemController extends Controller
         $year = Programming::find($request->programming_id)->year;
         if($year >= 2024){
             $programmingItem = new ProgrammingItem();
-            $programmingItem->activity_type = $request->pendingItemSelectedId != null ? 'Directa' : 'Indirecta';
+            $programmingItem->activity_type = !in_array($request->pendingItemSelectedId, ['Esporádicas', 'Designación']) ? 'Directa' : 'Indirecta';
+            $programmingItem->activity_subtype = in_array($request->pendingItemSelectedId, ['Esporádicas', 'Designación']) ? $request->pendingItemSelectedId : null;
             $programmingItem->user_id = auth()->id();
-            $programmingItem->activity_id = $request->pendingItemSelectedId;
+            $programmingItem->activity_id = !in_array($request->pendingItemSelectedId, ['Esporádicas', 'Designación']) ? $request->pendingItemSelectedId : null;
             $programmingItem->programming_id = $request->programming_id;
             $programmingItem->save();
 

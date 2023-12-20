@@ -33,6 +33,9 @@
             <th class="text-center align-middle table-dark">OBSERVACIÓN</th>
             <th class="text-center align-middle table-dark">EVALUADO POR</th>
             <th class="text-center align-middle table-dark">REVISAR</th>
+            @can('Reviews: delete')
+            <th class="text-center align-middle table-dark">ELIMINAR</th>
+            @endcan
         </tr>
     </thead>
     <tbody style="font-size:70%;">
@@ -69,6 +72,16 @@
             <td class="text-center align-middle">{{ $reviewItem->user->fullName ?? '' }}</td>
             @can('ProgrammingItem: evaluate')
             @if($programming->status == 'active')<td class="text-center align-middle" ><a href="{{ route('reviewItems.index', ['programmingItem_id' => $reviewItem->programItem->id]) }}" class="btn btb-flat btn-sm btn-light"><i class="fas fa-clipboard-check"></i></a>@endif</td>
+            @endcan
+            @can('Reviews: delete')
+            <td class="text-center align-middle">
+                <form method="POST" action="{{ route('reviewItems.destroy', $reviewItem->id) }}" class="small d-inline">
+                    {{ method_field('DELETE') }} {{ csrf_field() }}
+                    <button class="btn btn-sm btn-outline-danger small" onclick="return confirm('¿Desea eliminar el registro realmente?')">
+                    <span class="fas fa-trash-alt " aria-hidden="true"></span>
+                    </button>
+                </form>
+            </td>
             @endcan
         </tr>
     @php($key++)
