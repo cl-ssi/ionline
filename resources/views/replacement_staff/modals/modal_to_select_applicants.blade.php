@@ -10,7 +10,7 @@
             </div>
             <div class="modal-body">
                 <h6>Postulantes a cargo(s)</h6>
-                <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.request.technical_evaluation.applicant.update_to_select', $applicant) }}">
+                <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.request.technical_evaluation.applicant.update_to_select') }}">
                 @csrf
                 @method('PUT')
 
@@ -50,12 +50,21 @@
                                 <td>{{ $applicant->observations }}</td>
                                 <td>
                                   @if($applicant->desist == NULL)
+                                  
                                   <fieldset class="form-group">
                                       <div class="form-check">
                                           <input class="form-check-input" type="checkbox" name="applicant_id[]" onclick="myFunction()" id="for_applicant_id"
                                             value="{{ $applicant->id }}">
                                       </div>
                                   </fieldset>
+                                  {{--
+                                  <fieldset class="form-group">
+                                      <div class="form-check">
+                                          <input class="form-check-input" type="checkbox" name="applicant_id[]" onclick="myFunction()" id="for_applicant_id"
+                                            value="{{ $applicant->id }}">
+                                      </div>
+                                  </fieldset>
+                                  --}}
                                   @endif
                                 </td>
                             </tr>

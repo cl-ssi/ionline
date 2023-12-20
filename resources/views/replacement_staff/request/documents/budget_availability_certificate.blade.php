@@ -21,7 +21,7 @@
     que aprueba el presupuesto del Sector Público para el año 2023, vengo en certificar que la 
     Dirección del Servicio de Salud Tarapacá, cuenta con presupuesto para la contratación del 
     funcionario (a) que se individualiza, por el periodo señalado en la presente solicitud y resolución, 
-    con cargo al subtítulo <u>{{ $requestReplacementStaff->budgetItem->code }}, {{ $requestReplacementStaff->budgetItem->name }}</u>.
+    con cargo al subtítulo <u>{{ ($requestReplacementStaff->budgetItem) ? $requestReplacementStaff->budgetItem->code : '' }}, {{ ($requestReplacementStaff->budgetItem) ? $requestReplacementStaff->budgetItem->name : '' }}</u>.
 </div>
 
 <div style="clear: both; padding-bottom: 20px">&nbsp;</div>

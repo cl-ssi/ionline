@@ -134,6 +134,54 @@ class ApplicantController extends Controller
 
     public function update_to_select(Request $request, Applicant $applicant)
     {
+        /*
+        $applicant_evaluated = Applicant::find($request->applicant_id);
+
+        if($applicant_evaluated->psycholabor_evaluation_score == 0 || $applicant_evaluated->technical_evaluation_score == 0){
+            return redirect()
+                ->to(route('replacement_staff.request.technical_evaluation.edit', $applicant_evaluated->technicalEvaluation->requestReplacementStaff).'#applicant')
+                ->with('message-danger-aplicant-no-evaluated', 'Estimado usuario, favor ingresar evaluacion de postulante(s) seleccionado(s).');
+        }
+        else{
+            $applicant_evaluated->fill($request->all());
+            $applicant_evaluated->selected = 1;
+            $applicant_evaluated->save();
+
+            $applicant_evaluated->replacementStaff->status = 'selected';
+            $applicant_evaluated->replacementStaff->save();
+
+            $applicant_evaluated->technicalEvaluation->date_end = now();
+            $applicant_evaluated->technicalEvaluation->technical_evaluation_status = 'complete';
+            $applicant_evaluated->technicalEvaluation->save();
+
+            // SE AGREGA FINANCE STATUS = SIGN 
+            $applicant_evaluated->technicalEvaluation->requestReplacementStaff->request_status = 'finance sign';
+            $applicant_evaluated->technicalEvaluation->requestReplacementStaff->save();
+
+            // SE CREA APPROVAL DE F.E. FINANZAS
+            $approval = $applicant_evaluated->technicalEvaluation->requestReplacementStaff->approvals()->create([
+                "module"                            => "Solicitudes de Contración: Reemplazo",
+                "module_icon"                       => "bi bi-id-card",
+                "subject"                           => 'Certificado de disponibilidad presupuestaria<br><br>
+                                                        ID: '. $applicant_evaluated->technicalEvaluation->requestReplacementStaff->id.'<br><br>'.
+                                                        '<small><b>Periodo</b>: '. $applicant_evaluated->start_date->format('d-m-Y').' - '.$applicant_evaluated->end_date->format('d-m-Y').'<br>'.
+                                                        '<b>Funcionario</b>: '. $applicant_evaluated->replacementStaff->FullName.'<br>'.
+                                                        '<b> Codigo Item Presupuestario </b> - Nombre Item Presupuestario </small>',
+                "sent_to_ou_id"                     => Parameter::get('ou','FinanzasSSI'),
+                "document_route_name"               => "replacement_staff.request.create_budget_availability_certificate_approval_view",
+                "document_route_params"             => json_encode(["request_replacement_staff_id" => $applicant_evaluated->technicalEvaluation->requestReplacementStaff->id]),
+                "digital_signature"                 => true,
+                "active"                            => true,
+                "previous_approval_id"              => $applicant_evaluated->technicalEvaluation->requestReplacementStaff->approvals->last()->id,
+                "callback_controller_method"        => "App\Http\Controllers\ReplacementStaff\RequestReplacementStaffController@approvalCallback",
+                "callback_controller_params"        => json_encode([
+                    'request_replacement_staff_id'  => $applicant_evaluated->technicalEvaluation->requestReplacementStaff->id,
+                    'process'                       => null
+                ])
+            ]);
+        }
+        */
+        
         foreach ($request->applicant_id as $key_file => $app_id) {
             $applicant_evaluated = Applicant::where('id', $app_id)->first();
             if($applicant_evaluated->psycholabor_evaluation_score == 0 || $applicant_evaluated->technical_evaluation_score == 0){
@@ -166,7 +214,7 @@ class ApplicantController extends Controller
 
         $technicalEvaluation->requestReplacementStaff->request_status = 'complete';
         $technicalEvaluation->requestReplacementStaff->save();
-
+        
         
         //NOTIFICACIÓN VÍA CORREO ELECTRONICO
         $mail_request = $technicalEvaluation->requestReplacementStaff->user->email;
@@ -202,7 +250,7 @@ class ApplicantController extends Controller
         $notification_personal_manager->user->notify(new NotificationEndSelection($technicalEvaluation->requestReplacementStaff, 'personal'));
 
         return redirect()
-          ->to(route('replacement_staff.request.technical_evaluation.edit', $applicant->technicalEvaluation->requestReplacementStaff).'#applicant')
+          ->to(route('replacement_staff.request.technical_evaluation.edit', $technicalEvaluation->requestReplacementStaff).'#applicant')
           ->with('message-success-aplicant-finish', 'Estimado usuario, ha completado el proceso de selección');
     }
 
