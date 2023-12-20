@@ -48,7 +48,7 @@
         {{-- <div class="jumbotron mt-4 pt-2"> --}}
         <div class="mt-4 p-5 text-black rounded" style="background-color: #EEEEEE">
             <div class="row">
-                {{--
+                
                 <div class="col-md-3 col-12">
                     <!-- <img src="{{ asset('images/tree.jpg') }}" class="img-thumbnail rounded" alt="Arbol de navidad"> -->
                     <img src="{{ asset('images/Logo Servicio de Salud Tarapacá - RGB.png') }}"
@@ -76,7 +76,7 @@
                         </li>
                     </ul>
                 </div>
-                --}}
+                
 
                 <div class="col">
                     <h6>Pasos para solicitud de Firma Electrónica del Gobierno (OTP) para Funcionarios Visadores y Firmantes</h6>
