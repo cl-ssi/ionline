@@ -43,15 +43,15 @@
                     <a class="dropdown-item" href="{{ route('replacement_staff.request.create_replacement') }}"><i class="fas fa-plus"></i> Formulario de Reemplazos</a>
                     <a class="dropdown-item" href="{{ route('replacement_staff.request.create_announcement') }}"><i class="fas fa-plus"></i> Formulario de Convocatorias</a>
                 @endif
-                {{--
+                
                 @if(App\Rrhh\Authority::getAmIAuthorityFromOu(Carbon\Carbon::today(), 'manager', auth()->user()->id)->count() > 0 ||
                     Auth::user()->hasRole('Replacement Staff: personal sign'))
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="{{ route('replacement_staff.request.to_sign_index') }}">
-                    <i class="fas fa-check-circle"></i> Gestión de solicitudes
+                    <i class="fas fa-check-circle"></i> Gestión de aprobaciones
                 </a>
                 @endif
-                --}}
+                
            </div>
        </li>
     @endif
