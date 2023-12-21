@@ -217,7 +217,7 @@
                     {{ $requestReplacementStaff->fundamentManage->NameValue }}
                   </td>
                   <td style="width: 33%">
-                    {{ $requestReplacementStaff->fundamentDetailManage->NameValue }}
+                    {{ ($requestReplacementStaff->fundamentDetailManage) ? $requestReplacementStaff->fundamentDetailManage->NameValue : '' }}
                   </td>
               </tr>
               <tr>
