@@ -697,27 +697,27 @@
                     </td>
                     <td colspan="3">
                         <table>
+                            @if (key_exists('descuentos', $reception) and $reception['descuentos'] > 0)
+                            <tr>
+                                <th>Dcto.</th>
+                                <td>$</td>
+                                <td style="text-align: right;">{{ money($reception['descuentos'] ?? 0) }}
+                                </td>
+                            </tr>
+                            @endif
+                            @if (key_exists('cargos', $reception) and $reception['cargos'] > 0)
+                            <tr>
+                                <th>Cargos</th>
+                                <td>$</td>
+                                <td style="text-align: right;">{{ money($reception['cargos'] ?? 0) }}</td>
+                            </tr>
+                            @endif
                             <tr>
                                 <th width="100">Neto</th>
                                 <td>$</td>
                                 <td width="100"
                                     style="text-align: right;">{{ money($reception['neto'] ?? 0) }}</td>
                             </tr>
-                            @if (key_exists('descuentos', $reception) and $reception['descuentos'] > 0)
-                                <tr>
-                                    <th>Dcto.</th>
-                                    <td>$</td>
-                                    <td style="text-align: right;">{{ money($reception['descuentos'] ?? 0) }}
-                                    </td>
-                                </tr>
-                            @endif
-                            @if (key_exists('cargos', $reception) and $reception['cargos'] > 0)
-                                <tr>
-                                    <th>Cargos</th>
-                                    <td>$</td>
-                                    <td style="text-align: right;">{{ money($reception['cargos'] ?? 0) }}</td>
-                                </tr>
-                            @endif
                             <tr>
                                 <th>Subtotal</th>
                                 <td>$</td>

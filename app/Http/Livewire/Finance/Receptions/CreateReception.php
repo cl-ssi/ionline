@@ -219,10 +219,12 @@ class CreateReception extends Component
         if(!$this->receptionItems[$key]['Cantidad']) {
             $this->receptionItems[$key]['Cantidad'] = 0;
         }
-        $this->receptionItems[$key]['Total'] = $this->receptionItems[$key]['Cantidad'] * $this->receptionItems[$key]['PrecioNeto'];        
+        $this->receptionItems[$key]['Total'] = $this->receptionItems[$key]['Cantidad'] * $this->receptionItems[$key]['PrecioNeto'];
         $this->reception['neto']             = array_sum(array_column($this->receptionItems, 'Total'));
-        // TODO: Falta agregar cargos y descuentos
-        $this->reception['subtotal'] = $this->reception['neto']; 
+        // TODO: Solo implementé el caso de los cargos totales, aún no he podido ver un caso con cargos en cada item. OC Ej: 1272565-905-AG23
+        $this->reception['descuentos']       = $this->purchaseOrder->json->Listado[0]->Descuentos ?? 0;
+        $this->reception['cargos']           = $this->purchaseOrder->json->Listado[0]->Cargos ?? 0;
+        $this->reception['subtotal']         = $this->reception['neto'] + $this->reception['cargos'] - $this->reception['descuentos'];
 
         switch ($this->reception['dte_type'] ?? 'factura_electronica') {
             case 'boleta_honorarios':
