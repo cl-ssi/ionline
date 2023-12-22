@@ -10,7 +10,7 @@
             </div>
             <div class="modal-body">
                 <h6>Postulantes a cargo(s)</h6>
-                <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.request.technical_evaluation.applicant.update_to_select') }}">
+                <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.request.technical_evaluation.applicant.update_to_select', $applicant) }}">
                 @csrf
                 @method('PUT')
 
