@@ -58,6 +58,7 @@ use App\Http\Livewire\Inventory\InventoryManageUsers;
 use App\Http\Livewire\Inventory\InventoryLastReceptions;
 use App\Http\Livewire\Inventory\InventoryIndex;
 use App\Http\Livewire\Inventory\InventoryEdit;
+use App\Http\Livewire\Inventory\Fusion;
 use App\Http\Livewire\Inventory\CreateTransfer;
 use App\Http\Livewire\Inventory\ClassificationMgr;
 use App\Http\Livewire\Inventory\CheckTransfer;
@@ -177,8 +178,8 @@ use App\Http\Controllers\ReplacementStaff\CommissionController;
 use App\Http\Controllers\ReplacementStaff\ApplicantController;
 use App\Http\Controllers\Rem\UserRemController;
 use App\Http\Controllers\Rem\RemSerieController;
-use App\Http\Controllers\Rem\RemPeriodSerieController;
 //use App\Http\Controllers\RequestForms\SupplyPurchaseController;
+use App\Http\Controllers\Rem\RemPeriodSerieController;
 use App\Http\Controllers\Rem\RemPeriodController;
 use App\Http\Controllers\Rem\RemFileController;
 use App\Http\Controllers\RNIdb\RNIdbController;
@@ -1922,6 +1923,7 @@ Route::prefix('inventories')->as('inventories.')->middleware(['auth', 'must.chan
         Route::get('/number/{number}', InventoryShow::class)->name('show');
 
         Route::get('/print-code-queue', PrintCodeQueue::class)->name('print-code-queue');
+        Route::get('/fusion', Fusion::class)->name('fusion');
 
         Route::get('/', InventoryIndex::class)->name('index')
             ->middleware(['can:Inventory: index']);

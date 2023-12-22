@@ -111,6 +111,11 @@ class Inventory extends Model implements Auditable
         return $this->belongsTo(Establishment::class, 'establishment_id');
     }
 
+    public function classification()
+    {
+        return $this->belongsTo(Classification::class);
+    }
+
     public function requestOrganizationalUnit()
     {
         return $this->belongsTo(OrganizationalUnit::class, 'request_user_ou_id');
