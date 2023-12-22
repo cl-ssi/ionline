@@ -66,10 +66,16 @@
                             </small>
                         </td>
                         <td>
-                            <b>Estandard:</b> {{ $inventory->product?->product?->name }}
+                            @if($inventory->unspscProduct)
+                                <b>Std:</b> {{ $inventory->unspscProduct->name }}
+                            @endif
                             <br>
                             <small>
-                                <b>Bodega:</b> {{ $inventory->product?->name }}
+                                @if($inventory->product)
+                                    <b>Bodega:</b> {{ $inventory->product->name }}
+                                @else
+                                    <b>Desc:</b> {{ $inventory->description }}
+                                @endif
                             </small>
                         </td>
                         <td>
