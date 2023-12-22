@@ -590,7 +590,8 @@
 
     <hr>
 
-    <h3>Productos del mismo tipo</h3>
+    <!-- Nila comenta ruido visual
+        <h3>Productos del mismo tipo</h3>
 
     <table class="table table-sm table-bordered">
         <thead>
@@ -625,5 +626,6 @@
             </tr>
             @endforeach
         </tbody>
-    </table>
+    </table> 
+    -->
 </div>
