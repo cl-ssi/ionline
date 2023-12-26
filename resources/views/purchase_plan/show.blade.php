@@ -61,7 +61,7 @@
             </tr>
             <tr>
                 <th class="table-secondary">Depto./Unidad</th>
-                <td class="text-left">{{ $purchasePlan->organizationalUnit->name }}</td>
+                <td class="text-left">{{ $purchasePlan->organizationalUnit->name }} ({{$purchasePlan->organizationalUnit->establishment->name}})</td>
             </tr>
             <tr>
                 <th class="table-secondary">Nombre del Programa o Presupuesto Designado</th>

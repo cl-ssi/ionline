@@ -111,7 +111,7 @@ class PurchasePlanController extends Controller
             return redirect()->back();
         }
         
-        $purchasePlan->load('purchasePlanItems');
+        $purchasePlan->load('purchasePlanItems', 'organizationalUnit');
         if(!$purchasePlan->hasDistributionCompleted()){
             session()->flash('warning', 'No se ha iniciado proceso de aprobación ya que presenta items sin completar detalle de distribución.');
             return redirect()->back();
@@ -126,6 +126,18 @@ class PurchasePlanController extends Controller
             "document_route_name"   => "purchase_plan.show_approval",
             "document_route_params" => json_encode(["purchase_plan_id" => $purchasePlan->id])
         ]);
+
+        if(in_array($purchasePlan->organizationalUnit->establishment_id, explode(',', Parameter::get('establishment', 'EstablecimientosDispositivos')))){
+            /* APROBACION CORRESPONDIENTE A JEFATURA DEPARTAMENTO SALUD MENTAL EN CASO DE SER GESTIONADO POR ESTABLECIMIENTOS Y DISPOSITIVOS */
+            $prev_approval = $purchasePlan->approvals()->create([
+                "module"                => "Plan de Compras",
+                "module_icon"           => "fas fa-shopping-cart",
+                "subject"               => "Solicitud de Aprobación Jefatura Depto. Salud Mental",
+                "sent_to_ou_id"         => Parameter::get('ou', 'SaludMentalSSI'),
+                "document_route_name"   => "purchase_plan.show_approval",
+                "document_route_params" => json_encode(["purchase_plan_id" => $purchasePlan->id])
+            ]);
+        }
 
         /* APROBACION CORRESPONDIENTE A ABASTECIMIENTO */
         $prev_approval = $purchasePlan->approvals()->create([

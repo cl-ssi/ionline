@@ -29,7 +29,7 @@
                         <td>{{ $purchasePlan->subject }}</td>
                         <td>
                             <b>{{ $purchasePlan->userResponsible->FullName }}</b><br>
-                            {{ $purchasePlan->organizationalUnit->name }}<br><br>
+                            {{ $purchasePlan->organizationalUnit->name }} ({{$purchasePlan->organizationalUnit->establishment->name}})<br><br>
                             
                             creado por: <b>{{ $purchasePlan->userCreator->TinnyName }}</b>
                         </td>

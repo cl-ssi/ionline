@@ -17,6 +17,7 @@ use Carbon\Carbon;
 
 use App\Models\Documents\Approval;
 use App\Models\Parameters\Parameter;
+use App\Rrhh\OrganizationalUnit;
 
 class CreatePurchasePlan extends Component
 {
@@ -188,17 +189,29 @@ class CreatePurchasePlan extends Component
                 "module"                => "Plan de Compras",
                 "module_icon"           => "fas fa-shopping-cart",
                 "subject"               => "Solicitud de Aprobación Jefatura",
-                "sent_to_ou_id"        => $purchasePlan->organizational_unit_id,
+                "sent_to_ou_id"         => $purchasePlan->organizational_unit_id,
                 "document_route_name"   => "purchase_plan.show_approval",
                 "document_route_params" => json_encode(["purchase_plan_id" => $purchasePlan->id])
             ]);
+
+            if(in_array($this->searchedUser->organizationalUnit->establishment_id, explode(',', Parameter::get('establishment', 'EstablecimientosDispositivos')))){
+                /* APROBACION CORRESPONDIENTE A JEFATURA DEPARTAMENTO SALUD MENTAL EN CASO DE SER GESTIONADO EN ESTABLECIMIENTOS Y DISPOSITIVOS   */
+                $prev_approval = $purchasePlan->approvals()->create([
+                    "module"                => "Plan de Compras",
+                    "module_icon"           => "fas fa-shopping-cart",
+                    "subject"               => "Solicitud de Aprobación Jefatura Depto. Salud Mental",
+                    "sent_to_ou_id"         => Parameter::get('ou', 'SaludMentalSSI'),
+                    "document_route_name"   => "purchase_plan.show_approval",
+                    "document_route_params" => json_encode(["purchase_plan_id" => $purchasePlan->id])
+                ]);
+            }
 
             /* APROBACION CORRESPONDIENTE A ABASTECIMIENTO */
             $prev_approval = $purchasePlan->approvals()->create([
                 "module"                => "Plan de Compras",
                 "module_icon"           => "fas fa-shopping-cart",
                 "subject"               => "Solicitud de Aprobación Abastecimiento",
-                "sent_to_ou_id"        => Parameter::where('module', 'ou')->where('parameter', 'AbastecimientoSSI')->first()->value,
+                "sent_to_ou_id"         => Parameter::get('ou', 'AbastecimientoSSI'),
                 "document_route_name"   => "purchase_plan.show_approval",
                 "document_route_params" => json_encode(["purchase_plan_id" => $purchasePlan->id]),
                 "previous_approval_id"  => $prev_approval->id,
@@ -210,7 +223,7 @@ class CreatePurchasePlan extends Component
                 "module"                => "Plan de Compras",
                 "module_icon"           => "fas fa-shopping-cart",
                 "subject"               => "Solicitud de Aprobación Depto. Gestión Financiera",
-                "sent_to_ou_id"        => Parameter::where('module', 'ou')->where('parameter', 'FinanzasSSI')->first()->value,
+                "sent_to_ou_id"         => Parameter::get('ou', 'FinanzasSSI'),
                 "document_route_name"   => "purchase_plan.show_approval",
                 "document_route_params" => json_encode(["purchase_plan_id" => $purchasePlan->id]),
                 "previous_approval_id"  => $prev_approval->id,
@@ -222,7 +235,7 @@ class CreatePurchasePlan extends Component
                 "module"                => "Plan de Compras",
                 "module_icon"           => "fas fa-shopping-cart",
                 "subject"               => "Solicitud de Aprobación Subdir. Recursos Físicos y Financieros",
-                "sent_to_ou_id"        => Parameter::where('module', 'ou')->where('parameter', 'SDASSI')->first()->value,
+                "sent_to_ou_id"         => Parameter::get('ou', 'SDASSI'),
                 "document_route_name"   => "purchase_plan.show_approval",
                 "document_route_params" => json_encode(["purchase_plan_id" => $purchasePlan->id]),
                 "previous_approval_id"  => $prev_approval->id,
