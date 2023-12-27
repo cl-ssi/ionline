@@ -79,6 +79,9 @@ class AllowancesCreate extends Component
     /* Variable de pantalla */
     public $form;
 
+    // VARIABLE DE MENSAJE MEDIO DE TRANSPORTE 
+    public $messageMeansOfTransport = NULL;
+
     protected $listeners = ['emitPosition', 'emitPositionValue', 'userSelected', 'savedDestinations', 'selectedInputId',
         'searchedCommune'];
     
@@ -707,6 +710,16 @@ class AllowancesCreate extends Component
         if(!is_null($allowanceToEdit)){
             $this->allowanceToEdit = $allowanceToEdit;
             $this->setAllowance();
+        }
+    }
+
+    public function updatedmeansOfTransport($meansOfTransportId){
+        if($meansOfTransportId == "plane" || $meansOfTransportId == "bus"){
+            $this->messageMeansOfTransport = "<b>Estimado Usuario</b>: Usted ha seleccionado como medio de 
+                transporte Avión o Bus, por lo que debe adjuntar la aprobación de dirección.";
+        }
+        else{
+            $this->messageMeansOfTransport = null;
         }
     }
 }
