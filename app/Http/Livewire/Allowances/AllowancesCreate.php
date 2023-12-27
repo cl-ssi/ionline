@@ -7,7 +7,7 @@ use Livewire\Component;
 use App\Models\Allowances\Allowance;
 use App\Models\Allowances\Destination;
 use App\Models\Allowances\AllowanceFile;
-use App\Models\Allowances\AllowanceSign;
+// use App\Models\Allowances\AllowanceSign;
 
 use App\Models\Parameters\AllowanceValue;
 use App\Models\Parameters\ContractualCondition;
@@ -18,7 +18,6 @@ use App\Rrhh\Authority;
 use App\Models\Parameters\Parameter;
 use App\Models\ClLocality;
 
-
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Support\Facades\Storage;
@@ -26,6 +25,8 @@ use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
+
+use App\Models\Documents\Approval;
 
 class AllowancesCreate extends Component
 {
@@ -230,14 +231,20 @@ class AllowancesCreate extends Component
             );
         }
 
-        /* APROBACION SIRH */
-        $this->sirhSign($alw);
+        
 
-        /* APROBACION U.O. DE ACUERDO SOLICITANTE */
+        // APROBACION SIRH
+        $sirh_approval = $this->sirhSign($alw);
+        dd('hola', $sirh_approval);
+
+        /*
+        // APROBACION U.O. DE ACUERDO SOLICITANTE 
         $this->ouSign($alw);
 
-        /* APROBACION U.O. DE FINANZAS */
+        // APROBACION U.O. DE FINANZAS
         $this->financeSign($alw);
+
+        */
 
         session()->flash('success', 'Estimados Usuario, se ha creado exitosamente la solicitud de viatico N°'.$alw->id);
         return redirect()->route('allowances.index');
@@ -365,6 +372,8 @@ class AllowancesCreate extends Component
 
     public function sirhSign(Allowance $alw)
     {
+        // ANTIGUAS VISACIONES
+        /*
         //SE AGREGA AL PRINCIPIO VISACIÓN SIRH
         $allowance_sing_sirh                            = new AllowanceSign();
         $allowance_sing_sirh->position                  = 1;
@@ -379,6 +388,36 @@ class AllowancesCreate extends Component
         foreach($notificationSirhPermissionUsers as $notificationSirhPermissionUser){
             $notificationSirhPermissionUser->notify(new NewAllowance($alw));
         }
+        */
+
+        // APPROVALS
+        $approval = $alw->approvals()->create([
+            "module"                            => "Viáticos",
+            "module_icon"                       => "bi bi-wallet",
+            "subject"                           => "Solicitud de Viático: ID ". $alw->userAllowance->FullName,
+            "sent_to_ou_id"                     => Parameter::get('ou','FinanzasSSI'),
+            "document_route_name"               => "allowances.show_approval",
+            "document_route_params"             => json_encode([
+                "allowance_id" => $alw->id
+            ]),
+            "active"                            => true,
+            "previous_approval_id"              => null,
+            "callback_feedback_inputs"          => json_encode([
+                [
+                    "type"  => "text",
+                    "label" => "Folio SIRH",
+                    "name"  => "folio",
+                    "value" => null
+                ]
+            ]),
+            "callback_controller_method"        => "App\Http\Controllers\ReplacementStaff\RequestReplacementStaffController@approvalCallback",
+            "callback_controller_params"        => json_encode([
+                'allowance_id'  => $alw->id,
+                'process'       => null
+            ])
+        ]);
+        
+        return $approval->id;
     }
 
     public function ouSign(Allowance $alw){
@@ -580,8 +619,8 @@ class AllowancesCreate extends Component
             'id'            => $destination->id,
             'commune_id'    => $destination->commune->id,
             'commune_name'  => $destination->commune->name,
-            'locality_id'   => $destination->locality->id,
-            'locality_name' => $destination->locality->name,
+            'locality_id'   => ($destination->locality) ? $destination->locality->id : '',
+            'locality_name' => ($destination->locality) ? $destination->locality->name : '',
             'description'   => $destination->description
         ];
     }

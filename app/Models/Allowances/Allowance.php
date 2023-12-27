@@ -13,6 +13,9 @@ use Carbon\Carbon;
 use App\Models\Documents\Signature;
 use App\User;
 
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use App\Models\Documents\Approval;
+
 class Allowance extends Model implements Auditable
 {
     use HasFactory;
@@ -104,6 +107,13 @@ class Allowance extends Model implements Auditable
         }
     }
     */
+
+    /**
+     * Get all of the ModificationRequest's approvations.
+     */
+    public function approvals(): MorphMany{
+        return $this->morphMany(Approval::class, 'approvable');
+    }
     
     public function getLawValueAttribute(){
         switch ($this->law) {

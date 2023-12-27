@@ -387,7 +387,7 @@ Route::middleware(['auth', 'must.change.password'])->group(function () {
     });
 });
 
-/* Replacepent Staff */
+/* Replacement Staff */
 Route::prefix('replacement_staff')->as('replacement_staff.')->middleware(['auth', 'must.change.password'])->group(function () {
     Route::get('/', [ReplacementStaffController::class, 'index'])->name('index')->middleware(['permission:Replacement Staff: list rrhh']);
     Route::get('/{replacement_staff}/show_replacement_staff', [ReplacementStaffController::class, 'show_replacement_staff'])->name('show_replacement_staff');
@@ -2225,6 +2225,7 @@ Route::prefix('allowances')->as('allowances.')->middleware(['auth', 'must.change
     Route::get('{allowance}/edit', [AllowanceController::class, 'edit'])->name('edit');
     Route::put('{allowance}/update', [AllowanceController::class, 'update'])->name('update');
     Route::get('{allowance}/show', [AllowanceController::class, 'show'])->name('show');
+    Route::get('{allowance_id}/show_approval', [AllowanceController::class, 'show_approval'])->name('show_approval');
     Route::get('/show_file/{allowance}', [AllowanceController::class, 'show_file'])->name('show_file');
 
     Route::prefix('files')->as('files.')->group(function () {
