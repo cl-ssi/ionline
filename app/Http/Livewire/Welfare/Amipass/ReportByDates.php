@@ -21,16 +21,17 @@ class ReportByDates extends Component
     public $finicio;
     public $ftermino;
     public $userWithContracts;
+    public $output;
 
     protected $rules = [
         'finicio' => 'required',
         'ftermino' => 'required',
     ];
 
-    public function mount(){
-        $this->finicio = Carbon::createFromDate('2023-02-01');
-        $this->ftermino = Carbon::createFromDate('2023-02-28');
-    }
+    // public function mount(){
+    //     $this->finicio = Carbon::createFromDate('2023-02-01');
+    //     $this->ftermino = Carbon::createFromDate('2023-02-28');
+    // }
 
     public function search(){
 
@@ -95,6 +96,9 @@ class ReportByDates extends Component
                                         $endDate, 
                                         $holidays, 
                                         $compensatoryAbsenteeismType);
+
+            // para exportación
+            $this->output[$user->id] = $user->ammount;
         }
     }
 

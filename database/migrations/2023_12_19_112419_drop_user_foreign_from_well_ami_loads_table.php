@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::table('well_ami_loads', function (Blueprint $table) {
             $table->dropForeign(['run']);
-            $table->unique(['id_amipass','sucursal','centro_de_costo','n_factura','fecha','n_tarjeta','run'],'UNIQUE');
+            $table->unique(['id_amipass','fecha','run'],'UNIQUE');
         });
     }
 
