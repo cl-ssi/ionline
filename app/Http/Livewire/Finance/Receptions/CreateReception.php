@@ -475,6 +475,8 @@ class CreateReception extends Component
             ]);
         }
 
+        /* Si el documento asociado a la recepcion es una GD preguntar si esa guia de despacho tiene asociada una factura dte->invoices si tiene asociada una factura tomar el id de la factura, ponerlo en el reception en el dte_id*/
+
         session()->flash('success', 'Su acta fue creada.');
         return redirect()->route('finance.receptions.index');
     }
