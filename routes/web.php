@@ -2637,6 +2637,8 @@ Route::get('/file/{file}/download', [FileController::class, 'download'])->name('
 Route::view('/some', 'some');
 
 Route::prefix('test')->as('test.')->group(function () {
+    Route::get('/qrs/{width?}/{height?}/{margin?}',[TestController::class, 'qrs']);
+
     Route::get('/file/{receptionFinance}/update', TestFileUpdateManager::class);
     Route::get('/files', TestFileManager::class);
 
