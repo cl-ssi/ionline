@@ -4,13 +4,13 @@
     <div class="row row-cols-lg-auto g-2 mb-3 align-items-center">
         <div class="col-12">
             <label class="visually-hidden"
-                for="for-origin">Origen</label>
+                for="for-input_item_a">Item A</label>
 
             <input type="text"
-                wire:model.defer="input_origin"
-                class="form-control @error('input_origin') is-invalid @enderror"
-                id="for-origin"
-                placeholder="id Origen">
+                wire:model.defer="input_item_a"
+                class="form-control @error('input_item_a') is-invalid @enderror"
+                id="for-input_item_a"
+                placeholder="id ítem A">
         </div>
 
         <div class="col-12">
@@ -23,13 +23,13 @@
 
         <div class="col-12">
             <label class="visually-hidden"
-                for="for-target">Destino</label>
+                for="for-input_item_b">Item B</label>
 
             <input type="text"
-                wire:model.defer="input_target"
-                class="form-control @error('input_target') is-invalid @enderror"
-                id="for-target"
-                placeholder="id Destino">
+                wire:model.defer="input_item_b"
+                class="form-control @error('input_item_b') is-invalid @enderror"
+                id="for-input_item_b"
+                placeholder="id ítem B">
         </div>
 
         <div class="col-12">
@@ -41,7 +41,7 @@
 
     </div>
 
-    @if ($origin and $target)
+    @if ($item_a and $item_b)
         <table class="table table-sm table-bordered">
             <thead>
                 <tr>
@@ -61,9 +61,11 @@
                                 type="radio"
                                 name="for-id"
                                 id="for-id"
-                                value="A">
+                                wire:model.defer="fusion.id"
+                                value="{{ $item_a->id }}"
+                                required>
                             <label class="form-check-label"
-                                for="for-id">{{ $origin->id }}</label>
+                                for="for-id">{{ $item_a->number }}</label>
                         </div>
                     </td>
                     <td>
@@ -72,42 +74,49 @@
                                 type="radio"
                                 name="for-id"
                                 id="for-id"
-                                value="B">
+                                wire:model.defer="fusion.id"
+                                value="{{ $item_b->id }}">
                             <label class="form-check-label"
-                                for="for-id">{{ $target->id }}</label>
+                                for="for-id">{{ $item_b->number }}</label>
                         </div>
                     </td>
                 </tr>
 
 
-                <tr>
-                    <th>Nro. Inventario</th>
-                    <td>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input"
-                                type="radio"
-                                name="for-number"
-                                id="for-number"
-                                value="A">
-                            <label class="form-check-label"
-                                for="for-number">{{ $origin->number }}</label>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input"
-                                type="radio"
-                                name="for-number"
-                                id="for-number"
-                                value="B">
-                            <label class="form-check-label"
-                                for="for-number">{{ $target->number }}</label>
-                        </div>
-                    </td>
-                </tr>
 
                 <tr @class([
-                    'table-success' => $origin->unspsc_product_id == $target->unspsc_product_id,
+                    'table-success' => $item_a->old_number == $item_b->old_number,
+                ])>
+                    <th>Nro. Inventario Antiguo</th>
+                    <td>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input @error('fusion.old_number') is-invalid @enderror"
+                                type="radio"
+                                name="for-old_number"
+                                id="for-old_number"
+                                wire:model.defer="fusion.old_number"
+                                value="{{ $item_a->old_number }}">
+                            <label class="form-check-label"
+                                for="for-old_number">{{ $item_a->old_number }}</label>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input @error('fusion.old_number') is-invalid @enderror"
+                                type="radio"
+                                name="for-old_number"
+                                wire:model.defer="fusion.old_number"
+                                value="{{ $item_b->old_number }}">
+                            <label class="form-check-label"
+                                for="for-old_number">{{ $item_b->old_number }}</label>
+                        </div>
+                    </td>
+                </tr>
+
+
+
+                <tr @class([
+                    'table-success' => $item_a->unspsc_product_id == $item_b->unspsc_product_id,
                 ])>
                     <th>Código</th>
                     <td>
@@ -116,10 +125,11 @@
                                 type="radio"
                                 name="for-code"
                                 id="for-code"
-                                value="A">
+                                value="A"
+                                required>
                             <label class="form-check-label"
-                                for="for-code">{{ $origin->unspscProduct->code }} -
-                                {{ $origin->unspscProduct->name }}</label>
+                                for="for-code">{{ $item_a->unspscProduct->code }} -
+                                {{ $item_a->unspscProduct->name }}</label>
                         </div>
                     </td>
                     <td>
@@ -130,11 +140,13 @@
                                 id="for-code"
                                 value="B">
                             <label class="form-check-label"
-                                for="for-code">{{ $target->unspscProduct->code }} -
-                                {{ $target->unspscProduct->name }}</label>
+                                for="for-code">{{ $item_b->unspscProduct->code }} -
+                                {{ $item_b->unspscProduct->name }}</label>
                         </div>
                     </td>
                 </tr>
+
+
 
                 <tr>
                     <th>Descripción <small><br>(especificación técnica)</small></th>
@@ -144,9 +156,10 @@
                                 type="radio"
                                 name="for-description"
                                 id="for-description"
-                                value="A">
+                                value="A"
+                                required>
                             <label class="form-check-label"
-                                for="for-description">{{ $origin->product ? $origin->product->name : $origin->description }}</label>
+                                for="for-description">{{ $item_a->product ? $item_a->product->name : $item_a->description }}</label>
                         </div>
                     </td>
                     <td>
@@ -157,42 +170,16 @@
                                 id="for-description"
                                 value="B">
                             <label class="form-check-label"
-                                for="for-description">{{ $target->product ? $target->product->name : $target->description }}</label>
+                                for="for-description">{{ $item_b->product ? $item_b->product->name : $item_b->description }}</label>
                         </div>
                     </td>
                 </tr>
 
-                <tr @class([
-                    'table-success' => $origin->unspsc_product_id == $target->unspsc_product_id,
-                ])>
-                    <th>Nro. Inventario Antiguo</th>
-                    <td>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input"
-                                type="radio"
-                                name="for-old_number"
-                                id="for-old_number"
-                                value="A">
-                            <label class="form-check-label"
-                                for="for-old_number">{{ $origin->old_number }}</label>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input"
-                                type="radio"
-                                name="for-old_number"
-                                id="for-old_number"
-                                value="B">
-                            <label class="form-check-label"
-                                for="for-old_number">{{ $target->old_number }}</label>
-                        </div>
-                    </td>
-                </tr>
+
 
                 <tr @class([
                     'table-success' =>
-                        $origin->internal_description == $target->internal_description,
+                        $item_a->internal_description == $item_b->internal_description,
                 ])>
                     <th>Descripción Interna</th>
                     <td>
@@ -203,7 +190,7 @@
                                 id="for-internal_description"
                                 value="A">
                             <label class="form-check-label"
-                                for="for-internal_description">{{ $origin->internal_description }}</label>
+                                for="for-internal_description">{{ $item_a->internal_description }}</label>
                         </div>
                     </td>
                     <td>
@@ -214,13 +201,13 @@
                                 id="for-internal_description"
                                 value="B">
                             <label class="form-check-label"
-                                for="for-internal_description">{{ $target->internal_description }}</label>
+                                for="for-internal_description">{{ $item_b->internal_description }}</label>
                         </div>
                     </td>
                 </tr>
 
                 <tr @class([
-                    'table-success' => $origin->brand == $target->brand,
+                    'table-success' => $item_a->brand == $item_b->brand,
                 ])>
                     <th>Marca</th>
                     <td>
@@ -231,7 +218,7 @@
                                 id="for-brand"
                                 value="A">
                             <label class="form-check-label"
-                                for="for-brand">{{ $origin->brand }}</label>
+                                for="for-brand">{{ $item_a->brand }}</label>
                         </div>
                     </td>
                     <td>
@@ -242,13 +229,13 @@
                                 id="for-brand"
                                 value="B">
                             <label class="form-check-label"
-                                for="for-brand">{{ $target->brand }}</label>
+                                for="for-brand">{{ $item_b->brand }}</label>
                         </div>
                     </td>
                 </tr>
 
                 <tr @class([
-                    'table-success' => $origin->model == $target->model,
+                    'table-success' => $item_a->model == $item_b->model,
                 ])>
                     <th>Modelo</th>
                     <td>
@@ -259,7 +246,7 @@
                                 id="for-model"
                                 value="A">
                             <label class="form-check-label"
-                                for="for-model">{{ $origin->model }}</label>
+                                for="for-model">{{ $item_a->model }}</label>
                         </div>
                     </td>
                     <td>
@@ -270,13 +257,13 @@
                                 id="for-model"
                                 value="B">
                             <label class="form-check-label"
-                                for="for-model">{{ $target->model }}</label>
+                                for="for-model">{{ $item_b->model }}</label>
                         </div>
                     </td>
                 </tr>
 
                 <tr @class([
-                    'table-success' => $origin->serial_number == $target->serial_number,
+                    'table-success' => $item_a->serial_number == $item_b->serial_number,
                 ])>
                     <th>Número de Serie</th>
                     <td>
@@ -287,7 +274,7 @@
                                 id="for-serial_number"
                                 value="A">
                             <label class="form-check-label"
-                                for="for-serial_number">{{ $origin->serial_number }}</label>
+                                for="for-serial_number">{{ $item_a->serial_number }}</label>
                         </div>
                     </td>
                     <td>
@@ -298,7 +285,7 @@
                                 id="for-serial_number"
                                 value="B">
                             <label class="form-check-label"
-                                for="for-serial_number">{{ $target->serial_number }}</label>
+                                for="for-serial_number">{{ $item_b->serial_number }}</label>
                         </div>
                     </td>
                 </tr>
@@ -306,7 +293,7 @@
 
                 <tr @class([
                     'table-success' =>
-                        $origin->accounting_code_id == $target->accounting_code_id,
+                        $item_a->accounting_code_id == $item_b->accounting_code_id,
                 ])>
                     <th>Cuenta contable</th>
                     <td>
@@ -317,7 +304,7 @@
                                 id="for-accounting_code_id"
                                 value="A">
                             <label class="form-check-label"
-                                for="for-accounting_code_id">{{ $origin->accountingCode?->name }}</label>
+                                for="for-accounting_code_id">{{ $item_a->accountingCode?->name }}</label>
                         </div>
                     </td>
                     <td>
@@ -328,13 +315,13 @@
                                 id="for-accounting_code_id"
                                 value="B">
                             <label class="form-check-label"
-                                for="for-accounting_code_id">{{ $target->accountingCode?->name }}</label>
+                                for="for-accounting_code_id">{{ $item_b->accountingCode?->name }}</label>
                         </div>
                     </td>
                 </tr>
 
                 <tr @class([
-                    'table-success' => $origin->status == $target->status,
+                    'table-success' => $item_a->status == $item_b->status,
                 ])>
                     <th>Estado</th>
                     <td>
@@ -345,7 +332,7 @@
                                 id="for-status"
                                 value="A">
                             <label class="form-check-label"
-                                for="for-status">{{ $origin->status }}</label>
+                                for="for-status">{{ $item_a->status }}</label>
                         </div>
                     </td>
                     <td>
@@ -356,13 +343,13 @@
                                 id="for-status"
                                 value="B">
                             <label class="form-check-label"
-                                for="for-status">{{ $target->status }}</label>
+                                for="for-status">{{ $item_b->status }}</label>
                         </div>
                     </td>
                 </tr>
 
                 <tr @class([
-                    'table-success' => $origin->useful_life == $target->useful_life,
+                    'table-success' => $item_a->useful_life == $item_b->useful_life,
                 ])>
                     <th>Vida útil</th>
                     <td>
@@ -373,7 +360,7 @@
                                 id="for-useful_life"
                                 value="A">
                             <label class="form-check-label"
-                                for="for-useful_life">{{ $origin->useful_life }}</label>
+                                for="for-useful_life">{{ $item_a->useful_life }}</label>
                         </div>
                     </td>
                     <td>
@@ -384,13 +371,13 @@
                                 id="for-useful_life"
                                 value="B">
                             <label class="form-check-label"
-                                for="for-useful_life">{{ $target->useful_life }}</label>
+                                for="for-useful_life">{{ $item_b->useful_life }}</label>
                         </div>
                     </td>
                 </tr>
 
                 <tr @class([
-                    'table-success' => $origin->depreciation == $target->depreciation,
+                    'table-success' => $item_a->depreciation == $item_b->depreciation,
                 ])>
                     <th>Depreciación</th>
                     <td>
@@ -401,7 +388,7 @@
                                 id="for-depreciation"
                                 value="A">
                             <label class="form-check-label"
-                                for="for-depreciation">{{ $origin->depreciation }}</label>
+                                for="for-depreciation">{{ $item_a->depreciation }}</label>
                         </div>
                     </td>
                     <td>
@@ -412,13 +399,45 @@
                                 id="for-depreciation"
                                 value="B">
                             <label class="form-check-label"
-                                for="for-depreciation">{{ $target->depreciation }}</label>
+                                for="for-depreciation">{{ $item_b->depreciation }}</label>
                         </div>
                     </td>
                 </tr>
 
                 <tr @class([
-                    'table-success' => $origin->classification_id == $target->classification_id,
+                    'table-success' => $item_a->store_id == $item_b->store_id,
+                ])>
+                    <th>Ingreso en Bodega</th>
+                    <td>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input"
+                                type="radio"
+                                name="for-store_id"
+                                id="for-store_id"
+                                value="A">
+                            <label class="form-check-label"
+                                for="for-store_id">
+                                {{ $item_a->store?->name }} {{ $item_a->control?->date }}
+                            </label>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input"
+                                type="radio"
+                                name="for-store_id"
+                                id="for-store_id"
+                                value="B">
+                            <label class="form-check-label"
+                                for="for-store_id">
+                                {{ $item_b->store?->name }} {{ $item_b->control?->date }}
+                            </label>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr @class([
+                    'table-success' => $item_a->classification_id == $item_b->classification_id,
                 ])>
                     <th>Clasificación</th>
                     <td>
@@ -429,7 +448,7 @@
                                 id="for-classification_id"
                                 value="A">
                             <label class="form-check-label"
-                                for="for-classification_id">{{ $origin->classification->name }}</label>
+                                for="for-classification_id">{{ $item_a->classification->name }}</label>
                         </div>
                     </td>
                     <td>
@@ -440,13 +459,13 @@
                                 id="for-classification_id"
                                 value="B">
                             <label class="form-check-label"
-                                for="for-classification_id">{{ $target->classification->name }}</label>
+                                for="for-classification_id">{{ $item_b->classification->name }}</label>
                         </div>
                     </td>
                 </tr>
 
                 <tr @class([
-                    'table-success' => $origin->request_form_id == $target->request_form_id,
+                    'table-success' => $item_a->request_form_id == $item_b->request_form_id,
                 ])>
                     <th>Formulario de req.</th>
                     <td>
@@ -457,8 +476,8 @@
                                 id="for-request_form_id"
                                 value="A">
                             <label class="form-check-label"
-                                for="for-request_form_id">{{ $origin->requestForm?->folio }}
-                                {{ $origin->requestForm?->associateProgram?->name }}</label>
+                                for="for-request_form_id">{{ $item_a->requestForm?->folio }}
+                                {{ $item_a->requestForm?->associateProgram?->name }}</label>
                         </div>
                     </td>
                     <td>
@@ -469,14 +488,46 @@
                                 id="for-request_form_id"
                                 value="B">
                             <label class="form-check-label"
-                                for="for-request_form_id">{{ $target->requestForm?->folio }}
-                                {{ $target->requestForm?->associateProgram?->name }}</label>
+                                for="for-request_form_id">{{ $item_b->requestForm?->folio }}
+                                {{ $item_b->requestForm?->associateProgram?->name }}</label>
                         </div>
                     </td>
                 </tr>
 
                 <tr @class([
-                    'table-success' => $origin->po_code == $target->po_code,
+                    'table-success' => $item_a->budget_item_id == $item_b->budget_item_id,
+                ])>
+                    <th>Formulario de req.</th>
+                    <td>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input"
+                                type="radio"
+                                name="for-budget_item_id"
+                                id="for-budget_item_id"
+                                value="A">
+                            <label class="form-check-label"
+                                for="for-budget_item_id">
+                                {{ $item_a->budgetItem?->name }}
+                            </label>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input"
+                                type="radio"
+                                name="for-budget_item_id"
+                                id="for-budget_item_id"
+                                value="B">
+                            <label class="form-check-label"
+                                for="for-budget_item_id">
+                                {{ $item_b->budgetItem?->name }}
+                            </label>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr @class([
+                    'table-success' => $item_a->po_code == $item_b->po_code,
                 ])>
                     <th>Orden de Compra</th>
                     <td>
@@ -487,7 +538,7 @@
                                 id="for-po_code"
                                 value="A">
                             <label class="form-check-label"
-                                for="for-po_code">{{ $origin->po_code }}</label>
+                                for="for-po_code">{{ $item_a->po_code }}</label>
                         </div>
                     </td>
                     <td>
@@ -498,13 +549,13 @@
                                 id="for-po_code"
                                 value="B">
                             <label class="form-check-label"
-                                for="for-po_code">{{ $target->po_code }}</label>
+                                for="for-po_code">{{ $item_b->po_code }}</label>
                         </div>
                     </td>
                 </tr>
 
                 <tr @class([
-                    'table-success' => $origin->po_date == $target->po_date,
+                    'table-success' => $item_a->po_date == $item_b->po_date,
                 ])>
                     <th>Fecha OC</th>
                     <td>
@@ -515,7 +566,7 @@
                                 id="for-po_date"
                                 value="A">
                             <label class="form-check-label"
-                                for="for-po_date">{{ $origin->po_date }}</label>
+                                for="for-po_date">{{ $item_a->po_date }}</label>
                         </div>
                     </td>
                     <td>
@@ -526,13 +577,13 @@
                                 id="for-po_date"
                                 value="B">
                             <label class="form-check-label"
-                                for="for-po_date">{{ $target->po_date }}</label>
+                                for="for-po_date">{{ $item_b->po_date }}</label>
                         </div>
                     </td>
                 </tr>
 
                 <tr @class([
-                    'table-success' => $origin->po_price == $target->po_price,
+                    'table-success' => $item_a->po_price == $item_b->po_price,
                 ])>
                     <th>Valor OC</th>
                     <td>
@@ -543,7 +594,7 @@
                                 id="for-po_price"
                                 value="A">
                             <label class="form-check-label"
-                                for="for-po_price">{{ $origin->po_price }}</label>
+                                for="for-po_price">{{ $item_a->po_price }}</label>
                         </div>
                     </td>
                     <td>
@@ -554,7 +605,7 @@
                                 id="for-po_price"
                                 value="B">
                             <label class="form-check-label"
-                                for="for-po_price">{{ $target->po_price }}</label>
+                                for="for-po_price">{{ $item_b->po_price }}</label>
                         </div>
                     </td>
                 </tr>
@@ -569,7 +620,7 @@
                                 id="for-dte_number"
                                 value="A">
                             <label class="form-check-label"
-                                for="for-dte_number">{{ $origin->dte_number }}</label>
+                                for="for-dte_number">{{ $item_a->dte_number }}</label>
                         </div>
                     </td>
                     <td>
@@ -580,13 +631,13 @@
                                 id="for-dte_number"
                                 value="B">
                             <label class="form-check-label"
-                                for="for-dte_number">{{ $target->dte_number }}</label>
+                                for="for-dte_number">{{ $item_b->dte_number }}</label>
                         </div>
                     </td>
                 </tr>
 
                 <tr @class([
-                    'table-success' => $origin->observations == $target->observations,
+                    'table-success' => $item_a->observations == $item_b->observations,
                 ])>
                     <th>Observaciones</th>
                     <td>
@@ -597,7 +648,7 @@
                                 id="for-observations"
                                 value="A">
                             <label class="form-check-label"
-                                for="for-observations">{{ $origin->observations }}</label>
+                                for="for-observations">{{ $item_a->observations }}</label>
                         </div>
                     </td>
                     <td>
@@ -608,20 +659,75 @@
                                 id="for-observations"
                                 value="B">
                             <label class="form-check-label"
-                                for="for-observations">{{ $target->observations }}</label>
+                                for="for-observations">{{ $item_b->observations }}</label>
                         </div>
                     </td>
                 </tr>
 
                 <tr @class([
-                    'table-success' => $origin->observations == $target->observations,
+                    'table-success' => $item_a->removed_user_id == $item_b->removed_user_id,
                 ])>
+                    <th>Usuario que lo eliminó</th>
+                    <td>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input"
+                                type="radio"
+                                name="for-removed_user_id"
+                                id="for-removed_user_id"
+                                value="A">
+                            <label class="form-check-label"
+                                for="for-removed_user_id">{{ $item_a->removed_user_id }}</label>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input"
+                                type="radio"
+                                name="for-removed_user_id"
+                                id="for-removed_user_id"
+                                value="B">
+                            <label class="form-check-label"
+                                for="for-removed_user_id">{{ $item_b->removed_user_id }}</label>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr @class([
+                    'table-success' => $item_a->removed_at == $item_b->removed_at,
+                ])>
+                    <th>Fecha de eliminación</th>
+                    <td>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input"
+                                type="radio"
+                                name="for-removed_at"
+                                id="for-removed_at"
+                                value="A">
+                            <label class="form-check-label"
+                                for="for-removed_at">{{ $item_a->removed_at }}</label>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input"
+                                type="radio"
+                                name="for-removed_at"
+                                id="for-removed_at"
+                                value="B">
+                            <label class="form-check-label"
+                                for="for-removed_at">{{ $item_b->removed_at }}</label>
+                        </div>
+                    </td>
+                </tr>
+
+
+                <tr>
                     <th>Movimientos</th>
                     <td>
-                        @foreach ($origin->movements as $movement)
+                        @foreach ($item_a->movements as $movement)
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input"
-                                    type="radio"
+                                    type="checkbox"
                                     name="for-observations"
                                     id="for-observations"
                                     value="A">
@@ -638,10 +744,10 @@
 
                     </td>
                     <td>
-                        @foreach ($target->movements as $movement)
+                        @foreach ($item_b->movements as $movement)
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input"
-                                    type="radio"
+                                    type="checkbox"
                                     name="for-observations"
                                     id="for-observations"
                                     value="A">
@@ -662,8 +768,9 @@
             </tbody>
         </table>
 
-        <button type="button"
-            class="btn btn-primary">
+        <button type="submit"
+            class="btn btn-primary"
+            wire:click="fusion">
             <i class="bi bi-fusion"></i>
             Fusionar
         </button>
