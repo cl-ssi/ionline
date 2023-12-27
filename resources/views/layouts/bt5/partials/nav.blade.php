@@ -418,7 +418,7 @@
                         </a>
                         @endcanany
 
-                        @canany(['be god'])
+                        @canany(['be god', 'Summary: user', 'Summary: admin', 'Summary: admin viewer'])
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="{{ route('summary.index') }}">
                             <i class="fas fa-balance-scale"></i> Sumario
