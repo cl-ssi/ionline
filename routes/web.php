@@ -2302,7 +2302,7 @@ Route::prefix('suitability')->as('suitability.')->middleware(['auth', 'must.chan
     Route::get('/', [SuitabilityController::class, 'indexOwn'])->name('own');
     Route::post('/emergency/{psirequest}', [SuitabilityController::class, 'emergency'])->name('emergency');
     Route::get('/report/all/request', [SuitabilityController::class, 'reportAllRequest'])->name('reportAllRequest');
-    Route::get('/report', [SuitabilityController::class, 'report'])->name('report');
+    //Route::get('/report', [SuitabilityController::class, 'report'])->name('report');
     Route::get('/reportsigned', [SuitabilityController::class, 'reportsigned'])->name('reportsigned');
     Route::delete('{psirequest}/destroy', [SuitabilityController::class, 'destroy'])->name('destroy');
     Route::put('{psirequest}/update', [SuitabilityController::class, 'update'])->name('update');
@@ -2354,7 +2354,7 @@ Route::prefix('suitability')->as('suitability.')->middleware(['auth', 'must.chan
         Route::delete('/{school}/destroy', [SchoolsController::class, 'destroy'])->name('destroy');
     });
 
-    Route::prefix('users')->as('users.')->middleware('auth')->group(function () {
+    Route::prefix('users')->as('users.')->group(function () {
         Route::get('/', [SchoolUserController::class, 'index'])->name('index');
         Route::get('/create', [SchoolUserController::class, 'create'])->name('create');
         Route::post('/store', [SchoolUserController::class, 'store'])->name('store');
@@ -2362,15 +2362,16 @@ Route::prefix('suitability')->as('suitability.')->middleware(['auth', 'must.chan
         Route::post('/storeuser', [SchoolUserController::class, 'storeuser'])->name('storeuser');
     });
 
-
-    Route::prefix('users')->as('users.')->middleware('auth')->group(function () {
-        Route::get('/', [SchoolUserController::class, 'index'])->name('index');
-        Route::get('/create', [SchoolUserController::class, 'create'])->name('create');
-        Route::post('/store', [SchoolUserController::class, 'store'])->name('store');
+    Route::prefix('reports')->as('reports.')->group(function () {
+        Route::get('/byschool', [SuitabilityController::class, 'report'])->name('bySchool');
+        Route::get('/effective',  [SuitabilityController::class, 'effective'])->name('effective');
+        Route::get('/with-trashed',  [SuitabilityController::class, 'effectiveWithTrashed'])->name('effectiveWithTrashed');
+        
     });
 
 
-    Route::prefix('results')->as('results.')->middleware('auth')->group(function () {
+
+    Route::prefix('results')->as('results.')->group(function () {
         Route::get('/', [ResultsController::class, 'index'])->name('index');
         Route::delete('{result}/destroy', [ResultsController::class, 'destroy'])->name('destroy');
         Route::delete('{result}/destroy-result', [ResultsController::class, 'destroyResult'])->name('destroyResult');

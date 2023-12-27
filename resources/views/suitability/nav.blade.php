@@ -33,9 +33,23 @@
     </li>
 
     <li class="nav-item">
-        <a class="nav-link" href="{{ route('suitability.report') }}">
-            <i class="fas fa-book-open"></i> Reporte
+        <a class="nav-link  dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
+            aria-haspopup="true">
+            <i class="fas fa-book-open"></i> Reportes
         </a>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+            <a class="dropdown-item" href="{{ route('suitability.reports.bySchool') }}">
+                <i class="fas fa-school"></i> Cantidad de Solicitudes por Colegio
+            </a>
+
+            <a class="dropdown-item" href="{{ route('suitability.reports.effective') }}">
+                <i class="fas fa-chart-bar"></i> Cantidad de Solicitudes Efectivas por Colegio
+            </a>
+
+            <a class="dropdown-item" href="{{ route('suitability.reports.effectiveWithTrashed') }}">
+                <i class="fas fa-trash-alt"></i> Cantidad de Solicitudes (Incluye eliminados)
+            </a>
+        </div>
     </li>
 
     @can('be god')
@@ -46,11 +60,7 @@
         </li>
     @endcan
 
-    <li class="nav-item">
-        <a class="nav-link" href="{{ route('suitability.reportAllRequest') }}">
-            <i class="far fa-file-excel"></i> Reporte Todas las Solicitudes
-        </a>
-    </li>
+    
 
     <div class="dropdown show">
         <a class="nav-link  dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
