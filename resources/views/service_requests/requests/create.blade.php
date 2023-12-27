@@ -93,6 +93,7 @@
 				<option value="20">20</option>
 				<option value="16">16</option>
 				<option value="15">15</option>
+                <option value="12">12</option>
 				<option value="11">11</option>
 				<option value="9">9</option>
 				<option value="8.5">8.5</option>
