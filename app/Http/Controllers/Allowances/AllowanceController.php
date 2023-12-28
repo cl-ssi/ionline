@@ -16,6 +16,7 @@ use App\Rrhh\Authority;
 use App\Notifications\Allowances\NewAllowance;
 use App\Models\Parameters\Parameter;
 use App\User;
+use App\Models\Documents\Approval;
 // use Illuminate\Http\RedirectResponse;
 
 use App\Exports\AllowancesExport;
@@ -386,22 +387,22 @@ class AllowanceController extends Controller
         return view('allowances.import.import');
     }
 
-    public function approvalCallback($approval_id, $request_replacement_staff_id, $process){
+    public function approvalCallback($approval_id, $allowance_id, $process){
         $approval = Approval::find($approval_id);
-        $requestReplacementStaff = RequestReplacementStaff::find($request_replacement_staff_id);
+        $allowance = Allowance::find($allowance_id);
         
         /* Aprueba */
         if($approval->status == 1){
             if($process == 'end'){
-                $requestReplacementStaff->request_status = 'complete';
-                $requestReplacementStaff->save();
+                $allowance->status = 'complete';
+                $allowance->save();
             }
         }   
 
         /* Rechaza */
         if($approval->status == 0){
-            $requestReplacementStaff->request_status = 'rejected';
-            $requestReplacementStaff->save();
+            $allowance->status = 'rejected';
+            $allowance->save();
 
         }
     }

@@ -8,8 +8,10 @@
 
 <h5>
     <i class="fas fa-file"></i> Viatico ID: {{ $allowance->id }} <br>
-    Folio sirh: @if($allowance->folio_sirh) {{ $allowance->folio_sirh }} @else No disponible @endif
 </h5>
+<h6>
+    Folio sirh: @if($allowance->folio_sirh) {{ $allowance->folio_sirh }} @else No disponible @endif
+</h6>
 
 <br />
 
@@ -221,6 +223,7 @@
 
 <br>
 
+{{--
 @if($allowance->allowanceSigns->first()->status == 'pending')
     <i class="fas fa-check-circle"></i> Gestión de víatico.
     <div class="table-responsive">
@@ -478,7 +481,7 @@
         </table>
     </div>
 @endif
-
+--}}
 
 
 @endsection
