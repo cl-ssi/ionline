@@ -533,7 +533,7 @@ class CreateReception extends Component
             /* Si es de tipo guía de despacho */
             if( $selectedDte->tipo_documento == "guias_despacho" ) {
                 $this->reception['guia_id'] = $selectedDte->id;
-                if($selectedDte->invoices) {
+                if($selectedDte->invoices && $selectedDte->invoices->first()) {
                     $this->reception['dte_id']  = $selectedDte->invoices->first()->id;
                 }
             }
