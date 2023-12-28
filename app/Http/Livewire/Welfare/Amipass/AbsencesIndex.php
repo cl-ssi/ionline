@@ -18,12 +18,12 @@ class AbsencesIndex extends Component
     {
         if($this->year == 2023){
             return view('livewire.welfare.amipass.absences-index', [
-                'records' => Absence::where('rut', auth()->id())->whereYear('fecha_inicio',2023)
+                'records' => Absence::where('rut', auth()->id())->whereYear('fecha_inicio',$this->year)
                     ->paginate(50),
             ]);
         }else{
             return view('livewire.welfare.amipass.absences-index', [
-                'records' => Absenteeism::where('rut', auth()->id())->whereYear('finicio',2023)
+                'records' => Absenteeism::where('rut', auth()->id())->whereYear('finicio',$this->year)
                     ->paginate(50),
             ]);
         }
