@@ -15,7 +15,7 @@ use App\Models\Parameters\Holiday;
 
 use Livewire\Component;
 
-// use App\Models\Rrhh\CompensatoryDay;
+// use App\Models\Rrhh\CompensatoryDay
 
 class ReportByEmployee extends Component
 {
@@ -24,8 +24,13 @@ class ReportByEmployee extends Component
     public $new_records;
     public $user_id;
     public $calculatedData = [];
+    public $year;
 
     protected $listeners = ['reportByEmployeeEmit', 'reportByEmployeeEmit'];
+
+    public function mount(){
+        $this->year = now()->format('Y');
+    }
 
     public function reportByEmployeeEmit(User $user_id)
     {
@@ -61,14 +66,15 @@ class ReportByEmployee extends Component
             }
         }
 
-
-        // aqui obtener info como en report by dates
-        $start = now()->format('Y').'-01-01';
-        $end = now()->format('Y').'-12-31';
+        $this->calculatedData = [];
+        $this->userWithContracts = null;
         
-        $compensatoryAbsenteeismType = AbsenteeismType::find(5);
+        // aqui obtener info como en report by dates
+        $start = $this->year.'-01-01';
+        $end = $this->year.'-12-31';
+        
+        $compensatoryAbsenteeismType = AbsenteeismType::find(5); // dias compensatorios
         $periods = CarbonPeriod::create($start, '1 month', $end);
-        // dd($this->user_id);
 
         foreach($periods as $period){
             $startDate = $period->copy();
@@ -78,6 +84,7 @@ class ReportByEmployee extends Component
 
             $holidays = Holiday::whereBetween('date', [$startDate, $endDate])->get();
             
+
             /* Obtener los usuarios que tienen contratos en un rango de fecha con sus ausentismos */
             $this->userWithContracts = User::with([
                 'contracts' => function ($query) use ($startDate, $endDate) {
@@ -125,7 +132,9 @@ class ReportByEmployee extends Component
             
             // dd($this->userWithContracts);
 
-            $this->calculatedData[$startDate->format('Y-m')] = $this->userWithContracts->first()->getAmipassData($startDate,$endDate,$holidays,$compensatoryAbsenteeismType);   
+            if($this->userWithContracts->count() > 0){
+                $this->calculatedData[$startDate->format('Y-m')] = $this->userWithContracts->first()->getAmipassData($startDate,$endDate,$holidays,$compensatoryAbsenteeismType);   
+            }
         }
     }
 

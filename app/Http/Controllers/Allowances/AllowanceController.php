@@ -274,6 +274,12 @@ class AllowanceController extends Controller
         return view('allowances.show', compact('allowance'));
     }
 
+    public function show_approval($allowance_id){
+        $allowance = Allowance::find($allowance_id);
+
+        return view('allowances.show_approval', compact('allowance'));
+    }
+
     /**
      * Show the form for editing the specified resource.
      *

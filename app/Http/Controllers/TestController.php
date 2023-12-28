@@ -27,6 +27,14 @@ use App\Jobs\TestJob;
 class TestController extends Controller
 {
     /**
+    * Qrs
+    */
+    public function qrs($width, $height, $margin)
+    {
+        return view('test.qrs', compact('width','height','margin'));
+    }
+
+    /**
     * DocDigital
     */
     public function docDigital()

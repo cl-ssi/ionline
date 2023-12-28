@@ -13,7 +13,7 @@
 
     <h3 class="mb-3">Reporte de Solicitudes de Idoneidad {{ $request->year ?? '' }} - {{ $request->month ?? '' }}
     </h3>
-    <form method="GET" class="form-horizontal" action="{{ route('suitability.report') }}">
+    <form method="GET" class="form-horizontal" action="{{ route('suitability.reports.bySchool') }}">
         <div class="form-row">
             <fieldset class="form-group col-sm-2">
                 <label>Año</label>

@@ -928,7 +928,7 @@ class User extends Authenticatable implements Auditable
                                     $endDate, 
                                     $holidays, 
                                     $compensatoryAbsenteeismType){
-        $output = [];
+        // $output = [];
 
         /* Valor de amipass */
         $this->dailyAmmount = 4480;
@@ -943,8 +943,8 @@ class User extends Authenticatable implements Auditable
                 $shift->ammount = $shift->quantity * $this->shiftAmmount;
                 
                 // se genera array para exportación de montos
-                if(!array_key_exists($this->id,$output)){$output[$this->id] = 0;}
-                $output[$this->id] += $shift->ammount;
+                // if(!array_key_exists($this->id,$output)){$output[$this->id] = 0;}
+                // $output[$this->id] += $shift->ammount;
             }
         }
         else
@@ -1176,8 +1176,8 @@ class User extends Authenticatable implements Auditable
             $this->ammount = $this->dailyAmmount * ( $businessDays - $this->totalAbsenteeisms);
             
             // se genera array para exportación de montos
-            if(!array_key_exists($this->id,$output)){$output[$this->id] = 0;}
-            $output[$this->id] += $this->ammount;
+            // if(!array_key_exists($this->id,$output)){$output[$this->id] = 0;}
+            // $output[$this->id] += $this->ammount;
 
             // 
             // foreach($this->contracts as $contract) {

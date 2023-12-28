@@ -7,15 +7,16 @@ use App\Models\Inv\Inventory;
 
 class Fusion extends Component
 {
-    public $input_origin = '5380';
-    public $input_target = '4883';
+    public $input_item_a = '5380';
+    public $input_item_b = '4883';
 
-    public $origin;
-    public $target;
+    public $item_a;
+    public $item_b;
+    public $fusion;
 
     protected $rules = [
-        'input_origin' => 'required',
-        'input_target' => 'required',
+        'input_item_a' => 'required',
+        'input_item_b' => 'required',
     ];
 
     /**
@@ -24,22 +25,32 @@ class Fusion extends Component
     public function search()
     {
         $this->validate();
-        $origin = Inventory::find($this->input_origin);
-        $target = Inventory::find($this->input_target);
+        $item_a = Inventory::find($this->input_item_a);
+        $item_b = Inventory::find($this->input_item_b);
 
-        if (!$origin) {
-            $this->addError('input_origin', 'El id no se encontró en la base de datos.');
+        if (!$item_a) {
+            $this->addError('input_item_a', 'El id no se encontró en la base de datos.');
         } else {
-            $this->origin = $origin;
+            $this->item_a = $item_a;
         }
 
-        if (!$target) {
-            $this->addError('input_origin', 'El id no se encontró en la base de datos.');
+        if (!$item_b) {
+            $this->addError('input_item_a', 'El id no se encontró en la base de datos.');
         } else {
-            $this->target = $target;
+            $this->item_b = $item_b;
         }
 
-        app('debugbar')->log($this->origin);
+    }
+    
+    /**
+     * Fusion
+     */
+    public function fusion()
+    {
+        $this->validate([
+            'fusion.old_number' => 'required',
+        ]);
+        app('debugbar')->log($this->fusion);
     }
 
     public function render()

@@ -387,7 +387,7 @@ Route::middleware(['auth', 'must.change.password'])->group(function () {
     });
 });
 
-/* Replacepent Staff */
+/* Replacement Staff */
 Route::prefix('replacement_staff')->as('replacement_staff.')->middleware(['auth', 'must.change.password'])->group(function () {
     Route::get('/', [ReplacementStaffController::class, 'index'])->name('index')->middleware(['permission:Replacement Staff: list rrhh']);
     Route::get('/{replacement_staff}/show_replacement_staff', [ReplacementStaffController::class, 'show_replacement_staff'])->name('show_replacement_staff');
@@ -2225,6 +2225,7 @@ Route::prefix('allowances')->as('allowances.')->middleware(['auth', 'must.change
     Route::get('{allowance}/edit', [AllowanceController::class, 'edit'])->name('edit');
     Route::put('{allowance}/update', [AllowanceController::class, 'update'])->name('update');
     Route::get('{allowance}/show', [AllowanceController::class, 'show'])->name('show');
+    Route::get('{allowance_id}/show_approval', [AllowanceController::class, 'show_approval'])->name('show_approval');
     Route::get('/show_file/{allowance}', [AllowanceController::class, 'show_file'])->name('show_file');
 
     Route::prefix('files')->as('files.')->group(function () {
@@ -2301,7 +2302,7 @@ Route::prefix('suitability')->as('suitability.')->middleware(['auth', 'must.chan
     Route::get('/', [SuitabilityController::class, 'indexOwn'])->name('own');
     Route::post('/emergency/{psirequest}', [SuitabilityController::class, 'emergency'])->name('emergency');
     Route::get('/report/all/request', [SuitabilityController::class, 'reportAllRequest'])->name('reportAllRequest');
-    Route::get('/report', [SuitabilityController::class, 'report'])->name('report');
+    //Route::get('/report', [SuitabilityController::class, 'report'])->name('report');
     Route::get('/reportsigned', [SuitabilityController::class, 'reportsigned'])->name('reportsigned');
     Route::delete('{psirequest}/destroy', [SuitabilityController::class, 'destroy'])->name('destroy');
     Route::put('{psirequest}/update', [SuitabilityController::class, 'update'])->name('update');
@@ -2322,13 +2323,13 @@ Route::prefix('suitability')->as('suitability.')->middleware(['auth', 'must.chan
     Route::patch('/finalresult/{psirequest}/{result}', [SuitabilityController::class, 'finalresult'])->name('finalresult');
     Route::get('/sendForSignature/{id}', [SuitabilityController::class, 'sendForSignature'])->name('sendForSignature');
 
-    Route::prefix('categories')->as('categories.')->middleware('auth')->group(function () {
+    Route::prefix('categories')->as('categories.')->group(function () {
         Route::get('/', [CategoriesController::class, 'index'])->name('index');
         Route::get('/create', [CategoriesController::class, 'create'])->name('create');
         Route::post('/store', [CategoriesController::class, 'store'])->name('store');
     });
 
-    Route::prefix('questions')->as('questions.')->middleware('auth')->group(function () {
+    Route::prefix('questions')->as('questions.')->group(function () {
         Route::get('/', [QuestionsController::class, 'index'])->name('index');
         Route::get('/create', [QuestionsController::class, 'create'])->name('create');
         Route::post('/store', [QuestionsController::class, 'store'])->name('store');
@@ -2336,7 +2337,7 @@ Route::prefix('suitability')->as('suitability.')->middleware(['auth', 'must.chan
         Route::put('{question}/update', [QuestionsController::class, 'update'])->name('update');
     });
 
-    Route::prefix('options')->as('options.')->middleware('auth')->group(function () {
+    Route::prefix('options')->as('options.')->group(function () {
         Route::get('/', [OptionsController::class, 'index'])->name('index');
         Route::get('/create', [OptionsController::class, 'create'])->name('create');
         Route::post('/store', [OptionsController::class, 'store'])->name('store');
@@ -2344,7 +2345,7 @@ Route::prefix('suitability')->as('suitability.')->middleware(['auth', 'must.chan
         Route::put('{option}/update', [OptionsController::class, 'update'])->name('update');
     });
 
-    Route::prefix('schools')->as('schools.')->middleware('auth')->group(function () {
+    Route::prefix('schools')->as('schools.')->group(function () {
         Route::get('/', [SchoolsController::class, 'index'])->name('index');
         Route::get('/create', [SchoolsController::class, 'create'])->name('create');
         Route::post('/store', [SchoolsController::class, 'store'])->name('store');
@@ -2353,7 +2354,7 @@ Route::prefix('suitability')->as('suitability.')->middleware(['auth', 'must.chan
         Route::delete('/{school}/destroy', [SchoolsController::class, 'destroy'])->name('destroy');
     });
 
-    Route::prefix('users')->as('users.')->middleware('auth')->group(function () {
+    Route::prefix('users')->as('users.')->group(function () {
         Route::get('/', [SchoolUserController::class, 'index'])->name('index');
         Route::get('/create', [SchoolUserController::class, 'create'])->name('create');
         Route::post('/store', [SchoolUserController::class, 'store'])->name('store');
@@ -2361,15 +2362,16 @@ Route::prefix('suitability')->as('suitability.')->middleware(['auth', 'must.chan
         Route::post('/storeuser', [SchoolUserController::class, 'storeuser'])->name('storeuser');
     });
 
-
-    Route::prefix('users')->as('users.')->middleware('auth')->group(function () {
-        Route::get('/', [SchoolUserController::class, 'index'])->name('index');
-        Route::get('/create', [SchoolUserController::class, 'create'])->name('create');
-        Route::post('/store', [SchoolUserController::class, 'store'])->name('store');
+    Route::prefix('reports')->as('reports.')->group(function () {
+        Route::get('/byschool', [SuitabilityController::class, 'report'])->name('bySchool');
+        Route::get('/effective',  [SuitabilityController::class, 'effective'])->name('effective');
+        Route::get('/with-trashed',  [SuitabilityController::class, 'effectiveWithTrashed'])->name('effectiveWithTrashed');
+        
     });
 
 
-    Route::prefix('results')->as('results.')->middleware('auth')->group(function () {
+
+    Route::prefix('results')->as('results.')->group(function () {
         Route::get('/', [ResultsController::class, 'index'])->name('index');
         Route::delete('{result}/destroy', [ResultsController::class, 'destroy'])->name('destroy');
         Route::delete('{result}/destroy-result', [ResultsController::class, 'destroyResult'])->name('destroyResult');
@@ -2636,6 +2638,8 @@ Route::get('/file/{file}/download', [FileController::class, 'download'])->name('
 Route::view('/some', 'some');
 
 Route::prefix('test')->as('test.')->group(function () {
+    Route::get('/qrs/{width?}/{height?}/{margin?}',[TestController::class, 'qrs']);
+
     Route::get('/file/{receptionFinance}/update', TestFileUpdateManager::class);
     Route::get('/files', TestFileManager::class);
 

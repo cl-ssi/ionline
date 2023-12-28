@@ -343,11 +343,12 @@
                         {{-- @if(Auth::user()->can('Allowances: create') ||
                             Auth::user()->can('Allowances: all') ||
                             Auth::user()->can('Allowances: reports')) --}}
-
+                        {{--
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item {{ active('allowances.index') }}" href="{{ route('allowances.index') }}">
                             <i class="fas fa-wallet"></i> Viáticos
                         </a>
+                        --}}
                         {{-- @endcan --}}
                     @endif
                     </ul>
@@ -417,7 +418,7 @@
                         </a>
                         @endcanany
 
-                        @canany(['be god'])
+                        @canany(['be god', 'Summary: user', 'Summary: admin', 'Summary: admin viewer'])
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="{{ route('summary.index') }}">
                             <i class="fas fa-balance-scale"></i> Sumario

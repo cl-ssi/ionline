@@ -95,6 +95,8 @@ class AmiLoadsImport extends Component
                             'tipo_empleado' => $column['tipo_empleado'],
                             'monto' => $column['monto']
                         ];
+
+                        $count_inserts += 1;
                         
                     }
                 }
@@ -104,8 +106,8 @@ class AmiLoadsImport extends Component
 
         AmiLoad::upsert(
             $insert_array, 
-            ['id_amipass', 'sucursal','centro_de_costo','n_factura','fecha','n_tarjeta','run'], 
-            ['tipo','nombre_empleado','dv','tipo_empleado','monto']
+            ['id_amipass','fecha','run'], 
+            ['sucursal','centro_de_costo','tipo','n_factura','monto','n_tarjeta','nombre_empleado','dv','tipo_empleado']
         );
         
 

@@ -27,7 +27,7 @@ class HomeController extends Controller
         $phrase = PhraseOfTheDay::inRandomOrder()->first();
 
         /* NEWS: Noticias */
-        $allNews = News::all();
+        $allNews = News::latest()->get();
 
         return view('layouts.bt5.home', compact('phrase', 'allNews'));
     }

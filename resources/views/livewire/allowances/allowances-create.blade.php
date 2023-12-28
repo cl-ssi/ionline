@@ -284,8 +284,12 @@
 
     <hr>
     <br>
-
-    {{-- @livewire('allowances.allowance-files') --}}
+    
+    @if($messageMeansOfTransport != NULL)
+        <div class="alert alert-info" role="alert">
+            {!! $messageMeansOfTransport !!}
+        </div>
+    @endif
 
     <h6><i class="fas fa-paperclip"></i> Archivos Adjuntos</h6>
     <br>
@@ -362,14 +366,6 @@
             </ul>
         </div>
     @endif
-    
-    {{--
-    @if(session()->has('current'))
-        <div class="alert alert-danger">
-            {{ session('current') }}
-        </div>
-    @endif
-    --}}
 
     @if(session()->has('exceedTotalDays'))
         <div class="alert alert-danger">
