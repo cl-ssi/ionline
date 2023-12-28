@@ -40,7 +40,7 @@
             height: 50px;
             margin-top: -30px;
             position: absolute;
-            left: 35%; 
+            left: 33%; 
         }
 
         .contenedor .circle-svg {
@@ -82,7 +82,7 @@
                     <circle cx="50%" cy="50%" r="47%" stroke="black" fill="none" />
                 </svg>
                 <p class="small-text">En caso de extravío informar al</p>
-                <div class="whatsapp-number">+56965887867</div>
+                <div class="whatsapp-number">📞+56965887867</div>
             </div>
 
             @if($loop->iteration % 2 == 0)
