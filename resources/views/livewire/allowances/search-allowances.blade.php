@@ -96,7 +96,7 @@
                         <td>{{ $allowance->created_at->format('d-m-Y H:i:s') }}</td>
                         <td>
                             <b>{{ $allowance->userAllowance->FullName }}</b> <br>
-                            {{ $allowance->organizationalUnitAllowance->name }} <br><br>
+                            {{ ($allowance->organizationalUnitAllowance) ? $allowance->organizationalUnitAllowance->name : '' }} <br><br>
                             <b>Creado por</b>: {{ $allowance->userCreator->TinnyName }}
                         </td>
                         <td class="text-center">{{ ($allowance->ContractualCondition) ? $allowance->ContractualCondition->name : '' }}</td>
@@ -140,18 +140,18 @@
                                     <i class="fas fa-keyboard"></i>
                                 </a>
                             @endif
-
+                
                             @if($index == 'own' && $allowance->status != 'manual')
-                                @if($allowance->allowanceSigns->first()->status == 'pending' && Auth::user()->hasPermissionTo('Allowances: create'))
+                                {{-- @if($allowance->allowanceSigns->first()->status == 'pending' && Auth::user()->hasPermissionTo('Allowances: create')) --}}
                                     <a href="{{ route('allowances.edit', $allowance) }}"
                                         class="btn btn-outline-secondary btn-sm" title="Editar"><i class="fas fa-edit"></i>
                                     </a>
-                                @else
+                                {{-- @else --}}
                                     <a href="{{ route('allowances.show', $allowance) }}"
                                         class="btn btn-outline-secondary btn-sm" title="Ver Viático">
                                         <i class="fas fa-eye"></i>
                                     </a>
-                                @endif
+                                {{-- @endif --}}
                             @else
                                 Aprobaciones No Disponibles
                             @endif
