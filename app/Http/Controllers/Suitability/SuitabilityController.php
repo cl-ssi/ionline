@@ -128,6 +128,43 @@ class SuitabilityController extends Controller
         return view('suitability.report.request', compact('request','psirequests'));
     }
 
+
+    public function effective(Request $request)
+    {
+
+        $desde = $request->input('from');
+        $hasta = $request->input('to');
+    
+        $psirequests = PsiRequest::whereBetween('created_at', [$desde, $hasta])->get();
+        return view('suitability.report.request', [
+            'request' => $request,
+            'psirequests' => $psirequests,
+            'route' => route('suitability.reports.effective'),
+            'includeTrashed' => false,
+        ]);
+    }
+
+
+    public function effectiveWithTrashed(Request $request)
+    {
+
+        $desde = $request->input('from');
+        $hasta = $request->input('to');
+    
+        $psirequests = PsiRequest::withTrashed()
+        ->whereBetween('created_at', [$desde, $hasta])
+        ->get();        
+        
+        return view('suitability.report.request', [
+            'request' => $request,
+            'psirequests' => $psirequests,
+            'route' => route('suitability.reports.effectiveWithTrashed'),
+            'includeTrashed' => true,
+        ]);
+    }
+
+
+
     public function createExternal(School $school)
     {
 

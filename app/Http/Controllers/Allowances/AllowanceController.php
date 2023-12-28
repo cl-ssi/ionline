@@ -280,6 +280,12 @@ class AllowanceController extends Controller
         return view('allowances.show_approval', compact('allowance'));
     }
 
+    public function show_resol_pdf($allowance_id){
+        $allowance = Allowance::find($allowance_id);
+
+        return view('allowances.documents.allowance_resol_pdf', compact('allowance'));
+    }
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -378,5 +384,25 @@ class AllowanceController extends Controller
 
     public function import(){
         return view('allowances.import.import');
+    }
+
+    public function approvalCallback($approval_id, $request_replacement_staff_id, $process){
+        $approval = Approval::find($approval_id);
+        $requestReplacementStaff = RequestReplacementStaff::find($request_replacement_staff_id);
+        
+        /* Aprueba */
+        if($approval->status == 1){
+            if($process == 'end'){
+                $requestReplacementStaff->request_status = 'complete';
+                $requestReplacementStaff->save();
+            }
+        }   
+
+        /* Rechaza */
+        if($approval->status == 0){
+            $requestReplacementStaff->request_status = 'rejected';
+            $requestReplacementStaff->save();
+
+        }
     }
 }

@@ -181,6 +181,11 @@ class CreatePurchasePlan extends Component
             PurchasePlanItem::destroy($this->deletedItems);
         }
 
+        if($purchasePlan->approvals()->count() > 0){
+            $purchasePlan->approvals()->delete();
+            $purchasePlan->update(['status' => 'save']);
+        }
+
         if($this->purchase_plan_status == 'sent'){
             /* SE ENVÍA AL MODULOS DE APROBACIONES */
 

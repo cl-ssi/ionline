@@ -9,7 +9,7 @@
 <div class="row">
     <div class="col-md">
         <h4 class="mb-3"><i class="fas fa-inbox"></i> Mis Planes de Compras: </h4>
-        <p>Incluye Planes de Compras de mi Unidad Organizacional: <b>{{ Auth()->user()->organizationalUnit->name }}</b></p>
+        <p>Incluye Planes de Compras de mi Unidad Organizacional: <b>{{ Auth()->user()->organizationalUnit->name }} ({{ Auth()->user()->organizationalUnit->establishment->name}})</b></p>
     </div>
 </div>
 

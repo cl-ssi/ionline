@@ -2,8 +2,8 @@
 @section('title', 'Reporte de Solicitudes de Idoneidad')
 @section('content')
     @include('suitability.nav')
-    <h3 class="mb-3">Reporte de Solicitudes de Idoneidad</h3>
-    <form method="GET" class="form-horizontal" action="{{ route('suitability.reportAllRequest') }}">
+    <h3 class="mb-3">Reporte de Solicitudes de Idoneidad @if ($includeTrashed) (Incluye eliminados) @endif</h3>
+    <form method="GET" class="form-horizontal" action="{{ $route }}">
         <div class="row">
             <div class="col-md-3">
                 <div class="form-group">
@@ -35,6 +35,7 @@
             <table class="table table-sm table-bordered table-responsive text-center align-middle" id="tabla_solicitudes">
                 <thead>
                     <tr>
+                        <th>#</th>
                         <th>ID</th>
                         <th>Run</th>
                         <th>Colegio</th>
@@ -49,8 +50,12 @@
                     </tr>
                 </thead>
                 <tbody>
+                    @php
+                        $counter = 1;
+                    @endphp
                     @forelse ($psirequests as $psirequest)
                         <tr>
+                            <td>{{ $counter }}</td>
                             <td>{{ $psirequest->id ?? '' }}</td>
                             <td>{{ $psirequest->user->runFormat ?? '' }}</td>
                             <td>{{ $psirequest->school->name ?? '' }}</td>
@@ -63,6 +68,9 @@
                             <td>{{ $psirequest->created_at ?? '' }}</td>
                             <td>{{ $psirequest->user->email ?? '' }}</td>
                         </tr>
+                        @php
+                        $counter++;
+                        @endphp
                     @empty
                         <tr>
                             <td colspan="11">No se encontraron solicitudes.</td>

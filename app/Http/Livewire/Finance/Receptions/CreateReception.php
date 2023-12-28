@@ -475,6 +475,8 @@ class CreateReception extends Component
             ]);
         }
 
+        /* Si el documento asociado a la recepcion es una GD preguntar si esa guia de despacho tiene asociada una factura dte->invoices si tiene asociada una factura tomar el id de la factura, ponerlo en el reception en el dte_id*/
+
         session()->flash('success', 'Su acta fue creada.');
         return redirect()->route('finance.receptions.index');
     }
@@ -531,6 +533,9 @@ class CreateReception extends Component
             /* Si es de tipo guía de despacho */
             if( $selectedDte->tipo_documento == "guias_despacho" ) {
                 $this->reception['guia_id'] = $selectedDte->id;
+                if($selectedDte->invoices) {
+                    $this->reception['dte_id']  = $selectedDte->invoices->first()->id;
+                }
             }
             else {
                 $this->reception['dte_id']  = $selectedDte->id;

@@ -234,20 +234,14 @@ class AllowancesCreate extends Component
             );
         }
 
-        
-
         // APROBACION SIRH
         $sirh_approval = $this->sirhSign($alw);
-        dd('hola', $sirh_approval);
 
-        /*
         // APROBACION U.O. DE ACUERDO SOLICITANTE 
-        $this->ouSign($alw);
+        $ou_approval = $this->ouSign($alw, $sirh_approval);
 
         // APROBACION U.O. DE FINANZAS
-        $this->financeSign($alw);
-
-        */
+        $this->financeSign($alw, $ou_approval);
 
         session()->flash('success', 'Estimados Usuario, se ha creado exitosamente la solicitud de viatico N°'.$alw->id);
         return redirect()->route('allowances.index');
@@ -397,7 +391,8 @@ class AllowancesCreate extends Component
         $approval = $alw->approvals()->create([
             "module"                            => "Viáticos",
             "module_icon"                       => "bi bi-wallet",
-            "subject"                           => "Solicitud de Viático: ID ". $alw->userAllowance->FullName,
+            "subject"                           => 'Solicitud de Viático: ID '.$alw->id.'<br>
+                                                    Funcionario: '.$alw->userAllowance->FullName,
             "sent_to_ou_id"                     => Parameter::get('ou','FinanzasSSI'),
             "document_route_name"               => "allowances.show_approval",
             "document_route_params"             => json_encode([
@@ -413,7 +408,7 @@ class AllowancesCreate extends Component
                     "value" => null
                 ]
             ]),
-            "callback_controller_method"        => "App\Http\Controllers\ReplacementStaff\RequestReplacementStaffController@approvalCallback",
+            "callback_controller_method"        => "App\Http\Controllers\Allowances\AllowanceController@approvalCallback",
             "callback_controller_params"        => json_encode([
                 'allowance_id'  => $alw->id,
                 'process'       => null
@@ -423,7 +418,9 @@ class AllowancesCreate extends Component
         return $approval->id;
     }
 
-    public function ouSign(Allowance $alw){
+    public function ouSign(Allowance $alw, $sirh_approval){
+        /*
+
         //CONSULTO SI EL VIATICO ES PARA UNA AUTORIDAD
         $iam_authorities = Authority::getAmIAuthorityFromOu(Carbon::now(), 'manager', $alw->userAllowance->id);
 
@@ -525,15 +522,81 @@ class AllowancesCreate extends Component
                 $this->positionFinance = $position;
             }
         }
+        */
+
+        /*
+        if(count($alw->userAllowance->manager) > 0){
+            foreach($alw->userAllowance->manager as $manager){
+                if($alw->userAllowance->organizational == $manager->organizational_unit_id){
+                    $currentManager = $manager;
+                }
+            }
+        }
+        */
+
+        // $cont = 0;
+        $ous_to_approval = array();
+        $currentOu = $alw->userAllowance->organizationalUnit;
+
+        $lastApprovalId = $sirh_approval;
+        
+        for ($i = $alw->userAllowance->organizationalUnit->level; $i >= 2; $i--){
+            $approval = $alw->approvals()->create([
+                "module"                            => "Viáticos",
+                "module_icon"                       => "bi bi-wallet",
+                "subject"                           => 'Solicitud de Viático: ID '.$alw->id.'<br>
+                                                        Funcionario: '.$alw->userAllowance->FullName,
+                "sent_to_ou_id"                     => $currentOu->id,
+                "document_route_name"               => "allowances.show_approval",
+                "document_route_params"             => json_encode([
+                    "allowance_id" => $alw->id
+                ]),
+                "active"                            => false,
+                "previous_approval_id"              => $lastApprovalId,
+                "callback_controller_method"        => "App\Http\Controllers\Allowances\AllowanceController@approvalCallback",
+                "callback_controller_params"        => json_encode([
+                    'allowance_id'  => $alw->id,
+                    'process'       => null
+                ])
+            ]);
+            $currentOu = $currentOu->father;
+            $lastApprovalId = $approval->id;
+        }
+
+        return $approval->id;
     }
 
-    public function financeSign(Allowance $alw){
+    public function financeSign(Allowance $alw, $ou_approval){
+        /*
         $allowance_sing_finance = new AllowanceSign();
         $allowance_sing_finance->position = $this->positionFinance;
         $allowance_sing_finance->event_type = 'chief financial officer';
         $allowance_sing_finance->organizational_unit_id = Parameter::where('module', 'ou')->where('parameter', 'FinanzasSSI')->first()->value;
         $allowance_sing_finance->allowance_id = $alw->id;
         $allowance_sing_finance->save();
+        */
+
+        $approval = $alw->approvals()->create([
+            "module"                            => "Viáticos",
+            "module_icon"                       => "bi bi-wallet",
+            "subject"                           => 'Solicitud de Viático: ID '.$alw->id.'<br>
+                                                    Funcionario: '.$alw->userAllowance->FullName,
+            "sent_to_ou_id"                     => Parameter::get('ou','FinanzasSSI'),
+            "document_route_name"               => "allowances.show_approval",
+            "document_route_params"             => json_encode([
+                "allowance_id" => $alw->id
+            ]),
+            "active"                            => false,
+            "previous_approval_id"              => $ou_approval,
+            "callback_controller_method"        => "App\Http\Controllers\Allowances\AllowanceController@approvalCallback",
+            "callback_controller_params"        => json_encode([
+                'allowance_id'  => $alw->id,
+                'process'       => 'end'
+            ]),
+            "digital_signature"                 => true,
+            "position"                          => "right",
+            "filename"                          => "ionline/allowances/resol_pdf/".$alw->id.".pdf"
+        ]);
     }
 
     public function updatedContractualConditionId($contractualConditionId){

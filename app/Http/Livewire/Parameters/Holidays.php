@@ -73,7 +73,7 @@ class Holidays extends Component
 
     public function render()
     {
-        $holidays = Holiday::latest()->paginate(25);
+        $holidays = Holiday::orderByDesc('date')->paginate(25);
         return view('livewire.parameters.holidays', [
             'holidays' => $holidays,
         ])->extends('layouts.bt4.app');
