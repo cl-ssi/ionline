@@ -2323,13 +2323,13 @@ Route::prefix('suitability')->as('suitability.')->middleware(['auth', 'must.chan
     Route::patch('/finalresult/{psirequest}/{result}', [SuitabilityController::class, 'finalresult'])->name('finalresult');
     Route::get('/sendForSignature/{id}', [SuitabilityController::class, 'sendForSignature'])->name('sendForSignature');
 
-    Route::prefix('categories')->as('categories.')->middleware('auth')->group(function () {
+    Route::prefix('categories')->as('categories.')->group(function () {
         Route::get('/', [CategoriesController::class, 'index'])->name('index');
         Route::get('/create', [CategoriesController::class, 'create'])->name('create');
         Route::post('/store', [CategoriesController::class, 'store'])->name('store');
     });
 
-    Route::prefix('questions')->as('questions.')->middleware('auth')->group(function () {
+    Route::prefix('questions')->as('questions.')->group(function () {
         Route::get('/', [QuestionsController::class, 'index'])->name('index');
         Route::get('/create', [QuestionsController::class, 'create'])->name('create');
         Route::post('/store', [QuestionsController::class, 'store'])->name('store');
@@ -2337,7 +2337,7 @@ Route::prefix('suitability')->as('suitability.')->middleware(['auth', 'must.chan
         Route::put('{question}/update', [QuestionsController::class, 'update'])->name('update');
     });
 
-    Route::prefix('options')->as('options.')->middleware('auth')->group(function () {
+    Route::prefix('options')->as('options.')->group(function () {
         Route::get('/', [OptionsController::class, 'index'])->name('index');
         Route::get('/create', [OptionsController::class, 'create'])->name('create');
         Route::post('/store', [OptionsController::class, 'store'])->name('store');
@@ -2345,7 +2345,7 @@ Route::prefix('suitability')->as('suitability.')->middleware(['auth', 'must.chan
         Route::put('{option}/update', [OptionsController::class, 'update'])->name('update');
     });
 
-    Route::prefix('schools')->as('schools.')->middleware('auth')->group(function () {
+    Route::prefix('schools')->as('schools.')->group(function () {
         Route::get('/', [SchoolsController::class, 'index'])->name('index');
         Route::get('/create', [SchoolsController::class, 'create'])->name('create');
         Route::post('/store', [SchoolsController::class, 'store'])->name('store');

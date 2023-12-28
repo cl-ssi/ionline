@@ -86,6 +86,7 @@
                                 <label>
                                     {{ $dte->tipoDocumentoIniciales }}
                                     {{ $dte->folio }}
+                                    Id:{{ $dte->id }}
                                 </label>
                             </div>
                         </li>
