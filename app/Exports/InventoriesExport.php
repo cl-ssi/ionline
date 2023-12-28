@@ -2,40 +2,22 @@
 
 namespace App\Exports;
 
-use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\{WithHeadings, WithMapping, ShouldAutoSize};
+use Maatwebsite\Excel\Events\AfterSheet;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use App\Models\Inv\Inventory;
 
-class InventoriesExport implements FromCollection, WithHeadings
+class InventoriesExport implements FromCollection, WithHeadings, WithMapping, ShouldAutoSize
 {
     /**
-    * @return \Illuminate\Support\Collection
-    */
+     * @return \Illuminate\Support\Collection
+     */
     public function collection()
     {
-        return Inventory::where('establishment_id',auth()->user()->organizationalUnit->establishment_id)
+        return Inventory::with('unspscProduct')
+            ->where('establishment_id', auth()->user()->organizationalUnit->establishment_id)
             ->whereNotNull('number')
-            ->select(
-                'number',
-                'description',
-                'unspsc_product_id',
-                'brand',
-                'model',
-                'serial_number',
-                'useful_life',
-                'po_code',
-                'status',
-                'place_id',
-                'request_user_id',
-                'user_responsible_id',
-                'user_using_id',
-                'observations',
-                'po_price',
-                'accounting_code_id',
-                'dte_number',
-                'deliver_date',
-                'old_number',
-            )->get();
+            ->get();
     }
 
     public function headings(): array
@@ -43,7 +25,7 @@ class InventoriesExport implements FromCollection, WithHeadings
         return [
             "numero-inventario",
             "descripcion (especificaciones tecnicas)",
-            "producto estandar ONU (productUNSPSC)",
+            "código producto estandar ONU (productUNSPSC)",
             "marca",
             "modelo",
             "serial",
@@ -59,7 +41,45 @@ class InventoriesExport implements FromCollection, WithHeadings
             "cuenta contable",
             "factura",
             "fecha entrega",
-            "old number"
+            "old number",
         ];
     }
+
+    public function map($inventory): array
+    {
+        $description = '';
+
+        if ($inventory->unspscProduct) {
+            $description .= 'Std: ' . rtrim($inventory->unspscProduct->name) . "\n";
+        }
+
+        if ($inventory->product) {
+            $description .= 'Bodega: ' . rtrim($inventory->product->name);
+        } else {
+            $description .= 'Desc: ' . rtrim($inventory->description);
+        }
+
+        return [
+            $inventory->number,
+            $description,
+            optional($inventory->unspscProduct)->code,
+            $inventory->brand,
+            $inventory->model,
+            $inventory->serial_number,
+            $inventory->useful_life,
+            $inventory->po_code,
+            $inventory->status,
+            $inventory->place_id,
+            $inventory->request_user_id,
+            $inventory->user_responsible_id,
+            $inventory->user_using_id,
+            $inventory->observations,
+            $inventory->po_price,
+            $inventory->accounting_code_id,
+            $inventory->dte_number,
+            $inventory->deliver_date,
+            $inventory->old_number,
+        ];
+    }
+    
 }
