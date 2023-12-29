@@ -5,10 +5,16 @@
 @section('content')
 
     <div class="row">
-        <div class="col">
-            <img src="{{ asset('images/header_ionline_title_150px.png') }}"
-                class="img-fluid"
-                alt="...">
+        <div class="col-2 bg_azul_gob">&nbsp;</div>
+        <div class="col-2 bg_rojo_gob"></div>
+        <div class="col-2 bg-light"></div>
+        <div class="col-2 bg-light"></div>
+        <div class="col-2 bg_azul_gob"></div>
+        <div class="col-2 bg_rojo_gob"></div>
+
+        <div class="col-12 text-center bg-light">
+            <h1 class="color_rojo_gob"><b>iOnline</b></h1>
+            <h3>{{ env('APP_SS', 'Servicio de Salud') }}</h3>
         </div>
     </div>
 
@@ -17,7 +23,8 @@
         role="alert"
         id="developers">
         Hola {{ auth()->user()->firstName }}, soy el sistema
-        <i class="fas fa-cog fa-spin fa-2x" style="color:green"></i>
+        <i class="fas fa-cog fa-spin fa-2x"
+            style="color:green"></i>
         , quiero contarte que fui desarrollado el año 2018 por Alvaro Torres y Jorge Miranda
         y hoy día soy mantenido por un excelente equipo de desarrollo del Departamento TIC,
         dónde se incorporó los Estebanes (Rojas + Miranda) y Álvaro Lupa.
