@@ -30,6 +30,6 @@ class PrintCodeQueue extends Component
 
         return view('livewire.inventory.print-code-queue',[
             'inventories' => $inventories
-        ]);
+        ])->extends('layouts.blank');
     }
 }

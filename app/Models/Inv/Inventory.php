@@ -225,7 +225,7 @@ class Inventory extends Model implements Auditable
     }
 
     public function getQrSmallAttribute() {
-        return QrCode::size(62)
+        return QrCode::size(74)
             ->generate(route('inventories.show', [
                 'establishment' => $this->establishment_id,
                 'number' => $this->number
