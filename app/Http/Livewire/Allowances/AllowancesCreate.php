@@ -411,7 +411,7 @@ class AllowancesCreate extends Component
             "callback_controller_method"        => "App\Http\Controllers\Allowances\AllowanceController@approvalCallback",
             "callback_controller_params"        => json_encode([
                 'allowance_id'  => $alw->id,
-                'process'       => null
+                'process'       => "folio sirh"
             ])
         ]);
         

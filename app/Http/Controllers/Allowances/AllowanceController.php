@@ -393,6 +393,11 @@ class AllowanceController extends Controller
         
         /* Aprueba */
         if($approval->status == 1){
+            if($process == 'folio sirh'){
+                $approval_feedback = json_decode($approval->callback_feedback_inputs);
+                $allowance->folio_sirh = $approval_feedback[0]->value;
+                $allowance->save();
+            }
             if($process == 'end'){
                 $allowance->status = 'complete';
                 $allowance->save();
