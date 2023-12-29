@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\Models\Inv\Inventory;
 use App\Models\Inv\InventoryMovement;
+use Carbon\Carbon;
 
 class DeleteUploadExcelInv extends Command
 {
