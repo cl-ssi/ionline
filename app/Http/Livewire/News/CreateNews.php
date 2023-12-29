@@ -31,10 +31,10 @@ class CreateNews extends Component
         return [
             'type.required'     => 'Debe ingresar tipo de noticia.',
             'title.required'    => 'Debe ingresar un título.',
-            'subtitle.required' => 'Debe ingresar un subtítulo.',
+            // 'subtitle.required' => 'Debe ingresar un subtítulo.',
             'image.required'    => 'Debe ingresar una imágen',
-            'lead.required'     => 'Debe ingresar un lead (Ideas más importantes de noticia).',
-            'body.required'     => 'Debe ingresar el cuerpo para su noticia.',
+            // 'lead.required'     => 'Debe ingresar un lead (Ideas más importantes de noticia).',
+            // 'body.required'     => 'Debe ingresar el cuerpo para su noticia.',
             'untilAt.required'  => 'Debe ingresar una fecha limite de públicación',
         ];
     }
@@ -69,10 +69,10 @@ class CreateNews extends Component
         $this->validate([
             'type'      => 'required',
             'title'     => 'required',
-            'subtitle'  => 'required',
+            'subtitle'  => 'nullable',
             'image'     => 'required',
-            'lead'      => 'required',
-            'body'      => 'required',
+            'lead'      => 'nullable',
+            'body'      => 'nullable',
             'untilAt'   => 'required'
         ]);
 
@@ -89,7 +89,7 @@ class CreateNews extends Component
                     'lead'                  => $this->lead,
                     'body'                  => $this->body,
                     'publication_date_at'   => now(),
-                    'user_id'               => Auth::user()->id
+                    'user_id'               => auth()->id(),
                 ]
             );
             return $news;

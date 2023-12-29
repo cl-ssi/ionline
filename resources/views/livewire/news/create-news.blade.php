@@ -10,35 +10,36 @@
                 </fieldset>
 
                 <fieldset class="form-group col-md-6 col-12">
-                    <label for="for_until_date">Publicar hasta</label>
+                    <label for="for_until_date">Publicar hasta*</label>
                     <input type="date" class="form-control" id="for_until_date" wire:model="untilAt">
                 </fieldset>
             </div>
 
-            <div class="row g-3 mt-1">    
+            <div class="row g-3 mt-1">
                 <fieldset class="form-group col-md-12 col-12">
                     <label for="for_title">Titulo</label>
-                    <input class="form-control" type="text" autocomplete="off" wire:model="title">
+                    <input class="form-control" type="text" autocomplete="off" wire:model.defer="title">
                 </fieldset>
 
                 <fieldset class="form-group col-md-12 col-12">
                     <label for="for_subtitle">Subtítulo</label>
-                    <input class="form-control" type="text" autocomplete="off" wire:model="subtitle">
+                    <input class="form-control" type="text" autocomplete="off" wire:model.defer="subtitle">
                 </fieldset>
 
                 <fieldset class="form-group col-md-12 col-12">
                     <label for="for_image" class="form-label">Imagen</label>
                     <input class="form-control" type="file" id="for_image" wire:model="image">
+                    <div id="file-help" class="form-text">Tamaño de la imagen 766x530</div>
                 </fieldset>
 
                 <fieldset class="form-group">
                     <label for="for_body" class="form-label">Lead</label>
-                    <textarea class="form-control" id="for_body" rows="3" wire:model.debounce.700ms="lead">{{ $lead }}</textarea>
+                    <textarea class="form-control" id="for_body" rows="3" wire:model.defer="lead">{{ $lead }}</textarea>
                 </fieldset>
 
                 <fieldset class="form-group">
                     <label for="for_body" class="form-label">Cuerpo de noticia</label>
-                    <textarea class="form-control" id="for_body" rows="10" wire:model.debounce.700ms="body">{{ $body }}</textarea>
+                    <textarea class="form-control" id="for_body" rows="10" wire:model.defer="body">{{ $body }}</textarea>
                 </fieldset>
             </div>
 
@@ -56,8 +57,11 @@
             <div class="row g-3 mt-1">
                 <div class="col-12">
                     <button wire:click="saveNews()" 
-                        class="btn btn-primary float-end" 
-                        type="button">
+                        class="btn btn-primary float-end"
+                        type="button"
+                        wire:loading.attr="disabled"
+                        wire:target="image"
+                        >
                         <i class="fas fa-save"></i> Guardar
                     </button>
                 </div>

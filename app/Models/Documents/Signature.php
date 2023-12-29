@@ -19,7 +19,7 @@ class Signature extends Model implements Auditable
 
     protected $table = 'doc_signatures';
 
-    protected $dates = ['request_date'];
+    protected $dates = ['request_date', 'rejected_at'];
 
     /**
      * The attributes that are mass assignable.
