@@ -141,6 +141,9 @@
                             @case('rejected')
                                 <span class="badge badge-danger">Rechazada</span>
                                 @break
+                            @case('finance sign')
+                                <span class="badge badge-info">{{ $$requestReplacementStaff->StatusValue}}</span>
+                                @break
 
                             @default
                                 Default case...
@@ -266,6 +269,10 @@
                                             @if($flow->status == 1)
                                             <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="{{ $sign->organizationalUnit->name }}" style="color: green;">
                                                 <i class="fas fa-signature fa-2x"></i>
+                                            </span>
+                                            @elseif($flow->status == 0)
+                                            <span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" title="{{ $sign->organizationalUnit->name }}" style="color: tomato;">
+                                                <i class="fas fa-times-circle fa-2x"></i>
                                             </span>
                                             @else
                                             <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="{{ $sign->organizationalUnit->name }}">
