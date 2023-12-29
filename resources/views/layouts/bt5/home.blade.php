@@ -188,10 +188,11 @@
 
             <div class="alert alert-info mt-2" role="alert">
                 <small>
-                    <b>Estimado Usuario</b>, puede revisar todas sus notificaciones.
-                    <a type="button" class="btn btn-link btn-sm" href="{{ route('allNotifications') }}">
-                        Aquí!
-                    </a>
+                    <b>puede revisar 
+                        <a class="btn btn-link btn-sm" href="{{ route('allNotifications') }}">
+                            todas sus notificaciones.
+                        </a>
+                    </b>
                 </small>
             </div>
         @endif
