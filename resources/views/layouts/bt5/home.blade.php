@@ -41,9 +41,10 @@
             </button>
         </div>
 
-        <div class="mt-4" style="background-color: #006FB3; color: #FFFFFF">
-            <h5 class="ms-4"><i class="fas fa-file-signature"></i> Información sobre Firma Electrónica</h5>
-        </div>
+        <h5 class="text-white p-2 bg_azul_gob mt-3 text-center">
+            <i class="fas fa-file-signature"></i> 
+            Información sobre Firma Electrónica
+        </h5>
 
         {{-- <div class="jumbotron mt-4 pt-2"> --}}
         <div class="mt-4 p-5 text-black rounded" style="background-color: #EEEEEE">
@@ -136,17 +137,21 @@
     </div>
 
     <div class="col-sm-4 col-12">
+        {{--
         <img src="{{ asset('images/feliz_navidad.png') }}"
-            alt="Logo {{ env('APP_SS') }}"
+            alt="Feliz navidad"
             class="img-thumbnail mb-3">
+        --}}
 
         @if($ct_notifications = count(auth()->user()->unreadNotifications))
-            <h5 class="text-center" style="background-color: #006FB3; color: #FFFFFF">
-                <i class="fas fa-fw fa-bell" title="Notificaciones"></i> Mis Notificaciones sin leer
-                <span class="badge badge-secondary">{{ count(auth()->user()->unreadNotifications) }}</span>
+            <h5 class="text-center text-white bg_azul_gob p-2">
+                <i class="fas fa-fw fa-bell" title="Notificaciones"></i> Mis notificaciones sin leer
+                <span class="badge text-bg-danger">
+                    {{ count(auth()->user()->unreadNotifications) }}
+                </span>
             </h5>
             <ul class="list-group">
-                @foreach(auth()->user()->unreadNotifications->take(5) as $notification)
+                @foreach(auth()->user()->unreadNotifications->take(7) as $notification)
                 <a href="{{ route('openNotification',$notification) }}" class="list-group-item list-group-item-action small">
                     {{ $notification->created_at }} -
                     {!! $notification->data['icon'] ?? null !!}
@@ -156,18 +161,17 @@
                 @endforeach
             </ul>
 
-            @if(count(auth()->user()->unreadNotifications) > 5)
+            @if(count(auth()->user()->unreadNotifications) > 7)
             <div class="alert alert-danger mt-2" role="alert">
                 <small>
-                    <b>Estimado Usuario</b>, Favor atender notificaciones pendientes.
-                    <a type="button" class="btn btn-link btn-sm" href="{{ route('allNotifications') }}">
-                        Aquí!
-                    </a>
+                    <b><i class="bi bi-exclamation-triangle"></i> Favor atender sus 
+                        <a href="{{ route('allNotifications') }}">notificaciones pendientes.</a>
+                    </b>
                 </small>
             </div>
             @endif
         @else
-            <h5 class="text-center" style="background-color: #006FB3; color: #FFFFFF">
+            <h5 class="text-center text-white p-2 bg_azul_gob">
                 <i class="fas fa-fw fa-bell" title="Notificaciones"></i> Mis Notificaciones
             </h5>
 
@@ -192,8 +196,8 @@
             </div>
         @endif
 
-        <h5 class="text-center" style="background-color: #006FB3; color: #FFFFFF">
-            <i class="far fa-newspaper"></i> Todas las Noticias
+        <h5 class="text-center text-white p-2 bg_azul_gob">
+            <i class="far fa-fw fa-newspaper"></i> Todas las Noticias
         </h5>
         
         <ul class="list-group">
