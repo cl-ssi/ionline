@@ -4,7 +4,7 @@
 
     <div class="form-row">
         <fieldset class="form-group col-6">
-            <label>Archivo (csv,txt)</label>
+            <label>Archivo (Descargar de sirh en formato excel)</label>
             <input type="file" class="form-control" wire:model="file">
         </fieldset>
     </div>
@@ -21,9 +21,9 @@
     </div>
 
     <br>
-    @if($message != "")
+    @if($message2 != "")
         <div class="alert alert-success" role="alert">
-            {{ $message }}<br><br>
+            {{ $message2 }}<br><br>
 
             @if($non_existent_users>0)<p>Falta crear <b>{{$non_existent_users}}</b> funcionarios en sistema (Presionar botón "Procesar"). </p>@endif
             @if(count($non_existent_ous)>0)<p>Se detectaron <b>{{count($non_existent_ous)}}</b> códigos SIRH inexistentes en sistema, regularizar: </p>@endif

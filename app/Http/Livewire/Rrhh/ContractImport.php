@@ -20,7 +20,7 @@ class ContractImport extends Component
     use WithFileUploads;
 
     public $file;
-    public $message;
+    public $message2;
     public $non_existent_users = array();
     public $non_existent_ous = array();
 
@@ -31,7 +31,7 @@ class ContractImport extends Component
 
     public function save()
     {
-        $this->message = "";
+        $this->message2 = "";
         $this->non_existent_ous = [];
 
         $this->validate([
@@ -58,18 +58,22 @@ class ContractImport extends Component
                     {
                         if($column['rut']!=null)
                         {
-                            if($column['fecha_ingreso_grado']!="00/00/0000"){
+                            if($column['fecha_ingreso_grado']!="00/00/0000" && $column['fecha_ingreso_grado']!=null){
                                 $fecha_ingreso_grado = Carbon::createFromFormat('d/m/Y',$column['fecha_ingreso_grado']);
                             }else{$fecha_ingreso_grado = null;}
     
-                            $fecha_ingreso_servicio = Carbon::createFromFormat('d/m/Y',$column['fecha_ingreso_servicio']);
+                            // $fecha_ingreso_servicio = Carbon::createFromFormat('d/m/Y',$column['fecha_ingreso_servicio']);
+                            if($column['fecha_ingreso_servicio']!="00/00/0000" && $column['fecha_ingreso_servicio']!=null){
+                                $fecha_ingreso_servicio = Carbon::createFromFormat('d/m/Y',$column['fecha_ingreso_servicio']);
+                            }else{$fecha_ingreso_servicio = null;}
+                            
                             $fecha_ingreso_adm_publica = Carbon::createFromFormat('d/m/Y',$column['fecha_ingreso_adm_pblica']);
     
                             if($column['fecha_inicio_en_el_nivel']!=null){
                                 $fecha_inicio_en_el_nivel = Carbon::createFromFormat('d/m/Y',$column['fecha_inicio_en_el_nivel']);
                             }else{$fecha_inicio_en_el_nivel = null;}
     
-                            if($column['fecha_pago']!=null){
+                            if($column['fecha_pago']!=null && $column['fecha_pago']!="" && $column['fecha_pago']!=" "){
                                 $fecha_pago = Carbon::createFromFormat('d/m/Y',$column['fecha_pago']);
                             }else{$fecha_pago = null;}
     
@@ -209,11 +213,11 @@ class ContractImport extends Component
             echo 'Caught exception: ',  $e->getMessage(), "\n";
         }
 
-        $this->message = 'Se ha cargado correctamente el archivo (' . $count_inserts . ' filas procesadas).';
+        $this->message2 = 'Se ha cargado correctamente el archivo (' . $count_inserts . ' filas procesadas).';
     }
 
     public function process(){
-        $this->message = "";
+        $this->message2 = "";
         $this->non_existent_users = 0;
         $this->non_existent_ous = [];
 
@@ -248,7 +252,7 @@ class ContractImport extends Component
 
         $this->non_existent_ous = $withoutOu;
 
-        $this->message = 'Procesamiento completado. Se han creado/actualizado ' . $count_inserts . ' usuarios en el sistema. Si no se han creado más funcionarios, la posible causa puede ser que tengan asignado en el archivo de importación un código sirh no parametrizado con unidades organizacionales del ionline.';
+        $this->message2 = 'Procesamiento completado. Se han creado/actualizado ' . $count_inserts . ' usuarios en el sistema. Si no se han creado más funcionarios, la posible causa puede ser que tengan asignado en el archivo de importación un código sirh no parametrizado con unidades organizacionales del ionline.';
     }
 
     public function render()
