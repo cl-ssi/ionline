@@ -29,7 +29,7 @@
     </div>
 
     <br>
-    <!-- Todos los formularios -->
+
     @if($allowances->count() > 0)
         <div class="row">
             <div class="col">
@@ -66,31 +66,20 @@
                         <th>
                             {{ $allowance->id }} <br>
 
-                            @if($allowance->allowanceSignature && $allowance->folio_sirh)
+                            @if($allowance->folio_sirh)
                                 <span class="badge badge-secondary">{{ $allowance->folio_sirh }}</span> <br>
-                                @if($allowance->allowanceSignature->status == 'pending')
-                                    <span class="badge badge-warning">Pendiente</span>
-                                @endif
-                                
-                                @if($allowance->allowanceSignature->status == 'completed')
-                                    <span class="badge badge-success">Finalizado</span>
-                                @endif
+                            @endif
 
-                                @if($allowance->allowanceSignature->status == 'rejected')
-                                    <span class="badge badge-danger">Rechazado</span>
-                                @endif
-                            @else
-                                @if($allowance->status == 'pending')
-                                    <span class="badge badge-warning">Pendiente</span>
-                                @endif
+                            @if($allowance->status == 'pending')
+                                <span class="badge badge-warning">Pendiente</span>
+                            @endif
 
-                                @if($allowance->status == 'rejected')
-                                    <span class="badge badge-danger">Rechazado</span>
-                                @endif
+                            @if($allowance->status == 'rejected')
+                                <span class="badge badge-danger">Rechazado</span>
+                            @endif
 
-                                @if($allowance->status == 'manual')
-                                    <span class="badge badge-info">Carga Manual</span>
-                                @endif
+                            @if($allowance->status == 'manual')
+                                <span class="badge badge-info">Carga Manual</span>
                             @endif
                         </th>
                         <td>{{ $allowance->created_at->format('d-m-Y H:i:s') }}</td>

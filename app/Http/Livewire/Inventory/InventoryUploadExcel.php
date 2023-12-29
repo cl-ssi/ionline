@@ -49,33 +49,39 @@ class InventoryUploadExcel extends Component
 
 
         foreach ($data as $key => $row) {
-
-
-
-            //verificar que los usuarios del excel sean válidos.
-            if($row[10] and $row[11] and $row[12])
-            { //Quien Entrega
-                $user_sender = User::where('id',$row[10])->first();
-                if(!$user_sender){
-                    $msg .= "El usuario que entrega de la fila " .  ($key+1) . " no se ha encontrado. <br>";$rows_fail+=1;
-                    continue;
-                }
-
-                $user_responsible = User::where('id',$row[11])->first();
-                if(!$user_responsible){
-                    $msg .= "El responsable de la fila " .  ($key+1) . " no se ha ingresado. <br>";$rows_fail+=1;
-                    continue;
-                }
-
-                $user_using = User::where('id',$row[12])->first();
-                if(!$user_using){
-                    $msg .= "El usuario de la fila " .  ($key+1) . " no se ha ingresado. <br>";$rows_fail+=1;
+            $user_sender = null;
+            $user_responsible = null;
+            $user_using = null;
+                // Validar usuario que entrega
+            if ($row[10]) {
+                $user_sender = User::where('id', $row[10])->first();
+                if (!$user_sender) {
+                    $msg .= "El usuario que entrega de la fila " . ($key + 1) . " no se ha encontrado. <br>";
+                    $rows_fail += 1;
                     continue;
                 }
             }
 
+                // Validar responsable
+            if ($row[11]) {
+                $user_responsible = User::where('id', $row[11])->first();
+                if (!$user_responsible) {
+                    $msg .= "El responsable de la fila " . ($key + 1) . " no se ha encontrado. <br>";
+                    $rows_fail += 1;
+                    continue;
+                }
+            }
 
-            //verificar que la clasificación sea valida
+                // Validar usuario que usa
+            if ($row[12]) {
+                $user_using = User::where('id', $row[12])->first();
+                if (!$user_using) {
+                    $msg .= "El usuario de la fila " . ($key + 1) . " no se ha encontrado. <br>";
+                    $rows_fail += 1;
+                    continue;
+                }
+            }
+                    //verificar que la clasificación sea valida
             if($row[19])
             {
                 $classification = Classification::where('id',$row[19])->first();
@@ -134,8 +140,7 @@ class InventoryUploadExcel extends Component
                     break;
             }
             
-            if($user_sender and $user_responsible and $user_using)
-            {
+            if ($user_sender and $user_responsible and $user_using) {
                 $movement = true;
             }
             

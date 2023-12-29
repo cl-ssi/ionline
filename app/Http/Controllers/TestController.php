@@ -23,6 +23,8 @@ use App\Models\Documents\Sign\Signature;
 use App\Models\Documents\DocDigital;
 use App\Models\Documents\DigitalSignature;
 use App\Jobs\TestJob;
+use App\Models\Inv\Inventory;
+
 
 class TestController extends Controller
 {
@@ -31,7 +33,11 @@ class TestController extends Controller
     */
     public function qrs($width, $height, $margin)
     {
-        return view('test.qrs', compact('width','height','margin'));
+        $inventories = Inventory::whereNull('printed')
+            ->where('establishment_id', auth()->user()->organizationalUnit->establishment->id)
+            ->get();
+
+        return view('test.qrs', compact('width','height','margin', 'inventories'));
     }
 
     /**

@@ -16,6 +16,8 @@ use App\Rrhh\Authority;
 use App\Notifications\Allowances\NewAllowance;
 use App\Models\Parameters\Parameter;
 use App\User;
+use App\Models\Documents\Approval;
+use Barryvdh\DomPDF\Facade\Pdf;
 // use Illuminate\Http\RedirectResponse;
 
 use App\Exports\AllowancesExport;
@@ -281,9 +283,15 @@ class AllowanceController extends Controller
     }
 
     public function show_resol_pdf($allowance_id){
+        
         $allowance = Allowance::find($allowance_id);
+        $establishment = $allowance->organizationalUnitAllowance->establishment;
+        return Pdf::loadView('allowances.documents.allowance_resol_pdf', [
+            'allowance' => $allowance,
+            'establishment' => $establishment
+        ])->stream('download.pdf');
 
-        return view('allowances.documents.allowance_resol_pdf', compact('allowance'));
+        // return view('allowances.documents.allowance_resol_pdf', compact('allowance'));
     }
 
     /**
@@ -386,22 +394,27 @@ class AllowanceController extends Controller
         return view('allowances.import.import');
     }
 
-    public function approvalCallback($approval_id, $request_replacement_staff_id, $process){
+    public function approvalCallback($approval_id, $allowance_id, $process){
         $approval = Approval::find($approval_id);
-        $requestReplacementStaff = RequestReplacementStaff::find($request_replacement_staff_id);
+        $allowance = Allowance::find($allowance_id);
         
         /* Aprueba */
         if($approval->status == 1){
+            if($process == 'folio sirh'){
+                $approval_feedback = json_decode($approval->callback_feedback_inputs);
+                $allowance->folio_sirh = $approval_feedback[0]->value;
+                $allowance->save();
+            }
             if($process == 'end'){
-                $requestReplacementStaff->request_status = 'complete';
-                $requestReplacementStaff->save();
+                $allowance->status = 'complete';
+                $allowance->save();
             }
         }   
 
         /* Rechaza */
         if($approval->status == 0){
-            $requestReplacementStaff->request_status = 'rejected';
-            $requestReplacementStaff->save();
+            $allowance->status = 'rejected';
+            $allowance->save();
 
         }
     }

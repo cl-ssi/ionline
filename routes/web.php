@@ -2226,6 +2226,7 @@ Route::prefix('allowances')->as('allowances.')->middleware(['auth', 'must.change
     Route::put('{allowance}/update', [AllowanceController::class, 'update'])->name('update');
     Route::get('{allowance}/show', [AllowanceController::class, 'show'])->name('show');
     Route::get('{allowance_id}/show_approval', [AllowanceController::class, 'show_approval'])->name('show_approval');
+    Route::get('{allowance_id}/show_resol_pdf', [AllowanceController::class, 'show_resol_pdf'])->name('show_resol_pdf');
     Route::get('/show_file/{allowance}', [AllowanceController::class, 'show_file'])->name('show_file');
 
     Route::prefix('files')->as('files.')->group(function () {
