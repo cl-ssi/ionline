@@ -176,7 +176,7 @@
             </h5>
 
             <ul class="list-group">
-                @foreach(Auth()->user()->notifications->take(5) as $notification)
+                @foreach(Auth()->user()->notifications->take(7) as $notification)
                 <a href="{{ route('openNotification',$notification) }}" class="list-group-item list-group-item-action small">
                     {{ $notification->created_at }} -
                     {!! $notification->data['icon'] ?? null !!}
@@ -188,8 +188,8 @@
 
             <div class="alert alert-info mt-2" role="alert">
                 <small>
-                    <b>puede revisar 
-                        <a class="btn btn-link btn-sm" href="{{ route('allNotifications') }}">
+                    <b>Puede revisar 
+                        <a href="{{ route('allNotifications') }}">
                             todas sus notificaciones.
                         </a>
                     </b>
