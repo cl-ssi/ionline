@@ -35,10 +35,10 @@ class ChargeIndex extends Component
             $this->userWithContracts = null;
             
             // aqui obtener info como en report by dates
-            $start = $this->year.'-01-01';
-            $end = $this->year.'-12-31';
-            // $start = '2023-01-01';
-            // $end = '2023-12-31';
+            // $start = $this->year.'-01-01';
+            // $end = $this->year.'-12-31';
+            $start = '2023-01-01';
+            $end = '2023-12-31';
             
             $compensatoryAbsenteeismType = AbsenteeismType::find(5); // dias compensatorios
             $periods = CarbonPeriod::create($start, '1 month', $end);
