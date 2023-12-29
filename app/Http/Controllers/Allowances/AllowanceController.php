@@ -17,6 +17,7 @@ use App\Notifications\Allowances\NewAllowance;
 use App\Models\Parameters\Parameter;
 use App\User;
 use App\Models\Documents\Approval;
+use Barryvdh\DomPDF\Facade\Pdf;
 // use Illuminate\Http\RedirectResponse;
 
 use App\Exports\AllowancesExport;
@@ -282,9 +283,15 @@ class AllowanceController extends Controller
     }
 
     public function show_resol_pdf($allowance_id){
+        
         $allowance = Allowance::find($allowance_id);
+        $establishment = $allowance->organizationalUnitAllowance->establishment;
+        return Pdf::loadView('allowances.documents.allowance_resol_pdf', [
+            'allowance' => $allowance,
+            'establishment' => $establishment
+        ])->stream('download.pdf');
 
-        return view('allowances.documents.allowance_resol_pdf', compact('allowance'));
+        // return view('allowances.documents.allowance_resol_pdf', compact('allowance'));
     }
 
     /**
