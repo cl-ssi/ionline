@@ -104,10 +104,14 @@ class AllowancesCreate extends Component
             'meansOfTransport.required'         => 'Debe ingresar Medio de Transporte.',
             'roundTrip.required'                => 'Debe ingresar Itinerario.',
             'passage.required'                  => 'Debe ingresar Derecho de Pasaje.',
+
             'overnight.required'                => 'Debe ingresar Pernocta Fuera de Residencia.',
+            'accommodation.required'            => 'Debe ingresar si Incluye Alojamiento.',
+            'food.required'                     => 'Debe ingresar si Incluye Alimentación.',
             
             'from.required'                     => 'Debe ingresar Fecha Desde.',
             'to.required'                       => 'Debe ingresar Fecha Hasta.',
+            'to.after_or_equal'                 => 'Debe ingresar una Fecha Hasta, posterior o igual a Fecha Desde.',
 
             'files.required'                    => 'Debe ingresar al menos un Archivo Adjunto.',
 
@@ -139,10 +143,13 @@ class AllowancesCreate extends Component
             'meansOfTransport'                                      => 'required',
             'roundTrip'                                             => 'required',
             'passage'                                               => 'required',
+
             'overnight'                                             => 'required',
+            'accommodation'                                         => 'required',
+            'food'                                                  => 'required',
 
             'from'                                                  => 'required',
-            'to'                                                    => 'required',
+            'to'                                                    => 'required|after_or_equal:from',
 
             'files'                                                 => 'required'
         ]);
@@ -184,7 +191,9 @@ class AllowancesCreate extends Component
                     'establishment_id'                  => $this->userAllowance->organizationalUnit->establishment->id,
                     'organizational_unit_allowance_id'  => $this->userAllowance->organizationalUnit->id, 
                     'reason'                            => $this->reason,
-                    'overnight'                         => $this->overnight, 
+                    'overnight'                         => $this->overnight,
+                    'accommodation'                     => $this->accommodation,
+                    'food'                              => $this->food,
                     'passage'                           => $this->passage, 
                     'means_of_transport'                => $this->meansOfTransport, 
                     'origin_commune_id'                 => $this->originCommune->id,
@@ -344,14 +353,19 @@ class AllowancesCreate extends Component
                     return $this->MaxDaysStraight;
                 }
                 else{
-                    return Carbon::parse($this->from)->diffInDays(Carbon::parse($this->to)) - $this->MaxDaysStraight;
+                    // COMETIDO O ACTIVIDA NO INCLUYE NI ALOJAMIENTO NI ALIMENTACIÓN
+                    if($this->accommodation == 0 && $this->food == 0){
+                        return Carbon::parse($this->from)->diffInDays(Carbon::parse($this->to)) - $this->MaxDaysStraight;
+                    }
+                    // COMETIDO INCLUYE ALOJAMIENTO
+                    if($this->accommodation == 1 && $this->food == 0){
+                        // SOLO MEDIOS DIAS
+                    }
+                    if($this->accommodation == 0 && $this->food == 1){
+                        // DIAS COMPLETOS AL 60%
+                    }
                 }
-                // dd('aquí', Carbon::parse($this->from)->diffInDays(Carbon::parse($this->to)));
-                // return Carbon::parse($this->from)->diffInDays(Carbon::parse($this->to));
             }
-
-            // dd($allowanceMaxValue, $this->allowancesAvailableDays);
-            // dd(Carbon::parse($this->from)->diffInDays(Carbon::parse($this->to)) , '>', $this->allowancesAvailableDays);
         }
     }
 

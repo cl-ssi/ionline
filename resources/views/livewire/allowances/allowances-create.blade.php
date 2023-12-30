@@ -198,7 +198,7 @@
     <h6 class="small"><b>3. Información de Itinerario</b></h6> <br>
 
     <div class="form-row">
-        <fieldset class="form-group col-12 col-md-3">
+        <fieldset class="form-group col-12 col-md-4">
             <label for="for_round_trip">Medio de Transporte</label>
             <select wire:model="meansOfTransport" class="form-control" required>
                 <option value="">Seleccione...</option>
@@ -210,7 +210,7 @@
             @error('meansOfTransport') <span class="text-danger error small">{{ $message }}</span> @enderror
         </fieldset>
 
-        <fieldset class="form-group col-12 col-md-3">
+        <fieldset class="form-group col-12 col-md-4">
             <label for="for_round_trip">Itinerario</label>
             <select wire:model="roundTrip" class="form-control" required>
                 <option value="">Seleccione...</option>
@@ -220,7 +220,7 @@
             @error('roundTrip') <span class="text-danger error small">{{ $message }}</span> @enderror
         </fieldset>
         
-        <fieldset class="form-group col-12 col-md-3">
+        <fieldset class="form-group col-12 col-md-4 text-center">
             <label for="for_overnight">Derecho de Pasaje</label>
             <div class="mt-1">
                 <div class="form-check form-check-inline">
@@ -234,10 +234,12 @@
             </div>
             @error('passage') <span class="text-danger error small">{{ $message }}</span> @enderror
         </fieldset>
+    </div>
 
-        <fieldset class="form-group col-12 col-md-3">
-            <label for="for_passage">Pernocta fuera de residencia</label>
-            <div class="mt-1">
+    <div class="form-row text-center">
+        <fieldset class="form-group col-12 col-md-4">
+            <label for="for_overnight">Pernocta fuera de residencia</label>
+            <div class="mt-1 text-center">
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="radio" id="for_overnight_yes" wire:model.debounce.500ms="overnight" value="1" required>
                     <label class="form-check-label" for="for_overnight_no">Si</label>
@@ -249,22 +251,52 @@
             </div>
             @error('overnight') <span class="text-danger error small">{{ $message }}</span> @enderror
         </fieldset>
+
+        <fieldset class="form-group col-12 col-md-4">
+            <label for="for_accommodation">Alojamiento (Incluída en cometido o actividad)</label>
+            <div class="mt-1 text-center">
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" id="for_accommodation_yes" wire:model.debounce.500ms="accommodation" value="1" required>
+                    <label class="form-check-label" for="for_accommodation_yes">Si</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" id="for_overnight_no" wire:model.debounce.500ms="accommodation" value="0" required>
+                    <label class="form-check-label" for="for_accommodation_no">No</label>
+                </div>
+            </div>
+            @error('accommodation') <span class="text-danger error small">{{ $message }}</span> @enderror
+        </fieldset>
+
+        <fieldset class="form-group col-12 col-md-4">
+            <label for="for_food">Alimentación (Incluída en cometido o actividad)</label>
+            <div class="mt-1">
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" id="for_food_yes" wire:model.debounce.500ms="food" value="1" required>
+                    <label class="form-check-label" for="for_food_yes">Si</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" id="for_food_no" wire:model.debounce.500ms="food" value="0" required>
+                    <label class="form-check-label" for="for_food_no">No</label>
+                </div>
+            </div>
+            @error('food') <span class="text-danger error small">{{ $message }}</span> @enderror
+        </fieldset>
     </div>
 
     <div class="form-row">
-        <fieldset class="form-group col-12 col-sm-3">
+        <fieldset class="form-group col-12 col-sm-4">
             <label for="for_start_date">Desde</label>
             <input type="date" class="form-control" wire:model.defer="from" id="for_from">
             @error('from') <span class="text-danger error small">{{ $message }}</span> @enderror
         </fieldset>
 
-        <fieldset class="form-group col-12 col-sm-3">
+        <fieldset class="form-group col-12 col-sm-4">
             <label for="for_end_date">Hasta</label>
             <input type="date" class="form-control" wire:model.defer="to" id="for_to">
             @error('to') <span class="text-danger error small">{{ $message }}</span> @enderror
         </fieldset>
 
-        <div class="form-group col-12 col-md-3">
+        <div class="form-group col-12 col-md-4 text-center">
             <label for="name" class="col-form-label">Sólo medios días (Inlcusive):</label>
             <br>
             <div class="form-check form-check-inline">
