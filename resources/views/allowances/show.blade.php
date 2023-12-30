@@ -201,13 +201,13 @@
                 <td><b>3. PARCIAL</b></td>
                 <td class="text-center">50%</td>
                 <td class="text-right">
-                    
+                    ${{ ($allowance->fifty_percent_day_value) ? number_format($allowance->fifty_percent_day_value, 0, ",", ".") : '0' }}
                 </td>
                 <td class="text-center">
-                    
+                    {{ ($allowance->fifty_percent_total_days) ? intval($allowance->fifty_percent_total_days) : 0 }}
                 </td>
                 <td class="text-right">
-                    
+                    ${{ ($allowance->fifty_percent_day_value) ? number_format($allowance->fifty_percent_day_value * $allowance->fifty_percent_total_days, 0, ",", ".") : '' }}
                 </td>
             </tr>
             <tr>

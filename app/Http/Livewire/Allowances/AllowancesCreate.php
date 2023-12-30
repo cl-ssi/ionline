@@ -37,10 +37,12 @@ class AllowancesCreate extends Component
 
         $originCommune, $destinations,
         
-        $meansOfTransport, $roundTrip, $passage, $overnight, $from, $to, 
+        $meansOfTransport, $roundTrip, $passage, $overnight, $accommodation, $food, $from, $to, 
         $total_days = 0, $total_half_days = 0, $fifty_percent_total_days = 0, $halfDaysOnly,
-        $dayValue, $halfDayValue, $fifty_percent_day_value;
-    
+        $dayValue, $halfDayValue, $fifty_percent_day_value,
+        
+        $MaxDaysStraight = 0 ;
+
     public $disabledLaw = '';
 
     /* Archivo */
@@ -147,6 +149,7 @@ class AllowancesCreate extends Component
 
         /* Buscar si existen viáticos en fecha indicada */
         $currentAllowances = Allowance::where('user_allowance_id', $this->userAllowance->id)
+            ->where('status', '!=', 'rejected')
             ->whereYear('from', Carbon::parse($this->from)->year)
             ->WhereYear('to', Carbon::parse($this->to)->year)
             ->get();
@@ -163,7 +166,7 @@ class AllowancesCreate extends Component
         }
 
         /* SET NUMERO DE VIATICOS PARA PRUEBAS */
-        $this->totalCurrentAllowancesDaysByUser = $this->totalCurrentAllowancesDaysByUser + 87;
+        // $this->totalCurrentAllowancesDaysByUser = $this->totalCurrentAllowancesDaysByUser + 87;
         
         $alw = DB::transaction(function () {
             $alw = Allowance::updateOrCreate(
@@ -280,17 +283,18 @@ class AllowancesCreate extends Component
 
     /* Cálculo de días completos */
     public function totalDays(){
-        if($this->halfDaysOnly != 1){
+        /*if($this->halfDaysOnly != 1){
             if($this->from == $this->to){
                 return null;
             }
             else{
-                /* LÍMITE MÁXIMO DE VIATICOS AL AÑO */
+                //  LÍMITE MÁXIMO DE VIATICOS AL AÑO 
                 $allowanceMaxValue = Parameter::where('module', 'allowance')
                     ->where('parameter', 'AllowanceMaxValue')
                     ->first()
                     ->value;
-
+                    
+                //  SE CALCULA LOS DIAS DISPONIBLES 
                 $this->allowancesAvailableDays = $allowanceMaxValue - $this->totalCurrentAllowancesDaysByUser;
 
                 if(Carbon::parse($this->from)->diffInDays(Carbon::parse($this->to)) > $this->allowancesAvailableDays){
@@ -306,6 +310,48 @@ class AllowancesCreate extends Component
                     return Carbon::parse($this->from)->diffInDays(Carbon::parse($this->to));
                 }
             }
+        }*/
+
+        if($this->halfDaysOnly == 1){
+            dd('sólo medios días');
+        }
+        else{
+            //  LÍMITE MÁXIMO DE VIATICOS AL AÑO 
+            $allowanceMaxValue = Parameter::where('module', 'allowance')
+                ->where('parameter', 'AllowanceMaxValue')
+                ->first()
+                ->value;
+            
+            //  SE CALCULA LOS DIAS DISPONIBLES 
+            $this->allowancesAvailableDays = $allowanceMaxValue - $this->totalCurrentAllowancesDaysByUser;
+
+            // DIAS SOLICITADOS ES MAYOR A LOS DISPONIBLES? 
+            // OPCION: SI
+            if(Carbon::parse($this->from)->diffInDays(Carbon::parse($this->to)) > $this->allowancesAvailableDays){
+                if($this->allowancesAvailableDays > 0){
+                    $this->allowancesExceededDays = Carbon::parse($this->from)->diffInDays(Carbon::parse($this->to)) - $this->allowancesAvailableDays;
+                    return $this->allowancesAvailableDays;
+                }
+            }
+            // OPCION: NO
+            else{
+                // dd(Carbon::parse($this->from)->diffInDays(Carbon::parse($this->to)));
+
+                if(Carbon::parse($this->from)->diffInDays(Carbon::parse($this->to)) > 10){
+                    $this->MaxDaysStraight = 10;
+                    $this->allowancesExceededDays = Carbon::parse($this->from)->diffInDays(Carbon::parse($this->to)) - $this->MaxDaysStraight;
+                    // dd(Carbon::parse($this->from)->diffInDays(Carbon::parse($this->to)), $this->MaxDaysStraight, $this->allowancesExceededDays);
+                    return $this->MaxDaysStraight;
+                }
+                else{
+                    return Carbon::parse($this->from)->diffInDays(Carbon::parse($this->to)) - $this->MaxDaysStraight;
+                }
+                // dd('aquí', Carbon::parse($this->from)->diffInDays(Carbon::parse($this->to)));
+                // return Carbon::parse($this->from)->diffInDays(Carbon::parse($this->to));
+            }
+
+            // dd($allowanceMaxValue, $this->allowancesAvailableDays);
+            // dd(Carbon::parse($this->from)->diffInDays(Carbon::parse($this->to)) , '>', $this->allowancesAvailableDays);
         }
     }
 
