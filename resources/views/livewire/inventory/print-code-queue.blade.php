@@ -38,13 +38,13 @@
         .contenedor {}
 
         .qr-content {
-            width: 150px;
-            height: 140px;
+            width: 200px;
+            /* height: 140px; */
             margin-right: 25px;
             display: inline-block;
             text-align: center;
             margin-bottom: 14px;
-            /* border: 1px solid grey; */
+            border: 1px solid grey;
         }
 
 
@@ -96,19 +96,19 @@
     <div class="contenedor">
         @foreach ($inventories as $inventory)
             <div class="qr-content">
+                <div class="establecimiento">
+                    {{ auth()->user()->organizationalUnit->establishment->name }}
+                </div>
+                {!! $inventory->qrSmall !!}
+                <div class="qr-number">{{ $inventory->number }}</div>
                 <!-- <div id="outer-circle"> -->
-                    <div class="establecimiento">
-                        {{ auth()->user()->organizationalUnit->establishment->name }}
-                    </div>
                     <!-- <img class="logo"
                         src="{{ asset('images/inventario_' . auth()->user()->organizationalUnit->establishment->alias . '_small.png') }}"
                         alt="Logo"> -->
                     <!-- <div class="box" -->
                         <!-- style="--c:repeating-linear-gradient(45deg,#FD9D2D 0 2px);--w:calc(50% - 20px);--b:3px;--r:10px"> -->
-                        {!! $inventory->qrSmall !!}
                     <!-- </div> -->
 
-                    <div class="qr-number">{{ $inventory->number }}</div>
 
                     <!-- <div class="small-text">
                         En caso de extravío informar al
