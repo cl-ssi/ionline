@@ -44,7 +44,7 @@
             display: inline-block;
             text-align: center;
             margin-bottom: 14px;
-            border: 1px solid grey;
+            /* border: 1px solid grey; */
         }
 
 
