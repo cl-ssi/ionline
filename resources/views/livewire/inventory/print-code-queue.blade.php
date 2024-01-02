@@ -120,7 +120,7 @@
             </div>
 
             @if ($loop->iteration % 2 == 0)
-                <br>
+                
             @endif
         @endforeach
     </div>
