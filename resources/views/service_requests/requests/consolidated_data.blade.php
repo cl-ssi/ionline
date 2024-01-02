@@ -12,11 +12,16 @@
 	<div class="form-row mb-3">
 		<div class="form-group col">
 			<label>Establecimiento</label>
+            
 			<select class="form-control" data-live-search="true" name="establishment_id" data-size="5" required>
-				<option value="">Todos</option>
-				<option value="1" @if($request->establishment_id == "1") selected @endif>Hospital Ernesto Torres Galdames</option>
-				<!-- <option value="12" @if($request->establishment_id == "12") selected @endif>Dr. Héctor Reyno G.</option> -->
-				<option value="0" @if($request->establishment_id == "0") selected @endif>Dirección SSI</option>
+				<!-- <option value="">Todos</option> -->
+                @if(auth()->user()->organizationalUnit->establishment_id == 1)
+				    <option value="1" @if($request->establishment_id == "1") selected @endif>Hospital Ernesto Torres Galdames</option>
+                @endif
+                <!-- <option value="12" @if($request->establishment_id == "12") selected @endif>Dr. Héctor Reyno G.</option> -->
+                @if(auth()->user()->organizationalUnit->establishment_id == 38)
+				    <option value="0" @if($request->establishment_id == "0") selected @endif>Dirección SST</option>
+                @endif
 			</select>
 		</div>
         <div class="form-group col">
