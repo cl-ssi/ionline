@@ -256,11 +256,11 @@
             <label for="for_accommodation">Alojamiento (Incluída en cometido o actividad)</label>
             <div class="mt-1 text-center">
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" id="for_accommodation_yes" wire:model.debounce.500ms="accommodation" value="1" required>
+                    <input class="form-check-input" type="radio" id="for_accommodation_yes" wire:model="accommodation" value="1" required>
                     <label class="form-check-label" for="for_accommodation_yes">Si</label>
                 </div>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" id="for_overnight_no" wire:model.debounce.500ms="accommodation" value="0" required>
+                    <input class="form-check-input" type="radio" id="for_overnight_no" wire:model="accommodation" value="0" required>
                     <label class="form-check-label" for="for_accommodation_no">No</label>
                 </div>
             </div>
@@ -271,11 +271,11 @@
             <label for="for_food">Alimentación (Incluída en cometido o actividad)</label>
             <div class="mt-1">
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" id="for_food_yes" wire:model.debounce.500ms="food" value="1" required>
+                    <input class="form-check-input" type="radio" id="for_food_yes" wire:model="food" value="1" required>
                     <label class="form-check-label" for="for_food_yes">Si</label>
                 </div>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" id="for_food_no" wire:model.debounce.500ms="food" value="0" required>
+                    <input class="form-check-input" type="radio" id="for_food_no" wire:model="food" value="0" required>
                     <label class="form-check-label" for="for_food_no">No</label>
                 </div>
             </div>
@@ -300,7 +300,7 @@
             <label for="name" class="col-form-label">Sólo medios días (Inlcusive):</label>
             <br>
             <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" value="1" id="for_half_days_only" wire:model.debounce.500ms="halfDaysOnly">
+                <input class="form-check-input" type="checkbox" value="1" id="for_half_days_only" wire:model.debounce.500ms="halfDaysOnly" {{ $disabledHalfDayOnly }}>
                 <label class="form-check-label" for="for_yes">
                     Si
                 </label>

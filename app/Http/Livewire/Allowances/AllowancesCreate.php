@@ -43,6 +43,10 @@ class AllowancesCreate extends Component
         
         $MaxDaysStraight = 0 ;
 
+    public $disabledHalfDayOnly;
+    public $accommodationSelected = null;
+    public $foodSelected = null;
+
     public $disabledLaw = '';
 
     /* Archivo */
@@ -357,9 +361,10 @@ class AllowancesCreate extends Component
                     if($this->accommodation == 0 && $this->food == 0){
                         return Carbon::parse($this->from)->diffInDays(Carbon::parse($this->to)) - $this->MaxDaysStraight;
                     }
-                    // COMETIDO INCLUYE ALOJAMIENTO
+                    // COMETIDO INCLUYE SOLO ALOJAMIENTO
                     if($this->accommodation == 1 && $this->food == 0){
                         // SOLO MEDIOS DIAS
+                        return null;
                     }
                     if($this->accommodation == 0 && $this->food == 1){
                         // DIAS COMPLETOS AL 60%
@@ -371,12 +376,15 @@ class AllowancesCreate extends Component
 
     /* Cálculo de medios días */
     public function totalHalfDays(){
-        if($this->halfDaysOnly != 1 || ($this->from == $this->to)){
+        if($this->halfDaysOnly != null || ($this->from == $this->to)){
             return 1;
         }
         else{
+            // RETORNA SÓLO MEDIOS DIAS
+            // RETORNA CUANDO INCLUYE
             return Carbon::parse($this->from." 00:00:00")
                 ->diffInDays(Carbon::parse($this->to." 23:59:59")->addDay()->startOfDay());
+            
         }
     }
 
@@ -416,7 +424,13 @@ class AllowancesCreate extends Component
                 $allowanceTotalValue =  $this->allowanceDayValue() * $this->totalDays();
             }
             if($this->totalHalfDays()){
-                $allowanceTotalValue =  $allowanceTotalValue + ($this->allowanceHalfDayValue() * $this->totalHalfDays());
+                // COMETIDO INCLUYE SOLO ALOJAMIENTO
+                if($this->accommodation == 1 && $this->food == 0){
+                    $allowanceTotalValue = $this->allowanceHalfDayValue() * $this->totalHalfDays();
+                }
+                else{
+                    $allowanceTotalValue =  $allowanceTotalValue + ($this->allowanceHalfDayValue() * $this->totalHalfDays());
+                }
             }
             if($this->totalFiftyPercentDays()){
                 $allowanceTotalValue =  $allowanceTotalValue + ($this->allowanceFiftyPercentDayValue() * $this->totalFiftyPercentDays());
@@ -843,6 +857,40 @@ class AllowancesCreate extends Component
         }
         else{
             $this->messageMeansOfTransport = null;
+        }
+    }
+
+    public function updatedAccommodation($accomodationId){
+        if($accomodationId == 1){
+            $this->accommodationSelected = 1;
+            if($this->accommodationSelected == 1 || $this->foodSelected == 1){
+                $this->disabledHalfDayOnly = "disabled";
+                $this->halfDaysOnly = null;
+            }
+        }
+        else{
+            $this->accommodationSelected = 0;
+            if($this->accommodationSelected == 0 && $this->foodSelected == 0){
+                $this->disabledHalfDayOnly = null;
+                $this->halfDaysOnly = null;
+            }
+        }
+    }
+
+    public function updatedFood($foodId){
+        if($foodId == 1){
+            $this->foodSelected = 1;
+            if($this->accommodationSelected == 1 || $this->foodSelected == 1){
+                $this->disabledHalfDayOnly = "disabled";
+                $this->halfDaysOnly = null;
+            }
+        }
+        else{
+            $this->foodSelected = 0;
+            if($this->accommodationSelected == 0 && $this->foodSelected == 0){
+                $this->disabledHalfDayOnly = null;
+                $this->halfDaysOnly = null;
+            }
         }
     }
 }
