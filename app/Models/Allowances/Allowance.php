@@ -196,6 +196,28 @@ class Allowance extends Model implements Auditable
         }
     }
 
+    public function getAccommodationValueAttribute(){
+        switch ($this->accommodation) {
+            case 1:
+              return 'Sí';
+              break;
+            case 0:
+              return 'No';
+              break;
+        }
+    }
+
+    public function getFoodValueAttribute(){
+        switch ($this->food) {
+            case 1:
+              return 'Sí';
+              break;
+            case 0:
+              return 'No';
+              break;
+        }
+    }
+
     public function scopeSearch($query, $status_search, $search_id, $user_allowance_search){
         if ($status_search OR $search_id OR $user_allowance_search) {
             if($status_search != '' &&  ($status_search == 'pending' || $status_search == 'rejected')){

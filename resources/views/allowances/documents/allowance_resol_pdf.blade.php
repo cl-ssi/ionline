@@ -126,26 +126,34 @@
 
     <table class="tabla">
         <tr>
-            <th width="25%" style="background-color: #EEEEEE;">Medio de transporte</th>
-            <th width="25%" style="background-color: #EEEEEE;">Itinerario</th>
-            <th width="25%" style="background-color: #EEEEEE;">Derecho de pasaje</th>
-            <th width="25%" style="background-color: #EEEEEE;">Pernocta fuera del lugar de residencia</th>
+            <th width="33%" style="background-color: #EEEEEE;">Medio de transporte</th>
+            <th width="33%" style="background-color: #EEEEEE;">Itinerario</th>
+            <th width="33%" style="background-color: #EEEEEE;">Derecho de pasaje</th>
         </tr>
         <tr align="center">
             <td>{{ $allowance->MeansOfTransportValue }}</td>
             <td>{{ $allowance->RoundTripValue }}</td>
             <td>{{ $allowance->PassageValue }}</td>
+        </tr>
+        <tr>
+            <th style="background-color: #EEEEEE;">Pernocta fuera del lugar de residencia</th>
+            <th style="background-color: #EEEEEE;">Alojamiento *</th>
+            <th style="background-color: #EEEEEE;">Alimentación *</th>
+        </tr>
+        <tr align="center">
             <td>{{ $allowance->OvernightValue }}</td>
+            <td>{{ $allowance->AccommodationValue }}</td>
+            <td>{{ $allowance->FoodValue }}</td>
         </tr>
         <tr class="table-active">
             <th style="background-color: #EEEEEE;">Desde</th>
             <th style="background-color: #EEEEEE;">Hasta</th>
-            <th style="background-color: #EEEEEE;" colspan="2">Sólo medios días</th>
+            <th style="background-color: #EEEEEE;">Sólo medios días</th>
         </tr>
         <tr align="center">
             <td>{{ $allowance->FromFormat }}</td>
             <td>{{ $allowance->ToFormat }}</td>
-            <td colspan="2">{{ $allowance->HalfDaysOnlyValue }}</td>
+            <td>{{ $allowance->HalfDaysOnlyValue }}</td>
         </tr>
     </table>
 

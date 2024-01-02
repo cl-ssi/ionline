@@ -107,13 +107,21 @@
                         <th>Medio de transporte</th>
                         <th>Itinerario</th>
                         <th>Derecho de pasaje</th>
-                        <th>Pernocta fuera del lugar de residencia</th>
                     </tr>
                     <tr>
                         <td>{{ $allowance->MeansOfTransportValue }}</td>
                         <td>{{ $allowance->RoundTripValue }}</td>
                         <td>{{ $allowance->PassageValue }}</td>
+                    </tr>
+                    <tr class="table-active">
+                        <th>Pernocta fuera del lugar de residencia</th>
+                        <th>Alojamiento *</th>
+                        <th>Alimentación *</th>
+                    </tr>
+                    <tr>
                         <td>{{ $allowance->OvernightValue }}</td>
+                        <td>{{ $allowance->AccommodationValue }}</td>
+                        <td>{{ $allowance->FoodValue }}</td>
                     </tr>
                     <tr class="table-active">
                         <th>Desde</th>
@@ -127,6 +135,12 @@
                     </tr>
                 </tbody>
             </table>
+        </div>
+
+        <div class="row mt-0">
+            <div class="col">
+                <p class="small">* Incluído en cometido o actividad</p>
+            </div>
         </div>
 
         @if($allowance->allowanceSignature && $allowance->allowanceSignature->status == "completed")
