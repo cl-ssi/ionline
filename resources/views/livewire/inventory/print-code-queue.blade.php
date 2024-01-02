@@ -43,6 +43,7 @@
             margin-right: 25px;
             display: inline-block;
             text-align: center;
+            margin-bottom: 14px;
             /* border: 1px solid grey; */
         }
 
@@ -62,12 +63,13 @@
         }
 
         .establecimiento {
-            font-size: 6px;
+            font-size: 13px;
+            margin-bottom: 4px;
         }
 
         .qr-number {
-            font-size: 10px;
-            margin-top: -1px;
+            font-size: 14px;
+            margin-top: 3px;
         }
 
         .small-text {
@@ -94,29 +96,30 @@
     <div class="contenedor">
         @foreach ($inventories as $inventory)
             <div class="qr-content">
-                <div id="outer-circle">
-                    <img class="logo"
-                        src="{{ asset('images/inventario_' . auth()->user()->organizationalUnit->establishment->alias . '_small.png') }}"
-                        alt="Logo">
-                    <br>
-                    <div class="box"
-                        style="--c:repeating-linear-gradient(45deg,#FD9D2D 0 2px);--w:calc(50% - 20px);--b:3px;--r:10px">
-                        {!! $inventory->qrSmall !!}
+                <!-- <div id="outer-circle"> -->
+                    <div class="establecimiento">
+                        {{ auth()->user()->organizationalUnit->establishment->name }}
                     </div>
+                    <!-- <img class="logo"
+                        src="{{ asset('images/inventario_' . auth()->user()->organizationalUnit->establishment->alias . '_small.png') }}"
+                        alt="Logo"> -->
+                    <!-- <div class="box" -->
+                        <!-- style="--c:repeating-linear-gradient(45deg,#FD9D2D 0 2px);--w:calc(50% - 20px);--b:3px;--r:10px"> -->
+                        {!! $inventory->qrSmall !!}
+                    <!-- </div> -->
 
                     <div class="qr-number">{{ $inventory->number }}</div>
 
-                    <div class="small-text">
+                    <!-- <div class="small-text">
                         En caso de extravío informar al
                     </div>
                     <div class="whatsapp-number">
                         📞+56965887867
-                    </div>
-                </div>
+                    </div> -->
+                <!-- </div> -->
             </div>
 
             @if ($loop->iteration % 2 == 0)
-                <br>
                 <br>
             @endif
         @endforeach
