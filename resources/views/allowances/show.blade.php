@@ -168,7 +168,7 @@
 
 <h6><i class="fas fa-dollar-sign"></i> Resumen</h6>
 <div class="table-responsive">
-    <table class="table table-sm table-bordered table-striped table-hover">
+    <table class="table table-sm table-bordered table-striped table-hover small">
         <tbody>
             <tr class="text-center">
                 <th>Viático</th>
@@ -225,6 +225,19 @@
                 </td>
             </tr>
             <tr>
+                <td><b>4. PARCIAL</b></td>
+                <td class="text-center">60%</td>
+                <td class="text-right">
+                    ${{ ($allowance->sixty_percent_day_value) ? number_format($allowance->sixty_percent_day_value, 0, ",", ".") : '0' }}
+                </td>
+                <td class="text-center">
+                    {{ ($allowance->sixty_percent_total_days) ? intval($allowance->sixty_percent_total_days) : 0 }}
+                </td>
+                <td class="text-right">
+                    ${{ ($allowance->sixty_percent_day_value) ? number_format($allowance->sixty_percent_day_value * $allowance->sixty_percent_total_days, 0, ",", ".") : '' }}
+                </td>
+            </tr>
+            <tr>
                 <td colspan="3"></td>                    
                 <td class="text-center"><b>Total</b></td>
                 <td class="text-right">
@@ -236,6 +249,48 @@
 </div>
 
 <br>
+
+@if($allowance->approvals)
+    <i class="fas fa-check-circle"></i> Gestión de víatico. 
+    <div class="table-responsive">
+        <table class="table table-sm table-bordered small">
+            <tbody>
+                <tr>
+                    @foreach($allowance->approvals as $approval)
+                    <td class="table-active text-center">
+                        <strong>{{ $approval->sentToOu->name }}</strong><br>
+                    </td>
+                    @endforeach
+                </tr>
+                <tr>
+                    @foreach($allowance->approvals as $approval)
+                    <td class="table-active text-center">
+                        @if($approval->StatusInWords == "Pendiente")
+                            <span>
+                                <i class="fas fa-check-circle"></i> {{ $approval->StatusInWords }}
+                            </span> <br>
+                        @endif
+                        @if($approval->StatusInWords == "Aprobado")
+                            <span style="color: green;">
+                                <i class="fas fa-check-circle"></i> {{ $approval->StatusInWords }}
+                            </span> <br>
+                            <i class="fas fa-user"></i> {{ $approval->approver->FullName }}<br>
+                            <i class="fas fa-calendar-alt"></i> {{ $approval->approver_at->format('d-m-Y H:i:s') }}<br>
+                        @endif
+                        @if($approval->StatusInWords == "Rechazado")
+                            <span style="color: tomato;">
+                                <i class="fas fa-check-circle"></i> {{ $approval->StatusInWords }}
+                            </span> <br>
+                            <i class="fas fa-user"></i> {{ $approval->approver->FullName }}<br>
+                            <i class="fas fa-calendar-alt"></i> {{ $approval->approver_at->format('d-m-Y H:i:s') }}<br>
+                        @endif
+                    </td>
+                    @endforeach
+                </tr>
+            </tbody>
+        </table>
+    </div>
+@endif
 
 {{--
 @if($allowance->allowanceSigns->first()->status == 'pending')

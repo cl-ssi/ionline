@@ -26,9 +26,9 @@ class Allowance extends Model implements Auditable
         'folio_sirh', 'status', 'user_allowance_id', 'allowance_value_id', 'grade', 'law', 'contractual_condition_id', 
         'position', 'establishment_id', 'organizational_unit_allowance_id', 'place', 'reason',
         'overnight', 'accommodation', 'food','passage', 'means_of_transport', 'origin_commune_id', 'destination_commune_id', 
-        'round_trip', 'from', 'to', 'total_days', 'total_half_days', 'fifty_percent_total_days', 'half_days_only', 'day_value', 
-        'half_day_value', 'fifty_percent_day_value', 'total_value', 'creator_user_id', 
-        'creator_ou_id', 'document_date', 'signatures_file_id'
+        'round_trip', 'from', 'to', 'total_days', 'total_half_days', 'fifty_percent_total_days', 'sixty_percent_total_days',
+        'half_days_only', 'day_value', 'half_day_value', 'fifty_percent_day_value', 'sixty_percent_day_value', 'total_value', 
+        'creator_user_id', 'creator_ou_id', 'document_date', 'signatures_file_id'
     ];
 
      /**

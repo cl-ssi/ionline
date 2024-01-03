@@ -207,10 +207,12 @@ class AllowancesCreate extends Component
                     'total_days'                        => $this->totalDays(),
                     'total_half_days'                   => $this->totalHalfDays(),
                     'fifty_percent_total_days'          => $this->totalFiftyPercentDays(),
+                    'sixty_percent_total_days'          => $this->totalSixtyPercentDays(),
                     'half_days_only'                    => $this->halfDaysOnly,
                     'day_value'                         => $this->allowanceDayValue(),
                     'half_day_value'                    => $this->allowanceHalfDayValue(),
                     'fifty_percent_day_value'           => $this->allowanceFiftyPercentDayValue(),
+                    'sixty_percent_day_value'           => $this->allowanceSixtyPercentDayValue(),
                     'total_value'                       => $this->allowanceTotalValue(),
                     'creator_user_id'                   => Auth::user()->id, 
                     'creator_ou_id'                     => Auth::user()->organizationalUnit->id
@@ -326,7 +328,7 @@ class AllowancesCreate extends Component
         }*/
 
         if($this->halfDaysOnly == 1){
-            dd('sólo medios días');
+            return null;
         }
         else{
             //  LÍMITE MÁXIMO DE VIATICOS AL AÑO 
@@ -367,7 +369,7 @@ class AllowancesCreate extends Component
                         return null;
                     }
                     if($this->accommodation == 0 && $this->food == 1){
-                        // DIAS COMPLETOS AL 60%
+                        return null;
                     }
                 }
             }
@@ -376,21 +378,47 @@ class AllowancesCreate extends Component
 
     /* Cálculo de medios días */
     public function totalHalfDays(){
-        if($this->halfDaysOnly != null || ($this->from == $this->to)){
+        //Viático tradicional 
+        if(($this->halfDaysOnly == null || $this->halfDaysOnly == false) && 
+                $this->from != $this->to &&
+                $this->accommodation == 0 && 
+                $this->food == 0){
+
             return 1;
         }
-        else{
-            // RETORNA SÓLO MEDIOS DIAS
-            // RETORNA CUANDO INCLUYE
+
+        //Viático sólo alojamiento
+        if($this->from != $this->to &&
+            $this->accommodation == 1 && 
+            $this->food == 0){
+                return Carbon::parse($this->from." 00:00:00")
+                    ->diffInDays(Carbon::parse($this->to." 23:59:59")->addDay()->startOfDay());
+        }
+
+        //Viático sólo alimentacion
+        if($this->from != $this->to &&
+            $this->accommodation == 0 && 
+            $this->food == 1){
+
+            return null;
+        }
+
+        //Viático sólo medios días
+        if($this->halfDaysOnly != null || ($this->from == $this->to)){
             return Carbon::parse($this->from." 00:00:00")
                 ->diffInDays(Carbon::parse($this->to." 23:59:59")->addDay()->startOfDay());
-            
         }
     }
 
     /* Cálculo de días 50 porciento */
     public function totalFiftyPercentDays(){
         return $this->allowancesExceededDays;
+    }
+
+    public function totalSixtyPercentDays(){
+        if($this->accommodation == 0 && $this->food == 1){
+            return Carbon::parse($this->from." 00:00:00")->diffInDays(Carbon::parse($this->to." 23:59:59")->startOfDay());
+        }
     }
 
 
@@ -415,6 +443,10 @@ class AllowancesCreate extends Component
         return $this->cfgAllowanceValue->value * 0.5;
     }
 
+    public function allowanceSixtyPercentDayValue(){
+        return $this->cfgAllowanceValue->value * 0.6;
+    }
+
     public function allowanceTotalValue(){
         if($this->halfDaysOnly == 1 || ($this->from == $this->to)){
             return ($this->allowanceHalfDayValue() * $this->totalHalfDays());
@@ -434,6 +466,9 @@ class AllowancesCreate extends Component
             }
             if($this->totalFiftyPercentDays()){
                 $allowanceTotalValue =  $allowanceTotalValue + ($this->allowanceFiftyPercentDayValue() * $this->totalFiftyPercentDays());
+            }
+            if($this->totalSixtyPercentDays()){
+                $allowanceTotalValue =  $this->allowanceSixtyPercentDayValue() * $this->totalSixtyPercentDays();
             }
             return $allowanceTotalValue;
         }
@@ -474,6 +509,7 @@ class AllowancesCreate extends Component
             ]),
             "active"                            => true,
             "previous_approval_id"              => null,
+            /*
             "callback_feedback_inputs"          => json_encode([
                 [
                     "type"  => "text",
@@ -482,10 +518,11 @@ class AllowancesCreate extends Component
                     "value" => null
                 ]
             ]),
+            */
             "callback_controller_method"        => "App\Http\Controllers\Allowances\AllowanceController@approvalCallback",
             "callback_controller_params"        => json_encode([
                 'allowance_id'  => $alw->id,
-                'process'       => "folio sirh"
+                'process'       => null
             ])
         ]);
         

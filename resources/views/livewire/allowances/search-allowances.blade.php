@@ -99,6 +99,8 @@
                         <td class="text-left">
                             {{ $allowance->FromFormat }}<br>
                             {{ $allowance->ToFormat }}
+                            
+                            {{--
                             <br>
                             @if($allowance->total_days)
                                 <br>
@@ -108,7 +110,7 @@
                                 <br>
                                 <b>Parcial</b>: @if($allowance->total_half_days == 1) Medio día @else {{ intval($allowance->total_half_days) }} medios días @endif 
                             @endif
-                            
+                            --}}
                         </td>
                         {{--
                         <td class="text-center">

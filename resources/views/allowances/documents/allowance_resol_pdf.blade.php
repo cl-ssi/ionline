@@ -28,7 +28,7 @@
         <div class="left quince"
             style="padding-left: 2px; padding-bottom: 10px;">
             <strong style="text-transform: uppercase; padding-right: 30px;">
-                RESOLUCION EXENTA N°:
+                RESOLUCION EXENTA N°: {{ $allowance->id }}
             </strong>
         </div>
 
@@ -210,6 +210,13 @@
             <td align="right">${{ ($allowance->fifty_percent_day_value) ? number_format($allowance->fifty_percent_day_value, 0, ",", ".") : '0' }}</td>
             <td align="center">{{ ($allowance->fifty_percent_total_days) ? intval($allowance->fifty_percent_total_days) : 0 }}</td>
             <td align="right">${{ ($allowance->fifty_percent_day_value) ? number_format($allowance->fifty_percent_day_value * $allowance->fifty_percent_total_days, 0, ",", ".") : '' }}</td>
+        </tr>
+        <tr>
+            <td><b>4. PARCIAL</b></td>
+            <td align="center">60%</td>
+            <td align="right">${{ ($allowance->sixty_percent_day_value) ? number_format($allowance->sixty_percent_day_value, 0, ",", ".") : '0' }}</td>
+            <td align="center">{{ ($allowance->sixty_percent_total_days) ? intval($allowance->sixty_percent_total_days) : 0 }}</td>
+            <td align="right">${{ ($allowance->sixty_percent_day_value) ? number_format($allowance->sixty_percent_day_value * $allowance->sixty_percent_total_days, 0, ",", ".") : '' }}</td>
         </tr>
         <tr>
             <td colspan="3"></td>                    

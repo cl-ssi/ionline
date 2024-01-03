@@ -224,11 +224,11 @@
             <label for="for_overnight">Derecho de Pasaje</label>
             <div class="mt-1">
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" id="for_passage_yes" wire:model.debounce.500ms="passage" value="1" required>
+                    <input class="form-check-input" type="radio" id="for_passage_yes" wire:model="passage" value="1" required>
                     <label class="form-check-label" for="for_passage_yes">Si</label>
                 </div>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" id="for_passage_no" wire:model.debounce.500ms="passage" value="0" required>
+                    <input class="form-check-input" type="radio" id="for_passage_no" wire:model="passage" value="0" required>
                     <label class="form-check-label" for="for_passage_no">No</label>
                 </div>
             </div>
@@ -241,11 +241,11 @@
             <label for="for_overnight">Pernocta fuera de residencia</label>
             <div class="mt-1 text-center">
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" id="for_overnight_yes" wire:model.debounce.500ms="overnight" value="1" required>
+                    <input class="form-check-input" type="radio" id="for_overnight_yes" wire:model="overnight" value="1" required>
                     <label class="form-check-label" for="for_overnight_no">Si</label>
                 </div>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" id="for_overnight_no" wire:model.debounce.500ms="overnight" value="0" required>
+                    <input class="form-check-input" type="radio" id="for_overnight_no" wire:model="overnight" value="0" required>
                     <label class="form-check-label" for="for_overnight_no">No</label>
                 </div>
             </div>
@@ -300,7 +300,7 @@
             <label for="name" class="col-form-label">Sólo medios días (Inlcusive):</label>
             <br>
             <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" value="1" id="for_half_days_only" wire:model.debounce.500ms="halfDaysOnly" {{ $disabledHalfDayOnly }}>
+                <input class="form-check-input" type="checkbox" value="1" id="for_half_days_only" wire:model="halfDaysOnly" {{ $disabledHalfDayOnly }}>
                 <label class="form-check-label" for="for_yes">
                     Si
                 </label>
