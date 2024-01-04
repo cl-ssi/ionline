@@ -85,8 +85,7 @@
                                     value="{{ $dte->id }}">
                                 <label>
                                     {{ $dte->tipoDocumentoIniciales }}
-                                    {{ $dte->folio }}
-                                    Id:{{ $dte->id }}
+                                    {{ $dte->folio }} <small>({{ $dte->id }})</small>
                                 </label>
                             </div>
                         </li>

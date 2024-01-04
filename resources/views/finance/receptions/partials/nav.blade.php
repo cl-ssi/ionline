@@ -14,7 +14,6 @@
             Nueva acta con OC
         </a>
     </li>
-    @can('be god')
     <li class="nav-item">
         <a class="nav-link {{ active('finance.receptions.create_no_oc') }}"
             href="{{ route('finance.receptions.create_no_oc') }}">
@@ -22,7 +21,6 @@
             Nueva acta sin OC
         </a>
     </li>
-    @endcan
     <li class="nav-item">
         <a class="nav-link {{ active('finance.receptions.reject') }}"
             aria-current="page"
