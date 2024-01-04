@@ -54,7 +54,7 @@
             @livewire('places.find-place', [
                 'smallInput' => true,
                 'tagId' => 'place-id',
-                'placeholder' => 'Ingrese una ubicación',
+                'placeholder' => 'Ingrese una ubicación o cod. arq.',
                 'establishment' => auth()->user()->organizationalUnit->establishment,
             ])
 

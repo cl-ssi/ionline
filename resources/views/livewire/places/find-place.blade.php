@@ -41,7 +41,7 @@
                     class="list-group-item list-group-item-action py-1"
                 >
                     <small>
-                        {{ $place->location->name }}, {{ $place->name }}
+                        {{ $place->location->name }}, {{ $place->name }} ({{ $place->architectural_design_code }})
                     </small>
                 </a>
             @empty

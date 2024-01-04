@@ -44,6 +44,7 @@ class FindPlace extends Component
                 ->whereEstablishmentId($this->establishment->id)
                 ->where(function($query) use($search) {
                     $query->where('name', 'like', $search)
+                    ->orWhere('architectural_design_code', 'like', $search)
                     ->orWhereHas('location', function($query) use($search) {
                         $query->where('name', 'like', $search)
                             ->whereEstablishmentId($this->establishment->id);

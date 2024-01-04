@@ -558,7 +558,7 @@
 
             @livewire('places.find-place', [
                 'tagId' => 'place-id',
-                'placeholder' => 'Ingrese una ubicación',
+                'placeholder' => 'Ingrese una ubicación o cod. arq.',
                 'establishment' => $establishment,
             ])
 
