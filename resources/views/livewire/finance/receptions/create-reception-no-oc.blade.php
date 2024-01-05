@@ -18,8 +18,10 @@
                 aria-label="Archivo Digitalizado DTE"
                 aria-describedby="digital-invoice"
                 wire:model.defer="digitalInvoiceFile">
-                
             </div>
+            @error('digitalInvoiceFile')
+                    <span class="text-danger">{{ $message }}</span>
+            @enderror
         </div>
 
 
@@ -58,7 +60,8 @@
         <div class="form-group col-4">
             <label for="razonSocial">Razón Social</label>
             <input type="text" class="form-control" id="razonSocial" wire:model.defer="razonSocial"
-                autocomplete="off" wire:loading.attr="disabled">
+                autocomplete="off" wire:loading.attr="disabled"
+                    wire:target="digitalInvoiceFile">
             @error('razonSocial')
                 <span class="text-danger">{{ $message }}</span>
             @enderror
@@ -74,7 +77,8 @@
                 <input type="date"
                     class="form-control"
                     wire:model="reception.dte_date" 
-                    wire:loading.attr="disabled">
+                    wire:loading.attr="disabled"
+                    wire:target="digitalInvoiceFile">
             </div>
         </div>
 
@@ -84,7 +88,8 @@
             <label for="folio">Número</label>
             <input type="number" class="form-control" id="folio" wire:model.defer="folio" autocomplete="off"
                 min="1" 
-                wire:loading.attr="disabled">
+                wire:loading.attr="disabled"
+                wire:target="digitalInvoiceFile">
             @error('folio')
                 <span class="text-danger">{{ $message }}</span>
             @enderror
@@ -93,7 +98,10 @@
         <div class="form-group col-2">
             <label for="montoTotal">Monto Total</label>
             <input type="number" class="form-control" id="montoTotal" wire:model.defer="montoTotal"
-                autocomplete="off" min="1000" wire:loading.attr="disabled">
+                autocomplete="off" min="1000" 
+                wire:loading.attr="disabled"
+                wire:target="digitalInvoiceFile"
+                >
             @error('montoTotal')
                 <span class="text-danger">{{ $message }}</span>
             @enderror
@@ -110,6 +118,8 @@
                     class="form-control"
                     disabled
                     placeholder="Automático"
+                    wire:loading.attr="disabled"
+                    wire:target="digitalInvoiceFile"
                     >
             </div>
         </div>
@@ -118,7 +128,7 @@
                 <label for="reception-date">Fecha acta*</label>
                 <input type="date"
                     class="form-control @error('reception.date') is-invalid @enderror"
-                    wire:model.defer="reception.date" wire:loading.attr="disabled">
+                    wire:model.defer="reception.date" wire:loading.attr="disabled" wire:target="digitalInvoiceFile">
                 @error('reception.date')
                     <span class="text-danger">{{ $message }}</span>
                 @enderror
@@ -127,7 +137,8 @@
         <div class="form-group col-md-2">
             <label for="form-reception-type">Tipo de acta*</label>
             <select class="form-select @error('reception.reception_type_id') is-invalid @enderror"
-                wire:model.defer="reception.reception_type_id" wire:loading.attr="disabled">
+                wire:model.defer="reception.reception_type_id" wire:loading.attr="disabled"
+                wire:target="digitalInvoiceFile">
                 <option value=""></option>
                 @foreach ($types as $id => $type)
                     <option value="{{ $id }}">{{ $type }}</option>
@@ -331,7 +342,7 @@
 
     <div class="row mt-3">
         <div class="col-6 text-primary">
-            <button class="btn btn-primary" type="submit">
+            <button class="btn btn-primary" wire:click="save">
                 Crear
             </button>
 

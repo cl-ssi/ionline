@@ -30,7 +30,7 @@ class CreateReceptionNoOc extends Component
     
 
     protected $rules = [
-        'digitalInvoiceFile' => 'required|file|max:2048', // ajusta el tamaño máximo según tus necesidades
+        'digitalInvoiceFile' => 'required|file|max:2048',
         'reception.dte_type' => 'required',
         'reception.emisor' => 'required',
         'reception.razonSocial' => 'required',
@@ -77,7 +77,7 @@ class CreateReceptionNoOc extends Component
             'emisor' => $this->emisor,
             'razon_social_emisor' => $this->razonSocial,
             'monto_total' => $this->montoTotal,
-            'tipo' => $tipo,            
+            'tipo' => $tipo,
             'establishment_id' => auth()->user()->organizationalUnit->establishment_id,
         ]);
         
@@ -96,6 +96,21 @@ class CreateReceptionNoOc extends Component
             'header_notes' => $this->reception['header_notes'],
             'total' => $this->montoTotal,
         ]);
+
+
+        if($this->digitalInvoiceFile) {
+            $storage_path = 'ionline/finances/receptions/no_oc';
+            $filename = $reception->id.'.pdf';
+
+            $this->digitalInvoiceFile->storeAs($storage_path, $filename, 'gcs');
+
+            $reception->files()->create([
+                'storage_path' => $storage_path.'/'.$filename,
+                'stored' => true,
+                'type' => 'no_oc',
+                'stored_by_id' => auth()->id(),
+            ]);
+        }
 
         $priorityOrder = ['left', 'center', 'right'];
         foreach($priorityOrder as $element) {
