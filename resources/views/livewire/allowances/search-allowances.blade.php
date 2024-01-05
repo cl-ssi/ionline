@@ -24,6 +24,18 @@
                 <input class="form-control form-control-sm" type="text" autocomplete="off" placeholder="NOMBRE / APELLIDOS"
                     name="user_allowance_search" wire:model.debounce.500ms="selectedUserAllowance">
             </fieldset>
+
+            @if($index == 'sign' && Auth::user()->hasPermissionTo('Allowances: sirh'))
+            <fieldset class="form-group col-12 col-md-2">
+                <label for="for_status_search">Estado Revisión SIRH</label>
+                <select name="status_sirh_search" class="form-control form-control-sm" wire:model.debounce.500ms="selectedStatusSirh">
+                    <option value="">Seleccione...</option>
+                    <option value="pending">Pendiente</option>
+                    <option value="accepted">Aprobado</option>
+                    <option value="rejected">Rechazado</option>
+                </select>
+            </fieldset>
+            @endif
         </div>
 
     </div>
@@ -46,7 +58,7 @@
             <table class="table table-sm table-bordered table-striped table-hover small">
                 <thead>
                     <tr class="text-center">
-                        <th rowspan="2" style="width: 3%">ID <br> <span class="badge badge-secondary">Folio sirh</span></th>
+                        <th rowspan="2" style="width: 3%">ID</th>
                         <th rowspan="2" style="width: 7%">Fecha Creación</th>
                         <th rowspan="2">Funcionario</th>
                         <th rowspan="2">Calidad</th>
@@ -65,6 +77,10 @@
                     <tr>
                         <th>
                             {{ $allowance->id }} <br>
+
+                            @if($allowance->allowanceSigns->first()->status == "accepted")
+                                <span class="badge badge-success">SIRH <i class="fas fa-check-circle"></i></span> <br>
+                            @endif
 
                             @if($allowance->folio_sirh)
                                 <span class="badge badge-secondary">{{ $allowance->folio_sirh }}</span> <br>
@@ -132,19 +148,17 @@
                                 </a>
                             @endif
                 
-                            @if($index == 'own' && $allowance->status != 'manual')
-                                {{-- @if($allowance->allowanceSigns->first()->status == 'pending' && Auth::user()->hasPermissionTo('Allowances: create')) --}}
+                            @if($index == 'own')
+                                @if($allowance->allowanceSigns->first()->status == 'pending' && Auth::user()->hasPermissionTo('Allowances: create'))
                                     <a href="{{ route('allowances.edit', $allowance) }}"
                                         class="btn btn-outline-secondary btn-sm" title="Editar"><i class="fas fa-edit"></i>
                                     </a>
-                                {{-- @else --}}
+                                @else
                                     <a href="{{ route('allowances.show', $allowance) }}"
                                         class="btn btn-outline-secondary btn-sm" title="Ver Viático">
                                         <i class="fas fa-eye"></i>
                                     </a>
-                                {{-- @endif --}}
-                            @else
-                                Aprobaciones No Disponibles
+                                @endif
                             @endif
 
                             @if($index == 'all' && $allowance->status != 'manual')

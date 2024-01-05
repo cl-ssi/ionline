@@ -17,6 +17,7 @@ class SearchAllowances extends Component
     public $selectedStatus = null;
     public $selectedId = null;
     public $selectedUserAllowance = null;
+    public $selectedStatusSirh = null;
 
     public $index;
 
@@ -31,11 +32,12 @@ class SearchAllowances extends Component
                         latest()
                         ->search($this->selectedStatus,
                             $this->selectedId,
-                            $this->selectedUserAllowance)
+                            $this->selectedUserAllowance,
+                            $this->selectedStatusSirh)
                         ->paginate(50)
                 ]);
             }
-
+            /*
             $authorities = Authority::getAmIAuthorityFromOu(Carbon::now(), 'manager', Auth::user()->id);
             if($authorities->isNotEmpty()){
                 foreach ($authorities as $authority){
@@ -57,6 +59,7 @@ class SearchAllowances extends Component
                         $this->selectedUserAllowance)
                     ->paginate(50)
             ]);
+            */
         }
 
         if($this->index == 'own'){
@@ -70,7 +73,8 @@ class SearchAllowances extends Component
                         ->orWhere('organizational_unit_allowance_id', Auth::user()->organizationalUnit->id)
                         ->search($this->selectedStatus,
                             $this->selectedId,
-                            $this->selectedUserAllowance)
+                            $this->selectedUserAllowance,
+                            $this->selectedStatusSirh)
                         ->paginate(50)
                 ]);
             }
@@ -82,7 +86,8 @@ class SearchAllowances extends Component
                         ->where('user_allowance_id', Auth::user()->id)
                         ->search($this->selectedStatus,
                             $this->selectedId,
-                            $this->selectedUserAllowance)
+                            $this->selectedUserAllowance,
+                            $this->selectedStatusSirh)
                         ->paginate(50)
                 ]);
             }

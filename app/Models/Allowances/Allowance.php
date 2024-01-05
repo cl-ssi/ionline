@@ -218,8 +218,8 @@ class Allowance extends Model implements Auditable
         }
     }
 
-    public function scopeSearch($query, $status_search, $search_id, $user_allowance_search){
-        if ($status_search OR $search_id OR $user_allowance_search) {
+    public function scopeSearch($query, $status_search, $search_id, $user_allowance_search, $status_sirh_search){
+        if ($status_search OR $search_id OR $user_allowance_search OR $status_sirh_search) {
             if($status_search != '' &&  ($status_search == 'pending' || $status_search == 'rejected')){
                 $query->whereHas('allowanceSignature' ,function($query) use($status_search){
                     $query->where('status', $status_search);
@@ -245,6 +245,12 @@ class Allowance extends Model implements Auditable
                     $query->where('name', 'LIKE', '%'.$word.'%')
                         ->orwhere('fathers_family','LIKE', '%'.$word.'%')
                         ->orwhere('mothers_family','LIKE', '%'.$word.'%');
+                });
+            }
+
+            if($status_sirh_search != ''){
+                $query->whereHas('allowanceSigns' ,function($query) use($status_sirh_search){
+                    $query->where('status', $status_sirh_search);
                 });
             }
         }
