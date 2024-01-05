@@ -4,7 +4,7 @@
 
 @section('content')
 
-<h3>Editar Unidad Organizacional del {{Auth::user()->organizationalUnit->establishment->name}}</h3>
+<h3>Editar Unidad Organizacional del {{ Auth::user()->organizationalUnit->establishment->name }}</h3>
 
 <form method="POST" class="form-horizontal" action="{{ route('rrhh.organizational-units.update',$organizationalUnit->id) }}">
     {{ method_field('PUT') }}
@@ -138,8 +138,8 @@
 
             <a href="{{ route('rrhh.organizational-units.index') }}" class="btn btn-outline-dark">Cancelar</a>
 
-            @if($organizationalUnit->users()->exists())
-                <button class="btn btn-danger" title="No se puede eliminar la unidad, tiene usuarios dentro de ella" disabled>
+            @if($organizationalUnit->users()->exists() OR $organizationalUnit->childs()->exists())
+                <button class="btn btn-danger" title="No se puede eliminar la unidad, tiene usuarios o unidades dentro de ella" disabled>
                     <i class="fas fa-trash"></i> Eliminar
                 </button>
             @else
