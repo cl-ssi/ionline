@@ -19,6 +19,7 @@ use App\Models\Parameters\Municipality;
 use App\Models\Establishment;
 use Carbon\Carbon;
 use App\Http\Controllers\Controller;
+use App\Models\Agreements\ContinuityResolution;
 use Luecano\NumeroALetras\NumeroALetras;
 use PhpOffice\PhpWord\Settings;
 use PhpOffice;
@@ -430,6 +431,111 @@ class WordTestController extends Controller
         }
         
         $download_path = 'app/public/Prev-'. ($type != 'addendum' ? 'Resolucion-' : '') .'Addendum.docx';
+        $templateProcessor->saveAs(storage_path($download_path));
+        return response()->download(storage_path($download_path))->deleteFileAfterSend(true);
+    }
+
+    public function createWordDocxResContinuity(Request $request, ContinuityResolution $continuityResolution)
+    {
+        $continuityResolution->load('agreement.program','agreement.commune', 'referrer', 'director_signer.user');
+        $municipality   = Municipality::where('commune_id', $continuityResolution->agreement->commune->id)->first();
+
+    	$templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor(public_path('word-template/resolucioncontinuidadconvenio'.date('Y', strtotime($continuityResolution->date)).'.docx'));
+        
+        // No se guarda los cambios en el res continuidad ya que es solo para efectos de generar el documento
+        $formatter = new NumeroALetras;
+        $formatter->apocope = true;
+        $totalConvenio = $continuityResolution->amount;
+        $totalConvenioLetras = $this->correctAmountText($formatter->toMoney($totalConvenio,0, 'pesos',''));
+        $templateProcessor->setValue('totalConvenio',number_format($totalConvenio,0,",","."));
+        $templateProcessor->setValue('totalConvenioLetras',$totalConvenioLetras);
+
+        $first_word = explode(' ',trim($continuityResolution->agreement->program->name))[0];
+        $programa = $first_word == 'Programa' ? substr(strstr($continuityResolution->agreement->program->name," "), 1) : $continuityResolution->agreement->program->name;
+        if($continuityResolution->agreement->period >= 2022) $programa = mb_strtoupper($programa);
+        $ilustre = !Str::contains($municipality->name_municipality, 'ALTO HOSPICIO') ? 'Ilustre': null;
+        // $municipalidad = $municipality->name_municipality;
+        // $fechaAddendum = $this->formatDate($addendum->date);
+        // $fechaConvenio = $this->formatDate($addendum->agreement->date);
+        $fechaResolucionConvenio = $this->formatDate($continuityResolution->agreement->res_exempt_date);
+        // $directorApelativo = $continuityResolution->director_signer->appellative;
+        // if(!Str::contains($directorApelativo,'(S)')) $directorApelativo .= ' Titular';
+        //construir nombre director
+        // $first_name = explode(' ',trim($addendum->director_signer->user->name))[0];
+        // $director = mb_strtoupper($addendum->director_signer->user->fullName);
+        // $directorNationality = Str::contains($addendum->director_signer->appellative, 'a') ? 'chilena' : 'chileno';
+
+        // $alcaldeNationality = Str::endsWith($addendum->representative_appellative, 'a') ? 'chilena' : 'chileno';
+        // $alcaldeApelativo = $addendum->representative_appellative;
+        // $alcaldeApelativoCorto = Str::beforeLast($alcaldeApelativo, ' ');
+        // if(Str::contains($alcaldeApelativo, 'Subrogante')){
+        //     $alcaldeApelativoFirma = Str::before($alcaldeApelativo, 'Subrogante') . '(S)';
+        // }else{
+        //     $alcaldeApelativoFirma = explode(' ',trim($alcaldeApelativo))[0]; // Alcalde(sa)
+        // }
+		// $templateProcessor->setValue('programaTitulo', mb_strtoupper($programa));
+		$templateProcessor->setValue('programa', $programa);
+		$templateProcessor->setValue('periodoConvenio', $continuityResolution->agreement->period);
+        $templateProcessor->setValue('ilustre', $ilustre);
+        // $templateProcessor->setValue('municipalidad', $municipalidad);
+        // $templateProcessor->setValue('municipalidadDirec', $addendum->agreement->municipality_adress);
+        // $templateProcessor->setValue('fechaAddendum', $fechaAddendum);
+        // $templateProcessor->setValue('fechaConvenio', $fechaConvenio); // Cambiar formato d de m y
+        $templateProcessor->setValue('yearResolucionConvenio', $continuityResolution->agreement->res_exempt_date != NULL ? date('Y', strtotime($continuityResolution->agreement->res_exempt_date)) : '');
+        // $templateProcessor->setValue('directorApelativo', $directorApelativo);
+        // $templateProcessor->setValue('director', $director);
+        // $templateProcessor->setValue('directorNationality', $directorNationality);
+        // $templateProcessor->setValue('directorRut', mb_strtoupper($addendum->director_signer->user->runFormat()));
+        $templateProcessor->setValue('directorDecreto', $continuityResolution->director_signer->decree);
+        // $templateProcessor->setValue('art8', !Str::contains($directorApelativo, '(S)') ? 'Art. 8 del ' : '');
+        $templateProcessor->setValue('comuna', $continuityResolution->agreement->commune->name);
+        // $templateProcessor->setValue('comunaRut', $municipality->rut_municipality);
+        $templateProcessor->setValue('ilustre', ucfirst(mb_strtolower($ilustre)));
+        $templateProcessor->setValue('totalConvenio',number_format($totalConvenio,0,",","."));
+        $templateProcessor->setValue('totalConvenioLetras',$totalConvenioLetras);
+        // $templateProcessor->setValue('alcaldeApelativo', $alcaldeApelativo);
+        // $templateProcessor->setValue('alcaldeApelativoCorto', $alcaldeApelativoCorto);
+        // $templateProcessor->setValue('alcaldeApelativoFirma', $alcaldeApelativoFirma);
+        // $templateProcessor->setValue('alcalde', mb_strtoupper($addendum->representative));
+        // $templateProcessor->setValue('alcaldeNationality', $alcaldeNationality);
+        // $templateProcessor->setValue('alcaldeRut', $addendum->representative_rut);
+        // $templateProcessor->setValue('alcaldeDecreto', $addendum->representative_decree);
+
+        $templateProcessor->setValue('numResolucion', $continuityResolution->agreement->number);
+        $templateProcessor->setValue('yearResolucion', $continuityResolution->agreement->resolution_date != NULL ? date('Y', strtotime($continuityResolution->agreement->resolution_date)) : '');
+        $templateProcessor->setValue('fechaResolucion', $this->formatDate($continuityResolution->agreement->resolution_date));
+        $templateProcessor->setValue('numResourceResolucion', $continuityResolution->agreement->res_resource_number);
+        $templateProcessor->setValue('yearResourceResolucion', $continuityResolution->agreement->res_resource_date != NULL ? date('Y', strtotime($continuityResolution->agreement->res_resource_date)) : '');
+        $templateProcessor->setValue('fechaResourceResolucion', $this->formatDate($continuityResolution->agreement->res_resource_date));
+        
+        $templateProcessor->setValue('numResolucionConvenio', $continuityResolution->agreement->res_exempt_number);
+        $templateProcessor->setValue('fechaResolucionConvenio', $fechaResolucionConvenio);
+
+        // SE OBTIENE LAS INSTITUCIONES DE SALUD PERO SÓLO LAS QUE SE HAN SELECCIONADO
+        $establishment_list = unserialize($continuityResolution->agreement->establishment_list) == null ? [] : unserialize($continuityResolution->agreement->establishment_list);
+        $establishments = Establishment::where('commune_id', $continuityResolution->agreement->Commune->id)
+                                       ->whereIn('id', $establishment_list)->get();
+
+        // ARRAY PARA OBTNER LAS INSTITUCIONES ASOCIADAS AL CONVENIO
+        // SI EL ARRAY DE INSTITUCIONES VIENE VACIO
+        if($establishments->isEmpty()){
+            $arrayEstablishmentConcat = '';
+        }
+        else { 
+            foreach ($establishments as $key => $establishment) {
+                $arrayEstablishment[] = array('index' => $key+1
+                                             ,'establecimientoTipo' => $establishment->type
+                                             ,'establecimientoNombre' => $establishment->name
+                                             ,'establecimiento' => ucwords(mb_strtolower($establishment->type))." ".$establishment->name
+                                         );
+            }
+            $arrayEstablishmentConcat = implode(", ",array_column($arrayEstablishment, 'establecimiento',));
+        }
+
+        $templateProcessor->setValue('establecimientosListado',$arrayEstablishmentConcat);
+
+        
+        $download_path = 'app/public/Prev-ResolucionContinuidad.docx';
         $templateProcessor->saveAs(storage_path($download_path));
         return response()->download(storage_path($download_path))->deleteFileAfterSend(true);
     }

@@ -523,6 +523,79 @@
 
     @include('agreements/agreements/modal_add_addendum')
 @endif
+
+@if($agreement->fileResEnd != null && $agreement->program_id != 50)
+    <div class="card mt-3 small">
+        <div class="card-body">
+            <h5>Resoluciones de Continuidad de Convenio
+            @if($canEdit)
+            <button class="btn btn-sm btn-outline-primary float-right" data-toggle="modal"
+                                data-target="#addModalContinuityResol"
+                                data-formaction="{{ route('agreements.continuity.store' )}}">
+                            <i class="fas fa-plus"></i> Nueva Resolución</button>
+            @endif
+            </h5>
+
+            <table class="table table-sm table-hover">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Fecha</th>
+                        <th>Referente</th>
+                        <th>Director/a a cargo</th>
+                        <th>Fecha Res.</th>
+                        <th>N° Res.</th>
+                        <th>Monto total</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($agreement->continuities as $continuity)
+                    <tr>
+                        <td>{{ $continuity->id }}</td>
+                        <td>{{ $continuity->date ? $continuity->date->format('d-m-Y') : '' }}</td>
+                        <td>{{ $continuity->referrer->fullName ?? ''}}</td>
+                        <td>{{ $continuity->director_signer->user->fullName ?? '' }}</td>
+                        <td>{{ $continuity->res_date ? $continuity->res_date->format('d-m-Y') : '' }}</td>
+                        <td>{{ $continuity->res_number }}
+                            @if($continuity->res_file)
+                             <a class="text-info" href="{{ route('agreements.continuity.downloadRes', $continuity) }}" target="_blank">
+                                <i class="fas fa-paperclip"></i>
+                            </a>
+                            @endif
+                        </td>
+                        <td>{{number_format($continuity->amount,0,",",".")}}</td>
+                        <td>
+                            @if($canEdit)
+                            <button class="btn btn-sm btn-outline-secondary" data-toggle="modal" data-target="#editModalContinuityResol-{{$continuity->id}}">
+                            <i class="fas fa-edit"></i></button>
+                            @include('agreements/agreements/modal_edit_continuity')
+                            <a class="btn btn-sm btn-outline-secondary" href="#" data-toggle="tooltip" data-placement="top" title="Descargar borrador Resolucion"
+                                onclick="event.preventDefault(); document.getElementById('submit-form-continuity-{{$continuity->id}}').submit();"><i class="fas fa-file-download"></i></a>
+                            <form id="submit-form-continuity-{{$continuity->id}}" action="{{ route('agreements.continuity.createWord', $continuity) }}" method="POST" hidden>@csrf</form>
+                            @if($continuity->file != null)
+                            <a class="btn btn-sm btn-outline-secondary" href="{{ route('agreements.continuity.preview', $continuity) }}" target="blank" data-toggle="tooltip" data-placement="top" title="Previsualizar Resolucion"><i class="fas fa-eye"></i></a>
+                            @endif
+                            @endif <!-- canEdit fin -->
+                            @canany(['Documents: signatures and distribution'])
+                            @if($canEdit)
+                            <a class="btn btn-sm btn-outline-secondary" href="{{ route('agreements.continuity.sign', [$continuity, 'visators']) }}" data-toggle="tooltip" data-placement="top" title="Solicitar visación Resolucion"><i class="fas fa-file-signature"></i></a>
+                            @endif
+                            @if($continuity->fileToEndorse && $continuity->fileToEndorse->HasAllFlowsSigned)
+                            <a class="btn btn-sm btn-outline-secondary" href="{{route('documents.signatures.showPdf', [$continuity->file_to_endorse_id, time()])}}" target="blank" data-toggle="tooltip" data-placement="top" title="Ver resolución visado"><i class="fas fa-eye"></i></a> 
+                            @if($canEdit)<a class="btn btn-sm btn-outline-secondary" href="{{ route('agreements.addendum.sign', [$addendum, 'signer']) }}" data-toggle="tooltip" data-placement="top" title="Solicitar firma Addendum"><i class="fas fa-file-signature"></i></a> @endif
+                            @endif
+                            @endcan
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>    
+    </div>
+
+    @include('agreements/agreements/modal_add_continuity')
+@endif
     
     @include('agreements/agreements/modal_select_signer_res')
     @include('agreements/agreements/modal_select_evaluation_option')
@@ -653,5 +726,13 @@
             $(this).val('');
         }
     });
+
+
+    $('#addModalContinuityResol').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget) // Button that triggered the modal
+        var modal  = $(this)
+
+        modal.find("#form-add").attr('action', button.data('formaction'))
+    })
 </script>
 @endsection

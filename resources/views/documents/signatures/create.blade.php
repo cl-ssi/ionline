@@ -24,6 +24,11 @@
             <input type="hidden" name="signature_type" value="{{ $signature->type }}">
         @endif
 
+        @if (isset($signature->continuity_resol_id))
+            <input type="hidden" name="continuity_resol_id" value="{{ $signature->continuity_resol_id }}">
+            <input type="hidden" name="signature_type" value="{{ $signature->type }}">
+        @endif
+
         @if (isset($xAxis) && isset($yAxis))
             <input type="hidden" name='custom_x_axis' value="{{ $xAxis }}">
             <input type="hidden" name='custom_y_axis' value="{{ $yAxis }}">
