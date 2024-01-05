@@ -2587,8 +2587,8 @@ Route::prefix('identify_need')->as('identify_need.')->middleware(['auth', 'must.
     Route::get('/', [IdentifyNeedController::class, 'index'])->name('index')->middleware(['permission:Identify Need: create']);
     Route::get('/own_index', [IdentifyNeedController::class, 'own_index'])->name('own_index')->middleware(['permission:Identify Need: create']);
     Route::get('/create', [IdentifyNeedController::class, 'create'])->name('create')->middleware(['permission:Identify Need: create']);
-    Route::get('/{identifyNeed}/edit', [IdentifyNeedController::class, 'edit'])->name('edit')->middleware(['permission:News: create']);
-    Route::prefix('porject')->as('project.')->group(function () {
+    Route::get('/{identifyNeed}/edit', [IdentifyNeedController::class, 'edit'])->name('edit')->middleware(['permission:Identify Need: create']);
+    Route::prefix('project')->as('project.')->group(function () {
         Route::get('/{identifyNeed}/create', [ProjectController::class, 'create'])->name('create')->middleware(['permission:Identify Need: create']);
     });
 });
