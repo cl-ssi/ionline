@@ -7,7 +7,7 @@ use Livewire\Component;
 use App\Models\Allowances\Allowance;
 use App\Models\Allowances\Destination;
 use App\Models\Allowances\AllowanceFile;
-// use App\Models\Allowances\AllowanceSign;
+use App\Models\Allowances\AllowanceSign;
 
 use App\Models\Parameters\AllowanceValue;
 use App\Models\Parameters\ContractualCondition;
@@ -255,11 +255,13 @@ class AllowancesCreate extends Component
         // APROBACION SIRH
         $sirh_approval = $this->sirhSign($alw);
 
+        /*
         // APROBACION U.O. DE ACUERDO SOLICITANTE 
         $ou_approval = $this->ouSign($alw, $sirh_approval);
 
         // APROBACION U.O. DE FINANZAS
         $this->financeSign($alw, $ou_approval);
+        */
 
         session()->flash('success', 'Estimados Usuario, se ha creado exitosamente la solicitud de viatico N°'.$alw->id);
         return redirect()->route('allowances.index');
@@ -479,7 +481,7 @@ class AllowancesCreate extends Component
     public function sirhSign(Allowance $alw)
     {
         // ANTIGUAS VISACIONES
-        /*
+    
         //SE AGREGA AL PRINCIPIO VISACIÓN SIRH
         $allowance_sing_sirh                            = new AllowanceSign();
         $allowance_sing_sirh->position                  = 1;
@@ -494,8 +496,9 @@ class AllowancesCreate extends Component
         foreach($notificationSirhPermissionUsers as $notificationSirhPermissionUser){
             $notificationSirhPermissionUser->notify(new NewAllowance($alw));
         }
-        */
+        
 
+        /*
         // APPROVALS
         $approval = $alw->approvals()->create([
             "module"                            => "Viáticos",
@@ -509,7 +512,6 @@ class AllowancesCreate extends Component
             ]),
             "active"                            => true,
             "previous_approval_id"              => null,
-            /*
             "callback_feedback_inputs"          => json_encode([
                 [
                     "type"  => "text",
@@ -518,7 +520,7 @@ class AllowancesCreate extends Component
                     "value" => null
                 ]
             ]),
-            */
+            
             "callback_controller_method"        => "App\Http\Controllers\Allowances\AllowanceController@approvalCallback",
             "callback_controller_params"        => json_encode([
                 'allowance_id'  => $alw->id,
@@ -527,6 +529,7 @@ class AllowancesCreate extends Component
         ]);
         
         return $approval->id;
+        */
     }
 
     public function ouSign(Allowance $alw, $sirh_approval){

@@ -18,7 +18,7 @@
                 
                 @if(Auth::user()->can('Allowances: sirh'))
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item {{ active(['allowances.sign_index']) }}" href="{{ route('allowances.sign_index') }}"><i class="fas fa-keyboard"></i> Ingreso folio SIRH</a>
+                    <a class="dropdown-item {{ active(['allowances.sign_index']) }}" href="{{ route('allowances.sign_index') }}"><i class="fas fa-keyboard"></i> Revisión SIRH</a>
                 @endif
             </div>
         </li>

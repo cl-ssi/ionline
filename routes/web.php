@@ -2234,7 +2234,7 @@ Route::prefix('allowances')->as('allowances.')->middleware(['auth', 'must.change
     });
 
     Route::prefix('sign')->as('sign.')->group(function () {
-        Route::put('{allowanceSign}/{status}/{allowance}/update', [AllowanceSignController::class, 'update'])->name('update');
+        Route::put('{allowanceSign}/{status}/update', [AllowanceSignController::class, 'update'])->name('update');
         Route::get('/{allowance}/create_view_document', [AllowanceSignController::class, 'create_view_document'])->name('create_view_document');
         Route::get('/{allowance}/create_form_document', [AllowanceSignController::class, 'create_form_document'])->name('create_form_document');
         Route::get('/callback-sign-allowance/{message}/{modelId}/{signaturesFile?}', [AllowanceSignController::class, 'callbackSign'])->name('callbackSign');
