@@ -102,8 +102,7 @@ class AllowanceSignController extends Controller
 
             $lastApprovalId = null;
 
-            //APPROVAL DE JEFATURAS DIRECTAS
-            for ($i = $alw_ou_level; $i >= 2; $i--){
+            if($alw_ou_level == 1){
                 $approval = $allowanceSign->allowance->approvals()->create([
                     "module"                            => "Viáticos",
                     "module_icon"                       => "bi bi-wallet",
@@ -123,8 +122,34 @@ class AllowanceSignController extends Controller
                     ])
                 ]);
 
-                $currentOu = $currentOu->father;
                 $lastApprovalId = $approval->id;
+            }
+            else{
+                dd('aquí, jefe directo: sobre level 2');
+                //APPROVAL DE JEFATURAS DIRECTAS
+                for ($i = $alw_ou_level; $i >= 2; $i--){
+                    $approval = $allowanceSign->allowance->approvals()->create([
+                        "module"                            => "Viáticos",
+                        "module_icon"                       => "bi bi-wallet",
+                        "subject"                           => 'Solicitud de Viático: ID '.$allowanceSign->allowance->id.'<br>
+                                                                Funcionario: '.$allowanceSign->allowance->userAllowance->FullName,
+                        "sent_to_ou_id"                     => Parameter::get('ou','DireccionSSI'),
+                        "document_route_name"               => "allowances.show_approval",
+                        "document_route_params"             => json_encode([
+                            "allowance_id" => $allowanceSign->allowance->id
+                        ]),
+                        "active"                            => false,
+                        "previous_approval_id"              => $lastApprovalId,
+                        "callback_controller_method"        => "App\Http\Controllers\Allowances\AllowanceController@approvalCallback",
+                        "callback_controller_params"        => json_encode([
+                            'allowance_id'  => $allowanceSign->allowance->id,
+                            'process'       => null
+                        ])
+                    ]);
+
+                    $currentOu = $currentOu->father;
+                    $lastApprovalId = $approval->id;
+                }
             }
 
             //APPROVAL DE FINANZAS
