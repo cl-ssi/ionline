@@ -47,6 +47,9 @@
                         <th>Estado</th>
                         <th>Fecha Solicitud</th>
                         <th>Correo</th>
+                        @if ($includeTrashed)
+                        <th>Fecha y Hora de eliminación</th>
+                        @endif
                     </tr>
                 </thead>
                 <tbody>
@@ -67,6 +70,7 @@
                             <td>{{ $psirequest->status ?? '' }}</td>
                             <td>{{ $psirequest->created_at ?? '' }}</td>
                             <td>{{ $psirequest->user->email ?? '' }}</td>
+                            <td>{{ $psirequest->deleted_at ?? '' }}</td>
                         </tr>
                         @php
                         $counter++;
