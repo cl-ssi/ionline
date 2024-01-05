@@ -109,7 +109,8 @@ class SearchAllowances extends Component
                     ->orderBy('id', 'DESC')
                     ->search($this->selectedStatus,
                         $this->selectedId,
-                        $this->selectedUserAllowance)
+                        $this->selectedUserAllowance,
+                        $this->selectedStatusSirh)
                     ->paginate(50)
             ]);
         }

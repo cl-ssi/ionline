@@ -294,6 +294,16 @@ class AllowanceController extends Controller
         // return view('allowances.documents.allowance_resol_pdf', compact('allowance'));
     }
 
+    public function download_resol_pdf(Allowance $allowance)
+    {
+        if( Storage::disk('gcs')->exists("ionline/allowances/resol_pdf/".$allowance->id.".pdf") ) {
+            return Storage::response("ionline/allowances/resol_pdf/".$allowance->id.".pdf");
+        } 
+        else {
+            return redirect()->back()->with('warning', 'El archivo no se ha encontrado.');
+        }
+    }
+
     /**
      * Show the form for editing the specified resource.
      *

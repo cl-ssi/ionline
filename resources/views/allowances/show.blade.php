@@ -161,6 +161,13 @@
                 <i class="fas fa-calendar-day"></i> {{ $allowanceFile->created_at->format('d-m-Y H:i') }}</a>
             @endforeach
         </div>
+
+        <!-- PDF -->
+        <div class="list-group mt-3">
+            <a href="{{ route('allowances.download_resol_pdf', $allowance) }}" class="list-group-item list-group-item-action py-2 active small" target="_blank">
+                <i class="fas fa-file-pdf"></i> Viático Firmado <br>
+            </a>
+        </div>
     </div>
 </div>
 

@@ -82,10 +82,6 @@
                                 <span class="badge badge-success">SIRH <i class="fas fa-check-circle"></i></span> <br>
                             @endif
 
-                            @if($allowance->folio_sirh)
-                                <span class="badge badge-secondary">{{ $allowance->folio_sirh }}</span> <br>
-                            @endif
-
                             @if($allowance->status == 'pending')
                                 <span class="badge badge-warning">Pendiente</span>
                             @endif
@@ -94,8 +90,8 @@
                                 <span class="badge badge-danger">Rechazado</span>
                             @endif
 
-                            @if($allowance->status == 'manual')
-                                <span class="badge badge-info">Carga Manual</span>
+                            @if($allowance->status == 'complete')
+                                <span class="badge badge-success">Finalizado</span>
                             @endif
                         </th>
                         <td>{{ $allowance->created_at->format('d-m-Y H:i:s') }}</td>
@@ -169,8 +165,10 @@
                             @endif
                         </td>
                         <td class="text-center">
-                            @if($allowance->allowanceSignature && $allowance->allowanceSignature->status == "completed")
-                                <a href="{{ route('documents.signatures.showPdf',[$allowance->allowanceSignature->signaturesFileDocument->id, time()])}}"
+                            {{-- dd($allowance->approvals->last()) --}}
+
+                            @if($allowance->approvals->last()->status == 1)
+                                <a href="{{ route('allowances.download_resol_pdf', $allowance) }}"
                                     class="btn btn-sm btn-outline-primary " target="_blank"
                                     title="Ver documento">
                                     <span class="fas fa-file-pdf" aria-hidden="true"></span>

@@ -242,44 +242,122 @@
 
 <br>
 
-@if($allowance->approvals)
-    <i class="fas fa-check-circle"></i> Gestión de víatico. 
-    <div class="table-responsive">
-        <table class="table table-sm table-bordered small">
-            <tbody>
-                <tr>
-                    @foreach($allowance->approvals as $approval)
-                    <td class="table-active text-center">
-                        <strong>{{ $approval->sentToOu->name }}</strong><br>
-                    </td>
-                    @endforeach
-                </tr>
-                <tr>
-                    @foreach($allowance->approvals as $approval)
-                    <td class="text-center">
-                        @if($approval->StatusInWords == "Pendiente")
-                            <span>
-                                <i class="fas fa-check-circle"></i> {{ $approval->StatusInWords }}
-                            </span> <br>
+<h6><i class="fas fa-check-circle"></i> Revisión SIRH</h6>
+
+<div class="row">
+    <div class="col">
+        <div class="table-responsive">
+            <table class="table table-sm table-bordered small">
+                <tbody>
+                    <tr>
+                        @foreach($allowance->AllowanceSigns as $sign)
+                        <td class="table-active text-center">
+                            <strong>{{ $sign->organizationalUnit->name }}</strong><br>
+                        </td>
+                        @endforeach
+                        @if(count($allowance->approvals) > 0)
+                        @foreach($allowance->approvals as $approval)
+                        <td class="table-active text-center">
+                            <strong>{{ $approval->sentToOu->name }}</strong><br>
+                        </td>
+                        @endforeach
                         @endif
-                        @if($approval->StatusInWords == "Aprobado")
-                            <span style="color: green;">
-                                <i class="fas fa-check-circle"></i> {{ $approval->StatusInWords }}
-                            </span> <br>
-                            <i class="fas fa-user"></i> {{ $approval->approver->FullName }}<br>
-                            <i class="fas fa-calendar-alt"></i> {{ $approval->approver_at->format('d-m-Y H:i:s') }}<br>
+                    </tr>
+                    <tr>
+                        @foreach($allowance->AllowanceSigns as $allowanceSign)
+                        <td class="text-center">
+                            @if($allowanceSign->status == 'pending' && Auth::user()->can('Allowances: sirh'))
+                                <form method="POST" class="form-horizontal" action="{{ route('allowances.sign.update', [$allowanceSign, 'status' => 'accepted']) }}">
+                                    @csrf
+                                    @method('PUT')
+
+                                    <button type="submit" class="btn btn-success btn-sm ml-2 mt-2"
+                                        onclick="return confirm('¿Está seguro que desea Aceptar la solicitud?')"
+                                        title="Aceptar">
+                                        <i class="fas fa-check-circle"></i> Aceptar
+                                    </button>
+
+                                    <a class="btn btn-danger btn-sm mt-2" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                        <i class="fas fa-times-circle"></i> Rechazar
+                                    </a>
+                                </form>    
+
+                                <div class="row">
+                                    <div class="col-md">
+                                        <div class="collapse" id="collapseExample">
+                                            <form method="POST" class="form-horizontal" action="{{ route('allowances.sign.update', [$allowanceSign, 'status' => 'rejected', $allowance]) }}">
+                                                @csrf
+                                                @method('PUT')
+                                                <div class="form-group">
+                                                    <label class="float-left" for="for_observation">Motivo Rechazo</label>
+                                                    <textarea class="form-control" id="for_observation" name="observation" rows="2"></textarea>
+                                                </div>
+                                                    
+                                                <button type="submit" class="btn btn-danger btn-sm float-right"
+                                                    onclick="return confirm('¿Está seguro que desea Rechazar la solicitud?')"
+                                                    title="Rechazar">
+                                                    <i class="fas fa-times-circle"></i> Guardar</a>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <i class="fas fa-clock mt-3"></i> Pendiente de Aprobación
+                            @endif
+
+                            @if($allowanceSign->status == 'accepted')
+                                <span style="color: green;">
+                                    <i class="fas fa-check-circle"></i> {{ $allowanceSign->StatusValue }}
+                                </span> <br>
+                                <i class="fas fa-user"></i> {{ $allowanceSign->user->FullName }}<br>
+                                <i class="fas fa-calendar-alt"></i> {{ $allowanceSign->date_sign->format('d-m-Y H:i:s') }}<br>
+                            @endif
+                            @if($allowanceSign->status == 'rejected')
+                                <span style="color: Tomato;">
+                                    <i class="fas fa-times-circle"></i> {{ $allowanceSign->StatusValue }} 
+                                </span><br>
+                                <i class="fas fa-user"></i> {{ $allowanceSign->user->FullName }}<br>
+                                <i class="fas fa-calendar-alt"></i> {{ $allowanceSign->date_sign->format('d-m-Y H:i:s') }}<br>
+                                <hr>
+                                {{ $allowanceSign->observation }}<br>
+                            @endif
+                            @if($allowanceSign->status == NULL)
+                                <i class="fas fa-ban"></i> No disponible para Aprobación.<br>
+                            @endif
+                        </td>
+                        @endforeach
+
+                        @if(count($allowance->approvals) > 0)
+                        @foreach($allowance->approvals as $approval)
+                        <td class="text-center">
+                            @if($approval->StatusInWords == "Pendiente")
+                                <span>
+                                    <i class="fas fa-check-circle"></i> {{ $approval->StatusInWords }}
+                                </span> <br>
+                            @endif
+                            @if($approval->StatusInWords == "Aprobado")
+                                <span style="color: green;">
+                                    <i class="fas fa-check-circle"></i> {{ $approval->StatusInWords }}
+                                </span> <br>
+                                <i class="fas fa-user"></i> {{ $approval->approver->FullName }}<br>
+                                <i class="fas fa-calendar-alt"></i> {{ $approval->approver_at->format('d-m-Y H:i:s') }}<br>
+                            @endif
+                            @if($approval->StatusInWords == "Rechazado")
+                                <span style="color: tomato;">
+                                    <i class="fas fa-check-circle"></i> {{ $approval->StatusInWords }}
+                                </span> <br>
+                                <i class="fas fa-user"></i> {{ $approval->approver->FullName }}<br>
+                                <i class="fas fa-calendar-alt"></i> {{ $approval->approver_at->format('d-m-Y H:i:s') }}
+                                <hr>
+                                {{ $approval->approver_observation }}
+                            @endif
+                        </td>
+                        @endforeach
                         @endif
-                        @if($approval->StatusInWords == "Rechazado")
-                            <span style="color: tomato;">
-                                <i class="fas fa-check-circle"></i> {{ $approval->StatusInWords }}
-                            </span> <br>
-                            <i class="fas fa-user"></i> {{ $approval->approver->FullName }}<br>
-                            <i class="fas fa-calendar-alt"></i> {{ $approval->approver_at->format('d-m-Y H:i:s') }}<br>
-                        @endif
-                    </td>
-                    @endforeach
-                </tr>
-            </tbody>
-        </table>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
-@endif
+</div>

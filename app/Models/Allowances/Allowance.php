@@ -264,6 +264,20 @@ class Allowance extends Model implements Auditable
         return Carbon::parse($this->to)->format('d-m-Y');
     }
 
+    /**
+     * Simular un approval model.
+     */
+    public function getApprovalLegacyAttribute()
+    {
+        $approval = new Approval();
+        $approval->status = true;
+        $approval->approver_id = 16966444;
+        $approval->approver_at = now();
+        $approval->sent_to_ou_id = 20;
+        // $approval->approver_observation = $this->authority_observation;
+        return $approval;
+    }
+
     // protected $dates = [
     //     'from', 'to', 'document_date'
     // ];

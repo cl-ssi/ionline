@@ -21,6 +21,10 @@
         .nowrap {
             white-space: nowrap;
         }
+
+        .signature-container {
+            height: 80px;
+        }
     </style>
 
     <div style="float: right; width: 300px; padding-top: 66px;">
@@ -247,29 +251,27 @@
     </div>
 
     <!-- Sección de las aprobaciones -->
-    {{--
     <div class="signature-container">
         <div class="signature" style="padding-left: 32px;">
-            @if($approval = $reception->approvals->where('position', 'left')->first())
-                @include('sign.approvation', [
-                    'approval' => $approval,
-                ])
-            @endif
+            @include('sign.approvation', [
+                'approval' => $allowance->approvalLegacy,
+            ])
         </div>
         <div class="signature" style="padding-left: 6px; padding-right: 6px;">
-            @if($approval = $reception->approvals->where('position', 'center')->first())
-                @include('sign.approvation', [
-                    'approval' => $approval,
-                ])
+            @if($approvals = $allowance->approvals->where('position', 'center'))
+                @foreach($approvals as $approval)
+                    @include('sign.approvation', [
+                        'approval' => $approval,
+                    ])
+                @endforeach
             @endif
         </div>
         <div class="signature">
-            @if($approval = $reception->approvals->where('position', 'right')->first())
+            @if($approval = $allowance->approvals->where('position', 'right')->first())
                 @include('sign.approvation', [
                     'approval' => $approval,
                 ])
             @endif
         </div>
     </div>
-    --}}
 @endsection
