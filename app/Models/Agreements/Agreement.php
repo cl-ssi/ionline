@@ -57,6 +57,10 @@ class Agreement extends Model
         return $this->hasMany('App\Models\Agreements\Addendum')->orderBy('created_at','desc');
     }
 
+    public function continuities() {
+        return $this->hasMany('App\Models\Agreements\ContinuityResolution')->orderBy('created_at','desc');
+    }
+
     public function stages() {
         return $this->hasMany('App\Models\Agreements\Stage');
     }

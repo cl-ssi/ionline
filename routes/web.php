@@ -286,6 +286,7 @@ use App\Http\Controllers\Agreements\SignerController;
 use App\Http\Controllers\Agreements\ProgramResolutionController;
 use App\Http\Controllers\Agreements\AgreementController;
 use App\Http\Controllers\Agreements\AddendumController;
+use App\Http\Controllers\Agreements\ContinuityResolutionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -675,6 +676,14 @@ Route::prefix('agreements')->as('agreements.')->middleware(['auth', 'must.change
     Route::get('/addendum/download/{addendum}', [AddendumController::class, 'download'])->name('addendum.download');
     Route::get('/addendum/sign/{addendum}/type/{type}', [AddendumController::class, 'sign'])->name('addendum.sign');
     Route::get('/addendum/preview/{addendum}', [AddendumController::class, 'preview'])->name('addendum.preview');
+
+    Route::resource('continuity', ContinuityResolutionController::class);
+    Route::post('/continuity/createWord/{continuityResolution}', [WordTestController::class, 'createWordDocxResContinuity'])->name('continuity.createWord');
+    Route::get('/continuity/downloadRes/{continuityResolution}', [ContinuityResolutionController::class, 'downloadRes'])->name('continuity.downloadRes');
+    Route::get('/continuity/download/{continuityResolution}', [ContinuityResolutionController::class, 'download'])->name('continuity.download');
+    Route::get('/continuity/sign/{continuityResolution}/type/{type}', [ContinuityResolutionController::class, 'sign'])->name('continuity.sign');
+    Route::get('/continuity/preview/{continuityResolution}', [ContinuityResolutionController::class, 'preview'])->name('continuity.preview');
+
     Route::resource('programs', App\Http\Controllers\Agreements\ProgramController::class);
     Route::prefix('programs')->name('programs.')->group(function () {
         Route::resource('resolutions', ProgramResolutionController::class);

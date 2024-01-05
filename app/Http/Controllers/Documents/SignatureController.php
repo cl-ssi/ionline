@@ -32,6 +32,7 @@ use App\Models\Documents\Document;
 use App\Models\Agreements\Agreement;
 use App\Models\Agreements\Addendum;
 use App\Http\Controllers\Controller;
+use App\Models\Agreements\ContinuityResolution;
 
 class SignatureController extends Controller
 {
@@ -316,6 +317,11 @@ class SignatureController extends Controller
             if ($request->has('addendum_id')) {
                 $addendum = Addendum::find($request->addendum_id);
                 $request->signature_type == 'visators' ? $addendum->update(['file_to_endorse_id' => $signaturesFileDocumentId, 'file_to_sign_id' => null]) : $addendum->update(['file_to_sign_id' => $signaturesFileDocumentId]);
+            }
+
+            if ($request->has('continuity_resol_id')) {
+                $continuityResolution = ContinuityResolution::find($request->continuity_resol_id);
+                $request->signature_type == 'visators' ? $continuityResolution->update(['file_to_endorse_id' => $signaturesFileDocumentId, 'file_to_sign_id' => null]) : $continuityResolution->update(['file_to_sign_id' => $signaturesFileDocumentId]);
             }
 
             // dd();
