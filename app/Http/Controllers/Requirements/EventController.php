@@ -223,8 +223,11 @@ class EventController extends Controller
                 ->send(new RequirementEventNotification($requirementEvent));
         }
 
+        //session()->flash('info', 'El evento ' . $requirementEvent->id . ' ha sido ingresado.');
+        //return redirect()->route('requirements.show', $requirementEvent->requirement);
+        //requerimiento de Mariela Romero
         session()->flash('info', 'El evento ' . $requirementEvent->id . ' ha sido ingresado.');
-        return redirect()->route('requirements.show', $requirementEvent->requirement);
+        return redirect()->route('requirements.inbox');
     }
 
     /**

@@ -76,7 +76,7 @@ class AllowanceController extends Controller
                 ->get();
             
             if($currentAllowances->count() > 0){
-                return back()->withInput($request->input())->with('error', 'El funcionario ya dispone de viático(s) para la fecha solicitada, favor consulta historial de funcionario');;
+                return back()->withInput($request->input())->with('error', 'El funcionario ya dispone de viático(s) para la fecha solicitada, favor consulta historial de funcionario');
             }
             else{
                 //SE ALMACENA VIATICO
