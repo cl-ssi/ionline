@@ -224,8 +224,8 @@ class AddendumController extends Controller
 
         $signature->signaturesFiles->add($signaturesFile);
         
-        $users = User::orderBy('name', 'ASC')->get();
-        $organizationalUnits = OrganizationalUnit::orderBy('id', 'asc')->get();
-        return view('documents.signatures.create', compact('signature', 'users', 'organizationalUnits'));
+        // $users = User::orderBy('name', 'ASC')->get();
+        // $organizationalUnits = OrganizationalUnit::orderBy('id', 'asc')->get();
+        return view('documents.signatures.create', compact('signature'));
     }
 }
