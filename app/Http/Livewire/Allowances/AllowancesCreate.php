@@ -164,12 +164,21 @@ class AllowancesCreate extends Component
         ]);
 
         /* Buscar si existen viáticos en fecha indicada */
-        $currentAllowances = Allowance::where('user_allowance_id', $this->userAllowance->id)
-            ->where('status', '!=', 'rejected')
-            ->whereYear('from', Carbon::parse($this->from)->year)
-            ->WhereYear('to', Carbon::parse($this->to)->year)
-            ->get();
-
+        if($this->allowanceToEdit != null){
+            $currentAllowances = Allowance::where('user_allowance_id', $this->userAllowance->id)
+                ->where('id', '!=', $this->allowanceToEdit->id)
+                ->where('status', '!=', 'rejected')
+                ->whereYear('from', Carbon::parse($this->from)->year)
+                ->WhereYear('to', Carbon::parse($this->to)->year)
+                ->get();
+        }
+        else{
+            $currentAllowances = Allowance::where('user_allowance_id', $this->userAllowance->id)
+                ->where('status', '!=', 'rejected')
+                ->whereYear('from', Carbon::parse($this->from)->year)
+                ->WhereYear('to', Carbon::parse($this->to)->year)
+                ->get();
+        }
         $periodo = CarbonPeriod::create($this->from, $this->to);
         // Se itera por PERIODO
         foreach ($periodo as $fecha) {
@@ -205,7 +214,7 @@ class AllowancesCreate extends Component
                     'food'                              => $this->food,
                     'passage'                           => $this->passage, 
                     'means_of_transport'                => $this->meansOfTransport, 
-                    'origin_commune_id'                 => $this->originCommune->id,
+                    'origin_commune_id'                 => ($this->allowanceToEdit) ? $this->originCommune : $this->originCommune->id,
                     'round_trip'                        => $this->roundTrip,
                     'from'                              => $this->from, 
                     'to'                                => $this->to,
@@ -246,7 +255,8 @@ class AllowancesCreate extends Component
         foreach($this->files as $keyFiles => $allowanceFile){
             AllowanceFile::updateOrCreate(
                 [
-                    'id' => $this->idFile,
+                    // 'id' => $this->idFile,
+                    'id' => $allowanceFile['id']
                 ],
                 [
                     'name'          => $allowanceFile['fileName'],
@@ -854,7 +864,6 @@ class AllowancesCreate extends Component
 
     private function setFile($file)
     {
-
         $this->files[] = [
             'id'        => $file->id,
             'fileName'  => $file->name,
@@ -868,11 +877,12 @@ class AllowancesCreate extends Component
             $this->idAllowance              =   $this->allowanceToEdit->id;
             $this->userAllowance            =   $this->allowanceToEdit->userAllowance;
             $this->contractualConditionId   =   $this->allowanceToEdit->contractual_condition_id;
+            $this->position                 =   $this->allowanceToEdit->position;
             $this->allowanceValueId         =   $this->allowanceToEdit->allowance_value_id;
             $this->grade                    =   $this->allowanceToEdit->grade;
             $this->law                      =   $this->allowanceToEdit->law;
             $this->reason                   =   $this->allowanceToEdit->reason;
-
+            $this->originCommune            =   $this->allowanceToEdit->origin_commune_id;
             foreach($this->allowanceToEdit->destinationCommune as $destination){
                 $this->setDestination($destination);
             }
@@ -881,6 +891,9 @@ class AllowancesCreate extends Component
             $this->roundTrip                =   $this->allowanceToEdit->round_trip;
             $this->passage                  =   $this->allowanceToEdit->passage;
             $this->overnight                =   $this->allowanceToEdit->overnight;
+            $this->accommodation            =   $this->allowanceToEdit->overnight;
+            $this->overnight                =   $this->allowanceToEdit->accommodation;
+            $this->food                     =   $this->allowanceToEdit->food;
             $this->from                     =   $this->allowanceToEdit->from;
             $this->to                       =   $this->allowanceToEdit->to;
             $this->halfDayValue             =   $this->allowanceToEdit->halfDayValue;
@@ -962,7 +975,6 @@ class AllowancesCreate extends Component
         }
         else{
             $this->disabledAllowanceValueId = '';
-            $this->allowanceValueId = null;
             $this->disabledGrade = '';
         }
     }
