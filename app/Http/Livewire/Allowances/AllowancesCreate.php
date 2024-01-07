@@ -268,7 +268,9 @@ class AllowancesCreate extends Component
         }
 
         // APROBACION SIRH
-        $sirh_approval = $this->sirhSign($alw);
+        if($this->allowanceToEdit == null){
+            $sirh_approval = $this->sirhSign($alw);
+        }
 
         /*
         // APROBACION U.O. DE ACUERDO SOLICITANTE 
