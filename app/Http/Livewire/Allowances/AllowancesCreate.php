@@ -273,8 +273,11 @@ class AllowancesCreate extends Component
         $this->userAllowance = User::find($userAllowance);
 
         if($this->userAllowance){
-            /* Buscar si los viáticos del usuario no exceden 90 días en el presente año */
-            $this->totalCurrentAllowancesDaysByUser = 0;            
+            //  Buscar si los viáticos del usuario no exceden 90 días en el presente año 
+            $this->totalCurrentAllowancesDaysByUser = 0;
+            $this->totalCurrentMonthAllowancesDaysByUser = 0;   
+
+            //CONSULTA POR VIATICOS MENSUALES
             $allowancesCount = Allowance::select('total_days')
                 ->where('user_allowance_id', $this->userAllowance->id)
                 ->whereDate('from', '>=', now()->startOfYear())
@@ -284,6 +287,18 @@ class AllowancesCreate extends Component
                 ->get();
             foreach($allowancesCount as $allowanceDays){
                 $this->totalCurrentAllowancesDaysByUser = $this->totalCurrentAllowancesDaysByUser + $allowanceDays->total_days;
+            }
+
+            $allowancesMonthCount = Allowance::select('total_days')
+                ->where('user_allowance_id', $this->userAllowance->id)
+                ->whereDate('from', '>=', now()->startOfMonth())
+                ->WhereDate('to', '<=', now()->endOfMonth())
+                ->where('half_days_only', null)
+                ->where('total_days', '>=', 1.0)
+                ->get();
+            
+            foreach($allowancesMonthCount as $allowancesMonthDays){
+                $this->totalCurrentMonthAllowancesDaysByUser = $this->totalCurrentMonthAllowancesDaysByUser + $allowancesMonthDays->total_days;
             }
         }
     }
