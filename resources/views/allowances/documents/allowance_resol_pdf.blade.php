@@ -22,9 +22,11 @@
             white-space: nowrap;
         }
 
+        /*
         .signature-container {
             height: 80px;
         }
+        */
     </style>
 
     <div style="float: right; width: 300px; padding-top: 66px;">

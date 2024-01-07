@@ -258,7 +258,7 @@
                         @if(count($allowance->approvals) > 0)
                         @foreach($allowance->approvals as $approval)
                         <td class="table-active text-center">
-                            <strong>{{ $approval->sentToOu->name }}</strong><br>
+                            <strong>{{ ($approval->sentToOu) ? $approval->sentToOu->name : $approval->sentToUser->FullName }}</strong><br>
                         </td>
                         @endforeach
                         @endif

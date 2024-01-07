@@ -149,12 +149,13 @@
                                     <a href="{{ route('allowances.edit', $allowance) }}"
                                         class="btn btn-outline-secondary btn-sm" title="Editar"><i class="fas fa-edit"></i>
                                     </a>
-                                @else
-                                    <a href="{{ route('allowances.show', $allowance) }}"
-                                        class="btn btn-outline-secondary btn-sm" title="Ver Viático">
-                                        <i class="fas fa-eye"></i>
-                                    </a>
+                                    <br>
                                 @endif
+                                
+                                <a href="{{ route('allowances.show', $allowance) }}"
+                                    class="btn btn-outline-secondary btn-sm" title="Ver Viático">
+                                    <i class="fas fa-eye"></i>
+                                </a>
                             @endif
 
                             @if($index == 'all' && $allowance->status != 'manual')
@@ -165,9 +166,7 @@
                             @endif
                         </td>
                         <td class="text-center">
-                            {{-- dd($allowance->approvals->last()) --}}
-
-                            @if($allowance->approvals->last()->status == 1)
+                            @if(count($allowance->approvals) > 0 && $allowance->approvals->last()->status == 1)
                                 <a href="{{ route('allowances.download_resol_pdf', $allowance) }}"
                                     class="btn btn-sm btn-outline-primary " target="_blank"
                                     title="Ver documento">

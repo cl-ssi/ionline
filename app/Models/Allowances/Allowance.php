@@ -270,11 +270,12 @@ class Allowance extends Model implements Auditable
     public function getApprovalLegacyAttribute()
     {
         $approval = new Approval();
+
         $approval->status = true;
-        $approval->approver_id = 16966444;
-        $approval->approver_at = now();
-        $approval->sent_to_ou_id = 20;
-        // $approval->approver_observation = $this->authority_observation;
+        $approval->approver_id = $this->allowanceSigns->first()->user_id;
+        $approval->approver_at = $this->allowanceSigns->first()->date_sign;
+        $approval->sent_to_ou_id = $this->allowanceSigns->first()->organizational_unit_id;
+        
         return $approval;
     }
 

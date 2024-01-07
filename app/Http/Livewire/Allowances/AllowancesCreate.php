@@ -497,7 +497,6 @@ class AllowancesCreate extends Component
             $notificationSirhPermissionUser->notify(new NewAllowance($alw));
         }
         
-
         /*
         // APPROVALS
         $approval = $alw->approvals()->create([
