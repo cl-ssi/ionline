@@ -88,6 +88,11 @@ class AllowancesCreate extends Component
     // VARIABLE DE MENSAJE MEDIO DE TRANSPORTE 
     public $messageMeansOfTransport = NULL;
 
+    //SELECCION DE LEY MEDICA
+    public $disabledAllowanceValueId = '';
+    public $disabledGrade = '';
+
+
     protected $listeners = ['emitPosition', 'emitPositionValue', 'userSelected', 'savedDestinations', 'selectedInputId',
         'searchedCommune'];
     
@@ -137,7 +142,7 @@ class AllowancesCreate extends Component
             'contractualConditionId'                                => 'required',
             'position'                                              => 'required',
             'allowanceValueId'                                      => 'required',
-            'grade'                                                 => 'required',
+            ($this->law == "19664") ? 'grade' : 'grade'             => ($this->law == "19664") ? '' : 'required',
             ($this->contractualConditionId == "2") ? 'law' : 'law'  => ($this->contractualConditionId == "2") ? '' : 'required',
             'reason'                                                => 'required',
 
@@ -945,6 +950,20 @@ class AllowancesCreate extends Component
                 $this->disabledHalfDayOnly = null;
                 $this->halfDaysOnly = null;
             }
+        }
+    }
+
+    public function updatedLaw($lawId){
+        if($lawId == "19664"){
+            $this->disabledAllowanceValueId = 'disabled';
+            $this->allowanceValueId = 9;
+            $this->grade = null;
+            $this->disabledGrade = 'disabled';
+        }
+        else{
+            $this->disabledAllowanceValueId = '';
+            $this->allowanceValueId = null;
+            $this->disabledGrade = '';
         }
     }
 }

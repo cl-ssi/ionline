@@ -54,7 +54,7 @@
     <div class="form-row">
         <fieldset class="form-group col-12 col-md-3">
             <label for="for_allowance_value_id">Grado E.U.S.</label>
-            <select name="allowance_value_id" class="form-control" wire:model="allowanceValueId" required>
+            <select name="allowance_value_id" class="form-control" wire:model="allowanceValueId" {{ $disabledAllowanceValueId }} required>
                 <option value="">Seleccione...</option>
                 @foreach($allowanceValues as $allowanceValue)
                     <option value="{{ $allowanceValue->id }}">{{ $allowanceValue->name }}</option>
@@ -65,7 +65,7 @@
 
         <fieldset class="form-group col-12 col-md-3">
             <label for="for_place">Grado Específico</label>
-            <input class="form-control" type="text" autocomplete="off" wire:model="grade" required>
+            <input class="form-control" type="text" autocomplete="off" wire:model="grade" {{ $disabledGrade }} required>
             @error('grade') <span class="text-danger error small">{{ $message }}</span> @enderror
         </fieldset>
 
@@ -73,11 +73,11 @@
             <label for="for_law">Ley</label>
             <div class="mt-1">
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" id="for_law" value="18834" wire:model.debounce.500ms="law" {{ $disabledLaw }}>
+                    <input class="form-check-input" type="radio" id="for_law" value="18834" wire:model="law" {{ $disabledLaw }}>
                     <label class="form-check-label" for="for_law">N° 18.834</label>
                 </div>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" id="for_law" value="19664" wire:model.debounce.500ms="law" {{ $disabledLaw }}>
+                    <input class="form-check-input" type="radio" id="for_law" value="19664" wire:model="law" {{ $disabledLaw }}>
                     <label class="form-check-label" for="for_law">N° 19.664</label>
                 </div>
             </div>
