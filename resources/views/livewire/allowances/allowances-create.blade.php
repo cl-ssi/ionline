@@ -205,6 +205,7 @@
                 <option value="ambulance">Ambulancia</option>
                 <option value="plane">Avión</option>
                 <option value="bus">Bus</option>
+                <option value="institutional vehicle">Vehículo Institucional</option>
                 <option value="other">Otro</option>
             </select>
             @error('meansOfTransport') <span class="text-danger error small">{{ $message }}</span> @enderror

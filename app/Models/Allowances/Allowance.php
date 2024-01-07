@@ -140,6 +140,9 @@ class Allowance extends Model implements Auditable
             case 'bus':
                 return 'Bus';
                 break;
+            case 'institutional vehicle':
+                return 'Vehículo Institucional';
+                break;
             case 'other':
                 return 'Otro';
                 break;
