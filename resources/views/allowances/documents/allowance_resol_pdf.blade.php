@@ -21,12 +21,11 @@
         .nowrap {
             white-space: nowrap;
         }
-
-        /*
+        
         .signature-container {
             height: 80px;
         }
-        */
+        
     </style>
 
     <div style="float: right; width: 300px; padding-top: 66px;">
@@ -97,7 +96,7 @@
         </tr>
     </table>
 
-    <div style="clear: both; padding-bottom: 25px"></div>
+    <div style="clear: both; padding-bottom: 15px"></div>
 
     <div class="left"><b>2-. Origen / Destino(s)</b></div>
 
@@ -124,7 +123,7 @@
         @endforeach
     </table>
 
-    <div style="clear: both; padding-bottom: 25px"></div>
+    <div style="clear: both; padding-bottom: 15px"></div>
 
     <div class="left"><b>3-. Información de Itinerario</b></div>
 
@@ -163,7 +162,7 @@
         </tr>
     </table>
 
-    <div style="clear: both; padding-bottom: 25px"></div>
+    <div style="clear: both; padding-bottom: 15px"></div>
 
     <div class="left"><b>4-. Resumen</b></div>
 
@@ -233,20 +232,16 @@
         </tr>
     </table>
 
-    <div style="clear: both; padding-bottom: 20px">&nbsp;</div>
+    <div style="clear: both; padding-bottom: 10px">&nbsp;</div>
 
     <div class="siete">
         <b>NOTA</b>:	 EL CUMPLIMIENTO DE ESTE COMETIDO ES DE RESPONSABILIDAD DEL JEFE DIRECTO, 
         SOLIDARIAMENTE CON LA PERSONA QUE DISPONGA EL PAGO.
     </div>
-
-    <div style="clear: both; padding-bottom: 3px">&nbsp;</div>
         
     <div class="siete">
         AL TERMINO DE ESTE COMETIDO DEBERA ENTREGAR AL JEFE DE CONTABILIDAD EL BOLETO DE TRANSPORTE USADO.
     </div>
-
-    <div style="clear: both; padding-bottom: 3px">&nbsp;</div>
 
     <div class="siete">
         EL ANTICIPO DE VIATICO DEBERA REINTEGRARSE DENTRO DE LAS 48 HORAS DE REALIZADO EL COMETIDO. 
