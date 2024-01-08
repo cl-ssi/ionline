@@ -339,12 +339,12 @@
                             @endcan
                         @endif
 
-                        @canany(['Allowances: create', 'Allowances: all', 'Allowances: reports', 'Allowances: reports'])
+                        {{-- @canany(['Allowances: create', 'Allowances: all', 'Allowances: reports', 'Allowances: reports']) --}}
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item {{ active('allowances.index') }}" href="{{ route('allowances.index') }}">
                                 <i class="fas fa-wallet"></i> Viáticos
                             </a>
-                        @endcan
+                        {{-- @endcan --}}
                     </div>
 
                 </li>
