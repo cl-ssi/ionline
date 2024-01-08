@@ -31,7 +31,7 @@ class UpdateOrganizationalUnitRequest extends FormRequest
             'organizational_unit_id'    => 'required|exists:organizational_units,id',
             'sirh_function'             => 'nullable|integer',
             'sirh_ou_id'                => 'nullable|unique:organizational_units,sirh_ou_id,'.$request->organizationalUnitId,
-            'sirh_cost_center'          => 'nullable|integer'
+            'sirh_cost_center'          => 'nullable|string'
         ];
     }
 }
