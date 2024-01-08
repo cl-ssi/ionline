@@ -4,7 +4,7 @@
 
 @section('content')
 
-<h3 class="mb-3">Solicitudes de firmas y distribución Probando</h3>
+<h3 class="mb-3">Solicitudes de firmas y distribución</h3>
 
 @if($tab == 'pendientes') <form class="form d-print-none" method="GET" action="{{ route('documents.signatures.index',['pendientes']) }}"> @endif
 @if($tab == 'mis_documentos') <form class="form d-print-none" method="GET" action="{{ route('documents.signatures.index',['mis_documentos']) }}"> @endif
