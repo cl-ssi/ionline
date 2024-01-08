@@ -247,9 +247,9 @@ class AllowancesCreate extends Component
                 ],
                 [
                     'commune_id'    => $destination['commune_id'], 
-                    'locality_id'   => $destination['locality_id'], 
+                    'locality_id'   => ($destination['locality_id'] != null) ? $destination['locality_id'] : null, 
                     'description'   => $destination['description'],
-                    'allowance_id'  => $alw->id
+                    'allowance_id'  => ($this->allowanceToEdit) ? $this->allowanceToEdit->id : $alw->id
                 ]
             );
         }
