@@ -68,7 +68,7 @@
                 </th>
                 <td style="width: 33%">
                   {{ $requestReplacementStaff->fundamentManage->NameValue }}<br>
-                  {{ $requestReplacementStaff->fundamentDetailManage->NameValue }}
+                  {{ ($requestReplacementStaff->fundamentDetailManage) ? $requestReplacementStaff->fundamentDetailManage->NameValue : '' }}
                 </td>
                 <td style="width: 33%">De funcionario: {{ $requestReplacementStaff->name_to_replace }}</td>
             </tr>

@@ -189,6 +189,7 @@ class AllowanceSignController extends Controller
                     ]),
                     "digital_signature"                 => true,
                     "position"                          => "right",
+                    "start_y"                           => 22,
                     "filename"                          => "ionline/allowances/resol_pdf/".$allowanceSign->allowance->id.".pdf"
                 ]);
             }

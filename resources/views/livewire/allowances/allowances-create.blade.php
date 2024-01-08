@@ -327,25 +327,27 @@
     <h6><i class="fas fa-paperclip"></i> Archivos Adjuntos</h6>
     <br>
     
-    <div class="form-row">
-        <fieldset class="form-group col mt">
-            <label for="for_name">Nombre Archivo</label>
-            <input type="text" class="form-control" wire:model="fileName" required>
-        </fieldset>
-            
-        <fieldset class="form-group col mt">
-            <div class="mb-3">
-                <label for="forFile" class="form-label"><br></label>
-                <input class="form-control" type="file" wire:model.defer="file" accept="application/pdf" required>
-                <div wire:loading wire:target="fileRequests">Cargando archivo(s)...</div>
-            </div>
-        </fieldset>
+    <form wire:submit.prevent="addFile">
+        <div class="form-row">
+        
+            <fieldset class="form-group col mt">
+                <label for="for_name">Nombre Archivo</label>
+                <input type="text" class="form-control" wire:model="fileName" required>
+            </fieldset>
+                
+            <fieldset class="form-group col mt">
+                <div class="mb-3">
+                    <label for="forFile" class="form-label"><br></label>
+                    <input class="form-control" type="file" wire:model.defer="fileAttached" required>
+                </div>
+            </fieldset>
 
-        <div class="form-group col-12 col-md-1">
-            <label for="for_button"><br></label>
-            <a class="btn btn-info btn-block" wire:click="addFile"> Agregar</a>
-        </div> 
-    </div>
+            <div class="form-group col-12 col-md-1">
+                <label for="for_button"><br></label>
+                <button class="btn btn-info btn-block" type="submit" wire:loading.attr="disabled"> Agregar</button>
+            </div> 
+        </div>
+    </form>
 
     @if(count($errors) > 0 && $validateMessage == "file")
         <div class="alert alert-danger">
@@ -377,7 +379,7 @@
                     <td class="brd-l text-center">{{ $loop->iteration }}</td>
                     <td class="text-center">{{ $file['fileName'] }}</td>
                     <td class="text-center">
-                        <a class="btn btn-secondary btn-sm" href="#items" title="Eliminar" wire:click="showFile({{$key}})"><i class="fas fa-file"></i></a>
+                        <a class="btn btn-secondary btn-sm" href="#items" title="Eliminar" wire:click="{{-- showFile({{$key --}})"><i class="fas fa-file"></i></a>
                     </td>
                     <td width="5%" class="text-center">
                         <a class="btn btn-danger btn-sm" href="#items" title="Eliminar" wire:click="deleteItem({{-- $key --}})"><i class="fas fa-trash-alt"></i></a>

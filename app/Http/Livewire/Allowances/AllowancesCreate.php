@@ -51,10 +51,11 @@ class AllowancesCreate extends Component
 
     /* Archivo */
     public $idFile;
-    public $file;
+    // public $file;
     public $fileName;
     public $fileAttached;
-    public $files, $key;
+    public $files = array();
+    public $key;
 
     /* Destinos */
     /* Listeners */
@@ -160,7 +161,9 @@ class AllowancesCreate extends Component
             'from'                                                  => 'required',
             'to'                                                    => 'required|after_or_equal:from',
 
-            'files'                                                 => 'required'
+            'files'                                                 => 'required',
+
+            // 'fileAttached'                                          => 'required'
         ]);
 
         /* Buscar si existen viáticos en fecha indicada */
@@ -839,15 +842,17 @@ class AllowancesCreate extends Component
     /* Metodos para Archivos */
     public function addFile()
     {
-        // dd($this->file);
         $this->validateMessage = 'file';
         $validatedData = $this->validate([
-            'fileName'                                      => 'required',
-            ($this->file) ? 'fileAttached' : 'fileAttached' => ($this->file) ? '' : 'required' 
+            'fileName'      => 'required',
+            // ($this->fileAttached) ? 'fileAttached' : 'fileAttached' => ($this->fileAttached) ? '' : 'required' 
+            'fileAttached'  => 'required' 
         ]);
 
+        $count = ($this->files == null) ? 0 : count($this->files); 
+
         $now = Carbon::now()->format('Y_m_d_H_i_s');
-        $this->fileAttached = $this->file ? $this->file->storeAs('/ionline/allowances/allowance_docs', $now.'_alw_file.'.$this->file->extension(), 'gcs') : null;
+        $this->fileAttached = $this->fileAttached ? $this->fileAttached->storeAs('/ionline/allowances/allowance_docs', $now.'_'.$count.'_alw_file.'.$this->fileAttached->extension(), 'gcs') : null;
 
         $this->files[] = [
             'id'        => '',
@@ -860,8 +865,8 @@ class AllowancesCreate extends Component
 
     public function cleanFile()
     {   
-        $this->fileName = null;
-        $this->file     = null;
+        $this->fileName     = null;
+        $this->fileAttached = '';
     }
 
     private function setFile($file)
