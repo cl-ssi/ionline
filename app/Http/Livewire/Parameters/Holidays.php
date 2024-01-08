@@ -36,7 +36,7 @@ class Holidays extends Component
         $startOfYear = now()->startOfYear()->format('Y-m-d');
 
         return [
-            'holiday.date' => 'required|date_format:Y-m-d|after:' . $startOfYear,
+            'holiday.date' => 'required|date_format:Y-m-d|after_or_equal:' . $startOfYear,
             'holiday.name' => 'required|min:4',
             'holiday.region_id' => 'nullable',
         ];
