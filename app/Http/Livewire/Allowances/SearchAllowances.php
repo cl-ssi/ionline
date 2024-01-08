@@ -63,34 +63,19 @@ class SearchAllowances extends Component
         }
 
         if($this->index == 'own'){
-            //SI TENGO EL PERMISO DE CREAR INCLUYO: CREADOS, MIOS Y DE MI U.O.
-            if(auth()->user()->hasPermissionTo('Allowances: create')){
-                return view('livewire.allowances.search-allowances', [
-                    'allowances' => Allowance::
-                        latest()
-                        ->where('user_allowance_id', Auth::user()->id)
-                        ->orWhere('creator_user_id', Auth::user()->id)
-                        ->orWhere('organizational_unit_allowance_id', Auth::user()->organizationalUnit->id)
-                        ->search($this->selectedStatus,
-                            $this->selectedId,
-                            $this->selectedUserAllowance,
-                            $this->selectedStatusSirh)
-                        ->paginate(50)
-                ]);
-            }
-            //DE LO CONTRARIO, SÓLO MIS VIÁTICOS
-            else{
-                return view('livewire.allowances.search-allowances', [
-                    'allowances' => Allowance::
-                        latest()
-                        ->where('user_allowance_id', Auth::user()->id)
-                        ->search($this->selectedStatus,
-                            $this->selectedId,
-                            $this->selectedUserAllowance,
-                            $this->selectedStatusSirh)
-                        ->paginate(50)
-                ]);
-            }
+            //CREADOS, MIOS Y DE MI U.O.
+            return view('livewire.allowances.search-allowances', [
+                'allowances' => Allowance::
+                    latest()
+                    ->where('user_allowance_id', Auth::user()->id)
+                    ->orWhere('creator_user_id', Auth::user()->id)
+                    ->orWhere('organizational_unit_allowance_id', Auth::user()->organizationalUnit->id)
+                    ->search($this->selectedStatus,
+                        $this->selectedId,
+                        $this->selectedUserAllowance,
+                        $this->selectedStatusSirh)
+                    ->paginate(50)
+            ]);
         }
 
         if($this->index == 'all'){
