@@ -252,7 +252,7 @@
 
 <br>
 
-@if($jobPositionProfile->JobPositionProfileSigns->count() == 0)
+@if(count($jobPositionProfile->approvals) == 0)
 <div class="row">
     <div class="col">
         <form method="POST" class="form-horizontal" action="{{ route('job_position_profile.sign.store', $jobPositionProfile) }}" enctype="multipart/form-data"/>
