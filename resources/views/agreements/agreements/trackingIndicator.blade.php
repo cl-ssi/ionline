@@ -939,6 +939,15 @@
                   {{ $agreement->addendums->first()->res_number }}
                   @endif
                 @endif
+
+                @if (!$agreement->continuities->isEmpty())
+                  <hr class="mt-0 mb-1"/>
+                  @if($agreement->continuities->first()->res_file != null) 
+                  <a class="btn btn-link text-info" style ="outline: none !important;padding-top: 0;border: 0;vertical-align: baseline; font-size:10px;" href="{{ route('agreements.continuity.downloadRes', $agreement->continuities->first()) }}" target="_blank">{{ $agreement->continuities->first()->res_number }}</a>
+                  @else
+                  {{ $agreement->continuities->first()->res_number }}
+                  @endif
+                @endif
               </td>
             </tr>
             @endforeach
