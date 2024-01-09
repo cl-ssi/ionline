@@ -748,6 +748,23 @@ class RequirementController extends Controller
         return redirect()->back()->with('success', 'El requerimiento ha sido archivado');
     }
 
+    public function archive_mass(Request $request){
+        $requirementIds = $request->input('archive');
+    
+        foreach ($requirementIds as $requirementId) {
+            $requirement = Requirement::find($requirementId);
+            if($requirement) {
+                $requirementStatus = new RequirementStatus();
+                $requirementStatus->requirement_id = $requirement->id;
+                $requirementStatus->user_id = Auth::user()->id;
+                $requirementStatus->status = "viewed";
+                $requirementStatus->save();
+            }
+        }
+    
+        return redirect()->back()->with('success', 'Los requerimientos han sido archivados');
+    }
+
     public function archive_requirement_delete(Requirement $requirement)
     {
         $requirementStatus = RequirementStatus::where('requirement_id', $requirement->id)
