@@ -8,6 +8,7 @@ use Livewire\WithPagination;
 use App\Rrhh\Authority;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use App\Models\Parameters\Parameter;
 
 class SearchAllowances extends Component
 {
@@ -92,6 +93,22 @@ class SearchAllowances extends Component
                         'allowanceSignature'
                     ])
                     ->orderBy('id', 'DESC')
+                    ->search($this->selectedStatus,
+                        $this->selectedId,
+                        $this->selectedUserAllowance,
+                        $this->selectedStatusSirh)
+                    ->paginate(50)
+            ]);
+        }
+
+        //INDEX CON VIÁTICOS PARA FIRMA DE DIRECCIÓN
+        if($this->index == 'director'){
+            return view('livewire.allowances.search-allowances', [
+                'allowances' => Allowance::
+                    latest()
+                    ->whereHas("Approvals", function($subQuery){
+                        $subQuery->where('sent_to_ou_id', Parameter::get('ou','DireccionSSI'));
+                    })
                     ->search($this->selectedStatus,
                         $this->selectedId,
                         $this->selectedUserAllowance,
