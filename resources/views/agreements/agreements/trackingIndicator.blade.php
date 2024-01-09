@@ -8,7 +8,7 @@
 
 
 
-<h3 class="mb-3">Seguimiento de Convenios 
+<h3 class="mb-3">Seguimiento de Convenios
 <form class="form-inline float-right mb-3" method="GET" action="{{ route('agreements.tracking.index') }}">
   <div class="input-group">
     <select name="program" id="formprogram" class="form-control selectpicker" data-live-search="true" data-size="10">
@@ -93,6 +93,10 @@
                    <hr class="mt-0 mb-1"/>
                     <button style ="outline: none !important;padding-top: 0;border: 0;vertical-align: baseline; font-size:10px;" class="text-secondary" > -> @if($agreement->addendums->count() > 1) Incluye Addendums, último addendum #{{$agreement->addendums->first()->id}} @else Incluye Addendum #{{$agreement->addendums->first()->id}} @endif</button>
                  @endif
+                 @if (!$agreement->continuities->isEmpty())
+                   <hr class="mt-0 mb-1"/>
+                    <button style ="outline: none !important;padding-top: 0;border: 0;vertical-align: baseline; font-size:10px;" class="text-secondary" > -> @if($agreement->continuities->count() > 1) Incluye Resol. continuidad, último Resol. #{{$agreement->continuities->first()->id}} @else Incluye Resol. continuidad #{{$agreement->continuities->first()->id}} @endif</button>
+                 @endif
               </td>
               <td>{{ $agreement->commune->name }}</td>
               <td><!-- RTP -->
@@ -106,6 +110,13 @@
                 <hr class="mt-0 mb-1"/>
                 <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="{{$agreement->addendums->first()->getEndorseObservationBySignPos(1)}}">
                   <button style ="outline: none !important;padding-top: 0;border: 0;vertical-align: baseline; font-size:10px; text-align: center;" class="btn btn-link text-secondary text-center" style="pointer-events: none;" type="button" disabled><i class="fas {{$agreement->addendums->first()->getEndorseStateBySignPos(1)}}"></i></button>
+                </span>
+                @endif
+                @if (!$agreement->continuities->isEmpty() && $agreement->continuities->first()->file_to_endorse_id)
+                @php $flag_pending_state_continuity = false @endphp
+                <hr class="mt-0 mb-1"/>
+                <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="{{$agreement->continuities->first()->getEndorseObservationBySignPos(1)}}">
+                  <button style ="outline: none !important;padding-top: 0;border: 0;vertical-align: baseline; font-size:10px; text-align: center;" class="btn btn-link text-secondary text-center" style="pointer-events: none;" type="button" disabled><i class="fas {{$agreement->continuities->first()->getEndorseStateBySignPos(1)}}"></i></button>
                 </span>
                 @endif
               @else
@@ -177,6 +188,13 @@
                   <button style ="outline: none !important;padding-top: 0;border: 0;vertical-align: baseline; font-size:10px; text-align: center;" class="btn btn-link text-secondary text-center" style="pointer-events: none;" type="button" disabled><i class="fas {{$flag_pending_state_addendum ? 'fa-ellipsis-h' : $agreement->addendums->first()->getEndorseStateBySignPos(2)}}"></i></button>
                 </span>
                 @endif
+                @if (!$agreement->continuities->isEmpty() && $agreement->continuities->first()->file_to_endorse_id)
+                @if(!$flag_pending_state_continuity) @php $flag_pending_state_continuity = $agreement->continuities->first()->isEndorsePendingBySignPos(1) @endphp @endif
+                <hr class="mt-0 mb-1"/>
+                <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="{{$flag_pending_state_continuity ? 'En espera' : $agreement->continuities->first()->getEndorseObservationBySignPos(2)}}">
+                  <button style ="outline: none !important;padding-top: 0;border: 0;vertical-align: baseline; font-size:10px; text-align: center;" class="btn btn-link text-secondary text-center" style="pointer-events: none;" type="button" disabled><i class="fas {{$flag_pending_state_continuity ? 'fa-ellipsis-h' : $agreement->continuities->first()->getEndorseStateBySignPos(2)}}"></i></button>
+                </span>
+                @endif
               @else
                 @php $flag = 0; @endphp
                 @foreach($agreement->stages as $stage)
@@ -243,6 +261,13 @@
                   <hr class="mt-0 mb-1"/>
                   <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="{{$flag_pending_state_addendum ? 'En espera' : $agreement->addendums->first()->getEndorseObservationBySignPos(3)}}">
                     <button style ="outline: none !important;padding-top: 0;border: 0;vertical-align: baseline; font-size:10px; text-align: center;" class="btn btn-link text-secondary text-center" style="pointer-events: none;" type="button" disabled><i class="fas {{$flag_pending_state_addendum ? 'fa-ellipsis-h' : $agreement->addendums->first()->getEndorseStateBySignPos(3)}}"></i></button>
+                  </span>
+                @endif
+                @if (!$agreement->continuities->isEmpty() && $agreement->continuities->first()->file_to_endorse_id)
+                  @if(!$flag_pending_state_continuity) @php $flag_pending_state_continuity = $agreement->continuities->first()->isEndorsePendingBySignPos(2) @endphp @endif
+                  <hr class="mt-0 mb-1"/>
+                  <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="{{$flag_pending_state_continuity ? 'En espera' : $agreement->continuities->first()->getEndorseObservationBySignPos(3)}}">
+                    <button style ="outline: none !important;padding-top: 0;border: 0;vertical-align: baseline; font-size:10px; text-align: center;" class="btn btn-link text-secondary text-center" style="pointer-events: none;" type="button" disabled><i class="fas {{$flag_pending_state_continuity ? 'fa-ellipsis-h' : $agreement->continuities->first()->getEndorseStateBySignPos(3)}}"></i></button>
                   </span>
                 @endif
               @else
@@ -313,6 +338,13 @@
                     <button style ="outline: none !important;padding-top: 0;border: 0;vertical-align: baseline; font-size:10px; text-align: center;" class="btn btn-link text-secondary text-center" style="pointer-events: none;" type="button" disabled><i class="fas {{$flag_pending_state_addendum ? 'fa-ellipsis-h' : $agreement->addendums->first()->getEndorseStateBySignPos(4)}}"></i></button>
                   </span>
                 @endif
+                @if (!$agreement->continuities->isEmpty() && $agreement->continuities->first()->file_to_endorse_id)
+                  @if(!$flag_pending_state_continuity) @php $flag_pending_state_continuity = $agreement->continuities->first()->isEndorsePendingBySignPos(3) @endphp @endif
+                  <hr class="mt-0 mb-1"/>
+                  <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="{{$flag_pending_state_continuity ? 'En espera' : $agreement->continuities->first()->getEndorseObservationBySignPos(4)}}">
+                    <button style ="outline: none !important;padding-top: 0;border: 0;vertical-align: baseline; font-size:10px; text-align: center;" class="btn btn-link text-secondary text-center" style="pointer-events: none;" type="button" disabled><i class="fas {{$flag_pending_state_continuity ? 'fa-ellipsis-h' : $agreement->continuities->first()->getEndorseStateBySignPos(4)}}"></i></button>
+                  </span>
+                @endif
               @else
                 @php $flag = 0; @endphp
                 @foreach($agreement->stages as $stage)
@@ -379,6 +411,13 @@
                   <hr class="mt-0 mb-1"/>
                   <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="{{$flag_pending_state_addendum ? 'En espera' : $agreement->addendums->first()->getEndorseObservationBySignPos(5)}}">
                     <button style ="outline: none !important;padding-top: 0;border: 0;vertical-align: baseline; font-size:10px; text-align: center;" class="btn btn-link text-secondary text-center" style="pointer-events: none;" type="button" disabled><i class="fas {{$flag_pending_state_addendum ? 'fa-ellipsis-h' : $agreement->addendums->first()->getEndorseStateBySignPos(5)}}"></i></button>
+                  </span>
+                @endif
+                @if (!$agreement->continuities->isEmpty() && $agreement->continuities->first()->file_to_endorse_id)
+                  @if(!$flag_pending_state_continuity) @php $flag_pending_state_continuity = $agreement->continuities->first()->isEndorsePendingBySignPos(4) @endphp @endif
+                  <hr class="mt-0 mb-1"/>
+                  <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="{{$flag_pending_state_continuity ? 'En espera' : $agreement->continuities->first()->getEndorseObservationBySignPos(5)}}">
+                    <button style ="outline: none !important;padding-top: 0;border: 0;vertical-align: baseline; font-size:10px; text-align: center;" class="btn btn-link text-secondary text-center" style="pointer-events: none;" type="button" disabled><i class="fas {{$flag_pending_state_continuity ? 'fa-ellipsis-h' : $agreement->continuities->first()->getEndorseStateBySignPos(5)}}"></i></button>
                   </span>
                 @endif
               @else
