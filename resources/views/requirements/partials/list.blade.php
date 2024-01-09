@@ -1,4 +1,4 @@
-<table class="table table-sm table-bordered small">
+<table class="table table-sm table-bordered small" id="tabla_requerimientos">
     <thead>
         <tr>
             <th>N°</th>
@@ -141,3 +141,27 @@
         @endforeach
     </tbody>
 </table>
+
+
+@section('custom_js')
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+<script type="text/javascript">
+    let date = new Date()
+    let day = date.getDate()
+    let month = date.getMonth() + 1
+    let year = date.getFullYear()
+    let hour = date.getHours()
+    let minute = date.getMinutes()
+
+    function exportF(elem) {
+        var table = document.getElementById("tabla_requerimientos");
+        var html = table.outerHTML;
+        var html_no_links = html.replace(/<a[^>]*>|<\/a>/g, ""); //remove if u want links in your table
+        var url = 'data:application/vnd.ms-excel,' + escape(html_no_links); // Set your html table into url
+        elem.setAttribute("href", url);
+        elem.setAttribute("download", "tabla_requerimientos_inbox_" + day + "_" + month + "_" + year + "_" + hour + "_" + minute + ".xls"); // Choose the file name
+        return false;
+    }
+</script>
+@endsection
