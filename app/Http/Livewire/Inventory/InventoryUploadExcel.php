@@ -234,8 +234,10 @@ class InventoryUploadExcel extends Component
         if ($allRowsGood) {
             //aca recien realizo la logica de ingresar en la BD solo si todos los campos están bien           
             foreach ($data as $key => $row) {
+                $user_sender = User::where('id', $row[10])->first();
+                $user_responsible = User::where('id', $row[11])->first();
+                $user_using = User::where('id', $row[12])->first();                
                 $movement = false;
-                // $request_user = User::fin
                 if ($row[10] and $row[11] and $row[12]) {
                     $movement = true;
                 }
@@ -251,10 +253,11 @@ class InventoryUploadExcel extends Component
                     'po_code' => $row[7],
                     'status' => $status,
                     'place_id' => $place->id,
+                    //debe ser con el auth() o con el sender ¿? lo hice con el user_sender
                     'request_user_ou_id' => Auth::user()->organizationalUnit->id,
-                    'request_user_id' => $row[10],
-                    'user_responsible_id' => $row[11],
-                    'user_using_id' => $row[12],
+                    'request_user_id' => Auth::user()->id,
+                    // 'user_responsible_id' => $user_responsible->id,
+                    // 'user_using_id' => $user_using->id,
                     'observations' => $row[13],
                     'po_price' => $row[14],
                     'accounting_code_id' => $row[15],
@@ -264,22 +267,29 @@ class InventoryUploadExcel extends Component
                 ];
 
                 if ($movement) {
-                    // $inventoryData['user_using_id'] = $user_using->id;
-                    // $inventoryData['user_responsible_id'] = $user_responsible->id;
+                    $inventoryData['user_using_id'] = $user_using->id;
+                    $inventoryData['user_responsible_id'] = $user_responsible->id;
                 }
-
-                if (!empty($row[0])) {
+                if (!empty($row[18])) {
                     $inventory = Inventory::updateOrCreate(
-                        ['establishment_id' => $this->establishment->id, 'number' => $row[0]],
+                        ['establishment_id' => $this->establishment->id, 'old_number' => $row[18]],
                         $inventoryData
                     );
-                } else {
-                    // Si el número está vacío, realiza un create
-                    $inventory = Inventory::create(
-                        ['establishment_id' => $this->establishment->id] + $inventoryData
-                    );
-                    $inventory->number = $inventory->unspscProduct->code . '-' . $inventory->id;
-                    $inventory->save();
+                }
+                else{
+                    if (!empty($row[0])) {
+                            $inventory = Inventory::updateOrCreate(
+                            ['establishment_id' => $this->establishment->id, 'number' => $row[0]],
+                            $inventoryData
+                        );
+                        
+                    } else {
+                        $inventory = Inventory::create(
+                            ['establishment_id' => $this->establishment->id] + $inventoryData
+                        );
+                        $inventory->number = $inventory->unspscProduct->code . '-' . $inventory->id;
+                        $inventory->save();
+                    }
                 }
 
 
