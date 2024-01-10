@@ -462,7 +462,9 @@ class RequestFormCreate extends Component
               // $type_adm = 'secretary';
               // $mail_notification_ou_secretary = Authority::getAuthorityFromDate($req->eventRequestForms->first()->ou_signer_user, Carbon::now(), $type_adm);
 
-              $emails = [$mail_notification_ou_manager->user->email];
+              if($mail_notification_ou_manager){
+                $emails = [$mail_notification_ou_manager->user->email];
+              }
 
               if (env('APP_ENV') == 'production' OR env('APP_ENV') == 'testing') {
                 if($mail_notification_ou_manager){
