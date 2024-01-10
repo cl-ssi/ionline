@@ -80,9 +80,10 @@ class ReportByEmployee extends Component
             $startDate = $period->copy();
             $endDate = $period->endOfMonth();
 
-            // dd($startDate, $endDate);
-
-            $holidays = Holiday::whereBetween('date', [$startDate, $endDate])->get();
+            // Se deben obtener los feriados del mes siguiente, por ende se suma un mes a la fecha de analisis
+            $holidays_search_start_date = $startDate->addMonth();
+            $holidays_search_end_date = $holidays_search_start_date->copy()->endOfMonth();
+            $holidays = Holiday::whereBetween('date', [$holidays_search_start_date, $holidays_search_end_date])->get();
             
 
             /* Obtener los usuarios que tienen contratos en un rango de fecha con sus ausentismos */

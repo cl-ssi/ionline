@@ -18,14 +18,16 @@ use App\Models\Rrhh\AbsenteeismType;
 class ReportByDates extends Component
 {
 
-    public $finicio;
-    public $ftermino;
+    // public $finicio;
+    // public $ftermino;
+    public $search_date;
     public $userWithContracts;
     public $output;
 
     protected $rules = [
-        'finicio' => 'required',
-        'ftermino' => 'required',
+        // 'finicio' => 'required',
+        // 'ftermino' => 'required',
+        'search_date' => 'required'
     ];
 
     // public function mount(){
@@ -38,12 +40,20 @@ class ReportByDates extends Component
         $this->validate();
 
         // format fechas
-        if($this->finicio && $this->ftermino){
-            $startDate = Carbon::createFromDate($this->finicio);
-            $endDate = Carbon::createFromDate($this->ftermino);
-        }
+        $dateMonthArray = explode('-', $this->search_date);
+        $year = $dateMonthArray[0];
+        $month = $dateMonthArray[1];
 
-        $holidays = Holiday::whereBetween('date', [$startDate, $endDate])->get();
+        $startDate = Carbon::createFromDate($year, $month)->startOfMonth();
+        $endDate = Carbon::createFromDate($year, $month)->endOfMonth();
+
+        // Se deben obtener los feriados del mes siguiente, por ende se suma un mes a la fecha de analisis
+        $start = $startDate->copy();
+        $holidays_search_start_date = $start->addMonth();
+        $holidays_search_end_date = $holidays_search_start_date->copy()->endOfMonth();
+        $holidays = Holiday::whereBetween('date', [$holidays_search_start_date, $holidays_search_end_date])->get();
+
+        // se obtiene id del ausentismo descanso compensatorio
         $compensatoryAbsenteeismType = AbsenteeismType::find(5);
         
         /* Obtener los usuarios que tienen contratos en un rango de fecha con sus ausentismos */

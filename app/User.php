@@ -1027,14 +1027,22 @@ class User extends Authenticatable implements Auditable
                     $contractDates = $period->toArray();
                 }
             }
+            // dd($contractDates);
 
             // se obtiene primera y ultima fecha (keys del array) del cruce (para analisis posterior)
             $first_key = array_key_first($contractDates);
             $last_key = array_key_last($contractDates);
             $businessDays = [];
             if(count($contractDates) > 0){
+
                 // días laborales reales (considerando cruze de contratos)
-                $businessDays = DateHelper::getBusinessDaysByDateRangeHolidays($contractDates[$first_key],$contractDates[$last_key],$holidays)->toArray();
+                // Se deben obtener días del mes siguiente, por ende se suma un mes a la fecha de analisis
+                $businessDays_search_start_date = $contractDates[$first_key]->addMonth();
+                $businessDays_search_end_date = $contractDates[$last_key]->addMonth();
+                // dd($businessDays_search_start_date, $businessDays_search_end_date);
+
+                $businessDays = DateHelper::getBusinessDaysByDateRangeHolidays($businessDays_search_start_date, $businessDays_search_end_date, $holidays)->toArray();
+                // $businessDays = DateHelper::getBusinessDaysByDateRangeHolidays($contractDates[$first_key],$contractDates[$last_key],$holidays)->toArray();
             }
             
             //cantidad de días laborales
@@ -1089,7 +1097,12 @@ class User extends Authenticatable implements Auditable
                 }
                 $lastdate = $absenteeismEndDate->copy();
 
-                $absenteeism->totalDays = DateHelper::getBusinessDaysByDateRangeHolidays($absenteeismStartDate, $absenteeismEndDate, $holidays)->count();
+                // dd($absenteeismStartDate, $absenteeismEndDate);
+                // $absenteeism->totalDays = DateHelper::getBusinessDaysByDateRangeHolidays($absenteeismStartDate,$absenteeismEndDate,$holidays)->count();
+                $absenteeism->totalDays = DateHelper::getBusinessDaysByDateRangeHolidays($absenteeismStartDate->copy()->addMonth(), 
+                                                                                         $absenteeismEndDate->copy()->addMonth(), 
+                                                                                         $holidays)->count();
+                // dd($absenteeism->totalDays);
                 $this->totalAbsenteeisms += $absenteeism->totalDays;
 
                 // $this->absenteeisms[$this->id] = $absenteeism;
@@ -1111,7 +1124,10 @@ class User extends Authenticatable implements Auditable
                 $end = $compensatoryDay->end_date;
 
                 // obtiene días hábiles (sin feriados ni fds)
-                $habiles = DateHelper::getBusinessDaysByDateRangeHolidays($start, $end, $holidays)->toArray();
+                // Se deben obtener días hábiles del mes siguiente, por ende se suma un mes a la fecha de analisis
+                $businessDays_search_start_date = $start->copy()->addMonth();
+                $businessDays_search_end_date = $businessDays_search_start_date->copy()->endOfMonth();
+                $habiles = DateHelper::getBusinessDaysByDateRangeHolidays($businessDays_search_start_date, $businessDays_search_end_date, $holidays)->toArray();
 
                 $dates = [];
                 $datesArray = iterator_to_array(new \DatePeriod($start, new \DateInterval('P1D'), $end));
@@ -1173,6 +1189,7 @@ class User extends Authenticatable implements Auditable
 
 
             // obtiene monto a pagar de la ausencia y la asigna a usuario
+            // dd($businessDays, $this->totalAbsenteeisms);
             $this->ammount = $this->dailyAmmount * ( $businessDays - $this->totalAbsenteeisms);
             
             // se genera array para exportación de montos

@@ -5,14 +5,9 @@
 
     <div class="form-row">
         <div class="form-group col-3">
-            <label for="text11">Fecha de inicio</label>
-            <input type="date" class="form-control" wire:model.defer="finicio" required>
-            @error('finicio') <span class="error">{{ $message }}</span> @enderror
-        </div>
-        <div class="form-group col-3">
-            <label for="text12">Fecha de término</label>
-            <input type="date" class="form-control" wire:model.defer="ftermino" required>
-            @error('ftermino') <span class="error">{{ $message }}</span> @enderror
+            <label for="text12">Periodo</label>
+            <input type="month" class="form-control" wire:model.defer="search_date" required/>
+            @error('search_date') <span class="error">{{ $message }}</span> @enderror
         </div>
         <div class="form-group">
             <label for="text12"><br></label>
@@ -26,9 +21,7 @@
         </div>
     </div>
 
-    @if($finicio!=null && $ftermino!=null)
-
-    <!-- {{$finicio}} - {{$ftermino}} -->
+    @if($search_date!=null)
 
     <button class="btn btn-outline-success float-right" wire:click="export">
         Montos <i class="fas fa-download"></i>
