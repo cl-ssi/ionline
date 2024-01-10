@@ -16,7 +16,9 @@ class LinkController extends Controller
      */
     public function index()
     {
-        $summaryTypes = Type::with(['EventTypes'])->get();
+        $summaryTypes = Type::with(['eventTypes' => function ($query) {
+            $query->where('establishment_id', auth()->user()->organizationalUnit->establishment->id);
+        }])->get();
         return view('summary.links.index', compact('summaryTypes'));
     }
 

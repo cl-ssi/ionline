@@ -303,18 +303,19 @@
                     @if($sign->request_status == 'not valid')
                         @if($requestReplacementStaff->signaturesFile)
                             @foreach($requestReplacementStaff->signaturesFile->signaturesFlows as $flow)
+                                {{-- dd($flow) --}}
                                 @if($flow->status == 1)
                                     <span style="color: green;">
                                         <i class="fas fa-signature"></i> Aceptada
                                     </span><br>
                                     <i class="fas fa-user"></i> {{ $flow->signerName }}<br>
                                     <i class="fas fa-calendar-alt"></i> {{ $flow->signature_date->format('d-m-Y H:i:s') }}
-                                @elseif($flow->status == 0)
+                                @elseif($flow->status === 0)
                                     <span style="color: Tomato;">
                                         <i class="fas fa-times-circle"></i> Rechazada
                                     </span><br>
                                     <i class="fas fa-user"></i> {{ $flow->signerName }}<br>
-                                    <i class="fas fa-calendar-alt"></i> {{ $flow->signature->rejected_at->format('d-m-Y H:i:s') }}<br>
+                                    <i class="fas fa-calendar-alt"></i> {{ $flow->signature->rejected_at->format('d-m-Y H:i:s') : '' }}<br>
                                     <hr>
                                     {{ $flow->observation }}<br>
                                 @else

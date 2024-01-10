@@ -77,7 +77,7 @@
                         @endphp
                     @empty
                         <tr>
-                            <td colspan="11">No se encontraron solicitudes.</td>
+                            <td colspan="14">No se encontraron solicitudes.</td>
                         </tr>
                     @endforelse
                 </tbody>

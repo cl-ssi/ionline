@@ -1344,6 +1344,7 @@ Route::prefix('requirements')->as('requirements.')->middleware(['auth', 'must.ch
     Route::get('outbox', [RequirementController::class, 'outbox'])->name('outbox');
     Route::get('secretary_outbox', [RequirementController::class, 'secretary_outbox'])->name('secretary_outbox');
     Route::get('archive_requirement/{requirement}', [RequirementController::class, 'archive_requirement'])->name('archive_requirement');
+    Route::post('archive-mass', [RequirementController::class, 'archive_mass'])->name('archive_mass');
     Route::get('archive_requirement_delete/{requirement}', [RequirementController::class, 'archive_requirement_delete'])->name('archive_requirement_delete');
     // Route::get('asocia_categorias', [RequirementController::class,'asocia_categorias'])->name('asocia_categorias');
     Route::get('create_requirement/{parte}',  [RequirementController::class, 'create_requirement'])->name('create_requirement');
@@ -2231,6 +2232,7 @@ Route::prefix('allowances')->as('allowances.')->middleware(['auth', 'must.change
     Route::get('/', [AllowanceController::class, 'index'])->name('index');
     Route::get('all_index', [AllowanceController::class, 'all_index'])->name('all_index')->middleware('permission:Allowances: all');
     Route::get('sign_index', [AllowanceController::class, 'sign_index'])->name('sign_index')->middleware('permission:Allowances: sirh');
+    Route::get('director_index', [AllowanceController::class, 'director_index'])->name('director_index');
     Route::get('create', [AllowanceController::class, 'create'])->name('create');
     Route::post('store', [AllowanceController::class, 'store'])->name('store');
     Route::get('{allowance}/edit', [AllowanceController::class, 'edit'])->name('edit');

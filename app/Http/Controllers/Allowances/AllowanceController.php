@@ -45,6 +45,11 @@ class AllowanceController extends Controller
         return view('allowances.sign_index');
     }
 
+    public function director_index()
+    {   
+        return view('allowances.director_index');
+    }
+
     /**
      * Show the form for creating a new resource.
      *

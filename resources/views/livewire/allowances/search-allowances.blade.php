@@ -144,8 +144,8 @@
                                 </a>
                             @endif
                 
-                            @if($index == 'own')
-                                @if($allowance->allowanceSigns->first()->status == 'pending' && Auth::user()->hasPermissionTo('Allowances: create'))
+                            @if($index == 'own' || $index == 'director')
+                                @if($allowance->allowanceSigns->first()->status == 'pending')
                                     <a href="{{ route('allowances.edit', $allowance) }}"
                                         class="btn btn-outline-secondary btn-sm" title="Editar"><i class="fas fa-edit"></i>
                                     </a>

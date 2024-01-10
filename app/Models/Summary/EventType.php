@@ -36,6 +36,7 @@ class EventType extends Model
         'summary_type_id',
         'num_repeat',
         'summary_actor_id',
+        'establishment_id',
     ];
 
     public function getUserTextAttribute()
