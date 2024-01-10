@@ -315,7 +315,7 @@
                                         <i class="fas fa-times-circle"></i> Rechazada
                                     </span><br>
                                     <i class="fas fa-user"></i> {{ $flow->signerName }}<br>
-                                    <i class="fas fa-calendar-alt"></i> {{ $flow->signature->rejected_at->format('d-m-Y H:i:s') : '' }}<br>
+                                    <i class="fas fa-calendar-alt"></i> {{ $flow->signature->rejected_at->format('d-m-Y H:i:s') }}<br>
                                     <hr>
                                     {{ $flow->observation }}<br>
                                 @else
