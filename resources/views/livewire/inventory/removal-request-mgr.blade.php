@@ -6,8 +6,12 @@
         </li>
 
         <li class="nav-item">
-            <a class="nav-link" wire:click="$set('showRemoved', true)" href="#">Inventarios Dado de Baja</a>
+            <a class="nav-link" wire:click="showRemoved" href="#">Inventarios Dados de Baja</a>
         </li>
+
+        <li class="nav-item">
+            <a class="nav-link" wire:click="showRejected" href="#">Inventarios Rechazados la Baja</a>
+        </li>        
     </ul>
     <div class="form-row">
             <div class="col">
@@ -24,9 +28,15 @@
                 <th>Responsable</th>
                 <th>Fecha y Hora Solicitud de Baja</th>
                 <th>Motivo Solicitud de Baja</th>
-                @if($showRemoved)
+                @if($showRemoved or $showRejected)
+                    @if($showRemoved)
                     <th>Aprobado Baja de Inventario por</th>
                     <th>Fecha y Hora de Baja de Inventario</th>
+                    @endif
+                    @if($showRejected)
+                    <th>Rechazo de Solicitud de Baja de Inventario por</th>
+                    <th>Fecha y Hora de Rechazo de Solicitud</th>
+                    @endif
                 @else
                     <th>Acciones</th>
                 @endif
@@ -70,7 +80,7 @@
                     <td>
                         {{ $inventory->removal_request_reason }}
                     </td>
-                    @if($showRemoved)
+                    @if($showRemoved or $showRejected)
                         <td>
                             {{ optional($inventory->removedUser)->tinny_name }}
                         </td>
@@ -84,7 +94,7 @@
                                 Aprobar
                             </button>
                             <br><br><br>
-                            <button class="btn btn-danger" wire:click="reject">
+                            <button class="btn btn-danger" wire:click="reject({{ $inventory->id }})">
                                 <i class="fas fa-thumbs-down"></i>
                                 Rechazar
                             </button>

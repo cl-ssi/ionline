@@ -7,17 +7,18 @@ use App\Models\Inv\Inventory;
 
 class RemovalRequestMgr extends Component
 {
-
     public $showRemoved = false;
+    public $showRejected = false;
+
     public function render()
     {
-        $inventories = $this->showRemoved
-        ? Inventory::where('is_removed', true)->get()
-        : Inventory::whereNotNull('removal_request_reason')->whereNull('is_removed')->get();
+        $this->updateShowProperties();
+
+        $inventories = $this->getInventories();
+
         return view('livewire.inventory.removal-request-mgr', [
             'inventories' => $inventories,
         ]);
-        
     }
 
     public function approval($inventoryId)
@@ -28,15 +29,56 @@ class RemovalRequestMgr extends Component
         $inventory->removed_at = now();
         $inventory->save();
         session()->flash('success', 'Solicitud enviada con éxito.');
-        $this->render(); // Volver a renderizar la vista después de la aprobación
     }
-
 
     public function reject($inventoryId)
     {
         $inventory = Inventory::find($inventoryId);
-
-        $this->render(); // Volver a renderizar la vista después del rechazo
+        $inventory->is_removed = false;
+        $inventory->removed_user_id = auth()->user()->id;
+        $inventory->removed_at = now();
+        $inventory->save();
+        session()->flash('success', 'Solicitud rechazada');
     }
 
+    public function showRemoved()
+    {
+        $this->showRemoved = true;
+        $this->showRejected = false;
+    }
+    
+    public function showRejected()
+    {
+        $this->showRemoved = false;
+        $this->showRejected = true;
+    }
+    
+
+    private function updateShowProperties()
+    {
+        if ($this->showRemoved) {
+            $this->showRejected = false;
+        } elseif ($this->showRejected) {
+            $this->showRemoved = false;
+        }
+        else {            
+            $this->showRemoved = false;
+            $this->showRejected = false;
+        }
+    }
+    
+
+    private function getInventories()
+    {
+        if ($this->showRemoved) {
+            return Inventory::where('is_removed', true)->get();
+        }
+
+        if ($this->showRejected) {
+            return Inventory::where('is_removed', false)->whereNotNull('removal_request_reason')->get();
+        }
+
+        return Inventory::whereNotNull('removal_request_reason')->whereNull('is_removed')->get();
+    }
 }
+
