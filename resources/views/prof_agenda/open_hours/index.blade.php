@@ -10,7 +10,7 @@
 
 <form method="GET" class="form-horizontal" action="{{ route('prof_agenda.open_hour.index') }}">
 
-    @livewire('prof-agenda.select-user-profesion',['profession_id' => $request->profession_id, 'user_id' => $request->user_id])
+    @livewire('prof-agenda.select-user-profesion',['profession_id' => $request->profession_id, 'user_id' => $request->user_id, 'profesional_ust' => true])
 
     <div class="row">
         <fieldset class="form-group col col-md-6">

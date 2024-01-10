@@ -1882,6 +1882,7 @@ Route::prefix('prof_agenda')->as('prof_agenda.')->middleware(['auth'])->group(fu
 
     Route::prefix('agenda')->as('agenda.')->middleware(['auth'])->group(function () {
         Route::get('/', [AgendaController::class, 'index'])->name('index');
+        Route::get('booking', [AgendaController::class, 'booking'])->name('booking');
         // Route::get('/edit/{proposal}', [ProposalController::class, 'edit'])->name('edit');
         // Route::put('/update/{proposal}', [ProposalController::class, 'update'])->name('update');
         // Route::get('/create', [ProposalController::class, 'create'])->name('create');

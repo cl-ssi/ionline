@@ -45,7 +45,8 @@ class OpenHourController extends Controller
     public function store(Request $request)
     {
         $openHour = OpenHour::find($request->openHours_id);
-        
+        // dd($openHour);
+
         // valida si existen del paciente con otros funcionarios en la misma hora
         $othersReservationsCount = OpenHour::where('patient_id',$request->user_id)
                                             ->where(function($query) use ($openHour){
@@ -58,73 +59,72 @@ class OpenHourController extends Controller
             return redirect()->back();
         }
 
-        // // validación para dv de rut
-        // if($request->dv!=null){
-        //     session()->flash('warning', 'El campo dv no puede ser vacío.');
-        //     return redirect()->back();
-        // }
+        $resevationsInWeek = OpenHour::where('patient_id',$request->user_id)
+                                    ->whereBetween('start_date',[$openHour->start_date->startOfWeek(), $openHour->end_date->endOfWeek()])
+                                    ->count();
 
-        // si el usuario se encuentra eliminado, se vuelve a dejar activo
-        if(User::withTrashed()->find($request->user_id)){
-            if(User::withTrashed()->find($request->user_id)->trashed()){
-                User::withTrashed()->find($request->user_id)->restore();
-            }
+        if($resevationsInWeek > 2){
+            session()->flash('warning', 'Alcanzó el máximo de reservas a la semana (2 reservas). Si necesita agendar otra hora, contactar a Unidad de Salud del trabajador.');
+            return redirect()->back();
         }
 
-        //devuelve user o lo crea
-        if($request->new_user == 1){
-            $user = User::updateOrCreate(
-            ['id' => $request->user_id],
-            [
-                'dv' =>  $request->dv,
-                'name' =>  $request->name,
-                'fathers_family' =>  $request->fathers_family,
-                'mothers_family' =>  $request->mothers_family,
-                'commune_id' => $request->commune_id,
-                'address' =>  $request->address,
-                'phone_number' =>  $request->phone_number,
-                'email' =>  $request->email,
-                'organizational_unit_id' =>  $request->organizational_unit_id
-            ]
-            );
-        }else{
-            $user = User::updateOrCreate(
-            ['id' => $request->user_id],
-            [
-                'dv' =>  $request->dv,
-                'name' =>  $request->name,
-                'fathers_family' =>  $request->fathers_family,
-                'mothers_family' =>  $request->mothers_family,
-                'commune_id' => $request->commune_id,
-                'address' =>  $request->address,
-                'phone_number' =>  $request->phone_number,
-                'email' =>  $request->email
-            ]
-            );
-        }        
+        // solo si vienen parámetros del usuario, se hace modificación
+        if($request->name && $request->fathers_family){
+            // si el usuario se encuentra eliminado, se vuelve a dejar activo
+            if(User::withTrashed()->find($request->user_id)){
+                if(User::withTrashed()->find($request->user_id)->trashed()){
+                    User::withTrashed()->find($request->user_id)->restore();
+                }
+            }
+
+            //devuelve user o lo crea
+            if($request->new_user == 1){
+                $user = User::updateOrCreate(
+                ['id' => $request->user_id],
+                [
+                    'dv' =>  $request->dv,
+                    'name' =>  $request->name,
+                    'fathers_family' =>  $request->fathers_family,
+                    'mothers_family' =>  $request->mothers_family,
+                    'commune_id' => $request->commune_id,
+                    'address' =>  $request->address,
+                    'phone_number' =>  $request->phone_number,
+                    'email' =>  $request->email,
+                    'organizational_unit_id' =>  $request->organizational_unit_id
+                ]
+                );
+            }else{
+                $user = User::updateOrCreate(
+                ['id' => $request->user_id],
+                [
+                    'dv' =>  $request->dv,
+                    'name' =>  $request->name,
+                    'fathers_family' =>  $request->fathers_family,
+                    'mothers_family' =>  $request->mothers_family,
+                    'commune_id' => $request->commune_id,
+                    'address' =>  $request->address,
+                    'phone_number' =>  $request->phone_number,
+                    'email' =>  $request->email
+                ]
+                );
+            }    
+        }
+            
 
         // $openHour = OpenHour::find($request->openHours_id);
-        $openHour->contact_number = $request->phone_number;
-        $openHour->patient_id = $user->id;
+        if($request->phone_number){$openHour->contact_number = $request->phone_number;}
+        $openHour->patient_id = $request->user_id;
         $openHour->observation = $request->observation;
         $openHour->save();
 
         //envía correo de confirmación
-        if($openHour->patient){
-            
-            if($openHour->patient->email != null){
-                /*
-                 * Utilizando Notify
-                 */ 
-                $openHour->patient->notify(new NewReservation($openHour));
-
-                /** 
-                 * Utilizando mail tradicional
-                 */
-                // if (filter_var($openHour->patient->email, FILTER_VALIDATE_EMAIL)) {
-                //     Mail::to($openHour->patient)->send(new OpenHourReservation($openHour));
-                // }
-            } 
+        if (config('app.env') === 'local') {
+            if($openHour->patient){
+                if($openHour->patient->email != null){
+                    // Utilizando Notify 
+                    $openHour->patient->notify(new NewReservation($openHour));
+                } 
+            }
         }
         
         session()->flash('success', 'Se guardó la información.');

@@ -12,6 +12,7 @@ use App\Models\Parameters\Parameter;
 
 class SelectUserProfesion extends Component
 {
+    public $profesional_ust;
     public $users;
     public $user_id;
     public $professions;
@@ -21,24 +22,30 @@ class SelectUserProfesion extends Component
         $profession_id = $this->profession_id;
         $professions = explode(',',Parameter::where('parameter','profesiones_ust')->pluck('value')->toArray()[0]);
 
-        // se devuelve usuarios según rol asignado
-        if(Auth::user()->can('Agenda UST: Administrador') || Auth::user()->can('Agenda UST: Secretaria')){
+        if($this->profesional_ust == true){
+            // se devuelve usuarios según rol asignado
+            if(Auth::user()->can('Agenda UST: Administrador') || Auth::user()->can('Agenda UST: Secretaria')){
+                $this->professions = Profession::whereIn('id',$professions)->get();
+                $this->users = User::whereHas('agendaProposals', function($q) use ($profession_id){
+                                        $q->where('profession_id',$profession_id);
+                                    })->get();
+            }
+            if(Auth::user()->can('Agenda UST: Funcionario')){
+                // obtiene profesiones asociada a funcionario logeado
+                $array = Proposal::where('user_id',Auth::user()->id)->get()->pluck('profession_id')->toArray();
+                $this->professions = Profession::whereIn('id',$array)->get();
+
+                $this->users = User::whereHas('agendaProposals', function($q) use ($profession_id){
+                                    $q->where('profession_id',$profession_id);
+                                    $q->where('user_id',Auth::user()->id);
+                                })->get();
+            }
+        }else{
             $this->professions = Profession::whereIn('id',$professions)->get();
             $this->users = User::whereHas('agendaProposals', function($q) use ($profession_id){
                                     $q->where('profession_id',$profession_id);
                                 })->get();
         }
-        if(Auth::user()->can('Agenda UST: Funcionario')){
-            // obtiene profesiones asociada a funcionario logeado
-            $array = Proposal::where('user_id',Auth::user()->id)->get()->pluck('profession_id')->toArray();
-            $this->professions = Profession::whereIn('id',$array)->get();
-
-            $this->users = User::whereHas('agendaProposals', function($q) use ($profession_id){
-                                $q->where('profession_id',$profession_id);
-                                $q->where('user_id',Auth::user()->id);
-                            })->get();
-        }
-        
     }
 
     public function change(){
@@ -46,22 +53,29 @@ class SelectUserProfesion extends Component
         $profession_id = $this->profession_id;
         $professions = explode(',',Parameter::where('parameter','profesiones_ust')->pluck('value')->toArray()[0]);
         
-        // se devuelve usuarios según rol asignado
-        if(Auth::user()->can('Agenda UST: Administrador') || Auth::user()->can('Agenda UST: Secretaria')){
+        if($this->profesional_ust == true){
+            // se devuelve usuarios según rol asignado
+            if(Auth::user()->can('Agenda UST: Administrador') || Auth::user()->can('Agenda UST: Secretaria')){
+                $this->professions = Profession::whereIn('id',$professions)->get();
+                $this->users = User::whereHas('agendaProposals', function($q) use ($profession_id){
+                                        $q->where('profession_id',$profession_id);
+                                    })->get();
+            }
+            if(Auth::user()->can('Agenda UST: Funcionario')){
+                // obtiene profesiones asociada a funcionario logeado
+                $array = Proposal::where('user_id',Auth::user()->id)->get()->pluck('profession_id')->toArray();
+                $this->professions = Profession::whereIn('id',$array)->get();
+                
+                $this->users = User::whereHas('agendaProposals', function($q) use ($profession_id){
+                                    $q->where('profession_id',$profession_id);
+                                    $q->where('user_id',Auth::user()->id);
+                                })->get();
+            }
+        }else{
             $this->professions = Profession::whereIn('id',$professions)->get();
             $this->users = User::whereHas('agendaProposals', function($q) use ($profession_id){
                                     $q->where('profession_id',$profession_id);
                                 })->get();
-        }
-        if(Auth::user()->can('Agenda UST: Funcionario')){
-            // obtiene profesiones asociada a funcionario logeado
-            $array = Proposal::where('user_id',Auth::user()->id)->get()->pluck('profession_id')->toArray();
-            $this->professions = Profession::whereIn('id',$array)->get();
-            
-            $this->users = User::whereHas('agendaProposals', function($q) use ($profession_id){
-                                $q->where('profession_id',$profession_id);
-                                $q->where('user_id',Auth::user()->id);
-                            })->get();
         }
     }
 

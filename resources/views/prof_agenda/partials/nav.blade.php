@@ -7,6 +7,13 @@
         </a>
     </li>
 
+    <li class="nav-item">
+        <a class="nav-link {{ active('prof_agenda.agenda.booking') }}"
+            href="{{ route('prof_agenda.agenda.booking') }}">
+            <i class="fa fa-calendar"></i> Agendar hora
+        </a>
+    </li>
+
     @canany(['Agenda UST: Administrador','Agenda UST: Funcionario','Agenda UST: Secretaria'])
         <li class="nav-item">
             <a class="nav-link {{ active('prof_agenda.agenda.index') }}"
