@@ -218,5 +218,10 @@ class CreateReceptionNoOc extends Component
         $this->signer_id = $user_id;
     }
 
+    public function removeApproval($position)
+    {
+        unset($this->approvals[$position]);
+    }
+
 
 }
