@@ -273,6 +273,7 @@ use App\Http\Controllers\Auth\VerificationController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Attendances\PeopleController;
 use App\Http\Controllers\AssigmentController;
+use App\Http\Controllers\ApprovalController;
 use App\Http\Controllers\Allowances\AllowanceSignController;
 use App\Http\Controllers\Allowances\AllowanceFileController;
 use App\Http\Controllers\Allowances\AllowanceController;
@@ -284,9 +285,9 @@ use App\Http\Controllers\Agreements\WordCollaborationAgreeController;
 use App\Http\Controllers\Agreements\StageController;
 use App\Http\Controllers\Agreements\SignerController;
 use App\Http\Controllers\Agreements\ProgramResolutionController;
+use App\Http\Controllers\Agreements\ContinuityResolutionController;
 use App\Http\Controllers\Agreements\AgreementController;
 use App\Http\Controllers\Agreements\AddendumController;
-use App\Http\Controllers\Agreements\ContinuityResolutionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -1332,6 +1333,9 @@ Route::prefix('documents')->as('documents.')->middleware(['auth', 'must.change.p
 
     Route::get('/approvals/{approval?}', ApprovalsMgr::class)->name('approvals');
     Route::get('/approvals/{approval}/pdf', [NoAttendanceRecordController::class,'signedApproval'])->name('signed.approval.pdf');
+
+    /** Ruta que muestra un PDF desde el storage */
+    Route::get('/approvals/{approval}/show-pdf', [ApprovalController::class,'showPdf'])->name('approvals.show-pdf');
 
 });
 

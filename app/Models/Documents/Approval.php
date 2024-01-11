@@ -106,10 +106,12 @@ class Approval extends Model
                 "no_attendance_record_id" => "2863"
             ]),
 
+            /* (Opcional) Ruta al archivo pdf que se va a mostrar y firmar, al setear esta variable se ignoran lass dos de arriba*/
+            "document_pdf_path" => "ionline/samples/dummy.pdf",
+
             /** Quien firma: Utilizar uno de los dos */
             /* (Opcional) De preferncia enviar la aprobación a la OU */
             "sent_to_ou_id" => 20,
-
 
             /* (Opcional) Se puede enviar directo a una persona (es el user_id), pero hay que evitarlo */
             //"sent_to_user_id" => 15287582,
@@ -217,6 +219,8 @@ class Approval extends Model
         'subject',
         'document_route_name',
         'document_route_params',
+        'document_pdf_path',    // Opcional
+
         'sent_to_ou_id',        // Enviado a una autoridad de una OU
         'sent_to_user_id',      // Enviado a un usuario en particular
 

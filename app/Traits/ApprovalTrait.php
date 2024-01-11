@@ -146,7 +146,10 @@ trait ApprovalTrait
                      */
                     $show_controller_method = Route::getRoutes()->getByName($approval->document_route_name)->getActionName();
                     $response = app()->call($show_controller_method, json_decode($approval->document_route_params, true));
+                    /** TODO: hacer que se lea el pdf desde document_pdf_path si es que está seteado o es el de arriba o este otro*/
                     $files[] = $response->original;
+
+
                     $positions[] = [  // Opcional
                         'column'        => $approval->position,     // 'left','center','right'
                         'row'           => 'first',                 // 'first','second'

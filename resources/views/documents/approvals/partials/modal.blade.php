@@ -52,7 +52,11 @@
                         @if($approvalSelected->digital_signature && $approvalSelected->status)
                             data="{{ $approvalSelected->filename_link }}"
                         @else
-                            data="{{ route($approvalSelected->document_route_name, json_decode($approvalSelected->document_route_params, true)) }}"
+                            @if($approvalSelected->document_pdf_path)
+                                data="{{ route('documents.approvals.show-pdf', $approvalSelected) }}"
+                            @else
+                                data="{{ route($approvalSelected->document_route_name, json_decode($approvalSelected->document_route_params, true)) }}"
+                            @endif
                         @endif
                         type="application/pdf"
                         width="100%"

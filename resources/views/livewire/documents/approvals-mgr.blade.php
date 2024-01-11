@@ -83,7 +83,11 @@
                         @if($approval->digital_signature && $approval->status)
                             href="{{ route('documents.signed.approval.pdf', $approval) }}"
                         @else
-                            href="{{ route($approval->document_route_name, json_decode($approval->document_route_params, true)) }}"
+                            @if($approval->document_pdf_path)
+                                href="{{ route('documents.approvals.show-pdf', $approval) }}"
+                            @else
+                                href="{{ route($approval->document_route_name, json_decode($approval->document_route_params, true)) }}"
+                            @endif
                         @endif
                     >
                         <i class="fas fa-fw fa-file-pdf"></i>
