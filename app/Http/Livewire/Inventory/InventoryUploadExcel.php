@@ -236,7 +236,7 @@ class InventoryUploadExcel extends Component
             foreach ($data as $key => $row) {
                 $user_sender = User::where('id', $row[10])->first();
                 $user_responsible = User::where('id', $row[11])->first();
-                $user_using = User::where('id', $row[12])->first();                
+                $user_using = User::where('id', $row[12])->first();
                 $movement = false;
                 if ($row[10] and $row[11] and $row[12]) {
                     $movement = true;
@@ -271,10 +271,17 @@ class InventoryUploadExcel extends Component
                     $inventoryData['user_responsible_id'] = $user_responsible->id;
                 }
                 if (!empty($row[18])) {
+                    
                     $inventory = Inventory::updateOrCreate(
                         ['establishment_id' => $this->establishment->id, 'old_number' => $row[18]],
                         $inventoryData
                     );
+                    
+                    if (empty($row[0]))
+                    {
+                    $inventory->number = $inventory->unspscProduct->code . '-' . $inventory->id;
+                    $inventory->save();
+                    }
                 }
                 else{
                     if (!empty($row[0])) {
