@@ -367,7 +367,7 @@ class RequestFormCreate extends Component
 
         if($this->editRF){
           // Editar formulario que ya tenga aprobaciones hechas
-          if($this->form_status == 'save' && $this->requestForm && $this->requestForm->hasFirstEventRequestFormSigned()){
+          if($this->form_status == 'save' && $this->requestForm && $this->requestForm->hasEventRequestForms()){
             if(in_array($this->requestForm->status, ['pending', 'rejected'])){
               $this->requestForm->eventRequestForms()->delete();
               $this->requestForm->update(['status' => 'pending']);
@@ -400,9 +400,6 @@ class RequestFormCreate extends Component
               //manager
               $type = 'manager';
               $mail_notification_ou_manager = Authority::getAuthorityFromDate($req->eventRequestForms->first()->ou_signer_user, now(), $type);
-              //secretary
-              // $type_adm = 'secretary';
-              // $mail_notification_ou_secretary = Authority::getAuthorityFromDate($req->eventRequestForms->first()->ou_signer_user, Carbon::now(), $type_adm);
 
               $emails = [$mail_notification_ou_manager->user->email];
 

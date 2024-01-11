@@ -195,7 +195,7 @@
 
 
     <div class="float-right">
-        <button wire:click="saveRequestForm('save')"  class="btn btn-primary btn-sm" type="button" wire:loading.attr="disabled" @if($requestForm && $requestForm->hasFirstEventRequestFormSigned()) onclick="confirm('Estimado/a, está solicitando editar un formulario que está en proceso de firma vigente el cual requiere partir de cero o bien ya fue aprobado pero requiere volver a refrendación para su aprobación. ¿Ud. está de acuerdo con continuar?') || event.stopImmediatePropagation()" @endif>
+        <button wire:click="saveRequestForm('save')"  class="btn btn-primary btn-sm" type="button" wire:loading.attr="disabled" @if($requestForm && $requestForm->hasEventRequestForms()) onclick="confirm('Estimado/a, está solicitando editar un formulario que está en proceso de firma vigente el cual requiere partir de cero o bien ya fue aprobado pero requiere volver a refrendación para su aprobación. ¿Ud. está de acuerdo con continuar?') || event.stopImmediatePropagation()" @endif>
             <i class="fas fa-save"></i> Guardar
         </button>
 
