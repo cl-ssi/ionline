@@ -146,6 +146,7 @@ class AllowanceSignController extends Controller
                     ]);
 
                     $lastApprovalId = $approval->id;
+                    $lastApproval = $approval;
                     $count++;
                 }
                 else{
@@ -210,7 +211,7 @@ class AllowanceSignController extends Controller
                     ]),
                     "document_pdf_path"                 => ($lastApprovalId == null) ? null : $lastApproval->filename,
                     "active"                            => false,
-                    "previous_approval_id"              => $lastApprovalId,
+                    "previous_approval_id"              => ($lastApprovalId == null) ? null : $lastApprovalId,
                     "callback_controller_method"        => "App\Http\Controllers\Allowances\AllowanceController@approvalCallback",
                     "callback_controller_params"        => json_encode([
                         'allowance_id'  => $allowanceSign->allowance->id,
