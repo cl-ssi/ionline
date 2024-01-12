@@ -23,7 +23,7 @@
         }
         
         .signature-container {
-            height: 80px;
+            height: 160px;
         }
         
     </style>
@@ -250,10 +250,13 @@
     <!-- Sección de las aprobaciones -->
     <div class="signature-container">
         <div class="signature" style="padding-left: 32px;">
+            {{--
             @include('sign.approvation', [
                 'approval' => $allowance->approvalLegacy,
             ])
+            --}}
         </div>
+        
         <div class="signature" style="padding-left: 6px; padding-right: 6px;">
             @if($approvals = $allowance->approvals->where('position', 'center'))
                 @foreach($approvals as $approval)
@@ -264,10 +267,12 @@
             @endif
         </div>
         <div class="signature">
-            @if($approval = $allowance->approvals->where('position', 'right')->first())
-                @include('sign.approvation', [
-                    'approval' => $approval,
-                ])
+            @if($approvals = $allowance->approvals->where('position', 'right'))
+                @foreach($approvals as $approval)
+                    @include('sign.approvation', [
+                        'approval' => $approval,
+                    ])
+                @endforeach
             @endif
         </div>
     </div>

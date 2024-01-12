@@ -14,6 +14,7 @@ trait ApprovalTrait
      * @param  Approval  $approval
      * @return void
      */
+
     public function show(Approval $approval)
     {
         /**
@@ -144,12 +145,19 @@ trait ApprovalTrait
                     /**
                      * Obtiene el archivo desde el controller con sus parametros y genera el PDF
                      */
-                    $show_controller_method = Route::getRoutes()->getByName($approval->document_route_name)->getActionName();
-                    $response = app()->call($show_controller_method, json_decode($approval->document_route_params, true));
-                    /** TODO: hacer que se lea el pdf desde document_pdf_path si es que está seteado o es el de arriba o este otro*/
-                    $files[] = $response->original;
+                    if($approval->document_pdf_path){
+                        // METODO get() obtiene el contenido.
+                        $response = Storage::disk('gcs')->get($approval->document_pdf_path);
 
+                        $files[] = $response;           
+                    }
+                    else{
+                        $show_controller_method = Route::getRoutes()->getByName($approval->document_route_name)->getActionName();
+                        $response = app()->call($show_controller_method, json_decode($approval->document_route_params, true));
 
+                        $files[] = $response->original;
+                    }
+ 
                     $positions[] = [  // Opcional
                         'column'        => $approval->position,     // 'left','center','right'
                         'row'           => 'first',                 // 'first','second'
@@ -179,7 +187,6 @@ trait ApprovalTrait
                 }
             }
         }
-
 
         /**
          * Cierra el modal

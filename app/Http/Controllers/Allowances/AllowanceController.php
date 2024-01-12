@@ -301,8 +301,8 @@ class AllowanceController extends Controller
 
     public function download_resol_pdf(Allowance $allowance)
     {
-        if( Storage::disk('gcs')->exists("ionline/allowances/resol_pdf/".$allowance->id.".pdf") ) {
-            return Storage::response("ionline/allowances/resol_pdf/".$allowance->id.".pdf");
+        if( Storage::disk('gcs')->exists($allowance->approvals->last()->filename) ) {
+            return Storage::response($allowance->approvals->last()->filename);
         } 
         else {
             return redirect()->back()->with('warning', 'El archivo no se ha encontrado.');

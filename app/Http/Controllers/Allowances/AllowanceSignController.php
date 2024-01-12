@@ -116,8 +116,10 @@ class AllowanceSignController extends Controller
                 }
 
                 $lastApprovalId = null;
+                $count = 1;
 
                 if($alw_ou_level == 1){
+                    //APPROVALS CUANDO JEFATURA ES DIRECTOR O VIATICO DE DIRECCION
                     $approval = $allowanceSign->allowance->approvals()->create([
                         "module"                            => "Viáticos",
                         "module_icon"                       => "bi bi-wallet",
@@ -125,10 +127,11 @@ class AllowanceSignController extends Controller
                                                                 Funcionario: '.$allowanceSign->allowance->userAllowance->FullName,
                         "sent_to_ou_id"                     => ($subroDir == null) ? Parameter::get('ou','DireccionSSI') : null,
                         "sent_to_user_id"                   => ($subroDir != null) ? $subroDir : null,
-                        "document_route_name"               => "allowances.show_approval",
+                        "document_route_name"               => "allowances.show_resol_pdf",
                         "document_route_params"             => json_encode([
                             "allowance_id" => $allowanceSign->allowance->id
                         ]),
+                        "document_pdf_path"                 => ($lastApprovalId == null) ? null : $lastApproval->filename,
                         "active"                            => true,
                         "previous_approval_id"              => $lastApprovalId,
                         "callback_controller_method"        => "App\Http\Controllers\Allowances\AllowanceController@approvalCallback",
@@ -136,24 +139,44 @@ class AllowanceSignController extends Controller
                             'allowance_id'  => $allowanceSign->allowance->id,
                             'process'       => null
                         ]),
+                        "digital_signature"                 => true,
                         "position"                          => "center",
+                        "start_y"                           => 82,
+                        "filename"                          => "ionline/allowances/resol_pdf/".$allowanceSign->allowance->id."_".$count.".pdf"
                     ]);
 
                     $lastApprovalId = $approval->id;
+                    $count++;
                 }
                 else{
                     //APPROVAL DE JEFATURAS DIRECTAS
                     for ($i = $alw_ou_level; $i >= 2; $i--){
+                        //VALORES PARA UBICAR LA FIRMA EN
+                        if($count == 1){
+                            $start = 82;
+                        }
+                        if($count == 2){
+                            $start = 46;
+                        }
+                        if($count == 3){
+                            $start = 10;
+                        }
+                        if($count == 4){
+                            $start = -26;
+                        }
+                        /* ******************************* */
+
                         $approval = $allowanceSign->allowance->approvals()->create([
                             "module"                            => "Viáticos",
                             "module_icon"                       => "bi bi-wallet",
                             "subject"                           => 'Solicitud de Viático: ID '.$allowanceSign->allowance->id.'<br>
                                                                     Funcionario: '.$allowanceSign->allowance->userAllowance->FullName,
                             "sent_to_ou_id"                     => $currentOu->id,
-                            "document_route_name"               => "allowances.show_approval",
+                            "document_route_name"               => "allowances.show_resol_pdf",
                             "document_route_params"             => json_encode([
-                                "allowance_id" => $allowanceSign->allowance->id
+                                "allowance_id" => $allowanceSign->allowance->id,
                             ]),
+                            "document_pdf_path"                 => ($lastApprovalId == null) ? null : $lastApproval->filename,
                             "active"                            => ($lastApprovalId == null) ? true : false,
                             "previous_approval_id"              => $lastApprovalId,
                             "callback_controller_method"        => "App\Http\Controllers\Allowances\AllowanceController@approvalCallback",
@@ -161,15 +184,20 @@ class AllowanceSignController extends Controller
                                 'allowance_id'  => $allowanceSign->allowance->id,
                                 'process'       => null
                             ]),
+                            "digital_signature"                 => true,
                             "position"                          => "center",
+                            "start_y"                           => $start,
+                            "filename"                          => "ionline/allowances/resol_pdf/".$allowanceSign->allowance->id."_".$count.".pdf"
                         ]);
 
                         $currentOu = $currentOu->father;
+                        $lastApproval = $approval;
                         $lastApprovalId = $approval->id;
+                        $count++;
                     }
                 }
 
-                //APPROVAL DE FINANZAS
+                // APPROVAL DE FINANZAS
                 $approval = $allowanceSign->allowance->approvals()->create([
                     "module"                            => "Viáticos",
                     "module_icon"                       => "bi bi-wallet",
@@ -180,6 +208,7 @@ class AllowanceSignController extends Controller
                     "document_route_params"             => json_encode([
                         "allowance_id" => $allowanceSign->allowance->id
                     ]),
+                    "document_pdf_path"                 => ($lastApprovalId == null) ? null : $lastApproval->filename,
                     "active"                            => false,
                     "previous_approval_id"              => $lastApprovalId,
                     "callback_controller_method"        => "App\Http\Controllers\Allowances\AllowanceController@approvalCallback",
@@ -189,8 +218,8 @@ class AllowanceSignController extends Controller
                     ]),
                     "digital_signature"                 => true,
                     "position"                          => "right",
-                    "start_y"                           => 22,
-                    "filename"                          => "ionline/allowances/resol_pdf/".$allowanceSign->allowance->id.".pdf"
+                    "start_y"                           => 82,
+                    "filename"                          => "ionline/allowances/resol_pdf/".$allowanceSign->allowance->id."_".$count.".pdf"
                 ]);
             }
             else{
@@ -198,9 +227,6 @@ class AllowanceSignController extends Controller
                 return redirect()->route('allowances.show', $allowanceSign->allowance)->with('danger', 'Estimado usuario: No es posible aprobar viático, favor contactar a soporte para configurar autoridades');
             }
             
-            
-
-
             //ANTIGUO SISTEMA DE APROBACIONES
             /*
             //Se agrega folio SIRH
