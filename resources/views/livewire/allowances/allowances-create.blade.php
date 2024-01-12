@@ -298,7 +298,7 @@
         </fieldset>
 
         <div class="form-group col-12 col-md-4 text-center">
-            <label for="name" class="col-form-label">Sólo medios días (Inlcusive):</label>
+            <label for="name" class="col-form-label">Solo medios días (Inclusive):</label>
             <br>
             <div class="form-check form-check-inline">
                 <input class="form-check-input" type="checkbox" value="1" id="for_half_days_only" wire:model="halfDaysOnly" {{ $disabledHalfDayOnly }}>
