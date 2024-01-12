@@ -55,7 +55,7 @@ class OpenHourController extends Controller
                                             })
                                             ->count(); 
         if($othersReservationsCount>0){
-            session()->flash('warning', 'No es posible realizar la reserva del paciente, porque otra a la misma hora con otro funcionario.');
+            session()->flash('warning', 'No es posible realizar la reserva del paciente, porque tiene otra reserva a la misma hora con otro funcionario.');
             return redirect()->back();
         }
 
@@ -139,6 +139,13 @@ class OpenHourController extends Controller
 
     public function destroy(Request $request){
         $openHour = OpenHour::find($request->openHours_id);
+
+        // validación
+        if($openHour->start_date < now()){
+            session()->flash('warning', 'No es posible suprimir un bloque que haya transcurrido.');
+            return redirect()->back();
+        }
+
         $openHour->delete();
         
         session()->flash('success', 'Se eliminó el bloque.');
@@ -147,6 +154,13 @@ class OpenHourController extends Controller
 
     public function delete_reservation(Request $request){
         $openHour = OpenHour::find($request->openHours_id);
+
+        // validación
+        if($openHour->start_date < now()){
+            session()->flash('warning', 'No es posible eliminar una reserva de un bloque que haya trasncurrido.');
+            return redirect()->back();
+        }
+
         $openHour->deleted_bloqued_observation = now() . ": Se eliminó la reserva de " . $openHour->patient->shortName . ". Motivo: " . $request->deleted_bloqued_observation;
         $openHour->patient_id = null;
         $openHour->observation = null;
@@ -175,6 +189,13 @@ class OpenHourController extends Controller
 
     public function block(Request $request){
         $openHour = OpenHour::find($request->openHours_id);
+
+        // validación
+        if($openHour->start_date < now()){
+            session()->flash('warning', 'No es posible bloquear un bloque que haya trasncurrido.');
+            return redirect()->back();
+        }
+
         $openHour->deleted_bloqued_observation = now() . ": Motivo del bloqueo: " . $request->deleted_bloqued_observation;
         $openHour->blocked = true;
         $openHour->save();
@@ -185,6 +206,13 @@ class OpenHourController extends Controller
 
     public function unblock(Request $request){
         $openHour = OpenHour::find($request->openHours_id);
+
+        // validación
+        if($openHour->start_date < now()){
+            session()->flash('warning', 'No es posible desbloquear un bloque que haya trasncurrido.');
+            return redirect()->back();
+        }
+
         $openHour->deleted_bloqued_observation = null;
         $openHour->blocked = false;
         $openHour->save();
@@ -197,6 +225,13 @@ class OpenHourController extends Controller
         $start_date = Carbon::parse($start_date);
 
         $openHour = OpenHour::find($id);
+
+        // validación
+        if($openHour->start_date < now()){
+            session()->flash('warning', 'No es modificar el horario de un bloque que haya trasncurrido.');
+            return redirect()->back();
+        }
+
         $duration = $openHour->start_date->diffInMinutes($openHour->end_date);
         $openHour->start_date = $start_date;
         $openHour->end_date = $start_date->addMinutes($duration);
@@ -235,6 +270,13 @@ class OpenHourController extends Controller
         $date = Carbon::parse($request->date);
         $start_date = Carbon::parse($date->format('Y-m-d') . " " . $request->start_hour);
         $end_date = Carbon::parse($date->format('Y-m-d') . " " . $request->end_hour);
+
+        // validación
+        if($end_date < now()){
+            session()->flash('warning', 'No es modificar eliminar bloques que hayan trasncurrido.');
+            return redirect()->back();
+        }
+
         OpenHour::whereBetween('start_date',[$start_date,$end_date])->where('profesional_id',$request->profesional_id)->delete();
         session()->flash('success', 'Se eliminaron los bloques.');
         return redirect()->back();
