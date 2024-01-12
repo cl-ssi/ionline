@@ -14,10 +14,10 @@
 
 <hr>
 
-@livewire('rrhh.ami-loads-import')
+@livewire('rrhh.compensatory-days-import')
 
 <hr>
 
-@livewire('rrhh.compensatory-days-import')
+@livewire('rrhh.ami-loads-import')
 
 @endsection

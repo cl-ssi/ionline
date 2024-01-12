@@ -34,7 +34,7 @@
                 <th>Nombre</th>
                 <th>Cargado en AMIPASS</th>
                 <th>Calculo Sistema</th>
-                <th>Valor (S.T)</th>  <!-- debe eliminarse esta columna -->
+                <!-- <th>Valor (S.T)</th>  debe eliminarse esta columna -->
                 <th>Diferencia</th>
                 <th>Tipo</th>
             </tr>
@@ -51,7 +51,7 @@
                             <td>{{ $user->shortName }}</td>
                             <td>{{ money($user->AmiLoadMount) }}</td>
                             <td>{{ money($user->ammount) }}</td>
-                            <td>{{ money($user->valor_debia_cargarse) }}</td> <!-- debe eliminarse esta columna -->
+                            <!-- <td>{{ money($user->valor_debia_cargarse) }}</td> debe eliminarse esta columna -->
                             <td>
                                 @if($user->diff < 0)
                                     <p style="color:red;display: inline;">
@@ -158,7 +158,7 @@
                             <td>{{ $user->shortName }}</td>
                             <td>{{ money($user->AmiLoadMount) }}</td>
                             <td>{{ money($user->shifts->sum('ammount')) }}</td>
-                            <td>{{ money($user->valor_debia_cargarse) }}</td>
+                            <!-- <td>{{ money($user->valor_debia_cargarse) }}</td> -->
                             <td>
                                 @if($user->diff < 0)
                                     <p style="color:red;display: inline;">

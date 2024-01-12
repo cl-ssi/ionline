@@ -48,10 +48,12 @@ class ReportByDates extends Component
         $endDate = Carbon::createFromDate($year, $month)->endOfMonth();
 
         // Se deben obtener los feriados del mes siguiente, por ende se suma un mes a la fecha de analisis
+        $holidays = Holiday::whereBetween('date', [$startDate, $endDate])->get();
+
         $start = $startDate->copy();
         $holidays_search_start_date = $start->addMonth();
         $holidays_search_end_date = $holidays_search_start_date->copy()->endOfMonth();
-        $holidays = Holiday::whereBetween('date', [$holidays_search_start_date, $holidays_search_end_date])->get();
+        $holidaysNextMonth = Holiday::whereBetween('date', [$holidays_search_start_date, $holidays_search_end_date])->get();
 
         // se obtiene id del ausentismo descanso compensatorio
         $compensatoryAbsenteeismType = AbsenteeismType::find(5);
@@ -98,13 +100,14 @@ class ReportByDates extends Component
                         // ->where('shift',0); se traen todos, abajo se hace el filtro
                 });
             })
-            // ->whereIn('id',[9787020])
+            // ->whereIn('id',[17431050])
             ->get();   
 
         foreach($this->userWithContracts as $row => $user) {
             $user = $user->getAmipassData($startDate, 
                                         $endDate, 
                                         $holidays, 
+                                        $holidaysNextMonth,
                                         $compensatoryAbsenteeismType);
 
             // para exportación

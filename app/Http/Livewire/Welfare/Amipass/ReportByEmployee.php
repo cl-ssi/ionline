@@ -80,10 +80,12 @@ class ReportByEmployee extends Component
             $startDate = $period->copy();
             $endDate = $period->endOfMonth();
 
+            $holidays = Holiday::whereBetween('date', [$startDate, $endDate])->get();
+
             // Se deben obtener los feriados del mes siguiente, por ende se suma un mes a la fecha de analisis
             $holidays_search_start_date = $startDate->addMonth();
             $holidays_search_end_date = $holidays_search_start_date->copy()->endOfMonth();
-            $holidays = Holiday::whereBetween('date', [$holidays_search_start_date, $holidays_search_end_date])->get();
+            $holidaysNextMonth = Holiday::whereBetween('date', [$holidays_search_start_date, $holidays_search_end_date])->get();
             
 
             /* Obtener los usuarios que tienen contratos en un rango de fecha con sus ausentismos */
@@ -134,7 +136,11 @@ class ReportByEmployee extends Component
             // dd($this->userWithContracts);
 
             if($this->userWithContracts->count() > 0){
-                $this->calculatedData[$startDate->format('Y-m')] = $this->userWithContracts->first()->getAmipassData($startDate,$endDate,$holidays,$compensatoryAbsenteeismType);   
+                $this->calculatedData[$startDate->format('Y-m')] = $this->userWithContracts->first()->getAmipassData($startDate,
+                                                                                                                    $endDate,
+                                                                                                                    $holidays,
+                                                                                                                    $holidaysNextMonth,
+                                                                                                                    $compensatoryAbsenteeismType);   
             }
         }
     }
