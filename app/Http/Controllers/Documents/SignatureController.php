@@ -33,6 +33,7 @@ use App\Models\Agreements\Agreement;
 use App\Models\Agreements\Addendum;
 use App\Http\Controllers\Controller;
 use App\Models\Agreements\ContinuityResolution;
+use App\Notifications\Documents\PendingSign;
 
 class SignatureController extends Controller
 {
@@ -683,6 +684,21 @@ class SignatureController extends Controller
         $pendingSignaturesFlows = SignaturesFlow::findMany($pendingSignaturesFlowIdsArray);
 
         return view('documents.signatures.partials.mass_sign_modal_content', compact('pendingSignaturesFlows'));
+    }
+
+    public function notificationPending($signatureId)
+    {
+        
+        $signature = Signature::findOrFail($signatureId);
+
+        $pendingFlows = $signature->pendingSignaturesFlows();
+        
+        foreach ($pendingFlows as $pendingFlow) {
+            $user = $pendingFlow->userSigner;
+            $user->notify(new PendingSign($signature));
+        }
+        return redirect()->route('documents.signatures.index', ['pendientes'])
+                        ->with('success', 'Notificación enviada correctamente');
     }
 
 }

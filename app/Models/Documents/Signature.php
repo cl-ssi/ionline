@@ -79,6 +79,11 @@ class Signature extends Model implements Auditable
             ->signaturesFlows->where('type', 'firmante')->first();
     }
 
+    public function pendingSignaturesFlows()
+    {        
+        return $this->signaturesFlows->where('status', null);
+    }
+
     /**
      * @return mixed Retorna collection
      */
