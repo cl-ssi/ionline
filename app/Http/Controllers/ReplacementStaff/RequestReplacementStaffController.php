@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers\ReplacementStaff;
 
 use App\Models\ReplacementStaff\RequestReplacementStaff;
@@ -172,29 +171,30 @@ class RequestReplacementStaffController extends Controller
 
     public function create_replacement()
     {
-        // session()->flash('danger', 'Estimados Usuario: No es posible crear solicitudes debido a mantención programada, agradecemos su comprensión');
-        // return redirect()->route('replacement_staff.request.own_index');
+        session()->flash('danger', 'Estimados Usuario: No es posible crear solicitudes debido a mantención programada, agradecemos su comprensión');
+        return redirect()->route('replacement_staff.request.own_index');
 
-        return view('replacement_staff.request.create_replacement');
+        // return view('replacement_staff.request.create_replacement');
     }
 
     public function create_announcement()
     {
-        // session()->flash('danger', 'Estimados Usuario: No es posible crear solicitudes debido a mantención programada, agradecemos su comprensión');
-        // return redirect()->route('replacement_staff.request.own_index');
+        session()->flash('danger', 'Estimados Usuario: No es posible crear solicitudes debido a mantención programada, agradecemos su comprensión');
+        return redirect()->route('replacement_staff.request.own_index');
         
 
-        return view('replacement_staff.request.create_announcement');
+        // return view('replacement_staff.request.create_announcement');
     }
 
     public function create_extension(RequestReplacementStaff $requestReplacementStaff)
     {
-        /*
         session()->flash('danger', 'Estimados Usuario: No es posible crear solicitudes debido a mantención programada, agradecemos su comprensión');
         return redirect()->route('replacement_staff.request.own_index');
-        */
+        
+        /*
         $ouRoots = OrganizationalUnit::where('level', 1)->get();
         return view('replacement_staff.request.create_extension', compact('requestReplacementStaff', 'ouRoots'));
+        */
     }
 
     /**
