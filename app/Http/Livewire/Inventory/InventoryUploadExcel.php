@@ -255,7 +255,7 @@ class InventoryUploadExcel extends Component
                     'place_id' => $place->id,
                     //debe ser con el auth() o con el sender ¿? lo hice con el user_sender
                     'request_user_ou_id' => Auth::user()->organizationalUnit->id,
-                    'request_user_id' => Auth::user()->id,
+                    //'request_user_id' => Auth::user()->id,
                     // 'user_responsible_id' => $user_responsible->id,
                     // 'user_using_id' => $user_using->id,
                     'observations' => $row[13],
@@ -267,8 +267,11 @@ class InventoryUploadExcel extends Component
                 ];
 
                 if ($movement) {
+                    $inventoryData['request_user_ou_id'] = $user_sender->organizational_unit_id;
+                    $inventoryData['request_user_id'] = $user_sender->id;
                     $inventoryData['user_using_id'] = $user_using->id;
                     $inventoryData['user_responsible_id'] = $user_responsible->id;
+                    
                 }
                 if (!empty($row[18])) {
                     
