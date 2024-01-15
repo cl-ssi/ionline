@@ -48,9 +48,7 @@
                 <i class="fa fa-folder-open"></i> Aperturar agenda
             </a>
         </li>
-    @endcanany
 
-    @canany(['Agenda UST: Administrador'])
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle {{active('prof_agenda.activity_types.*')}}"
             data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
@@ -65,9 +63,11 @@
 
             </div>
         </li>
+    @endcanany
 
+    @canany(['Agenda UST: Administrador'])
         <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle {{active('prof_agenda.activity_types.*')}}"
+            <a class="nav-link dropdown-toggle {{active('prof_agenda.reports.*')}}"
             data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
                 <i class="fas fa-clipboard-check"></i> Reportes
             </a>
