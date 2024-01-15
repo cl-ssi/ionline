@@ -47,7 +47,7 @@ class InventoriesExport implements FromCollection, WithHeadings, WithMapping, Sh
 
     public function map($inventory): array
     {
-        $description = '';
+        //$description = '';
         $status = '';
 
         switch ($inventory->status) {
@@ -79,7 +79,7 @@ class InventoriesExport implements FromCollection, WithHeadings, WithMapping, Sh
 
         return [
             $inventory->number,
-            $description,
+            $inventory->description,
             optional($inventory->unspscProduct)->code,
             $inventory->brand,
             $inventory->model,
