@@ -1319,6 +1319,7 @@ Route::prefix('documents')->as('documents.')->middleware(['auth', 'must.change.p
     });
 
     Route::get('signatures/index/{tab}', [SignatureController::class, 'index'])->name('signatures.index');
+    Route::get('signatures/notification-pending/{id}', [SignatureController::class, 'notificationPending'])->name('signatures.notificationPending');
     Route::get('signatures/create/{xAxis?}/{yAxis?}', [SignatureController::class, 'create'])->name('signatures.create');
     Route::resource('signatures', SignatureController::class)->except(['index', 'create']);
     Route::get('/showPdf/{signaturesFile}/{timestamp?}', [SignatureController::class, 'showPdf'])->name('signatures.showPdf');

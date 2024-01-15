@@ -413,7 +413,9 @@
                         @livewire('documents.signature.distribute',['signature' => $signature])
                         @elseif($signature->signaturesFlows->where('status', '===' , 0)->count() > 0)
                         <p class="text-danger">Rechazo</p>
-                        @else Pendiente</p> @endif
+                        @else Pendiente</p> 
+
+                        <a href="{{ route('documents.signatures.notificationPending', ['id' => $signature->id]) }}"><i class="fas fa-bell"></i><small> Volver a Notificar</small></a> @endif
                     </td>
                     <td>
 
