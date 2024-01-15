@@ -24,7 +24,7 @@ class InventoriesExport implements FromCollection, WithHeadings, WithMapping, Sh
     {
         return [
             "numero-inventario",
-            "descripcion (especificaciones tecnicas)",
+            "descripcion",
             "código producto estandar ONU (productUNSPSC)",
             "marca",
             "modelo",
@@ -48,16 +48,34 @@ class InventoriesExport implements FromCollection, WithHeadings, WithMapping, Sh
     public function map($inventory): array
     {
         $description = '';
+        $status = '';
 
-        if ($inventory->unspscProduct) {
-            $description .= 'Std: ' . rtrim($inventory->unspscProduct->name) . "\n";
+        switch ($inventory->status) {
+                case -1:
+                $status = 'MALO';
+                break;
+            case 0:
+                $status = 'REGULAR';
+                break;
+            case 1:
+                $status = 'BUENO';
+                break;
+            default:
+                $status = 0;
+                break;
         }
 
-        if ($inventory->product) {
-            $description .= 'Bodega: ' . rtrim($inventory->product->name);
-        } else {
-            $description .= 'Desc: ' . rtrim($inventory->description);
-        }
+
+
+        // if ($inventory->unspscProduct) {
+        //     $description .= 'Std: ' . rtrim($inventory->unspscProduct->name) . "\n";
+        // }
+
+        // if ($inventory->product) {
+        //     $description .= 'Bodega: ' . rtrim($inventory->product->name);
+        // } else {
+        //     $description .= 'Desc: ' . rtrim($inventory->description);
+        // }
 
         return [
             $inventory->number,
@@ -68,7 +86,8 @@ class InventoriesExport implements FromCollection, WithHeadings, WithMapping, Sh
             $inventory->serial_number,
             $inventory->useful_life,
             $inventory->po_code,
-            $inventory->status,
+            //$inventory->status,
+            $status,
             $inventory->place_id,
             $inventory->request_user_id,
             $inventory->user_responsible_id,
@@ -77,7 +96,7 @@ class InventoriesExport implements FromCollection, WithHeadings, WithMapping, Sh
             $inventory->po_price,
             $inventory->accounting_code_id,
             $inventory->dte_number,
-            $inventory->deliver_date,
+            $inventory->lastMovement?->reception_date,
             $inventory->old_number,
         ];
     }
