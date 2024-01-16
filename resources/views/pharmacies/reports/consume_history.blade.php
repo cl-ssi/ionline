@@ -14,7 +14,7 @@
     	<div class="input-group-prepend">
     		<span class="input-group-text">Año</span>
     	</div>
-    	<select name="year" class="form-control">
+    	<select name="year" class="form-control" required>
             <option value="{{Carbon\Carbon::now()->format('Y')-3}}" @selected($request->get('year')==Carbon\Carbon::now()->format('Y')-3)>{{Carbon\Carbon::now()->format('Y')-3}}</option>
             <option value="{{Carbon\Carbon::now()->format('Y')-2}}" @selected($request->get('year')==Carbon\Carbon::now()->format('Y')-2)>{{Carbon\Carbon::now()->format('Y')-2}}</option>
     		<option value="{{Carbon\Carbon::now()->format('Y')-1}}" @selected($request->get('year')==Carbon\Carbon::now()->format('Y')-1)>{{Carbon\Carbon::now()->format('Y')-1}}</option>
@@ -26,8 +26,8 @@
     	<div class="input-group-prepend">
     		<span class="input-group-text">Categorías</span>
     	</div>
-    	<select name="category_id" class="form-control">
-    		<option value="0">Todos</option>
+    	<select name="category_id" class="form-control" required>
+    		<option value=""></option>
     		@foreach ($categories as $key => $category)
         		<option value="{{$category->id}}" @if ($category->id == $request->get('category_id'))
         		selected
@@ -39,8 +39,8 @@
     	<div class="input-group-prepend">
     		<span class="input-group-text">Programas</span>
     	</div>
-    	<select name="program_id" class="form-control">
-    		<option value="0">Todos</option>
+    	<select name="program_id" class="form-control" required>
+    		<option value=""></option>
     		@foreach ($programs as $key => $program)
         		<option value="{{$program->id}}" @if ($program->id == $request->get('program_id'))
         		selected
