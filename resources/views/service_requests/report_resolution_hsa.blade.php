@@ -232,7 +232,15 @@
       <p class="justify">
         <strong>VISTOS:</strong><br>
         <!-- 07/06/2023: Ajuste solicitado por Carol Pérez  -->
-        En estos antecedentes, según lo dispuesto según inciso final del Art. 2º y 3º del Decreto Nº 98 de 1991 del Ministerio de Hacienda, Circular Nº 2C/45 de 1998 del Ministerio de Salud, Art. 11° del D.F.L. Nº29/04 que fija texto refundido, coordinado y sistematizado de la Ley 18.834/89 sobre Estatuto Administrativo, Ley Nº 21.516/2022 de Presupuesto del Sector Público para el año 2023 D.F.L. Nº01/05 que fija texto refundido, coordinado y sistematizado, del Ministerio de Salud, Decreto Ley Nº 2.763 de 1979 y de las Leyes Nos. 18.933 y 18.469; Decreto N° 140/04, del Ministerio de Salud que aprobó el Reglamento Orgánico de los Servicios de Salud;  Decreto Afecto N° 56, de 29 de diciembre de 2022, del Ministerio de Salud<br>
+        En estos antecedentes, según lo dispuesto según inciso final del Art. 2º y 3º del Decreto Nº 98 de 1991 del Ministerio de Hacienda, 
+        Circular Nº 2C/45 de 1998 del Ministerio de Salud, Art. 11° del D.F.L. Nº29/04 que 
+        fija texto refundido, coordinado y sistematizado de la Ley 18.834/89 sobre Estatuto Administrativo, 
+        <!-- Ley Nº 21.516/2022 de Presupuesto del Sector Público para el año 2023  --> <!--16/01: solicitado por carol perez-->
+        Ley Nº 21.640/2023 de Presupuesto del Sector Público para el año 2024
+        D.F.L. Nº01/05 que fija texto refundido, 
+        coordinado y sistematizado, del Ministerio de Salud, Decreto Ley Nº 2.763 de 1979 y de las Leyes Nos. 18.933 y 18.469; Decreto N° 140/04, del Ministerio de Salud 
+        que aprobó el Reglamento Orgánico de los Servicios de Salud;  
+        Decreto Afecto N° 56, de 29 de diciembre de 2022, del Ministerio de Salud<br>
       </p>
 
       @endif
