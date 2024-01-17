@@ -14,6 +14,10 @@ class Fusion extends Component
     public $item_b;
     public $fusion;
 
+    public $input_item_a_checked = null;
+    public $input_item_b_checked = null;
+
+
     protected $rules = [
         'input_item_a' => 'required',
         'input_item_b' => 'required',
@@ -51,10 +55,20 @@ class Fusion extends Component
             'fusion.old_number' => 'required',
         ]);
         app('debugbar')->log($this->fusion);
+        dd("");
     }
 
     public function render()
     {
+        $this->input_item_a_checked = null;
+        $this->input_item_b_checked = null;
+        if($this->fusion != null){
+            if($this->fusion['id'][0] == "A"){
+                $this->input_item_a_checked = "checked";
+            }else{
+                $this->input_item_b_checked = "checked";
+            }
+        }
         return view('livewire.inventory.fusion');
     }
 }

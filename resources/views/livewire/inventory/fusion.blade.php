@@ -61,8 +61,8 @@
                                 type="radio"
                                 name="for-id"
                                 id="for-id"
-                                wire:model.defer="fusion.id"
-                                value="{{ $item_a->id }}"
+                                wire:model="fusion.id"
+                                value="A{{ $item_a->id }}"
                                 required>
                             <label class="form-check-label"
                                 for="for-id">{{ $item_a->number }}</label>
@@ -74,8 +74,8 @@
                                 type="radio"
                                 name="for-id"
                                 id="for-id"
-                                wire:model.defer="fusion.id"
-                                value="{{ $item_b->id }}">
+                                wire:model="fusion.id"
+                                value="B{{ $item_b->id }}">
                             <label class="form-check-label"
                                 for="for-id">{{ $item_b->number }}</label>
                         </div>
@@ -94,7 +94,7 @@
                                 type="radio"
                                 name="for-old_number"
                                 id="for-old_number"
-                                wire:model.defer="fusion.old_number"
+                                @if($item_a->old_number == $item_b->old_number) {{$input_item_a_checked}} @endif
                                 value="{{ $item_a->old_number }}">
                             <label class="form-check-label"
                                 for="for-old_number">{{ $item_a->old_number }}</label>
@@ -105,7 +105,7 @@
                             <input class="form-check-input @error('fusion.old_number') is-invalid @enderror"
                                 type="radio"
                                 name="for-old_number"
-                                wire:model.defer="fusion.old_number"
+                                @if($item_a->old_number == $item_b->old_number) {{$input_item_b_checked}} @endif
                                 value="{{ $item_b->old_number }}">
                             <label class="form-check-label"
                                 for="for-old_number">{{ $item_b->old_number }}</label>
@@ -125,6 +125,7 @@
                                 type="radio"
                                 name="for-code"
                                 id="for-code"
+                                @if($item_a->unspsc_product_id == $item_b->unspsc_product_id) {{$input_item_a_checked}} @endif
                                 value="A"
                                 required>
                             <label class="form-check-label"
@@ -138,6 +139,7 @@
                                 type="radio"
                                 name="for-code"
                                 id="for-code"
+                                @if($item_a->unspsc_product_id == $item_b->unspsc_product_id) {{$input_item_b_checked}} @endif
                                 value="B">
                             <label class="form-check-label"
                                 for="for-code">{{ $item_b->unspscProduct->code }} -
@@ -156,6 +158,7 @@
                                 type="radio"
                                 name="for-description"
                                 id="for-description"
+                                @if($item_a->description == $item_b->description) {{$input_item_a_checked}} @endif
                                 value="A"
                                 required>
                             <label class="form-check-label"
@@ -168,6 +171,7 @@
                                 type="radio"
                                 name="for-description"
                                 id="for-description"
+                                @if($item_a->description == $item_b->description) {{$input_item_b_checked}} @endif
                                 value="B">
                             <label class="form-check-label"
                                 for="for-description">{{ $item_b->product ? $item_b->product->name : $item_b->description }}</label>
@@ -188,6 +192,7 @@
                                 type="radio"
                                 name="for-internal_description"
                                 id="for-internal_description"
+                                @if($item_a->internal_description == $item_b->internal_description) {{$input_item_a_checked}} @endif
                                 value="A">
                             <label class="form-check-label"
                                 for="for-internal_description">{{ $item_a->internal_description }}</label>
@@ -199,6 +204,7 @@
                                 type="radio"
                                 name="for-internal_description"
                                 id="for-internal_description"
+                                @if($item_a->internal_description == $item_b->internal_description) {{$input_item_b_checked}} @endif
                                 value="B">
                             <label class="form-check-label"
                                 for="for-internal_description">{{ $item_b->internal_description }}</label>
@@ -216,6 +222,7 @@
                                 type="radio"
                                 name="for-brand"
                                 id="for-brand"
+                                @if($item_a->brand == $item_b->brand) {{$input_item_a_checked}} @endif
                                 value="A">
                             <label class="form-check-label"
                                 for="for-brand">{{ $item_a->brand }}</label>
@@ -227,6 +234,7 @@
                                 type="radio"
                                 name="for-brand"
                                 id="for-brand"
+                                @if($item_a->brand == $item_b->brand) {{$input_item_b_checked}} @endif
                                 value="B">
                             <label class="form-check-label"
                                 for="for-brand">{{ $item_b->brand }}</label>
@@ -244,6 +252,7 @@
                                 type="radio"
                                 name="for-model"
                                 id="for-model"
+                                @if($item_a->model == $item_b->model) {{$input_item_a_checked}} @endif
                                 value="A">
                             <label class="form-check-label"
                                 for="for-model">{{ $item_a->model }}</label>
@@ -255,6 +264,7 @@
                                 type="radio"
                                 name="for-model"
                                 id="for-model"
+                                @if($item_a->model == $item_b->model) {{$input_item_b_checked}} @endif
                                 value="B">
                             <label class="form-check-label"
                                 for="for-model">{{ $item_b->model }}</label>
@@ -272,6 +282,7 @@
                                 type="radio"
                                 name="for-serial_number"
                                 id="for-serial_number"
+                                @if($item_a->serial_number == $item_b->serial_number) {{$input_item_a_checked}} @endif
                                 value="A">
                             <label class="form-check-label"
                                 for="for-serial_number">{{ $item_a->serial_number }}</label>
@@ -283,6 +294,7 @@
                                 type="radio"
                                 name="for-serial_number"
                                 id="for-serial_number"
+                                @if($item_a->serial_number == $item_b->serial_number) {{$input_item_b_checked}} @endif
                                 value="B">
                             <label class="form-check-label"
                                 for="for-serial_number">{{ $item_b->serial_number }}</label>
@@ -302,6 +314,7 @@
                                 type="radio"
                                 name="for-accounting_code_id"
                                 id="for-accounting_code_id"
+                                @if($item_a->accounting_code_id == $item_b->accounting_code_id) {{$input_item_a_checked}} @endif
                                 value="A">
                             <label class="form-check-label"
                                 for="for-accounting_code_id">{{ $item_a->accountingCode?->name }}</label>
@@ -313,6 +326,7 @@
                                 type="radio"
                                 name="for-accounting_code_id"
                                 id="for-accounting_code_id"
+                                @if($item_a->accounting_code_id == $item_b->accounting_code_id) {{$input_item_b_checked}} @endif
                                 value="B">
                             <label class="form-check-label"
                                 for="for-accounting_code_id">{{ $item_b->accountingCode?->name }}</label>
@@ -330,6 +344,7 @@
                                 type="radio"
                                 name="for-status"
                                 id="for-status"
+                                @if($item_a->status == $item_b->status) {{$input_item_a_checked}} @endif
                                 value="A">
                             <label class="form-check-label"
                                 for="for-status">{{ $item_a->status }}</label>
@@ -341,6 +356,7 @@
                                 type="radio"
                                 name="for-status"
                                 id="for-status"
+                                @if($item_a->status == $item_b->status) {{$input_item_b_checked}} @endif
                                 value="B">
                             <label class="form-check-label"
                                 for="for-status">{{ $item_b->status }}</label>
@@ -358,6 +374,7 @@
                                 type="radio"
                                 name="for-useful_life"
                                 id="for-useful_life"
+                                @if($item_a->useful_life == $item_b->useful_life) {{$input_item_a_checked}} @endif
                                 value="A">
                             <label class="form-check-label"
                                 for="for-useful_life">{{ $item_a->useful_life }}</label>
@@ -369,6 +386,7 @@
                                 type="radio"
                                 name="for-useful_life"
                                 id="for-useful_life"
+                                @if($item_a->useful_life == $item_b->useful_life) {{$input_item_b_checked}} @endif
                                 value="B">
                             <label class="form-check-label"
                                 for="for-useful_life">{{ $item_b->useful_life }}</label>
@@ -386,6 +404,7 @@
                                 type="radio"
                                 name="for-depreciation"
                                 id="for-depreciation"
+                                @if($item_a->depreciation == $item_b->depreciation) {{$input_item_a_checked}} @endif
                                 value="A">
                             <label class="form-check-label"
                                 for="for-depreciation">{{ $item_a->depreciation }}</label>
@@ -397,6 +416,7 @@
                                 type="radio"
                                 name="for-depreciation"
                                 id="for-depreciation"
+                                @if($item_a->depreciation == $item_b->depreciation) {{$input_item_b_checked}} @endif
                                 value="B">
                             <label class="form-check-label"
                                 for="for-depreciation">{{ $item_b->depreciation }}</label>
@@ -414,6 +434,7 @@
                                 type="radio"
                                 name="for-store_id"
                                 id="for-store_id"
+                                @if($item_a->store_id == $item_b->store_id) {{$input_item_a_checked}} @endif
                                 value="A">
                             <label class="form-check-label"
                                 for="for-store_id">
@@ -427,6 +448,7 @@
                                 type="radio"
                                 name="for-store_id"
                                 id="for-store_id"
+                                @if($item_a->store_id == $item_b->store_id) {{$input_item_b_checked}} @endif
                                 value="B">
                             <label class="form-check-label"
                                 for="for-store_id">
@@ -446,6 +468,7 @@
                                 type="radio"
                                 name="for-classification_id"
                                 id="for-classification_id"
+                                @if($item_a->classification_id == $item_b->classification_id) {{$input_item_a_checked}} @endif
                                 value="A">
                             <label class="form-check-label"
                                 for="for-classification_id">{{ $item_a->classification->name }}</label>
@@ -457,6 +480,7 @@
                                 type="radio"
                                 name="for-classification_id"
                                 id="for-classification_id"
+                                @if($item_a->classification_id == $item_b->classification_id) {{$input_item_b_checked}} @endif
                                 value="B">
                             <label class="form-check-label"
                                 for="for-classification_id">{{ $item_b->classification->name }}</label>
@@ -474,6 +498,7 @@
                                 type="radio"
                                 name="for-request_form_id"
                                 id="for-request_form_id"
+                                @if($item_a->request_form_id == $item_b->request_form_id) {{$input_item_a_checked}} @endif
                                 value="A">
                             <label class="form-check-label"
                                 for="for-request_form_id">{{ $item_a->requestForm?->folio }}
@@ -486,6 +511,7 @@
                                 type="radio"
                                 name="for-request_form_id"
                                 id="for-request_form_id"
+                                @if($item_a->request_form_id == $item_b->request_form_id) {{$input_item_b_checked}} @endif
                                 value="B">
                             <label class="form-check-label"
                                 for="for-request_form_id">{{ $item_b->requestForm?->folio }}
@@ -504,6 +530,7 @@
                                 type="radio"
                                 name="for-budget_item_id"
                                 id="for-budget_item_id"
+                                @if($item_a->budget_item_id == $item_b->budget_item_id) {{$input_item_a_checked}} @endif
                                 value="A">
                             <label class="form-check-label"
                                 for="for-budget_item_id">
@@ -517,6 +544,7 @@
                                 type="radio"
                                 name="for-budget_item_id"
                                 id="for-budget_item_id"
+                                @if($item_a->budget_item_id == $item_b->budget_item_id) {{$input_item_b_checked}} @endif
                                 value="B">
                             <label class="form-check-label"
                                 for="for-budget_item_id">
@@ -536,6 +564,7 @@
                                 type="radio"
                                 name="for-po_code"
                                 id="for-po_code"
+                                @if($item_a->po_code == $item_b->po_code) {{$input_item_a_checked}} @endif
                                 value="A">
                             <label class="form-check-label"
                                 for="for-po_code">{{ $item_a->po_code }}</label>
@@ -547,6 +576,7 @@
                                 type="radio"
                                 name="for-po_code"
                                 id="for-po_code"
+                                @if($item_a->po_code == $item_b->po_code) {{$input_item_b_checked}} @endif
                                 value="B">
                             <label class="form-check-label"
                                 for="for-po_code">{{ $item_b->po_code }}</label>
@@ -564,6 +594,7 @@
                                 type="radio"
                                 name="for-po_date"
                                 id="for-po_date"
+                                @if($item_a->po_date == $item_b->po_date) {{$input_item_a_checked}} @endif
                                 value="A">
                             <label class="form-check-label"
                                 for="for-po_date">{{ $item_a->po_date }}</label>
@@ -575,6 +606,7 @@
                                 type="radio"
                                 name="for-po_date"
                                 id="for-po_date"
+                                @if($item_a->po_date == $item_b->po_date) {{$input_item_b_checked}} @endif
                                 value="B">
                             <label class="form-check-label"
                                 for="for-po_date">{{ $item_b->po_date }}</label>
@@ -592,6 +624,7 @@
                                 type="radio"
                                 name="for-po_price"
                                 id="for-po_price"
+                                @if($item_a->po_price == $item_b->po_price) {{$input_item_a_checked}} @endif
                                 value="A">
                             <label class="form-check-label"
                                 for="for-po_price">{{ $item_a->po_price }}</label>
@@ -603,6 +636,7 @@
                                 type="radio"
                                 name="for-po_price"
                                 id="for-po_price"
+                                @if($item_a->po_price == $item_b->po_price) {{$input_item_b_checked}} @endif
                                 value="B">
                             <label class="form-check-label"
                                 for="for-po_price">{{ $item_b->po_price }}</label>
@@ -610,7 +644,9 @@
                     </td>
                 </tr>
 
-                <tr>
+                <tr @class([
+                    'table-success' => $item_a->dte_number == $item_b->dte_number,
+                ])>
                     <th>Nº Factura</th>
                     <td>
                         <div class="form-check form-check-inline">
@@ -618,6 +654,7 @@
                                 type="radio"
                                 name="for-dte_number"
                                 id="for-dte_number"
+                                @if($item_a->dte_number == $item_b->dte_number) {{$input_item_a_checked}} @endif
                                 value="A">
                             <label class="form-check-label"
                                 for="for-dte_number">{{ $item_a->dte_number }}</label>
@@ -629,6 +666,7 @@
                                 type="radio"
                                 name="for-dte_number"
                                 id="for-dte_number"
+                                @if($item_a->dte_number == $item_b->dte_number) {{$input_item_b_checked}} @endif
                                 value="B">
                             <label class="form-check-label"
                                 for="for-dte_number">{{ $item_b->dte_number }}</label>
@@ -646,6 +684,7 @@
                                 type="radio"
                                 name="for-observations"
                                 id="for-observations"
+                                @if($item_a->observations == $item_b->observations) {{$input_item_a_checked}} @endif
                                 value="A">
                             <label class="form-check-label"
                                 for="for-observations">{{ $item_a->observations }}</label>
@@ -657,6 +696,7 @@
                                 type="radio"
                                 name="for-observations"
                                 id="for-observations"
+                                @if($item_a->observations == $item_b->observations) {{$input_item_b_checked}} @endif
                                 value="B">
                             <label class="form-check-label"
                                 for="for-observations">{{ $item_b->observations }}</label>
@@ -674,6 +714,7 @@
                                 type="radio"
                                 name="for-removed_user_id"
                                 id="for-removed_user_id"
+                                @if($item_a->removed_user_id == $item_b->removed_user_id) {{$input_item_a_checked}} @endif
                                 value="A">
                             <label class="form-check-label"
                                 for="for-removed_user_id">{{ $item_a->removed_user_id }}</label>
@@ -685,6 +726,7 @@
                                 type="radio"
                                 name="for-removed_user_id"
                                 id="for-removed_user_id"
+                                @if($item_a->removed_user_id == $item_b->removed_user_id) {{$input_item_b_checked}} @endif
                                 value="B">
                             <label class="form-check-label"
                                 for="for-removed_user_id">{{ $item_b->removed_user_id }}</label>
@@ -702,6 +744,7 @@
                                 type="radio"
                                 name="for-removed_at"
                                 id="for-removed_at"
+                                @if($item_a->removed_at == $item_b->removed_at) {{$input_item_a_checked}} @endif
                                 value="A">
                             <label class="form-check-label"
                                 for="for-removed_at">{{ $item_a->removed_at }}</label>
@@ -713,6 +756,7 @@
                                 type="radio"
                                 name="for-removed_at"
                                 id="for-removed_at"
+                                @if($item_a->removed_at == $item_b->removed_at) {{$input_item_b_checked}} @endif
                                 value="B">
                             <label class="form-check-label"
                                 for="for-removed_at">{{ $item_b->removed_at }}</label>
@@ -730,6 +774,7 @@
                                     type="checkbox"
                                     name="for-observations"
                                     id="for-observations"
+                                    @if($input_item_a_checked != null) {{$input_item_a_checked}} @endif
                                     value="A">
                                 <label class="form-check-label"
                                     for="for-observations">
@@ -750,6 +795,7 @@
                                     type="checkbox"
                                     name="for-observations"
                                     id="for-observations"
+                                    @if($input_item_b_checked != null) {{$input_item_b_checked}} @endif
                                     value="A">
                                 <label class="form-check-label"
                                     for="for-observations">
