@@ -473,15 +473,15 @@ class AllowancesCreate extends Component
 
     public function allowanceHalfDayValue(){
         $this->halfDayValue = $this->cfgAllowanceValue->value * 0.4;
-        return $this->cfgAllowanceValue->value * 0.4;
+        return round($this->cfgAllowanceValue->value * 0.4, 0);
     }
 
     public function allowanceFiftyPercentDayValue(){
-        return $this->cfgAllowanceValue->value * 0.5;
+        return round($this->cfgAllowanceValue->value * 0.5, 0);
     }
 
     public function allowanceSixtyPercentDayValue(){
-        return $this->cfgAllowanceValue->value * 0.6;
+        return round($this->cfgAllowanceValue->value * 0.6, 0);
     }
 
     public function allowanceTotalValue(){
@@ -903,7 +903,7 @@ class AllowancesCreate extends Component
             $this->food                     =   $this->allowanceToEdit->food;
             $this->from                     =   $this->allowanceToEdit->from;
             $this->to                       =   $this->allowanceToEdit->to;
-            $this->halfDayValue             =   $this->allowanceToEdit->halfDayValue;
+            $this->halfDaysOnly              =   $this->allowanceToEdit->half_days_only;
 
             foreach($this->allowanceToEdit->files as $file){
                 $this->setFile($file);

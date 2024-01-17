@@ -122,11 +122,11 @@ class GenerateReception extends Component
             $this->msg = $th->getMessage();
         }
 
-        if (isset($purchaseOrder) && $purchaseOrder->charges != 0) {
-            $this->error = true;
-            $this->msg = 'La OC posee cargos asociados.';
-            $this->resetInputReception();
-        }
+        // if (isset($purchaseOrder) && $purchaseOrder->charges != 0) {
+        //     $this->error = true;
+        //     $this->msg = 'La OC posee cargos asociados.';
+        //     $this->resetInputReception();
+        // }
 
         if (!$this->error) {
             foreach ($purchaseOrder->items as $item) {
