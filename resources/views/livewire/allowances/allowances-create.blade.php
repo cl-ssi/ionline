@@ -301,7 +301,7 @@
             <label for="name" class="col-form-label">Solo medios días (Inclusive):</label>
             <br>
             <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" value="1" id="for_half_days_only" wire:model="halfDaysOnly" {{ $disabledHalfDayOnly }}>
+                <input class="form-check-input" type="checkbox" value="1" id="for_half_days_only" wire:model.defer="halfDaysOnly" {{-- $disabledHalfDayOnly }} {{ $halfDaysOnly == 1 ? 'checked' : '' --}} >
                 <label class="form-check-label" for="for_yes">
                     Si
                 </label>
