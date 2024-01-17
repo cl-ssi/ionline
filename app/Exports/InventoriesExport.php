@@ -65,6 +65,8 @@ class InventoriesExport implements FromCollection, WithHeadings, WithMapping, Sh
                 break;
         }
 
+        $receptionDate = $inventory->lastMovement?->reception_date ? \Carbon\Carbon::parse($inventory->lastMovement->reception_date)->format('d-m-Y') : null;
+
 
 
         // if ($inventory->unspscProduct) {
@@ -96,7 +98,8 @@ class InventoriesExport implements FromCollection, WithHeadings, WithMapping, Sh
             $inventory->po_price,
             $inventory->accounting_code_id,
             $inventory->dte_number,
-            $inventory->lastMovement?->reception_date,
+            //$inventory->lastMovement?->reception_date,
+            $receptionDate,
             $inventory->old_number,
         ];
     }

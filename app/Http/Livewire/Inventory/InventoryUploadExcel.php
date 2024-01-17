@@ -153,6 +153,22 @@ class InventoryUploadExcel extends Component
                         break;
                 }
 
+
+                if ($row[17] && is_numeric($row[17])) {
+                    $excelDate = intval($row[17]);
+                    $formattedDate = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($excelDate);
+                
+                    if ($formattedDate) {
+                        // La fecha es válida, puedes continuar con el procesamiento si es necesario.
+                    } else {
+                        $msg .= "La celda en la fila " . ($key + 1) . " no contiene una fecha válida en formato Excel. <br>";
+                        $rows_fail += 1;
+                        $allRowsGood = false;
+                        continue;
+                    }
+                }
+                
+
                 // if ($user_sender and $user_responsible and $user_using) {
                 //     $movement = true;
                 // }
@@ -255,7 +271,7 @@ class InventoryUploadExcel extends Component
                     'status' => $status,
                     'place_id' => $place->id,
                     //debe ser con el auth() o con el sender ¿? lo hice con el user_sender
-                    'request_user_ou_id' => Auth::user()->organizationalUnit->id,
+                    //'request_user_ou_id' => Auth::user()->organizationalUnit->id,
                     //'request_user_id' => Auth::user()->id,
                     // 'user_responsible_id' => $user_responsible->id,
                     // 'user_using_id' => $user_using->id,
