@@ -72,5 +72,22 @@ class SearchPurchasePlan extends Component
                 ]
             );
         }
+
+        if($this->index == 'report: ppl-items'){
+            //PLANES DE COMPRAS: REPORT 
+            return view('livewire.purchase-plan.search-purchase-plan', [
+                'purchasePlans' => PurchasePlan::with('organizationalUnit.establishment', 'userResponsible', 'userCreator', 'programName', 'purchasePlanItems', 'unspscProduct')->latest()
+                    /*
+                    ->where('user_allowance_id', Auth::user()->id)
+                    ->orWhere('creator_user_id', Auth::user()->id)
+                    ->orWhere('organizational_unit_allowance_id', Auth::user()->organizationalUnit->id)
+                    ->search($this->selectedStatus,
+                        $this->selectedId,
+                        $this->selectedUserAllowance)
+                    */
+                    ->paginate(150)
+                ]
+            );
+        }
     }
 }
