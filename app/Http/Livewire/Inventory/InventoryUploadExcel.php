@@ -237,6 +237,7 @@ class InventoryUploadExcel extends Component
                 $user_sender = User::where('id', $row[10])->first();
                 $user_responsible = User::where('id', $row[11])->first();
                 $user_using = User::where('id', $row[12])->first();
+                $unspsc_product = Product::where('code', $row[2])->first();
                 $movement = false;
                 if ($row[10] and $row[11] and $row[12]) {
                     $movement = true;
