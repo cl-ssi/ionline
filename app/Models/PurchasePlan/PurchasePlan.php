@@ -93,6 +93,27 @@ class PurchasePlan extends Model implements Auditable
                 return false;
         return true;
     }
+    
+    public function getStatus()
+    {
+        switch ($this->status) {
+            case "sent":
+                return 'Enviado';
+                break;
+            case "rejected":
+                return 'Rechazado';
+                break;
+            case "approved":
+                return 'Aprobado';
+                break;
+            // case "closed":
+            //     return 'Cerrado';
+            //     break;
+            case "save":
+                return 'Guardado';
+                break;
+        }
+    }
 
     protected $hidden = [
         'created_at', 'updated_at'

@@ -2090,6 +2090,11 @@ Route::prefix('purchase_plan')->as('purchase_plan.')->middleware(['auth', 'must.
     Route::get('/{purchasePlan}/edit', [PurchasePlanController::class, 'edit'])->name('edit');
     Route::delete('/{purchasePlan}/destroy', [PurchasePlanController::class, 'destroy'])->name('destroy');
     Route::get('/{purchasePlan}/send', [PurchasePlanController::class, 'send'])->name('send');
+    
+    Route::prefix('reports')->as('reports.')->middleware('auth')->group(function () {
+        Route::get('/show_ppl_items', [PurchasePlanController::class, 'show_ppl_items'])->name('show_ppl_items');
+        // Route::get('/show_form_items_export', [RequestFormController::class, 'show_form_items_export'])->name('show_form_items_export');
+    });
 });
 
 /*formulario de requerimiento compra o servicio */

@@ -30,6 +30,10 @@ class PurchasePlanController extends Controller
         return view('purchase_plan.all_index');
     }
 
+    public function show_ppl_items(){
+        return view('purchase_plan.reports.show_ppl_items');
+    }
+
     /**
      * Show the form for creating a new resource.
      *
