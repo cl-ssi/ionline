@@ -64,10 +64,10 @@ class OpenHourController extends Controller
                                     ->whereBetween('start_date',[$openHour->start_date->startOfWeek(), $openHour->end_date->endOfWeek()])
                                     ->count();
 
-        if($resevationsInWeek > 2){
-            session()->flash('warning', 'Alcanzó el máximo de reservas a la semana (2 reservas). Si necesita agendar otra hora, contactar a Unidad de Salud del trabajador.');
-            return redirect()->back();
-        }
+        // if($resevationsInWeek > 2){
+        //     session()->flash('warning', 'Alcanzó el máximo de reservas a la semana (2 reservas). Si necesita agendar otra hora, contactar a Unidad de Salud del trabajador.');
+        //     return redirect()->back();
+        // }
 
         if($openHour->start_date < now()){
             session()->flash('warning', 'No se puede reservar para una fecha pasada.');
