@@ -55,43 +55,44 @@ class ControlReport extends Component
 
     public function getControlItems()
     {
-        $controlItems = ControlItem::query()
-            ->whereHas('control', function($query) {
+        $controlItems = ControlItem::with(['control', 'product', 'control.typeDispatch', 'control.typeReception'])
+            ->whereHas('control', function ($query) {
                 $query->whereStoreId($this->store->id)
                     ->whereConfirm(true);
             })
-            ->when($this->start_date, function($query) {
+            ->when($this->start_date, function ($query) {
                 $query->whereDate('created_at', '>=', $this->start_date);
             })
-            ->when($this->end_date, function($query) {
+            ->when($this->end_date, function ($query) {
                 $query->whereDate('created_at', '<=', $this->end_date);
             })
-            ->when($this->program_id, function($query) {
-                $query->when($this->program_id == -1, function($subquery) {
+            ->when($this->program_id, function ($query) {
+                $query->when($this->program_id == -1, function ($subquery) {
                     $subquery->where('program_id', '=', null);
                 }, function ($subquery) {
                     $subquery->where('program_id', '=', $this->program_id);
                 });
             })
-            ->when($this->product_id, function($query) {
+            ->when($this->product_id, function ($query) {
                 $query->where('product_id', $this->product_id);
             })
-            ->when($this->type, function($query) {
+            ->when($this->type, function ($query) {
                 $query->whereRelation('control', 'type', $this->type);
             })
-            ->when($this->type_control, function($query) {
+            ->when($this->type_control, function ($query) {
                 $query->when($this->type == '1', function ($query) {
                     $query->whereRelation('control', 'type_reception_id', $this->type_control);
-                }, function($query) {
+                }, function ($query) {
                     $query->whereRelation('control', 'type_dispatch_id', $this->type_control);
                 });
             })
             ->whereConfirm(true)
             ->orderBy('created_at', 'desc')
             ->get();
-
+    
         return $controlItems;
     }
+    
 
     public function updatedType()
     {
