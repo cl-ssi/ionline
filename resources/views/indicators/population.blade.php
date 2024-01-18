@@ -61,6 +61,7 @@
 										    <option value="{{ $edad }}" @if($request->type!= NULL && in_array($edad, $request->etario_id)) selected @endif>{{$edad}}</option>
 										@endforeach
 										<option value=">=100" @if($request->type!= NULL && in_array('>=100', $request->etario_id)) selected @endif>100 y más</option>
+										<option value="s.i." @if($request->type!= NULL && in_array('s.i.', $request->etario_id)) selected @endif>s.i.</option>
 				        </select>
 			      </fieldset>
 				</div>
