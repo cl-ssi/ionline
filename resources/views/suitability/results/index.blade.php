@@ -94,35 +94,6 @@
                             <span class="fas fa-exclamation-triangle" aria-hidden="true"></span>
                         </button>
                 </td>
-                <!-- <td>@if($result->psirequest && $result->psirequest->status =="Aprobado")
-                    <a href="{{ route('suitability.results.certificate', $result->id) }}" class="btn btn-outline-primary">
-                        <span class="fas fa-stamp" aria-hidden="true"></span></a>
-                    @endif
-                </td> -->
-
-                <!-- <td>
-                    @if($result->psirequest && $result->psirequest->status =="Aprobado" && $result->signed_certificate_id === null)
-                    <a href="{{ route('suitability.sendForSignature', $result->id) }}" class="btn btn-outline-primary">
-                        <span class="fas fa-signature" aria-hidden="true"></span></a>
-                    @endif
-                </td> -->
-
-                <!-- <td>
-                    @if($result->psirequest && $result->psirequest->status =="Aprobado")
-
-                    @if($result->signedCertificate && $result->signedCertificate->hasSignedFlow)
-                    <a href="{{ route('suitability.results.signedSuitabilityCertificate', $result->id) }}" class="btn @if($result->signedCertificate->hasAllFlowsSigned) btn-outline-success @else btn-outline-primary @endif" target="_blank">
-                        <span class="fas fa-file-pdf" aria-hidden="true"></span></a>
-                    @else
-
-                    <a href="{{ route('suitability.results.certificatepdf', $result->id) }}" class="btn btn-outline-primary">
-                        <span class="fas fa-file-pdf" aria-hidden="true"></span></a>
-                    @endif
-                    @endif
-                </td> -->
-                <!-- <td>
-                Correo
-            </td> -->
             </tr>
             @endforeach
         </tbody>

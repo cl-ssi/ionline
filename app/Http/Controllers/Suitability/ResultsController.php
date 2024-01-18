@@ -32,7 +32,7 @@ class ResultsController extends Controller
             return $q->whereHas("psirequest", function ($subQuery) use ($estado) {
                 $subQuery->where('status', $estado);
               });
-        })
+        })        
         ->with('psirequest.school', 'user')
         ->paginate(100);
 
