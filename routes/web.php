@@ -2391,7 +2391,8 @@ Route::prefix('suitability')->as('suitability.')->middleware(['auth', 'must.chan
         Route::get('/byschool', [SuitabilityController::class, 'report'])->name('bySchool');
         Route::get('/effective',  [SuitabilityController::class, 'effective'])->name('effective');
         Route::get('/with-trashed',  [SuitabilityController::class, 'effectiveWithTrashed'])->name('effectiveWithTrashed');
-        
+        Route::get('/slep-report/{year?}', [SuitabilityController::class, 'slep'])->name('slep');
+        Route::post('/slep-report', [SuitabilityController::class, 'processSlepForm'])->name('processSlepForm');
     });
 
 
@@ -2404,6 +2405,7 @@ Route::prefix('suitability')->as('suitability.')->middleware(['auth', 'must.chan
         Route::get('/certificate/{id}', [ResultsController::class, 'certificate'])->name('certificate');
         Route::get('/certificatepdf/{id}', [ResultsController::class, 'certificatepdf'])->name('certificatepdf');
         Route::get('/signed-suitability-certificate-pdf/{id}', [SuitabilityController::class, 'signedSuitabilityCertificatePDF'])->name('signedSuitabilityCertificate');
+        
         //Route::get('results/{result_id}', 'ResultsController::class,'show'])->name('results.show');
         // Route::get('/create', [OptionsController::class, 'create'])->name('create');
         // Route::post('/store', [OptionsController::class, 'store'])->name('store');

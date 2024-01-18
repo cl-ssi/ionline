@@ -513,4 +513,36 @@ class SuitabilityController extends Controller
         session()->flash('success', 'Se ha vuelto el test a estado "Esperando Test"');
         return redirect()->back();
     }
+
+    public function slep(Request $request)
+    {
+        return $this->showSlepReport($request);
+    }
+    
+    public function processSlepForm(Request $request)
+    {
+        return $this->showSlepReport($request);
+    }
+    
+    private function showSlepReport(Request $request)
+    {
+        $currentYear = date('Y');
+        $years = range(2021, $currentYear);
+        $selectedYear = $request->input('year', $currentYear);
+    
+        $slepData = PsiRequest::with(['school', 'user'])->when($selectedYear, function ($query) use ($selectedYear) {
+            return $query->whereYear('updated_at', $selectedYear);
+        })
+        ->whereIn('status', ['Aprobado', 'Rechazado'])
+        ->orderBy('updated_at', 'asc')
+        ->get();
+    
+        return view('suitability.report.slep', compact('years', 'selectedYear', 'slepData'));
+    }
+    
+
+
+    
+
+
 }

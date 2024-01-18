@@ -49,6 +49,10 @@
             <a class="dropdown-item" href="{{ route('suitability.reports.effectiveWithTrashed') }}">
                 <i class="fas fa-trash-alt"></i> Cantidad de Solicitudes (Incluye eliminados)
             </a>
+
+            <a class="dropdown-item" href="{{ route('suitability.reports.slep') }}">
+                <i class="fas fa-graduation-cap"></i> Reporte Formato SLEP
+            </a>
         </div>
     </li>
 
