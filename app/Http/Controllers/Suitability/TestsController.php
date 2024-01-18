@@ -98,7 +98,7 @@ class TestsController extends Controller
         $existingResult = Result::where('request_id', $request->input('psi_request_id'))->first();
 
         if ($existingResult) {            
-            session()->flash('warning', '¡Advertencia! Ya existe un Result asociado a este PsiRequest.');
+            session()->flash('warning', '¡Advertencia! Ya existe un resultado para esa solicitud de idoneidad');
             return redirect()->route('external');
         }
 
