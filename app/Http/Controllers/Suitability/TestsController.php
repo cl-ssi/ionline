@@ -94,6 +94,15 @@ class TestsController extends Controller
 
     public function storeExternal(Request $request)
     {
+
+        $existingResult = Result::where('request_id', $request->input('psi_request_id'))->first();
+
+        if ($existingResult) {            
+            session()->flash('warning', '¡Advertencia! Ya existe un Result asociado a este PsiRequest.');
+            return redirect()->route('external');
+        }
+
+
         //
         $options = Option::find(array_values($request->input('questions')));
 
