@@ -200,6 +200,7 @@
                 </tbody>
             </table>
         </div>
+        {{ $purchasePlans->appends(request()->query())->links() }}
         @endif
     @else
         <div class="alert alert-info" role="alert">
