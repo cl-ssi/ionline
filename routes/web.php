@@ -2452,7 +2452,7 @@ Route::prefix('rem')->as('rem.')->middleware(['auth', 'must.change.password'])->
     });
 
     Route::get('/rem_original', [RemFileController::class, 'rem_original'])->name('files.rem_original');
-    Route::get('/rem_correccion', [RemFileController::class, 'rem_correccion'])->name('files.rem_correccion');
+    Route::get('/rem_correccion/{monthsToShow?}', [RemFileController::class, 'rem_correccion'])->name('files.rem_correccion');
 });
 
 /* Rutas de Módulo de Bienestar */

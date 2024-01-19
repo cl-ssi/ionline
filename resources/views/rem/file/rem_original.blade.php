@@ -58,6 +58,7 @@
                                                     'remEstablishment' => $remEstablishment,
                                                     'rem_period_series' => $serie,
                                                     'type' => 'Original',
+                                                    'monthsToShow' => $monthsToShow
                                                 ])
                                             </ul>
                                         @endif

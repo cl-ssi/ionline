@@ -30,6 +30,7 @@ class NewUploadRem extends Component
     public $isOriginal = false;
     public $isCorreccion = false;
     public $isAutorizacion = false;
+    public $monthsToShow;
 
     protected $rules = [
         'file'  => 'required'
@@ -72,7 +73,8 @@ class NewUploadRem extends Component
         $this->remFiles->first()->filename = null;
         $this->remFiles->first()->save();
         $this->file = null;
-        return redirect()->route('rem.files.rem_original');
+        session()->flash('success', 'El Archivo ha sido Borrado de manera exitosa');
+        return redirect()->route('rem.files.rem_original', ['monthsToShow' => $this->monthsToShow]);
     }
 
 
@@ -80,7 +82,9 @@ class NewUploadRem extends Component
     {
         $this->remFiles->first()->locked = !$this->remFiles->first()->locked;
         $this->remFiles->first()->save();
-        return redirect()->route('rem.files.rem_original');
+        session()->flash('success', 'El Archivo ha sido bloqueado/desbloqueado de manera exitosa');
+        return redirect()->route('rem.files.rem_original', ['monthsToShow' => $this->monthsToShow]);
+        //return redirect()->route('rem.files.rem_original');
     }
 
 
@@ -124,7 +128,9 @@ class NewUploadRem extends Component
         // Redirigir a la misma página en la que se encuentra el componente
         if ($this->type == 'Original') {
             session()->flash('success', 'Archivo de REM Subido Exitosamente');
-            return redirect()->route('rem.files.rem_original');
+            //return redirect()->route('rem.files.rem_original');
+            return redirect()->route('rem.files.rem_original', ['monthsToShow' => $this->monthsToShow]);
+            
         } elseif ($this->type == 'Correccion') {
 
             session()->flash('success', 'Archivo de Correccion de REM subido exitosamente');
