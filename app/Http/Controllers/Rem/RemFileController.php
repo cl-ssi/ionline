@@ -22,7 +22,7 @@ class RemFileController extends Controller
      */
 
     public $folder = 'ionline/rem/';
-    public function index()
+    public function index(Request $request)
     {
         $now = now()->startOfMonth();
 
@@ -114,39 +114,43 @@ class RemFileController extends Controller
         return redirect()->route('rem.files.rem_correccion');
     }
 
-    public function rem_original()
+    public function rem_original(Request $request)
     {
-        $now = now()->startOfMonth();
         $user = auth()->user();
         $remFiles = [];
-
+    
         if ($user->can('Rem: admin')) {
             $remEstablishments = UserRem::all();
         } else {
             $remEstablishments = $user->remEstablishments;
         }
+    
+        // Obtén la cantidad de meses hacia atrás que se desea mostrar
+        //$monthsToShow = 5; // Puedes ajustar este valor según tus necesidades
+        $monthsToShow = $request->input('monthsToShow', 0);
 
-
-        $periods = RemPeriod::all();
-        $periods_count = RemPeriod::count();
-
-        if ($periods_count == 0) {
-            session()->flash('danger', 'No hay asignado periodos para el REM');
-            //return redirect()->route('home');
-
-        } else {
-
-
-            for ($i = 1; $i <= $periods_count; $i++) {
-                $periods_back[] = $now->clone();
-                $now->subMonth('1');
-            }
-            $remFiles = $this->getRemFiles($remEstablishments, $periods_back);
+    
+        $now = now()->startOfMonth();
+        $periods_back = [];
+    
+        // Genera los periodos hacia atrás
+        for ($i = 1; $i <= $monthsToShow; $i++) {
+            $periods_back[] = $now->clone();
+            $now->subMonth('1');
         }
-
-
-        return view('rem.file.rem_original', compact('periods', 'remFiles'));
+    
+        $periods = RemPeriod::whereIn('period', $periods_back)->get();
+        $periods_count = $periods->count();
+    
+        if ($periods_count == 0) {
+            //session()->flash('danger', 'No hay asignado periodos para el REM o no se ga ingresado en el filtro un valor de meses');
+        } else {
+            $remFiles = $this->getRemFiles($remEstablishments, $periods_back);
+        }    
+        
+        return view('rem.file.rem_original', compact('periods', 'remFiles', 'monthsToShow'));
     }
+    
 
     public function rem_correccion()
     {
