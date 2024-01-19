@@ -37,7 +37,7 @@
                     @csrf
                     @method('DELETE')
                         <button type="submit" class="btn btn-outline-danger btn-sm"
-                            onclick="return confirm('¿Está seguro que desea eliminar el tipo de actividad?')">
+                            onclick="return confirm('Si elimina esta actividad, se eliminar todos los bloques de horario aperturados asociados. ¿Está seguro que desea eliminar el tipo de actividad?')">
                             <i class="fas fa-trash"></i>
                         </button>
                 </form>
