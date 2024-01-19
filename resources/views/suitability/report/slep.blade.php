@@ -31,7 +31,7 @@
                         <i class="fas fa-file-excel"></i> Descargar en Excel
                     </a>
                 </div>
-                <table class="table" id="reporte_slep">
+                <table class="table" id="tabla_slep">
                     <thead>
                         <tr>
                             <th>Cantidad</th>
