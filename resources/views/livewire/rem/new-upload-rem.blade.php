@@ -3,29 +3,31 @@
         @if ($hasFile && $remFiles->first()->filename)
             {{-- Muestra el botón de descarga --}}
 
-            <button type="button" style="width: 200px; height: 50px" wire:click="download"
-                class="btn btn-sm btn-outline-secondary">
-                <i class="fas fa-fw fa-file-excel text-success"></i> Descargar Archivo
-            </button>
-            <br>
-            @if (!$remFiles->first()->locked && $remFiles->first()->filename)
-                <button type="button" style="width: 200px; height: 50px" wire:click="deleteFile"
-                    class="btn btn-sm btn-danger"
-                    onclick="return confirm('¿está seguro que desea eliminar este Archivo?');">
-                    <i class="fas fa-fw fa-trash-alt"></i> Borrar Archivo
+            <div class="mt-3">
+                <button type="button" wire:click="download" class="btn btn-sm btn-outline-secondary">
+                    <i class="fas fa-fw fa-file-excel text-success"></i> Descargar Archivo
                 </button>
-            @endif
+
+                @if (!$remFiles->first()->locked && $remFiles->first()->filename)
+                    <button type="button" wire:click="deleteFile" class="btn btn-sm btn-danger ml-2" onclick="return confirm('¿Está seguro que desea eliminar este Archivo?');">
+                        <i class="fas fa-fw fa-trash-alt"></i> Borrar Archivo
+                    </button>
+                @endif
+            </div>
+
             <br>
 
 
             @if (auth()->user()->can('Rem: admin'))
-                <button type="button" style="width: 200px; height: 50px" wire:click="lock_unlock"
-                    class="btn btn-sm btn-outline-primary">
-                    <i
-                        class="fas fa-fw {{ optional($remFiles)->first()->locked ? 'fa-lock' : 'fa-lock-open text-success' }}"></i>Bloquear
-                    Archivo
-                </button>
+                <div class="mt-3">
+                    <button type="button" wire:click="lock_unlock" class="btn btn-sm {{ optional($remFiles)->first()->locked ? 'btn-outline-danger' : 'btn-outline-primary' }}">
+                        <i class="fas fa-fw {{ optional($remFiles)->first()->locked ? 'fa-lock' : 'fa-lock-open text-success' }}"></i>
+                        {{ optional($remFiles)->first()->locked ? 'Desbloquear' : 'Bloquear' }} Archivo
+                    </button>
+                </div>
             @endif
+
+            
         @else
             {{-- Muestra el campo de carga de archivo --}}
             <div class="input-group" style="display: flex; align-items: center;">
