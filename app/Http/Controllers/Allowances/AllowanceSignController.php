@@ -373,11 +373,11 @@ class AllowanceSignController extends Controller
             $allowanceSign->save();
     
             //SE NOTIFICA RECHAZO DE VIATICO
-            $allowance->userCreator->notify(new RejectedAllowance($allowance));
-            $allowance->userAllowance->notify(new RejectedAllowance($allowance));
+            $allowanceSign->allowance->userCreator->notify(new RejectedAllowance($allowanceSign->allowance));
+            $allowanceSign->allowance->userAllowance->notify(new RejectedAllowance($allowanceSign->allowance));
 
-            $allowance->status = 'rejected';
-            $allowance->save();
+            $allowanceSign->allowance->status = 'rejected';
+            $allowanceSign->allowance->save();
     
             session()->flash('danger', 'Su solicitud de viático ha sido Rechazada con éxito.');
             return redirect()->route('allowances.sign_index');
