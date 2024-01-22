@@ -123,6 +123,7 @@
                             </p>
                         </td>
                         <td class="text-center">
+                            {{--
                             @foreach($requestReplacementStaff->RequestSign as $sign)
                                 @if($sign->request_status == 'pending' || $sign->request_status == NULL)
                                     <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="{{ $sign->organizationalUnit->name }}">
@@ -160,6 +161,7 @@
                                 @endif
                             @endforeach
                             </br>
+                            --}}
                             @if($requestReplacementStaff->request_id != NULL)
                                 <span class="badge badge-info">Continuidad</span>
                             @endif
@@ -173,32 +175,41 @@
                             @include('replacement_staff.modals.modal_to_sign')
                             --}}
 
-                            @if($requestReplacementStaff->signatures_file_id != null)
-                                <span class="d-inline-block" 
-                                    tabindex="0" 
-                                    data-toggle="tooltip" 
-                                    title="La aprobación de Departamento de Gestión Financiera se trasladó al módulo Solicitud de Firmas">
-                                    <i class="fas fa-info-circle fa-2x"></i>
-                                </span>
-                            @else
-                                <a class="btn btn-outline-secondary btn-sm" 
-                                    href="{{ route('replacement_staff.request.to_sign', $requestReplacementStaff) }}">
-                                    <i class="fas fa-signature"></i>
-                                </a>
-                                <br>
-                            @endif
-
-                            
-                            @foreach($requestReplacementStaff->RequestSign as $sign)
-                                @if($sign->ou_alias == 'sub_rrhh' && $sign->request_status == "pending")
-                                    @php $flagButton = 1; @endphp
-                                    @if($requestReplacementStaff->form_type == "replacement")
-                                        <div class="form-check float-right">
-                                            <input class="form-check-input" type="checkbox" name="sign_id[]" value="{{ $sign->id }}" onclick="myFunction()" id="for_sign_id">
-                                        </div>
-                                    @endif
+                            @if(count($requestReplacementStaff->approvals) > 0)
+                                @if($requestReplacementStaff->approvals->last()->subject == "Solicitud de Aprobación Jefatura Depto. o Unidad")
+                                    <a class="btn btn-outline-secondary btn-sm" 
+                                        href="{{ route('replacement_staff.request.to_sign', $requestReplacementStaff) }}">
+                                        <i class="fas fa-signature"></i>
+                                    </a>
+                                    <br>
                                 @endif
-                            @endforeach
+                            @else
+                                @if($requestReplacementStaff->signatures_file_id != null)
+                                    <span class="d-inline-block" 
+                                        tabindex="0" 
+                                        data-toggle="tooltip" 
+                                        title="La aprobación de Departamento de Gestión Financiera se trasladó al módulo Solicitud de Firmas">
+                                        <i class="fas fa-info-circle fa-2x"></i>
+                                    </span>
+                                @else
+                                    <a class="btn btn-outline-secondary btn-sm" 
+                                        href="{{ route('replacement_staff.request.to_sign', $requestReplacementStaff) }}">
+                                        <i class="fas fa-signature"></i>
+                                    </a>
+                                    <br>
+                                @endif
+
+                                @foreach($requestReplacementStaff->RequestSign as $sign)
+                                    @if($sign->ou_alias == 'sub_rrhh' && $sign->request_status == "pending")
+                                        @php $flagButton = 1; @endphp
+                                        @if($requestReplacementStaff->form_type == "replacement")
+                                            <div class="form-check float-right">
+                                                <input class="form-check-input" type="checkbox" name="sign_id[]" value="{{ $sign->id }}" onclick="myFunction()" id="for_sign_id">
+                                            </div>
+                                        @endif
+                                    @endif
+                                @endforeach
+                            @endif
                         </td>
                     </tr>
                     @endforeach
@@ -328,6 +339,7 @@
                         </p>
                     </td>
                     <td class="text-center">
+                        {{--
                         @foreach($requestReplacementStaff->RequestSign as $sign)
                             @if($sign->request_status == 'pending' || $sign->request_status == NULL)
                                 <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="{{ $sign->organizationalUnit->name }}">
@@ -365,6 +377,7 @@
                             @endif
                         @endforeach
                         </br>
+                        --}}
                         @if($requestReplacementStaff->request_id != NULL)
                             <span class="badge badge-info">Continuidad</span>
                         @endif

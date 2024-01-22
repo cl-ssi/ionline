@@ -10,6 +10,7 @@ use App\Rrhh\Authority;
 use Carbon\Carbon;
 use OwenIt\Auditing\Contracts\Auditable;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use App\Models\Documents\Approval;
 
 
@@ -158,15 +159,21 @@ class RequestReplacementStaff extends Model implements Auditable
 
     public function getStatusValueAttribute() {
         switch($this->request_status) {
-          case 'pending':
-            return 'Pendiente';
-            break;
-          case 'complete':
-            return 'Finalizada';
-            break;
-          case 'rejected':
-            return 'Rechazada';
-            break;
+            case 'pending':
+                return 'Pendiente';
+                break;
+            case 'complete':
+                return 'Finalizada';
+                break;
+            case 'rejected':
+                return 'Rechazada';
+                break;
+            case 'to assign':
+                return 'Pendiente';
+                break;
+            case 'finance sign':
+                return 'Pendiente';
+                break;
         }
     }
 

@@ -442,10 +442,12 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->middleware(['auth'
         Route::get('/show_verification_file/{requestReplacementStaff}', [RequestReplacementStaffController::class, 'show_verification_file'])->name('show_verification_file');
         Route::get('/download_verification/{requestReplacementStaff}', [RequestReplacementStaffController::class, 'download_verification'])->name('download_verification');
         Route::prefix('sign')->name('sign.')->group(function () {
-            Route::put('/{requestSign}/{status}/{requestReplacementStaff}/update', [RequestSignController::class, 'update'])->name('update');
+            Route::put('/{requestSign}/{status}/update', [RequestSignController::class, 'update'])->name('update');
             Route::put('massive_update', [RequestSignController::class, 'massive_update'])->name('massive_update');
         });
         Route::get('/{requestReplacementStaff}/create_budget_availability_certificate_view', [RequestReplacementStaffController::class, 'create_budget_availability_certificate_view'])->name('create_budget_availability_certificate_view');
+        Route::get('/{request_replacement_staff_id}/show_new_budget_availability_certificate_pdf', [RequestReplacementStaffController::class, 'show_new_budget_availability_certificate_pdf'])->name('show_new_budget_availability_certificate_pdf');
+
         Route::get('create_budget_availability_certificate_document/{requestReplacementStaff}/', [RequestReplacementStaffController::class, 'create_budget_availability_certificate_document'])->name('create_budget_availability_certificate_document');
         Route::get('/budget_availability_certificate_callbackSign/{message}/{modelId}/{signaturesFile?}', [RequestReplacementStaffController::class, 'callbackSign'])->name('callbackSign');
         Route::get('/show_budget_availability_certificate_signed/{requestReplacementStaff}', [RequestReplacementStaffController::class, 'show_budget_availability_certificate_signed'])->name('show_budget_availability_certificate_signed');
@@ -464,9 +466,10 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->middleware(['auth'
             Route::prefix('applicant')->name('applicant.')->group(function () {
                 Route::post('/store/{technicalEvaluation}', [ApplicantController::class, 'store'])->name('store');
                 Route::put('/{applicant}/update', [ApplicantController::class, 'update'])->name('update');
-                Route::put('/{applicant}/update_to_select', [ApplicantController::class, 'update_to_select'])->name('update_to_select');
+                Route::put('/update_to_select', [ApplicantController::class, 'update_to_select'])->name('update_to_select');
                 Route::delete('{applicant}/destroy', [ApplicantController::class, 'destroy'])->name('destroy');
                 Route::post('/decline_selected_applicant/{applicant}', [ApplicantController::class, 'decline_selected_applicant'])->name('decline_selected_applicant');
+                Route::get('{applicant}/download_budget_availavility_certificate_pdf', [ApplicantController::class, 'download_budget_availavility_certificate_pdf'])->name('download_budget_availavility_certificate_pdf');
             });
             Route::prefix('file')->name('file.')->group(function () {
                 Route::post('/store/{technicalEvaluation}', [TechnicalEvaluationFileController::class, 'store'])->name('store');

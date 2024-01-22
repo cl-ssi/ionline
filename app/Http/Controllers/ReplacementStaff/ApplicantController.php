@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\EndSelectionNotification;
 use App\Notifications\ReplacementStaff\NotificationEndSelection;
 use App\Models\Parameters\Parameter;
+use App\Models\Documents\Approval;
+use Illuminate\Support\Facades\Storage;
 
 class ApplicantController extends Controller
 {
@@ -132,9 +134,8 @@ class ApplicantController extends Controller
           ->with('message-danger-delete-applicants', 'Estimado usuario, primero debe seleccionar postulante(s) al cargo');
     }
 
-    public function update_to_select(Request $request, Applicant $applicant)
+    public function update_to_select(Request $request)
     {
-        /*
         $applicant_evaluated = Applicant::find($request->applicant_id);
 
         if($applicant_evaluated->psycholabor_evaluation_score == 0 || $applicant_evaluated->technical_evaluation_score == 0){
@@ -143,24 +144,28 @@ class ApplicantController extends Controller
                 ->with('message-danger-aplicant-no-evaluated', 'Estimado usuario, favor ingresar evaluacion de postulante(s) seleccionado(s).');
         }
         else{
+            // SE MARCA EL POSTULANTE COMO SELECCIONADO
             $applicant_evaluated->fill($request->all());
             $applicant_evaluated->selected = 1;
             $applicant_evaluated->save();
 
+            // SE CAMBIA EL ESTADO DEL INTEGRANTE DEL STAFF: "SELECCIONADO"
             $applicant_evaluated->replacementStaff->status = 'selected';
             $applicant_evaluated->replacementStaff->save();
 
+            // SE CAMBIA EL ESTADO DE LA EVALUACION TECNICA
             $applicant_evaluated->technicalEvaluation->date_end = now();
             $applicant_evaluated->technicalEvaluation->technical_evaluation_status = 'complete';
             $applicant_evaluated->technicalEvaluation->save();
 
-            // SE AGREGA FINANCE STATUS = SIGN 
+            // SE CAMBIA EL ESTADO DE LA SOLICITUD: "FINANCE SIGN"
             $applicant_evaluated->technicalEvaluation->requestReplacementStaff->request_status = 'finance sign';
             $applicant_evaluated->technicalEvaluation->requestReplacementStaff->save();
 
+            /*
             // SE CREA APPROVAL DE F.E. FINANZAS
             $approval = $applicant_evaluated->technicalEvaluation->requestReplacementStaff->approvals()->create([
-                "module"                            => "Solicitudes de Contración: Reemplazo",
+                "module"                            => "Solicitudes de Contración",
                 "module_icon"                       => "bi bi-id-card",
                 "subject"                           => 'Certificado de disponibilidad presupuestaria<br><br>
                                                         ID: '. $applicant_evaluated->technicalEvaluation->requestReplacementStaff->id.'<br><br>'.
@@ -179,9 +184,49 @@ class ApplicantController extends Controller
                     'process'                       => null
                 ])
             ]);
+            */
+
+            // APPROVAL DE FINANZAS
+            $approval = $applicant_evaluated->technicalEvaluation->requestReplacementStaff->approvals()->create([
+                "module"                            => "Solicitudes de Contración",
+                "module_icon"                       => "bi bi-id-card",
+                "subject"                           => 'Certificado de disponibilidad presupuestaria<br><br>
+                                                            ID: '. $applicant_evaluated->technicalEvaluation->requestReplacementStaff->id.'<br><br>'.
+                                                            '<small><b>Periodo</b>: '. $applicant_evaluated->start_date->format('d-m-Y').' - '.$applicant_evaluated->end_date->format('d-m-Y').'<br>'.
+                                                            '<b>Funcionario</b>: '. $applicant_evaluated->replacementStaff->FullName.'<br>'.
+                                                            '<b>'.$applicant_evaluated->technicalEvaluation->requestReplacementStaff->budgetItem->code.'</b> - '.$applicant_evaluated->technicalEvaluation->requestReplacementStaff->budgetItem->name.'</small>',
+                "sent_to_ou_id"                     => Parameter::get('ou','FinanzasSSI'),
+                "document_route_name"               => "replacement_staff.request.show_new_budget_availability_certificate_pdf",
+                "document_route_params"             => json_encode([
+                    "request_replacement_staff_id" => $applicant_evaluated->technicalEvaluation->requestReplacementStaff->id
+                ]),
+                "document_pdf_path"                 => null,
+                "active"                            => true,
+                "previous_approval_id"              => $applicant_evaluated->technicalEvaluation->requestReplacementStaff->approvals->last()->id,
+                "callback_controller_method"        => "App\Http\Controllers\ReplacementStaff\RequestReplacementStaffController@approvalCallback",
+                "callback_controller_params"        => json_encode([
+                    'request_replacement_staff_id'  => $applicant_evaluated->technicalEvaluation->requestReplacementStaff->id,
+                    'applicant_id'                  => $applicant_evaluated->id,
+                    'process'                       => 'end'
+                ]),
+                "digital_signature"                 => true,
+                "position"                          => "right",
+                "filename"                          => "ionline/replacement_staff/budget_availability_certificate/".$applicant_evaluated->technicalEvaluation->requestReplacementStaff->id."_".$applicant_evaluated->id.".pdf"
+            ]);
         }
-        */
-        
+
+        $notification_reclutamiento_manager = Authority::getAuthorityFromDate(Parameter::where('module', 'ou')->where('parameter', 'ReclutamientoSSI')->first()->value, today(), 'manager');
+        if($notification_reclutamiento_manager){
+            $notification_reclutamiento_manager->user->notify(new NotificationEndSelection($applicant_evaluated->technicalEvaluation->requestReplacementStaff, 'reclutamiento'));
+        }
+        //SE NOTIFICA A USUARIO QUE CREA  
+        $applicant_evaluated->technicalEvaluation->requestReplacementStaff->user->notify(new NotificationEndSelection($applicant_evaluated->technicalEvaluation->requestReplacementStaff, 'user'));
+        //SE NOTIFICA A USUARIO QUE SOLICITA
+        if($applicant_evaluated->technicalEvaluation->requestReplacementStaff->requesterUser){
+            $applicant_evaluated->technicalEvaluation->requestReplacementStaff->requesterUser->notify(new NotificationEndSelection($applicant_evaluated->technicalEvaluation->requestReplacementStaff, 'requester'));
+        }
+
+        /*        
         foreach ($request->applicant_id as $key_file => $app_id) {
             $applicant_evaluated = Applicant::where('id', $app_id)->first();
             if($applicant_evaluated->psycholabor_evaluation_score == 0 || $applicant_evaluated->technical_evaluation_score == 0){
@@ -222,7 +267,7 @@ class ApplicantController extends Controller
         $type = 'manager';
         $mail_notification_ou_manager = Authority::getAuthorityFromDate($technicalEvaluation->requestReplacementStaff->user->organizational_unit_id, $now, $type);
 
-        /* FIX: @mirandaljorge si no hay manager en Authority, se va a caer */
+        //  FIX: @mirandaljorge si no hay manager en Authority, se va a caer 
         $ou_personal_manager = Authority::getAuthorityFromDate(46, $now, 'manager');
 
         $emails = [$mail_request,
@@ -245,12 +290,12 @@ class ApplicantController extends Controller
             $technicalEvaluation->requestReplacementStaff->requesterUser->notify(new NotificationEndSelection($technicalEvaluation->requestReplacementStaff, 'requester'));
         }
         //SE NOTIFICA A UNIDAD DE PERSONAL
-        /* FIX: @mirandaljorge si no hay manager en Authority, se va a caer */
+        // FIX: @mirandaljorge si no hay manager en Authority, se va a caer 
         $notification_personal_manager = Authority::getAuthorityFromDate(46, $now, 'manager');
         $notification_personal_manager->user->notify(new NotificationEndSelection($technicalEvaluation->requestReplacementStaff, 'personal'));
-
+        */
         return redirect()
-          ->to(route('replacement_staff.request.technical_evaluation.edit', $technicalEvaluation->requestReplacementStaff).'#applicant')
+          ->to(route('replacement_staff.request.technical_evaluation.edit', $applicant_evaluated->technicalEvaluation->requestReplacementStaff).'#applicant')
           ->with('message-success-aplicant-finish', 'Estimado usuario, ha completado el proceso de selección');
     }
 
@@ -284,5 +329,17 @@ class ApplicantController extends Controller
             ->to(route('replacement_staff.request.technical_evaluation.edit', $applicant->technicalEvaluation->requestReplacementStaff).'#applicant')
             ->with('message-danger-aplicant-desist', 'Estimado usuario, se ha registrado el postulante ha desestimado el proceso de selección');
 
+    }
+
+    public function download_budget_availavility_certificate_pdf(Applicant $applicant)
+    {
+        $approval = Approval::find($applicant->approval_id);
+
+        if( Storage::disk('gcs')->exists($approval->filename) ) {
+            return Storage::response($approval->filename);
+        } 
+        else {
+            return redirect()->back()->with('warning', 'El archivo no se ha encontrado.');
+        }
     }
 }
