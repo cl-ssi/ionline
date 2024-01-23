@@ -41,6 +41,14 @@
                         @case('rejected')
                             <span class="badge bg-danger">{{ $requestReplacementStaff->StatusValue }}</span>
                             @break
+                        
+                        @case('to assign')
+                            <span class="badge badge-warning">{{ $requestReplacementStaff->StatusValue }}</span>
+                            @break
+
+                        @case('finance sign')
+                            <span class="badge badge-warning">{{ $requestReplacementStaff->StatusValue }}</span>
+                            @break
 
                         @default
                             Default case...
