@@ -50,6 +50,11 @@ class ChargeIndex extends Component
                 // dd($startDate, $endDate);
     
                 $holidays = Holiday::whereBetween('date', [$startDate, $endDate])->get();
+
+                // Se deben obtener los feriados del mes siguiente, por ende se suma un mes a la fecha de analisis
+                $holidays_search_start_date = $startDate->copy()->addMonth();
+                $holidays_search_end_date = $holidays_search_start_date->copy()->endOfMonth();
+                $holidaysNextMonth = Holiday::whereBetween('date', [$holidays_search_start_date, $holidays_search_end_date])->get();
                 
     
                 /* Obtener los usuarios que tienen contratos en un rango de fecha con sus ausentismos */
@@ -98,7 +103,11 @@ class ChargeIndex extends Component
                 ->get();  
     
                 if($this->userWithContracts->count() > 0){
-                    $this->calculatedData[$startDate->format('Y-m')] = $this->userWithContracts->first()->getAmipassData($startDate,$endDate,$holidays,$compensatoryAbsenteeismType);   
+                    $this->calculatedData[$startDate->format('Y-m')] = $this->userWithContracts->first()->getAmipassData($startDate,
+                                                                                                                        $endDate,
+                                                                                                                        $holidays,
+                                                                                                                        $holidaysNextMonth,
+                                                                                                                        $compensatoryAbsenteeismType);   
                 }
                 
             }
