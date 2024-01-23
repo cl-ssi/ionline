@@ -72,7 +72,7 @@
                 @endforeach
 
                 @foreach($approvals->where('subject', '!=','Solicitud de Aprobación Jefatura Depto. o Unidad') as $approval)
-                    {{ $approval->approver->getInitialsAttribute() }} 
+                    {{ $approval->approver->getInitialsAttribute() }} {{ ($approval->subject != 'Solicitud de Aprobación SDGP') ? '-' : '' }}
                 @endforeach
             @endif
         </div>
