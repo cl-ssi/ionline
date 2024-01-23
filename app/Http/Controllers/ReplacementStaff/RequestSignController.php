@@ -84,25 +84,76 @@ class RequestSignController extends Controller
      * @param  \App\Models\RequestSign  $requestSing
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, RequestSign $requestSign, $status, RequestReplacementStaff $requestReplacementStaff)
+    public function update(Request $request, RequestSign $requestSign, $status)
     {
         if($status == 'accepted'){
+
+            // SE APRUEBA LA SOLICITUD
             $requestSign->user_id = Auth::user()->id;
             $requestSign->request_status = $status;
             $requestSign->date_sign = Carbon::now();
             $requestSign->save();
 
+            // SE AGREGA ITEM PRESUPUESTARIO A SOLICITUD
             if($request->has('budget_item_id')){
-                $requestReplacementStaff->budget_item_id = $request->budget_item_id;
-                $requestReplacementStaff->save();
+                $requestSign->requestReplacementStaff->budget_item_id = $request->budget_item_id;
+                $requestSign->requestReplacementStaff->save();
             }
 
+            //AHORA SE CREA APROBACIONES EN APPROVALS (PLANIFICACION, )
+
+            // SE CREA APROBACIÓN UNIDAD DE PLANIFICACION
+            $prrhh_approval = $requestSign->requestReplacementStaff->approvals()->create([
+                "module"                            => "Solicitudes de Contración",
+                "module_icon"                       => "bi bi-id-card",
+                "subject"                           => "Solicitud de Aprobación Planificación",
+                "sent_to_ou_id"                     => Parameter::get('ou','PlanificacionRrhhSST'),
+                "document_route_name"               => "replacement_staff.request.to_sign_approval",
+                "document_route_params"             => json_encode(["request_replacement_staff_id" => $requestSign->requestReplacementStaff->id]),
+                "active"                            => true,
+                "previous_approval_id"              => $requestSign->requestReplacementStaff->approvals->last()->id,
+                "callback_controller_method"        => "App\Http\Controllers\ReplacementStaff\RequestReplacementStaffController@approvalCallback",
+                "callback_controller_params"        => json_encode([
+                    'request_replacement_staff_id'  => $requestSign->requestReplacementStaff->id,
+                    'applicant_id'                  => null,
+                    'process'                       => null
+                ]),
+                "position"                          => "left",
+            ]);
+
+            // SE CREA APROBACIÓN SGDP 
+            $sdgp_approval = $requestSign->requestReplacementStaff->approvals()->create([
+                "module"                            => "Solicitudes de Contración",
+                "module_icon"                       => "bi bi-id-card",
+                "subject"                           => "Solicitud de Aprobación SDGP",
+                "sent_to_ou_id"                     => Parameter::get('ou','SubRRHH'),
+                "document_route_name"               => "replacement_staff.request.to_sign_approval",
+                "document_route_params"             => json_encode(["request_replacement_staff_id" => $requestSign->requestReplacementStaff->id]),
+                "active"                            => false,
+                "previous_approval_id"              => $prrhh_approval->id,
+                "callback_controller_method"        => "App\Http\Controllers\ReplacementStaff\RequestReplacementStaffController@approvalCallback",
+                "callback_controller_params"        => json_encode([
+                    'request_replacement_staff_id'  => $requestSign->requestReplacementStaff->id,
+                    'applicant_id'                  => null,
+                    'process'                       => 'to select'
+                ]),
+                "position"                          => "left",
+            ]);
+
+            // NOTIFICACION PARA RECLUTAMIENTO
+            $notification_reclutamiento_manager = Authority::getAuthorityFromDate(Parameter::where('module', 'ou')->where('parameter', 'ReclutamientoSSI')->first()->value, today(), 'manager');
+            if($notification_reclutamiento_manager){
+                $notification_reclutamiento_manager->user->notify(new NotificationEndSigningProcess($requestSign->requestReplacementStaff));
+            }
+            
+            //ANTIGUO SISTEMA DE APROBACIONES
+            /*
             $nextRequestSign = $requestSign->requestReplacementStaff->requestSign->where('position', $requestSign->position + 1)->first();
 
             if($nextRequestSign && 
                 $nextRequestSign->ou_alias == 'finance' && 
                     $requestReplacementStaff->form_type == 'replacement'){
-                /* Se crea solicitu de firma electrónica */
+                // Se crea solicitu de firma electrónica 
                 $signature = Subrogation::
                     where('organizational_unit_id',  Parameter::where('parameter', 'FinanzasSSI')->first()->value)
                     ->where('type', 'manager')
@@ -111,11 +162,11 @@ class RequestSignController extends Controller
                     ->first();
                 
                 if($signature){
-                    /* SE REGISTRA COMO PENDIENTE LA PROXIMA APROBACION DE FINANZAS */     
+                    // SE REGISTRA COMO PENDIENTE LA PROXIMA APROBACION DE FINANZAS    
                     $nextRequestSign->request_status = 'not valid';
                     $nextRequestSign->save();
 
-                    /* SE CREAN FIRMAS DIGITALES */
+                    // SE CREAN FIRMAS DIGITALES 
                     $signatureFinance = new SignatureService();
 
                     $signatureFinance->addResponsible($requestSign->requestReplacementStaff->requesterUser);
@@ -140,14 +191,14 @@ class RequestSignController extends Controller
                     
                     $signatureFinance = $signatureFinance->sendRequest();
 
-                    /* CONSULTA POR SIGNATURE RECIENTE */
+                    // CONSULTA POR SIGNATURE RECIENTE 
                     $currentSignatureId = Signature::where('id', $signatureFinance->id)->first()->signaturesFiles->first()->id;
 
                     $requestSign->requestReplacementStaff->signaturesFile()->associate($currentSignatureId);
 
                     $requestSign->requestReplacementStaff->save();
 
-                    /* SE ENVÍA NOTIFIACIÓN SOBRE FIRMAS ELECTRÓNICAS */
+                    // SE ENVÍA NOTIFIACIÓN SOBRE FIRMAS ELECTRÓNICAS
                     $signature->user->notify(new NotificationFinanceElectronicSign($nextRequestSign->requestReplacementStaff));
                     
                     session()->flash('success', 'Su solicitud ha sido Aceptada con exito.');
@@ -167,7 +218,7 @@ class RequestSignController extends Controller
                 $nextRequestSign->request_status = 'pending';
                 $nextRequestSign->save();
 
-                /* FIX: @mirandaljorge si no hay manager en Authority, se va a caer */
+                // FIX: @mirandaljorge si no hay manager en Authority, se va a caer
                 $notification_ou_manager = Authority::getAuthorityFromDate($nextRequestSign->organizational_unit_id, $requestSign->date_sign, 'manager');
                 $users = [$notification_ou_manager->user]; 
 
@@ -199,6 +250,10 @@ class RequestSignController extends Controller
                 session()->flash('success', 'Su solicitud ha sido Aceptada en su totalidad.');
                 return redirect()->route('replacement_staff.request.to_sign_index');
             }
+            */
+
+            session()->flash('success', 'Su solicitud ha sido Aceptada.');
+            return redirect()->route('replacement_staff.request.to_sign_index');
         }
         else{
             $requestSign->user_id = Auth::user()->id;

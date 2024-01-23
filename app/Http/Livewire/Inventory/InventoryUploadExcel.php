@@ -254,10 +254,14 @@ class InventoryUploadExcel extends Component
                 $user_responsible = User::where('id', $row[11])->first();
                 $user_using = User::where('id', $row[12])->first();
                 $unspsc_product = Product::where('code', $row[2])->first();
+                $place = Place::where('id', $row[9])->first();
+                
                 $movement = false;
                 if ($row[10] and $row[11] and $row[12]) {
                     $movement = true;
                 }
+                
+                
 
                 $inventoryData = [
                     'number' => $row[0],

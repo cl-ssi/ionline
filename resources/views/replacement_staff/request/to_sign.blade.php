@@ -232,11 +232,11 @@
             <tr>
                 @foreach($requestReplacementStaff->RequestSign as $requestSign)
                     <td align="center">
-                        @if($requestSign->request_status == 'pending' && (in_array($requestSign->organizational_unit_id, $iam_authorities_in) || Auth::user()->hasRole('Replacement Staff: personal sign')))
+                        @if($requestSign->request_status == 'pending' && (in_array($requestSign->organizational_unit_id, $iam_authorities_in) || Auth::user()->hasPermissionTo('Replacement Staff: personal sign')))
                             Estado: {{ $requestSign->StatusValue }} <br><br>
                             <div class="row">
                                 <div class="col-md-12">
-                                    <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.request.sign.update', [$requestSign, 'status' => 'accepted', $requestReplacementStaff]) }}">
+                                    <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.request.sign.update', [$requestSign, 'status' => 'accepted']) }}">
                                         @csrf
                                         @method('PUT')
                 
@@ -276,28 +276,20 @@
                                 </div>
                                 <div class="col-md-12">
                                     <p>
-                                        @if($requestReplacementStaff->requestSign->where('ou_alias', 'sub_rrhh')->first()->request_status == 'accepted' &&
-                                            $requestReplacementStaff->budget_item_id)
-                                        @endif
+                                    <button type="submit" class="btn btn-success btn-sm"
+                                        onclick="return confirm('¿Está seguro que desea Aceptar la solicitud?')"
+                                        title="Aceptar"
+                                        @if($requestReplacementStaff->form_type == "replacement" && $requestSign->ou_alias == 'finance') disabled @endif>
+                                        <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Aceptar">
+                                            <i class="fas fa-check-circle"></i></a>
+                                        </span>
+                                    </button>
 
-                                        @if((in_array($requestSign->organizational_unit_id, $iam_authorities_in) || 
-                                                Auth::user()->hasRole('Replacement Staff: personal sign'))
-                                            )
-                                            <button type="submit" class="btn btn-success btn-sm"
-                                                onclick="return confirm('¿Está seguro que desea Aceptar la solicitud?')"
-                                                title="Aceptar"
-                                                @if($requestReplacementStaff->form_type == "replacement" && $requestSign->ou_alias == 'finance') disabled @endif>
-                                                <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Aceptar">
-                                                    <i class="fas fa-check-circle"></i></a>
-                                                </span>
-                                            </button>
-
-                                            <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Rechazar">
-                                                <a class="btn btn-danger btn-sm" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-                                                    <i class="fas fa-times-circle"></i>
-                                                </a>
-                                            </span>
-                                        @endif   
+                                    <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Rechazar">
+                                        <a class="btn btn-danger btn-sm" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                            <i class="fas fa-times-circle"></i>
+                                        </a>
+                                    </span>
                                     </p>
                                     </form>
                                 </div>

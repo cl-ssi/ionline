@@ -94,7 +94,6 @@
                 <label for="for_sub_search">Asignado</label>
                 <select name="sub_search" class="form-control" wire:model.debounce.500ms="selectedAssigned">
                     <option value="">Seleccione...</option>
-                    <option value="yes">Asignados</option>
                     <option value="no">Sin asignar</option>
                 </select>
             </fieldset>
@@ -131,18 +130,23 @@
                         <span class="badge badge-info">{{ $requestReplacementStaff->FormTypeValue }}</span> <br>
                         @switch($requestReplacementStaff->request_status)
                             @case('pending')
-                                <span class="badge badge-warning">Pendiente</span>
+                                <span class="badge badge-warning">{{ $requestReplacementStaff->StatusValue }}</span>
                                 @break
 
                             @case('complete')
-                                <span class="badge badge-success">Finalizada</span>
+                                <span class="badge badge-success">{{ $requestReplacementStaff->StatusValue }}</span>
                                 @break
 
                             @case('rejected')
-                                <span class="badge badge-danger">Rechazada</span>
+                                <span class="badge badge-danger">{{ $requestReplacementStaff->StatusValue }}</span>
                                 @break
+                            
+                            @case('to assign')
+                                <span class="badge badge-warning">{{ $requestReplacementStaff->StatusValue }}</span>
+                                @break
+
                             @case('finance sign')
-                                <span class="badge badge-info">{{ $$requestReplacementStaff->StatusValue}}</span>
+                                <span class="badge badge-warning">{{ $requestReplacementStaff->StatusValue }}</span>
                                 @break
 
                             @default
@@ -223,28 +227,107 @@
                             <b>Solicitado por</b>: {{($requestReplacementStaff->requesterUser) ?  $requestReplacementStaff->requesterUser->TinnyName : '' }}
                         </p>
                     </td>
-                    <td class="text-center">
+                    
+                    <td class="text-center">  
+                        {{--
                         @if(count($requestReplacementStaff->approvals) > 0)
+                            <!-- APPROVALS -->
                             @foreach($requestReplacementStaff->approvals as $approval)
-                                {{-- dd($approval->sentToOu) --}}
-                                @switch($approval->StatusInWords)
-                                    @case('Pendiente')
-                                        <span class="d-inline-block" tabindex="0" data-toggle="tooltip" data-placement="top" title="{{ $approval->sentToOu->name }}">
+                                @if($approval->subject == "Solicitud de Aprobación Jefatura Depto. o Unidad")
+                                    @switch($approval->StatusInWords)
+                                        @case('Pendiente')
+                                            <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="{{ $approval->sentToOu->name }}">
+                                                <i class="fas fa-clock fa-2x"></i>
+                                            </span>
+                                            @break
+                                        @case('Aprobado')
+                                            <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="{{ $approval->sentToOu->name }}" style="color: green;">
+                                                <i class="fas fa-check-circle fa-2x"></i>
+                                            </span>
+                                        @break
+                                        @case('Rechazado')
+                                            <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="{{ $approval->sentToOu->name }}" style="color: tomato;">
+                                                <i class="fas fa-times-circle fa-2x"></i>
+                                            </span>
+                                        @break
+                                    @endswitch
+                                @endif
+
+                                @if($approval->subject == "Solicitud de Aprobación SDGP" && $approval->status == 1)
+                                    @php $flag[] = 1; @endphp
+                                @else
+                                    @php $flag[] = 0; @endphp
+                                @endif
+
+                                @if($approval->subject == "Solicitud de Aprobación Finanzas" && $approval->status == 1)
+                                    @php $flagFinance[] = 1; @endphp
+                                @else
+                                    @php $flagFinance[] = 0; @endphp
+                                @endif
+                            @endforeach
+
+                            <!-- REQUESTSIGNS -->
+                            @if(count($requestReplacementStaff->requestSign) > 0)
+                                @foreach($requestReplacementStaff->requestSign as $sign)
+                                    @if($sign->request_status == 'pending' || $sign->request_status == NULL)
+                                        <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="hola - {{ $sign->organizationalUnit->name }}">
                                             <i class="fas fa-clock fa-2x"></i>
                                         </span>
-                                        @break
-                                    @case('Aprobado')
-                                        <span class="d-inline-block" tabindex="0" style="color: green;" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ $approval->sentToOu->name }}">
+                                    @endif
+                                    @if($sign->request_status == 'accepted')
+                                        <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="{{ $sign->organizationalUnit->name }}" style="color: green;">
                                             <i class="fas fa-check-circle fa-2x"></i>
                                         </span>
-                                    @break
-                                    @case('Rechazado')
-                                        <span class="d-inline-block" tabindex="0" style="color: tomato;" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ $approval->sentToOu->name }}">
-                                            <i class="fas fa-ban-circle fa-2x"></i>
+                                    @endif
+                                    @if($sign->request_status == 'rejected')
+                                        <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="{{ $sign->organizationalUnit->name }}" style="color: Tomato;">
+                                            <i class="fas fa-times-circle fa-2x"></i>
                                         </span>
-                                    @break
-                                @endswitch
+                                    @endif
+                                @endforeach
+                            @else
+                                <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="{{ App\Models\Parameters\Parameter::get('ou','NombrePersonal') }}">
+                                    <i class="fas fa-clock fa-2x"></i>
+                                </span>
+                            @endif
+
+                            @if(!count($requestReplacementStaff->requestSign) > 0) 
+                                <span class="d-inline-block" tabindex="0" data-toggle="tooltip" data-placement="top" title="{{ App\Models\Parameters\Parameter::get('ou','NombrePlanificaciónRRHH') }}">
+                                    <i class="fas fa-clock fa-2x"></i>
+                                </span>
+                                <span class="d-inline-block" tabindex="0" data-toggle="tooltip" data-placement="top" title="{{ App\Models\Parameters\Parameter::get('ou','NombreSubRRHH') }}">
+                                    <i class="fas fa-clock fa-2x"></i>
+                                </span>
+                            @endif
+
+                            <!-- APPROVALS (PLANIFICACIÓN, SUBRRHH Y FINANZAS) -->
+                            @foreach($requestReplacementStaff->approvals as $approval)
+                                @if($approval->subject != "Solicitud de Aprobación Jefatura Depto. o Unidad")
+                                    @switch($approval->StatusInWords)
+                                        @case('Pendiente')
+                                            <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="{{ $approval->sentToOu->name }}">
+                                                <i class="fas fa-clock fa-2x"></i>
+                                            </span>
+                                            @break
+                                        @case('Aprobado')
+                                            <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="{{ $approval->sentToOu->name }}" style="color: green;" >
+                                                <i class="fas fa-check-circle fa-2x"></i>
+                                            </span>
+                                        @break
+                                        @case('Rechazado')
+                                            <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="{{ $approval->sentToOu->name }}" style="color: tomato;">
+                                                <i class="fas fa-ban-circle fa-2x"></i>
+                                            </span>
+                                        @break
+                                    @endswitch
+                                @endif
                             @endforeach
+
+                            @if($flagFinance == 0)
+                                <span class="d-inline-block" tabindex="0" data-toggle="tooltip" data-placement="top" title="{{ App\Models\Parameters\Parameter::get('ou','NombreFinanzasSSI') }}">
+                                    <i class="fas fa-clock fa-2x"></i>
+                                </span>
+                            @endif
                         @else
                             <!-- Antiguo Modelo Interno de Aprobaciones -->
                             @foreach($requestReplacementStaff->requestSign as $sign)
@@ -288,16 +371,17 @@
                                 @endif
                             @endforeach
                         @endif
-                        </br>
+                        --}}
                         @if($requestReplacementStaff->request_id != NULL)
                             <span class="badge badge-info">Continuidad</span>
                         @endif
                     </td>
+                    
                     <td>
                         <!-- ACCIONES CON APPROVALS -->
                         @if(count($requestReplacementStaff->approvals) > 0)
                             <!-- PERMITE EDITAR SOLICITUD ANTES DE LA PRIMERA APROBACIÓN -->
-                            @if($requestReplacementStaff->approvals->first()->status == 0 && 
+                            @if($requestReplacementStaff->approvals->first()->status === null && 
                                 ($requestReplacementStaff->user->id == Auth::user()->id || 
                                 $requestReplacementStaff->organizational_unit_id == Auth::user()->organizationalUnit->id ||
                                 ($requestReplacementStaff->requesterUser && $requestReplacementStaff->requesterUser->id == Auth::user()->id)))
@@ -305,7 +389,8 @@
                                         class="btn btn-outline-secondary btn-sm" title="Selección"><i class="fas fa-edit"></i></a>
                             @endif
                             <!-- PERMITE MOSTRAR EL BOTÓN PARA ASIGNAR SOLICITUD -->
-                            @if($requestReplacementStaff->approvals->last()->status == 1 &&
+                            @if($typeIndex == 'assign' &&
+                                $requestReplacementStaff->request_status == "to assign" &&
                                 !$requestReplacementStaff->technicalEvaluation &&
                                 Auth::user()->hasPermissionTo('Replacement Staff: assign request'))
                                 <div class="form-check">
@@ -412,7 +497,7 @@
         </div>
     @endif
     
-    @if(Auth::user()->hasPermissionTo('Replacement Staff: assign request'))
+    @if($typeIndex == 'assign' && Auth::user()->hasPermissionTo('Replacement Staff: assign request'))
     <div class="card">
         <div class="card-body">
             <h6 class="mb-3"><i class="fas fa-user-tag"></i> Asignar solicitudes a funcionarios</h6>

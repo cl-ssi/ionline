@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Contracts\Auditable;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
+use App\Models\Documents\Approval;
 
 class Applicant extends Model implements Auditable
 {
@@ -29,6 +31,13 @@ class Applicant extends Model implements Auditable
 
     public function ouPerformance() {
         return $this->belongsTo('App\Rrhh\OrganizationalUnit', 'ou_of_performance_id');
+    }
+
+    /*
+        * Get the approval model.
+    */
+    public function approval(): MorphOne{
+        return $this->morphOne(Approval::class, 'approvable');
     }
 
     public function getPsyEvaScoreAttribute() {

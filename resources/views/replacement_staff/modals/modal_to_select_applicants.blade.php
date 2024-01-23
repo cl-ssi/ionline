@@ -10,7 +10,7 @@
             </div>
             <div class="modal-body">
                 <h6>Postulantes a cargo(s)</h6>
-                <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.request.technical_evaluation.applicant.update_to_select', $applicant) }}">
+                <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.request.technical_evaluation.applicant.update_to_select') }}">
                 @csrf
                 @method('PUT')
 
@@ -50,13 +50,6 @@
                                 <td>{{ $applicant->observations }}</td>
                                 <td>
                                   @if($applicant->desist == NULL)
-                                  
-                                  <fieldset class="form-group">
-                                      <div class="form-check">
-                                          <input class="form-check-input" type="checkbox" name="applicant_id[]" onclick="myFunction()" id="for_applicant_id"
-                                            value="{{ $applicant->id }}">
-                                      </div>
-                                  </fieldset>
                                   {{--
                                   <fieldset class="form-group">
                                       <div class="form-check">
@@ -65,6 +58,16 @@
                                       </div>
                                   </fieldset>
                                   --}}
+                                  <fieldset class="form-group">
+                                      <div class="form-check">
+                                          <input class="form-check-input" type="radio" name="applicant_id" id="for_applicant_id" value="{{ $applicant->id }}" onclick="myFunction()">
+                                          {{--
+                                          <label class="form-check-label" for="exampleRadios1">
+                                            Default radio
+                                          </label>
+                                          --}}
+                                      </div>
+                                  </fieldset>
                                   @endif
                                 </td>
                             </tr>
@@ -160,7 +163,7 @@ function myFunction() {
   var checkBox = document.getElementById("for_applicant_id");
 
   // If the checkbox is checked, display the output text
-  if (document.querySelectorAll('input[type="checkbox"]:checked').length > 0){
+  if (document.querySelectorAll('input[type="radio"]:checked').length > 0){
     document.getElementById("save_btn").disabled = false;
   } else {
     document.getElementById("save_btn").disabled = true;

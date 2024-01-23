@@ -47,6 +47,7 @@ class SearchRequests extends Component
     public function render()
     {   
         if($this->typeIndex == 'assign'){
+            /*
             if($this->selectedAssigned == 'yes'){
                 $requests = RequestReplacementStaff::
                 with(['user', 'organizationalUnit', 'requestSign.organizationalUnit', 'requesterUser', 'profile_manage', 
@@ -67,6 +68,7 @@ class SearchRequests extends Component
                 )
                 ->paginate(50);
             }
+            */
 
             if($this->selectedAssigned == ''){
                 $requests = RequestReplacementStaff::
@@ -94,7 +96,7 @@ class SearchRequests extends Component
                         'legalQualityManage', 'fundamentManage', 'fundamentDetailManage', 'technicalEvaluation',
                         'assignEvaluations'])
                     ->whereDoesntHave('technicalEvaluation')
-                    ->whereRelation('signaturesFile.signature', 'status', 'completed')
+                    ->where('request_status', 'to assign')
                     ->latest()
                     ->search($this->selectedFormType,
                         $this->selectedStatus,
