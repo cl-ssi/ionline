@@ -229,4 +229,11 @@ class ParteController extends Controller
             return redirect()->route('documents.partes.index');
         }
     }
+
+    public function parameters()
+    {
+        return view('documents.partes.parameters');
+    }
+
+
 }

@@ -60,5 +60,15 @@
         </a>
     </li>
     @endcan
+
+    <!-- Preguntar que permisos debería tener -->
+    @can('be god')
+    <li class="nav-item">
+        <a class="nav-link {{ active('documents.partes.parameters')}}"
+            href="{{ route('documents.partes.parameters') }}">
+            <i class="fas fa-cog"></i> Parámetros
+        </a>
+    </li>
+    @endcan
     
 </ul>

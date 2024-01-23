@@ -6,6 +6,8 @@ use Livewire\WithPagination;
 use Livewire\Component;
 use App\Models\Finance\Receptions\ReceptionType;
 use App\Models\Finance\Receptions\Reception;
+use App\Models\Parameters\Parameter;
+use App\Models\Documents\Numeration;
 
 class IndexReception extends Component
 {
@@ -76,6 +78,24 @@ class IndexReception extends Component
             ->latest()
             ->paginate(100);
         return $receptions;
+    }
+
+    public function numerate(Numeration $numeration)
+    {
+        $this->error_msg = null;
+
+        $parameterUser = Parameter::where('establishment_id', auth()->user()->organizationalUnit->establishment_id)
+        ->where('parameter', 'Usuario Numeración Automático')
+        ->first();
+
+        $status = $numeration->numerate();
+        if ($status === true) {
+            $numeration->numerator_id = $parameterUser->value;
+            $numeration->date = now();
+            $numeration->save();
+        } else {
+            $this->error_msg = $status;
+        }
     }
     
 }

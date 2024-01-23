@@ -191,8 +191,19 @@
                                         class="btn btn-primary">
                                         <i class="bi bi-pencil-square"></i>
                                     </a>
+                                    <br><br>
                                 @endif
                             @endif
+
+                            @can('be god')
+                                @if($reception->allApprovalsOk())
+                                <button class="btn btn-secondary"  wire:loading.attr="disabled"
+                                    wire:click="numerate( {{ $reception->numeration?->id }} )">
+                                    <i class="fa fa-spinner fa-spin" wire:loading></i>
+                                    <i class="bi" wire:loading.class="d-none">Numerar {{$reception->numeration?->number}}</i> 
+                                </button>
+                                @endif
+                            @endcan
                         </td>
                     </tr>
 
