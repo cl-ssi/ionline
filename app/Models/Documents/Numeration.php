@@ -138,7 +138,7 @@ class Numeration extends Model
     /**
     * Numerate
     */
-    public function numerate()
+    public function numerate(User $user)
     {
         // $modelo->numeration()->create([
         //     'automatic' => true,
@@ -152,7 +152,7 @@ class Numeration extends Model
         // ]);
 
         $status = null;
-        DB::transaction(function () {
+        DB::transaction(function () use ($user) {
             /* Chequear que el correlativo exista, si no, crearlo */
             $correlative = Correlative::firstOrCreate([
                 'type_id' => $this->doc_type_id,
@@ -164,14 +164,14 @@ class Numeration extends Model
 
             // dd($correlative);
 
-            $numerateUser = auth()->user();
+            
             $file = Storage::get($this->file_path);
             /* Generar el codigo de verificacion ej: ej: '000123-sbK5np' */ 
             $verificationCode = str_pad($this->id, 6, "0", STR_PAD_LEFT) . '-' . str()->random(6);
             $number = $correlative->correlative;
 
-            $digitalSignature = new DigitalSignature();
-            $success = $digitalSignature->numerate($numerateUser, $file, $verificationCode, $number);
+            $digitalSignature = new DigitalSignature();            
+            $success = $digitalSignature->numerate($user, $file, $verificationCode, $number);
 
             if($success) {
                 /* Aumentar el correlativo y guardarlo */

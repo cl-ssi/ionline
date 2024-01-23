@@ -1,6 +1,6 @@
-@extends('layouts.bt4.app')
+@extends('layouts.bt5.app')
 
-@section('title', 'Bandeja de salida')
+@section('title', 'Parametro Partes')
 
 @section('content')
 
@@ -12,9 +12,8 @@
 
 @livewire('parameters.parameter.single-manager',[
     'module' => 'partes',
-    'parameterName' => 'Usuario Numeración Automático',
+    'parameterName' => 'numerador',
     'type' => 'user',
-    'establishment_id' => auth()->user()->establishment_id,
     'parameterDescription' => 'ingresar el RUN sin dv de la persona que generara el numero de parte de manera automática en el módulo recepción'
 ])
 

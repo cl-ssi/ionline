@@ -62,7 +62,7 @@
     @endcan
 
     <!-- Preguntar que permisos debería tener -->
-    @can('be god')
+    @canany(['Partes: director'])
     <li class="nav-item">
         <a class="nav-link {{ active('documents.partes.parameters')}}"
             href="{{ route('documents.partes.parameters') }}">

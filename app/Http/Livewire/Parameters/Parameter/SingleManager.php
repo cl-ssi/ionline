@@ -39,6 +39,7 @@ class SingleManager extends Component
         $this->parameter = Parameter::firstOrCreate([
             'module' => $module,
             'parameter' => $parameterName,
+            'establishment_id' => auth()->user()->organizationalUnit->establishment->id            
         ]);
 
         $this->type = $type;
@@ -61,7 +62,6 @@ class SingleManager extends Component
         'parameter.parameter' => 'required',
         'parameter.value' => 'required',
         'parameter.description' => 'nullable',
-        'parameter.establishment_id' => 'nullable',
     ];
 
     /**
@@ -69,8 +69,7 @@ class SingleManager extends Component
     */
     public function save()
     {
-        $this->validate();
-        $this->parameter->establishment_id = auth()->user()->organizationalUnit->establishment->id;
+        $this->validate();        
         $this->parameter->save();
         $this->save = 'spin';
         $this->save = true;

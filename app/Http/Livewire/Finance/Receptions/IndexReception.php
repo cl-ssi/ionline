@@ -8,6 +8,7 @@ use App\Models\Finance\Receptions\ReceptionType;
 use App\Models\Finance\Receptions\Reception;
 use App\Models\Parameters\Parameter;
 use App\Models\Documents\Numeration;
+use App\User;
 
 class IndexReception extends Component
 {
@@ -21,6 +22,8 @@ class IndexReception extends Component
     public $filter_date;
     public $filter_number;
     public $types;
+    public $error_msg;
+
 
     /**
     * Mount
@@ -84,18 +87,20 @@ class IndexReception extends Component
     {
         $this->error_msg = null;
 
-        $parameterUser = Parameter::where('establishment_id', auth()->user()->organizationalUnit->establishment_id)
-        ->where('parameter', 'Usuario Numeración Automático')
-        ->first();
+        $user_id = Parameter::get('partes','numerador', auth()->user()->organizationalUnit->establishment_id);
 
-        $status = $numeration->numerate();
+        $user = User::find($user_id);
+        
+
+        $status = $numeration->numerate($user);
         if ($status === true) {
-            $numeration->numerator_id = $parameterUser->value;
+            $numeration->numerator_id = $user_id;
             $numeration->date = now();
             $numeration->save();
         } else {
             $this->error_msg = $status;
         }
+        
     }
     
 }
