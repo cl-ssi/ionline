@@ -31,6 +31,18 @@
                 <i class="fas fa-fw fa-clipboard-list"></i> Inventario
             </a>
         </li>
+
+        @can('Inventory: manager')
+            <li class="nav-item">
+                <a
+                    class="nav-link {{ active(['inventories.fusion', 'inventories.fusion']) }}"
+                    aria-current="page"
+                    href="{{ route('inventories.fusion', $establishment) }}"
+                >
+                    <i class="fas fa-fw fa-compress-alt"></i> Fusión
+                </a>
+            </li>
+        @endcan
     @endcan
 
     @can('Inventory: manager')
