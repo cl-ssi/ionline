@@ -170,6 +170,12 @@ class Inventory extends Model implements Auditable
     {
         return $this->hasOne(InventoryMovement::class)->latest();
     }
+    public function lastMovementReceptionDate()
+    {
+        return $this->hasOne(InventoryMovement::class)
+            ->latest()
+            ->select('reception_date');
+    }
 
     public function responsible()
     {
