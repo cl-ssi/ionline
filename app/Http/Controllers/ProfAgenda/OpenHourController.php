@@ -30,6 +30,7 @@ class OpenHourController extends Controller
                             ->where('blocked',0)
                             ->orderBy('start_date', 'DESC')
                             ->where('profesional_id',$user_id_param)
+                            ->whereHas('activityType')
                             ->when($assistance_param!=-1, function ($q) use ($assistance_param) {
                                 return $q->where('assistance',intval($assistance_param));
                             })
@@ -53,6 +54,7 @@ class OpenHourController extends Controller
                                                 $query->whereBetween('start_date',[$openHour->start_date, $openHour->end_date])
                                                         ->orWhereBetween('end_date',[$openHour->start_date, $openHour->end_date]);
                                             })
+                                            ->whereHas('activityType')
                                             ->count(); 
         if($othersReservationsCount>0){
             session()->flash('warning', 'No es posible realizar la reserva del paciente, porque tiene otra reserva a la misma hora con otro funcionario.');
@@ -62,6 +64,7 @@ class OpenHourController extends Controller
         // valida si existen más de 2 horas reservadas en la semana
         $resevationsInWeek = OpenHour::where('patient_id',$request->user_id)
                                     ->whereBetween('start_date',[$openHour->start_date->startOfWeek(), $openHour->end_date->endOfWeek()])
+                                    ->whereHas('activityType')
                                     ->count();
 
         // if($resevationsInWeek > 2){

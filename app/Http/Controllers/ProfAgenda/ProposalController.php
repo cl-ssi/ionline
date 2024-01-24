@@ -168,7 +168,7 @@ class ProposalController extends Controller
                 if($date >= $proposal->start_date && $date <= $proposal->end_date){
                     foreach($proposal->details->where('day',$date->dayOfWeek) as $detail){
                         // solo si es de un tipo reservable
-                        if($detail->activityType->reservable){
+                        if($detail->activityType && $detail->activityType->reservable){
                             // crea bloques de horarios
                             $duration = $detail->duration . ' minutes';
                             

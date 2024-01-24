@@ -80,7 +80,7 @@
                     <td nowrap>{{ $detail->start_hour }}</td>
                     <td nowrap>{{ $detail->end_hour }}</td>
                     <td nowrap>{{ $detail->duration }}</td>
-                    <td nowrap>{{ $detail->activityType->name }}</td>
+                    <td nowrap>@if($detail->activityType){{ $detail->activityType->name }}@endif</td>
                     <td width="10%">
                         <button type="submit" class="btn btn-outline-danger btn-sm" wire:click="delete({{$detail}})"
                             @disabled($proposal->status == "Aperturado")

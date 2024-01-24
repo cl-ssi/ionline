@@ -24,6 +24,7 @@ class BookingAgenda extends Component
 
         $openHours = OpenHour::where('profesional_id',$this->profesional_id)
                             ->where('profession_id',$this->profession_id)
+                            ->whereHas('activityType')
                             ->with('patient','activityType')
                             // ->where('id',2947)
                             ->get();
