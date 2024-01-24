@@ -64,7 +64,11 @@
                     @if( $approval->module_icon )
                     <i class="fa-fw {{$approval->module_icon}}"></i>
                     @endif
-                    {{ $approval->module }}
+                    {{ $approval->module }} 
+                    @if($approval->module == 'Solicitudes de Contración')
+                        <br>
+                        ID: {{ $approval->approvable_id }}
+                    @endif
                 </td>
                 <td>
                     {!! $approval->subject !!}
