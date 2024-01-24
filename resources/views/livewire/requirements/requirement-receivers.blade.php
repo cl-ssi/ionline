@@ -58,6 +58,7 @@
                     <th>Destinatario</th>
                     <th>En copia</th>
                     <th>Categoría</th>
+                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -84,6 +85,11 @@
                                 </select>
                                 <input type="hidden" name="category{{$key}}" value="">
                             @endif
+                        </td>
+                        <td>
+                        <button type="button" class="btn btn-outline-danger" data-toggle="tooltip" data-placement="top" title="Eliminar" wire:click="remove({{ $key }})">
+                            <i class="fas fa-trash"></i>
+                        </button>
                         </td>
                     </tr>
                 @endforeach

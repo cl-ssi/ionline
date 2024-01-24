@@ -6,6 +6,9 @@ use Livewire\WithPagination;
 use Livewire\Component;
 use App\Models\Finance\Receptions\ReceptionType;
 use App\Models\Finance\Receptions\Reception;
+use App\Models\Parameters\Parameter;
+use App\Models\Documents\Numeration;
+use App\User;
 
 class IndexReception extends Component
 {
@@ -19,6 +22,8 @@ class IndexReception extends Component
     public $filter_date;
     public $filter_number;
     public $types;
+    public $error_msg;
+
 
     /**
     * Mount
@@ -76,6 +81,26 @@ class IndexReception extends Component
             ->latest()
             ->paginate(100);
         return $receptions;
+    }
+
+    public function numerate(Numeration $numeration)
+    {
+        $this->error_msg = null;
+
+        $user_id = Parameter::get('partes','numerador', auth()->user()->organizationalUnit->establishment_id);
+
+        $user = User::find($user_id);
+        
+
+        $status = $numeration->numerate($user);
+        if ($status === true) {
+            $numeration->numerator_id = $user_id;
+            $numeration->date = now();
+            $numeration->save();
+        } else {
+            $this->error_msg = $status;
+        }
+        
     }
     
 }

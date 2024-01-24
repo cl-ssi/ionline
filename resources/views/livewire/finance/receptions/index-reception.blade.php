@@ -175,6 +175,20 @@
                                     </a>
                                 @endif
                             @endif
+
+                                @if($reception->numeration and $reception->numeration->number == null )
+                                <button class="btn btn-primary"  wire:loading.attr="disabled"
+                                    wire:click="numerate( {{ $reception->numeration->id }} )">
+                                    <i class="fa fa-spinner fa-spin" wire:loading></i>
+                                    <i class="bi" wire:loading.class="d-none">Numerar</i> 
+                                    @if($error_msg)
+                                        <div class="alert alert-danger"
+                                            role="alert">
+                                            {{ $error_msg }}
+                                        </div>
+                                    @endif
+                                </button>
+                                @endif
                         </td>
                         <td>
                             @if($reception->supportFile)
@@ -191,8 +205,11 @@
                                         class="btn btn-primary">
                                         <i class="bi bi-pencil-square"></i>
                                     </a>
+                                    <br><br>
                                 @endif
                             @endif
+
+
                         </td>
                     </tr>
 

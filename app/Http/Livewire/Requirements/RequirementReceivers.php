@@ -145,6 +145,13 @@ class RequirementReceivers extends Component
         return view('livewire.requirements.requirement-receivers');
     }
 
+    public function remove($key)
+    {
+        unset($this->users_array[$key]);
+        unset($this->enCopia[$key]);
+    }
+
+
     // function stripAccents($str) {
     //     return strtr(utf8_decode($str), utf8_decode('àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ'), 'aaaaaceeeeiiiinooooouuuuyyAAAAACEEEEIIIINOOOOOUUUUY');
     // }

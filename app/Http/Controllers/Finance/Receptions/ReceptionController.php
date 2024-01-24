@@ -73,6 +73,7 @@ class ReceptionController extends Controller
     * Approval Callback
     */
     public function approvalCallback($approval_id) {
+        /*Este código se ejecuta SOLO en el último approval*/
         $approval = Approval::find($approval_id);
         if($approval->status == true) {
             $approval->approvable->numeration()->create([

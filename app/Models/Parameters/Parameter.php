@@ -44,9 +44,17 @@ class Parameter extends Model
     //     });
     // }
 
-    public static function get($module, $parameter)
+    public static function get($module, $parameter, $establishment_id = null)
     {
-        $parameter = Parameter::where('module', $module)->where('parameter', $parameter)->first();
+        $query = Parameter::where('module', $module)
+        ->where('parameter', $parameter);
+
+        if ($establishment_id !== null) {
+            $query->where('establishment_id', $establishment_id);
+        }
+
+        $parameter = $query->first();
+        
         if(isset($parameter)) return $parameter->value;
         else return null;
     }

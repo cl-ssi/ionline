@@ -179,4 +179,16 @@ class Reception extends Model implements Auditable
     {
         return $this->morphOne(File::class, 'fileable')->where('type','support_file');
     }
+
+
+    public function allApprovalsOk(): bool
+    {
+        $approvals = $this->approvals;
+        
+        return $approvals->every(function ($approval) {
+            return $approval->status == 1;
+        });
+    }
+
+
 }
