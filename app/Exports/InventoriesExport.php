@@ -6,6 +6,7 @@ use Maatwebsite\Excel\Concerns\{WithHeadings, WithMapping, ShouldAutoSize};
 use Maatwebsite\Excel\Events\AfterSheet;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use App\Models\Inv\Inventory;
+use Illuminate\Support\Collection;
 
 class InventoriesExport implements FromCollection, WithHeadings, WithMapping, ShouldAutoSize
 {
@@ -14,11 +15,20 @@ class InventoriesExport implements FromCollection, WithHeadings, WithMapping, Sh
      */
     public function collection()
     {
-        return Inventory::with('unspscProduct')
-            ->where('establishment_id', auth()->user()->organizationalUnit->establishment_id)
+        $establishmentId = auth()->user()->organizationalUnit->establishment_id;
+
+        $inventories = new Collection();
+
+        Inventory::with('unspscProduct', 'lastMovement')
+            ->where('establishment_id', $establishmentId)
             ->whereNotNull('number')
-            ->get();
+            ->chunk(200, function ($chunk) use ($inventories) {
+                $inventories->push($chunk);
+            });
+
+        return $inventories->flatten();
     }
+    
 
     public function headings(): array
     {
