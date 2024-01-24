@@ -182,11 +182,13 @@ class RequestReplacementStaffController extends Controller
 
     public function create_announcement()
     {
+        /*
         session()->flash('danger', 'Estimados Usuario: No es posible crear solicitudes debido a mantención programada, agradecemos su comprensión');
         return redirect()->route('replacement_staff.request.own_index');
+        */
         
 
-        // return view('replacement_staff.request.create_announcement');
+        return view('replacement_staff.request.create_announcement');
     }
 
     public function create_extension(RequestReplacementStaff $requestReplacementStaff)
@@ -218,13 +220,14 @@ class RequestReplacementStaffController extends Controller
                 $position = new Position($request->All());
             }else{
                 $request_replacement = new RequestReplacementStaff($request->All());
-                /* CONDICIÓN DE CONVOCATORIA INTERNA O MIXTA */
+                /* CONDICIÓN DE CONVOCATORIA INTERNA O MIXTA 
                 if($request->fundament_detail_manage_id != 6 && $request->fundament_detail_manage_id != 7){
                     $request_replacement->request_status = 'pending';
                 }
                 else{
                     $request_replacement->request_status = 'complete';
                 }
+                */
             }
 
             $request_replacement->form_type = $formType;
@@ -467,15 +470,16 @@ class RequestReplacementStaffController extends Controller
                 }
                 $position++;
             }
+            /* ----------------------------------------------------------------------- */
 
             //SE NOTIFICA A UNIDAD DE RECLUTAMIENTO
-            $notification_reclutamiento_manager = Authority::getAuthorityFromDate(48, today(), 'manager');
+            $notification_reclutamiento_manager = Authority::getAuthorityFromDate(Parameter::get('ou','ReclutamientoSSI'), today(), 'manager');
             if($notification_reclutamiento_manager){
                 $notification_reclutamiento_manager->user->notify(new NotificationNewRequest($request_replacement, 'reclutamiento'));
             }
             //SE NOTIFICA A FUNCIONARIO SOLICITANTE
             $request_replacement->requesterUser->notify(new NotificationNewRequest($request_replacement, 'requester'));
-            /* ----------------------------------------------------------------------- */
+            
 
             session()->flash('success', 'Estimados Usuario, se ha creado la Solicitud Exitosamente');
             return redirect()->route('replacement_staff.request.own_index');
@@ -854,7 +858,53 @@ class RequestReplacementStaffController extends Controller
                     $request_sing->save();
                 }
                 else{
-                    // AQUÍ CONVOCATORIAS
+                    //AHORA SE CREA APROBACIONES EN APPROVALS (PLANIFICACION, )
+
+                    // SE CREA APROBACIÓN UNIDAD DE PLANIFICACION
+                    $prrhh_approval = $requestReplacementStaff->approvals()->create([
+                        "module"                            => "Solicitudes de Contración",
+                        "module_icon"                       => "bi bi-id-card",
+                        "subject"                           => "Solicitud de Aprobación Planificación",
+                        "sent_to_ou_id"                     => Parameter::get('ou','PlanificacionRrhhSST'),
+                        "document_route_name"               => "replacement_staff.request.to_sign_approval",
+                        "document_route_params"             => json_encode(["request_replacement_staff_id" => $requestReplacementStaff->id]),
+                        "active"                            => true,
+                        "previous_approval_id"              => $requestReplacementStaff->approvals->last()->id,
+                        "callback_controller_method"        => "App\Http\Controllers\ReplacementStaff\RequestReplacementStaffController@approvalCallback",
+                        "callback_controller_params"        => json_encode([
+                            'request_replacement_staff_id'  => $requestReplacementStaff->id,
+                            'applicant_id'                  => null,
+                            'process'                       => null
+                        ]),
+                        "position"                          => "left",
+                    ]);
+
+                    // SE CREA APROBACIÓN SGDP 
+                    $sdgp_approval = $requestReplacementStaff->approvals()->create([
+                        "module"                            => "Solicitudes de Contración",
+                        "module_icon"                       => "bi bi-id-card",
+                        "subject"                           => "Solicitud de Aprobación SDGP",
+                        "sent_to_ou_id"                     => Parameter::get('ou','SubRRHH'),
+                        "document_route_name"               => "replacement_staff.request.to_sign_approval",
+                        "document_route_params"             => json_encode(["request_replacement_staff_id" => $requestReplacementStaff->id]),
+                        "active"                            => false,
+                        "previous_approval_id"              => $prrhh_approval->id,
+                        "callback_controller_method"        => "App\Http\Controllers\ReplacementStaff\RequestReplacementStaffController@approvalCallback",
+                        "callback_controller_params"        => json_encode([
+                            'request_replacement_staff_id'  => $requestReplacementStaff->id,
+                            'applicant_id'                  => null,
+                            'process'                       => 'to select'
+                        ]),
+                        "position"                          => "left",
+                    ]);
+
+                    // NOTIFICACION PARA RECLUTAMIENTO
+                    /*
+                    $notification_reclutamiento_manager = Authority::getAuthorityFromDate(Parameter::get('ou','ReclutamientoSSI'), today(), 'manager');
+                    if($notification_reclutamiento_manager){
+                        $notification_reclutamiento_manager->user->notify(new NotificationEndSigningProcess($requestReplacementStaff));
+                    }
+                    */
                 }
             }
             if($process == 'to select'){

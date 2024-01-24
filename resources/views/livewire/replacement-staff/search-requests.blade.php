@@ -372,6 +372,52 @@
                             @endforeach
                         @endif
                         --}}
+
+                        @if(count($requestReplacementStaff->approvals) > 0)
+
+                        @else
+                            <!-- Antiguo Modelo Interno de Aprobaciones -->
+                            @foreach($requestReplacementStaff->requestSign as $sign)
+                                @if($sign->request_status == 'pending' || $sign->request_status == NULL)
+                                    <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="{{ $sign->organizationalUnit->name }}">
+                                        <i class="fas fa-clock fa-2x"></i>
+                                    </span>
+                                @endif
+                                @if($sign->request_status == 'accepted')
+                                    <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="{{ $sign->organizationalUnit->name }}" style="color: green;">
+                                        <i class="fas fa-check-circle fa-2x"></i>
+                                    </span>
+                                @endif
+                                @if($sign->request_status == 'rejected')
+                                    <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="{{ $sign->organizationalUnit->name }}" style="color: Tomato;">
+                                        <i class="fas fa-times-circle fa-2x"></i>
+                                    </span>
+                                @endif
+                                @if($sign->request_status == 'not valid')
+                                    @if($requestReplacementStaff->signaturesFile)
+                                        @foreach($requestReplacementStaff->signaturesFile->signaturesFlows as $flow)
+                                            @if($flow->status == 1)
+                                            <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="{{ $sign->organizationalUnit->name }}" style="color: green;">
+                                                <i class="fas fa-signature fa-2x"></i>
+                                            </span>
+                                            @elseif($flow->status === 0)
+                                            <span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" title="{{ $sign->organizationalUnit->name }}" style="color: tomato;">
+                                                <i class="fas fa-times-circle fa-2x"></i>
+                                            </span>
+                                            @else
+                                            <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="{{ $sign->organizationalUnit->name }}">
+                                                <i class="fas fa-clock fa-2x"></i>
+                                            </span>
+                                            @endif
+                                        @endforeach
+                                    @else
+                                        <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="{{ $sign->organizationalUnit->name }}">
+                                            <i class="fas fa-clock fa-2x"></i>
+                                        </span>
+                                    @endif
+                                @endif
+                            @endforeach
+                        @endif
                         @if($requestReplacementStaff->request_id != NULL)
                             <span class="badge badge-info">Continuidad</span>
                         @endif
