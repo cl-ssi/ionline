@@ -730,7 +730,7 @@
                         <a class="dropdown-item small" href="{{ route('openNotification', $notification) }}">
                             {!! $notification->data['icon'] ?? null !!}
                             <b>{{ $notification->data['module'] ?? '' }}</b>
-                            {{ substr($notification->data['subject'], 0, 100) }}
+                            {!! substr($notification->data['subject'], 0, 100) !!}
                         </a>
                         @endforeach
                         @else
