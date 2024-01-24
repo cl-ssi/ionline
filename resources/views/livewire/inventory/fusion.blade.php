@@ -1,5 +1,11 @@
 <div>
-    <h3>Fusión </h3>
+    @section('title', 'Fusión')
+
+    @include('inventory.nav', [
+        'establishment' => auth()->user()->organizationalUnit->establishment->id
+    ])
+
+    <h3>Fusión</h3>
 
     <div class="row row-cols-lg-auto g-2 mb-3 align-items-center">
         <div class="col-12">
