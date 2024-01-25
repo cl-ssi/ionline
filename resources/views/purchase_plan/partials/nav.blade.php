@@ -6,8 +6,8 @@
             @can('Purchase Plan: all')
                 <li><a class="dropdown-item" href="{{ route('purchase_plan.all_index') }}"><i class="fas fa-inbox"></i> Todos los Plan de Compras</a></li>
             @endcan
-                <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="{{ route('purchase_plan.create') }}"><i class="fas fa-plus"></i> Nuevo Plan de Compras</a></li>
+            {{--<li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="{{ route('purchase_plan.create') }}"><i class="fas fa-plus"></i> Nuevo Plan de Compras</a></li>--}}
         </ul>
     </li>
     @can('Purchase Plan: reports')
