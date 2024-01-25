@@ -484,159 +484,164 @@
     <table class="table table-sm table-bordered small">
         <thead style="font-size: 12px;">
             <tr>
-            <!-- APPROVALS -->
-            @if(count($requestReplacementStaff->approvals) > 0)
-                @foreach($requestReplacementStaff->approvals as $approval)
-                    @if($approval->subject == "Solicitud de Aprobación Jefatura Depto. o Unidad")
-                    <th class="table-active text-center">
-                        {{ $approval->sentToOu->name }}
-                    </th>
+                @if(count($requestReplacementStaff->approvals) > 0)
+                    <!-- APPROVALS -->
+                    @foreach($requestReplacementStaff->approvals as $approval)
+                        <!-- APPROVALS DE JEFATURA DIRECTA -->
+                        @if($approval->subject == "Solicitud de Aprobación Jefatura Depto. o Unidad")
+                            <th class="table-active text-center">
+                                {{ $approval->sentToOu->name }}
+                            </th>     
+                        @endif
+                    @endforeach
+
+
+                    <!-- APROBACION DE PERSONAL -->
+                    @if($requestReplacementStaff->form_type == 'replacement')
+                        @if(count($requestReplacementStaff->requestSign) > 0)
+                            @foreach($requestReplacementStaff->requestSign as $sign)
+                                <th class="table-active text-center">
+                                    {{ $sign->organizationalUnit->name }}
+                                </th>
+                            @endforeach
+                        @else
+                            <th class="table-active text-center">
+                                {{ App\Models\Parameters\Parameter::get('ou', 'NombrePersonal') }}
+                            </th>
+                        @endif
                     @endif
 
-                    @if($approval->subject == "Solicitud de Aprobación SDGP")
-                        @php $flag = 1; @endphp
-                    @else
-                        @php $flag = 0; @endphp
+                    <!-- APPROVALS DE PLANIFICACION - SDGP -->
+                    @php $flagPostPersonal = array(); @endphp
+                    @foreach($requestReplacementStaff->approvals as $approval)
+                        @if($approval->subject == 'Solicitud de Aprobación Planificación' || 
+                            $approval->subject == 'Solicitud de Aprobación SDGP')
+                            <th class="table-active text-center">
+                                {{ $approval->sentToOu->name }}
+                            </th>
+                            @php $flagPostPersonal[] = 1 @endphp
+                        @else
+                            @php $flagPostPersonal[] = 0; @endphp
+                        @endif
+                    @endforeach
+                
+                    @if(!in_array(1, $flagPostPersonal))
+                        <th class="table-active text-center">
+                            {{ App\Models\Parameters\Parameter::get('ou','NombrePlanificaciónRRHH') }}
+                        </th>
+                        <th class="table-active text-center">
+                            {{ App\Models\Parameters\Parameter::get('ou','NombreSubRRHH') }}
+                        </th>
                     @endif
 
-                    @if($approval->subject == "Solicitud de Aprobación Finanzas")
-                        @php $flagFinance = 1; @endphp
-                    @else
-                        @php $flagFinance = 0; @endphp
+                    <!-- APPROVALS DE FINANZAS FIRMA ELECTRÓNICA -->
+                    @php $flagPostRrhh = array(); @endphp
+                    @if($requestReplacementStaff->form_type == 'replacement')
+                        @foreach($requestReplacementStaff->approvals as $approval)
+                            @if(str_contains($approval->subject, 'Certificado de disponibilidad presupuestaria'))
+                                <th class="table-active text-center">
+                                    {{ $approval->sentToOu->name }}
+                                </th>
+                                @php $flagPostRrhh[] = 1 @endphp
+                            @else
+                                @php $flagPostRrhh[] = 0; @endphp
+                            @endif
+                        @endforeach
                     @endif
 
-                @endforeach
-
-                @if(count($requestReplacementStaff->requestSign) > 0)
-                    @foreach($requestReplacementStaff->requestSign as $sign)
+                    @if(!in_array(1, $flagPostRrhh))
+                        <th class="table-active text-center">
+                            {{ App\Models\Parameters\Parameter::get('ou','NombreFinanzasSSI') }}
+                        </th>
+                    @endif
+                @else
+                    <!-- ANTIGUO SISTEMA DE APROBACIONES -->
+                    @foreach($requestReplacementStaff->RequestSign as $sign)
                         <th class="table-active text-center">
                             {{ $sign->organizationalUnit->name }}
                         </th>
                     @endforeach
-
-                @else
-                    <th class="table-active text-center">
-                        {{ App\Models\Parameters\Parameter::get('ou', 'NombrePersonal') }}
-                    </th>
                 @endif
-
-                @if($flag == 0)
-                    <th class="table-active text-center">
-                        {{ App\Models\Parameters\Parameter::where('module', 'ou')->where('parameter', 'NombrePlanificacionRRHH')->first()->value }}
-                    </th>
-                    <th class="table-active text-center">
-                        {{ App\Models\Parameters\Parameter::where('module', 'ou')->where('parameter', 'NombreSubRRHH')->first()->value }}
-                    </th>
-                @endif
-            
-                @foreach($requestReplacementStaff->approvals as $approval)
-                    @if($approval->subject != "Solicitud de Aprobación Jefatura Depto. o Unidad")
-                    <th class="table-active text-center">
-                        {{ $approval->sentToOu->name }}
-                    </th>
-                    @endif
-                @endforeach
-
-                @if($flagFinance == 0)
-                    <th class="table-active text-center">
-                        {{ App\Models\Parameters\Parameter::where('module', 'ou')->where('parameter', 'NombreFinanzasSSI')->first()->value }}
-                    </th>
-                @endif
-
-            @else
-                <!-- ANTIGUO SISTEMA DE APROBACIONES -->
-                @foreach($requestReplacementStaff->RequestSign as $sign)
-                    <th class="table-active text-center">
-                        {{ $sign->organizationalUnit->name }}
-                    </th>
-                @endforeach
-            @endif    
             </tr>
         </thead>
         <tbody class="small">
             <tr class="text-center">
-            <!-- APPROVALS -->
-            @if(count($requestReplacementStaff->approvals) > 0)
-            <!-- APPROVALS JEFATURAS DIRECTAS -->
-                @foreach($requestReplacementStaff->approvals as $approval)
-                    @if($approval->subject == "Solicitud de Aprobación Jefatura Depto. o Unidad")
-                        <td>
-                            @if($approval->StatusInWords == "Pendiente")
-                                <span>
-                                    <i class="fas fa-check-circle"></i> {{ $approval->StatusInWords }}
-                                </span> <br>
-                            @endif
-                            @if($approval->StatusInWords == "Aprobado")
-                                <span style="color: green;">
-                                    <i class="fas fa-check-circle"></i> {{ $approval->StatusInWords }}
-                                </span> <br>
-                                <i class="fas fa-user"></i> {{ $approval->approver->FullName }}<br>
-                                <i class="fas fa-calendar-alt"></i> {{ $approval->approver_at->format('d-m-Y H:i:s') }}<br>
-                            @endif
-                            @if($approval->StatusInWords == "Rechazado")
-                                <span style="color: tomato;">
-                                    <i class="fas fa-check-circle"></i> {{ $approval->StatusInWords }}
-                                </span> <br>
-                                <i class="fas fa-user"></i> {{ $approval->approver->FullName }}<br>
-                                <i class="fas fa-calendar-alt"></i> {{ $approval->approver_at->format('d-m-Y H:i:s') }}
-                                <hr>
-                                {{ $approval->approver_observation }}
-                            @endif
-                        </td>
+                @if(count($requestReplacementStaff->approvals) > 0)
+                    <!-- APPROVALS -->
+                    @foreach($requestReplacementStaff->approvals as $approval)
+                        <!-- APPROVALS DE JEFATURA DIRECTA -->
+                        @if($approval->subject == "Solicitud de Aprobación Jefatura Depto. o Unidad")
+                            <td>
+                                @if($approval->StatusInWords == "Pendiente")
+                                    <span>
+                                        <i class="fas fa-check-circle"></i> {{ $approval->StatusInWords }}
+                                    </span> <br>
+                                @endif
+                                @if($approval->StatusInWords == "Aprobado")
+                                    <span style="color: green;">
+                                        <i class="fas fa-check-circle"></i> {{ $approval->StatusInWords }}
+                                    </span> <br>
+                                    <i class="fas fa-user"></i> {{ $approval->approver->FullName }}<br>
+                                    <i class="fas fa-calendar-alt"></i> {{ $approval->approver_at->format('d-m-Y H:i:s') }}<br>
+                                @endif
+                                @if($approval->StatusInWords == "Rechazado")
+                                    <span style="color: tomato;">
+                                        <i class="fas fa-check-circle"></i> {{ $approval->StatusInWords }}
+                                    </span> <br>
+                                    <i class="fas fa-user"></i> {{ $approval->approver->FullName }}<br>
+                                    <i class="fas fa-calendar-alt"></i> {{ $approval->approver_at->format('d-m-Y H:i:s') }}
+                                    <hr>
+                                    {{ $approval->approver_observation }}
+                                @endif
+                            </td>   
+                        @endif
+                    @endforeach
+
+
+                    <!-- APROBACION DE PERSONAL -->
+                    @if($requestReplacementStaff->form_type == 'replacement')
+                        @if(count($requestReplacementStaff->requestSign) > 0)
+                            @foreach($requestReplacementStaff->requestSign as $sign)
+                                <td>
+                                    @if($sign->request_status == 'accepted')
+                                        <span style="color: green;">
+                                            <i class="fas fa-check-circle"></i> {{ $sign->StatusValue }} 
+                                        </span><br>
+                                        <i class="fas fa-user"></i> {{ $sign->user->TinnyName }}<br>
+                                        <i class="fas fa-calendar-alt"></i> {{ ($sign->date_sign) ? $sign->date_sign->format('d-m-Y H:i:s') : '' }}<br>
+                                    @endif
+                                    @if($sign->request_status == 'rejected')
+                                        <span style="color: Tomato;">
+                                            <i class="fas fa-times-circle"></i> {{ $sign->StatusValue }} 
+                                        </span><br>
+                                        <i class="fas fa-user"></i> {{ $sign->user->FullName }}<br>
+                                        <i class="fas fa-calendar-alt"></i> {{ $sign->date_sign->format('d-m-Y H:i:s') }}<br>
+                                        <hr>
+                                        {{ $sign->observation }}<br>
+                                    @endif
+                                    @if($sign->request_status == 'pending' || $sign->request_status == NULL)
+                                        <i class="fas fa-clock"></i> Pendiente<br>
+                                    @endif
+                                </td>
+                            @endforeach
+                        @else
+                            <td>
+                                <i class="fas fa-clock"></i> Pendiente<br>
+                            </td>    
+                        @endif
                     @endif
-                @endforeach
-            
-            <!-- APROBACION INTERNA PERSONAL -->
-            @if(count($requestReplacementStaff->requestSign) > 0)
-            @foreach($requestReplacementStaff->requestSign as $sign)
-                <td>
-                @if($sign->request_status == 'accepted')
-                    <span style="color: green;">
-                        <i class="fas fa-check-circle"></i> {{ $sign->StatusValue }} 
-                    </span><br>
-                    <i class="fas fa-user"></i> {{ $sign->user->TinnyName }}<br>
-                    <i class="fas fa-calendar-alt"></i> {{ ($sign->date_sign) ? $sign->date_sign->format('d-m-Y H:i:s') : '' }}<br>
-                @endif
-                @if($sign->request_status == 'rejected')
-                    <span style="color: Tomato;">
-                        <i class="fas fa-times-circle"></i> {{ $sign->StatusValue }} 
-                    </span><br>
-                    <i class="fas fa-user"></i> {{ $sign->user->FullName }}<br>
-                    <i class="fas fa-calendar-alt"></i> {{ $sign->date_sign->format('d-m-Y H:i:s') }}<br>
-                    <hr>
-                    {{ $sign->observation }}<br>
-                @endif
-                @if($sign->request_status == 'pending' || $sign->request_status == NULL)
-                    <i class="fas fa-clock"></i> Pendiente<br>
-                @endif
-                </td>
-            @endforeach
 
-            @else
-                <td>
-                    <i class="fas fa-clock"></i> Pendiente<br>
-                </td>    
-
-            @endif
-
-            @if($flag == 0)
-                <td>
-                    <i class="fas fa-check-circle"></i> Pendiente
-                </td>
-                <td>
-                    <i class="fas fa-check-circle"></i> Pendiente
-                </td>
-            @endif
-
-            @if($flag ==  1)
-                @foreach($requestReplacementStaff->approvals as $approval)
-                    @if($approval->subject != "Solicitud de Aprobación Jefatura Depto. o Unidad")
-                        <td>
-                            @if($approval->StatusInWords == "Pendiente")
-                                <span>
-                                    <i class="fas fa-check-circle"></i> {{ $approval->StatusInWords }}
-                                </span> <br>
-                            @endif
+                    <!-- APPROVALS DE PLANIFICACION - SDGP -->
+                    @php $flagPostPersonal = array(); @endphp
+                    @foreach($requestReplacementStaff->approvals as $approval)
+                        @if($approval->subject == 'Solicitud de Aprobación Planificación' || 
+                            $approval->subject == 'Solicitud de Aprobación SDGP')
+                            <td>
+                                @if($approval->StatusInWords == "Pendiente")
+                                    <span>
+                                        <i class="fas fa-check-circle"></i> {{ $approval->StatusInWords }}
+                                    </span> <br>
+                                @endif
                                 @if($approval->StatusInWords == "Aprobado")
                                     <span style="color: green;">
                                         <i class="fas fa-check-circle"></i> {{ $approval->StatusInWords }}
@@ -654,68 +659,112 @@
                                     {{ $approval->approver_observation }}
                                 @endif
                             </td>
+                            @php $flagPostPersonal[] = 1 @endphp
+                        @else
+                            @php $flagPostPersonal[] = 0; @endphp
                         @endif
-                        
                     @endforeach
-                @endif
+                
+                    @if(!in_array(1, $flagPostPersonal))
+                        <td>
+                            <i class="fas fa-clock"></i> Pendiente<br>
+                        </td>
+                        <td>
+                            <i class="fas fa-clock"></i> Pendiente<br>
+                        </td> 
+                    @endif
 
-            @if($flagFinance == 0)
-                <td>
-                    <i class="fas fa-check-circle"></i> Pendiente
-                </td>
-            @endif
-
-            @else
-            <!-- ANTIGUO SISTEMA DE APROBACIONES -->
-            @foreach($requestReplacementStaff->RequestSign as $sign)
-                <td class="text-center">
-                @if($sign->request_status == 'accepted')
-                    <span style="color: green;">
-                        <i class="fas fa-check-circle"></i> {{ $sign->StatusValue }} 
-                    </span><br>
-                    <i class="fas fa-user"></i> {{ $sign->user->TinnyName }}<br>
-                    <i class="fas fa-calendar-alt"></i> {{ ($sign->date_sign) ? $sign->date_sign->format('d-m-Y H:i:s') : '' }}<br>
-                @endif
-                @if($sign->request_status == 'rejected')
-                    <span style="color: Tomato;">
-                        <i class="fas fa-times-circle"></i> {{ $sign->StatusValue }} 
-                    </span><br>
-                    <i class="fas fa-user"></i> {{ $sign->user->FullName }}<br>
-                    <i class="fas fa-calendar-alt"></i> {{ $sign->date_sign->format('d-m-Y H:i:s') }}<br>
-                    <hr>
-                    {{ $sign->observation }}<br>
-                @endif
-                @if($sign->request_status == 'pending' || $sign->request_status == NULL)
-                    <i class="fas fa-clock"></i> Pendiente<br>
-                @endif
-                @if($sign->request_status == 'not valid')
-                    @if($requestReplacementStaff->signaturesFile)
-                        @foreach($requestReplacementStaff->signaturesFile->signaturesFlows as $flow)
-                            @if($flow->status == 1)
-                                <span style="color: green;">
-                                    <i class="fas fa-signature"></i> Aceptada
-                                </span><br>
-                                <i class="fas fa-user"></i> {{ $flow->signerName }}<br>
-                                <i class="fas fa-calendar-alt"></i> {{ $flow->signature_date->format('d-m-Y H:i:s') }}
-                            @elseif($flow->status === 0)
-                                <span style="color: Tomato;">
-                                    <i class="fas fa-times-circle"></i> Rechazada
-                                </span><br>
-                                <i class="fas fa-user"></i> {{ $flow->signerName }}<br>
-                                <i class="fas fa-calendar-alt"></i> {{ $flow->signature->rejected_at->format('d-m-Y H:i:s') }}<br>
-                                <hr>
-                                {{ $flow->observation }}<br>
+                    <!-- APPROVALS DE FINANZAS FIRMA ELECTRÓNICA -->
+                    @php $flagPostRrhh = array(); @endphp
+                    @if($requestReplacementStaff->form_type == 'replacement')
+                        @foreach($requestReplacementStaff->approvals as $approval)
+                            @if(str_contains($approval->subject, 'Certificado de disponibilidad presupuestaria'))
+                                <td>
+                                    @if($approval->StatusInWords == "Pendiente")
+                                        <span>
+                                            <i class="fas fa-check-circle"></i> {{ $approval->StatusInWords }}
+                                        </span> <br>
+                                    @endif
+                                    @if($approval->StatusInWords == "Aprobado")
+                                        <span style="color: green;">
+                                            <i class="fas fa-check-circle"></i> {{ $approval->StatusInWords }}
+                                        </span> <br>
+                                        <i class="fas fa-user"></i> {{ $approval->approver->FullName }}<br>
+                                        <i class="fas fa-calendar-alt"></i> {{ $approval->approver_at->format('d-m-Y H:i:s') }}<br>
+                                    @endif
+                                    @if($approval->StatusInWords == "Rechazado")
+                                        <span style="color: tomato;">
+                                            <i class="fas fa-check-circle"></i> {{ $approval->StatusInWords }}
+                                        </span> <br>
+                                        <i class="fas fa-user"></i> {{ $approval->approver->FullName }}<br>
+                                        <i class="fas fa-calendar-alt"></i> {{ $approval->approver_at->format('d-m-Y H:i:s') }}
+                                        <hr>
+                                        {{ $approval->approver_observation }}
+                                    @endif
+                                </td>
+                                @php $flagPostRrhh[] = 1 @endphp
                             @else
-                                <i class="fas fa-clock"></i> Pendiente<br>
+                                @php $flagPostRrhh[] = 0; @endphp
                             @endif
                         @endforeach
-                    @else
-                        <i class="fas fa-clock"></i> Pendiente<br>
                     @endif
+
+                    @if(!in_array(1, $flagPostRrhh))
+                        <td>
+                            <i class="fas fa-clock"></i> Pendiente<br>
+                        </td> 
+                    @endif
+                @else
+                    <!-- ANTIGUO SISTEMA DE APROBACIONES -->
+                    @foreach($requestReplacementStaff->RequestSign as $sign)
+                        <td class="text-center">
+                            @if($sign->request_status == 'accepted')
+                                <span style="color: green;">
+                                    <i class="fas fa-check-circle"></i> {{ $sign->StatusValue }} 
+                                </span><br>
+                                <i class="fas fa-user"></i> {{ $sign->user->TinnyName }}<br>
+                                <i class="fas fa-calendar-alt"></i> {{ ($sign->date_sign) ? $sign->date_sign->format('d-m-Y H:i:s') : '' }}<br>
+                            @endif
+                            @if($sign->request_status == 'rejected')
+                                <span style="color: Tomato;">
+                                    <i class="fas fa-times-circle"></i> {{ $sign->StatusValue }} 
+                                </span><br>
+                                <i class="fas fa-user"></i> {{ $sign->user->FullName }}<br>
+                                <i class="fas fa-calendar-alt"></i> {{ $sign->date_sign->format('d-m-Y H:i:s') }}<br>
+                                <hr>
+                                {{ $sign->observation }}<br>
+                            @endif
+                            @if($sign->request_status == 'pending' || $sign->request_status == NULL)
+                                <i class="fas fa-clock"></i> Pendiente<br>
+                            @endif
+                            @if($sign->request_status == 'not valid')
+                                @if($requestReplacementStaff->signaturesFile)
+                                    @foreach($requestReplacementStaff->signaturesFile->signaturesFlows as $flow)
+                                        @if($flow->status == 1)
+                                            <span style="color: green;">
+                                                <i class="fas fa-signature"></i> Aceptada
+                                            </span><br>
+                                            <i class="fas fa-user"></i> {{ $flow->signerName }}<br>
+                                            <i class="fas fa-calendar-alt"></i> {{ $flow->signature_date->format('d-m-Y H:i:s') }}
+                                        @elseif($flow->status === 0)
+                                            <span style="color: Tomato;">
+                                                <i class="fas fa-times-circle"></i> Rechazada
+                                            </span><br>
+                                            <i class="fas fa-user"></i> {{ $flow->signerName }}<br>
+                                            <i class="fas fa-calendar-alt"></i> {{ $flow->signature->rejected_at->format('d-m-Y H:i:s') }}<br>
+                                            <hr>
+                                            {{ $flow->observation }}<br>
+                                        @else
+                                            <i class="fas fa-clock"></i> Pendiente<br>
+                                        @endif
+                                    @endforeach
+                                @else
+                                    <i class="fas fa-clock"></i> Pendiente<br>
+                                @endif
+                            @endif
+                        </td>
+                    @endforeach
                 @endif
-                </td>
-            @endforeach
-            @endif
             <tr>
         </tbody>
     </table>
