@@ -186,6 +186,17 @@ Urgencia y Pabellon deberían existir
 - Integración: Ficha clínica, Rebajar por paciente
 - Rebajar por pabellon/piso (otro tipo de rebaja)
 
+### Presentación Experto
+
+- Stock Crítico
+- Bodega de consumo inmediato
+- Aprobar pedido extra (es como aumento de cupo)
+- Solicitudes de pedidos
+- CENABAST cargan la info de lo que le va a llegar de un reporte de CENABAST
+- Las facturas se ingresan primero, y no las guias, luego se pueden enviar por una nómina a finanzas
+
+- URL Prod: http://10.6.53.30/produccion/interface.php
+- URL Test: http://128.1.4.230/produccion/login.php
 
 Compromisos:
 ========================================================================
@@ -314,3 +325,6 @@ Nota del 1 al 7 con decimales
 
 
 Factor
+
+
+[ ] Video usuarios y autoridades
