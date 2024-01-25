@@ -180,7 +180,7 @@
             <td><b>1. DIARIO</b></td>
             <td align="center">100%</td>
             <td align="right">
-                ${{ number_format($allowance->allowanceValue->value, 0, ",", ".") }}
+                ${{ ($allowance->day_value) ? number_format($allowance->day_value, 0, ",", ".") : number_format($allowance->allowanceValue->value, 0, ",", ".") }}
             </td>
             <td align="center"> 
                 {{ ($allowance->total_days) ? intval($allowance->total_days) : 0 }}
