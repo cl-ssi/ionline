@@ -45,6 +45,11 @@ class SearchPurchasePlan extends Component
                 $organizationalUnitIn[] = Parameter::get('ou', 'DeptoRRFF');
             }
 
+            if(Auth::user()->organizationalUnit->id == Parameter::get('ou', 'DeptoAPS')){
+                $childs_array = Auth::user()->organizationalUnit->childs->pluck('id')->toArray();
+                $organizationalUnitIn = [Auth::user()->organizationalUnit->id, ...$childs_array];
+            }
+
             return view('livewire.purchase-plan.search-purchase-plan', [
                 'purchasePlans' => PurchasePlan::with('organizationalUnit.establishment', 'approvals.sentToOu', 'userResponsible', 'userCreator')->latest()
                     ->where('user_creator_id', Auth::user()->id)
