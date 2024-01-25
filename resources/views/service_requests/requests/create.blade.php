@@ -220,14 +220,13 @@
 			<!-- <input type="text" class="form-control" id="for_programm_name" placeholder="" name="programm_name"> -->
 			<select name="programm_name" class="form-control" required id="programm_name">
                 <option value=""></option>
-                <option value="Covid19-APS No Médicos">Covid19-APS No Médicos</option>
-                <option value="Covid19-APS Médicos">Covid19-APS Médicos</option>
-                <option value="Covid19 No Médicos">Covid19 No Médicos</option>
-                <option value="Covid19 Médicos">Covid19 Médicos</option>
-
 
                 @if(Auth::user()->organizationalUnit->establishment_id == 1)
-                    <option value="Covid 2022">Covid 2022</option>
+                    <option value="Covid19-APS No Médicos" disabled>Covid19-APS No Médicos</option>
+                    <option value="Covid19-APS Médicos" disabled>Covid19-APS Médicos</option>
+                    <option value="Covid19 No Médicos" disabled>Covid19 No Médicos</option>
+                    <option value="Covid19 Médicos" disabled>Covid19 Médicos</option>
+                    <option value="Covid 2022" disabled>Covid 2022</option>
                     <option value="CONSULTORIO DE LLAMADA" disabled>CONSULTORIO DE LLAMADA</option>
                     <option value="33 MIL HORAS">33 MIL HORAS</option>
                     <option value="DFL" disabled>DFL</option>
@@ -241,6 +240,10 @@
                     <option value="TURNO DE RESIDENCIA" disabled>TURNO DE RESIDENCIA</option>
                     <option value="SENDA">SENDA</option>
                 @else
+                    <option value="Covid19-APS No Médicos">Covid19-APS No Médicos</option>
+                    <option value="Covid19-APS Médicos">Covid19-APS Médicos</option>
+                    <option value="Covid19 No Médicos">Covid19 No Médicos</option>
+                    <option value="Covid19 Médicos">Covid19 Médicos</option>
                     <option value="Covid 2022">Covid 2022</option>
                     <option value="PRAPS">PRAPS</option>
                     <option value="PESPI">PESPI</option>
