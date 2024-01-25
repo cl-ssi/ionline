@@ -369,4 +369,78 @@ class DigitalSignature extends Model
         return Storage::put($filename, $pdfContent, ['CacheControl' => 'no-store']);
     }
 
+
+    /**
+     * Esto no se está ocupando, es para guardar el código de como firmar un PDF con una firma
+     * electronica utilizando un certificado pfx convertido a cert y key
+     * o bien uno generado directamente con openssl 
+     * $ openssl pkcs12 -in firma.pfx -out firma.crt -nodes
+     * 
+     */
+    public static function localSign() {
+        // tinker > App\Models\Documents\DigitalSignature::localSign()
+        $certificate = '-----BEGIN CERTIFICATE-----...';
+
+        $private = '-----BEGIN PRIVATE KEY-----...';
+
+        // Hay que instalar este paquete
+        $pdf = new \setasign\Fpdi\Tcpdf\Fpdi();
+        $pdf->SetPrintHeader(false);
+        $pdf->SetPrintFooter(false);
+
+        $pages = $pdf->setSourceFile('/home/atorres/signatures/85.pdf');
+        for ($pageNo = 1; $pageNo <= $pages; $pageNo++) {
+            $page = $pdf->importPage($pageNo);
+
+            $size = $pdf->getTemplateSize($page);
+
+            // create a page (landscape or portrait depending on the imported page size)
+            if ($size[0] > $size[1]) {
+                $pdf->AddPage('L', [$size[0], $size[1]]);
+            } else {
+                $pdf->AddPage('P', [$size[0], $size[1]]);
+            }
+
+            print_r($size);
+            // $pdf->AddPage();
+            $pdf->useTemplate($page, 0, 0);
+            // use the imported page
+            if ($pageNo == 1) {
+
+                $info = [
+                    'Name' => 'Servicio de Salud Tarapaca',
+                    'Location' => 'Tarapaca',
+                    'Reason' => 'Numeracion',
+                    'ContactInfo' => 'sistemas.sst@redsalud.gob.cl',
+                ];
+
+                // Obtener la imagen de la firma en base64
+                //$signatureBase64 = app(ImageService::class)->createDocumentNumber($verificationCode, $number);
+
+                //Obtener $alto y $ancho de la imagen
+                $ancho = 60;
+                $alto = 14;
+
+                // Coordenadas de la firma esquina superior izquierda
+                $eje_x = 155.9;
+                $eje_y = 0;
+
+                // Firmado propiamente tal
+                $pdf->setSignature($certificate, $private, '', '', 2, $info, 'A');
+                // A: Para firma, null para certificado
+
+                // Poner la firma en el PDF
+                // Arriba está signatureBase64  $pdf->MemImage($variable con la imagen)
+                $pdf->Image('firma-template.png', $eje_x, $eje_y, $ancho, $alto, 'PNG');
+
+                // Definir el área activa de la firma en el pdf
+                $pdf->setSignatureAppearance($eje_x, $eje_y, $ancho, $alto);
+            }
+
+        }
+
+        // Guardar el PDF firmado en el directorio $out
+        $output_file = '/home/atorres/signatures/out.pdf';
+        $pdf->Output($output_file, 'F');
+    }
 }
