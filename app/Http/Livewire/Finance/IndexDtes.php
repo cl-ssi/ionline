@@ -288,6 +288,7 @@ class IndexDtes extends Component
                 'reason_rejection' => $this->reason_rejection,
                 'rejected_user_id' => auth()->id(),
                 'rejected_at' => now(),
+                'status' => 'Rechazada'
             ]);
         
         $this->refresh();

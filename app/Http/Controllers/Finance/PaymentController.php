@@ -89,6 +89,7 @@ class PaymentController extends Controller
             'requestForm.father.requestFormFiles'
         ])
             ->whereNotIn('tipo_documento', ['guias_despacho','nota_debito','nota_credito'])
+            ->whereNull('rejected')
             ->where('all_receptions', 1)
             ->where('establishment_id', auth()->user()->organizationalUnit->establishment->id)
             ->where(function (Builder $query) {
@@ -157,6 +158,7 @@ class PaymentController extends Controller
                 'requestForm.father',
                 'requestForm.father.requestFormFiles'
             ])
+            ->whereNull('rejected')
             ->where('all_receptions', 1)
             ->where('payment_ready', 1)
             ->where('establishment_id', auth()->user()->organizationalUnit->establishment_id);
