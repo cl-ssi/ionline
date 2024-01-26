@@ -1992,6 +1992,7 @@ Route::prefix('pharmacies')->as('pharmacies.')->middleware(['auth', 'must.change
     Route::get('admin_view', [App\Http\Controllers\Pharmacies\PharmacyController::class, 'admin_view'])->name('admin_view');
     Route::get('pharmacy_users', [App\Http\Controllers\Pharmacies\PharmacyController::class, 'pharmacy_users'])->name('pharmacy_users');
     Route::post('user_asign_store', [PharmacyController::class, 'user_asign_store'])->name('user_asign_store');
+    Route::get('change/{pharmacy}', [PharmacyController::class, 'change'])->name('change');
     Route::delete('/{pharmacy}/{user}/user_asign_destroy', [PharmacyController::class, 'user_asign_destroy'])->name('user_asign_destroy');
 
 
