@@ -106,6 +106,16 @@
     @endcanany
 
     @canany(['Pharmacy: change pharmacy'])
+        @php
+
+            $pharmacies = App\Models\Parameters\Parameter::where('module', 'frm')
+                                                        ->where('parameter', 'change_pharmacies')
+                                                        ->first()
+                                                        ->value;
+            $pharmacies = explode(',', $pharmacies);
+            $pharmacies = App\Models\Pharmacies\Pharmacy::whereIn('id',$pharmacies)->get();
+
+        @endphp
         <li class="nav-item dropdown ml-auto">
             <a class="nav-link dropdown-toggle"
                 href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
@@ -114,11 +124,13 @@
             </a>
 
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                @foreach($pharmacies as $pharmacy)
-                <a class="dropdown-item"
-                    href="{{ route('pharmacies.change',$pharmacy) }}">
-                    <i class="fas fa-fw fa-compress-alt"></i> {{$pharmacy->name}}</a>
-                @endforeach
+                @if($pharmacies)
+                    @foreach($pharmacies as $pharmacy)
+                    <a class="dropdown-item"
+                        href="{{ route('pharmacies.change',$pharmacy) }}">
+                        <i class="fas fa-fw fa-compress-alt"></i> {{$pharmacy->name}}</a>
+                    @endforeach
+                @endif
             </div>
         </li>
     @endcanany

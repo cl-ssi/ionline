@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 use App\Models\Pharmacies\Pharmacy;
-use App\Models\Parameters\Parameter;
 use App\User;
 
 class PharmacyController extends Controller
@@ -19,14 +18,8 @@ class PharmacyController extends Controller
      */
     public function index()
     {
-        $pharmacies = Parameter::where('module', 'frm')
-                                ->where('parameter', 'change_pharmacies')
-                                ->first()
-                                ->value;
-        $pharmacies = explode(',', $pharmacies);
-        $pharmacies = Pharmacy::whereIn('id',$pharmacies)->get();
         session(['pharmacy_id' => Auth::user()->pharmacies->first()->id]);
-        return view('pharmacies.index',compact('pharmacies'));
+        return view('pharmacies.index');
     }
 
     public function admin_view(){
