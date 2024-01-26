@@ -15,6 +15,7 @@ use App\Models\Finance\PurchaseOrder;
 use App\Models\Finance\Dte;
 use App\Models\Documents\Correlative;
 use App\Models\Documents\Approval;
+use App\Models\Warehouse\Control;
 
 
 class CreateReception extends Component
@@ -112,11 +113,40 @@ class CreateReception extends Component
     /**
     * Mount
     */
-    public function mount($reception_id = null)
+    public function mount($reception_id = null, $control_id = 0)
     {
-        if($reception_id) {
+
+        if($control_id <> 0 and $reception_id == null)
+        {
+            $control = Control::find($control_id);
+            $receptionData = [
+                'date' => $control->date,
+                'purchase_order' => $control->po_code,
+                'po_code' => $control->po_code,
+                'dte_number' => $control->document_number,
+            ];
+
+            $this->purchaseOrderCode =  $control->po_code;
+            $this->purchaseOrder     = $control->purchaseOrder;
+
+            //dd($this->purchaseOrder);
+
+            //$this->createArrayItemsFromOC();
+
+            
+            /* Setear la cantidad por item e id que tiene la seteada el item */
+            // $receptionItems =  $reception->items->toArray();
+            // foreach($receptionItems as $item) {
+            //     $this->receptionItems[$item['item_position']]['Cantidad'] = $item['Cantidad'];
+            //     $this->receptionItems[$item['item_position']]['id']       = $item['id'];
+            // }
+        }
+
+
+        if($reception_id and $control_id == 0) {
             $reception               = Reception::find($reception_id);
             $this->reception         = $reception->toArray();
+            //dd($reception->toArray());
             $this->purchaseOrderCode = $reception->purchase_order;
             $this->purchaseOrder     = $reception->purchaseOrder;
             $this->selectedDteId     = $reception->dte_id ?? $reception->guia_id ?? null;

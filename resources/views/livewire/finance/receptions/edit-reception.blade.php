@@ -36,7 +36,7 @@
             <td>{{ $reception->date?->format('Y-m-d') }}</td>
             <td>
                 @if ($reception->rejected == false)
-                    <a href="{{ route('finance.receptions.create', $reception) }}"
+                    <a href="{{ route('finance.receptions.create', ['reception_id' => $reception->id, 'control_id' => '0']) }}"
                         @class([
                             'btn',
                             'btn-primary',

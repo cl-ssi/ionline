@@ -2080,7 +2080,7 @@ Route::prefix('finance')->as('finance.')->middleware(['auth', 'must.change.passw
 
     Route::prefix('receptions')->as('receptions.')->group(function () {
         Route::get('/', IndexReception::class)->name('index');
-        Route::get('/create/{reception_id?}', CreateReception::class)->name('create');
+        Route::get('{control_id?}/create/{reception_id?}', CreateReception::class)->name('create');
         Route::get('/create_no_oc/{reception_id?}', CreateReceptionNoOc::class)->name('create_no_oc');
         Route::get('/reject', CreateRejection::class)->name('reject');
         Route::get('/edit/{reception}', EditReception::class)->name('edit');
