@@ -219,7 +219,12 @@ class JobPositionProfileController extends Controller
                 $jobPositionProfile->organizationalUnit()->associate($request->jpp_ou_id);
 
                 /* SE ELIMINAN LAS APROBACIONES */
-                $jobPositionProfile->jobPositionProfileSigns()->delete();
+                if(count($jobPositionProfile->approvals) > 0){
+                    $jobPositionProfile->approvals()->delete();
+                }
+                if($jobPositionProfile->jobPositionProfileSigns){
+                    $jobPositionProfile->jobPositionProfileSigns()->delete();
+                }
                 $jobPositionProfile->status = 'saved';
             }
         }

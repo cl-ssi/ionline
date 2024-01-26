@@ -152,7 +152,7 @@ class JobPositionProfileSignController extends Controller
             ]);
         }    
         
-        $jobPositionProfile->status = 'review';
+        $jobPositionProfile->status = 'sent';
         $jobPositionProfile->save();
 
         session()->flash('success', 'Estimado Usuario, se ha enviado Exitosamente El Perfil de Cargo');
