@@ -4,6 +4,8 @@ namespace App\Http\Livewire\Documents\Partes;
 
 use Livewire\Component;
 use App\Models\Documents\Numeration;
+use App\Models\Parameters\Parameter;
+use App\User;
 
 class NumerationInbox extends Component
 {
