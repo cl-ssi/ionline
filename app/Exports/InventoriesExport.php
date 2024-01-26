@@ -34,7 +34,7 @@ class InventoriesExport implements FromCollection, WithHeadings, WithMapping, Sh
     {
         return [
             "numero-inventario",
-            "descripcion",
+            "Std-Descripcion",
             "código producto estandar ONU (productUNSPSC)",
             "marca",
             "modelo",
@@ -78,6 +78,10 @@ class InventoriesExport implements FromCollection, WithHeadings, WithMapping, Sh
         $receptionDate = $inventory->lastMovement?->reception_date ? \Carbon\Carbon::parse($inventory->lastMovement->reception_date)->format('d-m-Y') : null;
 
 
+        $unspscProductInfo = optional($inventory->unspscProduct)->name ? 'Std: ' . rtrim($inventory->unspscProduct->name) : '';
+        $productInfo = $inventory->product ? 'Bodega: ' . rtrim($inventory->product->name) : 'Desc: ' . rtrim($inventory->description);
+
+
 
         // if ($inventory->unspscProduct) {
         //     $description .= 'Std: ' . rtrim($inventory->unspscProduct->name) . "\n";
@@ -91,7 +95,8 @@ class InventoriesExport implements FromCollection, WithHeadings, WithMapping, Sh
 
         return [
             $inventory->number,
-            $inventory->description,
+            //$inventory->description,
+            $unspscProductInfo . ' ' . $productInfo,
             optional($inventory->unspscProduct)->code,
             $inventory->brand,
             $inventory->model,
