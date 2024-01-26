@@ -64,6 +64,7 @@ use App\Http\Livewire\Inventory\ClassificationMgr;
 use App\Http\Livewire\Inventory\CheckTransfer;
 use App\Http\Livewire\Inventory\AssignedProducts;
 use App\Http\Livewire\InventoryLabel\InventoryLabelIndex;
+use App\Http\Livewire\Indicators\QueryGenerator;
 use App\Http\Livewire\His\NewModification;
 use App\Http\Livewire\His\ModificationRequestIndex;
 use App\Http\Livewire\His\ModificationMgr;
@@ -177,8 +178,8 @@ use App\Http\Controllers\ReplacementStaff\ContactRecordController;
 use App\Http\Controllers\ReplacementStaff\CommissionController;
 use App\Http\Controllers\ReplacementStaff\ApplicantController;
 use App\Http\Controllers\Rem\UserRemController;
-use App\Http\Controllers\Rem\RemSerieController;
 //use App\Http\Controllers\RequestForms\SupplyPurchaseController;
+use App\Http\Controllers\Rem\RemSerieController;
 use App\Http\Controllers\Rem\RemPeriodSerieController;
 use App\Http\Controllers\Rem\RemPeriodController;
 use App\Http\Controllers\Rem\RemFileController;
@@ -1385,6 +1386,8 @@ Route::prefix('indicators')->as('indicators.')->group(function () {
     Route::get('/', function () {
         return view('indicators.index');
     })->name('index');
+
+    Route::get('/query-generator', QueryGenerator::class)->name('query-generator');
 
     Route::get('/population', [SingleParameterController::class, 'population'])->name('population');
     Route::resource('single_parameter', SingleParameterController::class)->middleware('auth');
