@@ -155,20 +155,18 @@
 
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
 
-                        @if(auth()->user()->organizationalUnit->establishment_id != 1)
-
                         @php($ouSearch = App\Models\Parameters\Parameter::where('module', 'nav')->where('parameter', 'accessPP')->first()->value)
                         @if(auth()->user()->organizationalUnit && in_array(auth()->user()->organizationalUnit->establishment_id, explode(',', $ouSearch)))
-                        <a class="dropdown-item {{ active('purchase_plan.own_index') }}" href="{{ route('purchase_plan.own_index') }}">
-                            <i class="fas fa-fw fa-shopping-cart"></i> Plan de Compras
-                        </a>
+                            <a class="dropdown-item {{ active('purchase_plan.own_index') }}" href="{{ route('purchase_plan.own_index') }}">
+                                <i class="fas fa-fw fa-shopping-cart"></i> Plan de Compras
+                            </a>
                         @endif
 
                         @php($ouSearch = App\Models\Parameters\Parameter::where('module', 'nav')->where('parameter', 'accessRF')->first()->value)
                         @if(auth()->user()->organizationalUnit && in_array(auth()->user()->organizationalUnit->establishment_id, explode(',', $ouSearch)))
-                        <a class="dropdown-item {{ active('request_forms.my_forms') }}" href="{{ route('request_forms.my_forms') }}">
-                            <i class="fas fa-fw fa-shopping-cart"></i> Abastecimiento
-                        </a>
+                            <a class="dropdown-item {{ active('request_forms.my_forms') }}" href="{{ route('request_forms.my_forms') }}">
+                                <i class="fas fa-fw fa-shopping-cart"></i> Abastecimiento
+                            </a>
                         @endif
 
                         @canany(['HotelBooking: Administrador', 'HotelBooking: User'])
@@ -188,10 +186,10 @@
                             'be god',
                             'Payments: viewer',
                         ])
-                        <a class="dropdown-item {{ active('finance.dtes.index') }}" 
-                            href="{{ route('finance.dtes.index') }}">
-                            <i class="fas fa-fw fa-money-bill"></i> Estados de pago
-                        </a>
+                            <a class="dropdown-item {{ active('finance.dtes.index') }}" 
+                                href="{{ route('finance.dtes.index') }}">
+                                <i class="fas fa-fw fa-money-bill"></i> Estados de pago
+                            </a>
                         @endif
 
                         @canany([
@@ -206,48 +204,49 @@
                         @endcanany
 
                         @can('Store')
-                        <div class="dropdown-divider"></div>
-                        <h6 class="dropdown-header">Bodegas</h6>
+                            <div class="dropdown-divider"></div>
+                            <h6 class="dropdown-header">Bodegas</h6>
                         @endcan
 
 
                         @canany([
-                        'Store', 'Store: admin', 'Store: index', 'Store: list receptions',
-                        'Store: list dispatchs', 'Store: bincard report', 'Store: maintainer programs',
-                        'Store: maintainers', 'Store: add invoice', 'Store: create dispatch',
-                        'Store: create reception by donation', 'Store: create reception by purcharse order'
+                            'Store', 'Store: admin', 'Store: index', 'Store: list receptions',
+                            'Store: list dispatchs', 'Store: bincard report', 'Store: maintainer programs',
+                            'Store: maintainers', 'Store: add invoice', 'Store: create dispatch',
+                            'Store: create reception by donation', 'Store: create reception by purcharse order'
                         ])
-                        @forelse(Auth::user()->stores as $store)
-                        <a class="dropdown-item" href="{{ route('warehouse.store.active', $store->id) }}">
-                            @if($store->id == optional(Auth::user()->active_store)->id)
-                            <i class="fas fa-fw fa-box-open"></i>
-                            @else
-                            <i class="fas fa-fw fa-circle"></i>
-                            @endif
-                            {{ $store->name }}
-                        </a>
-                        @empty
-                        <a class="dropdown-item" href="#">
-                            No tiene bodegas asignadas
-                        </a>
-                        @endforelse
+                            @forelse(Auth::user()->stores as $store)
+                                <a class="dropdown-item" href="{{ route('warehouse.store.active', $store->id) }}">
+                                    @if($store->id == optional(Auth::user()->active_store)->id)
+                                    <i class="fas fa-fw fa-box-open"></i>
+                                    @else
+                                    <i class="fas fa-fw fa-circle"></i>
+                                    @endif
+                                    {{ $store->name }}
+                                </a>
+                            @empty
+                                <a class="dropdown-item" href="#">
+                                    No tiene bodegas asignadas
+                                </a>
+                            @endforelse
                         @endcanany
 
-                        {{-- @can('Store: add invoice')
-                            <a
-                                class="dropdown-item {{ active('warehouse.invoice-management') }}"
-                        href="{{ route('warehouse.invoice-management') }}"
+                        {{-- 
+                        @can('Store: add invoice')
+                        <a
+                            class="dropdown-item {{ active('warehouse.invoice-management') }}"
+                            href="{{ route('warehouse.invoice-management') }}"
                         >
-                        <i class="fas fa-fw fa-file-invoice-dollar"></i> Ingreso facturas
+                            <i class="fas fa-fw fa-file-invoice-dollar"></i> Ingreso facturas
                         </a>
-                        @endcan --}}
+                        @endcan 
+                        --}}
 
                         @canany(['Store: warehouse manager'])
-                        <a class="dropdown-item {{ active('warehouse.stores.index') }}" href="{{ route('warehouse.stores.index') }}">
-                            <i class="fas fa-fw fa-cog"></i> Administrar Bodegas
-                        </a>
+                            <a class="dropdown-item {{ active('warehouse.stores.index') }}" href="{{ route('warehouse.stores.index') }}">
+                                <i class="fas fa-fw fa-cog"></i> Administrar Bodegas
+                            </a>
                         @endcanany
-
 
 
                         @can('be god')
@@ -255,100 +254,98 @@
                             <i class="fas fa-pills"></i> Cenabast
                         </a> -->
                         @endcan
-                        
 
 
 
                         @can('Inventory')
-                        <div class="dropdown-divider"></div>
-                        <h6 class="dropdown-header">Inventario</h6>
+                            <div class="dropdown-divider"></div>
+                            <h6 class="dropdown-header">Inventario</h6>
                         @endcan
 
                         @can('Inventory')
-                        @foreach(auth()->user()->establishmentInventories as $establishmentItem)
-                        <a class="dropdown-item" href="{{ route('inventories.index', $establishmentItem) }}">
-                            <i class="fas fa-fw fa-clipboard-list"></i>
-                            {{ $establishmentItem->name }}
-                        </a>
-                        @endforeach
+                            @foreach(auth()->user()->establishmentInventories as $establishmentItem)
+                            <a class="dropdown-item" href="{{ route('inventories.index', $establishmentItem) }}">
+                                <i class="fas fa-fw fa-clipboard-list"></i>
+                                {{ $establishmentItem->name }}
+                            </a>
+                            @endforeach
                         @endcan
 
                         @can('Inventory: manager')
-                        <a class="dropdown-item" href="{{ route('inventories.manager') }}">
-                            <i class="fas fa-fw fa-cog"></i> Administrar Inventarios
-                        </a>
+                            <a class="dropdown-item" href="{{ route('inventories.manager') }}">
+                                <i class="fas fa-fw fa-cog"></i> Administrar Inventarios
+                            </a>
                         @endcan
-                    @endif
 
                         <!-- módulo de farmacias -->
                         @canany(['Pharmacy'])
-                        <div class="dropdown-divider"></div>
+                            <div class="dropdown-divider"></div>
 
-                        <h6 class="dropdown-header">Droguerías</h6>
+                            <h6 class="dropdown-header">Droguerías</h6>
 
-                        @canany(['Pharmacy: Administrator'])
-                        <a class="dropdown-item {{ active('pharmacies.admin_view') }}" href="{{ route('pharmacies.admin_view') }}">
-                            <i class="fas fa-fw fa-user"></i> Administrador
-                        </a>
-                        @endcanany
+                            @canany(['Pharmacy: Administrator'])
+                                <a class="dropdown-item {{ active('pharmacies.admin_view') }}" href="{{ route('pharmacies.admin_view') }}">
+                                    <i class="fas fa-fw fa-user"></i> Administrador
+                                </a>
+                            @endcanany
 
-                        @if(Auth::user()->pharmacies->count() > 0)
-                        <a class="dropdown-item {{ active('pharmacies.index') }}" href="{{ route('pharmacies.index') }}">
-                            <i class="fas fa-fw fa-prescription-bottle-alt"></i>
-                            {{ Auth::user()->pharmacies->first()->name}}
-                        </a>
-                        @else
-                        <a class="dropdown-item">
-                            <i class="fas fa-fw fa-exclamation-circle"></i> No tiene droguerías asignadas
-                        </a>
+                            @if(Auth::user()->pharmacies->count() > 0)
+                                <a class="dropdown-item {{ active('pharmacies.index') }}" href="{{ route('pharmacies.index') }}">
+                                    <i class="fas fa-fw fa-prescription-bottle-alt"></i>
+                                    {{ Auth::user()->pharmacies->first()->name}}
+                                </a>
+                            @else
+                                <a class="dropdown-item">
+                                    <i class="fas fa-fw fa-exclamation-circle"></i> No tiene droguerías asignadas
+                                </a>
+                            @endif
+                        @endcan
+
+
+                        @if(auth()->user()->organizationalUnit->establishment_id != 1)
+                            @canany(['Resources: create', 'Resources: edit', 'Resources: delete'])
+
+                            <div class="dropdown-divider"></div>
+
+                            <h6 class="dropdown-header">Recursos informáticos</h6>
+
+                            <a class="dropdown-item {{ active('resources.tic') }}" href="{{ route('resources.tic') }}">
+                                <i class="fas fa-boxes fa-fw"></i> Bandeja de inventario
+                            </a>
+
+                            <a class="dropdown-item {{ active('resources.computer.*') }}" href="{{ route('resources.computer.index') }}">
+                                <i class="fas fa-desktop fa-fw"></i> Computadores
+                            </a>
+
+                            <a class="dropdown-item {{ active('resources.printer.*') }}" href="{{ route('resources.printer.index') }}">
+                                <i class="fas fa-print fa-fw"></i> Impresoras
+                            </a>
+
+                            <a class="dropdown-item {{ active('resources.telephone.*') }}" href="{{ route('resources.telephone.index') }}">
+                                <i class="fas fa-fax fa-fw"></i> Teléfonos Fijos
+                            </a>
+
+                            <a class="dropdown-item {{ active('resources.mobile.*') }}" href="{{ route('resources.mobile.index') }}">
+                                <i class="fas fa-mobile-alt fa-fw"></i> Teléfonos Móviles
+                            </a>
+
+                            <a class="dropdown-item {{ active('resources.wingle.*') }}" href="{{ route('resources.wingle.index') }}">
+                                <i class="fas fa-wifi fa-fw"></i> Banda Ancha Móvil
+                            </a>
+
+                            @endcan
                         @endif
 
-                        @endcan
-
-
-                    @if(auth()->user()->organizationalUnit->establishment_id != 1)
-                        @canany(['Resources: create', 'Resources: edit', 'Resources: delete'])
-
-                        <div class="dropdown-divider"></div>
-
-                        <h6 class="dropdown-header">Recursos informáticos</h6>
-
-                        <a class="dropdown-item {{ active('resources.tic') }}" href="{{ route('resources.tic') }}">
-                            <i class="fas fa-boxes fa-fw"></i> Bandeja de inventario
-                        </a>
-
-                        <a class="dropdown-item {{ active('resources.computer.*') }}" href="{{ route('resources.computer.index') }}">
-                            <i class="fas fa-desktop fa-fw"></i> Computadores
-                        </a>
-
-                        <a class="dropdown-item {{ active('resources.printer.*') }}" href="{{ route('resources.printer.index') }}">
-                            <i class="fas fa-print fa-fw"></i> Impresoras
-                        </a>
-
-                        <a class="dropdown-item {{ active('resources.telephone.*') }}" href="{{ route('resources.telephone.index') }}">
-                            <i class="fas fa-fax fa-fw"></i> Teléfonos Fijos
-                        </a>
-
-                        <a class="dropdown-item {{ active('resources.mobile.*') }}" href="{{ route('resources.mobile.index') }}">
-                            <i class="fas fa-mobile-alt fa-fw"></i> Teléfonos Móviles
-                        </a>
-
-                        <a class="dropdown-item {{ active('resources.wingle.*') }}" href="{{ route('resources.wingle.index') }}">
-                            <i class="fas fa-wifi fa-fw"></i> Banda Ancha Móvil
-                        </a>
-
-                        @endcan
-                    @endif
-
-                    {{-- @canany(['Allowances: create', 'Allowances: all', 'Allowances: reports', 'Allowances: reports']) --}}
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item {{ active('allowances.index') }}" href="{{ route('allowances.index') }}">
-                            <i class="fas fa-wallet"></i> Viáticos
-                        </a>
-                    {{-- @endcan --}}
+                        {{-- @canany(['Allowances: create', 'Allowances: all', 'Allowances: reports', 'Allowances: reports']) --}}
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item {{ active('allowances.index') }}" href="{{ route('allowances.index') }}">
+                                <i class="fas fa-wallet"></i> Viáticos
+                            </a>
+                        {{-- @endcan --}}
                     </ul>
 
                 </li>
+                <!-- Fin del menú SDA -->
                 @endif
 
 
