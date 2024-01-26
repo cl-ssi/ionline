@@ -80,7 +80,7 @@ class Transfer extends Component
         $dataValidated = $this->validate();
 
         $userResponsible = User::find($dataValidated['user_responsible_id']);
-        $userUsing = User::find($dataValidated['user_using_id']);
+        $userUsing = User::find($dataValidated['user_using_id']);        
         $place = Place::find($dataValidated['place_id']);
         $dataValidated['user_responsible_ou_id'] = optional($userResponsible->organizationalUnit)->id;
         $dataValidated['user_sender_id'] = auth()->id();
@@ -109,7 +109,10 @@ class Transfer extends Component
             
 
             $dataValidated['inventory_id'] = $inventory->id;
-            $movement = InventoryMovement::create($dataValidated);            
+            //$movement = InventoryMovement::create($dataValidated);
+            InventoryMovement::withoutEvents(function () use ($dataValidated) {
+                $movement = InventoryMovement::create($dataValidated);
+            });
         }
         $this->resetInput();
         session()->flash('success', 'Los Items del Usuario fueron trasladados exitosamente, esperando confirmación de recepción por parte del usuario para finalizar el proceso'); 

@@ -47,7 +47,7 @@
             style="z-index: 3; position: absolute;">
             @if ($showResult)
                 @forelse($users as $user)
-                    <a wire:click.prevent="addSearchedUser({{ $user }})"
+                    <a wire:click.prevent="handleSearchedUser({{ $user->id }})"
                         class="list-group-item list-group-item-action">
                         <small>{{ $user->full_name }}</small>
                     </a>

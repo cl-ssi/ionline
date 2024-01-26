@@ -43,6 +43,7 @@ class SearchUser extends Component
         if($this->search)
         {
             $this->users = User::query()
+            ->withTrashed()
             ->whereNotIn('id', $this->idsExceptUsers)
                 ->when($this->search, function ($query) {
                     $query->findByUser($this->search);
@@ -50,10 +51,25 @@ class SearchUser extends Component
                 ->limit(5)
                 ->get();
         }
+        
     }
 
-    public function addSearchedUser(User $user)
+
+    public function handleSearchedUser($userId)
     {
+        $user = User::withTrashed()->find($userId);
+
+        if ($user) {
+            $this->addSearchedUser($user);
+        }
+}
+
+
+
+
+
+    public function addSearchedUser(User $user)
+    {        
         $this->showResult = false;
         $this->search = $user->full_name;
         $this->user_id = $user->id;
