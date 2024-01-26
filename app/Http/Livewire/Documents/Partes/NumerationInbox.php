@@ -16,9 +16,13 @@ class NumerationInbox extends Component
     {
         $this->error_msg = null;
 
-        $status = $numeration->numerate();
+        $user_id = Parameter::get('partes','numerador', auth()->user()->organizationalUnit->establishment_id);
+
+        $user = User::find($user_id);
+
+        $status = $numeration->numerate($user);
         if ($status === true) {
-            $numeration->numerator_id = auth()->id();
+            $numeration->numerator_id = $user_id;
             $numeration->date = now();
             $numeration->save();
         } else {
