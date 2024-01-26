@@ -7,9 +7,9 @@
         </a>
     </li>
     <li class="nav-item">
-        <a class="nav-link {{ active('finance.receptions.create') }}"
+        <a class="nav-link {{ active('finance.receptions.create', ['control_id' => '0']) }}"
             aria-current="page"
-            href="{{ route('finance.receptions.create') }}">
+            href="{{ route('finance.receptions.create', ['control_id' => '0']) }}">
             <i class="bi bi-file-plus"></i> 
             Nueva acta con OC
         </a>
