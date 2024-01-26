@@ -567,25 +567,40 @@
                         <td>{{number_format($continuity->amount,0,",",".")}}</td>
                         <td>
                             @if($canEdit)
-                            <button class="btn btn-sm btn-outline-secondary" data-toggle="modal" data-target="#editModalContinuityResol-{{$continuity->id}}">
-                            <i class="fas fa-edit"></i></button>
-                            @include('agreements/agreements/modal_edit_continuity')
-                            <a class="btn btn-sm btn-outline-secondary" href="#" data-toggle="tooltip" data-placement="top" title="Descargar borrador Resolucion"
-                                onclick="event.preventDefault(); document.getElementById('submit-form-continuity-{{$continuity->id}}').submit();"><i class="fas fa-file-download"></i></a>
-                            <form id="submit-form-continuity-{{$continuity->id}}" action="{{ route('agreements.continuity.createWord', $continuity) }}" method="POST" hidden>@csrf</form>
-                            @if($continuity->file != null)
-                            <a class="btn btn-sm btn-outline-secondary" href="{{ route('agreements.continuity.preview', $continuity) }}" target="blank" data-toggle="tooltip" data-placement="top" title="Previsualizar Resolucion"><i class="fas fa-eye"></i></a>
-                            @endif
+                                <button class="btn btn-sm btn-outline-secondary" data-toggle="modal" data-target="#editModalContinuityResol-{{$continuity->id}}">
+                                <i class="fas fa-edit"></i></button>
+                                @include('agreements/agreements/modal_edit_continuity')
+                                {{--<a class="btn btn-sm btn-outline-secondary" href="#" data-toggle="tooltip" data-placement="top" title="Descargar borrador Resolucion"
+                                    onclick="event.preventDefault(); document.getElementById('submit-form-continuity-{{$continuity->id}}').submit();"><i class="fas fa-file-download"></i></a>
+                                <form id="submit-form-continuity-{{$continuity->id}}" action="{{ route('agreements.continuity.createWord', $continuity) }}" method="POST" hidden>@csrf</form>--}}
+                                <a class="btn btn-sm btn-outline-secondary" href="#" data-toggle="tooltip" data-placement="top" title="Generar nuevo borrador Resolucion"
+                                    onclick="event.preventDefault(); document.getElementById('submit2-form-continuity-{{$continuity->id}}').submit();"><i class="fas fa-file-medical"></i></a>
+                                <form id="submit2-form-continuity-{{$continuity->id}}" action="{{ route('agreements.continuity.createDocument', $continuity) }}" method="POST" hidden>@csrf</form>
+                                {{--@if($continuity->file != null)
+                                <a class="btn btn-sm btn-outline-secondary" href="{{ route('agreements.continuity.preview', $continuity) }}" target="blank" data-toggle="tooltip" data-placement="top" title="Previsualizar Resolucion"><i class="fas fa-eye"></i></a>
+                                @endif--}}
+                                @if($continuity->document_id != null)
+                                    <a href="{{ route('documents.edit', $continuity->document_id) }}" class="btn btn-sm btn-outline-secondary" target="_blank" data-toggle="tooltip" data-placement="top" title="Editar borrador Resolución"><i class="fas fa-file-alt"></i></a> 
+                                    <a href="{{ route('documents.show', $continuity->document_id) }}" class="btn btn-sm btn-outline-secondary" target="_blank" data-toggle="tooltip" data-placement="top" title="Visualizar borrador Resolución"><i class="fas fa-eye"></i></a>
+                                @endif
                             @endif <!-- canEdit fin -->
                             @canany(['Documents: signatures and distribution'])
-                            @if($canEdit)
-                            <a class="btn btn-sm btn-outline-secondary" href="{{ route('agreements.continuity.sign', [$continuity, 'visators']) }}" data-toggle="tooltip" data-placement="top" title="Solicitar visación Resolucion"><i class="fas fa-file-signature"></i></a>
+                            @if($canEdit && $continuity->document_id != null)
+                            <a class="btn btn-sm btn-outline-secondary" href="{{ route('documents.sendForSignature', $continuity->document_id) }}" data-toggle="tooltip" data-placement="top" title="Solicitar visación Resolucion"><i class="fas fa-file-signature"></i></a>
                             @endif
-                            @if($continuity->fileToEndorse && $continuity->fileToEndorse->HasAllFlowsSigned)
+                            {{--@if($continuity->fileToEndorse && $continuity->fileToEndorse->HasAllFlowsSigned)
                             <a class="btn btn-sm btn-outline-secondary" href="{{route('documents.signatures.showPdf', [$continuity->file_to_endorse_id, time()])}}" target="blank" data-toggle="tooltip" data-placement="top" title="Ver resolución visado"><i class="fas fa-eye"></i></a> 
                             @if($canEdit)<a class="btn btn-sm btn-outline-secondary" href="{{ route('agreements.addendum.sign', [$addendum, 'signer']) }}" data-toggle="tooltip" data-placement="top" title="Solicitar firma Addendum"><i class="fas fa-file-signature"></i></a> @endif
-                            @endif
+                            @endif--}}
                             @endcan
+                            @if($continuity->document && $continuity->document->fileToSign)
+                                @if($continuity->document->fileToSign->hasSignedFlow)
+                                <a href="{{ route('documents.signedDocumentPdf', $continuity->document_id) }}" class="btn btn-sm @if($continuity->document->fileToSign->hasAllFlowsSigned) btn-outline-success @else btn-outline-primary @endif" target="_blank" data-toggle="tooltip" data-placement="top" title="Ver resolución visado">
+                                    <i class="fas fa-fw fa-file-contract"></i> </a>
+                                @else
+                                    {{ $continuity->document->fileToSign->signature_id }}
+                                @endif
+                            @endif
                         </td>
                     </tr>
                     @endforeach

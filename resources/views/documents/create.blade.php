@@ -22,6 +22,10 @@
 <form method="post" name="form" action="{{ route('documents.store') }}" onsubmit="return validate_form()">
     @csrf
 
+    @if (isset($document->continuity_resol_id))
+    <input type="hidden" name="continuity_resol_id" value="{{ $document->continuity_resol_id }}">
+    @endif
+
     <div class="form-row">
         <div class="form-group col-2">
             <label for="forDate">Fecha</label>
@@ -141,6 +145,7 @@
 
     $(function() {
         $('[data-toggle="tooltip"]').tooltip()
+        $('#formType').change()
     })
 
     $('#formType').change(
@@ -212,7 +217,12 @@
                 var contenido = '<h1 style="text-align: center; text-decoration: underline;">ACTA DE RECEPCION CONFORME</h1><br><h1 style="text-align: center; text-decoration: underline;">OBRAS MENORES Nº </h1><p>En Iquique, a dìa de mes 202x se emite el "Acta Recepción", que corresponde a:</p> <table border="1" cellspacing="0"  cellpadding="0"> <tbody> <tr> <td width="151"valign="top"> <p>Servicio</p> </td> <td width="438"valign="top"> </td></tr><tr><td width="151"valign="top"> <p>Unidad Requirente</p></td> <td width="438"valign="top"></td></tr><tr><td width="151"valign="top"><p>FR</p></td> <td width="438"valign="top"> </td></tr><tr><td width="151"valign="top"> <p>Proveedor</p></td> <td width="438"valign="top"></td></tr><tr><td width="151"valign="top"><p>Cotización</p></td> <td width="438"valign="top"> </td></tr><tr><td width="151"valign="top"> <p>Fuente Financiamiento</p></td> <td width="438"valign="top"> </td> </tr> </tbody> </table><br><br><table border="1"cellspacing="0" cellpadding="0"width="586"><tbody><tr><td width="85"rowspan="2"><p align="center"><strong>DISPOSITIVO</strong></p></td><td width="170"rowspan="2"><p align="center"><strong>TRABAJOS SOLICITADOS</strong></p></td><td width="331"colspan="3"valign="top"><p align="center"><strong>TRABAJOS REALIZADOS</strong></p></td></tr><tr><td width="66"valign="top"><p align="center"><strong>Realizado</strong></p></td><td width="66"valign="top"><p align="center"><strong>No Realizado</strong></p></td><td width="198"><p align="center"><strong>Observaciones</strong></p></td></tr><tr><td width="85"rowspan="7"></td><td width="170"></td><td width="66"valign="top"></td><td width="66"valign="top"><p align="right"></p></td><td width="198"><p align="right"></p></td></tr><tr><td width="170"></td><td width="66"valign="top"><p align="center"></p></td><td width="66"valign="top"><p align="right"></p></td><td width="198"><p align="right"></p></td></tr><tr><td width="170"></td><td width="66"valign="top"><p align="center"></p></td><td width="66"valign="top"><p align="right"></p></td><td width="198"><p align="right"></p></td></tr><tr><td width="170"></td><td width="66"valign="top"></td><td width="66"valign="top"><p align="right"></p></td><td width="198"><p align="right"></p></td></tr><tr><td width="170"></td><td width="66"valign="top"></td><td width="66"valign="top"><p align="right"></p></td><td width="198"><p align="right"></p></td></tr><tr><td width="170"></td><td width="66"valign="top"></td><td width="66"valign="top"><p align="right"></p></td><td width="198"><p align="right"></p></td></tr><tr><td width="170"></td><td width="66"valign="top"></td><td width="66"valign="top"><p align="right"></p></td><td width="198"><p align="right"></p></td></tr><tr><td width="586"colspan="5"><p><strong>OTROS</strong></p></td></tr><tr><td width="85"></td><td width="170"></td><td width="66"valign="top"></td><td width="66"valign="top"><p align="right"></p></td><td width="198"><p align="right"></p></td></tr><tr><td width="85"></td><td width="170"></td><td width="66"valign="top"></td><td width="66"valign="top"><p align="right"></p></td><td width="198"><p align="right"></p></td></tr><tr><td width="85"></td><td width="170"></td><td width="66"valign="top"></td><td width="66"valign="top"><p align="right"></p></td><td width="198"><p align="right"></p></td></tr></tbody></table><br><br><br><p>NOTA:<br/>Se deja constancia que se recepcionan conforme<br/>Para constancia firman:</p>';
                 tinyMCE.activeEditor.setContent(contenido);
             }
-            
+            /* Resolución de continuidad convenio */
+            if ("19" === this.value) {
+                $("#forFrom").removeAttr("required");
+                $("#forFor").removeAttr("required");
+                $("#collapse").hide();
+            }
         }
     );
 </script>

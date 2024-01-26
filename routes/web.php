@@ -685,6 +685,7 @@ Route::prefix('agreements')->as('agreements.')->middleware(['auth', 'must.change
     Route::post('/continuity/store', [ContinuityResolutionController::class, 'store'])->name('continuity.store');
     Route::put('/continuity/{continuityResolution}/update', [ContinuityResolutionController::class, 'update'])->name('continuity.update');
     Route::post('/continuity/createWord/{continuityResolution}', [WordTestController::class, 'createWordDocxResContinuity'])->name('continuity.createWord');
+    Route::post('/continuity/createDocument/{continuityResolution}', [ContinuityResolutionController::class, 'createDocumentResContinuity'])->name('continuity.createDocument');
     Route::get('/continuity/downloadRes/{continuityResolution}', [ContinuityResolutionController::class, 'downloadRes'])->name('continuity.downloadRes');
     Route::get('/continuity/download/{continuityResolution}', [ContinuityResolutionController::class, 'download'])->name('continuity.download');
     Route::get('/continuity/sign/{continuityResolution}/type/{type}', [ContinuityResolutionController::class, 'sign'])->name('continuity.sign');

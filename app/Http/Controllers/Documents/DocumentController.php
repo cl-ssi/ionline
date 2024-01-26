@@ -18,6 +18,8 @@ use App\Models\Documents\Document;
 use App\Models\Documents\Correlative;
 use App\Mail\SendDocument;
 use App\Http\Controllers\Controller;
+use App\Models\Agreements\ContinuityResolution;
+use App\Models\Documents\SignaturesFlow;
 
 class DocumentController extends Controller
 {
@@ -107,6 +109,12 @@ class DocumentController extends Controller
         $document->organizationalUnit()->associate(Auth::user()->organizationalUnit);
         $document->reserved = $request->input('reserved') == 'on' ? 1 : null;
         $document->save();
+
+        if ($request->has('continuity_resol_id')) {
+            $continuityResolution = ContinuityResolution::find($request->continuity_resol_id);
+            $continuityResolution->update(['document_id' => $document->id]);
+        }
+
         return redirect()->route('documents.index');
     }
 
@@ -296,6 +304,26 @@ class DocumentController extends Controller
 
         $signature->signaturesFiles->add($signaturesFile);
         $documentId = $document->id;
+
+        if($document->type_id == Type::where('name','Resolución Continuidad Convenio')->first()->id){
+            $continuityResolution = ContinuityResolution::with('referrer')->where('document_id', $document->id)->first();
+            $visadores = collect([$continuityResolution->referrer]); //referente tecnico
+            foreach(array(17289587, 14104369, 9994426) as $user_id) //resto de visadores por cadena de responsabilidad
+                $visadores->add(User::find($user_id));
+            
+            foreach($visadores as $key => $visador){
+                $signaturesFlow = new SignaturesFlow();
+                $signaturesFlow->type = 'visador';
+                $signaturesFlow->ou_id = $visador->organizational_unit_id;
+                $signaturesFlow->user_id = $visador->id;
+                $signaturesFlow->sign_position = $key;
+                $signaturesFile->signaturesFlows->add($signaturesFlow);
+            }
+
+            $signature->description = $document->subject;
+            $signature->endorse_type = 'Visación en cadena de responsabilidad';
+            $signature->distribution = 'blanca.galaz@redsalud.gob.cl';
+        }
 
         return view('documents.signatures.create', compact('signature', 'documentId'));
     }

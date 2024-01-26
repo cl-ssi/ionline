@@ -20,10 +20,15 @@
 
         <fieldset class="form-group col-3">
             <label for="for_name">E-mail municipio</label>
-            <input type="text" class="form-control" id="email_municipality" name="email_municipality" value="{{$municipality->email_municipality}}">
+            <input type="email" class="form-control" id="email_municipality" name="email_municipality" value="{{$municipality->email_municipality}}">
         </fieldset>
 
-        <fieldset class="form-group col-7">
+        <fieldset class="form-group col-3">
+            <label for="for_name">E-mail secundario municipio</label>
+            <input type="email" class="form-control" id="email_municipality_2" name="email_municipality_2" value="{{$municipality->email_municipality_2}}">
+        </fieldset>
+
+        <fieldset class="form-group col-4">
             <label for="for_address">Dirección</label>
             <input type="text" class="form-control" id="adress_municipality" name="adress_municipality" value="{{$municipality->adress_municipality}}" required>
         </fieldset>

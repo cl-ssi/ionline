@@ -2,6 +2,7 @@
 
 namespace App\Models\Agreements;
 
+use App\Models\Documents\Document;
 use App\Models\Documents\SignaturesFile;
 use App\User;
 use Illuminate\Database\Eloquent\Model;
@@ -17,6 +18,10 @@ class ContinuityResolution extends Model
 
     public function fileToEndorse() {
         return $this->belongsTo(SignaturesFile::class, 'file_to_endorse_id');
+    }
+
+    public function document() {
+        return $this->belongsTo(Document::class, 'document_id');
     }
 
     // public function fileToSign() {
@@ -76,7 +81,7 @@ class ContinuityResolution extends Model
      * @var array
      */
     protected $fillable = [
-        'date', 'file', 'res_number', 'res_date', 'res_file', 'agreement_id', 'file_to_endorse_id', 'file_to_sign_id', 'referrer_id', 'director_signer_id', 'amount'
+        'date', 'file', 'res_number', 'res_date', 'res_file', 'agreement_id', 'file_to_endorse_id', 'file_to_sign_id', 'referrer_id', 'director_signer_id', 'amount', 'document_id'
     ];
 
     /**

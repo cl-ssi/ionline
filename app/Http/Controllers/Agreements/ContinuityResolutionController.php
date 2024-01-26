@@ -7,16 +7,19 @@ use App\Models\Agreements\Signer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Agreements\ContinuityResolution;
+use App\Models\Documents\Document;
 use App\Models\Documents\Signature;
 use App\Models\Documents\SignaturesFile;
 use App\Models\Documents\SignaturesFlow;
 use App\Models\Documents\Type;
+use App\Models\Establishment;
 use App\Models\Parameters\Municipality;
 use App\Rrhh\OrganizationalUnit;
 use App\User;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Luecano\NumeroALetras\NumeroALetras;
 
 class ContinuityResolutionController extends Controller
 {
@@ -200,5 +203,514 @@ class ContinuityResolutionController extends Controller
         // $users = User::orderBy('name', 'ASC')->get();
         // $organizationalUnits = OrganizationalUnit::orderBy('id', 'asc')->get();
         return view('documents.signatures.create', compact('signature'));
+    }
+
+    public function createDocumentResContinuity(ContinuityResolution $continuityResolution)
+    {
+        $continuityResolution->load('agreement.program','agreement.commune.municipality', 'referrer', 'director_signer.user');
+        $municipality   = Municipality::where('commune_id', $continuityResolution->agreement->commune->id)->first();
+        
+        // No se guarda los cambios en el res continuidad ya que es solo para efectos de generar el documento
+        $formatter = new NumeroALetras;
+        $formatter->apocope = true;
+        $totalConvenio = $continuityResolution->amount;
+        $totalConvenioLetras = $this->correctAmountText($formatter->toMoney($totalConvenio,0, 'pesos',''));
+        $totalConvenio = number_format($totalConvenio,0,",",".");
+
+        $first_word = explode(' ',trim($continuityResolution->agreement->program->name))[0];
+        $programa = $first_word == 'Programa' ? substr(strstr($continuityResolution->agreement->program->name," "), 1) : $continuityResolution->agreement->program->name;
+        $comuna = $continuityResolution->agreement->commune->name;
+        if($continuityResolution->agreement->period >= 2022) $programa = mb_strtoupper($programa);
+        $ilustre = !Str::contains($municipality->name_municipality, 'ALTO HOSPICIO') ? 'Ilustre': null;
+        $fechaResolucionConvenio = $this->formatDate($continuityResolution->agreement->res_exempt_date);
+		$periodoConvenio = $continuityResolution->agreement->period;
+        $yearResolucionConvenio = $continuityResolution->agreement->res_exempt_date != NULL ? date('Y', strtotime($continuityResolution->agreement->res_exempt_date)) : '';
+        $directorDecreto = $continuityResolution->director_signer->decree;
+        $numResolucion = $continuityResolution->agreement->number;
+        $yearResolucion = $continuityResolution->agreement->resolution_date != NULL ? date('Y', strtotime($continuityResolution->agreement->resolution_date)) : '';
+        $fechaResolucion = $this->formatDate($continuityResolution->agreement->resolution_date);
+        $numResourceResolucion = $continuityResolution->agreement->res_resource_number;
+        $yearResourceResolucion = $continuityResolution->agreement->res_resource_date != NULL ? date('Y', strtotime($continuityResolution->agreement->res_resource_date)) : '';
+        $fechaResourceResolucion = $this->formatDate($continuityResolution->agreement->res_resource_date);
+        $numResolucionConvenio = $continuityResolution->agreement->res_exempt_number;
+
+        // SE OBTIENE LAS INSTITUCIONES DE SALUD PERO SÓLO LAS QUE SE HAN SELECCIONADO
+        $establishment_list = unserialize($continuityResolution->agreement->establishment_list) == null ? [] : unserialize($continuityResolution->agreement->establishment_list);
+        $establishments = Establishment::where('commune_id', $continuityResolution->agreement->Commune->id)
+                                       ->whereIn('id', $establishment_list)->get();
+
+        // ARRAY PARA OBTNER LAS INSTITUCIONES ASOCIADAS AL CONVENIO
+        // SI EL ARRAY DE INSTITUCIONES VIENE VACIO
+        if($establishments->isEmpty()){
+            $arrayEstablishmentConcat = '';
+        }
+        else { 
+            foreach ($establishments as $key => $establishment) {
+                $arrayEstablishment[] = array('index' => $key+1
+                                             ,'establecimientoTipo' => $establishment->type
+                                             ,'establecimientoNombre' => $establishment->name
+                                             ,'establecimiento' => ucwords(mb_strtolower($establishment->type))." ".$establishment->name
+                                         );
+            }
+            $arrayEstablishmentConcat = implode(", ",array_column($arrayEstablishment, 'establecimiento'));
+        }
+
+        $establecimientosListado = $arrayEstablishmentConcat;
+
+        $municipality_emails = $continuityResolution->agreement->commune->municipality->email_municipality."\n".$continuityResolution->agreement->commune->municipality->email_municipality_2;
+
+
+        $document = new Document();
+        $document->continuity_resol_id = $continuityResolution->id;
+        $document->date = $continuityResolution->date;
+        $document->type_id = Type::where('name','Resolución Continuidad Convenio')->first()->id;
+        $document->subject = 'Resolución prórroga automática Convenio programa '.$programa.' comuna de '.$continuityResolution->agreement->commune->name;
+        $document->distribution = $municipality_emails."\n".$continuityResolution->referrer->email."\nvalentina.ortega@redsalud.gob.cl\naps.ssi@redsalud.gob.cl\nromina.garin@redsalud.gob.cl\ncamila.cordova@redsalud.gob.cl\njuridica.ssi@redsalud.gob.cl\no.partes2@redsalud.gob.cl\nblanca.galaz@redsalud.gob.cl";
+        $document->content = "<p
+        style='text-align: justify;margin-top:12.0pt;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:'Calibri',sans-serif;text-align:justify;line-height:150%;'>
+        <strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+        &nbsp; &nbsp; &nbsp;VISTOS,</strong></p>
+    <p
+        style='text-align: justify;margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:'Calibri',sans-serif;text-align:justify;line-height:115%;'>
+        <span style='font-size:13px;line-height:115%;'>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            &nbsp;&nbsp;</span>Lo dispuesto en el Decreto con Fuerza de Ley N<span style='color:black;'>&ordm;</span>01 del
+        a&ntilde;o 2000, del Ministerio Secretar&iacute;a General de la Presidencia que fija el texto refundido, coordinado
+        y sistematizado de la Ley N<span style='color:black;'>&ordm;</span>18.575, Org&aacute;nica Constitucional de Bases
+        Generales de la Administraci&oacute;n del Estado; D.F.L. N<span style='color:black;'>&ordm;</span>01/2005, del
+        Ministerio de Salud, &nbsp; que fija el texto refundido, coordinado y sistematizado del Decreto Ley N<span
+            style='color:black;'>&ordm;</span>2.763 de 1979 y de las Leyes Nos. 18.933 y 18.469; Ley 19.937 de Autoridad
+        Sanitaria;&nbsp;Ley N<span style='color:black;'>&ordm;</span>19.880 que establece Bases de Procedimientos
+        Administrativos que rigen los actos de los &Oacute;rganos de la Administraci&oacute;n del Estado; Decreto
+        N&deg;140/04 del Ministerio de Salud que aprob&oacute; el Reglamento org&aacute;nico de los Servicios de
+        Salud,&nbsp;<span style='background:lime;'>".$directorDecreto."</span>;&nbsp;lo dispuesto en el art&iacute;culo 55 bis, 56 y 57 inciso segundo de la Ley N<span
+            style='color:black;'>&ordm;</span>19.378; art&iacute;culo 6 del Decreto Supremo N<span
+            style='color:black;'>&ordm;</span>118 del 2007, del Ministerio de Salud;&nbsp;Resoluci&oacute;n Exenta N<span
+            style='color:black;'>&ordm;</span><span style='background:lime;'>".$numResolucion."/".$yearResolucion."</span> del Ministerio de Salud, que
+        aprob&oacute; <span style='background:lime;'>el Programa de ".$programa." a&ntilde;o ".$periodoConvenio.", Resoluci&oacute;n
+            Exenta&nbsp;N&deg;".$numResourceResolucion."/".$yearResourceResolucion."</span> del Ministerio de Salud, que distribuy&oacute; los recursos del citado Programa;
+        Resoluci&oacute;n N<span style='color:black;'>&ordm;</span>007 de 2019 de la Contralor&iacute;a General de la
+        Rep&uacute;blica. Art&iacute;culo 7&deg; de la Ley N<span style='color:black;'>&ordm; 21.640 de Presupuesto para el
+            sector p&uacute;blico, correspondiente al a&ntilde;o 2024.</span></p>
+            
+            <p
+    style='text-align: justify;margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:'Calibri',sans-serif;text-align:justify;line-height:150%;'>
+    <strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+        &nbsp; &nbsp; &nbsp;CONSIDERANDO,</strong></p>
+<p
+    style='text-align: justify;margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:'Calibri',sans-serif;text-align:justify;line-height:115%;'>
+    <strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+        &nbsp; 1.-</strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Que, durante el a&ntilde;o presupuestario 2023, a
+    trav&eacute;s de Resoluci&oacute;n Exenta <span style='background:lime;'>N&deg;".$numResolucionConvenio."/".$yearResolucionConvenio."</span>, entre el Municipio de <span style='background:lime;'>".$comuna."</span> y este
+    Servicio de Salud, se aprob&oacute; el convenio correspondiente <strong>al <span style='background:lime;'>PROGRAMA
+            &ldquo;".$programa." A&Ntilde;O ".$periodoConvenio."&rdquo;</span>.</strong></p>
+<p
+    style='text-align: justify;margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:'Calibri',sans-serif;text-align:justify;line-height:115%;'>
+    <strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+    &nbsp; 2.- &nbsp;
+        &nbsp; &nbsp; &nbsp; &nbsp;</strong>Que, el citado Convenio incorpora en su cl&aacute;usula D&eacute;cimo
+    Cuarta, una pr&oacute;rroga autom&aacute;tica, la que consigna <em>&ldquo;Las</em><em>&nbsp;partes acuerdan que el
+        presente convenio se prorrogar&aacute; de forma autom&aacute;tica y sucesiva, siempre que el programa a ejecutar
+        cuente con la disponibilidad presupuestaria seg&uacute;n la ley de presupuestos del sector p&uacute;blico del
+        a&ntilde;o respectivo, salvo que las partes decidan ponerle termino por motivos fundados. La pr&oacute;rroga del
+        convenio comenzar&aacute; a regir desde el 01 de enero del a&ntilde;o presupuestario siguiente y su
+        duraci&oacute;n se extender&aacute; hasta el 31 de diciembre del mismo.</em></p>
+<p
+    style='text-align: justify;margin-top:0cm;margin-right:0cm;margin-bottom:12.0pt;margin-left:0cm;font-size:11.0pt;font-family:'Calibri',sans-serif;text-align:justify;'>
+    <em>&nbsp;</em></p>
+<p
+    style='text-align: justify;margin-top:0cm;margin-right:0cm;margin-bottom:12.0pt;margin-left:0cm;font-size:11.0pt;font-family:'Calibri',sans-serif;text-align:justify;'>
+    <em>Para todos los efectos legales, la pr&oacute;rroga autom&aacute;tica da inicio a un nuevo convenio de
+        transferencia, cuyo monto a transferir se establecer&aacute; mediante Resoluci&oacute;n Exenta del
+        <strong>&ldquo;SERVICIO&rdquo;</strong>, de conformidad a lo que se disponga en la Ley de Presupuestos del
+        Sector P&uacute;blico respectiva</em>&rdquo;</p>
+<p
+    style='text-align: justify;margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;font-size:11.0pt;font-family:'Calibri',sans-serif;text-align:justify;line-height:115%;'>
+    <strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+    &nbsp; 3.-</strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;Que, a trav&eacute;s de Resoluci&oacute;n Exenta <span
+        style='background:lime;'>N&deg;".$numResolucion."</span> de fecha <span style='background:lime;'>".$fechaResolucion."
+        </span> del Ministerio de Salud, se aprueba el Programa <span style='background:lime;'><strong>".$programa."</strong> para el a&ntilde;o
+    2024.</span></p>
+<p
+    style='text-align: justify;margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;font-size:11.0pt;font-family:'Calibri',sans-serif;text-align:justify;line-height:115%;'>
+    &nbsp;</p>
+<p
+    style='text-align: justify;margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;font-size:11.0pt;font-family:'Calibri',sans-serif;text-align:justify;line-height:115%;'>
+    <strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+        &nbsp; 4.-</strong>&nbsp;
+    &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;Que, a trav&eacute;s de Resoluci&oacute;n Exenta <span style='background:lime;'>N&deg;".$numResourceResolucion."</span> de fecha <span
+        style='background:lime;'>".$fechaResourceResolucion."</span> del Ministerio de Salud, se aprueban los
+    Recursos que distribuye los Recursos para el Programa<span
+        style='background:lime;'>&nbsp;<strong>".$programa."</strong> para el a&ntilde;o 2024.</span></p>
+<p
+    style='text-align: justify;margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;font-size:11.0pt;font-family:'Calibri',sans-serif;text-align:justify;line-height:115%;'>
+    &nbsp;</p>
+<p
+    style='text-align: justify;margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;font-size:11.0pt;font-family:'Calibri',sans-serif;text-align:justify;line-height:115%;'>
+    <strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+    &nbsp; <span
+            style='background:yellow;'>5.-</span></strong><span style='background:yellow;'>&nbsp; &nbsp; &nbsp; &nbsp;
+        &nbsp;&nbsp;Que, mediante de Resoluci&oacute;n Exenta N&deg;__ de fecha __ de _____ del a&ntilde;o 2024, el
+        Servicio de Salud Tarapac&aacute;, autoriz&oacute; Prorroga de Continuidad del Convenio Programa
+        <strong>".$programa."</strong> comuna de ".$comuna."<strong>&nbsp;</strong>para el a&ntilde;o 2024.</span></p><br>
+        
+        <p
+    style='text-align: justify;margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:'Calibri',sans-serif;text-align:justify;line-height:150%;'>
+    <strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+        &nbsp; &nbsp; &nbsp;RESUELVO,</strong></p>
+<p
+    style='text-align: justify;margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:'Calibri',sans-serif;text-align:justify;line-height:115%;'>
+    <strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+    &nbsp; 1.-&nbsp;
+        &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;APRU&Eacute;BASE</strong> la Pr&oacute;rroga de continuidad de convenio del Programa 
+    <span style='background:lime;'>&ldquo;<strong>".$programa."</strong><strong>&rdquo;</strong>, Comuna
+        de&nbsp;</span><span style='background:lime;'>".$comuna."</span>, para ser
+    ejecutado desde el 01 de enero del a&ntilde;o 2024 al 31 de diciembre del mismo a&ntilde;o, para lo cual es
+    necesario modificar las siguientes cl&aacute;usulas:</p><br>
+
+<div
+    style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:'Calibri',sans-serif;'>
+    <strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 1. Cl&aacute;usula Tercera (Aprobatoria del Programa):</strong>
+</div>
+<p
+    style='text-align: justify;margin-top:0cm;margin-right:0cm;margin-bottom:12.0pt;margin-left:0cm;font-size:11.0pt;font-family:'Calibri',sans-serif;text-align:justify;'>
+    El referido &ldquo;<strong>PROGRAMA&rdquo;&nbsp;</strong>ha sido aprobado por Resoluci&oacute;n Exenta <span
+        style='background:lime;'>N&deg;</span><span style='background:lime;'>".$numResolucionConvenio."</span><span
+        style='background:lime;'>&nbsp;de fecha&nbsp;</span><span style='background:lime;'>".$fechaResolucionConvenio."</span> del Ministerio de Salud y sus respectivas modificaciones, respecto a las exigencias de dicho
+    programa, la <strong>&ldquo;MUNICIPALIDAD&rdquo;&nbsp;</strong>se compromete a desarrollar las acciones atinentes
+    en&nbsp;virtud del presente instrumento.&nbsp;</p>
+<p style='text-align: justify;margin:0cm;text-align:justify;font-size:11.0pt;font-family:'Calibri',sans-serif;margin-bottom:12.0pt;'><span
+        style='font-size:11.0pt;font-family:'Calibri',sans-serif;'>Se deja establecido que, para los fines
+        espec&iacute;ficos del presente convenio</span><span style='font-size:11.0pt;font-family:'Calibri',sans-serif;'>,
+        el <strong>&ldquo;PROGRAMA&rdquo;&nbsp;</strong>se ejecutar&aacute;<strong>&nbsp;</strong>en el o los <span
+            style='background:lime;'>siguientes dispositivos de salud<strong>:&nbsp;</strong> ".$establecimientosListado."</span>, en los
+        cuales se llevar&aacute; a cabo el <strong>&ldquo;PROGRAMA&rdquo;</strong> a que se refiere el presente
+        convenio, y que dependen de la <strong>&ldquo;MUNICIPALIDAD&rdquo;.</strong></span></p>
+<p style='text-align: justify;margin:0cm;text-align:justify;font-size:11.0pt;font-family:'Calibri',sans-serif;margin-bottom:12.0pt;'>
+    <strong><span style='font-size:11.0pt;font-family:'Calibri',sans-serif;'>&nbsp;</span></strong></p>
+
+<div
+    style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:'Calibri',sans-serif;'>
+    <strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 2. Cl&aacute;usula Cuarta (Componentes):</strong>
+</div>
+<p style='text-align: justify;margin:0cm;text-align:justify;font-size:11.0pt;font-family:'Calibri',sans-serif;margin-bottom:12.0pt;'>
+    <strong><span style='font-size:11.0pt;font-family:'Calibri',sans-serif;'>&nbsp;</span></strong><span
+        style='font-size:11.0pt;font-family:'Calibri',sans-serif;'>El Ministerio de Salud, a trav&eacute;s del
+        &ldquo;<strong>SERVICIO&rdquo;</strong>, conviene en asignar a la <strong>&ldquo;MUNICIPALIDAD&rdquo;</strong>
+        recursos destinados a financiar los siguientes componentes del <strong>&ldquo;PROGRAMA&rdquo;:</strong></span>
+</p>
+
+<p style='text-align: justify;margin: 0cm; text-align: justify; font-size: 11.0pt;'>&nbsp;</p>
+<table style='border-collapse: collapse; width: 100%;' border='1'>
+<tbody>
+<tr>
+<td style='width: 100%;'>
+<p><span style='background:lime;'>(cuadro de texto)</span></p>
+<ol>
+<li><span style='background:lime;'>.....</span>
+<ol style='list-style-type: lower-alpha;'>
+<li><span style='background:lime;'>.....</span></li>
+<li><span style='background:lime;'>.....</span></li>
+<li><span style='background:lime;'>.....</span></li>
+</ol>
+</li>
+</ol>
+</td>
+</tr>
+</tbody>
+</table>
+<br>
+<div
+    style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:'Calibri',sans-serif;'>
+    <strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 3. Cl&aacute;usula Quinta (Financiamiento)</strong>
+</div>
+<p
+    style='text-align: justify;margin-top:0cm;margin-right:0cm;margin-bottom:12.0pt;margin-left:0cm;font-size:11.0pt;font-family:'Calibri',sans-serif;text-align:justify;'>
+    &nbsp;<span style='background:yellow;'>Conforme a lo se&ntilde;alado en las cl&aacute;usulas precedentes el
+        <strong>&ldquo;SERVICIO&rdquo;</strong> asignar&aacute; a la&nbsp;</span><strong><span
+            style='background:yellow;'>&ldquo;MUNICIPALIDAD&rdquo;</span></strong><span style='background:yellow;'>,
+        desde la fecha de total tramitaci&oacute;n de la Resoluci&oacute;n Exenta que apruebe el presente instrumento,
+        la suma anual y &uacute;nica de&nbsp;</span><strong><span style='background:yellow;'>$".$totalConvenio." (".$totalConvenioLetras.")</span></strong><span style='background:yellow;'>, de acuerdo a Resoluci&oacute;n que Aprueba
+        &nbsp;Recursos del referido programa, por parte del Ministerio de Salud, a&ntilde;o 2024 y su respectiva
+        redistribuci&oacute;n, para alcanzar el prop&oacute;sito y cumplimiento de los componentes se&ntilde;alados en
+        la cl&aacute;usula anterior, en la medida que esos fondos sean traspasados por el Ministerio de Salud al
+        <strong>&ldquo;SERVICIO&rdquo;</strong>.</span></p><br>
+
+        <div
+            style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:'Calibri',sans-serif;'>
+            <strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 4. Cl&aacute;usula Sexta (Objetivos)</strong>
+        </div>
+    <p
+        style='text-align: justify;margin-top:0cm;margin-right:0cm;margin-bottom:12.0pt;margin-left:0cm;font-size:11.0pt;font-family:'Calibri',sans-serif;text-align:justify;'>
+        La <strong>&ldquo;MUNICIPALIDAD&rdquo;</strong>, est&aacute; obligada a utilizar en forma exclusiva para los
+        objetivos del convenio, los recursos asignados seg&uacute;n el siguiente detalle de objetivos y productos
+        espec&iacute;ficos de cada componente, especificados en la cl&aacute;usula cuarta, pudiendo ser destinado el recurso
+        para uno o m&aacute;s componentes seg&uacute;n la necesidad del <strong>&ldquo;PROGRAMA&rdquo;:</strong></p>
+        <table style='border-collapse: collapse; width: 100%;' border='1'>
+        <tbody>
+        <tr>
+        <td style='text-align: center;'><strong>RECURSOS</strong></td>
+        <td style='text-align: center;'><strong>OBJETIVOS</strong></td>
+        </tr>
+        <tr>
+        <td rowspan='4'>$</td>
+        <td>TEXTO</td>
+        </tr>
+        <tr>
+        <td>&nbsp;</td>
+        </tr>
+        <tr>
+        <td>&nbsp;</td>
+        </tr>
+        <tr>
+        <td>&nbsp;</td>
+        </tr>
+        <tr>
+        <td rowspan='5'>&nbsp;</td>
+        <td>&nbsp;</td>
+        </tr>
+        <tr>
+        <td>&nbsp;</td>
+        </tr>
+        <tr>
+        <td>&nbsp;</td>
+        </tr>
+        <tr>
+        <td>&nbsp;</td>
+        </tr>
+        <tr>
+        <td>&nbsp;</td>
+        </tr>
+        <tr>
+        <td rowspan='3'>&nbsp;</td>
+        <td>&nbsp;</td>
+        </tr>
+        <tr>
+        <td>&nbsp;</td>
+        </tr>
+        <tr>
+        <td>&nbsp;</td>
+        </tr>
+        </tbody>
+        </table>
+<br>
+<div
+            style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:'Calibri',sans-serif;'>
+            <strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 5. Cl&aacute;usula S&eacute;ptima (Evaluaciones de Cumplimiento)</strong>
+        </div>
+<p
+    style='text-align: justify;margin-top:0cm;margin-right:0cm;margin-bottom:12.0pt;margin-left:0cm;font-size:11.0pt;font-family:'Calibri',sans-serif;text-align:justify;'>
+    <strong>&nbsp;</strong>El proceso de monitoreo y evaluaci&oacute;n del cumplimiento del presente convenio por parte
+    del <strong>&ldquo;SERVICIO&rdquo;,</strong> se orienta a conocer el desarrollo y grado de cumplimiento de los
+    diferentes componentes del <strong>&ldquo;PROGRAMA&rdquo;</strong>, con el prop&oacute;sito de mejorar la eficiencia
+    y efectividad de sus objetivos:</p>
+    <table style='border-collapse: collapse; width: 100%;' border='1'>
+    <tbody>
+    <tr>
+    <td style='width: 100%;'>
+    <ol style='list-style-type: upper-roman;'>
+        <li><span style='line-height:106%;font-family:'Calibri';font-size:11.0pt;background:lime;'>&Uacute;nica
+                Evaluaci&oacute;n.</span></li>
+        <li><span style='line-height:106%;font-family:'Calibri',sans-serif;font-size:11.0pt;background:lime;'>Dos Evaluaciones.</span></li>
+        <li><span style='line-height:106%;font-family:'Calibri',sans-serif;font-size:11.0pt;background:lime;'>Tres Evaluaciones.</span></li>
+        <li><span style='line-height:106%;font-family:'Calibri',sans-serif;font-size:11.0pt;background:lime;'>Evaluaciones mensuales.</span></li>
+    </ol>
+    </td>
+    </tr>
+    </tbody>
+    </table>
+<p
+    style='text-align: justify;margin-top:0cm;margin-right:0cm;margin-bottom:12.0pt;margin-left:0cm;font-size:11.0pt;font-family:'Calibri',sans-serif;text-align:justify;'>
+    La evaluaci&oacute;n del cumplimiento se realizar&aacute; en forma global para el
+    <strong>&ldquo;PROGRAMA&rdquo;,</strong> seg&uacute;n el siguiente detalle:</p>
+<p
+    style='text-align: justify;margin-top:0cm;margin-right:0cm;margin-bottom:12.0pt;margin-left:0cm;font-size:11.0pt;font-family:'Calibri',sans-serif;text-align:justify;'>
+    <strong><span style='color:black;'>INDICADORES Y MEDIOS DE VERIFICACI&Oacute;N:</span></strong></p>
+    <table style='border-collapse: collapse; width: 600px; margin-left: auto; margin-right: auto;' border='1'>
+    <tbody>
+    <tr>
+    <td style='width: 128.028px;'><strong>INDICADOR N&deg;</strong></td>
+    <td style='width: 425.084px;' colspan='2'><strong>NOMBRE DEL INDICADOR</strong></td>
+    </tr>
+    <tr>
+    <td style='width: 128.028px;'>&nbsp;</td>
+    <td style='width: 425.084px;' colspan='2'>&nbsp;</td>
+    </tr>
+    <tr>
+    <td style='width: 213.084px;' colspan='2'><strong>F&Oacute;RMULA</strong></td>
+    <td style='width: 340.028px;'><strong>VALOR ESPERADO</strong></td>
+    </tr>
+    <tr>
+    <td style='width: 213.084px;' colspan='2'>&nbsp;</td>
+    <td style='width: 340.028px;'>&nbsp;</td>
+    </tr>
+    <tr>
+    <td style='width: 128.028px;'><strong>NUMERADOR</strong></td>
+    <td style='width: 85.0556px;'>&nbsp;</td>
+    <td style='width: 340.028px;'><strong>FUENTE DE INFORMACI&Oacute;N</strong></td>
+    </tr>
+    <tr>
+    <td style='width: 128.028px;'><strong>DENOMINADOR</strong></td>
+    <td style='width: 85.0556px;'>&nbsp;</td>
+    <td style='width: 340.028px;'>&nbsp;</td>
+    </tr>
+    </tbody>
+    </table>
+<br>
+<p style='text-align: justify;margin:0cm;text-align:justify;font-size:11.0pt;font-family:'Calibri',sans-serif;margin-bottom:12.0pt;'><span
+        style='font-size:11.0pt;font-family:'Calibri',sans-serif;'>Este <strong>&ldquo;PROGRAMA&rdquo;</strong>
+        considera/no considera descuentos por concepto de reliquidaci&oacute;n de recursos asociado a Evaluaciones de
+        cumplimiento t&eacute;cnico, dado debe mantener la continuidad de las prestaciones de salud.</span></p><br>
+
+<div
+            style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:'Calibri',sans-serif;'>
+            <strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 6. Cl&aacute;usula Octava (Entrega de Recursos)</strong>
+        </div>
+<p
+    style='text-align: justify;margin-top:0cm;margin-right:0cm;margin-bottom:12.0pt;margin-left:0cm;font-size:11.0pt;font-family:'Calibri',sans-serif;text-align:justify;'>
+    Los&nbsp;recursos mencionados en la cl&aacute;usula quinta financiar&aacute;n exclusivamente las actividades
+    relacionadas al <strong>&ldquo;PROGRAMA&rdquo;&nbsp;</strong>y se <span style='background:lime;'>entregar&aacute;n
+        en _____</span><span style='background:lime;'>&nbsp;cuotas</span>, de acuerdo con la siguiente manera y
+    condiciones:</p>
+    <table style='border-collapse: collapse; width: 100%;' border='1'>
+<tbody>
+<tr>
+<td style='width: 100%;'>
+<ul style='list-style-type: disc;margin-left:8px;'>
+    <li><span style='font-family:'Calibri',sans-serif;color:black;font-size:11.0pt;color:black;background:lime;'>La
+            primera y &uacute;nica cuota de</span></li>
+    <li><span style='font-family:'Calibri',sans-serif;color:black;font-size:11.0pt;color:black;background:lime;'>Dos
+            cuotas</span></li>
+    <li><span style='font-family:'Calibri',sans-serif;color:black;font-size:11.0pt;color:black;background:lime;'>Tres
+            cuotas</span></li>
+    <li><span style='font-family:'Calibri',sans-serif;color:black;font-size:11.0pt;color:black;background:lime;'>12
+            cuotas</span></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p
+    style='margin:0cm;text-align:justify;font-size:16px;font-family:'Calibri',sans-serif;margin-top:0cm;margin-right:0cm;margin-bottom:12.0pt;margin-left:18.0pt;'>
+    <span style='font-size:15px;font-family:'Calibri',sans-serif;'>&nbsp;</span></p>
+
+<div
+            style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:'Calibri',sans-serif;'>
+            <strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 7. Cl&aacute;usula D&eacute;cimo Cuarta&nbsp;(Vigencia)</strong>
+        </div>
+    <p
+    style='text-align: justify;margin-top:0cm;margin-right:0cm;margin-bottom:12.0pt;margin-left:0cm;font-size:11.0pt;font-family:'Calibri',sans-serif;text-align:justify;'>
+    La presente Resoluci&oacute;n de Continuidad, tendr&aacute; vigencia a partir del <strong>01 de enero del a&ntilde;o
+        2024 al 31 de diciembre del a&ntilde;o 2024&nbsp;</strong>para la ejecuci&oacute;n de las actividades
+    comprendidas en este convenio.</p>
+    <p
+        style='text-align: justify;margin-top:0cm;margin-right:0cm;margin-bottom:12.0pt;margin-left:0cm;font-size:11.0pt;font-family:'Calibri',sans-serif;text-align:justify;'>
+        Sin perjuicio de lo anterior, las partes acuerdan que el presente convenio se prorrogar&aacute; de forma
+        autom&aacute;tica y sucesiva, siempre que el programa a ejecutar cuente con la disponibilidad presupuestaria
+        seg&uacute;n la ley de presupuestos del sector p&uacute;blico del a&ntilde;o respectivo, salvo que las partes
+        decidan ponerle termino por motivos fundados.</p>
+<p
+    style='text-align: justify;margin-top:0cm;margin-right:0cm;margin-bottom:12.0pt;margin-left:0cm;font-size:11.0pt;font-family:'Calibri',sans-serif;text-align:justify;'>
+    &nbsp;</p>
+
+<div
+            style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:'Calibri',sans-serif;'>
+            <strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 8. Cl&aacute;usula D&eacute;cimo Sexta (Reintegro de recursos)</strong>
+        </div>
+    <p
+    style='text-align: justify;margin-top:0cm;margin-right:0cm;margin-bottom:12.0pt;margin-left:0cm;font-size:11.0pt;font-family:'Calibri',sans-serif;text-align:justify;'>
+    Finalizado el per&iacute;odo de vigencia de la presente Resoluci&oacute;n de Continuidad, los saldos transferidos y
+    no utilizados, deber&aacute;n ser reintegrados por la&nbsp;<strong>&ldquo;MUNICIPALIDAD&rdquo;</strong>, a Rentas
+    Generales de la naci&oacute;n, a m&aacute;s tardar&nbsp;el<strong>&nbsp;31 de enero del a&ntilde;o 2025,</strong>
+    seg&uacute;n se&ntilde;ala el art&iacute;culo 7&deg; de la <span style='background:lime;'>Ley N&deg;21.640 de</span>
+    Presupuesto para el sector p&uacute;blico, correspondiente al a&ntilde;o 2024, salvo casos excepcionales debidamente
+    fundados.</p>
+    <p
+        style='text-align: justify;margin-top:0cm;margin-right:0cm;margin-bottom:12.0pt;margin-left:0cm;font-size:11.0pt;font-family:'Calibri',sans-serif;text-align:justify;'>
+        En el caso que la <strong>&ldquo;MUNICIPALIDAD&rdquo;</strong> por razones debidamente fundadas, no cumpla con las
+        acciones y ejecuciones presupuestarias establecidas en el convenio, puede solicitar una modificaci&oacute;n a
+        trav&eacute;s de Oficio dirigido a Director(a) del <strong>&ldquo;SERVICIO&rdquo;</strong> para su
+        aprobaci&oacute;n, exponiendo los fundamentos pertinentes y respaldos hasta el <strong>30 de octubre del a&ntilde;o
+            2024</strong>. &nbsp;El Referente T&eacute;cnico del <strong>&ldquo;PROGRAMA&rdquo;</strong> del
+        <strong>&ldquo;SERVICIO&rdquo;</strong> es el encargado de ponderar esta solicitud, considerando que la
+        destinaci&oacute;n de estos recursos es solo para acciones atingentes al programa. Excepcionalmente y en la medida
+        que se reciban nuevos recursos se<span style='color:red;'>&nbsp;</span>proceder&aacute; a elaborar la
+        resoluci&oacute;n modificatoria correspondiente.</p><br>
+
+        <p
+    style='text-align: justify;margin-top:0cm;margin-right:0cm;margin-bottom:12.0pt;margin-left:0cm;font-size:11.0pt;font-family:'Calibri',sans-serif;text-align:justify;line-height:115%;'>
+    <strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+    &nbsp; 2.-&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;IMP&Uacute;TESE</strong> el gasto
+    total de&nbsp;<strong><span style='background:lime;'>$".$totalConvenio." (".$totalConvenioLetras.")&nbsp;</span></strong>que irrogue
+    la presente Resoluci&oacute;n de Continuidad del Convenio, correspondiente al Programa <span
+        style='background:lime;'>&ldquo;<strong>".$programa."</strong><strong>&rdquo; a</strong></span><strong><span
+            style='background:lime;'>&ntilde;o 2024</span></strong>, entre el Servicio de Salud Tarapac&aacute; y
+    la&nbsp;<span style='background:lime;'>".$ilustre."</span> Municipalidad de&nbsp;<span
+        style='background:lime;'>".$comuna."</span> al &iacute;tem N&deg;24-03 298-002 correspondiente a
+    <strong>&ldquo;Reforzamiento Municipal del Presupuesto vigente del Servicio de Salud Tarapac&aacute; a&ntilde;o
+        2024&rdquo;</strong>.</p>
+<p
+    style='text-align: justify;margin-top:0cm;margin-right:0cm;margin-bottom:12.0pt;margin-left:0cm;font-size:11.0pt;font-family:'Calibri',sans-serif;text-align:justify;line-height:115%;'>
+    &nbsp;</p>
+<p
+    style='text-align: justify;margin-top:0cm;margin-right:0cm;margin-bottom:12.0pt;margin-left:0cm;font-size:11.0pt;font-family:'Calibri',sans-serif;text-align:justify;line-height:115%;'>
+    <strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+    &nbsp; 3.-</strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;El convenio individualizado en la cl&aacute;usula primera de este instrumento se
+    mantendr&aacute; plenamente vigente, subsistiendo todas sus cl&aacute;usulas, salvo en lo modificado por la presente
+    Resoluci&oacute;n.<strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+        &nbsp; &nbsp;</strong></p>
+<p
+    style='text-align: justify;margin-top:0cm;margin-right:0cm;margin-bottom:12.0pt;margin-left:0cm;font-size:11.0pt;font-family:'Calibri',sans-serif;text-align:justify;line-height:normal;'>
+    &nbsp;</p>
+<p
+    style='text-align: justify;margin-top:0cm;margin-right:0cm;margin-bottom:12.0pt;margin-left:0cm;font-size:11.0pt;font-family:'Calibri',sans-serif;text-align:justify;line-height:normal;'>
+    &nbsp;</p>
+<p
+    style='text-align: justify;margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;font-size:11.0pt;font-family:'Calibri',sans-serif;text-align:justify;line-height:normal;'>
+    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<strong>AN&Oacute;TESE,
+        COMUN&Iacute;QUESE, ARCH&Iacute;VESE.&nbsp;</strong></p>
+";
+
+        $types = Type::whereNull('partes_exclusive')->pluck('name','id');
+        return view('documents.create', compact('document', 'types'));
+    }
+
+    public function formatDate($date)
+    {
+        $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+        return date('j', strtotime($date)).' de '.$meses[date('n', strtotime($date))-1].' del año '.date('Y', strtotime($date));
+    }
+
+    public function correctAmountText($amount_text)
+    {
+        $amount_text = ucwords(mb_strtolower($amount_text));
+        // verificamos si antes de cerrar en pesos la ultima palabra termina en Millón o Millones, de ser así se agregar "de" antes de cerrar con pesos
+        $words_amount = explode(' ',trim($amount_text));
+        return ($words_amount[count($words_amount) - 2] == 'Millon' || $words_amount[count($words_amount) - 2] == 'Millones') ? substr_replace($amount_text, 'de ', (strlen($amount_text) - 5), 0) : $amount_text;
     }
 }

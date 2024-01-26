@@ -19,6 +19,7 @@ class Municipality extends Model
         'rut_representative_surrogate', 
         'decree_representative_surrogate',
         'email_municipality',
+        'email_municipality_2',
         'appellative_representative_surrogate'
     ];
 
