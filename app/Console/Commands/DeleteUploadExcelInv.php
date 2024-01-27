@@ -34,7 +34,7 @@ class DeleteUploadExcelInv extends Command
         // $fecha = '28-12-2023 11:30:30';
         // $fechaInicio = Carbon::createFromFormat('d-m-Y', $fecha)->startOfDay();
         // $inventarios = Inventory::where('created_at', '>=', $fechaInicio)->get();
-        $fecha = '09-01-2024 11:30:00';
+        $fecha = '26-01-2024 13:00:00';
 
         $fechaInicio = Carbon::parse($fecha);
         $inventarios = Inventory::where('created_at', '>=', $fechaInicio)->get();

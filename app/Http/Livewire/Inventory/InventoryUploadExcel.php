@@ -132,6 +132,20 @@ class InventoryUploadExcel extends Component
                     }
                 }
 
+
+                if ($row[18]) {
+                    $inventory = Inventory::where('old_number', $row[18])->whereNull('deleted_at')->first();
+                        if ($inventory) {
+                        $msg .= "El número de inventario antiguo de la fila " .  ($key + 1) . " cuyo número antiguo es " . $inventory->old_number . " ya se encuentra en nuestros sistemas. <br>";
+                        $rows_fail += 1;
+                        $allRowsGood = false;
+                        continue;
+                        }
+                }
+
+
+
+
                 switch ($row[8]) {
                     case "MALO":
                     case "Malo":
