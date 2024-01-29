@@ -215,7 +215,6 @@ class RequestReplacementStaffController extends Controller
             if($formType == 'announcement'){
                 $request_replacement = new RequestReplacementStaff();
                 $request_replacement->name = $request->name;
-                $request_replacement->request_status = 'pending';
                 $request_replacement->ou_of_performance_id = $request->ou_of_performance_id;
                 $position = new Position($request->All());
             }else{
@@ -230,6 +229,7 @@ class RequestReplacementStaffController extends Controller
                 */
             }
 
+            $request_replacement->request_status = 'pending';
             $request_replacement->form_type = $formType;
             $request_replacement->user()->associate(Auth::user());
             $request_replacement->organizationalUnit()->associate(Auth::user()->organizationalUnit);
@@ -273,7 +273,7 @@ class RequestReplacementStaffController extends Controller
                         "callback_controller_params"        => json_encode([
                             'request_replacement_staff_id'  => $request_replacement->id,
                             'applicant_id'                  => null,
-                            'process'                       => ($i == 2) ? 'end leadership sign' : null
+                            'process'                       => ($i == 2) ? 'end leadership sign' : (($organizationalUnit->father->id == Parameter::get('ou','SubRRHH')) ? 'end leadership sign' :null)
                         ]),
                         "position"                          => "left",
                     ]);
