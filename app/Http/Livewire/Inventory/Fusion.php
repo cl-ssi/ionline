@@ -29,8 +29,12 @@ class Fusion extends Component
     {
         $this->validate();
         
-        $item_a = Inventory::find($this->input_item_a);
-        $item_b = Inventory::find($this->input_item_b);
+        // $item_a = Inventory::find($this->input_item_a);
+        // $item_b = Inventory::find($this->input_item_b);
+        // $item_a = Inventory::where('number','LIKE','%'.$this->input_item_a.'%')->first();
+        // $item_b = Inventory::where('number','LIKE','%'.$this->input_item_b.'%')->first();
+        $item_a = Inventory::where('number',$this->input_item_a)->first();
+        $item_b = Inventory::where('number',$this->input_item_b)->first();
         $this->item_a = $item_a;
         $this->item_b = $item_b;
 

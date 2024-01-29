@@ -16,7 +16,7 @@
                 wire:model.defer="input_item_a"
                 class="form-control @error('input_item_a') is-invalid @enderror"
                 id="for-input_item_a"
-                placeholder="id ítem A">
+                placeholder="Nro.Inv. A">
         </div>
 
         <div class="col-12">
@@ -35,7 +35,7 @@
                 wire:model.defer="input_item_b"
                 class="form-control @error('input_item_b') is-invalid @enderror"
                 id="for-input_item_b"
-                placeholder="id ítem B">
+                placeholder="Nro.Inv. B">
         </div>
 
         <div class="col-12">
