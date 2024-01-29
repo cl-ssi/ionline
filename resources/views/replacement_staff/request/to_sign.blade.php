@@ -242,7 +242,8 @@
                 
                                         @if($requestSign->ou_alias == 'uni_per' 
                                             && (Auth::user()->hasRole('Replacement Staff: personal sign') || Auth::user()->id == App\Rrhh\Authority::getTodayAuthorityManagerFromDate(Auth::user()->organizational_unit_id)->user_id)
-                                            && ($requestReplacementStaff->legalQualityManage && $requestReplacementStaff->legalQualityManage->NameValue == 'Contrata'))
+                                            && ($requestReplacementStaff->legalQualityManage && ($requestReplacementStaff->legalQualityManage->NameValue == 'Contrata' ||
+                                            $requestReplacementStaff->legalQualityManage->NameValue == 'Titular')))
                                             <fieldset class="form-group">
                                                 <label for="for_gender" >Subtítulo</label>
                                                 <select name="budget_item_id" id="for_budget_item_id" class="form-control" required small>
