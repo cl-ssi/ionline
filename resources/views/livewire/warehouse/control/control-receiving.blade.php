@@ -131,15 +131,15 @@
                                 <i class="fas fa-file-pdf"></i>
                             </a>
 
-                            <a
-                                href="{{ route('finance.receptions.create', ['control_id' => $control->id]) }}"
-                                class="btn btn-sm btn-outline-secondary"
-                                title="Generar Acta Recepcion Basado en Ingreso Bodega"
-                            >
-                                <i class="fas fa-paper-plane"></i>
-                            </a>
-
-
+                            @if ($control->reception_id === null)
+                                <a
+                                    href="{{ route('finance.receptions.create', ['control_id' => $control->id]) }}"
+                                    class="btn btn-sm btn-outline-secondary"
+                                    title="Generar Acta Recepcion Basado en Ingreso Bodega"
+                                >
+                                    <i class="fas fa-paper-plane"></i>
+                                </a>
+                            @endif
                         @endif
                     </td>
                     <td>

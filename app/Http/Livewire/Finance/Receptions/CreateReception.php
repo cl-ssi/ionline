@@ -37,6 +37,7 @@ class CreateReception extends Component
     public $selectedDteId;
     public $file_signed;
     public $support_file;
+    public $control = null;
 
     public $receptionItemsWithCantidad; //para validación
     // public $message;
@@ -117,9 +118,10 @@ class CreateReception extends Component
     {
 
         if($control_id <> 0 and $reception_id == null)
-        {            
+        {
             
             $control = Control::find($control_id);
+            $this->control = $control;
             $receptionData = [
                 'date' => $control->date,
                 'purchase_order' => $control->po_code,
@@ -431,6 +433,11 @@ class CreateReception extends Component
             ['id' => $this->reception['id'] ?? null],
             $this->reception
         );
+        if ($this->control){
+            $this->control->reception_id = $reception->id;
+            $this->control->save();
+            $this->control = null;
+        }
 
 
         /* Guardar Items */

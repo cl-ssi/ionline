@@ -17,6 +17,7 @@ use App\Models\Parameters\Program;
 use App\Models\Finance\Dte;
 use App\Models\Documents\Signature;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use App\Models\Finance\Receptions\Reception;
 
 class Control extends Model
 {
@@ -67,6 +68,9 @@ class Control extends Model
         'visation_warehouse_manager_at',
         'visation_warehouse_manager_status',
         'visation_warehouse_manager_rejection_observation',
+
+        //dato relacion con reception
+        'reception_id'
     ];
 
     protected $dates = [
@@ -171,6 +175,11 @@ class Control extends Model
     public function receptionVisator()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function reception()
+    {
+        return $this->belongsTo(Reception::class);
     }
 
     public function isReceiving()
