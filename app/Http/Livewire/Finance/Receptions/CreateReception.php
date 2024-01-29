@@ -117,7 +117,8 @@ class CreateReception extends Component
     {
 
         if($control_id <> 0 and $reception_id == null)
-        {
+        {            
+            
             $control = Control::find($control_id);
             $receptionData = [
                 'date' => $control->date,
@@ -127,11 +128,19 @@ class CreateReception extends Component
             ];
 
             $this->purchaseOrderCode =  $control->po_code;
-            $this->purchaseOrder     = $control->purchaseOrder;
+            //$this->purchaseOrder     = $control->purchaseOrder;
+            $this->purchaseOrder    =  PurchaseOrder::where('code',$control->po_code)->first();
+            $this->createArrayItemsFromOC();
 
-            //dd($this->purchaseOrder);
 
-            //$this->createArrayItemsFromOC();
+            $this->reception = [
+                'purchase_order'    => $this->purchaseOrderCode,
+                'establishment_id'  => auth()->user()->organizationalUnit->establishment_id,
+                'creator_id'        => auth()->id(),
+                'creator_ou_id'     => auth()->user()->organizational_unit_id,
+            ];
+
+            //dd($this->purchaseOrder->json->Listado[0]->Items);
 
             
             /* Setear la cantidad por item e id que tiene la seteada el item */
@@ -295,7 +304,7 @@ class CreateReception extends Component
     * Create an Array of items from OC itmes
     */
     public function createArrayItemsFromOC()
-    {
+    {        
         foreach( $this->purchaseOrder->json->Listado[0]->Items->Listado as $key => $item ){
             $this->receptionItems[$key] = [
                 'item_position'             => $key,

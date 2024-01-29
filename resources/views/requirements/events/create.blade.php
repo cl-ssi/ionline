@@ -84,6 +84,7 @@
                         <th>Unidad Organizacional</th>
                         <th>Destinatario</th>
                         <th>En copia</th>
+                        <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>

@@ -295,11 +295,18 @@
                                "<td>" + ou + "</td>" +
                                "<td>" + user + "</td>" +
                                "<td><input type='checkbox' disabled></td>" +
+                               "<td><button type='button' class='btn btn-outline-danger delete-row' data-toggle='tooltip' data-placement='top' title='Eliminar'><i class='fas fa-trash'></i></button></td>" +
                                //"<td><button type='button' id='delete-row' class='btn btn-outline-secondary btn-sm' value=" + id + "><span class='fas fa-trash-alt' aria-hidden='true'></span></button></td>" +
                           "</tr>";
              $("#tabla_funcionarios").append(markup);
            }else{alert("No se puede derivar para más de un usuario en una respuesta a un requerimiento.");}
        });
+
+       $(document).on('click', '.delete-row', function () {
+            $(this).closest('tr').remove();
+            // También puedes eliminar el ID correspondiente del array
+            // Ejemplo: array.splice(index, 1);
+        });
 
        $(".add_destinatario_cc").click(function(){
 
