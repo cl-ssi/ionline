@@ -47,7 +47,7 @@ class Parameter extends Model
     public static function get($module, $parameter, $establishment_id = null)
     {
         $query = Parameter::where('module', $module)
-        ->where('parameter', $parameter);
+            ->where('parameter', $parameter);
 
         if ($establishment_id !== null) {
             $query->where('establishment_id', $establishment_id);

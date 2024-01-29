@@ -9,10 +9,12 @@ use Illuminate\Validation\Rule;
 class CreateParameterRequest extends FormRequest
 {
     public $module;
+    public $establishment_id;
 
-    public function __construct($module)
+    public function __construct($module, $establishment_id)
     {
         $this->module = $module;
+        $this->establishment_id = $establishment_id;
     }
 
     /**
@@ -37,7 +39,7 @@ class CreateParameterRequest extends FormRequest
                 'required',
                 'string',
                 'max:255',
-                Rule::unique('cfg_parameters', 'parameter')->where('module', $this->module)
+                Rule::unique('cfg_parameters', 'parameter')->where('module', $this->module)->where('establishment_id', $this->establishment_id)
             ],
             'module'            => 'required|string|max:255',
             'value'             => 'required|string|max:255',

@@ -28,7 +28,7 @@ class ParameterCreate extends Component
 
     public function rules()
     {
-        return (new CreateParameterRequest($this->module))->rules();
+        return (new CreateParameterRequest($this->module, $this->establishment_id))->rules();
     }
 
     public function create()

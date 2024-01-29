@@ -131,11 +131,26 @@ class EventRequestForm extends Model implements Auditable
         return true;
     }
 
-    public static function createPreFinanceEvent(RequestForm $requestForm){
-        $parameter = $requestForm->associateProgram->Subtitle->name != 31 && $requestForm->contractOrganizationalUnit->establishment_id == Parameter::where('parameter', 'HospitalAltoHospicio')->first()->value ? 'RefrendacionHAH' : 'FinanzasSSI';
-        $ouSearch = Parameter::where('module', 'ou')->where('parameter', $parameter)->first()->value;
+    public static function createPreFinanceEvent(RequestForm $requestForm) {
+        // SST = prefinance_ou_id = 40
+        // HAH = prefinance_ou_id = 339
+        // HETG = prefinance_ou_id = 111
+
+        // SST = prefinance_sub_31_ou_id = 40
+        // HAH = prefinance_sub_31_ou_id = 40
+        // HETG = prefinance_sub_31_ou_id = 111
+
+        if($requestForm->associateProgram->Subtitle->name == 31) {
+            // Obtener la ou_id del la unidad "prefinance" del establecimiento al que pertenece el administrador de contrato para subtitulo 31
+            $ou_id = Parameter::get('Abastecimiento','prefinance_sub_31_ou_id', $requestForm->contractOrganizationalUnit->establishment_id);
+        }
+        else {
+            // Obtener la ou_id del la unidad "prefinance" del establecimiento al que pertenece el administrador de contrato para los demás subtitulos
+            $ou_id = Parameter::get('Abastecimiento','prefinance_ou_id', $requestForm->contractOrganizationalUnit->establishment_id); 
+        }
+
         $event                      =   new EventRequestForm();
-        $event->ou_signer_user      =   $ouSearch;
+        $event->ou_signer_user      =   $ou_id;
         $event->cardinal_number     =   $requestForm->superior_chief == 1 ? 3 : 2;
         $event->status              =   'pending';
         $event->event_type          =   'pre_finance_event';
@@ -144,11 +159,26 @@ class EventRequestForm extends Model implements Auditable
         return true;
     }
 
-    public static function createFinanceEvent(RequestForm $requestForm){
-        $parameter = $requestForm->associateProgram->Subtitle->name != 31 && $requestForm->contractOrganizationalUnit->establishment_id == Parameter::where('parameter', 'HospitalAltoHospicio')->first()->value ? 'FinanzasHAH' : 'FinanzasSSI';
-        $ouSearch = Parameter::where('module', 'ou')->where('parameter', $parameter)->first()->value;
+    public static function createFinanceEvent(RequestForm $requestForm) {
+        // SST = finance_ou_id = 40
+        // HAH = finance_ou_id = 337
+        // HETG = finance_ou_id = 87
+
+        // SST = finance_sub_31_ou_id = 40
+        // HAH = finance_sub_31_ou_id = 40
+        // HETG = finance_sub_31_ou_id = 87
+
+        if($requestForm->associateProgram->Subtitle->name == 31) {
+            // Obtener la ou_id del la unidad "prefinance" del establecimiento al que pertenece el administrador de contrato para subtitulo 31
+            $ou_id = Parameter::get('Abastecimiento','finance_sub_31_ou_id', $requestForm->contractOrganizationalUnit->establishment_id);
+        }
+        else {
+            // Obtener la ou_id del la unidad "prefinance" del establecimiento al que pertenece el administrador de contrato para los demás subtitulos
+            $ou_id = Parameter::get('Abastecimiento','finance_ou_id', $requestForm->contractOrganizationalUnit->establishment_id); 
+        }
+
         $event                      =   new EventRequestForm();
-        $event->ou_signer_user      =   $ouSearch;
+        $event->ou_signer_user      =   $ou_id;
         $event->cardinal_number     =   $requestForm->superior_chief == 1 ? 4 : 3;
         $event->status              =   'pending';
         $event->event_type          =   'finance_event';
@@ -157,11 +187,27 @@ class EventRequestForm extends Model implements Auditable
         return true;
     }
 
-    public static function createSupplyEvent(RequestForm $requestForm){
-        $parameter = $requestForm->associateProgram->Subtitle->name != 31 && $requestForm->contractOrganizationalUnit->establishment_id == Parameter::where('parameter', 'HospitalAltoHospicio')->first()->value ? 'AbastecimientoHAH' : 'AbastecimientoSSI';
-        $ouSearch = Parameter::where('module', 'ou')->where('parameter', $parameter)->first()->value;
+    public static function createSupplyEvent(RequestForm $requestForm) {
+        // SST = supply_sub_31_ou_id = 37
+        // SST = supply_ou_id = 37
+
+        // HAH = supply_sub_31_ou_id = 37
+        // HAH = supply_ou_id = 334
+
+        // HETG = supply_sub_31_ou_id = 112
+        // HETG = supply_ou_id = 112
+
+        if($requestForm->associateProgram->Subtitle->name == 31) {
+            // Obtener la ou_id del la unidad "prefinance" del establecimiento al que pertenece el administrador de contrato para subtitulo 31
+            $ou_id = Parameter::get('Abastecimiento','supply_sub_31_ou_id', $requestForm->contractOrganizationalUnit->establishment_id);
+        }
+        else {
+            // Obtener la ou_id del la unidad "prefinance" del establecimiento al que pertenece el administrador de contrato para los demás subtitulos
+            $ou_id = Parameter::get('Abastecimiento','supply_ou_id', $requestForm->contractOrganizationalUnit->establishment_id); 
+        }
+
         $event                      =   new EventRequestForm();
-        $event->ou_signer_user      =   $ouSearch;
+        $event->ou_signer_user      =   $ou_id;
         $event->cardinal_number     =   $requestForm->superior_chief == 1 ? 5 : 4;
         $event->status              =   'pending';
         $event->event_type          =   'supply_event';
@@ -172,6 +218,7 @@ class EventRequestForm extends Model implements Auditable
 
     public static function createNewBudgetEvent(RequestForm $requestForm)
     {
+        // TODO: Cambiar a parametros sin nombre de establecimiento, ver ejemplo arriba
         $result = $requestForm->associateProgram->Subtitle->name != 31 && $requestForm->contractOrganizationalUnit->establishment_id == Parameter::where('parameter', 'HospitalAltoHospicio')->first()->value;
 
         $parameter = $result ? 'AbastecimientoHAH' : 'AbastecimientoSSI';
