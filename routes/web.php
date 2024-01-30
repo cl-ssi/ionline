@@ -85,6 +85,7 @@ use App\Http\Livewire\Drugs\CreateActPrecursor;
 use App\Http\Livewire\Documents\Partes\ReportByDates as PartesReportByDates;
 use App\Http\Livewire\Documents\Partes\NumerationInbox;
 use App\Http\Livewire\Documents\Partes\Inbox;
+use App\Http\Livewire\Documents\Partes\PartesAccessLog;
 use App\Http\Livewire\Documents\ApprovalsMgr;
 use App\Http\Livewire\Authorities\Calendar;
 use App\Http\Controllers\Welfare\WelfareController;
@@ -177,8 +178,8 @@ use App\Http\Controllers\ReplacementStaff\ExperienceController;
 use App\Http\Controllers\ReplacementStaff\ContactRecordController;
 use App\Http\Controllers\ReplacementStaff\CommissionController;
 use App\Http\Controllers\ReplacementStaff\ApplicantController;
-use App\Http\Controllers\Rem\UserRemController;
 //use App\Http\Controllers\RequestForms\SupplyPurchaseController;
+use App\Http\Controllers\Rem\UserRemController;
 use App\Http\Controllers\Rem\RemSerieController;
 use App\Http\Controllers\Rem\RemPeriodSerieController;
 use App\Http\Controllers\Rem\RemPeriodController;
@@ -1302,6 +1303,7 @@ Route::prefix('documents')->as('documents.')->middleware(['auth', 'must.change.p
 
     Route::prefix('partes')->as('partes.')->group(function () {
         Route::get('/parameters', [ParteController::class, 'parameters'])->name('parameters');
+        Route::get('/access-log', PartesAccessLog::class)->name('access-log');
         Route::post('/', [ParteController::class, 'store'])->name('store');
         Route::get('/create', [ParteController::class, 'create'])->name('create');
         Route::get('/download/{file}',  [ParteController::class, 'download'])->name('download');

@@ -14,7 +14,6 @@ class Inbox extends Component
 
     public $types;
 
-    
     public $parte_correlative;
     public $parte_type_id;
     public $parte_number;
@@ -79,6 +78,19 @@ class Inbox extends Component
                 'files.signatureFile',
                 ])
             ->latest()->paginate('100');
+
+        /** Log access a partes, no crea otro registro, si el usuario ingreso dentro de los últimos x minutos */
+        $minutos = 15;
+        $ha_ingresado_en_rango_de_x_minutos = auth()->user()->accessLogs->where('type','partes')->where('created_at', '>', now()->subMinutes($minutos))->last();
+        
+        if(!$ha_ingresado_en_rango_de_x_minutos) {
+            // Registramos su acceso a partes
+            auth()->user()->accessLogs()->create([
+                'type' => 'partes',
+                'switch_id' => session()->get('god'),
+                'enviroment' => 'Cloud Run' // Ya no es necesario
+            ]);
+        }
 
         return view('livewire.documents.partes.inbox', ['partes' => $partes])->extends('layouts.bt4.app');
     }

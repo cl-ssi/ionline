@@ -50,6 +50,13 @@
             <i class="fas fa-inbox"></i> Bandeja de Salida
         </a>
     </li>
+
+    <li class="nav-item">
+        <a class="nav-link"
+            href="{{ route('documents.partes.access-log') }}">
+            <i class="fas fa-clipboard-list"></i> Log
+        </a>
+    </li>
     @endcan
 
     @canany(['Partes: director'])
@@ -62,13 +69,15 @@
     @endcan
 
     <!-- Preguntar que permisos debería tener -->
-    @canany(['Partes: director'])
+
+    @can('be god')
     <li class="nav-item">
         <a class="nav-link {{ active('documents.partes.parameters')}}"
             href="{{ route('documents.partes.parameters') }}">
-            <i class="fas fa-cog"></i> Parámetros
+            <i class="fas fa-cog"></i> 
         </a>
     </li>
     @endcan
+
     
 </ul>
