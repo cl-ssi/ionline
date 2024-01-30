@@ -391,6 +391,16 @@ Route::middleware(['auth', 'must.change.password'])->group(function () {
     });
 });
 
+/** 
+ * Esta es la URL de la imagen de la firma
+ * para poder cambiarla sin cambiar todos los pies de firma de cada correo
+ * cree una, entonces cambiamos esta url y se cambiará para todos los correos
+ * en el fondo hay que definir acá el redirect para donde queremos que vaya
+ */
+Route::get('/redirect-url/signature', function () {
+    return redirect()->route('welcome');
+})->name('redirect-url.signature');
+
 /* Replacement Staff */
 Route::prefix('replacement_staff')->as('replacement_staff.')->middleware(['auth', 'must.change.password'])->group(function () {
     Route::get('/', [ReplacementStaffController::class, 'index'])->name('index')->middleware(['permission:Replacement Staff: list rrhh']);
