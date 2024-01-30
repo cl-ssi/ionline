@@ -1301,9 +1301,10 @@ Route::prefix('documents')->as('documents.')->middleware(['auth', 'must.change.p
     Route::get('/{document}/sendForSignature/', [DocumentController::class, 'sendForSignature'])->name('sendForSignature');
     Route::get('/signed-document-pdf/{id}', [DocumentController::class, 'signedDocumentPdf'])->name('signedDocumentPdf');
 
-    Route::prefix('partes')->as('partes.')->group(function () {
+    /** La primera está afuera porque no tiene el middleware del can Partes: oficina */
+    Route::get('/partes/access-log', PartesAccessLog::class)->name('partes.access-log');
+    Route::prefix('partes')->as('partes.')->middleware(['can:Partes: oficina'])->group(function () {
         Route::get('/parameters', [ParteController::class, 'parameters'])->name('parameters');
-        Route::get('/access-log', PartesAccessLog::class)->name('access-log');
         Route::post('/', [ParteController::class, 'store'])->name('store');
         Route::get('/create', [ParteController::class, 'create'])->name('create');
         Route::get('/download/{file}',  [ParteController::class, 'download'])->name('download');
@@ -1318,8 +1319,7 @@ Route::prefix('documents')->as('documents.')->middleware(['auth', 'must.change.p
         Route::put('/{parte}', [ParteController::class, 'update'])->name('update');
         Route::delete('/{parte}', [ParteController::class, 'destroy'])->name('destroy');
         Route::get('/{parte}/edit', [ParteController::class, 'edit'])->name('edit');
-        
-        
+
         Route::prefix('numeration')->as('numeration.')->group(function () {
             Route::get('/inbox', NumerationInbox::class)->name('inbox');
             Route::get('/original/{numeration}', [NumerationController::class,'showOriginal'])->name('show_original');
