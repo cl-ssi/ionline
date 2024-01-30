@@ -111,6 +111,7 @@ class HealthGoalController extends Controller
                             $indicator->values->add(new Value(['month' => $item->Mes, 'factor' => $factor, 'value' => $item->valor]));
                     }
                 }
+                // if($indicator->id == 702) dd($indicator);
             }
         }
     }
@@ -229,7 +230,7 @@ class HealthGoalController extends Controller
                             $indicator->values->add($value);
                         }
 
-                        if(in_array($indicator->id, [76,341]) && $factor == 'denominador'){
+                        if(in_array($indicator->id, [76,341,761]) && $factor == 'denominador'){
                             // N° de niños y niñas de 12 a 23 meses diagnosticados con riesgo de DSM en su primera evaluación en control de los 18 meses, período octubre 2020 a diciembre del 2020
                             $result = Rem::year($year-1)->selectRaw($raws)
                                     ->with(['establecimiento' => function($q) use ($establishment_cods){ 
