@@ -78,4 +78,15 @@ class QueryGenerator extends Component
         // die();
         return view('livewire.indicators.query-generator', compact('query','formatedQuery'));
     }
+
+    /**
+    * Process
+    */
+    public function process()
+    {
+        $this->goal = trim($this->goal);
+        $this->numerator = trim($this->numerator);
+        $this->denominator = trim($this->denominator);
+        $this->name = trim(ucfirst(strtolower($this->name)));
+    }
 }
