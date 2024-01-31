@@ -74,11 +74,10 @@ class Authorization extends Component
         if($this->requestForm->contractManager->organizationalUnit->establishment_id == $estab_hetg){
           $ouSearch = Parameter::get('Abastecimiento','purchaser_ou_id', $estab_hetg);
           $this->lstSupervisorUser = User::permission('Request Forms: purchaser')->whereHas('organizationalUnit', fn($q) => $q->where('establishment_id', $estab_hetg))->OrWhere('organizational_unit_id', $ouSearch)->orderBy('name','asc')->get();
-          // dd($this->lstSupervisorUser);
         }else{
           $estab_others = Parameter::get('establishment', ['SSTarapaca', 'HospitalAltoHospicio']);
           $ouSearch = Parameter::get('Abastecimiento','purchaser_ou_id', $estab_others);
-          $this->lstSupervisorUser      = User::permission('Request Forms: purchaser')->whereHas('organizationalUnit', fn($q) => $q->where('establishment_id', $estab_hetg))->OrWhereIn('organizational_unit_id', $ouSearch)->orderBy('name','asc')->get();
+          $this->lstSupervisorUser = User::permission('Request Forms: purchaser')->whereHas('organizationalUnit', fn($q) => $q->where('establishment_id', $estab_others))->OrWhereIn('organizational_unit_id', $ouSearch)->orderBy('name','asc')->get();
         }
         //$this->lstPurchaseType        = PurchaseType::all();
         $this->purchaseMechanism      = $requestForm->purchase_mechanism_id;

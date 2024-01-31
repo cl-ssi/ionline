@@ -130,12 +130,20 @@ class SearchRequests extends Component
 
     public function render()
     {   
-        $ouSearch = Parameter::where('module', 'ou')->whereIn('parameter', ['AbastecimientoSSI', 'AdquisicionesHAH'])->pluck('value')->toArray();
-        // dd($ouSearch);
+        // $ouSearch = Parameter::where('module', 'ou')->whereIn('parameter', ['AbastecimientoSSI', 'AdquisicionesHAH'])->pluck('value')->toArray();
+        $estab_hetg = Parameter::get('establishment', 'HETG');
+        if(Auth()->user()->organizationalUnit->establishment->id == Parameter::get('establishment', 'HETG')){
+            $ouSearch = Parameter::get('Abastecimiento','purchaser_ou_id', $estab_hetg);
+            $users = User::permission('Request Forms: purchaser')->whereHas('organizationalUnit', fn($q) => $q->where('establishment_id', $estab_hetg))->OrWhere('organizational_unit_id', $ouSearch)->orderBy('name','asc')->get();
+        }else{
+            $estab_others = Parameter::get('establishment', ['SSTarapaca', 'HospitalAltoHospicio']);
+            $ouSearch = Parameter::get('Abastecimiento','purchaser_ou_id', $estab_others);
+            $users = User::permission('Request Forms: purchaser')->whereHas('organizationalUnit', fn($q) => $q->where('establishment_id', $estab_others))->OrWhereIn('organizational_unit_id', $ouSearch)->orderBy('name','asc')->get();
+        }
 
         return view('livewire.request-form.search-requests', [
             'request_forms' => $this->querySearch(),
-            'users' => User::permission('Request Forms: purchaser')->OrWhereIn('organizational_unit_id', $ouSearch)->orderBy('name','asc')->get(),
+            'users' => $users,
         ]);
     }
 
