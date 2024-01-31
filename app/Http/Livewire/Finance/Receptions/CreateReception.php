@@ -74,7 +74,7 @@ class CreateReception extends Component
             'reception.creator_id'      => 'nullable',
             'reception.creator_ou_id'   => 'nullable',
             'receptionItemsWithCantidad'=> 'required|array|min:1',
-            'file_signed'               => 'nullable|mimes:pdf|max:2048',
+            'file_signed'               => 'nullable|mimes:pdf|max:10240',
             'approvals'                 => 'required|array|min:1',
         ];
 
