@@ -58,7 +58,7 @@
                     <td>{{ $program->financial_type }}</td>
                     <td>{{ $program->folio }}</td>
                     <td>{{ optional($program->subtitle)->name }}</td>
-                    <td>{{ $program->budget }}</td>
+                    <td>{{ $program->budget ? number_format($program->budget, 0, ',', '.') : '' }}</td>
                     <td>{{ $program->period }}</td>
                     <td class="text-center">
                         <button
