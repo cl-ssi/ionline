@@ -23,9 +23,10 @@
         @enderror
     </fieldset>
 
-    <fieldset class="form-group col-md-1">
+    <fieldset class="form-group col-md-2">
         <label for="period">Período</label>
         <select wire:model="period" id="period" class="form-control @error('period') is-invalid @enderror">
+            <option></option>
             <option>{{ date('Y') }}</option>
             <option>{{ date('Y') + 1 }}</option>
             <option>{{ date('Y') - 1 }}</option>
@@ -111,7 +112,7 @@
         @enderror
     </fieldset>
 
-    <fieldset class="form-group col-md-1">
+    <fieldset class="form-group col-md-2">
         <label for="subtitle_id">Sub</label>
         <select class="form-control @error('subtitle_id') is-invalid @enderror" id="subtitle_id"
             wire:model.debounce.1000ms="subtitle_id" required>

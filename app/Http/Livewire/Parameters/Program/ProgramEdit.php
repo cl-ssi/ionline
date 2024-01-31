@@ -20,6 +20,7 @@ class ProgramEdit extends Component
     public $start_date;
     public $end_date;
     public $description;
+    public $is_program;
 
     public $subtitles;
 
@@ -30,9 +31,9 @@ class ProgramEdit extends Component
             'alias'         => 'required|string|min:2|max:50',
             'alias_finance' => 'nullable|string|min:2|max:150',
             'financial_type'=> 'nullable|string|min:2|max:50',
-            'folio'         => 'nullable|integer|min:2|max:99999',
+            'folio'         => 'nullable|integer|min:1|max:99999',
             'subtitle_id'   => 'required|exists:cfg_subtitles,id',
-            'budget'        => 'nullable|integer|min:1|max:9999999999',
+            'budget'        => 'nullable|integer|min:1|max:99999999999',
             'period'        => 'required|integer|min:2015|max:2099',
             'start_date'    => 'nullable|date_format:Y-m-d',
             'end_date'      => 'nullable|date_format:Y-m-d',
@@ -54,7 +55,7 @@ class ProgramEdit extends Component
         $this->financial_type = $this->program->financial_type;
         $this->folio = $this->program->folio;
         $this->subtitle_id = $this->program->subtitle_id;
-        $this->amount = $this->program->amount;
+        $this->budget = $this->program->budget;
         $this->period = $this->program->period;
         $this->start_date = $this->program->start_date ? $this->program->start_date->format('Y-m-d') : null;
         $this->end_date = $this->program->end_date ? $this->program->end_date->format('Y-m-d') : null;
