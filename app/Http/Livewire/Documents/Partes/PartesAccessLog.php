@@ -15,6 +15,13 @@ class PartesAccessLog extends Component
         $lastLogs = AccessLog::with('user','switchUser')
                     ->where('type', 'partes')
                     ->where('created_at', '>', now()->subDays($daysAgo))
+                    ->whereHas('user', function($query) {
+                        $query->whereHas('organizationalUnit', function($query) {
+                            $query->whereHas('establishment', function($subQuery) {
+                                $subQuery->where('id', auth()->user()->organizationalUnit->establishment_id);
+                            });
+                        });
+                    })
                     ->latest()
                     ->get();
 
