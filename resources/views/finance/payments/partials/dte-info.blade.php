@@ -7,7 +7,8 @@
     @case('guias_despacho')
     @case('nota_debito')
     @case('nota_credito')
-        <a href="http://dipres2303.acepta.com/ca4webv3/PdfView?url={{ $dte->uri }}"
+        <a 
+            href="{{ $dte->uri }}"
             target="_blank" class="btn btn-sm mb-1 btn-outline-secondary">
             <i class="fas fa-file-pdf text-danger"></i> 
             {{ $dte->tipo_documento_iniciales }} {{ $dte->folio }}
