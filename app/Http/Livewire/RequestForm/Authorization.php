@@ -50,7 +50,7 @@ class Authorization extends Component
       $this->program            = $requestForm->program;
       $this->program_id         = $requestForm->program_id;
       
-      $authorities = Authority::getAmIAuthorityFromOu(Carbon::now(), 'manager', Auth::id());
+      $authorities = Authority::getAmIAuthorityFromOu(now(), 'manager', Auth::id());
 
       // dd($authorities);
       
@@ -69,8 +69,17 @@ class Authorization extends Component
       }
       
       if($eventType=='supply_event'){
-        $ouSearch = Parameter::where('module', 'ou')->whereIn('parameter', ['AbastecimientoSSI', 'AdquisicionesHAH'])->pluck('value')->toArray();
-        $this->lstSupervisorUser      = User::permission('Request Forms: purchaser')->OrWhereIn('organizational_unit_id', $ouSearch)->orderBy('name','asc')->get();
+        // $ouSearch = Parameter::where('module', 'ou')->whereIn('parameter', ['AbastecimientoSSI', 'AdquisicionesHAH'])->pluck('value')->toArray();
+        $estab_hetg = Parameter::get('establishment', 'HETG');
+        if($this->requestForm->contractManager->organizationalUnit->establishment_id == $estab_hetg){
+          $ouSearch = Parameter::get('Abastecimiento','purchaser_ou_id', $estab_hetg);
+          $this->lstSupervisorUser = User::permission('Request Forms: purchaser')->whereHas('organizationalUnit', fn($q) => $q->where('establishment_id', $estab_hetg))->OrWhere('organizational_unit_id', $ouSearch)->orderBy('name','asc')->get();
+          // dd($this->lstSupervisorUser);
+        }else{
+          $estab_others = Parameter::get('establishment', ['SSTarapaca', 'HospitalAltoHospicio']);
+          $ouSearch = Parameter::get('Abastecimiento','purchaser_ou_id', $estab_others);
+          $this->lstSupervisorUser      = User::permission('Request Forms: purchaser')->whereHas('organizationalUnit', fn($q) => $q->where('establishment_id', $estab_hetg))->OrWhereIn('organizational_unit_id', $ouSearch)->orderBy('name','asc')->get();
+        }
         //$this->lstPurchaseType        = PurchaseType::all();
         $this->purchaseMechanism      = $requestForm->purchase_mechanism_id;
         $this->lstPurchaseType        = PurchaseMechanism::find($this->purchaseMechanism)->purchaseTypes()->get();
@@ -186,9 +195,9 @@ class Authorization extends Component
               // $type_adm = 'secretary';
               // $mail_notification_ou_secretary = Authority::getAuthorityFromDate($nextEvent->first()->ou_signer_user, Carbon::now(), $type_adm);
 
-              $emails = [$mail_notification_ou_manager->user->email];
-
+              
               if($mail_notification_ou_manager){
+                $emails = [$mail_notification_ou_manager->user->email];
                 if($nextEvent->first()->event_type == 'pre_finance_event'){
                   Mail::to($emails)
                     ->cc([env('APP_RF_MAIL'), 'yazmin.galleguillos@redsalud.gob.cl'])
@@ -328,10 +337,10 @@ class Authorization extends Component
             /* FIX: @mirandaljorge si no hay manager en Authority, se va a caer */
             $mail_notification_ou_manager = Authority::getAuthorityFromDate($nextEvent->first()->ou_signer_user, Carbon::now(), $type);
 
-            $emails = [$mail_notification_ou_manager->user->email];
-
+            
             if (env('APP_ENV') == 'production' OR env('APP_ENV') == 'testing') {
               if($mail_notification_ou_manager){
+                  $emails = [$mail_notification_ou_manager->user->email];
                   Mail::to($emails)
                   ->cc(env('APP_RF_MAIL'))
                   ->send(new RequestFormSignNotification($this->requestForm, $nextEvent->first()));

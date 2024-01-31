@@ -153,13 +153,14 @@ class TechnicalEvaluationController extends Controller
         /* FIX: @mirandaljorge si no hay manager en Authority, se va a caer. Parametrizar el 46 */
         $ou_personal_manager = Authority::getAuthorityFromDate(46, Carbon::now(), 'manager');
 
-        $emails = [$mail_request,
-                    $mail_notification_ou_manager->user->email,
-                    $ou_personal_manager->user->email];
-
-        Mail::to($emails)
-          ->cc(env('APP_RYS_MAIL'))
-          ->send(new EndSelectionNotification($technicalEvaluation));
+        if($ou_personal_manager){     
+            $emails = [$mail_request,
+                        $mail_notification_ou_manager->user->email,
+                        $ou_personal_manager->user->email];
+            Mail::to($emails)
+            ->cc(env('APP_RYS_MAIL'))
+            ->send(new EndSelectionNotification($technicalEvaluation));
+        }
 
         return redirect()->route('replacement_staff.request.technical_evaluation.edit',['requestReplacementStaff' => $technicalEvaluation->requestReplacementStaff]);
     }

@@ -401,10 +401,10 @@ class RequestFormCreate extends Component
               $type = 'manager';
               $mail_notification_ou_manager = Authority::getAuthorityFromDate($req->eventRequestForms->first()->ou_signer_user, now(), $type);
 
-              $emails = [$mail_notification_ou_manager->user->email];
-
+              
               if (env('APP_ENV') == 'production' OR env('APP_ENV') == 'testing') {
                 if($mail_notification_ou_manager){
+                    $emails = [$mail_notification_ou_manager->user->email];
                     Mail::to($emails)
                       ->cc(env('APP_RF_MAIL'))
                       ->send(new RequestFormSignNotification($req, $req->eventRequestForms->first()));
@@ -458,13 +458,10 @@ class RequestFormCreate extends Component
               //secretary
               // $type_adm = 'secretary';
               // $mail_notification_ou_secretary = Authority::getAuthorityFromDate($req->eventRequestForms->first()->ou_signer_user, Carbon::now(), $type_adm);
-
-              if($mail_notification_ou_manager){
-                $emails = [$mail_notification_ou_manager->user->email];
-              }
-
+              
               if (env('APP_ENV') == 'production' OR env('APP_ENV') == 'testing') {
                 if($mail_notification_ou_manager){
+                    $emails = [$mail_notification_ou_manager->user->email];
                     Mail::to($emails)
                       ->cc(env('APP_RF_MAIL'))
                       ->send(new RequestFormSignNotification($req, $req->eventRequestForms->first()));
@@ -512,9 +509,9 @@ class RequestFormCreate extends Component
               // $type_adm = 'secretary';
               // $mail_notification_ou_secretary = Authority::getAuthorityFromDate($req->eventRequestForms->first()->ou_signer_user, Carbon::now(), $type_adm);
 
-              $emails = [$mail_notification_ou_manager->user->email];
-
+              
               if($mail_notification_ou_manager){
+                  $emails = [$mail_notification_ou_manager->user->email];
                   Mail::to($emails)
                     ->cc(env('APP_RF_MAIL'))
                     ->send(new RequestFormSignNotification($req, $req->eventRequestForms->first()));

@@ -120,9 +120,9 @@ class PrefinanceAuthorization extends Component
                // $type_adm = 'secretary';
                // $mail_notification_ou_secretary = Authority::getAuthorityFromDate($nextEvent->first()->ou_signer_user, Carbon::now(), $type_adm);
 
-               $emails = [$mail_notification_ou_manager->user->email];
-
+               
                if($mail_notification_ou_manager){
+                 $emails = [$mail_notification_ou_manager->user->email];
                   Mail::to($emails)
                     ->cc(env('APP_RF_MAIL'))
                     ->send(new RequestFormSignNotification($event->requestForm, $nextEvent->first()));

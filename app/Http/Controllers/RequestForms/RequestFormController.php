@@ -81,7 +81,7 @@ class RequestFormController extends Controller {
     {
         $events_type = [];
 
-        $authorities = Authority::getAmIAuthorityFromOu(Carbon::now(), 'manager', Auth::id());
+        $authorities = Authority::getAmIAuthorityFromOu(now(), 'manager', Auth::id());
 
         if($authorities->isNotEmpty()){
           foreach ($authorities as $authority){
@@ -96,28 +96,34 @@ class RequestFormController extends Controller {
           if($result > 0) $events_type[] = 'superior_leader_ship_event';
           $events_type[] = 'leader_ship_event';
 
-          $ousSearch = Parameter::where('module', 'ou')->whereIn('parameter', ['FinanzasSSI', 'FinanzasHAH'])->pluck('value')->toArray();
-          foreach($ousSearch as $ouSearch)
-            if(in_array($ouSearch, $iam_authorities_in)){
-                $events_type[] = 'finance_event';
-                break;
+        //   $ou_ids = Parameter::where('module', 'ou')->whereIn('parameter', ['FinanzasSSI', 'FinanzasHAH'])->pluck('value')->toArray();
+        //   $ou_ids = Parameter::get('Abastecimiento',['finance_ou_id', 'finance_sub_31_ou_id'], Parameter::get('establishment', ['HospitalAltoHospicio', 'HETG', 'SSTarapaca']));
+          $ou_ids = array_unique(Parameter::get('Abastecimiento',['finance_ou_id','finance_sub_31_ou_id']));
+          foreach($ou_ids as $ou_id)
+          if(in_array($ou_id, $iam_authorities_in)){
+              $events_type[] = 'finance_event';
+              break;
             }
             
-          $ousSearch = Parameter::where('module', 'ou')->whereIn('parameter', ['AbastecimientoSSI', 'AbastecimientoHAH'])->pluck('value')->toArray();
-          foreach($ousSearch as $ouSearch)
-            if(in_array($ouSearch, $iam_authorities_in)){
+            //   $ou_ids = Parameter::where('module', 'ou')->whereIn('parameter', ['AbastecimientoSSI', 'AbastecimientoHAH'])->pluck('value')->toArray();
+              $ou_ids = array_unique(Parameter::get('Abastecimiento',['supply_ou_id', 'supply_sub_31_ou_id']));
+            //   dd($ou_ids);
+          foreach($ou_ids as $ou_id)
+            if(in_array($ou_id, $iam_authorities_in)){
                 $events_type[] = 'supply_event';
                 break;
             }
 
-          $ousSearch = Parameter::where('module', 'ou')->where('parameter', ['RefrendacionHAH'])->first()->value;
-          if(Auth::user()->organizational_unit_id == $ousSearch) $events_type[] = 'pre_finance_event';
+        //   $ousSearch = Parameter::where('module', 'ou')->where('parameter', ['RefrendacionHAH'])->first()->value;
+          $ou_ids = array_unique(Parameter::get('Abastecimiento',['prefinance_ou_id', 'prefinance_sub_31_ou_id'], Parameter::get('establishment', ['HospitalAltoHospicio', 'HETG'])));
+          if(in_array(Auth::user()->organizational_unit_id, $ou_ids)) $events_type[] = 'pre_finance_event';
         }
         else {
             /* FIX: @mirandaljorge si no hay manager en Authority, se va a caer*/
-          $manager = Authority::getAuthorityFromDate(Auth::user()->organizationalUnit->id, Carbon::now(), 'manager');
-          $ouSearch = Parameter::where('module', 'ou')->whereIn('parameter', ['FinanzasSSI', 'RefrendacionHAH'])->pluck('value')->toArray();
-          if(in_array(Auth::user()->organizational_unit_id, $ouSearch) && $manager->user_id != Auth::user()->id) $events_type[] = 'pre_finance_event';
+          $manager = Authority::getAuthorityFromDate(Auth::user()->organizationalUnit->id, now(), 'manager');
+        //   $ouSearch = Parameter::where('module', 'ou')->whereIn('parameter', ['FinanzasSSI', 'RefrendacionHAH'])->pluck('value')->toArray();
+          $ou_ids = Parameter::get('Abastecimiento',['prefinance_ou_id', 'prefinance_sub_31_ou_id']);
+          if(in_array(Auth::user()->organizational_unit_id, $ou_ids) && $manager->user_id != Auth::user()->id) $events_type[] = 'pre_finance_event';
         }
         $ouTechnicalReview = EventRequestForm::where('event_type', 'technical_review_event')
             ->where('ou_signer_user', Auth::user()->organizationalUnit->id)
@@ -496,10 +502,10 @@ class RequestFormController extends Controller {
                 /* FIX: @mirandaljorge si no hay manager en Authority, se va a caer */
                 $mail_notification_ou_manager = Authority::getAuthorityFromDate($nextEvent->first()->ou_signer_user, Carbon::now(), $type);
 
-                $emails = [$mail_notification_ou_manager->user->email];
-
+                
                 if (env('APP_ENV') == 'production' OR env('APP_ENV') == 'testing') {
                     if($mail_notification_ou_manager){
+                        $emails = [$mail_notification_ou_manager->user->email];
                         Mail::to($emails)
                         ->cc(env('APP_RF_MAIL'))
                         ->send(new RequestFormSignNotification($requestForm, $nextEvent->first()));
@@ -837,10 +843,10 @@ class RequestFormController extends Controller {
             /* FIX: @mirandaljorge si no hay manager en Authority, se va a caer */
             $mail_notification_ou_manager = Authority::getAuthorityFromDate($nextEvent->first()->ou_signer_user, Carbon::now(), $type);
 
-            $emails = [$mail_notification_ou_manager->user->email];
-
+            
             if (env('APP_ENV') == 'production' OR env('APP_ENV') == 'testing') {
-              if($mail_notification_ou_manager){
+                if($mail_notification_ou_manager){
+                  $emails = [$mail_notification_ou_manager->user->email];
                   Mail::to($emails)
                   ->cc(env('APP_RF_MAIL'))
                   ->send(new RequestFormSignNotification($requestForm, $nextEvent->first()));
