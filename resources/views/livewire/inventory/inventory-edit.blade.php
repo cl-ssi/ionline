@@ -132,7 +132,7 @@
                 type="text"
                 class="form-control @error('internal_description') is-invalid @enderror"
                 id="internal_description"
-                wire:model.defer="internal_description"                
+                wire:model.defer="internal_description"
                 autocomplete="off"
             >
         </fieldset>
@@ -475,6 +475,19 @@
                 id="dte-number"
                 value="{{ $inventory->dte_number }}"
 
+            >
+        </fieldset>
+
+
+        <fieldset class="col-md-3">
+            <label for="po_code" class="form-label">
+                OC
+            </label>
+            <input
+                type="text"
+                class="form-control"
+                id="po_code"
+                wire:model.defer="po_code"
             >
         </fieldset>
 

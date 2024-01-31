@@ -35,6 +35,8 @@ class InventoryEdit extends Component
 
     public $observation_delete;
 
+    public $poc_code;
+
     public function render()
     {
         return view('livewire.inventory.inventory-edit');
@@ -63,6 +65,7 @@ class InventoryEdit extends Component
         $this->accounting_code_id = $this->inventory->accounting_code_id;
         $this->classification_id = $this->inventory->classification_id;
         $this->internal_description = $inventory->internal_description ?? $inventory->description;
+        $this->po_code = $this->inventory->po_code;
 
         $this->accountingCodes = AccountingCode::all();
         $this->classifications = CLassification::where('establishment_id',$this->establishment->id)->orderBy('name')->get();
@@ -159,6 +162,7 @@ class InventoryEdit extends Component
             $dataValidated = $this->validate();
             $dataValidated['number'] = $dataValidated['number_inventory'];
             $dataValidated['internal_description'] = $this->internal_description; ;
+            $dataValidated['po_code'] = $this->po_code;
             $this->inventory->update($dataValidated);
 
             /**
