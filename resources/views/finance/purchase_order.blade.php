@@ -109,7 +109,7 @@
         </table>
 
         <center>
-            <h3>ORDER DE COMPRA Nº: {{ $purchaseOrder->code }}</h3>
+            <h3>ORDEN DE COMPRA Nº: {{ $purchaseOrder->code }}</h3>
         </center>
 
         <table class="tabla1">

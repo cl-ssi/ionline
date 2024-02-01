@@ -105,7 +105,7 @@ class EventRequestForm extends Model implements Auditable
     }
 
     public static function createLeadershipEvent(RequestForm $requestForm){
-        $contractManagerBelongsHAH  = $requestForm->contractOrganizationalUnit->establishment_id == Parameter::get('ou', 'HospitalAltoHospicio');
+        $contractManagerBelongsHAH  = $requestForm->contractOrganizationalUnit->establishment_id == Parameter::get('establishment', 'HospitalAltoHospicio');
         $event                      =   new EventRequestForm();
         $event->ou_signer_user      =   $contractManagerBelongsHAH 
                                         ? ($requestForm->contractOrganizationalUnit->level > 2 ? $requestForm->contractOrganizationalUnit->getOrganizationalUnitByLevel(2)->id : ($requestForm->contractOrganizationalUnit->father->id ?? $requestForm->contract_manager_ou_id) ) 
