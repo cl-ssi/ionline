@@ -8,6 +8,7 @@
     </li>
 
     <!-- verifica que paciente tenga activa un appoitment para permitirle auto reservar -->
+    {{--
     @php
         $count = App\Models\ProfAgenda\Appointment::whereHas('openHour', function ($query) {
                                                         return $query->where('patient_id',auth()->user()->id);
@@ -15,6 +16,9 @@
                                                     ->whereNull('discharged_date')
                                                     ->count();
     @endphp
+    --}}
+
+    @php $count = 0; @endphp
 
     @if($count > 0)
         <li class="nav-item">
