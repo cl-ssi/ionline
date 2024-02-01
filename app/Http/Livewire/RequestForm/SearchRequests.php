@@ -67,10 +67,21 @@ class SearchRequests extends Component
     {
         $query = RequestForm::query();
 
+        if(Auth()->user()->organizationalUnit->establishment->id == Parameter::get('establishment', 'HETG')){
+            $query->whereHas('userOrganizationalUnit', function ($q){
+                return $q->where('establishment_id', Auth()->user()->organizationalUnit->establishment_id);
+            })
+            ->orWhereHas('contractOrganizationalUnit', function ($q){
+                return $q->where('establishment_id', Auth()->user()->organizationalUnit->establishment_id);
+            });
+        }
+
         if($this->inbox == 'all' || $this->inbox == 'report: form-items'){
             // Filtro por Hospital Alto Hospicio + Unidad Puesta en marcha HAH
-            if(Auth()->user()->organizationalUnit->establishment->id == Parameter::where('parameter', 'HospitalAltoHospicio')->first()->value){
-                $ouSearch = Parameter::where('parameter', 'PuestaEnMarchaHAH')->first()->value;
+            // if(Auth()->user()->organizationalUnit->establishment->id == Parameter::where('parameter', 'HospitalAltoHospicio')->first()->value){
+            if(Auth()->user()->organizationalUnit->establishment->id == Parameter::get('establishment', 'HospitalAltoHospicio')){
+                // $ouSearch = Parameter::where('parameter', 'PuestaEnMarchaHAH')->first()->value;
+                $ouSearch = Parameter::get('ou', 'PuestaEnMarchaHAH');
                 $query->whereHas('userOrganizationalUnit', function ($q) use ($ouSearch) {
                     return $q->where('establishment_id', Auth()->user()->organizationalUnit->establishment_id)
                     ->orWhere('request_user_ou_id', $ouSearch);

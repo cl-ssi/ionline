@@ -155,14 +155,14 @@
 
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
 
-                        @php($ouSearch = App\Models\Parameters\Parameter::where('module', 'nav')->where('parameter', 'accessPP')->first()->value)
+                        @php($ouSearch = App\Models\Parameters\Parameter::get('nav', 'accessPP'))
                         @if(auth()->user()->organizationalUnit && in_array(auth()->user()->organizationalUnit->establishment_id, explode(',', $ouSearch)))
                             <a class="dropdown-item {{ active('purchase_plan.own_index') }}" href="{{ route('purchase_plan.own_index') }}">
                                 <i class="fas fa-fw fa-shopping-cart"></i> Plan de Compras
                             </a>
                         @endif
 
-                        @php($ouSearch = App\Models\Parameters\Parameter::where('module', 'nav')->where('parameter', 'accessRF')->first()->value)
+                        @php($ouSearch = App\Models\Parameters\Parameter::get('nav', 'accessRF'))
                         @if(auth()->user()->organizationalUnit && in_array(auth()->user()->organizationalUnit->establishment_id, explode(',', $ouSearch)))
                             <a class="dropdown-item {{ active('request_forms.my_forms') }}" href="{{ route('request_forms.my_forms') }}">
                                 <i class="fas fa-fw fa-shopping-cart"></i> Abastecimiento

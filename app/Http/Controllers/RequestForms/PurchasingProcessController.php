@@ -33,7 +33,8 @@ class PurchasingProcessController extends Controller
 {
     public function index()
     {
-        $ouSearch = Parameter::where('module', 'ou')->whereIn('parameter', ['AbastecimientoSSI', 'AbastecimientoHAH', 'AdquisicionesHAH'])->pluck('value')->toArray();
+        // $ouSearch = Parameter::where('module', 'ou')->whereIn('parameter', ['AbastecimientoSSI', 'AbastecimientoHAH', 'AdquisicionesHAH'])->pluck('value')->toArray();
+        $ouSearch = array_unique(Parameter::get('Abastecimiento',['supply_ou_id', 'purchaser_ou_id']));
         if (!in_array(Auth()->user()->organizational_unit_id, $ouSearch) && !Auth::user()->can('Request Forms: purchaser')) {
             session()->flash('danger', 'Estimado Usuario/a: Usted no pertenece a la Unidad de Abastecimiento o no tiene los permisos de acceso.');
             return redirect()->route('request_forms.my_forms');
@@ -44,7 +45,8 @@ class PurchasingProcessController extends Controller
 
     public function purchase(RequestForm $requestForm)
     {
-        $ouSearch = Parameter::where('module', 'ou')->whereIn('parameter', ['AbastecimientoSSI', 'AbastecimientoHAH', 'AdquisicionesHAH'])->pluck('value')->toArray();
+        // $ouSearch = Parameter::where('module', 'ou')->whereIn('parameter', ['AbastecimientoSSI', 'AbastecimientoHAH', 'AdquisicionesHAH'])->pluck('value')->toArray();
+        $ouSearch = array_unique(Parameter::get('Abastecimiento',['supply_ou_id', 'purchaser_ou_id']));
         if (!in_array(Auth()->user()->organizational_unit_id, $ouSearch) && !Auth::user()->can('Request Forms: purchaser')) {
             session()->flash('danger', 'Estimado Usuario/a: Usted no pertenece a la Unidad de Abastecimiento o no tiene los permisos de acceso.');
             return redirect()->route('request_forms.my_forms');
@@ -61,7 +63,8 @@ class PurchasingProcessController extends Controller
 
     public function edit(RequestForm $requestForm, PurchasingProcessDetail $purchasingProcessDetail)
     {
-        $ouSearch = Parameter::where('module', 'ou')->whereIn('parameter', ['AbastecimientoSSI', 'AbastecimientoHAH', 'AdquisicionesHAH'])->pluck('value')->toArray();
+        // $ouSearch = Parameter::where('module', 'ou')->whereIn('parameter', ['AbastecimientoSSI', 'AbastecimientoHAH', 'AdquisicionesHAH'])->pluck('value')->toArray();
+        $ouSearch = array_unique(Parameter::get('Abastecimiento',['supply_ou_id', 'purchaser_ou_id']));
         if (!in_array(Auth()->user()->organizational_unit_id, $ouSearch) && !Auth::user()->can('Request Forms: purchaser')) {
             session()->flash('danger', 'Estimado Usuario/a: Usted no pertenece a la Unidad de Abastecimiento o no tiene los permisos de acceso.');
             return redirect()->route('request_forms.my_forms');
@@ -391,6 +394,7 @@ class PurchasingProcessController extends Controller
         if (!$requestForm->purchasingProcess) $requestForm->purchasingProcess = $this->create($requestForm);
 
         $oc = new ImmediatePurchase($request->all());
+        // $oc->po_id = $request->po_id;
         $oc->request_form_id = $requestForm->id;
         $oc->description = $request->po_description;
         $oc->supplier_specifications = null; // Las especificaciones tecnicas del proveedor son propias del item y no de la OC

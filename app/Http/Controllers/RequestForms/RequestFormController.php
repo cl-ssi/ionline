@@ -66,9 +66,10 @@ class RequestFormController extends Controller {
         return view('request_form.my_forms', compact('my_requests', 'my_pending_requests','my_ou'));
     }
 
-    public function all_forms(Request $request)
+    public function all_forms()
     {
-        $ouSearch = Parameter::where('module', 'ou')->whereIn('parameter', ['FinanzasSSI', 'RefrendacionHAH', 'FinanzasHAH'])->pluck('value')->toArray();
+        // $ouSearch = Parameter::where('module', 'ou')->whereIn('parameter', ['FinanzasSSI', 'RefrendacionHAH', 'FinanzasHAH'])->pluck('value')->toArray();
+        $ouSearch = array_unique(Parameter::get('Abastecimiento',['prefinance_ou_id','finance_ou_id']));
         if(!Auth()->user()->hasPermissionTo('Request Forms: all') && !in_array(Auth()->user()->organizational_unit_id, $ouSearch)){
             session()->flash('danger', 'Estimado Usuario/a: no tiene los permisos necesarios para ver todos los formularios.');
             return redirect()->route('request_forms.my_forms');
@@ -96,34 +97,32 @@ class RequestFormController extends Controller {
           if($result > 0) $events_type[] = 'superior_leader_ship_event';
           $events_type[] = 'leader_ship_event';
 
-        //   $ou_ids = Parameter::where('module', 'ou')->whereIn('parameter', ['FinanzasSSI', 'FinanzasHAH'])->pluck('value')->toArray();
-        //   $ou_ids = Parameter::get('Abastecimiento',['finance_ou_id', 'finance_sub_31_ou_id'], Parameter::get('establishment', ['HospitalAltoHospicio', 'HETG', 'SSTarapaca']));
-          $ou_ids = array_unique(Parameter::get('Abastecimiento',['finance_ou_id','finance_sub_31_ou_id']));
-          foreach($ou_ids as $ou_id)
+        //   $ouSearch = Parameter::where('module', 'ou')->whereIn('parameter', ['FinanzasSSI', 'FinanzasHAH'])->pluck('value')->toArray();
+          $ouSearch = array_unique(Parameter::get('Abastecimiento',['finance_ou_id']));
+          foreach($ouSearch as $ou_id)
           if(in_array($ou_id, $iam_authorities_in)){
               $events_type[] = 'finance_event';
               break;
             }
             
-            //   $ou_ids = Parameter::where('module', 'ou')->whereIn('parameter', ['AbastecimientoSSI', 'AbastecimientoHAH'])->pluck('value')->toArray();
-              $ou_ids = array_unique(Parameter::get('Abastecimiento',['supply_ou_id', 'supply_sub_31_ou_id']));
-            //   dd($ou_ids);
-          foreach($ou_ids as $ou_id)
+        //   $ouSearch = Parameter::where('module', 'ou')->whereIn('parameter', ['AbastecimientoSSI', 'AbastecimientoHAH'])->pluck('value')->toArray();
+            $ouSearch = array_unique(Parameter::get('Abastecimiento',['supply_ou_id']));
+          foreach($ouSearch as $ou_id)
             if(in_array($ou_id, $iam_authorities_in)){
                 $events_type[] = 'supply_event';
                 break;
             }
 
-        //   $ousSearch = Parameter::where('module', 'ou')->where('parameter', ['RefrendacionHAH'])->first()->value;
-          $ou_ids = array_unique(Parameter::get('Abastecimiento',['prefinance_ou_id', 'prefinance_sub_31_ou_id'], Parameter::get('establishment', ['HospitalAltoHospicio', 'HETG'])));
-          if(in_array(Auth::user()->organizational_unit_id, $ou_ids)) $events_type[] = 'pre_finance_event';
+        //   $ouSearch = Parameter::where('module', 'ou')->where('parameter', ['RefrendacionHAH'])->first()->value;
+          $ouSearch = array_unique(Parameter::get('Abastecimiento',['prefinance_ou_id'], Parameter::get('establishment', ['HospitalAltoHospicio', 'HETG'])));
+          if(in_array(Auth::user()->organizational_unit_id, $ouSearch)) $events_type[] = 'pre_finance_event';
         }
         else {
             /* FIX: @mirandaljorge si no hay manager en Authority, se va a caer*/
           $manager = Authority::getAuthorityFromDate(Auth::user()->organizationalUnit->id, now(), 'manager');
         //   $ouSearch = Parameter::where('module', 'ou')->whereIn('parameter', ['FinanzasSSI', 'RefrendacionHAH'])->pluck('value')->toArray();
-          $ou_ids = Parameter::get('Abastecimiento',['prefinance_ou_id', 'prefinance_sub_31_ou_id']);
-          if(in_array(Auth::user()->organizational_unit_id, $ou_ids) && $manager->user_id != Auth::user()->id) $events_type[] = 'pre_finance_event';
+          $ouSearch = array_unique(Parameter::get('Abastecimiento',['prefinance_ou_id']));
+          if(in_array(Auth::user()->organizational_unit_id, $ouSearch) && $manager->user_id != Auth::user()->id) $events_type[] = 'pre_finance_event';
         }
         $ouTechnicalReview = EventRequestForm::where('event_type', 'technical_review_event')
             ->where('ou_signer_user', Auth::user()->organizationalUnit->id)
@@ -141,8 +140,8 @@ class RequestFormController extends Controller {
         // dd($events_type);
         $iam_authorities_in = $iam_secretaries_in = [];
 
-        $authorities = Authority::getAmIAuthorityFromOu(Carbon::now(), 'manager', Auth::id());
-        $secretaries = Authority::getAmIAuthorityFromOu(Carbon::now(), 'secretary', Auth::id());
+        $authorities = Authority::getAmIAuthorityFromOu(now(), 'manager', Auth::id());
+        $secretaries = Authority::getAmIAuthorityFromOu(now(), 'secretary', Auth::id());
 
         // if($authorities->isNotEmpty()){
           foreach ($authorities as $authority){
@@ -208,7 +207,8 @@ class RequestFormController extends Controller {
         }
 
         // return $new_budget_pending_to_sign;
-        $ouSearch = Parameter::where('module', 'ou')->whereIn('parameter', ['AbastecimientoSSI', 'AbastecimientoHAH'])->pluck('value')->toArray();
+        // $ouSearch = Parameter::where('module', 'ou')->whereIn('parameter', ['AbastecimientoSSI', 'AbastecimientoHAH'])->pluck('value')->toArray();
+        $ouSearch = Parameter::get('Abastecimiento',['supply_ou_id']);
         foreach($events_type as $event_type){
             if(in_array($event_type, ['pre_finance_event', 'finance_event', 'supply_event']) || in_array(Auth::user()->organizationalUnit->id, $ouSearch)){
                 $not_pending_forms = RequestForm::with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'eventRequestForms.signerOrganizationalUnit')
@@ -260,7 +260,8 @@ class RequestFormController extends Controller {
 
     public function edit(RequestForm $requestForm){
         // $requestForm=null;
-        $ouSearch = Parameter::where('module', 'ou')->whereIn('parameter', ['FinanzasSSI', 'RefrendacionHAH', 'FinanzasHAH'])->pluck('value')->toArray();
+        // $ouSearch = Parameter::where('module', 'ou')->whereIn('parameter', ['FinanzasSSI', 'RefrendacionHAH', 'FinanzasHAH'])->pluck('value')->toArray();
+        $ouSearch = array_unique(Parameter::get('Abastecimiento', ['prefinance_ou_id', 'finance_ou_id']));
         if(!Auth()->user()->hasPermissionTo('Request Forms: all') && !in_array(Auth()->user()->organizational_unit_id, $ouSearch) && $requestForm->request_user_id != auth()->user()->id){
             session()->flash('danger', 'Estimado Usuario/a: no tiene los permisos necesarios para editar formulario N° '.$requestForm->folio);
             return redirect()->back();
@@ -278,17 +279,21 @@ class RequestFormController extends Controller {
     {
         $eventTypeBudget = null;
         if(in_array($eventType, ['pre_budget_event', 'pre_finance_budget_event', 'budget_event'])){
-            $manager = Authority::getAuthorityFromDate(Auth::user()->organizationalUnit->id, Carbon::now(), 'manager');
+            $manager = Authority::getAuthorityFromDate(Auth::user()->organizationalUnit->id, now(), 'manager');
 
-            if(Auth::user()->organizationalUnit->establishment_id == Parameter::where('module', 'establishment')->where('parameter', 'SSTarapaca')->first()->value){
-                $ouSearch = Parameter::where('module', 'ou')->where('parameter', 'FinanzasSSI')->first()->value;
-            }
+            // if(Auth::user()->organizationalUnit->establishment_id == Parameter::where('module', 'establishment')->where('parameter', 'SSTarapaca')->first()->value){
+            //     $ouSearch = Parameter::where('module', 'ou')->where('parameter', 'FinanzasSSI')->first()->value;
+            // }
 
-            if(Auth::user()->organizationalUnit->establishment_id == Parameter::where('module', 'establishment')->where('parameter', 'HospitalAltoHospicio')->first()->value){
-                $ouSearch = Parameter::where('module', 'ou')->where('parameter', 'FinanzasHAH')->first()->value;
-            }
+            // if(Auth::user()->organizationalUnit->establishment_id == Parameter::where('module', 'establishment')->where('parameter', 'HospitalAltoHospicio')->first()->value){
+            //     $ouSearch = Parameter::where('module', 'ou')->where('parameter', 'FinanzasHAH')->first()->value;
+            // }
 
-            $eventTypeBudget = $eventType == 'pre_budget_event' ? 'supply_event' : (Auth::user()->organizational_unit_id == $ouSearch && $manager->user_id == Auth::user()->id ? 'finance_event' : 'pre_finance_event');
+            $ouSearch = Parameter::get('Abastecimiento', ['finance_ou_id']);
+
+            $eventTypeBudget = $eventType == 'pre_budget_event' ? 'supply_event' : (in_array(Auth::user()->organizational_unit_id, $ouSearch) && $manager->user_id == Auth::user()->id ? 'finance_event' : 'pre_finance_event');
+            // $eventTypeBudget = $eventType == 'pre_budget_event' ? 'supply_event' : (Auth::user()->organizational_unit_id == $ouSearch && $manager->user_id == Auth::user()->id ? 'finance_event' : 'pre_finance_event');
+            // dd($eventTypeBudget);
             $requestForm->has_increased_expense = true;
             $requestForm->new_estimated_expense = $requestForm->estimated_expense + $requestForm->eventRequestForms()->where('status', 'pending')->where('event_type', 'budget_event')->first()->purchaser_amount;
             $requestForm->load('itemRequestForms.latestPendingItemChangedRequestForms', 'passengers.latestPendingPassengerChanged');
@@ -625,7 +630,8 @@ class RequestFormController extends Controller {
         $newRequestForm->request_user_ou_id = User::withTrashed()->find($requestForm->request_user_id)->organizational_unit_id;
         $newRequestForm->contract_manager_ou_id = User::withTrashed()->find($requestForm->contract_manager_id)->organizational_unit_id;
         $newRequestForm->estimated_expense = 0;
-        $ouSearch = Parameter::where('module', 'ou')->where('parameter', 'DireccionSSI')->first()->value;
+        // $ouSearch = Parameter::where('module', 'ou')->where('parameter', 'DireccionSSI')->first()->value;
+        $ouSearch = Parameter::get('ou', 'DireccionSSI');
         if($requestForm->eventRequestForms()->where('event_type', 'superior_leader_ship_event')->where('ou_signer_user', $ouSearch)->count() > 0) $newRequestForm->superior_chief = null;
         $newRequestForm->has_increased_expense = null;
         $newRequestForm->subtype = Str::contains($requestForm->subtype, 'bienes') ? 'bienes ejecución inmediata' : 'servicios ejecución inmediata';
