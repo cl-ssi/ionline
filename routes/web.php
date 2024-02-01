@@ -2088,7 +2088,8 @@ Route::prefix('finance')->as('finance.')->middleware(['auth', 'must.change.passw
         Route::get('/', [PaymentController::class, 'index'])->name('index');
         Route::get('/own', [PaymentController::class, 'indexOwn'])->name('own');
         Route::get('/review', [PaymentController::class, 'review'])->name('review');
-        Route::get('/{dte}/send-to-ready-inbox', [PaymentController::class, 'sendToReadyInbox'])->name('sendToReadyInbox');
+        Route::get('/{dte}/return-to-dte-inbox', [PaymentController::class, 'returnToDteInbox'])->name('returnToDteInbox');
+        Route::get('/{dte}/send-to-ready-inbox', [PaymentController::class, 'sendToReadyInbox'])->name('sendToReadyInbox');        
         Route::get('/ready', [PaymentController::class, 'ready'])->name('ready');
         Route::put('/{dte}/return-to-review', [PaymentController::class, 'returnToReview'])->name('returnToReview');
         Route::get('/rejected', [PaymentController::class, 'rejected'])->name('rejected');

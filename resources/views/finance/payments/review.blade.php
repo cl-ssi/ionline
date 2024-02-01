@@ -48,6 +48,7 @@
                 <th>Compromiso SIGFE</th>
                 <th>Devengo SIGFE</th>
                 <th>Revisar</th>
+                <th>Devolver</th>
             </tr>
         </thead>
         <tbody>
@@ -85,6 +86,12 @@
                         <a href="{{ route('finance.payments.sendToReadyInbox', ['dte' => $dte->id]) }}"
                             class="btn btn-sm btn-outline-success">
                             <i class="fas fa-hand-holding-usd"></i> Listos para Pago
+                        </a>
+                    </td>
+                    <td class="small">
+                        <a href="{{ route('finance.payments.returnToDteInbox', ['dte' => $dte->id]) }}"
+                            class="btn btn-sm btn-outline-danger">
+                            <i class="fas fa-arrow-left"></i> Retornar a DTE
                         </a>
                     </td>
                 </tr>
