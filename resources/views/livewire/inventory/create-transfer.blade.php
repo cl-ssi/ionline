@@ -84,6 +84,47 @@
         </fieldset>
     </div>
 
+    <div class="row g-2 g-2 mb-2">
+        <fieldset class="col-md-4">
+            <label for="number" class="form-label">
+                Marca
+            </label>
+            <input
+                type="text"
+                class="form-control form-control-sm"
+                id="brand"
+                value="{{ $inventory->brand }}"
+                readonly
+            >
+        </fieldset>
+
+        <fieldset class="col-md-4">
+            <label for="model" class="form-label">
+                Modelo
+            </label>
+            <input
+                type="text"
+                class="form-control form-control-sm"
+                id="model"
+                value="{{ $inventory->model }}"
+                readonly
+            >
+        </fieldset>
+
+        <fieldset class="col-md-4">
+            <label for="serial_number" class="form-label">
+                Número de serie
+            </label>
+            <input
+                type="text"
+                class="form-control form-control-sm"
+                id="serial_number"
+                value="{{ $inventory->serial_number }}"
+                readonly
+            >
+        </fieldset>
+    </div>
+
     @livewire('inventory.register-movement', ['inventory' => $inventory])
 
     @livewire('inventory.update-movement', ['inventory' => $inventory])
