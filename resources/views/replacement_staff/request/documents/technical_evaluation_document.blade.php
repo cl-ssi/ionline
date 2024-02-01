@@ -193,9 +193,9 @@
                   <td style="width: 33%">{{ $requestReplacementStaff->charges_number }}</td>
               </tr>
               <tr>
-                  <td><strong>Estamento / Grado</strong></td>
+                  <td><strong>Estamento / Ley / Grado</strong></td>
                   <td style="width: 33%">{{ $requestReplacementStaff->profile_manage->name }}</td>
-                  <td style="width: 33%">{{ $requestReplacementStaff->degree }}</td>
+                  <td style="width: 33%">{{ ($requestReplacementStaff->law) ? 'Ley N° '.number_format($requestReplacementStaff->law, 0, ",", ".").' -' : '' }} {{ ($requestReplacementStaff->degree) ? $requestReplacementStaff->degree : 'Sin especificar grado' }}</td>
               </tr>
               <tr>
                   <td><strong>Periodo</strong></td>

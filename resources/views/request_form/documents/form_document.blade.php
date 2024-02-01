@@ -140,8 +140,12 @@
   <div class="content">
 
     <div class="content">
-      <img style="padding-bottom: 4px;" src="images/Logo Servicio de Salud Tarapacá - Pluma.png" width="120" alt="Logo Servicio de Salud"><br>
-
+      @if($requestForm->contractManager->organizationalUnit->establishment_id == App\Models\Parameters\Parameter::get('establishment', 'HETG'))
+      <img style="padding-bottom: 4px;" src="images/Logo Hospital Ernesto Torres - Pluma.png" width="120" alt="Logo Hospital Ernesto Torres de Iquique">
+      @else
+      <img style="padding-bottom: 4px;" src="images/Logo Servicio de Salud Tarapacá - Pluma.png" width="120" alt="Logo Servicio de Salud">
+      @endif
+      <br>
 
       <!-- <div class="siete" style="padding-top: 3px;">
 

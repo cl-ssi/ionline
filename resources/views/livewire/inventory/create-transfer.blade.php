@@ -2,6 +2,42 @@
     @section('title', 'Generar Traspaso')
 
     @include('inventory.nav-user')
+    <style>
+        .bg-image-HAH {
+            width: 340px;
+            height: 340px;
+            background-image: url('{{ asset('images/inventario_HAH_nuevo.png') }}');
+            background-size: 340px;
+        }
+
+        .bg-image-SST {
+            width: 340px;
+            height: 340px;
+            background-image: url('{{ asset('images/inventario_SST_nuevo.png') }}');
+            background-size: 340px;
+        }
+
+        .qr {
+            padding-top: 111px;
+            padding-left: 6px;
+        }
+
+        .code {
+            padding-top: 8px;
+            text-align: center;
+            font-size: 19px;
+            font-weight: bold;
+        }
+    </style>
+
+    <div class="bg-image-{{ $inventory->establishment->alias }} mb-3">
+        <div class="qr text-center">
+            {!! $inventory->qr !!}
+        </div>
+        <div class="code">
+            {{ $inventory->number }}
+        </div>
+    </div>
 
     <h4 class="mb-3">
         Generar Traspaso

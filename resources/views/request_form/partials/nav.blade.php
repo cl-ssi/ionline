@@ -12,7 +12,8 @@
     </a>
     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
       <a class="dropdown-item" href="{{ route('request_forms.my_forms') }}"><i class="fas fa-fw fa-inbox"></i> Mis Formularios</a>
-      @php($ouSearch = App\Models\Parameters\Parameter::where('module', 'ou')->whereIn('parameter', ['FinanzasSSI','RefrendacionHAH','FinanzasHAH'])->pluck('value')->toArray())
+      {{--@php($ouSearch = App\Models\Parameters\Parameter::where('module', 'ou')->whereIn('parameter', ['FinanzasSSI','RefrendacionHAH','FinanzasHAH'])->pluck('value')->toArray())--}}
+      @php($ouSearch = App\Models\Parameters\Parameter::get('Abastecimiento',['prefinance_ou_id', 'finance_ou_id']))
       @if(Auth::user()->hasPermissionTo('Request Forms: all') || in_array(Auth()->user()->organizational_unit_id, $ouSearch))
       <a class="dropdown-item" href="{{ route('request_forms.all_forms') }}"><i class="fas fa-fw fa-inbox"></i> Todos los formularios</a>
       @endif
@@ -29,7 +30,8 @@
     </div>
   </li>
 
-  @php($ouSearch = App\Models\Parameters\Parameter::where('module', 'ou')->whereIn('parameter', ['AbastecimientoSSI', 'AbastecimientoHAH', 'AdquisicionesHAH'])->pluck('value')->toArray())
+  {{--@php($ouSearch = App\Models\Parameters\Parameter::where('module', 'ou')->whereIn('parameter', ['AbastecimientoSSI', 'AbastecimientoHAH', 'AdquisicionesHAH'])->pluck('value')->toArray())--}}
+  @php($ouSearch = App\Models\Parameters\Parameter::get('Abastecimiento',['purchaser_ou_id']))
   @if(in_array(Auth()->user()->organizational_unit_id, $ouSearch) || Auth::user()->hasPermissionTo('Request Forms: purchaser'))
     <li class="nav-item dropdown">
       <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -54,7 +56,8 @@
   </li>
   @endcan
 
-  @php($ouSearch = App\Models\Parameters\Parameter::where('module', 'ou')->whereIn('parameter', ['AbastecimientoSSI', 'AbastecimientoHAH', 'AdquisicionesHAH', 'FinanzasSSI', 'RefrendacionHAH','FinanzasHAH'])->pluck('value')->toArray())
+  {{--@php($ouSearch = App\Models\Parameters\Parameter::where('module', 'ou')->whereIn('parameter', ['AbastecimientoSSI', 'AbastecimientoHAH', 'AdquisicionesHAH', 'FinanzasSSI', 'RefrendacionHAH','FinanzasHAH'])->pluck('value')->toArray())--}}
+  @php($ouSearch = App\Models\Parameters\Parameter::get('Abastecimiento',['prefinance_ou_id', 'finance_ou_id', 'supply_ou_id']))
 	@if(in_array(Auth()->user()->organizational_unit_id, $ouSearch) || Auth::user()->hasPermissionTo('Request Forms: config'))
 	<li class="nav-item dropdown">
 	<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

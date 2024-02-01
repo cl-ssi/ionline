@@ -46,16 +46,23 @@ class Parameter extends Model
 
     public static function get($module, $parameter, $establishment_id = null)
     {
-        $query = Parameter::where('module', $module)
-            ->where('parameter', $parameter);
-
-        if ($establishment_id !== null) {
-            $query->where('establishment_id', $establishment_id);
+        $query = Parameter::where('module', $module);
+            // ->where('parameter', $parameter);
+        if(is_array($parameter)){
+            $query->whereIn('parameter', $parameter);
+        }else{
+            $query->where('parameter', $parameter);
         }
 
-        $parameter = $query->first();
-        
-        if(isset($parameter)) return $parameter->value;
+        if ($establishment_id !== null) {
+            if(is_array($establishment_id)){
+                $query->whereIn('establishment_id', $establishment_id);
+            }else{
+                $query->where('establishment_id', $establishment_id);
+            }
+        }
+
+        if(isset($parameter)) return is_array($parameter) || is_array($establishment_id) ? $query->pluck('value')->toArray() : $query->first()->value;
         else return null;
     }
 

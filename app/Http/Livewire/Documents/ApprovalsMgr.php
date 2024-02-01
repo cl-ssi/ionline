@@ -7,11 +7,14 @@ use Illuminate\Support\Facades\Route;
 use App\Traits\SingleSignature;
 use App\Traits\ApprovalTrait;
 use App\Models\Documents\Approval;
+use Livewire\WithPagination;
 
 class ApprovalsMgr extends Component
 {
     use SingleSignature;
     use ApprovalTrait;
+    use WithPagination;
+	protected $paginationTheme = 'bootstrap';
 
     public $showModal = false;
     public $approver_observation;

@@ -8,7 +8,7 @@
     <div class="row mb-3">
         <div class="form-group col-md-4">
             <label for="inputState">Estado</label>
-            <select id="inputState" class="form-select wire:model.defer="filter.status">
+            <select id="inputState" class="form-select" wire:model.defer="filter.status">
                 <option value="?">Pendientes</option>
                 <option value="1">Aprobados</option>
                 <option value="0">Rechazados</option>
@@ -21,12 +21,12 @@
                 <i class="fas fa-filter"></i>
             </button>
         </div>
-        <div class="form-group col-md-2">
+        <!-- <div class="form-group col-md-2">
             <label for="for_filter">&nbsp;</label>
             <a href="{{ route('documents.approvals') }}" class="btn btn-outline-secondary form-control">
                 Actualizar
             </a>
-        </div>
+        </div> -->
     </div>
 
     <table class="table table-sm table-bordered">

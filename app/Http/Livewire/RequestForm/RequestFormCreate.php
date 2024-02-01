@@ -89,14 +89,15 @@ class RequestFormCreate extends Component
       $this->editRF                 = false;
       $this->lstUnitOfMeasurement   = UnitOfMeasurement::all();
       $this->lstPurchaseMechanism   = PurchaseMechanism::all();
-      if(auth()->user()->OrganizationalUnit->establishment_id != Parameter::where('parameter', 'SSTarapaca')->first()->value){
+      $estab_hah = Parameter::get('establishment', 'HospitalAltoHospicio');
+      if(auth()->user()->OrganizationalUnit->establishment_id == $estab_hah){
         $filter = function($q){ $q->where('name', '!=', 31); };
         $this->lstProgram = Program::with(['Subtitle' => $filter])->whereHas('Subtitle', $filter)->orderBy('alias_finance')->get();
       }else{
         $this->lstProgram = Program::with('Subtitle')->orderBy('alias_finance')->get();
       }
 
-      if(auth()->user()->OrganizationalUnit->establishment_id == Parameter::where('parameter', 'HospitalAltoHospicio')->first()->value){
+      if(auth()->user()->OrganizationalUnit->establishment_id == $estab_hah){
         $this->superiorChief = 1;
         $this->isHAH = true;
       }
@@ -401,10 +402,10 @@ class RequestFormCreate extends Component
               $type = 'manager';
               $mail_notification_ou_manager = Authority::getAuthorityFromDate($req->eventRequestForms->first()->ou_signer_user, now(), $type);
 
-              $emails = [$mail_notification_ou_manager->user->email];
-
+              
               if (env('APP_ENV') == 'production' OR env('APP_ENV') == 'testing') {
                 if($mail_notification_ou_manager){
+                    $emails = [$mail_notification_ou_manager->user->email];
                     Mail::to($emails)
                       ->cc(env('APP_RF_MAIL'))
                       ->send(new RequestFormSignNotification($req, $req->eventRequestForms->first()));
@@ -458,13 +459,10 @@ class RequestFormCreate extends Component
               //secretary
               // $type_adm = 'secretary';
               // $mail_notification_ou_secretary = Authority::getAuthorityFromDate($req->eventRequestForms->first()->ou_signer_user, Carbon::now(), $type_adm);
-
-              if($mail_notification_ou_manager){
-                $emails = [$mail_notification_ou_manager->user->email];
-              }
-
+              
               if (env('APP_ENV') == 'production' OR env('APP_ENV') == 'testing') {
                 if($mail_notification_ou_manager){
+                    $emails = [$mail_notification_ou_manager->user->email];
                     Mail::to($emails)
                       ->cc(env('APP_RF_MAIL'))
                       ->send(new RequestFormSignNotification($req, $req->eventRequestForms->first()));
@@ -512,9 +510,9 @@ class RequestFormCreate extends Component
               // $type_adm = 'secretary';
               // $mail_notification_ou_secretary = Authority::getAuthorityFromDate($req->eventRequestForms->first()->ou_signer_user, Carbon::now(), $type_adm);
 
-              $emails = [$mail_notification_ou_manager->user->email];
-
+              
               if($mail_notification_ou_manager){
+                  $emails = [$mail_notification_ou_manager->user->email];
                   Mail::to($emails)
                     ->cc(env('APP_RF_MAIL'))
                     ->send(new RequestFormSignNotification($req, $req->eventRequestForms->first()));

@@ -85,6 +85,7 @@ use App\Http\Livewire\Drugs\CreateActPrecursor;
 use App\Http\Livewire\Documents\Partes\ReportByDates as PartesReportByDates;
 use App\Http\Livewire\Documents\Partes\NumerationInbox;
 use App\Http\Livewire\Documents\Partes\Inbox;
+use App\Http\Livewire\Documents\Partes\PartesAccessLog;
 use App\Http\Livewire\Documents\ApprovalsMgr;
 use App\Http\Livewire\Authorities\Calendar;
 use App\Http\Controllers\Welfare\WelfareController;
@@ -177,8 +178,8 @@ use App\Http\Controllers\ReplacementStaff\ExperienceController;
 use App\Http\Controllers\ReplacementStaff\ContactRecordController;
 use App\Http\Controllers\ReplacementStaff\CommissionController;
 use App\Http\Controllers\ReplacementStaff\ApplicantController;
-use App\Http\Controllers\Rem\UserRemController;
 //use App\Http\Controllers\RequestForms\SupplyPurchaseController;
+use App\Http\Controllers\Rem\UserRemController;
 use App\Http\Controllers\Rem\RemSerieController;
 use App\Http\Controllers\Rem\RemPeriodSerieController;
 use App\Http\Controllers\Rem\RemPeriodController;
@@ -389,6 +390,16 @@ Route::middleware(['auth', 'must.change.password'])->group(function () {
         Route::get('/signature', MailSignature::class)->name('signature');
     });
 });
+
+/** 
+ * Esta es la URL de la imagen de la firma
+ * para poder cambiarla sin cambiar todos los pies de firma de cada correo
+ * cree una, entonces cambiamos esta url y se cambiará para todos los correos
+ * en el fondo hay que definir acá el redirect para donde queremos que vaya
+ */
+Route::get('/redirect-url/signature', function () {
+    return redirect()->route('welcome');
+})->name('redirect-url.signature');
 
 /* Replacement Staff */
 Route::prefix('replacement_staff')->as('replacement_staff.')->middleware(['auth', 'must.change.password'])->group(function () {
@@ -1300,11 +1311,19 @@ Route::prefix('documents')->as('documents.')->middleware(['auth', 'must.change.p
     Route::get('/{document}/sendForSignature/', [DocumentController::class, 'sendForSignature'])->name('sendForSignature');
     Route::get('/signed-document-pdf/{id}', [DocumentController::class, 'signedDocumentPdf'])->name('signedDocumentPdf');
 
-    Route::prefix('partes')->as('partes.')->group(function () {
+    
+    // Se quitan estas rutas de partes para que puedas descargar el archivo y no tengan el middleware can:Partes: oficina    
+    Route::get('/original/{numeration}', [NumerationController::class,'showOriginal'])->name('partes.numeration.show_original');
+    Route::get('/numerado/{numeration}', [NumerationController::class,'showNumerated'])->name('partes.numeration.show_numerated');    
+    Route::get('/download/{file}',  [ParteController::class, 'download'])->name('partes.download');
+
+    /** La primera está afuera porque no tiene el middleware del can Partes: oficina */
+    Route::get('/partes/access-log', PartesAccessLog::class)->name('partes.access-log');
+    Route::prefix('partes')->as('partes.')->middleware(['can:Partes: oficina'])->group(function () {
         Route::get('/parameters', [ParteController::class, 'parameters'])->name('parameters');
         Route::post('/', [ParteController::class, 'store'])->name('store');
         Route::get('/create', [ParteController::class, 'create'])->name('create');
-        Route::get('/download/{file}',  [ParteController::class, 'download'])->name('download');
+        
         Route::delete('/files/{file}', [ParteFileController::class, 'destroy'])->name('files.destroy');
         Route::get('/inbox', [ParteController::class, 'inbox'])->name('inbox');
 
@@ -1316,13 +1335,12 @@ Route::prefix('documents')->as('documents.')->middleware(['auth', 'must.change.p
         Route::put('/{parte}', [ParteController::class, 'update'])->name('update');
         Route::delete('/{parte}', [ParteController::class, 'destroy'])->name('destroy');
         Route::get('/{parte}/edit', [ParteController::class, 'edit'])->name('edit');
-        
-        
         Route::prefix('numeration')->as('numeration.')->group(function () {
             Route::get('/inbox', NumerationInbox::class)->name('inbox');
-            Route::get('/original/{numeration}', [NumerationController::class,'showOriginal'])->name('show_original');
-            Route::get('/numerado/{numeration}', [NumerationController::class,'showNumerated'])->name('show_numerated');
+
         });
+
+
     });
 
     Route::get('signatures/index/{tab}', [SignatureController::class, 'index'])->name('signatures.index');
@@ -1341,6 +1359,8 @@ Route::prefix('documents')->as('documents.')->middleware(['auth', 'must.change.p
 
     Route::get('/approvals/{approval?}', ApprovalsMgr::class)->name('approvals');
     Route::get('/approvals/{approval}/pdf', [NoAttendanceRecordController::class,'signedApproval'])->name('signed.approval.pdf');
+
+
 
     /** Ruta que muestra un PDF desde el storage */
     Route::get('/approvals/{approval}/show-pdf', [ApprovalController::class,'showPdf'])->name('approvals.show-pdf');
