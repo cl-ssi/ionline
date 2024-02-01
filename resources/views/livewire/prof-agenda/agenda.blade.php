@@ -438,7 +438,7 @@
                     eventClick: function(info) {
                         // console.info(info.event.extendedProps);
                         $('.modalTitle').html(info.event.title);
-                        $('.patient').val(info.event.title);
+                        $('.patient').val(info.event.extendedProps.patient_name);
                         $('.contact_number').val(info.event.extendedProps.contact_number);
                         $('.openHours_id').val(info.event.id);
                         $('.finicio').val(info.event.start.toLocaleString());
