@@ -12,6 +12,7 @@ use App\Notifications\ProfAgenda\NewReservation;
 use App\Notifications\ProfAgenda\CancelReservation;
 
 use App\Models\ProfAgenda\OpenHour;
+use App\Models\ProfAgenda\Appointment;
 use App\Mail\OpenHourReservation;
 use App\Mail\OpenHourCancelation;
 use App\Http\Controllers\Controller;
@@ -61,21 +62,21 @@ class OpenHourController extends Controller
             return redirect()->back();
         }
 
-        // valida si existen más de 2 horas reservadas en la semana
-        $resevationsInWeek = OpenHour::where('patient_id',$request->user_id)
-                                    ->whereBetween('start_date',[$openHour->start_date->startOfWeek(), $openHour->end_date->endOfWeek()])
-                                    ->whereHas('activityType')
-                                    ->count();
+        // // valida si existen más de 2 horas reservadas en la semana
+        // $resevationsInWeek = OpenHour::where('patient_id',$request->user_id)
+        //                             ->whereBetween('start_date',[$openHour->start_date->startOfWeek(), $openHour->end_date->endOfWeek()])
+        //                             ->whereHas('activityType')
+        //                             ->count();
 
         // if($resevationsInWeek > 2){
         //     session()->flash('warning', 'Alcanzó el máximo de reservas a la semana (2 reservas). Si necesita agendar otra hora, contactar a Unidad de Salud del trabajador.');
         //     return redirect()->back();
         // }
 
-        if($openHour->start_date < now()){
-            session()->flash('warning', 'No se puede reservar para una fecha pasada.');
-            return redirect()->back();
-        }
+        // if($openHour->start_date < now()){
+        //     session()->flash('warning', 'No se puede reservar para una fecha pasada.');
+        //     return redirect()->back();
+        // }
 
         // solo si vienen parámetros del usuario, se hace modificación
         if($request->name && $request->fathers_family){
@@ -117,11 +118,80 @@ class OpenHourController extends Controller
                 ]
                 );
             }    
-        }
-            
+        }            
 
         // $openHour = OpenHour::find($request->openHours_id);
         if($request->phone_number){$openHour->contact_number = $request->phone_number;}
+        $openHour->patient_id = $request->user_id;
+        $openHour->observation = $request->observation;
+        $openHour->save();
+
+        // si es primera cita, se guarda fecha de inicio de tratamiento (de esta manera, el paciente podrá programar sus propias citas)
+        if($request->first_appointment){
+            $appointment = new Appointment();
+            $appointment->open_hour_id = $openHour->id;
+            $appointment->begin_date = now();
+            $appointment->save();
+        }
+
+        //envía correo de confirmación
+        if (config('app.env') === 'local') {
+            if($openHour->patient){
+                if($openHour->patient->email != null){
+                    // Utilizando Notify 
+                    $openHour->patient->notify(new NewReservation($openHour));
+                } 
+            }
+        }
+        
+        session()->flash('success', 'Se guardó la información.');
+        return redirect()->back();
+    }
+
+    public function patient_store(Request $request)
+    {
+        $openHour = OpenHour::find($request->openHours_id);
+
+        // valida si existen del paciente con otros funcionarios en la misma hora
+        $othersReservationsCount = OpenHour::where('patient_id',$request->user_id)
+                                            ->where(function($query) use ($openHour){
+                                                $query->whereBetween('start_date',[$openHour->start_date, $openHour->end_date])
+                                                        ->orWhereBetween('end_date',[$openHour->start_date, $openHour->end_date]);
+                                            })
+                                            ->whereHas('activityType')
+                                            ->count(); 
+        if($othersReservationsCount>0){
+            session()->flash('warning', 'No es posible realizar la reserva del paciente, porque tiene otra reserva a la misma hora con otro funcionario.');
+            return redirect()->back();
+        }
+
+        // valida si existen más de 2 horas reservadas en la semana
+        $resevationsInWeek = OpenHour::where('patient_id',$request->user_id)
+                                    ->whereBetween('start_date',[$openHour->start_date->startOfWeek(), $openHour->end_date->endOfWeek()])
+                                    ->whereHas('activityType')
+                                    ->count();
+
+        if($resevationsInWeek > 2){
+            session()->flash('warning', 'Alcanzó el máximo de reservas a la semana (2 reservas). Si necesita agendar otra hora, contactar a Unidad de Salud del trabajador.');
+            return redirect()->back();
+        }
+
+        if($openHour->start_date < now()){
+            session()->flash('warning', 'No se puede reservar para una fecha pasada.');
+            return redirect()->back();
+        }
+
+        // se deja reservar al paciente, solo si tiene activo un appointment (es decir, no ha sido dado de alta de otra reserva con misma actividad)
+        $appointments = Appointment::whereHas('openHour', function ($query) use ($request) {
+                                        return $query->where('patient_id', $request->user_id)
+                                                     ->whereNull('discharged_date');
+                                    })->first();
+        if(!$appointments){
+            session()->flash('warning', 'No puede reservar. Debe primero solicitar una reserva con su profesional.');
+            return redirect()->back();
+        }
+        
+        // se registra la reserva
         $openHour->patient_id = $request->user_id;
         $openHour->observation = $request->observation;
         $openHour->save();
@@ -142,7 +212,7 @@ class OpenHourController extends Controller
 
     public function destroy(Request $request){
         $openHour = OpenHour::find($request->openHours_id);
-
+        
         // validación
         if($openHour->start_date < now()){
             session()->flash('warning', 'No es posible suprimir un bloque que haya transcurrido.');
@@ -156,12 +226,25 @@ class OpenHourController extends Controller
     }
 
     public function delete_reservation(Request $request){
+        
         $openHour = OpenHour::find($request->openHours_id);
-
+        // dd($openHour);
         // validación
         if($openHour->start_date < now()){
             session()->flash('warning', 'No es posible eliminar una reserva de un bloque que haya trasncurrido.');
             return redirect()->back();
+        }
+
+        // se eliminan los appointments activos
+        if($openHour->appointments){
+            $openHour->appointments()->delete();
+        }
+
+        if($openHour->first_appointment){
+            $appointment = new Appointment();
+            $appointment->open_hour_id = $openHour->id;
+            $appointment->begin_date = now();
+            $appointment->save();
         }
 
         $openHour->deleted_bloqued_observation = now() . ": Se eliminó la reserva de " . $openHour->patient->shortName . ". Motivo: " . $request->deleted_bloqued_observation;
@@ -170,19 +253,21 @@ class OpenHourController extends Controller
         $openHour->save();
 
         //envía correo de cancelación
-        if($openHour->patient){
-            if($openHour->patient->email != null){
-                if (filter_var($openHour->patient->email, FILTER_VALIDATE_EMAIL)) {
-                    /*
-                    * Utilizando Notify
-                    */ 
-                    $openHour->patient->notify(new CancelReservation($openHour));
-
-                    /*
-                    * Utilizando Mail
-                    */ 
-                    // Mail::to($openHour->patient)->send(new OpenHourCancelation($openHour));
-                } 
+        if (config('app.env') === 'local') {
+            if($openHour->patient){
+                if($openHour->patient->email != null){
+                    if (filter_var($openHour->patient->email, FILTER_VALIDATE_EMAIL)) {
+                        /*
+                        * Utilizando Notify
+                        */ 
+                        $openHour->patient->notify(new CancelReservation($openHour));
+    
+                        /*
+                        * Utilizando Mail
+                        */ 
+                        // Mail::to($openHour->patient)->send(new OpenHourCancelation($openHour));
+                    } 
+                }    
             }
         }
         
@@ -276,7 +361,7 @@ class OpenHourController extends Controller
 
         // validación
         if($end_date < now()){
-            session()->flash('warning', 'No es modificar eliminar bloques que hayan trasncurrido.');
+            session()->flash('warning', 'No se puede eliminar bloques que ya hayan transcurrido.');
             return redirect()->back();
         }
 
@@ -299,6 +384,7 @@ class OpenHourController extends Controller
     }
 
     public function absence_confirmation(Request $request){
+        dd($request->openHours_id);
         $openHour = OpenHour::find($request->openHours_id);
         $openHour->assistance = false;
         $openHour->absence_reason = $request->absence_reason;
@@ -308,5 +394,41 @@ class OpenHourController extends Controller
         return redirect()->back();
     }
 
-    
+    public function blockPeriod(Request $request){
+        $start_date = Carbon::parse($request->start_date);
+        $start_date = Carbon::parse($start_date->format('Y-m-d') . " " . $request->start_hour);
+
+        $end_date = Carbon::parse($request->end_date);
+        $end_date = Carbon::parse($end_date->format('Y-m-d') . " " . $request->end_hour);
+
+        OpenHour::whereBetween('start_date',[$start_date,$end_date])
+                ->where('profesional_id',$request->profesional_id)
+                ->where('blocked',false)
+                ->update(['deleted_bloqued_observation' => now() . ": Motivo del bloqueo: Bloqueo masivo",
+                            'blocked' => true]);
+
+        // envia notificaciones
+        $openHours = OpenHour::whereBetween('start_date',[$start_date,$end_date])
+                            ->where('profesional_id',$request->profesional_id)
+                            ->where('blocked',true)
+                            ->get();
+        foreach($openHours as $openHour){
+            //envía correo de cancelación
+            if (config('app.env') === 'local') {
+                if($openHour->patient){
+                    if($openHour->patient->email != null){
+                        if (filter_var($openHour->patient->email, FILTER_VALIDATE_EMAIL)) {
+                            /*
+                            * Utilizando Notify
+                            */ 
+                            $openHour->patient->notify(new CancelReservation($openHour));
+                        } 
+                    }    
+                }
+            }
+        }
+
+        session()->flash('success', 'Se bloqueó el período.');
+        return redirect()->back();
+    }
 }

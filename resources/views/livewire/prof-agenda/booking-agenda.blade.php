@@ -36,8 +36,15 @@
                 </button>
             </div>
             <div class="modal-body">
+
+                <div class="row" id="div_activity_type_description">
+                    <fieldset class="form-group col-12">
+                        <label for="for_users">Glosa/Descripción de la actividad</label>
+                        <textarea class="form-control activity_type_description"  disabled cols="30" rows="3"></textarea>
+                    </fieldset>
+                </div>
                 
-                <form method="POST" class="form-horizontal" action="{{ route('prof_agenda.open_hour.store') }}">
+                <form method="POST" class="form-horizontal" action="{{ route('prof_agenda.open_hour.patient_store') }}">
                 @csrf
                 @method('POST')
 
@@ -181,6 +188,14 @@
                         $('.finicio').val(info.event.start.toLocaleString());
                         $('.ftermino').val(info.event.end.toLocaleString());
                         $('.observation').val(info.event.extendedProps.observation);
+
+                        var div = document.getElementById("div_activity_type_description");
+                        if(info.event.extendedProps.activity_type_description){
+                            div.style.display = "block";
+                            $('.activity_type_description').text(info.event.extendedProps.activity_type_description);
+                        }else{
+                            div.style.display = "none";
+                        }
 
                         // se verifica si es un bloque vacio o ya reservado
                         if(info.event.extendedProps.status=="Disponible"){

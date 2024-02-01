@@ -7,12 +7,23 @@
         </a>
     </li>
 
-    <!-- <li class="nav-item">
-        <a class="nav-link {{ active('prof_agenda.agenda.booking') }}"
-            href="{{ route('prof_agenda.agenda.booking') }}">
-            <i class="fa fa-calendar"></i> Agendar hora
-        </a>
-    </li> -->
+    <!-- verifica que paciente tenga activa un appoitment para permitirle auto reservar -->
+    @php
+        $count = App\Models\ProfAgenda\Appointment::whereHas('openHour', function ($query) {
+                                                        return $query->where('patient_id',auth()->user()->id);
+                                                    })
+                                                    ->whereNull('discharged_date')
+                                                    ->count();
+    @endphp
+
+    @if($count > 0)
+        <li class="nav-item">
+            <a class="nav-link {{ active('prof_agenda.agenda.booking') }}"
+                href="{{ route('prof_agenda.agenda.booking') }}">
+                <i class="fa fa-calendar"></i> Agendar hora
+            </a>
+        </li>
+    @endif
 
     @canany(['Agenda UST: Administrador','Agenda UST: Funcionario','Agenda UST: Secretaria'])
         <li class="nav-item">

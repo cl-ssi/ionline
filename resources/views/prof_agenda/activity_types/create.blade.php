@@ -26,6 +26,29 @@
     </fieldset>
 </div>
 
+<div class="row">
+    <fieldset class="form-group col col-md">
+        <label for="for_name">Max.Reservas p/semana	</label>
+        <input type="text" class="form-control" name="maximum_allowed_per_week">
+    </fieldset>
+
+    <fieldset class="form-group col col-md">
+        <label for="for_start_date">Permite Reservas D/consecutivos</label>
+        <select class="form-control" name="allow_consecutive_days" id="" required>
+            <option value=""></option>
+            <option value="1">Sí</option>
+            <option value="0">No</option>
+        </select>
+    </fieldset>
+</div>
+
+<div class="row">
+    <fieldset class="form-group col col-md">
+        <label for="for_start_date">Glosa/Descripción de la actividad</label>
+        <textarea class="form-control" name="description" id="" cols="30" rows="10"></textarea>
+    </fieldset>
+</div>
+
 <button type="submit" class="btn btn-primary">Guardar</button>
 
 </form>

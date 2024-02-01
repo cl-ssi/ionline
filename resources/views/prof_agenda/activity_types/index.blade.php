@@ -16,6 +16,9 @@
             <th>Id</th>
 			<th nowrap>Nombre</th>
             <th nowrap>Reservable</th>
+            <th nowrap>Glosa/Descripción</th>
+            <th nowrap>Permite Reservas D/consecutivos</th>
+            <th nowrap>Max.Reservas p/semana</th>
             <th style="width:10%"></th>
             <th style="width:10%"></th>
 		</tr>
@@ -26,6 +29,11 @@
             <td>{{ $activityType->id}}</td>
 			<td nowrap>{{ $activityType->name }}</td>
             <td nowrap>@if($activityType->reservable) Reservable @else No reservable @endif</td>
+            <td nowrap>{{ substr($activityType->description, 0, 30) }}</td>
+            <td>
+                @if($activityType->allow_consecutive_days) Sí @else No @endif
+            </td>
+            <td>{{$activityType->maximum_allowed_per_week}}</td>
 			<td style="width:10%">
 				<a href="{{ route('prof_agenda.activity_types.edit', $activityType) }}"
 					class="btn btn-sm btn-outline-secondary">
