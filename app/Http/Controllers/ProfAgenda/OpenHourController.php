@@ -384,7 +384,6 @@ class OpenHourController extends Controller
     }
 
     public function absence_confirmation(Request $request){
-        dd($request->openHours_id);
         $openHour = OpenHour::find($request->openHours_id);
         $openHour->assistance = false;
         $openHour->absence_reason = $request->absence_reason;
