@@ -57,14 +57,19 @@
                     </div>
 
                     <div class="row">
-                        <fieldset class="form-group col-12 col-md-6">
+                        <fieldset class="form-group col-12 col-md-10">
                             <label for="for_users">Buscar funcionario</label>
                             <div>
                                 @livewire('search-select-user', ['selected_id' => 'patient_id', 
                                                                  'emit_name' => 'loadUserData'])
                             </div>
                         </fieldset>
-                    </div>
+
+                        <fieldset class="form-group col-12 col-md-2">
+                            <label for="for_users"><b>Primera citaa</b></label>
+                            <input class="form-control first_appointment" type="checkbox" name="first_appointment" disabled>
+                        </fieldset>
+                    </div>     
 
                     @livewire('prof-agenda.employee-data')
 
@@ -124,22 +129,28 @@
                 </button>
             </div>
             <div class="modal-body">
-                
                 <form method="POST" class="form-horizontal" onsubmit="return confirm('¿Está seguro de eliminar la reserva?');" action="{{ route('prof_agenda.open_hour.delete_reservation') }}">
                 @csrf
                 @method('POST')
 
                     <div class="row">
+                        <!-- wire:model="openHours_id" -->
                         <input class="openHours_id" type="hidden" id="" name="openHours_id">
-                        <fieldset class="form-group col-12 col-md-6">
+                        <fieldset class="form-group col-12 col-md-5">
                             <label for="for_users">F.Inicio</label>
                             <input class="form-control finicio" type="datetime" id="" disabled>
                         </fieldset>
 
-                        <fieldset class="form-group col-12 col-md-6">
+                        <fieldset class="form-group col-12 col-md-5">
                             <label for="for_profesion_id">F.Término</label>
                             <input class="form-control ftermino" type="datetime" id="" disabled>
                         </fieldset>
+
+                        {{--
+                        <!-- <fieldset class="form-group col-12 col-md-2">
+                            <label for="for_profesion_id">Primera cita</label>
+                            <input class="form-control first_appointment" type="checkbox" wire:model="first_appointment" wire:change="first_appointment_change()" disabled>
+                        </fieldset> --> --}}
                     </div>
 
                     <div class="row">
@@ -416,10 +427,8 @@
         <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.7.0/main.min.js'></script>
         <script>
             document.addEventListener('livewire:load', function() {
-            // document.addEventListener('DOMContentLoaded', function() {
                 var Calendar = FullCalendar.Calendar;
                 var calendarEl = document.getElementById('calendar');
-                // var data =   @this.events;
                 var calendar = new Calendar(calendarEl, {
 
                     editable: true,
@@ -427,9 +436,9 @@
                     slotDuration: '00:20',
                     
                     eventClick: function(info) {
-                        console.info(info.event.extendedProps);
+                        // console.info(info.event.extendedProps);
                         $('.modalTitle').html(info.event.title);
-                        $('.patient').val(info.event.title);
+                        $('.patient').val(info.event.extendedProps.patient_name);
                         $('.contact_number').val(info.event.extendedProps.contact_number);
                         $('.openHours_id').val(info.event.id);
                         $('.finicio').val(info.event.start.toLocaleString());
@@ -440,6 +449,18 @@
                         if(info.event.extendedProps.status=="Disponible"){
                             $('#newHour').modal();
                         }else if(info.event.extendedProps.status=="Reservado"){
+                            // if(info.event.extendedProps.first_appointment){
+                            //     Livewire.emit('getFirstAppointment', true);
+                            // }else{
+                            //     Livewire.emit('getFirstAppointment', false);
+                            // }
+                            // // para obtener el id del bloque de horario en contexto livewire
+                            // Livewire.emit('getOpenHoursId', info.event.id);
+                            // // el sgte codigo permite que una vez procesado livewire, se ejecute el codigo javascript
+                            // Livewire.hook('message.processed', (message, component) => {
+                            //     $('.rut').val(info.event.extendedProps.rut);
+                            //     $('#reservedHour').modal();
+                            // })
                             $('.rut').val(info.event.extendedProps.rut);
                             $('#reservedHour').modal();
                         }
@@ -486,28 +507,8 @@
                 
                 // console.log(@this.events),
                 calendar.render();
-
-                @this.on('refreshCalendar', () => {
-                    // console.log(@this.events),
-                    calendar.refetchEvents()
-                    // calendar.render()
-                });
-
-                // Livewire.on('refreshCalendar', () => {
-                //     calendar.refetchEvents(),
-                //     calendar.render(),
-                //     alert("")
-                // });
                 
             });
-
-            // $(document).ready(function () {
-            //     window.livewire.emit('show');
-            // });
-
-            // window.livewire.on('show', () => {
-            //     $('#calendarModal').modal('show');
-            // });
 
             function padTo2Digits(num) {
             return num.toString().padStart(2, '0');

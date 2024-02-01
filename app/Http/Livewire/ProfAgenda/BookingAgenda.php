@@ -5,6 +5,7 @@ namespace App\Http\Livewire\ProfAgenda;
 use Livewire\Component;
 
 use App\Models\ProfAgenda\OpenHour;
+use App\Models\ProfAgenda\Appointment;
 use App\User;
 use App\Models\Parameters\Holiday;
 
@@ -22,11 +23,23 @@ class BookingAgenda extends Component
         $array = array();
         $count = 0;
 
+        // obtiene citas activas, para asi obtener tipos de actividades a mostrar
+        $appointments = Appointment::whereHas('openHour', function ($query) {
+                                            return $query->where('patient_id',auth()->user()->id);
+                                        })
+                                        ->whereNull('discharged_date')
+                                        ->get();
+        $activity_types = [];
+        foreach($appointments as $appointment){
+            $activity_types[] = $appointment->openHour->activity_type_id;
+        }
+
+        // obtiene las horas aperturadas que coincidas con los appointments activos
         $openHours = OpenHour::where('profesional_id',$this->profesional_id)
                             ->where('profession_id',$this->profession_id)
                             ->whereHas('activityType')
+                            ->whereIn('activity_type_id',$activity_types)
                             ->with('patient','activityType')
-                            // ->where('id',2947)
                             ->get();
 
         $min_date=$openHours->min('start_date');
@@ -40,6 +53,9 @@ class BookingAgenda extends Component
             $array[$count]['contact_number'] = $hour->contact_number;
             $array[$count]['start'] = $hour->start_date;
             $array[$count]['end'] = $hour->end_date;
+            if($hour->activityType->description){
+                $array[$count]['activity_type_description'] = $hour->activityType->description;
+            }
             
             // reservado
             if($hour->patient_id){

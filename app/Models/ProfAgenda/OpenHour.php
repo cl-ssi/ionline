@@ -43,4 +43,16 @@ class OpenHour extends Model implements Auditable
     public function activityType(){
         return $this->belongsTo('App\Models\ProfAgenda\ActivityType');
     }
+
+    public function appointments(){
+        return $this->hasMany('App\Models\ProfAgenda\Appointment');
+    }
+    
+    // public function active_appointment(){
+    //     if($this->appointments()->count()>0){
+    //         return $this->appointments()->whereNull('discharged_date')->first();
+    //     }else{
+    //         return $this->appointments();
+    //     }
+    // }
 }

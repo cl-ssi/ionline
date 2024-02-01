@@ -21,6 +21,7 @@
     <!-- Button trigger modal -->
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addBlock">Agregar bloque de horario</button>
     <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteBlocks">Eliminar bloques</button>
+    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#blockPeriod">Bloquear período</button>
 
     @livewire('prof-agenda.agenda',['profession_id' => $request->profession_id, 'profesional_id' => $request->user_id])
     @stack('scripts')
@@ -81,15 +82,11 @@
                     </select>
                 </fieldset>
 
-                <!-- <fieldset class="form-group col col-md-2">
-                    <label for="for_id_deis"><br></label>
-                    <button type="submit" class="btn btn-primary form-control" wire:click="save()">Guardar</button>
-                </fieldset> -->
             </div>
 
         </div>
         <div class="modal-footer">
-            <button type="submit" class="btn btn-primary">Guardar</button>
+            <button type="submit" class="btn btn-primary" onclick="return confirm('¿Está seguro que desea agregar el bloque de horario?')">Guardar</button>
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
         </div>
         </div>
@@ -131,7 +128,59 @@
 
         </div>
         <div class="modal-footer">
-            <button type="submit" class="btn btn-primary">Eliminar</button>
+            <button type="submit" class="btn btn-primary" onclick="return confirm('¿Está seguro que desea eliminar el bloque de horario?')">Eliminar</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        </div>
+        </div>
+    </div>
+    </div>
+</form>
+
+
+<!-- bloquear periodo de tiempo -->
+<form method="POST" class="form-horizontal" action="{{ route('prof_agenda.open_hour.blockPeriod') }}">
+    @csrf
+    @method('POST')
+
+    <input type="hidden" name="profesional_id" value="{{$request->user_id}}">
+    <div class="modal fade bd-example-modal-lg" tabindex="-1" id="blockPeriod" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Bloquear período de tiempo</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <fieldset class="form-group col col-md">
+                    <label for="for_id_deis">Inicio</label>
+                    <input type="date" class="form-control" name="start_date" required>
+                </fieldset>
+
+                <fieldset class="form-group col col-md">
+                    <label for="for_id_deis">H.inicio</label>
+                    <input type="time" class="form-control" name="start_hour" required>
+                </fieldset>
+
+            </div>
+
+            <div class="row">
+                <fieldset class="form-group col col-md">
+                    <label for="for_id_deis">Término</label>
+                    <input type="date" class="form-control" name="end_date" required>
+                </fieldset>
+
+                <fieldset class="form-group col col-md">
+                    <label for="for_id_deis">H.término</label>
+                    <input type="time" class="form-control" name="end_hour" required>
+                </fieldset>
+            </div>
+
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-primary" onclick="return confirm('¿Está seguro que desea bloquear el período seleccionado?')">Bloquear</button>
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
         </div>
         </div>
