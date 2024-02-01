@@ -79,7 +79,7 @@ class Agenda extends Component
                 // hora reservada
                 if($hour->assistance === null){
                     $array[$count]['color'] = "#E7EB89"; //amarillo
-                    $array[$count]['title'] =  $hour->activityType->name;
+                    $array[$count]['title'] =  ($hour->patient ? $hour->patient->shortName : '') . " - " . $hour->activityType->name;
                     $array[$count]['status'] = "Reservado";
                 }else{
                     // paciente asistió
