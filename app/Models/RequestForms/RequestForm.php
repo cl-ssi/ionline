@@ -751,7 +751,7 @@ class RequestForm extends Model implements Auditable
     public function canEdit()
     {
         $hasBudgetEvents = $this->eventRequestForms->where('event_type', 'budget_event')->count() > 0;
-        return in_array($this->status, ['saved', 'pending', 'rejected']) || ($this->status == 'approved' && !$hasBudgetEvents);
+        return in_array($this->status, ['saved', 'pending', 'rejected']) || ($this->status == 'approved' && !$this->purchasingProcess && !$hasBudgetEvents);
     }
 
     public function canDelete()
