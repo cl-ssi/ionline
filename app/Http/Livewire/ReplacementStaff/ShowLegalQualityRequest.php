@@ -42,6 +42,9 @@ class ShowLegalQualityRequest extends Component
     /* Para editar y precargar el select PERFIL */
     public $profileSelected = null;
 
+    //LEY 18.834 - 19.664
+    public $selectedLaw = null;
+
     public $isDisabled = '';
     public $editModePosition = false;
     public $isDisabledDetailFundament = '';
@@ -91,6 +94,10 @@ class ShowLegalQualityRequest extends Component
             /* PERFIL GRADO */
             $this->selectedProfile = $this->requestReplacementStaff->profile_manage_id;
             // if($this->formType == 'announcement' && $this->selectedLegalQuality == 1) $this->degreeStateInput = '';
+
+            // 
+            $this->selectedLaw = $this->requestReplacementStaff->law;
+
             if($this->formType == 'replacement')
                 switch ($this->requestReplacementStaff->profile_manage_id) {
                     case 1:
@@ -212,4 +219,31 @@ class ShowLegalQualityRequest extends Component
     {
         $this->isDisabled = $value;
     }
+
+    public function updatedselectedLaw($selectedLawValue){
+        if($selectedLawValue == '19664'){
+            $this->degree = null;
+        }
+        else{
+            switch ($this->selectedProfile) {
+                case 1:
+                    $this->degree = '22';
+                    break;
+                case 2:
+                    $this->degree = '24';
+                    break;
+                case 3:
+                    $this->degree = '16';
+                    break;
+                case 4:
+                    $this->degree = '22';
+                    break;
+
+                case '':
+                    $this->degree = '';
+                    break;
+            }
+        }
+    }
+
 }

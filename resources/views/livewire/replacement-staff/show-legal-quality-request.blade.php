@@ -94,7 +94,7 @@
                 id="for_other_fundament" placeholder="Fundamento..." @if($requestReplacementStaff) value="{{$requestReplacementStaff->other_fundament}}" @endif {{ $otherFundamentInput }} {{ $isDisabled }}>
         </fieldset>
 
-        <fieldset class="form-group col-12 col-md-2">
+        <fieldset class="form-group col-12 col-md-3">
             <label for="profiles">Estamento</label>
             <select name="profile_manage_id" id="for_profile_manage_id" class="form-control" wire:model="selectedProfile" required {{ $isDisabled }}>
                 <option value="">Seleccione...</option>
@@ -102,6 +102,20 @@
                     <option value="{{ $profile->id }}" @if($requestReplacementStaff) {{ ($requestReplacementStaff->profile_manage_id == $profileSelected) ? 'selected' : '' }} @endif >{{ $profile->name }}</option>
                 @endforeach
             </select>
+        </fieldset>
+
+        <fieldset class="form-group col-12 col-md-3">
+            <label for="for_law">Ley</label>
+            <div class="mt-1">
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="law" id="for_law" value="18834" wire:model.debounce.500ms="selectedLaw" required>
+                    <label class="form-check-label" for="for_law">N° 18.834</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="law" id="for_law" value="19664" wire:model.debounce.500ms="selectedLaw" required>
+                    <label class="form-check-label" for="for_law">N° 19.664</label>
+                </div>
+            </div>
         </fieldset>
 
         <fieldset class="form-group col-12 col-md-1">
