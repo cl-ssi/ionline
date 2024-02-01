@@ -299,12 +299,11 @@
             <span class="text-danger">{{ $message }}</span>
         @enderror
 
-
         <br>
         <br>
 
         <div class="row mb-3">
-            <div class="col-md-12">
+            <div class="col-md-3">
                 <div class="form-check form-check-inline">
                     <input class="form-check-input @error('reception.partial_reception') is-invalid @enderror"
                         type="radio"
@@ -313,9 +312,11 @@
                         name="partial_reception"
                         value="1">
                     <label class="form-check-label"
-                        for="for-parcial">Recepcionar la OC Parcial</label>
+                        for="for-parcial">Recepcionar OC Parcial</label>
                     <div class="form-text">&nbsp;</div>
                 </div>
+            </div>
+            <div class="col-md-3">
                 <div class="form-check form-check-inline">
                     <input class="form-check-input @error('reception.partial_reception') is-invalid @enderror"
                         type="radio"
@@ -325,9 +326,11 @@
                         wire:change="setPurchaseOrderCompleted"
                         value="0">
                     <label class="form-check-label"
-                        for="for-completa">Recepcionar la OC Completa</label>
+                        for="for-completa">Recepcionar OC Completa</label>
                     <div class="form-text">&nbsp;</div>
                 </div>
+            </div>
+            <div class="col-md-4">
                 <div class="form-check form-switch form-check-inline">
                     <input class="form-check-input"
                         type="checkbox"
@@ -336,9 +339,13 @@
                         wire:click="togglePoCompleted()"
                         {{ $purchaseOrder->completed ? 'checked' : '' }}>
                     <label class="form-check-label"
-                        for="flexSwitchCheckDefault">Marcar la Orden de Compra como Completada</label>
-                    <div class="form-text">No se recibirán más items de esta Orden de Compra</div>
+                        for="flexSwitchCheckDefault">Marcar la OC como Completada</label>
+                    <div class="form-text">No se recibirán más items de esta OC</div>
                 </div>
+            </div>
+            <div class="col-2">
+                <label for="cargos">Cargos</label>
+                <input class="form-control" type="text" wire:model="reception.cargos" id="reception.cargos">
             </div>
             @error('reception.partial_reception')
                 <span class="text-danger">{{ $message }}</span>
@@ -519,7 +526,7 @@
         </div>
 
 
-                <!-- Si tiene otros documentos necesarios para la recepción -->
+        <!-- Si tiene otros documentos necesarios para la recepción -->
         @if ($purchaseOrder->requestForm)
             @if ($purchaseOrder->requestForm->paymentDocs)
                 <div class="row mb-4">
