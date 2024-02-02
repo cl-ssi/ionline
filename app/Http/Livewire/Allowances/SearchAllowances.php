@@ -9,11 +9,14 @@ use App\Rrhh\Authority;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use App\Models\Parameters\Parameter;
+use App\Traits\ArchiveTrait;
 
 class SearchAllowances extends Component
 {
+    use ArchiveTrait;
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
+    
 
     public $selectedStatus = null;
     public $selectedId = null;
@@ -29,8 +32,19 @@ class SearchAllowances extends Component
         if($this->index == 'sign'){
             if(auth()->user()->hasPermissionTo('Allowances: sirh')){
                 return view('livewire.allowances.search-allowances', [
-                    'allowances' => Allowance::
-                        latest()
+                    'allowances' => Allowance::with([
+                            'userCreator',
+                            'userAllowance',
+                            'organizationalUnitCreator',
+                            'organizationalUnitAllowance',
+                            'allowanceSigns',
+                            'allowanceSigns.organizationalUnit',
+                            'originCommune',
+                            'destinationCommune.locality',
+                            'allowanceSignature'
+                        ])
+                        ->latest()
+                        ->doesntHave('archive')
                         ->search($this->selectedStatus,
                             $this->selectedId,
                             $this->selectedUserAllowance,
@@ -38,29 +52,21 @@ class SearchAllowances extends Component
                         ->paginate(50)
                 ]);
             }
-            /*
-            $authorities = Authority::getAmIAuthorityFromOu(Carbon::now(), 'manager', Auth::user()->id);
-            if($authorities->isNotEmpty()){
-                foreach ($authorities as $authority){
-                    $iam_authorities_in[] = $authority->organizational_unit_id;
-                }
-            }
-            else{
-                $iam_authorities_in = [];
-            }
+        }
 
-            return view('livewire.allowances.search-allowances', [
-                'allowances' => Allowance::
-                    latest()
-                    ->whereHas('allowanceSigns', function($q) use ($iam_authorities_in){
-                        $q->Where('organizational_unit_id', $iam_authorities_in);
-                    })
-                    ->search($this->selectedStatus,
-                        $this->selectedId,
-                        $this->selectedUserAllowance)
-                    ->paginate(50)
-            ]);
-            */
+        if($this->index == 'archived'){
+            if(auth()->user()->hasPermissionTo('Allowances: sirh')){
+                return view('livewire.allowances.search-allowances', [
+                    'allowances' => Allowance::
+                        latest()
+                        ->has('archive')
+                        ->search($this->selectedStatus,
+                            $this->selectedId,
+                            $this->selectedUserAllowance,
+                            $this->selectedStatusSirh)
+                        ->paginate(50)
+                ]);
+            }
         }
 
         if($this->index == 'own'){

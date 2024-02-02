@@ -1,7 +1,7 @@
 <ul class="nav nav-tabs mb-3 d-print-none">
 
         <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle {{ request()->routeIs('allowances.index*') || request()->routeIs('allowances.create*') || request()->routeIs('allowances.all_index*') || request()->routeIs('allowances.sign_index*')  ? 'active' : '' }}" href="#" id="navbardrop" data-toggle="dropdown">
+            <a class="nav-link dropdown-toggle {{ request()->routeIs('allowances.index*') || request()->routeIs('allowances.create*') || request()->routeIs('allowances.all_index*')  ? 'active' : '' }}" href="#" id="navbardrop" data-toggle="dropdown">
                 <i class="fas fa-wallet"></i> Viáticos
             </a>
 
@@ -12,13 +12,25 @@
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item {{ active(['allowances.all_index']) }}" href="{{ route('allowances.all_index') }}"><i class="fas fa-wallet"></i> Todos los víaticos</a>
                 @endcan
-                
-                @if(Auth::user()->can('Allowances: sirh'))
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item {{ active(['allowances.sign_index']) }}" href="{{ route('allowances.sign_index') }}"><i class="fas fa-keyboard"></i> Revisión SIRH</a>
-                @endif
             </div>
         </li>
+
+        @can('Allowances: sirh')
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle {{ request()->routeIs('allowances.sign_index') || request()->routeIs('allowances.archived_index') ? 'active' : '' }}" href="#" id="navbardrop" data-toggle="dropdown">
+                    <i class="fas fa-wallet"></i> Revisión SIRH
+                </a>
+
+                <div class="dropdown-menu">
+                    <a class="dropdown-item {{ active(['allowances.sign_index']) }}" href="{{ route('allowances.sign_index') }}">
+                        <i class="fas fa-wallet"></i> Todas los viáticos
+                    </a>
+                    <a class="dropdown-item {{ active(['allowances.archived_index']) }}" href="{{ route('allowances.archived_index') }}">
+                        <i class="fas fa-archive"></i> Viáticos archivados
+                    </a>
+                </div>
+            </li>
+        @endcan
 
         @if(Auth::user()->hasPermissionTo('Allowances: director') || count(App\Rrhh\Authority::getAmIAuthorityFromOu(now(),['manager'],Auth::user()->id)) > 0)
         <li class="nav-item dropdown">
@@ -45,12 +57,6 @@
                 <a class="dropdown-item {{ active(['allowances.reports.create_by_dates']) }}" href="{{ route('allowances.reports.create_by_dates') }}">
                     <i class="fas fa-calendar"></i> Viáticos por fecha
                 </a>
-
-                {{-- @can('Allowances: reports') --}}
-                <a class="dropdown-item {{ active(['allowances.import']) }}" href="{{ route('allowances.import') }}">
-                    <i class="fas fa-calendar"></i> Importar
-                </a>
-                {{-- @endcan --}}
             </div>
         </li>
         @endcan
