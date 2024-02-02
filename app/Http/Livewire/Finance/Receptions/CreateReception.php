@@ -237,8 +237,10 @@ class CreateReception extends Component
              * Esto no me convence mucho, hace que aparezcan los cargos y los decuentos luego de cargar la OC 
              * Estas dos líneas están dos veces, abajo en el calcular items también.
              */
+            // TODO: Solo implementé el caso de los cargos totales, aún no he podido ver un caso con cargos en cada item. OC Ej: 1272565-905-AG23
             $this->reception['descuentos']       = $this->purchaseOrder->json->Listado[0]->Descuentos ?? 0;
             $this->reception['cargos']           = $this->purchaseOrder->json->Listado[0]->Cargos ?? 0;
+
             /**
              * Esto obtiene el tipo de formulario, si es un bien o un servicio
              * luego lo busca en el array de tipos de documentos y 
@@ -257,20 +259,24 @@ class CreateReception extends Component
     }
 
     /**
-    * calculateItemTotal
+    * Calcular totales por item 
     */
     public function calculateItemTotal($key)
     {
-
         if(!$this->receptionItems[$key]['Cantidad']) {
             $this->receptionItems[$key]['Cantidad'] = 0;
         }
         $this->receptionItems[$key]['Total'] = $this->receptionItems[$key]['Cantidad'] * $this->receptionItems[$key]['PrecioNeto'];
+        $this->calculateTotals();
+    }
+
+    /**
+    * Calcular SubTotales y Totales generales
+    */
+    public function calculateTotals()
+    {
         /** El neto redondeado hacia abajo */
         $this->reception['neto']             = floor(array_sum(array_column($this->receptionItems, 'Total')));
-        // TODO: Solo implementé el caso de los cargos totales, aún no he podido ver un caso con cargos en cada item. OC Ej: 1272565-905-AG23
-        $this->reception['descuentos']       = $this->purchaseOrder->json->Listado[0]->Descuentos ?? 0;
-        $this->reception['cargos']           = $this->purchaseOrder->json->Listado[0]->Cargos ?? 0;
         $this->reception['subtotal']         = $this->reception['neto'] + $this->reception['cargos'] - $this->reception['descuentos'];
 
         switch ($this->reception['dte_type'] ?? 'factura_electronica') {
@@ -290,6 +296,11 @@ class CreateReception extends Component
                 $this->reception['total'] = $this->reception['iva'] + $this->reception['subtotal'];
                 break;
         }
+    }
+
+    /** Metodo mágico que captura el campo reception.cargos y se ejecuta si hay algún cambio */
+    public function updatedReceptionCargos() {
+        $this->calculateTotals();
     }
 
     /**
