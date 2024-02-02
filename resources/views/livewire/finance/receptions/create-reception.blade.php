@@ -592,9 +592,20 @@
         <!----------------------------------->
         <div class="row mb-3">
             <div class="col-9">
-                <img src="{{ asset('/images/logo_rgb_' . auth()->user()->organizationalUnit->establishment->alias . '.png') }}"
-                    height="109"
-                    alt="Logo de la institución">
+                <div class="bd-example m-0 border-0">
+                    <svg class="bd-placeholder-img img-thumbnail" 
+                            width="150" height="150" 
+                            xmlns="http://www.w3.org/2000/svg" 
+                            role="img" 
+                            aria-label="logo" 
+                            focusable="false">
+                        <title>Logo Institución</title>
+                        <rect width="100%" height="100%" fill="#CCCCCC"></rect>
+                        <text x="33%" y="50%" dy=".3em">
+                            Logo
+                        </text>
+                    </svg>
+                </div>
             </div>
             <div class="col-3 align-self-end fs-5">
                 <table class="table">
@@ -760,19 +771,19 @@
             <div class="col">
                 @if (array_key_exists('left', $approvals))
                     <b>{{ $this->approvals['left']['signerShortName'] }}</b><br>
-                    {{ auth()->user()->organizationalUnit->establishment->name }}<br>
+                    Unidad e Institución del firmante<br>
                 @endif
             </div>
             <div class="col">
                 @if (array_key_exists('center', $approvals))
                     <b>{{ $this->approvals['center']['signerShortName'] }}</b><br>
-                    {{ auth()->user()->organizationalUnit->establishment->name }}<br>
+                    Unidad e Institución del firmante<br>
                 @endif
             </div>
             <div class="col">
                 @if (array_key_exists('right', $approvals))
                     <b>{{ $approvals['right']['signerShortName'] }}</b><br>
-                    {{ auth()->user()->organizationalUnit->establishment->name }}<br>
+                    Unidad e Institución del firmante<br>
                 @endif
             </div>
         </div>
