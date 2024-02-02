@@ -45,6 +45,16 @@ class AllowanceController extends Controller
         return view('allowances.sign_index');
     }
 
+    public function archived_index()
+    {   
+        if(Auth::user()->hasPermissionTo('Allowances: sirh')){
+            return view('allowances.archived_index');
+        }
+        else{
+            return redirect()->back();
+        }
+    }
+
     public function director_index()
     {   
         return view('allowances.director_index');

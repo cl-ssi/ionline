@@ -299,12 +299,11 @@
             <span class="text-danger">{{ $message }}</span>
         @enderror
 
-
         <br>
         <br>
 
         <div class="row mb-3">
-            <div class="col-md-12">
+            <div class="col-md-3">
                 <div class="form-check form-check-inline">
                     <input class="form-check-input @error('reception.partial_reception') is-invalid @enderror"
                         type="radio"
@@ -313,9 +312,11 @@
                         name="partial_reception"
                         value="1">
                     <label class="form-check-label"
-                        for="for-parcial">Recepcionar la OC Parcial</label>
+                        for="for-parcial">Recepcionar OC Parcial</label>
                     <div class="form-text">&nbsp;</div>
                 </div>
+            </div>
+            <div class="col-md-3">
                 <div class="form-check form-check-inline">
                     <input class="form-check-input @error('reception.partial_reception') is-invalid @enderror"
                         type="radio"
@@ -325,9 +326,11 @@
                         wire:change="setPurchaseOrderCompleted"
                         value="0">
                     <label class="form-check-label"
-                        for="for-completa">Recepcionar la OC Completa</label>
+                        for="for-completa">Recepcionar OC Completa</label>
                     <div class="form-text">&nbsp;</div>
                 </div>
+            </div>
+            <div class="col-md-4">
                 <div class="form-check form-switch form-check-inline">
                     <input class="form-check-input"
                         type="checkbox"
@@ -336,9 +339,13 @@
                         wire:click="togglePoCompleted()"
                         {{ $purchaseOrder->completed ? 'checked' : '' }}>
                     <label class="form-check-label"
-                        for="flexSwitchCheckDefault">Marcar la Orden de Compra como Completada</label>
-                    <div class="form-text">No se recibirán más items de esta Orden de Compra</div>
+                        for="flexSwitchCheckDefault">Marcar la OC como Completada</label>
+                    <div class="form-text">No se recibirán más items de esta OC</div>
                 </div>
+            </div>
+            <div class="col-2">
+                <label for="cargos">Cargos</label>
+                <input class="form-control" type="text" wire:model="reception.cargos" id="reception.cargos">
             </div>
             @error('reception.partial_reception')
                 <span class="text-danger">{{ $message }}</span>
@@ -519,7 +526,7 @@
         </div>
 
 
-                <!-- Si tiene otros documentos necesarios para la recepción -->
+        <!-- Si tiene otros documentos necesarios para la recepción -->
         @if ($purchaseOrder->requestForm)
             @if ($purchaseOrder->requestForm->paymentDocs)
                 <div class="row mb-4">
@@ -585,9 +592,20 @@
         <!----------------------------------->
         <div class="row mb-3">
             <div class="col-9">
-                <img src="{{ asset('/images/logo_rgb_' . auth()->user()->organizationalUnit->establishment->alias . '.png') }}"
-                    height="109"
-                    alt="Logo de la institución">
+                <div class="bd-example m-0 border-0">
+                    <svg class="bd-placeholder-img img-thumbnail" 
+                            width="150" height="150" 
+                            xmlns="http://www.w3.org/2000/svg" 
+                            role="img" 
+                            aria-label="logo" 
+                            focusable="false">
+                        <title>Logo Institución</title>
+                        <rect width="100%" height="100%" fill="#CCCCCC"></rect>
+                        <text x="33%" y="50%" dy=".3em">
+                            Logo
+                        </text>
+                    </svg>
+                </div>
             </div>
             <div class="col-3 align-self-end fs-5">
                 <table class="table">
@@ -753,19 +771,19 @@
             <div class="col">
                 @if (array_key_exists('left', $approvals))
                     <b>{{ $this->approvals['left']['signerShortName'] }}</b><br>
-                    {{ auth()->user()->organizationalUnit->establishment->name }}<br>
+                    Unidad e Institución del firmante<br>
                 @endif
             </div>
             <div class="col">
                 @if (array_key_exists('center', $approvals))
                     <b>{{ $this->approvals['center']['signerShortName'] }}</b><br>
-                    {{ auth()->user()->organizationalUnit->establishment->name }}<br>
+                    Unidad e Institución del firmante<br>
                 @endif
             </div>
             <div class="col">
                 @if (array_key_exists('right', $approvals))
                     <b>{{ $approvals['right']['signerShortName'] }}</b><br>
-                    {{ auth()->user()->organizationalUnit->establishment->name }}<br>
+                    Unidad e Institución del firmante<br>
                 @endif
             </div>
         </div>

@@ -48,6 +48,16 @@
                 autocomplete="off">
         </fieldset>
 
+        <fieldset class="form-group col-md-2">
+            <label for="receptionType">Estado</label>
+            <select class="form-select"
+                wire:model="filter_pending">
+                <option value="all">Todas</option>
+                <option value="with_number">Numeradas</option>
+                <option value="without_number">Pendientes</option>
+            </select>
+        </fieldset>
+
         <fieldset class="form-group col-md-1">
             <label for="">&nbsp;</label>
             <button class="btn btn-primary form-control"
@@ -56,6 +66,7 @@
                 <i class="bi bi-filter"></i>
             </button>
         </fieldset>
+
     </div>
 
 

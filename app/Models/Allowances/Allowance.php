@@ -16,6 +16,9 @@ use App\User;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use App\Models\Documents\Approval;
 
+use Illuminate\Database\Eloquent\Relations\MorphOne;
+use App\Models\Archive\Archive;
+
 class Allowance extends Model implements Auditable
 {
     use HasFactory;
@@ -113,6 +116,13 @@ class Allowance extends Model implements Auditable
      */
     public function approvals(): MorphMany{
         return $this->morphMany(Approval::class, 'approvable');
+    }
+
+    /**
+     * Get one archive.
+     */
+    public function archive(): MorphOne{
+        return $this->morphOne(Archive::class, 'archive');
     }
     
     public function getLawValueAttribute(){

@@ -14,13 +14,13 @@ class IndexReception extends Component
 {
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
-    
-    
+
     public $filter_id;
     public $filter_purchase_order;
     public $filter_reception_type_id;
     public $filter_date;
     public $filter_number;
+    public $filter_pending;
     public $types;
     public $error_msg;
 
@@ -77,6 +77,13 @@ class IndexReception extends Component
             })
             ->when($this->filter_date, function($query) {
                 $query->where('date', $this->filter_date);
+            })
+            ->when($this->filter_pending, function($query) {
+                switch($this->filter_pending) {
+                    case 'with_number': $query->has('numeration'); break;
+                    case 'without_number': $query->doesntHave('numeration'); break;
+                    default: break;
+                }
             })
             ->latest()
             ->paginate(100);

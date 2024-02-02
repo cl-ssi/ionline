@@ -2088,7 +2088,8 @@ Route::prefix('finance')->as('finance.')->middleware(['auth', 'must.change.passw
         Route::get('/', [PaymentController::class, 'index'])->name('index');
         Route::get('/own', [PaymentController::class, 'indexOwn'])->name('own');
         Route::get('/review', [PaymentController::class, 'review'])->name('review');
-        Route::get('/{dte}/send-to-ready-inbox', [PaymentController::class, 'sendToReadyInbox'])->name('sendToReadyInbox');
+        Route::get('/{dte}/return-to-dte-inbox', [PaymentController::class, 'returnToDteInbox'])->name('returnToDteInbox');
+        Route::get('/{dte}/send-to-ready-inbox', [PaymentController::class, 'sendToReadyInbox'])->name('sendToReadyInbox');        
         Route::get('/ready', [PaymentController::class, 'ready'])->name('ready');
         Route::put('/{dte}/return-to-review', [PaymentController::class, 'returnToReview'])->name('returnToReview');
         Route::get('/rejected', [PaymentController::class, 'rejected'])->name('rejected');
@@ -2274,6 +2275,7 @@ Route::prefix('allowances')->as('allowances.')->middleware(['auth', 'must.change
     Route::get('/', [AllowanceController::class, 'index'])->name('index');
     Route::get('all_index', [AllowanceController::class, 'all_index'])->name('all_index')->middleware('permission:Allowances: all');
     Route::get('sign_index', [AllowanceController::class, 'sign_index'])->name('sign_index')->middleware('permission:Allowances: sirh');
+    Route::get('archived_index', [AllowanceController::class, 'archived_index'])->name('archived_index');
     Route::get('director_index', [AllowanceController::class, 'director_index'])->name('director_index');
     Route::get('create', [AllowanceController::class, 'create'])->name('create');
     Route::post('store', [AllowanceController::class, 'store'])->name('store');

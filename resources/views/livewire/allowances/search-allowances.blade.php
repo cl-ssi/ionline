@@ -78,8 +78,10 @@
                         <th>
                             {{ $allowance->id }} <br>
 
-                            @if($allowance->allowanceSigns->first()->status == "accepted")
-                                <span class="badge badge-success">SIRH <i class="fas fa-check-circle"></i></span> <br>
+                            @if($allowance->status != 'manual')
+                                @if($allowance->allowanceSigns->first()->status == "accepted")
+                                    <span class="badge badge-success">SIRH <i class="fas fa-check-circle"></i></span> <br>
+                                @endif
                             @endif
 
                             @if($allowance->status == 'pending')
@@ -92,6 +94,10 @@
 
                             @if($allowance->status == 'complete')
                                 <span class="badge badge-success">Finalizado</span>
+                            @endif
+
+                            @if($allowance->status == 'manual')
+                                <span class="badge badge-info">Manual</span>
                             @endif
                         </th>
                         <td>{{ $allowance->created_at->format('d-m-Y H:i:s') }}</td>
@@ -142,6 +148,25 @@
                                     class="btn btn-outline-secondary btn-sm" title="Ingresar folio SIRH">
                                     <i class="fas fa-keyboard"></i>
                                 </a>
+
+                                @if($allowance->status == 'complete' || $allowance->status == 'rejected' || $allowance->status == 'manual')
+                                    <button class="btn btn-outline-success btn-sm mt-2" 
+                                        wire:click="archive( '{{ addslashes(get_class($allowance)) }}', {{ $allowance->id }})">
+                                        <i class="fas fa-archive"></i>
+                                    </button>
+                                @endif
+                            @endif
+
+                            @if($index == 'archived')
+                                <a href="{{ route('allowances.show', $allowance) }}"
+                                    class="btn btn-outline-secondary btn-sm" title="Ingresar folio SIRH">
+                                    <i class="fas fa-keyboard"></i>
+                                </a>
+
+                                <button class="btn btn-outline-danger btn-sm mt-2" 
+                                    wire:click="unarchive( '{{ addslashes(get_class($allowance)) }}', {{ $allowance->id }})">
+                                    <i class="fas fa-archive"></i>
+                                </button>
                             @endif
                 
                             @if($index == 'own' || $index == 'director')

@@ -138,6 +138,22 @@ class PaymentController extends Controller
         return redirect()->back()->with('success', 'Se ha enviado a bandeja Pendiente para Pagos exitosamente');
     }
 
+    public function returnToDteInbox(Dte $dte)
+    {
+        $dte->all_receptions = null;
+        $dte->all_receptions_user_id = null;
+        $dte->all_receptions_ou_id = null;
+        $dte->all_receptions_at = null;
+        $dte->save();
+        PaymentFlow::create([
+            'dte_id' => $dte->id,
+            'user_id' => Auth::id(),
+            'status' => 'Retornado a bandeja DTE',
+        ]);
+
+        return redirect()->back()->with('success', 'Se ha devuelto a bandeja Dte exitosamente');
+    }
+
     public function ready(Request $request)
     {
         $query = Dte::with([

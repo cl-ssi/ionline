@@ -233,6 +233,13 @@ class CreateReception extends Component
 
             $this->getOtherReceptions();
 
+            /**
+             * Esto no me convence mucho, hace que aparezcan los cargos y los decuentos luego de cargar la OC 
+             * Estas dos líneas están dos veces, abajo en el calcular items también.
+             */
+            // TODO: Solo implementé el caso de los cargos totales, aún no he podido ver un caso con cargos en cada item. OC Ej: 1272565-905-AG23
+            $this->reception['descuentos']       = $this->purchaseOrder->json->Listado[0]->Descuentos ?? 0;
+            $this->reception['cargos']           = $this->purchaseOrder->json->Listado[0]->Cargos ?? 0;
 
             /**
              * Esto obtiene el tipo de formulario, si es un bien o un servicio
@@ -252,26 +259,34 @@ class CreateReception extends Component
     }
 
     /**
-    * calculateItemTotal
+    * Calcular totales por item 
     */
     public function calculateItemTotal($key)
     {
-
         if(!$this->receptionItems[$key]['Cantidad']) {
             $this->receptionItems[$key]['Cantidad'] = 0;
         }
         $this->receptionItems[$key]['Total'] = $this->receptionItems[$key]['Cantidad'] * $this->receptionItems[$key]['PrecioNeto'];
-        $this->reception['neto']             = array_sum(array_column($this->receptionItems, 'Total'));
-        // TODO: Solo implementé el caso de los cargos totales, aún no he podido ver un caso con cargos en cada item. OC Ej: 1272565-905-AG23
-        $this->reception['descuentos']       = $this->purchaseOrder->json->Listado[0]->Descuentos ?? 0;
-        $this->reception['cargos']           = $this->purchaseOrder->json->Listado[0]->Cargos ?? 0;
+        $this->calculateTotals();
+    }
+
+    /**
+    * Calcular SubTotales y Totales generales
+    */
+    public function calculateTotals()
+    {
+        /** El neto redondeado hacia abajo */
+        $this->reception['neto']             = floor(array_sum(array_column($this->receptionItems, 'Total')));
         $this->reception['subtotal']         = $this->reception['neto'] + $this->reception['cargos'] - $this->reception['descuentos'];
 
         switch ($this->reception['dte_type'] ?? 'factura_electronica') {
             case 'boleta_honorarios':
-                $factor                   = (100 - $this->purchaseOrder->json->Listado[0]->PorcentajeIva) / 100;
-                $this->reception['total'] = $this->reception['neto'] / $factor;
-                $this->reception['iva']   = $this->reception['total'] - $this->reception['neto'];
+                // Diferencia de impuesto: EJ: 100% - 13.75% = 86.25% diferencia
+                $diferencia_de_impuesto   = (100 - $this->purchaseOrder->json->Listado[0]->PorcentajeIva) / 100;
+                $this->reception['total'] = $this->reception['neto'] / $diferencia_de_impuesto;
+                /** El impuesto siempre redondeado hacia arriba */
+                $this->reception['iva']   = ceil($this->reception['total'] - $this->reception['neto']);
+                $this->reception['total'] = $this->reception['iva'] + floor($this->reception['neto']);
                 break;
             case 'factura_electronica':
             case 'guias_despacho':
@@ -281,6 +296,11 @@ class CreateReception extends Component
                 $this->reception['total'] = $this->reception['iva'] + $this->reception['subtotal'];
                 break;
         }
+    }
+
+    /** Metodo mágico que captura el campo reception.cargos y se ejecuta si hay algún cambio */
+    public function updatedReceptionCargos() {
+        $this->calculateTotals();
     }
 
     /**
