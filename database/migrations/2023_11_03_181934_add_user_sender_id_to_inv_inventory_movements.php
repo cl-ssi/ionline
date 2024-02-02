@@ -25,8 +25,10 @@ return new class extends Migration
      */
     public function down()
     {
-        //
-        $table->dropForeign(['user_sender_id']);
-        $table->dropColumn('user_sender_id');
+        Schema::table('inv_inventory_movements', function (Blueprint $table) {
+            $table->dropForeign(['user_sender_id']);
+            $table->dropColumn('user_sender_id');
+        });
+        
     }
 };
