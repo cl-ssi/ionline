@@ -19,7 +19,7 @@ class HotelBookingController extends Controller
 {
     public function index(Request $request){
         $hotels = Hotel::all();
-        $communes = ClCommune::all();
+        $communes = ClCommune::whereIn('id',$hotels->pluck('commune_id')->toArray())->get();
         return view('hotel_booking.home',compact('communes','hotels','request'));
     }
 
