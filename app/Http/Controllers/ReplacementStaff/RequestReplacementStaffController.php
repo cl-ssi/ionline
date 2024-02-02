@@ -927,7 +927,6 @@ class RequestReplacementStaffController extends Controller
         if($approval->status == 0){
             $requestReplacementStaff->request_status = 'rejected';
             $requestReplacementStaff->save();
-
         }
     }
 }

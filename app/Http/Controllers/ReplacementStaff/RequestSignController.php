@@ -262,16 +262,16 @@ class RequestSignController extends Controller
             $requestSign->date_sign = Carbon::now();
             $requestSign->save();
 
-            $requestReplacementStaff->request_status = 'rejected';
-            $requestReplacementStaff->save();
+            $requestSign->requestReplacementStaff->request_status = 'rejected';
+            $requestSign->requestReplacementStaff->save();
 
             //SE NOTIFICA A UNIDAD DE RECLUTAMIENTO
             $notification_reclutamiento_manager = Authority::getAuthorityFromDate(48, today(), 'manager');
             if($notification_reclutamiento_manager){
-                $notification_reclutamiento_manager->user->notify(new NotificationRejectedRequest($requestReplacementStaff, 'reclutamiento'));
+                $notification_reclutamiento_manager->user->notify(new NotificationRejectedRequest($requestSign->requestReplacementStaff, 'reclutamiento'));
             }
-            $requestReplacementStaff->requesterUser->notify(new NotificationRejectedRequest($requestReplacementStaff, 'requester'));
-            $requestReplacementStaff->user->notify(new NotificationRejectedRequest($requestReplacementStaff, 'user'));
+            $requestSign->requestReplacementStaff->requesterUser->notify(new NotificationRejectedRequest($requestSign->requestReplacementStaff, 'requester'));
+            $requestSign->requestReplacementStaff->user->notify(new NotificationRejectedRequest($requestSign->requestReplacementStaff, 'user'));
 
             session()->flash('danger', 'Su solicitud ha sido Rechazada con éxito.');
             return redirect()->route('replacement_staff.request.to_sign_index');
