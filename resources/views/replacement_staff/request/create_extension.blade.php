@@ -112,6 +112,19 @@
 
 <br>
 
+<div class="alert alert-info" role="alert">
+    <div class="row">
+        <div class="col-md-10 col-12">
+            Revisa aquí el <b>Calendario de Cierre Remuneraciones 2024</b>
+        </div>
+        <div class="col-md-2 col-12">
+            @livewire('replacement-staff.remuneration-schedule')
+        </div>
+    </div>
+</div>
+
+<br>
+
 <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.request.store_extension', [
     'requestReplacementStaff' => $requestReplacementStaff,
     'formType'                => 'replacement',
