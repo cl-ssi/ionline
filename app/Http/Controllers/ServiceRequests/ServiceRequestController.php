@@ -898,18 +898,21 @@ class ServiceRequestController extends Controller
     $serviceRequest = ServiceRequest::find($request->id);
 
     // validación
-    foreach ($serviceRequest->fulfillments as $key => $fulfillment) {
-      if ($fulfillment->total_paid != NULL) {
-        session()->flash('success', 'No se puede eliminar la solicitud porque ya tiene información de pago asociada.');
-        return redirect()->back();
-      }
+    if($serviceRequest){
+        foreach ($serviceRequest->fulfillments as $key => $fulfillment) {
+            if ($fulfillment->total_paid != NULL) {
+                session()->flash('success', 'No se puede eliminar la solicitud porque ya tiene información de pago asociada.');
+                return redirect()->back();
+            }
+        }
+      
+        $serviceRequest->observation = $request->observation;
+        $serviceRequest->save();
+    
+        $serviceRequest->delete();
+        session()->flash('info', 'La solicitud ' . $serviceRequest->id . ' ha sido eliminada.');
     }
-
-    $serviceRequest->observation = $request->observation;
-    $serviceRequest->save();
-
-    $serviceRequest->delete();
-    session()->flash('info', 'La solicitud ' . $serviceRequest->id . ' ha sido eliminada.');
+    
     return redirect()->route('rrhh.service-request.index','pending');
   }
 
