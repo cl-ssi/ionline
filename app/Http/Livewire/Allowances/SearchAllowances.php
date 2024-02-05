@@ -35,13 +35,12 @@ class SearchAllowances extends Component
                     'allowances' => Allowance::with([
                             'userCreator',
                             'userAllowance',
-                            'organizationalUnitCreator',
-                            'organizationalUnitAllowance',
                             'allowanceSigns',
-                            'allowanceSigns.organizationalUnit',
+                            'organizationalUnitAllowance',
                             'originCommune',
-                            'destinationCommune.locality',
-                            'allowanceSignature'
+                            'destinations.commune',
+                            'destinations.locality',
+                            'approvals'
                         ])
                         ->latest()
                         ->doesntHave('archive')

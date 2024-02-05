@@ -17,6 +17,10 @@ class ClLocality extends Model
         'commune_id'
     ];
 
+    public function commune() {
+        return $this->belongsTo('App\Models\ClCommune', 'commune_id');
+    }
+
     protected $dates = ['deleted_at'];
 
     protected $table = 'cl_localities';
