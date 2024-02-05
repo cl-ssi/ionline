@@ -80,7 +80,17 @@ class SearchAllowances extends Component
         if($this->index == 'own'){
             //CREADOS, MIOS Y DE MI U.O.
             return view('livewire.allowances.search-allowances', [
-                'allowances' => Allowance::
+                    'allowances' => Allowance::with([
+                        'userCreator',
+                        'userAllowance',
+                        'allowanceSigns',
+                        'organizationalUnitAllowance',
+                        'originCommune',
+                        'destinations.commune',
+                        'destinations.locality',
+                        'approvals'
+                    ])
+                    ->
                     latest()
                     ->where('user_allowance_id', Auth::user()->id)
                     ->orWhere('creator_user_id', Auth::user()->id)
@@ -95,16 +105,15 @@ class SearchAllowances extends Component
 
         if($this->index == 'all'){
             return view('livewire.allowances.search-allowances', [
-                'allowances' => Allowance::with([
+                    'allowances' => Allowance::with([
                         'userCreator',
                         'userAllowance',
-                        'organizationalUnitCreator',
-                        'organizationalUnitAllowance',
                         'allowanceSigns',
-                        'allowanceSigns.organizationalUnit',
+                        'organizationalUnitAllowance',
                         'originCommune',
-                        'destinationCommune',
-                        'allowanceSignature'
+                        'destinations.commune',
+                        'destinations.locality',
+                        'approvals'
                     ])
                     ->orderBy('id', 'DESC')
                     ->search($this->selectedStatus,
@@ -119,7 +128,17 @@ class SearchAllowances extends Component
         if($this->index == 'director'){
             return view('livewire.allowances.search-allowances', [
                 'allowances' => Allowance::
-                    latest()
+                    with([
+                        'userCreator',
+                        'userAllowance',
+                        'allowanceSigns',
+                        'organizationalUnitAllowance',
+                        'originCommune',
+                        'destinations.commune',
+                        'destinations.locality',
+                        'approvals'
+                    ])
+                    ->latest()
                     ->whereHas("Approvals", function($subQuery){
                         $subQuery->where('sent_to_ou_id', Parameter::get('ou','DireccionSSI'));
                     })
