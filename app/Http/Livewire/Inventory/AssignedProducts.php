@@ -58,7 +58,9 @@ class AssignedProducts extends Component
                       })
                       ->orWhere('description', 'like', $search)
                       ->orWhereHas('place', function ($query) use ($search) {
+                        
                           $query->where('name', 'like', $search)
+                          ->orWhere('architectural_design_code', 'like', $search)
                                 ->orWhereHas('location', function ($query) use ($search) {
                                     $query->where('name', 'like', $search);
                                 });

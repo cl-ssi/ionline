@@ -44,7 +44,7 @@
                 type="text"
                 id="search"
                 class="form-control"
-                placeholder="Ingresa un número inventario o nombre de producto o nombre unspc o ubicación"
+                placeholder="Ingresa un número inventario o nombre de producto o nombre unspc o ubicación o Código Arquitectónico"
                 wire:model.debounce.1500ms="search"
                 autocomplete="off"
             >
@@ -59,6 +59,8 @@
             <th>Producto</th>
             <th>Estado</th>
             <th>Ubicación</th>
+            <th>Lugar</th>
+            <th>Código Arquitectónico</th>
             <th>Responsable</th>
             <th>Usuario</th>
             <th></th>
@@ -104,7 +106,13 @@
                         {{ $inventory->estado }}
                     </td>
                     <td>
-                        {{ $inventory->location }}
+                        {{ $inventory->place->location?->name }}
+                    </td>
+                    <td>
+                        {{ $inventory->place->name }}
+                    </td>
+                    <td>
+                        {{ $inventory->place->architectural_design_code }}
                     </td>
                     <td>
                         {{ optional($inventory->responsible)->tinny_name }}

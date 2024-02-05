@@ -335,12 +335,10 @@
                         {{ $inventory->estado }}
                     </td>
                     <td>
-                        @if($inventory->place)
-                            {{ optional($inventory->place)->location->name }}
-                        @endif
+                            {{ $inventory->lastMovement->place->location?->name }}
                     </td>
                     <td>
-                        {{ optional($inventory->place)->name }}
+                            {{ $inventory->lastMovement->place?->name }}
                     </td>
                     <td class="text-center">
                         @if($inventory->lastMovement)

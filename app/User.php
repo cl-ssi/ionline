@@ -276,8 +276,7 @@ class User extends Authenticatable implements Auditable
 
     public function boss()
     {
-        
-        if($this->organizationalUnit) {
+        if($this->organizationalUnit AND $this->organizationalUnit->currentManager) {
             if($this->organizationalUnit->level == 1 and ($this->organizationalUnit->currentManager->user_id == auth()->id())) {
                 if($this->organizationalUnit->establishment->father_organizational_unit_id) {
                     return $this->currentBoss($this->organizationalUnit->establishment->ouFather);
