@@ -144,15 +144,21 @@ class Calendar extends Component
                 if(array_key_exists($day->format('Y-m-d'), $this->data)){
 
                     //verifica el usuario configurado para ese día
-                    if($this->data[$day->format('Y-m-d')]['user']!=null){
-                        $user = $this->data[$day->format('Y-m-d')]['user'] . "\n Ingresa: " . $roomBooking->user->getTinnyNameAttribute();
+                    if(auth()->user()->hasPermissionTo('HotelBooking: Administrador')){
+
+                        if($this->data[$day->format('Y-m-d')]['user']!=null){
+                            $user = $this->data[$day->format('Y-m-d')]['user'] . "\n Ingresa: " . $roomBooking->user->getTinnyNameAttribute();
+                        }else{
+                            if($day->format('Y-m-d') == $roomBooking->start_date->format('Y-m-d')){
+                                $user = "Ingresa: " . $roomBooking->user->getTinnyNameAttribute();
+                            }  
+                            else{
+                                $user = "Sale: " . $roomBooking->user->getTinnyNameAttribute();
+                            }  
+                        }
+
                     }else{
-                        if($day->format('Y-m-d') == $roomBooking->start_date->format('Y-m-d')){
-                            $user = "Ingresa: " . $roomBooking->user->getTinnyNameAttribute();
-                        }  
-                        else{
-                            $user = "Sale: " . $roomBooking->user->getTinnyNameAttribute();
-                        }  
+                        $user = '';
                     }
 
                     if($this->data[$day->format('Y-m-d')]['style']!=null){

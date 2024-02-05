@@ -1,12 +1,10 @@
 <div>
-    @if($start_date)   
-        <div class="form-row mb-4 justify-content-end">
-            <div style="color:LightSkyBlue">&#9632;</div>&nbsp;<p>Mis reserva</p>&nbsp;&nbsp;
-            <div style="color:#F1948A">&#9632;</div>&nbsp;<p>No disponible</p>
-            <div style="color:#FADBD8">&#9632;</div>&nbsp;<p>Pasados</p>
-            <div style="color:#A3E4D7">&#9632;</div>&nbsp;<p>Disponible</p>
-        </div>
-    @endif
+    <div class="form-row mb-4 justify-content-end">
+        <div style="color:LightSkyBlue">&#9632;</div>&nbsp;<p>Mis reserva</p>&nbsp;&nbsp;
+        <div style="color:#F1948A">&#9632;</div>&nbsp;<p>No disponible</p>
+        <div style="color:#FADBD8">&#9632;</div>&nbsp;<p>Pasados</p>
+        <div style="color:#A3E4D7">&#9632;</div>&nbsp;<p>Disponible</p>
+    </div>
     
     <!-- Muestra como título el nombre de la OU y el selector de mes -->
     <div class="form-row mb-4">

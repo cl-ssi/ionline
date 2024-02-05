@@ -80,14 +80,21 @@
             <ul class="list-group list-group-flush">
                 <li class="list-group-item"><h5>Habitaciones disponibles.</h5></li>
                 @foreach($hotel->rooms as $key => $room) 
-                    @if($room->bookingConfigurations->count() > 0)
+                    
                         <li class="list-group-item">
                             {{$room->identifier}} - <b>{{$room->max_days_avaliable}}</b> días como máximo - Capacidad <b>{{$room->single_bed + ($room->double_bed * 2)}}</b> huespedes.
+                            
+                            @if($room->bookingConfigurations->count() > 0)
                             <a href="#" data-toggle="modal" data-target="#exampleModal{{$room->id}}">
                                 <span class='badge badge-warning' >
                                     Ver disponibilidad
                                 </span>
                             </a>
+                            @else
+                                <span class='badge badge-danger' >
+                                    No disponible
+                                </span>
+                            @endif
                                 
                             <!-- Modal -->
                             <div class="modal fade bd-example-modal-lg" data-backdrop="true" id="exampleModal{{$room->id}}" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
@@ -109,7 +116,7 @@
                             </div>
                             
                         </li>
-                    @endif
+                   
                 @endforeach
             </ul>
         </div>
