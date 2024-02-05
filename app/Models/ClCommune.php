@@ -18,13 +18,14 @@ class ClCommune extends Model
         'region_id'
     ];
 
-    protected $dates = ['deleted_at'];
-
-    protected $table = 'cl_communes';
-
     public function region()
     {
         return $this->belongsTo(ClRegion::class);
+    }
+
+    public function localities()
+    {
+        return $this->hasMany('App\Models\ClLocality', 'commune_id');
     }
 
     public static function getCommunesBySearch($searchText){
@@ -38,4 +39,8 @@ class ClCommune extends Model
         
         return $communes;
     }
+
+    protected $dates = ['deleted_at'];
+    
+    protected $table = 'cl_communes';
 }

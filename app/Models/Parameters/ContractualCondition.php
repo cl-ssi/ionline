@@ -17,5 +17,9 @@ class ContractualCondition extends Model implements Auditable
         'name'
     ];
 
+    public function contractualCondition(){
+        return $this->belongsTo('App\Models\Parameters\ContractualCondition');
+    }
+
     protected $table = 'cfg_contractual_conditions';
 }
