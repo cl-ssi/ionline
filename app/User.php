@@ -1012,13 +1012,23 @@ class User extends Authenticatable implements Auditable
             // Intersectar horas de posibles contratos
             $dateResult = array();
             $contractDates = array();
+            // dd($startDate,$endDate);
+            // dd($this->contracts);
             foreach($this->contracts as $key => $contract) {
                 // obtiene la suma de horas estupiladas en los contratos (para analisis más abajo)
                 $numero_horas += $contract->numero_horas;
 
-                // Se crea array con fechas del periodo de cada contrato
-                $period = CarbonPeriod::create($contract->fecha_inicio_contrato->isAfter($startDate) ? $contract->fecha_inicio_contrato : $startDate, 
-                                               $contract->fecha_termino_contrato->isBefore($endDate) ? $contract->fecha_termino_contrato : $endDate);
+                // se hace este if, porque hay contratos que no tienen fecha de término (son indefinidos, y no se puede usar el valor fecha_termino_contrato)
+                if($contract->fecha_termino_contrato){
+                    // Se crea array con fechas del periodo de cada contrato
+                    $period = CarbonPeriod::create($contract->fecha_inicio_contrato->isAfter($startDate) ? $contract->fecha_inicio_contrato : $startDate, 
+                                                    $contract->fecha_termino_contrato->isBefore($endDate) ? $contract->fecha_termino_contrato : $endDate);
+                }else{
+                    // Se crea array con fechas del periodo de cada contrato
+                    $period = CarbonPeriod::create($contract->fecha_inicio_contrato->isAfter($startDate) ? $contract->fecha_inicio_contrato : $startDate, 
+                                                    $endDate);
+                }
+               
                 $dateResult[$key] = $period->toArray();
                 
                 // se dejan solo fechas que se intercepten
@@ -1033,13 +1043,14 @@ class User extends Authenticatable implements Auditable
             // se obtiene primera y ultima fecha (keys del array) del cruce (para analisis posterior)
             $first_key = array_key_first($contractDates);
             $last_key = array_key_last($contractDates);
+            // dd($first_key,$last_key);
             $businessDays = [];
             if(count($contractDates) > 0){
 
                 // días laborales reales (considerando cruze de contratos)
                 // Se deben obtener días del mes siguiente, por ende se suma un mes a la fecha de analisis
                 $businessDays_search_start_date = $contractDates[$first_key]->addMonth();
-                $businessDays_search_end_date = $contractDates[$last_key]->addMonth();
+                $businessDays_search_end_date = $businessDays_search_start_date->copy()->endOfMonth();
                 // dd($businessDays_search_start_date, $businessDays_search_end_date);
 
                 $businessDays = DateHelper::getBusinessDaysByDateRangeHolidays($businessDays_search_start_date, $businessDays_search_end_date, $holidaysNextMonth)->toArray();
@@ -1047,6 +1058,7 @@ class User extends Authenticatable implements Auditable
             }
             
             //cantidad de días laborales
+            // dd($businessDays);
             $businessDays = count($businessDays);
             $this->businessDays = $businessDays;
 

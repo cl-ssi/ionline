@@ -3,7 +3,7 @@
 
     <div class="form-row">
         <fieldset class="form-group col-6">
-            <label>Archivo (xls)</label>
+            <label>Archivo (xls) - Nombre columnas: Rut,dv,Nombres,Inicio,Termino,Inicial,Final,horas,dias</label>
             <input type="file" class="form-control" wire:model="file">
         </fieldset>
     </div>

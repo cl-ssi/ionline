@@ -217,36 +217,47 @@ class ContractImport extends Component
     }
 
     public function process(){
+
+        set_time_limit(7200);
+        ini_set('memory_limit', '2048M');
+
         $this->message2 = "";
         $this->non_existent_users = 0;
         $this->non_existent_ous = [];
 
         $count_inserts = 0;
         $contracts = Contract::whereDoesntHave('user')->with('organizationalUnit')->whereHas('organizationalUnit')->get();
+        // dd($contracts);
         $withoutOu = array_unique(Contract::whereDoesntHave('user')->whereDoesntHave('organizationalUnit')->pluck('codigo_unidad')->toArray());
+        // dd($withoutOu);
         $this->non_existent_users = Contract::whereDoesntHave('user')->whereDoesntHave('organizationalUnit')->count();
+        // dd($this->non_existent_users);
 
         foreach($contracts as $contract){
  
             $rut = $contract->rut;
             $dv = $contract->dv;
 
-            $fonasaUser = Fonasa::find($rut."-".$dv);
-            if(!isset($fonasaUser->message)){
-
-                User::withTrashed()->updateOrCreate([
-                    'id' => $rut
-                ],[
-                    'id' => $rut,
-                    'dv' => $dv,
-                    'mothers_family' => $fonasaUser->mothers_family,
-                    'fathers_family' => $fonasaUser->fathers_family,
-                    'name' => $fonasaUser->name,
-                    'organizational_unit_id' => $contract->organizationalUnit->id,
-                    'deleted_at' => null,
-                ]);
-
-                $count_inserts += 1;
+            if(!User::find($rut)){
+                
+                $fonasaUser = Fonasa::find($rut."-".$dv);
+                if(!isset($fonasaUser->message)){
+                    if($fonasaUser->name){
+                        User::withTrashed()->updateOrCreate([
+                            'id' => $rut
+                        ],[
+                            'id' => $rut,
+                            'dv' => $dv,
+                            'mothers_family' => $fonasaUser->mothers_family,
+                            'fathers_family' => $fonasaUser->fathers_family,
+                            'name' => $fonasaUser->name,
+                            'organizational_unit_id' => $contract->organizationalUnit->id,
+                            'deleted_at' => null,
+                        ]);
+        
+                        $count_inserts += 1;
+                    }
+                }
             }
         }
 

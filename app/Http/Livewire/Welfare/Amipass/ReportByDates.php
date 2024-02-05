@@ -64,7 +64,9 @@ class ReportByDates extends Component
                     $query->where(function ($query) use ($startDate, $endDate) {
                         $query->whereDate('fecha_inicio_contrato', '<=', $endDate)
                                 ->whereDate('fecha_termino_contrato', '>=', $startDate);
-                                // ->where('shift',0);
+                    })->orWhere(function ($query) use ($startDate, $endDate) {
+                        $query->whereDate('fecha_inicio_contrato', '<=', $endDate)
+                            ->whereNull('fecha_termino_contrato');
                     });
                 },
                 'absenteeisms' => function ($query) use ($startDate, $endDate) {
@@ -96,12 +98,19 @@ class ReportByDates extends Component
             ->whereHas('contracts', function ($query) use ($startDate, $endDate) {
                 $query->where(function ($query) use ($startDate, $endDate) {
                     $query->whereDate('fecha_inicio_contrato', '<=', $endDate)
+                        ->whereNotNull('fecha_inicio_contrato')
                         ->whereDate('fecha_termino_contrato', '>=', $startDate);
+                        // ->where('shift',0); se traen todos, abajo se hace el filtro
+                })->orWhere(function ($query) use ($startDate, $endDate) {
+                    $query->whereDate('fecha_inicio_contrato', '<=', $endDate)
+                        ->whereNull('fecha_termino_contrato');
                         // ->where('shift',0); se traen todos, abajo se hace el filtro
                 });
             })
-            // ->whereIn('id',[17431050])
-            ->get();   
+            // ->whereIn('id',[10266979])
+            ->get(); 
+            
+            // dd($this->userWithContracts);
 
         foreach($this->userWithContracts as $row => $user) {
             $user = $user->getAmipassData($startDate, 
