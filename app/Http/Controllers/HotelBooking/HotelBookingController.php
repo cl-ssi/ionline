@@ -18,7 +18,22 @@ use Illuminate\Support\Facades\Storage;
 class HotelBookingController extends Controller
 {
     public function index(Request $request){
-        $hotels = Hotel::all();
+        $hotels = Hotel::whereHas("rooms", function($q) {
+                            $q->whereHas("bookingConfigurations", function($q) {
+                                $q;
+                            });
+                        })
+                        ->with([
+                            'rooms' => function ($query) {
+                                $query->with([
+                                    'bookingConfigurations' => function ($query) {
+                                        $query->where('end_date','>=',now());
+                                    }
+                                ]);
+                            }
+                        ])
+                        ->get();
+        // dd($hotels);
         $communes = ClCommune::whereIn('id',$hotels->pluck('commune_id')->toArray())->get();
         return view('hotel_booking.home',compact('communes','hotels','request'));
     }

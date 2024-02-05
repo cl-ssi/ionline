@@ -78,36 +78,38 @@
             <!-- <a href="#" class="btn btn-primary">Reservar</a> -->
             
             <ul class="list-group list-group-flush">
-                <li class="list-group-item"><h5>Tipos de habitación disponibles.</h5></li>
+                <li class="list-group-item"><h5>Habitaciones disponibles.</h5></li>
                 @foreach($hotel->rooms as $key => $room) 
-                    <li class="list-group-item">
-                        {{$room->identifier}} - <b>{{$room->max_days_avaliable}}</b> días como máximo - Capacidad <b>{{$room->single_bed + ($room->double_bed * 2)}}</b> huespedes.
-                        <a href="#" data-toggle="modal" data-target="#exampleModal{{$room->id}}">
-                            <span class='badge badge-warning' >
-                                Ver disponibilidad
-                            </span>
-                        </a>
-                            
-                        <!-- Modal -->
-                        <div class="modal fade bd-example-modal-lg" data-backdrop="true" id="exampleModal{{$room->id}}" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-lg">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    @livewire('hotel-booking.calendar',['room' => $room])
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    @if($room->bookingConfigurations->count() > 0)
+                        <li class="list-group-item">
+                            {{$room->identifier}} - <b>{{$room->max_days_avaliable}}</b> días como máximo - Capacidad <b>{{$room->single_bed + ($room->double_bed * 2)}}</b> huespedes.
+                            <a href="#" data-toggle="modal" data-target="#exampleModal{{$room->id}}">
+                                <span class='badge badge-warning' >
+                                    Ver disponibilidad
+                                </span>
+                            </a>
+                                
+                            <!-- Modal -->
+                            <div class="modal fade bd-example-modal-lg" data-backdrop="true" id="exampleModal{{$room->id}}" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        @livewire('hotel-booking.calendar',['room' => $room])
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        </div>
-                        
-                    </li>
+                            </div>
+                            
+                        </li>
+                    @endif
                 @endforeach
             </ul>
         </div>
