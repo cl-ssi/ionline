@@ -56,8 +56,17 @@ class SearchAllowances extends Component
         if($this->index == 'archived'){
             if(auth()->user()->hasPermissionTo('Allowances: sirh')){
                 return view('livewire.allowances.search-allowances', [
-                    'allowances' => Allowance::
-                        latest()
+                    'allowances' => Allowance::with([
+                            'userCreator',
+                            'userAllowance',
+                            'allowanceSigns',
+                            'organizationalUnitAllowance',
+                            'originCommune',
+                            'destinations.commune',
+                            'destinations.locality',
+                            'approvals'
+                        ])
+                        ->latest()
                         ->has('archive')
                         ->search($this->selectedStatus,
                             $this->selectedId,
