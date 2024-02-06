@@ -56,6 +56,19 @@
        </li>
     @endif
 
+    <!-- SDGP -->
+    @if(Auth::user()->id == App\Rrhh\Authority::getTodayAuthorityManagerFromDate(App\Models\Parameters\Parameter::get('ou','SubRRHH'))->user_id)
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+            <i class="fas fa-users"></i> SDGP
+        </a>
+
+        <div class="dropdown-menu">
+            <a class="dropdown-item" href="{{ route('replacement_staff.request.sdgp_index') }}"><i class="fas fa-user-tag"></i> Asignar Solicitud</a>
+        </div>
+    </li>
+    @endif
+
     @canany(['Replacement Staff: assign request', 'Replacement Staff: technical evaluation'])
     <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">

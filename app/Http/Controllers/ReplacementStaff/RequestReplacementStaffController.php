@@ -43,6 +43,20 @@ class RequestReplacementStaffController extends Controller
         return view('replacement_staff.request.assign_index');
     }
 
+    public function sdgp_index()
+    {
+        return view('replacement_staff.request.sdgp_index');
+    }
+
+    public function store_change_degree(Request $request, RequestReplacementStaff $requestReplacementStaff)
+    {
+        $requestReplacementStaff->degree = $request->degree;
+        $requestReplacementStaff->save();
+
+        session()->flash('success', 'Estimado Usuario/a: Se ha modificado correctamente el grado en la solicitud.');
+        return redirect()->back();
+    }
+
     public function own_index()
     {
         return view('replacement_staff.request.own_index');

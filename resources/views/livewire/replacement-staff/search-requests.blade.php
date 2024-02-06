@@ -413,6 +413,7 @@
                                     <a href="{{ route('replacement_staff.request.edit', $requestReplacementStaff) }}"
                                         class="btn btn-outline-secondary btn-sm" title="Selección"><i class="fas fa-edit"></i></a>
                             @endif
+
                             <!-- PERMITE MOSTRAR EL BOTÓN PARA ASIGNAR SOLICITUD -->
                             @if($typeIndex == 'assign' &&
                                 $requestReplacementStaff->request_status == "to assign" &&
@@ -436,6 +437,7 @@
                                     @include('replacement_staff.modals.modal_to_assign')
                                 @endif
                             @endif
+
                             <!-- PERMITE INGRESAR A LA EVALUACION TÉCNICA -->
                             @if(($typeIndex == 'assign' || $typeIndex == 'assigned_to') 
                                 && $requestReplacementStaff->technicalEvaluation)
@@ -447,8 +449,23 @@
                             <!-- BOTÓN PARA SEGUIMIENTO DE EVALUACIÓN TÉCNICA -->
                             @else
                                 <a href="{{ route('replacement_staff.request.technical_evaluation.show', $requestReplacementStaff) }}"
-                                    class="btn btn-outline-secondary btn-sm" title="Evaluación Técnica"><i class="fas fa-eye"></i></a>
+                                    class="btn btn-outline-secondary btn-sm" title="Evaluación Técnica">
+                                    <i class="fas fa-eye fa-fw"></i>
+                                </a>
                             @endif
+                            
+                            <!-- BOTÓN PARA CAMBIAR GRADO (SDGP) -->
+                            @if($typeIndex == 'sdgp' && $requestReplacementStaff->degree)
+                                <a class="btn btn-outline-secondary btn-sm mt-2"
+                                    data-toggle="modal"
+                                    title="Cambio Grado"
+                                    data-target="#changeDegreeModal-{{ $requestReplacementStaff->id }}">
+                                    <i class="fas fa-sort-numeric-up-alt fa-fw"></i>
+                                </a>
+
+                                @include('replacement_staff.modals.modal_to_change_degree')
+                            @endif
+
                         <!-- ACCIONES CON APROBACIONES DEL MODULO -->
                         @else
                             @if($requestReplacementStaff->fundament_detail_manage_id != 6 && $requestReplacementStaff->fundament_detail_manage_id != 7)
