@@ -50,17 +50,17 @@ class OpenHourController extends Controller
         // dd($openHour);
 
         // valida si existen del paciente con otros funcionarios en la misma hora
-        $othersReservationsCount = OpenHour::where('patient_id',$request->user_id)
-                                            ->where(function($query) use ($openHour){
-                                                $query->whereBetween('start_date',[$openHour->start_date, $openHour->end_date])
-                                                        ->orWhereBetween('end_date',[$openHour->start_date, $openHour->end_date]);
-                                            })
-                                            ->whereHas('activityType')
-                                            ->count(); 
-        if($othersReservationsCount>0){
-            session()->flash('warning', 'No es posible realizar la reserva del paciente, porque tiene otra reserva a la misma hora con otro funcionario.');
-            return redirect()->back();
-        }
+        // $othersReservationsCount = OpenHour::where('patient_id',$request->user_id)
+        //                                     ->where(function($query) use ($openHour){
+        //                                         $query->whereBetween('start_date',[$openHour->start_date, $openHour->end_date])
+        //                                                 ->orWhereBetween('end_date',[$openHour->start_date, $openHour->end_date]);
+        //                                     })
+        //                                     ->whereHas('activityType')
+        //                                     ->count(); 
+        // if($othersReservationsCount>0){
+        //     session()->flash('warning', 'No es posible realizar la reserva del paciente, porque tiene otra reserva a la misma hora con otro funcionario.');
+        //     return redirect()->back();
+        // }
 
         // // valida si existen más de 2 horas reservadas en la semana
         // $resevationsInWeek = OpenHour::where('patient_id',$request->user_id)
