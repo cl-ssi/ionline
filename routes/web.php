@@ -58,6 +58,7 @@ use App\Http\Livewire\Inventory\InventoryManageUsers;
 use App\Http\Livewire\Inventory\InventoryLastReceptions;
 use App\Http\Livewire\Inventory\InventoryIndex;
 use App\Http\Livewire\Inventory\InventoryEdit;
+use App\Http\Livewire\Inventory\InventorySheet;
 use App\Http\Livewire\Inventory\Fusion;
 use App\Http\Livewire\Inventory\CreateTransfer;
 use App\Http\Livewire\Inventory\ClassificationMgr;
@@ -1965,6 +1966,7 @@ Route::prefix('prof_agenda')->as('prof_agenda.')->middleware(['auth'])->group(fu
 
 // Inventories
 Route::prefix('inventories')->as('inventories.')->middleware(['auth', 'must.change.password'])->group(function () {
+    Route::get('sheet', InventorySheet::class)->name('sheet');
 
     Route::prefix('establishment/{establishment}')->group(function () {
         /** Ruta para poder ver la hoja de inventario sin edición  */

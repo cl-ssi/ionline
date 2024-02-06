@@ -70,4 +70,9 @@ class InventoryController extends Controller
     {
         return Excel::download(new InventoriesExport, 'inventarios.xlsx');
     }
+
+    public function sheet() 
+    {
+        return view('inventory.sheet');
+    }
 }
