@@ -58,6 +58,7 @@ use App\Http\Livewire\Inventory\InventoryManageUsers;
 use App\Http\Livewire\Inventory\InventoryLastReceptions;
 use App\Http\Livewire\Inventory\InventoryIndex;
 use App\Http\Livewire\Inventory\InventoryEdit;
+use App\Http\Livewire\Inventory\InventorySheet;
 use App\Http\Livewire\Inventory\Fusion;
 use App\Http\Livewire\Inventory\CreateTransfer;
 use App\Http\Livewire\Inventory\ClassificationMgr;
@@ -427,6 +428,8 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->middleware(['auth'
     Route::prefix('request')->name('request.')->group(function () {
         Route::get('/', [RequestReplacementStaffController::class, 'index'])->name('index')->middleware('permission:Replacement Staff: assign request');
         Route::get('/assign_index', [RequestReplacementStaffController::class, 'assign_index'])->name('assign_index')->middleware('permission:Replacement Staff: technical evaluation');
+        Route::get('/sdgp_index', [RequestReplacementStaffController::class, 'sdgp_index'])->name('sdgp_index');
+        Route::post('/{requestReplacementStaff}/store_change_degree', [RequestReplacementStaffController::class, 'store_change_degree'])->name('store_change_degree');
         Route::get('/own_index', [RequestReplacementStaffController::class, 'own_index'])->name('own_index');
         Route::get('/personal_index', [RequestReplacementStaffController::class, 'personal_index'])->name('personal_index');
         Route::get('/pending_personal_index', [RequestReplacementStaffController::class, 'pending_personal_index'])->name('pending_personal_index');
@@ -1965,6 +1968,7 @@ Route::prefix('prof_agenda')->as('prof_agenda.')->middleware(['auth'])->group(fu
 
 // Inventories
 Route::prefix('inventories')->as('inventories.')->middleware(['auth', 'must.change.password'])->group(function () {
+    Route::get('sheet', InventorySheet::class)->name('sheet');
 
     Route::prefix('establishment/{establishment}')->group(function () {
         /** Ruta para poder ver la hoja de inventario sin edición  */

@@ -17,6 +17,7 @@ class FindPlace extends Component
     public $showResult;
     public $smallInput = false;
     public $placeholder;
+    public $selectedPlace;
 
     protected $listeners = [
         'clearSearchPlace' => 'clearSearch',
@@ -61,6 +62,7 @@ class FindPlace extends Component
         $this->search = $place->id. ",". $place->name . ", " . $place->location->name;
         $this->place_id = $place->id;
         $this->places = collect([]);
+        $this->selectedPlace = $place;
 
         $this->emit('myPlaceId', $this->place_id);
     }
@@ -73,5 +75,10 @@ class FindPlace extends Component
         $this->places = collect([]);
         $this->place_id = null;
         $this->search = null;
+    }
+
+    public function searchBySelectedPlace()
+    {
+        dd('aprete');
     }
 }

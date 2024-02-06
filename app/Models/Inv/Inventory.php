@@ -177,6 +177,13 @@ class Inventory extends Model implements Auditable
             ->select('reception_date');
     }
 
+    public function lastConfirmedMovement()
+    {
+        return $this->hasOne(InventoryMovement::class)
+            ->where('reception_confirmation', true)
+            ->latest('reception_date');
+    }
+
     public function responsible()
     {
         return $this->belongsTo(User::class, 'user_responsible_id')->withTrashed();

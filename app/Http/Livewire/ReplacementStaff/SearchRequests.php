@@ -47,29 +47,6 @@ class SearchRequests extends Component
     public function render()
     {   
         if($this->typeIndex == 'assign'){
-            /*
-            if($this->selectedAssigned == 'yes'){
-                $requests = RequestReplacementStaff::
-                with(['user', 'organizationalUnit', 'requestSign.organizationalUnit', 'requesterUser', 'profile_manage', 
-                    'legalQualityManage', 'fundamentManage', 'fundamentDetailManage', 'technicalEvaluation',
-                    'assignEvaluations'])
-                ->whereHas('technicalEvaluation')
-                ->latest()
-                ->search($this->selectedFormType,
-                    $this->selectedStatus,
-                    $this->selectedId,
-                    $this->selectedStartDate,
-                    $this->selectedEndDate,
-                    $this->selectedName,
-                    $this->selectedFundament,
-                    $this->selectedFundamentDetail,
-                    $this->selectedNameToReplace,
-                    $this->ou_dependents_array
-                )
-                ->paginate(50);
-            }
-            */
-
             if($this->selectedAssigned == ''){
                 $requests = RequestReplacementStaff::
                     with(['user', 'organizationalUnit', 'requestSign.organizationalUnit', 'requesterUser', 'profile_manage', 
@@ -111,6 +88,26 @@ class SearchRequests extends Component
                     )
                     ->paginate(50);
             }
+        }
+
+        if($this->typeIndex == 'sdgp'){
+            $requests = RequestReplacementStaff::
+                with(['user', 'organizationalUnit', 'requestSign.organizationalUnit', 'requesterUser', 'profile_manage', 
+                    'legalQualityManage', 'fundamentManage', 'fundamentDetailManage', 'technicalEvaluation',
+                    'assignEvaluations'])
+                ->latest()
+                ->search($this->selectedFormType,
+                    $this->selectedStatus,
+                    $this->selectedId,
+                    $this->selectedStartDate,
+                    $this->selectedEndDate,
+                    $this->selectedName,
+                    $this->selectedFundament,
+                    $this->selectedFundamentDetail,
+                    $this->selectedNameToReplace,
+                    $this->ou_dependents_array
+                )
+                ->paginate(50);
         }
 
         if($this->typeIndex == 'own'){
