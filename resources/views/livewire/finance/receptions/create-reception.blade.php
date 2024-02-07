@@ -671,7 +671,7 @@
                     Tipo de documento
                 </th>
                 <td>
-                    {{ $reception['dte_type'] ?? '' }}
+                    {!! $reception['dte_type'] ?? '<span class="text-danger">Falta el tipo de documento</span>' !!}
                 </td>
                 <th>
                     Fecha Emisón:

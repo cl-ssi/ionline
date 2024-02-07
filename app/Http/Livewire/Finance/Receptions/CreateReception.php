@@ -281,12 +281,27 @@ class CreateReception extends Component
 
         switch ($this->reception['dte_type'] ?? 'factura_electronica') {
             case 'boleta_honorarios':
-                // Diferencia de impuesto: EJ: 100% - 13.75% = 86.25% diferencia
+                /**
+                 * En el caso de las boletas de honorarios, el % de retención corresponde al campo "PorcentajeIva" en la OC.
+                 * Para calcular el neto, primero calculando el valor de la retención redondeado
+                 * Luego se resta al total de la boleta para obtener el neto.
+                 * 
+                 * Neto      = 1.292.997 (Este se calcula segundo: 1.499.000 - 206.113 = 1.292.997)
+                 * Retención =   206.113 (Este se calcula primero y se redondea  1.499.000 * 13.75% = round(206.112,5) )
+                 * Total     = 1.499.000 (A partir del total y del porcentaje de retención se calculan los dos de arriba)
+                 * 
+                 * Diferencia de la retención: EJ: 100% - 13.75% = 86.25% diferencia
+                 **/
+
                 $diferencia_de_impuesto   = (100 - $this->purchaseOrder->json->Listado[0]->PorcentajeIva) / 100;
                 $this->reception['total'] = $this->reception['neto'] / $diferencia_de_impuesto;
                 /** El impuesto siempre redondeado hacia arriba */
                 $this->reception['iva']   = ceil($this->reception['total'] - $this->reception['neto']);
                 $this->reception['total'] = $this->reception['iva'] + floor($this->reception['neto']);
+
+                // $this->reception['total'] = $this->purchaseOrder->json->Listado[0]->Total;
+                // $this->reception['iva'] = round($this->reception['total'] * $this->purchaseOrder->json->Listado[0]->PorcentajeIva / 100);
+                // $this->reception['neto'] = $this->reception['subtotal'] = $this->reception['total'] - $this->reception['iva'];
                 break;
             case 'factura_electronica':
             case 'guias_despacho':
