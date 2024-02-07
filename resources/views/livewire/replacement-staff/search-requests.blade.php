@@ -422,7 +422,7 @@
                                 <div class="form-check">
                                     <input class="form-check-input" 
                                         type="checkbox"
-                                        wire:model.debounce.500ms="checkToAssign"
+                                        wire:model="checkToAssign"
                                         value="{{ $requestReplacementStaff->id }}"
                                         id="for_sign_id">
                                 </div>
