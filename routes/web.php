@@ -291,6 +291,7 @@ use App\Http\Controllers\Agreements\ProgramResolutionController;
 use App\Http\Controllers\Agreements\ContinuityResolutionController;
 use App\Http\Controllers\Agreements\AgreementController;
 use App\Http\Controllers\Agreements\AddendumController;
+// use App\Http\Controllers\Agreements\BudgetAvailabilityController;
 
 /*
 |--------------------------------------------------------------------------
@@ -713,6 +714,9 @@ Route::prefix('agreements')->as('agreements.')->middleware(['auth', 'must.change
         Route::post('resolution/amount/{program_resolution}', [ProgramResolutionController::class, 'storeAmount'])->name('resolution.amount.store');
         Route::put('resolution/amount/{resolution_amount}', [ProgramResolutionController::class, 'updateAmount'])->name('resolution.amount.update');
         Route::delete('resolution/amount/{resolution_amount}', [ProgramResolutionController::class, 'destroyAmount'])->name('resolution.amount.destroy');
+        // Route::resource('budget_availability', BudgetAvailabilityController::class);
+        // Route::post('/budget_availability/createDocument/{budgetAvailability}', [BudgetAvailabilityController::class, 'createDocument'])->name('budget_availability.createDocument');
+        // Route::get('/budget_availability/download/{budgetAvailability}', [BudgetAvailabilityController::class, 'download'])->name('budget_availability.download');
     });
     Route::resource('municipalities', MunicipalityController::class);
     Route::resource('signers', SignerController::class);
@@ -2226,7 +2230,7 @@ Route::prefix('request_forms')->as('request_forms.')->middleware(['auth', 'must.
     });
 
     Route::prefix('reports')->as('reports.')->middleware('auth')->group(function () {
-        Route::get('/show_form_items', [RequestFormController::class, 'show_form_items'])->name('show_form_items');
+        Route::get('/show_form_items/{type}', [RequestFormController::class, 'show_form_items'])->name('show_form_items');
         Route::get('/show_form_items_export', [RequestFormController::class, 'show_form_items_export'])->name('show_form_items_export');
         Route::get('/show_amounts_by_program', [RequestFormController::class, 'show_amounts_by_program'])->name('show_amounts_by_program');
         Route::get('/show_globals_amounts', ReportGlobalBudget::class)->name('show_globals_amounts');
