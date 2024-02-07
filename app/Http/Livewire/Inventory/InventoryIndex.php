@@ -35,6 +35,7 @@ class InventoryIndex extends Component
     public $location_id;
     public $number;
     public $inv_id;
+    public $architectural_design_code;
 
     public $unspscProduct;
     public $userUsing;
@@ -104,13 +105,17 @@ class InventoryIndex extends Component
                     $query->whereRelation('location', 'id', '=', $this->location_id);
                 });
             })
+            ->when($this->architectural_design_code, function($query) {
+                $query->whereHas('place', function($query) {
+                    $query->where('architectural_design_code', 'LIKE', '%'.$this->architectural_design_code.'%');
+                });
+            })
             ->when($this->number, function($query) {
                 $query->where(function($query) {
                     $query->where('number', 'LIKE', '%'.$this->number.'%')
                           ->orWhere('old_number', 'LIKE', '%'.$this->number.'%');
                 });
-            })
-            
+            })            
             ->when($this->inv_id, function($query) {
                 $query->where('id', $this->inv_id);
             })

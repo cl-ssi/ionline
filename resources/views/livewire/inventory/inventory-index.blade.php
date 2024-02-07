@@ -27,7 +27,7 @@
     --}}
 
     <div class="row g-2 d-print-none mb-3">
-        <fieldset class="form-group col-md-4">
+        <fieldset class="form-group col-md-2">
             <label for="locations">Ubicaciones</label>
             <select
                 wire:model="location_id"
@@ -75,6 +75,15 @@
         </fieldset>
 
         <fieldset class="form-group col-md-2">
+            <label for="number">Cod. Int. Arq.</label>
+            <input
+                wire:model.defer="architectural_design_code"
+                id="architectural_design_code"
+                class="form-control"
+            >
+        </fieldset>
+
+        <fieldset class="form-group col-md-2">
             <label for="oc">OC</label>
             <input
                 wire:model.defer="oc"
@@ -83,7 +92,7 @@
             >
         </fieldset>
 
-        <fieldset class="form-group col-md-2">
+        <fieldset class="form-group col-md-1">
             <label for="classifications">Clasificación</label>
             <select
                 wire:model="classification_id"
@@ -190,7 +199,7 @@
             <tr>
                 <th>Producto/Especie</th>
                 <th>Ubicación</th>
-                <th>Lugar</th>
+                <th>Lugar</th>                
                 <th>Responsable</th>
                 <th>Usuario</th>
                 <th class="text-center">Total</th>
@@ -277,6 +286,12 @@
                     {{ $place->name }}
                 @endif
             </th>
+            <td>Código interno Arquitectura:</td>
+            <th>
+                @if($place)
+                    {{ $place->architectural_design_code }}
+                @endif
+            </th>
         </tr>
     </table>
     @endif
@@ -292,6 +307,7 @@
                     <th>Estado</th>
                     <th>Ubicación</th>
                     <th>Lugar</th>
+                    <th>Código interno Arquitectura</th>
                     <th>Responsable</th>
                     <th>QR</th>
                     <th class="d-print-none"></th>
@@ -339,6 +355,9 @@
                     </td>
                     <td>
                             {{ $inventory->lastMovement->place?->name }}
+                    </td>
+                    <td>
+                            {{ $inventory->lastMovement->place?->architectural_design_code }}
                     </td>
                     <td class="text-center">
                         @if($inventory->lastMovement)
