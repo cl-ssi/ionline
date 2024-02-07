@@ -30,10 +30,12 @@ class FormItemsExport implements FromView, ShouldAutoSize /*FromCollection, With
     use Exportable;
     
     public $resultSearch;
+    public $type;
 
-    public function __construct($resultSearch)
+    public function __construct($resultSearch, $type)
     {
         $this->resultSearch = $resultSearch;
+        $this->type = $type;
     }
 
     /**
@@ -46,7 +48,8 @@ class FormItemsExport implements FromView, ShouldAutoSize /*FromCollection, With
         ini_set('memory_limit', '1024M');
         
         return view('request_form.reports.items', [
-            'request_forms' => $this->resultSearch
+            'request_forms' => $this->resultSearch,
+            'type' => $this->type
         ]);
     }
 

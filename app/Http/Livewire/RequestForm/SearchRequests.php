@@ -43,6 +43,7 @@ class SearchRequests extends Component
     public $selectedSubType = null;
     public $result = null;
     public $inbox;
+    public $type;
 
     // public $batchId;
     // public $exporting = false;
@@ -122,13 +123,19 @@ class SearchRequests extends Component
         );
 
         if($this->inbox == 'report: form-items'){
-            $query->with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'purchaseType','associateProgram', 'purchasingProcess.details', 
-                'itemRequestForms.product', 'itemRequestForms.budgetItem','father:id,folio,has_increased_expense', 'purchasers', 'purchasingProcess')
-                ->doesntHave('passengers');
-                /*
-                ->select(['id', 'status', 'folio', 'created_at', 'subtype', 'name', 'type_of_currency', 'estimated_expense',
-                'approved_at']);
-                */
+            if($this->type == 'items'){
+                $query->with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'purchaseType','associateProgram', 'purchasingProcess.details', 
+                    'itemRequestForms.product', 'itemRequestForms.budgetItem','father:id,folio,has_increased_expense', 'purchasers', 'purchasingProcess')
+                    ->doesntHave('passengers');
+                    /*
+                    ->select(['id', 'status', 'folio', 'created_at', 'subtype', 'name', 'type_of_currency', 'estimated_expense',
+                    'approved_at']);
+                    */
+            }else{ // pasajes aereos
+                $query->with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'purchaseType','associateProgram', 'purchasingProcess.detailsPassenger', 
+                'passengers', 'passengers.budgetItem','father:id,folio,has_increased_expense', 'purchasers', 'purchasingProcess')
+                ->doesntHave('itemRequestForms');
+            }
         }else{
             $query->with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'purchaseType', 'eventRequestForms.signerUser',
             'eventRequestForms.signerOrganizationalUnit', 'father:id,folio,has_increased_expense', 'purchasers', 'purchasingProcess');
@@ -186,7 +193,7 @@ class SearchRequests extends Component
             // ->onConnection('cloudtasks')
             //->delay(15);
         // dd($this->querySearch(false));
-        return Excel::download(new FormItemsExport($this->querySearch(false)), 'requestFormsExport_'.Carbon::now().'.xlsx');
+        return Excel::download(new FormItemsExport($this->querySearch(false), $this->type), 'requestFormsExport_'.Carbon::now().'.xlsx');
         // $this->exporting = true;
         // $this->exportFinished = false;
 

@@ -806,8 +806,8 @@ class RequestFormController extends Controller {
         return Carbon::now()->year.'-'.$counter;
     }
 
-    public function show_form_items(){
-        return view('request_form.reports.show_form_items');
+    public function show_form_items($type){
+        return view('request_form.reports.show_form_items', compact('type'));
     }
 
     public function show_amounts_by_program(){

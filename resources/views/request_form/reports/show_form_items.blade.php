@@ -17,7 +17,8 @@
 
 <div class="col-sm">
     @livewire('request-form.search-requests', [
-      'inbox' => 'report: form-items'
+      'inbox' => 'report: form-items',
+      'type' => $type
     ])
 </div>
 
