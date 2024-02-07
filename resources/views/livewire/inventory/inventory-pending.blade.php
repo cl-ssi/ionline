@@ -12,7 +12,7 @@
     <div class="row g-2 mb-3">
         <fieldset class="form-group col-md-3">
             <label for="type-reception-id">Tipo de Ingreso</label>
-            <select wire:model="type_reception_id" id="type-reception-id" class="form-control">
+            <select wire:model="type_reception_id" id="type-reception-id" class="form-select">
                 <option value="">Todos</option>
                 <option value="{{ App\Models\Warehouse\TypeReception::receiving() }}">
                     Ingreso Normal
@@ -43,6 +43,9 @@
                     <th class="text-center">Código</th>
                     <th>Producto</th>
                     <th>Origen/OC</th>
+                    <th>Ubicación</th>
+                    <th>Lugar</th>
+                    <th>Código Arquitectónico</th>
                     <th class="text-center">Acciones</th>
                 </tr>
             </thead>
@@ -96,6 +99,15 @@
                                     No posee Origen/OC
                                 </small>
                             @endif
+                        </td>
+                        <td>
+                            {{ $inventory->place?->location->name }}
+                        </td>
+                        <td>
+                            {{ $inventory->place?->name }}
+                        </td>
+                        <td>
+                            {{ $inventory->place?->architectural_design_code }}
                         </td>
                         <td class="text-center">
                             <a

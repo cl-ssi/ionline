@@ -37,6 +37,7 @@ class InventoryPending extends Component
             ->with([
                 'control',
                 'product',
+                'place',
                 'product.product',
                 'control.typeReception',
             ])
@@ -57,6 +58,12 @@ class InventoryPending extends Component
                     $query->whereHas('control', function($query) use($search) {
                         $query->where('po_code', 'like', $search);
                     });
+                })
+                ->orWhereHas('place', function ($query) use ($search) {
+                    $query->where('name', 'like', $search);
+                })
+                ->orWhereHas('place', function ($query) use ($search) {
+                    $query->where('architectural_design_code', 'like', $search); 
                 })
                 ->orWhereHas('product', function ($query) use($search) {
                     $query->where('name', 'like', $search)
