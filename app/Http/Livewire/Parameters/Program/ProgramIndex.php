@@ -27,6 +27,7 @@ class ProgramIndex extends Component
         $programs = Program::query()
             ->when($this->search, function ($query) use ($search) {
                 $query->where('name', 'like', $search)
+                    ->orWhere('alias', 'like', $search)
                     ->orWhere('description', 'like', $search);
             })
             ->orderBy('name')

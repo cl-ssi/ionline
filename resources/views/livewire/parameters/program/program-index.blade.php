@@ -63,6 +63,7 @@
                     <td class="text-center">
                         <button
                             class="btn btn-sm btn-outline-danger"
+                            onclick="confirm('¿Está seguro de eliminar este programa?') || event.stopImmediatePropagation()"
                             wire:click="delete({{ $program }})"
                         >
                             <i class="fas fa-trash"></i>
