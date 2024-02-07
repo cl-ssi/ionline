@@ -40,6 +40,11 @@
 
     @if(count($inventories) > 0)
     <div>
+    <br>
+    <div class="text-end">
+        <h6>Fecha de Emisión: {{ now()->format('d-m-Y H:i:s') }}</h6>
+    </div>
+    <br>
     <div class="text-center">
         <h2>PLANILLA MURAL DE INVENTARIO OFICINA CONTROL DE BIENES:</h2>
     </div>
@@ -75,9 +80,9 @@
                     <th>ESTADO</th>
                     <th>CALIDAD</th>
                     <th>VALOR UNITARIO</th>
-                    <th>FUNCIONARIO RESPONSABLE</th>
                     <th>OBSERVACIONES</th>
-                    <th>FIRMAFUNCIONARIO</th>
+                    <th>FUNCIONARIO RESPONSABLE</th>
+                    <th>FECHA DE RECEPCIÓN</th>
                 </tr>
             </thead>
             <tbody>
@@ -88,8 +93,10 @@
                         <td>{{ $inventory->description }}</td>
                         <td>{{ $inventory->estado }}</td> 
                         <td></td> 
-                        <td></td> 
-                        <td>{{ $inventory->lastConfirmedMovement->responsibleUser->shortName }}</td>                     
+                        <td></td>
+                        <td></td>
+                        <td>{{ $inventory->lastConfirmedMovement->responsibleUser->shortName }}</td>
+                        <td>{{ $inventory->lastConfirmedMovement->reception_date?->format('d-m-Y')}}</td> 
                     </tr>
                 @endforeach
             </tbody>
