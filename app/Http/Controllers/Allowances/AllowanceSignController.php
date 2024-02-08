@@ -102,7 +102,8 @@ class AllowanceSignController extends Controller
                     else{
                         $currentOu = $allowanceSign->allowance->userAllowance->organizationalUnit;
                         if($allowanceSign->allowance->userAllowance->Subrogant){
-                            $subroDir = $allowanceSign->allowance->userAllowance->Subrogant->id;
+                            // $subroDir = $allowanceSign->allowance->userAllowance->Subrogant->id;
+                            $subroDir = $request->approver;
                         }
                         else{
                             return redirect()->route('allowances.show', $allowanceSign->allowance)->with('danger', 'Estimado usuario: No es posible aprobar viático, favor contactar a soporte para configurar subrrogancia de dirección');

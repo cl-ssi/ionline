@@ -259,7 +259,7 @@
 
 <br>
 
-<h6><i class="fas fa-check-circle"></i> Revisión SIRH</h6>
+<h6><i class="fas fa-check-circle"></i> Gestión de aprobaciones</h6>
 
 <div class="row">
     <div class="col">
@@ -283,11 +283,29 @@
                     <tr>
                         @foreach($allowance->AllowanceSigns as $allowanceSign)
                         <td class="text-center">
+                            @if($subrogants && $allowanceSign->status == 'pending')
+                                <div class="alert alert-info" role="alert">
+                                    <b>Estimado Usuario</b>: Según el calendario de autoridades <b>{{ $allowance->userAllowance->TinnyName }}</b> es director(a) {{ $allowance->userAllowance->organizationalUnit->establishment->name }}
+                                </div>
+                            @endif
+
                             @if($allowanceSign->status == 'pending' && Auth::user()->can('Allowances: sirh'))
                                 <form method="POST" class="form-horizontal" action="{{ route('allowances.sign.update', [$allowanceSign, 'status' => 'accepted']) }}">
                                     @csrf
                                     @method('PUT')
 
+                                    @if($subrogants)
+                                    <fieldset class="form-group">
+                                        <label for="for_gender" >Quien aprueba viátido de director?</label>
+                                        <select name="approver" id="for_approver" class="form-control" required>
+                                            <option value="">Seleccione...</option>                                           
+                                            @foreach($subrogants as $subrogant)
+                                                <option value="{{ $subrogant->subrogant_id}}">{{ $subrogant->subrogant->FullName }}</option>
+                                            @endforeach
+                                        </select>
+                                    </fieldset>
+                                    @endif
+                                    
                                     <button type="submit" class="btn btn-success btn-sm ml-2 mt-2"
                                         onclick="return confirm('¿Está seguro que desea Aceptar la solicitud?')"
                                         title="Aceptar">

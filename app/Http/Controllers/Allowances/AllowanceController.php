@@ -23,6 +23,8 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use App\Exports\AllowancesExport;
 use Maatwebsite\Excel\Facades\Excel;
 
+use App\Models\Profile\Subrogation;
+
 class AllowanceController extends Controller
 {
     /**
@@ -288,7 +290,27 @@ class AllowanceController extends Controller
      */
     public function show(Allowance $allowance)
     {
-        return view('allowances.show', compact('allowance'));
+        $authorities = Authority::getAmIAuthorityFromOu(now(), 'manager', $allowance->user_allowance_id);
+        $authorityDireccion = null;
+        foreach($authorities as $authority){
+            if($authority->organizational_unit_id == Parameter::get('ou', 'DireccionSSI')){
+                $authorityDireccion = 1;
+            }
+        }
+
+        if($allowance->status == 'pending' && $authorityDireccion == 1){
+            $subrogants = Subrogation::with(['subrogant'])
+                ->where('organizational_unit_id', Parameter::get('ou', 'DireccionSSI'))
+                ->where('type', 'manager')
+                ->where('subrogant_id', '!=', $allowance->user_allowance_id)
+                ->select('id', 'subrogant_id', 'type')
+                ->get();
+        }
+        else{
+            $subrogants = null;
+        }
+
+        return view('allowances.show', compact('allowance', 'subrogants'));
     }
 
     public function show_approval($allowance_id){
