@@ -17,6 +17,7 @@
                 <select name="status_search" class="form-control" wire:model.debounce.500ms="selectedStatus">
                     <option value="">Seleccione...</option>
                     <option value="pending">Pendiente</option>
+                    <option value="finance sign">Seleccionado</option>
                     <option value="complete">Finalizada</option>
                     <option value="rejected">Rechazada</option>
                 </select>
@@ -147,6 +148,7 @@
 
                             @case('finance sign')
                                 <span class="badge badge-warning">{{ $requestReplacementStaff->StatusValue }}</span>
+                                <span class="badge badge-success"><i class="fas fa-user"></i> Seleccionado</span> <br>
                                 @break
 
                             @default
