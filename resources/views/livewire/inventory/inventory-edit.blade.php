@@ -458,7 +458,7 @@
                     @if($inventory->control->isPurchaseOrder())
                         value="{{ $inventory->purchaseOrder->supplier_name }}"
                     @else
-                        value="{{ $inventory->control->origin->name }}"
+                        value="{{ $inventory->control->origin?->name }}"
                     @endif
                     disabled
                 >
