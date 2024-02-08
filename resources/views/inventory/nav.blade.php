@@ -70,7 +70,7 @@
                 <i class="fas fa-exchange-alt"></i> Traspaso Masivo
             </a>
         </li>
-        @can('be god')
+        
         <li class="nav-item">
             <a
                 class="nav-link {{ active(['inventories.sheet']) }}"
@@ -79,7 +79,7 @@
             <i class="fas fa-chalkboard"></i> Planilla Mural
             </a>
         </li>
-        @endcan
+        
     @endcan
 
     @can('Inventory: place maintainer')
