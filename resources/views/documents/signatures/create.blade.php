@@ -29,6 +29,11 @@
             <input type="hidden" name="signature_type" value="{{ $signature->type }}">
         @endif
 
+        @if (isset($signature->budget_availability_id))
+            <input type="hidden" name="budget_availability_id" value="{{ $signature->budget_availability_id }}">
+            <input type="hidden" name="signature_type" value="{{ $signature->type }}">
+        @endif
+
         @if (isset($xAxis) && isset($yAxis))
             <input type="hidden" name='custom_x_axis' value="{{ $xAxis }}">
             <input type="hidden" name='custom_y_axis' value="{{ $yAxis }}">
@@ -136,6 +141,7 @@
                             <label for="forOrganizationalUnit">Establecimiento / Unidad Organizacional</label>
                             @livewire('select-organizational-unit', [
                                 'establishment_id' => auth()->user()->organizationalUnit->establishment->id,
+                                'organizational_unit_id' => $signature->ou_id ?? null,
                                 'selected_id' => 'ou_id_signer',
                                 'emitToListener' => 'getOuId',
                                 'required' => false,
@@ -144,6 +150,7 @@
                         <div class="col-12 col-md-4">
                             <label for="forUsers">Usuarios</label>
                             @livewire('rrhh.ou-users',[
+                                'ou_id' => $signature->ou_id ?? null,
                                 'required' => false,
                             ], key('select-organizational-unit-'.$signature->id))
                         </div>

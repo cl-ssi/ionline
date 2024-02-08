@@ -44,11 +44,11 @@
 
                 <fieldset class="form-group col-3">
                     <label for="forreferente">Referente</label>
-                    <select name="referrer_id" class="form-control selectpicker" data-live-search="true" title="Seleccione referente" required>
-                        @foreach($referrers as $referrer)
-                        <option value="{{$referrer->id}}" @if(isset($program_resolution->referrer->id) && $referrer->id == $program_resolution->referrer->id) selected @endif>{{$referrer->fullName}}</option>
-                        @endforeach
-                    </select>
+                    @livewire('search-select-user', [
+                        'user' => $program_resolution->referrer,
+                        'required' => 'required',
+                        'selected_id' => 'referrer_id',
+                    ])
                 </fieldset>
 
                 <fieldset class="form-group col-3">

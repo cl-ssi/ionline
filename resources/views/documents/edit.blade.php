@@ -207,6 +207,12 @@
         $("#forFor").removeAttr("required");
         $("#collapse").hide();
     }
+    /* Certificado disponibilidad presupuestaria */
+    if (typeVal == "21") {
+        $("#forFrom").removeAttr("required");
+        $("#forFor").removeAttr("required");
+        $("#collapse").hide();
+    }
 
 $('#formType').change(
     function() {

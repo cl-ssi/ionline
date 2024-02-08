@@ -26,6 +26,10 @@
     <input type="hidden" name="continuity_resol_id" value="{{ $document->continuity_resol_id }}">
     @endif
 
+    @if (isset($document->budget_availability_id))
+    <input type="hidden" name="budget_availability_id" value="{{ $document->budget_availability_id }}">
+    @endif
+
     <div class="form-row">
         <div class="form-group col-2">
             <label for="forDate">Fecha</label>
@@ -219,6 +223,12 @@
             }
             /* Resolución de continuidad convenio */
             if ("19" === this.value) {
+                $("#forFrom").removeAttr("required");
+                $("#forFor").removeAttr("required");
+                $("#collapse").hide();
+            }
+            /* Certificado disponibilidad presupuestaria */
+            if ("21" === this.value) {
                 $("#forFrom").removeAttr("required");
                 $("#forFor").removeAttr("required");
                 $("#collapse").hide();

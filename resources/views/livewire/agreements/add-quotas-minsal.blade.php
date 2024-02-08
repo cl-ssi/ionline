@@ -1,6 +1,6 @@
 <div class="card mt-3 small">
 
-    @include('layouts.bt4.partials.flash_message')
+    {{--@include('layouts.bt4.partials.flash_message')--}}
 
     <div style="{{ $edit ? '' : 'display:none' }}">
 
@@ -71,8 +71,8 @@
                     <td class="text-center">{{ $quota->transfer_at ? $quota->transfer_at->format('d-m-Y') : '' }}</td>
                     <td>{{ $quota->voucher_number }}</td>
                     <td class="text-right">
-                        <button class="btn btn-sm btn-outline-secondary" wire:click="delete({{$quota}})">
-                        <i class="fas fa-edit"></i></button>
+                        <button class="btn btn-sm btn-outline-danger" wire:click="delete({{$quota}})">
+                        <i class="fas fa-trash-alt"></i></button>
                     </td>
                 </tr>
                 @endforeach

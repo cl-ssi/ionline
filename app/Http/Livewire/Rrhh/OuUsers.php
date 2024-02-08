@@ -11,6 +11,12 @@ class OuUsers extends Component
     public $authority_id = null;
     public $listeners = ["getOuId" => "getUsersFromOu"];
     public $required = true;
+    public $ou_id = null;
+
+    public function mount()
+    {
+        $this->getUsersFromOu($this->ou_id);
+    }
 
     public function render()
     {

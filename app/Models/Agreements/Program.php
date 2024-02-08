@@ -3,6 +3,7 @@
 namespace App\Models\Agreements;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Program extends Model
@@ -19,6 +20,16 @@ class Program extends Model
 
     public function quotas_minsal() {
         return $this->hasMany('App\Models\Agreements\ProgramQuotaMinsal');
+    }
+
+    /**
+     * Get all of the budget_availabilities for the Program
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function budget_availabilities(): HasMany
+    {
+        return $this->hasMany(BudgetAvailability::class);
     }
 
     /**

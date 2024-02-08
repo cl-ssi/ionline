@@ -52,7 +52,7 @@ class ProgramController extends Controller
      */
     public function show(Program $program)
     {
-        $program->load('resolutions', 'components');
+        $program->load('resolutions', 'components', 'budget_availabilities');
         $referrers = User::all()->sortBy('name');
         $signers = Signer::with('user')->get();
         return view('agreements.programs.show', compact('program', 'referrers', 'signers'));

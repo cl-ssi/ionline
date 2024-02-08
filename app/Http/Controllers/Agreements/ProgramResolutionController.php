@@ -62,9 +62,8 @@ class ProgramResolutionController extends Controller
         $program_resolution = ProgramResolution::findOrFail($programResolutionId);
         $program_resolution->load('resolution_amounts', 'program', 'director_signer', 'referrer');
         // return $program_resolution;
-        $referrers = User::all()->sortBy('name');
         $signers = Signer::with('user')->get();
-        return view('agreements.programs.resolutions.show', compact('program_resolution', 'referrers', 'signers'));
+        return view('agreements.programs.resolutions.show', compact('program_resolution', 'signers'));
     }
 
     /**

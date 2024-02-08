@@ -18,8 +18,11 @@ use App\Models\Documents\Document;
 use App\Models\Documents\Correlative;
 use App\Mail\SendDocument;
 use App\Http\Controllers\Controller;
+use App\Models\Agreements\BudgetAvailability;
 use App\Models\Agreements\ContinuityResolution;
 use App\Models\Documents\SignaturesFlow;
+use App\Models\Parameters\Parameter;
+use App\Rrhh\Authority;
 
 class DocumentController extends Controller
 {
@@ -113,6 +116,11 @@ class DocumentController extends Controller
         if ($request->has('continuity_resol_id')) {
             $continuityResolution = ContinuityResolution::find($request->continuity_resol_id);
             $continuityResolution->update(['document_id' => $document->id]);
+        }
+
+        if ($request->has('budget_availability_id')) {
+            $budgetAvailability = BudgetAvailability::find($request->budget_availability_id);
+            $budgetAvailability->update(['document_id' => $document->id]);
         }
 
         return redirect()->route('documents.index');
@@ -325,6 +333,24 @@ class DocumentController extends Controller
             $signature->distribution = 'blanca.galaz@redsalud.gob.cl';
         }
 
+        if($document->type_id == Type::where('name','Certificado Disponibilidad Presupuestaria')->first()->id){
+            $budgetAvailability = BudgetAvailability::where('document_id', $document->id)->first();
+            
+            // $signaturesFlow = new SignaturesFlow();
+            // $signaturesFlow->type = 'signer';
+            // $signaturesFlow->ou_id = Parameter::get('ou', 'FinanzasSSI');
+            // $signaturesFlow->user_id = Authority::getTodayAuthorityManagerFromDate($signaturesFlow->ou_id);
+            // $signaturesFlow->sign_position = 0;
+            // $signaturesFile->signaturesFlows->add($signaturesFlow);
+
+            $signature->type = 'signer';
+            $signature->ou_id = Parameter::get('ou', 'FinanzasSSI');
+            // $signature->user_id = Authority::getTodayAuthorityManagerFromDate($signature->ou_id);
+            $signature->description = $document->subject;
+            $signature->endorse_type = 'No requiere visación';
+            $signature->distribution = 'blanca.galaz@redsalud.gob.cl';
+        }
+    
         return view('documents.signatures.create', compact('signature', 'documentId'));
     }
 
