@@ -19,6 +19,7 @@
                 <th>Estado</th>
                 <th>Ubicación</th>
                 <th>Lugar</th>
+                <th>Código Arquitectónico</th>
                 <th>Responsable</th>
                 <th>Usuario</th>
                 <th></th>
@@ -63,6 +64,9 @@
                     </td>
                     <td>
                         {{ optional($movement->inventory->place)->name }}
+                    </td>
+                    <td>
+                        {{ $movement->inventory->place?->architectural_design_code }}
                     </td>
                     <td>
                         @if($movement->reception_date == null)

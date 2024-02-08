@@ -43,9 +43,6 @@
                     <th class="text-center">Código</th>
                     <th>Producto</th>
                     <th>Origen/OC</th>
-                    <th>Ubicación</th>
-                    <th>Lugar</th>
-                    <th>Código Arquitectónico</th>
                     <th class="text-center">Acciones</th>
                 </tr>
             </thead>
@@ -99,15 +96,6 @@
                                     No posee Origen/OC
                                 </small>
                             @endif
-                        </td>
-                        <td>
-                            {{ $inventory->place?->location->name }}
-                        </td>
-                        <td>
-                            {{ $inventory->place?->name }}
-                        </td>
-                        <td>
-                            {{ $inventory->place?->architectural_design_code }}
                         </td>
                         <td class="text-center">
                             <a
