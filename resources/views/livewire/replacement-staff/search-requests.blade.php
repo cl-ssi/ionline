@@ -400,6 +400,7 @@
                             @endforeach
                         @endif
                         @if($requestReplacementStaff->request_id != NULL)
+                            <br>
                             <span class="badge badge-info">Continuidad</span>
                         @endif
                     </td>
