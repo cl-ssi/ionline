@@ -264,34 +264,131 @@
       <table class="table table-sm table-bordered">
           <tbody>
               <tr>
-                  @foreach($requestReplacementStaff->RequestSign as $sign)
-                    <td align="center">
-                      <strong>
-                        {{ $sign->organizationalUnit->name }}<br>
-                      </strong>
-                    </td>
-                  @endforeach
+                  @if(count($requestReplacementStaff->approvals) > 0)
+                      <!-- APPROVALS DE JEFATURA DIRECTA -->
+                      @foreach($requestReplacementStaff->approvals as $approval)
+                        @if($approval->subject == "Solicitud de Aprobación Jefatura Depto. o Unidad")
+                              <th class="table-active text-center">
+                                  {{ $approval->sentToOu->name }}
+                              </th >     
+                          @endif
+                      @endforeach
+                      <!-- APROBACION DE PERSONAL -->
+                      @foreach($requestReplacementStaff->requestSign as $sign)
+                          <th class="table-active text-center">
+                              {{ $sign->organizationalUnit->name }}
+                          </th>
+                      @endforeach
+                      <!-- APPROVALS DE PLANIFICACION, SDGP, FINANZAS -->
+                      @foreach($requestReplacementStaff->approvals as $approval)
+                        @if($approval->subject != "Solicitud de Aprobación Jefatura Depto. o Unidad")
+                              <th class="table-active text-center">
+                                  {{ $approval->sentToOu->name }}
+                              </th >     
+                          @endif
+                      @endforeach
+                  @else
+                      @foreach($requestReplacementStaff->requestSign as $sign)
+                          <th class="table-active text-center">
+                              {{ $sign->organizationalUnit->name }}
+                          </th>
+                      @endforeach
+                  @endif
               </tr>
               <tr>
-                  @foreach($requestReplacementStaff->RequestSign as $requestSign)
-                    <td align="center">
-                        @if($requestSign->request_status == 'accepted')
-                            {{ $requestSign->StatusValue }}<br>
-                            {{ $requestSign->user->FullName }}<br>
-                            {{ ($requestSign->date_sign) ? $requestSign->date_sign->format('d-m-Y H:i:s') : '' }}<br>
-                        @endif
-                        @if($requestSign->request_status == 'rejected')
-                            {{ $requestSign->StatusValue }}<br>
-                            {{ $requestSign->user->FullName }}<br>
-                            {{ $requestSign->date_sign->format('d-m-Y H:i:s') }}<br>
-                            <hr>
-                            {{ $requestSign->observation }}<br>
-                        @endif
-                        @if($requestSign->request_status == 'pending' || $requestSign->request_status == NULL)
-                            <i class="fas fa-clock"></i> Pendiente.<br>
-                        @endif
-                    </td>
-                  @endforeach
+                  @if(count($requestReplacementStaff->approvals) > 0)
+                      <!-- APPROVALS DE JEFATURA DIRECTA -->
+                      @foreach($requestReplacementStaff->approvals as $approval)
+                          @if($approval->subject == "Solicitud de Aprobación Jefatura Depto. o Unidad")
+                              <td align="center"> 
+                                  @if($approval->StatusInWords == "Aprobado")
+                                      {{ $approval->StatusInWords }}<br>
+                                      {{ $approval->approver->FullName }}<br>
+                                      {{ $approval->approver_at->format('d-m-Y H:i:s') }}<br>
+                                  @endif
+                                  @if($approval->StatusInWords == "Rechazado")
+                                      {{ $approval->StatusInWords }}<br>
+                                      {{ $approval->approver->FullName }}<br>
+                                      {{ $approval->approver_at->format('d-m-Y H:i:s') }}<br>
+                                      <hr>
+                                      {{ $approval->approver_observation }}
+                                  @endif
+                              </td>  
+                          @endif
+                      @endforeach
+                      <!-- APROBACION DE PERSONAL -->
+                      @foreach($requestReplacementStaff->requestSign as $sign)
+                          <td align="center"> 
+                              @if($sign->request_status == 'accepted')
+                                  {{ $sign->StatusValue }}<br>
+                                  {{ $sign->user->FullName }}<br>
+                                  {{ $sign->date_sign->format('d-m-Y H:i:s') }}<br>
+                              @endif
+                              @if($sign->request_status == 'rejected')
+                                  {{ $sign->StatusValue }}<br>
+                                  {{ $sign->user->FullName }}<br>
+                                  {{ $sign->date_sign->format('d-m-Y H:i:s') }}<br>
+                                  <hr>
+                                  {{ $sign->observation }}<br>
+                              @endif
+                          </td>
+                      @endforeach
+                      <!-- APPROVALS DE JEFATURA DIRECTA -->
+                      @foreach($requestReplacementStaff->approvals as $approval)
+                          @if($approval->subject != "Solicitud de Aprobación Jefatura Depto. o Unidad")
+                              <td align="center"> 
+                                  @if($approval->StatusInWords == "Aprobado")
+                                      {{ $approval->StatusInWords }}<br>
+                                      {{ $approval->approver->FullName }}<br>
+                                      {{ $approval->approver_at->format('d-m-Y H:i:s') }}<br>
+                                  @endif
+                                  @if($approval->StatusInWords == "Rechazado")
+                                      {{ $approval->StatusInWords }}<br>
+                                      {{ $approval->approver->FullName }}<br>
+                                      {{ $approval->approver_at->format('d-m-Y H:i:s') }}<br>
+                                      <hr>
+                                      {{ $approval->approver_observation }}
+                                  @endif
+                              </td>  
+                          @endif
+                      @endforeach
+                  @else
+                      @foreach($requestReplacementStaff->requestSign as $sign)
+                          <td align="center"> 
+                              @if($sign->request_status == 'accepted')
+                                  {{ $sign->StatusValue }}<br>
+                                  {{ $sign->user->FullName }}<br>
+                                  {{ $sign->date_sign->format('d-m-Y H:i:s') }}<br>
+                              @endif
+                              @if($sign->request_status == 'rejected')
+                                  {{ $sign->StatusValue }}<br>
+                                  {{ $sign->user->FullName }}<br>
+                                  {{ $sign->date_sign->format('d-m-Y H:i:s') }}<br>
+                                  <hr>
+                                  {{ $sign->observation }}<br>
+                              @endif
+                              @if($sign->request_status == 'not valid')
+                                  @if($requestReplacementStaff->signaturesFile)
+                                      @foreach($requestReplacementStaff->signaturesFile->signaturesFlows as $flow)
+                                          @if($flow->status == 1)
+                                              Aceptada<br>
+                                              {{ $flow->userSigner->FullName }}<br>
+                                              {{ $flow->signature_date->format('d-m-Y H:i:s') }}
+                                          @endif
+                                          @if($flow->status === 0)
+                                              {{ $flow->signerName }}<br>
+                                              {{ $flow->signature->rejected_at->format('d-m-Y H:i:s') }}<br>
+                                              <hr>
+                                              {{ $flow->observation }}<br>
+                                          @endif
+                                      @endforeach
+                                  @else
+                                      <i class="fas fa-clock"></i> Pendiente<br>
+                                  @endif
+                              @endif
+                          </td>
+                      @endforeach
+                  @endif
               </tr>
           </tbody>
       </table>

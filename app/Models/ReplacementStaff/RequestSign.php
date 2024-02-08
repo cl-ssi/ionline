@@ -32,13 +32,13 @@ class RequestSign extends Model
     public function getStatusValueAttribute() {
         switch($this->request_status) {
           case 'pending':
-            return 'Pendiente de Aprobación';
+            return 'Pendiente';
             break;
           case 'accepted':
-            return 'Aceptada';
+            return 'Aprobado';
             break;
           case 'rejected':
-            return 'Rechazada';
+            return 'Rechazado';
             break;
         }
     }
