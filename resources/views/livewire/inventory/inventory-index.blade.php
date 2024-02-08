@@ -351,7 +351,7 @@
                         {{ $inventory->estado }}
                     </td>
                     <td>
-                            {{ $inventory->lastMovement->place->location?->name }}
+                            {{ $inventory->lastMovement->place?->location->name }}
                     </td>
                     <td>
                             {{ $inventory->lastMovement->place?->name }}
