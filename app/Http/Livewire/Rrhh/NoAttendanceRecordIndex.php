@@ -18,10 +18,8 @@ class NoAttendanceRecordIndex extends Component
     public $name = '';
     public $from;
     public $to;
-    
-    
-
-
+    public $rrhh_at;
+    public $simplified = false;
 
 
     /**
@@ -92,8 +90,6 @@ class NoAttendanceRecordIndex extends Component
     }
     
 
-    
-
     public function render()
     {
         $establishments_ids = explode(',',env('APP_SS_ESTABLISHMENTS'));
@@ -111,8 +107,16 @@ class NoAttendanceRecordIndex extends Component
                 ->when($this->to, function ($query) {
                     $query->whereDate('date', '<=', $this->to);
                 })
+                ->when($this->rrhh_at, function ($query) {
+                    if($this->rrhh_at == 'Si') {
+                        $query->whereNotNull('rrhh_at');
+                    }
+                    else if($this->rrhh_at == 'No') {
+                        $query->whereNull('rrhh_at');
+                    }
+                })
                 ->latest()
                 ->paginate(50),
-        ])->extends('layouts.bt5.app');
+        ]);
     }
 }
