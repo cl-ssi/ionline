@@ -11,14 +11,15 @@ class Informe extends Component
     public $github_input = null;
     public $headers = [];
     public $issues = [];
+    public $filtered_issues = [];
+    public $records = null;
 
     /**
     * mount
     */
     public function mount()
     {
-        // $this->period = now()->format('Y-m');
-        // $this->period = '2023-12';
+        $this->period = now()->format('Y-m');
     }
 
     /**
@@ -46,7 +47,6 @@ class Informe extends Component
             return $issue['Start at'] != '';
         });
 
-        // dd($this->issues);
         foreach($this->issues as $key => $issue) {
             // Eliminar de los issues de la clave "Repository" todo lo que esté antes del "/"
             if($issue['Repository']) {
@@ -58,33 +58,29 @@ class Informe extends Component
             }
         }
 
-        // Convertir las fechas a objetos Carbon
-        foreach($this->issues as $key => $issue) {
-            $this->issues[$key]['Start at'] = Carbon::parse($issue['Start at']);
-            $this->issues[$key]['End at'] = Carbon::parse($issue['End at']);
-        }
-
-        // Ordenar los issues por fecha de inicio
-        usort($this->issues, function($a, $b) {
-            return $a['Start at'] <=> $b['Start at'];
-        });
-
+        $this->records = count($this->issues);
     }
 
     public function render()
     {
-        if($this->issues) {
-            // dd($this->issues);
-                    // Convertir las fechas a objetos Carbon
+        $this->filtered_issues = [];
+
         foreach($this->issues as $key => $issue) {
-            $this->issues[$key]['Start at'] = Carbon::parse($issue['Start at']);
-            $this->issues[$key]['End at'] = Carbon::parse($issue['End at']);
+            $this->filtered_issues[$key] = $issue;
+            // Convertir las fechas a objetos Carbon
+            $this->filtered_issues[$key]['Start at'] = Carbon::parse($issue['Start at']);
+            $this->filtered_issues[$key]['End at'] = Carbon::parse($issue['End at']);
         }
-            // Filtrar los issues por el periodo seleccionado
-            $this->issues = array_filter($this->issues, function($issue) {
-                return $issue['Start at']->format('Y-m') == $this->period;
-            });
-        }
+
+        // Filtrar los issues por el periodo seleccionado
+        $this->filtered_issues = array_filter($this->filtered_issues, function($issue) {
+            return $issue['Start at']->format('Y-m') == $this->period;
+        });
+
+        // Ordenar los issues por fecha de inicio
+        usort($this->filtered_issues, function($a, $b) {
+            return $a['Start at'] <=> $b['Start at'];
+        });
 
         return view('livewire.documents.tic.informe');
     }
