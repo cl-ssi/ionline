@@ -23,6 +23,7 @@ class NoAttendanceRecord extends Model
     protected $fillable = [
         'date',
         'user_id',
+        'type',
         'reason_id',
         'observation',
         'authority_observation',

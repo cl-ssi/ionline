@@ -28,6 +28,7 @@ class NoAttendanceRecordMgr extends Component
     protected function rules()
     {
         return [
+            'noAttendanceRecord.type' => 'required',
             'noAttendanceRecord.date' => 'required|date',
             'noAttendanceRecord.reason_id' => 'required',
             'noAttendanceRecord.observation' => 'nullable',
@@ -116,6 +117,6 @@ class NoAttendanceRecordMgr extends Component
         return view('livewire.rrhh.no-attendance-record-mgr',[
             'myRecords' => $myRecords,
             'authorityRecrods' => $authorityRecrods
-        ])->extends('layouts.bt4.app');
+        ]);
     }
 }

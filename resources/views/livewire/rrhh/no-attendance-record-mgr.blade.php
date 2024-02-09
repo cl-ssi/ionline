@@ -4,10 +4,19 @@
     @if ($form)
         <h3 class="mb-3">Ingresar justificación de ausencia de registro de asistencia</h3>
         <h4>La autoridad que tiene usted asignada es: <strong>{{ optional($authority)->shortName }}</strong></h4>
-        <small class="mb-3">(*Si no corresponde, por favor solicitar la corrección de la autoridad con su secretaria antes de hacer el registro)</small>
+        <small class="mb-3">Nota: Si su autoridad asignada no corresponde, por favor solicitar la corrección con su secretaria antes de hacer el registro</small>
 
 
-        <form class="form-row mt-3">
+        <form class="row mt-3 g-2">
+            <div class="form-group col-md-1">
+                <label for="type">Tipo</label>
+                <select class="form-select" wire:model.defer="noAttendanceRecord.type">
+                    <option value=""></option>
+                    <option value="1">Entrada</option>
+                    <option value="0">Salida</option>
+                </select>
+                @error('noAttendanceRecord.type') <span class="text-danger">{{ $message }}</span> @enderror
+            </div>
             <div class="form-group col-md-3">
                 <label for="date">Fecha y hora a justificar</label>
                 <input type="datetime-local" class="form-control" wire:model.defer="noAttendanceRecord.date" max ="{{ date('Y-m-d\T23:59') }}">
@@ -15,7 +24,7 @@
             </div>
             <div class="form-group col-md-3">
                 <label for="reason">Motivo</label>
-                <select class="form-control" wire:model.defer="noAttendanceRecord.reason_id">
+                <select class="form-select" wire:model.defer="noAttendanceRecord.reason_id">
                     <option></option>
                     @foreach($reasons as $reason)
                         <option value="{{ $reason->id }}">{{ $reason->name }}</option>
@@ -23,13 +32,13 @@
                 </select>
                 @error('noAttendanceRecord.reason_id') <span class="text-danger">{{ $message }}</span> @enderror
             </div>
-            <div class="form-group col-md-6">
+            <div class="form-group col-md-5">
                 <label for="observation">Fundamente (otro)</label>
                 <input type="text" class="form-control" wire:model.defer="noAttendanceRecord.observation">
                 @error('noAttendanceRecord.observation') <span class="text-danger">{{ $message }}</span> @enderror
             </div>
         </form>
-        <div class="form-row">
+        <div class="row">
             <div class="mt-3 col-12">
                 @if(!is_null($noAttendanceRecord->rrhh_status) AND $noAttendanceRecord->rrhh_status == false)
                     <button type="button" class="btn btn-primary" wire:click="saveAfterEdit()">Corregir</button>
@@ -43,7 +52,7 @@
 
 
     @else
-        <div class="form-row">
+        <div class="row">
             <div class="col">
                 <h3 class="mb-3">Justificaciones de no registro de asistencia</h3>
             </div>
