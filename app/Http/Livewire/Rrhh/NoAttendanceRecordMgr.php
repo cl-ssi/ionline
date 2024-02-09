@@ -108,8 +108,12 @@ class NoAttendanceRecordMgr extends Component
     public function render()
     {
 
-        $myRecords = NoAttendanceRecord::with(['reason'])->whereUserId(auth()->id())->latest()->paginate(25);
-        $authorityRecrods = NoAttendanceRecord::with(['reason'])
+        $myRecords = NoAttendanceRecord::with('user','authority','reason')
+            ->whereUserId(auth()->id())
+            ->latest()
+            ->paginate(25);
+
+        $authorityRecrods = NoAttendanceRecord::with('user','authority','reason')
             ->whereAuthorityId(auth()->id())->latest()
             ->whereNull('rrhh_status')
             ->paginate(50);
