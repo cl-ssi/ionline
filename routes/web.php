@@ -71,6 +71,7 @@ use App\Http\Livewire\His\ModificationRequestIndex;
 use App\Http\Livewire\His\ModificationMgr;
 use App\Http\Livewire\HealthServices;
 use App\Http\Livewire\Finance\UploadDtes;
+use App\Http\Livewire\Finance\UploadBhe;
 use App\Http\Livewire\Finance\Receptions\TypeMgr;
 use App\Http\Livewire\Finance\Receptions\IndexReception;
 use App\Http\Livewire\Finance\Receptions\EditReception;
@@ -2083,6 +2084,7 @@ Route::prefix('pharmacies')->as('pharmacies.')->middleware(['auth', 'must.change
 /* Finanzas */
 Route::prefix('finance')->as('finance.')->middleware(['auth', 'must.change.password'])->group(function () {
     Route::get('dtes', IndexDtes::class)->name('dtes.index');
+    Route::get('dtes/upload-bhe', UploadBhe::class)->name('dtes.uploadBhe');
     Route::get('dte/{dte}/store', [DteController::class, 'store'])->name('dtes.confirmation.store');
     Route::get('dte/{dte}/confirmation-signature-file', [DteController::class, 'pdf'])->name('dtes.confirmation.pdf');
 

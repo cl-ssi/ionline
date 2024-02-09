@@ -19,4 +19,12 @@
             href="{{ route('finance.payments.rejected') }}">
             <i class="fas fa-fw fa-ban"></i> Rechazadas</a>
     </li>
+
+
+    <li class="nav-item">
+        <a class="nav-link {{ active('finance.payments.rejected') }}"
+            href="{{ route('finance.dtes.uploadBhe') }}">
+            <i class="fas fa-fw fa-cloud-upload-alt"></i> Cargar Reporte BHE</a>
+    </li>
+    
 </ul>

@@ -25,7 +25,7 @@ class UploadDtes extends Component
         // dd($this->dtes->path());
         Excel::import(new DtesImport, $this->dtes->path(), 'gcs');
 
-        session()->flash('message', 'Archivo con dtes cargado existosamente.');
+        session()->flash('message', 'Archivo con dtes cargado exitosamente.');
     }
     
     public function render()

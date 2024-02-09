@@ -1,6 +1,6 @@
 <form wire:submit.prevent="upload">
 
-    @include('finance.payments.partials.nav')    
+    @include('finance.payments.partials.nav')
 
     <h3 class="mb-3">Cargar archivo de Acepta con reporte de DTEs</h3>
 

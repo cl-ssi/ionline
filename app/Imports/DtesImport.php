@@ -69,7 +69,7 @@ class DtesImport implements ToModel, WithStartRow, WithHeadingRow
             'fecha_reclamo' => $row['fecha_reclamo'],
             'mensaje_reclamo' => $row['mensaje_reclamo'],
             'estado_devengo' => $row['estado_devengo'],
-            'codigo_devengo' => $row['codigo_devengo'],            
+            'codigo_devengo' => $row['codigo_devengo'],
             'fecha_ingreso_oc' => $row['fecha_ingreso_oc'],
             'folio_rc' => $row['folio_rc'],
             'fecha_ingreso_rc' => $row['fecha_ingreso_rc'],
