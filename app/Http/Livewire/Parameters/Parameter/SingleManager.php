@@ -13,17 +13,19 @@ class SingleManager extends Component
      * @livewire('parameters.parameter.single-manager',[
      *      'module' => 'drugs',
      *      'parameterName' => 'Jefe',
-     *      'type' => 'user'
+     *      'type' => 'user', // user or text
+     *      'parameterDescription' => 'bla bla bla'
      * ])
      * 
      * Type puede ser de tipo User o Value
      *
      * Obtener el valor de un parametro
-     * $value = Parameter::get('module','parameter');
+     * $value = Parameter::get('module','parameter','establishment_id' [opcional]);
      */
 
     public $module;
     public $parameterName;
+    public $parameterDescription;
     public $type;
     
     public $save = false;
@@ -34,12 +36,14 @@ class SingleManager extends Component
 
     protected $listeners = ['userSelected' => 'userSelected'];
 
-    public function mount($module, $parameterName, $type)
+    public function mount($module, $parameterName, $type, $parameterDescription = null)
     {
         $this->parameter = Parameter::firstOrCreate([
             'module' => $module,
             'parameter' => $parameterName,
-            'establishment_id' => auth()->user()->organizationalUnit->establishment->id            
+            'establishment_id' => auth()->user()->organizationalUnit->establishment->id
+        ],[
+            'description' => $parameterDescription,
         ]);
 
         $this->type = $type;
@@ -69,7 +73,7 @@ class SingleManager extends Component
     */
     public function save()
     {
-        $this->validate();        
+        $this->validate();
         $this->parameter->save();
         $this->save = 'spin';
         $this->save = true;
