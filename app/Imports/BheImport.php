@@ -37,8 +37,9 @@ class BheImport implements ToModel, WithHeadingRow
 
         $array_variable =
         [
-
             'razon_social_emisor' => $row['nombre_o_razon_social'],
+            'tipo'=> '69',
+            'tipo_documento'=> 'boleta_honorarios',
             'receptor' => '61.606.100-3',
             'monto_neto' => $row['pagado'],
             'monto_iva' => $row['retenido'],
