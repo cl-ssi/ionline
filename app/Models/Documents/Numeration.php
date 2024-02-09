@@ -170,7 +170,7 @@ class Numeration extends Model
             $verificationCode = str_pad($this->id, 6, "0", STR_PAD_LEFT) . '-' . str()->random(6);
             $number = $correlative->correlative;
 
-            $digitalSignature = new DigitalSignature();            
+            $digitalSignature = new DigitalSignature();
             $success = $digitalSignature->numerate($user, $file, $verificationCode, $number);
 
             if($success) {

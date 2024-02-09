@@ -2,17 +2,18 @@
 
 namespace App\Http\Livewire\Finance\Receptions;
 
-use Livewire\WithPagination;
-use Livewire\Component;
-use App\Models\Finance\Receptions\ReceptionType;
-use App\Models\Finance\Receptions\Reception;
-use App\Models\Parameters\Parameter;
-use App\Models\Documents\Numeration;
 use App\User;
+use Livewire\Component;
+use Livewire\WithPagination;
+use App\Traits\NumerateTrait;
+use App\Models\Finance\Receptions\Reception;
+use App\Models\Finance\Receptions\ReceptionType;
 
 class IndexReception extends Component
 {
     use WithPagination;
+    use NumerateTrait;
+
     protected $paginationTheme = 'bootstrap';
 
     public $filter_id;
@@ -90,24 +91,4 @@ class IndexReception extends Component
         return $receptions;
     }
 
-    public function numerate(Numeration $numeration)
-    {
-        $this->error_msg = null;
-
-        $user_id = Parameter::get('partes','numerador', auth()->user()->organizationalUnit->establishment_id);
-
-        $user = User::find($user_id);
-        
-
-        $status = $numeration->numerate($user);
-        if ($status === true) {
-            $numeration->numerator_id = $user_id;
-            $numeration->date = now();
-            $numeration->save();
-        } else {
-            $this->error_msg = $status;
-        }
-        
-    }
-    
 }
