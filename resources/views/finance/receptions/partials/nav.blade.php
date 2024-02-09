@@ -29,4 +29,12 @@
             Rechazar
         </a>
     </li>
+    <li class="nav-item">
+        <a class="nav-link {{ active('finance.receptions.parameters') }}"
+            aria-current="page"
+            href="{{ route('finance.receptions.parameters') }}">
+            <i class="bi bi-wrench"></i> 
+            Parametros
+        </a>
+    </li>
 </ul>

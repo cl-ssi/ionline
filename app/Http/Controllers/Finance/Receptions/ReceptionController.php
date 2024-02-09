@@ -58,6 +58,11 @@ class ReceptionController extends Controller
         // return view('finance.receptions.show', compact('reception'));
     }
 
+    public function parameters()
+    {
+        return view('finance.receptions.parameters');
+    }
+
     /**
      * Remove the specified resource from storage.
      *
