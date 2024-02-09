@@ -94,7 +94,8 @@ class NoAttendanceRecordIndex extends Component
     {
         $establishments_ids = explode(',',env('APP_SS_ESTABLISHMENTS'));
         return view('livewire.rrhh.no-attendance-record-index', [
-            'records' => NoAttendanceRecord::whereNotNull('status')
+            'records' => NoAttendanceRecord::with('authority', 'user','reason')
+                ->whereNotNull('status')
                 ->whereIn('establishment_id', $establishments_ids)
                 ->when($this->name, function ($query) {
                     $query->whereHas('user', function ($userQuery) {
