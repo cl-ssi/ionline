@@ -83,10 +83,11 @@ use App\Http\Livewire\Finance\AccountingCodesMgr;
 use App\Http\Livewire\Drugs\IndexActPrecursor;
 use App\Http\Livewire\Drugs\EditActPrecursor;
 use App\Http\Livewire\Drugs\CreateActPrecursor;
+use App\Http\Livewire\Documents\Tic\Informe;
 use App\Http\Livewire\Documents\Partes\ReportByDates as PartesReportByDates;
+use App\Http\Livewire\Documents\Partes\PartesAccessLog;
 use App\Http\Livewire\Documents\Partes\NumerationInbox;
 use App\Http\Livewire\Documents\Partes\Inbox;
-use App\Http\Livewire\Documents\Partes\PartesAccessLog;
 use App\Http\Livewire\Documents\ApprovalsMgr;
 use App\Http\Livewire\Authorities\Calendar;
 use App\Http\Controllers\Welfare\WelfareController;
@@ -178,8 +179,8 @@ use App\Http\Controllers\ReplacementStaff\LanguageController;
 use App\Http\Controllers\ReplacementStaff\ExperienceController;
 use App\Http\Controllers\ReplacementStaff\ContactRecordController;
 use App\Http\Controllers\ReplacementStaff\CommissionController;
-use App\Http\Controllers\ReplacementStaff\ApplicantController;
 //use App\Http\Controllers\RequestForms\SupplyPurchaseController;
+use App\Http\Controllers\ReplacementStaff\ApplicantController;
 use App\Http\Controllers\Rem\UserRemController;
 use App\Http\Controllers\Rem\RemSerieController;
 use App\Http\Controllers\Rem\RemPeriodSerieController;
@@ -1301,6 +1302,8 @@ Route::prefix('parameters')->as('parameters.')->middleware(['auth', 'must.change
 /** Fin de rutas de parametros */
 
 Route::prefix('documents')->as('documents.')->middleware(['auth', 'must.change.password'])->group(function () {
+
+    Route::get('tic/informe', Informe::class)->name('tic.informe');
 
     Route::get('lobby', MeetingMgr::class)->name('lobby.manager');
     Route::get('lobby/{meeting}', [MeetingController::class,'show'])->name('lobby.show');
