@@ -351,13 +351,13 @@
                         {{ $inventory->estado }}
                     </td>
                     <td>
-                            {{ $inventory->lastMovement->place?->location->name }}
+                            {{ $inventory->lastMovement?->place?->location->name }}
                     </td>
                     <td>
-                            {{ $inventory->lastMovement->place?->name }}
+                            {{ $inventory->lastMovement?->place?->name }}
                     </td>
                     <td>
-                            {{ $inventory->lastMovement->place?->architectural_design_code }}
+                            {{ $inventory->lastMovement?->place?->architectural_design_code }}
                     </td>
                     <td class="text-center">
                         @if($inventory->lastMovement)
