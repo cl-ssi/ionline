@@ -100,7 +100,7 @@
                         <td>{{ $inventory->number }}</td>
                         <td>{{ $inventory->description }}</td>
                         <td>{{ $inventory->estado }}</td> 
-                        <td>{{ $inventory->classification->name }}</td> 
+                        <td>{{ $inventory->classification?->name }}</td> 
                         <td>${{ money($inventory->po_price) }}</td>
                         <td>{{ $inventory->observations }}</td>
                         <td>{{ $inventory->lastConfirmedMovement->responsibleUser?->shortName }}</td>
