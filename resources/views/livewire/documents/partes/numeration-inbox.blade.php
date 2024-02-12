@@ -71,4 +71,5 @@
             @endforeach
         </tbody>
     </table>
+    {{ $numerations->links()}}
 </div>
