@@ -3,7 +3,7 @@
 namespace App\Notifications\Finance;
 
 use Illuminate\Bus\Queueable;
-use App\Models\Documents\Numeration;
+// use App\Models\Documents\Numeration; // No se si va o no
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use App\Models\Finance\Receptions\Reception;
@@ -20,10 +20,9 @@ class NewReceptionSigned extends Notification implements ShouldQueue
      *
      * @return void
      */
-    public function __construct(Reception $reception, Numeration $numeration)
+    public function __construct(Reception $reception)
     {
         $this->reception = $reception;
-        $this->numeration = $numeration;
     }
 
     /**
@@ -47,11 +46,10 @@ class NewReceptionSigned extends Notification implements ShouldQueue
     {
         return (new MailMessage)
             ->level('info')
-            ->subject('Acta de Recepción Nº: ' . $this->reception->id)
-            ->greeting('Hola ')
-            ->line('Acta de Recepción Nº: ' . $this->reception->id)
-            ->line('Creador: ' . $this->reception->user->shortName)
-            ->action('Ver acta', route('documents.partes.numeration.show_numerated', $this->numeration->id) )
+            ->subject('Acta de Recepción Conforme Nº: ' . $this->reception->id)
+            ->greeting('Informativo')
+            ->line('Nueva Acta de Recepción Conforme Nº: ' . $this->reception->id)
+            ->action('Acta Nº: '. $this->reception->id, route('documents.partes.numeration.show_numerated', $this->reception->numeration->id) )
             ->salutation('Saludos cordiales.');
     }
 

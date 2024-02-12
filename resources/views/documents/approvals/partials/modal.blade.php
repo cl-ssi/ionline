@@ -143,7 +143,7 @@
                                     </button>
 
                                 </div>
-                                <div class="invalid-feedback">
+                                <div>
                                     @if(isset($message))
                                         <small id="otp" class="text-danger">
                                             {{ $message }}

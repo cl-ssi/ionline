@@ -180,9 +180,9 @@ class Numeration extends Model
                 /* Guardar el documento numerado */
                 $digitalSignature->storeFirstSignedFile($this->storageFilePath);
                 $this->number = $number;
-                $this->date = now();
                 $this->verification_code = $verificationCode;
                 $this->numerator_id = auth()->id();
+                $this->date = now();
                 $this->save();
                 $this->status = true;
             }
