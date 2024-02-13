@@ -379,7 +379,7 @@
                     <td class="brd-l text-center">{{ $loop->iteration }}</td>
                     <td class="text-center">{{ $file['fileName'] }}</td>
                     <td class="text-center">
-                        <a class="btn btn-secondary btn-sm" href="#items" title="Eliminar" wire:click="{{-- showFile({{$key --}})"><i class="fas fa-file"></i></a>
+                        <a class="btn btn-secondary btn-sm" href="#items" title="Eliminar" wire:click="{{-- showFile({{ $key }}) --}}"><i class="fas fa-file"></i></a>
                     </td>
                     <td width="5%" class="text-center">
                         <a class="btn btn-danger btn-sm" href="#items" title="Eliminar" wire:click="deleteItem({{-- $key --}})"><i class="fas fa-trash-alt"></i></a>
