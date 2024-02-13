@@ -227,6 +227,7 @@ use App\Http\Livewire\Finance\Receptions\IndexReception;
 use App\Http\Livewire\Finance\Receptions\TypeMgr;
 use App\Http\Livewire\Finance\UploadBhe;
 use App\Http\Livewire\Finance\UploadDtes;
+use App\Http\Livewire\Finance\UploadTgr;
 use App\Http\Livewire\HealthServices;
 use App\Http\Livewire\His\ModificationMgr;
 use App\Http\Livewire\His\ModificationRequestIndex;
