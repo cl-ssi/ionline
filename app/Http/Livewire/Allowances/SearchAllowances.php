@@ -43,7 +43,9 @@ class SearchAllowances extends Component
                             'approvals'
                         ])
                         ->latest()
-                        ->doesntHave('archive')
+                        ->whereDoesntHave("archive", function($subQuery){
+                            $subQuery->where('user_id', Auth::user()->id);
+                        })
                         ->search($this->selectedStatus,
                             $this->selectedId,
                             $this->selectedUserAllowance,
@@ -67,7 +69,9 @@ class SearchAllowances extends Component
                             'approvals'
                         ])
                         ->latest()
-                        ->has('archive')
+                        ->whereHas("archive", function($subQuery){
+                            $subQuery->where('user_id', Auth::user()->id);
+                        })
                         ->search($this->selectedStatus,
                             $this->selectedId,
                             $this->selectedUserAllowance,
