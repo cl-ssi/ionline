@@ -26,15 +26,16 @@
     <li class="nav-item">
         <a class="nav-link"
             href="{{ route('documents.docdigital.documentos.creados') }}">
-            <i class="fas fa-file-import"></i> DocDigital - Creados
+            <i class="fas fa-file"></i> DocDigital - Creados
         </a>
     </li>
 
     <li class="nav-item">
         <a class="nav-link"
             href="{{ route('documents.docdigital.documentos.recibidos') }}">
-            <i class="fas fa-file-import"></i> DocDigital - Recibidos
+            <i class="fas fa-file"></i> DocDigital - Recibidos
         </a>
     </li>
+
     @endcan
 </ul>

@@ -2,7 +2,7 @@
     @include('documents.partials.nav')
 
     <h3 class="mb-3">
-        <i class="fas fa-file-import"></i> DocDigital - Recibidos ({{ $count }})
+        <div class="doc-digital">&nbsp;</div> DocDigital - Recibidos ({{ $count }})
     </h3>
 
     <table class="table table-sm table-bordered">
