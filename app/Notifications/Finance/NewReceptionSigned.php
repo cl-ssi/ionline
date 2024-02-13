@@ -16,6 +16,18 @@ class NewReceptionSigned extends Notification implements ShouldQueue
     protected $reception;
 
     /**
+     * Determine which queues should be used for each notification channel.
+     *
+     * @return array
+     */
+    public function viaQueues()
+    {
+        return [
+            'mail' => 'testing',
+        ];
+    }
+
+    /**
      * Create a new notification instance.
      *
      * @return void

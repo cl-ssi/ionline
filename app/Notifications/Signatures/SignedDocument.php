@@ -16,19 +16,6 @@ class SignedDocument extends Notification implements ShouldQueue
     protected $signature;
 
     /**
-     * Determine which queues should be used for each notification channel.
-     *
-     * @return array
-     */
-    /** PARA QUE SE EJECUTEN EN UNA COLA CUSTOM */
-    // public function viaQueues()
-    // {
-    //     return [
-    //         'mail' => 'testing',
-    //     ];
-    // }
-
-    /**
      * Create a new notification instance.
      *
      * @return void
