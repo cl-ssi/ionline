@@ -18,6 +18,7 @@ use App\Models\Documents\Document;
 use App\Models\Documents\Correlative;
 use App\Mail\SendDocument;
 use App\Http\Controllers\Controller;
+use App\Models\Agreements\Agreement;
 use App\Models\Agreements\BudgetAvailability;
 use App\Models\Agreements\ContinuityResolution;
 use App\Models\Documents\SignaturesFlow;
@@ -121,6 +122,11 @@ class DocumentController extends Controller
         if ($request->has('budget_availability_id')) {
             $budgetAvailability = BudgetAvailability::find($request->budget_availability_id);
             $budgetAvailability->update(['document_id' => $document->id]);
+        }
+
+        if ($request->has('agreement_id')) {
+            $agreement = Agreement::find($request->agreement_id);
+            $agreement->update(['document_id' => $document->id]);
         }
 
         return redirect()->route('documents.index');

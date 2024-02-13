@@ -2,6 +2,7 @@
 
 namespace App\Models\Agreements;
 
+use App\Models\Documents\Document;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -14,7 +15,7 @@ class Agreement extends Model
      */
     protected $fillable = [
         'number', 'date', 'period', 'file', 'commune_id', 'program_id', 'quotas', 'total_amount', 'referente', 
-        'director_signer_id', 'referrer_id', 'file_to_endorse_id', 'file_to_sign_id', 'fileResEnd'
+        'director_signer_id', 'referrer_id', 'file_to_endorse_id', 'file_to_sign_id', 'fileResEnd', 'document_id'
     ];
 
     protected $casts = [
@@ -28,6 +29,9 @@ class Agreement extends Model
     // {
     //     return $this->hasMany('App\Models\Agreements\ComponentAmount', 'App\Models\Agreements\AgreementComponent');
     // }
+    public function document() {
+        return $this->belongsTo(Document::class);
+    }
 
     public function program() {
         return $this->belongsTo('App\Models\Agreements\Program');

@@ -58,82 +58,114 @@
 </div>
 
 <ol class="breadcrumb bg-light justify-content-end small">
-    @if($canEdit)
-    <li class="nav-item">
-        @if($agreement->program_id == 3) <!-- convenio retiro voluntario -->
-        <a class="nav-link text-secondary" href="{{ route('agreements.createWordWithdrawal', $agreement) }}"><i class="fas fa-file-download"></i> Descargar borrador Convenio</a>
-        @elseif($agreement->program_id == 50) <!-- convenio de colaboración -->
-        <a class="nav-link text-secondary" href="{{ route('agreements.createWordCollaboration', $agreement) }}"><i class="fas fa-file-download"></i> Descargar borrador Convenio</a>
-        @elseif($agreement->isTypeMandate() && $agreement->period != 2023) <!-- convenio mandato para program id 44 con componente de desarrollo rrhh, para periodo 2023 corre convenio general -->
-        <a class="nav-link text-secondary" href="{{ route('agreements.createWordMandate', $agreement) }}"><i class="fas fa-file-download"></i> Descargar borrador Convenio</a>
-        @elseif($agreement->program_id == 51) <!-- convenio mandato PFC para program id 51 -->
-        <a class="nav-link text-secondary" href="{{ route('agreements.createWordMandatePFC', $agreement) }}"><i class="fas fa-file-download"></i> Descargar borrador Convenio</a>
-        @elseif($agreement->period >= 2022)
-        <a href="#" class="nav-link text-secondary" data-toggle="modal"
-                        data-target="#selectEvalOption"
-                        data-formaction="{{ route('agreements.createWord', $agreement )}}">
-                        <i class="fas fa-file-download"></i> Descargar borrador Convenio</a>
-        @else
-        <a class="nav-link text-secondary" href="{{ route('agreements.createWord', $agreement) }}"><i class="fas fa-file-download"></i> Descargar borrador Convenio</a>
-        @endif
-    </li>
-
-    @if($agreement->file != null)
-    <li>
-        <a class="nav-link text-secondary" href="{{ route('agreements.preview', $agreement->id) }}" target="blank"><i class="fas fa-eye"></i> Previsualizar convenio</a>
-    </li>
-    @endif
-
-    @endif
-
-    @canany(['Documents: signatures and distribution'])
-    @if($canEdit)
-    <li class="nav-item">
-        <a class="nav-link text-secondary" href="{{ route('agreements.sign', [$agreement, 'visators']) }}"><i class="fas fa-file-signature"></i> Solicitar visación Convenio</a>
-    </li>
-    @endif
-
-    @if($agreement->fileToEndorse && $agreement->fileToEndorse->HasAllFlowsSigned)
-    <li class="nav-item">
-        <a class="nav-link text-secondary" href="{{route('documents.signatures.showPdf', [$agreement->file_to_endorse_id, time()])}}" target="blank"><i class="fas fa-eye"></i> Ver convenio visado</a>
-    </li>
-    @if($canEdit)
-    <li class="nav-item">
-        <a class="nav-link text-secondary" href="{{ route('agreements.sign', [$agreement, 'signer']) }}"><i class="fas fa-file-signature"></i> Solicitar firma Convenio</a>
-    </li>
-    @endif
-    
-    @endif
-
-    @if($agreement->fileToSign && $agreement->fileToSign->HasAllFlowsSigned)
-    <li class="nav-item">
-        <a class="nav-link text-secondary" href="{{route('documents.signatures.showPdf', [$agreement->file_to_sign_id, time()])}}" target="blank"><i class="fas fa-eye"></i> Ver convenio firmado</a>
-    </li>
+    @if($agreement->period >= 2024)
         @if($canEdit)
-        @if($agreement->file)
-        <li class="nav-item">
-            <a href="#" class="nav-link text-secondary" data-toggle="modal"
-                            data-target="#selectSignerRes"
-                            data-formaction="{{ route('agreements.createWordRes'. ($agreement->program_id == 3 ? 'Withdrawal' : ($agreement->program_id == 50 ? 'Collaboration' : '')), $agreement )}}">
-                            <i class="fas fa-file-download"></i> Descargar borrador Resolución</a>
-        </li>
-        @else
-        <li class="nav-item">
-            <div class="tooltip-wrapper disabled" data-title="No existe registro de archivo docx versión final de Covenio Referentes, adjuntelo para habilitar esta opción">
-                <a href="#" class="nav-link text-secondary disabled"><i class="fas fa-file-download"></i> Descargar borrador Resolución</a>
-            </div>
-        </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link text-secondary" data-toggle="modal"
+                    data-target="#selectEvalOption" data-formmethod="POST"
+                    data-formaction="{{ route('agreements.createDocument', $agreement )}}">
+                    <i class="fas fa-file-medical"></i> Generar borrador Convenio</a>
+            </li>
+            @if($agreement->document_id != null)
+                <li class="nav-item">
+                    <a href="{{ route('documents.edit', $agreement->document_id) }}" class="nav-link text-secondary"><i class="fas fa-file-alt"></i> Editar borrador Convenio</a> 
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('documents.show', $agreement->document_id) }}" class="nav-link text-secondary"><i class="fas fa-eye"></i> Visualizar borrador Convenio</a> 
+                </li>
+            @endif
         @endif
+
+        @canany(['Documents: signatures and distribution'])
+        @if($canEdit && $agreement->document_id != null)
+        <a class="nav-link text-secondary" href="{{ route('documents.sendForSignature', $agreement->document_id) }}"><i class="fas fa-file-signature"></i> Solicitar visación Convenio</a>
         @endif
-    @endif
+        @endcan
+        @if($agreement->document && $agreement->document->fileToSign)
+            @if($agreement->document->fileToSign->hasSignedFlow)
+            <a href="{{ route('documents.signedDocumentPdf', $agreement->document_id) }}" class="btn btn-sm @if($agreement->document->fileToSign->hasAllFlowsSigned) btn-outline-success @else btn-outline-primary @endif">
+                <i class="fas fa-fw fa-file-contract"></i> Ver convenio visado</a>
+            @else
+                {{ $agreement->document->fileToSign->signature_id }}
+            @endif
+        @endif
+    @else
+        @if($canEdit)
+            <li class="nav-item">
+                @if($agreement->program_id == 3) <!-- convenio retiro voluntario -->
+                <a class="nav-link text-secondary" href="{{ route('agreements.createWordWithdrawal', $agreement) }}"><i class="fas fa-file-download"></i> Descargar borrador Convenio</a>
+                @elseif($agreement->program_id == 50) <!-- convenio de colaboración -->
+                <a class="nav-link text-secondary" href="{{ route('agreements.createWordCollaboration', $agreement) }}"><i class="fas fa-file-download"></i> Descargar borrador Convenio</a>
+                @elseif($agreement->isTypeMandate() && $agreement->period != 2023) <!-- convenio mandato para program id 44 con componente de desarrollo rrhh, para periodo 2023 corre convenio general -->
+                <a class="nav-link text-secondary" href="{{ route('agreements.createWordMandate', $agreement) }}"><i class="fas fa-file-download"></i> Descargar borrador Convenio</a>
+                @elseif($agreement->program_id == 51) <!-- convenio mandato PFC para program id 51 -->
+                <a class="nav-link text-secondary" href="{{ route('agreements.createWordMandatePFC', $agreement) }}"><i class="fas fa-file-download"></i> Descargar borrador Convenio</a>
+                @elseif($agreement->period >= 2022)
+                <a href="#" class="nav-link text-secondary" data-toggle="modal"
+                                data-target="#selectEvalOption"
+                                data-formaction="{{ route('agreements.createWord', $agreement )}}">
+                                <i class="fas fa-file-download"></i> Descargar borrador Convenio</a>
+                @else
+                <a class="nav-link text-secondary" href="{{ route('agreements.createWord', $agreement) }}"><i class="fas fa-file-download"></i> Descargar borrador Convenio</a>
+                @endif
+            </li>
 
-    @if($agreement->fileResEnd != null)
-    <li class="nav-item">
-        <a class="nav-link text-secondary" href="{{ route('agreements.downloadRes', $agreement->id) }}" target="blank"><i class="fas fa-eye"></i> Ver resolución firmada</a>
-    </li>
-    @endif
+            @if($agreement->file != null)
+            <li>
+                <a class="nav-link text-secondary" href="{{ route('agreements.preview', $agreement->id) }}" target="blank"><i class="fas fa-eye"></i> Previsualizar convenio</a>
+            </li>
+            @endif
 
-    @endcan
+        @endif
+
+        @canany(['Documents: signatures and distribution'])
+            @if($canEdit)
+            <li class="nav-item">
+                <a class="nav-link text-secondary" href="{{ route('agreements.sign', [$agreement, 'visators']) }}"><i class="fas fa-file-signature"></i> Solicitar visación Convenio</a>
+            </li>
+            @endif
+
+            @if($agreement->fileToEndorse && $agreement->fileToEndorse->HasAllFlowsSigned)
+            <li class="nav-item">
+                <a class="nav-link text-secondary" href="{{route('documents.signatures.showPdf', [$agreement->file_to_endorse_id, time()])}}" target="blank"><i class="fas fa-eye"></i> Ver convenio visado</a>
+            </li>
+            @if($canEdit)
+            <li class="nav-item">
+                <a class="nav-link text-secondary" href="{{ route('agreements.sign', [$agreement, 'signer']) }}"><i class="fas fa-file-signature"></i> Solicitar firma Convenio</a>
+            </li>
+            @endif
+            
+            @endif
+
+            @if($agreement->fileToSign && $agreement->fileToSign->HasAllFlowsSigned)
+            <li class="nav-item">
+                <a class="nav-link text-secondary" href="{{route('documents.signatures.showPdf', [$agreement->file_to_sign_id, time()])}}" target="blank"><i class="fas fa-eye"></i> Ver convenio firmado</a>
+            </li>
+                @if($canEdit)
+                @if($agreement->file)
+                <li class="nav-item">
+                    <a href="#" class="nav-link text-secondary" data-toggle="modal"
+                                    data-target="#selectSignerRes"
+                                    data-formaction="{{ route('agreements.createWordRes'. ($agreement->program_id == 3 ? 'Withdrawal' : ($agreement->program_id == 50 ? 'Collaboration' : '')), $agreement )}}">
+                                    <i class="fas fa-file-download"></i> Descargar borrador Resolución</a>
+                </li>
+                @else
+                <li class="nav-item">
+                    <div class="tooltip-wrapper disabled" data-title="No existe registro de archivo docx versión final de Covenio Referentes, adjuntelo para habilitar esta opción">
+                        <a href="#" class="nav-link text-secondary disabled"><i class="fas fa-file-download"></i> Descargar borrador Resolución</a>
+                    </div>
+                </li>
+                @endif
+                @endif
+            @endif
+
+            @if($agreement->fileResEnd != null)
+            <li class="nav-item">
+                <a class="nav-link text-secondary" href="{{ route('agreements.downloadRes', $agreement->id) }}" target="blank"><i class="fas fa-eye"></i> Ver resolución firmada</a>
+            </li>
+            @endif
+        @endcan
+    @endif
 </ol>
 <p>
 
@@ -695,6 +727,7 @@
         var button = $(event.relatedTarget) // Button that triggered the modal
         var modal  = $(this)
         modal.find("#form-edit").attr('action', button.data('formaction'))
+        modal.find("#form-edit").attr('method', button.data('formmethod') ?? 'GET')
     })
 
     $('#SubmitSignerSelected,#SubmitEvalSelected').click(function() {

@@ -737,6 +737,10 @@ Route::prefix('agreements')->as('agreements.')->middleware(['auth', 'must.change
     Route::get('/createWordMandate/{agreement}', [WordMandateAgreeController::class, 'createWordDocx'])->name('createWordMandate');
     Route::get('/createWordMandatePFC/{agreement}', [WordMandatePFCAgreeController::class, 'createWordDocx'])->name('createWordMandatePFC');
     Route::get('/sign/{agreement}/type/{type}', [AgreementController::class, 'sign'])->name('sign');
+
+    
+    // Convenios 2024
+    Route::post('/createDocument/{agreement}', [AgreementController::class, 'createDocument'])->name('createDocument');
 });
 /** Fin Agreements */
 

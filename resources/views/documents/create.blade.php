@@ -29,6 +29,10 @@
     @if (isset($document->budget_availability_id))
     <input type="hidden" name="budget_availability_id" value="{{ $document->budget_availability_id }}">
     @endif
+    
+    @if (isset($document->agreement_id))
+    <input type="hidden" name="agreement_id" value="{{ $document->agreement_id }}">
+    @endif
 
     <div class="form-row">
         <div class="form-group col-2">

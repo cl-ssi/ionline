@@ -6,7 +6,7 @@
                 <h5 class="modal-title" id="editModalLabel">Opciones de evaluación</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             </div>
-            <form method="GET" id="form-edit">
+            <form id="form-edit">
                 <div class="modal-body">
                     @csrf
                     <div class="form-group">
