@@ -371,9 +371,6 @@ class DigitalSignatureController extends Controller
         $yPading = 16;
         $fontSize = 10;
 
-        $actualDate = now()->format('d-m-Y H:i:s');
-        $fullName = Auth::user()->full_name;
-
         if ($signatureType === 'firmante' || $visatorAsSignature === true) {
             $im = @imagecreate(400, 84) or die("Cannot Initialize new GD image stream");
             $background_color = imagecolorallocate($im, 204, 204, 204);
@@ -399,7 +396,7 @@ class DigitalSignatureController extends Controller
                 $yPading * 2 + $marginTop + 0.2,
                 $text_color,
                 $font_bold,
-                $fullName
+                auth()->user()->fullName
             );
             imagettftext(
                 $im,
@@ -409,7 +406,7 @@ class DigitalSignatureController extends Controller
                 $yPading * 3 + $marginTop + 0.3,
                 $text_color,
                 $font_regular,
-                env('APP_SS')
+                auth()->user()->organizationalUnit->establishment->name
             );
             imagettftext(
                 $im,
@@ -419,7 +416,7 @@ class DigitalSignatureController extends Controller
                 $yPading * 4 + $marginTop + 0.4,
                 $text_color,
                 $font_regular,
-                'Autenticidad https://i.saludtarapaca.gob.cl/validador'
+                'Autenticidad '.env('APP_URL').'/validador'
             );
             imagettftext(
                 $im,
@@ -439,7 +436,7 @@ class DigitalSignatureController extends Controller
                 $yPading * 5 + $marginTop + 0.5,
                 $text_color,
                 $font_regular,
-                ($signatureType === 'firmante' ? $actualDate : '')
+                ($signatureType === 'firmante' ? now()->format('d-m-Y H:i:s') : '')
             );
         } else {
 
