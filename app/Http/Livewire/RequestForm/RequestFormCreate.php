@@ -237,9 +237,10 @@ class RequestFormCreate extends Component
     public function totalForm(){
       $total = 0;
       foreach($this->isRFItems ? $this->items : $this->passengers as $item)
-        $total += $this->typeOfCurrency == 'peso' ? round($item[$this->isRFItems ? 'totalValue' : 'unitValue']) : $item[$this->isRFItems ? 'totalValue' : 'unitValue'];
+        $total += $item[$this->isRFItems ? 'totalValue' : 'unitValue'];
+        // $total += $this->typeOfCurrency == 'peso' ? round($item[$this->isRFItems ? 'totalValue' : 'unitValue']) : $item[$this->isRFItems ? 'totalValue' : 'unitValue'];
 
-      return $total;
+      return $this->typeOfCurrency == 'peso' ? round($total) : $total;
     }
 
     private function createFolio(){
