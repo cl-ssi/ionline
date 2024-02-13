@@ -68,7 +68,7 @@ class DocDigital extends Model
     public function getEntidadesToken()
     {
         $response = $this->client->get('/entidades/token');
-        return json_decode($response->body());
+        return json_decode($response->body(), true);
     }
 
     /**
@@ -77,7 +77,16 @@ class DocDigital extends Model
     public function getDocumentosBuscar($filtro = [])
     {
         $response = $this->client->get('/documentos/buscar',$filtro);
-        return json_decode($response->body());
+        return json_decode($response->body(), true);
+    }
+
+    /**
+     * Método para obtener los documentos creados por la entidad asociada al token de autenticación
+     */
+    public function getDocumentosCreados($filtro = [])
+    {
+        $response = $this->client->get('/documentos/creados', $filtro);
+        return json_decode($response->body(), true);
     }
 
     /**
@@ -86,6 +95,15 @@ class DocDigital extends Model
     public function getDocumentosRecibidos($filtro = [])
     {
         $response = $this->client->get('/documentos/recibidos', $filtro);
+        return json_decode($response->body(), true);
+    }
+
+    /**
+     * Obtiene los documentos Recibidos
+     */
+    public function getDocumentosArchivo($documento_id, $id)
+    {
+        $response = $this->client->get('/documentos/'.$documento_id.'/archivo', ['archivo_id' => $id]);
         return json_decode($response->body());
     }
 
