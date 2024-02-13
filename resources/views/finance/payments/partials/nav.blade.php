@@ -22,9 +22,15 @@
 
 
     <li class="nav-item">
-        <a class="nav-link {{ active('finance.payments.rejected') }}"
+        <a class="nav-link {{ active('finance.payments.uploadBhe') }}"
             href="{{ route('finance.dtes.uploadBhe') }}">
             <i class="fas fa-fw fa-cloud-upload-alt"></i> Cargar Reporte BHE</a>
+    </li>
+
+    <li class="nav-item">
+        <a class="nav-link {{ active('finance.payments.uploadTgr') }}"
+            href="{{ route('finance.dtes.uploadTgr') }}">
+            <i class="fas fa-file-upload"></i> Cargar Reporte TGR</a>
     </li>
     
 </ul>
