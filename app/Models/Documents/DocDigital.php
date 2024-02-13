@@ -68,7 +68,7 @@ class DocDigital extends Model
     public function getEntidadesToken()
     {
         $response = $this->client->get('/entidades/token');
-        return json_decode($response->body());
+        return json_decode($response->body(), true);
     }
 
     /**
@@ -77,7 +77,7 @@ class DocDigital extends Model
     public function getDocumentosBuscar($filtro = [])
     {
         $response = $this->client->get('/documentos/buscar',$filtro);
-        return json_decode($response->body());
+        return json_decode($response->body(), true);
     }
 
     /**
