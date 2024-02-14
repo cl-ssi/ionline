@@ -8,7 +8,6 @@ use App\Models\Summary\Summary;
 use App\Models\Summary\EventType;
 use App\Models\Summary\Event;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
 
 class SummaryController extends Controller
 {
@@ -19,23 +18,19 @@ class SummaryController extends Controller
      */
     public function index()
     {
-        if (Auth::user()->can('Summary: user')) {
-            $user_id = auth()->id();
-            $summaries = Summary::where('investigator_id', $user_id)
-                ->orWhere('actuary_id', $user_id)
-                ->orWhere('creator_id', $user_id)
+        if (auth()->user()->can('Summary: user')) {
+            $summaries = Summary::where('investigator_id', auth()->id())
+                ->orWhere('actuary_id', auth()->id())
+                ->orWhere('creator_id', auth()->id())
                 ->latest()
-                ->get();
+                ->paginate(50);
         }
 
-        if (Auth::user()->can('Summary: admin') or Auth::user()->can('Summary: admin viewer') or Auth::user()->can('be god')) {
-            $summaries = Summary::where('establishment_id', auth()->user()->organizationalUnit->establishment->id)
+        if (auth()->user()->can('Summary: admin') OR auth()->user()->can('Summary: admin viewer')) {
+            $summaries = Summary::where('establishment_id', auth()->user()->organizationalUnit->establishment_id)
                 ->latest()
-                ->get();
+                ->paginate(50);
         }
-
-
-
 
         return view('summary.index', compact('summaries'));
     }

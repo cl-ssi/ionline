@@ -83,7 +83,14 @@ class EventTypeController extends Controller
     {
         $summaryActors = Actor::pluck('name','id');
 
-        return view('summary.events.edit', compact('eventType', 'summaryActors'));
+        $eventTypes = EventType::with('actor')
+            ->where('summary_type_id', $eventType->summary_type_id)
+            ->where('establishment_id', $eventType->establishment_id)
+            ->orderBy('summary_actor_id')
+            ->orderBy('name')
+            ->get();
+
+        return view('summary.events.edit', compact('eventType', 'summaryActors', 'eventTypes'));
     }
 
     /**

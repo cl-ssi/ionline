@@ -1,4 +1,4 @@
-@extends('layouts.bt4.app')
+@extends('layouts.bt5.app')
 
 @section('title', 'Módulo de Sumario - Crear Sumario')
 
@@ -11,7 +11,7 @@
 <form method="POST" class="form-horizontal" action="{{ route('summary.store') }}">
     @csrf
     @method('POST')
-    <div class="form-row mb-3">
+    <div class="row mb-3 g-2">
         <div class="col-12 col-md-4">
             <label for="for-name">Asunto*</label>
             <input type="text" class="form-control" name="subject" autocomplete="off" required>
@@ -19,7 +19,7 @@
 
         <div class="col-12 col-md-3">
             <label for="for-type">Tipo*</label>
-            <select name="type_id" id="for_type" class="form-control" required>
+            <select name="type_id" id="for_type" class="form-select" required>
                 <option value=""></option>
                 @foreach($types as $id => $name)
                     <option value="{{ $id }}">{{ $name }}</option>
@@ -46,7 +46,7 @@
         <textarea class="form-control" id="for-observation" rows="5" name="observation"></textarea>
     </div>
 
-    <div class="form-row">
+    <div class="row">
         <div class="mt-3 col-12">
             <button type="submit" class="btn btn-success">Guardar</button>
             <a href="{{ route('summary.index') }}" class="btn btn-outline-secondary">Cancelar</a>

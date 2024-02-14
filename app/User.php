@@ -26,6 +26,7 @@ use App\Models\Rrhh\AmiLoad;
 use App\Models\Rrhh\Shift;
 use App\Models\Rrhh\CompensatoryDay;
 
+use App\Models\Welfare\Amipass\PendingAmount;
 use App\Models\Welfare\Amipass\Charge;
 use App\Models\Welfare\Amipass\NewCharge;
 use App\Models\Welfare\Amipass\Regularization;
@@ -248,6 +249,13 @@ class User extends Authenticatable implements Auditable
     {
         return $this->hasMany(CompensatoryDay::class,'user_id');
     }
+
+    public function pendingAmounts(): HasMany
+    {
+        return $this->hasMany(PendingAmount::class,'user_id');
+    }
+
+    
 
 
     /* Authority relation: Is Manager from ou */
@@ -937,7 +945,7 @@ class User extends Authenticatable implements Auditable
         // dd($this);
 
         // si tiene turnos
-        if($this->shifts->count()>0 && 1==0)
+        if($this->shifts->count()>0)
         {
             foreach($this->shifts as $shift){
                 $shift->ammount = $shift->quantity * $this->shiftAmmount;
@@ -1072,7 +1080,7 @@ class User extends Authenticatable implements Auditable
 
 
             
-
+            
             foreach($this->absenteeisms->sortBy('finicio') as $key => $absenteeism) {
                 // si el tipo de ausentismo no considera descuento, se sigue en la siguiente iteración
                 if(!$absenteeism->type->discount){
@@ -1202,7 +1210,6 @@ class User extends Authenticatable implements Auditable
 
 
             // obtiene monto a pagar de la ausencia y la asigna a usuario
-            // dd($businessDays, $this->totalAbsenteeisms);
             $this->ammount = $this->dailyAmmount * ( $businessDays - $this->totalAbsenteeisms);
             
             // se genera array para exportación de montos
@@ -1246,9 +1253,8 @@ class User extends Authenticatable implements Auditable
 
 
         // se agrega para realizar comparación con información de tabla 'Charges' (se debe eiminar dsps)
-        $charges = Charge::where('rut', $this->id)->get();
         $meses[] = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
-        foreach($charges as $key => $charge){
+        foreach($this->charges as $key => $charge){
             list($day, $month, $year) = explode('-', $charge->fecha);
             $date_string = '2023-' . $day . "-" . str_pad((array_search($month, $meses)+1), 2, "0", STR_PAD_LEFT);
             $charge->date = Carbon::parse($date_string);
