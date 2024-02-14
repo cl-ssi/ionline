@@ -27,7 +27,7 @@ trait NumerateTrait
         if ($status === true) {
             /** Fue numerado con éxito */
             if($numeration->numerable_type == 'App\Models\Finance\Receptions\Reception') {
-                $emails = Parameter::get('Receptions','emails_notification', $numeration->establishment_id);
+                $emails = explode(',',Parameter::get('Receptions','emails_notification', $numeration->establishment_id));
                 /**
                  * Envia la notificacion por email
                  */
