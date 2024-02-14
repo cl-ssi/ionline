@@ -17,15 +17,34 @@
             <div wire:loading.delay class="z-50 static flex fixed left-0 top-0 bottom-0 w-full bg-gray-400 bg-opacity-50">
                 <img src="https://paladins-draft.com/img/circle_loading.gif" width="64" height="64" class="m-auto mt-1/4">
             </div>
-
         </div>
     </div>
 
     @if($search_date!=null)
 
-    <button class="btn btn-outline-success float-right" wire:click="export">
-        Montos <i class="fas fa-download"></i>
-    </button><br><br>
+    <div class="form-row">
+        <div class="form-group col-10">
+            
+        </div>
+        <div class="form-group col-2">
+            <button class="btn btn-outline-success float-right" wire:click="export">
+                Montos <i class="fas fa-download"></i>
+            </button>
+        </div>
+        <!-- <div class="form-group col-2">
+            <button class="btn btn-outline-info float-right" wire:click="process">
+                Procesar montos <i class="fa fa-cogs"></i>
+            </button>
+        </div> -->
+    </div>
+
+    <div>
+        @if (session()->has('message'))
+            <div class="alert alert-success">
+                {{ session('message') }}
+            </div>
+        @endif
+    </div>
 
     <table class="table table-bordered table-sm" style="border-collapse:collapse;">
         <thead>
@@ -40,161 +59,133 @@
             </tr>
         </thead>
         <tbody>
-            @if($userWithContracts)
-                @foreach ($userWithContracts as $ct => $user)
-                    @if($user->shifts->count()==0)
+            @foreach($output as $id => $user)
+                @if(!$user['shifts'])
+                    <tr>
+                        <td>{{ $id }}</td>
+                        <td>{{ $user['shortName'] }}</td>
+                        <td>{{ money($user['regularized_ammount']) }}</td>
+                        <td>--</td>
+                        <td>
+                            <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#demo{{$id}}" aria-expanded="false" aria-controls="collapseExample">
+                                Detalles
+                            </button>
+                        </td>
+                    </tr>
+                    <tr class="collapse" id="demo{{$id}}">
+                        <td></td>
+                        <td></td>
                         
-                    @if($user->ammount == $user->valor_debia_cargarse) <tr >
-                    @else <tr class="table-warning"> @endif
-                        
-                            <td>{{ $user->id }}</td>
-                            <td>{{ $user->shortName }}</td>
-                            <!-- <td>{{ money($user->AmiLoadMount) }}</td> -->
-                            <td>{{ money($user->ammount) }}</td>
-                            <!-- <td>{{ money($user->valor_debia_cargarse) }}</td> debe eliminarse esta columna -->
-                            <!-- <td>
-                                @if($user->diff < 0)
-                                    <p style="color:red;display: inline;">
-                                        {{$user->diff}}
-                                    </p>
-                                @else
-                                    {{$user->diff}}
-                                @endif
-                            </td> -->
-                            <td>--</td>
-                            <td>
-                                <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#demo{{$ct}}" aria-expanded="false" aria-controls="collapseExample">
-                                    Detalles
-                                </button>
-                            </td>
-                        </tr>
-                        
-                        <tr class="collapse" id="demo{{$ct}}">
-                            <td></td>
-                            <td></td>
-                            <td>
-                                <ul>
-                                    Detalles de cargas: <br>
-                                    @foreach($user->amiLoads as $amiLoad)
-                                        <li> 
-                                        {{$amiLoad->fecha}} - {{$amiLoad->monto}} 
-                                        </li>
+                        <td>
+                            <ul>
+                                Detalles de cargas: <br>
+                                @if($user['amiLoads'])
+                                    @foreach($user['amiLoads'] as $amiLoad)
+                                        <li>{{$amiLoad['fecha']}} - {{$amiLoad['monto']}}</li>
                                     @endforeach
-                                </ul>
-                            </td>
-                            <td class="small">
-                                <ul>
-                                    <!-- ausentismos (sin condierar dias compensatorios) -->
-                                    @foreach($user->absenteeisms as $absenteeism)
+                                @endif
+                            </ul>
+                        </td>
+                        
+                        
+                        <td class="small">
+                            <ul>
+                                <!-- ausentismos (sin condierar dias compensatorios) -->
+                                @if($user['absenteeisms'])
+                                    @foreach($user['absenteeisms'] as $absenteeism)
                                     <li> 
-                                        @if($absenteeism->totalDays==0)
-                                            {{ $absenteeism->finicio->format('Y-m-d') }} - {{ $absenteeism->ftermino->format('Y-m-d') }} 
-                                            <small>({{ $absenteeism->tipo_de_ausentismo }})</small> 
-                                            Dias: {{ $absenteeism->total_dias_ausentismo }} => {{ $absenteeism->totalDays}}
+                                        @if($absenteeism['totalDays']==0)
+                                            {{ $absenteeism['finicio'] }} - {{ $absenteeism['ftermino'] }} 
+                                            <small>({{ $absenteeism['tipo_de_ausentismo'] }})</small> 
+                                            Dias: {{ $absenteeism['total_dias_ausentismo'] }} => {{ $absenteeism['totalDays']}}
                                         @else 
                                             <p style="color:red;display: inline;">
-                                                {{ $absenteeism->finicio->format('Y-m-d') }} - {{ $absenteeism->ftermino->format('Y-m-d') }} 
-                                                <small>({{ $absenteeism->tipo_de_ausentismo }})</small> 
-                                                Dias: {{ $absenteeism->total_dias_ausentismo }} => {{ $absenteeism->totalDays}}
+                                                {{ $absenteeism['finicio'] }} - {{ $absenteeism['ftermino'] }} 
+                                                <small>({{ $absenteeism['tipo_de_ausentismo'] }})</small> 
+                                                Dias: {{ $absenteeism['total_dias_ausentismo'] }} => {{ $absenteeism['totalDays']}}
                                             </p>
                                         @endif
                                     </li>
                                     @endforeach
+                                @endif
 
-                                    <!-- solo dias compensatorios -->
-                                    @foreach($user->compensatoryDays as $compensatoryDay)
+                                
+                                <!-- solo dias compensatorios -->
+                                @if($user['compensatoryDays'])
+                                    @foreach($user['compensatoryDays'] as $compensatoryDay)
                                     <li> 
-                                        @if($compensatoryDay->totalDays==0)
-                                            {{ $compensatoryDay->start_date->format('Y-m-d H:i') }} - {{ $compensatoryDay->end_date->format('Y-m-d H:i')}} => {{$compensatoryDay->start_date->diffInHours($compensatoryDay->end_date)}} Hrs. 
+                                        @if($compensatoryDay['totalDays'] == 0)
+                                            {{ $compensatoryDay['start_date'] }} - {{ $compensatoryDay['end_date']}} => {{$compensatoryDay['diffInHours']}} Hrs. 
                                             <small>(DÍA COMPENSATORIO)</small> 
-                                            Dias: {{ $compensatoryDay->total_dias_ausentismo }} => {{ $compensatoryDay->totalDays}}
+                                            Dias: {{ $compensatoryDay['total_dias_ausentismo'] }} => {{ $compensatoryDay['totalDays']}}
                                         @else 
                                             <p style="color:red;display: inline;">
-                                                {{ $compensatoryDay->start_date->format('Y-m-d H:i') }} - {{ $compensatoryDay->end_date->format('Y-m-d H:i') }} => {{$compensatoryDay->start_date->diffInHours($compensatoryDay->end_date)}} Hrs. 
+                                                {{ $compensatoryDay['start_date'] }} - {{ $compensatoryDay['end_date'] }} => {{$compensatoryDay['diffInHours']}} Hrs. 
                                                 <small>(DÍA COMPENSATORIO)</small> 
-                                                Dias: {{ $compensatoryDay->total_dias_ausentismo }} => {{ $compensatoryDay->totalDays}}
+                                                Dias: {{ $compensatoryDay['total_dias_ausentismo'] }} => {{ $compensatoryDay['totalDays']}}
                                             </p>
                                         @endif
                                     </li>
                                     @endforeach
-
-                                    <br>
-                                    <li>Días hábiles en búsqueda: {{$user->businessDays}}</li>
-                                    <li>Días descuento: {{ $user->totalAbsenteeismsEnBd }} => {{ $user->totalAbsenteeisms }}</li>
-                                    <li>Días a pagar: {{$user->businessDays - $user->totalAbsenteeisms}}</li>
-                                    <li>Valor día: {{$user->dailyAmmount}}</li>
-                                </ul>
-
-                                
-
-                                <hr>
-
-                                
-                                <ul>
-                                    <li>
-                                    H.Totales contratos: {{$user->contract_hours}} 
-                                    @if($user->contract_hours<=33)
-                                        <p style="color:red;display: inline;">(Sin descuentos)</p>
-                                    @endif
-                                    </li>
-                                </ul>
-
-                                Contratos:
-                                <ul>
-                                @foreach($user->contracts as $contract)
-                                    <li>
-                                    {{ $contract->id }} - 
-                                    {{ optional($contract->fecha_inicio_contrato)->format('Y-m-d') }} - 
-                                    {{ optional($contract->fecha_termino_contrato)->format('Y-m-d') }}<br>
-                                    Horas contrato: {{ $contract->numero_horas }} <br>
-                                    </li>
-                                @endforeach
-                                </ul>
-                            </td>
-                            <td><small>D.Ausentismo: {{$user->dias_ausentismo}}</small> </td>
-                        </tr>
-                    @else
-                        <tr class="table-info">
-                            <td>{{ $user->id }}</td>
-                            <td>{{ $user->shortName }}</td>
-                            <!-- <td>{{ money($user->AmiLoadMount) }}</td> -->
-                            <td>{{ money($user->shifts->sum('ammount')) }}</td>
-                            <!-- <td>{{ money($user->valor_debia_cargarse) }}</td> -->
-                            <!-- <td>
-                                @if($user->diff < 0)
-                                    <p style="color:red;display: inline;">
-                                        {{$user->diff}}
-                                    </p>
-                                @else
-                                    {{$user->diff}}
                                 @endif
-                            </td> -->
-                            <td>Turno</td>
-                            <td>
-                                <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#demo{{$ct}}" aria-expanded="false" aria-controls="collapseExample">
-                                    Detalles
-                                </button>
-                            </td>
-                        </tr>
 
-                        <tr class="collapse" id="demo{{$ct}}">
-                            <td></td>
-                            <td></td>
-                            <td>
+                                
+                                <br>
+                                <li>Días hábiles en búsqueda: {{$user['businessDays']}}</li>
+                                <li>Días descuento: {{ $user['totalAbsenteeismsEnBd'] }} => {{ $user['totalAbsenteeisms'] }}</li>
+                                <li>Días a pagar: {{$user['businessDays'] - $user['totalAbsenteeisms']}}</li>
+                                <li>Valor día: {{$user['dailyAmmount']}}</li>
+                                <li>Valor calculado del mes: {{ money($user['ammount']) }}</li>
+                                @if(array_key_exists('pendingAmount', $user))
+                                    <li>Débito acumulado: {{$user['pendingAmount']}}</li>
+                                @endif
 
-                            </td>
-                            <td class="small">
-                                @foreach($user->shifts as $shift)
-                                    <li>
-                                    {{ $shift->year }} - {{ $shift->monthName() }}: {{ $shift->quantity }} días * {{ money($user->shiftAmmount) }}
-                                    </li>
-                                @endforeach
-                            </td>
-                            <td></td>
-                        </tr>
-                    @endif
-                @endforeach
-            @endif
+                            </ul>
+
+                            <hr>
+
+                            <ul>
+                                <li>
+                                H.Totales contratos: {{$user['contract_hours']}} 
+                                @if($user['contract_hours'] <= 33)
+                                    <p style="color:red;display: inline;">(Menor a 33 hrs - No se paga amipass)</p>
+                                @endif
+                                </li>
+                            </ul>
+                        </td>
+                        
+                        <td><small>D.Ausentismo: {{$user['dias_ausentismo']}}</small></td>
+                    </tr>
+                @else
+                    <tr class="table-info">
+                        <td>{{ $id }}</td>
+                        <td>{{ $user['shortName'] }}</td>
+                        <td>FALTA INCORPORAR!</td>
+                        <td>Turno</td>
+                        <td>
+                            <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#demo{{$id}}" aria-expanded="false" aria-controls="collapseExample">
+                                Detalles
+                            </button>
+                        </td>
+                    </tr>
+
+                    <tr class="collapse" id="demo{{$id}}">
+                        <td></td>
+                        <td></td>
+                        <td>
+
+                        </td>
+                        <td class="small">
+                            @foreach($user['shifts'] as $shift)
+                                <li>
+                                {{ $shift->year }} - {{ $shift->monthName() }}: {{ $shift->quantity }} días * {{ money($user->shiftAmmount) }}
+                                </li>
+                            @endforeach
+                        </td>
+                        <td></td>
+                    </tr>
+                @endif
+            @endforeach
         </tbody>
     </table>
 
