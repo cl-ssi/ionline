@@ -20,12 +20,11 @@ class TgrsImport implements WithHeadingRow, ToCollection
         $insert_array = [];
 
         foreach ($rows as $row) {
-            $principalParts = explode(' ', $row['principal'], 2);
-            $rut_emisor = $principalParts[0] ?? null;
-            $razon_social_emisor = $principalParts[1] ?? null;
-
+            if(isset($row['principal'])){
+            list($rut_emisor, $razon_social_emisor) = explode(' ', $row['principal'], 2);
+            $rut_emisor_formateado = $this->formatRut($rut_emisor);
             $insert_array[] = [
-                'rut_emisor' => $rut_emisor,
+                'rut_emisor' => $rut_emisor_formateado,
                 'folio_documento' => $row['nro_documento'],
                 'razon_social_emisor' => $razon_social_emisor,
                 'area_transaccional' => $row['area_transaccional'],
@@ -39,14 +38,23 @@ class TgrsImport implements WithHeadingRow, ToCollection
                 'banco_cta_corriente' => $row['banco_cta_corriente'],
                 'created_at' => now(),
                 'updated_at' => now(),
-            ];
+                ];
+            }
         }
-
-        // Realizar el upsert para el conjunto de datos recolectados
+        
         TgrPayedDte::upsert(
             $insert_array,
             ['rut_emisor', 'folio_documento'],
             ['razon_social_emisor', 'area_transaccional', 'folio', 'tipo_operacion', 'combinacion_catalogo', 'principal', 'principal_relacionado', 'beneficiario', 'banco_cta_corriente', 'created_at', 'updated_at']
         );
+    }
+
+    private function formatRut($rut)
+    {
+        // Formatear el RUN con puntos
+        $parte_numerica = substr($rut, 0, -2); // Obtener los primeros caracteres sin el guion y el dígito verificador
+        $digito_verificador = substr($rut, -1); // Obtener el dígito verificador
+        $rut_formateado = number_format($parte_numerica, 0, ',', '.') . '-' . $digito_verificador;
+        return $rut_formateado;
     }
 }
