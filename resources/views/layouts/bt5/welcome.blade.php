@@ -222,6 +222,13 @@
                             Metas sanitarias
                         </a>
 
+                        <br>
+
+                        <a class="card-link" href="{{ route('invoice.welcome') }}">
+                            <i class="fas fa-fw fa-file-invoice"></i>
+                            Honorarios (subir boletas)
+                        </a>
+
                     </div>
                 </div>
             </div>
