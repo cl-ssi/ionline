@@ -181,7 +181,7 @@
                             [{{ $eventType->actor->name }}]
                         </td>
                         <td class="align-middle;">
-                            @foreach ($eventType->summaryType->eventTypes as $type)
+                            @foreach ($eventTypes as $type)
                                 @if($type->id != $eventType->id)
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" value="{{ $type->id }}"
@@ -203,6 +203,10 @@
                                         @endif
                                     </label>
                                 </div>
+                                @else
+                                &nbsp;&nbsp;&nbsp;
+                                    [{{ optional($type->actor)->name }}] 
+                                    {{ $type->name }}
                                 @endif
                             @endforeach
                         </td>

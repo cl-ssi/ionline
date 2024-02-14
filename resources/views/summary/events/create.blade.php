@@ -1,4 +1,4 @@
-@extends('layouts.bt4.app')
+@extends('layouts.bt5.app')
 
 @section('title', 'Módulo de Sumario - Crear Tipo de Eventos')
 
@@ -9,10 +9,10 @@
     <form method="POST" class="form-horizontal" action="{{ route('summary.event-types.store') }}">
         @csrf
         @method('POST')
-        <div class="form-group row">
+        <div class="form-group row mb-3">
             <label for="for-name" class="col-sm-2 col-form-label">Tipo*</label>
             <div class="col-sm-5">
-                <select class="form-control" name="summary_type_id" required>
+                <select class="form-select" name="summary_type_id" required>
                     <option value=""></option>
                     @foreach($summaryTypes as $typeId => $typeName)
                         <option value="{{ $typeId }}">{{ $typeName }}</option>
@@ -21,14 +21,14 @@
             </div>
         </div>
 
-        <div class="form-group row">
+        <div class="form-group row mb-3">
             <label for="for-name" class="col-sm-2 col-form-label">Nombre*</label>
             <div class="col-sm-10">
                 <input type="text" class="form-control" name="name" autocomplete="off" required>
             </div>
         </div>
 
-        <div class="form-group row">
+        <div class="form-group row mb-3">
             <label for="for-name" class="col-sm-2 col-form-label">Tipo Actor*</label>
             <div class="col-sm-10">
                 <select class="form-control" name="summary_actor_id" required>
@@ -40,14 +40,14 @@
             </div>
         </div>
 
-        <div class="form-group row">
+        <div class="form-group row mb-3">
             <label for="for-description" class="col-sm-2 col-form-label">Descripción</label>
             <div class="col-sm-10">
                 <textarea class="form-control" name="description"></textarea>
             </div>
         </div>
 
-        <div class="form-group row">
+        <div class="form-group row mb-3">
             <label for="for-duration" class="col-sm-2 col-form-label">Duración</label>
             <div class="col-sm-2">
                 <input type="number" class="form-control" min="0" name="duration">
@@ -57,7 +57,7 @@
         </div>
 
 
-        <div class="form-group row">
+        <div class="form-group row mb-3">
             <legend class="col-form-label col-sm-2">Se repite</legend>
             <div class="col-sm-1">
                 <div class="form-check mt-2">
@@ -74,7 +74,7 @@
             </div>
         </div>
 
-        <fieldset class="form-group row">
+        <fieldset class="form-group row mb-3">
             <legend class="col-form-label col-sm-2 float-sm-left pt-0">Opciones</legend>
             <div class="col-sm-10">
                 <div class="form-check">
