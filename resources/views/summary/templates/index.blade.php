@@ -1,8 +1,10 @@
-@extends('layouts.bt4.app')
+@extends('layouts.bt5.app')
+
 @section('title', 'Módulo de Plantillas de Tipo de Eventos')
+
 @section('content')
     @include('summary.nav')
-    <div class="form-row">
+    <div class="row">
         <div class="col">
             <h3 class="mb-3">Listado de Plantillas para Tipos de Eventos</h3>
         </div>

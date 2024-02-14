@@ -118,7 +118,7 @@
                         @endif
                     @endif
 
-                    <div class="progress mt-2">
+                    <!-- <div class="progress mt-2">
                         <div
                             class="progress-bar @if($event->type->totalDays == $event->type->daysPassed) bg-danger @endif"
                             role="progressbar"
@@ -128,7 +128,7 @@
                             aria-valuemax="100"
                         >
                         </div>
-                    </div>
+                    </div> -->
                 </footer>
             </blockquote>
 
@@ -155,17 +155,10 @@
                                     @method('POST')
                                     <input type="hidden" class="form-control" name="event_id" value="{{$event->id}}">
                                     <div class="input-group">
-                                        <div class="custom-file">
-                                            <input type="file" class="custom-file-input" id="inputGroupFile04"
-                                                aria-describedby="inputGroupFileAddon04" name="files[]">
-                                            <label class="custom-file-label" for="customFileLangHTML"
-                                                data-browse="Examinar">Seleccione un archivo</label>
-                                        </div>
-                                        <div class="input-group-append">
-                                            <button class="btn btn-outline-primary" type="submit" id="attache">
-                                                <i class="fas fa-arrow-up"></i> Adjuntar
-                                            </button>
-                                        </div>
+                                        <input class="form-control" type="file" id="formFile" name="files[]">
+                                        <button class="btn btn-outline-primary" type="submit" id="attache">
+                                            <i class="fas fa-arrow-up"></i> Adjuntar
+                                        </button>
                                     </div>
                                 </form>
                             @endif

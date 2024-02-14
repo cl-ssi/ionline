@@ -14,7 +14,7 @@
 
         <div class="row">
             <div class="col">
-                <select name="event_type_id" id="" class="form-control">
+                <select name="event_type_id" id="" class="form-select">
                     <option value=""></option>
                     @foreach ($links as $linkAfter)
                         <option value="{{ $linkAfter->afterEvent->id }}">

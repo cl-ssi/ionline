@@ -1,4 +1,4 @@
-@extends('layouts.bt4.app')
+@extends('layouts.bt5.app')
 
 @section('title', 'Módulo de Sumario')
 
@@ -7,19 +7,14 @@
     @include('summary.nav')
 
     <div class="row pb-2">
-        
-
-
-        @can(['Summary: user'])
-        <div class="col">
-            <h3 class="mb-3">Listado de Mis Sumarios</h3>
-        </div>
-        @endcan
-
 
         @canany(['be god', 'Summary: admin','Summary: admin viewer'])
-        <div class="col">
-            <h3 class="mb-3">Listado de Sumarios del Establecimiento: {{auth()->user()->organizationalUnit->establishment->name}}</h3>
+        <div class="col-10">
+            <h3 class="mb-3">Sumarios del Establecimiento: {{auth()->user()->organizationalUnit->establishment->name}}</h3>
+        </div>
+        @else
+        <div class="col-10">
+            <h3 class="mb-3">Mis Sumarios</h3>
         </div>
         @endcanany
 
