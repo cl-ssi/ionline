@@ -13,8 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('fin_tgr_payed_dtes', function (Blueprint $table) {
-            $table->id();
+        Schema::create('fin_tgr_payed_dtes', function (Blueprint $table) {            
             $table->string('rut_emisor')->nullable();
             $table->string('folio_documento')->nullable();
             $table->string('razon_social_emisor')->nullable();
@@ -46,6 +45,10 @@ return new class extends Migration
             $table->string('numero_de_medio_de_pago')->nullable();
             $table->string('cuenta_tgr')->nullable();
             $table->timestamps();
+        });
+
+        Schema::table('fin_tgr_payed_dtes', function (Blueprint $table) {
+            $table->primary(['rut_emisor', 'folio_documento']);
         });
     }
 
