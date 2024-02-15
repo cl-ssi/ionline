@@ -30,8 +30,10 @@ class BookingAgenda extends Component
                                         ->whereNull('discharged_date')
                                         ->get();
         $activity_types = [];
+        $profesional_ids = [];
         foreach($appointments as $appointment){
             $activity_types[] = $appointment->openHour->activity_type_id;
+            $profesional_ids[] = $appointment->openHour->profesional_id;
         }
 
         // obtiene las horas aperturadas que coincidas con los appointments activos
@@ -39,6 +41,7 @@ class BookingAgenda extends Component
                             ->where('profession_id',$this->profession_id)
                             ->whereHas('activityType')
                             ->whereIn('activity_type_id',$activity_types)
+                            ->whereIn('profesional_id',$profesional_ids)
                             ->with('patient','activityType')
                             ->get();
 

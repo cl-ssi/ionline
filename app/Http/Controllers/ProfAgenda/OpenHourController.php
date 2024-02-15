@@ -50,17 +50,18 @@ class OpenHourController extends Controller
         // dd($openHour);
 
         // valida si existen del paciente con otros funcionarios en la misma hora
-        // $othersReservationsCount = OpenHour::where('patient_id',$request->user_id)
-        //                                     ->where(function($query) use ($openHour){
-        //                                         $query->whereBetween('start_date',[$openHour->start_date, $openHour->end_date])
-        //                                                 ->orWhereBetween('end_date',[$openHour->start_date, $openHour->end_date]);
-        //                                     })
-        //                                     ->whereHas('activityType')
-        //                                     ->count(); 
-        // if($othersReservationsCount>0){
-        //     session()->flash('warning', 'No es posible realizar la reserva del paciente, porque tiene otra reserva a la misma hora con otro funcionario.');
-        //     return redirect()->back();
-        // }
+        $othersReservationsCount = OpenHour::where('patient_id',$request->user_id)
+                                            ->where(function($query) use ($openHour){
+                                                $query->whereBetween('start_date',[$openHour->start_date, $openHour->end_date])
+                                                        ->orWhereBetween('end_date',[$openHour->start_date, $openHour->end_date]);
+                                            })
+                                            ->where('profesional_id','<>',$openHour->profesional_id)
+                                            ->whereHas('activityType')
+                                            ->count(); 
+        if($othersReservationsCount>0){
+            session()->flash('warning', 'No es posible realizar la reserva del paciente, porque tiene otra reserva a la misma hora con otro funcionario.');
+            return redirect()->back();
+        }
 
         // // valida si existen más de 2 horas reservadas en la semana
         // $resevationsInWeek = OpenHour::where('patient_id',$request->user_id)
@@ -158,27 +159,49 @@ class OpenHourController extends Controller
                                                 $query->whereBetween('start_date',[$openHour->start_date, $openHour->end_date])
                                                         ->orWhereBetween('end_date',[$openHour->start_date, $openHour->end_date]);
                                             })
+                                            ->where('profesional_id','<>',$openHour->profesional_id)
+                                            ->where('id','<>',$openHour->id)
                                             ->whereHas('activityType')
                                             ->count(); 
-        if($othersReservationsCount>0){
+        if($othersReservationsCount > 0){
             session()->flash('warning', 'No es posible realizar la reserva del paciente, porque tiene otra reserva a la misma hora con otro funcionario.');
             return redirect()->back();
         }
 
-        // valida si existen más de 2 horas reservadas en la semana
-        $resevationsInWeek = OpenHour::where('patient_id',$request->user_id)
-                                    ->whereBetween('start_date',[$openHour->start_date->startOfWeek(), $openHour->end_date->endOfWeek()])
-                                    ->whereHas('activityType')
-                                    ->count();
+        $allow_consecutive_days = $openHour->activityType->allow_consecutive_days;
+        $maximum_allowed_per_week = $openHour->activityType->maximum_allowed_per_week;
 
-        if($resevationsInWeek > 2){
-            session()->flash('warning', 'Alcanzó el máximo de reservas a la semana (2 reservas). Si necesita agendar otra hora, contactar a Unidad de Salud del trabajador.');
-            return redirect()->back();
+        // cuando no permite dias consecutivos
+        if($allow_consecutive_days == 0){
+            $search_days = [$openHour->start_date->day - 1, $openHour->start_date->day, $openHour->start_date->day + 1];
+            foreach($search_days as $search_day){
+                $consecutiveReservations = OpenHour::where('patient_id',$request->user_id)
+                                                    ->whereDay('start_date',$search_day)
+                                                    ->whereHas('activityType')
+                                                    ->where('id','<>',$openHour->id)
+                                                    ->where('profesional_id',$openHour->profesional_id)
+                                                    ->count();
+
+                if($consecutiveReservations > 0){
+                    session()->flash('warning', 'No es posible realizar la reserva del paciente, porque este bloque está configurado para no ser reservado días consecutivos.');
+                    return redirect()->back();
+                }
+            }
         }
 
-        if($openHour->start_date < now()){
-            session()->flash('warning', 'No se puede reservar para una fecha pasada.');
-            return redirect()->back();
+        // verifica el maximo de reservas a la semana
+        if($maximum_allowed_per_week > 0){
+            $countReservations = OpenHour::where('patient_id',$request->user_id)
+                                        ->whereBetween('start_date',[$openHour->start_date->startOfWeek(), $openHour->end_date->endOfWeek()])
+                                        ->where('id','<>',$openHour->id)
+                                        ->whereHas('activityType')
+                                        ->where('profesional_id',$openHour->profesional_id)
+                                        ->count();
+
+            if(($countReservations + 1) > $maximum_allowed_per_week){
+                session()->flash('warning', 'No es posible realizar la reserva del paciente, la configuración de este bloque acepta como máximo ' . $maximum_allowed_per_week . ' reservas a la semana.');
+                return redirect()->back();
+            }
         }
 
         // se deja reservar al paciente, solo si tiene activo un appointment (es decir, no ha sido dado de alta de otra reserva con misma actividad)

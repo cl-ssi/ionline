@@ -66,7 +66,7 @@
                         </fieldset>
 
                         <fieldset class="form-group col-12 col-md-2">
-                            <label for="for_users"><b>Primera citaa</b></label>
+                            <label for="for_users"><b>Primera cita</b></label>
                             <input class="form-control first_appointment" type="checkbox" name="first_appointment" disabled>
                         </fieldset>
                     </div>     
@@ -145,12 +145,6 @@
                             <label for="for_profesion_id">F.Término</label>
                             <input class="form-control ftermino" type="datetime" id="" disabled>
                         </fieldset>
-
-                        {{--
-                        <!-- <fieldset class="form-group col-12 col-md-2">
-                            <label for="for_profesion_id">Primera cita</label>
-                            <input class="form-control first_appointment" type="checkbox" wire:model="first_appointment" wire:change="first_appointment_change()" disabled>
-                        </fieldset> --> --}}
                     </div>
 
                     <div class="row">
