@@ -1,4 +1,4 @@
-@extends('layouts.bt4.app')
+@extends('layouts.bt5.app')
 
 @section('title', 'Editar documento')
 
@@ -17,7 +17,7 @@
     @csrf
     @method('PUT')
 
-    <div class="form-row">
+    <div class="row mb-3 g-2">
         <div class="form-group col-2">
             <label for="forNumber">Número</label>
             @livewire('documents.enumerate',['document' => $document])
@@ -29,7 +29,7 @@
         </div>
         <div class="form-group col-2">
             <label for="forType">Tipo*</label>
-            <select name="type_id" id="for_type_id" class="form-control" {{ isset($document->number) ? 'disabled':'' }}>
+            <select name="type_id" id="for_type_id" class="form-select" {{ isset($document->number) ? 'disabled':'' }}>
                 <option value=""></option>
                 @foreach($types as $id => $type)
                     <option value="{{ $id }}" {{ $document->type_id == $id ? 'selected' : '' }}>{{ $type }}</option>
@@ -53,7 +53,7 @@
                 value="{{ $document->antecedent }}" name="antecedent">
         </div>
     </div>
-    <div class="form-row">
+    <div class="row mb-3">
         <div class="form-group col">
             <label for="forSubject">Materia</label>
             <input type="text" class="form-control" id="forSubject"
@@ -62,20 +62,23 @@
         </div>
     </div>
 
-<div id="collapse">
-    <div class="form-row">
-        <div class="form-group col-7">
-            <div class="form-group ">
+    <div id="collapse">
+        <div class="row mb-3">
+            <div class="form-group col-7">
                 <label for="forFrom">De:*</label>
                 <input type="text" class="form-control" id="forFrom"
                     value="{{ $document->from }}" name="from"
                     placeholder="Nombre/Funcion" >
             </div>
+        </div>
+        <div class="row mb-3">
             <div class="form-group ">
                 <label for="forFor">Para:*</label>
                 <input type="text" class="form-control" id="forFor" name="for"
                     value="{{ $document->for }}" placeholder="Nombre/Funcion">
             </div>
+        </div>
+        <div class="row mb-3">
             <div class="form-group">
                 Mayor jerarquía:
                 <div class="form-check form-check-inline">
@@ -93,15 +96,16 @@
             </div>
         </div>
     </div>
-</div>
 
-    <div class="form-group pt-1" style="width: 940px;">
-        <label for="contenido">Contenido*</label>
-        <textarea class="form-control" id="contenido" rows="30"
-            name="content">{{ $document->content }}</textarea>
+    <div class="row mb-3">
+        <div class="form-group" style="width: 940px;">
+            <label for="contenido">Contenido*</label>
+            <textarea class="form-control" id="contenido" rows="34"
+                name="content">{{ $document->content }}</textarea>
+        </div>
     </div>
 
-    <div class="form-row">
+    <div class="row mb-3 g-2">
         <div class="form-group col">
             <label for="forDistribution">Distribución (separado por salto de línea)*</label>
             <textarea class="form-control" id="forDistribution" rows="5"
@@ -114,29 +118,33 @@
         </div>
     </div>
     
-    <div class="form-row">
+    <div class="row mb-3">
         <div class="form-group col-3">
             <label for="for_internal_number">Número Interno (Opcional)</label>
             <input type="number" class="form-control" id="for_internal_number" name="internal_number" value="{{ $document->internal_number }}">
         </div>
     </div>
 
-    <div class="form-group">
-        <button type="submit" class="btn btn-primary mr-4">Guardar</button>
-        </form>
-        @if(session()->has('god') OR auth()->user()->can('Documents: delete document'))
+    <div class="row">
+        <div class="col-2 mb-3">
+            <button type="submit" class="btn btn-primary mr-4">Guardar</button>
+        </div>
+</form>
+        <div class="offset-md-8 text-end col-2">
+            @if(session()->has('god') OR auth()->user()->can('Documents: delete document'))
 
-            @if(!$document->file OR $document->file_to_sign_id === null)
-            <form method="POST" class="form-horizontal" action="{{ route('documents.destroy', $document) }}">
-                @csrf
-                @method('DELETE')
-                <button type="submit" class="btn btn-danger ml-4 float-right">Eliminar</button>
-                <br>
-            </form>
-            @else
-            <button class="btn btn-outline-danger" disable>No se puede eliminar, tiene un archivo o ha sido firmado</button>
+                @if(!$document->file OR $document->file_to_sign_id === null)
+                <form method="POST" class="form-inline" action="{{ route('documents.destroy', $document) }}">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger ml-4 float-right">Eliminar</button>
+                    <br>
+                </form>
+                @else
+                <button class="btn btn-outline-danger" disable>No se puede eliminar, tiene un archivo o ha sido firmado</button>
+                @endif
             @endif
-        @endif
+        </div>
     </div>
 
     <div class="alert alert-info" role="alert">
