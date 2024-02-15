@@ -6,6 +6,7 @@ use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use App\Models\Finance\TgrPayedDte;
+use App\Models\Finance\TgrAccountingPortfolio;
 
 class TgrsImport implements WithHeadingRow, ToCollection
 {

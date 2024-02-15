@@ -15,12 +15,15 @@ return new class extends Migration
     {
         Schema::create('fin_tgr_accounting_portfolios', function (Blueprint $table) {
             $table->id();
+            $table->string('rut_emisor')->nullable();
+            $table->string('folio_documento')->nullable();
+            $table->string('razon_social_emisor')->nullable();
             $table->string('cuenta_contable')->nullable();
             $table->string('principal')->nullable();
             $table->integer('saldo')->nullable();
             $table->string('tipo_movimiento')->nullable();
             $table->date('fecha')->nullable();
-            $table->string('folio')->nullable();
+            
             $table->string('titulo')->nullable();
             $table->integer('debe')->nullable();
             $table->integer('haber')->nullable();
@@ -29,7 +32,10 @@ return new class extends Migration
             $table->integer('numero')->nullable();
             $table->string('origen_transaccion')->nullable();
             $table->integer('numero_documento')->nullable();
+            $table->foreignId('dte_id')->nullable()->constrained('fin_dtes');
             $table->timestamps();
+            $table->softDeletes();
+            $table->index(['rut_emisor', 'folio_documento']);
         });
     }
 
