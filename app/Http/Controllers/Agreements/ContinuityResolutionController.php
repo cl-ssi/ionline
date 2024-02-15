@@ -265,7 +265,7 @@ class ContinuityResolutionController extends Controller
         $document->date = $continuityResolution->date;
         $document->type_id = Type::where('name','Resolución Continuidad Convenio')->first()->id;
         $document->subject = 'Resolución prórroga automática Convenio programa '.$programa.' comuna de '.$continuityResolution->agreement->commune->name;
-        $document->distribution = $municipality_emails."\n".$continuityResolution->referrer->email."\nvalentina.ortega@redsalud.gob.cl\naps.ssi@redsalud.gob.cl\nromina.garin@redsalud.gob.cl\ncamila.cordova@redsalud.gob.cl\njuridica.ssi@redsalud.gob.cl\no.partes2@redsalud.gob.cl\nblanca.galaz@redsalud.gob.cl";
+        $document->distribution = $municipality_emails."\n".$continuityResolution->referrer->email."\nvalentina.ortega@redsalud.gob.cl\naps.ssi@redsalud.gob.cl\nromina.garin@redsalud.gob.cl\njuridica.ssi@redsalud.gob.cl\no.partes2@redsalud.gob.cl\nblanca.galaz@redsalud.gob.cl";
         $document->content = "<p
         style='text-align: justify;margin-top:12.0pt;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:'Calibri',sans-serif;text-align:justify;line-height:150%;'>
         <strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
