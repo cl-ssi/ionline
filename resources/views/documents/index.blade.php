@@ -1,4 +1,4 @@
-@extends('layouts.bt4.app')
+@extends('layouts.bt5.app')
 
 @section('title', 'Historial de documentos')
 
@@ -12,7 +12,7 @@
 
 <form method="GET" class="form-horizontal" action="{{ route('documents.index') }}">
 
-    <div class="form-row">
+    <div class="row g-2 mb-3">
         <fieldset class="form-group col-4 col-md-1">
             <label for="for_id">ID</label>
             <input type="text" class="form-control" id="for_id" name="id">
@@ -20,7 +20,7 @@
 
         <fieldset class="form-group col-8 col-md-2">
             <label for="for_type">Tipo</label>
-            <select name="type_id" id="for_type_id" class="form-control">
+            <select name="type_id" id="for_type_id" class="form-select">
                 <option value=""></option>
                 @foreach($types as $id => $type)
                 <option value="{{ $id }}" {{ old('type_id') == $id ? 'selected' : '' }}>{{ $type }}</option>
