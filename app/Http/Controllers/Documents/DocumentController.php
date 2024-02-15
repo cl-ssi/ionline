@@ -290,10 +290,24 @@ class DocumentController extends Controller
 
     public function report()
     {
-        $users = User::orderBy('name')->has('documents')->with('documents')->get();
-        $ct = Document::count();
-        $ous = OrganizationalUnit::has('documents')->get();
-        return view('documents.report', compact('users', 'ct', 'ous'));
+        $ct = Document::whereRelation('organizationalUnit.establishment','id',auth()->user()->organizationalUnit->establishment_id)
+            ->count();
+    
+        // Contar todos los documentos creados por usuarios
+        $users = User::whereHas('documents')
+            ->withCount('documents')
+            ->whereRelation('organizationalUnit.establishment','id',auth()->user()->organizationalUnit->establishment_id)
+            ->orderByDesc('documents_count')
+            ->get();
+
+        $ous = OrganizationalUnit::whereHas('documents')
+            ->withCount('documents')
+            ->where('establishment_id',auth()->user()->organizationalUnit->establishment_id)
+            ->with('establishment')
+            ->orderByDesc('documents_count')
+            ->get();
+
+        return view('documents.report', compact('ct','users','ous'));
     }
 
     public function sendForSignature(Document $document)
