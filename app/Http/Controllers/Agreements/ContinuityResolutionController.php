@@ -207,7 +207,8 @@ class ContinuityResolutionController extends Controller
 
     public function createDocumentResContinuity(ContinuityResolution $continuityResolution)
     {
-        $continuityResolution->load('agreement.program','agreement.commune.municipality', 'referrer', 'director_signer.user');
+        $continuityResolution->load('agreement.program','agreement.commune.municipality', 'referrer', 'director_signer.user', 'agreement.addendums');
+        $year = $continuityResolution->date != NULL ? date('Y', strtotime($continuityResolution->date)) : '';
         $municipality   = Municipality::where('commune_id', $continuityResolution->agreement->commune->id)->first();
         
         // No se guarda los cambios en el res continuidad ya que es solo para efectos de generar el documento
@@ -255,6 +256,20 @@ class ContinuityResolutionController extends Controller
             $arrayEstablishmentConcat = implode(", ",array_column($arrayEstablishment, 'establecimiento'));
         }
 
+        //CARGAR ADDENDUMS EN VISTOS Y CONSIDERANDOS
+        // $vistosAddendums = '';
+        // $considetandoAddendums = '';
+
+        // if($continuityResolution->agreement->addendums->isNotEmpty()){
+        //     foreach($continuityResolution->agreement->addendums as $addendum){
+        //         $vistosAddendums .= 'Resolución Exenta N°'.$addendum->res_number.' de fecha '.$this->formatDate($addendum->res_date);
+        //     }
+
+        //     $vistosAddendums .= ' del Servicio de Salud Tarapacá que modifica la resolución anterior;';
+        // }
+
+        // return $vistosAddendums;
+
         $establecimientosListado = $arrayEstablishmentConcat;
 
         $municipality_emails = $continuityResolution->agreement->commune->municipality->email_municipality."\n".$continuityResolution->agreement->commune->municipality->email_municipality_2;
@@ -290,9 +305,14 @@ class ContinuityResolutionController extends Controller
             style='color:black;'>&ordm;</span>19.378; art&iacute;culo 6 del Decreto Supremo N<span
             style='color:black;'>&ordm;</span>118 del 2007, del Ministerio de Salud;&nbsp;Resoluci&oacute;n Exenta N<span
             style='color:black;'>&ordm;</span><span style='background:lime;'>".$numResolucion."/".$yearResolucion."</span> del Ministerio de Salud, que
-        aprob&oacute; <span style='background:lime;'>el Programa de ".$programa." a&ntilde;o ".$periodoConvenio.", Resoluci&oacute;n
+        aprob&oacute; <span style='background:lime;'>el Programa de ".$programa." a&ntilde;o ".$periodoConvenio."; Resoluci&oacute;n
             Exenta&nbsp;N&deg;".$numResourceResolucion."/".$yearResourceResolucion."</span> del Ministerio de Salud, que distribuy&oacute; los recursos del citado Programa;
-        Resoluci&oacute;n N<span style='color:black;'>&ordm;</span>007 de 2019 de la Contralor&iacute;a General de la
+            <span style='background:lime;'>Resoluciones modificatorias si es que existieran</span>;
+            &nbsp;Resoluci&oacute;n Exenta N<span
+            style='color:black;'>&ordm;</span><span style='background:lime;'>_____/".($year)."</span> del Ministerio de Salud, que
+        aprob&oacute; <span style='background:lime;'>el Programa de ".$programa." a&ntilde;o ".($year)."; Resoluci&oacute;n
+            Exenta&nbsp;N&deg;_____/".($year)."</span> del Ministerio de Salud, que distribuy&oacute; los recursos del citado Programa;
+        Resoluci&oacute;n Exenta N<span style='color:black;'>&ordm;</span>007 de 2019 de la Contralor&iacute;a General de la
         Rep&uacute;blica. Art&iacute;culo 7&deg; de la Ley N<span style='color:black;'>&ordm; 21.640 de Presupuesto para el
             sector p&uacute;blico, correspondiente al a&ntilde;o 2024.</span></p>
             
@@ -308,7 +328,7 @@ class ContinuityResolutionController extends Controller
         &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
         &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
         &nbsp; 1.-</strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Que, durante el a&ntilde;o presupuestario 2023, a
-    trav&eacute;s de Resoluci&oacute;n Exenta <span style='background:lime;'>N&deg;".$numResolucionConvenio."/".$yearResolucionConvenio."</span>, entre el Municipio de <span style='background:lime;'>".$comuna."</span> y este
+    trav&eacute;s de Resoluci&oacute;n Exenta <span style='background:lime;'>N&deg;".$numResolucionConvenio."/".$yearResolucionConvenio." y Resoluciones modificatorias si es que existieran</span>, entre el Municipio de <span style='background:lime;'>".$comuna."</span> y este
     Servicio de Salud, se aprob&oacute; el convenio correspondiente <strong>al <span style='background:lime;'>PROGRAMA
             &ldquo;".$programa." A&Ntilde;O ".$periodoConvenio."&rdquo;</span>.</strong></p>
 <p
@@ -332,14 +352,14 @@ class ContinuityResolutionController extends Controller
     <em>Para todos los efectos legales, la pr&oacute;rroga autom&aacute;tica da inicio a un nuevo convenio de
         transferencia, cuyo monto a transferir se establecer&aacute; mediante Resoluci&oacute;n Exenta del
         <strong>&ldquo;SERVICIO&rdquo;</strong>, de conformidad a lo que se disponga en la Ley de Presupuestos del
-        Sector P&uacute;blico respectiva</em>&rdquo;</p>
+        Sector P&uacute;blico respectiva</em>&rdquo;.</p>
 <p
     style='text-align: justify;margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;font-size:11.0pt;font-family:'Calibri',sans-serif;text-align:justify;line-height:115%;'>
     <strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
     &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
     &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
     &nbsp; 3.-</strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;Que, a trav&eacute;s de Resoluci&oacute;n Exenta <span
-        style='background:lime;'>N&deg;".$numResolucion."</span> de fecha <span style='background:lime;'>".$fechaResolucion."
+        style='background:lime;'>N&deg;_____</span> de fecha <span style='background:lime;'>__ de _____ del a&ntilde;o 2024
         </span> del Ministerio de Salud, se aprueba el Programa <span style='background:lime;'><strong>".$programa."</strong> para el a&ntilde;o
     2024.</span></p>
 <p
@@ -351,8 +371,8 @@ class ContinuityResolutionController extends Controller
         &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
         &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
         &nbsp; 4.-</strong>&nbsp;
-    &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;Que, a trav&eacute;s de Resoluci&oacute;n Exenta <span style='background:lime;'>N&deg;".$numResourceResolucion."</span> de fecha <span
-        style='background:lime;'>".$fechaResourceResolucion."</span> del Ministerio de Salud, se aprueban los
+    &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;Que, a trav&eacute;s de Resoluci&oacute;n Exenta <span style='background:lime;'>N&deg;_____</span> de fecha <span
+        style='background:lime;'>__ de _____ del a&ntilde;o 2024</span> del Ministerio de Salud, se aprueban los
     Recursos que distribuye los Recursos para el Programa<span
         style='background:lime;'>&nbsp;<strong>".$programa."</strong> para el a&ntilde;o 2024.</span></p>
 <p
@@ -394,8 +414,8 @@ class ContinuityResolutionController extends Controller
 <p
     style='text-align: justify;margin-top:0cm;margin-right:0cm;margin-bottom:12.0pt;margin-left:0cm;font-size:11.0pt;font-family:'Calibri',sans-serif;text-align:justify;'>
     El referido &ldquo;<strong>PROGRAMA&rdquo;&nbsp;</strong>ha sido aprobado por Resoluci&oacute;n Exenta <span
-        style='background:lime;'>N&deg;</span><span style='background:lime;'>".$numResolucionConvenio."</span><span
-        style='background:lime;'>&nbsp;de fecha&nbsp;</span><span style='background:lime;'>".$fechaResolucionConvenio."</span> del Ministerio de Salud y sus respectivas modificaciones, respecto a las exigencias de dicho
+        style='background:lime;'>N&deg;</span><span style='background:lime;'>_____</span><span
+        style='background:lime;'>&nbsp;de fecha&nbsp;</span><span style='background:lime;'>__ de _____ del a&ntilde;o 2024</span> del Ministerio de Salud y sus respectivas modificaciones, respecto a las exigencias de dicho
     programa, la <strong>&ldquo;MUNICIPALIDAD&rdquo;&nbsp;</strong>se compromete a desarrollar las acciones atinentes
     en&nbsp;virtud del presente instrumento.&nbsp;</p>
 <p style='text-align: justify;margin:0cm;text-align:justify;font-size:11.0pt;font-family:'Calibri',sans-serif;margin-bottom:12.0pt;'><span
