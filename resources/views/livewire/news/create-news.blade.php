@@ -29,7 +29,7 @@
                 <fieldset class="form-group col-md-12 col-12">
                     <label for="for_image" class="form-label">Imagen</label>
                     <input class="form-control" type="file" id="for_image" wire:model="image">
-                    <div id="file-help" class="form-text">Tamaño de la imagen 766x530</div>
+                    <div id="file-help" class="form-text">Tamaño de la imagen 766x400 o 766x530</div>
                 </fieldset>
 
                 <fieldset class="form-group">
