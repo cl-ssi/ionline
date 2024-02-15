@@ -211,7 +211,7 @@
                         </td>
                         <td>
                             @if($reception->rejected == false)
-                                @if(($reception->created_at->diffInDays(now()) < 7 && $reception->creator_id == auth()->id()) || (Auth::user()->can('Receptions: load file retroactive')))
+                                @if(($reception->created_at->diffInDays(now()) < 365 && $reception->creator_id == auth()->id()) || (Auth::user()->can('Receptions: load file retroactive')))
                                     <a href="{{ route('finance.receptions.edit', $reception) }}"
                                         class="btn btn-primary">
                                         <i class="bi bi-pencil-square"></i>
@@ -219,7 +219,6 @@
                                     <br><br>
                                 @endif
                             @endif
-
 
                         </td>
                     </tr>

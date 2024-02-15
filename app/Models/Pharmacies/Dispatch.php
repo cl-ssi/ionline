@@ -13,7 +13,7 @@ class Dispatch extends Model
    * @var array
    */
   protected $fillable = [
-      'id', 'date', 'pharmacy_id', 'establishment_id', 'notes', 'user_id', 'sendC19', 'created_at'
+      'id', 'date', 'pharmacy_id', 'establishment_id', 'notes', 'user_id', 'receiver_id', 'sendC19', 'created_at'
   ];
 
   use SoftDeletes;
@@ -38,7 +38,12 @@ class Dispatch extends Model
 
   public function user()
   {
-    return $this->belongsTo('App\User')->withTrashed();
+    return $this->belongsTo('App\User','user_id')->withTrashed();
+  }
+
+  public function receiver()
+  {
+    return $this->belongsTo('App\User','receiver_id')->withTrashed();
   }
 
   public function files()

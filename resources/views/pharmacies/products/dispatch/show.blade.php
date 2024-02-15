@@ -17,11 +17,18 @@
       </fieldset>
 
       <fieldset class="form-group col">
-          <label for="for_origin">Destino</label>
-					<select name="establishment_id" class="form-control selectpicker" data-live-search="true" disabled>
-							<option value="{{$establishment->id}}">{{$establishment->name}}</option>
-					</select>
+            <label for="for_origin">Destino</label>
+            <select name="establishment_id" class="form-control selectpicker" data-live-search="true" disabled>
+                    @if($establishment)
+                        <option value="{{$establishment->id}}">{{$establishment->name}}</option>
+                    @endif
+            </select>
       </fieldset>
+
+        <fieldset class="form-group col">
+            <label for="for_origin">Receptor</label>
+            <input type="text" class="form-control" value="{{$dispatch->receiver->shortName}}" disabled>
+        </fieldset>
 </div>
 
 <div class="form-row">

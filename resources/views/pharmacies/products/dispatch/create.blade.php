@@ -10,6 +10,10 @@
 
 <h3>Nuevo Egreso</h3>
 
+<div class="alert alert-info" role="alert">
+    Al momento de crear el despacho, debe tener seleccionado el "destino" o el "receptor".
+</div>
+
 <form method="POST" action="{{ route('pharmacies.products.dispatch.store') }}">
 	@csrf
 
@@ -21,11 +25,17 @@
 
         <fieldset class="form-group col">
             <label for="for_origin">Destino</label>
-						<select name="establishment_id" class="form-control selectpicker" data-live-search="true" required="">
-							@foreach ($establishments as $key => $establishment)
-								<option value="{{$establishment->id}}">{{$establishment->name}}</option>
-							@endforeach
-						</select>
+            <select name="establishment_id" class="form-control selectpicker" data-live-search="true">
+                <option value=""></option>
+                @foreach ($establishments as $key => $establishment)
+                    <option value="{{$establishment->id}}">{{$establishment->name}}</option>
+                @endforeach
+            </select>
+        </fieldset>
+
+        <fieldset class="form-group col">
+            <label for="for_origin">Receptor</label>
+			@livewire('search-select-user', ['selected_id' => 'receiver_id'])
         </fieldset>
 	</div>
 

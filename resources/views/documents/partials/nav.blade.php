@@ -3,7 +3,7 @@
     <li class="nav-item">
         <a class="nav-link"
             href="{{ route('documents.create') }}">
-            <i class="fas fa-pencil-alt"></i> Nuevo documento
+            <i class="bi bi-pencil"></i> Nuevo documento
         </a>
     </li>
     @endcan
@@ -11,14 +11,7 @@
     <li class="nav-item">
         <a class="nav-link"
             href="{{ route('documents.index') }}">
-            <i class="fas fa-book"></i> Historial
-        </a>
-    </li>
-
-    <li class="nav-item">
-        <a class="nav-link"
-            href="{{ route('documents.report') }}">
-            <i class="fas fa-eye"></i> Reporte
+            <i class="bi bi-book"></i> Historial
         </a>
     </li>
 
@@ -26,16 +19,22 @@
     <li class="nav-item">
         <a class="nav-link"
             href="{{ route('documents.docdigital.documentos.creados') }}">
-            <i class="fas fa-file"></i> DocDigital - Creados
+            <i class="bi bi-file-earmark-richtext"></i> DocDigital - Creados
         </a>
     </li>
 
     <li class="nav-item">
         <a class="nav-link"
             href="{{ route('documents.docdigital.documentos.recibidos') }}">
-            <i class="fas fa-file"></i> DocDigital - Recibidos
+            <i class="bi bi-file-earmark-richtext"></i> DocDigital - Recibidos
         </a>
     </li>
-
     @endcan
+
+    <li class="nav-item">
+        <a class="nav-link"
+            href="{{ route('documents.report') }}">
+            <i class="bi bi-eye"></i> Reporte
+        </a>
+    </li>
 </ul>

@@ -33,7 +33,7 @@
 			<tr>
 				<th scope="col">id</th>
 				<th scope="col">Fecha</th>
-				<th scope="col">Establecimiento</th>
+				<th scope="col">Receptor</th>
 				<th scope="col">Notas</th>
 				<th scope="col">Estado recepción</th>
 				<th nowrap scope="col"></th>
@@ -45,7 +45,10 @@
 			<tr>
 				<td>{{ $dispatch->id }}</td>
         		<td>{{ Carbon\Carbon::parse($dispatch->date)->format('d/m/Y')}}</td>
-        		<td>{{ $dispatch->establishment->name }}</td>
+        		<td>
+                    {{ $dispatch->establishment ? $dispatch->establishment->name : '' }}
+                    {{ $dispatch->receiver ? " " . $dispatch->receiver->shortName : '' }}
+                </td>
         		<td>{{ $dispatch->notes }}</td>
 				<td>
 					@if($dispatch->verificationMailings->count()>0)
