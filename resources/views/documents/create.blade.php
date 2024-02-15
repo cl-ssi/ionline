@@ -1,4 +1,4 @@
-@extends('layouts.bt4.app')
+@extends('layouts.bt5.app')
 
 @section('title', 'Nuevo documento')
 
@@ -6,16 +6,22 @@
 
 @include('documents.partials.nav')
 
-<h3>Nuevo Documento</h3>
+<div class="row">
+    <div class="col-md-6">
+        <h3>Nuevo Documento</h3>
+    </div>
+    <div class="offset-md-3 col-md-3">
+        <form class="form-inline float-right" method="POST" action="{{ route('documents.createFromPrevious') }}">
+            @csrf
+            <label class="my-1 mr-2" for="forDocumentID">Crear a partir del </label>
+            <div class="input-group">
+                <input name="document_id" type="text" class="form-control" id="forDocumentID" placeholder="ID">
+                <button type="submit" class="btn btn-outline-secondary"> <i class="fas fa-search"></i> Precargar</button>
+            </div>
+        </form>
+    </div>
+</div>
 
-<form class="form-inline float-right" method="POST" action="{{ route('documents.createFromPrevious') }}">
-    @csrf
-    <label class="my-1 mr-2" for="forDocumentID">Crear a partir del </label>
-    <input name="document_id" type="text" class="form-control mr-3" id="forDocumentID" placeholder="ID">
-    <button type="submit" class="btn btn-outline-secondary my-1"> <i class="fas fa-search"></i> Precargar</button>
-</form>
-
-<br><br>
 <hr>
 <x-head.tinymce-config />
 
@@ -34,14 +40,14 @@
     <input type="hidden" name="agreement_id" value="{{ $document->agreement_id }}">
     @endif
 
-    <div class="form-row">
+    <div class="row mb-3 g-2">
         <div class="form-group col-2">
             <label for="forDate">Fecha</label>
             <input type="date" class="form-control" id="forDate" name="date" value="{{ now()->toDateString() }}">
         </div>
         <div class="form-group col-2">
             <label for="forType">Tipo*</label>
-            <select name="type_id" id="formType" class="form-control" required>
+            <select name="type_id" id="formType" class="form-select" required>
                 <option value=""></option>
                 @foreach($types as $id => $type)
                 <option value="{{ $id }}" {{$document->type_id == $id ? 'selected': ''}}>{{ $type }}</option>
@@ -62,44 +68,50 @@
             <input type="text" class="form-control" id="for_antecedent" name="antecedent" placeholder="[opcional]" {!! $document->antecedent ? 'value="' . $document->antecedent .'"' : '' !!}>
         </div>
     </div>
-    <div class="form-row">
+
+    <div class="row mb-3 g-2">
         <div class="form-group col">
             <label for="forSubject">Materia*</label>
             <input type="text" class="form-control" id="forSubject" name="subject" placeholder="Descripción del contenido del documento" required maxlength="255" {!! $document->subject ? 'value="' . $document->subject .'"' : '' !!}>
         </div>
     </div>
+
     <div id="collapse">
-        <div class="form-row">
+        <div class="row mb-3">
             <div class="form-group col-7">
-                <div class="form-group ">
-                    <label for="forFrom">De:*</label>
-                    <input type="text" class="form-control" id="forFrom" name="from" placeholder="Nombre/Funcion" required {!! $document->from ? 'value="' . $document->from .'"' : '' !!}>
+                <label for="forFrom">De:*</label>
+                <input type="text" class="form-control" id="forFrom" name="from" placeholder="Nombre/Funcion" required {!! $document->from ? 'value="' . $document->from .'"' : '' !!}>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="form-group col-7">
+                <label for="forFor">Para:*</label>
+                <input type="text" class="form-control" id="forFor" name="for" placeholder="Nombre/Funcion" required {!! $document->for ? 'value="' . $document->for .'"' : '' !!}>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="form-group">
+                Mayor jerarquía:
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="greater_hierarchy" id="forHierarchyFrom" value="from" checked>
+                    <label class="form-check-label" for="forHierarchyFrom">DE:</label>
                 </div>
-                <div class="form-group ">
-                    <label for="forFor">Para:*</label>
-                    <input type="text" class="form-control" id="forFor" name="for" placeholder="Nombre/Funcion" required {!! $document->for ? 'value="' . $document->for .'"' : '' !!}>
-                </div>
-                <div class="form-group">
-                    Mayor jerarquía:
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="greater_hierarchy" id="forHierarchyFrom" value="from" checked>
-                        <label class="form-check-label" for="forHierarchyFrom">DE:</label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="greater_hierarchy" id="forHierarchyFor" value="for">
-                        <label class="form-check-label" for="forHierarchyFor">PARA:</label>
-                    </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="greater_hierarchy" id="forHierarchyFor" value="for">
+                    <label class="form-check-label" for="forHierarchyFor">PARA:</label>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="form-group pt-1" style="width: 940px;">
-        <label for="contenido">Contenido*</label>
-        <textarea class="form-control" id="contenido" rows="30" name="content">{!! $document->content !!}</textarea>
+    <div class="row mb-3">
+        <div class="form-group" style="width: 940px;">
+            <label for="contenido">Contenido*</label>
+            <textarea class="form-control" id="contenido" rows="34" name="content">{!! $document->content !!}</textarea>
+        </div>
     </div>
-
-    <div class="form-row">
+        
+    <div class="row mb-3 g-2">
         <div class="form-group col">
             <label for="forDistribution">Distribución (separado por salto de línea)</label>
             <textarea class="form-control" id="forDistribution" rows="6" name="distribution" required>{!! $document->distribution ?? '' !!}</textarea>
@@ -111,20 +123,18 @@
         </div>
     </div>
 
-    <div class="form-row">
+    <div class="row mb-3">
         <div class="form-group col-3">
             <label for="for_internal_number">Número Interno (Opcional)</label>
             <input type="number" class="form-control" id="for_internal_number" name="internal_number" {!! $document->internal_number ? 'value="' . $document->internal_number .'"' : '' !!}>
         </div>
     </div>
     
-    <div class="form-group">
-        <button type="submit" class="btn btn-primary mr-4">Guardar</button>
-        <button type="button" class="btn btn-outline-primary" data-toggle="tooltip" data-placement="top" title="¡ Tampoco me pongas el mouse encima !" onclick="alert('Noooo, si pones Aceptar se borrará todo.');">No apretar</button>
-    </div>
+    <button type="submit" class="btn btn-primary">Guardar</button>
+    <!-- <button type="button" class="btn btn-outline-primary" data-toggle="tooltip" data-placement="top" title="¡ Tampoco me pongas el mouse encima !" onclick="alert('Noooo, si pones Aceptar se borrará todo.');">No apretar</button> -->
 </form>
 
-<div class="alert alert-info" role="alert">
+<div class="alert alert-info mt-3" role="alert">
     <strong>TIP para pegar tablas de word o excel</strong>
     <p>
     <ol>
