@@ -61,6 +61,7 @@ class UserController extends Controller
             $users = User::with('organizationalUnit','organizationalUnit.establishment','telephones')
                 ->findByUser($request->get('name'))
                 ->withTrashed(false)
+                ->whereExternal(false)
                 ->orderBy('name')
                 ->paginate(50);
         }
@@ -68,6 +69,7 @@ class UserController extends Controller
             $users = User::with('organizationalUnit','organizationalUnit.establishment','telephones')
                 ->where('organizational_unit_id',$organizationalUnit->id)
                 ->withTrashed(false)
+                ->whereExternal(false)
                 ->orderBy('name')
                 ->paginate(50);
         }

@@ -45,8 +45,12 @@ return new class extends Migration
             $table->string('medio_de_pago')->nullable();
             $table->string('numero_de_medio_de_pago')->nullable();
             $table->string('cuenta_tgr')->nullable();
+            $table->foreignId('document_id')->nullable()->constrained('documents');
             $table->timestamps();
+            $table->softDeletes();
+            $table->index(['rut_emisor', 'folio_documento']);
         });
+
     }
 
     /**

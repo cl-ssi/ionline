@@ -1,4 +1,4 @@
-@extends('layouts.bt4.app')
+@extends('layouts.bt5.app')
 
 @section('title', 'Directorio Telefónico')
 
@@ -21,18 +21,19 @@
     }
 </style>
 
-<div class="clearfix">
+<div class="row mb-3">
 
-    <div class="float-left"><h3>Directorio Telefónico</h3></div>
+    <div class="col-md-7">
+        <h3>Directorio Telefónico</h3>
+    </div>
 
-    <div class="float-right">
+    <div class="col-md-5">
         <form class="form-inline" method="GET" action="{{ route('rrhh.users.directory') }}">
-            <div class="input-group mb-3">
+            <div class="input-group">
                 <input type="text" name="name" class="form-control" placeholder="Nombre o Apellido" autocomplete="off">
-                <div class="input-group-append">
-                    <button class="btn btn-outline-secondary" type="submit">
-                        <i class="fas fa-search" aria-hidden="true"></i></button>
-                </div>
+                <button class="btn btn-outline-secondary" type="submit">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                </button>
             </div>
         </form>
     </div>

@@ -21,11 +21,11 @@
         <div class="card-body">
             <h5 class="card-title">Editar autoridad para la fecha {{ $date }} y tipo {{ $type }}</h5>
 
-            <div class="row">
+            <div class="row g-2">
                 <div class="col-12 col-md-4 mt-3">
                     <div class="form-group">
                         <label for="for_user_id">Usuario*</label>
-                        <select wire:model="user_id" class="form-control" required>
+                        <select wire:model="user_id" class="form-select" required>
                             <option value=""></option>
                             @foreach($subrogations as $subrogation)
                             <option value="{{ $subrogation->user_id }}">{{ $subrogation->user->shortName }}</option>
@@ -38,7 +38,7 @@
                 <div class="col-4 col-md-3 mt-3">
                     <div class="form-group">
                         <label for="Cargo">Cargo*</label>
-                        <select wire:model="position" id="for_position" class="form-control" required>
+                        <select wire:model="position" id="for_position" class="form-select" required>
                             <option value=""></option>
                             <option>Director</option>
                             <option>Directora</option>

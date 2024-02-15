@@ -851,17 +851,17 @@ class Signature extends Model
         {
             case Signature::modoDesatendidoTest():
                 $entity = 'Subsecretaría General de La Presidencia';
-                $entity = 'Servicio de Salud Iquique';
+                $entity = env('FIRMA_ENTITY');
                 break;
             case Signature::modoAtendidoTest():
                 $entity = 'Subsecretaría General de La Presidencia';
-                $entity = 'Servicio de Salud Iquique';
+                $entity = env('FIRMA_ENTITY');
                 break;
             case Signature::modoAtendidoProduccion():
-                $entity = 'Servicio de Salud Iquique';
+                $entity = env('FIRMA_ENTITY');
                 break;
             case Signature::modoDesatendidoProduccion():
-                $entity = 'Servicio de Salud Iquique';
+                $entity = env('FIRMA_ENTITY');
                 break;
             default:
                 $entity = null;

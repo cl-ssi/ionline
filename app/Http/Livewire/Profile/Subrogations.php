@@ -88,16 +88,16 @@ class Subrogations extends Component
     }
 
     public function store()
-    {
+    { 
         if ($this->organizationalUnit and $this->type) {
             Subrogation::firstOrCreate(
                 [
                     'user_id' => $this->subrogant_id,
                     'subrogant_id' => $this->subrogant_id,
                     'organizational_unit_id' => $this->organizationalUnit->id,
+                    'type' => $this->type,
                 ],
                 [
-                    'type' => $this->type,
                     'level' => Subrogation::where('organizational_unit_id', $this->organizationalUnit->id)->where('type', $this->type)->count() + 1
                 ]
             );
@@ -109,9 +109,9 @@ class Subrogations extends Component
                     'organizational_unit_id' => null,
                 ],
                 [
-                    'user_id' => $this->user_id,
-                    'subrogant_id' => $this->subrogant_id,
-                    'organizational_unit_id' => null,
+                    // 'user_id' => $this->user_id,
+                    // 'subrogant_id' => $this->subrogant_id,
+                    // 'organizational_unit_id' => null,
                     'level' => Subrogation::whereUserId($this->user_id)->where('organizational_unit_id', null)->where('type', null)->count() + 1
                 ]
             );

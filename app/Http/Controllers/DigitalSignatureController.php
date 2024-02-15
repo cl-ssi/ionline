@@ -491,7 +491,7 @@ class DigitalSignatureController extends Controller
             $otp = $otp;
             $run = Auth::id();
             $purpose = 'Propósito General';
-            $entity = 'Servicio de Salud Iquique';
+            $entity = env('FIRMA_ENTITY');
         } elseif ($modo == self::MODO_DESATENDIDO_PRODUCCION) {
             $url = env('FIRMA_URL');
             $api_token = env('FIRMA_API_TOKEN');
@@ -499,7 +499,7 @@ class DigitalSignatureController extends Controller
             $otp = $otp;
             $run = Auth::id();
             $purpose = 'Desatendido';
-            $entity = 'Servicio de Salud Iquique';
+            $entity = env('FIRMA_ENTITY');
         } else {
             session()->flash('warning', 'Modo de firma no seleccionado');
             return redirect()->route('documents.signatures.index', ['pendientes']);
@@ -611,7 +611,7 @@ class DigitalSignatureController extends Controller
             return [
                 'statusOk' => false,
                 'content' => '',
-                'errorMsg' => 'FirmaGob está presentando inestabilidad - ' . $response->reason(),
+                'errorMsg' => 'FirmaGob está presentando inestabilidad - ' . $response->json()['error'],
             ];
         }
 
@@ -787,7 +787,7 @@ class DigitalSignatureController extends Controller
 
         // $purpose    = 'Desatendido';
         $purpose    = 'Propósito General';
-        $entity     = 'Servicio de Salud Iquique';
+        $entity     = env('FIRMA_ENTITY');
 
         /* Confección firma en JWT */
         $payload = [

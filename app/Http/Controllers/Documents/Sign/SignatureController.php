@@ -95,7 +95,7 @@ class SignatureController extends Controller
          * Setea la info para firmar un documento
          */
         $purpose = 'Desatendido';
-        $entity = 'Servicio de Salud Iquique';
+        $entity = env('FIRMA_ENTITY');
         $run = "15287582";
         $page = 'LAST';
 

@@ -1,5 +1,7 @@
-@extends('layouts.bt4.app')
+@extends('layouts.bt5.app')
+
 @section('title', 'Módulo de Vinculos - Crear')
+
 @section('content')
     @include('summary.nav')
     <h3>Crear Vínculos</h3>
