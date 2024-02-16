@@ -32,16 +32,12 @@
                     <th>Documento</th>
                     <th>Folio OC</th>
                     <th>FR</th>
-                    <th>Doc. de Pago</th>
                     <th>Adjuntos</th>
-                    {{-- Sin Anexos hasta averiguar si son necesarios
-                    <th>Anexos</th> --}}
                     <th>Recepcion</th>
                     <th>Estado</th>
                     <th>Folio Sigfe</th>
                     <th>Observaciones</th>
                     <th>Comprobante de licitación de Fondos</th>
-                    {{-- <th>Guardar</th> --}}
                     @canany(['be god', 'Payments: return to review'])
                         <th>Retornar a Bandeja </th>
                     @endcanany
@@ -61,89 +57,8 @@
                             @include('finance.payments.partials.fr-info')
                         </td>
                         <td>
-                            <ul>
-                                @if ($dte->requestform)
-                                    @if ($dte->requestform->father)
-                                        @foreach ($dte->requestform->father->paymentDocs as $paymentDoc)
-                                            <li>{{ $paymentDoc->name ?? '' }}</li>
-                                        @endforeach
-                                    @endif
-
-                                    @foreach ($dte->requestform->paymentDocs as $paymentDoc)
-                                        <li>{{ $paymentDoc->name ?? '' }}</li>
-                                    @endforeach
-                                @endif
-                            </ul>
-                        </td>
-                        <td>
                             @include('finance.payments.partials.fr-files')
                         </td>
-                        {{-- 
-                        Se comenta la linea de Anexos
-                        
-                        <td>
-                            @if ($dte->requestform && $dte->requestform->purchasingProcess)
-                                @foreach ($dte->requestform->purchasingProcess->details->count() > 0 ? $dte->requestform->purchasingProcess->details : $dte->requestform->purchasingProcess->detailsPassenger as $key => $detail)
-                                    @if (isset($detail->pivot->tender) && isset($detail->pivot->tender->attachedFiles))
-                                        @foreach ($detail->pivot->tender->attachedFiles as $attachedFile)
-                                            <a href="{{ route('request_forms.supply.attached_file.download', $attachedFile) }}"
-                                                class="list-group-item list-group-item-action py-2" target="_blank">
-                                                <i class="fas fa-file"></i> {{ $attachedFile->document_type }}
-                                            </a>
-                                        @endforeach
-                                    @endif
-
-                                    @if (isset($detail->pivot->directDeal) && isset($detail->pivot->directDeal->attachedFiles))
-                                        @foreach ($detail->pivot->directDeal->attachedFiles as $attachedFile)
-                                            <a href="{{ route('request_forms.supply.attached_file.download', $attachedFile) }}"
-                                                class="list-group-item list-group-item-action py-2" target="_blank">
-                                                <i class="fas fa-file"></i> {{ $attachedFile->document_type }} </a>
-                                        @endforeach
-                                    @endif
-
-
-                                    @if (isset($detail->pivot->immediatePurchase) && isset($detail->pivot->immediatePurchase->attachedFiles))
-                                        @foreach ($detail->pivot->immediatePurchase->attachedFiles as $attachedFile)
-                                            <a href="{{ route('request_forms.supply.attached_file.download', $attachedFile) }}"
-                                                class="list-group-item list-group-item-action py-2" target="_blank">
-                                                <i class="fas fa-file"></i> {{ $attachedFile->document_type }} </a>
-                                        @endforeach
-                                    @endif
-                                @endforeach
-                            @endif
-
-                            @if ($dte->requestform)
-                                @if ($dte->requestform->father && $dte->requestform->father->purchasingProcess)
-                                    @foreach ($dte->requestform->father->purchasingProcess->details->count() > 0 ? $dte->requestform->father->purchasingProcess->details : $dte->requestform->father->purchasingProcess->detailsPassenger as $key => $detail)
-                                        @if (isset($detail->pivot->tender) && isset($detail->pivot->tender->attachedFiles))
-                                            @foreach ($detail->pivot->tender->attachedFiles as $attachedFile)
-                                                <a href="{{ route('request_forms.supply.attached_file.download', $attachedFile) }}"
-                                                    class="list-group-item list-group-item-action py-2" target="_blank">
-                                                    <i class="fas fa-file"></i> {{ $attachedFile->document_type }}
-                                                </a>
-                                            @endforeach
-                                        @endif
-
-                                        @if (isset($detail->pivot->directDeal) && isset($detail->pivot->directDeal->attachedFiles))
-                                            @foreach ($detail->pivot->directDeal->attachedFiles as $attachedFile)
-                                                <a href="{{ route('request_forms.supply.attached_file.download', $attachedFile) }}"
-                                                    class="list-group-item list-group-item-action py-2" target="_blank">
-                                                    <i class="fas fa-file"></i> {{ $attachedFile->document_type }} </a>
-                                            @endforeach
-                                        @endif
-
-
-                                        @if (isset($detail->pivot->immediatePurchase) && isset($detail->pivot->immediatePurchase->attachedFiles))
-                                            @foreach ($detail->pivot->immediatePurchase->attachedFiles as $attachedFile)
-                                                <a href="{{ route('request_forms.supply.attached_file.download', $attachedFile) }}"
-                                                    class="list-group-item list-group-item-action py-2" target="_blank">
-                                                    <i class="fas fa-file"></i> {{ $attachedFile->document_type }} </a>
-                                            @endforeach
-                                        @endif
-                                    @endforeach
-                                @endif
-                            @endif
-                        </td> --}}
                         <td>
                             <!-- Nuevo módulo de Recepciones -->
                             @include('finance.payments.partials.receptions-info')
