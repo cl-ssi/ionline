@@ -27,7 +27,7 @@
 
         <fieldset class="form-group col">
             <label for="for_origin">Receptor</label>
-            <input type="text" class="form-control" value="{{$dispatch->receiver->shortName}}" disabled>
+            <input type="text" class="form-control" value="{{$dispatch->receiver ? $dispatch->receiver->shortName : ''}}" disabled>
         </fieldset>
 </div>
 

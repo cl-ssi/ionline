@@ -19,6 +19,8 @@ use App\Models\Documents\Approval;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use App\Models\Archive\Archive;
 
+use App\Models\Documents\Correlative;
+
 class Allowance extends Model implements Auditable
 {
     use HasFactory;
@@ -26,7 +28,7 @@ class Allowance extends Model implements Auditable
     use \OwenIt\Auditing\Auditable;
 
     protected $fillable = [
-        'folio_sirh', 'status', 'user_allowance_id', 'allowance_value_id', 'grade', 'law', 'contractual_condition_id', 
+        'correlative', 'folio_sirh', 'status', 'user_allowance_id', 'allowance_value_id', 'grade', 'law', 'contractual_condition_id', 
         'position', 'establishment_id', 'organizational_unit_allowance_id', 'place', 'reason',
         'overnight', 'accommodation', 'food','passage', 'means_of_transport', 'origin_commune_id', 'destination_commune_id', 
         'round_trip', 'from', 'to', 'total_days', 'total_half_days', 'fifty_percent_total_days', 'sixty_percent_total_days',
@@ -302,6 +304,16 @@ class Allowance extends Model implements Auditable
         'to'    => 'date:Y-m-d'
     ];
     */
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($allowance) {
+            //TODO: PARAMETRIZAR TYPE_ID VIATICOS
+            $allowance->correlative = Correlative::getCorrelativeFromType(20, $allowance->organizationalUnitAllowance->establishment_id);
+        });
+    }
 
     protected $hidden = [
         'created_at', 'updated_at'

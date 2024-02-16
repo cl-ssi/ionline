@@ -33,7 +33,7 @@
         <div class="left quince"
             style="padding-left: 2px; padding-bottom: 10px;">
             <strong style="text-transform: uppercase; padding-right: 30px;">
-                RESOLUCION EXENTA N°: {{ $allowance->id }}
+                RESOLUCION EXENTA N°: {{ ($allowance->correlative) ? $allowance->correlative : $allowance->id }}
             </strong>
         </div>
 
