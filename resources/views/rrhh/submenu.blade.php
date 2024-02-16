@@ -10,7 +10,14 @@
 
     @can('Users: assign permission')
     <li class="nav-item">
-        <a class="nav-link {{ active('rrhh.roles.index') }}" href="{{ route('rrhh.roles.index', $user->id) }}">
+        <a class="nav-link {{ active('rrhh.roles.mgr') }}" href="{{ route('rrhh.roles.mgr', $user->id) }}">
+            <i class="bi bi-wrench-adjustable"></i> <span class="d-none d-sm-inline"> Roles</span></a>
+    </li>
+    @endcan
+
+    @can('Users: assign permission')
+    <li class="nav-item">
+        <a class="nav-link {{ active('rrhh.permissions.mgr') }}" href="{{ route('rrhh.permissions.mgr', $user->id) }}">
             <i class="bi bi-wrench-adjustable"></i> <span class="d-none d-sm-inline"> Permisos</span></a>
     </li>
     @endcan

@@ -795,13 +795,13 @@
                             <i class="fas fa-fw fa-question-circle"></i> {{ __('Consultas/Sugerencia Amipass') }}
                         </a>
 
-                        @role('god')
+                        @can('be god')
                         <div class="dropdown-divider"></div>
 
                         <a class="dropdown-item" href="{{ route('parameters.logs.index') }}">
                             <i class="fas fa-fw fa-bomb"></i> Log de errores
                         </a>
-                        @endrole
+                        @endcan
 
                         @can('News: create')
                         <div class="dropdown-divider"></div>
