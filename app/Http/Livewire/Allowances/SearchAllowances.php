@@ -46,6 +46,7 @@ class SearchAllowances extends Component
                         ->whereDoesntHave("archive", function($subQuery){
                             $subQuery->where('user_id', Auth::user()->id);
                         })
+                        ->where('establishment_id', Auth::user()->organizationalUnit->establishment_id)
                         ->search($this->selectedStatus,
                             $this->selectedId,
                             $this->selectedUserAllowance,
@@ -54,6 +55,36 @@ class SearchAllowances extends Component
                 ]);
             }
         }
+
+        if($this->index == 'contabilidad'){
+            if(auth()->user()->hasPermissionTo('Allowances: contabilidad')){
+                return view('livewire.allowances.search-allowances', [
+                    'allowances' => Allowance::with([
+                            'userCreator',
+                            'userAllowance',
+                            'allowanceSigns',
+                            'organizationalUnitAllowance',
+                            'originCommune',
+                            'destinations.commune',
+                            'destinations.locality',
+                            'approvals'
+                        ])
+                        ->latest()
+                        ->where('establishment_id', Auth::user()->organizationalUnit->establishment_id)
+                        ->whereHas("allowanceSigns", function($subQuery){
+                            $subQuery->where('event_type', 'contabilidad')
+                                ->whereIn('status', ['pending', 'accepted', 'rejected']);
+                        })
+                        ->doesntHave('archive')
+                        ->search($this->selectedStatus,
+                            $this->selectedId,
+                            $this->selectedUserAllowance,
+                            $this->selectedStatusSirh)
+                        ->paginate(50)
+                ]);
+            }
+        }
+
 
         if($this->index == 'archived'){
             if(auth()->user()->hasPermissionTo('Allowances: sirh')){
@@ -69,6 +100,7 @@ class SearchAllowances extends Component
                             'approvals'
                         ])
                         ->latest()
+                        // ->has('archive')
                         ->whereHas("archive", function($subQuery){
                             $subQuery->where('user_id', Auth::user()->id);
                         })

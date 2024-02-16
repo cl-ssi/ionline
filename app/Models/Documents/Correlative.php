@@ -24,11 +24,13 @@ class Correlative extends Model
      */
     protected $table = 'doc_correlatives';
 
-    public static function getCorrelativeFromType($type_id)
+    public static function getCorrelativeFromType($type_id, $establishment_id = null)
     {
         abort_if(auth()->user()->organizational_unit_id == null, 501,'El usuario no tiene unidad organizacional asociada');
 
-        $establishment_id = auth()->user()->organizationalUnit->establishment_id;
+        if($establishment_id == NULL){
+            $establishment_id = auth()->user()->organizationalUnit->establishment_id;
+        }
 
         /* Obtener el objeto correlativo según el tipo */
         $correlative = Correlative::where('type_id', $type_id)

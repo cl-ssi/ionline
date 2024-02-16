@@ -516,6 +516,9 @@ class AllowancesCreate extends Component
     public function sirhSign(Allowance $alw)
     {
         // ANTIGUAS VISACIONES
+
+        //U.O. QUE REFERENCIA A QUE ESTABLECIMIENTO APRUEBA
+        $ou_sirh = Parameter::get('allowance', 'sirh_sign', $alw->userAllowance->organizationalUnit->establishment->id);
     
         //SE AGREGA AL PRINCIPIO VISACIÓN SIRH
         $allowance_sing_sirh                            = new AllowanceSign();
@@ -523,7 +526,7 @@ class AllowancesCreate extends Component
         $allowance_sing_sirh->event_type                = 'sirh';
         $allowance_sing_sirh->status                    = 'pending';
         $allowance_sing_sirh->allowance_id              = $alw->id;
-        $allowance_sing_sirh->organizational_unit_id    = 40;
+        $allowance_sing_sirh->organizational_unit_id    = $ou_sirh;
         $allowance_sing_sirh->save();
 
         //SE NOTIFICA PARA INICIAR EL PROCESO DE APROBACIONES
@@ -532,38 +535,18 @@ class AllowancesCreate extends Component
             $notificationSirhPermissionUser->notify(new NewAllowance($alw));
         }
         
-        /*
-        // APPROVALS
-        $approval = $alw->approvals()->create([
-            "module"                            => "Viáticos",
-            "module_icon"                       => "bi bi-wallet",
-            "subject"                           => 'Solicitud de Viático: ID '.$alw->id.'<br>
-                                                    Funcionario: '.$alw->userAllowance->FullName,
-            "sent_to_ou_id"                     => Parameter::get('ou','FinanzasSSI'),
-            "document_route_name"               => "allowances.show_approval",
-            "document_route_params"             => json_encode([
-                "allowance_id" => $alw->id
-            ]),
-            "active"                            => true,
-            "previous_approval_id"              => null,
-            "callback_feedback_inputs"          => json_encode([
-                [
-                    "type"  => "text",
-                    "label" => "Folio SIRH",
-                    "name"  => "folio",
-                    "value" => null
-                ]
-            ]),
-            
-            "callback_controller_method"        => "App\Http\Controllers\Allowances\AllowanceController@approvalCallback",
-            "callback_controller_params"        => json_encode([
-                'allowance_id'  => $alw->id,
-                'process'       => null
-            ])
-        ]);
-        
-        return $approval->id;
-        */
+        //EN CASO DE SER HAH SE AGREGA NUEVA APROBACION
+        if($alw->establishment_id == Parameter::get('establishment', 'HospitalAltoHospicio')){
+            $ou_contabilidad = Parameter::get('allowance', 'contablidad', $alw->userAllowance->organizationalUnit->establishment->id);
+
+            $allowance_sing_sirh                            = new AllowanceSign();
+            $allowance_sing_sirh->position                  = 2;
+            $allowance_sing_sirh->event_type                = 'contabilidad';
+            $allowance_sing_sirh->status                    = null;
+            $allowance_sing_sirh->allowance_id              = $alw->id;
+            $allowance_sing_sirh->organizational_unit_id    = $ou_contabilidad;
+            $allowance_sing_sirh->save();
+        }
     }
 
     public function ouSign(Allowance $alw, $sirh_approval){

@@ -76,11 +76,14 @@
                     @foreach($allowances as $allowance)
                     <tr>
                         <th>
-                            {{ $allowance->id }} <br>
+                            {{ ($allowance->correlative) ? $allowance->correlative : $allowance->id }} <br>
 
                             @if($allowance->status != 'manual')
                                 @if($allowance->allowanceSigns->first()->status == "accepted")
                                     <span class="badge badge-success">SIRH <i class="fas fa-check-circle"></i></span> <br>
+                                @endif
+                                @if($allowance->allowanceSigns->last()->status == "accepted" && $allowance->establishment_id == App\Models\Parameters\Parameter::get('establishment', 'HospitalAltoHospicio'))
+                                    <span class="badge badge-info">Contabilidad <i class="fas fa-check-circle"></i></span> <br>
                                 @endif
                             @endif
 
@@ -103,7 +106,8 @@
                         <td>{{ $allowance->created_at->format('d-m-Y H:i:s') }}</td>
                         <td>
                             <b>{{ $allowance->userAllowance->FullName }}</b> <br>
-                            {{ ($allowance->organizationalUnitAllowance) ? $allowance->organizationalUnitAllowance->name : '' }} <br><br>
+                            <small>{{ ($allowance->organizationalUnitAllowance) ? $allowance->organizationalUnitAllowance->name : '' }}</small> <br>
+                            <small><b>{{ $allowance->allowanceEstablishment->name }}</b></small> <br><br>
                             <b>Creado por</b>: {{ $allowance->userCreator->TinnyName }}
                         </td>
                         <td class="text-center">{{ ($allowance->ContractualCondition) ? $allowance->ContractualCondition->name : '' }}</td>
@@ -143,7 +147,7 @@
                         </td>
                         --}}
                         <td class="text-center">
-                            @if($index == 'sign')
+                            @if($index == 'sign' || $index == 'contabilidad')
                                 <a href="{{ route('allowances.show', $allowance) }}"
                                     class="btn btn-outline-secondary btn-sm" title="Ingresar folio SIRH">
                                     <i class="fas fa-keyboard"></i>
@@ -156,6 +160,22 @@
                                     </button>
                                 @endif
                             @endif
+
+                            {{--
+                            @if($index == 'contabilidad')
+                                <a href="{{ route('allowances.show', $allowance) }}"
+                                    class="btn btn-outline-secondary btn-sm" title="Ingresar folio SIRH">
+                                    <i class="fas fa-keyboard"></i>
+                                </a>
+
+                                @if($allowance->status == 'complete' || $allowance->status == 'rejected' || $allowance->status == 'manual')
+                                    <button class="btn btn-outline-success btn-sm mt-2" 
+                                        wire:click="archive( '{{ addslashes(get_class($allowance)) }}', {{ $allowance->id }})">
+                                        <i class="fas fa-archive"></i>
+                                    </button>
+                                @endif
+                            @endif
+                            --}}
 
                             @if($index == 'archived')
                                 <a href="{{ route('allowances.show', $allowance) }}"

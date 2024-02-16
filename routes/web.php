@@ -2298,7 +2298,8 @@ Route::prefix('request_forms')->as('request_forms.')->middleware(['auth', 'must.
 Route::prefix('allowances')->as('allowances.')->middleware(['auth', 'must.change.password'])->group(function () {
     Route::get('/', [AllowanceController::class, 'index'])->name('index');
     Route::get('all_index', [AllowanceController::class, 'all_index'])->name('all_index')->middleware('permission:Allowances: all');
-    Route::get('sign_index', [AllowanceController::class, 'sign_index'])->name('sign_index')->middleware('permission:Allowances: sirh');
+    Route::get('sign_index', [AllowanceController::class, 'sign_index'])->name('sign_index')->middleware(['permission:Allowances: sirh']);
+    Route::get('contabilidad_index', [AllowanceController::class, 'contabilidad_index'])->name('contabilidad_index')->middleware(['permission:Allowances: contabilidad']);
     Route::get('archived_index', [AllowanceController::class, 'archived_index'])->name('archived_index');
     Route::get('director_index', [AllowanceController::class, 'director_index'])->name('director_index');
     Route::get('create', [AllowanceController::class, 'create'])->name('create');

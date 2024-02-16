@@ -47,6 +47,11 @@ class AllowanceController extends Controller
         return view('allowances.sign_index');
     }
 
+    public function contabilidad_index()
+    {   
+        return view('allowances.contabilidad_index');
+    }
+
     public function archived_index()
     {   
         if(Auth::user()->hasPermissionTo('Allowances: sirh')){

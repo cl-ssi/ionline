@@ -29,6 +29,15 @@ class AllowanceSign extends Model implements Auditable
         return $this->belongsTo('App\Models\Allowances\Allowance', 'allowance_id');
     }
 
+    public function getNextSign() {
+        $nextSign = AllowanceSign::
+            where('allowance_id', $this->allowance_id)
+            ->where('position', $this->position + 1)
+            ->first();
+
+        return $nextSign;
+    }
+
     public function getStatusValueAttribute() {
         switch($this->status) {
           case 'pending':
