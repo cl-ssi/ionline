@@ -27,6 +27,7 @@ class RoleAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Users: create', 'description' => 'Permite crear ususarios']);
         Permission::create(['name' => 'Users: edit', 'description' => 'Editar usuarios']);
         Permission::create(['name' => 'Users: delete', 'description' => 'Borrar usuarios']);
+        Permission::create(['name' => 'Users: assign roles', 'description' => 'Asignar roles a usuarios']);
         Permission::create(['name' => 'Users: assign permission', 'description' => 'Asignar permisos a usuarios']);
         Permission::create(['name' => 'Users: reset password option', 'description' => 'Muestra el boton para resetear password']);
         Permission::create(['name' => 'Users: send mail verification', 'description' => 'Muestra el boton para verificar email']);

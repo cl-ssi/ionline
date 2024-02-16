@@ -15,10 +15,10 @@
       </fieldset>
 
       <fieldset class="form-group col">
-          <label for="for_origin">Origen</label>
-					<select name="establishment_id" class="form-control selectpicker" data-live-search="true" disabled>
-							<option value="{{$establishment->id}}">{{$establishment->name}}</option>
-					</select>
+            <label for="for_origin">Origen</label>
+            <select name="establishment_id" class="form-control selectpicker" data-live-search="true" disabled>
+                    <option value="{{$establishment->id}}">{{$establishment->name}}</option>
+            </select>
       </fieldset>
 </div>
 
@@ -42,12 +42,13 @@
 
 @section('custom_js')
 
-  <script>
-    $( document ).ready(function() {
-      document.getElementById("for_barcode").focus();
-    });
+    <script>
+        $( document ).ready(function() {
+        document.getElementById("for_barcode").focus();
+        });
+    </script>
 
-
+    <!--
     document.onkeydown=function(evt){
         var keyCode = evt ? (evt.which ? evt.which : evt.keyCode) : event.keyCode;
         var barcode = document.getElementById("for_barcode").value;
@@ -74,6 +75,6 @@
         }
       @endforeach
     }
-  </script>
+  </script> -->
 
 @endsection

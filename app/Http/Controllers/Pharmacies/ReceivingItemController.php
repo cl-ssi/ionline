@@ -38,7 +38,7 @@ class ReceivingItemController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'barcode' => 'required|integer',
+            'barcode' => 'required|string',
             'amount' => 'required|numeric'
         ]);
 
@@ -52,6 +52,8 @@ class ReceivingItemController extends Controller
 
         $product = Product::find($request->product_id);
         $product->stock = $product->stock + $request->amount;
+        $product->name = $request->name;
+        $product->barcode = $request->barcode;
         $product->save();
 
         session()->flash('success', 'Se ha guardado el detalle del ingreso.');

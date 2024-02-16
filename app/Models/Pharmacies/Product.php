@@ -14,11 +14,11 @@ class Product extends Model
      * @var array
      */
     protected $fillable = [
-        'id', 'barcode', 'name', 'unit', 'expiration',
+        'id', 'barcode','experto_id','unspsc_product_id', 'name', 'unit', 'expiration',
         //'batch',
         'price', 'stock',
         'critic_stock','min_stock','max_stock','pharmacy_id',
-        'storage_conditions', 'category_id', 'program_id', 'experto_id'
+        'storage_conditions', 'category_id', 'program_id'
     ];
 
     protected $table = 'frm_products';

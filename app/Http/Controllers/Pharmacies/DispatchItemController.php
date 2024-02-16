@@ -39,7 +39,7 @@ class DispatchItemController extends Controller
     public function store(Request $request)
     {
       $this->validate($request, [
-          'barcode' => 'required|integer',
+          'barcode' => 'required|string',
           'amount' => 'required|numeric',
           'product_id' => 'required'
       ]);

@@ -276,6 +276,8 @@ use App\Http\Livewire\Rrhh\Attendance\ReasonMgr;
 use App\Http\Livewire\Rrhh\NoAttendanceRecordConfirmation;
 use App\Http\Livewire\Rrhh\NoAttendanceRecordIndex;
 use App\Http\Livewire\Rrhh\NoAttendanceRecordMgr;
+use App\Http\Livewire\Rrhh\PermissionsMgr;
+use App\Http\Livewire\Rrhh\RolesMgr;
 use App\Http\Livewire\Rrhh\ShiftsIndex;
 use App\Http\Livewire\Sign\RequestSignature;
 use App\Http\Livewire\Sign\SignatureIndex;
@@ -840,10 +842,11 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
         Route::put('/{absenteeismType}', [AbsenteeismTypeController::class, 'update'])->name('update');
     });
 
+    Route::get('{user}/roles', RolesMgr::class)->name('roles.mgr')->middleware('auth');
+    Route::get('{user}/permissions', PermissionsMgr::class)->name('permissions.mgr')->middleware('auth');
 
-
-    Route::get('{user}/roles', [RoleController::class, 'index'])->name('roles.index')->middleware('auth');
-    Route::post('{user}/roles', [RoleController::class, 'attach'])->name('roles.attach')->middleware('auth');
+    // Route::get('{user}/roles', [RoleController::class, 'index'])->name('roles.index')->middleware('auth');
+    // Route::post('{user}/roles', [RoleController::class, 'attach'])->name('roles.attach')->middleware('auth');
 
     /* TODO: #50 incorporar auth en el grupo e importar controllers al comienzo del archivo */
     /** Inicio Shift Managment */

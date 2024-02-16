@@ -18,16 +18,16 @@
           <input type="date" class="form-control" id="for_date" name="date" required="required" value="{{$receiving->date->format('Y-m-d')}}">
       </fieldset>
 
-      <fieldset class="form-group col">
-          <label for="for_origin">Origen</label>
-					<select name="establishment_id" class="form-control selectpicker" data-live-search="true" required="">
-            @foreach ($establishments as $key => $establishment)
-              <option value="{{$establishment->id}}" @if ($receiving->establishment_id == $establishment->id)
-                selected
-              @endif>{{$establishment->name}}</option>
-            @endforeach
-          </select>
-      </fieldset>
+        <fieldset class="form-group col">
+            <label for="for_origin">Origen</label>
+            <select name="establishment_id" class="form-control selectpicker" data-live-search="true" required="">
+                @foreach ($establishments as $key => $establishment)
+                <option value="{{$establishment->id}}" @if ($receiving->establishment_id == $establishment->id)@endif>
+                    {{$establishment->name}}
+                </option>
+                @endforeach
+            </select>
+        </fieldset>
 </div>
 
 <div class="form-row">
@@ -53,7 +53,12 @@
 
 @section('custom_js')
 
-  <script>
+    <script>
+        $( document ).ready(function() {
+        document.getElementById("for_barcode").focus();
+        });
+    </script>
+  <!-- <script>
     $( document ).ready(function() {
       document.getElementById("for_barcode").focus();
     });
@@ -79,12 +84,13 @@
       var value = selectObject.value;
       @foreach ($products as $key => $product)
         if ({{$product->id}} == value) {
-          document.getElementById("for_barcode").value = {{$product->barcode}};
+        //   document.getElementById("for_barcode").value = {{$product->barcode}};
+          document.getElementById("for_experto_id").value = {{$product->experto_id}};
           document.getElementById("for_unity").value = "{{$product->unit}}";
           document.getElementById("for_quantity").focus();
         }
       @endforeach
     }
-  </script>
+  </script> -->
 
 @endsection

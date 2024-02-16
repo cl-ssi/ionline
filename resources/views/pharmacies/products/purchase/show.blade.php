@@ -115,7 +115,13 @@
 
 @section('custom_js')
 
-  <script>
+    <script>
+        $( document ).ready(function() {
+        document.getElementById("for_barcode").focus();
+        });
+    </script>
+
+  <!-- <script>
     $( document ).ready(function() {
       document.getElementById("for_barcode").focus();
     });
@@ -147,6 +153,6 @@
         }
       @endforeach
     }
-  </script>
+  </script> -->
 
 @endsection
