@@ -181,8 +181,7 @@ class Product extends Model
                         $matrix[$cont]['id'] = $CollectionItem->dispatch->id;
                         //$matrix[$cont]['date'] = $CollectionItem->created_at->format("Y-m-d H:i:s");
                         $matrix[$cont]['date'] = $CollectionItem->dispatch->date->format("Y-m-d");
-                        $matrix[$cont]['origen_destino'] = $CollectionItem->dispatch->establishment ? $CollectionItem->dispatch->establishment->name : '';
-                        $matrix[$cont]['origen_destino'] = $matrix[$cont]['origen_destino'] . ' ' . $CollectionItem->dispatch->receiver ? $CollectionItem->dispatch->receiver->shortName : '';
+                        $matrix[$cont]['origen_destino'] = ($CollectionItem->dispatch->establishment ? $CollectionItem->dispatch->establishment->name : '') . ' ' . ($CollectionItem->dispatch->receiver ? $CollectionItem->dispatch->receiver->shortName : '');
                         //$matrix[$cont]['ingreso'] = 0;
                         //$matrix[$cont]['salida'] = $CollectionItem->amount;
                         //$matrix[$cont]['saldo'] = $saldo;
