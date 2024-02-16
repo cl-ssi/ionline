@@ -257,18 +257,33 @@ class ContinuityResolutionController extends Controller
         }
 
         //CARGAR ADDENDUMS EN VISTOS Y CONSIDERANDOS
-        // $vistosAddendums = '';
-        // $considetandoAddendums = '';
+        $vistosAddendums = '';
+        $considerandoAddendums = '';
 
-        // if($continuityResolution->agreement->addendums->isNotEmpty()){
-        //     foreach($continuityResolution->agreement->addendums as $addendum){
-        //         $vistosAddendums .= 'Resolución Exenta N°'.$addendum->res_number.' de fecha '.$this->formatDate($addendum->res_date);
-        //     }
+        $len = $continuityResolution->agreement->addendums->count();
+        if($continuityResolution->agreement->addendums->isNotEmpty()){
+            $considerandoAddendums .= $len > 1 ? 'Resoluciones Exentas ' : 'Resolución Exenta ';
+            foreach($continuityResolution->agreement->addendums as $key => $addendum){
+                if($key+1 == $len && $len > 1){
+                    $vistosAddendums .= ' y '; 
+                    $considerandoAddendums .= ' y '; 
+                }
+                $vistosAddendums .= 'Resolución Exenta N°'.($addendum->res_number ?? '____').' de fecha '.($this->formatDate($addendum->res_date) ?? '______________');
+                $considerandoAddendums .= 'N°'.($addendum->res_number ?? '____').'/'.($addendum->res_date != NULL ? date('Y', strtotime($addendum->res_date)) : '______');
+                if($key+2 < $len){
+                    $vistosAddendums .= ', ';
+                    $considerandoAddendums .= ', ';
+                }
+            }
 
-        //     $vistosAddendums .= ' del Servicio de Salud Tarapacá que modifica la resolución anterior;';
-        // }
+            $vistosAddendums .= ' del Servicio de Salud Tarapacá que modifica'.($len > 1 ? 'n' : '').' la resolución anterior';
+            $considerandoAddendums .= ' que modifica'.($len > 1 ? 'n' : '').' la resolución anterior';
+        }
 
-        // return $vistosAddendums;
+        if($vistosAddendums == '') $vistosAddendums = 'Resoluciones modificatorias si es que existieran';
+        if($considerandoAddendums == '') $considerandoAddendums = 'Resoluciones modificatorias si es que existieran';
+
+        // return $considerandoAddendums;
 
         $establecimientosListado = $arrayEstablishmentConcat;
 
@@ -305,9 +320,8 @@ class ContinuityResolutionController extends Controller
             style='color:black;'>&ordm;</span>19.378; art&iacute;culo 6 del Decreto Supremo N<span
             style='color:black;'>&ordm;</span>118 del 2007, del Ministerio de Salud;&nbsp;Resoluci&oacute;n Exenta N<span
             style='color:black;'>&ordm;</span><span style='background:lime;'>".$numResolucion."/".$yearResolucion."</span> del Ministerio de Salud, que
-        aprob&oacute; <span style='background:lime;'>el Programa de ".$programa." a&ntilde;o ".$periodoConvenio."; Resoluci&oacute;n
+        aprob&oacute; <span style='background:lime;'>el Programa de ".$programa." a&ntilde;o ".$periodoConvenio."; <span style='background:lime;'>".$vistosAddendums."</span>; Resoluci&oacute;n
             Exenta&nbsp;N&deg;".$numResourceResolucion."/".$yearResourceResolucion."</span> del Ministerio de Salud, que distribuy&oacute; los recursos del citado Programa;
-            <span style='background:lime;'>Resoluciones modificatorias si es que existieran</span>;
             &nbsp;Resoluci&oacute;n Exenta N<span
             style='color:black;'>&ordm;</span><span style='background:lime;'>_____/".($year)."</span> del Ministerio de Salud, que
         aprob&oacute; <span style='background:lime;'>el Programa de ".$programa." a&ntilde;o ".($year)."; Resoluci&oacute;n
@@ -328,7 +342,7 @@ class ContinuityResolutionController extends Controller
         &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
         &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
         &nbsp; 1.-</strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Que, durante el a&ntilde;o presupuestario 2023, a
-    trav&eacute;s de Resoluci&oacute;n Exenta <span style='background:lime;'>N&deg;".$numResolucionConvenio."/".$yearResolucionConvenio." y Resoluciones modificatorias si es que existieran</span>, entre el Municipio de <span style='background:lime;'>".$comuna."</span> y este
+    trav&eacute;s de Resoluci&oacute;n Exenta <span style='background:lime;'>N&deg;".$numResolucionConvenio."/".$yearResolucionConvenio." y ".$considerandoAddendums."</span>, entre el Municipio de <span style='background:lime;'>".$comuna."</span> y este
     Servicio de Salud, se aprob&oacute; el convenio correspondiente <strong>al <span style='background:lime;'>PROGRAMA
             &ldquo;".$programa." A&Ntilde;O ".$periodoConvenio."&rdquo;</span>.</strong></p>
 <p

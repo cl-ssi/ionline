@@ -106,13 +106,13 @@
                         {{ $inventory->estado }}
                     </td>
                     <td>
-                        {{ $inventory->place->location?->name }}
+                        {{ $inventory->place?->location->name }}
                     </td>
                     <td>
-                        {{ $inventory->place->name }}
+                        {{ $inventory->place?->name }}
                     </td>
                     <td>
-                        {{ $inventory->place->architectural_design_code }}
+                        {{ $inventory->place?->architectural_design_code }}
                     </td>
                     <td>
                         {{ optional($inventory->responsible)->tinny_name }}
