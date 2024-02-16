@@ -1,13 +1,11 @@
 <form method="POST" class="form-horizontal" action="{{ route('pharmacies.products.purchase_item.store') }}">
     @csrf
 
-    <div class="form-row">
+    {{--<!-- <div class="form-row">
         <fieldset class="form-group col-2">
             <label for="for_barcode">Código de Barra</label>
             <input type="number" class="form-control" id="for_barcode" placeholder="Código de barra" name="barcode">
         </fieldset>
-
-        <input type="hidden" name="purchase_id" value="{{$purchase->id}}" />
 
         <fieldset class="form-group col">
             <label for="for_product">Producto</label>
@@ -25,7 +23,11 @@
         </fieldset>
 
         <input type="hidden" id="for_unity" name="unity" />
-    </div>
+    </div> -->--}}
+
+    @livewire('pharmacies.product-search')
+
+    <input type="hidden" name="purchase_id" value="{{$purchase->id}}" />
 
     <div class="form-row">
         <fieldset class="form-group col-4">

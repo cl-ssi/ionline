@@ -13,10 +13,22 @@
     @method('PUT')
 
     <div class="form-row">
-        <fieldset class="form-group col-3">
-            <label for="for_barcode">Código</label>
+        <fieldset class="form-group col-2">
+            <label for="for_barcode">Código producto</label>
             <input type="text" class="form-control" id="for_barcode"
                 value = '{{ $product->barcode }}' name="barcode">
+        </fieldset>
+
+        <fieldset class="form-group col-2">
+            <label for="for_barcode">Código experto</label>
+            <input type="text" class="form-control" id="for_experto_id" placeholder="Código experto del producto" 
+            name="experto_id" required="" value="{{$product->experto_id}}">
+        </fieldset>
+
+        <fieldset class="form-group col-2">
+            <label for="for_barcode">Código Mercado público</label>
+            <input type="text" class="form-control" id="for_unspsc_product_id" placeholder="Código mercado público" 
+            name="unspsc_product_id" value="{{$product->unspsc_product_id}}">
         </fieldset>
 
         <fieldset class="form-group col">
@@ -25,31 +37,15 @@
             value = '{{ $product->name }}' name="name" required>
         </fieldset>
 
+        
+    </div>
+
+    <div class="form-row">
         <fieldset class="form-group col-2">
             <label for="for_unit">Unidad</label>
             <input type="text" class="form-control" id="for_unit"
             value = '{{ $product->unit }}' name="unit" required>
         </fieldset>
-    </div>
-
-    <div class="form-row">
-        <!--<fieldset class="form-group col-4">
-            <label for="for_expiration">Fecha Expiración</label>
-            <input type="date" class="form-control" id="for_expiration"
-            value = '{{ $product->expiration }}' name="expiration" required>
-        </fieldset>
-
-        <fieldset class="form-group col">
-            <label for="for_batch">Lote</label>
-            <input type="text" class="form-control" id="for_batch"
-            value = '{{ $product->batch }}' name="batch" required>
-        </fieldset>
-
-        <fieldset class="form-group col-4">
-            <label for="for_price">Precio</label>
-            <input type="number" class="form-control" id="for_price"
-            value = '{{ $product->price }}' name="price">
-        </fieldset>-->
 
         <fieldset class="form-group col-3">
             <label for="for_category">Categoria</label>
