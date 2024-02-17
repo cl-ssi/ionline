@@ -22,8 +22,7 @@ return new class extends Migration
             $table->string('principal')->nullable();
             $table->integer('saldo')->nullable();
             $table->string('tipo_movimiento')->nullable();
-            $table->date('fecha')->nullable();
-            
+            $table->date('fecha')->nullable();            
             $table->string('titulo')->nullable();
             $table->integer('debe')->nullable();
             $table->integer('haber')->nullable();

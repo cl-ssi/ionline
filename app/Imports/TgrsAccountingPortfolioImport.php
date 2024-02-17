@@ -7,6 +7,8 @@ use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use App\Models\Finance\TgrAccountingPortfolio;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
+use Carbon\Carbon;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 
 class TgrsAccountingPortfolioImport implements ToCollection, WithHeadingRow, WithChunkReading
 {
@@ -37,7 +39,7 @@ class TgrsAccountingPortfolioImport implements ToCollection, WithHeadingRow, Wit
                 'principal' => $row['principal'],
                 'saldo' => $row['saldo'],
                 'tipo_movimiento' => $row['tipo_movimiento'],
-                'fecha' => $row['fecha'],
+                'fecha' => isset($row['fecha']) ? Carbon::instance(Date::excelToDateTimeObject($row['fecha'])) : null,                
                 'titulo' => $row['titulo'],
                 'debe' => $row['debe'],
                 'haber' => $row['haber'],
@@ -86,6 +88,6 @@ class TgrsAccountingPortfolioImport implements ToCollection, WithHeadingRow, Wit
 
     public function chunkSize(): int
     {
-        return 200;
+        return 100;
     }
 }

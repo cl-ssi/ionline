@@ -27,6 +27,7 @@ return new class extends Migration
     public function down()
     {
         Schema::table('frm_dispatches', function (Blueprint $table) {
+            $table->dropForeign(['receiver_id']);
             $table->dropColumn('receiver_id');
         });
     }
