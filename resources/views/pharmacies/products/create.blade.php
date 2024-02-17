@@ -20,7 +20,7 @@
 
         <fieldset class="form-group col-2">
             <label for="for_barcode">Código experto</label>
-            <input type="text" class="form-control" id="for_experto_id" placeholder="Código experto del producto" name="experto_id" required="">
+            <input type="text" class="form-control" id="for_experto_id" placeholder="Código experto del producto" name="experto_id">
         </fieldset>
 
         <fieldset class="form-group col-2">
@@ -63,9 +63,10 @@
         <fieldset class="form-group col">
             <label for="for_category">Programa</label>
             <select name="program_id" id="for_program" class="form-control">
-            @foreach($programs as $program)
-            <option value='{{ $program->id }}'>{{ $program->name }}</option>
-            @endforeach
+                <option value=""></option>
+                @foreach($programs as $program)
+                <option value='{{ $program->id }}'>{{ $program->name }}</option>
+                @endforeach
             </select>
         </fieldset>
 

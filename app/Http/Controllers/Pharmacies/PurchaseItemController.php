@@ -37,21 +37,23 @@ class PurchaseItemController extends Controller
      */
     public function store(Request $request)
     {
-      $this->validate($request, [
-          'barcode' => 'required|string',
-          'amount' => 'required|numeric',
-          'unit_cost' => 'required|numeric'
-      ]);
+        $this->validate($request, [
+            'barcode' => 'required|string',
+            'amount' => 'required|numeric',
+            'unit_cost' => 'required|numeric'
+        ]);
 
-      $PurchaseItem = new PurchaseItem($request->all());
-      $PurchaseItem->save();
+        $PurchaseItem = new PurchaseItem($request->all());
+        $PurchaseItem->save();
 
-      $product = Product::find($request->product_id);
-      $product->stock = $product->stock + $request->amount;
-      $product->save();
+        $product = Product::find($request->product_id);
+        $product->stock = $product->stock + $request->amount;
+        $product->name = $request->name;
+        $product->barcode = $request->barcode;
+        $product->save();
 
-      session()->flash('success', 'Se ha guardado el detalle del ingreso.');
-      return redirect()->route('pharmacies.products.purchase.show', $PurchaseItem->purchase);
+        session()->flash('success', 'Se ha guardado el detalle del ingreso.');
+        return redirect()->route('pharmacies.products.purchase.show', $PurchaseItem->purchase);
     }
 
     /**
