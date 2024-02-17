@@ -13,7 +13,7 @@
 
         <fieldset class="form-group col-2">
             <label for="for_experto_id">Código experto</label>
-            <input type="text" class="form-control" id="for_experto_id" placeholder="" name="experto_id" wire:model="experto_id" required>
+            <input type="text" class="form-control" id="for_experto_id" placeholder="" name="experto_id" wire:model="experto_id">
         </fieldset>
 
         <fieldset class="form-group col-6">
