@@ -62,7 +62,7 @@
 <div class="titulo">ACTA DE DESPACHO N° {{ $dispatch->id }}</div>
 
 <div style="padding-bottom: 8px;">
-    <strong>Enviado a:</strong> {{ $dispatch->establishment->name }}<br>
+    <strong>Enviado a:</strong> {{ $dispatch->establishment ? $dispatch->establishment->name : '' }} {{$dispatch->receiver ? $dispatch->receiver->shortName : ''}}<br>
     <strong>Nota:</strong> {{ $dispatch->notes }}<br>
 </div>
 

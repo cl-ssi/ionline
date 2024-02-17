@@ -6,7 +6,7 @@
 
 @include('pharmacies.nav')
 
-<h3 class="mb-3">Editar un producto</h3>
+<h3 class="mb-3">Editar Producto</h3>
 
 <form method="POST" class="form-horizontal" action="{{ route('pharmacies.products.update', $product) }}">
     @csrf
@@ -22,7 +22,7 @@
         <fieldset class="form-group col-2">
             <label for="for_barcode">Código experto</label>
             <input type="text" class="form-control" id="for_experto_id" placeholder="Código experto del producto" 
-            name="experto_id" required="" value="{{$product->experto_id}}">
+            name="experto_id" value="{{$product->experto_id}}">
         </fieldset>
 
         <fieldset class="form-group col-2">
@@ -78,19 +78,19 @@
       <fieldset class="form-group col-4">
           <label for="for_critic_stock">Stock Crítico</label>
           <input type="text" class="form-control" id="for_critic_stock"
-          value = '{{ $product->critic_stock }}' name="critic_stock" required>
+          value = '{{ $product->critic_stock }}' name="critic_stock">
       </fieldset>
 
       <fieldset class="form-group col-4">
           <label for="for_min_stock">Stock Min.</label>
           <input type="text" class="form-control" id="for_min_stock"
-          value = '{{ $product->min_stock }}' name="min_stock" required>
+          value = '{{ $product->min_stock }}' name="min_stock">
       </fieldset>
 
       <fieldset class="form-group col-4">
           <label for="for_max_stock">Stock Max.</label>
           <input type="text" class="form-control" id="for_max_stock"
-          value = '{{ $product->max_stock }}' name="max_stock" required>
+          value = '{{ $product->max_stock }}' name="max_stock">
       </fieldset>
 
     </div>

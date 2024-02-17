@@ -32,7 +32,7 @@ class DispatchExport implements FromCollection, WithHeadings, WithMapping, WithC
             return [
                 $dispatch->id,
                 Date::dateTimeToExcel($dispatch->date),
-                $dispatch->establishment->name,
+                ($dispatch->establishment ? $dispatch->establishment->name : '') . ' ' . ($dispatch->receiver ? $dispatch->receiver->shortName : ''),
                 $dispatch->notes,
                 $dispatch->verificationMailings->last()->status,
             ];
@@ -40,7 +40,7 @@ class DispatchExport implements FromCollection, WithHeadings, WithMapping, WithC
             return [
                 $dispatch->id,
                 Date::dateTimeToExcel($dispatch->date),
-                $dispatch->establishment->name,
+                ($dispatch->establishment ? $dispatch->establishment->name : '') . ' ' . ($dispatch->receiver ? $dispatch->receiver->shortName : ''),
                 $dispatch->notes,
                 '',
             ];
