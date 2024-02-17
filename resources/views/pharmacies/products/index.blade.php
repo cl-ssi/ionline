@@ -35,7 +35,7 @@
 <table class="table table-striped table-sm table-bordered" id="tabla_movimientos">
 	<thead>
 		<tr>
-			<th scope="col">Cod</th>
+			<th scope="col">Código</th>
 			<th scope="col">Nombre</th>
 			<th scope="col">Unidad</th>
 			<!--<th scope="col">Expiración</th>

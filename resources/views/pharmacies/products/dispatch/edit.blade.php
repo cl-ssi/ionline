@@ -112,21 +112,21 @@
     });
 
 
-    document.onkeydown=function(evt){
-        var keyCode = evt ? (evt.which ? evt.which : evt.keyCode) : event.keyCode;
-        var barcode = document.getElementById("for_barcode").value;
-        if(keyCode == 13)
-        {
-          @foreach ($products as $key => $product)
-            if ({{$product->barcode}} == barcode) {
-              document.getElementById("for_product").value = {{$product->id}};
-              document.getElementById("for_unity").value = "{{$product->unit}}";
-              $( "#for_product" ).trigger( "change" );
-            }
-          @endforeach
+    // document.onkeydown=function(evt){
+    //     var keyCode = evt ? (evt.which ? evt.which : evt.keyCode) : event.keyCode;
+    //     var barcode = document.getElementById("for_barcode").value;
+    //     if(keyCode == 13)
+    //     {
+    //       @foreach ($products as $key => $product)
+    //         if ({{$product->barcode}} == barcode) {
+    //           document.getElementById("for_product").value = {{$product->id}};
+    //           document.getElementById("for_unity").value = "{{$product->unit}}";
+    //           $( "#for_product" ).trigger( "change" );
+    //         }
+    //       @endforeach
 
-        }
-    }
+    //     }
+    // }
 
     // function jsCambiaSelect(selectObject)
     // {

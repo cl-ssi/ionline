@@ -161,7 +161,7 @@
                     <tr>
                         <td>{{$data->id}}</td>
                         <td>{{$data->date->format('d/m/Y')}}</td>
-                        <td>{{$data->establishment->name}}</td>
+                        <td>{{$data->establishment ? $data->establishment->name : ''}} {{$data->receiver ? $data->receiver->shortName : ''}}</td>
                         <td>{{$data->notes}}</td>
                     </tr>
                 @endforeach
@@ -191,7 +191,7 @@
                 <tr>
                     <td>{{$data->id}}</td>
                     <td>{{$data->date->format('d/m/Y')}}</td>
-                    <td>{{$data->establishment->name}}</td>
+                    <td>{{$data->establishment ? $data->establishment->name : ''}} {{$data->receiver ? $data->receiver->shortName : ''}}</td>
                     <td>{{$data->notes}}</td>
                     <td><a href="{{ route('pharmacies.products.dispatch.edit', $data) }}" class="btn btn-outline-secondary btn-sm">
 					<span class="fas fa-edit" aria-hidden="true"></span></a></td>
