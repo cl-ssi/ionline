@@ -39,9 +39,9 @@ class ProductController extends Controller
      */
     public function create()
     {
-        $categories = Category::All();
-        $programs = Program::All();
-        $units = Unit::All();
+        $categories = Category::orderBy('name')->get();
+        $programs = Program::orderBy('name')->get();
+        $units = Unit::orderBy('name')->get();
         return view('pharmacies.products.create', compact('categories','units','programs'));
     }
 
