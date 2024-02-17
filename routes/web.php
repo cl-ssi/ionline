@@ -264,6 +264,7 @@ use App\Http\Livewire\Parameters\Parameter\ParameterCreate;
 use App\Http\Livewire\Parameters\Parameter\ParameterEdit;
 use App\Http\Livewire\Parameters\Parameter\ParameterIndex;
 use App\Http\Livewire\Parameters\Program\BudgetMgr;
+use App\Http\Livewire\Pharmacies\Products\IndexProducts;
 use App\Http\Livewire\ProfAgenda\Reports\SirsapReport;
 use App\Http\Livewire\Profile\MailSignature;
 use App\Http\Livewire\Profile\Subrogations;
@@ -2082,6 +2083,7 @@ Route::prefix('pharmacies')->as('pharmacies.')->middleware(['auth', 'must.change
         Route::delete('deliver/{deliver}/restore', [App\Http\Controllers\Pharmacies\DeliverController::class, 'restore'])->name('deliver.restore');
     });
     Route::resource('products', App\Http\Controllers\Pharmacies\ProductController::class);
+    Route::get('/products', IndexProducts::class)->name('products.index');
 
     Route::prefix('reports')->as('reports.')->middleware('auth')->group(function () {
         Route::get('bincard', [App\Http\Controllers\Pharmacies\ProductController::class, 'repBincard'])->name('bincard');
