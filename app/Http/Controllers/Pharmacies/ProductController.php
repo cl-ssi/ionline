@@ -182,13 +182,6 @@ class ProductController extends Controller
       //compras
       $dataCollection = collect();
       if ($tipo == 1) {
-        /*$dataCollection = PurchaseItem::whereHas('purchase', function ($query) use ($supplier_id, $fecha_inicio,$fecha_termino, $notes) {
-                                                   $query->whereBetween('date', [$fecha_inicio,$fecha_termino])
-                                                         ->when($supplier_id, function ($q, $supplier_id) {
-                                                              return $q->where('supplier_id', $supplier_id);
-                                                           })
-                                                         ->where('notes','LIKE',"%$notes%");
-                                                 })->paginate(15);*/
        $dataCollection = Purchase::where('pharmacy_id',session('pharmacy_id'))
                                     ->whereBetween('date', [$fecha_inicio,$fecha_termino])
                                     ->when($supplier_id, function ($q, $supplier_id) {
@@ -214,13 +207,6 @@ class ProductController extends Controller
       }
       //ingresos
       if ($tipo == 2) {
-        /*$dataCollection = ReceivingItem::whereHas('receiving', function ($query) use ($establishment_id, $fecha_inicio,$fecha_termino, $notes) {
-                                                     $query->whereBetween('date', [$fecha_inicio,$fecha_termino])
-                                                           ->when($establishment_id, function ($q, $establishment_id) {
-                                                                return $q->where('establishment_id', $establishment_id);
-                                                             })
-                                                           ->where('notes','LIKE',"%$notes%");
-                                                   })->paginate(15);*/
        $dataCollection = Receiving::where('pharmacy_id',session('pharmacy_id'))
                                 ->whereBetween('date', [$fecha_inicio,$fecha_termino])
                                 ->when($establishment_id, function ($q, $establishment_id) {
@@ -246,14 +232,6 @@ class ProductController extends Controller
       }
       //egresos
       if ($tipo == 3) {
-        /*$dataCollection = DispatchItem::whereHas('dispatch', function ($query) use ($establishment_id, $fecha_inicio,$fecha_termino, $notes) {
-                                                     $query->whereBetween('date', [$fecha_inicio,$fecha_termino])
-                                                           ->when($establishment_id, function ($q, $establishment_id) {
-                                                                return $q->where('establishment_id', $establishment_id);
-                                                             })
-                                                           ->where('notes','LIKE',"%$notes%");
-                                                   })->paginate(15);*/
-                                                   // dd($program);
        $dataCollection = Dispatch::where('pharmacy_id',session('pharmacy_id'))
                                 ->whereBetween('date', [$fecha_inicio,$fecha_termino])
                                 ->when($establishment_id, function ($q, $establishment_id) {
@@ -304,12 +282,6 @@ class ProductController extends Controller
     }
 
     public function repConsumeHistory(Request $request){
-        //dd($request->get('year'));
-        
-        // // FIX TIEMPO LIMITE DE EJECUCUCION Y MEMORIA LIMITE EN PHP.INI
-        // set_time_limit(3600);
-        // ini_set('memory_limit', '1024M');
-
         $matrix = Product::SearchConsumosHistoricos($request->get('year'),
                                                     $request->get('category_id'),
                                                     $request->get('program_id'),
@@ -323,21 +295,6 @@ class ProductController extends Controller
     }
 
     public function repProduct(Request $request){
-        //dd($request->get('year'));
-        /*$matrix = Product::SearchConsumosHistoricos($request->get('year'),
-                                                    $request->get('category_id'),
-                                                    $request->get('establishment_id'));
-
-        $categories = Category::orderBy('name','ASC')->get();
-        $establishments = Establishment::orderBy('name','ASC')->get();
-        */
-        // dd($request);
-
-        // FIX TIEMPO LIMITE DE EJECUCUCION Y MEMORIA LIMITE EN PHP.INI
-        // set_time_limit(3600);
-        // ini_set('memory_limit', '1024M');
-
-        // $matrix = Product::SearchProducts($request->get('product_id'), $request->get('program'));
         $products = Product::where('pharmacy_id',session('pharmacy_id'))
                             ->orderBy('name','ASC')
                             ->get();
@@ -347,10 +304,11 @@ class ProductController extends Controller
                             ->when($product_id, function ($q, $product_id) {
                                 return $q->where('id', $product_id);
                             })
-                            ->with('program')
+                            ->whereHas('receivingItems')
+                            ->with('program','receivingItems')
                             ->orderBy('name','ASC')
                             ->get();
+
         return view('pharmacies.reports.products', compact('request','products','products_data'));
-        // ,'matrix'));
     }
 }
