@@ -32,7 +32,7 @@
     <div class="form-row">
         <fieldset class="form-group col">
             <label for="for_note">Nota</label>
-            <input type="text" class="form-control" id="for_note" placeholder="" name="notes" required="">
+            <input type="text" class="form-control" id="for_note" placeholder="" name="notes">
         </fieldset>
 
         <fieldset class="form-group col-4">
