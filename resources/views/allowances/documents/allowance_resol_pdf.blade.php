@@ -33,7 +33,11 @@
         <div class="left quince"
             style="padding-left: 2px; padding-bottom: 10px;">
             <strong style="text-transform: uppercase; padding-right: 30px;">
-                RESOLUCION EXENTA N°: {{ ($allowance->correlative) ? $allowance->correlative : $allowance->id }}
+                @if($allowance->establishment_id == App\Models\Parameters\Parameter::get('establishment', 'HospitalAltoHospicio'))
+                    RESOLUCION EXENTA N°: {{ ($allowance->correlative) ? $allowance->correlative.' - '.$allowance->created_at->format('Y')  : $allowance->id }}
+                @else
+                    RESOLUCION EXENTA N°: {{ ($allowance->correlative) ? $allowance->correlative : $allowance->id }}
+                @endif
             </strong>
         </div>
 
