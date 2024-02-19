@@ -116,11 +116,9 @@
                                 <a href="{{ route('rrhh.users.switch', $user->id) }}" class="btn btn-outline-warning" @disabled(auth()->user()->godMode)>
                                     <i class="bi bi-arrow-clockwise"></i></a>
                             @endif
-                        @endunless
-
-                        @if ($user->trashed())
+                        @else
                             @livewire('rrhh.undo-user-deletion', ['user' => $user], key($user->id))
-                        @endif
+                        @endunless
                 </td>
             </tr>
         @endforeach
