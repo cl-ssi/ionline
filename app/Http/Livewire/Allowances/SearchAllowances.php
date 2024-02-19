@@ -140,7 +140,28 @@ class SearchAllowances extends Component
         }
 
         if($this->index == 'all'){
-            return view('livewire.allowances.search-allowances', [
+            if(auth()->user()->hasPermissionTo('Allowances: all establishment')){
+                return view('livewire.allowances.search-allowances', [
+                        'allowances' => Allowance::with([
+                            'userCreator',
+                            'userAllowance',
+                            'allowanceSigns',
+                            'organizationalUnitAllowance',
+                            'originCommune',
+                            'destinations.commune',
+                            'destinations.locality',
+                            'approvals'
+                        ])
+                        ->orderBy('id', 'DESC')
+                        ->search($this->selectedStatus,
+                            $this->selectedId,
+                            $this->selectedUserAllowance,
+                            $this->selectedStatusSirh)
+                        ->paginate(50)
+                ]);
+            }
+            if(auth()->user()->hasPermissionTo('Allowances: all')){
+                return view('livewire.allowances.search-allowances', [
                     'allowances' => Allowance::with([
                         'userCreator',
                         'userAllowance',
@@ -152,12 +173,14 @@ class SearchAllowances extends Component
                         'approvals'
                     ])
                     ->orderBy('id', 'DESC')
+                    ->where('establishment_id', Auth::user()->organizationalUnit->establishment_id)
                     ->search($this->selectedStatus,
                         $this->selectedId,
                         $this->selectedUserAllowance,
                         $this->selectedStatusSirh)
                     ->paginate(50)
-            ]);
+                ]);
+            }
         }
 
         //INDEX CON VIÁTICOS PARA FIRMA DE DIRECCIÓN
