@@ -38,7 +38,7 @@ class AppServiceProvider extends ServiceProvider
 
         /* Helper para imprimir un número con separador de miles */
         Blade::directive('numero', function ($numero) {
-            return "<?php echo number_format($numero, 0, '.', '.'); ?>";
+            return "<?php echo number_format($numero ?? 0, 0, '.', '.'); ?>";
         });
 
         /* Helper para imprimir un número decimal con separador de miles */
