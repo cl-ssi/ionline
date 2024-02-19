@@ -101,7 +101,11 @@
                         </th>
                     @endif
                     <th scope="row" nowrap>{{ $user->runFormat() }}</td>
-                    <td nowrap>{{ $user->shortName }} {{ trashed($user) }}</td>
+                    <td nowrap @class([
+                            'text-decoration-line-through' => $user->trashed()
+                        ])>
+                        {{ $user->shortName }}
+                    </td>
                     <td class="small">{{ @$user->organizationalUnit->name ?: '' }}
                         ({{ $user->organizationalUnit->establishment->alias ?? '' }})</td>
                     <td class="small">{{ $user->position }}</td>
