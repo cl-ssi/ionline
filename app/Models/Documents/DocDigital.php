@@ -59,6 +59,7 @@ class DocDigital extends Model
             $body = $response->body();
             Session::put('token', json_decode($body)->access_token, now()->addMinutes(json_decode($body)->expires_in));
         }
+        // app('debugbar')->info(session('token'));
         $this->client = Http::withToken(session('token'))->baseUrl(env('DOC_DIGITAL_URL'));
     }
 

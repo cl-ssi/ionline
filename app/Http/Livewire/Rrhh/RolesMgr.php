@@ -20,14 +20,26 @@ class RolesMgr extends Component
         }
     }
 
+    // metodo togglePermission
+    public function togglePermission($permission)
+    {
+        if ($this->user->hasDirectPermission($permission)) {
+            $this->user->revokePermissionTo($permission);
+        } else {
+            $this->user->givePermissionTo($permission);
+        }
+    }
+
     public function render()
     {
         $userRoles = $this->user->roles->pluck('name')->toArray();
-        $roles = Role::with('permissions')->orderBy('name')->get();
+        $userPermissions = $this->user->permissions->pluck('name')->toArray();
+        $roles = Role::with('permissions')->whereNotIn('name',['god','dev'])->orderBy('name')->get();
 
         return view('livewire.rrhh.roles-mgr', [
             'roles' => $roles, 
-            'userRoles' => $userRoles
+            'userRoles' => $userRoles,
+            'userPermissions' => $userPermissions,
         ]);
     }
 }

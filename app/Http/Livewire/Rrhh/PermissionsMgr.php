@@ -14,7 +14,7 @@ class PermissionsMgr extends Component
     // metodo togglePermission
     public function togglePermission($permission)
     {
-        if ($this->user->hasPermissionTo($permission)) {
+        if ($this->user->hasDirectPermission($permission)) {
             $this->user->revokePermissionTo($permission);
         } else {
             $this->user->givePermissionTo($permission);
