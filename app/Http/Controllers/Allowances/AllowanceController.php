@@ -54,7 +54,7 @@ class AllowanceController extends Controller
 
     public function archived_index()
     {   
-        if(Auth::user()->hasPermissionTo('Allowances: sirh')){
+        if(auth()->user()->hasPermissionTo('Allowances: sirh')){
             return view('allowances.archived_index');
         }
         else{
@@ -106,8 +106,8 @@ class AllowanceController extends Controller
                 $allowance->status = 'pending';
                 $allowance->organizationalUnitAllowance()->associate($allowance->userAllowance->organizationalUnit);
                 $allowance->allowanceEstablishment()->associate($allowance->userAllowance->organizationalUnit->establishment);
-                $allowance->userCreator()->associate(Auth::user());
-                $allowance->organizationalUnitCreator()->associate(Auth::user()->organizationalUnit);
+                $allowance->userCreator()->associate(auth()->user());
+                $allowance->organizationalUnitCreator()->associate(auth()->user()->organizationalUnit);
 
                 //CALCULO DE DIAS
                 $allowance->total_days = $this->allowanceTotalDays($request);
@@ -137,7 +137,7 @@ class AllowanceController extends Controller
                         $allowanceFile->file = $file->storeAs('/ionline/allowances/allowance_docs', $file_name.'.'.$file->extension(), 'gcs');
 
                         $allowanceFile->allowance()->associate($allowance);
-                        $allowanceFile->user()->associate(Auth::user());
+                        $allowanceFile->user()->associate(auth()->user());
                         
                         $allowanceFile->save();
                     }
@@ -373,8 +373,8 @@ class AllowanceController extends Controller
         $allowance->fill($request->All());
         $allowance->organizationalUnitAllowance()->associate($allowance->userAllowance->organizationalUnit);
         $allowance->allowanceEstablishment()->associate($allowance->userAllowance->organizationalUnit->establishment);
-        $allowance->userCreator()->associate(Auth::user());
-        $allowance->organizationalUnitCreator()->associate(Auth::user()->organizationalUnit);
+        $allowance->userCreator()->associate(auth()->user());
+        $allowance->organizationalUnitCreator()->associate(auth()->user()->organizationalUnit);
 
         //CALCULO DE DIAS
         $allowance->total_days = $this->allowanceTotalDays($request);
@@ -403,7 +403,7 @@ class AllowanceController extends Controller
                 $allowanceFile->file = $file->storeAs('/ionline/allowances/allowance_docs', $file_name.'.'.$file->extension(), 'gcs');
 
                 $allowanceFile->allowance()->associate($allowance);
-                $allowanceFile->user()->associate(Auth::user());
+                $allowanceFile->user()->associate(auth()->user());
                 
                 $allowanceFile->save();
             }

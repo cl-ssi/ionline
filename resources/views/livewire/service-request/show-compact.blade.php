@@ -14,7 +14,7 @@
         <div class="col-2">
         <button class="btn btn-danger" wire:click="deleteRequest({{$serviceRequest}})" 
             onclick="confirm('¿Está seguro de eliminar la solicitud?') || event.stopImmediatePropagation()"
-            @disabled(!Auth::user()->can('Service Request: fulfillments rrhh'))>
+            @disabled(!auth()->user()->can('Service Request: fulfillments rrhh'))>
             Eliminar solicitud
         </button>
         </div>

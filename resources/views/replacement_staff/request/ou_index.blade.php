@@ -8,7 +8,7 @@
 
 <div class="row">
     <div class="col-sm-9">
-        <h4 class="mb-3">Solicitudes de: <small>{{ Auth::user()->organizationalUnit->name }}</small></h4>
+        <h4 class="mb-3">Solicitudes de: <small>{{ auth()->user()->organizationalUnit->name }}</small></h4>
     </div>
 </div>
 

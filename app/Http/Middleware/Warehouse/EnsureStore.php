@@ -19,7 +19,7 @@ class EnsureStore
     public function handle(Request $request, Closure $next)
     {
         $store = $request->route('store');
-        $stores = Auth::user()->stores;
+        $stores = auth()->user()->stores;
         $user = User::find(Auth::id());
 
         if($stores->contains($store->id) || $user->hasPermissionTo('Store: warehouse manager'))

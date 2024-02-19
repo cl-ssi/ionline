@@ -105,10 +105,10 @@
             </tr>
         </thead>
         <tbody>
-            @foreach(Auth::user()->getIAmSubrogantNoAuthorityAttribute() as $key => $subrogation)
+            @foreach(auth()->user()->getIAmSubrogantNoAuthorityAttribute() as $key => $subrogation)
                 <tr>
                     <td>{{ $key+1 }}</td>
-                    <td>{{ Auth::user()->TinnyName }}</td>
+                    <td>{{ auth()->user()->TinnyName }}</td>
                     <td>{{ $subrogation->user->TinnyName }}</td>
                     <td>{{ $subrogation->level }}</td>
                 </tr>

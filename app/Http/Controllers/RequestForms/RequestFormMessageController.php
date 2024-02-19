@@ -42,7 +42,7 @@ class RequestFormMessageController extends Controller
     public function store(Request $request, RequestForm $requestForm, $eventType, $from)
     {
         $message = new RequestFormMessage($request->All());
-        $message->user()->associate(Auth::user());
+        $message->user()->associate(auth()->user());
         $message->requestForm()->associate($requestForm);
 
         if ($request->hasFile('file')) {

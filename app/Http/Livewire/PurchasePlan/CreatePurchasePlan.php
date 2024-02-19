@@ -132,7 +132,7 @@ class CreatePurchasePlan extends Component
                     'id'  =>  $this->idPurchasePlan,
                 ],
                 [
-                    'user_creator_id'           => Auth::user()->id, 
+                    'user_creator_id'           => auth()->id(), 
                     'user_responsible_id'       => $this->userResponsibleId, 
                     'position'                  => $this->position, 
                     'telephone'                 => $this->telephone, 

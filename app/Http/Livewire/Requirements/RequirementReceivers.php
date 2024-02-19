@@ -33,7 +33,7 @@ class RequirementReceivers extends Component
         $establishments_ids = explode(',',env('APP_SS_ESTABLISHMENTS'));
 
         // para verificar si usuario logeado es director(a) del servicio
-        $auth_user_id = Auth::user()->id;
+        $auth_user_id = auth()->id();
         $manager_user_id = OrganizationalUnit::where('level',1)
                                             // ->whereIn('establishment_id',$establishments_ids)
                                             ->where('establishment_id',38)

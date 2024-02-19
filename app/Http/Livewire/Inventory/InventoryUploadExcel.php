@@ -188,8 +188,8 @@ class InventoryUploadExcel extends Component
                 // }
 
                 // $inventoryData = [
-                //     'request_user_ou_id' => Auth::user()->organizationalUnit->id,
-                //     'request_user_id' => Auth::user()->id,
+                //     'request_user_ou_id' => auth()->user()->organizationalUnit->id,
+                //     'request_user_id' => auth()->id(),
                 //     'number' => $row[0],
                 //     'description' => $row[1],
                 //     'unspsc_product_id' => $unspsc_product->id,
@@ -289,8 +289,8 @@ class InventoryUploadExcel extends Component
                     'status' => $status,
                     'place_id' => $place->id,
                     //debe ser con el auth() o con el sender ¿? lo hice con el user_sender
-                    //'request_user_ou_id' => Auth::user()->organizationalUnit->id,
-                    //'request_user_id' => Auth::user()->id,
+                    //'request_user_ou_id' => auth()->user()->organizationalUnit->id,
+                    //'request_user_id' => auth()->id(),
                     // 'user_responsible_id' => $user_responsible->id,
                     // 'user_using_id' => $user_using->id,
                     'observations' => $row[13],

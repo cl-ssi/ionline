@@ -132,7 +132,7 @@ class HotelBookingController extends Controller
 
     public function my_bookings(){
 
-        if(Auth::user()->hasPermissionTo('HotelBooking: Administrador')){
+        if(auth()->user()->hasPermissionTo('HotelBooking: Administrador')){
             $roomBookings = RoomBooking::paginate(50);
         }else{
             $roomBookings = RoomBooking::where('user_id',auth()->user()->id)->paginate(50);

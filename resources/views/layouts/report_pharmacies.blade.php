@@ -8,7 +8,7 @@
     </head>
     <body>
         <div class="content">
-          @if( Auth::user()->pharmacies->first()->id == 2)
+          @if( auth()->user()->pharmacies->first()->id == 2)
             <img style="padding-bottom: 4px;" src="{{ asset('images/logo_cgu_pluma.jpg') }}"
               width="120" alt="Logo {{ env('APP_SS') }}"><br>
           @else

@@ -36,25 +36,25 @@ class PeriodFinance extends Component
 
     public function confirmFulfillment(Fulfillment $fulfillment)
     {
-        // dd(Auth::user()->can('Service Request: fulfillments rrhh'));
-        if (Auth::user()->can('Service Request: fulfillments responsable')) {
+        // dd(auth()->user()->can('Service Request: fulfillments rrhh'));
+        if (auth()->user()->can('Service Request: fulfillments responsable')) {
           if ($fulfillment->responsable_approver_id == NULL) {
             $fulfillment->responsable_approbation = 1;
             $fulfillment->responsable_approbation_date = Carbon::now();
-            $fulfillment->responsable_approver_id = Auth::user()->id;
+            $fulfillment->responsable_approver_id = auth()->id();
             $fulfillment->save();
 
             //items
             foreach ($fulfillment->FulfillmentItems as $key => $FulfillmentItem) {
               $FulfillmentItem->responsable_approbation = 1;
               $FulfillmentItem->responsable_approbation_date = Carbon::now();
-              $FulfillmentItem->responsable_approver_id = Auth::user()->id;
+              $FulfillmentItem->responsable_approver_id = auth()->id();
               $FulfillmentItem->save();
             }
           }
         }
 
-        if (Auth::user()->can('Service Request: fulfillments rrhh')) {
+        if (auth()->user()->can('Service Request: fulfillments rrhh')) {
           if ($fulfillment->responsable_approver_id == NULL) {
             session()->flash("period-finance", "No es posible aprobar, puesto que falta aprobación de Responsable.");
             $this->fulfillment->refresh();
@@ -74,21 +74,21 @@ class PeriodFinance extends Component
           if ($fulfillment->responsable_approver_id != NULL && $fulfillment->rrhh_approver_id == NULL) {
             $fulfillment->rrhh_approbation = 1;
             $fulfillment->rrhh_approbation_date = Carbon::now();
-            $fulfillment->rrhh_approver_id = Auth::user()->id;
+            $fulfillment->rrhh_approver_id = auth()->id();
             $fulfillment->save();
 
             //items
             foreach ($fulfillment->FulfillmentItems as $key => $FulfillmentItem) {
               $FulfillmentItem->rrhh_approbation = 1;
               $FulfillmentItem->rrhh_approbation_date = Carbon::now();
-              $FulfillmentItem->rrhh_approver_id = Auth::user()->id;
+              $FulfillmentItem->rrhh_approver_id = auth()->id();
               $FulfillmentItem->save();
             }
           }
         }
         
 
-        if (Auth::user()->can('Service Request: fulfillments finance')) {
+        if (auth()->user()->can('Service Request: fulfillments finance')) {
           if ($fulfillment->rrhh_approver_id == NULL) {
             session()->flash("period-finance", 'No es posible aprobar, puesto que falta aprobación de RRHH');
             $this->fulfillment->refresh();
@@ -122,14 +122,14 @@ class PeriodFinance extends Component
           if ($fulfillment->rrhh_approver_id != NULL && $fulfillment->finances_approver_id == NULL) {
             $fulfillment->finances_approbation = 1;
             $fulfillment->finances_approbation_date = Carbon::now();
-            $fulfillment->finances_approver_id = Auth::user()->id;
+            $fulfillment->finances_approver_id = auth()->id();
             $fulfillment->save();
 
             //items
             foreach ($fulfillment->FulfillmentItems as $key => $FulfillmentItem) {
               $FulfillmentItem->finances_approbation = 1;
               $FulfillmentItem->finances_approbation_date = Carbon::now();
-              $FulfillmentItem->finances_approver_id = Auth::user()->id;
+              $FulfillmentItem->finances_approver_id = auth()->id();
               $FulfillmentItem->save();
             }
           }
@@ -141,24 +141,24 @@ class PeriodFinance extends Component
 
     public function refuseFulfillment(Fulfillment $fulfillment)
     {
-        if (Auth::user()->can('Service Request: fulfillments responsable')) {
+        if (auth()->user()->can('Service Request: fulfillments responsable')) {
           if ($fulfillment->responsable_approver_id == NULL) {
             $fulfillment->responsable_approbation = 0;
             $fulfillment->responsable_approbation_date = Carbon::now();
-            $fulfillment->responsable_approver_id = Auth::user()->id;
+            $fulfillment->responsable_approver_id = auth()->id();
             $fulfillment->save();
 
             //items
             foreach ($fulfillment->FulfillmentItems as $key => $FulfillmentItem) {
               $FulfillmentItem->responsable_approbation = 0;
               $FulfillmentItem->responsable_approbation_date = Carbon::now();
-              $FulfillmentItem->responsable_approver_id = Auth::user()->id;
+              $FulfillmentItem->responsable_approver_id = auth()->id();
               $FulfillmentItem->save();
             }
           }
         }
 
-        if (Auth::user()->can('Service Request: fulfillments rrhh')) {
+        if (auth()->user()->can('Service Request: fulfillments rrhh')) {
           if ($fulfillment->responsable_approver_id == NULL) {
             session()->flash('danger', 'No es posible rechazar, puesto que falta aprobación de Responsable.');
             return redirect()->back();
@@ -166,20 +166,20 @@ class PeriodFinance extends Component
           if ($fulfillment->responsable_approver_id != NULL && $fulfillment->rrhh_approver_id == NULL) {
             $fulfillment->rrhh_approbation = 0;
             $fulfillment->rrhh_approbation_date = Carbon::now();
-            $fulfillment->rrhh_approver_id = Auth::user()->id;
+            $fulfillment->rrhh_approver_id = auth()->id();
             $fulfillment->save();
 
             //items
             foreach ($fulfillment->FulfillmentItems as $key => $FulfillmentItem) {
               $FulfillmentItem->rrhh_approbation = 0;
               $FulfillmentItem->rrhh_approbation_date = Carbon::now();
-              $FulfillmentItem->rrhh_approver_id = Auth::user()->id;
+              $FulfillmentItem->rrhh_approver_id = auth()->id();
               $FulfillmentItem->save();
             }
           }
         }
 
-        if (Auth::user()->can('Service Request: fulfillments finance')) {
+        if (auth()->user()->can('Service Request: fulfillments finance')) {
           if ($fulfillment->rrhh_approver_id == NULL) {
             session()->flash('danger', 'No es posible rechazar, puesto que falta aprobación de RRHH');
             return redirect()->back();
@@ -187,14 +187,14 @@ class PeriodFinance extends Component
           if ($fulfillment->rrhh_approver_id != NULL && $fulfillment->finances_approver_id == NULL) {
             $fulfillment->finances_approbation = 0;
             $fulfillment->finances_approbation_date = Carbon::now();
-            $fulfillment->finances_approver_id = Auth::user()->id;
+            $fulfillment->finances_approver_id = auth()->id();
             $fulfillment->save();
 
             //items
             foreach ($fulfillment->FulfillmentItems as $key => $FulfillmentItem) {
               $FulfillmentItem->finances_approbation = 0;
               $FulfillmentItem->finances_approbation_date = Carbon::now();
-              $FulfillmentItem->finances_approver_id = Auth::user()->id;
+              $FulfillmentItem->finances_approver_id = auth()->id();
               $FulfillmentItem->save();
             }
           }

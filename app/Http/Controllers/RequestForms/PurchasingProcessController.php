@@ -35,7 +35,7 @@ class PurchasingProcessController extends Controller
     {
         // $ouSearch = Parameter::where('module', 'ou')->whereIn('parameter', ['AbastecimientoSSI', 'AbastecimientoHAH', 'AdquisicionesHAH'])->pluck('value')->toArray();
         $ouSearch = array_unique(Parameter::get('Abastecimiento',['supply_ou_id', 'purchaser_ou_id']));
-        if (!in_array(Auth()->user()->organizational_unit_id, $ouSearch) && !Auth::user()->can('Request Forms: purchaser')) {
+        if (!in_array(Auth()->user()->organizational_unit_id, $ouSearch) && !auth()->user()->can('Request Forms: purchaser')) {
             session()->flash('danger', 'Estimado Usuario/a: Usted no pertenece a la Unidad de Abastecimiento o no tiene los permisos de acceso.');
             return redirect()->route('request_forms.my_forms');
         }
@@ -47,7 +47,7 @@ class PurchasingProcessController extends Controller
     {
         // $ouSearch = Parameter::where('module', 'ou')->whereIn('parameter', ['AbastecimientoSSI', 'AbastecimientoHAH', 'AdquisicionesHAH'])->pluck('value')->toArray();
         $ouSearch = array_unique(Parameter::get('Abastecimiento',['supply_ou_id', 'purchaser_ou_id']));
-        if (!in_array(Auth()->user()->organizational_unit_id, $ouSearch) && !Auth::user()->can('Request Forms: purchaser')) {
+        if (!in_array(Auth()->user()->organizational_unit_id, $ouSearch) && !auth()->user()->can('Request Forms: purchaser')) {
             session()->flash('danger', 'Estimado Usuario/a: Usted no pertenece a la Unidad de Abastecimiento o no tiene los permisos de acceso.');
             return redirect()->route('request_forms.my_forms');
         }
@@ -65,7 +65,7 @@ class PurchasingProcessController extends Controller
     {
         // $ouSearch = Parameter::where('module', 'ou')->whereIn('parameter', ['AbastecimientoSSI', 'AbastecimientoHAH', 'AdquisicionesHAH'])->pluck('value')->toArray();
         $ouSearch = array_unique(Parameter::get('Abastecimiento',['supply_ou_id', 'purchaser_ou_id']));
-        if (!in_array(Auth()->user()->organizational_unit_id, $ouSearch) && !Auth::user()->can('Request Forms: purchaser')) {
+        if (!in_array(Auth()->user()->organizational_unit_id, $ouSearch) && !auth()->user()->can('Request Forms: purchaser')) {
             session()->flash('danger', 'Estimado Usuario/a: Usted no pertenece a la Unidad de Abastecimiento o no tiene los permisos de acceso.');
             return redirect()->route('request_forms.my_forms');
         }
@@ -98,7 +98,7 @@ class PurchasingProcessController extends Controller
         $purchasingProcess->purchase_type_id      = $requestForm->purchase_type_id;
         $purchasingProcess->start_date            = Carbon::now();
         $purchasingProcess->status                = 'in_process';
-        $purchasingProcess->user_id               = Auth::user()->id;
+        $purchasingProcess->user_id               = auth()->id();
         $purchasingProcess->request_form_id       = $requestForm->id;
         $purchasingProcess->save();
         return $purchasingProcess;
@@ -178,7 +178,7 @@ class PurchasingProcessController extends Controller
                 $detail->passenger_request_form_id  = $item;
             }
             $detail->internal_purchase_order_id = $internalPurchaseOrder->id;
-            $detail->user_id                    = Auth::user()->id;
+            $detail->user_id                    = auth()->id();
             $detail->quantity                   = $request->quantity[$key];
             $detail->unit_value                 = $request->unit_value[$key];
             $detail->tax                        = $request->tax[$key];
@@ -233,7 +233,7 @@ class PurchasingProcessController extends Controller
                 $detail->passenger_request_form_id  = $item;
             } 
             $detail->petty_cash_id              = $pettyCash->id;
-            $detail->user_id                    = Auth::user()->id;
+            $detail->user_id                    = auth()->id();
             $detail->quantity                   = $request->quantity[$key];
             $detail->unit_value                 = $request->unit_value[$key];
             $detail->tax                        = $request->tax[$key];
@@ -282,7 +282,7 @@ class PurchasingProcessController extends Controller
                 $detail->passenger_request_form_id  = $item;
             }
             $detail->fund_to_be_settled_id      = $fundToBeSettled->id;
-            $detail->user_id                    = Auth::user()->id;
+            $detail->user_id                    = auth()->id();
             $detail->quantity                   = $request->quantity[$key];
             $detail->unit_value                 = $request->unit_value[$key];
             $detail->tax                        = $request->tax[$key];
@@ -330,7 +330,7 @@ class PurchasingProcessController extends Controller
                 $detail->passenger_request_form_id  = $item;
             }
             $detail->tender_id                  = $tender->id;
-            $detail->user_id                    = Auth::user()->id;
+            $detail->user_id                    = auth()->id();
             $detail->quantity                   = $request->quantity[$key];
             $detail->unit_value                 = $request->unit_value[$key];
             $detail->tax                        = $request->tax[$key];
@@ -413,7 +413,7 @@ class PurchasingProcessController extends Controller
                 $detail->passenger_request_form_id  = $item;
             }
             $detail->immediate_purchase_id      = $oc->id;
-            $detail->user_id                    = Auth::user()->id;
+            $detail->user_id                    = auth()->id();
             $detail->quantity                   = $request->quantity[$key];
             $detail->unit_value                 = $request->unit_value[$key];
             $detail->tax                        = $request->tax[$key];
@@ -478,7 +478,7 @@ class PurchasingProcessController extends Controller
                 $detail->passenger_request_form_id  = $item;
             }
             $detail->immediate_purchase_id      = $cm->id;
-            $detail->user_id                    = Auth::user()->id;
+            $detail->user_id                    = auth()->id();
             $detail->quantity                   = $request->quantity[$key];
             $detail->unit_value                 = $request->unit_value[$key];
             $detail->tax                        = $request->tax[$key];
@@ -545,7 +545,7 @@ class PurchasingProcessController extends Controller
                 $detail->passenger_request_form_id  = $item;
             }
             $detail->direct_deal_id             = $directdeal->id;
-            $detail->user_id                    = Auth::user()->id;
+            $detail->user_id                    = auth()->id();
             $detail->quantity                   = $request->quantity[$key];
             $detail->unit_value                 = $request->unit_value[$key];
             $detail->tax                        = $request->tax[$key];

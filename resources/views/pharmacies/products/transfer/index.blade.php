@@ -71,7 +71,7 @@
 				@endforeach
 			</select>
 		</form>
-		@if(!$products_by_establishment->isEmpty() && Auth::user()->can('Pharmacy: transfer view ortesis'))<a class="btn btn-outline-primary" href="{{route('pharmacies.products.transfer.auth', $filter)}}" role="button"><i class="fas fa-clipboard-check"></i> Autorizar</a>@endif
+		@if(!$products_by_establishment->isEmpty() && auth()->user()->can('Pharmacy: transfer view ortesis'))<a class="btn btn-outline-primary" href="{{route('pharmacies.products.transfer.auth', $filter)}}" role="button"><i class="fas fa-clipboard-check"></i> Autorizar</a>@endif
 		@else
 			{{$establishment->name}}
 		@endcan

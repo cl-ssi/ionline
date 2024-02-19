@@ -37,9 +37,9 @@ class SearchJobPositionProfiles extends Component
                     with('organizationalUnit', 'jobPositionProfileSigns', 'jobPositionProfileSigns.organizationalUnit',
                         'user', 'estament', 'area', 'contractualCondition')
                     ->latest()
-                    ->Where('user_creator_id', Auth::user()->id)
-                    ->orWhere('jpp_ou_id', Auth::user()->organizationalUnit->id)
-                    ->orWhere('ou_creator_id', Auth::user()->organizationalUnit->id)
+                    ->Where('user_creator_id', auth()->id())
+                    ->orWhere('jpp_ou_id', auth()->user()->organizationalUnit->id)
+                    ->orWhere('ou_creator_id', auth()->user()->organizationalUnit->id)
                     ->search($this->selectedStatus,
                         $this->selectedEstament,
                         $this->selectedId,
@@ -61,7 +61,7 @@ class SearchJobPositionProfiles extends Component
         }
 
         if($this->index == 'to_sign'){
-            $authorities = Authority::getAmIAuthorityFromOu(today(), 'manager', Auth::user()->id);
+            $authorities = Authority::getAmIAuthorityFromOu(today(), 'manager', auth()->id());
             $iam_authorities_in = array();
 
             foreach ($authorities as $authority){

@@ -51,7 +51,7 @@ class LanguageController extends Controller
                 $lenguage->language = $request->input('language.'.$key_file.'');
                 $lenguage->level = $request->input('level.'.$key_file.'');
                 $lenguage->replacement_staff()->associate($replacementStaff);
-                //$profile->replacement_staff()->associate(Auth::user());
+                //$profile->replacement_staff()->associate(auth()->user());
                 $lenguage->save();
             }
         }

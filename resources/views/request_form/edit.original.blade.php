@@ -124,7 +124,7 @@
                     <td>{{ $item->specification }}</td>
                     <td>
                       <select class="form-control form-control-sm selectpicker" id="forrequest_form_items_code_id" name="request_form_items_code_ids[]"
-                        title="Seleccione..." data-live-search="true" data-size="5" @foreach($requestForm->requestformevents as $event) @if(($event->type == "message" && $event->status == "item_record")  || Auth::user()->cannot('Request Forms: Finance add item code')) disabled @endif @endforeach required>
+                        title="Seleccione..." data-live-search="true" data-size="5" @foreach($requestForm->requestformevents as $event) @if(($event->type == "message" && $event->status == "item_record")  || auth()->user()->cannot('Request Forms: Finance add item code')) disabled @endif @endforeach required>
                           @foreach($item_codes as $item_code)
                               <option value="{{ $item_code->id }}" data-max-options=""  @if($item_code->id === $item->request_form_item_codes_id && $item != null) selected="selected" @endif>{{ $item_code->item_code }} {{ $item_code->name }}</option>
                           @endforeach
@@ -135,7 +135,7 @@
               </tbody>
             </table>
 
-            @if(Auth::user()->can('Request Forms: Finance add item code') && $flag_finance == 1)
+            @if(auth()->user()->can('Request Forms: Finance add item code') && $flag_finance == 1)
                     <div class="form-row">
                     <div class="form-group col">
                         <button class="btn btn-primary btn-sm float-right mr-3" type="submit">
@@ -143,7 +143,7 @@
                         </button>
                     </div>
                     </div>
-            @elseif(Auth::user()->can('Request Forms: Finance add item code') && $flag_finance == 2)
+            @elseif(auth()->user()->can('Request Forms: Finance add item code') && $flag_finance == 2)
                     <div class="form-row">
                     <div class="form-group col">
                         <button class="btn btn-primary btn-sm float-right mr-3" type="submit" disabled>
@@ -303,7 +303,7 @@
                 <td>
                 @foreach($requestForm->requestformevents as $event)
                   @if($loop->last)
-                    @if(($event->type == "status" && $event->StatusName === 'Nuevo') && $requestForm->whorequest_id == Auth::user()->id)
+                    @if(($event->type == "status" && $event->StatusName === 'Nuevo') && $requestForm->whorequest_id == auth()->id())
                         <form method="POST" class="form-horizontal" action="{{ route('request_forms.store_approved_request', $requestForm) }}">
                             @csrf
                             @method('PUT')
@@ -378,7 +378,7 @@
     @if($requestForm->type_form === 'item')
     @foreach($requestForm->requestformevents as $event)
       @if($loop->last)
-        @if($event->type == "message" && $event->status == "item_record" && Auth::user()->can('Request Forms: Finance add item code'))
+        @if($event->type == "message" && $event->status == "item_record" && auth()->user()->can('Request Forms: Finance add item code'))
           <form method="POST" class="form-horizontal" action="{{ route('request_forms.store_finance_data', $requestForm) }}" enctype="multipart/form-data">
               {{ csrf_field() }} <!-- input hidden contra ataques CSRF -->
               {{ method_field('PUT') }}
@@ -483,7 +483,7 @@
     @if($requestForm->type_form === 'passage')
     @foreach($requestForm->requestformevents as $event)
       @if($loop->last)
-        @if($event->type == "status" && $event->StatusName == "Aprobado por jefatura" && Auth::user()->can('Request Forms: Finance add item code'))
+        @if($event->type == "status" && $event->StatusName == "Aprobado por jefatura" && auth()->user()->can('Request Forms: Finance add item code'))
           <form method="POST" class="form-horizontal" action="{{ route('request_forms.store_finance_data', $requestForm) }}" enctype="multipart/form-data">
               {{ csrf_field() }} <!-- input hidden contra ataques CSRF -->
               {{ method_field('PUT') }}

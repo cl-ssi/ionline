@@ -109,7 +109,7 @@ class ShowTotalHours extends Component
 
 
 
-                    //                    if (Auth::user()->can('be god')) {
+                    //                    if (auth()->user()->can('be god')) {
                     //                        dump("{$shiftControl->start_date} - {$shiftControl->end_date} | dia: $hoursDayString | Noche: $hoursNightString");
                     //                    }
 

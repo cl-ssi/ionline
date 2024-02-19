@@ -91,8 +91,8 @@ class ParteController extends Controller
         //dd($parte);
 
         $evento = new ParteEvent();
-        $evento->user()->associate(Auth::user());
-        $evento->organizationalUnit()->associate(Auth::user()->organizationalUnit);
+        $evento->user()->associate(auth()->user());
+        $evento->organizationalUnit()->associate(auth()->user()->organizationalUnit);
 
         if($request->hasFile('forfile')){
             foreach($request->file('forfile') as $file) {

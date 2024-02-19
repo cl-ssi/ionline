@@ -186,7 +186,7 @@
 </div>
 @else
 <!-- Meta 7 -->
-@php($isManager = Auth::user() && Auth::user()->can('Indicators: manager meta7'))
+@php($isManager = auth()->user() && auth()->user()->can('Indicators: manager meta7'))
 <!-- Tab panes -->
 <div class="tab-content mt-3">
     @foreach($communes as $index => $commune)

@@ -7,7 +7,7 @@
 @include('allowances.partials.nav')
 
 <h5><i class="fas fa-file"></i> Mis viaticos</h5>
-@if(Auth::user()->hasPermissionTo('Allowances: create'))
+@if(auth()->user()->hasPermissionTo('Allowances: create'))
     <p>Incluye Víaticos de mi Unidad Organizacional: <b>{{ Auth()->user()->organizationalUnit->name }}</p>
 @endif
 </div>

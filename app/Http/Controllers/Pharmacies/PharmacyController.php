@@ -18,7 +18,7 @@ class PharmacyController extends Controller
      */
     public function index()
     {
-        session(['pharmacy_id' => Auth::user()->pharmacies->first()->id]);
+        session(['pharmacy_id' => auth()->user()->pharmacies->first()->id]);
         return view('pharmacies.index');
     }
 

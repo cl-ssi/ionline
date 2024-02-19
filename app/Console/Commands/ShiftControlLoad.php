@@ -119,7 +119,7 @@ class ShiftControlLoad extends Command
                 $fulfillment->type = $program_contract_type;
                 $fulfillment->start_date = $start_date_period;
                 $fulfillment->end_date = $end_date_period;
-                // $fulfillment->user_id = Auth::user()->id;
+                // $fulfillment->user_id = auth()->id();
                 $fulfillment->user_id = $serviceRequest->creator_id;
                 $fulfillment->save();
 
@@ -137,7 +137,7 @@ class ShiftControlLoad extends Command
               $fulfillment->month = $serviceRequest->start_date->format("m");
               $fulfillment->start_date = $serviceRequest->start_date;
               $fulfillment->end_date = $serviceRequest->end_date;
-              // $fulfillment->user_id = Auth::user()->id;
+              // $fulfillment->user_id = auth()->id();
               $fulfillment->user_id = $serviceRequest->creator_id;
               $fulfillment->save();
 

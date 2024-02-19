@@ -141,14 +141,14 @@
             <td class="text-center" nowrap>
 
                 @foreach( $parte->requirements as $req)
-                    @if( Auth::user()->can('Partes: director'))
+                    @if( auth()->user()->can('Partes: director'))
                     <a href="{{ route('requirements.show', $req) }}"
                         data-toggle="tooltip" data-placement="top"
                         data-original-title="N°: {{ $req->id }}">
                         <i class="fas fa-rocket"></i>
                     </a>
 
-                    @elseif( Auth::user()->can('Partes: oficina'))
+                    @elseif( auth()->user()->can('Partes: oficina'))
                         @if($req->events->count() > 0)
 
                             <span  data-toggle="tooltip" data-placement="top"

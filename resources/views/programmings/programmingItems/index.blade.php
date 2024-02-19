@@ -345,10 +345,10 @@
 </ul>
 
 <!-- PERMISOS -->
-@php($canEvaluate = Auth::user()->can('ProgrammingItem: evaluate'))
-@php($canEdit = Auth::user()->can('ProgrammingItem: edit'))
-@php($canDuplicate = Auth::user()->can('ProgrammingItem: duplicate'))
-@php($canDelete = Auth::user()->can('ProgrammingItem: delete'))
+@php($canEvaluate = auth()->user()->can('ProgrammingItem: evaluate'))
+@php($canEdit = auth()->user()->can('ProgrammingItem: edit'))
+@php($canDuplicate = auth()->user()->can('ProgrammingItem: duplicate'))
+@php($canDelete = auth()->user()->can('ProgrammingItem: delete'))
 <!-- ACTIVIDADES DIRECTAS -->
 <table id="HorasDirectas" class="table table-striped  table-sm table-bordered table-condensed fixed_headers table-hover table-responsive">
     <thead>

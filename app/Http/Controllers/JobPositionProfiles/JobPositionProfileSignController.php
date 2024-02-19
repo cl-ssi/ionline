@@ -191,7 +191,7 @@ class JobPositionProfileSignController extends Controller
     public function update(Request $request, JobPositionProfileSign $jobPositionProfileSign, $status, JobPositionProfile $jobPositionProfile)
     {
         if($status == 'accepted'){
-            $jobPositionProfileSign->user_id = Auth::user()->id;
+            $jobPositionProfileSign->user_id = auth()->id();
             $jobPositionProfileSign->status = $status;
             $jobPositionProfileSign->date_sign = now();
             $jobPositionProfileSign->save();
@@ -239,7 +239,7 @@ class JobPositionProfileSignController extends Controller
             }
         }
         else{
-            $jobPositionProfileSign->user_id        = Auth::user()->id;
+            $jobPositionProfileSign->user_id        = auth()->id();
             $jobPositionProfileSign->status         = $status;
             $jobPositionProfileSign->observation    = $request->observation;
             $jobPositionProfileSign->date_sign      = now();

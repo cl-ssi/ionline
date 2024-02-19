@@ -72,7 +72,7 @@
                 <td style="width: 33%">{{ $requestReplacementStaff->profile_manage->name }}</td>
                 <td style="width: 33%">
                     {{ ($requestReplacementStaff->law) ? 'Ley N° '.number_format($requestReplacementStaff->law, 0, ",", ".").' -' : '' }} {{ ($requestReplacementStaff->degree) ? $requestReplacementStaff->degree : 'Sin especificar grado' }}
-                    @if(Auth::user()->id == App\Rrhh\Authority::getTodayAuthorityManagerFromDate(App\Models\Parameters\Parameter::get('ou','SubRRHH'))->user_id && $requestReplacementStaff->degree)
+                    @if(auth()->id() == App\Rrhh\Authority::getTodayAuthorityManagerFromDate(App\Models\Parameters\Parameter::get('ou','SubRRHH'))->user_id && $requestReplacementStaff->degree)
                         <a class="btn btn-link btn-sm small"
                             data-toggle="modal"
                             title="Cambio Grado"
@@ -601,8 +601,8 @@
         @if($requestReplacementStaff->technicalEvaluation && $requestReplacementStaff->request_id == NULL &&
             $requestReplacementStaff->end_date < now()->toDateString() &&
                 $requestReplacementStaff->technicalEvaluation->date_end != null &&
-                    ($requestReplacementStaff->user_id == Auth::user()->id || 
-                        $requestReplacementStaff->organizational_unit_id == Auth::user()->organizationalUnit->id) &&
+                    ($requestReplacementStaff->user_id == auth()->id() || 
+                        $requestReplacementStaff->organizational_unit_id == auth()->user()->organizationalUnit->id) &&
                             (App\Models\ReplacementStaff\RequestReplacementStaff::getCurrentContinuity($requestReplacementStaff) == 'no current' || 
                                 App\Models\ReplacementStaff\RequestReplacementStaff::getCurrentContinuity($requestReplacementStaff) == 'no childs'))
             <a class="btn btn-success float-right btn-sm" href="{{ route('replacement_staff.request.create_extension', $requestReplacementStaff) }}">
@@ -717,9 +717,9 @@
                         @if($applicant->sirh_contract)
                             {{ $applicant->sirh_contract->format('d-m-Y') }}
                         @else
-                            @if((Auth::user()->hasPermissionTo('Replacement Staff: view requests') ||
-                              Auth::user()->can('Replacement Staff: admin') ||
-                              App\Rrhh\Authority::getAuthorityFromDate(46, Carbon\Carbon::now(), 'manager')->user_id == Auth::user()->id) &&
+                            @if((auth()->user()->hasPermissionTo('Replacement Staff: view requests') ||
+                              auth()->user()->can('Replacement Staff: admin') ||
+                              App\Rrhh\Authority::getAuthorityFromDate(46, Carbon\Carbon::now(), 'manager')->user_id == auth()->id()) &&
                               $applicant->selected == 1 && $applicant->desist == NULL)
                                 <!-- Button trigger modal -->
                                 <button type="button" class="btn btn-outline-secondary btn-sm" data-toggle="modal"

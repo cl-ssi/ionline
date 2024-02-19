@@ -22,7 +22,7 @@ class SampleToIspController extends Controller
         $sampleToISP = SampleToISP::firstOrNew(['reception_id' => $reception->id]);
         $sampleToISP->fill($request->all());
         $sampleToISP->reception_id = $reception->id;
-        $sampleToISP->user()->associate(Auth::user());
+        $sampleToISP->user()->associate(auth()->user());
         $sampleToISP->manager_id = Parameter::get('drugs','Jefe');
         $sampleToISP->lawyer_id  = Parameter::get('drugs','Mandatado');
         $sampleToISP->save();

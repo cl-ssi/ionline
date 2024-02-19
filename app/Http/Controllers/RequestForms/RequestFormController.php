@@ -44,7 +44,7 @@ class RequestFormController extends Controller {
     public function my_forms() 
     {
         $my_pending_requests = RequestForm::with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'eventRequestForms.signerOrganizationalUnit', 'father:id,folio,has_increased_expense', 'signedOldRequestForms')
-            ->where('request_user_id', Auth::user()->id)
+            ->where('request_user_id', auth()->id())
             ->where(function ($q){
                 $q->where('status', 'pending')
                 ->OrWhere('status', 'saved');
@@ -53,13 +53,13 @@ class RequestFormController extends Controller {
             ->get();
 
         $my_requests = RequestForm::with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'eventRequestForms.signerOrganizationalUnit', 'father:id,folio,has_increased_expense', 'signedOldRequestForms', 'purchasers')
-            ->where('request_user_id', Auth::user()->id)
+            ->where('request_user_id', auth()->id())
             ->whereIn('status', ['approved', 'rejected'])
             ->latest('id')
             ->get();
 
         $my_ou = RequestForm::with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'eventRequestForms.signerOrganizationalUnit', 'father:id,folio,has_increased_expense', 'signedOldRequestForms', 'purchasers')
-            ->where('request_user_ou_id', Auth::user()->OrganizationalUnit->id)
+            ->where('request_user_ou_id', auth()->user()->OrganizationalUnit->id)
             ->latest('id')
             ->get();
 
@@ -115,17 +115,17 @@ class RequestFormController extends Controller {
 
         //   $ouSearch = Parameter::where('module', 'ou')->where('parameter', ['RefrendacionHAH'])->first()->value;
           $ouSearch = array_unique(Parameter::get('Abastecimiento',['prefinance_ou_id'], Parameter::get('establishment', ['HospitalAltoHospicio', 'HETG'])));
-          if(in_array(Auth::user()->organizational_unit_id, $ouSearch)) $events_type[] = 'pre_finance_event';
+          if(in_array(auth()->user()->organizational_unit_id, $ouSearch)) $events_type[] = 'pre_finance_event';
         }
         else {
             /* FIX: @mirandaljorge si no hay manager en Authority, se va a caer*/
-          $manager = Authority::getAuthorityFromDate(Auth::user()->organizationalUnit->id, now(), 'manager');
+          $manager = Authority::getAuthorityFromDate(auth()->user()->organizationalUnit->id, now(), 'manager');
         //   $ouSearch = Parameter::where('module', 'ou')->whereIn('parameter', ['FinanzasSSI', 'RefrendacionHAH'])->pluck('value')->toArray();
           $ouSearch = array_unique(Parameter::get('Abastecimiento',['prefinance_ou_id']));
-          if(in_array(Auth::user()->organizational_unit_id, $ouSearch) && $manager->user_id != Auth::user()->id) $events_type[] = 'pre_finance_event';
+          if(in_array(auth()->user()->organizational_unit_id, $ouSearch) && $manager->user_id != auth()->id()) $events_type[] = 'pre_finance_event';
         }
         $ouTechnicalReview = EventRequestForm::where('event_type', 'technical_review_event')
-            ->where('ou_signer_user', Auth::user()->organizationalUnit->id)
+            ->where('ou_signer_user', auth()->user()->organizationalUnit->id)
             ->count();
         if($ouTechnicalReview > 0) $events_type[] = 'technical_review_event';
 
@@ -158,7 +158,7 @@ class RequestFormController extends Controller {
               $result = RequestForm::with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'eventRequestForms.signerOrganizationalUnit')
                   ->where('status', 'pending')
                   ->whereHas('eventRequestForms', function($q) use ($event_type, $iam_authorities_in){
-                      return $q->where('status', 'pending')->whereIn('ou_signer_user', (count($iam_authorities_in) > 0 ? $iam_authorities_in : [Auth::user()->organizationalUnit->id]))->where('event_type', $event_type);
+                      return $q->where('status', 'pending')->whereIn('ou_signer_user', (count($iam_authorities_in) > 0 ? $iam_authorities_in : [auth()->user()->organizationalUnit->id]))->where('event_type', $event_type);
                   })->when($prev_event_type, function($q) use ($prev_event_type) {
                       return $q->whereDoesntHave('eventRequestForms', function ($f) use ($prev_event_type) {
                           return is_array($prev_event_type) ? $f->whereIn('event_type', $prev_event_type)->where('status', 'pending') : $f->where('event_type', $prev_event_type)->where('status', 'pending');
@@ -177,7 +177,7 @@ class RequestFormController extends Controller {
               $result = RequestForm::with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'eventRequestForms.signerOrganizationalUnit')
                   ->where('status', 'pending')
                   ->whereHas('eventRequestForms', function($q) use ($event_type, $iam_secretaries_in){
-                      return $q->where('status', 'pending')->whereIn('ou_signer_user', (count($iam_secretaries_in) > 0 ? $iam_secretaries_in : [Auth::user()->organizationalUnit->id]))->where('event_type', $event_type);
+                      return $q->where('status', 'pending')->whereIn('ou_signer_user', (count($iam_secretaries_in) > 0 ? $iam_secretaries_in : [auth()->user()->organizationalUnit->id]))->where('event_type', $event_type);
                   })->when($prev_event_type, function($q) use ($prev_event_type) {
                       return $q->whereDoesntHave('eventRequestForms', function ($f) use ($prev_event_type) {
                           return is_array($prev_event_type) ? $f->whereIn('event_type', $prev_event_type)->where('status', 'pending') : $f->where('event_type', $prev_event_type)->where('status', 'pending');
@@ -195,7 +195,7 @@ class RequestFormController extends Controller {
                 $result = RequestForm::with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'eventRequestForms.signerOrganizationalUnit')
                     ->where('status', 'approved')
                     ->whereHas('eventRequestForms', function($q) use ($event_type){
-                        return $q->where('status', 'pending')->where('ou_signer_user', Auth::user()->organizationalUnit->id)->where('event_type', $event_type == 'finance_event' ? 'budget_event' : ($event_type == 'supply_event' ? 'pre_budget_event' : 'pre_finance_budget_event'));
+                        return $q->where('status', 'pending')->where('ou_signer_user', auth()->user()->organizationalUnit->id)->where('event_type', $event_type == 'finance_event' ? 'budget_event' : ($event_type == 'supply_event' ? 'pre_budget_event' : 'pre_finance_budget_event'));
                     })->when($prev_event_type, function($q) use ($prev_event_type) {
                         return $q->whereDoesntHave('eventRequestForms', function ($f) use ($prev_event_type) {
                             return $f->where('event_type', $prev_event_type)->where('status', 'pending');
@@ -210,7 +210,7 @@ class RequestFormController extends Controller {
         // $ouSearch = Parameter::where('module', 'ou')->whereIn('parameter', ['AbastecimientoSSI', 'AbastecimientoHAH'])->pluck('value')->toArray();
         $ouSearch = Parameter::get('Abastecimiento',['supply_ou_id']);
         foreach($events_type as $event_type){
-            if(in_array($event_type, ['pre_finance_event', 'finance_event', 'supply_event']) || in_array(Auth::user()->organizationalUnit->id, $ouSearch)){
+            if(in_array($event_type, ['pre_finance_event', 'finance_event', 'supply_event']) || in_array(auth()->user()->organizationalUnit->id, $ouSearch)){
                 $not_pending_forms = RequestForm::with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'eventRequestForms.signerOrganizationalUnit')
                         ->whereNotIn('status', ['saved', 'pending'])->latest('id')->paginate(15, ['*'], 'p1');
             }
@@ -220,8 +220,8 @@ class RequestFormController extends Controller {
 
         $my_forms_signed = RequestForm::with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'eventRequestForms.signerOrganizationalUnit')
             ->whereHas('eventRequestForms', $filter = function($q){
-                return $q->where('signer_user_id', Auth::user()->id)
-                    ->orWhere('ou_signer_user', Auth::user()->organizationalUnit->id);
+                return $q->where('signer_user_id', auth()->id())
+                    ->orWhere('ou_signer_user', auth()->user()->organizationalUnit->id);
             })->latest('id')->paginate(15, ['*'], 'p2');
 //            })->orderBy('approved_at', 'desc')->paginate(15, ['*'], 'p2');
 
@@ -231,7 +231,7 @@ class RequestFormController extends Controller {
     public function contract_manager_forms() {
 
         $contract_manager_forms = RequestForm::with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'eventRequestForms.signerOrganizationalUnit', 'father:id,folio,has_increased_expense')
-            ->where('contract_manager_id', Auth::user()->id)
+            ->where('contract_manager_id', auth()->id())
             ->latest('id')
             ->paginate(30);
 
@@ -279,20 +279,20 @@ class RequestFormController extends Controller {
     {
         $eventTypeBudget = null;
         if(in_array($eventType, ['pre_budget_event', 'pre_finance_budget_event', 'budget_event'])){
-            $manager = Authority::getAuthorityFromDate(Auth::user()->organizationalUnit->id, now(), 'manager');
+            $manager = Authority::getAuthorityFromDate(auth()->user()->organizationalUnit->id, now(), 'manager');
 
-            // if(Auth::user()->organizationalUnit->establishment_id == Parameter::where('module', 'establishment')->where('parameter', 'SSTarapaca')->first()->value){
+            // if(auth()->user()->organizationalUnit->establishment_id == Parameter::where('module', 'establishment')->where('parameter', 'SSTarapaca')->first()->value){
             //     $ouSearch = Parameter::where('module', 'ou')->where('parameter', 'FinanzasSSI')->first()->value;
             // }
 
-            // if(Auth::user()->organizationalUnit->establishment_id == Parameter::where('module', 'establishment')->where('parameter', 'HospitalAltoHospicio')->first()->value){
+            // if(auth()->user()->organizationalUnit->establishment_id == Parameter::where('module', 'establishment')->where('parameter', 'HospitalAltoHospicio')->first()->value){
             //     $ouSearch = Parameter::where('module', 'ou')->where('parameter', 'FinanzasHAH')->first()->value;
             // }
 
             $ouSearch = Parameter::get('Abastecimiento', ['finance_ou_id']);
 
-            $eventTypeBudget = $eventType == 'pre_budget_event' ? 'supply_event' : (in_array(Auth::user()->organizational_unit_id, $ouSearch) && $manager->user_id == Auth::user()->id ? 'finance_event' : 'pre_finance_event');
-            // $eventTypeBudget = $eventType == 'pre_budget_event' ? 'supply_event' : (Auth::user()->organizational_unit_id == $ouSearch && $manager->user_id == Auth::user()->id ? 'finance_event' : 'pre_finance_event');
+            $eventTypeBudget = $eventType == 'pre_budget_event' ? 'supply_event' : (in_array(auth()->user()->organizational_unit_id, $ouSearch) && $manager->user_id == auth()->id() ? 'finance_event' : 'pre_finance_event');
+            // $eventTypeBudget = $eventType == 'pre_budget_event' ? 'supply_event' : (auth()->user()->organizational_unit_id == $ouSearch && $manager->user_id == auth()->id() ? 'finance_event' : 'pre_finance_event');
             // dd($eventTypeBudget);
             $requestForm->has_increased_expense = true;
             $requestForm->new_estimated_expense = $requestForm->estimated_expense + $requestForm->eventRequestForms()->where('status', 'pending')->where('event_type', 'budget_event')->first()->purchaser_amount;
@@ -331,7 +331,7 @@ class RequestFormController extends Controller {
 
         $title = 'Formularios de Requerimiento - Autorización ' . $eventTitles[$eventType];
 
-        //$manager              = Authority::getAuthorityFromDate(Auth::user()->organizationalUnit->id, Carbon::now(), 'manager');
+        //$manager              = Authority::getAuthorityFromDate(auth()->user()->organizationalUnit->id, Carbon::now(), 'manager');
 
         // $position             = $manager->position;
         // $organizationalUnit   = $manager->organizationalUnit->name;

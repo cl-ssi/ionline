@@ -51,7 +51,7 @@ class CommissionController extends Controller
             $commission->organizational_unit_id = $user_ou->organizationalUnit->id;
 
             $commission->technicalEvaluation()->associate($technicalEvaluation);
-            $commission->register_user_id = Auth::user()->id;
+            $commission->register_user_id = auth()->id();
 
             $commission->save();
         //}

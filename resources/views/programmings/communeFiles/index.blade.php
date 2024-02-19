@@ -38,7 +38,7 @@
         @foreach($communeFiles as $communeFile)
         <tr class="small">
         <!-- Permiso para editar programación númerica -->
-            @if(Auth::user()->can('Communefiles: edit'))
+            @if(auth()->user()->can('Communefiles: edit'))
             <td >
                 @if($communeFile->programming_status == 'active')
                 <a href="{{ route('communefiles.show', $communeFile->id) }}" class="btn btb-flat btn-sm btn-light" >
@@ -79,7 +79,7 @@
             </td>
             <td class="text-right">
             <!-- Permiso para adjuntar documentos municipales programación númerica -->
-            @if(Auth::user()->can('Communefiles: upload') && $communeFile->programming_status == 'active')
+            @if(auth()->user()->can('Communefiles: upload') && $communeFile->programming_status == 'active')
                 <button class="btn btb-flat btn-sm btn-light" data-toggle="modal"
                     data-target="#updateModal"
                     data-communefile_id="{{ $communeFile->id }}"

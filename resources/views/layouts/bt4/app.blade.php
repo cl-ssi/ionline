@@ -54,7 +54,7 @@
         @guest
             @include('layouts.bt4.partials.nav')
         @else
-            @if(Auth::user()->external )
+            @if(auth()->user()->external )
                 @include('layouts.bt4.partials.nav_external')
             @else
                 @include('layouts.bt4.partials.nav')

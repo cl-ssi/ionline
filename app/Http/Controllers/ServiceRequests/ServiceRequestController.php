@@ -62,7 +62,7 @@ class ServiceRequestController extends Controller
     $au = Authority::getBossFromUser($a1->organizationalUnit->id,Carbon::now());
 
 
-    //$au = Authority::getBossFromUser(Auth::user()->organizationalUnit->id,Carbon::now());
+    //$au = Authority::getBossFromUser(auth()->user()->organizationalUnit->id,Carbon::now());
     dd($au);
 
   }
@@ -106,7 +106,7 @@ class ServiceRequestController extends Controller
     // }
     // dd(json_encode($array));
 
-    $user_id = Auth::user()->id;
+    $user_id = auth()->id();
     $users = User::orderBy('name', 'ASC')->get();
 
     $serviceRequestsOthersPendings = [];
@@ -169,7 +169,7 @@ class ServiceRequestController extends Controller
 
   public function index($type)
   {
-    $user_id = Auth::user()->id;
+    $user_id = auth()->id();
     $users = User::orderBy('name', 'ASC')->get();
 
     $data = [];
@@ -329,7 +329,7 @@ class ServiceRequestController extends Controller
     $id = $request->id;
     $type = $request->type;
 
-    // $establishment_id = Auth::user()->organizationalUnit->establishment_id;
+    // $establishment_id = auth()->user()->organizationalUnit->establishment_id;
     $establishment_id = $request->establishment_id;
 
     // dd($responsability_center_ou_id);
@@ -428,21 +428,21 @@ class ServiceRequestController extends Controller
    */
   public function create()
   {
-    // $users = User::where('organizational_unit_id',Auth::user()->organizationalUnit->id)->orderBy('name', 'ASC')->get();
+    // $users = User::where('organizational_unit_id',auth()->user()->organizationalUnit->id)->orderBy('name', 'ASC')->get();
     // $users = User::whereHas('organizationalUnit', function ($q) {
-    //   $q->where('establishment_id', Auth::user()->organizationalUnit->establishment->id);
+    //   $q->where('establishment_id', auth()->user()->organizationalUnit->establishment->id);
     // })->get();
     $establishments = Establishment::orderBy('name', 'ASC')->get();
     $professions = Profession::orderBy('name', 'ASC')->get();
 
     //signature flow
-    if (Auth::user()->organizationalUnit->establishment_id == 38) {
+    if (auth()->user()->organizationalUnit->establishment_id == 38) {
 
       $subdirections = OrganizationalUnit::where('name', 'LIKE', '%direc%')->where('establishment_id', 38)->orderBy('name', 'ASC')->get();
       $responsabilityCenters = OrganizationalUnit::where('establishment_id', 38)->orderBy('name', 'ASC')->get();
     }
     //hospital
-    elseif (Auth::user()->organizationalUnit->establishment_id == 1) {
+    elseif (auth()->user()->organizationalUnit->establishment_id == 1) {
       $subdirections = OrganizationalUnit::where('name', 'LIKE', '%direc%')->where('establishment_id', 1)->orderBy('name', 'ASC')->get();
       $responsabilityCenters = OrganizationalUnit::where('establishment_id', 1)
         ->orderBy('name', 'ASC')->get();
@@ -483,7 +483,7 @@ class ServiceRequestController extends Controller
     // 07/09/2023: solo para usuarios que no pertenezcan a RRHH del hospital
     // 07/09/2023: validación solicitada por samantha: en HETGH no se pueden crear más de 412 contratos (se obtienen en la consulta) suma alzada que 
     // sean del programa COVID 2022
-    if(!Auth::user()->can('Service Request: fulfillments rrhh')){
+    if(!auth()->user()->can('Service Request: fulfillments rrhh')){
         if ($request->type == "Suma alzada" && $request->programm_name == "Covid 2022" && $request->program_contract_type == "Mensual" && $request->establishment_id == 1) {
             // si usuario ya tiene creado un contrato en agosto, se permite la creación, de lo contrario no.
             $serviceRequestCount = ServiceRequest::whereDoesntHave("SignatureFlows", function ($subQuery) {
@@ -625,7 +625,7 @@ class ServiceRequestController extends Controller
             $fulfillment->type = $program_contract_type;
             $fulfillment->start_date = $start_date_period;
             $fulfillment->end_date = $end_date_period;
-            $fulfillment->user_id = Auth::user()->id;
+            $fulfillment->user_id = auth()->id();
             $fulfillment->save();
             }
       }
@@ -638,7 +638,7 @@ class ServiceRequestController extends Controller
             $fulfillment->month = $serviceRequest->start_date->format("m");
             $fulfillment->start_date = $serviceRequest->start_date;
             $fulfillment->end_date = $serviceRequest->end_date;
-            $fulfillment->user_id = Auth::user()->id;
+            $fulfillment->user_id = auth()->id();
             $fulfillment->save();
         } else {
             $fulfillment = $serviceRequest->fulfillments->first();
@@ -767,8 +767,8 @@ class ServiceRequestController extends Controller
   public function edit(ServiceRequest $serviceRequest)
   {
     //validate users without permission Service Request: additional data
-    if (!Auth::user()->can('Service Request: additional data')) {
-      $user_id = Auth::user()->id;
+    if (!auth()->user()->can('Service Request: additional data')) {
+      $user_id = auth()->id();
       if (
         $serviceRequest->signatureFlows->where('responsable_id', $user_id)->count() == 0 &&
         $serviceRequest->signatureFlows->where('user_id', $user_id)->count() == 0
@@ -788,7 +788,7 @@ class ServiceRequestController extends Controller
     $users = User::orderBy('name', 'ASC')->get();
     $establishments = Establishment::orderBy('name', 'ASC')->get();
     $professions = Profession::orderBy('name', 'ASC')->get();
-    $establishment_id = Auth::user()->organizationalUnit->establishment->id;
+    $establishment_id = auth()->user()->organizationalUnit->establishment->id;
     //dd($establishment_id);
 
     $subdirections = OrganizationalUnit::where('name', 'LIKE', '%direc%')->where('establishment_id', $establishment_id)->orderBy('name', 'ASC')->get();
@@ -799,8 +799,8 @@ class ServiceRequestController extends Controller
     $SignatureFlow = $serviceRequest->SignatureFlows->where('employee', 'Supervisor de servicio')->first();
 
     //saber la organizationalUnit que tengo a cargo
-    $authorities = Authority::getAmIAuthorityFromOu(Carbon::today(), 'manager', Auth::user()->id);
-    $employee = Auth::user()->position;
+    $authorities = Authority::getAmIAuthorityFromOu(Carbon::today(), 'manager', auth()->id());
+    $employee = auth()->user()->position;
     if ($authorities->isNotEmpty()) {
         /* FIX: es una colección puede haber más de un authority */
       $employee = $authorities[0]->position . " - " . $authorities[0]->organizationalUnit->name;
@@ -921,7 +921,7 @@ class ServiceRequestController extends Controller
     // set_time_limit(7200);
     // ini_set('memory_limit', '2048M');
     
-    // $establishment_id = Auth::user()->organizationalUnit->establishment_id;
+    // $establishment_id = auth()->user()->organizationalUnit->establishment_id;
     $establishment_id = $request->establishment_id;
     $year = $request->year;
     $semester = $request->semester;
@@ -1552,8 +1552,8 @@ class ServiceRequestController extends Controller
   public function derive(Request $request)
   {
 
-    $user_id = Auth::user()->id;
-    $sender_name = User::find(Auth::user()->id)->getFullNameAttribute();
+    $user_id = auth()->id();
+    $sender_name = User::find(auth()->id())->getFullNameAttribute();
     $receiver_name = User::find($request->derive_user_id)->getFullNameAttribute();
     $receiver_email = User::find($request->derive_user_id)->email;
 
@@ -1593,7 +1593,7 @@ class ServiceRequestController extends Controller
 
   public function accept_all_requests()
   {
-    $user_id = Auth::user()->id;
+    $user_id = auth()->id();
 
     $serviceRequestsMyPendings = array();
 

@@ -120,7 +120,7 @@
             <a class="nav-link dropdown-toggle"
                 href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
-                {{Auth::user()->pharmacies->first()->name}}
+                {{auth()->user()->pharmacies->first()->name}}
             </a>
 
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">

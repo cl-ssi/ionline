@@ -37,7 +37,7 @@
 				<th scope="col">Notas</th>
 				<th scope="col">Estado recepción</th>
 				<th nowrap scope="col"></th>
-				<!-- @if(Auth::user()->pharmacies->first()->id != 3) <th nowrap scope="col">C-19</th> @endif -->
+				<!-- @if(auth()->user()->pharmacies->first()->id != 3) <th nowrap scope="col">C-19</th> @endif -->
 			</tr>
 		</thead>
 		<tbody>
@@ -89,7 +89,7 @@
 					@endif
 					{{-- @endcan --}}
 				</td>
-				<!-- @if(Auth::user()->pharmacies->first()->id != 3)
+				<!-- @if(auth()->user()->pharmacies->first()->id != 3)
 				<td nowrap>
 					@if($dispatch->sendC19 == 0)
 						<form method="POST" action="{{ route('pharmacies.products.dispatch.sendC19', $dispatch) }}" class="d-inline">

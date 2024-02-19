@@ -14,7 +14,7 @@
         </div>
     </li>
 
-    @if(Auth::user()->manager->count() > 0)
+    @if(auth()->user()->manager->count() > 0)
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle {{ active(['job.position.profile.index_review']) }}" href="#" id="navbardrop" data-toggle="dropdown">
                 <i class="fas fa-id-badge"></i> Aprobación

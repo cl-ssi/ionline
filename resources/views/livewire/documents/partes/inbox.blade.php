@@ -157,7 +157,7 @@
 
                     @foreach( $parte->requirements as $req)
 
-                        @if( Auth::user()->can('Partes: director'))
+                        @if( auth()->user()->can('Partes: director'))
 
                             @if($req->unreadedEvents)
                                 <a href="{{ route('requirements.show',$req->id) }}" 
@@ -178,7 +178,7 @@
                                 </a>
                             @endif
 
-                        @elseif( Auth::user()->can('Partes: oficina'))
+                        @elseif( auth()->user()->can('Partes: oficina'))
                             @if($req->events->count() > 0)
 
                                 <span  data-toggle="tooltip" data-placement="top"

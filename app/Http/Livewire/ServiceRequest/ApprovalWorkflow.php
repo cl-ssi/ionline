@@ -83,7 +83,7 @@ class ApprovalWorkflow extends Component
     {
         $signatureFlow = SignatureFlow::find($signatureFlowId);
 
-        if($signatureFlow->responsable_id != Auth::user()->id){
+        if($signatureFlow->responsable_id != auth()->id()){
             Session::flash('approval-workflow', 'El usuario específicado para la visación no corresponde con el usuario logeado en el sistema.');
             return;
         }

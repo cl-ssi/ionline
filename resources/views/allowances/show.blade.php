@@ -289,7 +289,7 @@
                             
                             @if($allowanceSign->status == 'pending' &&
                                 $allowanceSign->event_type == 'sirh' &&
-                                Auth::user()->can('Allowances: sirh'))
+                                auth()->user()->can('Allowances: sirh'))
                                 <form method="POST" class="form-horizontal" action="{{ route('allowances.sign.update', [$allowanceSign, 'status' => 'accepted']) }}">
                                     @csrf
                                     @method('PUT')
@@ -341,13 +341,13 @@
                             @endif
                             --}}
 
-                            {{-- dd(Auth::user()->organizationalUnit->establishment_id, App\Models\Parameters\Parameter::get('establishment', 'SSTarapaca')) --}}
+                            {{-- dd(auth()->user()->organizationalUnit->establishment_id, App\Models\Parameters\Parameter::get('establishment', 'SSTarapaca')) --}}
 
                             @if($allowanceSign->status == 'pending' &&
                                 $allowanceSign->event_type == 'sirh' &&
-                                Auth::user()->can('Allowances: sirh') && 
+                                auth()->user()->can('Allowances: sirh') && 
                                 $allowanceSign->allowance->establishment_id == App\Models\Parameters\Parameter::get('establishment', 'SSTarapaca')  &&
-                                Auth::user()->organizationalUnit->establishment_id == App\Models\Parameters\Parameter::get('establishment', 'SSTarapaca'))
+                                auth()->user()->organizationalUnit->establishment_id == App\Models\Parameters\Parameter::get('establishment', 'SSTarapaca'))
                                 @if($subrogants && $allowanceSign->status == 'pending')
                                     <div class="alert alert-info" role="alert">
                                         <b>Estimado Usuario</b>: Según el calendario de autoridades <b>{{ $allowance->userAllowance->TinnyName }}</b> es director(a) {{ $allowance->userAllowance->organizationalUnit->establishment->name }}
@@ -406,9 +406,9 @@
                             <!-- SIRH HAH -->
                             @if($allowanceSign->status == 'pending' &&
                                 $allowanceSign->event_type == 'sirh' &&
-                                Auth::user()->can('Allowances: sirh') && 
+                                auth()->user()->can('Allowances: sirh') && 
                                 $allowanceSign->allowance->establishment_id == App\Models\Parameters\Parameter::get('establishment', 'HospitalAltoHospicio')  &&
-                                Auth::user()->organizationalUnit->establishment_id == App\Models\Parameters\Parameter::get('establishment', 'HospitalAltoHospicio')) 
+                                auth()->user()->organizationalUnit->establishment_id == App\Models\Parameters\Parameter::get('establishment', 'HospitalAltoHospicio')) 
                                 <form method="POST" class="form-horizontal" action="{{ route('allowances.sign.update', [$allowanceSign, 'status' => 'accepted']) }}">
                                     @csrf
                                     @method('PUT')
@@ -451,9 +451,9 @@
                             <!-- CONTABILIDAD HAH -->
                             @if($allowanceSign->status == 'pending' &&
                                 $allowanceSign->event_type == 'contabilidad' &&
-                                Auth::user()->can('Allowances: contabilidad') && 
+                                auth()->user()->can('Allowances: contabilidad') && 
                                 $allowanceSign->allowance->establishment_id == App\Models\Parameters\Parameter::get('establishment', 'HospitalAltoHospicio')  &&
-                                Auth::user()->organizationalUnit->establishment_id == App\Models\Parameters\Parameter::get('establishment', 'HospitalAltoHospicio')) 
+                                auth()->user()->organizationalUnit->establishment_id == App\Models\Parameters\Parameter::get('establishment', 'HospitalAltoHospicio')) 
                                 <form method="POST" class="form-horizontal" action="{{ route('allowances.sign.update', [$allowanceSign, 'status' => 'accepted']) }}">
                                     @csrf
                                     @method('PUT')

@@ -20,13 +20,13 @@
          <div class="form-group col-12 col-md-2">
             <label>Establecimiento</label>
             <select class="form-control" name="establishment_id">
-                @if(Auth::user()->organizationalUnit->establishment_id==1)
+                @if(auth()->user()->organizationalUnit->establishment_id==1)
                     <option value="1" @if($request->establishment_id == 1) selected @endif>Hospital Ernesto Torres Galdames</option>
                 @endif
-                @if(Auth::user()->organizationalUnit->establishment_id==41)
+                @if(auth()->user()->organizationalUnit->establishment_id==41)
                     <option value="41" @if($request->establishment_id == 41) selected @endif>Hospital Alto Hospicio</option>
                 @endif
-                @if(Auth::user()->organizationalUnit->establishment_id==38)
+                @if(auth()->user()->organizationalUnit->establishment_id==38)
                     <option value="38" @if($request->establishment_id === 0) selected @endif>Dirección SSI</option>
                 @endif
             </select>
@@ -58,7 +58,7 @@
             <option value="Covid19 No Médicos" @if($request->programm_name == 'Covid19 No Médicos') selected @endif>Covid19 No Médicos</option>
             <option value="Covid19 Médicos" @if($request->programm_name == 'Covid19 Médicos') selected @endif>Covid19 Médicos</option>
 
-            @if(Auth::user()->organizationalUnit->establishment_id == 1)
+            @if(auth()->user()->organizationalUnit->establishment_id == 1)
             <option value="Covid 2022" @if($request->programm_name == 'Covid 2022') selected @endif>Covid 2022</option>
             <option value="CONSULTORIO DE LLAMADA" @if($request->programm_name == 'CONSULTORIO DE LLAMADA') selected @endif>CONSULTORIO DE LLAMADA</option>
             <option value="33 MIL HORAS" @if($request->programm_name == '33 MIL HORAS') selected @endif>33 MIL HORAS</option>

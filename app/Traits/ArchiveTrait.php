@@ -16,7 +16,7 @@ trait ArchiveTrait
         $modelToArchive = $class_name::find($id);
         
         $archive = $modelToArchive->archive()->create([
-            'user_id' => Auth::user()->id,
+            'user_id' => auth()->id(),
         ]);
     }
 

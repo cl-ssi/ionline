@@ -23,7 +23,7 @@
                 <label for="ou">Unidad Organizacional</label>
                 <select id="ou" name="to_ou_id" class="form-control selectpicker" data-live-search="true" required data-size="5">
                     @foreach($ouRoots as $ouRoot)
-                    <option value="{{ $ouRoot->id }}" {{ (Auth::user()->organizationalunit == $ouRoot)?'selected':''}}>
+                    <option value="{{ $ouRoot->id }}" {{ (auth()->user()->organizationalunit == $ouRoot)?'selected':''}}>
                         {{ $ouRoot->name }} ({{$ouRoot->establishment->name}})
                     </option>
                     @if($ouRoot->name != 'Externos')

@@ -438,7 +438,7 @@ class ModalEditShiftUserDay extends Component
 							$bTurno = new ShiftUser;
 							$bTurno->date_from = $from;
 							$bTurno->date_up = $to;
-							$bTurno->asigned_by = Auth::user()->id;
+							$bTurno->asigned_by = auth()->id();
 							$bTurno->user_id = $this->userIdtoChange2;
 							$bTurno->shift_types_id = $this->shiftUserDay->ShiftUser->shift_types_id;
 							$bTurno->organizational_units_id = $this->shiftUserDay->ShiftUser->organizational_units_id;
@@ -509,9 +509,9 @@ class ModalEditShiftUserDay extends Component
 						$nHistory->save();
 					}
 					$nHistory = new ShiftDayHistoryOfChanges;
-					$nHistory->commentary = "El usuario \"".Auth::user()->name." ". Auth::user()->fathers_family." ". Auth::user()->mothers_family."\" ha modificado el <b>estado</b> de \"".$this->previousStatus." - ".$this->estados[$this->previousStatus]."\" a \"".$this->newStatus." - ".$this->estados[$this->newStatus]."\"";
+					$nHistory->commentary = "El usuario \"".auth()->user()->name." ". auth()->user()->fathers_family." ". auth()->user()->mothers_family."\" ha modificado el <b>estado</b> de \"".$this->previousStatus." - ".$this->estados[$this->previousStatus]."\" a \"".$this->newStatus." - ".$this->estados[$this->newStatus]."\"";
 					$nHistory->shift_user_day_id = $this->shiftUserDay->id;
-					$nHistory->modified_by = Auth::user()->id;
+					$nHistory->modified_by = auth()->id();
 					$nHistory->change_type = 1;//1:cambio estado, 2 cambio de tipo de jornada, 3 intercambio con otro usuario, 4 cambio confirmado por usuario, 5 cambio confirmado por administrador
 					$nHistory->day =  $this->shiftUserDay->day;
 					$nHistory->previous_value = $this->previousStatus;
@@ -533,9 +533,9 @@ class ModalEditShiftUserDay extends Component
 
 
 							$nHistory = new ShiftDayHistoryOfChanges;
-							$nHistory->commentary = "El usuario \"".Auth::user()->name." ". Auth::user()->fathers_family." ". Auth::user()->mothers_family."\" ha modificado el <b>estado</b> de \"".$this->previousStatus." - ".$this->estados[$this->previousStatus]."\" a \"".$this->newStatus." - ".$this->estados[$this->newStatus]."\"";
+							$nHistory->commentary = "El usuario \"".auth()->user()->name." ". auth()->user()->fathers_family." ". auth()->user()->mothers_family."\" ha modificado el <b>estado</b> de \"".$this->previousStatus." - ".$this->estados[$this->previousStatus]."\" a \"".$this->newStatus." - ".$this->estados[$this->newStatus]."\"";
 							$nHistory->shift_user_day_id = $day->id;
-							$nHistory->modified_by = Auth::user()->id;
+							$nHistory->modified_by = auth()->id();
 							$nHistory->change_type = 1;//1:cambio estado, 2 cambio de tipo de jornada, 3 intercambio con otro usuario, 4 cambio confirmado por usuario, 5 cambio confirmado por administrador
 							$nHistory->day =  $day->day;
 							$nHistory->previous_value = $this->previousStatus;
@@ -554,7 +554,7 @@ class ModalEditShiftUserDay extends Component
 									$bTurno = new ShiftUser;
 									$bTurno->date_from = $from;
 									$bTurno->date_up = $to;
-									$bTurno->asigned_by = Auth::user()->id;
+									$bTurno->asigned_by = auth()->id();
 									$bTurno->user_id = $this->userIdtoChange2;
 									$bTurno->shift_types_id = $day->ShiftUser->shift_types_id;
 									$bTurno->organizational_units_id = $day->ShiftUser->organizational_units_id;
@@ -660,7 +660,7 @@ class ModalEditShiftUserDay extends Component
 						$bTurno = new ShiftUser;
 						$bTurno->date_from = $from;
 						$bTurno->date_up = $to;
-						$bTurno->asigned_by = Auth::user()->id;
+						$bTurno->asigned_by = auth()->id();
 						$bTurno->user_id = $this->userIdtoChange;
 						$bTurno->shift_types_id = $this->shiftUserDay->ShiftUser->shift_types_id;
 						$bTurno->organizational_units_id = $this->shiftUserDay->ShiftUser->organizational_units_id;

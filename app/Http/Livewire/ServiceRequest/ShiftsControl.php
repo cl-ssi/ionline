@@ -42,12 +42,12 @@ class ShiftsControl extends Component
           $this->fulfillment = Fulfillment::find($this->fulfillment->id);
         }else{
           $this->msg = "No se encontró horario a eliminar. Intente nuevamente.";
-          logger("No se encontró shiftcontrol para eliminar. Usuario: " . Auth::user()->id);
+          logger("No se encontró shiftcontrol para eliminar. Usuario: " . auth()->id());
         }
         
       }else{
         $this->msg = "No se encontró horario a eliminar. Intente nuevamente.";
-        logger("Se intentó eliminar un shiftcontrol que venía vacío. Usuario: " . Auth::user()->id);
+        logger("Se intentó eliminar un shiftcontrol que venía vacío. Usuario: " . auth()->id());
       }
     }
 

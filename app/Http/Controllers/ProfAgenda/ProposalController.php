@@ -25,11 +25,11 @@ class ProposalController extends Controller
      */
     public function index()
     {
-        if(Auth::user()->can('Agenda UST: Administrador')){
+        if(auth()->user()->can('Agenda UST: Administrador')){
             $proposals = Proposal::all();
         }
-        if(Auth::user()->can('Agenda UST: Funcionario')){
-            $proposals = Proposal::where('user_id',Auth::user()->id)->get();
+        if(auth()->user()->can('Agenda UST: Funcionario')){
+            $proposals = Proposal::where('user_id',auth()->id())->get();
         }
         
         return view('prof_agenda.proposals.index', compact('proposals'));
@@ -226,11 +226,11 @@ class ProposalController extends Controller
         }
 
         // se devuelve usuarios según rol asignado
-        if(Auth::user()->can('Agenda UST: Administrador') || Auth::user()->can('Agenda UST: Secretaria')){
+        if(auth()->user()->can('Agenda UST: Administrador') || auth()->user()->can('Agenda UST: Secretaria')){
             $users = User::whereHas('agendaProposals')->get();
         }
-        if(Auth::user()->can('Agenda UST: Funcionario')){
-            $users = User::whereHas('agendaProposals')->where('id',Auth::user()->id)->get();
+        if(auth()->user()->can('Agenda UST: Funcionario')){
+            $users = User::whereHas('agendaProposals')->where('id',auth()->id())->get();
         }
 
         // validación para msg

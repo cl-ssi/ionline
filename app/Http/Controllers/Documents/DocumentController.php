@@ -108,9 +108,9 @@ class DocumentController extends Controller
     public function store(Request $request)
     {
         $document = new Document($request->All());
-        $document->user()->associate(Auth::user());
+        $document->user()->associate(auth()->user());
         $document->establishment()->associate(auth()->user()->organizationalUnit->establishment);
-        $document->organizationalUnit()->associate(Auth::user()->organizationalUnit);
+        $document->organizationalUnit()->associate(auth()->user()->organizationalUnit);
         $document->reserved = $request->input('reserved') == 'on' ? 1 : null;
         $document->save();
 

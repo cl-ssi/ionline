@@ -45,7 +45,7 @@
 
                     @if(session()->has('god'))<i class="fas fa-eye text-danger"></i>@endif
 
-                    {{ Auth::user()->name }}
+                    {{ auth()->user()->name }}
 
                 </a>
 

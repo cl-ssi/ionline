@@ -8,11 +8,11 @@
 
 <h4>
     Bodega Seleccionada:
-    @if(Auth::user()->active_store)
-        {{ optional(Auth::user()->active_store)->name }}
+    @if(auth()->user()->active_store)
+        {{ optional(auth()->user()->active_store)->name }}
         <p>
             <small>
-                {{ Auth::user()->active_store->address }}@if(Auth::user()->active_store->commune), {{ Auth::user()->active_store->commune->name }}@endif
+                {{ auth()->user()->active_store->address }}@if(auth()->user()->active_store->commune), {{ auth()->user()->active_store->commune->name }}@endif
             </small>
         </p>
     @else

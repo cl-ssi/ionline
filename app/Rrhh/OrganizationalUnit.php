@@ -231,7 +231,7 @@ class OrganizationalUnit extends Model implements Auditable
         foreach($array_search as $word){
             $organizationalUnits->where(function($q) use($word){
                 $q->where('name', 'LIKE', '%'.$word.'%')
-                ->where('establishment_id', Auth::user()->organizationalUnit->establishment_id);
+                ->where('establishment_id', auth()->user()->organizationalUnit->establishment_id);
             });
         }
 

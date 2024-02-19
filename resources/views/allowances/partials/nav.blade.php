@@ -49,7 +49,7 @@
             </li>
         @endcan
 
-        @if(Auth::user()->hasPermissionTo('Allowances: director'))
+        @if(auth()->user()->hasPermissionTo('Allowances: director'))
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle {{ request()->routeIs('allowances.director_index*')  ? 'active' : '' }}" href="#" id="navbardrop" data-toggle="dropdown">
                 <i class="fas fa-wallet"></i> Aprobaciones

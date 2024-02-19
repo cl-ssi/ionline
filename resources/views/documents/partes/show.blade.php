@@ -14,7 +14,7 @@ Materia: {{ $parte->subject }}
 <br>
 
 
-@if($parte->events()->count() == 1 AND $parte->events()->first()->user_id == Auth::user()->id)
+@if($parte->events()->count() == 1 AND $parte->events()->first()->user_id == auth()->id())
     @include('documents.partes.partials.reply')
 @endif
 

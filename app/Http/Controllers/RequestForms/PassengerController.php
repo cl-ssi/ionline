@@ -19,7 +19,7 @@ class PassengerController extends Controller
      */
     public function index()
     {
-        $user = User::where('id', Auth::user()->id);
+        $user = User::where('id', auth()->id());
         return view('request_form.passage.index', compact('user'));
     }
 
@@ -30,7 +30,7 @@ class PassengerController extends Controller
      */
     public function create()
     {
-        //$user = User::where('id', Auth::user()->id);
+        //$user = User::where('id', auth()->id());
         return  view('request_form.passenger.create');
     }
 

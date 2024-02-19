@@ -55,7 +55,7 @@ class ReceptionController extends Controller
     public function store(StoreReceptionRequest $request)
     {
         $reception = new Reception($request->validated());
-        $reception->user()->associate(Auth::user());
+        $reception->user()->associate(auth()->user());
         $reception->date = now();
         $reception->manager_id = Parameter::get('drugs','Jefe');
         $reception->lawyer_id  = Parameter::get('drugs','Mandatado');
@@ -138,7 +138,7 @@ class ReceptionController extends Controller
         $reception->items()->create($request->all());
 
         /* Re asociar usuario a quien le agrega items a la recepción */
-        $reception->user()->associate(Auth::user());
+        $reception->user()->associate(auth()->user());
         $reception->save();
 
         return redirect()->route('drugs.receptions.show', $reception);
@@ -194,7 +194,7 @@ class ReceptionController extends Controller
     public function storeProtocol(Request $request, ReceptionItem $receptionitem)
     {
         $protocol = new Protocol($request->All());
-        $protocol->user()->associate(Auth::user());
+        $protocol->user()->associate(auth()->user());
         $protocol->receptionItem()->associate($receptionitem);
         $protocol->save();
 

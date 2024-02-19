@@ -44,9 +44,9 @@ class SearchAllowances extends Component
                         ])
                         ->latest()
                         ->whereDoesntHave("archive", function($subQuery){
-                            $subQuery->where('user_id', Auth::user()->id);
+                            $subQuery->where('user_id', auth()->id());
                         })
-                        ->where('establishment_id', Auth::user()->organizationalUnit->establishment_id)
+                        ->where('establishment_id', auth()->user()->organizationalUnit->establishment_id)
                         ->search($this->selectedStatus,
                             $this->selectedId,
                             $this->selectedUserAllowance,
@@ -70,7 +70,7 @@ class SearchAllowances extends Component
                             'approvals'
                         ])
                         ->latest()
-                        ->where('establishment_id', Auth::user()->organizationalUnit->establishment_id)
+                        ->where('establishment_id', auth()->user()->organizationalUnit->establishment_id)
                         ->whereHas("allowanceSigns", function($subQuery){
                             $subQuery->where('event_type', 'contabilidad')
                                 ->whereIn('status', ['pending', 'accepted', 'rejected']);
@@ -102,7 +102,7 @@ class SearchAllowances extends Component
                         ->latest()
                         // ->has('archive')
                         ->whereHas("archive", function($subQuery){
-                            $subQuery->where('user_id', Auth::user()->id);
+                            $subQuery->where('user_id', auth()->id());
                         })
                         ->search($this->selectedStatus,
                             $this->selectedId,
@@ -128,9 +128,9 @@ class SearchAllowances extends Component
                     ])
                     ->
                     latest()
-                    ->where('user_allowance_id', Auth::user()->id)
-                    ->orWhere('creator_user_id', Auth::user()->id)
-                    ->orWhere('organizational_unit_allowance_id', Auth::user()->organizationalUnit->id)
+                    ->where('user_allowance_id', auth()->id())
+                    ->orWhere('creator_user_id', auth()->id())
+                    ->orWhere('organizational_unit_allowance_id', auth()->user()->organizationalUnit->id)
                     ->search($this->selectedStatus,
                         $this->selectedId,
                         $this->selectedUserAllowance,

@@ -12,7 +12,7 @@
 
                     <fieldset class="form-group col-2">
                         <label>Nombre</label>
-                        <input type="text" class="form-control" disabled value="{{Auth::user()->getTinnyNameAttribute()}}">
+                        <input type="text" class="form-control" disabled value="{{auth()->user()->getTinnyNameAttribute()}}">
                     </fieldset>
 
                     <fieldset class="form-group col-2">

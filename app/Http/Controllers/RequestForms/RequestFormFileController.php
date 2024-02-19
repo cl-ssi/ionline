@@ -48,7 +48,7 @@ class RequestFormFileController extends Controller
             $fileModel->file = $file->store('request_form');
             $fileModel->name = $filename;
             $fileModel->request_form_id = $request_form_id;
-            $fileModel->user()->associate(Auth::user());
+            $fileModel->user()->associate(auth()->user());
             $fileModel->save();
           }
         }

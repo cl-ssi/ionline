@@ -71,8 +71,8 @@ class JobPositionProfileController extends Controller
     {
         $jobPositionProfile = new JobPositionProfile($request->All());
         $jobPositionProfile->status = 'saved';
-        $jobPositionProfile->user()->associate(Auth::user());
-        $jobPositionProfile->creatorOrganizationalUnit()->associate(Auth::user()->organizationalUnit->id);
+        $jobPositionProfile->user()->associate(auth()->user());
+        $jobPositionProfile->creatorOrganizationalUnit()->associate(auth()->user()->organizationalUnit->id);
         
         /* O.U. DONDE SE DIRIGE EL PERFIL DE CARGO */
         $jobPositionProfile->organizationalUnit()->associate($request->jpp_ou_id);
@@ -106,7 +106,7 @@ class JobPositionProfileController extends Controller
 
     public function to_sign(JobPositionProfile $jobPositionProfile)
     {   
-        $authorities = Authority::getAmIAuthorityFromOu(today(), 'manager', Auth::user()->id);
+        $authorities = Authority::getAmIAuthorityFromOu(today(), 'manager', auth()->id());
         $iam_authorities_in = array();
 
         foreach ($authorities as $authority){

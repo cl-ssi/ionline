@@ -55,9 +55,9 @@
 
                     <!-- mientras el usuario logeado sea el "proximo" firmante y mientras la solicitud no este cancelada: se puede visar -->
                     @if($SignatureFlow->serviceRequest->SignatureFlows->whereNull('status')->count() > 0
-                        && $SignatureFlow->serviceRequest->SignatureFlows->whereNull('status')->sortBy('sign_position')->first()->responsable_id == Auth::user()->id
+                        && $SignatureFlow->serviceRequest->SignatureFlows->whereNull('status')->sortBy('sign_position')->first()->responsable_id == auth()->id()
                         && $SignatureFlow->serviceRequest->SignatureFlows->where('status', '===', 0)->count() == 0 
-                        && $SignatureFlow->responsable_id == Auth::user()->id)
+                        && $SignatureFlow->responsable_id == auth()->id())
 
                         <td>
                             <select class="form-control-sm" wire:model.defer="status" >

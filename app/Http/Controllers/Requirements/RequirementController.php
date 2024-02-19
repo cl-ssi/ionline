@@ -170,11 +170,11 @@ class RequirementController extends Controller
     public function outbox(Request $request)
     {
         //         set_time_limit(3600);
-        $users[0] = Auth::user()->id;
+        $users[0] = auth()->id();
         $ous_secretary = [];
 
         // 14/06/2022: Esteban Rojas - Quitar requerimientos como secretaria (Se creó una nueva bandeja para ello)
-        // $ous_secretary = Authority::getAmIAuthorityFromOu(today(), 'secretary', Auth::user()->id);
+        // $ous_secretary = Authority::getAmIAuthorityFromOu(today(), 'secretary', auth()->id());
         // foreach ($ous_secretary as $secretary) {
         //     $users[] = Authority::getAuthorityFromDate($secretary->OrganizationalUnit->id, today(), 'manager')->user_id;
         // }
@@ -322,7 +322,7 @@ class RequirementController extends Controller
 
             $flag = 0;
             foreach ($req->events as $key => $event) {
-                if ($event->status == "en copia" && $event->to_user_id == Auth::user()->id) {
+                if ($event->status == "en copia" && $event->to_user_id == auth()->id()) {
                     $flag = 1;
                     break;
                 }
@@ -333,7 +333,7 @@ class RequirementController extends Controller
             } else {
                 switch ($req->status) {
                     case 'creado':
-                        if ($req->user->id == Auth::user()->id) {
+                        if ($req->user->id == auth()->id()) {
                             $legend['creados']++;
                         } else {
                             $legend['recibidos']++;
@@ -360,7 +360,7 @@ class RequirementController extends Controller
         //     //echo $req->status;
         //     switch($req->status){
         //         case 'creado ':
-        //             if($req->user == Auth::user()) {
+        //             if($req->user == auth()->user()) {
         //                 $legend['creados']++;
         //             }
         //             else {
@@ -378,8 +378,8 @@ class RequirementController extends Controller
 
         //fixme SE DEMORA MUCHO
         //ciclo para definir si requerimiento tiene todos los eventos vistos (ticket verde) o no (ticket plomo)
-        //        $events_status = EventStatus::where('user_id',Auth::user()->id)->get();
-        $events_status_id_event_array = EventStatus::where('user_id', Auth::user()->id)->pluck('event_id')->toArray();
+        //        $events_status = EventStatus::where('user_id',auth()->id())->get();
+        $events_status_id_event_array = EventStatus::where('user_id', auth()->id())->pluck('event_id')->toArray();
 
         // dd($created_requirements->first()->events);
         foreach ($created_requirements as $key => $req) {
@@ -393,7 +393,7 @@ class RequirementController extends Controller
             // }
 
             // cuando la cantidad de eventos es igual a la cantidad de statusEventos (viewed)
-            if ($req->events->count() == EventStatus::where('user_id', Auth::user()->id)->whereIn('event_id',$req->events->pluck('id')->toArray())->count()) {
+            if ($req->events->count() == EventStatus::where('user_id', auth()->id())->whereIn('event_id',$req->events->pluck('id')->toArray())->count()) {
                 $req->status_view = "visto";
             } else {
                 $req->status_view = "sin revisar";
@@ -415,7 +415,7 @@ class RequirementController extends Controller
             //     }
             // }
 
-            if ($req->events->count() == EventStatus::where('user_id', Auth::user()->id)->whereIn('event_id',$req->events->pluck('id')->toArray())->count()) {
+            if ($req->events->count() == EventStatus::where('user_id', auth()->id())->whereIn('event_id',$req->events->pluck('id')->toArray())->count()) {
                 $req->status_view = "visto";
             } else {
                 $req->status_view = "sin revisar";
@@ -435,7 +435,7 @@ class RequirementController extends Controller
     public function secretary_outbox(Request $request)
     {
         $ous_secretary = [];
-        $ous_secretary = Authority::getAmIAuthorityFromOu(today(), 'secretary', Auth::user()->id);
+        $ous_secretary = Authority::getAmIAuthorityFromOu(today(), 'secretary', auth()->id());
         foreach ($ous_secretary as $secretary) {
             $users[] = Authority::getAuthorityFromDate($secretary->OrganizationalUnit->id, today(), 'manager')->user_id;
         }
@@ -680,11 +680,11 @@ class RequirementController extends Controller
         // $documents = Document::all()->sortBy('id');
         // $ous = OrganizationalUnit::all()->sortBy('name');
         //        $organizationalUnit = OrganizationalUnit::Find(1);
-        // $categories = Category::where('user_id', Auth::user()->id)->get();
+        // $categories = Category::where('user_id', auth()->id())->get();
         // $ouRoots = OrganizationalUnit::where('level', 1)->get();
         // $labels = Label::all();
         // $requirementCategories = RequirementCategory::where('requirement_id',$requirement->id)->get();
-        // $categories = Category::where('user_id', Auth::user()->id)->get();
+        // $categories = Category::where('user_id', auth()->id())->get();
         return view('requirements.create', compact('parte'));
     }
 
@@ -729,7 +729,7 @@ class RequirementController extends Controller
         // $ous = OrganizationalUnit::all()->sortBy('name');
         
         // $ouRoots = OrganizationalUnit::where('level', 1)->get();
-        // $categories = Category::where('user_id', Auth::user()->id)->get();
+        // $categories = Category::where('user_id', auth()->id())->get();
         // $labels = Label::all();
         
         // return view('requirements.create', compact('ous', 'ouRoots', 'parte', 'documents', 'categories', 'labels'));
@@ -740,7 +740,7 @@ class RequirementController extends Controller
     {
         $requirementStatus = new RequirementStatus();
         $requirementStatus->requirement_id = $requirement->id;
-        $requirementStatus->user_id = Auth::user()->id;
+        $requirementStatus->user_id = auth()->id();
         $requirementStatus->status = "viewed";
         $requirementStatus->save();
 
@@ -756,7 +756,7 @@ class RequirementController extends Controller
             if($requirement) {
                 $requirementStatus = new RequirementStatus();
                 $requirementStatus->requirement_id = $requirement->id;
-                $requirementStatus->user_id = Auth::user()->id;
+                $requirementStatus->user_id = auth()->id();
                 $requirementStatus->status = "viewed";
                 $requirementStatus->save();
             }
@@ -768,7 +768,7 @@ class RequirementController extends Controller
     public function archive_requirement_delete(Requirement $requirement)
     {
         $requirementStatus = RequirementStatus::where('requirement_id', $requirement->id)
-            ->where('user_id', Auth::user()->id)
+            ->where('user_id', auth()->id())
             ->where('status', 'viewed');
         $requirementStatus->delete();
 
@@ -814,7 +814,7 @@ class RequirementController extends Controller
 
 
     //     //     $requirement = new Requirement($req);
-    //     //     $requirement->user()->associate(Auth::user());
+    //     //     $requirement->user()->associate(auth()->user());
 
     //     //     //Si el usuario destino es autoridad, se marca el requerimiento
     //     //     $managerUserId = Authority::getAuthorityFromDate($request->to_ou_id, now(), 'manager')->user_id;
@@ -828,8 +828,8 @@ class RequirementController extends Controller
 
     //     //     //se guarda evento
     //     //     $firstEvent = new Event($request->All());
-    //     //     $firstEvent->from_user()->associate(Auth::user());
-    //     //     $firstEvent->from_ou_id = Auth::user()->organizationalUnit->id;
+    //     //     $firstEvent->from_user()->associate(auth()->user());
+    //     //     $firstEvent->from_ou_id = auth()->user()->organizationalUnit->id;
     //     //     $firstEvent->requirement()->associate($requirement);
     //     //     $firstEvent->to_authority = $isManager;
     //     //     $firstEvent->save();
@@ -938,7 +938,7 @@ class RequirementController extends Controller
 
     //             //se crea requerimiento
     //             $requirement = new Requirement($req);
-    //             $requirement->user()->associate(Auth::user());
+    //             $requirement->user()->associate(auth()->user());
     //             $requirement->group_number = $group_number;
     //             $requirement->to_authority = $isAnyManager;
 
@@ -975,8 +975,8 @@ class RequirementController extends Controller
     //                         $firstEvent->to_user_id = $user_;
     //                         $firstEvent->to_ou_id = $user_aux->first()->organizational_unit_id;
     //                         $firstEvent->status = "en copia";
-    //                         $firstEvent->from_user()->associate(Auth::user());
-    //                         $firstEvent->from_ou_id = Auth::user()->organizationalUnit->id;
+    //                         $firstEvent->from_user()->associate(auth()->user());
+    //                         $firstEvent->from_ou_id = auth()->user()->organizationalUnit->id;
     //                         $firstEvent->requirement()->associate($requirement);
     //                         $firstEvent->to_authority = $isManager;
     //                         $firstEvent->save();
@@ -1005,8 +1005,8 @@ class RequirementController extends Controller
     //                 $firstEvent->to_authority = $isManager;
     //                 if (!$isAnyManager) $requirement->update(['to_authority' => $isManager]);
     //             }
-    //             $firstEvent->from_user()->associate(Auth::user());
-    //             $firstEvent->from_ou_id = Auth::user()->organizationalUnit->id;
+    //             $firstEvent->from_user()->associate(auth()->user());
+    //             $firstEvent->from_ou_id = auth()->user()->organizationalUnit->id;
     //             $firstEvent->requirement()->associate($requirement);
     //             $firstEvent->save();
 
@@ -1504,7 +1504,7 @@ class RequirementController extends Controller
             ])->where('level', 1)->get();
 
         $lastEvent = Event::where('requirement_id', $requirement->id)
-            ->where('from_user_id', '<>', Auth::user()->id)->get()->last();
+            ->where('from_user_id', '<>', auth()->id())->get()->last();
         //dd($lastEvent);
 
         //si no existen respuestas de otras personas, se devuelve la ultima cualquiera.
@@ -1512,7 +1512,7 @@ class RequirementController extends Controller
             $lastEvent = Event::where('requirement_id', $requirement->id)->get()->last();
         }
         $firstEvent = Event::where('requirement_id', $requirement->id)
-            //->where('from_user_id','<>',Auth::user()->id)->get()
+            //->where('from_user_id','<>',auth()->id())->get()
             ->First();
 
        //Se busca requerimientos agrupados, estos corresponden a los req. de los otros destinatarios de la misma solicitud de req.

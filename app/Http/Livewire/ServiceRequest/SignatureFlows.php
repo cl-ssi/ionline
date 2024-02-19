@@ -31,9 +31,9 @@ class SignatureFlows extends Component
       if ($this->type == NULL || $this->type == "Covid") {
         if ($this->program_contract_type == "Mensual") {
           $this->a = "mensual";
-          if (Auth::user()->organizationalUnit->establishment_id == 38) {
+          if (auth()->user()->organizationalUnit->establishment_id == 38) {
             //Hector Reyno (CGU)
-            if (Auth::user()->organizationalUnit->id == 24) {
+            if (auth()->user()->organizationalUnit->id == 24) {
               $this->signatureFlows['RRHH CGU'] = 10739552; //RR.HH del CGU
               $this->signatureFlows['Directora CGU'] = 14745638; // 24 - Consultorio General Urbano Dr. Hector Reyno
               $this->signatureFlows['S.D.G.A SSI'] = 14104369; // 2 - Subdirección de Gestion Asistencial / Subdirección Médica
@@ -52,7 +52,7 @@ class SignatureFlows extends Component
             }
           }
           //hospital
-          elseif(Auth::user()->organizationalUnit->establishment_id == 1){
+          elseif(auth()->user()->organizationalUnit->establishment_id == 1){
             $this->signatureFlows['Subdirector'] = 12621281; // 88 - Subdirección Médica - 9882506 - (iriondo)
             $this->signatureFlows['S.D.G.A SSI'] = 14104369; // 2 - Subdirección de Gestion Asistencial / Subdirección Médica
             $this->signatureFlows['S.G.D.P Hospital'] = 16390845; // 86 - Subdirección de Gestión de Desarrollo de las Personas
@@ -62,9 +62,9 @@ class SignatureFlows extends Component
           }
         }elseif ($this->program_contract_type == "Horas") {
           $this->a = "horas";
-          if (Auth::user()->organizationalUnit->establishment_id == 38) {
+          if (auth()->user()->organizationalUnit->establishment_id == 38) {
             //Hector Reyno (CGU)
-            if (Auth::user()->organizationalUnit->id == 24) {
+            if (auth()->user()->organizationalUnit->id == 24) {
               $this->signatureFlows['Funcionario'] = 10739552; // 24 - Consultorio General Urbano Dr. Hector Reyno
               $this->signatureFlows['Directora CGU'] = 14745638; // 24 - Consultorio General Urbano Dr. Hector Reyno
               $this->signatureFlows['S.G.D.P SSI'] = 15685508; // 44 - Subdirección de Gestión y Desarrollo de las Personas
@@ -78,14 +78,14 @@ class SignatureFlows extends Component
             }
           }
           //hospital
-          elseif(Auth::user()->organizationalUnit->establishment_id == 1){
+          elseif(auth()->user()->organizationalUnit->establishment_id == 1){
             $this->signatureFlows['Subdirector'] = 12621281; // 88 - Subdirección Médica - 9882506 - (iriondo)
             $this->signatureFlows['S.G.D.P Hospital'] = 16390845; // 86 - Subdirección de Gestión de Desarrollo de las Personas
             $this->signatureFlows['Jefe Finanzas'] = 13866194; // 11 - Departamento de Finanzas
           }
         }
       }else{
-        if (Auth::user()->organizationalUnit->establishment_id == 1) {
+        if (auth()->user()->organizationalUnit->establishment_id == 1) {
           $this->a = "suma";
           $this->signatureFlows['S.G.D.P Hospital'] = 16390845;
           $this->signatureFlows['Jefe Finanzas'] = 13866194;

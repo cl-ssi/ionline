@@ -85,7 +85,7 @@ class RequestReplacementStaffController extends Controller
 
     public function to_sign_index(RequestReplacementStaff $requestReplacementStaff)
     {
-        $authorities = Authority::getAmIAuthorityFromOu(today(), 'manager', Auth::user()->id);
+        $authorities = Authority::getAmIAuthorityFromOu(today(), 'manager', auth()->id());
         $iam_authorities_in = array();
 
         foreach ($authorities as $authority){
@@ -122,7 +122,7 @@ class RequestReplacementStaffController extends Controller
                 'requests_to_sign'));
         }
         else{
-            if(Auth::user()->organizationalUnit->id == Parameter::get('ou','PersonalSSI')){
+            if(auth()->user()->organizationalUnit->id == Parameter::get('ou','PersonalSSI')){
                 $iam_authorities_in[] = Parameter::get('ou','PersonalSSI');
             }
 
@@ -157,7 +157,7 @@ class RequestReplacementStaffController extends Controller
     }
 
     public function to_sign(RequestReplacementStaff $requestReplacementStaff){
-        $authorities = Authority::getAmIAuthorityFromOu(today(), 'manager', Auth::user()->id);
+        $authorities = Authority::getAmIAuthorityFromOu(today(), 'manager', auth()->id());
         $iam_authorities_in = array();
 
         foreach ($authorities as $authority){
@@ -224,7 +224,7 @@ class RequestReplacementStaffController extends Controller
      */
     public function store(Request $request, $formType)
     {
-        if(Auth::user()->organizationalUnit->level != 1){
+        if(auth()->user()->organizationalUnit->level != 1){
             /* SE OBTIENEN LA INFORMACIÓN DEL FORMULARIO */
             if($formType == 'announcement'){
                 $request_replacement = new RequestReplacementStaff();
@@ -245,8 +245,8 @@ class RequestReplacementStaffController extends Controller
 
             $request_replacement->request_status = 'pending';
             $request_replacement->form_type = $formType;
-            $request_replacement->user()->associate(Auth::user());
-            $request_replacement->organizationalUnit()->associate(Auth::user()->organizationalUnit);
+            $request_replacement->user()->associate(auth()->user());
+            $request_replacement->organizationalUnit()->associate(auth()->user()->organizationalUnit);
             $request_replacement->requesterUser()->associate($request->requester_id);
 
             $now = Carbon::now()->format('Y_m_d_H_i_s');
@@ -436,7 +436,7 @@ class RequestReplacementStaffController extends Controller
                             $request_sing = new RequestSign();
                             $request_sing->position = $position;
                             $request_sing->ou_alias = 'sub';
-                            $request_sing->organizationalUnit()->associate(Auth::user()->organizationalUnit);
+                            $request_sing->organizationalUnit()->associate(auth()->user()->organizationalUnit);
                             $request_sing->request_status = 'pending';
                             $request_sing->requestReplacementStaff()->associate($request_replacement->id);
                             $request_sing->save();
@@ -511,8 +511,8 @@ class RequestReplacementStaffController extends Controller
         $newRequestReplacementStaff->form_type = $formType;
         $newRequestReplacementStaff->request_id = $requestReplacementStaff->id;
         $newRequestReplacementStaff->request_status = 'pending';
-        $newRequestReplacementStaff->user()->associate(Auth::user());
-        $newRequestReplacementStaff->organizationalUnit()->associate(Auth::user()->organizationalUnit->id);
+        $newRequestReplacementStaff->user()->associate(auth()->user());
+        $newRequestReplacementStaff->organizationalUnit()->associate(auth()->user()->organizationalUnit->id);
         $newRequestReplacementStaff->requesterUser()->associate($request->requester_id);
 
         /*
@@ -564,7 +564,7 @@ class RequestReplacementStaffController extends Controller
         $request_sing = new RequestSign();
         $request_sing->position = '1';
         $request_sing->ou_alias = 'leadership';
-        $request_sing->organizationalUnit()->associate(Auth::user()->organizationalUnit->id);
+        $request_sing->organizationalUnit()->associate(auth()->user()->organizationalUnit->id);
         $request_sing->request_status = 'pending';
         $request_sing->requestReplacementStaff()->associate($newRequestReplacementStaff->id);
         $request_sing->save();
@@ -825,13 +825,13 @@ class RequestReplacementStaffController extends Controller
             return redirect()->route('request_forms.pending_forms');   
         }
         else{
-            // dd(Auth::user()->id);
+            // dd(auth()->id());
             $requestReplacementStaff = RequestReplacementStaff::find($modelId);
 
             //SE ACTUALIZA SIGN DE FINANZAS
             $event = $requestReplacementStaff->requestSign->where('ou_alias', 'finance')->first();
 
-            $event->user_id         = Auth::user()->id;
+            $event->user_id         = auth()->id();
             $event->request_status  = 'accepted';
             $event->date_sign       = now();
             $event->save();

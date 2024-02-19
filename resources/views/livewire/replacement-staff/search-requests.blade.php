@@ -410,9 +410,9 @@
                         @if(count($requestReplacementStaff->approvals) > 0)
                             <!-- PERMITE EDITAR SOLICITUD ANTES DE LA PRIMERA APROBACIÓN -->
                             @if($requestReplacementStaff->approvals->first()->status === null && 
-                                ($requestReplacementStaff->user->id == Auth::user()->id || 
-                                $requestReplacementStaff->organizational_unit_id == Auth::user()->organizationalUnit->id ||
-                                ($requestReplacementStaff->requesterUser && $requestReplacementStaff->requesterUser->id == Auth::user()->id)))
+                                ($requestReplacementStaff->user->id == auth()->id() || 
+                                $requestReplacementStaff->organizational_unit_id == auth()->user()->organizationalUnit->id ||
+                                ($requestReplacementStaff->requesterUser && $requestReplacementStaff->requesterUser->id == auth()->id())))
                                     <a href="{{ route('replacement_staff.request.edit', $requestReplacementStaff) }}"
                                         class="btn btn-outline-secondary btn-sm" title="Selección"><i class="fas fa-edit"></i></a>
                             @endif
@@ -421,7 +421,7 @@
                             @if($typeIndex == 'assign' &&
                                 $requestReplacementStaff->request_status == "to assign" &&
                                 !$requestReplacementStaff->technicalEvaluation &&
-                                Auth::user()->hasPermissionTo('Replacement Staff: assign request'))
+                                auth()->user()->hasPermissionTo('Replacement Staff: assign request'))
                                 <div class="form-check">
                                     <input class="form-check-input" 
                                         type="checkbox"
@@ -473,8 +473,8 @@
                         @else
                             @if($requestReplacementStaff->fundament_detail_manage_id != 6 && $requestReplacementStaff->fundament_detail_manage_id != 7)
                                 <!-- PERMITE EDITAR SOLICITUD ANTES DE LA PRIMERA APROBACIÓN -->
-                                @if(($requestReplacementStaff->user->id == Auth::user()->id || $requestReplacementStaff->organizational_unit_id == Auth::user()->organizationalUnit->id ||
-                                        ($requestReplacementStaff->requesterUser && $requestReplacementStaff->requesterUser->id == Auth::user()->id)) &&
+                                @if(($requestReplacementStaff->user->id == auth()->id() || $requestReplacementStaff->organizational_unit_id == auth()->user()->organizationalUnit->id ||
+                                        ($requestReplacementStaff->requesterUser && $requestReplacementStaff->requesterUser->id == auth()->id())) &&
                                             $requestReplacementStaff->requestSign->first()->request_status == 'pending')
                                     @if($requestReplacementStaff->form_type != null)
                                         <a href="{{ route('replacement_staff.request.edit', $requestReplacementStaff) }}"
@@ -487,7 +487,7 @@
                                 @elseif(($requestReplacementStaff->requestSign->last()->request_status == "accepted" ||
                                     $requestReplacementStaff->signaturesFile && $requestReplacementStaff->signaturesFile->signaturesFlows->first()-> status == 1) &&
                                         !$requestReplacementStaff->technicalEvaluation &&
-                                            Auth::user()->hasPermissionTo('Replacement Staff: assign request'))
+                                            auth()->user()->hasPermissionTo('Replacement Staff: assign request'))
 
                                     <div class="form-check">
                                         <input class="form-check-input" 
@@ -542,7 +542,7 @@
         </div>
     @endif
     
-    @if($typeIndex == 'assign' && Auth::user()->hasPermissionTo('Replacement Staff: assign request'))
+    @if($typeIndex == 'assign' && auth()->user()->hasPermissionTo('Replacement Staff: assign request'))
     <div class="card">
         <div class="card-body">
             <h6 class="mb-3"><i class="fas fa-user-tag"></i> Asignar solicitudes a funcionarios</h6>

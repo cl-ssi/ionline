@@ -4,7 +4,7 @@
 
 @section('content')
 
-<h3>Editar Unidad Organizacional del {{ Auth::user()->organizationalUnit->establishment->name }}</h3>
+<h3>Editar Unidad Organizacional del {{ auth()->user()->organizationalUnit->establishment->name }}</h3>
 
 <form method="POST" class="form-horizontal" action="{{ route('rrhh.organizational-units.update',$organizationalUnit->id) }}">
     {{ method_field('PUT') }}

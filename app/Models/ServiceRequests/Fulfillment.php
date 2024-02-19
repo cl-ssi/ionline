@@ -147,7 +147,7 @@ class Fulfillment extends Model implements Auditable
     }*/
 
     // $query->whereHas("responsabilityCenter", function($subQuery) use ($establishment_id){
-    //   $subQuery->where('establishment_id', Auth::user()->organizationalUnit->establishment_id);
+    //   $subQuery->where('establishment_id', auth()->user()->organizationalUnit->establishment_id);
     // });
 
     if ($request->input('establishment') != "") {

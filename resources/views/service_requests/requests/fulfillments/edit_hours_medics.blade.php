@@ -98,7 +98,7 @@
 			</fieldset>
 			<fieldset class="form-group col-md-6 text-right">
 				@can('Service Request: fulfillments responsable')
-				@if(Auth::user()->id == $serviceRequest->signatureFlows->where('sign_position',2)->first()->responsable_id or App\Rrhh\Authority::getAmIAuthorityFromOu(now(),['manager'],Auth::user()->id))
+				@if(auth()->id() == $serviceRequest->signatureFlows->where('sign_position',2)->first()->responsable_id or App\Rrhh\Authority::getAmIAuthorityFromOu(now(),['manager'],auth()->id()))
 				@if($fulfillment->responsable_approver_id == NULL)
 				<a type="button" class="btn btn-danger" @disabled(auth()->user()->godMode) onclick="return confirm('Una vez confirmado, no podrá modificar la información. ¿Está seguro de rechazar?');" href="{{ route('rrhh.service-request.fulfillment.refuse-Fulfillment',$fulfillment) }}">
 					Rechazar

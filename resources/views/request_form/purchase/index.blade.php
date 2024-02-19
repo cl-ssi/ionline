@@ -177,7 +177,7 @@
                         @endif
 
                         @if(App\Rrhh\Authority::getAmIAuthorityFromOu(Carbon\Carbon::now(), 'manager', auth()->user()->id) ||
-                        Auth::user()->hasPermissionTo('Request Forms: boss'))
+                        auth()->user()->hasPermissionTo('Request Forms: boss'))
 
                         @if($requestForm->signatures_file_id)
                         <a class="btn btn-info btn-sm" title="Ver Formulario de Requerimiento firmado" href="{{ $requestForm->signatures_file_id == 11 ? route('request_forms.show_file', $requestForm->requestFormFiles->last() ?? 0) : route('request_forms.signedRequestFormPDF', [$requestForm, 1]) }}" target="_blank" title="Certificado">

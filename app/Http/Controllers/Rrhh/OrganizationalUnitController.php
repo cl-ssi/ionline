@@ -44,7 +44,7 @@ class OrganizationalUnitController extends Controller
     public function create()
     {
         //$organizationalUnit = OrganizationalUnit::find(84);
-        $organizationalUnit = OrganizationalUnit::where('level', 1)->where('establishment_id', Auth::user()->organizationalUnit->establishment->id)->first();
+        $organizationalUnit = OrganizationalUnit::where('level', 1)->where('establishment_id', auth()->user()->organizationalUnit->establishment->id)->first();
         return view('rrhh.organizationalunit.create',compact('organizationalUnit'));
     }
 

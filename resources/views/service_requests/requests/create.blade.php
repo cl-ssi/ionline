@@ -221,7 +221,7 @@
 			<select name="programm_name" class="form-control" required id="programm_name">
                 <option value=""></option>
 
-                @if(Auth::user()->organizationalUnit->establishment_id == 1)
+                @if(auth()->user()->organizationalUnit->establishment_id == 1)
                     <option value="Covid19-APS No Médicos" disabled>Covid19-APS No Médicos</option>
                     <option value="Covid19-APS Médicos" disabled>Covid19-APS Médicos</option>
                     <option value="Covid19 No Médicos" disabled>Covid19 No Médicos</option>
@@ -314,7 +314,7 @@
 				<option value="Hospitalizacion Domiciliaria">Hospitalizacion Domiciliaria</option>
 				<option value="Rehabilitación">Rehabilitación</option>
 				<!-- Fin de lo enviado por correo -->
-				@if(Auth::user()->organizationalUnit->establishment_id == 1)
+				@if(auth()->user()->organizationalUnit->establishment_id == 1)
 				<option value="Migración Colchane">Migración Colchane</option>
 				@endif
 			</select>
@@ -451,7 +451,7 @@
 	</div> -->
 
 
-	@if(Auth::user()->organizationalUnit->establishment_id == 1)
+	@if(auth()->user()->organizationalUnit->establishment_id == 1)
 
 	@else
 	<div class="form-row" id="div_subt31" style="display: none">
@@ -478,7 +478,7 @@
 			<button type="button" class="btn btn-outline-primary btn-sm" id="alias_ausentarse_motivos_particulares">Ausentarse por motivos particulares</button>
 
 			<button type="button" class="btn btn-outline-primary btn-sm" id="alias_capacitacion">Capacitación</button>
-			@if(Auth::user()->organizationalUnit->establishment_id == 1)
+			@if(auth()->user()->organizationalUnit->establishment_id == 1)
 			@else
 			<button type="button" class="btn btn-outline-primary btn-sm" id="alias_fiestas_patrias">Aguinaldo fiestas patrias</button>
 			<button type="button" class="btn btn-outline-primary btn-sm" id="alias_navidad">Aguinaldo navidad</button>
@@ -751,7 +751,7 @@
 			$("#div_additional_benefits").show();
 
 
-			if ({{Auth::user()->organizationalUnit->establishment_id}} == 1) {
+			if ({{auth()->user()->organizationalUnit->establishment_id}} == 1) {
 				$("#programm_name option[value='PRAPS']").hide();
 				$("#programm_name option[value='PESPI']").hide();
 				$("#programm_name option[value='CHILE CRECE CONTIGO']").hide();

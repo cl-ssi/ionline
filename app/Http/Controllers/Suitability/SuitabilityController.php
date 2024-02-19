@@ -395,7 +395,7 @@ class SuitabilityController extends Controller
             $signature = new Signature();
             $signature->user_id = Auth::id();
             $signature->responsable_id = Auth::id();
-            $signature->ou_id = Auth::user()->organizational_unit_id;
+            $signature->ou_id = auth()->user()->organizational_unit_id;
             $signature->request_date = now();
             $signature->type_id = Type::where('name', 'Carta')->first()->id;
             $signature->subject = 'Informe Idoneidad';

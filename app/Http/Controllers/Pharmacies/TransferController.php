@@ -26,7 +26,7 @@ class TransferController extends Controller
         $product_ortesis_list = null;
         $establishments = null;
         $establishment = null;
-        if(Auth::user()->hasAnyPermission(['Pharmacy: transfer view ortesis', 'Pharmacy: transfer view IQQ', 'Pharmacy: transfer view AHO'])){
+        if(auth()->user()->hasAnyPermission(['Pharmacy: transfer view ortesis', 'Pharmacy: transfer view IQQ', 'Pharmacy: transfer view AHO'])){
             $products_ortesis = Product::whereHas('establishments', function($q) {
                 $q->whereNotIn('establishment_id', [148, 128]); //SS BODEGA IQUIQUE Y BORO/TORTUGA
             })
@@ -45,11 +45,11 @@ class TransferController extends Controller
             
             $establishments = Establishment::where('pharmacy_id',session('pharmacy_id'))
                                             ->whereNotIn('id', [148, 128])
-                                            ->when(Auth::user()->can('Pharmacy: transfer view IQQ'), function($q) {
+                                            ->when(auth()->user()->can('Pharmacy: transfer view IQQ'), function($q) {
                                                 $establishmentsSearch = Parameter::where('module', 'frm')->where('parameter', 'EstablishmentsIQQ')->first()->value;
                                                 return $q->whereIn('id', explode(',', $establishmentsSearch));
                                             })
-                                            ->when(Auth::user()->can('Pharmacy: transfer view AHO'), function($q) {
+                                            ->when(auth()->user()->can('Pharmacy: transfer view AHO'), function($q) {
                                                 $establishmentsSearch = Parameter::where('module', 'frm')->where('parameter', 'EstablishmentsAHO')->first()->value;
                                                 return $q->whereIn('id', explode(',', $establishmentsSearch));
                                             })
@@ -73,17 +73,17 @@ class TransferController extends Controller
                                             ->orderBy('name', 'ASC')->paginate(15, ['*'], 'p2');
 
             $transfers = Transfer::with('establishment_from:id,name', 'establishment_to:id,name', 'product:id,name', 'user:id,name,fathers_family')
-                        ->when(Auth::user()->hasAnyPermission(['Pharmacy: transfer view IQQ', 'Pharmacy: transfer view AHO']), function($q) use ($filter) {
+                        ->when(auth()->user()->hasAnyPermission(['Pharmacy: transfer view IQQ', 'Pharmacy: transfer view AHO']), function($q) use ($filter) {
                             return $q->where('from', $filter)->orWhere('to', $filter);
                         })
                         ->orderBy('id','DESC')->paginate(15, ['*'], 'p3');
         } else {
-            if (Auth::user()->establishments->count()==0) {
+            if (auth()->user()->establishments->count()==0) {
                 session()->flash('warning', 'El usuario no tiene asignado establecimiento. Contacte a secretaría de informática.');
                 return redirect()->route('pharmacies.index');
             }
 
-            $filter = Auth::user()->establishments->first()->id;
+            $filter = auth()->user()->establishments->first()->id;
             $establishment = Establishment::find($filter);
             $filterEstablishment = function($query) use ($filter) {
                 $query->where('establishment_id', $filter);
@@ -172,7 +172,7 @@ class TransferController extends Controller
 
     public function auth($establishment_id)
     {     
-        if(!Auth::user()->can('Pharmacy: transfer view ortesis')){
+        if(!auth()->user()->can('Pharmacy: transfer view ortesis')){
             session()->flash('warning', 'Ud. no tiene permiso para autorizar la solicitud de stock via documento.');
             return redirect()->route('pharmacies.products.deliver.index');
         }
@@ -267,7 +267,7 @@ class TransferController extends Controller
      */
     public function edit($filter, Request $request)
     {
-        if(!Auth::user()->can('Pharmacy: transfer view ortesis')){
+        if(!auth()->user()->can('Pharmacy: transfer view ortesis')){
             session()->flash('warning', 'Ud. no tiene permiso para modificar stock de productos por establecimiento.');
             return redirect()->route('pharmacies.products.deliver.index');
         }

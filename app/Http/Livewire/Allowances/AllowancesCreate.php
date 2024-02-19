@@ -231,8 +231,8 @@ class AllowancesCreate extends Component
                     'fifty_percent_day_value'           => $this->allowanceFiftyPercentDayValue(),
                     'sixty_percent_day_value'           => $this->allowanceSixtyPercentDayValue(),
                     'total_value'                       => $this->allowanceTotalValue(),
-                    'creator_user_id'                   => Auth::user()->id, 
-                    'creator_ou_id'                     => Auth::user()->organizationalUnit->id
+                    'creator_user_id'                   => auth()->id(), 
+                    'creator_ou_id'                     => auth()->user()->organizationalUnit->id
                 ]
             );
 
@@ -265,7 +265,7 @@ class AllowancesCreate extends Component
                     'name'          => $allowanceFile['fileName'],
                     'file'          => $allowanceFile['file'], 
                     'allowance_id'  => $alw->id, 
-                    'user_id'       => Auth::user()->id, 
+                    'user_id'       => auth()->id(), 
                 ]
             );
         }

@@ -33,7 +33,7 @@ class FulfillmentController extends Controller
      */
     public function index(Request $request)
     {
-        $user = Auth::user();
+        $user = auth()->user();
         $serviceRequests = null;
 
         $responsability_center_ou_id = $request->responsability_center_ou_id;
@@ -49,10 +49,10 @@ class FulfillmentController extends Controller
           $array[] = $authority->organizational_unit_id;
         }
 
-        // $establishment_id = Auth::user()->organizationalUnit->establishment_id;
+        // $establishment_id = auth()->user()->organizationalUnit->establishment_id;
         $establishment_id = $request->establishment_id;
 
-        if (Auth::user()->can('Service Request: fulfillments responsable')) {
+        if (auth()->user()->can('Service Request: fulfillments responsable')) {
           $serviceRequests = ServiceRequest::whereHas("SignatureFlows", function($subQuery) use($user, $array){
                                                $subQuery->where('responsable_id',$user->id);
                                                // $subQuery->orwhere('user_id',$user->id);
@@ -128,7 +128,7 @@ class FulfillmentController extends Controller
         }
 
 
-        if (Auth::user()->can('Service Request: fulfillments')) {
+        if (auth()->user()->can('Service Request: fulfillments')) {
           foreach ($serviceRequests as $key => $serviceRequest) {
             //mensual -
             if ($serviceRequest->program_contract_type == "Mensual") {
@@ -179,7 +179,7 @@ class FulfillmentController extends Controller
     {
       $fulfillment = new Fulfillment($request->All());
       // $fulfillment->responsable_approbation = 1;
-      // $fulfillment->responsable_approver_id = Auth::user()->id;
+      // $fulfillment->responsable_approver_id = auth()->id();
       $fulfillment->save();
 
       // //turnos
@@ -200,7 +200,7 @@ class FulfillmentController extends Controller
       //     $fulfillmentItem->end_date = $shiftControl->end_date;
       //     $fulfillmentItem->type = "Turno";
       //     $fulfillmentItem->responsable_approbation = $flag;
-      //     $fulfillmentItem->responsable_approver_id = Auth::user()->id;
+      //     $fulfillmentItem->responsable_approver_id = auth()->id();
       //     $fulfillmentItem->observation = $shiftControl->observation;
       //     $fulfillmentItem->save();
       //
@@ -255,7 +255,7 @@ class FulfillmentController extends Controller
         // crea de forma automática las cabeceras
         if ($serviceRequest->program_contract_type == "Mensual" || ($serviceRequest->program_contract_type == "Horas" && $serviceRequest->working_day_type == "HORA MÉDICA")) {
           if ($serviceRequest->fulfillments->count() == 0) {
-            // if (!Auth::user()->can('Service Request: fulfillments responsable')) {
+            // if (!auth()->user()->can('Service Request: fulfillments responsable')) {
             //   session()->flash('danger', 'El usuario responsable no ha certificado el cumplimiento de la solicitud: <b>' . $serviceRequest->id . "</b>. No tiene acceso.");
             //   return redirect()->back();
             // }
@@ -284,7 +284,7 @@ class FulfillmentController extends Controller
               $fulfillment->type = $program_contract_type;
               $fulfillment->start_date = $start_date_period;
               $fulfillment->end_date = $end_date_period;
-              $fulfillment->user_id = Auth::user()->id;
+              $fulfillment->user_id = auth()->id();
 
               // $fulfillment->total_hours_to_pay = $serviceRequest->weekly_hours;
               // $fulfillment->total_to_pay = $serviceRequest->net_amount;
@@ -302,7 +302,7 @@ class FulfillmentController extends Controller
             //   $fulfillmentItem->end_date = $shiftControl->end_date;
             //   $fulfillmentItem->type = "Turno Médico";
             //   $fulfillmentItem->observation = $shiftControl->observation;
-            //   $fulfillmentItem->user_id = Auth::user()->id;
+            //   $fulfillmentItem->user_id = auth()->id();
             //   $fulfillmentItem->save();
             //
             // }
@@ -319,7 +319,7 @@ class FulfillmentController extends Controller
             $fulfillment->start_date = $serviceRequest->start_date;
             $fulfillment->end_date = $serviceRequest->end_date;
             // $fulfillment->observation = "Aprobaciones en flujo de firmas";
-            $fulfillment->user_id = Auth::user()->id;
+            $fulfillment->user_id = auth()->id();
             $fulfillment->save();
           }else {
             $fulfillment = $serviceRequest->fulfillments->first();
@@ -333,7 +333,7 @@ class FulfillmentController extends Controller
           //   $fulfillmentItem->end_date = $shiftControl->end_date;
           //   $fulfillmentItem->type = "Turno";
           //   $fulfillmentItem->observation = $shiftControl->observation;
-          //   $fulfillmentItem->user_id = Auth::user()->id;
+          //   $fulfillmentItem->user_id = auth()->id();
           //   $fulfillmentItem->save();
           // }
         }
@@ -358,7 +358,7 @@ class FulfillmentController extends Controller
 
         // crea de forma automática las cabeceras
         if ($serviceRequest->fulfillments->count() == 0) {
-          if (!Auth::user()->can('Service Request: fulfillments responsable')) {
+          if (!auth()->user()->can('Service Request: fulfillments responsable')) {
             session()->flash('danger', 'El usuario responsable no ha certificado el cumplimiento de la solicitud: <b>' . $serviceRequest->id . "</b>. No tiene acceso.");
             return redirect()->back();
           }
@@ -386,11 +386,11 @@ class FulfillmentController extends Controller
 
             $fulfillment->responsable_approbation = 1;
             $fulfillment->responsable_approbation_date = Carbon::now();
-            $fulfillment->responsable_approver_id = Auth::user()->id;
+            $fulfillment->responsable_approver_id = auth()->id();
 
             $fulfillment->start_date = $start_date_period;
             $fulfillment->end_date = $end_date_period;
-            $fulfillment->user_id = Auth::user()->id;
+            $fulfillment->user_id = auth()->id();
             $fulfillment->save();
           }
 
@@ -406,10 +406,10 @@ class FulfillmentController extends Controller
 
             $fulfillmentItem->responsable_approbation = 1;
             $fulfillmentItem->responsable_approbation_date = Carbon::now();
-            $fulfillmentItem->responsable_approver_id = Auth::user()->id;
+            $fulfillmentItem->responsable_approver_id = auth()->id();
 
             $fulfillmentItem->observation = $shiftControl->observation;
-            $fulfillmentItem->user_id = Auth::user()->id;
+            $fulfillmentItem->user_id = auth()->id();
             $fulfillmentItem->save();
 
           }
@@ -587,7 +587,7 @@ class FulfillmentController extends Controller
             "digital_signature" => false,
             "document_route_name" => "rrhh.service-request.fulfillment.certificate-pdf-signed", 
             "document_route_params" => json_encode(["fulfillment_id" => $fulfillment->id]),
-            "sent_to_user_id" => Auth::user()->id,
+            "sent_to_user_id" => auth()->id(),
             "callback_controller_method" => "App\Http\Controllers\ServiceRequests\FulfillmentController@process",
             "callback_controller_params" => json_encode(['fulfillment_id' => $fulfillment->id]),
             "filename" => "ionline/approvals/servicerequest/".$fulfillment->id.".pdf"
@@ -596,26 +596,26 @@ class FulfillmentController extends Controller
 
     public function confirmFulfillment(Fulfillment $fulfillment)
     {
-        if (Auth::user()->can('Service Request: fulfillments responsable')) {
+        if (auth()->user()->can('Service Request: fulfillments responsable')) {
 
             if ($fulfillment->responsable_approver_id == NULL) {
                 $fulfillment->responsable_approbation = 1;
                 $fulfillment->responsable_approbation_date = Carbon::now();
-                $fulfillment->responsable_approver_id = Auth::user()->id;
+                $fulfillment->responsable_approver_id = auth()->id();
                 $fulfillment->save();
 
                 //items
                 foreach ($fulfillment->FulfillmentItems as $key => $FulfillmentItem) {
                     $FulfillmentItem->responsable_approbation = 1;
                     $FulfillmentItem->responsable_approbation_date = Carbon::now();
-                    $FulfillmentItem->responsable_approver_id = Auth::user()->id;
+                    $FulfillmentItem->responsable_approver_id = auth()->id();
                     $FulfillmentItem->save();
                 }
             }
 
         }
 
-        if (Auth::user()->can('Service Request: fulfillments rrhh')) {
+        if (auth()->user()->can('Service Request: fulfillments rrhh')) {
           if ($fulfillment->responsable_approver_id == NULL) {
             session()->flash('danger', 'No es posible aprobar, puesto que falta aprobación de Responsable.');
             return redirect()->back();
@@ -631,20 +631,20 @@ class FulfillmentController extends Controller
           if ($fulfillment->responsable_approver_id != NULL && $fulfillment->rrhh_approver_id == NULL) {
             $fulfillment->rrhh_approbation = 1;
             $fulfillment->rrhh_approbation_date = Carbon::now();
-            $fulfillment->rrhh_approver_id = Auth::user()->id;
+            $fulfillment->rrhh_approver_id = auth()->id();
             $fulfillment->save();
 
             //items
             foreach ($fulfillment->FulfillmentItems as $key => $FulfillmentItem) {
               $FulfillmentItem->rrhh_approbation = 1;
               $FulfillmentItem->rrhh_approbation_date = Carbon::now();
-              $FulfillmentItem->rrhh_approver_id = Auth::user()->id;
+              $FulfillmentItem->rrhh_approver_id = auth()->id();
               $FulfillmentItem->save();
             }
           }
         }
 
-        if (Auth::user()->can('Service Request: fulfillments finance')) {
+        if (auth()->user()->can('Service Request: fulfillments finance')) {
           if ($fulfillment->rrhh_approver_id == NULL) {
             session()->flash('danger', 'No es posible aprobar, puesto que falta aprobación de RRHH');
             return redirect()->back();
@@ -652,14 +652,14 @@ class FulfillmentController extends Controller
           if ($fulfillment->rrhh_approver_id != NULL && $fulfillment->finances_approver_id == NULL) {
             $fulfillment->finances_approbation = 1;
             $fulfillment->finances_approbation_date = Carbon::now();
-            $fulfillment->finances_approver_id = Auth::user()->id;
+            $fulfillment->finances_approver_id = auth()->id();
             $fulfillment->save();
 
             //items
             foreach ($fulfillment->FulfillmentItems as $key => $FulfillmentItem) {
               $FulfillmentItem->finances_approbation = 1;
               $FulfillmentItem->finances_approbation_date = Carbon::now();
-              $FulfillmentItem->finances_approver_id = Auth::user()->id;
+              $FulfillmentItem->finances_approver_id = auth()->id();
               $FulfillmentItem->save();
             }
           }
@@ -672,24 +672,24 @@ class FulfillmentController extends Controller
 
     public function refuseFulfillment(Fulfillment $fulfillment)
     {
-        if (Auth::user()->can('Service Request: fulfillments responsable')) {
+        if (auth()->user()->can('Service Request: fulfillments responsable')) {
           if ($fulfillment->responsable_approver_id == NULL) {
             $fulfillment->responsable_approbation = 0;
             $fulfillment->responsable_approbation_date = Carbon::now();
-            $fulfillment->responsable_approver_id = Auth::user()->id;
+            $fulfillment->responsable_approver_id = auth()->id();
             $fulfillment->save();
 
             //items
             foreach ($fulfillment->FulfillmentItems as $key => $FulfillmentItem) {
               $FulfillmentItem->responsable_approbation = 0;
               $FulfillmentItem->responsable_approbation_date = Carbon::now();
-              $FulfillmentItem->responsable_approver_id = Auth::user()->id;
+              $FulfillmentItem->responsable_approver_id = auth()->id();
               $FulfillmentItem->save();
             }
           }
         }
 
-        if (Auth::user()->can('Service Request: fulfillments rrhh')) {
+        if (auth()->user()->can('Service Request: fulfillments rrhh')) {
           if ($fulfillment->responsable_approver_id == NULL) {
             session()->flash('danger', 'No es posible rechazar, puesto que falta aprobación de Responsable.');
             return redirect()->back();
@@ -697,20 +697,20 @@ class FulfillmentController extends Controller
           if ($fulfillment->responsable_approver_id != NULL && $fulfillment->rrhh_approver_id == NULL) {
             $fulfillment->rrhh_approbation = 0;
             $fulfillment->rrhh_approbation_date = Carbon::now();
-            $fulfillment->rrhh_approver_id = Auth::user()->id;
+            $fulfillment->rrhh_approver_id = auth()->id();
             $fulfillment->save();
 
             //items
             foreach ($fulfillment->FulfillmentItems as $key => $FulfillmentItem) {
               $FulfillmentItem->rrhh_approbation = 0;
               $FulfillmentItem->rrhh_approbation_date = Carbon::now();
-              $FulfillmentItem->rrhh_approver_id = Auth::user()->id;
+              $FulfillmentItem->rrhh_approver_id = auth()->id();
               $FulfillmentItem->save();
             }
           }
         }
 
-        if (Auth::user()->can('Service Request: fulfillments finance')) {
+        if (auth()->user()->can('Service Request: fulfillments finance')) {
           if ($fulfillment->rrhh_approver_id == NULL) {
             session()->flash('danger', 'No es posible rechazar, puesto que falta aprobación de RRHH');
             return redirect()->back();
@@ -718,14 +718,14 @@ class FulfillmentController extends Controller
           if ($fulfillment->rrhh_approver_id != NULL && $fulfillment->finances_approver_id == NULL) {
             $fulfillment->finances_approbation = 0;
             $fulfillment->finances_approbation_date = Carbon::now();
-            $fulfillment->finances_approver_id = Auth::user()->id;
+            $fulfillment->finances_approver_id = auth()->id();
             $fulfillment->save();
 
             //items
             foreach ($fulfillment->FulfillmentItems as $key => $FulfillmentItem) {
               $FulfillmentItem->finances_approbation = 0;
               $FulfillmentItem->finances_approbation_date = Carbon::now();
-              $FulfillmentItem->finances_approver_id = Auth::user()->id;
+              $FulfillmentItem->finances_approver_id = auth()->id();
               $FulfillmentItem->save();
             }
           }
@@ -739,18 +739,18 @@ class FulfillmentController extends Controller
     public function confirmFulfillmentBySignPosition(Fulfillment $fulfillment, $tipo = NULL)
     {
         // // dd($fulfillment);
-        // if (Auth::user()->can('Service Request: fulfillments responsable')) {
+        // if (auth()->user()->can('Service Request: fulfillments responsable')) {
         //   if ($fulfillment->responsable_approver_id == NULL) {
         //     $fulfillment->responsable_approbation = 1;
         //     $fulfillment->responsable_approbation_date = Carbon::now();
-        //     $fulfillment->responsable_approver_id = Auth::user()->id;
+        //     $fulfillment->responsable_approver_id = auth()->id();
         //     $fulfillment->save();
         //
         //     //items
         //     foreach ($fulfillment->FulfillmentItems as $key => $FulfillmentItem) {
         //       $FulfillmentItem->responsable_approbation = 1;
         //       $FulfillmentItem->responsable_approbation_date = Carbon::now();
-        //       $FulfillmentItem->responsable_approver_id = Auth::user()->id;
+        //       $FulfillmentItem->responsable_approver_id = auth()->id();
         //       $FulfillmentItem->save();
         //     }
         //   }
@@ -765,14 +765,14 @@ class FulfillmentController extends Controller
           if ($fulfillment->responsable_approver_id != NULL && $fulfillment->rrhh_approver_id == NULL) {
             $fulfillment->rrhh_approbation = $fulfillment->ServiceRequest->SignatureFlows->where('sign_position',$tipo)->first()->status;
             $fulfillment->rrhh_approbation_date = Carbon::now();
-            $fulfillment->rrhh_approver_id = Auth::user()->id;
+            $fulfillment->rrhh_approver_id = auth()->id();
             $fulfillment->save();
 
             //items
             foreach ($fulfillment->FulfillmentItems as $key => $FulfillmentItem) {
               $FulfillmentItem->rrhh_approbation = $fulfillment->ServiceRequest->SignatureFlows->where('sign_position',$tipo)->first()->status;
               $FulfillmentItem->rrhh_approbation_date = Carbon::now();
-              $FulfillmentItem->rrhh_approver_id = Auth::user()->id;
+              $FulfillmentItem->rrhh_approver_id = auth()->id();
               $FulfillmentItem->save();
             }
           }
@@ -787,14 +787,14 @@ class FulfillmentController extends Controller
           if ($fulfillment->rrhh_approver_id != NULL && $fulfillment->finances_approver_id == NULL) {
             $fulfillment->finances_approbation = $fulfillment->ServiceRequest->SignatureFlows->where('sign_position',$tipo)->first()->status;
             $fulfillment->finances_approbation_date = Carbon::now();
-            $fulfillment->finances_approver_id = Auth::user()->id;
+            $fulfillment->finances_approver_id = auth()->id();
             $fulfillment->save();
 
             //items
             foreach ($fulfillment->FulfillmentItems as $key => $FulfillmentItem) {
               $FulfillmentItem->finances_approbation = $fulfillment->ServiceRequest->SignatureFlows->where('sign_position',$tipo)->first()->status;
               $FulfillmentItem->finances_approbation_date = Carbon::now();
-              $FulfillmentItem->finances_approver_id = Auth::user()->id;
+              $FulfillmentItem->finances_approver_id = auth()->id();
               $FulfillmentItem->save();
             }
           }

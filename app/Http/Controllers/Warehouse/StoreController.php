@@ -106,7 +106,7 @@ class StoreController extends Controller
      */
     public function activateStore(Store $store)
     {
-        $storeActive = Auth::user()->active_store;
+        $storeActive = auth()->user()->active_store;
 
         if ($storeActive) {
             $storeActive->pivot->status = 0;

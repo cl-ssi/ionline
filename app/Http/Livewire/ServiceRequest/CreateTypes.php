@@ -25,14 +25,14 @@ class CreateTypes extends Component
   public function mount()
   {    
     // $this->users = User::whereHas('organizationalUnit', function ($q) {
-    //   $q->where('establishment_id', Auth::user()->organizationalUnit->establishment->id);
+    //   $q->where('establishment_id', auth()->user()->organizationalUnit->establishment->id);
     // })->get();
   }
 
   public function render()
   {
     //hospital
-    if (Auth::user()->organizationalUnit->establishment_id == 38) {
+    if (auth()->user()->organizationalUnit->establishment_id == 38) {
       if (Authority::getAuthorityFromDate(1, now(), ['manager']) == null) {
         dd("falta ingresar autoridad de " . OrganizationalUnit::find(1)->name);
       }
@@ -73,9 +73,9 @@ class CreateTypes extends Component
     if ($this->type == NULL || $this->type == "Covid") {
       if ($this->program_contract_type == "Mensual") {
         $this->a = "mensual";
-        if (Auth::user()->organizationalUnit->establishment_id == 38) {
+        if (auth()->user()->organizationalUnit->establishment_id == 38) {
           //Hector Reyno (CGU)
-          if (Auth::user()->organizationalUnit->id == 24) {
+          if (auth()->user()->organizationalUnit->id == 24) {
             $this->signatureFlows['RRHH CGU'] = 10739552; //RR.HH del CGU
             $this->signatureFlows['Directora CGU'] = Authority::getAuthorityFromDate(24, now(), ['manager'])->user->id; // 24 - Consultorio General Urbano Dr. Hector Reyno
             $this->signatureFlows['S.D.G.A SSI'] = Authority::getAuthorityFromDate(2, now(), ['manager'])->user->id; // 2 - Subdirección de Gestion Asistencial / Subdirección Médica
@@ -97,7 +97,7 @@ class CreateTypes extends Component
         }
         //hospital
         // se comenta 2 y 44, ya que se solicitó quitar autoridades del ssi de flujo de hospital
-        elseif (Auth::user()->organizationalUnit->establishment_id == 1) {
+        elseif (auth()->user()->organizationalUnit->establishment_id == 1) {
           $this->signatureFlows['Subdirector'] = Authority::getAuthorityFromDate(88, now(), ['manager'])->user->id; // 88 - Subdirección Médica - 9882506 - (iriondo)
           // $this->signatureFlows['S.D.G.A SSI'] = Authority::getAuthorityFromDate(2,now(),['manager'])->user->id; // 2 - Subdirección de Gestion Asistencial / Subdirección Médica
           $this->signatureFlows['S.G.D.P Hospital'] = Authority::getAuthorityFromDate(86, now(), ['manager'])->user->id; // 86 - Subdirección de Gestión de Desarrollo de las Personas
@@ -108,9 +108,9 @@ class CreateTypes extends Component
         }
       } elseif ($this->program_contract_type == "Horas") {
         $this->a = "horas";
-        if (Auth::user()->organizationalUnit->establishment_id == 38) {
+        if (auth()->user()->organizationalUnit->establishment_id == 38) {
           //Hector Reyno (CGU)
-          if (Auth::user()->organizationalUnit->id == 24) {
+          if (auth()->user()->organizationalUnit->id == 24) {
             $this->signatureFlows['Funcionario'] = 10739552; // 24 - Consultorio General Urbano Dr. Hector Reyno
             $this->signatureFlows['Directora CGU'] = Authority::getAuthorityFromDate(24, now(), ['manager'])->user->id; // 24 - Consultorio General Urbano Dr. Hector Reyno
             $this->signatureFlows['S.G.D.P SSI'] = Authority::getAuthorityFromDate(44, now(), ['manager'])->user->id; // 44 - Subdirección de Gestión y Desarrollo de las Personas
@@ -124,7 +124,7 @@ class CreateTypes extends Component
           }
         }
         //hospital
-        elseif (Auth::user()->organizationalUnit->establishment_id == 1) {
+        elseif (auth()->user()->organizationalUnit->establishment_id == 1) {
           $this->signatureFlows['Subdirector'] = Authority::getAuthorityFromDate(88, now(), ['manager'])->user->id; // 88 - Subdirección Médica - 9882506 - (iriondo)
           $this->signatureFlows['S.G.D.P Hospital'] = Authority::getAuthorityFromDate(86, now(), ['manager'])->user->id; // 86 - Subdirección de Gestión de Desarrollo de las Personas
           $this->signatureFlows['Jefe Finanzas'] = Authority::getAuthorityFromDate(111, now(), ['manager'])->user->id; // 11 - Departamento de Finanzas
@@ -132,7 +132,7 @@ class CreateTypes extends Component
         }
       }
     } else {
-      if (Auth::user()->organizationalUnit->establishment_id == 1) {
+      if (auth()->user()->organizationalUnit->establishment_id == 1) {
         $this->a = "suma";
         $this->signatureFlows['S.G.D.P Hospital'] = Authority::getAuthorityFromDate(86, now(), ['manager'])->user->id;
         $this->signatureFlows['Jefe Finanzas'] = Authority::getAuthorityFromDate(111, now(), ['manager'])->user->id;

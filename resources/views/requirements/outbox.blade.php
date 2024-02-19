@@ -65,7 +65,7 @@
 
             @php $flag = 0; @endphp
             @foreach($created->events as $event)
-              @if($event->status == "en copia" && $event->to_user_id == Auth::user()->id)
+              @if($event->status == "en copia" && $event->to_user_id == auth()->id())
                 @php $flag = 1; break; @endphp
               @endif
             @endforeach
@@ -74,7 +74,7 @@
             @else
               @switch($created->status)
                   @case('creado')
-                      @if($created->user_id == Auth::user()->id)
+                      @if($created->user_id == auth()->id())
                           <tr class="alert-info">
                       @else
                           <tr class="alert-light">
@@ -90,7 +90,7 @@
 				<td class="small">
                     {{$created->subject}}<br>
                     @foreach($created->labels as $label)
-                        @if(Auth::user()->id == $label->user_id)
+                        @if(auth()->id() == $label->user_id)
                             <span class='badge badge-primary' style='background-color: #{{$label->color}};'>{{$label->name}}</span>
                         @endif
                     @endforeach
@@ -104,7 +104,7 @@
                         {{$created->events->last()->to_ou->name}}
                 </td>
 				<td class="small">
-                    @if(($created->status == 'respondido') or ($created->status == 'creado' AND $created->from_user != Auth::user()))
+                    @if(($created->status == 'respondido') or ($created->status == 'creado' AND $created->from_user != auth()->user()))
                         @if($created->events->last()->from_user <> null){{$created->events->last()->from_user->getFullNameAttribute()}}@endif
                     @else
                         @if($created->events->last()->to_user <> null){{$created->events->last()->to_user->getFullNameAttribute()}}@endif
@@ -210,7 +210,7 @@
 		@foreach($archived_requirements as $archived)
           @php $flag = 0; @endphp
           @foreach($archived->events as $event)
-            @if($event->status == "en copia" && $event->to_user_id == Auth::user()->id)
+            @if($event->status == "en copia" && $event->to_user_id == auth()->id())
               @php $flag = 1; break; @endphp
             @endif
           @endforeach
@@ -219,7 +219,7 @@
           @else
             @switch($archived->status)
                 @case('creado')
-                    @if($archived->user_id == Auth::user()->id)
+                    @if($archived->user_id == auth()->id())
                         <tr class="alert-info">
                     @else
                         <tr class="alert-light">
@@ -235,7 +235,7 @@
 					<td class="small">
                         {{$archived->subject}}<br>
                         @foreach($archived->labels as $label)
-                            @if(Auth::user()->id == $label->user_id)
+                            @if(auth()->id() == $label->user_id)
                                 <span class='badge badge-primary' style='background-color: #{{$label->color}};'>{{$label->name}}</span>
                             @endif
                         @endforeach

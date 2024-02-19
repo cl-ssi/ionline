@@ -33,7 +33,7 @@ class ReportController extends Controller
     if($request->establishment_id){
         $establishment_id = $request->establishment_id;
     }else{
-        $establishment_id = Auth::user()->organizationalUnit->establishment_id;
+        $establishment_id = auth()->user()->organizationalUnit->establishment_id;
     }
     
     $type = $request->type;
@@ -628,21 +628,21 @@ class ReportController extends Controller
   public function pending(Request $request, $who)
   {
     // servicio
-    if (Auth::user()->organizationalUnit->establishment_id == 38) {
+    if (auth()->user()->organizationalUnit->establishment_id == 38) {
         $responsabilityCenters = OrganizationalUnit::where('establishment_id', 38)->orderBy('name', 'ASC')->get();
     }
     //hospital hetg
-    elseif (Auth::user()->organizationalUnit->establishment_id == 1) {
+    elseif (auth()->user()->organizationalUnit->establishment_id == 1) {
         $responsabilityCenters = OrganizationalUnit::where('establishment_id', 1)->orderBy('name', 'ASC')->get();
     }
     //hospital hospicio
     else
     {
-        $responsabilityCenters = OrganizationalUnit::where('establishment_id', Auth::user()->organizationalUnit->establishment_id)->orderBy('name', 'ASC')->get();
+        $responsabilityCenters = OrganizationalUnit::where('establishment_id', auth()->user()->organizationalUnit->establishment_id)->orderBy('name', 'ASC')->get();
     }
 
     $establishments = Establishment::all();
-    $user_id = Auth::user()->id;
+    $user_id = auth()->id();
     $query = Fulfillment::query();
     $responsability_center = $request->responsability_center;
 
@@ -824,7 +824,7 @@ class ReportController extends Controller
 
   public function contract(Request $request)
   {
-    $responsabilityCenters = OrganizationalUnit::where('establishment_id', Auth::user()->organizationalUnit->establishment_id)->orderBy('name', 'ASC')->get();
+    $responsabilityCenters = OrganizationalUnit::where('establishment_id', auth()->user()->organizationalUnit->establishment_id)->orderBy('name', 'ASC')->get();
     //dd($responsabilityCenters);
 
     $srs = array();
@@ -1813,7 +1813,7 @@ class ReportController extends Controller
   }
 
   public function mySignatures(Request $request){
-    $auth_user_id = Auth::user()->id;
+    $auth_user_id = auth()->id();
     $type = $request->type;
     $user_id = $request->user_id;
 

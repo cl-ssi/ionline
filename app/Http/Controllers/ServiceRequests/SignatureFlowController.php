@@ -62,7 +62,7 @@ class SignatureFlowController extends Controller
         return redirect()->back();
       }
 
-      if ($serviceRequest->SignatureFlows->whereNull('status')->sortBy('sign_position')->first()->responsable_id != Auth::user()->id) {
+      if ($serviceRequest->SignatureFlows->whereNull('status')->sortBy('sign_position')->first()->responsable_id != auth()->id()) {
         session()->flash('danger', "Existe otra persona que debe visar este documento antes que usted.");
         return redirect()->back();
       }
@@ -73,13 +73,13 @@ class SignatureFlowController extends Controller
       }
 
       //saber la organizationalUnit que tengo a cargo
-      $authorities = Authority::getAmIAuthorityFromOu(Carbon::today(), 'manager', Auth::user()->id);
-      $employee = Auth::user()->position;
+      $authorities = Authority::getAmIAuthorityFromOu(Carbon::today(), 'manager', auth()->id());
+      $employee = auth()->user()->position;
       if ($authorities->isNotEmpty()) {
         $employee = $authorities[0]->position; // . " - " . $authorities[0]->organizationalUnit->name;
         $ou_id = $authorities[0]->organizational_unit_id;
       } else {
-        $ou_id = Auth::user()->organizational_unit_id;
+        $ou_id = auth()->user()->organizational_unit_id;
       }
 
       //si seleccionó una opción, se agrega visto bueno.
@@ -115,7 +115,7 @@ class SignatureFlowController extends Controller
         }
         //Aceptar o rechazar
         else {
-          $SignatureFlow = SignatureFlow::where('responsable_id', Auth::user()->id)
+          $SignatureFlow = SignatureFlow::where('responsable_id', auth()->id())
             ->where('service_request_id', $request->service_request_id)
             ->whereNull('status')
             ->first();
@@ -168,7 +168,7 @@ class SignatureFlowController extends Controller
         //   $fulfillment->start_date = $serviceRequest->start_date;
         //   $fulfillment->end_date = $serviceRequest->end_date;
         //   $fulfillment->observation = "Aprobaciones en flujo de firmas";
-        //   $fulfillment->user_id = Auth::user()->id;
+        //   $fulfillment->user_id = auth()->id();
         //   $fulfillment->save();
         //
         //   session()->flash('info', 'Se ha registrado la visación de solicitud nro: <b>'.$serviceRequest->id.'</b>. Para visualizar el certificado de confirmación, hacer click <a href="'. route('rrhh.service-request.certificate-pdf', $serviceRequest) . '" target="_blank">Aquí.</a>');

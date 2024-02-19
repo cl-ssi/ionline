@@ -126,7 +126,7 @@ class PaymentController extends Controller
     {
         $dte->payment_ready = 1;
         $dte->sender_id = Auth::id();
-        $dte->sender_ou = Auth::user()->organizational_unit_id;
+        $dte->sender_ou = auth()->user()->organizational_unit_id;
         $dte->sender_at = now();
         $dte->save();
         PaymentFlow::create([

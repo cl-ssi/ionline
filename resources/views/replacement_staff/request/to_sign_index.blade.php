@@ -9,7 +9,7 @@
 <div class="row">
     <div class="col">
         <h4 class="mb-3">Gestión de Solicitudes para aprobación:<br>
-        <small>{{ Auth::user()->organizationalUnit->name }}</small></h4>
+        <small>{{ auth()->user()->organizationalUnit->name }}</small></h4>
     </div>
 </div>
 

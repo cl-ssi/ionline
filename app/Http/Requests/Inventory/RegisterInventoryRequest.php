@@ -43,7 +43,7 @@ class RegisterInventoryRequest extends FormRequest
             'depreciation'      => 'nullable|string|min:0|max:255',
             'accounting_code_id'=> 'nullable|exists:fin_accounting_codes,id',
             'observations'      => 'nullable|max:255',
-            'user_using_id'     => (Auth::user()->can('Inventory: manager'))
+            'user_using_id'     => (auth()->user()->can('Inventory: manager'))
                                     ? 'nullable|exists:users,id'
                                     : 'required|exists:users,id',
             'user_responsible_id'   => 'required|exists:users,id',

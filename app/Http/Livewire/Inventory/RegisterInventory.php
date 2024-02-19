@@ -64,7 +64,7 @@ class RegisterInventory extends Component
         $this->collapse = false;
         $this->status = 1;
         $this->po_code = null;
-        if (Auth::user()->can('Inventory: manager'))
+        if (auth()->user()->can('Inventory: manager'))
         {
             $this->type = 4;
             $this->user_using_id = null;

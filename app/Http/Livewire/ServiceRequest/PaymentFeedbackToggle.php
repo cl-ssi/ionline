@@ -22,7 +22,7 @@ class PaymentFeedbackToggle extends Component
 
   public function save()
   {
-      $rejection_detail = $this->fulfillment->payment_rejection_detail . "<br><br>" . "(". Carbon::now() . " - " . Auth::user()->initials .")" . ":" . $this->rejection_detail_input;
+      $rejection_detail = $this->fulfillment->payment_rejection_detail . "<br><br>" . "(". Carbon::now() . " - " . auth()->user()->initials .")" . ":" . $this->rejection_detail_input;
 
       $this->fulfillment->update(['payment_ready' => $this->payment_ready == 'null' ? null : $this->payment_ready]);
       $this->fulfillment->update(['payment_rejection_detail' => $rejection_detail]);

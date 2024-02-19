@@ -54,22 +54,22 @@ class TechnicalEvaluationController extends Controller
             $previous_assign->save();
 
             $assign_evaluation = new AssignEvaluation($request->All());
-            $assign_evaluation->user()->associate(Auth::user());
+            $assign_evaluation->user()->associate(auth()->user());
             $assign_evaluation->requestReplacementStaff()->associate($requestReplacementStaff);
             $assign_evaluation->status = 'assigned';
             $assign_evaluation->save();
         }
         else{
             $assign_evaluation = new AssignEvaluation($request->All());
-            $assign_evaluation->user()->associate(Auth::user());
+            $assign_evaluation->user()->associate(auth()->user());
             $assign_evaluation->requestReplacementStaff()->associate($requestReplacementStaff);
             $assign_evaluation->status = 'assigned';
             $assign_evaluation->save();
 
             $technicalEvaluation = new TechnicalEvaluation();
             $technicalEvaluation->technical_evaluation_status = 'pending';
-            $technicalEvaluation->user()->associate(Auth::user());
-            $technicalEvaluation->organizational_unit_id = Auth::user()->organizationalUnit->id;
+            $technicalEvaluation->user()->associate(auth()->user());
+            $technicalEvaluation->organizational_unit_id = auth()->user()->organizationalUnit->id;
             $technicalEvaluation->request_replacement_staff_id = $requestReplacementStaff->id;
             $technicalEvaluation->save();
         }

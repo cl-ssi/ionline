@@ -12,11 +12,11 @@
                     <i class="fas fa-arrow-left small"></i> 
                     <span class="small">Volver</span> 
     </a>
-{{--@if(Auth::user()->can('ProgrammingItem: edit') && $programmingItem->programming->status == 'active')
+{{--@if(auth()->user()->can('ProgrammingItem: edit') && $programmingItem->programming->status == 'active')
 <a target="_blank" href="{{ route('programmingitems.show', $programmingItem->id) }}" class="btn btb-flat btn-sm btn-light"><i class="fas fa-edit"></i> Editar</a>
 @endif--}}
 
-@if(Auth::user()->can('ProgrammingItem: delete') && $programmingItem->programming->status == 'active')
+@if(auth()->user()->can('ProgrammingItem: delete') && $programmingItem->programming->status == 'active')
     <form method="POST" action="{{ route('programmingitems.destroy', $programmingItem->id) }}" class="small d-inline">
         {{ method_field('DELETE') }} {{ csrf_field() }}
         <button class="btn btn-sm btn-outline-danger float-right " onclick="return confirm('¿Desea eliminar el registro realmente?')">
@@ -209,7 +209,7 @@
                         <th class="text-center align-middle table-dark">COMENTARIO / ACUERDO</th>
                         @can('Reviews: edit')<th class="text-center align-middle table-dark" >EDITAR</th>@endcan
                         @can('Reviews: edit')<th class="text-center align-middle table-dark" >¿CONFIRMAR?</th>@endcan
-                        @if(Auth::user()->can('Reviews: rectify') && $programmingItem->programming->status == 'active')
+                        @if(auth()->user()->can('Reviews: rectify') && $programmingItem->programming->status == 'active')
                         <th class="text-center align-middle table-dark" >RECTIFICAR</th>
                         @endif
                         @can('Reviews: delete')<th class="text-center align-middle table-dark" >ELIMINAR</th>@endcan
@@ -272,7 +272,7 @@
                         </td>
                         @endcan
                         <!-- EVALUAR PARA  -->
-                        @if(Auth::user()->can('Reviews: rectify') && $programmingItem->programming->status == 'active')
+                        @if(auth()->user()->can('Reviews: rectify') && $programmingItem->programming->status == 'active')
                        
                         <td class="text-center align-middle" >
                         <!-- <button class="btn btb-flat  btn-light" data-toggle="modal"

@@ -44,7 +44,7 @@ class DestructionController extends Controller
     public function store(Request $request)
     {
         $destruction = new Destruction($request->All());
-        $destruction->user()->associate(Auth::user());
+        $destruction->user()->associate(auth()->user());
         $destruction->manager_id  = Parameter::get('drugs','Jefe');
         $destruction->lawyer_id   = Parameter::get('drugs','Mandatado');
         $destruction->observer_id = empty(Parameter::get('drugs','MinistroDeFe')) ? null : Parameter::get('drugs','MinistroDeFe');

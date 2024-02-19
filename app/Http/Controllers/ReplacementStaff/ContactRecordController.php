@@ -43,7 +43,7 @@ class ContactRecordController extends Controller
     {
         $contactRecord = new ContactRecord($request->All());
         $contactRecord->replacementStaff()->associate($staff);
-        $contactRecord->user()->associate(Auth::user());
+        $contactRecord->user()->associate(auth()->user());
         $contactRecord->save();
 
         session()->flash('success', 'El Registro de Contacto se ha guardado correctamente.');

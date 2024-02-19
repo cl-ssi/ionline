@@ -206,7 +206,7 @@
                                 </a>
                                 
                                 @if(($jobPositionProfile->status == 'saved' || $jobPositionProfile->status == "review") 
-                                    && 	Auth::user()->hasPermissionTo('Job Position Profile: edit'))
+                                    && 	auth()->user()->hasPermissionTo('Job Position Profile: edit'))
                                     <br/><br/>
                                     <a href="{{ route('job_position_profile.edit', $jobPositionProfile) }}"
                                         class="btn btn-outline-secondary btn-sm" title="Editar">

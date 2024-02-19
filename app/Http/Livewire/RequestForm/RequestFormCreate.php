@@ -558,7 +558,7 @@ class RequestFormCreate extends Component
 
     public function render(){
         $this->messageMechanism();
-        // $users = User::where('organizational_unit_id', Auth::user()->organizational_unit_id)->orderBy('name', 'ASC')->get();
+        // $users = User::where('organizational_unit_id', auth()->user()->organizational_unit_id)->orderBy('name', 'ASC')->get();
         $users = User::where('external', 0)
           ->orderBy('name', 'ASC')
           ->get(['id', 'name', 'fathers_family', 'mothers_family']); //get specific columns equals best perfomance bench

@@ -16,11 +16,11 @@
 </form>
 </h3>
 <!-- PERMISOS -->
-@php($canStatus = Auth::user()->can('Programming: status'))
-@php($canEdit = Auth::user()->can('Programming: edit'))
-@php($canViewPH = Auth::user()->can('ProfessionalHour: view'))
-@php($canViewPD = Auth::user()->can('ProgrammingDay: view'))
-@php($canViewItem = Auth::user()->can('ProgrammingItem: view'))
+@php($canStatus = auth()->user()->can('Programming: status'))
+@php($canEdit = auth()->user()->can('Programming: edit'))
+@php($canViewPH = auth()->user()->can('ProfessionalHour: view'))
+@php($canViewPD = auth()->user()->can('ProgrammingDay: view'))
+@php($canViewItem = auth()->user()->can('ProgrammingItem: view'))
 <!-- Permiso para crear nueva programación númerica -->
 @can('Programming: create')
 <a href="{{ route('programmings.create') }}" class="btn btn-info mb-4">Comenzar Nueva Programación</a>

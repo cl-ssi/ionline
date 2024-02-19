@@ -45,14 +45,14 @@ class FulfillmentItemController extends Controller
     public function store(Request $request)
     {
       //validation
-      if (Auth::user()->can('Service Request: fulfillments rrhh')) {
+      if (auth()->user()->can('Service Request: fulfillments rrhh')) {
         if (Fulfillment::where('id',$request->fulfillment_id)->first()->responsable_approver_id == NULL) {
           session()->flash('danger', 'No es posible registrar, puesto que falta aprobación de Responsable.');
           return redirect()->back();
         }
       }
 
-      if (Auth::user()->can('Service Request: fulfillments finance')) {
+      if (auth()->user()->can('Service Request: fulfillments finance')) {
         if (Fulfillment::where('id',$request->fulfillment_id)->first()->rrhh_approver_id == NULL) {
           session()->flash('danger', 'No es posible registrar, puesto que falta aprobación de RRHH.');
           return redirect()->back();
@@ -83,21 +83,21 @@ class FulfillmentItemController extends Controller
       }
 
 
-      if (Auth::user()->can('Service Request: fulfillments responsable')) {
+      if (auth()->user()->can('Service Request: fulfillments responsable')) {
         $fulfillmentItem->responsable_approbation = 1;
         $fulfillmentItem->responsable_approbation_date = Carbon::now();
-        $fulfillmentItem->responsable_approver_id = Auth::user()->id;
-      }elseif(Auth::user()->can('Service Request: fulfillments rrhh')){
+        $fulfillmentItem->responsable_approver_id = auth()->id();
+      }elseif(auth()->user()->can('Service Request: fulfillments rrhh')){
         $fulfillmentItem->rrhh_approbation = 1;
         $fulfillmentItem->rrhh_approbation_date = Carbon::now();
-        $fulfillmentItem->rrhh_approver_id = Auth::user()->id;
+        $fulfillmentItem->rrhh_approver_id = auth()->id();
       }
-      elseif(Auth::user()->can('Service Request: fulfillments finance')){
+      elseif(auth()->user()->can('Service Request: fulfillments finance')){
         $fulfillmentItem->finances_approbation = 1;
         $fulfillmentItem->finances_approbation_date = Carbon::now();
-        $fulfillmentItem->finances_approver_id = Auth::user()->id;
+        $fulfillmentItem->finances_approver_id = auth()->id();
       }
-      $fulfillmentItem->user_id = Auth::user()->id;
+      $fulfillmentItem->user_id = auth()->id();
       $fulfillmentItem->save();
 
       session()->flash('success', 'Se ha registrado la inasistencia del período.');

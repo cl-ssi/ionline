@@ -1600,7 +1600,7 @@ class ShiftManagementController extends Controller
             $bTurno = new ShiftUser;
             $bTurno->date_from = $from;
             $bTurno->date_up = $to;
-            $bTurno->asigned_by = Auth::user()->id;
+            $bTurno->asigned_by = auth()->id();
             $bTurno->user_id = $fSolicitud->user_id;
             $bTurno->shift_types_id = $fSolicitud->ShiftUserDay->ShiftUser->shift_types_id;
             $bTurno->organizational_units_id = $fSolicitud->ShiftUserDay->ShiftUser->organizational_units_id;

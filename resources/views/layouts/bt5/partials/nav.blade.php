@@ -215,9 +215,9 @@
                             'Store: maintainers', 'Store: add invoice', 'Store: create dispatch',
                             'Store: create reception by donation', 'Store: create reception by purcharse order'
                         ])
-                            @forelse(Auth::user()->stores as $store)
+                            @forelse(auth()->user()->stores as $store)
                                 <a class="dropdown-item" href="{{ route('warehouse.store.active', $store->id) }}">
-                                    @if($store->id == optional(Auth::user()->active_store)->id)
+                                    @if($store->id == optional(auth()->user()->active_store)->id)
                                     <i class="fas fa-fw fa-box-open"></i>
                                     @else
                                     <i class="fas fa-fw fa-circle"></i>
@@ -289,10 +289,10 @@
                                 </a>
                             @endcanany
 
-                            @if(Auth::user()->pharmacies->count() > 0)
+                            @if(auth()->user()->pharmacies->count() > 0)
                                 <a class="dropdown-item {{ active('pharmacies.index') }}" href="{{ route('pharmacies.index') }}">
                                     <i class="fas fa-fw fa-prescription-bottle-alt"></i>
-                                    {{ Auth::user()->pharmacies->first()->name}}
+                                    {{ auth()->user()->pharmacies->first()->name}}
                                 </a>
                             @else
                                 <a class="dropdown-item">
@@ -454,53 +454,53 @@
                         </a>
                         @endcan
 
-                        @if(Auth::user()->manager->count() > 0 ||
-                            Auth::user()->can('Replacement Staff: assign request') ||
-                            Auth::user()->can('Replacement Staff: create request') ||
-                            Auth::user()->can('Replacement Staff: create staff') ||
-                            Auth::user()->can('Replacement Staff: list rrhh') ||
-                            Auth::user()->can('Replacement Staff: manage') ||
-                            Auth::user()->can('Replacement Staff: personal sign') ||
-                            Auth::user()->can('Replacement Staff: staff manage') ||
-                            Auth::user()->can('Replacement Staff: technical evaluation') ||
-                            Auth::user()->can('Replacement Staff: view requests') ||
-                            Auth::user()->can('Job Position Profile: all') ||
-                            Auth::user()->can('Job Position Profile: audit') ||
-                            Auth::user()->can('Job Position Profile: create') ||
-                            Auth::user()->can('Job Position Profile: edit') ||
-                            Auth::user()->can('Job Position Profile: review')
+                        @if(auth()->user()->manager->count() > 0 ||
+                            auth()->user()->can('Replacement Staff: assign request') ||
+                            auth()->user()->can('Replacement Staff: create request') ||
+                            auth()->user()->can('Replacement Staff: create staff') ||
+                            auth()->user()->can('Replacement Staff: list rrhh') ||
+                            auth()->user()->can('Replacement Staff: manage') ||
+                            auth()->user()->can('Replacement Staff: personal sign') ||
+                            auth()->user()->can('Replacement Staff: staff manage') ||
+                            auth()->user()->can('Replacement Staff: technical evaluation') ||
+                            auth()->user()->can('Replacement Staff: view requests') ||
+                            auth()->user()->can('Job Position Profile: all') ||
+                            auth()->user()->can('Job Position Profile: audit') ||
+                            auth()->user()->can('Job Position Profile: create') ||
+                            auth()->user()->can('Job Position Profile: edit') ||
+                            auth()->user()->can('Job Position Profile: review')
                         )
                         <div class="dropdown-divider"></div>
                         <h6 class="dropdown-header">Depto. Desarrollo y Gestión del Talento</h6>
-                        @if(Auth::user()->manager->count() > 0 ||
-                            Auth::user()->can('Replacement Staff: assign request') ||
-                            Auth::user()->can('Replacement Staff: create request') ||
-                            Auth::user()->can('Replacement Staff: create staff') ||
-                            Auth::user()->can('Replacement Staff: list rrhh') ||
-                            Auth::user()->can('Replacement Staff: manage') ||
-                            Auth::user()->can('Replacement Staff: personal sign') ||
-                            Auth::user()->can('Replacement Staff: staff manage') ||
-                            Auth::user()->can('Replacement Staff: technical evaluation') ||
-                            Auth::user()->can('Replacement Staff: view requests')
+                        @if(auth()->user()->manager->count() > 0 ||
+                            auth()->user()->can('Replacement Staff: assign request') ||
+                            auth()->user()->can('Replacement Staff: create request') ||
+                            auth()->user()->can('Replacement Staff: create staff') ||
+                            auth()->user()->can('Replacement Staff: list rrhh') ||
+                            auth()->user()->can('Replacement Staff: manage') ||
+                            auth()->user()->can('Replacement Staff: personal sign') ||
+                            auth()->user()->can('Replacement Staff: staff manage') ||
+                            auth()->user()->can('Replacement Staff: technical evaluation') ||
+                            auth()->user()->can('Replacement Staff: view requests')
                         )
                         <a class="dropdown-item {{ active('replacement_staff.request.own_index') }}" href="{{ route('replacement_staff.request.own_index') }}">
                             <i class="far fa-id-card fa-fw"></i> Solicitudes de Contratación
                         </a>
                         @endif
 
-                        @if(Auth::user()->manager->count() > 0 ||
-                            Auth::user()->can('Job Position Profile: all') ||
-                            Auth::user()->can('Job Position Profile: audit') ||
-                            Auth::user()->can('Job Position Profile: create') ||
-                            Auth::user()->can('Job Position Profile: edit') ||
-                            Auth::user()->can('Job Position Profile: review')
+                        @if(auth()->user()->manager->count() > 0 ||
+                            auth()->user()->can('Job Position Profile: all') ||
+                            auth()->user()->can('Job Position Profile: audit') ||
+                            auth()->user()->can('Job Position Profile: create') ||
+                            auth()->user()->can('Job Position Profile: edit') ||
+                            auth()->user()->can('Job Position Profile: review')
                         )
                         <a class="dropdown-item {{ active('job_position_profile.index') }}" href="{{ route('job_position_profile.index') }}">
                             <i class="fas fa-id-badge fa-fw"></i> Perfil de Cargos
                         </a>
                         @endif
 
-                        {{-- @if(Auth::user()->manager->count() > 0) --}}
+                        {{-- @if(auth()->user()->manager->count() > 0) --}}
                         <a class="dropdown-item {{ active('identify_need.own_index') }}" href="{{ route('identify_need.own_index') }}">
                             <i class="fas fa-chalkboard-teacher fa-fw"></i> Detección de Necesidades
                         </a>
@@ -741,9 +741,9 @@
                 <li class="nav-item dropdown">
                     <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" v-pre>
                         @if(auth()->user()->gravatar)
-                        <img src="{{ auth()->user()->gravatarUrl }}?s=30&d=mp&r=g" class="rounded-circle" alt="{{ Auth::user()->firstName }}">
+                        <img src="{{ auth()->user()->gravatarUrl }}?s=30&d=mp&r=g" class="rounded-circle" alt="{{ auth()->user()->firstName }}">
                         @else
-                        {{ Auth::user()->firstName }}
+                        {{ auth()->user()->firstName }}
                         @endif
                         <span class="caret"></span>
                         @if(auth()->user()->absent)

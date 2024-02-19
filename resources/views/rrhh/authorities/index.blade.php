@@ -70,7 +70,7 @@
                 <h4>{{ $ou->name }}</h4>
             </div>
             <div class="col-1">
-                @if($ouTopLevel->establishment_id == Auth::user()->organizationalUnit->establishment->id)
+                @if($ouTopLevel->establishment_id == auth()->user()->organizationalUnit->establishment->id)
                 <a href="{{ route('rrhh.authorities.create') }}?establishment_id={{$ouTopLevel->establishment_id}}&ou_id={{$ou->id}}" class="btn btn-primary">
                     Crear
                 </a>

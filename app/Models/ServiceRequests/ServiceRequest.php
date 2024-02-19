@@ -134,7 +134,7 @@ class ServiceRequest extends Model implements Auditable
     public static function getPendingRequests()
     {
         $count = 0;
-        $user_id = Auth::user()->id;
+        $user_id = auth()->id();
         $serviceRequests = ServiceRequest::whereHas("SignatureFlows", function($subQuery) use($user_id){
                                         $subQuery->whereNull('status')
                                                 ->where( function($query) use($user_id){

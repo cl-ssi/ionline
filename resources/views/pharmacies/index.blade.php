@@ -6,8 +6,8 @@
 
 @include('pharmacies.nav')
 
-<h3 class="mb-3">Bienvenido al módulo de {{Auth::user()->pharmacies->first()->name}}</h3>
-<h4>Bodega selecionada: {{Auth::user()->pharmacies->first()->name}}</h4>
+<h3 class="mb-3">Bienvenido al módulo de {{auth()->user()->pharmacies->first()->name}}</h3>
+<h4>Bodega selecionada: {{auth()->user()->pharmacies->first()->name}}</h4>
 -
 
 @endsection

@@ -19,7 +19,7 @@
 	</form>
 	@endcan
 </h3>
-@if(!Auth::user()->hasAnyPermission(['Pharmacy: transfer view ortesis', 'Pharmacy: transfer view IQQ', 'Pharmacy: transfer view AHO']))
+@if(!auth()->user()->hasAnyPermission(['Pharmacy: transfer view ortesis', 'Pharmacy: transfer view IQQ', 'Pharmacy: transfer view AHO']))
 <div class="mb-3">
 	<a class="btn btn-primary"
 		href="{{ route('pharmacies.products.deliver.create') }}">
@@ -88,7 +88,7 @@
 				<th scope="col" align="left">Folio</th>
 				<th scope="col" align="left">Observaciones</th>
 				@canany(['Pharmacy: transfer view ortesis']) <th nowrap scope="col" width="100" align="left">N° interno</th> @endcan
-				@if(!Auth::user()->hasAnyPermission(['Pharmacy: transfer view IQQ', 'Pharmacy: transfer view AHO']))<th scope="col" align="left">Acciones</th>@endif
+				@if(!auth()->user()->hasAnyPermission(['Pharmacy: transfer view IQQ', 'Pharmacy: transfer view AHO']))<th scope="col" align="left">Acciones</th>@endif
 			</tr>
 		</thead>
 		<tbody>
@@ -106,7 +106,7 @@
 				<td>{{$delivery->doctor_name}}</td>
 				<td>{{$delivery->invoice}}</td>
 				<td>{{$delivery->remarks}}</td>
-				@if(!Auth::user()->hasAnyPermission(['Pharmacy: transfer view ortesis','Pharmacy: transfer view IQQ', 'Pharmacy: transfer view AHO']))
+				@if(!auth()->user()->hasAnyPermission(['Pharmacy: transfer view ortesis','Pharmacy: transfer view IQQ', 'Pharmacy: transfer view AHO']))
 				<td>
 					@foreach($products_by_establishment as $product)
 						@if($product->id == $delivery->product_id && $product->quantity >= $delivery->quantity)

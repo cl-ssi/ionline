@@ -25,14 +25,14 @@ class DeliverController extends Controller
         $establishments = null;
         $pending_deliveries_list = null;
         $pendings_by_product = null;
-        if(Auth::user()->hasAnyPermission(['Pharmacy: transfer view ortesis', 'Pharmacy: transfer view IQQ', 'Pharmacy: transfer view AHO'])){
+        if(auth()->user()->hasAnyPermission(['Pharmacy: transfer view ortesis', 'Pharmacy: transfer view IQQ', 'Pharmacy: transfer view AHO'])){
             $establishments = Establishment::where('pharmacy_id',session('pharmacy_id'))
                                             ->whereNotIn('id', [148, 128])
-                                            ->when(Auth::user()->can('Pharmacy: transfer view IQQ'), function($q) {
+                                            ->when(auth()->user()->can('Pharmacy: transfer view IQQ'), function($q) {
                                                 $establishmentsSearch = Parameter::where('module', 'frm')->where('parameter', 'EstablishmentsIQQ')->first()->value;
                                                 return $q->whereIn('id', explode(',', $establishmentsSearch));
                                             })
-                                            ->when(Auth::user()->can('Pharmacy: transfer view AHO'), function($q) {
+                                            ->when(auth()->user()->can('Pharmacy: transfer view AHO'), function($q) {
                                                 $establishmentsSearch = Parameter::where('module', 'frm')->where('parameter', 'EstablishmentsAHO')->first()->value;
                                                 return $q->whereIn('id', explode(',', $establishmentsSearch));
                                             })
@@ -63,12 +63,12 @@ class DeliverController extends Controller
                                             ->orderBy('name', 'ASC')->get();
         } else {
 
-            if (Auth::user()->establishments->count()==0) {
+            if (auth()->user()->establishments->count()==0) {
               session()->flash('warning', 'El usuario no tiene asignado establecimiento. Contacte a secretaría de informática.');
               return redirect()->route('pharmacies.index');
             }
 
-            $filter = Auth::user()->establishments->first();
+            $filter = auth()->user()->establishments->first();
             $filterEstablishment = function($query) use ($filter) {
                 $query->where('establishment_id', $filter->id);
             };
@@ -110,17 +110,17 @@ class DeliverController extends Controller
     public function create(Request $request)
     {
 
-        if (Auth::user()->establishments->count()==0) {
+        if (auth()->user()->establishments->count()==0) {
           session()->flash('warning', 'El usuario no tiene asignado establecimiento. Contacte a secretaría de informática.');
           return redirect()->route('pharmacies.index');
         }
 
-        if(Auth::user()->can('Pharmacy: transfer view ortesis')){
+        if(auth()->user()->can('Pharmacy: transfer view ortesis')){
             session()->flash('warning', 'Ud. no tiene permiso para registrar y hacer entrega de ayuda técnica.');
             return redirect()->route('pharmacies.products.deliver.index');
         }
 
-        $establishment_id = Auth::user()->establishments->first()->id;
+        $establishment_id = auth()->user()->establishments->first()->id;
         $filterEstablishment = function($query) use ($establishment_id) {
             $query->where('establishment_id', $establishment_id);
         };
@@ -233,7 +233,7 @@ class DeliverController extends Controller
 
     public function restore(Deliver $deliver)
     {
-        if(!Auth::user()->can('Pharmacy: transfer view ortesis')){
+        if(!auth()->user()->can('Pharmacy: transfer view ortesis')){
             session()->flash('warning', 'Ud. no tiene permiso para reestablecer ayudas técnicas al establecimiento origen.');
             return redirect()->route('pharmacies.products.deliver.index');
         }

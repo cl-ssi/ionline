@@ -6,7 +6,7 @@
 
 <?php setlocale(LC_ALL, 'es_CL.UTF-8');?>
 
-@if(Auth::user()->pharmacies->first()->id == 1 || Auth::user()->pharmacies->first()->id == 2)
+@if(auth()->user()->pharmacies->first()->id == 1 || auth()->user()->pharmacies->first()->id == 2)
     <div>
         <div style="width: 49%; display: inline-block;">
             <div class="siete" style="padding-top: 3px;">
@@ -21,7 +21,7 @@
         </div>
     </div>
 @endif
-@if(Auth::user()->pharmacies->first()->id == 3)
+@if(auth()->user()->pharmacies->first()->id == 3)
     <div>
         <div style="width: 49%; display: inline-block;">
             <div class="siete" style="padding-top: 3px;">
@@ -39,7 +39,7 @@
         </div>
     </div>
 @endif
-@if(Auth::user()->pharmacies->first()->id == 4)
+@if(auth()->user()->pharmacies->first()->id == 4)
     <div>
         <div style="width: 49%; display: inline-block;">
             <div class="siete" style="padding-top: 3px;">
@@ -95,9 +95,9 @@
         <span class="uppercase">Encargado de bodega</span>
     </div> -->
     <div class="center" style="width: 49%">
-      @if(Auth::user()->pharmacies->first()->id == 2)
-        <span class="uppercase">{{Auth::user()->name}}</span><br>
-        @if(Auth::user()->id == 18899957 || Auth::user()->id == 16074423)
+      @if(auth()->user()->pharmacies->first()->id == 2)
+        <span class="uppercase">{{auth()->user()->name}}</span><br>
+        @if(auth()->id() == 18899957 || auth()->id() == 16074423)
           <span class="uppercase">QF Botiquín</span>
         @else <!-- 12093932 -->
           <span class="uppercase">Bodeguero</span>

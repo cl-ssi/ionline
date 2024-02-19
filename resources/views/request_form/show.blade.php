@@ -615,7 +615,7 @@
 
     <br><br>
 
-    @if(Auth::user()->hasPermissionTo('Request Forms: audit'))
+    @if(auth()->user()->hasPermissionTo('Request Forms: audit'))
 
         <hr/>
 

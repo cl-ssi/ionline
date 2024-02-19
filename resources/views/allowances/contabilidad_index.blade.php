@@ -7,7 +7,7 @@
 @include('allowances.partials.nav')
 
 <h5><i class="fas fa-check-circle"></i> Gestión de viaticos:
-    @if(Auth::user()->can('Allowances: contabilidad'))
+    @if(auth()->user()->can('Allowances: contabilidad'))
         Contabilidad
     @endif
 </h5>

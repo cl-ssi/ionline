@@ -49,16 +49,16 @@ class SignatureController extends Controller
         $mySignatures = null;
         $signedSignaturesFlows = null;
         $pendingSignaturesFlows = null;
-        $users[0] = Auth::user()->id;
+        $users[0] = auth()->id();
 
-        if(Auth::user()->iAmSubrogantOf->count() > 0){
-            foreach(Auth::user()->getIAmSubrogantOfAttribute() as $surrogacy){
+        if(auth()->user()->iAmSubrogantOf->count() > 0){
+            foreach(auth()->user()->getIAmSubrogantOfAttribute() as $surrogacy){
                 array_push($users, $surrogacy->id);
             }
         }
 
         $myAuthorities = collect();
-        $ous_secretary = Authority::getAmIAuthorityFromOu(today(), 'secretary', Auth::user()->id);
+        $ous_secretary = Authority::getAmIAuthorityFromOu(today(), 'secretary', auth()->id());
         foreach ($ous_secretary as $secretary) {
             if($secretary->OrganizationalUnit) {
                 $users[] = Authority::getAuthorityFromDate($secretary->OrganizationalUnit->id, today(), 'manager')->user_id;
@@ -218,7 +218,7 @@ class SignatureController extends Controller
             $signature = new Signature($request->All());
             $signature->status = 'pending';
             $signature->user_id = Auth::id();
-            $signature->ou_id = Auth::user()->organizationalUnit->id;
+            $signature->ou_id = auth()->user()->organizationalUnit->id;
             $signature->responsable_id = Auth::id();
             $signature->reserved = $request->input('reserved') == 'on' ? 1 : null;
             $signature->save();
@@ -358,8 +358,8 @@ class SignatureController extends Controller
         //     {
         //         $cont=$cont+1;
         //         $tipo = null;
-        //         $generador = Auth::user()->full_name;
-        //         $unidad = Auth::user()->organizationalUnit->name;
+        //         $generador = auth()->user()->full_name;
+        //         $unidad = auth()->user()->organizationalUnit->name;
 
         //         switch ($request->document_type) {
         //             case 'Memorando':
@@ -653,7 +653,7 @@ class SignatureController extends Controller
             $signatureFlow->update([
                 'status' => 0,
                 'observation' => $request->observacion,
-                'real_signer_id' => (Auth::user()->id == $user_signer_id) ? null : Auth::user()->id,
+                'real_signer_id' => (auth()->id() == $user_signer_id) ? null : auth()->id(),
             ]);
             $signatureFlow->signature()->update([
                 'status'        => 'rejected',

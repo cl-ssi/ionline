@@ -271,7 +271,7 @@ class DigitalSignatureController extends Controller
                     //     'date' => $signaturesFlow->signature->request_date,
                     //     'subject' => $signaturesFlow->signature->subject,
                     //     /* Fixear: que se genere un parte dependiendo del correo de director que se haya puesto */
-                    //     'establishment_id' => Auth::user()->organizationalUnit->establishment->id,
+                    //     'establishment_id' => auth()->user()->organizationalUnit->establishment->id,
                     //     // 'establishment_id' => 38,
                     //     'origin' => $unidad . ' (Parte generado desde Solicitud de Firma N°' . $signaturesFlow->signature->id . ' por ' . $generador . ')',
                     // ]);
@@ -453,7 +453,7 @@ class DigitalSignatureController extends Controller
                 $yPading * 1 + $marginTop,
                 $text_color,
                 $font_light,
-                Str::upper(Auth::user()->initials) . ' - ' . Str::upper(Auth::user()->organizationalUnit->initials)
+                Str::upper(auth()->user()->initials) . ' - ' . Str::upper(auth()->user()->organizationalUnit->initials)
             );
         }
 
@@ -681,7 +681,7 @@ class DigitalSignatureController extends Controller
         $fontSize = 10;
 
         $actualDate = now()->format('d-m-Y H:i:s');
-        $fullName = Auth::user()->full_name;
+        $fullName = auth()->user()->full_name;
 
         if ($signatureType === 'firmante' || $visatorAsSignature === true) {
             $im = @imagecreate(400, 84) or die("Cannot Initialize new GD image stream");
@@ -764,7 +764,7 @@ class DigitalSignatureController extends Controller
                 $yPading * 1 + $marginTop,
                 $text_color,
                 $font_light,
-                Str::upper(Auth::user()->initials) . ' - ' . Str::upper(Auth::user()->organizationalUnit->initials)
+                Str::upper(auth()->user()->initials) . ' - ' . Str::upper(auth()->user()->organizationalUnit->initials)
             );
         }
 

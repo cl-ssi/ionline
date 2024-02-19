@@ -38,7 +38,7 @@
     </thead>
 
 @foreach ($files as $file)
-@if($file->users->where('id', Auth::id())->count() > 0 || Auth::user()->hasPermissionTo('RNI Database: admin'))
+@if($file->users->where('id', Auth::id())->count() > 0 || auth()->user()->hasPermissionTo('RNI Database: admin'))
 <tr>
     <td>{{ $file->establishment->commune->name ?? ''}} @if($file->establishment->commune->name != $file->establishment->name) / {{ $file->establishment->name }} @endif</td>
     <td>{{ $file->filename }}</td>

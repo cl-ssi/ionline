@@ -33,7 +33,7 @@ class OuStaffSelect extends Component
     public function render()
     {
         return view('livewire.replacement-staff.ou-staff-select', [
-            'organizationalUnits' => OrganizationalUnit::where('id', Auth::user()->organizational_unit_id)
+            'organizationalUnits' => OrganizationalUnit::where('id', auth()->user()->organizational_unit_id)
               ->get()
         ]);
     }

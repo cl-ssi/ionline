@@ -89,7 +89,7 @@ class RequestSignController extends Controller
         if($status == 'accepted'){
 
             // SE APRUEBA LA SOLICITUD
-            $requestSign->user_id = Auth::user()->id;
+            $requestSign->user_id = auth()->id();
             $requestSign->request_status = $status;
             $requestSign->date_sign = Carbon::now();
             $requestSign->save();
@@ -256,7 +256,7 @@ class RequestSignController extends Controller
             return redirect()->route('replacement_staff.request.to_sign_index');
         }
         else{
-            $requestSign->user_id = Auth::user()->id;
+            $requestSign->user_id = auth()->id();
             $requestSign->request_status = $status;
             $requestSign->observation = $request->observation;
             $requestSign->date_sign = Carbon::now();
@@ -294,7 +294,7 @@ class RequestSignController extends Controller
             foreach($request->sign_id as $sign_id){
                 $sign = RequestSign::where('id', $sign_id)->first();
                 if($sign->ou_alias == "sub_rrhh"){
-                    $sign->user_id = Auth::user()->id;
+                    $sign->user_id = auth()->id();
                     $sign->request_status = 'accepted';
                     $sign->date_sign = now();
                     $sign->save();

@@ -43,7 +43,7 @@
                 <div class="form-group col">
                     <label for="text">Nombre de la Jefatura *</label>
                     <input id="text" name="text" type="text" class="form-control"
-                        value="{{Auth::user()->full_name}}" required="required" disabled>
+                        value="{{auth()->user()->full_name}}" required="required" disabled>
                 </div>
             </div>
 

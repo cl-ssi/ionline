@@ -24,8 +24,8 @@
         </li>
     @endcan
 
-    @if(Auth::user()->hasPermissionTo('Replacement Staff: create request') ||
-        Auth::user()->hasPermissionTo('Replacement Staff: technical evaluation') ||
+    @if(auth()->user()->hasPermissionTo('Replacement Staff: create request') ||
+        auth()->user()->hasPermissionTo('Replacement Staff: technical evaluation') ||
         App\Rrhh\Authority::getAmIAuthorityFromOu(Carbon\Carbon::now(), 'manager', auth()->user()->id)->count() > 0 ||
         auth()->user()->can('Replacement Staff: personal sign'))
         <li class="nav-item dropdown">
@@ -57,7 +57,7 @@
     @endif
 
     <!-- SDGP -->
-    @if(Auth::user()->id == App\Rrhh\Authority::getTodayAuthorityManagerFromDate(App\Models\Parameters\Parameter::get('ou','SubRRHH'))->user_id)
+    @if(auth()->id() == App\Rrhh\Authority::getTodayAuthorityManagerFromDate(App\Models\Parameters\Parameter::get('ou','SubRRHH'))->user_id)
     <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
             <i class="fas fa-users"></i> SDGP
@@ -86,9 +86,9 @@
     </li>
     @endcan
 
-    @if(Auth::user()->hasPermissionTo('Replacement Staff: view requests') ||
-        Auth::user()->hasPermissionTo('Replacement Staff: personal sign') ||
-        App\Rrhh\Authority::getAuthorityFromDate(46, Carbon\Carbon::now(), 'manager')->user_id == Auth::user()->id)
+    @if(auth()->user()->hasPermissionTo('Replacement Staff: view requests') ||
+        auth()->user()->hasPermissionTo('Replacement Staff: personal sign') ||
+        App\Rrhh\Authority::getAuthorityFromDate(46, Carbon\Carbon::now(), 'manager')->user_id == auth()->id())
     <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
             <i class="fas fa-users"></i> Personal y Ciclo de Vida laboral

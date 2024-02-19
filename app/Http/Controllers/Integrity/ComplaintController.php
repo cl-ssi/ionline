@@ -123,7 +123,7 @@ class ComplaintController extends Controller
      */
     public function mail(Complaint $complaint)
     {
-        //Mail::to(Auth::user())->send(new Confirmation($complaint));
+        //Mail::to(auth()->user())->send(new Confirmation($complaint));
         return view('integrity.mails.confirmation')->withComplaint($complaint);
         //return view('integrity/mails/confirmation');
     }

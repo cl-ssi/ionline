@@ -85,7 +85,7 @@ class AllowanceSignController extends Controller
         if($status == 'accepted'){
             //CONSULTO SI PRIMERA AUTORIDAD EXISTE
             if(Authority::getAuthorityFromDate($allowanceSign->allowance->userAllowance->organizational_unit_id, now(), 'manager')){
-                $allowanceSign->user_id = Auth::user()->id;
+                $allowanceSign->user_id = auth()->id();
                 $allowanceSign->status = $status;
                 $allowanceSign->date_sign = Carbon::now();
                 $allowanceSign->save();
@@ -308,7 +308,7 @@ class AllowanceSignController extends Controller
             }
         }
         if($status == 'rejected'){
-            $allowanceSign->user_id = Auth::user()->id;
+            $allowanceSign->user_id = auth()->id();
             $allowanceSign->status = $status;
             $allowanceSign->observation = $request->observation;
             $allowanceSign->date_sign = Carbon::now();
@@ -384,14 +384,14 @@ class AllowanceSignController extends Controller
             
             //SE ACTUALIZA EVENTO DE FINANZAS
             $allowance->AllowanceSigns->where('event_type', 'chief financial officer')->first()->update([
-                'user_id'   => Auth::user()->id,
+                'user_id'   => auth()->id(),
                 'status'    => 'accepted',
                 'date_sign' => now()
             ]);
 
             $allowanceSign = $allowance->AllowanceSigns->where('event_type', 'chief financial officer')->first();
 
-            $allowanceSign->user_id = Auth::user()->id;
+            $allowanceSign->user_id = auth()->id();
             $allowanceSign->status = 'accepted';
             $allowanceSign->date_sign = now();
 

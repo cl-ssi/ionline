@@ -51,13 +51,13 @@ class EventController extends Controller
         //cuando es nulo, es porque el select viene disabled, y debe obtenerse nuevamente la info.
         if ($request->to_ou_id == null) {
             $lastEvent = Event::where('requirement_id', $request->requirement_id)
-                ->where('from_user_id', '<>', Auth::user()->id)->get()->last();
+                ->where('from_user_id', '<>', auth()->id())->get()->last();
             //si no existen respuestas de otras personas, se devuelve la ultima cualquiera.
             if ($lastEvent == null) {
                 $lastEvent = Event::where('requirement_id', $request->requirement_id)->get()->last();
             }
             $firstEvent = Event::where('requirement_id', $request->requirement_id)
-                //->where('from_user_id','<>',Auth::user()->id)->get()
+                //->where('from_user_id','<>',auth()->id())->get()
                 ->First();
             if ($request->status == 'respondido') {
                 $request['to_ou_id'] = $lastEvent->from_user->organizationalUnit->id;
@@ -87,8 +87,8 @@ class EventController extends Controller
 
             //guarda evento.
             $requirementEvent = new Event($request->All());
-            $requirementEvent->from_user()->associate(Auth::user());
-            $requirementEvent->from_ou_id = Auth::user()->organizationalUnit->id;
+            $requirementEvent->from_user()->associate(auth()->user());
+            $requirementEvent->from_ou_id = auth()->user()->organizationalUnit->id;
             $requirementEvent->to_authority = $isManager;
             $requirementEvent->save();
 
@@ -102,7 +102,7 @@ class EventController extends Controller
 
             //modifica estado del requerimiento
             $requirement = Requirement::find($request->requirement_id);
-            //$requirement->user_id = Auth::user()->id;
+            //$requirement->user_id = auth()->id();
             $requirement->status = $request->status;
             if(!$requirement->to_authority) $requirement->to_authority = $isManager;
             $requirement->save();
@@ -157,8 +157,8 @@ class EventController extends Controller
                     $requirementEvent->to_ou_id = $user_aux->first()->organizational_unit_id;
                     $requirementEvent->to_user_id = $user_;
                     $requirementEvent->status = "en copia";
-                    $requirementEvent->from_user()->associate(Auth::user());
-                    $requirementEvent->from_ou_id = Auth::user()->organizationalUnit->id;
+                    $requirementEvent->from_user()->associate(auth()->user());
+                    $requirementEvent->from_ou_id = auth()->user()->organizationalUnit->id;
                     $requirementEvent->to_authority = $isManager;
                     $requirementEvent->save();
                     $requirementEvent->requirement()->update(['to_authority' => $isAnyManager]);
@@ -179,8 +179,8 @@ class EventController extends Controller
                     $requirementEvent = new Event($request->All());
                     $requirementEvent->to_ou_id = $user_aux->first()->organizational_unit_id;
                     $requirementEvent->to_user_id = $user_;
-                    $requirementEvent->from_user()->associate(Auth::user());
-                    $requirementEvent->from_ou_id = Auth::user()->organizationalUnit->id;
+                    $requirementEvent->from_user()->associate(auth()->user());
+                    $requirementEvent->from_ou_id = auth()->user()->organizationalUnit->id;
                     $requirementEvent->to_authority = $isManager;
                     $requirementEvent->save();
                     $requirementEvent->requirement()->update(['to_authority' => $isAnyManager]);

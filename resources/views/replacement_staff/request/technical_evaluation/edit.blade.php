@@ -840,7 +840,7 @@
 <div class="row">
     <div class="col">
         @if($requestReplacementStaff->technicalEvaluation->reason == NULL)
-            @if(($requestReplacementStaff->assignEvaluations->last()->to_user_id == Auth::user()->id ||
+            @if(($requestReplacementStaff->assignEvaluations->last()->to_user_id == auth()->id() ||
                auth()->user()->can('Replacement Staff: admin')) && $requestReplacementStaff->technicalEvaluation->technical_evaluation_status == 'pending')
                 <!-- Button trigger modal -->
                 <button type="button" class="btn btn-danger btn-sm float-right" data-toggle="modal"
@@ -1020,8 +1020,8 @@
                       <th style="width: 18%">Calificación Evaluación Psicolaboral</th>
                       <th style="width: 18%">Calificación Evaluación Técnica y/o de Apreciación Global</th>
                       <th style="width: 22%">Observaciones</th>
-                      @if($requestReplacementStaff->assignEvaluations->last()->to_user_id == Auth::user()->id ||
-                          Auth::user()->can('Replacement Staff: admin'))
+                      @if($requestReplacementStaff->assignEvaluations->last()->to_user_id == auth()->id() ||
+                          auth()->user()->can('Replacement Staff: admin'))
                       <th style="width: 8%">Ingreso Efectivo</th>
                       <th style="width: 8%">Fin</th>
                       <th style="width: 8%">Fecha Ingreso Contrato</th>
@@ -1059,8 +1059,8 @@
                         <td>{{ $applicant->observations }}</td>
                         <td class="text-center">{{ ($applicant->start_date) ? $applicant->start_date->format('d-m-Y') : '' }}</td>
                         <td class="text-center">{{ ($applicant->end_date) ? $applicant->end_date->format('d-m-Y') : '' }}</td>
-                        @if($requestReplacementStaff->assignEvaluations->last()->to_user_id == Auth::user()->id ||
-                            Auth::user()->can('Replacement Staff: admin'))
+                        @if($requestReplacementStaff->assignEvaluations->last()->to_user_id == auth()->id() ||
+                            auth()->user()->can('Replacement Staff: admin'))
                         <td class="text-center">
                           @if($applicant->sirh_contract)
                               {{ $applicant->sirh_contract->format('d-m-Y') }}
@@ -1123,8 +1123,8 @@
       @if($requestReplacementStaff->technicalEvaluation->applicants->count() > 0 && 
         $requestReplacementStaff->technicalEvaluation->date_end == NULL)
 
-          @if($requestReplacementStaff->assignEvaluations->last()->to_user_id == Auth::user()->id ||
-            Auth::user()->can('Replacement Staff: admin'))
+          @if($requestReplacementStaff->assignEvaluations->last()->to_user_id == auth()->id() ||
+            auth()->user()->can('Replacement Staff: admin'))
               <div class="row">
                   <div class="col">
                     <!-- Button trigger modal -->
@@ -1387,8 +1387,8 @@
                 </tbody>
             </table>
         </div>
-        @if($requestReplacementStaff->assignEvaluations->last()->to_user_id == Auth::user()->id ||
-          Auth::user()->can('Replacement Staff: admin'))
+        @if($requestReplacementStaff->assignEvaluations->last()->to_user_id == auth()->id() ||
+          auth()->user()->can('Replacement Staff: admin'))
             @livewire('replacement-staff.files', [
                 'technicalEvaluation' => $requestReplacementStaff->technicalEvaluation
             ])
@@ -1485,7 +1485,7 @@
 </div>
 @endif
 
-@if(Auth::user()->can('Replacement Staff: admin'))
+@if(auth()->user()->can('Replacement Staff: admin'))
 <br/>
 
 <hr/>

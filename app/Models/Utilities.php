@@ -32,7 +32,7 @@ class Utilities extends Model
 
     public static function getPendingSignatureAuthorize()
     {
-        // $authorities = Authority::getAmIAuthorityFromOu(Carbon::today(), 'manager', Auth::user()->id);
+        // $authorities = Authority::getAmIAuthorityFromOu(Carbon::today(), 'manager', auth()->id());
         // $label = array();
         // foreach ($authorities as $key => $authority) {
         //   $label['uo_id'] = $authority->organizational_unit_id;
@@ -46,7 +46,7 @@ class Utilities extends Model
 
     public static function getPermissionSignaureAuthorize()
     {
-        $authorities = Authority::getAmIAuthorityFromOu(Carbon::today(), 'manager', Auth::user()->id);
+        $authorities = Authority::getAmIAuthorityFromOu(Carbon::today(), 'manager', auth()->id());
         $label = array();
         foreach ($authorities as $key => $authority) {
             $label['uo_id'] = $authority->organizational_unit_id;
@@ -68,7 +68,7 @@ class Utilities extends Model
 
     public static function getAmIDirector()
     {
-        $authorities = Authority::getAmIAuthorityFromOu(Carbon::today(), 'manager', Auth::user()->id);
+        $authorities = Authority::getAmIAuthorityFromOu(Carbon::today(), 'manager', auth()->id());
         foreach ($authorities as $key => $authority) {
             if($authority->organizational_unit_id == 1){
               return $authority->organizational_unit_id;

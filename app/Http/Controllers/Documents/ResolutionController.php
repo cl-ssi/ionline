@@ -24,7 +24,7 @@ class ResolutionController extends Controller
     public function index()
     {
         //saber la organizationalUnit que tengo a cargo
-        $authorities = Authority::getAmIAuthorityFromOu(Carbon::today(), 'manager', Auth::user()->id);
+        $authorities = Authority::getAmIAuthorityFromOu(Carbon::today(), 'manager', auth()->id());
 
         //si es autoridad se devuelven las resoluciones pendientes de aprobación
         $resolutionsPending = [];
@@ -34,7 +34,7 @@ class ResolutionController extends Controller
           $resolutionsPending = Resolution::whereDoesntHave("SignatureFlows", function($subQuery) use($ou_id){
                                              $subQuery->where('ou_id', $ou_id)->whereNotNull('status');
                                            })
-                                           ->where('user_id','!=',Auth::user()->id)->orderBy('id','asc')->get();
+                                           ->where('user_id','!=',auth()->id())->orderBy('id','asc')->get();
                                      // dd($resolutionsPending);
 
 
@@ -47,7 +47,7 @@ class ResolutionController extends Controller
         }
 
         $myResolutions = Resolution::whereHas("SignatureFlows", function($subQuery) {
-                                       $subQuery->where('user_id',Auth::user()->id)->whereNotNull('status');
+                                       $subQuery->where('user_id',auth()->id())->whereNotNull('status');
                                      })->orderBy('id','asc')->get();
 
         return view('documents.signatures.index', compact('resolutionsPending','myResolutions'));
@@ -78,13 +78,13 @@ class ResolutionController extends Controller
          $resolution->save();
 
          //saber la organizationalUnit que tengo a cargo
-         $authorities = Authority::getAmIAuthorityFromOu(Carbon::today(), 'manager', Auth::user()->id);
-         $employee = Auth::user()->position;
+         $authorities = Authority::getAmIAuthorityFromOu(Carbon::today(), 'manager', auth()->id());
+         $employee = auth()->user()->position;
          if ($authorities->isNotEmpty()) {
            $employee = $authorities[0]->position . " - " . $authorities[0]->organizationalUnit->name;
            $ou_id = $authorities[0]->organizational_unit_id;
          }else{
-           $ou_id = Auth::user()->organizational_unit_id;
+           $ou_id = auth()->user()->organizational_unit_id;
          }
 
          //se crea la primera firma
@@ -151,8 +151,8 @@ class ResolutionController extends Controller
          $organizationalUnits = organizationalUnit::orderBy('id','asc')->get();
 
          //saber la organizationalUnit que tengo a cargo
-         $authorities = Authority::getAmIAuthorityFromOu(Carbon::today(), 'manager', Auth::user()->id);
-         $employee = Auth::user()->position;
+         $authorities = Authority::getAmIAuthorityFromOu(Carbon::today(), 'manager', auth()->id());
+         $employee = auth()->user()->position;
          if ($authorities->isNotEmpty()) {
            $employee = $authorities[0]->position . " - " . $authorities[0]->organizationalUnit->name;
          }
@@ -171,7 +171,7 @@ class ResolutionController extends Controller
      public function update(Request $request, Resolution $resolution)
      {
          //saber la organizationalUnit que tengo a cargo
-         $authorities = Authority::getAmIAuthorityFromOu(Carbon::today(), 'manager', Auth::user()->id);
+         $authorities = Authority::getAmIAuthorityFromOu(Carbon::today(), 'manager', auth()->id());
 
          //si es autoridad se devuelven las resoluciones pendientes de aprobación
          $resolutions = [];

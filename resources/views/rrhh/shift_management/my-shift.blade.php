@@ -152,13 +152,13 @@
     			El usuario {{ ($day->derived_from && $day->derived_from != "") ?  $day->DerivatedShift->ShiftUser->user->id : "" }} te asigno el día {{$day->day}}
     			<b style="background-color: yellow;color:gray"> {{$day->working_day}} </b> .  
                 @if(  App\Models\Rrhh\ShiftUserDay::where("id","<>",$day->id)->where("day",$day->day)->whereHas("ShiftUser",  function($q){
-                        $q->where('user_id',Auth::user()->id);
+                        $q->where('user_id',auth()->id());
                     })->get() )
 
                     @php  
 
                         $dayInTheSame = App\Models\Rrhh\ShiftUserDay::where("day",$day->day)->whereHas("ShiftUser",  function($q){
-                            $q->where('user_id',Auth::user()->id);
+                            $q->where('user_id',auth()->id());
                         })->get();
                          $dayInTheSame =  $dayInTheSame[0];
                     @endphp

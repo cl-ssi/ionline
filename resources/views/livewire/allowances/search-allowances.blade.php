@@ -25,7 +25,7 @@
                     name="user_allowance_search" wire:model.debounce.500ms="selectedUserAllowance">
             </fieldset>
 
-            @if($index == 'sign' && Auth::user()->hasPermissionTo('Allowances: sirh'))
+            @if($index == 'sign' && auth()->user()->hasPermissionTo('Allowances: sirh'))
             <fieldset class="form-group col-12 col-md-2">
                 <label for="for_status_search">Estado Revisión SIRH</label>
                 <select name="status_sirh_search" class="form-control form-control-sm" wire:model.debounce.500ms="selectedStatusSirh">

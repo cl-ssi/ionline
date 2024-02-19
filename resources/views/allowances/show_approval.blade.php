@@ -265,7 +265,7 @@
                     <tr>
                         @foreach($allowance->AllowanceSigns as $allowanceSign)
                         <td class="text-center">
-                            @if($allowanceSign->status == 'pending' && Auth::user()->can('Allowances: sirh'))
+                            @if($allowanceSign->status == 'pending' && auth()->user()->can('Allowances: sirh'))
                                 <form method="POST" class="form-horizontal" action="{{ route('allowances.sign.update', [$allowanceSign, 'status' => 'accepted']) }}">
                                     @csrf
                                     @method('PUT')

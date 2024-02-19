@@ -112,7 +112,7 @@ PROGRAMA DE REHABILITACIÓN INTEGRAL </title>
             </ul>
             <div class="firma center" style="padding-top: 68px; text-transform: uppercase; padding-bottom: 8px;">
                 <div style="padding-bottom: 4px;">___________________________________</div>
-                <div style="padding-bottom: 4px;">{{Auth::user()->fullName}}</div>
+                <div style="padding-bottom: 4px;">{{auth()->user()->fullName}}</div>
                 <div style="padding-bottom: 4px;">REFERENTE TÉCNICO PROGRAMA DE REHABILITACIÓN INTEGRAL</div>
                 <div>{{ env('APP_SS') }}</div>
             </div>

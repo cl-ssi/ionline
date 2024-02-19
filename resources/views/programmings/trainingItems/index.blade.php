@@ -6,7 +6,7 @@
 
 @include('programmings/nav')
 
-@if(Auth::user()->can('TrainingItem: edit') && $programming_status == 'active')
+@if(auth()->user()->can('TrainingItem: edit') && $programming_status == 'active')
 <a href="{{ route('trainingitems.create',['commune_file_id' => Request::get('commune_file_id')]) }}" class="btn btn-info mb-4 float-right btn-sm">Agregar Item</a>
 @endif
 <h4 class="mb-3"> Capacitaciones Municipales {{$trainingItems->first()->communeFile->year ?? ''}} - {{$trainingItems->first()->communeFile->commune->name ?? ''}}</h4>
@@ -28,8 +28,8 @@
             <th class="text-center align-middle" rowspan="2">ORGANISMO EJECUTOR</th>
             <th class="text-center align-middle" rowspan="2">COORDINADOR</th>
             <th class="text-center align-middle" rowspan="2">FECHA DE EJECUCIÓN</th>
-            @if(Auth::user()->can('TrainingItem: edit') && $programming_status == 'active')<th class="text-center align-middle" rowspan="2">EDITAR</th> @endif
-            @if(Auth::user()->can('TrainingItem: delete') && $programming_status == 'active')<th class="text-center align-middle" rowspan="2">ELIMINAR</th> @endif
+            @if(auth()->user()->can('TrainingItem: edit') && $programming_status == 'active')<th class="text-center align-middle" rowspan="2">EDITAR</th> @endif
+            @if(auth()->user()->can('TrainingItem: delete') && $programming_status == 'active')<th class="text-center align-middle" rowspan="2">ELIMINAR</th> @endif
         </tr>
         <tr style="font-size:45%;">
             <th class="text-center align-middle">A (Médicos, Odont, QF,etc.)</th>
@@ -71,12 +71,12 @@
             <td class="text-center align-middle">{{ $trainingItem->coordinador }}</td>
             <td class="text-center align-middle">{{ $trainingItem->fecha_ejecucion }}</td>
 
-            @if(Auth::user()->can('TrainingItem: edit') && $programming_status == 'active')
+            @if(auth()->user()->can('TrainingItem: edit') && $programming_status == 'active')
                 <td class="text-center align-middle"><a href="{{ route('trainingitems.show', $trainingItem->id) }}" class="btn btb-sm btn-light small" >
                     <span class="fas fa-edit" aria-hidden="true"></span></a>
                 </td>
             @endif
-            @if(Auth::user()->can('TrainingItem: delete') && $programming_status == 'active')
+            @if(auth()->user()->can('TrainingItem: delete') && $programming_status == 'active')
             <td class="text-center align-middle">
                 <form method="POST" action="{{ route('trainingitems.destroy', $trainingItem->id) }}" class="small d-inline">
                     {{ method_field('DELETE') }} {{ csrf_field() }}

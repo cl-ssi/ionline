@@ -179,10 +179,10 @@ class Requirement extends Model implements Auditable
 
     public static function getPendingRequirements()
     {
-        $users[0] = Auth::user()->id;
+        $users[0] = auth()->id();
         $ous_secretary = [];
         //   14/06/2022: Esteban Rojas - Quitar requerimientos como secretaria (Se creó una nueva bandeja para ello)
-        //   $ous_secretary = Authority::getAmIAuthorityFromOu(today(),'secretary', Auth::user()->id);
+        //   $ous_secretary = Authority::getAmIAuthorityFromOu(today(),'secretary', auth()->id());
         //   foreach($ous_secretary as $secretary){
         //     if (Authority::getAuthorityFromDate($secretary->OrganizationalUnit->id, today(), 'manager')) {
         //       $users[] = Authority::getAuthorityFromDate($secretary->OrganizationalUnit->id, today(), 'manager')->user_id;

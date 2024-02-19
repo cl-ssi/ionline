@@ -22,7 +22,7 @@ class RecordToCourtController extends Controller
         $recordToCourt = RecordToCourt::firstOrNew(['reception_id' => $reception->id]);
         $recordToCourt->fill($request->all());
         $recordToCourt->reception_id = $reception->id;
-        $recordToCourt->user()->associate(Auth::user());
+        $recordToCourt->user()->associate(auth()->user());
         $recordToCourt->manager_id = Parameter::get('drugs','Jefe');
         $recordToCourt->lawyer_id  = Parameter::get('drugs','Mandatado');
         $recordToCourt->save();

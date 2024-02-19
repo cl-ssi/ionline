@@ -232,7 +232,7 @@
             <tr>
                 @foreach($requestReplacementStaff->RequestSign as $requestSign)
                     <td align="center">
-                        @if($requestSign->request_status == 'pending' && (in_array($requestSign->organizational_unit_id, $iam_authorities_in) || Auth::user()->hasPermissionTo('Replacement Staff: personal sign')))
+                        @if($requestSign->request_status == 'pending' && (in_array($requestSign->organizational_unit_id, $iam_authorities_in) || auth()->user()->hasPermissionTo('Replacement Staff: personal sign')))
                             Estado: {{ $requestSign->StatusValue }} <br><br>
                             <div class="row">
                                 <div class="col-md-12">

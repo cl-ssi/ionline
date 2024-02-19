@@ -40,7 +40,7 @@ class MessageController extends Controller
     {
         $message = new Message($request->All());
         $message->jobPositionProfile()->associate($jobPositionProfile);
-        $message->user()->associate(Auth::user());
+        $message->user()->associate(auth()->user());
         $message->save();
 
         return redirect()->back();

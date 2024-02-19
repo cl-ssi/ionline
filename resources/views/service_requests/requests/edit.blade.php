@@ -14,7 +14,7 @@
 
   @else
 
-    @if($serviceRequest->where('user_id', Auth::user()->id)->orwhere('responsable_id',Auth::user()->id)->count() > 0)
+    @if($serviceRequest->where('user_id', auth()->id())->orwhere('responsable_id',auth()->id())->count() > 0)
       <form method="POST" action="{{ route('rrhh.service-request.update', $serviceRequest) }}" enctype="multipart/form-data">
     @else
       <!-- si existe una firma, no se deja modificar solicitud -->
@@ -325,7 +325,7 @@
         	<select name="programm_name" class="form-control">
 				<option value=""></option>
 
-				@if(Auth::user()->organizationalUnit->establishment_id == 1)
+				@if(auth()->user()->organizationalUnit->establishment_id == 1)
                 <option value="Covid19-APS No Médicos" disabled @if($serviceRequest->programm_name == 'Covid19-APS No Médicos') selected @endif >Covid19-APS No Médicos</option>
 				<option value="Covid19-APS Médicos" disabled @if($serviceRequest->programm_name == 'Covid19-APS Médicos') selected @endif>Covid19-APS Médicos</option>
 				<option value="Covid19 No Médicos" disabled @if($serviceRequest->programm_name == 'Covid19 No Médicos') selected @endif>Covid19 No Médicos</option>
@@ -568,7 +568,7 @@
         <button type="button" class="btn btn-outline-primary btn-sm" id="alias_dias_descanzo">Días de descanso</button>
 				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_ausentarse_motivos_particulares">Ausentarse por motivos particulares</button>
 				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_capacitacion">Capacitación</button>
-        @if(Auth::user()->organizationalUnit->establishment_id == 1)
+        @if(auth()->user()->organizationalUnit->establishment_id == 1)
 				@else
 				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_fiestas_patrias">Aguinaldo fiestas patrias</button>
 				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_navidad">Aguinaldo navidad</button>
@@ -597,7 +597,7 @@
           <button type="submit" class="btn btn-primary">Guardar</button>
         @else
           <!-- solo el creador de la solicitud puede editar  -->
-          @if($serviceRequest->where('user_id', Auth::user()->id)->orwhere('responsable_id',Auth::user()->id)->count() > 0)
+          @if($serviceRequest->where('user_id', auth()->id())->orwhere('responsable_id',auth()->id())->count() > 0)
             <!-- si existe una firma, no se deja modificar solicitud -->
             @if($serviceRequest->SignatureFlows->where('type','!=','creador')->where('type','!=','Responsable')->whereNotNull('status')->count() > 0)
               <button type="submit" class="btn btn-primary" disabled>Guardar</button>
@@ -617,7 +617,7 @@
 
   @else
     <!-- solo el creador de la solicitud puede editar  -->
-    @if($serviceRequest->where('user_id', Auth::user()->id)->orwhere('responsable_id',Auth::user()->id)->count() > 0)
+    @if($serviceRequest->where('user_id', auth()->id())->orwhere('responsable_id',auth()->id())->count() > 0)
       <!-- si existe una firma, no se deja modificar solicitud -->
       @if($serviceRequest->SignatureFlows->where('type','!=','creador')->where('type','!=','Responsable')->whereNotNull('status')->count() > 0)
         <div class="alert alert-warning" role="alert">
@@ -1237,7 +1237,7 @@
 			$("#div_additional_benefits").show();
 
 
-  			if ({{Auth::user()->organizationalUnit->establishment_id}} == 1) {
+  			if ({{auth()->user()->organizationalUnit->establishment_id}} == 1) {
   				$("#programm_name option[value='PRAPS']").hide();
   				$("#programm_name option[value='PESPI']").hide();
   				$("#programm_name option[value='CHILE CRECE CONTIGO']").hide();

@@ -56,7 +56,7 @@ class ExperienceController extends Controller
                     $experience->contact_name = $request->input('contact_name.'.$key_file.'');
                     $experience->contact_telephone = $request->input('contact_telephone.'.$key_file.'');
                     $experience->replacement_staff()->associate($replacementStaff);
-                    //$profile->replacement_staff()->associate(Auth::user());
+                    //$profile->replacement_staff()->associate(auth()->user());
                     $experience->save();
                 }
             }

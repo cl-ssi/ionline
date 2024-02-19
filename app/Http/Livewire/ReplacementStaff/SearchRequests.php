@@ -116,8 +116,8 @@ class SearchRequests extends Component
                     'legalQualityManage', 'fundamentManage', 'fundamentDetailManage', 'technicalEvaluation',
                     'assignEvaluations'])   
                 ->latest()
-                ->where('user_id', Auth::user()->id)
-                ->orWhere('requester_id', Auth::user()->id)
+                ->where('user_id', auth()->id())
+                ->orWhere('requester_id', auth()->id())
                 ->search($this->selectedFormType,
                     $this->selectedStatus,
                     $this->selectedId,
@@ -138,9 +138,9 @@ class SearchRequests extends Component
                     'legalQualityManage', 'fundamentManage', 'fundamentDetailManage', 'technicalEvaluation',
                     'assignEvaluations'])
                 ->latest()
-                ->where('user_id', Auth::user()->id)
-                ->orWhere('requester_id', Auth::user()->id)
-                ->orWhere('organizational_unit_id', Auth::user()->organizationalUnit->id)
+                ->where('user_id', auth()->id())
+                ->orWhere('requester_id', auth()->id())
+                ->orWhere('organizational_unit_id', auth()->user()->organizationalUnit->id)
                 ->search($this->selectedFormType,
                     $this->selectedStatus,
                     $this->selectedId,
@@ -181,7 +181,7 @@ class SearchRequests extends Component
                     'legalQualityManage', 'fundamentManage', 'fundamentDetailManage', 'technicalEvaluation',
                     'assignEvaluations.userAssigned'])
                 ->WhereHas('assignEvaluations', function($j) {
-                    $j->Where('to_user_id', Auth::user()->id)
+                    $j->Where('to_user_id', auth()->id())
                     ->where('status', 'assigned');
                 })
                 ->latest()
@@ -275,7 +275,7 @@ class SearchRequests extends Component
             $request = RequestReplacementStaff::find($id);
 
             $assign_evaluation = new AssignEvaluation();
-            $assign_evaluation->user()->associate(Auth::user());
+            $assign_evaluation->user()->associate(auth()->user());
             $assign_evaluation->to_user_id = $this->userToAssign;
             $assign_evaluation->requestReplacementStaff()->associate($request);
             $assign_evaluation->status = 'assigned';
@@ -283,8 +283,8 @@ class SearchRequests extends Component
 
             $technicalEvaluation = new TechnicalEvaluation();
             $technicalEvaluation->technical_evaluation_status = 'pending';
-            $technicalEvaluation->user()->associate(Auth::user());
-            $technicalEvaluation->organizational_unit_id = Auth::user()->organizationalUnit->id;
+            $technicalEvaluation->user()->associate(auth()->user());
+            $technicalEvaluation->organizational_unit_id = auth()->user()->organizationalUnit->id;
             $technicalEvaluation->request_replacement_staff_id = $request->id;
             $technicalEvaluation->save();
         }
