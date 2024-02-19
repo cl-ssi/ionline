@@ -74,6 +74,7 @@ class Agenda extends Component
             }
             $array[$count]['start'] = $hour->start_date;
             $array[$count]['end'] = $hour->end_date;
+            $array[$count]['textColor'] = "black";
             // reservado
             if($hour->patient_id){
                 // hora reservada
