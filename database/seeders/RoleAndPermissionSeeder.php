@@ -19,7 +19,7 @@ class RoleAndPermissionSeeder extends Seeder
         app()['cache']->forget('spatie.permission.cache');
 
         Permission::create(['name' => 'be god']);
-        Permission::create(['name' => 'I play with madness']);
+        Permission::create(['name' => 'dev']);
 
         // create permissions
         Permission::create(['name' => 'Users: must change password', 'description' => 'Para obligar a cambiar su clave (sin uso)']);
@@ -309,8 +309,7 @@ class RoleAndPermissionSeeder extends Seeder
 
         // create roles and assign created permissions
         // GOD LIKE
-        $role = Role::create(['name' => 'god']);
+        $role = Role::create(['name' => 'god', 'description' => 'God Mode !']);
         $role->givePermissionTo(Permission::all());
-        $role = Role::create(['name' => 'dev']);
     }
 }

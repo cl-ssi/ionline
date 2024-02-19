@@ -23,8 +23,8 @@ class PermissionsMgr extends Component
 
     public function render()
     {
-        $permissions = Permission::orderBy('name')->get();
         $userPermissions = $this->user->permissions->pluck('name')->toArray();
+        $permissions = Permission::whereNotIn('name',['be god','dev'])->orderBy('name')->get();
 
         return view('livewire.rrhh.permissions-mgr',
             [

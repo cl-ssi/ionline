@@ -7,11 +7,11 @@
     </li>
     @endcan
 
-    @role('dev')
+    @can('dev')
     <li class="nav-item">
         <a class="nav-link {{ active('rrhh/integrity/complaints/mail') }}" href="{{ route('integrity.complaints.mail',1) }}">Formato e-mail</a>
     </li>
-    @endrole
+    @endcan
 
     <li class="nav-item">
         <a class="nav-link {{ active('rrhh/integrity/complaints/create') }}" target="_blank"

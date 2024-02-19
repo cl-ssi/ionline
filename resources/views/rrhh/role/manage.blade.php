@@ -29,15 +29,15 @@
                 </div>
                 <div class="form-check">
                     <input class="form-check-input" type="checkbox" name="permissions[]"
-                        value="I play with madness" id="I play with madness"
-                        {{ $user->can('I play with madness')? 'checked':'' }}>
-                <label class="form-check-label" for="I play with madness">I play with madness</label>
+                        value="dev" id="dev"
+                        {{ $user->can('dev')? 'checked':'' }}>
+                <label class="form-check-label" for="dev">dev</label>
                 </div>
             @endcan
 
             @php $anterior = null; @endphp
             @foreach($permissions as $permission)
-                @if($permission->name != 'be god' AND $permission->name != 'I play with madness')
+                @if($permission->name != 'be god' AND $permission->name != 'dev')
                     @if( current(explode(':', $permission->name)) != current(explode(':', $anterior)))
                         <hr>
                         @php $anterior = $permission->name; @endphp
