@@ -109,8 +109,8 @@
 
             </tbody>
         </table>
-        @if($technicalEvaluation->requestReplacementStaff->assignEvaluations->last()->to_user_id == Auth::user()->id ||
-            Auth::user()->hasRole('Replacement Staff: admin'))
+        @if( $technicalEvaluation->requestReplacementStaff->assignEvaluations->last()->to_user_id == auth()->id() ||
+            auth()->user()->can('Replacement Staff: admin') )
           <button type="submit" class="btn btn-primary float-right"><i class="fas fa-save"></i> Seleccionar</button>
         @endif
         </form>

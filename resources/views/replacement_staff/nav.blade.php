@@ -27,7 +27,7 @@
     @if(Auth::user()->hasPermissionTo('Replacement Staff: create request') ||
         Auth::user()->hasPermissionTo('Replacement Staff: technical evaluation') ||
         App\Rrhh\Authority::getAmIAuthorityFromOu(Carbon\Carbon::now(), 'manager', auth()->user()->id)->count() > 0 ||
-        Auth::user()->hasRole('Replacement Staff: personal sign'))
+        auth()->user()->can('Replacement Staff: personal sign'))
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
                 <i class="fas fa-inbox"></i> Solicitudes
@@ -45,11 +45,11 @@
                 @endif
                 
                 @if(App\Rrhh\Authority::getAmIAuthorityFromOu(Carbon\Carbon::today(), 'manager', auth()->user()->id)->count() > 0 ||
-                    Auth::user()->hasRole('Replacement Staff: personal sign'))
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="{{ route('replacement_staff.request.to_sign_index') }}">
-                    <i class="fas fa-check-circle"></i> Gestión de aprobaciones
-                </a>
+                    auth()->user()->can('Replacement Staff: personal sign'))
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="{{ route('replacement_staff.request.to_sign_index') }}">
+                        <i class="fas fa-check-circle"></i> Gestión de aprobaciones
+                    </a>
                 @endif
                 
            </div>

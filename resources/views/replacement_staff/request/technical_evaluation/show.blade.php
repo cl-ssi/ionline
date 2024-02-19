@@ -718,7 +718,7 @@
                             {{ $applicant->sirh_contract->format('d-m-Y') }}
                         @else
                             @if((Auth::user()->hasPermissionTo('Replacement Staff: view requests') ||
-                              Auth::user()->hasRole('Replacement Staff: admin') ||
+                              Auth::user()->can('Replacement Staff: admin') ||
                               App\Rrhh\Authority::getAuthorityFromDate(46, Carbon\Carbon::now(), 'manager')->user_id == Auth::user()->id) &&
                               $applicant->selected == 1 && $applicant->desist == NULL)
                                 <!-- Button trigger modal -->

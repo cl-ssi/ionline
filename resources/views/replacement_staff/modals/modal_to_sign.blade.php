@@ -244,7 +244,7 @@
                                                         @method('PUT')
                                                             
                                                         @if($requestSign->ou_alias == 'uni_per' 
-                                                            && Auth::user()->hasRole('Replacement Staff: personal sign') 
+                                                            && auth()->user()->can('Replacement Staff: personal sign') 
                                                             && ($requestReplacementStaff->legalQualityManage && $requestReplacementStaff->legalQualityManage->NameValue == 'Contrata'))
                                                             <fieldset class="form-group">
                                                                 <label for="for_gender" >Subtítulo</label>

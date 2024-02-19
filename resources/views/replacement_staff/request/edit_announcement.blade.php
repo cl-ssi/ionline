@@ -96,7 +96,7 @@
 
 <br><br>
 
-{{-- @if(Auth::user()->hasRole('Replacement Staff: admin')) --}}
+{{-- @if(auth()->user()->can('Replacement Staff: admin')) --}}
 <br/>
 
 <hr/>
