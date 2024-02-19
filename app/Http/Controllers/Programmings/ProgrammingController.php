@@ -22,14 +22,14 @@ class ProgrammingController extends Controller
         $year = $request->year ?? Carbon::now()->year + 1;
         $accessByCommune = null;
         $accessByEstablishments = null;
-        if(Auth()->user()->hasAllRoles('Programming: Review') == False && Auth()->user()->hasAllRoles('Programming: Admin') == False){
+        if(auth()->user()->hasAllRoles('Programming: Review') == False && auth()->user()->hasAllRoles('Programming: Admin') == False){
             $last_year = Programming::latest()->first()->year;
             $accessByCommune = collect();
             $accessByEstablishments = collect();
             $last_programmings = Programming::with('establishment')->where('year', $last_year)->get();
             //El usuario tiene acceso por comunas y/o establecimientos?
             foreach($last_programmings as $programming){
-                if(Str::contains($programming->access, Auth()->user()->id)){
+                if(Str::contains($programming->access, auth()->user()->id)){
                     $accessByCommune->push($programming->establishment->commune_id);
                     $accessByEstablishments->push($programming->establishment_id);
                 }

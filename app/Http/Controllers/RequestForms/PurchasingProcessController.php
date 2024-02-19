@@ -35,7 +35,7 @@ class PurchasingProcessController extends Controller
     {
         // $ouSearch = Parameter::where('module', 'ou')->whereIn('parameter', ['AbastecimientoSSI', 'AbastecimientoHAH', 'AdquisicionesHAH'])->pluck('value')->toArray();
         $ouSearch = array_unique(Parameter::get('Abastecimiento',['supply_ou_id', 'purchaser_ou_id']));
-        if (!in_array(Auth()->user()->organizational_unit_id, $ouSearch) && !auth()->user()->can('Request Forms: purchaser')) {
+        if (!in_array(auth()->user()->organizational_unit_id, $ouSearch) && !auth()->user()->can('Request Forms: purchaser')) {
             session()->flash('danger', 'Estimado Usuario/a: Usted no pertenece a la Unidad de Abastecimiento o no tiene los permisos de acceso.');
             return redirect()->route('request_forms.my_forms');
         }
@@ -47,7 +47,7 @@ class PurchasingProcessController extends Controller
     {
         // $ouSearch = Parameter::where('module', 'ou')->whereIn('parameter', ['AbastecimientoSSI', 'AbastecimientoHAH', 'AdquisicionesHAH'])->pluck('value')->toArray();
         $ouSearch = array_unique(Parameter::get('Abastecimiento',['supply_ou_id', 'purchaser_ou_id']));
-        if (!in_array(Auth()->user()->organizational_unit_id, $ouSearch) && !auth()->user()->can('Request Forms: purchaser')) {
+        if (!in_array(auth()->user()->organizational_unit_id, $ouSearch) && !auth()->user()->can('Request Forms: purchaser')) {
             session()->flash('danger', 'Estimado Usuario/a: Usted no pertenece a la Unidad de Abastecimiento o no tiene los permisos de acceso.');
             return redirect()->route('request_forms.my_forms');
         }
@@ -65,7 +65,7 @@ class PurchasingProcessController extends Controller
     {
         // $ouSearch = Parameter::where('module', 'ou')->whereIn('parameter', ['AbastecimientoSSI', 'AbastecimientoHAH', 'AdquisicionesHAH'])->pluck('value')->toArray();
         $ouSearch = array_unique(Parameter::get('Abastecimiento',['supply_ou_id', 'purchaser_ou_id']));
-        if (!in_array(Auth()->user()->organizational_unit_id, $ouSearch) && !auth()->user()->can('Request Forms: purchaser')) {
+        if (!in_array(auth()->user()->organizational_unit_id, $ouSearch) && !auth()->user()->can('Request Forms: purchaser')) {
             session()->flash('danger', 'Estimado Usuario/a: Usted no pertenece a la Unidad de Abastecimiento o no tiene los permisos de acceso.');
             return redirect()->route('request_forms.my_forms');
         }

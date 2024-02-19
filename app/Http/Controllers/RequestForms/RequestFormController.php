@@ -70,7 +70,7 @@ class RequestFormController extends Controller {
     {
         // $ouSearch = Parameter::where('module', 'ou')->whereIn('parameter', ['FinanzasSSI', 'RefrendacionHAH', 'FinanzasHAH'])->pluck('value')->toArray();
         $ouSearch = array_unique(Parameter::get('Abastecimiento',['prefinance_ou_id','finance_ou_id']));
-        if(!Auth()->user()->hasPermissionTo('Request Forms: all') && !in_array(Auth()->user()->organizational_unit_id, $ouSearch)){
+        if(!auth()->user()->hasPermissionTo('Request Forms: all') && !in_array(auth()->user()->organizational_unit_id, $ouSearch)){
             session()->flash('danger', 'Estimado Usuario/a: no tiene los permisos necesarios para ver todos los formularios.');
             return redirect()->route('request_forms.my_forms');
         }
@@ -262,7 +262,7 @@ class RequestFormController extends Controller {
         // $requestForm=null;
         // $ouSearch = Parameter::where('module', 'ou')->whereIn('parameter', ['FinanzasSSI', 'RefrendacionHAH', 'FinanzasHAH'])->pluck('value')->toArray();
         $ouSearch = array_unique(Parameter::get('Abastecimiento', ['prefinance_ou_id', 'finance_ou_id']));
-        if(!Auth()->user()->hasPermissionTo('Request Forms: all') && !in_array(Auth()->user()->organizational_unit_id, $ouSearch) && $requestForm->request_user_id != auth()->user()->id){
+        if(!auth()->user()->hasPermissionTo('Request Forms: all') && !in_array(auth()->user()->organizational_unit_id, $ouSearch) && $requestForm->request_user_id != auth()->user()->id){
             session()->flash('danger', 'Estimado Usuario/a: no tiene los permisos necesarios para editar formulario N° '.$requestForm->folio);
             return redirect()->back();
         }
@@ -833,7 +833,7 @@ class RequestFormController extends Controller {
           $reqFile->name = $file_name;
           $reqFile->file = $request->docSigned->storeAs('/ionline/request_forms/request_files', $file_name.'.'.$request->docSigned->extension(), 'gcs');
           $reqFile->request_form_id = $requestForm->id;
-          $reqFile->user_id = Auth()->user()->id;
+          $reqFile->user_id = auth()->user()->id;
           $reqFile->save();
 
           $requestForm->signatures_file_id = 11;

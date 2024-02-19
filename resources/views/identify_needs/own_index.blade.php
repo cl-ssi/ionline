@@ -7,7 +7,7 @@
 @include('identify_needs.partials.nav')
 
 <h4 class="mt-3"><i class="far fa-newspaper"></i> Mis DNC</h4>
-<p>Incluye los DNC de mi Unidad Organizacional: <b>{{ Auth()->user()->organizationalUnit->name }}</b></p>
+<p>Incluye los DNC de mi Unidad Organizacional: <b>{{ auth()->user()->organizationalUnit->name }}</b></p>
 
 @livewire('identify-needs.search-identify-need', [
     'index'    => 'own',

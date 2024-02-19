@@ -133,8 +133,8 @@ class ReplacementStaffController extends Controller
     {
         //$professionManage = ProfessionManage::orderBy('name', 'ASC')->get();
         $profileManage = ProfileManage::orderBy('name', 'ASC')->get();
-        // dd(Auth()->user());
-        if($replacementStaff->run == Auth()->user()->id){
+        // dd(auth()->user());
+        if($replacementStaff->run == auth()->user()->id){
           return view('replacement_staff.edit', compact('replacementStaff'));
         }
         else{

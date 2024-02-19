@@ -282,8 +282,8 @@ class RequestFormCreate extends Component
                 'superior_chief'        =>  $this->superiorChief,
                 'justification'         =>  $this->justify,
                 'type_form'             =>  $this->isRFItems ? 'bienes y/o servicios' : 'pasajes aéreos',
-                'request_user_id'       =>  $this->editRF ? $this->requestForm->request_user_id : Auth()->user()->id,
-                'request_user_ou_id'    =>  $this->editRF ? $this->requestForm->request_user_ou_id : Auth()->user()->organizational_unit_id,
+                'request_user_id'       =>  $this->editRF ? $this->requestForm->request_user_id : auth()->user()->id,
+                'request_user_ou_id'    =>  $this->editRF ? $this->requestForm->request_user_ou_id : auth()->user()->organizational_unit_id,
                 'estimated_expense'     =>  $this->totalForm(),
                 'type_of_currency'      =>  $this->typeOfCurrency,
                 'purchase_mechanism_id' =>  $this->purchaseMechanism,
@@ -308,8 +308,8 @@ class RequestFormCreate extends Component
                 'superior_chief'        =>  $this->superiorChief,
                 'justification'         =>  $this->justify,
                 'type_form'             =>  $this->isRFItems ? 'bienes y/o servicios' : 'pasajes aéreos',
-                'request_user_id'       =>  $this->editRF ? $this->requestForm->request_user_id : Auth()->user()->id,
-                'request_user_ou_id'    =>  $this->editRF ? $this->requestForm->request_user_ou_id : Auth()->user()->organizational_unit_id,
+                'request_user_id'       =>  $this->editRF ? $this->requestForm->request_user_id : auth()->user()->id,
+                'request_user_ou_id'    =>  $this->editRF ? $this->requestForm->request_user_ou_id : auth()->user()->organizational_unit_id,
                 'estimated_expense'     =>  $this->editRF && $this->requestForm->has_increased_expense ? $this->requestForm->estimated_expense : $this->totalForm(),
                 'type_of_currency'      =>  $this->typeOfCurrency,
                 'purchase_mechanism_id' =>  $this->purchaseMechanism,
@@ -346,7 +346,7 @@ class RequestFormCreate extends Component
                 'id'                =>  $passenger['id'],
               ],
               [
-                'user_id'           =>  Auth()->user()->id,
+                'user_id'           =>  auth()->user()->id,
                 'run'               =>  $passenger['run'],
                 'dv'                =>  $passenger['dv'],
                 'name'              =>  $passenger['name'],
@@ -532,7 +532,7 @@ class RequestFormCreate extends Component
           $reqFile->name = $fileRequest->getClientOriginalName();
           $reqFile->file = $fileRequest->storeAs('/ionline/request_forms/request_files', $file_name.'.'.$fileRequest->extension(), 'gcs');
           $reqFile->request_form_id = $this->editRF ? $this->requestForm->id : $req->id;
-          $reqFile->user_id = Auth()->user()->id;
+          $reqFile->user_id = auth()->user()->id;
           $reqFile->save();
         }
 

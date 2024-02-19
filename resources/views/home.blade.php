@@ -180,7 +180,7 @@
             </h5>
 
             <ul class="list-group">
-                @foreach(Auth()->user()->notifications->take(5) as $notification)
+                @foreach(auth()->user()->notifications->take(5) as $notification)
                 <a href="{{ route('openNotification',$notification) }}" class="list-group-item list-group-item-action small">
                     {{ $notification->created_at }} -
                     {!! $notification->data['icon'] ?? null !!}

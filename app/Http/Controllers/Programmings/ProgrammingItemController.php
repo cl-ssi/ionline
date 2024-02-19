@@ -183,7 +183,7 @@ class ProgrammingItemController extends Controller
         $programmingItems = new ProgrammingItem($request->All());
         //$programming->year = date('Y', strtotime($request->date));
         //$programming->description = $request->description;
-        $programmingItems->user_id = Auth()->user()->id;
+        $programmingItems->user_id = auth()->user()->id;
         $programmingItems->programming_id = $request->programming_id;
        
         $programmingItems->save();
@@ -233,7 +233,7 @@ class ProgrammingItemController extends Controller
         $programmingitem->load('professionalHours', 'programming');
         $programmingitem->fill($request->all());
         $programmingitem->prevalence_rate = $request->has('prevalence_rate') ? $request->prevalence_rate : null;
-        $programmingitem->user_id = Auth()->user()->id;
+        $programmingitem->user_id = auth()->user()->id;
         $programmingitem->save();
 
         $programmingitem->professionalHours()->detach();
@@ -254,7 +254,7 @@ class ProgrammingItemController extends Controller
             $reviewItem = ReviewItem::findOrFail($request->review_id);
             $reviewItem->rectified = "SI";
             $reviewItem->rect_comments = $request->rect_comments;
-            $reviewItem->updated_by = Auth()->user()->id;
+            $reviewItem->updated_by = auth()->user()->id;
             if($programmingitem->programming->year >= 2024) $reviewItem->answer = null;
             $reviewItem->save();
 
@@ -270,7 +270,7 @@ class ProgrammingItemController extends Controller
     {
         $programmingItemOriginal = ProgrammingItem::find($id);
         $programmingItemsClone = $programmingItemOriginal->replicate();
-        $programmingItemsClone->user_id = Auth()->user()->id;
+        $programmingItemsClone->user_id = auth()->user()->id;
         $programmingItemsClone->push();
 
         $programmingItemOriginal->load('professionalHours');

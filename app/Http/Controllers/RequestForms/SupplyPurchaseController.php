@@ -23,13 +23,13 @@ class SupplyPurchaseController extends Controller
     {
         //By Purchaser
         $ouSearch = Parameter::where('module', 'ou')->where('parameter', 'AbastecimientoSSI')->first()->value;
-        if(Auth()->user()->organizational_unit_id == $ouSearch){
+        if(auth()->user()->organizational_unit_id == $ouSearch){
             $purchaser = User::with('requestForms')
                 ->latest()
                 ->whereHas('requestForms', function ($q){
                     $q->where('status', 'approved');
                 })
-                ->where('id', Auth()->user()->id)
+                ->where('id', auth()->user()->id)
                 ->first();
 
             return view('request_form.purchase.index', compact('purchaser'));

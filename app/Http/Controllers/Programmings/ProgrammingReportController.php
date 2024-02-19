@@ -245,12 +245,12 @@ class ProgrammingReportController extends Controller
         $year = $request->year ?? date("Y");
         $establishments = collect();
         $programming = $professionalHours = $establishment_id = null;
-        if(Auth()->user()->hasAllRoles('Programming: Comunal')){
+        if(auth()->user()->hasAllRoles('Programming: Comunal')){
             $last_year = Programming::latest()->first()->year;
             $last_programmings = Programming::with('establishment:id,type,name')->where('year', $last_year)->get();
             //El usuario tiene acceso por establecimientos?
             foreach($last_programmings as $programming){
-                if(Str::contains($programming->access, Auth()->user()->id))
+                if(Str::contains($programming->access, auth()->user()->id))
                     $establishments->push($programming->establishment);
             }
 
@@ -260,7 +260,7 @@ class ProgrammingReportController extends Controller
                     $q->whereIn('establishment_id', $establishments->pluck('id')->toArray());
                 })
                 ->get();
-        }elseif(Auth()->user()->hasAllRoles('Programming: Admin') || Auth()->user()->hasAllRoles('Programming: Review')){
+        }elseif(auth()->user()->hasAllRoles('Programming: Admin') || auth()->user()->hasAllRoles('Programming: Review')){
             $programmings = Programming::with('establishment:id,type,name')->where('year', $year)->get();
             foreach($programmings as $programming)
                 $establishments->push($programming->establishment);

@@ -26,7 +26,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach(Auth()->user()->notifications()->paginate(20) as $notification)
+            @foreach(auth()->user()->notifications()->paginate(20) as $notification)
             <tr class="{{ $notification->read_at ? 'table-success' : '' }}">
                 <td>{{ $notification->created_at->format('d-m-Y H:i:s') }}</td>
                 <td>{!! $notification->data['icon'] ?? null !!} {{ $notification->data['module'] ?? '' }}</td>
@@ -44,7 +44,7 @@
         </tbody>
     </table>
 
-    {{ Auth()->user()->notifications()->paginate(20)->links() }}
+    {{ auth()->user()->notifications()->paginate(20)->links() }}
 </div>
 
 @endsection

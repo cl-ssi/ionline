@@ -240,7 +240,7 @@ class EventRequestForm extends Model implements Auditable
         $event->event_type          =   'pre_budget_event';
         $event->purchaser_amount    =   $requestForm->newBudget - $requestForm->estimated_expense;
         $event->purchaser_observation = request()->purchaser_observation;
-        $event->purchaser_id        =   Auth()->user()->id;
+        $event->purchaser_id        =   auth()->user()->id;
         $event->requestForm()->associate($requestForm);
         $event->save();
 
@@ -263,7 +263,7 @@ class EventRequestForm extends Model implements Auditable
         $event->event_type          =   'pre_finance_budget_event';
         $event->purchaser_amount    =   $requestForm->newBudget - $requestForm->estimated_expense;
         $event->purchaser_observation = request()->purchaser_observation;
-        $event->purchaser_id        =   Auth()->user()->id;
+        $event->purchaser_id        =   auth()->user()->id;
         $event->requestForm()->associate($requestForm);
         $event->save();
 
@@ -286,7 +286,7 @@ class EventRequestForm extends Model implements Auditable
         $event->event_type          =   'budget_event';
         $event->purchaser_amount    =   $requestForm->newBudget - $requestForm->estimated_expense;
         $event->purchaser_observation = request()->purchaser_observation;
-        $event->purchaser_id        =   Auth()->user()->id;
+        $event->purchaser_id        =   auth()->user()->id;
         $event->requestForm()->associate($requestForm);
         $event->save();
 

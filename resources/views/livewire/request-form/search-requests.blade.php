@@ -248,7 +248,7 @@
                             <a href="{{ route('request_forms.show', $requestForm->id) }}" class="btn btn-outline-secondary btn-sm" title="Mostrar"><i class="fas fa-eye"></i>
                             </a> 
 
-                            @if(Auth()->user()->hasPermissionTo('Request Forms: all'))
+                            @if(auth()->user()->hasPermissionTo('Request Forms: all'))
                                 @if($requestForm->canEdit())
                                 <a href="{{ route('request_forms.edit', $requestForm->id) }}" class="btn btn-outline-secondary btn-sm" title="Edición"><i class="fas fa-edit"></i>
                                 </a>
@@ -287,13 +287,13 @@
                             @include('request_form.partials.modals.old_signed_request_forms')
                             @endif
 
-                            @if(Auth()->user()->hasPermissionTo('Request Forms: all') && Str::contains($requestForm->subtype, 'tiempo') && !$requestForm->isBlocked() && $requestForm->status == 'approved')
+                            @if(auth()->user()->hasPermissionTo('Request Forms: all') && Str::contains($requestForm->subtype, 'tiempo') && !$requestForm->isBlocked() && $requestForm->status == 'approved')
                             <a onclick="return confirm('¿Está seguro/a de crear nuevo formulario de ejecución inmediata?') || event.stopImmediatePropagation()" data-toggle="modal" data-target="#processClosure-{{$requestForm->id}}" class="btn btn-outline-secondary btn-sm" title="Nuevo formulario de ejecución inmediata"><i class="fas fa-plus"></i>
                             </a>
                             @include('request_form.partials.modals.create_provision_period_select')
                             @endif
 
-                            @if(Auth()->user()->hasPermissionTo('Request Forms: all') && $requestForm->purchasingProcess)
+                            @if(auth()->user()->hasPermissionTo('Request Forms: all') && $requestForm->purchasingProcess)
                             <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="">
                             <a href="{{ route('request_forms.supply.purchase', $requestForm) }}" class="btn btn-outline-secondary btn-sm"><i class="fas fa-shopping-cart"></i></a>
                             </span>

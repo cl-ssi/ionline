@@ -232,11 +232,11 @@ class ShiftManagementController extends Controller
         $actuallyShiftMonthsList = array();
         foreach($sTypes as $sType){
             //Nuevo filtrar por mes cada serie por usuario
-            $actuallyShiftMonths = UserShiftTypeMonths::where("user_id",Auth()->user()->id)->where("shift_type_id",$sType->id)->get();
+            $actuallyShiftMonths = UserShiftTypeMonths::where("user_id",auth()->user()->id)->where("shift_type_id",$sType->id)->get();
             if( !isset($actuallyShiftMonths) || $actuallyShiftMonths =="" || sizeof($actuallyShiftMonths) < 1 ){
                 $actuallyShiftMonths = array();
                 for($i=1;$i<13;$i++){
-                    $aMonth = (object) array("month" => $i,"user_id" =>Auth()->user()->id ,'shift_type_id' => $sType->id );
+                    $aMonth = (object) array("month" => $i,"user_id" =>auth()->user()->id ,'shift_type_id' => $sType->id );
                     // $aMonth = (object) $actuallyShiftMonths;
                     array_push($actuallyShiftMonths,$aMonth);
                 }
@@ -352,8 +352,8 @@ class ShiftManagementController extends Controller
 
     	$tiposJornada =   $this->tiposJornada;
         $sType = ShiftTypes::findOrFail($r->id);
-        $idUser = Auth()->user()->id;
-        $actuallyMonths = UserShiftTypeMonths::where("user_id",Auth()->user()->id)->where("shift_type_id",$r->id)->get();
+        $idUser = auth()->user()->id;
+        $actuallyMonths = UserShiftTypeMonths::where("user_id",auth()->user()->id)->where("shift_type_id",$r->id)->get();
         $months = (object) $this->months;
         // echo "MOnths : ".json_encode($actuallyMonths);
         if( !isset($actuallyMonths) || count($actuallyMonths ) <1  ){
@@ -361,7 +361,7 @@ class ShiftManagementController extends Controller
             $actuallyMonths = array();
             for($i=1;$i<13;$i++){
 
-                $aMonth = (object) array('month' => $i,'user_id' =>Auth()->user()->id ,'shift_type_id' => $r->id );
+                $aMonth = (object) array('month' => $i,'user_id' =>auth()->user()->id ,'shift_type_id' => $r->id );
 
                 // $aMonth =  $actuallyMonths;
 
@@ -392,7 +392,7 @@ class ShiftManagementController extends Controller
         for($i=0;$i<sizeof($r->months);$i++){
             $nUShiftTypesMonts = new UserShiftTypeMonths;
             $nUShiftTypesMonts->month =$r->months[$i] ;
-            $nUShiftTypesMonts->user_id =  Auth()->user()->id;
+            $nUShiftTypesMonts->user_id =  auth()->user()->id;
             $nUShiftTypesMonts->shift_type_id = $nSType->id;
             $nUShiftTypesMonts->save();
         }
@@ -409,14 +409,14 @@ class ShiftManagementController extends Controller
 		$fSType->day_series = implode(",", $r->day_series);
 		$fSType->update();
 
-        $actaullyMonths = UserShiftTypeMonths::where("user_id",Auth()->user()->id)->where("shift_type_id",$r->id)->get();
+        $actaullyMonths = UserShiftTypeMonths::where("user_id",auth()->user()->id)->where("shift_type_id",$r->id)->get();
         foreach($actaullyMonths as $months){
             $months->delete();
         }
         for($i=0;$i<sizeof($r->months);$i++){
             $nUShiftTypesMonths = new UserShiftTypeMonths;
             $nUShiftTypesMonths->month =$r->months[$i] ;
-            $nUShiftTypesMonths->user_id =  Auth()->user()->id;
+            $nUShiftTypesMonths->user_id =  auth()->user()->id;
             $nUShiftTypesMonths->shift_type_id = $fSType->id;
             $nUShiftTypesMonths->save();
         }
@@ -428,8 +428,8 @@ class ShiftManagementController extends Controller
         $nShift = new ShiftUser;
         $nShift->date_from = $r->dateFromAssign;
         $nShift->date_up = $r->dateUpAssign;
-        /* TODO: Auth()->id(); <- chequear si de esta forma reduce una query */
-        $nShift->asigned_by = Auth()->user()->id;
+        /* TODO: auth()->id(); <- chequear si de esta forma reduce una query */
+        $nShift->asigned_by = auth()->user()->id;
         $nShift->user_id = $r->slcStaff;
         $nShift->shift_types_id = $r->shiftId;
         $nShift->organizational_units_id = $r->orgUnitId;
@@ -481,9 +481,9 @@ class ShiftManagementController extends Controller
                 $nShiftD->save();
 
                 $nHistory = new ShiftDayHistoryOfChanges;
-                $nHistory->commentary = "El usuario \"".Auth()->user()->name." ". Auth()->user()->fathers_family." ". Auth()->user()->mothers_family."\" ha <b>asignado la jornada</b> del \"".$date->format('Y-m-d')."\" de tipo  \"".$nShiftD->working_day."\" al usuario ID: \"". $nUser->runFormat() ."\" - ".$nUser->name." ".$nUser->fathers_family." ".$nUser->mothers_family;
+                $nHistory->commentary = "El usuario \"".auth()->user()->name." ". auth()->user()->fathers_family." ". auth()->user()->mothers_family."\" ha <b>asignado la jornada</b> del \"".$date->format('Y-m-d')."\" de tipo  \"".$nShiftD->working_day."\" al usuario ID: \"". $nUser->runFormat() ."\" - ".$nUser->name." ".$nUser->fathers_family." ".$nUser->mothers_family;
                 $nHistory->shift_user_day_id = $nShiftD->id;
-                $nHistory->modified_by = Auth()->user()->id;
+                $nHistory->modified_by = auth()->user()->id;
                 $nHistory->change_type = 0;//0_asignado 1:cambio estado, 2 cambio de tipo de jornada, 3 intercambio con otro usuario
                 $nHistory->day =  $date->format('Y-m-d');
                 $nHistory->previous_value = "";
@@ -973,14 +973,14 @@ class ShiftManagementController extends Controller
            $users = "";//User::Search($r->get('name'))->orderBy('name','Asc')->paginate(500);
 
         $status = 4;
-        $userId = Auth()->user()->id;
-        // echo "aut: ". Auth()->user()->id;
+        $userId = auth()->user()->id;
+        // echo "aut: ". auth()->user()->id;
         //v1
-        /* $myConfirmationEarrings = ShiftUserDay::where("shift_user_id",Auth()->user()->id)->whereHas("shiftUserDayLog", function($q) use($status){
+        /* $myConfirmationEarrings = ShiftUserDay::where("shift_user_id",auth()->user()->id)->whereHas("shiftUserDayLog", function($q) use($status){
                                            $q->where('change_type',$status);
                                          })->get(); */
         //v2
-       /* $myConfirmationEarrings = ShiftUserDay::where("shift_user_id",Auth()->user()->id)->whereHas("ShiftUser",  function($q) use($userId){
+       /* $myConfirmationEarrings = ShiftUserDay::where("shift_user_id",auth()->user()->id)->whereHas("ShiftUser",  function($q) use($userId){
                 $q->where('shift_user_id',$userId);
             })->whereHas("shiftUserDayLog",  function($q) use($status){
                 $q->where('change_type',$status);
@@ -1021,7 +1021,7 @@ class ShiftManagementController extends Controller
             }
             $myConfirmationEarrings = (object) $myConfirmationEarrings;
 
-          $myShifts    = ShiftUser::where('date_up','>=',$actuallyYear."-".$actuallyMonth."-01")->where('date_from','<=',$actuallyYear."-".$actuallyMonth."-".$days)->where('user_id',Auth()->user()->id)->get();
+          $myShifts    = ShiftUser::where('date_up','>=',$actuallyYear."-".$actuallyMonth."-01")->where('date_from','<=',$actuallyYear."-".$actuallyMonth."-".$days)->where('user_id',auth()->user()->id)->get();
 
         $months = $this->months;
         $tiposJornada = $this->tiposJornada;
@@ -1036,9 +1036,9 @@ class ShiftManagementController extends Controller
         echo "R".json_encode($d);
 
         $nHistory = new ShiftDayHistoryOfChanges;
-        $nHistory->commentary = "El usuario \"".Auth()->user()->name." ". Auth()->user()->fathers_family." ". Auth()->user()->mothers_family."\" ha <b>confirmado la jornada</b> del \"".$d->day;
+        $nHistory->commentary = "El usuario \"".auth()->user()->name." ". auth()->user()->fathers_family." ". auth()->user()->mothers_family."\" ha <b>confirmado la jornada</b> del \"".$d->day;
         $nHistory->shift_user_day_id = $d->id;
-        $nHistory->modified_by = Auth()->user()->id;
+        $nHistory->modified_by = auth()->user()->id;
         $nHistory->change_type = 4;//0_asignado 1:cambio estado, 2 cambio de tipo de jornada, 3 intercambio con otro usuario;4:Confirmado por el usuario 5: confirmado por el administrador, 6:rechazado por usuario?
         $nHistory->day =  $d->day;
         $nHistory->previous_value = "";
@@ -1054,9 +1054,9 @@ class ShiftManagementController extends Controller
        // echo "C".json_encode($d);
 
         $nHistory = new ShiftDayHistoryOfChanges;
-        $nHistory->commentary = "El usuario \"".Auth()->user()->name." ". Auth()->user()->fathers_family." ". Auth()->user()->mothers_family."\" ha <b>rechazado la jornada</b> del \"".$d->day;
+        $nHistory->commentary = "El usuario \"".auth()->user()->name." ". auth()->user()->fathers_family." ". auth()->user()->mothers_family."\" ha <b>rechazado la jornada</b> del \"".$d->day;
         $nHistory->shift_user_day_id = $d->id;
-        $nHistory->modified_by = Auth()->user()->id;
+        $nHistory->modified_by = auth()->user()->id;
         $nHistory->change_type = 6;//0_asignado 1:cambio estado, 2 cambio de tipo de jornada, 3 intercambio con otro usuario; 5: confirmado por el administrador, 6:rechazado por usuario?
         $nHistory->day =  $d->day;
         $nHistory->previous_value = "";
@@ -1074,7 +1074,7 @@ class ShiftManagementController extends Controller
         $nHistory = new ShiftDayHistoryOfChanges;
         $nHistory->commentary = "El administrador ha <b>confirmado la jornada</b> del \"".$d->day;
         $nHistory->shift_user_day_id = $d->id;
-        $nHistory->modified_by = Auth()->user()->id;
+        $nHistory->modified_by = auth()->user()->id;
         $nHistory->change_type = 5;//0_asignado 1:cambio estado, 2 cambio de tipo de jornada, 3 intercambio con otro usuario; 5: confirmado por el administrador
         $nHistory->day =  $d->day;
         $nHistory->previous_value = $d->status;
@@ -1155,17 +1155,17 @@ class ShiftManagementController extends Controller
         if( $onlyConfirmedByMe == 0 )
             $firstConfirmations = ShiftClose::whereNotNull("first_confirmation_date")->whereNull("close_date")->where("first_confirmation_status",">",0)->get();
         else
-            $firstConfirmations = ShiftClose::whereNotNull("first_confirmation_date")->whereNull("close_date")->where("first_confirmation_user_id",Auth()->user()->id)->where("first_confirmation_status",">",0)->get();
+            $firstConfirmations = ShiftClose::whereNotNull("first_confirmation_date")->whereNull("close_date")->where("first_confirmation_user_id",auth()->user()->id)->where("first_confirmation_status",">",0)->get();
 
 
         if($onlyClosedByMe == 0)
             $closed= ShiftClose::whereNotNull("close_date")->get();
         else
-            $closed= ShiftClose::whereNotNull("close_date")->where("close_user_id", Auth()->user()->id)->get();
+            $closed= ShiftClose::whereNotNull("close_date")->where("close_user_id", auth()->user()->id)->get();
         if($onlyRejectedForMe == 0)
             $rejected= ShiftClose::whereNotNull("first_confirmation_date")->whereNull("close_date")->where("first_confirmation_status","-1")->get();
         else
-            $rejected = ShiftClose::whereNotNull("first_confirmation_date")->whereNull("close_date")->where("first_confirmation_user_id",Auth()->user()->id)->where("first_confirmation_status","-1")->get();
+            $rejected = ShiftClose::whereNotNull("first_confirmation_date")->whereNull("close_date")->where("first_confirmation_user_id",auth()->user()->id)->where("first_confirmation_status","-1")->get();
 
         $cierres = ShiftDateOfClosing::all();
         // if(isset( $cierres ))
@@ -1487,7 +1487,7 @@ class ShiftManagementController extends Controller
         else
             $actuallyOrgUnit = $cargos->first();
 
-        $actuallyOrgUnit =    Auth()->user()->organizationalUnit; // porque solo puedo ver los turnos disponibles de mi unidad (momentaneamente)
+        $actuallyOrgUnit =    auth()->user()->organizationalUnit; // porque solo puedo ver los turnos disponibles de mi unidad (momentaneamente)
 
         if(Session::has('actuallyMonth') && Session::get('actuallyMonth') != "")
             $actuallyMonth = Session::get('actuallyMonth');
@@ -1521,10 +1521,10 @@ class ShiftManagementController extends Controller
 
             })->get();*/
 
-          $misSolicitudes =   UserRequestOfDay::where("user_id",Auth()->user()->id)->where("created_at",">=", $actuallyYear."-".$actuallyMonth."-01")->where("created_at","<=", $actuallyYear."-".$actuallyMonth."-31")->get();
+          $misSolicitudes =   UserRequestOfDay::where("user_id",auth()->user()->id)->where("created_at",">=", $actuallyYear."-".$actuallyMonth."-01")->where("created_at","<=", $actuallyYear."-".$actuallyMonth."-31")->get();
           $solicitudesPorAprobar ="";
         // if( $user->can("Shift Management: approval extra day request") ){
-            $orgForAprove = Auth()->user()->organizational_unit_id;
+            $orgForAprove = auth()->user()->organizational_unit_id;
             $solicitudesPorAprobar =  UserRequestOfDay::where("created_at",">=", $actuallyYear."-".$actuallyMonth."-01")->where("created_at","<=", $actuallyYear."-".$actuallyMonth."-31")->whereHas("ShiftUserDay",  function($q) use($orgForAprove){
 
                 // $q->where('organizational_units_id',$actuallyOrgUnit->id);
@@ -1550,8 +1550,8 @@ class ShiftManagementController extends Controller
         $nRqst->status = "pendiente";
         $nRqst->commentary = "";
         $nRqst->shift_user_day_id =  $sUserDay->id;
-        $nRqst->user_id =  Auth()->user()->id;
-        $nRqst->status_change_by =  Auth()->user()->id;
+        $nRqst->user_id =  auth()->user()->id;
+        $nRqst->status_change_by =  auth()->user()->id;
         $nRqst->save();
         // dd($nRqst);
 
@@ -1563,7 +1563,7 @@ class ShiftManagementController extends Controller
         // dd($r->input("solicitudId"));
         $fSolicitud = UserRequestOfDay::find($r->input("solicitudId"));
         $fSolicitud->status = "cancelado";
-        $fSolicitud->status_change_by  = Auth()->user()->id;
+        $fSolicitud->status_change_by  = auth()->user()->id;
         $fSolicitud->save();
 
         session()->flash('warning', 'Se ha cancelado la solicitud del día extra del '.$fSolicitud->ShiftUserDay->day);
@@ -1574,7 +1574,7 @@ class ShiftManagementController extends Controller
         // 1) confirmar solicitud
         $fSolicitud = UserRequestOfDay::find($r->input("solicitudId"));
         $fSolicitud->status = "confirmado";
-        $fSolicitud->status_change_by  = Auth()->user()->id;
+        $fSolicitud->status_change_by  = auth()->user()->id;
         $fSolicitud->save();
 
         // 2) buscar solicitudes del mismo dia y rechazarlas
@@ -1582,7 +1582,7 @@ class ShiftManagementController extends Controller
         foreach($fSolicitudARechazar as $sol){
 
             $sol->status = "rechazado";
-            $sol->status_change_by  = Auth()->user()->id;
+            $sol->status_change_by  = auth()->user()->id;
             $sol->save();
 
         }
@@ -1619,9 +1619,9 @@ class ShiftManagementController extends Controller
         //si tiene turno creado para ese mes y ese tipo de turno
 
         $nHistory = new ShiftDayHistoryOfChanges;
-        $nHistory->commentary = "El usuario \"".Auth()->user()->name." ". Auth()->user()->fathers_family ." ". Auth()->user()->mothers_family ."\" <b>ha cambiado la asignacion del dia</b> del usuario \"". $fSolicitud->ShiftUserDay->ShiftUser->user_id . "\" al usuario \"" .$fSolicitud->user_id."\"";
+        $nHistory->commentary = "El usuario \"".auth()->user()->name." ". auth()->user()->fathers_family ." ". auth()->user()->mothers_family ."\" <b>ha cambiado la asignacion del dia</b> del usuario \"". $fSolicitud->ShiftUserDay->ShiftUser->user_id . "\" al usuario \"" .$fSolicitud->user_id."\"";
         $nHistory->shift_user_day_id = $fSolicitud->ShiftUserDay->id;
-        $nHistory->modified_by = Auth()->user()->id;
+        $nHistory->modified_by = auth()->user()->id;
         $nHistory->change_type = 2;//1:cambio estado, 2 cambio de tipo de jornada, 3 intercambio con otro usuario
         $nHistory->day =  $fSolicitud->ShiftUserDay->day;
         $nHistory->previous_value = 2;
@@ -1636,7 +1636,7 @@ class ShiftManagementController extends Controller
         // dd($r->input("solicitudId"));
         $fSolicitud = UserRequestOfDay::find($r->input("solicitudId"));
         $fSolicitud->status = "rechazado";
-        $fSolicitud->status_change_by  = Auth()->user()->id;
+        $fSolicitud->status_change_by  = auth()->user()->id;
         $fSolicitud->save();
 
         session()->flash('warning', 'Se ha rechazado la solicitud del día extra del '.$fSolicitud->ShiftUserDay->day);
@@ -1682,7 +1682,7 @@ class ShiftManagementController extends Controller
 
         }
         $n->first_confirmation_date =  Carbon::now();
-        $n->first_confirmation_user_id = Auth()->user()->id;
+        $n->first_confirmation_user_id = auth()->user()->id;
         $n->date_of_closing_id = $r->input("cierreId");
         $n->owner_of_the_days_id = $r->input("userId");
         $n->save();
@@ -1703,7 +1703,7 @@ class ShiftManagementController extends Controller
         $f->close_commentary = "";
         $f->close_status = 1;
         $f->close_date = Carbon::now();
-        $f->close_user_id =  Auth()->user()->id; ;
+        $f->close_user_id =  auth()->user()->id; ;
         $f->save();
         session()->flash('success', 'Se han cerrado los días ');
         return redirect()->route('rrhh.shiftManag.closeShift');
@@ -1716,7 +1716,7 @@ class ShiftManagementController extends Controller
         $f->close_commentary = "";
         $f->close_status = 2;
         $f->close_date = Carbon::now()->format('Y-m-d');;
-        $f->close_user_id =  Auth()->user()->id;
+        $f->close_user_id =  auth()->user()->id;
         $f->save();
         session()->flash('success', 'Se han cerrado los días ');
         return redirect()->route('rrhh.shiftManag.closeShift');
@@ -1744,7 +1744,7 @@ class ShiftManagementController extends Controller
 
             $bDate->init_date = $r->initDate;
             $bDate->close_date = $r->closeDate;
-            $bDate->user_id = Auth()->user()->id;
+            $bDate->user_id = auth()->user()->id;
             if($r->id == 0) //crear
                 $bDate->save() ;
             else // actualizar
@@ -1755,7 +1755,7 @@ class ShiftManagementController extends Controller
                 $bDate = new ShiftDateOfClosing;
                 $bDate->init_date = $r->initDate;
                 $bDate->close_date = $r->closeDate;
-                $bDate->user_id = Auth()->user()->id;
+                $bDate->user_id = auth()->user()->id;
                 $bDate->save() ;
                 session()->flash('success', 'Se han creado el dia de cierre ');
 

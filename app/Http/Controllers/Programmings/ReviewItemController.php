@@ -42,7 +42,7 @@ class ReviewItemController extends Controller
         if($reviewItem->review == 'No hay observaciones. Actividad aceptada')
             $reviewItem->answer = $reviewItem->rectified = "SI";
         $reviewItem->review_id = 1;
-        $reviewItem->user_id = Auth()->user()->id;
+        $reviewItem->user_id = auth()->user()->id;
         $reviewItem->save();
 
         session()->flash('success', 'Se ha creado una nueva observación para la actividad programada.');
@@ -79,7 +79,7 @@ class ReviewItemController extends Controller
         if($request->rectified){
             $reviewItem->rectified = $request->rectified;
             $reviewItem->rect_comments = $request->rect_comments;
-            $reviewItem->updated_by = Auth()->user()->id;
+            $reviewItem->updated_by = auth()->user()->id;
         }
 
         $reviewItem->save();

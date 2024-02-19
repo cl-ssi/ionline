@@ -474,9 +474,9 @@ class ModalEditShiftUserDay extends Component
 						if($this->chkSuplente){
 
 							$nHistory = new ShiftDayHistoryOfChanges;
-							$nHistory->commentary = "El usuario \"".Auth()->user()->name." ". Auth()->user()->fathers_family ." ". Auth()->user()->mothers_family ."\" <b>ha registrado la suplencia para del usuario \"". $this->shiftUserDay->ShiftUser->user_id . "\" al usuario \"" .$this->userIdtoChange2."\"";
+							$nHistory->commentary = "El usuario \"".auth()->user()->name." ". auth()->user()->fathers_family ." ". auth()->user()->mothers_family ."\" <b>ha registrado la suplencia para del usuario \"". $this->shiftUserDay->ShiftUser->user_id . "\" al usuario \"" .$this->userIdtoChange2."\"";
 							$nHistory->shift_user_day_id = $this->shiftUserDay->id;
-							$nHistory->modified_by = Auth()->user()->id;
+							$nHistory->modified_by = auth()->user()->id;
 							$nHistory->change_type = 10;
 							$nHistory->day =  $this->shiftUserDay->day;
 							$nHistory->previous_value = $this->previousStatus;
@@ -487,9 +487,9 @@ class ModalEditShiftUserDay extends Component
 
 							//si tiene turno creado para ese mes y ese tipo de turno
 							$nHistory = new ShiftDayHistoryOfChanges;
-							$nHistory->commentary = "El usuario \"".Auth()->user()->name." ". Auth()->user()->fathers_family ." ". Auth()->user()->mothers_family ."\" <b>ha cambiado la asignacion del dia</b> del usuario \"". $this->shiftUserDay->ShiftUser->user_id . "\" al usuario \"" .$this->userIdtoChange2."\"";
+							$nHistory->commentary = "El usuario \"".auth()->user()->name." ". auth()->user()->fathers_family ." ". auth()->user()->mothers_family ."\" <b>ha cambiado la asignacion del dia</b> del usuario \"". $this->shiftUserDay->ShiftUser->user_id . "\" al usuario \"" .$this->userIdtoChange2."\"";
 							$nHistory->shift_user_day_id = $this->shiftUserDay->id;
-							$nHistory->modified_by = Auth()->user()->id;
+							$nHistory->modified_by = auth()->user()->id;
 							$nHistory->change_type = 3;// 3 intercambio con otro usuario / 3 remplazo
 							$nHistory->day =  $this->shiftUserDay->day;
 							$nHistory->previous_value = $this->previousStatus;
@@ -499,9 +499,9 @@ class ModalEditShiftUserDay extends Component
 					}else{ // si no se selecciona ningun usuario para remplazo, qedara disponible
 
 						$nHistory = new ShiftDayHistoryOfChanges;
-						$nHistory->commentary = "El usuario \"".Auth()->user()->name." ". Auth()->user()->fathers_family ." ". Auth()->user()->mothers_family ."\" <b>ha dejado el día disponible \"";
+						$nHistory->commentary = "El usuario \"".auth()->user()->name." ". auth()->user()->fathers_family ." ". auth()->user()->mothers_family ."\" <b>ha dejado el día disponible \"";
 						$nHistory->shift_user_day_id = $this->shiftUserDay->id;
-						$nHistory->modified_by = Auth()->user()->id;
+						$nHistory->modified_by = auth()->user()->id;
 						$nHistory->change_type = 7;//0:asignado 1:cambio estado, 2 cambio de tipo de jornada, 3 intercambio con otro usuario;4:Confirmado por el usuario 5: confirmado por el administrador, 6:rechazado por usuario?, 7 Dejar disponible
 						$nHistory->day =  $this->shiftUserDay->day;
 						$nHistory->previous_value = $this->previousStatus;
@@ -598,9 +598,9 @@ class ModalEditShiftUserDay extends Component
 								$nHistory = new ShiftDayHistoryOfChanges;
 
 
-								$nHistory->commentary = "El usuario \"".Auth()->user()->name." ". Auth()->user()->fathers_family ." ". Auth()->user()->mothers_family ."\" <b>ha cambiado la asignacion del dia</b> del usuario \"". $day->ShiftUser->user_id . "\" al usuario \"" .$this->userIdtoChange2."\"";
+								$nHistory->commentary = "El usuario \"".auth()->user()->name." ". auth()->user()->fathers_family ." ". auth()->user()->mothers_family ."\" <b>ha cambiado la asignacion del dia</b> del usuario \"". $day->ShiftUser->user_id . "\" al usuario \"" .$this->userIdtoChange2."\"";
 								$nHistory->shift_user_day_id = $day->id;
-								$nHistory->modified_by = Auth()->user()->id;
+								$nHistory->modified_by = auth()->user()->id;
 								$nHistory->change_type = 2;//1:cambio estado, 2 cambio de tipo de jornada, 3 intercambio con otro usuario
 
 
@@ -612,9 +612,9 @@ class ModalEditShiftUserDay extends Component
 							}else{ // si el id es = 0 osea DEJAR DIA DISPONIBLE
 
 								$nHistory = new ShiftDayHistoryOfChanges;
-								$nHistory->commentary = "El usuario \"".Auth()->user()->name." ". Auth()->user()->fathers_family ." ". Auth()->user()->mothers_family ."\" <b>ha dejado el día disponible \"";
+								$nHistory->commentary = "El usuario \"".auth()->user()->name." ". auth()->user()->fathers_family ." ". auth()->user()->mothers_family ."\" <b>ha dejado el día disponible \"";
 								$nHistory->shift_user_day_id = $day->id;
-								$nHistory->modified_by = Auth()->user()->id;
+								$nHistory->modified_by = auth()->user()->id;
 								$nHistory->change_type = 7;//0:asignado 1:cambio estado, 2 cambio de tipo de jornada, 3 intercambio con otro usuario;4:Confirmado por el usuario 5: confirmado por el administrador, 6:rechazado por usuario?, 7 Dejar disponible
 								$nHistory->day =  $day->day;
 								$nHistory->previous_value = $this->previousStatus;
@@ -629,9 +629,9 @@ class ModalEditShiftUserDay extends Component
 			$this->shiftUserDay->update();
 
 			$nHistory = new ShiftDayHistoryOfChanges;
-			$nHistory->commentary = "El usuario \"".Auth()->user()->name." ". Auth()->user()->fathers_family." ". Auth()->user()->mothers_family."\" ha modificado el <b>tipo de jornada</b> de \"".$this->shiftUserDay->shift_user_day_id." - ".$this->tiposJornada[$this->previousWorkingDay]."\" a \"".$this->newWorkingDay." - ".$this->tiposJornada[$this->newWorkingDay]."\"";
+			$nHistory->commentary = "El usuario \"".auth()->user()->name." ". auth()->user()->fathers_family." ". auth()->user()->mothers_family."\" ha modificado el <b>tipo de jornada</b> de \"".$this->shiftUserDay->shift_user_day_id." - ".$this->tiposJornada[$this->previousWorkingDay]."\" a \"".$this->newWorkingDay." - ".$this->tiposJornada[$this->newWorkingDay]."\"";
 			$nHistory->shift_user_day_id = $this->shiftUserDay->id;
-			$nHistory->modified_by = Auth()->user()->id;
+			$nHistory->modified_by = auth()->user()->id;
 			$nHistory->change_type = 2;//1:cambio estado, 2 cambio de tipo de jornada, 3 intercambio con otro usuario
 			$nHistory->day =  $this->shiftUserDay->day;
 			$nHistory->previous_value = $this->previousStatus;
@@ -680,9 +680,9 @@ class ModalEditShiftUserDay extends Component
 					$nDay->save();
 					//si tiene turno creado para ese mes y ese tipo de turno
 					$nHistory = new ShiftDayHistoryOfChanges;
-					$nHistory->commentary = "El usuario \"".Auth()->user()->name." ". Auth()->user()->fathers_family ." ". Auth()->user()->mothers_family ."\" <b>ha cambiado la asignacion del dia</b> del usuario \"". $this->shiftUserDay->ShiftUser->user_id . "\" al usuario \"" .$this->userIdtoChange."\"";
+					$nHistory->commentary = "El usuario \"".auth()->user()->name." ". auth()->user()->fathers_family ." ". auth()->user()->mothers_family ."\" <b>ha cambiado la asignacion del dia</b> del usuario \"". $this->shiftUserDay->ShiftUser->user_id . "\" al usuario \"" .$this->userIdtoChange."\"";
 					$nHistory->shift_user_day_id = $this->shiftUserDay->id;
-					$nHistory->modified_by = Auth()->user()->id;
+					$nHistory->modified_by = auth()->user()->id;
 					$nHistory->change_type = 3;//1:cambio estado, 2 cambio de tipo de jornada, 3 intercambio con otro usuario
 					$nHistory->day =  $this->shiftUserDay->day;
 					$nHistory->previous_value = $this->previousStatus;
@@ -731,9 +731,9 @@ class ModalEditShiftUserDay extends Component
 
 
 					$nHistory = new ShiftDayHistoryOfChanges;
-					$nHistory->commentary = "El usuario \"".Auth()->user()->name." ". Auth()->user()->fathers_family ." ". Auth()->user()->mothers_family ."\" <b>ha generado el intercambio en la asignacion del dia</b> del usuario \"". $this->shiftUserDay->ShiftUser->user_id . "\" al usuario \"" .$this->userIdtoChange."\"";
+					$nHistory->commentary = "El usuario \"".auth()->user()->name." ". auth()->user()->fathers_family ." ". auth()->user()->mothers_family ."\" <b>ha generado el intercambio en la asignacion del dia</b> del usuario \"". $this->shiftUserDay->ShiftUser->user_id . "\" al usuario \"" .$this->userIdtoChange."\"";
 					$nHistory->shift_user_day_id = $this->shiftUserDay->id;
-					$nHistory->modified_by = Auth()->user()->id;
+					$nHistory->modified_by = auth()->user()->id;
 					$nHistory->change_type = 3;//1:cambio estado, 2 cambio de tipo de jornada, 3 intercambio con otro usuario
 					$nHistory->day =  $this->shiftUserDay->day;
 					$nHistory->previous_value = $this->previousStatus;
@@ -741,9 +741,9 @@ class ModalEditShiftUserDay extends Component
 					$nHistory->save();
 
 					$nHistory = new ShiftDayHistoryOfChanges;
-					$nHistory->commentary = "El usuario \"".Auth()->user()->name." ". Auth()->user()->fathers_family ." ". Auth()->user()->mothers_family ."\" <b>ha generado el intercambio en la asignacion del dia</b> del usuario \"". $bDay->ShiftUser->user_id . "\" al usuario \"" .$this->shiftUserDay->ShiftUser->user_id."\"";
+					$nHistory->commentary = "El usuario \"".auth()->user()->name." ". auth()->user()->fathers_family ." ". auth()->user()->mothers_family ."\" <b>ha generado el intercambio en la asignacion del dia</b> del usuario \"". $bDay->ShiftUser->user_id . "\" al usuario \"" .$this->shiftUserDay->ShiftUser->user_id."\"";
 					$nHistory->shift_user_day_id = $bDay->id;
-					$nHistory->modified_by = Auth()->user()->id;
+					$nHistory->modified_by = auth()->user()->id;
 					$nHistory->change_type = 3;//1:cambio estado, 2 cambio de tipo de jornada, 3 intercambio con otro usuario
 					$nHistory->day =  $bDay->day;
 					$nHistory->previous_value = $this->previousStatus;
@@ -755,9 +755,9 @@ class ModalEditShiftUserDay extends Component
 			}else{ // si el id es = 0 osea DEJAR DIA DISPONIBLE
 
 				$nHistory = new ShiftDayHistoryOfChanges;
-				$nHistory->commentary = "El usuario \"".Auth()->user()->name." ". Auth()->user()->fathers_family ." ". Auth()->user()->mothers_family ."\" <b>ha dejado el día disponible \"";
+				$nHistory->commentary = "El usuario \"".auth()->user()->name." ". auth()->user()->fathers_family ." ". auth()->user()->mothers_family ."\" <b>ha dejado el día disponible \"";
 				$nHistory->shift_user_day_id = $this->shiftUserDay->id;
-				$nHistory->modified_by = Auth()->user()->id;
+				$nHistory->modified_by = auth()->user()->id;
 				$nHistory->change_type = 7;//0:asignado 1:cambio estado, 2 cambio de tipo de jornada, 3 intercambio con otro usuario;4:Confirmado por el usuario 5: confirmado por el administrador, 6:rechazado por usuario?, 7 Dejar disponible
 				$nHistory->day =  $this->shiftUserDay->day;
 				$nHistory->previous_value = $this->previousStatus;
@@ -786,9 +786,9 @@ class ModalEditShiftUserDay extends Component
 			$this->shiftUserDay->update();
 
 			$nHistory = new ShiftDayHistoryOfChanges;
-			$nHistory->commentary = "El usuario \"".Auth()->user()->name." ". Auth()->user()->fathers_family ." ". Auth()->user()->mothers_family ."\" <b>ha generado el intercambio en la asignacion del dia</b> del usuario por necesidad del servicio \"". $this->shiftUserDay->ShiftUser->user_id;
+			$nHistory->commentary = "El usuario \"".auth()->user()->name." ". auth()->user()->fathers_family ." ". auth()->user()->mothers_family ."\" <b>ha generado el intercambio en la asignacion del dia</b> del usuario por necesidad del servicio \"". $this->shiftUserDay->ShiftUser->user_id;
 			$nHistory->shift_user_day_id = $this->shiftUserDay->id;
-			$nHistory->modified_by = Auth()->user()->id;
+			$nHistory->modified_by = auth()->user()->id;
 			$nHistory->change_type = 2;//1:cambio estado, 2 cambio de tipo de jornada, 3 intercambio con otro usuario
 			$nHistory->day =  $this->shiftUserDay->day;
 			$nHistory->previous_value = $this->previousStatus;
@@ -796,9 +796,9 @@ class ModalEditShiftUserDay extends Component
 			$nHistory->save();
 
 			$nHistory = new ShiftDayHistoryOfChanges;
-			$nHistory->commentary = "El usuario \"".Auth()->user()->name." ". Auth()->user()->fathers_family ." ". Auth()->user()->mothers_family ."\" <b>ha generado el intercambio en la asignacion del dia</b> del usuario por necesidad del servicio \"". $bDay->ShiftUser->user_id;
+			$nHistory->commentary = "El usuario \"".auth()->user()->name." ". auth()->user()->fathers_family ." ". auth()->user()->mothers_family ."\" <b>ha generado el intercambio en la asignacion del dia</b> del usuario por necesidad del servicio \"". $bDay->ShiftUser->user_id;
 			$nHistory->shift_user_day_id = $bDay->id;
-			$nHistory->modified_by = Auth()->user()->id;
+			$nHistory->modified_by = auth()->user()->id;
 			$nHistory->change_type = 2;//1:cambio estado, 2 cambio de tipo de jornada, 3 intercambio con otro usuario
 			$nHistory->day =  $bDay->day;
 			$nHistory->previous_value = $this->previousStatus;

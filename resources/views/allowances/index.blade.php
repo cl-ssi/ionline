@@ -8,7 +8,7 @@
 
 <h5><i class="fas fa-file"></i> Mis viaticos</h5>
 @if(auth()->user()->hasPermissionTo('Allowances: create'))
-    <p>Incluye Víaticos de mi Unidad Organizacional: <b>{{ Auth()->user()->organizationalUnit->name }}</p>
+    <p>Incluye Víaticos de mi Unidad Organizacional: <b>{{ auth()->user()->organizationalUnit->name }}</p>
 @endif
 </div>
 

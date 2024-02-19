@@ -277,16 +277,16 @@ class UserController extends Controller
         if(in_array($request->newpassword, $weakPaswords)) {
             session()->flash('danger', 'La nueva clave no puede ser su run o una clave simple.');
         } else {
-            if (Hash::check($request->password, Auth()->user()->password)) {
+            if (Hash::check($request->password, auth()->user()->password)) {
                 auth()->user()->password = bcrypt($request->newpassword);
                 auth()->user()->password_changed_at = now();
                 auth()->user()->save();
     
                 session()->flash('success', 'Su clave ha sido cambiada con éxito.');
     
-                if (Auth()->user()->hasPermissionTo('Users: must change password')) {
-                    Auth()->user()->revokePermissionTo('Users: must change password');
-                    Auth::login(Auth()->user());
+                if (auth()->user()->hasPermissionTo('Users: must change password')) {
+                    auth()->user()->revokePermissionTo('Users: must change password');
+                    Auth::login(auth()->user());
                 }
             } else {
                 session()->flash('danger', 'La clave actual es erronea.');

@@ -289,7 +289,7 @@ class Authorization extends Component
         $reqFile->name = $file_name;
         $reqFile->file = $this->docSigned->storeAs('/ionline/request_forms/request_files', $file_name.'.'.$this->docSigned->extension(), 'gcs');
         $reqFile->request_form_id = $this->requestForm->id;
-        $reqFile->user_id = Auth()->user()->id;
+        $reqFile->user_id = auth()->user()->id;
         $reqFile->save();
 
         $emails = [$this->requestForm->user->email,
@@ -320,7 +320,7 @@ class Authorization extends Component
           $reqFile->name = $file_name;
           $reqFile->file = $this->docSigned->storeAs('/ionline/request_forms/request_files', $file_name.'.'.$this->docSigned->extension(), 'gcs');
           $reqFile->request_form_id = $this->requestForm->id;
-          $reqFile->user_id = Auth()->user()->id;
+          $reqFile->user_id = auth()->user()->id;
           $reqFile->save();
 
           $this->requestForm->signatures_file_id = 11;

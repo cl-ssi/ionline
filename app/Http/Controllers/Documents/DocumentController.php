@@ -41,11 +41,11 @@ class DocumentController extends Controller
 
         $types = Type::whereNull('partes_exclusive')->pluck('name','id');
 
-        if (Auth()->user()->organizational_unit_id) {
-            $childs = array(Auth()->user()->organizational_unit_id);
+        if (auth()->user()->organizational_unit_id) {
+            $childs = array(auth()->user()->organizational_unit_id);
 
-            $childs = array_merge($childs, Auth()->user()->OrganizationalUnit->childs->pluck('id')->toArray());
-            foreach (Auth()->user()->OrganizationalUnit->childs as $child) {
+            $childs = array_merge($childs, auth()->user()->OrganizationalUnit->childs->pluck('id')->toArray());
+            foreach (auth()->user()->OrganizationalUnit->childs as $child) {
                 $childs = array_merge($childs, $child->childs->pluck('id')->toArray());
             }
 
@@ -59,7 +59,7 @@ class DocumentController extends Controller
                 )
                 ->Search($request)
                 ->latest()
-                ->where('user_id', Auth()->user()->id)
+                ->where('user_id', auth()->user()->id)
                 //->whereIn('organizational_unit_id',$childs)
                 // ->withTrashed()
                 ->paginate(100);
@@ -74,7 +74,7 @@ class DocumentController extends Controller
                 )
                 ->Search($request)
                 ->latest()
-                ->where('user_id', '<>', Auth()->user()->id)
+                ->where('user_id', '<>', auth()->user()->id)
                 ->whereRelation('type','reserved', null)
                 ->whereIn('organizational_unit_id', $childs)
                 // ->withTrashed()
