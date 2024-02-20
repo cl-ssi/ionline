@@ -2,11 +2,12 @@
 
 namespace App\Http\Livewire\Finance;
 
-use Livewire\WithPagination;
-use Livewire\Component;
+use App\Models\Establishment;
 use App\Models\Finance\Dte;
 use App\Models\Finance\Receptions\Reception;
-use App\Models\Establishment;
+use App\Notifications\Finance\DteConfirmation;
+use Livewire\Component;
+use Livewire\WithPagination;
 
 
 class IndexDtes extends Component
@@ -97,6 +98,7 @@ class IndexDtes extends Component
             'requestForm.contractManager',
             'dtes',
             'invoices',
+            'receptions'
         ])
             ->whereNull('rejected')
             ->orderByDesc('fecha_recepcion_sii');
@@ -239,7 +241,15 @@ class IndexDtes extends Component
     }
 
 
+    public function sendConfirmation($dte_id)
+    {
+        $dte = Dte::find($dte_id);
+        $dte->requestForm?->contractManager?->notify(new DteConfirmation($dte));
 
+        $dte->confirmation_sender_id = auth()->id();
+        $dte->confirmation_send_at = now();
+        $dte->save();
+    }
 
     public function updateAllReceptionsStatus($dte_id)
     {
