@@ -82,6 +82,7 @@ use App\Http\Controllers\Parameters\UnitOfMeasurementController;
 use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\Pharmacies\PharmacyController;
 use App\Http\Controllers\Pharmacies\PurchaseController;
+use App\Http\Controllers\Pharmacies\InventoryAdjustmentController;
 use App\Http\Controllers\ProfAgenda\ActivityTypeController;
 use App\Http\Controllers\ProfAgenda\AgendaController;
 use App\Http\Controllers\ProfAgenda\OpenHourController;
@@ -2074,6 +2075,18 @@ Route::prefix('pharmacies')->as('pharmacies.')->middleware(['auth', 'must.change
         Route::get('purchase/record-pdf/{purchase}', [App\Http\Controllers\Pharmacies\PurchaseController::class, 'recordPdf'])->name('purchase.record_pdf');
         Route::get('/callback-firma-record/{message}/{modelId}/{signaturesFile?}', [PurchaseController::class, 'callbackFirmaRecord'])->name('callbackFirmaRecord');
         Route::get('/signed-record-pdf/{purchase}', [PurchaseController::class, 'signedRecordPdf'])->name('signed_record_pdf');
+
+        Route::prefix('inventory_adjustments')->as('inventory_adjustments.')->group(function () {
+            // Route::get('/', [InventoryAdjustmentController::class, 'index'])->name('index');
+            // Route::get('/own', [PaymentController::class, 'indexOwn'])->name('own');
+            // Route::get('/review', [PaymentController::class, 'review'])->name('review');
+            // Route::get('/{dte}/return-to-dte-inbox', [PaymentController::class, 'returnToDteInbox'])->name('returnToDteInbox');
+            // Route::get('/{dte}/send-to-ready-inbox', [PaymentController::class, 'sendToReadyInbox'])->name('sendToReadyInbox');        
+            // Route::get('/ready', [PaymentController::class, 'ready'])->name('ready');
+            // Route::put('/{dte}/return-to-review', [PaymentController::class, 'returnToReview'])->name('returnToReview');
+            // Route::get('/rejected', [PaymentController::class, 'rejected'])->name('rejected');
+            // Route::put('/{dte}/update', [PaymentController::class, 'update'])->name('update');
+        });
 
         Route::resource('transfer', App\Http\Controllers\Pharmacies\TransferController::class);
         Route::get('transfer/{establishment}/auth', [App\Http\Controllers\Pharmacies\TransferController::class, 'auth'])->name('transfer.auth');
