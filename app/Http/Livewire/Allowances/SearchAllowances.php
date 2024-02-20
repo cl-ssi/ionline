@@ -170,6 +170,7 @@ class SearchAllowances extends Component
                         'destinations.locality',
                         'approvals'
                     ])
+                    ->orderBy('correlative', 'DESC')
                     ->orderBy('id', 'DESC')
                     ->where('establishment_id', Auth::user()->organizationalUnit->establishment_id)
                     ->search($this->selectedStatus,
