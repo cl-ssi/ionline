@@ -1,4 +1,4 @@
-@if($dte->purchaseOrder)
+@if($dte->receptions)
 
     @if($dte->payment_ready)
         <span class="badge text-bg-success">Listo para pago</span>
@@ -37,15 +37,17 @@
 
     <br>
 
-    @if($dte->purchaseOrder->receptions->count() > 0)
+    @if($dte->receptions->count() > 0)
         <span class="text-success">
-            {{ $dte->purchaseOrder->receptions->count() }}
+            {{ $dte->receptions->count() }}
         </span>
     @endif
 
-    @if($dte->purchaseOrder->rejections->count() > 0)
-        <span class="text-danger">
-            {{ $dte->purchaseOrder->rejections->count() }}
-        </span>
+    @if($dte->purchaseOrder)
+        @if($dte->purchaseOrder->rejections->count() > 0)
+            <span class="text-danger">
+                {{ $dte->purchaseOrder->rejections->count() }}
+            </span>
+        @endif
     @endif
 @endif
