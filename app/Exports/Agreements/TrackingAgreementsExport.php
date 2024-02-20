@@ -18,17 +18,21 @@ use Illuminate\Contracts\View\View;
 class TrackingAgreementsExport implements FromView, ShouldAutoSize //FromCollection, WithMapping, ShouldAutoSize, WithHeadings
 {
     // use Exportable;
+    public $resultSearch;
+    public $period;
 
-    public function __construct(Collection $resultSearch)
+    public function __construct(Collection $resultSearch, $period)
     {
         // dd($resultSearch);
         $this->resultSearch = $resultSearch;
+        $this->period = $period;
     }
 
     public function view(): View
     {
         return view('agreements.exports.tracking_agreements', [
-            'agreements' => $this->resultSearch
+            'agreements' => $this->resultSearch,
+            'period' => $this->period
         ]);
     }
 
