@@ -162,19 +162,19 @@
                     <td class="small">
                         {{ $dte->requestForm?->contractManager?->tinnyName }} <br>
                         
-                        <!-- Si tiene administrador de contrato mostrar el avion para enviar notificación -->
-                        @if($dte->requestForm?->contractManager?->id)
-                            @if($dte->confirmation_send_at)
-                                <i class="fas fa-paper-plane"></i> 
-                                {{ $dte->confirmation_send_at }}
-                            @else
-                                <button type="button" 
-                                    class="btn btn-sm btn-primary" 
-                                    wire:click="sendConfirmation({{ $dte->id }})">
-                                    <i class="fas fa-paper-plane"></i>
-                                </button>
+                            <!-- Si tiene administrador de contrato mostrar el avion para enviar notificación -->
+                            @if($dte->requestForm?->contractManager?->id)
+                                @if($dte->confirmation_send_at AND $dte->receptions->isNotEmpty())
+                                    <i class="fas fa-paper-plane"></i> 
+                                    {{ $dte->confirmation_send_at }}
+                                @else
+                                    <button type="button" 
+                                        class="btn btn-sm btn-primary" 
+                                        wire:click="sendConfirmation({{ $dte->id }})">
+                                        <i class="fas fa-paper-plane"></i>
+                                    </button>
+                                @endif
                             @endif
-                        @endif
 
                         {{ $dte->estado_reclamo }}
                     </td>
