@@ -42,7 +42,7 @@ class SearchAllowances extends Component
                             'destinations.locality',
                             'approvals'
                         ])
-                        ->latest()
+                        ->orderBy('id', 'DESC')
                         ->whereDoesntHave("archive", function($subQuery){
                             $subQuery->where('user_id', auth()->id());
                         })
@@ -69,7 +69,7 @@ class SearchAllowances extends Component
                             'destinations.locality',
                             'approvals'
                         ])
-                        ->latest()
+                        ->orderBy('id', 'DESC')
                         ->where('establishment_id', auth()->user()->organizationalUnit->establishment_id)
                         ->whereHas("allowanceSigns", function($subQuery){
                             $subQuery->where('event_type', 'contabilidad')
@@ -99,8 +99,7 @@ class SearchAllowances extends Component
                             'destinations.locality',
                             'approvals'
                         ])
-                        ->latest()
-                        // ->has('archive')
+                        ->orderBy('id', 'DESC')
                         ->whereHas("archive", function($subQuery){
                             $subQuery->where('user_id', auth()->id());
                         })
@@ -126,8 +125,7 @@ class SearchAllowances extends Component
                         'destinations.locality',
                         'approvals'
                     ])
-                    ->
-                    latest()
+                    ->orderBy('id', 'DESC')
                     ->where('user_allowance_id', auth()->id())
                     ->orWhere('creator_user_id', auth()->id())
                     ->orWhere('organizational_unit_allowance_id', auth()->user()->organizationalUnit->id)
@@ -197,7 +195,7 @@ class SearchAllowances extends Component
                         'destinations.locality',
                         'approvals'
                     ])
-                    ->latest()
+                    ->orderBy('id', 'DESC')
                     ->whereHas("Approvals", function($subQuery){
                         $subQuery->where('sent_to_ou_id', Parameter::get('ou','DireccionSSI'));
                     })
