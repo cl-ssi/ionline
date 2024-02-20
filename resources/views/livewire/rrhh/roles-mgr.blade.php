@@ -11,8 +11,8 @@
         <li>Si quitas el rol de un usuario, esto no desactivará los permisos que tenga asociado indivudualmente.</li>
     </div>
 
-    @role('dev')
-        <div class="form-check form-switch">
+    @can('be god')
+        <div class="form-check form-switch mb-3">
             <input 
                 class="form-check-input" 
                 type="checkbox" 
@@ -20,11 +20,12 @@
                 id="role-god"
                 wire:click="toggleRole('god')"
                 {{ in_array('god', $userRoles) ? 'checked' : '' }}>
-            <label class="form-check-label" for="role-god">
-                God Mode !
+            <label class="form-check-label text-danger" for="role-god">
+                god - God Mode !
             </label>
         </div>
-    @endrole
+    @endcan
+
 
     @foreach($roles as $rol)
         <div class="form-check form-switch">

@@ -42,7 +42,7 @@ class SearchAllowances extends Component
                             'destinations.locality',
                             'approvals'
                         ])
-                        ->latest()
+                        ->orderBy('id', 'DESC')
                         ->whereDoesntHave("archive", function($subQuery){
                             $subQuery->where('user_id', auth()->id());
                         })
@@ -69,7 +69,7 @@ class SearchAllowances extends Component
                             'destinations.locality',
                             'approvals'
                         ])
-                        ->latest()
+                        ->orderBy('id', 'DESC')
                         ->where('establishment_id', auth()->user()->organizationalUnit->establishment_id)
                         ->whereHas("allowanceSigns", function($subQuery){
                             $subQuery->where('event_type', 'contabilidad')
@@ -99,8 +99,7 @@ class SearchAllowances extends Component
                             'destinations.locality',
                             'approvals'
                         ])
-                        ->latest()
-                        // ->has('archive')
+                        ->orderBy('id', 'DESC')
                         ->whereHas("archive", function($subQuery){
                             $subQuery->where('user_id', auth()->id());
                         })
@@ -126,8 +125,7 @@ class SearchAllowances extends Component
                         'destinations.locality',
                         'approvals'
                     ])
-                    ->
-                    latest()
+                    ->orderBy('id', 'DESC')
                     ->where('user_allowance_id', auth()->id())
                     ->orWhere('creator_user_id', auth()->id())
                     ->orWhere('organizational_unit_allowance_id', auth()->user()->organizationalUnit->id)
@@ -140,7 +138,28 @@ class SearchAllowances extends Component
         }
 
         if($this->index == 'all'){
-            return view('livewire.allowances.search-allowances', [
+            if(auth()->user()->hasPermissionTo('Allowances: all establishment')){
+                return view('livewire.allowances.search-allowances', [
+                        'allowances' => Allowance::with([
+                            'userCreator',
+                            'userAllowance',
+                            'allowanceSigns',
+                            'organizationalUnitAllowance',
+                            'originCommune',
+                            'destinations.commune',
+                            'destinations.locality',
+                            'approvals'
+                        ])
+                        ->orderBy('id', 'DESC')
+                        ->search($this->selectedStatus,
+                            $this->selectedId,
+                            $this->selectedUserAllowance,
+                            $this->selectedStatusSirh)
+                        ->paginate(50)
+                ]);
+            }
+            if(auth()->user()->hasPermissionTo('Allowances: all')){
+                return view('livewire.allowances.search-allowances', [
                     'allowances' => Allowance::with([
                         'userCreator',
                         'userAllowance',
@@ -151,13 +170,16 @@ class SearchAllowances extends Component
                         'destinations.locality',
                         'approvals'
                     ])
+                    ->orderBy('correlative', 'DESC')
                     ->orderBy('id', 'DESC')
+                    ->where('establishment_id', Auth::user()->organizationalUnit->establishment_id)
                     ->search($this->selectedStatus,
                         $this->selectedId,
                         $this->selectedUserAllowance,
                         $this->selectedStatusSirh)
                     ->paginate(50)
-            ]);
+                ]);
+            }
         }
 
         //INDEX CON VIÁTICOS PARA FIRMA DE DIRECCIÓN
@@ -174,7 +196,7 @@ class SearchAllowances extends Component
                         'destinations.locality',
                         'approvals'
                     ])
-                    ->latest()
+                    ->orderBy('id', 'DESC')
                     ->whereHas("Approvals", function($subQuery){
                         $subQuery->where('sent_to_ou_id', Parameter::get('ou','DireccionSSI'));
                     })

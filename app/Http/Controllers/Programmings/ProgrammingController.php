@@ -22,7 +22,7 @@ class ProgrammingController extends Controller
         $year = $request->year ?? Carbon::now()->year + 1;
         $accessByCommune = null;
         $accessByEstablishments = null;
-        if(auth()->user()->hasAllRoles('Programming: Review') == False && auth()->user()->hasAllRoles('Programming: Admin') == False){
+        if( auth()->user()->cannot('Reviews: edit') ){
             $last_year = Programming::latest()->first()->year;
             $accessByCommune = collect();
             $accessByEstablishments = collect();

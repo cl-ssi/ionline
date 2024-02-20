@@ -60,16 +60,18 @@ class AgreementController extends Controller
 
     public function indexTracking(Request $request)
     {
-        // return $request;
+        $period_selected = $request->period ?? date('Y');
+        // return $period;
         $query = Agreement::with('program','stages','agreement_amounts.program_component','commune','fileToEndorse.signaturesFlows',
                                  'addendums.fileToEndorse.signaturesFlows','fileToSign.signaturesFlows','addendums.fileToSign.signaturesFlows',
-                                 'continuities.fileToEndorse.signaturesFlows')
+                                 'continuities.document.fileToSign.signaturesFlows', 'document.fileToSign.signaturesFlows')
         ->when($request->program, function($q) use ($request){ return $q->where('program_id', $request->program); })
         ->when($request->commune, function($q) use ($request){ return $q->where('commune_id', $request->commune); })
-        ->where('period', $request->period ? $request->period : date('Y'))->latest();
+        ->where('period', $period_selected)->latest();
 
         if($request->has('export')){
-            return Excel::download(new TrackingAgreementsExport($query->get()), 'TrackingAgreementsExport_'.Carbon::now().'.xlsx');
+            // dd($query->get()->first());
+            return Excel::download(new TrackingAgreementsExport($query->get(), $period_selected), 'TrackingAgreementsExport_'.Carbon::now().'.xlsx');
         }
 
         $agreements = $query->paginate(50);
@@ -77,7 +79,7 @@ class AgreementController extends Controller
         $programs = Program::orderBy('name')->get();
         $communes = Commune::orderBy('name')->get();
 
-        return view('agreements.agreements.trackingIndicator', compact('programs', 'agreements', 'communes'));
+        return view('agreements.agreements.trackingIndicator', compact('programs', 'agreements', 'communes', 'period_selected'));
     }
 
     /**
@@ -159,7 +161,7 @@ class AgreementController extends Controller
      */
     public function show(Agreement $agreement)
     {
-        $agreement->load('director_signer.user', 'commune.establishments', 'referrer', 'fileToEndorse', 'fileToSign', 'addendums.referrer', 'continuities.referrer','continuities.director_signer','continuities.document.fileToSign');
+        $agreement->load('director_signer.user', 'commune.establishments', 'referrer', 'fileToEndorse', 'fileToSign', 'addendums.referrer', 'continuities.referrer','continuities.director_signer','continuities.document.fileToSign', 'document.fileToSign');
         $municipality = Municipality::where('commune_id', $agreement->commune->id)->first();
         $establishment_list = unserialize($agreement->establishment_list);
         // $referrers = User::all()->sortBy('name');

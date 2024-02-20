@@ -82,14 +82,15 @@
         @endif
         @endcan
         @if($agreement->document && $agreement->document->fileToSign)
-            @if($agreement->document->fileToSign->hasSignedFlow)
-            <a href="{{ route('documents.signedDocumentPdf', $agreement->document_id) }}" class="btn btn-sm @if($agreement->document->fileToSign->hasAllFlowsSigned) btn-outline-success @else btn-outline-primary @endif">
+            @if($agreement->document->fileToSign->HasAllFlowsSigned)
+            <a href="{{ route('documents.signedDocumentPdf', $agreement->document_id) }}" class="nav-link text-secondary">
                 <i class="fas fa-fw fa-file-contract"></i> Ver convenio visado</a>
             @else
                 {{ $agreement->document->fileToSign->signature_id }}
             @endif
         @endif
     @else
+        <!-- convenios 2023 -->
         @if($canEdit)
             <li class="nav-item">
                 @if($agreement->program_id == 3) <!-- convenio retiro voluntario -->

@@ -190,11 +190,13 @@
                             @endif
                 
                             @if($index == 'own' || $index == 'director')
-                                @if($allowance->allowanceSigns->first()->status == 'pending')
-                                    <a href="{{ route('allowances.edit', $allowance) }}"
-                                        class="btn btn-outline-secondary btn-sm" title="Editar"><i class="fas fa-edit"></i>
-                                    </a>
-                                    <br>
+                                @if($allowance->allowanceSigns && $allowance->status != 'manual')
+                                    @if($allowance->allowanceSigns->first()->status == 'pending')
+                                        <a href="{{ route('allowances.edit', $allowance) }}"
+                                            class="btn btn-outline-secondary btn-sm" title="Editar"><i class="fas fa-edit"></i>
+                                        </a>
+                                        <br>
+                                    @endif
                                 @endif
                                 
                                 <a href="{{ route('allowances.show', $allowance) }}"

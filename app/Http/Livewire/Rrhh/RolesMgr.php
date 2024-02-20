@@ -34,7 +34,7 @@ class RolesMgr extends Component
     {
         $userRoles = $this->user->roles->pluck('name')->toArray();
         $userPermissions = $this->user->permissions->pluck('name')->toArray();
-        $roles = Role::with('permissions')->whereNotIn('name',['god','dev'])->orderBy('name')->get();
+        $roles = Role::with('permissions')->whereNot('name','god')->orderBy('name')->get();
 
         return view('livewire.rrhh.roles-mgr', [
             'roles' => $roles, 

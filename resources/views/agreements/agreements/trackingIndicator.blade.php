@@ -54,6 +54,23 @@
               <th class="text-center">#</th>
               <th>NOMBRE</th>
               <th>COMUNA</th>
+              @if($period_selected >= 2024)
+              <th class="text-center" data-toggle="tooltip" title="Referente Técnico">RTP</th>
+              <th class="text-center" data-toggle="tooltip" title="Dpto. Jurídico" colspan="1">DAJ</th>
+              <th class="text-center" data-toggle="tooltip" title="Director Atención Primaría" colspan="1">DAP</th>
+              <th class="text-center" data-toggle="tooltip" title="SDGA" colspan="1">SDGA</th>
+              <th class="text-center" data-toggle="tooltip" title="Dpto. Finanzas" colspan="1">DGF</th>
+              <th class="text-center" data-toggle="tooltip" title="Firma Alcalde" colspan="1" >COMUNA</th>
+              <th class="text-center" data-toggle="tooltip" title="Firma Director(a)" colspan="1" >DIRECTOR/A</th>
+
+              <th class="text-center" data-toggle="tooltip" title="Referente Técnico" colspan="1" style="border-left: 3px solid #c0c0c0">RTP</th>
+              <th class="text-center" data-toggle="tooltip" title="Director Atención Primaría" colspan="1">DAP</th>
+              <th class="text-center" data-toggle="tooltip" title="Dpto. Jurídico" colspan="1">DAJ</th>
+              <th class="text-center" data-toggle="tooltip" title="SDGA" colspan="1">SDGA</th>
+              <th class="text-center" data-toggle="tooltip" title="SDA" colspan="1">SDA</th>
+              <th class="text-center" data-toggle="tooltip" title="Oficina de Parte" colspan="1">OF.PARTE</th>
+              <th class="text-center" data-toggle="tooltip" title="Nro. Resolución" colspan="1">RES</th>
+              @else
               <th class="text-center" data-toggle="tooltip" title="Referente Técnico">RTP</th>
               <th class="text-center" data-toggle="tooltip" title="Director Atención Primaría" colspan="1">DAP</th>
               <th class="text-center" data-toggle="tooltip" title="Dpto. Jurídico" colspan="1">DAJ</th>
@@ -69,7 +86,7 @@
               <th class="text-center" data-toggle="tooltip" title="SDGA" colspan="1">SDGA</th>
               <th class="text-center" data-toggle="tooltip" title="Oficina de Parte" colspan="1">OF.PARTE</th>
               <th class="text-center" data-toggle="tooltip" title="Nro. Resolución" colspan="1">RES</th>
-
+              @endif
             </tr>
         </thead>
         <tbody style="font-size:65%;">
@@ -100,7 +117,7 @@
               </td>
               <td>{{ $agreement->commune->name }}</td>
               <td><!-- RTP -->
-              @if($agreement->file_to_endorse_id)
+              @if($agreement->file_to_endorse_id || $agreement->document?->file_to_sign_id)
                 @php $flag_pending_state = false @endphp
                 <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="{{$agreement->getEndorseObservationBySignPos(1)}}">
                   <button style ="outline: none !important;padding-top: 0;border: 0;vertical-align: baseline; font-size:10px; text-align: center;" class="btn btn-link text-secondary text-center" style="pointer-events: none;" type="button" disabled><i class="fas {{$agreement->getEndorseStateBySignPos(1)}}"></i></button>
@@ -176,7 +193,7 @@
               @endif
               </td>
               <td><!-- DAP IN -->
-              @if($agreement->file_to_endorse_id)
+              @if($agreement->file_to_endorse_id || $agreement->document?->file_to_sign_id)
                 @if(!$flag_pending_state) @php $flag_pending_state = $agreement->isEndorsePendingBySignPos(1) @endphp @endif
                 <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="{{$flag_pending_state ? 'En espera' : $agreement->getEndorseObservationBySignPos(2)}}">
                   <button style ="outline: none !important;padding-top: 0;border: 0;vertical-align: baseline; font-size:10px; text-align: center;" class="btn btn-link text-secondary text-center" style="pointer-events: none;" type="button" disabled><i class="fas {{$flag_pending_state ? 'fa-ellipsis-h' : $agreement->getEndorseStateBySignPos(2)}}"></i></button>
@@ -251,7 +268,7 @@
               @endif
               </td>
               <td><!-- DAJ IN -->
-              @if($agreement->file_to_endorse_id)
+              @if($agreement->file_to_endorse_id || $agreement->document?->file_to_sign_id)
                 @if(!$flag_pending_state) @php $flag_pending_state = $agreement->isEndorsePendingBySignPos(2) @endphp @endif
                 <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="{{$flag_pending_state ? 'En espera' : $agreement->getEndorseObservationBySignPos(3)}}">
                   <button style ="outline: none !important;padding-top: 0;border: 0;vertical-align: baseline; font-size:10px; text-align: center;" class="btn btn-link text-secondary text-center" style="pointer-events: none;" type="button" disabled><i class="fas {{$flag_pending_state ? 'fa-ellipsis-h' : $agreement->getEndorseStateBySignPos(3)}}"></i></button>
@@ -326,7 +343,7 @@
               @endif
               </td>
               <td><!-- DGF IN -->
-              @if($agreement->file_to_endorse_id)
+              @if($agreement->file_to_endorse_id || $agreement->document?->file_to_sign_id)
                 @if(!$flag_pending_state) @php $flag_pending_state = $agreement->isEndorsePendingBySignPos(3) @endphp @endif
                 <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="{{$flag_pending_state ? 'En espera' : $agreement->getEndorseObservationBySignPos(4)}}">
                   <button style ="outline: none !important;padding-top: 0;border: 0;vertical-align: baseline; font-size:10px; text-align: center;" class="btn btn-link text-secondary text-center" style="pointer-events: none;" type="button" disabled><i class="fas {{$flag_pending_state ? 'fa-ellipsis-h' : $agreement->getEndorseStateBySignPos(4)}}"></i></button>
@@ -401,7 +418,7 @@
               @endif
               </td>
               <td><!-- SDGA IN -->
-              @if($agreement->file_to_endorse_id)
+              @if($agreement->file_to_endorse_id || $agreement->document?->file_to_sign_id)
                 @if(!$flag_pending_state) @php $flag_pending_state = $agreement->isEndorsePendingBySignPos(4) @endphp @endif
                 <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="{{$flag_pending_state ? 'En espera' : $agreement->getEndorseObservationBySignPos(5)}}">
                   <button style ="outline: none !important;padding-top: 0;border: 0;vertical-align: baseline; font-size:10px; text-align: center;" class="btn btn-link text-secondary text-center" style="pointer-events: none;" type="button" disabled><i class="fas {{$flag_pending_state ? 'fa-ellipsis-h' : $agreement->getEndorseStateBySignPos(5)}}"></i></button>

@@ -245,7 +245,8 @@ class ProgrammingReportController extends Controller
         $year = $request->year ?? date("Y");
         $establishments = collect();
         $programming = $professionalHours = $establishment_id = null;
-        if(auth()->user()->hasAllRoles('Programming: Comunal')){
+        /** Reemplazo de rol Programming Comunal */
+        if( auth()->user()->can('Reviews: rectify') AND auth()->user()->can('Programming: report') ){
             $last_year = Programming::latest()->first()->year;
             $last_programmings = Programming::with('establishment:id,type,name')->where('year', $last_year)->get();
             //El usuario tiene acceso por establecimientos?
@@ -260,7 +261,7 @@ class ProgrammingReportController extends Controller
                     $q->whereIn('establishment_id', $establishments->pluck('id')->toArray());
                 })
                 ->get();
-        }elseif(auth()->user()->hasAllRoles('Programming: Admin') || auth()->user()->hasAllRoles('Programming: Review')){
+        }elseif( auth()->user()->cannot('Reviews: edit') ){
             $programmings = Programming::with('establishment:id,type,name')->where('year', $year)->get();
             foreach($programmings as $programming)
                 $establishments->push($programming->establishment);

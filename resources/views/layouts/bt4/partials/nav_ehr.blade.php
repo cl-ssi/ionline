@@ -18,12 +18,12 @@
 
         <ul class="navbar-nav mr-auto">
 
-            @role('dev')
+            @can('dev')
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('ehr.patient.index') }}">
                 <i class="fas fa-heartbeat"></i> EHR</a>
             </li>
-            @endrole
+            @endcan
 
         </ul>
 

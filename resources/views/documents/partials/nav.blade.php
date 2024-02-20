@@ -15,7 +15,7 @@
         </a>
     </li>
 
-    @can('I play with madness')
+    @can('dev')
     <li class="nav-item">
         <a class="nav-link"
             href="{{ route('documents.docdigital.documentos.creados') }}">

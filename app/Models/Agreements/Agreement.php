@@ -83,6 +83,7 @@ class Agreement extends Model
 
     public function getEndorseStateAttribute(){
         if($this->fileResEnd) return 'success';
+        if($this->period >= 2024) return (!$this->document?->fileToSign) ? 'secondary' : ( ($this->document->fileToSign->hasRejectedFlow) ? 'danger' : ( ($this->document->fileToSign->hasAllFlowsSigned) ? 'success' : 'warning' ) );
         return (!$this->fileToEndorse) ? 'secondary' : ( ($this->fileToEndorse->hasRejectedFlow) ? 'danger' : ( ($this->fileToEndorse->hasAllFlowsSigned) ? 'success' : 'warning' ) );
     }
 
@@ -97,24 +98,24 @@ class Agreement extends Model
     }
 
     public function getEndorseStateBySignPos($i){
-        if($this->fileToEndorse)
-            foreach($this->fileToEndorse->signaturesFlows as $signatureFlow)
+        if($this->period >= 2024 ? $this->document->fileToSign : $this->fileToEndorse)
+            foreach($this->period >= 2024 ? $this->document->fileToSign->signaturesFlows : $this->fileToEndorse->signaturesFlows as $signatureFlow)
                 if($signatureFlow->sign_position == $i)
                     return ($signatureFlow->status === 0) ? 'fa-times text-danger' : ( ($signatureFlow->status === 1) ? 'fa-check text-success' : 'fa-check text-warning' );
         return 'fa-ellipsis-h';
     }
 
     public function getEndorseObservationBySignPos($i){
-        if($this->fileToEndorse)
-            foreach($this->fileToEndorse->signaturesFlows as $signatureFlow)
+        if($this->period >= 2024 ? $this->document->fileToSign : $this->fileToEndorse)
+            foreach($this->period >= 2024 ? $this->document->fileToSign->signaturesFlows : $this->fileToEndorse->signaturesFlows as $signatureFlow)
                 if($signatureFlow->sign_position == $i)
                     return ($signatureFlow->status === 0) ? 'Motivo del rechazo: '.$signatureFlow->observation : ( ($signatureFlow->status === 1) ? 'Aceptado el '.$signatureFlow->signature_date->format('d-m-Y H:i') : 'Visación actual' );
         return 'En espera';
     }
 
     public function isEndorsePendingBySignPos($i){
-        if($this->fileToEndorse)
-            foreach($this->fileToEndorse->signaturesFlows as $signatureFlow)
+        if($this->period >= 2024 ? $this->document->fileToSign : $this->fileToEndorse)
+            foreach($this->period >= 2024 ? $this->document->fileToSign->signaturesFlows : $this->fileToEndorse->signaturesFlows as $signatureFlow)
                 if($signatureFlow->sign_position == $i) return $signatureFlow->status == null;
         return false;
     }

@@ -8,10 +8,10 @@
             <div class="dropdown-menu">
                 <a class="dropdown-item {{ active(['allowances.index']) }}" href="{{ route('allowances.index') }}"><i class="fas fa-wallet"></i> Mis víaticos</a>
                 <a class="dropdown-item {{ active(['allowances.create']) }}" href="{{ route('allowances.create') }}"><i class="fas fa-plus"></i> Nueva Solicitud</a>
-                @can('Allowances: all')
+                @canany(['Allowances: all', 'Allowances: all establishment'])
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item {{ active(['allowances.all_index']) }}" href="{{ route('allowances.all_index') }}"><i class="fas fa-wallet"></i> Todos los víaticos</a>
-                @endcan
+                @endcanany
             </div>
         </li>
 

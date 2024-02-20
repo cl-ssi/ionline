@@ -151,6 +151,13 @@
     
     <div class="col-md-3">
         <h6><i class="fas fa-paperclip"></i> Archivos Adjuntos</h6>
+
+        @if($allowance->status == 'manual')
+            <div class="alert alert-info" role="alert">
+                <b>Estimado Usuario</b>: Archivo adjunto no disponible para este Viático
+            </div>
+        @endif
+        
         <div class="list-group">
             @foreach($allowance->files as $allowanceFile)
             <a href="{{ route('allowances.files.show', $allowanceFile) }}" class="list-group-item list-group-item-action py-2 small" target="_blank">
@@ -257,6 +264,12 @@
 <br>
 
 <h6><i class="fas fa-check-circle"></i> Gestión de aprobaciones</h6>
+
+@if($allowance->status == 'manual')
+    <div class="alert alert-info" role="alert">
+        <b>Estimado Usuario</b>: Gestión de aprobaciones no disponible para este Viático
+    </div>
+@endif
 
 <div class="row">
     <div class="col">

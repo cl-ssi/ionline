@@ -19,7 +19,7 @@ class RoleAndPermissionSeeder extends Seeder
         app()['cache']->forget('spatie.permission.cache');
 
         Permission::create(['name' => 'be god']);
-        Permission::create(['name' => 'I play with madness']);
+        Permission::create(['name' => 'dev']);
 
         // create permissions
         Permission::create(['name' => 'Users: must change password', 'description' => 'Para obligar a cambiar su clave (sin uso)']);
@@ -166,11 +166,13 @@ class RoleAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Replacement Staff: create staff', 'description' => 'Permite crear staff (postulantes)']);
         Permission::create(['name' => 'Replacement Staff: admin', 'description' => 'Administrador de Staff de reemplazo']);
 
+        Permission::create(['name' => 'Allowances: all', 'description' => 'Permite visualizar todos los viáticos']);
+        Permission::create(['name' => 'Allowances: all establishment', 'description' => 'Permite visualizar todos los viáticos de todos los establecimientos']);
+        Permission::create(['name' => 'Allowances: contabilidad', 'description' => 'Permite revisión inicial del formulario contabilidad']);
         Permission::create(['name' => 'Allowances: create', 'description' => 'Permite crear viáticos']);
-        Permission::create(['name' => 'Allowances: all',    'description' => 'Permite visualizar todos los viáticos']);
+        Permission::create(['name' => 'Allowances: director', 'description' => 'Permite visualizar viáticos que requieren firma de dirección']);
         Permission::create(['name' => 'Allowances: reports', 'description' => 'Permite acceder a los reportes del módulo']);
         Permission::create(['name' => 'Allowances: sirh', 'description' => 'Permite revisión inicial del formulario e ingreso de folio sirh']);
-        Permission::create(['name' => 'Allowances: director', 'description' => 'Permite visualizar viáticos que requieren firma de dirección']);
 
         Permission::create(['name' => 'Job Position Profile: create', 'description' => 'Permite crear la creación de perfiles de cargo']);
         Permission::create(['name' => 'Job Position Profile: all', 'description' => 'Permite acceder a todo el listado de perfiles de cargo']);
@@ -307,8 +309,7 @@ class RoleAndPermissionSeeder extends Seeder
 
         // create roles and assign created permissions
         // GOD LIKE
-        $role = Role::create(['name' => 'god']);
+        $role = Role::create(['name' => 'god', 'description' => 'God Mode !']);
         $role->givePermissionTo(Permission::all());
-        $role = Role::create(['name' => 'dev']);
     }
 }
