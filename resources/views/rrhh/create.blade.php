@@ -38,7 +38,7 @@
         
         <div class="form-group col-md-1">
             <label for="name">Sexo</label>
-            <select name="gender" class="form-control" required>
+            <select name="gender" class="form-select" required>
                 <option value=""></option>
                 <option value="male">Masculino</option>
                 <option value="female">Femenino</option>
@@ -85,9 +85,9 @@
         
     -->
 
-    <h5>Permisos iniciales</h5>
+    <h5 class="mt-3">Roles iniciales</h5>
 
-    <div class="form-check">
+    <!-- <div class="form-check">
         <input class="form-check-input" type="checkbox" name="permissions[]" value="Authorities: view" checked>
         <label class="form-check-label" for="defaultCheck2">
             Authorities: view
@@ -128,8 +128,17 @@
         <label class="form-check-label" for="defaultCheck1">
             Users: must change password
         </label>
-    </div>
+    </div> -->
     
+    @foreach($roles as $role)
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" name="roles[]" value="{{ $role->name }}">
+        <label class="form-check-label" for="for-rol-{{$role->id}}">
+            {{ $role->name }}: <small class="text-muted"> {{ $role->description }} </small>
+        </label>
+    </div>
+    @endforeach
+
     <button type="submit" class="btn btn-primary mt-3">Crear</button>
 
 
@@ -137,4 +146,39 @@
 </form>
 @endcan
 
+@endsection
+
+@section('custom_js')
+<script>
+        // Función para calcular el dígito verificador (DV)
+        function calcularDV() {
+            var id = document.getElementById("formGroupIDInput").value; // Obtener el valor del ID
+
+            var suma = 0;
+            var multiplicador = 2; // Multiplicador inicial
+
+            // Calcular la suma ponderada de los dígitos
+            for (var i = id.length - 1; i >= 0; i--) {
+                suma += parseInt(id.charAt(i)) * multiplicador;
+
+                // Actualizar el multiplicador para el siguiente dígito
+                multiplicador = multiplicador === 7 ? 2 : multiplicador + 1;
+            }
+
+            // Calcular el dígito verificador (DV)
+            var residuo = suma % 11;
+            var dv = residuo === 0 ? 0 : 11 - residuo;
+
+            // Asignar "K" si el DV es 10
+            if (dv === 10) {
+                dv = "K";
+            }
+
+            // Actualizar el campo del dígito verificador con el resultado
+            document.getElementById("formGroupDVInput").value = dv;
+        }
+
+        // Asociar la función calcularDV al evento input del campo de ID
+        document.getElementById("formGroupIDInput").addEventListener("input", calcularDV);
+    </script>
 @endsection

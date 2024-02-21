@@ -17,6 +17,7 @@ use App\Models\ClCommune;
 use App\Http\Requests\Rrhh\updatePassword;
 use App\Http\Requests\Rrhh\storeUser;
 use App\Http\Controllers\Controller;
+use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
@@ -87,10 +88,10 @@ class UserController extends Controller
      */
     public function create()
     {
-
         //$ouRoot = OrganizationalUnit::find(1);
         $ouRoots = OrganizationalUnit::where('level', 1)->get();
-        return view('rrhh.create')->withOuRoots($ouRoots);
+        $roles = Role::whereNot('name','god')->orderBy('name')->get();
+        return view('rrhh.create', compact('ouRoots','roles'));
     }
 
     /**
@@ -116,13 +117,8 @@ class UserController extends Controller
 
         $user->save();
 
-        if ($request->hasFile('photo')) {
-            $path = $request->file('photo')
-                ->storeAs('public', $user->id . '.' . $request->file('photo')->clientExtension());
-        }
-
-        foreach($request->input('permissions') as $permission) {
-            $user->givePermissionTo($permission);
+        foreach($request->input('roles') as $role) {
+            $user->assignRole($role);
         }
         // $user->givePermissionTo('Authorities: view');
         // $user->givePermissionTo('Calendar: view');
