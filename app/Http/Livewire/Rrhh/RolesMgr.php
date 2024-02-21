@@ -39,7 +39,7 @@ class RolesMgr extends Component
             $this->openPermissions[$rol->id] = false;
         }
     }
-    
+
     public function togglePermissions($roleId)
     {
         // Cambiar el estado de los permisos para mostrar/ocultar
