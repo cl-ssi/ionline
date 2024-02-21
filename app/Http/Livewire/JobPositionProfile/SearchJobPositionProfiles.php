@@ -24,6 +24,7 @@ class SearchJobPositionProfiles extends Component
     public $selectedEstament    = null;
     public $selectedId          = null;  
     public $selectedUserCreator = null;
+    public $selectedName        = null;
     public $ou_dependents_array = [];
     public $selectedSub = null;
 
@@ -43,6 +44,7 @@ class SearchJobPositionProfiles extends Component
                     ->search($this->selectedStatus,
                         $this->selectedEstament,
                         $this->selectedId,
+                        $this->selectedName,
                         $this->selectedUserCreator,
                         $this->ou_dependents_array)
                     ->paginate(50),
@@ -106,6 +108,7 @@ class SearchJobPositionProfiles extends Component
                     ->search($this->selectedStatus,
                         $this->selectedEstament,
                         $this->selectedId,
+                        $this->selectedName,
                         $this->selectedUserCreator,
                         $this->ou_dependents_array)
                     ->paginate(50),

@@ -36,6 +36,12 @@
             </fieldset>
 
             <fieldset class="form-group col-12 col-md-2">
+                <label for="for_requester">Nombre Perfil de Cargo</label>
+                <input class="form-control" type="text" autocomplete="off"
+                    name="name_search" wire:model.debounce.500ms="selectedName">
+            </fieldset>
+
+            <fieldset class="form-group col-12 col-md-2">
                 <label for="for_requester">Usuario Creador</label>
                 <input class="form-control" type="text" autocomplete="off" placeholder="NOMBRE / APELLIDOS"
                     name="user_creator_search" wire:model.debounce.500ms="selectedUserCreator">
