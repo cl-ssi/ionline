@@ -13,7 +13,7 @@ class Dispatch extends Model
    * @var array
    */
   protected $fillable = [
-      'id', 'date', 'pharmacy_id', 'establishment_id', 'notes', 'user_id', 'receiver_id', 'sendC19', 'created_at'
+      'id', 'date', 'pharmacy_id', 'establishment_id', 'notes','inventory_adjustment_id', 'user_id', 'receiver_id', 'sendC19', 'created_at'
   ];
 
   use SoftDeletes;
@@ -54,6 +54,11 @@ class Dispatch extends Model
   public function verificationMailings()
   {
     return $this->hasMany('App\Models\Pharmacies\DispatchVerificationMailing');
+  }
+
+  public function inventoryAdjustment()
+  {
+    return $this->belongsTo('App\Models\Pharmacies\InventoryAdjustment');
   }
 
   protected $dates = ['date'];

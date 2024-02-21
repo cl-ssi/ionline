@@ -21,6 +21,7 @@
         <fieldset class="form-group col">
             <label for="for_origin">Origen</label>
             <select name="establishment_id" class="form-control selectpicker" data-live-search="true" required="">
+                <option value=""></option>
                 @foreach ($establishments as $key => $establishment)
                 <option value="{{$establishment->id}}" @if ($receiving->establishment_id == $establishment->id)@endif>
                     {{$establishment->name}}

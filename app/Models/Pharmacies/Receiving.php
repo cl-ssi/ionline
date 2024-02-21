@@ -13,7 +13,7 @@ class Receiving extends Model
    * @var array
    */
   protected $fillable = [
-      'id', 'date', 'establishment_id', 'pharmacy_id', 'notes', 'order_number', 'user_id', 'created_at'
+      'id', 'date', 'establishment_id', 'pharmacy_id', 'notes','inventory_adjustment_id', 'order_number', 'user_id', 'created_at'
   ];
 
   use SoftDeletes;
@@ -39,6 +39,11 @@ class Receiving extends Model
   public function user()
   {
     return $this->belongsTo('App\User')->withTrashed();
+  }
+
+  public function inventoryAdjustment()
+  {
+    return $this->belongsTo('App\Models\Pharmacies\InventoryAdjustment');
   }
 
   protected $dates = ['date'];

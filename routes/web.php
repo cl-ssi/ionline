@@ -2077,15 +2077,13 @@ Route::prefix('pharmacies')->as('pharmacies.')->middleware(['auth', 'must.change
         Route::get('/signed-record-pdf/{purchase}', [PurchaseController::class, 'signedRecordPdf'])->name('signed_record_pdf');
 
         Route::prefix('inventory_adjustments')->as('inventory_adjustments.')->group(function () {
-            // Route::get('/', [InventoryAdjustmentController::class, 'index'])->name('index');
-            // Route::get('/own', [PaymentController::class, 'indexOwn'])->name('own');
-            // Route::get('/review', [PaymentController::class, 'review'])->name('review');
-            // Route::get('/{dte}/return-to-dte-inbox', [PaymentController::class, 'returnToDteInbox'])->name('returnToDteInbox');
-            // Route::get('/{dte}/send-to-ready-inbox', [PaymentController::class, 'sendToReadyInbox'])->name('sendToReadyInbox');        
-            // Route::get('/ready', [PaymentController::class, 'ready'])->name('ready');
-            // Route::put('/{dte}/return-to-review', [PaymentController::class, 'returnToReview'])->name('returnToReview');
-            // Route::get('/rejected', [PaymentController::class, 'rejected'])->name('rejected');
-            // Route::put('/{dte}/update', [PaymentController::class, 'update'])->name('update');
+            Route::get('/', [InventoryAdjustmentController::class, 'index'])->name('index');
+            Route::get('/create', [InventoryAdjustmentController::class, 'create'])->name('create');
+            Route::post('/store', [InventoryAdjustmentController::class, 'store'])->name('store');
+            Route::get('/{inventoryAdjustment}', [InventoryAdjustmentController::class, 'show'])->name('show');
+            Route::post('/store_detail', [InventoryAdjustmentController::class, 'store_detail'])->name('store_detail');
+            Route::get('/{inventoryAdjustment}/edit', [InventoryAdjustmentController::class, 'edit'])->name('edit');
+            Route::delete('/{inventoryAdjustment}/destroy', [InventoryAdjustmentController::class, 'destroy'])->name('destroy');
         });
 
         Route::resource('transfer', App\Http\Controllers\Pharmacies\TransferController::class);

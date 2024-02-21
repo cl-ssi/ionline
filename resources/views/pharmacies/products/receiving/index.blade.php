@@ -30,7 +30,7 @@
 				<th scope="col">Fecha</th>
 				<th scope="col">Establecimiento</th>
 				<th scope="col">Notas</th>
-				<th scope="col">Accion</th>
+				<th scope="col"></th>
 			</tr>
 		</thead>
 		<tbody>
@@ -38,7 +38,7 @@
 			<tr>
 				<td>{{ $receiving->id }}</td>
         <td>{{ Carbon\Carbon::parse($receiving->date)->format('d/m/Y')}}</td>
-        <td>{{ $receiving->establishment->name }}</td>
+        <td>{{ $receiving->establishment ? $receiving->establishment->name :  '' }}</td>
         <td>{{ $receiving->notes }}</td>
 		<td  nowrap>
 				@can('Pharmacy: edit_delete')
