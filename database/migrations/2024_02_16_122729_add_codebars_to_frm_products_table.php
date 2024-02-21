@@ -29,7 +29,10 @@ return new class extends Migration
     public function down()
     {
         Schema::table('frm_products', function (Blueprint $table) {
-            //
+            $table->dropColumn('barcode');
+            $table->dropColumn('experto_id');
+            $table->dropForeign(['frm_products_unspsc_product_id_foreign']);
+            $table->dropColumn('unspsc_product_id');
         });
     }
 };
