@@ -21,7 +21,7 @@ class TgrPayedDte extends Model
         'tipo_operacion',
         'fecha_generacion',
         'cuenta_contable',
-        'tipo_documento',
+        'tipo_documento_tgr',
         'nro_documento',
         'fecha_cumplimiento',
         'combinacion_catalogo',
@@ -42,6 +42,7 @@ class TgrPayedDte extends Model
         'medio_de_pago',
         'numero_de_medio_de_pago',
         'cuenta_tgr',
+        'dte_id',
     ];
 
 

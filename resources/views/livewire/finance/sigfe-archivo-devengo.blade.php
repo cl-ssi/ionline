@@ -5,9 +5,11 @@
             <button wire:click="downloadFile('{{ $archivoDevengo }}')" class="btn btn-sm btn-success">
                 <i class="fas fa-download"></i> Descargar
             </button>
-            <button wire:click="deleteFile('{{ $archivoDevengo }}')" class="btn btn-sm btn-danger">
-                <i class="fas fa-trash-alt"></i> Eliminar
-            </button>
+            @if(!$onlyRead)
+                <button wire:click="deleteFile('{{ $archivoDevengo }}')" class="btn btn-sm btn-danger">
+                    <i class="fas fa-trash-alt"></i> Eliminar
+                </button>
+            @endif
         </div>
     @else
         <input type="file" wire:model="file" accept=".pdf">

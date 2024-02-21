@@ -3,7 +3,9 @@
     
 
     @include('layouts.bt5.partials.flash_message')
-    <h3 class="mb-3">Cargar archivo de TGR con reporte de de Pagos de a Proveedores</h3>
+    <h3 class="mb-3">Cargar archivo de TGR con reporte de Pagos a Proveedores</h3>
+    <a href="#" target="_blank">Descargar formato del archivo de Pagos a Proveedores</a> 
+    <br><br>
     <form wire:submit.prevent="upload">
         <div>
             @if (session()->has('message'))
@@ -25,6 +27,8 @@
 
     <hr>
     <h3 class="mb-3">Cargar archivo de TGR con Cartera Financiera Contable</h3>
+    <a href="#" target="_blank">Descargar formato del archivo de Cartera Financiera Contable</a> 
+    <br><br>
     <form wire:submit.prevent="uploadAccountingPortfolio">
         <div>
             @if (session()->has('message'))

@@ -17,6 +17,7 @@ class SigfeArchivoDevengo extends Component
     public $successMessage = '';
     public $folder = 'ionline/finances/sigfe/devengo';
     public $archivoDevengo = null;
+    public $onlyRead = false;
 
 
     public function mount($dte)
