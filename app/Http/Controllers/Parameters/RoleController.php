@@ -16,8 +16,10 @@ class RoleController extends Controller
      */
     public function index()
     {
-        $roles = Role::All();
-
+        $roles = Role::with('permissions')
+            // ->whereNotIn('name',['dev','god'])
+            ->orderBy('name')
+            ->get();
         return view('parameters.roles.index', compact('roles'));
     }
 
