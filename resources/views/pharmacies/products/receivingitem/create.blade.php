@@ -1,48 +1,32 @@
-<form method="POST" class="form-horizontal" action="{{ route('pharmacies.products.receiving_item.store') }}">
-    @csrf
+<!-- si no es un ajuste de inventarios, se muestra información para agregar detalles -->
+@if(!$receiving->inventory_adjustment_id)
+    <form method="POST" class="form-horizontal" action="{{ route('pharmacies.products.receiving_item.store') }}">
+        @csrf
 
-    {{--<!--
-    <div class="form-row">
-        <fieldset class="form-group col-2">
-            <label for="for_barcode">Código de Barra</label>
-            <input type="number" class="form-control" id="for_barcode" placeholder="" name="barcode">
-        </fieldset>
+        @livewire('pharmacies.product-search')
 
-        <fieldset class="form-group col">
-            <label for="for_product">Producto</label>
-            <select id="for_product" class="form-control" name="product_id" onchange="jsCambiaSelect(this)">
-                <option></option>
-              @foreach ($products as $key => $product)
-                <option value="{{$product->id}}">{{$product->name}}</option>
-              @endforeach
-            </select>
-        </fieldset> 
-    
-        <fieldset class="form-group col-2">
-            <label for="for_quantity">Cantidad</label>
-            <input type="number" class="form-control" id="for_quantity" placeholder="" name="amount" required="">
-        </fieldset>
-    </div>-->--}}
+        <input type="hidden" name="receiving_id" value="{{$receiving->id}}" />
 
-    @livewire('pharmacies.product-search')
+        <div class="form-row">
+            <fieldset class="form-group col-3">
+                <label for="for_serie">F. Vencimiento</label>
+                <input type="date" class="form-control" id="for_date" name="due_date" required="required">
+            </fieldset>
 
-    <input type="hidden" name="receiving_id" value="{{$receiving->id}}" />
+            <fieldset class="form-group col-3">
+                <label for="for_lote">Serie/Lote</label>
+                <input type="text" class="form-control" id="for_lote" placeholder="Número de Lote" name="batch" required="">
+            </fieldset>
 
-    <div class="form-row">
-        <fieldset class="form-group col-3">
-            <label for="for_serie">F. Vencimiento</label>
-            <input type="date" class="form-control" id="for_date" name="due_date" required="required">
-        </fieldset>
+        </div>
 
-        <fieldset class="form-group col-3">
-            <label for="for_lote">Serie/Lote</label>
-            <input type="text" class="form-control" id="for_lote" placeholder="Número de Lote" name="batch" required="">
-        </fieldset>
-
+        <button type="submit" class="btn btn-primary">Crear</button>
+    </form>
+@else
+    <div class="alert alert-warning" role="alert">
+        Para modificar un ajuste de inventarios, debe dirigirse a esa opción.
     </div>
-
-    <button type="submit" class="btn btn-primary">Crear</button>
-</form>
+@endif
 
 <br class="m-5">
 

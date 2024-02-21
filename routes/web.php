@@ -2084,6 +2084,9 @@ Route::prefix('pharmacies')->as('pharmacies.')->middleware(['auth', 'must.change
             Route::post('/store_detail', [InventoryAdjustmentController::class, 'store_detail'])->name('store_detail');
             Route::get('/{inventoryAdjustment}/edit', [InventoryAdjustmentController::class, 'edit'])->name('edit');
             Route::delete('/{inventoryAdjustment}/destroy', [InventoryAdjustmentController::class, 'destroy'])->name('destroy');
+
+            Route::delete('/{receivingItem}/destroy_receivingItem', [InventoryAdjustmentController::class, 'destroy_receivingItem'])->name('destroy_receivingItem');
+            Route::delete('/{dispatchItem}/destroy_dispatchItem', [InventoryAdjustmentController::class, 'destroy_dispatchItem'])->name('destroy_dispatchItem');
         });
 
         Route::resource('transfer', App\Http\Controllers\Pharmacies\TransferController::class);

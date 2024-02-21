@@ -1,12 +1,12 @@
 @extends('layouts.bt4.app')
 
-@section('title', 'Crear nuevo ajuste de inventario')
+@section('title', 'Editar ingreso')
 
 @section('content')
 
 @include('pharmacies.nav')
 
-<h3>Nuevo Ajuste de Inventario</h3>
+<h3>Editar Ajuste de Inventario</h3>
 
 <div class="form-row">
       <fieldset class="form-group col-3">
@@ -109,10 +109,14 @@
     </tbody>
 </table>
 
-
-
 @endsection
 
 @section('custom_js')
+
+    <script>
+        $( document ).ready(function() {
+        document.getElementById("for_barcode").focus();
+        });
+    </script>
 
 @endsection

@@ -24,11 +24,13 @@
     </li>
     @endcan
 
-    <!-- <li class="nav-item">
-        <a class="nav-link"
-            href="{{ route('pharmacies.products.inventory_adjustments.index') }}">
-            <i class="fas fa-pen"></i> Ajuste de inventario</a>
-    </li> -->
+    @canany(['Pharmacy: inventory adjustment'])
+        <li class="nav-item">
+            <a class="nav-link"
+                href="{{ route('pharmacies.products.inventory_adjustments.index') }}">
+                <i class="fas fa-pen"></i> Ajuste de inventario</a>
+        </li>
+    @endcan
 
     @canany(['Pharmacy: transfer'])
     <li class="nav-item">

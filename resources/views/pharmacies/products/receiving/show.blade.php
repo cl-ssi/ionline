@@ -16,9 +16,7 @@
 
       <fieldset class="form-group col">
             <label for="for_origin">Origen</label>
-            <select name="establishment_id" class="form-control selectpicker" data-live-search="true" disabled>
-                    <option value="{{$establishment->id}}">{{$establishment->name}}</option>
-            </select>
+            <input class="form-control" type="text" disabled @if($establishment) value="{{$establishment->name}}" @endif>
       </fieldset>
 </div>
 
@@ -47,34 +45,5 @@
         document.getElementById("for_barcode").focus();
         });
     </script>
-
-    <!--
-    document.onkeydown=function(evt){
-        var keyCode = evt ? (evt.which ? evt.which : evt.keyCode) : event.keyCode;
-        var barcode = document.getElementById("for_barcode").value;
-        if(keyCode == 13)
-        {
-          @foreach ($products as $key => $product)
-            if ({{$product->barcode}} == barcode) {
-              document.getElementById("for_product").value = {{$product->id}};
-              document.getElementById("for_unity").value = "{{$product->unit}}";
-            }
-          @endforeach
-
-        }
-    }
-
-    function jsCambiaSelect(selectObject)
-    {
-      var value = selectObject.value;
-      @foreach ($products as $key => $product)
-        if ({{$product->id}} == value) {
-          document.getElementById("for_barcode").value = {{$product->barcode}};
-          document.getElementById("for_unity").value = "{{$product->unit}}";
-          document.getElementById("for_quantity").focus();
-        }
-      @endforeach
-    }
-  </script> -->
 
 @endsection

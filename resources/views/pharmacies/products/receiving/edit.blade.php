@@ -59,39 +59,5 @@
         document.getElementById("for_barcode").focus();
         });
     </script>
-  <!-- <script>
-    $( document ).ready(function() {
-      document.getElementById("for_barcode").focus();
-    });
-
-
-    document.onkeydown=function(evt){
-        var keyCode = evt ? (evt.which ? evt.which : evt.keyCode) : event.keyCode;
-        var barcode = document.getElementById("for_barcode").value;
-        if(keyCode == 13)
-        {
-          @foreach ($products as $key => $product)
-            if ({{$product->barcode}} == barcode) {
-              document.getElementById("for_product").value = {{$product->id}};
-              document.getElementById("for_unity").value = "{{$product->unit}}";
-            }
-          @endforeach
-
-        }
-    }
-
-    function jsCambiaSelect(selectObject)
-    {
-      var value = selectObject.value;
-      @foreach ($products as $key => $product)
-        if ({{$product->id}} == value) {
-        //   document.getElementById("for_barcode").value = {{$product->barcode}};
-          document.getElementById("for_experto_id").value = {{$product->experto_id}};
-          document.getElementById("for_unity").value = "{{$product->unit}}";
-          document.getElementById("for_quantity").focus();
-        }
-      @endforeach
-    }
-  </script> -->
 
 @endsection

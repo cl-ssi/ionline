@@ -1,62 +1,17 @@
-<form method="POST" class="form-horizontal" action="{{ route('pharmacies.products.dispatch_item.store') }}">
-    @csrf
+<!-- si no es un ajuste de inventarios, se muestra información para agregar detalles -->
+@if(!$dispatch->inventory_adjustment_id)
+    <form method="POST" class="form-horizontal" action="{{ route('pharmacies.products.dispatch_item.store') }}">
+        @csrf
 
-    @livewire('pharmacies.product-duedate-batch-stock',['dispatch' => $dispatch])
+        @livewire('pharmacies.product-duedate-batch-stock',['dispatch' => $dispatch])
 
-    <!--
-    {{-- <div class="form-row">
-        <fieldset class="form-group col-2">
-            <label for="for_barcode">Código de Barra</label>
-            <input type="number" class="form-control" id="for_barcode" placeholder="" name="barcode">
-        </fieldset>
-
-        <input type="hidden" name="dispatch_id" value="{{$dispatch->id}}" />
-
-        <fieldset class="form-group col">
-            <label for="for_product">Producto</label>
-            <select id="for_product" class="form-control" name="product_id" onchange="jsCambiaSelect(this)">
-                <option></option>
-              @foreach ($products as $key => $product)
-                <option value="{{$product->id}}">{{$product->name}}</option>
-              @endforeach
-            </select>
-        </fieldset>
-
-        <fieldset class="form-group col-2">
-            <label for="for_quantity">Cantidad</label>
-            <input type="number" class="form-control" id="for_quantity" placeholder="" name="amount" required="">
-        </fieldset>
-
-        <input type="hidden" id="for_unity" name="unity" />
-
+        <button type="submit" class="btn btn-primary" @disabled($dispatch->inventory_adjustment_id)>Crear</button>
+    </form>
+@else
+    <div class="alert alert-warning" role="alert">
+        Para modificar un ajuste de inventarios, debe dirigirse a esa opción.
     </div>
-
-    <div class="form-row">
-
-
-       <fieldset class="form-group col-5">
-            <label for="for_serie">F. Vencimiento</label>
-            <select id="for_due_date" name="due_date" class="form-control " required="">
-
-            </select>
-        </fieldset>
-
-        <fieldset class="form-group col-5">
-            <label for="for_lote">Serie/Lote</label>
-            <select id="for_batch" name="batch" class="form-control" required="">
-
-            </select>
-        </fieldset>
-
-        <fieldset class="form-group col-2">
-            <label for="for_count">Disponible</label>
-            <input type="text" id="for_count" name="count" class="form-control" disabled>
-        </fieldset>
-
-    </div> --}} -->
-
-    <button type="submit" class="btn btn-primary">Crear</button>
-</form>
+@endif
 
 <br class="m-5">
 
