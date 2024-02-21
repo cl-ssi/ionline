@@ -42,7 +42,8 @@ class RequirementReceivers extends Component
                                             ->user_id;
 
         if($auth_user_id == $manager_user_id && $this->parte_id!=null){
-            $ouTree = Establishment::find(38)->getOuTreeWithAliasByLevelAttribute(2);
+            // $ouTree = Establishment::find(38)->getOuTreeWithAliasByLevelAttribute(2);
+            $ouTree = Establishment::find(38)->getOuTreeWithAliasAttribute();
             foreach($ouTree as $key => $outree){
                 $this->ouRoots[] = array('id'=> $key, 'name' => $outree);
             }

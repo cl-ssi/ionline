@@ -26,7 +26,14 @@
         </div>
     @endcan
 
+    <!-- @php $anterior = null; @endphp -->
     @foreach($roles as $rol)
+
+        <!-- @if( current(explode(':', $rol->name)) != current(explode(':', $anterior)))
+            <hr>
+        @endif
+        @php $anterior = $rol->name; @endphp -->
+
         <div class="form-check form-switch">
             <!-- Botón para mostrar/ocultar los permisos -->
             <button wire:click="togglePermissions('{{ $rol->id }}')" class="btn btn-sm link-primary">

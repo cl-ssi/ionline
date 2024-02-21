@@ -1142,14 +1142,14 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
 
         Route::get('/last-access', [UserController::class, 'lastAccess'])->name('last-access');
 
-        Route::prefix('service_requests')->name('service_requests.')->group(function () {
-            Route::get('/', [UserController::class, 'index_sr'])->name('index')->middleware('auth');
-            Route::get('/create', [UserController::class, 'create_sr'])->name('create')->middleware('auth');
-            Route::post('/', [UserController::class, 'store_sr'])->name('store')->middleware('auth');
-            Route::get('/{user}/edit', [UserController::class, 'edit_sr'])->name('edit')->middleware('auth');
-            Route::put('/{user}', [UserController::class, 'update_sr'])->name('update')->middleware('auth');
-            Route::delete('/{user}', [UserController::class, 'destroy_sr'])->name('destroy')->middleware('auth');
-        });
+        // Route::prefix('service_requests')->name('service_requests.')->group(function () {
+        //     Route::get('/', [UserController::class, 'index_sr'])->name('index')->middleware('auth');
+        //     Route::get('/create', [UserController::class, 'create_sr'])->name('create')->middleware('auth');
+        //     Route::post('/', [UserController::class, 'store_sr'])->name('store')->middleware('auth');
+        //     Route::get('/{user}/edit', [UserController::class, 'edit_sr'])->name('edit')->middleware('auth');
+        //     Route::put('/{user}', [UserController::class, 'update_sr'])->name('update')->middleware('auth');
+        //     Route::delete('/{user}', [UserController::class, 'destroy_sr'])->name('destroy')->middleware('auth');
+        // });
     });
 });
 

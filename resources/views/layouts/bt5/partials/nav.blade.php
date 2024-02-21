@@ -448,12 +448,6 @@
                         </a>
                         @endcan
 
-                        @canany(['Users: service requests'])
-                        <a class="dropdown-item {{ active('rrhh.users.service_requests.index') }}" href="{{ route('rrhh.users.service_requests.index') }}">
-                            <i class="fas fa-user fa-fw"></i> Usuarios - Contrat. de Servicios
-                        </a>
-                        @endcan
-
                         @if(auth()->user()->manager->count() > 0 ||
                             auth()->user()->can('Replacement Staff: assign request') ||
                             auth()->user()->can('Replacement Staff: create request') ||
