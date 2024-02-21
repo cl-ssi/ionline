@@ -16,7 +16,7 @@
 
       <fieldset class="form-group col">
             <label for="for_origin">Origen</label>
-            <input class="form-control" type="text" disabled value="{{$establishment}}">
+            <input class="form-control" type="text" disabled @if($establishment) value="{{$establishment->name}}" @endif>
       </fieldset>
 </div>
 

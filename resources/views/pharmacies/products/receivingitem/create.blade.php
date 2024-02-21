@@ -1,25 +1,32 @@
-<form method="POST" class="form-horizontal" action="{{ route('pharmacies.products.receiving_item.store') }}">
-    @csrf
+<!-- si no es un ajuste de inventarios, se muestra información para agregar detalles -->
+@if(!$receiving->inventory_adjustment_id)
+    <form method="POST" class="form-horizontal" action="{{ route('pharmacies.products.receiving_item.store') }}">
+        @csrf
 
-    @livewire('pharmacies.product-search')
+        @livewire('pharmacies.product-search')
 
-    <input type="hidden" name="receiving_id" value="{{$receiving->id}}" />
+        <input type="hidden" name="receiving_id" value="{{$receiving->id}}" />
 
-    <div class="form-row">
-        <fieldset class="form-group col-3">
-            <label for="for_serie">F. Vencimiento</label>
-            <input type="date" class="form-control" id="for_date" name="due_date" required="required">
-        </fieldset>
+        <div class="form-row">
+            <fieldset class="form-group col-3">
+                <label for="for_serie">F. Vencimiento</label>
+                <input type="date" class="form-control" id="for_date" name="due_date" required="required">
+            </fieldset>
 
-        <fieldset class="form-group col-3">
-            <label for="for_lote">Serie/Lote</label>
-            <input type="text" class="form-control" id="for_lote" placeholder="Número de Lote" name="batch" required="">
-        </fieldset>
+            <fieldset class="form-group col-3">
+                <label for="for_lote">Serie/Lote</label>
+                <input type="text" class="form-control" id="for_lote" placeholder="Número de Lote" name="batch" required="">
+            </fieldset>
 
+        </div>
+
+        <button type="submit" class="btn btn-primary">Crear</button>
+    </form>
+@else
+    <div class="alert alert-warning" role="alert">
+        Para modificar un ajuste de inventarios, debe dirigirse a esa opción.
     </div>
-
-    <button type="submit" class="btn btn-primary">Crear</button>
-</form>
+@endif
 
 <br class="m-5">
 

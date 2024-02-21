@@ -18,11 +18,7 @@
 
       <fieldset class="form-group col">
             <label for="for_origin">Destino</label>
-            <select name="establishment_id" class="form-control selectpicker" data-live-search="true" disabled>
-                    @if($establishment)
-                        <option value="{{$establishment->id}}">{{$establishment->name}}</option>
-                    @endif
-            </select>
+            <input class="form-control" type="text" disabled @if($establishment) value="{{$establishment->name}}" @endif>
       </fieldset>
 
         <fieldset class="form-group col">
