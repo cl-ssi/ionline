@@ -6,9 +6,10 @@ use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use App\Models\Finance\TgrPayedDte;
-use App\Models\Finance\TgrAccountingPortfolio;
 use App\Models\Finance\Dte;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
+use Carbon\Carbon;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 
 class TgrsImport implements WithHeadingRow, ToCollection,WithChunkReading
 {
@@ -24,8 +25,7 @@ class TgrsImport implements WithHeadingRow, ToCollection,WithChunkReading
 
         foreach ($rows as $row) {
             if(isset($row['principal']))
-            {
-                //dd($row);
+            {                
                 list($rut_emisor, $razon_social_emisor) = explode(' ', $row['principal'], 2);
                 $rut_emisor_formateado = $this->formatRut($rut_emisor);
 
@@ -62,9 +62,11 @@ class TgrsImport implements WithHeadingRow, ToCollection,WithChunkReading
                     'area_transaccional' => $row['area_transaccional'],
                     'folio' => $row['folio'],
                     'tipo_operacion' => $row['tipo_operacion'],
+                    'fecha_generacion' => isset($row['fecha_generacion']) ? Carbon::instance(Date::excelToDateTimeObject($row['fecha_generacion'])) : null,
                     'cuenta_contable' => $row['cuenta_contable'],
                     'tipo_documento_tgr' => $row['tipo_documento'],
                     'nro_documento' => $row['nro_documento'],
+                    'fecha_cumplimiento' => isset($row['fecha_cumplimiento']) ? Carbon::instance(Date::excelToDateTimeObject($row['fecha_cumplimiento'])) : null,
                     'combinacion_catalogo' => $row['combinacion_catalogo'],
                     'principal' => $row['principal'],
                     'principal_relacionado' => $row['principal_relacionado'],
@@ -89,19 +91,20 @@ class TgrsImport implements WithHeadingRow, ToCollection,WithChunkReading
         
         TgrPayedDte::upsert(
             $insert_array,
-            ['rut_emisor', 'folio_documento'],
+            ['rut_emisor', 'folio_documento', 'tipo_documento'],
             [
-                'razon_social_emisor', 
-                'tipo_documento', 
-                'area_transaccional', 
-                'folio', 
-                'tipo_operacion', 
+                'razon_social_emisor',
+                'area_transaccional',
+                'folio',
+                'tipo_operacion',
+                'fecha_generacion',
                 'cuenta_contable',
                 'nro_documento',
-                'combinacion_catalogo', 
-                'principal', 
-                'principal_relacionado', 
-                'beneficiario', 
+                'fecha_cumplimiento',
+                'combinacion_catalogo',
+                'principal',
+                'principal_relacionado',
+                'beneficiario',
                 'banco_cta_corriente',
                 'medio_pago',
                 'tipo_medio_pago',

@@ -120,9 +120,7 @@ class UserController extends Controller
         foreach($request->input('roles') as $role) {
             $user->assignRole($role);
         }
-        // $user->givePermissionTo('Authorities: view');
-        // $user->givePermissionTo('Calendar: view');
-        // $user->givePermissionTo('Requirements: create');
+        $user->givePermissionTo('Users: must change password');
 
 
         session()->flash('info', 'El usuario ' . $user->name . ' ha sido creado.');
@@ -218,8 +216,7 @@ class UserController extends Controller
         $user->roles()->detach();
         /* Segundo limpiamos permisos y contraseña */
         $user->syncPermissions([]);
-        $user->givePermissionTo('Users: must change password');
-        $user->givePermissionTo('Nuevo iOnline');
+
         $user->password = null;
         $user->save();
 
