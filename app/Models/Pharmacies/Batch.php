@@ -4,11 +4,12 @@ namespace App\Models\Pharmacies;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Batch extends Model
 {
     use HasFactory;
-
+    use SoftDeletes;
     //
     protected $fillable = [
         'id','product_id','due_date','batch','count'

@@ -92,15 +92,15 @@ class InventoryAdjustmentController extends Controller
         elseif($request->amount < $request->count){
 
         }
-        dd("");
+
     }
 
     public function edit(InventoryAdjustment $inventoryAdjustment){
-        dd($inventoryAdjustment);
+        // dd($inventoryAdjustment);
         return view('pharmacies.products.dispatch.edit', compact('establishments','dispatch','products','matrix_due_date','matrix_batch'));
     }
 
     public function destroy(InventoryAdjustment $inventoryAdjustment){
-        dd($inventoryAdjustment);
+        // dd($inventoryAdjustment);
     }
 }

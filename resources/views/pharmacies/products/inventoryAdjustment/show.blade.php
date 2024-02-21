@@ -35,6 +35,37 @@
 
 </form>
 
+<hr>
+
+<h2>Detalle</h2>
+
+@if($inventoryAdjustment->receiving)
+    <table class="table table-striped table-sm" id="tabla_receiving">
+		<thead>
+			<tr>
+				<th scope="col">id</th>
+				<th scope="col">Producto</th>
+				<th scope="col">F.Vencimiento</th>
+				<th scope="col">Lote</th>
+				<th scope="col">Valor antiguo</th>
+                <th scope="col">Nuevo valor</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach($inventoryAdjustment->receiving->receivingItems as $key => $item)
+			<tr>
+				<td>{{ $item->id }}</td>
+                <td>{{ $item->product->name }}</td>
+                <td>{{ $item->due_date }}</td>
+                <td>{{ $item->batch }}</td>
+                <td>{{ $item->batch_r->count - $item->amount }}</td>
+                <td>{{ $item->batch_r->count }}</td>
+			</tr>
+			@endforeach
+		</tbody>
+	</table>
+@endif
+
 
 @endsection
 

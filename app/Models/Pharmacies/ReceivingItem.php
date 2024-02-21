@@ -33,6 +33,11 @@ class ReceivingItem extends Model
     return $this->belongsTo('App\Models\Pharmacies\Product','product_id')->withTrashed();
   }
 
+  public function batch_r()
+  {
+    return $this->belongsTo('App\Models\Pharmacies\Batch','batch_id');
+  }
+
   /**
    * The attributes that should be mutated to dates.
    *

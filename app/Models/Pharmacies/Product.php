@@ -163,7 +163,7 @@ class Product extends Model
                         $matrix[$cont]['id'] = $CollectionItem->receiving->id;
                         //$matrix[$cont]['date'] = $CollectionItem->created_at->format("Y-m-d H:i:s");
                         $matrix[$cont]['date'] = $CollectionItem->receiving->date->format("Y-m-d");
-                        $matrix[$cont]['origen_destino'] = $CollectionItem->receiving->establishment->name;
+                        $matrix[$cont]['origen_destino'] = $CollectionItem->receiving->establishment ? $CollectionItem->receiving->establishment->name : '';
                         //$matrix[$cont]['ingreso'] = $CollectionItem->amount;
                         //$matrix[$cont]['salida'] = 0;
                         //$matrix[$cont]['saldo'] = $saldo;
