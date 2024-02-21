@@ -39,7 +39,7 @@ class TgrsAccountingPortfolioImport implements ToCollection, WithHeadingRow, Wit
                 'principal' => $row['principal'],
                 'saldo' => $row['saldo'],
                 'tipo_movimiento' => $row['tipo_movimiento'],
-                'fecha' => isset($row['fecha']) ? Carbon::instance(Date::excelToDateTimeObject($row['fecha'])) : null,                
+                'fecha' => isset($row['fecha']) ? Carbon::instance(Date::excelToDateTimeObject($row['fecha'])) : null,
                 'titulo' => $row['titulo'],
                 'debe' => $row['debe'],
                 'haber' => $row['haber'],

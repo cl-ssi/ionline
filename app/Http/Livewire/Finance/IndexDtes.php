@@ -2,11 +2,12 @@
 
 namespace App\Http\Livewire\Finance;
 
-use Livewire\WithPagination;
-use Livewire\Component;
+use App\Models\Establishment;
 use App\Models\Finance\Dte;
 use App\Models\Finance\Receptions\Reception;
-use App\Models\Establishment;
+use App\Notifications\Finance\DteConfirmation;
+use Livewire\Component;
+use Livewire\WithPagination;
 
 
 class IndexDtes extends Component
@@ -60,6 +61,31 @@ class IndexDtes extends Component
                     case 'folio_oc':
                         $query->where('folio_oc', 'like', '%' . $value. '%');
                         break;
+                    case 'oc':
+                        switch ($value) {
+                            case 'Con OC':
+                                $query->whereNotNull('folio_oc');
+                                break;
+                            case 'Sin OC':
+                                $query->whereNull('folio_oc');
+                                break;
+                            case 'Sin OC de MP':
+                                // Donde folio_oc no sea nulo ni vacio
+                                $query->whereNotNull('folio_oc')->where('folio_oc', '<>', '');
+                                $query->doesntHave('purchaseOrder');
+                                break;
+                        }
+                        break;
+                    case 'reception':
+                        switch ($value) {
+                            case 'Con Recepción':
+                                $query->has('receptions');
+                                break;
+                            case 'Sin Recepción':
+                                $query->doesntHave('receptions');
+                                break;
+                        }
+                        break;
                     case 'folio_sigfe':
                         switch ($value) {
                             case 'Con Folio SIGFE':
@@ -97,6 +123,7 @@ class IndexDtes extends Component
             'requestForm.contractManager',
             'dtes',
             'invoices',
+            'receptions'
         ])
             ->whereNull('rejected')
             ->orderByDesc('fecha_recepcion_sii');
@@ -239,7 +266,15 @@ class IndexDtes extends Component
     }
 
 
+    public function sendConfirmation($dte_id)
+    {
+        $dte = Dte::find($dte_id);
+        $dte->requestForm?->contractManager?->notify(new DteConfirmation($dte));
 
+        $dte->confirmation_sender_id = auth()->id();
+        $dte->confirmation_send_at = now();
+        $dte->save();
+    }
 
     public function updateAllReceptionsStatus($dte_id)
     {

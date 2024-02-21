@@ -11,6 +11,7 @@ class SigfeFolioDevengo extends Component
     public $dte;
     public $successMessage = '';
     public $editing = false;
+    public $onlyRead = false;
 
     // Recibe el ID del DTE cuando se carga el componente
     public function mount($dte)

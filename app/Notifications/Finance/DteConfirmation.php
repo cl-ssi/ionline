@@ -58,10 +58,10 @@ class DteConfirmation extends Notification
     public function toArray($notifiable)
     {
         return [
-            // 'module'  => 'Prueba', // Opcional
+            // 'module'  => 'Finanzas', // Opcional
             'icon'    => '<i class="fas fa-fw fa-file-invoice-dollar"></i>', // Opcional
-            'subject' => 'Nueva DTE para confirmar: '.$this->dte->id,
-            'action' => route('finance.dtes.confirmation',[$this->dte], false),
+            'subject' => 'Nueva DTE para recepcionar: '.$this->dte->id,
+            'action' => route('finance.receptions.create',0, false).'?oc='.$this->dte->folio_oc,
         ];
     }
 }

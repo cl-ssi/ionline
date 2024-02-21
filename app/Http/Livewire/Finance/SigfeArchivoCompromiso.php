@@ -16,6 +16,8 @@ class SigfeArchivoCompromiso extends Component
     public $successMessage = '';
     public $folder = 'ionline/finances/sigfe/compromiso';
     public $archivoCompromiso = null;
+    public $onlyRead = false;
+
 
     public function mount($dte)
     {

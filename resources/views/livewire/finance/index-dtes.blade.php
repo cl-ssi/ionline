@@ -28,6 +28,7 @@
 
     <div class="row g-2 mb-3">
         <div class="col-md-2">
+            <label for="for-establishment" class="form-label">Establecimiento</label>
             <select class="form-select" wire:model.defer="filter.establishment">
                 <option value="">Todos los Establecimientos</option>
                 @foreach ($establishments as $name => $id)
@@ -37,22 +38,44 @@
             </select>
         </div>
         <div class="col-md-1">
+            <label for="for-id" class="form-label">ID</label>
             <input type="text" class="form-control" wire:model.defer="filter.id" placeholder="id" autocomplete="off">
         </div>
-        <div class="col-md-2">
+        <div class="col-md-1">
+            <label for="for-folio" class="form-label">Folio</label>
             <input type="text" class="form-control" wire:model.defer="filter.folio" placeholder="folio">
         </div>
         <div class="col-md-2">
-            <input type="text" class="form-control" wire:model.defer="filter.folio_oc" placeholder="oc">
+            <label for="for-folio_oc" class="form-label">Folio OC</label>
+            <input type="text" class="form-control" wire:model.defer="filter.folio_oc" placeholder="folio oc">
         </div>
-        <div class="col-md-2">
+        <div class="col-md-1">
+            <label for="for-oc" class="form-label">OC</label>
+            <select class="form-select" wire:model.defer="filter.oc">
+                <option value="Todos">Todas</option>
+                <option value="Sin OC">Sin</option>
+                <option value="Con OC">Con</option>
+                <option value="Sin OC de MP">Sin OC de MP</option>
+            </select>
+        </div>
+        <div class="col-md-1">
+            <label for="for-reception" class="form-label">Recepción</label>
+            <select class="form-select" wire:model.defer="filter.reception">
+                <option value="Todos">Todas</option>
+                <option value="Sin Recepción">Sin</option>
+                <option value="Con Recepción">Con</option>
+            </select>
+        </div>
+        <div class="col-md-1">
+            <label for="for-folio_sigfe" class="form-label">Folio Sigfe</label>
             <select class="form-select" wire:model.defer="filter.folio_sigfe">
                 <option value="Todos">Todos</option>
-                <option value="Sin Folio SIGFE">Sin Folio SIGFE</option>
-                <option value="Con Folio SIGFE">Con Folio SIGFE</option>
+                <option value="Sin SIGFE">Sin</option>
+                <option value="Con SIGFE">Con</option>
             </select>
         </div>
         <div class="col-md-2">
+            <label for="for-tipo_documento" class="form-label">Tipo Documento</label>
             <select class="form-select" wire:model.defer="filter.tipo_documento">
                 <option value="">Todas</option>
                 <option value="factura_electronica">FE: Factura Electrónica</option>
@@ -64,7 +87,8 @@
             </select>
         </div>
         <div class="col-md-1">
-            <button class="btn btn-outline-secondary" type="button" wire:click="refresh">
+            <label for="search" class="form-label">&nbsp;</label>
+            <button class="btn btn-outline-secondary form-control" type="button" wire:click="refresh">
                 <i class="fas fa-search"></i>
             </button>
         </div>
@@ -154,13 +178,27 @@
                         --}}
 
 
-
                         <!-- Nuevo módulo de Recepciones -->
                         @include('finance.payments.partials.receptions-info')
 
                     </td>
                     <td class="small">
                         {{ $dte->requestForm?->contractManager?->tinnyName }} <br>
+                        
+                            <!-- Si tiene administrador de contrato mostrar el avion para enviar notificación -->
+                            @if($dte->requestForm?->contractManager?->id)
+                                @if($dte->confirmation_send_at AND $dte->receptions->isNotEmpty())
+                                    <i class="fas fa-paper-plane"></i> 
+                                    {{ $dte->confirmation_send_at }}
+                                @else
+                                    <button type="button" 
+                                        class="btn btn-sm btn-primary" 
+                                        wire:click="sendConfirmation({{ $dte->id }})">
+                                        <i class="fas fa-paper-plane"></i>
+                                    </button>
+                                @endif
+                            @endif
+
                         {{ $dte->estado_reclamo }}
                     </td>
                     <td class="small">

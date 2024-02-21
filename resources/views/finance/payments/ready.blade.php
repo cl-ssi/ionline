@@ -1,8 +1,8 @@
 @extends('layouts.bt5.app')
-@section('title', 'Flujos de Pago')
+@section('title', 'Bandeja Pendiente para Pago')
 @section('content')
     @include('finance.payments.partials.nav')
-    <h3 class="mb-3">Bandeja listos para pago</h3>
+    <h3 class="mb-3">Bandeja Pendiente para Pago</h3>
 
     <form action="{{ route('finance.payments.ready') }}" method="GET">
         <div class="row g-2 mb-3">
@@ -30,13 +30,19 @@
                 <tr>
                     <th>ID</th>
                     <th>Documento</th>
-                    <th>Folio OC</th>
+                    <th width="140px">OC</th>
                     <th>FR</th>
                     <th>Adjuntos</th>
                     <th>Recepcion</th>
-                    <th>Estado</th>
+                    {{--
+                    <th>Estado</th> 
+                    --}}                    
+                    <th>Compromiso SIGFE</th>
+                    <th>Devengo SIGFE</th>
+                    {{--  
                     <th>Folio Sigfe</th>
                     <th>Observaciones</th>
+                    --}}                    
                     <th>Comprobante de licitación de Fondos</th>
                     @canany(['be god', 'Payments: return to review'])
                         <th>Retornar a Bandeja </th>
@@ -51,7 +57,7 @@
                             @include('finance.payments.partials.dte-info')
                         </td>
                         <td class="small">
-                            {{ $dte->folio_oc }}
+                        @livewire('finance.get-purchase-order', ['dte' => $dte], key($dte->id))
                         </td>
                         <td>
                             @include('finance.payments.partials.fr-info')
@@ -63,7 +69,7 @@
                             <!-- Nuevo módulo de Recepciones -->
                             @include('finance.payments.partials.receptions-info')
                         </td>
-                        <td>
+                        <!-- <td>
                             <form action="{{ route('finance.payments.update', ['dte' => $dte->id]) }}" method="POST">
                                 @csrf
                                 @method('PUT')
@@ -82,21 +88,50 @@
 
                                 <button type="submit" class="btn btn-sm btn-primary">Guardar</button>
                             </form>
+                        </td> -->
+                        <td class="small">
+                            @livewire('finance.sigfe-folio-compromiso', 
+                            [
+                                'dte' => $dte,
+                                'onlyRead' => 'true'
+                            ],
+                            key($dte->id))
+                            <hr>
+                            @livewire('finance.sigfe-archivo-compromiso', 
+                            [
+                                'dte' => $dte,
+                                'onlyRead' => 'true'
+                                ], key($dte->id))
                         </td>
-                        <td>
+                        <td class="small">
+                            @livewire('finance.sigfe-folio-devengo', [
+                                'dte' => $dte,
+                                'onlyRead' => 'true'
+                            ], key($dte->id))
+                            <hr>
+                            @livewire('finance.sigfe-archivo-devengo', 
+                            [
+                                'dte' => $dte,
+                                'onlyRead' => 'true'
+                            ], key($dte->id))
+                        </td>
+                        {{--  
+                            <td>
                             <input type="number" name="folio_sigfe" class="form-control small"
                                 value={{ $dte->folio_sigfe }}required>
                         </td>
+
                         <td>
                             <textarea name="observation" class="form-control">
-                                                @foreach ($dte->paymentFlows as $paymentFlow)
-{{ $paymentFlow->observation }}
-                                                        @if ($paymentFlow->observation)
-({{ $paymentFlow->user->short_name }})
+                                                    @foreach ($dte->paymentFlows as $paymentFlow)
+    {{ $paymentFlow->observation }}
+                                                            @if ($paymentFlow->observation)
+    ({{ $paymentFlow->user->short_name }})
 @endif
 @endforeach
                             </textarea>
                         </td>
+                        --}}
                         <td>
                             @livewire('finance.sigfe-archivo-comprobante', ['dte' => $dte], key($dte->id))
                         </td>

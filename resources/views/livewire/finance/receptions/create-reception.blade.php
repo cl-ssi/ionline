@@ -74,6 +74,7 @@
             </div>
             <div class="col-md-2">
                 <b>Documento Tributario*</b><br>
+
                 <ul>
                     @foreach ($purchaseOrder->dtes as $dte)
                         <li>
@@ -84,8 +85,27 @@
                                     name="selectedDte"
                                     value="{{ $dte->id }}">
                                 <label>
-                                    {{ $dte->tipoDocumentoIniciales }}
-                                    {{ $dte->folio }} <small>({{ $dte->id }})</small>
+                                    @switch($dte->tipo_documento)
+                                        @case('factura_electronica')
+                                        @case('factura_exenta')
+                                        @case('guias_despacho')
+                                        @case('nota_debito')
+                                        @case('nota_credito')
+                                            <a target="_blank" class="link-primary"
+                                                href="{{ $dte->uri }}">
+                                            @break
+                                        @case('boleta_honorarios')
+                                            <a target="_blank" class="link-primary"
+                                                href="{{ $dte->uri }}">
+                                            @break
+                                        @case('boleta_electronica')
+                                            <a target="_blank" class="link-primary" 
+                                                href="{{ route('finance.dtes.downloadManualDteFile', $dte) }}">
+                                            @break
+                                    @endswitch
+                                            {{ $dte->tipoDocumentoIniciales }} {{ $dte->folio }}
+                                            <small>({{ $dte->id }})</small>
+                                        </a>
                                 </label>
                             </div>
                         </li>

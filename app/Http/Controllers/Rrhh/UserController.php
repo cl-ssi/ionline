@@ -227,6 +227,8 @@ class UserController extends Controller
         $user->password = null;
         $user->save();
 
+        // Eliminar de authorities todos los registros donde aparezca el usuario desde hoy en adelante
+        Authority::where('user_id', $user->id)->where('date', '>=', now()->startOfDay())->delete();
         $user->delete();
 
         session()->flash('success', 'El usuario ' . $user->name . ' ha sido eliminado');

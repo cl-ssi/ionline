@@ -23,6 +23,7 @@ class CreateReception extends Component
     use WithFileUploads;
 
     //   1272565-444-AG23 1057448-598-SE23 1272565-737-SE23;
+    // public $purchaseOrderCode = '1272565-444-AG23';
     public $purchaseOrderCode;
     public $purchaseOrder = false;
     public $reception;
@@ -116,7 +117,9 @@ class CreateReception extends Component
     */
     public function mount($reception_id = null, $control_id = 0)
     {
-
+        if( array_key_exists('oc', $_GET) ) {
+            $this->purchaseOrderCode = $_GET['oc'];
+        }
         if($control_id <> 0 and $reception_id == null)
         {
             
