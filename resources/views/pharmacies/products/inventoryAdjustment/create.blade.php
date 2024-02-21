@@ -20,7 +20,7 @@
         </fieldset>
 
         <fieldset class="form-group col">
-            <label for="for_origin">Tipo Ajuste de Inventario</label>
+            <label for="for_origin">Tipo de ajuste</label>
             <select name="inventory_adjustment_type_id" class="form-control selectpicker" data-live-search="true" required>
                 <option value=""></option>
                 @foreach($inventoryAdjustmentTypes as $inventoryAdjustmentType)

@@ -1,29 +1,6 @@
 <form method="POST" class="form-horizontal" action="{{ route('pharmacies.products.receiving_item.store') }}">
     @csrf
 
-    {{--<!--
-    <div class="form-row">
-        <fieldset class="form-group col-2">
-            <label for="for_barcode">Código de Barra</label>
-            <input type="number" class="form-control" id="for_barcode" placeholder="" name="barcode">
-        </fieldset>
-
-        <fieldset class="form-group col">
-            <label for="for_product">Producto</label>
-            <select id="for_product" class="form-control" name="product_id" onchange="jsCambiaSelect(this)">
-                <option></option>
-              @foreach ($products as $key => $product)
-                <option value="{{$product->id}}">{{$product->name}}</option>
-              @endforeach
-            </select>
-        </fieldset> 
-    
-        <fieldset class="form-group col-2">
-            <label for="for_quantity">Cantidad</label>
-            <input type="number" class="form-control" id="for_quantity" placeholder="" name="amount" required="">
-        </fieldset>
-    </div>-->--}}
-
     @livewire('pharmacies.product-search')
 
     <input type="hidden" name="receiving_id" value="{{$receiving->id}}" />

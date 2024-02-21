@@ -28,9 +28,9 @@
 			<tr>
 				<th scope="col">id</th>
 				<th scope="col">Fecha</th>
-				<th scope="col">Tipo</th>
+				<th scope="col">Tipo de ajuste</th>
 				<th scope="col">Notas</th>
-				<th scope="col">Funcionario</th>
+				<th scope="col">Creador</th>
                 <th scope="col"></th>
 			</tr>
 		</thead>
