@@ -18,7 +18,7 @@
             </fieldset>
 
             <fieldset class="form-group col-12 col-md-2">
-                <label for="for_profile_search">Estado</label>
+                <label for="for_profile_search">Estamento</label>
                 <select name="estament_search" id="for_estament_id" class="form-control" wire:model.debounce.500ms="selectedEstament" required>
                     <option value="">Seleccione...</option>
                         @foreach($estaments as $estament) 
