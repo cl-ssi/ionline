@@ -4,6 +4,7 @@ namespace App\Models\Finance;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Finance\Dte;
 
 class TgrPayedDte extends Model
 {
@@ -44,6 +45,11 @@ class TgrPayedDte extends Model
         'cuenta_tgr',
         'dte_id',
     ];
+
+    public function dte()
+    {
+        return $this->belongsTo(Dte::class);
+    }
 
 
 }

@@ -48,7 +48,7 @@ return new class extends Migration
             $table->foreignId('dte_id')->nullable()->constrained('fin_dtes');
             $table->timestamps();
             $table->softDeletes();
-            $table->index(['rut_emisor', 'folio_documento', 'tipo_documento'], 'fin_thr_payed_dtes_index');
+            $table->index(['rut_emisor', 'folio_documento', 'tipo_documento'], 'fin_tgr_payed_dtes_index');
 
         });
 

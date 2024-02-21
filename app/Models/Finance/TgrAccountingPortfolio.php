@@ -5,6 +5,7 @@ namespace App\Models\Finance;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\Finance\Dte;
 
 class TgrAccountingPortfolio extends Model
 {
@@ -30,5 +31,11 @@ class TgrAccountingPortfolio extends Model
         'numero',
         'origen_transaccion',
         'numero_documento',
+        'dte_id',
     ];
+
+    public function dte()
+    {
+        return $this->belongsTo(Dte::class);
+    }
 }

@@ -9,6 +9,7 @@ use App\Models\Finance\TgrAccountingPortfolio;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Carbon\Carbon;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
+use App\Models\Finance\Dte;
 
 class TgrsAccountingPortfolioImport implements ToCollection, WithHeadingRow, WithChunkReading
 {
@@ -24,13 +25,52 @@ class TgrsAccountingPortfolioImport implements ToCollection, WithHeadingRow, Wit
     * @param Collection $collection
     */
     public function collection(Collection $rows)
-    {        
+    {
+        set_time_limit(3600);
+        ini_set('memory_limit', '1024M');
         $insert_array = [];
 
         foreach ($rows as $row) {
             if(isset($row['folio'])){
             list($rut_emisor, $razon_social_emisor) = explode(' ', $row['principal'], 2);
             $rut_emisor_formateado = $this->formatRut($rut_emisor);
+
+
+            switch ($row['tipo_documento']) {
+                case 'Factura Afecta Electrónica':
+                    $tipo_documento = 'factura_electronica';
+                    break;
+                case 'Factura Exenta Electrónica':
+                    $tipo_documento = 'factura_exenta';
+                    break;
+                case 'Boleta de Honorarios Electrónica':
+                    $tipo_documento = 'boleta_honorarios';
+                    break;
+                case 'Nota de Crédito Electrónica':
+                    $tipo_documento = 'nota_credito';
+                    break;
+                case 'Nota de Débito Electrónica':
+                    $tipo_documento = 'nota_debito';
+                    break;
+                default:
+                    $tipo_documento = $row['tipo_documento'];
+                    break;
+            }
+
+
+
+            $dte = Dte::where('emisor', $rut_emisor_formateado)
+            ->where('folio', $row['numero_documento'])
+            ->where('tipo_documento', $tipo_documento)
+            ->first();
+
+            if($dte) {
+                $dte_id = $dte->id;
+            } else {
+                $dte_id = null; 
+            }
+
+
             $insert_array[] = [
                 'rut_emisor' => $rut_emisor_formateado,
                 'folio_documento' => $row['folio'],
@@ -48,6 +88,7 @@ class TgrsAccountingPortfolioImport implements ToCollection, WithHeadingRow, Wit
                 'numero' => $row['numero'],
                 'origen_transaccion' => $row['origen_transaccion'],
                 'numero_documento' => $row['numero_documento'],
+                'dte_id' => $dte_id,
                 ];
             }
         }
@@ -55,7 +96,7 @@ class TgrsAccountingPortfolioImport implements ToCollection, WithHeadingRow, Wit
 
         TgrAccountingPortfolio::upsert(
             $insert_array,
-            ['rut_emisor', 'folio_documento'],
+            ['rut_emisor', 'folio_documento', 'tipo_documento'],
                 [
                 'razon_social_emisor',
                 'cuenta_contable',
@@ -67,10 +108,10 @@ class TgrsAccountingPortfolioImport implements ToCollection, WithHeadingRow, Wit
                 'debe',
                 'haber',
                 'saldo_acumulado',
-                'tipo_documento',
                 'numero',
                 'origen_transaccion',
                 'numero_documento',
+                'dte_id'
                 ]
         );
 
@@ -88,6 +129,6 @@ class TgrsAccountingPortfolioImport implements ToCollection, WithHeadingRow, Wit
 
     public function chunkSize(): int
     {
-        return 100;
+        return 30;
     }
 }

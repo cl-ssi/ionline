@@ -13,6 +13,7 @@ use App\Models\RequestForms\ImmediatePurchase;
 use App\Models\Finance\Receptions\Reception;
 use App\Models\Finance\PurchaseOrder;
 use App\Models\Finance\File;
+use App\Models\Finance\TgrPayedDte;
 use App\Models\Establishment;
 
 class Dte extends Model implements Auditable
@@ -337,6 +338,11 @@ class Dte extends Model implements Auditable
     public function getTipoDocumentoInicialesAttribute()
     {
         return strtoupper(implode('', array_map(fn($s) => substr($s, 0, 1), explode("_", $this->tipo_documento))));
+    }
+
+    public function tgrPayedDtes()
+    {
+        return $this->hasMany(TgrPayedDte::class);
     }
 
 
