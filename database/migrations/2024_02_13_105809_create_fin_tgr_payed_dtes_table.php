@@ -22,11 +22,11 @@ return new class extends Migration
             $table->string('area_transaccional')->nullable();
             $table->string('folio')->nullable();
             $table->string('tipo_operacion')->nullable();
-            $table->string('fecha_generacion')->nullable();
+            $table->datetime('fecha_generacion')->nullable();
             $table->string('cuenta_contable')->nullable();
             $table->string('tipo_documento_tgr')->nullable();
             $table->string('nro_documento')->nullable();
-            $table->string('fecha_cumplimiento')->nullable();
+            $table->date('fecha_cumplimiento')->nullable();
             $table->string('combinacion_catalogo')->nullable();
             $table->string('principal')->nullable();
             $table->string('principal_relacionado')->nullable();
@@ -48,7 +48,8 @@ return new class extends Migration
             $table->foreignId('dte_id')->nullable()->constrained('fin_dtes');
             $table->timestamps();
             $table->softDeletes();
-            $table->index(['rut_emisor', 'folio_documento']);
+            $table->index(['rut_emisor', 'folio_documento', 'tipo_documento'], 'fin_thr_payed_dtes_index');
+
         });
 
     }
