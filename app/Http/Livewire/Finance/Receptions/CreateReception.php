@@ -117,7 +117,7 @@ class CreateReception extends Component
     */
     public function mount($reception_id = null, $control_id = 0)
     {
-        if( !is_null($_GET['oc']) ) {
+        if( array_key_exists('oc', $_GET) ) {
             $this->purchaseOrderCode = $_GET['oc'];
         }
         if($control_id <> 0 and $reception_id == null)
