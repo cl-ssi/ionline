@@ -1,4 +1,4 @@
-@extends('layouts.bt4.app')
+@extends('layouts.bt5.app')
 
 @section('title', 'Editar Rol')
 
@@ -10,7 +10,7 @@
     @csrf
     @method('PUT')
 
-    <div class="form-row">
+    <div class="row g-2">
 
         <fieldset class="form-group col">
             <label for="for_name">Nombre</label>
@@ -26,16 +26,25 @@
 
     </div>
 
+    @php $anterior = null; @endphp
+
     @foreach($permissions as $permission)
-    	<div class="form-check">
-      		<input class="form-check-input" type="checkbox" id="{{ $permission->name }}"
+        @if( current(explode(':', $permission->name)) != current(explode(':', $anterior)))
+        <hr>
+        @endif
+        @php $anterior = $permission->name; @endphp
+
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="{{ $permission->name }}"
                 name="permissions[]" value="{{ $permission->name }}"
                 {{ $role->hasPermissionTo($permission->name) ? 'checked':'' }} >
-      		<label class="form-check-label" for="{{ $permission->name }}">{{ $permission->name }}</label>
-            <br>
-            <small class="text-secondary">{{ $permission->description }}</small>
-    	</div>
+            <label class="form-check-label" for="{{ $permission->name }}">
+                {{ $permission->name }}
+                <small class="text-secondary">{{ $permission->description }}</small>
+            </label>
+        </div>
     @endforeach
+
 
     <div class="mt-3">
         <button type="submit" class="btn btn-primary">Guardar</button>
@@ -45,10 +54,11 @@
     
 </form>
 
-<form method="POST" class="form-horizontal" action="{{ route('parameters.roles.destroy', $role) }}">
+
+<form method="POST" class="form-horizontal text-end" action="{{ route('parameters.roles.destroy', $role) }}">
     @csrf
     @method('DELETE')
     <button type="submit" class="btn btn-danger float-right">Eliminar</button>
-</form><br><br>
+</form>
 
 @endsection

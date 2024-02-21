@@ -9,6 +9,7 @@ use Spatie\Permission\Models\Role;
 class RolesMgr extends Component
 {
     public User $user;
+    public $openPermissions = [];
 
     // metodo toggleRole
     public function toggleRole($role)
@@ -28,6 +29,21 @@ class RolesMgr extends Component
         } else {
             $this->user->givePermissionTo($permission);
         }
+    }
+
+    public function mount()
+    {
+        // Inicializa todos los permisos como cerrados
+        $roles = Role::all();
+        foreach ($roles as $rol) {
+            $this->openPermissions[$rol->id] = false;
+        }
+    }
+
+    public function togglePermissions($roleId)
+    {
+        // Cambiar el estado de los permisos para mostrar/ocultar
+        $this->openPermissions[$roleId] = !$this->openPermissions[$roleId];
     }
 
     public function render()

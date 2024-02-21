@@ -151,8 +151,8 @@ class JobPositionProfile extends Model implements Auditable
         }
     }
 
-    public function scopeSearch($query, $status_search, $estament_search, $id_search, $user_creator_search, $sub_search){
-        if ($status_search OR $estament_search OR $id_search OR $user_creator_search OR $sub_search) {
+    public function scopeSearch($query, $status_search, $estament_search, $id_search, $name_search, $user_creator_search, $sub_search){
+        if ($status_search OR $estament_search OR $id_search OR $name_search OR $user_creator_search OR $sub_search) {
             if($status_search != ''){
                 $query->where(function($q) use($status_search){
                     $q->where('status', $status_search);
@@ -166,6 +166,11 @@ class JobPositionProfile extends Model implements Auditable
             if($id_search != ''){
                 $query->where(function($q) use($id_search){
                     $q->where('id', $id_search);
+                });
+            }
+            if($name_search != ''){
+                $query->where(function($q) use($name_search){
+                    $q->where('name', 'LIKE', '%' . $name_search . '%');
                 });
             }
             $array_user_creator_search = explode(' ', $user_creator_search);

@@ -1,4 +1,4 @@
-@extends('layouts.bt4.app')
+@extends('layouts.bt5.app')
 
 @section('title', 'Crear nuevo Rol')
 
@@ -10,7 +10,7 @@
     @csrf
     @method('POST')
 
-    <div class="form-row">
+    <div class="row g-2">
 
         <fieldset class="form-group col-12 col-md-4">
             <label for="for_name">Nombre</label>
@@ -18,21 +18,28 @@
                 placeholder="Nombre del rol" name="name" required>
         </fieldset>
 
-        <fieldset class="form-group col-md-6">
+        <fieldset class="form-group col-md-8">
             <label for="for_description">Descripción</label>
             <input type="text" class="form-control" id="for_description"
                 placeholder="Descripciól del rol" name="description">
         </fieldset>
     </div>
 
+    @php $anterior = null; @endphp
+
     @foreach($permissions as $permission)
-    	<div class="form-check">
-      		<input class="form-check-input" type="checkbox" id="{{$permission->name}}"
+        @if( current(explode(':', $permission->name)) != current(explode(':', $anterior)))
+            <hr>
+        @endif
+        @php $anterior = $permission->name; @endphp
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="{{$permission->name}}"
                 name="permissions[]" value="{{ $permission->name }}">
-      		<label class="form-check-label" for="{{$permission->name}}">{{ $permission->name }}</label>
-            <br>
-            <small class="text-secondary">{{ $permission->description }}</small>
-    	</div>
+            <label class="form-check-label" for="{{$permission->name}}">
+                {{ $permission->name }}
+                <small class="text-secondary">{{ $permission->description }}</small>
+            </label>
+        </div>
     @endforeach
 
     <div class="mt-3">

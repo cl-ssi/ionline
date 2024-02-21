@@ -280,7 +280,7 @@ class CreateReception extends Component
     {
         /** El neto redondeado hacia abajo */
         $this->reception['neto']             = floor(array_sum(array_column($this->receptionItems, 'Total')));
-        $this->reception['subtotal']         = $this->reception['neto'] + $this->reception['cargos'] - $this->reception['descuentos'];
+        $this->reception['subtotal']         = $this->reception['neto'] + floatval($this->reception['cargos']) - $this->reception['descuentos'];
 
         switch ($this->reception['dte_type'] ?? 'factura_electronica') {
             case 'boleta_honorarios':

@@ -25,7 +25,7 @@ class EditReception extends Component
         if($this->reception->approvals) {
             foreach($this->reception->approvals as $approval) {
                 if(Storage::exists($approval->filename)) {
-                    Storage::detete($approval->filename);
+                    Storage::delete($approval->filename);
                 }
                 $approval->delete();
             }

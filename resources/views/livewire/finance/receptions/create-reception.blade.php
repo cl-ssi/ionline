@@ -365,7 +365,7 @@
             </div>
             <div class="col-2">
                 <label for="cargos">Cargos</label>
-                <input class="form-control" type="text" wire:model="reception.cargos" id="reception.cargos">
+                <input class="form-control" type="number" wire:model="reception.cargos" id="reception.cargos">
             </div>
             @error('reception.partial_reception')
                 <span class="text-danger">{{ $message }}</span>
