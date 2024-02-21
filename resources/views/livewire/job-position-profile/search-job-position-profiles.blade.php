@@ -71,6 +71,7 @@
         <h5 class="mb-3"><i class="fas fa-inbox"></i> Pendientes: </h5>
         @endif
         <div class="table-responsive">
+            {{ $jobPositionProfiles->links() }}    
             <table class="table table-sm table-bordered table-striped table-hover small">
                 <thead>
                     <tr class="text-center">
