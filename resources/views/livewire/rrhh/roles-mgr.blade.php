@@ -26,9 +26,12 @@
         </div>
     @endcan
 
-
     @foreach($roles as $rol)
         <div class="form-check form-switch">
+            <!-- Botón para mostrar/ocultar los permisos -->
+            <button wire:click="togglePermissions('{{ $rol->id }}')" class="btn btn-sm link-primary">
+                <i class="bi bi-eye"></i> <!-- Icono de Bootstrap Icons -->
+            </button>
             <input 
                 class="form-check-input" 
                 type="checkbox" 
@@ -40,9 +43,11 @@
                 {{ $rol->name }}
                 <small class="form-text">{{ $rol->description }}</small>
             </label>
+
         </div>
 
-        <ul>
+        <!-- Lista de permisos -->
+        <ul id="permissions-{{ $rol->id }}" class="{{ $openPermissions[$rol->id] ? '' : 'hidden' }}">
             @foreach($rol->permissions as $permission)
                 <li class="small">
                     <div class="form-check form-switch">
@@ -60,5 +65,17 @@
             @endforeach
         </ul>
     @endforeach
+
+    @section('custom_css')
+    <style>
+        .hidden {
+            display: none;
+        }
+    </style>
+    @endsection
+
+    @section('custom_js')
+
+    @endsection
 
 </div>
