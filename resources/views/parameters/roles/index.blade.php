@@ -11,9 +11,7 @@
 <table class="table table-sm">
     <thead>
         <tr>
-            <th>Id</th>
             <th>Rol</th>
-            <th>Descripción</th>
             <th>Permisos</th>
             <th></th>
         </tr>
@@ -21,9 +19,10 @@
     <tbody>
         @foreach($roles as $rol)
         <tr>
-            <td>{{ $rol->id }}</td>
-            <td>{{ $rol->name }}</td>
-            <td>{{ $rol->description }}</td>
+            <td>
+                {{ $rol->name }} <br>
+                <small class="text-muted">{{ $rol->description }}</small>
+            </td>
             <td>
                 <ul>
                     @foreach($rol->permissions as $permission)
@@ -32,8 +31,8 @@
                 </ul>
             </td>
             <td>
-                <a href="{{ route('parameters.roles.edit', $rol )}}">
-                <i class="fas fa-edit"></i>
+                <a href="{{ route('parameters.roles.edit', $rol )}}" class="btn btn-primary">
+                    <i class="bi bi-pencil-square"></i>
                 </a>
             </td>
         </tr>
