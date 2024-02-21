@@ -3,6 +3,15 @@
 
     @include('rrhh.submenu')
 
+    <div
+        class="alert alert-danger"
+        role="alert"
+    >
+        <strong>Importante:</strong> No asignar permisos directamente a los usuarios. 
+        Es preferible asignar roles a los usuarios y asignar permisos a los roles.
+    </div>
+    
+
     <h3 class="mb-3">Permisos</h3>
 
     <div class="form-check form-switch">
