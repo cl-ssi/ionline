@@ -60,6 +60,9 @@ class ApplicantController extends Controller
                 if($exist->isEmpty()){
                     $applicant = new Applicant();
                     $applicant->replacement_staff_id = $req;
+                    $applicant->psycholabor_evaluation_score = 80;
+                    $applicant->technical_evaluation_score = 80;
+                    $applicant->observations = 'Integrante de Staff';
                     $applicant->technicalEvaluation()->associate($technicalEvaluation);
                     $applicant->save();
                 }
