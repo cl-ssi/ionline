@@ -356,7 +356,7 @@ class DocumentController extends Controller
 
                 $signature->description = $document->subject;
                 $signature->endorse_type = 'Visación en cadena de responsabilidad';
-                $signature->distribution = 'blanca.galaz@redsalud.gob.cl';
+                $signature->recipients = 'blanca.galaz@redsalud.gob.cl';
             }
         }
 
@@ -384,7 +384,7 @@ class DocumentController extends Controller
 
             $signature->description = $document->subject;
             $signature->endorse_type = 'Visación en cadena de responsabilidad';
-            $signature->distribution = 'blanca.galaz@redsalud.gob.cl';
+            $signature->recipients = 'blanca.galaz@redsalud.gob.cl';
         }
 
         if($document->type_id == Type::where('name','Certificado Disponibilidad Presupuestaria')->first()->id){
@@ -402,7 +402,7 @@ class DocumentController extends Controller
             // $signature->user_id = Authority::getTodayAuthorityManagerFromDate($signature->ou_id);
             $signature->description = $document->subject;
             $signature->endorse_type = 'No requiere visación';
-            $signature->distribution = 'blanca.galaz@redsalud.gob.cl';
+            $signature->recipients = 'blanca.galaz@redsalud.gob.cl';
         }
     
         return view('documents.signatures.create', compact('signature', 'documentId'));

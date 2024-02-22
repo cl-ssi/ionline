@@ -70,7 +70,6 @@ class AgreementController extends Controller
         ->where('period', $period_selected)->latest();
 
         if($request->has('export')){
-            // dd($query->get()->first());
             return Excel::download(new TrackingAgreementsExport($query->get(), $period_selected), 'TrackingAgreementsExport_'.Carbon::now().'.xlsx');
         }
 
@@ -369,19 +368,27 @@ class AgreementController extends Controller
         $signature->subject = 'Convenio programa '.$programa.' comuna de '.$agreement->commune->name;
         $signature->description = 'Documento convenio '.($agreement->program_id == 3 ? 'de retiro voluntario por ' : ($agreement->program_id == 50 ? '' : 'de ejecución del programa ')).$programa.' año '.$agreement->period.' comuna de '.$agreement->commune->name;
         $signature->endorse_type = 'Visación en cadena de responsabilidad';
-        $signature->recipients = 'sdga.ssi@redsalud.gov.cl,jurídica.ssi@redsalud.gov.cl,cxhenriquez@gmail.com,'.$agreement->referrer->email.',natalia.rivera.a@redsalud.gob.cl,apoyo.convenioaps@redsalud.gob.cl,pablo.morenor@redsalud.gob.cl,finanzas.ssi@redsalud.gov.cl,jaime.abarzua@redsalud.gov.cl,aps.ssi@redsalud.gob.cl';
-        $signature->distribution = 'División de Atención Primaria MINSAL,Oficina de Partes SSI,'.$municipio;
+        // $signature->recipients = 'sdga.ssi@redsalud.gov.cl,jurídica.ssi@redsalud.gov.cl,cxhenriquez@gmail.com,'.$agreement->referrer->email.',natalia.rivera.a@redsalud.gob.cl,apoyo.convenioaps@redsalud.gob.cl,pablo.morenor@redsalud.gob.cl,finanzas.ssi@redsalud.gov.cl,jaime.abarzua@redsalud.gov.cl,aps.ssi@redsalud.gob.cl';
+        // $municipality_emails = $agreement->commune->municipality->email_municipality."\n".$agreement->commune->municipality->email_municipality_2;
+        $signature->recipients = "blanca.galaz@redsalud.gob.cl";
 
         $signaturesFile = new SignaturesFile();
         $signaturesFile->file_type = 'documento';
 
         if($type == 'signer'){
             $agreement->load('director_signer.user');
-            $signaturesFlow = new SignaturesFlow();
-            $signaturesFlow->type = 'firmante';
-            $signaturesFlow->ou_id = $agreement->director_signer->user->organizational_unit_id;
-            $signaturesFlow->user_id = $agreement->director_signer->user->id;
-            $signaturesFile->signaturesFlows->add($signaturesFlow);
+            // $signaturesFlow = new SignaturesFlow();
+            // $signaturesFlow->type = 'firmante';
+            // $signaturesFlow->ou_id = $agreement->director_signer->user->organizational_unit_id;
+            // $signaturesFlow->user_id = $agreement->director_signer->user->id;
+            // $signaturesFile->signaturesFlows->add($signaturesFlow);
+
+            // $signature->type = 'signer';
+            $signature->endorse_type = 'No requiere visación';
+            $signature->ou_id = $agreement->director_signer->user->organizational_unit_id;
+            $signature->user_id = $agreement->director_signer->user->id;
+            // $signature->description = $document->subject;
+            // $signature->distribution = 'blanca.galaz@redsalud.gob.cl';
         }
 
         if($type == 'visators'){

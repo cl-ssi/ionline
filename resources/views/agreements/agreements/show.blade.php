@@ -77,17 +77,36 @@
         @endif
 
         @canany(['Documents: signatures and distribution'])
-        @if($canEdit && $agreement->document_id != null)
-        <a class="nav-link text-secondary" href="{{ route('documents.sendForSignature', $agreement->document_id) }}"><i class="fas fa-file-signature"></i> Solicitar visación Convenio</a>
-        @endif
+            @if($canEdit && $agreement->document_id != null)
+            <li class="nav-item">
+                <a class="nav-link text-secondary" href="{{ route('documents.sendForSignature', $agreement->document_id) }}"><i class="fas fa-file-signature"></i> Solicitar visación Convenio</a>
+            </li>
+            @endif
         @endcan
-        @if($agreement->document && $agreement->document->fileToSign)
+
+        @if($agreement->document?->fileToSign)
+            <li class="nav-item">
             @if($agreement->document->fileToSign->HasAllFlowsSigned)
             <a href="{{ route('documents.signedDocumentPdf', $agreement->document_id) }}" class="nav-link text-secondary">
                 <i class="fas fa-fw fa-file-contract"></i> Ver convenio visado</a>
             @else
                 {{ $agreement->document->fileToSign->signature_id }}
             @endif
+            </li>
+        @endif
+
+        @canany(['Documents: signatures and distribution'])
+            @if($canEdit && $agreement->document?->fileToSign?->HasAllFlowsSigned)
+            <li class="nav-item">
+                <a class="nav-link text-secondary" href="{{ route('agreements.sign', [$agreement, 'signer']) }}"><i class="fas fa-file-signature"></i> Solicitar firma Convenio</a>
+            </li>
+            @endif
+        @endcan
+
+        @if($agreement->document?->fileToSign?->HasAllFlowsSigned)
+            <li class="nav-item">
+                <a class="nav-link text-secondary" href="{{route('documents.signatures.showPdf', [$agreement->file_to_sign_id, time()])}}" target="blank"><i class="fas fa-eye"></i> Ver convenio firmado</a>
+            </li>
         @endif
     @else
         <!-- convenios 2023 -->
