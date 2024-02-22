@@ -65,9 +65,9 @@
             </div>
 
             @if($simplified)
-                <div class="form-input">
-                <a class="btn btn-outline-success btn-sm mb-3" id="downloadLink" onclick="exportF(this)">Descargar en excel resultados</a>
-                </div>
+            <div class="form-input">
+                <button class="btn btn-outline-success btn-sm mb-3" wire:click="export">Descargar en Excel</button>
+            </div>
             @endif
         </div>
     </form>

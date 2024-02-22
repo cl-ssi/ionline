@@ -7,6 +7,8 @@ use Livewire\WithPagination;
 use Livewire\Component;
 use App\Models\Rrhh\NoAttendanceRecord;
 use App\User;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\NoAttendanceRecordsExport;
 
 class NoAttendanceRecordIndex extends Component
 {
@@ -120,4 +122,40 @@ class NoAttendanceRecordIndex extends Component
                 ->paginate(500),
         ]);
     }
+
+    public function export()
+    {
+        $establishments_ids = explode(',', env('APP_SS_ESTABLISHMENTS'));
+    
+        $records = NoAttendanceRecord::with('user', 'reason')
+            //->whereNotNull('status')
+            ->where('status', 1)
+            ->whereIn('establishment_id', $establishments_ids)
+            ->when($this->name, function ($query) {
+                $query->whereHas('user', function ($userQuery) {
+                    $userQuery->findByUser($this->name);
+                });
+            })
+            ->when($this->from, function ($query) {
+                $query->whereDate('date', '>=', $this->from);
+            })
+            ->when($this->to, function ($query) {
+                $query->whereDate('date', '<=', $this->to);
+            })
+            ->when($this->rrhh_at, function ($query) {
+                if ($this->rrhh_at == 'Si') {
+                    $query->whereNotNull('rrhh_at');
+                } elseif ($this->rrhh_at == 'No') {
+                    $query->whereNull('rrhh_at');
+                }
+            })            
+            ->latest()
+            ->get();
+    
+        return Excel::download(new NoAttendanceRecordsExport($records), 'no_attendance_records.xlsx');
+    }
+    
+    
+    
+
 }
