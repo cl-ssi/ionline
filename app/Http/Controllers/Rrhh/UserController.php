@@ -31,6 +31,7 @@ class UserController extends Controller
         $users = User::getUsersBySearch($request->get('name'))
             ->filter('organizational_unit_id',$request->input('organizational_unit_id'))
             ->filter('permission',$request->input('permission'))
+            ->filter('role',$request->input('roles'))
             ->with([
                 'organizationalUnit',
                 'permissions',
@@ -38,13 +39,14 @@ class UserController extends Controller
             ])->orderBy('name', 'Asc')->paginate(100);
 
         $permissions = Permission::orderBy('name')->pluck('name');
+        $roles = Role::orderBy('name')->pluck('name');
 
         $can = [
             'be god' => auth()->user()->can('be god'),
             'Users: edit' => auth()->user()->can('Users: edit'),
         ];
 
-        return view('rrhh.index', compact('users','permissions','can'));
+        return view('rrhh.index', compact('users','permissions','roles','can'));
     }
 
     /**

@@ -37,22 +37,12 @@
 
     <form method="GET" action="{{ route('rrhh.users.index') }}">
         <div class="row gx-2">
-            <fieldset class="col-7">
+            <fieldset class="col-9">
                 @livewire('select-organizational-unit', [
                     'establishment_id' => auth()->user()->organizationalUnit->establishment->id,
                     'required' => false,
                 ])
             </fieldset>
-            @if ($can['be god'])
-                <fieldset class="col-2">
-                    <select class="form-control form-select" name="permission">
-                        <option value="">Permisos</option>
-                        @foreach ($permissions as $permission)
-                            <option>{{ $permission }}</option>
-                        @endforeach
-                    </select>
-                </fieldset>
-            @endif
             <fieldset class="col-3">
                 <div class="input-group mb-3">
                     <input type="text" name="name" class="form-control" placeholder="Nombres, Apellidos o RUN sin DV"
@@ -64,6 +54,28 @@
                     </div>
                 </div>
             </fieldset>
+        </div>
+        <div class="row g-2">
+            @if ($can['be god'])
+                <fieldset class="col-5">
+                    <select class="form-control form-select" name="roles">
+                        <option value="">Roles</option>
+                        @foreach ($roles as $role)
+                            <option>{{ $role }}</option>
+                        @endforeach
+                    </select>
+                </fieldset>
+
+                <fieldset class="col-4">
+                    <select class="form-control form-select" name="permission">
+                        <option value="">Permisos</option>
+                        @foreach ($permissions as $permission)
+                            <option>{{ $permission }}</option>
+                        @endforeach
+                    </select>
+                </fieldset>
+
+            @endif
         </div>
     </form>
 

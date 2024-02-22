@@ -468,6 +468,10 @@ class User extends Authenticatable implements Auditable
                     break;
                 case 'permission':
                     $query->permission($value);
+                    break;
+                case 'role':
+                    $query->role($value);
+                    break;
             }
         }
     }
