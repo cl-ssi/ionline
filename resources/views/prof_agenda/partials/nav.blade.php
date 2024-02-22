@@ -76,7 +76,7 @@
         </li>
     @endcanany
 
-    @canany(['Agenda UST: Administrador'])
+    @canany(['Agenda UST: Administrador','Agenda UST: Funcionario'])
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle {{active('prof_agenda.reports.*')}}"
             data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">

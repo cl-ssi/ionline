@@ -8,11 +8,13 @@
         role="alert"
     >
         <strong>Importante:</strong> No asignar permisos directamente a los usuarios. 
-        Es preferible asignar roles a los usuarios y asignar permisos a los roles.
+        Asignar roles a los usuarios y asignar permisos a los roles.
     </div>
     
 
-    <h3 class="mb-3">Permisos</h3>
+    <h3 class="mb-3">Permisos
+        <small>(✅ corresponde a un permiso asignado via roles)</small>
+    </h3>
 
     <div class="form-check form-switch">
         <input 
@@ -53,7 +55,10 @@
                 wire:click="togglePermission('{{ $permission->name }}')"
                 {{ in_array($permission->name, $userPermissions) ? 'checked' : ''}}>
             <label class="form-check-label" 
-                for="permission-{{ $permission->id }}">{{ $permission->name }} <small class="form-text">{{ $permission->description }}</small></label>
+                for="permission-{{ $permission->id }}">
+                {{ $user->can($permission->name) ? '✅' : '⬜' }}
+                {{ $permission->name }} <small class="form-text">{{ $permission->description }}</small>
+            </label>
         </div>
 
 
