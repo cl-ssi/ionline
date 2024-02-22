@@ -78,11 +78,12 @@ use App\Http\Controllers\Parameters\ProgramController as ParametersProgramContro
 use App\Http\Controllers\Parameters\PurchaseMechanismController;
 use App\Http\Controllers\Parameters\PurchaseTypeController;
 use App\Http\Controllers\Parameters\PurchaseUnitController;
+use App\Http\Controllers\Parameters\RoleController;
 use App\Http\Controllers\Parameters\UnitOfMeasurementController;
 use App\Http\Controllers\PasswordResetController;
+use App\Http\Controllers\Pharmacies\InventoryAdjustmentController;
 use App\Http\Controllers\Pharmacies\PharmacyController;
 use App\Http\Controllers\Pharmacies\PurchaseController;
-use App\Http\Controllers\Pharmacies\InventoryAdjustmentController;
 use App\Http\Controllers\ProfAgenda\ActivityTypeController;
 use App\Http\Controllers\ProfAgenda\AgendaController;
 use App\Http\Controllers\ProfAgenda\OpenHourController;
@@ -159,7 +160,6 @@ use App\Http\Controllers\Rrhh\AttendanceController;
 use App\Http\Controllers\Rrhh\AuthorityController;
 use App\Http\Controllers\Rrhh\NoAttendanceRecordController;
 use App\Http\Controllers\Rrhh\OrganizationalUnitController;
-use App\Http\Controllers\Rrhh\RoleController;
 use App\Http\Controllers\Rrhh\SubrogationController;
 use App\Http\Controllers\Rrhh\UserController;
 use App\Http\Controllers\ServiceRequests\AttachmentController;
@@ -176,8 +176,8 @@ use App\Http\Controllers\ServiceRequests\ValueController;
 use App\Http\Controllers\Suitability\CategoriesController;
 use App\Http\Controllers\Suitability\OptionsController;
 use App\Http\Controllers\Suitability\QuestionsController;
-use App\Http\Controllers\Suitability\ResultsController;
 //use App\Http\Controllers\RequestForms\SupplyPurchaseController;
+use App\Http\Controllers\Suitability\ResultsController;
 use App\Http\Controllers\Suitability\SchoolUserController;
 use App\Http\Controllers\Suitability\SchoolsController;
 use App\Http\Controllers\Suitability\SuitabilityController;
@@ -847,9 +847,6 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
     Route::get('{user}/roles', RolesMgr::class)->name('roles.mgr')->middleware('auth');
     Route::get('{user}/permissions', PermissionsMgr::class)->name('permissions.mgr')->middleware('auth');
 
-    // Route::get('{user}/roles', [RoleController::class, 'index'])->name('roles.index')->middleware('auth');
-    // Route::post('{user}/roles', [RoleController::class, 'attach'])->name('roles.attach')->middleware('auth');
-
     /* TODO: #50 incorporar auth en el grupo e importar controllers al comienzo del archivo */
     /** Inicio Shift Managment */
     Route::prefix('shift-management')->group(function () {
@@ -1159,7 +1156,7 @@ Route::prefix('parameters')->as('parameters.')->middleware(['auth', 'must.change
     Route::get('/create', ParameterCreate::class)->name('create');
     Route::get('/{parameter}/edit', ParameterEdit::class)->name('edit');
     Route::put('/{parameter}', [ParameterController::class, 'update'])->name('update');
-    Route::get('drugs', [ParameterController::class, 'indexDrugs'])->name('drugs')->middleware(['role:Drugs: admin']);
+    Route::get('drugs', [ParameterController::class, 'indexDrugs'])->name('drugs')->middleware(['permission:Drugs: manage parameters']);
     //Route::resource('permissions', PermissionController::class);
     Route::prefix('permissions')->as('permissions.')->group(function () {
         Route::get('/create/{guard}', [PermissionController::class, 'create'])->name('create');
@@ -1186,8 +1183,7 @@ Route::prefix('parameters')->as('parameters.')->middleware(['auth', 'must.change
         Route::put('/{value}/update', [ValueController::class, 'update'])->name('update');
     });
 
-    /* FIXME: hay dos RoleControllers */
-    Route::resource('roles', App\Http\Controllers\Parameters\RoleController::class);
+    Route::resource('roles', RoleController::class);
 
     Route::prefix('communes')->as('communes.')->group(function () {
         Route::get('/', [CommuneController::class, 'index'])->name('index');
