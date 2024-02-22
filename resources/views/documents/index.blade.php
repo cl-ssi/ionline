@@ -150,7 +150,7 @@
                     @endif
                 @endif
             </td>
-            @can('Documents: create signature request v2')
+            @can('Documents: signatures and distribution v2')
             <td>
                 @if(! isset($doc->signature))
                     <a href="{{ route('documents.sendForSign.v2', $doc) }}" class="btn btn-sm btn-outline-danger">
@@ -255,7 +255,7 @@
                 </a>
                 @endif
             </td>
-            @can('Documents: create signature request v2')
+            @can('Documents: signatures and distribution v2')
             <td>
                 @if(! isset($doc->signature))
                     <a href="{{ route('documents.sendForSign.v2', $doc) }}" class="btn btn-sm btn-outline-danger">
