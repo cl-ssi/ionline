@@ -67,7 +67,12 @@ class InventoryAdjustmentController extends Controller
             return redirect()->back();
         }
 
-        if($dispatch->dispatchItems->where('product_id',$product->id)->count() || $receiving->receivingItems->where('product_id',$product->id)->count()){
+        if($dispatch && $dispatch->dispatchItems->where('product_id',$product->id)->count()){
+            session()->flash('warning', 'Ya ingresó un valor para ese producto, intentelo nuevamente.');
+            return redirect()->back();
+        }
+
+        if($receiving && $receiving->receivingItems->where('product_id',$product->id)->count()){
             session()->flash('warning', 'Ya ingresó un valor para ese producto, intentelo nuevamente.');
             return redirect()->back();
         }
@@ -130,12 +135,31 @@ class InventoryAdjustmentController extends Controller
     }
 
     public function edit(InventoryAdjustment $inventoryAdjustment){
-        // dd($inventoryAdjustment);
         return view('pharmacies.products.inventoryAdjustment.edit', compact('inventoryAdjustment'));
     }
 
     public function destroy(InventoryAdjustment $inventoryAdjustment){
-        // dd($inventoryAdjustment);
+        $receiving = $inventoryAdjustment->receiving;
+        $dispatch = $inventoryAdjustment->dispatch;
+
+        if($receiving){
+            session()->flash('warning', 'No se puede eliminar un ajuste de inventario con movimientos dentro.');
+            return redirect()->back();
+        }
+        if($dispatch){
+            session()->flash('warning', 'No se puede eliminar un ajuste de inventario con movimientos dentro.');
+            return redirect()->back();
+        }
+
+        if($inventoryAdjustment->user_id != auth()->user()->id){
+            session()->flash('warning', 'Solo podrá modificar este ajuste de inventario la persona que lo creó.');
+            return redirect()->back();
+        }
+
+        $inventoryAdjustment->delete();
+
+        session()->flash('success', 'Se ha eliminado el ajuste de inventario.');
+        return redirect()->back();
     }
 
     public function destroy_receivingItem(ReceivingItem $receivingItem)

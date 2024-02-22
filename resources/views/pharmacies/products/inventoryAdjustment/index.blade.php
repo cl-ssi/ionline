@@ -36,6 +36,7 @@
 		</thead>
 		<tbody>
             @foreach($inventoryAdjustments as $inventoryAdjustment)
+            <tr>
                 <td>{{$inventoryAdjustment->id}}</td>
                 <td>{{$inventoryAdjustment->date->format('Y-m-d')}}</td>
                 <td>{{$inventoryAdjustment->type->name}}</td>
@@ -55,6 +56,7 @@
 					</form>
 					@endcan
                 </td>
+            </tr>
             @endforeach
 		</tbody>
 	</table>
