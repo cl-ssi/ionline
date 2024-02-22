@@ -8,7 +8,7 @@
             <i class="bi bi-person-fill"></i> <span class="d-none d-sm-inline"> Perfil</span></a>
     </li>
 
-    @can('Users: assign permission')
+    @can('Users: assign roles')
     <li class="nav-item">
         <a class="nav-link {{ active('rrhh.roles.mgr') }}" href="{{ route('rrhh.roles.mgr', $user->id) }}">
             <i class="bi bi-wrench-adjustable"></i> <span class="d-none d-sm-inline"> Roles</span></a>
@@ -22,7 +22,7 @@
     </li>
     @endcan
 
-    @can('be god')
+    @can('Users: show access logs')
     <li class="nav-item">
         <a class="nav-link {{ active('rrhh.users.access-logs') }}" href="{{ route('rrhh.users.access-logs', [$user]) }}">
             <i class="bi bi-person-fill-lock"></i> <span class="d-none d-sm-inline"> Registros de acceso</span></a>
