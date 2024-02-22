@@ -15,16 +15,21 @@ class SirsapReport extends Component
     public $ftermino;
     public $data;
 
-     public function mount(){
-        $this->finicio = Carbon::createFromDate('2023-11-01');
-        $this->ftermino = Carbon::createFromDate('2023-11-15');
-    }
+    // public function mount(){
+    //     $this->finicio = Carbon::createFromDate('2023-11-01');
+    //     $this->ftermino = Carbon::createFromDate('2023-11-15');
+    // }
 
     public function search(){
         $openHours = OpenHour::whereBetween('start_date',[$this->finicio,$this->ftermino])
                             ->where('blocked','0')
                             ->with('patient')
+                            ->when(!auth()->user()->hasRole('Agenda Salud del Trabajdor: Administrador'), function ($q) {
+                                return $q->where('profesional_id',auth()->user()->id);
+                            })
                             ->get();
+
+                            
                             // dd($openHours);
                             // se deben agregar los tipos de actividad/género en el reporte
         $this->data = null;
