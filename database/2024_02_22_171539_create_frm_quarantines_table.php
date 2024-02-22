@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('frm_quarantines', function (Blueprint $table) {
             $table->id();
+            $table->datetime('start_date');
             $table->timestamps();
         });
     }
