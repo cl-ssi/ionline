@@ -22,6 +22,11 @@ class Meeting extends Model implements Auditable
         return $this->belongsTo('App\User', 'user_responsible_id')->withTrashed();
     }
 
+    protected $dates = [
+        'date'
+    ];
+    
+
     protected $hidden = [
         'created_at', 'updated_at'
     ];
