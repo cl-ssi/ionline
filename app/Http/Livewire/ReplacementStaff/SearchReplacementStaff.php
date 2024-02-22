@@ -37,7 +37,7 @@ class SearchReplacementStaff extends Component
             'profileManage' => ProfileManage::orderBy('name', 'ASC')->get(),
             'replacementStaff' => ReplacementStaff::
                 with(['profiles', 'profiles.profile_manage', 'profiles.profession_manage'])
-                ->latest()
+                ->orderBy('updated_at', 'DESC')
                 ->search($this->selectedSearch, 
                     $this->selectedProfile, 
                     $this->selectedProfession, 

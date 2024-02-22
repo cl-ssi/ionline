@@ -25,7 +25,8 @@ class SearchSelectApplicants extends Component
         return view('livewire.replacement-staff.search-select-applicants',[
             'profileManage' => ProfileManage::orderBy('name', 'ASC')->get(),
             //'professionManage' => ProfessionManage::orderBy('name', 'ASC')->get(),
-            'replacementStaff' => ReplacementStaff::latest()
+            'replacementStaff' => ReplacementStaff::
+                orderBy('updated_at', 'DESC')
                 ->search($this->selectedSearch,$this->selectedProfile,$this->selectedProfession,$this->selectedStaff, 0)
                 ->whereNotIn('status', ['selected'])
                 ->take(10)
