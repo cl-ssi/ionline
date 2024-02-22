@@ -8,14 +8,19 @@
         <input type="hidden" name="receiving_id" value="{{$receiving->id}}" />
 
         <div class="form-row">
-            <fieldset class="form-group col-3">
+            <fieldset class="form-group col-4">
                 <label for="for_serie">F. Vencimiento</label>
                 <input type="date" class="form-control" id="for_date" name="due_date" required="required">
             </fieldset>
 
-            <fieldset class="form-group col-3">
+            <fieldset class="form-group col-5">
                 <label for="for_lote">Serie/Lote</label>
                 <input type="text" class="form-control" id="for_lote" placeholder="Número de Lote" name="batch" required="">
+            </fieldset>
+
+            <fieldset class="form-group col-3">
+                <label for="for_quantity">Cantidad</label>
+                <input type="number" class="form-control" id="for_quantity" placeholder="" name="amount" required="">
             </fieldset>
 
         </div>

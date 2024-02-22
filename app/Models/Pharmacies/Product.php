@@ -58,7 +58,7 @@ class Product extends Model
 
     public function batchs()
     {
-      return $this->hasMany('App\Models\Pharmacies\Batch');
+      return $this->hasMany('App\Models\Pharmacies\Batch')->orderBy('due_date');
     }
 
     public function establishments()

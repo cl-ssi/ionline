@@ -46,29 +46,28 @@
 				<th scope="col">F.VENC</th>
 				<th scope="col">LOTE</th>
                 <th scope="col">CANTIDAD</th>
-        <th>
-            <button type="button" class="btn btn-sm btn-outline-primary"
-                onclick="tableToExcel('tabla_last', 'Hoja 1')">
-                <i class="fas fa-download"></i>
-            </button>
-        </th>
+                <th>
+                    <button type="button" class="btn btn-sm btn-outline-primary"
+                        onclick="tableToExcel('tabla_last', 'Hoja 1')">
+                        <i class="fas fa-download"></i>
+                    </button>
+                </th>
 			</tr>
 		</thead>
 		<tbody>
 
-
-
-      @foreach ($products_data as $key => $product)
-        @foreach ($product->batchs as $key => $batch)
-          <tr>
-            <td>{{$product->name}}</td>
-            <td>{{$product->program->name}}</td>
-            <td>{{$batch->due_date->format('d/m/Y')}}</td>
-            <td>{{$batch->batch}}</td>
-            <td>{{$batch->count}}</td>
-          </tr>
+        @foreach ($products_data as $key => $product)
+            @foreach ($product->batchs as $key => $batch)
+            @if($batch->due_date < now()) <tr class="table-danger">
+            @else <tr> @endif
+                <td>{{$product->name}}</td>
+                <td>{{$product->program->name}}</td>
+                <td>{{$batch->due_date->format('d/m/Y')}}</td>
+                <td>{{$batch->batch}}</td>
+                <td>{{$batch->count}}</td>
+            </tr>
+            @endforeach
         @endforeach
-      @endforeach
 
 		</tbody>
 	</table>
