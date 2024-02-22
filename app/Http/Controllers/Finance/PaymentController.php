@@ -79,8 +79,6 @@ class PaymentController extends Controller
             'establishment',
             'dtes',
             'invoices',
-            
-
 
             'receptions',
             'receptions.signedFileLegacy',
@@ -164,22 +162,25 @@ class PaymentController extends Controller
     public function ready(Request $request)
     {
         $query = Dte::with([
-                'purchaseOrder',
-                'purchaseOrder.receptions',
-                'purchaseOrder.rejections',
-                'establishment',
-                'controls',
-                'controls.store',
-                'dtes',
-                'invoices',
-                'paymentFlows',
+            'controls',
+            'controls.store',
+            'purchaseOrder',
+            'purchaseOrder.receptions',
+            'purchaseOrder.rejections',
+            'establishment',
+            'dtes',
+            'invoices',
+            
+            'receptions',
+            'receptions.signedFileLegacy',
+            'receptions.numeration',
 
-                'requestForm',
-                'requestForm.requestFormFiles',
-                'requestForm.contractManager',
-    
-                'requestForm.father',
-                'requestForm.father.requestFormFiles'
+            'requestForm',
+            'requestForm.requestFormFiles',
+            'requestForm.signedOldRequestForms',
+
+            'requestForm.father',
+            'requestForm.father.requestFormFiles'
             ])
             ->whereNull('rejected')
             ->where('all_receptions', 1)

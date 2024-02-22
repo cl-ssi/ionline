@@ -1,7 +1,7 @@
 <div>
 
     @if ($editing)
-        <input class="form-control form-control-sm" wire:model.defer="nuevoFolioDevengo" type="text" placeholder="Ingrese el folio devengo sigfe">
+        <input class="form-control-sm" wire:model.defer="nuevoFolioDevengo" type="text" placeholder="Ingrese el folio devengo sigfe">
         @if(!$onlyRead)
             <button class="btn btn-sm btn-primary" 
                 wire:click="guardarFolioDevengo">
@@ -10,7 +10,7 @@
         @endif
     @else
         <div class="input-group mb-3">
-            <input type="text" class="form-control form-control-sm" value="{{ $nuevoFolioDevengo }}" disabled>
+            <input type="text" class="form-control-sm" value="{{ $nuevoFolioDevengo }}" disabled>
             @if(!$onlyRead)
                 <div class="input-group-append">
                     <button wire:click="toggleEditing" 

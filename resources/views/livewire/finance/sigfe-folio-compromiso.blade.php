@@ -3,7 +3,7 @@
             <input wire:model.defer="nuevoFolioCompromiso" 
                 type="text" 
                 placeholder="Ingrese el folio compromiso sigfe"
-                class="form-control form-control-sm">
+                class="form-control-sm">
                 @if(!$onlyRead)
                     <button class="btn btn-sm btn-primary" 
                         type="button" 
@@ -16,7 +16,7 @@
         <div class="input-group mb-3">
             <input value="{{ $dte->folio_compromiso_sigfe }}" 
                 type="text" 
-                class="form-control form-control-sm" disabled>
+                class="form-control-sm" disabled>
             @if(!$onlyRead)
                 <div class="input-group-append">
                     <button 

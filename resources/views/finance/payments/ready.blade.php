@@ -34,16 +34,9 @@
                     <th>FR</th>
                     <th>Adjuntos</th>
                     <th>Recepcion</th>
-                    {{--
-                    <th>Estado</th> 
-                    --}}                    
                     <th>Compromiso SIGFE</th>
                     <th>Devengo SIGFE</th>
-                    {{--  
-                    <th>Folio Sigfe</th>
-                    <th>Observaciones</th>
-                    --}}                    
-                    <th>Comprobante de licitación de Fondos</th>
+                    <th>PDF</th>
                     @canany(['be god', 'Payments: return to review'])
                         <th>Retornar a Bandeja </th>
                     @endcanany
@@ -69,26 +62,6 @@
                             <!-- Nuevo módulo de Recepciones -->
                             @include('finance.payments.partials.receptions-info')
                         </td>
-                        <!-- <td>
-                            <form action="{{ route('finance.payments.update', ['dte' => $dte->id]) }}" method="POST">
-                                @csrf
-                                @method('PUT')
-                                <select class="form-select" name="status" required>
-                                    <option value="">Seleccionar Estado
-                                    </option>
-                                    <option value="Enviado a Pago" @if ($dte->estado == 'Enviado a Pago') selected @endif>
-                                        Enviado a
-                                        Pago
-                                    </option>
-                                    <option value="Rechazado" @if ($dte->estado == 'Rechazado') selected @endif>Rechazado
-                                    </option>
-                                    <option value="Pagado" @if ($dte->estado == 'Pagado') selected @endif>Pagado
-                                    </option>
-                                </select>
-
-                                <button type="submit" class="btn btn-sm btn-primary">Guardar</button>
-                            </form>
-                        </td> -->
                         <td class="small">
                             @livewire('finance.sigfe-folio-compromiso', 
                             [
@@ -115,25 +88,10 @@
                                 'onlyRead' => 'true'
                             ], key($dte->id))
                         </td>
-                        {{--  
-                            <td>
-                            <input type="number" name="folio_sigfe" class="form-control small"
-                                value={{ $dte->folio_sigfe }}required>
-                        </td>
-
                         <td>
-                            <textarea name="observation" class="form-control">
-                                                    @foreach ($dte->paymentFlows as $paymentFlow)
-    {{ $paymentFlow->observation }}
-                                                            @if ($paymentFlow->observation)
-    ({{ $paymentFlow->user->short_name }})
-@endif
-@endforeach
-                            </textarea>
-                        </td>
-                        --}}
-                        <td>
-                            @livewire('finance.sigfe-archivo-comprobante', ['dte' => $dte], key($dte->id))
+                            <a href="#" class="btn btn-outline-danger btn-sm">
+                                <i class="far fa-file-pdf text-danger"></i>
+                            </a>
                         </td>
                         @canany(['be god', 'Payments: return to review'])
                             <td>
