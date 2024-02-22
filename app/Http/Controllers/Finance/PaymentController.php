@@ -28,8 +28,7 @@ class PaymentController extends Controller
         $oc = $request->input('oc');
         $folio_compromiso = $request->input('folio_compromiso');
         $folio_devengo = $request->input('folio_devengo');
-
-        // $query = Dte::query();
+        
 
         if ($id) {
             $query->where('id', $id);
@@ -80,13 +79,21 @@ class PaymentController extends Controller
             'establishment',
             'dtes',
             'invoices',
+            
+
+
+            'receptions',
+            'receptions.signedFileLegacy',
+            'receptions.numeration',
 
             'requestForm',
             'requestForm.requestFormFiles',
-            'requestForm.contractManager',
+            'requestForm.signedOldRequestForms',
 
             'requestForm.father',
             'requestForm.father.requestFormFiles'
+
+            
         ])
             ->whereNotIn('tipo_documento', ['guias_despacho','nota_debito','nota_credito'])
             ->whereNull('rejected')
