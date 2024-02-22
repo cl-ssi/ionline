@@ -1,53 +1,29 @@
 <form method="POST" class="form-horizontal" action="{{ route('pharmacies.products.purchase_item.store') }}">
     @csrf
 
-    {{--<!-- <div class="form-row">
-        <fieldset class="form-group col-2">
-            <label for="for_barcode">Código de Barra</label>
-            <input type="number" class="form-control" id="for_barcode" placeholder="Código de barra" name="barcode">
-        </fieldset>
-
-        <fieldset class="form-group col">
-            <label for="for_product">Producto</label>
-            <select id="for_product" class="form-control selectpicker" data-live-search="true" name="product_id" onchange="jsCambiaSelect(this)">
-                <option></option>
-              @foreach ($products as $key => $product)
-                <option value="{{$product->id}}">{{$product->name}}</option>
-              @endforeach
-            </select>
-        </fieldset>
-
-        <fieldset class="form-group col-2">
-            <label for="for_quantity">Cantidad</label>
-            <input type="number" class="form-control" id="for_quantity" placeholder="Cantidad" name="amount" required="">
-        </fieldset>
-
-        <input type="hidden" id="for_unity" name="unity" />
-    </div> -->--}}
-
     @livewire('pharmacies.product-search')
 
     <input type="hidden" name="purchase_id" value="{{$purchase->id}}" />
 
     <div class="form-row">
-        <fieldset class="form-group col-4">
+        <fieldset class="form-group col-3">
             <label for="for_unit_cost">Precio</label>
             <input step="any" type="number" class="form-control" id="for_unit_cost" placeholder="Precio" name="unit_cost" required="">
         </fieldset>
 
-        <fieldset class="form-group col-4">
+        <fieldset class="form-group col-3">
             <label for="for_serie">F. Vencimiento</label>
             <input type="date" class="form-control" id="for_date" name="due_date" required="required">
         </fieldset>
 
-        <!--<fieldset class="form-group col-3">
-            <label for="for_serie">Serie</label>
-            <input type="text" class="form-control" id="for_serie" placeholder="Número de Serie" name="serial_number" required="">
-        </fieldset>-->
-
-        <fieldset class="form-group col-4">
+        <fieldset class="form-group col-3">
             <label for="for_lote">Serie/Lote</label>
             <input type="text" class="form-control" id="for_lote" placeholder="Número de Lote" name="batch" required="">
+        </fieldset>
+
+        <fieldset class="form-group col-3">
+            <label for="for_quantity">Cantidad</label>
+            <input type="number" class="form-control" id="for_quantity" placeholder="" name="amount" required="">
         </fieldset>
 
     </div>

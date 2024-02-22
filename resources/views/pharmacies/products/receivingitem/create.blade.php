@@ -8,14 +8,22 @@
         <input type="hidden" name="receiving_id" value="{{$receiving->id}}" />
 
         <div class="form-row">
-            <fieldset class="form-group col-4">
-                <label for="for_serie">F. Vencimiento</label>
-                <input type="date" class="form-control" id="for_date" name="due_date" required="required">
+
+            <fieldset class="form-group col-1">
+                <label for="for_lote"><br></label>
+                <button type="button" id="disable_due_date_batch" class="btn btn-primary form-control" title="Utilizar cuando el producto no tenga fecha de vencimiento o lote.">
+                    <i class="fa fa-unlock-alt"></i>
+                </button>
             </fieldset>
 
-            <fieldset class="form-group col-5">
+            <fieldset class="form-group col-4">
+                <label for="for_due_date">F. Vencimiento</label>
+                <input type="date" class="form-control" id="for_due_date" name="due_date" required>
+            </fieldset>
+
+            <fieldset class="form-group col-4">
                 <label for="for_lote">Serie/Lote</label>
-                <input type="text" class="form-control" id="for_lote" placeholder="Número de Lote" name="batch" required="">
+                <input type="text" class="form-control" id="for_lote" placeholder="Número de Lote" name="batch" required>
             </fieldset>
 
             <fieldset class="form-group col-3">

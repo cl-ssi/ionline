@@ -6,14 +6,14 @@ use App\User;
 use Illuminate\Console\Command;
 use Spatie\Permission\Models\Role;
 
-class SetRoles extends Command
+class SetRole extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'set:roles {rol_name}';
+    protected $signature = 'set:role {rol_name}';
 
     /**
      * The console command description.
@@ -40,7 +40,7 @@ class SetRoles extends Command
         foreach ($users as $user) {
             // set the rol {rol_name} to the user
             $user->assignRole($rol_name);
-            echo "Set rol " . $rol_name . " to user: " . $user->name . "\n";
+            echo "Set rol " . $rol_name . " to user: " . $user->shortName . "\n";
         }
 
         // Get all users whe have the rol {rol_name}
@@ -50,7 +50,7 @@ class SetRoles extends Command
             foreach ($permissions as $permission) {
                 $user->revokePermissionTo($permission);
             }
-            echo "Revoked all permissions from user: " . $user->name . "\n";
+            echo "Revoked all permissions from user: " . $user->shortName . "\n";
         }
 
         return Command::SUCCESS;

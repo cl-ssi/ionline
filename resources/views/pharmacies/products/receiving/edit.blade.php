@@ -56,8 +56,27 @@
 
     <script>
         $( document ).ready(function() {
-        document.getElementById("for_barcode").focus();
+            document.getElementById("for_barcode").focus();
+        });
+
+        document.getElementById("disable_due_date_batch").addEventListener("click", function() {
+            var dueDateInput = document.getElementById("for_due_date");
+            var batchInput = document.getElementById("for_lote");
+            
+            if (dueDateInput.readOnly) {
+                dueDateInput.value = "";
+                batchInput.value = "";
+                
+            } else {
+                dueDateInput.value = "2100-01-01";
+                batchInput.value = "S/Lote";
+            }
+
+            // Cambia el estado de solo lectura
+            dueDateInput.readOnly = !dueDateInput.readOnly;
+            batchInput.readOnly = !batchInput.readOnly;
         });
     </script>
+
 
 @endsection
