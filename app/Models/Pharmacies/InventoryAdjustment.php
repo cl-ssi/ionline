@@ -4,6 +4,7 @@ namespace App\Models\Pharmacies;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class InventoryAdjustment extends Model
 {
@@ -15,6 +16,8 @@ class InventoryAdjustment extends Model
     protected $fillable = [
         'id', 'date','inventory_adjustment_type_id','pharmacy_id','user_id','notes'
     ];
+
+    use SoftDeletes;
 
     /**
      * The table associated with the model.

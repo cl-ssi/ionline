@@ -142,11 +142,11 @@ class InventoryAdjustmentController extends Controller
         $receiving = $inventoryAdjustment->receiving;
         $dispatch = $inventoryAdjustment->dispatch;
 
-        if($receiving){
+        if($receiving && $receiving->receivingItems->count()>0){
             session()->flash('warning', 'No se puede eliminar un ajuste de inventario con movimientos dentro.');
             return redirect()->back();
         }
-        if($dispatch){
+        if($dispatch && $dispatch->dispatchItems->count()>0){
             session()->flash('warning', 'No se puede eliminar un ajuste de inventario con movimientos dentro.');
             return redirect()->back();
         }
@@ -154,6 +154,13 @@ class InventoryAdjustmentController extends Controller
         if($inventoryAdjustment->user_id != auth()->user()->id){
             session()->flash('warning', 'Solo podrá modificar este ajuste de inventario la persona que lo creó.');
             return redirect()->back();
+        }
+
+        if($receiving){
+            $receiving->delete();
+        }
+        if($dispatch){
+            $dispatch->delete();
         }
 
         $inventoryAdjustment->delete();
