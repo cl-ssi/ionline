@@ -135,23 +135,28 @@ class TechnicalEvaluationController extends Controller
 
     public function finalize_selection_process(Request $request, TechnicalEvaluation $technicalEvaluation)
     {
+        // RECHAZO EVALUACION TECNICA
         $technicalEvaluation->technical_evaluation_status = 'rejected';
         $technicalEvaluation->date_end = Carbon::now();
         $technicalEvaluation->reason = $request->reason;
         $technicalEvaluation->observation = $request->observation;
         $technicalEvaluation->save();
 
+        // RECHAZO SOLICITUD
         $technicalEvaluation->requestReplacementStaff->request_status = 'rejected';
         $technicalEvaluation->requestReplacementStaff->save();
 
-        //Request
-        $mail_request = $technicalEvaluation->requestReplacementStaff->user->email;
-        //Manager
-        $type = 'manager';
-        $mail_notification_ou_manager = Authority::getAuthorityFromDate($technicalEvaluation->requestReplacementStaff->user->organizational_unit_id, Carbon::now(), $type);
+        /* ELIMINAR APPROVALS DE FINANZAS
+        $approval = $technicalEvaluation->requestReplacementStaff->approvals->last();
+        if(str_contains($approval->subject, 'Certificado de disponibilidad presupuestaria')){
+            $approval->delete();
+        }
+        */
 
-        /* FIX: @mirandaljorge si no hay manager en Authority, se va a caer. Parametrizar el 46 */
-        $ou_personal_manager = Authority::getAuthorityFromDate(46, Carbon::now(), 'manager');
+        //REEMPLAZAR ENVÍO DE MAIL POR NOTIIFICACION
+        $mail_request = $technicalEvaluation->requestReplacementStaff->user->email;
+        $mail_notification_ou_manager = Authority::getAuthorityFromDate($technicalEvaluation->requestReplacementStaff->user->organizational_unit_id, Carbon::now(), 'manager');
+        $ou_personal_manager = Authority::getAuthorityFromDate(Parameter::get('ou', 'PersonalSSI'), Carbon::now(), 'manager');
 
         if($ou_personal_manager){     
             $emails = [$mail_request,

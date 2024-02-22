@@ -117,7 +117,7 @@ class NoAttendanceRecordIndex extends Component
                     }
                 })
                 ->latest()
-                ->paginate(50),
+                ->paginate(500),
         ]);
     }
 }

@@ -300,9 +300,9 @@ class ApplicantController extends Controller
     }
 
     public function decline_selected_applicant(Request $request, Applicant $applicant){
+        //POSTULANTE DESISTE
         $applicant->fill($request->all());
         $applicant->desist = 1;
-
         $applicant->save();
 
         $applicantsSelected = Applicant::where('technical_evaluation_id', $applicant->technical_evaluation_id)
@@ -311,19 +311,31 @@ class ApplicantController extends Controller
             ->get();
 
         if($applicantsSelected->count() == 0){
+            //SE CAMBIA ESTADO DE E.T. A PENDIENTE
             $applicant->technicalEvaluation->technical_evaluation_status = 'pending';
             $applicant->technicalEvaluation->date_end = NULL;
             $applicant->technicalEvaluation->save();
 
+            //SE CAMBIA ESTADO DE SOLICITUD A PENDIENTE
             $applicant->technicalEvaluation->requestReplacementStaff->request_status = 'pending';
             $applicant->technicalEvaluation->requestReplacementStaff->save();
 
-            /* RR.HH. Nuevamente queda Disponible */
+            // RR.HH. DISPONIBLE
             $applicant->replacementStaff->status = 'immediate_availability';
             $applicant->replacementStaff->save();
 
+            //SE ELIMINA CONTRATO EN SIRH
             $applicant->technicalEvaluation->requestReplacementStaff->sirh_contract = NULL;
             $applicant->technicalEvaluation->requestReplacementStaff->save();
+
+            // ELIMINAR APPROVALS DE FINANZAS
+            if($request->reason == 'rechazo oferta laboral' || $request->reason == 'error digitacion'){
+                $approval = $applicant->technicalEvaluation->requestReplacementStaff->approvals->last();
+                if(str_contains($approval->subject, 'Certificado de disponibilidad presupuestaria') &&
+                    $approval->status == NULL){
+                    $approval->delete();
+                }
+            }
         }
         return redirect()
             ->to(route('replacement_staff.request.technical_evaluation.edit', $applicant->technicalEvaluation->requestReplacementStaff).'#applicant')

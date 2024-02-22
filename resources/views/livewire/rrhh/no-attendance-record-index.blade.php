@@ -57,17 +57,25 @@
                         >
                 </div>
             </div>
+
+
             <div class="form-check form-switch">
                 <input class="form-check-input" type="checkbox" role="switch" wire:model="simplified" id="simplified">
                 <label class="form-check-label" for="simplified">Formato simplificado de carga</label>
             </div>
+
+            @if($simplified)
+                <div class="form-input">
+                <a class="btn btn-outline-success btn-sm mb-3" id="downloadLink" onclick="exportF(this)">Descargar en excel resultados</a>
+                </div>
+            @endif
         </div>
     </form>
 
 
 
     @if($simplified)
-        <table class="table table-sm table-bordered">
+        <table class="table table-sm table-bordered" id="tabla">
             <thead>
                 <tr>
                     <th>Id</th>
@@ -234,4 +242,35 @@
     @endif
 
     {{ $records->links() }}
+
+    @section('custom_js')
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <script type="text/javascript">
+        let date = new Date()
+        let day = date.getDate()
+        let month = date.getMonth() + 1
+        let year = date.getFullYear()
+        let hour = date.getHours()
+        let minute = date.getMinutes()
+
+        function exportF(elem) {
+            var table = document.getElementById("tabla");
+            var html = table.outerHTML;
+            var html_no_links = html.replace(/<a[^>]*>|<\/a>/g, ""); //remove if u want links in your table
+            var url = 'data:application/vnd.ms-excel,' + escape(html_no_links); // Set your html table into url
+            elem.setAttribute("href", url);
+            elem.setAttribute("download", "justificacionaciones_de_asistencia_no_registrada_" + day + "_" + month + "_" + year + "_" + hour + "_" + minute + ".xls"); // Choose the file name
+            return false;
+        }
+    </script>
+
+
+    @endsection
+
+    
+
+
+
 </div>
