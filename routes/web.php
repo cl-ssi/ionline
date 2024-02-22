@@ -59,7 +59,7 @@ use App\Http\Controllers\Inventory\InventoryController;
 use App\Http\Controllers\JobPositionProfiles\JobPositionProfileController;
 use App\Http\Controllers\JobPositionProfiles\JobPositionProfileSignController;
 use App\Http\Controllers\JobPositionProfiles\MessageController;
-use App\Http\Controllers\Lobby\MeetingController;
+// use App\Http\Controllers\Lobby\MeetingController;
 use App\Http\Controllers\Mammography\MammographyController;
 use App\Http\Controllers\MunicipalityController;
 use App\Http\Controllers\News\NewsController;
@@ -176,8 +176,11 @@ use App\Http\Controllers\ServiceRequests\ValueController;
 use App\Http\Controllers\Suitability\CategoriesController;
 use App\Http\Controllers\Suitability\OptionsController;
 use App\Http\Controllers\Suitability\QuestionsController;
-//use App\Http\Controllers\RequestForms\SupplyPurchaseController;
 use App\Http\Controllers\Suitability\ResultsController;
+use App\Http\Controllers\Meeting\MeetingController;
+
+//use App\Http\Controllers\RequestForms\SupplyPurchaseController;
+//use App\Http\Controllers\Suitability\ResultsController;
 use App\Http\Controllers\Suitability\SchoolUserController;
 use App\Http\Controllers\Suitability\SchoolsController;
 use App\Http\Controllers\Suitability\SuitabilityController;
@@ -543,36 +546,34 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->middleware(['auth'
     //     Route::delete('{language}/destroy', [languageController::class, 'destroy'])->name('destroy');
     // });
 
-    Route::group(['middleware' => ['role:Replacement Staff: admin']], function () {
-        Route::prefix('manage')->name('manage.')->group(function () {
-            Route::prefix('profession')->name('profession.')->group(function () {
-                Route::get('/', [ProfessionManageController::class, 'index'])->name('index');
-                Route::post('/store', [ProfessionManageController::class, 'store'])->name('store');
-                Route::get('/{professionManage}/edit', [ProfessionManageController::class, 'edit'])->name('edit');
-                Route::put('{professionManage}/update', [ProfessionManageController::class, 'update'])->name('update');
-                Route::delete('{professionManage}/destroy', [ProfessionManageController::class, 'destroy'])->name('destroy');
-            });
-            Route::prefix('profile')->name('profile.')->group(function () {
-                Route::get('/', [ProfileManageController::class, 'index'])->name('index');
-                Route::post('/store', [ProfileManageController::class, 'store'])->name('store');
-                Route::get('/{profileManage}/edit', [ProfileManageController::class, 'edit'])->name('edit');
-                Route::put('{profileManage}/update', [ProfileManageController::class, 'update'])->name('update');
-                Route::delete('{profileManage}/destroy', [ProfileManageController::class, 'destroy'])->name('destroy');
-            });
-            Route::prefix('legal_quality')->name('legal_quality.')->group(function () {
-                Route::get('/', [LegalQualityManageController::class, 'index'])->name('index');
-                Route::post('/store', [LegalQualityManageController::class, 'store'])->name('store');
-                Route::get('/{legalQualityManage}/edit', [LegalQualityManageController::class, 'edit'])->name('edit');
-                Route::post('{legalQualityManage}/assign_fundament', [LegalQualityManageController::class, 'assign_fundament'])->name('assign_fundament');
-                // Route::delete('{profileManage}/destroy', [ProfileManageController::class, 'destroy'])->name('destroy');
-            });
-            Route::prefix('fundament')->name('fundament.')->group(function () {
-                Route::get('/', [RstFundamentManageController::class, 'index'])->name('index');
-                Route::post('/store', [RstFundamentManageController::class, 'store'])->name('store');
-                Route::get('/{rstFundamentManage}/edit', [RstFundamentManageController::class, 'edit'])->name('edit');
-                Route::post('{rstFundamentManage}/assign_fundament', [RstFundamentManageController::class, 'assign_fundament'])->name('assign_fundament');
-                // Route::delete('{profileManage}/destroy', [ProfileManageController::class, 'destroy'])->name('destroy');
-            });
+    Route::prefix('manage')->name('manage.')->group(function () {
+        Route::prefix('profession')->name('profession.')->group(function () {
+            Route::get('/', [ProfessionManageController::class, 'index'])->name('index');
+            Route::post('/store', [ProfessionManageController::class, 'store'])->name('store');
+            Route::get('/{professionManage}/edit', [ProfessionManageController::class, 'edit'])->name('edit');
+            Route::put('{professionManage}/update', [ProfessionManageController::class, 'update'])->name('update');
+            Route::delete('{professionManage}/destroy', [ProfessionManageController::class, 'destroy'])->name('destroy');
+        });
+        Route::prefix('profile')->name('profile.')->group(function () {
+            Route::get('/', [ProfileManageController::class, 'index'])->name('index');
+            Route::post('/store', [ProfileManageController::class, 'store'])->name('store');
+            Route::get('/{profileManage}/edit', [ProfileManageController::class, 'edit'])->name('edit');
+            Route::put('{profileManage}/update', [ProfileManageController::class, 'update'])->name('update');
+            Route::delete('{profileManage}/destroy', [ProfileManageController::class, 'destroy'])->name('destroy');
+        });
+        Route::prefix('legal_quality')->name('legal_quality.')->group(function () {
+            Route::get('/', [LegalQualityManageController::class, 'index'])->name('index');
+            Route::post('/store', [LegalQualityManageController::class, 'store'])->name('store');
+            Route::get('/{legalQualityManage}/edit', [LegalQualityManageController::class, 'edit'])->name('edit');
+            Route::post('{legalQualityManage}/assign_fundament', [LegalQualityManageController::class, 'assign_fundament'])->name('assign_fundament');
+            // Route::delete('{profileManage}/destroy', [ProfileManageController::class, 'destroy'])->name('destroy');
+        });
+        Route::prefix('fundament')->name('fundament.')->group(function () {
+            Route::get('/', [RstFundamentManageController::class, 'index'])->name('index');
+            Route::post('/store', [RstFundamentManageController::class, 'store'])->name('store');
+            Route::get('/{rstFundamentManage}/edit', [RstFundamentManageController::class, 'edit'])->name('edit');
+            Route::post('{rstFundamentManage}/assign_fundament', [RstFundamentManageController::class, 'assign_fundament'])->name('assign_fundament');
+            // Route::delete('{profileManage}/destroy', [ProfileManageController::class, 'destroy'])->name('destroy');
         });
     });
 });
@@ -2347,6 +2348,12 @@ Route::prefix('allowances')->as('allowances.')->middleware(['auth', 'must.change
     Route::get('import', [AllowanceController::class, 'import'])->name('import');
 });
 
+Route::prefix('meetings')->as('meetings.')->middleware(['auth', 'must.change.password'])->group(function () {
+    Route::get('/', [MeetingController::class, 'index'])->name('index');
+    Route::get('create', [MeetingController::class, 'create'])->name('create');
+    Route::get('{meeting}/edit', [MeetingController::class, 'edit'])->name('edit');
+});
+
 /** Módulo de horas para vacunas. ya no se usa */
 // Route::get('/yomevacuno',[VaccinationController::class,'welcome']);
 
@@ -2624,6 +2631,7 @@ Route::prefix('summary')->as('summary.')->middleware(['auth', 'must.change.passw
 
 /* Rutas de Módulo de Lobby*/
 // Inicio Módulo Lobby
+/*
 Route::prefix('lobby')->as('lobby.')->middleware(['auth', 'must.change.password'])->group(function () {
     Route::prefix('meeting')->as('meeting.')->group(function () {
         Route::get('/', [MeetingController::class, 'index'])->name('index');
@@ -2633,6 +2641,7 @@ Route::prefix('lobby')->as('lobby.')->middleware(['auth', 'must.change.password'
         Route::put('/update/{meeting}', [MeetingController::class, 'update'])->name('update');
     });
 });
+*/
 
 /**
  * Rutas de Modulo Sign
