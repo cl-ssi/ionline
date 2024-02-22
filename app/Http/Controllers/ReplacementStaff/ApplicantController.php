@@ -150,7 +150,8 @@ class ApplicantController extends Controller
             $applicant_evaluated->save();
 
             // SE CAMBIA EL ESTADO DEL INTEGRANTE DEL STAFF: "SELECCIONADO"
-            $applicant_evaluated->replacementStaff->status = 'selected';
+            //$applicant_evaluated->replacementStaff->status = 'selected';
+            //PETICIÓN DE NO CAMBIAR ESTADO A SELECCIONADO: TODOS DISPONIBLES
             $applicant_evaluated->replacementStaff->save();
 
             // SE CAMBIA EL ESTADO DE LA EVALUACION TECNICA
