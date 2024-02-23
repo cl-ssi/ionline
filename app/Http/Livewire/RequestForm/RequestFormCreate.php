@@ -90,17 +90,18 @@ class RequestFormCreate extends Component
       $this->lstUnitOfMeasurement   = UnitOfMeasurement::all();
       $this->lstPurchaseMechanism   = PurchaseMechanism::all();
       $estab_hah = Parameter::get('establishment', 'HospitalAltoHospicio');
-      if(auth()->user()->OrganizationalUnit->establishment_id == $estab_hah){
-        $filter = function($q){ $q->where('name', '!=', 31); };
-        $this->lstProgram = Program::with(['Subtitle' => $filter])->whereHas('Subtitle', $filter)->orderBy('alias_finance')->get();
-      }else{
-        $this->lstProgram = Program::with('Subtitle')->orderBy('alias_finance')->get();
-      }
+      // if(auth()->user()->OrganizationalUnit->establishment_id == $estab_hah){
+      //   $filter = function($q){ $q->where('name', '!=', 31); };
+      //   $this->lstProgram = Program::with(['Subtitle' => $filter])->whereHas('Subtitle', $filter)->orderBy('alias_finance')->get();
+      // }else{
+      //   $this->lstProgram = Program::with('Subtitle')->orderBy('alias_finance')->get();
+      // }
+      $this->lstProgram = Program::with('Subtitle')->orderBy('alias_finance')->get();
 
-      if(auth()->user()->OrganizationalUnit->establishment_id == $estab_hah){
-        $this->superiorChief = 1;
-        $this->isHAH = true;
-      }
+      // if(auth()->user()->OrganizationalUnit->establishment_id == $estab_hah){
+      //   $this->superiorChief = 1;
+      //   $this->isHAH = true;
+      // }
 
       if(!is_null($requestForm)){
         $this->requestForm = $requestForm;

@@ -120,7 +120,7 @@ class EventRequestForm extends Model implements Auditable
             $event                      =   new EventRequestForm();
             $event->ou_signer_user      =   $contractManagerBelongsHAH
                                             ? Parameter::get('ou', 'SDAHAH') 
-                                            : $requestForm->contractOrganizationalUnit->father->id;
+                                            : ($requestForm->contractOrganizationalUnit->father->id ?? $requestForm->contract_manager_ou_id);
             $event->cardinal_number     =   2;
             $event->status              =   'pending';
             $event->event_type          =   'superior_leader_ship_event';
