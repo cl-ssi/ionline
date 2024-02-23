@@ -846,7 +846,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
     });
 
     Route::get('{user}/roles', RolesMgr::class)->name('roles.mgr')->middleware('auth');
-    Route::get('{user}/permissions', PermissionsMgr::class)->name('permissions.mgr')->middleware('auth');
+    Route::get('{user}/permissions', PermissionsMgr::class)->name('permissions.mgr')->middleware('auth','can: Users: assign permission');
 
     /* TODO: #50 incorporar auth en el grupo e importar controllers al comienzo del archivo */
     /** Inicio Shift Managment */
