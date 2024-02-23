@@ -10,7 +10,7 @@
     @csrf
     @method('POST')
 
-    <div class="row g-2">
+    <div class="row g-2 mb-3">
 
         <fieldset class="form-group col-12 col-md-4">
             <label for="for_name">Nombre</label>
@@ -18,12 +18,44 @@
                 placeholder="Nombre del rol" name="name" required>
         </fieldset>
 
-        <fieldset class="form-group col-md-8">
+        <fieldset class="form-group col-md-6">
             <label for="for_description">Descripción</label>
             <input type="text" class="form-control" id="for_description"
                 placeholder="Descripciól del rol" name="description">
         </fieldset>
+
+        <div class="col-md-2">
+            <br>
+            <button type="submit" class="btn btn-primary">Guardar</button>
+            <a class="btn btn-outline-secondary" href="{{ route('parameters.roles.index') }}">Volver</a>
+        </div>
     </div>
+
+    @can('be god')
+    <div class="form-check">
+        <input 
+            class="form-check-input" 
+            type="checkbox" 
+            role="switch" 
+            id="permission-be_god"
+            name="permissions[]"
+            value="be god">
+        <label class="form-check-label text-danger" 
+            for="permission-be_god">be god <small class="form-text">God Mode</small></label>
+    </div>
+    <div class="form-check">
+        <input 
+            class="form-check-input" 
+            type="checkbox" 
+            role="switch" 
+            id="permission-dev"
+            name="permissions[]"
+            value="dev">
+        <label class="form-check-label text-danger" 
+            for="permission-dev">dev <small class="form-text">Developer</small></label>
+    </div>
+    @endcan
+
 
     @php $anterior = null; @endphp
 
