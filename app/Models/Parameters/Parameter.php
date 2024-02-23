@@ -66,7 +66,7 @@ class Parameter extends Model
          * @alupa: 2021-07-20
          * $query->first()->value da error si el parámetro no existe, debería retornar null.
          */
-        if(isset($parameter)) return is_array($parameter) || is_array($establishment_id) ? $query->pluck('value')->toArray() : $query->first()->value;
+        if(isset($parameter)) return is_array($parameter) || is_array($establishment_id) ? $query->pluck('value')->toArray() : ($query->first()->value ?? null);
         else return null;
     }
 
