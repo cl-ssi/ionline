@@ -17,7 +17,7 @@ class RoleController extends Controller
     public function index()
     {
         $roles = Role::with('permissions')
-            // ->whereNotIn('name',['dev','god'])
+            //->whereNotIn('name',['dev','god'])
             ->orderBy('name')
             ->get();
         return view('parameters.roles.index', compact('roles'));
@@ -30,7 +30,9 @@ class RoleController extends Controller
      */
     public function create()
     {
-        $permissions = Permission::orderBy('name')->get();
+        $permissions = Permission::orderBy('name')
+            ->whereNotIn('name',['dev','god'])
+            ->get();
         return view('parameters.roles.create',compact('permissions'));
     }
 
@@ -78,7 +80,10 @@ class RoleController extends Controller
      */
     public function edit(Role $role)
     {
-        $permissions = Permission::orderBy('name')->where('guard_name','web')->get();
+        $permissions = Permission::orderBy('name')
+            ->whereNotIn('name',['dev','god'])
+            ->where('guard_name','web')
+            ->get();
         return view('parameters.roles.edit', compact('role','permissions'));
     }
 
