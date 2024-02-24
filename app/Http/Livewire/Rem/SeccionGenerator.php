@@ -11,11 +11,57 @@ class SeccionGenerator extends Component
     public $tabla;
     public $tabla_final;
     public $cols;
-    public $codigos;
+    public $cods;
     public $columnas;
     public $cabecera;
     public $message;
     public $thead;
+    public $nextRecord;
+
+    /*
+        'name',
+        'serie',
+        'nserie',
+        'supergroups',
+        'supergroups_inline',
+        'discard_group',
+        'thead',
+        'cols',
+        'cods',
+        'totals',
+        'totals_by_prestacion',
+        'totals_by_group',
+        'totals_first',
+        'subtotals',
+        'subtotals_first',
+        'tfoot',
+        'precision'
+        */
+    protected $rules = [
+        'seccion.name' => 'required',
+        'seccion.serie' => 'required',
+        'seccion.nserie' => 'required',
+        'seccion.supergroups' => 'required',
+        'seccion.supergroups_inline' => 'required',
+        'seccion.discard_group' => 'required',
+        'seccion.thead' => 'required',
+        'seccion.cols' => 'required',
+        'seccion.cods' => 'required',
+        'seccion.totals' => 'required',
+        'seccion.totals_by_prestacion' => 'required',
+        'seccion.totals_by_group' => 'required',
+        'seccion.totals_first' => 'required',
+        'seccion.subtotals' => 'required',
+        'seccion.subtotals_first' => 'required',
+        'seccion.tfoot' => 'required',
+        'seccion.precision' => 'required',
+    ];
+
+    public function mount(Seccion $seccion)
+    {
+        $this->seccion = $seccion;
+        $this->nextRecord = Seccion::where('id', '>', $this->seccion->id)->orderBy('id')->first()->id ?? 1;
+    }
 
     public function generar()
     {
@@ -70,25 +116,25 @@ class SeccionGenerator extends Component
             }
         }
         // // Ordena cols por orden alfabetico
-        sort($cols);
+        //sort($cols);
         // poner en mayuscula la primera letra
 
         // // Guarda todos los $cols separados por coma
         $this->cols = implode(',', $cols);
 
-        // obtene el primer elemento de cada fila de tabla_con_codigos y lo guarda en $codigos separados por ,
-        $this->codigos = implode(',', array_map(function($row) {
+        // obtene el primer elemento de cada fila de tabla_con_cods y lo guarda en $cods separados por ,
+        $this->cods = implode(',', array_map(function($row) {
             return $row[0];
         }, $cuerpo_values));
 
-        // app('debugbar')->info($codigos);
+        // app('debugbar')->info($cods);
 
         // Cuenta cuantos td hay en la variable $rows[0][0]
         $tds = substr_count($rows[0][0], '<td');
 
         // Suma todos los valores de "colspan" de los td de $rows[0][0]
         preg_match_all('/colspan="(\d+)"/', $rows[0][0], $colspans);
-        $this->columnas = array_sum($colspans[1]) - count($colspans[1]) + $tds -1 ; // el -1 es por los codigos
+        $this->columnas = array_sum($colspans[1]) - count($colspans[1]) + $tds -1 ; // el -1 es por los cods
 
         $cabecera_final = [];
         foreach($cabecera as $key_rows => $row) {
@@ -126,7 +172,7 @@ class SeccionGenerator extends Component
     public function save() {
         $this->seccion->thead = $this->thead;
         $this->seccion->cols = $this->cols;
-        $this->seccion->cods = $this->codigos;
+        $this->seccion->cods = $this->cods;
         $this->seccion->save();
     }
 
