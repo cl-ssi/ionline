@@ -61,6 +61,7 @@ use App\Http\Controllers\JobPositionProfiles\JobPositionProfileSignController;
 use App\Http\Controllers\JobPositionProfiles\MessageController;
 // use App\Http\Controllers\Lobby\MeetingController;
 use App\Http\Controllers\Mammography\MammographyController;
+use App\Http\Controllers\Meeting\MeetingController;
 use App\Http\Controllers\MunicipalityController;
 use App\Http\Controllers\News\NewsController;
 use App\Http\Controllers\Parameters\BudgetItemController;
@@ -177,7 +178,6 @@ use App\Http\Controllers\Suitability\CategoriesController;
 use App\Http\Controllers\Suitability\OptionsController;
 use App\Http\Controllers\Suitability\QuestionsController;
 use App\Http\Controllers\Suitability\ResultsController;
-use App\Http\Controllers\Meeting\MeetingController;
 
 //use App\Http\Controllers\RequestForms\SupplyPurchaseController;
 //use App\Http\Controllers\Suitability\ResultsController;
@@ -272,6 +272,8 @@ use App\Http\Livewire\Pharmacies\Products\IndexProducts;
 use App\Http\Livewire\ProfAgenda\Reports\SirsapReport;
 use App\Http\Livewire\Profile\MailSignature;
 use App\Http\Livewire\Profile\Subrogations;
+use App\Http\Livewire\Rem\SeccionGenerator;
+use App\Http\Livewire\Rem\SeccionIndex;
 use App\Http\Livewire\RequestForm\ReportGlobalBudget;
 use App\Http\Livewire\Requirements\Categories;
 use App\Http\Livewire\Resources\ComputerCreate;
@@ -1734,6 +1736,8 @@ Route::prefix('indicators')->as('indicators.')->group(function () {
     });
 
     Route::prefix('rem')->as('rem.')->group(function () {
+        Route::get('/generator/{seccion}', SeccionGenerator::class)->name('generator')->middleware('auth');
+        Route::get('/seccion', SeccionIndex::class)->name('seccion')->middleware('auth');
         Route::get('/{year}', [App\Http\Controllers\Indicators\RemController::class, 'list'])->name('list');
         Route::get('/{year}/{serie}', [App\Http\Controllers\Indicators\RemController::class, 'index'])->name('index');
         Route::get('/{year}/{serie}/{nserie}/{unique?}', [App\Http\Controllers\Indicators\RemController::class, 'show'])->name('show');
