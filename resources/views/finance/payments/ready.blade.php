@@ -35,8 +35,7 @@
                     <th>Adjuntos</th>
                     <th>Recepcion</th>
                     <th>Compromiso SIGFE</th>
-                    <th>Devengo SIGFE</th>
-                    <th>PDF</th>
+                    <th>Devengo SIGFE</th>                    
                     @canany(['be god', 'Payments: return to review'])
                         <th>Retornar a Bandeja </th>
                     @endcanany
@@ -88,11 +87,7 @@
                                 'onlyRead' => 'true'
                             ], key($dte->id))
                         </td>
-                        <td>
-                            <a href="#" class="btn btn-outline-danger btn-sm">
-                                <i class="far fa-file-pdf text-danger"></i>
-                            </a>
-                        </td>
+
                         @canany(['be god', 'Payments: return to review'])
                             <td>
                                 <form action="{{ route('finance.payments.returnToReview', ['dte' => $dte->id]) }}"
