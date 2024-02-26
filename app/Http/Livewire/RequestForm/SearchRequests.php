@@ -156,7 +156,7 @@ class SearchRequests extends Component
         }else{
             $estab_others = Parameter::get('establishment', ['SSTarapaca', 'HospitalAltoHospicio']);
             $ouSearch = Parameter::get('Abastecimiento','purchaser_ou_id', $estab_others);
-            $users = User::permission('Request Forms: purchaser')->whereHas('organizationalUnit', fn($q) => $q->where('establishment_id', $estab_others))->OrWhereIn('organizational_unit_id', $ouSearch)->orderBy('name','asc')->get();
+            $users = User::permission('Request Forms: purchaser')->whereHas('organizationalUnit', fn($q) => $q->whereIn('establishment_id', $estab_others))->OrWhereIn('organizational_unit_id', $ouSearch)->orderBy('name','asc')->get();
         }
 
         return view('livewire.request-form.search-requests', [
