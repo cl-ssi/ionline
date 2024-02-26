@@ -31,7 +31,7 @@
 
         <div class="form-group col-md-1">
             <label for="name">Sexo</label>
-            <select name="gender" class="form-control" required>
+            <select name="gender" class="form-select" required>
                 <option value=""></option>
                 <option value="male" @selected($user->gender == "male")>Masculino</option>
                 <option value="female" @selected($user->gender == "female")>Femenino</option>
