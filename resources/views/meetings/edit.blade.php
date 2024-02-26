@@ -9,7 +9,6 @@
 <h5><i class="fas fa-users fa-fw"></i> Mi Reunión ID: {{ $meeting->id }}</h5>
 
 <div class="col-sm">
-
     @livewire('meetings.meeting-create', [
         'meetingToEdit' => $meeting,
         'form'          => 'edit'

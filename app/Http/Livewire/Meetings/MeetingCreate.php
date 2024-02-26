@@ -8,11 +8,14 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
 use App\Models\Meetings\Meeting;
+use App\Models\Meetings\Grouping;
 use App\User;
 
 class MeetingCreate extends Component
 {
     public $date, $type, $subject, $mechanism, $start_at, $end_at;
+    public $groupings, $typeGrouping, $nameGrouping;
+    public $commitment, $typeResponsible;
 
     /* Meeting to edit */
     public $meetingToEdit;
@@ -35,8 +38,7 @@ class MeetingCreate extends Component
     }
 
     public function save(){
-        // dd($this->date, $this->type, $this->subject, $this->mecanism, $this->start_at, $this->end_at);
-
+        // SE GUARDA REUNIÓN
         $meeting = DB::transaction(function () {
             $meeting = Meeting::updateOrCreate(
                 [
@@ -45,9 +47,9 @@ class MeetingCreate extends Component
                 [
                     'status'                => 'pending',
                     'user_creator_id'       => auth()->id(), 
-                    'user_responsible_id'   => $this->searchedUser->id, 
-                    'ou_responsible_id'     => $this->searchedUser->organizational_unit_id,
-                    'establishment_id'      => $this->searchedUser->organizationalUnit->establishment_id,
+                    // 'user_responsible_id'   => $this->searchedUser->id, 
+                    // 'ou_responsible_id'     => $this->searchedUser->organizational_unit_id,
+                    'establishment_id'      => auth()->user()->organizationalUnit->establishment_id,
                     'date'                  => $this->date,
                     'type'                  => $this->type,
                     'subject'               => $this->subject,
@@ -59,6 +61,20 @@ class MeetingCreate extends Component
 
             return $meeting;
         });
+
+        //SE GUARDA GROUPING (Asociaciones / Federaciones / Reunión Mesas y Comités de Trabajos) PARTICIPANTES
+        foreach($this->groupings as $grouping){
+            Grouping::updateOrCreate(
+                [
+                    'id' => '',
+                ],
+                [
+                    'type'          => $destination['commune_id'], 
+                    'name'          => ($destination['locality_id'] != null) ? $destination['locality_id'] : null,
+                    'meeting_id'    => ($this->allowanceToEdit) ? $this->allowanceToEdit->id : $alw->id
+                ]
+            );
+        }
 
         if(is_null($this->meetingToEdit)){
             session()->flash('success', 'Estimados Usuario, se ha creado exitosamente la reunión');
@@ -86,14 +102,48 @@ class MeetingCreate extends Component
     public function searchedUser(User $user){
 
         $this->searchedUser = $user;
-
-        /*
-        $this->userResponsibleId = $this->searchedUser->id;
-        $this->position = $this->searchedUser->position;
-        $this->telephone = ($this->searchedUser->telephones->count() > 0) ? $this->searchedUser->telephones->first()->minsal : '';
-        $this->email = $this->searchedUser->email;
-
-        $this->organizationalUnit = $this->searchedUser->organizationalUnit->name;
-        */
     }
+
+    public function addGrouping(){
+        // dd($this->typeGrouping, $this->nameGrouping);
+        $this->groupings[] = [
+            'id'            => '',
+            'type'          => $this->typeGrouping,
+            'name'          => $this->nameGrouping,
+            'meeting_id'    => ($this->meetingToEdit) ? $this->meetingToEdit->id : null,
+        ];
+
+        
+    }
+
+    public function setGroupings(){
+        // foreach($this->meetingToEdit->groupings as $grouping){
+        foreach($this->groupings as $grouping){
+            $this->groupings[] = [
+                'id'            => $grouping->id,
+                'type'          => $grouping->type,
+                'name'          => $grouping->name,
+                'meeting_id'    => $grouping->meeting_id
+            ];
+        }
+    }
+
+    public function deleteGrouping($key){
+        $itemToDelete = $this->groupings[$key];
+
+        if($itemToDelete['id'] != ''){
+            unset($this->groupings[$key]);
+            $objectToDelete = Grouping::find($itemToDelete['id']);
+            $objectToDelete->delete();
+        }
+        else{
+            unset($this->groupings[$key]);
+        }
+    }
+
+    /*
+    public function updatedTypeResponsible($value){
+        dd('hola', $value);
+    }
+    */
 }
