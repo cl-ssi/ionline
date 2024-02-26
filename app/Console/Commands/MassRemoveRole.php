@@ -19,7 +19,7 @@ class MassRemoveRole extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Elimina roles masivamente a los usuarios que tengan el rol pasado como parametro';
 
     /**
      * Execute the console command.
@@ -31,11 +31,13 @@ class MassRemoveRole extends Command
         // Lista todos los usuarios que tengan el ROLE pasado como parametro
         $rol_name = $this->argument('rol_name');
         $users = User::role($rol_name)->get();
+        $ct = 1;
 
         // Por cada usuario, quitarle el ROLE
         foreach ($users as $user) {
             $user->removeRole($rol_name);
-            echo "Removed rol " . $rol_name . " from user: " . $user->shortName . "\n";
+            echo $ct . " Removed rol " . $rol_name . " from user: " . $user->shortName . "\n";
+            $ct++;
         }
 
         return Command::SUCCESS;

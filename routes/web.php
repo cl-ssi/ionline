@@ -847,8 +847,8 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
         Route::put('/{absenteeismType}', [AbsenteeismTypeController::class, 'update'])->name('update');
     });
 
-    Route::get('{user}/roles', RolesMgr::class)->name('roles.mgr')->middleware('auth');
-    Route::get('{user}/permissions', PermissionsMgr::class)->name('permissions.mgr')->middleware('auth');
+    Route::get('{user}/roles', RolesMgr::class)->name('roles.mgr')->middleware('auth');//->middleware(['can:Partes: oficina'])
+    Route::get('{user}/permissions', PermissionsMgr::class)->name('permissions.mgr')->middleware(['auth', 'permission:Users: assign permission|be god']);
 
     /* TODO: #50 incorporar auth en el grupo e importar controllers al comienzo del archivo */
     /** Inicio Shift Managment */
