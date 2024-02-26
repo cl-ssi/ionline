@@ -1,7 +1,11 @@
 <div>
     <h3>Secciones 2024</h3>
 
-    <table class="table table-sm table-bordered">
+    @foreach($columnas as $columna)
+        <a href="{{ route('indicators.rem.seccion', $columna) }}" class="btn btn-outline-primary btn-sm">{{ $columna['nserie'] }}</a>
+    @endforeach
+
+    <table class="table table-sm table-bordered mt-3">
         <thead>
             <tr>
                 <th>Nserie</th>

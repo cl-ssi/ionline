@@ -1,27 +1,8 @@
 <div>
-<script src="https://cdn.tiny.cloud/1/ktzops2hqsh9irqr0b17eqfnkuffe5d3u0k4bcpzkc1kfssx/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
-
-    @push('scripts')
-        <script>
-            tinymce.init({
-                selector: '#message',
-                language: 'es_MX',
-                toolbar: "paste|removeformat",
-                plugins: [
-                    'code','table'
-                ],
-                forced_root_block: false,
-                setup: function (editor) {
-                    editor.on('init change', function () {
-                        editor.save();
-                    });
-                    editor.on('change', function (e) {
-                        @this.set('tabla', editor.getContent());
-                    });
-                }
-            });
-        </script>
-    @endpush
+    <!-- <script src="https://cdn.tiny.cloud/1/ktzops2hqsh9irqr0b17eqfnkuffe5d3u0k4bcpzkc1kfssx/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script> -->
+    <!-- <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script> -->
+    <!-- <script src="{{ asset('js/tinymce/tinymce.min.js') }}" referrerpolicy="origin"></script> -->
+    <script src="{{ asset('js/tinymce/tinymce.5.10.min.js') }}" referrerpolicy="origin"></script>
 
     <style>
         table td{
@@ -39,7 +20,6 @@
     </div>
 
     <center>
-
         <button wire:click="generar" class="btn btn-primary">Generar</button>
     </center>
     <br>
@@ -133,12 +113,6 @@
     </div>
 
 
-
-
-
-
-
-
     Total Columnas: {{ $columnas }}<br>
 
     @if($cabecera)
@@ -162,11 +136,32 @@
         </div>
 
     @endif
-        <center>
-            <a href="{{ route('indicators.rem.seccion') }}" class="btn btn-outline-primary ">Volver</a>
-            <button type="submit" class="btn btn-primary" wire:click="save">Guardar</button>
-            <a href="{{ route('indicators.rem.generator', $nextRecord) }}" class="btn btn-secondary">Siguiente</a>
-        </center>
 
+    <center>
+        <a href="{{ route('indicators.rem.seccion') }}" class="btn btn-outline-primary ">Volver</a>
+        <button type="submit" class="btn btn-primary" wire:click="save">Guardar</button>
+        <a href="{{ route('indicators.rem.generator', $nextRecord) }}" class="btn btn-secondary">Siguiente</a>
+    </center>
 
+    @push('scripts')
+        <script>
+            tinymce.init({
+                selector: '#message',
+                language: 'es_MX',
+                toolbar: "removeformat",
+                plugins: [
+                    'code','table'
+                ],
+                forced_root_block: false,
+                setup: function (editor) {
+                    editor.on('init change', function () {
+                        editor.save();
+                    });
+                    editor.on('change', function (e) {
+                        @this.set('tabla', editor.getContent());
+                    });
+                }
+            });
+        </script>
+    @endpush
 </div>
