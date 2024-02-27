@@ -38,12 +38,36 @@
             @endif
         </div>
         <div class="input-group mb-3">
-            <input type="file" class="form-control" id="dte_file" wire:model="portfolios" accept=".xls">
+            <input type="file" class="form-control" id="dte_file" wire:model="portfolios" accept=".xls,.xlsx">
             <button class="btn btn-primary" type="submit" wire:loading.attr="disabled">
                 <i class="fas fa-fw fa-cloud-upload-alt"></i> Cargar Archivo
             </button>
         </div>
         <span class="form-text text-muted">Archivo xls de cartera financiera de TGR</span>
         @error('portfolios') <div class="alert alert-danger" role="alert">{{ $message }}</div> @enderror
+    </form>
+
+    <hr>
+
+    <h3 class="mb-3">Cargar archivo de SIGFE Comparativo de Requerimientos</h3>
+    <a href="#" target="_blank">Descargar formato del archivo Sigfe Comparativo de Requerimientos</a> 
+    <br><br>
+
+    <form wire:submit.prevent="uploadComparativeRequirement">
+        <div>
+            @if (session()->has('message'))
+                <div class="alert alert-success" role="alert">
+                    {{ session('message') }}
+                </div>
+            @endif
+        </div>
+        <div class="input-group mb-3">
+            <input type="file" class="form-control" id="dte_file" wire:model="requirements" accept=".xls,.xlsx">
+            <button class="btn btn-primary" type="submit" wire:loading.attr="disabled">
+                <i class="fas fa-fw fa-cloud-upload-alt"></i> Cargar Archivo
+            </button>
+        </div>
+        <span class="form-text text-muted">Archivo xls de comparativo de requerimientos</span>
+        @error('requirements') <div class="alert alert-danger" role="alert">{{ $message }}</div> @enderror
     </form>
 </div>

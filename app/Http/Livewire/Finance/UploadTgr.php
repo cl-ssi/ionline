@@ -7,12 +7,14 @@ use Livewire\WithFileUploads;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\TgrsImport;
 use App\Imports\TgrsAccountingPortfolioImport;
+use App\Imports\ComparativeRequirementImport;
 
 class UploadTgr extends Component
 {
     use WithFileUploads;
     public $tgrs;
     public $portfolios;
+    public $requirements;
     
 
 
@@ -26,7 +28,7 @@ class UploadTgr extends Component
     }
 
     public function uploadAccountingPortfolio()
-    {        
+    {
         $this->validate([
             'portfolios' => 'required|mimes:xlx,xls'
         ]);
@@ -34,6 +36,19 @@ class UploadTgr extends Component
         Excel::import(new TgrsAccountingPortfolioImport, $this->portfolios->path(), 'gcs');
 
         session()->flash('success', 'Archivo de tgr cargado exitosamente.');
+
+    }
+
+
+    public function uploadComparativeRequirement()
+    {
+        $this->validate([
+            'requirements' => 'required|mimes:xlx,xls,xlsx'
+        ]);
+
+        Excel::import(new ComparativeRequirementImport, $this->requirements->path(), 'gcs');
+
+        session()->flash('success', 'Archivo de comparativo de requerimientos cargado exitosamente.');
 
     }
 
