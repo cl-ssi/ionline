@@ -6,7 +6,7 @@
 
 @include('pharmacies.nav')
 
-<h3>Productos</h3>
+<h3>Reporte de productos</h3>
 
 <form method="GET" class="form-horizontal" action="{{ route('pharmacies.reports.products') }}">
 
@@ -27,6 +27,15 @@
             <span class="input-group-text">Programa</span>
         </div>
         <input type="text" class="form-control" name="program" {{ ($request->get('program'))?'value='.$request->get('program'):'' }}>
+
+        <div class="input-group-prepend">
+            <span class="input-group-text">Estado del producto</span>
+        </div>
+        <select name="status" class="form-control" id="" required>
+            <option value="0" @selected($request->status == 0)>Todos</option>
+            <option value="1" @selected($request->status == 1)>Vencidos</option>
+            <option value="2" @selected($request->status == 2)>No vencidos</option>
+        </select>
 
     	<div class="input-group-append">
     		<button type="submit" class="btn btn-primary">
