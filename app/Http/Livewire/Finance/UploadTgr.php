@@ -21,7 +21,7 @@ class UploadTgr extends Component
     public function upload()
     {
         $this->validate([
-            'tgrs' => 'required|mimes:xlx,xls'
+            'tgrs' => 'required|mimes:xlx,xls,xlsx'
         ]);
         Excel::import(new TgrsImport, $this->tgrs->path(), 'gcs');
         session()->flash('success', 'Archivo de tgr cargado exitosamente.');
@@ -30,7 +30,7 @@ class UploadTgr extends Component
     public function uploadAccountingPortfolio()
     {
         $this->validate([
-            'portfolios' => 'required|mimes:xlx,xls'
+            'portfolios' => 'required|mimes:xlx,xls,xlsx'
         ]);
 
         Excel::import(new TgrsAccountingPortfolioImport, $this->portfolios->path(), 'gcs');

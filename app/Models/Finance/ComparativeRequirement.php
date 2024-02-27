@@ -28,6 +28,7 @@ class ComparativeRequirement extends Model
         'efectivo_folio',
         'efectivo_fecha',
         'efectivo_monto',
+        'dte_id',
     ];
 
     public function dte()

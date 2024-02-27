@@ -26,7 +26,7 @@
     </form>
 
     <hr>
-    <h3 class="mb-3">Cargar archivo de TGR con Cartera Financiera Contable</h3>
+    <h3 class="mb-3">Cargar archivo de SIGFE con Cartera Financiera Contable</h3>
     <a href="#" target="_blank">Descargar formato del archivo de Cartera Financiera Contable</a> 
     <br><br>
     <form wire:submit.prevent="uploadAccountingPortfolio">
@@ -50,7 +50,7 @@
     <hr>
 
     <h3 class="mb-3">Cargar archivo de SIGFE Comparativo de Requerimientos</h3>
-    <a href="#" target="_blank">Descargar formato del archivo Sigfe Comparativo de Requerimientos</a> 
+    <a href="#" target="_blank">Descargar formato del archivo SIGFE Comparativo de Requerimientos</a> 
     <br><br>
 
     <form wire:submit.prevent="uploadComparativeRequirement">
