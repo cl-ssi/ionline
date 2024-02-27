@@ -125,7 +125,9 @@ class PurchasePlanController extends Controller
         $prev_approval = $purchasePlan->approvals()->create([
             "module"                => "Plan de Compras",
             "module_icon"           => "fas fa-shopping-cart",
-            "subject"               => "Solicitud de Aprobación Jefatura",
+            "subject"               => 'Solicitud de Aprobacion Jefatura <br>'.
+                                        '<small><b>Asunto</b>: '.$purchasePlan->subject.'<br>'.
+                                        '<b>Subtitulo</b>: '.$purchasePlan->program.'</small>',
             "sent_to_ou_id"        => $purchasePlan->organizational_unit_id,
             "document_route_name"   => "purchase_plan.show_approval",
             "document_route_params" => json_encode(["purchase_plan_id" => $purchasePlan->id])
@@ -136,10 +138,13 @@ class PurchasePlanController extends Controller
             $prev_approval = $purchasePlan->approvals()->create([
                 "module"                => "Plan de Compras",
                 "module_icon"           => "fas fa-shopping-cart",
-                "subject"               => "Solicitud de Aprobación Jefatura Depto. Salud Mental",
+                "subject"               => 'Solicitud de Aprobacion Jefatura Depto. Salud Mental<br>'.
+                                            '<small><b>Asunto</b>: '.$purchasePlan->subject.'<br>'.
+                                            '<b>Subtitulo</b>: '.$purchasePlan->program.'</small>',
                 "sent_to_ou_id"         => Parameter::get('ou', 'SaludMentalSSI'),
                 "document_route_name"   => "purchase_plan.show_approval",
-                "document_route_params" => json_encode(["purchase_plan_id" => $purchasePlan->id])
+                "document_route_params" => json_encode(["purchase_plan_id" => $purchasePlan->id]),
+                "active"                => false
             ]);
         }
 
@@ -147,8 +152,10 @@ class PurchasePlanController extends Controller
         $prev_approval = $purchasePlan->approvals()->create([
             "module"                => "Plan de Compras",
             "module_icon"           => "fas fa-shopping-cart",
-            "subject"               => "Solicitud de Aprobación Abastecimiento",
-            "sent_to_ou_id"        => Parameter::where('module', 'ou')->where('parameter', 'AbastecimientoSSI')->first()->value,
+            "subject"               => 'Solicitud de Aprobacion Abastecimiento<br>'.
+                                        '<small><b>Asunto</b>: '.$purchasePlan->subject.'<br>'.
+                                        '<b>Subtitulo</b>: '.$purchasePlan->program.'</small>',
+            "sent_to_ou_id"         => Parameter::get('ou', 'AbastecimientoSSI'),
             "document_route_name"   => "purchase_plan.show_approval",
             "document_route_params" => json_encode(["purchase_plan_id" => $purchasePlan->id]),
             "previous_approval_id"  => $prev_approval->id,
@@ -159,8 +166,10 @@ class PurchasePlanController extends Controller
         $prev_approval = $purchasePlan->approvals()->create([
             "module"                => "Plan de Compras",
             "module_icon"           => "fas fa-shopping-cart",
-            "subject"               => "Solicitud de Aprobación Depto. Gestión Financiera",
-            "sent_to_ou_id"        => Parameter::where('module', 'ou')->where('parameter', 'FinanzasSSI')->first()->value,
+            "subject"               => 'Solicitud de Aprobacion Depto. Gestion Financiera<br>'.
+                                        '<small><b>Asunto</b>: '.$purchasePlan->subject.'<br>'.
+                                        '<b>Subtitulo</b>: '.$purchasePlan->program.'</small>',
+            "sent_to_ou_id"         => Parameter::get('ou', 'FinanzasSSI'),
             "document_route_name"   => "purchase_plan.show_approval",
             "document_route_params" => json_encode(["purchase_plan_id" => $purchasePlan->id]),
             "previous_approval_id"  => $prev_approval->id,
@@ -171,8 +180,10 @@ class PurchasePlanController extends Controller
         $prev_approval = $purchasePlan->approvals()->create([
             "module"                => "Plan de Compras",
             "module_icon"           => "fas fa-shopping-cart",
-            "subject"               => "Solicitud de Aprobación Subdir. Recursos Físicos y Financieros",
-            "sent_to_ou_id"        => Parameter::where('module', 'ou')->where('parameter', 'SDASSI')->first()->value,
+            "subject"               => 'Solicitud de Aprobacion Subdir. Recursos Fisicos y Financieros<br>'.
+                                        '<small><b>Asunto</b>: '.$purchasePlan->subject.'<br>'.
+                                        '<b>Subtitulo</b>: '.$purchasePlan->program.'</small>',
+            "sent_to_ou_id"         => Parameter::get('ou', 'SDASSI'),
             "document_route_name"   => "purchase_plan.show_approval",
             "document_route_params" => json_encode(["purchase_plan_id" => $purchasePlan->id]),
             "previous_approval_id"  => $prev_approval->id,

@@ -64,8 +64,8 @@
                     @if( $approval->module_icon )
                     <i class="fa-fw {{$approval->module_icon}}"></i>
                     @endif
-                    {{ $approval->module }} 
-                    @if($approval->module == 'Solicitudes de Contración')
+                    {{ $approval->module }}
+                    @if(in_array($approval->module, ['Solicitudes de Contración', 'Plan de Compras']))
                         <br>
                         ID: {{ $approval->approvable_id }}
                     @endif
