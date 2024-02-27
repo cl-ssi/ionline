@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Parameters\Parameter;
 
+use Barryvdh\DomPDF\Facade\Pdf;
+
 class PurchasePlanController extends Controller
 {
     /**
@@ -194,5 +196,14 @@ class PurchasePlanController extends Controller
 
         session()->flash('success', 'Estimado Usuario, se ha enviado el plan de compra con éxito para su proceso de aprobación.');
         return redirect()->back();
+    }
+
+    public function show_purchase_plan_pdf($purchase_plan_id){
+        $purchasePlan = PurchasePlan::find($purchase_plan_id);
+        $establishment = $purchasePlan->organizationalUnit->establishment;
+        return Pdf::loadView('purchase_plan.documents.purchase_plan_pdf', [
+            'purchasePlan' => $purchasePlan,
+            'establishment' => $establishment
+        ])->stream('download.pdf');
     }
 }
