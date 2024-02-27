@@ -9,21 +9,23 @@ use Illuminate\Support\Facades\Auth;
 
 use App\Models\Meetings\Meeting;
 use App\Models\Meetings\Grouping;
+use App\Models\Meetings\Commitment;
 use App\User;
+use App\Rrhh\OrganizationalUnit;
 
 class MeetingCreate extends Component
 {
     public $date, $type, $subject, $mechanism, $start_at, $end_at;
     public $groupings, $typeGrouping, $nameGrouping;
-    public $commitment, $typeResponsible;
+    public $commitments, $commitmentDescription, $typeResponsible, $closingDate;
 
     /* Meeting to edit */
     public $meetingToEdit;
     public $idMeeting;
 
     // Listeners
-    public $searchedUser;
-    protected $listeners = ['searchedUser'];
+    public $searchedUser, $searchedCommitmentUser, $searchedCommitmentOu;
+    protected $listeners = ['searchedUser', 'searchedCommitmentUser', 'searchedCommitmentOu'];
 
     public function render()
     {
@@ -34,6 +36,8 @@ class MeetingCreate extends Component
         if(!is_null($meetingToEdit)){
             $this->meetingToEdit = $meetingToEdit;
             $this->setMeeting();
+            $this->setGroupings();
+            $this->setCommitments();
         }
     }
 
@@ -66,12 +70,30 @@ class MeetingCreate extends Component
         foreach($this->groupings as $grouping){
             Grouping::updateOrCreate(
                 [
-                    'id' => '',
+                    'id' => $grouping['id'] ? $grouping['id'] : null,
                 ],
                 [
-                    'type'          => $destination['commune_id'], 
-                    'name'          => ($destination['locality_id'] != null) ? $destination['locality_id'] : null,
-                    'meeting_id'    => ($this->allowanceToEdit) ? $this->allowanceToEdit->id : $alw->id
+                    'type'          => $grouping['type'], 
+                    'name'          => $grouping['name'],
+                    'meeting_id'    => $meeting->id
+                ]
+            );
+        }
+
+        //SE GUARDA COMPROMISOS
+        foreach($this->commitments as $commitment){
+            Commitment::updateOrCreate(
+                [
+                    'id' => $commitment['id'] ? $commitment['id'] : null,
+                ],
+                [
+                    'description'           => $commitment['description'], 
+                    'type'                  => $commitment['type'],
+                    'commitment_user_id'    => $commitment['commitment_user_id'],
+                    'commitment_ou_id'      => $commitment['commitment_ou_id'],
+                    'closing_date'          => $commitment['closing_date'],
+                    'meeting_id'            => $meeting->id,
+                    'user_id'               => $commitment['user_id']
                 ]
             );
         }
@@ -98,9 +120,7 @@ class MeetingCreate extends Component
         }
     }
 
-
     public function searchedUser(User $user){
-
         $this->searchedUser = $user;
     }
 
@@ -112,13 +132,11 @@ class MeetingCreate extends Component
             'name'          => $this->nameGrouping,
             'meeting_id'    => ($this->meetingToEdit) ? $this->meetingToEdit->id : null,
         ];
-
-        
     }
 
     public function setGroupings(){
-        // foreach($this->meetingToEdit->groupings as $grouping){
-        foreach($this->groupings as $grouping){
+        foreach($this->meetingToEdit->groupings as $grouping){
+        // foreach($this->groupings as $grouping){
             $this->groupings[] = [
                 'id'            => $grouping->id,
                 'type'          => $grouping->type,
@@ -141,9 +159,56 @@ class MeetingCreate extends Component
         }
     }
 
-    /*
-    public function updatedTypeResponsible($value){
-        dd('hola', $value);
+    public function addCommitment(){
+        $this->commitments[] = [
+            'id'                    => '',
+            'description'           => $this->commitmentDescription,
+            'type'                  => $this->typeResponsible,
+            'commitment_user_id'    => ($this->typeResponsible == 'individual') ? $this->searchedCommitmentUser->id : null,
+            'commitment_user_name'  => ($this->typeResponsible == 'individual') ? $this->searchedCommitmentUser->FullName : null,
+            'commitment_ou_id'      => ($this->typeResponsible == 'ou') ? $this->searchedCommitmentOu->id : null,
+            'commitment_ou_name'    => ($this->typeResponsible == 'ou') ? $this->searchedCommitmentOu->name : null,
+            'closing_date'          => $this->closingDate,
+            'requirement_id'        => '',
+            'user_id'               => auth()->id()
+        ];
     }
-    */
+
+    public function setCommitments(){
+        foreach($this->meetingToEdit->commitments as $commitment){
+            $this->commitments[] = [
+                'id'                    => $commitment->id,
+                'description'           => $commitment->description,
+                'type'                  => $commitment->type,
+                'commitment_user_id'    => $commitment->commitment_user_id,
+                'commitment_user_name'  => ($commitment->commitment_user_id) ? $commitment->commitmentUser->FullName : null,
+                'commitment_ou_id'      => $commitment->commitment_ou_id,
+                'commitment_ou_name'    => ($commitment->commitment_ou_id) ? $commitment->commitmentOrganizationalUnit->name : null,
+                'closing_date'          => $commitment->closing_date,
+                'requirement_id'        => $commitment->requirement_id,
+                'user_id'               => $commitment->user_id
+            ];
+        }
+    }
+
+    public function deleteCommitment($key){
+        $itemToDelete = $this->commitments[$key];
+
+        if($itemToDelete['id'] != ''){
+            unset($this->commitments[$key]);
+            $objectToDelete = Commitment::find($itemToDelete['id']);
+            $objectToDelete->delete();
+        }
+        else{
+            unset($this->commitments[$key]);
+        }
+    }
+
+    public function searchedCommitmentUser(User $user){
+        $this->searchedCommitmentUser = $user;
+    }
+
+    public function searchedCommitmentOu(OrganizationalUnit $organizationalUnit){
+        $this->searchedCommitmentOu = $organizationalUnit;
+    }
 }
