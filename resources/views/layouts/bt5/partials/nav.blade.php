@@ -355,19 +355,21 @@
                 @endif
 
 
-                @canany(['Users: create', 'Users: edit','Users: delete',
-                'OrganizationalUnits: create',
-                'OrganizationalUnits: edit',
-                'OrganizationalUnits: delete',
-                'Authorities: view',
-                'Authorities: create',
-                'Users: service requests',
-                'Service Request',
-                'Replacement Staff: create request',
-                'Replacement Staff: view requests',
-                'Job Position Profile: create',
-                'Job Position Profile: all',
-                'Job Position Profile: review'])
+                @canany([
+                    'Users: create', 'Users: edit','Users: delete',
+                    'OrganizationalUnits: create',
+                    'OrganizationalUnits: edit',
+                    'OrganizationalUnits: delete',
+                    'Authorities: view',
+                    'Authorities: create',
+                    'Users: service requests',
+                    'Service Request',
+                    'Replacement Staff: create request',
+                    'Replacement Staff: view requests',
+                    'Job Position Profile: create',
+                    'Job Position Profile: all',
+                    'Job Position Profile: review'
+                ])
                 <li class="nav-item dropdown
                     {{ active(['rrhh.users.*','rrhh.organizational-units.*','rrhh.authorities.*','suitability.*','replacement_staff.request.*']) }}">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -432,7 +434,7 @@
                         @endcan
 
 
-                        @canany(['Service Request'])
+                        @can('Service Request')
                         <a class="dropdown-item {{ active('rrhh.service-request.*') }}" href="{{ route('rrhh.service-request.home') }}">
                             <i class="fas fa-child fa-fw"></i> Contratación Honorarios
                         </a>
