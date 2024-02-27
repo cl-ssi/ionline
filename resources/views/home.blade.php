@@ -159,7 +159,7 @@
                     {{ $notification->created_at }} -
                     {!! $notification->data['icon'] ?? null !!}
                     <b>{{ $notification->data['module'] ?? '' }}</b>
-                    {{ $notification->data['subject'] }}
+                    {!! $notification->data['subject'] !!}
                 </a>
                 @endforeach
             </ul>
@@ -185,7 +185,7 @@
                     {{ $notification->created_at }} -
                     {!! $notification->data['icon'] ?? null !!}
                     <b>{{ $notification->data['module'] ?? '' }}</b>
-                    {{ $notification->data['subject'] }}
+                    {!! $notification->data['subject'] !!}
                 </a>
                 @endforeach
             </ul>
