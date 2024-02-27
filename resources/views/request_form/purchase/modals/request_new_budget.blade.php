@@ -64,7 +64,7 @@
                                         <input type="hidden" name="item_request_form_id[]" value="{{$item->id}}">
                                         <td>{{ $key+1 }}</td>
                                         <!-- <td>{{ $item->status }}</td> -->
-                                        <td>{{ $item->budgetItem()->first()->fullName() }}</td>
+                                        <td>{{ $item->budgetItem?->fullName() }}</td>
                                         <td>@if($item->product_id)
                                         {{ optional($item->product)->code}} {{ optional($item->product)->name }}
                                         @else

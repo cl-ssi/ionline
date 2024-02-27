@@ -333,7 +333,7 @@
                         <tr data-id="{{$item->product->code ?? ''}}">
                             <td>{{ $key+1 }}</td>
                             <!-- <td>{{ $item->status }}</td> -->
-                            <td>{{ $item->budgetItem()->first()->fullName() }}</td>
+                            <td>{{ $item->budgetItem?->fullName() }}</td>
                             <td>@if($item->product_id)
                             {{ optional($item->product)->code}} {{ optional($item->product)->name }}
                             @else
@@ -486,7 +486,7 @@
                                 <td>{{ $passenger->baggageName }}</td>
                                 {{--
                                 <td align="right">{{ number_format($passenger->unit_value, $requestForm->precision_currency, ",", ".") }}</td>
-                                <td>{{ $item->budgetItem()->first()->fullName() }}</td>
+                                <td>{{ $item->budgetItem?->fullName() }}</td>
                                 <td>@if($item->product_id)
                                     {{ optional($item->product)->code}} {{ optional($item->product)->name }}
                                     @else
