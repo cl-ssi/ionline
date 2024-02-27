@@ -112,18 +112,16 @@
         <textarea class="form-control" id="for-tfoot" wire:model="seccion.tfoot" rows="6"></textarea>
     </div>
 
+    <table class="mb-3 table-bordered border-secondary">
+        {!! $seccion->thead !!}
+    </table>
+
 
     Total Columnas: {{ $columnas }}<br>
 
     @if($cabecera)
         <table class="mb-3">
-            @foreach($cabecera as $row)
-                <tr>
-                    @foreach($row as $col)
-                        <td {!! $col['attributos'] !!}>{!! $col['valor'] !!}</td>
-                    @endforeach
-                </tr>
-            @endforeach
+            {!! $thead !!}
         </table>
 
         <div class="row mb-3">
