@@ -731,16 +731,16 @@ class ServiceRequestController extends Controller
         // $email = $serviceRequest->SignatureFlows->where('sign_position', 2)->first()->user->email;
         // Mail::to($email)->send(new ServiceRequestNotification($serviceRequest));
         
-        if($serviceRequest->employee){
-            if($serviceRequest->employee->email != null){
-                if (filter_var($serviceRequest->employee->email, FILTER_VALIDATE_EMAIL)) {
-                    /*
-                    * Utilizando Notify
-                    */ 
-                    $serviceRequest->employee->notify(new NewServiceRequest($serviceRequest));
-                } 
-            }
-        }  
+        // if($serviceRequest->employee){
+        //     if($serviceRequest->employee->email != null){
+        //         if (filter_var($serviceRequest->employee->email, FILTER_VALIDATE_EMAIL)) {
+        //             /*
+        //             * Utilizando Notify
+        //             */ 
+        //             $serviceRequest->employee->notify(new NewServiceRequest($serviceRequest));
+        //         } 
+        //     }
+        // }  
     // }
 
     session()->flash('info', 'La solicitud ' . $serviceRequest->id . ' ha sido creada.');
