@@ -31,6 +31,13 @@ class ComparativeRequirement extends Model
         'dte_id',
     ];
 
+    protected $casts = [
+        'afectacion_fecha' => 'date:Y-m-d',
+        'devengo_fecha' => 'date:Y-m-d',
+        'efectivo_fecha' => 'date:Y-m-d',
+        
+    ];
+
     public function dte()
     {
         return $this->belongsTo(Dte::class);
