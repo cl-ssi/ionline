@@ -312,6 +312,7 @@
         @endforeach
       </tbody>
     </table>
+    {{ $my_requests->links() }}
   </div>
 </div>
 @else
@@ -455,6 +456,7 @@
         @endforeach
       </tbody>
     </table>
+    {{ $my_ou->links() }}
   </div>
 </div>
 

@@ -56,12 +56,12 @@ class RequestFormController extends Controller {
             ->where('request_user_id', auth()->id())
             ->whereIn('status', ['approved', 'rejected'])
             ->latest('id')
-            ->get();
+            ->paginate(30, ['*'], 'p1');
 
         $my_ou = RequestForm::with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'eventRequestForms.signerOrganizationalUnit', 'father:id,folio,has_increased_expense', 'signedOldRequestForms', 'purchasers')
             ->where('request_user_ou_id', auth()->user()->OrganizationalUnit->id)
             ->latest('id')
-            ->get();
+            ->paginate(30, ['*'], 'p2');
 
         return view('request_form.my_forms', compact('my_requests', 'my_pending_requests','my_ou'));
     }
