@@ -300,11 +300,29 @@ class ProductController extends Controller
                             ->get();
 
         $product_id = $request->product_id;
+        $status = $request->status;
+
         $products_data = Product::where('pharmacy_id',session('pharmacy_id'))
                             ->when($product_id, function ($q, $product_id) {
                                 return $q->where('id', $product_id);
                             })
                             ->whereHas('receivingItems')
+                            ->when($status == 1, function ($q) {
+                                return $q->whereHas('batchs', function ($query) {
+                                            return $query->where('due_date','<',now());
+                                        })->with([
+                                            'batchs' => function ($query)  {
+                                                $query->where('due_date','<',now());
+                                        }]);
+                            })
+                            ->when($status == 2, function ($q) {
+                                return $q->whereHas('batchs', function ($query) {
+                                            return $query->where('due_date','>=',now());
+                                        })->with([
+                                            'batchs' => function ($query)  {
+                                                $query->where('due_date','>=',now());
+                                        }]);
+                            })
                             ->with('program','receivingItems')
                             ->orderBy('name','ASC')
                             ->get();

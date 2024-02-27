@@ -83,7 +83,7 @@
             </button>
         </fieldset>
     </div>
-
+    
     @if($groupings)
         <div class="table-responsive">
             <table class="table table-bordered table-striped table-sm small">
@@ -91,8 +91,8 @@
                     <tr class="text-center">
                         <th width="10%">#</th>
                         <th width="40%">Tipo</th>
-                        <th width="40%">Nombre</th>
-                        <th width="30%"></th>
+                        <th width="35%">Nombre</th>
+                        <th width="15%"></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -116,13 +116,13 @@
                         </td>
                         <td>{{ $grouping['name'] }}</td>
                         <td class="text-center">
-                            <a class="btn btn-outline-danger btn-sm"
-                                wire:click="deleteGrouping({{ $key }})">
-                                <i class="fas fa-trash-alt fa-fw"></i>
-                            </a>
                             <a href="{{-- route('meetings.edit', $meeting) --}}"
                                 class="btn btn-outline-secondary btn-sm">
                                 <i class="fas fa-edit fa-fw"></i> 
+                            </a>
+                            <a class="btn btn-outline-danger btn-sm"
+                                wire:click="deleteGrouping({{ $key }})">
+                                <i class="fas fa-trash-alt fa-fw"></i>
                             </a>
                         </td>
                     </tr>
@@ -136,15 +136,57 @@
 
     <h6 class="mt-5"><b>3- Compromisos</b></h6>
     
+    @if($commitments)
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped table-sm small">
+                <thead>
+                    <tr class="text-center">
+                        <th width="10%">#</th>
+                        <th width="40%">Descripción</th>
+                        <th width="25%">Usuario / Unidad Organizacional</th>
+                        <th width="10%">Fecha límite</th>
+                        <th width="15%"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($commitments as $key => $commitment)
+                    <tr>
+                        
+                        <th class="text-center">{{ $loop->iteration }}</th>
+                        <td style="text-align: justify;">{{ $commitment['description'] }}</td>
+                        <td class="text-center">{{ ($commitment['commitment_user_id']) ?  $commitment['commitment_user_name'] : $commitment['commitment_ou_name'] }}</td>
+                        <td class="text-center">{{ $commitment['closing_date'] }}</td>
+                        <td class="text-center">
+                            <a href=""
+                                class="btn btn-outline-secondary btn-sm">
+                                <i class="fas fa-edit fa-fw"></i> 
+                            </a>
+                            <a class="btn btn-outline-danger btn-sm"
+                                wire:click="deleteCommitment({{ $key }})">
+                                <i class="fas fa-trash-alt fa-fw"></i>
+                            </a>
+                            @if($commitment['requirement_id'])
+                            <a class="btn btn-primary btn-sm">
+                                <i class="fas fa-rocket"></i> SGR
+                            </a>
+                            @endif
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    @endif
+
     <div class="row g-3 mb-3">
         <fieldset class="form-group col-12 col-md-12">
-            <label for="for_subject">Responsabilidad</label>
-            <input class="form-control" type="text" autocomplete="off" wire:model.defer="commitment">
+            <label for="for_commitment_description">Descripción</label>
+            <textarea class="form-control" rows="3" wire:model.defer="commitmentDescription"></textarea>
         </fieldset>
     </div>
 
     <div class="row g-3 mb-3">
-        <fieldset class="col-12 col-md-3">
+        <fieldset class="col-12 col-md-4">
             <label for="for-mecanism">Tipo</label>
             <select class="form-select" wire:model="typeResponsible">
                 <option value="">Seleccionar</option>
@@ -169,34 +211,27 @@
                 @livewire('search-select-organizational-unit', [
                     'selected_id'         => 'compromise_ou_id',
                     'required'            => 'required',
+                    'emit_name'           => 'searchedCommitmentOu',
                     'organizationalUnit'  => ''
                 ])
             @endif
             
             @if($typeResponsible == '' || $typeResponsible == NULL)
                 <div class="alert alert-info alert-sm small mt-2" role="alert">
-                    A simple info alert—check it out!
+                    Favor seleccionar un tipo de responsabilidad
                 </div>
             @endif
         </fieldset>
 
-        <fieldset class="form-group col-12 col-sm-2">
-            <label for="for_date">Fecha Termino</label>
-            <input type="date" class="form-control" wire:model.defer="closingDate" id="for_date">
-        </fieldset>
-
-        <fieldset class="col-12 col-md-3">
-            <label for="for-mecanism">Estado</label>
-            <select class="form-select" wire:model="status">
-                <option value="">Seleccionar</option>
-                <option value="derived">Derivado</option>
-            </select>
+        <fieldset class="form-group col-12 col-sm-4">
+            <label for="for_closing_date">Fecha Límite</label>
+            <input type="date" class="form-control" wire:model.defer="closingDate">
         </fieldset>
     </div>
     
     <div class="row g-3"> 
         <fieldset class="form-group col-12 col-md-12">
-            <button wire:click="addGrouping" class="btn btn-success float-end" type="button">
+            <button wire:click="addCommitment" class="btn btn-success float-end" type="button">
                 <i class="fas fa-plus"></i> Agregar
             </button>
         </fieldset>

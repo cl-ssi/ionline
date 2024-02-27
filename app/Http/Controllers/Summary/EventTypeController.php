@@ -152,6 +152,6 @@ class EventTypeController extends Controller
         //
         $eventType->delete();
         session()->flash('danger', 'El Evento ha sido eliminado.');
-        return redirect()->route('summary.events.index');
+        return redirect()->route('summary.event-types.index');
     }
 }

@@ -22,9 +22,19 @@ class Meeting extends Model implements Auditable
         return $this->belongsTo('App\User', 'user_responsible_id')->withTrashed();
     }
 
+    public function groupings() {
+        return $this->hasMany('App\Models\Meetings\Grouping');
+    }
+
+    public function commitments() {
+        return $this->hasMany('App\Models\Meetings\Commitment');
+    }
+
+    /*
     protected $dates = [
         'date'
     ];
+    */
     
 
     protected $hidden = [
