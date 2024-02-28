@@ -22,7 +22,7 @@
         <div class="center" style="text-transform: uppercase;">
             <h2>
                 <strong style="text-transform: uppercase;">
-                    ACTA DE INGRESO Y RECEPCIÓN CONFORME N° {{ $control->id }}
+                    ACTA DE INGRESO DE ARTICULOS EN BODEGA N° {{ $control->id }}
                 </strong>
             </h2>
         </div>
