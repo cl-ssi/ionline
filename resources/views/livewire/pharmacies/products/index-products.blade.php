@@ -3,7 +3,7 @@
 
     <div class="row mb-3">
         <div class="col">
-            <h3 class="inline">Productos</h3>
+            <h3 class="inline">Mantenedor de productos</h3>
         </div>
         <div class="col">
             <div class="input-group mb-3">
@@ -11,6 +11,11 @@
                 <button class="btn btn-outline-secondary" type="button" id="search" wire:click="render">Buscar</button>
             </div>
         </div>
+
+        <div class="col-1 text-end">
+            <button class="btn btn-outline-success" type="button" id="search" wire:click="export">Exportar</button>
+        </div>
+
         <div class="col-1 text-end">
             @can('Pharmacy: create products')
             <a href="{{ route('pharmacies.products.create') }}" class="btn btn-primary">Crear</a>

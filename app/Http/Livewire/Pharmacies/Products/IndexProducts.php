@@ -6,6 +6,9 @@ use App\Models\Pharmacies\Product;
 use Livewire\Component;
 use Livewire\WithPagination;
 
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\ProductsExport;
+
 class IndexProducts extends Component
 {
     use WithPagination;
@@ -17,6 +20,10 @@ class IndexProducts extends Component
         if($this->filterName == '') {
             $this->filterName = null;
         }
+    }
+
+    public function export(){
+        return Excel::download(new ProductsExport, 'productos.xlsx');
     }
 
     public function render()
