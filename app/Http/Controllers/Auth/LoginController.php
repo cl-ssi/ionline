@@ -199,7 +199,7 @@ class LoginController extends Controller
     public function LogoutExternal(Request $request)
     {
         
-        dd('llegue');
+        //dd('llegue');
         Auth::guard('external')->logout();
         
         $request->session()->flush();

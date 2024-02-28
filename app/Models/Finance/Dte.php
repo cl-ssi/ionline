@@ -14,6 +14,8 @@ use App\Models\Finance\Receptions\Reception;
 use App\Models\Finance\PurchaseOrder;
 use App\Models\Finance\File;
 use App\Models\Finance\TgrPayedDte;
+use App\Models\Finance\ComparativeRequirement;
+use App\Models\Finance\TgrAccountingPortfolio;
 use App\Models\Establishment;
 
 class Dte extends Model implements Auditable
@@ -236,6 +238,26 @@ class Dte extends Model implements Auditable
         return $this->belongsToMany(Dte::class,'fin_invoice_dtes','dte_id','invoice_id')->withTimestamps();
     }
 
+
+    public function comparativeRequirement()
+    {
+        return $this->hasOne(ComparativeRequirement::class, 'dte_id');
+    }
+
+
+    public function tgrPayedDte()
+    {
+        return $this->hasOne(TgrPayedDte::class);
+    }
+
+    public function tgrAccountingPortfolio()
+    {
+        return $this->hasOne(TgrAccountingPortfolio::class, 'dte_id');
+    }
+
+
+
+
     /**
      * Relación con RequestForm a través de ImmediatePurchase
      */
@@ -340,10 +362,7 @@ class Dte extends Model implements Auditable
         return strtoupper(implode('', array_map(fn($s) => substr($s, 0, 1), explode("_", $this->tipo_documento))));
     }
 
-    public function tgrPayedDtes()
-    {
-        return $this->hasMany(TgrPayedDte::class);
-    }
+
 
 
     /** Creo que ya no se utiliza */
