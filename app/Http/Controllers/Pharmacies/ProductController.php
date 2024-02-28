@@ -306,23 +306,49 @@ class ProductController extends Controller
                             ->when($product_id, function ($q, $product_id) {
                                 return $q->where('id', $product_id);
                             })
-                            ->whereHas('receivingItems')
+
+                            ->when($status == 0, function ($q) {
+                                return $q->whereHas('batchs', function ($query) {
+                                            return $query->where('due_date','>=',now())
+                                                        ->where('count','>',0);
+                                        })->with([
+                                            'batchs' => function ($query)  {
+                                                $query->where('due_date','>=',now())
+                                                    ->where('count','>',0);
+                                        }]);
+                            })
                             ->when($status == 1, function ($q) {
                                 return $q->whereHas('batchs', function ($query) {
-                                            return $query->where('due_date','<',now());
+                                            return $query->where('due_date','<',now())
+                                                        ->where('count','>',0);
                                         })->with([
                                             'batchs' => function ($query)  {
-                                                $query->where('due_date','<',now());
+                                                $query->where('due_date','<',now())
+                                                    ->where('count','>',0);
                                         }]);
                             })
+
                             ->when($status == 2, function ($q) {
                                 return $q->whereHas('batchs', function ($query) {
-                                            return $query->where('due_date','>=',now());
+                                            return $query->where('due_date','>=',now())
+                                                        ->where('count','<=',0);
                                         })->with([
                                             'batchs' => function ($query)  {
-                                                $query->where('due_date','>=',now());
+                                                $query->where('due_date','>=',now())
+                                                    ->where('count','<=',0);
                                         }]);
                             })
+                            ->when($status == 3, function ($q) {
+                                return $q->whereHas('batchs', function ($query) {
+                                            return $query->where('due_date','<',now())
+                                                        ->where('count','<=',0);
+                                        })->with([
+                                            'batchs' => function ($query)  {
+                                                $query->where('due_date','<',now())
+                                                    ->where('count','<=',0);
+                                        }]);
+                            })
+                            
                             ->with('program','receivingItems')
                             ->orderBy('name','ASC')
                             ->get();

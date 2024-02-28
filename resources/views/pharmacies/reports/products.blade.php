@@ -32,9 +32,11 @@
             <span class="input-group-text">Estado del producto</span>
         </div>
         <select name="status" class="form-control" id="" required>
-            <option value="0" @selected($request->status == 0)>Todos</option>
-            <option value="1" @selected($request->status == 1)>Vencidos</option>
-            <option value="2" @selected($request->status == 2)>No vencidos</option>
+            <option value="0" @selected($request->status == 0)>Con Stock - No vencidos</option>
+            <option value="1" @selected($request->status == 1)>Con Stock - Vencidos</option>
+            <option value="2" @selected($request->status == 2)>Sin Stock - No vencidos</option>
+            <option value="3" @selected($request->status == 3)>Sin Stock - Vencidos</option>
+            <option value="4" @selected($request->status == 4)>Todos</option>
         </select>
 
     	<div class="input-group-append">
