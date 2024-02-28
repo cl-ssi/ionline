@@ -8,6 +8,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreTestRequest;
 use App\Models\Suitability\PsiRequest;
+use App\Models\Suitability\Result;
+
 
 class TestsController extends Controller
 {

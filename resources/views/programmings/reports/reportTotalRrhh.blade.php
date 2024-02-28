@@ -102,13 +102,13 @@
 
 @section('custom_js')
 @if($establishment_id)
-<script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>
+<script type="text/javascript" src="https://unpkg.com/xlsx@0.18.0/dist/xlsx.full.min.js"></script>
 <script>
     function tableExcel(type, fn, dl) {
         var elt = document.getElementById('tblData');
         const filename = 'Reporte_total_RRHH_' + '{!! $programming->establishment->type !!}' + '_' + '{!! $programming->establishment->name !!}' + '_' + '{!! Carbon\Carbon::now() !!}'
         var wb = XLSX.utils.table_to_book(elt, {
-            sheet: "Sheet JS"
+            sheet: "Sheet JS", raw: false
         });
         return dl ?
             XLSX.write(wb, {
