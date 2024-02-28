@@ -162,3 +162,7 @@ br {
 .especial { 
     font-family: DejaVu Sans !important;
 }
+
+table {
+	page-break-inside: avoid !important;
+}
