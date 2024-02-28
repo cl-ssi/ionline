@@ -50,11 +50,10 @@
 
     <div style="clear: both; padding-bottom: 35px"></div>
 
-    <div class="left"><b>1-. Descripción</b></div>
-
-    <div style="clear: both; padding-bottom: 5px"></div>
-
     <table class="tabla">
+        <tr>
+			<td style="width: 30%; background-color: #EEEEEE;" colspan="2">1-. Descripción</td>
+		</tr>
 		<tr>
 			<td style="width: 30%; background-color: #EEEEEE;">Asunto</td>
 			<td>{{ $purchasePlan->subject }}</td>
@@ -103,12 +102,11 @@
 
     <div style="clear: both; padding-bottom: 20px"></div>
 
-    <div class="left"><b>2-. Ítems a comprar</b></div>
-
-    <div style="clear: both; padding-bottom: 5px"></div>
-
     <table class="tabla">
         <thead>
+            <tr class="text-center">
+                <th colspan="9" style="background-color: #EEEEEE; text-align: left;">2-. Ítems a comprar</th>
+            </tr>
             <tr class="text-center">
                 <th rowspan="2" style="background-color: #EEEEEE;">#</th>
                 <th rowspan="2" style="background-color: #EEEEEE;">Artículo</th>
@@ -150,12 +148,11 @@
 
     <div style="clear: both; padding-bottom: 20px"></div>
 
-    <div class="left"><b>3-. Articulos Programados</b></div>
-
-    <div style="clear: both; padding-bottom: 5px"></div>
-
     <table class="tabla">
         <thead>
+            <tr class="text-center">
+                <th colspan="16" style="background-color: #EEEEEE; text-align: left;">3-. Articulos Programados</th>
+            </tr>
             <tr class="text-center">
                 <th style="background-color: #EEEEEE;"rowspan="2">#</th>
                 <th style="background-color: #EEEEEE;"rowspan="2">Artículo</th>

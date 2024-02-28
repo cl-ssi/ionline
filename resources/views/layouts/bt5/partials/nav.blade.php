@@ -509,7 +509,11 @@
                         {{-- @endif --}}
 
                         @endif
-
+                        {{--
+                        <a class="dropdown-item {{ active('trainings.*') }}" href="{{ route('trainings.index') }}">
+                            <i class="fas fa-chalkboard-teacher"></i> Capacitaciones
+                        </a>
+                        --}}
                     </ul>
 
                 </li>
