@@ -13,7 +13,7 @@
 
         <fieldset class="form-group col-3">
             <label for="for_serie">F. Vencimiento</label>
-            <input type="date" class="form-control" id="for_date" name="due_date" required="required">
+            <input type="date" class="form-control" id="for_date" name="due_date" required="required" max="3000-01-01">
         </fieldset>
 
         <fieldset class="form-group col-3">

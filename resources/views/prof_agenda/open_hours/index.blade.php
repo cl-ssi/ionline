@@ -14,7 +14,7 @@
 
     <div class="row">
         <fieldset class="form-group col col-md-6">
-            <label for="for_id_deis">Funcionario</label>
+            <label for="for_id_deis">Paciente</label>
             @livewire('search-select-user', [
                 'selected_id' => 'patient_id'
             ])
