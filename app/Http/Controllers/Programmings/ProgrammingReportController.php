@@ -242,12 +242,12 @@ class ProgrammingReportController extends Controller
 
     public function reportTotalRrhh(Request $request)
     {
-        $year = $request->year ?? date("Y");
+        $last_year = Programming::latest()->first()->year;
+        $year = $request->year ?? $last_year;
         $establishments = collect();
         $programming = $professionalHours = $establishment_id = null;
         /** Reemplazo de rol Programming Comunal */
         if( auth()->user()->can('Reviews: rectify') AND auth()->user()->can('Programming: report') ){
-            $last_year = Programming::latest()->first()->year;
             $last_programmings = Programming::with('establishment:id,type,name')->where('year', $last_year)->get();
             //El usuario tiene acceso por establecimientos?
             foreach($last_programmings as $programming){
@@ -272,7 +272,7 @@ class ProgrammingReportController extends Controller
 
         if($programmings->isEmpty()){
             session()->flash('warning', 'Estimado Usuario/a: no existe programación numérica para el año seleccionado.');
-            return redirect()->route('programming.reportTotalRrhh');
+            return redirect()->back();
         }
         // return $establishments;
         $establishment_id = $request->has('establishment_id') ? $request->establishment_id : $establishments->first()->id;
