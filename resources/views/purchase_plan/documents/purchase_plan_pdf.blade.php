@@ -1,6 +1,6 @@
 @extends('layouts.document')
 
-@section('title', 'Viático ' . $purchasePlan->id)
+@section('title', 'Plan de Compra N°' . $purchasePlan->id)
 
 @section('content')
 
