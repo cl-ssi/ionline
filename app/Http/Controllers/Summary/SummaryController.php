@@ -18,6 +18,7 @@ class SummaryController extends Controller
      */
     public function index()
     {
+        $summaries = collect();
         if (auth()->user()->can('Summary: user')) {
             $summaries = Summary::where('investigator_id', auth()->id())
                 ->orWhere('actuary_id', auth()->id())

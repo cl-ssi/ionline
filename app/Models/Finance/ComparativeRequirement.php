@@ -28,6 +28,14 @@ class ComparativeRequirement extends Model
         'efectivo_folio',
         'efectivo_fecha',
         'efectivo_monto',
+        'dte_id',
+    ];
+
+    protected $casts = [
+        'afectacion_fecha' => 'date:Y-m-d',
+        'devengo_fecha' => 'date:Y-m-d',
+        'efectivo_fecha' => 'date:Y-m-d',
+        
     ];
 
     public function dte()
