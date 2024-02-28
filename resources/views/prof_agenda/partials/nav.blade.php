@@ -89,6 +89,11 @@
                     <i class="fas fa-clipboard-check"></i> SIRSAP
                 </a>
 
+                <a class="dropdown-item {{ active('prof_agenda.reports.clinicalreport') }}"
+                    href="{{ route('prof_agenda.reports.clinicalreport') }}">
+                    <i class="fas fa-clipboard-check"></i> Ficha paciente
+                </a>
+
             </div>
         </li>
     @endcanany

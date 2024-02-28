@@ -18,6 +18,9 @@ class SearchSelectUser extends Component
      *
      *  Si necesitas sea requerido
      * @livewire('search-select-user', ['required' => 'required'])
+     * 
+     * Si necesitas obtener el usuario seleccionado en otro componente livewire, debes indicar el nombre del listener
+     * @livewire('search-select-user', ['emit_name' => 'Nombre del listener'])
      */
     public $query;
     public $users;

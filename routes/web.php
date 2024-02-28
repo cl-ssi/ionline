@@ -270,6 +270,7 @@ use App\Http\Livewire\Parameters\Parameter\ParameterIndex;
 use App\Http\Livewire\Parameters\Program\BudgetMgr;
 use App\Http\Livewire\Pharmacies\Products\IndexProducts;
 use App\Http\Livewire\ProfAgenda\Reports\SirsapReport;
+use App\Http\Livewire\ProfAgenda\Reports\ClinicalRecordReport;
 use App\Http\Livewire\Profile\MailSignature;
 use App\Http\Livewire\Profile\Subrogations;
 use App\Http\Livewire\Rem\SeccionGenerator;
@@ -1983,7 +1984,7 @@ Route::prefix('prof_agenda')->as('prof_agenda.')->middleware(['auth'])->group(fu
 
     Route::prefix('reports')->as('reports.')->middleware(['auth'])->group(function () {
         Route::get('/sirsap', SirsapReport::class)->name('sirsap');
-
+        Route::get('/clinicalreport', ClinicalRecordReport::class)->name('clinicalreport');
     });
 
 
