@@ -192,7 +192,7 @@ use App\Http\Controllers\Summary\SummaryController;
 use App\Http\Controllers\Summary\SummaryFileController;
 use App\Http\Controllers\Summary\TemplateController as SummaryTemplateController;
 use App\Http\Controllers\TestController;
-// use App\Http\Controllers\Trainings\TrainingController as TngTrainingController;
+use App\Http\Controllers\Trainings\TrainingController as TngTrainingController;
 use App\Http\Controllers\Unspsc\ClassController;
 use App\Http\Controllers\Unspsc\FamilyController;
 use App\Http\Controllers\Unspsc\ProductController;
@@ -2367,13 +2367,13 @@ Route::prefix('meetings')->as('meetings.')->middleware(['auth', 'must.change.pas
     Route::get('{meeting}/edit', [MeetingController::class, 'edit'])->name('edit');
 }); 
 
-/*
+
 Route::prefix('trainings')->as('trainings.')->middleware(['auth', 'must.change.password'])->group(function () {
     Route::get('/', [TngTrainingController::class, 'index'])->name('index');
     Route::get('create', [TngTrainingController::class, 'create'])->name('create');
     Route::get('{meeting}/edit', [TngTrainingController::class, 'edit'])->name('edit');
 });
-*/
+
 
 /** Módulo de horas para vacunas. ya no se usa */
 // Route::get('/yomevacuno',[VaccinationController::class,'welcome']);
