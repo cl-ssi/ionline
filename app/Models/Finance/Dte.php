@@ -144,6 +144,10 @@ class Dte extends Model implements Auditable
         'all_receptions_user_id',
         'all_receptions_ou_id',
         'all_receptions_at',
+
+        'excel_proveedor',
+        'excel_cartera',
+        'excel_requerimiento',
     ];
 
     /**

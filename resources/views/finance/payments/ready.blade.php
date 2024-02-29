@@ -95,21 +95,21 @@
                             ], key($dte->id))
                         </td>
                         <td class="text-center">
-                            @if ($dte->tgrPayedDte)
+                            @if ($dte->excel_proveedor)
                                 <i class="fas fa-check-circle text-success"></i>
                             @else
                                 <i class="fas fa-times-circle text-danger"></i>
                             @endif
                         </td>
                         <td class="text-center">
-                            @if ($dte->tgrAccountingPortfolio)
+                            @if ($dte->excel_cartera)
                                 <i class="fas fa-check-circle text-success"></i>
                             @else
                                 <i class="fas fa-times-circle text-danger"></i>
                             @endif
                         </td>
                         <td class="text-center">
-                            @if ($dte->comparativeRequirement)
+                            @if ($dte->excel_requerimiento)
                                 <i class="fas fa-check-circle text-success"></i>
                             @else
                                 <i class="fas fa-times-circle text-danger"></i>

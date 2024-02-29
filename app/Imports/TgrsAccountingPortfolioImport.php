@@ -66,6 +66,8 @@ class TgrsAccountingPortfolioImport implements ToCollection, WithHeadingRow, Wit
 
             if($dte) {
                 $dte_id = $dte->id;
+                $dte->excel_cartera = true;
+                $dte->save();
             } else {
                 $dte_id = null; 
             }

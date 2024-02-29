@@ -48,6 +48,8 @@ class TgrsImport implements WithHeadingRow, ToCollection,WithChunkReading
 
                 if($dte) {
                     $dte_id = $dte->id;
+                    $dte->excel_proveedor = true;
+                    $dte->save();
                 } else {
                     $dte_id = null; 
                 }
