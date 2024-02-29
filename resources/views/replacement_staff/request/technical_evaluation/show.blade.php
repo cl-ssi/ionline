@@ -839,7 +839,7 @@
                 </td>
                 <td>
                     {{ $requestChild->fundamentManage->NameValue }}<br>
-                    {{ $requestChild->fundamentDetailManage->NameValue }}
+                    {{ ($requestChild->fundamentDetailManage) ? $requestChild->fundamentDetailManage->NameValue : '' }}
                 </td>
                 <td>
                     {{ $requestChild->WorkDayValue }}
