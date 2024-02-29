@@ -2163,6 +2163,7 @@ Route::prefix('finance')->as('finance.')->middleware(['auth', 'must.change.passw
 Route::prefix('purchase_plan')->as('purchase_plan.')->middleware(['auth', 'must.change.password'])->group(function () {
     Route::get('/own_index', [PurchasePlanController::class, 'own_index'])->name('own_index');
     Route::get('/all_index', [PurchasePlanController::class, 'all_index'])->name('all_index');
+    Route::get('/pending_index', [PurchasePlanController::class, 'pending_index'])->name('pending_index');
     Route::get('/create', [PurchasePlanController::class, 'create'])->name('create');
     Route::get('/{purchasePlan}/show', [PurchasePlanController::class, 'show'])->name('show');
     Route::get('/{purchase_plan_id}/show_approval', [PurchasePlanController::class, 'show_approval'])->name('show_approval');

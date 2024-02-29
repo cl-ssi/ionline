@@ -23,7 +23,7 @@
         }
         
         .signature-container {
-            height: 160px;
+            height: 10px; 
         }
         
     </style>
@@ -32,15 +32,7 @@
 
         <div class="left quince"
             style="padding-left: 2px; padding-bottom: 10px;">
-            <strong style="text-transform: uppercase; padding-right: 30px;">
-            {{--
-                @if($allowance->establishment_id == App\Models\Parameters\Parameter::get('establishment', 'HospitalAltoHospicio'))
-                    RESOLUCION EXENTA N°: {{ ($allowance->correlative) ? $allowance->correlative.' - '.$allowance->created_at->format('Y')  : $allowance->id }}
-                @else
-                    RESOLUCION EXENTA N°: {{ ($allowance->correlative) ? $allowance->correlative : $allowance->id }}
-                @endif
-            --}}
-            </strong>
+            <strong style="text-transform: uppercase; padding-right: 30px;"></strong>
         </div>
 
         <div style="padding-top:5px; padding-left: 2px;">
@@ -203,27 +195,25 @@
 
     <!-- Sección de las aprobaciones -->
     <div class="signature-container">
-        <div class="signature" style="padding-left: 32px;">
-            {{--
-            @include('sign.approvation', [
-                'approval' => $allowance->approvalLegacy,
-            ])
-            --}}
+        <div class="signature" style="padding-left: 32px; vertical-align: middle;">
+            @if($approvals = $purchasePlan->approvals->where('position', 'left'))
+                @foreach($approvals as $approval)
+                    {{ $approval->approver->getInitialsAttribute() }} @if(!$loop->last) - @endif
+                @endforeach
+            @endif
         </div>
         
         <div class="signature" style="padding-left: 6px; padding-right: 6px;">
             
         </div>
         <div class="signature">
-            {{--
-            @if($approvals = $allowance->approvals->where('position', 'right'))
+            @if($approvals = $purchasePlan->approvals->where('position', 'right'))
                 @foreach($approvals as $approval)
                     @include('sign.approvation', [
                         'approval' => $approval,
                     ])
                 @endforeach
             @endif
-            --}}
         </div>
     </div>
 @endsection
