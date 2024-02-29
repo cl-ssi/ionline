@@ -15,6 +15,9 @@ class TrustHosts extends Middleware
     {
         return [
             $this->allSubdomainsOfApplicationUrl(),
+            'i.saludtarapaca.gob.cl',
+            'i.saludtarapaca.org',
+            'ionline-s26t746c6q-uc.a.run.app'
         ];
     }
 }
