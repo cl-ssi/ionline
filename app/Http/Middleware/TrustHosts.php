@@ -18,9 +18,9 @@ class TrustHosts extends Middleware
             /**
              * If this is enables in Kernel.php, You need to add your own domains to the list
              */
-            // 'i.saludtarapaca.gob.cl',
-            // 'i.saludtarapaca.org',
-            // 'ionline-s26t746c6q-uc.a.run.app'
+            'i.saludtarapaca.gob.cl',
+            'i.saludtarapaca.org',
+            'ionline-s26t746c6q-uc.a.run.app'
         ];
     }
 }
