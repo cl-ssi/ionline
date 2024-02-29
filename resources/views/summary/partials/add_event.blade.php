@@ -17,12 +17,14 @@
                 <select name="event_type_id" id="" class="form-select">
                     <option value=""></option>
                     @foreach ($links as $linkAfter)
-                        <option value="{{ $linkAfter->afterEvent->id }}">
-                            [{{ $linkAfter->afterEvent->actor->name }}]
-                            {{ $linkAfter->afterEvent->name ?? '' }} 
-                            {{ $linkAfter->afterEvent->duration ? '('.$linkAfter->afterEvent->duration . ' días)' : '' }} 
-                            {{ $linkAfter->afterEvent->description ? '('.$linkAfter->afterEvent->description.')' : '' }}
-                        </option>
+                        @if($linkAfter->afterEvent)
+                            <option value="{{ $linkAfter->afterEvent->id }}">
+                                [{{ $linkAfter->afterEvent->actor->name }}]
+                                {{ $linkAfter->afterEvent->name ?? '' }} 
+                                {{ $linkAfter->afterEvent->duration ? '('.$linkAfter->afterEvent->duration . ' días)' : '' }} 
+                                {{ $linkAfter->afterEvent->description ? '('.$linkAfter->afterEvent->description.')' : '' }}
+                            </option>
+                        @endif
                     @endforeach
                 </select>
             </div>

@@ -8,6 +8,16 @@ use Illuminate\Support\Facades\Schema;
 
 class Prestacion extends Model
 {
+    // protected $table = '2024prestaciones';
+
+    // protected $fillable = [
+    //     'id_prestacion',
+    //     'codigo_prestacion',
+    //     'descripcion',
+    //     'serie',
+    //     'Nserie'
+    // ];
+
     protected $connection = 'mysql_rem';
 
     protected $primaryKey = 'id_prestacion';

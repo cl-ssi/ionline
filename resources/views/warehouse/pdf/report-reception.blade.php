@@ -16,7 +16,7 @@
 </div>
 
 <div class="titulo">
-    ACTA DE INGRESO Y RECEPCIÓN CONFORME N° {{ $control->id }}
+    ACTA DE INGRESO DE ARTICULOS EN BODEGA N° {{ $control->id }}
 </div>
 
 

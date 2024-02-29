@@ -11,7 +11,15 @@
             </div>
         @endif
     </div>
+    <div class="text-muted small">
 
+        Servicios Online -> 
+        Boletas de honorarios electrónicas -> 
+        Emisor de boletas -> 
+        Consulta sobre boletas de honorarios electrónicas -> 
+        Consulta dobre boletas recibidas -> 
+        Consultar por Mes
+    </div>
 
     <div class="input-group mb-3">
         <div class="custom-file">
