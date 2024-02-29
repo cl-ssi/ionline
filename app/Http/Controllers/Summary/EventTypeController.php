@@ -18,10 +18,7 @@ class EventTypeController extends Controller
      */
     public function index()
     {
-        $summaryTypes = Type::with(['eventTypes' => function ($query) {
-            $query->where('establishment_id', auth()->user()->organizationalUnit->establishment_id);
-        }])->get();
-
+        $summaryTypes = Type::all();
         return view('summary.events.index', compact('summaryTypes'));
     }
 

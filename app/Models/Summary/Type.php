@@ -28,8 +28,9 @@ class Type extends Model
 
     public function eventTypes()
     {
+        // dd(auth()->user()->organizationalUnit->establishment_id);
         return $this->hasMany(EventType::class,'summary_type_id')
-            ->where('establishment_id', auth()->user()->organizationalUnit->establishment_id)
+            ->where('establishment_id', auth()->user()->organizationalUnit->establishment_id)            
             ->orderBy('summary_actor_id')
             ->orderBy('name');
     }
