@@ -109,12 +109,16 @@
         </fieldset>
 
         <fieldset class="form-group col-12 col-md-1">
-            <button type="button" class="btn btn-info mt-4"><i class="fas fa-info-circle"></i></button> *
+            <button type="button" class="btn btn-info mt-4"data-bs-toggle="modal" data-bs-target="#strategicAxesModal">
+                <i class="fas fa-info-circle"></i>
+            </button> 
         </fieldset>
+
+        @include('trainings.modals.ejes_estrategicos')
     </div>
     
     <div class="alert alert-info" role="alert">
-        * En n° 5 debe ser de EE 1 a EE 7 según apartado al reverso de esta hoja; En n°9 puede ser presencial, Semi presencial, on-line.
+        <i class="fas fa-info-circle"></i> Consulte guía para completar <b>Ejes estratégicos</b>.
     </div>
 
     <div class="row g-3 mb-3">
