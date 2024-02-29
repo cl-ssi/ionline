@@ -8,7 +8,8 @@
             <label for="for_id_deis">Paciente</label>
             @livewire('search-select-user', [
                 'selected_id' => 'patient_id',
-                'emit_name' => 'get_user'
+                'emit_name' => 'get_user',
+                'user' => $patient
             ])
         </fieldset>
 

@@ -453,4 +453,9 @@ class OpenHourController extends Controller
         session()->flash('success', 'Se bloqueó el período.');
         return redirect()->back();
     }
+
+    public function clinicalreportusu($id){
+        $openHour = OpenHour::find($id);
+        return view('livewire.prof-agenda.reports.report', ['patient' => $openHour->patient]);
+    }
 }

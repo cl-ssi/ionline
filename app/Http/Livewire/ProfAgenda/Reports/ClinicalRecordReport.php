@@ -35,6 +35,10 @@ class ClinicalRecordReport extends Component
 
     public function render()
     {
+        if($this->patient){
+            $this->search();
+        }
+
         return view('livewire.prof-agenda.reports.clinical-record-report');
     }
 }
