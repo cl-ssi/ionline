@@ -76,6 +76,7 @@ class Summary extends Model
     public function events()
     {
         return $this->hasMany(Event::class, 'summary_id')
+            ->withTrashed()
             ->where(function ($query) {
                 $query->whereHas('type', function ($query) {
                     $query->where('sub_event', false);
@@ -86,6 +87,7 @@ class Summary extends Model
     public function lastEvent()
     {
         return $this->hasOne(Event::class, 'summary_id')
+            ->withTrashed()
             ->where(function ($query) {
                 $query->whereHas('type', function ($query) {
                     $query->where('sub_event', 0)->orWhereNull('sub_event');

@@ -98,6 +98,8 @@ class ComparativeRequirementImport implements ToCollection, WithStartRow,WithChu
 
                 if($dte) {
                     $dte_id = $dte->id;
+                    $dte->excel_requerimiento = true;
+                    $dte->save();
                 } else {
                     $dte_id = null; 
                 }

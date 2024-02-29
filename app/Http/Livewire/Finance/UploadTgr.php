@@ -24,7 +24,7 @@ class UploadTgr extends Component
             'tgrs' => 'required|mimes:xlx,xls,xlsx'
         ]);
         Excel::import(new TgrsImport, $this->tgrs->path(), 'gcs');
-        session()->flash('success', 'Archivo de tgr cargado exitosamente.');
+        session()->flash('success', 'Archivo de TGR con reporte de Pagos a Proveedores cargado exitosamente');
     }
 
     public function uploadAccountingPortfolio()
@@ -35,7 +35,7 @@ class UploadTgr extends Component
 
         Excel::import(new TgrsAccountingPortfolioImport, $this->portfolios->path(), 'gcs');
 
-        session()->flash('success', 'Archivo de tgr cargado exitosamente.');
+        session()->flash('success', 'Archivo de SIGFE con Cartera Financiera Contable');
 
     }
 

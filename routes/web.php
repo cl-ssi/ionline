@@ -192,7 +192,7 @@ use App\Http\Controllers\Summary\SummaryController;
 use App\Http\Controllers\Summary\SummaryFileController;
 use App\Http\Controllers\Summary\TemplateController as SummaryTemplateController;
 use App\Http\Controllers\TestController;
-// use App\Http\Controllers\Trainings\TrainingController as TngTrainingController;
+use App\Http\Controllers\Trainings\TrainingController as TngTrainingController;
 use App\Http\Controllers\Unspsc\ClassController;
 use App\Http\Controllers\Unspsc\FamilyController;
 use App\Http\Controllers\Unspsc\ProductController;
@@ -2164,6 +2164,7 @@ Route::prefix('finance')->as('finance.')->middleware(['auth', 'must.change.passw
 Route::prefix('purchase_plan')->as('purchase_plan.')->middleware(['auth', 'must.change.password'])->group(function () {
     Route::get('/own_index', [PurchasePlanController::class, 'own_index'])->name('own_index');
     Route::get('/all_index', [PurchasePlanController::class, 'all_index'])->name('all_index');
+    Route::get('/pending_index', [PurchasePlanController::class, 'pending_index'])->name('pending_index');
     Route::get('/create', [PurchasePlanController::class, 'create'])->name('create');
     Route::get('/{purchasePlan}/show', [PurchasePlanController::class, 'show'])->name('show');
     Route::get('/{purchase_plan_id}/show_approval', [PurchasePlanController::class, 'show_approval'])->name('show_approval');
@@ -2368,13 +2369,13 @@ Route::prefix('meetings')->as('meetings.')->middleware(['auth', 'must.change.pas
     Route::get('{meeting}/edit', [MeetingController::class, 'edit'])->name('edit');
 }); 
 
-/*
+
 Route::prefix('trainings')->as('trainings.')->middleware(['auth', 'must.change.password'])->group(function () {
     Route::get('/', [TngTrainingController::class, 'index'])->name('index');
     Route::get('create', [TngTrainingController::class, 'create'])->name('create');
     Route::get('{meeting}/edit', [TngTrainingController::class, 'edit'])->name('edit');
 });
-*/
+
 
 /** Módulo de horas para vacunas. ya no se usa */
 // Route::get('/yomevacuno',[VaccinationController::class,'welcome']);

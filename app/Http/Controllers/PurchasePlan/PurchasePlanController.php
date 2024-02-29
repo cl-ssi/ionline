@@ -32,6 +32,11 @@ class PurchasePlanController extends Controller
         return view('purchase_plan.all_index');
     }
 
+    public function pending_index()
+    {
+        return view('purchase_plan.pending_index');
+    }
+
     public function show_ppl_items(){
         return view('purchase_plan.reports.show_ppl_items');
     }
@@ -134,7 +139,7 @@ class PurchasePlanController extends Controller
             "document_route_name"   => "purchase_plan.show_approval",
             "document_route_params" => json_encode(["purchase_plan_id" => $purchasePlan->id])
         ]);
-
+    
         if(in_array($purchasePlan->organizationalUnit->establishment_id, explode(',', Parameter::get('establishment', 'EstablecimientosDispositivos')))){
             /* APROBACION CORRESPONDIENTE A JEFATURA DEPARTAMENTO SALUD MENTAL EN CASO DE SER GESTIONADO POR ESTABLECIMIENTOS Y DISPOSITIVOS */
             $prev_approval = $purchasePlan->approvals()->create([
@@ -146,6 +151,7 @@ class PurchasePlanController extends Controller
                 "sent_to_ou_id"         => Parameter::get('ou', 'SaludMentalSSI'),
                 "document_route_name"   => "purchase_plan.show_approval",
                 "document_route_params" => json_encode(["purchase_plan_id" => $purchasePlan->id]),
+                "previous_approval_id"  => $prev_approval->id,
                 "active"                => false
             ]);
         }
@@ -186,10 +192,14 @@ class PurchasePlanController extends Controller
                                         '<small><b>Asunto</b>: '.$purchasePlan->subject.'<br>'.
                                         '<b>Subtitulo</b>: '.$purchasePlan->program.'</small>',
             "sent_to_ou_id"         => Parameter::get('ou', 'SDASSI'),
-            "document_route_name"   => "purchase_plan.show_approval",
+            "document_route_name"   => "purchase_plan.documents.show_purchase_plan_pdf",
             "document_route_params" => json_encode(["purchase_plan_id" => $purchasePlan->id]),
+            "active"                => false,
             "previous_approval_id"  => $prev_approval->id,
-            "active"                => false
+            "position"              => "right",
+            "start_y"               => -30,
+            "filename"              => "ionline/purchase_plan/pdf/".$purchasePlan->id.".pdf",
+            "digital_signature"     => true,
         ]);
 
         $purchasePlan->update(['status' => 'sent']);

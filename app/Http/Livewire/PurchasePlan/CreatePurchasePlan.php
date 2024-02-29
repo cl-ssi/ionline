@@ -181,73 +181,16 @@ class CreatePurchasePlan extends Component
             PurchasePlanItem::destroy($this->deletedItems);
         }
 
-        if($purchasePlan->approvals()->count() > 0){
-            $purchasePlan->approvals()->delete();
-            $purchasePlan->update(['status' => 'save']);
+        $purchasePlan->load('approvals');
+        if($purchasePlan->approvals->count() > 0){
+            $ous = auth()->user()->amIAuthorityFromOu->pluck('organizational_unit_id')->toArray();
+            $iam_approver = $purchasePlan->approvals->where('active', 1)->whereNull('status')->whereIn('sent_to_ou_id', $ous)->count();
+            if(!$iam_approver){
+                $purchasePlan->approvals()->delete();
+                $purchasePlan->update(['status' => 'save']);
+            }
         }
-
-        // if($this->purchase_plan_status == 'sent'){
-        //     /* SE ENVÍA AL MODULOS DE APROBACIONES */
-
-        //     /* APROBACION CORRESPONDIENTE A JEFATURA DEPARTAMENTO O UNIDAD */
-        //     $prev_approval = $purchasePlan->approvals()->create([
-        //         "module"                => "Plan de Compras",
-        //         "module_icon"           => "fas fa-shopping-cart",
-        //         "subject"               => "Solicitud de Aprobación Jefatura",
-        //         "sent_to_ou_id"         => $purchasePlan->organizational_unit_id,
-        //         "document_route_name"   => "purchase_plan.show_approval",
-        //         "document_route_params" => json_encode(["purchase_plan_id" => $purchasePlan->id])
-        //     ]);
-
-        //     if(in_array($this->searchedUser->organizationalUnit->establishment_id, explode(',', Parameter::get('establishment', 'EstablecimientosDispositivos')))){
-        //         /* APROBACION CORRESPONDIENTE A JEFATURA DEPARTAMENTO SALUD MENTAL EN CASO DE SER GESTIONADO EN ESTABLECIMIENTOS Y DISPOSITIVOS   */
-        //         $prev_approval = $purchasePlan->approvals()->create([
-        //             "module"                => "Plan de Compras",
-        //             "module_icon"           => "fas fa-shopping-cart",
-        //             "subject"               => "Solicitud de Aprobación Jefatura Depto. Salud Mental",
-        //             "sent_to_ou_id"         => Parameter::get('ou', 'SaludMentalSSI'),
-        //             "document_route_name"   => "purchase_plan.show_approval",
-        //             "document_route_params" => json_encode(["purchase_plan_id" => $purchasePlan->id])
-        //         ]);
-        //     }
-
-        //     /* APROBACION CORRESPONDIENTE A ABASTECIMIENTO */
-        //     $prev_approval = $purchasePlan->approvals()->create([
-        //         "module"                => "Plan de Compras",
-        //         "module_icon"           => "fas fa-shopping-cart",
-        //         "subject"               => "Solicitud de Aprobación Abastecimiento",
-        //         "sent_to_ou_id"         => Parameter::get('ou', 'AbastecimientoSSI'),
-        //         "document_route_name"   => "purchase_plan.show_approval",
-        //         "document_route_params" => json_encode(["purchase_plan_id" => $purchasePlan->id]),
-        //         "previous_approval_id"  => $prev_approval->id,
-        //         "active"                => false
-        //     ]);
-
-        //     /* APROBACION CORRESPONDIENTE A FINANZAS */
-        //     $prev_approval = $purchasePlan->approvals()->create([
-        //         "module"                => "Plan de Compras",
-        //         "module_icon"           => "fas fa-shopping-cart",
-        //         "subject"               => "Solicitud de Aprobación Depto. Gestión Financiera",
-        //         "sent_to_ou_id"         => Parameter::get('ou', 'FinanzasSSI'),
-        //         "document_route_name"   => "purchase_plan.show_approval",
-        //         "document_route_params" => json_encode(["purchase_plan_id" => $purchasePlan->id]),
-        //         "previous_approval_id"  => $prev_approval->id,
-        //         "active"                => false
-        //     ]);
-
-        //     /* APROBACION CORRESPONDIENTE A SDA */
-        //     $prev_approval = $purchasePlan->approvals()->create([
-        //         "module"                => "Plan de Compras",
-        //         "module_icon"           => "fas fa-shopping-cart",
-        //         "subject"               => "Solicitud de Aprobación Subdir. Recursos Físicos y Financieros",
-        //         "sent_to_ou_id"         => Parameter::get('ou', 'SDASSI'),
-        //         "document_route_name"   => "purchase_plan.show_approval",
-        //         "document_route_params" => json_encode(["purchase_plan_id" => $purchasePlan->id]),
-        //         "previous_approval_id"  => $prev_approval->id,
-        //         "active"                => false
-        //     ]);
-        // }
-
+        
         return redirect()->route('purchase_plan.show', $purchasePlan->id);
     }
 

@@ -88,10 +88,10 @@ class IndexDtes extends Component
                         break;
                     case 'folio_sigfe':
                         switch ($value) {
-                            case 'Con Folio SIGFE':
+                            case 'Con SIGFE':
                                 $query->whereNotNull('folio_sigfe');
                                 break;
-                            case 'Sin Folio SIGFE':
+                            case 'Sin SIGFE':
                                 $query->whereNull('folio_sigfe');
                                 break;
                         }

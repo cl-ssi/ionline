@@ -26,21 +26,28 @@
 
     <div class="table-responsive">
         <table class="table table-sm table-bordered">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Documento</th>
-                    <th width="140px">OC</th>
-                    <th>FR</th>
-                    <th>Adjuntos</th>
-                    <th>Recepcion</th>
-                    <th>Compromiso SIGFE</th>
-                    <th>Devengo SIGFE</th>                    
-                    @canany(['be god', 'Payments: return to review'])
-                        <th>Retornar a Bandeja </th>
-                    @endcanany
-                </tr>
-            </thead>
+        <thead class="text-center">
+            <tr>
+                <th rowspan="2">ID</th>
+                <th rowspan="2">Documento</th>
+                <th rowspan="2" width="140px">OC</th>
+                <th rowspan="2">FR</th>
+                <th rowspan="2">Adjuntos</th>
+                <th rowspan="2">Recepcion</th>
+                <th rowspan="2">Compromiso SIGFE</th>
+                <th rowspan="2">Devengo SIGFE</th>
+                <th colspan="3">Cargas Excel</th>
+                @canany(['be god', 'Payments: return to review'])
+                    <th rowspan="2">Retornar a Bandeja</th>
+                @endcanany
+            </tr>
+            <tr>
+                <th>Pagos a Proveedores</th>
+                <th>Cartera Financiera Contable</th>
+                <th>Requerimiento</th>
+            </tr>
+        </thead>
+
             <tbody>
                 @foreach ($dtes as $dte)
                     <tr>
@@ -86,6 +93,27 @@
                                 'dte' => $dte,
                                 'onlyRead' => 'true'
                             ], key($dte->id))
+                        </td>
+                        <td class="text-center">
+                            @if ($dte->excel_proveedor)
+                                <i class="fas fa-check-circle text-success"></i>
+                            @else
+                                <i class="fas fa-times-circle text-danger"></i>
+                            @endif
+                        </td>
+                        <td class="text-center">
+                            @if ($dte->excel_cartera)
+                                <i class="fas fa-check-circle text-success"></i>
+                            @else
+                                <i class="fas fa-times-circle text-danger"></i>
+                            @endif
+                        </td>
+                        <td class="text-center">
+                            @if ($dte->excel_requerimiento)
+                                <i class="fas fa-check-circle text-success"></i>
+                            @else
+                                <i class="fas fa-times-circle text-danger"></i>
+                            @endif
                         </td>
 
                         @canany(['be god', 'Payments: return to review'])
