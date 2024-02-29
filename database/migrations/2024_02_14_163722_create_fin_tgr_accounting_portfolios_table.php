@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('fin_tgr_accounting_portfolios', function (Blueprint $table) {
             $table->id();
             $table->string('rut_emisor')->nullable();
-            $table->string('folio_documento')->nullable();
+            $table->integer('folio_documento')->nullable();
             $table->string('razon_social_emisor')->nullable();
             $table->string('cuenta_contable')->nullable();
             $table->string('principal')->nullable();
