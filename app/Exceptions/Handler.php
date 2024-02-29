@@ -36,11 +36,6 @@ class Handler extends ExceptionHandler
      */
     public function report(Throwable $exception)
     {
-        // No registrar excepciones de autorización de OAuth
-        // TODO: Aun no se si es la mejor forma de hacerlo
-        if ($exception instanceof \League\OAuth2\Server\Exception\OAuthServerException && $exception->getCode() === 9) {
-            return;
-        }
         parent::report($exception);
     }
 
