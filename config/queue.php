@@ -68,12 +68,14 @@ return [
         ],
 
         'cloudtasks' => [
-            'driver' => 'cloudtasks',
-            'project' => env('GOOGLE_CLOUD_PROJECT_ID', ''),
-            'location' => env('GOOGLE_CLOUD_LOCATION', ''),
-            'handler' => env('GOOGLE_CLOUD_TASKS_HANDLER', ''),
-            'queue' => env('GOOGLE_CLOUD_TASKS_QUEUE', 'default'),
+            'driver'                => 'cloudtasks',
+            'project'               => env('GOOGLE_CLOUD_PROJECT_ID', ''),
+            'location'              => env('GOOGLE_CLOUD_LOCATION', ''),
+            'queue'                 => env('GOOGLE_CLOUD_TASKS_QUEUE', 'default'),
+            'handler'               => env('GOOGLE_CLOUD_TASKS_HANDLER', ''),
             'service_account_email' => env('GOOGLE_CLOUD_TASKS_SERVICE_EMAIL', ''),
+            // True or false depending if you want extra security by signing the audience of your tasks. May misbehave in certain Cloud Run setups. Defaults to true.
+            'signed_audience'       => false,
             // Optional: The deadline in seconds for requests sent to the worker. If the worker
             // does not respond by this deadline then the request is cancelled and the attempt
             // is marked as a DEADLINE_EXCEEDED failure.
