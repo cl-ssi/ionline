@@ -1986,6 +1986,7 @@ Route::prefix('prof_agenda')->as('prof_agenda.')->middleware(['auth'])->group(fu
     Route::prefix('reports')->as('reports.')->middleware(['auth'])->group(function () {
         Route::get('/sirsap', SirsapReport::class)->name('sirsap');
         Route::get('/clinicalreport', ClinicalRecordReport::class)->name('clinicalreport');
+        Route::get('/clinicalreportusu/{id}', [OpenHourController::class, 'clinicalreportusu'])->name('clinicalreportusu');
     });
 
 

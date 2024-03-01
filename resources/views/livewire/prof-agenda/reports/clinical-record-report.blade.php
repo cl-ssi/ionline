@@ -8,7 +8,8 @@
             <label for="for_id_deis">Paciente</label>
             @livewire('search-select-user', [
                 'selected_id' => 'patient_id',
-                'emit_name' => 'get_user'
+                'emit_name' => 'get_user',
+                'user' => $patient
             ])
         </fieldset>
 
@@ -33,12 +34,23 @@
 
                                 <td>{{$openHour->start_date->format('Y-m-d H:i')}}</td>
                                 <td>
-                                    @if($openHour->assistance === 0)
-                                        No asistió
-                                    @elseif($openHour->assistance === 1)
-                                        Asistió
+                                    @if(array_key_exists($openHour->id, $openHours) && $openHours[$openHour->id]['showSelect'])
+                                        <select wire:change="updateAssistance({{$openHour->id}}, $event.target.value)" wire:model="openHours.{{$openHour->id}}.selectedAssistance">
+                                            <option value=""></option>
+                                            <option value="0">No asistió</option>
+                                            <option value="1">Asistió</option>
+                                            <option value="2">Sin especificar</option>
+                                        </select>
                                     @else
-                                        Sin especificar
+                                        <a href="#" wire:click="showSelect({{$openHour->id}})">
+                                            @if($openHour->assistance === 0)
+                                                No asistió
+                                            @elseif($openHour->assistance === 1)
+                                                Asistió
+                                            @else
+                                                Sin especificar
+                                            @endif
+                                        </a>
                                     @endif
                                 </td>
                                 <td>{{$openHour->profesional->shortName}}</td>

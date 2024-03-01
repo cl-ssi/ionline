@@ -123,7 +123,9 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title modalTitle" id=""></h5>
+                <a id="miEnlace" href="#">
+                    <h5 class="modal-title modalTitle" id="">Modal title</h5>
+                </a>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
                 </button>
@@ -455,6 +457,14 @@
                             //     $('.rut').val(info.event.extendedProps.rut);
                             //     $('#reservedHour').modal();
                             // })
+
+                            // asigna ruta href
+                            var eventId = info.event.id;
+                            var enlace = document.getElementById("miEnlace");
+                            var route = "{{ route('prof_agenda.reports.clinicalreportusu', ':eventId') }}";
+                            route = route.replace(':eventId', eventId);
+                            enlace.href = route;
+
                             $('.rut').val(info.event.extendedProps.rut);
                             $('#reservedHour').modal();
                         }
