@@ -201,7 +201,7 @@ class IndexDtes extends Component
         $dte = Dte::find($dte_id);
         $dte->update([
             // comprueba que $this->folio_oc no esté vacio, si lo está, lo deja como null
-            'folico_oc' => $this->folio_oc ? trim($this->folio_oc) : null,
+            'folio_oc' => $this->folio_oc ? trim($this->folio_oc) : null,
             'contract_manager_id' => $this->contract_manager_id ?? null,
             // 'confirmation_status' => $this->confirmation_status, //¿?
             // 'confirmation_user_id' => auth()->id(), //¿
