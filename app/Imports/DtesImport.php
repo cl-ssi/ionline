@@ -9,6 +9,7 @@ use Maatwebsite\Excel\Concerns\ToModel;
 use Carbon\Carbon;
 use App\Models\Finance\Dte;
 use App\Models\Finance\PurchaseOrder\Prefix;
+use App\Models\Finance\PurchaseOrder;
 
 class DtesImport implements ToModel, WithStartRow, WithHeadingRow
 {
@@ -89,7 +90,24 @@ class DtesImport implements ToModel, WithStartRow, WithHeadingRow
             $array_variable['folio_oc'] = $folio_oc;
             $array_variable['establishment_id'] = Prefix::getEstablishmentIdFromPoCode($folio_oc);
             //$array_variable['cenabast'] = Prefix::getIsCenabastFromPoCode($folio_oc);            
+
+            if(Prefix::getIsCenabastFromPoCode($folio_oc))
+            {
+                $purchase_order = PurchaseOrder::where('code',$folio_oc)->first();
+                if($purchase_order) {
+                    $purchase_order->cenabast = 1;
+                    $purchase_order->save();
+                }
+
+            }
+
+
         }
+
+        
+
+        
+
 
         return Dte::updateOrCreate($array_clave, $array_variable);
 
