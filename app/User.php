@@ -129,7 +129,7 @@ class User extends Authenticatable implements Auditable
 
     public function organizationalUnit()
     {
-        return $this->belongsTo(OrganizationalUnit::class);
+        return $this->belongsTo(OrganizationalUnit::class)->withTrashed();
     }
 
     /** No pude hacer eagger loading con esta relación */
