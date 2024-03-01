@@ -12,7 +12,7 @@ class DteConfirmation extends Notification
 {
     use Queueable;
 
-    // public $dte;
+    public $dte;
 
     /**
      * Create a new notification instance.
