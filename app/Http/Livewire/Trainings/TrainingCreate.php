@@ -47,7 +47,8 @@ class TrainingCreate extends Component
 
     protected function messages(){
         return [
-            /* Mensajes para Training */
+            // Mensajes para Training
+
             'searchedUser.required'                 => 'Debe ingresar Usuario que realiza capacitación.',
             'selectedEstament.required'             => 'Debe ingresar Estamento de funcionario.',
             'degree.required'                       => 'Debe ingresar Grado de funcionario.',
@@ -70,6 +71,13 @@ class TrainingCreate extends Component
             'place.required'                        => 'Debe ingresar Lugar.',
             'workingDay.required'                   => 'Debe ingresar Jornada.',
             'technicalReasons.required'             => 'Debe ingresar Fundamento o Razones Técnicas.',
+
+            //  MENSAJES PARA COSTOS
+            'trainingCosts.required'                => 'Debe ingresar al menos un tipo de costo',
+            'typeTrainingCost.required'             => 'Ingresar un Tipo de Costo.',
+            'otherTypeTrainingCost.required'        => 'Debe especificar un Tipo de Costo.',
+            'exist.required'                        => 'Debe ingresar Sí/No.',
+            'expense.required'                      => 'Debe ingresar $ monto.',
             
         ];
     }
@@ -109,6 +117,8 @@ class TrainingCreate extends Component
             'place'                                                                     => 'required',
             'workingDay'                                                                => 'required',
             'technicalReasons'                                                          => 'required',
+
+            'trainingCosts'                                                             => 'required'
             
         ]);
 
@@ -152,6 +162,15 @@ class TrainingCreate extends Component
     }
 
     public function addTrainingCost(){
+        $this->validateMessage = 'training';
+
+        $validatedData = $this->validate([
+            'typeTrainingCost'          => 'required',
+            ($this->typeTrainingCost == "otro") ? 'otherTypeTrainingCost' : 'otherTypeTrainingCost' => ($this->typeTrainingCost == "otro") ? 'required' : '',
+            'exist'                     => 'required',
+            'expense'                   => 'required'
+        ]);
+
         $this->trainingCosts[] = [
             'id'            => '',
             'type'          => $this->typeTrainingCost,

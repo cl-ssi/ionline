@@ -279,8 +279,8 @@
         <fieldset class="form-group col-12 col-md-11">
             <label for="for_objective">Fundamento o Razones Técnicas para la asistencia del funcionario</label>
             <input class="form-control" type="text" autocomplete="off" wire:model.debounce.500ms="technicalReasons">
+            @error('technicalReasons') <span class="text-danger error small">{{ $message }}</span> @enderror
         </fieldset>
-        @error('technicalReasons') <span class="text-danger error small">{{ $message }}</span> @enderror
     </div>
 
     <h6 class="mb-3"><b>IV. Informe de Costos.</b></h6>
@@ -357,13 +357,14 @@
                 <option value="pasajes">Pasajes</option>
                 <option value="viaticos">Viáticos</option>
                 <option value="otro">Otro</option>
-
             </select>
+            @error('typeTrainingCost') <span class="text-danger error small">{{ $message }}</span> @enderror
         </fieldset>
 
         <fieldset class="form-group col-12 col-md-3">
             <label for="for_place">Especificar costo</label>
             <input class="form-control" type="text" autocomplete="off" wire:model.debounce.500ms="otherTypeTrainingCost" {{ $disabledInputOtherTypeTrainingCost }}>
+            @error('otherTypeTrainingCost') <span class="text-danger error small">{{ $message }}</span> @enderror
         </fieldset>
 
         <fieldset class="col-12 col-md-3">
@@ -372,13 +373,14 @@
                 <option value="">Seleccionar</option>
                 <option value="1">Si</option>
                 <option value="0">No</option>
-
             </select>
+            @error('exist') <span class="text-danger error small">{{ $message }}</span> @enderror
         </fieldset>
 
         <fieldset class="form-group col-12 col-md-2 gap-2 col-6 mx-auto">
             <label for="for_place">$ Costo</label>
             <input class="form-control" type="number" autocomplete="off" wire:model.debounce.500ms="expense">
+            @error('expense') <span class="text-danger error small">{{ $message }}</span> @enderror
         </fieldset>
 
         <div class="d-grid gap-2 col-2 mx-auto">
