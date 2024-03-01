@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Trainings;
 
 use App\Models\Trainings\StrategicAxes;
 use Illuminate\Http\Request;

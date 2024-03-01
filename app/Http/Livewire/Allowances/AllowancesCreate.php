@@ -69,6 +69,7 @@ class AllowancesCreate extends Component
     public $description;
     public $validateMessages;
     public $destinationCommune;
+    public $deleteDestinationMessage;
 
     /* Aprobaciones */
     public $positionFinance;
@@ -806,8 +807,21 @@ class AllowancesCreate extends Component
 
     public function deleteDestination($key)
     {
-        /* SOLO PARA EL ELIMINAR EN CREATE */
-        unset($this->destinations[$key]);
+        $itemToDelete = $this->destinations[$key];
+
+        if($itemToDelete['id'] != ''){
+            if(count($this->destinations) > 1){
+                unset($this->destinations[$key]);
+                $objectToDelete = Destination::find($itemToDelete['id']);
+                $objectToDelete->delete();
+            }
+            else{
+                $this->deleteDestinationMessage = "Estimado Usuario: No es posible eliminar el registro, el Viático debe incluír al menos un destino";
+            }
+        }
+        else{
+            unset($this->destinations[$key]);
+        }
     }
 
     private function setDestination($destination)

@@ -8,7 +8,7 @@
 
 <div class="row">
     <div class="col-sm-5">
-        <h4 class="mb-3">Nueva Capacitación:</h4>
+        <h4 class="mt-2 mb-3">Nueva Capacitación:</h4>
     </div>
 </div>
 

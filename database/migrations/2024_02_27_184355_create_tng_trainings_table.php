@@ -38,6 +38,7 @@ return new class extends Migration
             $table->date('permission_date_start_at')->nullable();
             $table->date('permission_date_end_at')->nullable();
             $table->string('place')->nullable();
+            $table->string('working_day')->nullable();
             $table->text('technical_reasons')->nullable();
             $table->string('feedback_type')->nullable(); 
             $table->foreignId('user_creator_id')->nullable()->constrained('users');

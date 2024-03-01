@@ -114,7 +114,6 @@
                 <th width="140px">OC</th>
                 <th>FR</th>
                 <th>Recepción</th>
-                <th width="190">Admin C.</th>
                 <th width="90">Fecha Aceptación SII (días)</th>
                 <th>Devengo</th>
                 <th>Editar</th>
@@ -142,6 +141,26 @@
                     </td>
                     <td class="small">
                         @include('finance.payments.partials.fr-info')
+
+                        {{ $dte->requestForm?->contractManager?->tinnyName }} 
+                        {{ $dte->contractManager?->tinnyName }}
+                        <br>
+                        
+                        <!-- Si tiene administrador de contrato mostrar el avion para enviar notificación -->
+                        @if($dte->requestForm?->contractManager?->id OR $dte->contract_manager_id)
+                            @if($dte->confirmation_send_at AND $dte->receptions->isEmpty())
+                                <i class="fas fa-paper-plane"></i> 
+                                {{ $dte->confirmation_send_at }}
+                            @else
+                                <button type="button" 
+                                    class="btn btn-sm btn-primary" 
+                                    wire:click="sendConfirmation({{ $dte->id }})">
+                                    <i class="fas fa-fw fa-paper-plane"></i>
+                                </button>
+                            @endif
+                        @endif
+
+                        {{ $dte->estado_reclamo }}
                     </td>
                     <td class="small">
                         <!--
@@ -182,25 +201,7 @@
                         @include('finance.payments.partials.receptions-info')
 
                     </td>
-                    <td class="small">
-                        {{ $dte->requestForm?->contractManager?->tinnyName }} <br>
-                        
-                            <!-- Si tiene administrador de contrato mostrar el avion para enviar notificación -->
-                            @if($dte->requestForm?->contractManager?->id)
-                                @if($dte->confirmation_send_at AND $dte->receptions->isNotEmpty())
-                                    <i class="fas fa-paper-plane"></i> 
-                                    {{ $dte->confirmation_send_at }}
-                                @else
-                                    <button type="button" 
-                                        class="btn btn-sm btn-primary" 
-                                        wire:click="sendConfirmation({{ $dte->id }})">
-                                        <i class="fas fa-paper-plane"></i>
-                                    </button>
-                                @endif
-                            @endif
 
-                        {{ $dte->estado_reclamo }}
-                    </td>
                     <td class="small">
                         {{ $dte->fecha_recepcion_sii ?? '' }} <br>
                         ({{ $dte->fecha_recepcion_sii ? $dte->fecha_recepcion_sii->diffInDays(now()) : '' }} días)
@@ -224,7 +225,7 @@
                     <tr>
                         <td colspan="11">
 
-                        <div class="row">
+                            <div class="row g-2">
                                 <div class="form-group col-md-2">
                                     <label for="for_folio_oc">Folio OC</label>
                                     <input type="text" class="form-control" id="for_folio_oc"
@@ -236,13 +237,14 @@
                                     <input type="text" class="form-control" id="for_folio_oc"
                                         wire:model.defer="monto_total" disabled>
                                 </div>
+
                                 @switch($dte->tipo_documento)
                                     @case('guias_despacho')
                                     @case('nota_credito')
                                     @case('nota_debito')
                                         <!-- TODO: Si es guia, se puede asociar a multiple
-                                                                                                                                                            si es nota de crédito o débito se debería poder asociar sólo a una
-                                                                                                                                                            preguntar a gina o juan toro -->
+                                            si es nota de crédito o débito se debería poder asociar sólo a una
+                                            preguntar a gina o juan toro -->
                                         <div class="form-group col-md-4">
                                             <label for="for_asociate">Asociar a Factura - ID DTE:</label>
                                             <select multiple class="form-control" id="for_asociate"
@@ -261,12 +263,21 @@
                                     @case('factura_exenta')
                                     @case('boleta_honorarios')
                                     @case('boleta_electronica')
+                                        @if ( !$dte->requestForm )
+                                            <div class="form-group col-md-3">
+                                                <label for="for-contract_manager">Administrador de contrato</label>
+                                                @livewire('search-select-user', [
+                                                    'emit_name' => 'setContractManager',
+                                                    'user' => $dte->contractManager,
+                                                ], key('contract_manager'.$dte->id))
+                                            </div>
+                                        @endif
                                     @break
                                 @endswitch
 
 
 
-                                <div class="form-group col-md-4">
+                                <div class="form-group col-md-3">
                                     <label for="for_asociate">Operaciones:</label>
                                     <br>
                                     <button type="submit" class="btn btn-primary"
