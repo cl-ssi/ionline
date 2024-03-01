@@ -126,7 +126,7 @@
     </div>
     
     <div class="alert alert-info" role="alert">
-        <i class="fas fa-info-circle"></i> Consulte guía para completar <b>Ejes estratégicos</b>.
+        <i class="fas fa-info-circle"></i> Consulte guía para completar Ejes estratégicos.
     </div>
 
     <div class="row g-3 mb-3">
