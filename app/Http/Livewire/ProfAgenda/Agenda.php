@@ -85,10 +85,17 @@ class Agenda extends Component
                 }else{
                     // paciente asistió
                     if($hour->assistance == 1){
-                        $array[$count]['rut'] = $hour->patient_id;
-                        $array[$count]['color'] = "#C4F7BF"; // verde
-                        $array[$count]['title'] = $hour->patient->shortName;
-                        $array[$count]['status'] = "Asistió";
+                        if($hour->patient){
+                            $array[$count]['rut'] = $hour->patient_id;
+                            $array[$count]['color'] = "#C4F7BF"; // verde
+                            $array[$count]['title'] = $hour->patient->shortName;
+                            $array[$count]['status'] = "Asistió";
+                        }else{
+                            $array[$count]['rut'] = $hour->patient_id;
+                            $array[$count]['color'] = "#C4F7BF"; // verde
+                            $array[$count]['title'] = $hour->id . " - Error con paciente";
+                            $array[$count]['status'] = "Asistió";
+                        }
                     }
                     if($hour->assistance == 0){
                         $array[$count]['color'] = "#EB9489"; // rojo
