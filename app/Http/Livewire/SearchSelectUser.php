@@ -16,7 +16,7 @@ class SearchSelectUser extends Component
      * Si necesitas que aparezca precargado el usuario
      * @livewire('search-select-user', ['user' => $user])
      *
-     *  Si necesitas sea requerido
+     * Si necesitas sea requerido
      * @livewire('search-select-user', ['required' => 'required'])
      * 
      * Si necesitas obtener el usuario seleccionado en otro componente livewire, debes indicar el nombre del listener

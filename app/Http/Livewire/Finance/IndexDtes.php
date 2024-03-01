@@ -14,6 +14,8 @@ class IndexDtes extends Component
 {
     use WithPagination;
 
+    protected $listeners = ['setContractManager'];
+
     protected $paginationTheme = 'bootstrap';
 
     public $filter = array();
@@ -41,6 +43,8 @@ class IndexDtes extends Component
     public $facturasEmisor;
 
     public $asociate_invoices;
+
+    public $contract_manager_id;
 
     public function searchDtes()
     {
@@ -123,7 +127,8 @@ class IndexDtes extends Component
             'requestForm.contractManager',
             'dtes',
             'invoices',
-            'receptions'
+            'receptions',
+            'contractManager'
         ])
             ->whereNull('rejected')
             ->orderByDesc('fecha_recepcion_sii');
@@ -182,6 +187,7 @@ class IndexDtes extends Component
         $this->facturasEmisor = Dte::where('emisor', 'like', '%' . trim($dte->emisor) . '%')
             ->whereIn('tipo_documento', ['factura_electronica', 'factura_exenta'])
             ->get();
+        $this->contract_manager_id = null;
     }
 
     public function dismiss()
@@ -194,7 +200,9 @@ class IndexDtes extends Component
     {
         $dte = Dte::find($dte_id);
         $dte->update([
-            'folio_oc' => trim($this->folio_oc),
+            // comprueba que $this->folio_oc no esté vacio, si lo está, lo deja como null
+            'folico_oc' => $this->folio_oc ? trim($this->folio_oc) : null,
+            'contract_manager_id' => $this->contract_manager_id ?? null,
             // 'confirmation_status' => $this->confirmation_status, //¿?
             // 'confirmation_user_id' => auth()->id(), //¿
             // 'confirmation_ou_id' => auth()->user()->organizational_unit_id, //¿?
@@ -205,7 +213,7 @@ class IndexDtes extends Component
 
         
         if($dte->receptions->first() and $dte->invoices->first())
-        {            
+        {
             //Una guía tiene una o mas recepciones, buscar las facturas asociadas a esa guía y a esa factura asociarle la recepción de la guia
             $dte->receptions->first()->dte_id = $dte->invoices->first()->id;
             $dte->receptions->first()->save();
@@ -220,7 +228,6 @@ class IndexDtes extends Component
             $dte->upload_user_id !== null &&
             $dte->cenabast_signed_pharmacist !== null &&
             $dte->cenabast_signed_boss !== null
-
         ) 
         
         {
@@ -269,7 +276,10 @@ class IndexDtes extends Component
     public function sendConfirmation($dte_id)
     {
         $dte = Dte::find($dte_id);
+        // Notifica al administrador de contrato del FR
         $dte->requestForm?->contractManager?->notify(new DteConfirmation($dte));
+        // Notifica al adminsitrador de contrato del DTE
+        $dte->contractManager?->notify(new DteConfirmation($dte));
 
         $dte->confirmation_sender_id = auth()->id();
         $dte->confirmation_send_at = now();
@@ -314,7 +324,7 @@ class IndexDtes extends Component
     {
         $this->validate([
             'reason_rejection' => 'required',
-        ]);   
+        ]);
 
         $dte = Dte::find($dte_id);
         $dte->update(
@@ -325,11 +335,14 @@ class IndexDtes extends Component
                 'rejected_at' => now(),
                 'status' => 'Rechazada'
             ]);
-        
+
         $this->refresh();
     }
 
 
-
+    public function setContractManager($contractManager)
+    {
+        $this->contract_manager_id = $contractManager['id'];
+    }
 
 }
