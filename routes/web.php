@@ -2798,12 +2798,14 @@ Route::prefix('test')->as('test.')->group(function () {
         return view('test.urgency');
     });
 
-    /** Usuarios del servicio */
+    /** Todos los usuarios */
     Route::get('/usuarios', function () {
         echo "<pre>";
-        $users = User::with('organizationalUnit')->whereRelation('organizationalUnit','establishment_id', 38)->get();
+        $users = User::with(['organizationalUnit' => function ($query) {
+            $query->whereNull('deleted_at');
+        }])->get();
         foreach($users as $user) {
-            echo $user->id.';'.$user->dv.';'.$user->shortName.';'.$user->email.';'.optional($user->organizationalUnit)->name.';'.optional($user->organizationalUnit)->establishment->name."\n";
+            echo $user->id.';'.$user->dv.';'.$user->shortName.';'.$user->email.';'.optional($user->organizationalUnit)->name.';'.optional(optional($user->organizationalUnit)->establishment)->name."\n";
         }
         echo "</pre>";
     })->middleware('auth');
