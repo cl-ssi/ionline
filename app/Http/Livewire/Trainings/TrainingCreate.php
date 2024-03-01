@@ -26,13 +26,53 @@ class TrainingCreate extends Component
     $mechanism, $schuduled,
     $activityDateStartAt, $activityDateEndAt, $totalHours,
     $permissionDateStartAt, $permissionDateEndAt, $place,
+    $workingDay,
     $technicalReasons,
     $feedback_type;
+
+    public $trainingCosts, $typeTrainingCost, $otherTypeTrainingCost, $disabledInputOtherTypeTrainingCost = 'disabled',$exist, $expense;
+
+    /* Training to edit */
+    public $trainingToEdit;
+    public $idTraining;
+
+    /* trainingCost to edit */
+    public $trainingCostToEdit;
+    public $idTrainingCost;
 
     // Listeners
     public $searchedUser;
     public $disabledUserInputs = "disabled";
     protected $listeners = ['searchedUser'];
+
+    protected function messages(){
+        return [
+            /* Mensajes para Training */
+            'searchedUser.required'                 => 'Debe ingresar Usuario que realiza capacitación.',
+            'selectedEstament.required'             => 'Debe ingresar Estamento de funcionario.',
+            'degree.required'                       => 'Debe ingresar Grado de funcionario.',
+            'selectedContractualCondition.required' => 'Debe ingresar Calidad Contractual de funcionario.',
+            'email.required'                        => 'Debe ingresar Correo Electrónico de funcionario.',
+            'telephone.required'                    => 'Debe ingresar Teléfonos de funcionario.',
+            
+            'selectedStrategicAxis.required'        => 'Debe ingresar Eje Estratégico.',
+            'objective.required'                    => 'Debe ingresar Objetivo.',
+            'activityName.required'                 => 'Debe ingresar Nombre de Actividad.',
+            'activityType.required'                 => 'Debe ingresar Tipo de Actividad.',
+            'otherActivityType.required'            => 'Debe ingresar Otro Tipo de Actividad.',
+            'mechanism.required'                    => 'Debe ingresar Modalidad de Aprendizaje.',
+            'schuduled.required'                    => 'Debe ingresar Actividad Programada.',
+            'activityDateStartAt.required'          => 'Debe ingresar Fecha Inicio Actividad.',
+            'activityDateEndAt.required'            => 'Debe ingresar Fecha Termino Actividad.',
+            'totalHours.required'                   => 'Debe ingresar Total Horas Cronológicas.',
+            'permissionDateStartAt.required'        => 'Debe ingresar Solicita Permiso Desde.',
+            'permissionDateEndAt.required'          => 'Debe ingresar Solicita Permiso Hasta.',
+            'place.required'                        => 'Debe ingresar Lugar.',
+            'workingDay.required'                   => 'Debe ingresar Jornada.',
+            'technicalReasons.required'             => 'Debe ingresar Fundamento o Razones Técnicas.',
+            
+        ];
+    }
 
     public function render()
     {
@@ -44,9 +84,37 @@ class TrainingCreate extends Component
     }
 
     public function save(){
+        $this->validateMessage = 'training';
+
+        $validatedData = $this->validate([
+            'searchedUser'                  => 'required',
+            'selectedEstament'              => 'required',
+            'degree'                        => 'required',
+            'selectedContractualCondition'  => 'required',
+            'email'                         => 'required',
+            'telephone'                     => 'required',
+
+            'selectedStrategicAxis'         => 'required',
+            'objective'                     => 'required',
+            'activityName'                  => 'required',
+            'activityType'                                                              => 'required',
+            ($this->activityType == "otro") ? 'otherActivityType' : 'otherActivityType' => ($this->activityType == "otro") ? 'required' : '',
+            'mechanism'                                                                 => 'required',
+            'schuduled'                                                                 => 'required',
+            'activityDateStartAt'                                                       => 'required',
+            'activityDateEndAt'                                                         => 'required',
+            'totalHours'                                                                => 'required',
+            'permissionDateStartAt'                                                     => 'required',
+            'permissionDateEndAt'                                                       => 'required',
+            'place'                                                                     => 'required',
+            'workingDay'                                                                => 'required',
+            'technicalReasons'                                                          => 'required',
+            
+        ]);
+
         // SE GUARDA REUNIÓN
-        $meeting = DB::transaction(function () {
-            $meeting = Training::updateOrCreate(
+        $training = DB::transaction(function () {
+            $training = Training::updateOrCreate(
                 [
                     'id'  =>  '',
                 ],
@@ -58,7 +126,7 @@ class TrainingCreate extends Component
                     'contractual_condition_id'  => $this->selectedContractualCondition,
                     'organizationl_unit_id'     => $this->searchedUser->organizational_unit_id,
                     'establishment_id'          => $this->searchedUser->organizationalUnit->establishment_id,
-                    'email'                      => $this->email,
+                    'email'                     => $this->email,
                     'telephone'                 => $this->telephone,
                     'strategic_axes_id'         => $this->selectedStrategicAxis,
                     'objective'                 => $this->objective,
@@ -79,8 +147,34 @@ class TrainingCreate extends Component
                 ]
             );
 
-            return $meeting;
+            return $training;
         });
+    }
+
+    public function addTrainingCost(){
+        $this->trainingCosts[] = [
+            'id'            => '',
+            'type'          => $this->typeTrainingCost,
+            'other_type'    => $this->otherTypeTrainingCost,
+            'exist'         => $this->exist,
+            'expense'       => $this->expense,
+            'training_id'   => ($this->trainingToEdit) ? $this->trainingToEdit->id : null,
+        ];
+    }
+
+    public function deleteTrainingCost($key){
+        $itemToDelete = $this->trainingCosts[$key];
+
+        if($itemToDelete['id'] != ''){
+            unset($this->trainingCosts[$key]);
+            /*
+            $objectToDelete = Grouping::find($itemToDelete['id']);
+            $objectToDelete->delete();
+            */
+        }
+        else{
+            unset($this->trainingCosts[$key]);
+        }
     }
 
     public function searchedUser(User $user){
@@ -100,6 +194,16 @@ class TrainingCreate extends Component
         }
         else{
             $this->disabledInputOtherActivityType = 'disabled';
+            $this->otherActivityType = null;
+        }
+    }
+
+    public function updatedtypeTrainingCost($value){
+        if($value == 'otro'){
+            $this->disabledInputOtherTypeTrainingCost = '';
+        }
+        else{
+            $this->disabledInputOtherTypeTrainingCost = 'disabled';
             $this->otherActivityType = null;
         }
     }

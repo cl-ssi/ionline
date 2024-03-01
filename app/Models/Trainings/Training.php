@@ -36,6 +36,7 @@ class Training extends Model implements Auditable
         'permission_date_start_at',
         'permission_date_end_at',
         'place',
+        'working_day',
         'technical_reasons',
         'feedback_type',
         'user_creator_id'
