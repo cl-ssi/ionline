@@ -8,6 +8,7 @@ use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Carbon\Carbon;
 use App\Models\Finance\Dte;
+use App\Models\Finance\PurchaseOrder\Prefix;
 
 class DtesImport implements ToModel, WithStartRow, WithHeadingRow
 {
@@ -84,7 +85,10 @@ class DtesImport implements ToModel, WithStartRow, WithHeadingRow
 
         if( trim(mb_strtoupper($row['folio_oc'])) != '' AND !is_null($row['folio_oc']) ) 
         {
-            $array_variable['folio_oc'] = trim(mb_strtoupper($row['folio_oc']));
+            $folio_oc = trim(mb_strtoupper($row['folio_oc']));
+            $array_variable['folio_oc'] = $folio_oc;
+            $array_variable['establishment_id'] = Prefix::getEstablishmentIdFromPoCode($folio_oc);
+            //$array_variable['cenabast'] = Prefix::getIsCenabastFromPoCode($folio_oc);            
         }
 
         return Dte::updateOrCreate($array_clave, $array_variable);
