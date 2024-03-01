@@ -9,7 +9,7 @@
                 ? route('request_forms.show_file', $dte->requestForm->requestFormFiles->last() ?? 0)
                 : route('request_forms.signedRequestFormPDF', [$dte->requestForm, 1]) }}"
             target="_blank" title="Certificado">
-            <i class="fas fa-file-contract"></i>
+            <i class="fas fa-fw fa-file-contract"></i>
         </a>
     @endif
 
@@ -20,7 +20,7 @@
                 ? route('request_forms.show_file', $dte->requestForm->requestFormFiles->last() ?? 0)
                 : route('request_forms.signedRequestFormPDF', [$dte->requestForm, 0]) }}"
             target="_blank" title="Certificado">
-            <i class="fas fa-file-contract"></i>
+            <i class="fas fa-fw fa-file-contract"></i>
         </a>
     @endif
 
@@ -32,7 +32,7 @@
                 : route('request_forms.signedRequestFormPDF', [$dte->requestForm, 0]) }}"
             target="_blank" data-toggle="modal"
             data-target="#history-fr-{{ $dte->requestForm->id }}">
-            <i class="fas fa-file-contract"></i>
+            <i class="fas fa-fw fa-file-contract"></i>
         </a>
     @endif
 

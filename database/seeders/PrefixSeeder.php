@@ -15,18 +15,18 @@ class PrefixSeeder extends Seeder
      */
     public function run()
     {
-        // 1	Servicio de Salud Tarapacá	1637-
-        // 2	Activo fijo	1057838-
-        // 3	Administracion de fondos	1077499-
-        // 4	Bienes y servicios	1057448-
-        // 5	Compra conjunta	1058517-
-        // 6	Convenios GORE	1180968-
-        // 7	Fármacos	1058052-
-        // 8	Hospital Alto Hospicio	1272565-
-        // 9	Hospital Dr. Hector Reyno	5483-
-        // 10	Obras civiles	1057964-
-        // 11	Servicio de Bienestar	2549-
-        // 12	Cenabat	621-
+        // 1    Servicio de Salud Tarapacá  1637-
+        // 2    Activo fijo                 1057838-
+        // 3    Administracion de fondos    1077499-
+        // 4    Bienes y servicios          1057448-
+        // 5    Compra conjunta             1058517-
+        // 6    Convenios GORE              1180968-
+        // 7    Fármacos                    1058052-
+        // 8    Hospital Alto Hospicio      1272565-
+        // 9    Hospital Dr. Hector Reyno   5483-
+        // 10   Obras civiles               1057964-
+        // 11   Servicio de Bienestar       2549-
+        // 12   Cenabat                     621-
 
         Prefix::create([
             'name' => 'Servicio de Salud Tarapacá',

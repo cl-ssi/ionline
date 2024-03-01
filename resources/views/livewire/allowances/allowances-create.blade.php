@@ -158,39 +158,43 @@
     @endif
 
     @if($destinations)
-    <br>
+        <br>
+        @if($deleteDestinationMessage)
+            <div class="alert alert-danger" role="alert">
+                {{ $deleteDestinationMessage }}
+            </div>
+        @endif
 
-    <div class="table-responsive">
-        <table class="table table-striped table-bordered table-sm small" name="items">
-            <thead>
-                <tr class="bg-light text-center">
-                    <th>#</th>
-                    <th>Comuna</th>
-                    <th>Localidad</th>
-                    <th>Descripción</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($destinations as $key => $destination)
-                <tr>
-                    <td class="brd-l text-center">{{ $loop->iteration }}</td>
-                    <td class="text-center">{{ $destination['commune_name'] }}</td>
-                    <td class="text-center">{{ $destination['locality_name'] }}</td>
-                    <td>{{ $destination['description'] }}</td>
-                    <td width="5%" class="text-center">
-                        <a class="btn btn-danger btn-sm" href="#items" class="text-danger" 
-                            title="Eliminar" 
-                            onclick="confirm('¿Está seguro que desea eliminar el destino?') || event.stopImmediatePropagation()"
-                            wire:click="deleteDestination({{ $key }})">
-                            <i class="fas fa-trash-alt"></i>
-                        </a>
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
-    </div>
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered table-sm small" name="items">
+                <thead>
+                    <tr class="bg-light text-center">
+                        <th>#</th>
+                        <th>Comuna</th>
+                        <th>Localidad</th>
+                        <th>Descripción</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($destinations as $key => $destination)
+                    <tr>
+                        <td class="brd-l text-center">{{ $loop->iteration }}</td>
+                        <td class="text-center">{{ $destination['commune_name'] }}</td>
+                        <td class="text-center">{{ $destination['locality_name'] }}</td>
+                        <td>{{ $destination['description'] }}</td>
+                        <td width="5%" class="text-center">
+                            <a class="btn btn-danger btn-sm" href="#items" class="text-danger" 
+                                title="Eliminar"
+                                wire:click="deleteDestination({{ $key }})">
+                                <i class="fas fa-trash-alt"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
     @endif
 
     <hr>

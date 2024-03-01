@@ -79,6 +79,9 @@ class Dte extends Model implements Auditable
         'fecha_aceptacion',
         'fecha',
 
+        // Administrador de contrato
+        'contract_manager_id',
+
         //Datos envia a pago
         'sender_id',
         'sender_ou',
@@ -109,7 +112,6 @@ class Dte extends Model implements Auditable
         // Se reemplaza por el  reason_rejection confirmation_observation = reason_rejection
         //'confirmation_observation',
         'confirmation_signature_file',
-
 
 
 
@@ -220,9 +222,6 @@ class Dte extends Model implements Auditable
     }
 
 
-
-    
-     
 
     /**
      * Una factura puede tener muchas dtes
@@ -356,17 +355,21 @@ class Dte extends Model implements Auditable
         return $this->belongsTo(User::class, 'confirmation_user_id');
     }
 
-    public function uploadUser()
+    /** Fue cambiada por contract manager, borrar más adelante */
+    // public function uploadUser()
+    // {
+    //     return $this->belongsTo(User::class, 'upload_user_id');
+    // }
+
+    public function contractManager()
     {
-        return $this->belongsTo(User::class, 'upload_user_id');
+        return $this->belongsTo(User::class, 'contract_manager_id')->withTrashed();
     }
 
     public function getTipoDocumentoInicialesAttribute()
     {
         return strtoupper(implode('', array_map(fn($s) => substr($s, 0, 1), explode("_", $this->tipo_documento))));
     }
-
-
 
 
     /** Creo que ya no se utiliza */
@@ -428,24 +431,23 @@ class Dte extends Model implements Auditable
         }
     }
 
-    public function getConfirmationSignatureFileUrlAttribute()
-    {
-        return Storage::disk('gcs')->url($this->confirmation_signature_file);
-    }
+    // public function getConfirmationSignatureFileUrlAttribute()
+    // {
+    //     return Storage::disk('gcs')->url($this->confirmation_signature_file);
+    // }
 
-    public function getCenabastReceptionFileUrlAttribute()
-    {
-        return Storage::disk('gcs')->url($this->cenabast_reception_file);
-    }
+    // public function getCenabastReceptionFileUrlAttribute()
+    // {
+    //     return Storage::disk('gcs')->url($this->cenabast_reception_file);
+    // }
 
-    public function getPharmacistAttribute()
-    {
-        return $this->uploadUser->organizationalUnit->currentManager->user ?? null;
-        
-    }
+    // public function getPharmacistAttribute()
+    // {
+    //     return $this->uploadUser->organizationalUnit->currentManager->user ?? null;
+    // }
 
-    public function getBossAttribute()
-    {
-        return $this->uploadUser->organizationalUnit->father->currentManager->user ?? null;
-    }
+    // public function getBossAttribute()
+    // {
+    //     return $this->uploadUser->organizationalUnit->father->currentManager->user ?? null;
+    // }
 }
