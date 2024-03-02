@@ -224,6 +224,7 @@ use App\Http\Livewire\Drugs\IndexActPrecursor;
 use App\Http\Livewire\Finance\AccountingCodesMgr;
 use App\Http\Livewire\Finance\DteConfirmation;
 use App\Http\Livewire\Finance\IndexDtes;
+use App\Http\Livewire\Finance\MyDtes;
 use App\Http\Livewire\Finance\Receptions\CreateReception;
 use App\Http\Livewire\Finance\Receptions\CreateReceptionNoOc;
 use App\Http\Livewire\Finance\Receptions\CreateRejection;
@@ -270,8 +271,8 @@ use App\Http\Livewire\Parameters\Parameter\ParameterEdit;
 use App\Http\Livewire\Parameters\Parameter\ParameterIndex;
 use App\Http\Livewire\Parameters\Program\BudgetMgr;
 use App\Http\Livewire\Pharmacies\Products\IndexProducts;
-use App\Http\Livewire\ProfAgenda\Reports\SirsapReport;
 use App\Http\Livewire\ProfAgenda\Reports\ClinicalRecordReport;
+use App\Http\Livewire\ProfAgenda\Reports\SirsapReport;
 use App\Http\Livewire\Profile\MailSignature;
 use App\Http\Livewire\Profile\Subrogations;
 use App\Http\Livewire\Rem\SeccionGenerator;
@@ -2117,6 +2118,7 @@ Route::prefix('pharmacies')->as('pharmacies.')->middleware(['auth', 'must.change
 /* Finanzas */
 Route::prefix('finance')->as('finance.')->middleware(['auth', 'must.change.password'])->group(function () {
     Route::get('dtes', IndexDtes::class)->name('dtes.index');
+    Route::get('my-dtes', MyDtes::class)->name('my.dtes');
     Route::get('dtes/upload-bhe', UploadBhe::class)->name('dtes.uploadBhe');
     Route::get('dtes/upload-tgr', UploadTgr::class)->name('dtes.uploadTgr');
     Route::get('dte/{dte}/store', [DteController::class, 'store'])->name('dtes.confirmation.store');

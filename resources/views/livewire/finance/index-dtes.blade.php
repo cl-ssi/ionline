@@ -11,10 +11,6 @@
                 <button class="btn btn-sm btn-success" type="button" wire:click="loadManualDTE">
                     <i class="fas fa-plus"></i> Cargar DTE individual</button>
             </div>
-            <div class="col">
-                <a class="btn btn-sm btn-success" href="{{ route('finance.dtes.upload') }}">
-                    <i class="fas fa-plus"></i> Cargar DTEs desde archivo</a>
-            </div>
         @endcannot
     </div>
 

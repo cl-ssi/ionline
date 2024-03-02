@@ -1,9 +1,14 @@
 <ul class="nav nav-tabs mb-3">
     <li class="nav-item">
+        <a class="nav-link {{ active('finance.my.dtes') }}" 
+            href="{{ route('finance.my.dtes') }}">
+            <i class="fas fa-fw fa-file-invoice-dollar"></i> Mis Dtes</a>
+    </li>
+    <li class="nav-item">
         <a class="nav-link {{ active('finance.dtes.index') }}" 
             href="{{ route('finance.dtes.index') }}">
             <i class="fas fa-fw fa-file-invoice-dollar"></i> Dtes</a>
-    </li>    
+    </li> 
     <li class="nav-item">
         <a class="nav-link {{ active('finance.payments.review') }}"
             href="{{ route('finance.payments.review') }}">
@@ -24,22 +29,36 @@
             >
             <i class="far fa-fw fa-check-circle"></i> Pagados</a>
     </li>
+
     <li class="nav-item">
         <a class="nav-link {{ active('finance.payments.rejected') }}"
             href="{{ route('finance.payments.rejected') }}">
             <i class="fas fa-fw fa-ban"></i> Rechazadas</a>
     </li>
 
-    <li class="nav-item">
-        <a class="nav-link {{ active('finance.payments.uploadBhe') }}"
-            href="{{ route('finance.dtes.uploadBhe') }}">
-            <i class="fas fa-fw fa-cloud-upload-alt"></i> Cargar BHE</a>
-    </li>
+    @cannot('Payments: viewer')
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fas fa-fw fa-cloud-upload-alt"></i> Cargar
+            </a>
+            <ul class="dropdown-menu">
+                <li>
+                    <a class="dropdown-item" href="{{ route('finance.dtes.upload') }}">
+                        <i class="fas fa-fw fa-cloud-upload-alt"></i> Cargar DTEs desde archivo</a>
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item" href="{{ route('finance.dtes.uploadTgr') }}">
+                        <i class="fas fa-fw fa-cloud-upload-alt"></i> Cargar TGR
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item" href="{{ route('finance.dtes.uploadBhe') }}">
+                        <i class="fas fa-fw fa-cloud-upload-alt"></i> Cargar BHE
+                    </a>
+                </li>
+            </ul>
+        </li>
+    @endcannot
 
-    <li class="nav-item">
-        <a class="nav-link {{ active('finance.payments.uploadTgr') }}"
-            href="{{ route('finance.dtes.uploadTgr') }}">
-            <i class="fas fa-file-upload"></i> Cargar TGR</a>
-    </li>
-    
 </ul>
