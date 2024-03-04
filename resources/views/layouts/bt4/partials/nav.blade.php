@@ -362,7 +362,6 @@
                 'OrganizationalUnits: delete',
                 'Authorities: view',
                 'Authorities: create',
-                'Users: service requests',
                 'Service Request',
                 'Replacement Staff: create request',
                 'Replacement Staff: view requests',
