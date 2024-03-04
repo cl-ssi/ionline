@@ -116,7 +116,7 @@
                         </td>
                         <td>{{ $grouping['name'] }}</td>
                         <td class="text-center">
-                            <a href="{{-- route('meetings.edit', $meeting) --}}"
+                            <a
                                 class="btn btn-outline-secondary btn-sm">
                                 <i class="fas fa-edit fa-fw"></i> 
                             </a>
@@ -239,11 +239,17 @@
     
     <hr>
 
-    <div class="row g-3 mt-5">
+    <div class="row g-3">
         <div class="col-12">
             <button wire:click="save" class="btn btn-primary float-end" type="button">
                 <i class="fas fa-save"></i> Guardar
             </button>
+
+            @if($meetingToEdit->StatusValue == 'Guardado')
+                <button wire:click="save" class="btn btn-success float-end me-3" type="button">
+                    <i class="fas fa-rocket"></i> Cerrar Reunión
+                </button>
+            @endif
         </div>
     </div>
 </div>

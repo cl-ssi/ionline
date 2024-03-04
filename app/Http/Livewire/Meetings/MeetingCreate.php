@@ -135,14 +135,16 @@ class MeetingCreate extends Component
     }
 
     public function setGroupings(){
-        foreach($this->meetingToEdit->groupings as $grouping){
-        // foreach($this->groupings as $grouping){
-            $this->groupings[] = [
-                'id'            => $grouping->id,
-                'type'          => $grouping->type,
-                'name'          => $grouping->name,
-                'meeting_id'    => $grouping->meeting_id
-            ];
+        if($this->meetingToEdit){
+            foreach($this->meetingToEdit->groupings as $grouping){
+            // foreach($this->groupings as $grouping){
+                $this->groupings[] = [
+                    'id'            => $grouping->id,
+                    'type'          => $grouping->type,
+                    'name'          => $grouping->name,
+                    'meeting_id'    => $grouping->meeting_id
+                ];
+            }
         }
     }
 
@@ -175,19 +177,21 @@ class MeetingCreate extends Component
     }
 
     public function setCommitments(){
-        foreach($this->meetingToEdit->commitments as $commitment){
-            $this->commitments[] = [
-                'id'                    => $commitment->id,
-                'description'           => $commitment->description,
-                'type'                  => $commitment->type,
-                'commitment_user_id'    => $commitment->commitment_user_id,
-                'commitment_user_name'  => ($commitment->commitment_user_id) ? $commitment->commitmentUser->FullName : null,
-                'commitment_ou_id'      => $commitment->commitment_ou_id,
-                'commitment_ou_name'    => ($commitment->commitment_ou_id) ? $commitment->commitmentOrganizationalUnit->name : null,
-                'closing_date'          => $commitment->closing_date,
-                'requirement_id'        => $commitment->requirement_id,
-                'user_id'               => $commitment->user_id
-            ];
+        if($this->meetingToEdit){
+            foreach($this->meetingToEdit->commitments as $commitment){
+                $this->commitments[] = [
+                    'id'                    => $commitment->id,
+                    'description'           => $commitment->description,
+                    'type'                  => $commitment->type,
+                    'commitment_user_id'    => $commitment->commitment_user_id,
+                    'commitment_user_name'  => ($commitment->commitment_user_id) ? $commitment->commitmentUser->FullName : null,
+                    'commitment_ou_id'      => $commitment->commitment_ou_id,
+                    'commitment_ou_name'    => ($commitment->commitment_ou_id) ? $commitment->commitmentOrganizationalUnit->name : null,
+                    'closing_date'          => $commitment->closing_date,
+                    'requirement_id'        => $commitment->requirement_id,
+                    'user_id'               => $commitment->user_id
+                ];
+            }
         }
     }
 
