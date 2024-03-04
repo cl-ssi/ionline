@@ -2803,11 +2803,12 @@ Route::prefix('test')->as('test.')->group(function () {
     /** Todos los usuarios */
     Route::get('/usuarios', function () {
         echo "<pre>";
-        $users = User::with(['organizationalUnit' => function ($query) {
-            $query->whereNull('deleted_at');
-        }])->get();
+        // $users = User::with(['organizationalUnit' => function ($query) {
+        //     //$query->whereNull('deleted_at');
+        // }])->get();
+        $users = User::all();
         foreach($users as $user) {
-            echo $user->id.';'.$user->dv.';'.$user->shortName.';'.$user->email.';'.optional($user->organizationalUnit)->name.';'.optional(optional($user->organizationalUnit)->establishment)->name."\n";
+            echo $user->id.';'.$user->dv.';'.$user->shortName.';'.$user->email.';'.optional($user->organizationalUnit)->name.';'.optional(optional($user->organizationalUnit)->establishment)->name.';'.$user->deleted_at."\n";
         }
         echo "</pre>";
     })->middleware('auth');
