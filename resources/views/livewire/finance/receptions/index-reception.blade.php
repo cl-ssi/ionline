@@ -81,6 +81,7 @@
                     <th>Total</th>
                     <th>Responsable</th>
                     <th>Fecha Recepción</th>
+                    <th>Mercado Público</th>
                     <th>Orig.</th>
                     <th>Aprobaciones</th>
                     <th>Número</th>
@@ -122,6 +123,9 @@
                         </td>
                         <td class="text-center">
                             {{ $reception->date?->format('Y-m-d') }}
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" {{ $reception->mercado_publico ? "checked" : "" }} wire:click="toggleMercadoPublico({{ $reception->id }})"  >
                         </td>
                         <td>
                             @if($reception->rejected == false)

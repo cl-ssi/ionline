@@ -24,6 +24,7 @@ class IndexReception extends Component
     public $filter_pending;
     public $types;
     public $error_msg;
+    public $mercado_publico;
 
 
     /**
@@ -89,6 +90,13 @@ class IndexReception extends Component
             ->latest()
             ->paginate(100);
         return $receptions;
+    }
+
+    public function toggleMercadoPublico($receptionId)
+    {
+        $reception = Reception::find($receptionId);
+        $reception->mercado_publico = !$reception->mercado_publico;
+        $reception->save();
     }
 
 }

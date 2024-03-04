@@ -68,6 +68,8 @@ class Reception extends Model implements Auditable
         'total',
 
         'status',
+
+        'mercado_publico',
     
         // 'file',
         'responsable_id',
