@@ -25,7 +25,9 @@
 
                     <div class="col-2">
                         <label for="">&nbsp;</label>
-                        <button type="submit" class="form-control btn btn-primary"><i class="fas fa-trash"></i> Destruir</button>
+                        <button type="submit" class="form-control btn btn-danger">
+                            <i class="fas fa-fire-alt"></i> Destruir
+                        </button>
                     </div>
 
                 </div>

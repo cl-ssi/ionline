@@ -31,9 +31,12 @@
                             @endforeach
                         </select>
                     </fieldset>
-
-                    <button type="submit" class="btn btn-primary nolabel"><i class="fas fa-save"></i> Guardar</button>
-
+                    <fieldset>
+                        <label for="form-label">&nbsp;</label>
+                        <button type="submit" class="btn btn-primary form-control">
+                            <i class="fas fa-save"></i>
+                        </button>
+                    </fieldset>
                 </div>
 
             </form>

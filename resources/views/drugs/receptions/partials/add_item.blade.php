@@ -80,9 +80,11 @@
                     <textarea name="description" class="form-control" id="for_description" rows="3" required="required"></textarea>
                 </fieldset>
                 
-                <div class="col-2">
+                <div class="col-1">
                     <label for="">&nbsp;</label>
-                    <button type="submit" class="btn btn-primary form-control"><i class="fas fa-save"></i> Guardar</button>
+                    <button type="submit" class="btn btn-primary form-control">
+                        <i class="fas fa-save"></i>
+                    </button>
                 </div>
             </div>
 
