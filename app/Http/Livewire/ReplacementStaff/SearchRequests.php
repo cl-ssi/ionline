@@ -44,6 +44,11 @@ class SearchRequests extends Component
     public $userToAssign = null;
     public $checkToAssign = [];
 
+    protected $queryString = ['selectedFormType', 'selectedStatus', 'selectedId', 'selectedStartDate',
+        'selectedEndDate', 'selectedName', 'selectedFundament', 'selectedFundamentDetail', 'selectedNameToReplace',
+        'selectedSub', 'selectedAssigned'
+    ];
+
     public function render()
     {   
         if($this->typeIndex == 'assign'){
@@ -291,5 +296,50 @@ class SearchRequests extends Component
 
         session()->flash('success', 'Se ha asignado exitosamente el Proceso de Selección');
         return redirect()->route('replacement_staff.request.index');
+    }
+
+    //RESET PAGE
+    public function updatingSelectedFormType(){
+        $this->resetPage();
+    }
+
+    public function updatingSelectedStatus(){
+        $this->resetPage();
+    }
+
+    public function updatingSelectedId(){
+        $this->resetPage();
+    }
+
+    public function updatingSelectedStartDate(){
+        $this->resetPage();
+    }
+
+    public function updatingSelectedEndDate(){
+        $this->resetPage();
+    }
+
+    public function updatingSelectedName(){
+        $this->resetPage();
+    }
+
+    public function updatingSelectedFundament(){
+        $this->resetPage();
+    }
+
+    public function updatingSelectedFundamentDetail(){
+        $this->resetPage();
+    }
+
+    public function updatingSelectedNameToReplace(){
+        $this->resetPage();
+    }
+
+    public function updatingSelectedSub(){
+        $this->resetPage();
+    }
+
+    public function updatingSelectedAssigned(){
+        $this->resetPage();
     }
 }
