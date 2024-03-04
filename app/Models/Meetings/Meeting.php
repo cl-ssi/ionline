@@ -30,6 +30,41 @@ class Meeting extends Model implements Auditable
         return $this->hasMany('App\Models\Meetings\Commitment');
     }
 
+    public function getStatusValueAttribute() {
+        switch($this->status) {
+            case 'saved':
+                return 'Guardado';
+                break;
+
+            case 'pending':
+                return 'Pendiente';
+                break;
+            /*
+            case 'complete':
+                return 'Finalizado';
+                break;
+            case 'rejected':
+                return 'Rechazado';
+                break;
+            case 'manual':
+                return 'Carga Manual';
+                break;
+            */
+        }
+    }
+
+    public function getTypeValueAttribute() {
+        switch($this->type) {
+            case 'lobby':
+                return 'Lobby';
+                break;
+
+            case 'pending':
+                return 'Pendiente';
+                break;
+        }
+    }
+
     /*
     protected $dates = [
         'date'
