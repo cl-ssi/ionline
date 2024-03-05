@@ -37,27 +37,28 @@ class EmployeeData extends Component
             $user = User::find($this->user_id);
             $this->emit('renderFromEmployeeData');
 
-            // validación para verificar funcionarios con 3 faltas consecutivas en los ultimos 2 meses
-            $twoMonthsAgo = now()->subMonths(2);
-            $openHours = OpenHour::where('patient_id',$user->id)
-                                ->orderBy('start_date')
-                                ->where('start_date', '>=', $twoMonthsAgo)
-                                ->get();
-            $count = 0;
-            foreach($openHours as $openHour){
-                if($openHour->assistance === 0){
-                    $count += 1;
-                }
-                if($openHour->assistance !== 0){
-                    $count = 0;
-                }
-                if($count >= 3){
-                    $this->flag_more_than_3_faults = true;
-                }
-            }
-
             // validación datos de usuario
             if ($user) {
+
+                // validación para verificar funcionarios con 3 faltas consecutivas en los ultimos 2 meses
+                $twoMonthsAgo = now()->subMonths(2);
+                $openHours = OpenHour::where('patient_id',$user->id)
+                                    ->orderBy('start_date')
+                                    ->where('start_date', '>=', $twoMonthsAgo)
+                                    ->get();
+                $count = 0;
+                foreach($openHours as $openHour){
+                    if($openHour->assistance === 0){
+                        $count += 1;
+                    }
+                    if($openHour->assistance !== 0){
+                        $count = 0;
+                    }
+                    if($count >= 3){
+                        $this->flag_more_than_3_faults = true;
+                    }
+                }
+
                 $this->email = $user->email;
             }else{
                 // validación correo
