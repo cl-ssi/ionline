@@ -240,14 +240,14 @@ class DigitalSignature extends Model
          * Peticion a la api para firmar
          */
         try {
-            $response = Http::withHeaders(['otp' => $otp])->post($this->url, $this->data);
+            $this->response = Http::withHeaders(['otp' => $otp])->post($this->url, $this->data);
 
-            if($response->failed()) {
-                $this->error = $response->reason();
+            if($this->response->failed()) {
+                $this->error = $this->response->reason();
             }
 
-            if(array_key_exists('error',$response->json())) {
-                $this->error = $response->json()['error'];
+            if(array_key_exists('error',$this->response->json())) {
+                $this->error = $this->response->json()['error'];
             }
         } catch (\Throwable $th) {
             $this->error = "No se pudo conectar a firma gobierno. ". $th->getCode();
