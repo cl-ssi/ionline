@@ -49,12 +49,13 @@
         </fieldset>
 
         <fieldset class="form-group col-md-2">
-            <label for="receptionType">Estado</label>
+            <label for="for-pending">Estado</label>
             <select class="form-select"
-                wire:model="filter_pending">
+                wire:model.defer="filter_pending">
                 <option value="all">Todas</option>
+                <option value="pending">Pendiente Aprobación</option>
+                <option value="without_number">Sin Numerar</option>
                 <option value="with_number">Numeradas</option>
-                <option value="without_number">Pendientes</option>
             </select>
         </fieldset>
 

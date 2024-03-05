@@ -82,8 +82,9 @@ class IndexReception extends Component
             })
             ->when($this->filter_pending, function($query) {
                 switch($this->filter_pending) {
-                    case 'with_number': $query->has('numeration'); break;
-                    case 'without_number': $query->doesntHave('numeration'); break;
+                    case 'with_number': $query->whereRelation('numeration','number','!=',null); break;
+                    case 'without_number': $query->whereRelation('numeration','number','=',null); break;
+                    case 'pending': $query->doesntHave('numeration'); break;
                     default: break;
                 }
             })
