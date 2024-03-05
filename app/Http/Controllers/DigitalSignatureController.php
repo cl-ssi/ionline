@@ -611,7 +611,7 @@ class DigitalSignatureController extends Controller
             return [
                 'statusOk' => false,
                 'content' => '',
-                'errorMsg' => 'FirmaGob está presentando inestabilidad - ' . $response->json()['error'],
+                'errorMsg' => 'FirmaGob está presentando inestabilidad - ' . $response->json(),
             ];
         }
 
