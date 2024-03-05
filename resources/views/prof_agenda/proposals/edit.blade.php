@@ -78,7 +78,9 @@
 
 @livewire('prof-agenda.add-proposal-detail',['proposal' => $proposal])
 
-@livewire('prof-agenda.clone-proposal',['proposal' => $proposal])
+@canany(['Agenda UST: Administrador'])
+    @livewire('prof-agenda.clone-proposal',['proposal' => $proposal])
+@endcanany
 
 @livewire('prof-agenda.proposal-calendar',['proposal' => $proposal])
 @stack('scripts')
