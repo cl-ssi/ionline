@@ -89,7 +89,6 @@ class DtesImport implements ToModel, WithStartRow, WithHeadingRow
             $folio_oc = trim(mb_strtoupper($row['folio_oc']));
             $array_variable['folio_oc'] = $folio_oc;
             $array_variable['establishment_id'] = Prefix::getEstablishmentIdFromPoCode($folio_oc);
-            //$array_variable['cenabast'] = Prefix::getIsCenabastFromPoCode($folio_oc);            
 
             if(Prefix::getIsCenabastFromPoCode($folio_oc))
             {
@@ -98,19 +97,8 @@ class DtesImport implements ToModel, WithStartRow, WithHeadingRow
                     $purchase_order->cenabast = 1;
                     $purchase_order->save();
                 }
-
             }
-
-
         }
-
-        
-
-        
-
-
         return Dte::updateOrCreate($array_clave, $array_variable);
-
-        
     }
 }

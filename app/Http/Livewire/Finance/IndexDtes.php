@@ -169,15 +169,6 @@ class IndexDtes extends Component
     }
 
     /**
-     * Toggle Cenabaste
-     */
-    public function toggleCenabast(Dte $dte)
-    {
-        $dte->cenabast = !$dte->cenabast;
-        $dte->save();
-    }
-
-    /**
      * Set establishment
      */
     public function setEstablishment()
@@ -237,9 +228,7 @@ class IndexDtes extends Component
             $dte->confirmation_user_id !== null &&
             $dte->confirmation_at !== null &&
             $dte->confirmation_signature_file !== null &&
-            $dte->upload_user_id !== null &&
-            $dte->cenabast_signed_pharmacist !== null &&
-            $dte->cenabast_signed_boss !== null
+            $dte->upload_user_id !== null
         ) 
         
         {
@@ -252,9 +241,7 @@ class IndexDtes extends Component
                     'confirmation_at' => $dte->confirmation_at,
                     'confirmation_signature_file' => $dte->confirmation_signature_file,
                     'upload_user_id' => $dte->upload_user_id,
-                    'cenabast_signed_pharmacist' => $dte->cenabast_signed_pharmacist,
-                    'cenabast_signed_boss' => $dte->cenabast_signed_boss,
-                ]);                
+                ]);
             }
         }
         $this->showEdit = null;
