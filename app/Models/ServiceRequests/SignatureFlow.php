@@ -48,6 +48,6 @@ class SignatureFlow extends Model implements Auditable
 
     public function organizationalUnit()
     {
-        return $this->belongsTo('App\Rrhh\OrganizationalUnit','ou_id');
+        return $this->belongsTo('App\Rrhh\OrganizationalUnit','ou_id')->withTrashed();
     }
 }
