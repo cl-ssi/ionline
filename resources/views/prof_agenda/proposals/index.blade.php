@@ -6,7 +6,7 @@
 
 @include('prof_agenda.partials.nav')
 
-<h3 class="inline">Propuestas
+<h3 class="inline">Listado de propuestas
 	<a href="{{ route('prof_agenda.proposals.create') }}" class="btn btn-primary">Crear</a>
 </h3>
 

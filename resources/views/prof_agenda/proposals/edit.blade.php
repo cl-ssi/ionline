@@ -78,6 +78,8 @@
 
 @livewire('prof-agenda.add-proposal-detail',['proposal' => $proposal])
 
+@livewire('prof-agenda.clone-proposal',['proposal' => $proposal])
+
 @livewire('prof-agenda.proposal-calendar',['proposal' => $proposal])
 @stack('scripts')
 
