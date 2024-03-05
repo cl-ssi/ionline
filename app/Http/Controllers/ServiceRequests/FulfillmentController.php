@@ -241,12 +241,12 @@ class FulfillmentController extends Controller
             logger("El ServiceRequest no tiene signature flows creados", ['id' => $serviceRequest->id]);
         }
 
-        foreach($serviceRequest->SignatureFlows as $signatureFlows){
-            if($signatureFlows->status != 1){
-                session()->flash('warning', 'La solicitud de contratación aún no ha sido aprobada, una vez que esta este aprobada su circuito de firmas completamente, podrá ingresar a esta pantalla.');
-                return redirect()->back();
-            }
-        }
+        // foreach($serviceRequest->SignatureFlows as $signatureFlows){
+        //     if($signatureFlows->status != 1){
+        //         session()->flash('warning', 'La solicitud de contratación aún no ha sido aprobada, una vez que esta este aprobada su circuito de firmas completamente, podrá ingresar a esta pantalla.');
+        //         return redirect()->back();
+        //     }
+        // }
 
         //se hizo esto para los casos en que no existan fulfillments
         if ($serviceRequest->fulfillments->count() == 0) {
