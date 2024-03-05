@@ -23,19 +23,23 @@
 
 
     <div class="row g-2 mb-3">
-        <div class="col-md-2">
-            <label for="for-establishment" class="form-label">Establecimiento</label>
+        <div class="col-md-1">
+            <label for="for-establishment" class="form-label">Estab.</label>
             <select class="form-select" wire:model.defer="filter.establishment">
-                <option value="">Todos los Establecimientos</option>
+                <option value="">Todos</option>
                 @foreach ($establishments as $name => $id)
                     <option value="{{ $name }}">{{ $id }}</option>
                 @endforeach
-                <option value="?">Sin establecimiento</option>
+                <option value="?">Sin</option>
             </select>
         </div>
         <div class="col-md-1">
             <label for="for-id" class="form-label">ID</label>
             <input type="text" class="form-control" wire:model.defer="filter.id" placeholder="id" autocomplete="off">
+        </div>
+        <div class="col-md-1">
+            <label for="for-emisor" class="form-label">Rut</label>
+            <input type="text" class="form-control" wire:model.defer="filter.emisor" placeholder="emisor">
         </div>
         <div class="col-md-1">
             <label for="for-folio" class="form-label">Folio</label>

@@ -59,6 +59,18 @@ class IndexDtes extends Component
                     case 'id':
                         $query->where('id', $value);
                         break;
+                    case 'emisor':
+                        /** 
+                         * Algoritmo para obtener convertir $value que tiene XXXXXXXXX  
+                         * en formato rut chileno XX.XXX.XXX-X 
+                         **/
+                        $value = preg_replace('/[^0-9K]/', '', strtoupper(trim($value)));
+                        $dv = substr($value, -1);
+                        $id = substr($value, 0, -1);
+                        $value = $this->filter['emisor'] = number_format($id, 0, '', '.').'-'.$dv;
+
+                        $query->where('emisor', $value);
+                        break;
                     case 'folio':
                         $query->where('folio', $value);
                         break;
