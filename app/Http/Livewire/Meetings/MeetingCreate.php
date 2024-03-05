@@ -12,12 +12,19 @@ use App\Models\Meetings\Grouping;
 use App\Models\Meetings\Commitment;
 use App\User;
 use App\Rrhh\OrganizationalUnit;
+use App\Rrhh\Authority;
+use App\Models\Requirements\Requirement;
+use App\Models\Requirements\Event;
+
+use App\Notifications\Requirements\NewSgr;
 
 class MeetingCreate extends Component
 {
+    public $form;
+    
     public $date, $type, $subject, $mechanism, $start_at, $end_at;
     public $groupings, $typeGrouping, $nameGrouping;
-    public $commitments, $commitmentDescription, $typeResponsible, $closingDate;
+    public $commitments, $commitmentDescription, $typeResponsible, $priority, $closingDate;
 
     /* Meeting to edit */
     public $meetingToEdit;
@@ -49,10 +56,8 @@ class MeetingCreate extends Component
                     'id'  =>  $this->idMeeting,
                 ],
                 [
-                    'status'                => 'pending',
-                    'user_creator_id'       => auth()->id(), 
-                    // 'user_responsible_id'   => $this->searchedUser->id, 
-                    // 'ou_responsible_id'     => $this->searchedUser->organizational_unit_id,
+                    'status'                => 'saved',
+                    'user_creator_id'       => auth()->id(),
                     'establishment_id'      => auth()->user()->organizationalUnit->establishment_id,
                     'date'                  => $this->date,
                     'type'                  => $this->type,
@@ -91,7 +96,9 @@ class MeetingCreate extends Component
                     'type'                  => $commitment['type'],
                     'commitment_user_id'    => $commitment['commitment_user_id'],
                     'commitment_ou_id'      => $commitment['commitment_ou_id'],
+                    'priority'              => $commitment['priority'],
                     'closing_date'          => $commitment['closing_date'],
+                    'priority'              => $commitment['priority'],
                     'meeting_id'            => $meeting->id,
                     'user_id'               => $commitment['user_id']
                 ]
@@ -137,7 +144,6 @@ class MeetingCreate extends Component
     public function setGroupings(){
         if($this->meetingToEdit){
             foreach($this->meetingToEdit->groupings as $grouping){
-            // foreach($this->groupings as $grouping){
                 $this->groupings[] = [
                     'id'            => $grouping->id,
                     'type'          => $grouping->type,
@@ -171,6 +177,7 @@ class MeetingCreate extends Component
             'commitment_ou_id'      => ($this->typeResponsible == 'ou') ? $this->searchedCommitmentOu->id : null,
             'commitment_ou_name'    => ($this->typeResponsible == 'ou') ? $this->searchedCommitmentOu->name : null,
             'closing_date'          => $this->closingDate,
+            'priority'              => $this->priority,
             'requirement_id'        => '',
             'user_id'               => auth()->id()
         ];
@@ -187,6 +194,7 @@ class MeetingCreate extends Component
                     'commitment_user_name'  => ($commitment->commitment_user_id) ? $commitment->commitmentUser->FullName : null,
                     'commitment_ou_id'      => $commitment->commitment_ou_id,
                     'commitment_ou_name'    => ($commitment->commitment_ou_id) ? $commitment->commitmentOrganizationalUnit->name : null,
+                    'priority'              => $commitment->priority,
                     'closing_date'          => $commitment->closing_date,
                     'requirement_id'        => $commitment->requirement_id,
                     'user_id'               => $commitment->user_id
@@ -206,6 +214,60 @@ class MeetingCreate extends Component
         else{
             unset($this->commitments[$key]);
         }
+    }
+
+    public function sentSgr(){
+        /** Crear el requerimiento */
+        foreach($this->commitments as $key => $commitment){
+            $to_authority = Authority::getAmIAuthorityOfMyOu(today(),'manager',$commitment['commitment_user_id']);
+
+            $requirement = Requirement::create([
+                'subject'       => $this->meetingToEdit->subject,
+                'priority'      => $commitment['priority'],
+                'status'        => 'creado',
+                'limit_at'      => $commitment['closing_date'],
+                'user_id'       => auth()->id(),
+                'parte_id'      => null,
+                'group_number'  => null,
+                'to_authority'  => $to_authority,
+                'category_id'   => null,
+            ]);
+
+            $toUser = User::find($commitment['commitment_user_id']);
+
+            $event = Event::create([
+                'body'              => $commitment['description'],
+                'status'            => 'creado',
+                'from_user_id'      => auth()->id(),
+                'form_ou_id'        => auth()->user()->organizational_unit_id,
+                'to_user_id'        => $commitment['commitment_user_id'],
+                'to_ou_id'          => $toUser ->organizational_unit_id,
+                'requirement_id'    => $requirement->id,
+                'to_authority'      => $to_authority,
+            ]);
+
+            /** Notifica por correo al destinatario, en cola */
+            $toUser->notify(new NewSgr($requirement, $event));
+
+            /** Marca los eventos como vistos */
+            $requirement->setEventsAsViewed;
+
+            // SE GUARDA EL ID DEL REQUIREMENT EN REUNION
+            $commitmentStatus =  Commitment::find($commitment['id']);
+            $commitmentStatus->requirement_id = $requirement->id;
+            $commitmentStatus->save();
+        }
+
+        // SE GUARDA STATUS EN REUNION
+        $this->meetingToEdit->status = 'sgr';
+        $this->meetingToEdit->save();
+    }
+
+    public function showSgr($key){
+        $itemToShow = $this->commitments[$key];
+        $req = Requirement::find($itemToShow['requirement_id']);
+
+        return redirect()->route('requirements.show', $req->id);
     }
 
     public function searchedCommitmentUser(User $user){

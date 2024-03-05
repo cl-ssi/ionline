@@ -36,20 +36,9 @@ class Meeting extends Model implements Auditable
                 return 'Guardado';
                 break;
 
-            case 'pending':
-                return 'Pendiente';
+            case 'sgr':
+                return 'Derivado SGR';
                 break;
-            /*
-            case 'complete':
-                return 'Finalizado';
-                break;
-            case 'rejected':
-                return 'Rechazado';
-                break;
-            case 'manual':
-                return 'Carga Manual';
-                break;
-            */
         }
     }
 
