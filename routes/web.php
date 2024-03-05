@@ -1866,16 +1866,6 @@ Route::prefix('warehouse')->as('warehouse.')->middleware(['auth', 'must.change.p
         });
     });
 
-    Route::prefix('cenabast')->as('cenabast.')->group(function () {
-        Route::get('index/{tray?}', CenabastIndex::class)->name('index');
-        Route::post('/save-file/{dte}', [StoreController::class, 'saveFile'])->name('saveFile');
-        Route::get('/download-file/{dte}', [StoreController::class, 'downloadFile'])->name('downloadFile');
-        Route::get('/download-signed/{dte}/dte', [StoreController::class, 'downloadSigned'])->name('download.signed');
-        Route::delete('/delete-file/{dte}', [StoreController::class, 'deleteFile'])->name('deleteFile');
-        Route::get('/callback/{dte}/dte', [StoreController::class, 'callback'])->name('callback');
-        Route::post('/bypass/{dte}', [StoreController::class, 'bypass'])->name('bypass');
-    });
-
     Route::prefix('visation_contract_manager')->as('visation_contract_manager.')->group(function () {
         Route::get('/{tray?}', [VisationContractManager::class, 'index'])->name('index');
         Route::post('/accept/{control}', [VisationContractManager::class, 'accept'])->name('accept');

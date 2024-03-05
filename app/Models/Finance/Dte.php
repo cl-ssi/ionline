@@ -113,11 +113,9 @@ class Dte extends Model implements Auditable
         //'confirmation_observation',
         'confirmation_signature_file',
 
-
-
         'dte_id',
 
-        'cenabast',
+        /** Estas 4 ya no deberian usarse, eran del modulo de warehouse */
         'cenabast_reception_file',
         'cenabast_signed_pharmacist',
         'cenabast_signed_boss',

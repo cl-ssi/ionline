@@ -163,43 +163,8 @@
                         {{ $dte->estado_reclamo }}
                     </td>
                     <td class="small">
-                        <!--
-                            Acá deben ir tres cosas.
-                            1. Actas de recepción emitidas en el módulo de cenabast
-                            2. Actas de recepción emitidas y firmadas en bodega
-                            3. Actas de recepción de servicios emitidas en abastecimiento
-
-                            Todo lo anterior se reemplaza por recepciones (y)
-                        -->
-
-                        <!-- Punto 1 -->
-                        {{--
-                        @if ($dte->cenabast_reception_file)
-                            <a class="btn btn-sm btn-outline-primary" target="_blank"
-                                href="{{ route('warehouse.cenabast.download.signed', $dte) }}"
-                                title="Acta de recepción CENABAST">
-                                <i class="fas fa-file"></i> CNB
-                            </a>
-                        @endif
-                        --}}
-
-                        <!-- Punto 2 -->
-                        <!-- Punto 3 -->
-
-                        <!-- Esto ya no debería ir, está comentado -->
-                        {{-- 
-                        @foreach ($dte->controls as $control)
-                            <a class="btn btn-sm btn-outline-primary"
-                                href="{{ route('warehouse.control.show', $control) }}" target="_blank">
-                                #{{ $control->id }}
-                            </a>
-                        @endforeach 
-                        --}}
-
-
-                        <!-- Nuevo módulo de Recepciones -->
+                         <!-- Nuevo módulo de Recepciones -->
                         @include('finance.payments.partials.receptions-info')
-
                     </td>
 
                     <td class="small">
