@@ -155,7 +155,17 @@
                         <th class="text-center">{{ $loop->iteration }}</th>
                         <td style="text-align: justify;">{{ $commitment['description'] }}</td>
                         <td class="text-center">{{ ($commitment['commitment_user_id']) ?  $commitment['commitment_user_name'] : $commitment['commitment_ou_name'] }}</td>
-                        <td class="text-center">{{ $commitment['closing_date'] }}</td>
+                        <td class="text-center">
+                            {{ $commitment['closing_date'] }} <br>
+                            @switch($commitment['priority'])
+                                @case('normal')
+                                    <span class="badge text-bg-success">{{ $commitment['priority'] }}</span>
+                                    @break
+                                @case('urgente')
+                                    <span class="badge text-bg-danger">{{ $commitment['priority'] }}</span>
+                                    @break
+                            @endswitch
+                        </td>
                         <td class="text-center">
                             <a href=""
                                 class="btn btn-outline-secondary btn-sm">
@@ -223,7 +233,16 @@
             @endif
         </fieldset>
 
-        <fieldset class="form-group col-12 col-sm-4">
+        <fieldset class="col-12 col-md-2">
+            <label for="for-mecanism">Prioridad</label>
+            <select class="form-select" wire:model="priority">
+                <option value="">Seleccionar</option>
+                <option value="normal">Normal</option>
+                <option value="urgente">Urgente</option>
+            </select>
+        </fieldset>
+
+        <fieldset class="col-12 col-sm-2">
             <label for="for_closing_date">Fecha Límite</label>
             <input type="date" class="form-control" wire:model.defer="closingDate">
         </fieldset>
@@ -245,8 +264,10 @@
                 <i class="fas fa-save"></i> Guardar
             </button>
 
-            @if($meetingToEdit->StatusValue == 'Guardado')
-                <button wire:click="save" class="btn btn-success float-end me-3" type="button">
+            @if($meetingToEdit && $meetingToEdit->StatusValue == 'Guardado')
+                <button class="btn btn-success float-end me-3" 
+                    type="button"
+                    wire:click="sentSgr">
                     <i class="fas fa-rocket"></i> Cerrar Reunión
                 </button>
             @endif
