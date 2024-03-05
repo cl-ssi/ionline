@@ -176,9 +176,9 @@
                                 <i class="fas fa-trash-alt fa-fw"></i>
                             </a>
                             @if($commitment['requirement_id'])
-                            <a class="btn btn-primary btn-sm">
-                                <i class="fas fa-rocket"></i> SGR
-                            </a>
+                                <a class="btn btn-primary btn-sm" wire:click="showSgr({{ $key }})" target="_blank">
+                                    <i class="fas fa-rocket"></i> SGR
+                                </a>
                             @endif
                         </td>
                     </tr>
@@ -260,9 +260,11 @@
 
     <div class="row g-3">
         <div class="col-12">
+            @if($form == 'create' || (($meetingToEdit && $meetingToEdit->StatusValue != 'Derivado SGR')))
             <button wire:click="save" class="btn btn-primary float-end" type="button">
                 <i class="fas fa-save"></i> Guardar
             </button>
+            @endif
 
             @if($meetingToEdit && $meetingToEdit->StatusValue == 'Guardado')
                 <button class="btn btn-success float-end me-3" 
