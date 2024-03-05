@@ -229,7 +229,7 @@ class ImageService
         /**
          * Add the signer's name to the image
          */
-        imagettftext($imagen, $fontSize + 15, 0, $xAxis - 2, $yPading * 2.6 + $marginTop + 0.3, $textColorAzul, $this->fontBold, $user->shortName);
+        imagettftext($imagen, $fontSize + 15, 0, $xAxis - 2, round($yPading * 2.6 + $marginTop + 0.3), $textColorAzul, $this->fontBold, $user->shortName);
 
         /**
          * Add the organizational unit to the image
@@ -239,7 +239,7 @@ class ImageService
         /**
          * Add the name of the app on the image
          */
-        imagettftext($imagen, $fontSize + 1, 0, $xAxis, $yPading * 5.0 + $marginTop + 0.5, $textColor, $this->fontRegular, env('APP_SS'));
+        imagettftext($imagen, $fontSize + 1, 0, $xAxis, round($yPading * 5.0 + $marginTop + 0.5), $textColor, $this->fontRegular, env('APP_SS'));
 
         /**
          *  Generate the image in base 64
