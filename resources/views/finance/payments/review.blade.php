@@ -45,16 +45,23 @@
                 <th>FR</th>
                 <th>Adjuntos</th>
                 <th>Recepción</th>
-                <th>Compromiso SIGFE</th>
-                <th>Devengo SIGFE</th>
+                <th>SIGFE</th>                
+                <th>Observaciones</th>
                 <th>Revisar</th>
-                <th>Devolver</th>
             </tr>
         </thead>
         <tbody>
             @foreach ($dtes as $dte)
                 <tr>
-                    <td class="small">{{ $dte->id }}</td>
+                    <td class="small">
+                        {{ $dte->id }}
+                        <br><br>
+                        <a href="{{ route('finance.payments.returnToDteInbox', ['dte' => $dte->id]) }}"
+                            class="btn btn-sm btn-outline-danger">
+                            <i class="fas fa-arrow-left"></i>
+                        </a>
+
+                    </td>
                     <td class="small">{{ $dte->establishment?->alias }}</td>
                     <td class="small">
                         @include('finance.payments.partials.dte-info')
@@ -73,27 +80,24 @@
                         @include('finance.payments.partials.receptions-info')
                     </td>
                     <td class="small">
+                        <small>Compromiso Sigfe</small>
                         @livewire('finance.sigfe-folio-compromiso', ['dte' => $dte], key($dte->id))
-                        <hr>
                         @livewire('finance.sigfe-archivo-compromiso', ['dte' => $dte], key($dte->id))
+                        <hr>
+                        <small>Devengo Sigfe</small>
+                        @livewire('finance.sigfe-folio-devengo', ['dte' => $dte], key($dte->id))
+                        @livewire('finance.sigfe-archivo-devengo', ['dte' => $dte], key($dte->id))
                     </td>
                     <td class="small">
-                        @livewire('finance.sigfe-folio-devengo', ['dte' => $dte], key($dte->id))
-                        <hr>
-                        @livewire('finance.sigfe-archivo-devengo', ['dte' => $dte], key($dte->id))
+                        @livewire('finance.dte-observations', ['dte' => $dte, 'rows' => 10, 'cols' => 50], key($dte->id))
                     </td>
                     <td class="small">
                         <a href="{{ route('finance.payments.sendToReadyInbox', ['dte' => $dte->id]) }}"
                             class="btn btn-sm btn-outline-success">
-                            <i class="fas fa-hand-holding-usd"></i> Pendientes para Pagos
+                            <i class="fas fa-hand-holding-usd"></i>
                         </a>
                     </td>
-                    <td class="small">
-                        <a href="{{ route('finance.payments.returnToDteInbox', ['dte' => $dte->id]) }}"
-                            class="btn btn-sm btn-outline-danger">
-                            <i class="fas fa-arrow-left"></i> Retornar a DTE
-                        </a>
-                    </td>
+
                 </tr>
             @endforeach
         </tbody>

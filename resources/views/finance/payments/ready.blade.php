@@ -6,9 +6,12 @@
 
     <form action="{{ route('finance.payments.ready') }}" method="GET">
         <div class="row g-2 mb-3">
-            <div class="col-md-2">
+            <div class="col-md-1">
                 <input type="text" class="form-control" name="id" placeholder="id" value="{{ old('id') }}"
                     autocomplete="off">
+            </div>
+            <div class="col-md-2">            
+                <input type="text" class="form-control" name="emisor" value="{{ old('emisor') }}" placeholder="rut emisor">
             </div>
             <div class="col-md-2">
                 <input type="text" class="form-control" name="folio" placeholder="folio" value="{{ old('folio') }}"
@@ -36,11 +39,12 @@
                 <th rowspan="2">Recepcion</th>
                 <th rowspan="2">SIGFE</th>
                 <th colspan="3">Cargas Excel</th>
+                <th rowspan="2">Observaciones</th>
             </tr>
             <tr>
-                <th>Proveedores</th>
-                <th>Cartera</th>
-                <th>Requ.</th>
+                <th>Prov.</th>
+                <th>Cart.</th>
+                <th>Req.</th>
             </tr>
         </thead>
 
@@ -85,7 +89,7 @@
                                 'dte' => $dte,
                                 'onlyRead' => 'true'
                             ],
-                            key($dte->id))                            
+                            key($dte->id))
                             @livewire('finance.sigfe-archivo-compromiso', 
                             [
                                 'dte' => $dte,
@@ -125,6 +129,9 @@
                                 <i class="fas fa-times-circle text-danger"></i>
                             @endif
                         </td>
+                        <td>
+                            @livewire('finance.dte-observations', ['dte' => $dte], key($dte->id))
+                        </td>
                     </tr>
 
                 @endforeach
@@ -135,4 +142,9 @@
         {{ $dtes->links() }}
 
     </div>
+@endsection
+
+
+@section('custom_js')
+
 @endsection

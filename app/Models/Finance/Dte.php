@@ -148,6 +148,8 @@ class Dte extends Model implements Auditable
         'excel_proveedor',
         'excel_cartera',
         'excel_requerimiento',
+
+        'observation',
     ];
 
     /**
