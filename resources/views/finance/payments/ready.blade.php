@@ -34,24 +34,34 @@
                 <th rowspan="2">FR</th>
                 <th rowspan="2">Adjuntos</th>
                 <th rowspan="2">Recepcion</th>
-                <th rowspan="2">Compromiso SIGFE</th>
-                <th rowspan="2">Devengo SIGFE</th>
+                <th rowspan="2">SIGFE</th>
                 <th colspan="3">Cargas Excel</th>
-                @canany(['be god', 'Payments: return to review'])
-                    <th rowspan="2">Retornar a Bandeja</th>
-                @endcanany
             </tr>
             <tr>
-                <th>Pagos a Proveedores</th>
-                <th>Cartera Financiera Contable</th>
-                <th>Requerimiento</th>
+                <th>Proveedores</th>
+                <th>Cartera</th>
+                <th>Requ.</th>
             </tr>
         </thead>
 
             <tbody>
                 @foreach ($dtes as $dte)
                     <tr>
-                        <td class="small">{{ $dte->id }}</td>
+                        <td class="small">
+                            {{ $dte->id }}
+                            <br>
+                            @canany(['be god', 'Payments: return to review'])
+                                <form action="{{ route('finance.payments.returnToReview', ['dte' => $dte->id]) }}"
+                                        method="POST">
+                                        @csrf
+                                        @method('PUT')
+                                        <button type="submit" class="btn btn-sm btn-primary"
+                                            onclick="return confirm('¿Está seguro que regresar a la bandeja de revisión?, esto solamente deberá realizarlo en caso de error en los datos del DTE')">
+                                            <i class="fas fa-arrow-circle-left"></i>
+                                        </button>
+                                </form>
+                            @endcanany
+                        </td>
                         <td>
                             @include('finance.payments.partials.dte-info')
                         </td>
@@ -69,20 +79,20 @@
                             @include('finance.payments.partials.receptions-info')
                         </td>
                         <td class="small">
+                            <small>Compromiso</small>
                             @livewire('finance.sigfe-folio-compromiso', 
                             [
                                 'dte' => $dte,
                                 'onlyRead' => 'true'
                             ],
-                            key($dte->id))
-                            <hr>
+                            key($dte->id))                            
                             @livewire('finance.sigfe-archivo-compromiso', 
                             [
                                 'dte' => $dte,
                                 'onlyRead' => 'true'
                                 ], key($dte->id))
-                        </td>
-                        <td class="small">
+                            <hr>
+                            <small>Devengo</small>
                             @livewire('finance.sigfe-folio-devengo', [
                                 'dte' => $dte,
                                 'onlyRead' => 'true'
@@ -115,20 +125,6 @@
                                 <i class="fas fa-times-circle text-danger"></i>
                             @endif
                         </td>
-
-                        @canany(['be god', 'Payments: return to review'])
-                            <td>
-                                <form action="{{ route('finance.payments.returnToReview', ['dte' => $dte->id]) }}"
-                                    method="POST">
-                                    @csrf
-                                    @method('PUT')
-                                    <button type="submit" class="btn btn-primary"
-                                        onclick="return confirm('¿Está seguro que regresar a la bandeja de revisión?, esto solamente deberá realizarlo en caso de error en los datos del DTE')">
-                                        <i class="fas fa-arrow-circle-left"></i>
-                                    </button>
-                                </form>
-                            </td>
-                        @endcanany
                     </tr>
 
                 @endforeach
