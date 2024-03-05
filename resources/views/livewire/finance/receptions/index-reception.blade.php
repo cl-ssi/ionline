@@ -81,7 +81,9 @@
                     <th>Total</th>
                     <th>Responsable</th>
                     <th>Fecha Recepción</th>
+                    @canany(['be god', 'Receptions: upload to mercado público'])
                     <th>Mercado Público</th>
+                    @endcanany
                     <th>Orig.</th>
                     <th>Aprobaciones</th>
                     <th>Número</th>
@@ -124,9 +126,11 @@
                         <td class="text-center">
                             {{ $reception->date?->format('Y-m-d') }}
                         </td>
+                        @canany(['be god', 'Receptions: upload to mercado público'])
                         <td class="text-center">
                             <input type="checkbox" {{ $reception->mercado_publico ? "checked" : "" }} wire:click="toggleMercadoPublico({{ $reception->id }})"  >
                         </td>
+                        @endcanany
                         <td>
                             @if($reception->rejected == false)
                                 @if($reception->purchase_order)
