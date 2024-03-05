@@ -21,7 +21,7 @@ return new class extends Migration
             $table->foreignId('estament_id')->nullable()->constrained('cfg_estaments');
             $table->string('degree')->nullable();
             $table->foreignId('contractual_condition_id')->nullable()->constrained('cfg_contractual_conditions');
-            $table->foreignId('organizationl_unit_id')->nullable()->constrained('organizational_units');
+            $table->foreignId('organizational_unit_id')->nullable()->constrained('organizational_units');
             $table->foreignId('establishment_id')->nullable()->constrained('establishments');
             $table->string('email')->nullable();
             $table->string('telephone')->nullable();
