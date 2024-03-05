@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
 
             $table->text('description')->nullable();
+            $table->string('priority')->nullable();
             $table->string('type')->nullable();
             $table->foreignId('commitment_user_id')->nullable()->constrained('users');
             $table->foreignId('commitment_ou_id')->nullable()->constrained('organizational_units');
