@@ -243,7 +243,7 @@ class FulfillmentController extends Controller
 
         foreach($serviceRequest->SignatureFlows as $signatureFlows){
             if($signatureFlows->status != 1){
-                session()->flash('warning', 'La solicitud no está aprobada completamente. No tiene acceso.');
+                session()->flash('warning', 'La solicitud de contratación aún no ha sido aprobada, una vez que esta este aprobada su circuito de firmas completamente, podrá ingresar a esta pantalla.');
                 return redirect()->back();
             }
         }
