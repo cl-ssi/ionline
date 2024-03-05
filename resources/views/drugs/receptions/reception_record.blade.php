@@ -16,7 +16,7 @@
 <p class="justify indent">
     En Iquique, a <strong>{{ $reception->date->day }} de {{ $reception->date->monthName }} del {{ $reception->date->year }}</strong>
     siendo las <strong>{{ $reception->date->format('H:i') }}</strong> horas
-    en la Unidad de Drogas de Servicio de Salud de Iquique,
+    en la Unidad de Drogas de Servicio de Salud Tarapacá,
     en conformidad a la ley 20.000/2005, se ha recibido el
     Ordinario N° <strong>{{ $reception->document_number }}</strong>
     de <strong>{{ $reception->documentPoliceUnit->name }}</strong>
@@ -26,7 +26,7 @@
     <strong>{{ $reception->partePoliceUnit->name }}</strong>,
     @endif
     a <strong>{{ $reception->court->name }}</strong>
-    para muestreo en el Servicio de Salud de Iquique,
+    para muestreo en el Servicio de Salud Tarapacá,
     las siguientes sustancias:
 </p>
 
