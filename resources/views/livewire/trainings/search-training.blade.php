@@ -1,29 +1,29 @@
 <div>
-    <div class="table-responsive">
+<div class="table-responsive">
         <table class="table table-bordered table-striped table-sm small">
             <thead>
                 <tr class="text-center">
                     <th>ID</th>
                     <th>Estado</th>
                     <th>Fecha Creación</th>
-                    <th>Fecha Reunión</th>
+                    <th>Funcionario</th>
                     <th>Tipo</th>
                     <th>Asunto</th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
-                @foreach($meetings as $key => $meeting)
+                @foreach($trainings as $key => $training)
                 <tr>
-                    <th class="text-center">{{ $meeting->id }}</th>
+                    <th class="text-center">{{ $training->id }}</th>
                     <td width="7%" class="text-center">
-                        @switch($meeting->StatusValue)
+                        @switch($training->StatusValue)
                             @case('Guardado')
-                                <span class="badge text-bg-primary">{{ $meeting->StatusValue }}</span>
+                                <span class="badge text-bg-primary">{{ $training->StatusValue }}</span>
                                 @break
 
-                            @case('Derivado SGR')
-                                <span class="badge text-bg-primary">{{ $meeting->StatusValue }} <i class="fas fa-rocket"></i></span>
+                            @case('Pendiente')
+                                <span class="badge text-bg-warning">{{ $training->StatusValue }}</span>
                                 @break
                         
                             @case(2)
@@ -34,7 +34,13 @@
                                 Default case...
                         @endswitch
                     </td>
-                    <td width="7%">{{ $meeting->created_at->format('d-m-Y H:i:s') }}</td>
+                    <td width="7%">{{ $training->created_at->format('d-m-Y H:i:s') }}</td>
+                    <td>
+                        {{ $training->userTraining->TinnyName }} <br>
+                        <small>{{ ($training->userTrainingOu) ? $training->userTrainingOu->name : '' }}</small> <br>
+                        <small><b>{{ $training->userTrainingEstablishment->name }}</b></small>
+                    </td>
+                    {{--
                     <td width="7%">{{ $meeting->date }}</td>
                     <td class="text-center">{{ $meeting->TypeValue }}</td>
                     <td>{{ $meeting->subject }}</td>
@@ -48,6 +54,7 @@
                             <i class="fas fa-trash-alt fa-fw"></i>
                         </a>
                     </td>
+                    --}}
                 </tr>
                 @endforeach
             </tbody>

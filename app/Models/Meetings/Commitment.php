@@ -14,7 +14,15 @@ class Commitment extends Model implements Auditable
     use \OwenIt\Auditing\Auditable;
 
     protected $fillable = [
-        'description', 'type', 'commitment_user_id', 'commitment_ou_id', 'closing_date', 'meeting_id', 'requirement_id', 'user_id'
+        'description', 
+        'type', 
+        'commitment_user_id', 
+        'commitment_ou_id', 
+        'priority',
+        'closing_date', 
+        'meeting_id', 
+        'requirement_id', 
+        'user_id'
     ];
 
     public function meeting() {

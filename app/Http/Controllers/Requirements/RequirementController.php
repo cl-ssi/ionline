@@ -1231,15 +1231,6 @@ class RequirementController extends Controller
             /** Notifica por correo al destinatario, en cola */
             $toUser->notify(new NewSgr($requirement, $event));
 
-            /** 
-             * Eliminado, porque ya no se mandarán email de forma tradaicional
-             * sino que a través de notify()
-             */
-            /** Cadena con correos de los destinatarios separados por "," */
-            // if($toUser->email) {
-            //     $emails .= $toUser->email . ',';
-            // }
-
             /** Marca los eventos como vistos */
             $requirement->setEventsAsViewed;
         }
