@@ -2847,3 +2847,18 @@ Route::post('/forgot-password', [PasswordResetController::class, 'forgotPassword
 Route::get('/reset-password/{token}', [PasswordResetController::class, 'resetPasswordToken'])->middleware('guest')->name('password.reset');
 
 Route::post('/reset-password', [PasswordResetController::class, 'resetPassword'])->middleware('guest')->name('password.update');
+
+
+
+/** Maquetas - Dummys */
+Route::get('/maquetas/bienestar', function () {
+    return view('maquetas.bienestar');
+});
+
+Route::get('/maquetas/calificaciones', function () {
+    return view('maquetas.calificaciones');
+});
+
+Route::get('/maquetas/capacitaciones', function () {
+    return view('maquetas.capacitaciones');
+});
