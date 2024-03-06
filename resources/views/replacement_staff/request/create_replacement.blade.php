@@ -119,13 +119,15 @@
     <h6 class="small"><b>4. Archivos Adjuntos</b></h6> <br>
 
     <div class="form-row">
+        {{--
         <fieldset class="form-group col-md-6">
             <div class="mb-3">
                 <label for="for_job_profile_file" class="form-label">Perfil de Cargo</label>
                 <input class="form-control" type="file" name="job_profile_file" accept="application/pdf">
             </div>
         </fieldset>
-
+        --}}
+        
         <fieldset class="form-group col-md-6">
             <div class="mb-3">
                 <label for="for_request_verification_file" class="form-label">Correo de Respaldo <small>(Autorizaciones, VB de jefaturas superiores o directas)</small></label>

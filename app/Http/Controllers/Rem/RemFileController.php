@@ -126,7 +126,6 @@ class RemFileController extends Controller
         }
     
         // Obtén la cantidad de meses hacia atrás que se desea mostrar
-        //$monthsToShow = 5; // Puedes ajustar este valor según tus necesidades
         $monthsToShow = $request->input('monthsToShow', 0);
 
     
@@ -142,9 +141,12 @@ class RemFileController extends Controller
         $periods = RemPeriod::whereIn('period', $periods_back)->get();
         $periods_count = $periods->count();
     
-        if ($periods_count == 0) {
+        if ($periods_count == 0 and $monthsToShow > 0) {
             session()->flash('danger', 'No hay asignados periodos para el REM, contactar con Departamento de Estadísticas y Gestión de la Información');
-        } else {
+        } 
+        
+        
+        if ($periods_count > 0 and $monthsToShow > 0)  {
             $remFiles = $this->getRemFiles($remEstablishments, $periods_back);
         }    
         

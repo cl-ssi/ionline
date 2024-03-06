@@ -99,13 +99,15 @@
             <input type="number" class="form-control" name="charges_number" value="1" id="for_charges_number">
         </fieldset>
     </div>
-
+    
+    {{--
     <div class="form-row">
         <fieldset class="form-group col-md-6">
             <label for="for_job_profile_file" class="form-label">Perfil de Cargo</label>
             <input class="form-control" type="file" name="job_profile_file" accept="application/pdf" required>
         </fieldset>
     </div>
+    --}}
 
     <h6 class="small"><b>4. Descripción de Unidad Organizacional</b></h6> <br>
 
