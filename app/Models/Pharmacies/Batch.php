@@ -17,6 +17,21 @@ class Batch extends Model
 
     protected $table = 'frm_batchs';
 
+    public function dispatchItems()
+    {
+        return $this->hasMany('App\Models\Pharmacies\DispatchItem');
+    }
+
+    public function purchaseItems()
+    {
+        return $this->hasMany('App\Models\Pharmacies\PurchaseItem');
+    }
+
+    public function receivingItems()
+    {
+        return $this->hasMany('App\Models\Pharmacies\ReceivingItem');
+    }
+
     /**
      * The attributes that should be mutated to dates.
      *

@@ -85,6 +85,7 @@ use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\Pharmacies\InventoryAdjustmentController;
 use App\Http\Controllers\Pharmacies\PharmacyController;
 use App\Http\Controllers\Pharmacies\PurchaseController;
+use App\Http\Controllers\Pharmacies\BatchController;
 use App\Http\Controllers\ProfAgenda\ActivityTypeController;
 use App\Http\Controllers\ProfAgenda\AgendaController;
 use App\Http\Controllers\ProfAgenda\OpenHourController;
@@ -2090,6 +2091,10 @@ Route::prefix('pharmacies')->as('pharmacies.')->middleware(['auth', 'must.change
         Route::put('deliver/{deliver}/confirm', [App\Http\Controllers\Pharmacies\DeliverController::class, 'confirm'])->name('deliver.confirm');
         Route::put('deliver/{deliver}/saveDocId', [App\Http\Controllers\Pharmacies\DeliverController::class, 'saveDocId'])->name('deliver.saveDocId');
         Route::delete('deliver/{deliver}/restore', [App\Http\Controllers\Pharmacies\DeliverController::class, 'restore'])->name('deliver.restore');
+    
+        Route::prefix('batchs')->as('batchs.')->group(function () {
+            Route::put('/{batch}/update', [BatchController::class, 'update'])->name('update');
+        });
     });
     Route::resource('products', App\Http\Controllers\Pharmacies\ProductController::class);
     Route::get('/products', IndexProducts::class)->name('products.index');

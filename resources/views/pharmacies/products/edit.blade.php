@@ -106,6 +106,49 @@
 
 </form>
 
+<hr>
+
+<h4>Lotes</h4>
+
+<div class="alert alert-warning" role="alert">
+    <li>Se actualizará la información de todas las compras, ingresos y salidas del lote modificado.</li>
+    <li>La cantidad no puede ser modificada en esta opción.</li>
+</div>
+
+@foreach($product->batchs as $batch )
+
+    <form method="POST" class="form-horizontal" action="{{ route('pharmacies.products.batchs.update', $batch) }}">
+    @csrf
+    @method('PUT')
+
+        <div class="form-row">
+
+            <fieldset class="form-group col-3">
+                <label for="for_min_stock">Lote</label>
+                <input type="text" class="form-control" value = '{{ $batch->batch }}' name="batch">
+            </fieldset>
+
+            <fieldset class="form-group col-3">
+                <label for="for_critic_stock">F.Vencimiento</label>
+                <input type="date" class="form-control" value = '{{ $batch->due_date->format("Y-m-d") }}' name="due_date">
+            </fieldset>
+
+            <fieldset class="form-group col-3">
+                <label for="for_max_stock">Cantidad</label>
+                <input type="text" class="form-control" value = '{{ $batch->count }}' name="count" disabled>
+            </fieldset>
+
+            <fieldset class="form-group col-2">
+                <label for="for_max_stock"><br></label>
+                <button type="submit" class="btn btn-primary form-control">Guardar</button>
+            </fieldset>
+
+        </div>
+
+    </form>
+
+@endforeach
+
 @endsection
 
 @section('custom_js')
