@@ -58,6 +58,27 @@
                 </div>
             </div>
 
+            @if($period)
+                <div class="col-md-1">
+                    <div class="form-group">
+                        <button class="btn btn-success mt-4"
+                            wire:click="setOkMassive()">
+                            <i class="fas fa-check"></i> Todas
+                        </button>
+                    </div>
+                </div>
+                {{--
+                <div class="col-md-1">
+                    <div class="form-group">
+                        <button class="btn btn-danger mt-4"
+                            wire:click="setRejectMassive">
+                            <i class="fas fa-ban"></i> Todas
+                        </button>
+                    </div>
+                </div>
+                --}}
+            @endif
+
 
             <div class="form-check form-switch">
                 <input class="form-check-input" type="checkbox" role="switch" wire:model="simplified" id="simplified">
@@ -209,6 +230,21 @@
                                     wire:click="reject({{ $record }})">
                                     <i class="fas fa-ban"></i>
                                 </button>
+                            @endif
+                            
+                            @if($period && is_null($record->status_sirh) && $record->status != false && $record->rrhh_at == null)
+                                @php
+                                    array_push($this->checkToOk, $record->id);
+                                @endphp
+
+                                <div class="form-check">
+                                    <input class="form-check-input" 
+                                        type="checkbox"
+                                        wire:model="checkToOk"
+                                        value="{{ $record->id }}"
+                                        id="for_ok_id"
+                                    />
+                                </div>
                             @endif
                         </td>
                         <td>

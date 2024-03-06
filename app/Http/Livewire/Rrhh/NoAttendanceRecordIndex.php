@@ -22,7 +22,8 @@ class NoAttendanceRecordIndex extends Component
     public $to;
     public $rrhh_at;
     public $simplified = false;
-
+    public $period = false;
+    public $checkToOk = [];
 
     /**
      * Registrado por rrhh
@@ -33,6 +34,17 @@ class NoAttendanceRecordIndex extends Component
         $noAttendanceRecord->rrhh_at = now();
         $noAttendanceRecord->rrhh_status = 1;
         $noAttendanceRecord->save();
+    }
+
+    /**
+     * Registrado por rrhh masivo
+     */
+    public function setOkMassive()
+    {
+        foreach($this->checkToOk as $setOk){
+            $noAttendanceRecord = NoAttendanceRecord::find($setOk);
+            $this->setOk($noAttendanceRecord);
+        }
     }
 
     /**
@@ -67,11 +79,16 @@ class NoAttendanceRecordIndex extends Component
         // $noAttendanceRecord->status = null;
         $noAttendanceRecord->save();
         $this->closeRejectForm();
-    }
 
+        $this->period = false;
+    }
 
     public function searchFuncionary()
     {
+        if($this->from != null && $this->to != null){
+            $this->period = true;
+        }
+
         $this->resetPage();
         $this->render();
         
@@ -89,6 +106,8 @@ class NoAttendanceRecordIndex extends Component
                 'after_or_equal:from', 
             ],
         ]);
+
+        $this->checkToOk = [];
     }
     
 
