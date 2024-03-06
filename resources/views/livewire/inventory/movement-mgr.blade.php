@@ -4,7 +4,8 @@
             <strong class="text-danger">Utilizar con precaución</strong>
         </div>
         <div class="col-2">
-            <select class="form-control" wire:model.defer="inventoryMovement.reception_confirmation">
+            <select class="form-select" wire:model.defer="inventoryMovement.reception_confirmation">
+                <option value="">Seleccionar</option>
                 <option value="1">Recepcionado</option>
                 <option value="0">Pendiente</option>
             </select>

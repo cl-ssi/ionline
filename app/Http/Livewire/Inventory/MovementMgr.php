@@ -17,8 +17,8 @@ class MovementMgr extends Component
     ];
 
     protected $messages = [
-        'inventoryMovement.reception_confirmation.required' => 'La fecha desde es requerida.',
-        'inventoryMovement.reception_date.required' => 'El nombre es requerido.',
+        'inventoryMovement.reception_confirmation.required' => 'La confirmacion de la recepción es requerida',
+        'inventoryMovement.reception_date.required' => 'La fecha de recepción es requerida.',
     ];
 
     /**
@@ -27,8 +27,19 @@ class MovementMgr extends Component
     public function save()
     {
         $this->inventoryMovement->save();
+        if ($this->inventoryMovement->reception_confirmation == 1)
+        {
+            $this->inventoryMovement->inventory->update(
+                [
+                    'user_responsible_id' => $this->inventoryMovement->user_responsible_id,
+                    'user_using_id' => $this->inventoryMovement->user_using_id,
+                    //'user_sender_id' => $this->inventoryMovement->user_sender_id
+                ]
+            );
+        }
         $this->message = true;
     }
+    
 
     public function render()
     {
