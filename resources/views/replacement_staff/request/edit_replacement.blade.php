@@ -134,14 +134,16 @@
                 @endif
             </div>
         </fieldset>
-
+        
+        {{--
         <fieldset class="form-group col-md-5">
             <div class="mb-3">
                 <label for="for_job_profile_file" class="form-label">Perfil de Cargo (Opcional)</label>
                 <input class="form-control" type="file" name="job_profile_file" accept="application/pdf">
             </div>
         </fieldset>
-
+        --}}
+        
         <fieldset class="col-sm-1">
             <div class="mb-3">
                 <label for="" class="form-label">&nbsp;</label>
