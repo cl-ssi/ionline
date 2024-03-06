@@ -478,6 +478,13 @@ class ReportController extends Controller
 
   public function resolutionPDFhsa(ServiceRequest $ServiceRequest)
   {
+    // validación que no permite abrir contrato si no se encuentra aprobado ciclo de firmas
+    foreach($ServiceRequest->SignatureFlows as $signatureFlows){
+        if($signatureFlows->status != 1){
+            session()->flash('warning', 'La solicitud de contratación aún no ha sido aprobada, una vez que esta este aprobada su circuito de firmas completamente, podrá generar el contrato.');
+            return redirect()->back();
+        }
+    }
 
     $formatter = new NumeroALetras();
     $ServiceRequest->gross_amount_description = $formatter->toWords($ServiceRequest->gross_amount, 0);
