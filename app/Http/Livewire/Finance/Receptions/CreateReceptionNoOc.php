@@ -70,6 +70,7 @@ class CreateReceptionNoOc extends Component
 
     public function save()
     {
+        $this->validate();
         $tipo = $this->tipoDocumentoMap[$this->reception['dte_type']];
         $dte_manual = Dte::create([
             'tipo_documento' => $this->reception['dte_type'],

@@ -143,7 +143,7 @@ class RemFileController extends Controller
         $periods_count = $periods->count();
     
         if ($periods_count == 0) {
-            //session()->flash('danger', 'No hay asignado periodos para el REM o no se ga ingresado en el filtro un valor de meses');
+            session()->flash('danger', 'No hay asignado periodos para el REM contactar con estadistica');
         } else {
             $remFiles = $this->getRemFiles($remEstablishments, $periods_back);
         }    
