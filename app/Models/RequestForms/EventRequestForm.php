@@ -105,23 +105,37 @@ class EventRequestForm extends Model implements Auditable
     }
 
     public static function createLeadershipEvent(RequestForm $requestForm){
+        $count = 1;
         $contractManagerBelongsHAH  = $requestForm->contractOrganizationalUnit->establishment_id == Parameter::get('establishment', 'HospitalAltoHospicio');
         $event                      =   new EventRequestForm();
         $event->ou_signer_user      =   $contractManagerBelongsHAH 
                                         ? ($requestForm->contractOrganizationalUnit->level > 2 ? $requestForm->contractOrganizationalUnit->getOrganizationalUnitByLevel(2)->id : ($requestForm->contractOrganizationalUnit->father->id ?? $requestForm->contract_manager_ou_id) ) 
                                         : $requestForm->contract_manager_ou_id;
-        $event->cardinal_number     =   1;
+        $event->cardinal_number     =   $count++;
         $event->status              =   'pending';
         $event->event_type          =   'leader_ship_event';
         $event->requestForm()->associate($requestForm);
         $event->save();
+
+        $tic_sst = Parameter::get('establishment', 'SSTarapaca');
+        $tic_hah = Parameter::get('establishment', 'HospitalAltoHospicio');
+
+        if( $requestForm->contract_manager_ou_id == Parameter::get('ou', 'DeptoTIC', $tic_sst) && $requestForm->request_user_ou_id == Parameter::get('ou', 'DeptoTIC', $tic_hah)){
+            $event                      =   new EventRequestForm();
+            $event->ou_signer_user      =   Parameter::get('ou', 'DeptoRRFF');
+            $event->cardinal_number     =   $count++;
+            $event->status              =   'pending';
+            $event->event_type          =   'leader_ship_event';
+            $event->requestForm()->associate($requestForm);
+            $event->save();
+        }
 
         if($requestForm->superior_chief == 1 || $contractManagerBelongsHAH){
             $event                      =   new EventRequestForm();
             $event->ou_signer_user      =   $contractManagerBelongsHAH
                                             ? Parameter::get('ou', 'SDAHAH') 
                                             : ($requestForm->contractOrganizationalUnit->father->id ?? $requestForm->contract_manager_ou_id);
-            $event->cardinal_number     =   2;
+            $event->cardinal_number     =   $count++;
             $event->status              =   'pending';
             $event->event_type          =   'superior_leader_ship_event';
             $event->requestForm()->associate($requestForm);
@@ -132,6 +146,7 @@ class EventRequestForm extends Model implements Auditable
     }
 
     public static function createPreFinanceEvent(RequestForm $requestForm) {
+        $next_event_number = $requestForm->eventRequestForms()->latest('id')->first()->cardinal_number + 1;
         // SST = prefinance_ou_id = 40
         // HAH = prefinance_ou_id = 339
         // HETG = prefinance_ou_id = 111
@@ -151,7 +166,7 @@ class EventRequestForm extends Model implements Auditable
 
         $event                      =   new EventRequestForm();
         $event->ou_signer_user      =   $ou_id;
-        $event->cardinal_number     =   $requestForm->superior_chief == 1 ? 3 : 2;
+        $event->cardinal_number     =   $next_event_number; //$requestForm->superior_chief == 1 ? 3 : 2;
         $event->status              =   'pending';
         $event->event_type          =   'pre_finance_event';
         $event->requestForm()->associate($requestForm);
@@ -160,6 +175,7 @@ class EventRequestForm extends Model implements Auditable
     }
 
     public static function createFinanceEvent(RequestForm $requestForm) {
+        $next_event_number = $requestForm->eventRequestForms()->latest('id')->first()->cardinal_number + 1;
         // SST = finance_ou_id = 40
         // HAH = finance_ou_id = 337
         // HETG = finance_ou_id = 87
@@ -179,7 +195,7 @@ class EventRequestForm extends Model implements Auditable
 
         $event                      =   new EventRequestForm();
         $event->ou_signer_user      =   $ou_id;
-        $event->cardinal_number     =   $requestForm->superior_chief == 1 ? 4 : 3;
+        $event->cardinal_number     =   $next_event_number; //$requestForm->superior_chief == 1 ? 4 : 3;
         $event->status              =   'pending';
         $event->event_type          =   'finance_event';
         $event->requestForm()->associate($requestForm);
@@ -188,6 +204,7 @@ class EventRequestForm extends Model implements Auditable
     }
 
     public static function createSupplyEvent(RequestForm $requestForm) {
+        $next_event_number = $requestForm->eventRequestForms()->latest('id')->first()->cardinal_number + 1;
         // SST = supply_sub_31_ou_id = 37
         // SST = supply_ou_id = 37
 
@@ -208,7 +225,7 @@ class EventRequestForm extends Model implements Auditable
 
         $event                      =   new EventRequestForm();
         $event->ou_signer_user      =   $ou_id;
-        $event->cardinal_number     =   $requestForm->superior_chief == 1 ? 5 : 4;
+        $event->cardinal_number     =   $next_event_number;//$requestForm->superior_chief == 1 ? 5 : 4;
         $event->status              =   'pending';
         $event->event_type          =   'supply_event';
         $event->requestForm()->associate($requestForm);
@@ -218,6 +235,7 @@ class EventRequestForm extends Model implements Auditable
 
     public static function createNewBudgetEvent(RequestForm $requestForm)
     {
+        $next_event_number = $requestForm->eventRequestForms()->latest('id')->first()->cardinal_number + 1;
         // TODO: Cambiar a parametros sin nombre de establecimiento, ver ejemplo arriba
         // $result = $requestForm->associateProgram->Subtitle->name != 31 && $requestForm->contractOrganizationalUnit->establishment_id == Parameter::where('parameter', 'HospitalAltoHospicio')->first()->value;
 
@@ -235,7 +253,7 @@ class EventRequestForm extends Model implements Auditable
 
         $event                      = new EventRequestForm();
         $event->ou_signer_user      =   $ou_id; // Abastecimiento SSI o HAH
-        $event->cardinal_number     =   $requestForm->superior_chief == 1 ? 6 : 5;
+        $event->cardinal_number     =   $next_event_number++;//$requestForm->superior_chief == 1 ? 6 : 5;
         $event->status              =   'pending';
         $event->event_type          =   'pre_budget_event';
         $event->purchaser_amount    =   $requestForm->newBudget - $requestForm->estimated_expense;
@@ -258,7 +276,7 @@ class EventRequestForm extends Model implements Auditable
         }
         $event                      =   new EventRequestForm();
         $event->ou_signer_user      =   $ou_id; // Refrendacion SSI o HAH
-        $event->cardinal_number     =   $requestForm->superior_chief == 1 ? 7 : 6;
+        $event->cardinal_number     =   $next_event_number++; //$requestForm->superior_chief == 1 ? 7 : 6;
         $event->status              =   'pending';
         $event->event_type          =   'pre_finance_budget_event';
         $event->purchaser_amount    =   $requestForm->newBudget - $requestForm->estimated_expense;
@@ -281,7 +299,7 @@ class EventRequestForm extends Model implements Auditable
         }
         $event                      = new EventRequestForm();
         $event->ou_signer_user      =   $ou_id; //Finanzas
-        $event->cardinal_number     =   $requestForm->superior_chief == 1 ? 8 : 7;
+        $event->cardinal_number     =   $next_event_number; //$requestForm->superior_chief == 1 ? 8 : 7;
         $event->status              =   'pending';
         $event->event_type          =   'budget_event';
         $event->purchaser_amount    =   $requestForm->newBudget - $requestForm->estimated_expense;
