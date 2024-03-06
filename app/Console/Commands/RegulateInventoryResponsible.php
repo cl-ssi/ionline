@@ -33,7 +33,6 @@ class RegulateInventoryResponsible extends Command
         $inventories = Inventory::all();
     
         foreach ($inventories as $inventory) {
-            // Obtener el último movimiento confirmado para el inventario
             $lastConfirmedMovement = $inventory->lastConfirmedMovement;
     
             if ($lastConfirmedMovement && $inventory->user_responsible_id !== $lastConfirmedMovement->user_responsible_id) {

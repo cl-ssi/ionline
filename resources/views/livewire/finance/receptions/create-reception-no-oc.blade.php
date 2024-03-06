@@ -22,6 +22,9 @@
             @error('digitalInvoiceFile')
                     <span class="text-danger">{{ $message }}</span>
             @enderror
+
+            <i class="fa fa-spinner fa-spin"
+                        wire:loading></i>
         </div>
 
 
@@ -46,7 +49,7 @@
         </div>
 
         <div class="form-group col-2">
-            <label for="emisor">RUT</label>
+            <label for="emisor">RUT*</label>
             <input type="text" class="form-control" id="emisor" wire:model.defer="emisor"
                 placeholder="ej: 76.278.474-2" autocomplete="off"
                 wire:loading.attr="disabled"
@@ -58,7 +61,7 @@
         </div>
 
         <div class="form-group col-4">
-            <label for="razonSocial">Razón Social</label>
+            <label for="razonSocial">Razón Social*</label>
             <input type="text" class="form-control" id="razonSocial" wire:model.defer="razonSocial"
                 autocomplete="off" wire:loading.attr="disabled"
                     wire:target="digitalInvoiceFile">
@@ -73,13 +76,16 @@
 
         <div class="col-md-2">
             <div class="form-group">
-                <label for="reception-date">Fecha de documento</label>
+                <label for="dte_date">Fecha de documento*</label>
                 <input type="date"
-                    class="form-control"
+                    class="form-control @error('reception.dte_date') is-invalid @enderror"
                     wire:model="reception.dte_date" 
                     wire:loading.attr="disabled"
                     wire:target="digitalInvoiceFile">
             </div>
+            @error('reception.dte_date')
+                    <span class="text-danger">{{ $message }}</span>
+            @enderror
         </div>
 
 
@@ -184,6 +190,58 @@
             </div>
         </div>
     </div>
+
+    <div class="row mb-3 g-2">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label>Ítems</label>
+                <div>
+                    <button class="btn btn-primary" wire:click="addItem">Agregar Ítem</button>
+                </div>
+                <div class="mt-2">
+                    @foreach ($items as $index => $item)
+                        <div class="row mb-2" wire:key="item_{{ $index }}">
+                            <div class="col-md-2">
+                                <input type="text" class="form-control" wire:model.defer="items.{{ $index }}.producto" placeholder="ej: bolsa de basura">
+                                @error("items.$index.producto")
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+
+                            <div class="col-md-2">
+                                <input type="text" class="form-control" wire:model.defer="items.{{ $index }}.unidad" placeholder="ej: centimetros">
+                                @error("items.$index.unidad")
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+                            <div class="col-md-2">
+                                <input type="number" class="form-control" wire:model.defer="items.{{ $index }}.cantidad" placeholder="Cantidad" wire:change="calculateTotal({{ $index }})">
+                                @error("items.$index.cantidad")
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+                            <div class="col-md-2">
+                                <input type="number" class="form-control" wire:model.defer="items.{{ $index }}.precioNeto" placeholder="Precio Neto" wire:change="calculateTotal({{ $index }})">
+                                @error("items.$index.precioNeto")
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+                            <div class="col-md-2">
+                                <input type="number" class="form-control" wire:model="items.{{ $index }}.total" readonly>
+                                @error("items.$index.total")
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+                            <div class="col-md-2">
+                                <button class="btn btn-danger" wire:click="removeItem({{ $index }})">Eliminar</button>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+    </div>
+
 
 
 
@@ -348,7 +406,4 @@
 
         </div>
     </div>
-    
-
-
 </div>

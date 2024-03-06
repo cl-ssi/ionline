@@ -7,6 +7,7 @@ use Livewire\WithFileUploads;
 use App\Models\Finance\Receptions\ReceptionType;
 use App\Models\Finance\Dte;
 use App\Models\Finance\Receptions\Reception;
+use App\Models\Finance\Receptions\ReceptionItem;
 use App\User;
 use App\Rrhh\OrganizationalUnit;
 
@@ -27,18 +28,23 @@ class CreateReceptionNoOc extends Component
     public $signer_id;
     public $signer_ou_id;
     public $approvals = [];
+    public $items = [];
     
 
     protected $rules = [
         'digitalInvoiceFile' => 'required|file|max:2048',
         'reception.dte_type' => 'required',
-        'reception.emisor' => 'required',
-        'reception.razonSocial' => 'required',
-        'reception.folio' => 'required|numeric|min:1',
-        'reception.montoTotal' => 'required|numeric|min:1000',
-        'reception.header_notes'    => 'nullable',
+        'reception.reception_type_id' => 'required',
         'reception.date'            => 'required|date_format:Y-m-d',
+        'reception.dte_date'            => 'required|date_format:Y-m-d',
         'approvals'                 => 'required|array|min:1',
+        'razonSocial'               => 'required',
+        'emisor'               => 'required',
+        'items.*.producto'                 => 'required|string',
+        'items.*.unidad'                 => 'required|string',
+        'items.*.cantidad'                 => 'required|numeric',
+        'items.*.precioNeto'                 => 'required|numeric',
+        'items.*.total'                 => 'required|numeric',
     ];
 
     public $tipoDocumentoMap = [
@@ -69,10 +75,12 @@ class CreateReceptionNoOc extends Component
     }
 
     public function save()
-    {
+    {        
+        
         $this->validate();
         $tipo = $this->tipoDocumentoMap[$this->reception['dte_type']];
         $dte_manual = Dte::create([
+            
             'tipo_documento' => $this->reception['dte_type'],
             'folio' => $this->folio,
             'emisor' => $this->emisor,
@@ -81,6 +89,8 @@ class CreateReceptionNoOc extends Component
             'tipo' => $tipo,
             'establishment_id' => auth()->user()->organizationalUnit->establishment_id,
         ]);
+
+        
         
         $reception = Reception::create([
             'reception_type_id' => $this->reception['reception_type_id'],
@@ -94,10 +104,21 @@ class CreateReceptionNoOc extends Component
             'dte_type' => $this->reception['dte_type'],
             'dte_number' => $this->folio,
             'dte_date' => $this->reception['dte_date'],
-            'header_notes' => $this->reception['header_notes'],
+            'header_notes' => $this->reception['header_notes'] ?? null,
             'total' => $this->montoTotal,
         ]);
+        
 
+        foreach ($this->items as $item) {
+            ReceptionItem::create([
+                'reception_id' => $reception->id,
+                'Producto' => $item['producto'],
+                'Unidad' => $item['unidad'],
+                'Cantidad' => $item['cantidad'],
+                'PrecioNeto' => $item['precioNeto'],
+                'Total' => $item['total'],
+            ]);
+        }
 
         if($this->digitalInvoiceFile) {
             $storage_path = 'ionline/finances/receptions/no_oc';
@@ -223,6 +244,37 @@ class CreateReceptionNoOc extends Component
     {
         unset($this->approvals[$position]);
     }
+
+    public function addItem()
+    {
+        $this->items[] = [
+            'producto' => '',
+            'cantidad' => '',
+            'unidad' => '',
+            'precioNeto' => '',
+            'total' => 0,
+        ];
+
+        $this->calculateTotal(count($this->items) - 1);
+    }
+    
+
+public function removeItem($index)
+{
+    unset($this->items[$index]);
+    $this->items = array_values($this->items);
+}
+
+public function calculateTotal($index)
+{
+    $item = $this->items[$index];
+    if (!empty($item['cantidad']) && !empty($item['precioNeto'])) {
+        $this->items[$index]['total'] = $item['cantidad'] * $item['precioNeto'];
+        return $this->items[$index]['total'];
+    }
+    return 0;
+}
+
 
 
 }
