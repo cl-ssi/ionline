@@ -59,6 +59,8 @@ class PharmacyController extends Controller
     public function change(Pharmacy $pharmacy){
         auth()->user()->pharmacies()->detach(auth()->user()->pharmacies()->first());
         auth()->user()->pharmacies()->attach($pharmacy);
+
+        session(['pharmacy_id' => auth()->user()->pharmacies->first()->id]);
         
         return redirect()->back()->with('success', 'Se ha cambiado la farmacia.');
     }
