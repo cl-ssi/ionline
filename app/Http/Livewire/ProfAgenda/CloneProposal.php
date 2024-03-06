@@ -50,7 +50,7 @@ class CloneProposal extends Component
     }
 
     public function mount(){
-        $this->proposals = Proposal::all();
+        $this->proposals = Proposal::doesntHave('details')->get();
     }
 
     public function render()
