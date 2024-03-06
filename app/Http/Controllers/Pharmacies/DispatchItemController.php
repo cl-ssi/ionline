@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Pharmacies\Dispatch;
 use App\Models\Pharmacies\Product;
+use App\Models\Pharmacies\Batch;
 
 class DispatchItemController extends Controller
 {
@@ -38,40 +39,51 @@ class DispatchItemController extends Controller
      */
     public function store(Request $request)
     {
-      $this->validate($request, [
-          'barcode' => 'required|string',
-          'amount' => 'required|numeric',
-          'product_id' => 'required'
-      ]);
+        $this->validate($request, [
+            'barcode' => 'required|string',
+            'amount' => 'required|numeric',
+            'product_id' => 'required'
+        ]);
 
-      // obtiene valores
-      $values = explode(" - ", $request->due_date_batch);
+        // obtiene valores
+        $values = explode(" - ", $request->due_date_batch);
 
-      $DispatchItem = new DispatchItem($request->all());
-      $DispatchItem->due_date = $values[0];
-      $DispatchItem->batch = $values[1];
-      $DispatchItem->save();
-
-      $product = Product::find($request->product_id);
-      $product->stock = $product->stock - $request->amount;
-      $product->save();
-
-      if($product->program_id == 46){ //APS ORTESIS
-        $product->load('establishments');
-        $establishment_id = Dispatch::find($request->dispatch_id)->establishment_id;
-        $pass = false;
-        foreach($product->establishments as $establishment)
-          if($establishment->id == $establishment_id){
-              $establishment->pivot->increment('stock', $request->amount);
-              $pass = true;
-          }
-        if(!$pass){
-          $product->establishments()->attach($establishment_id, ['stock' => $request->amount]);
+        $batch = Batch::where('product_id',$request->product_id)->where('due_date',$values[0])->where('batch',$values[1])->first();
+        if($batch){
+            if($request->amount > $batch->count){
+                session()->flash('warning', 'El monto que se intenta despachar es superior al disponible.');
+                return redirect()->back();
+            }
+        }else{
+            session()->flash('warning', 'No se encontró stock del lote seleccionado.');
+            return redirect()->back();
         }
-      }
 
-      session()->flash('success', 'Se ha guardado el detalle del egreso.');
-      return redirect()->route('pharmacies.products.dispatch.show', $DispatchItem->dispatch);
+        $DispatchItem = new DispatchItem($request->all());
+        $DispatchItem->due_date = $values[0];
+        $DispatchItem->batch = $values[1];
+        $DispatchItem->save();
+
+        $product = Product::find($request->product_id);
+        $product->stock = $product->stock - $request->amount;
+        $product->save();
+
+        if($product->program_id == 46){ //APS ORTESIS
+            $product->load('establishments');
+            $establishment_id = Dispatch::find($request->dispatch_id)->establishment_id;
+            $pass = false;
+            foreach($product->establishments as $establishment)
+            if($establishment->id == $establishment_id){
+                $establishment->pivot->increment('stock', $request->amount);
+                $pass = true;
+            }
+            if(!$pass){
+            $product->establishments()->attach($establishment_id, ['stock' => $request->amount]);
+            }
+        }
+
+        session()->flash('success', 'Se ha guardado el detalle del egreso.');
+        return redirect()->route('pharmacies.products.dispatch.show', $DispatchItem->dispatch);
     }
 
     /**

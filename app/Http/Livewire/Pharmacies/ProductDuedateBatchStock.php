@@ -57,11 +57,11 @@ class ProductDuedateBatchStock extends Component
   
             // se obtienen lotes desde tabla batchs
             foreach ($product->batchs as $key => $batch) {
-              $this->array[$batch->due_date->format('d-m-Y') . " - " . $batch->batch] = 0;
+              $this->array[$batch->due_date->format('Y-m-d') . " - " . $batch->batch] = 0;
             }
   
             foreach ($product->batchs as $key => $batch) {
-              $this->array[$batch->due_date->format('d-m-Y') . " - " . $batch->batch] = $batch->count;
+              $this->array[$batch->due_date->format('Y-m-d') . " - " . $batch->batch] = $batch->count;
             }
   
             // seteo de lotes
@@ -143,11 +143,11 @@ class ProductDuedateBatchStock extends Component
 
           // se obtienen lotes desde tabla batchs
           foreach ($product->batchs as $key => $batch) {
-            $this->array[$batch->due_date->format('d-m-Y') . " - " . $batch->batch] = 0;
+            $this->array[$batch->due_date->format('Y-m-d') . " - " . $batch->batch] = 0;
           }
 
           foreach ($product->batchs as $key => $batch) {
-            $this->array[$batch->due_date->format('d-m-Y') . " - " . $batch->batch] = $batch->count;
+            $this->array[$batch->due_date->format('Y-m-d') . " - " . $batch->batch] = $batch->count;
           }
 
           // seteo de lotes

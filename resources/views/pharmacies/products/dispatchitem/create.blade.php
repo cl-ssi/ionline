@@ -5,7 +5,7 @@
 
         @livewire('pharmacies.product-duedate-batch-stock',['dispatch' => $dispatch])
 
-        <button type="submit" class="btn btn-primary" @disabled($dispatch->inventory_adjustment_id)>Crear</button>
+        <button type="submit" class="btn btn-primary" @disabled($dispatch->inventory_adjustment_id)>Guardar</button>
     </form>
 @else
     <div class="alert alert-warning" role="alert">
