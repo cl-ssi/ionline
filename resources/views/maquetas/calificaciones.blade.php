@@ -167,13 +167,15 @@
 
     <div class="row mb-3 text-center">
         <div class="col-sm-4">
-            Firma Jefe Directo
+            Firma  <br>
+            Del creador
         </div>
         <div class="col-sm-4">
-            Firma Funcionario
+            Toma de Conocimiento del Funcionario <br>
+            
         </div>
         <div class="col-sm-4">
-            Fecha Notifiación
+            Fecha Notifiación <br>
         </div>
     </div>
 
@@ -209,23 +211,28 @@
             <th>Periodo</th>
             <th>Jefatura</th>
             <th>Informe</th>
-            <th>Estado</th>
+            <th>Toma de conocimiento</th>
         </tr>
     </thead>
     <tbody>
         <tr>
             <td>123</td>
-            <td>2023 Oct-Dic</td>
+            <td>Oct-Dic</td>
             <td>José Donoso Carrera</td>
             <td class="text-center"><a class="btn btn-success btn-sm" href=""><i class="bi bi-file-check"></i></a></td>
             <td class="text-success">
-                Toma de conocimiento
-                <br>Descargos:
+                2023-12-12 13:23:69<br>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="Observación" aria-label="Recipient's username" aria-describedby="button-addon2">
+                    <button class="btn btn-primary" type="button" id="button-addon2">
+                        <i class="bi bi-floppy"></i>
+                    </button>
+                </div>
             </td>
         </tr>
         <tr>
             <td>123</td>
-            <td>2024 Ene-Mar</td>
+            <td>Ene-Mar</td>
             <td>José Donoso Carrera</td>
             <td class="text-center"><a class="btn btn-success btn-sm" href=""><i class="bi bi-file-check"></i></a></td>
             <td class="text-secondary">
