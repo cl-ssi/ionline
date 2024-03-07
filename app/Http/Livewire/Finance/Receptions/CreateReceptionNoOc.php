@@ -32,6 +32,8 @@ class CreateReceptionNoOc extends Component
     public $approvals = [];
     public $items = [];
     public $showFacturaElectronicaFields = false;
+
+    public $receptionItems = [];
     
 
     protected $rules = [
@@ -304,6 +306,11 @@ class CreateReceptionNoOc extends Component
     public function toggleFacturaElectronicaFields($value)
     {
         $this->showFacturaElectronicaFields = $value === 'factura_electronica';
+    }
+
+    public function preview()
+    {
+        
     }
 
 

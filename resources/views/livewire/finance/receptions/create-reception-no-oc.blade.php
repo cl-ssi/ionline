@@ -63,7 +63,7 @@
 
         <div class="form-group col-4">
             <label for="razonSocial">Razón Social*</label>
-            <input type="text" class="form-control" id="razonSocial" wire:model.defer="razonSocial"
+            <input type="text" class="form-control" id="razonSocial" wire:model="razonSocial"
                 autocomplete="off" wire:loading.attr="disabled"
                     wire:target="digitalInvoiceFile">
             @error('razonSocial')
@@ -93,7 +93,7 @@
 
         <div class="form-group col-2">
             <label for="folio">Número</label>
-            <input type="number" class="form-control" id="folio" wire:model.defer="folio" autocomplete="off"
+            <input type="number" class="form-control" id="folio" wire:model="folio" autocomplete="off"
                 min="1" 
                 wire:loading.attr="disabled"
                 wire:target="digitalInvoiceFile">
@@ -104,7 +104,7 @@
     
     <div class="form-group col-2">
         <label for="montoNeto">Monto Neto</label>
-        <input type="number" class="form-control" id="montoNeto" wire:model.defer="montoNeto"
+        <input type="number" class="form-control" id="montoNeto" wire:model="montoNeto"
             autocomplete="off" min="1000"
             wire:loading.attr="disabled"
             wire:target="digitalInvoiceFile"
@@ -441,6 +441,220 @@
     </div>
 
 
+<hr>
+<br>
+<br>
+<br>
+        <!----------------------------------->
+        <!-- Preview del acta de recepción -->
+        <!----------------------------------->
+        <div class="row mb-3">
+            <div class="col-9">
+                <div class="bd-example m-0 border-0">
+                    <svg class="bd-placeholder-img img-thumbnail" 
+                            width="150" height="150" 
+                            xmlns="http://www.w3.org/2000/svg" 
+                            role="img" 
+                            aria-label="logo" 
+                            focusable="false">
+                        <title>Logo Institución</title>
+                        <rect width="100%" height="100%" fill="#CCCCCC"></rect>
+                        <text x="33%" y="50%" dy=".3em">
+                            Logo
+                        </text>
+                    </svg>
+                </div>
+            </div>
+            <div class="col-3 align-self-end fs-5">
+                <table class="table">
+                    <tr>
+                        <th>Número: </th>
+                        <td>
+
+                            <i>Autogenerado</i>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            Fecha:
+                        </th>
+                        <td>                        
+                            @if (key_exists('date', $reception))
+                                {{ $reception['date'] }}
+                            @else
+                                <span class="text-danger">Falta la fecha</span>
+                            @endif
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <br>
+
+        <h3 class="text-center mb-3">Acta de recepción conforme</h3>
+
+        <p style="white-space: pre-wrap;">{{ $reception['header_notes'] ?? '' }}</p>
+
+        <table class="table table-sm table-bordered">
+            <tr>
+                <th>
+                    Orden de Compra
+                </th>
+                <td>
+                    N/A
+                </td>
+                <th>
+                    Proveedor
+                </th>
+                <td>
+                    {{ $razonSocial ?? '' }}
+                </td>
+                <th>
+                    RUT Proveedor
+                </th>
+                <td>
+                    {{ $emisor ?? '' }}
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    N° Documento
+                </th>
+                <td>
+                    {{ $folio ?? '' }}
+                </td>
+                <th>
+                    Tipo de documento
+                </th>
+                <td>
+                    {!! $reception['dte_type'] ?? '<span class="text-danger">Falta el tipo de documento</span>' !!}
+                </td>
+                <th>
+                    Fecha Emisión:
+                </th>
+                <td>
+                    {{ $reception['dte_date'] ?? '' }}
+                </td>
+            </tr>
+        </table>
+
+        <table class="table table-sm table-bordered mb-3">
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Cantidad / Unidad</th>
+                    <th>Precio Unitario</th>
+                    <th>Valor Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+
+            @foreach ($items as $item)
+                @if ($item['cantidad'])
+                    <tr>
+                        <td>{{ $item['producto'] }}</td>
+                        <td>{{ $item['cantidad'] }} / {{ $item['unidad'] }}</td>
+                        <td style="text-align: right;">{{ money(floatval($item['precioNeto'])) }}</td>
+                        <td style="text-align: right;">{{ money(floatval($item['total'])) }}</td>
+                    </tr>
+                @endif
+            @endforeach
+
+            
+                <tr>
+                    <td colspan="3">
+                    </td>
+                    <td colspan="1">
+                        <table>
+                            <tr>
+                                <th width="100">Neto</th>
+                                <td>$</td>
+                                <td width="100"
+                                    style="text-align: right;">{{ money($montoNeto ?? 0) }}</td>
+                            </tr>
+                            <tr>
+                                <th>Subtotal</th>
+                                <td>$</td>
+                                <td style="text-align: right;">{{ money($montoNeto ?? 0) }}</td>
+                            </tr>
+                            @if($montoIva)
+                                <tr>
+                                    <th>IVA</th>
+                                    <td>$</td>
+                                    <td style="text-align: right;">{{ money($montoIva ?? 0) }}</td>
+                                </tr>
+                            @endif
+                            <tr>
+                                <th>Total</th>
+                                <td>$</td>
+                                <td style="text-align: right;">
+                                    <b>{{ money($montoTotal ?? 0) }}</b>
+                                </td>
+                            </tr>
+                        </table>
+                        <b>
+
+                        </b>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p style="white-space: pre-wrap;">{{ $reception['footer_notes'] ?? '' }}</p>
+        <br>
+        <br>
+        <br>
+
+        <div class="row text-center mt-3">
+            <div class="col">
+                @if (array_key_exists('left', $approvals))
+                    <b>{{ $this->approvals['left']['signerShortName'] }}</b><br>
+                    Unidad e Institución del firmante<br>
+                @endif
+            </div>
+            <div class="col">
+                @if (array_key_exists('center', $approvals))
+                    <b>{{ $this->approvals['center']['signerShortName'] }}</b><br>
+                    Unidad e Institución del firmante<br>
+                @endif
+            </div>
+            <div class="col">
+                @if (array_key_exists('right', $approvals))
+                    <b>{{ $approvals['right']['signerShortName'] }}</b><br>
+                    Unidad e Institución del firmante<br>
+                @endif
+            </div>
+        </div>
+
+        <div class="row mt-3">
+            <div class="col-6 text-danger">
+
+            </div>
+            <div class="col-6 text-end">
+                <button class="btn btn-outline-primary"
+                    wire:click="preview()">
+                    <i class="bi bi-eye"></i>
+                    Actualizar previsualización</button>
+
+                <button class="btn btn-primary"
+                    wire:click="save"
+                    wire:loading.attr="disabled">
+                    <i class="fa fa-spinner fa-spin"
+                        wire:loading></i>
+                    <i class="bi bi-save"
+                        wire:loading.class="d-none"></i>
+                    Crear
+                </button>
+            </div>
+        </div>
+
+
+
+
+
     @section('custom_js')
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="{{ asset('js/jquery.rut.chileno.js') }}"></script>
@@ -454,5 +668,3 @@
 
 
 </div>
-
-
