@@ -70,19 +70,31 @@
                 Orden de Compra
             </th>
             <td class="nowrap">
-                {{ $reception->purchase_order }}
+                @if($reception->purchaseOrder)
+                    {{ $reception->purchase_order }}
+                @else
+                    N/A
+                @endif
             </td>
             <th>
                 Proveedor
             </th>
             <td>
-                {{ $reception->purchaseOrder->json->Listado[0]->Proveedor->Nombre }}
+                @if($reception->purchaseOrder)
+                    {{ $reception->purchaseOrder->json->Listado[0]->Proveedor->Nombre }}
+                @else
+                    {{ $reception->dte?->razon_social_emisor }}
+                @endif
             </td>
             <th>
                 RUT Proveedor
             </th>
             <td class="nowrap">
-                {{ $reception->purchaseOrder->json->Listado[0]->Proveedor->RutSucursal }}
+                @if($reception->purchaseOrder)
+                    {{ $reception->purchaseOrder->json->Listado[0]->Proveedor->RutSucursal }}
+                @else
+                    {{ $reception->dte?->emisor }}
+                @endif
             </td>
         </tr>
         <tr>
@@ -109,42 +121,70 @@
 
     <br>
 
-    <table class="tabla">
-        <thead>
-            <tr>
-                <th>Producto</th>
-                <th>Cantidad / Unidad</th>
-                <th>Especificaciones Proveedor</th>
-                <th>Precio Unitario</th>
-                <th>Descuento</th>
-                <th>Cargos</th>
-                <th>Valor Total</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($reception->items as $item)
-                @if ($item->Cantidad)
-                    <tr>
-                        <td>{{ $item->Producto }}</td>
-                        <td class="center">{{ $item->Cantidad }}</td>
-                        <td>{{ $item->EspecificacionProveedor }}</td>
-                        <td class="right">{{ money($item->PrecioNeto) }}</td>
-                        <td class="right">{{ money($item->TotalDescuentos) }}</td>
-                        <td class="right">{{ money($item->TotalCargos) }}</td>
-                        <td class="right">{{ money($item->Total) }}</td>
-                    </tr>
-                @endif
-            @endforeach
-        </tbody>
-    </table>
+    @if ($reception->items->isNotEmpty())
+        <table class="tabla">
+            <thead>
+                <tr>
+                    <th>Producto</th>
+
+                    <th>Cantidad / Unidad</th>
+
+                    @if($reception->items->first()->EspecificacionProveedor)
+                        <th>Especificaciones Proveedor</th>
+                    @endif
+
+                    <th>Precio Unitario</th>
+                    
+                    @if($reception->items->first()->TotalDescuentos)
+                        <th>Descuento</th>
+                    @endif
+
+                    @if($reception->items->first()->TotalCargos)
+                        <th>Cargos</th>
+                    @endif
+
+                    <th>Valor Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($reception->items as $item)
+                    @if ($item->Cantidad)
+                        <tr>
+                            <td>{{ $item->Producto }}</td>
+                            
+                            <td class="center">{{ $item->Cantidad }} / {{ $item->Unidad}} </td>
+                            
+                            @if($item->EspecificacionProveedor)
+                                <td>{{ $item->EspecificacionProveedor }}</td>
+                            @endif
+                            
+                            <td class="right">{{ money($item->PrecioNeto) }}</td>
+                            
+                            @if($item->TotalDescuentos)
+                                <td class="right">{{ money($item->TotalDescuentos) }}</td>
+                            @endif
+
+                            @if($item->TotalCargos)
+                                <td class="right">{{ money($item->TotalCargos) }}</td>
+                            @endif
+                            <td class="right">{{ money($item->Total) }}</td>
+                        </tr>
+                    @endif
+                @endforeach
+            </tbody>
+        </table>
+    @endif
 
     <table class="totales">
-        <tr>
-            <th width="100">Neto</th>
-            <td>$</td>
-            <td width="100"
-                class="right">{{ money($reception->neto) }}</td>
-        </tr>
+        @if($reception->neto)
+            <tr>
+                <th width="100">Neto</th>
+                <td>$</td>
+                <td width="100"
+                    class="right">{{ money($reception->neto) }}</td>
+            </tr>
+        @endif
+
         @if ($reception->descuentos and $reception->descuentos > 0)
             <tr>
                 <th>Dcto.</th>
@@ -152,6 +192,7 @@
                 <td class="right">{{ money($reception->descuentos) }}</td>
             </tr>
         @endif
+        
         @if ($reception->cargos and $reception->cargos > 0)
             <tr>
                 <th>Cargos</th>
@@ -159,16 +200,23 @@
                 <td class="right">{{ money($reception->cargos) }}</td>
             </tr>
         @endif
-        <tr>
-            <th>Subtotal</th>
-            <td>$</td>
-            <td class="right">{{ money($reception->subtotal) }}</td>
-        </tr>
-        <tr>
-            <th>{{ $reception->purchaseOrder->json->Listado[0]->PorcentajeIva }}% IVA</th>
-            <td>$</td>
-            <td class="right">{{ money($reception->iva) }}</td>
-        </tr>
+
+        @if($reception->subtotal)
+            <tr>
+                <th>Subtotal</th>
+                <td>$</td>
+                <td class="right">{{ money($reception->subtotal) }}</td>
+            </tr>
+        @endif
+
+        @if($reception->purchaseOrder)
+            <tr>
+                <th>{{ $reception->purchaseOrder->json->Listado[0]->PorcentajeIva }}% IVA</th>
+                <td>$</td>
+                <td class="right">{{ money($reception->iva) }}</td>
+            </tr>
+        @endif
+        
         <tr>
             <th>Total</th>
             <td>$</td>

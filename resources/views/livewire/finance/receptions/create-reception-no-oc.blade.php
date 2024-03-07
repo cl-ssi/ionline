@@ -233,7 +233,9 @@
                                 @enderror
                             </div>
                             <div class="col-md-2">
-                                <button class="btn btn-danger" wire:click="removeItem({{ $index }})">Eliminar</button>
+                                <button class="btn btn-danger" wire:click="removeItem({{ $index }})">
+                                    <i class="fas fa-trash"></i> Eliminar Item
+                                </button>
                             </div>
                         </div>
                     @endforeach

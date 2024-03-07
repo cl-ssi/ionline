@@ -114,8 +114,7 @@
             <thead>
                 <tr>
                     <th>Producto</th>
-                    <th>Unidad</th>
-                    <th>Cantidad</th>
+                    <th>Cantidad / Unidad</th>
                     <th>Precio Unitario</th>
                     <th>Valor Total</th>
                 </tr>
@@ -125,8 +124,7 @@
                     @if ($item->Cantidad)
                         <tr>
                             <td>{{ $item->Producto }}</td>
-                            <td class="center">{{ $item->Unidad }}</td>
-                            <td class="center">{{ $item->Cantidad }}</td>
+                            <td class="center">{{ $item->Cantidad }} / {{ $item->Unidad }}</td>
                             <td class="right">{{ money($item->PrecioNeto) }}</td>
                             <td class="right">{{ money($item->Total) }}</td>
                         </tr>
@@ -137,12 +135,14 @@
     @endif
 
     <table class="totales">
-        <tr>
-            <th width="100">Neto</th>
-            <td>$</td>
-            <td width="100"
-                class="right">{{ money($reception->neto) }}</td>
-        </tr>
+        @if($reception->neto)
+            <tr>
+                <th width="100">Neto</th>
+                <td>$</td>
+                <td width="100"
+                    class="right">{{ money($reception->neto) }}</td>
+            </tr>
+        @endif
         @if ($reception->descuentos and $reception->descuentos > 0)
             <tr>
                 <th>Dcto.</th>
@@ -150,6 +150,7 @@
                 <td class="right">{{ money($reception->descuentos) }}</td>
             </tr>
         @endif
+
         @if ($reception->cargos and $reception->cargos > 0)
             <tr>
                 <th>Cargos</th>
@@ -157,16 +158,19 @@
                 <td class="right">{{ money($reception->cargos) }}</td>
             </tr>
         @endif
-        <tr>
-            <th>Subtotal</th>
-            <td>$</td>
-            <td class="right">{{ money($reception->subtotal) }}</td>
-        </tr>
+
+        @if($reception->subtotal)
+            <tr>
+                <th>Subtotal</th>
+                <td>$</td>
+                <td class="right">{{ money($reception->subtotal) }}</td>
+            </tr>
+        @endif
         <!-- <tr>
             <th>19% IVA</th>
             <td>$</td>
             <td class="right">{{ money($reception->iva) }}</td>
-        </tr> -->
+        </tr> -->        
         <tr>
             <th>Total</th>
             <td>$</td>
