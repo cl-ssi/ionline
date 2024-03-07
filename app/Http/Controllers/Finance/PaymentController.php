@@ -28,6 +28,9 @@ class PaymentController extends Controller
         $oc = $request->input('oc');
         $folio_compromiso = $request->input('folio_compromiso');
         $folio_devengo = $request->input('folio_devengo');
+        $prov = $request->input('prov');
+        $cart = $request->input('cart');
+        $req = $request->input('req');
         
 
         if ($id) {
@@ -45,10 +48,35 @@ class PaymentController extends Controller
         if ($folio_compromiso) {
             $query->where('folio_compromiso_sigfe', $folio_compromiso);
         }
-
         if ($folio_devengo) {
             $query->where('folio_devengo_sigfe', $folio_devengo);
         }
+
+        
+        if ($prov && $prov !== 'Todos') {
+            if ($prov === 'Sin') {
+                $query->whereNull('excel_proveedor');
+            } else {
+                $query->where('excel_proveedor', true);
+            }
+        }
+    
+        if ($cart && $cart !== 'Todos') {
+            if ($cart === 'Sin') {
+                $query->whereNull('excel_cartera');
+            } else {
+                $query->where('excel_cartera', true);
+            }
+        }
+    
+        if ($req && $req !== 'Todos') {
+            if ($req === 'Sin') {
+                $query->whereNull('excel_requerimiento');
+            } else {
+                $query->where('excel_requerimiento', true);
+            }
+        }
+
 
         return $query;
     }
@@ -187,7 +215,7 @@ class PaymentController extends Controller
             ->where('payment_ready', 1)
             ->where('establishment_id', auth()->user()->organizationalUnit->establishment_id);
 
-            if ($request->filled('id') || $request->filled('folio') || $request->filled('oc') || $request->filled('folio_compromiso') || $request->filled('folio_devengo')) {
+            if ($request->filled('id') || $request->filled('folio') || $request->filled('oc')  || $request->filled('prov') || $request->filled('cart') || $request->filled('req')) {
                 $query = $this->search($request, $query);
             }
 
