@@ -111,8 +111,8 @@
                         <td>
                             @if($reception->purchaseOrder)
                                 {{ $reception->purchaseOrder?->json->Listado[0]->Proveedor->Nombre }}
-                                @else
-                                {{ $reception->dte->razon_social_emisor }}
+                            @else
+                                {{ $reception->dte?->razon_social_emisor }}
                             @endif
                         </td>
                         <td class="text-center">
