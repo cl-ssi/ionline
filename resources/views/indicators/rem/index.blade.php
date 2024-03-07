@@ -15,7 +15,7 @@
                 <strong>Serie A</strong>
             </div>
             <ul class="list-group list-group-flush">
-                <li class="list-group-item text-muted"><a href="{{ route('indicators.rem.index', [2024, 'A']) }}">2024 <span class="badge badge-pill badge-warning">En Desarrollo</span></a></li>
+                <li class="list-group-item text-muted"><a href="{{ route('indicators.rem.index', [2024, 'A']) }}">2024 <span class="badge badge-pill badge-secondary">En Revisión</span></a></li>
                 <li class="list-group-item text-muted"><a href="{{ route('indicators.rem.index', [2023, 'A']) }}">2023</a></li>
                 <li class="list-group-item text-muted"><a href="{{ route('indicators.rem.index', [2022, 'A']) }}">2022</a></li>
                 <li class="list-group-item text-muted"><a href="{{ route('indicators.rem.index', [2021, 'A']) }}">2021</a></li>
@@ -35,7 +35,7 @@
                 <strong>Serie BM</strong>
             </div>
             <ul class="list-group list-group-flush">
-                <li class="list-group-item text-muted"><a href="{{ route('indicators.rem.index', [2023, 'BM']) }}">2023</a> <span class="badge badge-pill badge-warning">En Desarrollo</span></li>
+                <li class="list-group-item text-muted"><a href="{{ route('indicators.rem.index', [2023, 'BM']) }}">2023</a></li>
                 <li class="list-group-item text-muted"><a href="{{ route('indicators.rem.index', [2022, 'BM']) }}">2022</a></li>
                 <li class="list-group-item text-muted"><a href="{{ route('indicators.rem.index', [2021, 'BM']) }}">2021</a></li>
                 <li class="list-group-item text-muted"><a href="{{ route('indicators.rems.year.serie.index', [2020, 'serie_bm']) }}">2020</a></li>
@@ -53,10 +53,10 @@
                 <strong>Serie BS</strong>
             </div>
             <ul class="list-group list-group-flush">
-                <li class="list-group-item text-muted">{{--<a href="{{ route('indicators.rem.index', [2021, 'BS']) }}">2021</a>--}} 2021</li>
-                <li class="list-group-item text-muted"><a>2020</a></li>
+                <li class="list-group-item text-muted">2021</li>
+                <li class="list-group-item text-muted">2020</li>
                 <li class="list-group-item text-muted"><a href="{{ route('indicators.rems.year.serie.index', [2019, 'serie_bs']) }}">2019</a> </li>
-                <li class="list-group-item text-muted">2018 </li>
+                <li class="list-group-item text-muted">2018</li>
                 <!-- <li class="list-group-item text-muted"><a href="">2017</a> </li>
                 <li class="list-group-item text-muted"><a href="">2016</a> </li>
                 <li class="list-group-item text-muted"><a href="">2015</a> </li> -->
