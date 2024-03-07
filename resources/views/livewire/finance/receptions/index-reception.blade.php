@@ -149,7 +149,7 @@
                                         </a>
                                     @endif
                                     @else
-                                    <a href="{{ route('finance.receptions.show_no_oc', $reception->id) }}"
+                                    <a href="{{ route('finance.receptions.show', $reception->id) }}"
                                             class="btn btn-outline-info"
                                             target="_blank">
                                     <i class="bi bi-file-pdf-fill"></i>
