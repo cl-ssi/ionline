@@ -408,4 +408,19 @@
 
         </div>
     </div>
+
+
+    @section('custom_js')
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="{{ asset('js/jquery.rut.chileno.js') }}"></script>
+    <script type="text/javascript">
+    $(document).ready(function() {
+        $('#emisor').rut();
+    });
+    </script>
+    @endsection
+
+
 </div>
+
+
