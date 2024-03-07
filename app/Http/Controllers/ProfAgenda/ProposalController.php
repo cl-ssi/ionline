@@ -55,13 +55,26 @@ class ProposalController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request);
+
+        
+        $proposal = Proposal::where('user_id',$request->user_id)->where('end_date','>=',$request->start_date)->first();
+        if($proposal){
+            $proposal->end_date = Carbon::parse($request->start_date)->addDays(-1);
+            $proposal->save();
+        }
+
         $proposal = new Proposal($request->All());
         $proposal->status = "Creado";
         $proposal->save();
 
-        session()->flash('info', 'La propuesta ha sido registrada.');
+        if($proposal){
+            session()->flash('info', 'La propuesta ha sido registrada. Se ha modificado la fecha de término de la propuesta anterior para evitar solapamiento de horarios.');
+        }else{
+            session()->flash('info', 'La propuesta ha sido registrada.');
+        }
+        
         return redirect()->route('prof_agenda.proposals.index');
-        // return $this->edit($proposal);
     }
 
     /**
