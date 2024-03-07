@@ -36,6 +36,7 @@
                     wire:model.defer="reception.dte_type"
                     wire:loading.attr="disabled"
                     wire:target="digitalInvoiceFile"
+                    wire:change="toggleFacturaElectronicaFields($event.target.value)"
                     >
                     <option></option>
                     <option value ="factura_electronica">Factura Electronica Afecta</option>
@@ -100,10 +101,40 @@
                 <span class="text-danger">{{ $message }}</span>
             @enderror
         </div>
+    
+    <div class="form-group col-2">
+        <label for="montoNeto">Monto Neto</label>
+        <input type="number" class="form-control" id="montoNeto" wire:model.defer="montoNeto"
+            autocomplete="off" min="1000"
+            wire:loading.attr="disabled"
+            wire:target="digitalInvoiceFile"
+            wire:change="calculateTotalAmount"
+        >
+        @error('montoNeto')
+        <span class="text-danger">{{ $message }}</span>
+        @enderror
+    </div>
+
+    @if($showFacturaElectronicaFields)
+    <div class="form-group col-2" >
+        <label for="montoIva">Iva</label>
+        <input type="number" class="form-control" id="montoIva" wire:model.defer="montoIva"
+            autocomplete="off" min="1000"
+            wire:loading.attr="disabled"
+            wire:target="digitalInvoiceFile"
+            wire:change="calculateTotalAmount"
+        >
+        @error('montoIva')
+        <span class="text-danger">{{ $message }}</span>
+        @enderror
+    </div>
+@endif
+
+
 
         <div class="form-group col-2">
             <label for="montoTotal">Monto Total</label>
-            <input type="number" class="form-control" id="montoTotal" wire:model.defer="montoTotal"
+            <input type="number" class="form-control" id="montoTotal" wire:model.defer="montoTotal" readonly
                 autocomplete="off" min="1000" 
                 wire:loading.attr="disabled"
                 wire:target="digitalInvoiceFile"
@@ -419,6 +450,7 @@
     });
     </script>
     @endsection
+
 
 
 </div>
