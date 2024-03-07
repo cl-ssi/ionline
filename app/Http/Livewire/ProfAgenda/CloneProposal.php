@@ -45,7 +45,6 @@ class CloneProposal extends Component
             }else{
                 session()->flash('danger_message', 'No es posible clonar la propuesta, puesto que la propuesta objetivo ya tiene ingresado un horario.');
             }
-            
         }
     }
 

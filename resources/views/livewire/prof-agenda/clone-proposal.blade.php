@@ -40,7 +40,8 @@
         <div class="row">
             <fieldset class="form-group col-4">
                 <label for="for_users">Propuesta</label>
-                <select class="form-control" wire:model.defer="selectedProposal">
+                <select class="form-control" wire:model.defer="selectedProposal" required>
+                    <option value=""></option>
                     @foreach($proposals as $proposal)
                         <option value="{{$proposal->id}}">{{$proposal->id}} - {{$proposal->employee->shortName}}</option>
                     @endforeach
@@ -49,7 +50,7 @@
 
             <fieldset class="form-group col-2">
                 <label for="for_profesion_id"><br></label>
-                <button class="btn btn-primary form-control" wire:click="save">Guardar</button>
+                <button class="btn btn-primary form-control" wire:click="save">Clonar</button>
             </fieldset>
 
             <fieldset class="form-group col-2">
