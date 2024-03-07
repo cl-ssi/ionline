@@ -24,6 +24,7 @@ class PaymentController extends Controller
     public function search(Request $request, $query)
     {
         $id = $request->input('id');
+        $emisor = $request->input('emisor');
         $folio = $request->input('folio');
         $oc = $request->input('oc');
         $folio_compromiso = $request->input('folio_compromiso');
@@ -35,6 +36,10 @@ class PaymentController extends Controller
 
         if ($id) {
             $query->where('id', $id);
+        }
+
+        if ($emisor) {
+            $query->where('emisor', $emisor);
         }
 
         if ($folio) {
@@ -215,7 +220,7 @@ class PaymentController extends Controller
             ->where('payment_ready', 1)
             ->where('establishment_id', auth()->user()->organizationalUnit->establishment_id);
 
-            if ($request->filled('id') || $request->filled('folio') || $request->filled('oc')  || $request->filled('prov') || $request->filled('cart') || $request->filled('req')) {
+            if ($request->filled('id') || $request->filled('emisor')  || $request->filled('folio') || $request->filled('oc')  || $request->filled('prov') || $request->filled('cart') || $request->filled('req') ) {
                 $query = $this->search($request, $query);
             }
 
