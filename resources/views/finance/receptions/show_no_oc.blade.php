@@ -107,36 +107,34 @@
         </tr>
     </table>
 
-    <br>
+    <br><br>
 
-    <!-- <table class="tabla">
-        <thead>
-            <tr>
-                <th>Producto</th>
-                <th>Cantidad / Unidad</th>
-                <th>Especificaciones Proveedor</th>
-                <th>Precio Unitario</th>
-                <th>Descuento</th>
-                <th>Cargos</th>
-                <th>Valor Total</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($reception->items as $item)
-                @if ($item->Cantidad)
-                    <tr>
-                        <td>{{ $item->Producto }}</td>
-                        <td class="center">{{ $item->Cantidad }}</td>
-                        <td>{{ $item->EspecificacionProveedor }}</td>
-                        <td class="right">{{ money($item->PrecioNeto) }}</td>
-                        <td class="right">{{ money($item->TotalDescuentos) }}</td>
-                        <td class="right">{{ money($item->TotalCargos) }}</td>
-                        <td class="right">{{ money($item->Total) }}</td>
-                    </tr>
-                @endif
-            @endforeach
-        </tbody>
-    </table> -->
+    @if ($reception->items->isNotEmpty())
+        <table class="tabla">
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Unidad</th>
+                    <th>Cantidad</th>
+                    <th>Precio Unitario</th>
+                    <th>Valor Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($reception->items as $item)
+                    @if ($item->Cantidad)
+                        <tr>
+                            <td>{{ $item->Producto }}</td>
+                            <td class="center">{{ $item->Unidad }}</td>
+                            <td class="center">{{ $item->Cantidad }}</td>
+                            <td class="right">{{ money($item->PrecioNeto) }}</td>
+                            <td class="right">{{ money($item->Total) }}</td>
+                        </tr>
+                    @endif
+                @endforeach
+            </tbody>
+        </table>
+    @endif
 
     <table class="totales">
         <tr>

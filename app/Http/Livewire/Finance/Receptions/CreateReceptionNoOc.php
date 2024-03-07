@@ -201,7 +201,7 @@ class CreateReceptionNoOc extends Component
             "module"        => "Recepcion",
             "module_icon"   => "fas fa-list",
             "subject"       => "Acta de recepción conforme",
-            "document_route_name" => "finance.receptions.show",
+            "document_route_name" => "finance.receptions.show_no_oc",
             "position"      => $position,
             // "start_y"       => 0,
         ]);

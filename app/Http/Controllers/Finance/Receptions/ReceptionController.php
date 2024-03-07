@@ -48,7 +48,7 @@ class ReceptionController extends Controller
 
     public function showNoOc($reception_id)
     {
-        $reception = Reception::find($reception_id);
+        $reception = Reception::find($reception_id);        
         $establishment = $reception->creator->organizationalUnit->establishment;
         return Pdf::loadView('finance.receptions.show_no_oc', [
             'reception' => $reception,
