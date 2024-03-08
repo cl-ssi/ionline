@@ -260,7 +260,7 @@ class DocumentController extends Controller
             Mail::to($emails[0])->send(new SendDocument($document));
         }
 
-        return redirect()->route('documents.partes.outbox');
+        return redirect()->route('documents.index');
     }
 
     /**
