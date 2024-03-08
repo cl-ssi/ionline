@@ -305,8 +305,8 @@ class AllowanceSignController extends Controller
                     return redirect()->route('allowances.show', $allowanceSign->allowance)->with('danger', 'Estimado usuario: No es posible aprobar viático, favor contactar a soporte para configurar autoridades');
                 }
             }
-
-            session()->flash('success', 'Estimado usuario: Se ha aprobado correctamente el víatico ID: '.$allowanceSign->allowance->id);
+            $approvedId = ($allowanceSign->allowance->correlative) ? $allowanceSign->allowance->correlative : $allowanceSign->allowance->id;
+            session()->flash('success', 'Estimado usuario: Se ha aprobado correctamente el víatico ID: '.$approvedId);
             if($allowanceSign->event_type == "sirh"){
                 return redirect()->route('allowances.sign_index');
             }
