@@ -16,18 +16,18 @@
         <select class="form-control" name="user_id">
             <option value=""></option>
             @foreach($users as $user)
-                <option value="{{$user->id}}" @selected($request->user_id == $user->id)>{{$user->shortName}}</option>
+                <option value="{{$user->id}}" @selected(old('user_id') == $user->id)>{{$user->shortName}}</option>
             @endforeach
         </select>
     </fieldset>
     <fieldset class="form-group col col-md">
         <label for="for_start_date">Fecha Inicio</label>
-        <input type="date" class="form-control" name="start_date" @if($request->start_date) value="{{$request->start_date}}" @endif required>
+        <input type="date" class="form-control" name="start_date" value="{{old('start_date')}}" required>
     </fieldset>
 
     <fieldset class="form-group col col-md">
         <label for="for_end_date">Fecha Término</label>
-        <input type="date" class="form-control" name="end_date" @if($request->end_date) value="{{$request->end_date}}" @endif required>
+        <input type="date" class="form-control" name="end_date" value="{{old('end_date')}}" required>
     </fieldset>
 
     <fieldset class="form-group col col-md">
