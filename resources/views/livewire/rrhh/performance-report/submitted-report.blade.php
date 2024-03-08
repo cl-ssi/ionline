@@ -16,10 +16,9 @@
             <tr>
                 <th>Nombre</th>
                 <th>Unidad</th>
-                <th class="table-primary text-center">Oct-Dic</th>
-                <th class="table-primary text-center">Ene-Mar</th>
-                <th class="text-center">Abr-Jun</th>
-                <th class="text-center">Jul-Sep</th>
+                @foreach($periods as $period)
+                <th class="table-primary text-center">{{ $period->name }}</th>
+                @endforeach
             </tr>
         </thead>
         <tbody>
@@ -28,9 +27,9 @@
                 <td>{{ $user->short_name }}</td>
                 <td>{{ $organizationalUnit }}</td>
                 <td class="text-center"><a class="btn btn-success btn-sm" href=""><i class="bi bi-file-check"></i></a></td>
-                <td class="text-center"><button class="btn btn-success btn-sm"><i class="bi bi-file-check"></i></button></td>
+                <!-- <td class="text-center"><button class="btn btn-success btn-sm"><i class="bi bi-file-check"></i></button></td>
                 <td class="text-center"><button class="btn btn-secondary btn-sm disabled"><i class="bi bi-file-check"></i></button></td>
-                <td class="text-center"><button class="btn btn-secondary btn-sm disabled"><i class="bi bi-file-check"></i></button></td>
+                <td class="text-center"><button class="btn btn-secondary btn-sm disabled"><i class="bi bi-file-check"></i></button></td> -->
             </tr>
             @endforeach
         </tbody>
