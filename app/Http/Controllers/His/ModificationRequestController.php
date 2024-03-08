@@ -13,7 +13,8 @@ class ModificationRequestController extends Controller
     public function show($modification_request_id)
     {
         $modificationRequest = ModificationRequest::find($modification_request_id);
-        $documentFile = \PDF::loadView('his.modification-request-show', compact('modificationRequest'));
+        $establishment = auth()->user()->organizationalUnit->establishment;
+        $documentFile = \PDF::loadView('his.modification-request-show', compact('modificationRequest','establishment'));
         return $documentFile->stream();
     }
 
