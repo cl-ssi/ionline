@@ -30,6 +30,14 @@
         </a>
     </li>
     <li class="nav-item">
+        <a class="nav-link {{ active('finance.dtes.cenabast') }}"
+            aria-current="page"
+            href="{{ route('finance.dtes.cenabast') }}">
+            <i class="bi bi-prescription"></i> 
+            Dtes Cenabast
+        </a>
+    </li>
+    <li class="nav-item">
         <a class="nav-link {{ active('finance.receptions.parameters') }}"
             aria-current="page"
             href="{{ route('finance.receptions.parameters') }}">

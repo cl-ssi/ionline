@@ -1,81 +1,66 @@
-<html lang="es">
+@extends('layouts.document')
 
-@include('documents.templates.partials.head', [
-        'title' => "iOnline - Solicitud modificación ficha clínica"
-    ])
+@section('title', 'iOnline - Solicitud modificación ficha clínica')
 
-<body>
-    <!-- Define header and footer blocks before your content -->
-    @include('documents.templates.partials.header', [
-        'establishment' => auth()->user()->organizationalUnit->establishment,
-        'linea1' => auth()->user()->organizationalUnit->establishment->name,
-        'linea2' => "Departamento de Teconologías de la Información y Comunicaciones",
-    ])
+@section('linea1', auth()->user()->organizationalUnit->name)
 
-    @include('documents.templates.partials.footer', [
-        'establishment' => auth()->user()->organizationalUnit->establishment
-    ])
+@section('linea3', auth()->user()->organizationalUnit->establishment->name)
 
-    <!-- Define main for content -->
-    <main>
-        
-    <div style="clear: both;padding-top: 170px;"></div>
+@section('content')
 
-        <div class="center" style="text-transform: uppercase;">
-            <strong style="text-transform: uppercase;">
-            SOLICITUD DE MODIFICACIÓN DE FICHA CLÍNICA Nº {{ $modificationRequest->id }}
-            </strong>
+<style>
+    .etiqueta {
+        display: inline-block; /* Permite establecer un ancho fijo */
+        width: 120px; /* Ancho fijo deseado */
+        font-weight: bold;
+    }
+
+    .valor {
+        /* Estilos para el contenido */
+        display: inline-block; /* Permite establecer un ancho fijo */
+    }
+</style>
+
+<div style="clear: both;padding-top: 170px;"></div>
+
+<div class="center diez" style="text-transform: uppercase;">
+    <strong style="text-transform: uppercase;">
+    SOLICITUD DE MODIFICACIÓN DE FICHA CLÍNICA Nº {{ $modificationRequest->id }}
+    </strong>
+</div>
+
+<div style="clear: both; padding-bottom: 20px"></div>
+
+<br>
+
+<span class="etiqueta">Fecha de solicitud:</span>
+<span class="valor">{{ $modificationRequest->created_at }}</span><br>
+
+<span class="etiqueta">Solicitante:</span>
+<span class="valor">{{ $modificationRequest->creator->shortName }}</span><br>
+
+<span class="etiqueta">Tipo de solicitud:</span>
+<span class="valor">{{ $modificationRequest->type }}</span><br>
+
+<span class="etiqueta">Asunto:</span>
+<span class="valor">{{ $modificationRequest->subject }}</span><br>
+
+<span class="etiqueta">Detalle:</span>
+<span class="valor" style="white-space: pre-wrap;">{{ $modificationRequest->body }}</span>
+
+@endsection
+
+@section('approvals')
+    <!-- Sección de las aprobaciones -->
+    <div class="signature-footer">
+        @foreach($modificationRequest->approvals as $approval)
+
+        <div class="signature">
+            @include('sign.approvation', [
+                'approval' => $approval
+            ])
         </div>
-
-
-        <div style="clear: both; padding-bottom: 20px"></div>
         
-        <br>
-
-        <table class="ocho">
-            <tbody>
-                <tr>
-                    <td width="100"><strong>Fecha registro:</strong></td>
-                    <td>{{ $modificationRequest->created_at }}</td>
-                </tr>
-                <tr>
-                    <td width="100"><strong>Solicitante:</strong></td>
-                    <td>{{ $modificationRequest->creator->shortName }}</td>
-                </tr>
-                <tr>
-                    <td><strong>Tipo de solicitud:</strong></td>
-                    <td>{{ $modificationRequest->type }}</td>
-                </tr>
-                <tr>
-                    <td><strong>Asunto:</td>
-                    <td>{{ $modificationRequest->subject }}</strong></td>
-                </tr>
-                <tr>
-                    <td style="vertical-align: top;"><strong>Detalle:</td>
-                    <td>{{ $modificationRequest->body }}</strong></td>
-                </tr>
-            </tbody>
-        </table>
-
-
-        <div style="clear: both;padding-top: 156px;"></div>
-
-        <!-- Sección de las aprobaciones -->
-        <div class="signature-container">
-            @foreach($modificationRequest->approvals as $approval)
-
-                <div class="signature">
-                    @include('sign.approvation', [
-                        'approval' => $approval
-                    ])
-                </div>
-
-            @endforeach
-        </div>
-
-
-    </main>
-
-</body>
-
-</html>
+        @endforeach
+    </div>
+@endsection

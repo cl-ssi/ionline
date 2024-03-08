@@ -13,16 +13,10 @@
     </div>
 
     <div class="input-group mb-3">
-        <div class="custom-file">
-            <input type="file" class="custom-file-input" id="dte_file" wire:model="dtes">
-            <label class="custom-file-label" for="dte_file" data-browse="Examinar">{{ optional($dtes)->getClientOriginalName() }}</label>
-            <small id="emailHelp" class="form-text text-muted">Archivo xls de reporte de acepta, máximo 2mb.</small>
-        </div>
-        <div class="input-group-append">
-            <button class="btn btn-primary" type="submit" wire:loading.attr="disabled"> <i class="fas fa-fw fa-upload"></i> Cargar Archivo</button>
-        </div>
+        <input class="form-control" type="file" id="dte_file" wire:model="dtes">
+        <button class="btn btn-primary" type="submit" wire:loading.attr="disabled"> <i class="fas fa-fw fa-upload"></i> Cargar Archivo</button>
     </div>
-
+    <small id="emailHelp" class="form-text text-muted">Archivo xls de reporte de acepta, máximo 2mb.</small>
     @error('dtes') <span class="error">{{ $message }}</span> @enderror
 
 </form>

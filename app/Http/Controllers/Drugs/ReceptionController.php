@@ -242,6 +242,7 @@ class ReceptionController extends Controller
         $items = $items->filter(function($item) {
             return $item->total_sample > 0;
         });
+
         /**
          * Suma el total a destruir agrupados por sustancias, cada sustancia con su unidad de medida.
          */
@@ -259,26 +260,7 @@ class ReceptionController extends Controller
             return $item['sum'] > 0;
         });
 
-        /**
-         * Obtiene todos los items
-         */
-        $items = ReceptionItem::query()
-            ->with([
-                'reception',
-                'reception.user',
-                'reception.court',
-                'substance',
-                'protocols',
-                'reception.destruction.user',
-                'resultSubstance',
-                'reception.sampleToIsp',
-                'reception.recordToCourt',
-                'reception.partePoliceUnit',
-            ])
-            ->orderBy('reception_id', 'desc')
-            ->paginate(1000);
 
-
-        return view('drugs.receptions.report', compact('items', 'items_sin_destruir'));
+        return view('drugs.receptions.report', compact('items_sin_destruir'));
     }
 }
