@@ -215,6 +215,15 @@
                 <td>$</td>
                 <td class="right">{{ money($reception->iva) }}</td>
             </tr>
+            @else
+            @if($reception->iva)
+                <tr>
+                    <th>IVA</th>
+                    <td>$</td>
+                    <td class="right">{{ money($reception->iva) }}</td>
+                </tr>
+            @endif
+
         @endif
         
         <tr>

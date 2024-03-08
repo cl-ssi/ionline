@@ -795,6 +795,12 @@
                         </a>
 
                         @can('be god')
+                        <a class="dropdown-item" href="{{ route('rrhh.performance-report.received_report') }}">
+                            <i class="fas fa-fw fa-chart-line"></i> Mi Informe de desempeño
+                        </a>
+                        @endcan
+
+                        @can('be god')
                         <div class="dropdown-divider"></div>
 
                         <a class="dropdown-item" href="{{ route('parameters.logs.index') }}">

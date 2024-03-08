@@ -65,8 +65,8 @@
                 <ul>
                     @foreach ($purchaseOrder->receptions as $otherReception)
                         <li>
-                            <a href="#">
-                                Nº: {{ $otherReception->number }}
+                            <a href="{{ route('finance.receptions.show', $otherReception->id) }}">
+                                Nº: {{ $otherReception->numeration?->number }}
                                 Fecha: {{ $otherReception->date?->format('Y-m-d') }}</a>
                         </li>
                     @endforeach

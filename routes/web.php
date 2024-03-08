@@ -82,10 +82,10 @@ use App\Http\Controllers\Parameters\PurchaseUnitController;
 use App\Http\Controllers\Parameters\RoleController;
 use App\Http\Controllers\Parameters\UnitOfMeasurementController;
 use App\Http\Controllers\PasswordResetController;
+use App\Http\Controllers\Pharmacies\BatchController;
 use App\Http\Controllers\Pharmacies\InventoryAdjustmentController;
 use App\Http\Controllers\Pharmacies\PharmacyController;
 use App\Http\Controllers\Pharmacies\PurchaseController;
-use App\Http\Controllers\Pharmacies\BatchController;
 use App\Http\Controllers\ProfAgenda\ActivityTypeController;
 use App\Http\Controllers\ProfAgenda\AgendaController;
 use App\Http\Controllers\ProfAgenda\OpenHourController;
@@ -224,6 +224,7 @@ use App\Http\Livewire\Drugs\EditActPrecursor;
 use App\Http\Livewire\Drugs\IndexActPrecursor;
 use App\Http\Livewire\Finance\AccountingCodesMgr;
 use App\Http\Livewire\Finance\DteConfirmation;
+use App\Http\Livewire\Finance\Dte\Cenabast;
 use App\Http\Livewire\Finance\IndexDtes;
 use App\Http\Livewire\Finance\MyDtes;
 use App\Http\Livewire\Finance\Receptions\CreateReception;
@@ -290,13 +291,15 @@ use App\Http\Livewire\Rrhh\NoAttendanceRecordMgr;
 use App\Http\Livewire\Rrhh\PermissionsMgr;
 use App\Http\Livewire\Rrhh\RolesMgr;
 use App\Http\Livewire\Rrhh\ShiftsIndex;
+use App\Http\Livewire\Rrhh\PerformanceReport\Period;
+use App\Http\Livewire\Rrhh\PerformanceReport\ReceivedReport;
+use App\Http\Livewire\Rrhh\PerformanceReport\SubmittedReport;
 use App\Http\Livewire\Sign\RequestSignature;
 use App\Http\Livewire\Sign\SignatureIndex;
 use App\Http\Livewire\Summary\Template\ShowTemplate;
 use App\Http\Livewire\TestFileManager;
 use App\Http\Livewire\TestFileUpdateManager;
 use App\Http\Livewire\TicResources;
-use App\Http\Livewire\Warehouse\Cenabast\CenabastIndex;
 use App\Http\Livewire\Warehouse\Invoices\InvoiceManagement;
 use App\Http\Livewire\Welfare\Amipass\NewBeneficiaryRequest;
 use App\Http\Livewire\Welfare\Amipass\ReportByDates;
@@ -843,6 +846,14 @@ Route::prefix('integrity')->as('integrity.')->group(function () {
 });
 
 Route::prefix('rrhh')->as('rrhh.')->group(function () {
+    
+    Route::prefix('performance-report')->name('performance-report.')->middleware('auth')->group(function () {
+        Route::get('/period', Period::class)->name('period');
+        Route::get('/received-report', ReceivedReport::class)->name('received_report');
+        Route::get('/submitted-report', SubmittedReport::class)->name('submitted_report');
+    });
+
+    
 
     Route::prefix('absence-types')->name('absence-types.')->group(function () {
         Route::get('/', [AbsenteeismTypeController::class, 'index'])->name('index');
@@ -2112,21 +2123,23 @@ Route::prefix('pharmacies')->as('pharmacies.')->middleware(['auth', 'must.change
 
 /* Finanzas */
 Route::prefix('finance')->as('finance.')->middleware(['auth', 'must.change.password'])->group(function () {
-    Route::get('dtes', IndexDtes::class)->name('dtes.index');
+    Route::prefix('dtes')->as('dtes.')->group(function () {
+        Route::get('/', IndexDtes::class)->name('index');
+        Route::get('upload', UploadDtes::class)->name('upload');
+        Route::get('upload-bhe', UploadBhe::class)->name('uploadBhe');
+        Route::get('upload-tgr', UploadTgr::class)->name('uploadTgr');
+        Route::get('cenabast', Cenabast::class)->name('cenabast');
+        Route::post('{dte}/save-file', [DteController::class, 'saveFile'])->name('saveFile');
+        Route::get('{dte}/store', [DteController::class, 'store'])->name('confirmation.store');
+        Route::get('{dte}/confirmation-signature-file', [DteController::class, 'pdf'])->name('confirmation.pdf');
+        Route::get('{dte}/download', [DteController::class, 'downloadManualDteFile'])->name('downloadManualDteFile');
+        Route::get('{dte}/download', [DteController::class, 'downloadManualDteFile'])->name('downloadManualDteFile');
+        Route::get('{dte}/confirmation', DteConfirmation::class)->name('confirmation');
+    });
     Route::get('my-dtes', MyDtes::class)->name('my.dtes');
-    Route::get('dtes/upload-bhe', UploadBhe::class)->name('dtes.uploadBhe');
-    Route::get('dtes/upload-tgr', UploadTgr::class)->name('dtes.uploadTgr');
-    Route::get('dte/{dte}/store', [DteController::class, 'store'])->name('dtes.confirmation.store');
-    Route::get('dte/{dte}/confirmation-signature-file', [DteController::class, 'pdf'])->name('dtes.confirmation.pdf');
+    Route::get('my-dtes', MyDtes::class)->name('my.dtes');
 
-    Route::get('/{dte}/download', [DteController::class, 'downloadManualDteFile'])->name('dtes.downloadManualDteFile');
 
-    Route::get('/{dte}/download', [DteController::class, 'downloadManualDteFile'])->name('dtes.downloadManualDteFile');
-
-    Route::post('dte/save-file/{dte}', [DteController::class, 'saveFile'])->name('dtes.saveFile');
-
-    Route::get('dtes/upload', UploadDtes::class)->name('dtes.upload');
-    Route::get('dtes/{dte}/confirmation', DteConfirmation::class)->name('dtes.confirmation');
     Route::prefix('payments')->as('payments.')->group(function () {
         Route::get('/', [PaymentController::class, 'index'])->name('index');
         Route::get('/own', [PaymentController::class, 'indexOwn'])->name('own');

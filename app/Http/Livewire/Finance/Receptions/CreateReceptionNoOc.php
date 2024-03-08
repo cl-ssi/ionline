@@ -19,8 +19,10 @@ class CreateReceptionNoOc extends Component
     public $additionalField;
     public $types;
     public $storage_path = '/ionline/finances/dte/carga_manual';
-    public $reception;
+    public $reception = ['dte_type' => ''];
     public $montoTotal;
+    public $montoNeto;
+    public $montoIva;
     public $folio;
     public $razonSocial;
     public $emisor;
@@ -29,6 +31,9 @@ class CreateReceptionNoOc extends Component
     public $signer_ou_id;
     public $approvals = [];
     public $items = [];
+    public $showFacturaElectronicaFields = false;
+
+    public $receptionItems = [];
     
 
     protected $rules = [
@@ -45,6 +50,7 @@ class CreateReceptionNoOc extends Component
         'items.*.cantidad'                 => 'required|numeric',
         'items.*.precioNeto'                 => 'required|numeric',
         'items.*.total'                 => 'required|numeric',
+        'montoNeto' => 'required|numeric',
     ];
 
     public $tipoDocumentoMap = [
@@ -79,12 +85,21 @@ class CreateReceptionNoOc extends Component
         
         $this->validate();
         $tipo = $this->tipoDocumentoMap[$this->reception['dte_type']];
+
+        $value = preg_replace('/[^0-9K]/', '', strtoupper(trim($this->emisor)));
+        $dv = substr($value, -1);
+        $id = substr($value, 0, -1);
+        $this->emisor = number_format($id, 0, '', '.').'-'.$dv;
+
         $dte_manual = Dte::create([
             
             'tipo_documento' => $this->reception['dte_type'],
             'folio' => $this->folio,
             'emisor' => $this->emisor,
+            'emision' => $this->reception['dte_date'],
             'razon_social_emisor' => $this->razonSocial,
+            'monto_neto' => isset($this->montoNeto) ? $this->montoNeto : null,
+            'monto_iva' => isset($this->montoIva) ? $this->montoIva : null,
             'monto_total' => $this->montoTotal,
             'tipo' => $tipo,
             'establishment_id' => auth()->user()->organizationalUnit->establishment_id,
@@ -105,6 +120,9 @@ class CreateReceptionNoOc extends Component
             'dte_number' => $this->folio,
             'dte_date' => $this->reception['dte_date'],
             'header_notes' => $this->reception['header_notes'] ?? null,
+            'neto' => isset($this->montoNeto) ? $this->montoNeto : null,
+            'subtotal' => isset($this->montoNeto) ? $this->montoNeto : null,
+            'iva' => isset($this->montoIva) ? $this->montoIva : null,
             'total' => $this->montoTotal,
         ]);
         
@@ -189,7 +207,9 @@ class CreateReceptionNoOc extends Component
 
 
         session()->flash('success', 'Su acta sin OC fue creada exitosamente.');
+        $this->emit('documentTypeChanged', $this->reception['dte_type']);
         return redirect()->route('finance.receptions.index');
+
     }
 
 
@@ -216,7 +236,8 @@ class CreateReceptionNoOc extends Component
         }
     }
 
-    public function setTemplate($input, $template){
+    public function setTemplate($input, $template)
+    {
         $this->$input = $template;
     }
 
@@ -259,21 +280,38 @@ class CreateReceptionNoOc extends Component
     }
     
 
-public function removeItem($index)
-{
-    unset($this->items[$index]);
-    $this->items = array_values($this->items);
-}
-
-public function calculateTotal($index)
-{
-    $item = $this->items[$index];
-    if (!empty($item['cantidad']) && !empty($item['precioNeto'])) {
-        $this->items[$index]['total'] = $item['cantidad'] * $item['precioNeto'];
-        return $this->items[$index]['total'];
+    public function removeItem($index)
+    {
+        unset($this->items[$index]);
+        $this->items = array_values($this->items);
     }
-    return 0;
-}
+
+    public function calculateTotal($index)
+    {
+        $item = $this->items[$index];
+        if (!empty($item['cantidad']) && !empty($item['precioNeto'])) {
+            $this->items[$index]['total'] = $item['cantidad'] * $item['precioNeto'];
+            return $this->items[$index]['total'];
+        }
+        return 0;
+    }
+
+    public function calculateTotalAmount()
+    {
+        $neto = $this->montoNeto ?? 0;
+        $iva = $this->showFacturaElectronicaFields ? ($this->montoIva ?? 0) : 0;
+        $this->montoTotal = $neto + $iva;
+    }
+
+    public function toggleFacturaElectronicaFields($value)
+    {
+        $this->showFacturaElectronicaFields = $value === 'factura_electronica';
+    }
+
+    public function preview()
+    {
+        
+    }
 
 
 
