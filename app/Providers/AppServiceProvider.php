@@ -45,7 +45,8 @@ class AppServiceProvider extends ServiceProvider
         Blade::directive('numero_decimal', function ($numero) {
             return "<?php echo number_format($numero, 2, '.', '.'); ?>";
         });
-        
+
+        setlocale(LC_ALL, config('app.locale'));
         Paginator::useBootstrap();
     }
 }

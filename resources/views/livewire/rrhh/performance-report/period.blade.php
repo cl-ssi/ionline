@@ -8,22 +8,17 @@
         <form wire:submit.prevent="createPeriod">
             <div class="row mb-3">
                 <div class="col-md-3">
-                    <label for="name" class="form-label">Nombre del periodo</label>
-                    <input type="text" class="form-control" id="name" wire:model="name" required autocomplete="off">
-                    @error('name') <span class="text-danger">{{ $message }}</span> @enderror
-                </div>
-                <div class="col-md-3">
-                    <label for="start_at" class="form-label">Fecha de inicio</label>
-                    <input type="date" class="form-control" id="start_at" wire:model="start_at" required autocomplete="off">
+                    <label for="start_at" class="form-label">Mes de inicio</label>
+                    <input type="month" class="form-control" id="start_at" wire:model="start_at" required autocomplete="off">
                     @error('start_at') <span class="text-danger">{{ $message }}</span> @enderror
                 </div>
                 <div class="col-md-3">
-                    <label for="end_at" class="form-label">Fecha de término</label>
-                    <input type="date" class="form-control" id="end_at" wire:model="end_at" required autocomplete="off">
+                    <label for="end_at" class="form-label">Mes de término</label>
+                    <input type="month" class="form-control" id="end_at" wire:model="end_at" required autocomplete="off">
                     @error('end_at') <span class="text-danger">{{ $message }}</span> @enderror
                 </div>
                 <div class="col-md-3">
-                    <label for="year" class="form-label">Año</label>
+                    <label for="year" class="form-label">Año de Calificacion</label>
                     <select class="form-select" id="year" wire:model="year" required autocomplete="off">
                         @for ($i = now()->year; $i >= 2024; $i--)
                             <option value="{{ $i }}">{{ $i }}</option>

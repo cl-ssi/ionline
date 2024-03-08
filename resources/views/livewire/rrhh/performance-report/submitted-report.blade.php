@@ -17,7 +17,7 @@
                 <th>Nombre</th>
                 <th>Unidad</th>
                 @foreach($periods as $period)
-                <th class="table-primary text-center">{{ $period->name }}</th>
+                <th class="text-center {{ now()->greaterThan($period->end_at) ? 'table-primary' : '' }}">{{ $period->name }}</th>
                 @endforeach
             </tr>
         </thead>

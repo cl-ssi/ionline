@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Rrhh\PerformanceReport;
 
 use App\Models\Rrhh\PerformanceReportPeriod;
 use Livewire\Component;
+use Carbon\Carbon;
 
 class Period extends Component
 {
@@ -30,22 +31,27 @@ class Period extends Component
     public function createPeriod()
     {
         $this->validate([
-            'name' => 'required',
             'start_at' => 'required|date',
             'end_at' => 'required|date|after:start_at',
             'year' => 'required|integer',
         ]);
+        
+        $startOfMonth = Carbon::parse($this->start_at)->startOfMonth()->locale('es');
+        $endOfMonth = Carbon::parse($this->end_at)->endOfMonth()->locale('es');
+
+        $name = $startOfMonth->formatLocalized('%b') . '-' . $endOfMonth->formatLocalized('%b');
 
         PerformanceReportPeriod::create([
-            'name' => $this->name,
-            'start_at' => $this->start_at,
-            'end_at' => $this->end_at,
+            'name' => $name,
+            'start_at' => $startOfMonth,
+            'end_at' => $endOfMonth,
             'year' => $this->year,
         ]);
 
         $this->showSuccessMessage = true;
         $this->resetFields();
         $this->showForm = false;
+        
     }
 
     public function deletePeriod($id)
@@ -54,10 +60,8 @@ class Period extends Component
     }
 
     private function resetFields()
-    {
-        $this->name = '';
+    {        
         $this->start_at = '';
-        $this->end_at = '';
-        $this->year = '';
+        $this->end_at = '';        
     }
 }
