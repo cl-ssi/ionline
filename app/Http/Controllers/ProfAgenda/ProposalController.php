@@ -26,10 +26,10 @@ class ProposalController extends Controller
     public function index()
     {
         if(auth()->user()->can('Agenda UST: Administrador')){
-            $proposals = Proposal::all();
+            $proposals = Proposal::orderBy('id','DESC')->get();
         }
         if(auth()->user()->can('Agenda UST: Funcionario')){
-            $proposals = Proposal::where('user_id',auth()->id())->get();
+            $proposals = Proposal::where('user_id',auth()->id())->orderBy('id','DESC')->get();
         }
         
         return view('prof_agenda.proposals.index', compact('proposals'));

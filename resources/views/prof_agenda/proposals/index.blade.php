@@ -25,7 +25,8 @@
 	</thead>
 	<tbody>
 	@foreach($proposals as $proposal)
-		<tr>
+        @if($proposal->end_date < now()) <tr class="table-danger">
+        @else <tr> @endif
             <td>{{ $proposal->id}}</td>
 			<td nowrap>{{ $proposal->type }}</td>
             <td>{{$proposal->employee->shortName}}</td>
@@ -40,15 +41,16 @@
 				</a>
 			</td>
             <td>
-                <form method="POST" class="form-horizontal" action="{{ route('prof_agenda.proposals.destroy', $proposal) }}">
-                    @csrf
-                    @method('DELETE')
-                        <button type="submit" class="btn btn-outline-danger btn-sm"
-                            onclick="return confirm('¿Está seguro que desea eliminar la propuesta?')">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                </form>
-                </td>
+                @if($proposal->status != "Aperturado")
+                    <form method="POST" class="form-horizontal" action="{{ route('prof_agenda.proposals.destroy', $proposal) }}">
+                        @csrf
+                        @method('DELETE')
+                            <button type="submit" class="btn btn-outline-danger btn-sm"
+                                onclick="return confirm('¿Está seguro que desea eliminar la propuesta?')">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                    </form>
+                @endif
             </td>
 		</tr>
 	@endforeach
