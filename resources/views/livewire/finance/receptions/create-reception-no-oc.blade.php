@@ -80,7 +80,7 @@
                 <label for="dte_date">Fecha de documento*</label>
                 <input type="date"
                     class="form-control @error('reception.dte_date') is-invalid @enderror"
-                    wire:model="reception.dte_date" 
+                    wire:model.defer="reception.dte_date" 
                     wire:loading.attr="disabled"
                     wire:target="digitalInvoiceFile">
             </div>
@@ -93,7 +93,7 @@
 
         <div class="form-group col-2">
             <label for="folio">Número</label>
-            <input type="number" class="form-control" id="folio" wire:model="folio" autocomplete="off"
+            <input type="number" class="form-control" id="folio" wire:model.defer="folio" autocomplete="off"
                 min="1" 
                 wire:loading.attr="disabled"
                 wire:target="digitalInvoiceFile">
@@ -104,7 +104,7 @@
     
     <div class="form-group col-2">
         <label for="montoNeto">Monto Neto</label>
-        <input type="number" class="form-control" id="montoNeto" wire:model="montoNeto"
+        <input type="number" class="form-control" id="montoNeto" wire:model.defer="montoNeto"
             autocomplete="off" min="1000"
             wire:loading.attr="disabled"
             wire:target="digitalInvoiceFile"
