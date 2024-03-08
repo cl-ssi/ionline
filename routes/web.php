@@ -290,6 +290,9 @@ use App\Http\Livewire\Rrhh\NoAttendanceRecordMgr;
 use App\Http\Livewire\Rrhh\PermissionsMgr;
 use App\Http\Livewire\Rrhh\RolesMgr;
 use App\Http\Livewire\Rrhh\ShiftsIndex;
+use App\Http\Livewire\Rrhh\PerformanceReport\Period;
+use App\Http\Livewire\Rrhh\PerformanceReport\ReceivedReport;
+use App\Http\Livewire\Rrhh\PerformanceReport\SubmittedReport;
 use App\Http\Livewire\Sign\RequestSignature;
 use App\Http\Livewire\Sign\SignatureIndex;
 use App\Http\Livewire\Summary\Template\ShowTemplate;
@@ -843,6 +846,14 @@ Route::prefix('integrity')->as('integrity.')->group(function () {
 });
 
 Route::prefix('rrhh')->as('rrhh.')->group(function () {
+    
+    Route::prefix('performance-report')->name('performance-report.')->middleware('auth')->group(function () {
+        Route::get('/period', Period::class)->name('period');
+        Route::get('/received-report', ReceivedReport::class)->name('received_report');
+        Route::get('/submitted-report', SubmittedReport::class)->name('submitted_report');
+    });
+
+    
 
     Route::prefix('absence-types')->name('absence-types.')->group(function () {
         Route::get('/', [AbsenteeismTypeController::class, 'index'])->name('index');
