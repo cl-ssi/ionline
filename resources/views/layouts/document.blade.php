@@ -52,6 +52,8 @@
     <main>
         @yield('content', $slot ?? '')
     </main>
+    <!-- For approvals -->
+    @yield('approvals')
 </body>
 
 </html>
