@@ -3,14 +3,15 @@
     @include('finance.receptions.partials.nav')
 
     <h3 class="mb-3">Dtes de Cenabast</h3>
-    <p class="text-muted">Puede asignar un administrador de contrato y clasificar con el establecimiento los documentos tributarios de Cenabast</p>
+    <p class="text-muted">Asigne un administrador de contrato y clasifique los documentos tributarios de Cenabast según el establecimiento correspondiente al administrador seleccionado.</p>
+
 
     <div class="row g-2">
         <!-- Filtro por establecimiento -->
         <div class="col-md-3">
             <div class="form-group">
                 <label for="establishment">Establecimiento</label>
-                <select class="form-control" id="establishment" wire:model.defer="establishment_id">
+                <select class="form-select" id="establishment" wire:model.defer="establishment_id">
                     <option value="">Todos</option>
                     <option value="Sin">Sin establecimiento</option>
                     @foreach($establishments as $establishment)

@@ -40,6 +40,14 @@ class Cenabast extends Component
         $dte->save();
     }
 
+    public function mount()
+    {    
+        $loggedInUser = auth()->user();
+        $this->establishment_id = $loggedInUser->organizationalUnit->establishment_id;
+    }
+
+
+
     public function render()
     {
         // Obtener todos los establecimientos para el filtro
