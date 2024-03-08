@@ -83,144 +83,104 @@ class AllowanceSignController extends Controller
     public function update(Request $request, AllowanceSign $allowanceSign, $status)
     {
         if($status == 'accepted'){
-            //CONSULTO SI PRIMERA AUTORIDAD EXISTE
-            if(Authority::getAuthorityFromDate($allowanceSign->allowance->userAllowance->organizational_unit_id, now(), 'manager')){
-                $allowanceSign->user_id = auth()->id();
-                $allowanceSign->status = $status;
-                $allowanceSign->date_sign = Carbon::now();
-                $allowanceSign->save();
+            // CONSULTO SI EL FUNCIONARIO PERTENECE A HAH O SST (RAZON: CORRELATIVO)
+            if($allowanceSign->allowance->userAllowance->organizationalUnit->establishment->id != Parameter::get('establishment', 'HospitalAltoHospicio') &&
+                $allowanceSign->allowance->userAllowance->organizationalUnit->establishment->id != Parameter::get('establishment', 'SSTarapaca')){
+                return redirect()->back()->with('warning', 'Estimado Usuario: El funcionario seleccionado no pertenece a Servicio de Salud Tarapacá o Hospital de Alto Hospicio (Favor contactar a su administrativo).');
+            }
+            else{
+                //CONSULTO SI PRIMERA AUTORIDAD EXISTE
+                if(Authority::getAuthorityFromDate($allowanceSign->allowance->userAllowance->organizational_unit_id, now(), 'manager')){
+                    $allowanceSign->user_id = auth()->id();
+                    $allowanceSign->status = $status;
+                    $allowanceSign->date_sign = Carbon::now();
+                    $allowanceSign->save();
 
-                // CONSULTO SI EXISTE PROXIMA APROBACIÓN (HAH: CONTABILIDAD)
-                if($allowanceSign->getNextSign()){
-                    $nextSign           = $allowanceSign->getNextSign();
-                    $nextSign->status   = 'pending';
-                    $nextSign->save();
-                }
-                else{
-                    $currentOu = $allowanceSign->allowance->userAllowance->organizationalUnit;
-                    $subroDir = null;
-                    //$funDir = null;
-                    $dir = null;
-                    
-                    //PREGUNTO SI ES JEFE DE U.O.
-                    if($allowanceSign->allowance->userAllowance->id == Authority::getAuthorityFromDate($allowanceSign->allowance->userAllowance->organizational_unit_id, now(), 'manager')->user_id){
-                        // SI ES DE NIVEL 2 O SUPERIOR Y AUTORIDAD, SUBO UN NIVEL DE U.O.s
-                        if($currentOu->level >= 2){
-                            $currentOu = $allowanceSign->allowance->userAllowance->organizationalUnit->father;
-                            if($currentOu->establishment_id == Parameter::get('establishment', 'SSTarapaca')){
-                                if($currentOu->level == 1){
-                                    $dir = 'dir_sst';
+                    // CONSULTO SI EXISTE PROXIMA APROBACIÓN (HAH: CONTABILIDAD)
+                    if($allowanceSign->getNextSign()){
+                        $nextSign           = $allowanceSign->getNextSign();
+                        $nextSign->status   = 'pending';
+                        $nextSign->save();
+                    }
+                    else{
+                        $currentOu = $allowanceSign->allowance->userAllowance->organizationalUnit;
+                        $subroDir = null;
+                        //$funDir = null;
+                        $dir = null;
+                        
+                        //PREGUNTO SI ES JEFE DE U.O.
+                        if($allowanceSign->allowance->userAllowance->id == Authority::getAuthorityFromDate($allowanceSign->allowance->userAllowance->organizational_unit_id, now(), 'manager')->user_id){
+                            // SI ES DE NIVEL 2 O SUPERIOR Y AUTORIDAD, SUBO UN NIVEL DE U.O.s
+                            if($currentOu->level >= 2){
+                                $currentOu = $allowanceSign->allowance->userAllowance->organizationalUnit->father;
+                                if($currentOu->establishment_id == Parameter::get('establishment', 'SSTarapaca')){
+                                    if($currentOu->level == 1){
+                                        $dir = 'dir_sst';
+                                    }
+                                }
+                                if($currentOu->establishment_id == Parameter::get('establishment', 'HospitalAltoHospicio')){
+                                    if($currentOu->level == 1){
+                                        $dir = 'dir_hah';
+                                    }
                                 }
                             }
-                            if($currentOu->establishment_id == Parameter::get('establishment', 'HospitalAltoHospicio')){
-                                if($currentOu->level == 1){
+                            else{
+                                $currentOu = $allowanceSign->allowance->userAllowance->organizationalUnit;
+
+                                //SI ES PARA DIRECTOR DE ALTO HOSPICIO, SUBRROGANTE NULL Y ENVIO A DIRECCIÓN SST
+                                if($currentOu->establishment_id == Parameter::get('establishment', 'HospitalAltoHospicio')){
+                                    $dir = 'dir_sst';
+                                }
+                                //SI ES PARA DIRECTOR DE SST, ENVÍO AL SUBRROGANTE SELECCIONADO
+                                if($currentOu->establishment_id == Parameter::get('establishment', 'SSTarapaca')){
+                                    if($allowanceSign->allowance->userAllowance->Subrogant){
+                                        // $subroDir = $allowanceSign->allowance->userAllowance->Subrogant->id;
+                                        // $subroDir = $request->approver;
+                                        $dir = 'subro_sst';
+                                    }
+                                    else{
+                                        return redirect()->route('allowances.show', $allowanceSign->allowance)->with('danger', 'Estimado usuario: No es posible aprobar viático, favor contactar a soporte para configurar subrrogancia de dirección');
+                                    }
+                                }
+                            }
+                            $alw_ou_level = $currentOu->level;
+                        }
+                        //NO AUTORIDAD
+                        else{
+                            $currentOu = $allowanceSign->allowance->userAllowance->organizationalUnit;
+                            $alw_ou_level = $currentOu->level;
+                            // SI ES FUNCIONARIO DE DIRECIÓN ALMACENO U.O.
+                            if($alw_ou_level == 1){
+                                if($currentOu->establishment_id == Parameter::get('establishment', 'SSTarapaca')){
+                                    $dir = 'dir_sst';
+                                }
+                                if($currentOu->establishment_id == Parameter::get('establishment', 'HospitalAltoHospicio')){
                                     $dir = 'dir_hah';
                                 }
                             }
                         }
-                        else{
-                            $currentOu = $allowanceSign->allowance->userAllowance->organizationalUnit;
 
-                            //SI ES PARA DIRECTOR DE ALTO HOSPICIO, SUBRROGANTE NULL Y ENVIO A DIRECCIÓN SST
-                            if($currentOu->establishment_id == Parameter::get('establishment', 'HospitalAltoHospicio')){
-                                $dir = 'dir_sst';
-                            }
-                            //SI ES PARA DIRECTOR DE SST, ENVÍO AL SUBRROGANTE SELECCIONADO
-                            if($currentOu->establishment_id == Parameter::get('establishment', 'SSTarapaca')){
-                                if($allowanceSign->allowance->userAllowance->Subrogant){
-                                    // $subroDir = $allowanceSign->allowance->userAllowance->Subrogant->id;
-                                    // $subroDir = $request->approver;
-                                    $dir = 'subro_sst';
-                                }
-                                else{
-                                    return redirect()->route('allowances.show', $allowanceSign->allowance)->with('danger', 'Estimado usuario: No es posible aprobar viático, favor contactar a soporte para configurar subrrogancia de dirección');
-                                }
-                            }
-                        }
-                        $alw_ou_level = $currentOu->level;
-                    }
-                    //NO AUTORIDAD
-                    else{
-                        $currentOu = $allowanceSign->allowance->userAllowance->organizationalUnit;
-                        $alw_ou_level = $currentOu->level;
-                        // SI ES FUNCIONARIO DE DIRECIÓN ALMACENO U.O.
+                        $lastApprovalId = null;
+                        $count = 1;
+                        $approval_dir = null;
+
                         if($alw_ou_level == 1){
-                            if($currentOu->establishment_id == Parameter::get('establishment', 'SSTarapaca')){
-                                $dir = 'dir_sst';
-                            }
-                            if($currentOu->establishment_id == Parameter::get('establishment', 'HospitalAltoHospicio')){
-                                $dir = 'dir_hah';
-                            }
-                        }
-                    }
-
-                    $lastApprovalId = null;
-                    $count = 1;
-                    $approval_dir = null;
-
-                    if($alw_ou_level == 1){
-                        $approval_dir = 1;
-                        //APPROVALS CUANDO JEFATURA ES DIRECTOR O VIATICO DE DIRECCION
-                        $approval = $allowanceSign->allowance->approvals()->create([
-                            "module"                            => "Viáticos",
-                            "module_icon"                       => "bi bi-wallet",
-                            "subject"                           => 'Solicitud de Viático: ID '.$allowanceSign->allowance->id.'<br>
-                                                                    Funcionario: '.$allowanceSign->allowance->userAllowance->FullName,
-                            //"sent_to_ou_id"                     => ($subroDir == null) ? ($funDir == null) ? Parameter::get('ou','DireccionSSI') : $funDir : null,
-                            "sent_to_ou_id"                     =>  ($dir == 'dir_sst') ? Parameter::get('ou','DireccionSSI') : (($dir == 'dir_hah') ? Parameter::get('ou', 'Direccion', $currentOu->establishment_id) : null),
-                            "sent_to_user_id"                   => ($dir == 'subro_sst') ? $request->approver : null,
-                            "document_route_name"               => "allowances.show_resol_pdf",
-                            "document_route_params"             => json_encode([
-                                "allowance_id" => $allowanceSign->allowance->id
-                            ]),
-                            "document_pdf_path"                 => ($lastApprovalId == null) ? null : $lastApproval->filename,
-                            "active"                            => true,
-                            "previous_approval_id"              => $lastApprovalId,
-                            "callback_controller_method"        => "App\Http\Controllers\Allowances\AllowanceController@approvalCallback",
-                            "callback_controller_params"        => json_encode([
-                                'allowance_id'  => $allowanceSign->allowance->id,
-                                'process'       => null
-                            ]),
-                            "digital_signature"                 => true,
-                            "position"                          => "right",
-                            "start_y"                           => 82,
-                            "filename"                          => "ionline/allowances/resol_pdf/".$allowanceSign->allowance->id."_".$count.".pdf"
-                        ]);
-
-                        $lastApprovalId = $approval->id;
-                        $lastApproval = $approval;
-                        $count++;
-                    }
-                    else{
-                        //APPROVAL DE JEFATURAS DIRECTAS
-                        for ($i = $alw_ou_level; $i >= 2; $i--){
-                            //VALORES PARA UBICAR LA FIRMA EN
-                            if($count == 1){
-                                $start = 82;
-                            }
-                            if($count == 2){
-                                $start = 46;
-                            }
-                            if($count == 3){
-                                $start = 10;
-                            }
-                            if($count == 4){
-                                $start = -26;
-                            }
-                            /* ******************************* */
-
+                            $approval_dir = 1;
+                            //APPROVALS CUANDO JEFATURA ES DIRECTOR O VIATICO DE DIRECCION
                             $approval = $allowanceSign->allowance->approvals()->create([
                                 "module"                            => "Viáticos",
                                 "module_icon"                       => "bi bi-wallet",
                                 "subject"                           => 'Solicitud de Viático: ID '.$allowanceSign->allowance->id.'<br>
                                                                         Funcionario: '.$allowanceSign->allowance->userAllowance->FullName,
-                                "sent_to_ou_id"                     => $currentOu->id,
+                                //"sent_to_ou_id"                     => ($subroDir == null) ? ($funDir == null) ? Parameter::get('ou','DireccionSSI') : $funDir : null,
+                                "sent_to_ou_id"                     =>  ($dir == 'dir_sst') ? Parameter::get('ou','DireccionSSI') : (($dir == 'dir_hah') ? Parameter::get('ou', 'Direccion', $currentOu->establishment_id) : null),
+                                "sent_to_user_id"                   => ($dir == 'subro_sst') ? $request->approver : null,
                                 "document_route_name"               => "allowances.show_resol_pdf",
                                 "document_route_params"             => json_encode([
-                                    "allowance_id" => $allowanceSign->allowance->id,
+                                    "allowance_id" => $allowanceSign->allowance->id
                                 ]),
                                 "document_pdf_path"                 => ($lastApprovalId == null) ? null : $lastApproval->filename,
-                                "active"                            => ($lastApprovalId == null) ? true : false,
+                                "active"                            => true,
                                 "previous_approval_id"              => $lastApprovalId,
                                 "callback_controller_method"        => "App\Http\Controllers\Allowances\AllowanceController@approvalCallback",
                                 "callback_controller_params"        => json_encode([
@@ -228,28 +188,100 @@ class AllowanceSignController extends Controller
                                     'process'       => null
                                 ]),
                                 "digital_signature"                 => true,
-                                "position"                          => "center",
-                                "start_y"                           => $start,
+                                "position"                          => "right",
+                                "start_y"                           => 82,
                                 "filename"                          => "ionline/allowances/resol_pdf/".$allowanceSign->allowance->id."_".$count.".pdf"
                             ]);
 
-                            $currentOu = $currentOu->father;
-                            $lastApproval = $approval;
                             $lastApprovalId = $approval->id;
+                            $lastApproval = $approval;
                             $count++;
                         }
-                    }
+                        else{
+                            //APPROVAL DE JEFATURAS DIRECTAS
+                            for ($i = $alw_ou_level; $i >= 2; $i--){
+                                //VALORES PARA UBICAR LA FIRMA EN
+                                if($count == 1){
+                                    $start = 82;
+                                }
+                                if($count == 2){
+                                    $start = 46;
+                                }
+                                if($count == 3){
+                                    $start = 10;
+                                }
+                                if($count == 4){
+                                    $start = -26;
+                                }
+                                /* ******************************* */
 
-                    $approval_dir_hah = null;
-                    if($allowanceSign->allowance->establishment_id == Parameter::get('establishment', 'HospitalAltoHospicio') && $alw_ou_level >= 2){
-                        // APPROVAL DE DIRECCIÓN DE ALTO HOSPICIO
-                        $approval_dir_hah = 1;
+                                $approval = $allowanceSign->allowance->approvals()->create([
+                                    "module"                            => "Viáticos",
+                                    "module_icon"                       => "bi bi-wallet",
+                                    "subject"                           => 'Solicitud de Viático: ID '.$allowanceSign->allowance->id.'<br>
+                                                                            Funcionario: '.$allowanceSign->allowance->userAllowance->FullName,
+                                    "sent_to_ou_id"                     => $currentOu->id,
+                                    "document_route_name"               => "allowances.show_resol_pdf",
+                                    "document_route_params"             => json_encode([
+                                        "allowance_id" => $allowanceSign->allowance->id,
+                                    ]),
+                                    "document_pdf_path"                 => ($lastApprovalId == null) ? null : $lastApproval->filename,
+                                    "active"                            => ($lastApprovalId == null) ? true : false,
+                                    "previous_approval_id"              => $lastApprovalId,
+                                    "callback_controller_method"        => "App\Http\Controllers\Allowances\AllowanceController@approvalCallback",
+                                    "callback_controller_params"        => json_encode([
+                                        'allowance_id'  => $allowanceSign->allowance->id,
+                                        'process'       => null
+                                    ]),
+                                    "digital_signature"                 => true,
+                                    "position"                          => "center",
+                                    "start_y"                           => $start,
+                                    "filename"                          => "ionline/allowances/resol_pdf/".$allowanceSign->allowance->id."_".$count.".pdf"
+                                ]);
+
+                                $currentOu = $currentOu->father;
+                                $lastApproval = $approval;
+                                $lastApprovalId = $approval->id;
+                                $count++;
+                            }
+                        }
+
+                        $approval_dir_hah = null;
+                        if($allowanceSign->allowance->establishment_id == Parameter::get('establishment', 'HospitalAltoHospicio') && $alw_ou_level >= 2){
+                            // APPROVAL DE DIRECCIÓN DE ALTO HOSPICIO
+                            $approval_dir_hah = 1;
+                            $approval = $allowanceSign->allowance->approvals()->create([
+                                "module"                            => "Viáticos",
+                                "module_icon"                       => "bi bi-wallet",
+                                "subject"                           => 'Solicitud de Viático: ID '.$allowanceSign->allowance->id.'<br>
+                                                                        Funcionario: '.$allowanceSign->allowance->userAllowance->FullName,
+                                "sent_to_ou_id"                     => Parameter::get('ou', 'Direccion', $allowanceSign->allowance->establishment_id),
+                                "document_route_name"               => "allowances.show_resol_pdf",
+                                "document_route_params"             => json_encode([
+                                    "allowance_id" => $allowanceSign->allowance->id
+                                ]),
+                                "document_pdf_path"                 => ($lastApprovalId == null) ? null : $lastApproval->filename,
+                                "active"                            => false,
+                                "previous_approval_id"              => ($lastApprovalId == null) ? null : $lastApprovalId,
+                                "callback_controller_method"        => "App\Http\Controllers\Allowances\AllowanceController@approvalCallback",
+                                "callback_controller_params"        => json_encode([
+                                    'allowance_id'  => $allowanceSign->allowance->id,
+                                    'process'       => 'end'
+                                ]),
+                                "digital_signature"                 => true,
+                                "position"                          => "right",
+                                "start_y"                           => 82,
+                                "filename"                          => "ionline/allowances/resol_pdf/".$allowanceSign->allowance->id."_".$count.".pdf"
+                            ]);
+                        }
+
+                        // APPROVAL DE FINANZAS
                         $approval = $allowanceSign->allowance->approvals()->create([
                             "module"                            => "Viáticos",
                             "module_icon"                       => "bi bi-wallet",
                             "subject"                           => 'Solicitud de Viático: ID '.$allowanceSign->allowance->id.'<br>
                                                                     Funcionario: '.$allowanceSign->allowance->userAllowance->FullName,
-                            "sent_to_ou_id"                     => Parameter::get('ou', 'Direccion', $allowanceSign->allowance->establishment_id),
+                            "sent_to_ou_id"                     => ($allowanceSign->allowance->establishment_id == Parameter::get('establishment', 'HospitalAltoHospicio')) ? Parameter::get('ou','FinanzasHAH') : Parameter::get('ou','FinanzasSSI'),
                             "document_route_name"               => "allowances.show_resol_pdf",
                             "document_route_params"             => json_encode([
                                 "allowance_id" => $allowanceSign->allowance->id
@@ -264,41 +296,16 @@ class AllowanceSignController extends Controller
                             ]),
                             "digital_signature"                 => true,
                             "position"                          => "right",
-                            "start_y"                           => 82,
+                            "start_y"                           => ($approval_dir_hah != null || $approval_dir != null) ? 46 : 82,
                             "filename"                          => "ionline/allowances/resol_pdf/".$allowanceSign->allowance->id."_".$count.".pdf"
                         ]);
                     }
-
-                    // APPROVAL DE FINANZAS
-                    $approval = $allowanceSign->allowance->approvals()->create([
-                        "module"                            => "Viáticos",
-                        "module_icon"                       => "bi bi-wallet",
-                        "subject"                           => 'Solicitud de Viático: ID '.$allowanceSign->allowance->id.'<br>
-                                                                Funcionario: '.$allowanceSign->allowance->userAllowance->FullName,
-                        "sent_to_ou_id"                     => ($allowanceSign->allowance->establishment_id == Parameter::get('establishment', 'HospitalAltoHospicio')) ? Parameter::get('ou','FinanzasHAH') : Parameter::get('ou','FinanzasSSI'),
-                        "document_route_name"               => "allowances.show_resol_pdf",
-                        "document_route_params"             => json_encode([
-                            "allowance_id" => $allowanceSign->allowance->id
-                        ]),
-                        "document_pdf_path"                 => ($lastApprovalId == null) ? null : $lastApproval->filename,
-                        "active"                            => false,
-                        "previous_approval_id"              => ($lastApprovalId == null) ? null : $lastApprovalId,
-                        "callback_controller_method"        => "App\Http\Controllers\Allowances\AllowanceController@approvalCallback",
-                        "callback_controller_params"        => json_encode([
-                            'allowance_id'  => $allowanceSign->allowance->id,
-                            'process'       => 'end'
-                        ]),
-                        "digital_signature"                 => true,
-                        "position"                          => "right",
-                        "start_y"                           => ($approval_dir_hah != null || $approval_dir != null) ? 46 : 82,
-                        "filename"                          => "ionline/allowances/resol_pdf/".$allowanceSign->allowance->id."_".$count.".pdf"
-                    ]);
+                }
+                else{
+                    return redirect()->route('allowances.show', $allowanceSign->allowance)->with('danger', 'Estimado usuario: No es posible aprobar viático, favor contactar a soporte para configurar autoridades');
                 }
             }
-            else{
-                return redirect()->route('allowances.show', $allowanceSign->allowance)->with('danger', 'Estimado usuario: No es posible aprobar viático, favor contactar a soporte para configurar autoridades');
-            }
-            
+
             session()->flash('success', 'Estimado usuario: Se ha aprobado correctamente el víatico ID: '.$allowanceSign->allowance->id);
             if($allowanceSign->event_type == "sirh"){
                 return redirect()->route('allowances.sign_index');

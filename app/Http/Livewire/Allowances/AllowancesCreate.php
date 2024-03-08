@@ -41,9 +41,7 @@ class AllowancesCreate extends Component
         $total_days = 0, $total_half_days = 0, $fifty_percent_total_days = 0, $halfDaysOnly,
         $dayValue, $halfDayValue, $fifty_percent_day_value,
         
-        $MaxDaysStraight = 0,
-
-        $messageUserNotAvailable = null;
+        $MaxDaysStraight = 0;
 
     public $disabledHalfDayOnly;
     public $accommodationSelected = null;
@@ -294,10 +292,6 @@ class AllowancesCreate extends Component
     public function userSelected($userAllowance)
     {
         $this->userAllowance = User::find($userAllowance);
-
-        // CONSULTO SI EL FUNCIONARIO PERTENECE A HAH O SST (RAZON: CORRELATIVO)
-        
-        $this->messageUserNotAvailable = null;
             
         if($this->userAllowance){
             //  Buscar si los viáticos del usuario no exceden 90 días en el presente año 
