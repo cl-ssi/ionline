@@ -176,9 +176,11 @@
                                 'onlyRead' => 'true'
                             ], key($dte->id))
                         </td>
-                        <td class="text-center">
+                        <td class="text-center nowrap">
                             @if ($dte->excel_proveedor)
                                 <i class="fas fa-check-circle text-success"></i>
+                                <hr>
+                                <small>Fecha generación:<br>{{ $dte->tgrPayedDte?->fecha_generacion->format('d-m-Y') }}</small>
                             @else
                                 <i class="fas fa-times-circle text-danger"></i>
                             @endif
@@ -219,6 +221,10 @@
 <script type="text/javascript">
 $(document).ready(function() {
     $('input[name="emisor"]').rut();
+
+    // Remover el atributo "required"
+    $('input[name="emisor"]').removeAttr('required');
 });
+
 </script>
 @endsection
