@@ -250,7 +250,7 @@ class Allowance extends Model implements Auditable
 
             if($search_id != ''){
                 $query->where(function($q) use($search_id){
-                    $q->where('id', $search_id);
+                    $q->where('correlative', $search_id);
                 });
             }
 
