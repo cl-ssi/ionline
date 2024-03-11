@@ -41,7 +41,7 @@ class AllowancesCreate extends Component
         $total_days = 0, $total_half_days = 0, $fifty_percent_total_days = 0, $halfDaysOnly,
         $dayValue, $halfDayValue, $fifty_percent_day_value,
         
-        $MaxDaysStraight = 0 ;
+        $MaxDaysStraight = 0;
 
     public $disabledHalfDayOnly;
     public $accommodationSelected = null;
@@ -292,7 +292,7 @@ class AllowancesCreate extends Component
     public function userSelected($userAllowance)
     {
         $this->userAllowance = User::find($userAllowance);
-
+            
         if($this->userAllowance){
             //  Buscar si los viáticos del usuario no exceden 90 días en el presente año 
             $this->totalCurrentAllowancesDaysByUser = 0;
@@ -317,11 +317,17 @@ class AllowancesCreate extends Component
                 ->where('half_days_only', null)
                 ->where('total_days', '>=', 1.0)
                 ->get();
-            
+                
             foreach($allowancesMonthCount as $allowancesMonthDays){
                 $this->totalCurrentMonthAllowancesDaysByUser = $this->totalCurrentMonthAllowancesDaysByUser + $allowancesMonthDays->total_days;
             }
+        
+            if($this->userAllowance->organizationalUnit->establishment->id != Parameter::get('establishment', 'HospitalAltoHospicio') &&
+                $this->userAllowance->organizationalUnit->establishment->id != Parameter::get('establishment', 'SSTarapaca')){
+                return redirect()->route('allowances.create')->with('warning', 'Estimado Usuario: El funcionario seleccionado no pertenece a Servicio de Salud Tarapacá o Hospital de Alto Hospicio (Favor contactar a su administrativo).');
+            }
         }
+        
     }
 
     public function emitPosition($emitPosition)

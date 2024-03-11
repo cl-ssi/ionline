@@ -46,6 +46,12 @@ class TgrPayedDte extends Model
         'dte_id',
     ];
 
+
+    protected $casts = [
+        'fecha_generacion'=> 'datetime',
+        
+    ];
+
     public function dte()
     {
         return $this->belongsTo(Dte::class);

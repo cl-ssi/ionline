@@ -18,6 +18,8 @@ use App\Rrhh\Authority;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\EndSelectionNotification;
 
+use App\Models\Parameters\Parameter;
+
 class TechnicalEvaluationController extends Controller
 {
     /**
