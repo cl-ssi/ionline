@@ -209,7 +209,7 @@
             </tbody>
         </table>
 
-        {{ $dtes->links() }}
+        {{ $dtes->appends(request()->query())->links() }}        
 
     </div>
 @endsection

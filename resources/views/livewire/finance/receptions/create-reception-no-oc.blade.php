@@ -225,7 +225,7 @@
     <div class="row mb-3 g-2">
         <div class="col-md-12">
             <div class="form-group">
-                <label>Ítems</label>
+                <h5>Ítems</h5>
                 <div>
                     <button class="btn btn-primary" wire:click="addItem">Agregar Ítem</button>
                 </div>

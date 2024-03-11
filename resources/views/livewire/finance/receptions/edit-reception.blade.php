@@ -34,19 +34,23 @@
         <tr>
             <th>Fecha acta</th>
             <td>{{ $reception->date?->format('Y-m-d') }}</td>
+            
             <td>
-                @if ($reception->rejected == false)
-                    <a href="{{ route('finance.receptions.create', ['reception_id' => $reception->id, 'control_id' => '0']) }}"
-                        @class([
-                            'btn',
-                            'btn-primary',
-                            'form-control',
-                            'disabled' => $reception->items->isNotEmpty(),
-                        ])>
-                        <i class="bi bi-pencil-square"></i>
-                    </a>
+                @if($reception->purchase_order)
+                    @if ($reception->rejected == false)
+                        <a href="{{ route('finance.receptions.create', ['reception_id' => $reception->id, 'control_id' => '0']) }}"
+                            @class([
+                                'btn',
+                                'btn-primary',
+                                'form-control',
+                                'disabled' => $reception->items->isNotEmpty(),
+                            ])>
+                            <i class="bi bi-pencil-square"></i>
+                        </a>
+                    @endif
                 @endif
             </td>
+            
         </tr>
 
         <tr>
@@ -193,7 +197,7 @@
                                 </a>
                             @endif
                         @else
-                            <i class="bi bi-file-pdf-fill">soy sin OC</i>
+                            <i class="bi bi-file-pdf-fill"></i>
                         @endif
                     @endif
                 </td>
