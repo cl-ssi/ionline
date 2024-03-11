@@ -103,10 +103,26 @@
             @endif
         @endcan
 
-        @if($agreement->document?->fileToSign?->HasAllFlowsSigned)
+        @if($agreement->fileToSign?->HasAllFlowsSigned)
             <li class="nav-item">
                 <a class="nav-link text-secondary" href="{{route('documents.signatures.showPdf', [$agreement->file_to_sign_id, time()])}}" target="blank"><i class="fas fa-eye"></i> Ver convenio firmado</a>
             </li>
+            @if($canEdit)
+                @if($agreement->fileToSign?->HasAllFlowsSigned)
+                <li class="nav-item">
+                    <a href="#" class="nav-link text-secondary" data-toggle="modal"
+                                    data-target="#selectSignerRes"
+                                    data-formaction="{{ route('agreements.createWordRes'. ($agreement->program_id == 3 ? 'Withdrawal' : ($agreement->program_id == 50 ? 'Collaboration' : '')), $agreement )}}">
+                                    <i class="fas fa-file-download"></i> Descargar borrador Resolución</a>
+                </li>
+                @else
+                <li class="nav-item">
+                    <div class="tooltip-wrapper disabled" data-title="No existe registro de archivo docx versión final de Covenio Referentes, adjuntelo para habilitar esta opción">
+                        <a href="#" class="nav-link text-secondary disabled"><i class="fas fa-file-download"></i> Descargar borrador Resolución</a>
+                    </div>
+                </li>
+                @endif
+            @endif
         @endif
     @else
         <!-- convenios 2023 -->
