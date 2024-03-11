@@ -225,12 +225,14 @@
         </div>
     </div>
 
-    <!-- modal para mostrar info de reserva confirmada -->
+    <!-- modal para mostrar info de reserva con asistencia -->
     <div class="modal fade bd-example-modal-lg" id="confirmedHour" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title modalTitle" id=""></h5>
+                <a id="miEnlace3" href="#">
+                    <h5 class="modal-title modalTitle" id="">Modal title</h5>
+                </a>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
                 </button>
@@ -336,11 +338,14 @@
         </div>
     </div>
 
+    <!-- inasistencia -->
     <div class="modal fade" id="show_absence_reason" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title modalTitle" id=""></h5>
+                <a id="miEnlace2" href="#">
+                    <h5 class="modal-title modalTitle" id="">Modal title</h5>
+                </a>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
                 </button>
@@ -445,19 +450,6 @@
                         if(info.event.extendedProps.status=="Disponible"){
                             $('#newHour').modal();
                         }else if(info.event.extendedProps.status=="Reservado"){
-                            // if(info.event.extendedProps.first_appointment){
-                            //     Livewire.emit('getFirstAppointment', true);
-                            // }else{
-                            //     Livewire.emit('getFirstAppointment', false);
-                            // }
-                            // // para obtener el id del bloque de horario en contexto livewire
-                            // Livewire.emit('getOpenHoursId', info.event.id);
-                            // // el sgte codigo permite que una vez procesado livewire, se ejecute el codigo javascript
-                            // Livewire.hook('message.processed', (message, component) => {
-                            //     $('.rut').val(info.event.extendedProps.rut);
-                            //     $('#reservedHour').modal();
-                            // })
-
                             // asigna ruta href
                             var eventId = info.event.id;
                             var enlace = document.getElementById("miEnlace");
@@ -469,6 +461,13 @@
                             $('#reservedHour').modal();
                         }
                         else if(info.event.extendedProps.status=="Asistió"){
+                            // asigna ruta href
+                            var eventId = info.event.id;
+                            var enlace = document.getElementById("miEnlace3");
+                            var route = "{{ route('prof_agenda.reports.clinicalreportusu', ':eventId') }}";
+                            route = route.replace(':eventId', eventId);
+                            enlace.href = route;
+
                             $('.rut').val(info.event.extendedProps.rut);
                             $('#confirmedHour').modal();
                         }
@@ -478,6 +477,13 @@
                         }
 
                         else if(info.event.extendedProps.status=="No asistió"){
+                            // asigna ruta href
+                            var eventId = info.event.id;
+                            var enlace = document.getElementById("miEnlace2");
+                            var route = "{{ route('prof_agenda.reports.clinicalreportusu', ':eventId') }}";
+                            route = route.replace(':eventId', eventId);
+                            enlace.href = route;
+
                             $('#absence_reason').val(info.event.extendedProps.absence_reason);
                             $('#show_absence_reason').modal();   
                         }
