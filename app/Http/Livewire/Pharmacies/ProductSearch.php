@@ -19,6 +19,8 @@ class ProductSearch extends Component
 
     public $showSecondDiv = false;
 
+    public $filtro_producto;
+
     public function mount(){
         $this->products = Product::where('pharmacy_id',session('pharmacy_id'))
                                 ->orderBy('name','ASC')->get();
@@ -53,6 +55,19 @@ class ProductSearch extends Component
         $this->barcode_defer = $product->barcode;
         $this->experto_id = $product->experto_id;
         $this->defer_active = true;
+    }
+
+    public function updatedFiltroProducto()
+    {
+        // Filtrar los productos basados en el texto ingresado en $filtro_producto
+        $this->products = Product::where('pharmacy_id',session('pharmacy_id'))
+                                ->where('name', 'like', '%'.$this->filtro_producto.'%')
+                                ->orderBy('name','ASC')
+                                ->get();
+                                // dd($this->products);4
+
+                                $this->render();
+
     }
 
     public function render()

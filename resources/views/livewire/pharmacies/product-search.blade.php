@@ -16,12 +16,12 @@
             <input type="text" class="form-control" id="for_experto_id" placeholder="" name="experto_id" wire:model="experto_id">
         </fieldset>
 
-        <fieldset class="form-group col-6">
+        <fieldset class="form-group col-4">
             <label for="for_product">Producto</label>
-            <div wire:ignore id="for-bootstrap-select">
-                <!-- <select id="for_product" class="form-control selectpicker" data-live-search="true" data-container="#for-bootstrap-select" -->
-                    <select id="for_product" class="form-control" 
-                        name="product_id" wire:model.defer="product_id" wire:change="change" required>
+            <!--<div wire:ignore id="for-bootstrap-select">
+                    <select id="for_product" class="form-control selectpicker" data-live-search="true" data-container="#for-bootstrap-select" -->
+                <div>
+                    <select id="for_product" class="form-control" name="product_id" wire:model.defer="product_id" wire:change="change" required>
                     <option></option>
                     @foreach ($products as $key => $product_item)
                     <option value="{{$product_item->id}}">{{$product_item->name}}</option>
@@ -31,6 +31,11 @@
             @if($experto_id)
                 <button type="button" wire:click="toggleSecondDiv" class="btn btn-sm btn-primary">Editar nombre del producto</button>
             @endif
+        </fieldset>
+
+        <fieldset class="form-group col-2">
+            <label for="for_experto_id"><i>Filtro producto</i></label>
+            <input type="text" class="form-control" placeholder="" wire:model="filtro_producto">
         </fieldset>
 
         <!-- <div wire:ignore id="for-bootstrap-select">
