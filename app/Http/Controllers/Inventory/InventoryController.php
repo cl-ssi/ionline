@@ -107,7 +107,7 @@ class InventoryController extends Controller
             'establishment' => $establishment,
             'inventories' => $inventories,
             'qrcode' => $qrcode,
-        ])->stream('download.pdf');
+        ])->stream('planilla-mural-'.$place->name.'.pdf');
     }
     
 

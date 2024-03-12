@@ -39,6 +39,14 @@
 
 
     @if(count($inventories) > 0)
+
+    <div class="text-center">
+        <a href="{{ route('parameters.places.board', ['establishment' => auth()->user()->organizationalUnit->establishment, 'place' => $place]) }}" class="btn btn-sm btn-outline-secondary mt-3" target="_blank">
+            <i class="bi bi-printer"></i> Generar Planilla Mural
+        </a>
+    </div>
+
+
     <div>
     <br>
     <div class="text-end">
