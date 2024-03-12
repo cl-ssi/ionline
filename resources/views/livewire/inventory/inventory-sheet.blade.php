@@ -90,7 +90,7 @@
                     <th>OBSERVACIONES</th>
                     <th>FUNCIONARIO RESPONSABLE</th>
                     <th>FECHA DE RECEPCIÓN</th>
-                    <th>RECEPCION DIGITAL</th>
+                    <th>RECEPCIÓN DIGITAL</th>
                 </tr>
             </thead>
             <tbody>
@@ -103,8 +103,8 @@
                         <td>{{ $inventory->classification?->name }}</td> 
                         <td>${{ money($inventory->po_price) }}</td>
                         <td>{{ $inventory->observations }}</td>
-                        <td>{{ $inventory->lastConfirmedMovement->responsibleUser?->shortName }}</td>
-                        <td>{{ $inventory->lastConfirmedMovement->reception_date?->format('d-m-Y')}}</td> 
+                        <td>{{ $inventory->lastConfirmedMovement->responsibleUser->shortName }}</td>
+                        <td>{{ $inventory->lastConfirmedMovement->reception_date->format('d-m-Y')}}</td> 
                         <td>@include('sign.custom-clave-unica',['user'=>$inventory->lastConfirmedMovement->responsibleUser, 'date' => $inventory->lastConfirmedMovement->reception_date])</td>
                     </tr>
                 @endforeach

@@ -8,6 +8,10 @@ use App\Models\Inv\Inventory;
 use App\Models\Documents\Approval;
 use App\Http\Controllers\Controller;
 use App\Exports\InventoriesExport;
+use App\Models\Parameters\Place;
+use App\Models\Establishment;
+use Barryvdh\DomPDF\Facade\Pdf;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class InventoryController extends Controller
 {
@@ -75,4 +79,37 @@ class InventoryController extends Controller
     {
         return view('inventory.sheet');
     }
+
+    public function board(Establishment $establishment, Place $place)
+    {
+        $inventories = Inventory::whereHas('lastConfirmedMovement', function ($query) use ($place) {
+            $query->where('reception_confirmation', true)
+                  ->where('place_id', $place->id);
+        })->get();
+
+        // $qrCodeSvg = QrCode::format('svg')->size(200)->errorCorrection('H')->generate(route('parameters.places.board', [
+        //     'establishment' => $establishment->id,
+        //     'place' => $place->id
+        // ]));
+
+        $qrCodeSvg = QrCode::format('svg')->size(150)->errorCorrection('H')->generate(route('parameters.places.board', [
+            'establishment' => $establishment->id,
+            'place' => $place->id
+        ]));
+
+
+        $qrcode = base64_encode($qrCodeSvg);
+
+        
+        
+        return Pdf::loadView('inventory.board', [
+            'place' => $place,
+            'establishment' => $establishment,
+            'inventories' => $inventories,
+            'qrcode' => $qrcode,
+        ])->stream('download.pdf');
+    }
+    
+
+
 }

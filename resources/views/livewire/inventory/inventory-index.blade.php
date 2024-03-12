@@ -199,7 +199,7 @@
             <tr>
                 <th>Producto/Especie</th>
                 <th>Ubicación</th>
-                <th>Lugar</th>                
+                <th>Lugar</th>
                 <th>Responsable</th>
                 <th>Usuario</th>
                 <th class="text-center">Total</th>

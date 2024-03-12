@@ -57,7 +57,7 @@ class InventoryMovement extends Model implements Auditable
 
     public function responsibleUser()
     {
-        return $this->belongsTo(User::class, 'user_responsible_id');
+        return $this->belongsTo(User::class, 'user_responsible_id')->withTrashed();;
     }
 
     public function usingOrganizationalUnit()
@@ -67,12 +67,12 @@ class InventoryMovement extends Model implements Auditable
 
     public function usingUser()
     {
-        return $this->belongsTo(User::class, 'user_using_id');
+        return $this->belongsTo(User::class, 'user_using_id')->withTrashed();;
     }
 
     public function senderUser()
     {
-        return $this->belongsTo(User::class, 'user_sender_id');
+        return $this->belongsTo(User::class, 'user_sender_id')->withTrashed();;
     }
 
     protected static function boot()

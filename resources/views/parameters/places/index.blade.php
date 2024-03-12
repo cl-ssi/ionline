@@ -30,6 +30,7 @@
             </tr>
         </thead>
         <tbody>
+        
             @forelse($places as $place)
                 <tr>
                     <td class="text-center">{{ $place->id }}</td>
@@ -40,11 +41,16 @@
                     <td>{{ $place->establishment->name }}</td>
                     <td class="text-center">
                         @can('Inventory: manager')
+                            <a href="{{ route('parameters.places.board', ['establishment' => auth()->user()->organizationalUnit->establishment, 'place' => $place]) }}" class="btn btn-sm btn-outline-secondary ml-1" target="_blank">
+                                <i class="bi bi-printer"></i>
+                            </a>
+                            <br>
                             <button type="button"
                                 class="btn btn-sm btn-outline-primary"
                                 wire:click="edit({{ $place }})">
                                 <i class="fas fa-edit"></i>
                             </button>
+                            <br>
                             <button type="button" class="btn btn-sm btn-outline-danger float-righ" wire:click="delete({{ $place }})">
                                 <i class="fas fa-trash"></i>
                             </button>

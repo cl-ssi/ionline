@@ -36,17 +36,11 @@ class InventorySheet extends Component
 
     public function search()
     {    
-        $this->inventories = [];
-        $this->place = null;
-
-        $inventories = Inventory::whereHas('lastConfirmedMovement', function ($query) {
-            $query->where('reception_confirmation', true);
-        })
-        ->whereHas('lastConfirmedMovement.place', function ($query) {
-            $query->where('place_id', $this->place_id);
-        })->get();
-
-        $this->inventories = $inventories; 
+        $this->inventories = Inventory::whereHas('lastConfirmedMovement', function ($query) {
+                $query->where('place_id', $this->place_id);
+            })->get();
+    
         $this->place = Place::find($this->place_id);
     }
+    
 }

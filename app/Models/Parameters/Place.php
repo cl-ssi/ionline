@@ -7,6 +7,7 @@ use App\Models\Inv\Inventory;
 use App\Models\Inv\inventoryMovement;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class Place extends Model
 {
@@ -60,6 +61,22 @@ class Place extends Model
     public function inventoryMovements()
     {
         return $this->hasMany(InventoryMovement::class, 'place_id');
+    }
+
+    public function getQrAttribute() {
+        return QrCode::size(150)
+            ->generate(route('parameters.places.board', [
+                'establishment' => $this->establishment_id,
+                'place' => $this->id
+            ]));
+    }
+
+    public function getQrSmallAttribute() {
+        return QrCode::size(74)
+            ->generate(route('parameters.places.board', [
+                'establishment' => $this->establishment_id,
+                'place' => $this->id
+            ]));
     }
 
 
