@@ -19,11 +19,12 @@
         <fieldset class="form-group col-6">
             <label for="for_product">Producto</label>
             <div wire:ignore id="for-bootstrap-select">
-                <select id="for_product" class="form-control selectpicker" data-live-search="true" data-container="#for-bootstrap-select" 
+                <!-- <select id="for_product" class="form-control selectpicker" data-live-search="true" data-container="#for-bootstrap-select" -->
+                    <select id="for_product" class="form-control" 
                         name="product_id" wire:model.defer="product_id" wire:change="change" required>
                     <option></option>
-                    @foreach ($products as $key => $product)
-                    <option value="{{$product->id}}">{{$product->name}}</option>
+                    @foreach ($products as $key => $product_item)
+                    <option value="{{$product_item->id}}">{{$product_item->name}}</option>
                     @endforeach
                 </select>
             </div>
