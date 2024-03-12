@@ -165,7 +165,7 @@
                         </fieldset>
 
                         <fieldset class="form-group col-12 col-md-4">
-                            <label for="for_contact_number">Telefono de contacto</label>
+                            <label for="for_contact_number">Teléfono</label>
                             <div>
                                 <input type="text" class="form-control contact_number" disabled>
                             </div>
@@ -197,7 +197,7 @@
 
                 <hr>
 
-                <h6>¿Paciente asistió a la hora agendada?</h6>
+                <h6>¿Paciente asistió a la cita?</h6>
 
                 <div class="row">
 
@@ -268,7 +268,7 @@
                     </fieldset>
 
                     <fieldset class="form-group col-12 col-md-4">
-                        <label for="for_contact_number">Telefono de contacto</label>
+                        <label for="for_contact_number">Teléfono</label>
                         <div>
                             <input type="text" class="form-control contact_number" disabled>
                         </div>
@@ -351,6 +351,29 @@
                 </button>
             </div>
             <div class="modal-body">
+
+                <div class="row">
+                    <fieldset class="form-group col-4">
+                        <label for="for_rut">Rut</label>
+                        <div>
+                            <input type="text" class="form-control rut" id="" disabled>
+                        </div>
+                    </fieldset>
+
+                    <fieldset class="form-group col-4">
+                        <label for="for_patient">Funcionario</label>
+                        <div>
+                            <input type="text" class="form-control patient" id="" disabled>
+                        </div>
+                    </fieldset>
+
+                    <fieldset class="form-group col-4">
+                        <label for="for_contact_number">Teléfono</label>
+                        <div>
+                            <input type="text" class="form-control contact_number" disabled>
+                        </div>
+                    </fieldset>
+                </div>
                 
                 <div class="row">
                     <fieldset class="form-group col-12 col-md">
@@ -484,6 +507,7 @@
                             route = route.replace(':eventId', eventId);
                             enlace.href = route;
 
+                            $('.rut').val(info.event.extendedProps.rut);
                             $('#absence_reason').val(info.event.extendedProps.absence_reason);
                             $('#show_absence_reason').modal();   
                         }

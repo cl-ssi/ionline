@@ -64,7 +64,7 @@ class Agenda extends Component
             
             $array[$count]['id'] = $hour->id;
             $array[$count]['observation'] = $hour->observation;
-            $array[$count]['rut'] = $hour->patient_id;
+            $array[$count]['rut'] = $hour->patient ? ($hour->patient->id . "-" . $hour->patient->dv) : '';
             $array[$count]['patient_name'] =  $hour->patient ? $hour->patient->shortName : '';
             $array[$count]['contact_number'] = $hour->contact_number;
             if($hour->appointments->count() > 0){
@@ -86,18 +86,19 @@ class Agenda extends Component
                     // paciente asistió
                     if($hour->assistance == 1){
                         if($hour->patient){
-                            $array[$count]['rut'] = $hour->patient_id;
+                            $array[$count]['rut'] = $hour->patient->id . "-" . $hour->patient->dv;
                             $array[$count]['color'] = "#C4F7BF"; // verde
                             $array[$count]['title'] = $hour->patient->shortName;
                             $array[$count]['status'] = "Asistió";
                         }else{
-                            $array[$count]['rut'] = $hour->patient_id;
+                            $array[$count]['rut'] = $hour->patient->id . "-" . $hour->patient->dv;
                             $array[$count]['color'] = "#C4F7BF"; // verde
                             $array[$count]['title'] = $hour->id . " - Error con paciente";
                             $array[$count]['status'] = "Asistió";
                         }
                     }
                     if($hour->assistance == 0){
+                        $array[$count]['rut'] = $hour->patient ? ($hour->patient->id . "-" . $hour->patient->dv) : '';
                         $array[$count]['color'] = "#EB9489"; // rojo
                         $array[$count]['title'] = $hour->patient->shortName;
                         $array[$count]['status'] = "No asistió";
