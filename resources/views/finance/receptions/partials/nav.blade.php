@@ -37,12 +37,31 @@
             Dtes Cenabast
         </a>
     </li>
-    <li class="nav-item">
-        <a class="nav-link {{ active('finance.receptions.parameters') }}"
-            aria-current="page"
-            href="{{ route('finance.receptions.parameters') }}">
-            <i class="bi bi-wrench"></i> 
-            Parametros
-        </a>
+
+    <li class="nav-item dropdown">
+            <a
+                class="nav-link dropdown-toggle"
+                data-toggle="dropdown"
+                data-bs-toggle="dropdown"
+                href="#"
+                role="button"
+                aria-expanded="false"
+            >
+                <i class="bi bi-wrench"></i> Parametros
+            </a>
+            <div class="dropdown-menu">
+                <a
+                    class="dropdown-item"
+                    href="{{ route('finance.receptions.parameters') }}"
+                >
+                        <i class="fas fa-envelope"></i> Email Notificación
+                </a>
+                <a
+                    class="dropdown-item"
+                    href="{{ route('finance.receptions.type') }}"
+                >
+                        <i class="fas fa-file-alt"></i> Tipo de Acta
+                </a>
+            </div>
     </li>
 </ul>

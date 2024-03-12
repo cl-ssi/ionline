@@ -18,6 +18,7 @@ class TypeMgr extends Component
         return [
             
             'type.name' => 'required|min:4',
+            'type.title' => 'required|min:4',
         ];
     }
 
@@ -51,4 +52,16 @@ class TypeMgr extends Component
         $types = ReceptionType::where('establishment_id', auth()->user()->organizationalUnit->establishment_id)->latest()->paginate(25);
         return view('livewire.finance.receptions.type-mgr', ['types' => $types]);
     }
+
+    
+    public function delete(ReceptionType $type)
+    {
+        if ($type->receptions()->count() === 0) {
+            $type->delete();
+        } else {
+            session()->flash('message', 'No se puede eliminar este tipo de acta porque tiene recepciones asociadas.');
+        }
+    }
+
+
 }

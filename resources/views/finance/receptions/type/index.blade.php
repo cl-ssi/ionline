@@ -3,6 +3,7 @@
         <tr>
             <th>Editar</th>
             <th>Nombre</th>
+            <th>Titulo <small>(Titulo que aparecerá en el PDF)</small></th>
             <th></th>
         </tr>
     </thead>
@@ -14,6 +15,7 @@
                         wire:click="form({{$type}})"><i class="fas fa-edit"></i></button>
                 </td>
                 <td>{{ $type->name }}</td>
+                <td>{{ $type->title }}</td>
                 
                 <td>
                     <button type="button" class="btn btn-sm btn-danger" 

@@ -36,7 +36,7 @@
                     wire:model="reception.dte_type"
                     wire:loading.attr="disabled"
                     wire:target="digitalInvoiceFile"
-                    wire:change="toggleFacturaElectronicaFields($event.target.value)"                    
+                    wire:change="toggleFacturaElectronicaFields($event.target.value)"
                     >
                     <option></option>
                     <option value ="factura_electronica">Factura Electronica Afecta</option>

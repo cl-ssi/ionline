@@ -1,21 +1,17 @@
-<div>
-    {{-- If you look to others for fulfillment, you will never truly be fulfilled. --}}
+<div>    
     @section('title', 'Tipo de Actas')
-    <ul class="nav nav-tabs mb-3">
-        <li class="nav-item">
-            <a class="nav-link {{ active('finance.receptions.create') }}"
-                aria-current="page"
-                href="{{ route('finance.receptions.create') }}">Con Orden de Compra</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link"
-                href="#">Sin Orden de Compra</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link {{ active('finance.receptions.type') }}"
-                href="{{ route('finance.receptions.type') }}">Tipos de Acta</a>
-        </li>
-    </ul>
+
+
+    @include('finance.receptions.partials.nav')
+    
+    @if (session()->has('message'))
+        <div class="alert alert-danger">
+            {{ session('message') }}
+        </div>
+    @endif
+
+
+
 
 
 
