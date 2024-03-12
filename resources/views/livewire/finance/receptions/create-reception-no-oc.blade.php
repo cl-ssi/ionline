@@ -33,7 +33,7 @@
                 <label for="reception-date">Tipo de documento*</label>
                 <select id="document_type"
                     class="form-select @error('reception.dte_type') is-invalid @enderror"
-                    wire:model.defer="reception.dte_type"
+                    wire:model="reception.dte_type"
                     wire:loading.attr="disabled"
                     wire:target="digitalInvoiceFile"
                     wire:change="toggleFacturaElectronicaFields($event.target.value)"
@@ -51,15 +51,35 @@
 
         <div class="form-group col-2">
             <label for="emisor">RUT*</label>
-            <input type="text" class="form-control" id="emisor" wire:model.defer="emisor"
+            <input type="text" class="form-control" id="emisor" wire:model="emisor"
                 placeholder="ej: 76.278.474-2" autocomplete="off"
                 wire:loading.attr="disabled"
                 wire:target="digitalInvoiceFile"
+                wire:change="loadDteData()"
                 >
             @error('emisor')
                 <span class="text-danger">{{ $message }}</span>
             @enderror
         </div>
+
+        <div class="form-group col-2">
+            <label for="folio">Folio</label>
+            <input type="number" class="form-control" id="folio" wire:model="folio" autocomplete="off"
+                min="1" 
+                wire:loading.attr="disabled"
+                wire:target="digitalInvoiceFile"
+                wire:change="loadDteData()"
+                >
+            @error('folio')
+                <span class="text-danger">{{ $message }}</span>
+            @enderror
+        </div>
+
+
+    </div>
+
+
+    <div class="row mb-3 g-2">
 
         <div class="form-group col-4">
             <label for="razonSocial">Razón Social*</label>
@@ -70,10 +90,6 @@
                 <span class="text-danger">{{ $message }}</span>
             @enderror
         </div>
-    </div>
-
-
-    <div class="row mb-3 g-2">
 
         <div class="col-md-2">
             <div class="form-group">
@@ -91,16 +107,7 @@
 
 
 
-        <div class="form-group col-2">
-            <label for="folio">Número</label>
-            <input type="number" class="form-control" id="folio" wire:model.defer="folio" autocomplete="off"
-                min="1" 
-                wire:loading.attr="disabled"
-                wire:target="digitalInvoiceFile">
-            @error('folio')
-                <span class="text-danger">{{ $message }}</span>
-            @enderror
-        </div>
+
     
     <div class="form-group col-2">
         <label for="montoNeto">Monto Neto</label>

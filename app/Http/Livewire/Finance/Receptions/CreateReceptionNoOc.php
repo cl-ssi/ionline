@@ -80,6 +80,31 @@ class CreateReceptionNoOc extends Component
             ->pluck('name','id')->toArray();
     }
 
+    public function loadDteData()
+    {
+        if($this->reception['dte_type'])
+        {    
+            $value = preg_replace('/[^0-9K]/', '', strtoupper(trim($this->emisor)));
+            $dv = substr($value, -1);
+            $id = substr($value, 0, -1);
+            $this->emisor = number_format($id, 0, '', '.').'-'.$dv;
+    
+            $dteData = Dte::where('emisor', $this->emisor)
+                            ->where('folio', $this->folio)
+                            ->where('tipo_documento', $this->reception['dte_type'])
+                            ->first();            
+    
+            if ($dteData) {
+                $this->razonSocial = $dteData->razon_social_emisor;
+                $this->reception['dte_date'] = $dteData->emision?->format('Y-m-d');
+                $this->montoNeto = $dteData->monto_neto;
+                $this->montoIva = $dteData->monto_iva;
+                $this->montoTotal = $dteData->monto_total;
+            }
+        }
+    }
+    
+
     public function save()
     {        
         
