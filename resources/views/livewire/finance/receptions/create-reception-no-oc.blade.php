@@ -28,7 +28,7 @@
         </div>
 
 
-        <div class="col-md-2">
+        <div class="col-md-3">
             <div class="form-group">
                 <label for="reception-date">Tipo de documento*</label>
                 <select id="document_type"
@@ -36,8 +36,7 @@
                     wire:model="reception.dte_type"
                     wire:loading.attr="disabled"
                     wire:target="digitalInvoiceFile"
-                    wire:change="toggleFacturaElectronicaFields($event.target.value)"
-                    wire:change="loadDteData()"
+                    wire:change="toggleFacturaElectronicaFields($event.target.value)"                    
                     >
                     <option></option>
                     <option value ="factura_electronica">Factura Electronica Afecta</option>
@@ -53,7 +52,7 @@
         <div class="form-group col-2">
             <label for="emisor">RUT*</label>
             <input type="text" class="form-control" id="emisor" wire:model="emisor"
-                placeholder="ej: 76.278.474-2" autocomplete="off"
+                autocomplete="off"
                 wire:loading.attr="disabled"
                 wire:target="digitalInvoiceFile"
                 wire:change="loadDteData()"

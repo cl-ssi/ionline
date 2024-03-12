@@ -82,8 +82,11 @@ class CreateReceptionNoOc extends Component
 
     public function loadDteData()
     {
-        if($this->reception['dte_type'])
+        if($this->reception['dte_type'] )
         {    
+            
+            if($this->emisor)
+            {
             $value = preg_replace('/[^0-9K]/', '', strtoupper(trim($this->emisor)));
             $dv = substr($value, -1);
             $id = substr($value, 0, -1);
@@ -94,13 +97,14 @@ class CreateReceptionNoOc extends Component
                             ->where('tipo_documento', $this->reception['dte_type'])
                             ->first();
     
-            if ($dteData) {
-                $this->razonSocial = $dteData->razon_social_emisor;
-                $this->reception['dte_date'] = $dteData->emision?->format('Y-m-d');
-                $this->montoNeto = $dteData->monto_neto;
-                $this->montoExento = $dteData->monto_exento;
-                $this->montoIva = $dteData->monto_iva;
-                $this->montoTotal = $dteData->monto_total;
+                if ($dteData) {
+                    $this->razonSocial = $dteData->razon_social_emisor;
+                    $this->reception['dte_date'] = $dteData->emision?->format('Y-m-d');
+                    $this->montoNeto = $dteData->monto_neto;
+                    $this->montoExento = $dteData->monto_exento;
+                    $this->montoIva = $dteData->monto_iva;
+                    $this->montoTotal = $dteData->monto_total;
+                }
             }
         }
     }
@@ -344,6 +348,7 @@ class CreateReceptionNoOc extends Component
     {
         $this->showFacturaElectronicaFields = $value === 'factura_electronica';
         $this->showFacturaExentaFields = $value === 'factura_exenta';
+        $this->loadDteData();
     }
 
 
