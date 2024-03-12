@@ -23,11 +23,11 @@ class InventoryController extends Controller
      */
     public function actTransfer(InventoryMovement $movement)
     {
-        $approvalSender = $this->getApprovalLegacyAttribute($movement->senderUser ?? null);
+        $approvalSender = $this->getApprovalLegacyAttribute($movement->senderUser ?? null, $movement);
 
-        $approvalResponsible = $this->getApprovalLegacyAttribute($movement->inventory->responsible);
+        $approvalResponsible = $this->getApprovalLegacyAttribute($movement->inventory->responsible, $movement);
 
-        $approvalUsing = $this->getApprovalLegacyAttribute($movement->inventory->using);
+        $approvalUsing = $this->getApprovalLegacyAttribute($movement->inventory->using, $movement);
 
         return view('inventory.pdf.act-transfer', compact('movement', 'approvalSender', 'approvalResponsible'));
     }
@@ -38,7 +38,7 @@ class InventoryController extends Controller
      * @param  mixed  $approver
      * @return \App\Models\Documents\Approval|null
      */
-    public function getApprovalLegacyAttribute($approver = null)
+    public function getApprovalLegacyAttribute($approver = null, InventoryMovement $movement = null)
     {
         if(! isset($approver))
         {
@@ -48,7 +48,7 @@ class InventoryController extends Controller
         $approval = new Approval();
         $approval->status = 1;
         $approval->approver_id = $approver->id;
-        $approval->approver_at = now();
+        $approval->approver_at = $movement->reception_date ?? now();
         $approval->sent_to_ou_id = $approver->organizational_unit_id;
         return $approval;
     }
