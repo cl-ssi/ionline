@@ -94,6 +94,10 @@ class Allowance extends Model implements Auditable
         return $this->hasMany('App\Models\Allowances\Destination', 'allowance_id');
     }
 
+    public function corrections() {
+        return $this->hasMany('App\Models\Allowances\AllowanceCorrection', 'allowance_id');
+    }
+
     /*
     public function getStatusValueAttribute() {
         switch($this->status) {
