@@ -41,11 +41,12 @@
                 <th>ID</th>
                 <th>Estb.</th>
                 <th>Documento</th>
+                <th>Folio</th>
                 <th width="140px">OC</th>
                 <th>FR</th>
                 <th>Adjuntos</th>
                 <th>Recepción</th>
-                <th>SIGFE</th>                
+                <th>SIGFE</th>
                 <th>Observaciones</th>
                 <th>Revisar</th>
             </tr>
@@ -66,6 +67,7 @@
                     <td class="small">
                         @include('finance.payments.partials.dte-info')
                     </td>
+                    <td class="small">{{ $dte->folio }}</td>
                     <td class="small">
                         @livewire('finance.get-purchase-order', ['dte' => $dte], key($dte->id))
                     </td>
