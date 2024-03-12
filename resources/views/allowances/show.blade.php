@@ -179,89 +179,11 @@
 
 <br>
 
-<h6><i class="fas fa-dollar-sign"></i> Resumen</h6>
-<div class="table-responsive">
-    <table class="table table-sm table-bordered table-striped table-hover small">
-        <tbody>
-            <tr class="text-center">
-                <th>Viático</th>
-                <th>%</th>
-                <th>Valor</th>
-                <th>N° Días</th>
-                <th>Valor Total</th>
-            </tr>
-            <tr>
-                <td><b>1. DIARIO</b></td>
-                <td class="text-center">100%</td>
-                <td class="text-right">
-                    ${{ ($allowance->day_value) ? number_format($allowance->day_value, 0, ",", ".") : number_format($allowance->allowanceValue->value, 0, ",", ".") }}
-                </td>
-                <td class="text-center"> 
-                    {{ ($allowance->total_days) ? intval($allowance->total_days) : 0 }}
-                </td>
-                <td class="text-right">
-                    ${{ ($allowance->total_days >= 1) ? number_format(($allowance->day_value * intval($allowance->total_days)), 0, ",", ".") : '0' }}
-                </td>
-            </tr>
-            <tr>
-                <td><b>2. PARCIAL</b></td>
-                <td class="text-center">40%</td>
-                <td class="text-right">
-                    ${{ ($allowance->half_day_value) ? number_format($allowance->half_day_value, 0, ",", ".") : '0' }}
-                </td>
-                <td class="text-center">
-                    {{ ($allowance->total_half_days) ? intval($allowance->total_half_days) : 0 }}
+@livewire('allowances.show-summary',[
+    'allowance' => $allowance
+])
 
-                    @if($allowance->total_half_days && $allowance->total_half_days > 1)
-                        medios días
-                    @elseif($allowance->total_half_days && $allowance->total_half_days == 1)
-                        medio día
-                    @else
-
-                    @endif
-                </td>
-                <td class="text-right">
-                    ${{ ($allowance->half_day_value) ? number_format($allowance->half_day_value * $allowance->total_half_days, 0, ",", ".") : '' }}
-                </td>
-            </tr>
-            <tr>
-                <td><b>3. PARCIAL</b></td>
-                <td class="text-center">50%</td>
-                <td class="text-right">
-                    ${{ ($allowance->fifty_percent_day_value) ? number_format($allowance->fifty_percent_day_value, 0, ",", ".") : '0' }}
-                </td>
-                <td class="text-center">
-                    {{ ($allowance->fifty_percent_total_days) ? intval($allowance->fifty_percent_total_days) : 0 }}
-                </td>
-                <td class="text-right">
-                    ${{ ($allowance->fifty_percent_day_value) ? number_format($allowance->fifty_percent_day_value * $allowance->fifty_percent_total_days, 0, ",", ".") : '' }}
-                </td>
-            </tr>
-            <tr>
-                <td><b>4. PARCIAL</b></td>
-                <td class="text-center">60%</td>
-                <td class="text-right">
-                    ${{ ($allowance->sixty_percent_day_value) ? number_format($allowance->sixty_percent_day_value, 0, ",", ".") : '0' }}
-                </td>
-                <td class="text-center">
-                    {{ ($allowance->sixty_percent_total_days) ? intval($allowance->sixty_percent_total_days) : 0 }}
-                </td>
-                <td class="text-right">
-                    ${{ ($allowance->sixty_percent_day_value) ? number_format($allowance->sixty_percent_day_value * $allowance->sixty_percent_total_days, 0, ",", ".") : '' }}
-                </td>
-            </tr>
-            <tr>
-                <td colspan="3"></td>                    
-                <td class="text-center"><b>Total</b></td>
-                <td class="text-right">
-                    ${{ number_format($allowance->total_value, 0, ",", ".") }}
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</div>
-
-<br>
+<br><br>
 
 <h6><i class="fas fa-check-circle"></i> Gestión de aprobaciones</h6>
 
