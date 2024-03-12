@@ -32,12 +32,12 @@ class CreateReceptionNoOc extends Component
     public $approvals = [];
     public $items = [];
     public $showFacturaElectronicaFields = false;
+    public $showFacturaExentaFields = false;
 
     public $receptionItems = [];
     
 
-    protected $rules = [
-        'digitalInvoiceFile' => 'required|file|max:2048',
+    protected $rules = [        
         'reception.dte_type' => 'required',
         'reception.reception_type_id' => 'required',
         'reception.date'            => 'required|date_format:Y-m-d',
@@ -92,12 +92,13 @@ class CreateReceptionNoOc extends Component
             $dteData = Dte::where('emisor', $this->emisor)
                             ->where('folio', $this->folio)
                             ->where('tipo_documento', $this->reception['dte_type'])
-                            ->first();            
+                            ->first();
     
             if ($dteData) {
                 $this->razonSocial = $dteData->razon_social_emisor;
                 $this->reception['dte_date'] = $dteData->emision?->format('Y-m-d');
                 $this->montoNeto = $dteData->monto_neto;
+                $this->montoExento = $dteData->monto_exento;
                 $this->montoIva = $dteData->monto_iva;
                 $this->montoTotal = $dteData->monto_total;
             }
@@ -116,19 +117,29 @@ class CreateReceptionNoOc extends Component
         $id = substr($value, 0, -1);
         $this->emisor = number_format($id, 0, '', '.').'-'.$dv;
 
-        $dte_manual = Dte::create([
-            
-            'tipo_documento' => $this->reception['dte_type'],
-            'folio' => $this->folio,
-            'emisor' => $this->emisor,
-            'emision' => $this->reception['dte_date'],
-            'razon_social_emisor' => $this->razonSocial,
-            'monto_neto' => isset($this->montoNeto) ? $this->montoNeto : null,
-            'monto_iva' => isset($this->montoIva) ? $this->montoIva : null,
-            'monto_total' => $this->montoTotal,
-            'tipo' => $tipo,
-            'establishment_id' => auth()->user()->organizationalUnit->establishment_id,
-        ]);
+        $existingDte = Dte::where('tipo_documento', $this->reception['dte_type'])
+        ->where('folio', $this->folio)
+        ->where('emisor', $this->emisor)
+        ->first();
+
+
+        if ($existingDte) {
+            $dte_manual = $existingDte;
+        } else {
+            // Si no existe, crear un nuevo registro en la tabla Dte
+            $dte_manual = Dte::create([
+                'tipo_documento' => $this->reception['dte_type'],
+                'folio' => $this->folio,
+                'emisor' => $this->emisor,
+                'emision' => $this->reception['dte_date'],
+                'razon_social_emisor' => $this->razonSocial,
+                'monto_neto' => isset($this->montoNeto) ? $this->montoNeto : null,
+                'monto_iva' => isset($this->montoIva) ? $this->montoIva : null,
+                'monto_total' => $this->montoTotal,
+                'tipo' => $tipo,
+                'establishment_id' => auth()->user()->organizationalUnit->establishment_id,
+            ]);
+        }
 
         
         
@@ -324,14 +335,18 @@ class CreateReceptionNoOc extends Component
     public function calculateTotalAmount()
     {
         $neto = $this->montoNeto ?? 0;
+        $exento = $this->montoexento ?? 0;
         $iva = $this->showFacturaElectronicaFields ? ($this->montoIva ?? 0) : 0;
-        $this->montoTotal = $neto + $iva;
+        $this->montoTotal = $neto + $iva + $exento;
     }
 
     public function toggleFacturaElectronicaFields($value)
     {
         $this->showFacturaElectronicaFields = $value === 'factura_electronica';
+        $this->showFacturaExentaFields = $value === 'factura_exenta';
     }
+
+
 
     public function preview()
     {

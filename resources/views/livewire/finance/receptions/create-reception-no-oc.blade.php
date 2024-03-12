@@ -37,6 +37,7 @@
                     wire:loading.attr="disabled"
                     wire:target="digitalInvoiceFile"
                     wire:change="toggleFacturaElectronicaFields($event.target.value)"
+                    wire:change="loadDteData()"
                     >
                     <option></option>
                     <option value ="factura_electronica">Factura Electronica Afecta</option>
@@ -107,35 +108,52 @@
 
 
 
-
-    
-    <div class="form-group col-2">
-        <label for="montoNeto">Monto Neto</label>
-        <input type="number" class="form-control" id="montoNeto" wire:model.defer="montoNeto"
-            autocomplete="off" min="1000"
-            wire:loading.attr="disabled"
-            wire:target="digitalInvoiceFile"
-            wire:change="calculateTotalAmount"
-        >
-        @error('montoNeto')
-        <span class="text-danger">{{ $message }}</span>
-        @enderror
-    </div>
-
     @if($showFacturaElectronicaFields)
-    <div class="form-group col-2" >
-        <label for="montoIva">Iva</label>
-        <input type="number" class="form-control" id="montoIva" wire:model.defer="montoIva"
-            autocomplete="off" min="1000"
-            wire:loading.attr="disabled"
-            wire:target="digitalInvoiceFile"
-            wire:change="calculateTotalAmount"
-        >
-        @error('montoIva')
-        <span class="text-danger">{{ $message }}</span>
-        @enderror
-    </div>
-@endif
+        
+        <div class="form-group col-2">
+            <label for="montoNeto">Monto Neto</label>
+            <input type="number" class="form-control" id="montoNeto" wire:model.defer="montoNeto"
+                autocomplete="off" min="1000"
+                wire:loading.attr="disabled"
+                wire:target="digitalInvoiceFile"
+                wire:change="calculateTotalAmount"
+            >
+            @error('montoNeto')
+            <span class="text-danger">{{ $message }}</span>
+            @enderror
+        </div>
+
+        
+        <div class="form-group col-2" >
+            <label for="montoIva">Iva</label>
+            <input type="number" class="form-control" id="montoIva" wire:model.defer="montoIva"
+                autocomplete="off" min="1000"
+                wire:loading.attr="disabled"
+                wire:target="digitalInvoiceFile"
+                wire:change="calculateTotalAmount"
+            >
+            @error('montoIva')
+            <span class="text-danger">{{ $message }}</span>
+            @enderror
+        </div>
+    @endif
+
+
+    @if($showFacturaExentaFields)
+        <div class="form-group col-2">
+            <label for="montoExento">Monto Exento</label>
+            <input type="number" class="form-control" id="montoExento" wire:model.defer="montoExento"
+                autocomplete="off" min="1000"
+                wire:loading.attr="disabled"
+                wire:target="digitalInvoiceFile"
+                wire:change="calculateTotalAmount"
+            >
+            @error('montoExento')
+                <span class="text-danger">{{ $message }}</span>
+            @enderror
+        </div>
+    @endif
+
 
 
 
