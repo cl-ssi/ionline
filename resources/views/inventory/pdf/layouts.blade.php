@@ -10,17 +10,16 @@
     <body>
         <div class="content">
             <div style="padding-bottom: 0.3rem">
-                <img style="padding-bottom: 4px;" src="/images/logo_pluma.jpg"
+                <img style="padding-bottom: 4px;" src="/images/logo_pluma_{{ auth()->user()->organizationalUnit->establishment->alias }}.png"
                 width="120" alt="Logo {{ env('APP_SS') }}"><br>
             </div>
 
             @yield('content')
 
             <div class="pie_pagina seis center" style="height: 20px;">
-                <span class="uppercase">{{ env('APP_SS') }}</span><br>
-                {{ env('APP_SS_ADDRESS') }} -
-                Fono: {{ env('APP_SS_TELEPHONE') }} -
-                {{ env('APP_SS_WEBSITE') }}
+                <span class="uppercase">{{ auth()->user()->organizationalUnit->establishment?->name }}</span><br>
+                {{ auth()->user()->organizationalUnit->establishment?->full_address }} -
+                Fono: {{ auth()->user()->organizationalUnit->establishment?->telephone }}
             </div>
         </div>
     </body>

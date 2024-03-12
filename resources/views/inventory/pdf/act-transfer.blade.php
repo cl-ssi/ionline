@@ -33,7 +33,7 @@
 
 <div style="width: 49%; display: inline-block;">
     <div class="siete">
-        {{ env('APP_SS') }}
+        {{ auth()->user()->organizationalUnit->establishment->name }}
     </div>
 </div>
 
