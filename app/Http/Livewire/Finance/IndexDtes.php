@@ -128,6 +128,16 @@ class IndexDtes extends Component
                     case 'fecha_hasta':
                         $query->where('fecha_recepcion_sii', '<=', $value);
                         break;
+                    case 'estado':
+                        switch ($value) {
+                            case 'revision':
+                                $query->where('all_receptions',1);
+                                break;
+                            case 'listo_para_pago':
+                                $query->where('payment_ready',1);
+                                break;
+                        }
+                        break;
 
                 }
             }

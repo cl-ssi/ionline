@@ -109,6 +109,17 @@
             <label for="for-fecha_hasta" class="form-label">Fecha Hasta SII</label>
             <input type="date" class="form-control" wire:model.defer="filter.fecha_hasta">
         </div>
+
+        <div class="col-md-2">
+            <label for="for-tipo_documento" class="form-label">Estado</label>
+            <select class="form-select" wire:model.defer="filter.estado">
+                <option value="">Todas</option>
+                <option value="revision">Revision</option>
+                <option value="listo_para_pago">Listo para Pago</option>
+            </select>
+        </div>
+
+
     </div>
 
 
