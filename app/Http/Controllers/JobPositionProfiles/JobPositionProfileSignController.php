@@ -98,7 +98,8 @@ class JobPositionProfileSignController extends Controller
             ]);
 
             /* AGREGO SUBDIRECCIONES EN ARRAY */
-            if($organizationalUnit->id != Parameter::get('ou','GestionDesarrolloDelTalento')){
+            $sdr_approval = null;
+            if($organizationalUnit->id != Parameter::get('ou','SubRRHH')){
                 /* SE CREA APROBACIÓN PARA S.D. AREA REQUIRENTE (EXCEPTO SDGP) */
                 $sdr_approval = $jobPositionProfile->approvals()->create([
                     "module"                => "Perfil de Cargos",
@@ -126,7 +127,7 @@ class JobPositionProfileSignController extends Controller
                 "document_route_name"   => "job_position_profile.show_approval",
                 "document_route_params" => json_encode(["job_position_profile_id" => $jobPositionProfile->id]),
                 "active"                => false,
-                "previous_approval_id"  => ($sdr_approval) ? $sdr_approval->id : $dgt_approval, 
+                "previous_approval_id"  => ($sdr_approval != null) ? $sdr_approval->id : $dgt_approval->id, 
                 "callback_controller_method"    => "App\Http\Controllers\JobPositionProfiles\JobPositionProfileSignController@approvalCallback",
                 "callback_controller_params"    => json_encode([
                     'job_position_profile_id' => $jobPositionProfile->id,
