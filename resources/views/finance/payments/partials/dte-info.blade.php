@@ -1,5 +1,7 @@
 {{ $dte->emisor }}
 <br>
+<small>{{ $dte->razon_social_emisor }}</small>
+<br>
 
 @switch($dte->tipo_documento)
     @case('factura_electronica')
