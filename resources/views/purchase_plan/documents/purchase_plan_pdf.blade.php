@@ -2,6 +2,8 @@
 
 @section('title', 'Plan de Compra N°' . $purchasePlan->id)
 
+@section('linea1', 'Depto. de Gestión Abastecimiento y Logística')
+
 @section('content')
 
     <style>
@@ -30,9 +32,11 @@
 
     <div style="float: right; width: 300px; padding-top: 66px;">
 
-        <div class="left quince"
-            style="padding-left: 2px; padding-bottom: 10px;">
-            <strong style="text-transform: uppercase; padding-right: 30px;"></strong>
+        <div class="left quince" style="padding-left: 2px; padding-bottom: 10px;">
+            <strong style="text-transform: uppercase; padding-right: 30px;">
+            Plan de compra N°:
+            </strong> 
+            <span class="catorce negrita">{{ $purchasePlan->id }}</span>
         </div>
 
         <div style="padding-top:5px; padding-left: 2px;">
@@ -191,7 +195,7 @@
         </tbody>
     </table>
 
-    <div style="clear: both; padding-bottom: 15px"></div>
+    <div style="clear: both; padding-bottom: 60px;"></div>
 
     <!-- Sección de las aprobaciones -->
     <div class="signature-container">

@@ -48,7 +48,7 @@ class PurchasePlan extends Model implements Auditable
     }
 
     public function organizationalUnit() {
-        return $this->belongsTo('App\Rrhh\OrganizationalUnit', 'organizational_unit_id');
+        return $this->belongsTo('App\Rrhh\OrganizationalUnit', 'organizational_unit_id')->withTrashed();
     }
 
     public function programName()
@@ -93,10 +93,17 @@ class PurchasePlan extends Model implements Auditable
                 return false;
         return true;
     }
+
+    public function getApprovalPending(){
+        return $this->approvals->where('active', true)->whereNull('status')->first();
+    }
     
     public function getStatus()
     {
         switch ($this->status) {
+            case "save":
+                return 'Guardado';
+                break;
             case "sent":
                 return 'Enviado';
                 break;
@@ -106,11 +113,29 @@ class PurchasePlan extends Model implements Auditable
             case "approved":
                 return 'Aprobado';
                 break;
-            // case "closed":
-            //     return 'Cerrado';
-            //     break;
+            case "published":
+                return 'Publicado';
+                break;
+        }
+    }
+
+    public function getColorStatus()
+    {
+        switch ($this->status) {
             case "save":
-                return 'Guardado';
+                return 'primary';
+                break;
+            case "sent":
+                return 'secondary';
+                break;
+            case "rejected":
+                return 'danger';
+                break;
+            case "approved":
+                return 'success';
+                break;
+            case "published":
+                return 'info';
                 break;
         }
     }

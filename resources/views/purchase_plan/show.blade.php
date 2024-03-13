@@ -9,18 +9,8 @@
 <div class="row">
     <div class="col-12">
         <h5 class="mb-3">
-            <i class="fas fa-shopping-cart"></i> Plan de Compra: ID {{ $purchasePlan->id }}
-            @switch($purchasePlan->status)
-                @case('save')
-                    <span class="badge bg-primary badge-sm">Guardado</span>
-                    @break
-            
-                @case('sent')
-                    <span class="badge bg-secondary badge-sm">Enviado</span>
-                    @break
-                @default
-                    ''
-            @endswitch
+            <i class="fas fa-shopping-cart"></i> Plan de Compra: ID {{ $purchasePlan->id }} 
+            <span class="badge bg-{{$purchasePlan->getColorStatus()}} badge-sm">{{ $purchasePlan->getStatus() }}</span>
         </h5>
     </div>
 </div>
@@ -195,7 +185,7 @@
                             @break
                         @case('Rechazado')
                             <span class="d-inline-block" style="color: tomato;">
-                                <i class="fas fa-check-circle"></i> {{ $approval->StatusInWords }}
+                                <i class="fas fa-times-circle"></i> {{ $approval->StatusInWords }}
                             </span>
                             @break
                     @endswitch

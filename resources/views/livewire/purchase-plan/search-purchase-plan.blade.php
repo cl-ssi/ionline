@@ -161,25 +161,14 @@
                                             @break
                                         @case('Rechazado')
                                             <span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" style="color: tomato;" data-bs-placement="top" title="{{ $approval->sentToOu->name }}">
-                                                <i class="fas fa-ban-circle fa-2x"></i>
+                                                <i class="fas fa-times-circle fa-2x"></i>
                                             </span>
                                             @break
                                     @endswitch
                                 @endforeach
                             @endif
-
                             <br>
-
-                            @switch($purchasePlan->status)
-                                @case('save')
-                                    <span class="badge bg-primary badge-sm">Guardado</span>
-                                    @break
-                                @case('sent')
-                                    <span class="badge bg-secondary badge-sm">Enviado</span>
-                                    @break
-                                @default
-                                    ''
-                            @endswitch
+                            <span class="badge bg-{{$purchasePlan->getColorStatus()}} badge-sm">{{ $purchasePlan->getStatus() }}</span>
                         </td>
                         <td class="text-left">
                             <a href="{{ route('purchase_plan.show', $purchasePlan) }}"
@@ -193,7 +182,15 @@
                                 onclick="confirm('¿Está seguro que desea borrar el plan de compra ID {{ $purchasePlan->id }}?') || event.stopImmediatePropagation()"
                                 wire:click="delete({{ $purchasePlan }})"><i class="fas fa-trash"></i>
                             </button>
-                            @endif                        
+                            @endif
+                            @if($index == 'pending')
+                                @livewire('documents.approval-button', [
+                                    'approval' => $purchasePlan->getApprovalPending(), 
+                                    'redirect_route' => 'purchase_plan.pending_index', // (opcional) Redireccionar a una ruta despues de aprobar/rechazar
+                                    'button_text' => null, // (Opcional) Texto del boton
+                                    'button_size' => null, // (Opcional) Tamaño del boton: btn-sm, btn-lg, etc.
+                                ])
+                            @endif
                         </td>
                     </tr>
                     @endforeach
