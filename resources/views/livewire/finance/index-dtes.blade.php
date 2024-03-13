@@ -99,6 +99,19 @@
         </div>
     </div>
 
+    <div class="row g-2 mb-3">
+        <div class="col-md-2">
+            <label for="for-fecha_desde" class="form-label">Fecha Desde SII</label>
+            <input type="date" class="form-control" wire:model.defer="filter.fecha_desde">
+        </div>
+
+        <div class="col-md-2">
+            <label for="for-fecha_hasta" class="form-label">Fecha Hasta SII</label>
+            <input type="date" class="form-control" wire:model.defer="filter.fecha_hasta">
+        </div>
+    </div>
+
+
     <div class="row">
         <div class="col text-center">
 
