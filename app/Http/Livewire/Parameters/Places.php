@@ -149,7 +149,23 @@ class Places extends Component
 
     public function exportToExcel()
     {
-        $places = $this->getPlaces();
+        $places = Place::with('establishment')
+            ->when($this->establishment, function ($query) {
+                $query->whereEstablishmentId($this->establishment->id);
+            })
+            ->when($this->filter, function ($query, $searchTerm) {
+                $query->where(function ($q) use ($searchTerm) {
+                    $q->where('name', 'LIKE', '%' . $searchTerm . '%')
+                        ->orWhere('description', 'LIKE', '%' . $searchTerm . '%')
+                        ->orWhereHas('location', function ($q) use ($searchTerm) {
+                            $q->where('name', 'LIKE', '%' . $searchTerm . '%');
+                        })
+                        ->orWhere('architectural_design_code', 'LIKE', '%' . $searchTerm . '%');
+                });
+            })
+            ->orderBy('name', 'asc')
+            ->get();
+
         return Excel::download(new PlacesExport($places), 'places.xlsx');
     }
 
