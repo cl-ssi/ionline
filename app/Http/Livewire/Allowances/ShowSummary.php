@@ -27,6 +27,8 @@ class ShowSummary extends Component
 
     public $reason;
 
+    public $corrections;
+
     protected function messages(){
         return [
             'reason.required'   => 'Debe ingresar un motivo de modificación de valores de Viático.'
@@ -42,6 +44,7 @@ class ShowSummary extends Component
     public function mount($allowance){
         if(!is_null($allowance)){
             $this->setSummary();
+            $this->setCorrections();
         }
     }
 
@@ -128,20 +131,14 @@ class ShowSummary extends Component
 
             $this->correctionMessage = 'Estimado Usuario: El viático se ha modificado correctamente.';
 
-            /*
-            dd($this->allowance->getChanges());
-
-            if ($this->allowance->wasChanged()) {
-                return redirect()->back()->with('success', 'Estimado Usuario: El viático se ha modificado correctamente.');
-            }
-            else{
-                $this->correctionErrorMessage = 'Estimado Usuario, para guardar el registro es necesario modificar el viático';
-            }
-            */
+            $this->setCorrections();
         }
         else{
             $this->summaryDaysErrorMessage = 'Estimado Usuario, existe una diferencia entre los dias indicados en Viático y la edición';
         }
-        
+    }
+
+    public function setCorrections(){
+        $this->corrections = AllowanceCorrection::where('allowance_id', $this->allowance->id)->get();
     }
 }
