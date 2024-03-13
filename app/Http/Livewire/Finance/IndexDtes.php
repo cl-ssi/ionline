@@ -6,6 +6,7 @@ use App\Models\Establishment;
 use App\Models\Finance\Dte;
 use App\Models\Finance\Receptions\Reception;
 use App\Notifications\Finance\DteConfirmation;
+use App\Models\Parameters\Subtitle;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -23,6 +24,8 @@ class IndexDtes extends Component
     public $showManualDTE = false;
 
     public $establishments;
+
+    public $subtitles;
 
     // public $establishment;
 
@@ -138,6 +141,15 @@ class IndexDtes extends Component
                                 break;
                         }
                         break;
+                    case 'subtitulo':
+                        $query->whereHas('requestForm', function ($query) use ($value) {
+                            $query->whereHas('associateProgram', function ($query) use ($value) {
+                                $query->whereHas('Subtitle', function ($query) use ($value) {
+                                    $query->where('id', $value);
+                                });
+                            });
+                        });
+                        break;
 
                 }
             }
@@ -183,6 +195,10 @@ class IndexDtes extends Component
         $establishments_ids = explode(',', env('APP_SS_ESTABLISHMENTS'));
 
         $this->establishments = Establishment::whereIn('id', $establishments_ids)->pluck('alias', 'id');
+
+        $this->subtitles = Subtitle::all();
+
+
     }
 
     /**

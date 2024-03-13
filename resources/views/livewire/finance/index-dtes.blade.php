@@ -119,6 +119,16 @@
             </select>
         </div>
 
+        <div class="col-md-2">
+            <label for="for-tipo_documento" class="form-label">Subtitulo</label>
+            <select class="form-select" wire:model.defer="filter.subtitulo">
+                <option value="">Todas</option>
+                @foreach ($subtitles as $subtitle)
+                <option value="{{$subtitle->id}}">{{$subtitle->name}}</option>
+                @endforeach
+            </select>
+        </div>
+
 
     </div>
 
