@@ -130,11 +130,11 @@ class JobPositionProfileSignController extends Controller
                 "callback_controller_method"    => "App\Http\Controllers\JobPositionProfiles\JobPositionProfileSignController@approvalCallback",
                 "callback_controller_params"    => json_encode([
                     'job_position_profile_id' => $jobPositionProfile->id,
-                    'process'                 => null
+                    'process'                 => 'end'
                 ])
             ]);
 
-            /* SE CREA APROBACIÓN PARA S.D. AREA REQUIRENTE */
+            /* SE CREA APROBACIÓN PARA DIRECCIÓN 
             $dir_approval = $jobPositionProfile->approvals()->create([
                 "module"                => "Perfil de Cargos",
                 "module_icon"           => "fas fa-id-badge fa-fw",
@@ -150,6 +150,7 @@ class JobPositionProfileSignController extends Controller
                     'process'                 => 'end'
                 ])
             ]);
+            */
         }    
         
         $jobPositionProfile->status = 'sent';
