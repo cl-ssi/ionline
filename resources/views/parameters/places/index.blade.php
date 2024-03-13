@@ -1,6 +1,6 @@
 <form wire:submit.prevent="searchPlace">
     <div class="row mb-3">
-        <div class="col-lg-11">
+        <div class="col-lg-10">
             <input type="text"
                 wire:model.defer="filter"
                 class="form-control"
@@ -11,6 +11,11 @@
             <button type="submit"
                 class="btn btn-primary">
                 <i class="fas fa-search"></i>
+            </button>
+        </div>
+        <div class="col-lg-1">
+            <button type="button" class="btn btn-success mb-3" wire:click="exportToExcel">
+                <i class="fas fa-file-excel"></i>
             </button>
         </div>
     </div>

@@ -524,36 +524,38 @@ class AllowancesCreate extends Component
     {
         // ANTIGUAS VISACIONES
 
+        //EN CASO DE SER HAH SE AGREGA APROBACION CONTABILIDAD
+        if($alw->establishment_id == Parameter::get('establishment', 'HospitalAltoHospicio')){
+            $ou_contabilidad = Parameter::get('allowance', 'contablidad', $alw->userAllowance->organizationalUnit->establishment->id);
+
+            $allowance_sing_sirh                            = new AllowanceSign();
+            $allowance_sing_sirh->position                  = 1;
+            $allowance_sing_sirh->event_type                = 'contabilidad';
+            $allowance_sing_sirh->status                    = 'pending';
+            $allowance_sing_sirh->allowance_id              = $alw->id;
+            $allowance_sing_sirh->organizational_unit_id    = $ou_contabilidad;
+            $allowance_sing_sirh->save();
+        }
+
         //U.O. QUE REFERENCIA A QUE ESTABLECIMIENTO APRUEBA
         $ou_sirh = Parameter::get('allowance', 'sirh_sign', $alw->userAllowance->organizationalUnit->establishment->id);
     
         //SE AGREGA AL PRINCIPIO VISACIÓN SIRH
         $allowance_sing_sirh                            = new AllowanceSign();
-        $allowance_sing_sirh->position                  = 1;
+        $allowance_sing_sirh->position                  = ($alw->establishment_id == Parameter::get('establishment', 'HospitalAltoHospicio')) ? 2 : 1;
         $allowance_sing_sirh->event_type                = 'sirh';
-        $allowance_sing_sirh->status                    = 'pending';
+        $allowance_sing_sirh->status                    = ($alw->establishment_id == Parameter::get('establishment', 'HospitalAltoHospicio')) ? null : 'pending';
         $allowance_sing_sirh->allowance_id              = $alw->id;
         $allowance_sing_sirh->organizational_unit_id    = $ou_sirh;
         $allowance_sing_sirh->save();
 
         //SE NOTIFICA PARA INICIAR EL PROCESO DE APROBACIONES
-        $notificationSirhPermissionUsers = User::permission('Allowances: sirh')->get();
+        $notificationSirhPermissionUsers = ($alw->establishment_id == Parameter::get('establishment', 'HospitalAltoHospicio')) ? User::permission('Allowances: contabilidad')->get() : User::permission('Allowances: sirh')->get();
         foreach($notificationSirhPermissionUsers as $notificationSirhPermissionUser){
             $notificationSirhPermissionUser->notify(new NewAllowance($alw));
         }
         
-        //EN CASO DE SER HAH SE AGREGA NUEVA APROBACION
-        if($alw->establishment_id == Parameter::get('establishment', 'HospitalAltoHospicio')){
-            $ou_contabilidad = Parameter::get('allowance', 'contablidad', $alw->userAllowance->organizationalUnit->establishment->id);
-
-            $allowance_sing_sirh                            = new AllowanceSign();
-            $allowance_sing_sirh->position                  = 2;
-            $allowance_sing_sirh->event_type                = 'contabilidad';
-            $allowance_sing_sirh->status                    = null;
-            $allowance_sing_sirh->allowance_id              = $alw->id;
-            $allowance_sing_sirh->organizational_unit_id    = $ou_contabilidad;
-            $allowance_sing_sirh->save();
-        }
+        
     }
 
     public function ouSign(Allowance $alw, $sirh_approval){

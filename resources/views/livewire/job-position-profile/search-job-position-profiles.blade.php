@@ -158,7 +158,7 @@
                                                 @break
                                             @case('Rechazado')
                                                 <span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" style="color: tomato;" data-bs-placement="top" title="{{ $approval->sentToOu->name }}">
-                                                    <i class="fas fa-ban-circle fa-2x"></i>
+                                                    <i class="fas fa-times-circle fa-2x"></i>
                                                 </span>
                                                 @break
                                         @endswitch

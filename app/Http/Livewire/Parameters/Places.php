@@ -7,6 +7,8 @@ use App\Models\Parameters\Location;
 use App\Models\Parameters\Place;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\PlacesExport;
 
 class Places extends Component
 {
@@ -143,4 +145,13 @@ class Places extends Component
 
         return $query->paginate(100);
     }
+
+
+    public function exportToExcel()
+    {
+        $places = $this->getPlaces();
+        return Excel::download(new PlacesExport($places), 'places.xlsx');
+    }
+
+
 }

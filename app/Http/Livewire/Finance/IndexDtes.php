@@ -122,6 +122,13 @@ class IndexDtes extends Component
                     case 'tipo_documento':
                         $query->where('tipo_documento', $value);
                         break;
+                    case 'fecha_desde':
+                        $query->where('fecha_recepcion_sii', '>=', $value);
+                        break;
+                    case 'fecha_hasta':
+                        $query->where('fecha_recepcion_sii', '<=', $value);
+                        break;
+
                 }
             }
         }
