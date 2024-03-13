@@ -252,9 +252,8 @@
                 </tbody>
             </table>
         </div>
-    @endif
 
-    @if($allowance->corrections->count() > 0)
+        @if($corrections->count() > 0)
         <br>
         <h6><i class="fas fa-info-circle"></i> Correciones Registradas</h6>
 
@@ -268,7 +267,7 @@
                         <th>Usuario</th>
                     </tr>
                 </thead>
-                @foreach($allowance->corrections as $correction)
+                @foreach($corrections as $correction)
                     <tbody>
                         <tr>
                             <td class="text-center">{{ $loop->iteration }}</td>
@@ -280,5 +279,6 @@
                 @endforeach
             </table>
         </div>
+    @endif
     @endif
 </div>
