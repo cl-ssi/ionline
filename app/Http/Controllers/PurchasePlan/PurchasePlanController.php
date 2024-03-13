@@ -6,6 +6,7 @@ use App\Models\PurchasePlan\PurchasePlan;
 use Illuminate\Http\Request;
 
 use App\Http\Controllers\Controller;
+use App\Models\Documents\Approval;
 use App\Models\Parameters\Parameter;
 
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -200,6 +201,11 @@ class PurchasePlanController extends Controller
             "start_y"               => -30,
             "filename"              => "ionline/purchase_plan/pdf/".$purchasePlan->id.".pdf",
             "digital_signature"     => true,
+            "callback_controller_method"        => "App\Http\Controllers\PurchasePlan\PurchasePlanController@approvalCallback",
+            "callback_controller_params"        => json_encode([
+                'purchase_plan_id'  => $purchasePlan->id,
+                'process'           => 'end'
+            ]),
         ]);
 
         $purchasePlan->update(['status' => 'sent']);
@@ -215,5 +221,25 @@ class PurchasePlanController extends Controller
             'purchasePlan' => $purchasePlan,
             'establishment' => $establishment
         ])->stream('download.pdf');
+    }
+
+    public function approvalCallback($approval_id, $purchase_plan_id, $process){
+        $approval = Approval::find($approval_id);
+        $purchasePlan = PurchasePlan::find($purchase_plan_id);
+        
+        /* Aprueba */
+        if($approval->status == 1){
+            if($process == 'end'){
+                $purchasePlan->status = 'approved';
+                $purchasePlan->save();
+            }
+        }
+
+        /* Rechaza */
+        if($approval->status == 0){
+            $purchasePlan->status = 'rejected';
+            $purchasePlan->save();
+
+        }
     }
 }
