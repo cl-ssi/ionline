@@ -2147,10 +2147,11 @@ Route::prefix('finance')->as('finance.')->middleware(['auth', 'must.change.passw
         Route::get('/review', [PaymentController::class, 'review'])->name('review');
         Route::get('/{dte}/return-to-dte-inbox', [PaymentController::class, 'returnToDteInbox'])->name('returnToDteInbox');
         Route::get('/{dte}/send-to-ready-inbox', [PaymentController::class, 'sendToReadyInbox'])->name('sendToReadyInbox');        
-        Route::get('/ready', [PaymentController::class, 'ready'])->name('ready');
+        Route::get('/ready', [PaymentController::class, 'ready'])->name('ready');        
         Route::put('/{dte}/return-to-review', [PaymentController::class, 'returnToReview'])->name('returnToReview');
         Route::get('/rejected', [PaymentController::class, 'rejected'])->name('rejected');
         Route::put('/{dte}/update', [PaymentController::class, 'update'])->name('update');
+        Route::get('/paid', [PaymentController::class, 'paid'])->name('paid');
     });
 
     Route::prefix('purchase-orders')->as('purchase-orders.')->group(function () {

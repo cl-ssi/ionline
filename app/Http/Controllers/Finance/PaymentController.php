@@ -29,6 +29,7 @@ class PaymentController extends Controller
         $oc = $request->input('oc');
         $folio_compromiso = $request->input('folio_compromiso');
         $folio_devengo = $request->input('folio_devengo');
+        $folio_pago = $request->input('folio_pago');
         $prov = $request->input('prov');
         $cart = $request->input('cart');
         $req = $request->input('req');
@@ -47,7 +48,7 @@ class PaymentController extends Controller
         }
 
         if ($oc) {
-            $query->where('folio_oc', $oc);
+            $query->where('folio_oc', 'like', '%' . $oc . '%');
         }
 
         if ($folio_compromiso) {
@@ -55,6 +56,14 @@ class PaymentController extends Controller
         }
         if ($folio_devengo) {
             $query->where('folio_devengo_sigfe', $folio_devengo);
+        }
+
+        if ($folio_pago) {
+            
+            //$query->where('paid_folio', $folio_pago);
+            $query->whereHas('tgrPayedDte', function ($query) use ($folio_pago) {
+                $query->where('folio', $folio_pago);
+            });
         }
 
         
@@ -255,6 +264,47 @@ class PaymentController extends Controller
         $dte->sender_at = null;
         $dte->save();
         return redirect()->back()->with('success', 'Dte se regreso a Revisión');
+    }
+
+    public function paid(Request $request)
+    {
+
+        $query = Dte::with([
+            'tgrPayedDte',
+            'controls',
+            'controls.store',
+            'purchaseOrder',
+            'purchaseOrder.receptions',
+            'purchaseOrder.rejections',
+            'establishment',
+            'dtes',
+            'invoices',
+            
+            'receptions',
+            'receptions.signedFileLegacy',
+            'receptions.numeration',
+
+            'requestForm',
+            'requestForm.requestFormFiles',
+            'requestForm.signedOldRequestForms',
+
+            'requestForm.father',
+            'requestForm.father.requestFormFiles'
+            ])
+            ->whereNull('rejected')
+            ->where('all_receptions', 1)
+            ->where('payment_ready', 1)
+            ->where('establishment_id', auth()->user()->organizationalUnit->establishment_id);
+
+            if ($request->filled('id') || $request->filled('emisor')  || $request->filled('folio') || $request->filled('oc')  || $request->filled('prov') || $request->filled('cart') || $request->filled('req') || $request->filled('folio_compromiso') || $request->filled('folio_devengo') || $request->filled('folio_pago')) {
+                $query = $this->search($request, $query);
+            }
+
+        $dtes = $query->paginate(50);
+        $request->flash();
+
+        return view('finance.payments.paid', compact('dtes','request'));
+
     }
 
 

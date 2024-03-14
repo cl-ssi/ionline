@@ -69,8 +69,9 @@ class ComparativeRequirementImport implements ToCollection, WithStartRow,WithChu
         $insert_array = [];
         foreach ($rows as $row) {
             $principal = $row[6] ?? '';
-            $tipo_documento;
-            $dte_rut_emisor;
+            $tipo_documento = null;
+            $dte_rut_emisor = null;
+            $dte = null;
 
             $principal_values = explode('/', $principal);
             if (count($principal_values) >= 1 && (trim($principal_values[0]) === 'FA' || trim($principal_values[0]) === 'FE')) {
@@ -99,6 +100,9 @@ class ComparativeRequirementImport implements ToCollection, WithStartRow,WithChu
                 if($dte) {
                     $dte_id = $dte->id;
                     $dte->excel_requerimiento = true;
+                    $dte->paid_at = isset($row[1]) && strpos($row[9], '/') !== false ? Carbon::createFromFormat('d/m/Y', $row[9]) : null;
+                    $dte->paid_effective_amount = isset($row[10]) ? (int)str_replace('.', '', $row[10]) : null;
+                    $dte->paid_automatic = true;
                     $dte->save();
                 } else {
                     $dte_id = null; 
@@ -116,7 +120,7 @@ class ComparativeRequirementImport implements ToCollection, WithStartRow,WithChu
                     'afectacion_folio'          => $row[0],
                     'afectacion_fecha' => isset($row[1]) && strpos($row[1], '/') !== false ? Carbon::createFromFormat('d/m/Y', $row[1]) : null,
                     'afectacion_titulo'         => $row[2],
-                    'afectacion_monto'          => $row[3],
+                    'afectacion_monto'          => isset($row[3]) ? (int)str_replace('.', '', $row[3]) : null,
 
                     //devengo
                     'devengo_folio'             => $row[4],
@@ -127,13 +131,93 @@ class ComparativeRequirementImport implements ToCollection, WithStartRow,WithChu
                     //efectivo
                     'efectivo_folio'            => $row[8],
                     'efectivo_fecha'            => isset($row[1]) && strpos($row[9], '/') !== false ? Carbon::createFromFormat('d/m/Y', $row[9]) : null,
-                    'efectivo_monto'            => $row[10],
+                    'efectivo_monto'            => isset($row[10]) ? (int)str_replace('.', '', $row[10]) : null,
+
 
                     'dte_id'                    => $dte_id,
                 ];
 
 
 
+            }
+            else{
+                if (isset($row[4]) && $row[4] != 0 && isset($row[5]) && strpos($row[5], '/') !== false) 
+                {
+                    $dte_rut_emisor = null;
+                    $tipo_documento = null;
+                    $devengo_fecha = null;
+                    $devengo_year = null;
+                    $dte_folio = null;
+                    $dte_razon_social_emisor = null;
+                    $dte = null;
+                    $dte_id = null;
+                    $oc = null;
+
+                    if (isset($row[5]) && strpos($row[5], '/') !== false) {
+                        $devengo_fecha = Carbon::createFromFormat('d/m/Y', $row[5]);
+                        $devengo_year = Carbon::createFromFormat('d/m/Y', $row[5])->year;
+                    }
+
+                    
+
+
+                    $dte = Dte::where('folio_devengo_sigfe', $row[4]);
+                    // if ($devengo_year) {
+                    //     $dte->whereYear('created_at', $devengo_year);
+                    // }
+                    $dte = $dte->latest()->first();
+
+
+                    if($dte) {
+                        // dd($dte);
+                        $dte_id = $dte->id;
+                        $dte->excel_requerimiento = true;
+                        $dte->paid_at = isset($row[1]) && strpos($row[9], '/') !== false ? Carbon::createFromFormat('d/m/Y', $row[9]) : null;
+                        $dte->paid_effective_amount = isset($row[10]) ? (int)str_replace('.', '', $row[10]) : null;
+                        $dte->paid_manual = true;
+                        $dte->save();
+                        $dte_rut_emisor = $dte->emisor;
+                        $tipo_documento = $dte->tipo_documento;
+                        $dte_folio = $dte->folio;
+                        $dte_razon_social_emisor = $dte->razon_social_emisor;
+                        $oc = $dte->folio_oc;
+                    } else {
+                        $dte_id = null; 
+                    }
+
+                    $insert_array[] = 
+                    [
+                        'dte_rut_emisor'            => $dte_rut_emisor ?? null,
+                        'dte_folio'                 => $dte_folio ?? null,
+                        'dte_razon_social_emisor'   => $dte_razon_social_emisor ?? null,
+                        'dte_tipo_documento'        => $tipo_documento ?? null,
+                        'oc'                        => $oc ?? null,
+
+                        //afectacion
+                        'afectacion_folio'          => $row[0],
+                        'afectacion_fecha' => isset($row[1]) && strpos($row[1], '/') !== false ? Carbon::createFromFormat('d/m/Y', $row[1]) : null,
+                        'afectacion_titulo'         => $row[2],
+                        'afectacion_monto'          => isset($row[3]) ? (int)str_replace('.', '', $row[3]) : null,
+
+                        //devengo
+                        'devengo_folio'             => $row[4],
+                        'devengo_fecha'             => $devengo_fecha,
+                        'devengo_titulo'            => $row[6],
+                        'devengo_monto'             => $row[7],
+                        
+                        //efectivo
+                        'efectivo_folio'            => $row[8],
+                        'efectivo_fecha'            => isset($row[1]) && strpos($row[9], '/') !== false ? Carbon::createFromFormat('d/m/Y', $row[9]) : null,
+                        'efectivo_monto'            => isset($row[10]) ? (int)str_replace('.', '', $row[10]) : null,
+
+                        'dte_id'                    => $dte_id,
+                    ];
+                
+
+                }
+                else {                 
+                    continue;
+                }
             }
 
 

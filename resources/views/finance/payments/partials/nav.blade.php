@@ -25,8 +25,8 @@
             <i class="far fa-fw fa-money-bill-alt"></i> Otros Pagos no TGR</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" 
-            >
+        <a class="nav-link {{ active('finance.payments.paid') }}" 
+            href="{{ route('finance.payments.paid') }}">
             <i class="far fa-fw fa-check-circle"></i> Pagados</a>
     </li>
 

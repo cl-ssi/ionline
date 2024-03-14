@@ -25,7 +25,7 @@ class TgrsImport implements WithHeadingRow, ToCollection,WithChunkReading
 
         foreach ($rows as $row) {
             if(isset($row['principal']))
-            {                
+            {
                 list($rut_emisor, $razon_social_emisor) = explode(' ', $row['principal'], 2);
                 $rut_emisor_formateado = $this->formatRut($rut_emisor);
 
@@ -49,6 +49,7 @@ class TgrsImport implements WithHeadingRow, ToCollection,WithChunkReading
                 if($dte) {
                     $dte_id = $dte->id;
                     $dte->excel_proveedor = true;
+                    $dte->paid = true;                    
                     $dte->save();
                 } else {
                     $dte_id = null; 
