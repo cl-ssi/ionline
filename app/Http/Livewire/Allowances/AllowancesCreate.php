@@ -56,6 +56,7 @@ class AllowancesCreate extends Component
     public $fileAttached;
     public $files = array();
     public $key;
+    public $deleteFileMessage;
 
     /* Destinos */
     /* Listeners */
@@ -93,6 +94,8 @@ class AllowancesCreate extends Component
     //SELECCION DE LEY MEDICA
     public $disabledAllowanceValueId = '';
     public $disabledGrade = '';
+
+    public $iterationFileClean = 0;
 
 
     protected $listeners = ['emitPosition', 'emitPositionValue', 'userSelected', 'savedDestinations', 'selectedInputId',
@@ -845,12 +848,10 @@ class AllowancesCreate extends Component
     }
 
     /* Metodos para Archivos */
-    public function addFile()
-    {
+    public function addFile(){
         $this->validateMessage = 'file';
         $validatedData = $this->validate([
             'fileName'      => 'required',
-            // ($this->fileAttached) ? 'fileAttached' : 'fileAttached' => ($this->fileAttached) ? '' : 'required' 
             'fileAttached'  => 'required' 
         ]);
 
@@ -868,10 +869,28 @@ class AllowancesCreate extends Component
         $this->cleanFile();
     }
 
-    public function cleanFile()
-    {   
+    public function cleanFile(){   
         $this->fileName     = null;
-        $this->fileAttached = '';
+        // $this->fileAttached = '';
+        $this->iterationFileClean++;
+    }
+
+    public function deleteFile($key){
+        $itemToDelete = $this->files[$key];
+
+        if($itemToDelete['id'] != ''){
+            if(count($this->files) > 1){
+                unset($this->files[$key]);
+                $objectToDelete = AllowanceFile::find($itemToDelete['id']);
+                $objectToDelete->delete();
+            }
+            else{
+                $this->deleteFileMessage = "Estimado Usuario: No es posible eliminar el adjunto, el Viático debe incluír al menos un archivo adjunto.";
+            }
+        }
+        else{
+            unset($this->files[$key]);
+        }
     }
 
     private function setFile($file)

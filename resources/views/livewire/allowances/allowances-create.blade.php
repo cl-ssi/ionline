@@ -366,6 +366,11 @@
 
     @if($files)
     <br>
+    @if($deleteFileMessage)
+        <div class="alert alert-danger" role="alert">
+            {{ $deleteFileMessage }}
+        </div>
+    @endif
 
     <div class="table-responsive">
         <table class="table table-striped table-bordered table-sm small" name="items">
@@ -383,10 +388,10 @@
                     <td class="brd-l text-center">{{ $loop->iteration }}</td>
                     <td class="text-center">{{ $file['fileName'] }}</td>
                     <td class="text-center">
-                        <a class="btn btn-secondary btn-sm" href="#items" title="Eliminar" wire:click="{{-- showFile({{ $key }}) --}}"><i class="fas fa-file"></i></a>
+                        <a class="btn btn-secondary btn-sm" href="#items" title="Eliminar" wire:click="{{-- showFile({{ $key }}) --}}" disabled><i class="fas fa-file"></i></a>
                     </td>
                     <td width="5%" class="text-center">
-                        <a class="btn btn-danger btn-sm" href="#items" title="Eliminar" wire:click="deleteItem({{-- $key --}})"><i class="fas fa-trash-alt"></i></a>
+                        <a class="btn btn-danger btn-sm" id="upload{{ $iterationFileClean }}" title="Eliminar" wire:click="deleteFile({{ $key }})"><i class="fas fa-trash-alt"></i></a>
                     </td>
                 </tr>
                 @endforeach
