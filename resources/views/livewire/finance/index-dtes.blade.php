@@ -7,11 +7,12 @@
             <h3>Dtes cargadas en sistema</h3>
         </div>
         @cannot('Payments: viewer')
-            <div class="col">
+            <div class="col-2">
                 <button class="btn btn-sm btn-success" type="button" wire:click="loadManualDTE">
                     <i class="fas fa-plus"></i> Cargar DTE individual</button>
             </div>
         @endcannot
+
     </div>
 
 
@@ -74,8 +75,8 @@
                 <option value="Con SIGFE">Con</option>
             </select>
         </div>
-        <div class="col-md-2">
-            <label for="for-tipo_documento" class="form-label">Tipo Documento</label>
+        <div class="col-md-1">
+            <label for="for-tipo_documento" class="form-label">Tipo DTE</label>
             <select class="form-select" wire:model.defer="filter.tipo_documento">
                 <option value="">Todas</option>
                 <option value="factura_electronica">FE: Factura Electrónica</option>
@@ -93,9 +94,10 @@
             </button>
         </div>
         <div class="col-md-1">
-            <div wire:loading>
-                <div class="spinner-border"></div>
-            </div>
+            <label for="search" class="form-label">&nbsp;</label>
+            <button class="btn btn-success form-control" type="button" wire:click="exportToExcel">
+                <i class="fas fa-file-excel"></i>
+            </button>
         </div>
     </div>
 

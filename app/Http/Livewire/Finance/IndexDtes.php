@@ -7,6 +7,8 @@ use App\Models\Finance\Dte;
 use App\Models\Finance\Receptions\Reception;
 use App\Notifications\Finance\DteConfirmation;
 use App\Models\Parameters\Subtitle;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\DtesExport;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -49,7 +51,7 @@ class IndexDtes extends Component
 
     public $contract_manager_id;
 
-    public function searchDtes()
+    public function searchDtes($paginate = true)
     {
         $query = Dte::query();
 
@@ -173,7 +175,12 @@ class IndexDtes extends Component
         ])
             ->whereNull('rejected')
             ->orderByDesc('fecha_recepcion_sii');
-        return $query->paginate(50);
+        if ($paginate) {
+            return $query->paginate(50);
+        } else {
+            return $query->get();
+        }
+        //return $query->paginate(50);
     }
 
 
@@ -376,5 +383,14 @@ class IndexDtes extends Component
     {
         $this->contract_manager_id = $contractManager['id'];
     }
+
+    public function exportToExcel()
+    {
+     
+        $dtes = $this->searchDtes(false);
+        return Excel::download(new DtesExport($dtes), 'dtes.xlsx');
+    }
+
+
 
 }
