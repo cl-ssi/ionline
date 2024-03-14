@@ -100,6 +100,8 @@ class ComparativeRequirementImport implements ToCollection, WithStartRow,WithChu
                 if($dte) {
                     $dte_id = $dte->id;
                     $dte->excel_requerimiento = true;
+                    $dte->paid = true;
+                    $dte->paid_folio = $row[8];
                     $dte->paid_at = isset($row[1]) && strpos($row[9], '/') !== false ? Carbon::createFromFormat('d/m/Y', $row[9]) : null;
                     $dte->paid_effective_amount = isset($row[10]) ? (int)str_replace('.', '', $row[10]) : null;
                     $dte->paid_automatic = true;
@@ -172,6 +174,8 @@ class ComparativeRequirementImport implements ToCollection, WithStartRow,WithChu
                         // dd($dte);
                         $dte_id = $dte->id;
                         $dte->excel_requerimiento = true;
+                        $dte->paid = true;
+                        $dte->paid_folio = $row[8];
                         $dte->paid_at = isset($row[1]) && strpos($row[9], '/') !== false ? Carbon::createFromFormat('d/m/Y', $row[9]) : null;
                         $dte->paid_effective_amount = isset($row[10]) ? (int)str_replace('.', '', $row[10]) : null;
                         $dte->paid_manual = true;
