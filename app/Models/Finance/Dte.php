@@ -17,6 +17,7 @@ use App\Models\Finance\TgrPayedDte;
 use App\Models\Finance\ComparativeRequirement;
 use App\Models\Finance\TgrAccountingPortfolio;
 use App\Models\Establishment;
+use App\Rrhh\OrganizationalUnit;
 
 class Dte extends Model implements Auditable
 {
@@ -364,6 +365,16 @@ class Dte extends Model implements Auditable
     public function contractManager()
     {
         return $this->belongsTo(User::class, 'contract_manager_id')->withTrashed();
+    }
+
+    public function allReceptionsUser()
+    {
+        return $this->belongsTo(User::class, 'all_receptions_user_id');
+    }
+
+    public function allReceptionsOU()
+    {
+        return $this->belongsTo(OrganizationalUnit::class, 'all_receptions_ou_id');
     }
 
     public function getTipoDocumentoInicialesAttribute()

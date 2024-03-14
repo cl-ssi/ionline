@@ -151,7 +151,8 @@
                 <th>FR</th>
                 <th>Recepción</th>
                 <th width="90">Fecha Aceptación SII (días)</th>
-                <th>Devengo</th>
+                <!-- <th>Devengo</th> -->
+                <th>Enviado a Bandeja de Revión por</th>
                 <th>Editar</th>
             </tr>
         </thead>
@@ -208,8 +209,11 @@
                         ({{ $dte->fecha_recepcion_sii ? $dte->fecha_recepcion_sii->diffInDays(now()) : '' }} días)
                     </td>
                     <td class="small">
-                        {{ $dte->estado_devengo }}<br>
-                        {{ $dte->folio_sigfe }}
+                        {{$dte->allReceptionsUser?->shortName}}<br>
+                        {{$dte->allReceptionsOU?->name}}<br>
+                        {{$dte->all_receptions_at}}
+                        <!-- {{ $dte->estado_devengo }}<br>
+                        {{ $dte->folio_sigfe }} -->
                     </td>
 
                     <td class="small">

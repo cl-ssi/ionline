@@ -32,6 +32,10 @@ class DtesExport implements FromCollection, WithHeadings
                 'Monto Exento' => $dte->monto_exento,
                 'Monto Iva' => $dte->monto_iva,
                 'Monto Total' => $dte->monto_total,
+                'Enviado a Bandeja de Revisión por' => $dte->allReceptionsUser?->shortName,
+                'Unidad Organizacional Usuario que envía a Revisión' => $dte->allReceptionsOU?->name,
+                'Fecha y Hora envío a bandeja de Revisión' => $dte->all_receptions_at,
+
             ];
         });
     }
@@ -51,6 +55,9 @@ class DtesExport implements FromCollection, WithHeadings
             'Monto Exento',
             'Monto Iva',
             'Monto Total',
+            'Enviado a Bandeja de Revisión por',
+            'Unidad Organizacional Usuario que envía a Revisión',
+            'Fecha y Hora envío a bandeja de Revisión',
         ];
     }
 }
