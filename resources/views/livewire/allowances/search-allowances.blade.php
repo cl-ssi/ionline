@@ -79,12 +79,15 @@
                             {{ ($allowance->correlative) ? $allowance->correlative : $allowance->id }} <br>
 
                             @if($allowance->status != 'manual')
-                                @if($allowance->allowanceSigns->first()->status == "accepted")
-                                    <span class="badge badge-success">SIRH <i class="fas fa-check-circle"></i></span> <br>
-                                @endif
-                                @if($allowance->allowanceSigns->last()->status == "accepted" && $allowance->establishment_id == App\Models\Parameters\Parameter::get('establishment', 'HospitalAltoHospicio'))
-                                    <span class="badge badge-info">Contabilidad <i class="fas fa-check-circle"></i></span> <br>
-                                @endif
+                                @foreach($allowance->allowanceSigns as $sign)
+
+                                    @if($sign->event_type == 'contabilidad' && $sign->status == 'accepted' && $allowance->establishment_id == App\Models\Parameters\Parameter::get('establishment', 'HospitalAltoHospicio'))
+                                        <span class="badge badge-info">Contabilidad <i class="fas fa-check-circle"></i></span> <br>
+                                    @endif
+                                    @if($sign->event_type == 'sirh' && $sign->status == 'accepted')
+                                        <span class="badge badge-success">SIRH <i class="fas fa-check-circle"></i></span> <br>
+                                    @endif
+                                @endforeach
                             @endif
 
                             @if($allowance->status == 'pending')
