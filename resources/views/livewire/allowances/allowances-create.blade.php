@@ -342,7 +342,8 @@
             <fieldset class="form-group col mt">
                 <div class="mb-3">
                     <label for="forFile" class="form-label"><br></label>
-                    <input class="form-control" type="file" wire:model.defer="fileAttached" required>
+                    <input class="form-control" type="file" wire:model.defer="fileAttached" id="upload({{ $iterationFileClean }})" required>
+                    <div wire:loading wire:target="fileAttached">Cargando archivo...</div>
                 </div>
             </fieldset>
 

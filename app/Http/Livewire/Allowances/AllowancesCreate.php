@@ -871,7 +871,7 @@ class AllowancesCreate extends Component
 
     public function cleanFile(){   
         $this->fileName     = null;
-        // $this->fileAttached = '';
+        $this->fileAttached = null;
         $this->iterationFileClean++;
     }
 
