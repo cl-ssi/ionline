@@ -79,6 +79,11 @@ class AllowanceController extends Controller
         return view('allowances.create');
     }
 
+    public function create_to_replicate(Allowance $allowance)
+    {
+        return view('allowances.create_to_replicate', compact('allowance'));
+    }
+
     /**
      * Store a newly created resource in storage.
      *

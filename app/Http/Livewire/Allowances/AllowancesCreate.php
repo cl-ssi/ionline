@@ -56,6 +56,7 @@ class AllowancesCreate extends Component
     public $fileAttached;
     public $files = array();
     public $key;
+    public $deleteFileMessage;
 
     /* Destinos */
     /* Listeners */
@@ -77,6 +78,9 @@ class AllowancesCreate extends Component
     /* Allowance to edit */
     public $allowanceToEdit;
 
+    /* Allowance to replicate */
+    public $allowanceToReplicate;
+
     /* Total dias completos en el año */
     public $totalCurrentAllowancesDaysByUser = 0;
     /* Total días disponibles */
@@ -93,6 +97,8 @@ class AllowancesCreate extends Component
     //SELECCION DE LEY MEDICA
     public $disabledAllowanceValueId = '';
     public $disabledGrade = '';
+
+    public $iterationFileClean = 0;
 
 
     protected $listeners = ['emitPosition', 'emitPositionValue', 'userSelected', 'savedDestinations', 'selectedInputId',
@@ -218,7 +224,7 @@ class AllowancesCreate extends Component
                     'food'                              => $this->food,
                     'passage'                           => $this->passage, 
                     'means_of_transport'                => $this->meansOfTransport, 
-                    'origin_commune_id'                 => ($this->allowanceToEdit) ? $this->originCommune : $this->originCommune->id,
+                    'origin_commune_id'                 => ($this->allowanceToEdit || $this->allowanceToReplicate) ? $this->originCommune : $this->originCommune->id,
                     'round_trip'                        => $this->roundTrip,
                     'from'                              => $this->from, 
                     'to'                                => $this->to,
@@ -845,12 +851,10 @@ class AllowancesCreate extends Component
     }
 
     /* Metodos para Archivos */
-    public function addFile()
-    {
+    public function addFile(){
         $this->validateMessage = 'file';
         $validatedData = $this->validate([
             'fileName'      => 'required',
-            // ($this->fileAttached) ? 'fileAttached' : 'fileAttached' => ($this->fileAttached) ? '' : 'required' 
             'fileAttached'  => 'required' 
         ]);
 
@@ -868,10 +872,28 @@ class AllowancesCreate extends Component
         $this->cleanFile();
     }
 
-    public function cleanFile()
-    {   
+    public function cleanFile(){   
         $this->fileName     = null;
-        $this->fileAttached = '';
+        $this->fileAttached = null;
+        $this->iterationFileClean++;
+    }
+
+    public function deleteFile($key){
+        $itemToDelete = $this->files[$key];
+
+        if($itemToDelete['id'] != ''){
+            if(count($this->files) > 1){
+                unset($this->files[$key]);
+                $objectToDelete = AllowanceFile::find($itemToDelete['id']);
+                $objectToDelete->delete();
+            }
+            else{
+                $this->deleteFileMessage = "Estimado Usuario: No es posible eliminar el adjunto, el Viático debe incluír al menos un archivo adjunto.";
+            }
+        }
+        else{
+            unset($this->files[$key]);
+        }
     }
 
     private function setFile($file)
@@ -903,6 +925,37 @@ class AllowancesCreate extends Component
             $this->roundTrip                =   $this->allowanceToEdit->round_trip;
             $this->passage                  =   $this->allowanceToEdit->passage;
             $this->overnight                =   $this->allowanceToEdit->overnight;
+            $this->accommodation            =   $this->allowanceToEdit->accommodation;
+            $this->food                     =   $this->allowanceToEdit->food;
+            $this->from                     =   $this->allowanceToEdit->from;
+            $this->to                       =   $this->allowanceToEdit->to;
+            $this->halfDaysOnly              =   $this->allowanceToEdit->half_days_only;
+
+            foreach($this->allowanceToEdit->files as $file){
+                $this->setFile($file);
+            }
+        }
+    }
+
+    /* Set Allowance To Replicate */
+    private function setAllowanceToReplicate(){
+        if($this->allowanceToReplicate){
+            $this->userAllowance            =   $this->allowanceToReplicate->userAllowance;
+            $this->contractualConditionId   =   $this->allowanceToReplicate->contractual_condition_id;
+            $this->position                 =   $this->allowanceToReplicate->position;
+            $this->allowanceValueId         =   $this->allowanceToReplicate->allowance_value_id;
+            $this->grade                    =   $this->allowanceToReplicate->grade;
+            $this->law                      =   $this->allowanceToReplicate->law;
+            $this->reason                   =   $this->allowanceToReplicate->reason;
+            $this->originCommune            =   $this->allowanceToReplicate->origin_commune_id;
+            foreach($this->allowanceToReplicate->destinationCommune as $destination){
+                $this->setDestination($destination);
+            }
+            /*
+            $this->meansOfTransport         =   $this->allowanceToEdit->means_of_transport;
+            $this->roundTrip                =   $this->allowanceToEdit->round_trip;
+            $this->passage                  =   $this->allowanceToEdit->passage;
+            $this->overnight                =   $this->allowanceToEdit->overnight;
             $this->accommodation            =   $this->allowanceToEdit->overnight;
             $this->overnight                =   $this->allowanceToEdit->accommodation;
             $this->food                     =   $this->allowanceToEdit->food;
@@ -913,6 +966,7 @@ class AllowancesCreate extends Component
             foreach($this->allowanceToEdit->files as $file){
                 $this->setFile($file);
             }
+            */
         }
     }
 
@@ -927,10 +981,14 @@ class AllowancesCreate extends Component
         ]);
     }
 
-    public function mount($allowanceToEdit){
+    public function mount($allowanceToEdit, $allowanceToReplicate){
         if(!is_null($allowanceToEdit)){
             $this->allowanceToEdit = $allowanceToEdit;
             $this->setAllowance();
+        }
+        if(!is_null($allowanceToReplicate)){
+            $this->allowanceToReplicate = $allowanceToReplicate;
+            $this->setAllowanceToReplicate();
         }
     }
 

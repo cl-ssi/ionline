@@ -13,12 +13,12 @@
     <div class="form-row">
         <fieldset class="form-group col-12 col-md-6">
             <label for="for_user_allowance_id">Nombre Funcionario:</label>
-            @if($allowanceToEdit)
+            @if($allowanceToEdit || $allowanceToReplicate)
                 @livewire('search-select-user', [
                     'selected_id'   => 'user_allowance_id',
                     'required'      => 'required',
                     'emit_name'     => 'searchedUser',
-                    'user'          => $allowanceToEdit->userAllowance
+                    'user'          => ($allowanceToEdit) ? $allowanceToEdit->userAllowance : $allowanceToReplicate->userAllowance
                 ])
             @else
                 @livewire('search-select-user', [
@@ -41,9 +41,9 @@
         </fieldset>
 
         <fieldset class="form-group col-12 col-md-3">
-            @if($allowanceToEdit)
+            @if($allowanceToEdit || $allowanceToReplicate)
                 @livewire('allowances.show-position', [
-                    'position' => $allowanceToEdit->position
+                    'position' => ($allowanceToEdit) ? $allowanceToEdit->position : $allowanceToReplicate->position
                 ])
             @else
                 @livewire('allowances.show-position')
@@ -99,11 +99,12 @@
     <div class="form-row">
         <fieldset class="form-group col-12 col-md-6">
             <label for="for_requester_id">Comuna Origen:</label>
-                @if($allowanceToEdit)
+                @if($allowanceToEdit || $allowanceToReplicate)
                     @livewire('search-select-commune', [
                         'selected_id'           => 'origin_commune_id',
                         'required'              => 'required',
-                        'commune'               => $allowanceToEdit->originCommune
+                        'commune'               => ($allowanceToEdit) ? $allowanceToEdit->originCommune : $allowanceToReplicate->originCommune
+                        
                     ])
                 @else
                     @livewire('search-select-commune', [
@@ -342,7 +343,8 @@
             <fieldset class="form-group col mt">
                 <div class="mb-3">
                     <label for="forFile" class="form-label"><br></label>
-                    <input class="form-control" type="file" wire:model.defer="fileAttached" required>
+                    <input class="form-control" type="file" wire:model.defer="fileAttached" id="upload({{ $iterationFileClean }})" required>
+                    <div wire:loading wire:target="fileAttached">Cargando archivo...</div>
                 </div>
             </fieldset>
 
@@ -366,6 +368,11 @@
 
     @if($files)
     <br>
+    @if($deleteFileMessage)
+        <div class="alert alert-danger" role="alert">
+            {{ $deleteFileMessage }}
+        </div>
+    @endif
 
     <div class="table-responsive">
         <table class="table table-striped table-bordered table-sm small" name="items">
@@ -383,10 +390,10 @@
                     <td class="brd-l text-center">{{ $loop->iteration }}</td>
                     <td class="text-center">{{ $file['fileName'] }}</td>
                     <td class="text-center">
-                        <a class="btn btn-secondary btn-sm" href="#items" title="Eliminar" wire:click="{{-- showFile({{ $key }}) --}}"><i class="fas fa-file"></i></a>
+                        <a class="btn btn-secondary btn-sm" href="#items" title="Eliminar" wire:click="{{-- showFile({{ $key }}) --}}" disabled><i class="fas fa-file"></i></a>
                     </td>
                     <td width="5%" class="text-center">
-                        <a class="btn btn-danger btn-sm" href="#items" title="Eliminar" wire:click="deleteItem({{-- $key --}})"><i class="fas fa-trash-alt"></i></a>
+                        <a class="btn btn-danger btn-sm" id="upload{{ $iterationFileClean }}" title="Eliminar" wire:click="deleteFile({{ $key }})"><i class="fas fa-trash-alt"></i></a>
                     </td>
                 </tr>
                 @endforeach

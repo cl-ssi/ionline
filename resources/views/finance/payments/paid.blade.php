@@ -129,8 +129,8 @@
                             <hr>
                         </td>
                         <td>{{$dte->tgrPayedDte?->folio}}</td>
-                        <td nowrap><small>{{$dte->tgrPayedDte?->fecha_generacion->format('d-m-Y')}}</small></td>
-                        <td nowrap><small>{{$dte->comparativeRequirement?->efectivo_fecha->format('d-m-Y')}}</small></td>
+                        <td nowrap>{{$dte->tgrPayedDte ? $dte->tgrPayedDte->fecha_generacion->format('d-m-Y') : ''}}</td>
+                        <td nowrap><small>{{$dte->comparativeRequirement ? $dte->comparativeRequirement->efectivo_fecha->format('d-m-Y') : ''}}</small></td>
                         <td><a href="#" class="btn btn-sm btn-outline-danger"><i class="fas fa-file-pdf"></i></a></td>
                         <td>
                             @if($dte->paid_automatic)

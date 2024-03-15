@@ -7,6 +7,8 @@ use App\Models\Finance\Dte;
 use App\Models\Finance\Receptions\Reception;
 use App\Notifications\Finance\DteConfirmation;
 use App\Models\Parameters\Subtitle;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\DtesExport;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -49,7 +51,7 @@ class IndexDtes extends Component
 
     public $contract_manager_id;
 
-    public function searchDtes()
+    public function searchDtes($paginate = true)
     {
         $query = Dte::query();
 
@@ -123,16 +125,23 @@ class IndexDtes extends Component
                         }
                         break;
                     case 'tipo_documento':
-                        $query->where('tipo_documento', $value);
+                        if ($value === 'facturas') {
+                            $query->whereIn('tipo_documento', ['factura_electronica', 'factura_exenta']);
+                        } else {
+                            $query->where('tipo_documento', $value);
+                        }
                         break;
-                    case 'fecha_desde':
+                    case 'fecha_desde_sii':
                         $query->where('fecha_recepcion_sii', '>=', $value);
                         break;
-                    case 'fecha_hasta':
+                    case 'fecha_hasta_sii':
                         $query->where('fecha_recepcion_sii', '<=', $value);
                         break;
                     case 'estado':
                         switch ($value) {
+                            case 'sin_estado':
+                                $query->where('all_receptions', 0);
+                                break;
                             case 'revision':
                                 $query->where('all_receptions',1);
                                 break;
@@ -149,6 +158,12 @@ class IndexDtes extends Component
                                 });
                             });
                         });
+                        break;
+                    case 'fecha_desde_revision':                        
+                        $query->where('all_receptions_at', '>=', $value);
+                        break;
+                    case 'fecha_hasta_revision':
+                        $query->where('all_receptions_at', '<=', $value);
                         break;
 
                 }
@@ -173,7 +188,12 @@ class IndexDtes extends Component
         ])
             ->whereNull('rejected')
             ->orderByDesc('fecha_recepcion_sii');
-        return $query->paginate(50);
+        if ($paginate) {
+            return $query->paginate(50);
+        } else {
+            return $query->get();
+        }
+        //return $query->paginate(50);
     }
 
 
@@ -376,5 +396,14 @@ class IndexDtes extends Component
     {
         $this->contract_manager_id = $contractManager['id'];
     }
+
+    public function exportToExcel()
+    {
+     
+        $dtes = $this->searchDtes(false);
+        return Excel::download(new DtesExport($dtes), 'dtes.xlsx');
+    }
+
+
 
 }

@@ -47,11 +47,6 @@
             <div class="col">
                 <p class="font-weight-lighter">Total de Registros: <b>{{ $allowances->total() }}</b></p>
             </div>
-            {{-- 
-            <div class="col">
-                <a class="btn btn-success btn-sm mb-1 float-right disabled" wire:click="export"><i class="fas fa-file-excel"></i> Exportar formularios</a></h6>
-            </div>
-            --}}
         </div>
 
         <div class="table-responsive">
@@ -79,12 +74,15 @@
                             {{ ($allowance->correlative) ? $allowance->correlative : $allowance->id }} <br>
 
                             @if($allowance->status != 'manual')
-                                @if($allowance->allowanceSigns->first()->status == "accepted")
-                                    <span class="badge badge-success">SIRH <i class="fas fa-check-circle"></i></span> <br>
-                                @endif
-                                @if($allowance->allowanceSigns->last()->status == "accepted" && $allowance->establishment_id == App\Models\Parameters\Parameter::get('establishment', 'HospitalAltoHospicio'))
-                                    <span class="badge badge-info">Contabilidad <i class="fas fa-check-circle"></i></span> <br>
-                                @endif
+                                @foreach($allowance->allowanceSigns as $sign)
+
+                                    @if($sign->event_type == 'contabilidad' && $sign->status == 'accepted' && $allowance->establishment_id == App\Models\Parameters\Parameter::get('establishment', 'HospitalAltoHospicio'))
+                                        <span class="badge badge-info">Contabilidad <i class="fas fa-check-circle"></i></span> <br>
+                                    @endif
+                                    @if($sign->event_type == 'sirh' && $sign->status == 'accepted')
+                                        <span class="badge badge-success">SIRH <i class="fas fa-check-circle"></i></span> <br>
+                                    @endif
+                                @endforeach
                             @endif
 
                             @if($allowance->status == 'pending')
@@ -121,31 +119,7 @@
                         <td class="text-left">
                             {{ $allowance->FromFormat }}<br>
                             {{ $allowance->ToFormat }}
-                            
-                            {{--
-                            <br>
-                            @if($allowance->total_days)
-                                <br>
-                                <b>Diario</b>: {{ intval($allowance->total_days) }} @if($allowance->total_days > 1) días @else día @endif
-                            @endif
-                            @if($allowance->total_half_days)
-                                <br>
-                                <b>Parcial</b>: @if($allowance->total_half_days == 1) Medio día @else {{ intval($allowance->total_half_days) }} medios días @endif 
-                            @endif
-                            --}}
                         </td>
-                        {{--
-                        <td class="text-center">
-                            {{ number_format($allowance->total_days, 1, ",", ".") }} <br>
-                            @if($allowance->total_days > 1 && $allowance->half_days_only == 0)
-                                días
-                            @elseif($allowance->total_days > 1 && $allowance->half_days_only == 1)
-                                medios días
-                            @else
-                                día
-                            @endif
-                        </td>
-                        --}}
                         <td class="text-center">
                             @if($index == 'sign' || $index == 'contabilidad')
                                 <a href="{{ route('allowances.show', $allowance) }}"
@@ -160,22 +134,6 @@
                                     </button>
                                 @endif
                             @endif
-
-                            {{--
-                            @if($index == 'contabilidad')
-                                <a href="{{ route('allowances.show', $allowance) }}"
-                                    class="btn btn-outline-secondary btn-sm" title="Ingresar folio SIRH">
-                                    <i class="fas fa-keyboard"></i>
-                                </a>
-
-                                @if($allowance->status == 'complete' || $allowance->status == 'rejected' || $allowance->status == 'manual')
-                                    <button class="btn btn-outline-success btn-sm mt-2" 
-                                        wire:click="archive( '{{ addslashes(get_class($allowance)) }}', {{ $allowance->id }})">
-                                        <i class="fas fa-archive"></i>
-                                    </button>
-                                @endif
-                            @endif
-                            --}}
 
                             @if($index == 'archived')
                                 <a href="{{ route('allowances.show', $allowance) }}"
@@ -193,7 +151,14 @@
                                 @if($allowance->allowanceSigns && $allowance->status != 'manual')
                                     @if($allowance->allowanceSigns->first()->status == 'pending')
                                         <a href="{{ route('allowances.edit', $allowance) }}"
-                                            class="btn btn-outline-secondary btn-sm" title="Editar"><i class="fas fa-edit"></i>
+                                            class="btn btn-outline-secondary btn-sm" title="Editar"><i class="fas fa-edit fa-fw"></i>
+                                        </a>
+                                        <br>
+                                    @endif
+
+                                    @if($allowance->status == 'rejected')
+                                        <a href="{{ route('allowances.create_to_replicate', $allowance) }}"
+                                            class="btn btn-outline-success btn-sm" title="Crear Viático"><i class="fas fa-plus fa-fw"></i>
                                         </a>
                                         <br>
                                     @endif

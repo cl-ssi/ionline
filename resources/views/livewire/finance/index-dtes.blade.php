@@ -7,11 +7,12 @@
             <h3>Dtes cargadas en sistema</h3>
         </div>
         @cannot('Payments: viewer')
-            <div class="col">
+            <div class="col-2">
                 <button class="btn btn-sm btn-success" type="button" wire:click="loadManualDTE">
                     <i class="fas fa-plus"></i> Cargar DTE individual</button>
             </div>
         @endcannot
+
     </div>
 
 
@@ -74,14 +75,16 @@
                 <option value="Con SIGFE">Con</option>
             </select>
         </div>
-        <div class="col-md-2">
-            <label for="for-tipo_documento" class="form-label">Tipo Documento</label>
+        <div class="col-md-1">
+            <label for="for-tipo_documento" class="form-label">Tipo DTE</label>
             <select class="form-select" wire:model.defer="filter.tipo_documento">
                 <option value="">Todas</option>
+                <option value="facturas">Facturas (Afecta y Exenta)</option>
                 <option value="factura_electronica">FE: Factura Electrónica</option>
                 <option value="factura_exenta">FE: Factura Exenta</option>
                 <option value="guias_despacho">GD: Guias Despacho</option>
                 <option value="nota_credito">NC: Nota Crédito</option>
+                <option value="nota_debito">ND: Nota Débito</option>
                 <option value="boleta_honorarios">BH: Boleta Honorarios</option>
                 <option value="boleta_electronica">BE: Boleta Electrónica</option>
             </select>
@@ -93,29 +96,32 @@
             </button>
         </div>
         <div class="col-md-1">
-            <div wire:loading>
-                <div class="spinner-border"></div>
-            </div>
+            <label for="search" class="form-label">&nbsp;</label>
+            <button class="btn btn-success form-control" type="button" wire:click="exportToExcel">
+                <i class="fas fa-file-excel"></i>
+            </button>
         </div>
     </div>
 
     <div class="row g-2 mb-3">
         <div class="col-md-2">
             <label for="for-fecha_desde" class="form-label">Fecha Desde SII</label>
-            <input type="date" class="form-control" wire:model.defer="filter.fecha_desde">
+            <input type="date" class="form-control" wire:model.defer="filter.fecha_desde_sii">
         </div>
 
         <div class="col-md-2">
             <label for="for-fecha_hasta" class="form-label">Fecha Hasta SII</label>
-            <input type="date" class="form-control" wire:model.defer="filter.fecha_hasta">
+            <input type="date" class="form-control" wire:model.defer="filter.fecha_hasta_sii">
         </div>
 
         <div class="col-md-2">
             <label for="for-tipo_documento" class="form-label">Estado</label>
             <select class="form-select" wire:model.defer="filter.estado">
                 <option value="">Todas</option>
+                <option value="sin_estado">Sin Estado</option>
                 <option value="revision">Revision</option>
                 <option value="listo_para_pago">Listo para Pago</option>
+                <option value="pagado">Pagado</option>
             </select>
         </div>
 
@@ -127,6 +133,16 @@
                 <option value="{{$subtitle->id}}">{{$subtitle->name}}</option>
                 @endforeach
             </select>
+        </div>
+
+        <div class="col-md-2">
+            <label for="for-fecha_desde" class="form-label">Fecha Desde Revisión</label>
+            <input type="date" class="form-control" wire:model.defer="filter.fecha_desde_revision">
+        </div>
+
+        <div class="col-md-2">
+            <label for="for-fecha_hasta" class="form-label">Fecha Hasta Revisión</label>
+            <input type="date" class="form-control" wire:model.defer="filter.fecha_hasta_revision">
         </div>
 
 
@@ -149,7 +165,8 @@
                 <th>FR</th>
                 <th>Recepción</th>
                 <th width="90">Fecha Aceptación SII (días)</th>
-                <th>Devengo</th>
+                <!-- <th>Devengo</th> -->
+                <th>Enviado a Bandeja de Revión por</th>
                 <th>Editar</th>
             </tr>
         </thead>
@@ -206,8 +223,11 @@
                         ({{ $dte->fecha_recepcion_sii ? $dte->fecha_recepcion_sii->diffInDays(now()) : '' }} días)
                     </td>
                     <td class="small">
-                        {{ $dte->estado_devengo }}<br>
-                        {{ $dte->folio_sigfe }}
+                        {{$dte->allReceptionsUser?->shortName}}<br>
+                        {{$dte->allReceptionsOU?->name}}<br>
+                        {{$dte->all_receptions_at}}
+                        <!-- {{ $dte->estado_devengo }}<br>
+                        {{ $dte->folio_sigfe }} -->
                     </td>
 
                     <td class="small">
