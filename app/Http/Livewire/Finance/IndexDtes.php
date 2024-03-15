@@ -125,7 +125,11 @@ class IndexDtes extends Component
                         }
                         break;
                     case 'tipo_documento':
-                        $query->where('tipo_documento', $value);
+                        if ($value === 'facturas') {
+                            $query->whereIn('tipo_documento', ['factura_electronica', 'factura_exenta']);
+                        } else {
+                            $query->where('tipo_documento', $value);
+                        }
                         break;
                     case 'fecha_desde_sii':
                         $query->where('fecha_recepcion_sii', '>=', $value);
