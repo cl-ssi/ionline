@@ -34,7 +34,7 @@
             </a>
         </li>
 
-        <li class="nav-item dropdown ">
+        <!-- <li class="nav-item dropdown ">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="fas fa-hands-helping"></i> Beneficios </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -56,7 +56,7 @@
                     </a>
 
                 </div>
-        </li>
+        </li> -->
         
     @endcanany
 
