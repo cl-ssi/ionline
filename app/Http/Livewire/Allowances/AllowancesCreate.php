@@ -925,8 +925,7 @@ class AllowancesCreate extends Component
             $this->roundTrip                =   $this->allowanceToEdit->round_trip;
             $this->passage                  =   $this->allowanceToEdit->passage;
             $this->overnight                =   $this->allowanceToEdit->overnight;
-            $this->accommodation            =   $this->allowanceToEdit->overnight;
-            $this->overnight                =   $this->allowanceToEdit->accommodation;
+            $this->accommodation            =   $this->allowanceToEdit->accommodation;
             $this->food                     =   $this->allowanceToEdit->food;
             $this->from                     =   $this->allowanceToEdit->from;
             $this->to                       =   $this->allowanceToEdit->to;
