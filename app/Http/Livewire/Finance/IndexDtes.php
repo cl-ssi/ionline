@@ -127,14 +127,17 @@ class IndexDtes extends Component
                     case 'tipo_documento':
                         $query->where('tipo_documento', $value);
                         break;
-                    case 'fecha_desde':
+                    case 'fecha_desde_sii':
                         $query->where('fecha_recepcion_sii', '>=', $value);
                         break;
-                    case 'fecha_hasta':
+                    case 'fecha_hasta_sii':
                         $query->where('fecha_recepcion_sii', '<=', $value);
                         break;
                     case 'estado':
                         switch ($value) {
+                            case 'sin_estado':
+                                $query->where('all_receptions', 0);
+                                break;
                             case 'revision':
                                 $query->where('all_receptions',1);
                                 break;
@@ -151,6 +154,12 @@ class IndexDtes extends Component
                                 });
                             });
                         });
+                        break;
+                    case 'fecha_desde_revision':                        
+                        $query->where('all_receptions_at', '>=', $value);
+                        break;
+                    case 'fecha_hasta_revision':
+                        $query->where('all_receptions_at', '<=', $value);
                         break;
 
                 }

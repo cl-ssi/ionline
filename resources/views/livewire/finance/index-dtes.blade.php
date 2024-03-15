@@ -104,20 +104,22 @@
     <div class="row g-2 mb-3">
         <div class="col-md-2">
             <label for="for-fecha_desde" class="form-label">Fecha Desde SII</label>
-            <input type="date" class="form-control" wire:model.defer="filter.fecha_desde">
+            <input type="date" class="form-control" wire:model.defer="filter.fecha_desde_sii">
         </div>
 
         <div class="col-md-2">
             <label for="for-fecha_hasta" class="form-label">Fecha Hasta SII</label>
-            <input type="date" class="form-control" wire:model.defer="filter.fecha_hasta">
+            <input type="date" class="form-control" wire:model.defer="filter.fecha_hasta_sii">
         </div>
 
         <div class="col-md-2">
             <label for="for-tipo_documento" class="form-label">Estado</label>
             <select class="form-select" wire:model.defer="filter.estado">
                 <option value="">Todas</option>
+                <option value="sin_estado">Sin Estado</option>
                 <option value="revision">Revision</option>
                 <option value="listo_para_pago">Listo para Pago</option>
+                <option value="pagado">Pagado</option>
             </select>
         </div>
 
@@ -129,6 +131,16 @@
                 <option value="{{$subtitle->id}}">{{$subtitle->name}}</option>
                 @endforeach
             </select>
+        </div>
+
+        <div class="col-md-2">
+            <label for="for-fecha_desde" class="form-label">Fecha Desde Revisión</label>
+            <input type="date" class="form-control" wire:model.defer="filter.fecha_desde_revision">
+        </div>
+
+        <div class="col-md-2">
+            <label for="for-fecha_hasta" class="form-label">Fecha Hasta Revisión</label>
+            <input type="date" class="form-control" wire:model.defer="filter.fecha_hasta_revision">
         </div>
 
 

@@ -175,6 +175,11 @@ class Dte extends Model implements Auditable
         'confirmation_at',
     ];
 
+    protected $casts = [
+        'all_receptions_at'=> 'datetime',
+        
+    ];
+
     /**
      * tipo_documento
      * ==============
