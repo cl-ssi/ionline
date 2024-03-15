@@ -2346,6 +2346,7 @@ Route::prefix('allowances')->as('allowances.')->middleware(['auth', 'must.change
     Route::get('archived_index', [AllowanceController::class, 'archived_index'])->name('archived_index');
     Route::get('director_index', [AllowanceController::class, 'director_index'])->name('director_index');
     Route::get('create', [AllowanceController::class, 'create'])->name('create');
+    Route::get('create_to_replicate/{allowance}', [AllowanceController::class, 'create_to_replicate'])->name('create_to_replicate');
     Route::post('store', [AllowanceController::class, 'store'])->name('store');
     Route::get('{allowance}/edit', [AllowanceController::class, 'edit'])->name('edit');
     Route::put('{allowance}/update', [AllowanceController::class, 'update'])->name('update');
@@ -2379,6 +2380,10 @@ Route::prefix('meetings')->as('meetings.')->middleware(['auth', 'must.change.pas
     Route::get('/', [MeetingController::class, 'index'])->name('index');
     Route::get('create', [MeetingController::class, 'create'])->name('create');
     Route::get('{meeting}/edit', [MeetingController::class, 'edit'])->name('edit');
+    Route::prefix('commitments')->as('commitments.')->group(function () {
+        Route::get('/own_index', [CommitmentController::class, 'own_index'])->name('own_index');
+        Route::get('/all_index', [CommitmentController::class, 'all_index'])->name('all_index');
+    });
 }); 
 
 

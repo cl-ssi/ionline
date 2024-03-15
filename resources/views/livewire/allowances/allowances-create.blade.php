@@ -13,12 +13,12 @@
     <div class="form-row">
         <fieldset class="form-group col-12 col-md-6">
             <label for="for_user_allowance_id">Nombre Funcionario:</label>
-            @if($allowanceToEdit)
+            @if($allowanceToEdit || $allowanceToReplicate)
                 @livewire('search-select-user', [
                     'selected_id'   => 'user_allowance_id',
                     'required'      => 'required',
                     'emit_name'     => 'searchedUser',
-                    'user'          => $allowanceToEdit->userAllowance
+                    'user'          => ($allowanceToEdit) ? $allowanceToEdit->userAllowance : $allowanceToReplicate->userAllowance
                 ])
             @else
                 @livewire('search-select-user', [
@@ -41,9 +41,9 @@
         </fieldset>
 
         <fieldset class="form-group col-12 col-md-3">
-            @if($allowanceToEdit)
+            @if($allowanceToEdit || $allowanceToReplicate)
                 @livewire('allowances.show-position', [
-                    'position' => $allowanceToEdit->position
+                    'position' => ($allowanceToEdit) ? $allowanceToEdit->position : $allowanceToReplicate->position
                 ])
             @else
                 @livewire('allowances.show-position')
@@ -99,11 +99,12 @@
     <div class="form-row">
         <fieldset class="form-group col-12 col-md-6">
             <label for="for_requester_id">Comuna Origen:</label>
-                @if($allowanceToEdit)
+                @if($allowanceToEdit || $allowanceToReplicate)
                     @livewire('search-select-commune', [
                         'selected_id'           => 'origin_commune_id',
                         'required'              => 'required',
-                        'commune'               => $allowanceToEdit->originCommune
+                        'commune'               => ($allowanceToEdit) ? $allowanceToEdit->originCommune : $allowanceToReplicate->originCommune
+                        
                     ])
                 @else
                     @livewire('search-select-commune', [

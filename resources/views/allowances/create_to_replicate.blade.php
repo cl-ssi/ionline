@@ -12,8 +12,8 @@
 
 @livewire('allowances.allowances-create', [
     'allowanceToEdit'       => null,
-    'form'                  => 'create',
-    'allowanceToReplicate'  => null
+    'form'                  => 'create_to_replicate',
+    'allowanceToReplicate'  => $allowance
 ])
 
 @endsection

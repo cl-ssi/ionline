@@ -78,6 +78,9 @@ class AllowancesCreate extends Component
     /* Allowance to edit */
     public $allowanceToEdit;
 
+    /* Allowance to replicate */
+    public $allowanceToReplicate;
+
     /* Total dias completos en el año */
     public $totalCurrentAllowancesDaysByUser = 0;
     /* Total días disponibles */
@@ -221,7 +224,7 @@ class AllowancesCreate extends Component
                     'food'                              => $this->food,
                     'passage'                           => $this->passage, 
                     'means_of_transport'                => $this->meansOfTransport, 
-                    'origin_commune_id'                 => ($this->allowanceToEdit) ? $this->originCommune : $this->originCommune->id,
+                    'origin_commune_id'                 => ($this->allowanceToEdit || $this->allowanceToReplicate) ? $this->originCommune : $this->originCommune->id,
                     'round_trip'                        => $this->roundTrip,
                     'from'                              => $this->from, 
                     'to'                                => $this->to,
@@ -935,6 +938,39 @@ class AllowancesCreate extends Component
         }
     }
 
+    /* Set Allowance To Replicate */
+    private function setAllowanceToReplicate(){
+        if($this->allowanceToReplicate){
+            $this->userAllowance            =   $this->allowanceToReplicate->userAllowance;
+            $this->contractualConditionId   =   $this->allowanceToReplicate->contractual_condition_id;
+            $this->position                 =   $this->allowanceToReplicate->position;
+            $this->allowanceValueId         =   $this->allowanceToReplicate->allowance_value_id;
+            $this->grade                    =   $this->allowanceToReplicate->grade;
+            $this->law                      =   $this->allowanceToReplicate->law;
+            $this->reason                   =   $this->allowanceToReplicate->reason;
+            $this->originCommune            =   $this->allowanceToReplicate->origin_commune_id;
+            foreach($this->allowanceToReplicate->destinationCommune as $destination){
+                $this->setDestination($destination);
+            }
+            /*
+            $this->meansOfTransport         =   $this->allowanceToEdit->means_of_transport;
+            $this->roundTrip                =   $this->allowanceToEdit->round_trip;
+            $this->passage                  =   $this->allowanceToEdit->passage;
+            $this->overnight                =   $this->allowanceToEdit->overnight;
+            $this->accommodation            =   $this->allowanceToEdit->overnight;
+            $this->overnight                =   $this->allowanceToEdit->accommodation;
+            $this->food                     =   $this->allowanceToEdit->food;
+            $this->from                     =   $this->allowanceToEdit->from;
+            $this->to                       =   $this->allowanceToEdit->to;
+            $this->halfDaysOnly              =   $this->allowanceToEdit->half_days_only;
+
+            foreach($this->allowanceToEdit->files as $file){
+                $this->setFile($file);
+            }
+            */
+        }
+    }
+
     public function render()
     {
         $allowanceValues = AllowanceValue::where('year', Carbon::now()->year)->get();
@@ -946,10 +982,14 @@ class AllowancesCreate extends Component
         ]);
     }
 
-    public function mount($allowanceToEdit){
+    public function mount($allowanceToEdit, $allowanceToReplicate){
         if(!is_null($allowanceToEdit)){
             $this->allowanceToEdit = $allowanceToEdit;
             $this->setAllowance();
+        }
+        if(!is_null($allowanceToReplicate)){
+            $this->allowanceToReplicate = $allowanceToReplicate;
+            $this->setAllowanceToReplicate();
         }
     }
 
