@@ -305,6 +305,10 @@ use App\Http\Livewire\Welfare\Amipass\NewBeneficiaryRequest;
 use App\Http\Livewire\Welfare\Amipass\ReportByDates;
 use App\Http\Livewire\Welfare\Amipass\ReportByEmployee;
 use App\Http\Livewire\Welfare\Amipass\RequestMgr;
+use App\Http\Livewire\Welfare\Benefits\Benefits as BenefitLw;
+use App\Http\Livewire\Welfare\Benefits\Subsidies;
+use App\Http\Livewire\Welfare\Benefits\Requests;
+use App\Http\Livewire\Welfare\Benefits\RequestsAdmin;
 use App\Models\Pharmacies\Purchase;
 use App\Models\WebService\MercadoPublico;
 use App\User; /** ¿Un modelo? */
@@ -2615,6 +2619,14 @@ Route::prefix('welfare')->as('welfare.')->middleware(['auth', 'must.change.passw
             Route::post('/store', [AmipassController::class, 'storeValue'])->name('storeValue');
         });
     });
+
+    Route::prefix('benefits')->as('benefits.')->group(function () {
+        Route::get('/benefits', BenefitLw::class)->name('benefits');
+        Route::get('/subsidies', Subsidies::class)->name('subsidies');
+        Route::get('/requests', Requests::class)->name('requests');
+        Route::get('/requests-admin', RequestsAdmin::class)->name('requests-admin');
+    }); 
+    
 });
 
 
