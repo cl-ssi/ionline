@@ -71,11 +71,17 @@
                             <small>{{ $telephone->place ? $telephone->place->name : '' }}</small>
                         </td>
                         <td>
-                            <a href="{{ route('resources.telephone.edit', $telephone->id) }}"
-                                class="btn btn-outline-secondary btn-sm">
-                                <span class="fas fa-edit"
-                                    aria-hidden="true"></span>
-                            </a>
+                            @if($telephone->trashed())
+                                <button class="btn btn-secondary btn-sm" wire:click="restore({{$telephone->id}})" title="Restaurar">
+                                    <i class="bi bi-plus-circle-dotted"></i>
+                                </button>
+                            @else
+                                <a href="{{ route('resources.telephone.edit', $telephone->id) }}"
+                                    class="btn btn-outline-primary btn-sm">
+                                    <span class="bi bi-pencil-square"
+                                        aria-hidden="true"></span>
+                                </a>
+                            @endif
                         </td>
                     </tr>
                 @endforeach

@@ -99,7 +99,11 @@ class TelephoneController extends Controller
      */
     public function destroy(Telephone $telephone)
     {
+        /** Eliminar todos los usurios asociados al telefono */
+        $telephone->users()->detach();
+        /** Borrar el telefono */
         $telephone->delete();
+
         session()->flash('success', 'El telefono ' . $telephone->number . ' ha sido eliminado.');
         return redirect()->route('resources.telephone.index');
     }
