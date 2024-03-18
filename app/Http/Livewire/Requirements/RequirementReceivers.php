@@ -31,29 +31,38 @@ class RequirementReceivers extends Component
         
         $this->ouRoots = array();
         $establishments_ids = explode(',',env('APP_SS_ESTABLISHMENTS'));
+        // dd($establishments_ids);
 
         // para verificar si usuario logeado es director(a) del servicio
         $auth_user_id = auth()->id();
         $manager_user_id = OrganizationalUnit::where('level',1)
-                                            // ->whereIn('establishment_id',$establishments_ids)
                                             ->where('establishment_id',38)
                                             ->first()
                                             ->currentManager
                                             ->user_id;
 
-        if($auth_user_id == $manager_user_id && $this->parte_id!=null){
-            // $ouTree = Establishment::find(38)->getOuTreeWithAliasByLevelAttribute(2);
-            $ouTree = Establishment::find(38)->getOuTreeWithAliasAttribute();
+        // 18/03: José solicita por orden de Rafael villalobios que pueda visualizar todas las ou
+        
+        // if($auth_user_id == $manager_user_id && $this->parte_id!=null){
+        //     // $ouTree = Establishment::find(38)->getOuTreeWithAliasByLevelAttribute(2);
+        //     $ouTree = Establishment::find(38)->getOuTreeWithAliasAttribute();
+        //     foreach($ouTree as $key => $outree){
+        //         $this->ouRoots[] = array('id'=> $key, 'name' => $outree);
+        //     }
+        // }
+        // else{
+        //     foreach($establishments_ids as $establishment) {
+        //         $ouTree = Establishment::find($establishment)->ouTreeWithAlias;
+        //         foreach($ouTree as $key => $outree){
+        //             $this->ouRoots[] = array('id'=> $key, 'name' => $outree);
+        //         }
+        //     }
+        // }
+
+        foreach($establishments_ids as $establishment) {
+            $ouTree = Establishment::find($establishment)->ouTreeWithAlias;
             foreach($ouTree as $key => $outree){
                 $this->ouRoots[] = array('id'=> $key, 'name' => $outree);
-            }
-        }
-        else{
-            foreach($establishments_ids as $establishment) {
-                $ouTree = Establishment::find($establishment)->ouTreeWithAlias;
-                foreach($ouTree as $key => $outree){
-                    $this->ouRoots[] = array('id'=> $key, 'name' => $outree);
-                }
             }
         }
 
