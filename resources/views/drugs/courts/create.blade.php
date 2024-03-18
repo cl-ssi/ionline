@@ -16,6 +16,11 @@
   </fieldset>
 
   <fieldset class="form-group">
+      <label for="foremails">Emails</label>
+      <input type="text" class="form-control" id="foremails" placeholder="Ingrese el o los correos" name="emails" required="">
+    </fieldset>
+  
+  <fieldset class="form-group">
     <label for="foraddress">Dirección</label>
     <input type="text" class="form-control" id="foraddress" placeholder="Ingrese la dirección" name="address" required="">
   </fieldset>
