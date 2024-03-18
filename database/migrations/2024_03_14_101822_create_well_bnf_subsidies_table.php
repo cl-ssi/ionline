@@ -243,7 +243,7 @@ return new class extends Migration
 
         Subsidy::create([
             'benefit_id' => 2,
-            // 'name' => 'EDUCACION - PRE-KINDER',
+            'name' => 'EDUCACION - PRE-KINDER',
             // 'percentage' => null,
             // 'type' => 'MONTO',
             // 'value' => '35000',
