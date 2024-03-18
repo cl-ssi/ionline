@@ -67,13 +67,12 @@
                 <th rowspan="2">Adjuntos</th>
                 <th rowspan="2">Recepcion</th>
                 <th rowspan="2">SIGFE</th>
-                <th colspan="5">Pago</th>
+                <th colspan="4">Pago</th>
                 <th rowspan="2">Observaciones</th>
             </tr>
             <tr>
                 <th>Folio</th>
-                <th>Fec Gen</th>
-                <th>Fec Pag</th>
+                <th>Fec Gen</th>                
                 <th>PDF</th>
                 <th>Tipo</th>
             </tr>
@@ -129,8 +128,7 @@
                             <hr>
                         </td>
                         <td>{{$dte->tgrPayedDte?->folio}}</td>
-                        <td nowrap>{{$dte->tgrPayedDte ? $dte->tgrPayedDte->fecha_generacion->format('d-m-Y') : ''}}</td>
-                        <td nowrap><small>{{$dte->comparativeRequirement ? $dte->comparativeRequirement->efectivo_fecha->format('d-m-Y') : ''}}</small></td>
+                        <td nowrap><small>{{$dte->tgrPayedDte ? $dte->tgrPayedDte->fecha_generacion->format('d-m-Y') : ''}}</small></td>                        
                         <td><a href="#" class="btn btn-sm btn-outline-danger"><i class="fas fa-file-pdf"></i></a></td>
                         <td>
                             @if($dte->paid_automatic)
