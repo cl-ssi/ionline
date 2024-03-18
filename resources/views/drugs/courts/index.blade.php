@@ -28,7 +28,7 @@
             <th>Id</th>
             <th>Nombre</th>
             <th>Dirección</th>
-            <th>Comuna</th>
+            <th>Correos</th>
             <th>Estado</th>
             <th></th>
         </tr>
@@ -38,8 +38,8 @@
         <tr>
             <td>{{ $court->id }}</td>
             <td>{{ $court->name }}</td>
-            <td>{{ $court->address }}</td>
-            <td>{{ $court->commune }}</td>
+            <td>{{ $court->address }}, {{ $court->commune }}</td>
+            <td>{{ $court->emails }}</td>
             <td>{{ $court->status }}</td>
             <td>
               <a href="{{ route('drugs.courts.edit', $court->id) }}" class="btn btn-outline-primary btn-sm"><i class="fas fa-edit"></i> Editar</a>

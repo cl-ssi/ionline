@@ -16,6 +16,11 @@
       <label for="forname">Nombre</label>
       <input type="text" class="form-control" id="forname" placeholder="Ingrese el nombre del juzgado" name="name" value="{{ $court->name }}" required="">
     </fieldset>
+    
+    <fieldset class="form-group">
+      <label for="foremails">Emails</label>
+      <input type="text" class="form-control" id="foremails" placeholder="Ingrese el o los correos" name="emails" value="{{ $court->emails }}"  required="">
+    </fieldset>
 
     <fieldset class="form-group">
       <label for="foraddress">Dirección</label>

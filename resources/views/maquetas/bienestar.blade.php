@@ -65,7 +65,7 @@
 
     <table class="table table-bordered table-sm">
         <tr>
-            <th>Covertura</th>
+            <th>Descripción</th>
             <th>Tope anual</th>
             <th>Documentos de respaldo</th>
         </tr>
@@ -75,10 +75,13 @@
                     <li>100%</li>
                     <li>$ 100.000 por imponente</li>
                     <li>$ 80.000 por las cargas en total</li>
+                    <li>5 veces máximo por año</li>
                 </ul>
             </td>
-            <td>
-                $ 180.000
+            <td class="text-end">
+                $ 180.000  <br>
+                <span class="text-secondary">Utilizado: $ 110.000</span><br>
+                <span class="text-success ">Disponible: $ 70.000</span>
             </td>
             <td>
                 <div class="mb-3">
@@ -222,6 +225,7 @@
             <th>Beneficio</th>
             <th>Documentos</th>
             <th width="240">Estado</th>
+            <th>Monto aceptado</th>
             <th>Transferencia</th>
         </tr>
     </thead>
@@ -242,9 +246,18 @@
                     <button class="btn btn-outline-danger" type="button" id="inputGroupFileAddon03">Rechazada</button>
                 </div>
             </td>
+            <td class="text-end">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" value="80.000">
+                    <button class="btn btn-primary" type="button" id="button-addon2">
+                        <i class="bi bi-floppy"></i>
+                    </button>
+                </div>
+                <span class="text-secondary">Utilizado: $ 110.000</span><br>
+                <span class="text-success ">Disponible: $ 70.000</span>
+            </td>
             <td>
                 <button class="btn btn-success">Registrar transferencia y notificar</button>
-
             </td>
         </tr>
         <tr>
@@ -261,6 +274,14 @@
                 <div class="input-group mb-3">
                     <button class="btn btn-success" type="button" id="inputGroupFileAddon03">Aceptada</button>
                     <button class="btn btn-outline-danger" type="button" id="inputGroupFileAddon03">Rechazada</button>
+                </div>
+            </td>
+            <td>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control">
+                    <button class="btn btn-primary" type="button" id="button-addon2">
+                        <i class="bi bi-floppy"></i>
+                    </button>
                 </div>
             </td>
             <td>
@@ -283,6 +304,14 @@
                 </div>
                 <div class="input-group mb-3">
                     <input type="text" class="form-control" placeholder="Observación" aria-label="Recipient's username" aria-describedby="button-addon2" value="La receta no pertenece al beneficiario o a las cargas">
+                    <button class="btn btn-primary" type="button" id="button-addon2">
+                        <i class="bi bi-floppy"></i>
+                    </button>
+                </div>
+            </td>
+            <td>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control">
                     <button class="btn btn-primary" type="button" id="button-addon2">
                         <i class="bi bi-floppy"></i>
                     </button>
