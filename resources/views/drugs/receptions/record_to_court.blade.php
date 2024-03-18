@@ -143,7 +143,7 @@
         <p>
             <strong>Distribución:</strong>
             <ul>
-                <li>{{ $reception->court->name }} &lt;{{ $reception->court->emails }}&gt;</li>
+                <li>{{ $reception->court->name }} {{ $reception->court->emails }}</li>
                 <li>CC: Unidad de Drogas - SST</li>
                 <li>CC: Oficina de Partes - SST</li>
             </ul>
