@@ -88,7 +88,7 @@ class JobPositionProfileSignController extends Controller
                 "sent_to_ou_id"         => Parameter::get('ou','GestionDesarrolloDelTalento'),
                 "document_route_name"   => "job_position_profile.show_approval",
                 "document_route_params" => json_encode(["job_position_profile_id" => $jobPositionProfile->id]),
-                "active"                => false,
+                "active"                => ($previousApprovalId == null) ? true : false,
                 "previous_approval_id"  => $previousApprovalId,
                 "callback_controller_method"    => "App\Http\Controllers\JobPositionProfiles\JobPositionProfileSignController@approvalCallback",
                 "callback_controller_params"    => json_encode([
