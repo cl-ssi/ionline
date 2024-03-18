@@ -80,7 +80,7 @@ Iquique, <strong>{{ $protocol->created_at->day }} de {{ $protocol->created_at->m
 <div class="page-break"></div>
 
 
-<img style="padding-bottom: 4px;" src="{{ asset('images/logo_pluma.jpg') }}"
+<img style="padding-bottom: 4px;" src="{{ asset('images/Logo Servicio de Salud Tarapacá - Pluma.png') }}"
     width="120" alt="Logo {{ env('APP_SS') }}"><br>
 <div class="siete" style="padding-top: 3px;">Unidad de Drogas</div>
 <div class="siete" style="padding-top: 4px;">
