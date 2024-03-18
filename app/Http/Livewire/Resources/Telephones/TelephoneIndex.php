@@ -34,6 +34,7 @@ class TelephoneIndex extends Component
     public function searchTelephones()
     {
         $telephones = Telephone::query();
+        $telephones->withTrashed();
 
         $telephones->with([
             'users',
@@ -54,6 +55,15 @@ class TelephoneIndex extends Component
     {
         
     }
+
+    /** Metodo para restaruar un elemento borrado */
+    public function restore($id)
+    {
+        $telephone = Telephone::withTrashed()->findOrFail($id);
+        $telephone->restore();
+        $this->emit('alert', 'success', 'El telefono ' . $telephone->number . ' ha sido restaurado.');
+    }
+
     /**
     * placeSelected
     */

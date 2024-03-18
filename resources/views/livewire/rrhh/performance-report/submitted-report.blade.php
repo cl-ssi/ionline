@@ -26,12 +26,37 @@
             <tr>
                 <td>{{ $user->short_name }}</td>
                 <td>{{ $organizationalUnit }}</td>
-                <td class="text-center"><a class="btn btn-success btn-sm" href=""><i class="bi bi-file-check"></i></a></td>
-                <!-- <td class="text-center"><button class="btn btn-success btn-sm"><i class="bi bi-file-check"></i></button></td>
-                <td class="text-center"><button class="btn btn-secondary btn-sm disabled"><i class="bi bi-file-check"></i></button></td>
-                <td class="text-center"><button class="btn btn-secondary btn-sm disabled"><i class="bi bi-file-check"></i></button></td> -->
+                <td class="text-center"><a class="btn btn-success btn-sm" wire:click="showForm('{{ $user->id }}', '{{ $period->id }}')"><i class="bi bi-file-check"></i></a></td>
             </tr>
             @endforeach
         </tbody>
     </table>
+
+    <br><br><br>
+
+    @if($selectedUser)
+        <h4 class="mb-3">Informe de desempeño</h4>
+        <form>
+        <div class="row mb-3">
+            <label class="col-sm-3 col-form-label">Periodo</label>
+            <div class="col-sm-9">
+            <input type="text" class="form-control" value="{{ $selectedPeriod->name }}"  readonly>
+            </div>
+        </div>
+            <div class="row mb-3">
+            <label  class="col-sm-3 col-form-label">Nombre Funcionario</label>
+            <div class="col-sm-9">
+            <input type="text" class="form-control"  value="{{ $selectedUser->short_name }}"  readonly>
+            </div>
+        </div>
+            <div class="row mb-3">
+            <label class="col-sm-3 col-form-label">Unidad organizacional</label>
+            <div class="col-sm-9">
+            <input type="text" class="form-control"  value="{{ $organizationalUnit }}" readonly>
+            </div>
+        </div>
+        </form>
+    @endif
+
+
 </div>

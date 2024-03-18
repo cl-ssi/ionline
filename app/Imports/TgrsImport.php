@@ -49,7 +49,12 @@ class TgrsImport implements WithHeadingRow, ToCollection,WithChunkReading
                 if($dte) {
                     $dte_id = $dte->id;
                     $dte->excel_proveedor = true;
-                    $dte->paid = true;                    
+                    $dte->paid = true;
+                    if (!empty($row['cuenta_tgr'])) {
+                        $dte->paid_automatic = true;
+                    } else {
+                        $dte->paid_manual = true;
+                    }
                     $dte->save();
                 } else {
                     $dte_id = null; 
