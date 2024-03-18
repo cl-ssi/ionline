@@ -294,7 +294,7 @@ class ProductController extends Controller
       return view('pharmacies.reports.consume_history', compact('request','establishments','categories','matrix','programs'));
     }
 
-    public function repProduct(Request $request){
+    public function repProductByBatch(Request $request){
         $products = Product::where('pharmacy_id',session('pharmacy_id'))
                             ->orderBy('name','ASC')
                             ->get();
@@ -349,6 +349,24 @@ class ProductController extends Controller
                                         }]);
                             })
                             
+                            ->with('program','receivingItems')
+                            ->orderBy('name','ASC')
+                            ->get();
+
+        return view('pharmacies.reports.products_by_batch', compact('request','products','products_data'));
+    }
+
+    public function repProduct(Request $request){
+        $products = Product::where('pharmacy_id',session('pharmacy_id'))
+                            ->orderBy('name','ASC')
+                            ->get();
+
+        $product_id = $request->product_id;
+
+        $products_data = Product::where('pharmacy_id',session('pharmacy_id'))
+                            ->when($product_id, function ($q, $product_id) {
+                                return $q->where('id', $product_id);
+                            })
                             ->with('program','receivingItems')
                             ->orderBy('name','ASC')
                             ->get();

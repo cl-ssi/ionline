@@ -58,6 +58,10 @@
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
 
             <a class="dropdown-item"
+                href="{{ route('pharmacies.reports.productsbybatch') }}">
+                <i class="fas fa-file-alt"></i> Productos por Lote</a>
+
+            <a class="dropdown-item"
                 href="{{ route('pharmacies.reports.products') }}">
                 <i class="fas fa-file-alt"></i> Productos</a>
 

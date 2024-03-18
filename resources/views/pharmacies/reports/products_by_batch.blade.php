@@ -6,7 +6,7 @@
 
 @include('pharmacies.nav')
 
-<h3>Reporte de productos</h3>
+<h3>Reporte de productos por f.vencimiento/lote</h3>
 
 <form method="GET" class="form-horizontal" action="{{ route('pharmacies.reports.products') }}">
 
@@ -23,6 +23,22 @@
     		@endforeach
     	</select>
 
+        <div class="input-group-prepend">
+            <span class="input-group-text">Programa</span>
+        </div>
+        <input type="text" class="form-control" name="program" {{ ($request->get('program'))?'value='.$request->get('program'):'' }}>
+
+        <div class="input-group-prepend">
+            <span class="input-group-text">Estado del producto</span>
+        </div>
+        <select name="status" class="form-control" id="" required>
+            <option value="0" @selected($request->status == 0)>Con Stock - No vencidos</option>
+            <option value="1" @selected($request->status == 1)>Con Stock - Vencidos</option>
+            <option value="2" @selected($request->status == 2)>Sin Stock - No vencidos</option>
+            <option value="3" @selected($request->status == 3)>Sin Stock - Vencidos</option>
+            <option value="4" @selected($request->status == 4)>Todos</option>
+        </select>
+
     	<div class="input-group-append">
     		<button type="submit" class="btn btn-primary">
                 <i class="fas fa-search"></i> Buscar
@@ -33,12 +49,13 @@
 </form>
 
 <div class="table-responsive">
-<table class="table table-striped table-sm" id="tabla_last">
+	<table class="table table-striped table-sm" id="tabla_last">
 		<thead>
 			<tr>
 				<th scope="col">PRODUCTO</th>
                 <th scope="col">PROGRAMA</th>
-				<th scope="col">S.CRÍTICO</th> 
+				<th scope="col">F.VENC</th>
+				<th scope="col">LOTE</th>
                 <th scope="col">CANTIDAD</th>
                 <th>
                     <button type="button" class="btn btn-sm btn-outline-primary"
@@ -51,13 +68,16 @@
 		<tbody>
 
         @foreach ($products_data as $key => $product)
-            @if($product->stock <= $product->critic_stock) <tr class="table-danger">
+            @foreach ($product->batchs as $key => $batch)
+            @if($batch->due_date < now()) <tr class="table-danger">
             @else <tr> @endif
                 <td>{{$product->name}}</td>
                 <td>{{$product->program->name}}</td>
-                <td>{{$product->critic_stock}}</td>
-                <td>{{$product->stock}}</td>
+                <td>{{$batch->due_date->format('d/m/Y')}}</td>
+                <td>{{$batch->batch}}</td>
+                <td>{{$batch->count}}</td>
             </tr>
+            @endforeach
         @endforeach
 
 		</tbody>
