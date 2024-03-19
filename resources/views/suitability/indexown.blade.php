@@ -21,6 +21,11 @@
             </select>
         </fieldset>
 
+        <fieldset class="form-group col-6 col-md-5">
+            <label for="search">Buscar por nombre o apellido</label>
+            <input type="text" name="search" class="form-control" value="{{ $search ?? '' }}">
+        </fieldset>
+
         <fieldset class="form-group col-2 col-md-1">
             <label for="">&nbsp;</label>
             <button type="submit" class="form-control btn btn-primary"><i class="fas fa-search"></i></button>

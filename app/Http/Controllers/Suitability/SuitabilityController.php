@@ -261,20 +261,29 @@ class SuitabilityController extends Controller
     public function indexOwn(Request $request)
     {
         $school_id = $request->colegio;
+
+        $search = $request->search;
         $psirequests_count = PsiRequest::count();
         
         $psirequests = PsiRequest::with(['school', 'user'])
-            ->when($school_id != null, function ($q) use ($school_id) {
-                return $q->where('school_id', $school_id);
-            })
-            ->paginate(100);
+        ->when($school_id != null, function ($q) use ($school_id) {
+            return $q->where('school_id', $school_id);
+        })
+        ->when($search, function ($q) use ($search) {
+            $q->whereHas('user', function ($query) use ($search) {
+                $query->where('name', 'like', '%' . $search . '%')
+                    ->orWhere('fathers_family', 'like', '%' . $search . '%')
+                    ->orWhere('mothers_family', 'like', '%' . $search . '%');
+            });
+        })
+        ->paginate(100);
     
-        if ($school_id != null) {
+        if ($school_id != null or $search != null) {
             $psirequests_count = $psirequests->count();
         }
     
         $schools = School::orderBy("name", "asc")->get();
-        return view('suitability.indexown', compact('psirequests', 'schools', 'school_id', 'psirequests_count'));
+        return view('suitability.indexown', compact('psirequests', 'schools', 'school_id', 'psirequests_count', 'search'));
     }
     
 
