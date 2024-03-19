@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+use App\Models\Welfare\Benefits\Request as RequestModel;
 use App\Models\Welfare\Benefits\Subsidy;
 use App\Models\Welfare\Benefits\File;
 use App\User;
@@ -27,7 +28,7 @@ class Request extends Model
      */
     protected $fillable = [
         'id', 'subsidy_id', 'applicant_id', 'status', 'status_update_date', 'status_update_responsable_id', 'status_update_observation', 
-        'created_at'
+        'accepted_amount_date','accepted_amount_responsable_id','accepted_amount','created_at'
     ];
 
     /**
@@ -55,5 +56,20 @@ class Request extends Model
     public function applicant(): BelongsTo
     {
         return $this->belongsTo(User::class,'applicant_id');
+    }
+
+    public function getSubsidyUsedMoney(){
+        $requests = RequestModel::whereYear('created_at',$this->created_at->format('Y'))
+                                ->where('applicant_id', $this->applicant_id)
+                                ->where('subsidy_id', $this->subsidy_id)
+                                ->where('status', 'Aceptado')
+                                ->get();
+        
+        $accepted_amount = 0;
+        foreach($requests as $request){
+            $accepted_amount += $request->accepted_amount;
+        }   
+
+        return $accepted_amount;
     }
 }

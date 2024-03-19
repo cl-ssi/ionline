@@ -6,6 +6,7 @@ use Livewire\Component;
 
 use App\Models\Welfare\Benefits\Benefit;
 use App\Models\Welfare\Benefits\Subsidy;
+use App\Models\Welfare\Benefits\Document;
 
 class Subsidies extends Component
 {
@@ -15,17 +16,24 @@ class Subsidies extends Component
     public $newSubsidyName = '';
     public $selectedBenefitId; // Para almacenar el ID del beneficio seleccionado al crear un subsidio
     public $benefits; // Para almacenar todos los beneficios disponibles
-    public $percentage;
-    public $type;
-    public $value;
+    public $description;
+    public $annual_cap;
     public $recipient;
+    public $documents = [];
 
     public function showCreateForm()
     {
         $this->showCreate = !$this->showCreate;
-        if (!$this->showCreate) {
-            $this->reset(['newSubsidyName', 'selectedBenefitId', 'percentage', 'type', 'value', 'recipient']);
+        if ($this->showCreate) {
+            $this->resetInputFields();
         }
+    }
+
+    private function resetInputFields()
+    {
+        $this->reset([
+            'newSubsidyName', 'selectedBenefitId', 'description', 'annual_cap', 'recipient', 'selectedSubsidyId'
+        ]);
     }
 
     public function editSubsidy($subsidyId)
@@ -33,12 +41,12 @@ class Subsidies extends Component
         $subsidy = Subsidy::find($subsidyId);
         $this->newSubsidyName = $subsidy->name;
         $this->selectedBenefitId = $subsidy->benefit_id;
-        $this->percentage = $subsidy->percentage;
-        $this->type = $subsidy->type;
-        $this->value = $subsidy->value;
+        $this->description = $subsidy->description;
+        $this->annual_cap = $subsidy->annual_cap;
         $this->recipient = $subsidy->recipient;
         $this->selectedSubsidyId = $subsidyId;
         $this->showCreate = true;
+        $this->documents = $subsidy->documents;
     }
 
     public function deleteSubsidy($subsidyId)
@@ -52,10 +60,8 @@ class Subsidies extends Component
         $this->validate([
             'newSubsidyName' => 'required',
             'selectedBenefitId' => 'required', // Asegurarse de que se haya seleccionado un beneficio
-            'percentage' => 'required|string',
-            'type' => 'required|string',
-            'value' => 'required|string',
-            'recipient' => 'required|string',
+            'description' => 'required|string',
+            // 'recipient' => 'required|string',
         ]);
 
         if ($this->selectedSubsidyId) {
@@ -63,23 +69,32 @@ class Subsidies extends Component
             $subsidy->update([
                 'name' => $this->newSubsidyName,
                 'benefit_id' => $this->selectedBenefitId,
-                'percentage' => $this->percentage,
-                'type' => $this->type,
-                'value' => $this->value,
+                'description' => $this->description,
+                'annual_cap' => $this->annual_cap,
                 'recipient' => $this->recipient,
             ]);
         } else {
             Subsidy::create([
                 'name' => $this->newSubsidyName,
                 'benefit_id' => $this->selectedBenefitId,
-                'percentage' => $this->percentage,
-                'type' => $this->type,
-                'value' => $this->value,
+                'description' => $this->description,
+                'annual_cap' => $this->annual_cap,
                 'recipient' => $this->recipient,
             ]);
         }
+        
 
-        $this->reset(['newSubsidyName', 'selectedSubsidyId', 'selectedBenefitId', 'percentage', 'type', 'value', 'recipient', 'showCreate']);
+        $this->reset(['newSubsidyName', 'selectedSubsidyId', 'selectedBenefitId', 
+                        'description','annual_cap',
+                        'recipient', 'showCreate']);
+    }
+
+    public function deleteDocument($documentId){
+        Document::find($documentId)->delete();
+        
+        $this->reset(['newSubsidyName', 'selectedSubsidyId', 'selectedBenefitId', 
+                        'description','annual_cap',
+                        'recipient', 'showCreate']);
     }
 
     public function render()

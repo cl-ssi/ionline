@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 use App\Models\Welfare\Benefits\Subsidy;
+use App\Models\Welfare\Benefits\Request;
 
 class Benefit extends Model
 {
@@ -40,6 +41,28 @@ class Benefit extends Model
 
     public function subsidies(): HasMany
     {
-        return $this->hasMany(Subsidy::class);
+        // la siguiente validación permite saber y excluir los beneficios que hayan alcanzado su tope anual
+        $subsidies_array = [];
+        $subsidies = Subsidy::where('benefit_id',$this->id)->get();
+        foreach($subsidies as $subsidy){
+            $requests = Request::whereYear('created_at',now()->format('Y'))
+                            ->where('applicant_id', auth()->user()->id)
+                            ->where('subsidy_id', $subsidy->id)
+                            ->where('status', 'Aceptado')
+                            ->get();
+            
+            $accepted_amount = 0;
+            foreach($requests as $request){
+                $accepted_amount += $request->accepted_amount;
+            }  
+
+            if($accepted_amount == $subsidy->annual_cap){
+
+            }else{
+                array_push($subsidies_array, $subsidy->id);
+            }
+        }
+
+        return $this->hasMany(Subsidy::class)->whereIn('id',$subsidies_array);
     }
 }

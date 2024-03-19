@@ -10,14 +10,7 @@ class RequestsAdmin extends Component
 {
     public $requests;
     public $status_update_observation;
-
-    // public function mount(){
-    //     $this->requests = Request::all();
-    // }
-
-    // protected $rules = [
-    //     'request.status_update_observation' => 'required'
-    // ];
+    public $accepted_amount;
 
     public function accept($id){
         $request = Request::find($id);
@@ -41,6 +34,24 @@ class RequestsAdmin extends Component
         $request = Request::find($id);
         $request->status_update_observation = $this->status_update_observation;
         $request->save();
+        $this->render();
+    }
+
+    public function saveAcceptedAmount($id){
+        $request = Request::find($id);
+
+        // verificación no se pase monto del tope anual
+        $disponible_ammount = $request->subsidy->annual_cap - $request->getSubsidyUsedMoney();
+        
+        if($this->accepted_amount > $disponible_ammount){
+            session()->flash('info', 'No es posible guardar el valor puesto que excede el tope anual del beneficio.');
+        }else{
+            $request->accepted_amount_date = now();
+            $request->accepted_amount_responsable_id = auth()->user()->id;
+            $request->accepted_amount = $this->accepted_amount;
+            $request->save();
+        }
+        
         $this->render();
     }
 
