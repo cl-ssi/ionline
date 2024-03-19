@@ -8,7 +8,7 @@
 
 <h3>Reporte de productos por f.vencimiento/lote</h3>
 
-<form method="GET" class="form-horizontal" action="{{ route('pharmacies.reports.products') }}">
+<form method="GET" class="form-horizontal" action="{{ route('pharmacies.reports.productsbybatch') }}">
 
     <div class="input-group mb-3">
     	<div class="input-group-prepend">
