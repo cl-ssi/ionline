@@ -111,7 +111,7 @@
                 @if($agreement->fileToSign?->HasAllFlowsSigned)
                 <li class="nav-item">
                     <a href="#" class="nav-link text-secondary" data-toggle="modal"
-                                    data-target="#selectSignerRes"
+                                    data-target="#selectSignerRes" data-formmethod="POST"
                                     data-formaction="{{ route('agreements.createWordRes'. ($agreement->program_id == 3 ? 'Withdrawal' : ($agreement->program_id == 50 ? 'Collaboration' : '')), $agreement )}}">
                                     <i class="fas fa-file-download"></i> Descargar borrador Resolución</a>
                 </li>
@@ -181,7 +181,7 @@
                 @if($agreement->file)
                 <li class="nav-item">
                     <a href="#" class="nav-link text-secondary" data-toggle="modal"
-                                    data-target="#selectSignerRes"
+                                    data-target="#selectSignerRes" data-formmethod="POST"
                                     data-formaction="{{ route('agreements.createWordRes'. ($agreement->program_id == 3 ? 'Withdrawal' : ($agreement->program_id == 50 ? 'Collaboration' : '')), $agreement )}}">
                                     <i class="fas fa-file-download"></i> Descargar borrador Resolución</a>
                 </li>
