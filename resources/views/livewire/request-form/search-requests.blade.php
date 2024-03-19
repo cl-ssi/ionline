@@ -261,7 +261,7 @@
 
                                 @if($requestForm->status == 'approved')
                                 <!-- Button trigger modal -->            
-                                <button type="button" class="btn btn-outline-secondary btn-sm" data-toggle="modal" data-target="#exampleModal-{{ $requestForm->id }}" title="Reasignar comprador">
+                                <button type="button" class="btn btn-outline-secondary btn-sm" data-toggle="modal" data-target="#exampleModal-{{ $requestForm->id }}" title="Reasignar">
                                 <i class="fas fa-redo"></i>
                                 </button>
                                 @include('request_form.purchase.modals.reasign_purchaser')
