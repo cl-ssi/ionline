@@ -22,10 +22,15 @@ class SearchAllowances extends Component
     public $selectedId = null;
     public $selectedUserAllowance = null;
     public $selectedStatusSirh = null;
+    public $selectedEstablishment = null;
 
     public $index;
 
-    protected $queryString = ['selectedStatus', 'selectedId'];
+    protected $queryString = ['selectedStatus', 
+        'selectedId', 
+        'selectedUserAllowance', 
+        'selectedStatusSirh', 
+        'selectedEstablishment'];
 
     public function render()
     {   
@@ -40,7 +45,8 @@ class SearchAllowances extends Component
                             'originCommune',
                             'destinations.commune',
                             'destinations.locality',
-                            'approvals'
+                            'approvals',
+                            'allowanceEstablishment'
                         ])
                         ->orderBy('id', 'DESC')
                         ->whereDoesntHave("archive", function($subQuery){
@@ -50,7 +56,8 @@ class SearchAllowances extends Component
                         ->search($this->selectedStatus,
                             $this->selectedId,
                             $this->selectedUserAllowance,
-                            $this->selectedStatusSirh)
+                            $this->selectedStatusSirh,
+                            $this->selectedEstablishment)
                         ->paginate(50)
                 ]);
             }
@@ -67,7 +74,8 @@ class SearchAllowances extends Component
                             'originCommune',
                             'destinations.commune',
                             'destinations.locality',
-                            'approvals'
+                            'approvals',
+                            'allowanceEstablishment'
                         ])
                         ->orderBy('id', 'DESC')
                         ->where('establishment_id', auth()->user()->organizationalUnit->establishment_id)
@@ -79,7 +87,8 @@ class SearchAllowances extends Component
                         ->search($this->selectedStatus,
                             $this->selectedId,
                             $this->selectedUserAllowance,
-                            $this->selectedStatusSirh)
+                            $this->selectedStatusSirh,
+                            $this->selectedEstablishment)
                         ->paginate(50)
                 ]);
             }
@@ -97,7 +106,8 @@ class SearchAllowances extends Component
                             'originCommune',
                             'destinations.commune',
                             'destinations.locality',
-                            'approvals'
+                            'approvals',
+                            'allowanceEstablishment'
                         ])
                         ->orderBy('id', 'DESC')
                         ->whereHas("archive", function($subQuery){
@@ -106,7 +116,8 @@ class SearchAllowances extends Component
                         ->search($this->selectedStatus,
                             $this->selectedId,
                             $this->selectedUserAllowance,
-                            $this->selectedStatusSirh)
+                            $this->selectedStatusSirh,
+                            $this->selectedEstablishment)
                         ->paginate(50)
                 ]);
             }
@@ -123,7 +134,8 @@ class SearchAllowances extends Component
                         'originCommune',
                         'destinations.commune',
                         'destinations.locality',
-                        'approvals'
+                        'approvals',
+                        'allowanceEstablishment'
                     ])
                     ->orderBy('id', 'DESC')
                     ->where('user_allowance_id', auth()->id())
@@ -132,7 +144,8 @@ class SearchAllowances extends Component
                     ->search($this->selectedStatus,
                         $this->selectedId,
                         $this->selectedUserAllowance,
-                        $this->selectedStatusSirh)
+                        $this->selectedStatusSirh,
+                        $this->selectedEstablishment)
                     ->paginate(50)
             ]);
         }
@@ -148,13 +161,15 @@ class SearchAllowances extends Component
                             'originCommune',
                             'destinations.commune',
                             'destinations.locality',
-                            'approvals'
+                            'approvals',
+                            'allowanceEstablishment'
                         ])
                         ->orderBy('id', 'DESC')
                         ->search($this->selectedStatus,
                             $this->selectedId,
                             $this->selectedUserAllowance,
-                            $this->selectedStatusSirh)
+                            $this->selectedStatusSirh,
+                            $this->selectedEstablishment)
                         ->paginate(50)
                 ]);
             }
@@ -168,7 +183,8 @@ class SearchAllowances extends Component
                         'originCommune',
                         'destinations.commune',
                         'destinations.locality',
-                        'approvals'
+                        'approvals',
+                        'allowanceEstablishment'
                     ])
                     ->orderBy('correlative', 'DESC')
                     ->orderBy('id', 'DESC')
@@ -176,7 +192,8 @@ class SearchAllowances extends Component
                     ->search($this->selectedStatus,
                         $this->selectedId,
                         $this->selectedUserAllowance,
-                        $this->selectedStatusSirh)
+                        $this->selectedStatusSirh,
+                        $this->selectedEstablishment)
                     ->paginate(50)
                 ]);
             }
@@ -194,7 +211,8 @@ class SearchAllowances extends Component
                         'originCommune',
                         'destinations.commune',
                         'destinations.locality',
-                        'approvals'
+                        'approvals',
+                        'allowanceEstablishment'
                     ])
                     ->orderBy('id', 'DESC')
                     ->whereHas("Approvals", function($subQuery){
@@ -203,7 +221,8 @@ class SearchAllowances extends Component
                     ->search($this->selectedStatus,
                         $this->selectedId,
                         $this->selectedUserAllowance,
-                        $this->selectedStatusSirh)
+                        $this->selectedStatusSirh,
+                        $this->selectedEstablishment)
                     ->paginate(50)
             ]);
         }
