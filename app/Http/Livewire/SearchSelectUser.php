@@ -34,6 +34,7 @@ class SearchSelectUser extends Component
     public $emit_name;
     public $small_option = false;
     public $addUsers = false;
+    public $disabled;
 
     public $selectedUsers = [];
 

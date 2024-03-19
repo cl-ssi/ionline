@@ -32,7 +32,8 @@ class CreatePurchasePlan extends Component
         $organizationalUnit, 
         $subject,
         $program_id,
-        $period;
+        $period,
+        $disabled;
 
     /* Listeners */
     public $searchedUser, $searchedProgram, $items, $deletedItems;
@@ -231,6 +232,8 @@ class CreatePurchasePlan extends Component
         if(!is_null($purchasePlanToEdit)){
             $this->purchasePlanToEdit = $purchasePlanToEdit;
             $this->setPurchasePlan();
+            if($this->purchasePlanToEdit->approvals()->where('approver_ou_id', Parameter::get('ou', 'AbastecimientoSSI'))->exists())
+                $this->disabled = 'disabled';
         }
     }
 }

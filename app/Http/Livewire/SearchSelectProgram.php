@@ -33,6 +33,7 @@ class SearchSelectProgram extends Component
     public $required = '';
     public $small_option = false;
     public $msg_too_many;
+    public $disabled;
 
     public $emit_name;
 

@@ -8,37 +8,39 @@
                 'selected_id'   => 'user_responsible_id',
                 'required'      => 'required',
                 'emit_name'     => 'searchedUser',
-                'user'          => $purchasePlanToEdit->userResponsible ?? null
+                'user'          => $purchasePlanToEdit->userResponsible ?? null,
+                'disabled'      => $disabled
             ])
         </fieldset>
 
         <fieldset class="form-group col-2">
             <label for="for_telephone">Teléfono</label>
-            <input class="form-control" type="text" autocomplete="off" wire:model.defer="telephone">
+            <input class="form-control" type="text" autocomplete="off" wire:model.defer="telephone" {{$disabled}}>
         </fieldset>
 
         <fieldset class="form-group col-3">
             <label for="for_email">Correo Electrónico</label>
-            <input class="form-control" type="text" autocomplete="off" wire:model.defer="email">
+            <input class="form-control" type="text" autocomplete="off" wire:model.defer="email" {{$disabled}}>
         </fieldset>
 
         <fieldset class="form-group col-3">
             <label for="for_position">Cargo / Función</label>
-            <input class="form-control" type="text" autocomplete="off" wire:model.defer="position">
+            <input class="form-control" type="text" autocomplete="off" wire:model.defer="position" {{$disabled}}>
         </fieldset>
     </div>
 
     <div class="row g-3 mb-3">
         <fieldset class="form-group col-6">
             <label for="for_user_allowance_id">Unidad Organizacional</label>
-            <input class="form-control" type="text" autocomplete="off" wire:model.defer="organizationalUnit" {{ $readonly }} >
+            <input class="form-control" type="text" autocomplete="off" wire:model.defer="organizationalUnit" {{ $readonly }} {{$disabled}} >
         </fieldset>
 
         <fieldset class="form-group col-6">
             <label for="for_program">Programa</label>
             @livewire('search-select-program',[
                     'emit_name' => 'searchedProgram',
-                    'program'   => $purchasePlanToEdit->programName ?? null
+                    'program'   => $purchasePlanToEdit->programName ?? null,
+                    'disabled'  => $disabled
             ])
         </fieldset>
     </div>
@@ -46,11 +48,11 @@
     <div class="row g-3 mb-3">
         <fieldset class="form-group col-6">
             <label for="for_user_allowance_id">Asunto</label>
-            <input class="form-control" type="text" autocomplete="off" wire:model.defer="subject">
+            <input class="form-control" type="text" autocomplete="off" wire:model.defer="subject" {{$disabled}}>
         </fieldset>
         <fieldset class="form-group col-3">
             <label for="for_period">Periodo</label>
-            <select class="form-select" wire:model.defer="period">
+            <select class="form-select" wire:model.defer="period" {{$disabled}}>
                 <option value="0">Seleccione</option>
                 <option value="2023" disabled>2023</option>
                 <option value="2024">2024</option>
@@ -61,11 +63,11 @@
     <div class="row g-3">
         <div class="form-group col-6">
             <label for="for_description">Descripción general del proyecto o adquisición</label>
-            <textarea class="form-control" rows="3" autocomplete="off" wire:model.defer="description" ></textarea>
+            <textarea class="form-control" rows="3" autocomplete="off" wire:model.defer="description" {{$disabled}}></textarea>
         </div>
         <div class="form-group col-6">
             <label for="for_purpose">Propósito general del proyecto o adquisición</label>
-            <textarea class="form-control" rows="3" autocomplete="off" wire:model.defer="purpose" ></textarea>
+            <textarea class="form-control" rows="3" autocomplete="off" wire:model.defer="purpose" {{$disabled}}></textarea>
         </div>
     </div>
     

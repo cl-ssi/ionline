@@ -20,11 +20,11 @@
             <a class="btn btn-outline-secondary {{ $small_option ? 'btn-sm' : '' }}" wire:click="addUser">
                 <i class="fas fa-user"></i></a>
             @endif
-            <a class="btn btn-outline-secondary {{ $small_option ? 'btn-sm' : '' }}" wire:click="resetx">
+            <a class="btn btn-outline-secondary {{ $small_option ? 'btn-sm' : '' }} {{ $disabled }}" wire:click="resetx">
                 <i class="fas fa-eraser"></i></a>
     </div>
     
-    <input type="text" name="{{ $selected_id }}" value="{{ optional($user)->id }}" style="display:none;" {{ $required }}>
+    <input type="text" name="{{ $selected_id }}" value="{{ optional($user)->id }}" style="display:none;" {{ $required }} {{$disabled}}>
     
     <!-- TODO revisar si es necesario en los modulos o en que parte traer los eliminados para cambiar el comportamiento del modelo y evitar este if(!$user->trashed()) -->
     @if(!empty($query))
