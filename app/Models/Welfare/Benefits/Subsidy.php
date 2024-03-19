@@ -25,7 +25,7 @@ class Subsidy extends Model
      * @var array
      */
     protected $fillable = [
-        'id', 'benefit_id', 'name', 'percentage', 'type', 'value', 'recipient'
+        'id', 'benefit_id', 'name','description','annual_cap','recipient'
     ];
 
     /**

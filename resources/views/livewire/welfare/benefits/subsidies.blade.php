@@ -6,7 +6,7 @@
     </h4>
 
     @if($showCreate)
-    <div class="row mt-3">
+    <div class="row mt-3 showCreate">
         <div class="col-md-6">
             <div class="form-group">
                 <label for="selectedBenefitId">Beneficio:</label>
@@ -20,28 +20,65 @@
             <div class="form-group">
                 <label for="newSubsidyName">Nombre del Subsidio:</label>
                 <input wire:model="newSubsidyName" type="text" class="form-control" id="newSubsidyName">
+                @error('newSubsidyName') <p class="text-danger">{{ $message }}</p> @enderror
             </div>
             <div class="form-group">
-                <label for="percentage">Porcentaje:</label>
-                <input wire:model="percentage" type="text" class="form-control" id="percentage">
+                <label for="value">Descripción:</label>
+                <input wire:model="description" type="text" class="form-control" id="description">
+                @error('description') <p class="text-danger">{{ $message }}</p> @enderror
             </div>
             <div class="form-group">
-                <label for="type">Tipo:</label>
-                <input wire:model="type" type="text" class="form-control" id="type">
-            </div>
-            <div class="form-group">
-                <label for="value">Valor:</label>
-                <input wire:model="value" type="text" class="form-control" id="value">
+                <label for="value">Tope anual:</label>
+                <input wire:model="annual_cap" type="number" class="form-control" id="annual_cap">
+                @error('annual_cap') <p class="text-danger">{{ $message }}</p> @enderror
             </div>
             <div class="form-group">
                 <label for="recipient">Beneficiario:</label>
                 <input wire:model="recipient" type="text" class="form-control" id="recipient">
+                @error('recipient') <p class="text-danger">{{ $message }}</p> @enderror
             </div>
             <br>    
-            <button wire:click="saveSubsidy" class="btn btn-success">Guardar</button>
+        </div>
+
+        <h4>Documentos</h4>
+
+        <div class="col-md-12">
+        <table class="table table-bordered table-sm" style="border-collapse:collapse;">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Subsidio</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if($documents)
+                    @foreach($documents as $document)
+                        <tr>
+                            <td>{{ $document->id }}</td>
+                            <td>{{ $document->name }}</td>
+                            <td>
+                                <!-- Botón para eliminar -->
+                                <button wire:click="deleteDocument({{ $document->id }})" class="btn btn-danger btn-sm">Eliminar</button>
+                            </td>
+                        </tr>
+                    @endforeach
+                @endif
+            </tbody>
+        </table>
+        </div>
+
+        <br>
+
+        <div class="col-md-6">
+        <div wire:loading wire:target="saveSubsidy">
+                <i class="fas fa-spinner fa-spin"></i> Guardando...
+        </div>
+        <button wire:click="saveSubsidy" class="btn btn-success">Guardar</button>
         </div>
     </div>
     <br>
+    
     @endif
 
     <table class="table table-bordered table-sm" style="border-collapse:collapse;">
@@ -50,9 +87,8 @@
                 <th>Id</th>
                 <th>Subsidio</th>
                 <th>Beneficio</th>
-                <th>Porcentaje</th>
-                <th>Tipo</th>
-                <th>Valor</th>
+                <th>Descripción</th>
+                <th>Tope anual</th>
                 <th>Beneficiario</th>
                 <th>Docu/Reqs</th>
                 <th>Acciones</th>
@@ -64,9 +100,8 @@
                     <td>{{ $subsidy->id }}</td>
                     <td>{{ $subsidy->name }}</td>
                     <td>{{ $subsidy->benefit->name }}</td>
-                    <td>{{ $subsidy->percentage }}</td>
-                    <td>{{ $subsidy->type }}</td>
-                    <td>{{ $subsidy->value }}</td>
+                    <td>{{ $subsidy->description }}</td>
+                    <td>{{ $subsidy->annual_cap }}</td>
                     <td>{{ $subsidy->recipient }}</td>
                     <td>{{ $subsidy->documents->count() }}</td>
                     <td>

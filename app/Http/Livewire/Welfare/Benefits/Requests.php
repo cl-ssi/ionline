@@ -26,9 +26,11 @@ class Requests extends Component
     public $files = []; // Variable para almacenar archivos seleccionados
 
     protected $rules = [
-        'subsidy.percentage' => 'required',
-        'subsidy.type' => 'required',
-        'subsidy.value' => 'required',
+        // 'subsidy.percentage' => 'required',
+        // 'subsidy.type' => 'required',
+        // 'subsidy.value' => 'required',
+        'subsidy.description' => 'required',
+        'subsidy.annual_cap' => 'required',
         'subsidy.recipient' => 'required'
     ];
 

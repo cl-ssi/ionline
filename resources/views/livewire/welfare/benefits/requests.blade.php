@@ -31,7 +31,7 @@
             <div class="col-md-12">
                 <!-- Inputs bloqueados para mostrar los campos de Subsidy -->
                 <div class="row">
-                    <div class="col-md-6">
+                    <!-- <div class="col-md-6">
                         <div class="form-group">
                             <label for="type">Tipo:</label>
                             <input type="text" class="form-control" id="type" wire:model="subsidy.type" disabled>
@@ -42,16 +42,28 @@
                             <label for="value">Valor:</label>
                             <input type="text" class="form-control" id="value" wire:model="subsidy.value" disabled>
                         </div>
+                    </div> -->
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="type">Descripción:</label>
+                            <input type="text" class="form-control" id="description" wire:model="subsidy.description" disabled>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="type">Tope anual:</label>
+                            <input type="text" class="form-control" id="annual_cap" wire:model="subsidy.annual_cap" disabled>
+                        </div>
                     </div>
                 </div>
-                <div class="row">
+                <!-- <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="recipient">Beneficiario:</label>
                             <input type="text" class="form-control" id="recipient" wire:model="subsidy.recipient" disabled>
                         </div>
                     </div>
-                </div>
+                </div> -->
 
                 @if($subsidy && $subsidy->percentage)
                 <div class="row">
@@ -76,7 +88,8 @@
                     @foreach($subsidy->documents as $key => $document)
                         @if($document->type == "Documentación")
                             <li>
-                                <input type="file" wire:model="files.{{ $key }}"> - <div wire:loading wire:target="files.{{ $key }}"><i class="fas fa-spinner fa-spin"></i> <b>Cargando...</b></div> {{$document->name}}
+                                <div wire:loading wire:target="files.{{ $key }}"><i class="fas fa-spinner fa-spin"></i> <b>Cargando...</b></div> {{$document->name}}
+                                <input class="form-control" type="file" wire:model="files.{{ $key }}">
                             </li>
                         @endif
                     @endforeach
