@@ -263,7 +263,9 @@ class SuitabilityController extends Controller
         $school_id = $request->colegio;
 
         $search = $request->search;
+        $selectedYear = $request->yearFilter;
         $psirequests_count = PsiRequest::count();
+        $actuallyYear = $actuallyYear = date('Y');
         
         $psirequests = PsiRequest::with(['school', 'user'])
         ->when($school_id != null, function ($q) use ($school_id) {
@@ -276,6 +278,9 @@ class SuitabilityController extends Controller
                     ->orWhere('mothers_family', 'like', '%' . $search . '%');
             });
         })
+        ->when($selectedYear != 'todos', function ($q) use ($selectedYear) {
+            return $q->whereYear('created_at', $selectedYear);
+        })
         ->paginate(100);
     
         if ($school_id != null or $search != null) {
@@ -283,7 +288,7 @@ class SuitabilityController extends Controller
         }
     
         $schools = School::orderBy("name", "asc")->get();
-        return view('suitability.indexown', compact('psirequests', 'schools', 'school_id', 'psirequests_count', 'search'));
+        return view('suitability.indexown', compact('psirequests', 'schools', 'school_id', 'psirequests_count', 'search', 'selectedYear', 'actuallyYear', 'request'));
     }
     
 
