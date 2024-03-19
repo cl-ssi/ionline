@@ -25,13 +25,6 @@
                             @case('Derivado SGR')
                                 <span class="badge text-bg-primary">{{ $meeting->StatusValue }} <i class="fas fa-rocket"></i></span>
                                 @break
-                        
-                            @case(2)
-                                Second case...
-                                @break
-                        
-                            @default
-                                Default case...
                         @endswitch
                     </td>
                     <td width="7%">{{ $meeting->created_at->format('d-m-Y H:i:s') }}</td>
@@ -41,7 +34,7 @@
                     <td width="8%" class="text-center">
                         <a href="{{ route('meetings.edit', $meeting) }}"
                             class="btn btn-outline-secondary btn-sm">
-                            <i class="fas fa-edit"></i> 
+                            @if($meeting->StatusValue == 'Guardado') <i class="fas fa-edit"></i> @else <i class="fas fa-eye"></i> @endif 
                         </a>
                         <a class="btn btn-outline-danger btn-sm"
                             wire:click="deleteMeeting({{ $key }})">

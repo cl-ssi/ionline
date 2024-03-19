@@ -47,7 +47,7 @@ class MeetingController extends Controller
      */
     public function show(Meeting $meeting)
     {
-        //
+        return view('meetings.show', compact('meeting'));
     }
 
     /**

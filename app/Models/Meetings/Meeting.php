@@ -30,6 +30,10 @@ class Meeting extends Model implements Auditable
         return $this->hasMany('App\Models\Meetings\Commitment');
     }
 
+    public function userCreator() {
+        return $this->belongsTo('App\User', 'user_creator_id')->withTrashed();
+    }
+
     public function getStatusValueAttribute() {
         switch($this->status) {
             case 'saved':
@@ -50,6 +54,18 @@ class Meeting extends Model implements Auditable
 
             case 'pending':
                 return 'Pendiente';
+                break;
+        }
+    }
+
+    public function getMechanismValueAttribute() {
+        switch($this->mechanism) {
+            case 'videoconferencia':
+                return 'Videoconferencia';
+                break;
+
+            case 'presencial':
+                return 'Presencial';
                 break;
         }
     }

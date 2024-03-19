@@ -261,6 +261,8 @@ class MeetingCreate extends Component
         // SE GUARDA STATUS EN REUNION
         $this->meetingToEdit->status = 'sgr';
         $this->meetingToEdit->save();
+
+        return redirect()->route('meetings.show', $this->meetingToEdit);
     }
 
     public function showSgr($key){

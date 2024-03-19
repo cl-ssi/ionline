@@ -37,6 +37,10 @@ class Commitment extends Model implements Auditable
         return $this->belongsTo('App\Rrhh\OrganizationalUnit', 'commitment_ou_id')->withTrashed();
     }
 
+    public function requirement(){
+        return $this->belongsTo('App\Models\Requirements\Requirement', 'requirement_id');
+    }
+
     protected $hidden = [
         'created_at', 'updated_at'
     ];

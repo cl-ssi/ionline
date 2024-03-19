@@ -187,74 +187,76 @@
             </table>
         </div>
     @endif
-
-    <div class="row g-3 mb-3">
-        <fieldset class="form-group col-12 col-md-12">
-            <label for="for_commitment_description">Descripción</label>
-            <textarea class="form-control" rows="3" wire:model.defer="commitmentDescription"></textarea>
-        </fieldset>
-    </div>
-
-    <div class="row g-3 mb-3">
-        <fieldset class="col-12 col-md-4">
-            <label for="for-mecanism">Tipo</label>
-            <select class="form-select" wire:model="typeResponsible">
-                <option value="">Seleccionar</option>
-                <option value="individual">Personal</option>
-                <option value="ou">Unidad Organizacional</option>
-            </select>
-        </fieldset>
-
-        <fieldset class="col-12 col-md-4">
-            @if($typeResponsible == 'individual')
-                <label for="for_user_commitment_id">Nombre Funcionario responsable:</label>
-                @livewire('search-select-user', [
-                    'selected_id'   => 'user_commitment_id',
-                    'required'      => 'required',
-                    'emit_name'     => 'searchedCommitmentUser',
-                    'user'          => ''
-                ])
-            @endif
-
-            @if($typeResponsible == 'ou')
-                <label for="for_requester_ou_id">Unidad Organizacional</label>
-                @livewire('search-select-organizational-unit', [
-                    'selected_id'         => 'compromise_ou_id',
-                    'required'            => 'required',
-                    'emit_name'           => 'searchedCommitmentOu',
-                    'organizationalUnit'  => ''
-                ])
-            @endif
-            
-            @if($typeResponsible == '' || $typeResponsible == NULL)
-                <div class="alert alert-info alert-sm small mt-2" role="alert">
-                    Favor seleccionar un tipo de responsabilidad
-                </div>
-            @endif
-        </fieldset>
-
-        <fieldset class="col-12 col-md-2">
-            <label for="for-mecanism">Prioridad</label>
-            <select class="form-select" wire:model="priority">
-                <option value="">Seleccionar</option>
-                <option value="normal">Normal</option>
-                <option value="urgente">Urgente</option>
-            </select>
-        </fieldset>
-
-        <fieldset class="col-12 col-sm-2">
-            <label for="for_closing_date">Fecha Límite</label>
-            <input type="date" class="form-control" wire:model.defer="closingDate">
-        </fieldset>
-    </div>
     
-    <div class="row g-3"> 
-        <fieldset class="form-group col-12 col-md-12">
-            <button wire:click="addCommitment" class="btn btn-success float-end" type="button">
-                <i class="fas fa-plus"></i> Agregar
-            </button>
-        </fieldset>
-    </div>
+    @if($form == 'create' || ($meetingToEdit && $meetingToEdit->StatusValue != 'Derivado SGR'))
+        <div class="row g-3 mb-3">
+            <fieldset class="form-group col-12 col-md-12">
+                <label for="for_commitment_description">Descripción</label>
+                <textarea class="form-control" rows="3" wire:model.defer="commitmentDescription"></textarea>
+            </fieldset>
+        </div>
+
+        <div class="row g-3 mb-3">
+            <fieldset class="col-12 col-md-4">
+                <label for="for-mecanism">Tipo</label>
+                <select class="form-select" wire:model="typeResponsible">
+                    <option value="">Seleccionar</option>
+                    <option value="individual">Personal</option>
+                    <option value="ou">Unidad Organizacional</option>
+                </select>
+            </fieldset>
+
+            <fieldset class="col-12 col-md-4">
+                @if($typeResponsible == 'individual')
+                    <label for="for_user_commitment_id">Nombre Funcionario responsable:</label>
+                    @livewire('search-select-user', [
+                        'selected_id'   => 'user_commitment_id',
+                        'required'      => 'required',
+                        'emit_name'     => 'searchedCommitmentUser',
+                        'user'          => ''
+                    ])
+                @endif
+
+                @if($typeResponsible == 'ou')
+                    <label for="for_requester_ou_id">Unidad Organizacional</label>
+                    @livewire('search-select-organizational-unit', [
+                        'selected_id'         => 'compromise_ou_id',
+                        'required'            => 'required',
+                        'emit_name'           => 'searchedCommitmentOu',
+                        'organizationalUnit'  => ''
+                    ])
+                @endif
+                
+                @if($typeResponsible == '' || $typeResponsible == NULL)
+                    <div class="alert alert-info alert-sm small mt-2" role="alert">
+                        Favor seleccionar un tipo de responsabilidad
+                    </div>
+                @endif
+            </fieldset>
+
+            <fieldset class="col-12 col-md-2">
+                <label for="for-mecanism">Prioridad</label>
+                <select class="form-select" wire:model="priority">
+                    <option value="">Seleccionar</option>
+                    <option value="normal">Normal</option>
+                    <option value="urgente">Urgente</option>
+                </select>
+            </fieldset>
+
+            <fieldset class="col-12 col-sm-2">
+                <label for="for_closing_date">Fecha Límite</label>
+                <input type="date" class="form-control" wire:model.defer="closingDate">
+            </fieldset>
+        </div>
+        
+        <div class="row g-3"> 
+            <fieldset class="form-group col-12 col-md-12">
+                <button wire:click="addCommitment" class="btn btn-success float-end" type="button">
+                    <i class="fas fa-plus"></i> Agregar
+                </button>
+            </fieldset>
+        </div>
+    @endif
     
     <hr>
 

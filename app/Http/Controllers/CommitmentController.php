@@ -17,6 +17,11 @@ class CommitmentController extends Controller
         //
     }
 
+    public function own_index()
+    {
+        return view('meetings.commitments.own_index');
+    }
+
     /**
      * Show the form for creating a new resource.
      *

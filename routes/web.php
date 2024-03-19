@@ -2385,6 +2385,7 @@ Route::prefix('meetings')->as('meetings.')->middleware(['auth', 'must.change.pas
     Route::get('/', [MeetingController::class, 'index'])->name('index');
     Route::get('create', [MeetingController::class, 'create'])->name('create');
     Route::get('{meeting}/edit', [MeetingController::class, 'edit'])->name('edit');
+    Route::get('{meeting}/show', [MeetingController::class, 'show'])->name('show');
     Route::prefix('commitments')->as('commitments.')->group(function () {
         Route::get('/own_index', [CommitmentController::class, 'own_index'])->name('own_index');
         Route::get('/all_index', [CommitmentController::class, 'all_index'])->name('all_index');
