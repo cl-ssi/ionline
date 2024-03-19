@@ -26,7 +26,9 @@ class PaymentController extends Controller
         $id = $request->input('id');
         $emisor = $request->input('emisor');
         $folio = $request->input('folio');
-        $oc = $request->input('oc');
+        $folio_oc = $request->input('folio_oc');
+        $oc = $request->filled('oc');
+        $recepcion = $request->filled('reception');
         $folio_compromiso = $request->input('folio_compromiso');
         $folio_devengo = $request->input('folio_devengo');
         $folio_pago = $request->input('folio_pago');
@@ -47,7 +49,7 @@ class PaymentController extends Controller
             $query->where('folio', $folio);
         }
 
-        if ($oc) {
+        if ($folio_oc) {
             $query->where('folio_oc', 'like', '%' . $oc . '%');
         }
 
@@ -56,7 +58,7 @@ class PaymentController extends Controller
         }
         if ($folio_devengo) {
             $query->where('folio_devengo_sigfe', $folio_devengo);
-        }
+        }        
 
         if ($folio_pago) {
             
@@ -64,6 +66,28 @@ class PaymentController extends Controller
             $query->whereHas('tgrPayedDte', function ($query) use ($folio_pago) {
                 $query->where('folio', $folio_pago);
             });
+        }
+
+        if ($oc && $oc !== 'Todos') {            
+            switch ($oc) {
+                case 'Con OC':
+                    $query->whereNotNull('folio_oc');
+                    break;
+                case 'Sin OC':
+                    $query->whereNull('folio_oc');
+                    break;
+            }
+        }
+
+        if ($recepcion && $recepcion !== 'Todos') {
+            switch ($recepcion) {
+                case 'Sin Recepción':
+                    $query->doesntHave('receptions');
+                    break;
+                case 'Con Recepción':
+                    $query->has('receptions');
+                    break;
+            }
         }
 
         
@@ -229,7 +253,7 @@ class PaymentController extends Controller
             ->where('payment_ready', 1)
             ->where('establishment_id', auth()->user()->organizationalUnit->establishment_id);
 
-            if ($request->filled('id') || $request->filled('emisor')  || $request->filled('folio') || $request->filled('oc')  || $request->filled('prov') || $request->filled('cart') || $request->filled('req') ) {
+            if ($request->filled('id') || $request->filled('emisor')  || $request->filled('folio') || $request->filled('folio_oc') || $request->filled('oc')  || $request->filled('prov') || $request->filled('cart') || $request->filled('req') ) {
                 $query = $this->search($request, $query);
             }
 

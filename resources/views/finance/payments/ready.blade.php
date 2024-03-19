@@ -16,11 +16,27 @@
             </div>
             <div class="col-md-1">
                 <label for="for-folio" class="form-label">Folio DTE</label> 
-                <input type="text" class="form-control" name="folio" placeholder="folio" value="{{ old('folio') }}">
+                <input type="text" class="form-control" name="folio" placeholder="folio" value="{{ old('folio') }}" autocomplete="off">
             </div>
             <div class="col-md-2">
                 <label for="for-folio_oc" class="form-label">Folio OC</label>
-                <input type="text" class="form-control" name="oc" placeholder="oc" value="{{ old('oc') }}">
+                <input type="text" class="form-control" name="folio_oc" placeholder="oc" value="{{ old('folio_oc') }}">
+            </div>
+            <div class="col-md-1">
+                <label for="for-oc" class="form-label">OC</label>
+                <select class="form-select" name ="oc">
+                    <option value="Todos" {{ old('oc') == 'Todos' ? 'selected' : '' }}>Todos</option>
+                    <option value="Sin OC" {{ old('oc') == 'Sin OC' ? 'selected' : '' }}>Sin OC</option>
+                    <option value="Con OC" {{ old('oc') == 'Con OC' ? 'selected' : '' }}>Con OC</option>
+                </select>
+            </div>
+            <div class="col-md-1">
+                <label for="for-reception" class="form-label">Recepción</label>
+                <select class="form-select" name="reception">
+                    <option value="Todos" {{ old('reception') == 'Todos' ? 'selected' : '' }}>Todas</option>
+                    <option value="Sin Recepción" {{ old('reception') == 'Sin Recepción' ? 'selected' : '' }}>Sin</option>
+                    <option value="Con Recepción" {{ old('reception') == 'Con Recepción' ? 'selected' : '' }}>Con</option>
+                </select>
             </div>
             <div class="col-md-1">
                 <label for="for-prov" class="form-label">Prov</label>
@@ -46,8 +62,8 @@
                     <option value="Sin" {{ old('req') == 'Sin' ? 'selected' : '' }}>Sin</option>
                 </select>
             </div>
-            <div class="col-md-2">
-                <!-- <label for="for-tipo_documento" class="form-label">Tipo Documento</label>
+            <!-- <div class="col-md-2">
+                <label for="for-tipo_documento" class="form-label">Tipo Documento</label>
                 <select class="form-select" wire:model.defer="filter.tipo_documento">
                     <option value="">Todas</option>
                     <option value="factura_electronica">FE: Factura Electrónica</option>
@@ -56,8 +72,8 @@
                     <option value="nota_credito">NC: Nota Crédito</option>
                     <option value="boleta_honorarios">BH: Boleta Honorarios</option>
                     <option value="boleta_electronica">BE: Boleta Electrónica</option>
-                </select> -->
-            </div>
+                </select>
+            </div> -->
             <div class="col-md-1">
                 <label for="search" class="form-label">&nbsp;</label>
                 <button class="btn btn-outline-secondary form-control" type="submit">
