@@ -88,7 +88,7 @@ class JobPositionProfileSignController extends Controller
                 "sent_to_ou_id"         => Parameter::get('ou','GestionDesarrolloDelTalento'),
                 "document_route_name"   => "job_position_profile.show_approval",
                 "document_route_params" => json_encode(["job_position_profile_id" => $jobPositionProfile->id]),
-                "active"                => false,
+                "active"                => ($previousApprovalId == null) ? true : false,
                 "previous_approval_id"  => $previousApprovalId,
                 "callback_controller_method"    => "App\Http\Controllers\JobPositionProfiles\JobPositionProfileSignController@approvalCallback",
                 "callback_controller_params"    => json_encode([
@@ -134,27 +134,15 @@ class JobPositionProfileSignController extends Controller
                     'process'                 => 'end'
                 ])
             ]);
-
-            /* SE CREA APROBACIÓN PARA DIRECCIÓN 
-            $dir_approval = $jobPositionProfile->approvals()->create([
-                "module"                => "Perfil de Cargos",
-                "module_icon"           => "fas fa-id-badge fa-fw",
-                "subject"               => "Solicitud de Aprobación Dirección",
-                "sent_to_ou_id"         => Parameter::get('ou','DireccionSSI'),
-                "document_route_name"   => "job_position_profile.show_approval",
-                "document_route_params" => json_encode(["job_position_profile_id" => $jobPositionProfile->id]),
-                "active"                => false,
-                "previous_approval_id"  => $sdrgp_approval->id,
-                "callback_controller_method"    => "App\Http\Controllers\JobPositionProfiles\JobPositionProfileSignController@approvalCallback",
-                "callback_controller_params"    => json_encode([
-                    'job_position_profile_id' => $jobPositionProfile->id,
-                    'process'                 => 'end'
-                ])
-            ]);
-            */
         }    
         
-        $jobPositionProfile->status = 'sent';
+        if($jobPositionProfile->approvals->first()->sent_to_ou_id == Parameter::get('ou','GestionDesarrolloDelTalento')){
+            $jobPositionProfile->status = 'review';
+        }
+        else{
+            $jobPositionProfile->status = 'sent';
+        }
+        
         $jobPositionProfile->save();
 
         session()->flash('success', 'Estimado Usuario, se ha enviado Exitosamente El Perfil de Cargo');

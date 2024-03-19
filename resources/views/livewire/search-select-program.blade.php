@@ -16,12 +16,12 @@
         />
 
         <div class="input-group-append">
-            <a class="btn btn-outline-secondary {{ $small_option ? 'btn-sm' : '' }}" wire:click="resetx">
+            <a class="btn btn-outline-secondary {{ $small_option ? 'btn-sm' : '' }} {{$disabled}}" wire:click="resetx">
                 <i class="fas fa-eraser"></i></a>
         </div>
     </div>
     
-    <input type="text" name="{{ $selected_id }}" value="{{ optional($program)->id }}" style="display:none;" {{ $required }}>
+    <input type="text" name="{{ $selected_id }}" value="{{ optional($program)->id }}" style="display:none;" {{ $required }} {{$disabled}}>
     @if(!empty($query))
         <ul class="list-group col-12" style="z-index: 3; position: absolute;">
             @if( count($programs) >= 1 )
