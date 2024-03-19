@@ -26,15 +26,26 @@
             </fieldset>
 
             @if($index == 'sign' && auth()->user()->hasPermissionTo('Allowances: sirh'))
-            <fieldset class="form-group col-12 col-md-2">
-                <label for="for_status_search">Estado Revisión SIRH</label>
-                <select name="status_sirh_search" class="form-control form-control-sm" wire:model.debounce.500ms="selectedStatusSirh">
-                    <option value="">Seleccione...</option>
-                    <option value="pending">Pendiente</option>
-                    <option value="accepted">Aprobado</option>
-                    <option value="rejected">Rechazado</option>
-                </select>
-            </fieldset>
+                <fieldset class="form-group col-12 col-md-2">
+                    <label for="for_status_search">Estado Revisión SIRH</label>
+                    <select name="status_sirh_search" class="form-control form-control-sm" wire:model.debounce.500ms="selectedStatusSirh">
+                        <option value="">Seleccione...</option>
+                        <option value="pending">Pendiente</option>
+                        <option value="accepted">Aprobado</option>
+                        <option value="rejected">Rechazado</option>
+                    </select>
+                </fieldset>
+            @endif
+
+            @if(auth()->user()->hasPermissionTo('Allowances: all establishment') && $index == 'all')
+                <fieldset class="form-group col-12 col-md-2">
+                    <label for="for_status_search">Establecimiento</label>
+                    <select name="establishment_search" class="form-control form-control-sm" wire:model.debounce.500ms="selectedEstablishment">
+                        <option value="">Seleccione...</option>
+                        <option value="{{ App\Models\Parameters\Parameter::get('establishment', 'SSTarapaca') }}">Servicio de Salud Tarápaca</option>
+                        <option value="{{ App\Models\Parameters\Parameter::get('establishment', 'HospitalAltoHospicio') }}">Hospital Alto Hospicio</option>
+                    </select>
+                </fieldset>
             @endif
         </div>
 

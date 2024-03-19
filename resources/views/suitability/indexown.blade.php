@@ -21,10 +21,24 @@
             </select>
         </fieldset>
 
-        <fieldset class="form-group col-6 col-md-5">
+        <fieldset class="form-group col-6 col-md-4">
             <label for="search">Buscar por nombre o apellido</label>
             <input type="text" name="search" class="form-control" value="{{ $search ?? '' }}">
         </fieldset>
+
+
+        <fieldset class="form-group col-6 col-md-1">
+            <label for="search">Año</label>
+                    <select class="form-control" id="for_yearFilter" name="yearFilter">
+                        <option value="todos"> Todos</option>
+                        @foreach(range(2022, now()->year) as $year)
+                            <option value="{{ $year }}" @if($selectedYear == $year) selected @endif>{{ $year }}</option>
+                        @endforeach
+                	</select>
+        </fieldset>
+
+
+
 
         <fieldset class="form-group col-2 col-md-1">
             <label for="">&nbsp;</label>

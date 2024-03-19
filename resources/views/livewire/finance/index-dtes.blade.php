@@ -166,7 +166,7 @@
                 <th>Recepción</th>
                 <th width="90">Fecha Aceptación SII (días)</th>
                 <!-- <th>Devengo</th> -->
-                <th>Enviado a Bandeja de Revión por</th>
+                <th>Enviado a Bandeja de Revisión por</th>
                 <th>Editar</th>
             </tr>
         </thead>

@@ -237,8 +237,8 @@ class Allowance extends Model implements Auditable
         }
     }
 
-    public function scopeSearch($query, $status_search, $search_id, $user_allowance_search, $status_sirh_search){
-        if ($status_search OR $search_id OR $user_allowance_search OR $status_sirh_search) {
+    public function scopeSearch($query, $status_search, $search_id, $user_allowance_search, $status_sirh_search, $establishment_search){
+        if ($status_search OR $search_id OR $user_allowance_search OR $status_sirh_search OR $establishment_search) {
             if($status_search != '' &&  ($status_search == 'pending' || $status_search == 'rejected')){
                 $query->whereHas('allowanceSignature' ,function($query) use($status_search){
                     $query->where('status', $status_search);
@@ -270,6 +270,12 @@ class Allowance extends Model implements Auditable
             if($status_sirh_search != ''){
                 $query->whereHas('allowanceSigns' ,function($query) use($status_sirh_search){
                     $query->where('status', $status_sirh_search);
+                });
+            }
+
+            if($establishment_search != ''){
+                $query->whereHas('allowanceEstablishment' ,function($query) use($establishment_search){
+                    $query->where('establishment_id', $establishment_search);
                 });
             }
         }
