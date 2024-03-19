@@ -3,7 +3,7 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel-{{ $requestForm->id }}">Reasignar Comprador al ID: {{$requestForm->id}}
+                <h5 class="modal-title" id="exampleModalLabel-{{ $requestForm->id }}">Reasignar al ID: {{$requestForm->id}}
                 </h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -23,12 +23,28 @@
 
                             <fieldset class="form-group col-sm">
                                 <label>Nuevo Comprador:</label><br>
-                                <select name="new_purchaser_user_id" class="form-control form-control-sm" required>
+                                <select name="new_purchaser_user_id" class="form-control form-control-sm">
                                     <option value="">Seleccione...</option>
                                     @foreach($users as $user)
                                     <option value="{{ $user->id }}">{{ ucfirst(trans($user->TinnyName)) }}</option>
                                     @endforeach
                                 </select>
+                            </fieldset>
+                        </div>
+                        <div class="form-row">
+                            <fieldset class="form-group col-sm">
+                                <label>Usuario Gestor Actual:</label><br>
+                                <select name="" class="form-control form-control-sm" disabled>
+                                    <option value="{{ $requestForm->request_user_id }}">{{ ucfirst(trans($requestForm->user->tinnyName ?? '')) }}</option>
+                                </select>
+                            </fieldset>
+
+                            <fieldset class="form-group col-sm">
+                                <label>Nuevo Usuario Gestor:</label><br>
+                                @livewire('search-select-user', [
+                                    'selected_id' => 'new_request_user_id',
+                                    'small_option' => true
+                                ], , key($requestForm->id))
                             </fieldset>
                         </div>
 

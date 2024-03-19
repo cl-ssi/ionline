@@ -119,13 +119,18 @@ class PurchasingProcessController extends Controller
 
     public function reasign_purchaser(RequestForm $requestForm, Request $request)
     {
-        
-        $requestForm->purchasers()->detach();
-        $requestForm->purchasers()->attach($request->new_purchaser_user_id);
-        //$requestForm->purchasers()->delete();
-        session()->flash('success', 'Nuevo Comprador asignado exitosamente');        
-        return redirect()->route('request_forms.all_forms');
-        
+        if($request->new_purchaser_user_id != null){
+            $requestForm->purchasers()->detach();
+            $requestForm->purchasers()->attach($request->new_purchaser_user_id);
+            session()->flash('success', 'Nuevo Comprador asignado exitosamente.');
+        }
+
+        if($request->new_request_user_id != null){
+            $requestForm->update(['request_user_id' => $request->new_request_user_id, 'request_user_ou_id' => User::findOrFail($request->new_request_user_id)->organizational_unit_id]);
+            session()->flash('success', 'Nuevo Usuario Gestor asignado exitosamente.');
+        }
+
+        return redirect()->route('request_forms.all_forms');   
     }
 
     public function edit_observation(RequestForm $requestForm, Request $request)
