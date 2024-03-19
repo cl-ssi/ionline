@@ -182,8 +182,7 @@ class IndexDtes extends Component
             'requestForm',
             'requestForm.contractManager',
             'dtes',
-            'invoices',
-            'receptions',
+            'invoices',            
             'contractManager'
         ])
             ->whereNull('rejected')
