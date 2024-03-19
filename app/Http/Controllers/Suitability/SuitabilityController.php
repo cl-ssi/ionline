@@ -261,35 +261,34 @@ class SuitabilityController extends Controller
     public function indexOwn(Request $request)
     {
         $school_id = $request->colegio;
-
         $search = $request->search;
-        $selectedYear = $request->yearFilter;
+        $selectedYear = $request->yearFilter ?? 'todos';
         $psirequests_count = PsiRequest::count();
-        $actuallyYear = $actuallyYear = date('Y');
         
         $psirequests = PsiRequest::with(['school', 'user'])
-        ->when($school_id != null, function ($q) use ($school_id) {
-            return $q->where('school_id', $school_id);
-        })
-        ->when($search, function ($q) use ($search) {
-            $q->whereHas('user', function ($query) use ($search) {
-                $query->where('name', 'like', '%' . $search . '%')
-                    ->orWhere('fathers_family', 'like', '%' . $search . '%')
-                    ->orWhere('mothers_family', 'like', '%' . $search . '%');
-            });
-        })
-        ->when($selectedYear != 'todos', function ($q) use ($selectedYear) {
-            return $q->whereYear('created_at', $selectedYear);
-        })
-        ->paginate(100);
+            ->when($school_id != null, function ($q) use ($school_id) {
+                return $q->where('school_id', $school_id);
+            })
+            ->when($search, function ($q) use ($search) {
+                $q->whereHas('user', function ($query) use ($search) {
+                    $query->where('name', 'like', '%' . $search . '%')
+                        ->orWhere('fathers_family', 'like', '%' . $search . '%')
+                        ->orWhere('mothers_family', 'like', '%' . $search . '%');
+                });
+            })
+            ->when($selectedYear !== 'todos', function ($q) use ($selectedYear) {
+                return $q->whereYear('created_at', $selectedYear);
+            })
+            ->paginate(100);
     
-        if ($school_id != null or $search != null) {
+        if ($school_id != null or $search != null or $selectedYear !== 'todos') {
             $psirequests_count = $psirequests->count();
         }
     
         $schools = School::orderBy("name", "asc")->get();
-        return view('suitability.indexown', compact('psirequests', 'schools', 'school_id', 'psirequests_count', 'search', 'selectedYear', 'actuallyYear', 'request'));
+        return view('suitability.indexown', compact('psirequests', 'schools', 'school_id', 'psirequests_count', 'search', 'selectedYear', 'request'));
     }
+    
     
 
 

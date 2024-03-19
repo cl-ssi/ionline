@@ -31,9 +31,9 @@
             <label for="search">Año</label>
                     <select class="form-control" id="for_yearFilter" name="yearFilter">
                         <option value="todos"> Todos</option>
-                    	@for($i = (intval($actuallyYear)-2); $i< (intval($actuallyYear) + 4); $i++)
-                        	<option value="{{$i}}" {{ ($i == $request->yearFilter )?"selected":"" }}> {{$i}}</option>
-                    	@endfor	
+                        @foreach(range(2022, now()->year) as $year)
+                            <option value="{{ $year }}" @if($selectedYear == $year) selected @endif>{{ $year }}</option>
+                        @endforeach
                 	</select>
         </fieldset>
 
