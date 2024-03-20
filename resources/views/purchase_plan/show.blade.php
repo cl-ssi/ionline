@@ -69,6 +69,18 @@
     </table>
 </div>
 
+{{--
+@if($purchasePlan->canAddPurchasePlanId())
+    <!-- Button trigger modal: Ingresar datos de Portal "Plan de Compras" -->
+    <button type="button" class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#modal-{{$purchasePlan->id }}">
+        <i class="fas fa-upload fa-fw"></i> Ingresar ID Mercado Público
+    </button>
+
+    @livewire('purchase-plan.add-purchase-plan', [
+        'purchasePlan' =>   $purchasePlan 
+    ])
+@endif
+--}}
 
 
 {{--@if($purchasePlan->canEdit())
@@ -84,7 +96,7 @@
 
 <br>
 
-<div class="row"> 
+<div class="row mt-3"> 
     <div class="col">
         <h6><i class="fas fa-info-circle"></i> 2. Ítems a comprar</h6>
     </div>

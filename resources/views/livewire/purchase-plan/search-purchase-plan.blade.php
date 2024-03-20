@@ -151,7 +151,7 @@
                                     @switch($approval->StatusInWords)
                                         @case('Pendiente')
                                             <span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ $approval->sentToOu->name }}">
-                                                <i class="fas fa-clock fa-2x"></i>
+                                                <i class="fas fa-clock fa-2x "></i>
                                             </span>
                                             @break
                                         @case('Aprobado')
@@ -172,17 +172,29 @@
                         </td>
                         <td class="text-left">
                             <a href="{{ route('purchase_plan.show', $purchasePlan) }}"
-                                class="btn btn-outline-secondary btn-sm mb-1"><i class="fas fa-eye"></i></a>
+                                class="btn btn-outline-secondary btn-sm mb-1"><i class="fas fa-eye fa-fw"></i></a>
                             @if($purchasePlan->canEdit())
-                            <a href="{{ route('purchase_plan.edit', $purchasePlan->id) }}"
-                                class="btn btn-outline-secondary btn-sm mb-1"><i class="fas fa-edit"></i> </a>
+                                <a href="{{ route('purchase_plan.edit', $purchasePlan->id) }}"
+                                    class="btn btn-outline-secondary btn-sm mb-1"><i class="fas fa-edit fa-fw"></i> </a>
                             @endif
                             @if($purchasePlan->canDelete())
-                            <button type="button" class="btn btn-outline-secondary btn-sm mb-1 text-danger"
-                                onclick="confirm('¿Está seguro que desea borrar el plan de compra ID {{ $purchasePlan->id }}?') || event.stopImmediatePropagation()"
-                                wire:click="delete({{ $purchasePlan }})"><i class="fas fa-trash"></i>
-                            </button>
+                                <button type="button" class="btn btn-outline-secondary btn-sm mb-1 text-danger"
+                                    onclick="confirm('¿Está seguro que desea borrar el plan de compra ID {{ $purchasePlan->id }}?') || event.stopImmediatePropagation()"
+                                    wire:click="delete({{ $purchasePlan }})"><i class="fas fa-trash fa-fw"></i>
+                                </button>
                             @endif
+                            {{--
+                            @if($purchasePlan->canAddPurchasePlanId())
+                                <!-- Button trigger modal: Ingresar datos de Portal "Plan de Compras" -->
+                                <button type="button" class="btn btn-outline-primary btn-sm mb-1" data-bs-toggle="modal" data-bs-target="#modal-{{$purchasePlan->id }}">
+                                    <i class="fas fa-upload fa-fw"></i>
+                                </button>
+
+                                @livewire('purchase-plan.add-purchase-plan', [
+                                    'purchasePlan' =>   $purchasePlan 
+                                ])
+                            @endif
+                            --}}
                             @if($index == 'pending')
                                 @livewire('documents.approval-button', [
                                     'approval' => $purchasePlan->getApprovalPending(), 
