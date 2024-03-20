@@ -30,8 +30,6 @@ class AddProposalDetail extends Component
                             ->where('end_date','>=',now())
                             ->get();
 
-                            dd($proposals);
-
         if($this->start_hour >= $this->end_hour){
             session()->flash('message', 'No es posible agregar, horario de inicio es mayor o igual al horario de término.');
             return 0;
