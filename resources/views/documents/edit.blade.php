@@ -6,14 +6,14 @@
 
 @include('documents.partials.nav')
 
-<h3>Editar Documento</h3>
+<h3>Editar Documento {{ $document->id }}</h3>
 
 @if( Auth::id() == $document->user_id )
 
 <x-head.tinymce-config />
 
 
-<form method="POST" class="form-horizontal" action="{{ route('documents.update', $document) }}">
+<form method="POST" class="form-horizontal" action="{{ route('documents.update', $document) }}" enctype="multipart/form-data">
     @csrf
     @method('PUT')
 
@@ -100,8 +100,18 @@
     <div class="row mb-3">
         <div class="form-group" style="width: 940px;">
             <label for="contenido">Contenido*</label>
-            <textarea class="form-control" id="contenido" rows="34"
+            <textarea class="form-control" id="contenido" rows="38"
                 name="content">{{ $document->content }}</textarea>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="form-group col">
+            <label for="for_file">Archivo (Opcional, para cuando se quiere subir el archivo que fue hecho fuera del generador de documentos)</label>
+            <input type="file" class="form-control" id="for_file" name="file">
+            <small class="form-text text-muted">Tamaño máximo 32 MB, 
+                <span class="text-danger"> una vez cargado un archivo, no se podrá volver a editar a menos que se elimine el archivo cargado</span>
+            </small>
         </div>
     </div>
 

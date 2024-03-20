@@ -122,16 +122,13 @@
             </td>
             <td nowrap>
                 @if($doc->file)
-                <a href="{{ route('documents.download', $doc) }}" class="btn btn-sm btn-outline-danger" target="_blank">
-                    <i class="fas fa-fw fa-file-pdf"></i>
-                </a>
+                    <a href="{{ route('documents.download', $doc) }}" class="btn btn-sm btn-outline-danger" target="_blank">
+                        <i class="fas fa-fw fa-file-pdf"></i>
+                    </a>
                 @else
-                <form method="POST" action="{{ route('documents.find')}}">
-                    @csrf
-                    <button name="id" value="{{ $doc->id }}" class="btn btn-sm btn-outline-secondary">
-                        <i class="fas fa-fw fa-upload"></i>
+                    <button class="btn btn-sm btn-outline-secondary" disabled>
+                        <i class="fas fa-fw fa-file"></i>
                     </button>
-                </form>
                 @endif
             </td>
             <td nowrap>
