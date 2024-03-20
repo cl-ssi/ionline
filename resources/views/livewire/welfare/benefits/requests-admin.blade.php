@@ -70,9 +70,17 @@
                     </td>
                     <td class="text-end">
                         <div class="input-group mb-3">
-                            <input type="text" class="form-control" value="" size="10" maxlength="10" wire:model.defer="accepted_amount">
-                            <button class="btn btn-primary" type="button" id="button-addon2" @disabled($request->status != "Aceptado") wire:click="saveAcceptedAmount({{$request->id}})">
+                            <input type="text" class="form-control" value="" size="10" maxlength="10" wire:model.defer="accepted_amount" value="10">
+                            <button class="btn btn-primary" type="button" id="button-addon2" @disabled($request->status != "Aceptado") 
+                                wire:click="saveAcceptedAmount({{$request->id}})"
+                                title="Guardar monto aceptado">
                                 <i class="bi bi-floppy"></i>
+                            </button>
+                            <button class="btn btn-success" type="button" id="button-addon2" 
+                                @disabled($request->status != "Aceptado" || ($request->status == "Aceptado" && $request->accepted_amount == null)) 
+                                wire:click="saveAcceptedAmount({{$request->id}})"
+                                title="Registrar transferencia y transferir">
+                                <i class="bi bi-currency-dollar"></i>
                             </button>
                         </div>
                         <span class="text-secondary">Tope anual: $ {{$request->subsidy->annual_cap}}</span><br>
