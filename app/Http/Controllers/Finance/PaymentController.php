@@ -27,8 +27,8 @@ class PaymentController extends Controller
         $emisor = $request->input('emisor');
         $folio = $request->input('folio');
         $folio_oc = $request->input('folio_oc');
-        $oc = $request->filled('oc');
-        $recepcion = $request->filled('reception');
+        $oc = $request->input('oc');
+        $recepcion = $request->input('reception');
         $folio_compromiso = $request->input('folio_compromiso');
         $folio_devengo = $request->input('folio_devengo');
         $folio_pago = $request->input('folio_pago');
@@ -50,7 +50,7 @@ class PaymentController extends Controller
         }
 
         if ($folio_oc) {
-            $query->where('folio_oc', 'like', '%' . $oc . '%');
+            $query->where('folio_oc', 'like', '%' . $folio_oc . '%');
         }
 
         if ($folio_compromiso) {
@@ -66,14 +66,14 @@ class PaymentController extends Controller
             $query->whereHas('tgrPayedDte', function ($query) use ($folio_pago) {
                 $query->where('folio', $folio_pago);
             });
-        }
+        }        
 
-        if ($oc && $oc !== 'Todos') {            
+        if ($oc && $oc !== 'Todos') {
             switch ($oc) {
-                case 'Con OC':
+                case 'Con OC':                    
                     $query->whereNotNull('folio_oc');
                     break;
-                case 'Sin OC':
+                case 'Sin OC':                    
                     $query->whereNull('folio_oc');
                     break;
             }
