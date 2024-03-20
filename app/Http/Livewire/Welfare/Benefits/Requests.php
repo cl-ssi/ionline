@@ -10,6 +10,8 @@ use App\Models\Welfare\Benefits\Benefit;
 use App\Models\Welfare\Benefits\Subsidy;
 use App\Models\Welfare\Benefits\Request;
 use App\Models\Welfare\Benefits\File;
+use App\Models\Parameters\Bank;
+use App\Models\Rrhh\UserBankAccount;
 
 class Requests extends Component
 {
@@ -19,11 +21,18 @@ class Requests extends Component
     public $benefits;
     public $subsidies;
     public $showCreate = false;
+    public $showUpdateBankAccounts = false;
     public $selectedRequestId;
     public $benefit_id = '';
     public $subsidy_id = '';
     public $subsidy;
     public $files = []; // Variable para almacenar archivos seleccionados
+
+    public $banks;
+    public $bankaccount;
+    public $bank_id;
+    public $account_number;
+    public $pay_method;
 
     protected $rules = [
         // 'subsidy.percentage' => 'required',
@@ -31,7 +40,21 @@ class Requests extends Component
         // 'subsidy.value' => 'required',
         'subsidy.description' => 'required',
         'subsidy.annual_cap' => 'required',
-        'subsidy.recipient' => 'required'
+        'subsidy.recipient' => 'required',
+
+        'account_number' => 'required|integer',
+        'bank_id' => 'required',
+        'pay_method' => 'required'
+    ];
+
+    protected $messages = [
+        'account_number.required' => 'Debe Ingresar Número de Cuenta',
+        'bank_id.required' => 'Debe Seleccionar un Banco',
+        'pay_method.required' => 'Debe Seleccionar una Forma de Pago',
+        // 'phone_number.required' => 'Debe Ingresar su Número Telefónico',
+        // 'email.required' => 'Debe Ingresar un Correo Electrónico',
+        // 'email.email' => 'El Formato del Correo Electrónico no es válido',
+        'account_number.integer' => 'Debe Ingresar solo números ej:123456789',
     ];
 
 
@@ -40,12 +63,31 @@ class Requests extends Component
         $this->benefits = Benefit::all();
         $this->subsidies = collect();
         $this->subsidy = new Subsidy();
+
+        $this->banks = Bank::all();
+        $this->bankaccount = auth()->user()->bankAccount;
+
+        if($this->bankaccount){
+            if ($this->bankaccount->bank) {
+              $this->bank_id = $this->bankaccount->bank_id;
+              $this->account_number = $this->bankaccount->number;
+              $this->pay_method = $this->bankaccount->type;
+            }
+        }
     }
 
     public function showCreateForm()
     {
         $this->showCreate = !$this->showCreate;
         if (!$this->showCreate) {
+            $this->reset(['benefit_id', 'subsidy_id', 'subsidy']);
+        }
+    }
+
+    public function updateBankAccounts()
+    {
+        $this->showUpdateBankAccounts = !$this->showUpdateBankAccounts;
+        if (!$this->showUpdateBankAccounts) {
             $this->reset(['benefit_id', 'subsidy_id', 'subsidy']);
         }
     }
@@ -131,14 +173,32 @@ class Requests extends Component
             $fileModel->save();
         }
 
-        $this->reset(['benefit_id', 'subsidy_id', 'selectedRequestId', 'showCreate']);
+        $this->reset(['benefit_id', 'subsidy_id', 'selectedRequestId', 'showCreate', 'showUpdateBankAccounts']);
     }
 
     public function showFile($requestId)
     {
-        
         $file = File::find($requestId);
         return Storage::disk('gcs')->response($file->file, mb_convert_encoding($file->name,'ASCII'));
+    }
+
+    public function saveBankAccount(){
+        $this->validate([
+            'account_number' => 'required|integer',
+            'bank_id' => 'required',
+            'pay_method' => 'required'
+        ]);
+        
+        //devuelve user o lo crea
+        $userBankAccount = UserBankAccount::updateOrCreate(
+            ['user_id' => auth()->user()->id],
+            ['bank_id' => $this->bank_id,
+             'number' => $this->account_number,
+             'type' => $this->pay_method]
+        );
+
+        session()->flash('message', 'Información Bancaria Actualizada Exitosamente');
+        $this->reset(['benefit_id', 'subsidy_id', 'selectedRequestId', 'showCreate', 'showUpdateBankAccounts']);
     }
     
 
