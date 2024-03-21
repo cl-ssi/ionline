@@ -48,7 +48,7 @@ class RoleAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Communefiles: upload', 'description' => '']);
         Permission::create(['name' => 'Communefiles: view', 'description' => '']);
         Permission::create(['name' => 'Documents: add number', 'description' => 'Para oficina de partes o secretarias, asignar un número a un documento']);
-        Permission::create(['name' => 'Documents: admin', 'description' => 'Administrador de documentos, permite borrar numero, archivo adjunto y documento completo']);
+        Permission::create(['name' => 'Documents: admin', 'description' => 'Permite eliminar número, archivo adjunto y documento completo']);
         Permission::create(['name' => 'Documents: create', 'description' => 'Permite crear un documento']);
         Permission::create(['name' => 'Documents: delete document', 'description' => 'Permite borrar un documento que no tenga archivo adjunto o firmas (Sólo Administradores)']);
         Permission::create(['name' => 'Documents: edit', 'description' => 'Permite editar un documento creado']);
@@ -203,6 +203,7 @@ class RoleAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Service Request', 'description' => 'Módulo de honorarios (ex pukaña)']);
         Permission::create(['name' => 'Service Request: accept all requests', 'description' => 'Permite acepta todas las solicitudes de contrato de honorario']);
         Permission::create(['name' => 'Service Request: active contracts report', 'description' => '']);
+        Permission::create(['name' => 'Service Request: add fulfillments', 'description' => 'Permiso para agregar fulfillments de forma individual']);
         Permission::create(['name' => 'Service Request: additional data', 'description' => '']);
         Permission::create(['name' => 'Service Request: additional data finanzas', 'description' => '']);
         Permission::create(['name' => 'Service Request: additional data oficina partes', 'description' => '']);
@@ -323,6 +324,7 @@ class RoleAndPermissionSeeder extends Seeder
         $role->givePermissionTo('Drugs: view receptions');
         $role->givePermissionTo('Drugs: view reports');
         $role->givePermissionTo('Drugs: manage parameters');
+        $role->givePermissionTo('Drugs: manage courts');
         $role->givePermissionTo('Drugs: add results from ISP');
         $role->givePermissionTo('Drugs');
         
@@ -399,6 +401,7 @@ class RoleAndPermissionSeeder extends Seeder
         $role->givePermissionTo('Service Request: delete fulfillments');
         $role->givePermissionTo('Service Request: program_consolidated_report');
         $role->givePermissionTo('Service Request: active contracts report');
+        $role->givePermissionTo('Service Request: add fulfillments');
         
         $role = Role::create(['name' => 'Inventario: Administrador', 'description' => '']);
         $role->givePermissionTo('Inventory');
@@ -453,6 +456,7 @@ class RoleAndPermissionSeeder extends Seeder
         $role->givePermissionTo('Documents: signatures and distribution');
         $role->givePermissionTo('Partes: delete');
         $role->givePermissionTo('Partes: numerator');
+        $role->givePermissionTo('Documents: admin');
         
         $role = Role::create(['name' => 'Programación Numérica: Administrador', 'description' => '']);
         $role->givePermissionTo('Programming: create');
@@ -642,6 +646,7 @@ class RoleAndPermissionSeeder extends Seeder
         $role->givePermissionTo('Receptions: load support file');
         $role->givePermissionTo('News: create');
         $role->givePermissionTo('Users: assign roles');
+        $role->givePermissionTo('Documents: admin');
         
         $role = Role::create(['name' => 'Store: admin', 'description' => '']);
         
