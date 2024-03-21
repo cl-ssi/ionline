@@ -102,12 +102,12 @@ class InventoryController extends Controller
 
         
         
-        return Pdf::loadView('inventory.board', [
+        return PDF::loadView('inventory.board', [
             'place' => $place,
             'establishment' => $establishment,
             'inventories' => $inventories,
             'qrcode' => $qrcode,
-        ])->stream('planilla-mural-'.$place->name.'.pdf');
+        ])->setPaper('a4', 'landscape')->stream('planilla-mural-'.$place->name.'.pdf');
     }
     
 

@@ -91,11 +91,8 @@
             <th>CÓDIGO</th>
             <th>DESC.</th>
             <th>ESTADO</th>
-            <th>CLAS</th>
-            <th>VALOR UNITARIO</th>
             <th>OBS.</th>
             <th>RESPONSABLE</th>
-            <th>FECHA DE REC</th>
             <th>RECEPCIÓN DIGITAL</th>
         </tr>
     </thead>
@@ -105,12 +102,9 @@
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $inventory->number }}</td>
                         <td>{{ $inventory->description }}</td>
-                        <td>{{ $inventory->estado }}</td> 
-                        <td>{{ $inventory->classification?->name }}</td> 
-                        <td>${{ money($inventory->po_price) }}</td>
+                        <td>{{ $inventory->estado }}</td>
                         <td>{{ $inventory->observations }}</td>
-                        <td>{{ $inventory->lastConfirmedMovement->responsibleUser->shortName }}</td>
-                        <td>{{ $inventory->lastConfirmedMovement->reception_date->format('d-m-Y')}}</td> 
+                        <td>{{ $inventory->lastConfirmedMovement->responsibleUser->shortName }}</td>                        
                         <td>@include('sign.custom-clave-unica',['user'=>$inventory->lastConfirmedMovement->responsibleUser, 'date' => $inventory->lastConfirmedMovement->reception_date])</td>
                     </tr>
                 @endforeach

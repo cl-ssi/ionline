@@ -1242,7 +1242,7 @@ Route::prefix('parameters')->as('parameters.')->middleware(['auth', 'must.change
 
     Route::prefix('establishment/{establishment}/places')->as('places.')->group(function () {
         Route::get('/', MaintainerPlaces::class)->name('index');
-        Route::get('/{place}/board', [InventoryController::class, 'board'])->name('board');
+        Route::get('/{place}/board', [InventoryController::class, 'board'])->name('board')->withoutMiddleware(['auth']);;
     });
 
     Route::prefix('phrases')->as('phrases.')->group(function () {
