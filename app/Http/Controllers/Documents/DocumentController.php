@@ -182,6 +182,15 @@ class DocumentController extends Controller
     public function update(Request $request, Document $document)
     {
         $document->fill($request->all());
+
+        if ($request->hasFile('file')) {
+            $filename = $document->id . '-' .
+                $document->type->name . '_' .
+                $document->number . '.' .
+                $request->file->getClientOriginalExtension();
+            $document->file = $request->file->storeAs('ionline/documents/documents', $filename, ['disk' => 'gcs']);
+        }
+
         $document->reserved = $request->input('reserved') == 'on' ? 1 : null;
         $document->save();
 

@@ -145,13 +145,13 @@ trait ApprovalTrait
                     /**
                      * Obtiene el archivo desde el controller con sus parametros y genera el PDF
                      */
-                    if($approval->document_pdf_path){
+                    if($approval->document_pdf_path) {
                         // METODO get() obtiene el contenido.
                         $response = Storage::disk('gcs')->get($approval->document_pdf_path);
 
-                        $files[] = $response;           
+                        $files[] = $response;
                     }
-                    else{
+                    else {
                         $show_controller_method = Route::getRoutes()->getByName($approval->document_route_name)->getActionName();
                         $response = app()->call($show_controller_method, json_decode($approval->document_route_params, true));
 

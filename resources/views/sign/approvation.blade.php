@@ -14,6 +14,7 @@
             border: 0.01em solid #CCC;
             padding: 0.1rem;
             width: 204px;
+            height: 43px;
         }
 
         .text {
@@ -29,7 +30,7 @@
             font-size: 6px;
         }
 
-        .siete {
+        .normal {
             font-size: 7px;
         }
 
@@ -61,14 +62,14 @@
                 @break
             @endswitch
         </p>
-        <p class="text siete">
+        <p class="text normal">
             @if($approval->sent_to_ou_id)
                 {{ substr($approval->sentToOu->name, 0, 60) }}
             @else
                 {{ substr($approval->approverOu?->name, 0, 60) }}
             @endif
         </p>
-        <p class="text siete">
+        <p class="text normal">
             @if($approval->sent_to_ou_id)
                 {{ $approval->sentToOu->establishment->name }}
             @else

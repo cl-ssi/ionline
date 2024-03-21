@@ -19,4 +19,16 @@ class ApprovalController extends Controller
         /* TODO: Pasar al file controller */
         return Storage::response($approval->document_pdf_path);
     }
+
+    /**
+     * Retorna archivo firmado
+     *
+     * @param  Approval  $approval
+     * @return void
+     */
+    public function signedApproval(Approval $approval)
+    {
+        header('Content-Type: application/pdf');
+        echo Storage::get($approval->filename);
+    }
 }

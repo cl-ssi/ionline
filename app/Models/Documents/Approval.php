@@ -363,7 +363,7 @@ class Approval extends Model
 
         if(Storage::disk('gcs')->exists($this->filename))
         {
-            $link = Storage::disk('gcs')->url($this->filename);
+            $link = Storage::disk('gcs')->temporaryUrl($this->filename, now()->addMinutes(5));
         }
 
         return $link;

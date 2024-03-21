@@ -20,12 +20,13 @@
                     @endforeach
 
                     @if($existe)
-                        <div class="">
+                        <div>
                             Muestra {{ $existe->sample }}: El <strong>{{ $existe->created_at->format('d-m-Y') }}</strong>
                             se creó protocolo número: <strong>{{ $existe->id }}</strong>
                             con resultado <strong>{{ $existe->result }}</strong>
                             <a href="{{ route('drugs.receptions.protocols.show', $existe->id )}}" target="_blank"> <i class="fas fa-file"></i></a>
-
+                            <!-- Enviar protocolo y destrucción de muestra a firma -->
+                            @livewire('drugs.protocols.sign', ['protocol' => $existe])
                         </div>
                     @else
                         <form method="POST" class="form-horizontal" action="{{ route('drugs.receptions.store_protocol', $item) }}">
@@ -43,7 +44,7 @@
                                 </div>
                                 <div class="col-auto">
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="result" id="positivo{{ $i }}" value="Positivo" checked>
+                                        <input class="form-check-input" type="radio" name="result" id="positivo{{ $i }}" value="Positivo">
                                         <label class="form-check-label" for="positivo{{ $i }}">Positivo</label>
                                     </div>
                                     <div class="form-check form-check-inline">

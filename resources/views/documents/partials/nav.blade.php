@@ -31,6 +31,15 @@
     </li>
     @endcan
 
+    @can('Documents: admin')
+    <li class="nav-item">
+        <a class="nav-link"
+            href="{{ route('documents.manager') }}">
+            <i class="bi bi-gear"></i> Administrador de documentos
+        </a>
+    </li>
+    @endcan
+
     <li class="nav-item">
         <a class="nav-link"
             href="{{ route('documents.report') }}">

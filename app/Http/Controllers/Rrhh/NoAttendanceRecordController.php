@@ -42,15 +42,4 @@ class NoAttendanceRecordController extends Controller
         $noAttendanceRecord->save();
     }
 
-    /**
-     * Retorna archivo firmado
-     *
-     * @param  Approval  $approval
-     * @return void
-     */
-    public function signedApproval(Approval $approval)
-    {
-        header('Content-Type: application/pdf');
-        echo base64_decode($approval->filename_base64);
-    }
 }

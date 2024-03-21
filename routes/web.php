@@ -214,6 +214,7 @@ use App\Http\Livewire\Authorities\Calendar;
 use App\Http\Livewire\Documents\ApprovalsMgr;
 use App\Http\Livewire\Documents\DocDigital\Creados;
 use App\Http\Livewire\Documents\DocDigital\Recibidos;
+use App\Http\Livewire\Documents\DocumentMgr;
 use App\Http\Livewire\Documents\Partes\Inbox;
 use App\Http\Livewire\Documents\Partes\NumerationInbox;
 use App\Http\Livewire\Documents\Partes\PartesAccessLog;
@@ -288,12 +289,12 @@ use App\Http\Livewire\Rrhh\Attendance\ReasonMgr;
 use App\Http\Livewire\Rrhh\NoAttendanceRecordConfirmation;
 use App\Http\Livewire\Rrhh\NoAttendanceRecordIndex;
 use App\Http\Livewire\Rrhh\NoAttendanceRecordMgr;
-use App\Http\Livewire\Rrhh\PermissionsMgr;
-use App\Http\Livewire\Rrhh\RolesMgr;
-use App\Http\Livewire\Rrhh\ShiftsIndex;
 use App\Http\Livewire\Rrhh\PerformanceReport\Period;
 use App\Http\Livewire\Rrhh\PerformanceReport\ReceivedReport;
 use App\Http\Livewire\Rrhh\PerformanceReport\SubmittedReport;
+use App\Http\Livewire\Rrhh\PermissionsMgr;
+use App\Http\Livewire\Rrhh\RolesMgr;
+use App\Http\Livewire\Rrhh\ShiftsIndex;
 use App\Http\Livewire\Sign\RequestSignature;
 use App\Http\Livewire\Sign\SignatureIndex;
 use App\Http\Livewire\Summary\Template\ShowTemplate;
@@ -306,9 +307,9 @@ use App\Http\Livewire\Welfare\Amipass\ReportByDates;
 use App\Http\Livewire\Welfare\Amipass\ReportByEmployee;
 use App\Http\Livewire\Welfare\Amipass\RequestMgr;
 use App\Http\Livewire\Welfare\Benefits\Benefits as BenefitLw;
-use App\Http\Livewire\Welfare\Benefits\Subsidies;
 use App\Http\Livewire\Welfare\Benefits\Requests;
 use App\Http\Livewire\Welfare\Benefits\RequestsAdmin;
+use App\Http\Livewire\Welfare\Benefits\Subsidies;
 use App\Models\Pharmacies\Purchase;
 use App\Models\WebService\MercadoPublico;
 use App\User; /** ¿Un modelo? */
@@ -1351,7 +1352,8 @@ Route::prefix('documents')->as('documents.')->middleware(['auth', 'must.change.p
     Route::get('/{document}/sendForSignature/', [DocumentController::class, 'sendForSignature'])->name('sendForSignature');
     Route::get('/signed-document-pdf/{id}', [DocumentController::class, 'signedDocumentPdf'])->name('signedDocumentPdf');
 
-    
+    Route::get('manager', DocumentMgr::class)->middleware(['permission:Documents: admin'])->name('manager');
+
     // Se quitan estas rutas de partes para que puedas descargar el archivo y no tengan el middleware can:Partes: oficina    
     Route::get('/original/{numeration}', [NumerationController::class,'showOriginal'])->name('partes.numeration.show_original');
     Route::get('/numerado/{numeration}', [NumerationController::class,'showNumerated'])->name('partes.numeration.show_numerated');    
@@ -1402,7 +1404,7 @@ Route::prefix('documents')->as('documents.')->middleware(['auth', 'must.change.p
     Route::get('/callback_firma/{message}/{modelId}/{signaturesFile?}', [SignatureController::class, 'callbackFirma'])->name('callbackFirma');
 
     Route::get('/approvals/{approval?}', ApprovalsMgr::class)->name('approvals');
-    Route::get('/approvals/{approval}/pdf', [NoAttendanceRecordController::class,'signedApproval'])->name('signed.approval.pdf');
+    Route::get('/approvals/{approval}/pdf', [ApprovalController::class,'signedApproval'])->name('signed.approval.pdf');
 
 
 
@@ -1802,10 +1804,13 @@ Route::prefix('drugs')->as('drugs.')->middleware('can:Drugs', 'auth', 'drugs')->
     Route::post('receptions/{reception}/sample_to_isp', [App\Http\Controllers\Drugs\SampleToIspController::class, 'store'])->name('receptions.sample_to_isp.store');
     Route::get('receptions/{reception}/record_to_court', [App\Http\Controllers\Drugs\RecordToCourtController::class, 'show'])->name('receptions.record_to_court.show');
     Route::post('receptions/{reception}/record_to_court', [App\Http\Controllers\Drugs\RecordToCourtController::class, 'store'])->name('receptions.record_to_court.store');
-
+    
     Route::resource('receptions', App\Http\Controllers\Drugs\ReceptionController::class);
-
+    
     Route::resource('destructions', App\Http\Controllers\Drugs\DestructionController::class)->except(['create']);
+    
+    Route::get('protocols/{protocol}', [App\Http\Controllers\Drugs\ProtocolController::class, 'show'])->name('protocols.show');
+    Route::get('protocols/{protocol}/destruction', [App\Http\Controllers\Drugs\ProtocolController::class, 'destruction'])->name('protocols.destruction');
 
     Route::get('rosters/analisis_to_admin', [App\Http\Controllers\Drugs\RosterAnalisisToAdminController::class, 'index'])->name('roster.analisis_to_admin.index');
     Route::get('rosters/analisis_to_admin/{id}', [App\Http\Controllers\Drugs\RosterAnalisisToAdminController::class, 'show'])->name('roster.analisis_to_admin.show');

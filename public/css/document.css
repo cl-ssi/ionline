@@ -124,12 +124,15 @@ br {
     height: 50px;
     bottom: 50px; 
 }
+
 /* Este es para dejar las signatures antes del footer */
 .signature-footer {
     position: absolute;
-    margin-left: 84px;
-    bottom: 20px;
+    margin-left: 88px;
+    bottom: 50px;
+    height: 50px;
 }
+
 .signature {
     vertical-align: top;
     display: inline-block;

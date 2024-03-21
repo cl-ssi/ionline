@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Drugs;
 
-use App\Models\Drugs\Protocol;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Drugs\Protocol;
+use App\Models\Establishment;
+use App\Models\Parameters\Parameter;
+use Illuminate\Http\Request;
 
 class ProtocolController extends Controller
 {
@@ -45,9 +47,35 @@ class ProtocolController extends Controller
      * @param  \App\Models\Drugs\Protocol  $protocol
      * @return \Illuminate\Http\Response
      */
-    public function show(Protocol $protocol)
+    public function show($protocol)
     {
-        //
+        // if $proctols is integer then find the protocol object
+        if (is_numeric($protocol)) {
+            $protocol = Protocol::find($protocol);
+        }
+
+        $manager_position = Parameter::get('drugs','Jefe');
+        $establishment = Establishment::find(38);
+
+        $documentFile = \PDF::loadView('drugs.protocols.show', compact('protocol','manager_position','establishment'));
+
+        return $documentFile->stream();
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Drugs\Protocol  $protocol
+     * @return \Illuminate\Http\Response
+     */
+    public function destruction(Protocol $protocol)
+    {
+        $manager_position = Parameter::get('drugs','Jefe');
+        $establishment = Establishment::find(38);
+
+        $documentFile = \PDF::loadView('drugs.protocols.destruction', compact('protocol','manager_position','establishment'));
+
+        return $documentFile->stream();
     }
 
     /**
