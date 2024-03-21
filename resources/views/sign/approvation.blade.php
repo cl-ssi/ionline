@@ -14,6 +14,7 @@
             border: 0.01em solid #CCC;
             padding: 0.1rem;
             width: 204px;
+            height: 43px;
         }
 
         .text {

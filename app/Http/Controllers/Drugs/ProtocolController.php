@@ -47,8 +47,13 @@ class ProtocolController extends Controller
      * @param  \App\Models\Drugs\Protocol  $protocol
      * @return \Illuminate\Http\Response
      */
-    public function show(Protocol $protocol)
+    public function show($protocol)
     {
+        // if $proctols is integer then find the protocol object
+        if (is_numeric($protocol)) {
+            $protocol = Protocol::find($protocol);
+        }
+
         $manager_position = Parameter::get('drugs','Jefe');
         $establishment = Establishment::find(38);
 

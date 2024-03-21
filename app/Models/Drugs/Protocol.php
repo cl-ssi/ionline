@@ -2,8 +2,11 @@
 
 namespace App\Models\Drugs;
 
+use App\Models\Documents\Approval;
+use App\Models\Drugs\ReceptionItem;
 use App\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Protocol extends Model
@@ -43,6 +46,14 @@ class Protocol extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class)->withTrashed();
+    }
+
+    /**
+     * Get the approval model.
+     */
+    public function approval(): MorphOne
+    {
+        return $this->morphOne(Approval::class, 'approvable');
     }
 }

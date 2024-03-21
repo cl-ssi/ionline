@@ -72,106 +72,130 @@ class ReceptionItem extends Model
         return $this->hasMany(Protocol::class);
     }
 
+    public function getLetterFormPosition($position) {
+        $letras = [];
+
+        // Genera las letras de la 'a' a la 'z'
+        for ($i = ord('a'); $i <= ord('z'); $i++) {
+            $letras[] = chr($i);
+        }
+
+        // Genera las letras de 'aa' a 'zz'
+        for ($i = ord('a'); $i <= ord('z'); $i++) {
+            for ($j = ord('a'); $j <= ord('z'); $j++) {
+                $letras[] = chr($i) . chr($j);
+            }
+        }
+        return $letras[--$position];
+    }
+
     public function getLetterAttribute()
     {
         $position = "";
-        $position = $this->reception->items->search(function($receptionItem) {
-            return $receptionItem->id == $this->id;
-        });
-        return$this->position($position + 1);
+        $position = $this->reception->items()->where('id', '<=', $this->id)->count();
+        return $this->getLetterFormPosition($position);
     }
 
-    public function position($position)
-    {
-        $letter = "";
-        switch($position) {
-            case 1:
-                $letter = "a";
-                break;
-            case 2:
-                $letter = "b";
-                break;
-            case 3:
-                $letter = "c";
-                break;
-            case 4:
-                $letter = "d";
-                break;
-            case 5:
-                $letter = "e";
-                break;
-            case 6:
-                $letter = "f";
-                break;
-            case 7:
-                $letter = "g";
-                break;
-            case 8:
-                $letter = "h";
-                break;
-            case 9:
-                $letter = "i";
-                break;
-            case 10:
-                $letter = "j";
-                break;
-            case 11:
-                $letter = "k";
-                break;
-            case 12:
-                $letter = "l";
-                break;
-            case 13:
-                $letter = "m";
-                break;
-            case 14:
-                $letter = "n";
-                break;
-            case 15:
-                $letter = "o";
-                break;
-            case 16:
-                $letter = "p";
-                break;
-            case 17:
-                $letter = "q";
-                break;
-            case 18:
-                $letter = "r";
-                break;
-            case 19:
-                $letter = "s";
-                break;
-            case 20:
-                $letter = "t";
-                break;
-            case 21:
-                $letter = "u";
-                break;
-            case 22:
-                $letter = "v";
-                break;
-            case 23:
-                $letter = "w";
-                break;
-            case 24:
-                $letter = "x";
-                break;
-            case 25:
-                $letter = "y";
-                break;
-            case 26:
-                $letter = "z";
-                break;
-        }
+    // public function getLetterAttribute()
+    // {
+    //     $position = "";
+    //     $position = $this->reception->items->search(function($receptionItem) {
+    //         return $receptionItem->id == $this->id;
+    //     });
+    //     return $this->position($position + 1);
+    // }
 
-        if($position <= 26)
-        {
-            return $letter;
-        }
-        else
-        {
-            return $this->position((int)($position / 26)).$this->position($position % 26);
-        }
-    }
+    // public function position($position)
+    // {
+    //     $letter = "";
+    //     switch($position) {
+    //         case 1:
+    //             $letter = "a";
+    //             break;
+    //         case 2:
+    //             $letter = "b";
+    //             break;
+    //         case 3:
+    //             $letter = "c";
+    //             break;
+    //         case 4:
+    //             $letter = "d";
+    //             break;
+    //         case 5:
+    //             $letter = "e";
+    //             break;
+    //         case 6:
+    //             $letter = "f";
+    //             break;
+    //         case 7:
+    //             $letter = "g";
+    //             break;
+    //         case 8:
+    //             $letter = "h";
+    //             break;
+    //         case 9:
+    //             $letter = "i";
+    //             break;
+    //         case 10:
+    //             $letter = "j";
+    //             break;
+    //         case 11:
+    //             $letter = "k";
+    //             break;
+    //         case 12:
+    //             $letter = "l";
+    //             break;
+    //         case 13:
+    //             $letter = "m";
+    //             break;
+    //         case 14:
+    //             $letter = "n";
+    //             break;
+    //         case 15:
+    //             $letter = "o";
+    //             break;
+    //         case 16:
+    //             $letter = "p";
+    //             break;
+    //         case 17:
+    //             $letter = "q";
+    //             break;
+    //         case 18:
+    //             $letter = "r";
+    //             break;
+    //         case 19:
+    //             $letter = "s";
+    //             break;
+    //         case 20:
+    //             $letter = "t";
+    //             break;
+    //         case 21:
+    //             $letter = "u";
+    //             break;
+    //         case 22:
+    //             $letter = "v";
+    //             break;
+    //         case 23:
+    //             $letter = "w";
+    //             break;
+    //         case 24:
+    //             $letter = "x";
+    //             break;
+    //         case 25:
+    //             $letter = "y";
+    //             break;
+    //         case 26:
+    //             $letter = "z";
+    //             break;
+    //     }
+
+    //     if($position <= 26)
+    //     {
+    //         return $letter;
+    //     }
+    //     else
+    //     {
+    //         return $this->position((int)($position / 26)).$this->position($position % 26);
+    //     }
+    // }
 }

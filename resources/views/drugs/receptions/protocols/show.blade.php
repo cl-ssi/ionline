@@ -19,7 +19,7 @@ Iquique, <strong>{{ $protocol->created_at->day }} de {{ $protocol->created_at->m
     acta de recepción <strong>{{ $protocol->receptionItem->reception->id }}.</strong>
     <!-- Mostrar la letra del ítem sólo si es el acta tiene más de un item -->
     @if($protocol->receptionItem->reception->items->count() > 1)
-        Item <strong>{{ $letra }}).</strong>
+        Item <strong>{{ $protocol->receptionItem->letter }}).</strong>
     @endif
 </p>
 
@@ -100,7 +100,7 @@ Iquique, <strong>{{ $protocol->created_at->day }} de {{ $protocol->created_at->m
     acta de recepción <strong>{{ $protocol->receptionItem->reception->id }}</strong>.
     <!-- Mostrar la letra del ítem sólo si es el acta tiene más de un item -->
     @if($protocol->receptionItem->reception->items->count() > 1)
-        Item <strong>{{ $letra }}).</strong>
+        Item <strong>{{ $protocol->receptionItem->letter }}).</strong>
     @endif
     Peso de la muestra: <strong>{{ $protocol->receptionItem->sample }}</strong>
         <span style="text-transform: lowercase;">{{ $protocol->receptionItem->substance->unit }}</span>.

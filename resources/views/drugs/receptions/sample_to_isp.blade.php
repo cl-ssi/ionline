@@ -66,7 +66,7 @@
                     de presunta <strong>{{ $item->substance->name }}</strong>
                     para el análisis correspondiente.
                     @if(count($reception->items) > 1)
-                        Muestra <strong>{{$item->position}})</strong>.
+                        Muestra <strong>{{ $item->letter }})</strong>.
                     @endif
                 </li>
                 @endforeach

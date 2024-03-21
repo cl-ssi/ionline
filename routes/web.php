@@ -1404,7 +1404,7 @@ Route::prefix('documents')->as('documents.')->middleware(['auth', 'must.change.p
     Route::get('/callback_firma/{message}/{modelId}/{signaturesFile?}', [SignatureController::class, 'callbackFirma'])->name('callbackFirma');
 
     Route::get('/approvals/{approval?}', ApprovalsMgr::class)->name('approvals');
-    Route::get('/approvals/{approval}/pdf', [NoAttendanceRecordController::class,'signedApproval'])->name('signed.approval.pdf');
+    Route::get('/approvals/{approval}/pdf', [ApprovalController::class,'signedApproval'])->name('signed.approval.pdf');
 
 
 
