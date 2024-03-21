@@ -87,6 +87,10 @@ class PurchasePlan extends Model implements Auditable
         return $this->status == 'save';
     }
 
+    public function canAddPurchasePlanID(){
+        return $this->status == 'approved';
+    }
+
     public function hasDistributionCompleted(){
         foreach($this->purchasePlanItems as $item)
             if($item->quantity != $item->getScheduledQuantityAttribute())
