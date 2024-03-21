@@ -1,13 +1,15 @@
 -- --------------------------------------------------------
--- Host:                         localhost
--- Versión del servidor:         10.5.12-MariaDB-0+deb11u1 - Debian 11
--- SO del servidor:              debian-linux-gnu
--- HeidiSQL Versión:             11.2.0.6213
+-- Host:                         127.0.0.1
+-- Versión del servidor:         11.4.0-MariaDB - mariadb.org binary distribution
+-- SO del servidor:              Win64
+-- HeidiSQL Versión:             12.3.0.6589
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET NAMES utf8 */;
 /*!50503 SET NAMES utf8mb4 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
@@ -20,12 +22,12 @@ CREATE TABLE IF NOT EXISTS `2017establecimientos` (
   `nombre` varchar(255) DEFAULT NULL,
   `alias_estab` varchar(255) DEFAULT NULL,
   `comuna` varchar(255) DEFAULT NULL,
-  `codigo_comuna` varchar(255) CHARACTER SET utf8 COLLATE utf8_spanish_ci DEFAULT NULL,
+  `codigo_comuna` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_spanish_ci DEFAULT NULL,
   `meta_san` tinyint(4) DEFAULT NULL,
   `comuna_id_comuna` int(11) NOT NULL,
   PRIMARY KEY (`id_establecimiento`,`comuna_id_comuna`),
   KEY `fk_establecimiento_comuna_idx` (`comuna_id_comuna`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci ROW_FORMAT=COMPACT;
 
 -- La exportación de datos fue deseleccionada.
 
@@ -38,7 +40,7 @@ CREATE TABLE IF NOT EXISTS `2017prestaciones` (
   `Nserie` varchar(5) DEFAULT NULL,
   PRIMARY KEY (`id_prestacion`),
   KEY `SERIE` (`serie`,`codigo_prestacion`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=2507 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB AUTO_INCREMENT=2507 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci ROW_FORMAT=COMPACT;
 
 -- La exportación de datos fue deseleccionada.
 
@@ -107,7 +109,7 @@ CREATE TABLE IF NOT EXISTS `2017rems` (
   KEY `codigoprestacion` (`CodigoPrestacion`),
   KEY `fk_rem_establecimiento1_idx` (`establecimiento_id_establecimiento`),
   KEY `fk_rem_prestacion1_idx` (`prestacion_id_prestacion`)
-) ENGINE=InnoDB AUTO_INCREMENT=82642 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB AUTO_INCREMENT=82642 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci ROW_FORMAT=COMPACT;
 
 -- La exportación de datos fue deseleccionada.
 
@@ -132,7 +134,7 @@ CREATE TABLE IF NOT EXISTS `2017secciones` (
   `tfoot` text DEFAULT NULL,
   `precision` tinyint(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=273 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB AUTO_INCREMENT=273 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci ROW_FORMAT=DYNAMIC;
 
 -- La exportación de datos fue deseleccionada.
 
@@ -146,7 +148,7 @@ CREATE TABLE IF NOT EXISTS `2018establecimientos` (
   `nombre` varchar(255) DEFAULT NULL,
   `alias_estab` varchar(255) DEFAULT NULL,
   `comuna` varchar(255) DEFAULT NULL,
-  `codigo_comuna` varchar(255) CHARACTER SET utf8 COLLATE utf8_spanish_ci DEFAULT NULL,
+  `codigo_comuna` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_spanish_ci DEFAULT NULL,
   `comges19` tinyint(4) DEFAULT NULL,
   `meta_san` tinyint(4) DEFAULT NULL,
   `meta_san_18834` tinyint(4) DEFAULT NULL,
@@ -154,7 +156,7 @@ CREATE TABLE IF NOT EXISTS `2018establecimientos` (
   `comuna_id_comuna` int(11) NOT NULL,
   PRIMARY KEY (`id_establecimiento`,`comuna_id_comuna`),
   KEY `fk_establecimiento_comuna_idx` (`comuna_id_comuna`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci ROW_FORMAT=COMPACT;
 
 -- La exportación de datos fue deseleccionada.
 
@@ -167,7 +169,7 @@ CREATE TABLE IF NOT EXISTS `2018prestaciones` (
   `Nserie` varchar(5) DEFAULT NULL,
   PRIMARY KEY (`id_prestacion`),
   KEY `SERIE` (`serie`,`codigo_prestacion`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=4515 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB AUTO_INCREMENT=4515 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci ROW_FORMAT=COMPACT;
 
 -- La exportación de datos fue deseleccionada.
 
@@ -236,7 +238,7 @@ CREATE TABLE IF NOT EXISTS `2018rems` (
   KEY `codigoprestacion` (`CodigoPrestacion`),
   KEY `fk_rem_establecimiento1_idx` (`establecimiento_id_establecimiento`),
   KEY `fk_rem_prestacion1_idx` (`prestacion_id_prestacion`)
-) ENGINE=InnoDB AUTO_INCREMENT=99870 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB AUTO_INCREMENT=99870 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci ROW_FORMAT=COMPACT;
 
 -- La exportación de datos fue deseleccionada.
 
@@ -261,7 +263,7 @@ CREATE TABLE IF NOT EXISTS `2018secciones` (
   `tfoot` text DEFAULT NULL,
   `precision` tinyint(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=279 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=279 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 
 -- La exportación de datos fue deseleccionada.
 
@@ -275,7 +277,7 @@ CREATE TABLE IF NOT EXISTS `2019establecimientos` (
   `nombre` varchar(255) DEFAULT NULL,
   `alias_estab` varchar(255) DEFAULT NULL,
   `comuna` varchar(255) DEFAULT NULL,
-  `codigo_comuna` varchar(255) CHARACTER SET utf8 COLLATE utf8_spanish_ci DEFAULT NULL,
+  `codigo_comuna` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_spanish_ci DEFAULT NULL,
   `comges19` tinyint(4) DEFAULT NULL,
   `meta_san` tinyint(4) DEFAULT NULL,
   `meta_san_18834` tinyint(4) DEFAULT NULL,
@@ -288,7 +290,7 @@ CREATE TABLE IF NOT EXISTS `2019establecimientos` (
   `p_respiratorio` tinyint(4) DEFAULT NULL,
   PRIMARY KEY (`id_establecimiento`,`comuna_id_comuna`),
   KEY `fk_establecimiento_comuna_idx` (`comuna_id_comuna`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci ROW_FORMAT=COMPACT;
 
 -- La exportación de datos fue deseleccionada.
 
@@ -301,7 +303,7 @@ CREATE TABLE IF NOT EXISTS `2019prestaciones` (
   `Nserie` varchar(5) DEFAULT NULL,
   PRIMARY KEY (`id_prestacion`),
   KEY `SERIE` (`serie`,`codigo_prestacion`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=13361 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB AUTO_INCREMENT=13361 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci ROW_FORMAT=COMPACT;
 
 -- La exportación de datos fue deseleccionada.
 
@@ -371,7 +373,7 @@ CREATE TABLE IF NOT EXISTS `2019rems` (
   KEY `fk_rem_establecimiento1_idx` (`establecimiento_id_establecimiento`),
   KEY `fk_rem_prestacion1_idx` (`prestacion_id_prestacion`),
   KEY `programacion_aps` (`IdEstablecimiento`,`CodigoPrestacion`,`Mes`)
-) ENGINE=InnoDB AUTO_INCREMENT=324803 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB AUTO_INCREMENT=454667 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci ROW_FORMAT=COMPACT;
 
 -- La exportación de datos fue deseleccionada.
 
@@ -385,7 +387,7 @@ CREATE TABLE IF NOT EXISTS `2020establecimientos` (
   `nombre` varchar(255) DEFAULT NULL,
   `alias_estab` varchar(255) DEFAULT NULL,
   `comuna` varchar(255) DEFAULT NULL,
-  `codigo_comuna` varchar(255) CHARACTER SET utf8 COLLATE utf8_spanish_ci DEFAULT NULL,
+  `codigo_comuna` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_spanish_ci DEFAULT NULL,
   `comges19` tinyint(4) DEFAULT NULL,
   `meta_san` tinyint(4) DEFAULT NULL,
   `meta_san_18834` tinyint(4) DEFAULT NULL,
@@ -399,11 +401,12 @@ CREATE TABLE IF NOT EXISTS `2020establecimientos` (
   `p_mejor_aten_odont` tinyint(4) DEFAULT NULL,
   `p_odont_integral` tinyint(4) DEFAULT NULL,
   `p_equidad_rural` tinyint(4) DEFAULT NULL,
-  `comuna_id_comuna` int(11) NOT NULL,
   `p_respiratorio` tinyint(4) DEFAULT NULL,
+  `tablero_poblacion` tinyint(4) DEFAULT NULL,
+  `comuna_id_comuna` int(11) NOT NULL,
   PRIMARY KEY (`id_establecimiento`,`comuna_id_comuna`),
   KEY `fk_establecimiento_comuna_idx` (`comuna_id_comuna`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci ROW_FORMAT=COMPACT;
 
 -- La exportación de datos fue deseleccionada.
 
@@ -448,7 +451,7 @@ CREATE TABLE IF NOT EXISTS `2020percapita` (
   KEY `indexquery` (`COD_CENTRO`,`FECHA_CORTE`,`EDAD`,`ACEPTADO_RECHAZADO`),
   KEY `Índice 10` (`FECHA_NACIMIENTO`),
   KEY `MOTIVO` (`MOTIVO`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci ROW_FORMAT=COMPACT;
 
 -- La exportación de datos fue deseleccionada.
 
@@ -461,7 +464,7 @@ CREATE TABLE IF NOT EXISTS `2020prestaciones` (
   `Nserie` varchar(5) DEFAULT NULL,
   PRIMARY KEY (`id_prestacion`),
   KEY `SERIE` (`serie`,`codigo_prestacion`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=70261825 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB AUTO_INCREMENT=70261825 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci ROW_FORMAT=COMPACT;
 
 -- La exportación de datos fue deseleccionada.
 
@@ -531,7 +534,7 @@ CREATE TABLE IF NOT EXISTS `2020rems` (
   KEY `fk_rem_establecimiento1_idx` (`establecimiento_id_establecimiento`),
   KEY `fk_rem_prestacion1_idx` (`prestacion_id_prestacion`),
   KEY `programacion_aps` (`IdEstablecimiento`,`CodigoPrestacion`,`Mes`)
-) ENGINE=InnoDB AUTO_INCREMENT=980349 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB AUTO_INCREMENT=980349 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci ROW_FORMAT=COMPACT;
 
 -- La exportación de datos fue deseleccionada.
 
@@ -545,7 +548,7 @@ CREATE TABLE IF NOT EXISTS `2021establecimientos` (
   `nombre` varchar(255) DEFAULT NULL,
   `alias_estab` varchar(255) DEFAULT NULL,
   `comuna` varchar(255) DEFAULT NULL,
-  `codigo_comuna` varchar(255) CHARACTER SET utf8 COLLATE utf8_spanish_ci DEFAULT NULL,
+  `codigo_comuna` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_spanish_ci DEFAULT NULL,
   `comges19` tinyint(4) DEFAULT NULL,
   `meta_san` tinyint(4) DEFAULT NULL,
   `meta_san_18834` tinyint(4) DEFAULT NULL,
@@ -559,10 +562,11 @@ CREATE TABLE IF NOT EXISTS `2021establecimientos` (
   `p_mejor_aten_odont` tinyint(4) DEFAULT NULL,
   `p_odont_integral` tinyint(4) DEFAULT NULL,
   `p_equidad_rural` tinyint(4) DEFAULT NULL,
+  `tablero_poblacion` tinyint(4) DEFAULT NULL,
   `comuna_id_comuna` int(11) NOT NULL,
   PRIMARY KEY (`id_establecimiento`,`comuna_id_comuna`),
   KEY `fk_establecimiento_comuna_idx` (`comuna_id_comuna`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci ROW_FORMAT=COMPACT;
 
 -- La exportación de datos fue deseleccionada.
 
@@ -607,7 +611,7 @@ CREATE TABLE IF NOT EXISTS `2021percapita` (
   KEY `indexquery` (`COD_CENTRO`,`FECHA_CORTE`,`EDAD`,`ACEPTADO_RECHAZADO`),
   KEY `Índice 10` (`FECHA_NACIMIENTO`),
   KEY `MOTIVO` (`MOTIVO`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci ROW_FORMAT=COMPACT;
 
 -- La exportación de datos fue deseleccionada.
 
@@ -620,7 +624,7 @@ CREATE TABLE IF NOT EXISTS `2021prestaciones` (
   `Nserie` varchar(5) DEFAULT NULL,
   PRIMARY KEY (`id_prestacion`),
   KEY `SERIE` (`serie`,`codigo_prestacion`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=9279 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB AUTO_INCREMENT=9279 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci ROW_FORMAT=COMPACT;
 
 -- La exportación de datos fue deseleccionada.
 
@@ -690,7 +694,7 @@ CREATE TABLE IF NOT EXISTS `2021rems` (
   KEY `fk_rem_establecimiento1_idx` (`establecimiento_id_establecimiento`),
   KEY `fk_rem_prestacion1_idx` (`prestacion_id_prestacion`),
   KEY `programacion_aps` (`IdEstablecimiento`,`CodigoPrestacion`,`Mes`)
-) ENGINE=InnoDB AUTO_INCREMENT=2089192 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB AUTO_INCREMENT=3195883 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci ROW_FORMAT=COMPACT;
 
 -- La exportación de datos fue deseleccionada.
 
@@ -715,7 +719,7 @@ CREATE TABLE IF NOT EXISTS `2021secciones` (
   `tfoot` text DEFAULT NULL,
   `precision` tinyint(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=662 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB AUTO_INCREMENT=675 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci ROW_FORMAT=DYNAMIC;
 
 -- La exportación de datos fue deseleccionada.
 
@@ -729,7 +733,7 @@ CREATE TABLE IF NOT EXISTS `2022establecimientos` (
   `nombre` varchar(255) DEFAULT NULL,
   `alias_estab` varchar(255) DEFAULT NULL,
   `comuna` varchar(255) DEFAULT NULL,
-  `codigo_comuna` varchar(255) CHARACTER SET utf8 COLLATE utf8_spanish_ci DEFAULT NULL,
+  `codigo_comuna` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_spanish_ci DEFAULT NULL,
   `comges19` tinyint(4) DEFAULT NULL,
   `meta_san` tinyint(4) DEFAULT NULL,
   `meta_san_18834` tinyint(4) DEFAULT NULL,
@@ -743,10 +747,11 @@ CREATE TABLE IF NOT EXISTS `2022establecimientos` (
   `p_mejor_aten_odont` tinyint(4) DEFAULT NULL,
   `p_odont_integral` tinyint(4) DEFAULT NULL,
   `p_equidad_rural` tinyint(4) DEFAULT NULL,
+  `tablero_poblacion` tinyint(4) DEFAULT NULL,
   `comuna_id_comuna` int(11) NOT NULL,
   PRIMARY KEY (`id_establecimiento`,`comuna_id_comuna`),
   KEY `fk_establecimiento_comuna_idx` (`comuna_id_comuna`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci ROW_FORMAT=COMPACT;
 
 -- La exportación de datos fue deseleccionada.
 
@@ -772,13 +777,13 @@ CREATE TABLE IF NOT EXISTS `2022percapita` (
   `NOMBRE_CENTRO_DESTINO` varchar(255) DEFAULT NULL,
   `CODIGO_COMUNA_DESTINO` int(11) DEFAULT NULL,
   `NOMBRE_COMUNA_DESTINO` varchar(255) DEFAULT NULL,
-  `TRASLADO_POSITIVO` enum('X') NOT NULL,
-  `TRASLADO_NEGATIVO` enum('X') NOT NULL,
-  `NUEVO_INSCRITO` enum('X') NOT NULL,
-  `EXBLOQUEADO` enum('X') NOT NULL,
-  `RECHAZADO_PREVISIONAL` enum('X') NOT NULL,
-  `RECHAZADO_FALLECIDO` enum('X') NOT NULL,
-  `AUTORIZADO` enum('X') NOT NULL,
+  `TRASLADO_POSITIVO` enum('X','') DEFAULT NULL,
+  `TRASLADO_NEGATIVO` enum('X','') DEFAULT NULL,
+  `NUEVO_INSCRITO` enum('X','') DEFAULT NULL,
+  `EXBLOQUEADO` enum('X','') DEFAULT NULL,
+  `RECHAZADO_PREVISIONAL` enum('X','') DEFAULT NULL,
+  `RECHAZADO_FALLECIDO` enum('X','') DEFAULT NULL,
+  `AUTORIZADO` enum('X','') DEFAULT NULL,
   `ACEPTADO_RECHAZADO` enum('ACEPTADO','RECHAZADO','INGRESO RECHAZO SIMULTÁNEO') NOT NULL,
   `MOTIVO` varchar(128) NOT NULL,
   PRIMARY KEY (`RUN`,`FECHA_CORTE`,`COD_CENTRO`,`ACEPTADO_RECHAZADO`),
@@ -791,7 +796,42 @@ CREATE TABLE IF NOT EXISTS `2022percapita` (
   KEY `indexquery` (`COD_CENTRO`,`FECHA_CORTE`,`EDAD`,`ACEPTADO_RECHAZADO`),
   KEY `Índice 10` (`FECHA_NACIMIENTO`),
   KEY `MOTIVO` (`MOTIVO`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci ROW_FORMAT=COMPACT;
+
+-- La exportación de datos fue deseleccionada.
+
+-- Volcando estructura para tabla rem.2022percapitaoficial
+CREATE TABLE IF NOT EXISTS `2022percapitaoficial` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `Id_Región` int(11) NOT NULL,
+  `Región` varchar(12) DEFAULT NULL,
+  `Id_Serv._Salud` int(11) NOT NULL,
+  `Servicio_Salud` varchar(12) DEFAULT NULL,
+  `Id_Comuna` int(11) NOT NULL,
+  `Comuna` varchar(25) DEFAULT NULL,
+  `Id_Centro_APS` int(11) NOT NULL,
+  `Centro_APS` varchar(255) DEFAULT NULL,
+  `Sexo` varchar(12) DEFAULT NULL,
+  `Edad` int(11) DEFAULT NULL,
+  `Inscritos` varchar(12) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `Id_Serv._Salud_index` (`Id_Serv._Salud`),
+  KEY `Id_Comuna_index` (`Id_Comuna`),
+  KEY `Id_Centro_APS_index` (`Id_Centro_APS`)
+) ENGINE=InnoDB AUTO_INCREMENT=4067 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+
+-- La exportación de datos fue deseleccionada.
+
+-- Volcando estructura para tabla rem.2022prestaciones
+CREATE TABLE IF NOT EXISTS `2022prestaciones` (
+  `id_prestacion` int(11) NOT NULL AUTO_INCREMENT,
+  `codigo_prestacion` varchar(255) DEFAULT NULL,
+  `descripcion` longtext DEFAULT NULL,
+  `serie` varchar(255) DEFAULT NULL,
+  `Nserie` varchar(5) DEFAULT NULL,
+  PRIMARY KEY (`id_prestacion`),
+  KEY `SERIE` (`serie`,`codigo_prestacion`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=3900 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci ROW_FORMAT=COMPACT;
 
 -- La exportación de datos fue deseleccionada.
 
@@ -861,7 +901,446 @@ CREATE TABLE IF NOT EXISTS `2022rems` (
   KEY `fk_rem_establecimiento1_idx` (`establecimiento_id_establecimiento`),
   KEY `fk_rem_prestacion1_idx` (`prestacion_id_prestacion`),
   KEY `programacion_aps` (`IdEstablecimiento`,`CodigoPrestacion`,`Mes`)
-) ENGINE=InnoDB AUTO_INCREMENT=1458054 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB AUTO_INCREMENT=3008330 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci ROW_FORMAT=COMPACT;
+
+-- La exportación de datos fue deseleccionada.
+
+-- Volcando estructura para tabla rem.2022secciones
+CREATE TABLE IF NOT EXISTS `2022secciones` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) NOT NULL,
+  `serie` varchar(50) NOT NULL,
+  `nserie` varchar(50) NOT NULL,
+  `supergroups` text DEFAULT NULL,
+  `supergroups_inline` tinyint(1) NOT NULL DEFAULT 0,
+  `discard_group` tinyint(1) NOT NULL DEFAULT 0,
+  `thead` text DEFAULT NULL,
+  `cols` text DEFAULT NULL,
+  `cods` text DEFAULT NULL,
+  `totals` tinyint(1) NOT NULL DEFAULT 0,
+  `totals_by_prestacion` text DEFAULT NULL,
+  `totals_by_group` text DEFAULT NULL,
+  `totals_first` tinyint(1) NOT NULL DEFAULT 0,
+  `subtotals` text DEFAULT NULL,
+  `subtotals_first` tinyint(1) NOT NULL DEFAULT 0,
+  `tfoot` text DEFAULT NULL,
+  `precision` tinyint(1) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=391 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci ROW_FORMAT=DYNAMIC;
+
+-- La exportación de datos fue deseleccionada.
+
+-- Volcando estructura para tabla rem.2023establecimientos
+CREATE TABLE IF NOT EXISTS `2023establecimientos` (
+  `id_establecimiento` int(11) NOT NULL,
+  `servicio_salud` varchar(255) DEFAULT NULL,
+  `tipo` varchar(255) DEFAULT NULL,
+  `Codigo` varchar(255) DEFAULT NULL,
+  `dependencia` varchar(255) DEFAULT NULL,
+  `nombre` varchar(255) DEFAULT NULL,
+  `alias_estab` varchar(255) DEFAULT NULL,
+  `comuna` varchar(255) DEFAULT NULL,
+  `codigo_comuna` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_spanish_ci DEFAULT NULL,
+  `comges19` tinyint(4) DEFAULT NULL,
+  `meta_san` tinyint(4) DEFAULT NULL,
+  `meta_san_18834` tinyint(4) DEFAULT NULL,
+  `meta_san_18834_hosp` tinyint(4) DEFAULT NULL,
+  `p_masama` tinyint(4) DEFAULT NULL,
+  `p_chcc` tinyint(4) DEFAULT NULL,
+  `p_depsev` tinyint(4) DEFAULT NULL,
+  `p_saserep` tinyint(4) DEFAULT NULL,
+  `p_ges_odont` tinyint(4) DEFAULT NULL,
+  `p_sembrando_sonrisas` tinyint(4) DEFAULT NULL,
+  `p_mejor_aten_odont` tinyint(4) DEFAULT NULL,
+  `p_odont_integral` tinyint(4) DEFAULT NULL,
+  `p_equidad_rural` tinyint(4) DEFAULT NULL,
+  `tablero_poblacion` tinyint(4) DEFAULT NULL,
+  `comuna_id_comuna` int(11) NOT NULL,
+  PRIMARY KEY (`id_establecimiento`,`comuna_id_comuna`),
+  KEY `fk_establecimiento_comuna_idx` (`comuna_id_comuna`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci ROW_FORMAT=COMPACT;
+
+-- La exportación de datos fue deseleccionada.
+
+-- Volcando estructura para tabla rem.2023percapita
+CREATE TABLE IF NOT EXISTS `2023percapita` (
+  `RUN` int(11) NOT NULL,
+  `DV` char(1) NOT NULL,
+  `NOMBRES` varchar(255) DEFAULT NULL,
+  `APELLIDO_PATERNO` varchar(255) DEFAULT NULL,
+  `APELLIDO_MATERNO` varchar(255) DEFAULT NULL,
+  `FECHA_NACIMIENTO` date DEFAULT NULL,
+  `EDAD` int(11) DEFAULT NULL,
+  `GENERO` char(1) DEFAULT NULL,
+  `TRAMO` char(1) DEFAULT NULL,
+  `FECHA_CORTE` date NOT NULL,
+  `COD_CENTRO` int(11) NOT NULL,
+  `NOMBRE_CENTRO` varchar(255) NOT NULL,
+  `CODIGO_CENTRO_PROCEDENCIA` int(11) DEFAULT NULL,
+  `NOMBRE_CENTRO_PROCEDENCIA` varchar(255) DEFAULT NULL,
+  `CODIGO_COMUNA_PROCEDENCIA` int(11) DEFAULT NULL,
+  `NOMBRE_COMUNA_PROCEDENCIA` varchar(255) DEFAULT NULL,
+  `CODIGO_CENTRO_DESTINO` int(11) DEFAULT NULL,
+  `NOMBRE_CENTRO_DESTINO` varchar(255) DEFAULT NULL,
+  `CODIGO_COMUNA_DESTINO` int(11) DEFAULT NULL,
+  `NOMBRE_COMUNA_DESTINO` varchar(255) DEFAULT NULL,
+  `TRASLADO_POSITIVO` enum('X','') DEFAULT NULL,
+  `TRASLADO_NEGATIVO` enum('X','') DEFAULT NULL,
+  `NUEVO_INSCRITO` enum('X','') DEFAULT NULL,
+  `EXBLOQUEADO` enum('X','') DEFAULT NULL,
+  `RECHAZADO_PREVISIONAL` enum('X','') DEFAULT NULL,
+  `RECHAZADO_FALLECIDO` enum('X','') DEFAULT NULL,
+  `AUTORIZADO` enum('X','') DEFAULT NULL,
+  `ACEPTADO_RECHAZADO` enum('ACEPTADO','RECHAZADO','INGRESO RECHAZO SIMULTÁNEO') NOT NULL,
+  `MOTIVO` varchar(128) NOT NULL,
+  PRIMARY KEY (`RUN`,`FECHA_CORTE`,`COD_CENTRO`,`ACEPTADO_RECHAZADO`),
+  KEY `ACEPTADO_RECHAZADO` (`ACEPTADO_RECHAZADO`),
+  KEY `COD_CENTRO` (`COD_CENTRO`),
+  KEY `consulta_comunal` (`EDAD`,`FECHA_CORTE`,`AUTORIZADO`,`COD_CENTRO`),
+  KEY `FECHA_CORTE` (`FECHA_CORTE`),
+  KEY `FECHA_NACIMIENTO` (`FECHA_NACIMIENTO`),
+  KEY `indexGenero` (`COD_CENTRO`,`FECHA_CORTE`,`EDAD`,`ACEPTADO_RECHAZADO`,`GENERO`),
+  KEY `indexquery` (`COD_CENTRO`,`FECHA_CORTE`,`EDAD`,`ACEPTADO_RECHAZADO`),
+  KEY `Índice 10` (`FECHA_NACIMIENTO`),
+  KEY `MOTIVO` (`MOTIVO`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci ROW_FORMAT=COMPACT;
+
+-- La exportación de datos fue deseleccionada.
+
+-- Volcando estructura para tabla rem.2023percapitaoficial
+CREATE TABLE IF NOT EXISTS `2023percapitaoficial` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `Id_Región` int(11) NOT NULL,
+  `Región` varchar(12) DEFAULT NULL,
+  `Id_Serv._Salud` int(11) NOT NULL,
+  `Servicio_Salud` varchar(12) DEFAULT NULL,
+  `Id_Comuna` int(11) NOT NULL,
+  `Comuna` varchar(25) DEFAULT NULL,
+  `Id_Centro_APS` int(11) NOT NULL,
+  `Centro_APS` varchar(255) DEFAULT NULL,
+  `Sexo` varchar(12) DEFAULT NULL,
+  `Edad` int(11) DEFAULT NULL,
+  `Inscritos` varchar(12) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `Id_Serv._Salud_index` (`Id_Serv._Salud`),
+  KEY `Id_Comuna_index` (`Id_Comuna`),
+  KEY `Id_Centro_APS_index` (`Id_Centro_APS`)
+) ENGINE=InnoDB AUTO_INCREMENT=5189 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+
+-- La exportación de datos fue deseleccionada.
+
+-- Volcando estructura para tabla rem.2023prestaciones
+CREATE TABLE IF NOT EXISTS `2023prestaciones` (
+  `id_prestacion` int(11) NOT NULL AUTO_INCREMENT,
+  `codigo_prestacion` varchar(255) DEFAULT NULL,
+  `descripcion` longtext DEFAULT NULL,
+  `serie` varchar(255) DEFAULT NULL,
+  `Nserie` varchar(5) DEFAULT NULL,
+  PRIMARY KEY (`id_prestacion`) USING BTREE,
+  KEY `SERIE` (`serie`,`codigo_prestacion`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=8826 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci ROW_FORMAT=COMPACT;
+
+-- La exportación de datos fue deseleccionada.
+
+-- Volcando estructura para tabla rem.2023rems
+CREATE TABLE IF NOT EXISTS `2023rems` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `Mes` int(11) DEFAULT NULL,
+  `IdServicio` varchar(2) DEFAULT NULL,
+  `Ano` int(11) DEFAULT NULL,
+  `IdEstablecimiento` varchar(7) DEFAULT NULL,
+  `CodigoPrestacion` varchar(50) DEFAULT NULL,
+  `fechaIngreso` datetime DEFAULT NULL,
+  `Col01` double(11,2) DEFAULT 0.00,
+  `Col02` double(11,2) DEFAULT 0.00,
+  `Col03` double(11,2) DEFAULT 0.00,
+  `Col04` double(11,2) DEFAULT 0.00,
+  `Col05` double(11,2) DEFAULT 0.00,
+  `Col06` double(11,2) DEFAULT 0.00,
+  `Col07` double(11,2) DEFAULT 0.00,
+  `Col08` double(11,2) DEFAULT 0.00,
+  `Col09` double(11,2) DEFAULT 0.00,
+  `Col10` double(11,2) DEFAULT 0.00,
+  `Col11` double(11,2) DEFAULT 0.00,
+  `Col12` double(11,2) DEFAULT 0.00,
+  `Col13` double(11,2) DEFAULT 0.00,
+  `Col14` double(11,2) DEFAULT 0.00,
+  `Col15` double(11,2) DEFAULT 0.00,
+  `Col16` double(11,2) DEFAULT 0.00,
+  `Col17` double(11,2) DEFAULT 0.00,
+  `Col18` double(11,2) DEFAULT 0.00,
+  `Col19` double(11,2) DEFAULT 0.00,
+  `Col21` double(11,2) DEFAULT 0.00,
+  `Col20` double(11,2) DEFAULT 0.00,
+  `Col22` double(11,2) DEFAULT 0.00,
+  `Col23` double(11,2) DEFAULT 0.00,
+  `Col24` double(11,2) DEFAULT 0.00,
+  `Col25` double(11,2) DEFAULT 0.00,
+  `Col26` double(11,2) DEFAULT 0.00,
+  `Col27` double(11,2) DEFAULT 0.00,
+  `Col28` double(11,2) DEFAULT 0.00,
+  `Col29` double(11,2) DEFAULT 0.00,
+  `Col30` double(11,2) DEFAULT 0.00,
+  `Col31` double(11,2) DEFAULT 0.00,
+  `Col32` double(11,2) DEFAULT 0.00,
+  `Col33` double(11,2) DEFAULT 0.00,
+  `Col34` double(11,2) DEFAULT 0.00,
+  `Col35` double(11,2) DEFAULT 0.00,
+  `Col36` double(11,2) DEFAULT 0.00,
+  `Col37` double(11,2) DEFAULT 0.00,
+  `Col38` double(11,2) DEFAULT 0.00,
+  `Col39` double(11,2) DEFAULT 0.00,
+  `Col40` double(11,2) DEFAULT 0.00,
+  `Col41` double(11,2) DEFAULT 0.00,
+  `Col42` double(11,2) DEFAULT 0.00,
+  `Col43` double(11,2) DEFAULT 0.00,
+  `Col44` double(11,2) DEFAULT 0.00,
+  `Col45` double(11,2) DEFAULT 0.00,
+  `Col46` double(11,2) DEFAULT 0.00,
+  `Col47` double(11,2) DEFAULT 0.00,
+  `Col48` double(11,2) DEFAULT 0.00,
+  `Col49` double(11,2) DEFAULT 0.00,
+  `Col50` double(11,2) DEFAULT 0.00,
+  `establecimiento_id_establecimiento` int(11) NOT NULL DEFAULT 0,
+  `prestacion_id_prestacion` int(11) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`,`establecimiento_id_establecimiento`,`prestacion_id_prestacion`) USING BTREE,
+  KEY `codigoprestacion` (`CodigoPrestacion`) USING BTREE,
+  KEY `fk_rem_establecimiento1_idx` (`establecimiento_id_establecimiento`) USING BTREE,
+  KEY `fk_rem_prestacion1_idx` (`prestacion_id_prestacion`) USING BTREE,
+  KEY `programacion_aps` (`IdEstablecimiento`,`CodigoPrestacion`,`Mes`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=3708181 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci ROW_FORMAT=COMPACT;
+
+-- La exportación de datos fue deseleccionada.
+
+-- Volcando estructura para tabla rem.2023secciones
+CREATE TABLE IF NOT EXISTS `2023secciones` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) NOT NULL,
+  `serie` varchar(50) NOT NULL,
+  `nserie` varchar(50) NOT NULL,
+  `supergroups` text DEFAULT NULL,
+  `supergroups_inline` tinyint(1) NOT NULL DEFAULT 0,
+  `discard_group` tinyint(1) NOT NULL DEFAULT 0,
+  `thead` text DEFAULT NULL,
+  `cols` text DEFAULT NULL,
+  `cods` text DEFAULT NULL,
+  `totals` tinyint(1) NOT NULL DEFAULT 0,
+  `totals_by_prestacion` text DEFAULT NULL,
+  `totals_by_group` text DEFAULT NULL,
+  `totals_first` tinyint(1) NOT NULL DEFAULT 0,
+  `subtotals` text DEFAULT NULL,
+  `subtotals_first` tinyint(1) NOT NULL DEFAULT 0,
+  `tfoot` text DEFAULT NULL,
+  `precision` tinyint(1) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=464 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci ROW_FORMAT=DYNAMIC;
+
+-- La exportación de datos fue deseleccionada.
+
+-- Volcando estructura para tabla rem.2024establecimientos
+CREATE TABLE IF NOT EXISTS `2024establecimientos` (
+  `id_establecimiento` int(11) NOT NULL,
+  `servicio_salud` varchar(255) DEFAULT NULL,
+  `tipo` varchar(255) DEFAULT NULL,
+  `Codigo` varchar(255) DEFAULT NULL,
+  `dependencia` varchar(255) DEFAULT NULL,
+  `nombre` varchar(255) DEFAULT NULL,
+  `alias_estab` varchar(255) DEFAULT NULL,
+  `comuna` varchar(255) DEFAULT NULL,
+  `codigo_comuna` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_spanish_ci DEFAULT NULL,
+  `comges19` tinyint(4) DEFAULT NULL,
+  `meta_san` tinyint(4) DEFAULT NULL,
+  `meta_san_18834` tinyint(4) DEFAULT NULL,
+  `meta_san_18834_hosp` tinyint(4) DEFAULT NULL,
+  `p_masama` tinyint(4) DEFAULT NULL,
+  `p_chcc` tinyint(4) DEFAULT NULL,
+  `p_depsev` tinyint(4) DEFAULT NULL,
+  `p_saserep` tinyint(4) DEFAULT NULL,
+  `p_ges_odont` tinyint(4) DEFAULT NULL,
+  `p_sembrando_sonrisas` tinyint(4) DEFAULT NULL,
+  `p_mejor_aten_odont` tinyint(4) DEFAULT NULL,
+  `p_odont_integral` tinyint(4) DEFAULT NULL,
+  `p_equidad_rural` tinyint(4) DEFAULT NULL,
+  `tablero_poblacion` tinyint(4) DEFAULT NULL,
+  `comuna_id_comuna` int(11) NOT NULL,
+  PRIMARY KEY (`id_establecimiento`,`comuna_id_comuna`),
+  KEY `fk_establecimiento_comuna_idx` (`comuna_id_comuna`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci ROW_FORMAT=COMPACT;
+
+-- La exportación de datos fue deseleccionada.
+
+-- Volcando estructura para tabla rem.2024percapita
+CREATE TABLE IF NOT EXISTS `2024percapita` (
+  `RUN` int(11) NOT NULL,
+  `DV` char(1) NOT NULL,
+  `NOMBRES` varchar(255) DEFAULT NULL,
+  `APELLIDO_PATERNO` varchar(255) DEFAULT NULL,
+  `APELLIDO_MATERNO` varchar(255) DEFAULT NULL,
+  `FECHA_NACIMIENTO` date DEFAULT NULL,
+  `EDAD` int(11) DEFAULT NULL,
+  `GENERO` char(1) DEFAULT NULL,
+  `TRAMO` char(1) DEFAULT NULL,
+  `FECHA_CORTE` date NOT NULL,
+  `COD_CENTRO` int(11) NOT NULL,
+  `NOMBRE_CENTRO` varchar(255) NOT NULL,
+  `CODIGO_CENTRO_PROCEDENCIA` int(11) DEFAULT NULL,
+  `NOMBRE_CENTRO_PROCEDENCIA` varchar(255) DEFAULT NULL,
+  `CODIGO_COMUNA_PROCEDENCIA` int(11) DEFAULT NULL,
+  `NOMBRE_COMUNA_PROCEDENCIA` varchar(255) DEFAULT NULL,
+  `CODIGO_CENTRO_DESTINO` int(11) DEFAULT NULL,
+  `NOMBRE_CENTRO_DESTINO` varchar(255) DEFAULT NULL,
+  `CODIGO_COMUNA_DESTINO` int(11) DEFAULT NULL,
+  `NOMBRE_COMUNA_DESTINO` varchar(255) DEFAULT NULL,
+  `TRASLADO_POSITIVO` enum('X','') DEFAULT NULL,
+  `TRASLADO_NEGATIVO` enum('X','') DEFAULT NULL,
+  `NUEVO_INSCRITO` enum('X','') DEFAULT NULL,
+  `EXBLOQUEADO` enum('X','') DEFAULT NULL,
+  `RECHAZADO_PREVISIONAL` enum('X','') DEFAULT NULL,
+  `RECHAZADO_FALLECIDO` enum('X','') DEFAULT NULL,
+  `AUTORIZADO` enum('X','') DEFAULT NULL,
+  `ACEPTADO_RECHAZADO` enum('ACEPTADO','RECHAZADO','INGRESO RECHAZO SIMULTÁNEO') NOT NULL,
+  `MOTIVO` varchar(128) NOT NULL,
+  PRIMARY KEY (`RUN`,`FECHA_CORTE`,`COD_CENTRO`,`ACEPTADO_RECHAZADO`),
+  KEY `ACEPTADO_RECHAZADO` (`ACEPTADO_RECHAZADO`),
+  KEY `COD_CENTRO` (`COD_CENTRO`),
+  KEY `consulta_comunal` (`EDAD`,`FECHA_CORTE`,`AUTORIZADO`,`COD_CENTRO`),
+  KEY `FECHA_CORTE` (`FECHA_CORTE`),
+  KEY `FECHA_NACIMIENTO` (`FECHA_NACIMIENTO`),
+  KEY `indexGenero` (`COD_CENTRO`,`FECHA_CORTE`,`EDAD`,`ACEPTADO_RECHAZADO`,`GENERO`),
+  KEY `indexquery` (`COD_CENTRO`,`FECHA_CORTE`,`EDAD`,`ACEPTADO_RECHAZADO`),
+  KEY `Índice 10` (`FECHA_NACIMIENTO`),
+  KEY `MOTIVO` (`MOTIVO`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci ROW_FORMAT=COMPACT;
+
+-- La exportación de datos fue deseleccionada.
+
+-- Volcando estructura para tabla rem.2024percapitaoficial
+CREATE TABLE IF NOT EXISTS `2024percapitaoficial` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `Id_Región` int(11) NOT NULL,
+  `Región` varchar(12) DEFAULT NULL,
+  `Id_Serv._Salud` int(11) NOT NULL,
+  `Servicio_Salud` varchar(12) DEFAULT NULL,
+  `Id_Comuna` int(11) NOT NULL,
+  `Comuna` varchar(25) DEFAULT NULL,
+  `Id_Centro_APS` int(11) NOT NULL,
+  `Centro_APS` varchar(255) DEFAULT NULL,
+  `Sexo` varchar(12) DEFAULT NULL,
+  `Edad` int(11) DEFAULT NULL,
+  `Inscritos` varchar(12) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `Id_Serv._Salud_index` (`Id_Serv._Salud`),
+  KEY `Id_Comuna_index` (`Id_Comuna`),
+  KEY `Id_Centro_APS_index` (`Id_Centro_APS`)
+) ENGINE=InnoDB AUTO_INCREMENT=8192 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci ROW_FORMAT=DYNAMIC;
+
+-- La exportación de datos fue deseleccionada.
+
+-- Volcando estructura para tabla rem.2024prestaciones
+CREATE TABLE IF NOT EXISTS `2024prestaciones` (
+  `id_prestacion` int(11) NOT NULL AUTO_INCREMENT,
+  `codigo_prestacion` varchar(255) DEFAULT NULL,
+  `descripcion` longtext DEFAULT NULL,
+  `serie` varchar(255) DEFAULT NULL,
+  `Nserie` varchar(5) DEFAULT NULL,
+  PRIMARY KEY (`id_prestacion`) USING BTREE,
+  KEY `SERIE` (`serie`,`codigo_prestacion`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=3144 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci ROW_FORMAT=COMPACT;
+
+-- La exportación de datos fue deseleccionada.
+
+-- Volcando estructura para tabla rem.2024rems
+CREATE TABLE IF NOT EXISTS `2024rems` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `Mes` int(11) DEFAULT NULL,
+  `IdServicio` varchar(2) DEFAULT NULL,
+  `Ano` int(11) DEFAULT NULL,
+  `IdEstablecimiento` varchar(7) DEFAULT NULL,
+  `CodigoPrestacion` varchar(50) DEFAULT NULL,
+  `fechaIngreso` datetime DEFAULT NULL,
+  `Col01` double(11,2) DEFAULT 0.00,
+  `Col02` double(11,2) DEFAULT 0.00,
+  `Col03` double(11,2) DEFAULT 0.00,
+  `Col04` double(11,2) DEFAULT 0.00,
+  `Col05` double(11,2) DEFAULT 0.00,
+  `Col06` double(11,2) DEFAULT 0.00,
+  `Col07` double(11,2) DEFAULT 0.00,
+  `Col08` double(11,2) DEFAULT 0.00,
+  `Col09` double(11,2) DEFAULT 0.00,
+  `Col10` double(11,2) DEFAULT 0.00,
+  `Col11` double(11,2) DEFAULT 0.00,
+  `Col12` double(11,2) DEFAULT 0.00,
+  `Col13` double(11,2) DEFAULT 0.00,
+  `Col14` double(11,2) DEFAULT 0.00,
+  `Col15` double(11,2) DEFAULT 0.00,
+  `Col16` double(11,2) DEFAULT 0.00,
+  `Col17` double(11,2) DEFAULT 0.00,
+  `Col18` double(11,2) DEFAULT 0.00,
+  `Col19` double(11,2) DEFAULT 0.00,
+  `Col21` double(11,2) DEFAULT 0.00,
+  `Col20` double(11,2) DEFAULT 0.00,
+  `Col22` double(11,2) DEFAULT 0.00,
+  `Col23` double(11,2) DEFAULT 0.00,
+  `Col24` double(11,2) DEFAULT 0.00,
+  `Col25` double(11,2) DEFAULT 0.00,
+  `Col26` double(11,2) DEFAULT 0.00,
+  `Col27` double(11,2) DEFAULT 0.00,
+  `Col28` double(11,2) DEFAULT 0.00,
+  `Col29` double(11,2) DEFAULT 0.00,
+  `Col30` double(11,2) DEFAULT 0.00,
+  `Col31` double(11,2) DEFAULT 0.00,
+  `Col32` double(11,2) DEFAULT 0.00,
+  `Col33` double(11,2) DEFAULT 0.00,
+  `Col34` double(11,2) DEFAULT 0.00,
+  `Col35` double(11,2) DEFAULT 0.00,
+  `Col36` double(11,2) DEFAULT 0.00,
+  `Col37` double(11,2) DEFAULT 0.00,
+  `Col38` double(11,2) DEFAULT 0.00,
+  `Col39` double(11,2) DEFAULT 0.00,
+  `Col40` double(11,2) DEFAULT 0.00,
+  `Col41` double(11,2) DEFAULT 0.00,
+  `Col42` double(11,2) DEFAULT 0.00,
+  `Col43` double(11,2) DEFAULT 0.00,
+  `Col44` double(11,2) DEFAULT 0.00,
+  `Col45` double(11,2) DEFAULT 0.00,
+  `Col46` double(11,2) DEFAULT 0.00,
+  `Col47` double(11,2) DEFAULT 0.00,
+  `Col48` double(11,2) DEFAULT 0.00,
+  `Col49` double(11,2) DEFAULT 0.00,
+  `Col50` double(11,2) DEFAULT 0.00,
+  `establecimiento_id_establecimiento` int(11) NOT NULL DEFAULT 0,
+  `prestacion_id_prestacion` int(11) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`,`establecimiento_id_establecimiento`,`prestacion_id_prestacion`) USING BTREE,
+  KEY `codigoprestacion` (`CodigoPrestacion`) USING BTREE,
+  KEY `fk_rem_establecimiento1_idx` (`establecimiento_id_establecimiento`) USING BTREE,
+  KEY `fk_rem_prestacion1_idx` (`prestacion_id_prestacion`) USING BTREE,
+  KEY `programacion_aps` (`IdEstablecimiento`,`CodigoPrestacion`,`Mes`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=3715194 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci ROW_FORMAT=COMPACT;
+
+-- La exportación de datos fue deseleccionada.
+
+-- Volcando estructura para tabla rem.2024secciones
+CREATE TABLE IF NOT EXISTS `2024secciones` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) NOT NULL,
+  `serie` varchar(50) NOT NULL,
+  `nserie` varchar(50) NOT NULL,
+  `supergroups` text DEFAULT NULL,
+  `supergroups_inline` tinyint(1) NOT NULL DEFAULT 0,
+  `discard_group` tinyint(1) NOT NULL DEFAULT 0,
+  `thead` text DEFAULT NULL,
+  `cols` text DEFAULT NULL,
+  `cods` text DEFAULT NULL,
+  `totals` tinyint(1) NOT NULL DEFAULT 0,
+  `totals_by_prestacion` text DEFAULT NULL,
+  `totals_by_group` text DEFAULT NULL,
+  `totals_first` tinyint(1) NOT NULL DEFAULT 0,
+  `subtotals` text DEFAULT NULL,
+  `subtotals_first` tinyint(1) NOT NULL DEFAULT 0,
+  `tfoot` text DEFAULT NULL,
+  `precision` tinyint(1) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=447 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci ROW_FORMAT=DYNAMIC;
 
 -- La exportación de datos fue deseleccionada.
 
@@ -871,7 +1350,7 @@ CREATE TABLE IF NOT EXISTS `comunas` (
   `codigo_comuna` varchar(255) DEFAULT NULL,
   `nombre_comuna` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id_comuna`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci ROW_FORMAT=COMPACT;
 
 -- La exportación de datos fue deseleccionada.
 
@@ -885,7 +1364,7 @@ CREATE TABLE IF NOT EXISTS `establecimientos` (
   `nombre` varchar(255) DEFAULT NULL,
   `alias_estab` varchar(255) DEFAULT NULL,
   `comuna` varchar(255) DEFAULT NULL,
-  `codigo_comuna` varchar(255) CHARACTER SET utf8 COLLATE utf8_spanish_ci DEFAULT NULL,
+  `codigo_comuna` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_spanish_ci DEFAULT NULL,
   `comges19` tinyint(4) DEFAULT NULL,
   `meta_san` tinyint(4) DEFAULT NULL,
   `meta_san_18834` tinyint(4) DEFAULT NULL,
@@ -893,7 +1372,7 @@ CREATE TABLE IF NOT EXISTS `establecimientos` (
   `comuna_id_comuna` int(11) NOT NULL,
   PRIMARY KEY (`id_establecimiento`,`comuna_id_comuna`),
   KEY `fk_establecimiento_comuna_idx` (`comuna_id_comuna`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci ROW_FORMAT=COMPACT;
 
 -- La exportación de datos fue deseleccionada.
 
@@ -937,7 +1416,7 @@ CREATE TABLE IF NOT EXISTS `percapita` (
   KEY `indexquery` (`COD_CENTRO`,`FECHA_CORTE`,`EDAD`,`ACEPTADO_RECHAZADO`),
   KEY `indexGenero` (`COD_CENTRO`,`FECHA_CORTE`,`EDAD`,`ACEPTADO_RECHAZADO`,`GENERO`),
   KEY `consulta_comunal` (`EDAD`,`FECHA_CORTE`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci ROW_FORMAT=COMPACT;
 
 -- La exportación de datos fue deseleccionada.
 
@@ -982,7 +1461,7 @@ CREATE TABLE IF NOT EXISTS `percapita_pro` (
   KEY `indexGenero` (`COD_CENTRO`,`FECHA_CORTE`,`EDAD`,`ACEPTADO_RECHAZADO`,`GENERO`),
   KEY `Índice 10` (`FECHA_NACIMIENTO`),
   KEY `consulta_comunal` (`EDAD`,`FECHA_CORTE`,`AUTORIZADO`,`COD_CENTRO`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci ROW_FORMAT=COMPACT;
 
 -- La exportación de datos fue deseleccionada.
 
@@ -995,7 +1474,7 @@ CREATE TABLE IF NOT EXISTS `prestaciones` (
   `Nserie` varchar(5) DEFAULT NULL,
   PRIMARY KEY (`id_prestacion`),
   KEY `SERIE` (`serie`,`codigo_prestacion`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=4042 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB AUTO_INCREMENT=4042 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci ROW_FORMAT=COMPACT;
 
 -- La exportación de datos fue deseleccionada.
 
@@ -1044,7 +1523,7 @@ CREATE TABLE IF NOT EXISTS `sigte` (
   `ID_LOCAL` varchar(255) NOT NULL,
   `RESULTADO` int(11) NOT NULL,
   `SIGTE_ID` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci ROW_FORMAT=DYNAMIC;
 
 -- La exportación de datos fue deseleccionada.
 
@@ -1094,10 +1573,11 @@ CREATE TABLE IF NOT EXISTS `sigte2` (
   `RESULTADO` int(11) DEFAULT NULL,
   `SIGTE_ID` int(11) NOT NULL,
   PRIMARY KEY (`SERV_SALUD`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci ROW_FORMAT=COMPACT;
 
 -- La exportación de datos fue deseleccionada.
 
+/*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

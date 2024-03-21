@@ -60,6 +60,9 @@ class DatabaseSeeder extends Seeder
 
         /* SEED PARA MANTENEDORES DE DROGAS */
         $this->call(ParameterSeeder::class);
+    
+        $this->call(EstablishmentSeeder::class);
+        $this->call(ReceptionTypeSeeder::class);
 
     }
 }

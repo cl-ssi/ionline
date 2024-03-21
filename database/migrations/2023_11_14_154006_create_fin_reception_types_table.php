@@ -21,56 +21,6 @@ return new class extends Migration
             $table->foreignId('establishment_id')->constrained('establishments');
             $table->timestamps();
         });
-
-        ReceptionType::create([
-            'name' => 'Bienes',
-            'title' => 'Acta de recepción conforme',
-            'establishment_id' => 38,
-        ]);
-        ReceptionType::create([
-            'name' => 'Servicios',
-            'title' => 'Informe de cumplimiento de servicios',
-            'establishment_id' => 38,
-        ]);
-        ReceptionType::create([
-            'name' => 'Obras',
-            'title' => 'Acta de recepción conforme',
-            'establishment_id' => 38,
-        ]);
-
-
-        ReceptionType::create([
-            'name' => 'Bienes',
-            'title' => 'Acta de recepción conforme',
-            'establishment_id' => 41,
-        ]);
-        ReceptionType::create([
-            'name' => 'Servicios',
-            'title' => 'Informe de cumplimiento de servicios',
-            'establishment_id' => 41,
-        ]);
-        ReceptionType::create([
-            'name' => 'Obras',
-            'title' => 'Acta de recepción conforme',
-            'establishment_id' => 41,
-        ]);
-
-
-        ReceptionType::create([
-            'name' => 'Bienes',
-            'title' => 'Acta de recepción conforme',
-            'establishment_id' => 1,
-        ]);
-        ReceptionType::create([
-            'name' => 'Servicios',
-            'title' => 'Informe de cumplimiento de servicios',
-            'establishment_id' => 1,
-        ]);
-        ReceptionType::create([
-            'name' => 'Obras',
-            'title' => 'Acta de recepción conforme',
-            'establishment_id' => 1,
-        ]);
     }
 
     /**

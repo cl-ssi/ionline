@@ -2,7 +2,9 @@
 
 @section('title', "Protocolo de Análisis - $protocol->id")
 
-@section('linea1', $protocol->user->organizationalUnit->name)
+@section('linea1', "Unidad de Análisis")
+
+@section('linea2', $protocol->user->organizationalUnit->name)
 
 @section('linea3', $protocol->user->Initials)
 
