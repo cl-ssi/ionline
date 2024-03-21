@@ -88,7 +88,7 @@ return [
             'storage_api_uri' => env('GOOGLE_CLOUD_STORAGE_API_URI', null), // see: Public URLs below
             'apiEndpoint' => env('GOOGLE_CLOUD_STORAGE_API_ENDPOINT', null), // set storageClient apiEndpoint
             'visibility' => 'public', // optional: public|private
-            'metadata' => ['cacheControl'=> 'public,max-age=86400'], // optional: default metadata
+            'metadata' => ['cacheControl'=> 'public,max-age=3600'], // optional: default metadata
             'throw' => true,
         ],
 
