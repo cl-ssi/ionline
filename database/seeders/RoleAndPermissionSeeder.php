@@ -155,7 +155,6 @@ class RoleAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'ProgrammingItem: delete', 'description' => '']);
         Permission::create(['name' => 'ProgrammingItem: duplicate', 'description' => '']);
         Permission::create(['name' => 'ProgrammingItem: edit', 'description' => '']);
-        Permission::create(['name' => 'ProgrammingItem: edit', 'description' => '']);
         Permission::create(['name' => 'ProgrammingItem: evaluate', 'description' => '']);
         Permission::create(['name' => 'ProgrammingItem: view', 'description' => '']);
         Permission::create(['name' => 'Purchase Plan: all', 'description' => 'Permite visualizar todos los planes de compras']);
