@@ -16,7 +16,8 @@ sistemas.sst@redsalud.gob.cl
 
 -   git
 -   composer
--   php >= 8.1
+-   php >= 8.2
+-   php extensions: fileinfo, gd, sodium, zip, mbstring, pdo_mysql
 
 ## Ejecutar en un terminal los siguientes comandos
 
