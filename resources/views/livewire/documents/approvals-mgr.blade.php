@@ -5,14 +5,23 @@
 
     <h3 class="mb-3">Solicitudes de aprobación</h3>
 
-    <div class="row mb-3">
-        <div class="form-group col-md-4">
+    <div class="row g-2 mb-3">
+        <div class="form-group col-md-2">
             <label for="inputState">Estado</label>
             <select id="inputState" class="form-select" wire:model.defer="filter.status">
                 <option value="?">Pendientes</option>
                 <option value="1">Aprobados</option>
                 <option value="0">Rechazados</option>
                 <option value="">Todos</option>
+            </select>
+        </div>
+        <div class="form-group col-md-3">
+            <label for="inputModule">Módulo</label>
+            <select id="inputModule" class="form-select" wire:model.defer="filter.module">
+                <option value="">Todos</option>
+                @foreach($modules as $module)
+                <option value="{{ $module }}">{{ $module }}</option>
+                @endforeach
             </select>
         </div>
         <div class="form-group col-md-1">

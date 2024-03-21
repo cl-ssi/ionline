@@ -14,7 +14,7 @@ class ApprovalsMgr extends Component
     use SingleSignature;
     use ApprovalTrait;
     use WithPagination;
-	protected $paginationTheme = 'bootstrap';
+    protected $paginationTheme = 'bootstrap';
 
     public $showModal = false;
     public $approver_observation;
@@ -25,6 +25,7 @@ class ApprovalsMgr extends Component
     public $otp;
     public $message;
     public $callback_feedback_inputs = [];
+    public $modules = [];
 
     /** Utilizada por el approval-button */
     public $redirect_route;
@@ -43,6 +44,8 @@ class ApprovalsMgr extends Component
             $this->show($approval);
         }
         $this->filter['status'] = '';
+        $this->filter['module'] = '';
+        $this->modules = Approval::groupBy('module')->pluck('module');
     }
 
     /**
@@ -84,6 +87,10 @@ class ApprovalsMgr extends Component
             case "0": $query->where('status',false); break;
             case "1": $query->where('status',true); break;
             case "?": $query->whereNull('status'); break;
+        }
+
+        if($this->filter['module']) {
+            $query->where('module',$this->filter['module']);
         }
 
         return $query->latest()->paginate(100);
