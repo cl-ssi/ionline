@@ -256,8 +256,9 @@
                 <span class="text-secondary">Utilizado: $ 110.000</span><br>
                 <span class="text-success ">Disponible: $ 70.000</span>
             </td>
+
             <td>
-                <button class="btn btn-success">Registrar transferencia y notificar</button>
+                <button class="btn btn-outline-primary">Registrar transferencia</button>
             </td>
         </tr>
         <tr>
@@ -278,14 +279,25 @@
             </td>
             <td>
                 <div class="input-group mb-3">
-                    <input type="text" class="form-control">
+                    <input type="text" class="form-control" value="1400000">
                     <button class="btn btn-primary" type="button" id="button-addon2">
                         <i class="bi bi-floppy"></i>
                     </button>
                 </div>
+                <label for="cuotas">Cuotas</label>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" value="3">
+                    <button class="btn btn-primary" type="button" id="button-addon2">
+                        <i class="bi bi-floppy"></i>
+                    </button>
+                </div>
+
             </td>
             <td>
-                2023-12-12
+                <input type="text" class="form-control" value="500000" disabled><button class="btn btn-success" disabled>Transfe. el 2023-12-12</button>
+                <input type="text" class="form-control" value="500000" ><button class="btn btn-outline-primary">Registrar transferencia</button>
+                <input type="text" class="form-control" value="400000" ><button class="btn btn-outline-primary">Registrar transferencia</button>
+                
             </td>
         </tr>
         <tr>
