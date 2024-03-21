@@ -489,8 +489,12 @@
 <br>
 @endforeach
 
+@can('Service Request: add fulfillments')
 <div class="float-right">
 	<a href="{{route('rrhh.service-request.fulfillment.add_fulfillment', $serviceRequest)}}"
 		class="btn btn-outline-primary"> Agregar período
 	</a>
 </div>
+@endcan
+
+
