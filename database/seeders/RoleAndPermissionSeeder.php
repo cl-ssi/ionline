@@ -18,155 +18,17 @@ class RoleAndPermissionSeeder extends Seeder
         // Reset cached roles and permissions
         app()['cache']->forget('spatie.permission.cache');
 
-        Permission::create(['name' => 'be god']);
-        Permission::create(['name' => 'dev']);
-
-        // create permissions
-        Permission::create(['name' => 'Users: must change password', 'description' => 'Para obligar a cambiar su clave (sin uso)']);
-
-        Permission::create(['name' => 'Users: create', 'description' => 'Permite crear ususarios']);
-        Permission::create(['name' => 'Users: edit', 'description' => 'Editar usuarios']);
-        Permission::create(['name' => 'Users: delete', 'description' => 'Borrar usuarios']);
-        Permission::create(['name' => 'Users: assign roles', 'description' => 'Asignar roles a usuarios']);
-        Permission::create(['name' => 'Users: assign permission', 'description' => 'Asignar permisos a usuarios']);
-        Permission::create(['name' => 'Users: reset password option', 'description' => 'Muestra el boton para resetear password']);
-        Permission::create(['name' => 'Users: send mail verification', 'description' => 'Muestra el boton para verificar email']);
-        Permission::create(['name' => 'Users: no attendance record manager', 'description' => 'Para quien registra la justificación cuando no se marca en el reloj control']);
-
-        Permission::create(['name' => 'OrganizationalUnits: create', 'description' => 'Crear unidades organizacionales']);
-        Permission::create(['name' => 'OrganizationalUnits: edit', 'description' => 'Editar unidades organizacionales']);
-        Permission::create(['name' => 'OrganizationalUnits: delete', 'description' => 'Borrar unidades organizacionales']);
-
-        Permission::create(['name' => 'Documents: create', 'description' => 'Crear documentos']);
-        Permission::create(['name' => 'Documents: edit', 'description' => 'Editar documentos']);
-        Permission::create(['name' => 'Documents: add number', 'description' => 'Agregar número a documento y subir archivo']);
-        Permission::create(['name' => 'Documents: signatures and distribution', 'description' => 'Firmas y distribución']);
-        Permission::create(['name' => 'Documents: delete document', 'description' => 'Permite eliminar un documento que no tenga archivo adjunto o firmas']);
-        Permission::create(['name' => 'Documents: admin', 'description' => 'Permite eliminar el número, el archivo adjunto y el documento completo']);
-        Permission::create([
-            'name' => 'Documents: signatures and distribution v2',
-            'description' => 'Permite acceder al crear solicitud de firma nuevo modulo v2'
-        ]);
-
-        Permission::create(['name' => 'Resources: create', 'description' => 'Crear un recurso']);
-        Permission::create(['name' => 'Resources: edit', 'description' => 'Editar un recurso']);
-        Permission::create(['name' => 'Resources: delete', 'description' => 'Borrar un recurso']);
-
-        Permission::create(['name' => 'Drugs', 'description' => 'Permite acceder al menú del módulo de Drogas']);
-        Permission::create(['name' => 'Drugs: view receptions' , 'description' => 'Permite ver actas de recepción']);
-        Permission::create(['name' => 'Drugs: create receptions', 'description' => 'Crear actas de recepciones']);
-        Permission::create(['name' => 'Drugs: edit receptions', 'description' => 'Editar actas de recepción']);
-        Permission::create(['name' => 'Drugs: destroy drugs', 'description' => 'Crear actas de destrucción']);
-        Permission::create(['name' => 'Drugs: view reports', 'description' => 'Ver reporte']);
-        Permission::create(['name' => 'Drugs: manage parameters', 'description' => 'Modificar parametros del módulo de drogas']);
-        Permission::create(['name' => 'Drugs: manage substances', 'description' => 'Mantenedor de sustancias']);
-        Permission::create(['name' => 'Drugs: manage courts', 'description' => 'Mantenedor de Juzgados']);
-        Permission::create(['name' => 'Drugs: manage police units', 'description' => 'Mantenedor de unidades policiales']);
-        Permission::create(['name' => 'Drugs: delete destructions', 'description' => 'Borrar actas de destrucción']);
-        Permission::create(['name' => 'Drugs: add results from ISP', 'description' => 'Agregar resultados del ISP']);
-        Permission::create(['name' => 'Drugs: add protocols', 'description' => 'Crear protocolos (resultados de análisis)']);
-
-
-        Permission::create(['name' => 'Tickets: create']);
-        Permission::create(['name' => 'Tickets: manage']);
-        Permission::create(['name' => 'Tickets: TI']);
-
-        Permission::create(['name' => 'Calendar: view']);
-        Permission::create(['name' => 'Calendar: aps']);
-
-        Permission::create(['name' => 'Integrity: manage complaints']);
-
-        Permission::create(['name' => 'Indicators: view']);
-        Permission::create(['name' => 'Indicators: manager']);
-
-        Permission::create(['name' => 'Authorities: view', 'description' => 'Permite tener acceso al módulo de autoridades']);
-        Permission::create(['name' => 'Authorities: create', 'description' => 'Permite crear una autoridad']);
-        Permission::create(['name' => 'Authorities: edit', 'description' => 'Permite editar una autoridad']);
-        Permission::create(['name' => 'Authorities: all', 'description' => 'Permite tener acceso a todas las autoridades del módulo de autoridades']);
-
-        Permission::create(['name' => 'Requirements: create', 'description' => 'Acceso al SGR']);
-
-        Permission::create(['name' => 'Agreements: user']);
-        Permission::create(['name' => 'Agreements: manager']);
-
-        Permission::create(['name' => 'Pharmacy: manager']);
-        Permission::create(['name' => 'Pharmacy: user']);
-        Permission::create(['name' => 'Pharmacy: create']);
-        Permission::create(['name' => 'Pharmacy: deliver']);
-        Permission::create(['name' => 'Pharmacy: dispatch']);
-        Permission::create(['name' => 'Pharmacy: edit_delete']);
-        Permission::create(['name' => 'Pharmacy: mantenedores']);
-        Permission::create(['name' => 'Pharmacy: purchase']);
-        Permission::create(['name' => 'Pharmacy: receiving']);
-        Permission::create(['name' => 'Pharmacy: reports']);
-        Permission::create(['name' => 'Pharmacy: transfer']);
-        Permission::create(['name' => 'Pharmacy: transfer view ortesis']);
-        Permission::create(['name' => 'Pharmacy: create suppliers']);
-        Permission::create(['name' => 'Pharmacy: create establishments']);
-        Permission::create(['name' => 'Pharmacy: create products']);
-        Permission::create(['name' => 'Pharmacy: create programs']);
-
-        Permission::create(['name' => 'Service Request']);
-        Permission::create(['name' => 'Service Request: additional data']);
-        Permission::create(['name' => 'Service Request: additional data finanzas']);
-        Permission::create(['name' => 'Service Request: additional data oficina partes']);
-        Permission::create(['name' => 'Service Request: additional data rrhh']);
-        Permission::create(['name' => 'Service Request: consolidated data']);
-        Permission::create(['name' => 'Service Request: change signature flow']);
-        Permission::create(['name' => 'Service Request: audit']);
-        Permission::create(['name' => 'Service Request: delete request']);
-        Permission::create(['name' => 'Service Request: derive requests']);
-        Permission::create(['name' => 'Service Request: fulfillments']);
-        Permission::create(['name' => 'Service Request: fulfillments finance']);
-        Permission::create(['name' => 'Service Request: fulfillments responsable']);
-        Permission::create(['name' => 'Service Request: fulfillments rrhh']);
-        Permission::create(['name' => 'Service Request: maintainers']);
-        Permission::create(['name' => 'Service Request: pending requests']);
-        Permission::create(['name' => 'Service Request: report to pay']);
-        Permission::create(['name' => 'Service Request: sign document']);
-        Permission::create(['name' => 'Service Request: transfer requests']);
-        Permission::create(['name' => 'Service Request: view']);
-        Permission::create(['name' => 'Service Request: with resolution']);
-
-        Permission::create(['name' => 'Shift Management: view']);
-
-        Permission::create(['name' => 'Suitability: admin']);
-        Permission::create(['name' => 'Suitability: test']);
-        Permission::create(['name' => 'Suitability: ssi']);
-
-        Permission::create(['name' => 'Rem: admin', 
-                            'description' => 'Usuario Administrador que revisa los REM y bloquea para que no puedan seguir y a la vez designa a los usuarios por cada establecimiento']);
-        Permission::create(['name' => 'Rem: user',
-                            'description' => 'Usuario asignado para poder cargar REM a establecimiento correspondiente']);
-
-        Permission::create(['name' => 'Request Forms: all']);
-        Permission::create(['name' => 'Request Forms: audit']);
-        Permission::create(['name' => 'Request Forms: boss']);
-        Permission::create(['name' => 'Request Forms: config']);
-
-        Permission::create(['name' => 'Health Plan']);
-
-        Permission::create(['name' => 'Partes: user']);
-        Permission::create(['name' => 'Partes: director']);
-        Permission::create(['name' => 'Partes: oficina']);
-        Permission::create(['name' => 'Partes: delete']);
-        Permission::create(['name' => 'Partes: numerator', 'description' => 'Aquellos que pueden numerar un documento, les llega un mail por cada documento a enumerar']);
-
-        Permission::create(['name' => 'Rrhh: wellfair']);
-
-        Permission::create(['name' => 'amiPASS', 'description' => '	Accedo al módulo de amiPASS']);
-
-        Permission::create(['name' => 'Replacement Staff: assign request', 'description' => '	Permite asignar solicitudes a funcionarios de la unidad de reclutamiento y selección']);
-        Permission::create(['name' => 'Replacement Staff: create request', 'description' => 'Permite crear solicitudes de reemplazo']);
-        Permission::create(['name' => 'Replacement Staff: list rrhh', 'description' => 'Permite visualizar el listado de staff de reemplazo']);
-        Permission::create(['name' => 'Replacement Staff: manage', 'description' => 'Permite editar parámetros del módulo']);
-        Permission::create(['name' => 'Replacement Staff: personal sign', 'description' => 'Permite a funcionarios de unidad de personal aprobar o declinar solicitudes']);
-        Permission::create(['name' => 'Replacement Staff: staff manage', 'description' => 'Permite gestionar staff por unidad organizacional']);
-        Permission::create(['name' => 'Replacement Staff: technical evaluation', 'description' => 'Permite acceder al listado de solicitudes aceptadas para evaluación técnica']);
-        Permission::create(['name' => 'Replacement Staff: view requests', 'description' => 'Permite visualizar requerimientos']);
-        Permission::create(['name' => 'Replacement Staff: create staff', 'description' => 'Permite crear staff (postulantes)']);
-        Permission::create(['name' => 'Replacement Staff: admin', 'description' => 'Administrador de Staff de reemplazo']);
-
+        Permission::create(['name' => 'be god', 'description' => 'God Mode !']);
+        Permission::create(['name' => 'dev', 'description' => 'Developer']);
+        
+        
+        Permission::create(['name' => 'Agenda UST: Administrador', 'description' => 'Permiso administrador de módulo reservas Unidad Salud del Trabajador']);
+        Permission::create(['name' => 'Agenda UST: Funcionario', 'description' => 'Permiso funcionario de módulo reservas Unidad Salud del Trabajador']);
+        Permission::create(['name' => 'Agenda UST: Secretaria', 'description' => 'Permiso secretaria de módulo reservas Unidad Salud del Trabajador']);
+        Permission::create(['name' => 'Agreement: delete', 'description' => '']);
+        Permission::create(['name' => 'Agreement: edit', 'description' => '']);
+        Permission::create(['name' => 'Agreement: manage municipalities and signers', 'description' => '']);
+        Permission::create(['name' => 'Agreement: view', 'description' => '']);
         Permission::create(['name' => 'Allowances: all', 'description' => 'Permite visualizar todos los viáticos']);
         Permission::create(['name' => 'Allowances: all establishment', 'description' => 'Permite visualizar todos los viáticos de todos los establecimientos']);
         Permission::create(['name' => 'Allowances: contabilidad', 'description' => 'Permite revisión inicial del formulario contabilidad']);
@@ -174,141 +36,662 @@ class RoleAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Allowances: director', 'description' => 'Permite visualizar viáticos que requieren firma de dirección']);
         Permission::create(['name' => 'Allowances: reports', 'description' => 'Permite acceder a los reportes del módulo']);
         Permission::create(['name' => 'Allowances: sirh', 'description' => 'Permite revisión inicial del formulario e ingreso de folio sirh']);
-
-        Permission::create(['name' => 'Job Position Profile: create', 'description' => 'Permite crear la creación de perfiles de cargo']);
+        Permission::create(['name' => 'amiPASS', 'description' => 'Permiso para acceder al modulo de bienestar/amipass']);
+        Permission::create(['name' => 'Asignacion Estimulos', 'description' => '']);
+        Permission::create(['name' => 'Authorities: create', 'description' => 'Permite crear autoridades']);
+        Permission::create(['name' => 'Authorities: edit', 'description' => 'Permite editar una autoridad (sólo para expertos)']);
+        Permission::create(['name' => 'Authorities: view', 'description' => 'Permite ver el módulo de autoridades']);
+        Permission::create(['name' => 'Calendar: aps', 'description' => 'Poder ver Mesa Técnica APS']);
+        Permission::create(['name' => 'Calendar: view', 'description' => '']);
+        Permission::create(['name' => 'Communefiles: create', 'description' => '']);
+        Permission::create(['name' => 'Communefiles: edit', 'description' => '']);
+        Permission::create(['name' => 'Communefiles: upload', 'description' => '']);
+        Permission::create(['name' => 'Communefiles: view', 'description' => '']);
+        Permission::create(['name' => 'Documents: add number', 'description' => 'Para oficina de partes o secretarias, asignar un número a un documento']);
+        Permission::create(['name' => 'Documents: admin', 'description' => 'Administrador de documentos, permite borrar numero, archivo adjunto y documento completo']);
+        Permission::create(['name' => 'Documents: create', 'description' => 'Permite crear un documento']);
+        Permission::create(['name' => 'Documents: delete document', 'description' => 'Permite borrar un documento que no tenga archivo adjunto o firmas (Sólo Administradores)']);
+        Permission::create(['name' => 'Documents: edit', 'description' => 'Permite editar un documento creado']);
+        Permission::create(['name' => 'Documents: signatures and distribution', 'description' => 'Permite acceso al módulo de firmas y distribución']);
+        Permission::create(['name' => 'Documents: signatures and distribution v2', 'description' => 'Permite acceder al crear solicitud de firma nuevo modulo v2']);
+        Permission::create(['name' => 'Drugs', 'description' => 'Permite acceder al menú del módulo de drogas']);
+        Permission::create(['name' => 'Drugs: add protocols', 'description' => '']);
+        Permission::create(['name' => 'Drugs: add results from ISP', 'description' => 'Permite poder agregar resultados de análisis realizado por el ISP']);
+        Permission::create(['name' => 'Drugs: create receptions', 'description' => '']);
+        Permission::create(['name' => 'Drugs: delete destructions', 'description' => '']);
+        Permission::create(['name' => 'Drugs: destroy drugs', 'description' => '']);
+        Permission::create(['name' => 'Drugs: edit date receptions', 'description' => 'Permite editar la fecha de una recepción']);
+        Permission::create(['name' => 'Drugs: edit receptions', 'description' => '']);
+        Permission::create(['name' => 'Drugs: manage courts', 'description' => '']);
+        Permission::create(['name' => 'Drugs: manage parameters', 'description' => '']);
+        Permission::create(['name' => 'Drugs: manage police units', 'description' => '']);
+        Permission::create(['name' => 'Drugs: manage substances', 'description' => '']);
+        Permission::create(['name' => 'Drugs: view receptions', 'description' => '']);
+        Permission::create(['name' => 'Drugs: view reports', 'description' => '']);
+        Permission::create(['name' => 'Ges: user', 'description' => '']);
+        Permission::create(['name' => 'Health Plan', 'description' => '']);
+        Permission::create(['name' => 'HIS Modification Request: Manager', 'description' => 'Administrador de solicitudes de modificación del HIS APS (Referente SIDRA)']);
+        Permission::create(['name' => 'HIS Modification Request: User', 'description' => 'Permite hacer solicitudes de modificación al HIS APS']);
+        Permission::create(['name' => 'HotelBooking: Administrador', 'description' => 'Administrador del módulo de reserva de cabañas']);
+        Permission::create(['name' => 'HotelBooking: User', 'description' => 'Permiso para los usuarios del modulo de reserva de cabañas']);
+        Permission::create(['name' => 'Identify Need: create', 'description' => 'Permite crear procesos de Detección de Necesidades de Capacitación']);
+        Permission::create(['name' => 'Indicators: manager', 'description' => '']);
+        Permission::create(['name' => 'Indicators: manager meta7', 'description' => 'Permiso para administrar meta 7 en Metas Sanitarias Ley N° 19.813']);
+        Permission::create(['name' => 'Indicators: view', 'description' => '']);
+        Permission::create(['name' => 'Integrity: manage complaints', 'description' => '']);
+        Permission::create(['name' => 'Inventory', 'description' => 'Permite acceder al menú de inventario']);
+        Permission::create(['name' => 'Inventory: edit', 'description' => 'Permite editar el item de inventario']);
+        Permission::create(['name' => 'Inventory: edit act reception confirmation', 'description' => 'Permite editar los datos del acta de recepción de confirmación']);
+        Permission::create(['name' => 'Inventory: index', 'description' => 'Permite visualizar todos los productos inventariados']);
+        Permission::create(['name' => 'Inventory: last receptions', 'description' => 'Permite visualizar los últimos ingresos de la bodega']);
+        Permission::create(['name' => 'Inventory: mainteners', 'description' => 'Permite acceder a los mantenedores de inventario']);
+        Permission::create(['name' => 'Inventory: manager', 'description' => 'Permite acceder a todas las funcionalidades de inventario']);
+        Permission::create(['name' => 'Inventory: pending inventory', 'description' => 'Permite visualizar todos los inventarios pendientes']);
+        Permission::create(['name' => 'Inventory: place maintainer', 'description' => 'Permite acceder al mantenedor de lugares']);
         Permission::create(['name' => 'Job Position Profile: all', 'description' => 'Permite acceder a todo el listado de perfiles de cargo']);
         Permission::create(['name' => 'Job Position Profile: audit', 'description' => 'Permite acceder al registro de auditoría del módulo']);
+        Permission::create(['name' => 'Job Position Profile: create', 'description' => 'Permite crear la creación de perfiles de cargo']);
         Permission::create(['name' => 'Job Position Profile: edit', 'description' => 'Permite editar cualquier perfil de cargo']);
-        
-        Permission::create(['name' => 'Payments', 'description' => 'Acceso al módulo Estados de Pago']);
-        Permission::create(['name' => 'Payments: return to review', 'description' => 'permiso para devolver de bandeja "listo para pago" a bandeja de revisión (review)']);
+        Permission::create(['name' => 'Job Position Profile: review', 'description' => 'Permite realizar la revisión del perfil de cargo para aprobación']);
+        Permission::create(['name' => 'LE Extra Plan: Carga', 'description' => '']);
+        Permission::create(['name' => 'LE Extra Plan: Monitoreo', 'description' => '']);
+        Permission::create(['name' => 'Mammography: admin', 'description' => 'Permite acceder a los resultados del booking de Mammography']);
+        Permission::create(['name' => 'News: create', 'description' => 'Permite crear noticias']);
+        Permission::create(['name' => 'OrganizationalUnits: create', 'description' => '']);
+        Permission::create(['name' => 'OrganizationalUnits: delete', 'description' => '']);
+        Permission::create(['name' => 'OrganizationalUnits: edit', 'description' => '']);
+        Permission::create(['name' => 'OrganizationalUnits: sirh association', 'description' => 'Permite asociar unidades organizacionales ionline con unidades organizacionales sirh']);
+        Permission::create(['name' => 'Parameters: Classification', 'description' => 'Permiso para poder clasificar el tipo de inventario']);
+        Permission::create(['name' => 'Parameters: COMGES cutoffdates', 'description' => 'Mantenedor fecha de corte de COMGES']);
+        Permission::create(['name' => 'Parameters: holidays', 'description' => 'Mantenedor de días feriados']);
+        Permission::create(['name' => 'Parameters: locations', 'description' => 'Mantenedor de ubicaciones (edificios)']);
+        Permission::create(['name' => 'Parameters: places', 'description' => 'Mantenedor de lugares (oficinas, pasillos, comedores, etc.)']);
+        Permission::create(['name' => 'Parameters: professions', 'description' => 'Mantenedor de profesiones']);
+        Permission::create(['name' => 'Parameters: programs', 'description' => 'Mantenedor de programas']);
+        Permission::create(['name' => 'Parameters: UNSPSC', 'description' => 'Mantenedores de segmentos y productos del estandard UNSPSC que ocupa mercado público']);
+        Permission::create(['name' => 'Partes: delete', 'description' => 'Permite borrar un parte']);
+        Permission::create(['name' => 'Partes: director', 'description' => '']);
+        Permission::create(['name' => 'Partes: numerator', 'description' => 'Aquellos que pueden numerar un documento, les llega un mail por cada documento a enumerar']);
+        Permission::create(['name' => 'Partes: oficina', 'description' => '']);
+        Permission::create(['name' => 'Partes: user', 'description' => '']);
+        Permission::create(['name' => 'Payments', 'description' => 'Permite acceso al módulo de Estados de pago']);
+        Permission::create(['name' => 'Payments: cenabast bypass', 'description' => 'permiso para poder hacer bypass cuando se sube un documento ya firmado anteriormente por ende no debería entrar al proceso de firma por farmaceutico-jefe (carga retroactiva)']);
+        Permission::create(['name' => 'Payments: return to review', 'description' => 'Retorna las facturas a la bandeja de revisión']);
+        Permission::create(['name' => 'Payments: return to review', 'description' => 'permiso para devolver de bandeja \"listo para pago\" a bandeja de revisión (review)']);
         Permission::create(['name' => 'Payments: viewer', 'description' => 'Permite acceso al módulo de Estados de pago, pero solamente puede ver y no modificar nada']);
-
-        Permission::create(['name' => 'Summary: user', 'description' => 'Usuario del módulo de Sumarios']);
-        Permission::create(['name' => 'Summary: admin', 'description' => 'Administrador del módulo de sumarios']);
-
-        Permission::create(['name' => 'Summary: admin viewer', 'description' => 'Administrador del módulo de sumarios pero con permisos solamente para ver los sumarios y no modificar nada del contenido']);
-
-
-
-        Permission::create(['name' => 'Store: Cenabast', 'description' => 'Permiso para acceso a bodega de CENABAST donde se sube el Acta firmada de acuerdo a un DTE']);
-
-        Permission::create(['name' => 'HIS Modification Request: User', 'description' => 'Permite hacer solicitudes de modificación al HIS APS']);
-        Permission::create(['name' => 'HIS Modification Request: Manager', 'description' => 'Administrador de solicitudes de modificación del HIS APS (Referente SIDRA)']);
-
+        Permission::create(['name' => 'Pharmacy', 'description' => 'Permiso general para ingresar a módulo']);
+        Permission::create(['name' => 'Pharmacy: Administrator', 'description' => 'administrador del sistema']);
+        Permission::create(['name' => 'Pharmacy: change pharmacy', 'description' => 'Sirve para que usuario del hospital pueda cambiarse de farmacias segun requiera']);
+        Permission::create(['name' => 'Pharmacy: create', 'description' => '']);
+        Permission::create(['name' => 'Pharmacy: create establishments', 'description' => '']);
+        Permission::create(['name' => 'Pharmacy: create products', 'description' => '']);
+        Permission::create(['name' => 'Pharmacy: create programs', 'description' => '']);
+        Permission::create(['name' => 'Pharmacy: create suppliers', 'description' => '']);
+        Permission::create(['name' => 'Pharmacy: deliver', 'description' => '']);
+        Permission::create(['name' => 'Pharmacy: dispatch', 'description' => '']);
+        Permission::create(['name' => 'Pharmacy: edit_delete', 'description' => '']);
+        Permission::create(['name' => 'Pharmacy: inventory adjustment', 'description' => 'permite realizar ajustes de inventario']);
+        Permission::create(['name' => 'Pharmacy: mantenedores', 'description' => '']);
+        Permission::create(['name' => 'Pharmacy: purchase', 'description' => '']);
+        Permission::create(['name' => 'Pharmacy: receiving', 'description' => '']);
+        Permission::create(['name' => 'Pharmacy: reports', 'description' => '']);
+        Permission::create(['name' => 'Pharmacy: Servicios generales (id:4)', 'description' => '']);
+        Permission::create(['name' => 'Pharmacy: sign', 'description' => 'Permite firmar actas de recepción en modulo de compras.']);
+        Permission::create(['name' => 'Pharmacy: transfer', 'description' => '']);
+        Permission::create(['name' => 'Pharmacy: transfer view AHO', 'description' => 'Vista perfil comuna Alto Hospicio ayudas técnicas']);
+        Permission::create(['name' => 'Pharmacy: transfer view IQQ', 'description' => 'Vista perfil comuna de Iquique ayudas técnicas']);
+        Permission::create(['name' => 'Pharmacy: transfer view ortesis', 'description' => '']);
+        Permission::create(['name' => 'ProfessionalHour: view', 'description' => '']);
+        Permission::create(['name' => 'Programming: audit', 'description' => 'Auditoría para el módulo de Programación Numérica']);
+        Permission::create(['name' => 'Programming: create', 'description' => '']);
+        Permission::create(['name' => 'Programming: create action type', 'description' => '']);
+        Permission::create(['name' => 'Programming: create activity', 'description' => '']);
+        Permission::create(['name' => 'Programming: create ministerial', 'description' => '']);
+        Permission::create(['name' => 'Programming: create professional', 'description' => '']);
+        Permission::create(['name' => 'Programming: edit', 'description' => '']);
+        Permission::create(['name' => 'Programming: report', 'description' => '']);
+        Permission::create(['name' => 'Programming: status', 'description' => '']);
+        Permission::create(['name' => 'Programming: view', 'description' => '']);
+        Permission::create(['name' => 'ProgrammingDay: view', 'description' => '']);
+        Permission::create(['name' => 'ProgrammingItem: delete', 'description' => '']);
+        Permission::create(['name' => 'ProgrammingItem: duplicate', 'description' => '']);
+        Permission::create(['name' => 'ProgrammingItem: edit', 'description' => '']);
+        Permission::create(['name' => 'ProgrammingItem: edit', 'description' => '']);
+        Permission::create(['name' => 'ProgrammingItem: evaluate', 'description' => '']);
+        Permission::create(['name' => 'ProgrammingItem: view', 'description' => '']);
+        Permission::create(['name' => 'Purchase Plan: all', 'description' => 'Permite visualizar todos los planes de compras']);
         Permission::create(['name' => 'Purchase Plan: create', 'description' => 'Permite crear planes de compras']);
-        Permission::create(['name' => 'Purchase Plan: all',    'description' => 'Permite visualizar todos los planes de compras']);
-
-        Permission::create(['name' => 'Agenda UST: Administrador', 'description' => 'Rol de administrador del módulo agendamiento UST']);
-        Permission::create(['name' => 'Agenda UST: Funcionario', 'description' => 'Rol de funcionario del módulo agendamiento UST']);
-        Permission::create(['name' => 'Agenda UST: Secretaria', 'description' => 'Rol de secretaria del módulo agendamiento UST']);
-
-
-        Permission::create(['name' => 'Receptions: user', 'description' => 'Usuario normal']);
+        Permission::create(['name' => 'Purchase Plan: reports', 'description' => 'Permite acceder a los reportes del módulo de plan de compras']);
         Permission::create(['name' => 'Receptions: admin', 'description' => 'Usuario administrador']);
         Permission::create(['name' => 'Receptions: load file retroactive', 'description' => 'Permite cargar actas firmadas retroactivamente']);
         Permission::create(['name' => 'Receptions: load support file', 'description' => 'Permite cargar documentos de respaldo']);
-        Permission::create(['name' => 'Receptions: upload to mercado público', 'description' => 'Permite marcar la recepcion como subido a mercado público']);
-
-        // @role(
-        //   'Replacement Staff: admin |
-        //   Replacement Staff: user'
-        // )
-
-        $role = Role::create(['name' => 'Drugs: admin']);
-        $role->givePermissionTo([
-            'Drugs',
-            'Drugs: view receptions',
-            'Drugs: create receptions',
-            'Drugs: edit receptions',
-            'Drugs: destroy drugs',
-            'Drugs: view reports',
-            'Drugs: manage parameters',
-            'Drugs: manage substances',
-            'Drugs: manage courts',
-            'Drugs: manage police units',
-            'Drugs: delete destructions',
-            'Drugs: add results from ISP',
-            'Drugs: add protocols']);
-
-        $role = Role::create(['name' => 'Drugs: receptionist']);
-        $role->givePermissionTo([
-            'Drugs',
-            'Drugs: view receptions',
-            'Drugs: create receptions',
-            'Drugs: edit receptions',
-            'Drugs: destroy drugs',
-            'Drugs: view reports',
-            'Drugs: manage substances',
-            'Drugs: manage courts',
-            'Drugs: manage police units',
-            'Drugs: add protocols']);
-
-        $role = Role::create(['name' => 'Drugs: basic']);
-        $role->givePermissionTo([
-            'Drugs',
-            'Drugs: view receptions',
-            'Drugs: destroy drugs',
-            'Drugs: view reports',
-            'Drugs: add results from ISP']);
-
-        $role = Role::create(['name' => 'RRHH: admin']);
-        $role->givePermissionTo(['Users: create', 'Users: edit', 'Users: delete', 'Users: assign permission']);
-
-        $role = Role::create(['name' => 'Resources: admin']);
-        $role->givePermissionTo(['Resources: create', 'Resources: edit', 'Resources: delete']);
-
-        $role = Role::create(['name' => 'Tickets: admin']);
-        $role->givePermissionTo(['Tickets: create', 'Tickets: manage','Tickets: TI']);
-
-        $role = Role::create(['name' => 'Replacement Staff: admin']);
-        $role->givePermissionTo([
-            'Replacement Staff: assign request',
-            'Replacement Staff: create request',
-            'Replacement Staff: list rrhh',
-            'Replacement Staff: manage',
-            'Replacement Staff: staff manage',
-            'Replacement Staff: technical evaluation'
-        ]);
-
-        $role = Role::create(['name' => 'Replacement Staff: user']);
-        $role->givePermissionTo([
-            'Replacement Staff: create request'
-        ]);
-
-        $role = Role::create(['name' => 'Replacement Staff: user rys']);
-        $role->givePermissionTo([
-            'Replacement Staff: create request',
-            'Replacement Staff: list rrhh',
-            'Replacement Staff: technical evaluation',
-            'Replacement Staff: view requests'
-        ]);
-
-        $role = Role::create(['name' => 'Replacement Staff: personal']);
-        $role->givePermissionTo([
-            'Replacement Staff: view requests'
-        ]);
-
-        $role = Role::create(['name' => 'Replacement Staff: personal sign']);
-        $role->givePermissionTo([
-            'Replacement Staff: view requests',
-            'Replacement Staff: personal sign'
-        ]);
-
-        $roleStoreAdmin = Role::create(['name' => 'Store: admin']);
-        $roleStoreUser = Role::create(['name' => 'Store: user']);
-        $roleStoreSuperAdmin = Role::create(['name' => 'Store: Super admin']);
-
-        // TODO: Definir mas permisos por rol
-        $permission = Permission::create(['name' => 'Store: index']);
-
-        // $user = User::find(15287582);
-        // $user->assignRole($roleStoreSuperAdmin);
-        // $user->givePermissionTo('Store: index');
-
-        $roleStoreSuperAdmin->givePermissionTo($permission);
-
-        // create roles and assign created permissions
+        Permission::create(['name' => 'Receptions: upload to mercado público', 'description' => 'Permite marcar la recepción como subido a mercado público\'']);
+        Permission::create(['name' => 'Receptions: user', 'description' => 'Usuario normal']);
+        Permission::create(['name' => 'Rem: admin', 'description' => 'Administrador de carga de REMs']);
+        Permission::create(['name' => 'Rem: user', 'description' => 'Usuario cargador de REMs']);
+        Permission::create(['name' => 'Replacement Staff: admin', 'description' => 'Administrador de staff de reemplazo']);
+        Permission::create(['name' => 'Replacement Staff: assign request', 'description' => 'Permite asignar solicitudes a funcionarios de la unidad de reclutamiento y selección']);
+        Permission::create(['name' => 'Replacement Staff: create request', 'description' => 'Permite crear solicitudes de reemplazo']);
+        Permission::create(['name' => 'Replacement Staff: create staff', 'description' => 'Permite crear staff (postulantes)']);
+        Permission::create(['name' => 'Replacement Staff: list rrhh', 'description' => 'Permite visualizar el listado de staff de reemplazo']);
+        Permission::create(['name' => 'Replacement Staff: manage', 'description' => 'Permite editar parámetros del módulo']);
+        Permission::create(['name' => 'Replacement Staff: personal sign', 'description' => 'Permite a funcionarios de unidad de personal aprobar o declinar solicitudes']);
+        Permission::create(['name' => 'Replacement Staff: staff manage', 'description' => 'Permite gestionar staff por unidad organizacional']);
+        Permission::create(['name' => 'Replacement Staff: technical evaluation', 'description' => 'Permite acceder al listado de solicitudes aceptadas para evaluación técnica']);
+        Permission::create(['name' => 'Replacement Staff: view requests', 'description' => 'Permite visualizar requerimientos']);
+        Permission::create(['name' => 'Request Forms: all', 'description' => 'Ver todos los formularios de requerimiento independiente de su estado']);
+        Permission::create(['name' => 'Request Forms: audit', 'description' => 'Auditoría para el módulo de abastecimiento']);
+        Permission::create(['name' => 'Request Forms: boss', 'description' => 'Permisos para la jefatura de abastecimiento']);
+        Permission::create(['name' => 'Request Forms: config', 'description' => 'Permite editar mantenedores de Request Forms']);
+        Permission::create(['name' => 'Request Forms: purchaser', 'description' => 'Permite acceso a módulo de compradores']);
+        Permission::create(['name' => 'Request Forms: reports', 'description' => 'Permite acceder a los reportes del módulo de abastecimiento']);
+        Permission::create(['name' => 'Requirements: create', 'description' => '']);
+        Permission::create(['name' => 'Requirements: delete', 'description' => '']);
+        Permission::create(['name' => 'Resolutions', 'description' => '']);
+        Permission::create(['name' => 'Resources: create', 'description' => '']);
+        Permission::create(['name' => 'Resources: delete', 'description' => '']);
+        Permission::create(['name' => 'Resources: edit', 'description' => '']);
+        Permission::create(['name' => 'Reviews: create', 'description' => '']);
+        Permission::create(['name' => 'Reviews: delete', 'description' => '']);
+        Permission::create(['name' => 'Reviews: edit', 'description' => '']);
+        Permission::create(['name' => 'Reviews: rectify', 'description' => '']);
+        Permission::create(['name' => 'Reviews: view', 'description' => '']);
+        Permission::create(['name' => 'RNI Database: admin', 'description' => 'Acceso a carga de base datos RNI']);
+        Permission::create(['name' => 'RNI Database: view', 'description' => 'Acceso a descarga de base datos RNI']);
+        Permission::create(['name' => 'Rrhh: birthday', 'description' => '']);
+        Permission::create(['name' => 'Rrhh: wellfair', 'description' => 'Permiso para el módulo de Bienestar']);
+        Permission::create(['name' => 'Service Request', 'description' => 'Módulo de honorarios (ex pukaña)']);
+        Permission::create(['name' => 'Service Request: accept all requests', 'description' => 'Permite acepta todas las solicitudes de contrato de honorario']);
+        Permission::create(['name' => 'Service Request: active contracts report', 'description' => '']);
+        Permission::create(['name' => 'Service Request: additional data', 'description' => '']);
+        Permission::create(['name' => 'Service Request: additional data finanzas', 'description' => '']);
+        Permission::create(['name' => 'Service Request: additional data oficina partes', 'description' => '']);
+        Permission::create(['name' => 'Service Request: additional data rrhh', 'description' => '']);
+        Permission::create(['name' => 'Service Request: audit', 'description' => '']);
+        Permission::create(['name' => 'Service Request: change signature flow', 'description' => '']);
+        Permission::create(['name' => 'Service Request: compliance', 'description' => 'Permiso para ver reporte de cumplimiento']);
+        Permission::create(['name' => 'Service Request: consolidated data', 'description' => '']);
+        Permission::create(['name' => 'Service Request: delete fulfillments', 'description' => 'Permiso para eliminar fulfillments de forma individual']);
+        Permission::create(['name' => 'Service Request: delete request', 'description' => '']);
+        Permission::create(['name' => 'Service Request: delete signed certificate', 'description' => 'Borrar certificado de cumplimiento firmado']);
+        Permission::create(['name' => 'Service Request: derive requests', 'description' => '']);
+        Permission::create(['name' => 'Service Request: export sirh', 'description' => 'Permite exportar contratos creados a Sirh']);
+        Permission::create(['name' => 'Service Request: export sirh mantenedores', 'description' => 'Acceso a mantenedores para usuarios que hacen exportación sirh']);
+        Permission::create(['name' => 'Service Request: fulfillments', 'description' => '']);
+        Permission::create(['name' => 'Service Request: fulfillments finance', 'description' => '']);
+        Permission::create(['name' => 'Service Request: fulfillments responsable', 'description' => '']);
+        Permission::create(['name' => 'Service Request: fulfillments rrhh', 'description' => '']);
+        Permission::create(['name' => 'Service Request: maintainers', 'description' => 'mantenedores del sistema de honorarios']);
+        Permission::create(['name' => 'Service Request: pending requests', 'description' => '']);
+        Permission::create(['name' => 'Service Request: program_consolidated_report', 'description' => '']);
+        Permission::create(['name' => 'Service Request: report excel', 'description' => 'para que puedan descargar excel']);
+        Permission::create(['name' => 'Service Request: report payed', 'description' => '']);
+        Permission::create(['name' => 'Service Request: report sr continuity', 'description' => 'Reporte continuidad de solicitudes']);
+        Permission::create(['name' => 'Service Request: report to pay', 'description' => 'Acceso a reporte para pagos']);
+        Permission::create(['name' => 'Service Request: sign document', 'description' => 'Firmar documentos Service Request']);
+        Permission::create(['name' => 'Service Request: transfer requests', 'description' => '']);
+        Permission::create(['name' => 'Service Request: turno de llamado', 'description' => '']);
+        Permission::create(['name' => 'Service Request: with resolution', 'description' => 'Acceso a reporte de Contratación Honorarios \'Solicitudes con resolución cargada\'']);
+        Permission::create(['name' => 'Shift Management: approval extra day request', 'description' => 'Módulo de turno, habilitado para aprobar y rechazar solicitudes de dias extras']);
+        Permission::create(['name' => 'Shift Management: view', 'description' => 'Módulo de turno, Ver']);
+        Permission::create(['name' => 'Store', 'description' => 'Permite acceder al menú de bodega']);
+        Permission::create(['name' => 'Store: add invoice', 'description' => 'Permite cargar facturas a uno o más ingresos']);
+        Permission::create(['name' => 'Store: bincard report', 'description' => 'Permite visualizar el reporte bincard']);
+        Permission::create(['name' => 'Store: Cenabast', 'description' => 'Permiso para acceso a bodega de CENABAST donde se sube el Acta firmada de acuerdo a un DTE']);
+        Permission::create(['name' => 'Store: create dispatch', 'description' => 'Permite crear egreso']);
+        Permission::create(['name' => 'Store: create reception by donation', 'description' => 'Permite crear ingreso normal o por donación']);
+        Permission::create(['name' => 'Store: create reception by purcharse order', 'description' => 'Permite crear ingreso por orden de compra']);
+        Permission::create(['name' => 'Store: index', 'description' => 'Listar las bodegas']);
+        Permission::create(['name' => 'Store: list dispatchs', 'description' => 'Permite visualizar la lista de los egresos']);
+        Permission::create(['name' => 'Store: list receptions', 'description' => 'Permite visualizar la lista de los ingresos']);
+        Permission::create(['name' => 'Store: maintainer programs', 'description' => 'Permite acceder al mantenedor de programas']);
+        Permission::create(['name' => 'Store: maintainers', 'description' => 'Permite acceder a los mantenedores de la bodega']);
+        Permission::create(['name' => 'Store: warehouse manager', 'description' => 'Permite gestionar todas las bodegas']);
+        Permission::create(['name' => 'Suitability: admin', 'description' => 'Encargado de Idoneidad de cada Colegio']);
+        Permission::create(['name' => 'Suitability: admin', 'description' => '']);
+        Permission::create(['name' => 'Suitability: ssi', 'description' => 'Encargado de Idoneidad dentro del SSI']);
+        Permission::create(['name' => 'Summary: admin', 'description' => 'Permiso de módulo de Sumario de administrador']);
+        Permission::create(['name' => 'Summary: admin viewer', 'description' => 'Administrador del módulo de sumarios pero con permisos solamente para ver los sumarios y no modificar nada del contenido']);
+        Permission::create(['name' => 'Summary: user', 'description' => 'Permiso de usuario de Summario']);
+        Permission::create(['name' => 'Tickets: create', 'description' => '']);
+        Permission::create(['name' => 'Tickets: manage', 'description' => '']);
+        Permission::create(['name' => 'Tickets: TI', 'description' => '']);
+        Permission::create(['name' => 'TrainingItem: delete', 'description' => '']);
+        Permission::create(['name' => 'TrainingItem: edit', 'description' => '']);
+        Permission::create(['name' => 'TrainingItem: view', 'description' => '']);
+        Permission::create(['name' => 'Users: assign permission', 'description' => '']);
+        Permission::create(['name' => 'Users: assign roles', 'description' => 'Asignar roles a usuarios']);
+        Permission::create(['name' => 'Users: create', 'description' => '']);
+        Permission::create(['name' => 'Users: delete', 'description' => '']);
+        Permission::create(['name' => 'Users: edit', 'description' => '']);
+        Permission::create(['name' => 'Users: must change password', 'description' => '']);
+        Permission::create(['name' => 'Users: no attendance record manager', 'description' => 'Para quien registra la justificación cuando no se marca en el reloj control']);
+        Permission::create(['name' => 'Users: reset password option', 'description' => 'Permite ver el botón para resetear password del usuario']);
+        Permission::create(['name' => 'Users: send mail verification', 'description' => 'Permite enviar un email de verificación de correo al usuario']);
+        Permission::create(['name' => 'Users: show access logs', 'description' => 'Permite ver el registro de accesos al sistema de los usuarios']);
+        
+        $role = Role::create(['name' => 'Agenda Salud del Trabajdor: Administrador', 'description' => '']);
+        $role->givePermissionTo('Agenda UST: Administrador');
+        
+        $role = Role::create(['name' => 'Agenda Salud del Trabajdor: Funcionario', 'description' => '']);
+        $role->givePermissionTo('Agenda UST: Funcionario');
+        
+        $role = Role::create(['name' => 'Agenda Salud del Trabajdor: Secretaria', 'description' => '']);
+        $role->givePermissionTo('Agenda UST: Secretaria');
+        
+        $role = Role::create(['name' => 'Director', 'description' => '']);
+        $role->givePermissionTo('Documents: create');
+        $role->givePermissionTo('Documents: edit');
+        $role->givePermissionTo('Calendar: view');
+        $role->givePermissionTo('Requirements: create');
+        $role->givePermissionTo('Partes: user');
+        $role->givePermissionTo('Partes: director');
+        $role->givePermissionTo('Partes: oficina');
+        $role->givePermissionTo('Documents: signatures and distribution');
+        $role->givePermissionTo('Calendar: aps');
+        $role->givePermissionTo('Receptions: user');
+        $role->givePermissionTo('Purchase Plan: reports');
+        
+        $role = Role::create(['name' => 'Drogas: Jefe de unidad', 'description' => 'NO ASIGNAR a funcionarios fuera de la unidad, queda el registro de ingreso.']);
+        $role->givePermissionTo('Drugs: view receptions');
+        $role->givePermissionTo('Drugs: create receptions');
+        $role->givePermissionTo('Drugs: edit receptions');
+        $role->givePermissionTo('Drugs: destroy drugs');
+        $role->givePermissionTo('Drugs: view reports');
+        $role->givePermissionTo('Drugs: manage parameters');
+        $role->givePermissionTo('Drugs: manage substances');
+        $role->givePermissionTo('Drugs: manage courts');
+        $role->givePermissionTo('Drugs: manage police units');
+        $role->givePermissionTo('Drugs: delete destructions');
+        $role->givePermissionTo('Drugs: add protocols');
+        $role->givePermissionTo('Drugs: add results from ISP');
+        $role->givePermissionTo('Drugs');
+        $role->givePermissionTo('Drugs: edit date receptions');
+        
+        $role = Role::create(['name' => 'Drogas: Recepcionista', 'description' => 'Para los que realizan la recepción y analizan las sustancias.']);
+        $role->givePermissionTo('Drugs: view receptions');
+        $role->givePermissionTo('Drugs: create receptions');
+        $role->givePermissionTo('Drugs: edit receptions');
+        $role->givePermissionTo('Drugs: destroy drugs');
+        $role->givePermissionTo('Drugs: view reports');
+        $role->givePermissionTo('Drugs: manage parameters');
+        $role->givePermissionTo('Drugs: manage police units');
+        $role->givePermissionTo('Drugs: add protocols');
+        $role->givePermissionTo('Drugs');
+        
+        $role = Role::create(['name' => 'Drogas: Usuario administrativo', 'description' => '']);
+        $role->givePermissionTo('Drugs: view receptions');
+        $role->givePermissionTo('Drugs: view reports');
+        $role->givePermissionTo('Drugs: manage parameters');
+        $role->givePermissionTo('Drugs: add results from ISP');
+        $role->givePermissionTo('Drugs');
+        
+        $role = Role::create(['name' => 'Farmacia: Administrador', 'description' => 'administrador del sistema']);
+        $role->givePermissionTo('Pharmacy: receiving');
+        $role->givePermissionTo('Pharmacy: dispatch');
+        $role->givePermissionTo('Pharmacy: purchase');
+        $role->givePermissionTo('Pharmacy: reports');
+        $role->givePermissionTo('Pharmacy: mantenedores');
+        $role->givePermissionTo('Pharmacy: create');
+        $role->givePermissionTo('Pharmacy: edit_delete');
+        $role->givePermissionTo('Pharmacy: create products');
+        $role->givePermissionTo('Pharmacy: create establishments');
+        $role->givePermissionTo('Pharmacy: create suppliers');
+        $role->givePermissionTo('Pharmacy: create programs');
+        $role->givePermissionTo('Pharmacy: deliver');
+        $role->givePermissionTo('Pharmacy: sign');
+        $role->givePermissionTo('Pharmacy: Administrator');
+        $role->givePermissionTo('Pharmacy');
+        $role->givePermissionTo('Pharmacy: change pharmacy');
+        $role->givePermissionTo('Pharmacy: inventory adjustment');
+        
+        $role = Role::create(['name' => 'Farmacia: Bodeguero', 'description' => 'Funcionario normal de Bodega']);
+        $role->givePermissionTo('Pharmacy: receiving');
+        $role->givePermissionTo('Pharmacy: dispatch');
+        $role->givePermissionTo('Pharmacy: purchase');
+        $role->givePermissionTo('Pharmacy: reports');
+        $role->givePermissionTo('Pharmacy: mantenedores');
+        $role->givePermissionTo('Pharmacy: create');
+        $role->givePermissionTo('Pharmacy: edit_delete');
+        $role->givePermissionTo('Pharmacy: create products');
+        $role->givePermissionTo('Pharmacy: create suppliers');
+        $role->givePermissionTo('Pharmacy: sign');
+        $role->givePermissionTo('Pharmacy');
+        
+        $role = Role::create(['name' => 'Honorarios: Creador de solicitud de contratos', 'description' => 'Responsable (ex pukaña)']);
+        $role->givePermissionTo('Service Request');
+        $role->givePermissionTo('Service Request: fulfillments');
+        $role->givePermissionTo('Service Request: fulfillments responsable');
+        $role->givePermissionTo('Service Request: accept all requests');
+        
+        $role = Role::create(['name' => 'Honorarios: Finanzas', 'description' => '(Ex Pukaña)']);
+        $role->givePermissionTo('Service Request');
+        $role->givePermissionTo('Service Request: consolidated data');
+        $role->givePermissionTo('Service Request: additional data');
+        $role->givePermissionTo('Service Request: additional data finanzas');
+        $role->givePermissionTo('Service Request: pending requests');
+        $role->givePermissionTo('Service Request: audit');
+        $role->givePermissionTo('Service Request: fulfillments');
+        $role->givePermissionTo('Service Request: fulfillments finance');
+        $role->givePermissionTo('Service Request: report to pay');
+        $role->givePermissionTo('Service Request: report payed');
+        
+        $role = Role::create(['name' => 'Honorarios: RRHH', 'description' => 'Solo para recursos humanos']);
+        $role->givePermissionTo('Service Request');
+        $role->givePermissionTo('Service Request: consolidated data');
+        $role->givePermissionTo('Service Request: additional data');
+        $role->givePermissionTo('Service Request: additional data rrhh');
+        $role->givePermissionTo('Service Request: delete request');
+        $role->givePermissionTo('Service Request: pending requests');
+        $role->givePermissionTo('Service Request: audit');
+        $role->givePermissionTo('Service Request: fulfillments');
+        $role->givePermissionTo('Service Request: fulfillments rrhh');
+        $role->givePermissionTo('Service Request: transfer requests');
+        $role->givePermissionTo('Service Request: with resolution');
+        $role->givePermissionTo('Service Request: maintainers');
+        $role->givePermissionTo('Service Request: report to pay');
+        $role->givePermissionTo('Service Request: report payed');
+        $role->givePermissionTo('Service Request: change signature flow');
+        $role->givePermissionTo('Service Request: report excel');
+        $role->givePermissionTo('Service Request: delete signed certificate');
+        $role->givePermissionTo('Service Request: report sr continuity');
+        $role->givePermissionTo('Service Request: accept all requests');
+        $role->givePermissionTo('Service Request: delete fulfillments');
+        $role->givePermissionTo('Service Request: program_consolidated_report');
+        $role->givePermissionTo('Service Request: active contracts report');
+        
+        $role = Role::create(['name' => 'Inventario: Administrador', 'description' => '']);
+        $role->givePermissionTo('Inventory');
+        $role->givePermissionTo('Inventory: index');
+        $role->givePermissionTo('Inventory: last receptions');
+        $role->givePermissionTo('Inventory: pending inventory');
+        $role->givePermissionTo('Inventory: mainteners');
+        $role->givePermissionTo('Inventory: manager');
+        $role->givePermissionTo('Inventory: edit');
+        $role->givePermissionTo('Inventory: place maintainer');
+        $role->givePermissionTo('Inventory: edit act reception confirmation');
+        
+        $role = Role::create(['name' => 'Inventario: Usuario básico', 'description' => '']);
+        $role->givePermissionTo('Inventory');
+        $role->givePermissionTo('Inventory: index');
+        $role->givePermissionTo('Inventory: pending inventory');
+        $role->givePermissionTo('Inventory: edit');
+        
+        $role = Role::create(['name' => 'Jefe Finanzas', 'description' => '']);
+        $role->givePermissionTo('Documents: add number');
+        $role->givePermissionTo('Partes: director');
+        $role->givePermissionTo('Agreement: view');
+        $role->givePermissionTo('Service Request: derive requests');
+        $role->givePermissionTo('Service Request: sign document');
+        $role->givePermissionTo('Shift Management: view');
+        $role->givePermissionTo('Replacement Staff: create request');
+        $role->givePermissionTo('Replacement Staff: view requests');
+        $role->givePermissionTo('Request Forms: all');
+        $role->givePermissionTo('Replacement Staff: staff manage');
+        $role->givePermissionTo('Inventory');
+        $role->givePermissionTo('Inventory: index');
+        $role->givePermissionTo('Inventory: last receptions');
+        $role->givePermissionTo('Inventory: pending inventory');
+        $role->givePermissionTo('Inventory: mainteners');
+        $role->givePermissionTo('Inventory: manager');
+        $role->givePermissionTo('Allowances: all');
+        $role->givePermissionTo('Payments');
+        $role->givePermissionTo('Purchase Plan: create');
+        $role->givePermissionTo('Purchase Plan: all');
+        $role->givePermissionTo('Purchase Plan: reports');
+        
+        $role = Role::create(['name' => 'Oficina de partes', 'description' => 'Para los funcionarios de oficina de partes']);
+        $role->givePermissionTo('Documents: create');
+        $role->givePermissionTo('Documents: edit');
+        $role->givePermissionTo('Calendar: view');
+        $role->givePermissionTo('Indicators: view');
+        $role->givePermissionTo('Authorities: view');
+        $role->givePermissionTo('Requirements: create');
+        $role->givePermissionTo('Partes: user');
+        $role->givePermissionTo('Partes: director');
+        $role->givePermissionTo('Partes: oficina');
+        $role->givePermissionTo('Documents: signatures and distribution');
+        $role->givePermissionTo('Partes: delete');
+        $role->givePermissionTo('Partes: numerator');
+        
+        $role = Role::create(['name' => 'Programación Numérica: Administrador', 'description' => '']);
+        $role->givePermissionTo('Programming: create');
+        $role->givePermissionTo('Programming: create action type');
+        $role->givePermissionTo('Programming: create activity');
+        $role->givePermissionTo('Programming: create ministerial');
+        $role->givePermissionTo('Programming: create professional');
+        $role->givePermissionTo('Programming: edit');
+        $role->givePermissionTo('Programming: view');
+        $role->givePermissionTo('ProgrammingItem: edit');
+        $role->givePermissionTo('ProgrammingItem: delete');
+        $role->givePermissionTo('TrainingItem: delete');
+        $role->givePermissionTo('ProfessionalHour: view');
+        $role->givePermissionTo('ProgrammingDay: view');
+        $role->givePermissionTo('ProgrammingItem: view');
+        $role->givePermissionTo('TrainingItem: view');
+        $role->givePermissionTo('Programming: report');
+        $role->givePermissionTo('Communefiles: create');
+        $role->givePermissionTo('Communefiles: edit');
+        $role->givePermissionTo('Communefiles: upload');
+        $role->givePermissionTo('Reviews: view');
+        $role->givePermissionTo('Reviews: edit');
+        $role->givePermissionTo('Programming: status');
+        $role->givePermissionTo('Reviews: delete');
+        $role->givePermissionTo('ProgrammingItem: duplicate');
+        $role->givePermissionTo('TrainingItem: edit');
+        $role->givePermissionTo('Programming: audit');
+        
+        $role = Role::create(['name' => 'Programación Numérica: Revisor', 'description' => '']);
+        $role->givePermissionTo('Programming: view');
+        $role->givePermissionTo('ProgrammingItem: view');
+        $role->givePermissionTo('Programming: report');
+        $role->givePermissionTo('Reviews: view');
+        $role->givePermissionTo('Reviews: edit');
+        $role->givePermissionTo('ProgrammingItem: evaluate');
+        $role->givePermissionTo('Reviews: create');
+        $role->givePermissionTo('Reviews: delete');
+        
+        $role = Role::create(['name' => 'Programación Numérica: Usuario Básico', 'description' => '']);
+        $role->givePermissionTo('Programming: view');
+        $role->givePermissionTo('ProgrammingItem: edit');
+        $role->givePermissionTo('ProgrammingItem: delete');
+        $role->givePermissionTo('ProfessionalHour: view');
+        $role->givePermissionTo('ProgrammingDay: view');
+        $role->givePermissionTo('ProgrammingItem: view');
+        $role->givePermissionTo('TrainingItem: view');
+        $role->givePermissionTo('Reviews: view');
+        $role->givePermissionTo('ProgrammingItem: evaluate');
+        $role->givePermissionTo('ProgrammingItem: duplicate');
+        $role->givePermissionTo('Reviews: rectify');
+        
+        $role = Role::create(['name' => 'Programación Numérica: Usuario Comunal', 'description' => '']);
+        $role->givePermissionTo('Programming: view');
+        $role->givePermissionTo('ProgrammingItem: edit');
+        $role->givePermissionTo('ProgrammingItem: delete');
+        $role->givePermissionTo('ProfessionalHour: view');
+        $role->givePermissionTo('ProgrammingDay: view');
+        $role->givePermissionTo('ProgrammingItem: view');
+        $role->givePermissionTo('TrainingItem: view');
+        $role->givePermissionTo('Programming: report');
+        $role->givePermissionTo('Communefiles: upload');
+        $role->givePermissionTo('Reviews: view');
+        $role->givePermissionTo('ProgrammingItem: evaluate');
+        $role->givePermissionTo('ProgrammingItem: duplicate');
+        $role->givePermissionTo('Reviews: rectify');
+        $role->givePermissionTo('TrainingItem: edit');
+        
+        $role = Role::create(['name' => 'Recursos: administrador', 'description' => 'Manager de computadores, impresoras, telefonos, etc.']);
+        $role->givePermissionTo('Resources: create');
+        $role->givePermissionTo('Resources: edit');
+        $role->givePermissionTo('Resources: delete');
+        
+        $role = Role::create(['name' => 'Replacement Staff: admin', 'description' => '']);
+        $role->givePermissionTo('Replacement Staff: create request');
+        $role->givePermissionTo('Replacement Staff: list rrhh');
+        $role->givePermissionTo('Replacement Staff: technical evaluation');
+        $role->givePermissionTo('Replacement Staff: manage');
+        $role->givePermissionTo('Replacement Staff: assign request');
+        $role->givePermissionTo('Replacement Staff: staff manage');
+        $role->givePermissionTo('Replacement Staff: create staff');
+        $role->givePermissionTo('Replacement Staff: admin');
+        
+        $role = Role::create(['name' => 'Replacement Staff: personal', 'description' => 'Permite visualizar requerimientos']);
+        $role->givePermissionTo('Replacement Staff: view requests');
+        
+        $role = Role::create(['name' => 'Replacement Staff: personal sign', 'description' => 'Permite aceptar y visualizar requerimientos en la unidad de personal']);
+        $role->givePermissionTo('Replacement Staff: view requests');
+        $role->givePermissionTo('Replacement Staff: personal sign');
+        
+        $role = Role::create(['name' => 'Replacement Staff: user', 'description' => '']);
+        $role->givePermissionTo('Replacement Staff: create request');
+        
+        $role = Role::create(['name' => 'Replacement Staff: user rys', 'description' => '']);
+        $role->givePermissionTo('Replacement Staff: create request');
+        $role->givePermissionTo('Replacement Staff: list rrhh');
+        $role->givePermissionTo('Replacement Staff: technical evaluation');
+        $role->givePermissionTo('Replacement Staff: manage');
+        $role->givePermissionTo('Replacement Staff: view requests');
+        $role->givePermissionTo('Replacement Staff: staff manage');
+        
+        $role = Role::create(['name' => 'Secretaria', 'description' => '']);
+        $role->givePermissionTo('OrganizationalUnits: create');
+        $role->givePermissionTo('OrganizationalUnits: edit');
+        $role->givePermissionTo('OrganizationalUnits: delete');
+        $role->givePermissionTo('Documents: create');
+        $role->givePermissionTo('Documents: edit');
+        $role->givePermissionTo('Calendar: view');
+        $role->givePermissionTo('Authorities: view');
+        $role->givePermissionTo('Authorities: create');
+        $role->givePermissionTo('Requirements: create');
+        $role->givePermissionTo('Documents: signatures and distribution');
+        $role->givePermissionTo('Authorities: edit');
+        $role->givePermissionTo('Receptions: user');
+        
+        $role = Role::create(['name' => 'Secretaria Dirección', 'description' => 'Secretaria Dirección']);
+        $role->givePermissionTo('Documents: create');
+        $role->givePermissionTo('Documents: edit');
+        $role->givePermissionTo('Calendar: view');
+        $role->givePermissionTo('Authorities: view');
+        $role->givePermissionTo('Authorities: create');
+        $role->givePermissionTo('Requirements: create');
+        $role->givePermissionTo('Partes: user');
+        $role->givePermissionTo('Partes: director');
+        $role->givePermissionTo('Partes: oficina');
+        $role->givePermissionTo('Service Request');
+        $role->givePermissionTo('Service Request: consolidated data');
+        $role->givePermissionTo('Documents: signatures and distribution');
+        $role->givePermissionTo('Service Request: additional data');
+        $role->givePermissionTo('Requirements: delete');
+        $role->givePermissionTo('Service Request: additional data rrhh');
+        $role->givePermissionTo('Service Request: additional data finanzas');
+        $role->givePermissionTo('Service Request: additional data oficina partes');
+        $role->givePermissionTo('Service Request: pending requests');
+        $role->givePermissionTo('Service Request: audit');
+        $role->givePermissionTo('Service Request: fulfillments');
+        $role->givePermissionTo('Service Request: derive requests');
+        $role->givePermissionTo('Service Request: sign document');
+        $role->givePermissionTo('Service Request: transfer requests');
+        $role->givePermissionTo('Service Request: with resolution');
+        $role->givePermissionTo('Service Request: maintainers');
+        $role->givePermissionTo('Service Request: report to pay');
+        $role->givePermissionTo('Service Request: report payed');
+        $role->givePermissionTo('Service Request: turno de llamado');
+        $role->givePermissionTo('Service Request: change signature flow');
+        $role->givePermissionTo('Replacement Staff: create request');
+        $role->givePermissionTo('Partes: delete');
+        $role->givePermissionTo('Request Forms: all');
+        $role->givePermissionTo('Summary: user');
+        $role->givePermissionTo('Summary: admin viewer');
+        $role->givePermissionTo('Allowances: director');
+        
+        $role = Role::create(['name' => 'Secretaria TIC', 'description' => '']);
+        $role->givePermissionTo('be god');
+        $role->givePermissionTo('Users: create');
+        $role->givePermissionTo('Users: edit');
+        $role->givePermissionTo('Users: delete');
+        $role->givePermissionTo('OrganizationalUnits: create');
+        $role->givePermissionTo('OrganizationalUnits: edit');
+        $role->givePermissionTo('OrganizationalUnits: delete');
+        $role->givePermissionTo('Documents: create');
+        $role->givePermissionTo('Documents: edit');
+        $role->givePermissionTo('Resources: create');
+        $role->givePermissionTo('Resources: edit');
+        $role->givePermissionTo('Resources: delete');
+        $role->givePermissionTo('Calendar: view');
+        $role->givePermissionTo('Authorities: view');
+        $role->givePermissionTo('Authorities: create');
+        $role->givePermissionTo('Requirements: create');
+        $role->givePermissionTo('Users: assign permission');
+        $role->givePermissionTo('Service Request');
+        $role->givePermissionTo('Documents: signatures and distribution');
+        $role->givePermissionTo('Requirements: delete');
+        $role->givePermissionTo('Service Request: fulfillments');
+        $role->givePermissionTo('Service Request: fulfillments responsable');
+        $role->givePermissionTo('Authorities: edit');
+        $role->givePermissionTo('Documents: delete document');
+        $role->givePermissionTo('Parameters: programs');
+        $role->givePermissionTo('Parameters: locations');
+        $role->givePermissionTo('Parameters: places');
+        $role->givePermissionTo('Parameters: UNSPSC');
+        $role->givePermissionTo('Parameters: holidays');
+        $role->givePermissionTo('Users: send mail verification');
+        $role->givePermissionTo('Users: reset password option');
+        $role->givePermissionTo('OrganizationalUnits: sirh association');
+        $role->givePermissionTo('Purchase Plan: create');
+        $role->givePermissionTo('Receptions: user');
+        $role->givePermissionTo('Receptions: load support file');
+        $role->givePermissionTo('News: create');
+        $role->givePermissionTo('Users: assign roles');
+        
+        $role = Role::create(['name' => 'Store: admin', 'description' => '']);
+        
+        $role = Role::create(['name' => 'Store: Super admin', 'description' => '']);
+        
+        $role = Role::create(['name' => 'Store: user', 'description' => '']);
+        $role->givePermissionTo('Store: index');
+        $role->givePermissionTo('Store');
+        $role->givePermissionTo('Store: list receptions');
+        $role->givePermissionTo('Store: list dispatchs');
+        $role->givePermissionTo('Store: bincard report');
+        
+        $role = Role::create(['name' => 'Usuario Administrador', 'description' => 'Administrar usuarios, unidades organizacionales y autoridades']);
+        $role->givePermissionTo('Users: create');
+        $role->givePermissionTo('Users: edit');
+        $role->givePermissionTo('Users: delete');
+        $role->givePermissionTo('OrganizationalUnits: create');
+        $role->givePermissionTo('OrganizationalUnits: edit');
+        $role->givePermissionTo('OrganizationalUnits: delete');
+        $role->givePermissionTo('Authorities: view');
+        $role->givePermissionTo('Authorities: create');
+        $role->givePermissionTo('Authorities: edit');
+        $role->givePermissionTo('Users: send mail verification');
+        $role->givePermissionTo('Users: reset password option');
+        $role->givePermissionTo('OrganizationalUnits: sirh association');
+        $role->givePermissionTo('Users: assign roles');
+        
+        $role = Role::create(['name' => 'Usuario Básico', 'description' => 'Calendario, Documentos, Firmas y SGR']);
+        $role->givePermissionTo('Documents: create');
+        $role->givePermissionTo('Documents: edit');
+        $role->givePermissionTo('Calendar: view');
+        $role->givePermissionTo('Authorities: view');
+        $role->givePermissionTo('Requirements: create');
+        $role->givePermissionTo('Documents: signatures and distribution');
+        $role->givePermissionTo('Receptions: user');
+        
+        $role = Role::create(['name' => 'Usuario Semi Administrador', 'description' => 'Administrar usuarios, unidades organizacionales y autoridad (No puede borrar)']);
+        $role->givePermissionTo('Users: create');
+        $role->givePermissionTo('Users: edit');
+        $role->givePermissionTo('OrganizationalUnits: create');
+        $role->givePermissionTo('OrganizationalUnits: edit');
+        $role->givePermissionTo('Authorities: view');
+        $role->givePermissionTo('Authorities: create');
+        $role->givePermissionTo('Authorities: edit');
+        $role->givePermissionTo('Users: send mail verification');
+        $role->givePermissionTo('Users: reset password option');
+        $role->givePermissionTo('OrganizationalUnits: sirh association');
+        $role->givePermissionTo('Users: assign roles');
+        
+        
         // GOD LIKE
         $role = Role::create(['name' => 'god', 'description' => 'God Mode !']);
         $role->givePermissionTo(Permission::all());
