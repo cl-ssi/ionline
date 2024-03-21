@@ -101,6 +101,10 @@ class PurchasePlan extends Model implements Auditable
     public function getApprovalPending(){
         return $this->approvals->where('active', true)->whereNull('status')->first();
     }
+
+    public function purchasePlanPublications(){
+        return $this->hasMany('App\Models\PurchasePlan\PurchasePlanPublication', 'purchase_plan_id')->withTrashed();
+    }
     
     public function getStatus()
     {

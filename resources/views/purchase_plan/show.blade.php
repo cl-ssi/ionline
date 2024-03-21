@@ -82,6 +82,36 @@
 @endif
 --}}
 
+@if($purchasePlan->purchasePlanPublications->count() > 0)
+    <h6><i class="fas fa-info-circle mt-4"></i> Publicación Mercado Público</h6>
+    <div class="table-responsive">
+        <table class="table table-bordered table-sm small">
+            <thead>
+                <tr class="text-center table-secondary">
+                    <th width="5%">#</th>
+                    <th width="10%">Fecha Ingreso</th>
+                    <th width="30%">ID Mercado Público</th>
+                    <th width="30%">Fecha Publicación</th>
+                    <th width="30%">Adjunto</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($purchasePlan->purchasePlanPublications as $purchasePlanPublication)
+                    <tr>
+                        <td class="text-center">{{ $loop->iteration }}</td>
+                        <td class="text-center">{{ $purchasePlanPublication->created_at }}</td>
+                        <td class="text-center">{{ $purchasePlanPublication->mercado_publico_id }}</td>
+                        <td class="text-center">{{ $purchasePlanPublication->date }}</td>
+                        <td class="text-center">
+                            <button type="button" class="btn btn-outline-primary"><i class="fas fa-paperclip fa-fw"></i></button>
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>  
+@endif
+
 
 {{--@if($purchasePlan->canEdit())
 <div class="row">
