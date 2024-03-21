@@ -117,7 +117,6 @@ class RoleAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Payments', 'description' => 'Permite acceso al módulo de Estados de pago']);
         Permission::create(['name' => 'Payments: cenabast bypass', 'description' => 'permiso para poder hacer bypass cuando se sube un documento ya firmado anteriormente por ende no debería entrar al proceso de firma por farmaceutico-jefe (carga retroactiva)']);
         Permission::create(['name' => 'Payments: return to review', 'description' => 'Retorna las facturas a la bandeja de revisión']);
-        Permission::create(['name' => 'Payments: return to review', 'description' => 'permiso para devolver de bandeja \"listo para pago\" a bandeja de revisión (review)']);
         Permission::create(['name' => 'Payments: viewer', 'description' => 'Permite acceso al módulo de Estados de pago, pero solamente puede ver y no modificar nada']);
         Permission::create(['name' => 'Pharmacy', 'description' => 'Permiso general para ingresar a módulo']);
         Permission::create(['name' => 'Pharmacy: Administrator', 'description' => 'administrador del sistema']);
