@@ -1,8 +1,9 @@
 <form action="{{ route('requirements.archive_mass') }}" method="POST">
     @csrf
-    <button type="submit" id="archiveMassBtn" class="btn-small" disabled>
+    <button type="submit" id="archiveMassBtn" class="btn btn-primary btn-sm" disabled>
         <i class="fas fa-archive"></i> Archivar seleccionados
-    </button>
+    </button>    
+    <br>
     <table class="table table-sm table-bordered small" id="tabla_requerimientos">
         <thead>
             <tr>

@@ -80,7 +80,9 @@
         <div class="col-2 text-center">
             <span class="form-control-plaintext">
             @if ($requirements->isNotEmpty())
-                <a class="btn btn-outline-success btn-sm mb-3" id="downloadLink" onclick="exportF(this)"><i class="fa fa-file-excel"></i></a>
+                    <button class="btn btn-outline-success btn-sm mb-3" wire:click="export">
+                        <i class="fa fa-file-excel"></i> Exportar Excel
+                    </button>
                     Resultados: {{ $requirements->total() }} 
             @endif
             </span>
