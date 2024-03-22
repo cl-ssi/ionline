@@ -11,6 +11,22 @@
                 <li><a class="dropdown-item" href="{{ route('purchase_plan.create') }}"><i class="fas fa-plus"></i> Nuevo Plan de Compras</a></li>--}}
         </ul>
     </li>
+    
+    {{--
+    @php($ouSearch = App\Models\Parameters\Parameter::get('Abastecimiento',['purchaser_ou_id']))
+    @if(in_array(auth()->user()->organizational_unit_id, $ouSearch) || auth()->user()->hasPermissionTo('Request Forms: purchaser'))
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                <i class="far fa-money-bill-alt fa-fw"></i> Compradores
+            </a>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" href="{{ route('purchase_plan.assign_purchaser_index') }}"><i class="fas fa-inbox fa-fw"></i> Asignación Plan de Compras</a>
+                <a class="dropdown-item" href="{{ route('purchase_plan.assign_purchaser_index') }}"><i class="fas fa-inbox fa-fw"></i> Mis Plan de Compras asignados</a>
+            </div>
+        </li>
+    @endif
+    --}}
+
     @can('Purchase Plan: reports')
     <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">

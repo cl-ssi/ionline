@@ -2193,6 +2193,8 @@ Route::prefix('purchase_plan')->as('purchase_plan.')->middleware(['auth', 'must.
     Route::get('/{purchasePlan}/edit', [PurchasePlanController::class, 'edit'])->name('edit');
     Route::delete('/{purchasePlan}/destroy', [PurchasePlanController::class, 'destroy'])->name('destroy');
     Route::get('/{purchasePlan}/send', [PurchasePlanController::class, 'send'])->name('send');
+
+    Route::get('/assign_purchaser_index', [PurchasePlanController::class, 'assign_purchaser_index'])->name('assign_purchaser_index');
     
     Route::prefix('reports')->as('reports.')->middleware('auth')->group(function () {
         Route::get('/show_ppl_items', [PurchasePlanController::class, 'show_ppl_items'])->name('show_ppl_items');

@@ -91,6 +91,14 @@ class SearchPurchasePlan extends Component
                 ->paginate(150);
         }
 
+        if($this->index == 'assign_purchaser'){
+            $purchasePlans = 
+                PurchasePlan::with('organizationalUnit.establishment', 'userResponsible', 'userCreator', 'programName', 'purchasePlanItems.unspscProduct')
+                    ->latest()
+                    ->whereIn('status', ['approved', 'published'])
+                    ->paginate(150);
+        }
+
         return view('livewire.purchase-plan.search-purchase-plan', compact('purchasePlans'));
     }
 }

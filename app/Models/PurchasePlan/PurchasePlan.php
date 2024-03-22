@@ -36,7 +36,8 @@ class PurchasePlan extends Model implements Auditable
         'estimated_expense',
         'approved_estimated_expense',
         'status',
-        'period'
+        'period',
+        'assign_user_id'
     ];
 
     public function userResponsible() {

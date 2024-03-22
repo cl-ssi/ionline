@@ -38,6 +38,11 @@ class PurchasePlanController extends Controller
         return view('purchase_plan.pending_index');
     }
 
+    public function assign_purchaser_index()
+    {
+        return view('purchase_plan.assign_purchaser_index');
+    }
+
     public function show_ppl_items(){
         return view('purchase_plan.reports.show_ppl_items');
     }
