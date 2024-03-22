@@ -65,6 +65,10 @@
                 <th class="table-secondary">Monto aprobado</th>
                 <td></td>
             </tr>
+            <tr>
+                <th class="table-secondary">Asigando a: (Comprador)</th>
+                <td>{{ $purchasePlan->assignPurchaser->FullName }}</td>
+            </tr>
         </thead>
     </table>
 </div>

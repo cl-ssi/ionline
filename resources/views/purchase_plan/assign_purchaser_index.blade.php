@@ -12,6 +12,8 @@
     </div>
 </div>
 
+</div>
+
 @livewire('purchase-plan.search-purchase-plan', [
     'index'    => 'assign_purchaser',
 ])

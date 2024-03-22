@@ -10,8 +10,9 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <select class="form-select" aria-label="Default select example">
-                    <option selected>Selecione...</option>
+                <label>Comprador</label>
+                <select class="form-select" aria-label="Default select example" wire:model.defer="assignUserId">
+                    <option value="">Selecione...</option>
                     @foreach($purchasers as $purchaser)
                         <option value="{{ $purchaser->id }}">{{ $purchaser->FullName }}</option>
                     @endforeach

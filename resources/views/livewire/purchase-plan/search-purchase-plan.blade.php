@@ -114,16 +114,16 @@
                 <table class="table table-bordered table-sm small">
                     <thead>
                         <tr class="text-center align-top table-secondary">
-                            <th width="6%">ID</th>
+                            <th width="3%">ID</th>
                             <th width="8%">
                                 Fecha Creación
                                 <span class="badge bg-info text-dark">Periodo</span>
                             </th>
-                            <th width="">Asunto</th>
-                            <th width="">Responsable</th>
-                            <th width="">Programa</th>
-                            <th width="120px">Estado</th>
-                            <th width="85px"></th>
+                            <th width="20%">Asunto</th>
+                            <th width="32%">Responsable</th>
+                            <th width="20%">Programa</th>
+                            <th width="13%">Estado</th>
+                            <th width="4%"></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -133,8 +133,9 @@
                                     <th class="text-center">
                                         {{ $purchasePlan->id }}<br>
                                     </th>
-                                    <td>
+                                    <td class="text-center">
                                         {{ $purchasePlan->created_at->format('d-m-Y H:i:s') }}
+                                        <br>
                                         <span class="badge bg-info text-dark">{{ $purchasePlan->period }}</span><br>
                                     </td>
                                     <td>{{ $purchasePlan->subject }}</td>
@@ -172,7 +173,7 @@
                                         <br>
                                         <span class="badge bg-{{$purchasePlan->getColorStatus()}} badge-sm">{{ $purchasePlan->getStatus() }}</span>
                                     </td>
-                                    <td class="text-left">
+                                    <td class="text-left text-center">
                                         <a href="{{ route('purchase_plan.show', $purchasePlan) }}"
                                             class="btn btn-outline-secondary btn-sm"><i class="fas fa-eye fa-fw"></i></a>
                                         <!-- Button trigger modal: Ingresar datos de Portal "Plan de Compras" -->
@@ -197,16 +198,16 @@
                 <table class="table table-bordered table-sm small">
                     <thead>
                         <tr class="text-center align-top table-secondary">
-                            <th width="6%">ID</th>
+                            <th width="3%">ID</th>
                             <th width="8%">
                                 Fecha Creación
                                 <span class="badge bg-info text-dark">Periodo</span>
                             </th>
-                            <th width="">Asunto</th>
-                            <th width="">Responsable</th>
-                            <th width="">Programa</th>
-                            <th width="120px">Estado</th>
-                            <th width="85px"></th>
+                            <th width="20%">Asunto</th>
+                            <th width="32%">Responsable</th>
+                            <th width="20%">Programa</th>
+                            <th width="13%">Estado</th>
+                            <th width="4%"></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -254,40 +255,12 @@
                                         @endif
                                         <br>
                                         <span class="badge bg-{{$purchasePlan->getColorStatus()}} badge-sm">{{ $purchasePlan->getStatus() }}</span>
+                                        <br><br>
+                                        <small nowrap>Asignado a: <b>{{ $purchasePlan->assignPurchaser->TinnyName }}</b></small>
                                     </td>
-                                    <td class="text-left">
+                                    <td class="text-center">
                                         <a href="{{ route('purchase_plan.show', $purchasePlan) }}"
                                             class="btn btn-outline-secondary btn-sm mb-1"><i class="fas fa-eye fa-fw"></i></a>
-                                        @if($purchasePlan->canEdit())
-                                            <a href="{{ route('purchase_plan.edit', $purchasePlan->id) }}"
-                                                class="btn btn-outline-secondary btn-sm mb-1"><i class="fas fa-edit fa-fw"></i> </a>
-                                        @endif
-                                        @if($purchasePlan->canDelete())
-                                            <button type="button" class="btn btn-outline-secondary btn-sm mb-1 text-danger"
-                                                onclick="confirm('¿Está seguro que desea borrar el plan de compra ID {{ $purchasePlan->id }}?') || event.stopImmediatePropagation()"
-                                                wire:click="delete({{ $purchasePlan }})"><i class="fas fa-trash fa-fw"></i>
-                                            </button>
-                                        @endif
-                                        {{--
-                                        @if($purchasePlan->canAddPurchasePlanId())
-                                            <!-- Button trigger modal: Ingresar datos de Portal "Plan de Compras" -->
-                                            <button type="button" class="btn btn-outline-primary btn-sm mb-1" data-bs-toggle="modal" data-bs-target="#modal-{{$purchasePlan->id }}">
-                                                <i class="fas fa-upload fa-fw"></i>
-                                            </button>
-
-                                            @livewire('purchase-plan.add-purchase-plan', [
-                                                'purchasePlan' =>   $purchasePlan 
-                                            ])
-                                        @endif
-                                        --}}
-                                        @if($index == 'pending')
-                                            @livewire('documents.approval-button', [
-                                                'approval' => $purchasePlan->getApprovalPending(), 
-                                                'redirect_route' => 'purchase_plan.pending_index', // (opcional) Redireccionar a una ruta despues de aprobar/rechazar
-                                                'button_text' => null, // (Opcional) Texto del boton
-                                                'button_size' => null, // (Opcional) Tamaño del boton: btn-sm, btn-lg, etc.
-                                            ])
-                                        @endif
                                     </td>
                                 </tr>
                             @endif

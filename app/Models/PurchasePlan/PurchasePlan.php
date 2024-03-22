@@ -106,6 +106,10 @@ class PurchasePlan extends Model implements Auditable
     public function purchasePlanPublications(){
         return $this->hasMany('App\Models\PurchasePlan\PurchasePlanPublication', 'purchase_plan_id')->withTrashed();
     }
+
+    public function assignPurchaser() {
+        return $this->belongsTo('App\User', 'assign_user_id')->withTrashed();
+    }
     
     public function getStatus()
     {

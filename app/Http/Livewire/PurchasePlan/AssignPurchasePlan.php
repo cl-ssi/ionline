@@ -12,6 +12,8 @@ class AssignPurchasePlan extends Component
     public $purchasePlan;
     public $purchasers;
 
+    public $assignUserId;
+
     public function render()
     {
         $estab_others = $this->purchasePlan->organizationalUnit->establishment_id;
@@ -24,5 +26,13 @@ class AssignPurchasePlan extends Component
             ->get();
 
         return view('livewire.purchase-plan.assign-purchase-plan');
+    }
+
+    public function save(){
+        $this->purchasePlan->assign_user_id = $this->assignUserId;
+        $this->purchasePlan->save();
+
+        session()->flash('success', 'Estimados Usuario, se ha asignado exitosamente el Plan de Compra N°'.$this->purchasePlan->id);
+        return redirect()->route('purchase_plan.assign_purchaser_index');
     }
 }
