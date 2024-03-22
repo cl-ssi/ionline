@@ -42,6 +42,7 @@
                     <option value ="factura_electronica">Factura Electronica Afecta</option>
                     <option value ="factura_exenta">Factura Electronica Exenta</option>
                     <option value ="boleta_honorarios">Boleta Honorarios</option>
+                    <option value ="boleta_electronica">Boleta Electrónica</option>
                 </select>
                 @error('reception.dte_type')
                     <span class="text-danger">{{ $message }}</span>
@@ -158,7 +159,8 @@
 
         <div class="form-group col-2">
             <label for="montoTotal">Monto Total</label>
-            <input type="number" class="form-control" id="montoTotal" wire:model.defer="montoTotal" readonly
+            <input type="number" class="form-control" id="montoTotal" wire:model.defer="montoTotal"
+                @if($readonly) readonly @endif
                 autocomplete="off" min="1000" 
                 wire:loading.attr="disabled"
                 wire:target="digitalInvoiceFile"

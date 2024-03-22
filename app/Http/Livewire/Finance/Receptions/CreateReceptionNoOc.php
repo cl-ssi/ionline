@@ -20,6 +20,7 @@ class CreateReceptionNoOc extends Component
     public $types;
     public $storage_path = '/ionline/finances/dte/carga_manual';
     public $reception = ['dte_type' => ''];
+    public $montoExento;
     public $montoTotal;
     public $montoNeto;
     public $montoIva;
@@ -33,6 +34,7 @@ class CreateReceptionNoOc extends Component
     public $items = [];
     public $showFacturaElectronicaFields = false;
     public $showFacturaExentaFields = false;
+    public $readonly = true;
 
     public $receptionItems = [];
     
@@ -339,7 +341,7 @@ class CreateReceptionNoOc extends Component
     public function calculateTotalAmount()
     {
         $neto = $this->montoNeto ?? 0;
-        $exento = $this->montoexento ?? 0;
+        $exento = $this->montoExento ?? 0;
         $iva = $this->showFacturaElectronicaFields ? ($this->montoIva ?? 0) : 0;
         $this->montoTotal = $neto + $iva + $exento;
     }
@@ -348,6 +350,7 @@ class CreateReceptionNoOc extends Component
     {
         $this->showFacturaElectronicaFields = $value === 'factura_electronica';
         $this->showFacturaExentaFields = $value === 'factura_exenta';
+        $this->readonly = $value !== 'boleta_electronica';
         $this->loadDteData();
     }
 
