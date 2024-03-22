@@ -278,6 +278,7 @@ use App\Http\Livewire\ProfAgenda\Reports\ClinicalRecordReport;
 use App\Http\Livewire\ProfAgenda\Reports\SirsapReport;
 use App\Http\Livewire\Profile\MailSignature;
 use App\Http\Livewire\Profile\Subrogations;
+use App\Http\Livewire\Rem\ImportMdb;
 use App\Http\Livewire\Rem\SeccionGenerator;
 use App\Http\Livewire\Rem\SeccionIndex;
 use App\Http\Livewire\RequestForm\ReportGlobalBudget;
@@ -1760,6 +1761,7 @@ Route::prefix('indicators')->as('indicators.')->group(function () {
     Route::prefix('rem')->as('rem.')->group(function () {
         Route::get('/generator/{seccion}', SeccionGenerator::class)->name('generator')->middleware('auth');
         Route::get('/seccion', SeccionIndex::class)->name('seccion')->middleware('auth');
+        Route::get('/import-mdb', ImportMdb::class)->name('import-mdb');
         Route::get('/{year}', [App\Http\Controllers\Indicators\RemController::class, 'list'])->name('list');
         Route::get('/{year}/{serie}', [App\Http\Controllers\Indicators\RemController::class, 'index'])->name('index');
         Route::get('/{year}/{serie}/{nserie}/{unique?}', [App\Http\Controllers\Indicators\RemController::class, 'show'])->name('show');
