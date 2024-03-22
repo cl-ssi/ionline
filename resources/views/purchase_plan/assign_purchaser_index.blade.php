@@ -14,9 +14,11 @@
 
 </div>
 
-@livewire('purchase-plan.search-purchase-plan', [
-    'index'    => 'assign_purchaser',
-])
+<div class="container-fluid">
+    @livewire('purchase-plan.search-purchase-plan', [
+        'index'    => 'assign_purchaser',
+    ])
+</div>
 
 @endsection
 

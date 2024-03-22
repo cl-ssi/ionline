@@ -1,14 +1,129 @@
 <div>
-    @if($purchasePlans->count() > 0)
-        @if($index == 'report: ppl-items')
-            <div class="row">
-                <div class="col">
-                    <p class="font-weight-lighter">Total de Registros: <b>{{ $purchasePlans->total() }}</b></p>
-                </div>
-                {{--<div class="col">
-                    <a class="btn btn-success btn-sm mb-1 float-right" onclick="tableExcel('reporte_plan_compras_{{Carbon\Carbon::now()}}')"><i class="fas fa-file-excel"></i> Exportar formularios</a></h6>
-                </div>--}}
+    @if($index == 'own' || $index == 'all' || $this->index == 'pending')
+        <div class="row">
+            <div class="col">
+                <p class="font-weight-lighter">Total de Registros: <b>{{ $purchasePlans->total() }}</b></p>
             </div>
+            {{--<div class="col">
+                <a class="btn btn-success btn-sm mb-1 float-right" onclick="tableExcel('reporte_plan_compras_{{Carbon\Carbon::now()}}')"><i class="fas fa-file-excel"></i> Exportar formularios</a></h6>
+            </div>--}}
+        </div>
+        @if($purchasePlans->count() > 0)
+            <div class="table-responsive">
+                <table class="table table-bordered table-sm small">
+                    <thead>
+                        <tr class="text-center align-top table-secondary">
+                            <th width="6%">ID</th>
+                            <th width="7%">
+                                Fecha Creación
+                                <span class="badge bg-info text-dark">Periodo</span>
+                            </th>
+                            <th width="">Asunto</th>
+                            <th width="">Responsable</th>
+                            <th width="">Programa</th>
+                            <th width="120px">Estado</th>
+                            <th width="85px"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($purchasePlans as $purchasePlan)
+                            <tr>
+                                <th class="text-center">
+                                    {{ $purchasePlan->id }}<br>
+                                </th>
+                                <td>
+                                    {{ $purchasePlan->created_at->format('d-m-Y H:i:s') }}
+                                    <span class="badge bg-info text-dark">{{ $purchasePlan->period }}</span><br>
+                                </td>
+                                <td>{{ $purchasePlan->subject }}</td>
+                                <td>
+                                    <b>{{ $purchasePlan->userResponsible->FullName }}</b><br>
+                                    {{ $purchasePlan->organizationalUnit->name }} ({{$purchasePlan->organizationalUnit->establishment->name}})<br><br>
+                                    
+                                    creado por: <b>{{ $purchasePlan->userCreator->TinnyName }}</b>
+                                </td>
+                                <td>{{ $purchasePlan->program }}</td>
+                                <td class="text-center">
+                                    @if($purchasePlan->status == 'save')
+                                        <i class="fas fa-save fa-2x"></i>
+                                    @else
+                                        @foreach($purchasePlan->approvals as $approval)
+                                            @switch($approval->StatusInWords)
+                                                @case('Pendiente')
+                                                    <span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ $approval->sentToOu->name }}">
+                                                        <i class="fas fa-clock fa-2x "></i>
+                                                    </span>
+                                                    @break
+                                                @case('Aprobado')
+                                                    <span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" style="color: green;" data-bs-placement="top" title="{{ $approval->sentToOu->name }}">
+                                                        <i class="fas fa-check-circle fa-2x"></i>
+                                                    </span>
+                                                    @break
+                                                @case('Rechazado')
+                                                    <span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" style="color: tomato;" data-bs-placement="top" title="{{ $approval->sentToOu->name }}">
+                                                        <i class="fas fa-times-circle fa-2x"></i>
+                                                    </span>
+                                                    @break
+                                            @endswitch
+                                        @endforeach
+                                    @endif
+                                    <br>
+                                    <span class="badge bg-{{$purchasePlan->getColorStatus()}} badge-sm">{{ $purchasePlan->getStatus() }}</span>
+                                </td>
+                                <td class="text-left">
+                                    <a href="{{ route('purchase_plan.show', $purchasePlan) }}"
+                                        class="btn btn-outline-secondary btn-sm mb-1"><i class="fas fa-eye fa-fw"></i></a>
+                                    @if($purchasePlan->canEdit())
+                                        <a href="{{ route('purchase_plan.edit', $purchasePlan->id) }}"
+                                            class="btn btn-outline-secondary btn-sm mb-1"><i class="fas fa-edit fa-fw"></i> </a>
+                                    @endif
+                                    @if($purchasePlan->canDelete())
+                                        <button type="button" class="btn btn-outline-secondary btn-sm mb-1 text-danger"
+                                            onclick="confirm('¿Está seguro que desea borrar el plan de compra ID {{ $purchasePlan->id }}?') || event.stopImmediatePropagation()"
+                                            wire:click="delete({{ $purchasePlan }})"><i class="fas fa-trash fa-fw"></i>
+                                        </button>
+                                    @endif
+                                    {{--
+                                    @if($purchasePlan->canAddPurchasePlanId())
+                                        <!-- Button trigger modal: Ingresar datos de Portal "Plan de Compras" -->
+                                        <button type="button" class="btn btn-outline-primary btn-sm mb-1" data-bs-toggle="modal" data-bs-target="#modal-{{$purchasePlan->id }}">
+                                            <i class="fas fa-upload fa-fw"></i>
+                                        </button>
+
+                                        @livewire('purchase-plan.add-purchase-plan', [
+                                            'purchasePlan' =>   $purchasePlan 
+                                        ])
+                                    @endif
+                                    --}}
+                                    @if($index == 'pending')
+                                        @livewire('documents.approval-button', [
+                                            'approval' => $purchasePlan->getApprovalPending(), 
+                                            'redirect_route' => 'purchase_plan.pending_index', // (opcional) Redireccionar a una ruta despues de aprobar/rechazar
+                                            'button_text' => null, // (Opcional) Texto del boton
+                                            'button_size' => null, // (Opcional) Tamaño del boton: btn-sm, btn-lg, etc.
+                                        ])
+                                    @endif
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+            {{ $purchasePlans->appends(request()->query())->links() }}
+        @else
+            <div class="alert alert-info" role="alert">
+                Estimado Usuario: No se encuentran <b>Plan de Compras</b> bajo los parametros consultados.
+            </div>
+        @endif
+    @endif
+    
+    @if($index == 'report: ppl-items')
+        <div class="row">
+            <div class="col">
+                <p class="font-weight-lighter">Total de Registros: <b>{{ $purchasePlans->total() }}</b></p>
+            </div>
+        </div>
+        @if($purchasePlans->count() > 0)                                
             <div class="table-responsive">
                 <table id="contenedor" class="table table-bordered table-sm small">
                     <thead>
@@ -58,323 +173,243 @@
                         </tr>
                     </thead>
                     <tbody>
-                    @foreach($purchasePlans as $purchasePlan)
-                        @foreach($purchasePlan->purchasePlanItems as $item)
-                            <tr>
-                                <td rowspan="2">{{ $purchasePlan->id }}</td>
-                                <td rowspan="2">{{ $purchasePlan->created_at->format('d-m-Y H:i:s') }}</td>
-                                <td rowspan="2">{{ $purchasePlan->period }}</td>
-                                <td rowspan="2">{{ $purchasePlan->subject }}</td>
-                                <td rowspan="2">{{ $purchasePlan->description }}</td>
-                                <td rowspan="2">{{ $purchasePlan->purpose }}</td>
-                                <td rowspan="2">{{ $purchasePlan->userResponsible->FullName }}</td>
-                                <td rowspan="2">{{ $purchasePlan->position }}</td>
-                                <td rowspan="2">{{ $purchasePlan->telephone }}</td>
-                                <td rowspan="2">{{ $purchasePlan->email }}</td>
-                                <td rowspan="2">{{ $purchasePlan->organizationalUnit->name }} ({{$purchasePlan->organizationalUnit->establishment->name}})</td>
-                                <td rowspan="2">{{ $purchasePlan->userCreator->TinnyName }}</td>
-                                <td rowspan="2">{{ $purchasePlan->program }}</td>
-                                <td rowspan="2" class="text-center">{{ $purchasePlan->purchasePlanItems->count() }}</td>
-                                <td rowspan="2" class="text-end">{{ $purchasePlan->symbol_currency }}{{ number_format($purchasePlan->estimated_expense,$purchasePlan->precision_currency,",",".") }}</td>
-                                <td rowspan="2">{{ $purchasePlan->getStatus() }}</td>
-                                <td rowspan="2" class="text-center">{{ $loop->iteration }}</td>
-                                <td rowspan="2" class="text-end">{{ $item->id ?? '' }}</td>
-                                {{--<td rowspan="2" class="text-end" nowrap>{{ $item->budgetItem ? $item->budgetItem->fullName() : '' }}</td>--}}
-                                <td rowspan="2">{{ optional($item->unspscProduct)->code }} {{ optional($item->unspscProduct)->name }}</td>
-                                <td rowspan="2" class="text-center">{{ $item->unit_of_measurement }}</td>
-                                <td rowspan="2">{{ $item->specification }}</td>
-                                <td rowspan="2" class="text-center">{{ $item->quantity }}</td>
-                                <td rowspan="2" class="text-end">{{ str_replace(',00', '', number_format($item->unit_value, 2,",",".")) }}</td>
-                                <td rowspan="2" class="text-center">{{ $item->tax }}</td>
-                                <td rowspan="2" class="text-end">{{ number_format($item->expense, $item->precision_currency,",",".") }}</td>
-                            </tr>
-                            <tr>
-                                <td>{{$item->january}}</td>
-                                <td>{{$item->february}}</td>
-                                <td>{{$item->march}}</td>
-                                <td>{{$item->april}}</td>
-                                <td>{{$item->may}}</td>
-                                <td>{{$item->june}}</td>
-                                <td>{{$item->july}}</td>
-                                <td>{{$item->august}}</td>
-                                <td>{{$item->september}}</td>
-                                <td>{{$item->october}}</td>
-                                <td>{{$item->november}}</td>
-                                <td>{{$item->december}}</td>
-                            </tr>
-                        @endforeach
-                    @endforeach
-                    </tbody>
-                </table>
-            </div>
-            {{ $purchasePlans->appends(request()->query())->links() }}
-        @elseif($index == 'assign_purchaser')
-            <h6>Solicitudes pendientes de asignación</h6>
-            <div class="table-responsive">
-                <table class="table table-bordered table-sm small">
-                    <thead>
-                        <tr class="text-center align-top table-secondary">
-                            <th width="3%">ID</th>
-                            <th width="8%">
-                                Fecha Creación
-                                <span class="badge bg-info text-dark">Periodo</span>
-                            </th>
-                            <th width="20%">Asunto</th>
-                            <th width="32%">Responsable</th>
-                            <th width="20%">Programa</th>
-                            <th width="13%">Estado</th>
-                            <th width="4%"></th>
-                        </tr>
-                    </thead>
-                    <tbody>
                         @foreach($purchasePlans as $purchasePlan)
-                            @if($purchasePlan->status == "approved" && $purchasePlan->assign_user_id == NULL)
+                            @foreach($purchasePlan->purchasePlanItems as $item)
                                 <tr>
-                                    <th class="text-center">
-                                        {{ $purchasePlan->id }}<br>
-                                    </th>
-                                    <td class="text-center">
-                                        {{ $purchasePlan->created_at->format('d-m-Y H:i:s') }}
-                                        <br>
-                                        <span class="badge bg-info text-dark">{{ $purchasePlan->period }}</span><br>
-                                    </td>
-                                    <td>{{ $purchasePlan->subject }}</td>
-                                    <td>
-                                        <b>{{ $purchasePlan->userResponsible->FullName }}</b><br>
-                                        {{ $purchasePlan->organizationalUnit->name }} ({{$purchasePlan->organizationalUnit->establishment->name}})<br><br>
-                                        
-                                        creado por: <b>{{ $purchasePlan->userCreator->TinnyName }}</b>
-                                    </td>
-                                    <td>{{ $purchasePlan->program }}</td>
-                                    <td class="text-center">
-                                        @if($purchasePlan->status == 'save')
-                                            <i class="fas fa-save fa-2x"></i>
-                                        @else
-                                            @foreach($purchasePlan->approvals as $approval)
-                                                @switch($approval->StatusInWords)
-                                                    @case('Pendiente')
-                                                        <span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ $approval->sentToOu->name }}">
-                                                            <i class="fas fa-clock fa-2x "></i>
-                                                        </span>
-                                                        @break
-                                                    @case('Aprobado')
-                                                        <span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" style="color: green;" data-bs-placement="top" title="{{ $approval->sentToOu->name }}">
-                                                            <i class="fas fa-check-circle fa-2x"></i>
-                                                        </span>
-                                                        @break
-                                                    @case('Rechazado')
-                                                        <span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" style="color: tomato;" data-bs-placement="top" title="{{ $approval->sentToOu->name }}">
-                                                            <i class="fas fa-times-circle fa-2x"></i>
-                                                        </span>
-                                                        @break
-                                                @endswitch
-                                            @endforeach
-                                        @endif
-                                        <br>
-                                        <span class="badge bg-{{$purchasePlan->getColorStatus()}} badge-sm">{{ $purchasePlan->getStatus() }}</span>
-                                    </td>
-                                    <td class="text-left text-center">
-                                        <a href="{{ route('purchase_plan.show', $purchasePlan) }}"
-                                            class="btn btn-outline-secondary btn-sm"><i class="fas fa-eye fa-fw"></i></a>
-                                        <!-- Button trigger modal: Ingresar datos de Portal "Plan de Compras" -->
-                                        <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#modal-assign-{{$purchasePlan->id }}">
-                                            <i class="fas fa-user fa-fw"></i>
-                                        </button>
-                                        
-                                        @livewire('purchase-plan.assign-purchase-plan', [
-                                            'purchasePlan' =>   $purchasePlan 
-                                        ])
-                                        
-                                    </td>
+                                    <td rowspan="2">{{ $purchasePlan->id }}</td>
+                                    <td rowspan="2">{{ $purchasePlan->created_at->format('d-m-Y H:i:s') }}</td>
+                                    <td rowspan="2">{{ $purchasePlan->period }}</td>
+                                    <td rowspan="2">{{ $purchasePlan->subject }}</td>
+                                    <td rowspan="2">{{ $purchasePlan->description }}</td>
+                                    <td rowspan="2">{{ $purchasePlan->purpose }}</td>
+                                    <td rowspan="2">{{ $purchasePlan->userResponsible->FullName }}</td>
+                                    <td rowspan="2">{{ $purchasePlan->position }}</td>
+                                    <td rowspan="2">{{ $purchasePlan->telephone }}</td>
+                                    <td rowspan="2">{{ $purchasePlan->email }}</td>
+                                    <td rowspan="2">{{ $purchasePlan->organizationalUnit->name }} ({{$purchasePlan->organizationalUnit->establishment->name}})</td>
+                                    <td rowspan="2">{{ $purchasePlan->userCreator->TinnyName }}</td>
+                                    <td rowspan="2">{{ $purchasePlan->program }}</td>
+                                    <td rowspan="2" class="text-center">{{ $purchasePlan->purchasePlanItems->count() }}</td>
+                                    <td rowspan="2" class="text-end">{{ $purchasePlan->symbol_currency }}{{ number_format($purchasePlan->estimated_expense,$purchasePlan->precision_currency,",",".") }}</td>
+                                    <td rowspan="2">{{ $purchasePlan->getStatus() }}</td>
+                                    <td rowspan="2" class="text-center">{{ $loop->iteration }}</td>
+                                    <td rowspan="2" class="text-end">{{ $item->id ?? '' }}</td>
+                                    {{--<td rowspan="2" class="text-end" nowrap>{{ $item->budgetItem ? $item->budgetItem->fullName() : '' }}</td>--}}
+                                    <td rowspan="2">{{ optional($item->unspscProduct)->code }} {{ optional($item->unspscProduct)->name }}</td>
+                                    <td rowspan="2" class="text-center">{{ $item->unit_of_measurement }}</td>
+                                    <td rowspan="2">{{ $item->specification }}</td>
+                                    <td rowspan="2" class="text-center">{{ $item->quantity }}</td>
+                                    <td rowspan="2" class="text-end">{{ str_replace(',00', '', number_format($item->unit_value, 2,",",".")) }}</td>
+                                    <td rowspan="2" class="text-center">{{ $item->tax }}</td>
+                                    <td rowspan="2" class="text-end">{{ number_format($item->expense, $item->precision_currency,",",".") }}</td>
                                 </tr>
-                            @endif
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-
-            <h6 class="mt-4">Solicitudes asignadas</h6>
-            <div class="table-responsive">
-                <table class="table table-bordered table-sm small">
-                    <thead>
-                        <tr class="text-center align-top table-secondary">
-                            <th width="3%">ID</th>
-                            <th width="8%">
-                                Fecha Creación
-                                <span class="badge bg-info text-dark">Periodo</span>
-                            </th>
-                            <th width="20%">Asunto</th>
-                            <th width="32%">Responsable</th>
-                            <th width="20%">Programa</th>
-                            <th width="13%">Estado</th>
-                            <th width="4%"></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($purchasePlans as $purchasePlan)
-                            @if($purchasePlan->assign_user_id != NULL)
                                 <tr>
-                                    <th class="text-center">
-                                        {{ $purchasePlan->id }}<br>
-                                    </th>
-                                    <td>
-                                        {{ $purchasePlan->created_at->format('d-m-Y H:i:s') }}
-                                        <span class="badge bg-info text-dark">{{ $purchasePlan->period }}</span><br>
-                                    </td>
-                                    <td>{{ $purchasePlan->subject }}</td>
-                                    <td>
-                                        <b>{{ $purchasePlan->userResponsible->FullName }}</b><br>
-                                        {{ $purchasePlan->organizationalUnit->name }} ({{$purchasePlan->organizationalUnit->establishment->name}})<br><br>
-                                        
-                                        creado por: <b>{{ $purchasePlan->userCreator->TinnyName }}</b>
-                                    </td>
-                                    <td>{{ $purchasePlan->program }}</td>
-                                    <td class="text-center">
-                                        @if($purchasePlan->status == 'save')
-                                            <i class="fas fa-save fa-2x"></i>
-                                        @else
-                                            @foreach($purchasePlan->approvals as $approval)
-                                                @switch($approval->StatusInWords)
-                                                    @case('Pendiente')
-                                                        <span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ $approval->sentToOu->name }}">
-                                                            <i class="fas fa-clock fa-2x "></i>
-                                                        </span>
-                                                        @break
-                                                    @case('Aprobado')
-                                                        <span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" style="color: green;" data-bs-placement="top" title="{{ $approval->sentToOu->name }}">
-                                                            <i class="fas fa-check-circle fa-2x"></i>
-                                                        </span>
-                                                        @break
-                                                    @case('Rechazado')
-                                                        <span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" style="color: tomato;" data-bs-placement="top" title="{{ $approval->sentToOu->name }}">
-                                                            <i class="fas fa-times-circle fa-2x"></i>
-                                                        </span>
-                                                        @break
-                                                @endswitch
-                                            @endforeach
-                                        @endif
-                                        <br>
-                                        <span class="badge bg-{{$purchasePlan->getColorStatus()}} badge-sm">{{ $purchasePlan->getStatus() }}</span>
-                                        <br><br>
-                                        <small nowrap>Asignado a: <b>{{ $purchasePlan->assignPurchaser->TinnyName }}</b></small>
-                                    </td>
-                                    <td class="text-center">
-                                        <a href="{{ route('purchase_plan.show', $purchasePlan) }}"
-                                            class="btn btn-outline-secondary btn-sm mb-1"><i class="fas fa-eye fa-fw"></i></a>
-                                    </td>
+                                    <td>{{$item->january}}</td>
+                                    <td>{{$item->february}}</td>
+                                    <td>{{$item->march}}</td>
+                                    <td>{{$item->april}}</td>
+                                    <td>{{$item->may}}</td>
+                                    <td>{{$item->june}}</td>
+                                    <td>{{$item->july}}</td>
+                                    <td>{{$item->august}}</td>
+                                    <td>{{$item->september}}</td>
+                                    <td>{{$item->october}}</td>
+                                    <td>{{$item->november}}</td>
+                                    <td>{{$item->december}}</td>
                                 </tr>
-                            @endif
+                            @endforeach
                         @endforeach
                     </tbody>
                 </table>
             </div>
         @else
+            <div class="alert alert-info" role="alert">
+                Estimado Usuario: No se encuentran <b>Plan de Compras</b> bajo los parametros consultados.
+            </div>
+        @endif
+    @endif
+
+    @if($index == 'assign_purchaser')
+        <h6><i class="fas fa-inbox fa-fw"></i> Solicitudes pendientes de asignación</h6>
+        @if($pendingPurchasePlans->count() > 0)
+            <div class="row mt-3">
+                <div class="col">
+                    <p class="font-weight-lighter"><small>Total de Registros pendientes: <b>{{ $pendingPurchasePlans->total() }}</b></small></p>
+                </div>
+            </div>
             <div class="table-responsive">
                 <table class="table table-bordered table-sm small">
                     <thead>
                         <tr class="text-center align-top table-secondary">
-                            <th width="6%">ID</th>
-                            <th width="7%">
+                            <th width="3%">ID</th>
+                            <th width="8%">
                                 Fecha Creación
                                 <span class="badge bg-info text-dark">Periodo</span>
                             </th>
-                            <th width="">Asunto</th>
-                            <th width="">Responsable</th>
-                            <th width="">Programa</th>
-                            <th width="120px">Estado</th>
-                            <th width="85px"></th>
+                            <th width="20%">Asunto</th>
+                            <th width="32%">Responsable</th>
+                            <th width="20%">Programa</th>
+                            <th width="13%">Estado</th>
+                            <th width="4%"></th>
                         </tr>
                     </thead>
                     <tbody>
-                    @foreach($purchasePlans as $purchasePlan)
-                        <tr>
-                            <th class="text-center">
-                                {{ $purchasePlan->id }}<br>
-                            </th>
-                            <td>
-                                {{ $purchasePlan->created_at->format('d-m-Y H:i:s') }}
-                                <span class="badge bg-info text-dark">{{ $purchasePlan->period }}</span><br>
-                            </td>
-                            <td>{{ $purchasePlan->subject }}</td>
-                            <td>
-                                <b>{{ $purchasePlan->userResponsible->FullName }}</b><br>
-                                {{ $purchasePlan->organizationalUnit->name }} ({{$purchasePlan->organizationalUnit->establishment->name}})<br><br>
-                                
-                                creado por: <b>{{ $purchasePlan->userCreator->TinnyName }}</b>
-                            </td>
-                            <td>{{ $purchasePlan->program }}</td>
-                            <td class="text-center">
-                                @if($purchasePlan->status == 'save')
-                                    <i class="fas fa-save fa-2x"></i>
-                                @else
-                                    @foreach($purchasePlan->approvals as $approval)
-                                        @switch($approval->StatusInWords)
-                                            @case('Pendiente')
-                                                <span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ $approval->sentToOu->name }}">
-                                                    <i class="fas fa-clock fa-2x "></i>
-                                                </span>
-                                                @break
-                                            @case('Aprobado')
-                                                <span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" style="color: green;" data-bs-placement="top" title="{{ $approval->sentToOu->name }}">
-                                                    <i class="fas fa-check-circle fa-2x"></i>
-                                                </span>
-                                                @break
-                                            @case('Rechazado')
-                                                <span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" style="color: tomato;" data-bs-placement="top" title="{{ $approval->sentToOu->name }}">
-                                                    <i class="fas fa-times-circle fa-2x"></i>
-                                                </span>
-                                                @break
-                                        @endswitch
-                                    @endforeach
-                                @endif
-                                <br>
-                                <span class="badge bg-{{$purchasePlan->getColorStatus()}} badge-sm">{{ $purchasePlan->getStatus() }}</span>
-                            </td>
-                            <td class="text-left">
-                                <a href="{{ route('purchase_plan.show', $purchasePlan) }}"
-                                    class="btn btn-outline-secondary btn-sm mb-1"><i class="fas fa-eye fa-fw"></i></a>
-                                @if($purchasePlan->canEdit())
-                                    <a href="{{ route('purchase_plan.edit', $purchasePlan->id) }}"
-                                        class="btn btn-outline-secondary btn-sm mb-1"><i class="fas fa-edit fa-fw"></i> </a>
-                                @endif
-                                @if($purchasePlan->canDelete())
-                                    <button type="button" class="btn btn-outline-secondary btn-sm mb-1 text-danger"
-                                        onclick="confirm('¿Está seguro que desea borrar el plan de compra ID {{ $purchasePlan->id }}?') || event.stopImmediatePropagation()"
-                                        wire:click="delete({{ $purchasePlan }})"><i class="fas fa-trash fa-fw"></i>
-                                    </button>
-                                @endif
-                                {{--
-                                @if($purchasePlan->canAddPurchasePlanId())
+                        @foreach($pendingPurchasePlans as $purchasePlan)
+                            <tr>
+                                <th class="text-center">
+                                    {{ $purchasePlan->id }}<br>
+                                </th>
+                                <td class="text-center">
+                                    {{ $purchasePlan->created_at->format('d-m-Y H:i:s') }}
+                                    <br>
+                                    <span class="badge bg-info text-dark">{{ $purchasePlan->period }}</span><br>
+                                </td>
+                                <td>{{ $purchasePlan->subject }}</td>
+                                <td>
+                                    <b>{{ $purchasePlan->userResponsible->FullName }}</b><br>
+                                    {{ $purchasePlan->organizationalUnit->name }} ({{$purchasePlan->organizationalUnit->establishment->name}})<br><br>
+                                        
+                                    <small>creado por: <b>{{ $purchasePlan->userCreator->TinnyName }}</b></small>
+                                </td>
+                                <td>{{ $purchasePlan->program }}</td>
+                                <td class="text-center">
+                                    @if($purchasePlan->status == 'save')
+                                        <i class="fas fa-save fa-2x"></i>
+                                    @else
+                                        @foreach($purchasePlan->approvals as $approval)
+                                            @switch($approval->StatusInWords)
+                                                @case('Pendiente')
+                                                    <span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ $approval->sentToOu->name }}">
+                                                        <i class="fas fa-clock fa-2x "></i>
+                                                    </span>
+                                                    @break
+                                                @case('Aprobado')
+                                                    <span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" style="color: green;" data-bs-placement="top" title="{{ $approval->sentToOu->name }}">
+                                                        <i class="fas fa-check-circle fa-2x"></i>
+                                                    </span>
+                                                    @break
+                                                @case('Rechazado')
+                                                    <span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" style="color: tomato;" data-bs-placement="top" title="{{ $approval->sentToOu->name }}">
+                                                        <i class="fas fa-times-circle fa-2x"></i>
+                                                        
+                                                    </span>
+                                                    @break
+                                            @endswitch
+                                        @endforeach
+                                    @endif
+                                    <br>
+                                    <span class="badge bg-{{$purchasePlan->getColorStatus()}} badge-sm">{{ $purchasePlan->getStatus() }}</span>
+                                </td>
+                                <td class="text-left text-center">
+                                    <a href="{{ route('purchase_plan.show', $purchasePlan) }}"
+                                        class="btn btn-outline-secondary btn-sm"><i class="fas fa-eye fa-fw"></i></a>    
                                     <!-- Button trigger modal: Ingresar datos de Portal "Plan de Compras" -->
-                                    <button type="button" class="btn btn-outline-primary btn-sm mb-1" data-bs-toggle="modal" data-bs-target="#modal-{{$purchasePlan->id }}">
-                                        <i class="fas fa-upload fa-fw"></i>
+                                    <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#modal-assign-{{$purchasePlan->id }}">
+                                        <i class="fas fa-user fa-fw"></i>
                                     </button>
-
-                                    @livewire('purchase-plan.add-purchase-plan', [
+                                        
+                                    @livewire('purchase-plan.assign-purchase-plan', [
                                         'purchasePlan' =>   $purchasePlan 
                                     ])
-                                @endif
-                                --}}
-                                @if($index == 'pending')
-                                    @livewire('documents.approval-button', [
-                                        'approval' => $purchasePlan->getApprovalPending(), 
-                                        'redirect_route' => 'purchase_plan.pending_index', // (opcional) Redireccionar a una ruta despues de aprobar/rechazar
-                                        'button_text' => null, // (Opcional) Texto del boton
-                                        'button_size' => null, // (Opcional) Tamaño del boton: btn-sm, btn-lg, etc.
-                                    ])
-                                @endif
-                            </td>
+                                        
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+                {{ $pendingPurchasePlans->appends(request()->query())->links() }}
+            </div>
+        @else
+            <div class="alert alert-info" role="alert">
+                Estimado Usuario: No se encuentran <b>Plan de Compras</b> bajo los parametros consultados.
+            </div>
+        @endif
+        
+        <h6 class="mt-4"><i class="fas fa-inbox fa-fw"></i> Solicitudes asignadas</h6>
+        @if($assignedPurchasePlans->count() > 0)
+            <div class="row">
+                <div class="col">
+                    <p class="font-weight-lighter"><small>Total de Registros asignados: <b>{{ $assignedPurchasePlans->total() }}</b></small></p>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-bordered table-sm small">
+                    <thead>
+                        <tr class="text-center align-top table-secondary">
+                            <th width="3%">ID</th>
+                            <th width="8%">
+                                Fecha Creación
+                                <span class="badge bg-info text-dark">Periodo</span>
+                            </th>
+                            <th width="20%">Asunto</th>
+                            <th width="32%">Responsable</th>
+                            <th width="20%">Programa</th>
+                            <th width="13%">Estado</th>
+                            <th width="4%"></th>
                         </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($assignedPurchasePlans as $purchasePlan)
+                            <tr>
+                                <th class="text-center">
+                                    {{ $purchasePlan->id }}<br>
+                                </th>
+                                <td>
+                                    {{ $purchasePlan->created_at->format('d-m-Y H:i:s') }}
+                                    <span class="badge bg-info text-dark">{{ $purchasePlan->period }}</span><br>
+                                </td>
+                                <td>{{ $purchasePlan->subject }}</td>
+                                <td>
+                                    <b>{{ $purchasePlan->userResponsible->FullName }}</b><br>
+                                    {{ $purchasePlan->organizationalUnit->name }} ({{$purchasePlan->organizationalUnit->establishment->name}})<br><br>
+                                        
+                                    <small>creado por: <b>{{ $purchasePlan->userCreator->TinnyName }}</b></small>
+                                </td>
+                                <td>{{ $purchasePlan->program }}</td>
+                                <td class="text-center">
+                                    @if($purchasePlan->status == 'save')
+                                        <i class="fas fa-save fa-2x"></i>
+                                    @else
+                                        @foreach($purchasePlan->approvals as $approval)
+                                            @switch($approval->StatusInWords)
+                                                @case('Pendiente')
+                                                    <span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ $approval->sentToOu->name }}">
+                                                        <i class="fas fa-clock fa-2x "></i>
+                                                    </span>
+                                                    @break
+                                                @case('Aprobado')
+                                                    <span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" style="color: green;" data-bs-placement="top" title="{{ $approval->sentToOu->name }}">
+                                                        <i class="fas fa-check-circle fa-2x"></i>
+                                                    </span>
+                                                    @break
+                                                @case('Rechazado')
+                                                    <span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" style="color: tomato;" data-bs-placement="top" title="{{ $approval->sentToOu->name }}">
+                                                        <i class="fas fa-times-circle fa-2x"></i>
+                                                    </span>
+                                                    @break
+                                            @endswitch
+                                        @endforeach
+                                    @endif
+                                    <br>
+                                    <span class="badge bg-{{$purchasePlan->getColorStatus()}} badge-sm">{{ $purchasePlan->getStatus() }}</span>
+                                    <br><br>
+                                    <small nowrap>Asignado a: <b>{{ $purchasePlan->assignPurchaser->TinnyName }}</b></small>
+                                </td>
+                                <td class="text-center">
+                                    <a href="{{ route('purchase_plan.show', $purchasePlan) }}"
+                                        class="btn btn-outline-secondary btn-sm mb-1"><i class="fas fa-eye fa-fw"></i></a>
+                                </td>
+                            </tr>
                         @endforeach
                     </tbody>
                 </table>
             </div>
-            {{ $purchasePlans->appends(request()->query())->links() }}
+        @else
+            <div class="alert alert-info" role="alert">
+                Estimado Usuario: No se encuentran <b>Plan de Compras</b> bajo los parametros consultados.
+            </div>
         @endif
-    @else
-        <div class="alert alert-info" role="alert">
-            Estimado Usuario: No se encuentran <b>Plan de Compras</b> bajo los parametros consultados.
-        </div>
     @endif
 </div>
 
