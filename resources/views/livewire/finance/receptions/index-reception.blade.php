@@ -109,11 +109,13 @@
                             @if($reception->purchase_order)
                                 {{ $reception->purchase_order }}
                             @else
+                                @if($reception->noOcFile)
                                  <a href="{{ route('file.download', $reception->noOcFile) }}"
                                             class="btn btn-outline-danger"
                                             target="_blank">
                                             <i class="bi bi-file-pdf-fill"></i>
                                 </a>
+                                @endif
                             @endif
                         </td>
                         <td>
