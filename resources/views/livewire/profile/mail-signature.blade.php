@@ -33,7 +33,7 @@
 
 
 
-    <strong>Formato de firma del Gobierno (kitdigital)</strong>
+    <strong>Formato de firma del Gobierno <a href="https://kitdigital.gob.cl/generador-de-firma">(Generador de firmas - Manual Normas Gráficas del Gobierno)</a></strong>
     <address class="border p-2 mb-3">
 
     Estimado {{ auth()->user()->shortName }}<br><br>
