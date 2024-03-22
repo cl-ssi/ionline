@@ -52,7 +52,7 @@ class CreateReceptionNoOc extends Component
         'items.*.cantidad'                 => 'required|numeric',
         'items.*.precioNeto'                 => 'required|numeric',
         'items.*.total'                 => 'required|numeric',
-        'montoNeto' => 'required|numeric',
+        'montoTotal' => 'required|numeric',
     ];
 
     public $tipoDocumentoMap = [
