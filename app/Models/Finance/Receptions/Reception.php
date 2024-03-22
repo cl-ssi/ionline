@@ -174,6 +174,14 @@ class Reception extends Model implements Auditable
     {
         return $this->morphOne(File::class, 'fileable')->where('type','signed_file');
     }
+
+
+    public function noOcFile(): MorphOne
+    {
+        return $this->morphOne(File::class, 'fileable')->where('type','no_oc');
+    }
+
+
     /**
      * Get support file, archivo de respaldo.
      */

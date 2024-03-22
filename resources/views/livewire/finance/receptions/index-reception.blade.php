@@ -106,7 +106,15 @@
                             {{ $reception->id }}
                         </td>
                         <td nowrap>
-                            {{ $reception->purchase_order }}
+                            @if($reception->purchase_order)
+                                {{ $reception->purchase_order }}
+                            @else
+                                 <a href="{{ route('file.download', $reception->noOcFile) }}"
+                                            class="btn btn-outline-danger"
+                                            target="_blank">
+                                            <i class="bi bi-file-pdf-fill"></i>
+                                </a>
+                            @endif
                         </td>
                         <td>
                             @if($reception->purchaseOrder)
