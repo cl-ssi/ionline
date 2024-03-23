@@ -29,7 +29,7 @@
                 @if(in_array(App\Models\Parameters\Parameter::get('ou', 'AbastecimientoSSI'), $iAmAuthoritiesIn))
                     <a class="dropdown-item" href="{{ route('purchase_plan.assign_purchaser_index') }}"><i class="fas fa-inbox fa-fw"></i> Asignación Plan de Compras</a>
                 @endif
-                <a class="dropdown-item" href="{{ route('purchase_plan.assign_purchaser_index') }}"><i class="fas fa-inbox fa-fw"></i> Mis Plan de Compras asignados</a>
+                <a class="dropdown-item" href="{{ route('purchase_plan.my_assigned_plans_index') }}"><i class="fas fa-inbox fa-fw"></i> Mis Plan de Compras asignados</a>
             </div>
         </li>
     @endif

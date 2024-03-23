@@ -62,6 +62,7 @@ use App\Http\Controllers\JobPositionProfiles\MessageController;
 // use App\Http\Controllers\Lobby\MeetingController;
 use App\Http\Controllers\Mammography\MammographyController;
 use App\Http\Controllers\Meeting\MeetingController;
+use App\Http\Controllers\Meeting\CommitmentController;
 use App\Http\Controllers\MunicipalityController;
 use App\Http\Controllers\News\NewsController;
 use App\Http\Controllers\Parameters\BudgetItemController;
@@ -2197,6 +2198,7 @@ Route::prefix('purchase_plan')->as('purchase_plan.')->middleware(['auth', 'must.
     Route::get('/{purchasePlan}/send', [PurchasePlanController::class, 'send'])->name('send');
 
     Route::get('/assign_purchaser_index', [PurchasePlanController::class, 'assign_purchaser_index'])->name('assign_purchaser_index');
+    Route::get('/my_assigned_plans_index', [PurchasePlanController::class, 'my_assigned_plans_index'])->name('my_assigned_plans_index');
     
     Route::prefix('reports')->as('reports.')->middleware('auth')->group(function () {
         Route::get('/show_ppl_items', [PurchasePlanController::class, 'show_ppl_items'])->name('show_ppl_items');

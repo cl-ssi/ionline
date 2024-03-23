@@ -108,6 +108,12 @@ class SearchPurchasePlan extends Component
             return view('livewire.purchase-plan.search-purchase-plan', compact('pendingPurchasePlans', 'assignedPurchasePlans'));
         }
 
+        if($this->index == 'my_assigned_plans'){
+            $purchasePlans = $query
+                ->where('assign_user_id', auth()->id())
+                ->paginate(150);
+        }
+
         return view('livewire.purchase-plan.search-purchase-plan', compact('purchasePlans'));
     }
 }

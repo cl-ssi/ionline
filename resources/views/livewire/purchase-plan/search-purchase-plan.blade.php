@@ -1,5 +1,5 @@
 <div>
-    @if($index == 'own' || $index == 'all' || $this->index == 'pending')
+    @if($index == 'own' || $index == 'all' || $this->index == 'pending' || $this->index == 'my_assigned_plans')
         <div class="row">
             <div class="col">
                 <p class="font-weight-lighter">Total de Registros: <b>{{ $purchasePlans->total() }}</b></p>
@@ -70,7 +70,7 @@
                                     <br>
                                     <span class="badge bg-{{$purchasePlan->getColorStatus()}} badge-sm">{{ $purchasePlan->getStatus() }}</span>
                                 </td>
-                                <td class="text-left">
+                                <td class="text-center">
                                     <a href="{{ route('purchase_plan.show', $purchasePlan) }}"
                                         class="btn btn-outline-secondary btn-sm mb-1"><i class="fas fa-eye fa-fw"></i></a>
                                     @if($purchasePlan->canEdit())
