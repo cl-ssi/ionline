@@ -105,7 +105,9 @@
                         <td class="text-center">{{ $purchasePlanPublication->mercado_publico_id }}</td>
                         <td class="text-center">{{ $purchasePlanPublication->date }}</td>
                         <td class="text-center">
-                            <button type="button" class="btn btn-outline-primary"><i class="fas fa-paperclip fa-fw"></i></button>
+                            <a class="btn btn-outline-primary" href="{{ route('purchase_plan.show_file', $purchasePlanPublication) }}">
+                                <i class="fas fa-paperclip fa-fw"></i>
+                            </a>
                         </td>
                     </tr>
                 @endforeach

@@ -314,6 +314,7 @@ use App\Http\Livewire\Welfare\Benefits\RequestsAdmin;
 use App\Http\Livewire\Welfare\Benefits\Subsidies;
 use App\Models\Pharmacies\Purchase;
 use App\Models\WebService\MercadoPublico;
+use App\Http\Livewire\PurchasePlan\AddPurchasePlan;
 use App\User; /** ¿Un modelo? */
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
@@ -2192,6 +2193,7 @@ Route::prefix('purchase_plan')->as('purchase_plan.')->middleware(['auth', 'must.
     Route::get('/pending_index', [PurchasePlanController::class, 'pending_index'])->name('pending_index');
     Route::get('/create', [PurchasePlanController::class, 'create'])->name('create');
     Route::get('/{purchasePlan}/show', [PurchasePlanController::class, 'show'])->name('show');
+    Route::get('/{purchasePlanPublication}/show_file', [AddPurchasePlan::class, 'show_file'])->name('show_file');
     Route::get('/{purchase_plan_id}/show_approval', [PurchasePlanController::class, 'show_approval'])->name('show_approval');
     Route::get('/{purchasePlan}/edit', [PurchasePlanController::class, 'edit'])->name('edit');
     Route::delete('/{purchasePlan}/destroy', [PurchasePlanController::class, 'destroy'])->name('destroy');
