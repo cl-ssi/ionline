@@ -73,8 +73,7 @@
     </table>
 </div>
 
-{{--
-@if($purchasePlan->canAddPurchasePlanId())
+@if($purchasePlan->canAddPurchasePlanId() && $purchasePlan->assign_user_id == auth()->id())
     <!-- Button trigger modal: Ingresar datos de Portal "Plan de Compras" -->
     <button type="button" class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#modal-{{$purchasePlan->id }}">
         <i class="fas fa-upload fa-fw"></i> Ingresar ID Mercado Público
@@ -84,7 +83,6 @@
         'purchasePlan' =>   $purchasePlan 
     ])
 @endif
---}}
 
 @if($purchasePlan->purchasePlanPublications->count() > 0)
     <h6><i class="fas fa-info-circle mt-4"></i> Publicación Mercado Público</h6>
