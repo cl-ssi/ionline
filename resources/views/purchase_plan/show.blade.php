@@ -105,7 +105,7 @@
                         <td class="text-center">{{ $purchasePlanPublication->mercado_publico_id }}</td>
                         <td class="text-center">{{ $purchasePlanPublication->date }}</td>
                         <td class="text-center">
-                            <a class="btn btn-outline-primary" href="{{ route('purchase_plan.show_file', $purchasePlanPublication) }}">
+                            <a class="btn btn-outline-primary" href="{{ route('purchase_plan.show_file', $purchasePlanPublication) }}" target="_blank">
                                 <i class="fas fa-paperclip fa-fw"></i>
                             </a>
                         </td>
