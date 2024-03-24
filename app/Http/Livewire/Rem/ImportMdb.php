@@ -57,7 +57,9 @@ class ImportMdb extends Component
         $output = shell_exec($command);
         $this->info['output'] = $output;
 
-        $this->info['test'] = shell_exec('mdb-export --version');
+        $this->info['test'] = shell_exec("echo hello world");
+
+        
         
         // elimina del output "2024" las doble comillas
         $tabla = str_replace('"', '', trim($output))."rems";
