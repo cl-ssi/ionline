@@ -57,6 +57,8 @@ class ImportMdb extends Component
 
         $output = shell_exec($command);
 
+        echo $output;
+
         // elimina del output "2024" las doble comillas
         $tabla = str_replace('"', '', trim($output))."rems";
 

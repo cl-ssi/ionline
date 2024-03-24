@@ -12,6 +12,8 @@ RUN apk add --no-cache \
         freetype-dev \
         libxml2-dev \
         libzip-dev \
+        zip \
+        unzip \
         mdbtools
 
 
