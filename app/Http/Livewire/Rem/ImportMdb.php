@@ -53,11 +53,15 @@ class ImportMdb extends Component
         $fullpath = storage_path('app/rems/'.$filename);
         $command = "mdb-export $fullpath Registros | cut -d',' -f6 | head -n 2 | tail -n 1";
 
+        echo $command;
 
         $output = shell_exec($command);
 
         // elimina del output "2024" las doble comillas
         $tabla = str_replace('"', '', trim($output))."rems";
+
+        echo $tabla;
+        die();
 
         $command = "mdb-export -I mysql $fullpath Datos | sed 's/INTO `Datos`/INTO `$tabla`/'";
         $output = shell_exec($command);
