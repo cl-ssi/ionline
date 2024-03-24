@@ -15,7 +15,8 @@ RUN apk add --no-cache \
         zlib-dev \
         zip \
         unzip \
-        mdbtools
+        mdbtools \
+        mdbtools-dev
 
 
 RUN docker-php-ext-install mysqli pdo pdo_mysql

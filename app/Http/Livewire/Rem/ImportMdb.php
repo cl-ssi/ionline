@@ -57,7 +57,8 @@ class ImportMdb extends Component
         $output = shell_exec($command);
         $this->info['output'] = $output;
 
-        $this->info['test'] = shell_exec("echo hello world");
+        $this->info['echo'] = shell_exec("echo hello world");
+        $this->info['mdb-export'] = shell_exec("mdb-export --version");
 
         
         
