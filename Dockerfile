@@ -31,7 +31,7 @@ RUN docker-php-ext-install soap
 
 RUN docker-php-ext-install zip
 
-RUN docker-php-ext-configure zip --with-zlib-dir=/usr
+# RUN docker-php-ext-configure zip --with-zlib-dir=/usr
 
 RUN docker-php-ext-install bcmath
 
