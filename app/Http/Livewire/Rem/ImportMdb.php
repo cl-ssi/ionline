@@ -52,45 +52,36 @@ class ImportMdb extends Component
 
         $fullpath = storage_path('app/rems/'.$filename);
         $command = "mdb-export $fullpath Registros | cut -d',' -f6 | head -n 2 | tail -n 1";
-
-        echo $command;
+        $this->info['comando'] = $command;
 
         $output = shell_exec($command);
 
-        echo $output;
-        die();
-
-
         // elimina del output "2024" las doble comillas
         $tabla = str_replace('"', '', trim($output))."rems";
-
-        echo $tabla;
+        $this->info['titulo'] = $tabla;
 
         $command = "mdb-export -I mysql $fullpath Datos | sed 's/INTO `Datos`/INTO `$tabla`/'";
         $output = shell_exec($command);
         
-        $connection = DB::connection('mysql_rem');
+        // $connection = DB::connection('mysql_rem');
 
-        // vaciar la tabla $tabla de mysql
-        $connection->table($tabla)->truncate();
+        // // vaciar la tabla $tabla de mysql
+        // $connection->table($tabla)->truncate();
 
-        // Procesar la salida y ejecutar cada instrucción SQL generada por mdb-export
-        // Este es un ejemplo básico, asegúrate de procesar y validar correctamente el SQL para evitar problemas de seguridad
-        foreach (explode("\n", $output) as $sql) {
-            if (!empty($sql)) {
-                // Ejecutar el SQL en la base de datos "rems"
-                try {
-                    $connection->unprepared($sql);
-                } catch (\Exception $e) {
-                    $this->error("Error ejecutando SQL: " . $e->getMessage());
-                    return;
-                }
-            }
-        }
-        /**
-         * Get the file to save
-         */
-        $this->info['titulo'] = $tabla;
+        // // Procesar la salida y ejecutar cada instrucción SQL generada por mdb-export
+        // // Este es un ejemplo básico, asegúrate de procesar y validar correctamente el SQL para evitar problemas de seguridad
+        // foreach (explode("\n", $output) as $sql) {
+        //     if (!empty($sql)) {
+        //         // Ejecutar el SQL en la base de datos "rems"
+        //         try {
+        //             $connection->unprepared($sql);
+        //         } catch (\Exception $e) {
+        //             $this->error("Error ejecutando SQL: " . $e->getMessage());
+        //             return;
+        //         }
+        //     }
+        // }
+
 
     }
 
