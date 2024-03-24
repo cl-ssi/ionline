@@ -7,7 +7,7 @@
                 <label for="formFile" class="form-label">Default file input example</label>
                 <div class="input-group mb-3 @error('file') is-invalid @enderror">
                     <input class="form-control" type="file" id="formFile" wire:model="file">
-                    <button wire:click="save" class="btn btn-primary" wire:loading.attr="disabled">
+                    <button wire:click="save" class="btn btn-primary" wire:loading.attr="disabled" @disabled(!$file)>
                         <i class="bi bi-upload" wire:loading.remove></i>
                         <div wire:loading class="spinner-border spinner-border-sm "></div>
                     </button>

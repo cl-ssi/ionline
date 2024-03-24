@@ -58,12 +58,13 @@ class ImportMdb extends Component
         $output = shell_exec($command);
 
         echo $output;
+        die();
+
 
         // elimina del output "2024" las doble comillas
         $tabla = str_replace('"', '', trim($output))."rems";
 
         echo $tabla;
-        die();
 
         $command = "mdb-export -I mysql $fullpath Datos | sed 's/INTO `Datos`/INTO `$tabla`/'";
         $output = shell_exec($command);
