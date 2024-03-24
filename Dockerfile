@@ -15,6 +15,7 @@ RUN apk add --no-cache \
         zlib-dev \
         zip \
         unzip \
+        mdbtools-utils \
         mdbtools \
         mdbtools-dev
 
