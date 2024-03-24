@@ -53,9 +53,10 @@ class ImportMdb extends Component
         $fullpath = storage_path('app/rems/'.$filename);
         $command = "mdb-export $fullpath Registros | cut -d',' -f6 | head -n 2 | tail -n 1";
         $this->info['comando'] = $command;
-
+        
         $output = shell_exec($command);
-
+        $this->info['output'] = $output;
+        
         // elimina del output "2024" las doble comillas
         $tabla = str_replace('"', '', trim($output))."rems";
         $this->info['titulo'] = $tabla;
