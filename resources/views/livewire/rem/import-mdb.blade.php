@@ -1,4 +1,6 @@
 <div>
+    @include('rem.nav')
+
     <h3 class="mb-3">Import Archivos MDB de REMs</h3>
 
     <div class="alert alert-primary" role="alert">

@@ -1763,7 +1763,7 @@ Route::prefix('indicators')->as('indicators.')->group(function () {
     Route::prefix('rem')->as('rem.')->group(function () {
         Route::get('/generator/{seccion}', SeccionGenerator::class)->name('generator')->middleware('auth');
         Route::get('/seccion', SeccionIndex::class)->name('seccion')->middleware('auth');
-        Route::get('/import-mdb', ImportMdb::class)->name('import-mdb');
+        Route::get('/import-mdb', ImportMdb::class)->name('import-mdb')->middleware('auth');
         Route::get('/{year}', [App\Http\Controllers\Indicators\RemController::class, 'list'])->name('list');
         Route::get('/{year}/{serie}', [App\Http\Controllers\Indicators\RemController::class, 'index'])->name('index');
         Route::get('/{year}/{serie}/{nserie}/{unique?}', [App\Http\Controllers\Indicators\RemController::class, 'show'])->name('show');
