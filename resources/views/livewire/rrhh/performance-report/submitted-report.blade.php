@@ -16,19 +16,35 @@
             <tr>
                 <th>Nombre</th>
                 <th>Unidad</th>
-                @foreach($periods as $period)
-                <th class="text-center {{ now()->greaterThan($period->end_at) ? 'table-primary' : '' }}">{{ $period->name }}</th>
-                @endforeach
+                @if(!$periods->isEmpty())
+                    @foreach($periods as $period)
+                        <th class="text-center {{ now()->greaterThan($period->end_at) ? 'table-primary' : '' }}">{{ $period->name }}</th>
+                    @endforeach
+                @else
+                    <th colspan="3" class="text-center">No hay períodos definidos <br><small>(crear periodo de informe)</small></th>
+                @endif
             </tr>
         </thead>
         <tbody>
-        @foreach($users as $user)
-            <tr>
-                <td>{{ $user->short_name }}</td>
-                <td>{{ $organizationalUnit }}</td>
-                <td class="text-center"><a class="btn btn-success btn-sm" wire:click="showForm('{{ $user->id }}', '{{ $period->id }}')"><i class="bi bi-file-check"></i></a></td>
-            </tr>
-            @endforeach
+            @forelse($users as $user)
+                <tr>
+                    <td>{{ $user->short_name }}</td>
+                    <td>{{ $organizationalUnit }}</td>
+                    @if(!$periods->isEmpty())
+                        <td class="text-center">
+                            @foreach($periods as $period)
+                                <a class="btn btn-success btn-sm" wire:click="showForm('{{ $user->id }}', '{{ $period->id }}')"><i class="bi bi-file-check"></i></a>
+                            @endforeach
+                        </td>
+                    @else
+                        <td class="text-center">-</td>
+                    @endif
+                </tr>
+            @empty
+                <tr>
+                    <td colspan="3" class="text-center">No hay usuarios para mostrar</td>
+                </tr>
+            @endforelse
         </tbody>
     </table>
 
