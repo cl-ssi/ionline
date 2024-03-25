@@ -246,8 +246,7 @@ class RoleAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Store: maintainer programs', 'description' => 'Permite acceder al mantenedor de programas']);
         Permission::create(['name' => 'Store: maintainers', 'description' => 'Permite acceder a los mantenedores de la bodega']);
         Permission::create(['name' => 'Store: warehouse manager', 'description' => 'Permite gestionar todas las bodegas']);
-        Permission::create(['name' => 'Suitability: admin', 'description' => 'Encargado de Idoneidad de cada Colegio']);
-        Permission::create(['name' => 'Suitability: admin', 'description' => '']);
+        Permission::create(['name' => 'Suitability: admin', 'description' => 'Encargado de Idoneidad de cada Colegio']);        
         Permission::create(['name' => 'Suitability: ssi', 'description' => 'Encargado de Idoneidad dentro del SSI']);
         Permission::create(['name' => 'Summary: admin', 'description' => 'Permiso de módulo de Sumario de administrador']);
         Permission::create(['name' => 'Summary: admin viewer', 'description' => 'Administrador del módulo de sumarios pero con permisos solamente para ver los sumarios y no modificar nada del contenido']);
