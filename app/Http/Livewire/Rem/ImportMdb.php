@@ -29,8 +29,6 @@ class ImportMdb extends Component
     {
         $this->validate();
 
-        // $filename = '02A21022024.zip';
-
         $this->info['mdb-export'] = shell_exec("mdb-export --version");
 
         $filename = $this->file->getClientOriginalName();
