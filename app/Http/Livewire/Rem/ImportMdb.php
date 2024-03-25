@@ -29,7 +29,7 @@ class ImportMdb extends Component
     {
         $this->validate();
 
-        $this->info['mdb-export'] = shell_exec("mdb-export --version");
+        // $this->info['mdb-export'] = shell_exec("mdb-export --version");
 
         $filename = $this->file->getClientOriginalName();
         $this->file->storeAs('rems', $filename, 'local');
@@ -50,16 +50,20 @@ class ImportMdb extends Component
             // check if file exists
             if (file_exists($fullpath)) {
                 $this->info['step3'] = 'Archivo mdb encontrado';
-                $command = "mdb-export $fullpath Registros | cut -d',' -f6 | head -n 2 | tail -n 1";
-                $output = shell_exec($command);
-    
-                // elimina del output "2024" las doble comillas
-                $year = str_replace('"', '', trim($output));
-                $this->info['step4'] = "Año a procesar: $year";
+
+                // Obtiene el año del archivo mdb
+                $command = "mdb-export $fullpath Registros | cut -d',' -f6 | head -n 2 | tail -n 1 | tr -d '\"'";
+                $year = trim(shell_exec($command));
+                
+                // Obtiene la serie del archivo mdb
+                $command = "mdb-export $fullpath Registros | cut -d',' -f3 | head -n 2 | tail -n 1 | tr -d '\"' |cut -d' ' -f2";
+                $serie = trim(shell_exec($command));
+                $this->info['step4'] = "Serie a procesar: $serie año $year";
 
                 // $year tiene que estar entre el año actual y el anterior
                 if ($year > date('Y') || $year < date('Y') - 1) {
                     $this->info['step5'] = 'Error: Año incorrecto, debe estar entre el año actual y el anterior';
+                    session()->flash('status','danger');
                     return;
                 }
                 $tabla = $year.'rems';
@@ -71,8 +75,14 @@ class ImportMdb extends Component
                 $connection = DB::connection('mysql_rem');
 
                 // vaciar la tabla $tabla de mysql
-                $connection->table($tabla)->truncate();
-                $this->info['step6'] = "Vaciada la tabla $tabla";
+                // $connection->table($tabla)->truncate();
+
+                // Borrar solo los datos de la serie
+                $sql = "DELETE FROM $tabla WHERE codigoprestacion IN (SELECT codigo_prestacion FROM {$year}prestaciones WHERE serie='$serie')";
+                $connection->query($sql);
+                // $this->info['sql'] = $sql;
+
+                $this->info['step6'] = "Borrar los datos de la serie: $serie de la tabla: $tabla";
 
                 // Procesar la salida y ejecutar cada instrucción SQL generada por mdb-export
                 foreach (explode("\n", $output) as $sql) {
@@ -88,15 +98,20 @@ class ImportMdb extends Component
                 }
                 $this->info['step7'] = "Cargados los Datos a la tabla $tabla";
                 $this->info['Fin'] = "Proceso terminado exitosamente";
+                session()->flash('status','success');
             }
             else {
                 $this->info['step3'] = 'Error: El archivo mdb no existe';
-                return;
+                session()->flash('status','danger');
             }
         } else {
             $this->info['step2'] = 'Error: al descomprimir el archivo: '. $res;
+            session()->flash('status','danger');
         }
 
+        session()->flash('message', $this->info);
+        // Return redirect a la misma pagina
+        return redirect(request()->header('Referer'));
     }
 
     public function render()

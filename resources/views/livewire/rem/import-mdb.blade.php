@@ -13,6 +13,17 @@
         </ul>
     </div>
 
+    @if(session()->has('message'))
+        <div class="alert alert-{{ session()->get('status') }} alert-dismissible fade show" role="alert">
+            <ol>
+                @foreach(session()->get('message') as $key => $message)
+                <li>{!! $message !!}</li>
+                @endforeach
+            </ol>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
     <form wire:submit.prevent="save">
         <div class="row">
             <div class="col-md-8">
