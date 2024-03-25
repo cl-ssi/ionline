@@ -19,7 +19,9 @@ class CreateJobPositionProfiles extends Component
 
     public $selectedLaw = null;
 
-    public $lawStateOption = 'disabled';
+    public $lawStateOption;
+
+    public $workingDayState;
 
     public $action;
 
@@ -77,16 +79,17 @@ class CreateJobPositionProfiles extends Component
     
     public function updatedSelectedContractualCondition($selectedContractualConditionId)
     {
-        if($this->selectedLaw == '18834'){
-            if($selectedContractualConditionId == '1' || $selectedContractualConditionId == '3'){
-                $this->salaryStateInput = 'readonly';
-                $this->degreeStateInput = '';
-            }
-            if($selectedContractualConditionId == '2'){
-                $this->salaryStateInput = '';
-                $this->degreeStateInput = 'readonly';
-            }
+        if($selectedContractualConditionId == '2'){
+            $this->selectedLaw = null;
+            $this->lawStateOption = 'disabled';
+            $this->degree = null;
+            $this->degreeStateInput = 'readonly';
+            $this->salaryStateInput = null;
         }
+        else{
+            $this->lawStateOption = null;
+        }
+       
     }
 
     public function updatedSelectedLaw($selectedLawId)
@@ -102,7 +105,7 @@ class CreateJobPositionProfiles extends Component
                 $this->degreeStateInput = 'readonly';
             }
 
-            $this->lawStateOption = 'disabled';
+            $this->workingDayState = 'disabled';
         }
         else{
             //SE INHABILITA SALARIO Y GRADO
@@ -112,7 +115,7 @@ class CreateJobPositionProfiles extends Component
             $this->degreeStateInput = 'readonly';
 
             //HORAS DISPONIBLES
-            $this->lawStateOption = '';
+            $this->workingDayState = null;
         }
     }
 

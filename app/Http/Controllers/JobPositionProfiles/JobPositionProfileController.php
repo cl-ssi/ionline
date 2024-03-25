@@ -129,36 +129,53 @@ class JobPositionProfileController extends Controller
 
     public function edit_formal_requirements(JobPositionProfile $jobPositionProfile)
     {
-        if($jobPositionProfile->law == '18834'){
-            $staffDecree = StaffDecree::latest()->first();
+        if($jobPositionProfile->contractual_condition_id != 2){
+            if($jobPositionProfile->law == '18834'){
+                $staffDecree = StaffDecree::latest()->first();
 
-            $staffDecreeByEstaments = StaffDecreeByEstament::
-                where('staff_decree_id', $staffDecree->id)
-                ->where('estament_id', $jobPositionProfile->estament_id)
-                ->get();
+                $staffDecreeByEstaments = StaffDecreeByEstament::
+                    where('staff_decree_id', $staffDecree->id)
+                    ->where('estament_id', $jobPositionProfile->estament_id)
+                    ->get();
 
-            $generalRequirementsCount = collect(new StaffDecreeByEstament());
-            
-            foreach($staffDecreeByEstaments as $staffDecreeByEstament){
-                if($jobPositionProfile->degree >= $staffDecreeByEstament->start_degree
-                    && $jobPositionProfile->degree <= $staffDecreeByEstament->end_degree){
-                    $generalRequirementsCount->add($staffDecreeByEstament);
+                $generalRequirementsCount = collect(new StaffDecreeByEstament());
+                
+                foreach($staffDecreeByEstaments as $staffDecreeByEstament){
+                    if($jobPositionProfile->degree >= $staffDecreeByEstament->start_degree
+                        && $jobPositionProfile->degree <= $staffDecreeByEstament->end_degree){
+                        $generalRequirementsCount->add($staffDecreeByEstament);
+                    }
+                }
+
+                if($generalRequirementsCount->count() == 0){
+                    session()->flash('danger', 'Estimado Usuario, existe un error en el rango de grados correspondiente al estamento: '.$jobPositionProfile->estament->name);
+                    return view('job_position_profile.edit', compact('jobPositionProfile'));
+                }
+                else{
+                    $generalRequirements = $generalRequirementsCount->first();
                 }
             }
-
-            if($generalRequirementsCount->count() == 0){
-                session()->flash('danger', 'Estimado Usuario, existe un error en el rango de grados correspondiente al estamento: '.$jobPositionProfile->estament->name);
-                return view('job_position_profile.edit', compact('jobPositionProfile'));
-            }
             else{
-                $generalRequirements = $generalRequirementsCount->first();
+                /* EVALUAR CAMBIAR POR PARAMETRO */
+                $generalRequirements = collect(new StaffDecreeByEstament());
+                $generalRequirements->description   = 
+                'Título Profesional otorgado por una Universidad del Estado o instituto profesional del estado o reconocido por éste o aquellos validados en Chile, de acuerdo a la legislación vigente.<br>Acredita dicho título con el certificado de inscripción en el registro nacional de prestadores individuales de salud de la superintendencia de salud, dicho documento será validado para profesionales nacionales y extranjeros provenientes del sector público y privado.';
             }
         }
         else{
-            /* EVALUAR CAMBIAR POR PARAMETRO */
             $generalRequirements = collect(new StaffDecreeByEstament());
-            $generalRequirements->description   = 
-            'Título Profesional otorgado por una Universidad del Estado o instituto profesional del estado o reconocido por éste o aquellos validados en Chile, de acuerdo a la legislación vigente.<br>Acredita dicho título con el certificado de inscripción en el registro nacional de prestadores individuales de salud de la superintendencia de salud, dicho documento será validado para profesionales nacionales y extranjeros provenientes del sector público y privado.';
+            // Auxiliar o Administrativo
+            if($jobPositionProfile->estament_id == 1 || $jobPositionProfile->estament_id == 2){
+                $generalRequirements->description   = 'Licencia de Enseñanza Media o equivalente.';
+            }
+            // Profesional
+            if($jobPositionProfile->estament_id == 3){
+                $generalRequirements->description   = 'Título Profesional otorgado por una Universidad o Instituto Profesional del Estado o reconocido por éste o aquellos validados en Chile de acuerdo con la legislación vigente.';
+            }
+            // Técnico
+            if($jobPositionProfile->estament_id == 4){
+                $generalRequirements->description   = 'Título de Técnico de Nivel Medio o Superior otorgado por un Establecimiento de Educación reconocido y validado en Chile de acuerdo con la legislación vigente.';
+            }
         }
         return view('job_position_profile.edit_formal_requirements', 
             compact('jobPositionProfile', 'generalRequirements'));

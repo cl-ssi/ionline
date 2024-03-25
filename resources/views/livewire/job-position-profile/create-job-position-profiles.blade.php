@@ -96,11 +96,11 @@
                 <label for="for_law">Ley</label>
                 <div class="mt-1">
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="law" id="for_law" value="18834" wire:model.debounce.500ms="selectedLaw" required>
+                        <input class="form-check-input" type="radio" name="law" id="for_law" value="18834" wire:model.debounce.500ms="selectedLaw" {{ $lawStateOption }}>
                         <label class="form-check-label" for="for_law">N° 18.834</label>
                     </div>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="law" id="for_law" value="19664" wire:model.debounce.500ms="selectedLaw" required>
+                        <input class="form-check-input" type="radio" name="law" id="for_law" value="19664" wire:model.debounce.500ms="selectedLaw" {{ $lawStateOption }}>
                         <label class="form-check-label" for="for_law">N° 19.664</label>
                     </div>
                 </div>
@@ -150,9 +150,9 @@
                 <select name="working_day" id="for_working_day" class="form-control" wire.debounce.500ms required>
                     <option value="">Seleccione...</option>
                     <option value="44" {{ ($jobPositionProfile && $jobPositionProfile->working_day == 44)?'selected':'' }}>44 horas</option>
-                    <option value="33" {{ ($jobPositionProfile && $jobPositionProfile->working_day == 33)?'selected':'' }} {{ $lawStateOption }}>33 horas</option>
+                    <option value="33" {{ ($jobPositionProfile && $jobPositionProfile->working_day == 33)?'selected':'' }} {{ $workingDayState }}>33 horas</option>
                     <option value="22" {{ ($jobPositionProfile && $jobPositionProfile->working_day == 22)?'selected':'' }}>22 horas</option>
-                    <option value="11" {{ ($jobPositionProfile && $jobPositionProfile->working_day == 11)?'selected':'' }} {{ $lawStateOption }}>11 horas</option>
+                    <option value="11" {{ ($jobPositionProfile && $jobPositionProfile->working_day == 11)?'selected':'' }} {{ $workingDayState }}>11 horas</option>
                     <option value="shift" {{ ($jobPositionProfile && $jobPositionProfile->working_day == 'shift')?'selected':'' }}>Turno</option>
                 </select>
             </fieldset>
