@@ -17,7 +17,7 @@
         <fieldset class="form-group col-12 col-sm-2">
             <label for="for_date">Fecha Reunión</label>
             <input type="date" class="form-control" wire:model.defer="date" id="for_date">
-            @error('from') <span class="text-danger error small">{{ $message }}</span> @enderror
+            @error('date') <span class="text-danger error small">{{ $message }}</span> @enderror
         </fieldset>
 
         <fieldset class="form-group col-12 col-md-2">
@@ -28,11 +28,13 @@
                 <option value="no extraordinaria">No extraordinaria</option>
                 <option value="lobby">Lobby</option>
             </select>
+            @error('type') <span class="text-danger error small">{{ $message }}</span> @enderror
         </fieldset>
 
         <fieldset class="form-group col-12 col-md-8">
             <label for="for_subject">Asunto</label>
             <input class="form-control" type="text" autocomplete="off" wire:model.defer="subject">
+            @error('subject') <span class="text-danger error small">{{ $message }}</span> @enderror
         </fieldset>
     </div>
     
@@ -44,16 +46,19 @@
                 <option value="videoconferencia">Videoconferencia</option>
                 <option value="presencial">Presencial</option>
             </select>
+            @error('mechanism') <span class="text-danger error small">{{ $message }}</span> @enderror
         </fieldset>
 
         <fieldset class="col-12 col-md-2">
             <label for="for-start_at">Hora inicio</label>
             <input type="time" class="form-control" wire:model.defer="start_at" >
+            @error('start_at') <span class="text-danger error small">{{ $message }}</span> @enderror
         </fieldset>
 
         <fieldset class="col-12 col-md-2">
             <label for="for-end_at">Hora término</label>
             <input type="time" class="form-control" wire:model.defer="end_at">
+            @error('end_at') <span class="text-danger error small">{{ $message }}</span> @enderror
         </fieldset>
     </div>
 
@@ -70,11 +75,13 @@
                 <option value="federaciones regionales">Federaciones Regionales</option>
                 <option value="mesas comites de trabajo">Reunión Mesas y Comités de Trabajos</option>
             </select>
+            @error('typeGrouping') <span class="text-danger error small">{{ $message }}</span> @enderror
         </fieldset>
 
         <fieldset class="form-group col-12 col-md-4">
             <label for="for_subject">Nombre</label>
             <input class="form-control" type="text" autocomplete="off" wire:model.defer="nameGrouping">
+            @error('nameGrouping') <span class="text-danger error small">{{ $message }}</span> @enderror
         </fieldset>
 
         <fieldset class="form-group col-12 col-md-4">
@@ -116,10 +123,12 @@
                         </td>
                         <td>{{ $grouping['name'] }}</td>
                         <td class="text-center">
+                            {{--
                             <a
                                 class="btn btn-outline-secondary btn-sm">
                                 <i class="fas fa-edit fa-fw"></i> 
                             </a>
+                            --}}
                             <a class="btn btn-outline-danger btn-sm"
                                 wire:click="deleteGrouping({{ $key }})">
                                 <i class="fas fa-trash-alt fa-fw"></i>
@@ -156,7 +165,7 @@
                         <td style="text-align: justify;">{{ $commitment['description'] }}</td>
                         <td class="text-center">{{ ($commitment['commitment_user_id']) ?  $commitment['commitment_user_name'] : $commitment['commitment_ou_name'] }}</td>
                         <td class="text-center">
-                            {{ $commitment['closing_date'] }} <br>
+                            {{ ($commitment['closing_date']) ? $commitment['closing_date'] : 'Sin fecha límite' }} <br>
                             @switch($commitment['priority'])
                                 @case('normal')
                                     <span class="badge text-bg-success">{{ $commitment['priority'] }}</span>
@@ -193,6 +202,7 @@
             <fieldset class="form-group col-12 col-md-12">
                 <label for="for_commitment_description">Descripción</label>
                 <textarea class="form-control" rows="3" wire:model.defer="commitmentDescription"></textarea>
+                @error('commitmentDescription') <span class="text-danger error small">{{ $message }}</span> @enderror
             </fieldset>
         </div>
 
@@ -204,6 +214,7 @@
                     <option value="individual">Personal</option>
                     <option value="ou">Unidad Organizacional</option>
                 </select>
+                @error('typeResponsible') <span class="text-danger error small">{{ $message }}</span> @enderror
             </fieldset>
 
             <fieldset class="col-12 col-md-4">
@@ -215,6 +226,7 @@
                         'emit_name'     => 'searchedCommitmentUser',
                         'user'          => ''
                     ])
+                    @error('searchedCommitmentUser') <span class="text-danger error small">{{ $message }}</span> @enderror
                 @endif
 
                 @if($typeResponsible == 'ou')
@@ -225,6 +237,7 @@
                         'emit_name'           => 'searchedCommitmentOu',
                         'organizationalUnit'  => ''
                     ])
+                    @error('searchedCommitmentOu') <span class="text-danger error small">{{ $message }}</span> @enderror
                 @endif
                 
                 @if($typeResponsible == '' || $typeResponsible == NULL)
@@ -241,6 +254,7 @@
                     <option value="normal">Normal</option>
                     <option value="urgente">Urgente</option>
                 </select>
+                @error('priority') <span class="text-danger error small">{{ $message }}</span> @enderror
             </fieldset>
 
             <fieldset class="col-12 col-sm-2">

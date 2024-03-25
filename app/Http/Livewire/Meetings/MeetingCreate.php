@@ -34,6 +34,29 @@ class MeetingCreate extends Component
     public $searchedUser, $searchedCommitmentUser, $searchedCommitmentOu;
     protected $listeners = ['searchedUser', 'searchedCommitmentUser', 'searchedCommitmentOu'];
 
+    protected function messages(){
+        return [
+            // MENSAJES PARA MEETING
+            'date.required'         => 'Debe ingresar Fecha de reunión.',
+            'type.required'         => 'Debe ingresar Tipo de reunión.',
+            'subject.required'      => 'Debe ingresar Asunto de reunión.',
+            'mechanism.required'    => 'Debe ingresar Medio de reunión.',
+            'start_at.required'     => 'Debe ingresar Hora Inicio de reunión.',
+            'end_at.required'       => 'Debe ingresar Hora de Fin de reunión.',
+
+            // MENSAJES PARA GROUPING
+            'typeGrouping.required' => 'Debe ingresar Tipo de Asociaciones, Federaciones, etc.',
+            'nameGrouping.required' => 'Debe ingresar Nombre de Asociaciones, Federaciones, etc.',
+
+            // MENSAJES PARA COMMITMENT
+            'commitmentDescription.required'    => 'Debe ingresar Descripción del compromiso',
+            'typeResponsible.required'          => 'Debe ingresar Tipo de responsable del compromiso',
+            'searchedCommitmentUser.required'   => 'Debe ingresar funcionario responsable del compromiso',
+            'searchedCommitmentOu.required'     => 'Debe ingresar Unidad Organizacional responsable del compromiso',
+            'priority.required'                 => 'Debe ingresar Prioridad del compromiso'
+        ];
+    }
+
     public function render()
     {
         return view('livewire.meetings.meeting-create');
@@ -49,6 +72,16 @@ class MeetingCreate extends Component
     }
 
     public function save(){
+        $validatedData = $this->validate([
+                'date'      => 'required',
+                'type'      => 'required',
+                'subject'   => 'required',
+                'mechanism' => 'required',
+                'start_at'  => 'required',
+                'end_at'    => 'required',
+            ]
+        );
+
         // SE GUARDA REUNIÓN
         $meeting = DB::transaction(function () {
             $meeting = Meeting::updateOrCreate(
@@ -72,37 +105,41 @@ class MeetingCreate extends Component
         });
 
         //SE GUARDA GROUPING (Asociaciones / Federaciones / Reunión Mesas y Comités de Trabajos) PARTICIPANTES
-        foreach($this->groupings as $grouping){
-            Grouping::updateOrCreate(
-                [
-                    'id' => $grouping['id'] ? $grouping['id'] : null,
-                ],
-                [
-                    'type'          => $grouping['type'], 
-                    'name'          => $grouping['name'],
-                    'meeting_id'    => $meeting->id
-                ]
-            );
+        if(!empty($this->groupings)){
+            foreach($this->groupings as $grouping){
+                Grouping::updateOrCreate(
+                    [
+                        'id' => $grouping['id'] ? $grouping['id'] : null,
+                    ],
+                    [
+                        'type'          => $grouping['type'], 
+                        'name'          => $grouping['name'],
+                        'meeting_id'    => $meeting->id
+                    ]
+                );
+            }
         }
 
         //SE GUARDA COMPROMISOS
-        foreach($this->commitments as $commitment){
-            Commitment::updateOrCreate(
-                [
-                    'id' => $commitment['id'] ? $commitment['id'] : null,
-                ],
-                [
-                    'description'           => $commitment['description'], 
-                    'type'                  => $commitment['type'],
-                    'commitment_user_id'    => $commitment['commitment_user_id'],
-                    'commitment_ou_id'      => $commitment['commitment_ou_id'],
-                    'priority'              => $commitment['priority'],
-                    'closing_date'          => $commitment['closing_date'],
-                    'priority'              => $commitment['priority'],
-                    'meeting_id'            => $meeting->id,
-                    'user_id'               => $commitment['user_id']
-                ]
-            );
+        if(!empty($this->commitments)){
+            foreach($this->commitments as $commitment){
+                Commitment::updateOrCreate(
+                    [
+                        'id' => $commitment['id'] ? $commitment['id'] : null,
+                    ],
+                    [
+                        'description'           => $commitment['description'], 
+                        'type'                  => $commitment['type'],
+                        'commitment_user_id'    => $commitment['commitment_user_id'],
+                        'commitment_ou_id'      => $commitment['commitment_ou_id'],
+                        'priority'              => $commitment['priority'],
+                        'closing_date'          => $commitment['closing_date'],
+                        'priority'              => $commitment['priority'],
+                        'meeting_id'            => $meeting->id,
+                        'user_id'               => $commitment['user_id']
+                    ]
+                );
+            }
         }
 
         if(is_null($this->meetingToEdit)){
@@ -132,13 +169,25 @@ class MeetingCreate extends Component
     }
 
     public function addGrouping(){
-        // dd($this->typeGrouping, $this->nameGrouping);
+        $validatedData = $this->validate([
+                'typeGrouping' => 'required',
+                'nameGrouping' => 'required',
+            ]
+        );
+
         $this->groupings[] = [
             'id'            => '',
             'type'          => $this->typeGrouping,
             'name'          => $this->nameGrouping,
             'meeting_id'    => ($this->meetingToEdit) ? $this->meetingToEdit->id : null,
         ];
+
+        $this->cleanGrouping();
+    }
+
+    public function cleanGrouping(){
+        $this->typeGrouping = null;
+        $this->nameGrouping = null;
     }
 
     public function setGroupings(){
@@ -168,6 +217,15 @@ class MeetingCreate extends Component
     }
 
     public function addCommitment(){
+        $validatedData = $this->validate([
+                'commitmentDescription'     => 'required',
+                'typeResponsible'           => 'required',
+                ($this->typeResponsible == 'individual') ? 'searchedCommitmentUser' : 'searchedCommitmentUser'  => ($this->typeResponsible == 'individual') ? 'required' : '',
+                ($this->typeResponsible == 'ou') ? 'searchedCommitmentOu' : 'searchedCommitmentOu'              => ($this->typeResponsible == 'ou') ? 'required' : '',
+                'priority'           => 'required',
+            ]
+        );
+
         $this->commitments[] = [
             'id'                    => '',
             'description'           => $this->commitmentDescription,
@@ -181,6 +239,15 @@ class MeetingCreate extends Component
             'requirement_id'        => '',
             'user_id'               => auth()->id()
         ];
+
+        $this->cleanCommitment();
+    }
+
+    public function cleanCommitment(){
+        $this->commitmentDescription    = null;
+        $this->typeResponsible          = null;
+        $this->closingDate              = null;
+        $this->priority                 = null;
     }
 
     public function setCommitments(){

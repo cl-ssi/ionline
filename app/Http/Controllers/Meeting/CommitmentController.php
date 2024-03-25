@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Meeting;
 
+use App\Http\Controllers\Controller;
 use App\Models\Meetings\Commitment;
 use Illuminate\Http\Request;
 
