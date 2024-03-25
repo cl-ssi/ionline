@@ -1,4 +1,4 @@
-@extends('layouts.bt4.app')
+@extends('layouts.bt5.app')
 
 @section('title', 'Establecimientos')
 
@@ -13,13 +13,13 @@
             <th>Id</th>
             <th>Nombre Oficial</th>
             <th>Alias</th>
-            <th>Tipo</th>
+            <!-- <th>Tipo</th> -->
             <th>Deis</th>
             <th>Deis Nuevo</th>
             <th>Comuna</th>
             <th>Dependencia Jerarquica</th>
             <th>Dependencia Administrativa</th>
-            <th>Nivel de Atención</th>
+            <!-- <th>Nivel de Atención</th> -->
             <th>Dirección</th>
             <th>Fono</th>
             <th></th>
@@ -31,13 +31,13 @@
             <td>{{ $establishment->id?? '' }}</td>
             <td>{{ $establishment->official_name?? '' }}</td>
             <td>{{ $establishment->alias?? '' }}</td>
-            <td>{{ $establishment->establishmentType->name?? '' }}</td>
+            <!-- <td>{{ $establishment->establishmentType->name?? '' }}</td> -->
             <td>{{ $establishment->deis?? '' }}</td>
             <td>{{ $establishment->new_deis?? '' }}</td>
             <td>{{ $establishment->commune->name?? '' }}</td>
             <td>{{ $establishment->dependency?? '' }}</td>
             <td>{{ $establishment->administrative_dependency?? '' }}</td>
-            <td>{{ $establishment->level_of_care?? '' }}</td>
+            <!-- <td>{{ $establishment->level_of_care?? '' }}</td> -->
             <td>{{ $establishment->full_address ?? ''}} </td>
             <td>{{ $establishment->telephone??''}} </td>
             <td>
