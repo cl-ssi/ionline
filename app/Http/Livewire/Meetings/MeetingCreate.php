@@ -286,8 +286,16 @@ class MeetingCreate extends Component
     public function sentSgr(){
         /** Crear el requerimiento */
         foreach($this->commitments as $key => $commitment){
-            $to_authority = Authority::getAmIAuthorityOfMyOu(today(),'manager',$commitment['commitment_user_id']);
+            if($commitment['commitment_user_id'] != null){
+                $to_authority = Authority::getAmIAuthorityOfMyOu(today(),'manager',$commitment['commitment_user_id']);
+                $toUser = User::find($commitment['commitment_user_id']);
+            }
 
+            if($commitment['commitment_ou_id'] != null){
+                $toUser = Authority::getTodayAuthorityManagerFromDate($commitment['commitment_ou_id']);
+                $to_authority = true;
+            }
+            
             $requirement = Requirement::create([
                 'subject'       => $this->meetingToEdit->subject,
                 'priority'      => $commitment['priority'],
@@ -300,31 +308,38 @@ class MeetingCreate extends Component
                 'category_id'   => null,
             ]);
 
-            $toUser = User::find($commitment['commitment_user_id']);
-
             $event = Event::create([
                 'body'              => $commitment['description'],
                 'status'            => 'creado',
                 'from_user_id'      => auth()->id(),
-                'form_ou_id'        => auth()->user()->organizational_unit_id,
-                'to_user_id'        => $commitment['commitment_user_id'],
-                'to_ou_id'          => $toUser ->organizational_unit_id,
+                'from_ou_id'        => auth()->user()->organizational_unit_id,
+                'to_user_id'        => ($commitment['commitment_user_id'] != null) ? $toUser->id : $toUser->user_id,
+                'to_ou_id'          => $toUser->organizational_unit_id,
                 'requirement_id'    => $requirement->id,
                 'to_authority'      => $to_authority,
             ]);
 
-            /** Notifica por correo al destinatario, en cola */
-            $toUser->notify(new NewSgr($requirement, $event));
+            // Notifica por correo al destinatario, en cola
+            if($commitment['commitment_user_id'] != null){
+                $toUser->notify(new NewSgr($requirement, $event));
+            }
+            else{
+                $authorityNotify = User::find($toUser->user_id);
+                $authorityNotify->notify(new NewSgr($requirement, $event));
+            }
+            
 
-            /** Marca los eventos como vistos */
+            // Marca los eventos como vistos
             $requirement->setEventsAsViewed;
 
             // SE GUARDA EL ID DEL REQUIREMENT EN REUNION
             $commitmentStatus =  Commitment::find($commitment['id']);
             $commitmentStatus->requirement_id = $requirement->id;
             $commitmentStatus->save();
+            
         }
 
+        
         // SE GUARDA STATUS EN REUNION
         $this->meetingToEdit->status = 'sgr';
         $this->meetingToEdit->save();

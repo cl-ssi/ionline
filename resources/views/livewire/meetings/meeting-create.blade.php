@@ -150,11 +150,11 @@
             <table class="table table-bordered table-striped table-sm small">
                 <thead>
                     <tr class="text-center">
-                        <th width="10%">#</th>
-                        <th width="40%">Descripción</th>
+                        <th width="5%">#</th>
+                        <th width="50%">Descripción</th>
                         <th width="25%">Usuario / Unidad Organizacional</th>
                         <th width="10%">Fecha límite</th>
-                        <th width="15%"></th>
+                        <th width="10%"></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -176,10 +176,13 @@
                             @endswitch
                         </td>
                         <td class="text-center">
+                            {{--
                             <a href=""
                                 class="btn btn-outline-secondary btn-sm">
                                 <i class="fas fa-edit fa-fw"></i> 
                             </a>
+                            --}}
+
                             <a class="btn btn-outline-danger btn-sm"
                                 wire:click="deleteCommitment({{ $key }})">
                                 <i class="fas fa-trash-alt fa-fw"></i>
@@ -281,8 +284,8 @@
                 <i class="fas fa-save"></i> Guardar
             </button>
             @endif
-
-            @if($meetingToEdit && $meetingToEdit->StatusValue == 'Guardado')
+                
+            @if($meetingToEdit && $meetingToEdit->StatusValue == 'Guardado' && $meetingToEdit->commitments->count() > 0)
                 <button class="btn btn-success float-end me-3" 
                     type="button"
                     wire:click="sentSgr">
