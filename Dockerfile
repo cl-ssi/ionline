@@ -12,13 +12,7 @@ RUN apk add --no-cache \
         freetype-dev \
         libxml2-dev \
         libzip-dev \
-        zlib-dev \
-        zip \
-        unzip \
-        mdbtools-utils \
-        mdbtools \
-        mdbtools-dev
-
+        mdbtools-utils
 
 RUN docker-php-ext-install mysqli pdo pdo_mysql
 
@@ -32,8 +26,6 @@ RUN docker-php-ext-install gd
 RUN docker-php-ext-install soap
 
 RUN docker-php-ext-install zip
-
-# RUN docker-php-ext-configure zip --with-zlib-dir=/usr
 
 RUN docker-php-ext-install bcmath
 
