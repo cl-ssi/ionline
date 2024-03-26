@@ -35,6 +35,7 @@ class CreateReceptionNoOc extends Component
     public $showFacturaElectronicaFields = false;
     public $showFacturaExentaFields = false;
     public $readonly = true;
+    public $showAllFields = false;
 
     public $receptionItems = [];
     
@@ -149,7 +150,7 @@ class CreateReceptionNoOc extends Component
 
         
         
-        $reception = Reception::create([
+        $receptionData = [
             'reception_type_id' => $this->reception['reception_type_id'],
             'date' => $this->reception['date'],
             'creator_id' => auth()->user()->id,
@@ -157,7 +158,6 @@ class CreateReceptionNoOc extends Component
             'responsable_id' => auth()->user()->id,
             'responsable_ou_id' => auth()->user()->organizational_unit_id,
             'establishment_id' => auth()->user()->organizationalUnit->establishment_id,
-            'dte_id' => $dte_manual->id,
             'dte_type' => $this->reception['dte_type'],
             'dte_number' => $this->folio,
             'dte_date' => $this->reception['dte_date'],
@@ -166,7 +166,16 @@ class CreateReceptionNoOc extends Component
             'subtotal' => isset($this->montoNeto) ? $this->montoNeto : null,
             'iva' => isset($this->montoIva) ? $this->montoIva : null,
             'total' => $this->montoTotal,
-        ]);
+        ];
+    
+        // Determinar qué campo utilizar para el ID del documento
+        if ($this->reception['dte_type'] === 'guias_despacho') {
+            $receptionData['guia_id'] = $dte_manual->id;
+        } else {
+            $receptionData['dte_id'] = $dte_manual->id;
+        }
+    
+        $reception = Reception::create($receptionData);
         
 
         foreach ($this->items as $item) {
@@ -351,6 +360,7 @@ class CreateReceptionNoOc extends Component
         $this->showFacturaElectronicaFields = $value === 'factura_electronica';
         $this->showFacturaExentaFields = $value === 'factura_exenta';
         $this->readonly = $value !== 'boleta_electronica';
+        $this->showAllFields = $value === 'guias_despacho';
         $this->loadDteData();
     }
 

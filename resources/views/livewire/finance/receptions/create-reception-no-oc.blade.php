@@ -39,6 +39,7 @@
                     wire:change="toggleFacturaElectronicaFields($event.target.value)"
                     >
                     <option></option>
+                    <option value ="guias_despacho">Guía de Despacho</option>
                     <option value ="factura_electronica">Factura Electronica Afecta</option>
                     <option value ="factura_exenta">Factura Electronica Exenta</option>
                     <option value ="boleta_honorarios">Boleta Honorarios</option>
@@ -108,7 +109,7 @@
 
 
 
-    @if($showFacturaElectronicaFields)
+    @if($showFacturaElectronicaFields || $showAllFields)
         
         <div class="form-group col-2">
             <label for="montoNeto">Monto Neto</label>
@@ -139,7 +140,7 @@
     @endif
 
 
-    @if($showFacturaExentaFields)
+    @if($showFacturaExentaFields || $showAllFields)
         <div class="form-group col-2">
             <label for="montoExento">Monto Exento</label>
             <input type="number" class="form-control" id="montoExento" wire:model.defer="montoExento"
