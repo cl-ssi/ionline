@@ -30,12 +30,12 @@ class ImportMdb extends Component
         $this->validate();
 
         // $this->info['mdb-export'] = shell_exec("mdb-export --version");
+        //$filename = '02A20032024.mdb';
 
         $filename = $this->file->getClientOriginalName();
         $this->file->storeAs('rems', $filename, 'local');
         $this->info['step1'] = 'Archivo almacenado temporalmente';
 
-        // Descomprimir el archivo subido que es .zip
         $zip = new ZipArchive;
         $res = $zip->open(storage_path('app/rems/'.$filename));
         if ($res === TRUE) {
@@ -79,7 +79,7 @@ class ImportMdb extends Component
 
                 // Borrar solo los datos de la serie
                 $sql = "DELETE FROM $tabla WHERE codigoprestacion IN (SELECT codigo_prestacion FROM {$year}prestaciones WHERE serie='$serie')";
-                $connection->query($sql);
+                $connection->unprepared($sql);
                 // $this->info['sql'] = $sql;
 
                 $this->info['step6'] = "Borrar los datos de la serie: $serie de la tabla: $tabla";
