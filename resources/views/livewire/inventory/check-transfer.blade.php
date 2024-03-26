@@ -50,7 +50,7 @@
 
 
     <div class="row g-2 g-2 mb-2">
-        <fieldset class="col-md-12">
+        <fieldset class="col-md-6">
             <label for="place-location" class="form-label">
                 Ubicación
             </label>
@@ -59,6 +59,19 @@
                 class="form-control"
                 id="place-location"
                 value="{{ $movement->place->location->name ?? 'Sin ubicación' }} - {{ $movement->place->name ?? 'Sin lugar' }}"
+                readonly
+            >
+        </fieldset>
+
+        <fieldset class="col-md-6">
+            <label for="place-location" class="form-label">
+                    Nro. Antiguo (si tuviese)
+            </label>
+            <input
+                type="text"
+                class="form-control"
+                id="place-location"
+                value="{{ $movement->inventory->old_number ?? 'Sin Número de Inventario Antiguo' }}"
                 readonly
             >
         </fieldset>
