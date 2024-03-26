@@ -123,6 +123,15 @@ class ResultsController extends Controller
         return redirect()->back();
     }
 
+    public function destroyAndSetStatus(Result $result)
+    {
+        $result->delete();
+        $result->psirequest->status = 'Esperando Test';
+        $result->psirequest->save();
+        session()->flash('danger', 'El resultado de test de idoneidad ha sido eliminado y el estado se ha cambiado a "Esperando Test"');
+        return redirect()->back();
+    }
+
 
     public function certificate($id)
     {

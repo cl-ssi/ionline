@@ -54,6 +54,7 @@
                 <th>Ver Test</th>
                 <th>Eliminar Resultado y Solicitud</th>
                 <th>Eliminar Resultado Solamente</th>
+                <th>Eliminar Resultado y Dejar "Esperando Test"</th>
                 <!-- <th>Ver Certificado (Aprobados)</th> -->
                 <!-- <th>Enviar a Firmar</th> -->
                 <!-- <th>Descargar PDF (Aprobados)</th> -->
@@ -93,6 +94,16 @@
                         <button type="submit" class="btn btn-outline-danger btn-sm" onclick="return confirm('¿Está seguro de eliminar este resultado, recuerde que solo debe de eliminar si el resultado se encuentra duplicado, a diferencia del otro borrado este no elimina la solicitud')">
                             <span class="fas fa-exclamation-triangle" aria-hidden="true"></span>
                         </button>
+                    </form>
+                </td>
+                <td>
+                    <form method="POST" action="{{ route('suitability.results.destroyAndSetStatus', $result->id) }}" class="d-inline">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-outline-danger btn-sm" onclick="return confirm('¿Está seguro de eliminar este resultado y dejarlo como Esperando Test?')">
+                            <span class="fas fa-hourglass" aria-hidden="true"></span>
+                        </button>
+                    </form>
                 </td>
             </tr>
             @endforeach

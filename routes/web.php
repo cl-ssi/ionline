@@ -2543,6 +2543,7 @@ Route::prefix('suitability')->as('suitability.')->middleware(['auth', 'must.chan
         Route::get('/', [ResultsController::class, 'index'])->name('index');
         Route::delete('{result}/destroy', [ResultsController::class, 'destroy'])->name('destroy');
         Route::delete('{result}/destroy-result', [ResultsController::class, 'destroyResult'])->name('destroyResult');
+        Route::delete('{result}/destroyAndSetStatus', [ResultsController::class, 'destroyAndSetStatus'])->name('destroyAndSetStatus');
         Route::get('/{id}', [ResultsController::class, 'show'])->name('show');
         Route::get('/certificate/{id}', [ResultsController::class, 'certificate'])->name('certificate');
         Route::get('/certificatepdf/{id}', [ResultsController::class, 'certificatepdf'])->name('certificatepdf');
