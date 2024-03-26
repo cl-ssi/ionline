@@ -61,8 +61,8 @@ use App\Http\Controllers\JobPositionProfiles\JobPositionProfileSignController;
 use App\Http\Controllers\JobPositionProfiles\MessageController;
 // use App\Http\Controllers\Lobby\MeetingController;
 use App\Http\Controllers\Mammography\MammographyController;
-use App\Http\Controllers\Meeting\MeetingController;
 use App\Http\Controllers\Meeting\CommitmentController;
+use App\Http\Controllers\Meeting\MeetingController;
 use App\Http\Controllers\MunicipalityController;
 use App\Http\Controllers\News\NewsController;
 use App\Http\Controllers\Parameters\BudgetItemController;
@@ -242,6 +242,7 @@ use App\Http\Livewire\HealthServices;
 use App\Http\Livewire\His\ModificationMgr;
 use App\Http\Livewire\His\ModificationRequestIndex;
 use App\Http\Livewire\His\NewModification;
+use App\Http\Livewire\Indicators\PrestacionesLoader;
 use App\Http\Livewire\Indicators\QueryGenerator;
 use App\Http\Livewire\InventoryLabel\InventoryLabelIndex;
 use App\Http\Livewire\Inventory\AssignedProducts;
@@ -279,6 +280,7 @@ use App\Http\Livewire\ProfAgenda\Reports\ClinicalRecordReport;
 use App\Http\Livewire\ProfAgenda\Reports\SirsapReport;
 use App\Http\Livewire\Profile\MailSignature;
 use App\Http\Livewire\Profile\Subrogations;
+use App\Http\Livewire\PurchasePlan\AddPurchasePlan;
 use App\Http\Livewire\Rem\ImportMdb;
 use App\Http\Livewire\Rem\SeccionGenerator;
 use App\Http\Livewire\Rem\SeccionIndex;
@@ -314,7 +316,6 @@ use App\Http\Livewire\Welfare\Benefits\RequestsAdmin;
 use App\Http\Livewire\Welfare\Benefits\Subsidies;
 use App\Models\Pharmacies\Purchase;
 use App\Models\WebService\MercadoPublico;
-use App\Http\Livewire\PurchasePlan\AddPurchasePlan;
 use App\User; /** ¿Un modelo? */
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
@@ -1458,6 +1459,7 @@ Route::prefix('indicators')->as('indicators.')->group(function () {
     })->name('index');
 
     Route::get('/query-generator', QueryGenerator::class)->name('query-generator');
+    Route::get('/prestaciones-loader', PrestacionesLoader::class)->name('prestaciones-loader');
 
     Route::get('/population', [SingleParameterController::class, 'population'])->name('population');
     Route::resource('single_parameter', SingleParameterController::class)->middleware('auth');
