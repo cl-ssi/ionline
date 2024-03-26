@@ -1,5 +1,5 @@
 <div>
-    @include('finance.payments.partials.nav')
+    <!-- @include('finance.payments.partials.nav') -->
 
     <h3 class="mb-3">Mis Documentos Tributarios Electrónicos</h3>
 

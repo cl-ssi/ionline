@@ -779,8 +779,9 @@
                             </a>
                         @endcan
 
-
-
+                        <a class="dropdown-item" href="{{ route('finance.my.dtes') }}" }}">
+                            <i class="fas fa-fw fa-file-invoice-dollar"></i> {{ __('Mis Dtes') }}
+                        </a>
 
                         <a class="dropdown-item" href="{{ route('rrhh.attendance.no-records.mgr') }}">
                             <i class="fas fa-fw fa-clock"></i> {{ __('Justificar asistencia') }}

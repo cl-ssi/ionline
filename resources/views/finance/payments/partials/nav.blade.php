@@ -1,10 +1,5 @@
 <ul class="nav nav-tabs mb-3">
     <li class="nav-item">
-        <a class="nav-link {{ active('finance.my.dtes') }}" 
-            href="{{ route('finance.my.dtes') }}">
-            <i class="fas fa-fw fa-file-invoice-dollar"></i> Mis Dtes</a>
-    </li>
-    <li class="nav-item">
         <a class="nav-link {{ active('finance.dtes.index') }}" 
             href="{{ route('finance.dtes.index') }}">
             <i class="fas fa-fw fa-file-invoice-dollar"></i> Dtes</a>
