@@ -266,13 +266,16 @@ class AllowanceSignController extends Controller
                                 "callback_controller_method"        => "App\Http\Controllers\Allowances\AllowanceController@approvalCallback",
                                 "callback_controller_params"        => json_encode([
                                     'allowance_id'  => $allowanceSign->allowance->id,
-                                    'process'       => 'end'
+                                    'process'       => null
                                 ]),
                                 "digital_signature"                 => true,
                                 "position"                          => "right",
                                 "start_y"                           => 82,
                                 "filename"                          => "ionline/allowances/resol_pdf/".$allowanceSign->allowance->id."_".$count.".pdf"
                             ]);
+                            $lastApproval = $approval;
+                            $lastApprovalId = $approval->id;
+                            $count++;
                         }
 
                         // APPROVAL DE FINANZAS
