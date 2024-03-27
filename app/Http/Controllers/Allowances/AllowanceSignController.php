@@ -170,7 +170,7 @@ class AllowanceSignController extends Controller
                             $approval = $allowanceSign->allowance->approvals()->create([
                                 "module"                            => "Viáticos",
                                 "module_icon"                       => "bi bi-wallet",
-                                "subject"                           => 'Solicitud de Viático: ID '.$allowanceSign->allowance->id.'<br>
+                                "subject"                           => 'Solicitud de Viático: ID '.$allowanceSign->allowance->correlative.'<br>
                                                                         Funcionario: '.$allowanceSign->allowance->userAllowance->FullName,
                                 //"sent_to_ou_id"                     => ($subroDir == null) ? ($funDir == null) ? Parameter::get('ou','DireccionSSI') : $funDir : null,
                                 "sent_to_ou_id"                     =>  ($dir == 'dir_sst') ? Parameter::get('ou','DireccionSSI') : (($dir == 'dir_hah') ? Parameter::get('ou', 'Direccion', $currentOu->establishment_id) : null),
@@ -218,7 +218,7 @@ class AllowanceSignController extends Controller
                                 $approval = $allowanceSign->allowance->approvals()->create([
                                     "module"                            => "Viáticos",
                                     "module_icon"                       => "bi bi-wallet",
-                                    "subject"                           => 'Solicitud de Viático: ID '.$allowanceSign->allowance->id.'<br>
+                                    "subject"                           => 'Solicitud de Viático: ID '.$allowanceSign->allowance->correlative.'<br>
                                                                             Funcionario: '.$allowanceSign->allowance->userAllowance->FullName,
                                     "sent_to_ou_id"                     => $currentOu->id,
                                     "document_route_name"               => "allowances.show_resol_pdf",
@@ -253,7 +253,7 @@ class AllowanceSignController extends Controller
                             $approval = $allowanceSign->allowance->approvals()->create([
                                 "module"                            => "Viáticos",
                                 "module_icon"                       => "bi bi-wallet",
-                                "subject"                           => 'Solicitud de Viático: ID '.$allowanceSign->allowance->id.'<br>
+                                "subject"                           => 'Solicitud de Viático: ID '.$allowanceSign->allowance->correlative.'<br>
                                                                         Funcionario: '.$allowanceSign->allowance->userAllowance->FullName,
                                 "sent_to_ou_id"                     => Parameter::get('ou', 'Direccion', $allowanceSign->allowance->establishment_id),
                                 "document_route_name"               => "allowances.show_resol_pdf",
@@ -282,7 +282,7 @@ class AllowanceSignController extends Controller
                         $approval = $allowanceSign->allowance->approvals()->create([
                             "module"                            => "Viáticos",
                             "module_icon"                       => "bi bi-wallet",
-                            "subject"                           => 'Solicitud de Viático: ID '.$allowanceSign->allowance->id.'<br>
+                            "subject"                           => 'Solicitud de Viático: ID '.$allowanceSign->allowance->correlative.'<br>
                                                                     Funcionario: '.$allowanceSign->allowance->userAllowance->FullName,
                             "sent_to_ou_id"                     => ($allowanceSign->allowance->establishment_id == Parameter::get('establishment', 'HospitalAltoHospicio')) ? Parameter::get('ou','FinanzasHAH') : Parameter::get('ou','FinanzasSSI'),
                             "document_route_name"               => "allowances.show_resol_pdf",
