@@ -296,6 +296,7 @@ use App\Http\Livewire\Rrhh\NoAttendanceRecordMgr;
 use App\Http\Livewire\Rrhh\PerformanceReport\Period;
 use App\Http\Livewire\Rrhh\PerformanceReport\ReceivedReport;
 use App\Http\Livewire\Rrhh\PerformanceReport\SubmittedReport;
+use App\Http\Controllers\Rrhh\CalificationController;
 use App\Http\Livewire\Rrhh\PermissionsMgr;
 use App\Http\Livewire\Rrhh\RolesMgr;
 use App\Http\Livewire\Rrhh\ShiftsIndex;
@@ -860,6 +861,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
         Route::get('/period', Period::class)->name('period');
         Route::get('/received-report', ReceivedReport::class)->name('received_report');
         Route::get('/submitted-report', SubmittedReport::class)->name('submitted_report');
+        Route::get('/show/{userId}/{periodId}', [CalificationController::class, 'show'])->name('show');
     });
 
     

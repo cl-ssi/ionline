@@ -6,6 +6,7 @@ use Livewire\Component;
 use App\User;
 use App\Models\Rrhh\PerformanceReportPeriod;
 use App\Models\Rrhh\PerformanceReport;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class SubmittedReport extends Component
 {
@@ -145,6 +146,31 @@ class SubmittedReport extends Component
     {
         $this->reportDetails = null;
     }
+
+
+    public function show($userId, $periodId)
+    {
+        $report = PerformanceReport::where('received_user_id', $userId)
+        ->where('period_id', $periodId)
+        ->first();
+
+        $establishment = $report->createdUser->organizationalUnit->establishment;
+        
+        return Pdf::loadView('rrhh.performance_report.show', [
+            'report' => $report,
+            'establishment' => $establishment,
+        ])->stream('download.pdf');
+
+
+        // return Pdf::loadView('documents.templates.'.$document->viewName, [
+        //     'document' => $document
+        // ])->stream('download.pdf');
+
+        // return view('finance.receptions.show', compact('reception'));
+    }
+
+
+    
     
 
 

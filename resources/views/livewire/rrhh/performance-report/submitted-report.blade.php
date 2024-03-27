@@ -38,11 +38,11 @@
                     @if(!$periods->isEmpty())
                         <td class="text-center">
                             @foreach($periods as $period)
-                                @if($hasExistingReport = $this->hasExistingReport($user->id, $period->id))                                
+                                @if($hasExistingReport = $this->hasExistingReport($user->id, $period->id))
                                     <a href="#" wire:click.prevent="viewReport('{{ $user->id }}', '{{ $period->id }}')" data-bs-toggle="modal" data-bs-target="#reportModal" class="btn btn-outline-primary btn-sm">
                                         <i class="bi bi-eye"></i>
                                     </a>
-                                    <a href="#" class="btn btn-outline-primary btn-sm" data-bs-toggle="tooltip" title="Descargar PDF">
+                                    <a href="{{ route('rrhh.performance-report.show', ['userId' => $user->id, 'periodId' => $period->id]) }}" class="btn btn-outline-primary btn-sm" title="Descargar PDF" target="_blank">
                                         <i class="bi bi-file-pdf"></i>
                                     </a>
                                     <button class="btn btn-outline-danger btn-sm" wire:click="deleteReport('{{ $user->id }}', '{{ $period->id }}')" data-bs-toggle="tooltip" title="Borrar Informe">
