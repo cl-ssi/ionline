@@ -1460,9 +1460,6 @@ Route::prefix('indicators')->as('indicators.')->group(function () {
         return view('indicators.index');
     })->name('index');
 
-    Route::get('/query-generator', QueryGenerator::class)->name('query-generator');
-    Route::get('/prestaciones-loader', PrestacionesLoader::class)->name('prestaciones-loader');
-
     Route::get('/population', [SingleParameterController::class, 'population'])->name('population');
     Route::resource('single_parameter', SingleParameterController::class)->middleware('auth');
     Route::post('/population/export', [SingleParameterController::class, 'export'])->name('population.export');
@@ -1765,9 +1762,16 @@ Route::prefix('indicators')->as('indicators.')->group(function () {
     });
 
     Route::prefix('rem')->as('rem.')->group(function () {
-        Route::get('/generator/{seccion}', SeccionGenerator::class)->name('generator')->middleware('auth');
-        Route::get('/seccion', SeccionIndex::class)->name('seccion')->middleware('auth');
-        Route::get('/import-mdb', ImportMdb::class)->name('import-mdb')->middleware('auth');
+        // Rutas para apoyo de carga y confección de los rems
+        Route::prefix('admin')->as('admin.')->middleware('auth')->group(function () {
+            Route::get('/query-generator', QueryGenerator::class)->name('query-generator');
+            Route::get('/prestaciones-loader', PrestacionesLoader::class)->name('prestaciones-loader');
+            Route::get('/generator/{seccion}', SeccionGenerator::class)->name('generator');
+            Route::get('/seccion', SeccionIndex::class)->name('seccion');
+        });
+
+        Route::get('/import-mdb', ImportMdb::class)->name('import-mdb');
+
         Route::get('/{year}', [App\Http\Controllers\Indicators\RemController::class, 'list'])->name('list');
         Route::get('/{year}/{serie}', [App\Http\Controllers\Indicators\RemController::class, 'index'])->name('index');
         Route::get('/{year}/{serie}/{nserie}/{unique?}', [App\Http\Controllers\Indicators\RemController::class, 'show'])->name('show');

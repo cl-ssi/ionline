@@ -1,8 +1,10 @@
 <div>
     <h3>Secciones 2024</h3>
 
+    @include('indicators.rem.partials.admin.nav')
+
     @foreach($columnas as $columna)
-        <a href="{{ route('indicators.rem.seccion', $columna) }}" class="btn btn-outline-primary btn-sm">{{ $columna['nserie'] }}</a>
+        <a href="{{ route('indicators.rem.admin.seccion', $columna) }}" class="btn btn-outline-primary btn-sm">{{ $columna['nserie'] }}</a>
     @endforeach
 
     <table class="table table-sm table-bordered mt-3">
@@ -34,7 +36,7 @@
                 <td>{{ isset($seccion->tfoot) ? 'SI' : '' }}</td>
                 <td>{{ $seccion->precision }}</td>
                 <td>
-                    <a href="{{ route('indicators.rem.generator', $seccion) }}" class="btn btn-primary btn-sm">Editar</a>
+                    <a href="{{ route('indicators.rem.admin.generator', $seccion) }}" class="btn btn-primary btn-sm">Editar</a>
                 </td>
             </tr>
             @endforeach

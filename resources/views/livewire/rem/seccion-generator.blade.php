@@ -12,7 +12,7 @@
 
     <h3>
         REM {{ $seccion->nserie }} Sección {{ $seccion->name }}
-        <a href="{{ route('indicators.rem.seccion') }}" class="btn btn-outline-primary btn-sm">Volver</a>
+        <a href="{{ route('indicators.rem.admin.seccion') }}" class="btn btn-outline-primary btn-sm">Volver</a>
     </h3>
 
     <div wire:ignore class="mb-2">
@@ -136,9 +136,9 @@
     @endif
 
     <center>
-        <a href="{{ route('indicators.rem.seccion') }}" class="btn btn-outline-primary ">Volver</a>
+        <a href="{{ route('indicators.rem.admin.seccion') }}" class="btn btn-outline-primary ">Volver</a>
         <button type="submit" class="btn btn-primary" wire:click="save">Guardar</button>
-        <a href="{{ route('indicators.rem.generator', $nextRecord) }}" class="btn btn-secondary">Siguiente</a>
+        <a href="{{ route('indicators.rem.admin.generator', $nextRecord) }}" class="btn btn-secondary">Siguiente</a>
     </center>
 
     @push('scripts')

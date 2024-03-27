@@ -29,7 +29,7 @@ class PrestacionesLoader extends Component
 
             $nserie = strtoupper($nserie);
             // eliminar los caracteres ' de la descripcion
-            $descripcion = str_replace("'", "", $descripcion);
+            $descripcion = ucfirst(trim(str_replace("'", "", $descripcion)));
             // trim al codigo_prestacion
             $codigo_prestacion = trim($codigo_prestacion);
             $this->process[] = "INSERT INTO `{$year}prestaciones` (codigo_prestacion, descripcion, serie, Nserie) VALUES ('$codigo_prestacion','$descripcion','$serie','$nserie');";
