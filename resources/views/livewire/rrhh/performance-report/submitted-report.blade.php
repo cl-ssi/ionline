@@ -78,13 +78,13 @@
                 <input type="text" class="form-control" value="{{ $selectedPeriod->name }}"  readonly>
                 </div>
             </div>
-                <div class="row mb-3">
+            <div class="row mb-3">
                 <label  class="col-sm-3 col-form-label">Nombre Funcionario</label>
                 <div class="col-sm-9">
                 <input type="text" class="form-control"  value="{{ $selectedUser->short_name }}"  readonly>
                 </div>
             </div>
-                <div class="row mb-3">
+            <div class="row mb-3">
                 <label class="col-sm-3 col-form-label">Unidad organizacional</label>
                 <div class="col-sm-9">
                 <input type="text" class="form-control"  value="{{ $organizationalUnit }}" readonly>
@@ -153,11 +153,83 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="reportModalLabel">Detalles del Informe</h5>
+                    <h5 class="modal-title" id="reportModalLabel">Informe de Desempeño</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    Probando
+                    @if($reportDetails)
+                    <div class="row mb-3">
+                        <label class="col-sm-3 col-form-label">Periodo</label>
+                        <div class="col-sm-9">
+                        <input type="text" class="form-control" value="{{ $reportDetails->period?->name }}"  readonly>
+                        </div>
+                    </div>
+                        <div class="row mb-3">
+                        <label  class="col-sm-3 col-form-label">Nombre Funcionario</label>
+                        <div class="col-sm-9">
+                        <input type="text" class="form-control"  value="{{ $reportDetails->receivedUser?->short_name }}"  readonly>
+                        </div>
+                    </div>
+                        <div class="row mb-3">
+                        <label class="col-sm-3 col-form-label">Unidad organizacional</label>
+                        <div class="col-sm-9">
+                        <input type="text" class="form-control"  value="{{ $reportDetails->receivedOrganizationalUnit?->name }}" readonly>
+                        </div>
+                    </div>
+                    <h5 for="rend">1. Factor Rendimiento</h5>
+                    <div class="row mb-3">
+                        <label for="inputEmail3" class="col-sm-3 col-form-label">Cantidad de trabajo</label>
+                        <div class="col-sm-9">
+                            <textarea class="form-control" rows="2" readonly>{{ $reportDetails->cantidad_de_trabajo }}</textarea>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="inputEmail3" class="col-sm-3 col-form-label">Calidad del trabajo</label>
+                        <div class="col-sm-9">
+                            <textarea class="form-control" rows="2" readonly>{{ $reportDetails->calidad_del_trabajo }}</textarea>
+                        </div>
+                    </div>
+                    <h5 for="rend">2. Factor Condiciones Personales</h5>
+                    <div class="row mb-3">
+                        <label for="inputEmail3" class="col-sm-3 col-form-label">Conocimiento del trabajo</label>
+                        <div class="col-sm-9">
+                            <textarea class="form-control" rows="2" readonly>{{ $reportDetails->conocimiento_del_trabajo }}</textarea>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                    <label for="inputEmail3" class="col-sm-3 col-form-label">Interés por el trabajo</label>
+                        <div class="col-sm-9">
+                            <textarea class="form-control" rows="2" readonly>{{ $reportDetails->interes_por_el_trabajo }}</textarea>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="inputEmail3" class="col-sm-3 col-form-label">Capacidad trabajo en grupo</label>
+                        <div class="col-sm-9">
+                            <textarea class="form-control" rows="2" readonly>{{ $reportDetails->capacidad_trabajo_en_grupo }}</textarea>
+                        </div>
+                    </div>
+                    <h5 for="rend">3. Factor Comportamiento Funcionario</h5>
+                    <div class="row mb-3">
+                        <label for="inputEmail3" class="col-sm-3 col-form-label">Asistencia</label>
+                        <div class="col-sm-9">
+                            <textarea class="form-control" rows="2" readonly>{{ $reportDetails->asistencia }}</textarea>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="inputEmail3" class="col-sm-3 col-form-label">Puntualidad</label>
+                        <div class="col-sm-9">
+                            <textarea class="form-control" rows="2" readonly>{{ $reportDetails->puntualidad }}</textarea>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="inputEmail3" class="col-sm-3 col-form-label">Cumplimiento normas e instrucciones</label>
+                        <div class="col-sm-9">
+                            <textarea  class="form-control" rows="2" readonly>{{ $reportDetails->cumplimiento_normas_e_instrucciones }}</textarea>
+                        </div>
+                    </div>
+                    @else
+                        <p>No hay detalles de informe disponibles.</p>
+                    @endif
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
@@ -165,7 +237,5 @@
             </div>
         </div>
     </div>
-
-
 
 </div>
