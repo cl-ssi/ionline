@@ -30,7 +30,11 @@
                     <td width="7%">{{ $meeting->created_at->format('d-m-Y H:i:s') }}</td>
                     <td width="7%">{{ $meeting->date }}</td>
                     <td class="text-center">{{ $meeting->TypeValue }}</td>
-                    <td>{{ $meeting->subject }}</td>
+                    <td>
+                        {{ $meeting->subject }}
+                        <br><br>
+                        <small>Creado por: <b>{{ $meeting->userCreator->TinnyName }}</b></small>
+                    </td>
                     <td width="8%" class="text-center">
                         @if($meeting->StatusValue == 'Guardado')
                             <a href="{{ route('meetings.edit', $meeting) }}"
@@ -45,7 +49,7 @@
                         @endif
                             
                         @if($meeting->StatusValue == 'Derivado SGR')
-                            <a href="{{ route('meetings.edit', $meeting) }}"
+                            <a href="{{ route('meetings.show', $meeting) }}"
                                 class="btn btn-outline-secondary btn-sm">
                                <i class="fas fa-eye fa-fw"></i>
                             </a>

@@ -176,22 +176,10 @@
                             @endswitch
                         </td>
                         <td class="text-center">
-                            {{--
-                            <a href=""
-                                class="btn btn-outline-secondary btn-sm">
-                                <i class="fas fa-edit fa-fw"></i> 
-                            </a>
-                            --}}
-
                             <a class="btn btn-outline-danger btn-sm"
                                 wire:click="deleteCommitment({{ $key }})">
                                 <i class="fas fa-trash-alt fa-fw"></i>
                             </a>
-                            @if($commitment['requirement_id'])
-                                <a class="btn btn-primary btn-sm" wire:click="showSgr({{ $key }})" target="_blank">
-                                    <i class="fas fa-rocket"></i> SGR
-                                </a>
-                            @endif
                         </td>
                     </tr>
                     @endforeach

@@ -336,7 +336,6 @@ class MeetingCreate extends Component
             $commitmentStatus =  Commitment::find($commitment['id']);
             $commitmentStatus->requirement_id = $requirement->id;
             $commitmentStatus->save();
-            
         }
 
         
@@ -345,13 +344,6 @@ class MeetingCreate extends Component
         $this->meetingToEdit->save();
 
         return redirect()->route('meetings.show', $this->meetingToEdit);
-    }
-
-    public function showSgr($key){
-        $itemToShow = $this->commitments[$key];
-        $req = Requirement::find($itemToShow['requirement_id']);
-
-        return redirect()->route('requirements.show', $req->id);
     }
 
     public function searchedCommitmentUser(User $user){
