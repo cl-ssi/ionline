@@ -2,26 +2,7 @@
 
     @include('finance.payments.partials.nav')
 
-    <div class="row mb-3">
-        <div class="col-6">
-            <h3>Dtes cargadas en sistema</h3>
-        </div>
-        @cannot('Payments: viewer')
-            <div class="col-2">
-                <button class="btn btn-sm btn-success" type="button" wire:click="loadManualDTE">
-                    <i class="fas fa-plus"></i> Cargar DTE individual</button>
-            </div>
-        @endcannot
-
-    </div>
-
-
-    @if ($showManualDTE)
-        <div>
-            @livewire('finance.manual-dtes')
-        </div>
-    @endif
-
+    <h3>Dtes cargadas en sistema</h3>
 
     <div class="row g-2 mb-3">
         <div class="col-md-1">
@@ -91,13 +72,13 @@
         </div>
         <div class="col-md-1">
             <label for="search" class="form-label">&nbsp;</label>
-            <button class="btn btn-outline-secondary form-control" type="button" wire:click="refresh">
+            <button class="btn btn-primary form-control" type="button" wire:click="refresh">
                 <i class="fas fa-search"></i>
             </button>
         </div>
         <div class="col-md-1">
             <label for="search" class="form-label">&nbsp;</label>
-            <button class="btn btn-success form-control" type="button" wire:click="exportToExcel">
+            <button class="btn btn-outline-success form-control" type="button" wire:click="exportToExcel">
                 <i class="fas fa-file-excel"></i>
             </button>
         </div>
@@ -145,15 +126,8 @@
             <input type="date" class="form-control" wire:model.defer="filter.fecha_hasta_revision">
         </div>
 
-
     </div>
 
-
-    <div class="row">
-        <div class="col text-center">
-
-        </div>
-    </div>
 
     <table class="table table-sm table-bordered" wire:loading.class="text-muted">
         <thead>
