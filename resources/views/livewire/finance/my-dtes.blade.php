@@ -1,7 +1,14 @@
 <div>
     <!-- @include('finance.payments.partials.nav') -->
 
-    <h3 class="mb-3">Mis Documentos Tributarios Electrónicos</h3>
+    <div class="row mb-3">
+        <div class="col-6">
+            <h3 class="mb-3">Mis Documentos Tributarios Electrónicos</h3>
+        </div>
+        <div class="col-6 text-end">
+            <a class="btn btn-success d-inline" href="{{ route('finance.dtes.upload-single-bhe') }}">Subir Boleta Honorarios</a>
+        </div>
+    </div>
 
 
     <table class="table table-sm table-bordered" wire:loading.class="text-muted">

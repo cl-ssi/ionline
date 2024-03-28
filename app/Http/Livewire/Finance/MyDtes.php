@@ -11,7 +11,6 @@ class MyDtes extends Component
     {
         // Eloquent query donde Dte tenga un RequestForm y el RequestForm tenga un ContractManager y ese ContractManager sea el usuario autenticado
 
-
         $dtes = Dte::with([
                 'purchaseOrder',
                 'purchaseOrder.receptions',
@@ -27,6 +26,7 @@ class MyDtes extends Component
             ])
             ->whereRelation('requestForm.contractManager', 'id', auth()->id())
             ->orWhere('contract_manager_id', auth()->id())
+            ->orWhere('emisor', auth()->user()->runFormat)
             ->whereNull('rejected')
             ->orderByDesc('fecha_recepcion_sii')
             ->paginate(50);
