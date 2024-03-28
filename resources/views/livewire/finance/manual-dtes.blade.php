@@ -17,7 +17,6 @@
                     @foreach ($this->getDistinctTipoDocumento() as $tipo)
                         <option value="{{ $tipo }}">{{ $tipo }}</option>
                     @endforeach
-                    <option value="boleta_electronica">boleta_electronica</option>
                 </select>
                 @error('tipoDocumento')
                     <span class="text-danger">{{ $message }}</span>
