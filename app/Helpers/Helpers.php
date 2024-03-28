@@ -35,3 +35,14 @@ function fechasSeSolapan($inicio1, $fin1, $inicio2, $fin2)
         return false;
     }
 }
+
+
+function runFormat($run)
+{
+    $run = preg_replace('/[^0-9K]/', '', $run);
+    // Separa el dígito verificador
+    $id = substr($run, 0, -1);
+    $dv = substr($run, -1);
+
+    return number_format($id, 0, '', '.') . '-' . $dv;
+}

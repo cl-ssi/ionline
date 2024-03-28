@@ -12,7 +12,8 @@ RUN apk add --no-cache \
         freetype-dev \
         libxml2-dev \
         libzip-dev \
-        mdbtools-utils
+        mdbtools-utils \
+        poppler-utils
 
 RUN docker-php-ext-install mysqli pdo pdo_mysql
 

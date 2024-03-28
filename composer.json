@@ -31,6 +31,7 @@
         "simplesoftwareio/simple-qrcode": "^4.2",
         "spatie/laravel-google-cloud-storage": "^2.2",
         "spatie/laravel-permission": "^5.10",
+        "spatie/pdf-to-text": "^1.52",
         "stackkit/laravel-google-cloud-scheduler": "^2.0",
         "stackkit/laravel-google-cloud-tasks-queue": "^3.6"
     },
