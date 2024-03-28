@@ -15,6 +15,7 @@ class UploadSingleBhe extends Component
     public $bhe;
     public $bhe_to_text;
     public $dte;
+    public $message = null;
 
     protected $rules = [
         'dte.tipo' => 'required',
@@ -30,36 +31,34 @@ class UploadSingleBhe extends Component
         'dte.establishment_id' => 'required',
     ];
 
-    public function process()
+    public function updatedBhe()
     {
         $this->validate([
             'bhe' => 'max:1024|mimes:pdf', // 1MB Max
         ]);
 
         $filename = time().'.pdf';
-        // $filename = 'tmp.pdf';
-        
+
         $this->bhe->storeAs('bhe', $filename, 'local');
 
         $this->bhe_to_text = Pdf::getText(storage_path('app/bhe/'.$filename));
 
-        $this->dte = new Dte();
-
+        
         // Divide el texto en líneas
         $lineas = explode("\n", $this->bhe_to_text);
-
+        
         if($lineas[0] == 'BOLETA DE HONORARIOS') {
-            $this->dte->tipo_documento = 'boleta_honorarios';
-            $this->dte->tipo = 69;
+            $tipo_documento = 'boleta_honorarios';
+            $tipo = 69;
 
             preg_match("/N ° (\d+)/", $this->bhe_to_text, $matches);
-            $this->dte->folio = $matches[1];
+            $folio = $matches[1];
 
             preg_match("/\n\n(.+)\n\nN/", $this->bhe_to_text, $matches);
-            $this->dte->razon_social_emisor = $matches[1];
+            $razon_social_emisor = $matches[1];
 
             preg_match("/RUT: ([\d.]+−\d)/", $this->bhe_to_text, $matches);
-            $this->dte->emisor = runFormat($matches[1]);
+            $emisor = runFormat($matches[1]);
 
             preg_match("/Fecha: (\d+ de .+ de \d+)/", $this->bhe_to_text, $matches);
             list($day, $de, $mes, $de, $year) = explode(' ', $matches[1]);
@@ -81,11 +80,12 @@ class UploadSingleBhe extends Component
             ];
 
             // Parsea la fecha
-            $this->dte->emision = $year . '-' . $meses[$mes] . '-' . $day;
+            $emision = $year . '-' . $meses[$mes] . '-' . $day;
 
             preg_match("/Rut: ([\d.]+− \d)/", $this->bhe_to_text, $matches);
-            $this->dte->receptor = runFormat($matches[1]);
+            $receptor = runFormat($matches[1]);
 
+            // Esto es para encontrar el último valor después del Total: 
             // Encuentra el índice de la línea que contiene "Total:"
             $indiceTotal = 0;
             foreach ($lineas as $indice => $linea) {
@@ -104,26 +104,46 @@ class UploadSingleBhe extends Component
                 }
             }
 
-            // preg_match("/Total:\n\n[\d.]+\n([\d.]+)/", $this->bhe_to_text, $matches);
-            $this->dte->monto_total = preg_replace('/[^0-9]/', '', $monto_total);
+            $monto_total = preg_replace('/[^0-9]/', '', $monto_total);
 
             preg_match("/\n(\w+)\nRes. Ex. N/", $this->bhe_to_text, $matches);
             $bar_code = $matches[1];
 
-            $this->dte->uri = 'https://loa.sii.cl/cgi_IMT/TMBCOT_ConsultaBoletaPdf.cgi?origen=TERCEROS&txt_codigobarras='.$bar_code;
+            $uri = 'https://loa.sii.cl/cgi_IMT/TMBCOT_ConsultaBoletaPdf.cgi?origen=TERCEROS&txt_codigobarras='.$bar_code;
             
-            $this->dte->establishment_id = auth()->user()->organizationalUnit->establishment_id;
+            $establishment_id = auth()->user()->organizationalUnit->establishment_id;
+
+            $this->dte = Dte::firstOrNew([
+                'tipo'      => $tipo,
+                'folio'     => $folio,
+                'emisor'    => $emisor,
+            ]);
+
+            $this->dte->tipo_documento      = $tipo_documento;
+            $this->dte->razon_social_emisor = $razon_social_emisor;
+            $this->dte->receptor            = $receptor;
+            $this->dte->emision             = $emision;
+            $this->dte->monto_total         = $monto_total;
+            $this->dte->uri                 = $uri;
+            // $this->dte->folio_oc            = null;
+            $this->dte->establishment_id    = $establishment_id;        
+
+            app('debugbar')->info($this->dte->isDirty());
         }
         else {
             $this->bhe_to_text = "NO ES UNA BOLETA DE HONORARIOS";
-        }    
+        }
     }
 
     public function save()
     {
+        $this->validate();
+
         $this->dte->save();
 
         $this->reset();
+
+        $this->message = 'BHE cargada correctamente.';
     }
 
     public function render()
