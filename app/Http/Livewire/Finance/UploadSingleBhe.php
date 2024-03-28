@@ -127,8 +127,6 @@ class UploadSingleBhe extends Component
             $this->dte->uri                 = $uri;
             // $this->dte->folio_oc            = null;
             $this->dte->establishment_id    = $establishment_id;        
-
-            app('debugbar')->info($this->dte->isDirty());
         }
         else {
             $this->bhe_to_text = "NO ES UNA BOLETA DE HONORARIOS";
