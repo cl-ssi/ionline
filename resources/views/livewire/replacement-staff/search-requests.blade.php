@@ -425,7 +425,7 @@
                                 <div class="form-check">
                                     <input class="form-check-input" 
                                         type="checkbox"
-                                        wire:model="checkToAssign"
+                                        wire:model.defer="checkToAssign"
                                         value="{{ $requestReplacementStaff->id }}"
                                         id="for_sign_id">
                                 </div>
@@ -492,7 +492,7 @@
                                     <div class="form-check">
                                         <input class="form-check-input" 
                                             type="checkbox"
-                                            wire:model="checkToAssign"
+                                            wire:model.defer="checkToAssign"
                                             value="{{ $requestReplacementStaff->id }}"
                                             id="for_sign_id">
                                     </div>
