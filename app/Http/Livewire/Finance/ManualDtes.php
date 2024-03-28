@@ -18,6 +18,7 @@ class ManualDtes extends Component
     public $razonSocial;
     public $montoTotal;
     public $folioOC;
+    public $emision;
     public $barCode;
     public $showSuccessMessage = false;
     public $storage_path = '/ionline/finances/dte/carga_manual';
@@ -55,6 +56,7 @@ class ManualDtes extends Component
             'razonSocial' => 'required',
             'montoTotal' => 'required|numeric',
             'folioOC' => 'required',
+            'emision' => 'required',
             'archivoManual' => 'file|mimes:pdf|max:4096|nullable',
             
         ]);
@@ -75,6 +77,7 @@ class ManualDtes extends Component
             'razon_social_emisor' => $this->razonSocial,
             'monto_total' => $this->montoTotal,
             'folio_oc' => $this->folioOC,
+            'emision' => $this->emision,
             'tipo' => $tipo,
             // 'uri' => 'https://loa.sii.cl/cgi_IMT/TMBCOT_ConsultaBoletaPdf.cgi?origen=TERCEROS&txt_codigobarras=' . $uri_last_field,
         ]);
