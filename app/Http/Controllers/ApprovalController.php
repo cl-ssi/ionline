@@ -29,6 +29,6 @@ class ApprovalController extends Controller
     public function signedApproval(Approval $approval)
     {
         header('Content-Type: application/pdf');
-        echo Storage::get($approval->filename);
+        echo base64_decode($approval->filename_base64);
     }
 }

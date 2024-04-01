@@ -6,13 +6,13 @@
 
 @include('meetings.partials.nav')
 
-<h5><i class="fas fa-users fa-fw"></i> Mis reuniones</h5>
-<p>Incluye Reuniones de mi Unidad Organizacional: <b>{{ auth()->user()->organizationalUnit->name }}</b></p>
+<h5><i class="fas fa-users fa-fw"></i> Mis compromisos</h5>
+<p>Incluye compromisos de mi Unidad Organizacional: <b>{{ auth()->user()->organizationalUnit->name }}</b></p>
 
 </div>
 
 <div class="col-sm">
-    @livewire('meetings.commitments.search-meeting', [
+    @livewire('meetings.search-commitment', [
         'index' => 'own'
     ])
 </div>

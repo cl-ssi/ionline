@@ -73,8 +73,7 @@
     </table>
 </div>
 
-{{--
-@if($purchasePlan->canAddPurchasePlanId())
+@if($purchasePlan->canAddPurchasePlanId() && $purchasePlan->assign_user_id == auth()->id())
     <!-- Button trigger modal: Ingresar datos de Portal "Plan de Compras" -->
     <button type="button" class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#modal-{{$purchasePlan->id }}">
         <i class="fas fa-upload fa-fw"></i> Ingresar ID Mercado Público
@@ -84,7 +83,6 @@
         'purchasePlan' =>   $purchasePlan 
     ])
 @endif
---}}
 
 @if($purchasePlan->purchasePlanPublications->count() > 0)
     <h6><i class="fas fa-info-circle mt-4"></i> Publicación Mercado Público</h6>
@@ -107,7 +105,9 @@
                         <td class="text-center">{{ $purchasePlanPublication->mercado_publico_id }}</td>
                         <td class="text-center">{{ $purchasePlanPublication->date }}</td>
                         <td class="text-center">
-                            <button type="button" class="btn btn-outline-primary"><i class="fas fa-paperclip fa-fw"></i></button>
+                            <a class="btn btn-outline-primary" href="{{ route('purchase_plan.show_file', $purchasePlanPublication) }}" target="_blank">
+                                <i class="fas fa-paperclip fa-fw"></i>
+                            </a>
                         </td>
                     </tr>
                 @endforeach

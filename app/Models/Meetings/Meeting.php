@@ -51,9 +51,13 @@ class Meeting extends Model implements Auditable
             case 'lobby':
                 return 'Lobby';
                 break;
-
-            case 'pending':
-                return 'Pendiente';
+            
+            case 'extraordinaria':
+                return 'Extraordinaria';
+                break;
+            
+            case 'no extraordinaria':
+                return 'No extraordinaria';
                 break;
         }
     }

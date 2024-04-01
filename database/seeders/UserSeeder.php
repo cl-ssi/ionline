@@ -29,7 +29,7 @@ class UserSeeder extends Seeder
         $user->email = "alvaro.torres@redsalud.gob.cl";
         $user->organizationalUnit()->associate($ou);
         $user->save();
-        $user->assignRole('god', 'RRHH: admin');
+        $user->assignRole('god');
         $user->givePermissionTo(Permission::all());
 
         $user = new User();

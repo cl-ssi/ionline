@@ -98,7 +98,7 @@
 
 <div class="table-responsive">
     <table class="table table-bordered table-striped table-sm small">
-        <thead>
+        <thead class="table-info">
             <tr class="text-center">
                 <th width="3%">#</th>
                 <th width="40%">Descripción</th>
@@ -114,7 +114,7 @@
                     <td style="text-align: justify;">{{ $commitment->description }}</td>
                     <td class="text-center">{{ ($commitment->commitment_user_id) ?  $commitment->commitmentUser->TinnyName : $commitment->commitmentOrganizationalUnit->name }}</td>
                     <td class="text-center">
-                        {{ $commitment->closing_date }} <br>
+                        {{ ($commitment['closing_date']) ? $commitment['closing_date'] : 'Sin fecha límite' }} <br>
                         @switch($commitment->priority)
                             @case('normal')
                                 <span class="badge text-bg-success">{{ $commitment->priority }}</span>
@@ -142,6 +142,10 @@
                                 <span class="badge text-bg-light">{{ $commitment->requirement->status }}</span>
                                 @break
                         @endswitch
+                        <br>
+                        <a class="btn btn-primary btn-sm" href="{{ route('requirements.show', $commitment->requirement->id) }}" target="_blank">
+                            <i class="fas fa-rocket"></i> SGR
+                        </a>
                     </td>
                 </tr>
             @endforeach

@@ -27,13 +27,13 @@
     <tbody>
         @foreach($usersRem as $userRem)
         <tr>
-            <td>{{ optional($userRem->user)->fullname }}</td>
+            <td>{{ optional($userRem->user)->fullName }}</td>
             <td>{{ $userRem->establishment->name ?? '' }}</td>
             <td>
                 <form method="POST" class="form-horizontal" action="{{ route('rem.users.destroy', $userRem->id) }}">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="btn btn-danger float-left" onclick="return confirm('¿Está seguro que desea eliminar a {{ $userRem->user->fullname }} como usuario REM del establecimiento {{ $userRem->establishment->name }}? ' )"><i class="fas fa-trash-alt"></i></button>
+                    <button type="submit" class="btn btn-danger float-left" onclick="return confirm('¿Está seguro que desea eliminar a {{ $userRem->user?->fullName }} como usuario REM del establecimiento {{ $userRem->establishment->name }}? ' )"><i class="fas fa-trash-alt"></i></button>
                 </form>
             </td>
         </tr>

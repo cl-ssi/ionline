@@ -6,6 +6,8 @@ use Livewire\Component;
 use App\Models\Requirements\Requirement;
 use App\User;
 use Livewire\WithPagination;
+use App\Exports\RequirementsExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class Filter extends Component
 {
@@ -129,4 +131,15 @@ class Filter extends Component
             'requirements' => $requirements,
         ]);
     }
+
+    public function export()
+    {
+        $filteredRequirements = $this->getRequirements()->pluck('id'); // Obtener solo los IDs de los requisitos filtrados
+        
+        // Aplicar los mismos filtros al exportador
+        return Excel::download(new RequirementsExport($filteredRequirements), 'requirements.xlsx');
+    }
+    
+
+
 }

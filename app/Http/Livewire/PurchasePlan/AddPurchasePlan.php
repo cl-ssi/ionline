@@ -10,6 +10,7 @@ use App\Models\PurchasePlan\PurchasePlan;
 use App\Models\PurchasePlan\PurchasePlanPublication;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class AddPurchasePlan extends Component
 {
@@ -53,5 +54,9 @@ class AddPurchasePlan extends Component
 
         session()->flash('success', 'Estimados Usuario, se ha ingresado exitosamente ID de Mercado Público correspondiente al Plan de Compra N°'.$this->purchasePlan->id);
         return redirect()->route('purchase_plan.show', ['purchasePlan' => $this->purchasePlan]);
+    }
+
+    public function show_file(PurchasePlanPublication $purchasePlanPublication){
+        return Storage::disk('gcs')->response($purchasePlanPublication->file);
     }
 }

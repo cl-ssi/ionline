@@ -160,7 +160,7 @@ class Dte extends Model implements Auditable
      */
     protected $dates = [
         'publicacion',
-        'emision',
+        // 'emision',
         'fecha_nar',
         'fecha_arm',
         'fecha_vencimiento',
@@ -177,7 +177,7 @@ class Dte extends Model implements Auditable
 
     protected $casts = [
         'all_receptions_at'=> 'datetime',
-        
+        'emision' => 'date:Y-m-d',
     ];
 
     /**

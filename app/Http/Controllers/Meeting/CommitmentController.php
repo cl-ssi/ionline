@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Meeting;
 
+use App\Http\Controllers\Controller;
 use App\Models\Meetings\Commitment;
 use Illuminate\Http\Request;
 
@@ -20,6 +21,11 @@ class CommitmentController extends Controller
     public function own_index()
     {
         return view('meetings.commitments.own_index');
+    }
+
+    public function all_index()
+    {
+        return view('meetings.commitments.all_index');
     }
 
     /**

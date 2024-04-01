@@ -18,8 +18,8 @@ class EstablishmentController extends Controller
      */
     public function index()
     {
-        $establishments = Establishment::All();
-        return view('parameters/establishments/index')->withEstablishments($establishments);
+        $establishments = Establishment::with('commune','establishmentType')->get();
+        return view('parameters.establishments.index', compact('establishments'));
     }
 
     /**

@@ -12,12 +12,11 @@
         <div class="row g-2">
             <div class="form-group col-2">
                 <label for="tipoDocumento">Tipo de documento*</label>
-                <select class="form-control" id="tipoDocumento" wire:model.defer="tipoDocumento" required>
+                <select class="form-select" id="tipoDocumento" wire:model.defer="tipoDocumento" required>
                     <option value="">Seleccionar Tipo Documento</option>
                     @foreach ($this->getDistinctTipoDocumento() as $tipo)
                         <option value="{{ $tipo }}">{{ $tipo }}</option>
                     @endforeach
-                    <option value="boleta_electronica">boleta_electronica</option>
                 </select>
                 @error('tipoDocumento')
                     <span class="text-danger">{{ $message }}</span>
@@ -66,7 +65,16 @@
                     <span class="text-danger">{{ $message }}</span>
                 @enderror
             </div>
-            <div class="form-group col-4">
+
+            <div class="form-group col-2">
+                <label for="emision">Fecha</label>
+                <input type="date" class="form-control" id="emision" wire:model.defer="emision" autocomplete="off">
+                @error('emision')
+                    <span class="text-danger">{{ $message }}</span>
+                @enderror
+            </div>
+
+            <div class="form-group col-2">
                 <label for="folioOC">Orden de Compra</label>
                 <input type="text" class="form-control" id="folioOC" wire:model.defer="folioOC" autocomplete="off">
                 @error('folioOC')
@@ -79,7 +87,7 @@
                 <div class="input-group">
                     <input type="text" class="form-control" id="barCode" wire:model.defer="barCode"
                         placeholder="ej: 6A86963" maxlength="7" autocomplete="off">
-                    <a class="btn btn-outline-secondary" href="#" wire:click.prevent="verBoleta"
+                    <a class="btn btn-outline-secondary" href="#" wire:click.prevent="verBoleta" target="_blank"
                         target="_blank">
                         <i class="fas fa-file-pdf" aria-hidden="true"></i> Ver boleta
                     </a>

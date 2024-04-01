@@ -61,6 +61,7 @@ use App\Http\Controllers\JobPositionProfiles\JobPositionProfileSignController;
 use App\Http\Controllers\JobPositionProfiles\MessageController;
 // use App\Http\Controllers\Lobby\MeetingController;
 use App\Http\Controllers\Mammography\MammographyController;
+use App\Http\Controllers\Meeting\CommitmentController;
 use App\Http\Controllers\Meeting\MeetingController;
 use App\Http\Controllers\MunicipalityController;
 use App\Http\Controllers\News\NewsController;
@@ -160,6 +161,7 @@ use App\Http\Controllers\Resources\WingleController;
 use App\Http\Controllers\Rrhh\AbsenteeismTypeController;
 use App\Http\Controllers\Rrhh\AttendanceController;
 use App\Http\Controllers\Rrhh\AuthorityController;
+use App\Http\Controllers\Rrhh\CalificationController;
 use App\Http\Controllers\Rrhh\NoAttendanceRecordController;
 use App\Http\Controllers\Rrhh\OrganizationalUnitController;
 use App\Http\Controllers\Rrhh\SubrogationController;
@@ -178,10 +180,10 @@ use App\Http\Controllers\ServiceRequests\ValueController;
 use App\Http\Controllers\Suitability\CategoriesController;
 use App\Http\Controllers\Suitability\OptionsController;
 use App\Http\Controllers\Suitability\QuestionsController;
-use App\Http\Controllers\Suitability\ResultsController;
 
 //use App\Http\Controllers\RequestForms\SupplyPurchaseController;
 //use App\Http\Controllers\Suitability\ResultsController;
+use App\Http\Controllers\Suitability\ResultsController;
 use App\Http\Controllers\Suitability\SchoolUserController;
 use App\Http\Controllers\Suitability\SchoolsController;
 use App\Http\Controllers\Suitability\SuitabilityController;
@@ -236,11 +238,13 @@ use App\Http\Livewire\Finance\Receptions\IndexReception;
 use App\Http\Livewire\Finance\Receptions\TypeMgr;
 use App\Http\Livewire\Finance\UploadBhe;
 use App\Http\Livewire\Finance\UploadDtes;
+use App\Http\Livewire\Finance\UploadSingleBhe;
 use App\Http\Livewire\Finance\UploadTgr;
 use App\Http\Livewire\HealthServices;
 use App\Http\Livewire\His\ModificationMgr;
 use App\Http\Livewire\His\ModificationRequestIndex;
 use App\Http\Livewire\His\NewModification;
+use App\Http\Livewire\Indicators\PrestacionesLoader;
 use App\Http\Livewire\Indicators\QueryGenerator;
 use App\Http\Livewire\InventoryLabel\InventoryLabelIndex;
 use App\Http\Livewire\Inventory\AssignedProducts;
@@ -278,6 +282,8 @@ use App\Http\Livewire\ProfAgenda\Reports\ClinicalRecordReport;
 use App\Http\Livewire\ProfAgenda\Reports\SirsapReport;
 use App\Http\Livewire\Profile\MailSignature;
 use App\Http\Livewire\Profile\Subrogations;
+use App\Http\Livewire\PurchasePlan\AddPurchasePlan;
+use App\Http\Livewire\Rem\ImportMdb;
 use App\Http\Livewire\Rem\SeccionGenerator;
 use App\Http\Livewire\Rem\SeccionIndex;
 use App\Http\Livewire\RequestForm\ReportGlobalBudget;
@@ -856,6 +862,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
         Route::get('/period', Period::class)->name('period');
         Route::get('/received-report', ReceivedReport::class)->name('received_report');
         Route::get('/submitted-report', SubmittedReport::class)->name('submitted_report');
+        Route::get('/show/{userId}/{periodId}', [CalificationController::class, 'show'])->name('show');
     });
 
     
@@ -1454,8 +1461,6 @@ Route::prefix('indicators')->as('indicators.')->group(function () {
         return view('indicators.index');
     })->name('index');
 
-    Route::get('/query-generator', QueryGenerator::class)->name('query-generator');
-
     Route::get('/population', [SingleParameterController::class, 'population'])->name('population');
     Route::resource('single_parameter', SingleParameterController::class)->middleware('auth');
     Route::post('/population/export', [SingleParameterController::class, 'export'])->name('population.export');
@@ -1758,8 +1763,16 @@ Route::prefix('indicators')->as('indicators.')->group(function () {
     });
 
     Route::prefix('rem')->as('rem.')->group(function () {
-        Route::get('/generator/{seccion}', SeccionGenerator::class)->name('generator')->middleware('auth');
-        Route::get('/seccion', SeccionIndex::class)->name('seccion')->middleware('auth');
+        // Rutas para apoyo de carga y confección de los rems
+        Route::prefix('admin')->as('admin.')->middleware('auth')->group(function () {
+            Route::get('/query-generator', QueryGenerator::class)->name('query-generator');
+            Route::get('/prestaciones-loader', PrestacionesLoader::class)->name('prestaciones-loader');
+            Route::get('/generator/{seccion}', SeccionGenerator::class)->name('generator');
+            Route::get('/seccion', SeccionIndex::class)->name('seccion');
+        });
+
+        Route::get('/import-mdb', ImportMdb::class)->name('import-mdb');
+
         Route::get('/{year}', [App\Http\Controllers\Indicators\RemController::class, 'list'])->name('list');
         Route::get('/{year}/{serie}', [App\Http\Controllers\Indicators\RemController::class, 'index'])->name('index');
         Route::get('/{year}/{serie}/{nserie}/{unique?}', [App\Http\Controllers\Indicators\RemController::class, 'show'])->name('show');
@@ -2137,6 +2150,7 @@ Route::prefix('finance')->as('finance.')->middleware(['auth', 'must.change.passw
     Route::prefix('dtes')->as('dtes.')->group(function () {
         Route::get('/', IndexDtes::class)->name('index');
         Route::get('upload', UploadDtes::class)->name('upload');
+        Route::get('upload-single-bhe', UploadSingleBhe::class)->name('upload-single-bhe');
         Route::get('upload-bhe', UploadBhe::class)->name('uploadBhe');
         Route::get('upload-tgr', UploadTgr::class)->name('uploadTgr');
         Route::get('cenabast', Cenabast::class)->name('cenabast');
@@ -2189,12 +2203,14 @@ Route::prefix('purchase_plan')->as('purchase_plan.')->middleware(['auth', 'must.
     Route::get('/pending_index', [PurchasePlanController::class, 'pending_index'])->name('pending_index');
     Route::get('/create', [PurchasePlanController::class, 'create'])->name('create');
     Route::get('/{purchasePlan}/show', [PurchasePlanController::class, 'show'])->name('show');
+    Route::get('/{purchasePlanPublication}/show_file', [AddPurchasePlan::class, 'show_file'])->name('show_file');
     Route::get('/{purchase_plan_id}/show_approval', [PurchasePlanController::class, 'show_approval'])->name('show_approval');
     Route::get('/{purchasePlan}/edit', [PurchasePlanController::class, 'edit'])->name('edit');
     Route::delete('/{purchasePlan}/destroy', [PurchasePlanController::class, 'destroy'])->name('destroy');
     Route::get('/{purchasePlan}/send', [PurchasePlanController::class, 'send'])->name('send');
 
     Route::get('/assign_purchaser_index', [PurchasePlanController::class, 'assign_purchaser_index'])->name('assign_purchaser_index');
+    Route::get('/my_assigned_plans_index', [PurchasePlanController::class, 'my_assigned_plans_index'])->name('my_assigned_plans_index');
     
     Route::prefix('reports')->as('reports.')->middleware('auth')->group(function () {
         Route::get('/show_ppl_items', [PurchasePlanController::class, 'show_ppl_items'])->name('show_ppl_items');
@@ -2535,6 +2551,7 @@ Route::prefix('suitability')->as('suitability.')->middleware(['auth', 'must.chan
         Route::get('/', [ResultsController::class, 'index'])->name('index');
         Route::delete('{result}/destroy', [ResultsController::class, 'destroy'])->name('destroy');
         Route::delete('{result}/destroy-result', [ResultsController::class, 'destroyResult'])->name('destroyResult');
+        Route::delete('{result}/destroyAndSetStatus', [ResultsController::class, 'destroyAndSetStatus'])->name('destroyAndSetStatus');
         Route::get('/{id}', [ResultsController::class, 'show'])->name('show');
         Route::get('/certificate/{id}', [ResultsController::class, 'certificate'])->name('certificate');
         Route::get('/certificatepdf/{id}', [ResultsController::class, 'certificatepdf'])->name('certificatepdf');

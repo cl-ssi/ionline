@@ -311,19 +311,6 @@ class IndexDtes extends Component
         $this->showEdit = null;
     }
 
-
-    public function loadManualDTE()
-    {
-        $this->showManualDTE = true;
-    }
-
-    public function dteAdded()
-    {
-        // Ocultar el formulario
-        $this->showManualDTE = false;
-    }
-
-
     public function sendConfirmation($dte_id)
     {
         $dte = Dte::find($dte_id);
@@ -390,7 +377,6 @@ class IndexDtes extends Component
         $this->refresh();
     }
 
-
     public function setContractManager($contractManager)
     {
         $this->contract_manager_id = $contractManager['id'];
@@ -398,11 +384,8 @@ class IndexDtes extends Component
 
     public function exportToExcel()
     {
-     
         $dtes = $this->searchDtes(false);
         return Excel::download(new DtesExport($dtes), 'dtes.xlsx');
     }
-
-
 
 }
