@@ -418,8 +418,7 @@ class ContinuityResolutionController extends Controller
         &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;APRU&Eacute;BASE</strong> la Pr&oacute;rroga de continuidad de convenio del Programa 
     <span style='background:lime;'>&ldquo;<strong>".$programa."</strong><strong>&rdquo;</strong>, Comuna
         de&nbsp;</span><span style='background:lime;'>".$comuna."</span>, para ser
-    ejecutado desde el 01 de enero del a&ntilde;o 2024 al 31 de diciembre del mismo a&ntilde;o, para lo cual es
-    necesario modificar las siguientes cl&aacute;usulas:</p><br>
+    ejecutado desde el 01 de enero del a&ntilde;o 2024 al 31 de diciembre del mismo a&ntilde;o, por lo cual se modifican las cláusulas que se indican a continuación, conforme el texto que se transcribe respecto de cada una de ellas, el que pasa a reemplazar totalmente la anterior.</p><br>
 
 <div
     style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:'Calibri',sans-serif;'>
