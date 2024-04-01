@@ -139,11 +139,16 @@
                 <option value="">Todos</option>
                 @foreach($responsibles as $itemResponsible)
                     <option value="{{ $itemResponsible->id }}">
-                        {{ $itemResponsible->tinny_name }}
+                        @if($itemResponsible->trashed())
+                            <span class="text-danger">{{ $itemResponsible->tinny_name }} (Eliminado)</span>
+                        @else
+                            {{ $itemResponsible->tinny_name }}
+                        @endif
                     </option>
                 @endforeach
             </select>
         </fieldset>
+
 
         <fieldset class="form-group col-md-2">
             <label for="users">Usuarios</label>
@@ -154,9 +159,13 @@
             >
                 <option value="">Todos</option>
                 @foreach($users as $itemUser)
-                    <option value="{{ $itemUser->id }}">
+                <option value="{{ $itemUser->id }}">
+                    @if($itemUser->trashed())
+                        <span class="text-danger">{{ $itemUser->tinny_name }} (Eliminado)</span>
+                    @else
                         {{ $itemUser->tinny_name }}
-                    </option>
+                    @endif
+                </option>
                 @endforeach
             </select>
         </fieldset>

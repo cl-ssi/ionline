@@ -115,7 +115,7 @@ class InventoryIndex extends Component
                     $query->where('number', 'LIKE', '%'.$this->number.'%')
                           ->orWhere('old_number', 'LIKE', '%'.$this->number.'%');
                 });
-            })            
+            })
             ->when($this->inv_id, function($query) {
                 $query->where('id', $this->inv_id);
             })
@@ -144,7 +144,7 @@ class InventoryIndex extends Component
             ->groupBy('user_using_id')
             ->pluck('user_using_id');
 
-        $this->users = User::query()
+        $this->users = User::withTrashed()
             ->whereIn('id', $userIds)
             ->orderBy('name')
             ->get(['id', 'name', 'fathers_family']);
@@ -158,7 +158,7 @@ class InventoryIndex extends Component
             ->groupBy('user_responsible_id')
             ->pluck('user_responsible_id');
 
-        $this->responsibles = User::query()
+        $this->responsibles = User::withTrashed()
             ->whereIn('id', $responsibleIds)
             ->orderBy('name')
             ->get(['id', 'name', 'fathers_family']);
