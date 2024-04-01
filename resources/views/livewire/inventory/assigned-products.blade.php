@@ -44,7 +44,7 @@
                 type="text"
                 id="search"
                 class="form-control"
-                placeholder="Ingresa un número inventario o nombre de producto o nombre unspc o ubicación o Código Arquitectónico"
+                placeholder="Ingresa un número inventario (nuevo o antiguo) o nombre de producto o nombre unspc o ubicación o Código Arquitectónico"
                 wire:model.debounce.1500ms="search"
                 autocomplete="off"
             >

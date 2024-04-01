@@ -48,7 +48,7 @@ class AssignedProducts extends Component
                 $query->whereNotNull('reception_date');
             })
             ->where(function ($query) use ($search) {
-                $query->where('number', 'like', $search)
+                $query->where('number', 'like', $search)->orWhere('old_number', 'like', $search) 
                       ->orWhereHas('unspscProduct', function ($query) use ($search) {
                           $query->where('name', 'like', $search);
                       })
