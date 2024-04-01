@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 use App\Models\Welfare\Benefits\Benefit;
 use App\Models\Welfare\Benefits\Document;
+use App\Models\Welfare\Benefits\Request;
 
 class Subsidy extends Model
 {
@@ -25,7 +26,7 @@ class Subsidy extends Model
      * @var array
      */
     protected $fillable = [
-        'id', 'benefit_id', 'name','description','annual_cap','recipient'
+        'id', 'benefit_id', 'name','description','annual_cap','payment_in_installments','recipient','status'
     ];
 
     /**
@@ -49,5 +50,20 @@ class Subsidy extends Model
     public function documents(): HasMany
     {
         return $this->hasMany(Document::class);
+    }
+
+    public function getSubsidyUsedMoney(){
+        $requests = Request::whereYear('created_at',now()->format('Y'))
+                            ->where('applicant_id', auth()->user()->id)
+                            ->where('subsidy_id', $this->id)
+                            ->where('status', 'Aceptado')
+                            ->get();
+        
+        $accepted_amount = 0;
+        foreach($requests as $request){
+            $accepted_amount += $request->accepted_amount;
+        }   
+
+        return $accepted_amount;
     }
 }

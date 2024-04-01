@@ -43,7 +43,7 @@ class Benefit extends Model
     {
         // la siguiente validación permite saber y excluir los beneficios que hayan alcanzado su tope anual
         $subsidies_array = [];
-        $subsidies = Subsidy::where('benefit_id',$this->id)->get();
+        $subsidies = Subsidy::where('benefit_id',$this->id)->where('status',1)->get();
         foreach($subsidies as $subsidy){
             $requests = Request::whereYear('created_at',now()->format('Y'))
                             ->where('applicant_id', auth()->user()->id)
@@ -56,8 +56,8 @@ class Benefit extends Model
                 $accepted_amount += $request->accepted_amount;
             }  
 
-            if($accepted_amount == $subsidy->annual_cap){
-
+            if($subsidy->annual_cap != null && $accepted_amount == $subsidy->annual_cap){
+                
             }else{
                 array_push($subsidies_array, $subsidy->id);
             }

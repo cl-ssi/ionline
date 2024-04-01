@@ -21,12 +21,12 @@ class Requests extends Component
     public $benefits;
     public $subsidies;
     public $showCreate = false;
-    public $showUpdateBankAccounts = false;
     public $selectedRequestId;
     public $benefit_id = '';
     public $subsidy_id = '';
     public $subsidy;
     public $files = []; // Variable para almacenar archivos seleccionados
+    public $showData = false;
 
     public $banks;
     public $bankaccount;
@@ -84,16 +84,9 @@ class Requests extends Component
         }
     }
 
-    public function updateBankAccounts()
-    {
-        $this->showUpdateBankAccounts = !$this->showUpdateBankAccounts;
-        if (!$this->showUpdateBankAccounts) {
-            $this->reset(['benefit_id', 'subsidy_id', 'subsidy']);
-        }
-    }
-
     public function updatedBenefitId($value)
     {
+        $this->showData = false;
         if ($value) {
             $benefit = Benefit::find($value);
             $this->subsidies = $benefit->subsidies;
@@ -104,6 +97,7 @@ class Requests extends Component
 
     public function updatedSubsidyId($value)
     {
+        $this->showData = true;
         if ($value) {
             $this->subsidy = Subsidy::find($value);
         } else {
@@ -129,7 +123,9 @@ class Requests extends Component
     public function saveRequest()
     {
         $this->validate([
-            // 'benefit_id' => 'required',
+            'account_number' => 'required|integer',
+            'bank_id' => 'required',
+            'pay_method' => 'required',
             'subsidy_id' => 'required',
         ]);
 
@@ -164,32 +160,18 @@ class Requests extends Component
         }
 
         // Guardar archivos seleccionados
-        foreach ($this->files as $file) {
+        foreach ($this->files as $key => $file) {
             $filename = $file->getClientOriginalName();
             $fileModel = New File();
             $fileModel->file = $file->store('ionline/well_bnf',['disk' => 'gcs']);
             $fileModel->name = $filename;
             $fileModel->well_bnf_request_id = $request->id;
+            $fileModel->document_id = $this->subsidy->documents[$key]->id;
             $fileModel->save();
         }
 
-        $this->reset(['benefit_id', 'subsidy_id', 'selectedRequestId', 'showCreate', 'showUpdateBankAccounts']);
-    }
 
-    public function showFile($requestId)
-    {
-        $file = File::find($requestId);
-        return Storage::disk('gcs')->response($file->file, mb_convert_encoding($file->name,'ASCII'));
-    }
-
-    public function saveBankAccount(){
-        $this->validate([
-            'account_number' => 'required|integer',
-            'bank_id' => 'required',
-            'pay_method' => 'required'
-        ]);
-        
-        //devuelve user o lo crea
+        // guarda datos bancarios
         $userBankAccount = UserBankAccount::updateOrCreate(
             ['user_id' => auth()->user()->id],
             ['bank_id' => $this->bank_id,
@@ -197,10 +179,15 @@ class Requests extends Component
              'type' => $this->pay_method]
         );
 
-        session()->flash('message', 'Información Bancaria Actualizada Exitosamente');
-        $this->reset(['benefit_id', 'subsidy_id', 'selectedRequestId', 'showCreate', 'showUpdateBankAccounts']);
+        $this->reset(['benefit_id', 'subsidy_id', 'selectedRequestId', 'showCreate']);
+        session()->flash('message', 'Estimado funcionario hemos recibido su solicitud de beneficio, en este momento se encuentra "En revisión".');
     }
-    
+
+    public function showFile($requestId)
+    {
+        $file = File::find($requestId);
+        return Storage::disk('gcs')->response($file->file, mb_convert_encoding($file->name,'ASCII'));
+    }
 
     public function render()
     {

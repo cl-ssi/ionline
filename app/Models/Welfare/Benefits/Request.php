@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Models\Welfare\Benefits\Request as RequestModel;
 use App\Models\Welfare\Benefits\Subsidy;
 use App\Models\Welfare\Benefits\File;
+use App\Models\Welfare\Benefits\Transfer;
 use App\User;
 
 class Request extends Model
@@ -27,7 +28,7 @@ class Request extends Model
      * @var array
      */
     protected $fillable = [
-        'id', 'subsidy_id', 'applicant_id', 'status', 'status_update_date', 'status_update_responsable_id', 'status_update_observation', 
+        'id', 'subsidy_id', 'applicant_id', 'status', 'installments_number', 'status_update_date', 'status_update_responsable_id', 'status_update_observation', 
         'accepted_amount_date','accepted_amount_responsable_id','accepted_amount','created_at'
     ];
 
@@ -58,7 +59,31 @@ class Request extends Model
         return $this->belongsTo(User::class,'applicant_id');
     }
 
+    public function transfers(): HasMany
+    {
+        return $this->hasMany(Transfer::class);
+    }
+
+    // sin considerar este request
+    // se utiliza principalmente para actualizar sin problemas el accepted_amount de un request
     public function getSubsidyUsedMoney(){
+        $requests = RequestModel::whereYear('created_at',$this->created_at->format('Y'))
+                                ->where('applicant_id', $this->applicant_id)
+                                ->where('subsidy_id', $this->subsidy_id)
+                                ->where('status', 'Aceptado')
+                                ->where('id','!=',$this->id)
+                                ->get();
+        
+        $accepted_amount = 0;
+        foreach($requests as $request){
+            $accepted_amount += $request->accepted_amount;
+        }   
+
+        return $accepted_amount;
+    }
+
+    // considera todos los requests involucrados (sirve para la vista admin requests)
+    public function getSubsidyUsedMoneyAll(){
         $requests = RequestModel::whereYear('created_at',$this->created_at->format('Y'))
                                 ->where('applicant_id', $this->applicant_id)
                                 ->where('subsidy_id', $this->subsidy_id)

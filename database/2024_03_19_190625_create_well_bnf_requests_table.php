@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('subsidy_id')->constrained('well_bnf_subsidies');
             $table->foreignId('applicant_id')->constrained('users');
             $table->text('status'); //en revisión, aceptado, rechazado
+            $table->integer('installments_number')->nullable();
 
             $table->datetime('status_update_date')->nullable();
             $table->foreignId('status_update_responsable_id')->nullable()->constrained('users');

@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('file')->nullable();
             $table->string('name')->nullable();
             $table->foreignId('well_bnf_request_id')->constrained('well_bnf_requests');
+            $table->foreignId('document_id')->constrained('well_bnf_documents');
             $table->timestamps();
         });
     }

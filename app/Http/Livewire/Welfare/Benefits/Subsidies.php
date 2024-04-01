@@ -19,6 +19,8 @@ class Subsidies extends Component
     public $description;
     public $annual_cap;
     public $recipient;
+    public $status;
+    public $payment_in_installments;
     public $documents = [];
 
     public function showCreateForm()
@@ -32,7 +34,7 @@ class Subsidies extends Component
     private function resetInputFields()
     {
         $this->reset([
-            'newSubsidyName', 'selectedBenefitId', 'description', 'annual_cap', 'recipient', 'selectedSubsidyId'
+            'newSubsidyName', 'selectedBenefitId', 'description', 'annual_cap', 'recipient', 'status', 'payment_in_installments','selectedSubsidyId'
         ]);
     }
 
@@ -44,7 +46,9 @@ class Subsidies extends Component
         $this->description = $subsidy->description;
         $this->annual_cap = $subsidy->annual_cap;
         $this->recipient = $subsidy->recipient;
+        $this->status = $subsidy->status;
         $this->selectedSubsidyId = $subsidyId;
+        $this->payment_in_installments = $subsidy->payment_in_installments;
         $this->showCreate = true;
         $this->documents = $subsidy->documents;
     }
@@ -72,6 +76,8 @@ class Subsidies extends Component
                 'description' => $this->description,
                 'annual_cap' => $this->annual_cap,
                 'recipient' => $this->recipient,
+                'status' => $this->status,
+                'payment_in_installments' => $this->payment_in_installments,
             ]);
         } else {
             Subsidy::create([
@@ -80,21 +86,19 @@ class Subsidies extends Component
                 'description' => $this->description,
                 'annual_cap' => $this->annual_cap,
                 'recipient' => $this->recipient,
+                'status' => $this->status,
+                'payment_in_installments' => $this->payment_in_installments,
             ]);
         }
         
 
-        $this->reset(['newSubsidyName', 'selectedSubsidyId', 'selectedBenefitId', 
-                        'description','annual_cap',
-                        'recipient', 'showCreate']);
+        $this->reset(['newSubsidyName', 'selectedSubsidyId', 'selectedBenefitId','description','annual_cap','recipient','status','payment_in_installments','showCreate']);
     }
 
     public function deleteDocument($documentId){
         Document::find($documentId)->delete();
         
-        $this->reset(['newSubsidyName', 'selectedSubsidyId', 'selectedBenefitId', 
-                        'description','annual_cap',
-                        'recipient', 'showCreate']);
+        $this->reset(['newSubsidyName', 'selectedSubsidyId', 'selectedBenefitId','description','annual_cap','recipient','status','payment_in_installments','showCreate']);
     }
 
     public function render()

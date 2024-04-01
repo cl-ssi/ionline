@@ -10,7 +10,7 @@
         <div class="col-md-6">
             <div class="form-group">
                 <label for="selectedBenefitId">Beneficio:</label>
-                <select wire:model="selectedBenefitId" class="form-control" id="selectedBenefitId">
+                <select wire:model="selectedBenefitId" class="form-select" id="selectedBenefitId">
                     <option value="">Seleccionar Beneficio</option>
                     @foreach($benefits as $benefit)
                         <option value="{{ $benefit->id }}">{{ $benefit->name }}</option>
@@ -24,20 +24,47 @@
             </div>
             <div class="form-group">
                 <label for="value">Descripción:</label>
-                <input wire:model="description" type="text" class="form-control" id="description">
+                <!-- <input wire:model="description" type="text" class="form-control" id="description"> -->
+                <textarea wire:model="description" id="description" class="form-control" cols="30" rows="5"></textarea>
                 @error('description') <p class="text-danger">{{ $message }}</p> @enderror
             </div>
-            <div class="form-group">
-                <label for="value">Tope anual:</label>
-                <input wire:model="annual_cap" type="number" class="form-control" id="annual_cap">
-                @error('annual_cap') <p class="text-danger">{{ $message }}</p> @enderror
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="value">Tope anual:</label>
+                        <input wire:model="annual_cap" type="number" class="form-control" id="annual_cap">
+                        @error('annual_cap') <p class="text-danger">{{ $message }}</p> @enderror
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="value">Tipo de pago:</label>
+                        <select wire:model="payment_in_installments" class="form-select" id="payment_in_installments" required>
+                            <option value="1">Con cuotas</option>
+                            <option value="0">Sin cuotas</option>
+                        </select>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label for="recipient">Beneficiario:</label>
-                <input wire:model="recipient" type="text" class="form-control" id="recipient">
-                @error('recipient') <p class="text-danger">{{ $message }}</p> @enderror
-            </div>
-            <br>    
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="recipient">Beneficiario:</label>
+                        <input wire:model="recipient" type="text" class="form-control" id="recipient">
+                        @error('recipient') <p class="text-danger">{{ $message }}</p> @enderror
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="value">Estado:</label>
+                        <select wire:model="status" class="form-select" id="status" required>
+                            <option value="1">Activo</option>
+                            <option value="0">Desactivado</option>
+                        </select>
+                    </div>
+                </div>
+            </div>  
         </div>
 
         <h4>Documentos</h4>
@@ -89,6 +116,7 @@
                 <th>Beneficio</th>
                 <th>Descripción</th>
                 <th>Tope anual</th>
+                <th>Tipo de pago</th>
                 <th>Beneficiario</th>
                 <th>Docu/Reqs</th>
                 <th>Acciones</th>
@@ -96,12 +124,16 @@
         </thead>
         <tbody>
             @foreach($subsidies as $subsidy)
-                <tr>
+                @if($subsidy->status)<tr>
+                @else <tr class="table-danger"> @endif
                     <td>{{ $subsidy->id }}</td>
                     <td>{{ $subsidy->name }}</td>
                     <td>{{ $subsidy->benefit->name }}</td>
                     <td>{{ $subsidy->description }}</td>
                     <td>{{ $subsidy->annual_cap }}</td>
+                    <td>
+                        @if($subsidy->payment_in_installments == 1) Con cuotas @else Sin cuotas @endif
+                    </td>
                     <td>{{ $subsidy->recipient }}</td>
                     <td>{{ $subsidy->documents->count() }}</td>
                     <td>

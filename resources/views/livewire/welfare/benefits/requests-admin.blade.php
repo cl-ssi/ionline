@@ -3,20 +3,26 @@
 
     <h4>Administrador de solicitudes</h4>
 
-    <!-- Mensaje de éxito -->
-    @include('layouts.bt4.partials.flash_message')
+    <div>
+        @if (session()->has('message'))
+            <div class="alert alert-info">
+                {{ session('message') }}
+            </div>
+        @endif
+    </div>
 
     <table class="table table-bordered table-sm" style="border-collapse:collapse;">
         <thead>
             <tr>
                 <th>ID</th>
-                <th>Fecha solicitud</th>
-                <th>Solicitante</th>
-                <th>Beneficio</th>
-                <th>Adjunto</th>
+                <th style="width: 8%">F.solicitud</th>
+                <th style="width: 12%">Solicitante</th>
+                <th style="width: 25%">Beneficio</th>
+                <th style="width: 5%">Adjunto</th>
                 <!-- <th>Estado</th> -->
-                <th nowrap>Acciones</th>
-                <th>Monto aceptado</th>
+                <th style="width: 8%">Acciones</th>
+                <th style="width: 20%">Monto aceptado</th>
+                <th>Monto transferido</th>
             </tr>
         </thead>
         <tbody>
@@ -27,11 +33,15 @@
                     <td>{{ $request->applicant->shortName }}</td>
                     <td>
                         {{ $request->subsidy->benefit->name }} - {{ $request->subsidy->name }}
-                        @if($request->accepted_amount)
-                        <br><b>Monto aceptado: </b> ${{ money($request->accepted_amount) }}
-                        @endif
-                        @if($request->status_update_observation)
-                        <br><b>Observaciones: </b> {{ $request->status_update_observation }}
+                        <br><br>
+                        @if($request->status != "En revisión")
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="">Observación</span>
+                                <input type="text" class="form-control" wire:model.defer="requests.{{$key}}.status_update_observation">
+                                <button wire:click="saveObservation({{ $key }})" class="btn btn-primary" type="button">
+                                    <i class="bi bi-floppy"></i>
+                                </button>
+                            </div>
                         @endif
                     </td>
                     <td>
@@ -42,50 +52,105 @@
                             @endforeach
                         @endif
                     </td>
-                    <!-- <td>{{ $request->status }}</td> -->
-                    <td nowrap>
+                    <td>
                         <div class="input-group mb-3">
+                            @if($request->status == "Pagado")
+                                {{$request->status}}
+                            @endif
+                            @if($request->status == "En proceso de pago")
+                                {{$request->status}}
+                            @endif
                             @if($request->status == "En revisión")
-                                <button class="btn btn-outline-success" wire:click="accept({{$request->id}})" type="button">Aceptar</button>
-                                <button class="btn btn-outline-danger" wire:click="reject({{$request->id}})" type="button">Rechazar</button>
+                                <button class="btn btn-outline-success" wire:click="accept({{$request->id}})" type="button"><i class="fa fa-check" aria-hidden="true"></i></button>
+                                <button class="btn btn-outline-danger" wire:click="reject({{$request->id}})" type="button"><i class="fa fa-times" aria-hidden="true"></i></button>
                             @endif
                             @if($request->status == "Aceptado")
-                                <button class="btn btn-success" type="button">Aceptado</button>
-                                <button class="btn btn-outline-danger" wire:click="reject({{$request->id}})" type="button">Rechazar</button>
+                                <button class="btn btn-success" type="button"><i class="fa fa-check" aria-hidden="true"></i></button>
+                                <button class="btn btn-outline-danger" wire:click="reject({{$request->id}})" type="button"><i class="fa fa-times" aria-hidden="true"></i></button>
                             @endif
                             @if($request->status == "Rechazado")
-                                <button class="btn btn-outline-success" wire:click="accept({{$request->id}})" type="button">Aceptar</button>
-                                <button class="btn btn-danger" type="button">Rechazado</button>
+                                <button class="btn btn-outline-success" wire:click="accept({{$request->id}})" type="button"><i class="fa fa-check" aria-hidden="true"></i></button>
+                                <button class="btn btn-danger" type="button"><i class="fa fa-times" aria-hidden="true"></i></button>
                             @endif
                         </div>
-
-                        @if($request->status != "En revisión")
+                    </td>
+                    <td class="text-end">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="">$</span>
+                            <input type="number" class="form-control" wire:model.defer="requests.{{$key}}.accepted_amount">
+                            <button wire:click="saveAcceptedAmount({{ $key }})" class="btn btn-primary" type="button" @disabled($request->status != "Aceptado")>
+                                <i class="bi bi-floppy"></i>
+                            </button>
+                        </div>
+                        @if($request->accepted_amount != null && $request->subsidy->payment_in_installments)
                             <div class="input-group mb-3">
-                                <input type="text" class="form-control" wire:model.defer="status_update_observation" placeholder="Observación" aria-label="Recipient's username" aria-describedby="button-addon2">
-                                <button wire:click="saveObservation({{$request->id}})" class="btn btn-primary" type="button" id="button-addon2">
+                                <span class="input-group-text" id="">N°Cuotas</span>
+                                <input type="number" class="form-control" wire:model.defer="requests.{{$key}}.installments_number">
+                                <button wire:click="saveInstallmentsNumber({{ $key }})" class="btn btn-primary" type="button" @disabled($request->status != "Aceptado")>
                                     <i class="bi bi-floppy"></i>
                                 </button>
                             </div>
                         @endif
+                        <!-- se muestra solo si el subsidio tiene un tope anual -->
+                        @if($request->subsidy->annual_cap != null)
+                            <span class="text-secondary">Tope anual: $ {{ money($request->subsidy->annual_cap) }}</span><br>
+                            <span class="text-secondary">Utilizado: $ {{ money($request->getSubsidyUsedMoneyAll()) }}</span><br>
+                            <span class="text-success ">Disponible: $ {{ money($request->subsidy->annual_cap - $request->getSubsidyUsedMoneyAll())}}</span>
+                        @else
+                            <span class="text-secondary">Descripción del beneficio: </span>{{$request->subsidy->description}}<br>
+                        @endif
                     </td>
-                    <td class="text-end">
-                        <div class="input-group mb-3">
-                            <input type="text" class="form-control" value="" size="10" maxlength="10" wire:model.defer="accepted_amount" value="10">
-                            <button class="btn btn-primary" type="button" id="button-addon2" @disabled($request->status != "Aceptado") 
-                                wire:click="saveAcceptedAmount({{$request->id}})"
-                                title="Guardar monto aceptado">
-                                <i class="bi bi-floppy"></i>
-                            </button>
-                            <button class="btn btn-success" type="button" id="button-addon2" 
-                                @disabled($request->status != "Aceptado" || ($request->status == "Aceptado" && $request->accepted_amount == null)) 
-                                wire:click="saveAcceptedAmount({{$request->id}})"
-                                title="Registrar transferencia y transferir">
-                                <i class="bi bi-currency-dollar"></i>
-                            </button>
-                        </div>
-                        <span class="text-secondary">Tope anual: $ {{$request->subsidy->annual_cap}}</span><br>
-                        <span class="text-secondary">Utilizado: $ {{$request->getSubsidyUsedMoney()}}</span><br>
-                        <span class="text-success ">Disponible: $ {{$request->subsidy->annual_cap - $request->getSubsidyUsedMoney()}}</span>
+                    <td>
+                        <!-- cuando tenga tope anual -->
+                        @if($request->subsidy->annual_cap != null)
+                            <!-- cuando el pago es en cuotas -->
+                            @if($request->subsidy->payment_in_installments)
+                                @foreach($request->transfers as $key2 => $transfer)
+                                    @if($transfer->payed_amount != null)
+                                        <li>
+                                            {{$transfer->payed_date->format('Y-m-d')}} - <b>${{ money($transfer->payed_amount)}}</b>
+                                        </li>
+                                    @else
+                                        <div class="input-group mb-3">
+                                            <span class="input-group-text" id="basic-addon3">$</span>
+                                            <input type="number" class="form-control" wire:model.defer="requests.{{$key}}.transfers.{{$key2}}.payed_amount">
+                                            <button wire:click="saveTransfer({{$key}},{{ $key2 }})" class="btn btn-primary" type="button" @disabled($request->status == "Pagado")>
+                                                <i class="bi bi-floppy"></i>
+                                            </button>
+                                        </div>
+                                    @endif
+                                @endforeach
+                            @else
+                                <!-- pago tiene tope anual pero no es en cuotas -->
+                                @if($request->transfers->count() > 0)
+                                    <li>
+                                        {{$request->transfers->first()->payed_date->format('Y-m-d')}} - <b>${{ money($request->transfers->first()->payed_amount)}}</b>
+                                    </li>
+                                @else
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text" id="">Transferir</span>
+                                        <button wire:click="saveTransferWithoutInstallments({{$key}})" class="btn btn-primary" type="button" @disabled($request->status == "Pagado")>
+                                            <i class="bi bi-floppy"></i>
+                                        </button>
+                                    </div>
+                                @endif
+                            @endif
+                        @else
+                            @if($request->accepted_amount != null)
+                                @if($request->transfers->count() > 0)
+                                    <li>
+                                        {{$request->transfers->first()->payed_date->format('Y-m-d')}} - <b>${{ money($request->transfers->first()->payed_amount)}}</b>
+                                    </li>
+                                @else
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text" id="">$ Transferencia</span>
+                                        <button wire:click="saveTransferWithoutInstallments({{$key}})" class="btn btn-primary" type="button" @disabled($request->status == "Pagado")>
+                                            <i class="bi bi-floppy"></i>
+                                        </button>
+                                    </div>
+                                @endif
+                            @endif
+                        @endif
                     </td>
                 </tr>
             @endforeach

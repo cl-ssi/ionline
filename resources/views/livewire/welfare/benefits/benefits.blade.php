@@ -10,11 +10,11 @@
         <div class="col-md-6">
             <div class="form-group">
                 <label for="newBenefitName">Nombre del Beneficio:</label>
-                <input wire:model="newBenefitName" type="text" class="form-control" id="newBenefitName">
+                <input wire:model="newBenefitName" type="text" class="form-select" id="newBenefitName">
             </div>
             <div class="form-group">
                 <label for="newBenefitObservations">Observaciones:</label>
-                <textarea wire:model="newBenefitObservations" class="form-control" id="newBenefitObservations"></textarea>
+                <textarea wire:model="newBenefitObservations" class="form-select" id="newBenefitObservations"></textarea>
             </div>
             <button wire:click="saveBenefit" class="btn btn-success">Guardar</button>
         </div>
