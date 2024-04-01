@@ -43,15 +43,16 @@ class ItemReception extends Notification implements ShouldQueue
      */
     public function toMail($notifiable)
     {
+        
         return (new MailMessage)
             ->level('info')
             ->subject('Recepcionar Item Nº: ' . $this->movement->inventory->number)
             ->greeting('Hola ' . $notifiable->shortName)
-            ->line('Nuevo item de inventario para su recepción Nº: ' . $this->movement->inventory->number)
+            ->line('Se informa traspaso de bien inventariable, código de inventario N°' . $this->movement->inventory->number)
             // ->line('Item: ' . ($this->movement->inventory->product_id) ? $this->movement->inventory->product->name : $this->movement->inventory->unspscProduct->name)
             ->line('Estado: ' . $this->movement->inventory->estado)
             ->lineIf( !is_null( $this->movement->user_sender_id), 'Entregado por: ' . $this->movement->senderUser?->shortName)
-            ->action('Completar recepción ' . $this->movement->id, route('inventories.check-transfer', $this->movement->id) )
+            ->action('Ir a Movimientos Pendientes:', route('inventories.pending-movements') )
             ->salutation('Saludos cordiales.');
     }
 

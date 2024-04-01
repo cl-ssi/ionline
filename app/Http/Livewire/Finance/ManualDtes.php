@@ -127,7 +127,7 @@ class ManualDtes extends Component
         $this->razonSocial = '';
         $this->montoTotal = '';
         $this->folioOC = '';
-        $this->barCode = '';        
+        $this->barCode = '';
         $this->archivoManual = '';
     }
 

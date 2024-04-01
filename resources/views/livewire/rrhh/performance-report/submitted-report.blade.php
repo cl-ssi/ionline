@@ -17,54 +17,51 @@
     </div>
 
     <table class="table table-sm table-bordered">
-        <thead>
-            <tr>
-                <th>Nombre</th>
-                <th>Unidad</th>
-                @if(!$periods->isEmpty())
-                    @foreach($periods as $period)
-                        <th class="text-center {{ now()->greaterThan($period->end_at) ? 'table-primary' : '' }}">{{ $period->name }}</th>
-                    @endforeach
-                @else
-                    <th colspan="3" class="text-center">No hay períodos definidos <br><small>(crear periodo de informe)</small></th>
+    <thead>
+    <tr>
+        <th>Nombre</th>
+        <th>Unidad</th>
+        @foreach($periods as $period)
+            <th class="text-center {{ now()->greaterThan($period->start_at) ? 'table-primary' : '' }}">{{ $period->name }}</th>
+        @endforeach
+    </tr>
+</thead>
+<tbody>
+    @forelse($users as $user)
+        <tr>
+            <td>{{ $user->short_name }}</td>
+            <td>{{ $organizationalUnit }}</td>
+            @foreach($periods as $period)
+                <td class="text-center">
+                @if(now()->greaterThanOrEqualTo($period->start_at))
+                    @if($hasExistingReport = $this->hasExistingReport($user->id, $period->id))
+                            <a href="#" wire:click.prevent="viewReport('{{ $user->id }}', '{{ $period->id }}')" data-bs-toggle="modal" data-bs-target="#reportModal" class="btn btn-outline-primary btn-sm">
+                                <i class="bi bi-eye"></i>
+                            </a>
+                            <a href="{{ route('rrhh.performance-report.show', ['userId' => $user->id, 'periodId' => $period->id]) }}" class="btn btn-outline-primary btn-sm" title="Descargar PDF" target="_blank">
+                                <i class="bi bi-file-pdf"></i>
+                            </a>
+                            <button class="btn btn-outline-danger btn-sm" wire:click="deleteReport('{{ $user->id }}', '{{ $period->id }}')" data-bs-toggle="tooltip" title="Borrar Informe">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        @else
+                            <a class="btn btn-outline-success btn-sm" wire:click="showForm('{{ $user->id }}', '{{ $period->id }}')">
+                                <i class="bi bi-file-check"></i>
+                            </a>
+                        @endif
+                    @else                    
+                    <button class="btn btn-secondary btn-sm disabled"><i class="bi bi-file-check"></i></button>
                 @endif
-            </tr>
-        </thead>
-        <tbody>
-            @forelse($users as $user)
-                <tr>
-                    <td>{{ $user->short_name }}</td>
-                    <td>{{ $organizationalUnit }}</td>
-                    @if(!$periods->isEmpty())
-                        <td class="text-center">
-                            @foreach($periods as $period)
-                                @if($hasExistingReport = $this->hasExistingReport($user->id, $period->id))
-                                    <a href="#" wire:click.prevent="viewReport('{{ $user->id }}', '{{ $period->id }}')" data-bs-toggle="modal" data-bs-target="#reportModal" class="btn btn-outline-primary btn-sm">
-                                        <i class="bi bi-eye"></i>
-                                    </a>
-                                    <a href="{{ route('rrhh.performance-report.show', ['userId' => $user->id, 'periodId' => $period->id]) }}" class="btn btn-outline-primary btn-sm" title="Descargar PDF" target="_blank">
-                                        <i class="bi bi-file-pdf"></i>
-                                    </a>
-                                    <button class="btn btn-outline-danger btn-sm" wire:click="deleteReport('{{ $user->id }}', '{{ $period->id }}')" data-bs-toggle="tooltip" title="Borrar Informe">
-                                        <i class="bi bi-trash"></i>
-                                    </button>
-                                @else
-                                    <a class="btn btn-outline-success btn-sm" wire:click="showForm('{{ $user->id }}', '{{ $period->id }}')">
-                                        <i class="bi bi-file-check"></i>
-                                    </a>
-                                @endif
-                            @endforeach
-                        </td>
-                    @else
-                        <td class="text-center">-</td>
-                    @endif
-                </tr>
-            @empty
-                <tr>
-                    <td colspan="3" class="text-center">No hay usuarios para mostrar</td>
-                </tr>
-            @endforelse
-        </tbody>
+                </td>
+            @endforeach
+        </tr>
+    @empty
+        <tr>
+            <td colspan="{{ count($periods) + 2 }}" class="text-center">No hay usuarios para mostrar</td>
+        </tr>
+    @endforelse
+</tbody>
+
     </table>
 
     <br><br><br>
