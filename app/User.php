@@ -2,48 +2,49 @@
 
 namespace App;
 
-use Spatie\Permission\Traits\HasRoles;
-use OwenIt\Auditing\Contracts\Auditable;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Carbon\Carbon;
-use Carbon\CarbonPeriod;
 use App\Helpers\DateHelper;
+use App\Models\ClCommune;
+use App\Models\Country;
+use App\Models\Establishment;
+use App\Models\Inv\EstablishmentUser;
+use App\Models\Lobby\Meeting;
+use App\Models\Parameters\AccessLog;
+use App\Models\ProfAgenda\Proposal;
+use App\Models\Profile\Subrogation;
+use App\Models\RequestForms\RequestForm;
 
-use App\Rrhh\OrganizationalUnit;
-use App\Rrhh\Authority;
-use App\Models\Warehouse\StoreUser;
-use App\Models\Warehouse\Store;
-use App\Models\Suitability\Result;
-use App\Models\ServiceRequests\ServiceRequest;
-use App\Models\Rrhh\NoAttendanceRecord;
-use App\Models\Rrhh\Contract;
 use App\Models\Rrhh\Absenteeism;
 use App\Models\Rrhh\AmiLoad;
-use App\Models\Rrhh\Shift;
 use App\Models\Rrhh\CompensatoryDay;
-
-use App\Models\Welfare\Amipass\PendingAmount;
+use App\Models\Rrhh\Contract;
+use App\Models\Rrhh\NoAttendanceRecord;
+use App\Models\Rrhh\Shift;
+use App\Models\Rrhh\UserBankAccount;
+use App\Models\ServiceRequests\ServiceRequest;
+use App\Models\Suitability\Result;
+use App\Models\Warehouse\Store;
+use App\Models\Warehouse\StoreUser;
 use App\Models\Welfare\Amipass\Charge;
+
 use App\Models\Welfare\Amipass\NewCharge;
+use App\Models\Welfare\Amipass\PendingAmount;
 use App\Models\Welfare\Amipass\Regularization;
+use App\Rrhh\Authority;
 
-use App\Models\RequestForms\RequestForm;
-use App\Models\Profile\Subrogation;
-use App\Models\Parameters\AccessLog;
-use App\Models\Lobby\Meeting;
-use App\Models\Inv\EstablishmentUser;
-use App\Models\Establishment;
-use App\Models\Country;
-use App\Models\ClCommune;
-use App\Models\ProfAgenda\Proposal;
-// Para resetear contraseñas
+use App\Rrhh\OrganizationalUnit;
+use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 use Illuminate\Contracts\Auth\CanResetPassword;
-
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\hasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+// Para resetear contraseñas
+use Illuminate\Support\Facades\Auth;
+
+use OwenIt\Auditing\Contracts\Auditable;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements Auditable
 {
@@ -105,6 +106,8 @@ class User extends Authenticatable implements Auditable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'birthday' => 'date:Y-m-d',
+        'deleted_at' => 'datetime',
     ];
 
     /**
@@ -112,10 +115,10 @@ class User extends Authenticatable implements Auditable
      *
      * @var array
      */
-    protected $dates = [
-        'deleted_at',
-        'birthday',
-    ];
+    // protected $dates = [
+    //     'deleted_at',
+    //     'birthday',
+    // ];
 
     /**
      * Attributes to exclude from the Audit.
@@ -176,7 +179,7 @@ class User extends Authenticatable implements Auditable
 
     public function bankAccount()
     {
-        return $this->hasOne('\App\Models\Rrhh\UserBankAccount','user_id');
+        return $this->hasOne(UserBankAccount::class,'user_id');
     }
 
     public function requestForms()

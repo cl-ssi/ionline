@@ -1,6 +1,8 @@
 <div>
     @section('title', 'Mis subrogantes')
 
+    @include('rrhh.partials.nav')
+
     @switch($view)
 
         @case('index')

@@ -24,12 +24,27 @@ class AddPurchasePlan extends Component
     
     public $iterationFileClean = 0;
 
+    protected function messages(){
+        return [
+            'mercadoPublicoId.required' => 'Debe ingresar ID de Mercado Público.',
+            'date.required'             => 'Debe ingresar Fecha de publicación.',
+            'fileAttached.required'     => 'Debe ingresar Adjunto.'
+        ];
+    }
+
     public function render()
     {
         return view('livewire.purchase-plan.add-purchase-plan');
     }
 
     public function save(){
+        $validatedData = $this->validate([
+                'mercadoPublicoId'  => 'required',
+                'date'              => 'required',
+                'fileAttached'      => 'required'
+            ]
+        );
+
         $now = now()->format('Y_m_d_H_i_s');
 
         $purchasePlanPublication = DB::transaction(function () use($now) {

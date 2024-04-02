@@ -63,6 +63,16 @@ class SubmittedReport extends Component
         $this->selectedPeriod = PerformanceReportPeriod::find($periodId);
     }
 
+    public function showModal($userId, $periodId)
+    {
+        $this->selectedUser = User::find($userId);
+        $this->selectedPeriod = PerformanceReportPeriod::find($periodId);
+        $this->reportDetails = PerformanceReport::where('received_user_id', $userId)
+            ->where('period_id', $periodId)
+            ->first();
+    }
+
+
 
     public function saveReport()
     {

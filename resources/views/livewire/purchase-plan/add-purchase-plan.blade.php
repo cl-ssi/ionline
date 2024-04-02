@@ -14,24 +14,26 @@
                     <fieldset class="form-group col-12 col-md-4">
                         <label for="for_telephone">ID Mercado Público</label>
                         <input class="form-control" type="text" autocomplete="off" wire:model.defer="mercadoPublicoId">
+                        @error('mercadoPublicoId') <span class="text-danger error small">{{ $message }}</span> @enderror
                     </fieldset>
 
                     <fieldset class="form-group col-12 col-sm-4">
                         <label for="for_date">Publicacion en Mercado Público</label>
                         <input type="date" class="form-control" wire:model.defer="date" id="for_date">
-                        @error('from') <span class="text-danger error small">{{ $message }}</span> @enderror
+                        @error('date') <span class="text-danger error small">{{ $message }}</span> @enderror
                     </fieldset>
 
                     <fieldset class="form-group col-12 col-sm-4">
                         <label for="forFileAttached" class="form-label"></label>
-                        <input class="form-control" type="file" wire:model.defer="fileAttached" id="upload({{ $iterationFileClean }})" required>
+                        <input class="form-control" type="file" wire:model.defer="fileAttached" id="upload({{ $iterationFileClean }})">
                         <div wire:loading wire:target="fileAttached">Cargando archivo...</div>
+                        @error('fileAttached') <span class="text-danger error small">{{ $message }}</span> @enderror
                     </fieldset>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-primary btn-sm" wire:click="save"><i class="fas fa-save"></i> Guardar</button>
+                <button type="button" class="btn btn-primary btn-sm" wire:click="save" wire:loading.attr="disabled"><i class="fas fa-save"></i> Guardar</button>
             </div>
             </div>
         </div>

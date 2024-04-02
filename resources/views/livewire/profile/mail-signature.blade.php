@@ -1,6 +1,7 @@
 <div>
-        
-    <h3 class="mb-3">Firma de correo</h3>
+    @include('rrhh.partials.nav')
+
+    <h3 class="mb-3">Plantilla Firma de correo</h3>
 
     <style>
         .raya_rojo {
@@ -17,7 +18,7 @@
         }
     </style>
 
-    <div class="form-row">
+    <div class="row g-2 mb-3">
         <div class="form-group col-6">
             <label for="pronom">Pronombres y artículo</label>
             <input type="text" class="form-control" id="pronom" wire:model.debounce.500ms="pronom" aria-describedby="pronom">
@@ -32,8 +33,8 @@
 
 
     <strong>Formato de firma del Gobierno <a href="https://kitdigital.gob.cl/generador-de-firma">(Generador de firmas - Manual Normas Gráficas del Gobierno)</a></strong>
+    
     <address class="border p-2 mb-3">
-
     Estimado {{ auth()->user()->shortName }}<br><br>
     El presente correo electrónico es para lorem ipsum, dolor sit amet consectetur adipisicing elit. Ut est sint iure minus accusantium quidem, eligendi in aut ab tempore nihil, modi iusto quasi. Tempora asperiores quas rem libero iusto?
     Lorem ipsum dolor sit amet consectetur, adipisicing elit. Corporis deleniti, aspernatur, autem pariatur dolores magni, soluta fugiat nostrum omnis voluptatum voluptas ipsum ut dolore eum libero! Accusantium odio omnis ipsam.

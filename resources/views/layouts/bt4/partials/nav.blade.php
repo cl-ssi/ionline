@@ -741,12 +741,30 @@
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
 
                         @if(session()->has('god'))
-                        <a class="dropdown-item" href="{{ route('rrhh.users.switch', session('god')) }}">
-                            <i class="fas fa-eye text-danger"></i> God Like
-                        </a>
-
-                        <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="{{ route('rrhh.users.switch', session('god')) }}">
+                                <i class="fas fa-eye text-danger"></i> God Like
+                            </a>
                         @endif
+
+                        @can('dev')
+                            <a class="dropdown-item" href="{{ route('parameters.logs.index') }}">
+                                <i class="fas fa-fw fa-bug"></i> Log de errores
+                            </a>
+                        @endcan
+
+                        @can('News: create')
+                            <a class="dropdown-item" href="{{ route('news.create') }}">
+                                <i class="far fa-newspaper"></i> Noticias
+                            </a>
+                        @endcan
+
+                        @canany(['be god','dev','News: create'])
+                            <div class="dropdown-divider"></div>
+                        @endcanany
+
+                        <a class="dropdown-item" href="{{ route('rrhh.users.profile', auth()->id()) }}">
+                            <i class="fas fa-fw fa-user-circle"></i> Mi perfil
+                        </a>
 
                         <a class="dropdown-item" href="{{ route('profile.subrogations') }}">
                             @if(auth()->user()->absent)
@@ -781,31 +799,13 @@
                         </a>
 
                         <a class="dropdown-item" href="{{ route('welfare.amipass.question-my-index') }}">
-                            <i class="fas fa-question-circle"></i> {{ __('Consultas/Sugerencia Amipass') }}
+                            <i class="fas fa-fw fa-question-circle"></i> {{ __('Consultas/Sugerencia Amipass') }}
                         </a>
 
 
                         @can('be god')
                         <a class="dropdown-item" href="{{ route('rrhh.performance-report.received_report') }}">
                             <i class="fas fa-fw fa-chart-line"></i> Mi Informe de desempeño
-                        </a>
-                        @endcan
-
-
-
-                        @can('be god')
-                        <div class="dropdown-divider"></div>
-
-                        <a class="dropdown-item" href="{{ route('parameters.logs.index') }}">
-                            <i class="fas fa-fw fa-bomb"></i> Log de errores
-                        </a>
-                        @endcan
-
-                        @can('News: create')
-                        <div class="dropdown-divider"></div>
-
-                        <a class="dropdown-item" href="{{ route('news.create') }}">
-                            <i class="far fa-newspaper"></i> Noticias
                         </a>
                         @endcan
 
