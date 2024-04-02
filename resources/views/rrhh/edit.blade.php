@@ -11,12 +11,12 @@
     @csrf
     @method('PUT')
 
-    <div class="row gx-2">
-        <div class="form-group col-md-3">
+    <div class="row g-2 mb-3">
+        <div class="form-group col-md-2">
             <label for="run">RUN</label>
             <input type="text" readonly class="form-control-plaintext" id="staticRUN" value="{{$user->runFormat()}}">
         </div>
-        <div class="form-group col-md-2">
+        <div class="form-group col-md-3">
             <label for="name">Nombres*</label>
             <input type="text" class="form-control" name="name" value="{{$user->name}}" required>
         </div>
@@ -46,7 +46,7 @@
 
     </div>
 
-    <div class="row gx-2">
+    <div class="row g-2 mb-3">
         <fieldset class="form-group col-md-12">
             <label for="forOrganizationalUnit">Establecimiento / Unidad Organizacional</label>
                 @livewire('select-organizational-unit', [
@@ -58,7 +58,7 @@
         </fieldset>
     </div>
 
-    <div class="row gx-2">
+    <div class="row g-2 mb-3">
         <fieldset class="form-group col-12 col-md-6">
             <label for="forPosition">Función que desempeña</label>
             <input type="text" class="form-control" id="forPosition" placeholder="Subdirector(S), Enfermera, Referente..., Jefe." 
@@ -72,7 +72,7 @@
     </div>
 
 
-    <div class="row gx-2">
+    <div class="row g-2 mb-3">
         <fieldset class="form-group col-12 col-md-6">
             <label for="form-vc-link">Link VC</label>
             <input type="link" class="form-control" name="vc_link" value="{{ $user->vc_link }}">
@@ -87,7 +87,7 @@
 
     <hr>
     <h5>Datos de contacto</h5>
-    <div class="row gx-2">
+    <div class="row g-2 mb-3 mb-3">
         <div class="form-group col-11 col-md-4">
             <label for="for-address">Dirección</label>
             <input type="text" class="form-control" name="address" value="{{ $user->address }}">
@@ -107,7 +107,6 @@
         </div>
         @livewire('rrhh.personal-email-input',['user' => $user])
     </div>
-
 
 
     <div class="form-group d-inline">
