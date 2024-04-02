@@ -175,11 +175,11 @@
                             </a>
                         @endif
 
-                        @canany(['HotelBooking: Administrador', 'HotelBooking: User'])
+                        <!-- @canany(['HotelBooking: Administrador', 'HotelBooking: User'])
                             <a class="dropdown-item {{ active('hotel_booking.index') }}" href="{{ route('hotel_booking.index') }}">
                                 <i class="fas fa-fw fa-user"></i> Reserva Cabañas
                             </a>
-                        @endcanany
+                        @endcanany -->
 
                         @canany(['Agenda UST: Administrador','Agenda UST: Funcionario','Agenda UST: Secretaria'])
                             <a class="dropdown-item {{ active('prof_agenda.home') }}" href="{{ route('prof_agenda.home') }}">

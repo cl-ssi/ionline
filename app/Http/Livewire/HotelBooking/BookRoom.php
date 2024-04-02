@@ -8,6 +8,8 @@ use Carbon\Carbon;
 use App\Models\HotelBooking\Room;
 use App\Models\HotelBooking\RoomBooking;
 
+use App\Notifications\HotelBooking\NewBooking;
+
 class BookRoom extends Component
 {
     public $show = false;
@@ -25,25 +27,39 @@ class BookRoom extends Component
     }
 
     public function confirm_reservation(){
-
         // Validar el campo de código de barra antes de redirigir a la URL
         $this->validate([
             'payment_type' => 'required'
         ]);
 
-        $roomBooking = new RoomBooking();
-        $roomBooking->user_id = auth()->user()->id;
-        $roomBooking->room_id = $this->room->id;
-        $roomBooking->start_date = $this->start_date;
-        $roomBooking->end_date = $this->end_date;
-        $roomBooking->status = "Reservado";
-        $roomBooking->payment_type = $this->payment_type;
-        $roomBooking->save();
+        $roomBookingSeach = RoomBooking::where('user_id',auth()->user()->id)
+                                        ->where('room_id',$this->room->id)
+                                        ->where('start_date',$this->start_date)
+                                        ->where('end_date',$this->end_date)
+                                        ->where('payment_type',$this->payment_type)
+                                        ->count();
 
-        // $roomBooking = RoomBooking::find(3);
-        // dd($roomBooking);
-        // return redirect()->route('hotel_booking.confirmation_page',compact('roomBooking'));
-        return redirect()->route('hotel_booking.confirmation_page')->with( ['roomBooking' => $roomBooking] );
+        if($roomBookingSeach > 0){
+            session()->flash('info', 'Ya tienes una reserva para ese día.');
+        }else{
+            $roomBooking = new RoomBooking();
+            $roomBooking->user_id = auth()->user()->id;
+            $roomBooking->room_id = $this->room->id;
+            $roomBooking->start_date = $this->start_date;
+            $roomBooking->end_date = $this->end_date;
+            $roomBooking->status = "Reservado";
+            $roomBooking->payment_type = $this->payment_type;
+            $roomBooking->save();
+
+            if($roomBooking->user){
+                if($roomBooking->user->email != null){
+                    // Utilizando Notify 
+                    $roomBooking->user->notify(new NewBooking($roomBooking));
+                } 
+            }
+
+            return redirect()->route('hotel_booking.confirmation_page')->with( ['roomBooking' => $roomBooking] );
+        }
     }
 
     public function render()

@@ -16,17 +16,11 @@
 		<tr>
             <th>Hotel</th>
             <th>Hospedaje</th>
-            @canany(['HotelBooking: Administrador'])
-                <th>Reservante</th>
-            @endcanany
 			<th>Entrada</th>
             <th>Salida</th>
             <th>Estado</th>
             <th>T.Pago</th>
 			<th></th>
-            @canany(['HotelBooking: Administrador'])
-                <th></th>
-            @endcanany
 		</tr>
 	</thead>
 	<tbody>
@@ -36,18 +30,14 @@
         @endif
             <td nowrap>{{ $roomBooking->room->hotel->name}}</td>
             <td nowrap>{{ $roomBooking->room->identifier}}</td>
-            @canany(['HotelBooking: Administrador'])
-                <td>{{ $roomBooking->user->getShortNameAttribute() }}</td>
-            @endcanany
 			<td nowrap>{{ $roomBooking->start_date->format('Y-m-d') }}</td>
             <td nowrap>{{ $roomBooking->end_date->format('Y-m-d') }}</td>
             <td nowrap>
                 {{ $roomBooking->status }}</td>
             </td>
-            <td nowrap class="display: flex;
-    flex-direction: row;">
+            <td nowrap class="display: flex; flex-direction: row;">
                 {{ $roomBooking->payment_type }}
-                @if($roomBooking->payment_type == "Depósito")
+                @if($roomBooking->status == "Reservado" && $roomBooking->payment_type == "Depósito")
                     @if($roomBooking->files->count() != 0)
                         @foreach($roomBooking->files as $key => $file) 
                             <a href="{{ route('hotel_booking.download', $file->id) }}" target="_blank">
@@ -61,7 +51,8 @@
                 @endif
             </td>
             <td nowrap>
-                @if($roomBooking->status) 
+                <!-- solo se puede cancelar si el estado es reservado -->
+                @if($roomBooking->status == "Reservado") 
                 <form method="POST" class="form-horizontal" action="{{ route('hotel_booking.booking_cancelation', $roomBooking) }}">
                     @csrf
                     @method('DELETE')
@@ -71,21 +62,10 @@
                         </button>
                 </form> 
                 @else 
-                    Cancelada 
+                     
                 @endif
             </td>
-            @canany(['HotelBooking: Administrador'])
-                <td><button type="button" class="btn btn-success exploder">
-                    <span class="glyphicon glyphicon-search"></span>
-                    </button>
-                </td>
-            @endcanany
 		</tr>
-        <tr class="explode hide">
-            <td colspan="4" style="display: none;">
-                @include('partials.audit', ['audits' => $roomBooking->audits()] )
-            </td>
-        </tr>
         <tr style="display: none;" id="fila{{$roomBooking->id}}">
             <td colspan="9" style="background-color:white" >
                 @livewire('hotel-booking.upload-file',['roomBooking' => $roomBooking])
@@ -102,20 +82,6 @@
 @section('custom_js')
 
 <script>
-$(".exploder").click(function(){
-  $(this).toggleClass("btn-success btn-danger");
-  
-  $(this).children("span").toggleClass("glyphicon-search glyphicon-zoom-out");  
-  
-  $(this).closest("tr").next("tr").toggleClass("hide");
-  
-  if($(this).closest("tr").next("tr").hasClass("hide")){
-    $(this).closest("tr").next("tr").children("td").slideUp();
-  }
-  else{
-    $(this).closest("tr").next("tr").children("td").slideDown(350);
-  }
-});
 
 $(".uploadfilebutton").click(function(){
   $(this).toggleClass("btn-success btn-danger");
@@ -133,13 +99,13 @@ $(".uploadfilebutton").click(function(){
 });
 
 @foreach($roomBookings as $roomBooking)
-@if($roomBooking->payment_type == "Depósito")
-    @if($roomBooking->files)
-        $("#buttonfile{{$roomBooking->id}}").click(function(){
-            $("#fila{{$roomBooking->id}}").toggle();
-        });
+    @if($roomBooking->payment_type == "Depósito")
+        @if($roomBooking->files)
+            $("#buttonfile{{$roomBooking->id}}").click(function(){
+                $("#fila{{$roomBooking->id}}").toggle();
+            });
+        @endif
     @endif
-@endif
 @endforeach
 
 

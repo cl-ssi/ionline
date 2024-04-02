@@ -27,7 +27,7 @@
 
                     <fieldset class="form-group col-4">
                         <label>Tipo de pago</label>
-                        <select class="form-control" name="" id="" wire:model.defer="payment_type" required>
+                        <select class="form-control" name="" id="payment_type_select" wire:model.defer="payment_type" required>
                             <option value=""></option>
                             <option value="Descuento por planilla">Descuento por planilla</option>
                             <option value="Depósito">Depósito</option>
@@ -36,8 +36,12 @@
 
                     <fieldset class="form-group col-2">
                         <label><br></label>
-                        <button class="form-control btn btn-primary" wire:click="confirm_reservation()"
-                        onclick="confirm('¿Está seguro de reservar este hospedaje?') || event.stopImmediatePropagation()">Confirmar Reserva!</button>
+                        <button class="form-control btn btn-primary" wire:click="confirm_reservation()" wire:loading.attr="disabled">
+                            <span wire:loading.remove>Confirmar Reserva!</span>
+                            <span wire:loading>
+                                <i class="fas fa-spinner fa-spin"></i> Cargando...
+                            </span>
+                        </button>
                     </fieldset>
                 
                 </div>

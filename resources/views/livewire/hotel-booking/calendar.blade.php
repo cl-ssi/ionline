@@ -1,9 +1,9 @@
 <div>
     <div class="form-row mb-4 justify-content-end">
-        <div style="color:LightSkyBlue">&#9632;</div>&nbsp;<p>Mis reserva</p>&nbsp;&nbsp;
-        <div style="color:#F1948A">&#9632;</div>&nbsp;<p>No disponible</p>
-        <div style="color:#FADBD8">&#9632;</div>&nbsp;<p>Pasados</p>
-        <div style="color:#A3E4D7">&#9632;</div>&nbsp;<p>Disponible</p>
+        <div style="color:#FADBD8">&#9632;</div>&nbsp;<p>Pasados</p>&nbsp;&nbsp;
+        <div style="color:LightSkyBlue">&#9632;</div>&nbsp;<p>Mis reservas</p>&nbsp;&nbsp;
+        <div style="color:#F1948A">&#9632;</div>&nbsp;<p>No disponible</p>&nbsp;&nbsp;
+        <div style="color:#A3E4D7">&#9632;</div>&nbsp;<p>Disponible</p>&nbsp;&nbsp;
     </div>
     
     <!-- Muestra como título el nombre de la OU y el selector de mes -->

@@ -60,6 +60,14 @@
         
     @endcanany
 
+    @canany(['HotelBooking: Administrador', 'HotelBooking: User'])
+        <li class="nav-item">
+            <a class="nav-link" href="{{route('hotel_booking.index') }}">
+                <i class="fa fa-bed"></i> Reserva Cabañas
+            </a>
+        </li>
+    @endcanany
+
     @canany(['amiPASS'])
         <li class="nav-item dropdown ">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" data-bs-toggle="dropdown"

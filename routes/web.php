@@ -1914,7 +1914,9 @@ Route::prefix('hotel_booking')->as('hotel_booking.')->middleware(['auth', 'must.
     Route::get('/', [HotelBookingController::class, 'index'])->name('index');
     Route::get('/search_booking', [HotelBookingController::class, 'search_booking'])->name('search_booking');
     Route::get('/my_bookings', [HotelBookingController::class, 'my_bookings'])->name('my_bookings');
+    Route::get('/booking_admin', [HotelBookingController::class, 'booking_admin'])->name('booking_admin');
     Route::delete('/{roomBooking}/booking_cancelation', [HotelBookingController::class, 'booking_cancelation'])->name('booking_cancelation');
+    Route::delete('/{roomBooking}/booking_confirmation', [HotelBookingController::class, 'booking_confirmation'])->name('booking_confirmation');
     Route::view('/confirmation_page', 'hotel_booking.confirmation_page')->name('confirmation_page');
     Route::get('download/{file}',  [HotelBookingController::class, 'download'])->name('download');
     // Route::get('/confirmation_page/{roomBooking}', [HotelBookingController::class, 'confirmation_page'])->name('confirmation_page');
