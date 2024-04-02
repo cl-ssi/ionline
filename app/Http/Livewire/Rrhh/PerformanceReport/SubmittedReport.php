@@ -7,6 +7,8 @@ use App\User;
 use App\Models\Rrhh\PerformanceReportPeriod;
 use App\Models\Rrhh\PerformanceReport;
 use Barryvdh\DomPDF\Facade\Pdf;
+use App\Models\Documents\Approval;
+use App\Notifications\Rrhh\NewPerformanceReport;
 
 class SubmittedReport extends Component
 {
@@ -103,9 +105,59 @@ class SubmittedReport extends Component
         $report->received_user_id = $this->selectedUser->id;
         $report->received_ou_id = $this->selectedUser->organizational_unit_id;
         $report->save();
-    
-        // Restablecer los campos del formulario después de guardar y mostrar un mensaje de éxito
         $this->resetFormFields();
+
+        $approval = $report->approvals()->Create([
+            "module"        => "Calificaciones",
+            "module_icon"   => "bi bi-graph-up-arrow",
+            "subject"       => "Reporte de Calificación de funcionario: ".$report->receivedUser->TinnyName,
+            "document_route_name" => "rrhh.performance-report.show",
+            "document_route_params"             => json_encode
+            ([
+                "userId" => $report->received_user_id,
+                "periodId"                    => $report->period_id,
+            ]),
+            "sent_to_user_id" => $report->created_user_id,
+            "approver_id" => $report->created_user_id,
+            "approver_ou_id" => $report->created_ou_id,
+            "approver_at" => $report->created_at,
+            "status"        => 1,
+            "digital_signature"                 => false,
+            "position"      => "right",            
+            "active"    =>false
+        ]);
+
+        $report->approvals()->Create([
+            "module"        => "Calificaciones",
+            "module_icon"   => "bi bi-graph-up-arrow",
+            "subject"       => "Reporte de Calificación de funcionario: ".$report->receivedUser->TinnyName,
+            "document_route_name" => "rrhh.performance-report.show",
+            "document_route_params"             => json_encode
+            ([
+                "userId" => $report->received_user_id,
+                "periodId"                    => $report->period_id,
+            ]),
+            "sent_to_user_id" => $report->received_user_id,
+            "digital_signature"                 => false,
+            "position"      => "left",            
+            "previous_approval_id"  => $approval->id,
+            "active"    => true
+        ]);
+
+        
+
+        if($report->receivedUser){
+            if($report->receivedUser->email != null){
+                // Utilizando Notify 
+                $report->receivedUser->notify(new NewPerformanceReport($report));
+            } 
+        }
+
+        
+
+
+
+
         session()->flash('success', 'Informe de desempeño guardado exitosamente');
     }
     
@@ -178,6 +230,8 @@ class SubmittedReport extends Component
 
         // return view('finance.receptions.show', compact('reception'));
     }
+
+
 
 
     

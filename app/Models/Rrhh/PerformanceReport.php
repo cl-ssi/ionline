@@ -7,6 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\User;
 use App\Rrhh\OrganizationalUnit;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use App\Models\Documents\Approval;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\Rrhh\NewPerformanceReport;
 
 class PerformanceReport extends Model
 {
@@ -65,6 +71,16 @@ class PerformanceReport extends Model
     public function receivedOrganizationalUnit()
     {
         return $this->belongsTo(OrganizationalUnit::class, 'received_ou_id');
+    }
+
+    public function approvals(): MorphMany
+    {
+        return $this->morphMany(Approval::class, 'approvable');
+    }
+
+    public function mail($users)
+    {
+        Notification::route('mail', $users)->notify(new NewPerformanceReport($this));
     }
 
 
