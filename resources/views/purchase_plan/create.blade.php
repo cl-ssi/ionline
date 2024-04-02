@@ -17,7 +17,7 @@
 
 @livewire('purchase-plan.create-purchase-plan', [
     'action'                => 'store',
-    'purchasePlanToEdit'    => '',
+    'purchasePlanToEdit'    => null,
 ])
 
 @endsection
