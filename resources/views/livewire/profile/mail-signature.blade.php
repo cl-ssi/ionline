@@ -1,6 +1,7 @@
 <div>
-        
-    <h3 class="mb-3">Firma de correo</h3>
+    @include('rrhh.partials.nav')
+
+    <h3 class="mb-3">Plantilla Firma de correo</h3>
 
     <style>
         .raya_rojo {

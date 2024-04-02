@@ -1,8 +1,12 @@
-@extends('layouts.bt4.app')
+@extends('layouts.bt5.app')
 
 @section('title', 'Cambiar Password')
 
 @section('content')
+
+    @cannot('Users: must change password')
+        @include('rrhh.partials.nav')
+    @endcannot
 
     <div class="row justify-content-md-center">
 
@@ -14,7 +18,7 @@
                 action="{{ route('rrhh.users.password.update') }}">
                 {{ method_field('PUT') }} {{ csrf_field() }}
 
-                <div class="form-group">
+                <div class="form-group mb-3">
                     <label for="forClave">Clave Actual</label>
                     <input type="password"
                         name="password"
@@ -29,7 +33,7 @@
                     @endif
                 </div>
 
-                <div class="form-group">
+                <div class="form-group mb-3">
                     <label for="forClave">Nueva Clave</label>
                     <input type="password"
                         name="newpassword"
@@ -42,7 +46,7 @@
                     @endif
                 </div>
 
-                <div class="form-group">
+                <div class="form-group mb-3">
                     <label for="forNuevaClaveConfirm">Confirmar Nueva Clave</label>
                     <input type="password"
                         name="newpassword_confirm"

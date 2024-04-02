@@ -763,7 +763,7 @@
                         @endcanany
 
                         <a class="dropdown-item" href="{{ route('rrhh.users.profile', auth()->id()) }}">
-                            <i class="fas fa-fw fa-boxes"></i> Mi perfil
+                            <i class="fas fa-fw fa-user-circle"></i> Mi perfil
                         </a>
 
                         <a class="dropdown-item" href="{{ route('profile.subrogations') }}">
@@ -799,7 +799,7 @@
                         </a>
 
                         <a class="dropdown-item" href="{{ route('welfare.amipass.question-my-index') }}">
-                            <i class="fas fa-question-circle"></i> {{ __('Consultas/Sugerencia Amipass') }}
+                            <i class="fas fa-fw fa-question-circle"></i> {{ __('Consultas/Sugerencia Amipass') }}
                         </a>
 
 

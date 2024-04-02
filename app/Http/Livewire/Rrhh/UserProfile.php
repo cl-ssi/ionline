@@ -18,20 +18,20 @@ class UserProfile extends Component
         'user.name' => 'required',
         'user.fathers_family' => 'required',
         'user.mothers_family' => 'required',
-        'user.gender' => 'required',
-        'user.birthday' => 'required',
+        'user.gender' => 'nullable',
+        'user.birthday' => 'nullable|date',
         'user.position' => 'required',
-        
+
         'user.email' => 'required',
-        
+
         'user.address' => 'required',
         'user.commune_id' => 'required',
         'user.phone_number' => 'required',
         'user.email_personal' => 'required',
 
-        'bankAccount.bank_id' => 'required',
-        'bankAccount.number' => 'required|integer',
-        'bankAccount.type' => 'required',
+        'bankAccount.bank_id' => 'nullable|integer',
+        'bankAccount.number' => 'nullable',
+        'bankAccount.type' => 'nullable',
     ];
 
     public function mount()
@@ -52,12 +52,13 @@ class UserProfile extends Component
     {
         $this->validate();
         $this->user->save();
-        $this->user->bankAccount()->updateOrCreate(
-            ['user_id' => $this->user->id],
-            ['bank_id' => $this->bankAccount['bank_id'],
-            'number' => $this->bankAccount['number'],
-            'type' => $this->bankAccount['type']]
-        );
+
+        // Si los valores vienen vacios, los guardamos como null
+        $this->bankAccount->bank_id = $this->bankAccount->bank_id ?: null;
+        $this->bankAccount->type = $this->bankAccount->type ?: null;
+
+        $this->bankAccount->save();
+
         session()->flash('success', 'Información actualizada exitosamente');
     }
 

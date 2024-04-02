@@ -15,17 +15,11 @@ class CreateUserBankAccountsTable extends Migration
     {
         Schema::create('user_bank_accounts', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->nullable();
-            $table->foreign('user_id')->references('id')->on('users');
-
-            $table->foreignId('bank_id')->nullable();
-            $table->foreign('bank_id')->references('id')->on('cfg_banks');
-            
+            $table->foreignId('user_id')->nullable()->constrained('users');
+            $table->foreignId('bank_id')->nullable()->constrained('cfg_banks');
             $table->string('number')->nullable();
-            $table->string('type')->nullable();     
+            $table->string('type')->nullable();
             $table->timestamps();
-
-            $table->unique(["user_id"], 'user_id_unique');
         });
     }
 
