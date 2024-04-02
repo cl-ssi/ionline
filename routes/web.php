@@ -301,6 +301,7 @@ use App\Http\Livewire\Rrhh\PerformanceReport\SubmittedReport;
 use App\Http\Livewire\Rrhh\PermissionsMgr;
 use App\Http\Livewire\Rrhh\RolesMgr;
 use App\Http\Livewire\Rrhh\ShiftsIndex;
+use App\Http\Livewire\Rrhh\UserProfile;
 use App\Http\Livewire\Sign\RequestSignature;
 use App\Http\Livewire\Sign\SignatureIndex;
 use App\Http\Livewire\Summary\Template\ShowTemplate;
@@ -1151,6 +1152,8 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
 
         Route::get('password', [UserController::class, 'editPassword'])->name('password.edit');
         Route::put('password', [UserController::class, 'updatePassword'])->name('password.update');
+        
+        Route::get('{user}/profile', UserProfile::class)->name('profile');
 
         Route::put('{user}/password', [UserController::class, 'resetPassword'])->name('password.reset');
         Route::get('{user}/switch', [UserController::class, 'switch'])->name('switch');
@@ -1168,15 +1171,6 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
         Route::get('/{user}/access-logs', AccessLogIndex::class)->name('access-logs');
 
         Route::get('/last-access', [UserController::class, 'lastAccess'])->name('last-access');
-
-        // Route::prefix('service_requests')->name('service_requests.')->group(function () {
-        //     Route::get('/', [UserController::class, 'index_sr'])->name('index')->middleware('auth');
-        //     Route::get('/create', [UserController::class, 'create_sr'])->name('create')->middleware('auth');
-        //     Route::post('/', [UserController::class, 'store_sr'])->name('store')->middleware('auth');
-        //     Route::get('/{user}/edit', [UserController::class, 'edit_sr'])->name('edit')->middleware('auth');
-        //     Route::put('/{user}', [UserController::class, 'update_sr'])->name('update')->middleware('auth');
-        //     Route::delete('/{user}', [UserController::class, 'destroy_sr'])->name('destroy')->middleware('auth');
-        // });
     });
 });
 
