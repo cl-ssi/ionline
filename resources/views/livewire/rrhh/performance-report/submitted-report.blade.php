@@ -49,7 +49,7 @@
                                 <i class="bi bi-file-check"></i>
                             </a>
                         @endif
-                    @else                    
+                    @else
                     <button class="btn btn-secondary btn-sm disabled"><i class="bi bi-file-check"></i></button>
                 @endif
                 </td>

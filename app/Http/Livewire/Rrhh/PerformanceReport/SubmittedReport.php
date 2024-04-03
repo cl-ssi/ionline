@@ -189,12 +189,18 @@ class SubmittedReport extends Component
         $report = PerformanceReport::where('received_user_id', $userId)
             ->where('period_id', $periodId)
             ->first();
-
+    
         if ($report) {
-            $report->delete();
-            session()->flash('success', 'Informe de desempeño eliminado exitosamente');
+            // Verificar si todos los aprobadores han aprobado el informe
+            if ($report->allApprovalsOk()) {
+                session()->flash('error', 'No se puede eliminar el informe de desempeño porque está ya e');
+            } else {
+                $report->delete();
+                session()->flash('success', 'Informe de desempeño eliminado exitosamente');
+            }
         }
     }
+    
 
     public function viewReport($userId, $periodId)
     {

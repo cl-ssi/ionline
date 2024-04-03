@@ -72,7 +72,15 @@
             <td class="nowrap" style="text-transform: uppercase;">
                 {{ $report->receivedOrganizationalUnit?->name }}
             </td>
-        </tr>     
+        </tr>
+        <tr>
+            <th>
+                NOMBRE JEFE DIRECTO
+            </th>
+            <td class="nowrap" style="text-transform: uppercase;">
+                {{ $report->createdUser?->full_name_upper }}
+            </td>
+        </tr>
     </table>
     <br><br><br><br>
 
