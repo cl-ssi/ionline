@@ -38,7 +38,7 @@
 
             <fieldset class="form-group col-12 col-md-1">
                 <label for="for_mecanism">Tipo de Compra</label>
-                <select name="subtype_search" class="form-control form-control-sm" wire:model.debounce.500ms="selectedSubType">
+                <select name="subtype_search" class="form-control form-control-sm" wire:model.debounce.500ms="selectedSubtype">
                     <option value="">Todos</option>
                     <option value="bienes">Bienes</option>
                     <option value="servicios">Servicios</option>                    
@@ -91,6 +91,7 @@
                     ])
             </fieldset>
         </div>
+
         <div class="form-row">
             <fieldset class="form-group col-12 col-md-2">
                 <label for="for_purchaser">Comprador</label>
@@ -120,6 +121,33 @@
             </fieldset>
             @endif
         </div>
+
+        @if($inbox == 'report: form-items')
+            <div class="form-row">
+                <fieldset class="form-group col-sm-2">
+                    <label>Tipo:</label><br>
+                    <select class="form-control form-control-sm" name="type_form_search" wire:model.debounce.500ms="selectedTypeForm">
+                        <option value="">Seleccione...</option>
+                        <option value="bienes y/o servicios">Bienes y/o Servicios</option>
+                        <option value="pasajes aéreos">Pasajes Aéreos</option>
+                    </select>
+                </fieldset>
+                {{--
+                <fieldset class="form-group col-sm-2">
+                    <label>Mecanismo de Compra:</label><br>
+                    <select class="form-control form-control-sm" name="">
+                        <option value="">Seleccione...</option>
+                    </select>
+                </fieldset>
+                --}}
+            </div>
+            
+            {{--
+            <div class="form-row">
+                <button type="button" class="btn btn-primary btn-block" wire:click="search"><i class="fas fa-search"></i> Buscar</button>
+            </div>
+            --}}
+        @endif
     </div>
 
     <br>
