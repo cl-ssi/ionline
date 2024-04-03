@@ -108,7 +108,7 @@
                 Tipo de documento
             </th>
             <td>
-                {{ $reception->dte_type }}
+                {{ $reception->dte_type_name }}
             </td>
             <th>
                 Fecha Emisón:
