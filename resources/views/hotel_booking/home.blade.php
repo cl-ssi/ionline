@@ -13,7 +13,7 @@
     <form method="GET" class="form-horizontal" action="{{ route('hotel_booking.search_booking') }}">
         <div class="form-row">
 
-            <fieldset class="form-group col-3">
+            <!-- <fieldset class="form-group col-3">
                 <label for="for_hotel_id">Ciudad</label>
                 <select class="form-control" name="commune_id" id="for_commune_id">
                     <option value=""></option>
@@ -30,7 +30,7 @@
                             @endif>{{$commune->name}}</option>
                     @endforeach
                 </select>
-            </fieldset>
+            </fieldset> -->
 
             <fieldset class="form-group col-3">
                 <label for="for_hotel_id">Entrada</label>
@@ -42,14 +42,14 @@
                 <input type="date" class="form-control" required name="end_date" @if($request->end_date) value="{{$request->end_date}}" @endif>
             </fieldset>
 
-            <fieldset class="form-group col-2">
+            <!-- <fieldset class="form-group col-2">
                 <label for="for_hotel_id">Cantidad de huéspedes</label>
                 <input type="numeric" class="form-control" required name="guest_number" @if($request->guest_number) value="{{$request->guest_number}}" @else value="1" @endif>
-            </fieldset>
+            </fieldset> -->
 
             <fieldset class="form-group col-1">
                 <label for="for_hotel_id"><br></label>
-                <button type="submit" class="btn btn-primary form-control"><i class="fas fa-search"></i> Buscar</button>
+                <button type="submit" class="btn btn-primary form-control"><i class="fas fa-search"></i></button>
             </fieldset>
 
         </div>
@@ -182,8 +182,8 @@
 @endif
 
 <div class="tooltip">Hover over me
-        <span class="tooltiptext">Tooltip text</span>
-    </div>
+    <span class="tooltiptext">Tooltip text</span>
+</div>
 
 @endsection
 
@@ -352,6 +352,16 @@ document.addEventListener("DOMContentLoaded", () => {
             $('[data-toggle="tooltip"]').tooltip()
         })
     })
+});
+
+document.getElementById('payment_type_select').addEventListener('change', function() {
+    var selectedOption = this.value;
+    if (selectedOption == 'Descuento por planilla') {
+        var confirmation = confirm('La confirmación de su reserva estará sujeta a disponibilidad de alcance del 15% de su liquidación de sueldo.');
+        if (!confirmation) {
+            this.value = '';
+        }
+    }
 });
 
 </script>

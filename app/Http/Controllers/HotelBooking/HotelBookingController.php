@@ -10,10 +10,14 @@ use Illuminate\Support\Facades\Auth;
 
 use App\Models\ClCommune;
 use App\Models\HotelBooking\Hotel;
+use App\Models\HotelBooking\Room;
 use App\Models\HotelBooking\RoomBookingConfiguration;
 use App\Models\HotelBooking\RoomBooking;
 use App\Models\HotelBooking\RoomBookingFile;
 use Illuminate\Support\Facades\Storage;
+
+use App\Notifications\HotelBooking\BookingConfirmation;
+use App\Notifications\HotelBooking\BookingCancelation;
 
 class HotelBookingController extends Controller
 {
@@ -39,10 +43,10 @@ class HotelBookingController extends Controller
     }
 
     public function search_booking(Request $request){
-        $commune_id = $request->commune_id;
+        // $commune_id = $request->commune_id;
         $start_date = Carbon::parse($request->start_date);
         $end_date = Carbon::parse($request->end_date);
-        $guest_number = intval($request->guest_number);
+        // $guest_number = intval($request->guest_number);
         $diff = $start_date->diffInDays($end_date);
         // dd($start_date, $end_date);
 
@@ -64,11 +68,11 @@ class HotelBookingController extends Controller
         
         // encuentra todas las configuraciones que tengan disponibilidad 
         $bookingConfigurations = RoomBookingConfiguration::where('end_date','>=',now())
-                                        ->whereHas("room", function($q) use($commune_id){
-                                            $q->whereHas("hotel", function($q) use($commune_id){
-                                                $q->where('commune_id',$commune_id);
-                                            });
-                                        })
+                                        // ->whereHas("room", function($q) use($commune_id){
+                                        //     $q->whereHas("hotel", function($q) use($commune_id){
+                                        //         $q->where('commune_id',$commune_id);
+                                        //     });
+                                        // })
                                         ->get();
 
         foreach($bookingConfigurations as $bookingConfiguration){
@@ -91,11 +95,13 @@ class HotelBookingController extends Controller
             
             if($start_date >= $bookingConfiguration->start_date && $start_date <= $bookingConfiguration->end_date 
             && $end_date >= $bookingConfiguration->start_date && $end_date <= $bookingConfiguration->end_date
-            && $guest_number <= $room_capacity
+            // && $guest_number <= $room_capacity
             && $diff <= $max_days_alowed
             && $flag_not_configurated == 0){
 
-                $roomBookings = RoomBooking::where('room_id',$bookingConfiguration->room_id)->whereIn('status',['Reservado','Bloqueado'])->get();
+                $roomBookings = RoomBooking::where('room_id',$bookingConfiguration->room_id)
+                                        ->whereIn('status',['Confirmado','Bloqueado'])
+                                        ->get();
 
                 // se verifica si dia actuales son compatible con días reservados/bloqueados
                 $flag = 0;
@@ -131,18 +137,47 @@ class HotelBookingController extends Controller
     }
 
     public function my_bookings(){
-
-        if(auth()->user()->hasPermissionTo('HotelBooking: Administrador')){
-            $roomBookings = RoomBooking::paginate(50);
-        }else{
-            $roomBookings = RoomBooking::where('user_id',auth()->user()->id)->paginate(50);
-        }
+        $roomBookings = RoomBooking::where('user_id',auth()->user()->id)->paginate(50);
         return view('hotel_booking.my_bookings',compact('roomBookings'));
+    }
+
+    public function booking_admin(Request $request){
+        $room = null;
+        $roomBookings = null;
+        if($request->room_id){
+            $room = Room::find($request->room_id);
+            $roomBookings = RoomBooking::where('room_id',$request->room_id)->paginate(50);
+        }
+        
+        return view('hotel_booking.bookings_admin',compact('roomBookings','room'));
     }
 
     public function booking_cancelation(RoomBooking $roomBooking){
         $roomBooking->status = "Cancelado";
         $roomBooking->save();
+
+        if($roomBooking->user){
+            if($roomBooking->user->email != null){
+                // Utilizando Notify 
+                $roomBooking->user->notify(new BookingCancelation($roomBooking));
+            } 
+        }
+
+        session()->flash('success', 'Se modificó el estado de la reserva.');
+        return redirect()->back();
+    }
+
+    public function booking_confirmation(RoomBooking $roomBooking){
+        $roomBooking->status = "Confirmado";
+        $roomBooking->save();
+
+        if($roomBooking->user){
+            if($roomBooking->user->email != null){
+                // Utilizando Notify 
+                $roomBooking->user->notify(new BookingConfirmation($roomBooking));
+            } 
+        }
+
         session()->flash('success', 'Se modificó el estado de la reserva.');
         return redirect()->back();
     }

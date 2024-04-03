@@ -175,11 +175,11 @@
                             </a>
                         @endif
 
-                        @canany(['HotelBooking: Administrador', 'HotelBooking: User'])
+                        <!-- @canany(['HotelBooking: Administrador', 'HotelBooking: User'])
                             <a class="dropdown-item {{ active('hotel_booking.index') }}" href="{{ route('hotel_booking.index') }}">
                                 <i class="fas fa-fw fa-user"></i> Reserva Cabañas
                             </a>
-                        @endcanany
+                        @endcanany -->
 
                         @canany(['Agenda UST: Administrador','Agenda UST: Funcionario','Agenda UST: Secretaria'])
                             <a class="dropdown-item {{ active('prof_agenda.home') }}" href="{{ route('prof_agenda.home') }}">
@@ -753,82 +753,84 @@
                     <ul class="dropdown-menu dropdown-menu-lg-end" aria-labelledby="navbarDropdown">
 
                         @if(session()->has('god'))
-                        <a class="dropdown-item" href="{{ route('rrhh.users.switch', session('god')) }}">
-                            <i class="fas fa-eye text-danger"></i> God Like
-                        </a>
-
-                        <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="{{ route('rrhh.users.switch', session('god')) }}">
+                                <i class="bi bi-eye text-danger"></i> God Like
+                            </a>
                         @endif
+
+                        @can('dev')
+                            <a class="dropdown-item" href="{{ route('parameters.logs.index') }}">
+                                <i class="bi bi-bug"></i> Log de errores
+                            </a>
+                        @endcan
+
+                        @can('News: create')
+                            <a class="dropdown-item" href="{{ route('news.create') }}">
+                                <i class="bi bi-newspaper"></i> Noticias
+                            </a>
+                        @endcan
+
+                        @canany(['be god','dev','News: create'])
+                            <div class="dropdown-divider"></div>
+                        @endcanany
+
+                        <a class="dropdown-item" href="{{ route('rrhh.users.profile', auth()->id()) }}">
+                            <i class="bi bi-person-circle"></i> Mi perfil
+                        </a>
 
                         <a class="dropdown-item" href="{{ route('profile.subrogations') }}">
                             @if(auth()->user()->absent)
-                            <i class="fas fa-fw fa-cocktail text-danger"></i>
+                            <i class="bi bi-cup-straw text-danger"></i>
                             @else
-                            <i class="fas fa-fw fa-chess"></i>
+                            <i class="bi bi-people"></i>
                             @endif
                             Subrogancia
                         </a>
 
                         <a class="dropdown-item" href="{{ route('inventories.pending-movements') }}">
-                            <i class="fas fa-fw fa-boxes"></i> {{ __('Inventario') }}
+                            <i class="bi bi-boxes"></i> {{ __('Inventario') }}
                         </a>
 
                         @canany(['be god'])
                             <a class="dropdown-item" href="{{ route('warehouse.visation_contract_manager.index') }}">
-                                <i class="fas fa-tasks"></i> Mis Visaciones Pendiente
+                                <i class="bi bi-list-task"></i> Mis Visaciones Pendiente
                             </a>
                         @endcan
 
                         <a class="dropdown-item" href="{{ route('finance.my.dtes') }}" }}">
-                            <i class="fas fa-fw fa-file-invoice-dollar"></i> {{ __('Mis Dtes') }}
+                            <i class="bi bi-receipt"></i> {{ __('Mis Dtes') }}
                         </a>
 
                         <a class="dropdown-item" href="{{ route('rrhh.attendance.no-records.mgr') }}">
-                            <i class="fas fa-fw fa-clock"></i> {{ __('Justificar asistencia') }}
+                            <i class="bi bi-clock"></i> {{ __('Justificar asistencia') }}
                         </a>
 
                         <a class="dropdown-item" href="{{ route('welfare.amipass.mi-amipass') }}">
-                            <i class="fas fa-fw fa-question-circle"></i> Mi Amipass
+                            <i class="bi bi-egg-fried"></i> Mi Amipass
                         </a>
 
                         <a class="dropdown-item" href="{{ route('welfare.amipass.question-my-index') }}">
-                            <i class="fas fa-fw fa-question-circle"></i> {{ __('Consultas/Sugerencia Amipass') }}
+                            <i class="bi bi-egg-fried"></i> {{ __('Consultas/Sugerencia Amipass') }}
                         </a>
 
                         @can('be god')
                         <a class="dropdown-item" href="{{ route('rrhh.performance-report.received_report') }}">
-                            <i class="fas fa-fw fa-chart-line"></i> Mi Informe de desempeño
-                        </a>
-                        @endcan
-
-                        @can('be god')
-                        <div class="dropdown-divider"></div>
-
-                        <a class="dropdown-item" href="{{ route('parameters.logs.index') }}">
-                            <i class="fas fa-fw fa-bomb"></i> Log de errores
-                        </a>
-                        @endcan
-
-                        @can('News: create')
-                        <div class="dropdown-divider"></div>
-
-                        <a class="dropdown-item" href="{{ route('news.create') }}">
-                            <i class="far fa-newspaper"></i> Noticias
+                            <i class="bi bi-graph-up-arrow"></i> Mi Informe de desempeño
                         </a>
                         @endcan
 
                         <div class="dropdown-divider"></div>
 
                         <a class="dropdown-item" href="{{ route('profile.signature') }}">
-                            <i class="fas fa-fw fa-envelope"></i> Plantilla Firma Correo
+                            <i class="bi bi-envelope"></i> Plantilla Firma Correo
                         </a>
 
                         <a class="dropdown-item" href="{{ route('rrhh.users.password.edit') }}">
-                            <i class="fas fa-fw fa-key"></i> Cambio de clave
+                            <i class="bi bi-key"></i> Cambio de clave
                         </a>
 
                         <a class="dropdown-item" href="{{ route('logout') }}">
-                            <i class="fas fa-fw fa-sign-out-alt"></i> {{ __('Cerrar sesión') }}
+                            <i class="bi bi bi-door-closed fw-bold"></i> {{ __('Cerrar sesión') }}
                         </a>
 
                     </ul>

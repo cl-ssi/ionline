@@ -37,7 +37,7 @@ class PerformanceReportPeriod extends Model
 
     protected $casts = [
         'start_at'          => 'date:Y-m-d',
-        'end_at'      => 'date:Y-m-d',        
+        'end_at'      => 'date:Y-m-d',
     ];
 
 

@@ -130,19 +130,20 @@ class Calendar extends Component
         
         // marca los días ya ocupados
         $rooms_array = $this->configurations->pluck('room_id')->toArray();
-        $roomBookings = RoomBooking::whereBetween('start_date', [$this->startOfMonth, $this->endOfMonth])
-                                    ->orwhereBetween('end_date', [$this->startOfMonth, $this->endOfMonth])
+        $roomBookings = RoomBooking::whereIn('status',['Confirmado','Bloqueado'])
                                     ->whereIn('room_id',$rooms_array)
+                                    ->where(function($query) {
+                                        $query->whereBetween('start_date', [$this->startOfMonth, $this->endOfMonth])
+                                            ->orwhereBetween('end_date', [$this->startOfMonth, $this->endOfMonth]);
+                                    })
                                     ->get()
                                     ->sortBy('start_date');
 
-                                    // dd($roomBookings);
         foreach($roomBookings as $key => $roomBooking){
             foreach (CarbonPeriod::create($roomBooking->start_date, '1 day', $roomBooking->end_date) as $day) {
-
+                
                 // verifica primero si el tiene style, es decir si está configurado para ser reservado en las configuraciones
-                if(array_key_exists($day->format('Y-m-d'), $this->data)){
-
+                if(array_key_exists($day->format('Y-m-d'), $this->data)){                    
                     //verifica el usuario configurado para ese día
                     if(auth()->user()->hasPermissionTo('HotelBooking: Administrador')){
 
