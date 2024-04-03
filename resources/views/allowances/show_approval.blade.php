@@ -1,7 +1,24 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
 
 <h5>
-    <i class="fas fa-file"></i> Viatico ID: {{ ($allowance->correlative) ? $allowance->correlative : $allowance->id }} <br>
+    <i class="fas fa-file"></i> Viatico ID: {{ ($allowance->correlative) ? $allowance->correlative : $allowance->id }}
+    @switch($allowance->status)
+        @case('pending')
+            <span class="badge badge-warning">Pendiente</span>
+            @break
+    
+        @case('rejected')
+            <span class="badge badge-danger">Rechazado</span>
+            @break
+        
+        @case('complete')
+            <span class="badge badge-success">Finalizado</span>
+            @break
+        
+        @case('manual')
+            <span class="badge badge-info">Manual</span>
+            @break
+    @endswitch
 </h5>
 
 <br />

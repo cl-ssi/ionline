@@ -7,7 +7,24 @@
 @include('allowances.partials.nav')
 
 <h5>
-    <i class="fas fa-file"></i> Viatico ID: {{ ($allowance->correlative) ? $allowance->correlative : $allowance->id }} <br>
+    <i class="fas fa-file"></i> Viatico ID: {{ ($allowance->correlative) ? $allowance->correlative : $allowance->id }}
+    @switch($allowance->status)
+        @case('pending')
+            <span class="badge badge-warning">Pendiente</span>
+            @break
+    
+        @case('rejected')
+            <span class="badge badge-danger">Rechazado</span>
+            @break
+        
+        @case('complete')
+            <span class="badge badge-success">Finalizado</span>
+            @break
+        
+        @case('manual')
+            <span class="badge badge-info">Manual</span>
+            @break
+    @endswitch
 </h5>
 
 <br />
