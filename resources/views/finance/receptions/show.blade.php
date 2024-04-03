@@ -133,7 +133,9 @@
                         <th>Especificaciones Proveedor</th>
                     @endif
 
+                    @if($reception->dte_type != 'boleta_honorarios')
                     <th>Precio Unitario</th>
+                    @endif
                     
                     @if($reception->items->first()->TotalDescuentos)
                         <th>Descuento</th>
@@ -143,7 +145,9 @@
                         <th>Cargos</th>
                     @endif
 
+                    @if($reception->dte_type != 'boleta_honorarios')
                     <th>Valor Total</th>
+                    @endif
                 </tr>
             </thead>
             <tbody>
@@ -158,7 +162,9 @@
                                 <td>{{ $item->EspecificacionProveedor }}</td>
                             @endif
                             
+                            @if($reception->dte_type != 'boleta_honorarios')
                             <td class="right">{{ money($item->PrecioNeto) }}</td>
+                            @endif
                             
                             @if($item->TotalDescuentos)
                                 <td class="right">{{ money($item->TotalDescuentos) }}</td>
@@ -167,7 +173,10 @@
                             @if($item->TotalCargos)
                                 <td class="right">{{ money($item->TotalCargos) }}</td>
                             @endif
+
+                            @if($reception->dte_type != 'boleta_honorarios')
                             <td class="right">{{ money($item->Total) }}</td>
+                            @endif
                         </tr>
                     @endif
                 @endforeach
@@ -176,56 +185,57 @@
     @endif
 
     <table class="totales">
-        @if($reception->neto)
-            <tr>
-                <th width="100">Neto</th>
-                <td>$</td>
-                <td width="100"
-                    class="right">{{ money($reception->neto) }}</td>
-            </tr>
-        @endif
-
-        @if ($reception->descuentos and $reception->descuentos > 0)
-            <tr>
-                <th>Dcto.</th>
-                <td>$</td>
-                <td class="right">{{ money($reception->descuentos) }}</td>
-            </tr>
-        @endif
-        
-        @if ($reception->cargos and $reception->cargos > 0)
-            <tr>
-                <th>Cargos</th>
-                <td>$</td>
-                <td class="right">{{ money($reception->cargos) }}</td>
-            </tr>
-        @endif
-
-        @if($reception->subtotal)
-            <tr>
-                <th>Subtotal</th>
-                <td>$</td>
-                <td class="right">{{ money($reception->subtotal) }}</td>
-            </tr>
-        @endif
-
-        @if($reception->purchaseOrder)
-            <tr>
-                <th>{{ $reception->purchaseOrder->json->Listado[0]->PorcentajeIva }}% IVA</th>
-                <td>$</td>
-                <td class="right">{{ money($reception->iva) }}</td>
-            </tr>
-            @else
-            @if($reception->iva)
+        @if($reception->dte_type != 'boleta_honorarios')
+            @if($reception->neto)
                 <tr>
-                    <th>IVA</th>
+                    <th width="100">Neto</th>
                     <td>$</td>
-                    <td class="right">{{ money($reception->iva) }}</td>
+                    <td width="100"
+                        class="right">{{ money($reception->neto) }}</td>
                 </tr>
             @endif
 
+            @if ($reception->descuentos AND $reception->descuentos > 0)
+                <tr>
+                    <th>Dcto.</th>
+                    <td>$</td>
+                    <td class="right">{{ money($reception->descuentos) }}</td>
+                </tr>
+            @endif
+            
+            @if ($reception->cargos and $reception->cargos > 0)
+                <tr>
+                    <th>Cargos</th>
+                    <td>$</td>
+                    <td class="right">{{ money($reception->cargos) }}</td>
+                </tr>
+            @endif
+
+            @if($reception->subtotal)
+                <tr>
+                    <th>Subtotal</th>
+                    <td>$</td>
+                    <td class="right">{{ money($reception->subtotal) }}</td>
+                </tr>
+            @endif
+
+            @if($reception->purchaseOrder)
+                <tr>
+                    <th>{{ $reception->purchaseOrder->json->Listado[0]->PorcentajeIva }}% IVA</th>
+                    <td>$</td>
+                    <td class="right">{{ money($reception->iva) }}</td>
+                </tr>
+            @else
+                @if($reception->iva)
+                    <tr>
+                        <th>IVA</th>
+                        <td>$</td>
+                        <td class="right">{{ money($reception->iva) }}</td>
+                    </tr>
+                @endif
+            @endif
         @endif
-        
+
         <tr>
             <th>Total</th>
             <td>$</td>
