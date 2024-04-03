@@ -516,13 +516,13 @@ class RequestForm extends Model implements Auditable
         $tender_search,
         $supplier_search,
         $subtype_search,
-        $type_form_search
+        $purchase_mechanism_search
     ) {
         if (
             $status_search or $status_purchase_search or $id_search or $folio_search or $name_search
             or $start_date_search or $end_date_search or $requester_search or $requester_ou_id or $admin_search
             or $admin_ou_id or $purchaser_search or $program_search or $purchase_order_search or $tender_search or $supplier_search or $subtype_search
-            or $type_form_search
+            or $purchase_mechanism_search
         ) {
             if ($status_search != '') {
                 $query->where(function ($q) use ($status_search) {
@@ -654,9 +654,9 @@ class RequestForm extends Model implements Auditable
                 });
             }
 
-            if ($type_form_search != '') {
-                $query->where(function ($q) use ($type_form_search) {
-                    $q->where('type_form', $type_form_search);
+            if ($purchase_mechanism_search != '') {
+                $query->where(function ($q) use ($purchase_mechanism_search) {
+                    $q->where('purchase_mechanism_id', $purchase_mechanism_search);
                 });
             }
         }
