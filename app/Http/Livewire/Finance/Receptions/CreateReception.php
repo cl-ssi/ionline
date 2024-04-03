@@ -310,11 +310,15 @@ class CreateReception extends Component
             case 'factura_electronica':
             case 'guias_despacho':
             default:
-                /** Si el total de Impuestos en la OC es 0, es una OC excenta */
+                /** 
+                 * Si el total de Impuestos en la OC es 0, es una OC exenta (caso de Pasajes de Avión)
+                 * Las OC de pasajes de avión son hechas automáticamente por MP y no tienen impuestos. 
+                 **/
                 if( $this->purchaseOrder->json->Listado[0]->Impuestos == 0 ) {
                     $this->reception['iva'] = 0;
                     $this->reception['total'] = $this->reception['subtotal'];
                 }
+                /** Aquí cae todas las demás DTEs */
                 else {
                     $this->reception['iva']   = $this->purchaseOrder->json->Listado[0]->PorcentajeIva / 100 * $this->reception['subtotal'];  
                     $this->reception['total'] = $this->reception['iva'] + $this->reception['subtotal'];
