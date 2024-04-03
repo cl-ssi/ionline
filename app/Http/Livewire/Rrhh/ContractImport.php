@@ -226,8 +226,15 @@ class ContractImport extends Component
         $this->non_existent_ous = [];
 
         $count_inserts = 0;
-        $contracts = Contract::whereDoesntHave('user')->with('organizationalUnit')->whereHas('organizationalUnit')->get();
-        // dd($contracts);
+        $contracts = Contract::whereDoesntHave('user')
+                            ->with('organizationalUnit')
+                            ->whereHas('organizationalUnit')
+                            ->where(function($query) {
+                                $query->whereNull('fecha_termino_contrato')
+                                        ->orWhere('fecha_termino_contrato','>=',now());
+                            })
+                            ->get();
+
         $withoutOu = array_unique(Contract::whereDoesntHave('user')->whereDoesntHave('organizationalUnit')->pluck('codigo_unidad')->toArray());
         // dd($withoutOu);
         $this->non_existent_users = Contract::whereDoesntHave('user')->whereDoesntHave('organizationalUnit')->count();
