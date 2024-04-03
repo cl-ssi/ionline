@@ -180,12 +180,12 @@ class ContinuityResolutionController extends Controller
             //visadores por cadena de responsabilidad en orden parte primero por el referente tecnico
             // $visadores = collect([
             //                 ['ou_id' => 12, 'user_id' => 15005047] // DEPTO. ATENCION PRIMARIA DE SALUD - ANA MARIA MUJICA
-            //                 ['ou_id' => 61, 'user_id' => 6811637], // DEPTO.ASESORIA JURIDICA  - CARMEN HENRIQUEZ OLIVARES
+            //                 ['ou_id' => 61, 'user_id' => 12834358], // DEPTO.ASESORIA JURIDICA  - LUIS MUENA BUGUEÑO
             //                 ['ou_id' => 31, 'user_id' => 17432199], // DEPTO.GESTION FINANCIERA (40) - ROMINA GARÍN
             //                 ['ou_id' => 2, 'user_id' => 14104369], // SUBDIRECCION GESTION ASISTENCIAL - CARLOS CALVO
             //             ]);
             $visadores = collect([$continuityResolution->referrer]); //referente tecnico
-            foreach(array(15005047, 6811637, 17432199, 14104369) as $user_id) //resto de visadores por cadena de responsabilidad
+            foreach(array(15005047, 12834358, 17432199, 14104369) as $user_id) //resto de visadores por cadena de responsabilidad
                 $visadores->add(User::find($user_id));
             
             foreach($visadores as $key => $visador){

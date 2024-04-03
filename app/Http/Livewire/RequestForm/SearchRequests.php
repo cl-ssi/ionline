@@ -40,7 +40,7 @@ class SearchRequests extends Component
     public $selectedPo = null;
     public $selectedTender = null;
     public $selectedSupplier = null;
-    public $selectedSubType = null;
+    public $selectedSubtype = null;
     public $result = null;
     public $inbox;
     public $type;
@@ -51,11 +51,16 @@ class SearchRequests extends Component
 
     public $organizationalUnit;
 
+    //SEARCH FORM-ITEMS
+    // public $activeSearch = false;
+    public $selectedTypeForm = null;
+
     protected $listeners = ['searchedRequesterOu', 'clearRequesterOu','searchedAdminOu', 'clearAdminOu'];
 
     protected $queryString = ['selectedStatus', 'selectedStatusPurchase', 'selectedId', 'selectedFolio',
         'selectedName', 'selectedStartDate', 'selectedEndDate', 'selectedRequester', 'selectedRequesterOuName',
-        'selectedAdmin', 'selectedAdminOuName', 'selectedPurchaser', 'selectedProgram', 'selectedPo', 'selectedSupplier', 'selectedSubType'
+        'selectedAdmin', 'selectedAdminOuName', 'selectedPurchaser', 'selectedProgram', 'selectedPo', 'selectedSupplier', 'selectedSubtype',
+        'selectedTypeForm'
     ];
 
     public function mount() {
@@ -118,8 +123,8 @@ class SearchRequests extends Component
         $this->selectedPo,
         $this->selectedTender,
         $this->selectedSupplier,
-        $this->selectedSubType
-
+        $this->selectedSubtype,
+        $this->selectedTypeForm
         );
 
         if($this->inbox == 'report: form-items'){
@@ -308,4 +313,14 @@ class SearchRequests extends Component
     public function updatingSupplier(){
         $this->resetPage();
     }
+
+    public function updatingSelectedTypeForm(){
+        $this->resetPage();
+    }
+
+    /*
+    public function search(){
+        $this->activeSearch = true;
+    }
+    */
 }

@@ -23,7 +23,7 @@ class CreateReception extends Component
     use WithFileUploads;
 
     //   1272565-444-AG23 1057448-598-SE23 1272565-737-SE23;
-    // public $purchaseOrderCode = '1272565-444-AG23';
+    // public $purchaseOrderCode = '1057448-7-CM24';
     public $purchaseOrderCode;
     public $purchaseOrder = false;
     public $reception;
@@ -306,12 +306,19 @@ class CreateReception extends Component
                 // $this->reception['iva'] = round($this->reception['total'] * $this->purchaseOrder->json->Listado[0]->PorcentajeIva / 100);
                 // $this->reception['neto'] = $this->reception['subtotal'] = $this->reception['total'] - $this->reception['iva'];
                 break;
+            case 'factura_exenta':
             case 'factura_electronica':
             case 'guias_despacho':
-            case 'factura_exenta':
             default:
-                $this->reception['iva']   = $this->purchaseOrder->json->Listado[0]->PorcentajeIva / 100 * $this->reception['subtotal'];  
-                $this->reception['total'] = $this->reception['iva'] + $this->reception['subtotal'];
+                /** Si el total de Impuestos en la OC es 0, es una OC excenta */
+                if( $this->purchaseOrder->json->Listado[0]->Impuestos == 0 ) {
+                    $this->reception['iva'] = 0;
+                    $this->reception['total'] = $this->reception['subtotal'];
+                }
+                else {
+                    $this->reception['iva']   = $this->purchaseOrder->json->Listado[0]->PorcentajeIva / 100 * $this->reception['subtotal'];  
+                    $this->reception['total'] = $this->reception['iva'] + $this->reception['subtotal'];
+                }
                 break;
         }
     }

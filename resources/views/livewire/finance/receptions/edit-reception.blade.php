@@ -169,11 +169,13 @@
                     @if ($reception->purchaseOrder)
                         {{ $reception->purchaseOrder?->json->Listado[0]->Proveedor->Nombre }}
                     @else
-                        {{ $reception->dte->razon_social_emisor }}
+                        {{ $reception->dte?->razon_social_emisor }}
                     @endif
                 </td>
-                <td class="text-end"
-                    nowrap>
+                <td class="text-center">
+                    {{ $reception->items->count() }}
+                </td>
+                <td class="text-end" nowrap>
                     $ {{ money($reception->total) }}
                 </td>
                 <td>
@@ -182,27 +184,23 @@
 
                 <td>
                     @if ($reception->rejected == false)
-                        @if ($reception->purchase_order)
-                            @if ($reception->signedFileLegacy)
-                                <a href="{{ route('file.download', $reception->signedFileLegacy) }}"
-                                    class="btn btn-outline-secondary"
-                                    target="_blank">
-                                    <i class="bi bi-file-pdf-fill"></i>
-                                </a>
-                            @else
-                                <a href="{{ route('finance.receptions.show', $reception->id) }}"
-                                    class="btn btn-outline-success"
-                                    target="_blank">
-                                    <i class="bi bi-file-pdf-fill"></i>
-                                </a>
-                            @endif
+                        @if ($reception->signedFileLegacy )
+                            <a href="{{ route('file.download', $reception->signedFileLegacy) }}"
+                                class="btn btn-outline-secondary"
+                                target="_blank">
+                                <i class="bi bi-file-pdf-fill"></i>
+                            </a>
                         @else
-                            <i class="bi bi-file-pdf-fill"></i>
+                            <a href="{{ route('finance.receptions.show', $reception->id) }}"
+                                class="btn btn-outline-success"
+                                target="_blank">
+                                <i class="bi bi-file-pdf-fill"></i>
+                            </a>
                         @endif
                     @endif
                 </td>
                 <td>
-                    @if ($reception->supportFile)
+                    @if ($reception->supportFile )
                         <a href="{{ route('file.download', $reception->supportFile) }}"
                             target="_blank">
                             <i class="fas fa-paperclip"></i>

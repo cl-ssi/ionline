@@ -735,6 +735,12 @@
                     </td>
                     <td colspan="3">
                         <table>
+                            <tr>
+                                <th width="100">Neto</th>
+                                <td>$</td>
+                                <td width="100"
+                                    style="text-align: right;">{{ money($reception['neto'] ?? 0) }}</td>
+                            </tr>
                             @if (key_exists('descuentos', $reception) and $reception['descuentos'] > 0)
                             <tr>
                                 <th>Dcto.</th>
@@ -750,12 +756,6 @@
                                 <td style="text-align: right;">{{ money($reception['cargos'] ?? 0) }}</td>
                             </tr>
                             @endif
-                            <tr>
-                                <th width="100">Neto</th>
-                                <td>$</td>
-                                <td width="100"
-                                    style="text-align: right;">{{ money($reception['neto'] ?? 0) }}</td>
-                            </tr>
                             <tr>
                                 <th>Subtotal</th>
                                 <td>$</td>
