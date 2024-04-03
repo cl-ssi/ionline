@@ -103,7 +103,7 @@
                 <input class="form-control form-control-sm" type="text" autocomplete="off" placeholder=""
                     name="program_search" wire:model.debounce.500ms="selectedProgram">
             </fieldset>
-            @if($inbox == 'purchase')
+            @if($inbox == 'purchase' || $inbox == 'report: form-items')
             <fieldset class="form-group col-12 col-md-2">
                 <label for="for_purchaser">N° O.C.</label>
                 <input class="form-control form-control-sm" type="text" autocomplete="off" placeholder=""
@@ -125,21 +125,16 @@
         @if($inbox == 'report: form-items')
             <div class="form-row">
                 <fieldset class="form-group col-sm-2">
-                    <label>Tipo:</label><br>
-                    <select class="form-control form-control-sm" name="type_form_search" wire:model.debounce.500ms="selectedTypeForm">
-                        <option value="">Seleccione...</option>
-                        <option value="bienes y/o servicios">Bienes y/o Servicios</option>
-                        <option value="pasajes aéreos">Pasajes Aéreos</option>
-                    </select>
-                </fieldset>
-                {{--
-                <fieldset class="form-group col-sm-2">
                     <label>Mecanismo de Compra:</label><br>
-                    <select class="form-control form-control-sm" name="">
+                    <select wire:model.debounce.500ms="selectedPurchaseMechanism" name="purchase_mechanism_search" class="form-control form-control-sm ">
                         <option value="">Seleccione...</option>
+                        @foreach($lstPurchaseMechanism as $val)
+                            <option value="{{$val->id}}">{{$val->name}}</option>
+                        @endforeach
                     </select>
+                    @error('purchaseMechanism') <span class="text-danger small">{{ $message }}</span> @enderror
                 </fieldset>
-                --}}
+                
             </div>
             
             {{--

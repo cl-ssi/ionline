@@ -19,6 +19,8 @@ use App\Exports\RequestForms\FormItemsExport;
 // use Illuminate\Support\Facades\Bus;
 // use Illuminate\Support\Facades\Storage;
 
+use App\Models\Parameters\PurchaseMechanism;
+
 class SearchRequests extends Component
 {
     use WithPagination;
@@ -53,14 +55,15 @@ class SearchRequests extends Component
 
     //SEARCH FORM-ITEMS
     // public $activeSearch = false;
-    public $selectedTypeForm = null;
+    public $lstPurchaseMechanism;
+    public $selectedPurchaseMechanism = null;
 
     protected $listeners = ['searchedRequesterOu', 'clearRequesterOu','searchedAdminOu', 'clearAdminOu'];
 
     protected $queryString = ['selectedStatus', 'selectedStatusPurchase', 'selectedId', 'selectedFolio',
         'selectedName', 'selectedStartDate', 'selectedEndDate', 'selectedRequester', 'selectedRequesterOuName',
         'selectedAdmin', 'selectedAdminOuName', 'selectedPurchaser', 'selectedProgram', 'selectedPo', 'selectedSupplier', 'selectedSubtype',
-        'selectedTypeForm'
+        'selectedPurchaseMechanism'
     ];
 
     public function mount() {
@@ -124,10 +127,12 @@ class SearchRequests extends Component
         $this->selectedTender,
         $this->selectedSupplier,
         $this->selectedSubtype,
-        $this->selectedTypeForm
+        $this->selectedPurchaseMechanism
         );
 
         if($this->inbox == 'report: form-items'){
+            $this->lstPurchaseMechanism   = PurchaseMechanism::all();
+
             if($this->type == 'items'){
                 $query->with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'purchaseType','associateProgram', 'purchasingProcess.details', 
                     'itemRequestForms.product', 'itemRequestForms.budgetItem','father:id,folio,has_increased_expense', 'purchasers', 'purchasingProcess')
@@ -314,7 +319,7 @@ class SearchRequests extends Component
         $this->resetPage();
     }
 
-    public function updatingSelectedTypeForm(){
+    public function updatingSelectedPurchaseMechanism(){
         $this->resetPage();
     }
 
