@@ -813,11 +813,11 @@
                             <i class="bi bi-egg-fried"></i> {{ __('Consultas/Sugerencia Amipass') }}
                         </a>
 
-                        @can('be god')
+                        
                         <a class="dropdown-item" href="{{ route('rrhh.performance-report.received_report') }}">
                             <i class="bi bi-graph-up-arrow"></i> Mi Informe de desempeño
                         </a>
-                        @endcan
+                        
 
                         <div class="dropdown-divider"></div>
 

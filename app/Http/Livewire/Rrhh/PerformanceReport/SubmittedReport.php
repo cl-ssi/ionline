@@ -123,7 +123,7 @@ class SubmittedReport extends Component
             "approver_at" => $report->created_at,
             "status"        => 1,
             "digital_signature"                 => false,
-            "position"      => "right",            
+            "position"      => "left",            
             "active"    =>false
         ]);
 
@@ -139,7 +139,7 @@ class SubmittedReport extends Component
             ]),
             "sent_to_user_id" => $report->received_user_id,
             "digital_signature"                 => false,
-            "position"      => "left",            
+            "position"      => "right",            
             "previous_approval_id"  => $approval->id,
             "active"    => true
         ]);
@@ -147,7 +147,7 @@ class SubmittedReport extends Component
         
 
         if($report->receivedUser){
-            if($report->receivedUser->email != null){
+            if($report->receivedUser && $report->receivedUser->email != null){
                 // Utilizando Notify 
                 $report->receivedUser->notify(new NewPerformanceReport($report));
             } 
@@ -193,7 +193,7 @@ class SubmittedReport extends Component
         if ($report) {
             // Verificar si todos los aprobadores han aprobado el informe
             if ($report->allApprovalsOk()) {
-                session()->flash('error', 'No se puede eliminar el informe de desempeño porque está ya e');
+                session()->flash('success', 'No se puede eliminar el informe de desempeño, ya que el funcionario tomó conocimiento');
             } else {
                 $report->delete();
                 session()->flash('success', 'Informe de desempeño eliminado exitosamente');

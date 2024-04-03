@@ -2,14 +2,14 @@
     <li class="nav-item">
         <a class="nav-link {{ active('rrhh.performance-report.received_report') }}" aria-current="page" href="{{route('rrhh.performance-report.received_report')}}">
             <i class="bi bi-inbox"></i>
-            Informes de desempeño Recibidos
+            Informes de desempeño recibidos
         </a>
     </li>
     @if(auth()->user()->getAmIAuthorityFromOuAttribute()->isNotEmpty())
         <li class="nav-item">
             <a class="nav-link {{ active('rrhh.performance-report.submitted_report') }}" href="{{route('rrhh.performance-report.submitted_report')}}">
                 <i class="bi bi-file-earmark-text"></i>
-                Mis informes de desempeño Realizados
+                Mis informes de desempeño realizados
             </a>
         </li>
     @endif

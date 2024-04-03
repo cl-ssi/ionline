@@ -6,7 +6,7 @@
         </div>
     @endif
 
-    <h3 class="mb-3">Informe de desempeño Realizados</h3>
+    <h3 class="mb-3">Informe de desempeño realizados</h3>
     <div class="mb-3">
         <label class="form-label" for="newField">Periodo</label>
         <select class="form-select" id="year" wire:model="year" required autocomplete="off">

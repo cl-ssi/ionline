@@ -54,7 +54,7 @@
                 PERIODO
             </th>
             <td class="nowrap" style="text-transform: uppercase;">
-                {{ $report->period?->name }} <small> ({{ $report->period?->start_at->format('d-m-Y') }} - {{ $report->period?->end_at->format('d-m-Y') }} ) </small>
+                {{ $report->period?->name }}  ({{ $report->period?->start_at->format('d-m-Y') }} - {{ $report->period?->end_at->format('d-m-Y') }} )
             </td>
         </tr>
         <tr>
@@ -156,22 +156,25 @@
 
         <div class="signature" style="padding-left: 32px;">
             @if($approval = $report->approvals->where('position', 'left')->first())
-                @include('sign.approvation', [
+                @include('sign.calificaciones', [
                     'approval' => $approval,
+                    'observacion' => $report->received_user_observation
                 ])
             @endif
         </div>
         <div class="signature" style="padding-left: 6px; padding-right: 6px;">
             @if($approval = $report->approvals->where('position', 'center')->first())
-                @include('sign.approvation', [
+                @include('sign.calificaciones', [
                     'approval' => $approval,
+                    'observacion' => $report->received_user_observation
                 ])
             @endif
         </div>
         <div class="signature">
             @if($approval = $report->approvals->where('position', 'right')->first())
-                @include('sign.approvation', [
+                @include('sign.calificaciones', [
                     'approval' => $approval,
+                    'observacion' => $report->received_user_observation,
                 ])
             @endif
         </div>
