@@ -11,15 +11,6 @@
         Listado de los productos asignados a ud y debe completar el traspaso.
     </p>
 
-    @if(auth()->user()->organizationalUnit->establishment_id == 41)
-        <ul>
-            <li><a href="{{ asset('planos/hah/piso1.pdf') }}">Plano del Piso 1</a></li>
-            <li><a href="{{ asset('planos/hah/piso2.pdf') }}">Plano del Piso 2</a></li>
-            <li><a href="{{ asset('planos/hah/piso3.pdf') }}">Plano del Piso 3</a></li>
-            <li><a href="{{ asset('planos/hah/piso4.pdf') }}">Plano del Piso 4</a></li>
-        </ul>
-    @endif
-
     <table class="table table-bordered">
         <thead>
             <tr>

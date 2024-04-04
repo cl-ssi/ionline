@@ -1,6 +1,6 @@
 <form wire:submit.prevent="searchPlace">
     <div class="row mb-3">
-        <div class="col-lg-10">
+        <div class="col-lg-9">
             <input type="text"
                 wire:model.defer="filter"
                 class="form-control"
@@ -18,6 +18,15 @@
                 <i class="fas fa-file-excel"></i>
             </button>
         </div>
+        @if(auth()->user()->organizationalUnit->establishment_id == 41)
+            <div class="col-lg-1">
+                <button type="button" class="btn btn-danger mb-3">
+                    <a href="{{ asset('planos/hah/planos.pdf') }}" target="_blank" style="text-decoration: none; color: inherit;" title="Planos Arquitectonicos">
+                        <i class="fas fa-map-marked-alt"></i>
+                    </a>
+                </button>
+            </div>
+        @endif
     </div>
 </form>
 
