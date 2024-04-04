@@ -2,13 +2,16 @@
 
 namespace App\Http\Livewire\Parameters\Notification;
 
+use App\Jobs\TestJob;
 use App\Notifications\TestNotification;
 use Livewire\Component;
 
 class Test extends Component
 {
     public function sendNotification() {
-        auth()->user()->notify(new TestNotification(69));
+        //auth()->user()->notify(new TestNotification(69));
+        // ProcessApproval::dispatch($approval);
+        TestJob::dispatch(auth()->user());
     }
 
     public function render()
