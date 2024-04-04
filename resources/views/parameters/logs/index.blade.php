@@ -21,7 +21,7 @@
 
 @livewire('parameters.mail.test')
 
-@livewire('parameters.notification.test')
+@livewire('parameters.queue.test')
 
 @livewire('sign.signature-test')
 
