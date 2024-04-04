@@ -14,6 +14,8 @@
 
 @livewire('parameters.mail.test')
 
+@livewire('parameters.notification.test')
+
 @livewire('sign.signature-test')
 
 @livewire('parameters.log-statistics')

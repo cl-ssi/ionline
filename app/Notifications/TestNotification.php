@@ -7,9 +7,11 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class TestNotification extends Notification
+class TestNotification extends Notification implements ShouldQueue
 {
     use Queueable;
+
+    protected $param;
 
     /**
      * Pasos:
@@ -45,7 +47,7 @@ class TestNotification extends Notification
      */
     public function via($notifiable)
     {
-        return ['database'];
+        return ['mail'];
     }
 
     /**
@@ -57,9 +59,13 @@ class TestNotification extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+            ->level('info')
+            ->subject('Nueva notificación de prueba')
+            ->line('Hola '.$notifiable->shortName)
+            ->line('Notificación de prueba, parametro: '.$this->param)
+            ->action('Notification Action', url('/'))
+            ->line('Utilizando Colas')
+            ->salutation('Saludos cordiales.');
     }
 
     /**
