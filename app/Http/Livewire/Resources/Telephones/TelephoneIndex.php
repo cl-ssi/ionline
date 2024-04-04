@@ -2,14 +2,18 @@
 
 namespace App\Http\Livewire\Resources\Telephones;
 
-use Livewire\Component;
-use App\Models\Resources\Telephone;
-use App\Models\Parameters\Place;
-use App\Models\Parameters\Location;
 use App\Models\Establishment;
+use App\Models\Parameters\Location;
+use App\Models\Parameters\Place;
+use App\Models\Resources\Telephone;
+use Livewire\Component;
+use Livewire\WithPagination;
 
 class TelephoneIndex extends Component
 {
+    use WithPagination;
+    protected $paginationTheme = 'bootstrap';
+
     protected $listeners = ['placeSelected'];
 
     public $filter;
@@ -31,7 +35,7 @@ class TelephoneIndex extends Component
     /**
     * Search
     */
-    public function searchTelephones()
+    public function getTelephones()
     {
         $telephones = Telephone::query();
         $telephones->withTrashed();
@@ -43,7 +47,9 @@ class TelephoneIndex extends Component
         ]);
 
         $telephones->search('minsal', $this->filter);
-        $telephones->search('establishment_id', $this->establishment_id);
+        if($this->establishment_id != "todos") {
+            $telephones->search('establishment_id', $this->establishment_id);
+        }
 
         return $telephones->paginate(100);
     }
@@ -53,7 +59,8 @@ class TelephoneIndex extends Component
     */
     public function search()
     {
-        
+        // reset pagination
+        $this->resetPage();
     }
 
     /** Metodo para restaruar un elemento borrado */
@@ -76,7 +83,7 @@ class TelephoneIndex extends Component
 
     public function render()
     {
-        $telephones = $this->searchTelephones();
+        $telephones = $this->getTelephones();
 
         return view('livewire.resources.telephones.telephone-index', [
             'telephones' => $telephones,

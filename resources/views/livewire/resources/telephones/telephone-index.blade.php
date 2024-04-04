@@ -14,8 +14,9 @@
     <div class="row g-2 mb-3">
         <div class="form-group col-4">
             <label for="estab">Establecimiento</label>
-            <select wire:model="establishment_id" class="form-select">
-                <option value=""></option>
+            <select wire:model.defer="establishment_id" class="form-select">
+                <option value="todos">Todos los establecimientos</option>
+                <option value="">Sin Establecimiento</option>
                 @foreach ($establishments as $est)
                 <option value="{{ $est->id }}">{{ $est->official_name }}</option>
                 @endforeach
