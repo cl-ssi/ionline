@@ -2,13 +2,16 @@
 
 namespace App\Http\Livewire\Parameters\Queue;
 
+use App\Jobs\ProcessApproval;
 use App\Jobs\TestJob;
+use App\Models\Documents\Approval;
 use Livewire\Component;
 
 class Test extends Component
 {
     public function testQueue() {
-        // ProcessApproval::dispatch($approval);
+        $approval = Approval::find(1);
+        ProcessApproval::dispatch($approval);
         TestJob::dispatch(auth()->user());
     }
 
