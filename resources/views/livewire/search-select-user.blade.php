@@ -28,7 +28,7 @@
     
     <!-- TODO revisar si es necesario en los modulos o en que parte traer los eliminados para cambiar el comportamiento del modelo y evitar este if(!$user->trashed()) -->
     @if(!empty($query))
-        <ul class="list-group col-12" style="z-index: 3; position: absolute;">
+        <ul class="list-group" style="z-index: 3; position: absolute;">
             @if( count($users) >= 1 )
                 @foreach($users as $user)
                     @if(!$user->trashed())
@@ -44,4 +44,5 @@
             @endif
         </ul>
     @endif
+
 </div>
