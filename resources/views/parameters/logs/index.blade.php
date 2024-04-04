@@ -10,7 +10,14 @@
 	}
 </style>
 
-<h3 class="mb-3">Logs <small> registros totales: {{ $logs->total() }}</small></h3>
+<div class="row">
+    <div class="col-8">
+        <h3 class="mb-3">Logs <small> registros totales: {{ $logs->total() }} </small></h3>
+    </div>
+    <div class="col-4 text-end">
+        Hora del servidor: {{ date('Y-m-d H:i:s') }}
+    </div>
+</div>
 
 @livewire('parameters.mail.test')
 
@@ -19,6 +26,7 @@
 @livewire('sign.signature-test')
 
 @livewire('parameters.log-statistics')
+
 
 <table class="table table-sm">
     <tbody>
