@@ -8,8 +8,7 @@ use App\Models\Finance\Dte;
 use App\Models\Finance\PaymentFlow;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
-
-
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class PaymentController extends Controller
 {
@@ -328,6 +327,22 @@ class PaymentController extends Controller
         $request->flash();
 
         return view('finance.payments.paid', compact('dtes','request'));
+
+    }
+
+    public function paidPdf(Dte $dte)
+    {
+
+        $establishment = auth()->user()->organizationalUnit->establishment;
+
+        return Pdf::loadView('finance.payments.paid_pdf', [
+            'dte' => $dte,
+            'establishment' => $establishment,
+        ])->setPaper('a4', 'landscape')->stream('comprobante_liquidacion_de_fondo.pdf');
+        
+        
+        
+        return view('finance.payments.paidpdf', compact('dte'));
 
     }
 
