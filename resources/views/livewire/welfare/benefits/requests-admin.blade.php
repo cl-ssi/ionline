@@ -22,7 +22,7 @@
                 <!-- <th>Estado</th> -->
                 <th style="width: 8%">Acciones</th>
                 <th style="width: 20%">Monto aceptado</th>
-                <th>Monto transferido</th>
+                <th>Notificar</th>
             </tr>
         </thead>
         <tbody>
@@ -33,6 +33,8 @@
                     <td>{{ $request->applicant->shortName }}</td>
                     <td>
                         {{ $request->subsidy->benefit->name }} - {{ $request->subsidy->name }}
+                        <br>
+                        Monto solicitado: <b>${{ money($request->requested_amount) }}</b>
                         <br><br>
                         @if($request->status != "En revisión")
                             <div class="input-group mb-3">
@@ -101,55 +103,12 @@
                         @endif
                     </td>
                     <td>
-                        <!-- cuando tenga tope anual -->
-                        @if($request->subsidy->annual_cap != null)
-                            <!-- cuando el pago es en cuotas -->
-                            @if($request->subsidy->payment_in_installments)
-                                @foreach($request->transfers as $key2 => $transfer)
-                                    @if($transfer->payed_amount != null)
-                                        <li>
-                                            {{$transfer->payed_date->format('Y-m-d')}} - <b>${{ money($transfer->payed_amount)}}</b>
-                                        </li>
-                                    @else
-                                        <div class="input-group mb-3">
-                                            <span class="input-group-text" id="basic-addon3">$</span>
-                                            <input type="number" class="form-control" wire:model.defer="requests.{{$key}}.transfers.{{$key2}}.payed_amount">
-                                            <button wire:click="saveTransfer({{$key}},{{ $key2 }})" class="btn btn-primary" type="button" @disabled($request->status == "Pagado")>
-                                                <i class="bi bi-floppy"></i>
-                                            </button>
-                                        </div>
-                                    @endif
-                                @endforeach
-                            @else
-                                <!-- pago tiene tope anual pero no es en cuotas -->
-                                @if($request->transfers->count() > 0)
-                                    <li>
-                                        {{$request->transfers->first()->payed_date->format('Y-m-d')}} - <b>${{ money($request->transfers->first()->payed_amount)}}</b>
-                                    </li>
-                                @else
-                                    <div class="input-group mb-3">
-                                        <span class="input-group-text" id="">Transferir</span>
-                                        <button wire:click="saveTransferWithoutInstallments({{$key}})" class="btn btn-primary" type="button" @disabled($request->status == "Pagado")>
-                                            <i class="bi bi-floppy"></i>
-                                        </button>
-                                    </div>
-                                @endif
-                            @endif
+                        @if($request->payed_date)
+                            {{ $request->payed_date->format('Y-m-d')}} - <b>${{ money($request->payed_amount) }}
                         @else
-                            @if($request->accepted_amount != null)
-                                @if($request->transfers->count() > 0)
-                                    <li>
-                                        {{$request->transfers->first()->payed_date->format('Y-m-d')}} - <b>${{ money($request->transfers->first()->payed_amount)}}</b>
-                                    </li>
-                                @else
-                                    <div class="input-group mb-3">
-                                        <span class="input-group-text" id="">$ Transferencia</span>
-                                        <button wire:click="saveTransferWithoutInstallments({{$key}})" class="btn btn-primary" type="button" @disabled($request->status == "Pagado")>
-                                            <i class="bi bi-floppy"></i>
-                                        </button>
-                                    </div>
-                                @endif
-                            @endif
+                            <button wire:click="saveTransfer({{$key}})" class="btn btn-success" type="button" @disabled($request->status == "Pagado")>
+                                <i class="bi bi-floppy"></i> Transferencia
+                            </button>
                         @endif
                     </td>
                 </tr>

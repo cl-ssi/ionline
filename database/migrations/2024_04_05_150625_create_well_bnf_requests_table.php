@@ -17,7 +17,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('subsidy_id')->constrained('well_bnf_subsidies');
             $table->foreignId('applicant_id')->constrained('users');
+            $table->float('requested_amount', 14, 2)->nullable();
             $table->text('status'); //en revisión, aceptado, rechazado
+
             $table->integer('installments_number')->nullable();
 
             $table->datetime('status_update_date')->nullable();
@@ -27,6 +29,10 @@ return new class extends Migration
             $table->datetime('accepted_amount_date')->nullable();
             $table->foreignId('accepted_amount_responsable_id', 14, 2)->nullable()->constrained('users');
             $table->float('accepted_amount', 14, 2)->nullable();
+
+            $table->datetime('payed_date')->nullable();
+            $table->foreignId('payed_responsable_id')->nullable()->constrained('users');
+            $table->float('payed_amount', 14, 2)->nullable();
             
             $table->timestamps();
             $table->softDeletes();

@@ -58,14 +58,26 @@
                                 @if($document->type == "Documentación")
                                     <li>
                                         <div wire:loading wire:target="files.{{ $key }}"><i class="fas fa-spinner fa-spin"></i> <b>Cargando...</b></div> {{$document->name}}
-                                        <input class="form-control" type="file" wire:model="files.{{ $key }}">
+                                        <input class="form-control" type="file" wire:model="files.{{ $key }}" accept="application/pdf">
                                     </li>
                                 @endif
+                            @endforeach
+
+                            @foreach ($errors->get('files.*') as $error)
+                                <span class="text-danger">{{ $error[0] }}</span>
                             @endforeach
                         </ul>
                     </td>
                 </tbody>
             </table>
+
+            <div class="row g-2 mb-3">
+                <div class="col-md-3">
+                    <label>Monto solicitado</label>
+                    <input type="number" wire:model.lazy="requested_amount" class="form-control" required>
+                    @error('requested_amount') <span class="text-danger">{{ $message }}</span> @enderror
+                </div>
+            </div>
 
             <div class="row g-2 mb-3">
                 <div class="col-md-3">
@@ -128,6 +140,7 @@
                 <th>ID</th>
                 <th>Fecha solicitud</th>
                 <th>Beneficio</th>
+                <th>Monto solicitado</th>
                 <th>Adjunto</th>
                 <th>Estado</th>
                 <th>Observaciones</th>
@@ -146,34 +159,14 @@
                         @if($request->status_update_observation)
                         <br><b>OBSERVACIONES: </b> {{ $request->status_update_observation }}
                         @endif
-                        @if($request->subsidy->annual_cap != null)
-                            @foreach($request->transfers as $transfer)
-                                @if($request->subsidy->payment_in_installments)
-                                    <li>
-                                        Cuota {{$transfer->installment_number}}: 
-                                            @if($transfer->payed_date) 
-                                                Transferida - {{$transfer->payed_date->format('Y-m-d')}} - <b>${{ money($transfer->payed_amount)}}</b>
-                                            @else
-                                                Pendiente
-                                            @endif
-                                    </li>
-                                @else
-                                    <li>
-                                        Transferido: {{$request->transfers->first()->payed_date->format('Y-m-d')}} - <b>${{ money($request->transfers->first()->payed_amount)}}</b>
-                                    </li>
-                                @endif
-                            @endforeach
-                        @else
-                            @if($request->accepted_amount != null)
-                                @if($request->transfers->count() > 0)
-                                    <li>
-                                        Transferido: {{$request->transfers->first()->payed_date->format('Y-m-d')}} - <b>${{ money($request->transfers->first()->payed_amount)}}</b>
-                                    </li>
-                                @endif
-                            @endif
+                        @if($request->payed_date)
+                            <li> 
+                                Transferido: {{ $request->payed_date->format('Y-m-d')}} - <b>${{ money($request->payed_amount) }}
+                            </li>
                         @endif
 
                     </td>
+                    <td>${{ money($request->requested_amount) }}</td>
                     <td>
                         @if($request->files->count() > 0)
                             @foreach($request->files as $file)

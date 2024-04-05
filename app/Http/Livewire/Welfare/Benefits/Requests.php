@@ -29,6 +29,7 @@ class Requests extends Component
     public $files = []; // Variable para almacenar archivos seleccionados
     public $showData = false;
 
+    public $requested_amount;
     public $email;
     public $banks;
     public $bankaccount;
@@ -44,13 +45,15 @@ class Requests extends Component
         'subsidy.annual_cap' => 'required',
         'subsidy.recipient' => 'required',
 
+        'requested_amount' => 'required|numeric',
         'email' => 'required',
         'account_number' => 'required|integer',
         'bank_id' => 'required',
-        'pay_method' => 'required'
+        'pay_method' => 'required',
     ];
 
     protected $messages = [
+        'requested_amount' => 'Debe ingresar un monto a solicitar',
         'email' => 'Debe ingresar un correo electrónico',
         'account_number.required' => 'Debe Ingresar Número de Cuenta',
         'bank_id.required' => 'Debe Seleccionar un Banco',
@@ -129,11 +132,13 @@ class Requests extends Component
     public function saveRequest()
     {
         $this->validate([
+            'requested_amount' => 'required|numeric',
             'email' => 'required',
             'account_number' => 'required|integer',
             'bank_id' => 'required',
             'pay_method' => 'required',
             'subsidy_id' => 'required',
+            'files.*' => 'nullable|file|mimes:pdf|max:2048', // Maximum of 2MB
         ]);
 
         // se hace asi la validación puesto que hay documentación y requisitos. En este caso solo se consideran documentación.
@@ -162,7 +167,8 @@ class Requests extends Component
                 // 'benefit_id' => $this->benefit_id,
                 'subsidy_id' => $this->subsidy_id,
                 'applicant_id' => auth()->user()->id,
-                'status' => 'En revisión'
+                'status' => 'En revisión',
+                'requested_amount' => $this->requested_amount,
             ]);
         }
 

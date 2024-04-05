@@ -5,24 +5,17 @@ namespace App\Http\Livewire\Welfare\Benefits;
 use Livewire\Component;
 
 use App\Models\Welfare\Benefits\Request;
-use App\Models\Welfare\Benefits\Transfer;
+// use App\Models\Welfare\Benefits\Transfer;
 use App\Notifications\Welfare\Benefits\RequestTransfer;
 
 class RequestsAdmin extends Component
 {
     public $requests;
-    // public $status_update_observation = [];
-    // public $accepted_amount = [];
-    // public $installments_number = [];
-    // public $payed_installments = [];
-    // public $payed_amount = [];
 
     protected $rules = [
         'requests.*.status_update_observation' => 'required',
         'requests.*.accepted_amount' => 'required',
         'requests.*.installments_number' => 'required',
-
-        'requests.*.transfers.*.payed_amount' => 'required',
     ];
 
     public function accept($id){
@@ -79,67 +72,23 @@ class RequestsAdmin extends Component
         }
     }
 
-    public function saveTransfer($key, $key2){
-        $request = Request::find($this->requests[$key]->id);
-
-        $transfer = Transfer::find($this->requests[$key]->transfers[$key2]->id);
-        $transfer->payed_date = now();
-        $transfer->payed_responsable_id = auth()->user()->id;
-        $transfer->payed_amount = $this->requests[$key]->transfers[$key2]->payed_amount;
-        $transfer->save();
-
-        $flag = 0;
-        foreach($transfer->request->transfers as $transfer){
-            if($transfer->payed_amount == null){
-                $flag = 1;
-                
-            }
-        }
-        if($flag == 0){
-            $transfer->request->status = "Pagado";
-            $transfer->request->save();
-        }else{
-            $transfer->request->status = "En proceso de pago";
-            $transfer->request->save();
-        }
-
-        session()->flash('message', 'Se registró la transferencia.');
-
-        // envia notificación
-        // if (config('app.env') === 'production') {
-            if($request->applicant){
-                if($request->applicant->email_personal != null){
-                    // Utilizando Notify 
-                    $request->applicant->notify(new RequestTransfer($request, $this->requests[$key]->transfers[$key2]->payed_amount));
-                } 
-            }
-        // }
-    }
-
-    public function saveTransferWithoutInstallments($key){
+    public function saveTransfer($key){
         $request = Request::find($this->requests[$key]->id);
         $request->status = "Pagado";
+        $request->payed_date = now();
+        $request->payed_responsable_id = auth()->user()->id;
+        $request->payed_amount = $request->accepted_amount;
         $request->save();
-
-        $transfer = new Transfer();
-        $transfer->request_id = $request->id;
-        $transfer->installment_number = 1;
-        $transfer->payed_date = now();
-        $transfer->payed_responsable_id = auth()->user()->id;
-        $transfer->payed_amount = $request->accepted_amount;
-        $transfer->save();
 
         session()->flash('message', 'Se registró la transferencia.');
 
         // envia notificación
-        // if (config('app.env') === 'production') {
-            if($request->applicant){
-                if($request->applicant->email_personal != null){
-                    // Utilizando Notify 
-                    $request->applicant->notify(new RequestTransfer($request, $request->accepted_amount));
-                } 
-            }
-        // }
+        if($request->applicant){
+            if($request->applicant->email_personal != null){
+                // Utilizando Notify 
+                $request->applicant->notify(new RequestTransfer($request, $request->accepted_amount));
+            } 
+        }
     }
 
     public function render()
