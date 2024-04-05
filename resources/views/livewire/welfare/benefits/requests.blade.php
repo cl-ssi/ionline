@@ -68,7 +68,12 @@
             </table>
 
             <div class="row g-2 mb-3">
-                <div class="col-md-4">
+                <div class="col-md-3">
+                    <label>Correo electrónico</label>
+                    <input type="text" wire:model.lazy="email" class="form-control" required>
+                    @error('email') <span class="text-danger">{{ $message }}</span> @enderror
+                </div>
+                <div class="col-md-3">
                     <label>Banco</label>        
                     <select wire:model.lazy="bank_id" class="form-select" required>
                     <option value="">Seleccionar Banco</option>
@@ -79,7 +84,7 @@
                     @error('bank_id') <span class="text-danger">{{ $message }}</span> @enderror
                 </div>
                 <!-- tipos de cuenta-->
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <label for="for_pay_method">Tipo de Cuenta</label>
                     <select wire:model.lazy="pay_method" class="form-select">
                     <option value="">Seleccionar Forma de Pago</option>
@@ -90,18 +95,21 @@
                     @error('pay_method') <span class="text-danger">{{ $message }}</span> @enderror
                 </div>
                 <!-- numero de cuenta-->
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <label>Número de Cuenta</label>
                     <input type="number" wire:model.lazy="account_number" class="form-control" required>
                     @error('account_number') <span class="text-danger">{{ $message }}</span> @enderror
                 </div>
             </div>
 
-            <div wire:loading wire:target="saveRequest">
-                <i class="fas fa-spinner fa-spin"></i> Guardando...
+            <div wire:loading>
+                <i class="fas fa-spinner fa-spin"></i> Espere...
             </div>
 
-            <button wire:click="saveRequest" class="btn btn-success">Guardar</button>
+            <div wire:loading.remove>
+                <button wire:click="saveRequest" wire:loading.attr="disabled" class="btn btn-success">Guardar</button>
+            </div>
+            
 
             @endif
 
@@ -171,7 +179,7 @@
                             @foreach($request->files as $file)
                                 <li>
                                     <a href="#" wire:click="showFile({{ $file->id }})">
-                                        {{$file->document->name}}
+                                        {{$file->name}}
                                         <!-- <span class="fas fa-download" aria-hidden="true"></span> -->
                                     </a>
                                 </li>

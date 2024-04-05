@@ -12,6 +12,7 @@ use App\Models\Welfare\Benefits\Request;
 use App\Models\Welfare\Benefits\File;
 use App\Models\Parameters\Bank;
 use App\Models\Rrhh\UserBankAccount;
+use App\User;
 
 class Requests extends Component
 {
@@ -28,6 +29,7 @@ class Requests extends Component
     public $files = []; // Variable para almacenar archivos seleccionados
     public $showData = false;
 
+    public $email;
     public $banks;
     public $bankaccount;
     public $bank_id;
@@ -42,12 +44,14 @@ class Requests extends Component
         'subsidy.annual_cap' => 'required',
         'subsidy.recipient' => 'required',
 
+        'email' => 'required',
         'account_number' => 'required|integer',
         'bank_id' => 'required',
         'pay_method' => 'required'
     ];
 
     protected $messages = [
+        'email' => 'Debe ingresar un correo electrónico',
         'account_number.required' => 'Debe Ingresar Número de Cuenta',
         'bank_id.required' => 'Debe Seleccionar un Banco',
         'pay_method.required' => 'Debe Seleccionar una Forma de Pago',
@@ -66,6 +70,8 @@ class Requests extends Component
 
         $this->banks = Bank::all();
         $this->bankaccount = auth()->user()->bankAccount;
+
+        $this->email = auth()->user()->email;
 
         if($this->bankaccount){
             if ($this->bankaccount->bank) {
@@ -89,7 +95,7 @@ class Requests extends Component
         $this->showData = false;
         if ($value) {
             $benefit = Benefit::find($value);
-            $this->subsidies = $benefit->subsidies;
+            $this->subsidies = $benefit->subsidies->sortBy('name');
         } else {
             $this->subsidies = collect();
         }
@@ -123,6 +129,7 @@ class Requests extends Component
     public function saveRequest()
     {
         $this->validate([
+            'email' => 'required',
             'account_number' => 'required|integer',
             'bank_id' => 'required',
             'pay_method' => 'required',
@@ -161,15 +168,21 @@ class Requests extends Component
 
         // Guardar archivos seleccionados
         foreach ($this->files as $key => $file) {
-            $filename = $file->getClientOriginalName();
-            $fileModel = New File();
-            $fileModel->file = $file->store('ionline/well_bnf',['disk' => 'gcs']);
-            $fileModel->name = $filename;
-            $fileModel->well_bnf_request_id = $request->id;
-            $fileModel->document_id = $this->subsidy->documents[$key]->id;
-            $fileModel->save();
+            $request->files()->create([
+                'storage_path' => $file->store('ionline/welfare/benefits',['disk' => 'gcs']),
+                'stored' => true,
+                'name' => $this->subsidy->documents[$key]->name,
+                'valid_types' => json_encode(["pdf", "xls"]),
+                'max_file_size' => 10,
+                'stored_by_id' => auth()->id(),
+            ]);
         }
 
+        // guarda email
+        $user = User::updateOrCreate(
+            ['id' => auth()->user()->id],
+            ['email' => $this->email]
+        );
 
         // guarda datos bancarios
         $userBankAccount = UserBankAccount::updateOrCreate(

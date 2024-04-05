@@ -8,12 +8,13 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 use App\Models\Welfare\Benefits\Request as RequestModel;
 use App\Models\Welfare\Benefits\Subsidy;
-use App\Models\Welfare\Benefits\File;
 use App\Models\Welfare\Benefits\Transfer;
 use App\User;
+use App\Models\File;
 
 class Request extends Model
 {
@@ -49,9 +50,14 @@ class Request extends Model
         return $this->belongsTo(Subsidy::class);
     }
 
-    public function files(): HasMany
+    // public function files(): HasMany
+    // {
+    //     return $this->hasMany(File::class,'well_bnf_request_id');
+    // }
+
+    public function files(): MorphMany
     {
-        return $this->hasMany(File::class,'well_bnf_request_id');
+        return $this->morphMany(File::class, 'fileable');
     }
 
     public function applicant(): BelongsTo
