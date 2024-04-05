@@ -32,6 +32,7 @@ class ReceptionItem extends Model
         'EspecificacionComprador',
         'EspecificacionProveedor',
         'PrecioNeto',
+        'PrecioExento',
         'TotalDescuentos',
         'TotalCargos',
         'Total',

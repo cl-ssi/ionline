@@ -7,7 +7,11 @@
 
     <h5>Documento Tributario Asociado</h5>
     <!-- Archivo Digitalizado de DTE -->
+
+
+
     <div class="row mb-3 g-2">
+
         <div class="col-md-4">
             <!-- Etiqueta y campo de carga de archivo -->
             <label for="digital-invoice-file">Archivo Digitalizado DTE</label>
@@ -27,8 +31,22 @@
                         wire:loading></i>
         </div>
 
+    
 
-        <div class="col-md-3">
+        <div class="form-group col-2">
+            <label for="emisor">RUT*</label>
+            <input type="text" class="form-control" id="emisor" wire:model="emisor"
+                autocomplete="off"
+                wire:loading.attr="disabled"
+                wire:target="digitalInvoiceFile"
+                wire:change="loadDteData()"
+                >
+            @error('emisor')
+                <span class="text-danger">{{ $message }}</span>
+            @enderror
+        </div>
+
+        <div class="col-md-2">
             <div class="form-group">
                 <label for="reception-date">Tipo de documento*</label>
                 <select id="document_type"
@@ -52,19 +70,6 @@
         </div>
 
         <div class="form-group col-2">
-            <label for="emisor">RUT*</label>
-            <input type="text" class="form-control" id="emisor" wire:model="emisor"
-                autocomplete="off"
-                wire:loading.attr="disabled"
-                wire:target="digitalInvoiceFile"
-                wire:change="loadDteData()"
-                >
-            @error('emisor')
-                <span class="text-danger">{{ $message }}</span>
-            @enderror
-        </div>
-
-        <div class="form-group col-2">
             <label for="folio">Folio</label>
             <input type="number" class="form-control" id="folio" wire:model="folio" autocomplete="off"
                 min="1" 
@@ -77,8 +82,9 @@
             @enderror
         </div>
 
-
     </div>
+
+
 
 
     <div class="row mb-3 g-2">
@@ -93,19 +99,7 @@
             @enderror
         </div>
 
-        <div class="col-md-2">
-            <div class="form-group">
-                <label for="dte_date">Fecha de documento*</label>
-                <input type="date"
-                    class="form-control @error('reception.dte_date') is-invalid @enderror"
-                    wire:model.defer="reception.dte_date" 
-                    wire:loading.attr="disabled"
-                    wire:target="digitalInvoiceFile">
-            </div>
-            @error('reception.dte_date')
-                    <span class="text-danger">{{ $message }}</span>
-            @enderror
-        </div>
+
 
 
 
@@ -155,9 +149,6 @@
         </div>
     @endif
 
-
-
-
         <div class="form-group col-2">
             <label for="montoTotal">Monto Total</label>
             <input type="number" class="form-control" id="montoTotal" wire:model.defer="montoTotal"
@@ -170,6 +161,22 @@
                 <span class="text-danger">{{ $message }}</span>
             @enderror
         </div>
+
+        <div class="col-md-2">
+            <div class="form-group">
+                <label for="dte_date">Fecha de documento*</label>
+                <input type="date"
+                    class="form-control @error('reception.dte_date') is-invalid @enderror"
+                    wire:model.defer="reception.dte_date" 
+                    wire:loading.attr="disabled"
+                    wire:target="digitalInvoiceFile">
+            </div>
+            @error('reception.dte_date')
+                    <span class="text-danger">{{ $message }}</span>
+            @enderror
+        </div>
+
+
     </div>
 
     <h4>Recepción</h4>
@@ -258,32 +265,64 @@
                 </div>
                 <div class="mt-2">
                     @foreach ($items as $index => $item)
-                        <div class="row mb-2" wire:key="item_{{ $index }}">
-                            <div class="col-md-2">
-                                <input type="text" class="form-control" wire:model.defer="items.{{ $index }}.producto" placeholder="ej: bolsa de basura">
-                                @error("items.$index.producto")
-                                    <span class="text-danger">{{ $message }}</span>
-                                @enderror
-                            </div>
+                        <div class="row mb-2 g-2" wire:key="item_{{ $index }}">
+                            @can('be god')
+                                <div class="col-md-2">
+                                    <div class="form-check form-switch form-check-inline">
+                                        <input class="form-check-input"
+                                            type="checkbox"
+                                            role="switch"
+                                            id="for-order_completed"
+                                            wire:click="toggleExento()"
+                                            >
+                                        <label class="form-check-label"
+                                            for="flexSwitchCheckDefault">Marcar el ítem como exento</label>
+                                        <div class="form-text">Esta linea se considerara como exenta</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <input type="text" class="form-control" wire:model.defer="items.{{ $index }}.producto" placeholder="ej: bolsa de basura">
+                                    @error("items.$index.producto")
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                            @endcan
 
-                            <div class="col-md-2">
-                                <input type="text" class="form-control" wire:model.defer="items.{{ $index }}.unidad" placeholder="ej: centimetros">
+                            <div class="col-md-1">
+                                <input type="text" class="form-control" wire:model.defer="items.{{ $index }}.unidad" placeholder="ej: cm">
                                 @error("items.$index.unidad")
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
-                            <div class="col-md-2">
-                                <input type="number" class="form-control" wire:model.defer="items.{{ $index }}.cantidad" placeholder="Cantidad" wire:change="calculateTotal({{ $index }})">
+                            <div class="col-md-1">
+                                <input type="number" class="form-control" wire:model.defer="items.{{ $index }}.cantidad" placeholder="Cant" wire:change="calculateTotal({{ $index }})">
                                 @error("items.$index.cantidad")
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
-                            <div class="col-md-2">
-                                <input type="number" class="form-control" wire:model.defer="items.{{ $index }}.precioNeto" placeholder="Precio Neto" wire:change="calculateTotal({{ $index }})">
-                                @error("items.$index.precioNeto")
+
+                            @if($exento)
+                                <div class="form-group col-2"> 
+                                    <input type="number" class="form-control" id="montoExento" wire:model.defer="items.{{ $index }}.montoExento"
+                                        autocomplete="off" wire:change="calculateTotal({{ $index }})" placeholder="monto exento"
+                                    >
+                                    @error('montoExento')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                            @else
+                                <div class="form-group col-2">
+                                    <input type="number" class="form-control" id="montoNeto" wire:model.defer="items.{{ $index }}.montoExento"
+                                        autocomplete="off"
+                                        wire:change="calculateTotal({{ $index }})"
+                                        placeholder="monto neto"
+                                    >
+                                    @error('montoNeto')
                                     <span class="text-danger">{{ $message }}</span>
-                                @enderror
-                            </div>
+                                    @enderror
+                                </div>
+                            @endif
+
                             <div class="col-md-2">
                                 <input type="number" class="form-control" wire:model="items.{{ $index }}.total" readonly>
                                 @error("items.$index.total")
@@ -584,7 +623,13 @@
                     <tr>
                         <td>{{ $item['producto'] }}</td>
                         <td>{{ $item['cantidad'] }} / {{ $item['unidad'] }}</td>
-                        <td style="text-align: right;">{{ money(floatval($item['precioNeto'])) }}</td>
+                        <td style="text-align: right;">
+                            @if (!empty($item['precioNeto']))
+                                {{ money(floatval($item['precioNeto'])) }}
+                            @elseif (!empty($item['montoExento']))
+                                {{ money(floatval($item['montoExento'])) }}
+                            @endif
+                        </td>
                         <td style="text-align: right;">{{ money(floatval($item['total'])) }}</td>
                     </tr>
                 @endif
