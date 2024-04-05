@@ -106,7 +106,13 @@ class UserController extends Controller
     {
         $user = new User($request->All());
 
-        /** Ya no crearemos el password por defecto */
+        /** 
+         * Ya no crearemos el password por defecto 
+         * por que no todos los usuarios necesitan acceso a la plataforma
+         * 
+         * El usuario puede crearse una nueva contraseña en la opción "Olvido su contraseña"
+         * o bien el administrador que lo esta creando puede utilizar la opción "Resetear clave"
+         */
         //$user->password = bcrypt($request->id);
 
         if ($request->has('organizationalunit')) {
@@ -119,13 +125,16 @@ class UserController extends Controller
 
         $user->save();
 
-        foreach($request->input('roles') as $role) {
-            $user->assignRole($role);
+        if($request->has('roles')) {
+            foreach($request->input('roles') as $role) {
+                $user->assignRole($role);
+            }
         }
         $user->givePermissionTo('Users: must change password');
 
 
-        session()->flash('info', 'El usuario ' . $user->name . ' ha sido creado.');
+        session()->flash('info', 'El usuario ' . $user->name . 
+            ' ha sido creado. Puede generar una nueva clave en la opción: "Olvido su contraseña" en el login o bien el administrador que lo esta creando puede utilizar la opción "Resetear clave"');
 
         return redirect()->route('rrhh.users.index');
     }
