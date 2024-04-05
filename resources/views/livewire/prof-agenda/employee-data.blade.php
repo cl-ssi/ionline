@@ -77,7 +77,7 @@
 
         <fieldset class="form-group col-12 col-md-3">
             <label for="for_email">Email institucional*</label>
-            <input type="email" class="form-control" id="for_email" wire:model.lazy="email"
+            <input type="email" class="form-control" id="for_email" wire:model.defer="email"
                 name="email" @if($user) value="{{$user->email}}" @endif>
         </fieldset>
 
