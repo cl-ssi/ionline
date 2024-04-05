@@ -228,6 +228,8 @@ use App\Http\Livewire\Drugs\IndexActPrecursor;
 use App\Http\Livewire\Finance\AccountingCodesMgr;
 use App\Http\Livewire\Finance\DteConfirmation;
 use App\Http\Livewire\Finance\Dte\Cenabast;
+use App\Http\Livewire\Finance\FixedFund\FormFixedFund;
+use App\Http\Livewire\Finance\FixedFund\IndexFixedFund;
 use App\Http\Livewire\Finance\IndexDtes;
 use App\Http\Livewire\Finance\MyDtes;
 use App\Http\Livewire\Finance\Receptions\CreateReception;
@@ -2166,12 +2168,13 @@ Route::prefix('finance')->as('finance.')->middleware(['auth', 'must.change.passw
         Route::get('/own', [PaymentController::class, 'indexOwn'])->name('own');
         Route::get('/review', [PaymentController::class, 'review'])->name('review');
         Route::get('/{dte}/return-to-dte-inbox', [PaymentController::class, 'returnToDteInbox'])->name('returnToDteInbox');
-        Route::get('/{dte}/send-to-ready-inbox', [PaymentController::class, 'sendToReadyInbox'])->name('sendToReadyInbox');        
-        Route::get('/ready', [PaymentController::class, 'ready'])->name('ready');        
+        Route::get('/{dte}/send-to-ready-inbox', [PaymentController::class, 'sendToReadyInbox'])->name('sendToReadyInbox');
+        Route::get('/ready', [PaymentController::class, 'ready'])->name('ready');
         Route::put('/{dte}/return-to-review', [PaymentController::class, 'returnToReview'])->name('returnToReview');
         Route::get('/rejected', [PaymentController::class, 'rejected'])->name('rejected');
         Route::put('/{dte}/update', [PaymentController::class, 'update'])->name('update');
         Route::get('/paid', [PaymentController::class, 'paid'])->name('paid');
+        Route::get('/{dte}/paid/pdf', [PaymentController::class, 'paidPdf'])->name('paidPdf');
     });
 
     Route::prefix('purchase-orders')->as('purchase-orders.')->group(function () {
@@ -2189,6 +2192,11 @@ Route::prefix('finance')->as('finance.')->middleware(['auth', 'must.change.passw
         Route::get('/edit/{reception}', EditReception::class)->name('edit');
         Route::get('/{reception_id}', [FinReceptionController::class,'show'])->name('show');
         Route::get('/show_no_oc/{reception_id}', [FinReceptionController::class,'showNoOc'])->name('show_no_oc');
+    });
+    Route::prefix('fixed-fund')->as('fixed-fund.')->group(function () {
+        Route::get('/', IndexFixedFund::class)->name('index');
+        Route::get('/create', FormFixedFund::class)->name('create');
+        Route::get('/{fixedFund}/edit', FormFixedFund::class)->name('edit');
     });
 });
 

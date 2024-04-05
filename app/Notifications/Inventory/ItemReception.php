@@ -52,7 +52,7 @@ class ItemReception extends Notification implements ShouldQueue
             // ->line('Item: ' . ($this->movement->inventory->product_id) ? $this->movement->inventory->product->name : $this->movement->inventory->unspscProduct->name)
             ->line('Estado: ' . $this->movement->inventory->estado)
             ->lineIf( !is_null( $this->movement->user_sender_id), 'Entregado por: ' . $this->movement->senderUser?->shortName)
-            ->action('Ir a Movimientos Pendientes:', route('inventories.pending-movements') )
+            ->action('Ir a Movimientos Pendientes', route('inventories.pending-movements') )
             ->salutation('Saludos cordiales.');
     }
 

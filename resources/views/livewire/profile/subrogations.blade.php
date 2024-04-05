@@ -1,8 +1,6 @@
 <div>
     @section('title', 'Mis subrogantes')
 
-    @include('rrhh.partials.nav')
-
     @switch($view)
 
         @case('index')
@@ -14,6 +12,7 @@
                 </h5>
                 @include('profile.subrogation.index')
             @else
+                @include('rrhh.partials.nav')
                 <h5 class="mb-3">
                     <i class="fas fa-chess"></i> ¿Quienes son mis subrogantes? 
                     <button class="btn btn-success float-end"
