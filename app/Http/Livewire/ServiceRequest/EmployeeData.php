@@ -5,7 +5,7 @@ namespace App\Http\Livewire\ServiceRequest;
 use Livewire\Component;
 use App\Models\Country;
 use App\Models\ClCommune;
-use App\User;
+use App\Models\User;
 use App\Models\WebService\Fonasa;
 
 class EmployeeData extends Component

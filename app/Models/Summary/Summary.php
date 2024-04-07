@@ -5,7 +5,7 @@ namespace App\Models\Summary;
 use App\Helpers\DateHelper;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
-use App\User;
+use App\Models\User;
 use App\Models\Summary\Type;
 use App\Models\Summary\Event;
 use App\Models\Establishment;

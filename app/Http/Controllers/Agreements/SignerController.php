@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Agreements;
 
 use App\Models\Agreements\Signer;
 use App\Http\Controllers\Controller;
-use App\User;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class SignerController extends Controller

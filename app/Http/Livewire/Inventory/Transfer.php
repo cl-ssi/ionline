@@ -5,7 +5,7 @@ namespace App\Http\Livewire\Inventory;
 use Livewire\Component;
 use App\Models\Inv\Inventory;
 use App\Http\Requests\Inventory\CreateMovementRequest;
-use App\User;
+use App\Models\User;
 use App\Models\Inv\InventoryMovement;
 use App\Models\Parameters\Place;
 

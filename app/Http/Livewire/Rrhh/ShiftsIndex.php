@@ -5,7 +5,7 @@ namespace App\Http\Livewire\Rrhh;
 use Livewire\Component;
 
 use App\Models\Rrhh\Shift;
-use App\User;
+use App\Models\User;
 
 class ShiftsIndex extends Component
 {

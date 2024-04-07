@@ -23,7 +23,7 @@ class JobPositionProfile extends Model implements Auditable
     ];
 
     public function user() {
-        return $this->belongsTo('App\User', 'user_creator_id')->withTrashed();
+        return $this->belongsTo('App\Models\User', 'user_creator_id')->withTrashed();
     }
 
     public function creatorOrganizationalUnit() {

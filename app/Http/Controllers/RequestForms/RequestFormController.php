@@ -25,7 +25,7 @@ use Illuminate\Support\Facades\File;
 use PDF;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use App\User;
+use App\Models\User;
 use App\Mail\PurchaserNotification;
 use App\Mail\RfEndNewBudgetSignNotification;
 use App\Models\Parameters\Parameter;

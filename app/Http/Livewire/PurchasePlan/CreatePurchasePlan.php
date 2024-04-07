@@ -4,7 +4,7 @@ namespace App\Http\Livewire\PurchasePlan;
 
 use Livewire\Component;
 
-use App\User;
+use App\Models\User;
 use App\Models\Parameters\Program;
 use App\Models\PurchasePlan\PurchasePlan;
 use App\Models\PurchasePlan\PurchasePlanItem;

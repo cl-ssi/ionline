@@ -22,7 +22,7 @@ class JobPositionProfileSign extends Model implements Auditable
     }
 
     public function user() {
-        return $this->belongsTo('App\User')->withTrashed();
+        return $this->belongsTo('App\Models\User')->withTrashed();
     }
 
     public function getStatusValueAttribute() {

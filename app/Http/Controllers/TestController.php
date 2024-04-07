@@ -13,7 +13,7 @@ use App\Models\Inv\Inventory;
 use App\Models\WebService\MercadoPublico;
 use App\Rrhh\OrganizationalUnit;
 use App\Services\ImageService;
-use App\User;
+use App\Models\User;
 use Carbon\Carbon;
 use Exception;
 use Firebase\JWT\JWT;
@@ -129,7 +129,7 @@ class TestController extends Controller
 
     public function log()
     {
-        $user = \App\User::find(1528758);
+        $user = \App\Models\User::find(1528758);
         echo $user->name;
         Log::info('primer log');
         echo 'Primer log';

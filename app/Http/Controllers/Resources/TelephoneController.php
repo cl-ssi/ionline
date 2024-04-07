@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Resources;
 
 use Illuminate\Http\Request;
-use App\User;
+use App\Models\User;
 use App\Models\Resources\Telephone;
 use App\Http\Requests\Resources\UpdateTelephoneRequest;
 use App\Http\Requests\Resources\StoreTelephoneRequest;

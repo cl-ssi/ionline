@@ -5,7 +5,7 @@ namespace App\Http\Livewire\Welfare\Amipass;
 use Livewire\Component;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
-use App\User;
+use App\Models\User;
 use App\Helpers\DateHelper;
 use Illuminate\Support\Facades\DB;
 

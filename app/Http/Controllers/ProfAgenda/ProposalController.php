@@ -8,7 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Models\ProfAgenda\Proposal;
 use App\Models\ProfAgenda\OpenHour;
 use App\Models\Parameters\Profession;
-use App\User;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 use App\Models\Parameters\Holiday;

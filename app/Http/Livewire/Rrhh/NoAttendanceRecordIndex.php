@@ -6,7 +6,7 @@ use Illuminate\Validation\Rule;
 use Livewire\WithPagination;
 use Livewire\Component;
 use App\Models\Rrhh\NoAttendanceRecord;
-use App\User;
+use App\Models\User;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\NoAttendanceRecordsExport;
 

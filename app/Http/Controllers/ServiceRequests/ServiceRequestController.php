@@ -25,7 +25,7 @@ use App\Notifications\ServiceRequests\NewServiceRequest;
 use Illuminate\Support\Facades\Mail;
 use App\Rrhh\OrganizationalUnit;
 use App\Models\Establishment;
-use App\User;
+use App\Models\User;
 use DB;
 use App\Exports\ConsolidatedDataExport;
 use App\Exports\ConsolidatedMasterDataExport;

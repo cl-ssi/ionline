@@ -3,7 +3,7 @@
 namespace App\Http\Livewire\Documents\Partes;
 
 use Livewire\Component;
-use App\User;
+use App\Models\User;
 use App\Models\Parameters\AccessLog;
 
 class PartesAccessLog extends Component

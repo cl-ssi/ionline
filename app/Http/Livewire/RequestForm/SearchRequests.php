@@ -6,7 +6,7 @@ use App\Exports\RequestForms\RequestFormsExport;
 use App\Models\Parameters\Parameter;
 use Livewire\Component;
 use App\Models\RequestForms\RequestForm;
-use App\User;
+use App\Models\User;
 use Carbon\Carbon;
 use Livewire\WithPagination;
 use Maatwebsite\Excel\Facades\Excel;

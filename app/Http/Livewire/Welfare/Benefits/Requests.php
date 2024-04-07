@@ -12,7 +12,7 @@ use App\Models\Welfare\Benefits\Request;
 use App\Models\Welfare\Benefits\File;
 use App\Models\Parameters\Bank;
 use App\Models\Rrhh\UserBankAccount;
-use App\User;
+use App\Models\User;
 
 class Requests extends Component
 {

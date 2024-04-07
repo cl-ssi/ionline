@@ -4,7 +4,7 @@ namespace App\Http\Livewire\Rrhh;
 
 use App\Models\ClCommune;
 use App\Models\Parameters\Bank;
-use App\User;
+use App\Models\User;
 use Livewire\Component;
 
 class UserProfile extends Component

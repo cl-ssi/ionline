@@ -16,7 +16,7 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\Foundation\Application;
 use Exception;
 use Carbon\Carbon;
-use App\User;
+use App\Models\User;
 use App\Rules\CommaSeparatedEmails;
 use App\Rrhh\OrganizationalUnit;
 use App\Rrhh\Authority;

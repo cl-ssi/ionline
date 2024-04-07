@@ -4,7 +4,7 @@ namespace App\Models\Profile;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use App\User;
+use App\Models\User;
 use App\Rrhh\OrganizationalUnit;
 
 class Subrogation extends Model

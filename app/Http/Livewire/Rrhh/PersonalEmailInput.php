@@ -3,7 +3,7 @@
 namespace App\Http\Livewire\Rrhh;
 
 use Livewire\Component;
-use App\User;
+use App\Models\User;
 
 class PersonalEmailInput extends Component
 {

@@ -22,7 +22,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\ComplianceExport;
 use App\Exports\PayedExport;
 use App\Exports\ContractExport;
-use App\User;
+use App\Models\User;
 use App\Models\Parameters\Profession;
 
 

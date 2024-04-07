@@ -321,7 +321,7 @@ use App\Http\Livewire\Welfare\Benefits\RequestsAdmin;
 use App\Http\Livewire\Welfare\Benefits\Subsidies;
 use App\Models\Pharmacies\Purchase;
 use App\Models\WebService\MercadoPublico;
-use App\User; /** ¿Un modelo? */
+use App\Models\User; /** ¿Un modelo? */
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;

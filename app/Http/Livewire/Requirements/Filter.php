@@ -4,7 +4,7 @@ namespace App\Http\Livewire\Requirements;
 
 use Livewire\Component;
 use App\Models\Requirements\Requirement;
-use App\User;
+use App\Models\User;
 use Livewire\WithPagination;
 use App\Exports\RequirementsExport;
 use Maatwebsite\Excel\Facades\Excel;

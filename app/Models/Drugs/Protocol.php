@@ -4,7 +4,7 @@ namespace App\Models\Drugs;
 
 use App\Models\Documents\Approval;
 use App\Models\Drugs\ReceptionItem;
-use App\User;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\SoftDeletes;

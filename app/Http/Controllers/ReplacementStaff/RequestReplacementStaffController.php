@@ -7,7 +7,7 @@ use App\Models\ReplacementStaff\RequestSign;
 use App\Models\ReplacementStaff\AssignEvaluation;
 use App\Rrhh\OrganizationalUnit;
 use App\Rrhh\Authority;
-use App\User;
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;

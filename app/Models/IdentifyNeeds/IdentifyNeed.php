@@ -28,7 +28,7 @@ class IdentifyNeed extends Model implements Auditable
     }
 
     public function user() {
-        return $this->belongsTo('App\User', 'user_id')->withTrashed();
+        return $this->belongsTo('App\Models\User', 'user_id')->withTrashed();
     }
 
     public function learningGoals() {

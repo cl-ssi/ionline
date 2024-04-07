@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Rrhh;
 
 use App\Rrhh\Authority;
-use App\User;
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Rrhh\OrganizationalUnit;

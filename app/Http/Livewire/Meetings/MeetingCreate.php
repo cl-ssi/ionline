@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Meetings\Meeting;
 use App\Models\Meetings\Grouping;
 use App\Models\Meetings\Commitment;
-use App\User;
+use App\Models\User;
 use App\Rrhh\OrganizationalUnit;
 use App\Rrhh\Authority;
 use App\Models\Requirements\Requirement;

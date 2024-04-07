@@ -8,7 +8,7 @@ use App\Models\Documents\Sign\Signature;
 use App\Models\Documents\Sign\SignatureAnnex;
 use App\Models\Documents\Type;
 use App\Services\SignService;
-use App\User;
+use App\Models\User;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;

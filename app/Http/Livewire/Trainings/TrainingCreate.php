@@ -7,7 +7,7 @@ use Livewire\Component;
 use App\Models\Trainings\Training;
 use App\Models\Parameters\Estament;
 use App\Models\Parameters\ContractualCondition;
-use App\User;
+use App\Models\User;
 use App\Models\Trainings\StrategicAxes;
 
 use Illuminate\Support\Facades\DB;

@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Resources\Mobile;
 use App\Http\Requests\Resources\StoreMobileRequest;
 use App\Http\Requests\Resources\UpdateMobileRequest;
-use App\User;
+use App\Models\User;
 
 class MobileController extends Controller
 {

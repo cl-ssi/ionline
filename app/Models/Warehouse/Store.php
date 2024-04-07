@@ -5,7 +5,7 @@ namespace App\Models\Warehouse;
 use App\Models\Commune;
 use App\Models\Establishment;
 use App\Models\Warehouse\Origin;
-use App\User;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;

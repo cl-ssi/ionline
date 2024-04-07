@@ -8,7 +8,7 @@ use App\Models\Finance\Receptions\ReceptionType;
 use App\Models\Finance\Dte;
 use App\Models\Finance\Receptions\Reception;
 use App\Models\Finance\Receptions\ReceptionItem;
-use App\User;
+use App\Models\User;
 use App\Rrhh\OrganizationalUnit;
 
 class CreateReceptionNoOc extends Component

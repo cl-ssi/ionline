@@ -39,7 +39,7 @@ class Telephone extends Model
 
     public function users()
     {
-        return $this->belongsToMany('\App\User', 'res_telephone_user')->withTimestamps();
+        return $this->belongsToMany('\App\Models\User', 'res_telephone_user')->withTimestamps();
     }
 
     public function scopeSearch($query, $field, $value)

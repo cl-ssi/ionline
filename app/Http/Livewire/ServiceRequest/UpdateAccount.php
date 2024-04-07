@@ -5,7 +5,7 @@ namespace App\Http\Livewire\ServiceRequest;
 use Livewire\Component;
 use app\Models\ServiceRequests\ServiceRequest;
 use App\Models\Rrhh\UserBankAccount;
-use App\User;
+use App\Models\User;
 use App\Models\Parameters\Bank;
 
 class UpdateAccount extends Component

@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 use Carbon\CarbonPeriod;
 use Carbon\Carbon;
-use App\User;
+use App\Models\User;
 use App\Notifications\ProfAgenda\NewReservation;
 use App\Notifications\ProfAgenda\CancelReservation;
 

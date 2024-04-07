@@ -9,7 +9,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Bus\Queueable;
-use App\User;
+use App\Models\User;
 // use App\Mail\TestMail;
 
 class TestJob implements ShouldQueue

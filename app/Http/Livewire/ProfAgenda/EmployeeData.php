@@ -4,7 +4,7 @@ namespace App\Http\Livewire\ProfAgenda;
 
 use Livewire\Component;
 use App\Models\ClCommune;
-use App\User;
+use App\Models\User;
 use App\Models\ProfAgenda\OpenHour;
 
 class EmployeeData extends Component

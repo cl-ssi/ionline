@@ -3,7 +3,7 @@
 namespace App\Http\Livewire\ServiceRequest;
 
 use Livewire\Component;
-use App\User;
+use App\Models\User;
 use App\Models\ClCommune;
 use App\Models\Country;
 

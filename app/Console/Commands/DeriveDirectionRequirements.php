@@ -6,7 +6,7 @@ use Illuminate\Console\Command;
 
 use App\Models\Requirements\Event;
 use App\Models\Documents\Parte;
-use App\User;
+use App\Models\User;
 
 class DeriveDirectionRequirements extends Command
 {

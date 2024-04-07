@@ -4,7 +4,7 @@ namespace App\Models\Agreements;
 
 use App\Models\Documents\Document;
 use App\Models\Documents\SignaturesFile;
-use App\User;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 

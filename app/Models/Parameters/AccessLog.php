@@ -5,7 +5,7 @@ namespace App\Models\Parameters;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 /* TODO: Eliminar cuando se mueva el modelo User a App\Models */
-use App\User;
+use App\Models\User;
 
 class AccessLog extends Model
 {

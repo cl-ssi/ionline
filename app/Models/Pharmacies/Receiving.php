@@ -38,7 +38,7 @@ class Receiving extends Model
 
   public function user()
   {
-    return $this->belongsTo('App\User')->withTrashed();
+    return $this->belongsTo('App\Models\User')->withTrashed();
   }
 
   public function inventoryAdjustment()

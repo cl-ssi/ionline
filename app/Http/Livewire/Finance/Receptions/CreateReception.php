@@ -4,7 +4,7 @@ namespace App\Http\Livewire\Finance\Receptions;
 
 use Livewire\WithFileUploads;
 use Livewire\Component;
-use App\User;
+use App\Models\User;
 use App\Rrhh\OrganizationalUnit;
 use App\Models\WebService\MercadoPublico;
 use App\Models\Parameters\Parameter;

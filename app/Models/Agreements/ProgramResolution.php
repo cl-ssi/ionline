@@ -14,7 +14,7 @@ class ProgramResolution extends Model
     }
 
     public function referrer() {
-        return $this->belongsTo('App\User')->withTrashed();
+        return $this->belongsTo('App\Models\User')->withTrashed();
     }
 
     public function director_signer(){

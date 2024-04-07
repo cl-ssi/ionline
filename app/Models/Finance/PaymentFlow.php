@@ -4,7 +4,7 @@ namespace App\Models\Finance;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\User;
+use App\Models\User;
 
 class PaymentFlow extends Model
 {

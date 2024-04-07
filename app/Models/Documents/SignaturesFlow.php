@@ -2,7 +2,7 @@
 
 namespace App\Models\Documents;
 
-use App\User;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -44,12 +44,12 @@ class SignaturesFlow extends Model Implements Auditable
 
     public function userSigner()
     {
-        return $this->belongsTo('App\User', 'user_id')->withTrashed();
+        return $this->belongsTo('App\Models\User', 'user_id')->withTrashed();
     }
 
     public function realSigner()
     {
-        return $this->belongsTo('App\User', 'real_signer_id')->withTrashed();
+        return $this->belongsTo('App\Models\User', 'real_signer_id')->withTrashed();
     }
 
     public function signature()

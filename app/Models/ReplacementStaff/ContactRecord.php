@@ -22,7 +22,7 @@ class ContactRecord extends Model implements Auditable
     }
 
     public function user() {
-        return $this->belongsTo('App\User', 'contact_record_user_id')->withTrashed();
+        return $this->belongsTo('App\Models\User', 'contact_record_user_id')->withTrashed();
     }
 
     protected $hidden = [

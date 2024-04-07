@@ -11,7 +11,7 @@ use App\Models\Programmings\ProfessionalHour;
 use App\Models\Establishment;
 use App\Models\Commune;
 use App\Models\Programmings\ActivityItem;
-use App\User;
+use App\Models\User;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;

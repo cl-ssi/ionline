@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Rrhh\Authority;
 use App\Notifications\Allowances\NewAllowance;
 use App\Models\Parameters\Parameter;
-use App\User;
+use App\Models\User;
 use App\Models\Documents\Approval;
 use Barryvdh\DomPDF\Facade\Pdf;
 // use Illuminate\Http\RedirectResponse;

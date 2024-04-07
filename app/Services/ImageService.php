@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\User;
+use App\Models\User;
 
 class ImageService
 {
@@ -54,7 +54,7 @@ class ImageService
     /**
      * Create the image of Visator
      *
-     * @param  \App\User $user
+     * @param  \App\Models\User $user
      * @return string
      */
     public function createVisator(User $user)
@@ -172,7 +172,7 @@ class ImageService
     /**
      * Create the digital signature image
      *
-     * @param  \App\User $user
+     * @param  \App\Models\User $user
      * @return string
      */
     public function createSignature(User $user)

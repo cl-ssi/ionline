@@ -9,7 +9,7 @@ use App\Models\Rrhh\AmiLoad;
 use App\Imports\AbscencesImport as AbscencesImportFile;
 use Maatwebsite\Excel\Facades\Excel;
 use Carbon\Carbon;
-use App\User;
+use App\Models\User;
 
 class AmiLoadsImport extends Component
 {

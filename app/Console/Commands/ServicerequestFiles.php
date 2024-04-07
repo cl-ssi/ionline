@@ -6,7 +6,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
 use App\Models\ServiceRequests\ServiceRequest;
 use App\Models\Rrhh\UserBankAccount;
-use App\User;
+use App\Models\User;
 use DB;
 
 class ServicerequestFiles extends Command

@@ -8,7 +8,7 @@ use App\Models\Inv\Classification;
 use App\Models\Parameters\Location;
 use App\Models\Parameters\Place;
 use App\Models\Unspsc\Product as UnspscProduct;
-use App\User;
+use App\Models\User;
 use App\Models\Parameters\Parameter;
 use App\Rrhh\Authority;
 use Livewire\Component;

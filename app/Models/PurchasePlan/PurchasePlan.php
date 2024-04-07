@@ -41,11 +41,11 @@ class PurchasePlan extends Model implements Auditable
     ];
 
     public function userResponsible() {
-        return $this->belongsTo('App\User', 'user_responsible_id')->withTrashed();
+        return $this->belongsTo('App\Models\User', 'user_responsible_id')->withTrashed();
     }
 
     public function userCreator() {
-        return $this->belongsTo('App\User', 'user_creator_id')->withTrashed();
+        return $this->belongsTo('App\Models\User', 'user_creator_id')->withTrashed();
     }
 
     public function organizationalUnit() {
@@ -108,7 +108,7 @@ class PurchasePlan extends Model implements Auditable
     }
 
     public function assignPurchaser() {
-        return $this->belongsTo('App\User', 'assign_user_id')->withTrashed();
+        return $this->belongsTo('App\Models\User', 'assign_user_id')->withTrashed();
     }
     
     public function getStatus()

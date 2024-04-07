@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\Programmings\CommuneFile;
 use App\Models\Commune;
 use App\Models\Programmings\Programming;
-use App\User;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;

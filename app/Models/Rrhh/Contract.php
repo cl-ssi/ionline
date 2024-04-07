@@ -2,7 +2,7 @@
 
 namespace App\Models\Rrhh;
 
-use App\User;
+use App\Models\User;
 use App\Rrhh\OrganizationalUnit;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 use App\Models\Rrhh\AbsenteeismType;
-use App\User;
+use App\Models\User;
 
 class Absenteeism extends Model
 {
