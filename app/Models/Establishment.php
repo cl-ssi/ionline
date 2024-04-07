@@ -127,6 +127,8 @@ class Establishment extends Model implements Auditable
             ->get()
             ->toArray();
         
+        $array[0]['id'] = null;
+        $array[0]['name'] = null;
         if(!empty($ous)) {
             $array = $this->buildTree($ous, 'father_id', 'id');
         }
