@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 use App\Models\Pharmacies\Pharmacy;
-use App\User;
+use App\Models\User;
 
 class PharmacyController extends Controller
 {

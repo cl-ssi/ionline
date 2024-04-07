@@ -29,11 +29,11 @@ class OpenHour extends Model implements Auditable
     }
 
     public function patient(){
-        return $this->belongsTo('App\User','patient_id')->withTrashed();
+        return $this->belongsTo('App\Models\User','patient_id')->withTrashed();
     }
 
     public function profesional(){
-        return $this->belongsTo('App\User','profesional_id');
+        return $this->belongsTo('App\Models\User','profesional_id');
     }
 
     public function profession(){

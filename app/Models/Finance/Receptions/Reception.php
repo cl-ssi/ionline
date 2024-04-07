@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use App\User;
+use App\Models\User;
 use App\Rrhh\OrganizationalUnit;
 use App\Models\Finance\Receptions\ReceptionType;
 use App\Models\Finance\Receptions\ReceptionItem;

@@ -2,7 +2,7 @@
 
 namespace App\Traits;
 
-use App\User;
+use App\Models\User;
 use App\Models\Documents\Numeration;
 use App\Models\Parameters\Parameter;
 use Illuminate\Support\Facades\Mail;

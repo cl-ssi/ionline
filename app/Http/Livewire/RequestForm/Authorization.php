@@ -11,7 +11,7 @@ use App\Models\Parameters\PurchaseType;
 use App\Models\Parameters\PurchaseMechanism;
 use App\Rrhh\Authority;
 use Carbon\Carbon;
-use App\User;
+use App\Models\User;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\RequestFormSignNotification;
 use App\Mail\RfEndNewBudgetSignNotification;

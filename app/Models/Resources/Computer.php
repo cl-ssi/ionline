@@ -61,7 +61,7 @@ class Computer extends Model implements Auditable
 
     public function users()
     {
-        return $this->belongsToMany('\App\User', 'res_computer_user')->withTimestamps();
+        return $this->belongsToMany('\App\Models\User', 'res_computer_user')->withTimestamps();
     }
 
     public function place()

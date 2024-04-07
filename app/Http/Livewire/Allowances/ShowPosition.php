@@ -4,7 +4,7 @@ namespace App\Http\Livewire\Allowances;
 
 use Livewire\Component;
 
-use App\User;
+use App\Models\User;
 
 class ShowPosition extends Component
 {

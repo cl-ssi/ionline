@@ -12,7 +12,7 @@ use App\Models\Allowances\AllowanceSign;
 use App\Models\Parameters\AllowanceValue;
 use App\Models\Parameters\ContractualCondition;
 use App\Models\ClCommune;
-use App\User;
+use App\Models\User;
 use App\Notifications\Allowances\NewAllowance;
 use App\Rrhh\Authority;
 use App\Models\Parameters\Parameter;

@@ -5,7 +5,7 @@ namespace App\Http\Controllers\RequestForms;
 use App\Models\RequestForms\Passenger;
 use App\Models\RequestForms\RequestForm;
 //use App\RequestForms\RequestFormItemCode;
-use App\User;
+use App\Models\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;

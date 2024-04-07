@@ -8,7 +8,7 @@ use App\Models\ReplacementStaff\RstDetailFundament;
 use App\Models\ReplacementStaff\RequestReplacementStaff;
 use Illuminate\Support\Facades\Auth;
 use Livewire\WithPagination;
-use App\User;
+use App\Models\User;
 use App\Rrhh\OrganizationalUnit;
 use App\Models\Parameters\Parameter;
 

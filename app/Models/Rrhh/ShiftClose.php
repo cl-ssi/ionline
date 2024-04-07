@@ -13,7 +13,7 @@ class ShiftClose extends Model
 
     public function user()
     {
-        return $this->belongsTo(\App\User::class, 'owner_of_the_days_id');
+        return $this->belongsTo(\App\Models\User::class, 'owner_of_the_days_id');
     }
 
     public function status()

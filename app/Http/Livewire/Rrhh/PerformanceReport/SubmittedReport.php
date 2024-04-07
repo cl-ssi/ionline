@@ -3,7 +3,7 @@
 namespace App\Http\Livewire\Rrhh\PerformanceReport;
 
 use Livewire\Component;
-use App\User;
+use App\Models\User;
 use App\Models\Rrhh\PerformanceReportPeriod;
 use App\Models\Rrhh\PerformanceReport;
 use Barryvdh\DomPDF\Facade\Pdf;

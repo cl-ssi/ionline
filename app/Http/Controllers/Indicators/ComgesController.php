@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Indicators\Action;
 use App\Models\Indicators\Comges;
-use App\User;
+use App\Models\User;
 use App\Models\Indicators\Indicator;
 use App\Models\Indicators\Rem;
 use App\Models\Indicators\Value;

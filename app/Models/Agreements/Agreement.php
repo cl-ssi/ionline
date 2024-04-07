@@ -42,7 +42,7 @@ class Agreement extends Model
     }
 
     public function referrer() {
-        return $this->belongsTo('App\User')->withTrashed();
+        return $this->belongsTo('App\Models\User')->withTrashed();
     }
 
     public function municipality() {

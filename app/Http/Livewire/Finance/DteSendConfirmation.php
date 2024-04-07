@@ -3,7 +3,7 @@
 namespace App\Http\Livewire\Finance;
 
 use Livewire\Component;
-use App\User;
+use App\Models\User;
 use App\Notifications\Finance\DteConfirmation;
 use App\Models\Finance\Dte;
 

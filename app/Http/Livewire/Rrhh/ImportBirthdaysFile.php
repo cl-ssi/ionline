@@ -8,7 +8,7 @@ use Livewire\WithFileUploads;
 use App\Imports\UserBirthdayImport;
 use Maatwebsite\Excel\Facades\Excel;
 use Carbon\Carbon;
-use App\User;
+use App\Models\User;
 
 use App\Models\Rrhh\SirhActiveUser;
 

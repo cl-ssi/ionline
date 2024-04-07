@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 use App\Models\Welfare\Benefits\Request as RequestModel;
 use App\Models\Welfare\Benefits\Subsidy;
 // use App\Models\Welfare\Benefits\Transfer;
-use App\User;
+use App\Models\User;
 use App\Models\File;
 
 class Request extends Model

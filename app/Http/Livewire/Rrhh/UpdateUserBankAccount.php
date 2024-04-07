@@ -4,7 +4,7 @@ namespace App\Http\Livewire\Rrhh;
 
 use Livewire\Component;
 use App\Models\Rrhh\UserBankAccount;
-use App\User;
+use App\Models\User;
 use App\Models\Parameters\Bank;
 
 

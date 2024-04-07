@@ -6,7 +6,7 @@ use Livewire\Component;
 
 use App\Rrhh\OrganizationalUnit;
 use App\Rrhh\Authority;
-use App\User;
+use App\Models\User;
 use Carbon\Carbon;
 
 class SelectUser extends Component

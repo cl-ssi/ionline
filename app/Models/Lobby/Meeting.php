@@ -4,7 +4,7 @@ namespace App\Models\Lobby;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use App\User;
+use App\Models\User;
 use App\Models\Lobby\MeetingUser;
 use App\Models\Lobby\Compromise;
 

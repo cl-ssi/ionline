@@ -4,7 +4,7 @@ namespace App\Http\Livewire\Sign;
 
 use App\Models\Establishment;
 use App\Rrhh\OrganizationalUnit;
-use App\User;
+use App\Models\User;
 use Livewire\Component;
 
 class AddSigner extends Component

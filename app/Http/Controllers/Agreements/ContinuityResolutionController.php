@@ -15,7 +15,7 @@ use App\Models\Documents\Type;
 use App\Models\Establishment;
 use App\Models\Parameters\Municipality;
 use App\Rrhh\OrganizationalUnit;
-use App\User;
+use App\Models\User;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;

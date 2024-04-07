@@ -15,7 +15,7 @@ use App\Notifications\ReplacementStaff\NotificationRejectedRequest;
 use App\Notifications\ReplacementStaff\NotificationEndSigningProcess;
 use App\Models\ReplacementStaff\RequestReplacementStaff;
 // use App\Mail\NotificationEndSigningProcess;
-use App\User;
+use App\Models\User;
 use App\Models\Parameters\Parameter;
 use App\Models\Profile\Subrogation;
 use App\Services\SignatureService;

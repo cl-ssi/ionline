@@ -3,7 +3,7 @@
 namespace App\Http\Livewire\Documents\Signature;
 
 use Livewire\Component;
-use App\User;
+use App\Models\User;
 use App\Notifications\Signatures\SignedDocument;
 use App\Models\Documents\Signature;
 

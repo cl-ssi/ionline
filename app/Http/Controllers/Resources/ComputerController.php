@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Resources;
 
 use App\Models\Resources\Computer;
-use App\User;
+use App\Models\User;
 use App\Models\Parameters\Place;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;

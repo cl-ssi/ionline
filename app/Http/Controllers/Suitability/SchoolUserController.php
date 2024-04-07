@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Suitability;
 
 use App\Models\Suitability\SchoolUser;
 use App\Models\Suitability\School;
-use App\User;
+use App\Models\User;
 use App\Models\UserExternal;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;

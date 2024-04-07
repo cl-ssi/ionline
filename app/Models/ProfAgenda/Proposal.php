@@ -28,7 +28,7 @@ class Proposal extends Model implements Auditable
     }
 
     public function employee(){
-        return $this->belongsTo('App\User','user_id')->withTrashed();
+        return $this->belongsTo('App\Models\User','user_id')->withTrashed();
     }
 
     public function details(){

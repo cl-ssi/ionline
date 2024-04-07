@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
-use App\User;
+use App\Models\User;
 use App\Rrhh\OrganizationalUnit;
 use App\Rrhh\Authority;
 use App\Notifications\Requirements\NewSgr;

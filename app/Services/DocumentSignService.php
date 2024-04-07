@@ -4,7 +4,7 @@ namespace App\Services;
 
 use App\Exceptions\ExceptionSignService;
 use App\Models\Documents\Sign\Signature;
-use App\User;
+use App\Models\User;
 use Exception;
 use Firebase\JWT\JWT;
 use Illuminate\Support\Facades\Http;

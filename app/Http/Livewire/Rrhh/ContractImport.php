@@ -9,7 +9,7 @@ use App\Models\Rrhh\Contract;
 use App\Imports\EmployeeInformationImport;
 use Maatwebsite\Excel\Facades\Excel;
 use Carbon\Carbon;
-use App\User;
+use App\Models\User;
 use App\Rrhh\OrganizationalUnit;
 use App\Http\Controllers\WebserviceController;
 use App\Models\WebService\Fonasa;

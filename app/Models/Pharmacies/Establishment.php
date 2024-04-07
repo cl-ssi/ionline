@@ -39,7 +39,7 @@ class Establishment extends Model
     }
 
     public function users() {
-      return $this->belongsToMany('\App\User', 'frm_establishments_users')
+      return $this->belongsToMany('\App\Models\User', 'frm_establishments_users')
                   ->withTimestamps();
   }
 }

@@ -6,7 +6,7 @@ use OwenIt\Auditing\Contracts\Auditable;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use App\User;
+use App\Models\User;
 use App\Models\Warehouse\Control;
 use App\Models\RequestForms\RequestForm;
 use App\Models\RequestForms\ImmediatePurchase;

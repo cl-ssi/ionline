@@ -4,7 +4,7 @@ namespace App\Http\Livewire\Lobby;
 
 use Livewire\WithPagination;
 use Livewire\Component;
-use App\User;
+use App\Models\User;
 use App\Models\Lobby\Meeting;
 use App\Models\Lobby\Compromise;
 

@@ -3,7 +3,7 @@
 namespace App\Http\Livewire\Warehouse\Stores;
 
 use App\Models\Warehouse\StoreUser;
-use App\User;
+use App\Models\User;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Spatie\Permission\Models\Role;

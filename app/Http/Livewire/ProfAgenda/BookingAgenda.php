@@ -6,7 +6,7 @@ use Livewire\Component;
 
 use App\Models\ProfAgenda\OpenHour;
 use App\Models\ProfAgenda\Appointment;
-use App\User;
+use App\Models\User;
 use App\Models\Parameters\Holiday;
 
 class BookingAgenda extends Component

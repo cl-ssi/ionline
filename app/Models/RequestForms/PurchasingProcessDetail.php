@@ -2,7 +2,7 @@
 
 namespace App\Models\RequestForms;
 
-use App\User;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Database\Eloquent\SoftDeletes;
 

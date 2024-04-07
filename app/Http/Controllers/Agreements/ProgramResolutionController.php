@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Agreements\ProgramResolution;
 use App\Models\Agreements\ProgramResolutionAmount;
 use App\Models\Agreements\Signer;
-use App\User;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 

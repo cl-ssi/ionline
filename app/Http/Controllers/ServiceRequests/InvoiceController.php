@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Request;
 use Illuminate\Http\Client\ConnectionException;
-use App\User;
+use App\Models\User;
 use App\Models\ServiceRequests\ServiceRequest;
 use App\Models\ServiceRequests\Fulfillment;
 use App\Models\Rrhh\UserBankAccount;

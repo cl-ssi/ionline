@@ -7,7 +7,7 @@ use OwenIt\Auditing\Contracts\Auditable;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
-use App\User;
+use App\Models\User;
 use App\Rrhh\OrganizationalUnit;
 use App\Models\Establishment;
 use App\Models\Documents\Type;

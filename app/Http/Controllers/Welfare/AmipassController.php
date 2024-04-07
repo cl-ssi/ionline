@@ -9,7 +9,7 @@ use App\Models\Welfare\Abscence;
 use App\Models\Welfare\EmployeeInformation;
 use App\Models\Welfare\Doubt;
 use App\Models\Welfare\Amipass\Value;
-use App\User;
+use App\Models\User;
 
 class AmipassController extends Controller
 {

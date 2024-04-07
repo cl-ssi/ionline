@@ -9,7 +9,7 @@ use App\Models\Parameters\EstablishmentType;
 use App\Models\Commune;
 use App\Models\Inv\EstablishmentUser;
 use App\Models\Warehouse\Store;
-use App\User;
+use App\Models\User;
 
 class Establishment extends Model implements Auditable
 {

@@ -14,7 +14,7 @@ use App\Rrhh\OrganizationalUnit;
 use DateTime;
 use DatePeriod;
 use DateInterval;
-use App\User;
+use App\Models\User;
 use Redirect;
 use App\Models\Documents\Approval;
 use App\Models\Documents\SignaturesFile;

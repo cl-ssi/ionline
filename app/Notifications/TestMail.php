@@ -6,7 +6,7 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Bus\Queueable;
-use App\User;
+use App\Models\User;
 
 class TestMail extends Notification
 {

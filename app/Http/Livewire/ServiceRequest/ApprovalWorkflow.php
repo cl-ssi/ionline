@@ -6,7 +6,7 @@ use Livewire\Component;
 use App\Models\ServiceRequests\SignatureFlow;
 use Illuminate\Support\Facades\Session;
 
-use App\User;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 class ApprovalWorkflow extends Component

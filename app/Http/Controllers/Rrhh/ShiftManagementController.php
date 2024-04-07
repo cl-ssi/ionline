@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
-use App\User;
+use App\Models\User;
 use App\Models\Parameters\Holiday;
 use App\Models\Rrhh\ShiftTypes;
 use App\Models\Rrhh\ShiftUser;

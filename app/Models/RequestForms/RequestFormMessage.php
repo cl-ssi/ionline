@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Contracts\Auditable;
-use App\User;
+use App\Models\User;
 use App\Models\RequestForms\RequestForm;
 
 class RequestFormMessage extends Model implements Auditable

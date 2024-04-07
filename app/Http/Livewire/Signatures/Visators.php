@@ -4,7 +4,7 @@ namespace App\Http\Livewire\Signatures;
 
 use Livewire\Component;
 use App\Rrhh\OrganizationalUnit;
-use App\User;
+use App\Models\User;
 
 class Visators extends Component
 {

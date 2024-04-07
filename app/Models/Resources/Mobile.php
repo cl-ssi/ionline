@@ -4,7 +4,7 @@ namespace App\Models\Resources;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
-use App\User;
+use App\Models\User;
 
 class Mobile extends Model
 {

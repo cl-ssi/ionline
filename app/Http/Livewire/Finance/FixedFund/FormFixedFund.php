@@ -3,7 +3,7 @@
 namespace App\Http\Livewire\Finance\FixedFund;
 
 use App\Models\Finance\FixedFund;
-use App\User;
+use App\Models\User;
 use Carbon\Carbon;
 use Livewire\Component;
 

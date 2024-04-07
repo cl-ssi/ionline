@@ -30,7 +30,7 @@ class Commitment extends Model implements Auditable
     }
 
     public function commitmentUser() {
-        return $this->belongsTo('App\User', 'commitment_user_id')->withTrashed();
+        return $this->belongsTo('App\Models\User', 'commitment_user_id')->withTrashed();
     }
 
     public function commitmentOrganizationalUnit() {

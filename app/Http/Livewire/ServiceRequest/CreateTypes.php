@@ -6,7 +6,7 @@ use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
 use App\Rrhh\Authority;
 use App\Rrhh\OrganizationalUnit;
-use App\User;
+use App\Models\User;
 
 class CreateTypes extends Component
 {

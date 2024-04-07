@@ -3,7 +3,7 @@
 namespace App\Rrhh;
 
 use Illuminate\Database\Eloquent\Model;
-use App\User;
+use App\Models\User;
 use App\Rrhh\OrganizationalUnit;
 use App\Models\Agreements\Agreement;
 use OwenIt\Auditing\Contracts\Auditable;

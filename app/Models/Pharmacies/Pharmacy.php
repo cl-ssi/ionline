@@ -53,7 +53,7 @@ class Pharmacy extends Model
 
     public function users()
     {
-      // return $this->belongsToMany('App\User');
-      return $this->belongsToMany('App\User', 'frm_pharmacy_user')->withTimestamps();
+      // return $this->belongsToMany('App\Models\User');
+      return $this->belongsToMany('App\Models\User', 'frm_pharmacy_user')->withTimestamps();
     }
 }
