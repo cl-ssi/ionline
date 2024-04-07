@@ -19,6 +19,7 @@ class CreateClRegionsTable extends Migration
             $table->string('id_minsal')->nullable();
             $table->string('name')->nullable();
 
+            /* @mirandaljorge para que es esta relacion? */
             $table->foreign('region_id')->references('id')->on('cl_regions');
 
             $table->timestamps();

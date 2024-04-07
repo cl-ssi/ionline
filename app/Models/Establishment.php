@@ -34,7 +34,7 @@ class Establishment extends Model implements Auditable
         'sirh_code',
         'commune_id',
         'dependency',
-        'health_services_id',
+        'health_service_id',
         'official_name',
         'administrative_dependency',
         'level_of_care',
@@ -49,6 +49,7 @@ class Establishment extends Model implements Auditable
         'level_of_complexity',
         'provider_type_health_system',
         'mail_director',
+        'father_organizational_unit_id',
     ];
 
     /**
