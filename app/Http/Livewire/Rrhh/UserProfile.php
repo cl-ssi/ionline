@@ -54,10 +54,12 @@ class UserProfile extends Component
         $this->user->save();
 
         // Si los valores vienen vacios, los guardamos como null
-        $this->bankAccount->bank_id = $this->bankAccount->bank_id ?: null;
-        $this->bankAccount->type = $this->bankAccount->type ?: null;
+        if($this->bankAccount) {
+            $this->bankAccount->bank_id = $this->bankAccount->bank_id ?: null;
+            $this->bankAccount->type = $this->bankAccount->type ?: null;
+            $this->bankAccount->save();
+        }
 
-        $this->bankAccount->save();
 
         session()->flash('success', 'Información actualizada exitosamente');
     }
