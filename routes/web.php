@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Agreements\AccountabilityController;
+use App\Http\Controllers\Agreements\AccountabilityDetailController;
 use App\Http\Controllers\Agreements\AddendumController;
 use App\Http\Controllers\Agreements\AgreementController;
 use App\Http\Controllers\Agreements\BudgetAvailabilityController;
@@ -56,10 +58,11 @@ use App\Http\Controllers\Indicators\IaapsController;
 use App\Http\Controllers\Indicators\ProgramApsController;
 use App\Http\Controllers\Indicators\SingleParameterController;
 use App\Http\Controllers\Inventory\InventoryController;
+use App\Http\Controllers\IonlinePlusController;
+// use App\Http\Controllers\Lobby\MeetingController;
 use App\Http\Controllers\JobPositionProfiles\JobPositionProfileController;
 use App\Http\Controllers\JobPositionProfiles\JobPositionProfileSignController;
 use App\Http\Controllers\JobPositionProfiles\MessageController;
-// use App\Http\Controllers\Lobby\MeetingController;
 use App\Http\Controllers\Mammography\MammographyController;
 use App\Http\Controllers\Meeting\CommitmentController;
 use App\Http\Controllers\Meeting\MeetingController;
@@ -177,12 +180,12 @@ use App\Http\Controllers\ServiceRequests\ReportController;
 use App\Http\Controllers\ServiceRequests\ServiceRequestController;
 use App\Http\Controllers\ServiceRequests\SignatureFlowController;
 use App\Http\Controllers\ServiceRequests\ValueController;
-use App\Http\Controllers\Suitability\CategoriesController;
-use App\Http\Controllers\Suitability\OptionsController;
-use App\Http\Controllers\Suitability\QuestionsController;
 
 //use App\Http\Controllers\RequestForms\SupplyPurchaseController;
 //use App\Http\Controllers\Suitability\ResultsController;
+use App\Http\Controllers\Suitability\CategoriesController;
+use App\Http\Controllers\Suitability\OptionsController;
+use App\Http\Controllers\Suitability\QuestionsController;
 use App\Http\Controllers\Suitability\ResultsController;
 use App\Http\Controllers\Suitability\SchoolUserController;
 use App\Http\Controllers\Suitability\SchoolsController;
@@ -342,6 +345,7 @@ Route::get('/', function () {
     return view('layouts.bt4.welcome');
 })->name('welcome');
 
+Route::get('/ionline-plus', IonlinePlusController::class)->middleware('auth')->name('ionline-plus');
 
 Route::get('/claveunica/callback', [ClaveUnicaController::class, 'callback'])->name('claveunica.callback');
 Route::get('/claveunica/callback-testing', [ClaveUnicaController::class, 'callback']);
@@ -362,6 +366,7 @@ Route::post('/login/external', [LoginController::class, 'externalLogin']);
 
 /* Para testing, no he probado pero me la pedian en clave única */
 Route::get('logout-testing', [LoginController::class, 'logout'])->name('logout-testing');
+
 
 
 /* TODO: @sickiqq Chekear si necesitan o no middleware auth y mover al grupo que le corresponde */

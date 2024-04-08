@@ -802,12 +802,9 @@
                             <i class="fas fa-fw fa-question-circle"></i> {{ __('Consultas/Sugerencia Amipass') }}
                         </a>
 
-
-                        
                         <a class="dropdown-item" href="{{ route('rrhh.performance-report.received_report') }}">
                             <i class="fas fa-fw fa-chart-line"></i> Mi Informe de desempeño
                         </a>
-                        
 
                         <div class="dropdown-divider"></div>
 
@@ -818,6 +815,12 @@
                         <a class="dropdown-item" href="{{ route('rrhh.users.password.edit') }}">
                             <i class="fas fa-fw fa-key"></i> Cambio de clave
                         </a>
+
+                        @can('dev')
+                        <a class="dropdown-item bg-dark text-white" href="{{ route('ionline-plus') }}">
+                            <i class="fas fa-fw fa-exclamation-circle"></i> iOnline Plus
+                        </a>
+                        @endcan
 
                         <a class="dropdown-item" href="{{ route('logout') }}">
                             <i class="fas fa-fw fa-sign-out-alt"></i> {{ __('Cerrar sesión') }}

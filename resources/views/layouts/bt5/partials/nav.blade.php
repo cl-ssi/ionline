@@ -813,11 +813,9 @@
                             <i class="bi bi-egg-fried"></i> {{ __('Consultas/Sugerencia Amipass') }}
                         </a>
 
-                        
                         <a class="dropdown-item" href="{{ route('rrhh.performance-report.received_report') }}">
                             <i class="bi bi-graph-up-arrow"></i> Mi Informe de desempeño
                         </a>
-                        
 
                         <div class="dropdown-divider"></div>
 
@@ -829,8 +827,14 @@
                             <i class="bi bi-key"></i> Cambio de clave
                         </a>
 
+                        @can('dev')
+                        <a class="dropdown-item bg-dark text-white" href="{{ route('ionline-plus') }}">
+                            <i class="bi bi-exclamation-circle"></i> iOnline Plus
+                        </a>
+                        @endcan
+
                         <a class="dropdown-item" href="{{ route('logout') }}">
-                            <i class="bi bi bi-door-closed fw-bold"></i> {{ __('Cerrar sesión') }}
+                            <i class="bi bi-door-closed"></i> {{ __('Cerrar sesión') }}
                         </a>
 
                     </ul>
