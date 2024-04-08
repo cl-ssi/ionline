@@ -43,12 +43,12 @@ use Illuminate\Notifications\Notifiable;
 // Para resetear contraseñas
 use Illuminate\Support\Facades\Auth;
 
-use OwenIt\Auditing\Contracts\Auditable;
+//use OwenIt\Auditing\Contracts\Auditable;
 use Spatie\Permission\Traits\HasRoles;
 
-class User extends Authenticatable implements Auditable
+class User extends Authenticatable //implements Auditable
 {
-    use \OwenIt\Auditing\Auditable;
+    //use \OwenIt\Auditing\Auditable;
     use Notifiable, HasRoles, SoftDeletes, HasFactory;
 
     /**
