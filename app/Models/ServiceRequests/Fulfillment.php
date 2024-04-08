@@ -2,7 +2,7 @@
 
 namespace App\Models\ServiceRequests;
 
-use app\User;
+use App\Models\User;
 use OwenIt\Auditing\Contracts\Auditable;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\SoftDeletes;
