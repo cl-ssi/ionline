@@ -14,13 +14,14 @@ class TrustHosts extends Middleware
     public function hosts()
     {
         return [
-            $this->allSubdomainsOfApplicationUrl(),
             /**
              * If this is enables in Kernel.php, You need to add your own domains to the list
              */
             'i.saludtarapaca.gob.cl',
+            'i.saludiquique.gob.cl',
             'i.saludtarapaca.org',
-            'ionline-s26t746c6q-uc.a.run.app'
+            'ionline-s26t746c6q-uc.a.run.app',
+            $this->allSubdomainsOfApplicationUrl(),
         ];
     }
 }
