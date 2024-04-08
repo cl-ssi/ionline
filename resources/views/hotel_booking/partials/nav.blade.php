@@ -24,11 +24,11 @@
         </li>
 
         <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle {{
-                active('hotel_booking.hotels.index'),
-                active('hotel_booking.rooms.index'),
-                active('hotel_booking.room_booking_configuration.index')
-            }}"
+            <a class="nav-link dropdown-toggle {{ active([
+                    'hotel_booking.hotels.index',
+                    'hotel_booking.rooms.index',
+                    'hotel_booking.room_booking_configuration.index',
+                ]) }}"
             data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
                 <i class="fas fa-clipboard-check"></i> Administración
             </a>

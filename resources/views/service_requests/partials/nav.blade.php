@@ -31,10 +31,7 @@
     </li>
 
     <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle {{
-            active('rrhh.service-request.fulfillment.index'),
-            active('rrhh.service-request.report.fulfillment-pending')
-        }}"
+        <a class="nav-link dropdown-toggle {{ active(['rrhh.service-request.fulfillment.index','rrhh.service-request.report.fulfillment-pending']) }}"
         data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
             <i class="fas fa-clipboard-check"></i> Cumplimientos
         </a>
