@@ -22,7 +22,7 @@
         <th>Nombre</th>
         <th>Unidad</th>
         @foreach($periods as $period)
-            <th class="text-center {{ now()->greaterThan($period->start_at) ? 'table-primary' : '' }}">{{ $period->name }}</th>
+            <th class="text-center {{ now()->greaterThan($period->end_at) ? 'table-primary' : '' }}">{{ $period->name }}</th>
         @endforeach
     </tr>
 </thead>
@@ -33,7 +33,7 @@
             <td>{{ $organizationalUnit }}</td>
             @foreach($periods as $period)
                 <td class="text-center">
-                @if(now()->greaterThanOrEqualTo($period->start_at))
+                @if(now()->greaterThanOrEqualTo($period->end_at))
                     @if($hasExistingReport = $this->hasExistingReport($user->id, $period->id))
                             <a href="#" wire:click.prevent="viewReport('{{ $user->id }}', '{{ $period->id }}')" data-bs-toggle="modal" data-bs-target="#reportModal" class="btn btn-outline-primary btn-sm">
                                 <i class="bi bi-eye"></i>
