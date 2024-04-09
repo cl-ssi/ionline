@@ -8,7 +8,7 @@
             @endcan
             <li><a class="dropdown-item" href="{{ route('meetings.index') }}"><i class="fas fa-users fa-fw"></i> Mis reuniones</a></li>
             @can('Meetings: all meetings')
-                <li><a class="dropdown-item" href="{{ route('meetings.index') }}"><i class="fas fa-users fa-fw"></i> Todas las reuniones</a></li>
+                <li><a class="dropdown-item" href="{{ route('meetings.all_index') }}"><i class="fas fa-users fa-fw"></i> Todas las reuniones</a></li>
             @endcan
         </ul>
     </li>

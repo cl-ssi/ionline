@@ -131,13 +131,11 @@
                         <a class="dropdown-item {{ active('health_plan.*') }}" href="{{ route('health_plan.index', ['iquique']) }}">
                             <i class="fas fa-file-powerpoint"></i> Planes Comunales
                         </a>--}}
-                        
-                        {{--
+
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item {{ active('meetings.*') }}" href="{{ route('meetings.index') }}">
                             <i class="fas fa-users fa-fw"></i> Reuniones
                         </a>
-                        --}}
                     </div>
                 </li>
 

@@ -18,6 +18,11 @@ class MeetingController extends Controller
         return view('meetings.index');
     }
 
+    public function all_index()
+    {
+        return view('meetings.all_index');
+    }
+
     /**
      * Show the form for creating a new resource.
      *

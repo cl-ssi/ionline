@@ -50,7 +50,7 @@ class MeetingCreate extends Component
             'mechanism.required'    => 'Debe ingresar Medio de reunión.',
             'start_at.required'     => 'Debe ingresar Hora Inicio de reunión.',
             'end_at.required'       => 'Debe ingresar Hora de Fin de reunión.',
-            'file.required'         => 'Debe ingresar un Adjunto',
+            // 'file.required'         => 'Debe ingresar un Adjunto',
 
             // MENSAJES PARA GROUPING
             'typeGrouping.required' => 'Debe ingresar Tipo de Asociaciones, Federaciones, etc.',
@@ -87,7 +87,7 @@ class MeetingCreate extends Component
                 'mechanism' => 'required',
                 'start_at'  => 'required',
                 'end_at'    => 'required',
-                'file'      => 'required'
+                // 'file'      => 'required'
             ]
         );
 
@@ -113,9 +113,11 @@ class MeetingCreate extends Component
             return $meeting;
         });
 
-        $now = now()->format('Y_m_d_H_i_s');
-        $meeting->file = $this->file->storeAs('/ionline/meetings/attachments', $now.'_meet_'.$meeting->id.'.'.$this->file->extension(), 'gcs');
-        $meeting->save();
+        if($this->file){
+            $now = now()->format('Y_m_d_H_i_s');
+            $meeting->file = $this->file->storeAs('/ionline/meetings/attachments', $now.'_meet_'.$meeting->id.'.'.$this->file->extension(), 'gcs');
+            $meeting->save();
+        }
 
         //SE GUARDA GROUPING (Asociaciones / Federaciones / Reunión Mesas y Comités de Trabajos) PARTICIPANTES
         if(!empty($this->groupings)){

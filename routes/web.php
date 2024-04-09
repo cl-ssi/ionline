@@ -2417,6 +2417,7 @@ Route::prefix('allowances')->as('allowances.')->middleware(['auth', 'must.change
 
 Route::prefix('meetings')->as('meetings.')->middleware(['auth', 'must.change.password'])->group(function () {
     Route::get('/', [MeetingController::class, 'index'])->name('index');
+    Route::get('/all_index', [MeetingController::class, 'all_index'])->name('all_index');
     Route::get('create', [MeetingController::class, 'create'])->name('create');
     Route::get('{meeting}/edit', [MeetingController::class, 'edit'])->name('edit');
     Route::get('{meeting}/show', [MeetingController::class, 'show'])->name('show');

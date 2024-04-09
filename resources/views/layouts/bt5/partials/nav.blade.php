@@ -132,12 +132,10 @@
                             <i class="fas fa-file-powerpoint"></i> Planes Comunales
                         </a>--}}
                         
-                        {{--
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item {{ active('meetings.*') }}" href="{{ route('meetings.index') }}">
                             <i class="fas fa-users fa-fw"></i> Reuniones
                         </a>
-                        --}}
                     </ul>
                 </li>
 
