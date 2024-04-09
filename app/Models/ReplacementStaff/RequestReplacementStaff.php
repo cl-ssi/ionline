@@ -57,7 +57,7 @@ class RequestReplacementStaff extends Model implements Auditable
     }
 
     public function organizationalUnit() {
-        return $this->belongsTo('App\Rrhh\OrganizationalUnit');
+        return $this->belongsTo('App\Rrhh\OrganizationalUnit')->withTrashed();
     }
 
     public function requesterUser() {
@@ -65,7 +65,7 @@ class RequestReplacementStaff extends Model implements Auditable
     }
 
     public function ouPerformance() {
-        return $this->belongsTo('App\Rrhh\OrganizationalUnit', 'ou_of_performance_id');
+        return $this->belongsTo('App\Rrhh\OrganizationalUnit', 'ou_of_performance_id')->withTrashed();
     }
 
     public function replacementStaff() {
