@@ -4,24 +4,24 @@
     @php 
         /**
          * Parámetros del include:
-         * @include('documents.templates.partials.header', [
-         *   'establishment' => $document->organizationalUnit->establishment, // Obligatorio
-         *   'logo_pluma' => true or false, // Opcional
-         *   'linea1' => 'Ej: Establecimiento', // Opcional
-         *   'linea2' => 'Ej: Unidad organizacional', // Opcional
-         *   'linea3' => 'Ej: Nº Interno: '. $document->internal_number : '') // opcional,
-         *   ]);
-        */
+         **/
+        // @include('documents.templates.partials.header', [
+        //   'establishment' => $document->organizationalUnit->establishment, // Obligatorio
+        //   'logo_pluma' => true or false, // Opcional
+        //   'linea1' => 'Ej: Establecimiento', // Opcional
+        //   'linea2' => 'Ej: Unidad organizacional', // Opcional
+        //   'linea3' => 'Ej: Nº Interno: '. $document->internal_number : '') // opcional,
+        // ]);
 
 
 
         /** Confeccionar URL pública del logo */
-        /** El código está acá para poder reutilizar este include en otro documento
-        * EJ:  
-        * '/images/logo_rgb_SSI.png'
-        * '/images/logo_pluma_SSI_HAH.png'
-        * 
-        */
+        /** 
+         * El código está acá para poder reutilizar este include en otro documento
+         * EJ:  
+         * '/images/logo_rgb_SSI.png'
+         * '/images/logo_pluma_SSI_HAH.png'
+         **/
         $logo = '/images/logo_';
 
         if(isset($logo_pluma)) {

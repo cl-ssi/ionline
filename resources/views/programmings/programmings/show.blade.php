@@ -102,7 +102,6 @@
     });
 
     $(function () {
-        //var jobs = JSON.parse("{{!! json_encode($access_list) !!}}");
         var jobs =  @json($access_list);
         //console.log(jobs);
         $('select').selectpicker();

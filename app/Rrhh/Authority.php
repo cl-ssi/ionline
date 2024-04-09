@@ -38,6 +38,7 @@ class Authority extends Model implements Auditable
         return $this->belongsTo(User::class)->withTrashed();
     }
 
+    // TODO: @tebiccr esto se usa?
     public function creator() {
         return $this->belongsTo(User::class,'creator_id')->withTrashed();
     }

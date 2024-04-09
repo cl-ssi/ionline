@@ -783,7 +783,6 @@ class User extends Authenticatable implements Auditable
         }
 
         return $firstName;
-        // return strtok(mb_convert_case(trim($this->name), MB_CASE_TITLE, 'UTF-8'), " ");
     }
 
     public function getInitialsAttribute()

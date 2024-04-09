@@ -107,8 +107,10 @@ class SubmittedReport extends Component
         $report->save();
         $this->resetFormFields();
 
-        $approval = $report->approvals()->Create([
-            "module"        => "Calificaciones",
+
+        $approval = Approval::withoutEvents(function () use ($report) {
+            return $report->approvals()->create([
+           "module"        => "Calificaciones",
             "module_icon"   => "bi bi-graph-up-arrow",
             "subject"       => "Reporte de Calificación de funcionario: ".$report->receivedUser->TinnyName,
             "document_route_name" => "rrhh.performance-report.show",
@@ -123,9 +125,34 @@ class SubmittedReport extends Component
             "approver_at" => $report->created_at,
             "status"        => 1,
             "digital_signature"                 => false,
-            "position"      => "left",            
+            "position"      => "left",
             "active"    =>false
-        ]);
+            ]);
+        });
+
+
+        // $approval = Approval::create
+        
+
+        // $approval = $report->approvals()->Create([
+        //     "module"        => "Calificaciones",
+        //     "module_icon"   => "bi bi-graph-up-arrow",
+        //     "subject"       => "Reporte de Calificación de funcionario: ".$report->receivedUser->TinnyName,
+        //     "document_route_name" => "rrhh.performance-report.show",
+        //     "document_route_params"             => json_encode
+        //     ([
+        //         "userId" => $report->received_user_id,
+        //         "periodId"                    => $report->period_id,
+        //     ]),
+        //     "sent_to_user_id" => $report->created_user_id,
+        //     "approver_id" => $report->created_user_id,
+        //     "approver_ou_id" => $report->created_ou_id,
+        //     "approver_at" => $report->created_at,
+        //     "status"        => 1,
+        //     "digital_signature"                 => false,
+        //     "position"      => "left",
+        //     "active"    =>false
+        // ]);
 
         $report->approvals()->Create([
             "module"        => "Calificaciones",
@@ -146,12 +173,11 @@ class SubmittedReport extends Component
 
         
 
-        if($report->receivedUser){
+        
             if($report->receivedUser && $report->receivedUser->email != null){
-                // Utilizando Notify 
                 $report->receivedUser->notify(new NewPerformanceReport($report));
             } 
-        }
+        
 
         
 
