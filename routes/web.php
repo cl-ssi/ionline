@@ -314,6 +314,7 @@ use App\Http\Livewire\TestFileManager;
 use App\Http\Livewire\TestFileUpdateManager;
 use App\Http\Livewire\TicResources;
 use App\Http\Livewire\Warehouse\Invoices\InvoiceManagement;
+use App\Http\Livewire\Welfare\WelfareUsersImport;
 use App\Http\Livewire\Welfare\Amipass\NewBeneficiaryRequest;
 use App\Http\Livewire\Welfare\Amipass\ReportByDates;
 use App\Http\Livewire\Welfare\Amipass\ReportByEmployee;
@@ -2621,6 +2622,7 @@ Route::prefix('welfare')->as('welfare.')->middleware(['auth', 'must.change.passw
     Route::get('/balances', [WelfareController::class, 'balances'])->name('balances');
     Route::get('/report', [WelfareController::class, 'report'])->name('report');
     Route::get('/export-balance', [WelfareController::class, 'exportBalance'])->name('exportBalance');
+    Route::get('/welfare-users-import', WelfareUsersImport::class)->name('welfare-users-import');
 
 
     Route::prefix('loans')->as('loans.')->group(function () {

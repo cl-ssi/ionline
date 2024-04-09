@@ -82,6 +82,7 @@ class User extends Authenticatable implements Auditable
         'active',
         'gravatar',
         'external',
+        'welfare', // indica si el funcionario tiene convenio con bienestar o no.
         'country_id',
         'organizational_unit_id',
         'email_personal',

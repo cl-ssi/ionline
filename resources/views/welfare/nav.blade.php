@@ -116,5 +116,11 @@
                 <i class="fas fa-question-circle"></i> Consultas/Sugerencia Amipass
             </a>
         </li>
+
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('welfare.welfare-users-import') }}">
+                <i class="fas fa-file-upload"></i> Importar usuarios bienestar
+            </a>
+        </li>
     @endcanany
     </ul>
