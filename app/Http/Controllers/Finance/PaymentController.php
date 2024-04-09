@@ -339,12 +339,7 @@ class PaymentController extends Controller
             'dte' => $dte,
             'establishment' => $establishment,
         ])->setPaper('a4', 'landscape')->stream('comprobante_liquidacion_de_fondo.pdf');
-        
-        
-        
-        return view('finance.payments.paidpdf', compact('dte'));
 
+        return view('finance.payments.paid_pdf', compact('dte'));
     }
-
-
 }
