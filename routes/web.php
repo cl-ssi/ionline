@@ -23,6 +23,7 @@ use App\Http\Controllers\Auth\VerificationController;
 use App\Http\Controllers\ClaveUnicaController;
 use App\Http\Controllers\DigitalSignatureController;
 use App\Http\Controllers\Documents\DocDigital\DocDigitalController;
+use App\Http\Controllers\CarCalendarEventController;
 use App\Http\Controllers\Documents\DocumentController;
 use App\Http\Controllers\Documents\ParteController;
 use App\Http\Controllers\Documents\ParteFileController;
@@ -1451,6 +1452,13 @@ Route::prefix('requirements')->as('requirements.')->middleware(['auth', 'must.ch
 });
 
 Route::view('calendars', 'calendars.index')->name('calendars');
+
+# Calendario Vehiculos
+Route::get('/vehicleCalendar', [CarCalendarEventController::class, 'index']);
+
+Route::post('/vehicleCalendar', [CarCalendarEventController::class, 'store']);
+Route::patch('/vehicleCalendar/edit/{event}', [CarCalendarEventController::class, 'update']);
+Route::delete('/vehicleCalendar/destroy/{event}', [CarCalendarEventController::class, 'destroy']);
 
 Route::prefix('indicators')->as('indicators.')->group(function () {
     Route::get('/', function () {

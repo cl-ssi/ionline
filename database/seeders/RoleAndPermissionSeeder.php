@@ -42,6 +42,7 @@ class RoleAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Authorities: view', 'description' => 'Permite ver el módulo de autoridades']);
         Permission::create(['name' => 'Calendar: aps', 'description' => 'Poder ver Mesa Técnica APS']);
         Permission::create(['name' => 'Calendar: view', 'description' => '']);
+        Permission::create(['name' => 'Calendar: car', 'description' => 'Permite agregar, eliminar y modificar eventos del calendario de vehiculos']);
         Permission::create(['name' => 'Communefiles: create', 'description' => '']);
         Permission::create(['name' => 'Communefiles: edit', 'description' => '']);
         Permission::create(['name' => 'Communefiles: upload', 'description' => '']);
