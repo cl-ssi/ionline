@@ -692,6 +692,13 @@ class RoleAndPermissionSeeder extends Seeder
         $role->givePermissionTo('OrganizationalUnits: sirh association');
         $role->givePermissionTo('Users: assign roles');
         
+        $role = Role::create(['name' => 'Reuniones: Relacionador(a) Laborar', 'description' => 'Permite acceso a todas las reuniones y compromisos']);
+        $role->givePermissionTo('Meetings: create');
+        $role->givePermissionTo('Meetings: all commitments');
+        $role->givePermissionTo('Meetings: all meetings');
+
+        $role = Role::create(['name' => 'Reuniones: creador de reuniones', 'description' => 'Permite creación de reuniones y compromisos']);
+        $role->givePermissionTo('Meetings: create');
         
         // GOD LIKE
         $role = Role::create(['name' => 'god', 'description' => 'God Mode !']);
