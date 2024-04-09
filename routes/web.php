@@ -2192,7 +2192,7 @@ Route::prefix('finance')->as('finance.')->middleware(['auth', 'must.change.passw
     Route::prefix('receptions')->as('receptions.')->group(function () {
         Route::get('/', IndexReception::class)->name('index');
         Route::get('/parameters/email', [FinReceptionController::class,'parameters'])->name('parameters');
-        Route::get('/type', TypeMgr::class)->name('type');        
+        Route::get('/type', TypeMgr::class)->name('type');
         Route::get('{control_id?}/create/{reception_id?}', CreateReception::class)->name('create');
         Route::get('/create_no_oc/{reception_id?}', CreateReceptionNoOc::class)->name('create_no_oc');
         Route::get('/reject', CreateRejection::class)->name('reject');

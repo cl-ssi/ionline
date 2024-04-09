@@ -117,9 +117,6 @@ class CreateReception extends Component
     */
     public function mount($reception_id = null, $control_id = 0)
     {
-        if( array_key_exists('oc', $_GET) ) {
-            $this->purchaseOrderCode = $_GET['oc'];
-        }
         if($control_id <> 0 and $reception_id == null)
         {
             
@@ -198,6 +195,19 @@ class CreateReception extends Component
         if( is_null(Parameter::get('Recepciones','doc_type_id')) ) {
             dd('Falta parametrizar el módulo "Recepciones" Parametro "doc_type_id" con el id del tipo de documento acta de recepción');
         }
+
+        /* Esto precarga la OC*/
+        if( array_key_exists('oc', $_GET) ) {
+            $this->purchaseOrderCode = $_GET['oc'];
+            $this->getPurchaseOrder();
+        }
+
+        /* Esto precarga el DTE, debe ir después de la precarga de OC, si no no funciona */
+        if( array_key_exists('dte_id', $_GET) ) {
+            $this->selectedDteId = $_GET['dte_id'];
+            $this->getSelectedDte();
+        }
+
     }
 
     public function setTemplate($input, $template){
