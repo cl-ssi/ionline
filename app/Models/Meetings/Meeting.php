@@ -15,7 +15,7 @@ class Meeting extends Model implements Auditable
 
     protected $fillable = [
         'status', 'correlative', 'user_creator_id', 'user_responsible_id', 'ou_responsible_id', 'establishment_id', 
-        'date', 'type', 'subject', 'mechanism', 'start_at', 'end_at'
+        'date', 'type', 'subject', 'mechanism', 'start_at', 'end_at', 'file'
     ];
 
     public function userResponsible() {

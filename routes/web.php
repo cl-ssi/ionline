@@ -66,6 +66,7 @@ use App\Http\Controllers\JobPositionProfiles\MessageController;
 use App\Http\Controllers\Mammography\MammographyController;
 use App\Http\Controllers\Meeting\CommitmentController;
 use App\Http\Controllers\Meeting\MeetingController;
+use App\Http\Livewire\Meetings\MeetingCreate;
 use App\Http\Controllers\MunicipalityController;
 use App\Http\Controllers\News\NewsController;
 use App\Http\Controllers\Parameters\BudgetItemController;
@@ -2418,6 +2419,7 @@ Route::prefix('meetings')->as('meetings.')->middleware(['auth', 'must.change.pas
     Route::get('create', [MeetingController::class, 'create'])->name('create');
     Route::get('{meeting}/edit', [MeetingController::class, 'edit'])->name('edit');
     Route::get('{meeting}/show', [MeetingController::class, 'show'])->name('show');
+    Route::get('/{meetingToEdit}/show_file', [MeetingCreate::class, 'show_file'])->name('show_file');
     Route::prefix('commitments')->as('commitments.')->group(function () {
         Route::get('/own_index', [CommitmentController::class, 'own_index'])->name('own_index');
         Route::get('/all_index', [CommitmentController::class, 'all_index'])->name('all_index');

@@ -18,13 +18,20 @@ use App\Models\Requirements\Event;
 
 use App\Notifications\Requirements\NewSgr;
 
+use Livewire\WithFileUploads;
+use Illuminate\Support\Facades\Storage;
+
 class MeetingCreate extends Component
 {
+    use WithFileUploads;
+
     public $form;
     
     public $date, $type, $subject, $mechanism, $start_at, $end_at;
     public $groupings, $typeGrouping, $nameGrouping;
     public $commitments, $commitmentDescription, $typeResponsible, $priority, $closingDate;
+
+    public $file, $iterationFileClean = 0;
 
     /* Meeting to edit */
     public $meetingToEdit;
@@ -43,6 +50,7 @@ class MeetingCreate extends Component
             'mechanism.required'    => 'Debe ingresar Medio de reunión.',
             'start_at.required'     => 'Debe ingresar Hora Inicio de reunión.',
             'end_at.required'       => 'Debe ingresar Hora de Fin de reunión.',
+            'file.required'         => 'Debe ingresar un Adjunto',
 
             // MENSAJES PARA GROUPING
             'typeGrouping.required' => 'Debe ingresar Tipo de Asociaciones, Federaciones, etc.',
@@ -79,6 +87,7 @@ class MeetingCreate extends Component
                 'mechanism' => 'required',
                 'start_at'  => 'required',
                 'end_at'    => 'required',
+                'file'      => 'required'
             ]
         );
 
@@ -97,12 +106,16 @@ class MeetingCreate extends Component
                     'subject'               => $this->subject,
                     'mechanism'             => $this->mechanism,
                     'start_at'              => $this->start_at,
-                    'end_at'                => $this->end_at
+                    'end_at'                => $this->end_at,
                 ]
             );
 
             return $meeting;
         });
+
+        $now = now()->format('Y_m_d_H_i_s');
+        $meeting->file = $this->file->storeAs('/ionline/meetings/attachments', $now.'_meet_'.$meeting->id.'.'.$this->file->extension(), 'gcs');
+        $meeting->save();
 
         //SE GUARDA GROUPING (Asociaciones / Federaciones / Reunión Mesas y Comités de Trabajos) PARTICIPANTES
         if(!empty($this->groupings)){
@@ -352,5 +365,9 @@ class MeetingCreate extends Component
 
     public function searchedCommitmentOu(OrganizationalUnit $organizationalUnit){
         $this->searchedCommitmentOu = $organizationalUnit;
+    }
+
+    public function show_file(Meeting $meetingToEdit){
+        return Storage::disk('gcs')->response($meetingToEdit->file);
     }
 }
