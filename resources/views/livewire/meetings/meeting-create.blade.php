@@ -285,7 +285,7 @@
     <div class="row g-3">
         <div class="col-12">
             @if($form == 'create' || (($meetingToEdit && $meetingToEdit->StatusValue != 'Derivado SGR')))
-            <button wire:click="save" class="btn btn-primary float-end" type="button">
+            <button wire:click="save" class="btn btn-primary float-end" wire:loading.attr="disabled" wire:target="file" type="button">
                 <i class="fas fa-save"></i> Guardar
             </button>
             @endif

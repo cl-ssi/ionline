@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Contracts\Auditable;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
+use App\Models\File;
 
 class Meeting extends Model implements Auditable
 {
@@ -29,7 +31,7 @@ class Meeting extends Model implements Auditable
         'mechanism',
         'start_at',
         'end_at',
-        'file'
+        // 'file'
     ];
 
     public function userResponsible(): BelongsTo
@@ -50,6 +52,11 @@ class Meeting extends Model implements Auditable
     public function userCreator(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_creator_id')->withTrashed();
+    }
+
+    public function file(): MorphOne
+    {
+        return $this->morphOne(File::class, 'fileable');
     }
 
     public function getStatusValueAttribute()

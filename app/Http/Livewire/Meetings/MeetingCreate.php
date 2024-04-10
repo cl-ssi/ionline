@@ -114,9 +114,26 @@ class MeetingCreate extends Component
         });
 
         if($this->file){
+            /*
             $now = now()->format('Y_m_d_H_i_s');
             $meeting->file = $this->file->storeAs('/ionline/meetings/attachments', $now.'_meet_'.$meeting->id.'.'.$this->file->extension(), 'gcs');
             $meeting->save();
+            */
+
+            $now = now()->format('Y_m_d_H_i_s');
+            $meeting->file()->updateOrCreate(
+                [
+                    'id' => $meeting->file->id ? $meeting->file->id : null,
+                ],
+                [
+                    'storage_path' => '/ionline/meetings/attachments/'.$now.'_meet_'.$meeting->id.'.'.$this->file->extension(),
+                    'stored' => true,
+                    'name' => 'Mi documento.pdf',
+                    // 'valid_types' => json_encode(["pdf", "xls"]),
+                    // 'max_file_size' => 10,
+                    'stored_by_id' => auth()->id(),
+                ]);
+                $meeting->file = $this->file->storeAs('/ionline/meetings/attachments', $now.'_meet_'.$meeting->id.'.'.$this->file->extension(), 'gcs');
         }
 
         //SE GUARDA GROUPING (Asociaciones / Federaciones / Reunión Mesas y Comités de Trabajos) PARTICIPANTES
@@ -370,6 +387,8 @@ class MeetingCreate extends Component
     }
 
     public function show_file(Meeting $meetingToEdit){
-        return Storage::disk('gcs')->response($meetingToEdit->file);
+        // dd($meetingToEdit->file);
+
+        return Storage::disk('gcs')->response($meetingToEdit->file->storage_path);
     }
 }
