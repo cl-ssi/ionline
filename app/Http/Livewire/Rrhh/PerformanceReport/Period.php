@@ -44,12 +44,21 @@ class Period extends Component
         // $name = $startOfMonth->formatLocalized('%b', setlocale(LC_ALL, 'es_CL.UTF-8')) . '-' . $endOfMonth->formatLocalized('%b', setlocale(LC_ALL, 'es_CL.UTF-8'));
 
 
-        setlocale(LC_ALL, 'es_CL.UTF-8');
+        // setlocale(LC_ALL, 'es_CL.UTF-8');
+
+        // $startOfMonth = Carbon::parse($this->start_at)->startOfMonth();
+        // $endOfMonth = Carbon::parse($this->end_at)->endOfMonth();
+
+        // $name = ucfirst($startOfMonth->formatLocalized('%b')) . '-' . ucfirst($endOfMonth->formatLocalized('%b'));
 
         $startOfMonth = Carbon::parse($this->start_at)->startOfMonth();
         $endOfMonth = Carbon::parse($this->end_at)->endOfMonth();
 
-        $name = ucfirst($startOfMonth->formatLocalized('%B')) . '-' . ucfirst($endOfMonth->formatLocalized('%B'));
+        $startMonthName = $startOfMonth->monthName;
+        $endMonthName = $endOfMonth->monthName;
+
+        $name = ucfirst($startMonthName) . '-' . ucfirst($endMonthName);
+
 
 
 

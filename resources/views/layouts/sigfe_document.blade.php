@@ -1,3 +1,4 @@
+<?php setlocale(LC_ALL, 'es_CL.UTF-8');?>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
