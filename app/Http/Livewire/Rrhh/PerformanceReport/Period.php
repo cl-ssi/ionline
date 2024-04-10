@@ -39,7 +39,9 @@ class Period extends Component
         $startOfMonth = Carbon::parse($this->start_at)->startOfMonth()->locale('es');
         $endOfMonth = Carbon::parse($this->end_at)->endOfMonth()->locale('es');
 
-        $name = $startOfMonth->formatLocalized('%b') . '-' . $endOfMonth->formatLocalized('%b');
+        //$name = $startOfMonth->formatLocalized('%b') . '-' . $endOfMonth->formatLocalized('%b');
+        $name = $startOfMonth->formatLocalized('%b', setlocale(LC_ALL, 'es_CL.UTF-8')) . '-' . $endOfMonth->formatLocalized('%b', setlocale(LC_ALL, 'es_CL.UTF-8'));
+
 
         PerformanceReportPeriod::create([
             'name' => $name,
