@@ -139,21 +139,24 @@
         </thead>
         <tbody style="font-size: 1.1em;">
             <tr>
-                <td>{{ $dte->tgrPayedDte?->tipo_documento }} Factura Afecta Electrónica</td>
-                <td>{{ $dte->tgrPayedDte?->folio_documento }} 734095</td>
-                <td>{{ $dte->tgrPayedDte?->moneda }} CLP</td>
-                <td>{{ $dte->tgrAccountingPortfolio?->cuenta_contable }} 21522 Cuentas por Pagar - Bienes y Servicios de
-                    Consumo</td>
+                <td>{{ $dte->tgrPayedDte?->tipo_documento }}</td>
+                <td>{{ $dte->tgrPayedDte?->folio_documento }} </td>
+                <td>{{ $dte->tgrPayedDte?->moneda }} </td>
+                <td>{{ $dte->tgrAccountingPortfolio?->cuenta_contable }} </td>
                 <td>{{ $dte->tgrPayedDte?->banco_cta_corriente }}</td>
-                <td>{{ $dte->tgrPayedDte?->medio_pago }} Transferencia Electrónica de Fondos</td>
+                <td>{{ $dte->tgrPayedDte?->medio_pago }} </td>
                 <td>{{ $dte->tgrPayedDte?->nro_documento_pago }}</td>
                 <td>{{ $dte->tgrPayedDte?->moneda }}</td>
-                <td style="text-align: right;">{{ $dte->tgrPayedDte?->monto }} 4.629.971</td>
+                <td style="text-align: right;">{{ $dte->tgrPayedDte?->monto }} </td>
             </tr>
             <tr class="negrita ocho">
-                <td colspan="7" style="padding-top: 5px; padding-bottom: 5px;">Total (CLP)</td>
+                <td colspan="7" style="padding-top: 5px; padding-bottom: 5px;">
+                    Total (CLP)
+                </td>
                 <td></td>
-                <td style="text-align: right;">4.629.971</td>
+                <td style="text-align: right;">
+                    {{ $dte->tgrPayedDte?->monto }}
+                </td>
             </tr>
         </tbody>
     </table>
