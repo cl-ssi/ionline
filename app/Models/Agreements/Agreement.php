@@ -15,7 +15,7 @@ class Agreement extends Model
      */
     protected $fillable = [
         'number', 'date', 'period', 'file', 'commune_id', 'program_id', 'quotas', 'total_amount', 'referente', 
-        'director_signer_id', 'referrer_id', 'file_to_endorse_id', 'file_to_sign_id', 'fileResEnd', 'document_id'
+        'director_signer_id', 'referrer_id', 'referrer2_id', 'file_to_endorse_id', 'file_to_sign_id', 'fileResEnd', 'document_id', 'res_document_id'
     ];
 
     protected $casts = [
@@ -33,6 +33,10 @@ class Agreement extends Model
         return $this->belongsTo(Document::class);
     }
 
+    public function res_document() {
+        return $this->belongsTo(Document::class, 'res_document_id');
+    }
+
     public function program() {
         return $this->belongsTo('App\Models\Agreements\Program');
     }
@@ -43,6 +47,10 @@ class Agreement extends Model
 
     public function referrer() {
         return $this->belongsTo('App\Models\User')->withTrashed();
+    }
+
+    public function referrer2() {
+        return $this->belongsTo('App\Models\User', 'referrer2_id')->withTrashed();
     }
 
     public function municipality() {
