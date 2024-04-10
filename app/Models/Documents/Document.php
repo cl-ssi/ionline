@@ -36,8 +36,10 @@ class Document extends Model implements Auditable
         'greater_hierarchy',
         'distribution',
         'content',
-        'file_to_sign_id',
+        'user_id',
+        'organizational_unit_id',
         'establishment_id',
+        'file_to_sign_id',
         'signature_id',
     ];
 
