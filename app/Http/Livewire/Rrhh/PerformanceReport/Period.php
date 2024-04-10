@@ -36,11 +36,21 @@ class Period extends Component
             'year' => 'required|integer',
         ]);
         
-        $startOfMonth = Carbon::parse($this->start_at)->startOfMonth()->locale('es');
-        $endOfMonth = Carbon::parse($this->end_at)->endOfMonth()->locale('es');
+        
+        // $startOfMonth = Carbon::parse($this->start_at)->startOfMonth()->locale('es');
+        // $endOfMonth = Carbon::parse($this->end_at)->endOfMonth()->locale('es');
 
-        //$name = $startOfMonth->formatLocalized('%b') . '-' . $endOfMonth->formatLocalized('%b');
-        $name = $startOfMonth->formatLocalized('%b', setlocale(LC_ALL, 'es_CL.UTF-8')) . '-' . $endOfMonth->formatLocalized('%b', setlocale(LC_ALL, 'es_CL.UTF-8'));
+        // //$name = $startOfMonth->formatLocalized('%b') . '-' . $endOfMonth->formatLocalized('%b');
+        // $name = $startOfMonth->formatLocalized('%b', setlocale(LC_ALL, 'es_CL.UTF-8')) . '-' . $endOfMonth->formatLocalized('%b', setlocale(LC_ALL, 'es_CL.UTF-8'));
+
+
+        setlocale(LC_ALL, 'es_CL.UTF-8');
+
+        $startOfMonth = Carbon::parse($this->start_at)->startOfMonth();
+        $endOfMonth = Carbon::parse($this->end_at)->endOfMonth();
+
+        $name = ucfirst($startOfMonth->formatLocalized('%B')) . '-' . ucfirst($endOfMonth->formatLocalized('%B'));
+
 
 
         PerformanceReportPeriod::create([

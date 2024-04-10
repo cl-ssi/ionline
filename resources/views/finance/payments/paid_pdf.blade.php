@@ -3,7 +3,7 @@
 @section('title', 'Comprobante de Liquidación de Fondo')
 
 @section('content')
-<?php setlocale(LC_ALL, 'es'); ?>
+<?php setlocale(LC_ALL, 'es_CL.UTF-8');?>
     <style>
         .tabla-custom {
             width: 100%;
