@@ -75,22 +75,22 @@
     <tr>
         <th>Título</th>
         <td colspan="7">
-            {{ $dte->comparativeRequirement?->devengo_titulo ?? 'Pago Automático:FA / 7347095 / 99017000 / 1272565-375-SE23 / SEGUROS GENERALES' }}
+            {{ $dte->comparativeRequirement?->devengo_titulo  }}
         </td>
     </tr>
     <tr>
         <th>Descripción</th>
         <td colspan="7">
-            {{ $dte->comparativeRequirement?->devengo_titulo ?? 'Pago Automático:FA / 7347095 / 99017000 / 1272565-375-SE23 / SEGUROS GENERALES' }}
+            {{ $dte->comparativeRequirement?->devengo_titulo }}
         </td>
     </tr>
     <tr>
         <th>Periodo de Operación</td>
-        <td style="width:160px">Septiembre</td>
+        <td style="width:160px">¿?</td>
         <th style="width:94px">Ejercicio Fiscal</th>
-        <td style="width:100px">2023</td>
+        <td style="width:100px">¿?</td>
         <th style="width:90px">ID</th>
-        <td style="width:140px">42803425</td>
+        <td style="width:140px">¿?</td>
         <th style="width:120px">Folio</th>
         <td>{{ $dte->comparativeRequirement?->efectivo_folio }}</td>
     </tr>
@@ -98,17 +98,17 @@
         <th>Fecha y Hora de Aprobación</th>
         <td>{{ $dte->tgrPayedDte?->fecha_generacion }}</td>
         <th>Tipo de Transacción</th>
-        <td>Creación ¿?</td>
+        <td>Creación</td>
         <th>Tipo de Operación</th>
-        <td>{{ $dte->tgrPayedDte?->tipo_operacion }} Pagos a Terceros</td>
+        <td>{{ $dte->tgrPayedDte?->tipo_operacion }}</td>
         <th>Identificación de Transferencia de Datos</th>
-        <td>¿?</td>
+        <td></td>
     </tr>
     <tr>
         <th>Origen del Ajuste</th>
-        <td>¿?</td>
+        <td></td>
         <th>Folio Anterior</th>
-        <td>¿?</td>
+        <td></td>
     </tr>
 </table>
 
@@ -119,7 +119,7 @@
     <table class="tabla-custom nueve">
         <tr>
             <th width="108px;">Principal</th>
-            <td class="negrita">{{ $dte->tgrPayedDte?->principal }} 9901700-2 SEGUROS GENERALES SUDAMERICA S.A.</td>
+            <td class="negrita">{{ $dte->tgrPayedDte?->principal }}</td>
         </tr>
     </table>
 
