@@ -81,16 +81,16 @@
     <tr>
         <th>Descripción</th>
         <td colspan="7">
-            {{ $dte->comparativeRequirement?->devengo_titulo }}
+            {{ $dte->comparativeRequirement?->devengo_titulo }} @if($dte->paid_automatic) @endif
         </td>
     </tr>
     <tr>
         <th>Periodo de Operación</td>
-        <td style="width:160px">¿?</td>
+        <td style="width:160px">{{ ucfirst($dte->tgrPayedDte?->fecha_generacion->formatLocalized('%B')) }}</td>
         <th style="width:94px">Ejercicio Fiscal</th>
         <td style="width:100px">¿?</td>
         <th style="width:90px">ID</th>
-        <td style="width:140px">¿?</td>
+        <td style="width:140px"></td>
         <th style="width:120px">Folio</th>
         <td>{{ $dte->comparativeRequirement?->efectivo_folio }}</td>
     </tr>
@@ -147,7 +147,7 @@
                 <td>{{ $dte->tgrPayedDte?->medio_pago }} </td>
                 <td>{{ $dte->tgrPayedDte?->nro_documento_pago }}</td>
                 <td>{{ $dte->tgrPayedDte?->moneda }}</td>
-                <td style="text-align: right;">{{ $dte->tgrPayedDte?->monto }} </td>
+                <td style="text-align: right;">{{ money($dte->tgrPayedDte?->monto) }} </td>
             </tr>
             <tr class="negrita ocho">
                 <td colspan="7" style="padding-top: 5px; padding-bottom: 5px;">
@@ -155,7 +155,7 @@
                 </td>
                 <td></td>
                 <td style="text-align: right;">
-                    {{ $dte->tgrPayedDte?->monto }}
+                    {{ money($dte->tgrPayedDte?->monto) }}
                 </td>
             </tr>
         </tbody>
