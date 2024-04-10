@@ -160,7 +160,7 @@ class AgreementController extends Controller
      */
     public function show(Agreement $agreement)
     {
-        $agreement->load('director_signer.user', 'commune.establishments', 'referrer', 'fileToEndorse', 'fileToSign', 'addendums.referrer', 'continuities.referrer','continuities.director_signer','continuities.document.fileToSign', 'document.fileToSign');
+        $agreement->load('director_signer.user', 'commune.establishments', 'referrer', 'referrer2', 'fileToEndorse', 'fileToSign', 'addendums.referrer', 'continuities.referrer','continuities.director_signer','continuities.document.fileToSign', 'document.fileToSign', 'res_document');
         $municipality = Municipality::where('commune_id', $agreement->commune->id)->first();
         $establishment_list = unserialize($agreement->establishment_list);
         // $referrers = User::all()->sortBy('name');
@@ -222,6 +222,7 @@ class AgreementController extends Controller
         }
 
         $agreement->referrer_id = $request->referrer_id;
+        $agreement->referrer2_id = $request->referrer2_id;
         $agreement->director_signer_id = $request->director_signer_id;
         $agreement->save();
 
@@ -2521,6 +2522,123 @@ $document->content .= "
 </div>
 
 ";
+        
+        $types = Type::whereNull('partes_exclusive')->pluck('name','id');
+        return view('documents.create', compact('document', 'types'));
+    }
+
+    public function createResDocument(Request $request, Agreement $agreement)
+    {
+        // SE OBTIENEN DATOS RELACIONADOS AL CONVENIO
+    	$agreement->load('Program','Commune.municipality','agreement_amounts.program_component','agreement_quotas','director_signer.user', 'stages', 'referrer');
+        // $stage          = Stage::where('agreement_id', $agreement->id)->first();
+    	// $amounts        = AgreementAmount::with('program_component')->Where('agreement_id', $id)->get();
+        // $quotas         = AgreementQuota::Where('agreement_id', $id)->get();
+        // $municipality   = Municipality::where('commune_id', $agreements->Commune->id)->first();
+        $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+
+        // AL MOMENTO DE PREVISUALIZAR EL DOCUMENTO INICIA AUTOMATICAMENTE LA PRIMERA ETAPA
+        if($agreement->stages->isEmpty()){
+            $agreement->stages()->create(['group' => 'CON','type' => 'RTP', 'date' => Carbon::now()->toDateTimeString()]);
+        }
+
+        // SE OBTIENE LAS INSTITUCIONES DE SALUD PERO SÓLO LAS QUE SE HAN SELECCIONADO
+        $establishment_list = unserialize($agreement->establishment_list) == null ? [] : unserialize($agreement->establishment_list);
+        $establishments = Establishment::where('commune_id', $agreement->Commune->id)
+                                       ->whereIn('id', $establishment_list)->get();
+
+        // ARRAY PARA OBTNER LAS INSTITUCIONES ASOCIADAS AL CONVENIO
+        // SI EL ARRAY DE INSTITUCIONES VIENE VACIO
+        if($establishments->isEmpty()){
+            $arrayEstablishmentConcat = '';
+        }
+        else { 
+            foreach ($establishments as $key => $establishment) {
+                $arrayEstablishment[] = array('index' => $key+1
+                                             ,'establecimientoTipo' => $establishment->type
+                                             ,'establecimientoNombre' => $establishment->name
+                                             ,'establecimiento' => ucwords(mb_strtolower($establishment->type))." ".$establishment->name
+                                         );
+            }
+            $arrayEstablishmentConcat = implode(", ",array_column($arrayEstablishment, 'establecimiento',));
+        }
+
+        // ARRAY PARA OBTENER LOS COMPONENTES ASOCIADOS AL CONVENIO
+    	// foreach ($agreement->agreement_amounts as $key => $amount) {
+		// 	$arrayComponent[] = array('componenteIndex' => $key+1, 'componenteNombre' => $amount->program_component->name);
+    	// }
+        $componentesListado = '';
+        foreach ($agreement->agreement_amounts as $key => $amount){
+            $componentesListado .= '<b>Componente '.($key+1).':</b> '.$amount->program_component->name.'<br><br>';
+        }
+
+        // SE CONVIERTE EL VALOR TOTAL DEL CONVENIO EN PALABRAS
+        $formatter = new NumeroALetras;
+        $formatter->apocope = true;
+        $totalConvenio = $agreement->agreement_amounts->sum('amount');
+        $totalConvenioLetras = $this->correctAmountText($formatter->toMoney($totalConvenio,0, 'pesos',''));
+ 
+        // ARRAY PARA OBTENER LAS CUOTAS ASOCIADAS AL TOTAL DEL CONVENIO
+        foreach ($agreement->agreement_quotas as $key => $quota) {
+                $cuotaConvenioLetras = $this->correctAmountText($formatter->toMoney($quota->amount,0, 'pesos',''));
+                $arrayQuota[] = array('index' => ($this->ordinal($key+1))
+                                      ,'percentage' => $quota->percentage ?? 0
+                                      ,'cuotaDescripcion' => $quota->description . ($key+1 == 1 ? ' del total de los recursos del convenio una vez aprobada la resolución exenta que aprueba el presente instrumento y recibidos los recursos del Ministerio de Salud.' : ' restante del total de recursos y se enviará en el mes de octubre, según resultados obtenidos en la primera evaluación definida en la cláusula anterior. Así también, dependerá de la recepción de dichos recursos desde Ministerio de Salud y existencia de rendición financiera según lo establece la resolución N°30 del año 2015, de la Contraloría General de la República que fija normas sobre procedimiento de rendición de cuentas de la Contraloría General de la Republica, por parte de la “MUNICIPALIDAD”.')
+                                      ,'cuotaMonto' => number_format($quota->amount,0,",",".")
+                                      ,'cuotaLetra' => $cuotaConvenioLetras);
+             } 
+
+        $totalQuotas = mb_strtolower($formatter->toMoney(count($agreement->agreement_quotas),0));
+        if($totalQuotas == 'un ') $totalQuotas = 'una cuota'; else $totalQuotas .= 'cuotas';
+
+        $periodoConvenio = $agreement->period;
+        $fechaConvenio = date('j', strtotime($agreement->date)).' de '.$meses[date('n', strtotime($agreement->date))-1].' del año '.date('Y', strtotime($agreement->date));
+    	$numResolucion = $agreement->number;
+        $fechaResolucion = $agreement->resolution_date;
+        $fechaResolucion = $fechaResolucion != NULL ? date('j', strtotime($fechaResolucion)).' de '.$meses[date('n', strtotime($fechaResolucion))-1].' del año '.date('Y', strtotime($fechaResolucion)) : '';
+        $alcaldeApelativo = $agreement->representative_appelative;
+        if(Str::contains($alcaldeApelativo, 'Subrogante')){
+            $alcaldeApelativoFirma = Str::before($alcaldeApelativo, 'Subrogante') . '(S)';
+        }else{
+            $alcaldeApelativoFirma = explode(' ',trim($alcaldeApelativo))[0]; // Alcalde(sa)
+        }
+        $alcalde = $agreement->representative;
+        $alcaldeDecreto = $agreement->representative_decree;
+    	$municipalidad = $agreement->Commune->municipality->name_municipality;
+    	$ilustre = !Str::contains($municipalidad, 'ALTO HOSPICIO') ? 'ILUSTRE': null;
+    	$municipalidadDirec = $agreement->municipality_adress;
+    	$comunaRut = $agreement->municipality_rut;
+    	$alcaldeRut = $agreement->representative_rut;
+
+    	$comuna = $agreement->Commune->name;
+        $first_word = explode(' ',trim($agreement->Program->name))[0];
+        $programa = $first_word == 'Programa' ? substr(strstr($agreement->Program->name," "), 1) : $agreement->Program->name;
+
+        $totalEjemplares = Str::contains($municipalidad, 'IQUIQUE') ? 'cuatro': 'tres';
+        $addEjemplar = Str::contains($municipalidad, 'IQUIQUE') ? 'un ejemplar para CORMUDESI': null;
+
+        $director = mb_strtoupper($agreement->director_signer->user->fullName);
+        $directorApelativo = $agreement->director_signer->appellative;
+        if(!Str::contains($directorApelativo,'(S)')) $directorApelativo .= ' Titular';
+        $directorRut = mb_strtoupper($agreement->director_signer->user->runFormat());
+        $directorDecreto = $agreement->director_signer->decree;
+        $directorNationality = Str::contains($agreement->director_signer->appellative, 'a') ? 'chilena' : 'chileno';
+
+        if(count($agreement->agreement_quotas) == 12){ // 12 cuotas
+            $totalQuotasText = $arrayQuota[0]['cuotaMonto'] == $arrayQuota[11]['cuotaMonto'] 
+                                ? 'doce cuotas de $'.$arrayQuota[0]['cuotaMonto'].' ('.$arrayQuota[0]['cuotaLetra'].')'
+                                : 'once cuotas de $'.$arrayQuota[0]['cuotaMonto'].' ('.$arrayQuota[0]['cuotaLetra'].') y una cuota de $'.$arrayQuota[11]['cuotaMonto'].' ('.$arrayQuota[11]['cuotaLetra'].')';
+        }
+
+        $municipality_emails = $agreement->Commune->municipality->email_municipality."\n".$agreement->Commune->municipality->email_municipality_2;
+
+        $document = new Document();
+        $document->type_id = Type::where('name','Convenio')->first()->id;
+        $document->agreement_id = $agreement->id;
+        // $document->subject = 'Convenio programa '.$programa.' comuna de '.$agreement->commune->name;
+        $document->subject = 'Documento convenio de ejecución del programa '.$programa.' año '.$agreement->period.' comuna de '.$agreement->Commune->name;
+        $document->distribution = $municipality_emails."\n".$agreement->referrer->email."\nvalentina.ortega@redsalud.gob.cl\naps.ssi@redsalud.gob.cl\nromina.garin@redsalud.gob.cl\njuridica.ssi@redsalud.gob.cl\no.partes2@redsalud.gob.cl\nblanca.galaz@redsalud.gob.cl";
+        $document->content = "";
         
         $types = Type::whereNull('partes_exclusive')->pluck('name','id');
         return view('documents.create', compact('document', 'types'));
