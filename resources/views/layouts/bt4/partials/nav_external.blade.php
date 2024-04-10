@@ -48,6 +48,35 @@
     <span data-feather="plus-circle"></span>
     </a>
 </h6>
+
+{{--
+<h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-1 mb-1 text-muted">
+    <span>Capacitaciones</span>
+    <a class="d-flex align-items-center text-muted" href="{{ route('trainings.external_own_index') }}">
+    <span data-feather="plus-circle"></span>
+    </a>
+</h6>
+--}}
+
+<br>
+
+{{--
+<h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-1 mb-1 text-muted">
+    <span>Capacitaciones</span>
+    <span data-feather="book-open"></span>
+</h6>
+<ul class="nav flex-column">
+    <li class="nav-item">
+        <a class="nav-link {{ active('parameter.permission.index') }}" href="{{ route('trainings.external_create') }}">
+            <span data-feather="file-plus"></span>Crear Solicitud
+        </a>
+        <a class="nav-link {{ active('parameter.permission.index') }}" href="{{ route('trainings.external_own_index') }}">
+            <span data-feather="list"></span>Mis Solicitudes
+        </a>
+    </li>
+</ul>
+--}}
+
 <ul class="nav flex-column">
     <!-- <li class="nav-item">
         <a class="nav-link {{ active('patient.index') }}" href="{{ route('replacement_staff.create') }}">

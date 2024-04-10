@@ -2830,6 +2830,14 @@ Route::group(['middleware' => 'auth:external'], function () {
             Route::delete('{training}/destroy', [TrainingController::class, 'destroy'])->name('destroy');
         });
     });
+
+    // Route::prefix('replacement_staff')->as('replacement_staff.')->group(function () {
+
+    Route::prefix('trainings')->as('trainings.')->group(function () {
+        Route::get('/external_own_index', [TngTrainingController::class, 'external_own_index'])->name('external_own_index');
+        Route::get('/external_create', [TngTrainingController::class, 'external_create'])->name('external_create');
+        // Route::get('{meeting}/edit', [TngTrainingController::class, 'edit'])->name('edit');
+    });
 });
 
 

@@ -9,12 +9,17 @@ use App\Models\Parameters\Estament;
 use App\Models\Parameters\ContractualCondition;
 use App\Models\User;
 use App\Models\Trainings\StrategicAxes;
+use App\Models\Trainings\TrainingCost;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
+use Livewire\WithFileUploads;
+
 class TrainingCreate extends Component
 {
+    use WithFileUploads;
+
     public $run, $dv, 
     $selectedEstament, $degree, $selectedContractualCondition, 
     $organizationalUnitUser, $establishmentUser, 
@@ -30,15 +35,20 @@ class TrainingCreate extends Component
     $technicalReasons,
     $feedback_type;
 
-    public $trainingCosts, $typeTrainingCost, $otherTypeTrainingCost, $disabledInputOtherTypeTrainingCost = 'disabled',$exist, $expense;
+    // public $trainingCosts, $typeTrainingCost, $otherTypeTrainingCost, $disabledInputOtherTypeTrainingCost = 'disabled',$exist, $expense;
+
+    public $file, $iterationFileClean = 0;
+
+    public $bootstrap;
 
     /* Training to edit */
     public $trainingToEdit;
     public $idTraining;
 
-    /* trainingCost to edit */
+    /* trainingCost to edit 
     public $trainingCostToEdit;
     public $idTrainingCost;
+    */
 
     // Listeners
     public $searchedUser;
@@ -126,7 +136,7 @@ class TrainingCreate extends Component
         $training = DB::transaction(function () {
             $training = Training::updateOrCreate(
                 [
-                    'id'  =>  '',
+                    'id'  => '',
                 ],
                 [
                     'status'                    => 'pending',
@@ -134,7 +144,7 @@ class TrainingCreate extends Component
                     'estament_id'               => $this->selectedEstament,
                     'degree'                    => $this->degree, 
                     'contractual_condition_id'  => $this->selectedContractualCondition,
-                    'organizationl_unit_id'     => $this->searchedUser->organizational_unit_id,
+                    'organizational_unit_id'    => $this->searchedUser->organizational_unit_id,
                     'establishment_id'          => $this->searchedUser->organizationalUnit->establishment_id,
                     'email'                     => $this->email,
                     'telephone'                 => $this->telephone,
@@ -159,6 +169,56 @@ class TrainingCreate extends Component
 
             return $training;
         });
+
+        /* SE GUARDAN LOS COSTOS */
+        foreach($this->trainingCosts as $trainingCost){
+            TrainingCost::updateOrCreate(
+                [
+                    'id' => $trainingCost['id'],
+                ],
+                [
+                    'type'          => $trainingCost['type'], 
+                    'other_type'    => ($trainingCost['type'] != null) ? $trainingCost['other_type'] : null, 
+                    'exist'         => $trainingCost['exist'],
+                    'expense'       => $trainingCost['expense'],
+                    'training_id'   => ($this->trainingToEdit) ? $this->trainingToEdit->id : $training->id
+                ]
+            );
+        }
+    }
+
+    /* Set Allowance */
+    private function setTraining(){
+        if($this->trainingToEdit){
+            $this->idTraining   = $this->trainingToEdit->id;
+            /*
+            'status'                    => 'pending',
+                    'user_training_id'          => $this->searchedUser->id,
+                    'estament_id'               => $this->selectedEstament,
+                    'degree'                    => $this->degree, 
+                    'contractual_condition_id'  => $this->selectedContractualCondition,
+                    'organizationl_unit_id'     => $this->searchedUser->organizational_unit_id,
+                    'establishment_id'          => $this->searchedUser->organizationalUnit->establishment_id,
+                    'email'                     => $this->email,
+                    'telephone'                 => $this->telephone,
+                    'strategic_axes_id'         => $this->selectedStrategicAxis,
+                    'objective'                 => $this->objective,
+                    'activity_name'             => $this->activityName,
+                    'activity_type'             => $this->activityType, 
+                    'other_activity_type'       => $this->otherActivityType,
+                    'mechanism'                 => $this->mechanism, 
+                    'schuduled'                 => $this->schuduled,
+                    'activity_date_start_at'    => $this->activityDateStartAt, 
+                    'activity_date_end_at'      => $this->activityDateEndAt, 
+                    'total_hours'               => $this->totalHours,
+                    'permission_date_start_at'  => $this->permissionDateStartAt, 
+                    'permission_date_end_at'    => $this->permissionDateEndAt,
+                    'place'                     => $this->place,
+                    'technical_reasons'         => $this->technicalReasons,
+                    'feedback_type'             => $this->feedback_type,
+                    'user_creator_id'           => auth()->id()
+            */
+        }
     }
 
     public function addTrainingCost(){

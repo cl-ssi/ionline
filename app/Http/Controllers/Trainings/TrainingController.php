@@ -18,6 +18,12 @@ class TrainingController extends Controller
         return view('trainings.index');
     }
 
+    // EXTERNAL INDEX
+    public function external_own_index()
+    {
+        return view('trainings.external_own_index');
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -26,6 +32,12 @@ class TrainingController extends Controller
     public function create()
     {
         return view('trainings.create');
+    }
+
+    // EXTERNAL INDEX
+    public function external_create()
+    {
+        return view('trainings.external_create');
     }
 
     /**

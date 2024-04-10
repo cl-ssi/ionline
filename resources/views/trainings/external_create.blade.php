@@ -1,12 +1,10 @@
-@extends('layouts.bt5.app')
+@extends('layouts.bt4.external')
 
-@section('title', 'Listado de STAFF')
+@section('title', 'Nuevo Staff')
 
 @section('content')
 
- @include('trainings.partials.nav')
-
-<div class="row">
+<div class="row mt-3">
     <div class="col-sm-5">
         <h4 class="mt-2 mb-3">Nueva Capacitación:</h4>
     </div>
@@ -16,9 +14,9 @@
 
 <div class="col-sm">
     @livewire('trainings.training-create', [
-        'trainingToEdit'    => null,
+        'trainingToEdit'    => '',
         'form'              => 'create',
-        'bootstrap'         => null
+        'bootstrap'         => 'v4'
     ])
 </div>
 

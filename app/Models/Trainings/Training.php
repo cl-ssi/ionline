@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Contracts\Auditable;
 
+use Illuminate\Database\Eloquent\Relations\MorphOne;
+use App\Models\File;
+
 class Training extends Model implements Auditable
 {
     use HasFactory;
@@ -19,7 +22,7 @@ class Training extends Model implements Auditable
         'estament_id', 
         'degree', 
         'contractual_condition_id', 
-        'organizationl_unit_id', 
+        'organizational_unit_id', 
         'establishment_id',
         'email', 
         'telephone', 
@@ -41,6 +44,35 @@ class Training extends Model implements Auditable
         'feedback_type',
         'user_creator_id'
     ];
+
+    public function userTraining() {
+        return $this->belongsTo('App\User', 'user_training_id')->withTrashed();
+    }
+
+    public function userTrainingOu() {
+        return $this->belongsTo('App\Rrhh\OrganizationalUnit', 'organizational_unit_id')->withTrashed();
+    }
+
+    public function userTrainingEstablishment() {
+        return $this->belongsTo('App\Models\Establishment', 'establishment_id');
+    }
+
+    public function file(): MorphOne
+    {
+        return $this->morphOne(File::class, 'fileable');
+    }
+
+    public function getStatusValueAttribute() {
+        switch($this->status) {
+            case 'saved':
+                return 'Guardado';
+                break;
+
+            case 'pending':
+                return 'Pendiente';
+                break;
+        }
+    }
 
     protected $table = 'tng_trainings';
 }
