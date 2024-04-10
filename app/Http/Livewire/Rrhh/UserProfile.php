@@ -22,12 +22,12 @@ class UserProfile extends Component
         'user.birthday' => 'nullable|date',
         'user.position' => 'required',
 
-        'user.email' => 'required',
+        'user.email' => 'nullable',
 
-        'user.address' => 'required',
-        'user.commune_id' => 'required',
-        'user.phone_number' => 'required',
-        'user.email_personal' => 'required',
+        'user.address' => 'nullable',
+        'user.commune_id' => 'nullable',
+        'user.phone_number' => 'nullable',
+        'user.email_personal' => 'nullable',
 
         'bankAccount.bank_id' => 'nullable|integer',
         'bankAccount.number' => 'nullable',
