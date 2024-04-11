@@ -46,7 +46,12 @@ class Training extends Model implements Auditable
     ];
 
     public function userTraining() {
-        return $this->belongsTo('App\User', 'user_training_id')->withTrashed();
+        if(auth()->guard('external')->check() == true){
+            return $this->belongsTo('App\Models\UserExternal', 'user_training_id');
+        }
+        else{
+            return $this->belongsTo('App\User', 'user_training_id')->withTrashed();
+        }
     }
 
     public function userTrainingOu() {

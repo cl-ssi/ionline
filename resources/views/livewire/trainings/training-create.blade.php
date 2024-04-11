@@ -9,12 +9,16 @@
 
         <fieldset class="form-group col-12 col-md-4">
             <label for="for_user_responsible_id">Nombre Funcionario:</label>
-            @livewire('search-select-user', [
-                'selected_id'   => 'user_responsible_id',
-                'required'      => 'required',
-                'emit_name'     => 'searchedUser',
-                'user'          => $meetingToEdit->userResponsible ?? null
-            ])
+            @if(auth()->guard('external')->check() == true)
+                <input class="form-control" type="text" autocomplete="off" wire:model.defer="searchedUserName" {{ $disabledSearchedUserNameInput }}>
+            @else
+                @livewire('search-select-user', [
+                    'selected_id'   => 'user_responsible_id',
+                    'required'      => 'required',
+                    'emit_name'     => 'searchedUser',
+                    'user'          => $meetingToEdit->userResponsible ?? null
+                ])
+            @endif
             @error('searchedUser') <span class="text-danger error small">{{ $message }}</span> @enderror
         </fieldset>
 
@@ -37,7 +41,7 @@
         <fieldset class="form-group col-12 col-md-4">
             <label for="for_charges_number">Estamento</label>
             @if($bootstrap == 'v4')
-                <select name="estament_id" id="for_estament_id" class="form-control" wire:model.debounce.500ms="selectedEstament" {{-- @if($jobPositionProfile) readonly @endif --}}>
+                <select name="estament_id" id="for_estament_id" class="form-control" wire:model.defer="selectedEstament" {{-- @if($jobPositionProfile) readonly @endif --}}>
             @else
                 <select name="estament_id" id="for_estament_id" class="form-select" wire:model.debounce.500ms="selectedEstament" {{-- @if($jobPositionProfile) readonly @endif --}}>
             @endif        
@@ -51,14 +55,14 @@
 
         <fieldset class="form-group col-12 col-md-3">
             <label for="profiles">Grado</label>
-            <input type="degree" class="form-control" wire:model.defer="degree" id="for_degree">
+            <input type="text" class="form-control" wire:model.defer="degree" id="for_degree">
             @error('degree') <span class="text-danger error small">{{ $message }}</span> @enderror
         </fieldset>
 
         <fieldset class="form-group col-12 col-md-4">
             <label for="for_contractual_condition_id">Calidad Contractual</label>
             @if($bootstrap == 'v4')
-                <select name="contractual_condition_id" id="for_contractual_condition_id" class="form-control" wire:model.debounce.500ms="selectedContractualCondition">
+                <select name="contractual_condition_id" id="for_contractual_condition_id" class="form-control" wire:model.defer="selectedContractualCondition">
             @else
                 <select name="contractual_condition_id" id="for_contractual_condition_id" class="form-select" wire:model.debounce.500ms="selectedContractualCondition">
             @endif
@@ -93,14 +97,14 @@
         </fieldset>
 
         <fieldset class="form-group col-12 col-md-7">
-            <label for="for_subject">Correo electrónico</label>
-            <input class="form-control" type="text" autocomplete="off" wire:model.defer="email">
+            <label for="for_email">Correo electrónico</label>
+            <input class="form-control" type="text" autocomplete="off" wire:model.defer="email" id="for_email">
             @error('email') <span class="text-danger error small">{{ $message }}</span> @enderror
         </fieldset>
 
         <fieldset class="form-group col-12 col-md-4">
-            <label for="for_subject">Teléfono</label>
-            <input class="form-control" type="text" autocomplete="off" wire:model.defer="telephone">
+            <label for="for_telephone">Teléfono</label>
+            <input class="form-control" type="text" autocomplete="off" wire:model.defer="telephone" id="for_telephone">
             @error('telephone') <span class="text-danger error small">{{ $message }}</span> @enderror
         </fieldset>
     </div>
@@ -115,7 +119,7 @@
         <fieldset class="form-group col-12 col-md-10">
             <label for="for_subject">Eje estratégico asociados a la Actividad</label>
             @if($bootstrap == 'v4')
-                <select name="contractual_condition_id" id="for_contractual_condition_id" class="form-control" wire:model.debounce.500ms="selectedStrategicAxis">
+                <select name="contractual_condition_id" id="for_contractual_condition_id" class="form-control" wire:model.defer="selectedStrategicAxis">
             @else
                 <select name="contractual_condition_id" id="for_contractual_condition_id" class="form-select" wire:model.debounce.500ms="selectedStrategicAxis">
             @endif        
@@ -181,7 +185,7 @@
         <fieldset class="form-group col-12 col-md-4">
             <label for="for_activity_type">Tipo de Actividad</label>
             @if($bootstrap == 'v4')
-                <select id="for_activity_type" class="form-control" wire:model.debounce.500ms="activityType">
+                <select id="for_activity_type" class="form-control" wire:model.defer="activityType">
             @else
                 <select id="for_activity_type" class="form-select" wire:model.debounce.500ms="activityType">
             @endif
@@ -212,7 +216,7 @@
         <fieldset class="form-group col-12 col-md-4">
             <label for="for_objective">Modalidad de aprendizaje:</label>
             @if($bootstrap == 'v4')
-                <select id="for_activity_name" class="form-control" wire:model.debounce.500ms="mechanism">
+                <select id="for_activity_name" class="form-control" wire:model.defer="mechanism">
             @else
                 <select id="for_activity_name" class="form-select" wire:model.debounce.500ms="mechanism">
             @endif        
@@ -226,7 +230,7 @@
         <fieldset class="form-group col-12 col-md-3">
             <label for="for_objective">Actividad Programada:</label>
             @if($bootstrap == 'v4')
-                <select id="for_activity_name" class="form-control" wire:model.debounce.500ms="schuduled">
+                <select id="for_activity_name" class="form-control" wire:model.defer="schuduled">
             @else
                 <select id="for_activity_name" class="form-select" wire:model.debounce.500ms="schuduled">
             @endif
@@ -258,7 +262,7 @@
 
         <fieldset class="form-group col-12 col-md-4">
             <label for="for_total_hours">Total Horas Cronológicas</label>
-            <input class="form-control" type="text" autocomplete="off" wire:model.debounce.500ms="totalHours">
+            <input class="form-control" type="text" autocomplete="off" wire:model.defer="totalHours">
             @error('totalHours') <span class="text-danger error small">{{ $message }}</span> @enderror
         </fieldset>
     </div>	
@@ -282,7 +286,7 @@
         
         <fieldset class="form-group col-12 col-md-4">
             <label for="for_place">Lugar</label>
-            <input class="form-control" type="text" autocomplete="off" wire:model.debounce.500ms="place">
+            <input class="form-control" type="text" autocomplete="off" wire:model.defer="place">
             @error('place') <span class="text-danger error small">{{ $message }}</span> @enderror
         </fieldset>
     </div>
@@ -295,7 +299,7 @@
         <fieldset class="form-group col-12 col-md-4">
             <label for="for_objective">Jornada y Horarios</label>
             @if($bootstrap == 'v4')
-                <select id="for_activity_name" class="form-control" wire:model.debounce.500ms="workingDay">
+                <select id="for_activity_name" class="form-control" wire:model.defer="workingDay">
             @else
                 <select id="for_activity_name" class="form-select" wire:model.debounce.500ms="workingDay">
             @endif
@@ -315,7 +319,7 @@
 
         <fieldset class="form-group col-12 col-md-11">
             <label for="for_objective">Fundamento o Razones Técnicas para la asistencia del funcionario</label>
-            <input class="form-control" type="text" autocomplete="off" wire:model.debounce.500ms="technicalReasons">
+            <input class="form-control" type="text" autocomplete="off" wire:model.defer="technicalReasons">
             @error('technicalReasons') <span class="text-danger error small">{{ $message }}</span> @enderror
         </fieldset>
     </div>
@@ -326,11 +330,19 @@
                 14.
             </fieldset>
 
-            <fieldset class="form-group col-12 col-sm-8">
+            <fieldset class="form-group col-12 col-md-8">
                 <label for="forFileAttached" class="form-label">Medio de verificación comunal</label>
                 <input class="form-control" type="file" wire:model.defer="file" id="upload({{ $iterationFileClean }})">
                 <div wire:loading wire:target="file">Cargando archivo...</div>
                 @error('file') <span class="text-danger error small">{{ $message }}</span> @enderror
+            </fieldset>
+            
+            <fieldset class="form-group col-12 col-md-3">
+                <label for="for_municipal_profile">Perfil de Funcionario</label>
+                <select id="for_municipal_profile" class="form-control" wire:model.defer="municipalProfile">
+                    <option value="">Seleccionar</option>
+                    <option value="edf">Médico EDF</option>
+                </select>
             </fieldset>
         </div>
     @endif

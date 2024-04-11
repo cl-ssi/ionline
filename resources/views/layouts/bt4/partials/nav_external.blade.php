@@ -67,15 +67,16 @@
 </h6>
 <ul class="nav flex-column">
     <li class="nav-item">
-        <a class="nav-link {{ active('parameter.permission.index') }}" href="{{ route('trainings.external_create') }}">
+        <a class="nav-link {{ active('trainings.external_create') }}" href="{{ route('trainings.external_create') }}">
             <span data-feather="file-plus"></span>Crear Solicitud
         </a>
-        <a class="nav-link {{ active('parameter.permission.index') }}" href="{{ route('trainings.external_own_index') }}">
+        <a class="nav-link {{ active('trainings.external_own_index') }}" href="{{ route('trainings.external_own_index') }}">
             <span data-feather="list"></span>Mis Solicitudes
         </a>
     </li>
 </ul>
 --}}
+
 
 <ul class="nav flex-column">
     <!-- <li class="nav-item">

@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
 use Livewire\WithFileUploads;
+use App\Models\UserExternal;
+
 
 class TrainingCreate extends Component
 {
@@ -37,7 +39,8 @@ class TrainingCreate extends Component
 
     // public $trainingCosts, $typeTrainingCost, $otherTypeTrainingCost, $disabledInputOtherTypeTrainingCost = 'disabled',$exist, $expense;
 
-    public $file, $iterationFileClean = 0;
+    public $file, $iterationFileClean = 0, $municipalProfile, $userExternal = null, $searchedUserName, 
+    $disabledSearchedUserNameInput = 'disabled';
 
     public $bootstrap;
 
@@ -83,12 +86,13 @@ class TrainingCreate extends Component
             'technicalReasons.required'             => 'Debe ingresar Fundamento o Razones Técnicas.',
 
             //  MENSAJES PARA COSTOS
+            /*
             'trainingCosts.required'                => 'Debe ingresar al menos un tipo de costo',
             'typeTrainingCost.required'             => 'Ingresar un Tipo de Costo.',
             'otherTypeTrainingCost.required'        => 'Debe especificar un Tipo de Costo.',
             'exist.required'                        => 'Debe ingresar Sí/No.',
             'expense.required'                      => 'Debe ingresar $ monto.',
-            
+            */
         ];
     }
 
@@ -97,6 +101,36 @@ class TrainingCreate extends Component
         $estaments = Estament::orderBy('id')->get();
         $contractualConditions = ContractualCondition::orderBy('id')->get();
         $strategicAxes = StrategicAxes::orderBy('number', 'ASC')->get();
+
+        if(auth()->guard('external')->check() == true){
+            /*
+            if(User::find(UserExternal::where('id',Auth::guard('external')->user()->id)->first()->id)){
+                $this->userExternal = User::find(UserExternal::where('id',Auth::guard('external')->user()->id)->first()->id);
+                $this->searchedUser = $this->userExternal->id;
+                $this->searchedUserName = $this->userExternal->FullName;
+                $this->run = $this->userExternal->id;
+                $this->dv = $this->userExternal->dv;
+            }
+            else{
+                */
+                $this->userExternal = UserExternal::where('id',Auth::guard('external')->user()->id)->first();
+                $this->searchedUser = $this->userExternal;
+                $this->searchedUserId = $this->userExternal->id;
+                $this->searchedUserName = $this->userExternal->FullName;
+                $this->run = $this->userExternal->id;
+                $this->dv = $this->userExternal->dv;
+                $this->email = $this->userExternal->email;
+                $this->telephone = ($this->userExternal->phone_number) ? $this->userExternal->phone_number : null;
+            // }
+        }
+
+        /*
+        if(auth()->guard('external')->check() == true){
+            $this->userExternal = UserExternal::where('id',Auth::guard('external')->user()->id)->first();
+            $this->searchedUser = $this->userExternal->id;
+            $this->searchedUserName = $this->userExternal->FullName;
+        }
+        */
 
         return view('livewire.trainings.training-create', compact('estaments', 'contractualConditions', 'strategicAxes'));
     }
@@ -128,7 +162,7 @@ class TrainingCreate extends Component
             'workingDay'                                                                => 'required',
             'technicalReasons'                                                          => 'required',
 
-            'trainingCosts'                                                             => 'required'
+            // 'trainingCosts'                                                             => 'required'
             
         ]);
 
@@ -144,8 +178,8 @@ class TrainingCreate extends Component
                     'estament_id'               => $this->selectedEstament,
                     'degree'                    => $this->degree, 
                     'contractual_condition_id'  => $this->selectedContractualCondition,
-                    'organizational_unit_id'    => $this->searchedUser->organizational_unit_id,
-                    'establishment_id'          => $this->searchedUser->organizationalUnit->establishment_id,
+                    'organizational_unit_id'    => ($this->userExternal) ? null : $this->searchedUser->organizational_unit_id,
+                    'establishment_id'          => ($this->userExternal) ? null : $this->searchedUser->organizationalUnit->establishment_id,
                     'email'                     => $this->email,
                     'telephone'                 => $this->telephone,
                     'strategic_axes_id'         => $this->selectedStrategicAxis,
@@ -163,6 +197,7 @@ class TrainingCreate extends Component
                     'place'                     => $this->place,
                     'technical_reasons'         => $this->technicalReasons,
                     'feedback_type'             => $this->feedback_type,
+                    'municipal_profile'         => $this->municipalProfile,
                     'user_creator_id'           => auth()->id()
                 ]
             );
@@ -170,7 +205,23 @@ class TrainingCreate extends Component
             return $training;
         });
 
-        /* SE GUARDAN LOS COSTOS */
+        if($this->file){
+            $now = now()->format('Y_m_d_H_i_s');
+            $training->file()->updateOrCreate(
+                [
+                    'id' => ($training->file) ? $training->file->id : null,
+                ],
+                [
+                    'storage_path' => '/ionline/trainings/attachments/'.$now.'_training_'.$training->id.'.'.$this->file->extension(),
+                    'stored' => true,
+                    'name' => 'Mi adjunto.pdf',
+                    'stored_by_id' => auth()->id(),
+                ]
+            );
+            $training->file = $this->file->storeAs('/ionline/trainings/attachments', $now.'_meet_'.$training->id.'.'.$this->file->extension(), 'gcs');
+        }
+
+        /* SE GUARDAN LOS COSTOS 
         foreach($this->trainingCosts as $trainingCost){
             TrainingCost::updateOrCreate(
                 [
@@ -185,6 +236,7 @@ class TrainingCreate extends Component
                 ]
             );
         }
+        */
     }
 
     /* Set Allowance */
@@ -222,6 +274,7 @@ class TrainingCreate extends Component
     }
 
     public function addTrainingCost(){
+        /*
         $this->validateMessage = 'training';
 
         $validatedData = $this->validate([
@@ -239,21 +292,22 @@ class TrainingCreate extends Component
             'expense'       => $this->expense,
             'training_id'   => ($this->trainingToEdit) ? $this->trainingToEdit->id : null,
         ];
+        */
     }
 
     public function deleteTrainingCost($key){
+        /*
         $itemToDelete = $this->trainingCosts[$key];
 
         if($itemToDelete['id'] != ''){
             unset($this->trainingCosts[$key]);
-            /*
-            $objectToDelete = Grouping::find($itemToDelete['id']);
-            $objectToDelete->delete();
-            */
+            // $objectToDelete = Grouping::find($itemToDelete['id']);
+            // $objectToDelete->delete();
         }
         else{
             unset($this->trainingCosts[$key]);
         }
+        */
     }
 
     public function searchedUser(User $user){
@@ -267,7 +321,7 @@ class TrainingCreate extends Component
         $this->telephone = ($this->searchedUser->telephones) ? $this->searchedUser->telephones->first()->minsal : null;
     }
 
-    public function updatedactivityType($value){
+    public function updatedActivityType($value){
         if($value == 'otro'){
             $this->disabledInputOtherActivityType = '';
         }
@@ -278,6 +332,7 @@ class TrainingCreate extends Component
     }
 
     public function updatedtypeTrainingCost($value){
+        /*
         if($value == 'otro'){
             $this->disabledInputOtherTypeTrainingCost = '';
         }
@@ -285,5 +340,6 @@ class TrainingCreate extends Component
             $this->disabledInputOtherTypeTrainingCost = 'disabled';
             $this->otherActivityType = null;
         }
+        */
     }
 }
