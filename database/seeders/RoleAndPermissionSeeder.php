@@ -196,7 +196,7 @@ class RoleAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'RNI Database: admin', 'description' => 'Acceso a carga de base datos RNI']);
         Permission::create(['name' => 'RNI Database: view', 'description' => 'Acceso a descarga de base datos RNI']);
         Permission::create(['name' => 'Rrhh: birthday', 'description' => '']);
-        Permission::create(['name' => 'Rrhh: wellfair', 'description' => 'Permiso para el módulo de Bienestar']);
+        Permission::create(['name' => 'Rrhh: welfare', 'description' => 'Permiso para el módulo de Bienestar']);
         Permission::create(['name' => 'Service Request', 'description' => 'Módulo de honorarios (ex pukaña)']);
         Permission::create(['name' => 'Service Request: accept all requests', 'description' => 'Permite acepta todas las solicitudes de contrato de honorario']);
         Permission::create(['name' => 'Service Request: active contracts report', 'description' => '']);

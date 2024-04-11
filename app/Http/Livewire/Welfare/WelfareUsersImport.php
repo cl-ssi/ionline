@@ -39,7 +39,7 @@ class WelfareUsersImport extends Component
                 }
             }
 
-            User::query()->update(['welfare' => false]);
+            User::where('welfare', true)->update(['welfare' => false]);
             User::whereIn('id', $update_array)->update(['welfare' => true]);
 
         } catch (Exception $e) {
