@@ -12,10 +12,18 @@ class SearchTraining extends Component
 
     public function render()
     {
-        if($this->index == 'own'){
+        if(auth()->guard('external')->check() == true){
             return view('livewire.trainings.search-training', [
-                'trainings' => training::all()
+                'trainings' => training::latest()
+                    ->paginate(50)
             ]);
+        }
+        else{
+            if($this->index == 'own'){
+                return view('livewire.trainings.search-training', [
+                    'trainings' => training::all()
+                ]);
+            }
         }
 
         // return view('livewire.trainings.search-training');
