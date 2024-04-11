@@ -66,7 +66,8 @@ class RequirementReceivers extends Component
             }
         }
 
-        $this->to_ou_id = 1;
+        //$this->to_ou_id = 1;
+        $this->to_ou_id = '';
     }
 
     public function add()
