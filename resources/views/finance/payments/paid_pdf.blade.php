@@ -86,7 +86,7 @@
     </tr>
     <tr>
         <th>Periodo de Operación</td>
-        <td style="width:160px">{{ ucfirst($dte->tgrPayedDte?->fecha_generacion->formatLocalized('%B')) }}</td>
+        <td style="width:160px">{{ ucfirst($dte->tgrPayedDte?->fecha_generacion->monthName) }}</td>
         <th style="width:94px">Ejercicio Fiscal</th>
         <td style="width:100px">¿?</td>
         <th style="width:90px">ID</th>
