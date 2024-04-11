@@ -422,8 +422,9 @@
           // document.getElementById("div_destinatario").style.display = "block";
           // $("#div_tipo").removeClass("form-group col-12").addClass("form-group col-3");
 
-          $("#ou").val(1);
-          $('#organizational_unit_id').val(1);
+          $("#ou").val({{auth()->user()->organizational_unit_id}});
+          $('#organizational_unit_id').val({{auth()->user()->organizational_unit_id}});
+          //$('#organizational_unit_id').val(1);
           $("#ou").trigger("change", [true]);
         }else if(document.getElementById("status").value == "respondido" || document.getElementById("status").value == "reabierto"){
           @if($lastEvent <> null)
