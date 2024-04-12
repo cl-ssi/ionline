@@ -18,7 +18,7 @@ class Position extends Model implements Auditable
     use \OwenIt\Auditing\Auditable;
 
     protected $fillable = [
-        'profile_manage_id', 'degree', 'legal_quality_manage_id', 'salary', 'fundament_manage_id', 
+        'profile_manage_id', 'degree', 'legal_quality_manage_id', 'law', 'salary', 'fundament_manage_id', 
         'fundament_detail_manage_id', 'other_fundament', 'work_day', 'other_work_day',
         'charges_number','job_profile_file', 'request_replacement_staff_id'
     ];

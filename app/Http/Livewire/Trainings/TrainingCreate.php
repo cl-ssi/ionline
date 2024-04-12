@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Auth;
 use Livewire\WithFileUploads;
 use App\Models\UserExternal;
 use Illuminate\Support\Facades\Route;
-
+use Illuminate\Support\Facades\Storage;
 
 class TrainingCreate extends Component
 {
@@ -46,7 +46,7 @@ class TrainingCreate extends Component
     public $bootstrap;
 
     /* Training to edit */
-    public $trainingToEdit;
+    public $training;
     public $idTraining;
 
     /* trainingCost to edit 
@@ -103,8 +103,6 @@ class TrainingCreate extends Component
         $contractualConditions = ContractualCondition::orderBy('id')->get();
         $strategicAxes = StrategicAxes::orderBy('number', 'ASC')->get();
 
-        // dd(auth()->guard('external'));
-
         if(auth()->guard('external')->check() == true && Route::is('trainings.external_create') ){
             $this->userExternal = UserExternal::where('id',Auth::guard('external')->user()->id)->first();
             $this->searchedUser = $this->userExternal;
@@ -121,7 +119,7 @@ class TrainingCreate extends Component
 
     public function mount($trainingToEdit){
         if(!is_null($trainingToEdit)){
-            $this->trainingToEdit = $trainingToEdit;
+            $this->training = $trainingToEdit;
             $this->setTraining();
         }
     }
@@ -161,7 +159,7 @@ class TrainingCreate extends Component
         $training = DB::transaction(function () {
             $training = Training::updateOrCreate(
                 [
-                    'id'  => '',
+                    'id'  => ($this->idTraining) ? $this->idTraining : '',
                 ],
                 [
                     'status'                    => 'pending',
@@ -169,8 +167,8 @@ class TrainingCreate extends Component
                     'estament_id'               => $this->selectedEstament,
                     'degree'                    => $this->degree, 
                     'contractual_condition_id'  => $this->selectedContractualCondition,
-                    'organizational_unit_id'    => ($this->userExternal) ? null : $this->searchedUser->organizational_unit_id,
-                    'establishment_id'          => ($this->userExternal) ? null : $this->searchedUser->organizationalUnit->establishment_id,
+                    'organizational_unit_id'    => (auth()->guard('external')->check() == true) ? null : $this->searchedUser->organizational_unit_id,
+                    'establishment_id'          => (auth()->guard('external')->check() == true) ? null : $this->searchedUser->organizationalUnit->establishment_id,
                     'email'                     => $this->email,
                     'telephone'                 => $this->telephone,
                     'strategic_axes_id'         => $this->selectedStrategicAxis,
@@ -186,6 +184,7 @@ class TrainingCreate extends Component
                     'permission_date_start_at'  => $this->permissionDateStartAt, 
                     'permission_date_end_at'    => $this->permissionDateEndAt,
                     'place'                     => $this->place,
+                    'working_day'               => $this->workingDay,
                     'technical_reasons'         => $this->technicalReasons,
                     'feedback_type'             => $this->feedback_type,
                     'municipal_profile'         => $this->municipalProfile,
@@ -209,82 +208,43 @@ class TrainingCreate extends Component
                     'stored_by_id' => auth()->id(),
                 ]
             );
-            $training->file = $this->file->storeAs('/ionline/trainings/attachments', $now.'_meet_'.$training->id.'.'.$this->file->extension(), 'gcs');
+            $training->file = $this->file->storeAs('/ionline/trainings/attachments', $now.'_training_'.$training->id.'.'.$this->file->extension(), 'gcs');
         }
 
-        /* SE GUARDAN LOS COSTOS 
-        foreach($this->trainingCosts as $trainingCost){
-            TrainingCost::updateOrCreate(
-                [
-                    'id' => $trainingCost['id'],
-                ],
-                [
-                    'type'          => $trainingCost['type'], 
-                    'other_type'    => ($trainingCost['type'] != null) ? $trainingCost['other_type'] : null, 
-                    'exist'         => $trainingCost['exist'],
-                    'expense'       => $trainingCost['expense'],
-                    'training_id'   => ($this->trainingToEdit) ? $this->trainingToEdit->id : $training->id
-                ]
-            );
+        if(auth()->guard('external')->check() == true){
+            return redirect()->route('trainings.external_own_index');
         }
-        */
     }
 
     // Set Training
     private function setTraining(){
-        if($this->trainingToEdit){
-            $this->idTraining                   = $this->trainingToEdit->id;
-            $this->searchedUser                 = $this->trainingToEdit->userTraining;
+        if($this->training){
+            $this->idTraining                   = $this->training->id;
+            $this->searchedUser                 = $this->training->userTraining;
             $this->searchedUserName             = $this->searchedUser->FullName;
             $this->run                          = $this->searchedUser->id;
             $this->dv                           = $this->searchedUser->dv;
-            $this->selectedEstament             = $this->trainingToEdit->estament_id;
-            $this->degree                       = $this->trainingToEdit->degree;
-            $this->selectedContractualCondition = $this->trainingToEdit->contractual_condition_id;
-            $this->email                        = $this->trainingToEdit->email;
-            $this->telephone                    = $this->trainingToEdit->telephone;
-            $this->selectedStrategicAxis        = $this->trainingToEdit->strategic_axes_id;
-            $this->objective                    = $this->trainingToEdit->objective;
-            $this->activityName                 = $this->trainingToEdit->activity_name;
-            $this->activityType                 = $this->trainingToEdit->activity_type;
-            $this->otherActivityType            = $this->trainingToEdit->other_activity_type;
-            $this->mechanism                    = $this->trainingToEdit->mechanism;
-            $this->schuduled                    = $this->trainingToEdit->schuduled;
-            $this->activityDateStartAt          = $this->trainingToEdit->activity_date_start_at;
-            $this->activityDateEndAt            = $this->trainingToEdit->activity_date_end_at;
-            $this->totalHours                   = $this->trainingToEdit->total_hours;
-            $this->permissionDateStartAt        = $this->trainingToEdit->permission_date_start_at;
-            $this->permissionDateEndAt          = $this->trainingToEdit->permission_date_end_at;
-            $this->place                        = $this->trainingToEdit->place;
-            $this->workingDay                   = $this->trainingToEdit->working_day;
-            $this->technicalReasons             = $this->trainingToEdit->technical_reasons;
-
-
-            /*
-                    'estament_id'               => $this->selectedEstament,
-                    'degree'                    => $this->degree, 
-                    'contractual_condition_id'  => $this->selectedContractualCondition,
-                    'organizationl_unit_id'     => $this->searchedUser->organizational_unit_id,
-                    'establishment_id'          => $this->searchedUser->organizationalUnit->establishment_id,
-                    'email'                     => $this->email,
-                    'telephone'                 => $this->telephone,
-                    'strategic_axes_id'         => $this->selectedStrategicAxis,
-                    'objective'                 => $this->objective,
-                    'activity_name'             => $this->activityName,
-                    'activity_type'             => $this->activityType, 
-                    'other_activity_type'       => $this->otherActivityType,
-                    'mechanism'                 => $this->mechanism, 
-                    'schuduled'                 => $this->schuduled,
-                    'activity_date_start_at'    => $this->activityDateStartAt, 
-                    'activity_date_end_at'      => $this->activityDateEndAt, 
-                    'total_hours'               => $this->totalHours,
-                    'permission_date_start_at'  => $this->permissionDateStartAt, 
-                    'permission_date_end_at'    => $this->permissionDateEndAt,
-                    'place'                     => $this->place,
-                    'technical_reasons'         => $this->technicalReasons,
-                    'feedback_type'             => $this->feedback_type,
-                    'user_creator_id'           => auth()->id()
-            */
+            $this->selectedEstament             = $this->training->estament_id;
+            $this->degree                       = $this->training->degree;
+            $this->selectedContractualCondition = $this->training->contractual_condition_id;
+            $this->email                        = $this->training->email;
+            $this->telephone                    = $this->training->telephone;
+            $this->selectedStrategicAxis        = $this->training->strategic_axes_id;
+            $this->objective                    = $this->training->objective;
+            $this->activityName                 = $this->training->activity_name;
+            $this->activityType                 = $this->training->activity_type;
+            $this->otherActivityType            = $this->training->other_activity_type;
+            $this->mechanism                    = $this->training->mechanism;
+            $this->schuduled                    = $this->training->schuduled;
+            $this->activityDateStartAt          = $this->training->activity_date_start_at;
+            $this->activityDateEndAt            = $this->training->activity_date_end_at;
+            $this->totalHours                   = $this->training->total_hours;
+            $this->permissionDateStartAt        = $this->training->permission_date_start_at;
+            $this->permissionDateEndAt          = $this->training->permission_date_end_at;
+            $this->place                        = $this->training->place;
+            $this->workingDay                   = $this->training->working_day;
+            $this->technicalReasons             = $this->training->technical_reasons;
+            $this->municipalProfile             = $this->training->municipal_profile;
         }
     }
 
@@ -305,7 +265,7 @@ class TrainingCreate extends Component
             'other_type'    => $this->otherTypeTrainingCost,
             'exist'         => $this->exist,
             'expense'       => $this->expense,
-            'training_id'   => ($this->trainingToEdit) ? $this->trainingToEdit->id : null,
+            'training_id'   => ($this->training) ? $this->training->id : null,
         ];
         */
     }
@@ -356,5 +316,9 @@ class TrainingCreate extends Component
             $this->otherActivityType = null;
         }
         */
+    }
+
+    public function show_file(Training $training){
+        return Storage::disk('gcs')->response($training->file->storage_path);
     }
 }
