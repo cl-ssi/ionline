@@ -677,6 +677,17 @@ class User extends Authenticatable implements Auditable
         }
     }
 
+    public function getGender()
+    {
+        if(is_null($this->gender)) {
+            return "";
+        } else {
+            if($this->gender == "male"){ return "Masculino"; }
+            elseif($this->gender == "female"){ return "Femenino"; }
+            else{ return "Otro"; }
+        }
+    }
+
     /**
      * Retorna Usuarios según contenido en $searchText
      * Busqueda realizada en: nombres, apellidos, rut.

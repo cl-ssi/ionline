@@ -150,21 +150,28 @@
                     </div>
 
                     <div class="row">
-                        <fieldset class="form-group col-12 col-md-4">
+                        <fieldset class="form-group col-12 col-md-3">
                             <label for="for_rut">Rut</label>
                             <div>
                                 <input type="text" class="form-control rut" id="" disabled>
                             </div>
                         </fieldset>
 
-                        <fieldset class="form-group col-12 col-md-4">
+                        <fieldset class="form-group col-12 col-md-3">
                             <label for="for_patient">Funcionario</label>
                             <div>
                                 <input type="text" class="form-control patient" id="" disabled>
                             </div>
                         </fieldset>
 
-                        <fieldset class="form-group col-12 col-md-4">
+                        <fieldset class="form-group col-12 col-md-3">
+                            <label for="for_patient">Sexo</label>
+                            <div>
+                                <input type="text" class="form-control gender" id="" disabled>
+                            </div>
+                        </fieldset>
+
+                        <fieldset class="form-group col-12 col-md-3">
                             <label for="for_contact_number">Teléfono</label>
                             <div>
                                 <input type="text" class="form-control contact_number" disabled>
@@ -253,21 +260,28 @@
                 </div>
 
                 <div class="row">
-                    <fieldset class="form-group col-12 col-md-4">
+                    <fieldset class="form-group col-12 col-md-3">
                         <label for="for_rut">Rut</label>
                         <div>
                             <input type="text" class="form-control rut" id="" disabled>
                         </div>
                     </fieldset>
 
-                    <fieldset class="form-group col-12 col-md-4">
+                    <fieldset class="form-group col-12 col-md-3">
                         <label for="for_patient">Funcionario</label>
                         <div>
                             <input type="text" class="form-control patient" id="" disabled>
                         </div>
                     </fieldset>
 
-                    <fieldset class="form-group col-12 col-md-4">
+                    <fieldset class="form-group col-12 col-md-3">
+                            <label for="for_patient">Sexo</label>
+                            <div>
+                                <input type="text" class="form-control gender" id="" disabled>
+                            </div>
+                        </fieldset>
+
+                    <fieldset class="form-group col-12 col-md-3">
                         <label for="for_contact_number">Teléfono</label>
                         <div>
                             <input type="text" class="form-control contact_number" disabled>
@@ -353,21 +367,28 @@
             <div class="modal-body">
 
                 <div class="row">
-                    <fieldset class="form-group col-4">
+                    <fieldset class="form-group col-3">
                         <label for="for_rut">Rut</label>
                         <div>
                             <input type="text" class="form-control rut" id="" disabled>
                         </div>
                     </fieldset>
 
-                    <fieldset class="form-group col-4">
+                    <fieldset class="form-group col-3">
                         <label for="for_patient">Funcionario</label>
                         <div>
                             <input type="text" class="form-control patient" id="" disabled>
                         </div>
                     </fieldset>
 
-                    <fieldset class="form-group col-4">
+                    <fieldset class="form-group col-12 col-md-3">
+                        <label for="for_patient">Sexo</label>
+                        <div>
+                            <input type="text" class="form-control gender" id="" disabled>
+                        </div>
+                    </fieldset>
+
+                    <fieldset class="form-group col-3">
                         <label for="for_contact_number">Teléfono</label>
                         <div>
                             <input type="text" class="form-control contact_number" disabled>
@@ -464,6 +485,7 @@
                         $('.modalTitle').html(info.event.title);
                         $('.patient').val(info.event.extendedProps.patient_name);
                         $('.contact_number').val(info.event.extendedProps.contact_number);
+                        $('.gender').val(info.event.extendedProps.gender);
                         $('.openHours_id').val(info.event.id);
                         $('.finicio').val(info.event.start.toLocaleString());
                         $('.ftermino').val(info.event.end.toLocaleString());
