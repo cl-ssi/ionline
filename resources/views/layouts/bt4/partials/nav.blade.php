@@ -817,7 +817,7 @@
 
                         @can('dev')
                         <a class="dropdown-item bg-dark text-white" href="{{ route('ionline-plus') }}">
-                            <i class="fas fa-fw fa-exclamation-circle"></i> iOnline Plus
+                            <i class="bi icon-logo-ionline-white"></i> iOnline <span class="text-danger">Plus</span>
                         </a>
                         @endcan
 

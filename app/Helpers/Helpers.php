@@ -46,3 +46,11 @@ function runFormat($run)
 
     return number_format($id, 0, '', '.') . '-' . $dv;
 }
+
+function logoIonline()
+{
+    $path = public_path("images/logo-ionline.svg");
+    if (file_exists($path)) {
+        return file_get_contents($path);
+    }
+}
