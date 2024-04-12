@@ -37,6 +37,7 @@
                     <th scope="col">No agendadas</th>
                     <th scope="col" colspan="2" style="text-align: center;">Asiste</th>
                     <th scope="col" colspan="2" style="text-align: center;">No asiste</th>
+                    <th scope="col" colspan="2" style="text-align: center;">Cantidad</th>
                 </tr>
                 <tr>
                     <th scope="col"></th>
@@ -49,12 +50,14 @@
                     <th scope="col">Mujeres</th>
                     <th scope="col">Hombres</th>
                     <th scope="col">Mujeres</th>
+                    <th scope="col">Hombres</th>
+                    <th scope="col">Mujeres</th>
                 </tr>
             </thead>
         <tbody>
             @foreach($data as $profession_name => $item)
             <tr>
-                <td colspan="10"><b>{{$profession_name}}</b></td>
+                <td colspan="12"><b>{{$profession_name}}</b></td>
             </tr>
                 @foreach($item as $activity_type => $item2)
                     <tr>
@@ -68,6 +71,9 @@
                         <td style="text-align: center;">@if(array_key_exists('Asiste', $item2) && array_key_exists('female', $item2['Asiste'])) {{$item2['Asiste']['female']}} @endif</td>
                         <td style="text-align: center;">@if(array_key_exists('No_asiste', $item2) && array_key_exists('male', $item2['No_asiste'])) {{$item2['No_asiste']['male']}} @endif</td>
                         <td style="text-align: center;">@if(array_key_exists('No_asiste', $item2) && array_key_exists('female', $item2['No_asiste'])) {{$item2['No_asiste']['female']}} @endif</td>
+
+                        <td style="text-align: center;">@if(array_key_exists('Asiste_cantidad', $item2) && array_key_exists('male', $item2['Asiste_cantidad'])) {{count($item2['Asiste_cantidad']['male'])}} @endif</td>
+                        <td style="text-align: center;">@if(array_key_exists('Asiste_cantidad', $item2) && array_key_exists('female', $item2['Asiste_cantidad'])) {{count($item2['Asiste_cantidad']['female'])}} @endif</td>
                     </tr>
                 @endforeach
             @endforeach
