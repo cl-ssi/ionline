@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Auth;
 
 use Livewire\WithFileUploads;
 use App\Models\UserExternal;
+use Illuminate\Support\Facades\Route;
 
 
 class TrainingCreate extends Component
@@ -102,37 +103,27 @@ class TrainingCreate extends Component
         $contractualConditions = ContractualCondition::orderBy('id')->get();
         $strategicAxes = StrategicAxes::orderBy('number', 'ASC')->get();
 
-        if(auth()->guard('external')->check() == true){
-            /*
-            if(User::find(UserExternal::where('id',Auth::guard('external')->user()->id)->first()->id)){
-                $this->userExternal = User::find(UserExternal::where('id',Auth::guard('external')->user()->id)->first()->id);
-                $this->searchedUser = $this->userExternal->id;
-                $this->searchedUserName = $this->userExternal->FullName;
-                $this->run = $this->userExternal->id;
-                $this->dv = $this->userExternal->dv;
-            }
-            else{
-                */
-                $this->userExternal = UserExternal::where('id',Auth::guard('external')->user()->id)->first();
-                $this->searchedUser = $this->userExternal;
-                $this->searchedUserId = $this->userExternal->id;
-                $this->searchedUserName = $this->userExternal->FullName;
-                $this->run = $this->userExternal->id;
-                $this->dv = $this->userExternal->dv;
-                $this->email = $this->userExternal->email;
-                $this->telephone = ($this->userExternal->phone_number) ? $this->userExternal->phone_number : null;
-            // }
-        }
+        // dd(auth()->guard('external'));
 
-        /*
-        if(auth()->guard('external')->check() == true){
+        if(auth()->guard('external')->check() == true && Route::is('trainings.external_create') ){
             $this->userExternal = UserExternal::where('id',Auth::guard('external')->user()->id)->first();
-            $this->searchedUser = $this->userExternal->id;
+            $this->searchedUser = $this->userExternal;
+            $this->searchedUserId = $this->userExternal->id;
             $this->searchedUserName = $this->userExternal->FullName;
+            $this->run = $this->userExternal->id;
+            $this->dv = $this->userExternal->dv;
+            $this->email = $this->userExternal->email;
+            $this->telephone = ($this->userExternal->phone_number) ? $this->userExternal->phone_number : null;
         }
-        */
 
         return view('livewire.trainings.training-create', compact('estaments', 'contractualConditions', 'strategicAxes'));
+    }
+
+    public function mount($trainingToEdit){
+        if(!is_null($trainingToEdit)){
+            $this->trainingToEdit = $trainingToEdit;
+            $this->setTraining();
+        }
     }
 
     public function save(){
@@ -239,13 +230,37 @@ class TrainingCreate extends Component
         */
     }
 
-    /* Set Allowance */
+    // Set Training
     private function setTraining(){
         if($this->trainingToEdit){
-            $this->idTraining   = $this->trainingToEdit->id;
+            $this->idTraining                   = $this->trainingToEdit->id;
+            $this->searchedUser                 = $this->trainingToEdit->userTraining;
+            $this->searchedUserName             = $this->searchedUser->FullName;
+            $this->run                          = $this->searchedUser->id;
+            $this->dv                           = $this->searchedUser->dv;
+            $this->selectedEstament             = $this->trainingToEdit->estament_id;
+            $this->degree                       = $this->trainingToEdit->degree;
+            $this->selectedContractualCondition = $this->trainingToEdit->contractual_condition_id;
+            $this->email                        = $this->trainingToEdit->email;
+            $this->telephone                    = $this->trainingToEdit->telephone;
+            $this->selectedStrategicAxis        = $this->trainingToEdit->strategic_axes_id;
+            $this->objective                    = $this->trainingToEdit->objective;
+            $this->activityName                 = $this->trainingToEdit->activity_name;
+            $this->activityType                 = $this->trainingToEdit->activity_type;
+            $this->otherActivityType            = $this->trainingToEdit->other_activity_type;
+            $this->mechanism                    = $this->trainingToEdit->mechanism;
+            $this->schuduled                    = $this->trainingToEdit->schuduled;
+            $this->activityDateStartAt          = $this->trainingToEdit->activity_date_start_at;
+            $this->activityDateEndAt            = $this->trainingToEdit->activity_date_end_at;
+            $this->totalHours                   = $this->trainingToEdit->total_hours;
+            $this->permissionDateStartAt        = $this->trainingToEdit->permission_date_start_at;
+            $this->permissionDateEndAt          = $this->trainingToEdit->permission_date_end_at;
+            $this->place                        = $this->trainingToEdit->place;
+            $this->workingDay                   = $this->trainingToEdit->working_day;
+            $this->technicalReasons             = $this->trainingToEdit->technical_reasons;
+
+
             /*
-            'status'                    => 'pending',
-                    'user_training_id'          => $this->searchedUser->id,
                     'estament_id'               => $this->selectedEstament,
                     'degree'                    => $this->degree, 
                     'contractual_condition_id'  => $this->selectedContractualCondition,

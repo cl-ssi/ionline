@@ -51,7 +51,7 @@
                     <td class="text-center" width="7%">{{ $training->activity_date_start_at }}</td>
                     <td class="text-center" width="7%">{{ $training->activity_date_end_at }}</td>
                     <td width="8%" class="text-center">
-                        <a href="{{-- route('meetings.edit', $meeting) --}}"
+                        <a href="{{ route('trainings.external_edit', $training) }}"
                             class="btn btn-outline-secondary btn-sm">
                             <i class="fas fa-edit"></i> 
                         </a>

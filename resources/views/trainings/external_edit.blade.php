@@ -6,19 +6,20 @@
 
 <div class="row mt-3">
     <div class="col-sm-5">
-        <h4 class="mt-2 mb-3">Nueva Capacitación:</h4>
+        <h4 class="mt-2 mb-3">Mi Capacitación ID: {{ $training->id }}</h4>
     </div>
 </div>
 
-<br />
+<br>
 
 <div class="col-sm">
     @livewire('trainings.training-create', [
-        'trainingToEdit'    => null,
+        'trainingToEdit'    => $training,
         'form'              => 'create',
         'bootstrap'         => 'v4'
     ])
 </div>
+
 
 @endsection
 

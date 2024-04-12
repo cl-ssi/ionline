@@ -73,6 +73,12 @@ class TrainingController extends Controller
         //
     }
 
+    // Edicion en plataforma externa
+    public function external_edit(Training $training)
+    {
+        return view('trainings.external_edit', compact('training'));
+    }
+
     /**
      * Update the specified resource in storage.
      *
