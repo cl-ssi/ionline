@@ -14,7 +14,7 @@
 
         <div class="col-12 text-center bg-light">
             <h1 class="color_azul_gob">
-                <b><i class="icon-logo-ionline-azul"></i>Online</b>
+                <b>Online</b>
             </h1>
             <h3 class="color_rojo_gob">{{ env('APP_SS', 'Servicio de Salud') }}</h3>
         </div>
