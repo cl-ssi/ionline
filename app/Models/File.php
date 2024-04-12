@@ -5,10 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class File extends Model
 {
-    use HasFactory;
+    use SoftDeletes;
 
     /**
      * Get the file model.
@@ -34,8 +35,8 @@ class File extends Model
     //     'input_title' => 'Archivo pulento', // (opcional)
     //     'input_name' => 'reception', // (opcional)
     //     'required' => false, // (Opcional)
-    //     'valid_types' => json_encode(["pdf", "xls"]),
-    //     'max_file_size' => 10,
+    //     'valid_types' => json_encode(["pdf", "xls"]), (Opcional)
+    //     'max_file_size' => 10, (Opcional)
     //     'stored_by_id' => 15287582,
     // ]);
 

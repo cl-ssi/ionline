@@ -27,7 +27,6 @@ use App\Http\Controllers\DigitalSignatureController;
 use App\Http\Controllers\Documents\DocDigital\DocDigitalController;
 use App\Http\Controllers\Documents\DocumentController;
 use App\Http\Controllers\Documents\ParteController;
-use App\Http\Controllers\Documents\ParteFileController;
 use App\Http\Controllers\Documents\Partes\NumerationController;
 use App\Http\Controllers\Documents\Sign\SignatureController as SignSignatureController;
 use App\Http\Controllers\Documents\SignatureController;
@@ -1376,7 +1375,7 @@ Route::prefix('documents')->as('documents.')->middleware(['auth', 'must.change.p
         Route::post('/', [ParteController::class, 'store'])->name('store');
         Route::get('/create', [ParteController::class, 'create'])->name('create');
         
-        Route::delete('/files/{file}', [ParteFileController::class, 'destroy'])->name('files.destroy');
+        Route::delete('/files/{file}', [ParteController::class, 'fileDestroy'])->name('files.destroy');
         Route::get('/inbox', [ParteController::class, 'inbox'])->name('inbox');
 
         Route::get('/', Inbox::class)->name('index');

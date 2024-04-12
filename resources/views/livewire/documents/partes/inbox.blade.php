@@ -194,32 +194,28 @@
 
                     @endforeach
 
+                    @if($parte->signaturesFile)
+
+                        <a href="{{ route('documents.signatures.showPdf',[$parte->signatures_file_id, time()])}}"
+                            target="_blank" title="Documento firmado">
+                            <i class="fas fa-signature"></i>
+                        </a>
+
+                    @endif
+
                     @if($parte->files->count()>0)
                         @foreach($parte->files as $file)
-                        @if($file->signatureFile)
-                        @if($file->signatureFile->HasAllFlowsSigned)
-                            {{--<a href="https://storage.googleapis.com/{{env('APP_ENV') === 'production' ? 'saludiquique-storage' : 'saludiquique-dev'}}/{{$file->signatureFile->signed_file}}"  target="_blank" title="Documento Firmado">
-                            <i class="fas fa-signature"></i>
-                            </a>--}}
-
-                            <a href="{{ route('documents.signatures.showPdf',[$file->signatureFile->id, time()])}}"
-                                target="_blank" title="Documento firmado">
-                                <i class="fas fa-signature"></i>
-                            </a>
-
-                        @else
-                            Firmas Pend.
-                        @endif
-                        @else
+                        
                             <a href="{{ route('documents.partes.download', $file->id) }}"
                                 target="_blank"
                                 data-toggle="tooltip" data-placement="top"
                                 data-original-title="{{ $file->name }} ">
                                 <i class="fas fa-paperclip"></i>
                             </a>
-                        @endif
+
                         @endforeach
                     @endif
+
                     @if($parte->physical_format)
                     <i class="fas fa-folder" title="Parte requiere documento físico al derivar"></i>
                     @endif

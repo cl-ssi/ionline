@@ -106,9 +106,17 @@
 
 <h5 class="mb-3"><span class="text-info">Req {{ $requirement->id}}:</span> {{ $requirement->subject }} </h5>
 
-@if($requirement->parte <> null)
+@if($requirement->parte)
+    <h6 class="mb-3">Requerimiento creado en base al parte número: {{ $requirement->parte->correlative }}
+
+    @if($requirement->parte->signaturesFile)
+        <a href="{{ route('documents.signatures.showPdf',[$requirement->parte->signatures_file_id, time()])}}"
+            target="_blank" title="Documento firmado">
+            <i class="fas fa-signature"></i>
+        </a>
+    @endif
+
     @if($requirement->parte->files != null)
-        <h6 class="mb-3">Requerimiento creado en base al parte número: {{ $requirement->parte->correlative }}
         @foreach($requirement->parte->files as $file)
             <a href="{{ route('documents.partes.download', $file->id) }}"
                 target="_blank" data-toggle="tooltip" data-placement="top"
@@ -116,9 +124,13 @@
                 <i class="fas fa-paperclip"></i>
             </a>
         @endforeach
-        </h6>
     @endif
+    
+    </h6>
 @endif
+
+
+
 
 @if($requirement->limit_at)
 <h6 class="mb-3 text-danger"> 

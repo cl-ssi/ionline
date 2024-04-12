@@ -26,7 +26,8 @@ use App\Models\ServiceRequests\Fulfillment;
 use App\Models\Documents\SignaturesFlow;
 use App\Models\Documents\SignaturesFile;
 use App\Models\Documents\Signature;
-use App\Models\Documents\ParteFile;
+// use App\Models\Documents\ParteFile;
+use App\Models\File;
 use App\Models\Documents\Parte;
 use App\Models\Documents\Document;
 use App\Models\Agreements\Agreement;
@@ -550,15 +551,15 @@ class SignatureController extends Controller
                     Storage::disk('gcs')->delete($signaturesFile->signed_file);
                 }
 
-                /* borro partes files y partes */
-                if ($signaturesFile->parteFile) {
-                    if($signaturesFile->parteFile->event) {
-                        $signaturesFile->parteFile->event->delete();
+                // borro files asociados
+                if($signaturesFile->parte){
+                    if($signaturesFile->parte->files){
+                        $signaturesFile->parte->files()->delete();
                     }
-                    if($signaturesFile->parteFile) {
-                        $signaturesFile->parteFile->delete();
-                    }
+
+                    $signaturesFile->parte->delete();
                 }
+                
                 $signaturesFile->delete();
 
             }

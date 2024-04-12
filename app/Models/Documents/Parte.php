@@ -10,6 +10,14 @@ use App\Models\Establishment;
 use App\Models\Documents\Type;
 use App\Models\Documents\Correlative;
 
+use App\Models\User;
+use App\Rrhh\OrganizationalUnit;
+use App\Models\File;
+use App\Models\Documents\SignaturesFile;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\hasMany;
+use Illuminate\Database\Eloquent\Relations\belongsTo;
+
 class Parte extends Model
 {
     use SoftDeletes;
@@ -32,6 +40,9 @@ class Parte extends Model
         'physical_format',
         'received_by_id',
         'establishment_id',
+        'organizational_unit_id',
+        'user_id',
+        'signatures_file_id',
         'reception_date',
         'viewed_at',
     ];
@@ -63,9 +74,9 @@ class Parte extends Model
         return $this->hasMany('\App\Models\Requirements\Requirement');
     }
 
-    public function files()
+    public function files(): MorphMany
     {
-        return $this->hasMany('App\Models\Documents\ParteFile');
+        return $this->morphMany(File::class, 'fileable');
     }
 
     public function establishment()
@@ -78,6 +89,20 @@ class Parte extends Model
         return $this->belongsTo(Type::class)->withTrashed();
     }
 
+    public function user(): belongsTo
+    {
+        return $this->belongsTo(User::class)->withTrashed();
+    }
+
+    public function organizationalUnit(): belongsTo
+    {
+        return $this->belongsTo(organizationalUnit::class)->withTrashed();
+    }
+
+    public function signaturesFile(): belongsTo
+    {
+        return $this->belongsTo(SignaturesFile::class)->withTrashed();
+    }
 
     public function setCorrelative()
     {
@@ -143,37 +168,35 @@ class Parte extends Model
         }
 
         foreach ($ids_establecimientos as $id) {
-            $parte = Parte::create([
-                'entered_at' => Carbon::now(),
-                'type_id' => $signaturesFlow->signature->type_id,
-                'date' => $signaturesFlow->signature->request_date,
-                'subject' => $signaturesFlow->signature->subject,
-                'establishment_id' => $id,
-                'origin' => $signaturesFlow->signature->organizationalUnit->name . ' (Parte generado desde Solicitud de Firma N°' . $signaturesFlow->signature->id . ' por ' . $signaturesFlow->signature->responsable->fullname . ')',
-            ]);
-            $parte->setCorrelative();
-            $parte->save();
 
             $document = SignaturesFile::where('signature_id', $signaturesFlow->signature->id)
                 ->where('file_type', 'documento')
                 ->first();
 
-            ParteFile::create([
-                'parte_id' => $parte->id,
-                'file' => $document->file,
-                'name' => $document->fileName,
-                'signature_file_id' => $document->id,
+            $parte = Parte::create([
+                'entered_at' => now(),
+                'type_id' => $signaturesFlow->signature->type_id,
+                'date' => $signaturesFlow->signature->request_date,
+                'subject' => $signaturesFlow->signature->subject,
+                'user_id' => $signaturesFlow->user_id,
+                'organizational_unit_id' => $signaturesFlow->signature->organizationalUnit->id,
+                'establishment_id' => $id,
+                'origin' => $signaturesFlow->signature->organizationalUnit->name . ' (Parte generado desde Solicitud de Firma N°' . $signaturesFlow->signature->id . ' por ' . $signaturesFlow->signature->responsable->fullname . ')',
+                'signatures_file_id' => $document->id
             ]);
+            $parte->setCorrelative();
+            $parte->save();
 
             $signaturesFiles = SignaturesFile::where('signature_id', $signaturesFlow->signature->id)
             ->where('file_type', 'anexo')
             ->get();
 
             foreach ($signaturesFiles as $key => $sf) {
-                ParteFile::create([
-                    'parte_id' => $parte->id,
-                    'file' => $sf->file,
+                $parte->files()->create([
+                    'storage_path' => $sf->file,
+                    'stored' => true,
                     'name' => $sf->fileName,
+                    'stored_by_id' => $parte->user_id,
                 ]);
             }
         }
