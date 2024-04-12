@@ -330,14 +330,23 @@
                 14.
             </fieldset>
 
-            <fieldset class="form-group col-12 col-md-8">
+            <fieldset class="form-group col-12 col-md-5">
                 <label for="forFileAttached" class="form-label">Medio de verificación comunal</label>
                 <input class="form-control" type="file" wire:model.defer="file" id="upload({{ $iterationFileClean }})">
                 <div wire:loading wire:target="file">Cargando archivo...</div>
                 @error('file') <span class="text-danger error small">{{ $message }}</span> @enderror
             </fieldset>
             
-            <fieldset class="form-group col-12 col-md-3">
+            
+            <fieldset class="form-group col-12 col-md-2">
+                @if(Route::is('trainings.external_edit'))
+                    <a class="btn btn-primary mt-4" href="{{ route('trainings.show_file', $training) }}" target="_blank">
+                        <i class="fas fa-paperclip fa-fw"></i> Ver adjunto
+                    </a>
+                @endif
+            </fieldset>
+            
+            <fieldset class="form-group col-12 col-md-4">
                 <label for="for_municipal_profile">Perfil de Funcionario</label>
                 <select id="for_municipal_profile" class="form-control" wire:model.defer="municipalProfile">
                     <option value="">Seleccionar</option>

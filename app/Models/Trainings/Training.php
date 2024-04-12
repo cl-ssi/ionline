@@ -42,6 +42,7 @@ class Training extends Model implements Auditable
         'working_day',
         'technical_reasons',
         'feedback_type',
+        'municipal_profile',
         'user_creator_id'
     ];
 
@@ -50,7 +51,7 @@ class Training extends Model implements Auditable
             return $this->belongsTo('App\Models\UserExternal', 'user_training_id');
         }
         else{
-            return $this->belongsTo('App\User', 'user_training_id')->withTrashed();
+            return $this->belongsTo('App\Models\User', 'user_training_id')->withTrashed();
         }
     }
 

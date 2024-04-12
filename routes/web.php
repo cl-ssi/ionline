@@ -200,6 +200,7 @@ use App\Http\Controllers\Summary\SummaryFileController;
 use App\Http\Controllers\Summary\TemplateController as SummaryTemplateController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\Trainings\TrainingController as TngTrainingController;
+use App\Http\Livewire\Trainings\TrainingCreate;
 use App\Http\Controllers\Unspsc\ClassController;
 use App\Http\Controllers\Unspsc\FamilyController;
 use App\Http\Controllers\Unspsc\ProductController;
@@ -2432,7 +2433,7 @@ Route::prefix('meetings')->as('meetings.')->middleware(['auth', 'must.change.pas
 Route::prefix('trainings')->as('trainings.')->middleware(['auth', 'must.change.password'])->group(function () {
     Route::get('/', [TngTrainingController::class, 'index'])->name('index');
     Route::get('create', [TngTrainingController::class, 'create'])->name('create');
-    Route::get('{meeting}/edit', [TngTrainingController::class, 'edit'])->name('edit');
+    Route::get('/{training}/show_file', [TrainingCreate::class, 'show_file'])->name('show_file');
 });
 
 
@@ -2837,6 +2838,7 @@ Route::group(['middleware' => 'auth:external'], function () {
         Route::get('/external_own_index', [TngTrainingController::class, 'external_own_index'])->name('external_own_index');
         Route::get('/external_create', [TngTrainingController::class, 'external_create'])->name('external_create');
         Route::get('{training}/external_edit', [TngTrainingController::class, 'external_edit'])->name('external_edit');
+        Route::get('/{training}/show_file', [TrainingCreate::class, 'show_file'])->name('show_file');
     });
 });
 
