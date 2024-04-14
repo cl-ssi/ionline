@@ -71,7 +71,7 @@
                     <a href="{{ route('documents.edit', $agreement->document_id) }}" class="nav-link text-secondary"><i class="fas fa-file-alt"></i> Editar borrador Convenio</a> 
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('documents.show', $agreement->document_id) }}" class="nav-link text-secondary"><i class="fas fa-eye"></i> Visualizar borrador Convenio</a> 
+                    <a href="{{ route('documents.show', $agreement->document_id) }}" class="nav-link text-secondary"><i class="fas fa-eye"></i> Ver borrador Convenio</a> 
                 </li>
             @endif
         @endif
@@ -109,20 +109,28 @@
             </li>
             @if($canEdit)
                 @if($agreement->fileToSign?->HasAllFlowsSigned)
-                <li class="nav-item">
+                {{--<li class="nav-item">
                     <a href="#" class="nav-link text-secondary" data-toggle="modal"
                                     data-target="#selectSignerRes" data-formmethod="POST"
                                     data-formaction="{{ route('agreements.createWordRes'. ($agreement->program_id == 3 ? 'Withdrawal' : ($agreement->program_id == 50 ? 'Collaboration' : '')), $agreement )}}">
                                     <i class="fas fa-file-download"></i> Descargar borrador Resolución</a>
-                </li>
-                {{--
+                </li>--}}
+                
                 <li class="nav-item">
                 <a href="#" class="nav-link text-secondary" data-toggle="modal"
                     data-target="#selectSignerRes" data-formmethod="POST"
                     data-formaction="{{ route('agreements.createResDocument', $agreement )}}">
                     <i class="fas fa-file-medical"></i> Generar borrador Resolución Convenio</a>
                 </li>
-                --}}
+
+                    @if($agreement->res_document_id != null)
+                    <li class="nav-item">
+                        <a href="{{ route('documents.edit', $agreement->res_document_id) }}" class="nav-link text-secondary"><i class="fas fa-file-alt"></i> Editar borrador Resolución Convenio</a> 
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('documents.show', $agreement->res_document_id) }}" class="nav-link text-secondary"><i class="fas fa-eye"></i> Ver borrador Resolución Convenio</a> 
+                    </li>
+                    @endif
                 @endif
             @endif
         @endif

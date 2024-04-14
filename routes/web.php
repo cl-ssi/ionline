@@ -778,6 +778,7 @@ Route::prefix('agreements')->as('agreements.')->middleware(['auth', 'must.change
     
     // Convenios 2024
     Route::post('/createDocument/{agreement}', [AgreementController::class, 'createDocument'])->name('createDocument');
+    Route::post('/createResDocument/{agreement}', [AgreementController::class, 'createResDocument'])->name('createResDocument');
 });
 /** Fin Agreements */
 

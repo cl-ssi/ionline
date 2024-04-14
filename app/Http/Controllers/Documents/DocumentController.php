@@ -126,7 +126,10 @@ class DocumentController extends Controller
 
         if ($request->has('agreement_id')) {
             $agreement = Agreement::find($request->agreement_id);
-            $agreement->update(['document_id' => $document->id]);
+            if($document->type_id == Type::where('name','Resolución')->first()->id)
+                $agreement->update(['res_document_id' => $document->id]);
+            else
+                $agreement->update(['document_id' => $document->id]);
         }
 
         return redirect()->route('documents.index');
