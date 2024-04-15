@@ -42,7 +42,7 @@
                     <th scope="col" colspan="2" style="text-align: center;">Asiste</th>
                     <th scope="col" colspan="2" style="text-align: center;">No asiste</th>
                     <th scope="col" colspan="2" style="text-align: center;">Cantidad</th>
-                    <th scope="col" colspan="2" style="text-align: center;">Cantidad (>2)</th>
+                    <th scope="col" colspan="2" style="text-align: center;">Cantidad (>=2)</th>
                 </tr>
                 <tr>
                     <th scope="col"></th>
