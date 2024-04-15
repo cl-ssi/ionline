@@ -557,7 +557,10 @@ class SignatureController extends Controller
                         $signaturesFile->parte->files()->delete();
                     }
 
-                    $signaturesFile->parte->delete();
+                    // si no tiene sgr asociado, se permite la eliminación del parte.
+                    if($signaturesFile->parte->requirements->isEmpty()){
+                        $signaturesFile->parte->delete();
+                    }
                 }
                 
                 $signaturesFile->delete();
