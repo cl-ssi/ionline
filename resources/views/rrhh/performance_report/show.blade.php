@@ -145,6 +145,24 @@
         </tbody>
     </table>
 
+    <br><br><br><br>
+    <table class="tabla">
+        <thead>
+            <tr>
+                <th colspan="3">Observaciones <small>(opcional)</small></th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td colspan="3">Observación Usuario Creador: {{ $report->creator_user_observation }}</td>
+            </tr>
+            <tr>
+                <td colspan="3">Observación Funcionario Receptor: {{ $report->received_user_observation }}</td>
+            </tr>
+        </tbody>
+    </table>
+
     
     
     
