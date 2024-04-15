@@ -28,6 +28,7 @@ class Meeting extends Model implements Auditable
         'date',
         'type',
         'subject',
+        'description',
         'mechanism',
         'start_at',
         'end_at',

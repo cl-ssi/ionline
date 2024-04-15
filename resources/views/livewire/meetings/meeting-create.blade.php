@@ -37,6 +37,14 @@
             @error('subject') <span class="text-danger error small">{{ $message }}</span> @enderror
         </fieldset>
     </div>
+
+    <div class="row g-3 mb-3">
+        <fieldset class="form-group col-12 col-md-12">
+            <label for="for_description">Descripción</label>
+            <textarea class="form-control" rows="3" wire:model.defer="description"></textarea>
+            @error('description') <span class="text-danger error small">{{ $message }}</span> @enderror
+        </fieldset>
+    </div>
     
     <div class="row g-3 mb-3">
         <fieldset class="col-12 col-md-4">
