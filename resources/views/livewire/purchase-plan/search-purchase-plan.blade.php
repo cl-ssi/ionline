@@ -2,11 +2,26 @@
     @if($index == 'own' || $index == 'all')
         <div class="card card-body small">
             <h5 class="mb-3"><i class="fas fa-search"></i> Buscar:</h5>
-            <fieldset class="form-group col-12 col-md-1">
-                <label for="for_id">ID</label>
-                <input class="form-control form-control-sm" type="number" name="id_search" autocomplete="off" 
-                    placeholder="001" wire:model.debounce.500ms="selectedId">
-            </fieldset>
+            <div class="row">
+                <fieldset class="form-group col-12 col-md-1">
+                    <label for="for_id">ID</label>
+                    <input class="form-control form-control-sm" type="number" name="id_search" autocomplete="off" 
+                        placeholder="001" wire:model.debounce.500ms="selectedId">
+                </fieldset>
+                
+                <fieldset class="form-group col-12 col-md-2">
+                    <label for="for_status_search">Estado Formulario</label>
+                    <select name="status_search" class="form-select form-select-sm" wire:model.debounce.500ms="selectedStatus">
+                        <option value="">Seleccione...</option>
+                        <option value="save">Guardado</option>
+                        <option value="sent">Enviado</option>
+                        <option value="approved">Aprobado</option>
+                        <option value="rejected">Rechazado</option>
+                        <option value="published">Publicado</option>
+                    </select>
+                </fieldset>
+
+            </div>
         </div>
     @endif
 

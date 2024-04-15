@@ -154,11 +154,16 @@ class PurchasePlan extends Model implements Auditable
     }
 
     public function scopeSearch(
-        $query, $id_search){
-        if ($id_search){
+        $query, $id_search, $status_search){
+        if ($id_search OR $status_search){
             if ($id_search != '') {
                 $query->where(function ($q) use ($id_search) {
                     $q->where('id', $id_search);
+                });
+            }
+            if ($status_search != '') {
+                $query->where(function ($q) use ($status_search) {
+                    $q->where('status', $status_search);
                 });
             }
         }
