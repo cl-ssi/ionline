@@ -29,6 +29,10 @@
         @if($data)
         <table class="table table-striped">
             <thead>
+                <!-- <tr>
+                    <th scope="col" colspan="12" style="text-align: center;"></th>
+                    <th scope="col">(+ de 2)</th>
+                </tr> -->
                 <tr>
                     <th scope="col">Especialidad</th>
                     <th scope="col">T.Actividad</th>
@@ -38,6 +42,7 @@
                     <th scope="col" colspan="2" style="text-align: center;">Asiste</th>
                     <th scope="col" colspan="2" style="text-align: center;">No asiste</th>
                     <th scope="col" colspan="2" style="text-align: center;">Cantidad</th>
+                    <th scope="col" colspan="2" style="text-align: center;">Cantidad (>2)</th>
                 </tr>
                 <tr>
                     <th scope="col"></th>
@@ -46,6 +51,8 @@
                     <th scope="col">Hombres</th>
                     <th scope="col">Mujeres</th>
                     <th scope="col"></th>
+                    <th scope="col">Hombres</th>
+                    <th scope="col">Mujeres</th>
                     <th scope="col">Hombres</th>
                     <th scope="col">Mujeres</th>
                     <th scope="col">Hombres</th>
@@ -57,7 +64,7 @@
         <tbody>
             @foreach($data as $profession_name => $item)
             <tr>
-                <td colspan="12"><b>{{$profession_name}}</b></td>
+                <td colspan="14"><b>{{$profession_name}}</b></td>
             </tr>
                 @foreach($item as $activity_type => $item2)
                     <tr>
@@ -74,6 +81,9 @@
 
                         <td style="text-align: center;">@if(array_key_exists('Asiste_cantidad', $item2) && array_key_exists('male', $item2['Asiste_cantidad'])) {{count($item2['Asiste_cantidad']['male'])}} @endif</td>
                         <td style="text-align: center;">@if(array_key_exists('Asiste_cantidad', $item2) && array_key_exists('female', $item2['Asiste_cantidad'])) {{count($item2['Asiste_cantidad']['female'])}} @endif</td>
+
+                        <td style="text-align: center;">@if(array_key_exists('Asiste_cantidad', $item2) && array_key_exists('male', $item2['Asiste_cantidad'])) {{ count(array_filter($item2['Asiste_cantidad']['male'], function($value) { return $value > 1; })) ?? 0 }} @else 0 @endif</td>
+                        <td style="text-align: center;">@if(array_key_exists('Asiste_cantidad', $item2) && array_key_exists('female', $item2['Asiste_cantidad'])) {{ count(array_filter($item2['Asiste_cantidad']['female'], function($value) { return $value > 1; })) ?? 0 }} @else 0 @endif</td>
                     </tr>
                 @endforeach
             @endforeach

@@ -28,7 +28,6 @@ class SirsapReport extends Component
                                 return $q->where('profesional_id',auth()->user()->id);
                             })
                             ->get();
-
                             
                             // dd($openHours);
                             // se deben agregar los tipos de actividad/género en el reporte
@@ -39,7 +38,9 @@ class SirsapReport extends Component
                 // $this->data[$openHour->profession->name][$openHour->activityType->name]['Agendadas'][($openHour->patient->gender == null ? 'Otro' : $openHour->patient->gender)] = 0; 
                 $this->data[$openHour->profession->name][$openHour->activityType->name]['Asiste'][($openHour->patient->gender == null ? 'Otro' : $openHour->patient->gender)] = 0; 
                 // $this->data[$openHour->profession->name][$openHour->activityType->name]['Asiste'][($openHour->patient->gender == null ? 'Otro' : $openHour->patient->gender)] = 0;
-                $this->data[$openHour->profession->name][$openHour->activityType->name]['Asiste_cantidad'][($openHour->patient->gender == null ? 'Otro' : $openHour->patient->gender)][$openHour->patient->id] = 0;
+                if($openHour->assistance == 1){
+                    $this->data[$openHour->profession->name][$openHour->activityType->name]['Asiste_cantidad'][($openHour->patient->gender == null ? 'Otro' : $openHour->patient->gender)][$openHour->patient->id] = 0;
+                }
                 $this->data[$openHour->profession->name][$openHour->activityType->name]['No_asiste'][($openHour->patient->gender == null ? 'Otro' : $openHour->patient->gender)] = 0; 
                 // $this->data[$openHour->profession->name][$openHour->activityType->name]['No_asiste'][($openHour->patient->gender == null ? 'Otro' : $openHour->patient->gender)] = 0; 
             }
