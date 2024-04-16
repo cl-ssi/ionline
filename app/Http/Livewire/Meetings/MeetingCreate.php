@@ -119,12 +119,12 @@ class MeetingCreate extends Component
             $now = now()->format('Y_m_d_H_i_s');
             $meeting->file()->updateOrCreate(
                 [
-                    'id' => $meeting->file->id ? $meeting->file->id : null,
+                    'id' => $meeting->file ? $meeting->file->id : null,
                 ],
                 [
                     'storage_path' => '/ionline/meetings/attachments/'.$now.'_meet_'.$meeting->id.'.'.$this->file->extension(),
                     'stored' => true,
-                    'name' => 'Mi documento.pdf',
+                    'name' => 'adjunto.pdf',
                     // 'valid_types' => json_encode(["pdf", "xls"]),
                     // 'max_file_size' => 10,
                     'stored_by_id' => auth()->id(),

@@ -12,7 +12,11 @@ class ImageService
      * return app(ImageService::class)->createVisator(auth()->user());
      * return app(ImageService::class)->createDocumentNumber("2342-Xdf4", "13.089");
      * return app(ImageService::class)->createSignature(auth()->user());
-     */
+     * 
+     * para verla en el navegador :
+     **/
+     // $image = base64_decode(app(ImageService::class)->createDocumentNumber("2342-Xdf4", "13.089"));
+     // return response($image)->header('Content-Type', 'image/png');
 
     /**
      * @var string

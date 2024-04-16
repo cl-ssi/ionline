@@ -15,7 +15,7 @@ class Agreement extends Model
      */
     protected $fillable = [
         'number', 'date', 'period', 'file', 'commune_id', 'program_id', 'quotas', 'total_amount', 'referente', 
-        'director_signer_id', 'referrer_id', 'referrer2_id', 'file_to_endorse_id', 'file_to_sign_id', 'fileResEnd', 'document_id', 'res_document_id'
+        'director_signer_id', 'referrer_id', 'referrer2_id', 'file_to_endorse_id', 'file_to_sign_id', 'fileResEnd', 'document_id', 'res_document_id', 'agreement_id'
     ];
 
     protected $casts = [
@@ -29,6 +29,10 @@ class Agreement extends Model
     // {
     //     return $this->hasMany('App\Models\Agreements\ComponentAmount', 'App\Models\Agreements\AgreementComponent');
     // }
+    public function previous() {
+        return $this->belongsTo(Agreement::class, 'agreement_id');
+    }
+
     public function document() {
         return $this->belongsTo(Document::class);
     }

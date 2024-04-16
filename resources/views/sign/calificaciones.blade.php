@@ -83,10 +83,4 @@
             @endif
         </p>
     </div>
-    <p class="text small {{ $approval->color }}" style="padding-left: 6;">
-        @if($observacion and $approval->position == 'right')
-            Obs:{{ $observacion }}
-        @endif
-    </p>
-
 @endif

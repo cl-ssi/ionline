@@ -29,6 +29,7 @@ class SubmittedReport extends Component
     public $asistencia;
     public $puntualidad;
     public $cumplimiento_normas_e_instrucciones;
+    public $creator_user_observation;
     public $reportDetails = null;
 
 
@@ -99,6 +100,7 @@ class SubmittedReport extends Component
         $report->asistencia = $this->asistencia;
         $report->puntualidad = $this->puntualidad;
         $report->cumplimiento_normas_e_instrucciones = $this->cumplimiento_normas_e_instrucciones;
+        $report->creator_user_observation = $this->creator_user_observation;
         // Asignar los demás valores del formulario
         $report->created_user_id = auth()->user()->id;
         $report->created_ou_id = auth()->user()->organizational_unit_id;
@@ -179,11 +181,7 @@ class SubmittedReport extends Component
             } 
         
 
-        
-
-
-
-
+        $this->mount();
         session()->flash('success', 'Informe de desempeño guardado exitosamente');
     }
     

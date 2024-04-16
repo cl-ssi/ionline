@@ -239,6 +239,7 @@ class Approval extends Model
         'approvable_id',
         'approvable_type',
         'digital_signature',
+        'endorse',
         'position',
         'start_y',
         'filename',
@@ -251,6 +252,10 @@ class Approval extends Model
     */
     protected $casts = [
         'approver_at' => 'datetime',
+        'status' => 'boolean',
+        'active' => 'boolean',
+        'digital_signature' => 'boolean',
+        'endorse' => 'boolean',
     ];
 
     public function sentToOu()

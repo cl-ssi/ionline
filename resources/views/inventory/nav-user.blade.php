@@ -17,7 +17,17 @@
         >
             <i class="fas fa-boxes"></i> Mi inventario
         </a>
-    </li>    
+    </li>
+
+    <li class="nav-item">
+        <a
+            class="nav-link {{ active(['inventories.update-pma']) }}"
+            aria-current="page"
+            href="{{ route('inventories.update-pma') }}"
+        >
+            <i class="fas fa-sync-alt"></i> Actualización Emplazamiento
+        </a>
+    </li>
 
     <li class="nav-item">
         <a

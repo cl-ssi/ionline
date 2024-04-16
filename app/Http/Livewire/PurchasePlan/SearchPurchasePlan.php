@@ -13,6 +13,8 @@ class SearchPurchasePlan extends Component
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
 
+    public $selectedId, $selectedStatus;
+
     public $index;
 
     public function delete(PurchasePlan $purchasePlan)
@@ -45,6 +47,8 @@ class SearchPurchasePlan extends Component
                 ->when(auth()->user()->organizationalUnit->id == Parameter::get('ou', 'SaludMentalSSI'),
                     fn($q) => $q->orwhereHas('organizationalUnit', 
                         fn($q2) => $q2->whereIn('establishment_id', explode(',', Parameter::get('establishment', 'EstablecimientosDispositivos')))))
+                ->search($this->selectedId,
+                    $this->selectedStatus)
                 /*
                 ->search($this->selectedStatus,
                     $this->selectedId,
@@ -64,6 +68,8 @@ class SearchPurchasePlan extends Component
                     $this->selectedId,
                     $this->selectedUserAllowance)
                 */
+                ->search($this->selectedId,
+                    $this->selectedStatus)
                 ->paginate(30);
         }
 
@@ -74,6 +80,8 @@ class SearchPurchasePlan extends Component
 
             $purchasePlans = $query
                 ->whereHas('approvals', fn($q) => $q->where('active', 1)->whereNull('status')->whereIn('sent_to_ou_id', $ous))
+                ->search($this->selectedId,
+                    $this->selectedStatus)
                 ->paginate(30);
         }
 

@@ -102,7 +102,7 @@
                 <strong>Serie BS</strong>
             </div>
             <ul class="list-group list-group-flush">
-                <li class="list-group-item text-muted">2024</li>
+                <li class="list-group-item text-muted"><a href="{{ route('indicators.rem.index', [2024, 'BS']) }}">2024 <span class="badge badge-pill badge-secondary">En Revisión</span></a></li>
                 <li class="list-group-item text-muted">2023</li>
                 <li class="list-group-item text-muted">2022</li>
                 <li class="list-group-item text-muted">2021</li>

@@ -64,7 +64,7 @@ class AgreementController extends Controller
         // return $period;
         $query = Agreement::with('program','stages','agreement_amounts.program_component','commune','fileToEndorse.signaturesFlows',
                                  'addendums.fileToEndorse.signaturesFlows','fileToSign.signaturesFlows','addendums.fileToSign.signaturesFlows',
-                                 'continuities.document.fileToSign.signaturesFlows', 'document.fileToSign.signaturesFlows')
+                                 'continuities.document.fileToSign.signaturesFlows', 'document.fileToSign.signaturesFlows', 'previous')
         ->when($request->program, function($q) use ($request){ return $q->where('program_id', $request->program); })
         ->when($request->commune, function($q) use ($request){ return $q->where('commune_id', $request->commune); })
         ->where('period', $period_selected)->latest();
@@ -425,7 +425,7 @@ class AgreementController extends Controller
     public function createDocument(Request $request, Agreement $agreement)
     {
         // SE OBTIENEN DATOS RELACIONADOS AL CONVENIO
-    	$agreement->load('Program','Commune.municipality','agreement_amounts.program_component','agreement_quotas','director_signer.user', 'stages', 'referrer');
+    	$agreement->load('previous.Program','Program','Commune.municipality','agreement_amounts.program_component','agreement_quotas','director_signer.user', 'stages', 'referrer');
         // $stage          = Stage::where('agreement_id', $agreement->id)->first();
     	// $amounts        = AgreementAmount::with('program_component')->Where('agreement_id', $id)->get();
         // $quotas         = AgreementQuota::Where('agreement_id', $id)->get();
@@ -531,7 +531,7 @@ class AgreementController extends Controller
         $document->type_id = Type::where('name','Convenio')->first()->id;
         $document->agreement_id = $agreement->id;
         // $document->subject = 'Convenio programa '.$programa.' comuna de '.$agreement->commune->name;
-        $document->subject = 'Documento convenio de ejecución del programa '.$programa.' año '.$agreement->period.' comuna de '.$agreement->Commune->name;
+        $document->subject = 'Documento convenio de ejecución'.($agreement->previous ? ' prórroga': '').' del programa '.$programa.' año '.$agreement->period.' comuna de '.$agreement->Commune->name;
         $document->distribution = $municipality_emails."\n".$agreement->referrer->email."\nvalentina.ortega@redsalud.gob.cl\naps.ssi@redsalud.gob.cl\nromina.garin@redsalud.gob.cl\njuridica.ssi@redsalud.gob.cl\no.partes2@redsalud.gob.cl\nblanca.galaz@redsalud.gob.cl";
         $document->content = "
 
@@ -539,7 +539,7 @@ class AgreementController extends Controller
     <strong><span style='font-size:12pt; '>CONVENIO DE EJECUCIÓN </span></strong>
 </p>
 <p style='margin-top:12pt; margin-bottom:0pt;text-align:center'>
-    <strong><span style='font-size:12pt; '>“PROGRAMA </span></strong><strong><span
+    <strong><span style='font-size:12pt; '>“".($agreement->previous ? "PRÓRROGA " : "")."PROGRAMA </span></strong><strong><span
             style='font-size:12pt; background-color:#00ff00'>".mb_strtoupper($programa)."</span></strong><strong><span
             style='font-size:12pt; '> AÑO </span></strong><strong><span
             style='font-size:12pt; background-color:#00ff00'>".$periodoConvenio."</span></strong><strong><span
@@ -602,13 +602,105 @@ class AgreementController extends Controller
         style=' font-size:11pt; font-weight:normal; background-color:#00ff00'>".$comuna."</span><span
         style=' font-size:11pt; font-weight:normal'>, en adelante la </span><span
         style=' font-size:11pt'>“MUNICIPALIDAD”</span><span
-        style=' font-size:11pt; font-weight:normal'>, se ha acordado celebrar un convenio, que
-        consta de las siguientes cláusulas:</span>
+        style=' font-size:11pt; font-weight:normal'>, se ha acordado celebrar ".($agreement->previous ? "una prórroga de convenio para el año ".$agreement->period.", que modifica las cláusulas que se indican:" : "un convenio, que
+        consta de las siguientes cláusulas:")."</span>
+</p>";
+
+if($agreement->previous)
+{
+    $fechaConvenioAnterior = date('j', strtotime($agreement->previous->date)).' de '.$meses[date('n', strtotime($agreement->previous->date))-1].' del año '.date('Y', strtotime($agreement->previous->date));
+    $first_word_anterior = explode(' ',trim($agreement->previous->Program->name))[0];
+    $programaAnterior = $first_word_anterior == 'Programa' ? substr(strstr($agreement->previous->Program->name," "), 1) : $agreement->previous->Program->name;
+    
+    $document->content .= "<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>Con fecha de <span
+    style='background-color:#00ff00'>".$fechaConvenioAnterior."</span>, se celebró un convenio sobre Programa de <span
+    style='background-color:#00ff00'>".$programa."</span>, entre las mismas partes 
+    comparecientes y mediante este acto se prorroga por el año ".$agreement->period.", dicho convenio con las siguientes modificaciones: </p>
+    
+    <p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
+    <strong><span>I.- CLAUSULA PRIMERA: </span></strong><span>Modifica y prorroga el citado convenio de fecha <span
+    style='background-color:#00ff00'>".$fechaConvenioAnterior."</span>, SSI, aprobado por resolución exenta ( o afecta según corresponda).</p>
+    <ol style='list-style-type: decimal;margin-left:0cmundefined;'>
+    <li><strong>Cláusula&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;</strong></li>
+    <li><strong>Cláusula&hellip;&hellip;&hellip;&hellip;.</strong></li>
+    </ol>
+    <p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;'><strong><span style='color:red;'>TRANSCRIBIR CLAUSULAS QUE MODIFICAN CONVENIO ORIGINAL Y QUE EST&Aacute;N EN LA RESOLUCI&Oacute;N DE CONTINUIDAD</span></strong></p>
+    <p style='margin-top:0pt; margin-bottom:0pt; text-align:center'>
+    <strong><span style=' '>&#xa0;</span></strong>
 </p>
-<p style='margin-top:0pt; margin-bottom:0pt'>
-    &#xa0;
+    <p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
+    <strong><span>II.- CLÁUSULA SEGUNDA:</span></strong><span>
+        Déjese constancia que la personería de </span><strong><span
+            style='background-color:#00ff00'>D. ".$director."</span></strong><strong><span
+        > </span></strong><span>para representar al
+        Servicio de Salud de Tarapacá, consta en el </span><span
+        style='background-color:#00ff00'>".$directorDecreto."</span><span
+    >. La representación de D. </span><strong><span
+            style='background-color:#00ff00'>".$alcalde."</span></strong><span
+    > para actuar en nombre de la </span><span
+        style='background-color:#ffff00'>".ucfirst(mb_strtolower($ilustre))."</span><span>
+        Municipalidad de </span><span style='background-color:#00ff00'>".$comuna."</span><span
+    >, emana del </span><span
+        style='background-color:#00ff00'>".$alcaldeDecreto."</span><span>
+        de la </span><span style='background-color:#ffff00'>".ucfirst(mb_strtolower($ilustre))."</span><span
+    >
+        Municipalidad de </span><span style='background-color:#00ff00'>".$comuna."</span><span
+    >.</span>
+</p>
+<p style='margin-top:0pt; margin-bottom:0pt; text-align:center'>
+    <strong><span style=' '>&#xa0;</span></strong>
 </p>
 <p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
+    <strong><span>III.- CLÁUSULA TERCERA:</span></strong><span> La
+        presente prórroga de convenio, regirá hasta el 31 de Diciembre de ".$agreement->period.", y se firma digitalmente en un ejemplar, quedando este en poder del </span><strong><span
+        >“SERVICIO”. </span></strong><span>Por su
+        parte,</span><strong><span> </span></strong><span>la
+    </span><strong><span>“MUNICIPALIDAD”
+        </span></strong><span>contraparte de este convenio y la División de Atención
+        Primaria de Ministerio de Salud e involucrados, recibirán el documento original digitalizado. </span>
+</p>
+<p style='margin-top:0pt; margin-bottom:0pt; text-align:center'>
+    <strong><span style=' '>&#xa0;</span></strong>
+</p>
+<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
+    <strong><span>IV.- CLÁUSULA CUARTA:</span></strong><span> En lo no modificado se mantienen vigentes las cláusulas del convenio de fecha <span
+    style='background-color:#00ff00'>".$fechaConvenioAnterior."</span>, aprobado por resolución exenta o afecta <span
+    style='background-color:#00ff00'>N°".$agreement->previous->res_exempt_number."/".($agreement->previous->res_exempt_date ? date('Y', strtotime($agreement->previous->res_exempt_date)) : '') ."</span>, SSI.</span>
+</p>
+<p style='margin-top:0pt; margin-bottom:0pt; text-align:center'>
+    <strong><span style=' '>&#xa0;</span></strong>
+</p>
+<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
+    <span>En comprobante firman</span>
+</p>
+<p style='margin-top:0pt; margin-bottom:48pt; text-align:justify; font-size:10pt'>
+    <strong><span>&#xa0;</span></strong>
+</p>
+<div style='text-align:center'>
+    <table cellspacing='0' cellpadding='0'
+        style='width:339.75pt; margin-right:auto; margin-left:auto; border-collapse:collapse'>
+        <tr style='height:25.05pt'>
+            <td style='width:339.75pt; vertical-align:top'>
+                <p style='margin:0pt 2.1pt 0pt 7.1pt; text-align:center; font-size:11pt'>
+                    <strong><span style='background-color:#00ff00'>".$alcalde."</span></strong>
+                </p>
+                <p style='margin:0pt 2.1pt 0pt 7.1pt; text-align:center; font-size:11pt'>
+                    <strong><span
+                            style='background-color:#00ff00'>".$alcaldeApelativoFirma."</span></strong>
+                </p>
+                <p style='margin:0pt 2.1pt 0pt 7.1pt; text-align:center; font-size:11pt'>
+                    <strong><span style='background-color:#00ff00'>".$ilustre." ".
+                            $municipalidad."</span></strong>
+                </p>
+            </td>
+        </tr>
+    </table>
+</div>
+";
+
+} else {
+
+    $document->content .= "<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
     <strong><span>PRIMERA: </span></strong><span>Se deja
         constancia que el Estatuto de Atención Primaria de Salud Municipal, aprobado por la Ley N°19.378, en su
         artículo 56 establece que el aporte estatal mensual podrá incrementarse: </span><strong><span
@@ -2522,6 +2614,7 @@ $document->content .= "
 </div>
 
 ";
+}
         
         $types = Type::whereNull('partes_exclusive')->pluck('name','id');
         return view('documents.create', compact('document', 'types'));
