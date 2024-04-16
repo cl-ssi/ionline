@@ -146,11 +146,6 @@
     <div class="col-md-3">
         <button class="btn btn-primary" wire:click="updateSelected" wire:loading.attr="disabled">Actualizar Seleccionado</button>
     </div>
-        
-    @else
-        <div class="alert alert-warning" role="alert">
-            No se encontraron resultados.
-        </div>
     @endif
 
 </div>
