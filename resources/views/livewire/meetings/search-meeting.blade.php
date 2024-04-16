@@ -41,11 +41,12 @@
                                 class="btn btn-outline-secondary btn-sm">
                                 <i class="fas fa-edit fa-fw"></i>
                             </a>
-
+                            {{--
                             <a class="btn btn-outline-danger btn-sm"
                                 wire:click="deleteMeeting({{ $key }})">
                                 <i class="fas fa-trash-alt fa-fw"></i>
                             </a>
+                            --}}
                         @endif
                             
                         @if($meeting->StatusValue == 'Derivado SGR')
