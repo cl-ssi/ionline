@@ -10,7 +10,7 @@
 
 <div class="col-sm">
     @livewire('meetings.meeting-create', [
-        'meetingToEdit' => '',
+        'meetingToEdit' => null,
         'form'          => 'create'
     ])
 </div>

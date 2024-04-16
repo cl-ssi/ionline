@@ -358,7 +358,6 @@ class MeetingCreate extends Component
                 $authorityNotify->notify(new NewSgr($requirement, $event));
             }
             
-
             // Marca los eventos como vistos
             $requirement->setEventsAsViewed;
 

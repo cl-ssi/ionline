@@ -44,8 +44,6 @@
                                     <i class="fas fa-edit fa-fw"></i>
                                 </a>
 
-                                
-
                                 {{--
                                 <a class="btn btn-outline-danger btn-sm"
                                     wire:click="deleteMeeting({{ $key }})">
@@ -63,7 +61,7 @@
                             
                             @if($meeting->file)
                                 <a href="{{ route('meetings.show_file', $meeting) }}"
-                                    class="btn btn-outline-primary btn-sm">
+                                    class="btn btn-outline-primary btn-sm" target="_blank">
                                     <i class="fas fa-paperclip fa-fw"></i>
                                 </a>
                             @endif

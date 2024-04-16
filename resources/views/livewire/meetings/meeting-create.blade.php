@@ -79,12 +79,14 @@
             <div wire:loading wire:target="file">Cargando archivo...</div>
             @error('file') <span class="text-danger error small">{{ $message }}</span> @enderror
         </fieldset>
-
-        <fieldset class="form-group col-12 col-sm-2">
-            <a class="btn btn-primary mt-4" href="{{ route('meetings.show_file', $meetingToEdit) }}" target="_blank">
-                <i class="fas fa-paperclip fa-fw"></i> Ver adjunto
-            </a>
-        </fieldset>
+        
+        @if($form == 'edit' && $meetingToEdit->file)
+            <fieldset class="form-group col-12 col-sm-2">
+                <a class="btn btn-primary mt-4" href="{{ route('meetings.show_file', $meetingToEdit) }}" target="_blank">
+                    <i class="fas fa-paperclip fa-fw"></i> Ver adjunto
+                </a>
+            </fieldset>
+        @endif
     </div>
 
     <hr>
