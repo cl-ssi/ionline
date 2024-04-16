@@ -41,6 +41,9 @@
                                 class="btn btn-outline-secondary btn-sm">
                                 <i class="fas fa-edit fa-fw"></i>
                             </a>
+
+                            
+
                             {{--
                             <a class="btn btn-outline-danger btn-sm"
                                 wire:click="deleteMeeting({{ $key }})">
@@ -53,6 +56,13 @@
                             <a href="{{ route('meetings.show', $meeting) }}"
                                 class="btn btn-outline-secondary btn-sm">
                                <i class="fas fa-eye fa-fw"></i>
+                            </a>
+                        @endif
+                        
+                        @if($meeting->file)
+                            <a href="{{ route('meetings.show_file', $meeting) }}"
+                                class="btn btn-outline-primary btn-sm">
+                                <i class="fas fa-paperclip fa-fw"></i>
                             </a>
                         @endif
                     </td>
