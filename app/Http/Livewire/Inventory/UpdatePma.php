@@ -73,32 +73,27 @@ class UpdatePma extends Component
             $this->addError('new_place_id', 'Debe seleccionar una nueva ubicación.');
             return;
         }
-
+    
         // Obtener la nueva ubicación a la que se van a trasladar los elementos seleccionados
         $newPlace = Place::find($this->new_place_id);
-
+    
         // Iterar sobre los elementos seleccionados
         foreach ($this->selectedItems as $index => $isSelected) {
             if ($isSelected) {
                 $inventory = $this->inventories[$index];
-
-                // Crear un nuevo movimiento de inventario
-                InventoryMovement::create([
-                    'inventory_id' => $inventory->id,
-                    'place_id' => $newPlace->id,
-                    'user_responsible_id' => auth()->user()->id,
-                    'reception_date' => now(),
-                ]);
+                $lastMovement = $inventory->lastMovement;
+                $inventory->update(['place_id' => $newPlace->id]);                
+                if ($lastMovement) {
+                    $lastMovement->update(['place_id' => $newPlace->id]);
+                }
             }
-        }       
-
-
+        }
+    
+        // Reiniciar los datos después de la actualización
         $this->resetData();
         $this->updateCompleted = true;
-
-        // Mostrar el mensaje de actualización completada
-        $this->updateCompleted = true;
     }
+    
 
 
     public function resetData()
