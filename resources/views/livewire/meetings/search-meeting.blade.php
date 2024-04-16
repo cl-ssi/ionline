@@ -27,8 +27,8 @@
                                 @break
                         @endswitch
                     </td>
-                    <td width="7%">{{ $meeting->created_at->format('d-m-Y H:i:s') }}</td>
-                    <td width="7%">{{ $meeting->date }}</td>
+                    <td width="8%">{{ $meeting->created_at->format('d-m-Y H:i:s') }}</td>
+                    <td width="8%">{{ $meeting->date }}</td>
                     <td class="text-center">{{ $meeting->TypeValue }}</td>
                     <td>
                         {{ $meeting->subject }}
