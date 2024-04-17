@@ -62,6 +62,7 @@ use App\Http\Controllers\IonlinePlusController;
 use App\Http\Controllers\JobPositionProfiles\JobPositionProfileController;
 use App\Http\Controllers\JobPositionProfiles\JobPositionProfileSignController;
 use App\Http\Controllers\JobPositionProfiles\MessageController;
+use App\Http\Controllers\CalendarEventController;
 use App\Http\Controllers\Mammography\MammographyController;
 use App\Http\Controllers\Meeting\CommitmentController;
 use App\Http\Controllers\Meeting\MeetingController;
@@ -1460,6 +1461,13 @@ Route::prefix('requirements')->as('requirements.')->middleware(['auth', 'must.ch
 });
 
 Route::view('calendars', 'calendars.index')->name('calendars');
+
+# Calendario Vehiculos
+Route::get('/vehicleCalendar', [CalendarEventController::class, 'index']);
+
+Route::post('/vehicleCalendar', [CalendarEventController::class, 'store']);
+Route::patch('/vehicleCalendar/edit/{event}', [CalendarEventController::class, 'update']);
+Route::delete('/vehicleCalendar/destroy/{event}', [CalendarEventController::class, 'destroy']);
 
 Route::prefix('indicators')->as('indicators.')->group(function () {
     Route::get('/', function () {
