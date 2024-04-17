@@ -17,6 +17,8 @@ class SearchPurchasePlan extends Component
 
     public $index;
 
+    protected $queryString = ['selectedId', 'selectedStatus', 'selectedSubject', 'selectedStartDate', 'selectedEndDate'];
+
     public function delete(PurchasePlan $purchasePlan)
     {
         $purchasePlan->delete();
@@ -132,5 +134,25 @@ class SearchPurchasePlan extends Component
         }
 
         return view('livewire.purchase-plan.search-purchase-plan', compact('purchasePlans'));
+    }
+
+    public function updatingSelectedId(){
+        $this->resetPage();
+    }
+
+    public function updatingSelectedStatus(){
+        $this->resetPage();
+    }
+
+    public function updatingSelectedSubject(){
+        $this->resetPage();
+    }
+
+    public function updatingSelectedStartDate(){
+        $this->resetPage();
+    }
+
+    public function updatingSelectedEndDate(){
+        $this->resetPage();
     }
 }
