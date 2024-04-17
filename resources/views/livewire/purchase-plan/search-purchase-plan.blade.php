@@ -58,6 +58,11 @@
                             'organizationalUnit' => null
                         ])
                 </fieldset>
+
+                <fieldset class="form-group col-12 col-md-3">
+                    <label for="for_program">Programa</label>
+                    <input class="form-control form-control-sm" type="text" autocomplete="off" name="program_search" wire:model.debounce.500ms="selectedProgram">
+                </fieldset>
             </div>
         </div>
     @endif

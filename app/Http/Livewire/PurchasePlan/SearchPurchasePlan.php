@@ -15,14 +15,14 @@ class SearchPurchasePlan extends Component
     protected $paginationTheme = 'bootstrap';
 
     public $selectedId, $selectedStatus, $selectedSubject, $selectedStartDate, $selectedEndDate, $selectedUserCreator, $selectedUserResponsible,
-        $selectedResponsibleOuName;
+        $selectedResponsibleOuName, $selectedProgram;
 
     public $index;
 
     protected $listeners = ['searchedResponsibleOu', 'clearResponsibleOu'];
 
     protected $queryString = ['selectedId', 'selectedStatus', 'selectedSubject', 'selectedStartDate', 'selectedEndDate', 'selectedUserCreator',
-        'selectedUserResponsible', 'selectedResponsibleOuName'];
+        'selectedUserResponsible', 'selectedResponsibleOuName', 'selectedProgram'];
 
     public function delete(PurchasePlan $purchasePlan)
     {
@@ -61,7 +61,8 @@ class SearchPurchasePlan extends Component
                     $this->selectedEndDate,
                     $this->selectedUserCreator,
                     $this->selectedUserResponsible,
-                    $this->selectedResponsibleOuName)
+                    $this->selectedResponsibleOuName,
+                    $this->selectedProgram)
                 /*
                 ->search($this->selectedStatus,
                     $this->selectedId,
@@ -88,7 +89,8 @@ class SearchPurchasePlan extends Component
                     $this->selectedEndDate,
                     $this->selectedUserCreator,
                     $this->selectedUserResponsible,
-                    $this->selectedResponsibleOuName)
+                    $this->selectedResponsibleOuName,
+                    $this->selectedProgram)
                 ->paginate(30);
         }
 
@@ -106,7 +108,8 @@ class SearchPurchasePlan extends Component
                     $this->selectedEndDate,
                     $this->selectedUserCreator,
                     $this->selectedUserResponsible,
-                    $this->selectedResponsibleOuName)
+                    $this->selectedResponsibleOuName,
+                    $this->selectedProgram)
                 ->paginate(30);
         }
 
@@ -187,6 +190,10 @@ class SearchPurchasePlan extends Component
     }
 
     public function updatingSelectedResponsibleOuName(){
+        $this->resetPage();
+    }
+
+    public function updatingSelectedProgram(){
         $this->resetPage();
     }
 }
