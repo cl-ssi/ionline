@@ -35,6 +35,11 @@
                     </div>
                 </fieldset>
 
+                <fieldset class="form-group col-12 col-md-3">
+                    <label for="for_user_creator">Usuario Creador</label>
+                    <input class="form-control form-control-sm" type="text" autocomplete="off" placeholder="NOMBRE / APELLIDOS"
+                        name="user_creator_search" wire:model.debounce.500ms="selectedUserCreator">
+                </fieldset>
             </div>
         </div>
     @endif

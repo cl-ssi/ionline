@@ -13,11 +13,11 @@ class SearchPurchasePlan extends Component
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
 
-    public $selectedId, $selectedStatus, $selectedSubject, $selectedStartDate, $selectedEndDate;
+    public $selectedId, $selectedStatus, $selectedSubject, $selectedStartDate, $selectedEndDate, $selectedUserCreator;
 
     public $index;
 
-    protected $queryString = ['selectedId', 'selectedStatus', 'selectedSubject', 'selectedStartDate', 'selectedEndDate'];
+    protected $queryString = ['selectedId', 'selectedStatus', 'selectedSubject', 'selectedStartDate', 'selectedEndDate', 'selectedUserCreator'];
 
     public function delete(PurchasePlan $purchasePlan)
     {
@@ -53,7 +53,8 @@ class SearchPurchasePlan extends Component
                     $this->selectedStatus,
                     $this->selectedSubject,
                     $this->selectedStartDate,
-                    $this->selectedEndDate)
+                    $this->selectedEndDate,
+                    $this->selectedUserCreator)
                 /*
                 ->search($this->selectedStatus,
                     $this->selectedId,
@@ -77,7 +78,8 @@ class SearchPurchasePlan extends Component
                     $this->selectedStatus,
                     $this->selectedSubject,
                     $this->selectedStartDate,
-                    $this->selectedEndDate)
+                    $this->selectedEndDate,
+                    $this->selectedUserCreator)
                 ->paginate(30);
         }
 
@@ -92,7 +94,8 @@ class SearchPurchasePlan extends Component
                     $this->selectedStatus,
                     $this->selectedSubject,
                     $this->selectedStartDate,
-                    $this->selectedEndDate)
+                    $this->selectedEndDate,
+                    $this->selectedUserCreator)
                 ->paginate(30);
         }
 
@@ -153,6 +156,10 @@ class SearchPurchasePlan extends Component
     }
 
     public function updatingSelectedEndDate(){
+        $this->resetPage();
+    }
+
+    public function updatingSelectedUserCreator(){
         $this->resetPage();
     }
 }
