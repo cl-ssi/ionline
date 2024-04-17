@@ -259,9 +259,19 @@ class Dte extends Model implements Auditable
         return $this->hasOne(TgrPayedDte::class);
     }
 
-    public function tgrAccountingPortfolio()
+    public function tgrAccountingPortfolios()
     {
-        return $this->hasOne(TgrAccountingPortfolio::class, 'dte_id');
+        return $this->hasMany(TgrAccountingPortfolio::class, 'dte_id');
+    }
+
+    public function totalDebe()
+    {
+        return $this->tgrAccountingPortfolios()->sum('debe');
+    }
+
+    public function totalHaber()
+    {
+        return $this->tgrAccountingPortfolios()->sum('haber');
     }
 
 

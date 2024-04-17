@@ -2185,6 +2185,8 @@ Route::prefix('finance')->as('finance.')->middleware(['auth', 'must.change.passw
         Route::put('/{dte}/update', [PaymentController::class, 'update'])->name('update');
         Route::get('/paid', [PaymentController::class, 'paid'])->name('paid');
         Route::get('/{dte}/paid/pdf', [PaymentController::class, 'paidPdf'])->name('paidPdf');
+        //Route::get('/{dte}/compromiso/pdf', [PaymentController::class, 'compromisoPdf'])->name('compromisoPdf');
+        Route::get('/{dte}/devengo/pdf', [PaymentController::class, 'devengoPdf'])->name('devengoPdf');
     });
 
     Route::prefix('purchase-orders')->as('purchase-orders.')->group(function () {
