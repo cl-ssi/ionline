@@ -13,7 +13,7 @@ class SearchPurchasePlan extends Component
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
 
-    public $selectedId, $selectedStatus;
+    public $selectedId, $selectedStatus, $selectedSubject;
 
     public $index;
 
@@ -48,7 +48,8 @@ class SearchPurchasePlan extends Component
                     fn($q) => $q->orwhereHas('organizationalUnit', 
                         fn($q2) => $q2->whereIn('establishment_id', explode(',', Parameter::get('establishment', 'EstablecimientosDispositivos')))))
                 ->search($this->selectedId,
-                    $this->selectedStatus)
+                    $this->selectedStatus,
+                    $this->selectedSubject)
                 /*
                 ->search($this->selectedStatus,
                     $this->selectedId,
@@ -69,7 +70,8 @@ class SearchPurchasePlan extends Component
                     $this->selectedUserAllowance)
                 */
                 ->search($this->selectedId,
-                    $this->selectedStatus)
+                    $this->selectedStatus,
+                    $this->selectedSubject)
                 ->paginate(30);
         }
 
@@ -81,7 +83,8 @@ class SearchPurchasePlan extends Component
             $purchasePlans = $query
                 ->whereHas('approvals', fn($q) => $q->where('active', 1)->whereNull('status')->whereIn('sent_to_ou_id', $ous))
                 ->search($this->selectedId,
-                    $this->selectedStatus)
+                    $this->selectedStatus,
+                    $this->selectedSubject)
                 ->paginate(30);
         }
 

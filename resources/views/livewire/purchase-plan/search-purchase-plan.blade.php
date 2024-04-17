@@ -21,6 +21,12 @@
                     </select>
                 </fieldset>
 
+                <fieldset class="form-group col-12 col-md-3">
+                    <label for="for_subject">Asunto</label>
+                    <input class="form-control form-control-sm" type="text" autocomplete="off" name="subject_search" 
+                        wire:model.debounce.500ms="selectedSubject">
+                </fieldset>
+
             </div>
         </div>
     @endif
