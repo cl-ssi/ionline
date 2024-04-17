@@ -40,7 +40,7 @@
     </div>
     <div class="tab-pane" id="messages" role="tabpanel" aria-labelledby="messages-tab">
         {{-- <iframe src="https://calendar.google.com/calendar/embed?title=Agenda%20de%20veh%C3%ADculos&amp;showCalendars=0&amp;showTz=0&amp;height=600&amp;wkst=2&amp;hl=es_419&amp;bgcolor=%23FFFFFF&amp;src=servicios.generales.dssi%40gmail.com&ctz=America%2FSantiago" style="border-width:0" width="1100" height="600" frameborder="0" scrolling="no"></iframe> --}}
-        @livewire('calendar-event') 
+        @livewire('car-calendar-event') 
     </div>
     <div class="tab-pane" id="zoom" role="tabpanel" aria-labelledby="zoom-tab">
         <iframe src="https://calendar.google.com/calendar/embed?height=600&amp;wkst=2&amp;bgcolor=%23ffffff&amp;ctz=America%2FSantiago&amp;src=Z3BhaDdlbjZzYW40dm82bzBsdGR1cGdqZTRAZ3JvdXAuY2FsZW5kYXIuZ29vZ2xlLmNvbQ&amp;color=%23F4511E&amp;mode=WEEK" style="border:solid 1px #777" width="1100" height="600" frameborder="0" scrolling="no"></iframe>
