@@ -7,18 +7,22 @@ use Livewire\Component;
 use App\Models\PurchasePlan\PurchasePlan;
 use Livewire\WithPagination;
 use Illuminate\Support\Facades\Auth;
+use App\Rrhh\OrganizationalUnit;
 
 class SearchPurchasePlan extends Component
 {
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
 
-    public $selectedId, $selectedStatus, $selectedSubject, $selectedStartDate, $selectedEndDate, $selectedUserCreator, $selectedUserResponsible;
+    public $selectedId, $selectedStatus, $selectedSubject, $selectedStartDate, $selectedEndDate, $selectedUserCreator, $selectedUserResponsible,
+        $selectedResponsibleOuName;
 
     public $index;
 
+    protected $listeners = ['searchedResponsibleOu', 'clearResponsibleOu'];
+
     protected $queryString = ['selectedId', 'selectedStatus', 'selectedSubject', 'selectedStartDate', 'selectedEndDate', 'selectedUserCreator',
-        'selectedUserResponsible'];
+        'selectedUserResponsible', 'selectedResponsibleOuName'];
 
     public function delete(PurchasePlan $purchasePlan)
     {
@@ -56,7 +60,8 @@ class SearchPurchasePlan extends Component
                     $this->selectedStartDate,
                     $this->selectedEndDate,
                     $this->selectedUserCreator,
-                    $this->selectedUserResponsible)
+                    $this->selectedUserResponsible,
+                    $this->selectedResponsibleOuName)
                 /*
                 ->search($this->selectedStatus,
                     $this->selectedId,
@@ -82,7 +87,8 @@ class SearchPurchasePlan extends Component
                     $this->selectedStartDate,
                     $this->selectedEndDate,
                     $this->selectedUserCreator,
-                    $this->selectedUserResponsible)
+                    $this->selectedUserResponsible,
+                    $this->selectedResponsibleOuName)
                 ->paginate(30);
         }
 
@@ -99,7 +105,8 @@ class SearchPurchasePlan extends Component
                     $this->selectedStartDate,
                     $this->selectedEndDate,
                     $this->selectedUserCreator,
-                    $this->selectedUserResponsible)
+                    $this->selectedUserResponsible,
+                    $this->selectedResponsibleOuName)
                 ->paginate(30);
         }
 
@@ -143,6 +150,14 @@ class SearchPurchasePlan extends Component
         return view('livewire.purchase-plan.search-purchase-plan', compact('purchasePlans'));
     }
 
+    public function searchedResponsibleOu(OrganizationalUnit $organizationalUnit){
+        $this->selectedResponsibleOuName = $organizationalUnit->id;
+    }
+
+    public function clearResponsibleOu(){
+        $this->selectedResponsibleOuName = null;
+    }
+
     public function updatingSelectedId(){
         $this->resetPage();
     }
@@ -168,6 +183,10 @@ class SearchPurchasePlan extends Component
     }
 
     public function updatingSelectedUserResponsible(){
+        $this->resetPage();
+    }
+
+    public function updatingSelectedResponsibleOuName(){
         $this->resetPage();
     }
 }

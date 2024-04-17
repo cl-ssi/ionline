@@ -48,6 +48,16 @@
                     <input class="form-control form-control-sm" type="text" autocomplete="off" placeholder="NOMBRE / APELLIDOS"
                         name="user_responsible_search" wire:model.debounce.500ms="selectedUserResponsible">
                 </fieldset>
+
+                <fieldset class="form-group col-12 col-md-3">
+                    <label for="for_requester_ou_id">U.O. Administrador Contrato</label>
+                        @livewire('search-select-organizational-unit', [
+                            'emit_name'          => 'searchedResponsibleOu',
+                            'selected_id'        => 'responsible_ou_id',
+                            'small_option'       => true,
+                            'organizationalUnit' => null
+                        ])
+                </fieldset>
             </div>
         </div>
     @endif

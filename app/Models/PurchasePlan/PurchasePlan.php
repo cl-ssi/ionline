@@ -154,9 +154,10 @@ class PurchasePlan extends Model implements Auditable
     }
 
     public function scopeSearch(
-        $query, $id_search, $status_search, $search_subject, $start_date_search, $end_date_search, $user_creator_search, $user_responsible_search){
+        $query, $id_search, $status_search, $search_subject, $start_date_search, $end_date_search, $user_creator_search, $user_responsible_search,
+            $responsible_ou_id){
         if ($id_search OR $status_search OR $search_subject OR $start_date_search OR $end_date_search OR $user_creator_search OR 
-            $user_responsible_search){
+            $user_responsible_search OR $responsible_ou_id){
             // dd($user_responsible_search);
 
             if ($id_search != '') {
@@ -193,6 +194,11 @@ class PurchasePlan extends Model implements Auditable
                     $query->where('name', 'LIKE', '%' . $word . '%')
                         ->orwhere('fathers_family', 'LIKE', '%' . $word . '%')
                         ->orwhere('mothers_family', 'LIKE', '%' . $word . '%');
+                });
+            }
+            if ($responsible_ou_id != '') {
+                $query->where(function ($q) use ($responsible_ou_id) {
+                    $q->where('organizational_unit_id', $responsible_ou_id);
                 });
             }
         }
