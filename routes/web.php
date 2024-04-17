@@ -255,6 +255,7 @@ use App\Http\Livewire\His\NewModification;
 use App\Http\Livewire\Indicators\PrestacionesLoader;
 use App\Http\Livewire\Indicators\QueryGenerator;
 use App\Http\Livewire\InventoryLabel\InventoryLabelIndex;
+use App\Http\Livewire\Inventory\AccountingUpdate;
 use App\Http\Livewire\Inventory\AssignedProducts;
 use App\Http\Livewire\Inventory\CheckTransfer;
 use App\Http\Livewire\Inventory\ClassificationMgr;
@@ -2037,6 +2038,7 @@ Route::prefix('prof_agenda')->as('prof_agenda.')->middleware(['auth'])->group(fu
 // Inventories
 Route::prefix('inventories')->as('inventories.')->middleware(['auth', 'must.change.password'])->group(function () {
     Route::get('sheet', InventorySheet::class)->name('sheet');
+    Route::get('/accounting-update', AccountingUpdate::class)->name('accounting-update');
 
     Route::prefix('establishment/{establishment}')->group(function () {
         /** Ruta para poder ver la hoja de inventario sin edición  */
