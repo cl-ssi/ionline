@@ -13,11 +13,12 @@ class SearchPurchasePlan extends Component
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
 
-    public $selectedId, $selectedStatus, $selectedSubject, $selectedStartDate, $selectedEndDate, $selectedUserCreator;
+    public $selectedId, $selectedStatus, $selectedSubject, $selectedStartDate, $selectedEndDate, $selectedUserCreator, $selectedUserResponsible;
 
     public $index;
 
-    protected $queryString = ['selectedId', 'selectedStatus', 'selectedSubject', 'selectedStartDate', 'selectedEndDate', 'selectedUserCreator'];
+    protected $queryString = ['selectedId', 'selectedStatus', 'selectedSubject', 'selectedStartDate', 'selectedEndDate', 'selectedUserCreator',
+        'selectedUserResponsible'];
 
     public function delete(PurchasePlan $purchasePlan)
     {
@@ -54,7 +55,8 @@ class SearchPurchasePlan extends Component
                     $this->selectedSubject,
                     $this->selectedStartDate,
                     $this->selectedEndDate,
-                    $this->selectedUserCreator)
+                    $this->selectedUserCreator,
+                    $this->selectedUserResponsible)
                 /*
                 ->search($this->selectedStatus,
                     $this->selectedId,
@@ -79,7 +81,8 @@ class SearchPurchasePlan extends Component
                     $this->selectedSubject,
                     $this->selectedStartDate,
                     $this->selectedEndDate,
-                    $this->selectedUserCreator)
+                    $this->selectedUserCreator,
+                    $this->selectedUserResponsible)
                 ->paginate(30);
         }
 
@@ -95,7 +98,8 @@ class SearchPurchasePlan extends Component
                     $this->selectedSubject,
                     $this->selectedStartDate,
                     $this->selectedEndDate,
-                    $this->selectedUserCreator)
+                    $this->selectedUserCreator,
+                    $this->selectedUserResponsible)
                 ->paginate(30);
         }
 
@@ -160,6 +164,10 @@ class SearchPurchasePlan extends Component
     }
 
     public function updatingSelectedUserCreator(){
+        $this->resetPage();
+    }
+
+    public function updatingSelectedUserResponsible(){
         $this->resetPage();
     }
 }

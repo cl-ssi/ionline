@@ -41,6 +41,14 @@
                         name="user_creator_search" wire:model.debounce.500ms="selectedUserCreator">
                 </fieldset>
             </div>
+
+            <div class="row mt-3">
+                <fieldset class="form-group col-12 col-md-3">
+                    <label for="for_user_responsible">Usuario Responsable</label>
+                    <input class="form-control form-control-sm" type="text" autocomplete="off" placeholder="NOMBRE / APELLIDOS"
+                        name="user_responsible_search" wire:model.debounce.500ms="selectedUserResponsible">
+                </fieldset>
+            </div>
         </div>
     @endif
 
