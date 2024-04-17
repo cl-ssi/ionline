@@ -27,6 +27,14 @@
                         wire:model.debounce.500ms="selectedSubject">
                 </fieldset>
 
+                <fieldset class="form-group col-12 col-md-3">
+                    <label for="regiones">Periodo de Creación</label>
+                    <div class="input-group">
+                        <input type="date" class="form-control form-control-sm" name="start_date_search" wire:model.debounce.500ms="selectedStartDate">
+                        <input type="date" class="form-control form-control-sm" name="end_date_search" wire:model.debounce.500ms="selectedEndDate">
+                    </div>
+                </fieldset>
+
             </div>
         </div>
     @endif

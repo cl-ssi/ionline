@@ -154,8 +154,8 @@ class PurchasePlan extends Model implements Auditable
     }
 
     public function scopeSearch(
-        $query, $id_search, $status_search, $search_subject){
-        if ($id_search OR $status_search OR $search_subject){
+        $query, $id_search, $status_search, $search_subject, $start_date_search, $end_date_search){
+        if ($id_search OR $status_search OR $search_subject OR $start_date_search OR $end_date_search){
             if ($id_search != '') {
                 $query->where(function ($q) use ($id_search) {
                     $q->where('id', $id_search);
@@ -169,6 +169,11 @@ class PurchasePlan extends Model implements Auditable
             if ($search_subject != '') {
                 $query->where(function ($q) use ($search_subject) {
                     $q->where('subject', 'LIKE', '%' . $search_subject . '%');
+                });
+            }
+            if ($start_date_search != '' && $end_date_search != '') {
+                $query->where(function ($q) use ($start_date_search, $end_date_search) {
+                    $q->whereBetween('created_at', [$start_date_search, $end_date_search . " 23:59:59"])->get();
                 });
             }
         }
