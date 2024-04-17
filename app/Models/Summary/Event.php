@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Summary\EventType;
 use App\Models\Summary\Summary;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use App\User;
+use App\Models\User;
 
 class Event extends Model
 {

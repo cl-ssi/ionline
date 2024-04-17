@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Documents\Sign\Signature;
 use App\Models\Documents\Sign\SignatureFlow;
 use App\Services\ImageService;
-use App\User;
+use App\Models\User;
 use Firebase\JWT\JWT;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;

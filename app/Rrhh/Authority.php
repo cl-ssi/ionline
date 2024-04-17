@@ -3,7 +3,7 @@
 namespace App\Rrhh;
 
 use Illuminate\Database\Eloquent\Model;
-use App\User;
+use App\Models\User;
 use App\Rrhh\OrganizationalUnit;
 use App\Models\Agreements\Agreement;
 use OwenIt\Auditing\Contracts\Auditable;
@@ -38,6 +38,7 @@ class Authority extends Model implements Auditable
         return $this->belongsTo(User::class)->withTrashed();
     }
 
+    // TODO: @tebiccr esto se usa?
     public function creator() {
         return $this->belongsTo(User::class,'creator_id')->withTrashed();
     }

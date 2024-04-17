@@ -3,7 +3,7 @@
 namespace App\Http\Livewire\Rrhh\PerformanceReport;
 
 use Livewire\Component;
-use App\User;
+use App\Models\User;
 use App\Models\Rrhh\PerformanceReportPeriod;
 use App\Models\Rrhh\PerformanceReport;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -29,6 +29,7 @@ class SubmittedReport extends Component
     public $asistencia;
     public $puntualidad;
     public $cumplimiento_normas_e_instrucciones;
+    public $creator_user_observation;
     public $reportDetails = null;
 
 
@@ -99,6 +100,7 @@ class SubmittedReport extends Component
         $report->asistencia = $this->asistencia;
         $report->puntualidad = $this->puntualidad;
         $report->cumplimiento_normas_e_instrucciones = $this->cumplimiento_normas_e_instrucciones;
+        $report->creator_user_observation = $this->creator_user_observation;
         // Asignar los demás valores del formulario
         $report->created_user_id = auth()->user()->id;
         $report->created_ou_id = auth()->user()->organizational_unit_id;
@@ -107,8 +109,10 @@ class SubmittedReport extends Component
         $report->save();
         $this->resetFormFields();
 
-        $approval = $report->approvals()->Create([
-            "module"        => "Calificaciones",
+
+        $approval = Approval::withoutEvents(function () use ($report) {
+            return $report->approvals()->create([
+           "module"        => "Calificaciones",
             "module_icon"   => "bi bi-graph-up-arrow",
             "subject"       => "Reporte de Calificación de funcionario: ".$report->receivedUser->TinnyName,
             "document_route_name" => "rrhh.performance-report.show",
@@ -123,9 +127,34 @@ class SubmittedReport extends Component
             "approver_at" => $report->created_at,
             "status"        => 1,
             "digital_signature"                 => false,
-            "position"      => "right",            
+            "position"      => "left",
             "active"    =>false
-        ]);
+            ]);
+        });
+
+
+        // $approval = Approval::create
+        
+
+        // $approval = $report->approvals()->Create([
+        //     "module"        => "Calificaciones",
+        //     "module_icon"   => "bi bi-graph-up-arrow",
+        //     "subject"       => "Reporte de Calificación de funcionario: ".$report->receivedUser->TinnyName,
+        //     "document_route_name" => "rrhh.performance-report.show",
+        //     "document_route_params"             => json_encode
+        //     ([
+        //         "userId" => $report->received_user_id,
+        //         "periodId"                    => $report->period_id,
+        //     ]),
+        //     "sent_to_user_id" => $report->created_user_id,
+        //     "approver_id" => $report->created_user_id,
+        //     "approver_ou_id" => $report->created_ou_id,
+        //     "approver_at" => $report->created_at,
+        //     "status"        => 1,
+        //     "digital_signature"                 => false,
+        //     "position"      => "left",
+        //     "active"    =>false
+        // ]);
 
         $report->approvals()->Create([
             "module"        => "Calificaciones",
@@ -139,25 +168,20 @@ class SubmittedReport extends Component
             ]),
             "sent_to_user_id" => $report->received_user_id,
             "digital_signature"                 => false,
-            "position"      => "left",            
+            "position"      => "right",            
             "previous_approval_id"  => $approval->id,
             "active"    => true
         ]);
 
         
 
-        if($report->receivedUser){
-            if($report->receivedUser->email != null){
-                // Utilizando Notify 
+        
+            if($report->receivedUser && $report->receivedUser->email != null){
                 $report->receivedUser->notify(new NewPerformanceReport($report));
             } 
-        }
-
         
 
-
-
-
+        $this->mount();
         session()->flash('success', 'Informe de desempeño guardado exitosamente');
     }
     
@@ -189,12 +213,18 @@ class SubmittedReport extends Component
         $report = PerformanceReport::where('received_user_id', $userId)
             ->where('period_id', $periodId)
             ->first();
-
+    
         if ($report) {
-            $report->delete();
-            session()->flash('success', 'Informe de desempeño eliminado exitosamente');
+            // Verificar si todos los aprobadores han aprobado el informe
+            if ($report->allApprovalsOk()) {
+                session()->flash('success', 'No se puede eliminar el informe de desempeño, ya que el funcionario tomó conocimiento');
+            } else {
+                $report->delete();
+                session()->flash('success', 'Informe de desempeño eliminado exitosamente');
+            }
         }
     }
+    
 
     public function viewReport($userId, $periodId)
     {

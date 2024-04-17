@@ -8,7 +8,7 @@ use App\Mail\BirthdayGreetingSirhActiveUser;
 use App\Models\Commune;
 use Illuminate\Support\Facades\Mail;
 
-use App\User;
+use App\Models\User;
 use App\Models\Rrhh\SirhActiveUser;
 use Carbon\Carbon;
 

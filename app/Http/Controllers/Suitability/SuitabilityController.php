@@ -11,7 +11,7 @@ use App\Models\Suitability\Result;
 use App\Models\Suitability\Signer;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
-use App\User;
+use App\Models\User;
 use App\Models\Suitability\PsiRequest;
 use App\Models\Suitability\School;
 use App\Models\UserExternal;

@@ -4,7 +4,7 @@ namespace App\Http\Livewire\Rrhh;
 
 use App\Models\ClCommune;
 use App\Models\Parameters\Bank;
-use App\User;
+use App\Models\User;
 use Livewire\Component;
 
 class UserProfile extends Component
@@ -22,12 +22,12 @@ class UserProfile extends Component
         'user.birthday' => 'nullable|date',
         'user.position' => 'required',
 
-        'user.email' => 'required',
+        'user.email' => 'nullable',
 
-        'user.address' => 'required',
-        'user.commune_id' => 'required',
-        'user.phone_number' => 'required',
-        'user.email_personal' => 'required',
+        'user.address' => 'nullable',
+        'user.commune_id' => 'nullable',
+        'user.phone_number' => 'nullable',
+        'user.email_personal' => 'nullable',
 
         'bankAccount.bank_id' => 'nullable|integer',
         'bankAccount.number' => 'nullable',
@@ -54,10 +54,12 @@ class UserProfile extends Component
         $this->user->save();
 
         // Si los valores vienen vacios, los guardamos como null
-        $this->bankAccount->bank_id = $this->bankAccount->bank_id ?: null;
-        $this->bankAccount->type = $this->bankAccount->type ?: null;
+        if($this->bankAccount) {
+            $this->bankAccount->bank_id = $this->bankAccount->bank_id ?: null;
+            $this->bankAccount->type = $this->bankAccount->type ?: null;
+            $this->bankAccount->save();
+        }
 
-        $this->bankAccount->save();
 
         session()->flash('success', 'Información actualizada exitosamente');
     }

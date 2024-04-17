@@ -38,7 +38,7 @@
 
             <fieldset class="form-group col-12 col-md-1">
                 <label for="for_mecanism">Tipo de Compra</label>
-                <select name="subtype_search" class="form-control form-control-sm" wire:model.debounce.500ms="selectedSubType">
+                <select name="subtype_search" class="form-control form-control-sm" wire:model.debounce.500ms="selectedSubtype">
                     <option value="">Todos</option>
                     <option value="bienes">Bienes</option>
                     <option value="servicios">Servicios</option>                    
@@ -91,6 +91,7 @@
                     ])
             </fieldset>
         </div>
+
         <div class="form-row">
             <fieldset class="form-group col-12 col-md-2">
                 <label for="for_purchaser">Comprador</label>
@@ -102,7 +103,7 @@
                 <input class="form-control form-control-sm" type="text" autocomplete="off" placeholder=""
                     name="program_search" wire:model.debounce.500ms="selectedProgram">
             </fieldset>
-            @if($inbox == 'purchase')
+            @if($inbox == 'purchase' || $inbox == 'report: form-items')
             <fieldset class="form-group col-12 col-md-2">
                 <label for="for_purchaser">N° O.C.</label>
                 <input class="form-control form-control-sm" type="text" autocomplete="off" placeholder=""
@@ -120,6 +121,28 @@
             </fieldset>
             @endif
         </div>
+
+        @if($inbox == 'report: form-items')
+            <div class="form-row">
+                <fieldset class="form-group col-sm-2">
+                    <label>Mecanismo de Compra:</label><br>
+                    <select wire:model.debounce.500ms="selectedPurchaseMechanism" name="purchase_mechanism_search" class="form-control form-control-sm ">
+                        <option value="">Seleccione...</option>
+                        @foreach($lstPurchaseMechanism as $val)
+                            <option value="{{$val->id}}">{{$val->name}}</option>
+                        @endforeach
+                    </select>
+                    @error('purchaseMechanism') <span class="text-danger small">{{ $message }}</span> @enderror
+                </fieldset>
+                
+            </div>
+            
+            {{--
+            <div class="form-row">
+                <button type="button" class="btn btn-primary btn-block" wire:click="search"><i class="fas fa-search"></i> Buscar</button>
+            </div>
+            --}}
+        @endif
     </div>
 
     <br>

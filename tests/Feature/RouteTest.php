@@ -3,7 +3,7 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
-use App\User; // Asegúrate de importar el modelo de usuario si aún no lo has hecho
+use App\Models\User; // Asegúrate de importar el modelo de usuario si aún no lo has hecho
 
 class RouteTest extends TestCase
 {

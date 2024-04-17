@@ -3,7 +3,7 @@
 namespace App\Http\Livewire;
 
 use Livewire\Component;
-use App\User;
+use App\Models\User;
 
 class SearchSelectUser extends Component
 {
@@ -21,6 +21,9 @@ class SearchSelectUser extends Component
      * 
      * Si necesitas obtener el usuario seleccionado en otro componente livewire, debes indicar el nombre del listener
      * @livewire('search-select-user', ['emit_name' => 'Nombre del listener'])
+     * 
+     * 
+     * protected $listeners = ['userSelected'];
      */
     public $query;
     public $users;

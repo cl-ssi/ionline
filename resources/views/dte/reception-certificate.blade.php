@@ -12,7 +12,7 @@
 
 
 <div class="right" style="width: 50%; display: inline-block; padding-bottom: 10px;">
-    Iquique, {{ now()->day . ' de ' . now()->monthName . ' del ' . now()->year; }}<br>
+    Iquique, {{ now()->day . ' de ' . now()->monthName . ' del ' . now()->year }}<br>
 </div>
 
 <div class="titulo">

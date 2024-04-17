@@ -57,11 +57,26 @@ class DteConfirmation extends Notification
      */
     public function toArray($notifiable)
     {
-        return [
-            // 'module'  => 'Finanzas', // Opcional
-            'icon'    => '<i class="fas fa-fw fa-file-invoice-dollar"></i>', // Opcional
-            'subject' => 'Nueva DTE para recepcionar: '.$this->dte->id,
-            'action' => route('finance.receptions.create',0, false).'?oc='.$this->dte->folio_oc,
-        ];
+        if($this->dte->folio_oc)
+        {
+            return [
+                'module'  => 'Finanzas',
+                'icon'    => '<i class="fas fa-fw fa-file-invoice-dollar"></i>',
+                'subject' => 'Nueva DTE para recepcionar: '.$this->dte->id,
+                'action' => route('finance.receptions.create',0, false).'?oc='.$this->dte->folio_oc.'&dte_id='.$this->dte->id,
+            ];
+        }
+        else
+        {
+            return [
+                'module'  => 'Finanzas',
+                'icon'    => '<i class="fas fa-fw fa-file-invoice-dollar"></i>',
+                'subject' => 'Nueva DTE para recepcionar: '.$this->dte->id,
+                'action' => route('finance.receptions.create_no_oc').'?dte_id='.$this->dte->id,
+            ];
+
+        }
+
+        
     }
 }

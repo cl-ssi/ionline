@@ -5,7 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\Models\WebService\Fonasa;
 
-use App\User;
+use App\Models\User;
 
 class GetUsersGender extends Command
 {

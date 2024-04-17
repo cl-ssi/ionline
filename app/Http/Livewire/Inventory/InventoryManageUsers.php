@@ -4,7 +4,7 @@ namespace App\Http\Livewire\Inventory;
 
 use App\Models\Establishment;
 use App\Models\Inv\EstablishmentUser;
-use App\User;
+use App\Models\User;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Spatie\Permission\Models\Role;

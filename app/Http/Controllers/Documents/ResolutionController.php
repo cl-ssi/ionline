@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 use App\Models\Documents\Resolution;
 use App\Models\ServiceRequests\SignatureFlow;
 use App\Rrhh\OrganizationalUnit;
-use App\User;
+use App\Models\User;
 
 use Illuminate\Support\Facades\Auth;
 use App\Rrhh\Authority;

@@ -7,7 +7,7 @@ use OwenIt\Auditing\Contracts\Auditable;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
-use App\User;
+use App\Models\User;
 use App\Rrhh\OrganizationalUnit;
 use App\Models\Establishment;
 use App\Models\Documents\Type;
@@ -36,8 +36,10 @@ class Document extends Model implements Auditable
         'greater_hierarchy',
         'distribution',
         'content',
-        'file_to_sign_id',
+        'user_id',
+        'organizational_unit_id',
         'establishment_id',
+        'file_to_sign_id',
         'signature_id',
     ];
 

@@ -5,7 +5,7 @@ namespace App\Models\Rrhh;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\User;
+use App\Models\User;
 use App\Rrhh\OrganizationalUnit;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
@@ -38,6 +38,8 @@ class PerformanceReport extends Model
         'asistencia',
         'puntualidad',
         'cumplimiento_normas_e_instrucciones',
+        'creator_user_observation',
+        'received_user_observation',
         'created_user_id',
         'created_ou_id',
         'received_user_id',
@@ -81,6 +83,15 @@ class PerformanceReport extends Model
     public function mail($users)
     {
         Notification::route('mail', $users)->notify(new NewPerformanceReport($this));
+    }
+
+    public function allApprovalsOk(): bool
+    {
+        $approvals = $this->approvals;
+        
+        return $approvals->every(function ($approval) {
+            return $approval->status == 1;
+        });
     }
 
 

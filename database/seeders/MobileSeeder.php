@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\Resources\Mobile;
-use App\User;
+use App\Models\User;
 
 class MobileSeeder extends Seeder
 {

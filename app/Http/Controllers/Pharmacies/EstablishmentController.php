@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Pharmacies;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Pharmacies\Establishment;
-use App\User;
+use App\Models\User;
 
 class EstablishmentController extends Controller
 {

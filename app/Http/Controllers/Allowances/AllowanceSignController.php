@@ -15,7 +15,7 @@ use App\Notifications\Allowances\RejectedAllowance;
 use Illuminate\Http\Response;
 use App\Models\Documents\SignaturesFile;
 use App\Services\SignatureService;
-use App\User;
+use App\Models\User;
 use App\Models\Parameters\Parameter;
 
 class AllowanceSignController extends Controller

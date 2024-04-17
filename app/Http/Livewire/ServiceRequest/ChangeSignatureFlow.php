@@ -5,7 +5,7 @@ namespace App\Http\Livewire\ServiceRequest;
 use Livewire\Component;
 
 use App\Models\ServiceRequests\ServiceRequest;
-use App\User;
+use App\Models\User;
 
 class ChangeSignatureFlow extends Component
 {

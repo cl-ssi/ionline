@@ -9,7 +9,7 @@ use App\Models\Parameters\EstablishmentType;
 use App\Models\Commune;
 use App\Models\Inv\EstablishmentUser;
 use App\Models\Warehouse\Store;
-use App\User;
+use App\Models\User;
 
 class Establishment extends Model implements Auditable
 {
@@ -34,7 +34,7 @@ class Establishment extends Model implements Auditable
         'sirh_code',
         'commune_id',
         'dependency',
-        'health_services_id',
+        'health_service_id',
         'official_name',
         'administrative_dependency',
         'level_of_care',
@@ -49,6 +49,7 @@ class Establishment extends Model implements Auditable
         'level_of_complexity',
         'provider_type_health_system',
         'mail_director',
+        'father_organizational_unit_id',
     ];
 
     /**
@@ -69,7 +70,7 @@ class Establishment extends Model implements Auditable
 
     public function establishmentType()
     {
-        return $this->belongsTo(establishmentType::class);
+        return $this->belongsTo(EstablishmentType::class);
     }
 
     public function organizationalUnits()
@@ -126,6 +127,8 @@ class Establishment extends Model implements Auditable
             ->get()
             ->toArray();
         
+        $array[0]['id'] = null;
+        $array[0]['name'] = null;
         if(!empty($ous)) {
             $array = $this->buildTree($ous, 'father_id', 'id');
         }

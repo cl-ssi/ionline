@@ -16,7 +16,9 @@
 </div>
 
 <div class="col-sm">
-    
+    @livewire('trainings.search-training', [
+        'index' => 'own'
+    ])
 </div>
 
 @endsection

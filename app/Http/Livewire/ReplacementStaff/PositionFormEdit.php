@@ -3,7 +3,7 @@
 namespace App\Http\Livewire\ReplacementStaff;
 
 use App\Models\ReplacementStaff\Position;
-use App\User;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithFileUploads;

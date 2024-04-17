@@ -6,11 +6,12 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
-use App\User;
+use App\Models\User;
 use App\Rrhh\OrganizationalUnit;
 use App\Models\Documents\Type;
-use App\Models\Documents\ParteFile;
-use App\Models\Documents\ParteEvent;
+// use App\Models\Documents\ParteFile;
+use App\Models\File;
+// use App\Models\Documents\ParteEvent;
 use App\Models\Documents\Parte;
 use App\Models\Documents\Document;
 use App\Http\Controllers\Controller;
@@ -33,8 +34,8 @@ class ParteController extends Controller
                 'files',
                 'requirements.events',
                 'requirements.events.to_user',
-                'files.signatureFile.signaturesFlows',
-                'files.signatureFile',
+                // 'files.signatureFile.signaturesFlows',
+                // 'files.signatureFile',
                 ])
             ->latest()->paginate('100');
 
@@ -85,27 +86,22 @@ class ParteController extends Controller
         $parte->establishment()->associate(auth()->user()->organizationalUnit->establishment);
         $parte->important = $request->input('important') == 'on' ? 1 : null;
         $parte->reserved = $request->input('reserved') == 'on' ? 1 : null;
+        $parte->user()->associate(auth()->user());
+        $parte->organizationalUnit()->associate(auth()->user()->organizationalUnit);
         $parte->setCorrelative();
         $parte->save();
 
-        //dd($parte);
-
-        $evento = new ParteEvent();
-        $evento->user()->associate(auth()->user());
-        $evento->organizationalUnit()->associate(auth()->user()->organizationalUnit);
-
         if($request->hasFile('forfile')){
             foreach($request->file('forfile') as $file) {
-                $filename = $file->getClientOriginalName();
-                $fileModel = New ParteFile;
-                $fileModel->file = $file->store('ionline/documents/partes',['disk' => 'gcs']);
-                $fileModel->name = $filename;
-                $fileModel->parte_id = $parte->id;
-                $fileModel->save();
+
+                $parte->files()->create([
+                    'storage_path' => $file->store('ionline/documents/partes',['disk' => 'gcs']),
+                    'stored' => true,
+                    'name' => $file->getClientOriginalName(),
+                    'stored_by_id' => $parte->user_id,
+                ]);
             }
         }
-
-        $parte->events()->save($evento);
 
         session()->flash('info', 'El documento ha sido ingresado.');
         return redirect()->route('documents.partes.index');
@@ -119,11 +115,11 @@ class ParteController extends Controller
      */
     public function show(Parte $parte)
     {
-        $files = ParteFile::where('parte_id',$parte->id)->get();
-        $ous = OrganizationalUnit::all()->sortBy('name');
-        $organizationalUnit = OrganizationalUnit::find(1);
-        //$leafs = $parte->events()->doesntHave('childs')->get();
-        return view('documents.partes.show', compact('parte','ous','organizationalUnit','files'));
+        // $files = ParteFile::where('parte_id',$parte->id)->get();
+        // $ous = OrganizationalUnit::all()->sortBy('name');
+        // $organizationalUnit = OrganizationalUnit::find(1);
+        // //$leafs = $parte->events()->doesntHave('childs')->get();
+        // return view('documents.partes.show', compact('parte','ous','organizationalUnit','files'));
     }
 
     /**
@@ -154,12 +150,13 @@ class ParteController extends Controller
 
         if($request->hasFile('forfile')){
             foreach($request->file('forfile') as $file) {
-                $filename = $file->getClientOriginalName();
-                $fileModel = New ParteFile;
-                $fileModel->file = $file->store('ionline/documents/partes',['disk'=>'gcs']);
-                $fileModel->name = $filename;
-                $fileModel->parte_id = $parte->id;
-                $fileModel->save();
+
+                $parte->files()->create([
+                    'storage_path' => $file->store('ionline/documents/partes',['disk' => 'gcs']),
+                    'stored' => true,
+                    'name' => $file->getClientOriginalName(),
+                    'stored_by_id' => $parte->user_id,
+                ]);
             }
         }
 
@@ -177,16 +174,12 @@ class ParteController extends Controller
     {
         if($parte->requirements->count() == 0)
         {
-            foreach($parte->events as $event) {
-                $event->forceDelete();
-            }
             foreach($parte->files as $file) {
-                Storage::disk('gcs')->delete($file->file);
-                //$file->delete();
-                $file->forceDelete();
+                Storage::disk('gcs')->delete($file->storage_path);
+                $file->delete();
             }
 
-            $parte->forceDelete();
+            $parte->delete();
             return redirect()->route('documents.partes.index');
         }
         else
@@ -215,17 +208,17 @@ class ParteController extends Controller
         return view('documents.partes.admin')->withOus($ous);
     }
 
-    public function download(ParteFile $file)
+    public function download(File $file)
     {
 
-        if(Storage::disk('gcs')->exists($file->file))
+        if(Storage::disk('gcs')->exists($file->storage_path))
         {
-            return Storage::disk('gcs')->response($file->file, mb_convert_encoding($file->name,'ASCII'));
+            return Storage::disk('gcs')->response($file->storage_path, mb_convert_encoding($file->name,'ASCII'));
         }
         else
         {
             //logger('No se encontró el archivo '.$file->file);
-            session()->flash('danger', 'No se encontró el archivo '.$file->file);
+            session()->flash('danger', 'No se encontró el archivo '.$file->name);
             return redirect()->route('documents.partes.index');
         }
     }
@@ -233,6 +226,13 @@ class ParteController extends Controller
     public function parameters()
     {
         return view('documents.partes.parameters');
+    }
+
+    public function fileDestroy(File $file){
+        Storage::disk('gcs')->delete($file->storage_path);
+        $file->delete();
+        session()->flash('success', 'El archivo ha sido eliminado');
+        return back();
     }
 
 

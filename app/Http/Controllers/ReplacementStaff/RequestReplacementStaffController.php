@@ -7,7 +7,7 @@ use App\Models\ReplacementStaff\RequestSign;
 use App\Models\ReplacementStaff\AssignEvaluation;
 use App\Rrhh\OrganizationalUnit;
 use App\Rrhh\Authority;
-use App\User;
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -250,13 +250,17 @@ class RequestReplacementStaffController extends Controller
             $request_replacement->requesterUser()->associate($request->requester_id);
 
             $now = Carbon::now()->format('Y_m_d_H_i_s');
+
             if($request->hasFile('job_profile_file')){
                 $file = $request->file('job_profile_file');
                 $file_name = $now.'_job_profile';
-                if($formType == 'announcement')
+                if($formType == 'announcement'){
                     $position->job_profile_file = $file->storeAs('/ionline/replacement_staff/request_job_profile/', $file_name.'.'.$file->extension(), 'gcs');
+                }
                 else
+                {
                     $request_replacement->job_profile_file = $file->storeAs('/ionline/replacement_staff/request_job_profile/', $file_name.'.'.$file->extension(), 'gcs');
+                }
             }
 
             $file_verification = $request->file('request_verification_file');

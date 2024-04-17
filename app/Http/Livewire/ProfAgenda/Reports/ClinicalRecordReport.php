@@ -4,7 +4,7 @@ namespace App\Http\Livewire\ProfAgenda\Reports;
 
 use Livewire\Component;
 
-use App\User;
+use App\Models\User;
 use App\Models\ProfAgenda\OpenHour;
 
 class ClinicalRecordReport extends Component

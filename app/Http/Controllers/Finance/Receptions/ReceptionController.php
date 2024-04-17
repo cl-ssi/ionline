@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Finance\Receptions;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
-use App\User;
+use App\Models\User;
 use App\Notifications\Documents\Partes\NewNumeration;
 use App\Models\Finance\Receptions\Reception;
 use App\Models\Documents\Approval;

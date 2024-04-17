@@ -12,7 +12,7 @@ use App\Models\Unspsc\Product;
 use Livewire\Component;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Auth;
-use App\User;
+use App\Models\User;
 
 
 class InventoryUploadExcel extends Component

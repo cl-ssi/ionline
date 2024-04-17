@@ -21,7 +21,7 @@ use App\Models\Documents\SignaturesFlow;
 use App\Models\Documents\Type;
 use App\Models\Establishment;
 use App\Rrhh\OrganizationalUnit;
-use App\User;
+use App\Models\User;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -64,7 +64,7 @@ class AgreementController extends Controller
         // return $period;
         $query = Agreement::with('program','stages','agreement_amounts.program_component','commune','fileToEndorse.signaturesFlows',
                                  'addendums.fileToEndorse.signaturesFlows','fileToSign.signaturesFlows','addendums.fileToSign.signaturesFlows',
-                                 'continuities.document.fileToSign.signaturesFlows', 'document.fileToSign.signaturesFlows')
+                                 'continuities.document.fileToSign.signaturesFlows', 'document.fileToSign.signaturesFlows', 'previous')
         ->when($request->program, function($q) use ($request){ return $q->where('program_id', $request->program); })
         ->when($request->commune, function($q) use ($request){ return $q->where('commune_id', $request->commune); })
         ->where('period', $period_selected)->latest();
@@ -160,7 +160,7 @@ class AgreementController extends Controller
      */
     public function show(Agreement $agreement)
     {
-        $agreement->load('director_signer.user', 'commune.establishments', 'referrer', 'fileToEndorse', 'fileToSign', 'addendums.referrer', 'continuities.referrer','continuities.director_signer','continuities.document.fileToSign', 'document.fileToSign');
+        $agreement->load('director_signer.user', 'commune.establishments', 'referrer', 'referrer2', 'fileToEndorse', 'fileToSign', 'addendums.referrer', 'continuities.referrer','continuities.director_signer','continuities.document.fileToSign', 'document.fileToSign', 'res_document');
         $municipality = Municipality::where('commune_id', $agreement->commune->id)->first();
         $establishment_list = unserialize($agreement->establishment_list);
         // $referrers = User::all()->sortBy('name');
@@ -222,6 +222,7 @@ class AgreementController extends Controller
         }
 
         $agreement->referrer_id = $request->referrer_id;
+        $agreement->referrer2_id = $request->referrer2_id;
         $agreement->director_signer_id = $request->director_signer_id;
         $agreement->save();
 
@@ -396,12 +397,12 @@ class AgreementController extends Controller
             //visadores por cadena de responsabilidad en orden parte primero por el referente tecnico
             // $visadores = collect([
             //                 ['ou_id' => 12, 'user_id' => 15005047] // DEPTO. ATENCION PRIMARIA DE SALUD - ANA MARIA MUJICA
-            //                 ['ou_id' => 61, 'user_id' => 6811637], // DEPTO.ASESORIA JURIDICA  - CARMEN HENRIQUEZ OLIVARES
+            //                 ['ou_id' => 61, 'user_id' => 12834358], // DEPTO.ASESORIA JURIDICA  - LUIS MUENA BUGEÑO
             //                 ['ou_id' => 31, 'user_id' => 17432199], // DEPTO.GESTION FINANCIERA (40) - ROMINA GARÍN
             //                 ['ou_id' => 2, 'user_id' => 14104369], // SUBDIRECCION GESTION ASISTENCIAL - CARLOS CALVO
             //             ]);
             $visadores = collect([$agreement->referrer]); //referente tecnico
-            foreach(array(15005047, 6811637, 17432199, 14104369) as $user_id) //resto de visadores por cadena de responsabilidad
+            foreach(array(15005047, 12834358, 17432199, 14104369) as $user_id) //resto de visadores por cadena de responsabilidad
                 $visadores->add(User::find($user_id));
             
             foreach($visadores as $key => $visador){
@@ -424,7 +425,7 @@ class AgreementController extends Controller
     public function createDocument(Request $request, Agreement $agreement)
     {
         // SE OBTIENEN DATOS RELACIONADOS AL CONVENIO
-    	$agreement->load('Program','Commune.municipality','agreement_amounts.program_component','agreement_quotas','director_signer.user', 'stages', 'referrer');
+    	$agreement->load('previous.Program','Program','Commune.municipality','agreement_amounts.program_component','agreement_quotas','director_signer.user', 'stages', 'referrer');
         // $stage          = Stage::where('agreement_id', $agreement->id)->first();
     	// $amounts        = AgreementAmount::with('program_component')->Where('agreement_id', $id)->get();
         // $quotas         = AgreementQuota::Where('agreement_id', $id)->get();
@@ -530,7 +531,7 @@ class AgreementController extends Controller
         $document->type_id = Type::where('name','Convenio')->first()->id;
         $document->agreement_id = $agreement->id;
         // $document->subject = 'Convenio programa '.$programa.' comuna de '.$agreement->commune->name;
-        $document->subject = 'Documento convenio de ejecución del programa '.$programa.' año '.$agreement->period.' comuna de '.$agreement->Commune->name;
+        $document->subject = 'Documento convenio de ejecución'.($agreement->previous ? ' prórroga': '').' del programa '.$programa.' año '.$agreement->period.' comuna de '.$agreement->Commune->name;
         $document->distribution = $municipality_emails."\n".$agreement->referrer->email."\nvalentina.ortega@redsalud.gob.cl\naps.ssi@redsalud.gob.cl\nromina.garin@redsalud.gob.cl\njuridica.ssi@redsalud.gob.cl\no.partes2@redsalud.gob.cl\nblanca.galaz@redsalud.gob.cl";
         $document->content = "
 
@@ -538,7 +539,7 @@ class AgreementController extends Controller
     <strong><span style='font-size:12pt; '>CONVENIO DE EJECUCIÓN </span></strong>
 </p>
 <p style='margin-top:12pt; margin-bottom:0pt;text-align:center'>
-    <strong><span style='font-size:12pt; '>“PROGRAMA </span></strong><strong><span
+    <strong><span style='font-size:12pt; '>“".($agreement->previous ? "PRÓRROGA " : "")."PROGRAMA </span></strong><strong><span
             style='font-size:12pt; background-color:#00ff00'>".mb_strtoupper($programa)."</span></strong><strong><span
             style='font-size:12pt; '> AÑO </span></strong><strong><span
             style='font-size:12pt; background-color:#00ff00'>".$periodoConvenio."</span></strong><strong><span
@@ -601,13 +602,105 @@ class AgreementController extends Controller
         style=' font-size:11pt; font-weight:normal; background-color:#00ff00'>".$comuna."</span><span
         style=' font-size:11pt; font-weight:normal'>, en adelante la </span><span
         style=' font-size:11pt'>“MUNICIPALIDAD”</span><span
-        style=' font-size:11pt; font-weight:normal'>, se ha acordado celebrar un convenio, que
-        consta de las siguientes cláusulas:</span>
+        style=' font-size:11pt; font-weight:normal'>, se ha acordado celebrar ".($agreement->previous ? "una prórroga de convenio para el año ".$agreement->period.", que modifica las cláusulas que se indican:" : "un convenio, que
+        consta de las siguientes cláusulas:")."</span>
+</p>";
+
+if($agreement->previous)
+{
+    $fechaConvenioAnterior = date('j', strtotime($agreement->previous->date)).' de '.$meses[date('n', strtotime($agreement->previous->date))-1].' del año '.date('Y', strtotime($agreement->previous->date));
+    $first_word_anterior = explode(' ',trim($agreement->previous->Program->name))[0];
+    $programaAnterior = $first_word_anterior == 'Programa' ? substr(strstr($agreement->previous->Program->name," "), 1) : $agreement->previous->Program->name;
+    
+    $document->content .= "<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>Con fecha de <span
+    style='background-color:#00ff00'>".$fechaConvenioAnterior."</span>, se celebró un convenio sobre Programa de <span
+    style='background-color:#00ff00'>".$programa."</span>, entre las mismas partes 
+    comparecientes y mediante este acto se prorroga por el año ".$agreement->period.", dicho convenio con las siguientes modificaciones: </p>
+    
+    <p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
+    <strong><span>I.- CLAUSULA PRIMERA: </span></strong><span>Modifica y prorroga el citado convenio de fecha <span
+    style='background-color:#00ff00'>".$fechaConvenioAnterior."</span>, SSI, aprobado por resolución exenta ( o afecta según corresponda).</p>
+    <ol style='list-style-type: decimal;margin-left:0cmundefined;'>
+    <li><strong>Cláusula&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;</strong></li>
+    <li><strong>Cláusula&hellip;&hellip;&hellip;&hellip;.</strong></li>
+    </ol>
+    <p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;'><strong><span style='color:red;'>TRANSCRIBIR CLAUSULAS QUE MODIFICAN CONVENIO ORIGINAL Y QUE EST&Aacute;N EN LA RESOLUCI&Oacute;N DE CONTINUIDAD</span></strong></p>
+    <p style='margin-top:0pt; margin-bottom:0pt; text-align:center'>
+    <strong><span style=' '>&#xa0;</span></strong>
 </p>
-<p style='margin-top:0pt; margin-bottom:0pt'>
-    &#xa0;
+    <p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
+    <strong><span>II.- CLÁUSULA SEGUNDA:</span></strong><span>
+        Déjese constancia que la personería de </span><strong><span
+            style='background-color:#00ff00'>D. ".$director."</span></strong><strong><span
+        > </span></strong><span>para representar al
+        Servicio de Salud de Tarapacá, consta en el </span><span
+        style='background-color:#00ff00'>".$directorDecreto."</span><span
+    >. La representación de D. </span><strong><span
+            style='background-color:#00ff00'>".$alcalde."</span></strong><span
+    > para actuar en nombre de la </span><span
+        style='background-color:#ffff00'>".ucfirst(mb_strtolower($ilustre))."</span><span>
+        Municipalidad de </span><span style='background-color:#00ff00'>".$comuna."</span><span
+    >, emana del </span><span
+        style='background-color:#00ff00'>".$alcaldeDecreto."</span><span>
+        de la </span><span style='background-color:#ffff00'>".ucfirst(mb_strtolower($ilustre))."</span><span
+    >
+        Municipalidad de </span><span style='background-color:#00ff00'>".$comuna."</span><span
+    >.</span>
+</p>
+<p style='margin-top:0pt; margin-bottom:0pt; text-align:center'>
+    <strong><span style=' '>&#xa0;</span></strong>
 </p>
 <p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
+    <strong><span>III.- CLÁUSULA TERCERA:</span></strong><span> La
+        presente prórroga de convenio, regirá hasta el 31 de Diciembre de ".$agreement->period.", y se firma digitalmente en un ejemplar, quedando este en poder del </span><strong><span
+        >“SERVICIO”. </span></strong><span>Por su
+        parte,</span><strong><span> </span></strong><span>la
+    </span><strong><span>“MUNICIPALIDAD”
+        </span></strong><span>contraparte de este convenio y la División de Atención
+        Primaria de Ministerio de Salud e involucrados, recibirán el documento original digitalizado. </span>
+</p>
+<p style='margin-top:0pt; margin-bottom:0pt; text-align:center'>
+    <strong><span style=' '>&#xa0;</span></strong>
+</p>
+<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
+    <strong><span>IV.- CLÁUSULA CUARTA:</span></strong><span> En lo no modificado se mantienen vigentes las cláusulas del convenio de fecha <span
+    style='background-color:#00ff00'>".$fechaConvenioAnterior."</span>, aprobado por resolución exenta o afecta <span
+    style='background-color:#00ff00'>N°".$agreement->previous->res_exempt_number."/".($agreement->previous->res_exempt_date ? date('Y', strtotime($agreement->previous->res_exempt_date)) : '') ."</span>, SSI.</span>
+</p>
+<p style='margin-top:0pt; margin-bottom:0pt; text-align:center'>
+    <strong><span style=' '>&#xa0;</span></strong>
+</p>
+<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
+    <span>En comprobante firman</span>
+</p>
+<p style='margin-top:0pt; margin-bottom:48pt; text-align:justify; font-size:10pt'>
+    <strong><span>&#xa0;</span></strong>
+</p>
+<div style='text-align:center'>
+    <table cellspacing='0' cellpadding='0'
+        style='width:339.75pt; margin-right:auto; margin-left:auto; border-collapse:collapse'>
+        <tr style='height:25.05pt'>
+            <td style='width:339.75pt; vertical-align:top'>
+                <p style='margin:0pt 2.1pt 0pt 7.1pt; text-align:center; font-size:11pt'>
+                    <strong><span style='background-color:#00ff00'>".$alcalde."</span></strong>
+                </p>
+                <p style='margin:0pt 2.1pt 0pt 7.1pt; text-align:center; font-size:11pt'>
+                    <strong><span
+                            style='background-color:#00ff00'>".$alcaldeApelativoFirma."</span></strong>
+                </p>
+                <p style='margin:0pt 2.1pt 0pt 7.1pt; text-align:center; font-size:11pt'>
+                    <strong><span style='background-color:#00ff00'>".$ilustre." ".
+                            $municipalidad."</span></strong>
+                </p>
+            </td>
+        </tr>
+    </table>
+</div>
+";
+
+} else {
+
+    $document->content .= "<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
     <strong><span>PRIMERA: </span></strong><span>Se deja
         constancia que el Estatuto de Atención Primaria de Salud Municipal, aprobado por la Ley N°19.378, en su
         artículo 56 establece que el aporte estatal mensual podrá incrementarse: </span><strong><span
@@ -2521,6 +2614,197 @@ $document->content .= "
 </div>
 
 ";
+}
+        
+        $types = Type::whereNull('partes_exclusive')->pluck('name','id');
+        return view('documents.create', compact('document', 'types'));
+    }
+
+    public function createResDocument(Request $request, Agreement $agreement)
+    {
+        // SE OBTIENEN DATOS RELACIONADOS AL CONVENIO
+        $agreement->load('Program','Commune.municipality','agreement_amounts', 'referrer', 'document');
+        $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+
+        // SE CONVIERTE EL VALOR TOTAL DEL CONVENIO EN PALABRAS
+        $formatter = new NumeroALetras;
+        $formatter->apocope = true;
+        $totalConvenio = number_format($agreement->agreement_amounts->sum('amount'),0,",",".");
+        $totalConvenioLetras = $this->correctAmountText($formatter->toMoney($agreement->agreement_amounts->sum('amount'), 0, 'pesos',''));
+
+        // Parametros a imprimir en los archivos abiertos
+        $periodoConvenio = $agreement->period;
+        $fechaConvenio = date('j', strtotime($agreement->date)).' de '.$meses[date('n', strtotime($agreement->date))-1].' del año '.date('Y', strtotime($agreement->date));
+    	$numResolucion = $agreement->number;
+        $yearResolucion = $agreement->resolution_date != NULL ? date('Y', strtotime($agreement->resolution_date)) : '';
+        $fechaResolucion = $agreement->resolution_date != NULL ? date('j', strtotime($agreement->resolution_date)).' de '.$meses[date('n', strtotime($agreement->resolution_date))-1].' del año '.date('Y', strtotime($agreement->resolution_date)) : '';
+        $numResourceResolucion = $agreement->res_resource_number;
+        $yearResourceResolucion = $agreement->res_resource_date != NULL ? date('Y', strtotime($agreement->res_resource_date)) : '';
+        $fechaResourceResolucion = $agreement->res_resource_date != NULL ? date('j', strtotime($agreement->res_resource_date)).' de '.$meses[date('n', strtotime($agreement->res_resource_date))-1].' del año '.date('Y', strtotime($agreement->res_resource_date)) : '';
+    	$ilustre = !Str::contains($agreement->Commune->municipality->name_municipality, 'ALTO HOSPICIO') ? 'Ilustre': null;
+        $emailMunicipality = $agreement->Commune->municipality->email_municipality;
+        $comuna = $agreement->Commune->name; 
+        $first_word = explode(' ',trim($agreement->Program->name))[0];
+        $programa = $first_word == 'Programa' ? substr(strstr($agreement->Program->name," "), 1) : $agreement->Program->name;
+        if($agreement->period >= 2022) $programa = mb_strtoupper($programa);
+        
+        //Director ssi quien firma a la fecha de hoy
+        $director = Signer::find($request->signer_id);
+
+        //email referente
+        $emailReferrer = $agreement->referrer != null ? $agreement->referrer->email : '';
+
+        $directorDecreto = Str::contains($director->appellative, '(S)') ? Str::after($director->decree, 'de los Servicios de Salud;') : $director->decree;
+        $art8 = !Str::contains($director->appellative, '(S)') ? 'Art. 8 del ' : '';
+
+        $municipality_emails = $agreement->Commune->municipality->email_municipality."\n".$agreement->Commune->municipality->email_municipality_2;
+
+        $document = new Document();
+        $document->type_id = Type::where('name','Resolución')->first()->id;
+        $document->agreement_id = $agreement->id;
+        // $document->subject = 'Convenio programa '.$programa.' comuna de '.$agreement->commune->name;
+        $document->subject = 'Documento resolución de convenio de ejecución del programa '.$programa.' año '.$agreement->period.' comuna de '.$agreement->Commune->name;
+        $document->distribution = $municipality_emails."\n".$emailReferrer."\nvalentina.ortega@redsalud.gob.cl\naps.ssi@redsalud.gob.cl\nromina.garin@redsalud.gob.cl\njuridica.ssi@redsalud.gob.cl\no.partes2@redsalud.gob.cl\nblanca.galaz@redsalud.gob.cl";
+        
+        $document->content  = "<p
+        style='margin-top:12.0pt;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;text-align:justify;line-height:150%;'>
+        <strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            &nbsp;VISTOS,</strong></p>
+    <p
+        style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;text-align:justify;line-height:115%;'>
+        <span style='font-size:13px;line-height:115%;'>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            &nbsp;&nbsp;</span>Lo dispuesto en el Decreto con Fuerza de Ley N<span style='color:black;'>&ordm;</span>01 del
+        a&ntilde;o 2000, del Ministerio Secretar&iacute;a General de la Presidencia que fija el texto refundido, coordinado
+        y sistematizado de la Ley N<span style='color:black;'>&ordm;</span>18.575, Org&aacute;nica Constitucional de Bases
+        Generales de la Administraci&oacute;n del Estado; D.F.L. N<span style='color:black;'>&ordm;</span>01/2005, del
+        Ministerio de Salud, &nbsp;que fija el texto refundido, coordinado y sistematizado del Decreto Ley N<span
+            style='color:black;'>&ordm;</span>2.763 de 1979 y de las Leyes Nos. 18.933 y 18.469; Ley 19.937 de Autoridad
+        Sanitaria;&nbsp;Ley N<span style='color:black;'>&ordm;</span>19.880 que establece Bases de Procedimientos
+        Administrativos que rigen los actos de los &Oacute;rganos de la Administraci&oacute;n del Estado; Decreto
+        N&deg;140/04 del Ministerio de Salud que aprob&oacute; el Reglamento org&aacute;nico de los Servicios de
+        Salud,&nbsp;<span style='background:lime;'>".$directorDecreto."</span>;&nbsp;lo dispuesto en el art&iacute;culo 55
+        bis, 56 y 57 inciso segundo de la Ley N<span style='color:black;'>&ordm;</span>19.378; art&iacute;culo 6 del Decreto
+        Supremo N<span style='color:black;'>&ordm;</span>118 del 2007, del Ministerio de Salud;&nbsp;Resoluci&oacute;n
+        Exenta N<span style='color:black;'>&ordm;</span><span
+            style='background:lime;'>".$numResolucion."/".$yearResolucion."</span> del Ministerio de Salud, que aprob&oacute; el
+        Programa de <span style='background:lime;'>".$programa."</span> a&ntilde;o <span
+            style='background:lime;'>".$periodoConvenio."</span>, Resoluci&oacute;n Exenta N<span
+            style='color:black;'>&ordm;</span><span
+            style='background:lime;'>".$numResourceResolucion."/".$yearResourceResolucion."</span> del Ministerio de Salud, que
+        distribuy&oacute; los recursos del citado Programa; Resoluci&oacute;n N<span style='color:black;'>&ordm;</span>007
+        de 2019 de la Contralor&iacute;a General de la Rep&uacute;blica.</p>
+    <p
+        style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;text-align:justify;line-height:115%;'>
+        &nbsp;</p>
+    <p
+        style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;text-align:justify;line-height:150%;'>
+        <span style='font-size:13px;line-height:150%;'>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            &nbsp; &nbsp; &nbsp;</span><strong>CONSIDERANDO,</strong></p>
+    <p
+        style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;text-align:justify;line-height:115%;'>
+        <strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            &nbsp;1.-</strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;Que, por Resoluci&oacute;n Exenta N&deg;<span
+            style='background:lime;'>".$numResolucion."</span> de fecha <span
+            style='background:lime;'>".$fechaResolucion."</span>, el Ministerio de Salud, sus modificaciones o aquella que la
+        reemplace, se aprueba el &quot;<strong>PROGRAMA <span style='background:lime;'>".$programa." A&Ntilde;O
+                ".$periodoConvenio."&rdquo;.</span></strong></p>
+    <p
+        style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;font-size:11.0pt;text-align:justify;line-height:normal;'>
+        &nbsp;</p>
+    <p
+        style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;text-align:justify;line-height:115%;'>
+        <strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;2.-&nbsp;
+            &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;</strong>Que, por Resoluci&oacute;n Exenta N&deg;<span
+            style='background:lime;'>".$numResourceResolucion."</span> de fecha <span
+            style='background:lime;'>".$fechaResourceResolucion."</span>, el Ministerio de Salud, se aprueban los recursos que
+        financian el &ldquo;<strong>PROGRAMA <span style='background:lime;'>".$programa." A&Ntilde;O
+                ".$periodoConvenio."&rdquo;</span></strong>.</p>
+    <p
+        style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;font-size:11.0pt;text-align:justify;line-height:normal;'>
+        &nbsp;</p>
+    <p
+        style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;font-size:11.0pt;text-align:justify;line-height:115%;'>
+        <strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            &nbsp;3.-</strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;Que, mediante convenio de fecha&nbsp;<span
+            style='background:lime;'>".$fechaConvenio."</span>,&nbsp;suscrito entre el Servicio de Salud de Tarapac&aacute; y
+        la <span style='background:yellow;'>".$ilustre."</span> Municipalidad de <span
+            style='background:lime;'>".$comuna."</span>, el <strong>&ldquo;SERVICIO&rdquo;</strong> le asign&oacute; a la
+        Entidad Edilicia la suma de&nbsp;<strong><span style='background:lime;'>$".$totalConvenio."
+                (".$totalConvenioLetras.")</span></strong><strong>,&nbsp;</strong>para realizar las acciones de apoyo
+        relativas al &ldquo;<strong>PROGRAMA&nbsp;</strong><strong><span
+                style='background:lime;'>".$programa."</span></strong><strong>&nbsp;A&Ntilde;O <span
+                style='background:lime;'>".$periodoConvenio."</span>&rdquo;</strong>, de la&nbsp;Comuna de&nbsp;<span
+            style='background:lime;'>".$comuna."</span>.</p>
+    <p
+        style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;font-size:11.0pt;text-align:justify;line-height:115%;'>
+        &nbsp;</p>
+    <p
+        style='margin-top:12.0pt;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;font-size:11.0pt;text-align:justify;line-height:200%;'>
+        <strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            &nbsp;RESUELVO,</strong></p>
+    <p
+        style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;font-size:11.0pt;text-align:justify;line-height:200%;'>
+        <strong>&nbsp;</strong></p>
+    <p
+        style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;text-align:justify;line-height:115%;'>
+        <strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;1.-&nbsp;
+            &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;APRU&Eacute;BASE</strong> el convenio de ejecuci&oacute;n del
+        <strong>&ldquo;PROGRAMA&nbsp;</strong><strong><span
+                style='background:lime;'>".$programa."</span></strong><strong>&nbsp;A&Ntilde;O&nbsp;</strong><strong><span
+                style='background:lime;'>".$periodoConvenio."</span></strong><strong>&rdquo;</strong>, Comuna de&nbsp;<span
+            style='background:lime;'>".$comuna."</span>, de fecha&nbsp;<span style='background:lime;'>".$fechaConvenio."</span>,
+        suscrito entre el Servicio de Salud de Tarapac&aacute;, y la <span
+            style='background:yellow;'>".$ilustre."</span> Municipalidad de <span
+            style='background:lime;'>".$comuna."</span>.</p>
+    <p
+        style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;text-align:justify;line-height:115%;'>
+        <strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            &nbsp;2.-</strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; El convenio que se aprueba en virtud de este acto
+        administrativo, se pasa a transcribir:</p>";
+        $document->content .= Str::beforeLast($agreement->document->content, 'Presupuesto vigente del Servicio de Salud');
+        $document->content .= 'Presupuesto vigente del Servicio de Salud Tarapacá año '.$agreement->period.'”.</strong></p>';
+        //footer
+        $document->content .= "<br><p
+        style='margin-top:0cm;margin-right:0cm;margin-bottom:12.0pt;margin-left:0cm;font-size:11.0pt;text-align:justify;line-height:115%;'>
+        <span style='font-size:13px;line-height:115%;'>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            &nbsp; &nbsp; &nbsp;</span><strong>3.- IMP&Uacute;TESE</strong> el gasto total de&nbsp;<strong><span
+                style='background:lime;'>$".$totalConvenio." (".$totalConvenioLetras.")</span></strong> que irrogue el presente
+        Convenio de Ejecuci&oacute;n correspondiente al <strong>&ldquo;Programa&nbsp;</strong><strong><span
+                style='background:lime;'>".$programa."</span></strong><strong>&nbsp;a&ntilde;o <span
+                style='background:lime;'>".$periodoConvenio."</span>&rdquo;</strong>, entre el Servicio de Salud
+        Tarapac&aacute; y la <span style='background:yellow;'>".$ilustre."</span> Municipalidad de <span
+            style='background:lime;'>".$comuna."</span><strong>&nbsp;</strong>al &iacute;tem N&deg;<span
+            style='background:yellow;'>24-03 298-002</span> <strong>&ldquo;Reforzamiento Municipal del Presupuesto vigente
+            del Servicio de Salud Tarapac&aacute; a&ntilde;o 2024&rdquo;</strong>.</p>
+    <p
+        style='margin-top:0cm;margin-right:0cm;margin-bottom:12.0pt;margin-left:0cm;font-size:11.0pt;text-align:justify;line-height:normal;'>
+        &nbsp;</p>
+    <p
+        style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;font-size:11.0pt;text-align:justify;line-height:normal;'>
+        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<strong>AN&Oacute;TESE,
+            COMUN&Iacute;QUESE, ARCH&Iacute;VESE.&nbsp;</strong></p>";
         
         $types = Type::whereNull('partes_exclusive')->pluck('name','id');
         return view('documents.create', compact('document', 'types'));

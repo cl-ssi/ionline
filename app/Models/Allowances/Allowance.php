@@ -11,7 +11,7 @@ use App\Rrhh\Authority;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use App\Models\Documents\Signature;
-use App\User;
+use App\Models\User;
 
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use App\Models\Documents\Approval;
@@ -43,7 +43,7 @@ class Allowance extends Model implements Auditable
      */
 
     public function userAllowance() {
-        return $this->belongsTo('App\User', 'user_allowance_id')->withTrashed();
+        return $this->belongsTo('App\Models\User', 'user_allowance_id')->withTrashed();
     }
 
     public function organizationalUnitAllowance() {
@@ -51,7 +51,7 @@ class Allowance extends Model implements Auditable
     }
 
     public function userCreator() {
-        return $this->belongsTo('App\User', 'creator_user_id')->withTrashed();
+        return $this->belongsTo('App\Models\User', 'creator_user_id')->withTrashed();
     }
 
     public function organizationalUnitCreator() {

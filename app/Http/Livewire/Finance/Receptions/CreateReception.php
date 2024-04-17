@@ -4,7 +4,7 @@ namespace App\Http\Livewire\Finance\Receptions;
 
 use Livewire\WithFileUploads;
 use Livewire\Component;
-use App\User;
+use App\Models\User;
 use App\Rrhh\OrganizationalUnit;
 use App\Models\WebService\MercadoPublico;
 use App\Models\Parameters\Parameter;
@@ -23,7 +23,7 @@ class CreateReception extends Component
     use WithFileUploads;
 
     //   1272565-444-AG23 1057448-598-SE23 1272565-737-SE23;
-    // public $purchaseOrderCode = '1272565-444-AG23';
+    // public $purchaseOrderCode = '1057448-7-CM24';
     public $purchaseOrderCode;
     public $purchaseOrder = false;
     public $reception;
@@ -117,9 +117,6 @@ class CreateReception extends Component
     */
     public function mount($reception_id = null, $control_id = 0)
     {
-        if( array_key_exists('oc', $_GET) ) {
-            $this->purchaseOrderCode = $_GET['oc'];
-        }
         if($control_id <> 0 and $reception_id == null)
         {
             
@@ -198,6 +195,19 @@ class CreateReception extends Component
         if( is_null(Parameter::get('Recepciones','doc_type_id')) ) {
             dd('Falta parametrizar el módulo "Recepciones" Parametro "doc_type_id" con el id del tipo de documento acta de recepción');
         }
+
+        /* Esto precarga la OC*/
+        if( array_key_exists('oc', $_GET) ) {
+            $this->purchaseOrderCode = $_GET['oc'];
+            $this->getPurchaseOrder();
+        }
+
+        /* Esto precarga el DTE, debe ir después de la precarga de OC, si no no funciona */
+        if( array_key_exists('dte_id', $_GET) ) {
+            $this->selectedDteId = $_GET['dte_id'];
+            $this->getSelectedDte();
+        }
+
     }
 
     public function setTemplate($input, $template){
@@ -306,12 +316,23 @@ class CreateReception extends Component
                 // $this->reception['iva'] = round($this->reception['total'] * $this->purchaseOrder->json->Listado[0]->PorcentajeIva / 100);
                 // $this->reception['neto'] = $this->reception['subtotal'] = $this->reception['total'] - $this->reception['iva'];
                 break;
+            case 'factura_exenta':
             case 'factura_electronica':
             case 'guias_despacho':
-            case 'factura_exenta':
             default:
-                $this->reception['iva']   = $this->purchaseOrder->json->Listado[0]->PorcentajeIva / 100 * $this->reception['subtotal'];  
-                $this->reception['total'] = $this->reception['iva'] + $this->reception['subtotal'];
+                /** 
+                 * Si el total de Impuestos en la OC es 0, es una OC exenta (caso de Pasajes de Avión)
+                 * Las OC de pasajes de avión son hechas automáticamente por MP y no tienen impuestos. 
+                 **/
+                if( $this->purchaseOrder->json->Listado[0]->Impuestos == 0 ) {
+                    $this->reception['iva'] = 0;
+                    $this->reception['total'] = $this->reception['subtotal'];
+                }
+                /** Aquí cae todas las demás DTEs */
+                else {
+                    $this->reception['iva']   = $this->purchaseOrder->json->Listado[0]->PorcentajeIva / 100 * $this->reception['subtotal'];  
+                    $this->reception['total'] = $this->reception['iva'] + $this->reception['subtotal'];
+                }
                 break;
         }
     }

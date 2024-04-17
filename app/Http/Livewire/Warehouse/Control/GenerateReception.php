@@ -22,7 +22,7 @@ use Carbon\Carbon;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Str;
 use Livewire\Component;
-use App\User;
+use App\Models\User;
 
 
 class GenerateReception extends Component

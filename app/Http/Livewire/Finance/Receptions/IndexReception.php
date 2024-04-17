@@ -2,7 +2,7 @@
 
 namespace App\Http\Livewire\Finance\Receptions;
 
-use App\User;
+use App\Models\User;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Traits\NumerateTrait;

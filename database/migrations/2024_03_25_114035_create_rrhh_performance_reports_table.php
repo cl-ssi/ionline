@@ -24,6 +24,8 @@ return new class extends Migration
             $table->text('asistencia')->nullable();
             $table->text('puntualidad')->nullable();
             $table->text('cumplimiento_normas_e_instrucciones')->nullable();
+            $table->text('creator_user_observation')->nullable();
+            $table->text('received_user_observation')->nullable();
             $table->foreignId('created_user_id')->nullable()->constrained('users');
             $table->foreignId('created_ou_id')->nullable()->constrained('organizational_units');
             $table->foreignId('received_user_id')->nullable()->constrained('users');

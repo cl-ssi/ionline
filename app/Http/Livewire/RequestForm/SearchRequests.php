@@ -6,7 +6,7 @@ use App\Exports\RequestForms\RequestFormsExport;
 use App\Models\Parameters\Parameter;
 use Livewire\Component;
 use App\Models\RequestForms\RequestForm;
-use App\User;
+use App\Models\User;
 use Carbon\Carbon;
 use Livewire\WithPagination;
 use Maatwebsite\Excel\Facades\Excel;
@@ -18,6 +18,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Exports\RequestForms\FormItemsExport;
 // use Illuminate\Support\Facades\Bus;
 // use Illuminate\Support\Facades\Storage;
+
+use App\Models\Parameters\PurchaseMechanism;
 
 class SearchRequests extends Component
 {
@@ -40,7 +42,7 @@ class SearchRequests extends Component
     public $selectedPo = null;
     public $selectedTender = null;
     public $selectedSupplier = null;
-    public $selectedSubType = null;
+    public $selectedSubtype = null;
     public $result = null;
     public $inbox;
     public $type;
@@ -51,11 +53,17 @@ class SearchRequests extends Component
 
     public $organizationalUnit;
 
+    //SEARCH FORM-ITEMS
+    // public $activeSearch = false;
+    public $lstPurchaseMechanism;
+    public $selectedPurchaseMechanism = null;
+
     protected $listeners = ['searchedRequesterOu', 'clearRequesterOu','searchedAdminOu', 'clearAdminOu'];
 
     protected $queryString = ['selectedStatus', 'selectedStatusPurchase', 'selectedId', 'selectedFolio',
         'selectedName', 'selectedStartDate', 'selectedEndDate', 'selectedRequester', 'selectedRequesterOuName',
-        'selectedAdmin', 'selectedAdminOuName', 'selectedPurchaser', 'selectedProgram', 'selectedPo', 'selectedSupplier', 'selectedSubType'
+        'selectedAdmin', 'selectedAdminOuName', 'selectedPurchaser', 'selectedProgram', 'selectedPo', 'selectedSupplier', 'selectedSubtype',
+        'selectedPurchaseMechanism'
     ];
 
     public function mount() {
@@ -118,11 +126,13 @@ class SearchRequests extends Component
         $this->selectedPo,
         $this->selectedTender,
         $this->selectedSupplier,
-        $this->selectedSubType
-
+        $this->selectedSubtype,
+        $this->selectedPurchaseMechanism
         );
 
         if($this->inbox == 'report: form-items'){
+            $this->lstPurchaseMechanism   = PurchaseMechanism::all();
+
             if($this->type == 'items'){
                 $query->with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'purchaseType','associateProgram', 'purchasingProcess.details', 
                     'itemRequestForms.product', 'itemRequestForms.budgetItem','father:id,folio,has_increased_expense', 'purchasers', 'purchasingProcess')
@@ -308,4 +318,14 @@ class SearchRequests extends Component
     public function updatingSupplier(){
         $this->resetPage();
     }
+
+    public function updatingSelectedPurchaseMechanism(){
+        $this->resetPage();
+    }
+
+    /*
+    public function search(){
+        $this->activeSearch = true;
+    }
+    */
 }

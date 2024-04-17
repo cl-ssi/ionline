@@ -72,7 +72,7 @@
             </tr>
             <tr>
                 <th>Folio</th>
-                <th>Fec Gen</th>                
+                <th>Fec Gen</th>
                 <th>PDF</th>
                 <th>Tipo</th>
             </tr>
@@ -128,8 +128,13 @@
                             <hr>
                         </td>
                         <td>{{$dte->tgrPayedDte?->folio}}</td>
-                        <td nowrap><small>{{$dte->tgrPayedDte ? $dte->tgrPayedDte->fecha_generacion->format('d-m-Y') : ''}}</small></td>                        
-                        <td><a href="#" class="btn btn-sm btn-outline-danger"><i class="fas fa-file-pdf"></i></a></td>
+                        <td nowrap><small>{{$dte->tgrPayedDte ? $dte->tgrPayedDte->fecha_generacion->format('d-m-Y') : ''}}</small></td>
+                        <td>
+                        <a href="{{ route('finance.payments.paidPdf', ['dte' => $dte]) }}" class="btn btn-sm btn-outline-danger" target="_blank">
+                            <i class="fas fa-file-pdf"></i>
+                        </a>
+                    </td>
+
                         <td>
                             @if($dte->paid_automatic)
                                 <span title="Pago automático"><i class="fas fa-money-check-alt"></i></span>

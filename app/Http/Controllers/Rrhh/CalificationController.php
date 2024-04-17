@@ -29,7 +29,7 @@ class CalificationController extends Controller
                     'status' => 1,
                     'approver_id' => auth()->user()->id,
                     'approver_ou_id' => auth()->user()->organizational_unit_id,
-                    'approver_at' => now(),                    
+                    'approver_at' => now(),
                 ]);
             }
 

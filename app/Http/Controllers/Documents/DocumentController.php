@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Barryvdh\DomPDF\Facade\Pdf;
-use App\User;
+use App\Models\User;
 use App\Rrhh\OrganizationalUnit;
 use App\Models\Documents\Type;
 use App\Models\Documents\SignaturesFile;
@@ -126,7 +126,10 @@ class DocumentController extends Controller
 
         if ($request->has('agreement_id')) {
             $agreement = Agreement::find($request->agreement_id);
-            $agreement->update(['document_id' => $document->id]);
+            if($document->type_id == Type::where('name','Resolución')->first()->id)
+                $agreement->update(['res_document_id' => $document->id]);
+            else
+                $agreement->update(['document_id' => $document->id]);
         }
 
         return redirect()->route('documents.index');
@@ -347,11 +350,11 @@ class DocumentController extends Controller
             if($agreement){
                 $visadores = collect([$agreement->referrer]); //referente tecnico
                             // $visadores = collect([
-            //                 ['ou_id' => 61, 'user_id' => 6811637], // DEPTO. ASESORIA JURIDICA - CARMEN HENRIQUEZ OLIVARES
+            //                 ['ou_id' => 61, 'user_id' => 12834358], // DEPTO. ASESORIA JURIDICA - LUIS MENA BUGUEÑO
             //                 ['ou_id' => 12, 'user_id' => 17289587] // DEPTO. APS - VALENTINA ORTEGA
             //                 ['ou_id' => 2, 'user_id' => 14104369], // SDGA - CARLOS CALVO
             //                 ['ou_id' => 31, 'user_id' => 17432199], // DEPTO.GESTION FINANCIERA (40) - ROMINA GARÍN
-                foreach(array(6811637, 17289587, 14104369, 17432199) as $user_id) //resto de visadores por cadena de responsabilidad
+                foreach(array(12834358, 17289587, 14104369, 17432199) as $user_id) //resto de visadores por cadena de responsabilidad
                     $visadores->add(User::find($user_id));
                 
                 foreach($visadores as $key => $visador){
@@ -374,12 +377,12 @@ class DocumentController extends Controller
             $continuityResolution = ContinuityResolution::with('referrer')->where('document_id', $document->id)->first();
             $visadores = collect([$continuityResolution->referrer]); //referente tecnico
                         // $visadores = collect([
-            //                 ['ou_id' => 61, 'user_id' => 6811637], // DEPTO. ASESORIA JURIDICA - CARMEN HENRIQUEZ OLIVARES
+            //                 ['ou_id' => 61, 'user_id' => 12834358], // DEPTO. ASESORIA JURIDICA - LUIS MENA BUGUEÑO
             //                 ['ou_id' => 12, 'user_id' => 17289587] // DEPTO. APS - VALENTINA ORTEGA
             //                 ['ou_id' => 2, 'user_id' => 14104369], // SDGA - CARLOS CALVO
             //                 ['ou_id' => 31, 'user_id' => 9994426], // SDA - JAIME ABARZUA
             //             ]);
-            foreach(array(6811637, 17289587, 14104369, 9994426) as $user_id) //resto de visadores por cadena de responsabilidad
+            foreach(array(12834358, 17289587, 14104369, 9994426) as $user_id) //resto de visadores por cadena de responsabilidad
                 $visadores->add(User::find($user_id));
             
             foreach($visadores as $key => $visador){

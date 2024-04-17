@@ -3,7 +3,7 @@
 namespace App\Http\Livewire\Parameters;
 
 use Livewire\Component;
-use App\User;
+use App\Models\User;
 
 class AccessLogIndex extends Component
 {

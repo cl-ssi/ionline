@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use App\User;
+use App\Models\User;
 use App\Rrhh\OrganizationalUnit;
 use App\Notifications\Documents\NewApproval;
 use App\Models\Finance\Dte; // Sólo para el ejemplo, no tiene uso
@@ -239,6 +239,7 @@ class Approval extends Model
         'approvable_id',
         'approvable_type',
         'digital_signature',
+        'endorse',
         'position',
         'start_y',
         'filename',
@@ -251,6 +252,10 @@ class Approval extends Model
     */
     protected $casts = [
         'approver_at' => 'datetime',
+        'status' => 'boolean',
+        'active' => 'boolean',
+        'digital_signature' => 'boolean',
+        'endorse' => 'boolean',
     ];
 
     public function sentToOu()

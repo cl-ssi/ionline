@@ -5,7 +5,7 @@ namespace App\Services;
 use App\Models\Documents\Signature;
 use App\Models\Documents\SignaturesFile;
 use App\Models\Documents\SignaturesFlow;
-use App\User;
+use App\Models\User;
 use Illuminate\Support\Facades\Storage;
 
 class SignatureService
@@ -23,7 +23,7 @@ class SignatureService
 
     /**
      * Add responsable
-     * @param  \App\User  $responsible
+     * @param  \App\Models\User  $responsible
      */
     public function addResponsible(User $responsible)
     {

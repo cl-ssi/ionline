@@ -2,7 +2,7 @@
 
 namespace App\Http\Livewire\Rrhh;
 
-use App\User;
+use App\Models\User;
 use Livewire\Component;
 
 class UndoUserDeletion extends Component

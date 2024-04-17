@@ -6,7 +6,7 @@ use App\Models\Agreements\Program;
 use App\Models\Agreements\Signer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\User;
+use App\Models\User;
 
 class ProgramController extends Controller
 {

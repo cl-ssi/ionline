@@ -12,7 +12,7 @@ use App\Models\Programmings\CommuneFile;
 use App\Models\Programmings\ActivityItem;
 use App\Models\Programmings\ProfessionalHour;
 use App\Models\Programmings\ProgrammingItem;
-use App\User;
+use App\Models\User;
 use Illuminate\Support\Str;
 
 class ProgrammingController extends Controller

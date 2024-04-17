@@ -2,28 +2,29 @@
 
 namespace App\Http\Controllers;
 
-use setasign\Fpdi\PdfParser\StreamReader;
-use setasign\Fpdi\Fpdi;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\DB;
-
-use Illuminate\Http\Request;
-use GuzzleHttp\Client;
-use Firebase\JWT\JWT;
-use Exception;
-use Carbon\Carbon;
-use App\User;
-use App\Services\ImageService;
-use App\Rrhh\OrganizationalUnit;
-use App\Models\WebService\MercadoPublico;
-use App\Models\Establishment;
-use App\Models\Documents\Sign\Signature;
-use App\Models\Documents\DocDigital;
-use App\Models\Documents\DigitalSignature;
 use App\Jobs\TestJob;
+use App\Models\Documents\Approval;
+use App\Models\Documents\DigitalSignature;
+use App\Models\Documents\DocDigital;
+use App\Models\Documents\Sign\Signature;
+use App\Models\Establishment;
+
 use App\Models\Inv\Inventory;
+use App\Models\WebService\MercadoPublico;
+use App\Rrhh\OrganizationalUnit;
+use App\Services\ImageService;
+use App\Models\User;
+use Carbon\Carbon;
+use Exception;
+use Firebase\JWT\JWT;
+use GuzzleHttp\Client;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
+use setasign\Fpdi\Fpdi;
+use setasign\Fpdi\PdfParser\StreamReader;
 
 
 class TestController extends Controller
@@ -128,7 +129,7 @@ class TestController extends Controller
 
     public function log()
     {
-        $user = \App\User::find(1528758);
+        $user = \App\Models\User::find(1528758);
         echo $user->name;
         Log::info('primer log');
         echo 'Primer log';
@@ -137,6 +138,16 @@ class TestController extends Controller
     public function info()
     {
         phpinfo();
+    }
+
+    public function approvalCallback($approval_id, $param2) {
+        $approval = Approval::find($approval_id);
+        if($approval->status === true) {
+            logger()->info('Aprobado id:' . $approval->id. ' param2: '. $param2);
+        }
+        else {
+            logger()->info('Rechazado id: ' . $approval->id. ' param2: '. $param2 . ' motivo:'. $approval->approver_observation);
+        }
     }
 
     /**

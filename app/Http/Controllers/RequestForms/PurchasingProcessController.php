@@ -7,7 +7,7 @@ use App\Models\RequestForms\PurchasingProcess;
 use Illuminate\Http\Request;
 
 use App\Models\RequestForms\RequestForm;
-use App\User;
+use App\Models\User;
 use App\Models\Parameters\Supplier;
 use App\Models\Parameters\Parameter;
 use App\Models\RequestForms\InternalPurchaseOrder;

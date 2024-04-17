@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
-use App\User;
+use App\Models\User;
 use App\Rrhh\OrganizationalUnit;
 use App\Models\RequestForms\PurchasingProcess;
 use App\Models\RequestForms\PaymentDoc;
@@ -515,12 +515,14 @@ class RequestForm extends Model implements Auditable
         $purchase_order_search,
         $tender_search,
         $supplier_search,
-        $subtype_search
+        $subtype_search,
+        $purchase_mechanism_search
     ) {
         if (
             $status_search or $status_purchase_search or $id_search or $folio_search or $name_search
             or $start_date_search or $end_date_search or $requester_search or $requester_ou_id or $admin_search
             or $admin_ou_id or $purchaser_search or $program_search or $purchase_order_search or $tender_search or $supplier_search or $subtype_search
+            or $purchase_mechanism_search
         ) {
             if ($status_search != '') {
                 $query->where(function ($q) use ($status_search) {
@@ -646,10 +648,15 @@ class RequestForm extends Model implements Auditable
                 /* Proveedores de las OC Interna */
             }
 
-            // dd($status_subtype_search);
             if ($subtype_search != '') {
                 $query->where(function ($q) use ($subtype_search) {
                     $q->where('subtype', 'LIKE', $subtype_search.'%');
+                });
+            }
+
+            if ($purchase_mechanism_search != '') {
+                $query->where(function ($q) use ($purchase_mechanism_search) {
+                    $q->where('purchase_mechanism_id', $purchase_mechanism_search);
                 });
             }
         }

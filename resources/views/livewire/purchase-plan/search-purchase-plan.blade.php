@@ -1,6 +1,69 @@
 <div>
+    @if($index == 'own' || $index == 'all')
+        <div class="card card-body small">
+            <h5 class="mb-3"><i class="fas fa-search"></i> Buscar:</h5>
+            <div class="row">
+                <fieldset class="form-group col-12 col-md-1">
+                    <label for="for_id">ID</label>
+                    <input class="form-control form-control-sm" type="number" name="id_search" autocomplete="off" 
+                        placeholder="001" wire:model.debounce.500ms="selectedId">
+                </fieldset>
+                
+                <fieldset class="form-group col-12 col-md-2">
+                    <label for="for_status_search">Estado Formulario</label>
+                    <select name="status_search" class="form-select form-select-sm" wire:model.debounce.500ms="selectedStatus">
+                        <option value="">Seleccione...</option>
+                        <option value="save">Guardado</option>
+                        <option value="sent">Enviado</option>
+                        <option value="approved">Aprobado</option>
+                        <option value="rejected">Rechazado</option>
+                        <option value="published">Publicado</option>
+                    </select>
+                </fieldset>
+
+                <fieldset class="form-group col-12 col-md-3">
+                    <label for="for_subject">Asunto</label>
+                    <input class="form-control form-control-sm" type="text" autocomplete="off" name="subject_search" 
+                        wire:model.debounce.500ms="selectedSubject">
+                </fieldset>
+
+                <fieldset class="form-group col-12 col-md-3">
+                    <label for="regiones">Periodo de Creación</label>
+                    <div class="input-group">
+                        <input type="date" class="form-control form-control-sm" name="start_date_search" wire:model.debounce.500ms="selectedStartDate">
+                        <input type="date" class="form-control form-control-sm" name="end_date_search" wire:model.debounce.500ms="selectedEndDate">
+                    </div>
+                </fieldset>
+
+                <fieldset class="form-group col-12 col-md-3">
+                    <label for="for_user_creator">Usuario Creador</label>
+                    <input class="form-control form-control-sm" type="text" autocomplete="off" placeholder="NOMBRE / APELLIDOS"
+                        name="user_creator_search" wire:model.debounce.500ms="selectedUserCreator">
+                </fieldset>
+            </div>
+
+            <div class="row mt-3">
+                <fieldset class="form-group col-12 col-md-3">
+                    <label for="for_user_responsible">Usuario Responsable</label>
+                    <input class="form-control form-control-sm" type="text" autocomplete="off" placeholder="NOMBRE / APELLIDOS"
+                        name="user_responsible_search" wire:model.debounce.500ms="selectedUserResponsible">
+                </fieldset>
+
+                <fieldset class="form-group col-12 col-md-3">
+                    <label for="for_requester_ou_id">U.O. Administrador Contrato</label>
+                        @livewire('search-select-organizational-unit', [
+                            'emit_name'          => 'searchedResponsibleOu',
+                            'selected_id'        => 'responsible_ou_id',
+                            'small_option'       => true,
+                            'organizationalUnit' => null
+                        ])
+                </fieldset>
+            </div>
+        </div>
+    @endif
+
     @if($index == 'own' || $index == 'all' || $this->index == 'pending' || $this->index == 'my_assigned_plans')
-        <div class="row">
+        <div class="row mb-3">
             <div class="col">
                 <p class="font-weight-lighter">Total de Registros: <b>{{ $purchasePlans->total() }}</b></p>
             </div>
@@ -9,7 +72,7 @@
             </div>--}}
         </div>
         @if($purchasePlans->count() > 0)
-            <div class="table-responsive">
+            <div class="table-responsive ">
                 <table class="table table-bordered table-sm small">
                     <thead>
                         <tr class="text-center align-top table-secondary">

@@ -8,7 +8,7 @@ use Illuminate\Support\Collection;
 use App\Rrhh\OrganizationalUnit;
 use App\Models\Establishment;
 use App\Rrhh\Authority;
-use App\User;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 
@@ -66,7 +66,8 @@ class RequirementReceivers extends Component
             }
         }
 
-        $this->to_ou_id = 1;
+        //$this->to_ou_id = 1;
+        $this->to_ou_id = '';
     }
 
     public function add()

@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Notification;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use App\User;
+use App\Models\User;
 use App\Notifications\Signatures\SignedDocument;
 use App\Models\Documents\Type;
 
@@ -46,12 +46,12 @@ class Signature extends Model implements Auditable
 
     public function user()
     {
-        return $this->belongsTo('App\User')->withTrashed();
+        return $this->belongsTo('App\Models\User')->withTrashed();
     }
 
     public function responsable()
     {
-        return $this->belongsTo('App\User','responsable_id')->withTrashed();
+        return $this->belongsTo('App\Models\User','responsable_id')->withTrashed();
     }
 
     public function organizationalUnit()

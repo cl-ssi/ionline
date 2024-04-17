@@ -3,7 +3,7 @@
 namespace App\Http\Livewire\RequestForm\Passenger;
 
 use Livewire\Component;
-use App\User;
+use App\Models\User;
 use App\Models\Parameters\PurchaseMechanism;
 use Carbon\Carbon;
 

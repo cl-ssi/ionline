@@ -6,7 +6,7 @@ use OwenIt\Auditing\Contracts\Auditable;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use App\User;
+use App\Models\User;
 use App\Models\Warehouse\Control;
 use App\Models\RequestForms\RequestForm;
 use App\Models\RequestForms\ImmediatePurchase;
@@ -259,9 +259,19 @@ class Dte extends Model implements Auditable
         return $this->hasOne(TgrPayedDte::class);
     }
 
-    public function tgrAccountingPortfolio()
+    public function tgrAccountingPortfolios()
     {
-        return $this->hasOne(TgrAccountingPortfolio::class, 'dte_id');
+        return $this->hasMany(TgrAccountingPortfolio::class, 'dte_id');
+    }
+
+    public function totalDebe()
+    {
+        return $this->tgrAccountingPortfolios()->sum('debe');
+    }
+
+    public function totalHaber()
+    {
+        return $this->tgrAccountingPortfolios()->sum('haber');
     }
 
 

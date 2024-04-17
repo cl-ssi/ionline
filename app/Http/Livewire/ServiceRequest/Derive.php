@@ -3,7 +3,7 @@
 namespace App\Http\Livewire\ServiceRequest;
 
 use App\Models\ServiceRequests\ServiceRequest;
-use App\User;
+use App\Models\User;
 use Carbon\Carbon;
 use App\Mail\ServiceRequestNotification;
 use App\Mail\DerivationNotification;

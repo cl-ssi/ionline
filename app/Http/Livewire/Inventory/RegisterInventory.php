@@ -9,7 +9,7 @@ use App\Models\Inv\Inventory;
 use App\Models\Inv\InventoryMovement;
 use App\Models\WebService\MercadoPublico;
 use App\Services\PurchaseOrderService;
-use App\User;
+use App\Models\User;
 use App\Notifications\InventoryNewItem;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;

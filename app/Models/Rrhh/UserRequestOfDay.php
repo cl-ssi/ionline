@@ -13,11 +13,11 @@ class UserRequestOfDay extends Model
     /* Status, Pendiente, Cancelada, Aceptada, Rechazada */
     public function user()
     {
-        return $this->belongsTo(\App\User::class, 'user_id');
+        return $this->belongsTo(\App\Models\User::class, 'user_id');
     }
     public function ChangeBy()
     {
-        return $this->belongsTo(\App\User::class, 'status_change_by');
+        return $this->belongsTo(\App\Models\User::class, 'status_change_by');
     }
     public function ShiftUserDay()
     {

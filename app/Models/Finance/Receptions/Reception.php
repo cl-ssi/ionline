@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use App\User;
+use App\Models\User;
 use App\Rrhh\OrganizationalUnit;
 use App\Models\Finance\Receptions\ReceptionType;
 use App\Models\Finance\Receptions\ReceptionItem;
@@ -190,6 +190,11 @@ class Reception extends Model implements Auditable
         return $this->morphOne(File::class, 'fileable')->where('type','support_file');
     }
 
+    /** Convierte los tipos de dte en human readable "boleta_honorarios" => "Boleta Honorarios" */
+    public function getDteTypeNameAttribute()
+    {
+        return ucwords(str_replace('_', ' ', strtolower($this->dte_type)));
+    }
 
     public function allApprovalsOk(): bool
     {

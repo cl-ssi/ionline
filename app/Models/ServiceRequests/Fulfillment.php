@@ -2,7 +2,7 @@
 
 namespace App\Models\ServiceRequests;
 
-use app\User;
+use App\Models\User;
 use OwenIt\Auditing\Contracts\Auditable;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -95,22 +95,22 @@ class Fulfillment extends Model implements Auditable
 
   public function responsableUser()
   {
-    return $this->belongsTo('App\User', 'responsable_approver_id')->withTrashed();
+    return $this->belongsTo('App\Models\User', 'responsable_approver_id')->withTrashed();
   }
 
   public function rrhhUser()
   {
-    return $this->belongsTo('App\User', 'rrhh_approver_id')->withTrashed();
+    return $this->belongsTo('App\Models\User', 'rrhh_approver_id')->withTrashed();
   }
 
   public function financesUser()
   {
-    return $this->belongsTo('App\User', 'finances_approver_id')->withTrashed();
+    return $this->belongsTo('App\Models\User', 'finances_approver_id')->withTrashed();
   }
 
   public function voiceUploader()
   {
-    return $this->belongsTo('App\User', 'has_invoice_file_user_id')->withTrashed();
+    return $this->belongsTo('App\Models\User', 'has_invoice_file_user_id')->withTrashed();
   }
 
   public function signedCertificate()

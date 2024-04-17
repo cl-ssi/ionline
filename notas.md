@@ -73,6 +73,13 @@
 
 
 
+## Partes
+[ ] Copiar(crear) columnas organizational_unit_id, user_id desde parte_events hacia partes
+[ ] eliminar model parte_events con su tabla
+[ ] crear signatures_file_id en partes y migrar desde la tabla parte_files, todos los files que tengan un signature_file_id (el nombre es distinto) distinto de null, entonces el parte quedaría con la relacion $parte->signatureFile
+[ ] Por cada ParteFile crear un File (generico) y crear la relacion polimorfica File en modelo Parte
+[ ] Borrar modelo ParteFile
+
 ## Inventario
 
 

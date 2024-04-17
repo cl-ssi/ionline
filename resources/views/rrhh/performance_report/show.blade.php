@@ -54,7 +54,7 @@
                 PERIODO
             </th>
             <td class="nowrap" style="text-transform: uppercase;">
-                {{ $report->period?->name }} <small> ({{ $report->period?->start_at->format('d-m-Y') }} - {{ $report->period?->end_at->format('d-m-Y') }} ) </small>
+                {{ $report->period?->name }}  ({{ $report->period?->start_at->format('d-m-Y') }} - {{ $report->period?->end_at->format('d-m-Y') }} )
             </td>
         </tr>
         <tr>
@@ -72,7 +72,15 @@
             <td class="nowrap" style="text-transform: uppercase;">
                 {{ $report->receivedOrganizationalUnit?->name }}
             </td>
-        </tr>     
+        </tr>
+        <tr>
+            <th>
+                NOMBRE JEFE DIRECTO
+            </th>
+            <td class="nowrap" style="text-transform: uppercase;">
+                {{ $report->createdUser?->full_name_upper }}
+            </td>
+        </tr>
     </table>
     <br><br><br><br>
 
@@ -137,6 +145,24 @@
         </tbody>
     </table>
 
+    <br><br><br><br>
+    <table class="tabla">
+        <thead>
+            <tr>
+                <th colspan="3">Observaciones <small>(opcional)</small></th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td colspan="3">Observación Usuario Creador: {{ $report->creator_user_observation }}</td>
+            </tr>
+            <tr>
+                <td colspan="3">Observación Funcionario Receptor: {{ $report->received_user_observation }}</td>
+            </tr>
+        </tbody>
+    </table>
+
     
     
     
@@ -148,22 +174,25 @@
 
         <div class="signature" style="padding-left: 32px;">
             @if($approval = $report->approvals->where('position', 'left')->first())
-                @include('sign.approvation', [
+                @include('sign.calificaciones', [
                     'approval' => $approval,
+                    'observacion' => $report->received_user_observation
                 ])
             @endif
         </div>
         <div class="signature" style="padding-left: 6px; padding-right: 6px;">
             @if($approval = $report->approvals->where('position', 'center')->first())
-                @include('sign.approvation', [
+                @include('sign.calificaciones', [
                     'approval' => $approval,
+                    'observacion' => $report->received_user_observation
                 ])
             @endif
         </div>
         <div class="signature">
             @if($approval = $report->approvals->where('position', 'right')->first())
-                @include('sign.approvation', [
+                @include('sign.calificaciones', [
                     'approval' => $approval,
+                    'observacion' => $report->received_user_observation,
                 ])
             @endif
         </div>

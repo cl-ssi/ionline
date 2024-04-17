@@ -37,6 +37,14 @@
             @error('subject') <span class="text-danger error small">{{ $message }}</span> @enderror
         </fieldset>
     </div>
+
+    <div class="row g-3 mb-3">
+        <fieldset class="form-group col-12 col-md-12">
+            <label for="for_description">Descripción</label>
+            <textarea class="form-control" rows="3" wire:model.defer="description"></textarea>
+            @error('description') <span class="text-danger error small">{{ $message }}</span> @enderror
+        </fieldset>
+    </div>
     
     <div class="row g-3 mb-3">
         <fieldset class="col-12 col-md-4">
@@ -60,6 +68,25 @@
             <input type="time" class="form-control" wire:model.defer="end_at">
             @error('end_at') <span class="text-danger error small">{{ $message }}</span> @enderror
         </fieldset>
+
+        
+    </div>
+
+    <div class="row g-3 mb-3">
+        <fieldset class="form-group col-12 col-sm-4">
+            <label for="forFileAttached" class="form-label"></label>
+            <input class="form-control" type="file" wire:model.defer="file" id="upload({{ $iterationFileClean }})">
+            <div wire:loading wire:target="file">Cargando archivo...</div>
+            @error('file') <span class="text-danger error small">{{ $message }}</span> @enderror
+        </fieldset>
+        
+        @if($form == 'edit' && $meetingToEdit->file)
+            <fieldset class="form-group col-12 col-sm-2">
+                <a class="btn btn-primary mt-4" href="{{ route('meetings.show_file', $meetingToEdit) }}" target="_blank">
+                    <i class="fas fa-paperclip fa-fw"></i> Ver adjunto
+                </a>
+            </fieldset>
+        @endif
     </div>
 
     <hr>
@@ -105,7 +132,12 @@
                 <tbody>
                     @foreach($groupings as $key => $grouping)
                     <tr>
-                        <th class="text-center">{{ $loop->iteration }}</th>
+                        <th class="text-center">
+                            {{ $loop->iteration }}
+                            @if($grouping['id'] != null)
+                                <br><i class="fas fa-save fa-fw"></i>
+                            @endif
+                        </th>
                         <td class="text-center">
                             @switch($grouping['type'])
                                 @case('asociaciones funcionarios')
@@ -161,7 +193,12 @@
                     @foreach($commitments as $key => $commitment)
                     <tr>
                         
-                        <th class="text-center">{{ $loop->iteration }}</th>
+                        <th class="text-center">
+                            {{ $loop->iteration }}
+                            @if($commitment['id'] != null)
+                                <br><i class="fas fa-save fa-fw"></i>
+                            @endif
+                        </th>
                         <td style="text-align: justify;">{{ $commitment['description'] }}</td>
                         <td class="text-center">{{ ($commitment['commitment_user_id']) ?  $commitment['commitment_user_name'] : $commitment['commitment_ou_name'] }}</td>
                         <td class="text-center">
@@ -268,7 +305,7 @@
     <div class="row g-3">
         <div class="col-12">
             @if($form == 'create' || (($meetingToEdit && $meetingToEdit->StatusValue != 'Derivado SGR')))
-            <button wire:click="save" class="btn btn-primary float-end" type="button">
+            <button wire:click="save('save')" class="btn btn-primary float-end" wire:loading.attr="disabled" wire:target="file" type="button">
                 <i class="fas fa-save"></i> Guardar
             </button>
             @endif
@@ -276,7 +313,8 @@
             @if($meetingToEdit && $meetingToEdit->StatusValue == 'Guardado' && $meetingToEdit->commitments->count() > 0)
                 <button class="btn btn-success float-end me-3" 
                     type="button"
-                    wire:click="sentSgr">
+                    wire:click="sentSgr"
+                    wire:loading.attr="disabled">
                     <i class="fas fa-rocket"></i> Cerrar Reunión
                 </button>
             @endif

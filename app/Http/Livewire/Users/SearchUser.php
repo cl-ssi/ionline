@@ -2,7 +2,7 @@
 
 namespace App\Http\Livewire\Users;
 
-use App\User;
+use App\Models\User;
 use Livewire\Component;
 
 class SearchUser extends Component

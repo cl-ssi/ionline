@@ -5,7 +5,7 @@ namespace App\Models\His;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use App\User;
+use App\Models\User;
 use App\Models\Documents\Approval;
 use App\Models\His\ModificationRequestFile;
 

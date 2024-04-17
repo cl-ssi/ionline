@@ -4,7 +4,7 @@ namespace App\Http\Livewire\Rrhh;
 
 use Livewire\Component;
 use App\Models\Rrhh\ShiftUserDay;
-use App\User;
+use App\Models\User;
 use App\Models\Rrhh\ShiftUser;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Rrhh\ShiftDayHistoryOfChanges;

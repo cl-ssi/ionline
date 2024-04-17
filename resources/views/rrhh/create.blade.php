@@ -10,7 +10,7 @@
 <form method="POST" action="{{ route('rrhh.users.store') }}" enctype="multipart/form-data">
     @csrf
 
-    <div class="row gx-2">
+    <div class="row gx-2 mb-3">
         <fieldset class="form-group col-2">
             <label for="formGroupIDInput">ID*</label>
             <input type="number" class="form-control" id="formGroupIDInput" name="id" required="required" min="6" max="99999999" step="" autocomplete="off">
@@ -37,7 +37,7 @@
         </div>
         
         <div class="form-group col-md-1">
-            <label for="name">Sexo</label>
+            <label for="name">Sexo*</label>
             <select name="gender" class="form-select" required>
                 <option value=""></option>
                 <option value="male">Masculino</option>
@@ -51,7 +51,7 @@
         </fieldset>
     </div>
 
-    <div class="form-row row gx-2">
+    <div class="row gx-2 mb-3">
         <fieldset class="form-group col-md-12">
             <label for="forOrganizationalUnit">Establecimiento / Unidad Organizacional</label>
                 @livewire('select-organizational-unit', [

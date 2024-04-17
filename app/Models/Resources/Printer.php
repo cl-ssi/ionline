@@ -40,7 +40,7 @@ class Printer extends Model
 
     public function users()
     {
-        return $this->belongsToMany('\App\User', 'res_printer_user')->withTimestamps();
+        return $this->belongsToMany('\App\Models\User', 'res_printer_user')->withTimestamps();
     }
 
     public function place()

@@ -8,7 +8,7 @@ use App\Models\Finance\Receptions\ReceptionType;
 use App\Models\Finance\Dte;
 use App\Models\Finance\Receptions\Reception;
 use App\Models\Finance\Receptions\ReceptionItem;
-use App\User;
+use App\Models\User;
 use App\Rrhh\OrganizationalUnit;
 
 class CreateReceptionNoOc extends Component
@@ -38,6 +38,7 @@ class CreateReceptionNoOc extends Component
     public $showAllFields = false;
 
     public $receptionItems = [];
+    public $exento = false;
     
 
     protected $rules = [        
@@ -81,6 +82,21 @@ class CreateReceptionNoOc extends Component
     {
         $this->types = ReceptionType::where('establishment_id',auth()->user()->organizationalUnit->establishment_id)
             ->pluck('name','id')->toArray();
+        
+        if( array_key_exists('dte_id', $_GET) ) {
+            $this->selectedDteId = $_GET['dte_id'];
+            $dteData = Dte::find($this->selectedDteId);
+            $this->emisor = $dteData->emisor;
+            $this->folio = $dteData->folio;
+            $this->reception['dte_type'] = $dteData->tipo_documento;
+            $this->razonSocial = $dteData->razon_social_emisor;
+            $this->reception['dte_date'] = $dteData->emision?->format('Y-m-d');
+            $this->montoNeto = $dteData->monto_neto;
+            $this->montoExento = $dteData->monto_exento;
+            $this->montoIva = $dteData->monto_iva;
+            $this->montoTotal = $dteData->monto_total;
+            
+        }
     }
 
     public function loadDteData()
@@ -324,6 +340,7 @@ class CreateReceptionNoOc extends Component
             'cantidad' => '',
             'unidad' => '',
             'precioNeto' => '',
+            'precioExento' => '',
             'total' => 0,
         ];
 
@@ -340,12 +357,19 @@ class CreateReceptionNoOc extends Component
     public function calculateTotal($index)
     {
         $item = $this->items[$index];
-        if (!empty($item['cantidad']) && !empty($item['precioNeto'])) {
-            $this->items[$index]['total'] = $item['cantidad'] * $item['precioNeto'];
+        if (!empty($item['cantidad'])) {
+            if (!empty($item['montoExento'])) {
+                // Si hay un monto exento definido, calcular el total usando el monto exento
+                $this->items[$index]['total'] = $item['cantidad'] * $item['montoExento'];
+            } elseif (!empty($item['precioNeto'])) {
+                // Si no hay monto exento pero hay un precio neto, calcular el total usando el precio neto
+                $this->items[$index]['total'] = $item['cantidad'] * $item['precioNeto'];
+            }
             return $this->items[$index]['total'];
         }
         return 0;
     }
+    
 
     public function calculateTotalAmount()
     {
@@ -371,6 +395,8 @@ class CreateReceptionNoOc extends Component
         
     }
 
-
-
+    public function toggleExento()
+    {
+        $this->exento = !$this->exento;
+    }
 }

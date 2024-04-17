@@ -6,7 +6,7 @@ use App\Models\RequestForms\SupplyPurchase;
 use Illuminate\Http\Request;
 
 use App\Models\RequestForms\RequestForm;
-use App\User;
+use App\Models\User;
 use App\Models\Parameters\Supplier;
 
 use App\Http\Controllers\Controller;

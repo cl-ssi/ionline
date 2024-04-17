@@ -2,7 +2,7 @@
 
 namespace App\Models\Warehouse;
 
-use App\User;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 use Spatie\Permission\Models\Role;

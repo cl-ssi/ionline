@@ -10,7 +10,7 @@ use App\Models\Rrhh\AbsenteeismType;
 use App\Imports\AbscencesImport as AbscencesImportFile;
 use Maatwebsite\Excel\Facades\Excel;
 use Carbon\Carbon;
-use App\User;
+use App\Models\User;
 
 use App\Models\Rrhh\SirhActiveUser;
 

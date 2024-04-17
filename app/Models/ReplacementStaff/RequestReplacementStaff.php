@@ -53,19 +53,19 @@ class RequestReplacementStaff extends Model implements Auditable
     
     //user_id ORIGINALMENTE QUIEN REGISTRA SOLICITUD
     public function user() {
-        return $this->belongsTo('App\User')->withTrashed();
+        return $this->belongsTo('App\Models\User')->withTrashed();
     }
 
     public function organizationalUnit() {
-        return $this->belongsTo('App\Rrhh\OrganizationalUnit');
+        return $this->belongsTo('App\Rrhh\OrganizationalUnit')->withTrashed();
     }
 
     public function requesterUser() {
-        return $this->belongsTo('App\User', 'requester_id')->withTrashed();
+        return $this->belongsTo('App\Models\User', 'requester_id')->withTrashed();
     }
 
     public function ouPerformance() {
-        return $this->belongsTo('App\Rrhh\OrganizationalUnit', 'ou_of_performance_id');
+        return $this->belongsTo('App\Rrhh\OrganizationalUnit', 'ou_of_performance_id')->withTrashed();
     }
 
     public function replacementStaff() {

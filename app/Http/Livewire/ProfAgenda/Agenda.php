@@ -6,7 +6,7 @@ use Livewire\Component;
 
 use App\Models\ProfAgenda\OpenHour;
 use App\Models\ProfAgenda\Appointment;
-use App\User;
+use App\Models\User;
 use App\Models\Parameters\Holiday;
 
 class Agenda extends Component
@@ -67,6 +67,7 @@ class Agenda extends Component
             $array[$count]['rut'] = $hour->patient ? ($hour->patient->id . "-" . $hour->patient->dv) : '';
             $array[$count]['patient_name'] =  $hour->patient ? $hour->patient->shortName : '';
             $array[$count]['contact_number'] = $hour->contact_number;
+            $array[$count]['gender'] = $hour->patient ? $hour->patient->getGender() : '';
             if($hour->appointments->count() > 0){
                 $array[$count]['first_appointment'] = true;
             }else{
@@ -128,6 +129,7 @@ class Agenda extends Component
             $array[$count]['observation'] = null;
             $array[$count]['rut'] = null;
             $array[$count]['contact_number'] = null;
+            $array[$count]['gender'] = null;
             $array[$count]['first_appointment'] = null;
             $array[$count]['start'] = $holiday->date->format('Y-m-d') . " 00:00";
             $array[$count]['end'] = $holiday->date->format('Y-m-d') . " 23:59";

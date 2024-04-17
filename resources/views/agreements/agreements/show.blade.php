@@ -24,7 +24,7 @@
 
 @include('agreements/nav')
 
-@php($canEdit = auth()->user()->can('Agreement: edit') || auth()->id() == $agreement->referrer_id)
+@php($canEdit = auth()->user()->can('Agreement: edit') || auth()->id() == $agreement->referrer_id || auth()->id() == $agreement->referrer2_id)
 
 
 <h3 class="mb-3">Ver detalle de Convenio #{{$agreement->id}}
@@ -71,7 +71,7 @@
                     <a href="{{ route('documents.edit', $agreement->document_id) }}" class="nav-link text-secondary"><i class="fas fa-file-alt"></i> Editar borrador Convenio</a> 
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('documents.show', $agreement->document_id) }}" class="nav-link text-secondary"><i class="fas fa-eye"></i> Visualizar borrador Convenio</a> 
+                    <a href="{{ route('documents.show', $agreement->document_id) }}" class="nav-link text-secondary"><i class="fas fa-eye"></i> Ver borrador Convenio</a> 
                 </li>
             @endif
         @endif
@@ -109,18 +109,28 @@
             </li>
             @if($canEdit)
                 @if($agreement->fileToSign?->HasAllFlowsSigned)
-                <li class="nav-item">
+                {{--<li class="nav-item">
                     <a href="#" class="nav-link text-secondary" data-toggle="modal"
                                     data-target="#selectSignerRes" data-formmethod="POST"
                                     data-formaction="{{ route('agreements.createWordRes'. ($agreement->program_id == 3 ? 'Withdrawal' : ($agreement->program_id == 50 ? 'Collaboration' : '')), $agreement )}}">
                                     <i class="fas fa-file-download"></i> Descargar borrador Resolución</a>
-                </li>
-                @else
+                </li>--}}
+                
                 <li class="nav-item">
-                    <div class="tooltip-wrapper disabled" data-title="No existe registro de archivo docx versión final de Covenio Referentes, adjuntelo para habilitar esta opción">
-                        <a href="#" class="nav-link text-secondary disabled"><i class="fas fa-file-download"></i> Descargar borrador Resolución</a>
-                    </div>
+                <a href="#" class="nav-link text-secondary" data-toggle="modal"
+                    data-target="#selectSignerRes" data-formmethod="POST"
+                    data-formaction="{{ route('agreements.createResDocument', $agreement )}}">
+                    <i class="fas fa-file-medical"></i> Generar borrador Resolución Convenio</a>
                 </li>
+
+                    @if($agreement->res_document_id != null)
+                    <li class="nav-item">
+                        <a href="{{ route('documents.edit', $agreement->res_document_id) }}" class="nav-link text-secondary"><i class="fas fa-file-alt"></i> Editar borrador Resolución Convenio</a> 
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('documents.show', $agreement->res_document_id) }}" class="nav-link text-secondary"><i class="fas fa-eye"></i> Ver borrador Resolución Convenio</a> 
+                    </li>
+                    @endif
                 @endif
             @endif
         @endif
@@ -249,18 +259,26 @@
                 </fieldset>
             </div>
             <div class="form-row">
-                <fieldset class="form-group col-3">
+                <fieldset class="form-group col-2">
                     <label for="fordate">Fecha</label>
                     <input type="date" name="date" class="form-control" id="fordate" value="{{ $agreement->date }}" @if(!$canEdit) disabled @endif>
                     <small class="form-text text-muted">* Fecha del convenio</small>
                 </fieldset>
 
-                <fieldset class="form-group col-4">
+                <fieldset class="form-group col-3">
                     <label for="forreferente">Referente</label>
                     @livewire('search-select-user', [
                         'user' => $agreement->referrer,
                         'required' => 'required',
                         'selected_id' => 'referrer_id',
+                    ])
+                </fieldset>
+
+                <fieldset class="form-group col-3">
+                    <label for="forreferente">Referente suplente</label>
+                    @livewire('search-select-user', [
+                        'user' => $agreement->referrer2,
+                        'selected_id' => 'referrer2_id',
                     ])
                 </fieldset>
 
@@ -274,7 +292,7 @@
                     <input type="integer" class="form-control" id="fortotal_amount" name="total_amount" min="100" value="{{$agreement->total_amount}}" required @if(!$canEdit) disabled @endif>
                 </fieldset>
                 @else
-                <fieldset class="form-group col-5">
+                <fieldset class="form-group col-4">
                     <label for="forestablishment">Centros de Atencion</label>
                     <select id="establishment" class="selectpicker " name="establishment[]" title="Seleccionar" data-selected-text-format="count > 2" data-width="100%" multiple @if(!$canEdit) disabled @endif>
                     @foreach($agreement->commune->establishments as $key => $establishment)

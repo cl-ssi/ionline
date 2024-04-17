@@ -6,7 +6,7 @@ use App\Models\Documents\Sign\Signature;
 use App\Models\Documents\Sign\SignatureFlow;
 use App\Services\DocumentSignService;
 use App\Services\ImageService;
-use App\User;
+use App\Models\User;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Throwable;

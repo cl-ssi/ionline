@@ -4,7 +4,7 @@ namespace App\Http\Livewire\Inventory;
 
 use App\Http\Requests\Inventory\CreateMovementRequest;
 use App\Models\Inv\InventoryMovement;
-use App\User;
+use App\Models\User;
 use Livewire\Component;
 
 class RegisterMovement extends Component

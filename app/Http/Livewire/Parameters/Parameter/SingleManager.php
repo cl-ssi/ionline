@@ -3,7 +3,7 @@
 namespace App\Http\Livewire\Parameters\Parameter;
 
 use Livewire\Component;
-use App\User;
+use App\Models\User;
 use App\Models\Parameters\Parameter;
 
 class SingleManager extends Component

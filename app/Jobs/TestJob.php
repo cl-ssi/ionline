@@ -2,15 +2,15 @@
 
 namespace App\Jobs;
 
-use Illuminate\Support\Facades\Mail;
+// use Illuminate\Support\Facades\Mail;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Bus\Queueable;
-use App\User;
-use App\Mail\TestMail;
+use App\Models\User;
+// use App\Mail\TestMail;
 
 class TestJob implements ShouldQueue
 {
@@ -35,9 +35,10 @@ class TestJob implements ShouldQueue
      */
     public function handle()
     {
+        logger()->info('La cola se ejecutó correctamente la cola por '.$this->user->shortName);
         // try {
-            Mail::to($this->user->email)
-                ->send(new TestMail($this->user));
+            // Mail::to($this->user->email)
+            //     ->send(new TestMail($this->user));
         // } catch (\Exception $exception) {
         //     logger()->info($exception->getMessage());
         // }

@@ -9,7 +9,7 @@ use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithStartRow;
 use Carbon\Carbon;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
-use App\User;
+use App\Models\User;
 
 class AllowancesImport implements ToCollection, WithStartRow
 {

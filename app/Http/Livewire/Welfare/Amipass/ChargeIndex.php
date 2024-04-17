@@ -9,7 +9,7 @@ use App\Models\Rrhh\AbsenteeismType;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use App\Models\Parameters\Holiday;
-use App\User;
+use App\Models\User;
 
 use Livewire\Component;
 

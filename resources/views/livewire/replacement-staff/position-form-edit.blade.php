@@ -19,7 +19,7 @@
                     </thead>
                     <tbody class="text-center small">
                         @foreach($requestReplacementStaff->positions as $position)
-                        <tr @if($editMode && $position->id == $positionEdit->id) class="table-warning"> @endif>
+                        <tr @if($editMode && $position->id == $positionEdit->id) class="table-warning" @endif>
                             <td>{{ $position->id }}</td>
                             <td>{{ $position->profile_manage->name ?? '' }}</td>
                             <td>{{ $position->degree ?? number_format($position->salary, 0, ",", ".") }}</td>

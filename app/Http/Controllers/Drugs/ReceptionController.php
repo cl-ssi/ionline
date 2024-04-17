@@ -13,7 +13,7 @@ use App\Models\Drugs\PoliceUnit;
 use App\Models\Drugs\Substance;
 use App\Models\Drugs\Destruction;
 use App\Models\Drugs\Protocol;
-use App\User;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;

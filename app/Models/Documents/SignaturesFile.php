@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+use Illuminate\Database\Eloquent\Relations\hasOne;
+use App\Models\Documents\Parte;
+
 class SignaturesFile extends Model
 {
     use HasFactory;
@@ -41,9 +44,14 @@ class SignaturesFile extends Model
         return $this->hasOne('App\Models\Suitability\Result', 'signed_certificate_id');
     }
 
-    public function parteFile()
+    // public function parteFile()
+    // {
+    //     return $this->hasOne('App\Models\Documents\ParteFile', 'signature_file_id');
+    // }
+
+    public function parte(): hasOne
     {
-        return $this->hasOne('App\Models\Documents\ParteFile', 'signature_file_id');
+        return $this->hasOne(Parte::class);
     }
 
     /**

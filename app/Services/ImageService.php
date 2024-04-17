@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\User;
+use App\Models\User;
 
 class ImageService
 {
@@ -12,7 +12,11 @@ class ImageService
      * return app(ImageService::class)->createVisator(auth()->user());
      * return app(ImageService::class)->createDocumentNumber("2342-Xdf4", "13.089");
      * return app(ImageService::class)->createSignature(auth()->user());
-     */
+     * 
+     * para verla en el navegador :
+     **/
+     // $image = base64_decode(app(ImageService::class)->createDocumentNumber("2342-Xdf4", "13.089"));
+     // return response($image)->header('Content-Type', 'image/png');
 
     /**
      * @var string
@@ -54,7 +58,7 @@ class ImageService
     /**
      * Create the image of Visator
      *
-     * @param  \App\User $user
+     * @param  \App\Models\User $user
      * @return string
      */
     public function createVisator(User $user)
@@ -172,7 +176,7 @@ class ImageService
     /**
      * Create the digital signature image
      *
-     * @param  \App\User $user
+     * @param  \App\Models\User $user
      * @return string
      */
     public function createSignature(User $user)

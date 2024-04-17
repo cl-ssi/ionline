@@ -9,7 +9,7 @@ use App\Models\RequestForms\Passenger;
 use App\Models\RequestForms\EventRequestForm;
 use App\Models\Parameters\UnitOfMeasurement;
 use App\Models\Parameters\PurchaseMechanism;
-use App\User;
+use App\Models\User;
 use App\Rrhh\OrganizationalUnit;
 use Illuminate\Support\Facades\DB;
 use Livewire\WithFileUploads;

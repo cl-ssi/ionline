@@ -3,7 +3,7 @@
 namespace App\Http\Livewire\Drugs;
 
 use Livewire\Component;
-use App\User;
+use App\Models\User;
 use App\Models\Parameters\Parameter;
 use App\Models\Drugs\ReceptionItem;
 use App\Models\Drugs\ActPrecursorItem;

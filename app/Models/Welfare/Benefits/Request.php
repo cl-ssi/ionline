@@ -8,12 +8,13 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 use App\Models\Welfare\Benefits\Request as RequestModel;
 use App\Models\Welfare\Benefits\Subsidy;
-use App\Models\Welfare\Benefits\File;
-use App\Models\Welfare\Benefits\Transfer;
-use App\User;
+// use App\Models\Welfare\Benefits\Transfer;
+use App\Models\User;
+use App\Models\File;
 
 class Request extends Model
 {
@@ -28,8 +29,8 @@ class Request extends Model
      * @var array
      */
     protected $fillable = [
-        'id', 'subsidy_id', 'applicant_id', 'status', 'installments_number', 'status_update_date', 'status_update_responsable_id', 'status_update_observation', 
-        'accepted_amount_date','accepted_amount_responsable_id','accepted_amount','created_at'
+        'id', 'subsidy_id', 'applicant_id', 'requested_amount', 'status', 'installments_number', 'status_update_date', 'status_update_responsable_id', 'status_update_observation', 
+        'accepted_amount_date','accepted_amount_responsable_id','accepted_amount','payed_date','payed_responsable_id','payed_amount','created_at'
     ];
 
     /**
@@ -40,6 +41,7 @@ class Request extends Model
 
     protected $casts = [
         'status_update_user_id' => 'date:Y-m-d',
+        'payed_date' => 'date:Y-m-d',
         'created_at' => 'date:Y-m-d'
     ];
 
@@ -49,9 +51,14 @@ class Request extends Model
         return $this->belongsTo(Subsidy::class);
     }
 
-    public function files(): HasMany
+    // public function files(): HasMany
+    // {
+    //     return $this->hasMany(File::class,'well_bnf_request_id');
+    // }
+
+    public function files(): MorphMany
     {
-        return $this->hasMany(File::class,'well_bnf_request_id');
+        return $this->morphMany(File::class, 'fileable');
     }
 
     public function applicant(): BelongsTo
@@ -59,10 +66,10 @@ class Request extends Model
         return $this->belongsTo(User::class,'applicant_id');
     }
 
-    public function transfers(): HasMany
-    {
-        return $this->hasMany(Transfer::class);
-    }
+    // public function transfers(): HasMany
+    // {
+    //     return $this->hasMany(Transfer::class);
+    // }
 
     // sin considerar este request
     // se utiliza principalmente para actualizar sin problemas el accepted_amount de un request

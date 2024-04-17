@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
-use App\User;
+use App\Models\User;
 use App\Rrhh\OrganizationalUnit;
 use App\Rrhh\Authority;
 use App\Models\Rrhh\UserBankAccount;
@@ -106,7 +106,13 @@ class UserController extends Controller
     {
         $user = new User($request->All());
 
-        /** Ya no crearemos el password por defecto */
+        /** 
+         * Ya no crearemos el password por defecto 
+         * por que no todos los usuarios necesitan acceso a la plataforma
+         * 
+         * El usuario puede crearse una nueva contraseña en la opción "Olvido su contraseña"
+         * o bien el administrador que lo esta creando puede utilizar la opción "Resetear clave"
+         */
         //$user->password = bcrypt($request->id);
 
         if ($request->has('organizationalunit')) {
@@ -119,13 +125,16 @@ class UserController extends Controller
 
         $user->save();
 
-        foreach($request->input('roles') as $role) {
-            $user->assignRole($role);
+        if($request->has('roles')) {
+            foreach($request->input('roles') as $role) {
+                $user->assignRole($role);
+            }
         }
         $user->givePermissionTo('Users: must change password');
 
 
-        session()->flash('info', 'El usuario ' . $user->name . ' ha sido creado.');
+        session()->flash('info', 'El usuario ' . $user->name . 
+            ' ha sido creado. Puede generar una nueva clave en la opción: "Olvido su contraseña" en el login o bien el administrador que lo esta creando puede utilizar la opción "Resetear clave"');
 
         return redirect()->route('rrhh.users.index');
     }
@@ -133,7 +142,7 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\User  $user
+     * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
     public function show(User $user)
@@ -144,7 +153,7 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\User  $user
+     * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
     public function edit(User $user)
@@ -160,7 +169,7 @@ class UserController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\User  $user
+     * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, User $user)
@@ -192,7 +201,7 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\User  $user
+     * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
     public function destroy(User $user)
@@ -230,7 +239,7 @@ class UserController extends Controller
     /**
      * Show the form for change password.
      *
-     * @param  \App\User  $user
+     * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
     public function editPassword()
@@ -280,7 +289,7 @@ class UserController extends Controller
     /**
      * Reset user password.
      *
-     * @param  \App\User  $user
+     * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
     public function resetPassword(User $user)

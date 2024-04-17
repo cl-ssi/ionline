@@ -13,6 +13,12 @@
       </div>
       <ul class="list-group list-group-flush">
           <li class="list-group-item">
+              <a href="{{ route('indicators.health_goals.list', [19813, 2024]) }}">2024</a>
+          </li>
+          <li class="list-group-item">
+              <a href="{{ route('indicators.health_goals.list', [19813, 2023]) }}">2023</a>
+          </li>
+          <li class="list-group-item">
               <a href="{{ route('indicators.health_goals.list', [19813, 2022]) }}">2022</a>
           </li>
           <li class="list-group-item">

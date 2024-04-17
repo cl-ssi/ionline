@@ -4,7 +4,7 @@ namespace App\Models\Parameters;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\User;
+use App\Models\User;
 
 class Log extends Model
 {
