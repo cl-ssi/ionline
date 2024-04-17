@@ -24,7 +24,7 @@ use App\Notifications\Signatures\NewSignatureRequest;
 use App\Models\Establishment;
 use App\Models\Documents\SignaturesFlow;
 use App\Models\Documents\SignaturesFile;
-use App\Models\Documents\ParteFile;
+// use App\Models\Documents\ParteFile;
 use App\Models\Documents\Parte;
 
 

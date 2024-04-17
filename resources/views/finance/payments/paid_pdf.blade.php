@@ -1,115 +1,183 @@
-@extends('layouts.document')
+@extends('layouts.sigfe_document')
+
 @section('title', 'Comprobante de Liquidación de Fondo')
+
 @section('content')
     <style>
-            .tabla th,
-            .tabla td {
-                padding: 3px;
-                /* Ajusta este valor a tus necesidades */
-            }
+        .tabla-custom {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 6px;
+        }
+
+        .tabla-custom tr {}
+
+        .tabla-custom th {
+            text-align: left;
+            padding-left: 10px;
+        }
+
+        .tabla-custom td {
+            padding-left: 10px;
+            border: 1px solid black;
+        }
+
+        .tabla-items {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .tabla-items thead {
+            background-color: black;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+            vertical-align: top;
+
+        }
+
+        .tabla-items tr {}
+
+        .tabla-items th {
+            border: 1px solid black;
+            padding: 0px;
+            padding: 8px 0 3px 0;
+            line-height: 0.5;
+        }
+
+        .tabla-items td {
+            padding-left: 10px;
+            padding-top: 3px;
+            padding-bottom: 3x;
+            border: 1px solid black;
+        }
+
+        hr {
+            margin-bottom: 0px;
+        }
     </style>
 
-<div class="center diez">
-        <strong style="text-transform: uppercase;">
-            Comprobante de Liquidación de Fondos
-        </strong>
-    </div>
-    <hr>
-<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-<table class="tabla">
-    <tr>
-        <td>Institución / Área Transaccional</td>
-        <td>¿?</td>
-    </tr>
-    <tr>
-        <td>Título</td>
-        <td>{{$dte->comparativeRequirement?->devengo_titulo}}</td>
-    </tr>
-    <tr>
-        <td>Descripción</td>
-        <td>{{$dte->comparativeRequirement?->devengo_titulo}}</td>
-    </tr>
-    <tr>
-        <td>Periodo de Operación</td>
-        <td></td>
-        <td>Ejercicio Fiscal</td>
-        <td></td>
-        <td>ID</td>
-        <td>¿?</td>
-        <td>Folio</td>
-        <td>{{$dte->comparativeRequirement?->efectivo_folio}}</td>
-    </tr>
-    <tr>
-        <td>Fecha y Hora de Aprobación</td>
-        <td>{{$dte->tgrPayedDte?->fecha_generacion}}</td>
-        <td>Tipo de Transacción</td>
-        <td>Creación ¿?</td>
-        <td>Tipo de Operación</td>
-        <td>{{$dte->tgrPayedDte?->tipo_operacion}}</td>
-        <td>Identificación de Transferencia de Datos</td>
-        <td>¿?</td>
-    </tr>
-    <tr>
-        <td>Origen del Ajuste</td>
-        <td>¿?</td>
-        <td>Folio Anterior</td>
-        <td>¿?</td>
-    </tr>
+@section('linea1', 'Ministerio de Salud')
 
+<div style="margin-top: 120px; padding-left: 9px; font-size: 1.3rem">
+    <strong style="">
+        Comprobante de Liquidación de Fondos
+    </strong>
+</div>
+
+<hr>
+
+<table class="tabla-custom nueve">
+    <tr>
+        <th width="130px">Institución / Área Transaccional</th>
+        <td colspan="7">Servicio de Salud Iquique / Hospital de Alto Hospicio</td>
+    </tr>
+    <tr>
+        <th>Título</th>
+        <td colspan="7">
+            {{ $dte->comparativeRequirement?->devengo_titulo  }}
+        </td>
+    </tr>
+    <tr>
+        <th>Descripción</th>
+        <td colspan="7">
+            {{ $dte->comparativeRequirement?->devengo_titulo }} @if($dte->paid_automatic) @endif
+        </td>
+    </tr>
+    <tr>
+        <th>Periodo de Operación</td>
+        <td style="width:160px">{{ ucfirst($dte->tgrPayedDte?->fecha_generacion->monthName) }}</td>
+        <th style="width:94px">Ejercicio Fiscal</th>
+        <td style="width:100px">¿?</td>
+        <th style="width:90px">ID</th>
+        <td style="width:140px"></td>
+        <th style="width:120px">Folio</th>
+        <td>{{ $dte->comparativeRequirement?->efectivo_folio }}</td>
+    </tr>
+    <tr>
+        <th>Fecha y Hora de Aprobación</th>
+        <td>{{ $dte->tgrPayedDte?->fecha_generacion }}</td>
+        <th>Tipo de Transacción</th>
+        <td>Creación</td>
+        <th>Tipo de Operación</th>
+        <td>{{ $dte->tgrPayedDte?->tipo_operacion }}</td>
+        <th>Identificación de Transferencia de Datos</th>
+        <td></td>
+    </tr>
+    <tr>
+        <th>Origen del Ajuste</th>
+        <td></td>
+        <th>Folio Anterior</th>
+        <td></td>
+    </tr>
 </table>
+
 <br><br><br>
-<table style="border-collapse: collapse; border: 1px solid black;" class="tabla">
-    <tr>
-        <td>Principal</td>
-        <td>{{$dte->tgrPayedDte?->principal}}</td>
-    </tr>
-    <thead class="tabla" style="background-color: black; color: white;">
+
+<div style="border: 2px solid black; padding: 6px">
+
+    <table class="tabla-custom nueve">
         <tr>
-            <td>Tipo Documento</td>
-            <td>Nº Documento</td>
-            <td>Moneda Documento</td>
-            <td>Cuenta Contable</td>
-            <td>Cuenta Bancaria</td>
-            <td>Medio de Pago</td>
-            <td>Nº Documento de Pago</td>
-            <td>Moneda de Pago</td>
-            <td>Monto</td>
+            <th width="108px;">Principal</th>
+            <td class="negrita">{{ $dte->tgrPayedDte?->principal }}</td>
         </tr>
-    </thead>
-    <tbody class="tabla">
-        <tr>
-            <td>{{$dte->tgrPayedDte?->tipo_documento}}</td>
-            <td>{{$dte->tgrPayedDte?->folio_documento}}</td>
-            <td>{{$dte->tgrPayedDte?->moneda}}</td>
-            <td>{{$dte->tgrAccountingPortfolio?->cuenta_contable}}</td>
-            <td>{{$dte->tgrPayedDte?->banco_cta_corriente}}</td>
-            <td>{{$dte->tgrPayedDte?->medio_pago}}</td>
-            <td>{{$dte->tgrPayedDte?->nro_documento_pago}}</td>
-            <td>{{$dte->tgrPayedDte?->moneda}}</td>
-            <td>{{$dte->tgrPayedDte?->monto}}</td>
-        </tr>        
-    </tbody>
+    </table>
 
+    <table class="tabla-items" style="font-size: 1.05em;">
+        <thead>
+            <tr>
+                <th width="100px">Tipo<br>Documento</th>
+                <th>Nº<br>Documento</th>
+                <th>Moneda<br>Documento</th>
+                <th width="220px">Cuenta Contable</th>
+                <th>Cuenta Bancaria</th>
+                <th width="100px">Medio de Pago</th>
+                <th>Nº Documento<br>de Pago</th>
+                <th>Moneda<br>de Pago</th>
+                <th>Monto</th>
+            </tr>
+        </thead>
+        <tbody style="font-size: 1.1em;">
+            <tr>
+                <td>{{ $dte->tgrPayedDte?->tipo_documento }}</td>
+                <td>{{ $dte->tgrPayedDte?->folio_documento }} </td>
+                <td>{{ $dte->tgrPayedDte?->moneda }} </td>
+                <td>{{ $dte->tgrAccountingPortfolio?->cuenta_contable }} </td>
+                <td>{{ $dte->tgrPayedDte?->banco_cta_corriente }}</td>
+                <td>{{ $dte->tgrPayedDte?->medio_pago }} </td>
+                <td>{{ $dte->tgrPayedDte?->nro_documento_pago }}</td>
+                <td>{{ $dte->tgrPayedDte?->moneda }}</td>
+                <td style="text-align: right;">{{ money($dte->tgrPayedDte?->monto) }} </td>
+            </tr>
+            <tr class="negrita ocho">
+                <td colspan="7" style="padding-top: 5px; padding-bottom: 5px;">
+                    Total (CLP)
+                </td>
+                <td></td>
+                <td style="text-align: right;">
+                    {{ money($dte->tgrPayedDte?->monto) }}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<table class="nueve" width="100%" style="text-align: center; margin-top: 30px;">
+    <tr>
+        <td width="120px"></td>
+        <td style="border-bottom: 1px solid black;">00000000-0-InterPPC</td>
+        <td width="120px"></td>
+        <td style="border-bottom: 1px solid black;">00000000-0-InterPPC</td>
+        <td width="120px"></td>
+    </tr>
+    <tr>
+        <td></td>
+        <td>Usuario Generador</td>
+        <td></td>
+        <td>Usuario Aprobador</td>
+        <td></td>
+    </tr>
 </table>
-
-<br><br><br><br><br>
-
-<div>
-____________________000000-Inter-pc____________________
-                    
-</div>
-<br>
-Usuario Generador
-
-
-<br><br><br><br><br>
-
-<div>
-____________________000000-Inter-pc____________________
-                    
-</div>
-<br>
-Usuario Aprobador
 
 
 @endsection

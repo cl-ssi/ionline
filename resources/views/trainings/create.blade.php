@@ -16,8 +16,9 @@
 
 <div class="col-sm">
     @livewire('trainings.training-create', [
-        'trainingToEdit'    => '',
-        'form'              => 'create'
+        'trainingToEdit'    => null,
+        'form'              => 'create',
+        'bootstrap'         => null
     ])
 </div>
 

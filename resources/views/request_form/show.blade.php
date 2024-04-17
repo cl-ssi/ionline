@@ -88,9 +88,7 @@
                             <tr>
                                 <th class="table-active" colspan="2" scope="row">Vencimiento</th>
                                 <td @if($requestForm->purchaseType->supply_continuous_day <= $requestForm->eventRequestForms->last()->signature_date->diffInDays(Carbon\Carbon::now())) class="text-danger" @endif>
-                                    {{
-                                    $requestForm->eventRequestForms->last()->signature_date->diffInDays(Carbon\Carbon::now());
-                                    }}
+                                    {{ $requestForm->eventRequestForms->last()->signature_date->diffInDays(now()) }}
                                     ({{$requestForm->purchaseType->supply_continuous_day}})
                                 </td>
                             </tr>

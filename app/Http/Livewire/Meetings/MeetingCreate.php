@@ -18,13 +18,20 @@ use App\Models\Requirements\Event;
 
 use App\Notifications\Requirements\NewSgr;
 
+use Livewire\WithFileUploads;
+use Illuminate\Support\Facades\Storage;
+
 class MeetingCreate extends Component
 {
+    use WithFileUploads;
+
     public $form;
     
-    public $date, $type, $subject, $mechanism, $start_at, $end_at;
+    public $date, $type, $description, $subject, $mechanism, $start_at, $end_at;
     public $groupings, $typeGrouping, $nameGrouping;
     public $commitments, $commitmentDescription, $typeResponsible, $priority, $closingDate;
+
+    public $file, $iterationFileClean = 0;
 
     /* Meeting to edit */
     public $meetingToEdit;
@@ -40,9 +47,11 @@ class MeetingCreate extends Component
             'date.required'         => 'Debe ingresar Fecha de reunión.',
             'type.required'         => 'Debe ingresar Tipo de reunión.',
             'subject.required'      => 'Debe ingresar Asunto de reunión.',
+            'description.required'  => 'Debe ingresar Descripción de reunión.',
             'mechanism.required'    => 'Debe ingresar Medio de reunión.',
             'start_at.required'     => 'Debe ingresar Hora Inicio de reunión.',
             'end_at.required'       => 'Debe ingresar Hora de Fin de reunión.',
+            // 'file.required'         => 'Debe ingresar un Adjunto',
 
             // MENSAJES PARA GROUPING
             'typeGrouping.required' => 'Debe ingresar Tipo de Asociaciones, Federaciones, etc.',
@@ -73,12 +82,13 @@ class MeetingCreate extends Component
 
     public function save(){
         $validatedData = $this->validate([
-                'date'      => 'required',
-                'type'      => 'required',
-                'subject'   => 'required',
-                'mechanism' => 'required',
-                'start_at'  => 'required',
-                'end_at'    => 'required',
+                'date'          => 'required',
+                'type'          => 'required',
+                'subject'       => 'required',
+                'description'   => 'required',
+                'mechanism'     => 'required',
+                'start_at'      => 'required',
+                'end_at'        => 'required'
             ]
         );
 
@@ -95,14 +105,33 @@ class MeetingCreate extends Component
                     'date'                  => $this->date,
                     'type'                  => $this->type,
                     'subject'               => $this->subject,
+                    'description'           => $this->description,
                     'mechanism'             => $this->mechanism,
                     'start_at'              => $this->start_at,
-                    'end_at'                => $this->end_at
+                    'end_at'                => $this->end_at,
                 ]
             );
 
             return $meeting;
         });
+
+        if($this->file){
+            $now = now()->format('Y_m_d_H_i_s');
+            $meeting->file()->updateOrCreate(
+                [
+                    'id' => $meeting->file ? $meeting->file->id : null,
+                ],
+                [
+                    'storage_path' => '/ionline/meetings/attachments/'.$now.'_meet_'.$meeting->id.'.'.$this->file->extension(),
+                    'stored' => true,
+                    'name' => 'adjunto.pdf',
+                    // 'valid_types' => json_encode(["pdf", "xls"]),
+                    // 'max_file_size' => 10,
+                    'stored_by_id' => auth()->id(),
+                ]
+            );
+            $meeting->file = $this->file->storeAs('/ionline/meetings/attachments', $now.'_meet_'.$meeting->id.'.'.$this->file->extension(), 'gcs');
+        }
 
         //SE GUARDA GROUPING (Asociaciones / Federaciones / Reunión Mesas y Comités de Trabajos) PARTICIPANTES
         if(!empty($this->groupings)){
@@ -158,6 +187,7 @@ class MeetingCreate extends Component
             $this->date         = $this->meetingToEdit->date;
             $this->type         = $this->meetingToEdit->type;
             $this->subject      = $this->meetingToEdit->subject;
+            $this->description  = $this->meetingToEdit->description;
             $this->mechanism    = $this->meetingToEdit->mechanism;
             $this->start_at     = $this->meetingToEdit->start_at;
             $this->end_at       = $this->meetingToEdit->end_at;
@@ -328,7 +358,6 @@ class MeetingCreate extends Component
                 $authorityNotify->notify(new NewSgr($requirement, $event));
             }
             
-
             // Marca los eventos como vistos
             $requirement->setEventsAsViewed;
 
@@ -352,5 +381,11 @@ class MeetingCreate extends Component
 
     public function searchedCommitmentOu(OrganizationalUnit $organizationalUnit){
         $this->searchedCommitmentOu = $organizationalUnit;
+    }
+
+    public function show_file(Meeting $meetingToEdit){
+        // dd($meetingToEdit->file);
+
+        return Storage::disk('gcs')->response($meetingToEdit->file->storage_path);
     }
 }

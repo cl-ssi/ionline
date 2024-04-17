@@ -16,18 +16,27 @@
             <button type="button" id="btn_fonasa" class="btn btn-outline-info">Fonasa&nbsp;</button>
         </fieldset> -->
 
+        <fieldset class="form-group col-12 col-md-2">
+            <label for="for_name">Sexo</label>
+            <select name="gender" id="" class="form-control">
+                <option value=""></option>
+                <option value="male" @if($user) @selected($user->gender == "male") @endif>Masculino</option>
+                <option value="female" @if($user) @selected($user->gender == "female") @endif>Femenino</option>
+            </select>
+        </fieldset>
+
         <fieldset class="form-group col-12 col-md-3">
             <label for="for_name">Nombres</label>
             <input type="text" class="form-control" id="for_name" name="name" required="required" @if($user) value="{{$user->name}}" @endif>
         </fieldset>
 
-        <fieldset class="form-group col-12 col-md">
-            <label for="for_name">Apellido Paterno</label>
+        <fieldset class="form-group col-12 col-md-2">
+            <label for="for_name">A.Paterno</label>
             <input type="text" class="form-control" id="for_fathers_family" name="fathers_family" required="required" @if($user) value="{{$user->fathers_family}}" @endif>
         </fieldset>
 
-        <fieldset class="form-group col-12 col-md">
-            <label for="for_name">Apellido Materno</label>
+        <fieldset class="form-group col-12 col-md-2">
+            <label for="for_name">A.Materno</label>
             <input type="text" class="form-control" id="for_mothers_family" name="mothers_family" required="required" @if($user) value="{{$user->mothers_family}}" @endif>
         </fieldset>
 

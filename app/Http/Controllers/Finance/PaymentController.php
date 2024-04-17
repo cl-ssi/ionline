@@ -339,12 +339,37 @@ class PaymentController extends Controller
             'dte' => $dte,
             'establishment' => $establishment,
         ])->setPaper('a4', 'landscape')->stream('comprobante_liquidacion_de_fondo.pdf');
-        
-        
-        
-        return view('finance.payments.paidpdf', compact('dte'));
 
+        return view('finance.payments.paid_pdf', compact('dte'));
     }
+
+    public function compromisoPdf(Dte $dte)
+    {
+
+        $establishment = auth()->user()->organizationalUnit->establishment;
+
+        return Pdf::loadView('finance.payments.compromiso_pdf', [
+            'dte' => $dte,
+            'establishment' => $establishment,
+        ])->stream('compromiso_sigfe.pdf');
+
+        //return view('finance.payments.paid_pdf', compact('dte'));
+    }
+
+    public function devengoPdf(Dte $dte)
+    {
+
+        $establishment = auth()->user()->organizationalUnit->establishment;
+
+        return Pdf::loadView('finance.payments.devengo_pdf', [
+            'dte' => $dte,
+            'establishment' => $establishment,
+        ])->stream('devengo_sigfe.pdf');
+
+        //return view('finance.payments.paid_pdf', compact('dte'));
+    }
+
+
 
 
 }

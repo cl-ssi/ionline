@@ -7,13 +7,22 @@ use Livewire\Component;
 use App\Models\PurchasePlan\PurchasePlan;
 use Livewire\WithPagination;
 use Illuminate\Support\Facades\Auth;
+use App\Rrhh\OrganizationalUnit;
 
 class SearchPurchasePlan extends Component
 {
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
 
+    public $selectedId, $selectedStatus, $selectedSubject, $selectedStartDate, $selectedEndDate, $selectedUserCreator, $selectedUserResponsible,
+        $selectedResponsibleOuName;
+
     public $index;
+
+    protected $listeners = ['searchedResponsibleOu', 'clearResponsibleOu'];
+
+    protected $queryString = ['selectedId', 'selectedStatus', 'selectedSubject', 'selectedStartDate', 'selectedEndDate', 'selectedUserCreator',
+        'selectedUserResponsible', 'selectedResponsibleOuName'];
 
     public function delete(PurchasePlan $purchasePlan)
     {
@@ -45,6 +54,14 @@ class SearchPurchasePlan extends Component
                 ->when(auth()->user()->organizationalUnit->id == Parameter::get('ou', 'SaludMentalSSI'),
                     fn($q) => $q->orwhereHas('organizationalUnit', 
                         fn($q2) => $q2->whereIn('establishment_id', explode(',', Parameter::get('establishment', 'EstablecimientosDispositivos')))))
+                ->search($this->selectedId,
+                    $this->selectedStatus,
+                    $this->selectedSubject,
+                    $this->selectedStartDate,
+                    $this->selectedEndDate,
+                    $this->selectedUserCreator,
+                    $this->selectedUserResponsible,
+                    $this->selectedResponsibleOuName)
                 /*
                 ->search($this->selectedStatus,
                     $this->selectedId,
@@ -64,6 +81,14 @@ class SearchPurchasePlan extends Component
                     $this->selectedId,
                     $this->selectedUserAllowance)
                 */
+                ->search($this->selectedId,
+                    $this->selectedStatus,
+                    $this->selectedSubject,
+                    $this->selectedStartDate,
+                    $this->selectedEndDate,
+                    $this->selectedUserCreator,
+                    $this->selectedUserResponsible,
+                    $this->selectedResponsibleOuName)
                 ->paginate(30);
         }
 
@@ -74,6 +99,14 @@ class SearchPurchasePlan extends Component
 
             $purchasePlans = $query
                 ->whereHas('approvals', fn($q) => $q->where('active', 1)->whereNull('status')->whereIn('sent_to_ou_id', $ous))
+                ->search($this->selectedId,
+                    $this->selectedStatus,
+                    $this->selectedSubject,
+                    $this->selectedStartDate,
+                    $this->selectedEndDate,
+                    $this->selectedUserCreator,
+                    $this->selectedUserResponsible,
+                    $this->selectedResponsibleOuName)
                 ->paginate(30);
         }
 
@@ -115,5 +148,45 @@ class SearchPurchasePlan extends Component
         }
 
         return view('livewire.purchase-plan.search-purchase-plan', compact('purchasePlans'));
+    }
+
+    public function searchedResponsibleOu(OrganizationalUnit $organizationalUnit){
+        $this->selectedResponsibleOuName = $organizationalUnit->id;
+    }
+
+    public function clearResponsibleOu(){
+        $this->selectedResponsibleOuName = null;
+    }
+
+    public function updatingSelectedId(){
+        $this->resetPage();
+    }
+
+    public function updatingSelectedStatus(){
+        $this->resetPage();
+    }
+
+    public function updatingSelectedSubject(){
+        $this->resetPage();
+    }
+
+    public function updatingSelectedStartDate(){
+        $this->resetPage();
+    }
+
+    public function updatingSelectedEndDate(){
+        $this->resetPage();
+    }
+
+    public function updatingSelectedUserCreator(){
+        $this->resetPage();
+    }
+
+    public function updatingSelectedUserResponsible(){
+        $this->resetPage();
+    }
+
+    public function updatingSelectedResponsibleOuName(){
+        $this->resetPage();
     }
 }

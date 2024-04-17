@@ -74,8 +74,8 @@ class Inbox extends Component
                 'files',
                 'requirements.events',
                 'requirements.events.to_user',
-                'files.signatureFile.signaturesFlows',
-                'files.signatureFile',
+                // 'files.signatureFile.signaturesFlows',
+                // 'files.signatureFile',
                 ])
             ->latest()->paginate('100');
 

@@ -14,7 +14,15 @@ class SearchMeeting extends Component
     {
         if($this->index == 'own'){
             return view('livewire.meetings.search-meeting', [
-                'meetings' => Meeting::all()
+                'meetings' => Meeting::latest()
+                    ->where('user_creator_id', auth()->id())
+                    ->paginate(50)
+            ]);
+        }
+        if($this->index == 'all'){
+            return view('livewire.meetings.search-meeting', [
+                'meetings' => Meeting::latest()
+                    ->paginate(50)
             ]);
         }
     }

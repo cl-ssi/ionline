@@ -59,20 +59,23 @@
             <td>{{$openHour->activityType->name}}</td>
             <td>@if($openHour->patient){{$openHour->patient->shortName}}@endif</td>
             <td>
-                @if($openHour->deleted_at) <a data-toggle="collapse" href="#hiddenrow{{$openHour->id}}" role="button" aria-expanded="false" aria-controls="collapseExample">
-                                                Eliminado
-                                            </a>
+                @if($openHour->deleted_at) <i class="fa fa-ban" aria-hidden="true"></i>
                 @elseif($openHour->assistance === 1) <i class="fa fa-check" aria-hidden="true"></i>
                 @elseif($openHour->assistance === 0) <i class="fa fa-times" aria-hidden="true"></i>
                 @endif
+                @canany(['Agenda UST: Administrador'])
+                    <a data-toggle="collapse" href="#hiddenrow{{$openHour->id}}" role="button" aria-expanded="false" aria-controls="collapseExample">
+                        <i class="fa fa-eye" aria-hidden="true"></i>
+                    </a>
+                @endcanany
             </td>
 		</tr>
 
-        @if($openHour->deleted_at)
+        @canany(['Agenda UST: Administrador'])
             <tr id="hiddenrow{{$openHour->id}}" class="collapse">
                 <td colspan="7">@include('prof_agenda.partials.audit', ['audits' => $openHour->audits] )</td>
             </tr>
-        @endif
+        @endcanany
 
 	@endforeach
 	</tbody>

@@ -1,5 +1,5 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-
+<script src="https://use.fontawesome.com/releases/v5.15.4/js/all.js" data-mutate-approach="sync"></script>
 
 <div class="row">
     <div class="col">
@@ -204,16 +204,21 @@
                     <td>{{ $position->charges_number }}</td>
                     <td>{{ $position->profile_manage->name ?? '' }}</td>
                     <td>{{ $position->degree ?? number_format($position->salary, 0, ",", ".") }}</td>
-                    <td>{{ $position->legalQualityManage->NameValue ?? '' }}</td>
+                    <td>
+                        {{ $position->legalQualityManage->NameValue ?? '' }} <br><br>
+                        <b>Ley</b>: {{ ($position->law) ? number_format($position->law, 0, ",", ".") : 'Sin especificar' }}    
+                    </td>
                     <td>
                         {{ $position->fundamentManage->NameValue ?? '' }}<br>
                         {{ $position->fundamentDetailManage->NameValue ?? '' }}</td>
                     <td>{{ $position->WorkDayValue ?? '' }}</td>
                     <td>
-                        <a class="btn btn-outline-secondary"
-                            href="{{ route('replacement_staff.request.show_file_position', $position) }}"
-                            target="_blank"> Adjunto
-                        </a>
+                        @if($position->job_profile_file)
+                            <a class="btn btn-outline-secondary"
+                                href="{{ route('replacement_staff.request.show_file_position', $position) }}"
+                                target="_blank"> Adjunto
+                            </a>
+                        @endif
                     </td>
                 </tr>
                 @endforeach

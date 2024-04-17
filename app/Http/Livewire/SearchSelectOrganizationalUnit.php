@@ -62,6 +62,9 @@ class SearchSelectOrganizationalUnit extends Component
         if($this->emit_name == 'searchedAdminOu'){
             $this->emit('clearAdminOu');
         }
+        if($this->emit_name == 'searchedResponsibleOu'){
+            $this->emit('clearResponsibleOu');
+        }
     }
 
     public function addSearchedOrganizationalUnit($organizationalUnitId){

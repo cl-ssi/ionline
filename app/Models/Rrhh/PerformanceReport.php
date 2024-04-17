@@ -38,6 +38,7 @@ class PerformanceReport extends Model
         'asistencia',
         'puntualidad',
         'cumplimiento_normas_e_instrucciones',
+        'creator_user_observation',
         'received_user_observation',
         'created_user_id',
         'created_ou_id',

@@ -13,8 +13,10 @@
         <div class="col-2 bg_rojo_gob"></div>
 
         <div class="col-12 text-center bg-light">
-            <h1 class="color_rojo_gob"><b>iOnline</b></h1>
-            <h3>{{ env('APP_SS', 'Servicio de Salud') }}</h3>
+            <h1 class="color_azul_gob">
+                <b>Online</b>
+            </h1>
+            <h3 class="color_rojo_gob">{{ env('APP_SS', 'Servicio de Salud') }}</h3>
         </div>
     </div>
 
@@ -35,6 +37,38 @@
         Nuestro jefe de departamento es el glorioso Don José Don Oso. <br>
         <hr>
         <pre>{{ $phrase ? $phrase->phrase : '' }}</pre>
+
+        <style>
+            .logo_ionline {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.5em;
+                font-weight: bold;
+                color: #006cb7;
+            }
+            .logo_ionline svg {
+                width: 50px;
+            }
+            .logo_ionline .ionline {
+                font-size: 1.2em;
+                margin-top: 0px;
+            }
+            .logo_ionline .plus {
+                font-size: 0.7em;
+                font-family: 'Brush Script MT', cursive;
+                color: #ef4144;
+                margin-top: -48px;
+                margin-left: 62px;
+            }
+        </style>
+    
+        <div class="logo_ionline">
+            {!! logoIonline() !!}
+            <span class="ionline">iOnline</span>
+            <span class="plus">Plus</span>
+        </div>
     </div>
 
     <div class="row pt-2">
@@ -51,8 +85,9 @@
                             aria-label="Slide {{ $loop->index }}"></button>
                     @endforeach
                 </div>
-                <div class="carousel-inner">
-                    @foreach ($allNews as $news)
+                @env('production')
+                    <div class="carousel-inner">
+                        @foreach ($allNews as $news)
                         <div class="carousel-item @if ($loop->index == 0) active @endif">
                             <a href="{{ route('news.show', $news) }}">
                                 <img src="{{ route('news.view_image', $news) }}"
@@ -64,8 +99,9 @@
                                 </div>
                             </a>
                         </div>
-                    @endforeach
-                </div>
+                        @endforeach
+                    </div>
+                @endenv
                 <button class="carousel-control-prev"
                     type="button"
                     data-bs-target="#carouselNews"

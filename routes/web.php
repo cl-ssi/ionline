@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Agreements\AccountabilityController;
+use App\Http\Controllers\Agreements\AccountabilityDetailController;
 use App\Http\Controllers\Agreements\AddendumController;
 use App\Http\Controllers\Agreements\AgreementController;
 use App\Http\Controllers\Agreements\BudgetAvailabilityController;
@@ -26,7 +28,6 @@ use App\Http\Controllers\Documents\DocDigital\DocDigitalController;
 use App\Http\Controllers\CarCalendarEventController;
 use App\Http\Controllers\Documents\DocumentController;
 use App\Http\Controllers\Documents\ParteController;
-use App\Http\Controllers\Documents\ParteFileController;
 use App\Http\Controllers\Documents\Partes\NumerationController;
 use App\Http\Controllers\Documents\Sign\SignatureController as SignSignatureController;
 use App\Http\Controllers\Documents\SignatureController;
@@ -57,13 +58,16 @@ use App\Http\Controllers\Indicators\IaapsController;
 use App\Http\Controllers\Indicators\ProgramApsController;
 use App\Http\Controllers\Indicators\SingleParameterController;
 use App\Http\Controllers\Inventory\InventoryController;
+use App\Http\Controllers\IonlinePlusController;
+// use App\Http\Controllers\Lobby\MeetingController;
 use App\Http\Controllers\JobPositionProfiles\JobPositionProfileController;
 use App\Http\Controllers\JobPositionProfiles\JobPositionProfileSignController;
 use App\Http\Controllers\JobPositionProfiles\MessageController;
-// use App\Http\Controllers\Lobby\MeetingController;
+use App\Http\Controllers\CalendarEventController;
 use App\Http\Controllers\Mammography\MammographyController;
 use App\Http\Controllers\Meeting\CommitmentController;
 use App\Http\Controllers\Meeting\MeetingController;
+use App\Http\Livewire\Meetings\MeetingCreate;
 use App\Http\Controllers\MunicipalityController;
 use App\Http\Controllers\News\NewsController;
 use App\Http\Controllers\Parameters\BudgetItemController;
@@ -178,12 +182,12 @@ use App\Http\Controllers\ServiceRequests\ReportController;
 use App\Http\Controllers\ServiceRequests\ServiceRequestController;
 use App\Http\Controllers\ServiceRequests\SignatureFlowController;
 use App\Http\Controllers\ServiceRequests\ValueController;
-use App\Http\Controllers\Suitability\CategoriesController;
-use App\Http\Controllers\Suitability\OptionsController;
-use App\Http\Controllers\Suitability\QuestionsController;
 
 //use App\Http\Controllers\RequestForms\SupplyPurchaseController;
 //use App\Http\Controllers\Suitability\ResultsController;
+use App\Http\Controllers\Suitability\CategoriesController;
+use App\Http\Controllers\Suitability\OptionsController;
+use App\Http\Controllers\Suitability\QuestionsController;
 use App\Http\Controllers\Suitability\ResultsController;
 use App\Http\Controllers\Suitability\SchoolUserController;
 use App\Http\Controllers\Suitability\SchoolsController;
@@ -197,6 +201,7 @@ use App\Http\Controllers\Summary\SummaryFileController;
 use App\Http\Controllers\Summary\TemplateController as SummaryTemplateController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\Trainings\TrainingController as TngTrainingController;
+use App\Http\Livewire\Trainings\TrainingCreate;
 use App\Http\Controllers\Unspsc\ClassController;
 use App\Http\Controllers\Unspsc\FamilyController;
 use App\Http\Controllers\Unspsc\ProductController;
@@ -270,6 +275,7 @@ use App\Http\Livewire\Inventory\PrintCodeQueue;
 use App\Http\Livewire\Inventory\RegisterInventory;
 use App\Http\Livewire\Inventory\RemovalRequestMgr;
 use App\Http\Livewire\Inventory\Transfer;
+use App\Http\Livewire\Inventory\UpdatePma;
 use App\Http\Livewire\Lobby\MeetingMgr;
 use App\Http\Livewire\News\CreateNews;
 use App\Http\Livewire\News\SearchNews;
@@ -312,6 +318,7 @@ use App\Http\Livewire\TestFileManager;
 use App\Http\Livewire\TestFileUpdateManager;
 use App\Http\Livewire\TicResources;
 use App\Http\Livewire\Warehouse\Invoices\InvoiceManagement;
+use App\Http\Livewire\Welfare\WelfareUsersImport;
 use App\Http\Livewire\Welfare\Amipass\NewBeneficiaryRequest;
 use App\Http\Livewire\Welfare\Amipass\ReportByDates;
 use App\Http\Livewire\Welfare\Amipass\ReportByEmployee;
@@ -343,6 +350,7 @@ Route::get('/', function () {
     return view('layouts.bt4.welcome');
 })->name('welcome');
 
+Route::get('/ionline-plus', IonlinePlusController::class)->middleware('auth')->name('ionline-plus');
 
 Route::get('/claveunica/callback', [ClaveUnicaController::class, 'callback'])->name('claveunica.callback');
 Route::get('/claveunica/callback-testing', [ClaveUnicaController::class, 'callback']);
@@ -363,6 +371,7 @@ Route::post('/login/external', [LoginController::class, 'externalLogin']);
 
 /* Para testing, no he probado pero me la pedian en clave única */
 Route::get('logout-testing', [LoginController::class, 'logout'])->name('logout-testing');
+
 
 
 /* TODO: @sickiqq Chekear si necesitan o no middleware auth y mover al grupo que le corresponde */
@@ -772,6 +781,7 @@ Route::prefix('agreements')->as('agreements.')->middleware(['auth', 'must.change
     
     // Convenios 2024
     Route::post('/createDocument/{agreement}', [AgreementController::class, 'createDocument'])->name('createDocument');
+    Route::post('/createResDocument/{agreement}', [AgreementController::class, 'createResDocument'])->name('createResDocument');
 });
 /** Fin Agreements */
 
@@ -1370,7 +1380,7 @@ Route::prefix('documents')->as('documents.')->middleware(['auth', 'must.change.p
         Route::post('/', [ParteController::class, 'store'])->name('store');
         Route::get('/create', [ParteController::class, 'create'])->name('create');
         
-        Route::delete('/files/{file}', [ParteFileController::class, 'destroy'])->name('files.destroy');
+        Route::delete('/files/{file}', [ParteController::class, 'fileDestroy'])->name('files.destroy');
         Route::get('/inbox', [ParteController::class, 'inbox'])->name('inbox');
 
         Route::get('/', Inbox::class)->name('index');
@@ -2062,6 +2072,7 @@ Route::prefix('inventories')->as('inventories.')->middleware(['auth', 'must.chan
 
     Route::get('pending-movements', PendingMovements::class)->name('pending-movements');
     Route::get('assigned-products', AssignedProducts::class)->name('assigned-products');
+    Route::get('update-pma', UpdatePma::class)->name('update-pma');
     Route::get('movement/{movement}/check-transfer', CheckTransfer::class)->name('check-transfer')
         ->middleware('ensure.movement');
     Route::get('{inventory}/create-transfer', CreateTransfer::class)->name('create-transfer')
@@ -2183,6 +2194,8 @@ Route::prefix('finance')->as('finance.')->middleware(['auth', 'must.change.passw
         Route::put('/{dte}/update', [PaymentController::class, 'update'])->name('update');
         Route::get('/paid', [PaymentController::class, 'paid'])->name('paid');
         Route::get('/{dte}/paid/pdf', [PaymentController::class, 'paidPdf'])->name('paidPdf');
+        //Route::get('/{dte}/compromiso/pdf', [PaymentController::class, 'compromisoPdf'])->name('compromisoPdf');
+        Route::get('/{dte}/devengo/pdf', [PaymentController::class, 'devengoPdf'])->name('devengoPdf');
     });
 
     Route::prefix('purchase-orders')->as('purchase-orders.')->group(function () {
@@ -2193,7 +2206,7 @@ Route::prefix('finance')->as('finance.')->middleware(['auth', 'must.change.passw
     Route::prefix('receptions')->as('receptions.')->group(function () {
         Route::get('/', IndexReception::class)->name('index');
         Route::get('/parameters/email', [FinReceptionController::class,'parameters'])->name('parameters');
-        Route::get('/type', TypeMgr::class)->name('type');        
+        Route::get('/type', TypeMgr::class)->name('type');
         Route::get('{control_id?}/create/{reception_id?}', CreateReception::class)->name('create');
         Route::get('/create_no_oc/{reception_id?}', CreateReceptionNoOc::class)->name('create_no_oc');
         Route::get('/reject', CreateRejection::class)->name('reject');
@@ -2418,9 +2431,11 @@ Route::prefix('allowances')->as('allowances.')->middleware(['auth', 'must.change
 
 Route::prefix('meetings')->as('meetings.')->middleware(['auth', 'must.change.password'])->group(function () {
     Route::get('/', [MeetingController::class, 'index'])->name('index');
+    Route::get('/all_index', [MeetingController::class, 'all_index'])->name('all_index');
     Route::get('create', [MeetingController::class, 'create'])->name('create');
     Route::get('{meeting}/edit', [MeetingController::class, 'edit'])->name('edit');
     Route::get('{meeting}/show', [MeetingController::class, 'show'])->name('show');
+    Route::get('/{meetingToEdit}/show_file', [MeetingCreate::class, 'show_file'])->name('show_file');
     Route::prefix('commitments')->as('commitments.')->group(function () {
         Route::get('/own_index', [CommitmentController::class, 'own_index'])->name('own_index');
         Route::get('/all_index', [CommitmentController::class, 'all_index'])->name('all_index');
@@ -2431,7 +2446,7 @@ Route::prefix('meetings')->as('meetings.')->middleware(['auth', 'must.change.pas
 Route::prefix('trainings')->as('trainings.')->middleware(['auth', 'must.change.password'])->group(function () {
     Route::get('/', [TngTrainingController::class, 'index'])->name('index');
     Route::get('create', [TngTrainingController::class, 'create'])->name('create');
-    Route::get('{meeting}/edit', [TngTrainingController::class, 'edit'])->name('edit');
+    Route::get('/{training}/show_file', [TrainingCreate::class, 'show_file'])->name('show_file');
 });
 
 
@@ -2624,6 +2639,7 @@ Route::prefix('welfare')->as('welfare.')->middleware(['auth', 'must.change.passw
     Route::get('/balances', [WelfareController::class, 'balances'])->name('balances');
     Route::get('/report', [WelfareController::class, 'report'])->name('report');
     Route::get('/export-balance', [WelfareController::class, 'exportBalance'])->name('exportBalance');
+    Route::get('/welfare-users-import', WelfareUsersImport::class)->name('welfare-users-import');
 
 
     Route::prefix('loans')->as('loans.')->group(function () {
@@ -2827,6 +2843,15 @@ Route::group(['middleware' => 'auth:external'], function () {
             Route::get('/show_file/{training}', [TrainingController::class, 'show_file'])->name('show_file');
             Route::delete('{training}/destroy', [TrainingController::class, 'destroy'])->name('destroy');
         });
+    });
+
+    // Route::prefix('replacement_staff')->as('replacement_staff.')->group(function () {
+
+    Route::prefix('trainings')->as('trainings.')->group(function () {
+        Route::get('/external_own_index', [TngTrainingController::class, 'external_own_index'])->name('external_own_index');
+        Route::get('/external_create', [TngTrainingController::class, 'external_create'])->name('external_create');
+        Route::get('{training}/external_edit', [TngTrainingController::class, 'external_edit'])->name('external_edit');
+        Route::get('/{training}/show_file', [TrainingCreate::class, 'show_file'])->name('show_file');
     });
 });
 

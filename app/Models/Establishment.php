@@ -70,7 +70,7 @@ class Establishment extends Model implements Auditable
 
     public function establishmentType()
     {
-        return $this->belongsTo(establishmentType::class);
+        return $this->belongsTo(EstablishmentType::class);
     }
 
     public function organizationalUnits()

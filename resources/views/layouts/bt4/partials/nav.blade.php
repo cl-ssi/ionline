@@ -131,12 +131,11 @@
                         <a class="dropdown-item {{ active('health_plan.*') }}" href="{{ route('health_plan.index', ['iquique']) }}">
                             <i class="fas fa-file-powerpoint"></i> Planes Comunales
                         </a>--}}
-                        {{--
+
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item {{ active('meetings.*') }}" href="{{ route('meetings.index') }}">
                             <i class="fas fa-users fa-fw"></i> Reuniones
                         </a>
-                        --}}
                     </div>
                 </li>
 
@@ -401,7 +400,7 @@
                         </a>
                         @endcanany
 
-                        @canany(['Rrhh: wellfair', 'be god', 'amiPASS'])
+                        @canany(['Rrhh: welfare', 'be god', 'amiPASS'])
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="{{ route('welfare.index') }}">
                             <i class="fas fa-money-check"></i> Bienestar
@@ -802,12 +801,9 @@
                             <i class="fas fa-fw fa-question-circle"></i> {{ __('Consultas/Sugerencia Amipass') }}
                         </a>
 
-
-                        
                         <a class="dropdown-item" href="{{ route('rrhh.performance-report.received_report') }}">
                             <i class="fas fa-fw fa-chart-line"></i> Mi Informe de desempeño
                         </a>
-                        
 
                         <div class="dropdown-divider"></div>
 
@@ -818,6 +814,12 @@
                         <a class="dropdown-item" href="{{ route('rrhh.users.password.edit') }}">
                             <i class="fas fa-fw fa-key"></i> Cambio de clave
                         </a>
+
+                        @can('dev')
+                        <a class="dropdown-item bg-dark text-white" href="{{ route('ionline-plus') }}">
+                            <i class="bi icon-logo-ionline-white"></i> iOnline <span class="text-danger">Plus</span>
+                        </a>
+                        @endcan
 
                         <a class="dropdown-item" href="{{ route('logout') }}">
                             <i class="fas fa-fw fa-sign-out-alt"></i> {{ __('Cerrar sesión') }}

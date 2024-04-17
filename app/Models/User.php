@@ -32,6 +32,7 @@ use App\Models\Welfare\Amipass\Regularization;
 use App\Rrhh\Authority;
 
 use App\Rrhh\OrganizationalUnit;
+use Attribute;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Contracts\Auth\CanResetPassword;
@@ -82,7 +83,9 @@ class User extends Authenticatable implements Auditable
         'active',
         'gravatar',
         'external',
+        'welfare', // indica si el funcionario tiene convenio con bienestar o no.
         'country_id',
+        'establishment_id',
         'organizational_unit_id',
         'email_personal',
         'email_verified_at',
@@ -130,16 +133,15 @@ class User extends Authenticatable implements Auditable
         'password',
     ];
 
+    public function establishment()
+    {
+        return $this->belongsTo(Establishment::class);
+    }
+
     public function organizationalUnit()
     {
         return $this->belongsTo(OrganizationalUnit::class)->withTrashed();
     }
-
-    /** No pude hacer eagger loading con esta relación */
-    // public function establishment()
-    // {
-    //     return $this->organizationalUnit?->establishment() ?? $this->belongsTo(new Establishment());
-    // }
 
     public function telephones()
     {
@@ -158,7 +160,7 @@ class User extends Authenticatable implements Auditable
 
     public function mobile()
     {
-        return $this->hasOne('\App\Models\Resources\Mobile');
+        return $this->hasOne(Resources\Mobile::class);
     }
 
     public function commune()
@@ -258,7 +260,20 @@ class User extends Authenticatable implements Auditable
         return $this->hasMany(PendingAmount::class,'user_id');
     }
 
-    
+    /**
+     * Un mutador para 'organizational_unit_id' que también actualiza 'establishment_id'.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute
+     */
+    protected function organizationalUnitId(): Attribute
+    {
+        return Attribute::make(
+            set: function ($value) {
+                $this->attributes['establishment_id'] = OrganizationalUnit::find($value)?->establishment_id;
+                return $value;
+            },
+        );
+    }
 
 
     /* Authority relation: Is Manager from ou */
@@ -662,6 +677,17 @@ class User extends Authenticatable implements Auditable
         }
     }
 
+    public function getGender()
+    {
+        if(is_null($this->gender)) {
+            return "";
+        } else {
+            if($this->gender == "male"){ return "Masculino"; }
+            elseif($this->gender == "female"){ return "Femenino"; }
+            else{ return "Otro"; }
+        }
+    }
+
     /**
      * Retorna Usuarios según contenido en $searchText
      * Busqueda realizada en: nombres, apellidos, rut.
@@ -782,7 +808,6 @@ class User extends Authenticatable implements Auditable
         }
 
         return $firstName;
-        // return strtok(mb_convert_case(trim($this->name), MB_CASE_TITLE, 'UTF-8'), " ");
     }
 
     public function getInitialsAttribute()

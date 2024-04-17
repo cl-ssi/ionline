@@ -44,7 +44,7 @@
                                 @livewire('search-select-user', [
                                     'selected_id' => 'new_request_user_id',
                                     'small_option' => true
-                                ], , key($requestForm->id))
+                                ], key($requestForm->id))
                             </fieldset>
                         </div>
 

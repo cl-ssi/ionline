@@ -153,6 +153,57 @@ class PurchasePlan extends Model implements Auditable
         }
     }
 
+    public function scopeSearch(
+        $query, $id_search, $status_search, $search_subject, $start_date_search, $end_date_search, $user_creator_search, $user_responsible_search,
+            $responsible_ou_id){
+        if ($id_search OR $status_search OR $search_subject OR $start_date_search OR $end_date_search OR $user_creator_search OR 
+            $user_responsible_search OR $responsible_ou_id){
+            // dd($user_responsible_search);
+
+            if ($id_search != '') {
+                $query->where(function ($q) use ($id_search) {
+                    $q->where('id', $id_search);
+                });
+            }
+            if ($status_search != '') {
+                $query->where(function ($q) use ($status_search) {
+                    $q->where('status', $status_search);
+                });
+            }
+            if ($search_subject != '') {
+                $query->where(function ($q) use ($search_subject) {
+                    $q->where('subject', 'LIKE', '%' . $search_subject . '%');
+                });
+            }
+            if ($start_date_search != '' && $end_date_search != '') {
+                $query->where(function ($q) use ($start_date_search, $end_date_search) {
+                    $q->whereBetween('created_at', [$start_date_search, $end_date_search . " 23:59:59"])->get();
+                });
+            }
+            $array_requester_search = explode(' ', $user_creator_search);
+            foreach ($array_requester_search as $word) {
+                $query->whereHas('userCreator', function ($query) use ($word) {
+                    $query->where('name', 'LIKE', '%' . $word . '%')
+                        ->orwhere('fathers_family', 'LIKE', '%' . $word . '%')
+                        ->orwhere('mothers_family', 'LIKE', '%' . $word . '%');
+                });
+            }
+            $array_responsible_search = explode(' ', $user_responsible_search);
+            foreach ($array_responsible_search as $word) {
+                $query->whereHas('userResponsible', function ($query) use ($word) {
+                    $query->where('name', 'LIKE', '%' . $word . '%')
+                        ->orwhere('fathers_family', 'LIKE', '%' . $word . '%')
+                        ->orwhere('mothers_family', 'LIKE', '%' . $word . '%');
+                });
+            }
+            if ($responsible_ou_id != '') {
+                $query->where(function ($q) use ($responsible_ou_id) {
+                    $q->where('organizational_unit_id', $responsible_ou_id);
+                });
+            }
+        }
+    }
+
     protected $hidden = [
         'created_at', 'updated_at'
     ];

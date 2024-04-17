@@ -82,6 +82,21 @@ class CreateReceptionNoOc extends Component
     {
         $this->types = ReceptionType::where('establishment_id',auth()->user()->organizationalUnit->establishment_id)
             ->pluck('name','id')->toArray();
+        
+        if( array_key_exists('dte_id', $_GET) ) {
+            $this->selectedDteId = $_GET['dte_id'];
+            $dteData = Dte::find($this->selectedDteId);
+            $this->emisor = $dteData->emisor;
+            $this->folio = $dteData->folio;
+            $this->reception['dte_type'] = $dteData->tipo_documento;
+            $this->razonSocial = $dteData->razon_social_emisor;
+            $this->reception['dte_date'] = $dteData->emision?->format('Y-m-d');
+            $this->montoNeto = $dteData->monto_neto;
+            $this->montoExento = $dteData->monto_exento;
+            $this->montoIva = $dteData->monto_iva;
+            $this->montoTotal = $dteData->monto_total;
+            
+        }
     }
 
     public function loadDteData()

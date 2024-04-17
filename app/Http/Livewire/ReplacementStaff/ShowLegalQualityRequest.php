@@ -223,6 +223,9 @@ class ShowLegalQualityRequest extends Component
     public function updatedselectedLaw($selectedLawValue){
         if($selectedLawValue == '19664'){
             $this->degree = null;
+            if($this->formType == 'announcement'){
+                $this->degreeStateInput = 'readonly';
+            }
         }
         else{
             switch ($this->selectedProfile) {
@@ -242,6 +245,9 @@ class ShowLegalQualityRequest extends Component
                 case '':
                     $this->degree = '';
                     break;
+            }
+            if($this->formType == 'announcement'){
+                $this->degreeStateInput = '';
             }
         }
     }

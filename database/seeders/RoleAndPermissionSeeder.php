@@ -197,7 +197,7 @@ class RoleAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'RNI Database: admin', 'description' => 'Acceso a carga de base datos RNI']);
         Permission::create(['name' => 'RNI Database: view', 'description' => 'Acceso a descarga de base datos RNI']);
         Permission::create(['name' => 'Rrhh: birthday', 'description' => '']);
-        Permission::create(['name' => 'Rrhh: wellfair', 'description' => 'Permiso para el módulo de Bienestar']);
+        Permission::create(['name' => 'Rrhh: welfare', 'description' => 'Permiso para el módulo de Bienestar']);
         Permission::create(['name' => 'Service Request', 'description' => 'Módulo de honorarios (ex pukaña)']);
         Permission::create(['name' => 'Service Request: accept all requests', 'description' => 'Permite acepta todas las solicitudes de contrato de honorario']);
         Permission::create(['name' => 'Service Request: active contracts report', 'description' => '']);
@@ -693,6 +693,13 @@ class RoleAndPermissionSeeder extends Seeder
         $role->givePermissionTo('OrganizationalUnits: sirh association');
         $role->givePermissionTo('Users: assign roles');
         
+        $role = Role::create(['name' => 'Reuniones: Relacionador(a) Laborar', 'description' => 'Permite acceso a todas las reuniones y compromisos']);
+        $role->givePermissionTo('Meetings: create');
+        $role->givePermissionTo('Meetings: all commitments');
+        $role->givePermissionTo('Meetings: all meetings');
+
+        $role = Role::create(['name' => 'Reuniones: creador de reuniones', 'description' => 'Permite creación de reuniones y compromisos']);
+        $role->givePermissionTo('Meetings: create');
         
         // GOD LIKE
         $role = Role::create(['name' => 'god', 'description' => 'God Mode !']);

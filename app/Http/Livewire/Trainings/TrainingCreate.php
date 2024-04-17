@@ -9,12 +9,20 @@ use App\Models\Parameters\Estament;
 use App\Models\Parameters\ContractualCondition;
 use App\Models\User;
 use App\Models\Trainings\StrategicAxes;
+use App\Models\Trainings\TrainingCost;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
+use Livewire\WithFileUploads;
+use App\Models\UserExternal;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
+
 class TrainingCreate extends Component
 {
+    use WithFileUploads;
+
     public $run, $dv, 
     $selectedEstament, $degree, $selectedContractualCondition, 
     $organizationalUnitUser, $establishmentUser, 
@@ -30,15 +38,21 @@ class TrainingCreate extends Component
     $technicalReasons,
     $feedback_type;
 
-    public $trainingCosts, $typeTrainingCost, $otherTypeTrainingCost, $disabledInputOtherTypeTrainingCost = 'disabled',$exist, $expense;
+    // public $trainingCosts, $typeTrainingCost, $otherTypeTrainingCost, $disabledInputOtherTypeTrainingCost = 'disabled',$exist, $expense;
+
+    public $file, $iterationFileClean = 0, $municipalProfile, $userExternal = null, $searchedUserName, 
+    $disabledSearchedUserNameInput = 'disabled';
+
+    public $bootstrap;
 
     /* Training to edit */
-    public $trainingToEdit;
+    public $training;
     public $idTraining;
 
-    /* trainingCost to edit */
+    /* trainingCost to edit 
     public $trainingCostToEdit;
     public $idTrainingCost;
+    */
 
     // Listeners
     public $searchedUser;
@@ -73,12 +87,13 @@ class TrainingCreate extends Component
             'technicalReasons.required'             => 'Debe ingresar Fundamento o Razones Técnicas.',
 
             //  MENSAJES PARA COSTOS
+            /*
             'trainingCosts.required'                => 'Debe ingresar al menos un tipo de costo',
             'typeTrainingCost.required'             => 'Ingresar un Tipo de Costo.',
             'otherTypeTrainingCost.required'        => 'Debe especificar un Tipo de Costo.',
             'exist.required'                        => 'Debe ingresar Sí/No.',
             'expense.required'                      => 'Debe ingresar $ monto.',
-            
+            */
         ];
     }
 
@@ -88,7 +103,25 @@ class TrainingCreate extends Component
         $contractualConditions = ContractualCondition::orderBy('id')->get();
         $strategicAxes = StrategicAxes::orderBy('number', 'ASC')->get();
 
+        if(auth()->guard('external')->check() == true && Route::is('trainings.external_create') ){
+            $this->userExternal = UserExternal::where('id',Auth::guard('external')->user()->id)->first();
+            $this->searchedUser = $this->userExternal;
+            $this->searchedUserId = $this->userExternal->id;
+            $this->searchedUserName = $this->userExternal->FullName;
+            $this->run = $this->userExternal->id;
+            $this->dv = $this->userExternal->dv;
+            $this->email = $this->userExternal->email;
+            $this->telephone = ($this->userExternal->phone_number) ? $this->userExternal->phone_number : null;
+        }
+
         return view('livewire.trainings.training-create', compact('estaments', 'contractualConditions', 'strategicAxes'));
+    }
+
+    public function mount($trainingToEdit){
+        if(!is_null($trainingToEdit)){
+            $this->training = $trainingToEdit;
+            $this->setTraining();
+        }
     }
 
     public function save(){
@@ -118,7 +151,7 @@ class TrainingCreate extends Component
             'workingDay'                                                                => 'required',
             'technicalReasons'                                                          => 'required',
 
-            'trainingCosts'                                                             => 'required'
+            // 'trainingCosts'                                                             => 'required'
             
         ]);
 
@@ -126,7 +159,7 @@ class TrainingCreate extends Component
         $training = DB::transaction(function () {
             $training = Training::updateOrCreate(
                 [
-                    'id'  =>  '',
+                    'id'  => ($this->idTraining) ? $this->idTraining : '',
                 ],
                 [
                     'status'                    => 'pending',
@@ -134,8 +167,8 @@ class TrainingCreate extends Component
                     'estament_id'               => $this->selectedEstament,
                     'degree'                    => $this->degree, 
                     'contractual_condition_id'  => $this->selectedContractualCondition,
-                    'organizationl_unit_id'     => $this->searchedUser->organizational_unit_id,
-                    'establishment_id'          => $this->searchedUser->organizationalUnit->establishment_id,
+                    'organizational_unit_id'    => (auth()->guard('external')->check() == true) ? null : $this->searchedUser->organizational_unit_id,
+                    'establishment_id'          => (auth()->guard('external')->check() == true) ? null : $this->searchedUser->organizationalUnit->establishment_id,
                     'email'                     => $this->email,
                     'telephone'                 => $this->telephone,
                     'strategic_axes_id'         => $this->selectedStrategicAxis,
@@ -151,17 +184,72 @@ class TrainingCreate extends Component
                     'permission_date_start_at'  => $this->permissionDateStartAt, 
                     'permission_date_end_at'    => $this->permissionDateEndAt,
                     'place'                     => $this->place,
+                    'working_day'               => $this->workingDay,
                     'technical_reasons'         => $this->technicalReasons,
                     'feedback_type'             => $this->feedback_type,
+                    'municipal_profile'         => $this->municipalProfile,
                     'user_creator_id'           => auth()->id()
                 ]
             );
 
             return $training;
         });
+
+        if($this->file){
+            $now = now()->format('Y_m_d_H_i_s');
+            $training->file()->updateOrCreate(
+                [
+                    'id' => ($training->file) ? $training->file->id : null,
+                ],
+                [
+                    'storage_path' => '/ionline/trainings/attachments/'.$now.'_training_'.$training->id.'.'.$this->file->extension(),
+                    'stored' => true,
+                    'name' => 'Mi adjunto.pdf',
+                    'stored_by_id' => auth()->id(),
+                ]
+            );
+            $training->file = $this->file->storeAs('/ionline/trainings/attachments', $now.'_training_'.$training->id.'.'.$this->file->extension(), 'gcs');
+        }
+
+        if(auth()->guard('external')->check() == true){
+            return redirect()->route('trainings.external_own_index');
+        }
+    }
+
+    // Set Training
+    private function setTraining(){
+        if($this->training){
+            $this->idTraining                   = $this->training->id;
+            $this->searchedUser                 = $this->training->userTraining;
+            $this->searchedUserName             = $this->searchedUser->FullName;
+            $this->run                          = $this->searchedUser->id;
+            $this->dv                           = $this->searchedUser->dv;
+            $this->selectedEstament             = $this->training->estament_id;
+            $this->degree                       = $this->training->degree;
+            $this->selectedContractualCondition = $this->training->contractual_condition_id;
+            $this->email                        = $this->training->email;
+            $this->telephone                    = $this->training->telephone;
+            $this->selectedStrategicAxis        = $this->training->strategic_axes_id;
+            $this->objective                    = $this->training->objective;
+            $this->activityName                 = $this->training->activity_name;
+            $this->activityType                 = $this->training->activity_type;
+            $this->otherActivityType            = $this->training->other_activity_type;
+            $this->mechanism                    = $this->training->mechanism;
+            $this->schuduled                    = $this->training->schuduled;
+            $this->activityDateStartAt          = $this->training->activity_date_start_at;
+            $this->activityDateEndAt            = $this->training->activity_date_end_at;
+            $this->totalHours                   = $this->training->total_hours;
+            $this->permissionDateStartAt        = $this->training->permission_date_start_at;
+            $this->permissionDateEndAt          = $this->training->permission_date_end_at;
+            $this->place                        = $this->training->place;
+            $this->workingDay                   = $this->training->working_day;
+            $this->technicalReasons             = $this->training->technical_reasons;
+            $this->municipalProfile             = $this->training->municipal_profile;
+        }
     }
 
     public function addTrainingCost(){
+        /*
         $this->validateMessage = 'training';
 
         $validatedData = $this->validate([
@@ -177,23 +265,24 @@ class TrainingCreate extends Component
             'other_type'    => $this->otherTypeTrainingCost,
             'exist'         => $this->exist,
             'expense'       => $this->expense,
-            'training_id'   => ($this->trainingToEdit) ? $this->trainingToEdit->id : null,
+            'training_id'   => ($this->training) ? $this->training->id : null,
         ];
+        */
     }
 
     public function deleteTrainingCost($key){
+        /*
         $itemToDelete = $this->trainingCosts[$key];
 
         if($itemToDelete['id'] != ''){
             unset($this->trainingCosts[$key]);
-            /*
-            $objectToDelete = Grouping::find($itemToDelete['id']);
-            $objectToDelete->delete();
-            */
+            // $objectToDelete = Grouping::find($itemToDelete['id']);
+            // $objectToDelete->delete();
         }
         else{
             unset($this->trainingCosts[$key]);
         }
+        */
     }
 
     public function searchedUser(User $user){
@@ -207,7 +296,7 @@ class TrainingCreate extends Component
         $this->telephone = ($this->searchedUser->telephones) ? $this->searchedUser->telephones->first()->minsal : null;
     }
 
-    public function updatedactivityType($value){
+    public function updatedActivityType($value){
         if($value == 'otro'){
             $this->disabledInputOtherActivityType = '';
         }
@@ -218,6 +307,7 @@ class TrainingCreate extends Component
     }
 
     public function updatedtypeTrainingCost($value){
+        /*
         if($value == 'otro'){
             $this->disabledInputOtherTypeTrainingCost = '';
         }
@@ -225,5 +315,10 @@ class TrainingCreate extends Component
             $this->disabledInputOtherTypeTrainingCost = 'disabled';
             $this->otherActivityType = null;
         }
+        */
+    }
+
+    public function show_file(Training $training){
+        return Storage::disk('gcs')->response($training->file->storage_path);
     }
 }

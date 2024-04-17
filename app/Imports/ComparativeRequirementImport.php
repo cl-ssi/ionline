@@ -24,7 +24,7 @@ class ComparativeRequirementImport implements ToCollection, WithStartRow,WithChu
 
     public function chunkSize(): int
     {
-        return 10;
+        return 5;
     }
 
     private function formatRUT($rut)

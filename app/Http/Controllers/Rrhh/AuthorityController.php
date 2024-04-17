@@ -18,8 +18,7 @@ class AuthorityController extends Controller
     
     /**
      * Display a listing of the resource.
-     *
-     Código para probar si se implemento bien los cambios de funciones a newAuthority
+     * Código para probar si se implemento bien los cambios de funciones a newAuthority
      */
     public function test()
     {
@@ -64,7 +63,7 @@ class AuthorityController extends Controller
         return view('rrhh.new_authorities.calendar', [
             'ou' => $organizationalUnit,
             'subrogants' => $subrogants,
-        ]);        
+        ]);
     }
 
 
