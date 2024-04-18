@@ -2807,6 +2807,7 @@ $document->content .= "
             COMUN&Iacute;QUESE, ARCH&Iacute;VESE.&nbsp;</strong></p>";
         
         $document->content = preg_replace('/font-size.+?;/', "", $document->content);
+        $document->content = str_replace("<!-- pagebreak -->", "", $document->content);
         
         $types = Type::whereNull('partes_exclusive')->pluck('name','id');
         return view('documents.create', compact('document', 'types'));
