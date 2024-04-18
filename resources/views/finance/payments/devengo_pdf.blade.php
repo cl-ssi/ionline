@@ -8,14 +8,16 @@
         .tabla-custom {
             width: 100%;
             border-collapse: separate;
-            border-spacing: 0 6px;
+            border-spacing: 0 12px;
+            padding-left: 14px;
         }
 
-        .tabla-custom tr {}
+        .tabla-custom tr {
+        }
 
         .tabla-custom th {
             text-align: left;
-            padding-left: 10px;
+            /* padding-left: 10px; */
         }
 
         .tabla-custom td {
@@ -34,16 +36,15 @@
             font-weight: bold;
             text-align: center;
             vertical-align: top;
-
         }
 
         .tabla-items tr {}
 
         .tabla-items th {
             border: 1px solid black;
-            padding: 0px;
-            padding: 8px 0 3px 0;
-            line-height: 0.5;
+            line-height: 100%; 
+            padding-top: 2px; 
+            padding-bottom: 2px;
         }
 
         .tabla-items td {
@@ -53,8 +54,30 @@
             border: 1px solid black;
         }
 
+        .tabla-cumplimiento {
+            width: 99%;
+            border-collapse: collapse;
+            padding-bottom: 18px;
+        }
+
+        .tabla-cumplimiento thead {
+            background-color: black;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+            vertical-align: top;
+        }
+        
+        .tabla-cumplimiento td {
+            text-align: center;
+        }
+
         hr {
             margin-bottom: 0px;
+        }
+
+        .margen-wn {
+            padding-left: 10px;
         }
 </style>
 
@@ -68,63 +91,65 @@
 
 <hr>
 
-<table class="tabla-custom nueve">
+<table class="tabla-custom" style="font-size: 1.2em;">
     <tr>
-        <th width="130px">Institución / Área Transaccional</th>
-        <td colspan="7">Servicio de Salud Iquique / Hospital de Alto Hospicio</td>
+        <th>Institución / Área Transaccional</th>
+        <td colspan="3">Servicio de Salud Iquique / Hospital de Alto Hospicio</td>
     </tr>
     <tr>
-        <th>Título</th>
-        <td colspan="7">
-            {{ $dte->comparativeRequirement?->devengo_titulo  }}
+        <th class="margen-wn" class="margen-wn">Título</th>
+        <td colspan="3">
+            {{ $dte->comparativeRequirement?->devengo_titulo  }} DEV. LABORATORIO BIOSANO S A FACT. 315285 OC 621-547-SE23
+            INTERMEDIACION
         </td>
     </tr>
     <tr>
-        <th>Descripción</th>
-        <td colspan="7">
-            {{ $dte->comparativeRequirement?->devengo_titulo }} @if($dte->paid_automatic) @endif
+        <th class="margen-wn">Descripción</th>
+        <td colspan="3">
+            {{ $dte->comparativeRequirement?->devengo_titulo }} @if($dte->paid_automatic) @endif FA / 315285 / 88597500 / 621-547-SE23 / LABORATORIO BIOSANO S A
         </td>
     </tr>
     <tr>
-        <th>Periodo de Operación</td>
-        <td style="width:160px">{{ ucfirst($dte->tgrPayedDte?->fecha_generacion->monthName) }}</td>
-        <th style="width:94px">Ejercicio Fiscal</th>
-        <td style="width:100px">¿?</td>
+        <th width="150px" class="margen-wn">Periodo de Operación</td>
+        <td width="190px">{{ ucfirst($dte->tgrPayedDte?->fecha_generacion->monthName) }} Diciembre</td>
+        <th width="165px" class="margen-wn">Ejercicio Fiscal</th>
+        <td></td>
     </tr>
     <tr>
-        <th>Folio</td>
-        <td style="width:160px">{{ $dte->comparativeRequirement?->devengo_folio }}</td>
-        <th style="width:94px">Fecha y Hora de Aprobación</th>
-        <td style="width:100px">{{ $dte->comparativeRequirement?->devengo_fecha }}</td>
+        <th class="margen-wn">Folio</td>
+        <td>{{ $dte->comparativeRequirement?->devengo_folio }}</td>
+        <th class="margen-wn">Fecha y Hora de Aprobación</th>
+        <td>{{ $dte->comparativeRequirement?->devengo_fecha }}</td>
     </tr>
     <tr>
-        <th>Tipo de Transacción</td>
-        <td style="width:160px">Creación</td>
-        <th style="width:94px">Proceso Fuente</th>
-        <td style="width:100px">Devengo</td>
+        <th class="margen-wn">Tipo de Transacción</td>
+        <td>Creación</td>
+        <th class="margen-wn">Proceso Fuente</th>
+        <td>Devengo</td>
     </tr>
     <tr>
-        <th>Tipo de Movimiento</td>
-        <td style="width:160px">Financiero</td>
-        <th style="width:94px">Identificación de Transferencia de Datos</th>
-        <td style="width:100px"></td>
+        <th class="margen-wn">Tipo de Movimiento</td>
+        <td>Financiero</td>
+        <th class="margen-wn">Identificación de Transferencia de Datos</th>
+        <td></td>
     </tr>
     <tr>
-        <th>Origen del Ajuste</td>
-        <td style="width:160px"></td>
-        <th style="width:94px">Folio Anterior</th>
-        <td style="width:100px"></td>
+        <th class="margen-wn">Origen del Ajuste</td>
+        <td></td>
+        <th class="margen-wn">Folio Anterior</th>
+        <td></td>
     </tr>
     <tr>
-        <th>Usuario Aprobador</td>
-        <td style="width:160px">interDTE</td>
-        <th style="width:94px">Origen Transacción</th>
-        <td style="width:100px">Sistema Vertical DTE</td>
+        <th class="margen-wn">Usuario Aprobador</td>
+        <td>interDTE</td>
+        <th class="margen-wn">Origen Transacción</th>
+        <td>Sistema Vertical DTE</td>
     </tr>
-
 </table>
+
 <br>
-<div style="margin-top: 60px; padding-left: 9px; font-size: 1.3rem">
+
+<div style="margin-top: 20px; padding-left: 0px; font-size: 1.2rem; margin-bottom: 16px;">
     <strong style="">
         Contabilidad
     </strong>
@@ -158,7 +183,7 @@
     </table>
 
     <br>
-    <div style="margin-top: 60px; padding-left: 9px; font-size: 1.3rem">
+    <div style="margin-top: 30px; padding-left: 9px; font-size: 1.2rem; margin-bottom: 16px;">
         <strong style="">
             Cartera Financiera
         </strong>
@@ -183,11 +208,11 @@
                 </tr>
             @endforeach
             <tr>
-                <td colspan="3" style="padding-top: 5px; padding-bottom: 5px;">
-                        <center>Cartera Financiera</center>
-                        <strong>Principal:</strong>{{ $dte->tgrPayedDte?->principal }}<br>
-                        <strong>Monto Debe Dcto :</strong>0<br>
-                        <strong>Monto Haber Dcto :</strong>{{ $dte->totalHaber() }}
+                <td colspan="3" style="padding-top: 15px; padding-bottom: 2px; font-size: 14px;">
+                        <center><strong>Cartera Financiera</strong></center>
+                        <strong>Principal : </strong>{{ $dte->tgrPayedDte?->principal }} 88597500-3 LABORATORIO BIOSANO S A<br>
+                        <strong>Monto Debe Dcto : </strong>0<br>
+                        <strong>Monto Haber Dcto : </strong>{{ $dte->totalHaber() }} 
                 </td>
 
             </tr>
@@ -198,25 +223,33 @@
         <thead>
             <tr>
                 <th>Beneficiario</th>
-                <th>Nº<br>Documento</th>
-                <th>Fecha <br>Documento</th>
-                <th>Tipo<br>Documento</th>
+                <th>Nº Documento</th>
+                <th>Fecha Documento</th>
+                <th>Tipo Documento</th>
                 <th>Descripcion</th>
-                <th>Monto<br>Debe<br>Dcto</th>
-                <th>Monto<br>Haber<br>Dcto</th>
+                <th>Monto Debe Dcto</th>
+                <th style="">Monto Haber Dcto</th>
                 <th>Moneda Origen</th>
-                <th>Fecha<br>Tipo<br>Cambio</th>
-                <th>Tipo<br>Cambio</th>
-                <th>Monto<br>MO</th>
+                <th>Fecha Tipo Cambio</th>
+                <th>Tipo Cambio</th>
+                <th>Monto MO</th>
             </tr>
         </thead>
         <tbody style="font-size: 1.1em;">
             <tr>
                 <td>xxx1</td>
-                <td>xxx2</td>
-                <td>xxx3</td>
-                <td>xxx4</td>
-                <td>xxx5</td>
+                <td>315285</td>
+                <td>24/11/2023</td>
+                <td>Factura
+                    Afecta</td>
+                <td>FA /
+                    315285 /
+                    88597500 / 621-547-
+                    SE23 /
+                    LABORA
+                    TORIO
+                    BIOSANO
+                    S A</td>
                 <td>xxx6</td>
                 <td>xxx7</td>
                 <td>xxx8</td>
@@ -224,43 +257,52 @@
                 <td>xxx10</td>
                 <td>xxx11</td>
             </tr>
-        </tbody>
-        <tr>
-            <td colspan="11">Fechas Cumplimiento</td>
-        </tr>
-        <thead>
-            <tr>
-                <th>Combinaciòn de Catàlogos</th>
-                <th>Fecha Cumplimiento </th>
-                <th>Monto Debe</th>
-                <th>Monto Haber</th>
-                <th>Monto Debe M/O</th>
-                <th>Monto Haber M/O</th>
-            </tr>
-        </thead>
-        <tbody style="font-size: 1.1em;">
-            <tr>
-                <td>xxx1</td>
-                <td>xxx2</td>
-                <td>xxx3</td>
-                <td>xxx4</td>
-                <td>xxx5</td>
-                <td>xxx6</td>
-            </tr>
-            <tr>
-                <td><strong>Total</strong></td>
-                <td>xxx2</td>
-                <td>xxx3</td>
-                <td>xxx4</td>
-                <td>xxx5</td>
-                <td>xxx6</td>
 
+            <tr>
+                <td colspan="11" style="text-align: center; padding-top: 15px;">
+                    <strong>Fechas Cumplimiento</strong>
+                    <table class="tabla-cumplimiento">
+                        <thead>
+                            <tr>
+                                <th>Combinaciòn de Catàlogos</th>
+                                <th>Fecha Cumplimiento </th>
+                                <th>Monto Debe</th>
+                                <th>Monto Haber</th>
+                                <th>Monto Debe M/O</th>
+                                <th>Monto Haber M/O</th>
+                            </tr>
+                        </thead>
+                        <tbody style="font-size: 1.1em;">
+                            <tr>
+                                <td width="110"  style="text-align: center;">Propio Contabilidad - 00 -
+                                    No Aplica</td>
+                                <td>xxx2</td>
+                                <td>xxx3</td>
+                                <td>xxx4</td>
+                                <td>xxx5</td>
+                                <td>xxx6</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Total</strong></td>
+                                <td>xxx2</td>
+                                <td>xxx3</td>
+                                <td>xxx4</td>
+                                <td>xxx5</td>
+                                <td>xxx6</td>
+                
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </td>
             </tr>
         </tbody>
     </table>
 
-Monto Total Cartera Debe:xxx<br>
-Monto Total Cartera Haber:xxx<br>
+    <div class="margen-wn ocho" style="margin-top: 20px;">
+        <div><strong>Monto Total Cartera Debe : </strong> 0<div>
+        <div><strong>Monto Total Cartera Haber :</strong> 22.610</div>
+    </div>
 
 
 
@@ -280,5 +322,9 @@ Monto Total Cartera Haber:xxx<br>
         <td></td>
     </tr>
 </table>
+
+<div style="margin-top: 30px;">
+    Usuario Responsable : 16350071 - Nibaldo Andrés Quinzacara Carpier
+</div>
 
 @endsection
