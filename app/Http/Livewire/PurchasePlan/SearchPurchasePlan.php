@@ -42,18 +42,20 @@ class SearchPurchasePlan extends Component
                 $organizationalUnitIn[] = Parameter::get('ou', 'DeptoRRFF');
             }
 
-            if(auth()->user()->organizationalUnit->id == Parameter::get('ou', 'DeptoAPS')){
+            if(in_array(auth()->user()->organizationalUnit->id, Parameter::get('ou', ['DeptoAPS','SaludMentalSSI']))){
                 $childs_array = auth()->user()->organizationalUnit->childs->pluck('id')->toArray();
-                $organizationalUnitIn = [auth()->user()->organizationalUnit->id, ...$childs_array];
+                $organizationalUnitIn = [auth()->user()->organizationalUnit->id, ...auth()->user()->organizationalUnit->getAllChilds()];
             }
 
             $purchasePlans = $query
                 ->where('user_creator_id', auth()->id())
                 ->orWhere('user_responsible_id', auth()->id())
                 ->orWhereIn('organizational_unit_id', $organizationalUnitIn)
+                /*
                 ->when(auth()->user()->organizationalUnit->id == Parameter::get('ou', 'SaludMentalSSI'),
                     fn($q) => $q->orwhereHas('organizationalUnit', 
                         fn($q2) => $q2->whereIn('establishment_id', explode(',', Parameter::get('establishment', 'EstablecimientosDispositivos')))))
+                */
                 ->search($this->selectedId,
                     $this->selectedStatus,
                     $this->selectedSubject,
