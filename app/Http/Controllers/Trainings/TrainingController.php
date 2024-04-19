@@ -101,4 +101,27 @@ class TrainingController extends Controller
     {
         //
     }
+
+    public function approvalCallback($approval_id, $training_id, $process){
+        $approval = Approval::find($approval_id);
+        $training = Training::find($training_id);
+        
+        /* Aprueba */
+        if($approval->status == 1){
+            if($process == 'end'){
+                /*
+                $allowance->status = 'complete';
+                $allowance->save();
+                */
+            }
+        }   
+
+        /* Rechaza */
+        if($approval->status == 0){
+            /*
+            $allowance->status = 'rejected';
+            $allowance->save();
+            */
+        }
+    }
 }

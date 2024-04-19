@@ -10,6 +10,9 @@ use OwenIt\Auditing\Contracts\Auditable;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use App\Models\File;
 
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use App\Models\Documents\Approval;
+
 class Training extends Model implements Auditable
 {
     use HasFactory;
@@ -68,10 +71,21 @@ class Training extends Model implements Auditable
         return $this->morphOne(File::class, 'fileable');
     }
 
+    /**
+     * Get all of the ModificationRequest's approvations.
+     */
+    public function approvals(): MorphMany{
+        return $this->morphMany(Approval::class, 'approvable');
+    }
+
     public function getStatusValueAttribute() {
         switch($this->status) {
             case 'saved':
                 return 'Guardado';
+                break;
+            
+            case 'sent':
+                return 'Enviado';
                 break;
 
             case 'pending':
