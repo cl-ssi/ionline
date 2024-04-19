@@ -158,7 +158,8 @@
     </div>
 
     <div class="alert alert-info" role="alert">
-        <strong>TIP para pegar tablas de word o excel</strong>
+        <strong>TIP para pegar tablas de word o excel</strong> 
+        @livewire('documents.clean-html-form-document',['record' => $document])
         <p>
             <ol>
                 <li>Copiar y pegar la tabla desde el excel o word</li>
