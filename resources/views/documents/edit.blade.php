@@ -158,16 +158,22 @@
     </div>
 
     <div class="alert alert-info" role="alert">
-        <strong>TIP para pegar tablas de word o excel</strong> 
         @livewire('documents.clean-html-form-document',['record' => $document])
-        <p>
-            <ol>
-                <li>Copiar y pegar la tabla desde el excel o word</li>
-                <li>En el cuadro del contenido, seleccionar "Vista" y luego "Código fuente"</li>
-                <li>Buscar donde diga <strong>&lt;table width="XXX"&gt;</strong></li>
-                <li>Reemplazar por <strong>&lt;table style="border-collapse: collapse; width: 100%;" border="1"&gt;</strong></li>
-            </ol>
-        </p>
+        <span class="text-muted">Este botón realizará los siguientes cambios en el formato de su documento</span>
+        <ul>
+            <li>Todas las tablas del documento quedarán uniformes, del mismo ancho y forma.</li>
+            <li>Todos los textos quedarán con el mismo tamaño y tipo de letra (estandard del Servicio).</li>
+            <li>Se eliminarán los colores de fondo y de texto (se mantendrán las negritas).</li>
+            <li>Se eliminarán los saltos de página que se hayan agregado manualmente.</li>
+            <li>Se aplicará justificado automaticamente a todos los párrafos.</li>
+            <li>Se mantendrá en la "mayoría" de los casos el centrado.</li>
+            <li>Reducirá, dependiendo del documento, algunos saltos de lineas duplicados.</li>
+        </ul>
+        <span>Después de limpiar el formato, si su documento contiene lo siguiente:</span>
+        <ul>
+            <li>Textos centrados: Revisar que estén correctamente centrados.</li>
+            <li>Tablas y dentro de las tablas existen saltos de línea: Revisar si es necesario agregar saltos de línea adiconales.</li>
+        </ul>
     </div>
 
 @endif
