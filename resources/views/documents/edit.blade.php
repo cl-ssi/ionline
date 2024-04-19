@@ -165,14 +165,14 @@
             <li>Todos los textos quedarán con el mismo tamaño y tipo de letra (estandard del Servicio).</li>
             <li>Se eliminarán los colores de fondo y de texto (se mantendrán las negritas).</li>
             <li>Se eliminarán los saltos de página que se hayan agregado manualmente.</li>
-            <li>Se aplicará justificado automaticamente a todos los párrafos.</li>
+            <li>Se aplicará justificado automáticamente a todos los párrafos.</li>
             <li>Se mantendrá en la "mayoría" de los casos el centrado.</li>
-            <li>Reducirá, dependiendo del documento, algunos saltos de lineas duplicados.</li>
+            <li>Reducirá, dependiendo del documento, algunos saltos de líneas duplicados.</li>
         </ul>
         <span>Después de limpiar el formato, si su documento contiene lo siguiente:</span>
         <ul>
             <li>Textos centrados: Revisar que estén correctamente centrados.</li>
-            <li>Saltos de línea dentro de tablas: Revisar si es necesario agregar saltos de línea adiconales.</li>
+            <li>Saltos de línea dentro de tablas: Revisar si es necesario agregar saltos de línea adicionales.</li>
         </ul>
     </div>
 
