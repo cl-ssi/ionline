@@ -66,8 +66,9 @@ class CleanHtmlFormDocument extends Component
             $content
         );
 
-        // Eliminar etiquetas HTML vacías
-        $content = preg_replace('/<(\w+)(\s+[^>]*)?>\s*<\/\1>/is', '', $content);
+        // Eliminar etiquetas HTML vacías, excepto las etiquetas de tabla (table, tr, th, td)
+        $content = preg_replace('/<((?!table|tr|th|td)\w+)(\s+[^>]*)?>\s*<\/\1>/is', '', $content);
+
 
         // Añadir estilos a las etiquetas <p>
         $content = preg_replace_callback(
