@@ -96,6 +96,9 @@ class RoleAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'LE Extra Plan: Carga', 'description' => '']);
         Permission::create(['name' => 'LE Extra Plan: Monitoreo', 'description' => '']);
         Permission::create(['name' => 'Mammography: admin', 'description' => 'Permite acceder a los resultados del booking de Mammography']);
+        Permission::create(['name' => 'Meetings: create', 'description' => 'Permite crear una reunión']);
+        Permission::create(['name' => 'Meetings: all meetings', 'description' => 'Permite visualizar todas las reuniones']);
+        Permission::create(['name' => 'Meetings: all commitments', 'description' => 'Permite visualizar todos los compromisos']);
         Permission::create(['name' => 'News: create', 'description' => 'Permite crear noticias']);
         Permission::create(['name' => 'OrganizationalUnits: create', 'description' => '']);
         Permission::create(['name' => 'OrganizationalUnits: delete', 'description' => '']);
@@ -267,6 +270,8 @@ class RoleAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Users: reset password option', 'description' => 'Permite ver el botón para resetear password del usuario']);
         Permission::create(['name' => 'Users: send mail verification', 'description' => 'Permite enviar un email de verificación de correo al usuario']);
         Permission::create(['name' => 'Users: show access logs', 'description' => 'Permite ver el registro de accesos al sistema de los usuarios']);
+
+
         
         $role = Role::create(['name' => 'Agenda Salud del Trabajdor: Administrador', 'description' => '']);
         $role->givePermissionTo('Agenda UST: Administrador');
