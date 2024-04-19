@@ -31,83 +31,45 @@ class AuthoritySeeder extends Seeder
             Authority::create([
                 'user_id' => '12345678',
                 'date' => $date,
-                'position' => 'Subdirectora',
-                'type' => 'manager',
-                'decree' => 'resol. pendiente',
-                'organizational_unit_id' => '1',                
-                'created_at' => carbon::now(),
-                'updated_at' => carbon::now()
-            ]);
-
-            Authority::create([
-                'user_id' => '15287582',
-                'date' => $date,
                 'position' => 'Director',
                 'type' => 'manager',
-                'organizational_unit_id' => '1',                
-                'created_at' => carbon::now(),
-                'updated_at' => carbon::now()
-            ]);
-
-            Authority::create([
-                'user_id' => '15287582',
-                'date' => $date,
-                'position' => 'Jefe',
-                'type' => 'manager',
-                'organizational_unit_id' => '2',                
-                'created_at' => carbon::now(),
-                'updated_at' => carbon::now()
-            ]);
-
-            Authority::create([
-                'user_id' => '15287582',
-                'date' => $date,
-                'position' => 'Jefe',
-                'type' => 'manager',
-                'organizational_unit_id' => '24',                
-                'created_at' => carbon::now(),
-                'updated_at' => carbon::now()
-            ]);
-
-            Authority::create([
-                'user_id' => '15287582',
-                'date' => $date,
-                'position' => 'Jefe',
-                'type' => 'manager',
-                'organizational_unit_id' => '40',                
-                'created_at' => carbon::now(),
-                'updated_at' => carbon::now()
-            ]);
-
-            Authority::create([
-                'user_id' => '15287582',
-                'date' => $date,
-                'position' => 'Jefe',
-                'type' => 'manager',
-                'organizational_unit_id' => '44',
-                'created_at' => carbon::now(),
-                'updated_at' => carbon::now()
-            ]);
-
-            Authority::create([
-                'user_id' => '15287582',
-                'date' => $date,
-                'position' => 'Jefe',
-                'type' => 'manager',
-                'organizational_unit_id' => '59',
-                'created_at' => carbon::now(),
-                'updated_at' => carbon::now()
-            ]);
-
-            Authority::create([
-                'user_id' => '15287582',
-                'date' => $date,
-                'position' => 'Subdirector',
-                'type' => 'manager',
+                'decree' => 'resol. pendiente',
                 'organizational_unit_id' => '1',
                 'created_at' => carbon::now(),
                 'updated_at' => carbon::now()
             ]);
+
+            Authority::create([
+                'user_id' => '12345678',
+                'date' => $date,
+                'position' => 'Director',
+                'type' => 'manager',
+                'decree' => 'resol. pendiente',
+                'organizational_unit_id' => '1',
+                'created_at' => carbon::now(),
+                'updated_at' => carbon::now()->add(1, 'day')
+            ]);
+
+            Authority::create([
+                'user_id' => '12345678',
+                'date' => $date,
+                'position' => 'Jefe',
+                'type' => 'manager',
+                'organizational_unit_id' => '2',
+                'created_at' => carbon::now(),
+                'updated_at' => carbon::now()
+            ]);
+
+            Authority::create([
+                'user_id' => '12345678',
+                'date' => $date,
+                'position' => 'Jefe',
+                'type' => 'manager',
+                'organizational_unit_id' => '2',
+                'created_at' => carbon::now(),
+                'updated_at' => carbon::now()->add(1, 'day')
+            ]);
+
         }
     }
 }
