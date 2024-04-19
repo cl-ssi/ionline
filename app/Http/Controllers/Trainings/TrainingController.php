@@ -70,7 +70,7 @@ class TrainingController extends Controller
      */
     public function edit(Training $training)
     {
-        //
+        return view('trainings.edit', compact('training'));
     }
 
     // Edicion en plataforma externa

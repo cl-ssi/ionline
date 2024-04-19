@@ -358,12 +358,12 @@
 
     <div class="row g-3 mb-5">
         <div class="col-12">
-            <button wire:click="save" wire:loading.attr="disabled" wire:target="file" class="btn btn-primary {{ ($bootstrap == 'v4') ? 'float-right' : 'float-end me-3' }}" type="button">
+            <button wire:click="save" wire:loading.attr="disabled" wire:target="file" class="btn btn-primary {{ ($bootstrap == 'v4') ? 'float-right' : 'float-end' }}" type="button">
                 <i class="fas fa-save"></i> Guardar
             </button>
 
-            @if($form == 'edit')
-                <button wire:click="sentToApproval" wire:loading.attr="disabled" wire:target="file" class="btn btn-success {{ ($bootstrap == 'v4') ? 'float-right mr-3' : 'float-end' }}" type="button">
+            @if($form == 'edit' && !$training->approvals)
+                <button wire:click="sentToApproval" wire:loading.attr="disabled" wire:target="file" class="btn btn-success {{ ($bootstrap == 'v4') ? 'float-right mr-3' : 'float-end me-3' }}" type="button">
                     <i class="fas fa-paper-plane"></i> Enviar Capacitación
                 </button>
             @endif

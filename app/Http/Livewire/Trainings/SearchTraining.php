@@ -10,6 +10,8 @@ class SearchTraining extends Component
 {
     public $index;
 
+    public $bootstrap;
+
     public function render()
     {
         if(auth()->guard('external')->check() == true){
@@ -25,7 +27,9 @@ class SearchTraining extends Component
                 return view('livewire.trainings.search-training', [
                     'trainings' => training::latest()
                     ->where('user_training_id', auth()->id())
+                    ->orWhere('user_creator_id', auth()->id())
                     ->whereNotNull('organizational_unit_id')
+                    ->paginate(50)
                 ]);
             }
         }

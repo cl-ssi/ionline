@@ -12,7 +12,8 @@
 
 <div class="col-sm">
     @livewire('trainings.search-training', [
-        'index' => 'own'
+        'index'     => 'own',
+        'bootstrap' => 'v4'
     ])
 </div>
 
