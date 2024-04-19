@@ -159,7 +159,7 @@
 
     <div class="alert alert-info" role="alert">
         @livewire('documents.clean-html-form-document',['record' => $document])
-        <span class="text-muted">Este botón realizará los siguientes cambios en el formato de su documento</span>
+        <span>Este botón realizará los siguientes cambios en el formato de su documento:</span>
         <ul>
             <li>Todas las tablas del documento quedarán uniformes, del mismo ancho y forma.</li>
             <li>Todos los textos quedarán con el mismo tamaño y tipo de letra (estandard del Servicio).</li>
@@ -172,7 +172,7 @@
         <span>Después de limpiar el formato, si su documento contiene lo siguiente:</span>
         <ul>
             <li>Textos centrados: Revisar que estén correctamente centrados.</li>
-            <li>Tablas y dentro de las tablas existen saltos de línea: Revisar si es necesario agregar saltos de línea adiconales.</li>
+            <li>Saltos de línea dentro de tablas: Revisar si es necesario agregar saltos de línea adiconales.</li>
         </ul>
     </div>
 
