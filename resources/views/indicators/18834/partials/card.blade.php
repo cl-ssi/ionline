@@ -3,6 +3,9 @@
         <strong>Metas Sanitarias Ley N° 18.834</strong>
     </div>
     <ul class="list-group list-group-flush">
+        <li class="list-group-item text-muted">
+            2024
+        </li>
         <li class="list-group-item">
             <a href="{{ route('indicators.health_goals.list', [18834, 2023]) }}">2023 <span class="badge badge-warning">En Validación</span></a>
         </li>

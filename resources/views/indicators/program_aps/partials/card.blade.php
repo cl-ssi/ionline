@@ -3,6 +3,9 @@
         <strong>Monitoreo Programación APS (Trazadoras)</strong>
     </div>
     <ul class="list-group list-group-flush">
+        <li class="list-group-item text-muted">
+            2024
+        </li>
         <li class="list-group-item">
             <a href="{{ route('indicators.programming_aps.show', [2023, 6]) }}">2023</a>
         </li>
