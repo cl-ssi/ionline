@@ -99,19 +99,18 @@
     <tr>
         <th class="margen-wn" class="margen-wn">Título</th>
         <td colspan="3">
-            {{ $dte->comparativeRequirement?->devengo_titulo  }} DEV. LABORATORIO BIOSANO S A FACT. 315285 OC 621-547-SE23
-            INTERMEDIACION
+            {{ $dte->comparativeRequirement?->devengo_titulo  }}
         </td>
     </tr>
     <tr>
         <th class="margen-wn">Descripción</th>
         <td colspan="3">
-            {{ $dte->comparativeRequirement?->devengo_titulo }} @if($dte->paid_automatic) @endif FA / 315285 / 88597500 / 621-547-SE23 / LABORATORIO BIOSANO S A
+            {{ $dte->comparativeRequirement?->devengo_titulo }} @if($dte->paid_automatic) @endif 
         </td>
     </tr>
     <tr>
         <th width="150px" class="margen-wn">Periodo de Operación</td>
-        <td width="190px">{{ ucfirst($dte->tgrPayedDte?->fecha_generacion->monthName) }} Diciembre</td>
+        <td width="190px">{{ ucfirst($dte->tgrPayedDte?->fecha_generacion->monthName) }}</td>
         <th width="165px" class="margen-wn">Ejercicio Fiscal</th>
         <td></td>
     </tr>
@@ -210,7 +209,7 @@
             <tr>
                 <td colspan="3" style="padding-top: 15px; padding-bottom: 2px; font-size: 14px;">
                         <center><strong>Cartera Financiera</strong></center>
-                        <strong>Principal : </strong>{{ $dte->tgrPayedDte?->principal }} 88597500-3 LABORATORIO BIOSANO S A<br>
+                        <strong>Principal : </strong>{{ $dte->tgrPayedDte?->principal }} 
                         <strong>Monto Debe Dcto : </strong>0<br>
                         <strong>Monto Haber Dcto : </strong>{{ $dte->totalHaber() }} 
                 </td>
@@ -238,18 +237,10 @@
         <tbody style="font-size: 1.1em;">
             <tr>
                 <td>xxx1</td>
-                <td>315285</td>
-                <td>24/11/2023</td>
-                <td>Factura
-                    Afecta</td>
-                <td>FA /
-                    315285 /
-                    88597500 / 621-547-
-                    SE23 /
-                    LABORA
-                    TORIO
-                    BIOSANO
-                    S A</td>
+                <td>xxx2</td>
+                <td>xxx3</td>
+                <td>xxx4</td>
+                <td>xxx5</td>
                 <td>xxx6</td>
                 <td>xxx7</td>
                 <td>xxx8</td>
