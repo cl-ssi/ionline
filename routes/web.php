@@ -2448,6 +2448,8 @@ Route::prefix('meetings')->as('meetings.')->middleware(['auth', 'must.change.pas
 Route::prefix('trainings')->as('trainings.')->middleware(['auth', 'must.change.password'])->group(function () {
     Route::get('/', [TngTrainingController::class, 'index'])->name('index');
     Route::get('create', [TngTrainingController::class, 'create'])->name('create');
+    Route::get('{training}/edit', [TngTrainingController::class, 'edit'])->name('edit');
+    Route::get('/{purchase_id}/show_approval', [TngTrainingController::class, 'show_approval'])->name('show_approval');
     Route::get('/{training}/show_file', [TrainingCreate::class, 'show_file'])->name('show_file');
 });
 

@@ -70,7 +70,7 @@ class TrainingController extends Controller
      */
     public function edit(Training $training)
     {
-        //
+        return view('trainings.edit', compact('training'));
     }
 
     // Edicion en plataforma externa
@@ -100,5 +100,28 @@ class TrainingController extends Controller
     public function destroy(Training $training)
     {
         //
+    }
+
+    public function approvalCallback($approval_id, $training_id, $process){
+        $approval = Approval::find($approval_id);
+        $training = Training::find($training_id);
+        
+        /* Aprueba */
+        if($approval->status == 1){
+            if($process == 'end'){
+                /*
+                $allowance->status = 'complete';
+                $allowance->save();
+                */
+            }
+        }   
+
+        /* Rechaza */
+        if($approval->status == 0){
+            /*
+            $allowance->status = 'rejected';
+            $allowance->save();
+            */
+        }
     }
 }
