@@ -3,6 +3,7 @@
         'establishment' => auth()->user()->organizationalUnit->establishment->id
     ])
     <h3>Actualización Contable</h3>
+    @include('layouts.bt5.partials.flash_message')
     <div class="row g-2 mb-3">
         <div class="col-md-4">
             <label for="for-folio_oc" class="form-label">Folio OC</label>
@@ -14,20 +15,36 @@
                 <i class="fas fa-search"></i>
             </button>
         </div>
+        <div class="col-md-6"></div>
+        <div class="col-md-1">
+            <label for="update" class="form-label">&nbsp;</label>
+            <button class="btn btn-secondary form-control" type="button" wire:click="update">
+                Actualizar
+            </button>
+        </div>
     </div>
+
+    <br><br>
+    <!-- <div class="row g-2 mb-3">    
+        <div class="col-md-4">
+            <label for="total" class="form-label">Total: {{ number_format($total, 2) }}</label>
+        </div>
+    </div> -->
+    
+
 
 
     <div class="table-responsive">
         <table class="table table-sm table-bordered">
             <thead>
                 <tr>
+                    <th class="text-center">ID</th>
                     <th class="text-center">Nro. Inv.</th>
                     <th class="text-center">Std-Descripción</th>
                     <th>Vida Útil</th>
                     <th>Valor</th>
                     <th>Cuenta Contable</th>
-                    <th>Id Bodega</th>
-                    <th>Fecha Entrega</th>
+                    <th>Fecha de Entrega</th>
                 </tr>
             </thead>
             <tbody>
@@ -41,6 +58,9 @@
                 </tr>
                 @forelse($inventories as $inventory)
                 <tr wire:loading.remove>
+                    <td>
+                        {{ $inventory->id }}
+                    </td>
                     <td class="text-center" nowrap>
                         <small>
                             <a href="{{ route('inventories.show', ['establishment' => $establishment, 'number' => $inventory->number]) }}">
@@ -61,23 +81,25 @@
                             @endif
                         </small>
                     </td>
-                    <td>
-                        {{ $inventory->useful_life }}
+                    <td class="text-center nowrap">
+                        <input type="number" class="form-control" wire:model.defer="usefulLife.{{ $inventory->id }}">
+                    </td>
+                    <td class="text-center nowrap">
+                        <input type="number" class="form-control" wire:model.defer="poPrice.{{ $inventory->id }}" >
                     </td>
                     <td>
-                        {{ $inventory->po_price }}
+                        <select class="form-select" wire:model.defer="accountingCodes.{{ $inventory->id }}">
+                            <option value="">Seleccione cuenta contable</option>
+                            @foreach($allAccountingCodes as $accountingCode)
+                                <option value="{{ $accountingCode->id }}" @if($accountingCode->id == $inventory->accounting_code_id) selected @endif>
+                                    {{ $accountingCode->id }} - {{ $accountingCode->description }}
+                                </option>
+                            @endforeach
+                        </select>
                     </td>
                     <td>
-                        <option value="">Seleccione cuenta contable</option>
-                    @foreach($accountingCodes as $accountingCode)
-                        <option value="{{ $accountingCode->id }}">
-                        {{ $accountingCode->id }} - {{ $accountingCode->description }}
-                        </option>
-                    @endforeach
-
+                        {{$inventory->lastMovement?->reception_date->format('d-m-Y')}}
                     </td>
-
-
                 </tr>
                 @empty
                 <tr class="text-center" wire:loading.remove>
@@ -90,6 +112,5 @@
         </table>
         
     </div>
-
 
 </div>
