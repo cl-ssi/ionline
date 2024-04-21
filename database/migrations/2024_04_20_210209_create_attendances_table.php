@@ -23,6 +23,7 @@ return new class extends Migration
             $table->date('report_date');
             $table->timestamps();
             $table->softDeletes();
+            $table->unique(['user_id','date'],'UNIQUE');
         });
     }
 

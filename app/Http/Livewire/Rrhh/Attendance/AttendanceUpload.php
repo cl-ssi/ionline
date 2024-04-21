@@ -38,8 +38,9 @@ class AttendanceUpload extends Component
     {
         $file          = fopen($filepath, 'r');
         $lineNumber    = 0;
-        $currentRecord = null;
+        $records       = [];
         $date          = '';
+        $ct_records    = 0;
 
         $meses = [];
         for ($i = 1; $i <= 12; $i++) {
@@ -83,25 +84,27 @@ class AttendanceUpload extends Component
 
                 // Verificar si el user_id existe en el array
                 if (!in_array($userId, $users)) {
-                    $this->missingUserIds[] = $line;
+                    $this->missingUserIds[] = str_replace('"','',$line);
                     continue; // Saltar este user_id si no existe
                 }
 
-                // Aquí utilizamos updateOrCreate para evitar duplicados
-                $currentRecord = Attendance::updateOrCreate(
-                    ['user_id' => $userId, 'date' => $date, 'report_date' => $report_date], // Claves para buscar
-                    ['records' => ''] // Valores por defecto para nuevo registro
-                );
+                $ct_records++;
 
-                $currentRecord->records = $line; // Comienza con la línea actual del RUT
-            } elseif ( $currentRecord ) {
-                $currentRecord->records .= $line; // Concatena las siguientes líneas
-                $currentRecord->save(); // Guarda los cambios actuales
+                $records[$ct_records] = [
+                    'user_id' => $userId,
+                    'date' => $date,
+                    'report_date' => $report_date,
+                    'records' => $line,
+                ];
+
+            } elseif ( array_key_exists($ct_records,$records) ) {
+                $records[$ct_records]['records'] .= $line; // Concatena las siguientes líneas
             }
         }
 
-        if ( $currentRecord ) {
-            $currentRecord->save();
+        // Comprobar que el array $records tenga registros
+        if ( !empty($records) ) {
+            Attendance::upsert($records, ['user_id', 'date'], ['report_date', 'records']);
         }
 
         fclose($file);
