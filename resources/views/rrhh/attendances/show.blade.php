@@ -14,13 +14,13 @@
 
     <div style="clear: both; padding-bottom: 65px"></div>
 
-    <div class="center diez" style="margin-bottom: 20px;">
+    <div class="center diez" style="margin-bottom: 34px;">
         <strong style="text-transform: uppercase;">
             INFORME DE ASISTENCIA
         </strong>
     </div>
 
-    <div class="ocho">
+    <div class="ocho" style="padding-left: 38px; padding-bottom: 10px;">
         <strong  style="text-transform: uppercase;">
             {{ $attendance->user->full_name }}
             <br>
@@ -29,7 +29,7 @@
     </div>
 
     @if ($attendance)
-        <pre style="white-space: pre-wrap; word-wrap: break-word;">{{ str_replace('"', '', $attendance->records) }}</pre>
+        <pre style="white-space: pre-wrap; word-wrap: break-word; padding-left: 38px;">{{ $attendance->records }}</pre>
     @else
         <p>No se encontraron registros de asistencia.</p>
     @endif
