@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Rrhh;
 
 use App\Http\Controllers\Controller;
+use App\Models\Establishment;
 use App\Models\Rrhh\Attendance;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
 class AttendanceController extends Controller
@@ -70,9 +72,15 @@ class AttendanceController extends Controller
      * @param  \App\Models\Rrhh\Attendance  $attendance
      * @return \Illuminate\Http\Response
      */
-    public function show(Attendance $attendance)
+    public function show($user, $date)
     {
-        //
+        $attendance = Attendance::where('user_id', $user)->where('date', $date)->firstOrFail();
+        $establishment = Establishment::find(38);
+
+        return Pdf::loadView('rrhh.attendances.show', [
+            'attendance' => $attendance,
+            'establishment' => $establishment
+        ])->stream('download.pdf');
     }
 
     /**
