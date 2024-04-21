@@ -80,6 +80,7 @@ use App\Http\Controllers\Parameters\LogController;
 use App\Http\Controllers\Parameters\ParameterController;
 use App\Http\Controllers\Parameters\PermissionController;
 use App\Http\Controllers\Parameters\PhraseOfTheDayController;
+use App\Http\Livewire\Rrhh\Attendance\AttendanceUpload;
 use App\Http\Controllers\Parameters\ProfessionController;
 use App\Http\Controllers\Parameters\ProgramController as ParametersProgramController;
 use App\Http\Controllers\Parameters\PurchaseMechanismController;
@@ -956,6 +957,8 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
     /** Fin Shift Managment */
 
     Route::prefix('attendance')->name('attendance.')->middleware(['auth', 'must.change.password'])->group(function () {
+        Route::get('/upload', AttendanceUpload::class)->name('upload');
+        Route::get('/{user}/{date}', [AttendanceController::class, 'show'])->name('show');
         Route::get('/', [AttendanceController::class, 'index'])->name('index');
         Route::get('/import', [AttendanceController::class, 'import'])->name('import');
         Route::post('/store', [AttendanceController::class, 'store'])->name('store');
