@@ -28,9 +28,9 @@ class AttendanceUpload extends Component
         ]);
 
         $this->attendanceFile->storeAs('attendances', 'att.txt', 'local'); 
-        $this->processFile(storage_path('app/attendances/att.txt'));
+        $totalRecords = $this->processFile(storage_path('app/attendances/att.txt'));
 
-        session()->flash('message', 'Archivo de asistencia cargado exitosamente.');
+        session()->flash('message', 'Archivo de asistencia cargado exitosamente. Total de registros: '. $totalRecords);
         $this->reset('attendanceFile'); // Reset input field
     }
 
@@ -108,6 +108,7 @@ class AttendanceUpload extends Component
         }
 
         fclose($file);
+        return $ct_records;
         // unlink($filepath); // Borra el archivo después de procesarlo
     }
 }
