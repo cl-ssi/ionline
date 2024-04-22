@@ -48,8 +48,9 @@ class ReportByDates extends Component
         $year = $dateMonthArray[0];
         $month = $dateMonthArray[1];
 
-        $startDate = Carbon::createFromDate($year, $month)->startOfMonth();
-        $endDate = Carbon::createFromDate($year, $month)->endOfMonth();
+        // se le resta uno al mes en busqueda (porque se busca con la info. del mes anterior)
+        $startDate = Carbon::createFromDate($year, $month)->addMonths(-1)->startOfMonth();
+        $endDate = Carbon::createFromDate($year, $month)->addMonths(-1)->endOfMonth();
 
         // Se deben obtener los feriados del mes siguiente, por ende se suma un mes a la fecha de analisis
         $holidays = Holiday::whereBetween('date', [$startDate, $endDate])->get();
@@ -121,7 +122,7 @@ class ReportByDates extends Component
                         // ->where('shift',0); se traen todos, abajo se hace el filtro
                 });
             })
-            // ->whereIn('id',[8165126])
+            // ->whereIn('id',[10471613])
             ->get(); 
             
             // dd($this->userWithContracts);
