@@ -494,16 +494,11 @@
                         </a>
                         @endif
 
-                        {{-- @if(auth()->user()->manager->count() > 0) --}}
-                        <a class="dropdown-item {{ active('identify_need.own_index') }}" href="{{ route('identify_need.own_index') }}">
-                            <i class="fas fa-chalkboard-teacher fa-fw"></i> Detección de Necesidades
-                        </a>
-                        {{-- @endif --}}
-
                         @endif
+                        
                         {{--
-                        <a class="dropdown-item {{ active('trainings.*') }}" href="{{ route('trainings.index') }}">
-                            <i class="fas fa-chalkboard-teacher"></i> Capacitaciones
+                        <a class="dropdown-item {{ active('trainings.*') }}" href="{{ route('trainings.own_index') }}">
+                            <i class="fas fa-chalkboard-teacher"></i> Solicitud Permiso Capacitación
                         </a>
                         --}}
                     </ul>
@@ -514,7 +509,7 @@
                 @can('Drugs')
                 <li class="nav-item {{ active('drugs.*') }}">
                     <a class="nav-link" href="{{ route('drugs.receptions.index') }}">
-                        <i class="fas fa-cannabis"></i> Drogas</a>
+                        <i class="fas fa-cannabis fa-fw"></i> Drogas</a>
                 </li>
                 @endcan
 

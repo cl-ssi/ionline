@@ -56,7 +56,7 @@
                     <td class="text-center" width="7%">{{ $training->activity_date_start_at }}</td>
                     <td class="text-center" width="7%">{{ $training->activity_date_end_at }}</td>
                     <td width="8%" class="text-center">
-                        @if($training->StatusValue == 'Guardado' || $training->StatusValue == 'Enviado')
+                        @if($training->StatusValue == 'Guardado')
                             @if(auth()->guard('external')->check() == true)
                                 <a href="{{ route('trainings.external_edit', $training) }}"
                                     class="btn btn-outline-secondary btn-sm">
@@ -69,10 +69,17 @@
                                 </a>
                             @endif
                         @else
-                            <a href="{{-- route('trainings.external_edit', $training) --}}"
-                                class="btn btn-outline-secondary btn-sm">
-                                <i class="fas fa-eye"></i>
-                            </a>
+                            @if(auth()->guard('external')->check() == true)
+                                <a href="{{ route('trainings.external_show', $training) }}"
+                                    class="btn btn-outline-secondary btn-sm">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                            @else
+                                <a href="{{ route('trainings.show', $training) }}"
+                                    class="btn btn-outline-secondary btn-sm">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                            @endif
                         @endif
                         {{--
                         <a class="btn btn-outline-danger btn-sm"

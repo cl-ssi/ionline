@@ -64,7 +64,12 @@ class TrainingController extends Controller
      */
     public function show(Training $training)
     {
-        //
+        return view('trainings.show', compact('training'));
+    }
+
+    public function external_show(Training $training)
+    {
+        return view('trainings.external_show', compact('training'));
     }
 
     /**

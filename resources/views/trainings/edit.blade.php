@@ -1,6 +1,6 @@
 @extends('layouts.bt5.app')
 
-@section('title', 'Listado de STAFF')
+@section('title', 'Solicitud Permiso Capacitación')
 
 @section('content')
 

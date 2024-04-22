@@ -66,6 +66,18 @@ class Training extends Model implements Auditable
         return $this->belongsTo('App\Models\Establishment', 'establishment_id');
     }
 
+    public function estament() {
+        return $this->belongsTo('App\Models\Parameters\Estament');
+    }
+
+    public function contractualCondition() {
+        return $this->belongsTo('App\Models\Parameters\ContractualCondition');
+    }
+
+    public function StrategicAxes() {
+        return $this->belongsTo('App\Models\Trainings\StrategicAxes');
+    }
+
     public function file(): MorphOne
     {
         return $this->morphOne(File::class, 'fileable');

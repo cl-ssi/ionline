@@ -2455,6 +2455,7 @@ Route::prefix('trainings')->as('trainings.')->middleware(['auth', 'must.change.p
     Route::get('{training}/edit', [TngTrainingController::class, 'edit'])->name('edit');
     Route::get('/{purchase_id}/show_approval', [TngTrainingController::class, 'show_approval'])->name('show_approval');
     Route::get('/{training}/show_file', [TrainingCreate::class, 'show_file'])->name('show_file');
+    Route::get('{training}/show', [TngTrainingController::class, 'show'])->name('show');
 });
 
 
@@ -2860,6 +2861,7 @@ Route::group(['middleware' => 'auth:external'], function () {
         Route::get('/external_create', [TngTrainingController::class, 'external_create'])->name('external_create');
         Route::get('{training}/external_edit', [TngTrainingController::class, 'external_edit'])->name('external_edit');
         Route::get('/{training}/show_file', [TrainingCreate::class, 'show_file'])->name('show_file');
+        Route::get('{training}/external_show', [TngTrainingController::class, 'external_show'])->name('external_show');
     });
 });
 
