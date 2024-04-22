@@ -1,32 +1,20 @@
-@extends('layouts.bt4.app')
+@extends('layouts.bt5.app')
 
 @section('title', 'Registros de asistencia')
 
 @section('content')
-<h3 class="mb-3">Registros de asistencia</h3>
+<h3 class="mb-3">Registros de asistencia de {{ auth()->user()->short_name }} </h3>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Run</th>
-            <th>Marca</th>
-            <th>Tipo</th>
-            <th>Reloj</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach($attendances as $a)
-        <tr>
-            <td>{{ $a->user_id }}</td>
-            <td>{{ $a->timestamp }}</td>
-            <td>{{ $a->type }}</td>
-            <td>{{ $a->clock_id }}</td>
-            <td></td>
-        </tr>
-        @endforeach
-    </tbody>
-</table>
+<ul>
+    @foreach($periods as $period)
+        <li>
+            <a href="{{ route('rrhh.attendance.show',[auth()->id(),$period['period']]) }}-01" target="_blank">
+                {{ $period['period'] }}
+            </a>
+        </li>
+    @endforeach
+</ul>
+
 @endsection
 
 @section('custom_js')
