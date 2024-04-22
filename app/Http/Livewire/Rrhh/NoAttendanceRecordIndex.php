@@ -2,6 +2,8 @@
 
 namespace App\Http\Livewire\Rrhh;
 
+use App\Models\Establishment;
+use App\Models\Parameters\Parameter;
 use Illuminate\Validation\Rule;
 use Livewire\WithPagination;
 use Livewire\Component;
@@ -21,9 +23,16 @@ class NoAttendanceRecordIndex extends Component
     public $from;
     public $to;
     public $rrhh_at;
+    public $establishment_id;
     public $simplified = false;
     public $period = false;
     public $checkToOk = [];
+
+    public function mount() {
+        $this->establishments = Establishment::whereIn('id',explode(',',env('APP_SS_ESTABLISHMENTS')))->pluck('name','id');
+        // Set establishemnt with estbalishment of the user
+        $this->establishment_id = auth()->user()->establishment_id;
+    }
 
     /**
      * Registrado por rrhh
@@ -113,11 +122,11 @@ class NoAttendanceRecordIndex extends Component
 
     public function render()
     {
-        $establishments_ids = explode(',',env('APP_SS_ESTABLISHMENTS'));
+        // $establishments_ids = Parameter::get('Justificación Asistencia','establishments_ids',auth()->user()->establishment_id) ?? 1;
         return view('livewire.rrhh.no-attendance-record-index', [
             'records' => NoAttendanceRecord::with('authority', 'user','reason')
                 ->whereNotNull('status')
-                ->whereIn('establishment_id', $establishments_ids)
+                // ->whereIn('establishment_id', explode(',',$establishments_ids))
                 ->when($this->name, function ($query) {
                     $query->whereHas('user', function ($userQuery) {
                         $userQuery->findByUser($this->name);
@@ -128,6 +137,9 @@ class NoAttendanceRecordIndex extends Component
                 })
                 ->when($this->to, function ($query) {
                     $query->whereDate('date', '<=', $this->to);
+                })
+                ->when($this->establishment_id, function ($query) {
+                    $query->where('establishment_id', $this->establishment_id);
                 })
                 ->when($this->rrhh_at, function ($query) {
                     if($this->rrhh_at == 'Si') {
@@ -144,12 +156,11 @@ class NoAttendanceRecordIndex extends Component
 
     public function export()
     {
-        $establishments_ids = explode(',', env('APP_SS_ESTABLISHMENTS'));
-    
+        // $establishments_ids = Parameter::get('Justificación Asistencia','establishments_ids',auth()->user()->establishment_id) ?? 1;
         $records = NoAttendanceRecord::with('user', 'reason')
             //->whereNotNull('status')
             ->where('status', 1)
-            ->whereIn('establishment_id', $establishments_ids)
+            // ->whereIn('establishment_id', explode(',',$establishments_ids))
             ->when($this->name, function ($query) {
                 $query->whereHas('user', function ($userQuery) {
                     $userQuery->findByUser($this->name);
@@ -161,20 +172,20 @@ class NoAttendanceRecordIndex extends Component
             ->when($this->to, function ($query) {
                 $query->whereDate('date', '<=', $this->to);
             })
+            ->when($this->establishment_id, function ($query) {
+                $query->where('establishment_id', $this->establishment_id);
+            })
             ->when($this->rrhh_at, function ($query) {
                 if ($this->rrhh_at == 'Si') {
                     $query->whereNotNull('rrhh_at');
                 } elseif ($this->rrhh_at == 'No') {
                     $query->whereNull('rrhh_at');
                 }
-            })            
+            })
             ->latest()
             ->get();
-    
+
         return Excel::download(new NoAttendanceRecordsExport($records), 'no_attendance_records.xlsx');
     }
-    
-    
-    
 
 }
