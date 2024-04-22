@@ -25,12 +25,12 @@
     </div>
 
     <br><br>
-    <!-- <div class="row g-2 mb-3">    
+
+    {{-- <div class="row g-2 mb-3">    
         <div class="col-md-4">
             <label for="total" class="form-label">Total: {{ number_format($total, 2) }}</label>
         </div>
-    </div> -->
-    
+    </div> --}}
 
 
 
@@ -98,7 +98,7 @@
                         </select>
                     </td>
                     <td>
-                        {{$inventory->lastMovement?->reception_date->format('d-m-Y')}}
+                        {{$inventory->lastMovement?->reception_date?->format('d-m-Y')}}
                     </td>
                 </tr>
                 @empty
