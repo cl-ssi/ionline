@@ -3,6 +3,9 @@
 @section('title', 'Registros de asistencia')
 
 @section('content')
+
+@include('rrhh.partials.nav')
+
 <h3 class="mb-3">Registros de asistencia de {{ auth()->user()->short_name }} </h3>
 
 <ul>
