@@ -27,6 +27,7 @@ class NoAttendanceRecordIndex extends Component
     public $simplified = false;
     public $period = false;
     public $checkToOk = [];
+    public $establishments;
 
     public function mount() {
         $this->establishments = Establishment::whereIn('id',explode(',',env('APP_SS_ESTABLISHMENTS')))->pluck('name','id');
