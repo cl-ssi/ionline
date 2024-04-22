@@ -42,13 +42,10 @@ class AttendanceUpload extends Component
         $date          = '';
         $ct_records    = 0;
 
-        /** Tuve que comentar esto, porque el mes de Febrero está mal escrito en el reporte de SIRH */
-        // $meses = [];
-        // for ($i = 1; $i <= 12; $i++) {
-        //     $meses[sprintf("%02d", $i)] = strtoupper(Carbon::createFromDate(null,$i,1)->monthName);
-        // }
-
-        $meses = ['ENERO', 'FEBRRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO', 'JULIO', 'AGOSTO', 'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE'];
+        $meses = [];
+        for ($i = 1; $i <= 12; $i++) {
+            $meses[sprintf("%02d", $i)] = strtoupper(Carbon::createFromDate(null,$i,1)->monthName);
+        }
 
         // Obtener todos los user_id existentes en un array
         $users = User::pluck('id')->toArray();
