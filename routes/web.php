@@ -25,6 +25,7 @@ use App\Http\Controllers\Auth\VerificationController;
 use App\Http\Controllers\ClaveUnicaController;
 use App\Http\Controllers\DigitalSignatureController;
 use App\Http\Controllers\Documents\DocDigital\DocDigitalController;
+use App\Http\Controllers\CarCalendarEventController;
 use App\Http\Controllers\Documents\DocumentController;
 use App\Http\Controllers\Documents\ParteController;
 use App\Http\Controllers\Documents\Partes\NumerationController;
@@ -62,6 +63,7 @@ use App\Http\Controllers\IonlinePlusController;
 use App\Http\Controllers\JobPositionProfiles\JobPositionProfileController;
 use App\Http\Controllers\JobPositionProfiles\JobPositionProfileSignController;
 use App\Http\Controllers\JobPositionProfiles\MessageController;
+use App\Http\Controllers\CalendarEventController;
 use App\Http\Controllers\Mammography\MammographyController;
 use App\Http\Controllers\Meeting\CommitmentController;
 use App\Http\Controllers\Meeting\MeetingController;
@@ -78,6 +80,7 @@ use App\Http\Controllers\Parameters\LogController;
 use App\Http\Controllers\Parameters\ParameterController;
 use App\Http\Controllers\Parameters\PermissionController;
 use App\Http\Controllers\Parameters\PhraseOfTheDayController;
+use App\Http\Livewire\Rrhh\Attendance\AttendanceUpload;
 use App\Http\Controllers\Parameters\ProfessionController;
 use App\Http\Controllers\Parameters\ProgramController as ParametersProgramController;
 use App\Http\Controllers\Parameters\PurchaseMechanismController;
@@ -253,6 +256,7 @@ use App\Http\Livewire\His\NewModification;
 use App\Http\Livewire\Indicators\PrestacionesLoader;
 use App\Http\Livewire\Indicators\QueryGenerator;
 use App\Http\Livewire\InventoryLabel\InventoryLabelIndex;
+use App\Http\Livewire\Inventory\AccountingUpdate;
 use App\Http\Livewire\Inventory\AssignedProducts;
 use App\Http\Livewire\Inventory\CheckTransfer;
 use App\Http\Livewire\Inventory\ClassificationMgr;
@@ -953,6 +957,8 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
     /** Fin Shift Managment */
 
     Route::prefix('attendance')->name('attendance.')->middleware(['auth', 'must.change.password'])->group(function () {
+        Route::get('/upload', AttendanceUpload::class)->name('upload');
+        Route::get('/{user}/{date}', [AttendanceController::class, 'show'])->name('show');
         Route::get('/', [AttendanceController::class, 'index'])->name('index');
         Route::get('/import', [AttendanceController::class, 'import'])->name('import');
         Route::post('/store', [AttendanceController::class, 'store'])->name('store');
@@ -1460,6 +1466,13 @@ Route::prefix('requirements')->as('requirements.')->middleware(['auth', 'must.ch
 });
 
 Route::view('calendars', 'calendars.index')->name('calendars');
+
+# Calendario Vehiculos
+Route::get('/vehicleCalendar', [CarCalendarEventController::class, 'index']);
+
+Route::post('/vehicleCalendar', [CarCalendarEventController::class, 'store']);
+Route::patch('/vehicleCalendar/edit/{event}', [CarCalendarEventController::class, 'update']);
+Route::delete('/vehicleCalendar/destroy/{event}', [CarCalendarEventController::class, 'destroy']);
 
 Route::prefix('indicators')->as('indicators.')->group(function () {
     Route::get('/', function () {
@@ -2028,6 +2041,7 @@ Route::prefix('prof_agenda')->as('prof_agenda.')->middleware(['auth'])->group(fu
 // Inventories
 Route::prefix('inventories')->as('inventories.')->middleware(['auth', 'must.change.password'])->group(function () {
     Route::get('sheet', InventorySheet::class)->name('sheet');
+    Route::get('/accounting-update', AccountingUpdate::class)->name('accounting-update');
 
     Route::prefix('establishment/{establishment}')->group(function () {
         /** Ruta para poder ver la hoja de inventario sin edición  */
@@ -2185,6 +2199,8 @@ Route::prefix('finance')->as('finance.')->middleware(['auth', 'must.change.passw
         Route::put('/{dte}/update', [PaymentController::class, 'update'])->name('update');
         Route::get('/paid', [PaymentController::class, 'paid'])->name('paid');
         Route::get('/{dte}/paid/pdf', [PaymentController::class, 'paidPdf'])->name('paidPdf');
+        //Route::get('/{dte}/compromiso/pdf', [PaymentController::class, 'compromisoPdf'])->name('compromisoPdf');
+        Route::get('/{dte}/devengo/pdf', [PaymentController::class, 'devengoPdf'])->name('devengoPdf');
     });
 
     Route::prefix('purchase-orders')->as('purchase-orders.')->group(function () {
@@ -2435,6 +2451,8 @@ Route::prefix('meetings')->as('meetings.')->middleware(['auth', 'must.change.pas
 Route::prefix('trainings')->as('trainings.')->middleware(['auth', 'must.change.password'])->group(function () {
     Route::get('/', [TngTrainingController::class, 'index'])->name('index');
     Route::get('create', [TngTrainingController::class, 'create'])->name('create');
+    Route::get('{training}/edit', [TngTrainingController::class, 'edit'])->name('edit');
+    Route::get('/{purchase_id}/show_approval', [TngTrainingController::class, 'show_approval'])->name('show_approval');
     Route::get('/{training}/show_file', [TrainingCreate::class, 'show_file'])->name('show_file');
 });
 

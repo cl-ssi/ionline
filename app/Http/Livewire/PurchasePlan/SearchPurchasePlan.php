@@ -7,15 +7,22 @@ use Livewire\Component;
 use App\Models\PurchasePlan\PurchasePlan;
 use Livewire\WithPagination;
 use Illuminate\Support\Facades\Auth;
+use App\Rrhh\OrganizationalUnit;
 
 class SearchPurchasePlan extends Component
 {
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
 
-    public $selectedId, $selectedStatus;
+    public $selectedId, $selectedStatus, $selectedSubject, $selectedStartDate, $selectedEndDate, $selectedUserCreator, $selectedUserResponsible,
+        $selectedResponsibleOuName, $selectedProgram;
 
     public $index;
+
+    protected $listeners = ['searchedResponsibleOu', 'clearResponsibleOu'];
+
+    protected $queryString = ['selectedId', 'selectedStatus', 'selectedSubject', 'selectedStartDate', 'selectedEndDate', 'selectedUserCreator',
+        'selectedUserResponsible', 'selectedResponsibleOuName', 'selectedProgram'];
 
     public function delete(PurchasePlan $purchasePlan)
     {
@@ -35,20 +42,29 @@ class SearchPurchasePlan extends Component
                 $organizationalUnitIn[] = Parameter::get('ou', 'DeptoRRFF');
             }
 
-            if(auth()->user()->organizationalUnit->id == Parameter::get('ou', 'DeptoAPS')){
+            if(in_array(auth()->user()->organizationalUnit->id, Parameter::get('ou', ['DeptoAPS','SaludMentalSSI']))){
                 $childs_array = auth()->user()->organizationalUnit->childs->pluck('id')->toArray();
-                $organizationalUnitIn = [auth()->user()->organizationalUnit->id, ...$childs_array];
+                $organizationalUnitIn = [auth()->user()->organizationalUnit->id, ...auth()->user()->organizationalUnit->getAllChilds()];
             }
 
             $purchasePlans = $query
                 ->where('user_creator_id', auth()->id())
                 ->orWhere('user_responsible_id', auth()->id())
                 ->orWhereIn('organizational_unit_id', $organizationalUnitIn)
+                /*
                 ->when(auth()->user()->organizationalUnit->id == Parameter::get('ou', 'SaludMentalSSI'),
                     fn($q) => $q->orwhereHas('organizationalUnit', 
                         fn($q2) => $q2->whereIn('establishment_id', explode(',', Parameter::get('establishment', 'EstablecimientosDispositivos')))))
+                */
                 ->search($this->selectedId,
-                    $this->selectedStatus)
+                    $this->selectedStatus,
+                    $this->selectedSubject,
+                    $this->selectedStartDate,
+                    $this->selectedEndDate,
+                    $this->selectedUserCreator,
+                    $this->selectedUserResponsible,
+                    $this->selectedResponsibleOuName,
+                    $this->selectedProgram)
                 /*
                 ->search($this->selectedStatus,
                     $this->selectedId,
@@ -69,7 +85,14 @@ class SearchPurchasePlan extends Component
                     $this->selectedUserAllowance)
                 */
                 ->search($this->selectedId,
-                    $this->selectedStatus)
+                    $this->selectedStatus,
+                    $this->selectedSubject,
+                    $this->selectedStartDate,
+                    $this->selectedEndDate,
+                    $this->selectedUserCreator,
+                    $this->selectedUserResponsible,
+                    $this->selectedResponsibleOuName,
+                    $this->selectedProgram)
                 ->paginate(30);
         }
 
@@ -81,7 +104,14 @@ class SearchPurchasePlan extends Component
             $purchasePlans = $query
                 ->whereHas('approvals', fn($q) => $q->where('active', 1)->whereNull('status')->whereIn('sent_to_ou_id', $ous))
                 ->search($this->selectedId,
-                    $this->selectedStatus)
+                    $this->selectedStatus,
+                    $this->selectedSubject,
+                    $this->selectedStartDate,
+                    $this->selectedEndDate,
+                    $this->selectedUserCreator,
+                    $this->selectedUserResponsible,
+                    $this->selectedResponsibleOuName,
+                    $this->selectedProgram)
                 ->paginate(30);
         }
 
@@ -123,5 +153,49 @@ class SearchPurchasePlan extends Component
         }
 
         return view('livewire.purchase-plan.search-purchase-plan', compact('purchasePlans'));
+    }
+
+    public function searchedResponsibleOu(OrganizationalUnit $organizationalUnit){
+        $this->selectedResponsibleOuName = $organizationalUnit->id;
+    }
+
+    public function clearResponsibleOu(){
+        $this->selectedResponsibleOuName = null;
+    }
+
+    public function updatingSelectedId(){
+        $this->resetPage();
+    }
+
+    public function updatingSelectedStatus(){
+        $this->resetPage();
+    }
+
+    public function updatingSelectedSubject(){
+        $this->resetPage();
+    }
+
+    public function updatingSelectedStartDate(){
+        $this->resetPage();
+    }
+
+    public function updatingSelectedEndDate(){
+        $this->resetPage();
+    }
+
+    public function updatingSelectedUserCreator(){
+        $this->resetPage();
+    }
+
+    public function updatingSelectedUserResponsible(){
+        $this->resetPage();
+    }
+
+    public function updatingSelectedResponsibleOuName(){
+        $this->resetPage();
+    }
+
+    public function updatingSelectedProgram(){
+        $this->resetPage();
     }
 }

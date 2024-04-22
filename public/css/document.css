@@ -34,7 +34,12 @@ main {
 }
 
 .content {
-    padding-bottom: 30px;
+    /* Margen para firmas y vistos buenos de Doc Digital */
+    padding-bottom: 68px;
+}
+
+.distribution-responsible {
+    padding-bottom: 68px;
 }
 
 .cinco {

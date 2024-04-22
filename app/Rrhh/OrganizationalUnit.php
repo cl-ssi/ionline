@@ -224,6 +224,19 @@ class OrganizationalUnit extends Model implements Auditable
         return $this->getTree(false, true);
     }
 
+    public function getAllChilds(){
+        $root = $this;
+        $ouChilds = array();
+
+        foreach($root->childs as $child){
+            $ouChilds[] = $child->id;
+            foreach($child->childs as $child){
+                $ouChilds[] = $child->id;
+            }
+        }
+        return $ouChilds;
+    }
+
     public static function getOrganizationalUnitsBySearch($searchText)
     {
         $organizationalUnits = OrganizationalUnit::query();

@@ -730,6 +730,15 @@
                                 @include('replacement_staff.modals.modal_to_sirh_contract')
                             @endif
                         @endif
+
+                        @if($applicant->approval_id)
+                            <a type="button" 
+                                class="btn btn-primary btn-sm" 
+                                href="{{ route('replacement_staff.request.technical_evaluation.applicant.download_budget_availavility_certificate_pdf', $applicant) }}"
+                                target="_blank">
+                                <i class="fas fa-file-pdf fa-fw"></i>
+                            </a>
+                        @endif
                     </td>
                 </tr>
               @endforeach

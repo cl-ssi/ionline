@@ -80,6 +80,16 @@
             </a>
         </li>
         
+        <li class="nav-item">
+            <a
+                class="nav-link {{ active(['inventories.accounting-update']) }}"
+                href="{{ route('inventories.accounting-update') }}"
+            >
+            <i class="fas fa-dollar-sign"></i> Actualización Contable
+            </a>
+        </li>
+        
+        
     @endcan
 
     @can('Inventory: place maintainer')

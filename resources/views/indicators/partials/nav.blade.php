@@ -43,6 +43,7 @@
                         @case('sembrando_sonrisas') Sembrando Sonrisas @break
                         @case('mejoramiento_atencion_odontologica') Mejoramiento Atención Odontológica @break
                         @case('pespi') PESPI @break
+                        @case('health_goals')  @break
                         @default
                             {{ ucfirst(str_replace('_',' ',$segment)) }}
                             @break

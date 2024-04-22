@@ -19,6 +19,9 @@ use App\Models\UserExternal;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 
+use App\Models\Documents\Approval;
+use App\Models\Parameters\Parameter;
+
 class TrainingCreate extends Component
 {
     use WithFileUploads;
@@ -43,7 +46,7 @@ class TrainingCreate extends Component
     public $file, $iterationFileClean = 0, $municipalProfile, $userExternal = null, $searchedUserName, 
     $disabledSearchedUserNameInput = 'disabled';
 
-    public $bootstrap;
+    public $form, $bootstrap;
 
     /* Training to edit */
     public $training;
@@ -162,7 +165,7 @@ class TrainingCreate extends Component
                     'id'  => ($this->idTraining) ? $this->idTraining : '',
                 ],
                 [
-                    'status'                    => 'pending',
+                    'status'                    => 'saved',
                     'user_training_id'          => $this->searchedUser->id,
                     'estament_id'               => $this->selectedEstament,
                     'degree'                    => $this->degree, 
@@ -320,5 +323,56 @@ class TrainingCreate extends Component
 
     public function show_file(Training $training){
         return Storage::disk('gcs')->response($training->file->storage_path);
+    }
+
+    public function sentToApproval(){
+        $external_approval = null;
+
+        if(auth()->guard('external')->check() == true && $this->training->municipal_profile == 'edf'){
+            //  APROBACION CORRESPONDIENTE A JEFATURA DIRECCIÓN APS
+            $external_approval = $this->training->approvals()->create([
+                "module"                        => "Solicitud Permiso Capacitación",
+                "module_icon"                   => "fas fa-chalkboard-teacher",
+                "subject"                       => 'Solicitud Permiso Capacitación <br>'.
+                                                    'ID: '.$this->training->id,
+                "sent_to_ou_id"                 => Parameter::get('ou', 'DireccionAPS'),
+                "document_route_name"           => "trainings.show_approval",
+                "document_route_params"         => json_encode(["training_id" => $this->training->id]),
+                "active"                        => true,
+                "previous_approval_id"          => null,
+                "callback_controller_method"    => "App\Http\Controllers\Trainings\TrainingController@approvalCallback",
+                "callback_controller_params"    => json_encode([
+                                                        'training_id' => $this->training->id,
+                                                        'process'     => null
+                                                    ])
+            ]);
+        }
+
+        // AQUÍ APPROVALS DE JEFATURAS INTERNAS
+
+        // APPROVALS DE CAPACITACIÓN
+        $external_approval = $this->training->approvals()->create([
+            "module"                        => "Solicitud Permiso Capacitación",
+            "module_icon"                   => "fas fa-chalkboard-teacher",
+            "subject"                       => 'Solicitud Permiso Capacitación <br>'.
+                                                'ID: '.$this->training->id,
+            "sent_to_ou_id"                 => Parameter::get('ou', 'Capacitación'),
+            "document_route_name"           => "trainings.show_approval",
+            "document_route_params"         => json_encode(["training_id" => $this->training->id]),
+            "active"                        => false,
+            "previous_approval_id"          => ($external_approval) ? $external_approval->id : null,
+            "callback_controller_method"    => "App\Http\Controllers\Trainings\TrainingController@approvalCallback",
+            "callback_controller_params"    => json_encode([
+                                                    'training_id' => $this->training->id,
+                                                    'process'     => 'end'
+                                                ])
+        ]);
+
+        $this->training->status = 'sent';
+        $this->training->save();
+
+        if(auth()->guard('external')->check() == true){
+            return redirect()->route('trainings.external_own_index');
+        }
     }
 }

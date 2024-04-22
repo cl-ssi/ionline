@@ -21,6 +21,48 @@
                     </select>
                 </fieldset>
 
+                <fieldset class="form-group col-12 col-md-3">
+                    <label for="for_subject">Asunto</label>
+                    <input class="form-control form-control-sm" type="text" autocomplete="off" name="subject_search" 
+                        wire:model.debounce.500ms="selectedSubject">
+                </fieldset>
+
+                <fieldset class="form-group col-12 col-md-3">
+                    <label for="regiones">Periodo de Creación</label>
+                    <div class="input-group">
+                        <input type="date" class="form-control form-control-sm" name="start_date_search" wire:model.debounce.500ms="selectedStartDate">
+                        <input type="date" class="form-control form-control-sm" name="end_date_search" wire:model.debounce.500ms="selectedEndDate">
+                    </div>
+                </fieldset>
+
+                <fieldset class="form-group col-12 col-md-3">
+                    <label for="for_user_creator">Usuario Creador</label>
+                    <input class="form-control form-control-sm" type="text" autocomplete="off" placeholder="NOMBRE / APELLIDOS"
+                        name="user_creator_search" wire:model.debounce.500ms="selectedUserCreator">
+                </fieldset>
+            </div>
+
+            <div class="row mt-3">
+                <fieldset class="form-group col-12 col-md-3">
+                    <label for="for_user_responsible">Usuario Responsable</label>
+                    <input class="form-control form-control-sm" type="text" autocomplete="off" placeholder="NOMBRE / APELLIDOS"
+                        name="user_responsible_search" wire:model.debounce.500ms="selectedUserResponsible">
+                </fieldset>
+
+                <fieldset class="form-group col-12 col-md-3">
+                    <label for="for_requester_ou_id">U.O. Administrador Contrato</label>
+                        @livewire('search-select-organizational-unit', [
+                            'emit_name'          => 'searchedResponsibleOu',
+                            'selected_id'        => 'responsible_ou_id',
+                            'small_option'       => true,
+                            'organizationalUnit' => null
+                        ])
+                </fieldset>
+
+                <fieldset class="form-group col-12 col-md-3">
+                    <label for="for_program">Programa</label>
+                    <input class="form-control form-control-sm" type="text" autocomplete="off" name="program_search" wire:model.debounce.500ms="selectedProgram">
+                </fieldset>
             </div>
         </div>
     @endif
