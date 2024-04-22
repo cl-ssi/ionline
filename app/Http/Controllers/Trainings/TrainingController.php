@@ -15,7 +15,12 @@ class TrainingController extends Controller
      */
     public function index()
     {
-        return view('trainings.index');
+        // return view('trainings.index');
+    }
+
+    public function own_index()
+    {
+        return view('trainings.own_index');
     }
 
     // EXTERNAL INDEX

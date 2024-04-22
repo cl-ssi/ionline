@@ -7,12 +7,14 @@
  @include('trainings.partials.nav')
 
 <div class="row">
-    <div class="col-sm-5">
+    <div class="col-12 col-md-12 mt-3">
         <h4 class="mb-3">Mis Capacitaciones:</h4>
+        <p>Incluye Capacitaciones de mi Unidad Organizacional: <b>{{ auth()->user()->organizationalUnit->name }}</b></p>
     </div>
 </div>
 
 <br />
+
 </div>
 
 <div class="col-sm">
