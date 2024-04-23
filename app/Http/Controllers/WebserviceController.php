@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Models\WebService\PendingJsonToInsert;
 
 class WebserviceController extends Controller
 {
@@ -80,5 +82,44 @@ class WebserviceController extends Controller
 
             return isset($user) ? json_encode($user) : json_encode($error);
         }
+    }
+
+    public function pendingJsonToInsert(Request $request)
+    {
+        // Validar el request
+        $request->validate([
+            'model_route' => 'required|string', // Ruta al modelo
+            'model_data' => 'required|array',   // Datos del modelo
+        ]);
+
+        // Obtener la ruta del modelo y los datos del JSON
+        $modelRoute = $request->input('model_route');
+        $modelData = $request->input('model_data');
+
+        // Verificar si ya existe una fila sin procesar para el modelo especificado
+        $existingPendingRecord = PendingJsonToInsert::where('model_route', $modelRoute)
+            ->where('procesed', 0)
+            ->first();
+
+        // Si existe una fila sin procesar, informar y no insertar una nueva fila
+        if ($existingPendingRecord) {
+            return response()->json(['message' => 'Ya existe una fila sin procesar para este modelo'], 409);
+        }
+
+        // Si existe una fila procesada, crear un nuevo registro con el mismo modelo y datos
+        try {
+            DB::transaction(function () use ($modelRoute, $modelData) {
+                PendingJsonToInsert::create([
+                    'model_route' => $modelRoute,
+                    'json' => json_encode($modelData),
+                    'procesed' => 0
+                ]);
+            });
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error al crear un nuevo registro: ' . $e->getMessage()], 500);
+        }
+
+        // Devolver una respuesta exitosa
+        return response()->json(['message' => 'Registro creado en PendingJsonToInsert']);
     }
 }

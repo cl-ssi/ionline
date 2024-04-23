@@ -8,7 +8,7 @@ use App\Http\Controllers\TestController;
 use App\Http\Controllers\ServiceRequests\ServiceRequestController;
 use App\Http\Controllers\Pharmacies\ReceivingController;
 use App\Http\Controllers\Pharmacies\DispatchController;
-use App\Http\Controllers\Rrhh\OrganizationalUnitController;
+use App\Http\Controllers\WebserviceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,8 +37,8 @@ Route::prefix('pharmacies')->name('pharmacies.')->middleware('client')->group(fu
     Route::post('/dispatchingProductsWs', [DispatchController::class, 'dispatchingProductsWs']);
 });
 
-Route::prefix('organizational_units')->name('organizational_units.')->middleware('client')->group(function (){
-    Route::post('/create', [OrganizationalUnitController::class, 'createWs']);
+Route::prefix('ws')->name('ws.')->middleware('client')->group(function (){
+    Route::post('/pendingJsonToInsert', [WebserviceController::class, 'pendingJsonToInsert']);
 });
 
 
