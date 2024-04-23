@@ -30,8 +30,10 @@
 			<label>Año Inicio de Contrato</label>
             {{now()->subYear()->format('Y')}}
 			<select class="form-control" data-live-search="true" name="year" data-size="5">
-                <option value="{{now()->subYear()->format('Y')}}"  @selected($request->year == now()->subYear()->format('Y'))> {{now()->subYear()->format('Y')}}</option>
-				<option value="{{now()->format('Y')}}"      @selected($request->year == now()->format('Y'))> {{now()->format('Y')}}</option>
+                <option value="{{now()->addYear(-3)->format('Y')}}" @selected($request->year == now()->addYear(-3)->format('Y'))> {{now()->addYear(-3)->format('Y')}}</option>
+                <option value="{{now()->addYear(-2)->format('Y')}}" @selected($request->year == now()->addYear(-2)->format('Y'))> {{now()->addYear(-2)->format('Y')}}</option>
+                <option value="{{now()->addYear(-1)->format('Y')}}" @selected($request->year == now()->addYear(-1)->format('Y'))> {{now()->addYear(-1)->format('Y')}}</option>
+				<option value="{{now()->format('Y')}}" @selected($request->year == now()->format('Y'))> {{now()->format('Y')}}</option>
                 <option value="{{now()->addYear()->format('Y')}}"  @selected($request->year == now()->addYear()->format('Y'))> {{now()->addYear()->format('Y')}}</option>
 			</select>
 		</div>

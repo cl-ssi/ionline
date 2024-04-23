@@ -9,6 +9,7 @@ use App\Http\Controllers\ServiceRequests\ServiceRequestController;
 use App\Http\Controllers\Pharmacies\ReceivingController;
 use App\Http\Controllers\Pharmacies\DispatchController;
 use App\Http\Controllers\WebserviceController;
+use App\Http\Controllers\Rrhh\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,13 +38,11 @@ Route::prefix('pharmacies')->name('pharmacies.')->middleware('client')->group(fu
     Route::post('/dispatchingProductsWs', [DispatchController::class, 'dispatchingProductsWs']);
 });
 
-Route::prefix('ws')->name('ws.')->middleware('client')->group(function (){
-    Route::post('/pendingJsonToInsert', [WebserviceController::class, 'pendingJsonToInsert']);
-});
+// Route::prefix('ws')->name('ws.')->middleware('client')->group(function (){
+//     Route::post('/pendingJsonToInsert', [WebserviceController::class, 'pendingJsonToInsert']);
+// });
 
-
-
-
+Route::post('/pendingJsonToInsert', [WebserviceController::class, 'pendingJsonToInsert']);
 
 // Route::post('/post-request-inputs',[TestController::class,'storeRequestInputs']);
 // Route::get('/get-request-inputs',[TestController::class,'storeRequestInputs']);
