@@ -181,7 +181,7 @@
                                 </a>
                             @endif
 
-                            @if($index == 'all' && $allowance->status != 'manual')
+                            @if(($index == 'all' || $index == 'all_establishment') && $allowance->status != 'manual')
                                 <a href="{{ route('allowances.show', $allowance) }}"
                                     class="btn btn-outline-secondary btn-sm" title="Ver Viático">
                                     <i class="fas fa-eye"></i>
