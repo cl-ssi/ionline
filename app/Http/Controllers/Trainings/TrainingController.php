@@ -72,6 +72,12 @@ class TrainingController extends Controller
         return view('trainings.external_show', compact('training'));
     }
 
+    public function show_approval($training_id){
+        $training = Training::find($training_id);
+
+        return view('trainings.show_approval', compact('training'));
+    }
+
     /**
      * Show the form for editing the specified resource.
      *
