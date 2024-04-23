@@ -29,8 +29,9 @@ class NoAttendanceRecordIndex extends Component
     public $checkToOk = [];
     public $establishments;
 
-    public function mount() {
-        $this->establishments = Establishment::whereIn('id',explode(',',env('APP_SS_ESTABLISHMENTS')))->pluck('name','id');
+    public function mount()
+    {
+        $this->establishments = Establishment::whereIn('id', explode(',', env('APP_SS_ESTABLISHMENTS')))->pluck('name', 'id');
         // Set establishemnt with estbalishment of the user
         $this->establishment_id = auth()->user()->establishment_id;
     }
@@ -41,8 +42,8 @@ class NoAttendanceRecordIndex extends Component
     public function setOk(NoAttendanceRecord $noAttendanceRecord)
     {
         $noAttendanceRecord->rrhh_user_id = auth()->id();
-        $noAttendanceRecord->rrhh_at = now();
-        $noAttendanceRecord->rrhh_status = 1;
+        $noAttendanceRecord->rrhh_at      = now();
+        $noAttendanceRecord->rrhh_status  = 1;
         $noAttendanceRecord->save();
     }
 
@@ -51,7 +52,7 @@ class NoAttendanceRecordIndex extends Component
      */
     public function setOkMassive()
     {
-        foreach($this->checkToOk as $setOk){
+        foreach ( $this->checkToOk as $setOk ) {
             $noAttendanceRecord = NoAttendanceRecord::find($setOk);
             $this->setOk($noAttendanceRecord);
         }
@@ -78,10 +79,10 @@ class NoAttendanceRecordIndex extends Component
      */
     public function saveRejectForm(NoAttendanceRecord $noAttendanceRecord)
     {
-        $noAttendanceRecord->rrhh_user_id = auth()->id();
-        $noAttendanceRecord->rrhh_at = now();
+        $noAttendanceRecord->rrhh_user_id     = auth()->id();
+        $noAttendanceRecord->rrhh_at          = now();
         $noAttendanceRecord->rrhh_observation = $this->rrhh_observation;
-        $noAttendanceRecord->rrhh_status = 0;
+        $noAttendanceRecord->rrhh_status      = 0;
         /**
          * Ya no vamos a devolver las justificaciones de asistencia, se crearan nuevas
          * Por lo tanto el status queda en el estado que estaba
@@ -95,37 +96,36 @@ class NoAttendanceRecordIndex extends Component
 
     public function searchFuncionary()
     {
-        if($this->from != null && $this->to != null){
+        if ( $this->from != null && $this->to != null ) {
             $this->period = true;
         }
 
         $this->resetPage();
         $this->render();
-        
+
         $this->validate([
             'from' => [
                 'nullable',
                 'date',
                 Rule::requiredIf(function () {
-                    return !empty($this->to);
-                }), 
+                    return !empty ($this->to);
+                }),
             ],
-            'to' => [
+            'to'   => [
                 'nullable',
                 'date',
-                'after_or_equal:from', 
+                'after_or_equal:from',
             ],
         ]);
 
         $this->checkToOk = [];
     }
-    
+
 
     public function render()
     {
-        // $establishments_ids = Parameter::get('Justificación Asistencia','establishments_ids',auth()->user()->establishment_id) ?? 1;
         return view('livewire.rrhh.no-attendance-record-index', [
-            'records' => NoAttendanceRecord::with('authority', 'user','reason')
+            'records' => NoAttendanceRecord::with('authority', 'user', 'reason')
                 ->whereNotNull('status')
                 // ->whereIn('establishment_id', explode(',',$establishments_ids))
                 ->when($this->name, function ($query) {
@@ -143,10 +143,9 @@ class NoAttendanceRecordIndex extends Component
                     $query->where('establishment_id', $this->establishment_id);
                 })
                 ->when($this->rrhh_at, function ($query) {
-                    if($this->rrhh_at == 'Si') {
+                    if ( $this->rrhh_at == 'Si' ) {
                         $query->whereNotNull('rrhh_at');
-                    }
-                    else if($this->rrhh_at == 'No') {
+                    } else if ( $this->rrhh_at == 'No' ) {
                         $query->whereNull('rrhh_at');
                     }
                 })
@@ -157,9 +156,8 @@ class NoAttendanceRecordIndex extends Component
 
     public function export()
     {
-        // $establishments_ids = Parameter::get('Justificación Asistencia','establishments_ids',auth()->user()->establishment_id) ?? 1;
         $records = NoAttendanceRecord::with('user', 'reason')
-            //->whereNotNull('status')
+            ->whereNotNull('status')
             ->where('status', 1)
             // ->whereIn('establishment_id', explode(',',$establishments_ids))
             ->when($this->name, function ($query) {
@@ -177,9 +175,9 @@ class NoAttendanceRecordIndex extends Component
                 $query->where('establishment_id', $this->establishment_id);
             })
             ->when($this->rrhh_at, function ($query) {
-                if ($this->rrhh_at == 'Si') {
+                if ( $this->rrhh_at == 'Si' ) {
                     $query->whereNotNull('rrhh_at');
-                } elseif ($this->rrhh_at == 'No') {
+                } elseif ( $this->rrhh_at == 'No' ) {
                     $query->whereNull('rrhh_at');
                 }
             })
