@@ -748,7 +748,15 @@ class RequestReplacementStaffController extends Controller
     }
 
     public function search_request_by_dates(Request $request){
-        $totalRequestByDates = RequestReplacementStaff::whereBetween('created_at', [$request->start_date_search, $request->end_date_search." 23:59:59"])->get();
+        // dd(request('organizational_unit_id_search'));
+
+        $totalRequestByDates = RequestReplacementStaff::
+            whereBetween('created_at', [$request->start_date_search, $request->end_date_search." 23:59:59"])
+            // ->where('organizational_unit_id', $request->organizational_unit_id_search)
+            ->when(request('organizational_unit_id_search') != null, function ($q) {
+                return $q->where('organizational_unit_id', request('organizational_unit_id_search'));
+            })
+            ->get();
         
         $pending    = 0;
         $complete   = 0;
