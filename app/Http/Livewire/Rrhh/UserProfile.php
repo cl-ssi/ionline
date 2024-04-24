@@ -14,6 +14,8 @@ class UserProfile extends Component
     public $communes;
     public $banks;
 
+    protected $listeners = ['setOrganizationalUnit'];
+
     protected $rules = [
         'user.name' => 'required',
         'user.fathers_family' => 'required',
@@ -21,6 +23,7 @@ class UserProfile extends Component
         'user.gender' => 'nullable',
         'user.birthday' => 'nullable|date',
         'user.position' => 'required',
+        // 'user.organizational_unit_id' => 'required',
 
         'user.email' => 'nullable',
 
@@ -46,6 +49,11 @@ class UserProfile extends Component
         // $this->user->load('bankAccount');
         // $this->user->bankAccount;
         $this->bankAccount = $this->user->bankAccount;
+    }
+
+    public function setOrganizationalUnit($ou_id)
+    {
+        $this->user->organizational_unit_id = $ou_id;
     }
 
     public function save()
