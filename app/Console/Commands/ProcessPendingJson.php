@@ -59,12 +59,13 @@ class ProcessPendingJson extends Command
         // Insertar datos en la base de datos
         DB::transaction(function () use ($modelRoute, $jsonData, $columnMapping, $record) {
             $modelInstance = new $modelRoute;
-            $modelAttributes = [];
-            foreach ($columnMapping as $jsonKey => $columnName) {
-                $modelAttributes[$columnName] = $jsonData[$jsonKey];
+            foreach ($jsonData as $data) {
+                $modelAttributes = [];
+                foreach ($columnMapping as $jsonKey => $columnName) {
+                    $modelAttributes[$columnName] = $data[$jsonKey];
+                }
+                $modelInstance->create($modelAttributes);
             }
-            $modelInstance->fill($modelAttributes);
-            $modelInstance->save();
             $record->update(['procesed' => 1]); // Marcar el registro como procesado
             $this->info("Datos insertados en $modelRoute con éxito.");
         });
