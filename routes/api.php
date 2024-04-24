@@ -44,3 +44,10 @@ Route::prefix('ws')->name('ws.')->middleware('client')->group(function (){
 
 // Route::post('/post-request-inputs',[TestController::class,'storeRequestInputs']);
 // Route::get('/get-request-inputs',[TestController::class,'storeRequestInputs']);
+
+// API routes with Basic Authentication
+Route::middleware('auth.basic')->group(function () {
+    Route::get('/userinfo', function (Request $request) {
+        return "Puum\n";
+    });
+});
