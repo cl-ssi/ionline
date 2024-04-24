@@ -19,7 +19,8 @@ class PendingJsonToInsert extends Model
     protected $fillable = [
         'id',
         'model_route',
-        'json',
+        'data_json',
+        'column_mapping',
         'procesed',
     ];
 }

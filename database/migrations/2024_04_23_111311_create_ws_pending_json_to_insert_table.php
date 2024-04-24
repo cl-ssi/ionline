@@ -16,7 +16,8 @@ return new class extends Migration
         Schema::create('ws_pending_json_to_insert', function (Blueprint $table) {
             $table->id();
             $table->string('model_route');
-            $table->text('json');
+            $table->text('data_json');
+            $table->text('column_mapping'); // Nuevo campo para el mapeo de columnas
             $table->boolean('procesed')->default(0);
             $table->timestamps();
         });

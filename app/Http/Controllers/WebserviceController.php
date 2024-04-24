@@ -86,15 +86,40 @@ class WebserviceController extends Controller
 
     public function pendingJsonToInsert(Request $request)
     {
-        // Validar el request
-        $request->validate([
-            'model_route' => 'required|string', // Ruta al modelo
-            'model_data' => 'required|array',   // Datos del modelo
-        ]);
+        // ejemplo json valido
+
+        // {
+        //     "model_route": "App\\Models\\Pharmacies\\Unit",
+        //     "model_data":       {
+        //                     "nombre": "Ejemplo de ingreso"
+        //                 },
+        //     "column_mapping": {
+        //                     "nombre": "name"
+        //                 }
+        // }
 
         // Obtener la ruta del modelo y los datos del JSON
         $modelRoute = $request->input('model_route');
         $modelData = $request->input('model_data');
+        $columnMapping = $request->input('column_mapping');
+
+        // Verificar si el JSON tiene el formato correcto
+        if (!is_string($modelRoute) || !is_array($modelData) || !is_array($columnMapping)) {
+            return response()->json(['error' => 'El JSON no tiene el formato correcto'], 400);
+        }
+
+        // Verificar si el modelo especificado existe
+        if (!class_exists($modelRoute)) {
+            return response()->json(['error' => 'El modelo especificado no existe'], 400);
+        }
+
+        // Verificar si el modelo especificado tiene las columnas especificadas en el mapeo
+        $modelInstance = new $modelRoute;
+        $modelColumns = $modelInstance->getConnection()->getSchemaBuilder()->getColumnListing($modelInstance->getTable());
+        $mappedColumns = array_values($columnMapping);
+        if (count(array_diff($mappedColumns, $modelColumns)) > 0) {
+            return response()->json(['error' => 'El mapeo de columnas contiene nombres de columna no válidos para el modelo especificado'], 400);
+        }
 
         // Verificar si ya existe una fila sin procesar para el modelo especificado
         $existingPendingRecord = PendingJsonToInsert::where('model_route', $modelRoute)
@@ -108,10 +133,11 @@ class WebserviceController extends Controller
 
         // Si existe una fila procesada, crear un nuevo registro con el mismo modelo y datos
         try {
-            DB::transaction(function () use ($modelRoute, $modelData) {
+            DB::transaction(function () use ($modelRoute, $modelData, $columnMapping) {
                 PendingJsonToInsert::create([
                     'model_route' => $modelRoute,
-                    'json' => json_encode($modelData),
+                    'data_json' => json_encode($modelData),
+                    'column_mapping' => json_encode($columnMapping), // Guardar el mapeo de columnas
                     'procesed' => 0
                 ]);
             });
