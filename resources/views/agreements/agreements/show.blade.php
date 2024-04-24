@@ -60,12 +60,24 @@
 <ol class="breadcrumb bg-light justify-content-end small">
     @if($agreement->period >= 2024)
         @if($canEdit)
+            @if($agreement->program_id == 3)
+            <li class="nav-item">
+                <a href="{{ route('agreements.createDocument', $agreement) }}" class="nav-link text-secondary" 
+                onclick="event.preventDefault(); document.getElementById('submit-form').submit();">
+                <i class="fas fa-file-medical"></i> Generar borrador Convenio</a>
+                <form id="submit-form" action="{{ route('agreements.createDocument', $agreement) }}" method="POST" class="hidden">
+                @csrf
+                @method('POST')
+                </form>
+            </li>
+            @else
             <li class="nav-item">
                 <a href="#" class="nav-link text-secondary" data-toggle="modal"
                     data-target="#selectEvalOption" data-formmethod="POST"
                     data-formaction="{{ route('agreements.createDocument', $agreement )}}">
                     <i class="fas fa-file-medical"></i> Generar borrador Convenio</a>
             </li>
+            @endif
             @if($agreement->document_id != null)
                 <li class="nav-item">
                     <a href="{{ route('documents.edit', $agreement->document_id) }}" class="nav-link text-secondary"><i class="fas fa-file-alt"></i> Editar borrador Convenio</a> 

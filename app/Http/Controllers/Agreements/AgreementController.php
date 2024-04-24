@@ -424,13 +424,1341 @@ class AgreementController extends Controller
 
     public function createDocument(Request $request, Agreement $agreement)
     {
+        $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+
+        if($agreement->program_id == 3){ // convenio retiro voluntario
+            // SE OBTIENEN DATOS RELACIONADOS AL CONVENIO
+            $agreement->load('program', 'commune.municipality', 'director_signer.user', 'stages', 'referrer');
+            // AL MOMENTO DE PREVISUALIZAR EL DOCUMENTO INICIA AUTOMATICAMENTE LA PRIMERA ETAPA
+            if($agreement->stages->isEmpty()){
+                $agreement->stages()->create(['group' => 'CON','type' => 'RTP', 'date' => Carbon::now()->toDateTimeString()]);
+            }
+            // SE CONVIERTE EL VALOR TOTAL DEL CONVENIO EN PALABRAS
+            $formatter = new NumeroALetras;
+            $formatter->apocope = true;
+            $totalConvenio = $agreement->total_amount;
+            $totalConvenioLetras = $this->correctAmountText($formatter->toMoney($totalConvenio,0, 'pesos',''));
+            $totalQuotas = $agreement->quotas;
+            
+            $amountPerQuota = round($totalConvenio/$totalQuotas);
+            $diff = $totalConvenio - $amountPerQuota * $totalQuotas; //residuo
+            $totalQuotasText = $diff ? ($totalQuotas - 1). ' cuotas de $'.number_format($amountPerQuota,0,",",".").' ('.$this->correctAmountText($formatter->toMoney($amountPerQuota,0, 'pesos','')).') y una cuota de $'.number_format($amountPerQuota + $diff,0,",",".").' ('.$this->correctAmountText($formatter->toMoney($amountPerQuota + $diff,0, 'pesos','')).')'
+                                     : $totalQuotas. ' cuotas de $'.number_format($amountPerQuota,0,",",".").' ('.$this->correctAmountText($formatter->toMoney($totalConvenio,0, 'pesos','')).')';
+
+            $periodoConvenio = $agreement->period;
+            $fechaConvenio = date('j', strtotime($agreement->date)).' de '.$meses[date('n', strtotime($agreement->date))-1].' del año '.date('Y', strtotime($agreement->date));
+            $numResolucion = $agreement->number;
+            $fechaResolucion = $agreement->resolution_date;
+            $fechaResolucion = $fechaResolucion != NULL ? date('j', strtotime($fechaResolucion)).' de '.$meses[date('n', strtotime($fechaResolucion))-1].' del año '.date('Y', strtotime($fechaResolucion)) : '';
+            
+            // Alcalde y su municipalidad
+            $alcaldeApelativo = $agreement->representative_appelative;
+            if(Str::contains($alcaldeApelativo, 'Subrogante')){
+                $alcaldeApelativoFirma = Str::before($alcaldeApelativo, 'Subrogante') . '(S)';
+            }else{
+                $alcaldeApelativoFirma = explode(' ',trim($alcaldeApelativo))[0]; // Alcalde(sa)
+            }
+            $alcalde = $agreement->representative;
+            $alcaldeDecreto = $agreement->representative_decree;
+            $municipalidad = $agreement->commune->municipality->name_municipality;
+            $ilustre = !Str::contains($agreement->commune->municipality->name_municipality, 'ALTO HOSPICIO') ? 'ILUSTRE': null;
+            $municipalidadDirec = $agreement->municipality_adress;
+            $comunaRut = $agreement->municipality_rut;
+            $alcaldeRut = $agreement->representative_rut;
+            $comuna = $agreement->commune->name;
+
+            //Director
+            $director = mb_strtoupper($agreement->director_signer->user->fullName);
+            $directorApelativo = $agreement->director_signer->appellative;
+            if(!Str::contains($directorApelativo,'(S)')) $directorApelativo .= ' Titular';
+            $directorRut = mb_strtoupper($agreement->director_signer->user->runFormat());
+            $directorDecreto = $agreement->director_signer->decree;
+            $directorNationality = Str::contains($agreement->director_signer->appellative, 'a') ? 'chilena' : 'chileno';
+
+            $first_word = explode(' ',trim($agreement->program->name))[0];
+            $programa = $first_word == 'Programa' ? substr(strstr($agreement->program->name," "), 1) : $agreement->program->name;
+
+            $municipality_emails = $agreement->Commune->municipality->email_municipality."\n".$agreement->Commune->municipality->email_municipality_2;
+
+            $document = new Document();
+            $document->type_id = Type::where('name','Convenio')->first()->id;
+            $document->agreement_id = $agreement->id;
+            // $document->subject = 'Convenio programa '.$programa.' comuna de '.$agreement->commune->name;
+            $document->subject = 'Documento convenio de ejecución de retiro voluntario'.($agreement->previous ? ' prórroga': '').' del programa '.$programa.' año '.$agreement->period.' comuna de '.$agreement->Commune->name;
+            $document->distribution = $municipality_emails."\n".$agreement->referrer->email."\nvalentina.ortega@redsalud.gob.cl\naps.ssi@redsalud.gob.cl\nromina.garin@redsalud.gob.cl\njuridica.ssi@redsalud.gob.cl\no.partes2@redsalud.gob.cl\nblanca.galaz@redsalud.gob.cl";
+            $document->content = "<p
+            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+            <strong><span>CONVENIO ANTICIPO DE APORTE ESTATAL&nbsp;</span></strong></p>
+        <p
+            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+            <strong><span>BONIFICACI&Oacute;N POR RETIRO VOLUNTARIO <span
+                        style='background:yellow;'>".$periodoConvenio."</span> ESTABLECIDO EN LA LEY N&ordm;20.919</span></strong>
+        </p>
+        <p
+            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+            <strong><span>&nbsp;PARA FUNCIONARIOS DE ATENCI&Oacute;N PRIMARIA DE SALUD ENTRE SERVICIO DE
+                    SALUD TARAPAC&Aacute; Y LA <span style='background:yellow;'>".$ilustre."
+                        ".$municipalidad."</span>.</span></strong></p>
+        <p
+            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
+            <strong><span>&nbsp;</span></strong></p>
+        <p
+            style='margin-top:0cm;margin-right:0cm;margin-bottom:10.0pt;margin-left:0cm;line-height:115%;text-align:justify;'>
+            <span style='line-height:115%;'>En Iquique a <span
+                    style='background:yellow;'>".$fechaConvenio."</span>, comparecen, por una parte, el <strong>SERVICIO DE SALUD
+                    TARAPAC&Aacute;,</strong> persona jur&iacute;dica de derecho p&uacute;blico,&nbsp;</span><span
+                style='line-height:115%;'>RUT. 61.606.100-3&nbsp;</span><span
+                style='line-height:115%;'>con domicilio en calle An&iacute;bal Pinto N&ordm; 815 de Iquique,
+                representado por su <span style='background:yellow;'>".$directorApelativo." D. <strong>".$director."</strong>,
+                    ".$directorNationality.", C&eacute;dula Nacional de Identidad N&ordm; ".$directorRut."</span>, del mismo
+                domicilio del servicio p&uacute;blico que representa, en adelante el
+                <strong>&ldquo;SERVICIO&rdquo;</strong></span><span style='line-height:115%;'>&nbsp;</span><span
+                style='line-height:115%;'>por una parte</span><span
+                style='line-height:115%;'>;&nbsp;</span><span style='line-height:115%;'>y por la
+                otra, la <strong><span style='background:yellow;'>".$ilustre." ".$municipalidad."</span></strong>, persona
+                jur&iacute;dica de derecho p&uacute;blico, RUT <span style='background:yellow;'>".$comunaRut."</span>,
+                representada por su <span style='background:yellow;'>".$alcaldeApelativo." D. <strong>".$alcalde."</strong>,
+                    chileno, C&eacute;dula Nacional de Identidad N&ordm; ".$alcaldeRut."</span> ambos domiciliados en <span
+                    style='background:yellow;'>".$municipalidadDirec." de la comuna de ".$comuna."</span>, en adelante la
+                <strong>&ldquo;MUNICIPALIDAD&rdquo;</strong>, se ha acordado celebrar un convenio, que consta de las siguientes
+                cl&aacute;usulas</span><span style='line-height:115%;'>:</span></p>
+        <p
+            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
+            <strong><em><span>PRIMERA:&nbsp;</span></em></strong><span>El
+                presente convenio se suscribe conforme a lo establecido en el decreto con fuerza ley N&deg;1-3063, de 1980, del
+                Ministerio de Interior y sus normas complementarias; a lo acordado en los convenios celebrados en virtud de
+                dichas normas entre el <strong>&ldquo;SERVICIO&rdquo;</strong> y la
+                <strong>&ldquo;MUNICIPALIDAD&rdquo;,</strong> especialmente el denominado aporte per c&aacute;pita, aprobado en
+                art&iacute;culo 49&ordm; de la ley N&ordm;19.378 que aprueba el Estatuto de Atenci&oacute;n Primaria de Salud
+                Municipal. En el marco de la modernizaci&oacute;n de la Atenci&oacute;n Primaria, pilar de la reforma a la salud
+                impulsada por el Gobierno, el Ministerio de Salud ha firmado un acta de acuerdos con la Confederaci&oacute;n
+                Nacional de la Salud Municipal (CONFUSAM) y la Asociaci&oacute;n Chilena de Municipalidades (ACHM), en la que se
+                acuerda desarrollar un programa de mejoramiento de las condiciones de trabajo y salariales de los funcionarios
+                de la atenci&oacute;n primaria municipal.&nbsp;</span></p>
+        <p
+            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
+            <strong><em><u><span><span
+                                style='text-decoration:none;'>&nbsp;</span></span></u></em></strong></p>
+        <p
+            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
+            <strong><em><span>SEGUNDA:&nbsp;</span></em></strong><span>Se deja
+                constancia que el Estatuto de Atenci&oacute;n Primaria de salud Municipal, aprobado por la Ley N&ordm;19.378, en
+                su art&iacute;culo N&ordm;56 establece que el aporte estatal mensual podr&aacute; incrementarse &ldquo;En el
+                caso que la Norma T&eacute;cnica, planes y programas que se impartan con posterioridad a la entrada en vigencia
+                de esta Ley, impliquen un mayor gasto para la&nbsp;</span><strong><span
+                >&ldquo;MUNICIPALIDAD&rdquo;</span></strong><span>, su
+                financiamiento ser&aacute; incorporado a los aportes establecidos en el art&iacute;culo
+                49&ordm;&rdquo;</span><span>. &nbsp;</span></p>
+        <p
+            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
+            <span>&nbsp;</span></p>
+        <p
+            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
+            <strong><em><span>TERCERA:&nbsp;</span></em></strong><span>Las
+                partes dejan constancia que la Ley N&ordm;20.919, otorga beneficios a los trabajadores de la Salud Municipal y
+                establece en los art&iacute;culos 1&ordm;, 2&ordm;, 3&ordm;, 4&ordm;, 5&ordm;, 6&ordm;, 7&ordm;, 8&ordm; y
+                9&ordm; los requisitos para acceder a dicha Ley y, en el art&iacute;culo 10&ordm; los per&iacute;odos y plazos
+                de postulaci&oacute;n. Por su parte, la Ley N&ordm;20.589, en su art&iacute;culo 11&ordm;, establece los
+                criterios para solicitar financiamiento, cuando las entidades no cuentan con los recursos suficientes para pagar
+                indemnizaciones de cargo Municipal.</span></p>
+        <p
+            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
+            <span>&nbsp;</span></p>
+        <p
+            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
+            <strong><span>CUARTA</span></strong><strong><span
+                >:&nbsp;</span></strong><span>Respecto a los beneficios, la
+                Ley N&ordm;20.919 en su art&iacute;culo 1&ordm; concede, de cargo municipal, una bonificaci&oacute;n equivalente
+                a un mes de remuneraci&oacute;n imponible por cada a&ntilde;o de servicio y fracci&oacute;n superior a seis
+                meses prestados en establecimientos de salud p&uacute;blicos, municipales o corporaciones de salud municipal,
+                con m&aacute;ximo de diez meses. Las funcionario/as tendr&aacute;n derecho a un mes adicional de
+                bonificaci&oacute;n por retiro voluntario.&nbsp;</span></p>
+        <p
+            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
+            <span>&nbsp;</span></p>
+        <p
+            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
+            <strong><em><span>QUINTA</span></em></strong><strong><em><span
+                    >:&nbsp;</span></em></strong><span>Las partes dejan
+                constancia que conforme a Ord. <span style='background:yellow;'>N&deg;_ &nbsp;de fecha ______ del
+                    a&ntilde;o_____</span> y&nbsp;</span><span>Resoluci&oacute;n Exenta <span
+                    style='background:yellow;'>N&ordm;__, de fecha _____________del a&ntilde;o _____ de la
+                    ________________________________</span></span><span>&nbsp;,
+                la&nbsp;</span><strong><span>&ldquo;MUNICIPALIDAD&rdquo;&nbsp;</span></strong><span
+            >env&iacute;a antecedentes que respaldan cumplimiento de los requisitos que se&ntilde;ala
+                la Ley N&ordm;20.919 y el c&aacute;lculo de los beneficios que corresponden a
+                ______________________________________________ seg&uacute;n Resoluci&oacute;n Exenta <span
+                    style='background:yellow;'>N&ordm; ".$numResolucion."&nbsp;</span>del Ministerio de Salud de fecha <span
+                    style='background:yellow;'>".$fechaResolucion.".</span>&nbsp;</span></p>
+        <p
+            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
+            <span>&nbsp;</span></p>
+        <p
+            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
+            <strong><em><span>SEXTA:</span></em></strong><span>&nbsp;El
+                &ldquo;<strong>SERVICIO&rdquo;</strong>, una vez verificados los datos de la solicitud, los c&aacute;lculos
+                efectuados sobre los beneficios y la justificaci&oacute;n relativa al plan, conforme la citada normativa,
+                procedi&oacute; a requerir los recursos respectivos al Ministerio de Salud, los que quedan establecidos en la
+                cl&aacute;usula<span style='background:yellow;'>_______</span> de este convenio, se&ntilde;alando a cada uno de
+                los beneficiarios de la Comuna de <span style='background:yellow;'>_____________,</span> de acuerdo a las
+                siguientes definiciones:</span></p>
+        <p
+            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
+            <span>&nbsp;</span></p>
+        <p
+            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
+            <strong><em><span>S&Eacute;PTIMA:&nbsp;</span></em></strong><span>En
+                su art&iacute;culo 1&ordm; la Ley otorga por una sola vez, una bonificaci&oacute;n por retiro voluntario, de
+                cargo municipal, que ser&aacute; equivalente a un mes de remuneraci&oacute;n imponible por cada a&ntilde;o de
+                servicio y fracci&oacute;n superior a seis meses prestados en establecimientos de salud p&uacute;blicos,
+                municipales o corporaciones de salud municipal, con un m&aacute;ximo de diez meses. Las funcionarias o los
+                funcionarios tendr&aacute;n derecho a un mes adicional de bonificaci&oacute;n por retiro voluntario.</span></p>
+        <p
+            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
+            <span>&nbsp;</span></p>
+        <p
+            style='margin-top:0cm;margin-right:0cm;margin-bottom:10.0pt;margin-left:0cm;line-height:115%;text-align:justify;'>
+            <strong><em><span style='line-height:115%;'>OCTAVA:&nbsp;</span></em></strong><span
+                style='line-height:115%;'>El Ministerio de Salud, de acuerdo a los recursos susceptibles de
+                destinar para efecto del adelanto del aporte estatal, asign&oacute; la suma <span style='background:yellow;'>de
+                    <strong>$".number_format($totalConvenio,0,",",".")." (".$totalConvenioLetras.")</strong></span>, de acuerdo a lo solicitado por la
+                Comuna mediante <span style='background:yellow;'>__________________________________________________, de fecha
+                    _______ del a&ntilde;o ____,</span> que corresponde exactamente a la n&oacute;mina de funcionarios que han
+                cumplido todos los requisitos del Art&iacute;culo 1&ordm; de la Ley:</span></p>
+        <div align='center'
+            style='margin-top:0cm;margin-right:0cm;margin-bottom:10.0pt;margin-left:0cm;line-height:115%;'>
+            <table style='border-collapse:collapse;border: 1pt solid;'>
+                <tbody>
+                    <tr>
+                        <td style='width: 200.9pt;border: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <strong><span>NOMINA DE FUNCIONARIOS&nbsp;</span></strong></p>
+                        </td>
+                        <td
+                            style='width: 114.7pt;border-top: 1pt solid;border-right: 1pt solid;border-bottom: 1pt solid;border-image: initial;border-left: none;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <strong><span>RUT</span></strong></p>
+                        </td>
+                        <td
+                            style='width: 125.9pt;border-top: 1pt solid;border-right: 1pt solid;border-bottom: 1pt solid;border-image: initial;border-left: none;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <strong><span>BONIFICACI&Oacute;N ART. N&ordm;1</span></strong></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td
+                            style='width: 200.9pt;border-right: 1pt solid;border-bottom: 1pt solid;border-left: 1pt solid;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:  normal;text-align:justify;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                        <td
+                            style='width: 114.7pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                        <td
+                            style='width: 125.9pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td
+                            style='width: 200.9pt;border-right: 1pt solid;border-bottom: 1pt solid;border-left: 1pt solid;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:  normal;text-align:justify;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                        <td
+                            style='width: 114.7pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                        <td
+                            style='width: 125.9pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td
+                            style='width: 200.9pt;border-right: 1pt solid;border-bottom: 1pt solid;border-left: 1pt solid;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:  normal;text-align:justify;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                        <td
+                            style='width: 114.7pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                        <td
+                            style='width: 125.9pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td
+                            style='width: 200.9pt;border-right: 1pt solid;border-bottom: 1pt solid;border-left: 1pt solid;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:  normal;text-align:justify;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                        <td
+                            style='width: 114.7pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                        <td
+                            style='width: 125.9pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td
+                            style='width: 200.9pt;border-right: 1pt solid;border-bottom: 1pt solid;border-left: 1pt solid;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:  normal;text-align:justify;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                        <td
+                            style='width: 114.7pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                        <td
+                            style='width: 125.9pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td
+                            style='width: 200.9pt;border-right: 1pt solid;border-bottom: 1pt solid;border-left: 1pt solid;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:  normal;text-align:justify;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                        <td
+                            style='width: 114.7pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                        <td
+                            style='width: 125.9pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td
+                            style='width: 200.9pt;border-right: 1pt solid;border-bottom: 1pt solid;border-left: 1pt solid;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:  normal;text-align:justify;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                        <td
+                            style='width: 114.7pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                        <td
+                            style='width: 125.9pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td
+                            style='width: 200.9pt;border-right: 1pt solid;border-bottom: 1pt solid;border-left: 1pt solid;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:right;'>
+                                <strong><span>&nbsp;</span></strong></p>
+                        </td>
+                        <td
+                            style='width: 114.7pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:right;'>
+                                <strong><span>TOTAL:</span></strong></p>
+                        </td>
+                        <td
+                            style='width: 125.9pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <strong><span>$&nbsp;</span></strong></p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <p
+            style='margin-top:0cm;margin-right:0cm;margin-bottom:10.0pt;margin-left:0cm;line-height:115%;text-align:justify;'>
+            <span style='line-height:115%;'>&nbsp;</span></p>
+        <p
+            style='margin-top:0cm;margin-right:0cm;margin-bottom:10.0pt;margin-left:0cm;line-height:115%;text-align:justify;'>
+            <strong><em><span style='line-height:115%;background:yellow;'>NOVENA:</span></em></strong><span
+                style='line-height:115%;background:yellow;'>&nbsp;La suma se&ntilde;alada como adelanto del
+                aporte estatal en raz&oacute;n de&nbsp;</span><strong><span
+                    style='line-height:115%;background:yellow;'>$".number_format($totalConvenio,0,",",".")."
+                    (".$totalConvenioLetras.")</span></strong><span
+                style='line-height:115%;background:yellow;'>,</span><strong><span
+                    style='line-height:115%;background:yellow;'>&nbsp;</span></strong><span
+                style='line-height:115%;background:yellow;'>ser&aacute; devuelta por la entidad administradora en
+                un plazo de ".$totalQuotas." meses, en <strong>".$totalQuotasText."</strong>. El monto de los recursos a rebajar
+                ser&aacute; de hasta el 3% de aporte estatal mensual, no pudiendo exceder de ".$totalQuotas." meses el plazo para
+                la devoluci&oacute;n total. La primera rebaja del aporte estatal se har&aacute; efectiva a contar del mes
+                siguiente al de la entrega del anticipo que consta en las cl&aacute;usulas s&eacute;ptima y octava.</span><span
+                style='line-height:115%;'>&nbsp;</span></p>
+        <p
+            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
+            <strong><em><span>D&Eacute;CIMA:</span></em></strong><span>&nbsp;En
+                su art&iacute;culo 7&ordm;<strong>&nbsp;</strong>y de cargo fiscal, la Ley N&ordm;20.919 otorga al personal que,
+                acogi&eacute;ndose a la bonificaci&oacute;n por retiro voluntario del art&iacute;culo 1&ordm;, tenga a la fecha
+                de la renuncia voluntaria una antig&uuml;edad m&iacute;nima de diez a&ntilde;os continuos de servicio en
+                establecimientos de salud p&uacute;blicos, municipales o corporaciones de salud municipal, un incremento de la
+                referida bonificaci&oacute;n, equivalente a diez meses y medio adicionales de la misma remuneraci&oacute;n que
+                sirvi&oacute; de base de c&aacute;lculo de dicha bonificaci&oacute;n, para jornadas de 44 hrs. semanales. El
+                personal que desempe&ntilde;e funciones en m&aacute;s de un establecimiento, s&oacute;lo podr&aacute;
+                incrementar la bonificaci&oacute;n una sola vez y hasta por un m&aacute;ximo de 44 hrs. Este incremento se
+                pagar&aacute; por la entidad administradora, en la misma oportunidad en que se pague la bonificaci&oacute;n por
+                retiro voluntario. No ser&aacute; imponible ni constituir&aacute; renta para ning&uacute;n efecto legal y, en
+                consecuencia, no estar&aacute; afecto a descuento alguno.</span><span>&nbsp;Este
+                incremento corresponde exactamente a la n&oacute;mina de funcionarios que han cumplido todos los requisitos del
+                Art&iacute;culo 7&ordm; de la Ley</span><span>:&nbsp;</span></p>
+        <p
+            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
+            <span>&nbsp;</span></p>
+        <p
+            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
+            <span>&nbsp;</span></p>
+        <div align='center'
+            style='margin-top:0cm;margin-right:0cm;margin-bottom:10.0pt;margin-left:0cm;line-height:115%;'>
+            <table style='border-collapse:collapse;'>
+                <tbody>
+                    <tr>
+                        <td style='width: 200.9pt;border: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <strong><span>NOMINA DE FUNCIONARIOS&nbsp;</span></strong></p>
+                        </td>
+                        <td
+                            style='width: 114.7pt;border-top: 1pt solid;border-right: 1pt solid;border-bottom: 1pt solid;border-image: initial;border-left: none;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <strong><span>RUT</span></strong></p>
+                        </td>
+                        <td
+                            style='width: 125.9pt;border-top: 1pt solid;border-right: 1pt solid;border-bottom: 1pt solid;border-image: initial;border-left: none;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <strong><span>BONIFICACI&Oacute;N ART. N&ordm;7</span></strong></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td
+                            style='width: 200.9pt;border-right: 1pt solid;border-bottom: 1pt solid;border-left: 1pt solid;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:  normal;text-align:justify;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                        <td
+                            style='width: 114.7pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                        <td
+                            style='width: 125.9pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td
+                            style='width: 200.9pt;border-right: 1pt solid;border-bottom: 1pt solid;border-left: 1pt solid;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:  normal;text-align:justify;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                        <td
+                            style='width: 114.7pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                        <td
+                            style='width: 125.9pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td
+                            style='width: 200.9pt;border-right: 1pt solid;border-bottom: 1pt solid;border-left: 1pt solid;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:  normal;text-align:justify;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                        <td
+                            style='width: 114.7pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                        <td
+                            style='width: 125.9pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td
+                            style='width: 200.9pt;border-right: 1pt solid;border-bottom: 1pt solid;border-left: 1pt solid;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:  normal;text-align:justify;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                        <td
+                            style='width: 114.7pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                        <td
+                            style='width: 125.9pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td
+                            style='width: 200.9pt;border-right: 1pt solid;border-bottom: 1pt solid;border-left: 1pt solid;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:  normal;text-align:justify;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                        <td
+                            style='width: 114.7pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                        <td
+                            style='width: 125.9pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td
+                            style='width: 200.9pt;border-right: 1pt solid;border-bottom: 1pt solid;border-left: 1pt solid;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:  normal;text-align:justify;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                        <td
+                            style='width: 114.7pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                        <td
+                            style='width: 125.9pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td
+                            style='width: 200.9pt;border-right: 1pt solid;border-bottom: 1pt solid;border-left: 1pt solid;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:  normal;text-align:justify;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                        <td
+                            style='width: 114.7pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                        <td
+                            style='width: 125.9pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td
+                            style='width: 200.9pt;border-right: 1pt solid;border-bottom: 1pt solid;border-left: 1pt solid;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:right;'>
+                                <strong><span>&nbsp;</span></strong></p>
+                        </td>
+                        <td
+                            style='width: 114.7pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:right;'>
+                                <strong><span>TOTAL:</span></strong></p>
+                        </td>
+                        <td
+                            style='width: 125.9pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <strong><span>$ 0</span></strong></p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <p
+            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
+            <span>&nbsp;</span></p>
+        <p
+            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
+            <strong><em><span>&nbsp;</span></em></strong></p>
+        <p
+            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
+            <strong><em><span>D&Eacute;CIMO PRIMERA:&nbsp;</span></em></strong><span
+            >La Ley N&ordm;20.919, en su art&iacute;culo 8&ordm;, se&ntilde;ala que el personal que
+                acogi&eacute;ndose a la bonificaci&oacute;n por retiro voluntario del art&iacute;culo 1&ordm; tenga a la fecha
+                de renuncia voluntaria una antig&uuml;edad m&iacute;nima de diez a&ntilde;os continuos de servicio en
+                establecimientos de salud p&uacute;blicos, municipales o corporaciones de salud municipal, tendr&aacute; derecho
+                a recibir un bono adicional, de cargo fiscal, que ascender&aacute; a los montos que se indican, siempre que se
+                desempe&ntilde;e en jornada de 44 hrs. semanales o m&aacute;s. El personal que desempe&ntilde;e funciones en
+                m&aacute;s de un establecimiento s&oacute;lo podr&aacute; acceder a un bono adicional, especificado en UF de
+                acuerdo al par&aacute;metro estableciendo en relaci&oacute;n a la remuneraci&oacute;n bruta total mensual. Este
+                incremento se pagar&aacute; por la entidad administradora, en la misma oportunidad en que se pague la
+                bonificaci&oacute;n por retiro voluntario. No ser&aacute; imponible ni constituir&aacute; renta para
+                ning&uacute;n efecto legal y, en consecuencia, no estar&aacute; afecto a descuento alguno.&nbsp;</span><span
+            >Este incremento corresponde exactamente a la n&oacute;mina de funcionarios que han
+                cumplido todos los requisitos del Art&iacute;culo 8&ordm; de la Ley</span><span>:</span>
+        </p>
+        <p
+            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
+            <span>&nbsp;</span></p>
+        <p
+            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
+            <span>&nbsp;</span></p>
+        <div align='center'
+            style='margin-top:0cm;margin-right:0cm;margin-bottom:10.0pt;margin-left:0cm;line-height:115%;'>
+            <table style='border-collapse:collapse;'>
+                <tbody>
+                    <tr>
+                        <td style='width: 200.9pt;border: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <strong><span>NOMINA DE FUNCIONARIOS&nbsp;</span></strong></p>
+                        </td>
+                        <td
+                            style='width: 114.7pt;border-top: 1pt solid;border-right: 1pt solid;border-bottom: 1pt solid;border-image: initial;border-left: none;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <strong><span>RUT</span></strong></p>
+                        </td>
+                        <td
+                            style='width: 125.9pt;border-top: 1pt solid;border-right: 1pt solid;border-bottom: 1pt solid;border-image: initial;border-left: none;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <strong><span>BONIFICACI&Oacute;N ART. N&ordm;8</span></strong></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td
+                            style='width: 200.9pt;border-right: 1pt solid;border-bottom: 1pt solid;border-left: 1pt solid;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:  normal;text-align:justify;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                        <td
+                            style='width: 114.7pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                        <td
+                            style='width: 125.9pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td
+                            style='width: 200.9pt;border-right: 1pt solid;border-bottom: 1pt solid;border-left: 1pt solid;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:  normal;text-align:justify;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                        <td
+                            style='width: 114.7pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                        <td
+                            style='width: 125.9pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td
+                            style='width: 200.9pt;border-right: 1pt solid;border-bottom: 1pt solid;border-left: 1pt solid;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:  normal;text-align:justify;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                        <td
+                            style='width: 114.7pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                        <td
+                            style='width: 125.9pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td
+                            style='width: 200.9pt;border-right: 1pt solid;border-bottom: 1pt solid;border-left: 1pt solid;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:  normal;text-align:justify;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                        <td
+                            style='width: 114.7pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                        <td
+                            style='width: 125.9pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td
+                            style='width: 200.9pt;border-right: 1pt solid;border-bottom: 1pt solid;border-left: 1pt solid;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:  normal;text-align:justify;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                        <td
+                            style='width: 114.7pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                        <td
+                            style='width: 125.9pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td
+                            style='width: 200.9pt;border-right: 1pt solid;border-bottom: 1pt solid;border-left: 1pt solid;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:  normal;text-align:justify;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                        <td
+                            style='width: 114.7pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                        <td
+                            style='width: 125.9pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td
+                            style='width: 200.9pt;border-right: 1pt solid;border-bottom: 1pt solid;border-left: 1pt solid;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:  normal;text-align:justify;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                        <td
+                            style='width: 114.7pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                        <td
+                            style='width: 125.9pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td
+                            style='width: 200.9pt;border-right: 1pt solid;border-bottom: 1pt solid;border-left: 1pt solid;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:right;'>
+                                <strong><span>&nbsp;</span></strong></p>
+                        </td>
+                        <td
+                            style='width: 114.7pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:right;'>
+                                <strong><span>TOTAL:</span></strong></p>
+                        </td>
+                        <td
+                            style='width: 125.9pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <strong><span>$ 0</span></strong></p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <p
+            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
+            <span>&nbsp;</span></p>
+        <p
+            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
+            <strong><em><span>&nbsp;</span></em></strong></p>
+        <p
+            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
+            <strong><em><span>D&Eacute;CIMO SEGUNDA:&nbsp;</span></em></strong><em><span
+                >La Ley N&ordm;20.919, en su art&iacute;culo 9&ordm;&nbsp;</span></em><span
+            >establece que el personal beneficiado del incremento establecido en la cl&aacute;usula
+                quinta, en relaci&oacute;n con el art&iacute;culo 7&ordm; de la Ley, tendr&aacute; derecho a un bono
+                complementario, de cargo fiscal, si la suma del referido incremento y el bono adicional de art&iacute;culo
+                8&ordm; fuere inferior a 395 UF. El bono complementario ascender&aacute; a una cantidad que le permita alcanzar
+                las mencionadas 395 UF, calculadas a la fecha de renuncia voluntaria. Lo anterior para jornadas de 44 hrs.
+                semanales. El personal que desempe&ntilde;e funciones en m&aacute;s de un establecimiento s&oacute;lo
+                podr&aacute; acceder al bono complementario, una sola vez y hasta por un m&aacute;ximo de 44 hrs. este bono
+                tendr&aacute; las mismas caracter&iacute;sticas y se pagar&aacute; por la entidad administradora, en la misma
+                oportunidad que el incremento del art&iacute;culo 7&ordm;. Este incremento corresponde exactamente a la
+                n&oacute;mina de funcionarios que han cumplido todos los requisitos del Art&iacute;culo 9&ordm; de la
+                Ley:</span></p>
+        <p
+            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
+            <span>&nbsp;</span></p>
+        <div align='center'
+            style='margin-top:0cm;margin-right:0cm;margin-bottom:10.0pt;margin-left:0cm;line-height:115%;'>
+            <table style='border-collapse:collapse;'>
+                <tbody>
+                    <tr>
+                        <td style='width: 200.9pt;border: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <strong><span>NOMINA DE FUNCIONARIOS&nbsp;</span></strong></p>
+                        </td>
+                        <td
+                            style='width: 114.7pt;border-top: 1pt solid;border-right: 1pt solid;border-bottom: 1pt solid;border-image: initial;border-left: none;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <strong><span>RUT</span></strong></p>
+                        </td>
+                        <td
+                            style='width: 125.9pt;border-top: 1pt solid;border-right: 1pt solid;border-bottom: 1pt solid;border-image: initial;border-left: none;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <strong><span>BONIFICACI&Oacute;N ART. N&ordm;9</span></strong></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td
+                            style='width: 200.9pt;border-right: 1pt solid;border-bottom: 1pt solid;border-left: 1pt solid;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:  normal;text-align:justify;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                        <td
+                            style='width: 114.7pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                        <td
+                            style='width: 125.9pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td
+                            style='width: 200.9pt;border-right: 1pt solid;border-bottom: 1pt solid;border-left: 1pt solid;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:  normal;text-align:justify;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                        <td
+                            style='width: 114.7pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                        <td
+                            style='width: 125.9pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td
+                            style='width: 200.9pt;border-right: 1pt solid;border-bottom: 1pt solid;border-left: 1pt solid;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:  normal;text-align:justify;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                        <td
+                            style='width: 114.7pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                        <td
+                            style='width: 125.9pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td
+                            style='width: 200.9pt;border-right: 1pt solid;border-bottom: 1pt solid;border-left: 1pt solid;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:  normal;text-align:justify;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                        <td
+                            style='width: 114.7pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                        <td
+                            style='width: 125.9pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td
+                            style='width: 200.9pt;border-right: 1pt solid;border-bottom: 1pt solid;border-left: 1pt solid;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:  normal;text-align:justify;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                        <td
+                            style='width: 114.7pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                        <td
+                            style='width: 125.9pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td
+                            style='width: 200.9pt;border-right: 1pt solid;border-bottom: 1pt solid;border-left: 1pt solid;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:  normal;text-align:justify;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                        <td
+                            style='width: 114.7pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                        <td
+                            style='width: 125.9pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td
+                            style='width: 200.9pt;border-right: 1pt solid;border-bottom: 1pt solid;border-left: 1pt solid;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:  normal;text-align:justify;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                        <td
+                            style='width: 114.7pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                        <td
+                            style='width: 125.9pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td
+                            style='width: 200.9pt;border-right: 1pt solid;border-bottom: 1pt solid;border-left: 1pt solid;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:right;'>
+                                <strong><span>&nbsp;</span></strong></p>
+                        </td>
+                        <td
+                            style='width: 114.7pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:right;'>
+                                <strong><span>TOTAL:</span></strong></p>
+                        </td>
+                        <td
+                            style='width: 125.9pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <strong><span>$&nbsp;</span></strong></p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <p
+            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
+            <span>&nbsp;</span></p>
+        <p
+            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
+            <span>&nbsp;</span></p>
+        <p
+            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
+            <strong><em><span>&nbsp;</span></em></strong></p>
+        <p
+            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
+            <strong><em><span>&nbsp;</span></em></strong></p>
+        <p
+            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
+            <strong><em><span>&nbsp;</span></em></strong></p>
+        <p
+            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
+            <strong><em><span>&nbsp;</span></em></strong></p>
+        <p
+            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
+            <strong><em><span>D&Eacute;CIMO TERCERA:&nbsp;</span></em></strong><span
+            >La <strong>&ldquo;MUNICIPALIDAD&rdquo;</strong></span><span
+            >,<strong>&nbsp;</strong>efectuar&aacute; el pago del incentivo que corresponda a cada
+                uno de los trabajadores que se&ntilde;ala el presente convenio, en una sola cuota, una vez que est&eacute;
+                totalmente tramitado el acto administrativo que disponga el cese de funciones. El t&eacute;rmino de la
+                relaci&oacute;n laboral se producir&aacute; cuando el empleador pague la totalidad de los beneficios detallados
+                en la siguiente n&oacute;mina, de lo que se dejar&aacute; constancia, en la forma se&ntilde;alada en la
+                cl&aacute;usula d&eacute;cimo cuarta.</span></p>
+        <p
+            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
+            <span>&nbsp;</span></p>
+        <div align='center'
+            style='margin-top:0cm;margin-right:0cm;margin-bottom:10.0pt;margin-left:0cm;line-height:115%;'>
+            <table style='border-collapse:collapse;border: 1pt solid;'>
+                <tbody>
+                    <tr>
+                        <td style='width: 200.9pt;border: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <strong><span>NOMINA DE FUNCIONARIOS&nbsp;</span></strong></p>
+                        </td>
+                        <td
+                            style='width: 114.7pt;border-top: 1pt solid;border-right: 1pt solid;border-bottom: 1pt solid;border-image: initial;border-left: none;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <strong><span>RUT</span></strong></p>
+                        </td>
+                        <td
+                            style='width: 125.9pt;border-top: 1pt solid;border-right: 1pt solid;border-bottom: 1pt solid;border-image: initial;border-left: none;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <strong><span>TOTAL BONIFICACIONES</span></strong></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td
+                            style='width: 200.9pt;border-right: 1pt solid;border-bottom: 1pt solid;border-left: 1pt solid;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:  normal;text-align:justify;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                        <td
+                            style='width: 114.7pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                        <td
+                            style='width: 125.9pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td
+                            style='width: 200.9pt;border-right: 1pt solid;border-bottom: 1pt solid;border-left: 1pt solid;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:  normal;text-align:justify;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                        <td
+                            style='width: 114.7pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                        <td
+                            style='width: 125.9pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td
+                            style='width: 200.9pt;border-right: 1pt solid;border-bottom: 1pt solid;border-left: 1pt solid;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:  normal;text-align:justify;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                        <td
+                            style='width: 114.7pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                        <td
+                            style='width: 125.9pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td
+                            style='width: 200.9pt;border-right: 1pt solid;border-bottom: 1pt solid;border-left: 1pt solid;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:  normal;text-align:justify;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                        <td
+                            style='width: 114.7pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                        <td
+                            style='width: 125.9pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td
+                            style='width: 200.9pt;border-right: 1pt solid;border-bottom: 1pt solid;border-left: 1pt solid;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:  normal;text-align:justify;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                        <td
+                            style='width: 114.7pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                        <td
+                            style='width: 125.9pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td
+                            style='width: 200.9pt;border-right: 1pt solid;border-bottom: 1pt solid;border-left: 1pt solid;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:  normal;text-align:justify;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                        <td
+                            style='width: 114.7pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                        <td
+                            style='width: 125.9pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td
+                            style='width: 200.9pt;border-right: 1pt solid;border-bottom: 1pt solid;border-left: 1pt solid;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:  normal;text-align:justify;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                        <td
+                            style='width: 114.7pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                        <td
+                            style='width: 125.9pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <span>&nbsp;</span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td
+                            style='width: 200.9pt;border-right: 1pt solid;border-bottom: 1pt solid;border-left: 1pt solid;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:right;'>
+                                <strong><span>&nbsp;</span></strong></p>
+                        </td>
+                        <td
+                            style='width: 114.7pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:right;'>
+                                <strong><span>TOTAL:</span></strong></p>
+                        </td>
+                        <td
+                            style='width: 125.9pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                                <strong><span>$ total de todas las tablas anteriores</span></strong></p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <p
+            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
+            <strong><em><span>&nbsp;</span></em></strong></p>
+        <p
+            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
+            <strong><em><span>&nbsp;</span></em></strong></p>
+        <p
+            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
+            <strong><em><span>D&Eacute;CIMO &nbsp;CUARTA:&nbsp;</span></em></strong><span
+            >El convenio entrar&aacute; en vigencia a contar de la total tramitaci&oacute;n de la
+                resoluci&oacute;n del Ministerio de Salud, visada por el Ministerio de Hacienda, que lo apruebe, hasta la fecha
+                de la &uacute;ltima rebaja, conforme al plazo establecido en la cl&aacute;usula octava.&nbsp;</span></p>
+        <p
+            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
+            <span>&nbsp;</span></p>
+        <p
+            style='margin-top:0cm;margin-right:0cm;margin-bottom:10.0pt;margin-left:0cm;line-height:115%;text-align:justify;'>
+            <strong><em><span style='line-height:115%;'>D&Eacute;CIMO QUINTA:&nbsp;</span></em></strong><span
+                style='line-height:115%;'>La personer&iacute;a de D. <span
+                    style='background:yellow;'>".$director."</span>, para representar el Servicio de Salud de
+                Tarapac&aacute;,</span><span style='line-height:115%;'>&nbsp;</span><span
+                style='line-height:115%;'>consta en el <span
+                    style='background:yellow;'>".$directorDecreto."</span>.</span><span
+                style='line-height:115%;'>&nbsp;La representaci&oacute;n de D. <span
+                    style='background:yellow;'>".$alcalde."</span> para actuar en nombre de la <span
+                    style='background:yellow;'>".ucfirst(mb_strtolower($ilustre))."</span> Municipalidad de <span
+                    style='background:yellow;'>".$comuna."</span>, emana del <span
+                    style='background:yellow;'>".$alcaldeDecreto."</span> de la <span style='background:yellow;'>".ucfirst(mb_strtolower($ilustre))."</span>
+                Municipalidad de <span style='background:yellow;'>".$comuna."</span>.</span></p>
+        <p
+            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
+            <strong><em><span style='color:black;'>D&Eacute;CIMO SEXTA</span></em></strong><strong><em><span
+                    >:&nbsp;</span></em></strong><span>El presente Convenio
+                se firma digitalmente en un ejemplar, quedando este en poder del <strong>&ldquo;SERVICIO&rdquo;</strong>. Por su
+                parte, la <strong>&ldquo;MUNICIPALIDAD&rdquo;</strong>, contraparte de este convenio y la Divisi&oacute;n de
+                Atenci&oacute;n Primaria del Ministerio de Salud e involucrados, recibir&aacute;n el documento original
+                digitalizado.</span></p>
+        <p
+            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
+            <span>&nbsp;</span></p>
+        <p
+            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
+            <span>&nbsp;</span></p>
+        <p
+            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
+            <span>&nbsp;</span></p>
+        <p
+            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
+            <span>&nbsp;</span></p>
+        <p
+            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
+            <span>&nbsp;</span></p>
+        <p
+            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
+            <span>&nbsp;</span></p>
+        <p
+            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
+            <span>&nbsp;</span></p>
+        <p
+            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
+            <span>&nbsp;</span></p>
+        <p
+            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+            <strong><span style='background:yellow;'>D. ".$alcalde."</span></strong></p>
+        <p
+            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+            <strong><span style='background:yellow;'>".$alcaldeApelativoFirma."</span></strong></p>
+        <p
+            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+            <strong><span style='background:yellow;'>".$ilustre." ".$municipalidad."</span></strong></p>";
+
+            $document->content = preg_replace('/font-size.+?;/', "", $document->content);
+
+            $types = Type::whereNull('partes_exclusive')->pluck('name','id');
+            return view('documents.create', compact('document', 'types'));
+        }
+
         // SE OBTIENEN DATOS RELACIONADOS AL CONVENIO
     	$agreement->load('previous.Program','Program','Commune.municipality','agreement_amounts.program_component','agreement_quotas','director_signer.user', 'stages', 'referrer');
-        // $stage          = Stage::where('agreement_id', $agreement->id)->first();
-    	// $amounts        = AgreementAmount::with('program_component')->Where('agreement_id', $id)->get();
-        // $quotas         = AgreementQuota::Where('agreement_id', $id)->get();
-        // $municipality   = Municipality::where('commune_id', $agreements->Commune->id)->first();
-        $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+        
 
         // AL MOMENTO DE PREVISUALIZAR EL DOCUMENTO INICIA AUTOMATICAMENTE LA PRIMERA ETAPA
         if($agreement->stages->isEmpty()){
@@ -2779,6 +4107,7 @@ $document->content .= "
             &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
             &nbsp;2.-</strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; El convenio que se aprueba en virtud de este acto
         administrativo, se pasa a transcribir:</p>";
+        return $agreement->document->content;
         $document->content .= Str::beforeLast($agreement->document->content, 'Presupuesto vigente del Servicio de Salud');
         $document->content .= 'Presupuesto vigente del Servicio de Salud Tarapacá año '.$agreement->period.'”.</strong></p>';
         //footer
