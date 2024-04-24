@@ -958,16 +958,15 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
 
     Route::prefix('attendance')->name('attendance.')->middleware(['auth', 'must.change.password'])->group(function () {
         Route::get('/upload', AttendanceUpload::class)->name('upload');
-        Route::get('/{user}/{date}', [AttendanceController::class, 'show'])->name('show');
         Route::get('/', [AttendanceController::class, 'index'])->name('index');
         Route::get('/import', [AttendanceController::class, 'import'])->name('import');
         Route::post('/store', [AttendanceController::class, 'store'])->name('store');
-
         Route::get('no-records', NoAttendanceRecordIndex::class)->name('no-records.index');
         Route::get('no-records-mgr', NoAttendanceRecordMgr::class)->name('no-records.mgr');
         Route::get('no-records/{no_attendance_record_id}', [NoAttendanceRecordController::class,'show'])->name('no-records.show');
         Route::get('no-records/{noAttendanceRecord}/confirmation', NoAttendanceRecordConfirmation::class)->name('no-records.confirmation');
         Route::get('reasons', ReasonMgr::class)->name('reason.mgr');
+        Route::get('/{user}/{date}', [AttendanceController::class, 'show'])->name('show');
     });
 
 
