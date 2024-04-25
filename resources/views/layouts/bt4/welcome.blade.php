@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="Sitio web del Servicio de Salud Tarapacá">
+    <meta name="description" content="Sitio web del {{ env('APP_SS') }}">
     <meta name="author" content="Servicio de Salud Tarapacá">
     <title>{{ config('app.name') }}</title>
 
@@ -70,7 +70,7 @@
                 </tr>
             </table>
         </div>
-        <p class="text-muted mt-4">Bienvenido a la intranet del Servicio de Salud de Tarapacá.</p>
+        <p class="text-muted mt-4">Bienvenido a la intranet del {{ env('APP_SS') }}.</p>
         @include('layouts.bt4.partials.errors')
         @include('layouts.bt4.partials.flash_message')
 
@@ -161,83 +161,84 @@
                 </div>
             </div>
 
-
-            <div class="card shadow-sm">
-                <div class="card-header">
-                    <h4 class="my-0 font-weight-normal text-center">Resultado exámenes</h4>
-                </div>
-                <div class="card-body">
-
-                    <ul class="list-unstyled mt-3 mb-4 text-center">
-                        <p>Si perteneces a la región de Tarapacá, puedes revisar
-                            el resultado de tu exámen de Covid-19 utilizando tu
-                            clave única del estado, haciendo click en el botón
-                            de abajo.</p>
-
-                    </ul>
-                    <div class="row justify-content-center">
-                        <a class="btn btn-primary" href="https://esmeralda.saludtarapaca.gob.cl">
-                            Resultado Exámenes
-                        </a>
+            @if(env('APP_SS_ID') === '1')
+                <div class="card shadow-sm">
+                    <div class="card-header">
+                        <h4 class="my-0 font-weight-normal text-center">Resultado exámenes</h4>
                     </div>
+                    <div class="card-body">
+
+                        <ul class="list-unstyled mt-3 mb-4 text-center">
+                            <p>Si perteneces a la región de Tarapacá, puedes revisar
+                                el resultado de tu exámen de Covid-19 utilizando tu
+                                clave única del estado, haciendo click en el botón
+                                de abajo.</p>
+
+                        </ul>
+                        <div class="row justify-content-center">
+                            <a class="btn btn-primary" href="https://esmeralda.saludtarapaca.gob.cl">
+                                Resultado Exámenes
+                            </a>
+                        </div>
 
 
-                    <hr>
+                        <hr>
 
-                    <h6 class="mb-3">Otros links de interés</h6>
-                    
-                    <a class="card-link" href="{{ route('rrhh.users.directory') }}">
-                        <i class="fas fa-fw fa-address-book"></i>
-                        Directorio telefónico
-                    </a>
+                        <h6 class="mb-3">Otros links de interés</h6>
+                        
+                        <a class="card-link" href="{{ route('rrhh.users.directory') }}">
+                            <i class="fas fa-fw fa-address-book"></i>
+                            Directorio telefónico
+                        </a>
 
-                    <br>
-                    
-                    <a class="card-link" href="{{ route('indicators.index') }}">
-                        <i class="fas fa-fw fa-chart-pie"></i>
-                        Metas sanitarias
-                    </a>
+                        <br>
+                        
+                        <a class="card-link" href="{{ route('indicators.index') }}">
+                            <i class="fas fa-fw fa-chart-pie"></i>
+                            Metas sanitarias
+                        </a>
 
-                    <br>
+                        <br>
 
-                    <a class="card-link" href="{{ route('invoice.welcome') }}">
-                        <i class="fas fa-fw fa-file-invoice"></i>
-                        Honorarios (subir boletas)
-                    </a>
+                        <a class="card-link" href="{{ route('invoice.welcome') }}">
+                            <i class="fas fa-fw fa-file-invoice"></i>
+                            Honorarios (subir boletas)
+                        </a>
 
+                    </div>
                 </div>
-            </div>
 
 
 
-            <div class="card shadow-sm">
-                <div class="card-header">
-                    <h4 class="my-0 font-weight-normal">
-                        <a href="https://portal.saludtarapaca.gob.cl" class="btn btn-secondary btn-block">Portal de sistemas</a>
-                    </h4>
+                <div class="card shadow-sm">
+                    <div class="card-header">
+                        <h4 class="my-0 font-weight-normal">
+                            <a href="https://portal.saludtarapaca.gob.cl" class="btn btn-secondary btn-block">Portal de sistemas</a>
+                        </h4>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <a href="https://i.saludtarapaca.gob.cl" class="btn btn-info btn-block disabled">iOnline</a>
+                        </li>
+                        <li class="list-group-item">
+                            <a href="{{ route('login') }}/external" class="btn btn-outline-info btn-block">Externos</a>
+                        </li>
+                        <li class="list-group-item">
+                            <a href="https://neo.saludtarapaca.gob.cl" class="btn btn-outline-info btn-block">NeoSalud</a>
+                        </li>
+                        <li class="list-group-item">
+                            <a href="https://uni.saludtarapaca.gob.cl" class="btn btn-outline-info btn-block">UniSalud</a>
+                        </li>
+                        <li class="list-group-item">
+                            <a href="https://esmeralda.saludtarapaca.gob.cl" class="btn btn-outline-info btn-block">Esmeralda</a>
+                        </li>
+                        <li class="list-group-item">
+                            <a href="https://siremx.saludtarapaca.gob.cl" class="btn btn-outline-info btn-block">Siremx</a>
+                            <!--a href="{{ route('claveunica.autenticar') }}/L3NpcmVteC9sb2dpbmN1" class="btn btn-outline-info btn-block">Siremx</a-->
+                        </li>
+                    </ul>
                 </div>
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item">
-                        <a href="https://i.saludtarapaca.gob.cl" class="btn btn-info btn-block disabled">iOnline</a>
-                    </li>
-                    <li class="list-group-item">
-                        <a href="{{ route('login') }}/external" class="btn btn-outline-info btn-block">Externos</a>
-                    </li>
-                    <li class="list-group-item">
-                        <a href="https://neo.saludtarapaca.gob.cl" class="btn btn-outline-info btn-block">NeoSalud</a>
-                    </li>
-                    <li class="list-group-item">
-                        <a href="https://uni.saludtarapaca.gob.cl" class="btn btn-outline-info btn-block">UniSalud</a>
-                    </li>
-                    <li class="list-group-item">
-                        <a href="https://esmeralda.saludtarapaca.gob.cl" class="btn btn-outline-info btn-block">Esmeralda</a>
-                    </li>
-                    <li class="list-group-item">
-                        <a href="https://siremx.saludtarapaca.gob.cl" class="btn btn-outline-info btn-block">Siremx</a>
-                        <!--a href="{{ route('claveunica.autenticar') }}/L3NpcmVteC9sb2dpbmN1" class="btn btn-outline-info btn-block">Siremx</a-->
-                    </li>
-                </ul>
-            </div>
+            @endif
 
         </div>
 
