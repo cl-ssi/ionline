@@ -16,7 +16,7 @@
                     'selected_id'   => 'user_responsible_id',
                     'required'      => 'required',
                     'emit_name'     => 'searchedUser',
-                    'user'          => $meetingToEdit->userResponsible ?? null
+                    'user'          => $trainingToEdit->userTraining ?? null
                 ])
             @endif
             @error('searchedUser') <span class="text-danger error small">{{ $message }}</span> @enderror

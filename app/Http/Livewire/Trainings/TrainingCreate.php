@@ -49,6 +49,7 @@ class TrainingCreate extends Component
     public $form, $bootstrap;
 
     /* Training to edit */
+    public $trainingToEdit;
     public $training;
     public $idTraining;
 
@@ -233,7 +234,14 @@ class TrainingCreate extends Component
             $this->selectedEstament             = $this->training->estament_id;
             $this->degree                       = $this->training->degree;
             $this->selectedContractualCondition = $this->training->contractual_condition_id;
-            $this->email                        = $this->training->email;
+            $this->selectedContractualCondition = $this->training->contractual_condition_id;
+            $this->organizationalUnitUser       = $this->searchedUser->organizationalUnit->name;
+            $this->establishmentUser            = $this->searchedUser->organizationalUnit->establishment->name;
+
+            // 'organizational_unit_id'    => (auth()->guard('external')->check() == true) ? null : $this->searchedUser->organizational_unit_id,
+            //         'establishment_id'          => (auth()->guard('external')->check() == true) ? null : $this->searchedUser->organizationalUnit->establishment_id,
+            
+                    $this->email                        = $this->training->email;
             $this->telephone                    = $this->training->telephone;
             $this->selectedStrategicAxis        = $this->training->strategic_axes_id;
             $this->objective                    = $this->training->objective;
