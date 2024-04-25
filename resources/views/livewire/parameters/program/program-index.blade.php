@@ -26,6 +26,7 @@
                 <tr>
                     <th class="text-center">ID</th>
                     <th>Nombre</th>
+                    <th>Establecimiento</th>
                     <th>Alias</th>
                     <th>Alias finanzas</th>
                     <th>Financiamiento</th>
@@ -53,6 +54,7 @@
                         </a>
                     </td>
                     <td>{{ $program->name }}</td>
+                    <td>{{ $program->establishment?->alias }}</td>
                     <td>{{ $program->alias }}</td>
                     <td>{{ $program->alias_finance }}</td>
                     <td>{{ $program->financial_type }}</td>
