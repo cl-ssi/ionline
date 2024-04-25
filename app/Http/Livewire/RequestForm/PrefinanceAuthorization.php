@@ -10,6 +10,7 @@ use App\Rrhh\Authority;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\RequestFormSignNotification;
+use App\Models\Parameters\Parameter;
 use App\Models\Parameters\Program;
 
 class PrefinanceAuthorization extends Component
@@ -38,7 +39,13 @@ class PrefinanceAuthorization extends Component
       $this->comment            = '';
       $this->codigo             = '';
       $this->lstBudgetItem      = BudgetItem::all();
-      $this->lstProgram         = Program::with('Subtitle')->orderBy('alias_finance')->get();
+      $estab_hetg = Parameter::get('establishment', 'HETG');
+      if(auth()->user()->establishment_id == $estab_hetg){
+        $this->lstProgram = Program::with('Subtitle')->where('establishment_id', $estab_hetg)->orderBy('alias_finance')->get();
+      }else{
+        $this->lstProgram = Program::with('Subtitle')->orderBy('alias_finance')->get();
+      }
+      // $this->lstProgram         = Program::with('Subtitle')->orderBy('alias_finance')->get();
       $this->organizationalUnit = auth()->user()->organizationalUnit->name;
       $this->userAuthority      = auth()->user()->getFullNameAttribute();
       $this->position           = auth()->user()->position;

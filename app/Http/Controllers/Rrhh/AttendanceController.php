@@ -7,6 +7,7 @@ use App\Models\Establishment;
 use App\Models\Rrhh\Attendance;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class AttendanceController extends Controller
 {
@@ -15,11 +16,18 @@ class AttendanceController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(): View
     {
-        $attendances = Attendance::all();
+        // $attendances = Attendance::where();
+        $periods = Attendance::selectRaw("DATE_FORMAT(date, '%Y-%m') as period")
+            ->where('user_id', auth()->id())
+            ->groupBy('period')
+            ->orderBy('period', 'desc')
+            ->get()->toArray();
 
-        return view('rrhh.attendances.index', compact('attendances'));
+            // dd($periods);
+
+        return view('rrhh.attendances.index', compact('periods'));
     }
 
     /**
@@ -27,7 +35,7 @@ class AttendanceController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function import()
+    public function import(): View
     {
         return view('rrhh.attendances.import');
     }
@@ -38,25 +46,25 @@ class AttendanceController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request): View
     {
         $attendances = $request->file('attendances_file')->get();
-        $separator = "\r\n";
-        $line = strtok($attendances, $separator);
+        $separator   = "\r\n";
+        $line        = strtok($attendances, $separator);
 
         //echo "<pre>";
-        while ($line !== false) {
+        while ( $line !== false ) {
             # do something with $line
-            $line = strtok( $separator );
+            $line = strtok($separator);
             #001,01,01,0016865601,0000000000,07,44,01,01,21,00,00,00,00,00,0000000000,0000000000, 0.00, 0.00
-            $array = explode(',',$line);
+            $array = explode(',', $line);
             //print_r($array);
-            if(count($array) >= 2){
+            if ( count($array) >= 2 ) {
                 Attendance::create([
-                    'user_id' => intval($array[3]),
-                    'type' => $array[2],
-                    'timestamp' => '20'.$array[9].'-'.$array[7].'-'.$array[8].' '.$array[5].':'.$array[6],
-                    'clock_id' => 1
+                    'user_id'   => intval($array[3]),
+                    'type'      => $array[2],
+                    'timestamp' => '20' . $array[9] . '-' . $array[7] . '-' . $array[8] . ' ' . $array[5] . ':' . $array[6],
+                    'clock_id'  => 1
                 ]);
             }
 
@@ -74,11 +82,11 @@ class AttendanceController extends Controller
      */
     public function show($user, $date)
     {
-        $attendance = Attendance::where('user_id', $user)->where('date', $date)->firstOrFail();
+        $attendance    = Attendance::where('user_id', $user)->where('date', $date)->firstOrFail();
         $establishment = Establishment::find(38);
 
         return Pdf::loadView('rrhh.attendances.show', [
-            'attendance' => $attendance,
+            'attendance'    => $attendance,
             'establishment' => $establishment
         ])->stream('download.pdf');
     }

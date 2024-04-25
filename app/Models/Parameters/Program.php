@@ -2,6 +2,7 @@
 
 namespace App\Models\Parameters;
 
+use App\Models\Establishment;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -31,12 +32,18 @@ class Program extends Model implements Auditable
         'end_date',
         'description',
         'is_program',
+        'establishment_id',
     ];
 
     protected $dates = [
         'start_date',
         'end_date',
     ];
+
+    public function establishment()
+    {
+        return $this->belongsTo(Establishment::class);
+    }
 
     public function Subtitle()
     {

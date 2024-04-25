@@ -16,7 +16,7 @@
                     'selected_id'   => 'user_responsible_id',
                     'required'      => 'required',
                     'emit_name'     => 'searchedUser',
-                    'user'          => $meetingToEdit->userResponsible ?? null
+                    'user'          => $trainingToEdit->userTraining ?? null
                 ])
             @endif
             @error('searchedUser') <span class="text-danger error small">{{ $message }}</span> @enderror
@@ -362,7 +362,7 @@
                 <i class="fas fa-save"></i> Guardar
             </button>
 
-            @if($form == 'edit' && !$training->approvals)
+            @if($form == 'edit' && $training->approvals->count() == 0)
                 <button wire:click="sentToApproval" wire:loading.attr="disabled" wire:target="file" class="btn btn-success {{ ($bootstrap == 'v4') ? 'float-right mr-3' : 'float-end me-3' }}" type="button">
                     <i class="fas fa-paper-plane"></i> Enviar Capacitación
                 </button>

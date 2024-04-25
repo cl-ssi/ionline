@@ -18,10 +18,15 @@
         </a>
     </li>
     <li class="nav-item">
+        <a class="nav-link {{ active('rrhh.attendance.index') }}" 
+            href="{{ route('rrhh.attendance.index') }}#">
+            <i class="bi bi-clock"></i> Mi Asistencia
+        </a>
+    </li>
+    <li class="nav-item">
         <a class="nav-link {{ active('rrhh.users.password.edit') }}" 
             href="{{ route('rrhh.users.password.edit') }}#">
             <i class="bi bi-key"></i> Cambio de clave
         </a>
     </li>
-
 </ul>

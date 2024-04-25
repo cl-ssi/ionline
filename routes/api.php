@@ -8,6 +8,8 @@ use App\Http\Controllers\TestController;
 use App\Http\Controllers\ServiceRequests\ServiceRequestController;
 use App\Http\Controllers\Pharmacies\ReceivingController;
 use App\Http\Controllers\Pharmacies\DispatchController;
+use App\Http\Controllers\WebserviceController;
+use App\Http\Controllers\Rrhh\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,6 +38,10 @@ Route::prefix('pharmacies')->name('pharmacies.')->middleware('client')->group(fu
     Route::post('/dispatchingProductsWs', [DispatchController::class, 'dispatchingProductsWs']);
 });
 
-
 // Route::post('/post-request-inputs',[TestController::class,'storeRequestInputs']);
 // Route::get('/get-request-inputs',[TestController::class,'storeRequestInputs']);
+
+// API routes with Basic Authentication
+Route::middleware('auth.basic')->group(function () {
+    Route::post('/pending-json-to-insert', [WebserviceController::class, 'pendingJsonToInsert']);
+});

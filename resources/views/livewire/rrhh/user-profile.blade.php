@@ -57,12 +57,14 @@
     <div class="row g-2 mb-3">
         <fieldset class="form-group col-md-12">
             <label for="forOrganizationalUnit">Establecimiento / Unidad Organizacional</label>
-            @livewire('select-organizational-unit', [
+            <p>{{ $user->establishment->name }} - {{ $user->organizationalUnit->name }}</p>
+            {{-- @livewire('select-organizational-unit', [
                 'establishment_id' => optional($user->organizationalUnit)->establishment_id,
                 'organizational_unit_id' => optional($user->organizationalUnit)->id,
                 'select_id' => 'organizationalunit',
                 'aditional_ous' => [53],
-            ])
+                'emitToListener' => 'setOrganizationalUnit',
+            ]) --}}
         </fieldset>
     </div>
 

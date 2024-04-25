@@ -208,300 +208,300 @@
     <div class="alert alert-info" role="alert">
         <b>Estimado Usuario</b>: Gestión de aprobaciones no disponible para este Viático
     </div>
-@endif
-
-<div class="row">
-    <div class="col">
-        <div class="table-responsive">
-            <table class="table table-sm table-bordered small">
-                <tbody>
-                    <tr>
-                        @foreach($allowance->AllowanceSigns as $sign)
-                            <td class="table-active text-center">
-                                <strong>{{ $sign->organizationalUnit->name }}</strong><br>
-                            </td>
-                        @endforeach
-                        @if(count($allowance->approvals) > 0)
-                            @foreach($allowance->approvals as $approval)
+@else
+    <div class="row">
+        <div class="col">
+            <div class="table-responsive">
+                <table class="table table-sm table-bordered small">
+                    <tbody>
+                        <tr>
+                            @foreach($allowance->AllowanceSigns as $sign)
                                 <td class="table-active text-center">
-                                    <strong>{{ ($approval->sentToOu) ? $approval->sentToOu->name : $approval->sentToUser->FullName }}</strong><br>
+                                    <strong>{{ $sign->organizationalUnit->name }}</strong><br>
                                 </td>
                             @endforeach
-                        @endif
-                    </tr>
-                    <tr>
-                        @foreach($allowance->AllowanceSigns as $allowanceSign)
-                        <td class="text-center">
-                            {{--
-                            @if($subrogants && $allowanceSign->status == 'pending')
-                                <div class="alert alert-info" role="alert">
-                                    <b>Estimado Usuario</b>: Según el calendario de autoridades <b>{{ $allowance->userAllowance->TinnyName }}</b> es director(a) {{ $allowance->userAllowance->organizationalUnit->establishment->name }}
-                                </div>
+                            @if(count($allowance->approvals) > 0)
+                                @foreach($allowance->approvals as $approval)
+                                    <td class="table-active text-center">
+                                        <strong>{{ ($approval->sentToOu) ? $approval->sentToOu->name : $approval->sentToUser->FullName }}</strong><br>
+                                    </td>
+                                @endforeach
                             @endif
-                            
-                            @if($allowanceSign->status == 'pending' &&
-                                $allowanceSign->event_type == 'sirh' &&
-                                auth()->user()->can('Allowances: sirh'))
-                                <form method="POST" class="form-horizontal" action="{{ route('allowances.sign.update', [$allowanceSign, 'status' => 'accepted']) }}">
-                                    @csrf
-                                    @method('PUT')
-
-                                    <!-- CAMPO PARA ELEGIR SUBRROGANTE DE DIRECCION -->
-                                    @if($subrogants)
-                                        <fieldset class="form-group">
-                                            <label for="for_gender" >Quien aprueba viátido de director?</label>
-                                            <select name="approver" id="for_approver" class="form-control" required>
-                                                <option value="">Seleccione...</option>                                           
-                                                @foreach($subrogants as $subrogant)
-                                                    <option value="{{ $subrogant->subrogant_id}}">{{ $subrogant->subrogant->FullName }}</option>
-                                                @endforeach
-                                            </select>
-                                        </fieldset>
-                                    @endif
-                                    
-                                    <button type="submit" class="btn btn-success btn-sm ml-2 mt-2"
-                                        onclick="return confirm('¿Está seguro que desea Aceptar la solicitud?')"
-                                        title="Aceptar">
-                                        <i class="fas fa-check-circle"></i> Aceptar
-                                    </button>
-
-                                    <a class="btn btn-danger btn-sm mt-2" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-                                        <i class="fas fa-times-circle"></i> Rechazar
-                                    </a>
-                                </form>    
-
-                                <div class="row">
-                                    <div class="col-md">
-                                        <div class="collapse" id="collapseExample">
-                                            <form method="POST" class="form-horizontal" action="{{ route('allowances.sign.update', [$allowanceSign, 'status' => 'rejected', $allowance]) }}">
-                                                @csrf
-                                                @method('PUT')
-                                                <div class="form-group">
-                                                    <label class="float-left" for="for_observation">Motivo Rechazo</label>
-                                                    <textarea class="form-control" id="for_observation" name="observation" rows="2"></textarea>
-                                                </div>
-                                                    
-                                                <button type="submit" class="btn btn-danger btn-sm float-right"
-                                                    onclick="return confirm('¿Está seguro que desea Rechazar la solicitud?')"
-                                                    title="Rechazar">
-                                                    <i class="fas fa-times-circle"></i> Guardar</a>
-                                                </button>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            @endif
-                            --}}
-
-                            {{-- dd(auth()->user()->organizationalUnit->establishment_id, App\Models\Parameters\Parameter::get('establishment', 'SSTarapaca')) --}}
-
-                            @if($allowanceSign->status == 'pending' &&
-                                $allowanceSign->event_type == 'sirh' &&
-                                auth()->user()->can('Allowances: sirh') && 
-                                $allowanceSign->allowance->establishment_id == App\Models\Parameters\Parameter::get('establishment', 'SSTarapaca')  &&
-                                auth()->user()->organizationalUnit->establishment_id == App\Models\Parameters\Parameter::get('establishment', 'SSTarapaca'))
+                        </tr>
+                        <tr>
+                            @foreach($allowance->AllowanceSigns as $allowanceSign)
+                            <td class="text-center">
+                                {{--
                                 @if($subrogants && $allowanceSign->status == 'pending')
                                     <div class="alert alert-info" role="alert">
                                         <b>Estimado Usuario</b>: Según el calendario de autoridades <b>{{ $allowance->userAllowance->TinnyName }}</b> es director(a) {{ $allowance->userAllowance->organizationalUnit->establishment->name }}
                                     </div>
                                 @endif
                                 
-                                <form method="POST" class="form-horizontal" action="{{ route('allowances.sign.update', [$allowanceSign, 'status' => 'accepted']) }}">
-                                    @csrf
-                                    @method('PUT')
+                                @if($allowanceSign->status == 'pending' &&
+                                    $allowanceSign->event_type == 'sirh' &&
+                                    auth()->user()->can('Allowances: sirh'))
+                                    <form method="POST" class="form-horizontal" action="{{ route('allowances.sign.update', [$allowanceSign, 'status' => 'accepted']) }}">
+                                        @csrf
+                                        @method('PUT')
 
-                                    <!-- CAMPO PARA ELEGIR SUBRROGANTE DE DIRECCION -->
-                                    @if($subrogants)
-                                        <fieldset class="form-group">
-                                            <label for="for_gender" >Quien aprueba viátido de director?</label>
-                                            <select name="approver" id="for_approver" class="form-control" required>
-                                                <option value="">Seleccione...</option>                                           
-                                                @foreach($subrogants as $subrogant)
-                                                    <option value="{{ $subrogant->subrogant_id}}">{{ $subrogant->subrogant->FullName }}</option>
-                                                @endforeach
-                                            </select>
-                                        </fieldset>
-                                    @endif
-                                    
-                                    <button type="submit" class="btn btn-success btn-sm ml-2 mt-2"
-                                        onclick="return confirm('¿Está seguro que desea Aceptar la solicitud?')"
-                                        title="Aceptar">
-                                        <i class="fas fa-check-circle"></i> Aceptar
-                                    </button>
+                                        <!-- CAMPO PARA ELEGIR SUBRROGANTE DE DIRECCION -->
+                                        @if($subrogants)
+                                            <fieldset class="form-group">
+                                                <label for="for_gender" >Quien aprueba viátido de director?</label>
+                                                <select name="approver" id="for_approver" class="form-control" required>
+                                                    <option value="">Seleccione...</option>                                           
+                                                    @foreach($subrogants as $subrogant)
+                                                        <option value="{{ $subrogant->subrogant_id}}">{{ $subrogant->subrogant->FullName }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </fieldset>
+                                        @endif
+                                        
+                                        <button type="submit" class="btn btn-success btn-sm ml-2 mt-2"
+                                            onclick="return confirm('¿Está seguro que desea Aceptar la solicitud?')"
+                                            title="Aceptar">
+                                            <i class="fas fa-check-circle"></i> Aceptar
+                                        </button>
 
-                                    <a class="btn btn-danger btn-sm mt-2" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-                                        <i class="fas fa-times-circle"></i> Rechazar
-                                    </a>
-                                </form>    
+                                        <a class="btn btn-danger btn-sm mt-2" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                            <i class="fas fa-times-circle"></i> Rechazar
+                                        </a>
+                                    </form>    
 
-                                <div class="row">
-                                    <div class="col-md">
-                                        <div class="collapse" id="collapseExample">
-                                            <form method="POST" class="form-horizontal" action="{{ route('allowances.sign.update', [$allowanceSign, 'status' => 'rejected', $allowance]) }}">
-                                                @csrf
-                                                @method('PUT')
-                                                <div class="form-group">
-                                                    <label class="float-left" for="for_observation">Motivo Rechazo</label>
-                                                    <textarea class="form-control" id="for_observation" name="observation" rows="2"></textarea>
-                                                </div>
-                                                    
-                                                <button type="submit" class="btn btn-danger btn-sm float-right"
-                                                    onclick="return confirm('¿Está seguro que desea Rechazar la solicitud?')"
-                                                    title="Rechazar">
-                                                    <i class="fas fa-times-circle"></i> Guardar</a>
-                                                </button>
-                                            </form>
+                                    <div class="row">
+                                        <div class="col-md">
+                                            <div class="collapse" id="collapseExample">
+                                                <form method="POST" class="form-horizontal" action="{{ route('allowances.sign.update', [$allowanceSign, 'status' => 'rejected', $allowance]) }}">
+                                                    @csrf
+                                                    @method('PUT')
+                                                    <div class="form-group">
+                                                        <label class="float-left" for="for_observation">Motivo Rechazo</label>
+                                                        <textarea class="form-control" id="for_observation" name="observation" rows="2"></textarea>
+                                                    </div>
+                                                        
+                                                    <button type="submit" class="btn btn-danger btn-sm float-right"
+                                                        onclick="return confirm('¿Está seguro que desea Rechazar la solicitud?')"
+                                                        title="Rechazar">
+                                                        <i class="fas fa-times-circle"></i> Guardar</a>
+                                                    </button>
+                                                </form>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            @endif
-                            <!-- SIRH HAH -->
-                            @if($allowanceSign->status == 'pending' &&
-                                $allowanceSign->event_type == 'sirh' &&
-                                auth()->user()->can('Allowances: sirh') && 
-                                $allowanceSign->allowance->establishment_id == App\Models\Parameters\Parameter::get('establishment', 'HospitalAltoHospicio')  &&
-                                auth()->user()->organizationalUnit->establishment_id == App\Models\Parameters\Parameter::get('establishment', 'HospitalAltoHospicio')) 
-                                <form method="POST" class="form-horizontal" action="{{ route('allowances.sign.update', [$allowanceSign, 'status' => 'accepted']) }}">
-                                    @csrf
-                                    @method('PUT')
+                                @endif
+                                --}}
+
+                                {{-- dd(auth()->user()->organizationalUnit->establishment_id, App\Models\Parameters\Parameter::get('establishment', 'SSTarapaca')) --}}
+
+                                @if($allowanceSign->status == 'pending' &&
+                                    $allowanceSign->event_type == 'sirh' &&
+                                    auth()->user()->can('Allowances: sirh') && 
+                                    $allowanceSign->allowance->establishment_id == App\Models\Parameters\Parameter::get('establishment', 'SSTarapaca')  &&
+                                    auth()->user()->organizationalUnit->establishment_id == App\Models\Parameters\Parameter::get('establishment', 'SSTarapaca'))
+                                    @if($subrogants && $allowanceSign->status == 'pending')
+                                        <div class="alert alert-info" role="alert">
+                                            <b>Estimado Usuario</b>: Según el calendario de autoridades <b>{{ $allowance->userAllowance->TinnyName }}</b> es director(a) {{ $allowance->userAllowance->organizationalUnit->establishment->name }}
+                                        </div>
+                                    @endif
                                     
-                                    <button type="submit" class="btn btn-success btn-sm ml-2 mt-2"
-                                        onclick="return confirm('¿Está seguro que desea Aceptar la solicitud?')"
-                                        title="Aceptar">
-                                        <i class="fas fa-check-circle"></i> Aceptar
-                                    </button>
+                                    <form method="POST" class="form-horizontal" action="{{ route('allowances.sign.update', [$allowanceSign, 'status' => 'accepted']) }}">
+                                        @csrf
+                                        @method('PUT')
 
-                                    <a class="btn btn-danger btn-sm mt-2" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-                                        <i class="fas fa-times-circle"></i> Rechazar
-                                    </a>
-                                </form>    
+                                        <!-- CAMPO PARA ELEGIR SUBRROGANTE DE DIRECCION -->
+                                        @if($subrogants)
+                                            <fieldset class="form-group">
+                                                <label for="for_gender" >Quien aprueba viátido de director?</label>
+                                                <select name="approver" id="for_approver" class="form-control" required>
+                                                    <option value="">Seleccione...</option>                                           
+                                                    @foreach($subrogants as $subrogant)
+                                                        <option value="{{ $subrogant->subrogant_id}}">{{ $subrogant->subrogant->FullName }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </fieldset>
+                                        @endif
+                                        
+                                        <button type="submit" class="btn btn-success btn-sm ml-2 mt-2"
+                                            onclick="return confirm('¿Está seguro que desea Aceptar la solicitud?')"
+                                            title="Aceptar">
+                                            <i class="fas fa-check-circle"></i> Aceptar
+                                        </button>
 
-                                <div class="row">
-                                    <div class="col-md">
-                                        <div class="collapse" id="collapseExample">
-                                            <form method="POST" class="form-horizontal" action="{{ route('allowances.sign.update', [$allowanceSign, 'status' => 'rejected', $allowance]) }}">
-                                                @csrf
-                                                @method('PUT')
-                                                <div class="form-group">
-                                                    <label class="float-left" for="for_observation">Motivo Rechazo</label>
-                                                    <textarea class="form-control" id="for_observation" name="observation" rows="2"></textarea>
-                                                </div>
-                                                    
-                                                <button type="submit" class="btn btn-danger btn-sm float-right"
-                                                    onclick="return confirm('¿Está seguro que desea Rechazar la solicitud?')"
-                                                    title="Rechazar">
-                                                    <i class="fas fa-times-circle"></i> Guardar</a>
-                                                </button>
-                                            </form>
+                                        <a class="btn btn-danger btn-sm mt-2" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                            <i class="fas fa-times-circle"></i> Rechazar
+                                        </a>
+                                    </form>    
+
+                                    <div class="row">
+                                        <div class="col-md">
+                                            <div class="collapse" id="collapseExample">
+                                                <form method="POST" class="form-horizontal" action="{{ route('allowances.sign.update', [$allowanceSign, 'status' => 'rejected', $allowance]) }}">
+                                                    @csrf
+                                                    @method('PUT')
+                                                    <div class="form-group">
+                                                        <label class="float-left" for="for_observation">Motivo Rechazo</label>
+                                                        <textarea class="form-control" id="for_observation" name="observation" rows="2"></textarea>
+                                                    </div>
+                                                        
+                                                    <button type="submit" class="btn btn-danger btn-sm float-right"
+                                                        onclick="return confirm('¿Está seguro que desea Rechazar la solicitud?')"
+                                                        title="Rechazar">
+                                                        <i class="fas fa-times-circle"></i> Guardar</a>
+                                                    </button>
+                                                </form>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                @endif
+                                <!-- SIRH HAH -->
+                                @if($allowanceSign->status == 'pending' &&
+                                    $allowanceSign->event_type == 'sirh' &&
+                                    auth()->user()->can('Allowances: sirh') && 
+                                    $allowanceSign->allowance->establishment_id == App\Models\Parameters\Parameter::get('establishment', 'HospitalAltoHospicio')  &&
+                                    auth()->user()->organizationalUnit->establishment_id == App\Models\Parameters\Parameter::get('establishment', 'HospitalAltoHospicio')) 
+                                    <form method="POST" class="form-horizontal" action="{{ route('allowances.sign.update', [$allowanceSign, 'status' => 'accepted']) }}">
+                                        @csrf
+                                        @method('PUT')
+                                        
+                                        <button type="submit" class="btn btn-success btn-sm ml-2 mt-2"
+                                            onclick="return confirm('¿Está seguro que desea Aceptar la solicitud?')"
+                                            title="Aceptar">
+                                            <i class="fas fa-check-circle"></i> Aceptar
+                                        </button>
 
-                                <br>
-                            @endif
+                                        <a class="btn btn-danger btn-sm mt-2" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                            <i class="fas fa-times-circle"></i> Rechazar
+                                        </a>
+                                    </form>    
 
-                            <!-- CONTABILIDAD HAH -->
-                            @if($allowanceSign->status == 'pending' &&
-                                $allowanceSign->event_type == 'contabilidad' &&
-                                auth()->user()->can('Allowances: contabilidad') && 
-                                $allowanceSign->allowance->establishment_id == App\Models\Parameters\Parameter::get('establishment', 'HospitalAltoHospicio')  &&
-                                auth()->user()->organizationalUnit->establishment_id == App\Models\Parameters\Parameter::get('establishment', 'HospitalAltoHospicio')) 
-                                <form method="POST" class="form-horizontal" action="{{ route('allowances.sign.update', [$allowanceSign, 'status' => 'accepted']) }}">
-                                    @csrf
-                                    @method('PUT')
-                                    
-                                    <button type="submit" class="btn btn-success btn-sm ml-2 mt-2"
-                                        onclick="return confirm('¿Está seguro que desea Aceptar la solicitud?')"
-                                        title="Aceptar">
-                                        <i class="fas fa-check-circle"></i> Aceptar
-                                    </button>
-
-                                    <a class="btn btn-danger btn-sm mt-2" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-                                        <i class="fas fa-times-circle"></i> Rechazar
-                                    </a>
-                                </form>   
-
-                                <div class="row">
-                                    <div class="col-md">
-                                        <div class="collapse" id="collapseExample">
-                                            <form method="POST" class="form-horizontal" action="{{ route('allowances.sign.update', [$allowanceSign, 'status' => 'rejected', $allowance]) }}">
-                                                @csrf
-                                                @method('PUT')
-                                                <div class="form-group">
-                                                    <label class="float-left" for="for_observation">Motivo Rechazo</label>
-                                                    <textarea class="form-control" id="for_observation" name="observation" rows="2"></textarea>
-                                                </div>
-                                                    
-                                                <button type="submit" class="btn btn-danger btn-sm float-right"
-                                                    onclick="return confirm('¿Está seguro que desea Rechazar la solicitud?')"
-                                                    title="Rechazar">
-                                                    <i class="fas fa-times-circle"></i> Guardar</a>
-                                                </button>
-                                            </form>
+                                    <div class="row">
+                                        <div class="col-md">
+                                            <div class="collapse" id="collapseExample">
+                                                <form method="POST" class="form-horizontal" action="{{ route('allowances.sign.update', [$allowanceSign, 'status' => 'rejected', $allowance]) }}">
+                                                    @csrf
+                                                    @method('PUT')
+                                                    <div class="form-group">
+                                                        <label class="float-left" for="for_observation">Motivo Rechazo</label>
+                                                        <textarea class="form-control" id="for_observation" name="observation" rows="2"></textarea>
+                                                    </div>
+                                                        
+                                                    <button type="submit" class="btn btn-danger btn-sm float-right"
+                                                        onclick="return confirm('¿Está seguro que desea Rechazar la solicitud?')"
+                                                        title="Rechazar">
+                                                        <i class="fas fa-times-circle"></i> Guardar</a>
+                                                    </button>
+                                                </form>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            @endif
 
-                            <!-- INFO DE ESTADOS -->
-                            @if($allowanceSign->status == 'pending')
-                                <i class="fas fa-clock"></i> Pendiente de Aprobación.<br>
-                            @endif
-                            @if($allowanceSign->status == 'accepted')
-                                <span style="color: green;">
-                                    <i class="fas fa-check-circle"></i> {{ $allowanceSign->StatusValue }}
-                                </span> <br>
-                                <i class="fas fa-user"></i> {{ $allowanceSign->user->FullName }}<br>
-                                <i class="fas fa-calendar-alt"></i> {{ $allowanceSign->date_sign->format('d-m-Y H:i:s') }}<br>
-                            @endif
-                            @if($allowanceSign->status == 'rejected')
-                                <span style="color: Tomato;">
-                                    <i class="fas fa-times-circle"></i> {{ $allowanceSign->StatusValue }} 
-                                </span><br>
-                                <i class="fas fa-user"></i> {{ $allowanceSign->user->FullName }}<br>
-                                <i class="fas fa-calendar-alt"></i> {{ $allowanceSign->date_sign->format('d-m-Y H:i:s') }}<br>
-                                <hr>
-                                {{ $allowanceSign->observation }}<br>
-                            @endif
-                            @if($allowanceSign->status == NULL)
-                                <i class="fas fa-ban"></i> No disponible para Aprobación.<br>
-                            @endif
-                        </td>
-                        @endforeach
+                                    <br>
+                                @endif
 
-                        @if(count($allowance->approvals) > 0)
-                            @foreach($allowance->approvals as $approval)
-                                <td class="text-center">
-                                    @if($approval->StatusInWords == "Pendiente")
-                                        <span>
-                                            <i class="fas fa-check-circle"></i> {{ $approval->StatusInWords }}
-                                        </span> <br>
-                                    @endif
-                                    @if($approval->StatusInWords == "Aprobado")
-                                        <span style="color: green;">
-                                            <i class="fas fa-check-circle"></i> {{ $approval->StatusInWords }}
-                                        </span> <br>
-                                        <i class="fas fa-user"></i> {{ $approval->approver->FullName }}<br>
-                                        <i class="fas fa-calendar-alt"></i> {{ $approval->approver_at->format('d-m-Y H:i:s') }}<br>
-                                    @endif
-                                    @if($approval->StatusInWords == "Rechazado")
-                                        <span style="color: tomato;">
-                                            <i class="fas fa-check-circle"></i> {{ $approval->StatusInWords }}
-                                        </span> <br>
-                                        <i class="fas fa-user"></i> {{ $approval->approver->FullName }}<br>
-                                        <i class="fas fa-calendar-alt"></i> {{ $approval->approver_at->format('d-m-Y H:i:s') }}
-                                        <hr>
-                                        {{ $approval->approver_observation }}
-                                    @endif
-                                </td>
+                                <!-- CONTABILIDAD HAH -->
+                                @if($allowanceSign->status == 'pending' &&
+                                    $allowanceSign->event_type == 'contabilidad' &&
+                                    auth()->user()->can('Allowances: contabilidad') && 
+                                    $allowanceSign->allowance->establishment_id == App\Models\Parameters\Parameter::get('establishment', 'HospitalAltoHospicio')  &&
+                                    auth()->user()->organizationalUnit->establishment_id == App\Models\Parameters\Parameter::get('establishment', 'HospitalAltoHospicio')) 
+                                    <form method="POST" class="form-horizontal" action="{{ route('allowances.sign.update', [$allowanceSign, 'status' => 'accepted']) }}">
+                                        @csrf
+                                        @method('PUT')
+                                        
+                                        <button type="submit" class="btn btn-success btn-sm ml-2 mt-2"
+                                            onclick="return confirm('¿Está seguro que desea Aceptar la solicitud?')"
+                                            title="Aceptar">
+                                            <i class="fas fa-check-circle"></i> Aceptar
+                                        </button>
+
+                                        <a class="btn btn-danger btn-sm mt-2" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                            <i class="fas fa-times-circle"></i> Rechazar
+                                        </a>
+                                    </form>   
+
+                                    <div class="row">
+                                        <div class="col-md">
+                                            <div class="collapse" id="collapseExample">
+                                                <form method="POST" class="form-horizontal" action="{{ route('allowances.sign.update', [$allowanceSign, 'status' => 'rejected', $allowance]) }}">
+                                                    @csrf
+                                                    @method('PUT')
+                                                    <div class="form-group">
+                                                        <label class="float-left" for="for_observation">Motivo Rechazo</label>
+                                                        <textarea class="form-control" id="for_observation" name="observation" rows="2"></textarea>
+                                                    </div>
+                                                        
+                                                    <button type="submit" class="btn btn-danger btn-sm float-right"
+                                                        onclick="return confirm('¿Está seguro que desea Rechazar la solicitud?')"
+                                                        title="Rechazar">
+                                                        <i class="fas fa-times-circle"></i> Guardar</a>
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
+
+                                <!-- INFO DE ESTADOS -->
+                                @if($allowanceSign->status == 'pending')
+                                    <i class="fas fa-clock"></i> Pendiente de Aprobación.<br>
+                                @endif
+                                @if($allowanceSign->status == 'accepted')
+                                    <span style="color: green;">
+                                        <i class="fas fa-check-circle"></i> {{ $allowanceSign->StatusValue }}
+                                    </span> <br>
+                                    <i class="fas fa-user"></i> {{ $allowanceSign->user->FullName }}<br>
+                                    <i class="fas fa-calendar-alt"></i> {{ $allowanceSign->date_sign->format('d-m-Y H:i:s') }}<br>
+                                @endif
+                                @if($allowanceSign->status == 'rejected')
+                                    <span style="color: Tomato;">
+                                        <i class="fas fa-times-circle"></i> {{ $allowanceSign->StatusValue }} 
+                                    </span><br>
+                                    <i class="fas fa-user"></i> {{ $allowanceSign->user->FullName }}<br>
+                                    <i class="fas fa-calendar-alt"></i> {{ $allowanceSign->date_sign->format('d-m-Y H:i:s') }}<br>
+                                    <hr>
+                                    {{ $allowanceSign->observation }}<br>
+                                @endif
+                                @if($allowanceSign->status == NULL)
+                                    <i class="fas fa-ban"></i> No disponible para Aprobación.<br>
+                                @endif
+                            </td>
                             @endforeach
-                        @endif
-                    </tr>
-                </tbody>
-            </table>
+
+                            @if(count($allowance->approvals) > 0)
+                                @foreach($allowance->approvals as $approval)
+                                    <td class="text-center">
+                                        @if($approval->StatusInWords == "Pendiente")
+                                            <span>
+                                                <i class="fas fa-check-circle"></i> {{ $approval->StatusInWords }}
+                                            </span> <br>
+                                        @endif
+                                        @if($approval->StatusInWords == "Aprobado")
+                                            <span style="color: green;">
+                                                <i class="fas fa-check-circle"></i> {{ $approval->StatusInWords }}
+                                            </span> <br>
+                                            <i class="fas fa-user"></i> {{ $approval->approver->FullName }}<br>
+                                            <i class="fas fa-calendar-alt"></i> {{ $approval->approver_at->format('d-m-Y H:i:s') }}<br>
+                                        @endif
+                                        @if($approval->StatusInWords == "Rechazado")
+                                            <span style="color: tomato;">
+                                                <i class="fas fa-check-circle"></i> {{ $approval->StatusInWords }}
+                                            </span> <br>
+                                            <i class="fas fa-user"></i> {{ $approval->approver->FullName }}<br>
+                                            <i class="fas fa-calendar-alt"></i> {{ $approval->approver_at->format('d-m-Y H:i:s') }}
+                                            <hr>
+                                            {{ $approval->approver_observation }}
+                                        @endif
+                                    </td>
+                                @endforeach
+                            @endif
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
-</div>
+@endif
 
 @endsection
 

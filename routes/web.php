@@ -958,16 +958,15 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
 
     Route::prefix('attendance')->name('attendance.')->middleware(['auth', 'must.change.password'])->group(function () {
         Route::get('/upload', AttendanceUpload::class)->name('upload');
-        Route::get('/{user}/{date}', [AttendanceController::class, 'show'])->name('show');
         Route::get('/', [AttendanceController::class, 'index'])->name('index');
         Route::get('/import', [AttendanceController::class, 'import'])->name('import');
         Route::post('/store', [AttendanceController::class, 'store'])->name('store');
-
         Route::get('no-records', NoAttendanceRecordIndex::class)->name('no-records.index');
         Route::get('no-records-mgr', NoAttendanceRecordMgr::class)->name('no-records.mgr');
         Route::get('no-records/{no_attendance_record_id}', [NoAttendanceRecordController::class,'show'])->name('no-records.show');
         Route::get('no-records/{noAttendanceRecord}/confirmation', NoAttendanceRecordConfirmation::class)->name('no-records.confirmation');
         Route::get('reasons', ReasonMgr::class)->name('reason.mgr');
+        Route::get('/{user}/{date}', [AttendanceController::class, 'show'])->name('show');
     });
 
 
@@ -2450,10 +2449,13 @@ Route::prefix('meetings')->as('meetings.')->middleware(['auth', 'must.change.pas
 
 Route::prefix('trainings')->as('trainings.')->middleware(['auth', 'must.change.password'])->group(function () {
     Route::get('/', [TngTrainingController::class, 'index'])->name('index');
+    Route::get('/own_index', [TngTrainingController::class, 'own_index'])->name('own_index');
+    Route::get('/all_index', [TngTrainingController::class, 'all_index'])->name('all_index');
     Route::get('create', [TngTrainingController::class, 'create'])->name('create');
     Route::get('{training}/edit', [TngTrainingController::class, 'edit'])->name('edit');
-    Route::get('/{purchase_id}/show_approval', [TngTrainingController::class, 'show_approval'])->name('show_approval');
+    Route::get('/{training_id}/show_approval', [TngTrainingController::class, 'show_approval'])->name('show_approval');
     Route::get('/{training}/show_file', [TrainingCreate::class, 'show_file'])->name('show_file');
+    Route::get('{training}/show', [TngTrainingController::class, 'show'])->name('show');
 });
 
 
@@ -2859,6 +2861,7 @@ Route::group(['middleware' => 'auth:external'], function () {
         Route::get('/external_create', [TngTrainingController::class, 'external_create'])->name('external_create');
         Route::get('{training}/external_edit', [TngTrainingController::class, 'external_edit'])->name('external_edit');
         Route::get('/{training}/show_file', [TrainingCreate::class, 'show_file'])->name('show_file');
+        Route::get('{training}/external_show', [TngTrainingController::class, 'external_show'])->name('external_show');
     });
 });
 

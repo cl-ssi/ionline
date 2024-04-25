@@ -49,6 +49,7 @@ class TrainingCreate extends Component
     public $form, $bootstrap;
 
     /* Training to edit */
+    public $trainingToEdit;
     public $training;
     public $idTraining;
 
@@ -217,6 +218,9 @@ class TrainingCreate extends Component
         if(auth()->guard('external')->check() == true){
             return redirect()->route('trainings.external_own_index');
         }
+        else{
+            return redirect()->route('trainings.own_index');
+        }
     }
 
     // Set Training
@@ -230,7 +234,14 @@ class TrainingCreate extends Component
             $this->selectedEstament             = $this->training->estament_id;
             $this->degree                       = $this->training->degree;
             $this->selectedContractualCondition = $this->training->contractual_condition_id;
-            $this->email                        = $this->training->email;
+            $this->selectedContractualCondition = $this->training->contractual_condition_id;
+            $this->organizationalUnitUser       = $this->searchedUser->organizationalUnit->name;
+            $this->establishmentUser            = $this->searchedUser->organizationalUnit->establishment->name;
+
+            // 'organizational_unit_id'    => (auth()->guard('external')->check() == true) ? null : $this->searchedUser->organizational_unit_id,
+            //         'establishment_id'          => (auth()->guard('external')->check() == true) ? null : $this->searchedUser->organizationalUnit->establishment_id,
+            
+                    $this->email                        = $this->training->email;
             $this->telephone                    = $this->training->telephone;
             $this->selectedStrategicAxis        = $this->training->strategic_axes_id;
             $this->objective                    = $this->training->objective;
@@ -347,8 +358,50 @@ class TrainingCreate extends Component
                                                     ])
             ]);
         }
+        else{
+            $previousApprovalId = null;
 
-        // AQUÍ APPROVALS DE JEFATURAS INTERNAS
+            // AQUÍ APPROVALS DE JEFATURAS INTERNAS
+            $approval = $this->training->approvals()->create([
+                "module"                        => "Solicitud Permiso Capacitación",
+                "module_icon"                   => "fas fa-chalkboard-teacher",
+                "subject"                       => 'Solicitud Permiso Capacitación <br>'.
+                                                    'ID: '.$this->training->id,
+                "sent_to_ou_id"                 => $this->training->organizational_unit_id,
+                "document_route_name"           => "trainings.show_approval",
+                "document_route_params"         => json_encode(["training_id" => $this->training->id]),
+                "active"                        => true,
+                "previous_approval_id"          => ($external_approval) ? $external_approval->id : $previousApprovalId,
+                "callback_controller_method"    => "App\Http\Controllers\Trainings\TrainingController@approvalCallback",
+                "callback_controller_params"    => json_encode([
+                                                        'training_id' => $this->training->id,
+                                                        'process'     => null
+                                                    ])
+            ]);
+
+            $previousApprovalId = $approval->id;
+
+            if($this->training->userTrainingOu->father != null){
+                $approval = $this->training->approvals()->create([
+                    "module"                        => "Solicitud Permiso Capacitación",
+                    "module_icon"                   => "fas fa-chalkboard-teacher",
+                    "subject"                       => 'Solicitud Permiso Capacitación <br>'.
+                                                        'ID: '.$this->training->id,
+                    "sent_to_ou_id"                 => $this->training->userTrainingOu->father->id,
+                    "document_route_name"           => "trainings.show_approval",
+                    "document_route_params"         => json_encode(["training_id" => $this->training->id]),
+                    "active"                        => false,
+                    "previous_approval_id"          => $previousApprovalId,
+                    "callback_controller_method"    => "App\Http\Controllers\Trainings\TrainingController@approvalCallback",
+                    "callback_controller_params"    => json_encode([
+                                                            'training_id' => $this->training->id,
+                                                            'process'     => null
+                                                        ])
+                ]);
+
+                $previousApprovalId = $approval->id;
+            }
+        }
 
         // APPROVALS DE CAPACITACIÓN
         $external_approval = $this->training->approvals()->create([
@@ -360,7 +413,7 @@ class TrainingCreate extends Component
             "document_route_name"           => "trainings.show_approval",
             "document_route_params"         => json_encode(["training_id" => $this->training->id]),
             "active"                        => false,
-            "previous_approval_id"          => ($external_approval) ? $external_approval->id : null,
+            "previous_approval_id"          => ($external_approval) ? $external_approval->id : $previousApprovalId,
             "callback_controller_method"    => "App\Http\Controllers\Trainings\TrainingController@approvalCallback",
             "callback_controller_params"    => json_encode([
                                                     'training_id' => $this->training->id,
@@ -373,6 +426,9 @@ class TrainingCreate extends Component
 
         if(auth()->guard('external')->check() == true){
             return redirect()->route('trainings.external_own_index');
+        }
+        else{
+            return redirect()->route('trainings.own_index');
         }
     }
 }

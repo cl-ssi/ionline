@@ -26,6 +26,13 @@
                     <input type="date" class="form-control" name="end_date_search" @if($request) value="{{ $request->end_date_search }}" @endif required>
                 </div>
             </fieldset>
+
+            <fieldset class="form-group col-sm">
+                <label for="organizational_unit_id_search">Unidad Organizacional</label>
+                @livewire('search-select-organizational-unit', [
+                    'selected_id'          => 'organizational_unit_id_search'
+                ])
+            </fieldset>
         </div>
 
         <button type="submit" class="btn btn-primary float-right"> Consultar</button>
@@ -38,7 +45,14 @@
 
 <div class="row">
     <div class="col-sm">
-        <h5>1-. Total de Solicitudes por Estado</h5>
+        <h5>
+            1-. Total de Solicitudes por Estado: 
+            @if($request->organizational_unit_id_search != null) 
+                {{ App\Rrhh\OrganizationalUnit::find($request->organizational_unit_id_search)->name }}
+            @else 
+                Todas las Unidades Organizacionales 
+            @endif
+        </h5>
     </div>
 </div>
     
@@ -85,7 +99,14 @@
 
 <div class="row">
     <div class="col-sm">
-        <h5>2-. Total por Tipo de Solicitudes (Primera Solicitud o Continuidad)</h5>
+        <h5>
+            2-. Total por Tipo de Solicitudes (Primera Solicitud o Continuidad)
+            @if($request->organizational_unit_id_search != null) 
+                {{ App\Rrhh\OrganizationalUnit::find($request->organizational_unit_id_search)->name }}
+            @else 
+                Todas las Unidades Organizacionales 
+            @endif
+        </h5>
     </div>
 </div>
 

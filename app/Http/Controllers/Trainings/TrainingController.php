@@ -15,7 +15,17 @@ class TrainingController extends Controller
      */
     public function index()
     {
-        return view('trainings.index');
+        // return view('trainings.index');
+    }
+
+    public function own_index()
+    {
+        return view('trainings.own_index');
+    }
+
+    public function all_index()
+    {
+        return view('trainings.all_index');
     }
 
     // EXTERNAL INDEX
@@ -59,7 +69,18 @@ class TrainingController extends Controller
      */
     public function show(Training $training)
     {
-        //
+        return view('trainings.show', compact('training'));
+    }
+
+    public function external_show(Training $training)
+    {
+        return view('trainings.external_show', compact('training'));
+    }
+
+    public function show_approval($training_id){
+        $training = Training::find($training_id);
+
+        return view('trainings.show_approval', compact('training'));
     }
 
     /**

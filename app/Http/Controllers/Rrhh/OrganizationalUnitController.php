@@ -121,4 +121,9 @@ class OrganizationalUnitController extends Controller
 
         return redirect()->route('rrhh.organizational-units.index');
     }
+
+    public function createWs(Request $request){
+        $responseArray = ['status' => true,'msg' => "Prueba realizada con éxito."];
+        return json_encode($responseArray);
+    }
 }

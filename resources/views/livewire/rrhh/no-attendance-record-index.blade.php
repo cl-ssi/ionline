@@ -48,6 +48,19 @@
                     </select>
                 </div>
             </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label for="establishment_id">Establecimiento</label>
+                    <select
+                        class="form-select"
+                        wire:model.defer="establishment_id">
+                        <option value="">Todos</option>
+                        @foreach ($establishments as $id => $name)
+                            <option value="{{ $id }}">{{ $name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
             <div class="col-md-1">
                 <div class="form-group">
                     <label for="search">&nbsp;</label>
