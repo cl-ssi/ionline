@@ -235,13 +235,9 @@ class TrainingCreate extends Component
             $this->degree                       = $this->training->degree;
             $this->selectedContractualCondition = $this->training->contractual_condition_id;
             $this->selectedContractualCondition = $this->training->contractual_condition_id;
-            $this->organizationalUnitUser       = $this->searchedUser->organizationalUnit->name;
-            $this->establishmentUser            = $this->searchedUser->organizationalUnit->establishment->name;
-
-            // 'organizational_unit_id'    => (auth()->guard('external')->check() == true) ? null : $this->searchedUser->organizational_unit_id,
-            //         'establishment_id'          => (auth()->guard('external')->check() == true) ? null : $this->searchedUser->organizationalUnit->establishment_id,
-            
-                    $this->email                        = $this->training->email;
+            $this->organizationalUnitUser       = ($this->searchedUser->organizationalUnit) ? $this->searchedUser->organizationalUnit->name : null;
+            $this->establishmentUser            = ($this->searchedUser->organizationalUnit) ? $this->searchedUser->organizationalUnit->establishment->name : null;
+            $this->email                        = $this->training->email;
             $this->telephone                    = $this->training->telephone;
             $this->selectedStrategicAxis        = $this->training->strategic_axes_id;
             $this->objective                    = $this->training->objective;

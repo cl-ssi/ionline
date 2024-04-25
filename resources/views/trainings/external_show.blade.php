@@ -123,6 +123,37 @@
     </table>
 </div>
 
+
+<h6 class="mt-3"><i class="fas fa-check-circle"></i> Aprobaciones</h6>
+
+<div class="table-responsive">
+    <table class="table table-bordered table-sm small">
+        <thead>
+            <tr class="text-center">
+                @foreach($training->approvals as $approval)
+                    <th class="table-secondary">{{ $approval->sentToOu->name }}</th>
+                @endforeach
+            </tr>
+        </thead>
+        <thead>
+            <tr class="text-center">
+                @foreach($training->approvals as $approval)
+                    <td>
+                        {{ $approval->StatusInWords }} <br><br>
+                        @if($approval->approver) <i class="fas fa-user"></i> @endif {{ ($approval->approver) ? $approval->approver->FullName : null }}<br> 
+                        @if($approval->approver) <i class="fas fa-calendar"></i> @endif {{ ($approval->approver) ? $approval->approver_at : null }}
+                        
+                        @if($approval->approver_observation != null) 
+                            <hr>
+                            {{ $approval->approver_observation }} 
+                        @endif
+                    </td>
+                @endforeach
+            </tr>
+        </thead>
+    </table>
+</div>
+
 @endsection
 
 @section('custom_js')
