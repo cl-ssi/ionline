@@ -38,17 +38,10 @@ Route::prefix('pharmacies')->name('pharmacies.')->middleware('client')->group(fu
     Route::post('/dispatchingProductsWs', [DispatchController::class, 'dispatchingProductsWs']);
 });
 
-Route::prefix('ws')->name('ws.')->middleware('client')->group(function (){
-    Route::post('/pendingJsonToInsert', [WebserviceController::class, 'pendingJsonToInsert']);
-});
-
 // Route::post('/post-request-inputs',[TestController::class,'storeRequestInputs']);
 // Route::get('/get-request-inputs',[TestController::class,'storeRequestInputs']);
 
 // API routes with Basic Authentication
 Route::middleware('auth.basic')->group(function () {
-    // Route::get('/userinfo', function (Request $request) {
-    //     return "Puum\n";
-    // });
-    Route::get('/pending-json-to-insert', [WebserviceController::class, 'pendingJsonToInsert']);
+    Route::post('/pending-json-to-insert', [WebserviceController::class, 'pendingJsonToInsert']);
 });
