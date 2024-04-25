@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\WebService\PendingJsonToInsert;
+use Illuminate\Support\Facades\Artisan;
 
 class WebserviceController extends Controller
 {
@@ -145,7 +146,16 @@ class WebserviceController extends Controller
             return response()->json(['error' => 'Error al crear un nuevo registro: ' . $e->getMessage()], 500);
         }
 
+        // Ejecutar el comando de Artisan
+        Artisan::call('process:pending-json');
+
+        // Obtener el resultado de la ejecución del comando (opcional)
+        $output = Artisan::output();
+
+        // Devolver una respuesta al cliente
+        return response()->json(['message' => 'Registro creado en PendingJsonToInsert / Comando ejecutado con éxito: ', 'output' => $output]);
+
         // Devolver una respuesta exitosa
-        return response()->json(['message' => 'Registro creado en PendingJsonToInsert']);
+        // return response()->json(['message' => 'Registro creado en PendingJsonToInsert']);
     }
 }
