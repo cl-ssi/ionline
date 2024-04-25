@@ -23,6 +23,11 @@ class TrainingController extends Controller
         return view('trainings.own_index');
     }
 
+    public function all_index()
+    {
+        return view('trainings.all_index');
+    }
+
     // EXTERNAL INDEX
     public function external_own_index()
     {

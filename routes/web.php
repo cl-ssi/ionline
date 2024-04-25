@@ -2450,6 +2450,7 @@ Route::prefix('meetings')->as('meetings.')->middleware(['auth', 'must.change.pas
 Route::prefix('trainings')->as('trainings.')->middleware(['auth', 'must.change.password'])->group(function () {
     Route::get('/', [TngTrainingController::class, 'index'])->name('index');
     Route::get('/own_index', [TngTrainingController::class, 'own_index'])->name('own_index');
+    Route::get('/all_index', [TngTrainingController::class, 'all_index'])->name('all_index');
     Route::get('create', [TngTrainingController::class, 'create'])->name('create');
     Route::get('{training}/edit', [TngTrainingController::class, 'edit'])->name('edit');
     Route::get('/{training_id}/show_approval', [TngTrainingController::class, 'show_approval'])->name('show_approval');

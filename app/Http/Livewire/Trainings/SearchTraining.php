@@ -32,6 +32,12 @@ class SearchTraining extends Component
                     ->paginate(50)
                 ]);
             }
+            if($this->index == 'all'){
+                return view('livewire.trainings.search-training', [
+                    'trainings' => training::latest()
+                    ->paginate(50)
+                ]);
+            }
         }
 
         // return view('livewire.trainings.search-training');
