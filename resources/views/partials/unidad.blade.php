@@ -1,6 +1,6 @@
 <!-- resources/views/partials/unidad.blade.php -->
 <li>
-    {{ $unidad['descripcion'] }}
+    {{ $unidad['descripcion'] }} <span class="small text-muted">{{ $unidad['codigo'] }}</span>
     @if (count($unidad['children']) > 0)
         <ol>
             @foreach ($unidad['children'] as $child)

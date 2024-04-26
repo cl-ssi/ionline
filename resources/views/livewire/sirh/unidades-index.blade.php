@@ -1,4 +1,18 @@
 <div>
+    <style>
+        ol {
+            counter-reset: item
+        }
+
+        li {
+            display: block
+        }
+
+        li:before {
+            content: counters(item, ".") " ";
+            counter-increment: item
+        }
+    </style>
     <h3 class="mb-3">Organigrama Unidades Sirh</h3>
 
     <div class="row mb-3">
@@ -17,11 +31,10 @@
 
     <!-- resources/views/livewire/unidades-index.blade.php -->
     <div>
-        <ul>
-            @foreach ($arbol as $unidad)
-                @include('partials.unidad', ['unidad' => $unidad])
+        <ol>
+            @foreach ($arbol as $key => $unidad)
+                @include('partials.unidad', ['unidad' => $unidad, 'index' => $key . '.'])
             @endforeach
-        </ul>
+        </ol>
     </div>
-
 </div>
