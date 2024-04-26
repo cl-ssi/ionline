@@ -161,7 +161,7 @@
                 </div>
             </div>
 
-            @if(env('APP_SS_ID') === '2')
+            @if(env('APP_SS_ID') == 2)
                 <div class="card shadow-sm">
                     <div class="card-header">
                         <h4 class="my-0 font-weight-normal text-center">Resultado exámenes</h4>
