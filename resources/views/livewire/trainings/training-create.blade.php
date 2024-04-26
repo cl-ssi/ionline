@@ -38,7 +38,7 @@
             2.
         </fieldset>
 
-        <fieldset class="form-group col-12 col-md-4">
+        <fieldset class="form-group col-12 col-md-2">
             <label for="for_charges_number">Estamento</label>
             @if($bootstrap == 'v4')
                 <select name="estament_id" id="for_estament_id" class="form-control" wire:model.defer="selectedEstament" {{-- @if($jobPositionProfile) readonly @endif --}}>
@@ -53,13 +53,7 @@
                 @error('selectedEstament') <span class="text-danger error small">{{ $message }}</span> @enderror
         </fieldset>
 
-        <fieldset class="form-group col-12 col-md-3">
-            <label for="profiles">Grado</label>
-            <input type="text" class="form-control" wire:model.defer="degree" id="for_degree">
-            @error('degree') <span class="text-danger error small">{{ $message }}</span> @enderror
-        </fieldset>
-
-        <fieldset class="form-group col-12 col-md-4">
+        <fieldset class="form-group col-12 col-md-2">
             <label for="for_contractual_condition_id">Calidad Contractual</label>
             @if($bootstrap == 'v4')
                 <select name="contractual_condition_id" id="for_contractual_condition_id" class="form-control" wire:model.defer="selectedContractualCondition">
@@ -73,6 +67,33 @@
                 </select>
             @error('selectedContractualCondition') <span class="text-danger error small">{{ $message }}</span> @enderror
         </fieldset>
+
+        <fieldset class="form-group col-12 col-md-3">
+            <label for="for_law">Ley</label>
+            <div class="mt-1">
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="law" id="for_law" value="18834" wire:model="selectedLaw" {{-- $lawStateOption --}}>
+                    <label class="form-check-label" for="for_law">N° 18.834</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="law" id="for_law" value="19664" wire:model="selectedLaw" {{-- $lawStateOption --}}>
+                    <label class="form-check-label" for="for_law">N° 19.664</label>
+                </div>
+            </div>
+            @error('selectedLaw') <span class="text-danger error small">{{ $message }}</span> @enderror
+        </fieldset>
+
+        <fieldset class="form-group col-12 col-md-2">
+            <label for="profiles">Grado</label>
+            <input type="text" class="form-control" wire:model.defer="degree" id="for_degree" {{ $degreeStateInput }}>
+            @error('degree') <span class="text-danger error small">{{ $message }}</span> @enderror
+        </fieldset>
+
+        <fieldset class="form-group col-12 col-md-2">
+            <label for="for_work_hours">Horas de Desempeño</label>
+            <input type="text" class="form-control" wire:model.defer="workHours" id="for_work_hours" {{ $workHoursStateInput }}>
+            @error('workHours') <span class="text-danger error small">{{ $message }}</span> @enderror
+        </fieldset>
     </div>
 
     <div class="row g-3 mb-3">
@@ -84,11 +105,23 @@
             <label for="for_subject">Servicio/Unidad</label>
             <input class="form-control" type="text" autocomplete="off" wire:model.defer="organizationalUnitUser" {{ $disabledUserInputs }}>
         </fieldset>
-
-        <fieldset class="form-group col-12 col-md-4">
-            <label for="for_subject">Establecimiento</label>
-            <input class="form-control" type="text" autocomplete="off" wire:model.defer="establishmentUser" {{ $disabledUserInputs }}>
-        </fieldset>
+        
+        @if(auth()->guard('external')->check() == true)
+            <fieldset class="form-group col-12 col-md-4">
+                <label for="for_subject">Establecimiento</label>
+                <select name="contractual_condition_id" id="for_contractual_condition_id" class="form-control" wire:model.defer="selectedContractualCondition">
+                    <option value="">Seleccione...</option>
+                    @foreach($establishments as $establishment)
+                        <option value="{{ $establishment->id }}" >{{ $establishment->type }} {{ $establishment->name }}</option>
+                    @endforeach
+                </select>
+            </fieldset>
+        @else
+            <fieldset class="form-group col-12 col-md-4">
+                <label for="for_subject">Establecimiento</label>
+                <input class="form-control" type="text" autocomplete="off" wire:model.defer="establishmentUser" {{ $disabledUserInputs }}>
+            </fieldset>
+        @endif
     </div>
 
     <div class="row g-3 mb-5">
@@ -216,18 +249,33 @@
         <fieldset class="form-group col-12 col-md-4">
             <label for="for_objective">Modalidad de aprendizaje:</label>
             @if($bootstrap == 'v4')
-                <select id="for_activity_name" class="form-control" wire:model.defer="mechanism">
+                <select id="for_activity_name" class="form-control" wire:model="mechanism">
             @else
                 <select id="for_activity_name" class="form-select" wire:model.debounce.500ms="mechanism">
             @endif        
                     <option value="">Seleccionar</option>
-                    <option value="videoconferencia">Videoconferencia</option>
+                    <option value="online">Online</option>
                     <option value="presencial">Presencial</option>			
                 </select>
                 @error('mechanism') <span class="text-danger error small">{{ $message }}</span> @enderror
         </fieldset>
 
         <fieldset class="form-group col-12 col-md-3">
+            <label for="for_objective">Modalidad Online:</label>
+            @if($bootstrap == 'v4')
+                <select id="for_activity_name" class="form-control" wire:model.defer="onlineTypeMechanism" {{ $onlineTypeMechanismStateInput }}>
+            @else
+                <select id="for_activity_name" class="form-select" wire:model.debounce.500ms="onlineTypeMechanism" {{ $onlineTypeMechanismStateInput }}>
+            @endif        
+                    <option value="">Seleccionar</option>
+                    <option value="Sincronico">Sincrónico</option>
+                    <option value="asincronico">Asincrónico</option>	
+                    <option value="mixta">Mixta</option>			
+                </select>
+                @error('onlineTypeMechanism') <span class="text-danger error small">{{ $message }}</span> @enderror
+        </fieldset>
+
+        <fieldset class="form-group col-12 col-md-4">
             <label for="for_objective">Actividad Programada:</label>
             @if($bootstrap == 'v4')
                 <select id="for_activity_name" class="form-control" wire:model.defer="schuduled">
@@ -261,7 +309,7 @@
         </fieldset>
 
         <fieldset class="form-group col-12 col-md-4">
-            <label for="for_total_hours">Total Horas Cronológicas</label>
+            <label for="for_total_hours">Total Horas Pedagógicas</label>
             <input class="form-control" type="text" autocomplete="off" wire:model.defer="totalHours">
             @error('totalHours') <span class="text-danger error small">{{ $message }}</span> @enderror
         </fieldset>

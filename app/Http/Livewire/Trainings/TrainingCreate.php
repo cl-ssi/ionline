@@ -21,20 +21,21 @@ use Illuminate\Support\Facades\Storage;
 
 use App\Models\Documents\Approval;
 use App\Models\Parameters\Parameter;
+use App\Models\Establishment;
 
 class TrainingCreate extends Component
 {
     use WithFileUploads;
 
     public $run, $dv, 
-    $selectedEstament, $degree, $selectedContractualCondition, 
+    $selectedEstament, $selectedContractualCondition, $selectedLaw, $degree, $degreeStateInput = 'disabled', $workHours, $workHoursStateInput = 'disabled',
     $organizationalUnitUser, $establishmentUser, 
     $email, $telephone,
     $selectedStrategicAxis,
     $objective,
     $activityName,
     $activityType, $otherActivityType, $disabledInputOtherActivityType = 'disabled',
-    $mechanism, $schuduled,
+    $mechanism, $onlineTypeMechanism, $onlineTypeMechanismStateInput = 'disabled', $schuduled,
     $activityDateStartAt, $activityDateEndAt, $totalHours,
     $permissionDateStartAt, $permissionDateEndAt, $place,
     $workingDay,
@@ -69,7 +70,9 @@ class TrainingCreate extends Component
 
             'searchedUser.required'                 => 'Debe ingresar Usuario que realiza capacitación.',
             'selectedEstament.required'             => 'Debe ingresar Estamento de funcionario.',
+            'selectedLaw.required'                  => 'Debe ingresar Ley adscrita a funcionario.',
             'degree.required'                       => 'Debe ingresar Grado de funcionario.',
+            'workHours.required'                    => 'Debe ingresar Horas de Desempeño de funcionario.',
             'selectedContractualCondition.required' => 'Debe ingresar Calidad Contractual de funcionario.',
             'email.required'                        => 'Debe ingresar Correo Electrónico de funcionario.',
             'telephone.required'                    => 'Debe ingresar Teléfonos de funcionario.',
@@ -80,6 +83,7 @@ class TrainingCreate extends Component
             'activityType.required'                 => 'Debe ingresar Tipo de Actividad.',
             'otherActivityType.required'            => 'Debe ingresar Otro Tipo de Actividad.',
             'mechanism.required'                    => 'Debe ingresar Modalidad de Aprendizaje.',
+            'onlineTypeMechanism.required'          => 'Debe ingresar Modalidad Online de Aprendizaje.',
             'schuduled.required'                    => 'Debe ingresar Actividad Programada.',
             'activityDateStartAt.required'          => 'Debe ingresar Fecha Inicio Actividad.',
             'activityDateEndAt.required'            => 'Debe ingresar Fecha Termino Actividad.',
@@ -106,6 +110,7 @@ class TrainingCreate extends Component
         $estaments = Estament::orderBy('id')->get();
         $contractualConditions = ContractualCondition::orderBy('id')->get();
         $strategicAxes = StrategicAxes::orderBy('number', 'ASC')->get();
+        $establishments = Establishment::all();
 
         if(auth()->guard('external')->check() == true && Route::is('trainings.external_create') ){
             $this->userExternal = UserExternal::where('id',Auth::guard('external')->user()->id)->first();
@@ -118,7 +123,7 @@ class TrainingCreate extends Component
             $this->telephone = ($this->userExternal->phone_number) ? $this->userExternal->phone_number : null;
         }
 
-        return view('livewire.trainings.training-create', compact('estaments', 'contractualConditions', 'strategicAxes'));
+        return view('livewire.trainings.training-create', compact('estaments', 'contractualConditions', 'strategicAxes', 'establishments'));
     }
 
     public function mount($trainingToEdit){
@@ -134,7 +139,9 @@ class TrainingCreate extends Component
         $validatedData = $this->validate([
             'searchedUser'                  => 'required',
             'selectedEstament'              => 'required',
-            'degree'                        => 'required',
+            'selectedLaw'                   => 'required',
+            'degree'                        => ($this->selectedLaw == "18834") ? 'required' : '',
+            'workHours'                     => ($this->selectedLaw == "19664") ? 'required' : '',
             'selectedContractualCondition'  => 'required',
             'email'                         => 'required',
             'telephone'                     => 'required',
@@ -145,6 +152,7 @@ class TrainingCreate extends Component
             'activityType'                                                              => 'required',
             ($this->activityType == "otro") ? 'otherActivityType' : 'otherActivityType' => ($this->activityType == "otro") ? 'required' : '',
             'mechanism'                                                                 => 'required',
+            'onlineTypeMechanism'                                                       => ($this->mechanism == "online") ? 'required' : '',
             'schuduled'                                                                 => 'required',
             'activityDateStartAt'                                                       => 'required',
             'activityDateEndAt'                                                         => 'required',
@@ -425,6 +433,32 @@ class TrainingCreate extends Component
         }
         else{
             return redirect()->route('trainings.own_index');
+        }
+    }
+
+    public function updatedSelectedLaw($value){
+        if($value == '18834'){
+            $this->degree = null;
+            $this->degreeStateInput = null;
+            $this->workHours = null;
+            $this->workHoursStateInput = 'disabled';
+        }
+        if($value == '19664'){
+            $this->degree = null;
+            $this->degreeStateInput = 'disabled';
+            $this->workHours = null;
+            $this->workHoursStateInput = null;
+        }
+    }
+
+    public function updatedMechanism($value){
+        if($value == 'online'){
+            // $this->onlineTypeMechanism = null;
+            $this->onlineTypeMechanismStateInput = null;
+        }
+        else{
+            $this->onlineTypeMechanism = null;
+            $this->onlineTypeMechanismStateInput = 'disabled';
         }
     }
 }
