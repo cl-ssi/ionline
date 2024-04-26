@@ -45,6 +45,7 @@ class LoginController extends Controller
      */
     public function login(Request $request)
     {
+        $originalId = strtoupper($request->input('id'));
         $this->validateLogin($request);
 
         if (method_exists($this, 'hasTooManyLoginAttempts') && $this->hasTooManyLoginAttempts($request)) {
@@ -88,7 +89,7 @@ class LoginController extends Controller
 
             return $this->sendLoginResponse($request);
         }
-        
+        $request->merge(['id' => $originalId]);
         $this->incrementLoginAttempts($request);
 
         return $this->sendFailedLoginResponse($request);
@@ -177,7 +178,6 @@ class LoginController extends Controller
 
     public function externalLogin(Request $request)
     {
-        
         $credentials = $request->only('id', 'password');
         $credentials['id'] = str_replace('.','',$credentials['id']);
         $credentials['id'] = str_replace('-','',$credentials['id']);
