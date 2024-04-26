@@ -87,13 +87,13 @@ class Authorization extends Component
         $this->title = 'Autorización Abastecimiento';
       }elseif($eventType=='finance_event'){
         $this->title = 'Autorización Finanzas';
-        // $this->lstProgram = Program::with('Subtitle')->orderBy('alias_finance')->get();
         $estab_hetg = Parameter::get('establishment', 'HETG');
-        if(auth()->user()->establishment_id == $estab_hetg){
-          $this->lstProgram = Program::with('Subtitle')->where('establishment_id', $estab_hetg)->orderBy('alias_finance')->get();
-        }else{
-          $this->lstProgram = Program::with('Subtitle')->orderBy('alias_finance')->get();
-        }
+        $this->lstProgram = Program::with('Subtitle')->where('establishment_id', auth()->user()->establishment_id == $estab_hetg ? $estab_hetg : NULL)->orderBy('alias_finance')->get();
+        // if(auth()->user()->establishment_id == $estab_hetg){
+        //   $this->lstProgram = Program::with('Subtitle')->where('establishment_id', $estab_hetg)->orderBy('alias_finance')->get();
+        // }else{
+        //   $this->lstProgram = Program::with('Subtitle')->orderBy('alias_finance')->get();
+        // }
         $this->sigfe = $requestForm->associateProgram ? $requestForm->associateProgram->folio : $requestForm->sigfe;
         $this->financial_type = $requestForm->associateProgram->financing ?? '';
       }elseif($eventType=='leader_ship_event'){

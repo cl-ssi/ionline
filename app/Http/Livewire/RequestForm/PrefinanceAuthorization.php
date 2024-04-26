@@ -40,12 +40,12 @@ class PrefinanceAuthorization extends Component
       $this->codigo             = '';
       $this->lstBudgetItem      = BudgetItem::all();
       $estab_hetg = Parameter::get('establishment', 'HETG');
-      if(auth()->user()->establishment_id == $estab_hetg){
-        $this->lstProgram = Program::with('Subtitle')->where('establishment_id', $estab_hetg)->orderBy('alias_finance')->get();
-      }else{
-        $this->lstProgram = Program::with('Subtitle')->orderBy('alias_finance')->get();
-      }
-      // $this->lstProgram         = Program::with('Subtitle')->orderBy('alias_finance')->get();
+      // if(auth()->user()->establishment_id == $estab_hetg){
+      //   $this->lstProgram = Program::with('Subtitle')->where('establishment_id', $estab_hetg)->orderBy('alias_finance')->get();
+      // }else{
+      //   $this->lstProgram = Program::with('Subtitle')->orderBy('alias_finance')->get();
+      // }
+      $this->lstProgram         = Program::with('Subtitle')->where('establishment_id', auth()->user()->establishment_id == $estab_hetg ? $estab_hetg : NULL)->orderBy('alias_finance')->get();
       $this->organizationalUnit = auth()->user()->organizationalUnit->name;
       $this->userAuthority      = auth()->user()->getFullNameAttribute();
       $this->position           = auth()->user()->position;

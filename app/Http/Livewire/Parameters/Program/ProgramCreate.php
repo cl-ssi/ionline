@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Parameters\Program;
 
+use App\Models\Parameters\Parameter;
 use App\Models\Parameters\Program;
 use App\Models\Parameters\Subtitle;
 use Livewire\Component;
@@ -54,6 +55,8 @@ class ProgramCreate extends Component
     public function createProgram()
     {
         $dataValidated = $this->validate();
+        $estab_hetg = Parameter::get('establishment', 'HETG');
+        $dataValidated['establishment_id'] = auth()->user()->establishment_id == $estab_hetg ? $estab_hetg : NULL;
         Program::create($dataValidated);
 
         session()->flash('success', 'El programa fue creado exitosamente.');
