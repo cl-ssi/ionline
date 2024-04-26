@@ -4107,7 +4107,7 @@ $document->content .= "
             &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
             &nbsp;2.-</strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; El convenio que se aprueba en virtud de este acto
         administrativo, se pasa a transcribir:</p>";
-        return $agreement->document->content;
+        
         $document->content .= Str::beforeLast($agreement->document->content, 'Presupuesto vigente del Servicio de Salud');
         $document->content .= 'Presupuesto vigente del Servicio de Salud Tarapacá año '.$agreement->period.'”.</strong></p>';
         //footer
