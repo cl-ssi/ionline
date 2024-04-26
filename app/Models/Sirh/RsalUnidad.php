@@ -10,7 +10,12 @@ class RsalUnidad extends Model
     use HasFactory;
 
     protected $fillable = [
-        'id','unid_codigo','unid_descripcion','unid_codigo_deis','unid_comuna','unid_cod_dipres'
+        'id',
+        'unid_codigo',
+        'unid_descripcion',
+        'unid_codigo_deis',
+        'unid_comuna',
+        'unid_cod_dipres'
     ];
 
     protected $table = 'sirh_rsal_unidades';

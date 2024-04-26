@@ -873,6 +873,10 @@ Route::prefix('integrity')->as('integrity.')->group(function () {
 });
 
 Route::prefix('rrhh')->as('rrhh.')->group(function () {
+    Route::prefix('sirh')->as('sirh.')->group(function () {
+        Route::get('/unidades', \App\Http\Livewire\Sirh\UnidadesIndex::class)->name('unidades');
+    });
+
     
     Route::prefix('performance-report')->name('performance-report.')->middleware('auth')->group(function () {
         Route::get('/period', Period::class)->name('period');
