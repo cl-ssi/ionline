@@ -1,14 +1,14 @@
 <div>
     <style>
-        ol {
+        .organigrama ol {
             counter-reset: item
         }
 
-        li {
+        .organigrama li {
             display: block
         }
 
-        li:before {
+        .organigrama li:before {
             content: counters(item, ".") " ";
             counter-increment: item
         }
@@ -30,10 +30,10 @@
     </div>
 
     <!-- resources/views/livewire/unidades-index.blade.php -->
-    <div>
+    <div class="organigrama">
         <ol>
-            @foreach ($arbol as $key => $unidad)
-                @include('partials.unidad', ['unidad' => $unidad, 'index' => $key . '.'])
+            @foreach ($arbol as $unidad)
+                @include('partials.unidad', ['unidad' => $unidad])
             @endforeach
         </ol>
     </div>

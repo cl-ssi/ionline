@@ -38,29 +38,31 @@
         @foreach($subrogations as $subrogation)
             <tr class="table-{{ $type == 'manager' ? 'primary' : 'secondary'}}">
                 <td>
-                    <button
-                        type="button"
-                        class="btn btn-sm btn-primary"
-                        wire:click="up({{ $subrogation }})"
-                        @if($subrogation->level == 1)
-                            disabled
-                        @endif
-                    >
-                        <i class="fas fa-caret-up"></i>
-                    </button>
+                    @can('Authorities: edit')
+                        <button
+                            type="button"
+                            class="btn btn-sm btn-primary"
+                            wire:click="up({{ $subrogation }})"
+                            @if($subrogation->level == 1)
+                                disabled
+                            @endif
+                        >
+                            <i class="fas fa-caret-up"></i>
+                        </button>
 
-                    <button
-                        type="button"
-                        class="btn btn-sm btn-primary"
-                        wire:click="down({{ $subrogation }})"
-                        @if($subrogation->level == $subrogations->count())
-                            disabled
-                        @endif
-                    >
-                        <i class="fas fa-caret-down"></i>
-                    </button>
-                    <!-- <button type="button" class="btn btn-sm btn-primary"
-                        wire:click="edit({{$subrogation}})"><i class="fas fa-edit"></i></button> -->
+                        <button
+                            type="button"
+                            class="btn btn-sm btn-primary"
+                            wire:click="down({{ $subrogation }})"
+                            @if($subrogation->level == $subrogations->count())
+                                disabled
+                            @endif
+                        >
+                            <i class="fas fa-caret-down"></i>
+                        </button>
+                    @endcan
+                    {{-- <button type="button" class="btn btn-sm btn-primary"
+                        wire:click="edit({{$subrogation}})"><i class="fas fa-edit"></i></button> --}}
                 </td>
                 <td>
                     @if($subrogation->subrogant->absent)
@@ -75,6 +77,7 @@
                 <td>{{ optional($subrogation->organizationalUnit)->name }}</td>
                 @endif
                 <td>
+                    @can('Authorities: edit')
                     <button
                         type="button"
                         class="btn btn-sm btn-danger"
@@ -82,6 +85,7 @@
                     >
                         <i class="fas fa-trash"></i>
                     </button>
+                    @endcan
                 </td>
             </tr>
         @endforeach
