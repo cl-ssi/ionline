@@ -24,19 +24,11 @@ class Numeration extends Model
     protected $status;
 
     /**
-     * Get the numeration model.
+     * Get the numeration of the model.
      */
-    // public function file(): MorphOne
+    // public function numeration(): MorphOne
     // {
-    //     return $this->morphOne(Numeration::class, 'numerable');
-    // }
-
-    /**
-     * Get all of the numerations of a model.
-     */
-    // public function numerations(): MorphMany
-    // {
-    //     return $this->morphMany(Numeration::class, 'numerable');
+    //     return $this->morphOne(Numeration::class, 'numerable);
     // }
 
 
@@ -46,10 +38,21 @@ class Numeration extends Model
     //     'doc_type_id' => $file_type_id,
     //     'file_path' => $file_path,
     //     'subject' => $subject,
-    //     'user_id' => auth()->user()->id, // Responsable del documento numerado
-    //     'organizational_unit_id' => auth()->user()->organizationalUnit->id, // Ou del responsable
-    //     'establishment_id' => auth()->user()->establishment->id,
+    //     'user_id' => auth()->id(), // Responsable del documento numerado
+    //     'organizational_unit_id' => auth()->user()->organizational_unit_id, // Ou del responsable
+    //     'establishment_id' => auth()->user()->establishment_id,
     // ]);
+
+    // /* Numerar */
+    // $user = User::find(Parameter::get('partes','numerador', auth()->user()->establishment_id));
+    // $status = $numeration->numerate($user);
+
+    // if ($status === true) {
+    //     /** Fue numerado con éxito */
+    // } 
+    // else {
+    //     /** En caso de error al numerar */
+    // }
 
 
 
@@ -146,12 +149,12 @@ class Numeration extends Model
         //     'doc_type_id' => $file_type_id,
         //     'file_path' => $file_path,
         //     'subject' => $subject,
-        //     'user_id' => auth()->user()->id, // Responsable del documento numerado
-        //     'organizational_unit_id' => auth()->user()->organizationalUnit->id, // Ou del responsable
-        //     'establishment_id' => auth()->user()->establishment->id,
+        //     'user_id' => auth()->id(), // Responsable del documento numerado
+        //     'organizational_unit_id' => auth()->user()->organizational_unit_id, // Ou del responsable
+        //     'establishment_id' => auth()->user()->establishment_id,
         // ]);
 
-        $status = null;
+        $this->status = null;
         DB::transaction(function () use ($user) {
             /* Chequear que el correlativo exista, si no, crearlo */
             $correlative = Correlative::firstOrCreate([
@@ -160,11 +163,7 @@ class Numeration extends Model
             ],[
                 'correlative' => 1
             ]);
-            //])->lockForUpdate();
 
-            // dd($correlative);
-
-            
             $file = Storage::get($this->file_path);
             /* Generar el codigo de verificacion ej: ej: '000123-sbK5np' */ 
             $verificationCode = str_pad($this->id, 6, "0", STR_PAD_LEFT) . '-' . str()->random(6);
