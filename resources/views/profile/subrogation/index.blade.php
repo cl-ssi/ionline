@@ -32,13 +32,13 @@
                 </td>
                 <td>{{ auth()->user()->fullName }}</td>
                 <td> 0 </td>
-                <td></td>
+                <td><!--Este nivel no se puede borrar, es la misma persona --></td>
             </tr>
         @endif
         @foreach($subrogations as $subrogation)
             <tr class="table-{{ $type == 'manager' ? 'primary' : 'secondary'}}">
                 <td>
-                    @can('Authorities: edit')
+                    @if(auth()->user()->can('Authorities: edit') OR $subrogation->user->is(auth()->user()))
                         <button
                             type="button"
                             class="btn btn-sm btn-primary"
@@ -60,7 +60,7 @@
                         >
                             <i class="fas fa-caret-down"></i>
                         </button>
-                    @endcan
+                    @endif
                     {{-- <button type="button" class="btn btn-sm btn-primary"
                         wire:click="edit({{$subrogation}})"><i class="fas fa-edit"></i></button> --}}
                 </td>
@@ -77,7 +77,7 @@
                 <td>{{ optional($subrogation->organizationalUnit)->name }}</td>
                 @endif
                 <td>
-                    @can('Authorities: edit')
+                    @if(auth()->user()->can('Authorities: edit') OR $subrogation->user->is(auth()->user()))
                     <button
                         type="button"
                         class="btn btn-sm btn-danger"
@@ -85,7 +85,7 @@
                     >
                         <i class="fas fa-trash"></i>
                     </button>
-                    @endcan
+                    @endif
                 </td>
             </tr>
         @endforeach
