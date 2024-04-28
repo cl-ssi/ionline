@@ -12,8 +12,12 @@
             @endif
         </div>
     @else
-        <input type="file" wire:model="file" accept=".pdf">
-        <button wire:click="uploadFile">Subir Archivo</button>
+        <div class="input-group">
+            <input class="form-control" type="file" wire:model="file" accept=".pdf" data-browse="Bestand kiezen">
+            <button class="btn btn-outline-primary" wire:click="uploadFile">
+                <i class="bi bi-upload"></i>
+            </button>
+        </div>
     @endif
 
     @if ($successMessage)

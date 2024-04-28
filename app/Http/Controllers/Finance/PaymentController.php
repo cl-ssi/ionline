@@ -317,6 +317,7 @@ class PaymentController extends Controller
             ->whereNull('rejected')
             ->where('all_receptions', 1)
             ->where('payment_ready', 1)
+            ->where('check_tesoreria', false)
             ->where('establishment_id', auth()->user()->organizationalUnit->establishment_id);
 
             if ($request->filled('id') || $request->filled('emisor')  || $request->filled('folio') || $request->filled('oc')  || $request->filled('prov') || $request->filled('cart') || $request->filled('req') || $request->filled('folio_compromiso') || $request->filled('folio_devengo') || $request->filled('folio_pago')) {

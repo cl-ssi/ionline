@@ -151,6 +151,10 @@ class Dte extends Model implements Auditable
         'excel_requerimiento',
 
         'observation',
+
+        'paid_automatic',
+        'paid_manual',
+        'check_tesoreria',
     ];
 
     /**

@@ -83,6 +83,7 @@
                     <tr>
                         <td class="small">
                             {{ $dte->id }}
+                            @livewire('finance.check-tesoreria', ['dte_id' => $dte->id], key($dte->id))
                         </td>
                         <td>
                             @include('finance.payments.partials.dte-info')
@@ -125,7 +126,7 @@
                                 'dte' => $dte,
                                 'onlyRead' => 'true'
                             ], key($dte->id))
-                            <hr>
+
                         </td>
                         <td>{{$dte->tgrPayedDte?->folio}}</td>
                         <td nowrap><small>{{$dte->tgrPayedDte ? $dte->tgrPayedDte->fecha_generacion->format('d-m-Y') : ''}}</small></td>
