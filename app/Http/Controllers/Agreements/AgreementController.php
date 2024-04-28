@@ -1916,7 +1916,7 @@ $document->content .= "
         la normativa vigente. </span>
 </p>
 <p style='text-align:justify;'>
-    <strong><span>OCTAVA:</span></strong><span>Los
+    <strong><span>OCTAVA: </span></strong><span>Los
         </span></a><span>recursos mencionados en la cláusula quinta financiarán
         exclusivamente las actividades relacionadas al </span><strong><span>“PROGRAMA”
         </span></strong><span>y se entregarán en </span><span style='background-color: yellow;'>".$totalQuotas.",</span><span>

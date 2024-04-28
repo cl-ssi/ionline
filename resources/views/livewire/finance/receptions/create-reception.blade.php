@@ -565,16 +565,14 @@
             @endif
         @endif
 
-        @can('Receptions: load support file')
-            <div class="mb-3">
-                <label for="support_file"
-                    class="form-label">Documento de respaldo</label>
-                <input class="form-control"
-                    type="file"
-                    wire:model="support_file"
-                    id="support_file">
-            </div>
-        @endcan
+        <div class="mb-3">
+            <label for="support_file"
+                class="form-label">Documento de respaldo (opcional)</label>
+            <input class="form-control"
+                type="file"
+                wire:model="support_file"
+                id="support_file">
+        </div>
 
         @can('Receptions: load file retroactive')
             <div class="alert alert-warning"
