@@ -2460,7 +2460,7 @@ Route::prefix('trainings')->as('trainings.')->middleware(['auth', 'must.change.p
     Route::get('create', [TngTrainingController::class, 'create'])->name('create');
     Route::get('{training}/edit', [TngTrainingController::class, 'edit'])->name('edit');
     Route::get('/{training_id}/show_approval', [TngTrainingController::class, 'show_approval'])->name('show_approval');
-    Route::get('/{training}/show_file', [TrainingCreate::class, 'show_file'])->name('show_file');
+    Route::get('/{training}/show_file', [TngTrainingController::class, 'show_file'])->name('show_file');
     Route::get('{training}/show', [TngTrainingController::class, 'show'])->name('show');
 });
 

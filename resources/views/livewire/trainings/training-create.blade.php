@@ -109,7 +109,7 @@
         @if(auth()->guard('external')->check() == true)
             <fieldset class="form-group col-12 col-md-4">
                 <label for="for_subject">Establecimiento</label>
-                <select name="contractual_condition_id" id="for_contractual_condition_id" class="form-control" wire:model.defer="selectedContractualCondition">
+                <select name="contractual_condition_id" id="for_contractual_condition_id" class="form-control" wire:model.defer="establishmentUser">
                     <option value="">Seleccione...</option>
                     @foreach($establishments as $establishment)
                         <option value="{{ $establishment->id }}" >{{ $establishment->type }} {{ $establishment->name }}</option>
@@ -218,7 +218,7 @@
         <fieldset class="form-group col-12 col-md-4">
             <label for="for_activity_type">Tipo de Actividad</label>
             @if($bootstrap == 'v4')
-                <select id="for_activity_type" class="form-control" wire:model.defer="activityType">
+                <select id="for_activity_type" class="form-control" wire:model="activityType">
             @else
                 <select id="for_activity_type" class="form-select" wire:model.debounce.500ms="activityType">
             @endif
@@ -268,7 +268,7 @@
                 <select id="for_activity_name" class="form-select" wire:model.debounce.500ms="onlineTypeMechanism" {{ $onlineTypeMechanismStateInput }}>
             @endif        
                     <option value="">Seleccionar</option>
-                    <option value="Sincronico">Sincrónico</option>
+                    <option value="sincronico">Sincrónico</option>
                     <option value="asincronico">Asincrónico</option>	
                     <option value="mixta">Mixta</option>			
                 </select>
@@ -379,10 +379,10 @@
             </fieldset>
 
             <fieldset class="form-group col-12 col-md-5">
-                <label for="forFileAttached" class="form-label">Medio de verificación comunal</label>
-                <input class="form-control" type="file" wire:model.defer="file" id="upload({{ $iterationFileClean }})">
-                <div wire:loading wire:target="file">Cargando archivo...</div>
-                @error('file') <span class="text-danger error small">{{ $message }}</span> @enderror
+                <label for="forPermissionFile" class="form-label">Permiso</label>
+                <input class="form-control" type="file" wire:model.defer="permissionFile" id="upload({{ $iterationFileClean }})">
+                <div wire:loading wire:target="permissionFile">Cargando archivo...</div>
+                @error('permissionFile') <span class="text-danger error small">{{ $message }}</span> @enderror
             </fieldset>
             
             
@@ -404,9 +404,57 @@
         </div>
     @endif
 
+    <div class="row g-3 mb-3">
+        <fieldset class="form-group col-12 col-md-1 mt-5">
+            15.
+        </fieldset>
+
+        <fieldset class="form-group col-12 col-md-5">
+            <label for="forRejoinderFile" class="form-label">Contrato Replica</label>
+            <input class="form-control" type="file" wire:model.defer="rejoinderFile" id="upload({{ $iterationFileClean }})">
+            <div wire:loading wire:target="rejoinderFile">Cargando archivo...</div>
+            @error('rejoinderFile') <span class="text-danger error small">{{ $message }}</span> @enderror
+        </fieldset>
+        
+        @if(Route::is('trainings.external_edit') || Route::is('trainings.edit'))
+        <fieldset class="form-group col-12 col-md-2">
+            <!-- <label for="for_rejoinder_file" class="form-label">&nbsp</label><br> -->
+            <a href="{{ route('trainings.show_file', $training) }}" target="_blank" class="btn btn-primary">
+                <i class="fas fa-paperclip fa-fw"></i> Ver adjunto xs
+            </a>
+
+            <a href="{{ route('trainings.show', $training) }}" target="_blank" class="btn btn-outline-secondary btn-sm">
+                <i class="fas fa-eye"></i>
+            </a>
+        </fieldset>
+        @endif
+    </div>
+
+    <div class="row g-3 mb-3">
+        <fieldset class="form-group col-12 col-md-1 mt-5">
+            16.
+        </fieldset>
+
+        <fieldset class="form-group col-12 col-md-5">
+            <label for="forProgramFile" class="form-label">Programa</label>
+            <input class="form-control" type="file" wire:model.defer="programFile" id="upload({{ $iterationFileClean }})">
+            <div wire:loading wire:target="programFile">Cargando archivo...</div>
+            @error('programFile') <span class="text-danger error small">{{ $message }}</span> @enderror
+        </fieldset>
+        
+        
+        <fieldset class="form-group col-12 col-md-2">
+            @if(Route::is('trainings.external_edit'))
+                <a class="btn btn-primary mt-4" href="{{ route('trainings.show_file', $training) }}" target="_blank">
+                    <i class="fas fa-paperclip fa-fw"></i> Ver adjunto
+                </a>
+            @endif
+        </fieldset>
+    </div>
+
     <div class="row g-3 mb-5">
         <div class="col-12">
-            <button wire:click="save" wire:loading.attr="disabled" wire:target="file" class="btn btn-primary {{ ($bootstrap == 'v4') ? 'float-right' : 'float-end' }}" type="button">
+            <button wire:click="save" wire:loading.attr="disabled" wire:target="permissionFile, rejoinderFile ,programFile" class="btn btn-primary {{ ($bootstrap == 'v4') ? 'float-right' : 'float-end' }}" type="button">
                 <i class="fas fa-save"></i> Guardar
             </button>
 
