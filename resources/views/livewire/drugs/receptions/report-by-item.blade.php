@@ -36,7 +36,7 @@
             <th style="width: 30px; word-wrap: break-word">Parte</th>
             <th>Fiscalia</th>
             <th>NUE</th>
-            <th>Imputado</th>
+            {{-- <th>Imputado</th> --}}
             <th>Sustancia Presunta</th>
             <th>Sustancia Determinda</th>
             <th>P.Oficio</th>
@@ -66,7 +66,7 @@
             <td class="text-center">{{ $item->reception->parte }}</td>
             <td>{{ $item->reception->court->name }}</td>
             <td>{{ $item->nue }}</td>
-            <td></td>
+            {{-- <td></td> --}}
             <td>{{ $item->substance->name }}</td>
             <td>
                 @foreach($item->protocols as $protocol )

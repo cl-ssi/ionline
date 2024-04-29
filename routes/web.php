@@ -1825,6 +1825,7 @@ Route::prefix('drugs')->as('drugs.')->middleware('can:Drugs', 'auth', 'drugs')->
     Route::get('users', [UserController::class, 'drugs'])->name('users');
 
     Route::get('receptions/report', [App\Http\Controllers\Drugs\ReceptionController::class, 'report'])->name('receptions.report');
+    Route::get('receptions/export/{year}', [App\Http\Controllers\Drugs\ReceptionController::class, 'export'])->name('receptions.export');
     Route::get('receptions/{reception}/record', [App\Http\Controllers\Drugs\ReceptionController::class, 'showRecord'])->name('receptions.record');
     Route::get('receptions/{receptionitem}/edit_item', [App\Http\Controllers\Drugs\ReceptionController::class, 'editItem'])->name('receptions.edit_item');
     Route::put('receptions/{receptionitem}/update_item', [App\Http\Controllers\Drugs\ReceptionController::class, 'updateItem'])->name('receptions.update_item');
@@ -1853,6 +1854,7 @@ Route::prefix('drugs')->as('drugs.')->middleware('can:Drugs', 'auth', 'drugs')->
     Route::get('precursors/create', CreateActPrecursor::class)->name('precursors.create');
     Route::get('precursors/{actPrecursor}/create', EditActPrecursor::class)->name('precursors.edit');
     Route::get('precursors/{actPrecursor}/pdf', ActPrecursorController::class)->name('precursors.pdf');
+
 });
 
 Route::get('health_plan/{comuna}', [HealthPlanController::class, 'index'])->middleware('auth')->name('health_plan.index');
