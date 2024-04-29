@@ -416,17 +416,13 @@
             @error('rejoinderFile') <span class="text-danger error small">{{ $message }}</span> @enderror
         </fieldset>
         
-        @if(Route::is('trainings.external_edit') || Route::is('trainings.edit'))
-        <fieldset class="form-group col-12 col-md-2">
-            <!-- <label for="for_rejoinder_file" class="form-label">&nbsp</label><br> -->
-            <a href="{{ route('trainings.show_file', $training) }}" target="_blank" class="btn btn-primary">
-                <i class="fas fa-paperclip fa-fw"></i> Ver adjunto xs
-            </a>
-
-            <a href="{{ route('trainings.show', $training) }}" target="_blank" class="btn btn-outline-secondary btn-sm">
-                <i class="fas fa-eye"></i>
-            </a>
-        </fieldset>
+        @if(Route::is('trainings.edit'))
+            <fieldset class="form-group col-12 col-md-2">
+                <label for="for_rejoinder_file" class="form-label">&nbsp</label><br>
+                <a href="{{ route('trainings.show_file', ['training' => $training, 'type' => 'rejoinder_file']) }}" target="_blank" class="btn btn-primary">
+                    <i class="fas fa-paperclip fa-fw"></i> Ver adjunto
+                </a>
+            </fieldset>
         @endif
     </div>
 
@@ -444,8 +440,9 @@
         
         
         <fieldset class="form-group col-12 col-md-2">
-            @if(Route::is('trainings.external_edit'))
-                <a class="btn btn-primary mt-4" href="{{ route('trainings.show_file', $training) }}" target="_blank">
+            @if(Route::is('trainings.edit'))
+                <label for="for_rejoinder_file" class="form-label">&nbsp</label><br>
+                <a class="btn btn-primary" href="{{ route('trainings.show_file', ['training' => $training, 'type' => 'program_file']) }}" target="_blank">
                     <i class="fas fa-paperclip fa-fw"></i> Ver adjunto
                 </a>
             @endif

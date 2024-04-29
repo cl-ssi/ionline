@@ -235,9 +235,7 @@ class TrainingCreate extends Component
 
         if($this->rejoinderFile){
             $now = now()->format('Y_m_d_H_i_s');
-
             $rejoinder = $training->files->where('type', 'rejoinder_file');
-            // dd($rejoinder);
 
             $training->files()->updateOrCreate(
                 [
@@ -254,19 +252,19 @@ class TrainingCreate extends Component
             $training->file = $this->rejoinderFile->storeAs('/ionline/trainings/attachments/rejoinder', $now.'_training_'.$training->id.'.'.$this->rejoinderFile->extension(), 'gcs');
         }
 
-        dd('guardado');
-
         if($this->programFile){
             $now = now()->format('Y_m_d_H_i_s');
-            $training->file()->updateOrCreate(
+            $program = $training->files->where('type', 'program_file');
+
+            $training->files()->updateOrCreate(
                 [
-                    'id' => ($training->file) ? $training->file->id : null,
+                    'id' => ($program->isNotEmpty()) ? $program->id : null,
                 ],
                 [
                     'storage_path'  => '/ionline/trainings/attachments/program/'.$now.'_training_'.$training->id.'.'.$this->programFile->extension(),
                     'stored'        => true,
                     'name'          => 'program_'.$training->id.'.pdf',
-                    'type'          => 'rejoinder_file',
+                    'type'          => 'program_file',
                     'stored_by_id'  => auth()->id(),
                 ]
             );
@@ -386,20 +384,9 @@ class TrainingCreate extends Component
         */
     }
 
-    public function show_file(Training $training){
-        dd($training);
-        return Storage::disk('gcs')->response($training->file->storage_path);
+    public function show_file(Training $training, $type){
+        return Storage::disk('gcs')->response($training->files->where('type', $type)->first()->storage_path);
     }
-
-    /*
-    public function showFile(Training $training, $type){
-        // return Storage::disk('gcs')->response($training->files->where('type', $type)->first()->storage_path);
-
-        return Storage::disk('gcs')->response()->streamDownload(function () {
-            echo 'CSV Contents...';
-        }, $training->files->where('type', $type)->first()->storage_path);
-    }
-    */
 
     public function sentToApproval(){
         $external_approval = null;
