@@ -1472,6 +1472,7 @@ Route::get('/vehicleCalendar', [CarCalendarEventController::class, 'index']);
 
 Route::post('/vehicleCalendar', [CarCalendarEventController::class, 'store']);
 Route::patch('/vehicleCalendar/edit/{event}', [CarCalendarEventController::class, 'update']);
+Route::get('/calendars/{id}/edit/', [CarCalendarEventController::class, 'edit']);
 Route::delete('/vehicleCalendar/destroy/{event}', [CarCalendarEventController::class, 'destroy']);
 
 Route::prefix('indicators')->as('indicators.')->group(function () {
