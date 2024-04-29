@@ -34,6 +34,8 @@ class ReceptionExport implements FromCollection, WithMapping, WithHeadings
                     'reception.sampleToIsp',
                     'reception.recordToCourt',
                     'substance',
+                    'actPrecursorItem',
+                    'actPrecursorItem.act_precursor',
                 ]
             )
             ->whereBetween('created_at', [
@@ -52,7 +54,7 @@ class ReceptionExport implements FromCollection, WithMapping, WithHeadings
             $item->id,
             $item->reception->user->initials,
             $item->reception->id,
-            $item->reception->date->format('Y-m-d'),
+            $item->reception->date->format('d-m-Y'),
             $item->reception->document_number,
             $item->reception->partePoliceUnit?->name,
             $item->reception->delivery,
@@ -74,6 +76,9 @@ class ReceptionExport implements FromCollection, WithMapping, WithHeadings
             $item->reception->wasDestructed() ? $item->destruct : '',
             $item->reception->sampleToIsp?->number,
             $item->reception->recordToCourt?->number,
+            $item->actPrecursorItem?->act_precursor->id,
+            $item->actPrecursorItem?->act_precursor->date->format('d-m-Y'),
+            $item->actPrecursorItem?->act_precursor->full_name_receiving,
         ];
     }
 
@@ -105,6 +110,9 @@ class ReceptionExport implements FromCollection, WithMapping, WithHeadings
             'Destruido',
             'N°Envío a ISP',
             'N°Envío a Fiscalía',
+            'Acta precursor enajenado',
+            'Fecha acta enajenación',
+            'Receptor',
         ];
     }
 }
