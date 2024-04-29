@@ -17,10 +17,9 @@
 
     </div>
     <div class="col-12 col-md-7">
-        <div id="barchart" style="width: 900px; height: 500px;"></div>
+        <div id="barchart" style="width: 900px; "></div>
     </div>
 </div>
-
 
 @endsection
 

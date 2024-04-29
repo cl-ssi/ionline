@@ -190,4 +190,23 @@
         </tbody>
     </table>
 
+    <hr>
+
+    <div class="jumbotron mt-3">
+
+        <h3>Digitalizar documentación de respaldo</h3>
+        <p>Al momento de hacer una solictud, para adjuntar los documentos de respaldo te recomendamos hacerlo de la siguiente manera.</p>
+        <div class="row">
+            <fieldset class="form-group col-12 col-md-2">
+                
+            </fieldset>
+            <fieldset class="form-group col-12 col-md-8">
+                <iframe width="100%" height="315" src="https://www.youtube.com/embed/iHWq_kfOFUM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </fieldset>
+            <fieldset class="form-group col-12 col-md-2">
+                
+            </fieldset>
+        </div>
+    </div>
+
 </div>

@@ -64,12 +64,13 @@ class RequestsAdmin extends Component
 
     public function saveInstallmentsNumber($key){
         $this->requests[$key]->save();
-        for ($i = 0; $i < $this->requests[$key]->installments_number; $i++) {
-            $transfer = new Transfer();
-            $transfer->request_id = $this->requests[$key]->id;
-            $transfer->installment_number = ($i + 1);
-            $transfer->save();
-        }
+        // for ($i = 0; $i < $this->requests[$key]->installments_number; $i++) {
+        //     $transfer = new Transfer();
+        //     $transfer->request_id = $this->requests[$key]->id;
+        //     $transfer->installment_number = ($i + 1);
+        //     $transfer->save();
+        // }
+        session()->flash('message', 'Se registró el número de cuotas.');
     }
 
     public function saveTransfer($key){
