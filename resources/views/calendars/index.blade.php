@@ -12,10 +12,10 @@
     <a class="nav-link" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="false">Home</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link active" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="true">Videoconferencia</a>
+    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Videoconferencia</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" id="messages-tab" data-toggle="tab" href="#messages" role="tab" aria-controls="messages" aria-selected="false">Vehículos</a>
+    <a class="nav-link active" id="messages-tab" data-toggle="tab" href="#messages" role="tab" aria-controls="messages" aria-selected="true">Vehículos</a>
   </li>
   <li class="nav-item">
     <a class="nav-link" id="zoom-tab" data-toggle="tab" href="#zoom" role="tab" aria-controls="zoom" aria-selected="false">Zoom</a>
@@ -35,11 +35,12 @@
     <div class="tab-pane" id="home" role="tabpanel" aria-labelledby="home-tab">
         Seleccione su agenda.
     </div>
-    <div class="tab-pane active" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+    <div class="tab-pane" id="profile" role="tabpanel" aria-labelledby="profile-tab">
         <iframe src="https://calendar.google.com/calendar/b/3/embed?title=Sala%20de%20Videoconferencia&amp;showCalendars=0&amp;showTz=0&amp;mode=WEEK&amp;height=600&amp;wkst=2&amp;bgcolor=%23FFFFFF&amp;src=hjf5qbbq8hb1it8a849aau1bgs%40group.calendar.google.com&amp;color=%235A6986&amp;ctz=America%2FSantiago" style="border-width:0" width="1100" height="600" frameborder="0" scrolling="no"></iframe>
     </div>
-    <div class="tab-pane" id="messages" role="tabpanel" aria-labelledby="messages-tab">
+    <div class="tab-pane active" id="messages" role="tabpanel" aria-labelledby="messages-tab">
         {{-- <iframe src="https://calendar.google.com/calendar/embed?title=Agenda%20de%20veh%C3%ADculos&amp;showCalendars=0&amp;showTz=0&amp;height=600&amp;wkst=2&amp;hl=es_419&amp;bgcolor=%23FFFFFF&amp;src=servicios.generales.dssi%40gmail.com&ctz=America%2FSantiago" style="border-width:0" width="1100" height="600" frameborder="0" scrolling="no"></iframe> --}}
+
         @livewire('car-calendar-event') 
     </div>
     <div class="tab-pane" id="zoom" role="tabpanel" aria-labelledby="zoom-tab">

@@ -1,3 +1,11 @@
+{{-- <head>
+    <style>
+        .fc-daygrid-day-frame {
+    height: 125px;
+ }
+    </style>
+</head> --}}
+
 <div>
     <div>
         <div class="container">
@@ -30,10 +38,56 @@
                             <div class="form-row justify-start">
                                 <div style="color:#6c757d">&#9632;</div>&nbsp;<p style="font-size: 15px">Suspendido</p>
                             </div>
+
+                            <div class="form-row justify-start">
+                                <div style="color:#553C7B">&#9632;</div>&nbsp;<p style="font-size: 15px">No Operativo</p>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    
+                    {{-- <div class="card">
+                        <div class="card-header" id="vehicle_types_header">
+                            Tipos Vehiculos
+                        </div>
+                        <div class="card-body">
+                            <div class="form-row justify-start">
+                                <i class="fa-solid fa-van-shuttle"></i><span>&nbsp;1/1</span>
+                            </div>
+
+                            <div class="form-row justify-start">
+                                <i class="fa-solid fa-truck-pickup"></i><span>&nbsp;1/2</span>
+                            </div>
+
+                            <div class="form-row justify-start">
+                                <i class="fa-solid fa-truck-field"></i><span>&nbsp;1/3</span>
+                            </div>
                         </div>
                     </div>
 
+                    <br>
+                    <div class="card">
+                        <div class="card-header">
+                            Conductores
+                        </div>
+                        <div class="card-body">
+                            <div class="form-row justify-start">
+                                <p>En Gestión</p>
+                            </div>
 
+                            <div class="form-row justify-start">
+                                <p>Con Permiso</p>
+                            </div>
+
+                            <div class="form-row justify-start">
+                                <p>Con Licencia</p>
+                            </div>
+
+                            <div class="form-row justify-start">
+                                <p>Feriado Legal</p>
+                            </div>
+                        </div>
+                    </div> --}}
 
 
                 </div>
@@ -175,8 +229,15 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="crate_driver_id">Conductor</label>
-                            @livewire('search-select-user', ['selected_id' => 'driver_id'])
+                            <label for="create_driver_id">Conductor</label>
+                            <select class="custom-select" id="create_driver_id" name='driver_id'>
+                                <option selected value="">Seleccione un conductor</option>
+                                <option value="16055330">Osvaldo Díaz Vicencio</option>
+                                <option value="12321170">Rodolfo Velásquez Bahamonde</option>
+                                <option value="7229401">Juan Pastén Ruarte</option>
+                                <option value="8004424">Ricardo Durán Caruncho</option>
+                                <option value="13215605">Daniel Mundaca Díaz</option>
+                            </select>
                             <span class="text-danger" id="create_driver_error"></span>
                         </div>
 
@@ -190,10 +251,16 @@
                             <div class="row">
                                 <div class="col-6 pl-0 pr-1">
                                     <div class="form-group">
-                                        <label for="create_car_input">Patente Vehiculo</label>
-                                        <input class="form-control" id="create_car_input" name="car_licence_number"
-                                            type="text" placeholder="Escriba la patente"
-                                        >
+                                        <label for="create_car_input">Patente</label>
+                                        <select class="custom-select" id="create_car_input" name='car_licence_number'>
+                                            <option selected value="">Seleccione una patente</option>
+                                            <option value="PGLC-45">PGLC-45 (Fortuner)</option>
+                                            <option value="PGLC-46">PGLC-46 (Fortuener)</option>
+                                            <option value="PGLC-47">PGLC-47 (Fortuner)</option>
+                                            <option value="PPTW-55">PPTW-55 (Hilux)</option>
+                                            <option value="PPTW-57">PPTW-57 (Hilux)</option>
+                                            <option value="PKFF-71">PKFF-71 (Van)</option>
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="col-6 pl-1 pr-0">
@@ -228,7 +295,7 @@
                                         <select class="custom-select" id="create_state_option"
                                             name='create_state_option'
                                         >
-                                            <option selected>Seleccione un estado</option>
+                                            <option selected value="">Seleccione un estado</option>
                                             <option
                                                 value="En Mantencion"style="background-color: #dc3545; color: white"
                                             >En Mantencion</option>
@@ -240,8 +307,10 @@
                                             </option>
                                             <option value="Disponible" style="background-color: #0d6efd">Disponible
                                             </option>
-                                            <option value="Suspendido"style="background-color: #6c757d; color: white">
+                                            <option value="Suspendido" style="background-color: #6c757d; color: white">
                                                 Suspendido</option>
+                                            <option value="No Operativo" style="background-color: #553C7B; color: white">
+                                                    No Operativo</option>
                                         </select>
                                         @error('state')
                                             <span class="text-danger">{{ $message }}</span>
@@ -278,6 +347,9 @@
         ></script>
         <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <script src='https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.5/locales-all.global.min.js'></script>
+
         <script>
             let canAddEvent = false;
 
@@ -305,6 +377,9 @@
                     case 'Suspendido':
                         return '#6c757d';
                         break;
+                    case 'No Operativo':
+                        return '#553C7B';
+                        break;
                     default:
                         return '#198754';
                         break;
@@ -323,9 +398,14 @@
                 var Calendar = FullCalendar.Calendar;
                 var calendarEl = document.getElementById('calendar');
                 var calendar = new Calendar(calendarEl, {
+                    locale: 'es',
+                    slotMinTime: "07:00:00",
+                    slotMaxTime: "20:59:59",
+                    navLinks: true,
+                    events: '/vehicleCalendar',
                     timeZone: 'America/Santiago',
                     initialView: 'dayGridMonth',
-                    dayMaxEvents: true,
+                    dayMaxEvents: 5,
                     selectable: canAddEvent,
                     fixedWeekCount: false,
                     allDayText: 'Todo el dia',
@@ -333,17 +413,19 @@
                     headerToolbar: {
                         left: 'prev,next today',
                         center: 'title',
-                        right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                        right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
                     },
-                    locale: 'es',
                     firstDay: 1,
                     buttonText: {
                         today: 'hoy',
                         month: 'mes',
                         week: 'semana',
                         day: 'dia',
+                        listMonth: 'lista',
+                        next: 'siguiente',
+                        prev: 'anterior',
+                        more: 'más'
                     },
-                    events: '/vehicleCalendar',
                     eventClick: function(info) {
                         $('#info-modal').modal('toggle');
                         $('#title-info').text(info.event.title);
@@ -358,7 +440,6 @@
                         $('#requester-info').text(info.event.extendedProps.requester_fullname);
                         $('#comment-info').text(info.event.extendedProps.comment);
                         $('#requester-unit-info').text(info.event.extendedProps.requester_unit);
-
 
                         var id = info.event.id;
 
@@ -396,6 +477,10 @@
                         });
 
                         $('#edit-button').click(function(e) {
+                            window.location.href = '/calendars/' + info.event.id + '/edit';
+
+
+                            /*
                             $('#info-modal').modal('toggle');
                             $('#edit-modal').modal('toggle');
 
@@ -451,6 +536,7 @@
                                     },
                                 });
                             });
+                            */
                         });
 
                     },
@@ -468,7 +554,7 @@
                                 title: $('#create_title_input').val(),
                                 start: $('#create_start_input').val(),
                                 end: $('#create_end_input').val(),
-                                driver_id: $('input[name="driver_id"').val(),
+                                driver_id: $('#create_driver_id').val(),
                                 requester_id: $('input[name="requester_id"').val(),
                                 car_licence_number: $('#create_car_input').val(),
                                 passenger_number: $('#create_passengers_input').val(),
@@ -519,140 +605,176 @@
                         });
 
                     },
-                });
-
-                $(document).on('shown.bs.tab', 'a[data-toggle="tab"]', function(e) {
-                    calendar.render();
 
                 });
+
+                // $(document).on('shown.bs.tab', 'a[data-toggle="tab"]', function(e) {
+                //     calendar.render();
+
+                // });
+
+                calendar.render();
             });
         </script>
     @endpush
 </div>
 
 
-{{-- edit modal start --}}
-<div class="modal fade" id="edit-modal" aria-labelledby="edit-modal-label" aria-hidden="true" tabindex="-1"
-    wire:ignore
+   {{-- create modal start --}}
+   <div class="modal fade" id="vehicle-modal" aria-labelledby="create-modal-label" aria-hidden="true" tabindex="-1"
+   wire:ignore.self
 >
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header" id="edit_modal_header">
-                <h5 class="create-modal-title" id="edit-modal-label">Editar Evento</h5>
-                <button class="close" data-dismiss="modal" type="button" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form class="form-horizontal" id="edit_event_form">
-                    <div class="form-group">
-                        <label for="edit_title_input">Titulo</label>
-                        <input class="form-control" id="edit_title_input" name="edit_title_input" type="text"
-                            placeholder="Escriba el Titulo del Evento"
-                        >
-                        <span class="text-danger" id="edit_title_error"></span>
-                    </div>
+   <div class="modal-dialog modal-dialog-centered">
+       <div class="modal-content">
+           <div class="modal-header">
+               <h5 class="create-modal-title" id="create-modal-label">Crear Evento</h5>
+               <button class="close" data-dismiss="modal" type="button" aria-label="Close">
+                   <span aria-hidden="true">&times;</span>
+               </button>
+           </div>
+           <div class="modal-body">
+               <form class="form-horizontal" id="create_event_form">
+                   <div class="form-group">
+                       <label for="create_title_input">Titulo</label>
+                       <input class="form-control" id="create_title_input" name="create_title_input" type="text"
+                           placeholder="Escriba el Titulo del Evento"
+                       >
+                       <span class="text-danger" id="create_title_error"></span>
+                   </div>
 
-                    <div class="container-fluid">
-                        <div class="row">
-                            <div class="col-6 pl-0 pr-1">
-                                <div class="form-group">
-                                    <label for="edit_start_input">Fecha Inicio</label>
-                                    <input class="form-control" id="edit_start_input" name="edit_start_input"
-                                        type="datetime-local"
-                                    >
-                                    <span class="text-danger" id="edit_start_error"></span>
+                   <div class="container-fluid">
+                       <div class="row">
+                           <div class="col-6 pl-0 pr-1">
+                               <div class="form-group">
+                                   <label for="create_start_input">Fecha Inicio</label>
+                                   <input class="form-control" id="create_start_input" name="create_start_input"
+                                       type="datetime-local"
+                                   >
+                                   <span class="text-danger" id="create_start_error"></span>
 
-                                </div>
-                            </div>
-                            <div class="col-6 pl-1 pr-0">
-                                <div class="form-group">
-                                    <label for="edit_end_input">Fecha Termino</label>
-                                    <input class="form-control" id="edit_end_input" name="edit_end_input"
-                                        type="datetime-local"
-                                    >
-                                    <span class="text-danger" id="edit_end_error"></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                               </div>
+                           </div>
+                           <div class="col-6 pl-1 pr-0">
+                               <div class="form-group">
+                                   <label for="create_end_input">Fecha Termino</label>
+                                   <input class="form-control" id="create_end_input" name="end"
+                                       type="datetime-local"
+                                   >
+                                   <span class="text-danger" id="create_end_error"></span>
+                               </div>
+                           </div>
+                       </div>
+                   </div>
 
-                    <div class="container-fluid">
-                        <div class="row">
-                            <div class="col-6 pl-0 pr-1">
-                                <div class="form-group">
-                                    <label for="edit_car_input">Patente Vehiculo</label>
-                                    <input class="form-control" id="edit_car_input" name="edit_car_licence_number"
-                                        type="text" placeholder="Escriba la patente"
-                                    >
-                                </div>
-                            </div>
-                            <div class="col-6 pl-1 pr-0">
-                                <div class="form-group">
-                                    <label for="edit_passengers_input">Numero de Pasajeros</label>
-                                    <input class="form-control" id="edit_passengers_input" name="passenger_number"
-                                        type="number" placeholder="(Valor de 1 a 16)" min="1" max="16"
-                                    >
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                   <div class="form-group">
+                       <label for="create_driver_id">Conductor</label>
+                       <select class="custom-select" id="create_driver_id" name='driver_id'>
+                           <option selected value="">Seleccione un conductor</option>
+                           <option value="16055330">Osvaldo Díaz Vicencio</option>
+                           <option value="12321170">Rodolfo Velásquez Bahamonde</option>
+                           <option value="7229401">Juan Pastén Ruarte</option>
+                           <option value="8004424">Ricardo Durán Caruncho</option>
+                           <option value="13215605">Daniel Mundaca Díaz</option>
+                       </select>
+                       <span class="text-danger" id="create_driver_error"></span>
+                   </div>
 
-                    <div class="container-fluid">
-                        <div class="row">
-                            <div class="col-6 pl-0 pr-1">
-                                <div class="form-group">
-                                    <label for="edit_location_input">Destino</label>
-                                    <input class="form-control" id="edit_location_input" name="location"
-                                        type="text" placeholder="Escriba el Destino"
-                                    >
-                                    @error('location')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
-                                </div>
-                            </div>
+                   <div class="form-group">
+                       <label for="create-requester-id">Solicitante</label>
+                       @livewire('search-select-user', ['selected_id' => 'requester_id'])
+                       <span class="text-danger" id="create_requester_error"></span>
+                   </div>
 
-                            <div class="col-md-6 pl-1 pr-0">
-                                <div class="form-group">
-                                    <label for="edit_state_option">Estado</label>
-                                    <select class="custom-select" id="edit_state_option" name='edit_state_option'>
-                                        <option selected>Seleccione un estado</option>
-                                        <option value="En Mantencion"style="background-color: #dc3545; color: white">En
-                                            Mantencion</option>
-                                        <option value="Por Confirmar" style="background-color: #fd7e14">Por
-                                            Confirmar</option>
-                                        <option value="En Espera" style="background-color: #ffc107">En Espera
-                                        </option>
-                                        <option value="Agendado" style="background-color: #198754">Agendado
-                                        </option>
-                                        <option value="Disponible" style="background-color: #0d6efd">Disponible
-                                        </option>
-                                        <option value="Suspendido"style="background-color: #6c757d; color: white">
-                                            Suspendido</option>
-                                    </select>
-                                    @error('state')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
-                                </div>
-                            </div>
+                   <div class="container-fluid">
+                       <div class="row">
+                           <div class="col-6 pl-0 pr-1">
+                               <div class="form-group">
+                                   <label for="create_car_input">Patente</label>
+                                   <select class="custom-select" id="create_car_input" name='car_licence_number'>
+                                       <option selected value="">Seleccione una patente</option>
+                                       <option value="PGLC-45">PGLC-45 (Fortuner)</option>
+                                       <option value="PGLC-46">PGLC-46 (Fortuener)</option>
+                                       <option value="PGLC-47">PGLC-47 (Fortuner)</option>
+                                       <option value="PPTW-55">PPTW-55 (Hilux)</option>
+                                       <option value="PPTW-57">PPTW-57 (Hilux)</option>
+                                       <option value="PKFF-71">PKFF-71 (Van)</option>
+                                   </select>
+                               </div>
+                           </div>
+                           <div class="col-6 pl-1 pr-0">
+                               <div class="form-group">
+                                   <label for="create_passengers_input">Numero de Pasajeros</label>
+                                   <input class="form-control" id="create_passengers_input"
+                                       name="passenger_number" type="number" placeholder="(Valor de 1 a 16)"
+                                       min="1" max="16"
+                                   >
+                               </div>
+                           </div>
+                       </div>
+                   </div>
 
-                            <div class="container-fluid">
-                                <div class="row">
-                                    <div class="form-group">
-                                        <label for="edit_comment_input">Comentario</label>
-                                        <textarea class="form-control" id="edit_comment_input" cols="120"></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                   <div class="container-fluid">
+                       <div class="row">
+                           <div class="col-6 pl-0 pr-1">
+                               <div class="form-group">
+                                   <label for="create-location-input">Destino</label>
+                                   <input class="form-control" id="create_location_input" name="location"
+                                       type="text" placeholder="Escriba el Destino"
+                                   >
+                                   @error('location')
+                                       <span class="text-danger">{{ $message }}</span>
+                                   @enderror
+                               </div>
+                           </div>
 
-                    <button class="form-control btn btn-primary" id="edit_submit_btn" type="submit">Guardar</button>
-                </form>
-            </div>
-            <div class="modal-footer">
-            </div>
-        </div>
-    </div>
+                           <div class="col-md-6 pl-1 pr-0">
+                               <div class="form-group">
+                                   <label for="create-state-input">Estado</label>
+                                   <select class="custom-select" id="create_state_option"
+                                       name='create_state_option'
+                                   >
+                                       <option selected value="">Seleccione un estado</option>
+                                       <option
+                                           value="En Mantencion"style="background-color: #dc3545; color: white"
+                                       >En Mantencion</option>
+                                       <option value="Por Confirmar" style="background-color: #fd7e14">Por
+                                           Confirmar</option>
+                                       <option value="En Espera" style="background-color: #ffc107">En Espera
+                                       </option>
+                                       <option value="Agendado" style="background-color: #198754">Agendado
+                                       </option>
+                                       <option value="Disponible" style="background-color: #0d6efd">Disponible
+                                       </option>
+                                       <option value="Suspendido" style="background-color: #6c757d; color: white">
+                                           Suspendido</option>
+                                       <option value="No Operativo" style="background-color: #553C7B; color: white">
+                                               No Operativo</option>
+                                   </select>
+                                   @error('state')
+                                       <span class="text-danger">{{ $message }}</span>
+                                   @enderror
+                               </div>
+                           </div>
+                       </div>
+                   </div>
+
+                   <div class="container-fluid">
+                       <div class="row">
+                           <div class="form-group">
+                               <label for="create_comment_input">Comentario</label>
+                               <textarea class="form-control" id="create_comment_input" cols="120"></textarea>
+                           </div>
+                       </div>
+                   </div>
+
+
+                   <button class="form-control btn btn-primary" id="create_submit_btn"
+                       type="submit">Guardar</button>
+               </form>
+           </div>
+           <div class="modal-footer">
+           </div>
+       </div>
+   </div>
 </div>
-{{-- edit modal ending --}}
+{{-- create modal ending --}}
