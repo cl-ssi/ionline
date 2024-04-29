@@ -2,6 +2,7 @@
 
 namespace App\Rrhh;
 
+use App\Models\RequestForms\RequestForm;
 use OwenIt\Auditing\Contracts\Auditable;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -24,6 +25,7 @@ class OrganizationalUnit extends Model implements Auditable
      * @var array
      */
     protected $fillable = [
+        'id',
         'name',
         'level',
         'organizational_unit_id',

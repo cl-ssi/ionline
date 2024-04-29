@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Parameters\Program;
 
+use App\Models\Parameters\Parameter;
 use App\Models\Parameters\Program;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -23,6 +24,7 @@ class ProgramIndex extends Component
     public function getPrograms()
     {
         $search = "%$this->search%";
+        $estab_hetg = Parameter::get('establishment', 'HETG');
 
         $programs = Program::query()
             ->when($this->search, function ($query) use ($search) {
@@ -30,6 +32,10 @@ class ProgramIndex extends Component
                     ->orWhere('alias', 'like', $search)
                     ->orWhere('description', 'like', $search);
             })
+            // ->when(auth()->user()->establishment_id == Parameter::get('establishment', 'HETG'), function($query){
+            //     $query->where('establishment_id', auth()->user()->establishment_id);
+            // })
+            ->where('establishment_id', auth()->user()->establishment_id == $estab_hetg ? $estab_hetg : NULL)
             ->orderBy('name')
             ->paginate(100);
 

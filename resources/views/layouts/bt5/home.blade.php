@@ -212,7 +212,7 @@
 
             @if ($ct_notifications = count(auth()->user()->unreadNotifications))
                 <h5 class="text-center text-white bg_azul_gob p-2">
-                    <i class="fas fa-fw fa-bell"
+                    <i class="bi bi-bell"
                         title="Notificaciones"></i> Mis notificaciones sin leer
                     <span class="badge text-bg-danger">
                         {{ count(auth()->user()->unreadNotifications) }}
@@ -271,7 +271,7 @@
             @endif
 
             <h5 class="text-center text-white p-2 bg_azul_gob">
-                <i class="far fa-fw fa-newspaper"></i> Todas las Noticias
+                <i class="bi bi-newspaper"></i> Todas las Noticias
             </h5>
 
             <ul class="list-group">
@@ -283,6 +283,17 @@
                         <b>{{ $news->title }}</b>
                     </a>
                 @endforeach
+            </ul>
+
+            <h5 class="text-center text-white p-2 bg_azul_gob mt-3">
+                <i class="bi bi-file-text"></i> Manuales
+            </h5>
+
+            <ul class="list-group">
+                <a href="https://docs.google.com/document/d/13-mHAWRwlk4IdIzKVLIGycIF0v6WaG6Z/edit?usp=sharing&ouid=114284222513106267165&rtpof=true&sd=true"
+                    class="list-group-item list-group-item-action small" target="_blank">
+                    Creación de formularios de requerimiento.
+                </a>
             </ul>
 
         </div>

@@ -22,8 +22,10 @@ class Training extends Model implements Auditable
     protected $fillable = [
         'status', 
         'user_training_id', 
-        'estament_id', 
-        'degree', 
+        'estament_id',
+        'law',
+        'degree',
+        'work_hours',
         'contractual_condition_id', 
         'organizational_unit_id', 
         'establishment_id',
@@ -35,6 +37,7 @@ class Training extends Model implements Auditable
         'activity_type',
         'other_activity_type',
         'mechanism',
+        'online_type',
         'schuduled',
         'activity_date_start_at',
         'activity_date_end_at',
@@ -78,9 +81,11 @@ class Training extends Model implements Auditable
         return $this->belongsTo('App\Models\Trainings\StrategicAxes');
     }
 
-    public function file(): MorphOne
-    {
-        return $this->morphOne(File::class, 'fileable');
+    /**
+     * Get all of the files of a model.
+     */
+    public function files(): MorphMany{
+        return $this->morphMany(File::class, 'fileable');
     }
 
     /**

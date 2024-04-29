@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Drugs;
 
+use App\Exports\Drugs\ReceptionExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Drugs\StoreReceptionRequest;
 use App\Http\Requests\Drugs\UpdateReceptionRequest;
@@ -17,6 +18,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ReceptionController extends Controller
 {
@@ -214,7 +216,19 @@ class ReceptionController extends Controller
          * Obtiene todos los items sin reservar y por destruir.
          */
         $items = ReceptionItem::query()
-            ->with('substance')
+            ->with(
+                [
+                    'reception',
+                    'reception.user',
+                    'reception.partePoliceUnit',
+                    'reception.court',
+                    'resultSubstance',
+                    'reception.destruction',
+                    'reception.sampleToIsp',
+                    'reception.recordToCourt',
+                    'substance',
+                ]
+            )
             ->whereNull('dispose_precursor')
             ->doesnthave('reception.destruction')
             ->selectRaw('*, net_weight - sample - countersample as total_sample')
@@ -244,7 +258,16 @@ class ReceptionController extends Controller
             return $item['sum'] > 0;
         });
 
+        $years = Reception::select(DB::raw('YEAR(created_at) as year'))
+                ->groupBy('year')
+                ->orderBy('year', 'asc')
+                ->get();
 
-        return view('drugs.receptions.report', compact('items_sin_destruir'));
+        return view('drugs.receptions.report', compact('items_sin_destruir','years'));
+    }
+
+    public function export($year) 
+    {
+        return Excel::download(new ReceptionExport($year), 'report.xlsx');
     }
 }

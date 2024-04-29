@@ -2,6 +2,7 @@
 
 namespace App\Models\Drugs;
 
+use App\Models\Drugs\ActPrecursorItem;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -94,6 +95,12 @@ class ReceptionItem extends Model
         $position = "";
         $position = $this->reception->items()->where('id', '<=', $this->id)->count();
         return $this->getLetterFormPosition($position);
+    }
+
+    //Relacion con ActPrecursorItem
+    public function actPrecursorItem()
+    {
+        return $this->hasOne(ActPrecursorItem::class);
     }
 
     // public function getLetterAttribute()

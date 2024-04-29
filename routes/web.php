@@ -873,6 +873,10 @@ Route::prefix('integrity')->as('integrity.')->group(function () {
 });
 
 Route::prefix('rrhh')->as('rrhh.')->group(function () {
+    Route::prefix('sirh')->as('sirh.')->group(function () {
+        Route::get('/unidades', \App\Http\Livewire\Sirh\UnidadesIndex::class)->name('unidades');
+    });
+
     
     Route::prefix('performance-report')->name('performance-report.')->middleware('auth')->group(function () {
         Route::get('/period', Period::class)->name('period');
@@ -1471,6 +1475,7 @@ Route::get('/vehicleCalendar', [CarCalendarEventController::class, 'index']);
 
 Route::post('/vehicleCalendar', [CarCalendarEventController::class, 'store']);
 Route::patch('/vehicleCalendar/edit/{event}', [CarCalendarEventController::class, 'update']);
+Route::get('/calendars/{id}/edit/', [CarCalendarEventController::class, 'edit']);
 Route::delete('/vehicleCalendar/destroy/{event}', [CarCalendarEventController::class, 'destroy']);
 
 Route::prefix('indicators')->as('indicators.')->group(function () {
@@ -1821,6 +1826,7 @@ Route::prefix('drugs')->as('drugs.')->middleware('can:Drugs', 'auth', 'drugs')->
     Route::get('users', [UserController::class, 'drugs'])->name('users');
 
     Route::get('receptions/report', [App\Http\Controllers\Drugs\ReceptionController::class, 'report'])->name('receptions.report');
+    Route::get('receptions/export/{year}', [App\Http\Controllers\Drugs\ReceptionController::class, 'export'])->name('receptions.export');
     Route::get('receptions/{reception}/record', [App\Http\Controllers\Drugs\ReceptionController::class, 'showRecord'])->name('receptions.record');
     Route::get('receptions/{receptionitem}/edit_item', [App\Http\Controllers\Drugs\ReceptionController::class, 'editItem'])->name('receptions.edit_item');
     Route::put('receptions/{receptionitem}/update_item', [App\Http\Controllers\Drugs\ReceptionController::class, 'updateItem'])->name('receptions.update_item');
@@ -1849,6 +1855,7 @@ Route::prefix('drugs')->as('drugs.')->middleware('can:Drugs', 'auth', 'drugs')->
     Route::get('precursors/create', CreateActPrecursor::class)->name('precursors.create');
     Route::get('precursors/{actPrecursor}/create', EditActPrecursor::class)->name('precursors.edit');
     Route::get('precursors/{actPrecursor}/pdf', ActPrecursorController::class)->name('precursors.pdf');
+
 });
 
 Route::get('health_plan/{comuna}', [HealthPlanController::class, 'index'])->middleware('auth')->name('health_plan.index');
@@ -2454,7 +2461,7 @@ Route::prefix('trainings')->as('trainings.')->middleware(['auth', 'must.change.p
     Route::get('create', [TngTrainingController::class, 'create'])->name('create');
     Route::get('{training}/edit', [TngTrainingController::class, 'edit'])->name('edit');
     Route::get('/{training_id}/show_approval', [TngTrainingController::class, 'show_approval'])->name('show_approval');
-    Route::get('/{training}/show_file', [TrainingCreate::class, 'show_file'])->name('show_file');
+    Route::get('/{training}/show_file/{type}', [TrainingCreate::class, 'show_file'])->name('show_file');
     Route::get('{training}/show', [TngTrainingController::class, 'show'])->name('show');
 });
 
@@ -2856,7 +2863,7 @@ Route::group(['middleware' => 'auth:external'], function () {
 
     // Route::prefix('replacement_staff')->as('replacement_staff.')->group(function () {
 
-    Route::prefix('trainings')->as('trainings.')->group(function () {
+    Route::prefix('external_trainings')->as('external_trainings.')->group(function () {
         Route::get('/external_own_index', [TngTrainingController::class, 'external_own_index'])->name('external_own_index');
         Route::get('/external_create', [TngTrainingController::class, 'external_create'])->name('external_create');
         Route::get('{training}/external_edit', [TngTrainingController::class, 'external_edit'])->name('external_edit');

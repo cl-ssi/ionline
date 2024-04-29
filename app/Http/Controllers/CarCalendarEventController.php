@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Livewire\CalendarEvent;
 use App\Models\CarCalendarEvent;
 use Illuminate\Http\Request;
 
@@ -12,21 +13,24 @@ class CarCalendarEventController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+ 
     public function index()
-    {
-        $events = CarCalendarEvent::where('type', 'vehicle')->with(['driver', 'requester'])->get();
+{
+    $events = CarCalendarEvent::all();
 
-        $events = $events->map(function ($event) {
-            $event->driver_fullname = $event->driver->name . " " . $event->driver->fathers_family . " " . $event->driver->mothers_family;
-            $event->requester_fullname = $event->requester->name . " " . $event->requester->fathers_family . " " . $event->requester->mothers_family;
-            $event->requester_unit = $event->requester->organizationalUnit->name;
-            unset($event->driver);
-            unset($event->requester);
-            return $event;
-        });
+    $events = $events->map(function ($event) {
+        $event->driver_fullname = $event->driver ? $event->driver->name . " " . $event->driver->fathers_family . " " . $event->driver->mothers_family : null;
+        $event->requester_fullname = $event->requester ? $event->requester->name . " " . $event->requester->fathers_family . " " . $event->requester->mothers_family : null;
+        $event->requester_unit = $event->requester && $event->requester->organizationalUnit ? $event->requester->organizationalUnit->name : null;
+        $event->backgroundColor = $this->getColor($event->state);
+        unset($event->driver);
+        unset($event->requester);
+        return $event;
+    });
 
-        return response()->json($events);
-    }
+    return response()->json($events);
+}
+
 
     /**
      * Show the form for creating a new resource.
@@ -48,13 +52,10 @@ class CarCalendarEventController extends Controller
     {
         $request->validate([
             'title' => 'required|string',
-            'state' => 'required',
-            'location' => 'required',
             'passengerNumber' => 'numeric|between:1,16',
             'start' => 'required|date',
             'end' => 'required|date|after_or_equal:start',
-            'requester_id' => 'required',
-            'driver_id' => 'required|different:requester',
+            'driver_id' => 'different:requester',
         ]);
 
         $event = CarCalendarEvent::create($request->all());
@@ -79,9 +80,10 @@ class CarCalendarEventController extends Controller
      * @param  \App\Models\CalendarEvent  $calendarEvent
      * @return \Illuminate\Http\Response
      */
-    public function edit(CarCalendarEvent $calendarEvent)
+    public function edit($id)
     {
-        //
+        $event = CarCalendarEvent::findOrFail($id);
+        return view('calendars.edit', compact('event'));
     }
 
     /**
@@ -95,9 +97,12 @@ class CarCalendarEventController extends Controller
     {
         $event = CarCalendarEvent::findOrFail($id);
 
-        $event->update($request->all());
+        // $event->update([$request->all(), 'state' => $request->input('state'), 'color' => $this->getColor($request->input('state'))]);
 
-        return response()->json('Evento Actualizado');
+        $event->update($request->all());
+        // $event->save();
+
+        return redirect('/calendars')->with('success', 'Evento Actualizado');
     }
 
     /**
@@ -119,5 +124,20 @@ class CarCalendarEventController extends Controller
         $event->delete();
 
         return $id;
+    }
+
+    private function getColor($state)
+    {
+        $colorMap = [
+            'En Mantencion' => '#dc3545',
+            'Por Confirmar' => '#fd7e14',
+            'En Espera' => '#ffc107',
+            'Agendado' => '#198754',
+            'Disponible' => '#0d6efd',
+            'Suspendido' => '#6c757d',
+            'No Operativo' => '#553C7B',
+        ];
+
+        return $colorMap[$state] ?? null;
     }
 }

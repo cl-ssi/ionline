@@ -21,20 +21,21 @@ use Illuminate\Support\Facades\Storage;
 
 use App\Models\Documents\Approval;
 use App\Models\Parameters\Parameter;
+use App\Models\Establishment;
 
 class TrainingCreate extends Component
 {
     use WithFileUploads;
 
     public $run, $dv, 
-    $selectedEstament, $degree, $selectedContractualCondition, 
+    $selectedEstament, $selectedContractualCondition, $selectedLaw, $degree, $degreeStateInput = 'disabled', $workHours, $workHoursStateInput = 'disabled',
     $organizationalUnitUser, $establishmentUser, 
     $email, $telephone,
     $selectedStrategicAxis,
     $objective,
     $activityName,
     $activityType, $otherActivityType, $disabledInputOtherActivityType = 'disabled',
-    $mechanism, $schuduled,
+    $mechanism, $onlineTypeMechanism, $onlineTypeMechanismStateInput = 'disabled', $schuduled,
     $activityDateStartAt, $activityDateEndAt, $totalHours,
     $permissionDateStartAt, $permissionDateEndAt, $place,
     $workingDay,
@@ -43,7 +44,7 @@ class TrainingCreate extends Component
 
     // public $trainingCosts, $typeTrainingCost, $otherTypeTrainingCost, $disabledInputOtherTypeTrainingCost = 'disabled',$exist, $expense;
 
-    public $file, $iterationFileClean = 0, $municipalProfile, $userExternal = null, $searchedUserName, 
+    public $file, $permissionFile, $rejoinderFile, $programFile, $iterationFileClean = 0, $municipalProfile, $userExternal = null, $searchedUserName, 
     $disabledSearchedUserNameInput = 'disabled';
 
     public $form, $bootstrap;
@@ -69,7 +70,9 @@ class TrainingCreate extends Component
 
             'searchedUser.required'                 => 'Debe ingresar Usuario que realiza capacitación.',
             'selectedEstament.required'             => 'Debe ingresar Estamento de funcionario.',
+            'selectedLaw.required'                  => 'Debe ingresar Ley adscrita a funcionario.',
             'degree.required'                       => 'Debe ingresar Grado de funcionario.',
+            'workHours.required'                    => 'Debe ingresar Horas de Desempeño de funcionario.',
             'selectedContractualCondition.required' => 'Debe ingresar Calidad Contractual de funcionario.',
             'email.required'                        => 'Debe ingresar Correo Electrónico de funcionario.',
             'telephone.required'                    => 'Debe ingresar Teléfonos de funcionario.',
@@ -80,6 +83,7 @@ class TrainingCreate extends Component
             'activityType.required'                 => 'Debe ingresar Tipo de Actividad.',
             'otherActivityType.required'            => 'Debe ingresar Otro Tipo de Actividad.',
             'mechanism.required'                    => 'Debe ingresar Modalidad de Aprendizaje.',
+            'onlineTypeMechanism.required'          => 'Debe ingresar Modalidad Online de Aprendizaje.',
             'schuduled.required'                    => 'Debe ingresar Actividad Programada.',
             'activityDateStartAt.required'          => 'Debe ingresar Fecha Inicio Actividad.',
             'activityDateEndAt.required'            => 'Debe ingresar Fecha Termino Actividad.',
@@ -89,6 +93,9 @@ class TrainingCreate extends Component
             'place.required'                        => 'Debe ingresar Lugar.',
             'workingDay.required'                   => 'Debe ingresar Jornada.',
             'technicalReasons.required'             => 'Debe ingresar Fundamento o Razones Técnicas.',
+            'permissionFile.required'               => 'Debe ingresar un adjunto',
+            'programFile.required'                  => 'Debe ingresar un adjunto',
+            'rejoinderFile.required'                => 'Debe ingresar un adjunto'
 
             //  MENSAJES PARA COSTOS
             /*
@@ -106,6 +113,7 @@ class TrainingCreate extends Component
         $estaments = Estament::orderBy('id')->get();
         $contractualConditions = ContractualCondition::orderBy('id')->get();
         $strategicAxes = StrategicAxes::orderBy('number', 'ASC')->get();
+        $establishments = Establishment::all();
 
         if(auth()->guard('external')->check() == true && Route::is('trainings.external_create') ){
             $this->userExternal = UserExternal::where('id',Auth::guard('external')->user()->id)->first();
@@ -118,7 +126,7 @@ class TrainingCreate extends Component
             $this->telephone = ($this->userExternal->phone_number) ? $this->userExternal->phone_number : null;
         }
 
-        return view('livewire.trainings.training-create', compact('estaments', 'contractualConditions', 'strategicAxes'));
+        return view('livewire.trainings.training-create', compact('estaments', 'contractualConditions', 'strategicAxes', 'establishments'));
     }
 
     public function mount($trainingToEdit){
@@ -132,19 +140,21 @@ class TrainingCreate extends Component
         $this->validateMessage = 'training';
 
         $validatedData = $this->validate([
-            'searchedUser'                  => 'required',
-            'selectedEstament'              => 'required',
-            'degree'                        => 'required',
-            'selectedContractualCondition'  => 'required',
-            'email'                         => 'required',
-            'telephone'                     => 'required',
-
-            'selectedStrategicAxis'         => 'required',
-            'objective'                     => 'required',
-            'activityName'                  => 'required',
+            'searchedUser'                                                              => 'required',
+            'selectedEstament'                                                          => 'required',
+            'selectedLaw'                                                               => 'required',
+            'degree'                                                                    => ($this->selectedLaw == "18834") ? 'required' : '',
+            'workHours'                                                                 => ($this->selectedLaw == "19664") ? 'required' : '',
+            'selectedContractualCondition'                                              => 'required',
+            'email'                                                                     => 'required',
+            'telephone'                                                                 => 'required',
+            'selectedStrategicAxis'                                                     => 'required',
+            'objective'                                                                 => 'required',
+            'activityName'                                                              => 'required',
             'activityType'                                                              => 'required',
             ($this->activityType == "otro") ? 'otherActivityType' : 'otherActivityType' => ($this->activityType == "otro") ? 'required' : '',
             'mechanism'                                                                 => 'required',
+            'onlineTypeMechanism'                                                       => ($this->mechanism == "online") ? 'required' : '',
             'schuduled'                                                                 => 'required',
             'activityDateStartAt'                                                       => 'required',
             'activityDateEndAt'                                                         => 'required',
@@ -154,9 +164,10 @@ class TrainingCreate extends Component
             'place'                                                                     => 'required',
             'workingDay'                                                                => 'required',
             'technicalReasons'                                                          => 'required',
-
-            // 'trainingCosts'                                                             => 'required'
-            
+            'permissionFile'                                                            => (auth()->guard('external')->check() == true) ? 'required' : '',
+            'rejoinderFile'                                                             => (auth()->guard('external')->check() == true) ? 'required' : 'required',
+            'programFile'                                                               => (auth()->guard('external')->check() == true) ? 'required' : 'required'
+            // 'trainingCosts'                                                          => 'required'
         ]);
 
         // SE GUARDA REUNIÓN
@@ -169,7 +180,9 @@ class TrainingCreate extends Component
                     'status'                    => 'saved',
                     'user_training_id'          => $this->searchedUser->id,
                     'estament_id'               => $this->selectedEstament,
-                    'degree'                    => $this->degree, 
+                    'law'                       => $this->selectedLaw,
+                    'degree'                    => $this->degree,
+                    'work_hours'                => $this->workHours,
                     'contractual_condition_id'  => $this->selectedContractualCondition,
                     'organizational_unit_id'    => (auth()->guard('external')->check() == true) ? null : $this->searchedUser->organizational_unit_id,
                     'establishment_id'          => (auth()->guard('external')->check() == true) ? null : $this->searchedUser->organizationalUnit->establishment_id,
@@ -180,7 +193,9 @@ class TrainingCreate extends Component
                     'activity_name'             => $this->activityName,
                     'activity_type'             => $this->activityType, 
                     'other_activity_type'       => $this->otherActivityType,
-                    'mechanism'                 => $this->mechanism, 
+                    'mechanism'                 => $this->mechanism,
+                    'online_type'               => $this->onlineTypeMechanism,
+                    'work_hours'                => $this->workHours,
                     'schuduled'                 => $this->schuduled,
                     'activity_date_start_at'    => $this->activityDateStartAt, 
                     'activity_date_end_at'      => $this->activityDateEndAt, 
@@ -198,21 +213,62 @@ class TrainingCreate extends Component
 
             return $training;
         });
-
-        if($this->file){
+        
+        /*
+        if($this->permissionFile){
             $now = now()->format('Y_m_d_H_i_s');
-            $training->file()->updateOrCreate(
+            $training->files()->updateOrCreate(
                 [
                     'id' => ($training->file) ? $training->file->id : null,
                 ],
                 [
-                    'storage_path' => '/ionline/trainings/attachments/'.$now.'_training_'.$training->id.'.'.$this->file->extension(),
-                    'stored' => true,
-                    'name' => 'Mi adjunto.pdf',
-                    'stored_by_id' => auth()->id(),
+                    'storage_path'  => '/ionline/trainings/attachments/permission/'.$now.'_training_'.$training->id.'.'.$this->permissionFile->extension(),
+                    'stored'        => true,
+                    'name'          => 'permission_'.$training->id.'.pdf',
+                    'type'          => 'permission_file',
+                    'stored_by_id'  => auth()->id(),
                 ]
             );
-            $training->file = $this->file->storeAs('/ionline/trainings/attachments', $now.'_training_'.$training->id.'.'.$this->file->extension(), 'gcs');
+            $training->file = $this->permissionFile->storeAs('/ionline/trainings/attachments/permission', $now.'_training_'.$training->id.'.'.$this->permissionFile->extension(), 'gcs');
+        }
+        */
+
+        if($this->rejoinderFile){
+            $now = now()->format('Y_m_d_H_i_s');
+            $rejoinder = $training->files->where('type', 'rejoinder_file');
+
+            $training->files()->updateOrCreate(
+                [
+                    'id' => ($rejoinder->isNotEmpty()) ? $rejoinder->id : null,
+                ],
+                [
+                    'storage_path'  => '/ionline/trainings/attachments/rejoinder/'.$now.'_training_'.$training->id.'.'.$this->rejoinderFile->extension(),
+                    'stored'        => true,
+                    'name'          => 'rejoinder_'.$training->id.'.pdf',
+                    'type'          => 'rejoinder_file',
+                    'stored_by_id'  => auth()->id(),
+                ]
+            );
+            $training->file = $this->rejoinderFile->storeAs('/ionline/trainings/attachments/rejoinder', $now.'_training_'.$training->id.'.'.$this->rejoinderFile->extension(), 'gcs');
+        }
+
+        if($this->programFile){
+            $now = now()->format('Y_m_d_H_i_s');
+            $program = $training->files->where('type', 'program_file');
+
+            $training->files()->updateOrCreate(
+                [
+                    'id' => ($program->isNotEmpty()) ? $program->id : null,
+                ],
+                [
+                    'storage_path'  => '/ionline/trainings/attachments/program/'.$now.'_training_'.$training->id.'.'.$this->programFile->extension(),
+                    'stored'        => true,
+                    'name'          => 'program_'.$training->id.'.pdf',
+                    'type'          => 'program_file',
+                    'stored_by_id'  => auth()->id(),
+                ]
+            );
+            $training->file = $this->programFile->storeAs('/ionline/trainings/attachments/program', $now.'_training_'.$training->id.'.'.$this->programFile->extension(), 'gcs');
         }
 
         if(auth()->guard('external')->check() == true){
@@ -235,13 +291,9 @@ class TrainingCreate extends Component
             $this->degree                       = $this->training->degree;
             $this->selectedContractualCondition = $this->training->contractual_condition_id;
             $this->selectedContractualCondition = $this->training->contractual_condition_id;
-            $this->organizationalUnitUser       = $this->searchedUser->organizationalUnit->name;
-            $this->establishmentUser            = $this->searchedUser->organizationalUnit->establishment->name;
-
-            // 'organizational_unit_id'    => (auth()->guard('external')->check() == true) ? null : $this->searchedUser->organizational_unit_id,
-            //         'establishment_id'          => (auth()->guard('external')->check() == true) ? null : $this->searchedUser->organizationalUnit->establishment_id,
-            
-                    $this->email                        = $this->training->email;
+            $this->organizationalUnitUser       = ($this->searchedUser->organizationalUnit) ? $this->searchedUser->organizationalUnit->name : null;
+            $this->establishmentUser            = ($this->searchedUser->organizationalUnit) ? $this->searchedUser->organizationalUnit->establishment->name : null;
+            $this->email                        = $this->training->email;
             $this->telephone                    = $this->training->telephone;
             $this->selectedStrategicAxis        = $this->training->strategic_axes_id;
             $this->objective                    = $this->training->objective;
@@ -332,8 +384,8 @@ class TrainingCreate extends Component
         */
     }
 
-    public function show_file(Training $training){
-        return Storage::disk('gcs')->response($training->file->storage_path);
+    public function show_file(Training $training, $type){
+        return Storage::disk('gcs')->response($training->files->where('type', $type)->first()->storage_path);
     }
 
     public function sentToApproval(){
@@ -429,6 +481,32 @@ class TrainingCreate extends Component
         }
         else{
             return redirect()->route('trainings.own_index');
+        }
+    }
+
+    public function updatedSelectedLaw($value){
+        if($value == '18834'){
+            $this->degree = null;
+            $this->degreeStateInput = null;
+            $this->workHours = null;
+            $this->workHoursStateInput = 'disabled';
+        }
+        if($value == '19664'){
+            $this->degree = null;
+            $this->degreeStateInput = 'disabled';
+            $this->workHours = null;
+            $this->workHoursStateInput = null;
+        }
+    }
+
+    public function updatedMechanism($value){
+        if($value == 'online'){
+            // $this->onlineTypeMechanism = null;
+            $this->onlineTypeMechanismStateInput = null;
+        }
+        else{
+            $this->onlineTypeMechanism = null;
+            $this->onlineTypeMechanismStateInput = 'disabled';
         }
     }
 }

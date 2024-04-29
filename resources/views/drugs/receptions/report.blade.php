@@ -8,7 +8,11 @@
 
 <h3 class="mb-3">Reporte</h3>
 
-<h4>Cantidades sin destruir</h4>
+@foreach ($years as $year)
+    <a href="{{ route('drugs.receptions.export', ['year'=>$year->year]) }}">{{ $year->year }}</a> - 
+@endforeach
+
+<h4 class="mt-3">Cantidades sin destruir</h4>
 
 <div class="row">
     <div class="col-6">

@@ -7,8 +7,10 @@
             @if($organizationalUnit)
                 <h5 class="mb-3">
                     <i class="fas fa-chess"></i> Subrogantes de Autoridad {{$organizationalUnit->name?? ''}} de tipo @if($type) {{$type}} @endif
-                    <button class="btn btn-success float-end"
-                        wire:click="create"><i class="fas fa-plus"></i> Agregar nuevo</button>
+                    @can('Authorities: create')
+                        <button class="btn btn-success float-end"
+                            wire:click="create"><i class="fas fa-plus"></i> Agregar nuevo</button>
+                    @endcan
                 </h5>
                 @include('profile.subrogation.index')
             @else

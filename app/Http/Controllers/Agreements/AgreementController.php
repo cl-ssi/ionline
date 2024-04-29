@@ -486,45 +486,31 @@ class AgreementController extends Controller
             // $document->subject = 'Convenio programa '.$programa.' comuna de '.$agreement->commune->name;
             $document->subject = 'Documento convenio de ejecución de retiro voluntario'.($agreement->previous ? ' prórroga': '').' del programa '.$programa.' año '.$agreement->period.' comuna de '.$agreement->Commune->name;
             $document->distribution = $municipality_emails."\n".$agreement->referrer->email."\nvalentina.ortega@redsalud.gob.cl\naps.ssi@redsalud.gob.cl\nromina.garin@redsalud.gob.cl\njuridica.ssi@redsalud.gob.cl\no.partes2@redsalud.gob.cl\nblanca.galaz@redsalud.gob.cl";
-            $document->content = "<p
-            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
-            <strong><span>CONVENIO ANTICIPO DE APORTE ESTATAL&nbsp;</span></strong></p>
-        <p
-            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
-            <strong><span>BONIFICACI&Oacute;N POR RETIRO VOLUNTARIO <span
-                        style='background:yellow;'>".$periodoConvenio."</span> ESTABLECIDO EN LA LEY N&ordm;20.919</span></strong>
+            $document->content = "<p style='text-align:center;'>
+            <strong><span>CONVENIO ANTICIPO DE APORTE ESTATAL</span></strong></p>
+        <p style='text-align:center;'>
+            <strong><span>BONIFICACI&Oacute;N POR RETIRO VOLUNTARIO <span style='background:yellow;'>".$periodoConvenio."</span> ESTABLECIDO EN LA LEY N&ordm;20.919</span></strong>
         </p>
-        <p
-            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
-            <strong><span>&nbsp;PARA FUNCIONARIOS DE ATENCI&Oacute;N PRIMARIA DE SALUD ENTRE SERVICIO DE
+        <p style='text-align:center;'>
+            <strong><span>PARA FUNCIONARIOS DE ATENCI&Oacute;N PRIMARIA DE SALUD ENTRE SERVICIO DE
                     SALUD TARAPAC&Aacute; Y LA <span style='background:yellow;'>".$ilustre."
                         ".$municipalidad."</span>.</span></strong></p>
-        <p
-            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
-            <strong><span>&nbsp;</span></strong></p>
-        <p
-            style='margin-top:0cm;margin-right:0cm;margin-bottom:10.0pt;margin-left:0cm;line-height:115%;text-align:justify;'>
-            <span style='line-height:115%;'>En Iquique a <span
-                    style='background:yellow;'>".$fechaConvenio."</span>, comparecen, por una parte, el <strong>SERVICIO DE SALUD
-                    TARAPAC&Aacute;,</strong> persona jur&iacute;dica de derecho p&uacute;blico,&nbsp;</span><span
-                style='line-height:115%;'>RUT. 61.606.100-3&nbsp;</span><span
-                style='line-height:115%;'>con domicilio en calle An&iacute;bal Pinto N&ordm; 815 de Iquique,
+
+        <p style='text-align:justify;'>
+            <span>En Iquique a <span style='background:yellow;'>".$fechaConvenio."</span>, comparecen, por una parte, el <strong>SERVICIO DE SALUD
+                    TARAPAC&Aacute;,</strong> persona jur&iacute;dica de derecho p&uacute;blico,</span><span>RUT. 61.606.100-3</span><span>con domicilio en calle An&iacute;bal Pinto N&ordm; 815 de Iquique,
                 representado por su <span style='background:yellow;'>".$directorApelativo." D. <strong>".$director."</strong>,
                     ".$directorNationality.", C&eacute;dula Nacional de Identidad N&ordm; ".$directorRut."</span>, del mismo
                 domicilio del servicio p&uacute;blico que representa, en adelante el
-                <strong>&ldquo;SERVICIO&rdquo;</strong></span><span style='line-height:115%;'>&nbsp;</span><span
-                style='line-height:115%;'>por una parte</span><span
-                style='line-height:115%;'>;&nbsp;</span><span style='line-height:115%;'>y por la
+                <strong>&ldquo;SERVICIO&rdquo;</strong></span><span>por una parte</span><span>;</span><span>y por la
                 otra, la <strong><span style='background:yellow;'>".$ilustre." ".$municipalidad."</span></strong>, persona
                 jur&iacute;dica de derecho p&uacute;blico, RUT <span style='background:yellow;'>".$comunaRut."</span>,
                 representada por su <span style='background:yellow;'>".$alcaldeApelativo." D. <strong>".$alcalde."</strong>,
-                    chileno, C&eacute;dula Nacional de Identidad N&ordm; ".$alcaldeRut."</span> ambos domiciliados en <span
-                    style='background:yellow;'>".$municipalidadDirec." de la comuna de ".$comuna."</span>, en adelante la
+                    chileno, C&eacute;dula Nacional de Identidad N&ordm; ".$alcaldeRut."</span> ambos domiciliados en <span style='background:yellow;'>".$municipalidadDirec." de la comuna de ".$comuna."</span>, en adelante la
                 <strong>&ldquo;MUNICIPALIDAD&rdquo;</strong>, se ha acordado celebrar un convenio, que consta de las siguientes
-                cl&aacute;usulas</span><span style='line-height:115%;'>:</span></p>
-        <p
-            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
-            <strong><em><span>PRIMERA:&nbsp;</span></em></strong><span>El
+                cl&aacute;usulas</span>:</p>
+        <p style='text-align:justify;'>
+            <strong><em><span>PRIMERA:</span></em></strong><span>El
                 presente convenio se suscribe conforme a lo establecido en el decreto con fuerza ley N&deg;1-3063, de 1980, del
                 Ministerio de Interior y sus normas complementarias; a lo acordado en los convenios celebrados en virtud de
                 dichas normas entre el <strong>&ldquo;SERVICIO&rdquo;</strong> y la
@@ -534,305 +520,189 @@ class AgreementController extends Controller
                 impulsada por el Gobierno, el Ministerio de Salud ha firmado un acta de acuerdos con la Confederaci&oacute;n
                 Nacional de la Salud Municipal (CONFUSAM) y la Asociaci&oacute;n Chilena de Municipalidades (ACHM), en la que se
                 acuerda desarrollar un programa de mejoramiento de las condiciones de trabajo y salariales de los funcionarios
-                de la atenci&oacute;n primaria municipal.&nbsp;</span></p>
-        <p
-            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
-            <strong><em><u><span><span
-                                style='text-decoration:none;'>&nbsp;</span></span></u></em></strong></p>
-        <p
-            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
-            <strong><em><span>SEGUNDA:&nbsp;</span></em></strong><span>Se deja
+                de la atenci&oacute;n primaria municipal.</span></p>
+        <p style='text-align:justify;'>
+            </p>
+        <p style='text-align:justify;'>
+            <strong><em><span>SEGUNDA:</span></em></strong><span>Se deja
                 constancia que el Estatuto de Atenci&oacute;n Primaria de salud Municipal, aprobado por la Ley N&ordm;19.378, en
                 su art&iacute;culo N&ordm;56 establece que el aporte estatal mensual podr&aacute; incrementarse &ldquo;En el
                 caso que la Norma T&eacute;cnica, planes y programas que se impartan con posterioridad a la entrada en vigencia
-                de esta Ley, impliquen un mayor gasto para la&nbsp;</span><strong><span
-                >&ldquo;MUNICIPALIDAD&rdquo;</span></strong><span>, su
+                de esta Ley, impliquen un mayor gasto para la</span><strong><span>&ldquo;MUNICIPALIDAD&rdquo;</span></strong><span>, su
                 financiamiento ser&aacute; incorporado a los aportes establecidos en el art&iacute;culo
-                49&ordm;&rdquo;</span><span>. &nbsp;</span></p>
-        <p
-            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
-            <span>&nbsp;</span></p>
-        <p
-            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
-            <strong><em><span>TERCERA:&nbsp;</span></em></strong><span>Las
+                49&ordm;&rdquo;</span><span>. </span></p>
+
+        <p style='text-align:justify;'>
+            <strong><em><span>TERCERA:</span></em></strong><span>Las
                 partes dejan constancia que la Ley N&ordm;20.919, otorga beneficios a los trabajadores de la Salud Municipal y
                 establece en los art&iacute;culos 1&ordm;, 2&ordm;, 3&ordm;, 4&ordm;, 5&ordm;, 6&ordm;, 7&ordm;, 8&ordm; y
                 9&ordm; los requisitos para acceder a dicha Ley y, en el art&iacute;culo 10&ordm; los per&iacute;odos y plazos
                 de postulaci&oacute;n. Por su parte, la Ley N&ordm;20.589, en su art&iacute;culo 11&ordm;, establece los
                 criterios para solicitar financiamiento, cuando las entidades no cuentan con los recursos suficientes para pagar
                 indemnizaciones de cargo Municipal.</span></p>
-        <p
-            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
-            <span>&nbsp;</span></p>
-        <p
-            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
-            <strong><span>CUARTA</span></strong><strong><span
-                >:&nbsp;</span></strong><span>Respecto a los beneficios, la
+
+        <p style='text-align:justify;'>
+            <strong><span>CUARTA</span></strong>:<span>Respecto a los beneficios, la
                 Ley N&ordm;20.919 en su art&iacute;culo 1&ordm; concede, de cargo municipal, una bonificaci&oacute;n equivalente
                 a un mes de remuneraci&oacute;n imponible por cada a&ntilde;o de servicio y fracci&oacute;n superior a seis
                 meses prestados en establecimientos de salud p&uacute;blicos, municipales o corporaciones de salud municipal,
                 con m&aacute;ximo de diez meses. Las funcionario/as tendr&aacute;n derecho a un mes adicional de
-                bonificaci&oacute;n por retiro voluntario.&nbsp;</span></p>
-        <p
-            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
-            <span>&nbsp;</span></p>
-        <p
-            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
-            <strong><em><span>QUINTA</span></em></strong><strong><em><span
-                    >:&nbsp;</span></em></strong><span>Las partes dejan
-                constancia que conforme a Ord. <span style='background:yellow;'>N&deg;_ &nbsp;de fecha ______ del
-                    a&ntilde;o_____</span> y&nbsp;</span><span>Resoluci&oacute;n Exenta <span
-                    style='background:yellow;'>N&ordm;__, de fecha _____________del a&ntilde;o _____ de la
-                    ________________________________</span></span><span>&nbsp;,
-                la&nbsp;</span><strong><span>&ldquo;MUNICIPALIDAD&rdquo;&nbsp;</span></strong><span
-            >env&iacute;a antecedentes que respaldan cumplimiento de los requisitos que se&ntilde;ala
+                bonificaci&oacute;n por retiro voluntario.</span></p>
+
+        <p style='text-align:justify;'>
+            <strong><em><span>QUINTA</span></em></strong>:<span>Las partes dejan
+                constancia que conforme a Ord. <span style='background:yellow;'>N&deg;_ de fecha ______ del
+                    a&ntilde;o_____</span> y</span><span>Resoluci&oacute;n Exenta <span style='background:yellow;'>N&ordm;__, de fecha _____________del a&ntilde;o _____ de la
+                    ________________________________</span></span><span>,
+                la</span><strong><span>&ldquo;MUNICIPALIDAD&rdquo;</span></strong><span>env&iacute;a antecedentes que respaldan cumplimiento de los requisitos que se&ntilde;ala
                 la Ley N&ordm;20.919 y el c&aacute;lculo de los beneficios que corresponden a
-                ______________________________________________ seg&uacute;n Resoluci&oacute;n Exenta <span
-                    style='background:yellow;'>N&ordm; ".$numResolucion."&nbsp;</span>del Ministerio de Salud de fecha <span
-                    style='background:yellow;'>".$fechaResolucion.".</span>&nbsp;</span></p>
-        <p
-            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
-            <span>&nbsp;</span></p>
-        <p
-            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
-            <strong><em><span>SEXTA:</span></em></strong><span>&nbsp;El
+                ______________________________________________ seg&uacute;n Resoluci&oacute;n Exenta <span style='background:yellow;'>N&ordm; ".$numResolucion."</span>del Ministerio de Salud de fecha <span style='background:yellow;'>".$fechaResolucion.".</span></span></p>
+
+        <p style='text-align:justify;'>
+            <strong><em><span>SEXTA:</span></em></strong><span>El
                 &ldquo;<strong>SERVICIO&rdquo;</strong>, una vez verificados los datos de la solicitud, los c&aacute;lculos
                 efectuados sobre los beneficios y la justificaci&oacute;n relativa al plan, conforme la citada normativa,
                 procedi&oacute; a requerir los recursos respectivos al Ministerio de Salud, los que quedan establecidos en la
                 cl&aacute;usula<span style='background:yellow;'>_______</span> de este convenio, se&ntilde;alando a cada uno de
                 los beneficiarios de la Comuna de <span style='background:yellow;'>_____________,</span> de acuerdo a las
                 siguientes definiciones:</span></p>
-        <p
-            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
-            <span>&nbsp;</span></p>
-        <p
-            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
-            <strong><em><span>S&Eacute;PTIMA:&nbsp;</span></em></strong><span>En
+
+        <p style='text-align:justify;'>
+            <strong><em><span>S&Eacute;PTIMA:</span></em></strong><span>En
                 su art&iacute;culo 1&ordm; la Ley otorga por una sola vez, una bonificaci&oacute;n por retiro voluntario, de
                 cargo municipal, que ser&aacute; equivalente a un mes de remuneraci&oacute;n imponible por cada a&ntilde;o de
                 servicio y fracci&oacute;n superior a seis meses prestados en establecimientos de salud p&uacute;blicos,
                 municipales o corporaciones de salud municipal, con un m&aacute;ximo de diez meses. Las funcionarias o los
                 funcionarios tendr&aacute;n derecho a un mes adicional de bonificaci&oacute;n por retiro voluntario.</span></p>
-        <p
-            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
-            <span>&nbsp;</span></p>
-        <p
-            style='margin-top:0cm;margin-right:0cm;margin-bottom:10.0pt;margin-left:0cm;line-height:115%;text-align:justify;'>
-            <strong><em><span style='line-height:115%;'>OCTAVA:&nbsp;</span></em></strong><span
-                style='line-height:115%;'>El Ministerio de Salud, de acuerdo a los recursos susceptibles de
+
+        <p style='text-align:justify;'>
+            <strong><em><span>OCTAVA:</span></em></strong><span>El Ministerio de Salud, de acuerdo a los recursos susceptibles de
                 destinar para efecto del adelanto del aporte estatal, asign&oacute; la suma <span style='background:yellow;'>de
                     <strong>$".number_format($totalConvenio,0,",",".")." (".$totalConvenioLetras.")</strong></span>, de acuerdo a lo solicitado por la
                 Comuna mediante <span style='background:yellow;'>__________________________________________________, de fecha
                     _______ del a&ntilde;o ____,</span> que corresponde exactamente a la n&oacute;mina de funcionarios que han
-                cumplido todos los requisitos del Art&iacute;culo 1&ordm; de la Ley:</span></p>
-        <div align='center'
-            style='margin-top:0cm;margin-right:0cm;margin-bottom:10.0pt;margin-left:0cm;line-height:115%;'>
-            <table style='border-collapse:collapse;border: 1pt solid;'>
+                cumplido todos los requisitos del Art&iacute;culo 1&ordm; de la Ley:</span></p>        <div align='center'>
+            <table style='collapse:collapse;'>
                 <tbody>
                     <tr>
-                        <td style='width: 200.9pt;border: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
-                                <strong><span>NOMINA DE FUNCIONARIOS&nbsp;</span></strong></p>
+                        <td>
+                            <p style='text-align:center;'>
+                                <strong><span>NOMINA DE FUNCIONARIOS</span></strong></p>
                         </td>
-                        <td
-                            style='width: 114.7pt;border-top: 1pt solid;border-right: 1pt solid;border-bottom: 1pt solid;border-image: initial;border-left: none;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                        <td>
+                            <p style='text-align:center;'>
                                 <strong><span>RUT</span></strong></p>
                         </td>
-                        <td
-                            style='width: 125.9pt;border-top: 1pt solid;border-right: 1pt solid;border-bottom: 1pt solid;border-image: initial;border-left: none;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                        <td>
+                            <p style='text-align:center;'>
                                 <strong><span>BONIFICACI&Oacute;N ART. N&ordm;1</span></strong></p>
                         </td>
                     </tr>
                     <tr>
-                        <td
-                            style='width: 200.9pt;border-right: 1pt solid;border-bottom: 1pt solid;border-left: 1pt solid;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:  normal;text-align:justify;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+                            
                         </td>
-                        <td
-                            style='width: 114.7pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+
                         </td>
-                        <td
-                            style='width: 125.9pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+
                         </td>
                     </tr>
                     <tr>
-                        <td
-                            style='width: 200.9pt;border-right: 1pt solid;border-bottom: 1pt solid;border-left: 1pt solid;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:  normal;text-align:justify;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+                            
                         </td>
-                        <td
-                            style='width: 114.7pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+
                         </td>
-                        <td
-                            style='width: 125.9pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+
                         </td>
                     </tr>
                     <tr>
-                        <td
-                            style='width: 200.9pt;border-right: 1pt solid;border-bottom: 1pt solid;border-left: 1pt solid;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:  normal;text-align:justify;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+                            
                         </td>
-                        <td
-                            style='width: 114.7pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+
                         </td>
-                        <td
-                            style='width: 125.9pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+
                         </td>
                     </tr>
                     <tr>
-                        <td
-                            style='width: 200.9pt;border-right: 1pt solid;border-bottom: 1pt solid;border-left: 1pt solid;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:  normal;text-align:justify;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+                            
                         </td>
-                        <td
-                            style='width: 114.7pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+
                         </td>
-                        <td
-                            style='width: 125.9pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+
                         </td>
                     </tr>
                     <tr>
-                        <td
-                            style='width: 200.9pt;border-right: 1pt solid;border-bottom: 1pt solid;border-left: 1pt solid;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:  normal;text-align:justify;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+                            
                         </td>
-                        <td
-                            style='width: 114.7pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+
                         </td>
-                        <td
-                            style='width: 125.9pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+
                         </td>
                     </tr>
                     <tr>
-                        <td
-                            style='width: 200.9pt;border-right: 1pt solid;border-bottom: 1pt solid;border-left: 1pt solid;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:  normal;text-align:justify;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+                            
                         </td>
-                        <td
-                            style='width: 114.7pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+
                         </td>
-                        <td
-                            style='width: 125.9pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+
                         </td>
                     </tr>
                     <tr>
-                        <td
-                            style='width: 200.9pt;border-right: 1pt solid;border-bottom: 1pt solid;border-left: 1pt solid;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:  normal;text-align:justify;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+                            
                         </td>
-                        <td
-                            style='width: 114.7pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+
                         </td>
-                        <td
-                            style='width: 125.9pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+
                         </td>
                     </tr>
                     <tr>
-                        <td
-                            style='width: 200.9pt;border-right: 1pt solid;border-bottom: 1pt solid;border-left: 1pt solid;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:right;'>
-                                <strong><span>&nbsp;</span></strong></p>
+                        <td>
+
                         </td>
-                        <td
-                            style='width: 114.7pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:right;'>
+                        <td>
+                            <p>
                                 <strong><span>TOTAL:</span></strong></p>
                         </td>
-                        <td
-                            style='width: 125.9pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
-                                <strong><span>$&nbsp;</span></strong></p>
+                        <td>
+                            <p style='text-align:center;'>
+                                <strong><span>$</span></strong></p>
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
-        <p
-            style='margin-top:0cm;margin-right:0cm;margin-bottom:10.0pt;margin-left:0cm;line-height:115%;text-align:justify;'>
-            <span style='line-height:115%;'>&nbsp;</span></p>
-        <p
-            style='margin-top:0cm;margin-right:0cm;margin-bottom:10.0pt;margin-left:0cm;line-height:115%;text-align:justify;'>
-            <strong><em><span style='line-height:115%;background:yellow;'>NOVENA:</span></em></strong><span
-                style='line-height:115%;background:yellow;'>&nbsp;La suma se&ntilde;alada como adelanto del
-                aporte estatal en raz&oacute;n de&nbsp;</span><strong><span
-                    style='line-height:115%;background:yellow;'>$".number_format($totalConvenio,0,",",".")."
-                    (".$totalConvenioLetras.")</span></strong><span
-                style='line-height:115%;background:yellow;'>,</span><strong><span
-                    style='line-height:115%;background:yellow;'>&nbsp;</span></strong><span
-                style='line-height:115%;background:yellow;'>ser&aacute; devuelta por la entidad administradora en
+
+        <p style='text-align:justify;'>
+            <strong><em><span style='background:yellow;'>NOVENA:</span></em></strong><span style='background:yellow;'>La suma se&ntilde;alada como adelanto del
+                aporte estatal en raz&oacute;n de</span><strong><span style='background:yellow;'>$".number_format($totalConvenio,0,",",".")."
+                    (".$totalConvenioLetras.")</span></strong><span style='background:yellow;'>,</span><strong><span style='background:yellow;'></span></strong><span style='background:yellow;'>ser&aacute; devuelta por la entidad administradora en
                 un plazo de ".$totalQuotas." meses, en <strong>".$totalQuotasText."</strong>. El monto de los recursos a rebajar
                 ser&aacute; de hasta el 3% de aporte estatal mensual, no pudiendo exceder de ".$totalQuotas." meses el plazo para
                 la devoluci&oacute;n total. La primera rebaja del aporte estatal se har&aacute; efectiva a contar del mes
-                siguiente al de la entrega del anticipo que consta en las cl&aacute;usulas s&eacute;ptima y octava.</span><span
-                style='line-height:115%;'>&nbsp;</span></p>
-        <p
-            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
-            <strong><em><span>D&Eacute;CIMA:</span></em></strong><span>&nbsp;En
-                su art&iacute;culo 7&ordm;<strong>&nbsp;</strong>y de cargo fiscal, la Ley N&ordm;20.919 otorga al personal que,
+                siguiente al de la entrega del anticipo que consta en las cl&aacute;usulas s&eacute;ptima y octava.</span></p>
+        <p style='text-align:justify;'>
+            <strong><em><span>D&Eacute;CIMA:</span></em></strong><span>En
+                su art&iacute;culo 7&ordm;y de cargo fiscal, la Ley N&ordm;20.919 otorga al personal que,
                 acogi&eacute;ndose a la bonificaci&oacute;n por retiro voluntario del art&iacute;culo 1&ordm;, tenga a la fecha
                 de la renuncia voluntaria una antig&uuml;edad m&iacute;nima de diez a&ntilde;os continuos de servicio en
                 establecimientos de salud p&uacute;blicos, municipales o corporaciones de salud municipal, un incremento de la
@@ -842,211 +712,125 @@ class AgreementController extends Controller
                 incrementar la bonificaci&oacute;n una sola vez y hasta por un m&aacute;ximo de 44 hrs. Este incremento se
                 pagar&aacute; por la entidad administradora, en la misma oportunidad en que se pague la bonificaci&oacute;n por
                 retiro voluntario. No ser&aacute; imponible ni constituir&aacute; renta para ning&uacute;n efecto legal y, en
-                consecuencia, no estar&aacute; afecto a descuento alguno.</span><span>&nbsp;Este
+                consecuencia, no estar&aacute; afecto a descuento alguno.</span><span>Este
                 incremento corresponde exactamente a la n&oacute;mina de funcionarios que han cumplido todos los requisitos del
-                Art&iacute;culo 7&ordm; de la Ley</span><span>:&nbsp;</span></p>
-        <p
-            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
-            <span>&nbsp;</span></p>
-        <p
-            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
-            <span>&nbsp;</span></p>
-        <div align='center'
-            style='margin-top:0cm;margin-right:0cm;margin-bottom:10.0pt;margin-left:0cm;line-height:115%;'>
-            <table style='border-collapse:collapse;'>
+                Art&iacute;culo 7&ordm; de la Ley</span>:</p>
+
+        <div align='center'>
+            <table style='collapse:collapse;'>
                 <tbody>
                     <tr>
-                        <td style='width: 200.9pt;border: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
-                                <strong><span>NOMINA DE FUNCIONARIOS&nbsp;</span></strong></p>
+                        <td>
+                            <p style='text-align:center;'>
+                                <strong><span>NOMINA DE FUNCIONARIOS</span></strong></p>
                         </td>
-                        <td
-                            style='width: 114.7pt;border-top: 1pt solid;border-right: 1pt solid;border-bottom: 1pt solid;border-image: initial;border-left: none;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                        <td>
+                            <p style='text-align:center;'>
                                 <strong><span>RUT</span></strong></p>
                         </td>
-                        <td
-                            style='width: 125.9pt;border-top: 1pt solid;border-right: 1pt solid;border-bottom: 1pt solid;border-image: initial;border-left: none;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                        <td>
+                            <p style='text-align:center;'>
                                 <strong><span>BONIFICACI&Oacute;N ART. N&ordm;7</span></strong></p>
                         </td>
                     </tr>
                     <tr>
-                        <td
-                            style='width: 200.9pt;border-right: 1pt solid;border-bottom: 1pt solid;border-left: 1pt solid;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:  normal;text-align:justify;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+                            
                         </td>
-                        <td
-                            style='width: 114.7pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+
                         </td>
-                        <td
-                            style='width: 125.9pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+
                         </td>
                     </tr>
                     <tr>
-                        <td
-                            style='width: 200.9pt;border-right: 1pt solid;border-bottom: 1pt solid;border-left: 1pt solid;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:  normal;text-align:justify;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+                            
                         </td>
-                        <td
-                            style='width: 114.7pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+
                         </td>
-                        <td
-                            style='width: 125.9pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+
                         </td>
                     </tr>
                     <tr>
-                        <td
-                            style='width: 200.9pt;border-right: 1pt solid;border-bottom: 1pt solid;border-left: 1pt solid;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:  normal;text-align:justify;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+                            
                         </td>
-                        <td
-                            style='width: 114.7pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+
                         </td>
-                        <td
-                            style='width: 125.9pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+
                         </td>
                     </tr>
                     <tr>
-                        <td
-                            style='width: 200.9pt;border-right: 1pt solid;border-bottom: 1pt solid;border-left: 1pt solid;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:  normal;text-align:justify;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+                            
                         </td>
-                        <td
-                            style='width: 114.7pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+
                         </td>
-                        <td
-                            style='width: 125.9pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+
                         </td>
                     </tr>
                     <tr>
-                        <td
-                            style='width: 200.9pt;border-right: 1pt solid;border-bottom: 1pt solid;border-left: 1pt solid;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:  normal;text-align:justify;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+                            
                         </td>
-                        <td
-                            style='width: 114.7pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+
                         </td>
-                        <td
-                            style='width: 125.9pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+
                         </td>
                     </tr>
                     <tr>
-                        <td
-                            style='width: 200.9pt;border-right: 1pt solid;border-bottom: 1pt solid;border-left: 1pt solid;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:  normal;text-align:justify;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+                            
                         </td>
-                        <td
-                            style='width: 114.7pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+
                         </td>
-                        <td
-                            style='width: 125.9pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+
                         </td>
                     </tr>
                     <tr>
-                        <td
-                            style='width: 200.9pt;border-right: 1pt solid;border-bottom: 1pt solid;border-left: 1pt solid;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:  normal;text-align:justify;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+                            
                         </td>
-                        <td
-                            style='width: 114.7pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+
                         </td>
-                        <td
-                            style='width: 125.9pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+
                         </td>
                     </tr>
                     <tr>
-                        <td
-                            style='width: 200.9pt;border-right: 1pt solid;border-bottom: 1pt solid;border-left: 1pt solid;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:right;'>
-                                <strong><span>&nbsp;</span></strong></p>
+                        <td>
+
                         </td>
-                        <td
-                            style='width: 114.7pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:right;'>
+                        <td>
+                            <p>
                                 <strong><span>TOTAL:</span></strong></p>
                         </td>
-                        <td
-                            style='width: 125.9pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                        <td>
+                            <p style='text-align:center;'>
                                 <strong><span>$ 0</span></strong></p>
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
-        <p
-            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
-            <span>&nbsp;</span></p>
-        <p
-            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
-            <strong><em><span>&nbsp;</span></em></strong></p>
-        <p
-            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
-            <strong><em><span>D&Eacute;CIMO PRIMERA:&nbsp;</span></em></strong><span
-            >La Ley N&ordm;20.919, en su art&iacute;culo 8&ordm;, se&ntilde;ala que el personal que
+
+        <p style='text-align:justify;'>
+            </p>
+        <p style='text-align:justify;'>
+            <strong><em><span>D&Eacute;CIMO PRIMERA:</span></em></strong><span>La Ley N&ordm;20.919, en su art&iacute;culo 8&ordm;, se&ntilde;ala que el personal que
                 acogi&eacute;ndose a la bonificaci&oacute;n por retiro voluntario del art&iacute;culo 1&ordm; tenga a la fecha
                 de renuncia voluntaria una antig&uuml;edad m&iacute;nima de diez a&ntilde;os continuos de servicio en
                 establecimientos de salud p&uacute;blicos, municipales o corporaciones de salud municipal, tendr&aacute; derecho
@@ -1056,213 +840,125 @@ class AgreementController extends Controller
                 acuerdo al par&aacute;metro estableciendo en relaci&oacute;n a la remuneraci&oacute;n bruta total mensual. Este
                 incremento se pagar&aacute; por la entidad administradora, en la misma oportunidad en que se pague la
                 bonificaci&oacute;n por retiro voluntario. No ser&aacute; imponible ni constituir&aacute; renta para
-                ning&uacute;n efecto legal y, en consecuencia, no estar&aacute; afecto a descuento alguno.&nbsp;</span><span
-            >Este incremento corresponde exactamente a la n&oacute;mina de funcionarios que han
-                cumplido todos los requisitos del Art&iacute;culo 8&ordm; de la Ley</span><span>:</span>
+                ning&uacute;n efecto legal y, en consecuencia, no estar&aacute; afecto a descuento alguno.</span><span>Este incremento corresponde exactamente a la n&oacute;mina de funcionarios que han
+                cumplido todos los requisitos del Art&iacute;culo 8&ordm; de la Ley</span>:
         </p>
-        <p
-            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
-            <span>&nbsp;</span></p>
-        <p
-            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
-            <span>&nbsp;</span></p>
-        <div align='center'
-            style='margin-top:0cm;margin-right:0cm;margin-bottom:10.0pt;margin-left:0cm;line-height:115%;'>
-            <table style='border-collapse:collapse;'>
+
+        <div align='center'>
+            <table style='collapse:collapse;'>
                 <tbody>
                     <tr>
-                        <td style='width: 200.9pt;border: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
-                                <strong><span>NOMINA DE FUNCIONARIOS&nbsp;</span></strong></p>
+                        <td>
+                            <p style='text-align:center;'>
+                                <strong><span>NOMINA DE FUNCIONARIOS</span></strong></p>
                         </td>
-                        <td
-                            style='width: 114.7pt;border-top: 1pt solid;border-right: 1pt solid;border-bottom: 1pt solid;border-image: initial;border-left: none;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                        <td>
+                            <p style='text-align:center;'>
                                 <strong><span>RUT</span></strong></p>
                         </td>
-                        <td
-                            style='width: 125.9pt;border-top: 1pt solid;border-right: 1pt solid;border-bottom: 1pt solid;border-image: initial;border-left: none;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                        <td>
+                            <p style='text-align:center;'>
                                 <strong><span>BONIFICACI&Oacute;N ART. N&ordm;8</span></strong></p>
                         </td>
                     </tr>
                     <tr>
-                        <td
-                            style='width: 200.9pt;border-right: 1pt solid;border-bottom: 1pt solid;border-left: 1pt solid;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:  normal;text-align:justify;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+                            
                         </td>
-                        <td
-                            style='width: 114.7pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+
                         </td>
-                        <td
-                            style='width: 125.9pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+
                         </td>
                     </tr>
                     <tr>
-                        <td
-                            style='width: 200.9pt;border-right: 1pt solid;border-bottom: 1pt solid;border-left: 1pt solid;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:  normal;text-align:justify;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+                            
                         </td>
-                        <td
-                            style='width: 114.7pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+
                         </td>
-                        <td
-                            style='width: 125.9pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+
                         </td>
                     </tr>
                     <tr>
-                        <td
-                            style='width: 200.9pt;border-right: 1pt solid;border-bottom: 1pt solid;border-left: 1pt solid;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:  normal;text-align:justify;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+                            
                         </td>
-                        <td
-                            style='width: 114.7pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+
                         </td>
-                        <td
-                            style='width: 125.9pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+
                         </td>
                     </tr>
                     <tr>
-                        <td
-                            style='width: 200.9pt;border-right: 1pt solid;border-bottom: 1pt solid;border-left: 1pt solid;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:  normal;text-align:justify;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+                            
                         </td>
-                        <td
-                            style='width: 114.7pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+
                         </td>
-                        <td
-                            style='width: 125.9pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+
                         </td>
                     </tr>
                     <tr>
-                        <td
-                            style='width: 200.9pt;border-right: 1pt solid;border-bottom: 1pt solid;border-left: 1pt solid;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:  normal;text-align:justify;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+                            
                         </td>
-                        <td
-                            style='width: 114.7pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+
                         </td>
-                        <td
-                            style='width: 125.9pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+
                         </td>
                     </tr>
                     <tr>
-                        <td
-                            style='width: 200.9pt;border-right: 1pt solid;border-bottom: 1pt solid;border-left: 1pt solid;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:  normal;text-align:justify;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+                            
                         </td>
-                        <td
-                            style='width: 114.7pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+
                         </td>
-                        <td
-                            style='width: 125.9pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+
                         </td>
                     </tr>
                     <tr>
-                        <td
-                            style='width: 200.9pt;border-right: 1pt solid;border-bottom: 1pt solid;border-left: 1pt solid;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:  normal;text-align:justify;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+                            
                         </td>
-                        <td
-                            style='width: 114.7pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+
                         </td>
-                        <td
-                            style='width: 125.9pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+
                         </td>
                     </tr>
                     <tr>
-                        <td
-                            style='width: 200.9pt;border-right: 1pt solid;border-bottom: 1pt solid;border-left: 1pt solid;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:right;'>
-                                <strong><span>&nbsp;</span></strong></p>
+                        <td>
+
                         </td>
-                        <td
-                            style='width: 114.7pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:right;'>
+                        <td>
+                            <p>
                                 <strong><span>TOTAL:</span></strong></p>
                         </td>
-                        <td
-                            style='width: 125.9pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                        <td>
+                            <p style='text-align:center;'>
                                 <strong><span>$ 0</span></strong></p>
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
-        <p
-            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
-            <span>&nbsp;</span></p>
-        <p
-            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
-            <strong><em><span>&nbsp;</span></em></strong></p>
-        <p
-            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
-            <strong><em><span>D&Eacute;CIMO SEGUNDA:&nbsp;</span></em></strong><em><span
-                >La Ley N&ordm;20.919, en su art&iacute;culo 9&ordm;&nbsp;</span></em><span
-            >establece que el personal beneficiado del incremento establecido en la cl&aacute;usula
+
+        <p style='text-align:justify;'>
+            </p>
+        <p style='text-align:justify;'>
+            <strong><em><span>D&Eacute;CIMO SEGUNDA:</span></em></strong><em><span>La Ley N&ordm;20.919, en su art&iacute;culo 9&ordm;</span></em><span>establece que el personal beneficiado del incremento establecido en la cl&aacute;usula
                 quinta, en relaci&oacute;n con el art&iacute;culo 7&ordm; de la Ley, tendr&aacute; derecho a un bono
                 complementario, de cargo fiscal, si la suma del referido incremento y el bono adicional de art&iacute;culo
                 8&ordm; fuere inferior a 395 UF. El bono complementario ascender&aacute; a una cantidad que le permita alcanzar
@@ -1273,481 +969,275 @@ class AgreementController extends Controller
                 oportunidad que el incremento del art&iacute;culo 7&ordm;. Este incremento corresponde exactamente a la
                 n&oacute;mina de funcionarios que han cumplido todos los requisitos del Art&iacute;culo 9&ordm; de la
                 Ley:</span></p>
-        <p
-            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
-            <span>&nbsp;</span></p>
-        <div align='center'
-            style='margin-top:0cm;margin-right:0cm;margin-bottom:10.0pt;margin-left:0cm;line-height:115%;'>
-            <table style='border-collapse:collapse;'>
+        <div align='center'>
+            <table style='collapse:collapse;'>
                 <tbody>
                     <tr>
-                        <td style='width: 200.9pt;border: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
-                                <strong><span>NOMINA DE FUNCIONARIOS&nbsp;</span></strong></p>
+                        <td>
+                            <p style='text-align:center;'>
+                                <strong><span>NOMINA DE FUNCIONARIOS</span></strong></p>
                         </td>
-                        <td
-                            style='width: 114.7pt;border-top: 1pt solid;border-right: 1pt solid;border-bottom: 1pt solid;border-image: initial;border-left: none;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                        <td>
+                            <p style='text-align:center;'>
                                 <strong><span>RUT</span></strong></p>
                         </td>
-                        <td
-                            style='width: 125.9pt;border-top: 1pt solid;border-right: 1pt solid;border-bottom: 1pt solid;border-image: initial;border-left: none;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                        <td>
+                            <p style='text-align:center;'>
                                 <strong><span>BONIFICACI&Oacute;N ART. N&ordm;9</span></strong></p>
                         </td>
                     </tr>
                     <tr>
-                        <td
-                            style='width: 200.9pt;border-right: 1pt solid;border-bottom: 1pt solid;border-left: 1pt solid;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:  normal;text-align:justify;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+                            
                         </td>
-                        <td
-                            style='width: 114.7pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+
                         </td>
-                        <td
-                            style='width: 125.9pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+
                         </td>
                     </tr>
                     <tr>
-                        <td
-                            style='width: 200.9pt;border-right: 1pt solid;border-bottom: 1pt solid;border-left: 1pt solid;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:  normal;text-align:justify;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+                            
                         </td>
-                        <td
-                            style='width: 114.7pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+
                         </td>
-                        <td
-                            style='width: 125.9pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+
                         </td>
                     </tr>
                     <tr>
-                        <td
-                            style='width: 200.9pt;border-right: 1pt solid;border-bottom: 1pt solid;border-left: 1pt solid;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:  normal;text-align:justify;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+                            
                         </td>
-                        <td
-                            style='width: 114.7pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+
                         </td>
-                        <td
-                            style='width: 125.9pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+
                         </td>
                     </tr>
                     <tr>
-                        <td
-                            style='width: 200.9pt;border-right: 1pt solid;border-bottom: 1pt solid;border-left: 1pt solid;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:  normal;text-align:justify;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+                            
                         </td>
-                        <td
-                            style='width: 114.7pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+
                         </td>
-                        <td
-                            style='width: 125.9pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+
                         </td>
                     </tr>
                     <tr>
-                        <td
-                            style='width: 200.9pt;border-right: 1pt solid;border-bottom: 1pt solid;border-left: 1pt solid;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:  normal;text-align:justify;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+                            
                         </td>
-                        <td
-                            style='width: 114.7pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+
                         </td>
-                        <td
-                            style='width: 125.9pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+
                         </td>
                     </tr>
                     <tr>
-                        <td
-                            style='width: 200.9pt;border-right: 1pt solid;border-bottom: 1pt solid;border-left: 1pt solid;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:  normal;text-align:justify;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+                            
                         </td>
-                        <td
-                            style='width: 114.7pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+
                         </td>
-                        <td
-                            style='width: 125.9pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+
                         </td>
                     </tr>
                     <tr>
-                        <td
-                            style='width: 200.9pt;border-right: 1pt solid;border-bottom: 1pt solid;border-left: 1pt solid;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:  normal;text-align:justify;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+                            
                         </td>
-                        <td
-                            style='width: 114.7pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+
                         </td>
-                        <td
-                            style='width: 125.9pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+
                         </td>
                     </tr>
                     <tr>
-                        <td
-                            style='width: 200.9pt;border-right: 1pt solid;border-bottom: 1pt solid;border-left: 1pt solid;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:right;'>
-                                <strong><span>&nbsp;</span></strong></p>
+                        <td>
+
                         </td>
-                        <td
-                            style='width: 114.7pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:right;'>
+                        <td>
+                            <p>
                                 <strong><span>TOTAL:</span></strong></p>
                         </td>
-                        <td
-                            style='width: 125.9pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
-                                <strong><span>$&nbsp;</span></strong></p>
+                        <td>
+                            <p style='text-align:center;'>
+                                <strong><span>$</span></strong></p>
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
-        <p
-            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
-            <span>&nbsp;</span></p>
-        <p
-            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
-            <span>&nbsp;</span></p>
-        <p
-            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
-            <strong><em><span>&nbsp;</span></em></strong></p>
-        <p
-            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
-            <strong><em><span>&nbsp;</span></em></strong></p>
-        <p
-            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
-            <strong><em><span>&nbsp;</span></em></strong></p>
-        <p
-            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
-            <strong><em><span>&nbsp;</span></em></strong></p>
-        <p
-            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
-            <strong><em><span>D&Eacute;CIMO TERCERA:&nbsp;</span></em></strong><span
-            >La <strong>&ldquo;MUNICIPALIDAD&rdquo;</strong></span><span
-            >,<strong>&nbsp;</strong>efectuar&aacute; el pago del incentivo que corresponda a cada
+
+
+        <p style='text-align:justify;'>
+            </p>
+        <p style='text-align:justify;'>
+            </p>
+        <p style='text-align:justify;'>
+            </p>
+        <p style='text-align:justify;'>
+            </p>
+        <p style='text-align:justify;'>
+            <strong><em><span>D&Eacute;CIMO TERCERA:</span></em></strong><span>La <strong>&ldquo;MUNICIPALIDAD&rdquo;</strong></span><span>,efectuar&aacute; el pago del incentivo que corresponda a cada
                 uno de los trabajadores que se&ntilde;ala el presente convenio, en una sola cuota, una vez que est&eacute;
                 totalmente tramitado el acto administrativo que disponga el cese de funciones. El t&eacute;rmino de la
                 relaci&oacute;n laboral se producir&aacute; cuando el empleador pague la totalidad de los beneficios detallados
                 en la siguiente n&oacute;mina, de lo que se dejar&aacute; constancia, en la forma se&ntilde;alada en la
                 cl&aacute;usula d&eacute;cimo cuarta.</span></p>
-        <p
-            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
-            <span>&nbsp;</span></p>
-        <div align='center'
-            style='margin-top:0cm;margin-right:0cm;margin-bottom:10.0pt;margin-left:0cm;line-height:115%;'>
-            <table style='border-collapse:collapse;border: 1pt solid;'>
+        <div align='center'>
+            <table style='collapse:collapse;'>
                 <tbody>
                     <tr>
-                        <td style='width: 200.9pt;border: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
-                                <strong><span>NOMINA DE FUNCIONARIOS&nbsp;</span></strong></p>
+                        <td>
+                            <p style='text-align:center;'>
+                                <strong><span>NOMINA DE FUNCIONARIOS</span></strong></p>
                         </td>
-                        <td
-                            style='width: 114.7pt;border-top: 1pt solid;border-right: 1pt solid;border-bottom: 1pt solid;border-image: initial;border-left: none;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                        <td>
+                            <p style='text-align:center;'>
                                 <strong><span>RUT</span></strong></p>
                         </td>
-                        <td
-                            style='width: 125.9pt;border-top: 1pt solid;border-right: 1pt solid;border-bottom: 1pt solid;border-image: initial;border-left: none;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                        <td>
+                            <p style='text-align:center;'>
                                 <strong><span>TOTAL BONIFICACIONES</span></strong></p>
                         </td>
                     </tr>
                     <tr>
-                        <td
-                            style='width: 200.9pt;border-right: 1pt solid;border-bottom: 1pt solid;border-left: 1pt solid;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:  normal;text-align:justify;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+                            
                         </td>
-                        <td
-                            style='width: 114.7pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+
                         </td>
-                        <td
-                            style='width: 125.9pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+
                         </td>
                     </tr>
                     <tr>
-                        <td
-                            style='width: 200.9pt;border-right: 1pt solid;border-bottom: 1pt solid;border-left: 1pt solid;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:  normal;text-align:justify;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+                            
                         </td>
-                        <td
-                            style='width: 114.7pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+
                         </td>
-                        <td
-                            style='width: 125.9pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+
                         </td>
                     </tr>
                     <tr>
-                        <td
-                            style='width: 200.9pt;border-right: 1pt solid;border-bottom: 1pt solid;border-left: 1pt solid;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:  normal;text-align:justify;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+                            
                         </td>
-                        <td
-                            style='width: 114.7pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+
                         </td>
-                        <td
-                            style='width: 125.9pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+
                         </td>
                     </tr>
                     <tr>
-                        <td
-                            style='width: 200.9pt;border-right: 1pt solid;border-bottom: 1pt solid;border-left: 1pt solid;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:  normal;text-align:justify;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+                            
                         </td>
-                        <td
-                            style='width: 114.7pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+
                         </td>
-                        <td
-                            style='width: 125.9pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+
                         </td>
                     </tr>
                     <tr>
-                        <td
-                            style='width: 200.9pt;border-right: 1pt solid;border-bottom: 1pt solid;border-left: 1pt solid;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:  normal;text-align:justify;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+                            
                         </td>
-                        <td
-                            style='width: 114.7pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+
                         </td>
-                        <td
-                            style='width: 125.9pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+
                         </td>
                     </tr>
                     <tr>
-                        <td
-                            style='width: 200.9pt;border-right: 1pt solid;border-bottom: 1pt solid;border-left: 1pt solid;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:  normal;text-align:justify;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+                            
                         </td>
-                        <td
-                            style='width: 114.7pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+
                         </td>
-                        <td
-                            style='width: 125.9pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+
                         </td>
                     </tr>
                     <tr>
-                        <td
-                            style='width: 200.9pt;border-right: 1pt solid;border-bottom: 1pt solid;border-left: 1pt solid;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:  normal;text-align:justify;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+                            
                         </td>
-                        <td
-                            style='width: 114.7pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+
                         </td>
-                        <td
-                            style='width: 125.9pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
-                                <span>&nbsp;</span></p>
+                        <td>
+
                         </td>
                     </tr>
                     <tr>
-                        <td
-                            style='width: 200.9pt;border-right: 1pt solid;border-bottom: 1pt solid;border-left: 1pt solid;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:right;'>
-                                <strong><span>&nbsp;</span></strong></p>
+                        <td>
+
                         </td>
-                        <td
-                            style='width: 114.7pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:right;'>
+                        <td>
+                            <p>
                                 <strong><span>TOTAL:</span></strong></p>
                         </td>
-                        <td
-                            style='width: 125.9pt;border-top: none;border-left: none;border-bottom: 1pt solid;border-right: 1pt solid;padding: 0cm 5.4pt;vertical-align: top;'>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+                        <td>
+                            <p style='text-align:center;'>
                                 <strong><span>$ total de todas las tablas anteriores</span></strong></p>
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
-        <p
-            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
-            <strong><em><span>&nbsp;</span></em></strong></p>
-        <p
-            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
-            <strong><em><span>&nbsp;</span></em></strong></p>
-        <p
-            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
-            <strong><em><span>D&Eacute;CIMO &nbsp;CUARTA:&nbsp;</span></em></strong><span
-            >El convenio entrar&aacute; en vigencia a contar de la total tramitaci&oacute;n de la
+        <p style='text-align:justify;'>
+            </p>
+        <p style='text-align:justify;'>
+            </p>
+        <p style='text-align:justify;'>
+            <strong><em><span>D&Eacute;CIMO CUARTA:</span></em></strong><span>El convenio entrar&aacute; en vigencia a contar de la total tramitaci&oacute;n de la
                 resoluci&oacute;n del Ministerio de Salud, visada por el Ministerio de Hacienda, que lo apruebe, hasta la fecha
-                de la &uacute;ltima rebaja, conforme al plazo establecido en la cl&aacute;usula octava.&nbsp;</span></p>
-        <p
-            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
-            <span>&nbsp;</span></p>
-        <p
-            style='margin-top:0cm;margin-right:0cm;margin-bottom:10.0pt;margin-left:0cm;line-height:115%;text-align:justify;'>
-            <strong><em><span style='line-height:115%;'>D&Eacute;CIMO QUINTA:&nbsp;</span></em></strong><span
-                style='line-height:115%;'>La personer&iacute;a de D. <span
-                    style='background:yellow;'>".$director."</span>, para representar el Servicio de Salud de
-                Tarapac&aacute;,</span><span style='line-height:115%;'>&nbsp;</span><span
-                style='line-height:115%;'>consta en el <span
-                    style='background:yellow;'>".$directorDecreto."</span>.</span><span
-                style='line-height:115%;'>&nbsp;La representaci&oacute;n de D. <span
-                    style='background:yellow;'>".$alcalde."</span> para actuar en nombre de la <span
-                    style='background:yellow;'>".ucfirst(mb_strtolower($ilustre))."</span> Municipalidad de <span
-                    style='background:yellow;'>".$comuna."</span>, emana del <span
-                    style='background:yellow;'>".$alcaldeDecreto."</span> de la <span style='background:yellow;'>".ucfirst(mb_strtolower($ilustre))."</span>
+                de la &uacute;ltima rebaja, conforme al plazo establecido en la cl&aacute;usula octava.</span></p>
+
+        <p style='text-align:justify;'>
+            <strong><em><span>D&Eacute;CIMO QUINTA:</span></em></strong><span>La personer&iacute;a de D. <span style='background:yellow;'>".$director."</span>, para representar el Servicio de Salud de
+                Tarapac&aacute;,</span><span>consta en el <span style='background:yellow;'>".$directorDecreto."</span>.</span><span>La representaci&oacute;n de D. <span style='background:yellow;'>".$alcalde."</span> para actuar en nombre de la <span style='background:yellow;'>".ucfirst(mb_strtolower($ilustre))."</span> Municipalidad de <span style='background:yellow;'>".$comuna."</span>, emana del <span style='background:yellow;'>".$alcaldeDecreto."</span> de la <span style='background:yellow;'>".ucfirst(mb_strtolower($ilustre))."</span>
                 Municipalidad de <span style='background:yellow;'>".$comuna."</span>.</span></p>
-        <p
-            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
-            <strong><em><span style='color:black;'>D&Eacute;CIMO SEXTA</span></em></strong><strong><em><span
-                    >:&nbsp;</span></em></strong><span>El presente Convenio
+        <p style='text-align:justify;'>
+            <strong><em><span style='color:black;'>D&Eacute;CIMO SEXTA</span></em></strong>:<span> El presente Convenio
                 se firma digitalmente en un ejemplar, quedando este en poder del <strong>&ldquo;SERVICIO&rdquo;</strong>. Por su
                 parte, la <strong>&ldquo;MUNICIPALIDAD&rdquo;</strong>, contraparte de este convenio y la Divisi&oacute;n de
                 Atenci&oacute;n Primaria del Ministerio de Salud e involucrados, recibir&aacute;n el documento original
                 digitalizado.</span></p>
-        <p
-            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
-            <span>&nbsp;</span></p>
-        <p
-            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
-            <span>&nbsp;</span></p>
-        <p
-            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
-            <span>&nbsp;</span></p>
-        <p
-            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
-            <span>&nbsp;</span></p>
-        <p
-            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
-            <span>&nbsp;</span></p>
-        <p
-            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
-            <span>&nbsp;</span></p>
-        <p
-            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
-            <span>&nbsp;</span></p>
-        <p
-            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:justify;'>
-            <span>&nbsp;</span></p>
-        <p
-            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+
+
+
+
+
+
+
+
+        <p style='text-align:center;'>
             <strong><span style='background:yellow;'>D. ".$alcalde."</span></strong></p>
-        <p
-            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+        <p style='text-align:center;'>
             <strong><span style='background:yellow;'>".$alcaldeApelativoFirma."</span></strong></p>
-        <p
-            style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;text-align:center;'>
+        <p style='text-align:center;'>
             <strong><span style='background:yellow;'>".$ilustre." ".$municipalidad."</span></strong></p>";
 
             $document->content = preg_replace('/font-size.+?;/', "", $document->content);
@@ -1863,74 +1353,26 @@ class AgreementController extends Controller
         $document->distribution = $municipality_emails."\n".$agreement->referrer->email."\nvalentina.ortega@redsalud.gob.cl\naps.ssi@redsalud.gob.cl\nromina.garin@redsalud.gob.cl\njuridica.ssi@redsalud.gob.cl\no.partes2@redsalud.gob.cl\nblanca.galaz@redsalud.gob.cl";
         $document->content = "
 
-        <p style='margin-top:12pt; margin-bottom:0pt;text-align:center'>
-    <strong><span style='font-size:12pt; '>CONVENIO DE EJECUCIÓN </span></strong>
+        <p style='text-align:center'>
+    <strong><span>CONVENIO DE EJECUCIÓN </span></strong>
 </p>
-<p style='margin-top:12pt; margin-bottom:0pt;text-align:center'>
-    <strong><span style='font-size:12pt; '>“".($agreement->previous ? "PRÓRROGA " : "")."PROGRAMA </span></strong><strong><span
-            style='font-size:12pt; background-color:#00ff00'>".mb_strtoupper($programa)."</span></strong><strong><span
-            style='font-size:12pt; '> AÑO </span></strong><strong><span
-            style='font-size:12pt; background-color:#00ff00'>".$periodoConvenio."</span></strong><strong><span
-            style='font-size:12pt; '>”</span></strong>
+<p style='text-align:center'>
+    <strong><span>“".($agreement->previous ? "PRÓRROGA " : "")."PROGRAMA </span></strong><strong><span style='background-color: yellow;'>".mb_strtoupper($programa)."</span></strong><strong><span> AÑO </span></strong><strong><span style='background-color: yellow;'>".$periodoConvenio."</span></strong><strong><span>”</span></strong>
 </p>
-<p style='margin-top:0pt; margin-bottom:0pt; text-align:center'>
-    <strong><span style='font-size:12pt; '>ENTRE EL SERVICIO DE SALUD TARAPACÁ Y LA
-        </span></strong><strong><span style='font-size:12pt; background-color:#ffff00'>".$ilustre."
-        </span></strong><strong><span
-            style='font-size:12pt;background-color:#00ff00'>".$municipalidad."</span></strong><strong><span
-            style='font-size:12pt; '>.</span></strong>
+<p style='text-align:center'>
+    <strong><span>ENTRE EL SERVICIO DE SALUD TARAPACÁ Y LA
+        </span></strong><strong><span style='background-color: yellow;'>".$ilustre."
+        </span></strong><strong><span style='background-color: yellow;'>".$municipalidad."</span></strong><strong><span>.</span></strong>
 </p>
-<p style='margin-top:0pt; margin-bottom:0pt; text-align:center'>
-    <strong><span style=' '>&#xa0;</span></strong>
-</p>
-<p style='margin-top:12pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
-    <span style=' font-size:11pt; font-weight:normal'>En Iquique a </span><span
-        style=' font-size:11pt; font-weight:normal; background-color:#00ff00'>".$fechaConvenio."</span><span
-        style=' font-size:11pt; font-weight:normal'>, entre</span><span
-        style=' font-size:11pt'> </span><span
-        style=' font-size:11pt; font-weight:normal'>el </span><span
-        style=' font-size:11pt'>SERVICIO DE SALUD TARAPACÁ</span><span
-        style=' font-size:11pt; font-weight:normal'>, persona jurídica de derecho público,
-    </span><span style=' font-size:11pt'>RUT. 61.606.100-3</span><span
-        style=' font-size:11pt; font-weight:normal'>, con domicilio en </span><span
-        style=' font-size:11pt'>calle Aníbal Pinto N°815</span><span
-        style=' font-size:11pt; font-weight:normal'> de la ciudad de Iquique, representado por
-        su </span><span
-        style=' font-size:11pt; background-color:#00ff00'>".$directorApelativo."</span><span
-        style=' font-size:11pt'> D. </span><span
-        style=' font-size:11pt; background-color:#00ff00'>".$director."</span><span
-        style=' font-size:11pt; font-weight:normal'>,</span><span
-        style=' font-size:11pt'> </span><span
-        style=' font-size:11pt; font-weight:normal; background-color:#00ff00'>".$directorNationality."</span><span
-        style=' font-size:11pt; font-weight:normal'>, Cédula Nacional de Identidad </span><span
-        style=' font-size:11pt; background-color:#00ff00'>N°".$directorRut."</span><span
-        style=' font-size:11pt; font-weight:normal; background-color:#00ff00'>,</span><span
-        style=' font-size:11pt; font-weight:normal'> del mismo domicilio del servicio público
-        que representa, en adelante el </span><span style=' font-size:11pt'>“SERVICIO”
-    </span><span style=' font-size:11pt; font-weight:normal'>por una parte; y por la
-        otra,</span><span style=' font-size:11pt'> </span><span
-        style=' font-size:11pt; font-weight:normal'>la </span><span
-        style=' font-size:11pt'>".$ilustre."</span><span
-        style=' font-size:11pt; font-weight:normal'> </span><span
-        style=' font-size:11pt; background-color:#00ff00'>".$municipalidad."</span><span
-        style=' font-size:11pt; font-weight:normal'>, persona jurídica de derecho público,
-    </span><span style=' font-size:11pt; background-color:#00ff00'>RUT ".$comunaRut."</span><span
-        style=' font-size:11pt; font-weight:normal; background-color:#00ff00'>,</span><span
-        style=' font-size:11pt; font-weight:normal'> representada por su </span><span
-        style=' font-size:11pt; background-color:#00ff00'>".$alcaldeApelativo."</span><span
-        style=' font-size:11pt; font-weight:normal'> </span><span
-        style=' font-size:11pt; background-color:#00ff00'>".$alcalde."</span><span
-        style=' font-size:11pt; font-weight:normal'>, chileno, Cédula Nacional de Identidad
-    </span><span style=' font-size:11pt; background-color:#00ff00'>N°".$alcaldeRut."</span><span
-        style=' font-size:11pt; font-weight:normal'> ambos domiciliados en</span><span
-        style=' font-weight:normal'> </span><span
-        style=' font-size:11pt; background-color:#00ff00'>".$municipalidadDirec."</span><span
-        style=' font-size:11pt'> </span><span
-        style=' font-size:11pt; font-weight:normal'>de la comuna de </span><span
-        style=' font-size:11pt; font-weight:normal; background-color:#00ff00'>".$comuna."</span><span
-        style=' font-size:11pt; font-weight:normal'>, en adelante la </span><span
-        style=' font-size:11pt'>“MUNICIPALIDAD”</span><span
-        style=' font-size:11pt; font-weight:normal'>, se ha acordado celebrar ".($agreement->previous ? "una prórroga de convenio para el año ".$agreement->period.", que modifica las cláusulas que se indican:" : "un convenio, que
+
+<p style='text-align:justify;'>
+    <span>En Iquique a </span><span style='background-color: yellow;'>".$fechaConvenio."</span><span>, entre el </span><span>SERVICIO DE SALUD TARAPACÁ</span><span>, persona jurídica de derecho público,
+    </span><span>RUT. 61.606.100-3</span><span>, con domicilio en </span><span>calle Aníbal Pinto N°815</span><span> de la ciudad de Iquique, representado por
+        su </span><span style='background-color: yellow;'>".$directorApelativo."</span><span> D. </span><span style='background-color: yellow;'>".$director.", ".$directorNationality."</span><span>, Cédula Nacional de Identidad </span><span style='background-color: yellow;'>N°".$directorRut."</span><span style='background-color: yellow;'>,</span><span> del mismo domicilio del servicio público
+        que representa, en adelante el </span><span>“SERVICIO”
+    </span><span>por una parte; y por la otra, </span><span>la </span><span>".$ilustre."</span><span style='background-color: yellow;'>".$municipalidad."</span><span>, persona jurídica de derecho público,
+    </span><span style='background-color: yellow;'>RUT ".$comunaRut."</span><span style='background-color: yellow;'>,</span><span> representada por su </span><span style='background-color: yellow;'>".$alcaldeApelativo."</span> <span style='background-color: yellow;'>".$alcalde."</span><span>, chileno, Cédula Nacional de Identidad
+    </span><span style='background-color: yellow;'>N°".$alcaldeRut."</span><span> ambos domiciliados en </span><span style='background-color: yellow;'>".$municipalidadDirec."</span><span> de la comuna de </span><span style='background-color: yellow;'>".$comuna."</span><span>, en adelante la </span><span>“MUNICIPALIDAD”</span><span>, se ha acordado celebrar ".($agreement->previous ? "una prórroga de convenio para el año ".$agreement->period.", que modifica las cláusulas que se indican:" : "un convenio, que
         consta de las siguientes cláusulas:")."</span>
 </p>";
 
@@ -1940,84 +1382,61 @@ if($agreement->previous)
     $first_word_anterior = explode(' ',trim($agreement->previous->Program->name))[0];
     $programaAnterior = $first_word_anterior == 'Programa' ? substr(strstr($agreement->previous->Program->name," "), 1) : $agreement->previous->Program->name;
     
-    $document->content .= "<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>Con fecha de <span
-    style='background-color:#00ff00'>".$fechaConvenioAnterior."</span>, se celebró un convenio sobre Programa de <span
-    style='background-color:#00ff00'>".$programa."</span>, entre las mismas partes 
+    $document->content .= "<p style='text-align:justify;'>Con fecha de <span
+    style='background-color: yellow;'>".$fechaConvenioAnterior."</span>, se celebró un convenio sobre Programa de <span
+    style='background-color: yellow;'>".$programa."</span>, entre las mismas partes 
     comparecientes y mediante este acto se prorroga por el año ".$agreement->period.", dicho convenio con las siguientes modificaciones: </p>
     
-    <p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
+    <p style='text-align:justify;'>
     <strong><span>I.- CLAUSULA PRIMERA: </span></strong><span>Modifica y prorroga el citado convenio de fecha <span
-    style='background-color:#00ff00'>".$fechaConvenioAnterior."</span>, SSI, aprobado por resolución exenta ( o afecta según corresponda).</p>
+    style='background-color: yellow;'>".$fechaConvenioAnterior."</span>, SSI, aprobado por resolución exenta ( o afecta según corresponda).</p>
     <ol style='list-style-type: decimal;margin-left:0cmundefined;'>
     <li><strong>Cláusula&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;</strong></li>
     <li><strong>Cláusula&hellip;&hellip;&hellip;&hellip;.</strong></li>
     </ol>
-    <p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;'><strong><span style='color:red;'>TRANSCRIBIR CLAUSULAS QUE MODIFICAN CONVENIO ORIGINAL Y QUE EST&Aacute;N EN LA RESOLUCI&Oacute;N DE CONTINUIDAD</span></strong></p>
-    <p style='margin-top:0pt; margin-bottom:0pt; text-align:center'>
-    <strong><span style=' '>&#xa0;</span></strong>
-</p>
-    <p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
+    <p><strong><span style='color:red;'>TRANSCRIBIR CLAUSULAS QUE MODIFICAN CONVENIO ORIGINAL Y QUE EST&Aacute;N EN LA RESOLUCI&Oacute;N DE CONTINUIDAD</span></strong></p>
+    
+    <p style='text-align:justify;'>
     <strong><span>II.- CLÁUSULA SEGUNDA:</span></strong><span>
-        Déjese constancia que la personería de </span><strong><span
-            style='background-color:#00ff00'>D. ".$director."</span></strong><strong><span
-        > </span></strong><span>para representar al
-        Servicio de Salud de Tarapacá, consta en el </span><span
-        style='background-color:#00ff00'>".$directorDecreto."</span><span
-    >. La representación de D. </span><strong><span
-            style='background-color:#00ff00'>".$alcalde."</span></strong><span
-    > para actuar en nombre de la </span><span
-        style='background-color:#ffff00'>".ucfirst(mb_strtolower($ilustre))."</span><span>
-        Municipalidad de </span><span style='background-color:#00ff00'>".$comuna."</span><span
-    >, emana del </span><span
-        style='background-color:#00ff00'>".$alcaldeDecreto."</span><span>
-        de la </span><span style='background-color:#ffff00'>".ucfirst(mb_strtolower($ilustre))."</span><span
-    >
-        Municipalidad de </span><span style='background-color:#00ff00'>".$comuna."</span><span
-    >.</span>
+        Déjese constancia que la personería de </span><strong><span style='background-color: yellow;'>D. ".$director."</span></strong><span>para representar al
+        Servicio de Salud de Tarapacá, consta en el </span><span style='background-color: yellow;'>".$directorDecreto."</span><span>. La representación de D. </span><strong><span style='background-color: yellow;'>".$alcalde."</span></strong><span> para actuar en nombre de la </span><span style='background-color: yellow;'>".ucfirst(mb_strtolower($ilustre))."</span><span>
+        Municipalidad de </span><span style='background-color: yellow;'>".$comuna."</span><span>, emana del </span><span style='background-color: yellow;'>".$alcaldeDecreto."</span><span>
+        de la </span><span style='background-color: yellow;'>".ucfirst(mb_strtolower($ilustre))."</span><span>
+        Municipalidad de </span><span style='background-color: yellow;'>".$comuna."</span><span>.</span>
 </p>
-<p style='margin-top:0pt; margin-bottom:0pt; text-align:center'>
-    <strong><span style=' '>&#xa0;</span></strong>
-</p>
-<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
+
+<p style='text-align:justify;'>
     <strong><span>III.- CLÁUSULA TERCERA:</span></strong><span> La
-        presente prórroga de convenio, regirá hasta el 31 de Diciembre de ".$agreement->period.", y se firma digitalmente en un ejemplar, quedando este en poder del </span><strong><span
-        >“SERVICIO”. </span></strong><span>Por su
-        parte,</span><strong><span> </span></strong><span>la
+        presente prórroga de convenio, regirá hasta el 31 de Diciembre de ".$agreement->period.", y se firma digitalmente en un ejemplar, quedando este en poder del </span><strong><span>“SERVICIO”. </span></strong><span>Por su
+        parte,</span><span>la
     </span><strong><span>“MUNICIPALIDAD”
         </span></strong><span>contraparte de este convenio y la División de Atención
         Primaria de Ministerio de Salud e involucrados, recibirán el documento original digitalizado. </span>
 </p>
-<p style='margin-top:0pt; margin-bottom:0pt; text-align:center'>
-    <strong><span style=' '>&#xa0;</span></strong>
-</p>
-<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
+
+<p style='text-align:justify;'>
     <strong><span>IV.- CLÁUSULA CUARTA:</span></strong><span> En lo no modificado se mantienen vigentes las cláusulas del convenio de fecha <span
-    style='background-color:#00ff00'>".$fechaConvenioAnterior."</span>, aprobado por resolución exenta o afecta <span
-    style='background-color:#00ff00'>N°".$agreement->previous->res_exempt_number."/".($agreement->previous->res_exempt_date ? date('Y', strtotime($agreement->previous->res_exempt_date)) : '') ."</span>, SSI.</span>
+    style='background-color: yellow;'>".$fechaConvenioAnterior."</span>, aprobado por resolución exenta o afecta <span
+    style='background-color: yellow;'>N°".$agreement->previous->res_exempt_number."/".($agreement->previous->res_exempt_date ? date('Y', strtotime($agreement->previous->res_exempt_date)) : '') ."</span>, SSI.</span>
 </p>
-<p style='margin-top:0pt; margin-bottom:0pt; text-align:center'>
-    <strong><span style=' '>&#xa0;</span></strong>
-</p>
-<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
+
+<p style='text-align:justify;'>
     <span>En comprobante firman</span>
 </p>
-<p style='margin-top:0pt; margin-bottom:48pt; text-align:justify; font-size:10pt'>
-    <strong><span>&#xa0;</span></strong>
-</p>
+
 <div style='text-align:center'>
     <table cellspacing='0' cellpadding='0'
-        style='width:339.75pt; margin-right:auto; margin-left:auto; border-collapse:collapse'>
-        <tr style='height:25.05pt'>
-            <td style='width:339.75pt; vertical-align:top'>
-                <p style='margin:0pt 2.1pt 0pt 7.1pt; text-align:center; font-size:11pt'>
-                    <strong><span style='background-color:#00ff00'>".$alcalde."</span></strong>
+        style='margin-right:auto; margin-left:auto; collapse:collapse'>
+        <tr>
+            <td >
+                <p style='text-align:center;'>
+                    <strong><span style='background-color: yellow;'>".$alcalde."</span></strong>
                 </p>
-                <p style='margin:0pt 2.1pt 0pt 7.1pt; text-align:center; font-size:11pt'>
-                    <strong><span
-                            style='background-color:#00ff00'>".$alcaldeApelativoFirma."</span></strong>
+                <p style='text-align:center;'>
+                    <strong><span style='background-color: yellow;'>".$alcaldeApelativoFirma."</span></strong>
                 </p>
-                <p style='margin:0pt 2.1pt 0pt 7.1pt; text-align:center; font-size:11pt'>
-                    <strong><span style='background-color:#00ff00'>".$ilustre." ".
+                <p style='text-align:center;'>
+                    <strong><span style='background-color: yellow;'>".$ilustre." ".
                             $municipalidad."</span></strong>
                 </p>
             </td>
@@ -2028,47 +1447,37 @@ if($agreement->previous)
 
 } else {
 
-    $document->content .= "<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
+    $document->content .= "<p style='text-align:justify;'>
     <strong><span>PRIMERA: </span></strong><span>Se deja
         constancia que el Estatuto de Atención Primaria de Salud Municipal, aprobado por la Ley N°19.378, en su
-        artículo 56 establece que el aporte estatal mensual podrá incrementarse: </span><strong><span
-        >“En el caso que las normas técnicas, planes y programas que se impartan
+        artículo 56 establece que el aporte estatal mensual podrá incrementarse: </span><strong><span>“En el caso que las normas técnicas, planes y programas que se impartan
             con posterioridad a la entrada en vigencia de esta ley impliquen un mayor gasto para la “MUNICIPALIDAD”,
             su financiamiento será incorporado a los aportes establecidos en el artículo 49”.</span></strong>
 </p>
-<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
+<p style='text-align:justify;'>
     <span>Por su parte, el artículo 5º del Decreto Supremo N°37 del año 2021, del
         Ministerio de Salud, reitera dicha norma agregando la forma de materializarla al señalar “para cuyos efectos
         el Ministerio de Salud dictará la correspondiente resolución”.</span>
 </p>
-<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
-    <span>&#xa0;</span>
-</p>
-<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
+
+<p style='text-align:justify;'>
     <strong><span>SEGUNDA: </span></strong><span>El
         presente convenio se suscribe conforme a lo establecido en el decreto con fuerza ley N°1-3063 de 1980, del
         Ministerio de Interior y sus normas complementarias; a lo acordado en los convenios celebrados en virtud de
-        dichas normas entre el </span><strong><span>“SERVICIO”</span></strong><span
-    > y la </span><strong><span
-        >“MUNICIPALIDAD”,</span></strong><span>
+        dichas normas entre el </span><strong><span>“SERVICIO”</span></strong><span> y la </span><strong><span>“MUNICIPALIDAD”,</span></strong><span>
         especialmente el denominado convenio per cápita, aprobado por los correspondientes decretos supremos del
         Ministerio de Salud; y a lo dispuesto en la ley N°19.378, que aprueba el Estatuto de Atención Primaria de
         Salud Municipal.</span>
 </p>
-<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
-    <span>&#xa0;</span>
-</p>
-<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
+
+<p style='text-align:justify;'>
     <strong><span>TERCERA:</span></strong><span> En el
         marco de la Reforma de Salud, cuyos principios orientadores apuntan a la Equidad, Participación,
         Descentralización y Satisfacción de los Usuarios, de las prioridades programáticas emanadas del Ministerio
-        de Salud y de la</span><span>&#xa0; </span><span
-    >modernización de la Atención Primaria, incorporándola como área y pilar
+        de Salud y de la</span><span> modernización de la Atención Primaria, incorporándola como área y pilar
         relevante en el proceso de cambio a un nuevo modelo de atención, el Ministerio de Salud, ha decidido
-        desarrollar el Programa de </span><strong><span
-            style='background-color:#00ff00'>“".$programa."”</span></strong><strong><span
-        > </span></strong><span>en adelante el
-        “</span><strong><span>PROGRAMA”</span></strong><span>,
+        desarrollar el Programa de </span><strong><span style='background-color: yellow;'>“".$programa."”</span></strong><span> 
+        en adelante el “</span><strong><span>PROGRAMA”</span></strong><span>,
         a fin de contribuir a mejorar la salud de la población beneficiaria legal del
         Sector Público de Salud, aumentando la capacidad de respuesta oportuna de la atención primaria, a los
         problemas de salud por los cuales consultan las personas, para lograr una red de atención primaria más
@@ -2076,66 +1485,46 @@ if($agreement->previous)
         atención de salud a la comunidad en el que participarán las partes, en conformidad a lo establecido en el
         presente convenio.</span>
 </p>
-<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
+<p style='text-align:justify;'>
     <span>El referido “</span><strong><span>PROGRAMA”
         </span></strong><span>ha sido aprobado por Resolución Exenta
-        N</span><strong><span>°</span></strong><span
-        style='background-color:#00ff00'>".$numResolucion."</span><span>
-        de fecha </span><span style='background-color:#00ff00'>".$fechaResolucion."</span><span
-    >, del Ministerio de Salud y sus respectivas modificaciones, respecto a las
+        N</span><strong><span>°</span></strong><span style='background-color: yellow;'>".$numResolucion."</span><span>
+        de fecha </span><span style='background-color: yellow;'>".$fechaResolucion."</span><span>, del Ministerio de Salud y sus respectivas modificaciones, respecto a las
         exigencias de dicho programa, la </span><strong><span>“MUNICIPALIDAD”
         </span></strong><span>se compromete a desarrollar las acciones atinentes en
         virtud del presente instrumento. </span>
 </p>
-<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
+<p style='text-align:justify;'>
     <span>Se deja establecido que, para los fines específicos del presente convenio, el
     </span><strong><span>“PROGRAMA” </span></strong><span>se
         ejecutará</span><strong><span>
         </span></strong><span>en el o los siguientes dispositivos de
-        salud</span><strong><span>: </span></strong><strong><span
-            style='background-color:#00ff00'>&#xa0;</span></strong><span
-        style='background-color:#00ff00'>".$arrayEstablishmentConcat."</span><span
-    >, en los cuales se llevará a cabo el </span><strong><span
-        >“PROGRAMA”</span></strong><span> a que se
-        refiere el presente convenio, y que dependen de la </span><strong><span
-        >“MUNICIPALIDAD”.</span></strong>
+        salud</span><strong><span>: </span></strong><span style='background-color: yellow;'>".$arrayEstablishmentConcat."</span><span>, en los cuales se llevará a cabo el </span><strong><span>“PROGRAMA”</span></strong><span> a que se
+        refiere el presente convenio, y que dependen de la </span><strong><span>“MUNICIPALIDAD”.</span></strong>
 </p>
-<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
-    <strong><span>&#xa0;</span></strong>
-</p>
-<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
+
+<p style='text-align:justify;'>
     <strong><span>CUARTA: </span></strong><span>El
-        Ministerio de Salud, a través del “</span><strong><span
-        >SERVICIO”</span></strong><span>, conviene en
-        asignar a la </span><strong><span>“MUNICIPALIDAD”</span></strong><span
-    > recursos destinados a financiar los siguientes componentes del
+        Ministerio de Salud, a través del “</span><strong><span>SERVICIO”</span></strong><span>, conviene en
+        asignar a la </span><strong><span>“MUNICIPALIDAD”</span></strong><span> recursos destinados a financiar los siguientes componentes del
     </span><strong><span>“PROGRAMA”:</span></strong>
 </p>
-<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
-    <strong><span>&#xa0;</span></strong>
+
+<p style='text-align:justify;'>
+    <span style='background-color: yellow;'>".$componentesListado."</span>
 </p>
-<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
-    <span style='background-color:#00ff00'>".$componentesListado."</span>
-</p>
-<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
-    <strong><span>&#xa0;</span></strong>
-</p>
-<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
+
+<p style='text-align:justify;'>
     <strong><span>QUINTA:</span></strong><span> Conforme a
-        lo señalado en las cláusulas precedentes el </span><strong><span
-        >“SERVICIO”</span></strong><span> asignará a la
-    </span><strong><span>“MUNICIPALIDAD”</span></strong><span
-    >, desde la fecha de total tramitación de la Resolución Exenta que apruebe el
-        presente instrumento, la suma anual y única de </span><strong><span
-            style='background-color:#00ff00'>$".number_format($totalConvenio, 0, ',', '.')."
+        lo señalado en las cláusulas precedentes el </span><strong><span>“SERVICIO”</span></strong><span> asignará a la
+    </span><strong><span>“MUNICIPALIDAD”</span></strong><span>, desde la fecha de total tramitación de la Resolución Exenta que apruebe el
+        presente instrumento, la suma anual y única de </span><strong><span style='background-color: yellow;'>$".number_format($totalConvenio, 0, ',', '.')."
             (".$totalConvenioLetras.")</span></strong><span> para alcanzar el propósito y
         cumplimiento de los componentes señalados en la cláusula anterior, en la medida que esos fondos sean
         traspasados por el Ministerio de Salud al </span><strong><span>“SERVICIO”</span></strong><span>.</span>
 </p>
-<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
-    <strong><span>&#xa0;</span></strong>
-</p>
-<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
+
+<p style='text-align:justify;'>
     <strong><span>SEXTA: </span></strong><span>La
     </span><strong><span>“MUNICIPALIDAD”</span></strong><span>
         está obligada a cumplir las coberturas definidas en este convenio, así como
@@ -2143,1484 +1532,1086 @@ if($agreement->previous)
         obligada a implementar y otorgar las prestaciones que correspondan a la atención primaria, señaladas en el
     </span><strong><span>“PROGRAMA”.</span></strong>
 </p>
-<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
-    <span>La </span><strong><span
-        >“MUNICIPALIDAD”</span></strong><span>, está
+<p style='text-align:justify;'>
+    <span>La </span><strong><span>“MUNICIPALIDAD”</span></strong><span>, está
         obligada a utilizar en forma exclusiva para los objetivos del convenio, los recursos asignados según el
         siguiente detalle de objetivos y productos específicos de cada componente, especificados en la cláusula
         cuarta.</span>
 </p>
-<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
-    <span>&#xa0;</span>
-</p>
-<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
-    <span style='background-color:#ffff00'>Describir indicadores y medios de
+
+<p style='text-align:justify;'>
+    <span style='background-color: yellow;'>Describir indicadores y medios de
         verificación……</span>
 </p>
-<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
-    <span>&#xa0;</span>
-</p>
-<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
-    <span>El </span><strong><span
-        >“SERVICIO</span></strong><span>” determinará
+
+<p style='text-align:justify;'>
+    <span>El </span><strong><span>“SERVICIO</span></strong><span>” determinará
         previamente la pertinencia técnica de la compra de servicios o la adquisición de insumos, materiales,
-        implementos, o bienes, por parte de la </span><strong><span
-        >“MUNICIPALIDAD”</span></strong><span>,
-        asegurando que sean acordes a las necesidades del </span><strong><span
-        >“PROGRAMA</span></strong><span>” y de acuerdo
+        implementos, o bienes, por parte de la </span><strong><span>“MUNICIPALIDAD”</span></strong><span>,
+        asegurando que sean acordes a las necesidades del </span><strong><span>“PROGRAMA</span></strong><span>” y de acuerdo
         a la normativa vigente, para estos efectos deberá enviar vía correo electrónico a la referente del programa,
-        la propuesta de compras, que deberá ser aprobada por el </span><strong><span
-        >“SERVICIO”</span></strong><span>, previo a su
-        adquisición.</span><span>&#xa0; </span><span>El
-    </span><strong><span>“SERVICIO”,</span></strong><span>
+        la propuesta de compras, que deberá ser aprobada por el </span><strong><span>“SERVICIO”</span></strong><span>, previo a su
+        adquisición. </span><span>El </span><strong><span>“SERVICIO”,</span></strong><span>
         podrá determinar otros criterios de distribución de los recursos destinados, atendiendo a criterios de
         equidad y acortamiento de brechas en el otorgamiento de las prestaciones.</span>
 </p>
-<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
-    <strong><span>&#xa0;</span></strong>
-</p>
-<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
+
+<p style='text-align:justify;'>
     <strong><span>SÉPTIMA: </span></strong><span>El
-        proceso de monitoreo y evaluación del cumplimiento del presente convenio por parte del </span><strong><span
-        >“SERVICIO”,</span></strong><span> se orienta a
-        conocer el desarrollo y grado de cumplimiento de los diferentes componentes del </span><strong><span
-        >“PROGRAMA”</span></strong><span>, con el
+        proceso de monitoreo y evaluación del cumplimiento del presente convenio por parte del </span><strong><span>“SERVICIO”,</span></strong><span> se orienta a
+        conocer el desarrollo y grado de cumplimiento de los diferentes componentes del </span><strong><span>“PROGRAMA”</span></strong><span>, con el
         propósito de mejorar la eficiencia y efectividad de sus objetivos.</span>
 </p>";
 
 if($request->has('eval_option'))
     if($request->eval_option == 1)
-        $document->content .= "<ul type='square' style='margin:0pt; padding-left:0pt'>
-    <li
-        style='margin-left:28.03pt; text-align:justify;padding-left:7.97pt;font-size:11pt'>
-        <span style='background-color:#00ff00'>La </span><strong><span
-                style='background-color:#00ff00'>primera evaluación</span></strong><span
-            style='background-color:#00ff00'> técnica se efectuará con corte al
-        </span><strong><span style='background-color:#00ff00'>__________ del año
-                ".$periodoConvenio."</span></strong><span style='background-color:#00ff00'> por parte del
-            referente técnico encargado/a del </span><strong><span
-                style='background-color:#00ff00'>“PROGRAMA”</span></strong><span
-            style='background-color:#00ff00'> perteneciente al </span><strong><span
-                style='background-color:#00ff00'>“SERVICIO”</span></strong><span
-            style='background-color:#00ff00'>, en esta instancia la comuna deberá estar al día
+        $document->content .= "<ul type='square'>
+    <li style='text-align:justify;'>
+        <span style='background-color: yellow;'>La </span><strong><span style='background-color: yellow;'>primera evaluación</span></strong><span style='background-color: yellow;'> técnica se efectuará con corte al
+        </span><strong><span style='background-color: yellow;'>__________ del año
+                ".$periodoConvenio."</span></strong><span style='background-color: yellow;'> por parte del
+            referente técnico encargado/a del </span><strong><span style='background-color: yellow;'>“PROGRAMA”</span></strong><span style='background-color: yellow;'> perteneciente al </span><strong><span style='background-color: yellow;'>“SERVICIO”</span></strong><span style='background-color: yellow;'>, en esta instancia la comuna deberá estar al día
             con el envío de las rendiciones mensuales; en caso contrario no se procederá a hacer efectiva la
             transferencia de la segunda cuota de recursos.</span>
     </li>
 </ul>
-<p style='margin-top:0pt; margin-left:36pt; margin-bottom:0pt; text-align:justify; line-height:107%; font-size:11pt'>
-    <span>&#xa0;</span>
-</p>
-<ul type='square' style='margin:0pt; padding-left:0pt'>
-    <li
-        style='margin-left:28.03pt; text-align:justify;padding-left:7.97pt;font-size:11pt'>
-        <span style='background-color:#00ff00'>La </span><strong><span
-                style='background-color:#00ff00'>segunda evaluación </span></strong><span
-            style='background-color:#00ff00'>técnica y final, se efectuará con corte al
-            ___________</span><strong><span style='background-color:#00ff00'> del año
-                ".$periodoConvenio."</span></strong><span style='background-color:#00ff00'>, fecha en que el
-        </span><strong><span style='background-color:#00ff00'>“PROGRAMA” </span></strong><span
-            style='background-color:#00ff00'>deberá tener ejecutado el </span><strong><span
-                style='background-color:#00ff00'>100%</span></strong><span
-            style='background-color:#00ff00'> de las acciones comprometidas en el convenio y la
-        </span><strong><span style='background-color:#00ff00'>“MUNICIPALIDAD”</span></strong><span
-            style='background-color:#00ff00'> haber enviado el informe técnico final de
-            ejecución al ____________</span><strong><span style='background-color:#00ff00'> del
-                año ____</span></strong><span style='background-color:#00ff00'>. Asimismo,
-            la</span><strong><span style='background-color:#00ff00'> “MUNICIPALIDAD”
-            </span></strong><span style='background-color:#00ff00'>deberá haber hecho en
-            ingreso de las rendiciones mensuales hasta el mes de </span><strong><span
-                style='background-color:#00ff00'>Diciembre del año ".$periodoConvenio.", </span></strong><span
-            style='background-color:#00ff00'>en plataforma habilitada para estos fines. </span>
+
+<ul type='square'>
+    <li style='text-align:justify;'>
+        <span style='background-color: yellow;'>La </span><strong><span style='background-color: yellow;'>segunda evaluación </span></strong><span style='background-color: yellow;'>técnica y final, se efectuará con corte al
+            ___________</span><strong><span style='background-color: yellow;'> del año
+                ".$periodoConvenio."</span></strong><span style='background-color: yellow;'>, fecha en que el
+        </span><strong><span style='background-color: yellow;'>“PROGRAMA” </span></strong><span style='background-color: yellow;'>deberá tener ejecutado el </span><strong><span style='background-color: yellow;'>100%</span></strong><span style='background-color: yellow;'> de las acciones comprometidas en el convenio y la
+        </span><strong><span style='background-color: yellow;'>“MUNICIPALIDAD”</span></strong><span style='background-color: yellow;'> haber enviado el informe técnico final de
+            ejecución al ____________</span><strong><span style='background-color: yellow;'> del
+                año ____</span></strong><span style='background-color: yellow;'>. Asimismo,
+            la</span><strong><span style='background-color: yellow;'> “MUNICIPALIDAD”
+            </span></strong><span style='background-color: yellow;'>deberá haber hecho en
+            ingreso de las rendiciones mensuales hasta el mes de </span><strong><span style='background-color: yellow;'>Diciembre del año ".$periodoConvenio.", </span></strong><span style='background-color: yellow;'>en plataforma habilitada para estos fines. </span>
     </li>
 </ul>
-<p style='margin-top:0pt; margin-left:36pt; margin-bottom:0pt; text-align:justify; line-height:107%; font-size:11pt'>
-    <span>&#xa0;</span>
-</p>
-<ul type='square' style='margin:0pt; padding-left:0pt'>
-    <li
-        style='margin-left:28.03pt; text-align:justify;padding-left:7.97pt;font-size:11pt'>
-        <span style='background-color:#00ff00'>En caso de incumplimiento, el
-        </span><strong><span style='background-color:#00ff00'>“SERVICIO” </span></strong><span
-            style='background-color:#00ff00'>deberá solicitar a la </span><strong><span
-                style='background-color:#00ff00'>“MUNICIPALIDAD” </span></strong><span
-            style='background-color:#00ff00'>el reintegro de los recursos que no hayan sido
-            ejecutados, a más tardar el </span><strong><span style='background-color:#00ff00'>31 de
-                enero del año ".($periodoConvenio+1).".</span></strong><span style='background-color:#00ff00'> </span>
+
+<ul type='square'>
+    <li style='text-align:justify;'>
+        <span style='background-color: yellow;'>En caso de incumplimiento, el
+        </span><strong><span style='background-color: yellow;'>“SERVICIO” </span></strong><span style='background-color: yellow;'>deberá solicitar a la </span><strong><span style='background-color: yellow;'>“MUNICIPALIDAD” </span></strong><span style='background-color: yellow;'>el reintegro de los recursos que no hayan sido
+            ejecutados, a más tardar el </span><strong><span style='background-color: yellow;'>31 de
+                enero del año ".($periodoConvenio+1).".</span></strong><span style='background-color: yellow;'> </span>
     </li>
 </ul>
-<p style='margin-top:0pt; margin-left:36pt; margin-bottom:10pt; line-height:107%; font-size:11pt'>
-    <span>&#xa0;</span>
-</p>
-<ul type='square' style='margin:0pt; padding-left:0pt'>
-    <li
-        style='margin-left:28.03pt; text-align:justify;padding-left:7.97pt;font-size:11pt'>
-        <span style='background-color:#00ff00'>Conforme los resultados obtenidos en esta
+
+<ul type='square'>
+    <li style='text-align:justify;'>
+        <span style='background-color: yellow;'>Conforme los resultados obtenidos en esta
             evaluación se harán efectiva la reliquidación de la segunda cuota.</span>
     </li>
 </ul>
-<p style='margin-top:0pt; margin-left:36pt; margin-bottom:10pt; line-height:107%; font-size:11pt'>
-    <span>&#xa0;</span>
-</p>
-<p style='margin-top:12pt; margin-left:36pt; margin-bottom:12pt; text-align:justify;font-size:11pt'>
-    <span style='background-color:#00ff00'>La </span><strong><span
-            style='background-color:#00ff00'>Reliquidación</span></strong><span
-        style='background-color:#00ff00'> a la </span><strong><span
-            style='background-color:#00ff00'>“MUNICIPALIDAD”,</span></strong><span
-        style='background-color:#00ff00'> se hará efectiva en el mes de Octubre por parte del
-    </span><strong><span style='background-color:#00ff00'>“SERVICIO”,</span></strong><span
-        style='background-color:#00ff00'> si es que el resultado final de la ponderación de los
+
+<p style='text-align:justify;'>
+    <span style='background-color: yellow;'>La </span><strong><span style='background-color: yellow;'>Reliquidación</span></strong><span style='background-color: yellow;'> a la </span><strong><span style='background-color: yellow;'>“MUNICIPALIDAD”,</span></strong><span style='background-color: yellow;'> se hará efectiva en el mes de Octubre por parte del
+    </span><strong><span style='background-color: yellow;'>“SERVICIO”,</span></strong><span style='background-color: yellow;'> si es que el resultado final de la ponderación de los
         indicadores de la comuna es inferior al _____%, en relación al 100% de la meta anual. El descuento será
         proporcional al porcentaje de incumplimiento, de acuerdo al siguiente cuadro:</span>
 </p>
-<p style='margin-top:0pt; margin-left:36pt; margin-bottom:0pt; text-align:justify; line-height:107%; font-size:11pt'>
-    <span>&#xa0;</span>
-</p>
-<table style='border-collapse: collapse; width: 370.75pt; border-color: #000000; border-style: solid; margin-left: auto; margin-right: auto; height: 143.695px;' cellspacing='0' cellpadding='0'>
-    <tr style='height:6.6pt'>
+
+<table style='collapse: collapse;' cellspacing='0' cellpadding='0'>
+    <tr>
         <td
-            style='width:172.95pt; border-right-style:solid; border-right-width:0.75pt; border-bottom-style:solid; border-bottom-width:0.75pt; padding-right:3.88pt; padding-left:3.88pt; vertical-align:top; background-color:#f2f2f2'>
-            <p style='margin-top:0pt; margin-bottom:0pt; text-align:center; font-size:11pt'>
-                <strong><span style='background-color:#00ff00'>PORCENTAJE CUMPLIMIENTO METAS
+            style='background-color: yellow;'>
+            <p style='text-align:center;'>
+                <strong><span style='background-color: yellow;'>PORCENTAJE CUMPLIMIENTO METAS
                         DEL PROGRAMA</span></strong>
             </p>
         </td>
         <td
-            style='width:180.05pt; border-left-style:solid; border-left-width:0.75pt; border-bottom-style:solid; border-bottom-width:0.75pt; padding-right:3.88pt; padding-left:3.88pt; vertical-align:top; background-color:#f2f2f2'>
-            <p style='margin-top:0pt; margin-bottom:0pt; text-align:center; font-size:11pt'>
-                <strong><span style='background-color:#00ff00'>PORCENTAJE DE DESCUENTO DE
+            style='background-color: yellow;'>
+            <p style='text-align:center;'>
+                <strong><span style='background-color: yellow;'>PORCENTAJE DE DESCUENTO DE
                         RECURSOS 2ª CUOTA </span></strong>
             </p>
         </td>
     </tr>
     <tr>
-        <td
-            style='width:172.95pt; border-top-style:solid; border-top-width:0.75pt; border-right-style:solid; border-right-width:0.75pt; border-bottom-style:solid; border-bottom-width:0.75pt; padding-right:3.88pt; padding-left:3.88pt; vertical-align:top'>
-            <p style='margin-top:0pt; margin-bottom:0pt; text-align:center; font-size:11pt'>
-                <span style='background-color:#00ff00'>Mayor o igual a %</span>
+        <td>
+            <p style='text-align:center;'>
+                <span style='background-color: yellow;'>Mayor o igual a %</span>
             </p>
         </td>
-        <td
-            style='width:180.05pt; border-top-style:solid; border-top-width:0.75pt; border-left-style:solid; border-left-width:0.75pt; border-bottom-style:solid; border-bottom-width:0.75pt; padding-right:3.88pt; padding-left:3.88pt; vertical-align:top'>
-            <p style='margin-top:0pt; margin-bottom:0pt; text-align:center; font-size:11pt'>
-                <span style='background-color:#00ff00'>0%</span>
-            </p>
-        </td>
-    </tr>
-    <tr>
-        <td
-            style='width:172.95pt; border-top-style:solid; border-top-width:0.75pt; border-right-style:solid; border-right-width:0.75pt; border-bottom-style:solid; border-bottom-width:0.75pt; padding-right:3.88pt; padding-left:3.88pt; vertical-align:top'>
-            <p style='margin-top:0pt; margin-bottom:0pt; text-align:center; font-size:11pt'>
-                <span style='background-color:#00ff00'>Entre % y %</span>
-            </p>
-        </td>
-        <td
-            style='width:180.05pt; border-top-style:solid; border-top-width:0.75pt; border-left-style:solid; border-left-width:0.75pt; border-bottom-style:solid; border-bottom-width:0.75pt; padding-right:3.88pt; padding-left:3.88pt; vertical-align:top'>
-            <p style='margin-top:0pt; margin-bottom:0pt; text-align:center; font-size:11pt'>
-                <span style='background-color:#00ff00'>0%</span>
+        <td>
+            <p style='text-align:center;'>
+                <span style='background-color: yellow;'>0%</span>
             </p>
         </td>
     </tr>
     <tr>
-        <td
-            style='width:172.95pt; border-top-style:solid; border-top-width:0.75pt; border-right-style:solid; border-right-width:0.75pt; border-bottom-style:solid; border-bottom-width:0.75pt; padding-right:3.88pt; padding-left:3.88pt; vertical-align:top'>
-            <p style='margin-top:0pt; margin-bottom:0pt; text-align:center; font-size:11pt'>
-                <span style='background-color:#00ff00'>Entre % y %</span>
+        <td>
+            <p style='text-align:center;'>
+                <span style='background-color: yellow;'>Entre % y %</span>
             </p>
         </td>
-        <td
-            style='width:180.05pt; border-top-style:solid; border-top-width:0.75pt; border-left-style:solid; border-left-width:0.75pt; border-bottom-style:solid; border-bottom-width:0.75pt; padding-right:3.88pt; padding-left:3.88pt; vertical-align:top'>
-            <p style='margin-top:0pt; margin-bottom:0pt; text-align:center; font-size:11pt'>
-                <span style='background-color:#00ff00'>0%</span>
+        <td>
+            <p style='text-align:center;'>
+                <span style='background-color: yellow;'>0%</span>
             </p>
         </td>
     </tr>
     <tr>
-        <td
-            style='width:172.95pt; border-top-style:solid; border-top-width:0.75pt; border-right-style:solid; border-right-width:0.75pt; padding-right:3.88pt; padding-left:3.88pt; vertical-align:top'>
-            <p style='margin-top:0pt; margin-bottom:0pt; text-align:center; font-size:11pt'>
-                <span style='background-color:#00ff00'>Menos del %</span>
+        <td>
+            <p style='text-align:center;'>
+                <span style='background-color: yellow;'>Entre % y %</span>
             </p>
         </td>
-        <td
-            style='width:180.05pt; border-top-style:solid; border-top-width:0.75pt; border-left-style:solid; border-left-width:0.75pt; padding-right:3.88pt; padding-left:3.88pt; vertical-align:top'>
-            <p style='margin-top:0pt; margin-bottom:0pt; text-align:center; font-size:11pt'>
-                <span style='background-color:#00ff00'>0%</span>
+        <td>
+            <p style='text-align:center;'>
+                <span style='background-color: yellow;'>0%</span>
+            </p>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <p style='text-align:center;'>
+                <span style='background-color: yellow;'>Menos del %</span>
+            </p>
+        </td>
+        <td>
+            <p style='text-align:center;'>
+                <span style='background-color: yellow;'>0%</span>
             </p>
         </td>
     </tr>
 </table>
-<p style='margin-top:12pt; margin-left:36pt; margin-bottom:12pt; text-align:justify; line-height:107%; font-size:11pt'>
-    <span>&#xa0;</span>
-</p>
-<p style='margin-top:12pt; margin-left:36pt; margin-bottom:12pt; text-align:justify;font-size:11pt'>
-    <span style='background-color:#00ff00'>Excepcionalmente, cuando existan razones fundadas
-        del incumplimiento, la “</span><strong><span
-            style='background-color:#00ff00'>MUNICIPALIDAD”,</span></strong><span
-        style='background-color:#00ff00'> podrá apelar la decisión de reliquidar, mediante
-        oficio enviado a Director(a) del </span><strong><span
-            style='background-color:#00ff00'>“SERVICIO”</span></strong><span
-        style='background-color:#00ff00'>, acompañando un Plan de Trabajo que comprometa un
+
+<p style='text-align:justify;'>
+    <span style='background-color: yellow;'>Excepcionalmente, cuando existan razones fundadas
+        del incumplimiento, la “</span><strong><span style='background-color: yellow;'>MUNICIPALIDAD”,</span></strong><span style='background-color: yellow;'> podrá apelar la decisión de reliquidar, mediante
+        oficio enviado a Director(a) del </span><strong><span style='background-color: yellow;'>“SERVICIO”</span></strong><span style='background-color: yellow;'>, acompañando un Plan de Trabajo que comprometa un
         cronograma para el cumplimiento de las metas, dentro del periodo vigente del convenio. El
-    </span><strong><span style='background-color:#00ff00'>“SERVICIO”,</span></strong><span
-        style='background-color:#00ff00'> analizará la apelación y verificará la existencia de
+    </span><strong><span style='background-color: yellow;'>“SERVICIO”,</span></strong><span style='background-color: yellow;'> analizará la apelación y verificará la existencia de
         razones fundadas para el incumplimiento. En caso de comprobar la existencia de razones fundadas, el
-    </span><strong><span style='background-color:#00ff00'>“SERVICIO”</span></strong><span
-        style='background-color:#00ff00'> podrá pedir al Ministerio de Salud la no
-        reliquidación del </span><strong><span
-            style='background-color:#00ff00'>“PROGRAMA”</span></strong><span
-        style='background-color:#00ff00'> adjuntando los antecedentes que respalden esta
+    </span><strong><span style='background-color: yellow;'>“SERVICIO”</span></strong><span style='background-color: yellow;'> podrá pedir al Ministerio de Salud la no
+        reliquidación del </span><strong><span style='background-color: yellow;'>“PROGRAMA”</span></strong><span style='background-color: yellow;'> adjuntando los antecedentes que respalden esta
         solicitud.</span>
 </p>";
 else if($request->eval_option == 2)
-    $document->content .= "<ul type='square' style='margin:0pt; padding-left:0pt'>
-    <li
-        style='margin-left:28.03pt; text-align:justify;padding-left:7.97pt;font-size:11pt'>
-        <span style='background-color:#00ff00'>La </span><strong><span
-                style='background-color:#00ff00'>primera evaluación</span></strong><span
-            style='background-color:#00ff00'> técnica se efectuará con corte al
-        </span><strong><span style='background-color:#00ff00'>__________ del año
-                ".$periodoConvenio."</span></strong><span style='background-color:#00ff00'> por parte del
-            referente técnico encargado/a del </span><strong><span
-                style='background-color:#00ff00'>“PROGRAMA”</span></strong><span
-            style='background-color:#00ff00'> perteneciente al </span><strong><span
-                style='background-color:#00ff00'>“SERVICIO”</span></strong><span
-            style='background-color:#00ff00'>, en esta instancia la comuna deberá estar al día
+    $document->content .= "<ul type='square'>
+    <li style='text-align:justify;'>
+        <span style='background-color: yellow;'>La </span><strong><span style='background-color: yellow;'>primera evaluación</span></strong><span style='background-color: yellow;'> técnica se efectuará con corte al
+        </span><strong><span style='background-color: yellow;'>__________ del año
+                ".$periodoConvenio."</span></strong><span style='background-color: yellow;'> por parte del
+            referente técnico encargado/a del </span><strong><span style='background-color: yellow;'>“PROGRAMA”</span></strong><span style='background-color: yellow;'> perteneciente al </span><strong><span style='background-color: yellow;'>“SERVICIO”</span></strong><span style='background-color: yellow;'>, en esta instancia la comuna deberá estar al día
             con el envío de las rendiciones mensuales; en caso contrario no se procederá a hacer efectiva la
             transferencia de la segunda cuota de recursos.</span>
     </li>
 </ul>
-<p style='margin-top:0pt; margin-left:36pt; margin-bottom:0pt; text-align:justify; line-height:107%; font-size:11pt'>
-    <strong><span>&#xa0;</span></strong>
-</p>
-<ul type='square' style='margin:0pt; padding-left:0pt'>
-    <li
-        style='margin-left:28.03pt; text-align:justify;padding-left:7.97pt;font-size:11pt'>
-        <span style='background-color:#00ff00'>La </span><strong><span
-                style='background-color:#00ff00'>segunda evaluación </span></strong><span
-            style='background-color:#00ff00'>técnica y final, se efectuará con corte al
-            ___________</span><strong><span style='background-color:#00ff00'> del año
-                ".$periodoConvenio."</span></strong><span style='background-color:#00ff00'>, fecha en que el
-        </span><strong><span style='background-color:#00ff00'>“PROGRAMA” </span></strong><span
-            style='background-color:#00ff00'>deberá tener ejecutado el </span><strong><span
-                style='background-color:#00ff00'>100%</span></strong><span
-            style='background-color:#00ff00'> de las acciones comprometidas en el convenio y la
-        </span><strong><span style='background-color:#00ff00'>“MUNICIPALIDAD”</span></strong><span
-            style='background-color:#00ff00'> haber enviado el informe técnico final de
-            ejecución al ____________</span><strong><span style='background-color:#00ff00'> del
-                año ____</span></strong><span style='background-color:#00ff00'>. Asimismo,
-            la</span><strong><span style='background-color:#00ff00'> “MUNICIPALIDAD”
-            </span></strong><span style='background-color:#00ff00'>deberá haber hecho en
-            ingreso de las rendiciones mensuales hasta el mes de </span><strong><span
-                style='background-color:#00ff00'>Diciembre del año ".$periodoConvenio.", </span></strong><span
-            style='background-color:#00ff00'>en plataforma habilitada para estos fines. </span>
+
+<ul type='square'>
+    <li style='text-align:justify;'>
+        <span style='background-color: yellow;'>La </span><strong><span style='background-color: yellow;'>segunda evaluación </span></strong><span style='background-color: yellow;'>técnica y final, se efectuará con corte al
+            ___________</span><strong><span style='background-color: yellow;'> del año
+                ".$periodoConvenio."</span></strong><span style='background-color: yellow;'>, fecha en que el
+        </span><strong><span style='background-color: yellow;'>“PROGRAMA” </span></strong><span style='background-color: yellow;'>deberá tener ejecutado el </span><strong><span style='background-color: yellow;'>100%</span></strong><span style='background-color: yellow;'> de las acciones comprometidas en el convenio y la
+        </span><strong><span style='background-color: yellow;'>“MUNICIPALIDAD”</span></strong><span style='background-color: yellow;'> haber enviado el informe técnico final de
+            ejecución al ____________</span><strong><span style='background-color: yellow;'> del
+                año ____</span></strong><span style='background-color: yellow;'>. Asimismo,
+            la</span><strong><span style='background-color: yellow;'> “MUNICIPALIDAD”
+            </span></strong><span style='background-color: yellow;'>deberá haber hecho en
+            ingreso de las rendiciones mensuales hasta el mes de </span><strong><span style='background-color: yellow;'>Diciembre del año ".$periodoConvenio.", </span></strong><span style='background-color: yellow;'>en plataforma habilitada para estos fines. </span>
     </li>
 </ul>
-<p style='margin-top:0pt; margin-left:36pt; margin-bottom:0pt; text-align:justify; line-height:107%; font-size:11pt'>
-    <span>&#xa0;</span>
-</p>
-<ul type='square' style='margin:0pt; padding-left:0pt'>
-    <li
-        style='margin-left:28.03pt; text-align:justify;padding-left:7.97pt;font-size:11pt'>
-        <span style='background-color:#00ff00'>En caso de incumplimiento, el
-        </span><strong><span style='background-color:#00ff00'>“SERVICIO” </span></strong><span
-            style='background-color:#00ff00'>deberá solicitar a la </span><strong><span
-                style='background-color:#00ff00'>“MUNICIPALIDAD” </span></strong><span
-            style='background-color:#00ff00'>el reintegro de los recursos que no hayan sido
-            ejecutados, a más tardar el </span><strong><span style='background-color:#00ff00'>31 de
-                enero del año ".($periodoConvenio+1).".</span></strong><span style='background-color:#00ff00'> </span>
+
+<ul type='square'>
+    <li style='text-align:justify;'>
+        <span style='background-color: yellow;'>En caso de incumplimiento, el
+        </span><strong><span style='background-color: yellow;'>“SERVICIO” </span></strong><span style='background-color: yellow;'>deberá solicitar a la </span><strong><span style='background-color: yellow;'>“MUNICIPALIDAD” </span></strong><span style='background-color: yellow;'>el reintegro de los recursos que no hayan sido
+            ejecutados, a más tardar el </span><strong><span style='background-color: yellow;'>31 de
+                enero del año ".($periodoConvenio+1).".</span></strong><span style='background-color: yellow;'> </span>
     </li>
 </ul>
-<p style='margin-top:0pt; margin-left:36pt; margin-bottom:0pt; text-align:justify; line-height:107%; font-size:11pt'>
-    <span>&#xa0;</span>
-</p>
-<ul type='square' style='margin:0pt; padding-left:0pt'>
-    <li
-        style='margin-left:28.03pt; text-align:justify;padding-left:7.97pt;font-size:11pt'>
-        <span style='background-color:#00ff00'>Conforme los resultados obtenidos en esta
+
+<ul type='square'>
+    <li style='text-align:justify;'>
+        <span style='background-color: yellow;'>Conforme los resultados obtenidos en esta
             evaluación se harán efectiva la reliquidación de la segunda cuota.</span>
     </li>
 </ul>
-<p style='margin-top:0pt; margin-left:36pt; margin-bottom:0pt; text-align:justify; line-height:107%; font-size:11pt'>
-    <span>&#xa0;</span>
-</p>
-<p style='margin-top:12pt; margin-left:36pt; margin-bottom:12pt; text-align:justify;font-size:11pt'>
-    <span style='background-color:#00ff00'>La </span><strong><span
-            style='background-color:#00ff00'>Reliquidación</span></strong><span
-        style='background-color:#00ff00'> a la </span><strong><span
-            style='background-color:#00ff00'>“MUNICIPALIDAD”,</span></strong><span
-        style='background-color:#00ff00'> se hará efectiva en el mes de Octubre por parte del
-    </span><strong><span style='background-color:#00ff00'>“SERVICIO”,</span></strong><span
-        style='background-color:#00ff00'> si es que el resultado final de la ponderación de los
+
+<p style='text-align:justify;'>
+    <span style='background-color: yellow;'>La </span><strong><span style='background-color: yellow;'>Reliquidación</span></strong><span style='background-color: yellow;'> a la </span><strong><span style='background-color: yellow;'>“MUNICIPALIDAD”,</span></strong><span style='background-color: yellow;'> se hará efectiva en el mes de Octubre por parte del
+    </span><strong><span style='background-color: yellow;'>“SERVICIO”,</span></strong><span style='background-color: yellow;'> si es que el resultado final de la ponderación de los
         indicadores de la comuna es inferior al _____%, en relación al 100% de la meta anual. El descuento será
         proporcional al porcentaje de incumplimiento, de acuerdo al siguiente cuadro:</span>
 </p>
-<table style='border-collapse: collapse; width: 370.75pt; border-color: #000000; border-style: solid; margin-left: auto; margin-right: auto; height: 143.695px;' cellspacing='0' cellpadding='0'>
-    <tr style='height:6.6pt'>
+<table style='collapse: collapse;' cellspacing='0' cellpadding='0'>
+    <tr>
         <td
-            style='width:172.95pt; border-right-style:solid; border-right-width:0.75pt; border-bottom-style:solid; border-bottom-width:0.75pt; padding-right:3.88pt; padding-left:3.88pt; vertical-align:top; background-color:#f2f2f2'>
-            <p style='margin-top:0pt; margin-bottom:0pt; text-align:center; font-size:11pt'>
-                <strong><span style='background-color:#00ff00'>PORCENTAJE CUMPLIMIENTO METAS
+            style='background-color: yellow;'>
+            <p style='text-align:center;'>
+                <strong><span style='background-color: yellow;'>PORCENTAJE CUMPLIMIENTO METAS
                         DEL PROGRAMA</span></strong>
             </p>
         </td>
         <td
-            style='width:180.05pt; border-left-style:solid; border-left-width:0.75pt; border-bottom-style:solid; border-bottom-width:0.75pt; padding-right:3.88pt; padding-left:3.88pt; vertical-align:top; background-color:#f2f2f2'>
-            <p style='margin-top:0pt; margin-bottom:0pt; text-align:center; font-size:11pt'>
-                <strong><span style='background-color:#00ff00'>PORCENTAJE DE DESCUENTO DE
+            style='background-color: yellow;'>
+            <p style='text-align:center;'>
+                <strong><span style='background-color: yellow;'>PORCENTAJE DE DESCUENTO DE
                         RECURSOS 2ª CUOTA </span></strong>
             </p>
         </td>
     </tr>
     <tr>
-        <td
-            style='width:172.95pt; border-top-style:solid; border-top-width:0.75pt; border-right-style:solid; border-right-width:0.75pt; border-bottom-style:solid; border-bottom-width:0.75pt; padding-right:3.88pt; padding-left:3.88pt; vertical-align:top'>
-            <p style='margin-top:0pt; margin-bottom:0pt; text-align:center; font-size:11pt'>
-                <span style='background-color:#00ff00'>Mayor o igual a %</span>
+        <td>
+            <p style='text-align:center;'>
+                <span style='background-color: yellow;'>Mayor o igual a %</span>
             </p>
         </td>
-        <td
-            style='width:180.05pt; border-top-style:solid; border-top-width:0.75pt; border-left-style:solid; border-left-width:0.75pt; border-bottom-style:solid; border-bottom-width:0.75pt; padding-right:3.88pt; padding-left:3.88pt; vertical-align:top'>
-            <p style='margin-top:0pt; margin-bottom:0pt; text-align:center; font-size:11pt'>
-                <span style='background-color:#00ff00'>0%</span>
-            </p>
-        </td>
-    </tr>
-    <tr>
-        <td
-            style='width:172.95pt; border-top-style:solid; border-top-width:0.75pt; border-right-style:solid; border-right-width:0.75pt; border-bottom-style:solid; border-bottom-width:0.75pt; padding-right:3.88pt; padding-left:3.88pt; vertical-align:top'>
-            <p style='margin-top:0pt; margin-bottom:0pt; text-align:center; font-size:11pt'>
-                <span style='background-color:#00ff00'>Entre % y %</span>
-            </p>
-        </td>
-        <td
-            style='width:180.05pt; border-top-style:solid; border-top-width:0.75pt; border-left-style:solid; border-left-width:0.75pt; border-bottom-style:solid; border-bottom-width:0.75pt; padding-right:3.88pt; padding-left:3.88pt; vertical-align:top'>
-            <p style='margin-top:0pt; margin-bottom:0pt; text-align:center; font-size:11pt'>
-                <span style='background-color:#00ff00'>0%</span>
+        <td>
+            <p style='text-align:center;'>
+                <span style='background-color: yellow;'>0%</span>
             </p>
         </td>
     </tr>
     <tr>
-        <td
-            style='width:172.95pt; border-top-style:solid; border-top-width:0.75pt; border-right-style:solid; border-right-width:0.75pt; border-bottom-style:solid; border-bottom-width:0.75pt; padding-right:3.88pt; padding-left:3.88pt; vertical-align:top'>
-            <p style='margin-top:0pt; margin-bottom:0pt; text-align:center; font-size:11pt'>
-                <span style='background-color:#00ff00'>Entre % y %</span>
+        <td>
+            <p style='text-align:center;'>
+                <span style='background-color: yellow;'>Entre % y %</span>
             </p>
         </td>
-        <td
-            style='width:180.05pt; border-top-style:solid; border-top-width:0.75pt; border-left-style:solid; border-left-width:0.75pt; border-bottom-style:solid; border-bottom-width:0.75pt; padding-right:3.88pt; padding-left:3.88pt; vertical-align:top'>
-            <p style='margin-top:0pt; margin-bottom:0pt; text-align:center; font-size:11pt'>
-                <span style='background-color:#00ff00'>0%</span>
+        <td>
+            <p style='text-align:center;'>
+                <span style='background-color: yellow;'>0%</span>
             </p>
         </td>
     </tr>
     <tr>
-        <td
-            style='width:172.95pt; border-top-style:solid; border-top-width:0.75pt; border-right-style:solid; border-right-width:0.75pt; padding-right:3.88pt; padding-left:3.88pt; vertical-align:top'>
-            <p style='margin-top:0pt; margin-bottom:0pt; text-align:center; font-size:11pt'>
-                <span style='background-color:#00ff00'>Menos del %</span>
+        <td>
+            <p style='text-align:center;'>
+                <span style='background-color: yellow;'>Entre % y %</span>
             </p>
         </td>
-        <td
-            style='width:180.05pt; border-top-style:solid; border-top-width:0.75pt; border-left-style:solid; border-left-width:0.75pt; padding-right:3.88pt; padding-left:3.88pt; vertical-align:top'>
-            <p style='margin-top:0pt; margin-bottom:0pt; text-align:center; font-size:11pt'>
-                <span style='background-color:#00ff00'>0%</span>
+        <td>
+            <p style='text-align:center;'>
+                <span style='background-color: yellow;'>0%</span>
+            </p>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <p style='text-align:center;'>
+                <span style='background-color: yellow;'>Menos del %</span>
+            </p>
+        </td>
+        <td>
+            <p style='text-align:center;'>
+                <span style='background-color: yellow;'>0%</span>
             </p>
         </td>
     </tr>
 </table>
-<p style='margin-top:0pt; margin-left:36pt; margin-bottom:0pt; text-align:justify; line-height:107%; font-size:11pt'>
-    <span>&#xa0;</span>
-</p>
-<p style='margin-top:12pt; margin-left:36pt; margin-bottom:12pt; text-align:justify;font-size:11pt'>
-    <span style='background-color:#00ff00'>Excepcionalmente, cuando existan razones fundadas
-        del incumplimiento, la “</span><strong><span
-            style='background-color:#00ff00'>MUNICIPALIDAD”,</span></strong><span
-        style='background-color:#00ff00'> podrá apelar la decisión de reliquidar, mediante
-        oficio enviado a Director(a) del </span><strong><span
-            style='background-color:#00ff00'>“SERVICIO”</span></strong><span
-        style='background-color:#00ff00'>, acompañando un Plan de Trabajo que comprometa un
+
+<p style='text-align:justify;'>
+    <span style='background-color: yellow;'>Excepcionalmente, cuando existan razones fundadas
+        del incumplimiento, la “</span><strong><span style='background-color: yellow;'>MUNICIPALIDAD”,</span></strong><span style='background-color: yellow;'> podrá apelar la decisión de reliquidar, mediante
+        oficio enviado a Director(a) del </span><strong><span style='background-color: yellow;'>“SERVICIO”</span></strong><span style='background-color: yellow;'>, acompañando un Plan de Trabajo que comprometa un
         cronograma para el cumplimiento de las metas, dentro del periodo vigente del convenio. El
-    </span><strong><span style='background-color:#00ff00'>“SERVICIO”,</span></strong><span
-        style='background-color:#00ff00'> analizará la apelación y verificará la existencia de
+    </span><strong><span style='background-color: yellow;'>“SERVICIO”,</span></strong><span style='background-color: yellow;'> analizará la apelación y verificará la existencia de
         razones fundadas para el incumplimiento. En caso de comprobar la existencia de razones fundadas, el
-    </span><strong><span style='background-color:#00ff00'>“SERVICIO”</span></strong><span
-        style='background-color:#00ff00'> podrá pedir al Ministerio de Salud la no
-        reliquidación del </span><strong><span
-            style='background-color:#00ff00'>“PROGRAMA”</span></strong><span
-        style='background-color:#00ff00'> adjuntando los antecedentes que respalden esta
+    </span><strong><span style='background-color: yellow;'>“SERVICIO”</span></strong><span style='background-color: yellow;'> podrá pedir al Ministerio de Salud la no
+        reliquidación del </span><strong><span style='background-color: yellow;'>“PROGRAMA”</span></strong><span style='background-color: yellow;'> adjuntando los antecedentes que respalden esta
         solicitud.</span>
 </p>
-<p style='margin-top:0pt; margin-left:36pt; margin-bottom:0pt; text-align:justify; line-height:107%; font-size:11pt'>
-    <span>&#xa0;</span>
-</p>
-<ul type='square' style='margin:0pt; padding-left:0pt'>
-    <li
-        style='margin-left:28.03pt; margin-bottom:12pt; text-align:justify;padding-left:7.97pt;font-size:11pt'>
-        <span style='background-color:#00ff00'>La </span><strong><span
-                style='background-color:#00ff00'>Tercera evaluación </span></strong><span
-            style='background-color:#00ff00'>técnica y final, se efectuará con corte al
-            ___________</span><strong><span style='background-color:#00ff00'> del año
-                ".$periodoConvenio."</span></strong><span style='background-color:#00ff00'>, fecha en que el
-        </span><strong><span style='background-color:#00ff00'>“PROGRAMA” </span></strong><span
-            style='background-color:#00ff00'>deberá tener ejecutado el </span><strong><span
-                style='background-color:#00ff00'>100%</span></strong><span
-            style='background-color:#00ff00'> de las acciones comprometidas en el convenio y la
-        </span><strong><span style='background-color:#00ff00'>“MUNICIPALIDAD”</span></strong><span
-            style='background-color:#00ff00'> haber enviado el informe técnico final de
-            ejecución al ____________</span><strong><span style='background-color:#00ff00'> del
-                año ".($periodoConvenio+1)."</span></strong><span style='background-color:#00ff00'>. Asimismo,
-            la</span><strong><span style='background-color:#00ff00'> “MUNICIPALIDAD”
-            </span></strong><span style='background-color:#00ff00'>deberá haber hecho en
-            ingreso de las rendiciones mensuales hasta el mes de </span><strong><span
-                style='background-color:#00ff00'>Diciembre del año ".$periodoConvenio." </span></strong><span
-            style='background-color:#00ff00'>en plataforma habilitada para estos fines. En caso
-            contrario el </span><strong><span style='background-color:#00ff00'>“SERVICIO”
-            </span></strong><span style='background-color:#00ff00'>procederá a solicitar a la
-        </span><strong><span style='background-color:#00ff00'>“MUNICIPALIDAD”
-            </span></strong><span style='background-color:#00ff00'>el reintegro de los recursos
-            que no hayan sido ejecutados, a más tardar el </span><strong><span
-                style='background-color:#00ff00'>31 de enero del año ".($periodoConvenio+1).".</span></strong>
+
+<ul type='square'>
+    <li style='text-align:justify;'>
+        <span style='background-color: yellow;'>La </span><strong><span style='background-color: yellow;'>Tercera evaluación </span></strong><span style='background-color: yellow;'>técnica y final, se efectuará con corte al
+            ___________</span><strong><span style='background-color: yellow;'> del año
+                ".$periodoConvenio."</span></strong><span style='background-color: yellow;'>, fecha en que el
+        </span><strong><span style='background-color: yellow;'>“PROGRAMA” </span></strong><span style='background-color: yellow;'>deberá tener ejecutado el </span><strong><span style='background-color: yellow;'>100%</span></strong><span style='background-color: yellow;'> de las acciones comprometidas en el convenio y la
+        </span><strong><span style='background-color: yellow;'>“MUNICIPALIDAD”</span></strong><span style='background-color: yellow;'> haber enviado el informe técnico final de
+            ejecución al ____________</span><strong><span style='background-color: yellow;'> del
+                año ".($periodoConvenio+1)."</span></strong><span style='background-color: yellow;'>. Asimismo,
+            la</span><strong><span style='background-color: yellow;'> “MUNICIPALIDAD”
+            </span></strong><span style='background-color: yellow;'>deberá haber hecho en
+            ingreso de las rendiciones mensuales hasta el mes de </span><strong><span style='background-color: yellow;'>Diciembre del año ".$periodoConvenio." </span></strong><span style='background-color: yellow;'>en plataforma habilitada para estos fines. En caso
+            contrario el </span><strong><span style='background-color: yellow;'>“SERVICIO”
+            </span></strong><span style='background-color: yellow;'>procederá a solicitar a la
+        </span><strong><span style='background-color: yellow;'>“MUNICIPALIDAD”
+            </span></strong><span style='background-color: yellow;'>el reintegro de los recursos
+            que no hayan sido ejecutados, a más tardar el </span><strong><span style='background-color: yellow;'>31 de enero del año ".($periodoConvenio+1).".</span></strong>
     </li>
 </ul>";
 
 else // eval_option == 3
-    $document->content .= "<ul type='square' style='margin:0pt; padding-left:0pt'>
-    <li
-        style='margin-left:28.03pt; margin-bottom:12pt; text-align:justify;padding-left:7.97pt;font-size:11pt'>
-        <span style='background-color:#00ff00'>La única evaluación</span><strong><span
-                style='background-color:#00ff00'> </span></strong><span
-            style='background-color:#00ff00'>técnica y final, se efectuará con corte al
-            ___________</span><strong><span style='background-color:#00ff00'> del año
-                ".$periodoConvenio."</span></strong><span style='background-color:#00ff00'>, fecha en que el
-        </span><strong><span style='background-color:#00ff00'>“PROGRAMA” </span></strong><span
-            style='background-color:#00ff00'>deberá tener ejecutado el </span><strong><span
-                style='background-color:#00ff00'>100%</span></strong><span
-            style='background-color:#00ff00'> de las acciones comprometidas en el convenio y la
-        </span><strong><span style='background-color:#00ff00'>“MUNICIPALIDAD”</span></strong><span
-            style='background-color:#00ff00'> haber enviado el informe técnico final de
-            ejecución al ____________</span><strong><span style='background-color:#00ff00'> del
-                año ".($periodoConvenio+1)."</span></strong><span style='background-color:#00ff00'>. Asimismo,
-            la</span><strong><span style='background-color:#00ff00'> “MUNICIPALIDAD”
-            </span></strong><span style='background-color:#00ff00'>deberá haber hecho en
-            ingreso de las rendiciones mensuales hasta el mes de </span><strong><span
-                style='background-color:#00ff00'>Diciembre del año ".$periodoConvenio." </span></strong><span
-            style='background-color:#00ff00'>en plataforma habilitada para estos fines. En caso
-            contrario el </span><strong><span style='background-color:#00ff00'>“SERVICIO”
-            </span></strong><span style='background-color:#00ff00'>procederá a solicitar a la
-        </span><strong><span style='background-color:#00ff00'>“MUNICIPALIDAD”
-            </span></strong><span style='background-color:#00ff00'>el reintegro de los recursos
-            que no hayan sido ejecutados, a más tardar el </span><strong><span
-                style='background-color:#00ff00'>31 de enero del año ".($periodoConvenio+1).".</span></strong>
+    $document->content .= "<ul type='square'>
+    <li style='text-align:justify;'>
+        <span style='background-color: yellow;'>La única evaluación</span><strong><span style='background-color: yellow;'> </span></strong><span style='background-color: yellow;'>técnica y final, se efectuará con corte al
+            ___________</span><strong><span style='background-color: yellow;'> del año
+                ".$periodoConvenio."</span></strong><span style='background-color: yellow;'>, fecha en que el
+        </span><strong><span style='background-color: yellow;'>“PROGRAMA” </span></strong><span style='background-color: yellow;'>deberá tener ejecutado el </span><strong><span style='background-color: yellow;'>100%</span></strong><span style='background-color: yellow;'> de las acciones comprometidas en el convenio y la
+        </span><strong><span style='background-color: yellow;'>“MUNICIPALIDAD”</span></strong><span style='background-color: yellow;'> haber enviado el informe técnico final de
+            ejecución al ____________</span><strong><span style='background-color: yellow;'> del
+                año ".($periodoConvenio+1)."</span></strong><span style='background-color: yellow;'>. Asimismo,
+            la</span><strong><span style='background-color: yellow;'> “MUNICIPALIDAD”
+            </span></strong><span style='background-color: yellow;'>deberá haber hecho en
+            ingreso de las rendiciones mensuales hasta el mes de </span><strong><span style='background-color: yellow;'>Diciembre del año ".$periodoConvenio." </span></strong><span style='background-color: yellow;'>en plataforma habilitada para estos fines. En caso
+            contrario el </span><strong><span style='background-color: yellow;'>“SERVICIO”
+            </span></strong><span style='background-color: yellow;'>procederá a solicitar a la
+        </span><strong><span style='background-color: yellow;'>“MUNICIPALIDAD”
+            </span></strong><span style='background-color: yellow;'>el reintegro de los recursos
+            que no hayan sido ejecutados, a más tardar el </span><strong><span style='background-color: yellow;'>31 de enero del año ".($periodoConvenio+1).".</span></strong>
     </li>
 </ul>
-<p style='margin-top:0pt; margin-left:35.45pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
-    <span style='background-color:#00ff00'>Este </span><strong><span
-            style='background-color:#00ff00'>“PROGRAMA”</span></strong><span
-        style='background-color:#00ff00'> no considera descuentos por concepto de reliquidación
+<p style='text-align:justify; '>
+    <span style='background-color: yellow;'>Este </span><strong><span style='background-color: yellow;'>“PROGRAMA”</span></strong><span style='background-color: yellow;'> no considera descuentos por concepto de reliquidación
         de recursos asociado a Evaluaciones de cumplimiento técnico, dado debe mantener la continuidad de las
         prestaciones de salud.</span>
 </p>";
 
 $document->content .= "
 
-<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
-    <span>No obstante, el </span><strong><span
-        >“SERVICIO”</span></strong><span>, requerirá el
+<p style='text-align:justify;'>
+    <span>No obstante, el </span><strong><span>“SERVICIO”</span></strong><span>, requerirá el
         envío de informes de avances de carácter técnico, con el fin de evaluar el cumplimiento de las actividades
-        del </span><strong><span>“PROGRAMA”,</span></strong><span
-    > y realizar recomendaciones para su correcta ejecución a través de referente
+        del </span><strong><span>“PROGRAMA”,</span></strong><span> y realizar recomendaciones para su correcta ejecución a través de referente
         técnico del programa de atención primaria.</span>
 </p>
-<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
-    <span>Los datos considerados en las evaluaciones técnicas del </span><strong><span
-        >“PROGRAMA”,</span></strong><span> serán
-        constatados por el Departamento de Atención Primaria del </span><strong><span
-        >“SERVICIO”,</span></strong><span> mediante
+<p style='text-align:justify;'>
+    <span>Los datos considerados en las evaluaciones técnicas del </span><strong><span>“PROGRAMA”,</span></strong><span> serán
+        constatados por el Departamento de Atención Primaria del </span><strong><span>“SERVICIO”,</span></strong><span> mediante
         solicitud de informes y visitas inspectivas por parte del/la Referente Técnico Encargado/a del
     </span><strong><span>“PROGRAM</span></strong><span>A”
-        perteneciente al</span><span>&#xa0; </span><strong><span
-        >“SERVICIO”</span></strong><span>. Por lo
-        anterior, la </span><strong><span>“MUNICIPALIDAD”</span></strong><span
-    > deberá contar con informes detallados de fácil acceso, que respalden la
+        perteneciente al </span><strong><span>“SERVICIO”</span></strong><span>. Por lo
+        anterior, la </span><strong><span>“MUNICIPALIDAD”</span></strong><span> deberá contar con informes detallados de fácil acceso, que respalden la
         información entregada. </span>
 </p>
-<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
-    <span>El resultado de los indicadores al mes de diciembre del año ".$periodoConvenio.",</span><span
-    >&#xa0; </span><span>podrán tener incidencia en los
+<p style='text-align:justify;'>
+    <span>El resultado de los indicadores al mes de diciembre del año ".$periodoConvenio.",</span><span>podrán tener incidencia en los
         criterios de asignación de recursos del año siguiente, según señala Contraloría General de la República en
         su Resolución N°30/2015: “Los Servicios de Salud, no entregarán nuevos fondos a rendir, sea a disposición de
         unidades internas o a la administración de terceros, mientras la persona o institución que debe recibirlos
         no haya cumplido con la obligación de rendir cuenta de la inversión de los fondos ya concedidos”.</span>
 </p>
-<p style='margin-top:0pt; margin-left:36pt; margin-bottom:0pt; text-align:justify; line-height:107%; font-size:11pt'>
-    <span>&#xa0;</span>
-<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
+<p style='text-align:justify;'>
     <span>La evaluación del cumplimiento se realizará en forma global para el
     </span><strong><span>“PROGRAMA”,</span></strong><span>
         según el siguiente detalle:</span>
 </p>
-<p style='margin-top:0pt; margin-left:36pt; margin-bottom:0pt; text-align:justify; line-height:107%; font-size:11pt'>
-    <span>&#xa0;</span>
-<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
+<p style='text-align:justify;'>
     <strong><span>INDICADORES Y MEDIOS DE VERIFICACIÓN:</span></strong>
 </p>
-<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
-    <span>&#xa0;</span>
+
+<p style='text-align:justify;'>
+    <span style='background-color: yellow;'>Incluir los indicadores… </span>
 </p>
-<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
-    <span style='background-color:#ffff00'>Incluir los indicadores… </span>
-</p>
-<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
-    <span>&#xa0;</span>
-</p>
-<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
+
+<p style='text-align:justify;'>
     <span>Para efectos de registro de información de prestaciones, solicitudes y órdenes
-        de atención, éstas deberán ser registradas en Plataformas: </span><strong><span
-        >REM, RAYEN, SIGGES, y OTRAS</span></strong><span>
+        de atención, éstas deberán ser registradas en Plataformas: </span><strong><span>REM, RAYEN, SIGGES, y OTRAS</span></strong><span>
         habilitadas para estos fines, según corresponda, únicos medios de verificación
-        de atención de pacientes</span><strong><span> FONASA</span></strong><span
-    >.</span>
+        de atención de pacientes</span><strong><span> FONASA</span></strong><span>.</span>
 </p>
-<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
-    <span>Adicionalmente el Departamento de Atención Primaria del </span><strong><span
-        >“SERVICIO”,</span></strong><span> efectuará la
+<p style='text-align:justify;'>
+    <span>Adicionalmente el Departamento de Atención Primaria del </span><strong><span>“SERVICIO”,</span></strong><span> efectuará la
         fiscalización del uso correcto y adecuado de los recursos, mediante visitas inspectivas, solicitud de
         informes de avances y demás medios previstos por las normas y procedimientos de auditoría de conformidad con
         la normativa vigente. </span>
 </p>
-<p style='margin-top:0pt; margin-left:36pt; margin-bottom:0pt; text-align:justify; line-height:107%; font-size:11pt'>
-    <span>&#xa0;</span>
-
-
-<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
-    <strong><span>OCTAVA:</span></strong><strong><span
-            >&#xa0;</span></strong><span>Los
+<p style='text-align:justify;'>
+    <strong><span>OCTAVA: </span></strong><span>Los
         </span></a><span>recursos mencionados en la cláusula quinta financiarán
         exclusivamente las actividades relacionadas al </span><strong><span>“PROGRAMA”
-        </span></strong><span>y se entregarán en </span><span
-        style='background-color:#00ff00'>".$totalQuotas.",</span><span>
+        </span></strong><span>y se entregarán en </span><span style='background-color: yellow;'>".$totalQuotas.",</span><span>
         de acuerdo con la siguiente manera y condiciones:</span>
 </p>";
 
 if($agreement->agreement_quotas->count() == 2)
-    $document->content .= "<ul type='disc' style='margin:0pt; padding-left:0pt'>
-    <li
-        style='margin-left:27.14pt; margin-bottom:12pt; text-align:justify; padding-left:8.86pt; font-size:9pt; color:#404040'>
-        <span style='font-size:11pt; color:#000000; background-color:#00ff00'>La primera cuota
-            de $ </span><strong><span
-                style='font-size:11pt; color:#000000; background-color:#00ff00'>".$arrayQuota[0]['cuotaMonto']."</span></strong><span
-            style='font-size:11pt; color:#000000; background-color:#00ff00'>
-        </span><strong><span
-                style='font-size:11pt; color:#000000; background-color:#00ff00'>(".$arrayQuota[0]['cuotaLetra']."),</span></strong><span
-            style='font-size:11pt; color:#000000; background-color:#00ff00'> correspondiente al
+    $document->content .= "<ul type='disc'>
+    <li style='text-align:justify;'>
+        La primera cuota de $ <strong><span style=' background-color: yellow'>".$arrayQuota[0]['cuotaMonto']."</span></strong>
+        <strong><span style=' background-color: yellow'>(".$arrayQuota[0]['cuotaLetra']."),</span>
+        </strong><span style=' background-color: yellow'> correspondiente al
             ".$arrayQuota[0]['percentage']."% del total de los recursos del presente convenio, se transferirá una vez emitida la
             Resolución Exenta que aprueba el presente instrumento y una vez recibidos los recursos desde el
             Ministerio de Salud.</span>
     </li>
-    <li
-        style='margin-left:28.06pt; margin-bottom:12pt; text-align:justify; padding-left:7.94pt;font-size:11pt'>
-        <span style='background-color:#00ff00'>La segunda cuota y final de $
-        </span><strong><span style='background-color:#00ff00'>".$arrayQuota[1]['cuotaMonto']."</span></strong><span
-            style='background-color:#00ff00'> </span><strong><span
-                style='background-color:#00ff00'>(".$arrayQuota[1]['cuotaLetra']."),</span></strong><span
-            style='background-color:#00ff00'> correspondiente al ".$arrayQuota[1]['percentage']."% del total de
+    <li style='text-align:justify;'>
+        <span style='background-color: yellow;'>La segunda cuota y final de $
+        </span><strong><span style='background-color: yellow;'>".$arrayQuota[1]['cuotaMonto']."</span></strong><span style='background-color: yellow;'> </span><strong><span style='background-color: yellow;'>(".$arrayQuota[1]['cuotaLetra']."),</span></strong><span style='background-color: yellow;'> correspondiente al ".$arrayQuota[1]['percentage']."% del total de
             los recursos del presente convenio, se transferirá según los resultados obtenidos en la primera
             evaluación definida en la cláusula anterior y una vez sean recibidos los recursos desde el Ministerio de
             Salud.</span>
     </li>
 </ul>
-<p style='margin-top:0pt; margin-left:36pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
-    <span style='background-color:#00ff00'>La entrega de la segunda cuota del programa estará
+<p style='text-align:justify;'>
+    <span style='background-color: yellow;'>La entrega de la segunda cuota del programa estará
         condicionada a dos aspectos principales:</span>
 </p>
-<p
-    style='margin-top:0pt; margin-left:35.4pt; margin-bottom:12pt; text-indent:0.6pt; text-align:justify;font-size:11pt'>
-    <strong><span style='background-color:#00ff00'>1° Evaluación Técnica del
-            Programa:</span></strong><span style='background-color:#00ff00'> Evaluación
-        realizada por el Referente Técnico de Atención Primaria del </span><strong><span
-            style='background-color:#00ff00'>“SERVICIO”</span></strong><span
-        style='background-color:#00ff00'>, encargado del </span><strong><span
-            style='background-color:#00ff00'>“PROGRAMA”</span></strong><span
-        style='background-color:#00ff00'>, según la cláusula séptima del presente convenio, lo
-        cual será informado por el </span><strong><span
-            style='background-color:#00ff00'>“SERVICIO”</span></strong><span
-        style='background-color:#00ff00'> a través de los oficios correspondientes a la
-    </span><strong><span style='background-color:#00ff00'>“MUNICIPALIDAD”,
-        </span></strong><span style='background-color:#00ff00'>&#xa0;</span><span
-        style='background-color:#00ff00'>posterior a los cortes de evaluación indicados en la
-        misma cláusula.</span><span style='background-color:#00ff00'>&#xa0;&#xa0; </span>
+<p style='text-align:justify;'>
+    <strong><span style='background-color: yellow;'>1° Evaluación Técnica del
+            Programa:</span></strong><span style='background-color: yellow;'> Evaluación
+        realizada por el Referente Técnico de Atención Primaria del </span><strong><span style='background-color: yellow;'>“SERVICIO”</span></strong><span style='background-color: yellow;'>, encargado del </span><strong><span style='background-color: yellow;'>“PROGRAMA”</span></strong><span style='background-color: yellow;'>, según la cláusula séptima del presente convenio, lo
+        cual será informado por el </span><strong><span style='background-color: yellow;'>“SERVICIO”</span></strong><span style='background-color: yellow;'> a través de los oficios correspondientes a la
+    </span><strong><span style='background-color: yellow;'>“MUNICIPALIDAD”,
+        </span></strong><span style='background-color: yellow;'>posterior a los cortes de evaluación indicados en la
+        misma cláusula.</span><span style='background-color: yellow;'> </span>
 </p>
-<p
-    style='margin-top:0pt; margin-left:35.4pt; margin-bottom:12pt; text-indent:0.6pt; text-align:justify;font-size:11pt'>
-    <strong><span style='background-color:#00ff00'>2° Evaluación Financiera del
-            Programa:</span></strong><span style='background-color:#00ff00'> Evaluación
-        realizada por el Departamento de Finanzas del </span><strong><span
-            style='background-color:#00ff00'>“SERVICIO”</span></strong><span
-        style='background-color:#00ff00'>, a través de la plataforma habilitada para estos
-        fines </span><strong><span style='background-color:#00ff00'>“SISREC”</span></strong><span
-        style='background-color:#00ff00'>,</span><span
-        style='background-color:#00ff00'>&#xa0; </span><span
-        style='background-color:#00ff00'>donde la </span><strong><span
-            style='background-color:#00ff00'>“MUNICIPALIDAD”</span></strong><span
-        style='background-color:#00ff00'> debe dar cuenta de los recursos otorgados por el
-    </span><strong><span style='background-color:#00ff00'>“SERVICIO”,</span></strong><span
-        style='background-color:#00ff00'> de forma mensual, según lo dispuesto en la
-    </span><strong><span style='background-color:#00ff00'>Resolución N°30/2015 de Contraloría
-            General de la República, </span></strong><span style='background-color:#00ff00'>que
+<p style='text-align:justify;'>
+    <strong><span style='background-color: yellow;'>2° Evaluación Financiera del
+            Programa:</span></strong><span style='background-color: yellow;'> Evaluación
+        realizada por el Departamento de Finanzas del </span><strong><span style='background-color: yellow;'>“SERVICIO”</span></strong><span style='background-color: yellow;'>, a través de la plataforma habilitada para estos
+        fines </span><strong><span style='background-color: yellow;'>“SISREC”</span></strong><span style='background-color: yellow;'>,</span><span style='background-color: yellow;'> </span><span style='background-color: yellow;'>donde la </span><strong><span style='background-color: yellow;'>“MUNICIPALIDAD”</span></strong><span style='background-color: yellow;'> debe dar cuenta de los recursos otorgados por el
+    </span><strong><span style='background-color: yellow;'>“SERVICIO”,</span></strong><span style='background-color: yellow;'> de forma mensual, según lo dispuesto en la
+    </span><strong><span style='background-color: yellow;'>Resolución N°30/2015 de Contraloría
+            General de la República, </span></strong><span style='background-color: yellow;'>que
         Fija Normas de Procedimiento sobre Rendición de Cuentas.</span>
 </p>";
 
 else if($agreement->agreement_quotas->count() == 3)
-    $document->content .= "<ul type='disc' style='margin:0pt; padding-left:0pt'>
-    <li
-        style='margin-left:27.14pt; margin-bottom:12pt; text-align:justify; padding-left:8.86pt;font-size:9pt; color:#404040'>
-        <span style='font-size:11pt; color:#000000; background-color:#00ff00'>La primera cuota
-            de $ </span><strong><span
-                style='font-size:11pt; color:#000000; background-color:#00ff00'>".$arrayQuota[0]['cuotaMonto']."</span></strong><span
-            style='font-size:11pt; color:#000000; background-color:#00ff00'>
-        </span><strong><span
-                style='font-size:11pt; color:#000000; background-color:#00ff00'>(".$arrayQuota[0]['cuotaLetra']."),
-            </span></strong><span
-            style='font-size:11pt; color:#000000; background-color:#00ff00'>correspondiente al
+    $document->content .= "<ul type='disc'>
+    <li style='text-align:justify;  '>
+        <span style=' background-color: yellow'>La primera cuota
+            de $ </span><strong><span style=' background-color: yellow'>".$arrayQuota[0]['cuotaMonto']."</span></strong><span style=' background-color: yellow'>
+        </span><strong><span style=' background-color: yellow'>(".$arrayQuota[0]['cuotaLetra']."),
+            </span></strong><span style=' background-color: yellow'>correspondiente al
             ".$arrayQuota[0]['percentage']."% del total de los recursos del presente convenio, se transferirá una vez emitida la
             Resolución Exenta que aprueba el presente instrumento y una vez recibidos los recursos desde el
             Ministerio de Salud.</span>
     </li>
-    <li
-        style='margin-left:28.06pt; margin-bottom:12pt; text-align:justify; padding-left:7.94pt;font-size:11pt'>
-        <span style='background-color:#00ff00'>La segunda cuota de $ </span><strong><span
-                style='background-color:#00ff00'>".$arrayQuota[1]['cuotaMonto']."</span></strong><span
-            style='background-color:#00ff00'> </span><strong><span
-                style='background-color:#00ff00'>(".$arrayQuota[1]['cuotaLetra']."),</span></strong><span
-            style='background-color:#00ff00'> correspondiente al ".$arrayQuota[1]['percentage']."%</span><span
-            style='background-color:#00ff00'>&#xa0; </span><span
-            style='background-color:#00ff00'>del total de los recursos del presente convenio,
+    <li style='text-align:justify;'>
+        <span style='background-color: yellow;'>La segunda cuota de $ </span><strong><span style='background-color: yellow;'>".$arrayQuota[1]['cuotaMonto']."</span></strong><span style='background-color: yellow;'> </span><strong><span style='background-color: yellow;'>(".$arrayQuota[1]['cuotaLetra']."),</span></strong><span style='background-color: yellow;'> correspondiente al ".$arrayQuota[1]['percentage']."%</span><span style='background-color: yellow;'> </span><span style='background-color: yellow;'>del total de los recursos del presente convenio,
             se transferirá según los resultados obtenidos en la primera evaluación definida en la cláusula anterior
             y una vez sean recibidos los recursos desde el Ministerio de Salud.</span>
     </li>
 </ul>
-<p style='margin-top:0pt; margin-left:36pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
-    <span style='background-color:#00ff00'>La entrega de la segunda cuota del programa estará
+<p style='text-align:justify;'>
+    <span style='background-color: yellow;'>La entrega de la segunda cuota del programa estará
         condicionada a dos aspectos principales:</span>
 </p>
-<p style='margin-top:0pt; margin-left:36pt; margin-bottom:12pt; text-align:justify;font-size:11pt'>
-    <strong><span style='background-color:#00ff00'>1° Evaluación Técnica del
-            Programa:</span></strong><span style='background-color:#00ff00'> Evaluación
-        realizada por el Referente Técnico de Atención Primaria del </span><strong><span
-            style='background-color:#00ff00'>“SERVICIO”</span></strong><span
-        style='background-color:#00ff00'>, encargado del </span><strong><span
-            style='background-color:#00ff00'>“PROGRAMA”</span></strong><span
-        style='background-color:#00ff00'>, según la cláusula séptima del presente convenio, lo
-        cual será informado por el </span><strong><span
-            style='background-color:#00ff00'>“SERVICIO”</span></strong><span
-        style='background-color:#00ff00'> a través de la plataforma habilitada para estos fines
-        a la </span><strong><span style='background-color:#00ff00'>“MUNICIPALIDAD”,
-        </span></strong><span style='background-color:#00ff00'>posterior a los cortes de
-        evaluación indicados en la misma cláusula.</span><span
-        style='background-color:#00ff00'>&#xa0;&#xa0; </span>
+<p style='text-align:justify;'>
+    <strong><span style='background-color: yellow;'>1° Evaluación Técnica del
+            Programa:</span></strong><span style='background-color: yellow;'> Evaluación
+        realizada por el Referente Técnico de Atención Primaria del </span><strong><span style='background-color: yellow;'>“SERVICIO”</span></strong><span style='background-color: yellow;'>, encargado del </span><strong><span style='background-color: yellow;'>“PROGRAMA”</span></strong><span style='background-color: yellow;'>, según la cláusula séptima del presente convenio, lo
+        cual será informado por el </span><strong><span style='background-color: yellow;'>“SERVICIO”</span></strong><span style='background-color: yellow;'> a través de la plataforma habilitada para estos fines
+        a la </span><strong><span style='background-color: yellow;'>“MUNICIPALIDAD”,
+        </span></strong><span style='background-color: yellow;'>posterior a los cortes de
+        evaluación indicados en la misma cláusula.</span><span style='background-color: yellow;'> </span>
 </p>
-<p style='margin-top:0pt; margin-left:36pt; margin-bottom:12pt; text-align:justify;font-size:11pt'>
-    <strong><span style='background-color:#00ff00'>2° Evaluación Financiera del
-            Programa:</span></strong><span style='background-color:#00ff00'> Evaluación
-        realizada por el Departamento de Finanzas del </span><strong><span
-            style='background-color:#00ff00'>“SERVICIO”</span></strong><span
-        style='background-color:#00ff00'>, a través de la plataforma habilitada para estos
-        fines,</span><span style='background-color:#00ff00'>&#xa0; </span><span
-        style='background-color:#00ff00'>donde la </span><strong><span
-            style='background-color:#00ff00'>“MUNICIPALIDAD”</span></strong><span
-        style='background-color:#00ff00'> debe dar cuenta de los recursos otorgados por el
-    </span><strong><span style='background-color:#00ff00'>“SERVICIO”,</span></strong><span
-        style='background-color:#00ff00'> de forma mensual, según lo dispuesto en la
-    </span><strong><span style='background-color:#00ff00'>Resolución N°30/2015 de Contraloría
-            General de la República, </span></strong><span style='background-color:#00ff00'>que
+<p style='text-align:justify;'>
+    <strong><span style='background-color: yellow;'>2° Evaluación Financiera del
+            Programa:</span></strong><span style='background-color: yellow;'> Evaluación
+        realizada por el Departamento de Finanzas del </span><strong><span style='background-color: yellow;'>“SERVICIO”</span></strong><span style='background-color: yellow;'>, a través de la plataforma habilitada para estos
+        fines,</span><span style='background-color: yellow;'> </span><span style='background-color: yellow;'>donde la </span><strong><span style='background-color: yellow;'>“MUNICIPALIDAD”</span></strong><span style='background-color: yellow;'> debe dar cuenta de los recursos otorgados por el
+    </span><strong><span style='background-color: yellow;'>“SERVICIO”,</span></strong><span style='background-color: yellow;'> de forma mensual, según lo dispuesto en la
+    </span><strong><span style='background-color: yellow;'>Resolución N°30/2015 de Contraloría
+            General de la República, </span></strong><span style='background-color: yellow;'>que
         Fija Normas de Procedimiento sobre Rendición de Cuentas.</span>
 </p>
-<ul type='disc' style='margin:0pt; padding-left:0pt'>
-    <li
-        style='margin-left:28.06pt; margin-bottom:12pt; text-align:justify; padding-left:7.94pt;font-size:11pt'>
-        <span style='background-color:#00ff00'>La tercera cuota y final de $
-        </span><strong><span style='background-color:#00ff00'>".$arrayQuota[2]['cuotaMonto']."</span></strong><span
-            style='background-color:#00ff00'> </span><strong><span
-                style='background-color:#00ff00'>(".$arrayQuota[2]['cuotaLetra']."),</span></strong><span
-            style='background-color:#00ff00'> correspondiente al ".$arrayQuota[2]['percentage']."% del total de
+<ul type='disc'>
+    <li style='text-align:justify;'>
+        <span style='background-color: yellow;'>La tercera cuota y final de $
+        </span><strong><span style='background-color: yellow;'>".$arrayQuota[2]['cuotaMonto']."</span></strong><span style='background-color: yellow;'> </span><strong><span style='background-color: yellow;'>(".$arrayQuota[2]['cuotaLetra']."),</span></strong><span style='background-color: yellow;'> correspondiente al ".$arrayQuota[2]['percentage']."% del total de
             los recursos del presente convenio, se transferirá según los resultados obtenidos en la segunda
             evaluación definida en la cláusula anterior y una vez sean recibidos los recursos desde el Ministerio de
             Salud.</span>
     </li>
 </ul>
-<p style='margin-top:0pt; margin-left:36pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
-    <span style='background-color:#00ff00'>La entrega de la tercera cuota del programa estará
+<p style='text-align:justify;'>
+    <span style='background-color: yellow;'>La entrega de la tercera cuota del programa estará
         condicionada a dos aspectos principales:</span>
 </p>
-<p style='margin-top:0pt; margin-left:36pt; margin-bottom:12pt; text-align:justify;font-size:11pt'>
-    <strong><span style='background-color:#00ff00'>1° Evaluación Técnica del
-            Programa:</span></strong><span style='background-color:#00ff00'> Evaluación
-        realizada por el Referente Técnico de Atención Primaria del </span><strong><span
-            style='background-color:#00ff00'>“SERVICIO”</span></strong><span
-        style='background-color:#00ff00'>, encargado del </span><strong><span
-            style='background-color:#00ff00'>“PROGRAMA”</span></strong><span
-        style='background-color:#00ff00'>, según la cláusula séptima del presente convenio, lo
-        cual será informado por el </span><strong><span
-            style='background-color:#00ff00'>“SERVICIO”</span></strong><span
-        style='background-color:#00ff00'> a través de los oficios correspondientes a la
-    </span><strong><span style='background-color:#00ff00'>“MUNICIPALIDAD”,
-        </span></strong><span style='background-color:#00ff00'>&#xa0;</span><span
-        style='background-color:#00ff00'>posterior a los cortes de evaluación indicados en la
-        misma cláusula.</span><span style='background-color:#00ff00'>&#xa0;&#xa0; </span>
+<p style='text-align:justify;'>
+    <strong><span style='background-color: yellow;'>1° Evaluación Técnica del
+            Programa:</span></strong><span style='background-color: yellow;'> Evaluación
+        realizada por el Referente Técnico de Atención Primaria del </span><strong><span style='background-color: yellow;'>“SERVICIO”</span></strong><span style='background-color: yellow;'>, encargado del </span><strong><span style='background-color: yellow;'>“PROGRAMA”</span></strong><span style='background-color: yellow;'>, según la cláusula séptima del presente convenio, lo
+        cual será informado por el </span><strong><span style='background-color: yellow;'>“SERVICIO”</span></strong><span style='background-color: yellow;'> a través de los oficios correspondientes a la
+    </span><strong><span style='background-color: yellow;'>“MUNICIPALIDAD”,
+        </span></strong><span style='background-color: yellow;'>posterior a los cortes de evaluación indicados en la
+        misma cláusula.</span><span style='background-color: yellow;'> </span>
 </p>
-<p style='margin-top:0pt; margin-left:36pt; margin-bottom:12pt; text-align:justify;font-size:11pt'>
-    <strong><span style='background-color:#00ff00'>2° Evaluación Financiera del
-            Programa:</span></strong><span style='background-color:#00ff00'> Evaluación
-        realizada por el Departamento de Finanzas del </span><strong><span
-            style='background-color:#00ff00'>“SERVICIO”</span></strong><span
-        style='background-color:#00ff00'>, a través de la plataforma habilitada para estos
-        fines </span><strong><span style='background-color:#00ff00'>“SISREC”</span></strong><span
-        style='background-color:#00ff00'>, donde la </span><strong><span
-            style='background-color:#00ff00'>“MUNICIPALIDAD”</span></strong><span
-        style='background-color:#00ff00'> debe dar cuenta de los recursos otorgados por el
-    </span><strong><span style='background-color:#00ff00'>“SERVICIO”,</span></strong><span
-        style='background-color:#00ff00'> de forma mensual, según lo dispuesto en la
-    </span><strong><span style='background-color:#00ff00'>Resolución N°30/2015 de Contraloría
-            General de la República, </span></strong><span style='background-color:#00ff00'>que
+<p style='text-align:justify;'>
+    <strong><span style='background-color: yellow;'>2° Evaluación Financiera del
+            Programa:</span></strong><span style='background-color: yellow;'> Evaluación
+        realizada por el Departamento de Finanzas del </span><strong><span style='background-color: yellow;'>“SERVICIO”</span></strong><span style='background-color: yellow;'>, a través de la plataforma habilitada para estos
+        fines </span><strong><span style='background-color: yellow;'>“SISREC”</span></strong><span style='background-color: yellow;'>, donde la </span><strong><span style='background-color: yellow;'>“MUNICIPALIDAD”</span></strong><span style='background-color: yellow;'> debe dar cuenta de los recursos otorgados por el
+    </span><strong><span style='background-color: yellow;'>“SERVICIO”,</span></strong><span style='background-color: yellow;'> de forma mensual, según lo dispuesto en la
+    </span><strong><span style='background-color: yellow;'>Resolución N°30/2015 de Contraloría
+            General de la República, </span></strong><span style='background-color: yellow;'>que
         Fija Normas de Procedimiento sobre Rendición de Cuentas.</span>
 </p>";
 
 elseif($agreement->agreement_quotas->count() == 1)
-    $document->content .= "<ul type='disc' style='margin:0pt; padding-left:0pt'>
-    <li
-        style='margin-left:28.06pt; margin-bottom:12pt; text-align:justify; padding-left:7.94pt;font-size:11pt'>
-        <span style='background-color:#00ff00'>La primera y única cuota de $
-        </span><strong><span style='background-color:#00ff00'>".$arrayQuota[0]['cuotaMonto']."</span></strong><span
-            style='background-color:#00ff00'> </span><strong><span
-                style='background-color:#00ff00'>(".$arrayQuota[0]['cuotaLetra']."),</span></strong><span
-            style='background-color:#00ff00'> correspondiente al 100 % del total de los
-            recursos del presente convenio, se transferirá a la </span><strong><span
-                style='background-color:#00ff00'>“MUNICIPALIDAD”,</span></strong><span
-            style='background-color:#00ff00'> una vez emitida la Resolución Exenta que aprueba
+    $document->content .= "<ul type='disc'>
+    <li style='text-align:justify;'>
+        <span style='background-color: yellow;'>La primera y única cuota de $
+        </span><strong><span style='background-color: yellow;'>".$arrayQuota[0]['cuotaMonto']."</span></strong><span style='background-color: yellow;'> </span><strong><span style='background-color: yellow;'>(".$arrayQuota[0]['cuotaLetra']."),</span></strong><span style='background-color: yellow;'> correspondiente al 100 % del total de los
+            recursos del presente convenio, se transferirá a la </span><strong><span style='background-color: yellow;'>“MUNICIPALIDAD”,</span></strong><span style='background-color: yellow;'> una vez emitida la Resolución Exenta que aprueba
             el presente instrumento y una vez recibidos los recursos desde el Ministerio de Salud.</span>
     </li>
 </ul>
-<p style='margin-top:0pt; margin-left:36pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
-    <span style='background-color:#00ff00'>La aprobación de las rendiciones mensuales de este
+<p style='text-align:justify;'>
+    <span style='background-color: yellow;'>La aprobación de las rendiciones mensuales de este
         Programa, se basará en dos aspectos principales:</span>
 </p>
-<p style='margin-top:0pt; margin-left:36pt; margin-bottom:12pt; text-align:justify;font-size:11pt'>
-    <strong><span style='background-color:#00ff00'>1° Evaluación Técnica del
-            Programa:</span></strong><span style='background-color:#00ff00'> Evaluación
-        realizada por el Referente Técnico de Atención Primaria del </span><strong><span
-            style='background-color:#00ff00'>“SERVICIO”</span></strong><span
-        style='background-color:#00ff00'>, encargado del </span><strong><span
-            style='background-color:#00ff00'>“PROGRAMA”</span></strong><span
-        style='background-color:#00ff00'>, según la cláusula séptima del presente convenio, lo
-        cual será informado por el </span><strong><span
-            style='background-color:#00ff00'>“SERVICIO”</span></strong><span
-        style='background-color:#00ff00'> a través de la plataforma habilitada para estos fines
-        a la </span><strong><span
-            style='background-color:#00ff00'>“MUNICIPALIDAD”,</span></strong><span
-        style='background-color:#00ff00'> posterior a los cortes de evaluación indicados en la
-        misma cláusula.</span><span style='background-color:#00ff00'>&#xa0;&#xa0; </span>
+<p style='text-align:justify;'>
+    <strong><span style='background-color: yellow;'>1° Evaluación Técnica del
+            Programa:</span></strong><span style='background-color: yellow;'> Evaluación
+        realizada por el Referente Técnico de Atención Primaria del </span><strong><span style='background-color: yellow;'>“SERVICIO”</span></strong><span style='background-color: yellow;'>, encargado del </span><strong><span style='background-color: yellow;'>“PROGRAMA”</span></strong><span style='background-color: yellow;'>, según la cláusula séptima del presente convenio, lo
+        cual será informado por el </span><strong><span style='background-color: yellow;'>“SERVICIO”</span></strong><span style='background-color: yellow;'> a través de la plataforma habilitada para estos fines
+        a la </span><strong><span style='background-color: yellow;'>“MUNICIPALIDAD”,</span></strong><span style='background-color: yellow;'> posterior a los cortes de evaluación indicados en la
+        misma cláusula.</span><span style='background-color: yellow;'> </span>
 </p>
-<p style='margin-top:0pt; margin-left:36pt; margin-bottom:12pt; text-align:justify;font-size:11pt'>
-    <strong><span style='background-color:#00ff00'>2° Evaluación Financiera del
-            Programa:</span></strong><span style='background-color:#00ff00'> Evaluación
-        realizada por el Departamento de Finanzas del </span><strong><span
-            style='background-color:#00ff00'>“SERVICIO”</span></strong><span
-        style='background-color:#00ff00'>, a través de la plataforma habilitada para estos
-        fines, donde la </span><strong><span
-            style='background-color:#00ff00'>“MUNICIPALIDAD”</span></strong><span
-        style='background-color:#00ff00'> debe dar cuenta de los recursos otorgados por el
-    </span><strong><span style='background-color:#00ff00'>“SERVICIO”,</span></strong><span
-        style='background-color:#00ff00'> de forma mensual, según lo dispuesto en la
-    </span><strong><span style='background-color:#00ff00'>Resolución N°30/2015 de Contraloría
-            General de la República, </span></strong><span style='background-color:#00ff00'>que
+<p style='text-align:justify;'>
+    <strong><span style='background-color: yellow;'>2° Evaluación Financiera del
+            Programa:</span></strong><span style='background-color: yellow;'> Evaluación
+        realizada por el Departamento de Finanzas del </span><strong><span style='background-color: yellow;'>“SERVICIO”</span></strong><span style='background-color: yellow;'>, a través de la plataforma habilitada para estos
+        fines, donde la </span><strong><span style='background-color: yellow;'>“MUNICIPALIDAD”</span></strong><span style='background-color: yellow;'> debe dar cuenta de los recursos otorgados por el
+    </span><strong><span style='background-color: yellow;'>“SERVICIO”,</span></strong><span style='background-color: yellow;'> de forma mensual, según lo dispuesto en la
+    </span><strong><span style='background-color: yellow;'>Resolución N°30/2015 de Contraloría
+            General de la República, </span></strong><span style='background-color: yellow;'>que
         Fija Normas de Procedimiento sobre Rendición de Cuentas.</span>
 </p>";
 
 else // $agreement->agreement_quotas == 12
-    $document->content .= "<ul type='disc' style='margin:0pt; padding-left:0pt'>
-    <li
-        style='margin-left:28.06pt; margin-bottom:12pt; text-align:justify; padding-left:7.94pt;font-size:11pt'>
-        <span style='background-color:#00ff00'>Los recursos mencionados en la Cláusula Quinta,
+    $document->content .= "<ul type='disc'>
+    <li style='text-align:justify;'>
+        <span style='background-color: yellow;'>Los recursos mencionados en la Cláusula Quinta,
             financiarán exclusivamente las actividades relacionadas al “PROGRAMA”, y se entregarán en
-            ".$totalQuotasText." los que</span><strong><span style='background-color:#00ff00'>
-            </span></strong><span style='background-color:#00ff00'>se transferirá a la
-        </span><strong><span style='background-color:#00ff00'>“MUNICIPALIDAD”,</span></strong><span
-            style='background-color:#00ff00'> una vez emitida la Resolución Exenta que aprueba
+            ".$totalQuotasText." los que</span><strong><span style='background-color: yellow;'>
+            </span></strong><span style='background-color: yellow;'>se transferirá a la
+        </span><strong><span style='background-color: yellow;'>“MUNICIPALIDAD”,</span></strong><span style='background-color: yellow;'> una vez emitida la Resolución Exenta que aprueba
             el presente instrumento y una vez recibidos los recursos desde el Ministerio de Salud, de acuerdo a la
             siguiente manera y condiciones:</span>
     </li>
 </ul>
-<p style='margin-top:0pt; margin-left:36pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
-    <span>&#xa0;</span>
-</p>
-<table style='border-collapse: collapse; border-color: #000000; border-style: solid; margin-left: auto; margin-right: auto;' cellspacing='0' cellpadding='0'>
+
+<table style='collapse: collapse;    ' cellspacing='0' cellpadding='0'>
     <tr>
         <td colspan='2'
-            style='width:254.7pt; border-right-style:solid; border-right-width:0.75pt; border-bottom-style:solid; border-bottom-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top'>
-            <p style='margin-top:0pt; margin-bottom:12pt; text-align:center; font-size:11pt'>
+            >
+            <p style='text-align:center;'>
                 <span>N° DE CUOTAS</span>
             </p>
         </td>
-        <td
-            style='width:129.1pt; border-left-style:solid; border-left-width:0.75pt; border-bottom-style:solid; border-bottom-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top'>
-            <p style='margin-top:0pt; margin-bottom:12pt; text-align:center; font-size:11pt'>
+        <td>
+            <p style='text-align:center;'>
                 <span>MONTO</span>
             </p>
         </td>
     </tr>
     <tr>
-        <td
-            style='width:16.75pt; border-top-style:solid; border-top-width:0.75pt; border-right-style:solid; border-right-width:0.75pt; border-bottom-style:solid; border-bottom-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top'>
-            <p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
+        <td>
+            <p style='text-align:justify;'>
                 <span>1</span>
             </p>
         </td>
-        <td
-            style='width:227.15pt; border-style:solid; border-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top'>
-            <p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
+        <td>
+            <p style='text-align:justify;'>
                 <span>ENERO</span>
             </p>
         </td>
-        <td
-            style='width:129.1pt; border-top-style:solid; border-top-width:0.75pt; border-left-style:solid; border-left-width:0.75pt; border-bottom-style:solid; border-bottom-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top'>
-            <p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
-                <span>$ </span><strong><span
-                        style='background-color:#00ff00'>".$arrayQuota[0]['cuotaMonto']."</span></strong>
+        <td>
+            <p style='text-align:justify;'>
+                <span>$ </span><strong><span style='background-color: yellow;'>".$arrayQuota[0]['cuotaMonto']."</span></strong>
             </p>
         </td>
     </tr>
     <tr>
-        <td
-            style='width:16.75pt; border-top-style:solid; border-top-width:0.75pt; border-right-style:solid; border-right-width:0.75pt; border-bottom-style:solid; border-bottom-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top'>
-            <p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
+        <td>
+            <p style='text-align:justify;'>
                 <span>2</span>
             </p>
         </td>
-        <td
-            style='width:227.15pt; border-style:solid; border-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top'>
-            <p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
+        <td>
+            <p style='text-align:justify;'>
                 <span>FEBRERO</span>
             </p>
         </td>
-        <td
-            style='width:129.1pt; border-top-style:solid; border-top-width:0.75pt; border-left-style:solid; border-left-width:0.75pt; border-bottom-style:solid; border-bottom-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top'>
-            <p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
-                <span>$ </span><strong><span
-                        style='background-color:#00ff00'>".$arrayQuota[1]['cuotaMonto']."</span></strong>
+        <td>
+            <p style='text-align:justify;'>
+                <span>$ </span><strong><span style='background-color: yellow;'>".$arrayQuota[1]['cuotaMonto']."</span></strong>
             </p>
         </td>
     </tr>
     <tr>
-        <td
-            style='width:16.75pt; border-top-style:solid; border-top-width:0.75pt; border-right-style:solid; border-right-width:0.75pt; border-bottom-style:solid; border-bottom-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top'>
-            <p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
+        <td>
+            <p style='text-align:justify;'>
                 <span>3</span>
             </p>
         </td>
-        <td
-            style='width:227.15pt; border-style:solid; border-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top'>
-            <p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
+        <td>
+            <p style='text-align:justify;'>
                 <span>MARZO</span>
             </p>
         </td>
-        <td
-            style='width:129.1pt; border-top-style:solid; border-top-width:0.75pt; border-left-style:solid; border-left-width:0.75pt; border-bottom-style:solid; border-bottom-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top'>
-            <p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
-                <span>$ </span><strong><span
-                        style='background-color:#00ff00'>".$arrayQuota[2]['cuotaMonto']."</span></strong>
+        <td>
+            <p style='text-align:justify;'>
+                <span>$ </span><strong><span style='background-color: yellow;'>".$arrayQuota[2]['cuotaMonto']."</span></strong>
             </p>
         </td>
     </tr>
     <tr>
-        <td
-            style='width:16.75pt; border-top-style:solid; border-top-width:0.75pt; border-right-style:solid; border-right-width:0.75pt; border-bottom-style:solid; border-bottom-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top'>
-            <p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
+        <td>
+            <p style='text-align:justify;'>
                 <span>4</span>
             </p>
         </td>
-        <td
-            style='width:227.15pt; border-style:solid; border-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top'>
-            <p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
+        <td>
+            <p style='text-align:justify;'>
                 <span>ABRIL</span>
             </p>
         </td>
-        <td
-            style='width:129.1pt; border-top-style:solid; border-top-width:0.75pt; border-left-style:solid; border-left-width:0.75pt; border-bottom-style:solid; border-bottom-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top'>
-            <p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
-                <span>$ </span><strong><span
-                        style='background-color:#00ff00'>".$arrayQuota[3]['cuotaMonto']."</span></strong>
+        <td>
+            <p style='text-align:justify;'>
+                <span>$ </span><strong><span style='background-color: yellow;'>".$arrayQuota[3]['cuotaMonto']."</span></strong>
             </p>
         </td>
     </tr>
     <tr>
-        <td
-            style='width:16.75pt; border-top-style:solid; border-top-width:0.75pt; border-right-style:solid; border-right-width:0.75pt; border-bottom-style:solid; border-bottom-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top'>
-            <p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
+        <td>
+            <p style='text-align:justify;'>
                 <span>5</span>
             </p>
         </td>
-        <td
-            style='width:227.15pt; border-style:solid; border-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top'>
-            <p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
+        <td>
+            <p style='text-align:justify;'>
                 <span>MAYO</span>
             </p>
         </td>
-        <td
-            style='width:129.1pt; border-top-style:solid; border-top-width:0.75pt; border-left-style:solid; border-left-width:0.75pt; border-bottom-style:solid; border-bottom-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top'>
-            <p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
-                <span>$ </span><strong><span
-                        style='background-color:#00ff00'>".$arrayQuota[4]['cuotaMonto']."</span></strong>
+        <td>
+            <p style='text-align:justify;'>
+                <span>$ </span><strong><span style='background-color: yellow;'>".$arrayQuota[4]['cuotaMonto']."</span></strong>
             </p>
         </td>
     </tr>
     <tr>
-        <td
-            style='width:16.75pt; border-top-style:solid; border-top-width:0.75pt; border-right-style:solid; border-right-width:0.75pt; border-bottom-style:solid; border-bottom-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top'>
-            <p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
+        <td>
+            <p style='text-align:justify;'>
                 <span>6</span>
             </p>
         </td>
-        <td
-            style='width:227.15pt; border-style:solid; border-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top'>
-            <p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
+        <td>
+            <p style='text-align:justify;'>
                 <span>JUNIO</span>
             </p>
         </td>
-        <td
-            style='width:129.1pt; border-top-style:solid; border-top-width:0.75pt; border-left-style:solid; border-left-width:0.75pt; border-bottom-style:solid; border-bottom-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top'>
-            <p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
-                <span>$ </span><strong><span
-                        style='background-color:#00ff00'>".$arrayQuota[5]['cuotaMonto']."</span></strong>
+        <td>
+            <p style='text-align:justify;'>
+                <span>$ </span><strong><span style='background-color: yellow;'>".$arrayQuota[5]['cuotaMonto']."</span></strong>
             </p>
         </td>
     </tr>
     <tr>
-        <td
-            style='width:16.75pt; border-top-style:solid; border-top-width:0.75pt; border-right-style:solid; border-right-width:0.75pt; border-bottom-style:solid; border-bottom-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top'>
-            <p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
+        <td>
+            <p style='text-align:justify;'>
                 <span>7</span>
             </p>
         </td>
-        <td
-            style='width:227.15pt; border-style:solid; border-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top'>
-            <p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
+        <td>
+            <p style='text-align:justify;'>
                 <span>JULIO</span>
             </p>
         </td>
-        <td
-            style='width:129.1pt; border-top-style:solid; border-top-width:0.75pt; border-left-style:solid; border-left-width:0.75pt; border-bottom-style:solid; border-bottom-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top'>
-            <p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
-                <span>$ </span><strong><span
-                        style='background-color:#00ff00'>".$arrayQuota[6]['cuotaMonto']."</span></strong>
+        <td>
+            <p style='text-align:justify;'>
+                <span>$ </span><strong><span style='background-color: yellow;'>".$arrayQuota[6]['cuotaMonto']."</span></strong>
             </p>
         </td>
     </tr>
     <tr>
-        <td
-            style='width:16.75pt; border-top-style:solid; border-top-width:0.75pt; border-right-style:solid; border-right-width:0.75pt; border-bottom-style:solid; border-bottom-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top'>
-            <p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
+        <td>
+            <p style='text-align:justify;'>
                 <span>8</span>
             </p>
         </td>
-        <td
-            style='width:227.15pt; border-style:solid; border-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top'>
-            <p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
+        <td>
+            <p style='text-align:justify;'>
                 <span>AGOSTO</span>
             </p>
         </td>
-        <td
-            style='width:129.1pt; border-top-style:solid; border-top-width:0.75pt; border-left-style:solid; border-left-width:0.75pt; border-bottom-style:solid; border-bottom-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top'>
-            <p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
-                <span>$ </span><strong><span
-                        style='background-color:#00ff00'>".$arrayQuota[7]['cuotaMonto']."</span></strong>
+        <td>
+            <p style='text-align:justify;'>
+                <span>$ </span><strong><span style='background-color: yellow;'>".$arrayQuota[7]['cuotaMonto']."</span></strong>
             </p>
         </td>
     </tr>
     <tr>
-        <td
-            style='width:16.75pt; border-top-style:solid; border-top-width:0.75pt; border-right-style:solid; border-right-width:0.75pt; border-bottom-style:solid; border-bottom-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top'>
-            <p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
+        <td>
+            <p style='text-align:justify;'>
                 <span>9</span>
             </p>
         </td>
-        <td
-            style='width:227.15pt; border-style:solid; border-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top'>
-            <p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
+        <td>
+            <p style='text-align:justify;'>
                 <span>SEPTIEMBRE</span>
             </p>
         </td>
-        <td
-            style='width:129.1pt; border-top-style:solid; border-top-width:0.75pt; border-left-style:solid; border-left-width:0.75pt; border-bottom-style:solid; border-bottom-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top'>
-            <p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
-                <span>$ </span><strong><span
-                        style='background-color:#00ff00'>".$arrayQuota[8]['cuotaMonto']."</span></strong>
+        <td>
+            <p style='text-align:justify;'>
+                <span>$ </span><strong><span style='background-color: yellow;'>".$arrayQuota[8]['cuotaMonto']."</span></strong>
             </p>
         </td>
     </tr>
     <tr>
-        <td
-            style='width:16.75pt; border-top-style:solid; border-top-width:0.75pt; border-right-style:solid; border-right-width:0.75pt; border-bottom-style:solid; border-bottom-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top'>
-            <p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
+        <td>
+            <p style='text-align:justify;'>
                 <span>10</span>
             </p>
         </td>
-        <td
-            style='width:227.15pt; border-style:solid; border-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top'>
-            <p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
+        <td>
+            <p style='text-align:justify;'>
                 <span>OCTUBRE</span>
             </p>
         </td>
-        <td
-            style='width:129.1pt; border-top-style:solid; border-top-width:0.75pt; border-left-style:solid; border-left-width:0.75pt; border-bottom-style:solid; border-bottom-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top'>
-            <p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
-                <span>$ </span><strong><span
-                        style='background-color:#00ff00'>".$arrayQuota[9]['cuotaMonto']."</span></strong>
+        <td>
+            <p style='text-align:justify;'>
+                <span>$ </span><strong><span style='background-color: yellow;'>".$arrayQuota[9]['cuotaMonto']."</span></strong>
             </p>
         </td>
     </tr>
     <tr>
-        <td
-            style='width:16.75pt; border-top-style:solid; border-top-width:0.75pt; border-right-style:solid; border-right-width:0.75pt; border-bottom-style:solid; border-bottom-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top'>
-            <p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
+        <td>
+            <p style='text-align:justify;'>
                 <span>11</span>
             </p>
         </td>
-        <td
-            style='width:227.15pt; border-style:solid; border-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top'>
-            <p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
+        <td>
+            <p style='text-align:justify;'>
                 <span>NOVIEMBRE</span>
             </p>
         </td>
-        <td
-            style='width:129.1pt; border-top-style:solid; border-top-width:0.75pt; border-left-style:solid; border-left-width:0.75pt; border-bottom-style:solid; border-bottom-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top'>
-            <p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
-                <span>$ </span><strong><span
-                        style='background-color:#00ff00'>".$arrayQuota[10]['cuotaMonto']."</span></strong>
+        <td>
+            <p style='text-align:justify;'>
+                <span>$ </span><strong><span style='background-color: yellow;'>".$arrayQuota[10]['cuotaMonto']."</span></strong>
             </p>
         </td>
     </tr>
     <tr>
-        <td
-            style='width:16.75pt; border-top-style:solid; border-top-width:0.75pt; border-right-style:solid; border-right-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top'>
-            <p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
+        <td>
+            <p style='text-align:justify;'>
                 <span>12</span>
             </p>
         </td>
-        <td
-            style='width:227.15pt; border-top-style:solid; border-top-width:0.75pt; border-right-style:solid; border-right-width:0.75pt; border-left-style:solid; border-left-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top'>
-            <p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
+        <td>
+            <p style='text-align:justify;'>
                 <span>DICIEMBRE</span>
             </p>
         </td>
-        <td
-            style='width:129.1pt; border-top-style:solid; border-top-width:0.75pt; border-left-style:solid; border-left-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top'>
-            <p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
-                <span>$ </span><strong><span
-                        style='background-color:#00ff00'>".$arrayQuota[11]['cuotaMonto']."</span></strong>
+        <td>
+            <p style='text-align:justify;'>
+                <span>$ </span><strong><span style='background-color: yellow;'>".$arrayQuota[11]['cuotaMonto']."</span></strong>
             </p>
         </td>
     </tr>
 </table>
-<p style='margin-top:0pt; margin-left:36pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
-    <span>&#xa0;</span>
-</p>
-<p style='margin-top:0pt; margin-left:36pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
-    <span style='background-color:#00ff00'>La aprobación de las rendiciones mensuales de este
+
+<p style='text-align:justify;'>
+    <span style='background-color: yellow;'>La aprobación de las rendiciones mensuales de este
         “PROGRAMA”, se basará en dos aspectos principales:</span>
 </p>
-<p style='margin-top:0pt; margin-left:36pt; margin-bottom:12pt; text-align:justify;font-size:11pt'>
-    <strong><span style='background-color:#00ff00'>1° Evaluación Técnica del
-            Programa:</span></strong><span style='background-color:#00ff00'> Evaluación
-        realizada por el Referente Técnico de Atención Primaria del </span><strong><span
-            style='background-color:#00ff00'>“SERVICIO”</span></strong><span
-        style='background-color:#00ff00'>, encargado del </span><strong><span
-            style='background-color:#00ff00'>“PROGRAMA”</span></strong><span
-        style='background-color:#00ff00'>, según la cláusula séptima del presente convenio, lo
-        cual será informado por el </span><strong><span
-            style='background-color:#00ff00'>“SERVICIO”</span></strong><span
-        style='background-color:#00ff00'> a través de los oficios correspondientes a la
-    </span><strong><span style='background-color:#00ff00'>“MUNICIPALIDAD”,</span></strong><span
-        style='background-color:#00ff00'> posterior a los cortes de evaluación indicados en la
-        misma cláusula.</span><span style='background-color:#00ff00'>&#xa0;&#xa0; </span>
+<p style='text-align:justify;'>
+    <strong><span style='background-color: yellow;'>1° Evaluación Técnica del
+            Programa:</span></strong><span style='background-color: yellow;'> Evaluación
+        realizada por el Referente Técnico de Atención Primaria del </span><strong><span style='background-color: yellow;'>“SERVICIO”</span></strong><span style='background-color: yellow;'>, encargado del </span><strong><span style='background-color: yellow;'>“PROGRAMA”</span></strong><span style='background-color: yellow;'>, según la cláusula séptima del presente convenio, lo
+        cual será informado por el </span><strong><span style='background-color: yellow;'>“SERVICIO”</span></strong><span style='background-color: yellow;'> a través de los oficios correspondientes a la
+    </span><strong><span style='background-color: yellow;'>“MUNICIPALIDAD”,</span></strong><span style='background-color: yellow;'> posterior a los cortes de evaluación indicados en la
+        misma cláusula.</span><span style='background-color: yellow;'> </span>
 </p>
-<p style='margin-top:0pt; margin-left:36pt; margin-bottom:12pt; text-align:justify; line-height:115%; font-size:11pt'>
-    <strong><span style='background-color:#00ff00'>2° Evaluación Financiera del
-            Programa:</span></strong><span style='background-color:#00ff00'> Evaluación
-        realizada por el Departamento de Finanzas del </span><strong><span
-            style='background-color:#00ff00'>“SERVICIO”</span></strong><span
-        style='background-color:#00ff00'>, a través de la plataforma habilitada para estos
-        fines </span><strong><span style='background-color:#00ff00'>“SISREC”</span></strong><span
-        style='background-color:#00ff00'>,</span><span
-        style='background-color:#00ff00'>&#xa0; </span><span
-        style='background-color:#00ff00'>donde la </span><strong><span
-            style='background-color:#00ff00'>“MUNICIPALIDAD”</span></strong><span
-        style='background-color:#00ff00'> debe dar cuenta de los recursos otorgados por el
-    </span><strong><span style='background-color:#00ff00'>“SERVICIO”,</span></strong><span
-        style='background-color:#00ff00'> de forma mensual, según lo dispuesto en la
-    </span><strong><span style='background-color:#00ff00'>Resolución N°30/2015 de Contraloría
-            General de la República, </span></strong><span style='background-color:#00ff00'>que
+<p style='text-align:justify;'>
+    <strong><span style='background-color: yellow;'>2° Evaluación Financiera del
+            Programa:</span></strong><span style='background-color: yellow;'> Evaluación
+        realizada por el Departamento de Finanzas del </span><strong><span style='background-color: yellow;'>“SERVICIO”</span></strong><span style='background-color: yellow;'>, a través de la plataforma habilitada para estos
+        fines </span><strong><span style='background-color: yellow;'>“SISREC”</span></strong><span style='background-color: yellow;'>,</span><span style='background-color: yellow;'> </span><span style='background-color: yellow;'>donde la </span><strong><span style='background-color: yellow;'>“MUNICIPALIDAD”</span></strong><span style='background-color: yellow;'> debe dar cuenta de los recursos otorgados por el
+    </span><strong><span style='background-color: yellow;'>“SERVICIO”,</span></strong><span style='background-color: yellow;'> de forma mensual, según lo dispuesto en la
+    </span><strong><span style='background-color: yellow;'>Resolución N°30/2015 de Contraloría
+            General de la República, </span></strong><span style='background-color: yellow;'>que
         Fija Normas de Procedimiento sobre Rendición de Cuentas.</span>
 </p>
-<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:9pt'>
-    <span style='font-family:Menlo; color:#404040'>&#xa0;</span>
-</p>";
+";
 
 $document->content .= "
-<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
+<p style='text-align:justify;'>
     <strong><span>NOVENA: </span></strong><span>El
     </span><strong><span>“SERVICIO”</span></strong><span>
         no asume responsabilidad financiera mayor que la que en este convenio se señala. Por ello, en el caso que la
     </span><strong><span>“MUNICIPALIDAD”</span></strong><span>
-        se exceda de los fondos destinados por el </span><strong><span
-        >“SERVICIO”</span></strong><span> para los
+        se exceda de los fondos destinados por el </span><strong><span>“SERVICIO”</span></strong><span> para los
         efectos de este convenio, esta asumirá el gasto excedente, lo que no debe afectar el cumplimiento, ni los
         plazos de ejecución dispuestos por este medio para otorgar las prestaciones y/o acciones propias del
     </span><strong><span>“PROGRAMA”.</span></strong>
 </p>
-<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
-    <strong><span>&#xa0;</span></strong>
-</p>
-<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
-    <strong><span>DÉCIMA: </span></strong><span
-        >La Municipalidad deberá rendir los gastos del Programa, únicamente
+
+<p style='text-align:justify;'>
+    <strong><span>DÉCIMA: </span></strong><span>La Municipalidad deberá rendir los gastos del Programa, únicamente
             utilizando el Sistema de Rendición Electrónica de cuentas de la Contraloría General de la República, en
-            adelante, “</span><strong><span>SISREC”</span></strong><span
-        > y de conformidad con lo establecido en la </span><strong><span
-            >Resolución N° 30/2015, de la Contraloría General de la
+            adelante, “</span><strong><span>SISREC”</span></strong><span> y de conformidad con lo establecido en la </span><strong><span>Resolución N° 30/2015, de la Contraloría General de la
                 República,</span></strong><span> o de las resoluciones que la modifiquen
             o la reemplacen.</span></a>
 </p>
-<p style='margin-top:0pt; margin-bottom:0pt; text-align:justify; font-size:11pt'>
-    <span>En plataforma </span><strong><span
-        >“SISREC”,</span></strong><span> la rendición
+<p style='text-align:justify;'>
+    <span>En plataforma </span><strong><span>“SISREC”,</span></strong><span> la rendición
         debe presentar documentos auténticos digitalizados y documentos electrónicos, previa validación del ministro
-        de fe de la </span><strong><span>“MUNICIPALIDAD”, </span></strong><span
-    >que justifiquen cada uno de los gastos realizados en el mes
+        de fe de la </span><strong><span>“MUNICIPALIDAD”, </span></strong><span>que justifiquen cada uno de los gastos realizados en el mes
         correspondiente.</span>
 </p>
-<p style='margin-top:0pt; margin-bottom:0pt; text-align:justify; font-size:11pt'>
-    <span>&#xa0;</span>
-</p>
-<p style='margin-top:0pt; margin-bottom:0pt; text-align:justify; font-size:11pt'>
-    <span>&#xa0;</span>
-</p>
-<p style='margin-top:0pt; margin-bottom:0pt; text-align:justify; font-size:11pt'>
+
+
+<p style='text-align:justify;'>
     <span>La</span><strong><span>
-            “MUNICIPALIDAD”</span></strong><span> por su parte</span><strong><span
-        >,</span></strong><span> quedará obligada, en
+            “MUNICIPALIDAD”</span></strong><span> por su parte</span><strong><span>,</span></strong><span> quedará obligada, en
         su calidad de ejecutor, a lo siguiente:</span>
 </p>
-<p style='margin-top:0pt; margin-bottom:0pt; text-align:justify; font-size:11pt'>
-    <span>&#xa0;</span>
-</p>
-<p style='margin-top:0pt; margin-bottom:0pt; text-align:justify; font-size:11pt'>
+
+<p style='text-align:justify;'>
     <strong><span>a)</span></strong><span> Utilizar la
-        plataforma </span><strong><span>“SISREC”</span></strong><span
-    > para la rendición de cuentas a que dé lugar al presente convenio, ocupando las
-        funcionalidades que otorga el perfil </span><strong><span
-        >“EJECUTOR”,</span></strong><span> dando
+        plataforma </span><strong><span>“SISREC”</span></strong><span> para la rendición de cuentas a que dé lugar al presente convenio, ocupando las
+        funcionalidades que otorga el perfil </span><strong><span>“EJECUTOR”,</span></strong><span> dando
         cumplimiento al marco normativo aplicable que instruye la Contraloría General de la República en la
         Resolución N°30/2015.</span>
 </p>
-<p style='margin-top:0pt; margin-bottom:0pt; font-size:11pt'>
-    <span>&#xa0;</span>
-</p>
-<p style='margin-top:0pt; margin-bottom:0pt; text-align:justify; font-size:11pt'>
+
+<p style='text-align:justify;'>
     <strong><span>b)</span></strong><span> Asignar a los
         funcionarios que cuenten con las competencias técnicas y atribuciones necesarias para perfilarse en calidad
         de titular, y al menos un subrogante, en los roles de encargado, analista y ministro de fe, en
     </span><strong><span>“SISREC”.</span></strong>
 </p>
-<p style='margin-top:0pt; margin-bottom:0pt; text-align:justify; font-size:11pt'>
-    <span>&#xa0;</span>
-</p>
-<p style='margin-top:0pt; margin-bottom:0pt; text-align:justify; font-size:11pt'>
+
+<p style='text-align:justify;'>
     <strong><span>c)</span></strong><span> Disponer de
         medios tecnológicos de hardware y software para realizar la rendición de cuentas con documentación
-        electrónica y digital a través del </span><strong><span
-        >“SISREC”.</span></strong><span> Lo anterior
+        electrónica y digital a través del </span><strong><span>“SISREC”.</span></strong><span> Lo anterior
         incluye: la adquisición de token para firma electrónica avanzada del encargado ejecutor, scanner para
         digitalización de documentos en papel, contar con casilla de correo electrónico e internet.</span>
 </p>
-<p style='margin-top:0pt; margin-bottom:0pt; text-align:justify; font-size:11pt'>
-    <span>&#xa0;</span>
-</p>
-<p style='margin-top:0pt; margin-bottom:0pt; text-align:justify; font-size:11pt'>
+
+<p style='text-align:justify;'>
     <strong><span>d)</span></strong><span> Custodiar
         adecuadamente los documentos originales de la rendición garantizando su autenticidad, integridad y
         disponibilidad para las revisiones de la Contraloría General de la República, en el marco de la normativa
         legal pertinente.</span>
 </p>
-<p style='margin-top:0pt; margin-bottom:0pt; text-align:justify; font-size:11pt'>
-    <span>&#xa0;</span>
+
+<p style='text-align:justify;'>
+    <strong><span>e)</span></strong><strong><span>
+        </span></strong><span>Solicitar el cierre de Proyecto en </span><strong><span>“SISREC”.</span></strong>
 </p>
-<p style='margin-top:0pt; margin-bottom:0pt; text-align:justify; font-size:11pt'>
-    <strong><span>e)</span></strong><strong><span>&#xa0;
-        </span></strong><span>Solicitar el cierre de Proyecto en </span><strong><span
-        >“SISREC”.</span></strong>
-</p>
-<p style='margin-top:0pt; margin-bottom:0pt; text-align:justify; font-size:11pt'>
-    <span>&#xa0;</span>
-</p>
-<p style='margin-top:0pt; margin-bottom:0pt; text-align:justify; font-size:11pt'>
+
+<p style='text-align:justify;'>
     <strong><span>El “SERVICIO”</span></strong><span>, por
         su parte, quedará obligado, en su calidad de otorgante, a lo siguiente:</span>
 </p>
-<p style='margin-top:0pt; margin-bottom:0pt; text-align:justify; font-size:11pt'>
-    <span>&#xa0;</span>
-</p>
-<p style='margin-top:0pt; margin-bottom:0pt; text-align:justify; font-size:11pt'>
+
+<p style='text-align:justify;'>
     <strong><span>a)</span></strong><span> Asignar a los
         funcionarios que cuenten con las competencias técnicas y las atribuciones necesarias para perfilarse en
         calidad de titular, y al menos un subrogante, en los roles de encargado y analista de la plataforma
-    </span><strong><span>“SISREC”</span></strong><span
-    >.</span>
+    </span><strong><span>“SISREC”</span></strong><span>.</span>
 </p>
-<p style='margin-top:0pt; margin-bottom:0pt; text-align:justify; font-size:11pt'>
-    <span>&#xa0;</span>
-</p>
-<p style='margin-top:0pt; margin-bottom:0pt; text-align:justify; font-size:11pt'>
+
+<p style='text-align:justify;'>
     <strong><span>b)</span></strong><span> Disponer de
         medios tecnológicos de hardware y software para realizar la rendición de cuentas del proyecto, con
-        documentación electrónica y digital a través de la plataforma </span><strong><span
-        >“SISREC”,</span></strong><span> durante el
+        documentación electrónica y digital a través de la plataforma </span><strong><span>“SISREC”,</span></strong><span> durante el
         período de rendición de la totalidad de los recursos transferidos para la ejecución del proyecto. Lo
         anterior incluye: la adquisición de token para la firma electrónica avanzada del encargado otorgante,
         scanner para digitalización de documentos en papel, contar con casilla de correo electrónico e
         internet.</span>
 </p>
-<p style='margin-top:0pt; margin-bottom:0pt; text-align:justify; font-size:11pt'>
-    <span>&#xa0;</span>
-</p>
-<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
-    <span>La </span><strong><span
-        >“MUNICIPALIDAD”</span></strong><span> deberá
+
+<p style='text-align:justify;'>
+    <span>La </span><strong><span>“MUNICIPALIDAD”</span></strong><span> deberá
         rendir los gastos mensuales del Programa una vez realizada la primera remesa, utilizando la plataforma
     </span><strong><span>“SISREC”</span></strong><span> y
         sujetándose a lo establecido en la Resolución N°30/2015 de la Contraloría General de la República, según las
         siguientes fechas:</span>
 </p>
-<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:10pt'>
-    <span style='color:#ff6600'>&#xa0;</span>
-</p>
+
 <div style='text-align:center'>
-<table style='border-collapse: collapse; border-color: #000000; border-style: solid; margin-left: auto; margin-right: auto;' cellspacing='0' cellpadding='0'>
+<table style='collapse: collapse;    ' cellspacing='0' cellpadding='0'>
         <tr>
-            <td
-                style='width:104.65pt; border-right-style:solid; border-right-width:0.75pt; border-bottom-style:solid; border-bottom-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top; background-color:#f2f2f2'>
-                <p style='margin-top:0pt; margin-bottom:0pt; text-align:justify; font-size:11pt'>
+            <td>
+                <p style='text-align:justify;'>
                     <strong><span>MES PARA RENDIR</span></strong>
                 </p>
             </td>
-            <td
-                style='width:150.15pt; border-left-style:solid; border-left-width:0.75pt; border-bottom-style:solid; border-bottom-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top; background-color:#f2f2f2'>
-                <p style='margin-top:0pt; margin-bottom:0pt; text-align:justify; font-size:11pt'>
+            <td>
+                <p style='text-align:justify;'>
                     <strong><span>PLAZO ENVÍO RENDICIÓN</span></strong>
                 </p>
             </td>
         </tr>
         <tr>
-            <td
-                style='width:104.65pt; border-top-style:solid; border-top-width:0.75pt; border-right-style:solid; border-right-width:0.75pt; border-bottom-style:solid; border-bottom-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top'>
-                <p style='margin-top:0pt; margin-bottom:0pt; text-align:justify; font-size:11pt'>
+            <td>
+                <p style='text-align:justify;'>
                     <span>Enero ".$periodoConvenio."</span>
                 </p>
             </td>
-            <td
-                style='width:150.15pt; border-top-style:solid; border-top-width:0.75pt; border-left-style:solid; border-left-width:0.75pt; border-bottom-style:solid; border-bottom-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top'>
-                <p style='margin-top:0pt; margin-bottom:0pt; text-align:justify; font-size:11pt'>
-                    <span>&#xa0;</span><span>Febrero
+            <td>
+                <p style='text-align:justify;'>
+                    <span>Febrero
                         ".$periodoConvenio."</span>
                 </p>
             </td>
         </tr>
         <tr>
-            <td
-                style='width:104.65pt; border-top-style:solid; border-top-width:0.75pt; border-right-style:solid; border-right-width:0.75pt; border-bottom-style:solid; border-bottom-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top'>
-                <p style='margin-top:0pt; margin-bottom:0pt; text-align:justify; font-size:11pt'>
+            <td>
+                <p style='text-align:justify;'>
                     <span>Febrero ".$periodoConvenio."</span>
                 </p>
             </td>
-            <td
-                style='width:150.15pt; border-top-style:solid; border-top-width:0.75pt; border-left-style:solid; border-left-width:0.75pt; border-bottom-style:solid; border-bottom-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top'>
-                <p style='margin-top:0pt; margin-bottom:0pt; text-align:justify; font-size:11pt'>
-                    <span>&#xa0;</span><span>Marzo
+            <td>
+                <p style='text-align:justify;'>
+                    <span>Marzo
                         ".$periodoConvenio."</span>
                 </p>
             </td>
         </tr>
         <tr>
-            <td
-                style='width:104.65pt; border-top-style:solid; border-top-width:0.75pt; border-right-style:solid; border-right-width:0.75pt; border-bottom-style:solid; border-bottom-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top'>
-                <p style='margin-top:0pt; margin-bottom:0pt; text-align:justify; font-size:11pt'>
+            <td>
+                <p style='text-align:justify;'>
                     <span>Marzo ".$periodoConvenio."</span>
                 </p>
             </td>
-            <td
-                style='width:150.15pt; border-top-style:solid; border-top-width:0.75pt; border-left-style:solid; border-left-width:0.75pt; border-bottom-style:solid; border-bottom-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top'>
-                <p style='margin-top:0pt; margin-bottom:0pt; text-align:justify; font-size:11pt'>
-                    <span>&#xa0;</span><span>Abril
+            <td>
+                <p style='text-align:justify;'>
+                    <span>Abril
                         ".$periodoConvenio."</span>
                 </p>
             </td>
         </tr>
         <tr>
-            <td
-                style='width:104.65pt; border-top-style:solid; border-top-width:0.75pt; border-right-style:solid; border-right-width:0.75pt; border-bottom-style:solid; border-bottom-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top'>
-                <p style='margin-top:0pt; margin-bottom:0pt; text-align:justify; font-size:11pt'>
+            <td>
+                <p style='text-align:justify;'>
                     <span>Abril ".$periodoConvenio."</span>
                 </p>
             </td>
-            <td
-                style='width:150.15pt; border-top-style:solid; border-top-width:0.75pt; border-left-style:solid; border-left-width:0.75pt; border-bottom-style:solid; border-bottom-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top'>
-                <p style='margin-top:0pt; margin-bottom:0pt; text-align:justify; font-size:11pt'>
-                    <span>&#xa0;</span><span>Mayo
+            <td>
+                <p style='text-align:justify;'>
+                    <span>Mayo
                         ".$periodoConvenio."</span>
                 </p>
             </td>
         </tr>
         <tr>
-            <td
-                style='width:104.65pt; border-top-style:solid; border-top-width:0.75pt; border-right-style:solid; border-right-width:0.75pt; border-bottom-style:solid; border-bottom-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top'>
-                <p style='margin-top:0pt; margin-bottom:0pt; text-align:justify; font-size:11pt'>
+            <td>
+                <p style='text-align:justify;'>
                     <span>Mayo ".$periodoConvenio."</span>
                 </p>
             </td>
-            <td
-                style='width:150.15pt; border-top-style:solid; border-top-width:0.75pt; border-left-style:solid; border-left-width:0.75pt; border-bottom-style:solid; border-bottom-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top'>
-                <p style='margin-top:0pt; margin-bottom:0pt; text-align:justify; font-size:11pt'>
-                    <span>&#xa0;</span><span>Junio
+            <td>
+                <p style='text-align:justify;'>
+                    <span>Junio
                         ".$periodoConvenio."</span>
                 </p>
             </td>
         </tr>
         <tr>
-            <td
-                style='width:104.65pt; border-top-style:solid; border-top-width:0.75pt; border-right-style:solid; border-right-width:0.75pt; border-bottom-style:solid; border-bottom-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top'>
-                <p style='margin-top:0pt; margin-bottom:0pt; text-align:justify; font-size:11pt'>
+            <td>
+                <p style='text-align:justify;'>
                     <span>Junio ".$periodoConvenio."</span>
                 </p>
             </td>
-            <td
-                style='width:150.15pt; border-top-style:solid; border-top-width:0.75pt; border-left-style:solid; border-left-width:0.75pt; border-bottom-style:solid; border-bottom-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top'>
-                <p style='margin-top:0pt; margin-bottom:0pt; text-align:justify; font-size:11pt'>
-                    <span>&#xa0;</span><span>Julio
+            <td>
+                <p style='text-align:justify;'>
+                    <span>Julio
                         ".$periodoConvenio."</span>
                 </p>
             </td>
         </tr>
         <tr>
-            <td
-                style='width:104.65pt; border-top-style:solid; border-top-width:0.75pt; border-right-style:solid; border-right-width:0.75pt; border-bottom-style:solid; border-bottom-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top'>
-                <p style='margin-top:0pt; margin-bottom:0pt; text-align:justify; font-size:11pt'>
+            <td>
+                <p style='text-align:justify;'>
                     <span>Julio ".$periodoConvenio."</span>
                 </p>
             </td>
-            <td
-                style='width:150.15pt; border-top-style:solid; border-top-width:0.75pt; border-left-style:solid; border-left-width:0.75pt; border-bottom-style:solid; border-bottom-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top'>
-                <p style='margin-top:0pt; margin-bottom:0pt; text-align:justify; font-size:11pt'>
-                    <span>&#xa0;</span><span>Agosto
+            <td>
+                <p style='text-align:justify;'>
+                    <span>Agosto
                         ".$periodoConvenio."</span>
                 </p>
             </td>
         </tr>
         <tr>
-            <td
-                style='width:104.65pt; border-top-style:solid; border-top-width:0.75pt; border-right-style:solid; border-right-width:0.75pt; border-bottom-style:solid; border-bottom-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top'>
-                <p style='margin-top:0pt; margin-bottom:0pt; text-align:justify; font-size:11pt'>
+            <td>
+                <p style='text-align:justify;'>
                     <span>Agosto ".$periodoConvenio."</span>
                 </p>
             </td>
-            <td
-                style='width:150.15pt; border-top-style:solid; border-top-width:0.75pt; border-left-style:solid; border-left-width:0.75pt; border-bottom-style:solid; border-bottom-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top'>
-                <p style='margin-top:0pt; margin-bottom:0pt; text-align:justify; font-size:11pt'>
-                    <span>&#xa0;</span><span>Septiembre
+            <td>
+                <p style='text-align:justify;'>
+                    <span>Septiembre
                         ".$periodoConvenio."</span>
                 </p>
             </td>
         </tr>
         <tr>
-            <td
-                style='width:104.65pt; border-top-style:solid; border-top-width:0.75pt; border-right-style:solid; border-right-width:0.75pt; border-bottom-style:solid; border-bottom-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top'>
-                <p style='margin-top:0pt; margin-bottom:0pt; text-align:justify; font-size:11pt'>
+            <td>
+                <p style='text-align:justify;'>
                     <span>Septiembre ".$periodoConvenio."</span>
                 </p>
             </td>
-            <td
-                style='width:150.15pt; border-top-style:solid; border-top-width:0.75pt; border-left-style:solid; border-left-width:0.75pt; border-bottom-style:solid; border-bottom-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top'>
-                <p style='margin-top:0pt; margin-bottom:0pt; text-align:justify; font-size:11pt'>
-                    <span>&#xa0;</span><span>Octubre
+            <td>
+                <p style='text-align:justify;'>
+                    <span>Octubre
                         ".$periodoConvenio."</span>
                 </p>
             </td>
         </tr>
         <tr>
-            <td
-                style='width:104.65pt; border-top-style:solid; border-top-width:0.75pt; border-right-style:solid; border-right-width:0.75pt; border-bottom-style:solid; border-bottom-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top'>
-                <p style='margin-top:0pt; margin-bottom:0pt; text-align:justify; font-size:11pt'>
+            <td>
+                <p style='text-align:justify;'>
                     <span>Octubre ".$periodoConvenio."</span>
                 </p>
             </td>
-            <td
-                style='width:150.15pt; border-top-style:solid; border-top-width:0.75pt; border-left-style:solid; border-left-width:0.75pt; border-bottom-style:solid; border-bottom-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top'>
-                <p style='margin-top:0pt; margin-bottom:0pt; text-align:justify; font-size:11pt'>
-                    <span>&#xa0;</span><span>Noviembre
+            <td>
+                <p style='text-align:justify;'>
+                    <span>Noviembre
                         ".$periodoConvenio."</span>
                 </p>
             </td>
         </tr>
         <tr>
-            <td
-                style='width:104.65pt; border-top-style:solid; border-top-width:0.75pt; border-right-style:solid; border-right-width:0.75pt; border-bottom-style:solid; border-bottom-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top'>
-                <p style='margin-top:0pt; margin-bottom:0pt; text-align:justify; font-size:11pt'>
+            <td>
+                <p style='text-align:justify;'>
                     <span>Noviembre ".$periodoConvenio."</span>
                 </p>
             </td>
-            <td
-                style='width:150.15pt; border-top-style:solid; border-top-width:0.75pt; border-left-style:solid; border-left-width:0.75pt; border-bottom-style:solid; border-bottom-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top'>
-                <p style='margin-top:0pt; margin-bottom:0pt; text-align:justify; font-size:11pt'>
-                    <span>&#xa0;</span><span>Diciembre
+            <td>
+                <p style='text-align:justify;'>
+                    <span>Diciembre
                         ".$periodoConvenio."</span>
                 </p>
             </td>
         </tr>
         <tr>
-            <td
-                style='width:104.65pt; border-top-style:solid; border-top-width:0.75pt; border-right-style:solid; border-right-width:0.75pt; border-bottom-style:solid; border-bottom-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top'>
-                <p style='margin-top:0pt; margin-bottom:0pt; text-align:justify; font-size:11pt'>
+            <td>
+                <p style='text-align:justify;'>
                     <span>Diciembre ".$periodoConvenio."</span>
                 </p>
             </td>
-            <td
-                style='width:150.15pt; border-top-style:solid; border-top-width:0.75pt; border-left-style:solid; border-left-width:0.75pt; border-bottom-style:solid; border-bottom-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top'>
-                <p style='margin-top:0pt; margin-bottom:0pt; text-align:justify; font-size:11pt'>
-                    <span>&#xa0;</span><span>Enero
+            <td>
+                <p style='text-align:justify;'>
+                    <span>Enero
                         ".($periodoConvenio+1)."</span>
                 </p>
             </td>
         </tr>
         <tr>
-            <td
-                style='width:104.65pt; border-top-style:solid; border-top-width:0.75pt; border-right-style:solid; border-right-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top'>
-                <p style='margin-top:0pt; margin-bottom:0pt; text-align:justify; font-size:11pt'>
+            <td>
+                <p style='text-align:justify;'>
                     <strong><span>Enero ".($periodoConvenio+1)."</span></strong>
                 </p>
             </td>
-            <td
-                style='width:150.15pt; border-top-style:solid; border-top-width:0.75pt; border-left-style:solid; border-left-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top'>
-                <p style='margin-top:0pt; margin-bottom:0pt; text-align:justify; font-size:11pt'>
-                    <strong><span>&#xa0;</span></strong><strong><span
-                        >Febrero ".($periodoConvenio+1)."</span></strong>
+            <td>
+                <p style='text-align:justify;'>
+                    <strong><span>Febrero ".($periodoConvenio+1)."</span></strong>
                 </p>
             </td>
         </tr>
     </table>
 </div>
 
-<p style='margin-top:0pt; margin-bottom:0pt; text-align:justify; font-size:11pt'>
-    <em><span>&#xa0;</span></em>
-</p>
-<p style='margin-top:0pt; margin-bottom:0pt; text-align:justify; font-size:11pt'>
+
+<p style='text-align:justify;'>
     <em><span>El periodo a rendir del mes de enero ".($periodoConvenio+1).", corresponde únicamente a
             boletas de honorarios y liquidaciones de remuneraciones cuyos montos líquidos son devengados o pagados
             antes del 31 de diciembre de ".$periodoConvenio." y que sus pagos de impuestos e imposiciones son efectuados en enero de
@@ -3628,318 +2619,219 @@ $document->content .= "
             siguiente. Esto no implica, bajo ningún aspecto, que la ejecución del programa sea hasta el mes de enero
             de ".($periodoConvenio+1).", por lo que no se aceptará la rendición de otros gastos efectuados.</span></em>
 </p>
-<p style='margin-top:12pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
+<p style='text-align:justify;'>
     <span>Dichos informes mensuales, deberán contar con documentación de respaldo, la
         que deberá encontrarse en estado devengado y pagado. Los antecedentes de respaldo deben ser original
         digitalizado o electrónico y deben incluir lo que señala a continuación, según corresponda en cada programa
         de salud:</span>
 </p>
-<ul type='square' style='margin:0pt; padding-left:0pt'>
-    <li style='margin-left:28.03pt; padding-left:7.97pt;font-size:11pt'>
+<ul type='square'>
+    <li>
         <span>Copia de comprobantes de ingreso digitalizado o electrónico.</span>
     </li>
-    <li style='margin-left:28.03pt; padding-left:7.97pt;font-size:11pt'>
+    <li>
         <span>Copia de comprobantes de egreso digitalizado o electrónico.</span>
     </li>
-    <li style='margin-left:28.03pt; padding-left:7.97pt;font-size:11pt'>
+    <li>
         <span>Copia boletas de honorario de RRHH digitalizado o electrónico.</span>
     </li>
-    <li style='margin-left:28.03pt; padding-left:7.97pt;font-size:11pt'>
+    <li>
         <span>Contrato de personal RRHH digitalizado o electrónico.</span>
     </li>
-    <li style='margin-left:28.03pt; padding-left:7.97pt;font-size:11pt'>
+    <li>
         <span>Facturas y/o boletas compras de insumos o equipamiento digitalizado o
             electrónico.</span>
     </li>
-    <li style='margin-left:28.03pt; margin-bottom:12pt; padding-left:7.97pt;font-size:11pt'>
-        <span>Boletas de respaldo en caso de tener caja chica</span><span>&#xa0;</span><span>o
+    <li>
+        <span>Boletas de respaldo en caso de tener caja chica</span><span>o
                 fondo por rendir digitalizado o electrónico.</span>
     </li>
 </ul>
-<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
+<p style='text-align:justify;'>
     <span>Asimismo, toda la documentación original de respaldo, deberá estar disponible
-        en la </span><strong><span>“MUNICIPALIDAD' </span></strong><span
-    >para cuando el </span><strong><span
-        >“SERVICIO”</span></strong><span> así lo
+        en la </span><strong><span>“MUNICIPALIDAD' </span></strong><span>para cuando el </span><strong><span>“SERVICIO”</span></strong><span> así lo
         requiera, para su fiscalización, en caso de ser necesario.</span>
 </p>
-<p style='margin-top:0pt; margin-bottom:0pt; text-align:justify; font-size:11pt'>
-    <strong><span style='font-family:Calibri; color:#ff0000'>&#xa0;</span></strong>
-</p>
-<p style='margin-top:0pt; margin-bottom:0pt; text-align:justify; font-size:11pt'>
+
+<p style='text-align:justify;'>
     <strong><span>DÉCIMA PRIMERA:</span></strong><span> En
         el caso que se registren excedentes de los recursos financieros en el ítem de Recursos Humanos del programa,
-        la “</span><strong><span>MUNICIPALIDAD”</span></strong><span
-    > podrá redestinarlos para el pago de extensión u horas extras de los recursos
-        humanos contratados para la ejecución del </span><strong><span
-        >“PROGRAMA”</span></strong><span> y/o contratar
-        recurso humano de acuerdo al convenio y a las necesidades del </span><strong><span
-        >“PROGRAMA”</span></strong><span> para su
+        la “</span><strong><span>MUNICIPALIDAD”</span></strong><span> podrá redestinarlos para el pago de extensión u horas extras de los recursos
+        humanos contratados para la ejecución del </span><strong><span>“PROGRAMA”</span></strong><span> y/o contratar
+        recurso humano de acuerdo al convenio y a las necesidades del </span><strong><span>“PROGRAMA”</span></strong><span> para su
         eficiente ejecución, siempre con previa autorización del Referente Técnico del Servicio, encargado/a del
     </span><strong><span>“PROGRAMA”.</span></strong>
 </p>
-<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
-    <strong><span>&#xa0;</span></strong>
-</p>
-<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
+
+<p style='text-align:justify;'>
     <strong><span>DÉCIMA SEGUNDA: </span></strong><span>La
-    </span><strong><span>“MUNICIPALIDAD”</span></strong><span
-    >, deberá dar cumplimiento a las normas de procedimientos establecidos, de manera
+    </span><strong><span>“MUNICIPALIDAD”</span></strong><span>, deberá dar cumplimiento a las normas de procedimientos establecidos, de manera
         que el Organismo Público receptor estará obligado a enviar a la Unidad otorgante un comprobante de ingreso
         por los recursos percibidos y un informe mensual de su inversión, que deberá señalar, el monto de los
         recursos recibidos en el mes, el monto detallado de la inversión realizada y el saldo disponible para el mes
         siguiente. </span>
 </p>
-<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
+<p style='text-align:justify;'>
     <span>Por lo anterior, y con el fin de monitorear, controlar y asegurar la oportuna
-        entrega de recursos al Departamento de Salud, la </span><strong><span
-        >“MUNICIPALIDAD”</span></strong><span> deberá
-        rendir el informe mensual en </span><strong><span>“SISREC”,</span></strong><span
-    > dentro de
+        entrega de recursos al Departamento de Salud, la </span><strong><span>“MUNICIPALIDAD”</span></strong><span> deberá
+        rendir el informe mensual en </span><strong><span>“SISREC”,</span></strong><span> dentro de
     </span><strong><span>los quince primeros días hábiles administrativos siguientes
             al que se informa</span></strong><span>, incluso en aquellos meses en que no
         exista inversión de los fondos traspasados, y deberá señalar, el monto de los recursos recibidos en el mes,
         el monto detallado de la inversión y el saldo disponible para el mes siguiente. Cuando el organismo
-        receptor, esto es, la </span><strong><span>“MUNICIPALIDAD”</span></strong><span
-    > tenga la
+        receptor, esto es, la </span><strong><span>“MUNICIPALIDAD”</span></strong><span> tenga la
         calidad de ejecutor, deberá proporcionar información sobre el avance de las actividades realizadas.</span>
 </p>
-<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
-    <span>Asimismo, la </span><strong><span
-        >“MUNICIPALIDAD”</span></strong><span>, deberá
-        registrar en plataforma </span><strong><span>“SISREC”,</span></strong><span
-    > en un periodo no superior a 07 días hábiles, al </span><strong><span
-        >“SERVICIO”</span></strong><span>, el
-        comprobante de ingreso municipal que acredita que la </span><strong><span
-        >“MUNICIPALIDAD”</span></strong><span>, recibió
+<p style='text-align:justify;'>
+    <span>Asimismo, la </span><strong><span>“MUNICIPALIDAD”</span></strong><span>, deberá
+        registrar en plataforma </span><strong><span>“SISREC”,</span></strong><span> en un periodo no superior a 07 días hábiles, al </span><strong><span>“SERVICIO”</span></strong><span>, el
+        comprobante de ingreso municipal que acredita que la </span><strong><span>“MUNICIPALIDAD”</span></strong><span>, recibió
         la transferencia de fondos, materia de este convenio.</span>
 </p>
-<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
-    <span>El </span><strong><span
-        >“PROGRAMA”</span></strong><span> estará sujeto
+<p style='text-align:justify;'>
+    <span>El </span><strong><span>“PROGRAMA”</span></strong><span> estará sujeto
         a que el Departamento de Atención Primaria de Salud, Departamento de finanzas y/o las respectivas
-        Subdirecciones del </span><strong><span>“SERVICIO”</span></strong><span
-    >, valide en terreno las rendiciones financieras para lo cual, la
+        Subdirecciones del </span><strong><span>“SERVICIO”</span></strong><span>, valide en terreno las rendiciones financieras para lo cual, la
     </span><strong><span>“MUNICIPALIDAD”</span></strong><span>
         se compromete a tener la documentación original que respalde su gasto en
-        función del </span><strong><span>“PROGRAMA”</span></strong><span
-    >.</span><span>&#xa0; </span>
+        función del </span><strong><span>“PROGRAMA”</span></strong><span>.</span>
 </p>
-<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
-    <strong><span>&#xa0;</span></strong>
-</p>
-<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
+
+<p style='text-align:justify;'>
     <strong><span>DÉCIMA TERCERA:</span></strong><span>
-        Será responsabilidad de la </span><strong><span
-        >“MUNICIPALIDAD”</span></strong><span>, velar
+        Será responsabilidad de la </span><strong><span>“MUNICIPALIDAD”</span></strong><span>, velar
         por la correcta administración de los fondos recibidos, gastados e invertidos en las diferentes unidades de
-        Salud. Lo anterior, independientemente de las atribuciones que le competen al </span><strong><span
-        >“SERVICIO”</span></strong><span>, en el
+        Salud. Lo anterior, independientemente de las atribuciones que le competen al </span><strong><span>“SERVICIO”</span></strong><span>, en el
         sentido de exigir oportunamente la rendición de cuentas de los fondos entregados y de las revisiones que
         pudiese efectuar, el Departamento de Atención Primaria, Subdirección Médica y/o el Departamento de Gestión
-        Financiera, o Subdirección Administrativa del </span><strong><span
-        >“SERVICIO”</span></strong><span>.</span>
+        Financiera, o Subdirección Administrativa del </span><strong><span>“SERVICIO”</span></strong><span>.</span>
 </p>
-<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
-    <span>Por su parte, la </span><strong><span
-        >“MUNICIPALIDAD”</span></strong><span> se
-        compromete a facilitar al </span><strong><span>“SERVICIO”</span></strong><span
-    > todos los informes y datos que sean requeridos para la evaluación del
+<p style='text-align:justify;'>
+    <span>Por su parte, la </span><strong><span>“MUNICIPALIDAD”</span></strong><span> se
+        compromete a facilitar al </span><strong><span>“SERVICIO”</span></strong><span> todos los informes y datos que sean requeridos para la evaluación del
         cumplimiento de las actividades y ejecución de los recursos en su formato original. El incumplimiento de la
-        entrega de cualquier documento a que se refiere esta cláusula, requerido por el </span><strong><span
-        >“SERVICIO”</span></strong><span>, se pondrá en
+        entrega de cualquier documento a que se refiere esta cláusula, requerido por el </span><strong><span>“SERVICIO”</span></strong><span>, se pondrá en
         conocimiento de las autoridades de control, tanto interno como externo de la Administración del Estado, para
         que adopten las medidas consignadas en la normativa vigente.</span>
 </p>
-<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
-    <strong><span>&#xa0;</span></strong>
-</p>
-<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
-    <strong><span>DÉCIMA CUARTA:</span></strong><span
-        > El presente convenio tendrá vigencia a partir del </span><strong><span
-            >01 de enero del año ".$periodoConvenio." al 31 de diciembre del año ".$periodoConvenio."
+
+<p style='text-align:justify;'>
+    <strong><span>DÉCIMA CUARTA:</span></strong><span> El presente convenio tendrá vigencia a partir del </span><strong><span>01 de enero del año ".$periodoConvenio." al 31 de diciembre del año ".$periodoConvenio."
             </span></strong><span>para la ejecución de las actividades comprendidas en
             este convenio.</span>
 </p>
-<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
+<p style='text-align:justify;'>
     <span>Sin perjuicio de lo anterior, las partes acuerdan que el presente convenio se
         prorrogará de forma automática y sucesiva, siempre que el programa a ejecutar cuente con la disponibilidad
         presupuestaria según la ley de presupuestos del sector público del año respectivo, salvo que las partes
         decidan ponerle termino por motivos fundados.</span>
 </p>
-<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
+<p style='text-align:justify;'>
     <span>La prórroga del convenio comenzará a regir desde el 01 de enero del año
         presupuestario siguiente y su duración se extenderá hasta el 31 de diciembre del mismo.</span>
 </p>
-<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
+<p style='text-align:justify;'>
     <span>Para todos los efectos legales, la prórroga automática da inicio a un nuevo
         convenio de transferencia, cuyo monto a transferir se establecerá mediante Resolución Exenta del
     </span><strong><span>“SERVICIO”</span></strong><span>,
         de conformidad a lo que se disponga en la Ley de Presupuestos del Sector Público respectiva.</span>
 </p>
-<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
-    <strong><span>&#xa0;</span></strong>
-</p>
-<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
-    <strong><span>DÉCIMA QUINTA: </span></strong><span
-    >Considerando la necesidad de asegurar la continuidad de la atención y
-        prestaciones de salud, las partes dejan constancia que por tratarse de un </span><strong><span
-        >“PROGRAMA”</span></strong><span> ministerial
+
+<p style='text-align:justify;'>
+    <strong><span>DÉCIMA QUINTA: </span></strong><span>Considerando la necesidad de asegurar la continuidad de la atención y
+        prestaciones de salud, las partes dejan constancia que por tratarse de un </span><strong><span>“PROGRAMA”</span></strong><span> ministerial
         que se ejecuta todos los años, las prestaciones descritas en éste se comenzaron a otorgar desde el
-    </span><strong><span>01 de enero del año ".$periodoConvenio."</span></strong><span
-    >, razón por la cual dichas atenciones se imputarán a los recursos que se
+    </span><strong><span>01 de enero del año ".$periodoConvenio."</span></strong><span>, razón por la cual dichas atenciones se imputarán a los recursos que se
         transferirán en conformidad a lo señalado en el presente convenio. Lo anterior según se establece en la Ley
         de Bases N°19.880 en su artículo 52.</span>
 </p>
-<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
-    <strong><span>&#xa0;</span></strong>
-</p>
-<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
-    <strong><span>DÉCIMA SEXTA</span></strong><strong><em><span
-                >:</span></em></strong><strong><span
-            >&#xa0;</span></strong><span>Finalizado el
+
+<p style='text-align:justify;'>
+    <strong><span>DÉCIMA SEXTA</span></strong>:<span> Finalizado el
             período de vigencia del presente convenio, los saldos transferidos no utilizados, deberán ser
-            reintegrados por la</span><span>&#xa0;</span><strong><span
-            >“MUNICIPALIDAD”</span></strong><span>, a
-            Rentas Generales de la nación, a más tardar</span><span
-        >&#xa0;</span><strong><span>el 31 de enero del
+            reintegrados por la </span><strong><span>“MUNICIPALIDAD”</span></strong><span>, a
+            Rentas Generales de la nación, a más tardar </span><strong><span>el 31 de enero del
                 año ".($periodoConvenio+1)."</span></strong><span>, según señala el artículo 7° de la Ley
             N°21.516 de Presupuesto para el sector público, correspondiente al año ".$periodoConvenio.", salvo casos excepcionales
             debidamente fundados.</span>
 </p>
-<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
-    <span>Los fondos transferidos a la “</span><strong><span
-        >MUNICIPALIDAD”, </span></strong><span>solo
+<p style='text-align:justify;'>
+    <span>Los fondos transferidos a la “</span><strong><span>MUNICIPALIDAD”, </span></strong><span>solo
         podrán ser destinados a los objetivos y actividades que determine el programa en las cláusulas sexta y
         séptima del presente convenio. </span>
 </p>
-<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
-    <span>En el caso que la </span><strong><span
-        >“MUNICIPALIDAD”</span></strong><span> por
+<p style='text-align:justify;'>
+    <span>En el caso que la </span><strong><span>“MUNICIPALIDAD”</span></strong><span> por
         razones debidamente fundadas, no cumpla con las acciones y ejecuciones presupuestarias establecidas en el
         convenio, puede solicitar una modificación a través de Oficio dirigido a Director(a) del
     </span><strong><span>“SERVICIO”</span></strong><span>
-        para su aprobación, exponiendo los fundamentos pertinentes y respaldos hasta el </span><strong><span
-        >30 de octubre del año ".$periodoConvenio."</span></strong><span
-    >.</span><span>&#xa0; </span><span
-    >El Referente Técnico del </span><strong><span
-        >“PROGRAMA”</span></strong><span> del
+        para su aprobación, exponiendo los fundamentos pertinentes y respaldos hasta el </span><strong><span>30 de octubre del año ".$periodoConvenio."</span></strong><span>.</span><span>El Referente Técnico del </span><strong><span>“PROGRAMA”</span></strong><span> del
     </span><strong><span>“SERVICIO”</span></strong><span>
         es el encargado de ponderar esta solicitud, considerando que la destinación de estos recursos es solo para
         acciones atingentes al programa. Excepcionalmente y en la medida que se reciban nuevos recursos
         se procederá a
         elaborar addendum correspondiente.</span>
 </p>
-<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
-    <strong><span>&#xa0;</span></strong>
-</p>
-<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
+
+<p style='text-align:justify;'>
     <strong><span>DÉCIMA SÉPTIMA: </span></strong><span>El
         envío de información financiera e informes técnicos solicitados en el presente convenio, deberán realizarse
-        en sistema de Rendiciones </span><strong><span>“SISREC”,</span></strong><span
-    > único medio habilitado para estos fines. Para efectos de prestaciones y
-        solicitudes u órdenes de atención, deberán realizarse en sistema de registro </span><strong><span
-        >REM, RAYEN,</span></strong><span>
+        en sistema de Rendiciones </span><strong><span>“SISREC”,</span></strong><span> único medio habilitado para estos fines. Para efectos de prestaciones y
+        solicitudes u órdenes de atención, deberán realizarse en sistema de registro </span><strong><span>REM, RAYEN,</span></strong><span>
         plataformas</span> <span>y
         planillas normadas según corresponda, medios de verificación de atención de
         pacientes </span><strong><span>FONASA.</span></strong>
 </p>
-<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
-    <strong><span>&#xa0;</span></strong>
-</p>
-<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
+
+<p style='text-align:justify;'>
     <strong><span>DÉCIMA OCTAVA:</span></strong><span> Las
         partes fijan su domicilio en la Primera Región, sometiéndose a la competencia de sus tribunales de
         Justicia.</span>
 </p>
-<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
-    <strong><span>&#xa0;</span></strong>
-</p>
-<p style='margin-top:0pt; margin-bottom:0pt; text-align:justify; font-size:11pt'>
+
+<p style='text-align:justify;'>
     <strong><span>DÉCIMA NOVENA:</span></strong><span>
-        Déjese constancia que la personería de </span><strong><span
-            style='background-color:#00ff00'>D. ".$director."</span></strong><strong><span
-        > </span></strong><span>para representar al
-        Servicio de Salud de Tarapacá, consta en el </span><span
-        style='background-color:#00ff00'>".$directorDecreto."</span><span
-    >. La representación de D. </span><strong><span
-            style='background-color:#00ff00'>".$alcalde."</span></strong><span
-    > para actuar en nombre de la </span><span
-        style='background-color:#ffff00'>".ucfirst(mb_strtolower($ilustre))."</span><span>
-        Municipalidad de </span><span style='background-color:#00ff00'>".$comuna."</span><span
-    >, emana del </span><span
-        style='background-color:#00ff00'>".$alcaldeDecreto."</span><span>
-        de la </span><span style='background-color:#ffff00'>".ucfirst(mb_strtolower($ilustre))."</span><span
-    >
-        Municipalidad de </span><span style='background-color:#00ff00'>".$comuna."</span><span
-    >.</span>
+        Déjese constancia que la personería de </span><strong><span style='background-color: yellow;'>D. ".$director."</span></strong><span> para representar al
+        Servicio de Salud de Tarapacá, consta en el </span><span style='background-color: yellow;'>".$directorDecreto."</span><span>. La representación de D. </span><strong><span style='background-color: yellow;'>".$alcalde."</span></strong><span> para actuar en nombre de la </span><span style='background-color: yellow;'>".ucfirst(mb_strtolower($ilustre))."</span><span>
+        Municipalidad de </span><span style='background-color: yellow;'>".$comuna."</span><span>, emana del </span><span style='background-color: yellow;'>".$alcaldeDecreto."</span><span>
+        de la </span><span style='background-color: yellow;'>".ucfirst(mb_strtolower($ilustre))."</span><span>
+        Municipalidad de </span><span style='background-color: yellow;'>".$comuna."</span><span>.</span>
 </p>
-<p style='margin-top:0pt; margin-bottom:0pt; text-align:justify; font-size:10pt'>
-    <span>&#xa0;</span>
-</p>
-<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
-    <strong><span>&#xa0;</span></strong>
-</p>
-<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
+
+
+<p style='text-align:justify;'>
     <strong><span>VIGÉSIMA:</span></strong><span> El
-        presente Convenio se firma digitalmente en un ejemplar, quedando este en poder del </span><strong><span
-        >“SERVICIO”. </span></strong><span>Por su
-        parte,</span><strong><span> </span></strong><span>la
-    </span><strong><span>“MUNICIPALIDAD”
+        presente Convenio se firma digitalmente en un ejemplar, quedando este en poder del </span><strong><span>“SERVICIO”. </span></strong><span>Por su
+        parte,</span><span> la </span><strong><span>“MUNICIPALIDAD”
         </span></strong><span>contraparte de este convenio y la División de Atención
         Primaria de Ministerio de Salud e involucrados, recibirán el documento original digitalizado. </span>
 </p>
-<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
-    <strong><span>&#xa0;</span></strong>
-</p>
-<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
+
+<p style='text-align:justify;'>
     <strong><span>VIGÉSIMA PRIMERA:</span></strong><span>
         Los bienes, equipos e infraestructura adquiridos con los fondos del presente convenio, deberán contar con un
         logo del Servicio de Salud Tarapacá y deberán mantener su destino conforme a los objetivos del presente
         programa, no pudiendo destinarse a otros fines.</span>
 </p>
-<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
-    <strong><span>&#xa0;</span></strong>
-</p>
-<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:11pt'>
+
+<p style='text-align:justify;'>
     <strong><span>VIGÉSIMA SEGUNDA:</span></strong><span>
-        El gasto que irrogue el presente convenio se imputará al Ítem </span><span
-        style='background-color:#ffff00'>N°24-03 298-002</span><span>
+        El gasto que irrogue el presente convenio se imputará al Ítem </span><span style='background-color: yellow;'>N°24-03 298-002</span><span>
     </span><strong><span>“Presupuesto vigente del
             Servicio de Salud Tarapacá año ".$periodoConvenio."”.</span></strong>
 </p>
-<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:10pt'>
-    <span>&#xa0;</span>
+
+
+<p style='text-align:center;'>
+    <strong><span style='background-color: yellow;'>".$alcalde."</span></strong>
 </p>
-<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:10pt'>
-    <span>&#xa0;</span>
+<p style='text-align:center;'>
+    <strong><span style='background-color: yellow;'>".$alcaldeApelativoFirma."</span></strong>
 </p>
-<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:10pt'>
-    <strong><span>&#xa0;</span></strong>
+<p style='text-align:center;'>
+    <strong><span style='background-color: yellow;'>".$ilustre." ".
+            $municipalidad."</span></strong>
 </p>
-<p style='margin-top:0pt; margin-bottom:12pt; text-align:justify; font-size:10pt'>
-    <strong><span>&#xa0;</span></strong>
-</p>
-<div style='text-align:center'>
-    <table cellspacing='0' cellpadding='0'
-        style='width:339.75pt; margin-right:auto; margin-left:auto; border-collapse:collapse'>
-        <tr style='height:25.05pt'>
-            <td style='width:339.75pt; vertical-align:top'>
-                <p style='margin:0pt 2.1pt 0pt 7.1pt; text-align:center; font-size:11pt'>
-                    <strong><span style='background-color:#00ff00'>".$alcalde."</span></strong>
-                </p>
-                <p style='margin:0pt 2.1pt 0pt 7.1pt; text-align:center; font-size:11pt'>
-                    <strong><span
-                            style='background-color:#00ff00'>".$alcaldeApelativoFirma."</span></strong>
-                </p>
-                <p style='margin:0pt 2.1pt 0pt 7.1pt; text-align:center; font-size:11pt'>
-                    <strong><span style='background-color:#00ff00'>".$ilustre." ".
-                            $municipalidad."</span></strong>
-                </p>
-            </td>
-        </tr>
-    </table>
-</div>
 
 ";
 }
@@ -3994,146 +2886,99 @@ $document->content .= "
         $document->subject = 'Documento resolución de convenio de ejecución del programa '.$programa.' año '.$agreement->period.' comuna de '.$agreement->Commune->name;
         $document->distribution = $municipality_emails."\n".$emailReferrer."\nvalentina.ortega@redsalud.gob.cl\naps.ssi@redsalud.gob.cl\nromina.garin@redsalud.gob.cl\njuridica.ssi@redsalud.gob.cl\no.partes2@redsalud.gob.cl\nblanca.galaz@redsalud.gob.cl";
         
-        $document->content  = "<p
-        style='margin-top:12.0pt;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;text-align:justify;line-height:150%;'>
-        <strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-            &nbsp;VISTOS,</strong></p>
-    <p
-        style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;text-align:justify;line-height:115%;'>
-        <span style='font-size:13px;line-height:115%;'>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-            &nbsp;&nbsp;</span>Lo dispuesto en el Decreto con Fuerza de Ley N<span style='color:black;'>&ordm;</span>01 del
+        $document->content  = "<p style='text-align:justify;'>
+        <strong>              
+                           
+                        
+            VISTOS,</strong></p>
+    <p style='text-align:justify;'>
+        <span>         
+                           
+                         
+            </span>Lo dispuesto en el Decreto con Fuerza de Ley N<span style='color:black;'>&ordm;</span>01 del
         a&ntilde;o 2000, del Ministerio Secretar&iacute;a General de la Presidencia que fija el texto refundido, coordinado
         y sistematizado de la Ley N<span style='color:black;'>&ordm;</span>18.575, Org&aacute;nica Constitucional de Bases
         Generales de la Administraci&oacute;n del Estado; D.F.L. N<span style='color:black;'>&ordm;</span>01/2005, del
-        Ministerio de Salud, &nbsp;que fija el texto refundido, coordinado y sistematizado del Decreto Ley N<span
-            style='color:black;'>&ordm;</span>2.763 de 1979 y de las Leyes Nos. 18.933 y 18.469; Ley 19.937 de Autoridad
-        Sanitaria;&nbsp;Ley N<span style='color:black;'>&ordm;</span>19.880 que establece Bases de Procedimientos
+        Ministerio de Salud, que fija el texto refundido, coordinado y sistematizado del Decreto Ley N<span style='color:black;'>&ordm;</span>2.763 de 1979 y de las Leyes Nos. 18.933 y 18.469; Ley 19.937 de Autoridad
+        Sanitaria;Ley N<span style='color:black;'>&ordm;</span>19.880 que establece Bases de Procedimientos
         Administrativos que rigen los actos de los &Oacute;rganos de la Administraci&oacute;n del Estado; Decreto
         N&deg;140/04 del Ministerio de Salud que aprob&oacute; el Reglamento org&aacute;nico de los Servicios de
-        Salud,&nbsp;<span style='background:lime;'>".$directorDecreto."</span>;&nbsp;lo dispuesto en el art&iacute;culo 55
+        Salud,<span style='background:lime;'>".$directorDecreto."</span>;lo dispuesto en el art&iacute;culo 55
         bis, 56 y 57 inciso segundo de la Ley N<span style='color:black;'>&ordm;</span>19.378; art&iacute;culo 6 del Decreto
-        Supremo N<span style='color:black;'>&ordm;</span>118 del 2007, del Ministerio de Salud;&nbsp;Resoluci&oacute;n
-        Exenta N<span style='color:black;'>&ordm;</span><span
-            style='background:lime;'>".$numResolucion."/".$yearResolucion."</span> del Ministerio de Salud, que aprob&oacute; el
-        Programa de <span style='background:lime;'>".$programa."</span> a&ntilde;o <span
-            style='background:lime;'>".$periodoConvenio."</span>, Resoluci&oacute;n Exenta N<span
-            style='color:black;'>&ordm;</span><span
-            style='background:lime;'>".$numResourceResolucion."/".$yearResourceResolucion."</span> del Ministerio de Salud, que
+        Supremo N<span style='color:black;'>&ordm;</span>118 del 2007, del Ministerio de Salud;Resoluci&oacute;n
+        Exenta N<span style='color:black;'>&ordm;</span><span style='background:lime;'>".$numResolucion."/".$yearResolucion."</span> del Ministerio de Salud, que aprob&oacute; el
+        Programa de <span style='background:lime;'>".$programa."</span> a&ntilde;o <span style='background:lime;'>".$periodoConvenio."</span>, Resoluci&oacute;n Exenta N<span style='color:black;'>&ordm;</span><span style='background:lime;'>".$numResourceResolucion."/".$yearResourceResolucion."</span> del Ministerio de Salud, que
         distribuy&oacute; los recursos del citado Programa; Resoluci&oacute;n N<span style='color:black;'>&ordm;</span>007
         de 2019 de la Contralor&iacute;a General de la Rep&uacute;blica.</p>
-    <p
-        style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;text-align:justify;line-height:115%;'>
-        &nbsp;</p>
-    <p
-        style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;text-align:justify;line-height:150%;'>
-        <span style='font-size:13px;line-height:150%;'>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-            &nbsp; &nbsp; &nbsp;</span><strong>CONSIDERANDO,</strong></p>
-    <p
-        style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;text-align:justify;line-height:115%;'>
-        <strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-            &nbsp;1.-</strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;Que, por Resoluci&oacute;n Exenta N&deg;<span
-            style='background:lime;'>".$numResolucion."</span> de fecha <span
-            style='background:lime;'>".$fechaResolucion."</span>, el Ministerio de Salud, sus modificaciones o aquella que la
+
+    <p style='text-align:justify;'>
+        <span>         
+                           
+                           
+              </span><strong>CONSIDERANDO,</strong></p>
+    <p style='text-align:justify;'>
+        <strong>              
+                           
+                        
+            1.-</strong>    Que, por Resoluci&oacute;n Exenta N&deg;<span style='background:lime;'>".$numResolucion."</span> de fecha <span style='background:lime;'>".$fechaResolucion."</span>, el Ministerio de Salud, sus modificaciones o aquella que la
         reemplace, se aprueba el &quot;<strong>PROGRAMA <span style='background:lime;'>".$programa." A&Ntilde;O
                 ".$periodoConvenio."&rdquo;.</span></strong></p>
-    <p
-        style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;font-size:11.0pt;text-align:justify;line-height:normal;'>
-        &nbsp;</p>
-    <p
-        style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;text-align:justify;line-height:115%;'>
-        <strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;2.-&nbsp;
-            &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;</strong>Que, por Resoluci&oacute;n Exenta N&deg;<span
-            style='background:lime;'>".$numResourceResolucion."</span> de fecha <span
-            style='background:lime;'>".$fechaResourceResolucion."</span>, el Ministerio de Salud, se aprueban los recursos que
+
+    <p style='text-align:justify;'>
+        <strong>              
+                           
+                         2.-
+               </strong>Que, por Resoluci&oacute;n Exenta N&deg;<span style='background:lime;'>".$numResourceResolucion."</span> de fecha <span style='background:lime;'>".$fechaResourceResolucion."</span>, el Ministerio de Salud, se aprueban los recursos que
         financian el &ldquo;<strong>PROGRAMA <span style='background:lime;'>".$programa." A&Ntilde;O
                 ".$periodoConvenio."&rdquo;</span></strong>.</p>
-    <p
-        style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;font-size:11.0pt;text-align:justify;line-height:normal;'>
-        &nbsp;</p>
-    <p
-        style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;font-size:11.0pt;text-align:justify;line-height:115%;'>
-        <strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-            &nbsp;3.-</strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;Que, mediante convenio de fecha&nbsp;<span
-            style='background:lime;'>".$fechaConvenio."</span>,&nbsp;suscrito entre el Servicio de Salud de Tarapac&aacute; y
-        la <span style='background:yellow;'>".$ilustre."</span> Municipalidad de <span
-            style='background:lime;'>".$comuna."</span>, el <strong>&ldquo;SERVICIO&rdquo;</strong> le asign&oacute; a la
-        Entidad Edilicia la suma de&nbsp;<strong><span style='background:lime;'>$".$totalConvenio."
-                (".$totalConvenioLetras.")</span></strong><strong>,&nbsp;</strong>para realizar las acciones de apoyo
-        relativas al &ldquo;<strong>PROGRAMA&nbsp;</strong><strong><span
-                style='background:lime;'>".$programa."</span></strong><strong>&nbsp;A&Ntilde;O <span
-                style='background:lime;'>".$periodoConvenio."</span>&rdquo;</strong>, de la&nbsp;Comuna de&nbsp;<span
-            style='background:lime;'>".$comuna."</span>.</p>
-    <p
-        style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;font-size:11.0pt;text-align:justify;line-height:115%;'>
-        &nbsp;</p>
-    <p
-        style='margin-top:12.0pt;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;font-size:11.0pt;text-align:justify;line-height:200%;'>
-        <strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-            &nbsp;RESUELVO,</strong></p>
-    <p
-        style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;font-size:11.0pt;text-align:justify;line-height:200%;'>
-        <strong>&nbsp;</strong></p>
-    <p
-        style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;text-align:justify;line-height:115%;'>
-        <strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;1.-&nbsp;
-            &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;APRU&Eacute;BASE</strong> el convenio de ejecuci&oacute;n del
-        <strong>&ldquo;PROGRAMA&nbsp;</strong><strong><span
-                style='background:lime;'>".$programa."</span></strong><strong>&nbsp;A&Ntilde;O&nbsp;</strong><strong><span
-                style='background:lime;'>".$periodoConvenio."</span></strong><strong>&rdquo;</strong>, Comuna de&nbsp;<span
-            style='background:lime;'>".$comuna."</span>, de fecha&nbsp;<span style='background:lime;'>".$fechaConvenio."</span>,
-        suscrito entre el Servicio de Salud de Tarapac&aacute;, y la <span
-            style='background:yellow;'>".$ilustre."</span> Municipalidad de <span
-            style='background:lime;'>".$comuna."</span>.</p>
-    <p
-        style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;text-align:justify;line-height:115%;'>
-        <strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-            &nbsp;2.-</strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; El convenio que se aprueba en virtud de este acto
+
+    <p style='text-align:justify;'>
+        <strong>              
+                           
+                        
+            3.-</strong>    Que, mediante convenio de fecha<span style='background:lime;'>".$fechaConvenio."</span>,suscrito entre el Servicio de Salud de Tarapac&aacute; y
+        la <span style='background:yellow;'>".$ilustre."</span> Municipalidad de <span style='background:lime;'>".$comuna."</span>, el <strong>&ldquo;SERVICIO&rdquo;</strong> le asign&oacute; a la
+        Entidad Edilicia la suma de<strong><span style='background:lime;'>$".$totalConvenio."
+                (".$totalConvenioLetras.")</span></strong><strong>,</strong>para realizar las acciones de apoyo
+        relativas al &ldquo;<strong>PROGRAMA</strong><strong><span style='background:lime;'>".$programa."</span></strong><strong>A&Ntilde;O <span style='background:lime;'>".$periodoConvenio."</span>&rdquo;</strong>, de laComuna de<span style='background:lime;'>".$comuna."</span>.</p>
+
+    <p style='text-align:justify;'>
+        <strong>              
+                           
+                        
+            RESUELVO,</strong></p>
+ 
+    <p style='text-align:justify;'>
+        <strong>              
+                           
+                         1.-
+               APRU&Eacute;BASE</strong> el convenio de ejecuci&oacute;n del
+        <strong>&ldquo;PROGRAMA</strong><strong><span style='background:lime;'>".$programa."</span></strong><strong>A&Ntilde;O</strong><strong><span style='background:lime;'>".$periodoConvenio."</span></strong><strong>&rdquo;</strong>, Comuna de<span style='background:lime;'>".$comuna."</span>, de fecha<span style='background:lime;'>".$fechaConvenio."</span>,
+        suscrito entre el Servicio de Salud de Tarapac&aacute;, y la <span style='background:yellow;'>".$ilustre."</span> Municipalidad de <span style='background:lime;'>".$comuna."</span>.</p>
+    <p style='text-align:justify;'>
+        <strong>              
+                           
+                        
+            2.-</strong>     El convenio que se aprueba en virtud de este acto
         administrativo, se pasa a transcribir:</p>";
-        return $agreement->document->content;
+        
         $document->content .= Str::beforeLast($agreement->document->content, 'Presupuesto vigente del Servicio de Salud');
         $document->content .= 'Presupuesto vigente del Servicio de Salud Tarapacá año '.$agreement->period.'”.</strong></p>';
         //footer
-        $document->content .= "<br><p
-        style='margin-top:0cm;margin-right:0cm;margin-bottom:12.0pt;margin-left:0cm;font-size:11.0pt;text-align:justify;line-height:115%;'>
-        <span style='font-size:13px;line-height:115%;'>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-            &nbsp; &nbsp; &nbsp;</span><strong>3.- IMP&Uacute;TESE</strong> el gasto total de&nbsp;<strong><span
-                style='background:lime;'>$".$totalConvenio." (".$totalConvenioLetras.")</span></strong> que irrogue el presente
-        Convenio de Ejecuci&oacute;n correspondiente al <strong>&ldquo;Programa&nbsp;</strong><strong><span
-                style='background:lime;'>".$programa."</span></strong><strong>&nbsp;a&ntilde;o <span
-                style='background:lime;'>".$periodoConvenio."</span>&rdquo;</strong>, entre el Servicio de Salud
-        Tarapac&aacute; y la <span style='background:yellow;'>".$ilustre."</span> Municipalidad de <span
-            style='background:lime;'>".$comuna."</span><strong>&nbsp;</strong>al &iacute;tem N&deg;<span
-            style='background:yellow;'>24-03 298-002</span> <strong>&ldquo;Reforzamiento Municipal del Presupuesto vigente
+        $document->content .= "<br><p style='text-align:justify;'>
+        <span>         
+                           
+                           
+              </span><strong>3.- IMP&Uacute;TESE</strong> el gasto total de<strong><span style='background:lime;'>$".$totalConvenio." (".$totalConvenioLetras.")</span></strong> que irrogue el presente
+        Convenio de Ejecuci&oacute;n correspondiente al <strong>&ldquo;Programa</strong><strong><span style='background:lime;'>".$programa."</span></strong><strong>a&ntilde;o <span style='background:lime;'>".$periodoConvenio."</span>&rdquo;</strong>, entre el Servicio de Salud
+        Tarapac&aacute; y la <span style='background:yellow;'>".$ilustre."</span> Municipalidad de <span style='background:lime;'>".$comuna."</span>al &iacute;tem N&deg;<span style='background:yellow;'>24-03 298-002</span> <strong>&ldquo;Reforzamiento Municipal del Presupuesto vigente
             del Servicio de Salud Tarapac&aacute; a&ntilde;o 2024&rdquo;</strong>.</p>
-    <p
-        style='margin-top:0cm;margin-right:0cm;margin-bottom:12.0pt;margin-left:0cm;font-size:11.0pt;text-align:justify;line-height:normal;'>
-        &nbsp;</p>
-    <p
-        style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;font-size:11.0pt;text-align:justify;line-height:normal;'>
-        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<strong>AN&Oacute;TESE,
-            COMUN&Iacute;QUESE, ARCH&Iacute;VESE.&nbsp;</strong></p>";
+
+    <p style='text-align:justify;'>
+                       
+                       
+                    <strong>AN&Oacute;TESE,
+            COMUN&Iacute;QUESE, ARCH&Iacute;VESE.</strong></p>";
         
         $document->content = preg_replace('/font-size.+?;/', "", $document->content);
         $document->content = str_replace("<!-- pagebreak -->", "", $document->content);

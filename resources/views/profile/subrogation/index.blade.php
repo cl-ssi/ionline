@@ -32,35 +32,37 @@
                 </td>
                 <td>{{ auth()->user()->fullName }}</td>
                 <td> 0 </td>
-                <td></td>
+                <td><!--Este nivel no se puede borrar, es la misma persona --></td>
             </tr>
         @endif
         @foreach($subrogations as $subrogation)
             <tr class="table-{{ $type == 'manager' ? 'primary' : 'secondary'}}">
                 <td>
-                    <button
-                        type="button"
-                        class="btn btn-sm btn-primary"
-                        wire:click="up({{ $subrogation }})"
-                        @if($subrogation->level == 1)
-                            disabled
-                        @endif
-                    >
-                        <i class="fas fa-caret-up"></i>
-                    </button>
+                    @if(auth()->user()->can('Authorities: edit') OR $subrogation->user->is(auth()->user()))
+                        <button
+                            type="button"
+                            class="btn btn-sm btn-primary"
+                            wire:click="up({{ $subrogation }})"
+                            @if($subrogation->level == 1)
+                                disabled
+                            @endif
+                        >
+                            <i class="fas fa-caret-up"></i>
+                        </button>
 
-                    <button
-                        type="button"
-                        class="btn btn-sm btn-primary"
-                        wire:click="down({{ $subrogation }})"
-                        @if($subrogation->level == $subrogations->count())
-                            disabled
-                        @endif
-                    >
-                        <i class="fas fa-caret-down"></i>
-                    </button>
-                    <!-- <button type="button" class="btn btn-sm btn-primary"
-                        wire:click="edit({{$subrogation}})"><i class="fas fa-edit"></i></button> -->
+                        <button
+                            type="button"
+                            class="btn btn-sm btn-primary"
+                            wire:click="down({{ $subrogation }})"
+                            @if($subrogation->level == $subrogations->count())
+                                disabled
+                            @endif
+                        >
+                            <i class="fas fa-caret-down"></i>
+                        </button>
+                    @endif
+                    {{-- <button type="button" class="btn btn-sm btn-primary"
+                        wire:click="edit({{$subrogation}})"><i class="fas fa-edit"></i></button> --}}
                 </td>
                 <td>
                     @if($subrogation->subrogant->absent)
@@ -75,6 +77,7 @@
                 <td>{{ optional($subrogation->organizationalUnit)->name }}</td>
                 @endif
                 <td>
+                    @if(auth()->user()->can('Authorities: edit') OR $subrogation->user->is(auth()->user()))
                     <button
                         type="button"
                         class="btn btn-sm btn-danger"
@@ -82,6 +85,7 @@
                     >
                         <i class="fas fa-trash"></i>
                     </button>
+                    @endif
                 </td>
             </tr>
         @endforeach
