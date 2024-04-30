@@ -582,7 +582,7 @@ class AgreementController extends Controller
                 Comuna mediante <span style='background:yellow;'>__________________________________________________, de fecha
                     _______ del a&ntilde;o ____,</span> que corresponde exactamente a la n&oacute;mina de funcionarios que han
                 cumplido todos los requisitos del Art&iacute;culo 1&ordm; de la Ley:</span></p>        <div align='center'>
-            <table style='collapse:collapse;'>
+            <table style='border-collapse: collapse; width: 100%;' border='1'>
                 <tbody>
                     <tr>
                         <td>
@@ -716,8 +716,8 @@ class AgreementController extends Controller
                 incremento corresponde exactamente a la n&oacute;mina de funcionarios que han cumplido todos los requisitos del
                 Art&iacute;culo 7&ordm; de la Ley</span>:</p>
 
-        <div align='center'>
-            <table style='collapse:collapse;'>
+
+            <table style='border-collapse: collapse; width: 100%;' border='1'>
                 <tbody>
                     <tr>
                         <td>
@@ -825,7 +825,6 @@ class AgreementController extends Controller
                     </tr>
                 </tbody>
             </table>
-        </div>
 
         <p style='text-align:justify;'>
             </p>
@@ -844,8 +843,8 @@ class AgreementController extends Controller
                 cumplido todos los requisitos del Art&iacute;culo 8&ordm; de la Ley</span>:
         </p>
 
-        <div align='center'>
-            <table style='collapse:collapse;'>
+
+            <table style='border-collapse: collapse; width: 100%;' border='1'>
                 <tbody>
                     <tr>
                         <td>
@@ -953,7 +952,7 @@ class AgreementController extends Controller
                     </tr>
                 </tbody>
             </table>
-        </div>
+
 
         <p style='text-align:justify;'>
             </p>
@@ -969,8 +968,8 @@ class AgreementController extends Controller
                 oportunidad que el incremento del art&iacute;culo 7&ordm;. Este incremento corresponde exactamente a la
                 n&oacute;mina de funcionarios que han cumplido todos los requisitos del Art&iacute;culo 9&ordm; de la
                 Ley:</span></p>
-        <div align='center'>
-            <table style='collapse:collapse;'>
+
+            <table style='border-collapse: collapse; width: 100%;' border='1'>
                 <tbody>
                     <tr>
                         <td>
@@ -1078,7 +1077,7 @@ class AgreementController extends Controller
                     </tr>
                 </tbody>
             </table>
-        </div>
+
 
 
         <p style='text-align:justify;'>
@@ -1096,8 +1095,9 @@ class AgreementController extends Controller
                 relaci&oacute;n laboral se producir&aacute; cuando el empleador pague la totalidad de los beneficios detallados
                 en la siguiente n&oacute;mina, de lo que se dejar&aacute; constancia, en la forma se&ntilde;alada en la
                 cl&aacute;usula d&eacute;cimo cuarta.</span></p>
-        <div align='center'>
-            <table style='collapse:collapse;'>
+
+
+            <table style='border-collapse: collapse; width: 100%;' border='1'>
                 <tbody>
                     <tr>
                         <td>
@@ -1205,7 +1205,7 @@ class AgreementController extends Controller
                     </tr>
                 </tbody>
             </table>
-        </div>
+
         <p style='text-align:justify;'>
             </p>
         <p style='text-align:justify;'>
@@ -1424,25 +1424,17 @@ if($agreement->previous)
     <span>En comprobante firman</span>
 </p>
 
-<div style='text-align:center'>
-    <table cellspacing='0' cellpadding='0'
-        style='margin-right:auto; margin-left:auto; collapse:collapse'>
-        <tr>
-            <td >
-                <p style='text-align:center;'>
-                    <strong><span style='background-color: yellow;'>".$alcalde."</span></strong>
-                </p>
-                <p style='text-align:center;'>
-                    <strong><span style='background-color: yellow;'>".$alcaldeApelativoFirma."</span></strong>
-                </p>
-                <p style='text-align:center;'>
-                    <strong><span style='background-color: yellow;'>".$ilustre." ".
-                            $municipalidad."</span></strong>
-                </p>
-            </td>
-        </tr>
-    </table>
-</div>
+
+<p style='text-align:center;'>
+    <strong><span style='background-color: yellow;'>".$alcalde."</span></strong>
+</p>
+<p style='text-align:center;'>
+    <strong><span style='background-color: yellow;'>".$alcaldeApelativoFirma."</span></strong>
+</p>
+<p style='text-align:center;'>
+    <strong><span style='background-color: yellow;'>".$ilustre." ".$municipalidad."</span></strong>
+</p>
+
 ";
 
 } else {
@@ -1614,7 +1606,7 @@ if($request->has('eval_option'))
         proporcional al porcentaje de incumplimiento, de acuerdo al siguiente cuadro:</span>
 </p>
 
-<table style='collapse: collapse;' cellspacing='0' cellpadding='0'>
+<table style='border-collapse: collapse; width: 100%;' border='1'>
     <tr>
         <td
             style='background-color: yellow;'>
@@ -1741,7 +1733,7 @@ else if($request->eval_option == 2)
         indicadores de la comuna es inferior al _____%, en relación al 100% de la meta anual. El descuento será
         proporcional al porcentaje de incumplimiento, de acuerdo al siguiente cuadro:</span>
 </p>
-<table style='collapse: collapse;' cellspacing='0' cellpadding='0'>
+<table style='border-collapse: collapse; width: 100%;' border='1'>
     <tr>
         <td
             style='background-color: yellow;'>
@@ -2083,7 +2075,7 @@ else // $agreement->agreement_quotas == 12
     </li>
 </ul>
 
-<table style='collapse: collapse;    ' cellspacing='0' cellpadding='0'>
+<table style='border-collapse: collapse; width: 100%;' border='1'>
     <tr>
         <td colspan='2'
             >
@@ -2426,7 +2418,7 @@ $document->content .= "
 </p>
 
 <div style='text-align:center'>
-<table style='collapse: collapse;    ' cellspacing='0' cellpadding='0'>
+<table style='border-collapse: collapse; width: 100%;' border='1'>
         <tr>
             <td>
                 <p style='text-align:justify;'>
@@ -2829,8 +2821,7 @@ $document->content .= "
     <strong><span style='background-color: yellow;'>".$alcaldeApelativoFirma."</span></strong>
 </p>
 <p style='text-align:center;'>
-    <strong><span style='background-color: yellow;'>".$ilustre." ".
-            $municipalidad."</span></strong>
+    <strong><span style='background-color: yellow;'>".$ilustre." ".$municipalidad."</span></strong>
 </p>
 
 ";
