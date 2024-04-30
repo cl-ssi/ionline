@@ -85,20 +85,71 @@ class WebserviceController extends Controller
         }
     }
 
+    // public function pendingJsonToInsert(Request $request)
+    // {
+    //     // Obtener la ruta del modelo y los datos del JSON
+    //     $modelRoute = $request->input('model_route');
+    //     $modelData = $request->input('model_data');
+    //     $columnMapping = $request->input('column_mapping');
+
+    //     // Verificar si el JSON tiene el formato correcto
+    //     if (!is_string($modelRoute) || !is_array($modelData) || !is_array($columnMapping)) {
+    //         return response()->json(['error' => 'El JSON no tiene el formato correcto'], 400);
+    //     }
+
+    //     // Verificar si el modelo especificado existe
+    //     if (!class_exists($modelRoute)) {
+    //         return response()->json(['error' => 'El modelo especificado no existe'], 400);
+    //     }
+
+    //     // Verificar si el modelo especificado tiene las columnas especificadas en el mapeo
+    //     $modelInstance = new $modelRoute;
+    //     $modelColumns = $modelInstance->getConnection()->getSchemaBuilder()->getColumnListing($modelInstance->getTable());
+    //     $mappedColumns = array_values($columnMapping);
+    //     if (count(array_diff($mappedColumns, $modelColumns)) > 0) {
+    //         return response()->json(['error' => 'El mapeo de columnas contiene nombres de columna no validos para el modelo especificado'], 400);
+    //     }
+
+    //     // Verificar si ya existe una fila sin procesar para el modelo especificado
+    //     $existingPendingRecord = PendingJsonToInsert::where('model_route', $modelRoute)
+    //         ->where('procesed', 0)
+    //         ->first();
+
+    //     // Si existe una fila sin procesar, informar y no insertar una nueva fila
+    //     if ($existingPendingRecord) {
+    //         return response()->json(['message' => 'Ya existe una fila sin procesar para este modelo'], 409);
+    //     }
+
+    //     // Si existe una fila procesada, crear un nuevo registro con el mismo modelo y datos
+    //     try {
+    //         DB::transaction(function () use ($modelRoute, $modelData, $columnMapping) {
+    //             PendingJsonToInsert::create([
+    //                 'model_route' => $modelRoute,
+    //                 'data_json' => json_encode($modelData),
+    //                 'column_mapping' => json_encode($columnMapping), // Guardar el mapeo de columnas
+    //                 'procesed' => 0
+    //             ]);
+    //         });
+    //     } catch (\Exception $e) {
+    //         return response()->json(['error' => 'Error al crear registros: ' . $e->getMessage()], 500);
+    //     }
+
+    //     // Ejecutar el comando de Artisan
+    //     Artisan::call('process:pending-json');
+
+    //     // Obtener el resultado de la ejecución del comando (opcional)
+    //     $output = Artisan::output();
+
+    //     // Devolver una respuesta al cliente
+    //     return response()->json(['message' => 'Registros creados / Comando ejecutado con exito: ', 'output' => $output]);
+
+    //     // Devolver una respuesta exitosa
+    //     // return response()->json(['message' => 'Registro creado en PendingJsonToInsert']);
+    // }
+
+
     public function pendingJsonToInsert(Request $request)
     {
-        // ejemplo json valido
-
-        // {
-        //     "model_route": "App\\Models\\Pharmacies\\Unit",
-        //     "model_data":       {
-        //                     "nombre": "Ejemplo de ingreso"
-        //                 },
-        //     "column_mapping": {
-        //                     "nombre": "name"
-        //                 }
-        // }
-
         // Obtener la ruta del modelo y los datos del JSON
         $modelRoute = $request->input('model_route');
         $modelData = $request->input('model_data');
@@ -122,28 +173,23 @@ class WebserviceController extends Controller
             return response()->json(['error' => 'El mapeo de columnas contiene nombres de columna no válidos para el modelo especificado'], 400);
         }
 
-        // Verificar si ya existe una fila sin procesar para el modelo especificado
-        $existingPendingRecord = PendingJsonToInsert::where('model_route', $modelRoute)
-            ->where('procesed', 0)
-            ->first();
-
-        // Si existe una fila sin procesar, informar y no insertar una nueva fila
-        if ($existingPendingRecord) {
-            return response()->json(['message' => 'Ya existe una fila sin procesar para este modelo'], 409);
-        }
-
-        // Si existe una fila procesada, crear un nuevo registro con el mismo modelo y datos
         try {
-            DB::transaction(function () use ($modelRoute, $modelData, $columnMapping) {
-                PendingJsonToInsert::create([
+            // Crear el registro solo si no existe una fila con los mismos datos
+            PendingJsonToInsert::firstOrCreate(
+                [   // Condiciones de búsqueda
+                    'model_route' => $modelRoute,
+                    'data_json' => json_encode($modelData),
+                    'column_mapping' => json_encode($columnMapping)
+                ],
+                [   // Datos para crear el nuevo registro
                     'model_route' => $modelRoute,
                     'data_json' => json_encode($modelData),
                     'column_mapping' => json_encode($columnMapping), // Guardar el mapeo de columnas
                     'procesed' => 0
-                ]);
-            });
+                ]
+            );
         } catch (\Exception $e) {
-            return response()->json(['error' => 'Error al crear un nuevo registro: ' . $e->getMessage()], 500);
+            return response()->json(['error' => 'Error al crear o actualizar registros: ' . $e->getMessage()], 500);
         }
 
         // Ejecutar el comando de Artisan
@@ -153,9 +199,7 @@ class WebserviceController extends Controller
         $output = Artisan::output();
 
         // Devolver una respuesta al cliente
-        return response()->json(['message' => 'Registro creado en PendingJsonToInsert / Comando ejecutado con éxito: ', 'output' => $output]);
-
-        // Devolver una respuesta exitosa
-        // return response()->json(['message' => 'Registro creado en PendingJsonToInsert']);
+        return response()->json(['message' => 'Registros creados / Comando ejecutado con éxito', 'output' => $output]);
     }
+
 }
