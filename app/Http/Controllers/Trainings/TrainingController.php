@@ -91,7 +91,10 @@ class TrainingController extends Controller
      */
     public function edit(Training $training)
     {
-        return view('trainings.edit', compact('training'));
+        if($training->user_creator_id == auth()->id())
+            return view('trainings.edit', compact('training'));
+        else
+            return view('trainings.own_index');
     }
 
     // Edicion en plataforma externa

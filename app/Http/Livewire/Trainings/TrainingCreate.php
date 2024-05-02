@@ -219,7 +219,7 @@ class TrainingCreate extends Component
             return $training;
         });
         
-        /*
+        // CREAR O ACTUALIZAR PERMISO
         if($this->permissionFile){
             $now = now()->format('Y_m_d_H_i_s');
             $training->files()->updateOrCreate(
@@ -236,8 +236,8 @@ class TrainingCreate extends Component
             );
             $training->file = $this->permissionFile->storeAs('/ionline/trainings/attachments/permission', $now.'_training_'.$training->id.'.'.$this->permissionFile->extension(), 'gcs');
         }
-        */
 
+        // CREAR O ACTUALIZAR ARCHIVO REPLICA
         if($this->rejoinderFile){
             $now = now()->format('Y_m_d_H_i_s');
             $rejoinder = $training->files->where('type', 'rejoinder_file');
@@ -257,6 +257,7 @@ class TrainingCreate extends Component
             $training->file = $this->rejoinderFile->storeAs('/ionline/trainings/attachments/rejoinder', $now.'_training_'.$training->id.'.'.$this->rejoinderFile->extension(), 'gcs');
         }
 
+        // CREAR O ACTUALIZAR PROGRAMA
         if($this->programFile){
             $now = now()->format('Y_m_d_H_i_s');
             $program = $training->files->where('type', 'program_file');

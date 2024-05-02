@@ -17,7 +17,6 @@
                 </tr>
             </thead>
             <tbody>
-                {{-- dd($trainings) --}}
                 @foreach($trainings as $key => $training)
                 <tr>
                     <th class="text-center" width="4%">{{ $training->id }}</th>
@@ -63,10 +62,17 @@
                                     <i class="fas fa-edit"></i> 
                                 </a>
                             @else
-                                <a href="{{ route('trainings.edit', $training) }}"
-                                    class="btn btn-outline-secondary btn-sm">
-                                    <i class="fas fa-edit"></i> 
-                                </a>
+                                @if($training->user_creator_id == auth()->id())
+                                    <a href="{{ route('trainings.edit', $training) }}"
+                                        class="btn btn-outline-secondary btn-sm">
+                                        <i class="fas fa-edit"></i> 
+                                    </a>
+                                @else
+                                    <a href="{{ route('trainings.show', $training) }}"
+                                        class="btn btn-outline-secondary btn-sm">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                @endif
                             @endif
                         @else
                             @if(auth()->guard('external')->check() == true)

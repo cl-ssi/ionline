@@ -124,35 +124,85 @@
     </table>
 </div>
 
-<h6 class="mt-3"><i class="fas fa-check-circle"></i> Aprobaciones</h6>
+<h6 class="mt-3"><i class="fas fa-paperclip"></i> Adjuntos</h6>
 
 <div class="table-responsive">
     <table class="table table-bordered table-sm small">
         <thead>
-            <tr class="text-center">
-                @foreach($training->approvals as $approval)
-                    <th class="table-secondary">{{ $approval->sentToOu->name }}</th>
-                @endforeach
+            <tr class="text-center table-secondary">
+                <th width="10%">#</th>
+                <th width="45%">Nombre Archivo</th>
+                <th width="45%"></th>
             </tr>
         </thead>
-        <thead>
-            <tr class="text-center">
-                @foreach($training->approvals as $approval)
+        <tbody>
+            @foreach($training->files as $file)
+                <tr class="text-center">
+                    <td>{{ $loop->iteration }}</td>
                     <td>
-                        {{ $approval->StatusInWords }} <br><br>
-                        @if($approval->approver) <i class="fas fa-user"></i> @endif {{ ($approval->approver) ? $approval->approver->FullName : null }}<br> 
-                        @if($approval->approver) <i class="fas fa-calendar"></i> @endif {{ ($approval->approver) ? $approval->approver_at : null }}
+                        @switch($file->type)
+                            @case('permission_file')
+                                Permiso
+                                @break
+
+                            @case('rejoinder_file')
+                                Contrato Replica
+                                @break
                         
-                        @if($approval->approver_observation != null) 
-                            <hr>
-                            {{ $approval->approver_observation }} 
-                        @endif
+                            @case('program_file')
+                                Programa
+                                @break
+                        
+                            @default
+                                Default case...
+                        @endswitch
                     </td>
-                @endforeach
-            </tr>
-        </thead>
+                    <td>
+                        <a class="btn btn-primary" href="{{ route('trainings.show_file', ['training' => $training, 'type' => $file->type]) }}" target="_blank">
+                            <i class="fas fa-paperclip fa-fw"></i> Ver adjunto
+                        </a>
+                    </td>
+                </tr>
+            @endforeach
+        </tbody>
     </table>
 </div>
+
+<h6 class="mt-3"><i class="fas fa-check-circle"></i> Aprobaciones</h6>
+
+@if(!$training->approvals->isEmpty())
+    <div class="table-responsive">
+        <table class="table table-bordered table-sm small">
+            <thead>
+                <tr class="text-center">
+                    @foreach($training->approvals as $approval)
+                        <th class="table-secondary">{{ $approval->sentToOu->name }}</th>
+                    @endforeach
+                </tr>
+            </thead>
+            <thead>
+                <tr class="text-center">
+                    @foreach($training->approvals as $approval)
+                        <td>
+                            {{ $approval->StatusInWords }} <br><br>
+                            @if($approval->approver) <i class="fas fa-user"></i> @endif {{ ($approval->approver) ? $approval->approver->FullName : null }}<br> 
+                            @if($approval->approver) <i class="fas fa-calendar"></i> @endif {{ ($approval->approver) ? $approval->approver_at : null }}
+                            
+                            @if($approval->approver_observation != null) 
+                                <hr>
+                                {{ $approval->approver_observation }} 
+                            @endif
+                        </td>
+                    @endforeach
+                </tr>
+            </thead>
+        </table>
+    </div>
+@else
+    <div class="alert alert-info" role="alert">
+        <b>Estimado Usuario</b>: Gestión de aprobaciones no disponible para esta Solicitud
+    </div>
+@endif
 
 @endsection
 
