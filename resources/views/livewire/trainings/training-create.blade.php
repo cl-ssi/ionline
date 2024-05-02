@@ -400,6 +400,7 @@
                     <option value="">Seleccionar</option>
                     <option value="edf">Médico EDF</option>
                 </select>
+                @error('municipalProfile') <span class="text-danger error small">{{ $message }}</span> @enderror
             </fieldset>
         </div>
     @endif

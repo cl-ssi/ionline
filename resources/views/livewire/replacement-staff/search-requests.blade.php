@@ -521,6 +521,9 @@
                                             class="btn btn-outline-secondary btn-sm" title="Evaluación Técnica"><i class="fas fa-eye"></i></a>
                                     @endif
                                 @endif
+                            
+                            @else
+                                Registro sin selección
                             @endif
                         @endif
                     </td>

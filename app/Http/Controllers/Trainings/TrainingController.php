@@ -83,11 +83,6 @@ class TrainingController extends Controller
         return view('trainings.show_approval', compact('training'));
     }
 
-    public function show_file(Training $training){
-        dd('hola');
-        return Storage::disk('gcs')->response($training->file->storage_path);
-    }
-
     /**
      * Show the form for editing the specified resource.
      *

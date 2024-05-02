@@ -58,7 +58,7 @@
                     <td width="8%" class="text-center">
                         @if($training->StatusValue == 'Guardado')
                             @if(auth()->guard('external')->check() == true)
-                                <a href="{{ route('trainings.external_edit', $training) }}"
+                                <a href="{{ route('external_trainings.external_edit', $training) }}"
                                     class="btn btn-outline-secondary btn-sm">
                                     <i class="fas fa-edit"></i> 
                                 </a>
@@ -70,7 +70,7 @@
                             @endif
                         @else
                             @if(auth()->guard('external')->check() == true)
-                                <a href="{{ route('trainings.external_show', $training) }}"
+                                <a href="{{ route('external_trainings.external_show', $training) }}"
                                     class="btn btn-outline-secondary btn-sm">
                                     <i class="fas fa-eye"></i>
                                 </a>
