@@ -33,6 +33,10 @@
                             @case('Rechazado')
                                 <span class="badge text-bg-danger">{{ $training->StatusValue }}</span>
                                 @break
+                            
+                            @case('Finalizado')
+                                <span class="badge text-bg-success">{{ $training->StatusValue }}</span>
+                                @break
                         @endswitch
                     </td>
                     <td width="7%">{{ $training->created_at->format('d-m-Y H:i:s') }}</td>

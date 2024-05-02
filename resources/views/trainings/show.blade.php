@@ -21,104 +21,136 @@
                 @case('Rechazado')
                     <span class="badge text-bg-danger">{{ $training->StatusValue }}</span>
                     @break
+                
+                @case('Finalizado')
+                    <span class="badge text-bg-success">{{ $training->StatusValue }}</span>
+                    @break
             @endswitch
         </h5>
     </div>
 </div>
 
+<h6 class="mt-3"><b>I. Antecedentes del funcionario/a que asiste a la Capacitación.</b></h6>
+
 <div class="table-responsive mt-3">
-    <table class="table table-bordered table-sm small">
-        <thead>
-            <tr>
-                <th colspan="6" class="table-secondary">I. Antecedentes del funcionario/a que asiste a la Capacitación.</th>
-            </tr>
-        </thead>
+    <table class="table table-bordered table-sm small text-center">
         <tbody>
             <tr>
-                <th width="25%" colspan="2" class="table-secondary">Nombre</th>
-                <td width="25%" colspan="2">{{ ($training->userTraining) ? $training->userTraining->FullName : null }}</td>
-                <th width="25%" class="table-secondary">RUN</th>
-                <td width="25%">{{ $training->userTraining->id }}-{{ $training->userTraining->dv }}</td>
+                <th width="45%" colspan="2" class="table-secondary">Nombre</th>
+                <th width="45%" colspan="2" class="table-secondary">RUN</th>
             </tr>
             <tr>
-                <th width="12.5%" class="table-secondary">Estamento</th>
-                <td width="12.5%">{{ $training->estament->name }}</td>
-                <th width="12.5%" class="table-secondary">Grado</th>
-                <td width="12.5%">{{ $training->degree }}</td>
-                <th width="" class="table-secondary">Calidad Jurídica</th>
-                <td width="">{{ $training->contractualCondition->name }}</td>
+                <td colspan="2">{{ ($training->userTraining) ? $training->userTraining->FullName : null }}</td>
+                <td colspan="2">{{ $training->userTraining->id }}-{{ $training->userTraining->dv }}</td>
             </tr>
             <tr>
-                <th width="25%" colspan="2" class="table-secondary">Servicio/Unidad</th>
-                <td width="25%" colspan="2">{{ ($training->userTrainingOu) ? $training->userTrainingOu->name : null }}</td>
-                <th width="25%" class="table-secondary">Establecimiento</th>
-                <td width="25%">{{ ($training->userTrainingEstablishment) ? $training->userTrainingEstablishment->name : null }}</td>
+                <th width="22.5%" class="table-secondary">Estamento</th>
+                <th width="22.5%" class="table-secondary">Calidad Contractual</th>
+                <th width="22.5%" class="table-secondary">Ley</th>
+                <th width="22.5%" width="15%" class="table-secondary">
+                    @if($training->law == 18834)
+                        Grado
+                    @else
+                        Horas de Desempeño
+                    @endif
+                </th>
             </tr>
             <tr>
-                <th width="25%" colspan="2" class="table-secondary">Correo electrónico</th>
-                <td width="25%" colspan="2">{{ $training->email }}</td>
-                <th width="25%" class="table-secondary">Fono contacto</th>
-                <td width="25%">{{ $training->telephone }}</td>
+                <td>{{ $training->estament->name }}</td>
+                <td>{{ $training->contractualCondition->name }}</td>
+                <td>N° {{ number_format($training->law, 0, ",", ".") }}</td>
+                <td>
+                    @if($training->law == 18834)
+                        {{ $training->degree }}
+                    @else
+                        {{ $training->work_hours }}
+                    @endif
+                </td>
+            </tr>
+            <tr>
+                <th colspan="2" class="table-secondary">Servicio/Unidad</th>
+                <th colspan="2" class="table-secondary">Establecimiento</th>
+            </tr>
+            <tr>
+                <td colspan="2">{{ ($training->userTrainingOu) ? $training->userTrainingOu->name : null }}</td>
+                <td colspan="2">{{ ($training->userTrainingEstablishment) ? $training->userTrainingEstablishment->name : null }}</td>
+            </tr>
+            <tr>
+                <th colspan="2" class="table-secondary">Correo electrónico</th>
+                <th colspan="2" class="table-secondary">Fono contacto</th>
+            </tr>
+            <tr>
+                <td colspan="2">{{ $training->email }}</td>
+                <td colspan="2" >{{ $training->telephone }}</td>
             </tr>
         </tbody>
     </table>
 </div>
 
+<h6 class="mt-3"><b>II. Antecedentes de la Actividad.</b></h6>
+
 <div class="table-responsive mt-3">
-    <table class="table table-bordered table-sm small">
-        <thead>
-            <tr>
-                <th colspan="6" class="table-secondary">II. Antecedentes de la Actividad.</th>
-            </tr>
-        </thead>
+    <table class="table table-bordered table-sm small text-center">
         <tbody>
             <tr>
-                <th width="25%" colspan="2" class="table-secondary">Eje estratégico asociados a la Actividad</th>
+                <th colspan="4" class="table-secondary">Eje estratégico asociados a la Actividad</th>
+            </tr>
+            <tr>
                 <td colspan="4">{{ $training->StrategicAxes->name }}</td>
             </tr>
             <tr>
-                <th width="25%" colspan="2" class="table-secondary">Objetivo</th>
+                <th colspan="4" class="table-secondary">Objetivo</th>
+            </tr>
+            <tr>
                 <td colspan="4">{{ $training->objective }}</td>
             </tr>
             <tr>
-                <th width="25%" colspan="2" class="table-secondary">Nombre de la Actividad</th>
-                <td colspan="4">{{ $training->activity_name }}</td>
+                <th colspan="2" width="50%" class="table-secondary">Nombre de la Actividad</th>
+                <th width="25%" class="table-secondary">Tipo de Actividad</th>
+                <th width="25%" class="table-secondary">Nombre de la Actividad</th>
             </tr>
             <tr>
-                <th width="25%" colspan="2" class="table-secondary">Tipo de Actividad</th>
-                <td width="25%" colspan="2">{{ $training->activity_type }}</td>
-                <th width="25%" class="table-secondary">Otro</th>
-                <td width="25%">{{ $training->other_activity_type }}</td>
+                <td colspan="2">{{ $training->activity_name }}</td|>
+                <td>{{ $training->activity_type }}</td>
+                <td>{{ $training->other_activity_type }}</td>
             </tr>
             <tr>
-                <th width="25%" colspan="2" class="table-secondary">Modalidad de aprendizaje</th>
-                <td width="25%" colspan="2">{{ $training->mechanism }}</td>
-                <th width="25%" class="table-secondary">Actividad</th>
-                <td width="25%"> {{ $training->schuduled }}</td>
+                <th colspan="2" width="50%" class="table-secondary">Modalidad de aprendizaje</th>
+                <th width="25%" class="table-secondary">Modalidad Online</th>
+                <th width="25%" class="table-secondary">Actividad Programada</th>
             </tr>
             <tr>
-                <th width="12.5%" class="table-secondary">Inicio Actividad</th>
-                <td width="12.5%">{{ $training->activity_date_start_at }}</td>
-                <th width="12.5%" class="table-secondary">Fin Actividad</th>
-                <td width="12.5%">{{ $training->activity_date_end_at }}</td>
-                <th width="" class="table-secondary">Total horas cronológicas</th>
-                <td width="">{{ $training->total_hours }}</td>
+                <td colspan="2" width="50%">{{ $training->mechanism }}</td>
+                <td width="25%">{{ $training->online_type }}</td>
+                <td width="25%">{{ $training->schuduled }}</td>
             </tr>
             <tr>
-                <th width="12.5%" class="table-secondary">Permiso Desde</th>
-                <td width="12.5%">{{ $training->permission_date_start_at }}</td>
-                <th width="12.5%" class="table-secondary">Permiso Hasta</th>
-                <td width="12.5%">{{ $training->permission_date_end_at }}</td>
-                <th width="" class="table-secondary">Lugar</th>
-                <td width="">{{ $training->place }}</td>
+                <th colspan="2" width="50%" class="table-secondary">Fecha Inicio de Actividad</th>
+                <th width="25%" class="table-secondary">Fecha Termino de Actividad</th>
+                <th width="25%" class="table-secondary">Total Horas Pedagógicas</th>
             </tr>
             <tr>
-                <th width="25%" colspan="2" class="table-secondary">Jornada y Horarios</th>
-                <td colspan="4">{{ $training->working_day }}</td>
+                <td colspan="2" width="50%">{{ $training->activity_date_start_at }}</td>
+                <td width="25%">{{ $training->activity_date_end_at }}</td>
+                <td width="25%">{{ $training->total_hours }}</td>
             </tr>
             <tr>
-                <th width="25%" colspan="2" class="table-secondary">Fundamento o Razones Técnicas para la asistencia del funcionario</th>
-                <td colspan="4">{{ $training->technical_reasons }}</td>
+                <th colspan="2" width="50%" class="table-secondary">Solicita Permiso Desde</th>
+                <th width="25%" class="table-secondary">Solicita Permiso Hasta</th>
+                <th width="25%" class="table-secondary">Lugar</th>
+            </tr>
+            <tr>
+                <td colspan="2" width="50%">{{ $training->permission_date_start_at }}</td>
+                <td width="25%">{{ $training->permission_date_end_at }}</td>
+                <td width="25%">{{ $training->place }}</td>
+            </tr>
+            <tr>
+                <th colspan="2" width="50%" class="table-secondary">Jornada</th>
+                <th colspan="2" width="50%" class="table-secondary">Fundamento o Razones Técnicas para la asistencia del funcionario</th>
+            </tr>
+            <tr>
+                <td colspan="2" width="50%">{{ $training->working_day }}</td>
+                <td colspan="2" width="50%">{{ $training->technical_reasons }}</td>
             </tr>
         </tbody>
     </table>
