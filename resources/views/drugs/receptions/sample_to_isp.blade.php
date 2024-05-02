@@ -107,7 +107,7 @@
             <strong>Distribución:</strong>
             <ul>
                 <li>Director ISP</li>
-                <li>CC: {{ $reception->court->name }}</li>
+                <li>CC: {{ $reception->court->name }} {{ $reception->court->emails }}</li>
                 <li>CC: Unidad de Drogas - SSI</li>
                 <li>CC: Oficina de Partes - SSI</li>
             </ul>
