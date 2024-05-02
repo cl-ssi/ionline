@@ -12,6 +12,8 @@ class NewApproval extends Notification
 {
     use Queueable;
 
+    public $approval;
+
     /**
      * Create a new notification instance.
      *
