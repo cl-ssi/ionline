@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Trainings;
 use App\Http\Controllers\Controller;
 use App\Models\Trainings\Training;
 use Illuminate\Http\Request;
+use App\Models\Documents\Approval;
 
 class TrainingController extends Controller
 {
@@ -130,22 +131,18 @@ class TrainingController extends Controller
         $approval = Approval::find($approval_id);
         $training = Training::find($training_id);
         
-        /* Aprueba */
+        // APRUEBA
         if($approval->status == 1){
             if($process == 'end'){
-                /*
-                $allowance->status = 'complete';
-                $allowance->save();
-                */
+                $training->status = 'complete';
+                $training->save();
             }
         }   
 
-        /* Rechaza */
+        // RECHAZA
         if($approval->status == 0){
-            /*
-            $allowance->status = 'rejected';
-            $allowance->save();
-            */
+            $training->status = 'rejected';
+            $training->save();
         }
     }
 }

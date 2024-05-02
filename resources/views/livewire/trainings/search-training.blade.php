@@ -30,16 +30,9 @@
                                 <span class="{{ ($bootstrap == 'v4') ? 'badge badge-warning' : 'badge text-bg-warning' }}">{{ $training->StatusValue }}</span>
                                 @break
 
-                            @case('Pendiente')
-                                <span class="badge text-bg-warning">{{ $training->StatusValue }}</span>
+                            @case('Rechazado')
+                                <span class="badge text-bg-danger">{{ $training->StatusValue }}</span>
                                 @break
-                        
-                            @case(2)
-                                Second case...
-                                @break
-                        
-                            @default
-                                Default case...
                         @endswitch
                     </td>
                     <td width="7%">{{ $training->created_at->format('d-m-Y H:i:s') }}</td>

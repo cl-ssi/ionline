@@ -18,8 +18,8 @@
                     <span class="badge text-bg-warning">{{ $training->StatusValue }}</span>
                     @break
 
-                @case('Pendiente')
-                    <span class="badge text-bg-warning">{{ $training->StatusValue }}</span>
+                @case('Rechazado')
+                    <span class="badge text-bg-danger">{{ $training->StatusValue }}</span>
                     @break
             @endswitch
         </h5>

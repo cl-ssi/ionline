@@ -105,8 +105,12 @@ class Training extends Model implements Auditable
                 return 'Enviado';
                 break;
 
-            case 'pending':
-                return 'Pendiente';
+            case 'complete':
+                return 'Finalizado';
+                break;
+            
+            case 'rejected':
+                return 'Rechazado';
                 break;
         }
     }
