@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use App\Models\WebService\PendingJsonToInsert;
+use Symfony\Component\Console\Helper\ProgressBar;
 
 class ProcessPendingJson extends Command
 {
@@ -59,8 +60,14 @@ class ProcessPendingJson extends Command
             throw new \Exception('El mapeo de columnas contiene nombres de columna no válidos para el modelo especificado');
         }
 
+        // Obtener el total de registros
+        $totalRecords = count($jsonData);
+
+        // Crear una barra de progreso
+        $bar = $this->output->createProgressBar($totalRecords);
+
         // Insertar datos en la base de datos
-        DB::transaction(function () use ($modelRoute, $jsonData, $columnMapping, $primaryKeys, $record) {
+        DB::transaction(function () use ($modelRoute, $jsonData, $columnMapping, $primaryKeys, $record, $bar, $totalRecords) {
             $modelInstance = new $modelRoute;
             foreach ($jsonData as $data) {
                 $attributes = [];
@@ -79,12 +86,17 @@ class ProcessPendingJson extends Command
                 if (!$existingRecord) {
                     $modelInstance->create($attributes);
                 }
+
+                // Avanzar la barra de progreso
+                $bar->advance();
             }
         });
 
-        $record->update(['procesed' => 1]); // Marcar el registro como procesado
-        $this->info("Datos insertados en $modelRoute.");
-    }
+        // Finalizar la barra de progreso
+        $bar->finish();
 
+        $record->update(['procesed' => 1]); // Marcar el registro como procesado
+        $this->info("\nDatos insertados en $modelRoute.");
+    }
 
 }
