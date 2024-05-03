@@ -30,6 +30,7 @@ use App\Models\Welfare\Amipass\NewCharge;
 use App\Models\Welfare\Amipass\PendingAmount;
 use App\Models\Welfare\Amipass\Regularization;
 use App\Rrhh\Authority;
+use App\Models\Sirh\WelfareUser;
 
 use App\Rrhh\OrganizationalUnit;
 use Attribute;
@@ -38,6 +39,7 @@ use Carbon\CarbonPeriod;
 use Illuminate\Contracts\Auth\CanResetPassword;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\hasMany;
+use Illuminate\Database\Eloquent\Relations\hasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -83,7 +85,6 @@ class User extends Authenticatable implements Auditable
         'active',
         'gravatar',
         'external',
-        'welfare', // indica si el funcionario tiene convenio con bienestar o no.
         'country_id',
         'establishment_id',
         'organizational_unit_id',
@@ -258,6 +259,11 @@ class User extends Authenticatable implements Auditable
     public function pendingAmounts(): HasMany
     {
         return $this->hasMany(PendingAmount::class,'user_id');
+    }
+
+    public function welfare(): HasOne
+    {
+        return $this->hasOne(WelfareUser::class,'rut');
     }
 
     /**

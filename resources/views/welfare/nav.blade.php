@@ -31,7 +31,7 @@
         </a>
     </li>
 
-    @if(auth()->user()->welfare == 1)
+    @if(auth()->user()->welfare)
         <li class="nav-item dropdown ">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="fas fa-hands-helping"></i> Beneficios </a>
@@ -97,13 +97,18 @@
             </div>
         </li>
     @endcanany
+
+    <li class="nav-item">
+        <a class="nav-link" href="{{ route('welfare.amipass.mi-amipass') }}">
+            <i class="fas fa-utensils"></i> Mi Amipass
+        </a>
+    </li>
     
     <li class="nav-item">
         <a class="nav-link" href="{{ route('welfare.amipass.requests-manager') }}">
             <i class="fas fa-utensils"></i> Solicitudes Amipass
         </a>
     </li>
-
 
     <li class="nav-item">
         <a class="nav-link" href="{{ route('welfare.amipass.question-all-index') }}">
