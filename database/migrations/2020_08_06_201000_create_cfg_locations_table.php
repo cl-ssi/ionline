@@ -14,12 +14,12 @@ class CreateCfgLocationsTable extends Migration
     public function up()
     {
         Schema::create('cfg_locations', function (Blueprint $table) {
-              $table->id();
-              $table->string('name');
-              $table->string('address')->nullable()->default(NULL);
-              $table->timestamps();
-              $table->softDeletes();
-          });
+            $table->id();
+            $table->string('name');
+            $table->string('address')->nullable()->default(NULL);
+            $table->timestamps();
+            $table->softDeletes();
+        });
     }
 
     /**

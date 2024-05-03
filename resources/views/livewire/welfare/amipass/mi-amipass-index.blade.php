@@ -9,6 +9,9 @@
             <a class="nav-link {{$currentTab == 'absences_tab' ? 'active' : ''}}" data-toggle="tab" role="tab" wire:click.prevent="changeTab('absences_tab')">Mis ausentismos</a>
             <!-- <button class="nav-link" id="ausentismos-tab" data-bs-toggle="tab" data-bs-target="#ausentismos" type="button" role="tab" aria-controls="ausentismos" aria-selected="true">Mis ausentismos</button> -->
         </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('welfare.amipass.new-beneficiary-request')}}">Solicitar beneficio</a>
+        </li>
     </ul>
 
     <!-- Tab panes -->
