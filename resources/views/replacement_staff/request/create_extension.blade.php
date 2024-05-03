@@ -217,11 +217,14 @@
     <hr>
 
     <h6 class="small"><b>3. Descripción de Funcionario a Reemplazar</b></h6> <br>
-    
     <div class="form-row">
-        @livewire('calculate-dv')
+        @livewire('calculate-dv', [
+            'requestReplacementStaff'     =>  $requestReplacementStaff
+        ])
 
-        @livewire('replacement-staff.name-to-replace')
+        @livewire('replacement-staff.name-to-replace', [
+            'requestReplacementStaff'     =>  $requestReplacementStaff
+        ])
     </div>
             
     <hr>

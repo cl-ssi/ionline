@@ -228,7 +228,7 @@ class Approval extends Model
         'approver_id',          // user_id, asignar en caso de aprobación/rechazo
         'approver_observation', // varchar, observación de aprobación/rechazo
         'approver_at',          // Datetime, asignar en caso de aprobación/rechazo
-        'status',               // True or False, asignar en caso deaprobación/rechazo
+        'status',               // True or False, asignar en caso de aprobación/rechazo
         
         'callback_controller_method',
         'callback_controller_params',
