@@ -300,7 +300,6 @@
             <input type="date" class="form-control" wire:model.defer="activityDateStartAt">
             @error('activityDateStartAt') <span class="text-danger error small">{{ $message }}</span> @enderror
         </fieldset>
-        </fieldset>
 
         <fieldset class="form-group col-12 col-md-3">
             <label for="for_activity_date_end_at">Fecha Termino de Actividad</label>

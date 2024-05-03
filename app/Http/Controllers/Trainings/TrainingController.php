@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Trainings\Training;
 use Illuminate\Http\Request;
 use App\Models\Documents\Approval;
+use App\Models\Parameters\Parameter;
+use App\Models\Establishment;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class TrainingController extends Controller
 {
@@ -144,5 +147,14 @@ class TrainingController extends Controller
             $training->status = 'rejected';
             $training->save();
         }
+    }
+
+    public function show_summary_pdf(Training $training){
+        $establishment = Establishment::Find(Parameter::get('establishment', 'SSTarapaca'));
+
+        return Pdf::loadView('trainings.documents.training_summary_pdf', [
+            'training'      => $training,
+            'establishment' => $establishment
+        ])->stream('download.pdf');
     }
 }
