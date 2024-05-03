@@ -106,7 +106,7 @@
             </tr>
             <tr>
                 <td colspan="2">{{ $training->activity_name }}</td|>
-                <td>{{ $training->activity_type }}</td>
+                <td>{{ $training->ActivityTypeValue }}</td>
                 <td>{{ $training->other_activity_type }}</td>
             </tr>
             <tr>
@@ -115,9 +115,9 @@
                 <th width="25%" class="table-secondary">Actividad Programada</th>
             </tr>
             <tr>
-                <td colspan="2" width="50%">{{ $training->mechanism }}</td>
-                <td width="25%">{{ $training->online_type }}</td>
-                <td width="25%">{{ $training->schuduled }}</td>
+                <td colspan="2" width="50%">{{ $training->MechanismValue }}</td>
+                <td width="25%">{{ $training->OnlineTypeValue }}</td>
+                <td width="25%">{{ $training->SchuduledValue }}</td>
             </tr>
             <tr>
                 <th colspan="2" width="50%" class="table-secondary">Fecha Inicio de Actividad</th>
@@ -144,7 +144,7 @@
                 <th colspan="2" width="50%" class="table-secondary">Fundamento o Razones Técnicas para la asistencia del funcionario</th>
             </tr>
             <tr>
-                <td colspan="2" width="50%">{{ $training->working_day }}</td>
+                <td colspan="2" width="50%">{{ $training->WorkingDayValue }}</td>
                 <td colspan="2" width="50%">{{ $training->technical_reasons }}</td>
             </tr>
         </tbody>

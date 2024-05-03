@@ -311,11 +311,11 @@ class TrainingCreate extends Component
             $this->mechanism                    = $this->training->mechanism;
             $this->onlineTypeMechanism          = $this->training->online_type;
             $this->schuduled                    = $this->training->schuduled;
-            $this->activityDateStartAt          = $this->training->activity_date_start_at;
-            $this->activityDateEndAt            = $this->training->activity_date_end_at;
+            $this->activityDateStartAt          = $this->training->activity_date_start_at?->format('Y-m-d');
+            $this->activityDateEndAt            = $this->training->activity_date_end_at?->format('Y-m-d');
             $this->totalHours                   = $this->training->total_hours;
-            $this->permissionDateStartAt        = $this->training->permission_date_start_at;
-            $this->permissionDateEndAt          = $this->training->permission_date_end_at;
+            $this->permissionDateStartAt        = $this->training->permission_date_start_at?->format('Y-m-d');
+            $this->permissionDateEndAt          = $this->training->permission_date_end_at?->format('Y-m-d');
             $this->place                        = $this->training->place;
             $this->workingDay                   = $this->training->working_day;
             $this->technicalReasons             = $this->training->technical_reasons;

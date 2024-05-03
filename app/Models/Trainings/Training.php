@@ -57,6 +57,7 @@ class Training extends Model implements Auditable
             return $this->belongsTo('App\Models\UserExternal', 'user_training_id');
         }
         else{
+            
             return $this->belongsTo('App\Models\User', 'user_training_id')->withTrashed();
         }
     }
@@ -114,6 +115,97 @@ class Training extends Model implements Auditable
                 break;
         }
     }
+
+    public function getActivityTypeValueAttribute() {
+        switch($this->activity_type) {
+            case 'curso':
+                return 'Curso';
+                break;
+            
+            case 'taller':
+                return 'Taller';
+                break;
+
+            case 'jornada':
+                return 'Jornada';
+                break;
+            
+            case 'estadía pasantía':
+                return 'Estadía Pasantía';
+                break;
+            
+            case 'perfeccionamiento diplomado':
+                return 'Perfeccionamiento Diplomado';
+                break;
+            
+            case 'otro':
+                return 'Otro';
+                break;
+        }
+    }
+
+    public function getMechanismValueAttribute() {
+        switch($this->mechanism) {
+            case 'online':
+                return 'Online';
+                break;
+            
+            case 'presencial':
+                return 'Presencial';
+                break;
+        }
+    }
+
+    public function getOnlineTypeValueAttribute() {
+        switch($this->online_type) {
+            case 'sincronico':
+                return 'Sincrónico';
+                break;
+            
+            case 'asincronico':
+                return 'Asincrónico';
+                break;
+
+            case 'mixta':
+                return 'Mixta';
+                break;
+        }
+    }
+
+    public function getSchuduledValueAttribute() {
+        switch($this->schuduled) {
+            case 'pac':
+                return 'Programada en PAC';
+                break;
+            
+            case 'no planificada':
+                return 'No planificada';
+                break;
+        }
+    }
+
+    public function getWorkingDayValueAttribute() {
+        switch($this->working_day) {
+            case 'completa':
+                return 'Jornada Completa';
+                break;
+            
+            case 'mañana':
+                return 'Jornada Mañana';
+                break;
+            
+            case 'tarde':
+                return 'Jornada Tarde';
+                break;
+        }
+    }
+
+    protected $casts = [
+        'activity_date_start_at'    => 'date:Y-m-d',
+        'activity_date_end_at'      => 'date:Y-m-d',
+        'permission_date_start_at'  => 'date:Y-m-d',
+        'permission_date_end_at'    => 'date:Y-m-d'
+    ];
 
     protected $table = 'tng_trainings';
 }

@@ -84,12 +84,21 @@
                                 </a>
                             @endif
                         @endif
-                        {{--
-                        <a class="btn btn-outline-danger btn-sm"
-                            wire:click="deleteMeeting({{ $key }})">
-                            <i class="fas fa-trash-alt fa-fw"></i>
-                        </a>
-                        --}}
+
+                        @if($training->StatusValue == 'Finalizado')
+                            @if(auth()->guard('external')->check() == true)
+                                <a href="{{ route('external_trainings.external_show', $training) }}"
+                                    class="btn btn-outline-secondary btn-sm">
+                                    <i class="fas fa-eye fa-fw"></i>
+                                </a>
+                            @else
+                                <a class="btn btn-outline-primary btn-sm"
+                                    target="_blank"
+                                    href="{{ route('trainings.show_summary_pdf', $training) }}">
+                                    <i class="fas fa-file-pdf fa-fw"></i>
+                                </a>
+                            @endif
+                        @endif
                     </td>
                 </tr>
                 @endforeach
