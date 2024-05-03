@@ -106,32 +106,28 @@ class WebserviceController extends Controller
     //     $modelInstance = new $modelRoute;
     //     $modelColumns = $modelInstance->getConnection()->getSchemaBuilder()->getColumnListing($modelInstance->getTable());
     //     $mappedColumns = array_values($columnMapping);
-    //     if (count(array_diff($mappedColumns, $modelColumns)) > 0) {
-    //         return response()->json(['error' => 'El mapeo de columnas contiene nombres de columna no validos para el modelo especificado'], 400);
+    //     $invalidColumns = array_diff($mappedColumns, $modelColumns);
+    //     if (count($invalidColumns) > 0) {
+    //         return response()->json(['error' => 'El mapeo de columnas contiene nombres de columna no válidos para el modelo especificado', 'invalid_columns' => $invalidColumns], 400);
     //     }
 
-    //     // Verificar si ya existe una fila sin procesar para el modelo especificado
-    //     $existingPendingRecord = PendingJsonToInsert::where('model_route', $modelRoute)
-    //         ->where('procesed', 0)
-    //         ->first();
-
-    //     // Si existe una fila sin procesar, informar y no insertar una nueva fila
-    //     if ($existingPendingRecord) {
-    //         return response()->json(['message' => 'Ya existe una fila sin procesar para este modelo'], 409);
-    //     }
-
-    //     // Si existe una fila procesada, crear un nuevo registro con el mismo modelo y datos
     //     try {
-    //         DB::transaction(function () use ($modelRoute, $modelData, $columnMapping) {
-    //             PendingJsonToInsert::create([
+    //         // Crear el registro solo si no existe una fila con los mismos datos
+    //         PendingJsonToInsert::firstOrCreate(
+    //             [   // Condiciones de búsqueda
+    //                 'model_route' => $modelRoute,
+    //                 'data_json' => json_encode($modelData),
+    //                 'column_mapping' => json_encode($columnMapping)
+    //             ],
+    //             [   // Datos para crear el nuevo registro
     //                 'model_route' => $modelRoute,
     //                 'data_json' => json_encode($modelData),
     //                 'column_mapping' => json_encode($columnMapping), // Guardar el mapeo de columnas
     //                 'procesed' => 0
-    //             ]);
-    //         });
+    //             ]
+    //         );
     //     } catch (\Exception $e) {
-    //         return response()->json(['error' => 'Error al crear registros: ' . $e->getMessage()], 500);
+    //         return response()->json(['error' => 'Error al crear o actualizar registros: ' . $e->getMessage()], 500);
     //     }
 
     //     // Ejecutar el comando de Artisan
@@ -141,12 +137,8 @@ class WebserviceController extends Controller
     //     $output = Artisan::output();
 
     //     // Devolver una respuesta al cliente
-    //     return response()->json(['message' => 'Registros creados / Comando ejecutado con exito: ', 'output' => $output]);
-
-    //     // Devolver una respuesta exitosa
-    //     // return response()->json(['message' => 'Registro creado en PendingJsonToInsert']);
+    //     return response()->json(['message' => 'Registros creados / Comando ejecutado con éxito', 'output' => $output]);
     // }
-
 
     public function pendingJsonToInsert(Request $request)
     {
@@ -154,9 +146,10 @@ class WebserviceController extends Controller
         $modelRoute = $request->input('model_route');
         $modelData = $request->input('model_data');
         $columnMapping = $request->input('column_mapping');
+        $primaryKeys = $request->input('primary_keys');
 
         // Verificar si el JSON tiene el formato correcto
-        if (!is_string($modelRoute) || !is_array($modelData) || !is_array($columnMapping)) {
+        if (!is_string($modelRoute) || !is_array($modelData) || !is_array($columnMapping) || !is_array($primaryKeys)) {
             return response()->json(['error' => 'El JSON no tiene el formato correcto'], 400);
         }
 
@@ -171,24 +164,30 @@ class WebserviceController extends Controller
         $mappedColumns = array_values($columnMapping);
         $invalidColumns = array_diff($mappedColumns, $modelColumns);
         if (count($invalidColumns) > 0) {
-            return response()->json(['error' => 'El mapeo de columnas contiene nombres de columna no válidos para el modelo especificado', 'invalid_columns' => $invalidColumns], 400);
+            return response()->json(['error' => 'El mapeo de columnas contiene nombres de columna no validos para el modelo especificado', 'invalid_columns' => $invalidColumns], 400);
         }
 
         try {
-            // Crear el registro solo si no existe una fila con los mismos datos
-            PendingJsonToInsert::firstOrCreate(
-                [   // Condiciones de búsqueda
-                    'model_route' => $modelRoute,
-                    'data_json' => json_encode($modelData),
-                    'column_mapping' => json_encode($columnMapping)
-                ],
-                [   // Datos para crear el nuevo registro
-                    'model_route' => $modelRoute,
-                    'data_json' => json_encode($modelData),
-                    'column_mapping' => json_encode($columnMapping), // Guardar el mapeo de columnas
-                    'procesed' => 0
-                ]
-            );
+            // Verificar si ya existe un registro con los mismos datos
+            $existingRecord = PendingJsonToInsert::where('model_route', $modelRoute)
+                ->where('data_json', json_encode($modelData))
+                ->where('column_mapping', json_encode($columnMapping))
+                ->where('primary_keys', json_encode($primaryKeys))
+                ->exists();
+
+            if ($existingRecord) {
+                // Mostrar un mensaje indicando que ya existe un registro igual
+                return response()->json(['message' => 'No se han creado registros, ya existen los que se intentan registrar'], 400);
+            }
+
+            // Crear el registro si no existe uno igual
+            PendingJsonToInsert::create([
+                'model_route' => $modelRoute,
+                'data_json' => json_encode($modelData),
+                'column_mapping' => json_encode($columnMapping),
+                'primary_keys' => json_encode($primaryKeys),
+                'procesed' => 0
+            ]);
         } catch (\Exception $e) {
             return response()->json(['error' => 'Error al crear o actualizar registros: ' . $e->getMessage()], 500);
         }
@@ -200,7 +199,8 @@ class WebserviceController extends Controller
         $output = Artisan::output();
 
         // Devolver una respuesta al cliente
-        return response()->json(['message' => 'Registros creados / Comando ejecutado con éxito', 'output' => $output]);
+        return response()->json(['message' => 'Registros creados con exito', 'output' => $output]);
     }
+
 
 }

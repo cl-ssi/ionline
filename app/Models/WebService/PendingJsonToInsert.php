@@ -21,6 +21,7 @@ class PendingJsonToInsert extends Model
         'model_route',
         'data_json',
         'column_mapping',
+        'primary_keys',
         'procesed',
     ];
 }

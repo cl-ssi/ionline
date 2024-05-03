@@ -31,7 +31,7 @@ class ProcessPendingJson extends Command
             }
         }
 
-        $this->info('Proceso completado.');
+        // $this->info('Proceso completado.');
     }
 
     private function processRecord($record)
@@ -39,9 +39,10 @@ class ProcessPendingJson extends Command
         $modelRoute = $record->model_route;
         $jsonData = json_decode($record->data_json, true);
         $columnMapping = json_decode($record->column_mapping, true);
+        $primaryKeys = json_decode($record->primary_keys, true);
 
         // Verificar si el JSON tiene el formato correcto
-        if (!is_string($modelRoute) || !is_array($jsonData) || !is_array($columnMapping)) {
+        if (!is_string($modelRoute) || !is_array($jsonData) || !is_array($columnMapping) || !is_array($primaryKeys)) {
             throw new \Exception('El JSON no tiene el formato correcto');
         }
 
@@ -59,17 +60,31 @@ class ProcessPendingJson extends Command
         }
 
         // Insertar datos en la base de datos
-        DB::transaction(function () use ($modelRoute, $jsonData, $columnMapping, $record) {
+        DB::transaction(function () use ($modelRoute, $jsonData, $columnMapping, $primaryKeys, $record) {
             $modelInstance = new $modelRoute;
             foreach ($jsonData as $data) {
-                $modelAttributes = [];
+                $attributes = [];
                 foreach ($columnMapping as $jsonKey => $columnName) {
-                    $modelAttributes[$columnName] = $data[$jsonKey];
+                    $attributes[$columnName] = $data[$jsonKey];
                 }
-                $modelInstance->create($modelAttributes);
+                
+                // Verificar si ya existe un registro con las mismas claves primarias
+                $existingRecord = $modelInstance;
+                foreach ($primaryKeys as $column => $isPrimaryKey) {
+                    $existingRecord = $existingRecord->where($column, $attributes[$column]);
+                }
+                $existingRecord = $existingRecord->first();
+
+                // Si no existe un registro con las mismas claves primarias, se crea uno nuevo
+                if (!$existingRecord) {
+                    $modelInstance->create($attributes);
+                }
             }
-            $record->update(['procesed' => 1]); // Marcar el registro como procesado
-            $this->info("Datos insertados en $modelRoute con éxito.");
         });
+
+        $record->update(['procesed' => 1]); // Marcar el registro como procesado
+        $this->info("Datos insertados en $modelRoute.");
     }
+
+
 }
