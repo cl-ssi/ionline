@@ -104,8 +104,10 @@
                     </tr>
                     <tr>
                         <td colspan="2"></td>                    
-                        <td class="text-center"><b>Total</b></td>
+                        <td class="text-center"></td>
                         <td class="text-center">
+                            <b>Total</b>
+                            {{--
                             @if($allowance->HalfDaysOnlyValue == 'Sí')
                                 {{ ($allowance->total_half_days) ? intval($allowance->total_half_days) : 0 }}
 
@@ -123,6 +125,7 @@
                                 {{ $totalEditSummaryDays }} y medio día
                                 @endif
                             @endif
+                            --}}
                         </td>
                         <td class="text-right">
                             ${{ number_format($totalEditSummaryDaysValue, 0, ",", ".") }}
@@ -225,8 +228,10 @@
                     </tr>
                     <tr>
                         <td colspan="2"></td>                    
-                        <td class="text-center"><b>Total</b></td>
+                        <td class="text-center"></td>
                         <td class="text-center">
+                            <b>Total</b>
+                            {{--
                             @if($allowance->HalfDaysOnlyValue == 'Sí')
                                 {{ ($allowance->total_half_days) ? intval($allowance->total_half_days) : 0 }}
 
@@ -244,6 +249,7 @@
                                 {{ $allowance->total_days + $allowance->fifty_percent_total_days + $allowance->sixty_percent_total_days }} y medio día
                                 @endif
                             @endif
+                            --}}
                         </td>
                         <td class="text-right">
                             ${{ number_format($allowance->total_value, 0, ",", ".") }}
