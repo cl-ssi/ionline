@@ -7,11 +7,9 @@ use App\Models\User;
 use App\Rrhh\OrganizationalUnit;
 use App\Models\Agreements\Agreement;
 use OwenIt\Auditing\Contracts\Auditable;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Authority extends Model implements Auditable
 {
-    use SoftDeletes;
     use \OwenIt\Auditing\Auditable;
     /**
      * The attributes that are mass assignable.
@@ -64,7 +62,7 @@ class Authority extends Model implements Auditable
      * @var array
      */ 
 
-     protected $casts = [
+    protected $casts = [
         'date' => 'date:Y-m-d'
     ];
 
