@@ -26,6 +26,8 @@ class ProcessPendingJson extends Command
                 $this->processRecord($record);
             } catch (\Exception $e) {
                 $this->error('Error al procesar registro: ' . $e->getMessage());
+                // Si ocurre un error, marcar el registro como procesado y agregar el mensaje de error al campo data_json
+                $record->update(['procesed' => 1, 'data_json' => 'Error - fecha hora: ' . now()->toDateTimeString() . ' - ' . $e->getMessage()]);
             }
         }
 

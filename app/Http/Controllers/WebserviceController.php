@@ -169,8 +169,9 @@ class WebserviceController extends Controller
         $modelInstance = new $modelRoute;
         $modelColumns = $modelInstance->getConnection()->getSchemaBuilder()->getColumnListing($modelInstance->getTable());
         $mappedColumns = array_values($columnMapping);
-        if (count(array_diff($mappedColumns, $modelColumns)) > 0) {
-            return response()->json(['error' => 'El mapeo de columnas contiene nombres de columna no válidos para el modelo especificado'], 400);
+        $invalidColumns = array_diff($mappedColumns, $modelColumns);
+        if (count($invalidColumns) > 0) {
+            return response()->json(['error' => 'El mapeo de columnas contiene nombres de columna no válidos para el modelo especificado', 'invalid_columns' => $invalidColumns], 400);
         }
 
         try {
