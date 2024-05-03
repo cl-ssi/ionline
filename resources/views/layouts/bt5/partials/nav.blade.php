@@ -716,7 +716,7 @@
                         <div class="dropdown-divider"></div>
 
                         @if(count(auth()->user()->unreadNotifications))
-                        @foreach(auth()->user()->unreadNotifications as $notification)
+                        @foreach(auth()->user()->unreadNotifications->where('type', '!=', 'Filament\Notifications\DatabaseNotification') as $notification)
                         <a class="dropdown-item small" href="{{ route('openNotification', $notification) }}">
                             {!! $notification->data['icon'] ?? null !!}
                             <b>{{ $notification->data['module'] ?? '' }}</b>

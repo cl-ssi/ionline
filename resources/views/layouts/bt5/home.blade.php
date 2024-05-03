@@ -219,13 +219,15 @@
                     </span>
                 </h5>
                 <ul class="list-group">
-                    @foreach (auth()->user()->unreadNotifications->take(7) as $notification)
+                    @foreach (auth()->user()->unreadNotifications->where('type', '!=', 'Filament\Notifications\DatabaseNotification')->take(7) as $notification)
                         <a href="{{ route('openNotification', $notification) }}"
                             class="list-group-item list-group-item-action small">
                             {{ $notification->created_at }} -
                             {!! $notification->data['icon'] ?? null !!}
                             <b>{{ $notification->data['module'] ?? '' }}</b>
+                            @if( array_key_exists('subject',$notification->data) )
                             {!! $notification->data['subject'] !!}
+                            @endif
                         </a>
                     @endforeach
                 </ul>

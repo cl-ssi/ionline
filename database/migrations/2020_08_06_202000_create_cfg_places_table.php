@@ -13,14 +13,14 @@ class CreateCfgPlacesTable extends Migration
      */
     public function up()
     {
-          Schema::create('cfg_places', function (Blueprint $table) {
-              $table->id();
-              $table->string('name');
-              $table->string('description')->nullable()->default(NULL);
-              $table->foreignId('location_id')->constrained('cfg_locations')->onDelete('restrict');
-              $table->timestamps();
-              $table->softDeletes();
-          });
+        Schema::create('cfg_places', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->string('description')->nullable()->default(NULL);
+            $table->foreignId('location_id')->constrained('cfg_locations')->onDelete('restrict');
+            $table->timestamps();
+            $table->softDeletes();
+        });
     }
 
     /**
