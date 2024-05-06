@@ -793,21 +793,11 @@
                             <i class="fas fa-fw fa-clock"></i> {{ __('Justificar asistencia') }}
                         </a>
 
-                        @if(auth()->user()->welfare)
+                        @if(auth()->user()->welfare || auth()->user()->can('be god'))
                             <a class="dropdown-item" href="{{ route('welfare.index') }}">
                                 <i class="fas fa-fw fa-question-circle"></i> Módulo de Bienestar
                             </a>
                         @endif
-
-                        @canany(['be god'])
-                            <a class="dropdown-item" href="{{ route('welfare.index') }}">
-                                <i class="fas fa-fw fa-question-circle"></i> Módulo de Bienestar
-                            </a>
-                        @endcan
-
-                        <a class="dropdown-item" href="{{ route('welfare.amipass.mi-amipass') }}">
-                            <i class="fas fa-fw fa-question-circle"></i> Mi Amipass
-                        </a>
 
                         <a class="dropdown-item" href="{{ route('welfare.amipass.question-my-index') }}">
                             <i class="fas fa-fw fa-question-circle"></i> {{ __('Consultas/Sugerencia Amipass') }}
