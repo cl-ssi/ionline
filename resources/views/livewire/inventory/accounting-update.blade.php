@@ -38,13 +38,14 @@
         <table class="table table-sm table-bordered">
             <thead>
                 <tr>
+                    <th class="text-center">#</th>
                     <th class="text-center">ID</th>
                     <th class="text-center">Nro. Inv.</th>
                     <th class="text-center">Std-Descripción</th>
-                    <th>Vida Útil</th>
-                    <th>Valor</th>
+                    <th >Vida Útil</th>
+                    <th >Valor</th>
                     <th>Cuenta Contable</th>
-                    <th>Fecha de Entrega</th>
+                    <th>Fecha de Ingreso en Bodega</th>
                 </tr>
             </thead>
             <tbody>
@@ -52,12 +53,14 @@
                     class="d-none"
                     wire:loading.class.remove="d-none"
                 >
-                    <td class="text-center" colspan="7">
+
+                    <td class="text-center" colspan="8">
                         @include('layouts.bt5.partials.spinner')
                     </td>
                 </tr>
-                @forelse($inventories as $inventory)
+                @forelse($inventories as $key => $inventory)
                 <tr wire:loading.remove>
+                    <td>{{ $key + 1 }}</td>
                     <td>
                         {{ $inventory->id }}
                     </td>
@@ -81,11 +84,11 @@
                             @endif
                         </small>
                     </td>
-                    <td class="text-center nowrap">
+                    <td class="text-center text-nowrap" style="max-width: 150px;">
                         <input type="number" class="form-control" wire:model.defer="usefulLife.{{ $inventory->id }}">
                     </td>
-                    <td class="text-center nowrap">
-                        <input type="number" class="form-control" wire:model.defer="poPrice.{{ $inventory->id }}" >
+                    <td class="text-center text-nowrap" >
+                        <input type="number" class="form-control" wire:model.defer="poPrice.{{ $inventory->id }}" step="0.01" style="width: 120px;" >
                     </td>
                     <td>
                         <select class="form-select" wire:model.defer="accountingCodes.{{ $inventory->id }}">
@@ -98,12 +101,12 @@
                         </select>
                     </td>
                     <td>
-                        {{$inventory->lastMovement?->reception_date?->format('d-m-Y')}}
+                        {{$inventory->control->date->format('d-m-Y')}}
                     </td>
                 </tr>
                 @empty
                 <tr class="text-center" wire:loading.remove>
-                    <td colspan="7">
+                    <td colspan="8">
                         <em>No hay registros</em>
                     </td>
                 </tr>
