@@ -112,12 +112,15 @@ class ShowSummary extends Component
                 'reason'                  => 'required'
             ]);
             
-            $this->allowance->total_days                  = ($this->totalDays == $this->allowance->total_days) ? $this->allowance->total_days : $this->totalDays ;
+            $this->allowance->total_days                  = ($this->totalDays == $this->allowance->total_days) ? $this->allowance->total_days : $this->totalDays;
+            $this->allowance->day_value                   = $this->allowance->allowanceValue->value;
+            
             $this->allowance->fifty_percent_total_days    = ($this->fiftyPercentTotalDays == $this->allowance->fifty_percent_total_days) ? $this->allowance->fifty_percent_total_days : $this->fiftyPercentTotalDays;
-            $this->allowance->sixty_percent_total_days    = ($this->sixtyPercentTotalDays == $this->allowance->sixty_percent_total_days) ? $this->allowance->sixty_percent_total_days : $this->sixtyPercentTotalDays;
-            // $this->allowance->day_value                   = $this->allowance->allowanceValue->value;
             // $this->allowance->fifty_percent_day_value     = ($this->fiftyPercentTotalDaysValue == 0) ? $this->allowance->fifty_percent_day_value : $this->fiftyPercentTotalDaysValue;
+            
+            $this->allowance->sixty_percent_total_days    = ($this->sixtyPercentTotalDays == $this->allowance->sixty_percent_total_days) ? $this->allowance->sixty_percent_total_days : $this->sixtyPercentTotalDays;
             // $this->allowance->sixty_percent_day_value     = ($this->sixtyPercentTotalDaysValue == 0 || $this->sixtyPercentTotalDaysValue == 1) ? $this->allowance->sixty_percent_day_value : $this->sixtyPercentTotalDaysValue;
+
             $this->allowance->total_value                 = $this->totalEditSummaryDaysValue;
 
             $this->allowance->save();
