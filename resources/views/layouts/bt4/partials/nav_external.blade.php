@@ -60,22 +60,20 @@
 
 <br>
 
-{{--
 <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-1 mb-1 text-muted">
     <span>Capacitaciones</span>
     <span data-feather="book-open"></span>
 </h6>
 <ul class="nav flex-column">
     <li class="nav-item">
-        <a class="nav-link {{ active('trainings.external_create') }}" href="{{ route('external_trainings.external_create') }}">
+        <a class="nav-link {{ active('external_trainings.external_create') }}" href="{{ route('external_trainings.external_create') }}">
             <span data-feather="file-plus"></span>Crear Solicitud
         </a>
-        <a class="nav-link {{ active('trainings.external_own_index') }}" href="{{ route('external_trainings.external_own_index') }}">
+        <a class="nav-link {{ active('external_trainings.external_own_index') }}" href="{{ route('external_trainings.external_own_index') }}">
             <span data-feather="list"></span>Mis Solicitudes
         </a>
     </li>
 </ul>
---}}
 
 <ul class="nav flex-column">
     <!-- <li class="nav-item">
