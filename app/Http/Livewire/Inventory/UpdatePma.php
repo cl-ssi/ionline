@@ -21,10 +21,16 @@ class UpdatePma extends Component
     public function mount()
     {
         $this->selectedItems = array_fill(0, count($this->inventories), false);
+
+        //cambios solicitado por Nila ahora deben salir todos
+        $this->inventories = Inventory::whereHas('lastConfirmedMovement', function ($query) {
+            //$query->where('place_id', $this->place_id);
+            $query->where('user_responsible_id', auth()->user()->id);
+        })->get();
     }
 
     protected $listeners = [
-        'myPlaceId',        
+        'myPlaceId',
     ];
 
     public function myPlaceId($value, $key)
@@ -62,7 +68,7 @@ class UpdatePma extends Component
 
     public function selectAllItems()
     {
-        $this->selectAll = !$this->selectAll;        
+        $this->selectAll = !$this->selectAll;
         $this->selectedItems = array_fill(0, count($this->inventories), $this->selectAll);
     }
 
@@ -82,7 +88,7 @@ class UpdatePma extends Component
             if ($isSelected) {
                 $inventory = $this->inventories[$index];
                 $lastMovement = $inventory->lastMovement;
-                $inventory->update(['place_id' => $newPlace->id]);                
+                $inventory->update(['place_id' => $newPlace->id]);
                 if ($lastMovement) {
                     $lastMovement->update(['place_id' => $newPlace->id]);
                 }

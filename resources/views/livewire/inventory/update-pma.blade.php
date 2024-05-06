@@ -8,6 +8,7 @@
         </div>
     @endif
 
+    {{--
 
     <fieldset class="col-md-6">
             <label for="place-id" class="form-label">
@@ -31,15 +32,21 @@
                     <strong>{{ $message }}</strong>
                 </span>
             @enderror
-    </fieldset>
+    </fieldset> 
+    
 
+    
     <br>
     <div class="col-md-1">
             <label class="form-label">
                 &nbsp; 
             </label>
             <button class="btn btn-primary" wire:loading.attr="disabled" wire:click="search" wire:target="search">Buscar</button>
-    </div>
+    </div> 
+   
+
+    --}}
+
 
     @if(count($inventories) > 0)
     <br><br>
