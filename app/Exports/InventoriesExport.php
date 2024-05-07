@@ -19,10 +19,10 @@ class InventoriesExport implements FromCollection, WithHeadings, WithMapping, Sh
 
         $inventories = new Collection();
 
-        Inventory::with('unspscProduct', 'lastMovement')
+        Inventory::with('unspscProduct', 'lastMovement', 'lastMovement.place', 'lastMovement.place.location')
             ->where('establishment_id', $establishmentId)
             ->whereNotNull('number')
-            ->chunk(200, function ($chunk) use ($inventories) {
+            ->chunk(100, function ($chunk) use ($inventories) {
                 $inventories->push($chunk);
             });
 
