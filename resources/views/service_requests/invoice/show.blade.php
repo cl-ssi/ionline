@@ -24,7 +24,11 @@
 		@foreach($fulfillments as $fullfillment)
 
 		<div class="card mb-3">
-			<div class="card-header {{ ($fullfillment->payment_date)?'bg-success text-white':'' }}">
+            @if($fullfillment->type != "Remanente")
+			    <div class="card-header {{ ($fullfillment->payment_date)?'bg-success text-white':'' }}">
+            @else
+                <div class="card-header bg-info text-white">
+            @endif
 				<h4 class="card-title">
 					Período: <span class="font-weight-normal">
 						@if($fullfillment->type == "Horas")
@@ -35,7 +39,11 @@
 				</h4>
 				<p class="card-text">
 					<strong>ID:</strong> {{ $fullfillment->serviceRequest->id ?? '' }} <span class="small">({{ $fullfillment->id ?? '' }})</span> -
-					<strong>Tipo:</strong> {{ $fullfillment->serviceRequest->program_contract_type ?? '' }} -
+					@if($fullfillment->type != "Remanente")
+                        <strong>Tipo:</strong> {{ $fullfillment->serviceRequest->program_contract_type ?? '' }} -
+                    @else
+                        <strong>Tipo:</strong> Remanente -
+                    @endif
 					<strong>Jornada:</strong> {{ $fullfillment->serviceRequest->working_day_type ?? '' }}</strong>
 				</p>
 			</div>
@@ -92,15 +100,17 @@
 						No se ha cargado resolución.
 						@endif
 					</li>
-					<li class="list-group-item">
-						@if($fullfillment->signatures_file_id)
-						<i class="fas fa-circle text-success"></i>
-						<a href="{{ route('rrhh.service-request.fulfillment.signed-certificate-pdf',$fullfillment) }}" target="_blank" title="Certificado">Certificado de cumplimiento. <i class="fas fa-paperclip"></i></a>
-						@else
-						<i class="fas fa-circle text-secondary"></i>
-						No se ha firmado certificado de cumplimiento.
-						@endif
-					</li>
+                    @if($fullfillment->type != "Remanente")
+                        <li class="list-group-item">
+                            @if($fullfillment->signatures_file_id)
+                            <i class="fas fa-circle text-success"></i>
+                            <a href="{{ route('rrhh.service-request.fulfillment.signed-certificate-pdf',$fullfillment) }}" target="_blank" title="Certificado">Certificado de cumplimiento. <i class="fas fa-paperclip"></i></a>
+                            @else
+                            <i class="fas fa-circle text-secondary"></i>
+                            No se ha firmado certificado de cumplimiento.
+                            @endif
+                        </li>
+                    @endif
 					<li class="list-group-item">
 						@if($fullfillment->total_to_pay)
 						<i class="fas fa-circle text-success"></i>

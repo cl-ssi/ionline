@@ -623,53 +623,53 @@ class FulfillmentController extends Controller
         }
 
         if (auth()->user()->can('Service Request: fulfillments rrhh')) {
-          if ($fulfillment->responsable_approver_id == NULL) {
-            session()->flash('danger', 'No es posible aprobar, puesto que falta aprobación de Responsable.');
-            return redirect()->back();
-          }
-          if ($fulfillment->total_hours_to_pay == NULL) {
-            session()->flash('danger', 'No es posible aprobar, puesto que falta ingresar total de horas a pagar.');
-            return redirect()->back();
-          }
-          if ($fulfillment->total_to_pay == NULL) {
-            session()->flash('danger', 'No es posible aprobar, puesto que falta ingresar total a pagar.');
-            return redirect()->back();
-          }
-          if ($fulfillment->responsable_approver_id != NULL && $fulfillment->rrhh_approver_id == NULL) {
-            $fulfillment->rrhh_approbation = 1;
-            $fulfillment->rrhh_approbation_date = Carbon::now();
-            $fulfillment->rrhh_approver_id = auth()->id();
-            $fulfillment->save();
-
-            //items
-            foreach ($fulfillment->FulfillmentItems as $key => $FulfillmentItem) {
-              $FulfillmentItem->rrhh_approbation = 1;
-              $FulfillmentItem->rrhh_approbation_date = Carbon::now();
-              $FulfillmentItem->rrhh_approver_id = auth()->id();
-              $FulfillmentItem->save();
+            if ($fulfillment->responsable_approver_id == NULL) {
+                session()->flash('danger', 'No es posible aprobar, puesto que falta aprobación de Responsable.');
+                return redirect()->back();
             }
-          }
+            if ($fulfillment->total_hours_to_pay == NULL && $fulfillment->type != "Remanente") {
+                session()->flash('danger', 'No es posible aprobar, puesto que falta ingresar total de horas a pagar.');
+                return redirect()->back();
+            }
+            if ($fulfillment->total_to_pay == NULL) {
+                session()->flash('danger', 'No es posible aprobar, puesto que falta ingresar total a pagar.');
+                return redirect()->back();
+            }
+            if ($fulfillment->responsable_approver_id != NULL && $fulfillment->rrhh_approver_id == NULL) {
+                $fulfillment->rrhh_approbation = 1;
+                $fulfillment->rrhh_approbation_date = Carbon::now();
+                $fulfillment->rrhh_approver_id = auth()->id();
+                $fulfillment->save();
+
+                //items
+                foreach ($fulfillment->FulfillmentItems as $key => $FulfillmentItem) {
+                $FulfillmentItem->rrhh_approbation = 1;
+                $FulfillmentItem->rrhh_approbation_date = Carbon::now();
+                $FulfillmentItem->rrhh_approver_id = auth()->id();
+                $FulfillmentItem->save();
+                }
+            }
         }
 
         if (auth()->user()->can('Service Request: fulfillments finance')) {
-          if ($fulfillment->rrhh_approver_id == NULL) {
-            session()->flash('danger', 'No es posible aprobar, puesto que falta aprobación de RRHH');
-            return redirect()->back();
-          }
-          if ($fulfillment->rrhh_approver_id != NULL && $fulfillment->finances_approver_id == NULL) {
-            $fulfillment->finances_approbation = 1;
-            $fulfillment->finances_approbation_date = Carbon::now();
-            $fulfillment->finances_approver_id = auth()->id();
-            $fulfillment->save();
-
-            //items
-            foreach ($fulfillment->FulfillmentItems as $key => $FulfillmentItem) {
-              $FulfillmentItem->finances_approbation = 1;
-              $FulfillmentItem->finances_approbation_date = Carbon::now();
-              $FulfillmentItem->finances_approver_id = auth()->id();
-              $FulfillmentItem->save();
+            if ($fulfillment->rrhh_approver_id == NULL) {
+                session()->flash('danger', 'No es posible aprobar, puesto que falta aprobación de RRHH');
+                return redirect()->back();
             }
-          }
+            if ($fulfillment->rrhh_approver_id != NULL && $fulfillment->finances_approver_id == NULL) {
+                $fulfillment->finances_approbation = 1;
+                $fulfillment->finances_approbation_date = Carbon::now();
+                $fulfillment->finances_approver_id = auth()->id();
+                $fulfillment->save();
+
+                //items
+                foreach ($fulfillment->FulfillmentItems as $key => $FulfillmentItem) {
+                $FulfillmentItem->finances_approbation = 1;
+                $FulfillmentItem->finances_approbation_date = Carbon::now();
+                $FulfillmentItem->finances_approver_id = auth()->id();
+                $FulfillmentItem->save();
+                }
+            }
         }
 
         session()->flash('success', 'Se ha confirmado la información del período.');
@@ -941,5 +941,45 @@ class FulfillmentController extends Controller
     session()->flash('success', 'Se ha creado nuevo período.');
     return redirect()->back();
   }
+    
+    public function add_remainder(Fulfillment $fulfillment){
+        // Clona el post original
+        $newFulfillment = $fulfillment->replicate();
+
+        // Modifica las columnas necesarias
+        $newFulfillment->type = 'Remanente';
+        $newFulfillment->observation = 'Remanente por pagar';
+        $newFulfillment->rrhh_approbation = null;
+        $newFulfillment->rrhh_approbation_date = null;
+        $newFulfillment->rrhh_approver_id = null;
+        $newFulfillment->payment_ready = null;
+        $newFulfillment->has_invoice_file = null;
+        $newFulfillment->has_invoice_file_at = null;
+        $newFulfillment->has_invoice_file_user_id = null;
+        $newFulfillment->finances_approbation = null;
+        $newFulfillment->finances_approbation_date = null;
+        $newFulfillment->finances_approver_id = null;
+        // $newFulfillment->invoice_path = null;
+        // $newFulfillment->signatures_file_id = null;
+        $newFulfillment->bill_number = null;
+        $newFulfillment->total_hours_to_pay = null;
+        $newFulfillment->total_to_pay = null;
+        $newFulfillment->total_to_pay_at = null;
+        $newFulfillment->total_hours_paid = null;
+        $newFulfillment->total_paid = null;
+        $newFulfillment->payment_date = null;
+        $newFulfillment->contable_month = null;
+        $newFulfillment->payment_rejection_detail = null;
+        $newFulfillment->illness_leave = null;
+        $newFulfillment->leave_of_absence = null;
+        $newFulfillment->assistance = null;
+        $newFulfillment->backup_assistance = null;
+
+        // Guarda el nuevo post en la base de datos
+        $newFulfillment->save();
+
+        session()->flash('success', 'Se han creado campos para ingresar remanente.');
+        return redirect()->back();
+    }
 
 }

@@ -1045,6 +1045,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
             Route::post('/store', [FulfillmentController::class, 'store'])->name('store');
             Route::put('/{fulfillment}/update', [FulfillmentController::class, 'update'])->name('update');
             Route::get('{fulfillment}/destroy', [FulfillmentController::class, 'destroy'])->name('destroy');
+            Route::get('{fulfillment}/add_remainder', [FulfillmentController::class, 'add_remainder'])->name('add_remainder');
             // fin descomposición
             Route::get('/edit/{serviceRequest}', [FulfillmentController::class, 'edit_fulfillment'])->name('edit');
             Route::get('/save-approbed-fulfillment/{serviceRequest}', [FulfillmentController::class, 'save_approbed_fulfillment'])->name('save_approbed_fulfillment');
