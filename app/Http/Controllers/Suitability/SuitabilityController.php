@@ -260,6 +260,7 @@ class SuitabilityController extends Controller
 
     public function indexOwn(Request $request)
     {
+        $selectedYear = $request->yearFilter ?? 'todos';
         $school_id = $request->colegio;
         $search = $request->search;
         $selectedYear = $request->yearFilter ?? 'todos';

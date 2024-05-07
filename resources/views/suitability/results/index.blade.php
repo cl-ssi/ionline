@@ -29,21 +29,32 @@
             </select>
         </fieldset>
 
+        <fieldset class="form-group col-6 col-md-1">
+            <label for="search">Año</label>
+                    <select class="form-control" id="for_yearFilter" name="yearFilter">
+                        <option value="todos">Todos</option>
+                        @foreach(range(2022, now()->year) as $year)
+                            <option value="{{ $year }}" @if($selectedYear == $year) selected @endif>{{ $year }}</option>
+                        @endforeach
+                	</select>
+        </fieldset>
+
         <fieldset class="form-group col-2 col-md-1">
             <label for="">&nbsp;</label>
             <button type="submit" class="form-control btn btn-primary"><i class="fas fa-search"></i></button>
         </fieldset>
     </div>
-
-    </forn>
+</form>
 
     <table class="table">
         <thead>
             <tr>
-                <th>Contador</th>
-                <th>ID</th>
+                <!-- <th>Contador</th> -->
+                <!-- <th>ID</th> -->
+                <th>ID Solicitud</th>
+                <th>Fecha y Hora de Solicitud</th>
                 <th>Colegio</th>
-                <th>Solicitud N°</th>
+                <!-- <th>Solicitud N°</th> -->                
                 <th>Nombre</th>
                 <th>Rut</th>
                 <th>Cargo</th>
@@ -64,10 +75,11 @@
         <tbody>
             @foreach($results as $key => $result)
             <tr>
-                <td>{{ $key+1 }}</td>
-                <td>{{ $result->id ?? '' }}</td>
-                <td>{{ $result->psirequest->school->name ?? ''  }}</td>
+                <!-- <td>{{ $key+1 }}</td> -->
+                <!-- <td>{{ $result->id ?? '' }}</td> -->
                 <td>{{ $result->request_id ?? '' }}</td>
+                <td>{{ $result->psirequest?->created_at}}</td>
+                <td>{{ $result->psirequest->school->name ?? ''  }}</td>                
                 <td>{{ $result->user->fullName ?? ''  }}</td>
                 <td nowrap>{{ $result->user->runFormat() ?? ''  }}</td>
                 <td>{{ $result->psirequest->job ?? ''  }}</td>

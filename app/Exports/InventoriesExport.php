@@ -19,10 +19,10 @@ class InventoriesExport implements FromCollection, WithHeadings, WithMapping, Sh
 
         $inventories = new Collection();
 
-        Inventory::with('unspscProduct', 'lastMovement')
+        Inventory::with('unspscProduct', 'lastMovement', 'lastMovement.place', 'lastMovement.place.location')
             ->where('establishment_id', $establishmentId)
             ->whereNotNull('number')
-            ->chunk(200, function ($chunk) use ($inventories) {
+            ->chunk(100, function ($chunk) use ($inventories) {
                 $inventories->push($chunk);
             });
 
@@ -33,16 +33,19 @@ class InventoriesExport implements FromCollection, WithHeadings, WithMapping, Sh
     public function headings(): array
     {
         return [
-            "numero-inventario",
+            "código de inventario",
             "Std-Descripcion",
             "código producto estandar ONU (productUNSPSC)",
             "marca",
             "modelo",
             "serial",
             "vida_util",
-            "codigo OC",
+            "orden de compra",
             "estado del producto",
+            "ubicacion",
+            "lugar id",
             "lugar",
+            "Código interno Arquitectura",
             "quien entrega",
             "responsable",
             "usuario",
@@ -105,7 +108,10 @@ class InventoriesExport implements FromCollection, WithHeadings, WithMapping, Sh
             $inventory->po_code,
             //$inventory->status,
             $status,
-            $inventory->place_id,
+            $inventory->lastMovement?->place?->location->name,
+            $inventory->lastMovement?->place?->id,
+            $inventory->lastMovement?->place?->name,
+            $inventory->lastMovement?->place?->architectural_design_code,
             $inventory->request_user_id,
             $inventory->user_responsible_id,
             $inventory->user_using_id,
