@@ -13,21 +13,32 @@ class InventoriesExport implements FromCollection, WithHeadings, WithMapping, Sh
     /**
      * @return \Illuminate\Support\Collection
      */
+    // public function collection()
+    // {
+    //     $establishmentId = auth()->user()->organizationalUnit->establishment_id;
+
+    //     $inventories = new Collection();
+
+    //     Inventory::with('unspscProduct', 'lastMovement', 'lastMovement.place', 'lastMovement.place.location')
+    //         ->where('establishment_id', $establishmentId)
+    //         ->whereNotNull('number')
+    //         ->chunk(100, function ($chunk) use ($inventories) {
+    //             $inventories->push($chunk);
+    //         });
+
+    //     return $inventories->flatten();
+    // }
+
     public function collection()
     {
         $establishmentId = auth()->user()->organizationalUnit->establishment_id;
 
-        $inventories = new Collection();
-
-        Inventory::with('unspscProduct', 'lastMovement', 'lastMovement.place', 'lastMovement.place.location')
+        return Inventory::with('unspscProduct', 'lastMovement', 'lastMovement.place', 'lastMovement.place.location')
             ->where('establishment_id', $establishmentId)
             ->whereNotNull('number')
-            ->chunk(100, function ($chunk) use ($inventories) {
-                $inventories->push($chunk);
-            });
-
-        return $inventories->flatten();
+            ->cursor();
     }
+
     
 
     public function headings(): array
