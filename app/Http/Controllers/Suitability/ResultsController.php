@@ -20,6 +20,7 @@ class ResultsController extends Controller
         
         $school_id = $request->colegio;
         $estado = $request->estado;
+        $selectedYear = $request->yearFilter ?? 'todos';
 
         $results = Result::when($school_id != null, function ($q) use ($school_id) 
         {
@@ -32,7 +33,10 @@ class ResultsController extends Controller
             return $q->whereHas("psirequest", function ($subQuery) use ($estado) {
                 $subQuery->where('status', $estado);
               });
-        })        
+        })
+        ->when($selectedYear !== 'todos', function ($q) use ($selectedYear) {
+            return $q->whereYear('created_at', $selectedYear);
+        })
         ->with('psirequest.school', 'user')
         ->paginate(100);
 
@@ -41,7 +45,7 @@ class ResultsController extends Controller
         $schools = School::orderBy("name", "asc")->get();
         
 
-        return view('suitability.results.index', compact('results','schools','school_id', 'estado', 'count'));
+        return view('suitability.results.index', compact('results','schools','school_id', 'estado', 'count', 'request', 'selectedYear'));
     }
 
     /**
