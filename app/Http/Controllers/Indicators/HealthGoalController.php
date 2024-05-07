@@ -48,11 +48,11 @@ class HealthGoalController extends Controller
             $indicator = Indicator::findOrFail($health_goal);
             $indicator->load('values.attachedFiles', 'attachedFiles');
             $healthGoal = HealthGoal::find($indicator->indicatorable_id);
-            if($healthGoal->number != 7){
+            if(($healthGoal->number != 7 && in_array($year, ["2022", "2023"])) || $healthGoal->number != 8 && in_array($year, ["2024"])){
                 $currentMonth = Rem::year($year)->max('Mes');
                 $indicator->currentMonth = $currentMonth;
             }
-            $indicator->establishments = Establecimiento::year($year)->where('meta_san', 1)->when($healthGoal->number == 7, function($q){ return $q->orWhere('Codigo', 102307); })->orderBy('comuna')->get();
+            $indicator->establishments = Establecimiento::year($year)->where('meta_san', 1)->when($healthGoal->number == 7 & in_array($year, ["2022", "2023"]), function($q){ return $q->orWhere('Codigo', 102307); })->orderBy('comuna')->get();
             // return $indicator;
             $this->loadValuesWithRemSourceLaw19813($year, $indicator);
         } else { // ley 18834 o 19664

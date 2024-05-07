@@ -41,7 +41,7 @@
     @endforeach
 </ul>
 
-@if($indicator->number != 7)
+@if(($indicator->number != 7 && in_array($healthGoal->year, ["2022", "2023"])) || ($indicator->number != 8 && in_array($healthGoal->year, ["2024"])))
 <!-- Tab panes -->
 <div class="tab-content mt-3">
     @foreach($communes as $index => $commune)
