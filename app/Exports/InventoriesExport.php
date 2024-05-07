@@ -4,29 +4,40 @@ namespace App\Exports;
 
 use Maatwebsite\Excel\Concerns\{WithHeadings, WithMapping, ShouldAutoSize};
 use Maatwebsite\Excel\Events\AfterSheet;
-use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\FromQuery;
 use App\Models\Inv\Inventory;
 use Illuminate\Support\Collection;
+use Maatwebsite\Excel\Concerns\WithChunkReading;
 
-class InventoriesExport implements FromCollection, WithHeadings, WithMapping, ShouldAutoSize
+class InventoriesExport implements FromQuery, WithHeadings, WithMapping, ShouldAutoSize, WithChunkReading
 {
     /**
      * @return \Illuminate\Support\Collection
      */
-    public function collection()
+    // public function collection()
+    // {
+    //     $establishmentId = auth()->user()->organizationalUnit->establishment_id;
+
+    //     $inventories = new Collection();
+
+    //     Inventory::with('unspscProduct', 'lastMovement', 'lastMovement.place', 'lastMovement.place.location')
+    //         ->where('establishment_id', $establishmentId)
+    //         ->whereNotNull('number')
+    //         ->chunk(50, function ($chunk) use ($inventories) {
+    //             $inventories->push($chunk);
+    //         });
+
+    //     return $inventories->flatten();
+    // }
+
+    public function query()
     {
         $establishmentId = auth()->user()->organizationalUnit->establishment_id;
 
-        $inventories = new Collection();
-
-        Inventory::with('unspscProduct', 'lastMovement', 'lastMovement.place', 'lastMovement.place.location')
+        return Inventory::query()
+            ->with('unspscProduct', 'lastMovement', 'lastMovement.place', 'lastMovement.place.location')
             ->where('establishment_id', $establishmentId)
-            ->whereNotNull('number')
-            ->chunk(50, function ($chunk) use ($inventories) {
-                $inventories->push($chunk);
-            });
-
-        return $inventories->flatten();
+            ->whereNotNull('number');
     }
     
 
@@ -123,6 +134,12 @@ class InventoriesExport implements FromCollection, WithHeadings, WithMapping, Sh
             $receptionDate,
             $inventory->old_number,
         ];
+    }
+
+    
+    public function chunkSize(): int
+    {
+        return 100;
     }
     
 }
