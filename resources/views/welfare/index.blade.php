@@ -7,7 +7,7 @@
 @include('welfare.nav')
 
 
-<div class="row">
+<!-- <div class="row">
     <div class="col-12 col-md-5">
         <h3 class="mb-3">¡Bienvenidos al Módulo de Estado Financiero de Bienestar!</h3>
         <p class="lead text-center">
@@ -19,13 +19,26 @@
     <div class="col-12 col-md-7">
         <div id="barchart" style="width: 900px; "></div>
     </div>
+</div> -->
+
+<div class="row">
+    <div class="col-12 col-md-12">
+        <h3 class="mb-3">¡Bienvenidos al Módulo de Bienestar!</h3><br>
+        <li>Este módulo de iOnline permite visualizar el estado financiero en el tiempo del Servicio de Bienestar</li>
+        <li>Este módulo de iOnline permite hacer gestión sobre amipass.</li>
+        <li>Este módulo de iOnline permite solicitar beneficios a asociados.</li>
+
+    </div>
+    <div class="col-12 col-md-7">
+        <div id="barchart" style="width: 900px; "></div>
+    </div>
 </div>
 
 @endsection
 
 
 @section('custom_js')
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<!-- <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
       google.charts.load('current', {'packages':['corechart']});
       google.charts.setOnLoadCallback(drawChart);
@@ -53,5 +66,5 @@
 
         chart.draw(data, options);
       }
-    </script>
+</script> -->
 @endsection

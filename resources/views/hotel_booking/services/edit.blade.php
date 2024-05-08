@@ -4,7 +4,7 @@
 
 @section('content')
 
-@include('hotel_booking.partials.nav')
+@include('welfare.nav')
 
 <link href="{{ asset('css/bootstrap-select.min.css') }}" rel="stylesheet" type="text/css" />
 

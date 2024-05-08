@@ -4,7 +4,7 @@
 
 @section('content')
 
-@include('hotel_booking.partials.nav')
+@include('welfare.nav')
 
 <h3 class="inline">Servicios
 	<a href="{{ route('hotel_booking.services.create') }}" class="btn btn-primary">Crear</a>

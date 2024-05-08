@@ -6,30 +6,36 @@
         </a>
     </li>
 
+    @if(auth()->user()->can('welfare: balance') || auth()->user()->can('be god'))
+        <li class="nav-item dropdown ">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-balance-scale"></i> Balance </a>
 
-    <li class="nav-item">
-        <a class="nav-link" href="{{ route('welfare.balances') }}">
-            <i class="fas fa-balance-scale"></i> Balance
-        </a>
-    </li>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    
+                    <a class="dropdown-item" href="{{ route('welfare.dosfile.index') }}">
+                        <i class="fas fa-file-upload"></i> Carga archivo DOS
+                    </a>
 
-    <li class="nav-item">
-        <a class="nav-link" href="{{ route('welfare.dosfile.index') }}">
-            <i class="fas fa-file-upload"></i> Carga archivo DOS
-        </a>
-    </li>
+                    <a class="dropdown-item" href="{{ route('welfare.balances') }}">
+                        <i class="fas fa-balance-scale"></i> Balance
+                    </a>
 
-    <!--li class="nav-item">
-            <a class="nav-link" href="{{ route('welfare.loans.index') }}">
-                <i class="fas fa-file-excel"></i> Carga Excel de préstamos
-            </a>
-        </li-->
+                    <a class="dropdown-item" href="{{ route('welfare.loans.index') }}">
+                        <i class="fas fa-file-excel"></i> Carga Excel de préstamos
+                    </a>
 
-    <li class="nav-item">
-        <a class="nav-link" href="{{ route('welfare.report') }}">
-            <i class="fas fa-chart-bar"></i> Gráficos
-        </a>
-    </li>
+                    <a class="dropdown-item" href="{{ route('welfare.report') }}">
+                        <i class="fas fa-chart-bar"></i> Gráficos
+                    </a>
+                </div>
+        </li>
+    @endif
+
+    
+
+
+    
 
     @if(auth()->user()->welfare || auth()->user()->can('be god'))
         <li class="nav-item dropdown ">
@@ -56,18 +62,64 @@
                 </div>
         </li>
 
-        <li class="nav-item">
-            <a class="nav-link" href="{{route('hotel_booking.index') }}">
-                <i class="fa fa-bed"></i> Reserva Cabañas
-            </a>
+        <li class="nav-item dropdown ">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fa fa-bed"></i> Reserva de cabañas </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+
+                    <a class="dropdown-item {{ active('hotel_booking.index') }}"
+                        href="{{ route('hotel_booking.index') }}">
+                        <i class="fas fa-home"></i> Reservar
+                    </a>
+
+                    <a class="dropdown-item {{ active('hotel_booking.my_bookings') }}"
+                        href="{{ route('hotel_booking.my_bookings') }}">
+                        <i class="fa fa-list"></i> Mis reservas
+                    </a>
+
+                    <div class="dropdown-divider"></div> <!-- Agregamos una línea divisora -->
+
+                    @canany(['HotelBooking: Administrador'])
+
+                        <a class="dropdown-item {{ active('hotel_booking.booking_admin') }}"
+                            href="{{ route('hotel_booking.booking_admin') }}">
+                            <i class="fa fa-list"></i> Gestor de reservas
+                        </a>
+
+                        <a class="dropdown-item {{ active('hotel_booking.hotels.index') }}"
+                            href="{{ route('hotel_booking.hotels.index') }}">
+                            <i class="fas fa-clipboard-check"></i> Hoteles
+                        </a>
+
+                        <a class="dropdown-item {{ active('hotel_booking.rooms.index') }}"
+                            href="{{ route('hotel_booking.rooms.index') }}">
+                            <i class="fas fa-clipboard-check"></i> Hospedajes
+                        </a>
+
+                        <a class="dropdown-item {{ active('hotel_booking.room_booking_configuration.index') }}"
+                            href="{{ route('hotel_booking.room_booking_configuration.index') }}">
+                            <i class="fas fa-clipboard-check"></i> Configuración Habitación
+                        </a>
+
+                        <a class="dropdown-item {{ active('hotel_booking.services.index') }}"
+                            href="{{ route('hotel_booking.services.index') }}">
+                            <i class="fas fa-clipboard-check"></i> Servicios
+                        </a>
+                    @endcanany
+
+                </div>
         </li>
     @endif
 
-    @canany(['amiPASS'])
+
+
+
+
+    @if(auth()->user()->can('welfare: amipass') || auth()->user()->can('be god'))
         <li class="nav-item dropdown ">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" data-bs-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
-                <i class="fas fa-file-invoice"></i> amiPASS</a>
+                <i class="fas fa-file-invoice"></i> Gestor Amipass</a>
 
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
 
@@ -96,32 +148,30 @@
                 </a>
             </div>
         </li>
-    @endcanany
+    @endif
 
-    <li class="nav-item">
-        <a class="nav-link" href="{{ route('welfare.amipass.mi-amipass') }}">
-            <i class="fas fa-utensils"></i> Mi Amipass
-        </a>
-    </li>
-    
-    <li class="nav-item">
-        <a class="nav-link" href="{{ route('welfare.amipass.requests-manager') }}">
-            <i class="fas fa-utensils"></i> Solicitudes Amipass
-        </a>
-    </li>
 
-    <li class="nav-item">
-        <a class="nav-link" href="{{ route('welfare.amipass.question-all-index') }}">
-            <i class="fas fa-question-circle"></i> Consultas/Sugerencia Amipass
-        </a>
-    </li>
 
-    @canany(['Welfare: welfare users import'])
-    <li class="nav-item">
-        <a class="nav-link" href="{{ route('welfare.welfare-users-import') }}">
-            <i class="fas fa-file-upload"></i> Importar usuarios bienestar
-        </a>
+
+    <li class="nav-item dropdown ">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" data-bs-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+            <i class="fas fa-file-invoice"></i> Mi Amipass</a>
+
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+
+                <a class="dropdown-item" href="{{ route('welfare.amipass.mi-amipass') }}">
+                    <i class="fas fa-utensils"></i> Mi Amipass
+                </a>
+
+                <a class="dropdown-item" href="{{ route('welfare.amipass.requests-manager') }}">
+                    <i class="fas fa-utensils"></i> Solicitudes Amipass
+                </a>
+
+                <a class="dropdown-item" href="{{ route('welfare.amipass.question-all-index') }}">
+                    <i class="fas fa-question-circle"></i> Consultas/Sugerencia Amipass
+                </a>
+            </div>
     </li>
-    @endcanany
 
     </ul>

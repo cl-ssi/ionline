@@ -4,7 +4,7 @@
 
 @section('content')
 
-@include('hotel_booking.partials.nav')
+@include('welfare.nav')
 
     <h3>Configuración de hospedajes</h3>
 

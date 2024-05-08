@@ -4,7 +4,7 @@
 
 @section('content')
 
-@include('hotel_booking.partials.nav')
+@include('welfare.nav')
 
 <div class="jumbotron mt-3">
     <h1 class="display-6">Módulo de Reserva de Cabañas </h1>

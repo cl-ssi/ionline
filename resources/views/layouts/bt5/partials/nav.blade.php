@@ -174,12 +174,6 @@
                             </a>
                         @endif
 
-                        <!-- @canany(['HotelBooking: Administrador', 'HotelBooking: User'])
-                            <a class="dropdown-item {{ active('hotel_booking.index') }}" href="{{ route('hotel_booking.index') }}">
-                                <i class="fas fa-fw fa-user"></i> Reserva Cabañas
-                            </a>
-                        @endcanany -->
-
                         @canany(['Agenda UST: Administrador','Agenda UST: Funcionario','Agenda UST: Secretaria'])
                             <a class="dropdown-item {{ active('prof_agenda.home') }}" href="{{ route('prof_agenda.home') }}">
                                 <i class="fas fa-fw fa-user"></i> Agenda UST
@@ -403,12 +397,12 @@
                         </a>
                         @endcanany
 
-                        @canany(['Rrhh: welfare', 'be god', 'amiPASS'])
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="{{ route('welfare.index') }}">
-                            <i class="fas fa-money-check"></i> Bienestar
-                        </a>
-                        @endcanany
+                        @if(auth()->user()->welfare || auth()->user()->can('be god') || auth()->user()->can('welfare: amipass') || auth()->user()->can('welfare: balance'))
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="{{ route('welfare.index') }}">
+                                <i class="fas fa-money-check"></i> Bienestar
+                            </a>
+                        @endif
 
                         @canany(['Summary: user', 'Summary: admin', 'Summary: admin viewer'])
                         <div class="dropdown-divider"></div>
@@ -799,7 +793,7 @@
                             <i class="bi bi-clock"></i> {{ __('Justificar asistencia') }}
                         </a>
 
-                        @if(auth()->user()->welfare || auth()->user()->can('be god'))
+                        @if(auth()->user()->welfare || auth()->user()->can('be god') || auth()->user()->can('welfare: amipass') || auth()->user()->can('welfare: balance'))
                             <a class="dropdown-item" href="{{ route('welfare.index') }}">
                                 <i class="bi bi-egg-fried"></i> Módulo de Bienestar
                             </a>

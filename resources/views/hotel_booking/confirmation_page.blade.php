@@ -4,7 +4,7 @@
 
 @section('content')
 
-@include('hotel_booking.partials.nav')
+@include('welfare.nav')
 
 <?php $roomBooking = Session::get('roomBooking'); ?>
 
