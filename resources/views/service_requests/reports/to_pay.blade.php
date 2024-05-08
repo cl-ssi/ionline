@@ -20,15 +20,9 @@
          <div class="form-group col-12 col-md-2">
             <label>Establecimiento</label>
             <select class="form-control" name="establishment_id">
-                @if(auth()->user()->organizationalUnit->establishment_id==1)
-                    <option value="1" @if($request->establishment_id == 1) selected @endif>Hospital Ernesto Torres Galdames</option>
-                @endif
-                @if(auth()->user()->organizationalUnit->establishment_id==41)
-                    <option value="41" @if($request->establishment_id == 41) selected @endif>Hospital Alto Hospicio</option>
-                @endif
-                @if(auth()->user()->organizationalUnit->establishment_id==38)
-                    <option value="38" @if($request->establishment_id === 0) selected @endif>Dirección SSI</option>
-                @endif
+                @foreach($establishments as $establishment)
+                    <option value="{{$establishment->id}}" @selected($request->establishment_id == $establishment->id)>{{$establishment->name}}</option>
+                @endforeach
             </select>
         </div>
         <div class="form-group col-12 col-md-2">

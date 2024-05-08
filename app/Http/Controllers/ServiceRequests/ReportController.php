@@ -30,58 +30,27 @@ class ReportController extends Controller
 {
   public function toPay(Request $request)
   {
-    if($request->establishment_id){
-        $establishment_id = $request->establishment_id;
-    }else{
-        $establishment_id = auth()->user()->organizationalUnit->establishment_id;
-    }
+    // if($request->establishment_id){
+    //     $establishment_id = $request->establishment_id;
+    // }else{
+    //     $establishment_id = auth()->user()->organizationalUnit->establishment_id;
+    // }
     
+    $establishment_id = $request->establishment_id;
     $type = $request->type;
     $programm_name = $request->programm_name;
     $pay_type = $request->pay_type;
     $topay_fulfillments = [];
+    $topay_fulfillments2 = [];
 
-    // se hace union de 2 querys: la primera trae los cumplimientos que necesitan visaciones de respo, rrhh y finanzas. 
-    // la segunda trae los que no necesitan la visación del cumplimiento.
+    if($establishment_id){
+        // se hace union de 2 querys: la primera trae los cumplimientos que necesitan visaciones de respo, rrhh y finanzas. 
+        // la segunda trae los que no necesitan la visación del cumplimiento.
 
-    $topay_fulfillments1 = Fulfillment::whereHas("ServiceRequest", function ($subQuery) {
-        $subQuery->where('has_resolution_file', 1);
-    })
-    ->when($establishment_id != null, function ($q) use ($establishment_id) {
-        return $q->whereHas("ServiceRequest", function ($subQuery) use ($establishment_id) {
-            $subQuery->where('establishment_id', $establishment_id);
-        });
-    })
-    ->when($type != null, function ($q) use ($type) {
-        return $q->whereHas("ServiceRequest", function ($subQuery) use ($type) {
-            $subQuery->where('type', $type);
-        });
-    })
-    ->when($programm_name != null, function ($q) use ($programm_name) {
-        return $q->whereHas("ServiceRequest", function ($subQuery) use ($programm_name) {
-            $subQuery->where('programm_name', $programm_name);
-        });
-    })
-    ->with('serviceRequest','serviceRequest.employee','serviceRequest.responsabilityCenter','serviceRequest.establishment','serviceRequest.employee.bankAccount')
-    ->where('has_invoice_file', 1)
-    ->whereNotNull('signatures_file_id')
-    ->when($pay_type == "remanente", function ($q) use ($type) {
-        return $q->where('type','Remanente'); // necesitan visacion
-    })
-    ->when($pay_type == "normal", function ($q) use ($type) {
-        return $q->whereIn('type', ['Mensual', 'Parcial', 'Horas Médicas']); // necesitan visacion
-    })
-    ->where('responsable_approbation', 1)
-    ->where('rrhh_approbation', 1)
-    ->where('finances_approbation', 1)
-    ->whereNull('total_paid')
-    ->get();
-
-    if($pay_type != "remanente"){
-        $topay_fulfillments2 = Fulfillment::whereHas("ServiceRequest", function ($subQuery) {
+        $topay_fulfillments1 = Fulfillment::whereHas("ServiceRequest", function ($subQuery) {
             $subQuery->where('has_resolution_file', 1);
         })
-        ->when($request->establishment_id != null, function ($q) use ($establishment_id) {
+        ->when($establishment_id != null, function ($q) use ($establishment_id) {
             return $q->whereHas("ServiceRequest", function ($subQuery) use ($establishment_id) {
                 $subQuery->where('establishment_id', $establishment_id);
             });
@@ -99,15 +68,52 @@ class ReportController extends Controller
         ->with('serviceRequest','serviceRequest.employee','serviceRequest.responsabilityCenter','serviceRequest.establishment','serviceRequest.employee.bankAccount')
         ->where('has_invoice_file', 1)
         ->whereNotNull('signatures_file_id')
-        ->whereIn('type', ['Horas', 'Horas No Médicas']) // no necesita visaciones
+        ->when($pay_type == "remanente", function ($q) use ($type) {
+            return $q->where('type','Remanente'); // necesitan visacion
+        })
+        ->when($pay_type == "normal", function ($q) use ($type) {
+            return $q->whereIn('type', ['Mensual', 'Parcial', 'Horas Médicas']); // necesitan visacion
+        })
+        ->where('responsable_approbation', 1)
+        ->where('rrhh_approbation', 1)
+        ->where('finances_approbation', 1)
         ->whereNull('total_paid')
         ->get();
+
+        if($pay_type != "remanente"){
+            $topay_fulfillments2 = Fulfillment::whereHas("ServiceRequest", function ($subQuery) {
+                $subQuery->where('has_resolution_file', 1);
+            })
+            ->when($request->establishment_id != null, function ($q) use ($establishment_id) {
+                return $q->whereHas("ServiceRequest", function ($subQuery) use ($establishment_id) {
+                    $subQuery->where('establishment_id', $establishment_id);
+                });
+            })
+            ->when($type != null, function ($q) use ($type) {
+                return $q->whereHas("ServiceRequest", function ($subQuery) use ($type) {
+                    $subQuery->where('type', $type);
+                });
+            })
+            ->when($programm_name != null, function ($q) use ($programm_name) {
+                return $q->whereHas("ServiceRequest", function ($subQuery) use ($programm_name) {
+                    $subQuery->where('programm_name', $programm_name);
+                });
+            })
+            ->with('serviceRequest','serviceRequest.employee','serviceRequest.responsabilityCenter','serviceRequest.establishment','serviceRequest.employee.bankAccount')
+            ->where('has_invoice_file', 1)
+            ->whereNotNull('signatures_file_id')
+            ->whereIn('type', ['Horas', 'Horas No Médicas']) // no necesita visaciones
+            ->whereNull('total_paid')
+            ->get();
+        }
 
         $topay_fulfillments = $topay_fulfillments1->merge($topay_fulfillments2);
     }
 
+    $establishments_ids = explode(',',env('APP_SS_ESTABLISHMENTS'));
+    $establishments = Establishment::whereIn('id',$establishments_ids)->orderBy('official_name')->get();
     
-    return view('service_requests.reports.to_pay', compact('topay_fulfillments', 'request'));
+    return view('service_requests.reports.to_pay', compact('topay_fulfillments', 'request', 'establishments'));
   }
 
   public function payed(Request $request)
