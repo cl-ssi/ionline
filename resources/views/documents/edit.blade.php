@@ -176,6 +176,15 @@
         </ul>
     </div>
 
+    <div class="alert alert-warning" role="alert">
+        <strong>Convenios</strong>
+        <ul>
+            <li>Para eliminar el color "destacado amarillo" del documento, vaya al menú "Editar", luego
+                 "Seleccionar todo" y finalmente en el boton de color de fondo, selecione remover color,
+                es la opción que está al lado derecho del color blanco (cuadro blanco con una raya roja)</li>
+        </ul>
+    </div>
+
 @endif
 
 @endsection

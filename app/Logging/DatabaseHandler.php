@@ -2,7 +2,6 @@
 namespace App\Logging;
 // use Illuminate\Log\Logger;
 use DB;
-use Illuminate\Support\Facades\Auth;
 use Monolog\Logger;
 use Monolog\Handler\AbstractProcessingHandler;
 
