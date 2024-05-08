@@ -27,7 +27,10 @@ class HomeController extends Controller
         $phrase = PhraseOfTheDay::inRandomOrder()->first();
 
         /* NEWS: Noticias */
-        $allNews = News::latest()->get();
+        $allNews = News::where('until_at', '>', now())
+            ->orWhere('until_at', null)
+            ->orderBy('id', 'desc')
+            ->get();
 
         return view('layouts.bt5.home', compact('phrase', 'allNews'));
     }
