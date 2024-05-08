@@ -198,8 +198,11 @@
         <div class="right" style="float: right; width: 280px;">
             <div class="left" style="padding-bottom: 6px;">
                 @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
-                    @if($ServiceRequest->programm_name == "OTROS PROGRAMAS HETG" or $ServiceRequest->programm_name == "LEQ Fonasa" or 
-                        $ServiceRequest->programm_name == "CONTINGENCIA RESPIRATORIA" or $ServiceRequest->programm_name == "SENDA")
+                    @if($ServiceRequest->programm_name == "OTROS PROGRAMAS HETG" or 
+                        $ServiceRequest->programm_name == "LEQ Fonasa" or 
+                        $ServiceRequest->programm_name == "CONTINGENCIA RESPIRATORIA" or 
+                        $ServiceRequest->programm_name == "SENDA" or 
+                        $ServiceRequest->programm_name == "PABELLON GINE")
                         <strong>RESOLUCIÓN EXENTA N°: {{$ServiceRequest->resolution_number}}</strong>
                     @else
                         <strong>RESOLUCIÓN N°: {{$ServiceRequest->resolution_number}}</strong>
