@@ -111,7 +111,7 @@ class ReportController extends Controller
     }
 
     $establishments_ids = explode(',',env('APP_SS_ESTABLISHMENTS'));
-    $establishments = Establishment::whereIn('id',$establishments_ids)->orderBy('official_name')->get();
+    $establishments = Establishment::whereIn('id',$establishments_ids)->where('id',auth()->user()->organizationalUnit->establishment_id)->orderBy('official_name')->get();
     
     return view('service_requests.reports.to_pay', compact('topay_fulfillments', 'request', 'establishments'));
   }
