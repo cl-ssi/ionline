@@ -43,21 +43,25 @@
                 <i class="fas fa-hands-helping"></i> Beneficios </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     
-                    <a class="dropdown-item" href="{{ route('welfare.benefits.benefits') }}">
-                        <i class="fas fa-plus-square"></i> Mantenedor de beneficios
-                    </a>
-
-                    <a class="dropdown-item" href="{{ route('welfare.benefits.subsidies') }}">
-                        <i class="fas fa-plus-square"></i> Mantenedor de subsidios
-                    </a>
-
                     <a class="dropdown-item" href="{{ route('welfare.benefits.requests') }}">
                         <i class="fa fa-user-plus" aria-hidden="true"></i> Mis solicitudes
                     </a>
 
-                    <a class="dropdown-item" href="{{ route('welfare.benefits.requests-admin') }}">
-                        <i class="fa fa-users" aria-hidden="true"></i> Administrador de solicitudes
-                    </a>
+                    @canany(['welfare: benefits'])
+
+                        <a class="dropdown-item" href="{{ route('welfare.benefits.benefits') }}">
+                            <i class="fas fa-plus-square"></i> Mantenedor de beneficios
+                        </a>
+
+                        <a class="dropdown-item" href="{{ route('welfare.benefits.subsidies') }}">
+                            <i class="fas fa-plus-square"></i> Mantenedor de subsidios
+                        </a>
+
+                        <a class="dropdown-item" href="{{ route('welfare.benefits.requests-admin') }}">
+                            <i class="fa fa-users" aria-hidden="true"></i> Administrador de solicitudes
+                        </a>
+
+                    @endcanany
 
                 </div>
         </li>
