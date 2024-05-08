@@ -269,7 +269,8 @@ class RoleAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Users: reset password option', 'description' => 'Permite ver el botón para resetear password del usuario']);
         Permission::create(['name' => 'Users: send mail verification', 'description' => 'Permite enviar un email de verificación de correo al usuario']);
         Permission::create(['name' => 'Users: show access logs', 'description' => 'Permite ver el registro de accesos al sistema de los usuarios']);
-
+        Permission::create(['name' => 'welfare: amipass', 'description' => 'Permiso para acceder a la opción gestor de amipass en bienestar']);
+        Permission::create(['name' => 'welfare: balance', 'description' => 'Para acceder a la opción balance de bienestar']);
 
         
         $role = Role::create(['name' => 'Agenda Salud del Trabajdor: Administrador', 'description' => '']);
