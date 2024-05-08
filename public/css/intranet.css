@@ -45,14 +45,14 @@ body {
 }
 
 
-[class*="icon-"]:before {
-    content: '';
-    display: inline-block;
-    width: 1em;
-    height: 1em;
+/* [class*="icon-"]:before { */
+    /* content: ''; */
+    /* display: inline-block; */
+    /* width: 1em; */
+    /* height: 1em; */
     /*background-color: #EE3A43;*/
-    opacity: 0.5;
-}
+    /* opacity: 0.5; */
+/* } */
 
 .icon-logo-ionline {
     background-repeat: no-repeat;
