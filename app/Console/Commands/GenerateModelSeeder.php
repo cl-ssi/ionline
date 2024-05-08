@@ -40,7 +40,7 @@ class GenerateModelSeeder extends Command
             return;
         }
 
-        $modelInstances = $modelClass::all();
+        $modelInstances = $modelClass::withTrashed()->get();
         // Generar el nombre de la clase Seeder usando solo el nombre del modelo sin el espacio de nombres
         $className = class_basename($modelName) . "Seeder";
         $seederContent = "<?php\n\nnamespace Database\Seeders;\n\nuse Illuminate\\Database\\Seeder;\nuse {$modelClass};\n\nclass {$className} extends Seeder\n{\n    public function run()\n    {\n";
