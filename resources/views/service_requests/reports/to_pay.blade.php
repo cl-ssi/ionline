@@ -40,12 +40,11 @@
             </select>
         </div>
         <div class="form-group col-9 col-md-2">
-            <label>Estado de aprobacion</label>
-            <select class="form-control" name="type" disabled>
-            <option value=""></option>
-            <option value="aprobado">Aprobado</option>
-            <option value="pendiente">Pendiente</option>
-            <option value="rechazado">Rechazado</option>
+            <label>Tipo de pago</label>
+            <select class="form-control" name="pay_type">
+                <option value="normal" @selected($request->pay_type == "normal")>Normal</option>
+                <option value="remanente" @selected($request->pay_type == "remanente")>Remanente</option>
+                <!-- <option value="rechazado">Rechazado</option> -->
             </select>
         </div>
 
@@ -95,18 +94,19 @@
             </select>
         </div>
 
-        <div class="form-group col-3 col-md-4">
+        <div class="form-group col-3 col-md-2">
             <label>&nbsp;</label>
             <button type="submit" class="btn btn-primary form-control"><i class="fas fa-search"></i> Buscar</button>
         </div>
-    </div>
 
-    <div class="col-2">
-    	@if($request->establishment_id)
-      	<a class="btn btn-outline-success" href="{{route('rrhh.service-request.report.bank-payment-file',$request->establishment_id)}}">
-        	<i class="fas fa-file"></i>Archivo de pago banco
-		</a>
-      	@endif
+        <div class="form-group col-3 col-md-2">
+            <label>&nbsp;</label>
+            @if($request)
+                <a class="btn btn-outline-success form-control" href="{{route('rrhh.service-request.report.bank-payment-file',[$request->establishment_id, $request->pay_type, $request->programm_name])}}">
+                    <i class="fas fa-file"></i>Archivo de pago
+                </a>
+            @endif
+        </div>
     </div>
 </div>
 

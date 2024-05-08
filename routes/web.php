@@ -1097,7 +1097,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
             Route::get('/service-request-continuity', [ReportController::class, 'service_request_continuity'])->name('service-request-continuity');
             Route::get('/resolution-pdf/{ServiceRequest}', [ReportController::class, 'resolutionPDF'])->name('resolution-pdf');
             Route::get('/resolution-pdf-hsa/{ServiceRequest}', [ReportController::class, 'resolutionPDFhsa'])->name('resolution-pdf-hsa');
-            Route::get('/bank-payment-file/{establishment_id?}', [ReportController::class, 'bankPaymentFile'])->name('bank-payment-file');
+            Route::get('/bank-payment-file/{establishment_id?}/{pay_type?}/{programm_name?}', [ReportController::class, 'bankPaymentFile'])->name('bank-payment-file');
             Route::get('/with-resolution-file', [ReportController::class, 'indexWithResolutionFile'])->name('with-resolution-file');
             Route::get('/without-resolution-file', [ReportController::class, 'indexWithoutResolutionFile'])->name('without-resolution-file');
             Route::get('/budget-availability/{serviceRequest}', [ReportController::class, 'budgetAvailability'])->name('budget-availability');

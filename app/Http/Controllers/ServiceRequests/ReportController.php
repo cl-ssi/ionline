@@ -38,6 +38,11 @@ class ReportController extends Controller
     
     $type = $request->type;
     $programm_name = $request->programm_name;
+    $pay_type = $request->pay_type;
+    $topay_fulfillments = [];
+
+    // se hace union de 2 querys: la primera trae los cumplimientos que necesitan visaciones de respo, rrhh y finanzas. 
+    // la segunda trae los que no necesitan la visación del cumplimiento.
 
     $topay_fulfillments1 = Fulfillment::whereHas("ServiceRequest", function ($subQuery) {
         $subQuery->where('has_resolution_file', 1);
@@ -60,39 +65,48 @@ class ReportController extends Controller
     ->with('serviceRequest','serviceRequest.employee','serviceRequest.responsabilityCenter','serviceRequest.establishment','serviceRequest.employee.bankAccount')
     ->where('has_invoice_file', 1)
     ->whereNotNull('signatures_file_id')
-    ->whereIn('type', ['Mensual', 'Parcial', 'Horas Médicas', 'Remanente'])
+    ->when($pay_type == "remanente", function ($q) use ($type) {
+        return $q->where('type','Remanente'); // necesitan visacion
+    })
+    ->when($pay_type == "normal", function ($q) use ($type) {
+        return $q->whereIn('type', ['Mensual', 'Parcial', 'Horas Médicas']); // necesitan visacion
+    })
     ->where('responsable_approbation', 1)
     ->where('rrhh_approbation', 1)
     ->where('finances_approbation', 1)
     ->whereNull('total_paid')
     ->get();
 
-    $topay_fulfillments2 = Fulfillment::whereHas("ServiceRequest", function ($subQuery) {
-        $subQuery->where('has_resolution_file', 1);
-    })
-    ->when($request->establishment_id != null, function ($q) use ($establishment_id) {
-        return $q->whereHas("ServiceRequest", function ($subQuery) use ($establishment_id) {
-            $subQuery->where('establishment_id', $establishment_id);
-        });
-    })
-    ->when($type != null, function ($q) use ($type) {
-        return $q->whereHas("ServiceRequest", function ($subQuery) use ($type) {
-            $subQuery->where('type', $type);
-        });
-    })
-    ->when($programm_name != null, function ($q) use ($programm_name) {
-        return $q->whereHas("ServiceRequest", function ($subQuery) use ($programm_name) {
-            $subQuery->where('programm_name', $programm_name);
-        });
-    })
-    ->with('serviceRequest','serviceRequest.employee','serviceRequest.responsabilityCenter','serviceRequest.establishment','serviceRequest.employee.bankAccount')
-    ->where('has_invoice_file', 1)
-    ->whereNotNull('signatures_file_id')
-    ->whereNotIn('type', ['Mensual', 'Parcial', 'Horas Médicas', 'Remanente'])
-    ->whereNull('total_paid')
-    ->get();
+    if($pay_type != "remanente"){
+        $topay_fulfillments2 = Fulfillment::whereHas("ServiceRequest", function ($subQuery) {
+            $subQuery->where('has_resolution_file', 1);
+        })
+        ->when($request->establishment_id != null, function ($q) use ($establishment_id) {
+            return $q->whereHas("ServiceRequest", function ($subQuery) use ($establishment_id) {
+                $subQuery->where('establishment_id', $establishment_id);
+            });
+        })
+        ->when($type != null, function ($q) use ($type) {
+            return $q->whereHas("ServiceRequest", function ($subQuery) use ($type) {
+                $subQuery->where('type', $type);
+            });
+        })
+        ->when($programm_name != null, function ($q) use ($programm_name) {
+            return $q->whereHas("ServiceRequest", function ($subQuery) use ($programm_name) {
+                $subQuery->where('programm_name', $programm_name);
+            });
+        })
+        ->with('serviceRequest','serviceRequest.employee','serviceRequest.responsabilityCenter','serviceRequest.establishment','serviceRequest.employee.bankAccount')
+        ->where('has_invoice_file', 1)
+        ->whereNotNull('signatures_file_id')
+        ->whereIn('type', ['Horas', 'Horas No Médicas']) // no necesita visaciones
+        ->whereNull('total_paid')
+        ->get();
 
-    $topay_fulfillments = $topay_fulfillments1->merge($topay_fulfillments2);
+        $topay_fulfillments = $topay_fulfillments1->merge($topay_fulfillments2);
+    }
+
+    
     return view('service_requests.reports.to_pay', compact('topay_fulfillments', 'request'));
   }
 
@@ -230,54 +244,64 @@ class ReportController extends Controller
 
 
 
-  public function bankPaymentFile($establishment_id = NULL)
+  public function bankPaymentFile($establishment_id = NULL, $pay_type = NULL, $programm_name = NULL)
   {
+    $fulfillments = [];
+    
     $fulfillments1 = Fulfillment::whereHas("ServiceRequest", function ($subQuery) {
-      $subQuery->where('has_resolution_file', 1);
+        $subQuery->where('has_resolution_file', 1);
     })
-      ->when($establishment_id != null, function ($q) use ($establishment_id) {
+    ->when($establishment_id != null, function ($q) use ($establishment_id) {
         return $q->whereHas("ServiceRequest", function ($subQuery) use ($establishment_id) {
-          $subQuery->where('establishment_id', $establishment_id);
+            $subQuery->where('establishment_id', $establishment_id);
         });
-      })
-      // ->when($establishment_id === 0, function ($q) use ($establishment_id) {
-      //      return $q->whereHas("ServiceRequest", function($subQuery) use ($establishment_id) {
-      //                  $subQuery->whereNotIn('establishment_id',[1,2]);
-      //                });
-      //   })
-      ->where('has_invoice_file', 1)
-      ->whereNotNull('signatures_file_id')
-      ->where('payment_ready', 1)
-      ->whereNull('total_paid')
-      ->whereIn('type', ['Mensual', 'Parcial'])
-      ->where('responsable_approbation', 1)
-      ->where('rrhh_approbation', 1)
-      ->where('finances_approbation', 1)
-      ->get();
-
-    $fulfillments2 = Fulfillment::whereHas("ServiceRequest", function ($subQuery) {
-      $subQuery->where('has_resolution_file', 1);
     })
-      ->when($establishment_id != null, function ($q) use ($establishment_id) {
-        return $q->whereHas("ServiceRequest", function ($subQuery) use ($establishment_id) {
-          $subQuery->where('establishment_id', $establishment_id);
+    ->when($programm_name != null, function ($q) use ($programm_name) {
+        return $q->whereHas("ServiceRequest", function ($subQuery) use ($programm_name) {
+            $subQuery->where('programm_name', $programm_name);
         });
-      })
-      // ->when($establishment_id === 0, function ($q) use ($establishment_id) {
-      //      return $q->whereHas("ServiceRequest", function($subQuery) use ($establishment_id) {
-      //                  $subQuery->whereNotIn('establishment_id',[1,2]);
-      //                });
-      //   })
-      ->where('has_invoice_file', 1)
-      ->whereNotNull('signatures_file_id')
-      ->where('payment_ready', 1)
-      ->whereNull('total_paid')
-      ->whereNotIn('type', ['Mensual', 'Parcial'])
-      ->get();
+    })
+    ->where('has_invoice_file', 1)
+    ->whereNotNull('signatures_file_id')
+    ->where('payment_ready', 1)
+    ->whereNull('total_paid')
+//   ->whereIn('type', ['Mensual', 'Parcial'])
+    ->when($pay_type == "remanente", function ($q) {
+        return $q->where('type','Remanente'); // necesitan visacion
+    })
+    ->when($pay_type == "normal", function ($q) {
+        return $q->whereIn('type', ['Mensual', 'Parcial', 'Horas Médicas']); // necesitan visacion
+    })
+    ->where('responsable_approbation', 1)
+    ->where('rrhh_approbation', 1)
+    ->where('finances_approbation', 1)
+    ->get();                      
 
-    $fulfillments = $fulfillments1->merge($fulfillments2);
-
-    if ($fulfillments->count() == 0) {
+    if($pay_type != "remanente"){
+        $fulfillments2 = Fulfillment::whereHas("ServiceRequest", function ($subQuery) {
+            $subQuery->where('has_resolution_file', 1);
+        })
+        ->when($establishment_id != null, function ($q) use ($establishment_id) {
+            return $q->whereHas("ServiceRequest", function ($subQuery) use ($establishment_id) {
+            $subQuery->where('establishment_id', $establishment_id);
+            });
+        })
+        ->when($programm_name != null, function ($q) use ($programm_name) {
+            return $q->whereHas("ServiceRequest", function ($subQuery) use ($programm_name) {
+                $subQuery->where('programm_name', $programm_name);
+            });
+        })
+        ->where('has_invoice_file', 1)
+        ->whereNotNull('signatures_file_id')
+        ->where('payment_ready', 1)
+        ->whereNull('total_paid')
+        ->whereIn('type', ['Horas', 'Horas No Médicas']) // no necesita visaciones
+        ->get();
+    
+        $fulfillments = $fulfillments1->merge($fulfillments2);
+    }
+    
+    if (count($fulfillments)==0) {
       session()->flash('warning', "No existen solicitudes aptas para pago.");
       return redirect()->back();
     }
