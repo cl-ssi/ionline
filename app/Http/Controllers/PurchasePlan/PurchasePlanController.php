@@ -141,58 +141,75 @@ class PurchasePlanController extends Controller
 
         /* APROBACION CORRESPONDIENTE A JEFATURA DEPARTAMENTO O UNIDAD */
         $prev_approval = $purchasePlan->approvals()->create([
-            "module"                => "Plan de Compras",
-            "module_icon"           => "fas fa-shopping-cart",
-            "subject"               => 'Solicitud de Aprobacion Jefatura <br>'.
-                                        '<small><b>Asunto</b>: '.$purchasePlan->subject.'<br>'.
-                                        '<b>Subtitulo</b>: '.$purchasePlan->program.'</small>',
-            "sent_to_ou_id"        => $purchasePlan->organizational_unit_id,
-            "document_route_name"   => "purchase_plan.show_approval",
-            "document_route_params" => json_encode(["purchase_plan_id" => $purchasePlan->id])
+            "module"                        => "Plan de Compras",
+            "module_icon"                   => "fas fa-shopping-cart",
+            "subject"                       => 'Solicitud de Aprobacion Jefatura <br>'.
+                                                '<small><b>Asunto</b>: '.$purchasePlan->subject.'<br>'.
+                                                '<b>Subtitulo</b>: '.$purchasePlan->program.'</small>',
+            "sent_to_ou_id"                 => $purchasePlan->organizational_unit_id,
+            "document_route_name"           => "purchase_plan.show_approval",
+            "document_route_params"         => json_encode(["purchase_plan_id" => $purchasePlan->id]),
+            "active"                        => true,
+            "callback_controller_method"    => "App\Http\Controllers\PurchasePlan\PurchasePlanController@approvalCallback",
+            "callback_controller_params"    => json_encode([
+                'purchase_plan_id'  => $purchasePlan->id
+            ])
         ]);
     
         if(in_array($purchasePlan->organizationalUnit->establishment_id, explode(',', Parameter::get('establishment', 'EstablecimientosDispositivos')))){
             /* APROBACION CORRESPONDIENTE A JEFATURA DEPARTAMENTO SALUD MENTAL EN CASO DE SER GESTIONADO POR ESTABLECIMIENTOS Y DISPOSITIVOS */
             $prev_approval = $purchasePlan->approvals()->create([
-                "module"                => "Plan de Compras",
-                "module_icon"           => "fas fa-shopping-cart",
-                "subject"               => 'Solicitud de Aprobacion Jefatura Depto. Salud Mental<br>'.
-                                            '<small><b>Asunto</b>: '.$purchasePlan->subject.'<br>'.
-                                            '<b>Subtitulo</b>: '.$purchasePlan->program.'</small>',
-                "sent_to_ou_id"         => Parameter::get('ou', 'SaludMentalSSI'),
-                "document_route_name"   => "purchase_plan.show_approval",
-                "document_route_params" => json_encode(["purchase_plan_id" => $purchasePlan->id]),
-                "previous_approval_id"  => $prev_approval->id,
-                "active"                => false
+                "module"                        => "Plan de Compras",
+                "module_icon"                   => "fas fa-shopping-cart",
+                "subject"                       => 'Solicitud de Aprobacion Jefatura Depto. Salud Mental<br>'.
+                                                    '<small><b>Asunto</b>: '.$purchasePlan->subject.'<br>'.
+                                                    '<b>Subtitulo</b>: '.$purchasePlan->program.'</small>',
+                "sent_to_ou_id"                 => Parameter::get('ou', 'SaludMentalSSI'),
+                "document_route_name"           => "purchase_plan.show_approval",
+                "document_route_params"         => json_encode(["purchase_plan_id" => $purchasePlan->id]),
+                "previous_approval_id"          => $prev_approval->id,
+                "active"                        => false,
+                "callback_controller_method"    => "App\Http\Controllers\PurchasePlan\PurchasePlanController@approvalCallback",
+                "callback_controller_params"    => json_encode([
+                    'purchase_plan_id'  => $purchasePlan->id
+                ]),
             ]);
         }
 
         /* APROBACION CORRESPONDIENTE A ABASTECIMIENTO */
         $prev_approval = $purchasePlan->approvals()->create([
-            "module"                => "Plan de Compras",
-            "module_icon"           => "fas fa-shopping-cart",
-            "subject"               => 'Solicitud de Aprobacion Abastecimiento<br>'.
-                                        '<small><b>Asunto</b>: '.$purchasePlan->subject.'<br>'.
-                                        '<b>Subtitulo</b>: '.$purchasePlan->program.'</small>',
-            "sent_to_ou_id"         => Parameter::get('ou', 'AbastecimientoSSI'),
-            "document_route_name"   => "purchase_plan.show_approval",
-            "document_route_params" => json_encode(["purchase_plan_id" => $purchasePlan->id]),
-            "previous_approval_id"  => $prev_approval->id,
-            "active"                => false
+            "module"                        => "Plan de Compras",
+            "module_icon"                   => "fas fa-shopping-cart",
+            "subject"                       => 'Solicitud de Aprobacion Abastecimiento<br>'.
+                                                '<small><b>Asunto</b>: '.$purchasePlan->subject.'<br>'.
+                                                '<b>Subtitulo</b>: '.$purchasePlan->program.'</small>',
+            "sent_to_ou_id"                 => Parameter::get('ou', 'AbastecimientoSSI'),
+            "document_route_name"           => "purchase_plan.show_approval",
+            "document_route_params"         => json_encode(["purchase_plan_id" => $purchasePlan->id]),
+            "previous_approval_id"          => $prev_approval->id,
+            "active"                        => false,
+            "callback_controller_method"    => "App\Http\Controllers\PurchasePlan\PurchasePlanController@approvalCallback",
+            "callback_controller_params"    => json_encode([
+                'purchase_plan_id'  => $purchasePlan->id
+            ]),
         ]);
 
         /* APROBACION CORRESPONDIENTE A FINANZAS */
         $prev_approval = $purchasePlan->approvals()->create([
-            "module"                => "Plan de Compras",
-            "module_icon"           => "fas fa-shopping-cart",
-            "subject"               => 'Solicitud de Aprobacion Depto. Gestion Financiera<br>'.
-                                        '<small><b>Asunto</b>: '.$purchasePlan->subject.'<br>'.
-                                        '<b>Subtitulo</b>: '.$purchasePlan->program.'</small>',
-            "sent_to_ou_id"         => Parameter::get('ou', 'FinanzasSSI'),
-            "document_route_name"   => "purchase_plan.show_approval",
-            "document_route_params" => json_encode(["purchase_plan_id" => $purchasePlan->id]),
-            "previous_approval_id"  => $prev_approval->id,
-            "active"                => false
+            "module"                        => "Plan de Compras",
+            "module_icon"                   => "fas fa-shopping-cart",
+            "subject"                       => 'Solicitud de Aprobacion Depto. Gestion Financiera<br>'.
+                                                '<small><b>Asunto</b>: '.$purchasePlan->subject.'<br>'.
+                                                '<b>Subtitulo</b>: '.$purchasePlan->program.'</small>',
+            "sent_to_ou_id"                 => Parameter::get('ou', 'FinanzasSSI'),
+            "document_route_name"           => "purchase_plan.show_approval",
+            "document_route_params"         => json_encode(["purchase_plan_id" => $purchasePlan->id]),
+            "previous_approval_id"          => $prev_approval->id,
+            "active"                        => false,
+            "callback_controller_method"    => "App\Http\Controllers\PurchasePlan\PurchasePlanController@approvalCallback",
+            "callback_controller_params"    => json_encode([
+                'purchase_plan_id'  => $purchasePlan->id
+            ]),
         ]);
 
         /* APROBACION CORRESPONDIENTE A SDA */
