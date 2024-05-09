@@ -23,7 +23,7 @@ class CreateUsersTable extends Migration
             $table->string('email');
             $table->string('email_personal')->nullable();
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
+            $table->string('password')->nullable();
             $table->string('position')->nullable();
             $table->date('birthday')->nullable();
             $table->foreignId('organizational_unit_id')->nullable()->constrained('organizational_units');

@@ -52,8 +52,8 @@ class CreateSignaturesTable extends Migration
             $table->softDeletes();
         });
 
-        DB::statement("ALTER TABLE doc_signatures_files MODIFY COLUMN file MEDIUMBLOB");
-        DB::statement("ALTER TABLE doc_signatures_files MODIFY COLUMN signed_file MEDIUMBLOB");
+        // DB::statement("ALTER TABLE doc_signatures_files MODIFY COLUMN file MEDIUMBLOB");
+        // DB::statement("ALTER TABLE doc_signatures_files MODIFY COLUMN signed_file MEDIUMBLOB");
 
         Schema::create('doc_signatures_flows', function (Blueprint $table) {
             $table->id();
