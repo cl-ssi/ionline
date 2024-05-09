@@ -47,7 +47,7 @@
                         <i class="fa fa-user-plus" aria-hidden="true"></i> Mis solicitudes
                     </a>
 
-                    @canany(['welfare: benefits'])
+                    @if(auth()->user()->can('welfare: benefits') || auth()->user()->can('be god'))
 
                         <a class="dropdown-item" href="{{ route('welfare.benefits.benefits') }}">
                             <i class="fas fa-plus-square"></i> Mantenedor de beneficios
@@ -61,7 +61,7 @@
                             <i class="fa fa-users" aria-hidden="true"></i> Administrador de solicitudes
                         </a>
 
-                    @endcanany
+                    @endif
 
                 </div>
         </li>

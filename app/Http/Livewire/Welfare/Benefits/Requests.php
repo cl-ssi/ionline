@@ -9,7 +9,8 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\Welfare\Benefits\Benefit;
 use App\Models\Welfare\Benefits\Subsidy;
 use App\Models\Welfare\Benefits\Request;
-use App\Models\Welfare\Benefits\File;
+// use App\Models\Welfare\Benefits\File;
+use App\Models\File;
 use App\Models\Parameters\Bank;
 use App\Models\Rrhh\UserBankAccount;
 use App\Models\User;
@@ -205,7 +206,7 @@ class Requests extends Component
     public function showFile($requestId)
     {
         $file = File::find($requestId);
-        return Storage::disk('gcs')->response($file->file, mb_convert_encoding($file->name,'ASCII'));
+        return Storage::disk('gcs')->response($file->storage_path, mb_convert_encoding($file->name,'ASCII'));
     }
 
     public function render()
