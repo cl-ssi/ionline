@@ -158,21 +158,12 @@
     </div>
 
     <div class="alert alert-info" role="alert">
-        @livewire('documents.clean-html-form-document',['record' => $document])
-        <span>Este botón realizará los siguientes cambios en el formato de su documento:</span>
+        <strong><span class="text-danger"> <i class="bi bi-exclamation-circle"></i> Puede utilizar las nuevas opciones dentro del menú "Limpiar Documento" en el editor</span></strong>
         <ul>
-            <li>Todas las tablas del documento quedarán uniformes, del mismo ancho y forma.</li>
-            <li>Todos los textos quedarán con el mismo tamaño y tipo de letra (estandard del Servicio).</li>
-            <li>Se eliminarán los colores de fondo y de texto (se mantendrán las negritas).</li>
-            <li>Se eliminarán los saltos de página que se hayan agregado manualmente.</li>
-            <li>Se aplicará justificado automáticamente a todos los párrafos.</li>
-            <li>Se mantendrá en la "mayoría" de los casos el centrado.</li>
-            <li>Reducirá, dependiendo del documento, algunos saltos de líneas duplicados.</li>
-        </ul>
-        <span>Después de limpiar el formato, si su documento contiene lo siguiente:</span>
-        <ul>
-            <li>Textos centrados: Revisar que estén correctamente centrados.</li>
-            <li>Saltos de línea dentro de tablas: Revisar si es necesario agregar saltos de línea adicionales.</li>
+            <li>Limpiar espacios en blanco</li>
+            <li>Limpiar tamaño y tipo de letra: Todos los textos quedarán con el mismo tamaño y tipo de letra (estandard del Servicio).</li>
+            <li>Limpiar colores y fondos: Se eliminarán los colores de fondo y de texto (se mantendrán las negritas).</li>
+            <li>Limpiar tablas: Todas las tablas del documento quedarán uniformes, del mismo ancho y forma.</li>
         </ul>
     </div>
 
