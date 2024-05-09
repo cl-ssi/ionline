@@ -292,6 +292,10 @@
             </h5>
 
             <ul class="list-group">
+                <a href="https://docs.google.com/document/d/1UzWY4S5DXlgnYAhbtNhgGiYmP3R9UyxJ/edit?usp=sharing&ouid=100875180090664492720&rtpof=true&sd=true"
+                    class="list-group-item list-group-item-action small" target="_blank">
+                    Bienestar - Reserva de cabañas.
+                </a>
                 <a href="https://docs.google.com/document/d/13-mHAWRwlk4IdIzKVLIGycIF0v6WaG6Z/edit?usp=sharing&ouid=114284222513106267165&rtpof=true&sd=true"
                     class="list-group-item list-group-item-action small" target="_blank">
                     Creación de formularios de requerimiento.
