@@ -1,12 +1,12 @@
 @extends('layouts.bt4.app')
 
-@section('title', 'Crear Hotel')
+@section('title', 'Crear Recinto')
 
 @section('content')
 
 @include('welfare.nav')
 
-<h3>Nuevo Hotel</h3>
+<h3>Nuevo Recinto</h3>
 
 <form method="POST" action="{{ route('hotel_booking.hotels.store') }}" enctype="multipart/form-data">
 	@csrf
@@ -20,7 +20,7 @@
 
         <fieldset class="form-group col">
 		    <label for="for_name">Descripción</label>
-		    <input type="text" class="form-control" id="for_description" placeholder="Agregue una breve descripción del hotel" name="description" required="required">
+		    <input type="text" class="form-control" id="for_description" placeholder="Agregue una breve descripción del recinto" name="description" required="required">
 		</fieldset>
 
     </div>

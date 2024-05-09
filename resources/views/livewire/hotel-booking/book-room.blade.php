@@ -6,7 +6,7 @@
                 Reserva de Hospedaje
             </div>
             <div class="card-body">
-                @livewire('hotel-booking.calendar',['room' => $room, 'start_date' => $start_date, 'end_date' => $end_date])
+                {{--@livewire('hotel-booking.calendar',['room' => $room, 'start_date' => $start_date, 'end_date' => $end_date])--}}
 
                 <div class="form-row">
 
@@ -16,12 +16,12 @@
                     </fieldset>
 
                     <fieldset class="form-group col-2">
-                        <label for="for_start_date">Ingreso</label>
+                        <label for="for_start_date">Ingresando el</label>
                         <input type="date" class="form-control" value="{{$start_date}}" disabled>
                     </fieldset>
 
                     <fieldset class="form-group col-2">
-                        <label for="for_end_date">Salida</label>
+                        <label for="for_end_date">Saliendo el</label>
                         <input type="text" class="form-control" value="{{$end_date}}" disabled>
                     </fieldset>
 

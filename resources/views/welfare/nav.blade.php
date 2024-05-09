@@ -81,9 +81,9 @@
                         <i class="fa fa-list"></i> Mis reservas
                     </a>
 
-                    <div class="dropdown-divider"></div> <!-- Agregamos una línea divisora -->
-
                     @canany(['HotelBooking: Administrador'])
+
+                        <div class="dropdown-divider"></div> <!-- Agregamos una línea divisora -->
 
                         <a class="dropdown-item {{ active('hotel_booking.booking_admin') }}"
                             href="{{ route('hotel_booking.booking_admin') }}">
@@ -92,12 +92,12 @@
 
                         <a class="dropdown-item {{ active('hotel_booking.hotels.index') }}"
                             href="{{ route('hotel_booking.hotels.index') }}">
-                            <i class="fas fa-clipboard-check"></i> Hoteles
+                            <i class="fa fa-building"></i> Recintos
                         </a>
 
                         <a class="dropdown-item {{ active('hotel_booking.rooms.index') }}"
                             href="{{ route('hotel_booking.rooms.index') }}">
-                            <i class="fas fa-clipboard-check"></i> Hospedajes
+                            <i class="fa fa-bed"></i> Hospedajes
                         </a>
 
                         <a class="dropdown-item {{ active('hotel_booking.room_booking_configuration.index') }}"

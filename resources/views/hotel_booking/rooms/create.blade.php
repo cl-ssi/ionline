@@ -14,7 +14,7 @@
 	<div class="form-row">
 
         <fieldset class="form-group col-3">
-		    <label for="for_hotel_id">Hotel</label>
+		    <label for="for_hotel_id">Recinto</label>
 		    <select class="form-control" name="hotel_id" id="for_hotel_id">
                 @foreach($hotels as $hotel)
                     <option value="{{$hotel->id}}">{{$hotel->name}}</option>

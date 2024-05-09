@@ -8,7 +8,7 @@
 
 <div class="jumbotron mt-3">
     <h1 class="display-6">Módulo de Reserva de Cabañas </h1>
-    <p class="lead">En este módulo podrá realizar reservas de los espacios que tenemos para nuestros funcionarios. </p>
+    <p class="lead">En este módulo podrá realizar reservas de los espacios que tenemos para nuestros beneficiarios. </p>
 
     <form method="GET" class="form-horizontal" action="{{ route('hotel_booking.search_booking') }}">
         <div class="form-row">
@@ -33,12 +33,12 @@
             </fieldset> -->
 
             <fieldset class="form-group col-3">
-                <label for="for_hotel_id">Entrada</label>
+                <label for="for_hotel_id">Entrando el</label>
                 <input type="date" class="form-control" required name="start_date" @if($request->start_date) value="{{$request->start_date}}" @endif>
             </fieldset>
 
             <fieldset class="form-group col-3">
-                <label for="for_hotel_id">Salida</label>
+                <label for="for_hotel_id">Saliendo el</label>
                 <input type="date" class="form-control" required name="end_date" @if($request->end_date) value="{{$request->end_date}}" @endif>
             </fieldset>
 

@@ -36,7 +36,7 @@
 
                 <a class="dropdown-item {{ active('hotel_booking.hotels.index') }}"
                     href="{{ route('hotel_booking.hotels.index') }}">
-                    <i class="fas fa-clipboard-check"></i> Hoteles
+                    <i class="fas fa-clipboard-check"></i> Recintos
                 </a>
 
                 <a class="dropdown-item {{ active('hotel_booking.rooms.index') }}"

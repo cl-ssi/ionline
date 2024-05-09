@@ -1,12 +1,12 @@
 @extends('layouts.bt4.app')
 
-@section('title', 'Lista de Hoteles')
+@section('title', 'Lista de Recintos')
 
 @section('content')
 
 @include('welfare.nav')
 
-<h3 class="inline">Hoteles
+<h3 class="inline">Recintos
 	<a href="{{ route('hotel_booking.hotels.create') }}" class="btn btn-primary">Crear</a>
 </h3>
 

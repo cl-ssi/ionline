@@ -17,7 +17,7 @@
 	<thead>
 		<tr>
             <th>Id</th>
-            <th scope="col">Hotel</th>
+            <th scope="col">Recinto</th>
             <th scope="col">Tipo</th>
 			<th scope="col">Identificador</th>
             <th scope="col">Max.Días</th>
