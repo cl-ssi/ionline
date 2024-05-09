@@ -5,7 +5,7 @@
         menu: {
             custom: {
                 title: 'Limpiar documento',
-                items: 'cleanTableButton cleanTextButton cleanSpaceButton cleanParragraphButton'
+                items: 'cleanSpaceButton cleanTextButton cleanColorButton cleanTableButton'
             }
         },
         menubar: 'file edit views insert format tools table custom',
@@ -23,6 +23,7 @@
         promotion: false,
         license_key: 'gpl',
         setup: function(editor) {
+
             editor.ui.registry.addMenuItem('cleanTableButton', {
                 text: 'Limpiar tablas',
                 onAction: function(_) {
@@ -65,7 +66,7 @@
             });
 
             editor.ui.registry.addMenuItem('cleanTextButton', {
-                text: 'Limpiar letras',
+                text: 'Limpiar tamaño y tipo de letra',
                 onAction: function(_) {
                     var content = editor.getContent();
                     var container = document.createElement('div');
@@ -80,6 +81,34 @@
                         if (element.style.fontFamily) {
                             element.style.removeProperty('font-family');
                         }
+                        if (element.style.lineHeight) {
+                            element.style.removeProperty('line-height');
+                        }
+                        if (element.style.margin) {
+                            element.style.removeProperty('margin');
+                        }
+                    });
+
+                    var paragraphs = container.querySelectorAll('p');
+                    paragraphs.forEach(function(p) {
+                        // Verificar y conservar text-align: justify o center si están presentes
+                        const textAlign = p.style.textAlign === 'justify' ? 'justify' :
+                            (p.style.textAlign === 'center' ? 'center' : '');
+                        p.removeAttribute('style'); // Elimina todos los estilos
+                        if (textAlign) {
+                            p.style.textAlign =
+                            textAlign; // Reestablece justify o center si estaba aplicado
+                        }
+                    });
+
+                    // Extendiendo la funcionalidad para eliminar etiquetas vacías ahora también para 'p'
+                    var elements = container.querySelectorAll('span, div, em');
+                    elements.forEach(function(el) {
+                        // Eliminar la etiqueta si el contenido es solo espacio en blanco o &nbsp;
+                        var innerContent = el.innerHTML.replace(/&nbsp;/g, ' ').trim();
+                        if (!innerContent) {
+                            el.parentNode.removeChild(el);
+                        }
                     });
 
                     editor.setContent(container.innerHTML);
@@ -87,7 +116,7 @@
             });
 
             editor.ui.registry.addMenuItem('cleanSpaceButton', {
-                text: 'Limpiar espacios',
+                text: 'Limpiar espacios en blanco',
                 onAction: function(_) {
                     var content = editor.getContent({
                         format: 'raw'
@@ -98,21 +127,32 @@
                 }
             });
 
-            editor.ui.registry.addMenuItem('cleanParragraphButton', {
-                text: 'Limpiar párrafos',
+            editor.ui.registry.addMenuItem('cleanColorButton', {
+                text: 'Eliminar colores y fondos',
                 onAction: function(_) {
                     var content = editor.getContent();
                     var container = document.createElement('div');
                     container.innerHTML = content;
 
-                    var paragraphs = container.querySelectorAll('p');
-                    paragraphs.forEach(function(p) {
-                        // Conservar text-align: justify si está presente
-                        const textAlign = p.style.textAlign === 'justify' ? 'justify' :
-                            '';
-                        p.removeAttribute('style');
-                        if (textAlign) {
-                            p.style.textAlign = textAlign;
+                    var elements = container.querySelectorAll('span, p');
+                    elements.forEach(function(el) {
+                        // Eliminar los estilos de color y todos los estilos de fondo
+                        if (el.style.color) {
+                            el.style.removeProperty('color');
+                        }
+
+                        // Eliminar todas las propiedades de estilo que comienzan con 'background'
+                        Array.from(el.style).forEach(styleProp => {
+                            if (styleProp.startsWith('background')) {
+                                el.style.removeProperty(styleProp);
+                            }
+                        });
+
+                        // Si la etiqueta queda sin atributos, eliminarla completamente
+                        if (!el.getAttribute('style') || el.getAttribute('style') ===
+                            '') {
+                            el.outerHTML = el
+                                .innerHTML; // Elimina la etiqueta pero conserva su contenido
                         }
                     });
 
