@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use App\Models\Finance\Dte;
 use App\Models\Finance\PurchaseOrder\Prefix;
 use App\Models\Finance\PurchaseOrder;
+use App\Notifications\Finance\DteConfirmation;
 
 class DtesImport implements ToModel, WithStartRow, WithHeadingRow
 {
@@ -96,9 +97,34 @@ class DtesImport implements ToModel, WithStartRow, WithHeadingRow
                 if($purchase_order) {
                     $purchase_order->cenabast = 1;
                     $purchase_order->save();
+                    // if($purchase_order->requestForm)
+                    // {
+                    //     $requestForm = $purchase_order->requestForm;
+                    //     if($requestForm->contract_manager_id)
+                    //     {
+                    //         $array_variable['contract_manager_id'] = $requestForm->contract_manager_id;
+                    //         $array_variable['confirmation_sender_id'] = auth()->user()->id;
+                    //         $array_variable['confirmation_send_at'] = now();
+                    //         $this->sendDteNotification($this->dte, $requestForm);
+                    //     }
+                    // }
                 }
             }
         }
         return Dte::updateOrCreate($array_clave, $array_variable);
     }
+
+        /**
+     * Envía la notificación DteConfirmation
+     *
+     * @param Dte $dte
+     * @return void
+     */
+    private function sendDteNotification(Dte $dte, $requestForm)
+    {
+        $contract_manager = User::find($requestForm->contract_manager_id);
+        $contract_manager->notify(new DteConfirmation($dte));
+    }
+
+
 }
