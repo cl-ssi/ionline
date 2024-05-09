@@ -35,6 +35,7 @@
 			<td nowrap>{{ $room->identifier }}</td>
             <td nowrap>{{ $room->max_days_avaliable }}</td>
             <td>{{ $room->description }}</td>
+            <td nowrap>@if($room->status) Activo @else Desactivado @endif</td>
 			<td>
 				<a href="{{ route('hotel_booking.rooms.edit', $room) }}"
 					class="btn btn-sm btn-outline-secondary">

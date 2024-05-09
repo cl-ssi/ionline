@@ -27,6 +27,9 @@ class HotelBookingController extends Controller
                                 $q;
                             });
                         })
+                        ->whereHas("rooms", function($q) {
+                            $q->where('status', 1);
+                        })
                         ->with([
                             'rooms' => function ($query) {
                                 $query->with([
@@ -83,11 +86,9 @@ class HotelBookingController extends Controller
         
         // encuentra todas las configuraciones que tengan disponibilidad 
         $bookingConfigurations = RoomBookingConfiguration::where('end_date','>=',now())
-                                        // ->whereHas("room", function($q) use($commune_id){
-                                        //     $q->whereHas("hotel", function($q) use($commune_id){
-                                        //         $q->where('commune_id',$commune_id);
-                                        //     });
-                                        // })
+                                        ->whereHas("room", function($q) {
+                                            $q->where('status', 1);
+                                        })
                                         ->get();
 
         foreach($bookingConfigurations as $bookingConfiguration){

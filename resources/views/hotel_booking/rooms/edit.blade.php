@@ -65,6 +65,14 @@
 		    <input type="number" class="form-control" id="for_description" name="double_bed" value="{{$room->double_bed}}" required>
 		</fieldset>
 
+        <fieldset class="form-group col">
+		    <label for="for_status">Estado</label>
+		    <select class="form-control" name="status" id="for_status">
+                <option value="1" @selected($room->status == 1)>Activo</option>
+                <option value="0" @selected($room->status == 0)>Desactivado</option>
+            </select>
+		</fieldset>
+
     </div>
 
     @livewire('hotel-booking.add-services',['room' => $room])

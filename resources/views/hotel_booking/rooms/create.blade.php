@@ -64,6 +64,14 @@
 		    <input type="number" class="form-control" id="for_double_bed" name="double_bed">
 		</fieldset>
 
+        <fieldset class="form-group col">
+		    <label for="for_status">Estado</label>
+		    <select class="form-control" name="status" id="for_status">
+                <option value="1">Activo</option>
+                <option value="0">Desactivado</option>
+            </select>
+		</fieldset>
+
     </div>
 
 	<button type="submit" class="btn btn-primary">Crear</button>

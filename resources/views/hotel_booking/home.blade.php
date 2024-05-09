@@ -7,6 +7,11 @@
 @include('welfare.nav')
 
 <div class="jumbotron mt-3">
+
+    <div class="d-flex justify-content-end mb-3">
+        <a href="https://docs.google.com/document/d/1UzWY4S5DXlgnYAhbtNhgGiYmP3R9UyxJ/edit?usp=sharing&ouid=100875180090664492720&rtpof=true&sd=true" target="_blank" class="btn btn-info">Manual de Usuario</a>
+    </div>
+
     <h1 class="display-6">Módulo de Reserva de Cabañas </h1>
     <p class="lead">En este módulo podrá realizar reservas de los espacios que tenemos para nuestros beneficiarios. </p>
 
