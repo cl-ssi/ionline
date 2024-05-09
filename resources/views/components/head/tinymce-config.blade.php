@@ -42,8 +42,14 @@
                             'border-collapse: collapse; width: 100%;');
                         table.setAttribute('border', '1');
 
+                        // Eliminar atributos innecesarios de la tabla
+                        table.removeAttribute('width');
+                        table.removeAttribute('heigth');
+                        table.removeAttribute('cellspacing');
+                        table.removeAttribute('cellpadding');
+
                         // Procesar cada celda en la tabla
-                        var cells = table.querySelectorAll('td, th');
+                        var cells = table.querySelectorAll('tr, td, th');
                         cells.forEach(cell => {
                             // Conservar los atributos 'colspan' y 'rowspan'
                             const colspan = cell.getAttribute('colspan');
@@ -57,6 +63,20 @@
                             // Reestablecer 'colspan' y 'rowspan' si existían
                             if (colspan) cell.setAttribute('colspan', colspan);
                             if (rowspan) cell.setAttribute('rowspan', rowspan);
+
+                            // Buscar y reemplazar etiquetas <p> por <span> dentro de las celdas
+                            var paragraphs = cell.querySelectorAll('p');
+                            paragraphs.forEach(p => {
+                                var span = document.createElement(
+                                    'span');
+                                span.innerHTML = p
+                                .innerHTML; // Mover el contenido
+                                span.setAttribute('style', p
+                                    .getAttribute('style')
+                                    ); // Conservar el estilo
+                                p.parentNode.replaceChild(span,
+                                p); // Reemplazar <p> por <span>
+                            });
                         });
                     });
 
@@ -64,6 +84,8 @@
                     editor.setContent(container.innerHTML);
                 }
             });
+
+
 
             editor.ui.registry.addMenuItem('cleanTextButton', {
                 text: 'Limpiar tamaño y tipo de letra',
@@ -97,12 +119,12 @@
                         p.removeAttribute('style'); // Elimina todos los estilos
                         if (textAlign) {
                             p.style.textAlign =
-                            textAlign; // Reestablece justify o center si estaba aplicado
+                                textAlign; // Reestablece justify o center si estaba aplicado
                         }
                     });
 
                     // Extendiendo la funcionalidad para eliminar etiquetas vacías ahora también para 'p'
-                    var elements = container.querySelectorAll('span, div, em');
+                    var elements = container.querySelectorAll('span, div, em, strong');
                     elements.forEach(function(el) {
                         // Eliminar la etiqueta si el contenido es solo espacio en blanco o &nbsp;
                         var innerContent = el.innerHTML.replace(/&nbsp;/g, ' ').trim();
