@@ -171,9 +171,8 @@
                         @if($request->files->count() > 0)
                             @foreach($request->files as $file)
                                 <li>
-                                    <a href="#" wire:click="showFile({{ $file->id }})">
-                                        {{$file->name}}
-                                        <!-- <span class="fas fa-download" aria-hidden="true"></span> -->
+                                    <a href="{{ route('welfare.download', $file->id) }}" target="_blank">
+                                        <i class="fas fa-paperclip"></i> {{$file->name}}
                                     </a>
                                 </li>
                             @endforeach

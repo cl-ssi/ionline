@@ -17,6 +17,7 @@ class RequestsAdmin extends Component
     protected $rules = [
         'requests.*.status_update_observation' => 'required',
         'requests.*.accepted_amount' => 'required',
+        'requests.*.folio_number' => 'required',
         'requests.*.installments_number' => 'required',
     ];
 
@@ -42,6 +43,12 @@ class RequestsAdmin extends Component
         $this->requests[$key]->save();
         session()->flash('message', 'Se registró la observación.');
     }
+
+    public function saveFolio($key){
+        $this->requests[$key]->save();
+        session()->flash('message', 'Se registró el folio.');
+    }
+
 
     public function saveAcceptedAmount($key){
         $request = Request::find($this->requests[$key]->id);

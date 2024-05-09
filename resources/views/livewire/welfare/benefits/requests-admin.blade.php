@@ -40,17 +40,23 @@
                             <div class="input-group mb-3">
                                 <span class="input-group-text" id="">Observación</span>
                                 <input type="text" class="form-control" wire:model.defer="requests.{{$key}}.status_update_observation">
-                                <button wire:click="saveObservation({{ $key }})" class="btn btn-primary" type="button">
-                                    <i class="bi bi-floppy"></i>
-                                </button>
+                                <div wire:loading wire:target="saveObservation">
+                                    <i class="fas fa-spinner fa-spin"></i> Espere...
+                                </div>
+                                <div wire:loading.remove wire:target="saveObservation">
+                                    <button wire:click="saveObservation({{ $key }})" class="btn btn-primary" type="button">
+                                        <i class="bi bi-floppy"></i>
+                                    </button>
+                                </div >
                             </div>
                         @endif
                     </td>
                     <td>
                         @if($request->files->count() > 0)
                             @foreach($request->files as $file)
-                                <a href="#" wire:click="showFile({{ $file->id }})" >
-                                <span class="fas fa-download" aria-hidden="true"></span></a>
+                                <a href="{{ route('welfare.download', $file->id) }}" target="_blank">
+                                    <i class="fas fa-paperclip"></i>
+                                </a>
                             @endforeach
                         @endif
                     </td>
@@ -63,15 +69,36 @@
                                 {{$request->status}}
                             @endif
                             @if($request->status == "En revisión")
-                                <button class="btn btn-outline-success" wire:click="accept({{$request->id}})" type="button"><i class="fa fa-check" aria-hidden="true"></i></button>
-                                <button class="btn btn-outline-danger" wire:click="reject({{$request->id}})" type="button"><i class="fa fa-times" aria-hidden="true"></i></button>
+                                <div wire:loading wire:target="accept">
+                                    <i class="fas fa-spinner fa-spin"></i> Espere...
+                                </div>
+                                <div wire:loading.remove wire:target="accept">
+                                    <button class="btn btn-outline-success" wire:click="accept({{$request->id}})" type="button"><i class="fa fa-check" aria-hidden="true"></i></button>
+                                </div>
+                                <div wire:loading wire:target="reject">
+                                    <i class="fas fa-spinner fa-spin"></i> Espere...
+                                </div>
+                                <div wire:loading.remove wire:target="accept">
+                                    <button class="btn btn-outline-danger" wire:click="reject({{$request->id}})" type="button"><i class="fa fa-times" aria-hidden="true"></i></button>
+                                </div>
+                                
                             @endif
                             @if($request->status == "Aceptado")
                                 <button class="btn btn-success" type="button"><i class="fa fa-check" aria-hidden="true"></i></button>
-                                <button class="btn btn-outline-danger" wire:click="reject({{$request->id}})" type="button"><i class="fa fa-times" aria-hidden="true"></i></button>
+                                <div wire:loading wire:target="reject">
+                                    <i class="fas fa-spinner fa-spin"></i> Espere...
+                                </div>
+                                <div wire:loading.remove wire:target="reject">
+                                    <button class="btn btn-outline-danger" wire:click="reject({{$request->id}})" type="button"><i class="fa fa-times" aria-hidden="true"></i></button>
+                                </div>
                             @endif
                             @if($request->status == "Rechazado")
-                                <button class="btn btn-outline-success" wire:click="accept({{$request->id}})" type="button"><i class="fa fa-check" aria-hidden="true"></i></button>
+                                <div wire:loading wire:target="accept">
+                                    <i class="fas fa-spinner fa-spin"></i> Espere...
+                                </div>
+                                <div wire:loading.remove wire:target="accept">
+                                    <button class="btn btn-outline-success" wire:click="accept({{$request->id}})" type="button"><i class="fa fa-check" aria-hidden="true"></i></button>
+                                </div>
                                 <button class="btn btn-danger" type="button"><i class="fa fa-times" aria-hidden="true"></i></button>
                             @endif
                         </div>
@@ -79,15 +106,37 @@
                     <td class="text-end">
                         <div class="input-group mb-3">
                             <span class="input-group-text" id="">$</span>
-                            <input type="number" class="form-control" wire:model.defer="requests.{{$key}}.accepted_amount">
-                            <button wire:click="saveAcceptedAmount({{ $key }})" class="btn btn-primary" type="button" @disabled($request->status != "Aceptado")>
-                                <i class="bi bi-floppy"></i>
-                            </button>
+                            <input type="number" class="form-control" wire:model.defer="requests.{{$key}}.accepted_amount" @disabled($request->status != "Aceptado")>
+                            
+                            <div wire:loading wire:target="saveAcceptedAmount">
+                                <i class="fas fa-spinner fa-spin"></i> Espere...
+                            </div>
+                            <div wire:loading.remove wire:target="saveAcceptedAmount">
+                                <button wire:click="saveAcceptedAmount({{ $key }})" class="btn btn-primary" type="button" @disabled($request->status != "Aceptado")>
+                                    <i class="bi bi-floppy"></i>
+                                </button>
+                            </div>
+    
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="">Folio</span>
+                            <input type="text" class="form-control" wire:model.defer="requests.{{$key}}.folio_number" @disabled($request->status != "Aceptado")>
+                            
+                            <div wire:loading wire:target="saveFolio">
+                                <i class="fas fa-spinner fa-spin"></i> Espere...
+                            </div>
+                            <div wire:loading.remove wire:target="saveFolio">
+                                <button wire:click="saveFolio({{ $key }})" class="btn btn-primary" type="button" @disabled($request->status != "Aceptado")>
+                                    <i class="bi bi-floppy"></i>
+                                </button>
+                            </div>
+
+                            
                         </div>
                         @if($request->accepted_amount != null && $request->subsidy->payment_in_installments)
                             <div class="input-group mb-3">
                                 <span class="input-group-text" id="">N°Cuotas</span>
-                                <input type="number" class="form-control" wire:model.defer="requests.{{$key}}.installments_number">
+                                <input type="number" class="form-control" wire:model.defer="requests.{{$key}}.installments_number" @disabled($request->status != "Aceptado")>
                                 <button wire:click="saveInstallmentsNumber({{ $key }})" class="btn btn-primary" type="button" @disabled($request->status != "Aceptado")>
                                     <i class="bi bi-floppy"></i>
                                 </button>
@@ -106,9 +155,16 @@
                         @if($request->payed_date)
                             {{ $request->payed_date->format('Y-m-d')}} - <b>${{ money($request->payed_amount) }}
                         @else
-                            <button wire:click="saveTransfer({{$key}})" class="btn btn-success" type="button" @disabled($request->status == "Pagado")>
-                                <i class="bi bi-floppy"></i> Transferencia
+
+                            <div wire:loading wire:target="saveTransfer">
+                                <i class="fas fa-spinner fa-spin"></i> Espere...
+                            </div>
+                            <div wire:loading.remove wire:target="saveTransfer">
+                                <button wire:click="saveTransfer({{$key}})" class="btn btn-success" type="button" @disabled($request->status == "Pagado")>
+                                    <i class="bi bi-floppy"></i> Transferencia
                             </button>
+                            </div>
+
                         @endif
                     </td>
                 </tr>

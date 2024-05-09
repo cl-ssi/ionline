@@ -2658,7 +2658,7 @@ Route::prefix('welfare')->as('welfare.')->middleware(['auth', 'must.change.passw
     Route::get('/report', [WelfareController::class, 'report'])->name('report');
     Route::get('/export-balance', [WelfareController::class, 'exportBalance'])->name('exportBalance');
     Route::get('/welfare-users-import', WelfareUsersImport::class)->name('welfare-users-import');
-
+    Route::get('/download/{file}',  [WelfareController::class, 'download'])->name('download');
 
     Route::prefix('loans')->as('loans.')->group(function () {
         Route::get('/', [LoanController::class, 'index'])->name('index');

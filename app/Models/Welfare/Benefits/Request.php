@@ -30,7 +30,7 @@ class Request extends Model
      */
     protected $fillable = [
         'id', 'subsidy_id', 'applicant_id', 'requested_amount', 'status', 'installments_number', 'status_update_date', 'status_update_responsable_id', 'status_update_observation', 
-        'accepted_amount_date','accepted_amount_responsable_id','accepted_amount','payed_date','payed_responsable_id','payed_amount','created_at'
+        'accepted_amount_date','accepted_amount_responsable_id','accepted_amount','payed_date','payed_responsable_id','payed_amount','created_at','folio_number'
     ];
 
     /**

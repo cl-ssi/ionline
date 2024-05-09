@@ -9,6 +9,9 @@ use App\Exports\BalanceExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Carbon\Carbon;
 
+use Illuminate\Support\Facades\Storage;
+use App\Models\File;
+
 class WelfareController extends Controller
 {
     //
@@ -234,5 +237,14 @@ class WelfareController extends Controller
                 return $balance;
             });
         return Excel::download(new BalanceExport($ingresos, $gastos), 'balance.xlsx');
+    }
+
+    public function download(File $file)
+    {
+        if(Storage::disk('gcs')->exists($file->storage_path)){
+            return Storage::disk('gcs')->response($file->storage_path, mb_convert_encoding($file->name,'ASCII'));
+        }else{
+            return redirect()->back()->with('warning', 'El archivo no se ha encontrado.');
+        }  
     }
 }
