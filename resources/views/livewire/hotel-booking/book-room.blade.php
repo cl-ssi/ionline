@@ -10,9 +10,16 @@
 
                 <div class="form-row">
 
-                    <fieldset class="form-group col-2">
+                    <fieldset class="form-group col-3">
                         <label>Nombre</label>
-                        <input type="text" class="form-control" disabled value="{{auth()->user()->getTinnyNameAttribute()}}">
+                        @if(auth()->user()->can('be god') || auth()->user()->can('HotelBooking: Administrador'))
+                            @livewire('search-select-user', ['selected_id' => 'user_id', 
+                                                             'emit_name' => 'loadUserData',
+                                                             'required' => 'required'])
+                        @else
+                            <input type="hidden" wire:model="user_id">
+                            <input type="text" class="form-control" disabled value="{{auth()->user()->getTinnyNameAttribute()}}">
+                        @endif
                     </fieldset>
 
                     <fieldset class="form-group col-2">
@@ -25,7 +32,7 @@
                         <input type="text" class="form-control" value="{{$end_date}}" disabled>
                     </fieldset>
 
-                    <fieldset class="form-group col-4">
+                    <fieldset class="form-group col-3">
                         <label>Tipo de pago</label>
                         <select class="form-control" name="" id="payment_type_select" wire:model.defer="payment_type" required>
                             <option value=""></option>

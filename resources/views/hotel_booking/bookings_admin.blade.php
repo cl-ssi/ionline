@@ -14,12 +14,6 @@
 
 </form>
 
-@if($room)
-    @livewire('hotel-booking.calendar',['room' => $room])
-@endif
-
-<br>
-
 @if($roomBookings)
 <table class="table table-striped table-sm table-bordered">
 	<thead>
@@ -113,6 +107,15 @@
 
 {{$roomBookings->appends(Request::input())->links()}}
 
+@endif
+
+@if($room)
+
+    <hr><br>
+
+    <h3>Reservas confirmadas</h3>
+    
+    @livewire('hotel-booking.calendar',['room' => $room])
 @endif
 
 @endsection

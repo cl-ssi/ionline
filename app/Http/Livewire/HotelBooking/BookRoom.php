@@ -5,6 +5,7 @@ namespace App\Http\Livewire\HotelBooking;
 use Livewire\Component;
 use Carbon\Carbon;
 
+use App\Models\User;
 use App\Models\HotelBooking\Room;
 use App\Models\HotelBooking\RoomBooking;
 
@@ -17,6 +18,7 @@ class BookRoom extends Component
     public $start_date;
     public $end_date;
     public $payment_type;
+    public $user_id;
 
     public function show(){
         if($this->show){
@@ -26,13 +28,23 @@ class BookRoom extends Component
         }
     }
 
+    public function mount(){
+        $this->user_id = auth()->user()->id;
+    }
+
+    protected $listeners = ['loadUserData' => 'loadUserData'];
+
+    public function loadUserData(User $User){
+        $this->user_id = $User->id;
+    }
+
     public function confirm_reservation(){
         // Validar el campo de código de barra antes de redirigir a la URL
         $this->validate([
             'payment_type' => 'required'
         ]);
 
-        $roomBookingSeach = RoomBooking::where('user_id',auth()->user()->id)
+        $roomBookingSeach = RoomBooking::where('user_id',$this->user_id)
                                         ->where('room_id',$this->room->id)
                                         ->where('start_date',$this->start_date)
                                         ->where('end_date',$this->end_date)
@@ -43,7 +55,7 @@ class BookRoom extends Component
             session()->flash('info', 'Ya tienes una reserva para ese día.');
         }else{
             $roomBooking = new RoomBooking();
-            $roomBooking->user_id = auth()->user()->id;
+            $roomBooking->user_id = $this->user_id;
             $roomBooking->room_id = $this->room->id;
             $roomBooking->start_date = $this->start_date;
             $roomBooking->end_date = $this->end_date;

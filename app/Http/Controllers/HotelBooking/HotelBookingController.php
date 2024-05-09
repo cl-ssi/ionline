@@ -43,12 +43,27 @@ class HotelBookingController extends Controller
     }
 
     public function search_booking(Request $request){
+        
         // $commune_id = $request->commune_id;
         $start_date = Carbon::parse($request->start_date);
         $end_date = Carbon::parse($request->end_date);
-        // $guest_number = intval($request->guest_number);
         $diff = $start_date->diffInDays($end_date);
-        // dd($start_date, $end_date);
+
+        // se valida que no haya excedido el limite de reservas en el año
+        $user_id = auth()->user()->id;
+        $start_year = $start_date->year;
+
+        $count = RoomBooking::where('user_id', $user_id)
+                            ->whereYear('start_date', $start_year)
+                            ->count();
+
+        // Si el número de reservas del usuario en el año es menor o igual a 2, puedes proceder.
+        if(!(auth()->user()->can('be god') || auth()->user()->can('HotelBooking: Administrador'))){
+            if ($count >= 2) {
+                session()->flash('warning', 'Has excedido el límite de reservas para este año.');
+                return redirect()->back();
+            }
+        }
 
         $hotels = Hotel::all();
         $communes = ClCommune::all();
@@ -168,6 +183,12 @@ class HotelBookingController extends Controller
     }
 
     public function booking_confirmation(RoomBooking $roomBooking){
+        // verifica si tiene asociado archivos
+        if(count($roomBooking->files)==0){
+            session()->flash('warning', 'Para confirmar debe tener asociado un archivo.');
+            return redirect()->back();
+        }
+
         $roomBooking->status = "Confirmado";
         $roomBooking->save();
 
