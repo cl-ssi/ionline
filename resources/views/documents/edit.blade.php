@@ -158,10 +158,10 @@
     </div>
 
     <div class="alert alert-info" role="alert">
-        <strong><span class="text-danger"> <i class="bi bi-exclamation-circle"></i> Puede utilizar las nuevas opciones dentro del menú "Limpiar Documento" en el editor</span></strong>
+        <strong><i class="bi bi-exclamation-circle"></i> Puede utilizar las nuevas opciones dentro del menú "Limpiar Documento" en el editor</strong>
         <ul>
-            <li>Limpiar espacios en blanco</li>
-            <li>Limpiar tamaño y tipo de letra: Todos los textos quedarán con el mismo tamaño y tipo de letra (estandard del Servicio).</li>
+            <li>Limpiar espacios en blanco: Eliminará todos los espacios innecesarios y duplicados. </li>
+            <li>Limpiar tamaño y tipo de letra: Todos los textos quedarán con el mismo tamaño y tipo de letra (estándard del Servicio).</li>
             <li>Limpiar colores y fondos: Se eliminarán los colores de fondo y de texto (se mantendrán las negritas).</li>
             <li>Limpiar tablas: Todas las tablas del documento quedarán uniformes, del mismo ancho y forma.</li>
         </ul>
