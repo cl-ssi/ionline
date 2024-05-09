@@ -4,9 +4,11 @@ namespace App\Http\Livewire\Welfare\Benefits;
 
 use Livewire\Component;
 
+use Illuminate\Support\Facades\Storage;
 use App\Models\Welfare\Benefits\Request;
 // use App\Models\Welfare\Benefits\Transfer;
 use App\Notifications\Welfare\Benefits\RequestTransfer;
+use App\Models\File;
 
 class RequestsAdmin extends Component
 {
@@ -90,6 +92,12 @@ class RequestsAdmin extends Component
                 $request->applicant->notify(new RequestTransfer($request, $request->accepted_amount));
             } 
         }
+    }
+
+    public function showFile($requestId)
+    {
+        $file = File::find($requestId);
+        return Storage::disk('gcs')->response($file->storage_path, mb_convert_encoding($file->name,'ASCII'));
     }
 
     public function render()

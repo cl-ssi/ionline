@@ -49,7 +49,7 @@
                     <td>
                         @if($request->files->count() > 0)
                             @foreach($request->files as $file)
-                                <a href="#" wire:click="showFile({{ $file->id }})">
+                                <a href="#" wire:click="showFile({{ $file->id }})" >
                                 <span class="fas fa-download" aria-hidden="true"></span></a>
                             @endforeach
                         @endif
