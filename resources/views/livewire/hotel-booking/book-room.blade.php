@@ -12,7 +12,7 @@
 
                     <fieldset class="form-group col-3">
                         <label>Nombre</label>
-                        @if(auth()->user()->can('be god') || auth()->user()->can('HotelBooking: Administrador'))
+                        @if(auth()->user()->can('be god') || auth()->user()->can('welfare: hotel booking administrator'))
                             @livewire('search-select-user', ['selected_id' => 'user_id', 
                                                              'emit_name' => 'loadUserData',
                                                              'required' => 'required'])

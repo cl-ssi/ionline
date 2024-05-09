@@ -14,7 +14,7 @@
         </a>
     </li>
 
-    @canany(['HotelBooking: Administrador'])
+    @canany(['welfare: hotel booking administrator'])
 
         <li class="nav-item">
             <a class="nav-link {{ active('hotel_booking.booking_admin') }}"

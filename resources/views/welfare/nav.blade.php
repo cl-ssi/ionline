@@ -81,7 +81,7 @@
                         <i class="fa fa-list"></i> Mis reservas
                     </a>
 
-                    @canany(['HotelBooking: Administrador'])
+                    @canany(['welfare: hotel booking administrator'])
 
                         <div class="dropdown-divider"></div> <!-- Agregamos una línea divisora -->
 

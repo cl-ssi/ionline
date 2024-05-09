@@ -58,7 +58,7 @@ class HotelBookingController extends Controller
                             ->count();
 
         // Si el número de reservas del usuario en el año es menor o igual a 2, puedes proceder.
-        if(!(auth()->user()->can('be god') || auth()->user()->can('HotelBooking: Administrador'))){
+        if(!(auth()->user()->can('be god') || auth()->user()->can('welfare: hotel booking administrator'))){
             if ($count >= 2) {
                 session()->flash('warning', 'Has excedido el límite de reservas para este año.');
                 return redirect()->back();
