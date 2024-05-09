@@ -24,7 +24,7 @@
         license_key: 'gpl',
         setup: function(editor) {
             editor.ui.registry.addMenuItem('cleanTableButton', {
-                text: 'Limpiar Tablas',
+                text: 'Limpiar tablas',
                 onAction: function(_) {
                     // Obtener el contenido del editor
                     var content = editor.getContent();
@@ -63,6 +63,7 @@
                     editor.setContent(container.innerHTML);
                 }
             });
+
             editor.ui.registry.addMenuItem('cleanTextButton', {
                 text: 'Limpiar letras',
                 onAction: function(_) {
@@ -86,7 +87,7 @@
             });
 
             editor.ui.registry.addMenuItem('cleanSpaceButton', {
-                text: 'Eliminar Espacios',
+                text: 'Limpiar espacios',
                 onAction: function(_) {
                     var content = editor.getContent({
                         format: 'raw'
@@ -98,7 +99,7 @@
             });
 
             editor.ui.registry.addMenuItem('cleanParragraphButton', {
-                text: 'Limpiar Párrafos',
+                text: 'Limpiar párrafos',
                 onAction: function(_) {
                     var content = editor.getContent();
                     var container = document.createElement('div');
