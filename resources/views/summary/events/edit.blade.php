@@ -83,6 +83,7 @@
                     <input class="form-check-input" type="checkbox" name="start" id="for-start" value="1"
                     {{ $eventType->start ? 'checked' : '' }}>
                     <label class="form-check-label" for="for-start">
+                        <i class="fas fa-caret-right"></i>
                         Es el primer evento de un sumario
                     </label>
                 </div>
@@ -91,6 +92,7 @@
                     {{ $eventType->end ? 'checked' : '' }}>
                     <label class="form-check-label" for="for-end">
                         Es el último evento de un sumario
+                        <i class="fas fa-caret-left"></i>
                     </label>
                 </div>
                 <div class="form-check">

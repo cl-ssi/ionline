@@ -80,13 +80,14 @@
                 <div class="form-check">
                     <input class="form-check-input" type="checkbox" name="start" id="for-start" value="1">
                     <label class="form-check-label" for="for-start">
+                        <i class="fas fa-caret-right"></i>
                         Es el primer evento de un sumario
                     </label>
                 </div>
                 <div class="form-check">
                     <input class="form-check-input" type="checkbox" name="end" id="for-end" value="1">
                     <label class="form-check-label" for="for-end">
-                        Es el último evento de un sumario
+                        Es el último evento de un sumario <i class="fas fa-caret-left"></i>
                     </label>
                 </div>
                 <div class="form-check">
