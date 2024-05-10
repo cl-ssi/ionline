@@ -34,6 +34,7 @@ class PaymentController extends Controller
         $prov = $request->input('prov');
         $cart = $request->input('cart');
         $req = $request->input('req');
+        $rev = $request->input('rev');
         
 
         if ($id) {
@@ -111,6 +112,14 @@ class PaymentController extends Controller
                 $query->whereNull('excel_requerimiento');
             } else {
                 $query->where('excel_requerimiento', true);
+            }
+        }
+
+        if ($rev && $rev !== 'Todos') {
+            if ($rev === 'Sin') {
+                $query->where('check_tesoreria', 0);
+            } else {
+                $query->where('check_tesoreria', 1);
             }
         }
 
@@ -252,7 +261,7 @@ class PaymentController extends Controller
             ->where('payment_ready', 1)
             ->where('establishment_id', auth()->user()->organizationalUnit->establishment_id);
 
-            if ($request->filled('id') || $request->filled('emisor')  || $request->filled('folio') || $request->filled('folio_oc') || $request->filled('oc')  || $request->filled('prov') || $request->filled('cart') || $request->filled('req') ) {
+            if ($request->filled('id') || $request->filled('emisor')  || $request->filled('folio') || $request->filled('folio_oc') || $request->filled('oc')  || $request->filled('prov') || $request->filled('cart') || $request->filled('req') || $request->filled('rev') ) {
                 $query = $this->search($request, $query);
             }
 
@@ -317,7 +326,7 @@ class PaymentController extends Controller
             ->whereNull('rejected')
             ->where('all_receptions', 1)
             ->where('payment_ready', 1)
-            ->where('check_tesoreria', false)
+            //->where('check_tesoreria', false)
             ->where('establishment_id', auth()->user()->organizationalUnit->establishment_id);
 
             if ($request->filled('id') || $request->filled('emisor')  || $request->filled('folio') || $request->filled('oc')  || $request->filled('prov') || $request->filled('cart') || $request->filled('req') || $request->filled('folio_compromiso') || $request->filled('folio_devengo') || $request->filled('folio_pago')) {

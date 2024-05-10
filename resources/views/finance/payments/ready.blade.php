@@ -18,9 +18,9 @@
                 <label for="for-folio" class="form-label">Folio DTE</label> 
                 <input type="text" class="form-control" name="folio" placeholder="folio" value="{{ old('folio') }}" autocomplete="off">
             </div>
-            <div class="col-md-2">
+            <div class="col-md-1">
                 <label for="for-folio_oc" class="form-label">Folio OC</label>
-                <input type="text" class="form-control" name="folio_oc" placeholder="oc" value="{{ old('folio_oc') }}">
+                <input type="text" class="form-control" name="folio_oc" placeholder="oc" value="{{ old('folio_oc') }}" autocomplete="off">
             </div>
             <div class="col-md-1">
                 <label for="for-oc" class="form-label">OC</label>
@@ -60,6 +60,14 @@
                     <option value="Todos" {{ old('req') == 'Todos' ? 'selected' : '' }}>Todos</option>
                     <option value="Con" {{ old('req') == 'Con' ? 'selected' : '' }}>Con</option>
                     <option value="Sin" {{ old('req') == 'Sin' ? 'selected' : '' }}>Sin</option>
+                </select>
+            </div>
+            <div class="col-md-1">
+                <label for="for-req" class="form-label">Rev</label>
+                <select class="form-select" name="rev">
+                    <option value="Todos" {{ old('rev') == 'Todos' ? 'selected' : '' }}>Todos</option>
+                    <option value="Con" {{ old('rev') == 'Con' ? 'selected' : '' }}>Con</option>
+                    <option value="Sin" {{ old('rev') == 'Sin' ? 'selected' : '' }}>Sin</option>
                 </select>
             </div>
             <!-- <div class="col-md-2">
@@ -124,6 +132,7 @@
                 <th rowspan="2">SIGFE</th>
                 <th colspan="3">Cargas Excel</th>
                 <th rowspan="2">Observaciones</th>
+                <th rowspan="2">Rev.</th>
             </tr>
             <tr>
                 <th>Prov.</th>
@@ -217,6 +226,9 @@
                         </td>
                         <td>
                             @livewire('finance.dte-observations', ['dte' => $dte], key($dte->id))
+                        </td>
+                        <td>
+                            @livewire('finance.check-tesoreria', ['dte' => $dte], key($dte->id))
                         </td>
                     </tr>
 
