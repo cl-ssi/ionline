@@ -31,7 +31,7 @@
         <div class="form-group row mb-3">
             <label for="for-name" class="col-sm-2 col-form-label">Tipo Actor*</label>
             <div class="col-sm-10">
-                <select class="form-control" name="summary_actor_id" required>
+                <select class="form-select" name="summary_actor_id" required>
                     <option value=""></option>
                     @foreach($summaryActors as $actorId => $actorName)
                         <option value="{{ $actorId }}">{{ $actorName }}</option>
@@ -78,20 +78,6 @@
             <legend class="col-form-label col-sm-2 float-sm-left pt-0">Opciones</legend>
             <div class="col-sm-10">
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="require_user" id="for-require_user"
-                        value="1">
-                    <label class="form-check-label" for="for-require_user">
-                        Requiere asignar un usuario
-                    </label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="require_file" id="for-require_file"
-                        value="1">
-                    <label class="form-check-label" for="for-require_file">
-                        Requiere adjuntar uno o más archivos
-                    </label>
-                </div>
-                <div class="form-check">
                     <input class="form-check-input" type="checkbox" name="start" id="for-start" value="1">
                     <label class="form-check-label" for="for-start">
                         Es el primer evento de un sumario
@@ -104,8 +90,15 @@
                     </label>
                 </div>
                 <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="require_user" id="for-require_user"
+                    value="1">
+                    <label class="form-check-label" for="for-require_user">
+                        Requiere asignar un usuario
+                    </label>
+                </div>
+                <div class="form-check">
                     <input class="form-check-input" type="checkbox" name="investigator" id="for-investigator"
-                        value="1">
+                    value="1">
                     <label class="form-check-label" for="for-investigator">
                         Este evento asigna al fiscal del sumario
                     </label>
@@ -114,6 +107,13 @@
                     <input class="form-check-input" type="checkbox" name="actuary" id="for-actuary" value="1">
                     <label class="form-check-label" for="for-actuary">
                         Este evento asigna al actuario del sumario
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="require_file" id="for-require_file"
+                    value="1">
+                    <label class="form-check-label" for="for-require_file">
+                        Requiere adjuntar uno o más archivos
                     </label>
                 </div>
                 <div class="form-check">

@@ -18,7 +18,7 @@ class EventTypeController extends Controller
      */
     public function index()
     {
-        $summaryTypes = Type::all();
+        $summaryTypes = Type::where('establishment_id',auth()->user()->establishment_id)->get();
         return view('summary.events.index', compact('summaryTypes'));
     }
 
@@ -29,7 +29,7 @@ class EventTypeController extends Controller
      */
     public function create()
     {
-        $summaryTypes = Type::pluck('name','id');
+        $summaryTypes = Type::where('establishment_id',auth()->user()->establishment_id)->pluck('name','id');
         $summaryActors = Actor::pluck('name','id');
 
         return view('summary.events.create', compact('summaryTypes', 'summaryActors'));
