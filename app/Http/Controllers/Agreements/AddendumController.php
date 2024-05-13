@@ -270,7 +270,7 @@ class AddendumController extends Controller
         $document = new Document();
         $document->addendum_id = $addendum->id;
         $document->type_id = Type::where('name','Convenio')->first()->id;
-        $document->antecedent = 'Convenio Rex. '. $addendum->agreement->res_exempt_number . ' ' . $addendum->agreement->res_exempt_date;
+        $document->antecedent = 'Convenio Rex. '. $addendum->agreement->res_exempt_number . ' del ' . $addendum->agreement->res_exempt_date;
         $document->subject = 'Adendum de convenio '.$programa.' comuna de '.$addendum->agreement->commune->name;
         $document->distribution = "\nvalentina.ortega@redsalud.gob.cl\naps.ssi@redsalud.gob.cl\nromina.garin@redsalud.gob.cl\njuridica.ssi@redsalud.gob.cl\no.partes2@redsalud.gob.cl\nblanca.galaz@redsalud.gob.cl";
         $document->content = '
@@ -297,31 +297,31 @@ class AddendumController extends Controller
             <td><span style="text-align: justify;">Componente </span></td>
             <td><span style="text-align: justify;">Objetivo</span></td>
             <td><span style="text-align: justify;">Estrategia</span></td>
-            <td><span style="text-align: justify;">Monto</span></td>
+            <td style="text-align: right;"><span style="text-align: justify;">Monto</span></td>
             </tr>
             <tr>
             <td><span style="text-align: justify;">Componente 1</span></td>
             <td><span style="text-align: justify;">XXX</span></td>
             <td>XXX</td>
-            <td>$ XXX.XXX</td>
+            <td style="text-align: right;">$ XXX.XXX</td>
             </tr>
             <tr>
             <td>Componente 2</td>
             <td><span style="text-align: justify;">XXX</span></td>
             <td><span style="text-align: justify;">XXX</span></td>
-            <td>$ XXX.XXX</td>
+            <td style="text-align: right;">$ XXX.XXX</td>
             </tr>
             <tr>
             <td></td>
             <td><span style="text-align: justify;"></span></td>
             <td><span style="text-align: justify;"></span></td>
-            <td></td>
+            <td style="text-align: right;"></td>
             </tr>
             <tr>
             <td>Total</td>
             <td>&nbsp;</td>
             <td>&nbsp;</td>
-            <td>$ X.XXX.XXX</td>
+            <td style="text-align: right;">$ X.XXX.XXX</td>
             </tr>
             </tbody>
             </table>
@@ -339,13 +339,13 @@ class AddendumController extends Controller
             <td><span style="text-align: justify;">Componente </span></td>
             <td><span style="text-align: justify;">Objetivo</span></td>
             <td><span style="text-align: justify;">Estrategia</span></td>
-            <td><span style="text-align: justify;">Monto</span></td>
+            <td style="text-align: right;">Monto</td>
             </tr>
             <tr>
             <td><span style="text-align: justify;">Componente 1</span></td>
             <td><span style="text-align: justify;">XXXXXXXXXXX</span></td>
             <td><span style="text-align: justify;">XXXXXXXXXXXXXXXXXXX</span></td>
-            <td>$XXXXXXXXXXXXXXXXXX</td>
+            <td style="text-align: right;">$ XXX.XXX.XXX</td>
             </tr>
             <tr>
             <td>&nbsp;</td>
