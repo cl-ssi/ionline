@@ -164,7 +164,7 @@ class Agreement extends Model
      *
      * @var array
      */
-    protected $dates = ['deleted_at'];
+    protected $dates = ['deleted_at', 'date', 'res_exempt_date'];//'res_exempt_date'];
 
     protected $table = 'agr_agreements';
 }

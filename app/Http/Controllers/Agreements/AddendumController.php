@@ -233,45 +233,11 @@ class AddendumController extends Controller
 
     public function createDocument(Addendum $addendum) 
     {
-        /** Variables del addendum */
-        $municipality   = Municipality::where('commune_id', $addendum->agreement->commune->id)->first();
-        // // $addendum->director_signer = Signer::with('user')->find($request->signer_id);
-        $totalConvenio = $addendum->agreement->agreement_amounts->sum('amount');
-        $formatter = new NumeroALetras;
-        $formatter->apocope = true;
-        $totalConvenioLetras = $this->correctAmountText($formatter->toMoney($totalConvenio,0, 'pesos',''));
-        $first_word = explode(' ',trim($addendum->agreement->program->name))[0];
-        $programa = $first_word == 'Programa' ? substr(strstr($addendum->agreement->program->name," "), 1) : $addendum->agreement->program->name;
-        if($addendum->agreement->period >= 2022) $programa = mb_strtoupper($programa);
-        $ilustre = !Str::contains($municipality->name_municipality, 'ALTO HOSPICIO') ? 'ILUSTRE': null;
-        $municipalidad = $municipality->name_municipality;
-        $fechaAddendum = $this->formatDate($addendum->date);
-        $fechaConvenio = $this->formatDate($addendum->agreement->date);
-        $fechaResolucionConvenio = $this->formatDate($addendum->agreement->res_exempt_date);
-        $directorApelativo = $addendum->director_signer->appellative;
-        $directorRut = $addendum->director_signer->user->runFormat;
-        if(!Str::contains($directorApelativo,'(S)')) $directorApelativo .= ' Titular';
-        //construir nombre director
-        $first_name = explode(' ',trim($addendum->director_signer->user->name))[0];
-        $director = mb_strtoupper($addendum->director_signer->user->fullName);
-        $directorNationality = Str::contains($addendum->director_signer->appellative, 'a') ? 'chilena' : 'chileno';
-
-        $alcaldeNationality = Str::endsWith($addendum->representative_appellative, 'a') ? 'chilena' : 'chileno';
-        $alcaldeApelativo = $addendum->representative_appellative;
-        $alcaldeApelativoCorto = Str::beforeLast($alcaldeApelativo, ' ');
-        if(Str::contains($alcaldeApelativo, 'Subrogante')){
-            $alcaldeApelativoFirma = Str::before($alcaldeApelativo, 'Subrogante') . '(S)';
-        }else{
-            $alcaldeApelativoFirma = explode(' ',trim($alcaldeApelativo))[0]; // Alcalde(sa)
-        }
-
-        // dd($ilustre);
-
         $document = new Document();
         $document->addendum_id = $addendum->id;
         $document->type_id = Type::where('name','Convenio')->first()->id;
         $document->antecedent = 'Convenio Rex. '. $addendum->agreement->res_exempt_number . ' del ' . $addendum->agreement->res_exempt_date;
-        $document->subject = 'Adendum de convenio '.$programa.' comuna de '.$addendum->agreement->commune->name;
+        $document->subject = 'Adendum de convenio '.$addendum->agreement->program->name.' comuna de '.$addendum->agreement->commune->name;
         $document->distribution = "\nvalentina.ortega@redsalud.gob.cl\naps.ssi@redsalud.gob.cl\nromina.garin@redsalud.gob.cl\njuridica.ssi@redsalud.gob.cl\no.partes2@redsalud.gob.cl\nblanca.galaz@redsalud.gob.cl";
         $document->content = '
             <p style="text-align: center;"><strong>ADDENDUM DE CONVENIO</strong></p>
@@ -279,7 +245,7 @@ class AddendumController extends Controller
             <p style="text-align: center;"><strong>ENTRE EL SERVICIO DE SALUD TARAPAC&Aacute; Y LA <span style="background-color: yellow;">${ilustreTitulo}</span> <span style="background-color: yellow;">${municipalidad}</span></strong></p>
             <p style="text-align: center;">&nbsp;</p>
 
-            <p style="text-align: justify;">En Iquique a&nbsp;<strong><span style="background-color: yellow;">${fechaAddendum}</span></strong>, entre el SERVICIO DE SALUD TARAPAC&Aacute;, persona jur&iacute;dica de derecho p&uacute;blico, RUT 61.606.100-3, con domicilio en calle An&iacute;bal Pinto N&ordm; 815 de la ciudad de Iquique, representado por su <strong><span style="background-color: yellow;">${directorApelativo}</span> <span style="background-color: yellow;">${director}</span></strong>, <span style="background-color: yellow;"><strong>${directorNationality}</strong></span>, C&eacute;dula Nacional de Identidad N&deg; <strong><span style="background-color: yellow;">${directorRut}</span></strong>, del mismo domicilio del servicio p&uacute;blico que representa, en adelante el &ldquo;SERVICIO&rdquo;, por una parte; y por la otra, la <span style="background-color: yellow;"><strong>${ilustreTitulo}</strong> <strong>${municipalidad}</strong></span>, persona jur&iacute;dica de derecho p&uacute;blico, RUT <span style="background-color: yellow;"><strong>${comunaRut}</strong></span>, representada por su <span style="background-color: yellow;"><strong>${alcaldeApelativo}</strong> <strong>${alcalde}</strong></span>, chileno, C&eacute;dula Nacional de Identidad N&deg; <span style="background-color: yellow;"><strong>${alcaldeRut}</strong></span> ambos domiciliados en <span style="background-color: yellow;"><strong>${municipalidadDirec}</strong></span> de la comuna de <span style="background-color: yellow;"><strong>${comuna}</strong></span>, en adelante la &ldquo;MUNICIPALIDAD&rdquo;, se ha acordado celebrar un adendum de convenio, que consta de las siguientes cl&aacute;usulas:</p>
+            <p style="text-align: justify;">En Iquique a&nbsp;<strong><span style="background-color: yellow;">${fechaAddendum}</span></strong>, entre el SERVICIO DE SALUD TARAPAC&Aacute;, persona jur&iacute;dica de derecho p&uacute;blico, RUT 61.606.100-3, con domicilio en calle An&iacute;bal Pinto N&ordm; 815 de la ciudad de Iquique, representado por su <strong><span style="background-color: yellow;">${directorApelativo}</span> <span style="background-color: yellow;">${director}</span></strong>, <span style="background-color: yellow;"><strong>${directorNationality}</strong></span>, C&eacute;dula Nacional de Identidad N&deg; <strong><span style="background-color: yellow;">${directorRut}</span></strong>, del mismo domicilio del servicio p&uacute;blico que representa, en adelante el &ldquo;SERVICIO&rdquo;, por una parte; y por la otra, la <span style="background-color: yellow;"><strong>${ilustreTitulo}</strong> <strong>${municipalidad}</strong></span>, persona jur&iacute;dica de derecho p&uacute;blico, RUT <span style="background-color: yellow;"><strong>${comunaRut}</strong></span>, representada por su <span style="background-color: yellow;"><strong>${alcaldeApelativo}</strong> <strong>${alcalde}</strong></span>, ${alcaldeNationality}, C&eacute;dula Nacional de Identidad N&deg; <span style="background-color: yellow;"><strong>${alcaldeRut}</strong></span> ambos domiciliados en <span style="background-color: yellow;"><strong>${municipalidadDirec}</strong></span> de la comuna de <span style="background-color: yellow;"><strong>${comuna}</strong></span>, en adelante la &ldquo;MUNICIPALIDAD&rdquo;, se ha acordado celebrar un adendum de convenio, que consta de las siguientes cl&aacute;usulas:</p>
 
             <p style="text-align: justify;"><strong><u>PRIMERA</u>:</strong> Con fecha <span style="background-color: yellow;"><strong>${fechaConvenio}</strong></span>, las partes comparecientes firmaron el &ldquo;CONVENIO DEL PROGRAMA <span style="background-color: yellow;"><strong>${programaTitulo}</strong></span> A&Ntilde;O <span style="background-color: yellow;"><strong>${periodoConvenio}</strong></span>&rdquo; entre el SERVICIO DE SALUD TARAPAC&Aacute; y la <span style="background-color: yellow;"><strong>${ilustreTitulo}</strong> <strong>${municipalidad}</strong></span> aprobado por Resoluci&oacute;n Exenta N&deg; <span style="background-color: yellow;"><strong>${numResolucionConvenio}</strong></span> del <span style="background-color: yellow;"><strong>${fechaResolucionConvenio}</strong></span> del Servicio de Salud de Tarapac&aacute;.</p>
             <p style="text-align: justify;"><strong><u>SEGUNDA</u></strong><strong>: </strong>Por este acto e instrumento las partes comparecientes, de com&uacute;n acuerdo, vienen en modificar las siguientes cl&aacute;usulas del convenio ya individualizado quedando del siguiente tenor:</p>
@@ -382,29 +348,29 @@ class AddendumController extends Controller
             <p style="text-align: center;"><span style="background-color: yellow;"><strong>${ilustreTitulo} ${municipalidad}</strong></span></p>';
 
 
-
         // Buscar y reemplazar en $document->content las variables ${...} por los valores correspondientes
-        $document->content = str_replace('${programaTitulo}', $programa, $document->content);
+        $document->content = str_replace('${programaTitulo}', mb_strtoupper(preg_replace('/^Programa /','',trim($addendum->agreement->program->name))), $document->content);
+        $document->content = str_replace('${fechaAddendum}', $addendum->date->day . ' de ' . $addendum->date->monthName . ' de ' . $addendum->date->year, $document->content);
+        $document->content = str_replace('${fechaConvenio}', $addendum->agreement->date->day . ' de ' . $addendum->agreement->date->monthName . ' de ' . $addendum->agreement->date->year, $document->content);
+        $document->content = str_replace('${fechaResolucionConvenio}', $addendum->agreement->res_exempt_date->day . ' de ' . $addendum->agreement->res_exempt_date->monthName . ' de ' . $addendum->agreement->res_exempt_date->year, $document->content);
         $document->content = str_replace('${periodoConvenio}', $addendum->agreement->period, $document->content);
-        $document->content = str_replace('${ilustreTitulo}', $ilustre, $document->content);
-        $document->content = str_replace('${municipalidad}', $municipalidad, $document->content);
-        $document->content = str_replace('${fechaAddendum}', $this->formatDate($addendum->date), $document->content);
-        $document->content = str_replace('${directorApelativo}', $addendum->director_signer->appellative, $document->content);
+        $document->content = str_replace('${numResolucionConvenio}', $addendum->agreement->res_exempt_number, $document->content);
         $document->content = str_replace('${director}', mb_strtoupper($addendum->director_signer->user->fullName), $document->content);
-        $document->content = str_replace('${directorNationality}', Str::contains($addendum->director_signer->appellative, 'a') ? 'chilena' : 'chileno', $document->content);
         $document->content = str_replace('${directorRut}', $addendum->director_signer->user->runFormat, $document->content);
-        $document->content = str_replace('${alcaldeApelativo}', $addendum->representative_appelative, $document->content);
+        $document->content = str_replace('${directorApelativo}', $addendum->director_signer->appellative, $document->content);
+        $document->content = str_replace('${directorNationality}', Str::contains($addendum->director_signer->appellative, 'a') ? 'chilena' : 'chileno', $document->content);
+        $document->content = str_replace('${directorDecreto}', $addendum->director_signer->decree, $document->content);
+        $document->content = str_replace('${ilustreTitulo}', !Str::contains($addendum->agreement->commune->municipality->name_municipality, 'ALTO HOSPICIO') ? 'ILUSTRE': null, $document->content);
+        $document->content = str_replace('${municipalidad}', $addendum->agreement->commune->municipality->name_municipality, $document->content);
         $document->content = str_replace('${alcalde}', $addendum->representative, $document->content);
         $document->content = str_replace('${alcaldeRut}', $addendum->representative_rut, $document->content);
-        $document->content = str_replace('${alcaldeApelativoFirma}', $alcaldeApelativoFirma, $document->content);
-        $document->content = str_replace('${comuna}', $addendum->agreement->commune->name, $document->content);
-        $document->content = str_replace('${comunaRut}', $municipality->rut_municipality, $document->content);
-        $document->content = str_replace('${municipalidadDirec}', $municipality->address, $document->content);
-        $document->content = str_replace('${fechaConvenio}', $this->formatDate($addendum->agreement->date), $document->content);
-        $document->content = str_replace('${numResolucionConvenio}', $addendum->agreement->res_exempt_number, $document->content);
-        $document->content = str_replace('${fechaResolucionConvenio}', $this->formatDate($addendum->agreement->res_exempt_date), $document->content);
-        $document->content = str_replace('${directorDecreto}', $addendum->director_signer->decree, $document->content);
         $document->content = str_replace('${alcaldeDecreto}', $addendum->representative_decree, $document->content);
+        $document->content = str_replace('${alcaldeNationality}', Str::endsWith($addendum->representative_appellative, 'a') ? 'chilena' : 'chileno', $document->content);
+        $document->content = str_replace('${alcaldeApelativo}', $addendum->representative_appellative, $document->content);
+        $document->content = str_replace('${alcaldeApelativoFirma}', Str::beforeLast($addendum->representative_appellative, ' ') . (Str::contains($addendum->representative_appellative, 'Subrogante') ? '(S)' : ''), $document->content);
+        $document->content = str_replace('${municipalidadDirec}', $addendum->agreement->commune->municipality->address, $document->content);
+        $document->content = str_replace('${comuna}', $addendum->agreement->commune->name, $document->content);
+        $document->content = str_replace('${comunaRut}', $addendum->agreement->commune->municipality->rut_municipality, $document->content);
 
 
         $types = Type::whereNull('partes_exclusive')->pluck('name','id');
@@ -417,11 +383,5 @@ class AddendumController extends Controller
         // verificamos si antes de cerrar en pesos la ultima palabra termina en Millón o Millones, de ser así se agregar "de" antes de cerrar con pesos
         $words_amount = explode(' ',trim($amount_text));
         return ($words_amount[count($words_amount) - 2] == 'Millon' || $words_amount[count($words_amount) - 2] == 'Millones') ? substr_replace($amount_text, 'de ', (strlen($amount_text) - 5), 0) : $amount_text;
-    }
-
-    public function formatDate($date)
-    {
-        $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
-        return date('j', strtotime($date)).' de '.$meses[date('n', strtotime($date))-1].' del año '.date('Y', strtotime($date));
     }
 }
