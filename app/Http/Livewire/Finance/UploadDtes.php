@@ -7,6 +7,7 @@ use Livewire\WithFileUploads;
 use Livewire\Component;
 use App\Imports\DtesImport;
 
+
 class UploadDtes extends Component
 {
     use WithFileUploads;
@@ -23,7 +24,7 @@ class UploadDtes extends Component
         ]);
 
         // dd($this->dtes->path());
-        Excel::import(new DtesImport, $this->dtes->path(), 'gcs');
+        Excel::import(new DtesImport, $this->dtes->path());
 
         session()->flash('message', 'Archivo con dtes cargado exitosamente.');
     }
