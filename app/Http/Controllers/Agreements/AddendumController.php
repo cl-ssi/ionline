@@ -268,6 +268,7 @@ class AddendumController extends Controller
         // dd($ilustre);
 
         $document = new Document();
+        $document->addendum_id = $addendum->id;
         $document->type_id = Type::where('name','Convenio')->first()->id;
         $document->antecedent = 'Convenio Rex. '. $addendum->agreement->res_exempt_number . ' ' . $addendum->agreement->res_exempt_date;
         $document->subject = 'Adendum de convenio '.$programa.' comuna de '.$addendum->agreement->commune->name;

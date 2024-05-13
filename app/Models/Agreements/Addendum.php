@@ -74,7 +74,7 @@ class Addendum extends Model
      * @var array
      */
     protected $fillable = [
-        'date', 'file', 'res_number', 'res_date', 'res_file', 'agreement_id', 'file_to_endorse_id', 'file_to_sign_id', 'referrer_id', 'director_signer_id', 'representative', 'representative_rut', 'representative_appellative', 'representative_decree'
+        'date', 'file', 'res_number', 'res_date', 'res_file', 'agreement_id', 'file_to_endorse_id', 'file_to_sign_id', 'referrer_id', 'director_signer_id', 'representative', 'representative_rut', 'representative_appellative', 'representative_decree', 'document_id'
     ];
 
     /**
