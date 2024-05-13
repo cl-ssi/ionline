@@ -578,9 +578,17 @@
                             <button class="btn btn-sm btn-outline-secondary" data-toggle="modal" data-target="#editModalAddendum-{{$addendum->id}}">
                             <i class="fas fa-edit"></i></button>
                             @include('agreements/agreements/modal_edit_addendum')
-                            <a class="btn btn-sm btn-outline-secondary" href="#" data-toggle="tooltip" data-placement="top" title="Descargar borrador Addendum"
-                                onclick="event.preventDefault(); document.getElementById('submit-form-addendum-{{$addendum->id}}').submit();"><i class="fas fa-file-download"></i></a>
-                            <form id="submit-form-addendum-{{$addendum->id}}" action="{{ route('agreements.addendum.createWord'.($agreement->program_id == 3 ? 'Withdrawal' : ''), [$addendum, 'addendum']) }}" method="POST" hidden>@csrf</form>
+                            
+                            {{-- <a class="btn btn-sm btn-outline-secondary" href="#" data-toggle="tooltip" data-placement="top" title="Descargar borrador Addendum"
+                                onclick="event.preventDefault(); document.getElementById('submit-form-addendum-{{$addendum->id}}').submit();"><i class="fas fa-file-download"></i></a> --}}
+                            {{-- <form id="submit-form-addendum-{{$addendum->id}}" action="{{ route('agreements.addendum.createWord'.($agreement->program_id == 3 ? 'Withdrawal' : ''), [$addendum, 'addendum']) }}" method="POST" hidden>@csrf</form> --}}
+                                
+                                <a href="#" class="btn btn-sm btn-outline-secondary" data-toggle="modal"
+                                    data-target="#selectEvalOption" data-formmethod="POST"
+                                    data-formaction="{{ route('agreements.addendum.createDocument', $addendum )}}">
+                                    <i class="fas fa-fw fa-file-download"></i></a>
+                                </a>
+    
                             @if($addendum->file != null)
                             <a class="btn btn-sm btn-outline-secondary" href="{{ route('agreements.addendum.preview', $addendum) }}" target="blank" data-toggle="tooltip" data-placement="top" title="Previsualizar Addendum"><i class="fas fa-eye"></i></a>
                             @endif
