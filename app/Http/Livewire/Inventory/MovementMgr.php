@@ -33,6 +33,7 @@ class MovementMgr extends Component
                 [
                     'user_responsible_id' => $this->inventoryMovement->user_responsible_id,
                     'user_using_id' => $this->inventoryMovement->user_using_id,
+                    'place_id' => $this->inventoryMovement->place_id,
                     //'user_sender_id' => $this->inventoryMovement->user_sender_id
                 ]
             );
