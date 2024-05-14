@@ -218,7 +218,7 @@ class Requests extends Component
 
     public function render()
     {
-        $this->requests = Request::with('subsidy')->where('applicant_id',auth()->user()->id)->get();
+        $this->requests = Request::with('subsidy')->where('applicant_id',auth()->user()->id)->orderByDesc('id')->get();
         return view('livewire.welfare.benefits.requests');
     }
 }
