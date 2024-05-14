@@ -27,6 +27,7 @@ class SyncWelfareUsersCommand extends Command
     public function handle()
     {
         $welfareUsers = WelfareUser::all();
+        $count = 0;
 
         foreach ($welfareUsers as $welfareUser) {
             // Verificar si el usuario ya existe en la tabla Users
@@ -66,10 +67,11 @@ class SyncWelfareUsersCommand extends Command
 
                 // Guardar el usuario
                 $user->save();
+                $count += 1;
             }
         }
 
-        $this->info('Welfare Users sincronizado correctamente!');
+        $this->info('Welfare Users sincronizado correctamente! (cantidad de registros: ' . $count . ' )' );
     }
 
     // Función para mapear el género de WelfareUser a User
