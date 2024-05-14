@@ -37,6 +37,7 @@ use App\Http\Controllers\Drugs\ReceptionController;
 use App\Http\Controllers\Drugs\RosterAnalisisToAdminController;
 use App\Http\Controllers\Drugs\SubstanceController;
 use App\Http\Controllers\FileController;
+use App\Http\Controllers\Finance\CdpController;
 use App\Http\Controllers\Finance\DteController;
 use App\Http\Controllers\Finance\PaymentController;
 use App\Http\Controllers\Finance\PurchaseOrderController;
@@ -2192,6 +2193,11 @@ Route::prefix('finance')->as('finance.')->middleware(['auth', 'must.change.passw
         Route::get('{dte}/download', [DteController::class, 'downloadManualDteFile'])->name('downloadManualDteFile');
         Route::get('{dte}/confirmation', DteConfirmation::class)->name('confirmation');
     });
+
+    Route::prefix('cdp')->as('cdp.')->group(function () {
+        Route::get('{cdp}', [CdpController::class,'show'])->name('show');
+    });
+
     Route::get('my-dtes', MyDtes::class)->name('my.dtes');
     Route::get('my-dtes', MyDtes::class)->name('my.dtes');
 

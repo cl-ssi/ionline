@@ -99,7 +99,7 @@
                             @if($approval->document_pdf_path)
                                 href="{{ route('documents.approvals.show-pdf', $approval) }}"
                             @else
-                                href="{{ route($approval->document_route_name, json_decode($approval->document_route_params, true)) }}"
+                                href="{{ $approval->document_route_name ? route($approval->document_route_name, json_decode($approval->document_route_params, true)) : '' }}"
                             @endif
                         @endif
                     >

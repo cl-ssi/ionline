@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\RequestForms;
 
 use App\Exports\RequestForms\RequestFormsExport;
+use App\Models\Finance\Cdp;
 use App\Models\RequestForms\RequestForm;
 use App\Models\RequestForms\Item;
 use App\RequestForms\Passage;
@@ -507,7 +508,6 @@ class RequestFormController extends Controller {
                 /* FIX: @mirandaljorge si no hay manager en Authority, se va a caer */
                 $mail_notification_ou_manager = Authority::getAuthorityFromDate($nextEvent->first()->ou_signer_user, Carbon::now(), $type);
 
-                
                 if (env('APP_ENV') == 'production' OR env('APP_ENV') == 'testing') {
                     if($mail_notification_ou_manager){
                         $emails = [$mail_notification_ou_manager->user->email];
@@ -520,6 +520,9 @@ class RequestFormController extends Controller {
 
             $requestForm->signatures_file_id = $signaturesFile->id;
             $requestForm->save();
+
+            /* Crear el CDP */
+            Cdp::createCdp($requestForm);
 
             session()->flash('success', $message);
             return redirect()->route('request_forms.pending_forms');
