@@ -26,7 +26,6 @@
 
 @php($canEdit = auth()->user()->can('Agreement: edit') || auth()->id() == $agreement->referrer_id || auth()->id() == $agreement->referrer2_id)
 
-
 <h3 class="mb-3">Ver detalle de Convenio #{{$agreement->id}}
     @can('Agreement: delete')
 		<form method="POST" action="{{ route('agreements.destroy', $agreement->id) }}" onclick="return confirm('¿Está seguro/a de eliminar este convenio?');" class="d-inline">
@@ -712,12 +711,14 @@
                     @endforeach
                 </tbody>
             </table>
-        </div>    
+        </div>
     </div>
 
     @include('agreements/agreements/modal_add_continuity')
 @endif
-    
+
+    @livewire('agreements.associate-with-another-agreement', ['agreement_id' => $agreement->id])
+
     @include('agreements/agreements/modal_select_signer_res')
     @include('agreements/agreements/modal_select_evaluation_option')
     @include('agreements/agreements/modal_select_signer_res')
