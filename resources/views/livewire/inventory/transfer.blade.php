@@ -36,6 +36,18 @@
     </div>
 
     @if($old_user_responsible_id)
+
+    <div class="row g-2 mb-3">
+        <fieldset class="col text-end">
+            <button class="btn btn-primary"
+                    wire:loading.attr="disabled"
+                    wire:click="toggleSelectAll"
+                    wire:target="toggleSelectAll"
+            >{{ $selectAllText }}</button>
+        </fieldset>
+    </div>
+
+
         <table class="table table-sm table-bordered">
             <thead>
                 <tr>

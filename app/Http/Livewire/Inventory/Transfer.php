@@ -25,6 +25,7 @@ class Transfer extends Component
     public $has_product = null;
     public $has_inventories;
     public $selectedInventories = [];
+    public $selectAllText = 'Seleccionar todos';
     
 
 
@@ -129,6 +130,28 @@ class Transfer extends Component
         session()->flash('success', 'Los Items del Usuario fueron trasladados exitosamente, esperando confirmación de recepción por parte del usuario para finalizar el proceso'); 
         return redirect()->route('inventories.transfer');
     }
+
+    public function toggleSelectAll()
+    {
+        if ($this->selectAllText == 'Seleccionar todos') {
+            $this->selectAll();
+            $this->selectAllText = 'Deseleccionar todos';
+        } else {
+            $this->deselectAll();
+            $this->selectAllText = 'Seleccionar todos';
+        }
+    }
+
+    public function selectAll()
+    {
+        $this->selectedInventories = array_fill_keys($this->has_inventories->pluck('id')->toArray(), true);
+    }
+
+    public function deselectAll()
+    {
+        $this->selectedInventories = [];
+    }
+
 
     public function resetInput()
     {
