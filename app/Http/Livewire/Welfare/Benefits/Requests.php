@@ -37,6 +37,7 @@ class Requests extends Component
     public $bank_id;
     public $account_number;
     public $pay_method;
+    public $user_id;
 
     // public $files = [];
 
@@ -53,6 +54,7 @@ class Requests extends Component
         'subsidy.annual_cap' => 'required',
         'subsidy.recipient' => 'required',
 
+        'user_id' => 'required|numeric',
         'requested_amount' => 'required|numeric',
         'email' => 'required',
         'account_number' => 'required|integer',
@@ -61,6 +63,7 @@ class Requests extends Component
     ];
 
     protected $messages = [
+        'user_id' => 'Debe seleccionar un funcionario',
         'requested_amount' => 'Debe ingresar un monto a solicitar',
         'email' => 'Debe ingresar un correo electrónico',
         'account_number.required' => 'Debe Ingresar Número de Cuenta',
@@ -75,6 +78,7 @@ class Requests extends Component
 
     public function mount()
     {
+        $this->user_id = auth()->user()->id;
         $this->benefits = Benefit::all();
         $this->subsidies = collect();
         $this->subsidy = new Subsidy();
@@ -90,6 +94,33 @@ class Requests extends Component
               $this->account_number = $this->bankaccount->number;
               $this->pay_method = $this->bankaccount->type;
             }
+        }else{
+            $this->bank_id = null;
+            $this->account_number = null;
+            $this->pay_method = null;
+        }
+    }
+
+    protected $listeners = ['loadUserData' => 'loadUserData'];
+
+    public function loadUserData(User $User){
+        $this->user_id = $User->id;
+
+        $this->banks = Bank::all();
+        $this->bankaccount = $User->bankAccount;
+
+        $this->email = $User->email;
+
+        if($this->bankaccount){
+            if ($this->bankaccount->bank) {
+              $this->bank_id = $this->bankaccount->bank_id;
+              $this->account_number = $this->bankaccount->number;
+              $this->pay_method = $this->bankaccount->type;
+            }
+        }else{
+            $this->bank_id = null;
+            $this->account_number = null;
+            $this->pay_method = null;
         }
     }
 
@@ -174,7 +205,7 @@ class Requests extends Component
             $request = Request::create([
                 // 'benefit_id' => $this->benefit_id,
                 'subsidy_id' => $this->subsidy_id,
-                'applicant_id' => auth()->user()->id,
+                'applicant_id' => $this->user_id,
                 'status' => 'En revisión',
                 'requested_amount' => $this->requested_amount,
             ]);
@@ -194,13 +225,13 @@ class Requests extends Component
 
         // guarda email
         $user = User::updateOrCreate(
-            ['id' => auth()->user()->id],
+            ['id' => $this->user_id],
             ['email' => $this->email]
         );
 
         // guarda datos bancarios
         $userBankAccount = UserBankAccount::updateOrCreate(
-            ['user_id' => auth()->user()->id],
+            ['user_id' => $this->user_id],
             ['bank_id' => $this->bank_id,
              'number' => $this->account_number,
              'type' => $this->pay_method]

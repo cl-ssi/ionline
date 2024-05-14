@@ -77,7 +77,20 @@
 
             <div class="row g-2 mb-3">
                 <div class="col-md-3">
-                    <label>Monto solicitado</label>
+                    <label>Funcionario</label>
+                    @if(auth()->user()->can('be god') || auth()->user()->can('welfare: benefits'))
+                        @livewire('search-select-user', ['selected_id' => 'user_id', 
+                                                         'emit_name' => 'loadUserData',
+                                                         'required' => 'required',
+                                                         'user' => auth()->user()])
+                    @else
+                        <input type="hidden" wire:model="user_id">
+                        <input type="text" class="form-control" disabled value="{{auth()->user()->getTinnyNameAttribute()}}">
+                    @endif
+                    @error('user_id') <span class="text-danger">{{ $user_id }}</span> @enderror
+                </div>
+                <div class="col-md-3">
+                    <label>Monto solicitado</label>        
                     <input type="number" wire:model.lazy="requested_amount" class="form-control" required>
                     @error('requested_amount') <span class="text-danger">{{ $message }}</span> @enderror
                 </div>

@@ -121,7 +121,7 @@ class RequestsAdmin extends Component
         }
 
         // Obtener las solicitudes filtradas
-        $this->requests = $query->get();
+        $this->requests = $query->orderByDesc('id')->get();
 
         return view('livewire.welfare.benefits.requests-admin');
         

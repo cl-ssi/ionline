@@ -15,7 +15,8 @@
                         @if(auth()->user()->can('be god') || auth()->user()->can('welfare: hotel booking administrator'))
                             @livewire('search-select-user', ['selected_id' => 'user_id', 
                                                              'emit_name' => 'loadUserData',
-                                                             'required' => 'required'])
+                                                             'required' => 'required',
+                                                             'user' => auth()->user()])
                         @else
                             <input type="hidden" wire:model="user_id">
                             <input type="text" class="form-control" disabled value="{{auth()->user()->getTinnyNameAttribute()}}">
