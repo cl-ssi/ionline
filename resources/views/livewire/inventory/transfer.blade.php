@@ -46,6 +46,7 @@
                     <th>Lugar</th>
                     <th>Responsable</th>
                     <th>Usuario</th>
+                    <th>Trapasar</th>
                 </tr>
             </thead>
             <tbody>
@@ -53,7 +54,7 @@
                     <tr>
                         <td class="text-center" nowrap>
                             <small>
-                                    {{ $inventory->number }}                                
+                                    {{ $inventory->number }}
                             </small>
                         </td>
                         <td nowrap>
@@ -83,6 +84,9 @@
                             @if($inventory->using)
                                 {{ $inventory->using->tinny_name }}
                             @endif
+                        </td>
+                        <td class="text-center" nowrap>
+                            <input type="checkbox" wire:model="selectedInventories.{{ $inventory->id }}">
                         </td>
                     </tr>
                     @empty
