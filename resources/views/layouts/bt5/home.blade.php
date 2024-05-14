@@ -291,6 +291,10 @@
             </h5>
 
             <ul class="list-group">
+                <a href="https://docs.google.com/document/d/1FMhKIgpKiEjTcez887z_8fKOmYXGaQ21/edit?usp=sharing&ouid=100875180090664492720&rtpof=true&sd=true"
+                    class="list-group-item list-group-item-action small" target="_blank">
+                    Bienestar - Solicitud de beneficios.
+                </a>
                 <a href="https://docs.google.com/document/d/1UzWY4S5DXlgnYAhbtNhgGiYmP3R9UyxJ/edit?usp=sharing&ouid=100875180090664492720&rtpof=true&sd=true"
                     class="list-group-item list-group-item-action small" target="_blank">
                     Bienestar - Reserva de cabañas.
