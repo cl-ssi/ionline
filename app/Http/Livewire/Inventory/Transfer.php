@@ -8,10 +8,13 @@ use App\Http\Requests\Inventory\CreateMovementRequest;
 use App\Models\User;
 use App\Models\Inv\InventoryMovement;
 use App\Models\Parameters\Place;
+use Livewire\WithPagination;
 
 class Transfer extends Component
 {
 
+    use WithPagination;
+	protected $paginationTheme = 'bootstrap';
     public $inventory;
     public $user_using_id = null;
     public $user_responsible_id = null;

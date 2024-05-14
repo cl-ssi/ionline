@@ -39,6 +39,8 @@
         <table class="table table-sm table-bordered">
             <thead>
                 <tr>
+                    <th class="text-center">Nro. Inv.</th>
+                    <th class="text-center">Nro. Ant.</th>
                     <th>Producto/Especie</th>
                     <th>Ubicación</th>
                     <th>Lugar</th>
@@ -49,6 +51,14 @@
             <tbody>
                 @forelse($inventories as $inventory)
                     <tr>
+                        <td class="text-center" nowrap>
+                            <small>
+                                    {{ $inventory->number }}                                
+                            </small>
+                        </td>
+                        <td nowrap>
+                            {{ $inventory->old_number }}
+                        </td>
                         <td>
                             @if($inventory->unspscProduct)
                                 {{ $inventory->unspscProduct->name }}
