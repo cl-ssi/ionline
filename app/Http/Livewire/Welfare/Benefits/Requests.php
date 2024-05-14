@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\Welfare\Benefits\Benefit;
 use App\Models\Welfare\Benefits\Subsidy;
 use App\Models\Welfare\Benefits\Request;
-// use App\Models\Welfare\Benefits\File;
+use App\Notifications\Welfare\Benefits\RequestCreate;
 use App\Models\File;
 use App\Models\Parameters\Bank;
 use App\Models\Rrhh\UserBankAccount;
@@ -205,6 +205,14 @@ class Requests extends Component
              'number' => $this->account_number,
              'type' => $this->pay_method]
         );
+
+        // envia notificación
+        if($request->applicant){
+            if($request->applicant->email_personal != null){
+                // Utilizando Notify 
+                $request->applicant->notify(new RequestCreate($request));
+            } 
+        }
 
         $this->reset(['benefit_id', 'subsidy_id', 'selectedRequestId', 'showCreate']);
         session()->flash('message', 'Estimado funcionario hemos recibido su solicitud de beneficio, en este momento se encuentra "En revisión".');
