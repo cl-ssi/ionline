@@ -6,6 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use App\Models\Parameters\Parameter;
 
 use Illuminate\Support\HtmlString;
 
@@ -46,6 +47,8 @@ class BookingCancelation extends Notification implements ShouldQueue
      */
     public function toMail($notifiable)
     {
+        $cc_mails = explode(', ', Parameter::get('welfare: cabañas','correos solicitudes'));
+
         $roomBooking = $this->roomBooking;
         return (new MailMessage)
                     ->level('info')
@@ -53,6 +56,7 @@ class BookingCancelation extends Notification implements ShouldQueue
                     ->greeting('Hola ' . $notifiable->shortName)
                     ->line(new HtmlString('Se ha <b>CANCELADO</b> una reserva en <b>' . $roomBooking->room->identifier . '</b> en el complejo <b>' . $roomBooking->room->hotel->name . '</b>.'))
                     ->line(new HtmlString('Para conocer los detalles de la cancelación, ingrese al módulo de reservas o bien contácte al área de bienestar.'))
+                    ->cc($cc_mails)
                     ->salutation('Saludos cordiales');
     }
 

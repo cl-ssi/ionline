@@ -6,6 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use App\Models\Parameters\Parameter;
 
 use Illuminate\Support\HtmlString;
 
@@ -46,6 +47,8 @@ class NewBooking extends Notification implements ShouldQueue
      */
     public function toMail($notifiable)
     {
+        $cc_mails = explode(', ', Parameter::get('welfare: cabañas','correos solicitudes'));
+
         $roomBooking = $this->roomBooking;
         return (new MailMessage)
                     ->level('info')
@@ -58,6 +61,7 @@ class NewBooking extends Notification implements ShouldQueue
                     ->line(new HtmlString('Si el tipo de pago es depósito, favor ingresar a la aplicación y subir el comprobante de transferencia.'))
                     ->line(new HtmlString('<br>'))
                     ->line(new HtmlString('<i>La reserva se encuentra en revisión, y sera confirmada por el área de bienestar.</i>'))
+                    ->cc($cc_mails)
                     ->salutation('Saludos cordiales.');
     }
 
