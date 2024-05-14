@@ -5,10 +5,12 @@ namespace App\Models\Drugs;
 use App\Models\Drugs\ActPrecursorItem;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class ReceptionItem extends Model
+class ReceptionItem extends Model implements Auditable
 {
     use SoftDeletes;
+    use \OwenIt\Auditing\Auditable;
 
     /**
      * The attributes that are mass assignable.

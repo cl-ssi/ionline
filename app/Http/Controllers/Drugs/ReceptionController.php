@@ -29,6 +29,19 @@ class ReceptionController extends Controller
      */
     public function index(Request $request)
     {
+        /** Log access a partes, no crea otro registro, si el usuario ingreso dentro de los últimos x minutos */
+        $minutos = 15;
+        $ha_ingresado_en_rango_de_x_minutos = auth()->user()->accessLogs->where('type','drugs')->where('created_at', '>', now()->subMinutes($minutos))->last();
+        
+        if(!$ha_ingresado_en_rango_de_x_minutos) {
+            // Registramos su acceso a partes
+            auth()->user()->accessLogs()->create([
+                'type' => 'drugs',
+                'switch_id' => session()->get('god'),
+                'enviroment' => 'Cloud Run' // Ya no es necesario
+            ]);
+        }
+
         return view('drugs.receptions.index');
     }
 

@@ -358,8 +358,24 @@ class UserController extends Controller
 
     public function drugs()
     {
+        $daysAgo = 15;
+
+        $lastLogs = AccessLog::with('user','switchUser')
+            ->where('type', 'drugs')
+            ->where('created_at', '>', now()->subDays($daysAgo))
+            ->whereHas('user', function($query) {
+                $query->whereHas('organizationalUnit', function($query) {
+                    $query->whereHas('establishment', function($subQuery) {
+                        $subQuery->where('id', auth()->user()->organizationalUnit->establishment_id);
+                    });
+                });
+            })
+            ->latest()
+            ->get();
+
         $users = User::permission('Drugs')->get();
-        return view('drugs.users', compact('users'));
+
+        return view('drugs.users', compact('users','lastLogs', 'daysAgo'));
     }
 
     public function openNotification($notification)

@@ -23,7 +23,7 @@ class SummaryController extends Controller
             $summaries = Summary::where('investigator_id', auth()->id())
                 ->orWhere('actuary_id', auth()->id())
                 ->orWhere('creator_id', auth()->id())
-                ->latest()
+                ->orderBy('resolution_date','desc')
                 ->paginate(50);
         }
 
@@ -43,7 +43,7 @@ class SummaryController extends Controller
      */
     public function create()
     {
-        $types = Type::pluck('name', 'id');
+        $types = Type::where('establishment_id',auth()->user()->establishment_id)->pluck('name', 'id');
 
         $eventType = EventType::where('start', true)->first();
 

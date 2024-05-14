@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Documents;
 
+use App\Models\Agreements\Addendum;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\File;
@@ -130,6 +131,11 @@ class DocumentController extends Controller
                 $agreement->update(['res_document_id' => $document->id]);
             else
                 $agreement->update(['document_id' => $document->id]);
+        }
+
+        if ($request->has('addendum_id')) {
+            $addendum = Addendum::find($request->addendum_id);
+            $addendum->update(['document_id' => $document->id]);
         }
 
         return redirect()->route('documents.index');

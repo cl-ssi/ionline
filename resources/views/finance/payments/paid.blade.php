@@ -83,7 +83,9 @@
                     <tr>
                         <td class="small">
                             {{ $dte->id }}
+                            {{--
                             @livewire('finance.check-tesoreria', ['dte_id' => $dte->id], key($dte->id))
+                            --}}
                         </td>
                         <td>
                             @include('finance.payments.partials.dte-info')

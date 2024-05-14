@@ -214,6 +214,10 @@
             @break
     @endswitch
 
+    @can('be god')
+        @include('partials.audit', ['audits' => $reception->audits()] )
+    @endcan
+
 @endsection
 
 @section('custom_js')

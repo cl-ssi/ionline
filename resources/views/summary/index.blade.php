@@ -38,10 +38,12 @@
                 <th>Fecha Res.</th>
                 <th>Estado/Último Evento</th>
                 <th>Actor</th>
+                {{-- 
                 <th>Duración</th>
                 <th>Dias pasados desde inicio del sumario</th>
                 <th>Fiscal</th>
-                <th>Actuario</th>
+                <th>Actuario</th> 
+                --}}
                 <th width="60"></th>
             </tr>
         </thead>
@@ -49,12 +51,12 @@
             @foreach ($summaries as $summary)
                 <tr>
                     <td>
-                        {{ $summary->id }}
                         @if ($summary->end_at)
-                            <i class="fas fa-lock"></i>
+                            <i class="fas fa-lock text-success"></i>
                         @else
-                            <i class="fas fa-lock-open"></i>
+                            <i class="fas fa-lock-open text-danger"></i>
                         @endif
+                        {{ $summary->id }}
                     </td>
                     <td>
                         {{ $summary->type->name }}:<br>
@@ -66,6 +68,7 @@
                     <td>
                         {{ $summary->lastEvent->type->actor->name ?? '' }}
                     </td>
+                    {{--
                     <td>
                         @if(isset($summary->end_at))
                         <p class="text-danger">
@@ -78,11 +81,13 @@
                     <td>{{ $summary->start_at->diffInDays(now()) }}</td>
                     <td>{{ optional($summary->investigator)->tinnyName }}</td>
                     <td>{{ optional($summary->actuary)->tinnyName }}</td>
+                    --}}
                     <td>
                         <a href="{{ route('summary.edit', $summary) }}" class="btn btn-primary">
                             <i class="fas fa-edit"></i>
                         </a>
                     </td>
+                    
                 </tr>
             @endforeach
         </tbody>

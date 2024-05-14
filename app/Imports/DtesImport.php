@@ -11,6 +11,8 @@ use App\Models\Finance\Dte;
 use App\Models\Finance\PurchaseOrder\Prefix;
 use App\Models\Finance\PurchaseOrder;
 use App\Notifications\Finance\DteConfirmation;
+use App\Models\User;
+
 
 class DtesImport implements ToModel, WithStartRow, WithHeadingRow
 {
@@ -87,27 +89,38 @@ class DtesImport implements ToModel, WithStartRow, WithHeadingRow
 
         if( trim(mb_strtoupper($row['folio_oc'])) != '' AND !is_null($row['folio_oc']) ) 
         {
+            $purchase_order = null;
             $folio_oc = trim(mb_strtoupper($row['folio_oc']));
             $array_variable['folio_oc'] = $folio_oc;
             $array_variable['establishment_id'] = Prefix::getEstablishmentIdFromPoCode($folio_oc);
+            $purchase_order = PurchaseOrder::where('code',$folio_oc)->first();
 
             if(Prefix::getIsCenabastFromPoCode($folio_oc))
             {
-                $purchase_order = PurchaseOrder::where('code',$folio_oc)->first();
+                
                 if($purchase_order) {
                     $purchase_order->cenabast = 1;
                     $purchase_order->save();
-                    // if($purchase_order->requestForm)
-                    // {
-                    //     $requestForm = $purchase_order->requestForm;
-                    //     if($requestForm->contract_manager_id)
-                    //     {
-                    //         $array_variable['contract_manager_id'] = $requestForm->contract_manager_id;
-                    //         $array_variable['confirmation_sender_id'] = auth()->user()->id;
-                    //         $array_variable['confirmation_send_at'] = now();
-                    //         $this->sendDteNotification($this->dte, $requestForm);
-                    //     }
-                    // }
+
+                }
+            }
+
+            if($purchase_order and $purchase_order?->requestForm)
+
+            {
+                
+                $requestForm = $purchase_order->requestForm;
+                if($requestForm->contract_manager_id)
+                {
+                    $array_variable['contract_manager_id'] = $requestForm->contract_manager_id;
+                    $array_variable['confirmation_sender_id'] = auth()->user()->id;
+                    $array_variable['confirmation_send_at'] = now();
+
+                    $temporaryDte = new Dte($array_variable);
+
+                    $this->sendDteNotification($temporaryDte, $requestForm);
+
+                    //app('debugbar')->info($requestForm->contract_manager_id);
                 }
             }
         }

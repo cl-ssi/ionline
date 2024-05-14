@@ -202,6 +202,7 @@ use App\Http\Controllers\Summary\SummaryFileController;
 use App\Http\Controllers\Summary\TemplateController as SummaryTemplateController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\Trainings\TrainingController as TngTrainingController;
+use App\Http\Livewire\Summary\TypeCrud;
 use App\Http\Livewire\Trainings\TrainingCreate;
 use App\Http\Controllers\Unspsc\ClassController;
 use App\Http\Controllers\Unspsc\FamilyController;
@@ -740,6 +741,7 @@ Route::prefix('agreements')->as('agreements.')->middleware(['auth', 'must.change
     Route::get('/addendum/download/{addendum}', [AddendumController::class, 'download'])->name('addendum.download');
     Route::get('/addendum/sign/{addendum}/type/{type}', [AddendumController::class, 'sign'])->name('addendum.sign');
     Route::get('/addendum/preview/{addendum}', [AddendumController::class, 'preview'])->name('addendum.preview');
+    Route::post('/addendum/createDocument/{addendum}', [AddendumController::class, 'createDocument'])->name('addendum.createDocument');
 
     Route::post('/continuity/store', [ContinuityResolutionController::class, 'store'])->name('continuity.store');
     Route::put('/continuity/{continuityResolution}/update', [ContinuityResolutionController::class, 'update'])->name('continuity.update');
@@ -2713,6 +2715,7 @@ Route::prefix('summary')->as('summary.')->middleware(['auth', 'must.change.passw
     Route::get('/create', [SummaryController::class, 'create'])->name('create');
     Route::post('/store', [SummaryController::class, 'store'])->name('store');
     Route::get('/edit/{summary}', [SummaryController::class, 'edit'])->name('edit');
+    Route::get('/types', TypeCrud::class)->name('types.index');
 
     Route::prefix('{summary}/event')->as('event.')->group(function () {
         Route::post('/store/{event?}', [SummaryEventController::class, 'store'])->name('store');

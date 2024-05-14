@@ -150,4 +150,8 @@
 </form>
 @endcan
 
+@can('be god')
+    @include('partials.audit', ['audits' => $reception->audits()] )
+@endcan
+
 @endsection

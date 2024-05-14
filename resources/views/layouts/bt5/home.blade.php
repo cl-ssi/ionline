@@ -73,6 +73,7 @@
 
     <div class="row pt-2">
         <div class="col-sm-8 col-12">
+            @env('production')
             <div id="carouselNews"
                 class="carousel slide">
                 <div class="carousel-indicators">
@@ -85,7 +86,6 @@
                             aria-label="Slide {{ $loop->index }}"></button>
                     @endforeach
                 </div>
-                @env('production')
                     <div class="carousel-inner">
                         @foreach ($allNews as $news)
                         <div class="carousel-item @if ($loop->index == 0) active @endif">
@@ -93,15 +93,13 @@
                                 <img src="{{ route('news.view_image', $news) }}"
                                     class="d-block w-100"
                                     alt="...">
-                                <div class="carousel-caption d-none d-md-block">
-                                    <h5>{{ $news->title }}</h5>
-                                    <p>{{ $news->subtitle }}.</p>
-                                </div>
                             </a>
+                            <p>{{ $news->publication_date_at }} - {{ $news->title }}</p>
+                            <p>{{ $news->body }}</p>
+                            <br>
                         </div>
                         @endforeach
                     </div>
-                @endenv
                 <button class="carousel-control-prev"
                     type="button"
                     data-bs-target="#carouselNews"
@@ -119,6 +117,7 @@
                     <span class="visually-hidden">Next</span>
                 </button>
             </div>
+            @endenv
 
             <h5 class="text-white p-2 bg_azul_gob mt-3 text-center">
                 <i class="fas fa-file-signature"></i>

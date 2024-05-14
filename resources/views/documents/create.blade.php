@@ -40,6 +40,10 @@
     <input type="hidden" name="agreement_id" value="{{ $document->agreement_id }}">
     @endif
 
+    @if (isset($document->addendum_id))
+    <input type="hidden" name="addendum_id" value="{{ $document->addendum_id }}">
+    @endif
+
     <div class="row mb-3 g-2">
         <div class="form-group col-2">
             <label for="forDate">Fecha</label>

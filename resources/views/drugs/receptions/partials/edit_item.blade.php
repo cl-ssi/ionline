@@ -111,5 +111,9 @@
 
         </form>
     </div>
+
+    @can('be god')
+        @include('partials.audit', ['audits' => $item->audits()] )
+    @endcan
 </div>
 @endcan

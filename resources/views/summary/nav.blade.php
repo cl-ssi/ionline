@@ -14,20 +14,22 @@
                 <i class="fas fa-list-alt"></i> Tipos de Eventos
             </a>
         </li>
-    @endcanany
 
-    @canany(['be god', 'Summary: admin'])
         <li class="nav-item">
             <a class="nav-link {{ active('summary.links.*') }}" href="{{ route('summary.links.index') }}">
                 <i class="fas fa-link"></i> Vínculos entre tipos de eventos
             </a>
         </li>
-    @endcanany
 
-    @canany(['be god', 'Summary: admin'])
         <li class="nav-item">
             <a class="nav-link {{ active('summary.templates.*') }}" href="{{ route('summary.templates.index') }}">
                 <i class="far fa-file-alt"></i> Plantillas
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link {{ active('summary.types.*') }}" href="{{ route('summary.types.index') }}">
+                <i class="far fa-file-alt"></i> Procesos
             </a>
         </li>
     @endcanany
