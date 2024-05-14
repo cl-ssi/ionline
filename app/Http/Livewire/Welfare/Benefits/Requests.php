@@ -151,18 +151,18 @@ class Requests extends Component
 
         // se hace asi la validación puesto que hay documentación y requisitos. En este caso solo se consideran documentación.
         $count = 0;
-        if($this->subsidy->documents->count() > 0){
-            foreach($this->subsidy->documents as $document){
-                if($document->type == "Documentación"){
-                    $count += 1;
-                }
-            }
+        // if($this->subsidy->documents->count() > 0){
+        //     foreach($this->subsidy->documents as $document){
+        //         if($document->type == "Documentación"){
+        //             $count += 1;
+        //         }
+        //     }
 
-            if($count != count($this->files)){
-                session()->flash('message', 'Debe adjuntar toda la documentación solicitada.');
-                return;
-            }
-        }
+        //     if($count != count($this->files)){
+        //         session()->flash('message', 'Debe adjuntar toda la documentación solicitada.');
+        //         return;
+        //     }
+        // }
 
         if ($this->selectedRequestId) {
             $request = Request::find($this->selectedRequestId);

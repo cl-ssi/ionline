@@ -7,6 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use App\Models\Welfare\Benefits\Request;
+use App\Models\Parameters\Parameter;
 
 class RequestTransfer extends Notification implements ShouldQueue
 {
@@ -45,6 +46,8 @@ class RequestTransfer extends Notification implements ShouldQueue
      */
     public function toMail($notifiable)
     {
+        $cc_mails = explode(', ', Parameter::get('welfare: beneficios','correos transferido'));
+
         $payed_amount = $this->payed_amount;
         return (new MailMessage)
                 ->level('info')
@@ -52,7 +55,7 @@ class RequestTransfer extends Notification implements ShouldQueue
                 ->greeting('Hola ' . $notifiable->shortName)
                 ->line('Se informa transferencia de beneficio ' . $this->request->subsidy->name . '.')
                 ->line('El monto transferido corresponde a $' . $payed_amount)
-                // ->action('Ir a bandeja de numeración', route('documents.partes.numeration.inbox') )
+                ->cc($cc_mails)
                 ->salutation('Saludos cordiales.');
     }
 
