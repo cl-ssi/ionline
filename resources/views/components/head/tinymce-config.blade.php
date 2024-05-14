@@ -18,7 +18,7 @@
             classes: 'especial'
         }, ],
         style_formats_merge: true,
-        toolbar: 'undo redo | styles | bold italic | alignleft aligncenter alignright | indent outdent | bullist numlist | table forecolor backcolor removeformat preview',
+        toolbar: 'undo redo | styles | bold italic | alignleft aligncenter alignright alignjustify | indent outdent | bullist numlist | table forecolor backcolor removeformat preview',
         content_style: "body { font-size: 10pt; font-family: Verdana; }",
         promotion: false,
         license_key: 'gpl',
