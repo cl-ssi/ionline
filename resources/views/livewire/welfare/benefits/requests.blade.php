@@ -15,18 +15,18 @@
         <div class="row mt-3">
             <div class="col-md-6">
                 <div class="form-group">
-                    <label for="benefit_id">Beneficio:</label>
+                    <label for="benefit_id">Categoría:</label>
                     <select wire:model="benefit_id" class="form-select" id="benefit_id">
-                        <option value="">Selecciona un beneficio</option>
+                        <option value="">Selecciona una categoría</option>
                         @foreach($benefits as $benefit)
                             <option value="{{ $benefit->id }}">{{ $benefit->name }}</option>
                         @endforeach
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="subsidy_id">Subsidio:</label>
+                    <label for="subsidy_id">Beneficio:</label>
                     <select wire:model="subsidy_id" class="form-select" id="subsidy_id">
-                        <option value="">Selecciona un subsidio</option>
+                        <option value="">Selecciona un beneficio</option>
                         @foreach($subsidies as $subsidy_item)
                             <option value="{{ $subsidy_item->id }}">{{ $subsidy_item->name }}</option>
                         @endforeach
