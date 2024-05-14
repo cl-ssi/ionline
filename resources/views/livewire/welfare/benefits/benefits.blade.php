@@ -2,14 +2,14 @@
     @include('welfare.nav')
 
     <h4>
-        Beneficios <button wire:click="showCreateForm" class="btn btn-primary btn-sm ml-2">Crear</button>
+        Categorías <button wire:click="showCreateForm" class="btn btn-primary btn-sm ml-2">Crear</button>
     </h4>
 
     @if($showCreate)
     <div class="row mt-3">
         <div class="col-md-6">
             <div class="form-group">
-                <label for="newBenefitName">Nombre del Beneficio:</label>
+                <label for="newBenefitName">Nombre de la categoría:</label>
                 <input wire:model="newBenefitName" type="text" class="form-select" id="newBenefitName">
             </div>
             <div class="form-group">
@@ -41,7 +41,8 @@
                     <!-- Botón para editar -->
                     <button wire:click="editBenefit({{ $benefit->id }})" class="btn btn-primary btn-sm">Editar</button>
                     <!-- Botón para eliminar -->
-                    <button wire:click="deleteBenefit({{ $benefit->id }})" class="btn btn-danger btn-sm">Eliminar</button>
+                    <!-- <button wire:click="deleteBenefit({{ $benefit->id }})" class="btn btn-danger btn-sm">Eliminar</button> -->
+                    <button onclick="return confirm('¿Estás seguro de que deseas eliminar esta categoría?') || event.stopImmediatePropagation()" wire:click="deleteBenefit({{ $benefit->id }})" class="btn btn-danger btn-sm">Eliminar</button>
                 </td>
                 </tr>
             @endforeach

@@ -50,11 +50,11 @@
                     @if(auth()->user()->can('welfare: benefits') || auth()->user()->can('be god'))
 
                         <a class="dropdown-item" href="{{ route('welfare.benefits.benefits') }}">
-                            <i class="fas fa-plus-square"></i> Mantenedor de beneficios
+                            <i class="fas fa-plus-square"></i> Mantenedor de Categorías
                         </a>
 
                         <a class="dropdown-item" href="{{ route('welfare.benefits.subsidies') }}">
-                            <i class="fas fa-plus-square"></i> Mantenedor de subsidios
+                            <i class="fas fa-plus-square"></i> Mantenedor de Beneficios
                         </a>
 
                         <a class="dropdown-item" href="{{ route('welfare.benefits.requests-admin') }}">

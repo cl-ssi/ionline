@@ -38,6 +38,13 @@ class Requests extends Component
     public $account_number;
     public $pay_method;
 
+    // public $files = [];
+
+    public function addFileInput()
+    {
+        $this->files[] = null; // Agregar un nuevo campo de archivo
+    }
+
     protected $rules = [
         // 'subsidy.percentage' => 'required',
         // 'subsidy.type' => 'required',

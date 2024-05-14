@@ -57,15 +57,19 @@
                             @foreach($subsidy->documents as $key => $document)
                                 @if($document->type == "Documentación")
                                     <li>
-                                        <div wire:loading wire:target="files.{{ $key }}"><i class="fas fa-spinner fa-spin"></i> <b>Cargando...</b></div> {{$document->name}}
-                                        <input class="form-control" type="file" wire:model="files.{{ $key }}" accept="application/pdf">
+                                        {{$document->name}}
                                     </li>
                                 @endif
                             @endforeach
 
-                            @foreach ($errors->get('files.*') as $error)
-                                <span class="text-danger">{{ $error[0] }}</span>
-                            @endforeach
+                            <div id="fileInputs">
+                                <!-- Aquí se agregarán dinámicamente los inputs file -->
+                                @foreach($files as $key => $file)
+                                    <div wire:loading wire:target="files.{{ $key }}"><i class="fas fa-spinner fa-spin"></i> <b>Cargando...</b></div>
+                                    <input type="file" wire:model="files.{{ $key }}" class="form-control mb-2" accept="application/pdf">
+                                @endforeach
+                            </div>
+                            <button wire:click.prevent="addFileInput" class="btn btn-primary btn-sm">Agregar Archivo</button>
                         </ul>
                     </td>
                 </tbody>
@@ -152,7 +156,7 @@
                     <td>{{ $request->id }}</td>
                     <td>{{ $request->created_at->format('Y-m-d') }}</td>
                     <td>
-                        {{ $request->subsidy->benefit->name }} - {{ $request->subsidy->name }}
+                        @if($request->subsidy->benefit) {{ $request->subsidy->benefit->name }} - {{ $request->subsidy->name }} @endif
                         @if($request->accepted_amount)
                         <br><b>MONTO ACEPTADO: </b> ${{ money($request->accepted_amount) }}
                         @endif
@@ -172,7 +176,7 @@
                             @foreach($request->files as $file)
                                 <li>
                                     <a href="{{ route('welfare.download', $file->id) }}" target="_blank">
-                                        <i class="fas fa-paperclip"></i> {{$file->name}}
+                                        <i class="fas fa-paperclip"></i>
                                     </a>
                                 </li>
                             @endforeach

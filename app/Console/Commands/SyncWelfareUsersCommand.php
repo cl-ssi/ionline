@@ -68,6 +68,8 @@ class SyncWelfareUsersCommand extends Command
                 // Guardar el usuario
                 $user->save();
                 $count += 1;
+
+                print_r($welfareUser->rut . " \n");
             }
         }
 

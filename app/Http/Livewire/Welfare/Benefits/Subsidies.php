@@ -23,6 +23,39 @@ class Subsidies extends Component
     public $payment_in_installments;
     public $documents = [];
 
+    public $showCreateDocumentForm = false; // Agrega una propiedad para controlar la visibilidad del formulario de creación
+    public $newDocumentName = '';
+
+    // Método para mostrar el formulario de creación de documento
+    public function showCreateDocumentForm()
+    {
+        $this->showCreateDocumentForm = true;
+    }
+
+    // Método para guardar el nuevo documento
+    public function saveDocument()
+    {
+        // Validar el nombre del documento
+        $this->validate([
+            'newDocumentName' => 'required|string',
+        ]);
+
+        // Crear un nuevo documento
+        Document::create([
+            'name' => $this->newDocumentName,
+            'subsidy_id' => $this->selectedSubsidyId,
+            // Otras columnas si es necesario
+        ]);
+
+        // Limpiar el campo de entrada
+        $this->newDocumentName = '';
+
+        // Ocultar el formulario de creación
+        $this->showCreateDocumentForm = false;
+        
+        $this->reset(['newSubsidyName', 'selectedSubsidyId', 'selectedBenefitId','description','annual_cap','recipient','status','payment_in_installments','showCreate']);
+    }
+
     public function showCreateForm()
     {
         $this->showCreate = !$this->showCreate;

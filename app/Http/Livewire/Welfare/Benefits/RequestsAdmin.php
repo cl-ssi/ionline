@@ -13,6 +13,7 @@ use App\Models\File;
 class RequestsAdmin extends Component
 {
     public $requests;
+    public $statusFilter = 'En revisión';
 
     protected $rules = [
         'requests.*.status_update_observation' => 'required',
@@ -110,7 +111,18 @@ class RequestsAdmin extends Component
     public function render()
     {
         $this->requests = Request::all();
-        // $this->refresh();
+        
+        // Inicializar la consulta de solicitudes
+        $query = Request::query();
+
+        // Aplicar el filtro si se selecciona un estado
+        if ($this->statusFilter && $this->statusFilter !== 'Todos') {
+            $query->where('status', $this->statusFilter);
+        }
+
+        // Obtener las solicitudes filtradas
+        $this->requests = $query->get();
+
         return view('livewire.welfare.benefits.requests-admin');
         
     }

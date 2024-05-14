@@ -3,6 +3,26 @@
 
     <h4>Administrador de solicitudes</h4>
 
+    <br>
+    <div>
+        <label>
+            <input type="radio" wire:model="statusFilter" value="Todos"> Todos
+        </label>
+        <label>
+            <input type="radio" wire:model="statusFilter" value="En revisión"> En revisión
+        </label>
+        <label>
+            <input type="radio" wire:model="statusFilter" value="Aceptado"> Aceptado
+        </label>
+        <label>
+            <input type="radio" wire:model="statusFilter" value="Rechazado"> Rechazado
+        </label>
+        <label>
+            <input type="radio" wire:model="statusFilter" value="Pagado"> Pagado
+        </label>
+    </div>
+    <br>
+
     <div>
         @if (session()->has('message'))
             <div class="alert alert-info">
@@ -19,7 +39,6 @@
                 <th style="width: 12%">Solicitante</th>
                 <th style="width: 25%">Beneficio</th>
                 <th style="width: 5%">Adjunto</th>
-                <!-- <th>Estado</th> -->
                 <th style="width: 8%">Acciones</th>
                 <th style="width: 20%">Monto aceptado</th>
                 <th>Notificar</th>
@@ -32,7 +51,7 @@
                     <td>{{ $request->created_at->format('Y-m-d') }}</td>
                     <td>{{ $request->applicant->shortName }}</td>
                     <td>
-                        {{ $request->subsidy->benefit->name }} - {{ $request->subsidy->name }}
+                        @if($request->subsidy->benefit) {{ $request->subsidy->benefit->name }} - {{ $request->subsidy->name }} @endif
                         <br>
                         Monto solicitado: <b>${{ money($request->requested_amount) }}</b>
                         <br><br>

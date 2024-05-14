@@ -2,16 +2,16 @@
     @include('welfare.nav')
 
     <h4>
-        Subsidios <button wire:click="showCreateForm" class="btn btn-primary btn-sm ml-2">Crear</button>
+        Beneficios <button wire:click="showCreateForm" class="btn btn-primary btn-sm ml-2">Crear</button>
     </h4>
 
     @if($showCreate)
     <div class="row mt-3 showCreate">
         <div class="col-md-6">
             <div class="form-group">
-                <label for="selectedBenefitId">Beneficio:</label>
+                <label for="selectedBenefitId">Categoría:</label>
                 <select wire:model="selectedBenefitId" class="form-select" id="selectedBenefitId">
-                    <option value="">Seleccionar Beneficio</option>
+                    <option value="">Seleccionar categoría</option>
                     @foreach($benefits as $benefit)
                         <option value="{{ $benefit->id }}">{{ $benefit->name }}</option>
                     @endforeach
@@ -67,7 +67,29 @@
             </div>  
         </div>
 
-        <h4>Documentos</h4>
+        <!-- Botón "Crear" -->
+        <br>
+        <h4>
+            Documentos <button wire:click="showCreateDocumentForm" class="btn btn-primary btn-sm">Crear</button>
+        </h4>
+
+        <!-- Formulario de creación de documento -->
+        @if($showCreateDocumentForm)
+            <div class="row mt-3">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="newDocumentName">Nombre del Documento:</label>
+                        <input wire:model="newDocumentName" type="text" class="form-control" id="newDocumentName">
+                        @error('newDocumentName') <p class="text-danger">{{ $message }}</p> @enderror
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label for="newDocumentName"><br></label>
+                    <!-- Botón "Guardar" -->
+                    <button wire:click="saveDocument" class="btn btn-success form-control">Guardar</button>
+                </div>
+            </div>
+        @endif
 
         <div class="col-md-12">
         <table class="table table-bordered table-sm" style="border-collapse:collapse;">
@@ -98,10 +120,10 @@
         <br>
 
         <div class="col-md-6">
-        <div wire:loading wire:target="saveSubsidy">
-                <i class="fas fa-spinner fa-spin"></i> Guardando...
-        </div>
-        <button wire:click="saveSubsidy" class="btn btn-success">Guardar</button>
+            <div wire:loading wire:target="saveSubsidy">
+                    <i class="fas fa-spinner fa-spin"></i> Guardando...
+            </div>
+            <button wire:click="saveSubsidy" class="btn btn-success">Guardar</button>
         </div>
     </div>
     <br>
@@ -112,8 +134,8 @@
         <thead>
             <tr>
                 <th>Id</th>
-                <th>Subsidio</th>
                 <th>Beneficio</th>
+                <th>Categoría</th>
                 <th>Descripción</th>
                 <th>Tope anual</th>
                 <th>Tipo de pago</th>
@@ -128,7 +150,7 @@
                 @else <tr class="table-danger"> @endif
                     <td>{{ $subsidy->id }}</td>
                     <td>{{ $subsidy->name }}</td>
-                    <td>{{ $subsidy->benefit->name }}</td>
+                    <td>@if($subsidy->benefit) {{ $subsidy->benefit->name }} @endif</td>
                     <td>{{ $subsidy->description }}</td>
                     <td>{{ $subsidy->annual_cap }}</td>
                     <td>
@@ -140,7 +162,8 @@
                         <!-- Botón para editar -->
                         <button wire:click="editSubsidy({{ $subsidy->id }})" class="btn btn-primary btn-sm">Editar</button>
                         <!-- Botón para eliminar -->
-                        <button wire:click="deleteSubsidy({{ $subsidy->id }})" class="btn btn-danger btn-sm">Eliminar</button>
+                        <!-- <button wire:click="deleteSubsidy({{ $subsidy->id }})" class="btn btn-danger btn-sm">Eliminar</button> -->
+                        <button onclick="return confirm('¿Estás seguro de que deseas eliminar este beneficio?') || event.stopImmediatePropagation()" wire:click="deleteSubsidy({{ $subsidy->id }})" class="btn btn-danger btn-sm">Eliminar</button>
                     </td>
                 </tr>
             @endforeach
