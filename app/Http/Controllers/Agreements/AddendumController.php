@@ -376,12 +376,4 @@ class AddendumController extends Controller
         $types = Type::whereNull('partes_exclusive')->pluck('name','id');
         return view('documents.create', compact('document', 'types'));
     }
-
-    public function correctAmountText($amount_text)
-    {
-        $amount_text = ucwords(mb_strtolower($amount_text));
-        // verificamos si antes de cerrar en pesos la ultima palabra termina en Millón o Millones, de ser así se agregar "de" antes de cerrar con pesos
-        $words_amount = explode(' ',trim($amount_text));
-        return ($words_amount[count($words_amount) - 2] == 'Millon' || $words_amount[count($words_amount) - 2] == 'Millones') ? substr_replace($amount_text, 'de ', (strlen($amount_text) - 5), 0) : $amount_text;
-    }
 }
