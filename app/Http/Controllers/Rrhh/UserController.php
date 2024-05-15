@@ -46,6 +46,8 @@ class UserController extends Controller
             'Users: edit' => auth()->user()->can('Users: edit'),
         ];
 
+        $request->flash();
+        
         return view('rrhh.index', compact('users','permissions','roles','can'));
     }
 
