@@ -168,7 +168,7 @@
                                             @endif
                                         @endforeach
                                     @else
-                                        <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="{{ App\Models\Parameters\Parameter::get('ou','NombrePersonal') }}">
+                                        <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="{{ App\Models\Parameters\Parameter::get('ou','NombreUnidadPersonal', $requestReplacementStaff->establishment_id) }}">
                                             <i class="fas fa-clock fa-2x"></i>
                                         </span>
                                     @endif
@@ -204,10 +204,10 @@
                                 @endforeach
 
                                 @if(!in_array(1, $flagPostPersonal))
-                                    <span class="d-inline-block" tabindex="0" data-toggle="tooltip" data-placement="top" title="{{ App\Models\Parameters\Parameter::get('ou','NombrePlanificaciónRRHH') }}">
+                                    <span class="d-inline-block" tabindex="0" data-toggle="tooltip" data-placement="top" title="{{ App\Models\Parameters\Parameter::get('ou','NombrePlanificaciónRRHH', $requestReplacementStaff->establishment_id) }}">
                                         <i class="fas fa-clock fa-2x"></i>
                                     </span>
-                                    <span class="d-inline-block" tabindex="0" data-toggle="tooltip" data-placement="top" title="{{ App\Models\Parameters\Parameter::get('ou','NombreSubRRHH') }}">
+                                    <span class="d-inline-block" tabindex="0" data-toggle="tooltip" data-placement="top" title="{{ App\Models\Parameters\Parameter::get('ou','NombreSubRRHH', $requestReplacementStaff->establishment_id) }}">
                                         <i class="fas fa-clock fa-2x"></i>
                                     </span>
                                 @endif
@@ -243,7 +243,11 @@
                                 
 
                                     @if(!in_array(1, $flagPostRrhh))
-                                        <span class="d-inline-block" tabindex="0" data-toggle="tooltip" data-placement="top" title="{{ App\Models\Parameters\Parameter::get('ou','NombreSubRRHH') }}">
+                                        <span class="d-inline-block" 
+                                            tabindex="0" 
+                                            data-toggle="tooltip" 
+                                            data-placement="top" 
+                                            title="{{ App\Models\Parameters\Parameter::get('ou', 'NombreUnidadFinanzas', $requestReplacementStaff->establishment_id) }}">
                                             <i class="fas fa-signature fa-2x"></i>
                                         </span>
                                     @endif
@@ -551,10 +555,10 @@
                             @endforeach
 
                             @if(!in_array(1, $flagPostPersonal))
-                                <span class="d-inline-block" tabindex="0" data-toggle="tooltip" data-placement="top" title="{{ App\Models\Parameters\Parameter::get('ou','NombrePlanificaciónRRHH') }}">
+                                <span class="d-inline-block" tabindex="0" data-toggle="tooltip" data-placement="top" title="{{ App\Models\Parameters\Parameter::get('ou','NombrePlanificaciónRRHH', $requestReplacementStaff->establishment_id) }}">
                                     <i class="fas fa-clock fa-2x"></i>
                                 </span>
-                                <span class="d-inline-block" tabindex="0" data-toggle="tooltip" data-placement="top" title="{{ App\Models\Parameters\Parameter::get('ou','NombreSubRRHH') }}">
+                                <span class="d-inline-block" tabindex="0" data-toggle="tooltip" data-placement="top" title="{{ App\Models\Parameters\Parameter::get('ou','NombreSubRRHH', $requestReplacementStaff->establishment_id) }}">
                                     <i class="fas fa-clock fa-2x"></i>
                                 </span>
                             @endif
@@ -590,7 +594,7 @@
                             
 
                                 @if(!in_array(1, $flagPostRrhh))
-                                    <span class="d-inline-block" tabindex="0" data-toggle="tooltip" data-placement="top" title="{{ App\Models\Parameters\Parameter::get('ou','NombreSubRRHH') }}">
+                                    <span class="d-inline-block" tabindex="0" data-toggle="tooltip" data-placement="top" title="{{ App\Models\Parameters\Parameter::get('ou', 'NombreUnidadFinanzas', $requestReplacementStaff->establishment_id) }}">
                                         <i class="fas fa-signature fa-2x"></i>
                                     </span>
                                 @endif

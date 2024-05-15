@@ -100,14 +100,14 @@ class RequestSignController extends Controller
                 $requestSign->requestReplacementStaff->save();
             }
 
-            //AHORA SE CREA APROBACIONES EN APPROVALS (PLANIFICACION, )
+            //AHORA SE CREA APROBACIONES EN APPROVALS
 
             // SE CREA APROBACIÓN UNIDAD DE PLANIFICACION
             $prrhh_approval = $requestSign->requestReplacementStaff->approvals()->create([
                 "module"                            => "Solicitudes de Contración",
                 "module_icon"                       => "bi bi-id-card",
                 "subject"                           => "Solicitud de Aprobación Planificación",
-                "sent_to_ou_id"                     => Parameter::get('ou','PlanificacionRrhhSST'),
+                "sent_to_ou_id"                     => Parameter::get('ou','PlanificacionRrhh', $requestSign->requestReplacementStaff->establishment_id),
                 "document_route_name"               => "replacement_staff.request.to_sign_approval",
                 "document_route_params"             => json_encode(["request_replacement_staff_id" => $requestSign->requestReplacementStaff->id]),
                 "active"                            => true,
@@ -126,7 +126,7 @@ class RequestSignController extends Controller
                 "module"                            => "Solicitudes de Contración",
                 "module_icon"                       => "bi bi-id-card",
                 "subject"                           => "Solicitud de Aprobación SDGP",
-                "sent_to_ou_id"                     => Parameter::get('ou','SubRRHH'),
+                "sent_to_ou_id"                     => Parameter::get('ou','SubRRHH', $requestSign->requestReplacementStaff->establishment_id),
                 "document_route_name"               => "replacement_staff.request.to_sign_approval",
                 "document_route_params"             => json_encode(["request_replacement_staff_id" => $requestSign->requestReplacementStaff->id]),
                 "active"                            => false,
@@ -141,7 +141,7 @@ class RequestSignController extends Controller
             ]);
 
             // NOTIFICACION PARA RECLUTAMIENTO
-            $notification_reclutamiento_manager = Authority::getAuthorityFromDate(Parameter::where('module', 'ou')->where('parameter', 'ReclutamientoSSI')->first()->value, today(), 'manager');
+            $notification_reclutamiento_manager = Authority::getAuthorityFromDate(Parameter::where('module', 'ou')->where('parameter', 'Reclutamiento', $requestSign->requestReplacementStaff->establishment_id)->first()->value, today(), 'manager');
             if($notification_reclutamiento_manager){
                 $notification_reclutamiento_manager->user->notify(new NotificationEndSigningProcess($requestSign->requestReplacementStaff));
             }

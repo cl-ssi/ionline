@@ -13,6 +13,8 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use App\Models\Documents\Approval;
 
+use App\Models\Establishment;
+
 
 class RequestReplacementStaff extends Model implements Auditable
 {
@@ -58,6 +60,10 @@ class RequestReplacementStaff extends Model implements Auditable
 
     public function organizationalUnit() {
         return $this->belongsTo('App\Rrhh\OrganizationalUnit')->withTrashed();
+    }
+
+    public function establishment() {
+        return $this->belongsTo(Establishment::class);
     }
 
     public function requesterUser() {

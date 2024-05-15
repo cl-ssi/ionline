@@ -139,7 +139,8 @@
             </tr>
             <tr>
                 <th class="table-active">Lugar de Desempeño</th>
-                <td colspan="2">{{ $requestReplacementStaff->ouPerformance->name }}</td>
+                <td>{{ $requestReplacementStaff->ouPerformance->name }}</td>
+                <td>{{ ($requestReplacementStaff->establishment) ? $requestReplacementStaff->establishment->name : '' }}</td>
             </tr>
             <tr>
                 <th class="table-active">Staff Sugerido</th>
@@ -312,7 +313,7 @@
                             @endforeach
                         @else
                             <th class="table-active text-center">
-                                {{ App\Models\Parameters\Parameter::get('ou', 'NombrePersonal') }}
+                                {{ App\Models\Parameters\Parameter::get('ou', 'NombreUnidadPersonal', $requestReplacementStaff->establishment_id) }}
                             </th>
                         @endif
                     @endif
@@ -333,10 +334,10 @@
                 
                     @if(!in_array(1, $flagPostPersonal))
                         <th class="table-active text-center">
-                            {{ App\Models\Parameters\Parameter::get('ou','NombrePlanificaciónRRHH') }}
+                            {{ App\Models\Parameters\Parameter::get('ou','NombrePlanificaciónRRHH', $requestReplacementStaff->establishment_id) }}
                         </th>
                         <th class="table-active text-center">
-                            {{ App\Models\Parameters\Parameter::get('ou','NombreSubRRHH') }}
+                            {{ App\Models\Parameters\Parameter::get('ou','NombreSubRRHH', $requestReplacementStaff->establishment_id) }}
                         </th>
                     @endif
 
@@ -357,7 +358,7 @@
 
                     @if(!in_array(1, $flagPostRrhh))
                         <th class="table-active text-center">
-                            {{ App\Models\Parameters\Parameter::get('ou','NombreFinanzasSSI') }}
+                            {{ App\Models\Parameters\Parameter::get('ou','NombreUnidadFinanzas', $requestReplacementStaff->establishment_id) }}
                         </th>
                     @endif
                 @else

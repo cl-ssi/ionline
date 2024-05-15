@@ -124,7 +124,8 @@
             </tr>
             <tr>
                 <th class="table-active">Lugar de Desempeño</th>
-                <td colspan="2">{{ $requestReplacementStaff->ouPerformance->name }}</td>
+                <td>{{ $requestReplacementStaff->ouPerformance->name }}</td>
+                <td>{{ ($requestReplacementStaff->establishment) ? $requestReplacementStaff->establishment->name : '' }}</td>
             </tr>
             <tr>
                 <th class="table-active">Staff Sugerido</th>
@@ -308,7 +309,7 @@
                     @endforeach
 
                     <th class="table-active text-center">
-                        {{ App\Models\Parameters\Parameter::where('module', 'ou')->where('parameter', 'NombreFinanzasSSI')->first()->value }}
+                        {{ App\Models\Parameters\Parameter::where('module', 'ou')->where('parameter', 'NombreUnidadFinanzas', $requestReplacementStaff->establishment_id)->first()->value }}
                     </th>
                 @else
                     @foreach($requestReplacementStaff->RequestSign as $sign)
@@ -506,7 +507,7 @@
                             @endforeach
                         @else
                             <th class="table-active text-center">
-                                {{ App\Models\Parameters\Parameter::get('ou', 'NombrePersonal') }}
+                                {{ App\Models\Parameters\Parameter::get('ou', 'NombreUnidadPersonal') }}
                             </th>
                         @endif
                     @endif
@@ -551,7 +552,7 @@
 
                     @if(!in_array(1, $flagPostRrhh))
                         <th class="table-active text-center">
-                            {{ App\Models\Parameters\Parameter::get('ou','NombreFinanzasSSI') }}
+                            {{ App\Models\Parameters\Parameter::get('ou','NombreUnidadFinanzas', $requestReplacementStaff->establishment_id) }}
                         </th>
                     @endif
                 @else

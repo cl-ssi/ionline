@@ -188,10 +188,10 @@ class RequestReplacementStaffController extends Controller
 
     public function create_replacement()
     {
-        // session()->flash('danger', 'Estimados Usuario: No es posible crear solicitudes debido a mantención programada, agradecemos su comprensión');
-        // return redirect()->route('replacement_staff.request.own_index');
+        session()->flash('danger', 'Estimados Usuario: No es posible crear solicitudes debido a mantención programada, agradecemos su comprensión');
+        return redirect()->route('replacement_staff.request.own_index');
 
-        return view('replacement_staff.request.create_replacement');
+        // return view('replacement_staff.request.create_replacement');
     }
 
     public function create_announcement()
@@ -247,6 +247,7 @@ class RequestReplacementStaffController extends Controller
             $request_replacement->form_type = $formType;
             $request_replacement->user()->associate(auth()->user());
             $request_replacement->organizationalUnit()->associate(auth()->user()->organizationalUnit);
+            $request_replacement->establishment()->associate(auth()->user()->organizationalUnit->establishment);
             $request_replacement->requesterUser()->associate($request->requester_id);
 
             $now = Carbon::now()->format('Y_m_d_H_i_s');
@@ -491,7 +492,7 @@ class RequestReplacementStaffController extends Controller
             /* ----------------------------------------------------------------------- */
 
             //SE NOTIFICA A UNIDAD DE RECLUTAMIENTO
-            $notification_reclutamiento_manager = Authority::getAuthorityFromDate(Parameter::get('ou','ReclutamientoSSI'), today(), 'manager');
+            $notification_reclutamiento_manager = Authority::getAuthorityFromDate(Parameter::get('ou', 'Reclutamiento', $request_replacement->establishment_id), today(), 'manager');
             if($notification_reclutamiento_manager){
                 $notification_reclutamiento_manager->user->notify(new NotificationNewRequest($request_replacement, 'reclutamiento'));
             }
@@ -852,7 +853,7 @@ class RequestReplacementStaffController extends Controller
             $requestReplacementStaff->signatures_file_id = $signaturesFile->id;
             $requestReplacementStaff->save();
 
-            $notification_reclutamiento_manager = Authority::getAuthorityFromDate(Parameter::where('module', 'ou')->where('parameter', 'ReclutamientoSSI')->first()->value, today(), 'manager');
+            $notification_reclutamiento_manager = Authority::getAuthorityFromDate(Parameter::where('module', 'ou')->where('parameter', 'Reclutamiento', $requestReplacementStaff->establishment_id)->first()->value, today(), 'manager');
             if($notification_reclutamiento_manager){
                 $notification_reclutamiento_manager->user->notify(new NotificationEndSigningProcess($requestReplacementStaff));
             }
@@ -878,7 +879,7 @@ class RequestReplacementStaffController extends Controller
                     $request_sing = new RequestSign();
                     $request_sing->position = 1;
                     $request_sing->ou_alias = 'uni_per';
-                    $request_sing->organizationalUnit()->associate(Parameter::get('ou','PersonalSSI'));
+                    $request_sing->organizationalUnit()->associate(Parameter::get('ou', 'UnidadPersonal', $requestReplacementStaff->establishment_id));
                     $request_sing->request_status = 'pending';
                     $request_sing->requestReplacementStaff()->associate($requestReplacementStaff->id);
                     $request_sing->save();
@@ -891,7 +892,7 @@ class RequestReplacementStaffController extends Controller
                         "module"                            => "Solicitudes de Contración",
                         "module_icon"                       => "bi bi-id-card",
                         "subject"                           => "Solicitud de Aprobación Planificación",
-                        "sent_to_ou_id"                     => Parameter::get('ou','PlanificacionRrhhSST'),
+                        "sent_to_ou_id"                     => Parameter::get('ou','PlanificacionRrhh', $requestSign->requestReplacementStaff->establishment_id),
                         "document_route_name"               => "replacement_staff.request.to_sign_approval",
                         "document_route_params"             => json_encode(["request_replacement_staff_id" => $requestReplacementStaff->id]),
                         "active"                            => true,

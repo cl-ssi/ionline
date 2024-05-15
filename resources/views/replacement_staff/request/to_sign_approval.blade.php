@@ -26,7 +26,32 @@
         <table class="table table-sm table-bordered small">
             <thead>
                 <tr class="table-active">
-                    <th colspan="4">Formulario Contratación de Personal - Solicitud Nº {{ $requestReplacementStaff->id }}</th>
+                    <th colspan="4">Formulario Contratación de Personal - Solicitud Nº {{ $requestReplacementStaff->id }}
+                        @switch($requestReplacementStaff->request_status)
+                            @case('pending')
+                                <span class="badge bg-warning">{{ $requestReplacementStaff->StatusValue }}</span>
+                                @break
+
+                            @case('complete')
+                                <span class="badge bg-success">{{ $requestReplacementStaff->StatusValue }}</span>
+                                @break
+
+                            @case('rejected')
+                                <span class="badge bg-danger">{{ $requestReplacementStaff->StatusValue }}</span>
+                                @break
+                            
+                            @case('to assign')
+                                <span class="badge badge-warning">{{ $requestReplacementStaff->StatusValue }}</span>
+                                @break
+
+                            @case('finance sign')
+                                <span class="badge badge-warning">{{ $requestReplacementStaff->StatusValue }}</span>
+                                @break
+
+                            @default
+                                Default case...
+                        @endswitch
+                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -108,7 +133,8 @@
                 </tr>
                 <tr>
                     <th class="table-active">Lugar de Desempeño</th>
-                    <td colspan="2">{{ $requestReplacementStaff->ouPerformance->name }}</td>
+                    <td>{{ $requestReplacementStaff->ouPerformance->name }}</td>
+                    <td>{{ ($requestReplacementStaff->establishment) ? $requestReplacementStaff->establishment->name : '' }}</td>
                 </tr>
                 <tr>
                     <th class="table-active">Staff Sugerido</th>
@@ -266,16 +292,16 @@
 
                 @else
                     <th class="table-active text-center">
-                        {{ App\Models\Parameters\Parameter::get('ou','NombrePersonal') }}
+                        {{ App\Models\Parameters\Parameter::get('ou', 'NombreUnidadPersonal', $requestReplacementStaff->establishment_id) }}
                     </th>
                 @endif
             
                 @if($flag == 0)
                     <th class="table-active text-center">
-                        {{ App\Models\Parameters\Parameter::get('ou', 'NombrePlanificacionRRHH') }}
+                        {{ App\Models\Parameters\Parameter::get('ou', 'NombrePlanificacionRRHH', $requestReplacementStaff->establishment_id) }}
                     </th>
                     <th class="table-active text-center">
-                        {{ App\Models\Parameters\Parameter::get('ou', 'NombreSubRRHH') }}
+                        {{ App\Models\Parameters\Parameter::get('ou', 'NombreSubRRHH', $requestReplacementStaff->establishment_id) }}
                     </th>
                 @endif
             
@@ -291,7 +317,7 @@
 
                 @if($flagFinance == 0)
                     <th class="table-active text-center">
-                        {{ App\Models\Parameters\Parameter::get('ou', 'NombreFinanzasSSI') }}
+                        {{ App\Models\Parameters\Parameter::get('ou', 'NombreUnidadFinanzas', $requestReplacementStaff->establishment_id) }}
                     </th>
                 @endif
             @else

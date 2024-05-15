@@ -69,6 +69,7 @@ class SearchRequests extends Component
                         $this->selectedNameToReplace,
                         $this->ou_dependents_array
                     )
+                    ->where('establishment_id', auth()->user()->establishment->id)
                     ->paginate(50);
             }
 
@@ -212,10 +213,12 @@ class SearchRequests extends Component
 
         $subs = OrganizationalUnit::whereIn('id', $subParams)->get();
 
+        $users_rys = User::where('organizational_unit_id', Parameter::get('ou', 'Reclutamiento', auth()->user()->establishment_id))->get();
+
         return view('livewire.replacement-staff.search-requests',[
             'fundaments'    => RstFundamentManage::all(),
             'requests'      => $requests,
-            'users_rys'     => User::where('organizational_unit_id', 48)->get(),
+            'users_rys'     => $users_rys,
             'subs'          => $subs
         ]);
     }

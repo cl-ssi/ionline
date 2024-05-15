@@ -442,7 +442,7 @@
                         </a>
                         @endcan
 
-                        @if(auth()->user()->manager->count() > 0 ||
+                        @if((auth()->user()->manager->count() > 0 ||
                             auth()->user()->can('Replacement Staff: assign request') ||
                             auth()->user()->can('Replacement Staff: create request') ||
                             auth()->user()->can('Replacement Staff: create staff') ||
@@ -456,7 +456,8 @@
                             auth()->user()->can('Job Position Profile: audit') ||
                             auth()->user()->can('Job Position Profile: create') ||
                             auth()->user()->can('Job Position Profile: edit') ||
-                            auth()->user()->can('Job Position Profile: review')
+                            auth()->user()->can('Job Position Profile: review')) &&
+                            auth()->user()->establishment_id == App\Models\Parameters\Parameter::get('establishment', 'SSTarapaca')
                         )
                         <div class="dropdown-divider"></div>
                         <h6 class="dropdown-header">Depto. Desarrollo y Gestión del Talento</h6>
