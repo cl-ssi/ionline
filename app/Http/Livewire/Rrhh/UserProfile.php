@@ -37,6 +37,16 @@ class UserProfile extends Component
         'bankAccount.type' => 'nullable',
     ];
 
+    protected function anyBankAccountFieldFilled()
+    {
+        return !empty($this->bankAccount['bank_id']) || !empty($this->bankAccount['number']) || !empty($this->bankAccount['type']);
+    }
+
+    protected function allBankAccountFieldsEmpty()
+    {
+        return empty($this->bankAccount['bank_id']) && empty($this->bankAccount['number']) && empty($this->bankAccount['type']);
+    }
+
     public function mount()
     {
         /** Si el usuario pasado por parametro no es quien está logeado */
@@ -59,13 +69,25 @@ class UserProfile extends Component
     public function save()
     {
         $this->validate();
+
+        // Custom validation for bankAccount fields
+        if ($this->anyBankAccountFieldFilled()) {
+            $this->validate([
+                'bankAccount.bank_id' => 'required|integer',
+                'bankAccount.number' => 'required',
+                'bankAccount.type' => 'required',
+            ]);
+        }
+
         $this->user->save();
 
-        // Si los valores vienen vacios, los guardamos como null
-        if($this->bankAccount) {
-            $this->bankAccount->bank_id = $this->bankAccount->bank_id ?: null;
-            $this->bankAccount->type = $this->bankAccount->type ?: null;
-            $this->bankAccount->save();
+        // Check if all bankAccount fields are empty
+        if ($this->allBankAccountFieldsEmpty()) {
+            // Delete the bankAccount relationship if all fields are empty
+            $this->user->bankAccount()->delete();
+        } else {
+            // Save the bankAccount data
+            $this->user->bankAccount()->updateOrCreate([], $this->bankAccount);
         }
 
 
