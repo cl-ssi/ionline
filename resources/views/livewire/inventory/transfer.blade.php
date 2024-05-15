@@ -113,7 +113,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="5" align="center">No hay Productos asociado a este usuario</td>
+                        <td colspan="8" align="center">No hay Productos asociado a este usuario</td>
                     </tr>
 
                 @endforelse
@@ -123,7 +123,7 @@
         {{ $inventories->links() }}
 
         <div class="row g-2 mb-3">
-            @if($old_user_responsible_id and $has_product >=1)
+            @if($old_user_responsible_id && !$inventories->isEmpty())
                 <fieldset class="col-md-3">
                     
                         <label for="new-user-using-id" class="form-label">Nuevo Responsable de productos</label>
