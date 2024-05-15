@@ -40,7 +40,7 @@
                 <th style="width: 25%">Beneficio</th>
                 <th style="width: 5%">Adjunto</th>
                 <th style="width: 8%">Acciones</th>
-                <th style="width: 20%">Monto aceptado</th>
+                <th style="width: 20%">Monto aprobado</th>
                 <th>Notificar</th>
             </tr>
         </thead>

@@ -69,7 +69,7 @@ class RequestsAdmin extends Component
         $request->accepted_amount = $this->requests[$key]->accepted_amount;
         $request->save();
 
-        session()->flash('message', 'Se registró el monto aceptado.');
+        session()->flash('message', 'Se registró el monto aprobado.');
     }
 
     public function saveInstallmentsNumber($key){
