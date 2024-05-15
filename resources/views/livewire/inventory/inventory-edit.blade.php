@@ -603,6 +603,12 @@
 
     <hr>
 
+    @can('be god')
+        @include('partials.audit', ['audits' => $inventory->audits()] )
+    @endcan
+
+    
+
     <!-- Nila comenta ruido visual
         <h3>Productos del mismo tipo</h3>
 

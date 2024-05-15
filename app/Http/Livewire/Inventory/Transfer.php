@@ -9,6 +9,8 @@ use App\Models\User;
 use App\Models\Inv\InventoryMovement;
 use App\Models\Parameters\Place;
 use Livewire\WithPagination;
+use Illuminate\Database\Eloquent\Builder;
+
 
 class Transfer extends Component
 {
@@ -26,6 +28,7 @@ class Transfer extends Component
     public $has_inventories;
     public $selectedInventories = [];
     public $selectAllText = 'Seleccionar todos';
+    public $searchTerm = '';
     
 
 
@@ -71,13 +74,38 @@ class Transfer extends Component
 
     public function render()
     {
+        $inventories = $this->search();
+
+        return view('livewire.inventory.transfer', compact('inventories'));
+    }
+
+    public function search()
+    {
         $inventoriesQuery = Inventory::where('user_responsible_id', $this->old_user_responsible_id)->latest();
+
+        if ($this->searchTerm) {
+            $inventoriesQuery->where(function (Builder $query) {
+                $query->where('number', 'like', '%' . $this->searchTerm . '%')
+                    ->orWhere('old_number', 'like', '%' . $this->searchTerm . '%')
+                    ->orWhereHas('unspscProduct', function (Builder $query) {
+                        $query->where('name', 'like', '%' . $this->searchTerm . '%');
+                    })
+                    ->orWhereHas('place.location', function (Builder $query) {
+                        $query->where('name', 'like', '%' . $this->searchTerm . '%');
+                    })
+                    ->orWhereHas('place', function (Builder $query) {
+                        $query->where('name', 'like', '%' . $this->searchTerm . '%');
+                    })
+                    ->orWhereHas('using', function (Builder $query) {
+                        $query->where('name', 'like', '%' . $this->searchTerm . '%')
+                              ->orWhere('fathers_family', 'like', '%' . $this->searchTerm . '%');
+                    });
+
+            });
+        }
+
         $paginateQuery = clone $inventoriesQuery;
-        $inventories = $paginateQuery->paginate(50);
-        
-        $this->has_inventories = $inventoriesQuery->get();
-        $this->has_product = !$inventories->isEmpty();
-        return view('livewire.inventory.transfer', ['inventories' => $inventories]);
+        return $paginateQuery->paginate(50);
     }
 
     public function transfer()

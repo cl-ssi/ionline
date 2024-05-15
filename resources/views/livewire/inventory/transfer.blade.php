@@ -47,6 +47,16 @@
         </fieldset>
     </div>
 
+    <div class="row g-3 align-items-center">
+        <div class="col-2">
+            <label for="searchTerm" class="form-label">Buscar:</label>
+        </div>
+        <div class="col-10">
+            <input type="text" class="form-control" wire:model="searchTerm" id="searchTerm" placeholder="Ingrese término de búsqueda">
+        </div>
+    </div>
+    <br>
+
 
         <table class="table table-sm table-bordered">
             <thead>
