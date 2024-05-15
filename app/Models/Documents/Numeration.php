@@ -28,7 +28,7 @@ class Numeration extends Model
      */
     // public function numeration(): MorphOne
     // {
-    //     return $this->morphOne(Numeration::class, 'numerable);
+    //     return $this->morphOne(Numeration::class, 'numerable');
     // }
 
 

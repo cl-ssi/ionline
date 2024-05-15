@@ -36,19 +36,42 @@
     </div>
 
     @if($old_user_responsible_id)
+
+    <div class="row g-2 mb-3">
+        <fieldset class="col text-end">
+            <button class="btn btn-primary"
+                    wire:loading.attr="disabled"
+                    wire:click="toggleSelectAll"
+                    wire:target="toggleSelectAll"
+            >{{ $selectAllText }}</button>
+        </fieldset>
+    </div>
+
+
         <table class="table table-sm table-bordered">
             <thead>
                 <tr>
+                    <th class="text-center">Nro. Inv.</th>
+                    <th class="text-center">Nro. Ant.</th>
                     <th>Producto/Especie</th>
                     <th>Ubicación</th>
                     <th>Lugar</th>
                     <th>Responsable</th>
                     <th>Usuario</th>
+                    <th>Trapasar</th>
                 </tr>
             </thead>
             <tbody>
                 @forelse($inventories as $inventory)
                     <tr>
+                        <td class="text-center" nowrap>
+                            <small>
+                                    {{ $inventory->number }}
+                            </small>
+                        </td>
+                        <td nowrap>
+                            {{ $inventory->old_number }}
+                        </td>
                         <td>
                             @if($inventory->unspscProduct)
                                 {{ $inventory->unspscProduct->name }}
@@ -73,6 +96,9 @@
                             @if($inventory->using)
                                 {{ $inventory->using->tinny_name }}
                             @endif
+                        </td>
+                        <td class="text-center" nowrap>
+                            <input type="checkbox" wire:model="selectedInventories.{{ $inventory->id }}">
                         </td>
                     </tr>
                     @empty

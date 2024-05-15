@@ -8,10 +8,13 @@ use App\Http\Requests\Inventory\CreateMovementRequest;
 use App\Models\User;
 use App\Models\Inv\InventoryMovement;
 use App\Models\Parameters\Place;
+use Livewire\WithPagination;
 
 class Transfer extends Component
 {
 
+    use WithPagination;
+	protected $paginationTheme = 'bootstrap';
     public $inventory;
     public $user_using_id = null;
     public $user_responsible_id = null;
@@ -21,6 +24,8 @@ class Transfer extends Component
     public $installation_date;
     public $has_product = null;
     public $has_inventories;
+    public $selectedInventories = [];
+    public $selectAllText = 'Seleccionar todos';
     
 
 
@@ -77,49 +82,76 @@ class Transfer extends Component
 
     public function transfer()
     {
-        $dataValidated = $this->validate();
+        foreach($this->selectedInventories as $inventoryId => $isSelected) {
+            if ($isSelected) {
+                $inventory = Inventory::findOrFail($inventoryId);
 
-        $userResponsible = User::find($dataValidated['user_responsible_id']);
-        $userUsing = User::find($dataValidated['user_using_id']);        
-        $place = Place::find($dataValidated['place_id']);
-        $dataValidated['user_responsible_ou_id'] = optional($userResponsible->organizationalUnit)->id;
-        $dataValidated['user_sender_id'] = auth()->id();
-        $dataValidated['observations'] = 'movimiento por traspaso masivo de inventario';
-        foreach($this->has_inventories as $inventory)
-        {
-            if($userUsing)
-            {
-                $dataValidated['user_using_id'] = $userUsing->id;
-                $dataValidated['user_using_ou_id'] = $userUsing->organizational_unit_id;
-            }
-            else
-            {
-                $dataValidated['user_using_id'] = $inventory->lastMovement->user_using_id;
-                $dataValidated['user_using_ou_id'] = $inventory->lastMovement->user_using_ou_id;
+                $dataValidated = $this->validate([
+                    'user_responsible_id' => 'required',
+                    'user_using_id' => 'nullable',
+                    'place_id' => 'nullable',
+                ]);
 
-            }
-            if($place)
-            {
-                $dataValidated['place_id'] = $place->id;
-            }
-            else
-            {
-                $dataValidated['place_id'] = $inventory->lastMovement->place_id;
-            }
-            
+                $dataValidated['user_responsible_ou_id'] = optional(User::find($dataValidated['user_responsible_id'])->organizationalUnit)->id;
+                $dataValidated['user_sender_id'] = auth()->id();
+                $dataValidated['observations'] = 'movimiento por traspaso masivo de inventario';
 
-            $dataValidated['inventory_id'] = $inventory->id;
-            //$movement = InventoryMovement::create($dataValidated);
-            InventoryMovement::withoutEvents(function () use ($dataValidated) {
-                $movement = InventoryMovement::create($dataValidated);
-            });
+                $userUsing = User::find($dataValidated['user_using_id']);
+                $place = Place::find($dataValidated['place_id']);
+
+                if($userUsing)
+                {
+                    $dataValidated['user_using_ou_id'] = $userUsing->organizational_unit_id;
+                }
+                else
+                {
+                    $dataValidated['user_using_id'] = $inventory->lastMovement->user_using_id;
+                    $dataValidated['user_using_ou_id'] = $inventory->lastMovement->user_using_ou_id;
+                }
+
+                if($place)
+                {
+                    $dataValidated['place_id'] = $place->id;
+                }
+                else
+                {
+                    $dataValidated['place_id'] = $inventory->lastMovement->place_id;
+                }
+
+                $dataValidated['inventory_id'] = $inventory->id;
+
+                InventoryMovement::withoutEvents(function () use ($dataValidated) {
+                    InventoryMovement::create($dataValidated);
+                });
+            }
         }
+
         $this->resetInput();
         session()->flash('success', 'Los Items del Usuario fueron trasladados exitosamente, esperando confirmación de recepción por parte del usuario para finalizar el proceso'); 
         return redirect()->route('inventories.transfer');
-
-
     }
+
+    public function toggleSelectAll()
+    {
+        if ($this->selectAllText == 'Seleccionar todos') {
+            $this->selectAll();
+            $this->selectAllText = 'Deseleccionar todos';
+        } else {
+            $this->deselectAll();
+            $this->selectAllText = 'Seleccionar todos';
+        }
+    }
+
+    public function selectAll()
+    {
+        $this->selectedInventories = array_fill_keys($this->has_inventories->pluck('id')->toArray(), true);
+    }
+
+    public function deselectAll()
+    {
+        $this->selectedInventories = [];
+    }
+
 
     public function resetInput()
     {
