@@ -50,7 +50,7 @@
                         Ingreso: 
                     </td>
                     <td width="70%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 15px 10px 5px 10px;">
-                        @if($roomBooking) <b>{{$roomBooking->start_date->format('Y-m-d')}}</b> @endif a las <b>16:00.</b>
+                        @if($roomBooking) <b>{{$roomBooking->start_date->format('Y-m-d')}}</b> @endif a las <b>18:00.</b>
                     </td>
                 </tr>
                 <tr>
@@ -58,7 +58,7 @@
                         Salida:
                     </td>
                     <td width="70%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 5px 10px;">
-                        @if($roomBooking) <b>{{$roomBooking->end_date->format('Y-m-d')}}</b> @endif a las <b>12:00.</b>
+                        @if($roomBooking) <b>{{$roomBooking->end_date->format('Y-m-d')}}</b> @endif a las <b>17:00.</b>
                     </td>
                 </tr>
                 <tr>
