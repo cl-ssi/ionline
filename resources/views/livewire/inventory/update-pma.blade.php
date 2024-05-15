@@ -8,46 +8,6 @@
         </div>
     @endif
 
-    {{--
-
-    <fieldset class="col-md-6">
-            <label for="place-id" class="form-label">
-                Ubicación Actual
-            </label>
-
-            @livewire('places.find-place', [
-                'smallInput' => true,
-                'tagId' => 'place-id',
-                'placeholder' => 'Ingrese una ubicación o cod. arq.',
-                'establishment' => auth()->user()->organizationalUnit->establishment,
-                'key' => 'old'
-            ])
-            <input
-                class="form-control @error('place_id') is-invalid @enderror"
-                type="hidden"
-            >
-
-            @error('place_id')
-                <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                </span>
-            @enderror
-    </fieldset> 
-    
-
-    
-    <br>
-    <div class="col-md-1">
-            <label class="form-label">
-                &nbsp; 
-            </label>
-            <button class="btn btn-primary" wire:loading.attr="disabled" wire:click="search" wire:target="search">Buscar</button>
-    </div> 
-   
-
-    --}}
-
-
     @if(count($inventories) > 0)
     <br><br>
     <div class="row g-2 mb-3">
@@ -59,6 +19,20 @@
             >{{ $selectAllText }}</button>
         </fieldset>
     </div>
+
+    {{--
+    <div class="row g-3 align-items-center">
+        <div class="col-2">
+            <label for="searchTerm" class="form-label">Buscar:</label>
+        </div>
+        <div class="col-10">
+            <input type="text" class="form-control" wire:model="searchTerm" id="searchTerm" placeholder="Ingrese término de búsqueda">
+        </div>
+    </div>
+    --}}
+    <br>
+
+
     <div class="table-responsive">
         <table class="table table-sm table-bordered">
             <thead>

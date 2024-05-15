@@ -90,7 +90,7 @@
                 </tr>
             @empty
                 <tr class="text-center" wire:loading.remove>
-                    <td colspan="8">
+                    <td colspan="9">
                         <em>No hay registros</em>
                     </td>
                 </tr>

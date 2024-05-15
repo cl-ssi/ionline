@@ -6,9 +6,13 @@ use Livewire\Component;
 use App\Models\Inv\Inventory;
 use App\Models\Inv\InventoryMovement;
 use App\Models\Parameters\Place;
+use Livewire\WithPagination;
 
 class UpdatePma extends Component
 {
+    use WithPagination;
+	protected $paginationTheme = 'bootstrap';
+
     public $place_id = null;
     public $new_place_id = null;
     public $inventories = [];
@@ -18,6 +22,7 @@ class UpdatePma extends Component
     public $updateCompleted = false;
     public $selectedItems = [];
     public $selectAllText = 'Seleccionar todos';
+    public $searchTerm = '';
 
     public function mount()
     {
@@ -41,37 +46,30 @@ class UpdatePma extends Component
         } elseif ($key === 'new') {
             $this->new_place_id = $value;
         }
-    }
-    
-    
-
-
-
+    }    
     public function render()
     {
+        $inventoriesQuery = Inventory::where('place_id', $this->place_id)
+            ->where('user_responsible_id', auth()->user()->id);    
+        
+        if ($this->searchTerm) {
+            $inventoriesQuery->where(function ($query) {
+                $query->where('number', 'like', '%' . $this->searchTerm . '%')
+                    ->orWhere('old_number', 'like', '%' . $this->searchTerm . '%');
+            });
+        }
+    
+        $inventories = $inventoriesQuery->paginate(50);
+    
         return view('livewire.inventory.update-pma', [
-            'inventories' => $this->inventories,
+            'inventories' => $inventories,
             'place' => $this->place,
             'placeNew' => $this->placeNew,
             'establishment' => auth()->user()->establishment,
         ]);
     }
-
-    public function search()
-    {
-        $this->inventories = Inventory::whereHas('lastConfirmedMovement', function ($query) {
-                $query->where('place_id', $this->place_id);
-                $query->where('user_responsible_id', auth()->user()->id);
-            })->get();
     
-        $this->place = Place::find($this->place_id);
-    }
-
-    // public function selectAllItems()
-    // {
-    //     $this->selectAll = !$this->selectAll;
-    //     $this->selectedItems = array_fill(0, count($this->inventories), $this->selectAll);
-    // }
+    
 
     public function updateSelected()
     {
@@ -82,9 +80,7 @@ class UpdatePma extends Component
         }
     
         
-        $newPlace = Place::find($this->new_place_id);
-    
-        
+        $newPlace = Place::find($this->new_place_id);        
         foreach ($this->selectedItems as $inventoryId => $isSelected) {
             if ($isSelected) {
                 $inventory = Inventory::find($inventoryId);
@@ -137,7 +133,4 @@ class UpdatePma extends Component
     {
         $this->selectedItems = [];
     }
-
-
-
 }
