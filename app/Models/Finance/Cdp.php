@@ -72,7 +72,7 @@ class Cdp extends Model
     public static function createCdp(RequestForm $requestForm): void 
     {
         $cdp = Cdp::create([
-            'date' => $requestForm->approved_at,
+            'date' => $requestForm->created_at,
             'file_path' => $requestForm->file_path,
             'request_form_id' => $requestForm->id,
             'user_id' => null,
