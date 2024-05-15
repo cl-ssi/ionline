@@ -50,8 +50,14 @@
 
     @if(count($inventories) > 0)
     <br><br>
-    <div class="col-md-3">
-        <button class="btn btn-primary" wire:click="selectAllItems" wire:loading.attr="disabled">Seleccionar Todo</button>
+    <div class="row g-2 mb-3">
+        <fieldset class="col text-end">
+            <button class="btn btn-primary"
+                    wire:loading.attr="disabled"
+                    wire:click="toggleSelectAll"
+                    wire:target="toggleSelectAll"
+            >{{ $selectAllText }}</button>
+        </fieldset>
     </div>
     <div class="table-responsive">
         <table class="table table-sm table-bordered">
@@ -119,9 +125,8 @@
                             @endif
                         </td>
                         <td class="text-center">
-                            <input type="checkbox" wire:model="selectedItems.{{ $loop->index }}">
+                            <input type="checkbox" wire:model="selectedItems.{{ $inventory->id }}">
                         </td>
-
                     </tr>
                 @endforeach
             </tbody>

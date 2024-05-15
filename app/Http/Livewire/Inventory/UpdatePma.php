@@ -10,13 +10,14 @@ use App\Models\Parameters\Place;
 class UpdatePma extends Component
 {
     public $place_id = null;
-    public $new_place_id = null;    
+    public $new_place_id = null;
     public $inventories = [];
     public $place = null;
     public $placeNew = null;
     public $selectAll = false;
-    public $selectedItems = [];
     public $updateCompleted = false;
+    public $selectedItems = [];
+    public $selectAllText = 'Seleccionar todos';
 
     public function mount()
     {
@@ -66,39 +67,42 @@ class UpdatePma extends Component
         $this->place = Place::find($this->place_id);
     }
 
-    public function selectAllItems()
-    {
-        $this->selectAll = !$this->selectAll;
-        $this->selectedItems = array_fill(0, count($this->inventories), $this->selectAll);
-    }
+    // public function selectAllItems()
+    // {
+    //     $this->selectAll = !$this->selectAll;
+    //     $this->selectedItems = array_fill(0, count($this->inventories), $this->selectAll);
+    // }
 
     public function updateSelected()
     {
-        // Validar que se haya seleccionado una nueva ubicación        
+        
         if (!$this->new_place_id) {
             $this->addError('new_place_id', 'Debe seleccionar una nueva ubicación.');
             return;
         }
     
-        // Obtener la nueva ubicación a la que se van a trasladar los elementos seleccionados
+        
         $newPlace = Place::find($this->new_place_id);
     
-        // Iterar sobre los elementos seleccionados
-        foreach ($this->selectedItems as $index => $isSelected) {
+        
+        foreach ($this->selectedItems as $inventoryId => $isSelected) {
             if ($isSelected) {
-                $inventory = $this->inventories[$index];
-                $lastMovement = $inventory->lastMovement;
-                $inventory->update(['place_id' => $newPlace->id]);
-                if ($lastMovement) {
-                    $lastMovement->update(['place_id' => $newPlace->id]);
+                $inventory = Inventory::find($inventoryId);
+                if ($inventory) {
+                    $lastMovement = $inventory->lastMovement;
+                    $inventory->update(['place_id' => $newPlace->id]);
+                    if ($lastMovement) {
+                        $lastMovement->update(['place_id' => $newPlace->id]);
+                    }
                 }
             }
         }
     
-        // Reiniciar los datos después de la actualización
+        
         $this->resetData();
         $this->updateCompleted = true;
     }
+    
     
 
 
@@ -110,6 +114,27 @@ class UpdatePma extends Component
         $this->place = null;
         $this->placeNew = null;
         $this->selectAll = false;
+        $this->selectedItems = [];
+    }
+
+    public function toggleSelectAll()
+    {
+        if ($this->selectAllText == 'Seleccionar todos') {
+            $this->selectAll();
+            $this->selectAllText = 'Deseleccionar todos';
+        } else {
+            $this->deselectAll();
+            $this->selectAllText = 'Seleccionar todos';
+        }
+    }
+
+    public function selectAll()
+    {
+        $this->selectedItems = array_fill_keys($this->inventories->pluck('id')->toArray(), true);
+    }    
+
+    public function deselectAll()
+    {
         $this->selectedItems = [];
     }
 
