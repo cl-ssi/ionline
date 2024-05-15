@@ -361,7 +361,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 document.getElementById('payment_type_select').addEventListener('change', function() {
     var selectedOption = this.value;
-    if (selectedOption == 'Descuento por planilla') {
+    if (selectedOption == 'Descuento por planilla - 1 cuota' || selectedOption == 'Descuento por planilla - 2 cuotas' || selectedOption == 'Descuento por planilla - 3 cuotas') {
         var confirmation = confirm('La confirmación de su reserva estará sujeta a disponibilidad de alcance del 15% de su liquidación de sueldo.');
         if (!confirmation) {
             this.value = '';
