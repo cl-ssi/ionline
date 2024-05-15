@@ -6,10 +6,17 @@
 
 @include('welfare.nav')
 
-<h3 class="inline">Mis reservas</h3>
+<div class="alert alert-warning" role="alert">
+  <b>PARA DEPOSITAR O TRANSFERIR AL SERVICIO DE BIENESTAR</b><br><br>
 
-<br>
-<br>
+  <li>Banco: BANCO ESTADO</li>
+  <li>Cuenta corriente: 01309099679</li>
+  <li>Rut: 61.606.100-3</li>
+  <li>Nombre: Servicio de Salud Iquique</li>
+  <li>Correo: contador.bienestar@redsalud.gob.cl</li>
+</div>
+
+<h3 class="inline">Mis reservas</h3>
 
 <table class="table table-striped table-sm table-bordered">
 	<thead>
