@@ -46,7 +46,7 @@
             <fieldset class="col-3">
                 <div class="input-group mb-3">
                     <input type="text" name="name" class="form-control" placeholder="Nombres, Apellidos o RUN sin DV"
-                        autofocus autocomplete="off">
+                    value="{{ old('name') }}"  autofocus autocomplete="off">
                     <div class="input-group-append">
                         <button class="btn btn-outline-secondary" type="submit">
                             <i class="bi bi-search" aria-hidden="true"></i>
@@ -61,7 +61,7 @@
                     <select class="form-control form-select" name="roles">
                         <option value="">Roles</option>
                         @foreach ($roles as $role)
-                            <option>{{ $role }}</option>
+                            <option value="{{ $role }}" {{ old('roles') == $role ? 'selected' : '' }}>{{ $role }}</option>
                         @endforeach
                     </select>
                 </fieldset>
@@ -70,7 +70,7 @@
                     <select class="form-control form-select" name="permission">
                         <option value="">Permisos</option>
                         @foreach ($permissions as $permission)
-                            <option>{{ $permission }}</option>
+                            <option value="{{ $permission }}" {{ old('permission') == $permission ? 'selected' : '' }}>{{ $permission }}</option>
                         @endforeach
                     </select>
                 </fieldset>
