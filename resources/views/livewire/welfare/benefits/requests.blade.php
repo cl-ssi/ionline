@@ -171,7 +171,7 @@
                     <td>
                         @if($request->subsidy->benefit) {{ $request->subsidy->benefit->name }} - {{ $request->subsidy->name }} @endif
                         @if($request->accepted_amount)
-                        <br><b>MONTO ACEPTADO: </b> ${{ money($request->accepted_amount) }}
+                        <br><b>MONTO APROBADO: </b> ${{ money($request->accepted_amount) }}
                         @endif
                         @if($request->status_update_observation)
                         <br><b>OBSERVACIONES: </b> {{ $request->status_update_observation }}

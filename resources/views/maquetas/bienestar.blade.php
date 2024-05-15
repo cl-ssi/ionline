@@ -225,7 +225,7 @@
             <th>Beneficio</th>
             <th>Documentos</th>
             <th width="240">Estado</th>
-            <th>Monto aceptado</th>
+            <th>Monto aprobado</th>
             <th>Transferencia</th>
         </tr>
     </thead>
