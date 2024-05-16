@@ -184,9 +184,17 @@
                             <span class="badge bg-danger">{{ $requestReplacementStaff->StatusValue }}</span>
                             @break
 
-                        @default
-                            Default case...
-                    @endswitch
+                        @case('to assign')
+                            <span class="badge badge-warning">{{ $requestReplacementStaff->StatusValue }}</span>
+                            @break
+
+                        @case('finance sign')
+                            <span class="badge badge-warning">{{ $requestReplacementStaff->StatusValue }}</span>
+                            @break
+
+                      @default
+                          Default case...
+                  @endswitch
                 </th>
             </tr>
         </thead>
@@ -208,6 +216,11 @@
             <tr>
                 <th class="table-active">Archivos</th>
                 <td colspan="2">Correo (Verificación Solicitud) <a href="{{ route('replacement_staff.request.show_verification_file', $requestReplacementStaff) }}" target="_blank"> <i class="fas fa-paperclip"></i></a></td>
+            </tr>
+            <tr>
+                <th class="table-active">Lugar de Desempeño</th>
+                <td>{{ $requestReplacementStaff->ouPerformance->name }}</td>
+                <td>{{ ($requestReplacementStaff->establishment) ? $requestReplacementStaff->establishment->name : '' }}</td>
             </tr>
         </tbody>
     </table>
@@ -239,6 +252,10 @@
                 <td>{{ $position->legalQualityManage->NameValue ?? '' }}</td>
                 <td>
                     {{ $position->fundamentManage->NameValue ?? '' }}<br>
+                    @if($position->other_fundament)
+                        <hr>
+                        {{ $position->other_fundament }}
+                    @endif
                     {{ $position->fundamentDetailManage->NameValue ?? '' }}</td>
                 <td>{{ $position->WorkDayValue ?? '' }}</td>
                 <td>
@@ -356,7 +373,7 @@
                         @endforeach
                     @endif
 
-                    @if(!in_array(1, $flagPostRrhh))
+                    @if(!in_array(1, $flagPostRrhh) && $requestReplacementStaff->form_type == 'replacement')
                         <th class="table-active text-center">
                             {{ App\Models\Parameters\Parameter::get('ou','NombreUnidadFinanzas', $requestReplacementStaff->establishment_id) }}
                         </th>
@@ -516,7 +533,7 @@
                         @endforeach
                     @endif
 
-                    @if(!in_array(1, $flagPostRrhh))
+                    @if(!in_array(1, $flagPostRrhh) && $requestReplacementStaff->form_type == 'replacement')
                         <td>
                             <i class="fas fa-clock"></i> Pendiente<br>
                         </td> 

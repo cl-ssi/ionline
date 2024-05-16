@@ -169,9 +169,17 @@
                             <span class="badge bg-danger">{{ $requestReplacementStaff->StatusValue }}</span>
                             @break
 
-                        @default
-                            Default case...
-                    @endswitch
+                        @case('to assign')
+                            <span class="badge badge-warning">{{ $requestReplacementStaff->StatusValue }}</span>
+                            @break
+
+                        @case('finance sign')
+                            <span class="badge badge-warning">{{ $requestReplacementStaff->StatusValue }}</span>
+                            @break
+
+                      @default
+                          Default case...
+                  @endswitch
                 </th>
             </tr>
         </thead>
@@ -550,7 +558,7 @@
                         @endforeach
                     @endif
 
-                    @if(!in_array(1, $flagPostRrhh))
+                    @if(!in_array(1, $flagPostRrhh) && $requestReplacementStaff->form_type == 'replacement')
                         <th class="table-active text-center">
                             {{ App\Models\Parameters\Parameter::get('ou','NombreUnidadFinanzas', $requestReplacementStaff->establishment_id) }}
                         </th>
@@ -710,7 +718,7 @@
                         @endforeach
                     @endif
 
-                    @if(!in_array(1, $flagPostRrhh))
+                    @if(!in_array(1, $flagPostRrhh) && $requestReplacementStaff->form_type == 'replacement')
                         <td>
                             <i class="fas fa-clock"></i> Pendiente<br>
                         </td> 

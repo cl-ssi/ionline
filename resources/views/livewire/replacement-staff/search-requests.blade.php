@@ -177,15 +177,14 @@
                         @endif
                     </td>
                     <td>
-                        {{--
                         @if($requestReplacementStaff->form_type == 'replacement' || $requestReplacementStaff->form_type == NULL)
                             {{ $requestReplacementStaff->legalQualityManage->NameValue ?? '' }} ({{ $requestReplacementStaff->profile_manage->name ?? '' }})
                         @else
                             @foreach($requestReplacementStaff->positions as $position)
+                                <span class="badge badge-pill badge-dark">{{ $position->charges_number }}</span>
                                 {{ $position->legalQualityManage->NameValue ?? '' }} ({{ $position->profile_manage->name ?? '' }})
                             @endforeach
                         @endif
-                        --}}
                     </td>
                     <td>
                         @if($requestReplacementStaff->form_type == 'replacement' || $requestReplacementStaff->form_type == NULL)

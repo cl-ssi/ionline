@@ -198,12 +198,12 @@ class RequestReplacementStaffController extends Controller
 
     public function create_announcement()
     {
+        /*
         session()->flash('danger', 'Estimados Usuario: No es posible crear solicitudes debido a mantención programada, agradecemos su comprensión');
         return redirect()->route('replacement_staff.request.own_index');
-        
-        /*
-        return view('replacement_staff.request.create_announcement');
         */
+        
+        return view('replacement_staff.request.create_announcement');
     }
 
     public function create_extension(RequestReplacementStaff $requestReplacementStaff)
@@ -894,7 +894,7 @@ class RequestReplacementStaffController extends Controller
                         "module"                            => "Solicitudes de Contración",
                         "module_icon"                       => "bi bi-id-card",
                         "subject"                           => "Solicitud de Aprobación Planificación",
-                        "sent_to_ou_id"                     => Parameter::get('ou','PlanificacionRrhh', $requestSign->requestReplacementStaff->establishment_id),
+                        "sent_to_ou_id"                     => Parameter::get('ou','PlanificacionRrhh', $requestReplacementStaff->establishment_id),
                         "document_route_name"               => "replacement_staff.request.to_sign_approval",
                         "document_route_params"             => json_encode(["request_replacement_staff_id" => $requestReplacementStaff->id]),
                         "active"                            => true,
@@ -913,7 +913,7 @@ class RequestReplacementStaffController extends Controller
                         "module"                            => "Solicitudes de Contración",
                         "module_icon"                       => "bi bi-id-card",
                         "subject"                           => "Solicitud de Aprobación SDGP",
-                        "sent_to_ou_id"                     => Parameter::get('ou','SubRRHH'),
+                        "sent_to_ou_id"                     => Parameter::get('ou', 'SubRRHH', $requestReplacementStaff->establishment_id),
                         "document_route_name"               => "replacement_staff.request.to_sign_approval",
                         "document_route_params"             => json_encode(["request_replacement_staff_id" => $requestReplacementStaff->id]),
                         "active"                            => false,

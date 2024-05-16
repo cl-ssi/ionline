@@ -203,6 +203,11 @@
                     <th class="table-active">Archivos</th>
                     <td colspan="2">Correo (Verificación Solicitud) <a href="{{ route('replacement_staff.request.show_verification_file', $requestReplacementStaff) }}" target="_blank"> <i class="fas fa-paperclip"></i></a></td>
                 </tr>
+                <tr>
+                    <th class="table-active">Lugar de Desempeño</th>
+                    <td>{{ $requestReplacementStaff->ouPerformance->name }}</td>
+                    <td>{{ ($requestReplacementStaff->establishment) ? $requestReplacementStaff->establishment->name : '' }}</td>
+                </tr>
             </tbody>
         </table>
     </div>
@@ -236,6 +241,10 @@
                     </td>
                     <td>
                         {{ $position->fundamentManage->NameValue ?? '' }}<br>
+                        @if($position->other_fundament)
+                            <hr>
+                            {{ $position->other_fundament }}
+                        @endif
                         {{ $position->fundamentDetailManage->NameValue ?? '' }}</td>
                     <td>{{ $position->WorkDayValue ?? '' }}</td>
                     <td>
@@ -283,17 +292,20 @@
 
                 @endforeach
 
-                @if(count($requestReplacementStaff->requestSign) > 0)
-                    @foreach($requestReplacementStaff->requestSign as $sign)
-                        <th class="table-active text-center">
-                            {{ $sign->organizationalUnit->name }}
-                        </th>
-                    @endforeach
+                <!-- APROBACION DE PERSONAL -->
+                @if($requestReplacementStaff->form_type == 'replacement')
+                    @if(count($requestReplacementStaff->requestSign) > 0)
+                        @foreach($requestReplacementStaff->requestSign as $sign)
+                            <th class="table-active text-center">
+                                {{ $sign->organizationalUnit->name }}
+                            </th>
+                        @endforeach
 
-                @else
-                    <th class="table-active text-center">
-                        {{ App\Models\Parameters\Parameter::get('ou', 'NombreUnidadPersonal', $requestReplacementStaff->establishment_id) }}
-                    </th>
+                    @else
+                        <th class="table-active text-center">
+                            {{ App\Models\Parameters\Parameter::get('ou', 'NombreUnidadPersonal', $requestReplacementStaff->establishment_id) }}
+                        </th>
+                    @endif
                 @endif
             
                 @if($flag == 0)
@@ -315,7 +327,7 @@
                     @endforeach
                 @endif
 
-                @if($flagFinance == 0)
+                @if($flagFinance == 0 && $requestReplacementStaff->form_type == 'replacement')
                     <th class="table-active text-center">
                         {{ App\Models\Parameters\Parameter::get('ou', 'NombreUnidadFinanzas', $requestReplacementStaff->establishment_id) }}
                     </th>
@@ -364,36 +376,38 @@
                     
                 @endforeach
                 <!-- APROBACION INTERNA PERSONAL -->
-                @if(count($requestReplacementStaff->requestSign) > 0)
-                    @foreach($requestReplacementStaff->requestSign as $sign)
-                        <td>
-                            @if($sign->request_status == 'accepted')
-                                <span style="color: green;">
-                                    <i class="fas fa-check-circle"></i> {{ $sign->StatusValue }} 
-                                </span><br>
-                                <i class="fas fa-user"></i> {{ $sign->user->TinnyName }}<br>
-                                <i class="fas fa-calendar-alt"></i> {{ ($sign->date_sign) ? $sign->date_sign->format('d-m-Y H:i:s') : '' }}<br>
-                            @endif
-                            @if($sign->request_status == 'rejected')
-                                <span style="color: Tomato;">
-                                    <i class="fas fa-times-circle"></i> {{ $sign->StatusValue }} 
-                                </span><br>
-                                <i class="fas fa-user"></i> {{ $sign->user->FullName }}<br>
-                                <i class="fas fa-calendar-alt"></i> {{ $sign->date_sign->format('d-m-Y H:i:s') }}<br>
-                                <hr>
-                                {{ $sign->observation }}<br>
-                            @endif
-                            @if($sign->request_status == 'pending' || $sign->request_status == NULL)
-                                <i class="fas fa-clock"></i> Pendiente<br>
-                            @endif
-                        </td>
-                    @endforeach
+                @if($requestReplacementStaff->form_type == 'replacement')
+                    @if(count($requestReplacementStaff->requestSign) > 0)
+                        @foreach($requestReplacementStaff->requestSign as $sign)
+                            <td>
+                                @if($sign->request_status == 'accepted')
+                                    <span style="color: green;">
+                                        <i class="fas fa-check-circle"></i> {{ $sign->StatusValue }} 
+                                    </span><br>
+                                    <i class="fas fa-user"></i> {{ $sign->user->TinnyName }}<br>
+                                    <i class="fas fa-calendar-alt"></i> {{ ($sign->date_sign) ? $sign->date_sign->format('d-m-Y H:i:s') : '' }}<br>
+                                @endif
+                                @if($sign->request_status == 'rejected')
+                                    <span style="color: Tomato;">
+                                        <i class="fas fa-times-circle"></i> {{ $sign->StatusValue }} 
+                                    </span><br>
+                                    <i class="fas fa-user"></i> {{ $sign->user->FullName }}<br>
+                                    <i class="fas fa-calendar-alt"></i> {{ $sign->date_sign->format('d-m-Y H:i:s') }}<br>
+                                    <hr>
+                                    {{ $sign->observation }}<br>
+                                @endif
+                                @if($sign->request_status == 'pending' || $sign->request_status == NULL)
+                                    <i class="fas fa-clock"></i> Pendiente<br>
+                                @endif
+                            </td>
+                        @endforeach
 
-                @else
-                    <td>
-                        <i class="fas fa-clock"></i> Pendiente<br>
-                    </td>
-                @endif
+                    @else
+                        <td>
+                            <i class="fas fa-clock"></i> Pendiente<br>
+                        </td>
+                    @endif
+                @endif   
 
                 @if($flag == 0)
                     <td>
@@ -434,7 +448,7 @@
                     @endforeach
                 @endif
 
-                @if($flagFinance == 0)
+                @if($flagFinance == 0 && $requestReplacementStaff->form_type == 'replacement')
                     <td>
                         <i class="fas fa-check-circle"></i> Pendiente
                     </td>
