@@ -191,7 +191,7 @@ class AgreementController extends Controller
     public function update(Request $request, Agreement $agreement)
     {
         $agreement->date                = $request->date;
-        $agreement->period              = Carbon::createFromFormat('Y-m-d', $request->date)->format('Y');
+        $agreement->period              = $request->date != null ? Carbon::createFromFormat('Y-m-d', $request->date)->format('Y') : null;
         $agreement->resolution_date     = $request->resolution_date;
         $agreement->number              = $request->number;
         $agreement->res_exempt_number    = $request->res_exempt_number;
