@@ -67,7 +67,8 @@ class ProcessPendingJson extends Command
         // $bar = $this->output->createProgressBar($totalRecords);
 
         // Insertar datos en la base de datos
-        DB::transaction(function () use ($modelRoute, $jsonData, $columnMapping, $primaryKeys, $record, $totalRecords) {
+        $count = 0;
+        DB::transaction(function () use ($modelRoute, $jsonData, $columnMapping, $primaryKeys, $record, $totalRecords, $count) {
             $modelInstance = new $modelRoute;
             foreach ($jsonData as $data) {
                 $attributes = [];
@@ -85,6 +86,8 @@ class ProcessPendingJson extends Command
                 // Si no existe un registro con las mismas claves primarias, se crea uno nuevo
                 if (!$existingRecord) {
                     $modelInstance->create($attributes);
+
+                    $count += 1;
                 }
 
                 // Avanzar la barra de progreso
@@ -96,7 +99,7 @@ class ProcessPendingJson extends Command
         // $bar->finish();
 
         $record->update(['procesed' => 1]); // Marcar el registro como procesado
-        $this->info("Datos insertados en $modelRoute.");
+        $this->info($count . " datos insertados en " . $modelRoute. ".");
     }
 
 }
