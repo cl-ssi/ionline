@@ -272,7 +272,7 @@
             <div class="form-row">
                 <fieldset class="form-group col-2">
                     <label for="fordate">Fecha</label>
-                    <input type="date" name="date" class="form-control" id="fordate" value="{{ $agreement->date->format('Y-m-d') }}" @if(!$canEdit) disabled @endif>
+                    <input type="date" name="date" class="form-control" id="fordate" value="{{ $agreement->date?->format('Y-m-d') }}" @if(!$canEdit) disabled @endif>
                     <small class="form-text text-muted">* Fecha del convenio</small>
                 </fieldset>
 
@@ -397,7 +397,7 @@
 
                 <fieldset class="form-group col-3">
                     <label for="fordate">Fecha Resolución Exenta del Convenio</label>
-                    <input type="date" name="res_exempt_date" class="form-control" id="fordate" value="{{ $agreement->res_exempt_date->format('Y-m-d') }}" @if(!$canEdit) disabled @endif>
+                    <input type="date" name="res_exempt_date" class="form-control" id="fordate" value="{{ $agreement->res_exempt_date?->format('Y-m-d') }}" @if(!$canEdit) disabled @endif>
                 </fieldset>
 
                 <fieldset class="form-group col-3">
