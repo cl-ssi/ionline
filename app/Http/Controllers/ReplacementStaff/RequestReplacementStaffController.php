@@ -208,13 +208,13 @@ class RequestReplacementStaffController extends Controller
 
     public function create_extension(RequestReplacementStaff $requestReplacementStaff)
     {
+        /*
         session()->flash('danger', 'Estimados Usuario: No es posible crear solicitudes debido a mantención programada, agradecemos su comprensión');
         return redirect()->route('replacement_staff.request.own_index');
-        
-        /*
+        */
+
         $ouRoots = OrganizationalUnit::where('level', 1)->get();
         return view('replacement_staff.request.create_extension', compact('requestReplacementStaff', 'ouRoots'));
-        */
     }
 
     /**
@@ -519,6 +519,7 @@ class RequestReplacementStaffController extends Controller
         $newRequestReplacementStaff->request_status = 'pending';
         $newRequestReplacementStaff->user()->associate(auth()->user());
         $newRequestReplacementStaff->organizationalUnit()->associate(auth()->user()->organizationalUnit->id);
+        $newRequestReplacementStaff->establishment()->associate(auth()->user()->organizationalUnit->establishment);
         $newRequestReplacementStaff->requesterUser()->associate($request->requester_id);
 
         /*
