@@ -73,7 +73,7 @@ class SyncWelfareUsersCommand extends Command
             }
         }
 
-        $this->info('Welfare Users sincronizado correctamente! (cantidad de registros: ' . $count . ' )' );
+        $this->info('Usuarios de bienestar (SIRH) sincronizados correctamente en Ionline! (cantidad de registros: ' . $count . ' )' );
     }
 
     // Función para mapear el género de WelfareUser a User

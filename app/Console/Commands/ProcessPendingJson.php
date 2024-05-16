@@ -64,10 +64,10 @@ class ProcessPendingJson extends Command
         $totalRecords = count($jsonData);
 
         // Crear una barra de progreso
-        $bar = $this->output->createProgressBar($totalRecords);
+        // $bar = $this->output->createProgressBar($totalRecords);
 
         // Insertar datos en la base de datos
-        DB::transaction(function () use ($modelRoute, $jsonData, $columnMapping, $primaryKeys, $record, $bar, $totalRecords) {
+        DB::transaction(function () use ($modelRoute, $jsonData, $columnMapping, $primaryKeys, $record, $totalRecords) {
             $modelInstance = new $modelRoute;
             foreach ($jsonData as $data) {
                 $attributes = [];
@@ -88,15 +88,15 @@ class ProcessPendingJson extends Command
                 }
 
                 // Avanzar la barra de progreso
-                $bar->advance();
+                // $bar->advance();
             }
         });
 
         // Finalizar la barra de progreso
-        $bar->finish();
+        // $bar->finish();
 
         $record->update(['procesed' => 1]); // Marcar el registro como procesado
-        $this->info("\nDatos insertados en $modelRoute.");
+        $this->info("Datos insertados en $modelRoute.");
     }
 
 }
