@@ -7,6 +7,9 @@ use Illuminate\Support\Facades\DB;
 use App\Models\WebService\PendingJsonToInsert;
 use Illuminate\Support\Facades\Artisan;
 
+use App\Notifications\Sirh\PendingJsonToInsertNotification;
+use Illuminate\Support\Facades\Notification;
+
 class WebserviceController extends Controller
 {
     /**
@@ -85,121 +88,95 @@ class WebserviceController extends Controller
         }
     }
 
-    // public function pendingJsonToInsert(Request $request)
-    // {
-    //     // Obtener la ruta del modelo y los datos del JSON
-    //     $modelRoute = $request->input('model_route');
-    //     $modelData = $request->input('model_data');
-    //     $columnMapping = $request->input('column_mapping');
-
-    //     // Verificar si el JSON tiene el formato correcto
-    //     if (!is_string($modelRoute) || !is_array($modelData) || !is_array($columnMapping)) {
-    //         return response()->json(['error' => 'El JSON no tiene el formato correcto'], 400);
-    //     }
-
-    //     // Verificar si el modelo especificado existe
-    //     if (!class_exists($modelRoute)) {
-    //         return response()->json(['error' => 'El modelo especificado no existe'], 400);
-    //     }
-
-    //     // Verificar si el modelo especificado tiene las columnas especificadas en el mapeo
-    //     $modelInstance = new $modelRoute;
-    //     $modelColumns = $modelInstance->getConnection()->getSchemaBuilder()->getColumnListing($modelInstance->getTable());
-    //     $mappedColumns = array_values($columnMapping);
-    //     $invalidColumns = array_diff($mappedColumns, $modelColumns);
-    //     if (count($invalidColumns) > 0) {
-    //         return response()->json(['error' => 'El mapeo de columnas contiene nombres de columna no válidos para el modelo especificado', 'invalid_columns' => $invalidColumns], 400);
-    //     }
-
-    //     try {
-    //         // Crear el registro solo si no existe una fila con los mismos datos
-    //         PendingJsonToInsert::firstOrCreate(
-    //             [   // Condiciones de búsqueda
-    //                 'model_route' => $modelRoute,
-    //                 'data_json' => json_encode($modelData),
-    //                 'column_mapping' => json_encode($columnMapping)
-    //             ],
-    //             [   // Datos para crear el nuevo registro
-    //                 'model_route' => $modelRoute,
-    //                 'data_json' => json_encode($modelData),
-    //                 'column_mapping' => json_encode($columnMapping), // Guardar el mapeo de columnas
-    //                 'procesed' => 0
-    //             ]
-    //         );
-    //     } catch (\Exception $e) {
-    //         return response()->json(['error' => 'Error al crear o actualizar registros: ' . $e->getMessage()], 500);
-    //     }
-
-    //     // Ejecutar el comando de Artisan
-    //     Artisan::call('process:pending-json');
-
-    //     // Obtener el resultado de la ejecución del comando (opcional)
-    //     $output = Artisan::output();
-
-    //     // Devolver una respuesta al cliente
-    //     return response()->json(['message' => 'Registros creados / Comando ejecutado con éxito', 'output' => $output]);
-    // }
-
     public function pendingJsonToInsert(Request $request)
     {
-        // Obtener la ruta del modelo y los datos del JSON
-        $modelRoute = $request->input('model_route');
-        $modelData = $request->input('model_data');
-        $columnMapping = $request->input('column_mapping');
-        $primaryKeys = $request->input('primary_keys');
-
-        // Verificar si el JSON tiene el formato correcto
-        if (!is_string($modelRoute) || !is_array($modelData) || !is_array($columnMapping) || !is_array($primaryKeys)) {
-            return response()->json(['error' => 'El JSON no tiene el formato correcto'], 400);
-        }
-
-        // Verificar si el modelo especificado existe
-        if (!class_exists($modelRoute)) {
-            return response()->json(['error' => 'El modelo especificado no existe'], 400);
-        }
-
-        // Verificar si el modelo especificado tiene las columnas especificadas en el mapeo
-        $modelInstance = new $modelRoute;
-        $modelColumns = $modelInstance->getConnection()->getSchemaBuilder()->getColumnListing($modelInstance->getTable());
-        $mappedColumns = array_values($columnMapping);
-        $invalidColumns = array_diff($mappedColumns, $modelColumns);
-        if (count($invalidColumns) > 0) {
-            return response()->json(['error' => 'El mapeo de columnas contiene nombres de columna no validos para el modelo especificado', 'invalid_columns' => $invalidColumns], 400);
-        }
-
         try {
-            // Verificar si ya existe un registro con los mismos datos
-            $existingRecord = PendingJsonToInsert::where('model_route', $modelRoute)
-                ->where('data_json', json_encode($modelData))
-                ->where('column_mapping', json_encode($columnMapping))
-                ->where('primary_keys', json_encode($primaryKeys))
-                ->exists();
+            // Obtener la ruta del modelo y los datos del JSON
+            $modelRoute = $request->input('model_route');
+            $modelData = $request->input('model_data');
+            $columnMapping = $request->input('column_mapping');
+            $primaryKeys = $request->input('primary_keys');
 
-            if ($existingRecord) {
-                // Mostrar un mensaje indicando que ya existe un registro igual
-                return response()->json(['message' => 'No se han creado registros, ya existen los que se intentan registrar'], 400);
+            // Verificar si el JSON tiene el formato correcto
+            if (!is_string($modelRoute) || !is_array($modelData) || !is_array($columnMapping) || !is_array($primaryKeys)) {
+
+                Notification::route('mail', 'sistemas.sst@redsalud.gob.cl')
+                ->notify(new PendingJsonToInsertNotification("El JSON no tiene el formato correcto: " . $modelRoute ));
+
+                return response()->json(['error' => 'El JSON no tiene el formato correcto'], 400);
             }
 
-            // Crear el registro si no existe uno igual
-            PendingJsonToInsert::create([
-                'model_route' => $modelRoute,
-                'data_json' => json_encode($modelData),
-                'column_mapping' => json_encode($columnMapping),
-                'primary_keys' => json_encode($primaryKeys),
-                'procesed' => 0
-            ]);
+            // Verificar si el modelo especificado existe
+            if (!class_exists($modelRoute)) {
+
+                Notification::route('mail', 'sistemas.sst@redsalud.gob.cl')
+                ->notify(new PendingJsonToInsertNotification("El modelo especificado no existe: " . $modelRoute ));
+
+                return response()->json(['error' => 'El modelo especificado no existe'], 400);
+            }
+
+            // Verificar si el modelo especificado tiene las columnas especificadas en el mapeo
+            $modelInstance = new $modelRoute;
+            $modelColumns = $modelInstance->getConnection()->getSchemaBuilder()->getColumnListing($modelInstance->getTable());
+            $mappedColumns = array_values($columnMapping);
+            $invalidColumns = array_diff($mappedColumns, $modelColumns);
+            if (count($invalidColumns) > 0) {
+
+                Notification::route('mail', 'sistemas.sst@redsalud.gob.cl')
+                ->notify(new PendingJsonToInsertNotification("El mapeo de columnas contiene nombres de columna no validos para el modelo especificado: " . $modelRoute, $invalidColumns));
+
+                return response()->json(['error' => 'El mapeo de columnas contiene nombres de columna no validos para el modelo especificado', 'invalid_columns' => $invalidColumns], 400);
+            }
+
+            try {
+                // Verificar si ya existe un registro con los mismos datos
+                $existingRecord = PendingJsonToInsert::where('model_route', $modelRoute)
+                    ->where('data_json', json_encode($modelData))
+                    ->where('column_mapping', json_encode($columnMapping))
+                    ->where('primary_keys', json_encode($primaryKeys))
+                    ->exists();
+
+                if ($existingRecord) {
+
+                    Notification::route('mail', 'sistemas.sst@redsalud.gob.cl')
+                    ->notify(new PendingJsonToInsertNotification("No se han creado registros, ya existen los que se intentan registrar: " . $modelRoute ));
+
+                    // Mostrar un mensaje indicando que ya existe un registro igual
+                    return response()->json(['message' => 'No se han creado registros, ya existen los que se intentan registrar'], 400);
+                }
+
+                // Crear el registro si no existe uno igual
+                PendingJsonToInsert::create([
+                    'model_route' => $modelRoute,
+                    'data_json' => json_encode($modelData),
+                    'column_mapping' => json_encode($columnMapping),
+                    'primary_keys' => json_encode($primaryKeys),
+                    'procesed' => 0
+                ]);
+            } catch (\Exception $e) {
+
+                Notification::route('mail', 'sistemas.sst@redsalud.gob.cl')
+                ->notify(new PendingJsonToInsertNotification("Error al crear o actualizar registros: " . $modelRoute . ": " . $e->getMessage()));
+
+                return response()->json(['error' => 'Error al crear o actualizar registros: ' . $e->getMessage()], 500);
+            }
+
+            // Ejecutar el comando de Artisan
+            Artisan::call('process:pending-json');
+
+            // Obtener el resultado de la ejecución del comando (opcional)
+            $output = Artisan::output();
+
+            // Enviar la notificación
+            Notification::route('mail', 'sistemas.sst@redsalud.gob.cl')->notify(new PendingJsonToInsertNotification("Registros creados con exito", $output));
+
+            // Devolver una respuesta al cliente
+            return response()->json(['message' => 'Registros creados con exito', 'output' => $output]);
+
         } catch (\Exception $e) {
-            return response()->json(['error' => 'Error al crear o actualizar registros: ' . $e->getMessage()], 500);
+
+            return response()->json(['error' => 'Error: ' . $e->getMessage()], 500);
         }
-
-        // Ejecutar el comando de Artisan
-        Artisan::call('process:pending-json');
-
-        // Obtener el resultado de la ejecución del comando (opcional)
-        $output = Artisan::output();
-
-        // Devolver una respuesta al cliente
-        return response()->json(['message' => 'Registros creados con exito', 'output' => $output]);
     }
 
 
