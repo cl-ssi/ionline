@@ -147,6 +147,7 @@ class SearchRequests extends Component
                 ->where('user_id', auth()->id())
                 ->orWhere('requester_id', auth()->id())
                 ->orWhere('organizational_unit_id', auth()->user()->organizationalUnit->id)
+                ->orWhere('ou_of_performance_id', auth()->user()->organizational_unit_id)
                 ->search($this->selectedFormType,
                     $this->selectedStatus,
                     $this->selectedId,
