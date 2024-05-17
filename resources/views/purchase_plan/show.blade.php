@@ -252,11 +252,42 @@
 </div>
 @else
 
-<div class="alert alert-info" role="alert">
-    Estimado Usuario: El Plan de Compras aún no ha sido enviado para aprobaciones. Procure completar detalle de distribucion por item.  
-    <a class="btn btn-sm btn-outline-success float-end pt-0" href="{{ route('purchase_plan.send', $purchasePlan) }}"><i class="fas fa-paper-plane"></i> Enviar</a>
+    <div class="alert alert-info" role="alert">
+        Estimado Usuario: El Plan de Compras aún no ha sido enviado para aprobaciones. Procure completar detalle de distribucion por item.  
+        <a class="btn btn-sm btn-outline-success float-end pt-0" href="{{ route('purchase_plan.send', $purchasePlan) }}"><i class="fas fa-paper-plane"></i> Enviar</a>
+    </div>
+
+@endif
+
+<div class="row mt-3"> 
+    <div class="col">
+        <h6><i class="fas fa-info-circle"></i> Historial de Rechazos</h6>
+    </div>
 </div>
 
+@if($purchasePlan->trashedApprovals)
+    <div class="table-responsive">
+        <table class="table table-bordered table-sm small">
+            <thead>
+                <tr class="text-center">
+                    <th width="8%" class="table-secondary">Fecha</th>
+                    <th width="" class="table-secondary">Motivo Rechazo</th>
+                    <th width="20%" class="table-secondary">Usuario</th>
+                    <th width="20%" class="table-secondary">Unidad Organizacional</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($purchasePlan->trashedApprovals as $approval)
+                    <tr class="text-center">
+                        <td>{{ $approval->approver_at->format('d-m-Y H:i:s') }}</td>
+                        <td>{{ $approval->approver_observation }}</td> 
+                        <td>{{ $approval->approver->FullName }}</td>
+                        <td>{{ $approval->sentToOu->name }}</td>         
+                    </tr>
+                @endforeach
+            <tbody>
+        </table>
+    </div>
 @endif
 
 @endsection

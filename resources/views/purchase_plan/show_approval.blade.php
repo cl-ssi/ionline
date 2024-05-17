@@ -181,36 +181,6 @@
     </div>
 </div>
 
-{{--
-<div class="table-responsive">
-    <table class="table table-bordered table-sm small">
-        <thead>
-            <tr class="text-center">
-                @foreach($purchasePlan->approvals as $approval)
-                <th width="" class="table-secondary">{{ $approval->sentToOu->name }}</th>
-                @endforeach
-            </tr>
-        </thead>
-        <tbody>
-            <tr class="text-center">
-                @foreach($purchasePlan->approvals as $approval)
-                <td>
-                    @switch($approval->StatusInWords)
-                        @case('Pendiente')
-                            <i class="fas fa-clock"></i> {{ $approval->StatusInWords }}
-                            @break
-                    @endswitch
-
-                    {{ ($approval->approver) ? $approval->approver->FullName : '' }} <br>
-                    {{ ($approval->approver_at) ? $approval->approver_at->format('d-m-Y H:i:s') : '' }}
-                </td>           
-                @endforeach
-            </tr>
-        <tbody>
-    </table>
-</div>
---}}
-
 <div class="table-responsive">
     <table class="table table-bordered table-sm small">
         <thead>
@@ -255,6 +225,33 @@
     </table>
 </div>
 
-{{--
-@endsection
---}}
+<div class="row mt-3"> 
+    <div class="col">
+        <h6><i class="fas fa-info-circle"></i> Historial de Rechazos</h6>
+    </div>
+</div>
+
+@if($purchasePlan->trashedApprovals)
+    <div class="table-responsive">
+        <table class="table table-bordered table-sm small">
+            <thead>
+                <tr class="text-center">
+                    <th width="8%" class="table-secondary">Fecha</th>
+                    <th width="" class="table-secondary">Motivo Rechazo</th>
+                    <th width="20%" class="table-secondary">Usuario</th>
+                    <th width="20%" class="table-secondary">Unidad Organizacional</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($purchasePlan->trashedApprovals as $approval)
+                    <tr class="text-center">
+                        <td>{{ $approval->approver_at->format('d-m-Y H:i:s') }}</td>
+                        <td>{{ $approval->approver_observation }}</td> 
+                        <td>{{ $approval->approver->FullName }}</td>
+                        <td>{{ $approval->sentToOu->name }}</td>         
+                    </tr>
+                @endforeach
+            <tbody>
+        </table>
+    </div>
+@endif

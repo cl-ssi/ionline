@@ -152,7 +152,8 @@ class PurchasePlanController extends Controller
             "active"                        => true,
             "callback_controller_method"    => "App\Http\Controllers\PurchasePlan\PurchasePlanController@approvalCallback",
             "callback_controller_params"    => json_encode([
-                'purchase_plan_id'  => $purchasePlan->id
+                'purchase_plan_id'  => $purchasePlan->id,
+                "process"           => null
             ])
         ]);
     
@@ -171,7 +172,8 @@ class PurchasePlanController extends Controller
                 "active"                        => false,
                 "callback_controller_method"    => "App\Http\Controllers\PurchasePlan\PurchasePlanController@approvalCallback",
                 "callback_controller_params"    => json_encode([
-                    'purchase_plan_id'  => $purchasePlan->id
+                    'purchase_plan_id'  => $purchasePlan->id,
+                    "process"           => null
                 ]),
             ]);
         }
@@ -190,7 +192,8 @@ class PurchasePlanController extends Controller
             "active"                        => false,
             "callback_controller_method"    => "App\Http\Controllers\PurchasePlan\PurchasePlanController@approvalCallback",
             "callback_controller_params"    => json_encode([
-                'purchase_plan_id'  => $purchasePlan->id
+                'purchase_plan_id'  => $purchasePlan->id,
+                "process"           => null
             ]),
         ]);
 
@@ -208,7 +211,8 @@ class PurchasePlanController extends Controller
             "active"                        => false,
             "callback_controller_method"    => "App\Http\Controllers\PurchasePlan\PurchasePlanController@approvalCallback",
             "callback_controller_params"    => json_encode([
-                'purchase_plan_id'  => $purchasePlan->id
+                'purchase_plan_id'  => $purchasePlan->id,
+                "process"           => null
             ]),
         ]);
 

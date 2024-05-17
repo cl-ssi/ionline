@@ -94,7 +94,35 @@
             </ul>
         </div>
     @endif
+    
+    <h6 class="small"><b>Historial de Rechazos</b></h6> <br>
 
+    @if($purchasePlanToEdit->trashedApprovals)
+        <div class="table-responsive">
+            <table class="table table-bordered table-sm small">
+                <thead>
+                    <tr class="text-center">
+                        <th width="8%" class="table-secondary">Fecha</th>
+                        <th width="" class="table-secondary">Motivo Rechazo</th>
+                        <th width="20%" class="table-secondary">Usuario</th>
+                        <th width="20%" class="table-secondary">Unidad Organizacional</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($purchasePlanToEdit->trashedApprovals as $approval)
+                        <tr class="text-center">
+                            <td>{{ $approval->approver_at->format('d-m-Y H:i:s') }}</td>
+                            <td>{{ $approval->approver_observation }}</td> 
+                            <td>{{ $approval->approver->FullName }}</td>
+                            <td>{{ $approval->sentToOu->name }}</td>         
+                        </tr>
+                    @endforeach
+                <tbody>
+            </table>
+        </div>
+    @endif
+    
+    {{--
     <div class="row g-3">
         <div class="col-12">
             <button wire:click="savePurchasePlan('save')" class="btn btn-primary float-end" type="button">
@@ -103,6 +131,18 @@
                 @else
                     <i class="fas fa-save"></i> Guardar
                 @endif
+            </button>
+            <button wire:click="savePurchasePlan('sent')" class="btn btn-success float-end me-2" type="button" @if($purchasePlanToEdit && $purchasePlanToEdit->hasApprovals()) disabled @endif>
+                <i class="fas fa-paper-plane"></i> Guardar y Enviar
+            </button>
+        </div>
+    </div>
+    --}}
+
+    <div class="row g-3">
+        <div class="col-12">
+            <button wire:click="savePurchasePlan('save')" class="btn btn-primary float-end" type="button">
+                <i class="fas fa-save"></i> Guardar
             </button>
             {{--<button wire:click="savePurchasePlan('sent')" class="btn btn-success float-end me-2" type="button" @if($purchasePlanToEdit && $purchasePlanToEdit->hasApprovals()) disabled @endif>
                 <i class="fas fa-paper-plane"></i> Guardar y Enviar
