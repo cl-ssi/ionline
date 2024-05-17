@@ -98,7 +98,11 @@
     <div class="row g-3">
         <div class="col-12">
             <button wire:click="savePurchasePlan('save')" class="btn btn-primary float-end" type="button">
-                <i class="fas fa-save"></i> Guardar
+                @if(Route::is('purchase_plan.edit') && $purchasePlanToEdit->getStatus() == 'Rechazado')
+                    <i class="fas fa-undo"></i> Restablecer Solicitud
+                @else
+                    <i class="fas fa-save"></i> Guardar
+                @endif
             </button>
             {{--<button wire:click="savePurchasePlan('sent')" class="btn btn-success float-end me-2" type="button" @if($purchasePlanToEdit && $purchasePlanToEdit->hasApprovals()) disabled @endif>
                 <i class="fas fa-paper-plane"></i> Guardar y Enviar

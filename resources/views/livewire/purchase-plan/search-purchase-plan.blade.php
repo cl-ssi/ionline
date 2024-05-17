@@ -141,7 +141,7 @@
                                 <td class="text-center">
                                     <a href="{{ route('purchase_plan.show', $purchasePlan) }}"
                                         class="btn btn-outline-secondary btn-sm mb-1"><i class="fas fa-eye fa-fw"></i></a>
-                                    @if($purchasePlan->canEdit())
+                                    @if($purchasePlan->canEdit() && $index == 'own')
                                         <a href="{{ route('purchase_plan.edit', $purchasePlan->id) }}"
                                             class="btn btn-outline-secondary btn-sm mb-1"><i class="fas fa-edit fa-fw"></i> </a>
                                     @endif

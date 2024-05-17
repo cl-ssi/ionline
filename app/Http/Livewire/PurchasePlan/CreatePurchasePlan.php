@@ -19,6 +19,8 @@ use App\Models\Documents\Approval;
 use App\Models\Parameters\Parameter;
 use App\Rrhh\OrganizationalUnit;
 
+use Illuminate\Support\Facades\Route;
+
 class CreatePurchasePlan extends Component
 {
     public $idPurchasePlan, 
@@ -110,6 +112,13 @@ class CreatePurchasePlan extends Component
       }
 
     public function savePurchasePlan($purchase_plan_status){
+        if($this->purchasePlanToEdit && $this->purchasePlanToEdit->getStatus() == "Rechazado"){
+            $returnView = 'edit';
+        }
+        else{
+            $returnView = 'show';
+        }
+
         $this->purchase_plan_status = $purchase_plan_status;
 
         $this->validateMessage = 'description';
@@ -192,7 +201,12 @@ class CreatePurchasePlan extends Component
             }
         }
         
-        return redirect()->route('purchase_plan.show', $purchasePlan->id);
+        if($returnView == 'edit'){
+            return redirect()->route('purchase_plan.edit', $purchasePlan->id);
+        }
+        else{
+            return redirect()->route('purchase_plan.show', $purchasePlan->id);
+        }
     }
 
     private function setPurchasePlan(){

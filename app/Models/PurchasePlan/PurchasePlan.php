@@ -81,7 +81,7 @@ class PurchasePlan extends Model implements Auditable
     }
 
     public function canEdit(){
-        return in_array($this->status, ['save', 'sent']); //|| !$this->hasFirstApprovalSigned();
+        return in_array($this->status, ['save', 'sent', 'rejected']); //|| !$this->hasFirstApprovalSigned();
     }
 
     public function canDelete(){
