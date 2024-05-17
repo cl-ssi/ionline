@@ -92,11 +92,9 @@ class CdpController extends Controller
 
     public function approvalCallback($approval_id) 
     {
-        logger()->info($approval_id);
         $approval = Approval::find($approval_id);
-        if($approval->status === true) {
-            logger()->info('true');
 
+        if($approval->status === true) {
             $approval->approvable->numeration()->create([
                 'automatic' => true,
                 'doc_type_id' => Parameter::get('Cdp','doc_type_id'),
