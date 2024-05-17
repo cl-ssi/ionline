@@ -100,9 +100,9 @@ class CdpController extends Controller
                 'doc_type_id' => Parameter::get('Cdp','doc_type_id'),
                 'file_path' => $approval->filename,
                 'subject' => "Certificado de Disponibilidad Presupuestal",
-                'user_id' => auth()->id(), // Responsable del documento numerado
-                'organizational_unit_id' => auth()->user()->organizational_unit_id, // Ou del responsable
-                'establishment_id' => auth()->user()->establishment_id,
+                'user_id' => $approval->approver_id, // Responsable del documento numerado
+                'organizational_unit_id' => $approval->approver_ou_id, // Ou del responsable
+                'establishment_id' => $approval->approverOu->establishment_id,
             ]);
         }
         else {
