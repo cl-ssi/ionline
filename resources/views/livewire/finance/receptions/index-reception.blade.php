@@ -106,17 +106,7 @@
                             {{ $reception->id }}
                         </td>
                         <td nowrap>
-                            @if($reception->purchase_order)
-                                {{ $reception->purchase_order }}
-                            @else
-                                @if($reception->noOcFile)
-                                 <a href="{{ route('file.download', $reception->noOcFile) }}"
-                                            class="btn btn-outline-danger"
-                                            target="_blank">
-                                            <i class="bi bi-file-pdf-fill"></i>
-                                </a>
-                                @endif
-                            @endif
+                                {{ $reception->purchase_order }}                            
                         </td>
                         <td>
                             @if($reception->purchaseOrder)
@@ -227,6 +217,13 @@
                                     <i class="fas fa-paperclip"></i>
                                 </a>
                             @endif
+                            @if($reception->noOcFile)
+                                 <a href="{{ route('file.download', $reception->noOcFile) }}"
+                                            class="btn btn-outline-danger"
+                                            target="_blank">
+                                            <i class="bi bi-file-pdf-fill"></i>
+                                </a>
+                                @endif
                         </td>
                         <td>
                             @if($reception->rejected == false)
