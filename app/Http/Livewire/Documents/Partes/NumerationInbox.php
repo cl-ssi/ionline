@@ -17,8 +17,9 @@ class NumerationInbox extends Component
 
     public function render()
     {
-        $numerations = Numeration::where('establishment_id', auth()->user()->organizationalUnit->establishment_id)
-            ->latest()
+        $numerations = Numeration::with('numerable','type')
+            ->where('establishment_id', auth()->user()->organizationalUnit->establishment_id)
+            ->orderByRaw("CASE WHEN number IS NULL OR number = '' THEN 0 ELSE 1 END, created_at DESC")
             ->paginate(100);
 
         return view('livewire.documents.partes.numeration-inbox', [

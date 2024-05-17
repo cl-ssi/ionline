@@ -34,7 +34,7 @@
             @foreach ($numerations as $numeration)
                 <tr>
                     <td>{{ $numeration->id }}</td>
-                    <td>{{ $numeration->type?->name }}</td>
+                    <td>{{ $numeration->type?->name }} {{ $numeration->numerable?->id }}</td>
                     <td>{{ $numeration->subject }}</td>
                     <td>{{ $numeration->user?->shortName }}</td>
                     <td class="text-center">
