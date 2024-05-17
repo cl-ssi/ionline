@@ -76,7 +76,7 @@ class Cdp extends Model
             'file_path' => $requestForm->file_path,
             'request_form_id' => $requestForm->id,
             'user_id' => null,
-            'organizational_unit_id' => Parameter::get('Finanzas','ou_id'),
+            'organizational_unit_id' => Parameter::get('Finanzas','ou_id', auth()->user()->establishment_id),
             'establishment_id' => auth()->user()->establishment_id,
         ]);
 
