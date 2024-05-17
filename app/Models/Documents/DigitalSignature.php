@@ -263,13 +263,13 @@ class DigitalSignature extends Model
     {
         foreach($positions as $position) {
             /** Posición por defecto,  */
-            if( !key_exists('column',$position) ) {
+            if ( !array_key_exists('column', $position) || is_null($position['column']) ) {
                 $position['column'] = 'right';
             }
-            if( !key_exists('row',$position) ) {
+            if ( !array_key_exists('row',$position) || is_null($position['row']) ) {
                 $position['row'] = 'first';
             }
-            if( !key_exists('margin-bottom',$position) ) {
+            if ( !array_key_exists('margin-bottom',$position) || is_null($position['margin-bottom']) ) {
                 $position['margin-bottom'] = 0;
             }
 

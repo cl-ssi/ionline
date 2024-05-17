@@ -5,7 +5,8 @@ use DB;
 use Monolog\Logger;
 use Monolog\Handler\AbstractProcessingHandler;
 
-class DatabaseHandler extends AbstractProcessingHandler{
+class DatabaseHandler extends AbstractProcessingHandler {
+    public $table;
 /**
  *
  * Reference:
