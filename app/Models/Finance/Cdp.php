@@ -71,12 +71,14 @@ class Cdp extends Model
 
     public static function createCdp(RequestForm $requestForm): void 
     {
+        $ou = Parameter::get('Finanzas','ou_id', auth()->user()->establishment_id);
+
         $cdp = Cdp::create([
             'date' => $requestForm->created_at,
             'file_path' => $requestForm->file_path,
             'request_form_id' => $requestForm->id,
             'user_id' => null,
-            'organizational_unit_id' => Parameter::get('Finanzas','ou_id', auth()->user()->establishment_id),
+            'organizational_unit_id' => $ou,
             'establishment_id' => auth()->user()->establishment_id,
         ]);
 
@@ -88,7 +90,7 @@ class Cdp extends Model
             "document_route_params" => json_encode([
                 "cdp" => $cdp->id
             ]),
-            "sent_to_ou_id" => Parameter::get('Finanzas','ou_id'),
+            "sent_to_ou_id" => $ou,
             "callback_controller_method" => "App\Http\Controllers\Finance\CdpController@approvalCallback",
             "callback_controller_params" => json_encode([]),
             "digital_signature" => true,
