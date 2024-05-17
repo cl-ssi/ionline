@@ -5,17 +5,7 @@
     <div class="col-6">
         <h5 class="mb-3">
             <i class="fas fa-shopping-cart"></i> Plan de Compra: ID {{ $purchasePlan->id }}
-            @switch($purchasePlan->status)
-                @case('save')
-                    <span class="badge bg-primary badge-sm">Guardado</span>
-                    @break
-            
-                @case('sent')
-                    <span class="badge bg-secondary badge-sm">Enviado</span>
-                    @break
-                @default
-                    ''
-            @endswitch
+            <span class="badge bg-{{$purchasePlan->getColorStatus()}} badge-sm">{{ $purchasePlan->getStatus() }}</span>
         </h5>
     </div>
     <div class="col-6">
@@ -191,6 +181,7 @@
     </div>
 </div>
 
+{{--
 <div class="table-responsive">
     <table class="table table-bordered table-sm small">
         <thead>
@@ -212,6 +203,51 @@
 
                     {{ ($approval->approver) ? $approval->approver->FullName : '' }} <br>
                     {{ ($approval->approver_at) ? $approval->approver_at->format('d-m-Y H:i:s') : '' }}
+                </td>           
+                @endforeach
+            </tr>
+        <tbody>
+    </table>
+</div>
+--}}
+
+<div class="table-responsive">
+    <table class="table table-bordered table-sm small">
+        <thead>
+            <tr class="text-center">
+                @foreach($purchasePlan->approvals as $approval)
+                <th width="" class="table-secondary">{{ $approval->sentToOu->name }}</th>
+                @endforeach
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="text-center">
+                @foreach($purchasePlan->approvals as $approval)
+                <td>
+                    @switch($approval->StatusInWords)
+                        @case('Pendiente')
+                            <i class="fas fa-clock"></i> {{ $approval->StatusInWords }}
+                            @break
+                        @case('Aprobado')
+                            <span class="d-inline-block" style="color: green;">
+                                <i class="fas fa-check-circle"></i> {{ $approval->StatusInWords }}
+                            </span>
+                            @break
+                        @case('Rechazado')
+                            <span class="d-inline-block" style="color: tomato;">
+                                <i class="fas fa-times-circle"></i> {{ $approval->StatusInWords }}
+                            </span>
+                            @break
+                    @endswitch
+                    <br>
+                    @if($approval->StatusInWords == 'Aprobado' || $approval->StatusInWords == 'Rechazado')
+                        <i class="fas fa-user"></i> {{ ($approval->approver) ? $approval->approver->FullName : '' }} <br>
+                        <i class="fas fa-calendar-alt"></i> {{ ($approval->approver_at) ? $approval->approver_at->format('d-m-Y H:i:s') : '' }}
+                        @if($approval->approver_observation)
+                            <hr>
+                            {{ $approval->approver_observation }}
+                        @endif
+                    @endif
                 </td>           
                 @endforeach
             </tr>

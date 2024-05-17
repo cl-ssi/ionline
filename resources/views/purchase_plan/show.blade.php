@@ -239,6 +239,10 @@
                     @if($approval->StatusInWords == 'Aprobado' || $approval->StatusInWords == 'Rechazado')
                         <i class="fas fa-user"></i> {{ ($approval->approver) ? $approval->approver->FullName : '' }} <br>
                         <i class="fas fa-calendar-alt"></i> {{ ($approval->approver_at) ? $approval->approver_at->format('d-m-Y H:i:s') : '' }}
+                        @if($approval->approver_observation)
+                            <hr>
+                            {{ $approval->approver_observation }}
+                        @endif
                     @endif
                 </td>           
                 @endforeach
