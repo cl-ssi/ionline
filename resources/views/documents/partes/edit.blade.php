@@ -164,8 +164,6 @@
                     @endif
                 </div>
             </fieldset>
-            
-            
         @endcan
         
 

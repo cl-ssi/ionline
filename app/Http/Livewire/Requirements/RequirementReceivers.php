@@ -61,7 +61,7 @@ class RequirementReceivers extends Component
 
         foreach($establishments_ids as $establishment) {
             $ouTree = Establishment::find($establishment)->ouTreeWithAlias;
-            foreach($ouTree as $key => $outree){
+            foreach((array) $ouTree as $key => $outree){
                 $this->ouRoots[] = array('id'=> $key, 'name' => $outree);
             }
         }

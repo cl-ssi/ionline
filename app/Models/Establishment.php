@@ -162,9 +162,10 @@ class Establishment extends Model implements Auditable
             ->toArray();
         
         if(!empty($ous)) {
-            $this->buildTree($ous, 'father_id', 'id');
+            $this->buildTree($ous);
         }
-        foreach ($this->options as $key => $option) {
+        // dd($this->options);
+        foreach ((array) $this->options as $key => $option) {
             $this->options[$key] = $this->alias . ' ' .$option;
         }
         return $this->options;
@@ -223,7 +224,6 @@ class Establishment extends Model implements Auditable
             }
             return $siblings;
         };
-
         return $fnBuilder($grouped[0]);
     }
 

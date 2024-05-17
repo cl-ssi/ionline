@@ -14,7 +14,6 @@
     <small>Origen: {{$parte->origin}}</small><br>
     <small>F.Ingreso: {{$parte->entered_at}}</small><br>
     @endif
-    
 </h4>
 
 <br>
