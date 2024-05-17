@@ -4,7 +4,7 @@
 
     <div class="alert alert-info"
         role="alert">
-        <b>Importante:</b>
+        <b>Importante:</b> Acá encontrará documentos generados por sistema que necesiten ser numerados. <br>
         Sólo funcionarios que tengan firma electrónica con propósito "iOnline" pueden numerar un documento.
     </div>
 

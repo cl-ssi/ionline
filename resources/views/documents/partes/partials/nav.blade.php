@@ -1,13 +1,4 @@
 <ul class="nav nav-tabs mb-3">
-    @can('Partes: oficina')
-    <li class="nav-item">
-        <a class="nav-link {{ active('documents.partes.create') }}"
-            href="{{ route('documents.partes.create') }}">
-            <i class="fas fa-plus"></i> Nuevo Ingreso
-        </a>
-    </li>
-    @endcan
-
     @canany(['Partes: oficina', 'Partes: director'])
     <li class="nav-item">
         <a class="nav-link {{ active('documents.partes.index') }}"
@@ -17,23 +8,14 @@
     </li>
     @endcan
 
-    @canany(['Partes: oficina'])
+    @can('Partes: oficina')
     <li class="nav-item">
-        <a class="nav-link {{ active('documents.partes.report-by-dates') }}"
-            href="{{ route('documents.partes.report-by-dates') }}">
-            <i class="fas fa-search"></i> Buscar por fecha
+        <a class="nav-link {{ active('documents.partes.create') }}"
+            href="{{ route('documents.partes.create') }}">
+            <i class="fas fa-plus"></i> Nuevo Ingreso
         </a>
     </li>
-    @endcan
 
-
-    @canany(['Partes: oficina'])
-    <li class="nav-item">
-        <a class="nav-link"
-            href="{{ route('documents.add_number') }}">
-            <i class="fas fa-certificate"></i> Editar
-        </a>
-    </li>
 
     <li class="nav-item">
         <a class="nav-link {{ active('documents.partes.numeration.inbox') }}"
@@ -41,15 +23,21 @@
             <i class="fas fa-certificate"></i> Numerar y distribuir
         </a>
     </li>
-    @endcan
 
-    @canany(['Partes: oficina'])
+    {{--
+    <li class="nav-item">
+        <a class="nav-link"
+            href="{{ route('documents.add_number') }}">
+            <i class="fas fa-certificate"></i> Editar
+        </a>
+    </li>
     <li class="nav-item">
         <a class="nav-link"
             href="{{ route('documents.partes.outbox') }}">
             <i class="fas fa-inbox"></i> Bandeja de Salida
         </a>
     </li>
+    --}}
 
     <li class="nav-item">
         <a class="nav-link"
@@ -59,17 +47,25 @@
     </li>
     @endcan
 
+    @canany(['Partes: user','Partes: oficina', 'Partes: director'])
+    <li class="nav-item">
+        <a class="nav-link {{ active('documents.partes.report-by-dates') }}"
+            href="{{ route('documents.partes.report-by-dates') }}">
+            <i class="fas fa-search"></i> Buscar por fecha
+        </a>
+    </li>
+    @endcan
+
     @canany(['Partes: director'])
     <li class="nav-item">
         <a class="nav-link"
             href="{{ route('requirements.createFromParte') }}">
-            <i class="fas fa-hands"></i> Derivar Pendientes
+            <i class="fas fa-hands"></i> Derivar Pendientes (Director)
         </a>
     </li>
     @endcan
 
     <!-- Preguntar que permisos debería tener -->
-
     @can('be god')
     <li class="nav-item">
         <a class="nav-link {{ active('documents.partes.parameters')}}"
@@ -78,6 +74,4 @@
         </a>
     </li>
     @endcan
-
-    
 </ul>
