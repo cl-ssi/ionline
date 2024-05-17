@@ -90,8 +90,9 @@ class Cdp extends Model
             ]),
             "sent_to_ou_id" => Parameter::get('Finanzas','ou_id'),
             "callback_controller_method" => "App\Http\Controllers\Finance\CdpController@approvalCallback",
-            "callback_controller_params" => json_encode([]),
+            "callback_controller_params" => json_encode(['']),
             "digital_signature" => true,
+            "position" => "right",
             "filename" => "ionline/finance/cdp/".time().str()->random(30).".pdf",
         ]);
     }
