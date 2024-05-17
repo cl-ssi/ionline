@@ -24,7 +24,7 @@
     <div class="col-12 col-md-8">
     @if($parte->files != null)
         @foreach($parte->files as $file)
-            <embed src="https://drive.google.com/viewerng/viewer?embedded=true&url={{ Storage::disk('gcs')->url($file->file) }}" width="100%" height="700">
+            <embed src="https://drive.google.com/viewerng/viewer?embedded=true&url={{ Storage::url($file->storage_path) }}" width="100%" height="700">
         @endforeach
     @endif
     </div>
