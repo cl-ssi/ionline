@@ -2209,6 +2209,7 @@ Route::prefix('finance')->as('finance.')->middleware(['auth', 'must.change.passw
         Route::get('/{dte}/return-to-dte-inbox', [PaymentController::class, 'returnToDteInbox'])->name('returnToDteInbox');
         Route::get('/{dte}/send-to-ready-inbox', [PaymentController::class, 'sendToReadyInbox'])->name('sendToReadyInbox');
         Route::get('/ready', [PaymentController::class, 'ready'])->name('ready');
+        Route::get('/ready/export', [PaymentController::class, 'readyExport'])->name('readyExport');
         Route::put('/{dte}/return-to-review', [PaymentController::class, 'returnToReview'])->name('returnToReview');
         Route::get('/rejected', [PaymentController::class, 'rejected'])->name('rejected');
         Route::put('/{dte}/update', [PaymentController::class, 'update'])->name('update');

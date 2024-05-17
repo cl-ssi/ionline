@@ -4,6 +4,13 @@
     @include('finance.payments.partials.nav')
     <h3 class="mb-3">Bandeja Pendiente para Pago</h3>
 
+    <div class="d-flex justify-content-end mb-3">
+        <a href="{{ route('finance.payments.readyExport', request()->query()) }}" class="btn btn-success">
+            <i class="fas fa-file-excel"></i> Exportar
+        </a>
+    </div>
+
+
     <form action="{{ route('finance.payments.ready') }}" method="GET">
         <div class="row g-2 mb-3">
             <div class="col-md-1">

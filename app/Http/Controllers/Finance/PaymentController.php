@@ -9,6 +9,8 @@ use App\Models\Finance\PaymentFlow;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
+use App\Exports\DteReadyExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class PaymentController extends Controller
 {
@@ -269,6 +271,44 @@ class PaymentController extends Controller
         $request->flash();
         return view('finance.payments.ready', compact('dtes', 'request'));
     }
+
+    public function readyExport(Request $request)
+    {
+        $query = Dte::with([
+            'controls',
+            'controls.store',
+            'purchaseOrder',
+            'purchaseOrder.receptions',
+            'purchaseOrder.rejections',
+            'establishment',
+            'dtes',
+            'invoices',
+            
+            'receptions',
+            'receptions.signedFileLegacy',
+            'receptions.numeration',
+
+            'requestForm',
+            'requestForm.requestFormFiles',
+            'requestForm.signedOldRequestForms',
+
+            'requestForm.father',
+            'requestForm.father.requestFormFiles'
+        ])
+        ->whereNull('rejected')
+        ->where('all_receptions', 1)
+        ->where('payment_ready', 1)
+        ->where('establishment_id', auth()->user()->organizationalUnit->establishment_id);
+
+        if ($request->filled('id') || $request->filled('emisor')  || $request->filled('folio') || $request->filled('folio_oc') || $request->filled('oc')  || $request->filled('prov') || $request->filled('cart') || $request->filled('req') || $request->filled('rev') ) {
+            $query = $this->search($request, $query);
+        }
+
+        $dtes = $query->get();
+
+        return Excel::download(new DteReadyExport($dtes), 'ready_dtes.xlsx');
+    }
+
 
 
     public function rejected()
