@@ -121,7 +121,7 @@
 
             <h5 class="text-white p-2 bg_azul_gob mt-3 text-center">
                 <i class="fas fa-file-signature"></i>
-                Información sobre Firma Electrónica
+                Informacion Firma Electrónica
             </h5>
 
             <div class="mt-4 p-5 text-black rounded bg-light">
@@ -160,28 +160,47 @@
                             Firmantes</h6>
                         <ol>
                             <li>
-                                Solicitar mediante un requerimiento en iOnline/SGR, dirigido a Gabriela Aliaga del
-                                Departamento de Tecnologías de la Información y Comunicaciones, la creación del usuario
-                                firma.digital.gob.cl. Indicar los siguientes datos:
+                                Solicitar mediante SGR o correo electrónico, la creación del usuario en firma.digital.gob.cl. Indicando los siguientes datos:
                             </li>
                             <ul>
                                 <li>Run</li>
                                 <li>Nombre completo</li>
                                 <li>Correo electrónico</li>
                                 <li>Cargo</li>
-                                <li>Telefono</li>
+                                <li>Teléfono</li>
                             </ul>
+
+                            <br>
+
+                            <p>
+                                <b>Usuarios SST:</b>
+                                <br>
+                                Dirigir su requerimiento a Gabriela Aliaga.<br>
+                                Correo: <a href="mailto:dtic.sst@redsalud.gob.cl">dtic.sst@redsalud.gob.cl</a>
+                            </p>
+
+                            <p>
+                                <b>Usuarios HETG:</b><br>
+                                Dirigir su requerimiento a: Eric Ossandón.
+                                <a href="mailto:eric.ossandon@redsalud.gob.cl">eric.ossandon@redsalud.gob.cl</a>
+                            </p>
+
+                            <p>
+                                <b>Usuarios HAH:</b><br>
+                                Dirigir su requerimiento a: Bjorn Bergk y Erick Guzmán<br>
+                                Correos: <a href="mailto:bjorn.bergk@hah.gob.cl">bjorn.bergk@hah.gob.cl</a> y <a href="mailto:erick.guzman@hah.gob.cl">erick.guzman@hah.gob.cl</a>
+                            </p>
+
                             <li>
                                 Ingresar al link <a href="https://firma.digital.gob.cl/ra/"
-                                    target="_blank">firma.digital.gob.cl</a>
-                                usando su clave única y obtener un certificado de "propósito general".
+                                    target="_blank">firma.digital.gob.cl/ra</a>
+                                usando su clave única y obtener un certificado digital de "propósito general".
                             </li>
+                            <br>
                             <li>
-                                Contactar al ministro de fe Paula Tapia (paula.tapia@redsalud.gob.cl) o
-                                Pamela Villagrán (sdga.ssi@redsalud.gob.cl) o
-                                José Donoso (jose.donosoc@redsalud.gob.cl) para solicitar la aprobación por parte del
-                                ministro de fe.
+                                Esperar la Autorización de su certificado por parte de un ministro de fe de SST. Luego usted recibirá un correo electrónico a la dirección informada inicialmente, informando sobre su aprobación.
                             </li>
+                            <br>
                             <li>
                                 Volver a ingresar a <a href="https://firma.digital.gob.cl/ra/"
                                     target="_blank">firma.digital.gob.cl</a>
@@ -302,6 +321,10 @@
                 <a href="https://docs.google.com/document/d/13-mHAWRwlk4IdIzKVLIGycIF0v6WaG6Z/edit?usp=sharing&ouid=114284222513106267165&rtpof=true&sd=true"
                     class="list-group-item list-group-item-action small" target="_blank">
                     Creación de formularios de requerimiento.
+                </a>
+                <a href="https://drive.google.com/file/d/1dB7AYItL__aqTT--lPN0VKJmGJ_NY9l0/view?usp=sharing"
+                    class="list-group-item list-group-item-action small" target="_blank">
+                    Solicitud Firma Electrónica
                 </a>
             </ul>
 
