@@ -280,13 +280,14 @@
                                         <div class="form-text">Esta linea se considerara como exenta</div>
                                     </div>
                                 </div>
+                            @endcan
                                 <div class="col-md-2">
                                     <input type="text" class="form-control" wire:model.defer="items.{{ $index }}.producto" placeholder="ej: bolsa de basura">
                                     @error("items.$index.producto")
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
-                            @endcan
+                            
 
                             <div class="col-md-1">
                                 <input type="text" class="form-control" wire:model.defer="items.{{ $index }}.unidad" placeholder="ej: cm">
