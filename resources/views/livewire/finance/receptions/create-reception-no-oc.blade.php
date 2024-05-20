@@ -7,6 +7,15 @@
 
     <h5>Documento Tributario Asociado</h5>
     <!-- Archivo Digitalizado de DTE -->
+    @if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+            <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div><br />
+    @endif
 
 
 
@@ -312,7 +321,7 @@
 
                             @if($exento)
                                 <div class="form-group col-2"> 
-                                    <input type="number" class="form-control" id="montoExento" wire:model.defer="items.{{ $index }}.montoExento"
+                                    <input type="number" class="form-control" id="montoExento" wire:model.defer="items.{{ $index }}.precioExento"
                                         autocomplete="off" wire:change="calculateTotal({{ $index }})" placeholder="monto exento"
                                     >
                                     @error('montoExento')
@@ -321,7 +330,7 @@
                                 </div>
                             @else
                                 <div class="form-group col-2">
-                                    <input type="number" class="form-control" id="montoNeto" wire:model.defer="items.{{ $index }}.montoExento"
+                                    <input type="number" class="form-control" id="montoNeto" wire:model.defer="items.{{ $index }}.precioNeto"
                                         autocomplete="off"
                                         wire:change="calculateTotal({{ $index }})"
                                         placeholder="monto neto"
