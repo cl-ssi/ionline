@@ -103,7 +103,9 @@
 
 
 
-    @if($showFacturaElectronicaFields || $showAllFields)
+    {{--
+        @if($showFacturaElectronicaFields || $showAllFields)
+    --}}
         
         <div class="form-group col-2">
             <label for="montoNeto">Monto Neto</label>
@@ -131,10 +133,14 @@
             <span class="text-danger">{{ $message }}</span>
             @enderror
         </div>
+    {{--    
     @endif
+    --}}
 
 
+    {{--
     @if($showFacturaExentaFields || $showAllFields)
+    --}}
         <div class="form-group col-2">
             <label for="montoExento">Monto Exento</label>
             <input type="number" class="form-control" id="montoExento" wire:model.defer="montoExento"
@@ -147,7 +153,9 @@
                 <span class="text-danger">{{ $message }}</span>
             @enderror
         </div>
+    {{--
     @endif
+    --}}
 
         <div class="form-group col-2">
             <label for="montoTotal">Monto Total</label>
