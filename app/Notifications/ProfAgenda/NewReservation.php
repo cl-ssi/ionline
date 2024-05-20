@@ -56,6 +56,7 @@ class NewReservation extends Notification implements ShouldQueue
             ->line(' Si no puede asistir, rogamos contactar a la Unidad de Salud del Trabajador para reagendar o cancelar su hora.')
             ->line('N° Telefono: 575767 / +57 2 405766')
             ->line('Correo electrónico: unidadstrabajador@gmail.com')
+            ->line(new HtmlString('Este correo se genera de forma automática, <b>FAVOR NO RESPONDER</b>.'))
             ->salutation('Saludos cordiales.');
     }
 
