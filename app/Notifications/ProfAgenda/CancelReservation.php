@@ -50,6 +50,8 @@ class CancelReservation extends Notification implements ShouldQueue
             ->line('Lamentablemente la reserva que tenía el para ' . $this->openHour->start_date->format('Y-m-d') . ' a las ' . $this->openHour->start_date->format('H:s') . ' con el profesional ' . $this->openHour->profesional->shortName . ' ha sido cancelada por fuerza mayor y no podrá ser atendido.')
             ->line('Disculpando las molestias y en caso que siga requiriendo la atención, se le solicita pueda llamar (575767) o acercarse a nuestra unidad para reagendar.')
             ->line(' Si no puede asistir, rogamos contactar a la Unidad de Salud del Trabajador para reagendar o cancelar su hora.')
+            ->line('N° Telefono: 575767 / +57 2 405766')
+            ->line('Correo electrónico: unidadstrabajador@gmail.com')
             ->salutation('Saludos cordiales.');
     }
 

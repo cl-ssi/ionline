@@ -54,6 +54,8 @@ class NewReservation extends Notification implements ShouldQueue
             
             // ->action('Texto del boton', route('requirements.show', $this->sgr->id) )
             ->line(' Si no puede asistir, rogamos contactar a la Unidad de Salud del Trabajador para reagendar o cancelar su hora.')
+            ->line('N° Telefono: 575767 / +57 2 405766')
+            ->line('Correo electrónico: unidadstrabajador@gmail.com')
             ->salutation('Saludos cordiales.');
     }
 
