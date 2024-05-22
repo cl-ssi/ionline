@@ -24,7 +24,7 @@
 @section('content')
 
     <div class="row mb-3">
-        <div class="col-6">
+        <div class="col-12 col-md-6">
             <h3>Usuarios</h3>
         </div>
         <div class="col-6 text-end">
@@ -37,13 +37,13 @@
 
     <form method="GET" action="{{ route('rrhh.users.index') }}">
         <div class="row gx-2">
-            <fieldset class="col-9">
+            <fieldset class="col-12 col-md-9">
                 @livewire('select-organizational-unit', [
                     'establishment_id' => auth()->user()->organizationalUnit->establishment->id,
                     'required' => false,
                 ])
             </fieldset>
-            <fieldset class="col-3">
+            <fieldset class="col-12 col-md-3">
                 <div class="input-group mb-3">
                     <input type="text" name="name" class="form-control" placeholder="Nombres, Apellidos o RUN sin DV"
                     value="{{ old('name') }}"  autofocus autocomplete="off">
@@ -84,8 +84,8 @@
 
     Total de registros: {{ $users->total() }}
 
-    <div class="table-responsive">
-    <table class="table table-responsive-xl table-striped table-sm">
+<div class="table-responsive">
+    <table class="table table-striped table-sm">
         <thead class="table-dark">
             <tr>
                 @if ($can['be god'])
@@ -135,12 +135,12 @@
                         @else
                             @livewire('rrhh.undo-user-deletion', ['user' => $user], key($user->id))
                         @endunless
-                </td>
-            </tr>
-        @endforeach
-    </tbody>
+                    </td>
+                </tr>
+             @endforeach
+        </tbody>
 
-</table>
+    </table>
 </div>
 {{ $users->links() }}
 
