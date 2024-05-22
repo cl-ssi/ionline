@@ -7,6 +7,7 @@ use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Bus\Queueable;
 use App\Models\ProfAgenda\OpenHour;
+use Illuminate\Support\HtmlString;
 
 class NewReservation extends Notification implements ShouldQueue
 {
@@ -51,12 +52,11 @@ class NewReservation extends Notification implements ShouldQueue
             ->line('Con el profesional: ' . $this->openHour->profesional->shortName)
             ->line('La reserva se encuentra realizada para: ' . $this->openHour->start_date->format('Y-m-d'). ' a las: ' . $this->openHour->start_date->format('H:i'))
             ->line('Se solicita llegar puntual a su hora.')
-            
-            // ->action('Texto del boton', route('requirements.show', $this->sgr->id) )
-            ->line(' Si no puede asistir, rogamos contactar a la Unidad de Salud del Trabajador para reagendar o cancelar su hora.')
-            ->line('N° Telefono: 575767 / +57 2 405766')
-            ->line('Correo electrónico: unidadstrabajador@gmail.com')
-            ->line(new HtmlString('Este correo se genera de forma automática, <b>FAVOR NO RESPONDER</b>.'))
+            ->line(new HtmlString('<hr>'))
+            ->line(new HtmlString('<small><i>Si no puede asistir, rogamos contactar a la Unidad de Salud del Trabajador para reagendar o cancelar su hora.</i></small>'))
+            ->line(new HtmlString('<small><i>N° Telefono: 575767 / +57 2 405766</i></small>'))
+            ->line(new HtmlString('<small><i>Correo electrónico: unidadstrabajador@gmail.com</i></small>'))
+            ->line(new HtmlString('<small>Este correo se genera de forma automática, <b>FAVOR NO RESPONDER</b>.</small><br><hr>'))
             ->salutation('Saludos cordiales.');
     }
 
