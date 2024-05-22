@@ -237,10 +237,16 @@ class ProposalController extends Controller
 
         // se devuelve usuarios según rol asignado
         if(auth()->user()->can('Agenda UST: Administrador') || auth()->user()->can('Agenda UST: Secretaria')){
-            $users = User::whereHas('agendaProposals')->get();
-        }
+            $users = User::whereHas('agendaProposals', function($q){
+                                        $q->where('status','Aperturado')
+                                            ->where('end_date','>=',now());
+                                    })->get();
+                                }
         if(auth()->user()->can('Agenda UST: Funcionario')){
-            $users = User::whereHas('agendaProposals')->where('id',auth()->id())->get();
+            $users = User::whereHas('agendaProposals', function($q){
+                                $q->where('status','Aperturado')
+                                    ->where('end_date','>=',now());
+                            })->where('id',auth()->id())->get();
         }
 
         return view('prof_agenda.open_calendar',compact('users','request','block_dates'));
