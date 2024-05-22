@@ -119,18 +119,6 @@
             </div>
             @endenv
 
-            <h5 class="text-white p-2 bg_azul_gob text-center">
-                <i class="bi bi-file-text"></i>
-                Manual Firma Electrónica
-            </h5>
-
-            <ul class="list-group">
-                <a href="https://drive.google.com/file/d/1dB7AYItL__aqTT--lPN0VKJmGJ_NY9l0/view?usp=sharing"
-                    class="list-group-item list-group-item-action small text-center" target="_blank">
-                    Solicitud Firma Digital
-                </a>
-            </ul>
-
             <h5 class="text-white p-2 bg_azul_gob mt-3 text-center">
                 <i class="fas fa-file-signature"></i>
                 Informacion Firma Electrónica
@@ -185,20 +173,20 @@
                             <br>
 
                             <p>
-                                <b>Usuarios SST:</b>
+                                <b>Funcionarios SST:</b>
                                 <br>
                                 Dirigir su requerimiento a Gabriela Aliaga.<br>
                                 Correo: <a href="mailto:dtic.sst@redsalud.gob.cl">dtic.sst@redsalud.gob.cl</a>
                             </p>
 
                             <p>
-                                <b>Usuarios HETG:</b><br>
+                                <b>Funcionarios HETG:</b><br>
                                 Dirigir su requerimiento a: Eric Ossandón.
                                 <a href="mailto:eric.ossandon@redsalud.gob.cl">eric.ossandon@redsalud.gob.cl</a>
                             </p>
 
                             <p>
-                                <b>Usuarios HAH:</b><br>
+                                <b>Funcionarios HAH:</b><br>
                                 Dirigir su requerimiento a: Bjorn Bergk y Erick Guzmán<br>
                                 Correos: <a href="mailto:bjorn.bergk@hah.gob.cl">bjorn.bergk@hah.gob.cl</a> y <a href="mailto:erick.guzman@hah.gob.cl">erick.guzman@hah.gob.cl</a>
                             </p>
