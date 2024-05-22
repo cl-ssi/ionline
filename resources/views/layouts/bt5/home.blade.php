@@ -334,6 +334,10 @@
                     class="list-group-item list-group-item-action small" target="_blank">
                     Creación de formularios de requerimiento.
                 </a>
+                <a href="https://drive.google.com/file/d/1dB7AYItL__aqTT--lPN0VKJmGJ_NY9l0/view?usp=sharing"
+                    class="list-group-item list-group-item-action small" target="_blank">
+                    Solicitud Firma Electrónica
+                </a>
             </ul>
 
         </div>

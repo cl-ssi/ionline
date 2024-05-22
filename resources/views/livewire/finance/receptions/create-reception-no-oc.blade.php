@@ -7,6 +7,15 @@
 
     <h5>Documento Tributario Asociado</h5>
     <!-- Archivo Digitalizado de DTE -->
+    @if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+            <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div><br />
+    @endif
 
 
 
@@ -103,7 +112,9 @@
 
 
 
-    @if($showFacturaElectronicaFields || $showAllFields)
+    {{--
+        @if($showFacturaElectronicaFields || $showAllFields)
+    --}}
         
         <div class="form-group col-2">
             <label for="montoNeto">Monto Neto</label>
@@ -131,10 +142,14 @@
             <span class="text-danger">{{ $message }}</span>
             @enderror
         </div>
+    {{--    
     @endif
+    --}}
 
 
+    {{--
     @if($showFacturaExentaFields || $showAllFields)
+    --}}
         <div class="form-group col-2">
             <label for="montoExento">Monto Exento</label>
             <input type="number" class="form-control" id="montoExento" wire:model.defer="montoExento"
@@ -147,7 +162,9 @@
                 <span class="text-danger">{{ $message }}</span>
             @enderror
         </div>
+    {{--
     @endif
+    --}}
 
         <div class="form-group col-2">
             <label for="montoTotal">Monto Total</label>
@@ -280,13 +297,14 @@
                                         <div class="form-text">Esta linea se considerara como exenta</div>
                                     </div>
                                 </div>
+                            @endcan
                                 <div class="col-md-2">
                                     <input type="text" class="form-control" wire:model.defer="items.{{ $index }}.producto" placeholder="ej: bolsa de basura">
                                     @error("items.$index.producto")
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
-                            @endcan
+                            
 
                             <div class="col-md-1">
                                 <input type="text" class="form-control" wire:model.defer="items.{{ $index }}.unidad" placeholder="ej: cm">
@@ -303,7 +321,7 @@
 
                             @if($exento)
                                 <div class="form-group col-2"> 
-                                    <input type="number" class="form-control" id="montoExento" wire:model.defer="items.{{ $index }}.montoExento"
+                                    <input type="number" class="form-control" id="montoExento" wire:model.defer="items.{{ $index }}.precioExento"
                                         autocomplete="off" wire:change="calculateTotal({{ $index }})" placeholder="monto exento"
                                     >
                                     @error('montoExento')
@@ -312,7 +330,7 @@
                                 </div>
                             @else
                                 <div class="form-group col-2">
-                                    <input type="number" class="form-control" id="montoNeto" wire:model.defer="items.{{ $index }}.montoExento"
+                                    <input type="number" class="form-control" id="montoNeto" wire:model.defer="items.{{ $index }}.precioNeto"
                                         autocomplete="off"
                                         wire:change="calculateTotal({{ $index }})"
                                         placeholder="monto neto"

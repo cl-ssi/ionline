@@ -32,6 +32,25 @@
                 </a>
             @endif
         @endif
+
+        <!-- Solicitud de ver los Adjuntos -->
+        @if($reception->supportFile)
+            <hr>
+            <a href="{{ route('file.download', $reception->supportFile) }}"
+                target="_blank">
+                <i class="fas fa-paperclip"></i>
+            </a>
+        @endif
+
+        @if($reception->noOcFile)
+            <hr>
+            <a href="{{ route('file.download', $reception->noOcFile) }}"
+                    class="btn btn-outline-danger"
+                    target="_blank">
+                    <i class="bi bi-file-pdf-fill"></i>
+            </a>
+        @endif
+
         
     @endforeach
 

@@ -719,7 +719,12 @@ class RequestReplacementStaffController extends Controller
 
     public function show_file_position(Position $position)
     {
-        return Storage::disk('gcs')->response($position->job_profile_file);
+        if($position->job_profile_file){
+            return Storage::disk('gcs')->response($position->job_profile_file);
+        }
+        else{
+            return redirect()->back()->with('danger', 'Estimado Usuario: El archivo no se encuentra disponible.');
+        }
     }
 
     public function download(RequestReplacementStaff $requestReplacementStaff)

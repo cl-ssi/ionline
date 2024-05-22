@@ -223,7 +223,7 @@
                                             target="_blank">
                                             <i class="bi bi-file-pdf-fill"></i>
                                 </a>
-                                @endif
+                            @endif
                         </td>
                         <td>
                             @if($reception->rejected == false)

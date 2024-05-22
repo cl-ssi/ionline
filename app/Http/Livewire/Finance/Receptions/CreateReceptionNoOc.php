@@ -52,7 +52,8 @@ class CreateReceptionNoOc extends Component
         'items.*.producto'                 => 'required|string',
         'items.*.unidad'                 => 'required|string',
         'items.*.cantidad'                 => 'required|numeric',
-        'items.*.precioNeto'                 => 'required|numeric',
+        'items.*.precioNeto'                 => 'numeric',
+        'items.*.precioExento'                 => 'numeric',
         'items.*.total'                 => 'required|numeric',
         'montoTotal' => 'required|numeric',
     ];
@@ -209,7 +210,7 @@ class CreateReceptionNoOc extends Component
             $storage_path = 'ionline/finances/receptions/no_oc';
             $filename = $reception->id.'.pdf';
 
-            $this->digitalInvoiceFile->storeAs($storage_path, $filename, 'gcs');
+            $this->digitalInvoiceFile->storeAs($storage_path, $filename);
 
             $reception->files()->create([
                 'storage_path' => $storage_path.'/'.$filename,

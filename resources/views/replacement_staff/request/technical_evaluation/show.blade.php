@@ -617,12 +617,13 @@
 <div class="row">
     <div class="col">
         @if($requestReplacementStaff->technicalEvaluation && $requestReplacementStaff->request_id == NULL &&
+            $requestReplacementStaff->form_type == 'replacement' &&
             $requestReplacementStaff->end_date < now()->toDateString() &&
-                $requestReplacementStaff->technicalEvaluation->date_end != null &&
-                    ($requestReplacementStaff->user_id == auth()->id() || 
-                        $requestReplacementStaff->organizational_unit_id == auth()->user()->organizationalUnit->id) &&
-                            (App\Models\ReplacementStaff\RequestReplacementStaff::getCurrentContinuity($requestReplacementStaff) == 'no current' || 
-                                App\Models\ReplacementStaff\RequestReplacementStaff::getCurrentContinuity($requestReplacementStaff) == 'no childs'))
+            $requestReplacementStaff->technicalEvaluation->date_end != null &&
+            ($requestReplacementStaff->user_id == auth()->id() || 
+            $requestReplacementStaff->organizational_unit_id == auth()->user()->organizationalUnit->id) &&
+            (App\Models\ReplacementStaff\RequestReplacementStaff::getCurrentContinuity($requestReplacementStaff) == 'no current' || 
+            App\Models\ReplacementStaff\RequestReplacementStaff::getCurrentContinuity($requestReplacementStaff) == 'no childs'))
             <a class="btn btn-success float-right btn-sm" href="{{ route('replacement_staff.request.create_extension', $requestReplacementStaff) }}">
                 <i class="fas fa-plus"></i> Extender en Nueva Solicitud</a>
         @endif

@@ -137,7 +137,7 @@
                 <th>Documento</th>
                 <th width="140px">OC</th>
                 <th>FR</th>
-                <th>Recepción</th>
+                <th>Recepción/Adjuntos</th>
                 <th width="90">Fecha Aceptación SII (días)</th>
                 <!-- <th>Devengo</th> -->
                 <th>Enviado a Bandeja de Revisión por</th>
