@@ -44,7 +44,7 @@
 
                         // Eliminar atributos innecesarios de la tabla
                         table.removeAttribute('width');
-                        table.removeAttribute('heigth');
+                        table.removeAttribute('height');
                         table.removeAttribute('cellspacing');
                         table.removeAttribute('cellpadding');
 
@@ -54,8 +54,18 @@
                             // Conservar los atributos 'colspan' y 'rowspan'
                             const colspan = cell.getAttribute('colspan');
                             const rowspan = cell.getAttribute('rowspan');
+                            let textAlignCenter = cell.style.textAlign ===
+                                'center';
+
+                            // Buscar en los spans si hay un text-align: center y conservarlo
+                            const centerSpan = cell.querySelector(
+                                'span[style*="text-align: center"]');
+                            if (centerSpan) {
+                                textAlignCenter = true;
+                            }
 
                             // Limpiar todos los atributos excepto 'colspan' y 'rowspan'
+                            cell.removeAttribute('style');
                             while (cell.attributes.length > 0) {
                                 cell.removeAttribute(cell.attributes[0].name);
                             }
@@ -63,6 +73,8 @@
                             // Reestablecer 'colspan' y 'rowspan' si existían
                             if (colspan) cell.setAttribute('colspan', colspan);
                             if (rowspan) cell.setAttribute('rowspan', rowspan);
+                            if (textAlignCenter) cell.style.textAlign =
+                            'center';
 
                             // Buscar y reemplazar etiquetas <p> por <span> dentro de las celdas
                             var paragraphs = cell.querySelectorAll('p');
@@ -70,12 +82,27 @@
                                 var span = document.createElement(
                                     'span');
                                 span.innerHTML = p
-                                .innerHTML; // Mover el contenido
+                                    .innerHTML; // Mover el contenido
                                 span.setAttribute('style', p
                                     .getAttribute('style')
-                                    ); // Conservar el estilo
+                                ); // Conservar el estilo
                                 p.parentNode.replaceChild(span,
-                                p); // Reemplazar <p> por <span>
+                                    p); // Reemplazar <p> por <span>
+                            });
+
+                            // Si un <span> tiene text-align: center, mover esa propiedad al td o th
+                            var spans = cell.querySelectorAll(
+                                'span[style*="text-align: center"]');
+                            spans.forEach(span => {
+                                // Añadir text-align: center al td o th
+                                cell.style.textAlign = 'center';
+                                // Quitar el atributo style del span si solo tenía text-align
+                                if (span.style.length === 1) {
+                                    span.removeAttribute('style');
+                                } else {
+                                    span.style.removeProperty(
+                                        'text-align');
+                                }
                             });
                         });
                     });
@@ -85,8 +112,6 @@
                 }
             });
 
-
-
             editor.ui.registry.addMenuItem('cleanTextButton', {
                 text: 'Limpiar tamaño y tipo de letra',
                 onAction: function(_) {
@@ -94,9 +119,68 @@
                     var container = document.createElement('div');
                     container.innerHTML = content;
 
+                    // Convertir h1, h2, h3, h4 a p con texto en negrita
+                    var headers = container.querySelectorAll('h1, h2, h3, h4');
+                    headers.forEach(function(header) {
+                        var p = document.createElement('p'); // Crea un nuevo elemento p
+                        var strong = document.createElement(
+                            'strong'); // Crea un nuevo elemento strong
+                        strong.innerHTML = header
+                            .innerHTML; // Copia el contenido del encabezado al strong
+                        p.appendChild(strong); // Añade strong a p
+                        header.parentNode.replaceChild(p,
+                            header); // Reemplaza el encabezado por el nuevo p
+                    });
+
+
+                    // Eliminar todos los comentarios HTML
+                    var removeComments = function(node) {
+                        var child = node.firstChild;
+                        while (child) {
+                            if (child.nodeType === Node.COMMENT_NODE) {
+                                var toRemove = child;
+                                child = child
+                                    .nextSibling; // Asegúrate de establecer el nextSibling antes de eliminar
+                                node.removeChild(toRemove);
+                            } else {
+                                removeComments(child);
+                                child = child.nextSibling;
+                            }
+                        }
+                    };
+
+                    removeComments(container);
+
                     // Encontrar todos los elementos con estilos inline y eliminar font-size y font-family
                     var allElements = container.querySelectorAll('*');
                     allElements.forEach(function(element) {
+
+                        // Eliminar propiedades específicas de estilo y todas las propiedades que comiencen con mso-
+                        var style = element.getAttribute('style');
+                        if (style) {
+                            var cleanedStyle = style.replace(/mso-[^\s:]+:\s*[^;]+;?/g,
+                                '').trim();
+                            if (cleanedStyle) {
+                                element.setAttribute('style', cleanedStyle);
+                            } else {
+                                element.removeAttribute('style');
+                            }
+                        }
+
+                        // Eliminar la clase MsoBodyText si está presente
+                        if (element.classList.contains('MsoBodyText')) {
+                            element.classList.remove('MsoBodyText');
+                        }
+                        if (element.classList.contains('TableNormal')) {
+                            element.classList.remove('TableNormal');
+                        }
+                        if (element.classList.contains('MsoNormal')) {
+                            element.classList.remove('MsoNormal');
+                        }
+                        if (element.classList.contains('MsoTableGrid')) {
+                            element.classList.remove('MsoTableGrid');
+                        }
+
                         if (element.style.fontSize) {
                             element.style.removeProperty('font-size');
                         }
@@ -108,6 +192,14 @@
                         }
                         if (element.style.margin) {
                             element.style.removeProperty('margin');
+                        }
+                        if (element.style.letterSpacing) {
+                            element.style.removeProperty('letter-spacing');
+                        }
+
+                        // Si después de eliminar las clases, el atributo class está vacío, quitar el atributo class
+                        if (element.classList.length === 0) {
+                            element.removeAttribute('class');
                         }
                     });
 
@@ -123,13 +215,16 @@
                         }
                     });
 
-                    // Extendiendo la funcionalidad para eliminar etiquetas vacías ahora también para 'p'
-                    var elements = container.querySelectorAll('span, div, em, strong');
+                    // Extendiendo la funcionalidad para eliminar etiquetas vacías y reemplazarlas por un espacio
+                    var elements = container.querySelectorAll('span, div, em, strong, a');
                     elements.forEach(function(el) {
-                        // Eliminar la etiqueta si el contenido es solo espacio en blanco o &nbsp;
+                        // Eliminar la etiqueta si el contenido es solo espacio en blanco o &nbsp; y reemplazar con un espacio
                         var innerContent = el.innerHTML.replace(/&nbsp;/g, ' ').trim();
                         if (!innerContent) {
-                            el.parentNode.removeChild(el);
+                            var space = document.createTextNode(
+                                ' '); // Crear un nodo de texto con un espacio
+                            el.parentNode.replaceChild(space,
+                                el); // Reemplazar el elemento por el espacio
                         }
                     });
 
