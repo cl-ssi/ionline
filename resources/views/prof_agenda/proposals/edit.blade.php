@@ -13,7 +13,7 @@
 <div class="row">
     <fieldset class="form-group col col-md-4">
         <label for="for_type">Tipo</label>
-        <select class="form-control" name="type">
+        <select class="form-control" name="type" @if($proposal->status == "Aperturado") readonly @endif>
             <option value=""></option>
             <option value="Nuevo horario" @selected($proposal->type == "Nuevo horario")>Nuevo horario</option>
             <option value="Reprogramación" @selected($proposal->type == "Reprogramación")>Reprogramación</option>
@@ -21,12 +21,12 @@
     </fieldset>
     <fieldset class="form-group col col-md">
         <label for="for_start_date">Fecha Inicio</label>
-        <input type="date" class="form-control" name="start_date" value="{{$proposal->start_date->format('Y-m-d')}}" required>
+        <input type="date" class="form-control" name="start_date" value="{{$proposal->start_date->format('Y-m-d')}}" required  @if($proposal->status == "Aperturado") readonly @endif>
     </fieldset>
 
     <fieldset class="form-group col col-md">
         <label for="for_end_date">Fecha Término</label>
-        <input type="date" class="form-control" name="end_date" value="{{$proposal->end_date->format('Y-m-d')}}" required>
+        <input type="date" class="form-control" name="end_date" value="{{$proposal->end_date->format('Y-m-d')}}" required  @if($proposal->status == "Aperturado") readonly @endif>
     </fieldset>
 </div>
 
@@ -41,7 +41,7 @@
 
     <fieldset class="form-group col-12 col-md-4">
         <label for="for_profesion_id">Profesión</label>
-        <select class="form-control" name="profession_id" id="" required>
+        <select class="form-control" name="profession_id" id="" required  @if($proposal->status == "Aperturado") readonly @endif>
             <option value=""></option>
             @foreach($professions as $profession)
                 <option value="{{$profession->id}}" @selected($profession->id == $proposal->profession_id)>{{$profession->name}}</option>
@@ -50,21 +50,25 @@
     </fieldset>
 
     <fieldset class="form-group col-12 col-md-4">
-        <label for="for_profesion_id"><br></label>
-        <input type="text" class="form-control" value="{{$proposal->status}}" disabled>
+        <label for="for_status">Estado</label>
+        <select class="form-control" name="status" id="for_status" required>
+            <option value="Creado" @selected($proposal->status == "Creado")>Creado</option>
+            <option value="Aperturado" @selected($proposal->status == "Aperturado")>Aperturado</option>
+            <option value="Bloqueado" @selected($proposal->status == "Bloqueado")>Bloqueado</option>
+        </select>
     </fieldset>
 </div>
 
 <div class="row">
     <fieldset class="form-group col col-md">
         <label for="for_observation">Observación</label>
-        <textarea name="observation" class="form-control" rows="3" cols="80">
+        <textarea name="observation" class="form-control" rows="3" cols="80" @if($proposal->status == "Aperturado") readonly @endif>
             {!!$proposal->observation!!}
         </textarea>
     </fieldset>
 </div>
 
-<button type="submit" class="btn btn-primary" @disabled($proposal->status == "Aperturado")>Guardar</button>
+<button type="submit" class="btn btn-primary">Guardar</button>
 
 </form>
 

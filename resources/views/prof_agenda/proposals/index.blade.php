@@ -10,7 +10,13 @@
 	<a href="{{ route('prof_agenda.proposals.create') }}" class="btn btn-primary">Crear</a>
 </h3>
 
-<table class="table table-striped table-sm table-bordered">
+<div class="form-row justify-content-end">
+    <div style="color:white; border: 1px solid black; width: 20px; height: 20px; display: inline-block;">&#9632;</div>&nbsp;<p>Activos</p>&nbsp;&nbsp; 
+    <div style="color:#FAC2C2; width: 20px; height: 20px; display: inline-block;">&#9632;</div>&nbsp;<p>Bloqueado</p>&nbsp;&nbsp; 
+    <div style="color:#FAFAC0; width: 20px; height: 20px; display: inline-block;">&#9632;</div>&nbsp;<p>Expirados</p>&nbsp;&nbsp; 
+</div>
+
+<table class="table table-sm table-bordered">
 	<thead>
 		<tr>
             <th>Id</th>
@@ -25,8 +31,10 @@
 	</thead>
 	<tbody>
 	@foreach($proposals as $proposal)
-        @if($proposal->end_date < now()) <tr class="table-danger">
-        @else <tr> @endif
+        <tr class=""> 
+        @if($proposal->end_date < now()) <tr class="table-warning"> @endif
+        @if($proposal->status == "Bloqueado") <tr class="table-danger"> @endif
+
             <td>{{ $proposal->id}}</td>
 			<td nowrap>{{ $proposal->type }}</td>
             <td>{{$proposal->employee->shortName}}</td>

@@ -27,8 +27,10 @@ class SelectUserProfesion extends Component
             if(auth()->user()->can('Agenda UST: Administrador') || auth()->user()->can('Agenda UST: Secretaria')){
                 $this->professions = Profession::whereIn('id',$professions)->get();
                 $this->users = User::whereHas('agendaProposals', function($q) use ($profession_id){
-                                        $q->where('profession_id',$profession_id);
+                                        $q->where('profession_id',$profession_id)
+                                            ->where('status','Aperturado');
                                     })->get();
+                                    // dd($this->users);
             }
             if(auth()->user()->can('Agenda UST: Funcionario')){
                 // obtiene profesiones asociada a funcionario logeado
@@ -43,7 +45,8 @@ class SelectUserProfesion extends Component
         }else{
             $this->professions = Profession::whereIn('id',$professions)->get();
             $this->users = User::whereHas('agendaProposals', function($q) use ($profession_id){
-                                    $q->where('profession_id',$profession_id);
+                                    $q->where('profession_id',$profession_id)
+                                        ->where('status','Aperturado');
                                 })->get();
         }
     }
@@ -58,7 +61,8 @@ class SelectUserProfesion extends Component
             if(auth()->user()->can('Agenda UST: Administrador') || auth()->user()->can('Agenda UST: Secretaria')){
                 $this->professions = Profession::whereIn('id',$professions)->get();
                 $this->users = User::whereHas('agendaProposals', function($q) use ($profession_id){
-                                        $q->where('profession_id',$profession_id);
+                                        $q->where('profession_id',$profession_id)
+                                            ->where('status','Aperturado');
                                     })->get();
             }
             if(auth()->user()->can('Agenda UST: Funcionario')){
@@ -74,7 +78,8 @@ class SelectUserProfesion extends Component
         }else{
             $this->professions = Profession::whereIn('id',$professions)->get();
             $this->users = User::whereHas('agendaProposals', function($q) use ($profession_id){
-                                    $q->where('profession_id',$profession_id);
+                                    $q->where('profession_id',$profession_id)
+                                        ->where('status','Aperturado');
                                 })->get();
         }
     }
