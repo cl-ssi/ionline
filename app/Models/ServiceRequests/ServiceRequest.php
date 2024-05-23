@@ -138,17 +138,12 @@ class ServiceRequest extends Model implements Auditable
         $serviceRequests = ServiceRequest::whereHas("SignatureFlows", function($subQuery) use($user_id){
                                         $subQuery->whereNull('status')
                                                 ->where( function($query) use($user_id){
-                                                    $query->where('responsable_id', $user_id)
-                                                            ->orwhere('user_id', $user_id);
+                                                    $query->where('responsable_id', $user_id);
                                                 }); 
                                     })
                                     ->wheredoesnthave("SignatureFlows", function($subQuery) {
                                         $subQuery->where('status',0);
                                     })
-                                    // ->wheredoesnthave("SignatureFlows", function($subQuery) {
-                                    //     $subQuery->whereNull('status')
-                                    //             ->where('sign_position',2);
-                                    // })
                                     ->with('SignatureFlows')
                                     ->get();
 
@@ -157,10 +152,12 @@ class ServiceRequest extends Model implements Auditable
             if ($serviceRequest->SignatureFlows->where('status', '===', 0)->count() == 0) {
                 foreach ($serviceRequest->SignatureFlows->sortBy('sign_position') as $key2 => $signatureFlow) {
                     //with responsable_id
-                    if ($user_id == $signatureFlow->responsable_id || $user_id == $signatureFlow->user_id) {
+                    if ($user_id == $signatureFlow->responsable_id) {
                         if ($signatureFlow->status == NULL) {
-                            if ($serviceRequest->SignatureFlows->where('status', '!=', 2)->where('sign_position', $signatureFlow->sign_position - 1)->first()) {
-                                if ($serviceRequest->SignatureFlows->where('status', '!=', 2)->where('sign_position', $signatureFlow->sign_position - 1)->first()->status == NULL) {
+                            // se encuentra signature flow anterior
+                            $last_signature_flow = $serviceRequest->SignatureFlows->where('status', '!=', 2)->where('sign_position', $signatureFlow->sign_position - 1)->first();
+                            if ($last_signature_flow) {
+                                if ($last_signature_flow->status == NULL) {
                                 
                                 } 
                                 else 

@@ -51,7 +51,7 @@ class ServiceRequestAssignUserBetweenSignatureFlows extends Command
         ->wheredoesnthave("SignatureFlows", function($subQuery) {
             $subQuery->where('status',0);
         })
-        ->where('id',34557)
+        // ->where('id',34557)
         ->with('SignatureFlows')
         ->get();
 
@@ -90,7 +90,7 @@ class ServiceRequestAssignUserBetweenSignatureFlows extends Command
             $subQuery->where('status',0);
         })
         ->with('SignatureFlows')
-        ->where('id',34557)
+        // ->where('id',34557)
         ->get();
 
         // dd($serviceRequests);
