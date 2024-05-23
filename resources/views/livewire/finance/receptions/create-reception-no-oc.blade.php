@@ -55,7 +55,7 @@
             @enderror
         </div>
 
-        <div class="col-md-2">
+        <div class="col-md-3">
             <div class="form-group">
                 <label for="reception-date">Tipo de documento*</label>
                 <select id="document_type"
@@ -79,7 +79,7 @@
         </div>
 
         <div class="form-group col-2">
-            <label for="folio">Folio</label>
+            <label for="folio">Folio*</label>
             <input type="number" class="form-control" id="folio" wire:model="folio" autocomplete="off"
                 min="1" 
                 wire:loading.attr="disabled"
@@ -283,27 +283,26 @@
                 <div class="mt-2">
                     @foreach ($items as $index => $item)
                         <div class="row mb-2 g-2" wire:key="item_{{ $index }}">
-                            @can('be god')
-                                <div class="col-md-2">
-                                    <div class="form-check form-switch form-check-inline">
-                                        <input class="form-check-input"
-                                            type="checkbox"
-                                            role="switch"
-                                            id="for-order_completed"
-                                            wire:click="toggleExento()"
-                                            >
-                                        <label class="form-check-label"
-                                            for="flexSwitchCheckDefault">Marcar el ítem como exento</label>
-                                        <div class="form-text">Esta linea se considerara como exenta</div>
-                                    </div>
+                            <div class="col-md-2">
+                                <div class="form-check form-switch form-check-inline">
+                                    <input class="form-check-input"
+                                        type="checkbox"
+                                        role="switch"
+                                        id="for-order_completed_{{ $index }}"
+                                        wire:click="toggleExento({{ $index }})"
+                                        @if($item['exento']) checked @endif
+                                        >
+                                    <label class="form-check-label" for="flexSwitchCheckDefault_{{ $index }}">Marcar el ítem como exento</label>
+                                    <div class="form-text">Esta linea se considerara como exenta</div>
                                 </div>
-                            @endcan
-                                <div class="col-md-2">
-                                    <input type="text" class="form-control" wire:model.defer="items.{{ $index }}.producto" placeholder="ej: bolsa de basura">
-                                    @error("items.$index.producto")
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
-                                </div>
+                            </div>
+                        
+                            <div class="col-md-2">
+                                <input type="text" class="form-control" wire:model.defer="items.{{ $index }}.producto" placeholder="ej: bolsa de basura">
+                                @error("items.$index.producto")
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
                             
 
                             <div class="col-md-1">
@@ -319,24 +318,24 @@
                                 @enderror
                             </div>
 
-                            @if($exento)
-                                <div class="form-group col-2"> 
-                                    <input type="number" class="form-control" id="montoExento" wire:model.defer="items.{{ $index }}.precioExento"
+                            @if($item['exento'])
+                                <div class="form-group col-2">
+                                    <input type="number" class="form-control" wire:model="items.{{ $index }}.precioExento"
                                         autocomplete="off" wire:change="calculateTotal({{ $index }})" placeholder="monto exento"
                                     >
-                                    @error('montoExento')
+                                    @error("items.$index.precioExento")
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
                             @else
                                 <div class="form-group col-2">
-                                    <input type="number" class="form-control" id="montoNeto" wire:model.defer="items.{{ $index }}.precioNeto"
+                                    <input type="number" class="form-control" wire:model="items.{{ $index }}.precioNeto"
                                         autocomplete="off"
                                         wire:change="calculateTotal({{ $index }})"
                                         placeholder="monto neto"
                                     >
-                                    @error('montoNeto')
-                                    <span class="text-danger">{{ $message }}</span>
+                                    @error("items.$index.precioNeto")
+                                        <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
                             @endif
@@ -644,8 +643,8 @@
                         <td style="text-align: right;">
                             @if (!empty($item['precioNeto']))
                                 {{ money(floatval($item['precioNeto'])) }}
-                            @elseif (!empty($item['montoExento']))
-                                {{ money(floatval($item['montoExento'])) }}
+                            @elseif (!empty($item['precioExento']))
+                                {{ money(floatval($item['precioExento'])) }}
                             @endif
                         </td>
                         <td style="text-align: right;">{{ money(floatval($item['total'])) }}</td>
