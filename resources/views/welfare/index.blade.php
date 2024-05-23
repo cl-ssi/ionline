@@ -29,7 +29,7 @@
             <br>
             <div class="row">
                 <fieldset class="form-group col-12 col-md-12">
-                    <iframe src="https://drive.google.com/file/d/1YsmCsLqlfcdSqODBUwtUb3xoDdSMzljo/preview" width="100%" height="540" allow="autoplay"></iframe>
+                    <iframe src="https://drive.google.com/file/d/1YsmCsLqlfcdSqODBUwtUb3xoDdSMzljo/preview" width="100%" height="540" allow="autoplay; fullscreen" allowfullscreen></iframe>
                 </fieldset>
             </div>
         </div>
