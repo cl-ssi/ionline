@@ -3,7 +3,10 @@
     tinymce.init({
         selector: 'textarea#contenido', // Replace this CSS selector to match the placeholder element for TinyMCE
         menu: {
-            tools: { title: 'Herramientas', items: 'code visualblocks removeformat' },
+            tools: {
+                title: 'Herramientas',
+                items: 'code visualblocks removeformat'
+            },
             custom: {
                 title: 'Limpiar documento',
                 items: 'cleanSpaceButton cleanTextButton cleanColorButton cleanTableButton'
@@ -75,8 +78,7 @@
                             // Reestablecer 'colspan' y 'rowspan' si existían
                             if (colspan) cell.setAttribute('colspan', colspan);
                             if (rowspan) cell.setAttribute('rowspan', rowspan);
-                            if (textAlignCenter) cell.style.textAlign =
-                            'center';
+                            if (textAlignCenter) cell.style.textAlign = 'center';
 
                             // Buscar y reemplazar etiquetas <p> por <span> dentro de las celdas
                             var paragraphs = cell.querySelectorAll('p');
