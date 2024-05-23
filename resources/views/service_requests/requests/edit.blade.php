@@ -843,7 +843,7 @@
              @endforeach
             @else
             <!-- devolucion -->
-              @foreach($serviceRequest->SignatureFlows->sortBy('created_at') as $key => $SignatureFlow)
+              @foreach($serviceRequest->SignatureFlows->sortBy('sign_position') as $key => $SignatureFlow)
                 @if($SignatureFlow->status === null)
                   <tr class="bg-light">
                 @elseif($SignatureFlow->status === 0)
