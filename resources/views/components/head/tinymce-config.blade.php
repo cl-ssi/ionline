@@ -3,13 +3,17 @@
     tinymce.init({
         selector: 'textarea#contenido', // Replace this CSS selector to match the placeholder element for TinyMCE
         menu: {
+            tools: {
+                title: 'Herramientas',
+                items: 'code visualblocks removeformat'
+            },
             custom: {
                 title: 'Limpiar documento',
                 items: 'cleanSpaceButton cleanTextButton cleanColorButton cleanTableButton'
-            }
+            },
         },
         menubar: 'file edit views insert format tools table custom',
-        plugins: 'code table lists preview fullscreen pagebreak',
+        plugins: 'code table lists preview fullscreen pagebreak visualblocks',
         language: 'es_MX',
         browser_spellcheck: true,
         style_formats: [{
@@ -18,7 +22,7 @@
             classes: 'especial'
         }, ],
         style_formats_merge: true,
-        toolbar: 'undo redo | styles | bold | alignleft aligncenter alignright alignjustify | indent outdent | bullist numlist | table forecolor backcolor removeformat preview',
+        toolbar: 'undo redo | styles | bold | alignleft aligncenter alignright alignjustify | indent outdent | bullist numlist | table forecolor backcolor preview',
         content_style: "body { font-size: 10pt; font-family: Verdana; }",
         promotion: false,
         license_key: 'gpl',
@@ -47,6 +51,7 @@
                         table.removeAttribute('height');
                         table.removeAttribute('cellspacing');
                         table.removeAttribute('cellpadding');
+                        table.removeAttribute('align');
 
                         // Procesar cada celda en la tabla
                         var cells = table.querySelectorAll('tr, td, th');
@@ -73,8 +78,7 @@
                             // Reestablecer 'colspan' y 'rowspan' si existían
                             if (colspan) cell.setAttribute('colspan', colspan);
                             if (rowspan) cell.setAttribute('rowspan', rowspan);
-                            if (textAlignCenter) cell.style.textAlign =
-                            'center';
+                            if (textAlignCenter) cell.style.textAlign = 'center';
 
                             // Buscar y reemplazar etiquetas <p> por <span> dentro de las celdas
                             var paragraphs = cell.querySelectorAll('p');
