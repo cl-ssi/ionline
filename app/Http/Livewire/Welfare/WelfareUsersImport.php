@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Welfare;
 
+use Exception;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
