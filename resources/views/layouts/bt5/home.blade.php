@@ -236,6 +236,26 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Se restringe la visualización a usuarios de bienestar y administradores -->
+            @if(auth()->user()->welfare || auth()->user()->can('be god') || auth()->user()->can('welfare: amipass') || auth()->user()->can('welfare: balance'))
+                <h5 class="text-white p-2 bg_azul_gob mt-3 text-center">
+                    <i class="fas fa-file-signature"></i>
+                    Reserva de cabañas - Bienestar
+                </h5>
+
+                <div class="mt-4 p-5 text-black rounded bg-light">
+
+                    <h6>En el siguiente video podrá visualizar como realizar una reserva de cabañas del área de Bienestar. Para acceder al módulo presionar <a href="{{ route('welfare.index') }}">aquí</a>.</h6>
+                    <br>
+                    <div class="row">
+                        <fieldset class="form-group col-12 col-md-12">
+                            <iframe src="https://drive.google.com/file/d/1YsmCsLqlfcdSqODBUwtUb3xoDdSMzljo/preview" width="100%" height="315" allow="autoplay"></iframe>
+                        </fieldset>
+                    </div>
+                </div>
+            @endif
+            
         </div>
 
         <div class="col-sm-4 col-12">
