@@ -378,7 +378,9 @@
                         </td>
                         <td>{{ $requestForm->name }}</td>
                         <td>{{ $requestForm->user ? $requestForm->user->FullName : 'Usuario eliminado' }}<br>
-                            {{ $requestForm->user ? $requestForm->userOrganizationalUnit->name : 'Usuario eliminado' }}
+                            {{ $requestForm->user ? $requestForm->userOrganizationalUnit->name : 'Usuario eliminado' }}<br><br>
+
+                            <small><b>{{ $requestForm->contractOrganizationalUnit ? $requestForm->contractOrganizationalUnit->establishment->name : 'Establecimiento eliminado' }}</b></small>
                         </td>
                         <td>{{ $requestForm->quantityOfItems() }}</td>
                         <td class="text-right">{{$requestForm->symbol_currency}}{{ number_format($requestForm->estimated_expense,$requestForm->precision_currency,",",".") }}</td>
