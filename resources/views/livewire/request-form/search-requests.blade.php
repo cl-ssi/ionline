@@ -225,8 +225,10 @@
                             {{ $requestForm->SubtypeValue }}
                         </td>
                         <td>{{ $requestForm->name }}</td>
-                        <td>{{ $requestForm->user ? $requestForm->user->FullName : 'Usuario eliminado' }}<br>
-                            {{ $requestForm->userOrganizationalUnit ? $requestForm->userOrganizationalUnit->name : 'Usuario eliminado' }}
+                        <td>
+                            {{ $requestForm->user ? $requestForm->user->FullName : 'Usuario eliminado' }}<br>
+                            {{ $requestForm->userOrganizationalUnit ? $requestForm->userOrganizationalUnit->name : 'Usuario eliminado' }}<br><br>
+                            <small><b>{{ $requestForm->contractOrganizationalUnit ? $requestForm->contractOrganizationalUnit->establishment->name : 'Establecimiento eliminado' }}</b></small>
                         </td>
                         <td>{{ $requestForm->purchasers->first()->FullName?? 'No asignado' }}</td>
                         <td align="center">{{ $requestForm->quantityOfItems() }}</td>

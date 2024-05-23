@@ -100,6 +100,11 @@ class SearchRequests extends Component
                     ->orWhere('contract_manager_ou_id', $ouSearch);
                 });
             }
+            else{
+                $query->whereHas('contractOrganizationalUnit', function ($q) {
+                    return $q->where('establishment_id', auth()->user()->organizationalUnit->establishment_id);
+                });
+            }
         }
 
         if($this->inbox == 'purchase'){            

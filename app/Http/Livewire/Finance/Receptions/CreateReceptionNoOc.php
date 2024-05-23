@@ -75,6 +75,7 @@ class CreateReceptionNoOc extends Component
 
     public function render()
     {
+        app('debugbar')->log($this->items);
         return view('livewire.finance.receptions.create-reception-no-oc');
     }
 
@@ -158,6 +159,7 @@ class CreateReceptionNoOc extends Component
                 'emision' => $this->reception['dte_date'],
                 'razon_social_emisor' => $this->razonSocial,
                 'monto_neto' => isset($this->montoNeto) ? $this->montoNeto : null,
+                'monto_exento' => isset($this->montoExento) ? $this->montoExento : null,
                 'monto_iva' => isset($this->montoIva) ? $this->montoIva : null,
                 'monto_total' => $this->montoTotal,
                 'tipo' => $tipo,
@@ -195,14 +197,17 @@ class CreateReceptionNoOc extends Component
         $reception = Reception::create($receptionData);
         
 
-        foreach ($this->items as $item) {
+        foreach ($this->items as $index => $item) {
             ReceptionItem::create([
                 'reception_id' => $reception->id,
+                'item_position' => $index,
                 'Producto' => $item['producto'],
                 'Unidad' => $item['unidad'],
                 'Cantidad' => $item['cantidad'],
-                'PrecioNeto' => $item['precioNeto'],
+                'PrecioNeto' => !empty($item['precioNeto']) ? $item['precioNeto'] : null,
+                'PrecioExento' => !empty($item['precioExento']) ? $item['precioExento'] : null,
                 'Total' => $item['total'],
+                
             ]);
         }
 
@@ -343,6 +348,7 @@ class CreateReceptionNoOc extends Component
             'precioNeto' => '',
             'precioExento' => '',
             'total' => 0,
+            'exento' => false,
         ];
 
         $this->calculateTotal(count($this->items) - 1);
@@ -359,16 +365,14 @@ class CreateReceptionNoOc extends Component
     {
         $item = $this->items[$index];
         if (!empty($item['cantidad'])) {
-            if (!empty($item['montoExento'])) {
-                // Si hay un monto exento definido, calcular el total usando el monto exento
-                $this->items[$index]['total'] = $item['cantidad'] * $item['montoExento'];
-            } elseif (!empty($item['precioNeto'])) {
+            if (!empty($item['precioExento']) && $item['exento']) {
+                // Si hay un monto exento definido y el ítem es exento, calcular el total usando el monto exento
+                $this->items[$index]['total'] = $item['cantidad'] * $item['precioExento'];
+            } elseif (!empty($item['precioNeto']) && !$item['exento']) {
                 // Si no hay monto exento pero hay un precio neto, calcular el total usando el precio neto
                 $this->items[$index]['total'] = $item['cantidad'] * $item['precioNeto'];
             }
-            return $this->items[$index]['total'];
         }
-        return 0;
     }
     
 
@@ -396,8 +400,11 @@ class CreateReceptionNoOc extends Component
         
     }
 
-    public function toggleExento()
+    public function toggleExento($index)
     {
-        $this->exento = !$this->exento;
+        $this->items[$index]['exento'] = !$this->items[$index]['exento'];
+        $this->calculateTotal($index); // recalcular el total cuando se cambia el estado de exento
+        
     }
+    
 }
