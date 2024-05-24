@@ -289,10 +289,12 @@
                         </td>
                         <td>{{ $item->EspecificacionComprador }}</td>
                         <td>{{ $item->EspecificacionProveedor }}</td>
-                        <td style="text-align: right;">{{ money($item->PrecioNeto) }}</td>
+                        <td style="text-align: right;">{{ moneyDecimal($item->PrecioNeto, 4) }}</td>
                         <td style="text-align: right;">{{ money($item->TotalDescuentos) }}</td>
                         <td style="text-align: right;">{{ money($item->TotalCargos) }}</td>
-                        <td style="text-align: right;">{{ money($item->Cantidad * $item->PrecioNeto) }}</td>
+                        {{-- <td style="text-align: right;">{{ moneyDecimal($item->Cantidad * $item->PrecioNeto, 4) }}</td> --}}
+                        <td style="text-align: right;">{{ moneyDecimal($item->Total,4) }}</td>
+                        
                     </tr>
                     @if (array_key_exists($key, $otherItems))
                         @foreach ($otherItems[$key] as $otherItem)
