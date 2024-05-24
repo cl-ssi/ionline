@@ -254,6 +254,22 @@
                         </fieldset>
                     </div>
                 </div>
+
+                <h5 class="text-white p-2 bg_azul_gob mt-3 text-center">
+                    <i class="fas fa-file-signature"></i>
+                    Solicitud de beneficios - Bienestar
+                </h5>
+
+                <div class="mt-4 p-5 text-black rounded bg-light">
+
+                    <h6>En el siguiente video podrá visualizar como realizar una solicitud de beneficios al área de Bienestar. Para acceder al módulo presionar <a href="{{ route('welfare.index') }}">aquí</a>.</h6>
+                    <br>
+                    <div class="row">
+                        <fieldset class="form-group col-12 col-md-12">
+                            <iframe src="https://drive.google.com/file/d/1wek1IN34UxbOSqwyeqgwdxX8vNn1X0Ok/view" width="100%" height="315" allow="autoplay; fullscreen" allowfullscreen></iframe>
+                        </fieldset>
+                    </div>
+                </div>
             @endif
             
         </div>
