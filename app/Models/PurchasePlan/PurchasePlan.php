@@ -10,7 +10,7 @@ use OwenIt\Auditing\Contracts\Auditable;
 
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use App\Models\Documents\Approval;
-
+use App\Models\RequestForms\RequestForm;
 
 class PurchasePlan extends Model implements Auditable
 {
@@ -61,6 +61,30 @@ class PurchasePlan extends Model implements Auditable
         return $this->hasMany('App\Models\PurchasePlan\PurchasePlanItem', 'purchase_plan_id');
     }
 
+    public function requestForms() {
+        return $this->hasMany(RequestForm::class);
+    }
+
+    public function getTotalEstimatedExpense()
+    {
+        $total = 0;
+        foreach ($this->requestForms as $requestForm) {
+            if ($requestForm->status == 'approved')
+                $total += $requestForm->estimated_expense;
+        }
+        return $total;
+    }
+
+    public function getTotalExpense()
+    {
+        $total = 0;
+        foreach ($this->requestForms as $requestForm) {
+            if ($requestForm->purchasingProcess)
+                $total += $requestForm->purchasingProcess->getExpense();
+        }
+        return $total;
+    }
+
     public function unspscProduct() {
         return $this->belongsTo('App\Models\Unspsc\Product', 'unspsc_product_id');
     }
@@ -93,6 +117,10 @@ class PurchasePlan extends Model implements Auditable
 
     public function canAddPurchasePlanID(){
         return $this->status == 'approved';
+    }
+
+    public function canCreateRquestForm(){
+        return $this->status == 'published';
     }
 
     public function hasDistributionCompleted(){

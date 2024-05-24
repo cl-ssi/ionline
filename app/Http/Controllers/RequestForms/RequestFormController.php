@@ -30,6 +30,7 @@ use App\Models\User;
 use App\Mail\PurchaserNotification;
 use App\Mail\RfEndNewBudgetSignNotification;
 use App\Models\Parameters\Parameter;
+use App\Models\PurchasePlan\PurchasePlan;
 use App\Models\RequestForms\ItemChangedRequestForm;
 use App\Models\RequestForms\ItemRequestForm;
 use App\Models\RequestForms\OldSignatureFile;
@@ -433,9 +434,9 @@ class RequestFormController extends Controller {
         );
     }
 
-    public function create(){
+    public function create(PurchasePlan $purchasePlan = null){
         $requestForm=null;
-        return  view('request_form.create', compact('requestForm'));
+        return  view('request_form.create', compact('requestForm', 'purchasePlan'));
     }
 
 

@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\UploadedFile;
 use App\Models\User;
+use App\Notifications\Requirements\NewSgr;
 
 class EventController extends Controller
 {
@@ -104,6 +105,13 @@ class EventController extends Controller
             $requirement = Requirement::find($request->requirement_id);
             //$requirement->user_id = auth()->id();
             $requirement->status = $request->status;
+            
+            // Si es un reabierto gatilla un mail a los responsables
+            if($request->status == 'reabierto')
+                    {
+                        $toUser = User::find($requirementEvent->to_user_id);
+                        $toUser->notify(new NewSgr($requirement, $requirementEvent));
+                    }
             if(!$requirement->to_authority) $requirement->to_authority = $isManager;
             $requirement->save();
 

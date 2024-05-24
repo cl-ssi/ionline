@@ -11,9 +11,21 @@ function active($route)
     //echo request()->routeIs($route_name) ? 'active' : '';
 }
 
+function isDecimal($value) {
+    return is_numeric($value) && floor($value) != $value;
+}
+
 function money($value)
 {
     echo number_format($value ?? 0, 0, '', '.');
+}
+
+function moneyDecimal($value, $decimal = 2) {
+    if (isDecimal($value)) {
+        return number_format($value, $decimal, ',', '.');
+    } else {
+        return $value;
+    }
 }
 
 function trashed($user)
