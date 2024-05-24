@@ -42,7 +42,7 @@
 
 <br>
 
-@livewire('request-form.request-form-create', ['requestForm' => $requestForm, 'purchasePlan' => $purchasePlan])
+@livewire('request-form.request-form-create', ['requestForm' => $requestForm, 'purchasePlan' => $purchasePlan ?? null])
 
 @endsection
 
