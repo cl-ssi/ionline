@@ -173,8 +173,8 @@
     </div>
 
     <br>
-    @if($isRFItems)
-        @livewire('request-form.item.request-form-items', ['savedItems' => $requestForm->itemRequestForms ?? null, 'savedTypeOfCurrency' => $requestForm->type_of_currency ?? null])
+    @if($isRFItems || $purchasePlan)
+        @livewire('request-form.item.request-form-items', ['purchasePlan' => $purchasePlan ?? null, 'savedItems' => $requestForm->itemRequestForms ?? null, 'savedTypeOfCurrency' => $requestForm->type_of_currency ?? null])
     @else
         @livewire('request-form.passenger.passenger-request', ['savedPassengers' => $requestForm->passengers ?? null, 'savedTypeOfCurrency' => $requestForm->type_of_currency ?? null])
     @endif

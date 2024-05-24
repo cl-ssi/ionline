@@ -23,6 +23,7 @@ use App\Mail\NewRequestFormNotification;
 use App\Mail\RequestFormSignNotification;
 use App\Models\Parameters\Parameter;
 use App\Models\Parameters\Program;
+use App\Models\PurchasePlan\PurchasePlan;
 use Illuminate\Contracts\Validation\Validator;
 
 class RequestFormCreate extends Component
@@ -30,7 +31,7 @@ class RequestFormCreate extends Component
     use WithFileUploads;
 
     public $article, $unitOfMeasurement, $technicalSpecifications, $quantity, $typeOfCurrency, $articleFile, $subtype,
-            $unitValue, $taxes, $fileItem, $totalValue, $lstUnitOfMeasurement, $title, $edit, $key, $request_form_id;
+            $unitValue, $taxes, $fileItem, $totalValue, $lstUnitOfMeasurement, $title, $edit, $key, $request_form_id, $purchasePlan;
 
     public $name, $contractManagerId, $contractManagerOuId, $contractManager, $superiorChief, $purchaseMechanism, $messagePM, $isHAH,
             $program, $fileRequests = [], $justify, $totalDocument, $technicalReviewOuId;
@@ -77,7 +78,7 @@ class RequestFormCreate extends Component
       ];
     }
 
-    public function mount($requestForm){
+    public function mount($requestForm, $purchasePlan = null){
       $this->isRFItems = request()->route()->getName() == 'request_forms.items.create' || ($requestForm && $requestForm->type_form == 'bienes y/o servicios');
       $this->purchaseMechanism      = "";
       $this->totalDocument          = 0;
@@ -105,6 +106,11 @@ class RequestFormCreate extends Component
       if(!is_null($requestForm)){
         $this->requestForm = $requestForm;
         $this->setRequestForm();
+      }
+
+      if(!is_null($purchasePlan)){
+        $this->purchasePlan = $purchasePlan;
+        $this->setRequestFormFromPurchasePlan();
       }
     }
 
@@ -151,6 +157,13 @@ class RequestFormCreate extends Component
       else
         foreach($this->requestForm->passengers as $passenger)
           $this->setPassengers($passenger);
+    }
+
+    private function setRequestFormFromPurchasePlan(){
+      $this->name               =   $this->purchasePlan->subject;
+      $this->program_id         =   $this->purchasePlan->program_id;
+      $this->justify            =   $this->purchasePlan->description."\n".$this->purchasePlan->purpose;
+      $this->typeOfCurrency     =   "peso";
     }
 
     private function setItems($item){
@@ -289,7 +302,8 @@ class RequestFormCreate extends Component
                 'purchase_mechanism_id' =>  $this->purchaseMechanism,
                 'program'               =>  $this->program_id == 'other' ? $this->program : null,
                 'program_id'            =>  $this->program_id != 'other' ? $this->program_id : null,
-                'status'                =>  'pending'
+                'status'                =>  'pending',
+                'purchase_plan_id'      => $this->purchasePlan ? $this->purchasePlan->id : null
             ]);
         }
         else{
@@ -315,7 +329,8 @@ class RequestFormCreate extends Component
                 'purchase_mechanism_id' =>  $this->purchaseMechanism,
                 'program'               =>  $this->program_id == 'other' ? $this->program : null,
                 'program_id'            =>  $this->program_id != 'other' ? $this->program_id : null,
-                'status'                =>  $this->editRF ? $this->requestForm->status : 'saved'
+                'status'                =>  $this->editRF ? $this->requestForm->status : 'saved',
+                'purchase_plan_id'      => $this->purchasePlan ? $this->purchasePlan->id : null
             ]);
         }
 
@@ -559,10 +574,10 @@ class RequestFormCreate extends Component
     public function render(){
         $this->messageMechanism();
         // $users = User::where('organizational_unit_id', auth()->user()->organizational_unit_id)->orderBy('name', 'ASC')->get();
-        $users = User::where('external', 0)
-          ->orderBy('name', 'ASC')
-          ->get(['id', 'name', 'fathers_family', 'mothers_family']); //get specific columns equals best perfomance bench
-        return view('livewire.request-form.request-form-create', compact('users'));
+        // $users = User::where('external', 0)
+        //   ->orderBy('name', 'ASC')
+        //   ->get(['id', 'name', 'fathers_family', 'mothers_family']); //get specific columns equals best perfomance bench
+        return view('livewire.request-form.request-form-create');
     }
 
     public function available_balance_purchases_exceeded()

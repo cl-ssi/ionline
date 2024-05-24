@@ -22,6 +22,7 @@ use App\Models\Parameters\PurchaseType;
 use App\Models\Parameters\PurchaseMechanism;
 use App\Models\Parameters\Program;
 use App\Models\Documents\SignaturesFile;
+use App\Models\PurchasePlan\PurchasePlan;
 use App\Models\Warehouse\Control;
 
 class RequestForm extends Model implements Auditable
@@ -37,7 +38,7 @@ class RequestForm extends Model implements Auditable
     protected $table = 'arq_request_forms';
 
     protected $fillable = [
-        'request_form_id', 'estimated_expense', 'program', 'contract_manager_id',
+        'purchase_plan_id', 'request_form_id', 'estimated_expense', 'program', 'contract_manager_id',
         'name', 'subtype', 'justification', 'superior_chief',
         'type_form', 'bidding_number', 'request_user_id', 'program_id',
         'request_user_ou_id', 'contract_manager_ou_id', 'status', 'sigfe',
@@ -57,6 +58,11 @@ class RequestForm extends Model implements Auditable
     public function getFolioAttribute($value)
     {
         return $value . ($this->has_increased_expense ? '-M' : '');
+    }
+
+    public function purchasePlan()
+    {
+        return $this->belongsTo(PurchasePlan::class, 'purchase_plan_id');
     }
 
     public function father()

@@ -167,7 +167,7 @@ class RequestFormItems extends Component
         $this->iteration++;
     }
 
-    public function mount($savedItems, $savedTypeOfCurrency)
+    public function mount($savedItems, $savedTypeOfCurrency, $purchasePlan)
     {
         $this->iteration = 0;
         $this->totalDocument          = 0;
@@ -178,16 +178,26 @@ class RequestFormItems extends Component
         $this->editRF                 = false;
         // Porcentaje retención boleta de honorarios según el año vigente
         $this->withholding_tax        = [2021 => 0.115, 2022 => 0.1225, 2023 => 0.13, 2024 => 0.1375, 2025 => 0.145, 2026 => 0.1525, 2027 => 0.16, 2028 => 0.17];
+
+        if(!is_null($purchasePlan))
+        {
+            $purchasePlan->load('purchasePlanItems.unspscProduct');
+            $this->savedItems = $purchasePlan->purchasePlanItems;
+            $this->setSavedItems();
+        }
+
         if(!is_null($savedItems))
         {
             $this->editRF = true;
             $this->savedItems = $savedItems;
             $this->setSavedItems();
         }
+
         if(!is_null($savedTypeOfCurrency))
         {
             $this->precision_currency = $savedTypeOfCurrency == 'peso' ? 0 : 2;
         }
+
         $this->results = collect([]);
     }
 

@@ -259,13 +259,12 @@
 
 @endif
 
-<div class="row mt-3"> 
-    <div class="col">
-        <h6><i class="fas fa-info-circle"></i> Historial de Rechazos</h6>
+@if($purchasePlan->trashedApprovals->count() > 0)
+    <div class="row mt-3"> 
+        <div class="col">
+            <h6><i class="fas fa-info-circle"></i> Historial de Rechazos</h6>
+        </div>
     </div>
-</div>
-
-@if($purchasePlan->trashedApprovals)
     <div class="table-responsive">
         <table class="table table-bordered table-sm small">
             <thead>
@@ -287,6 +286,105 @@
                 @endforeach
             <tbody>
         </table>
+    </div>
+@endif
+
+@if($purchasePlan->requestForms->count() > 0)
+<br>
+    <div class="row">
+        <div class="col-sm">
+            <div class="table-responsive">
+                <h6><i class="fas fa-shopping-cart"></i> Historial de compras en ejecución</h6>
+                <table class="table table-sm table-hover table-bordered small">
+                    <thead class="text-center">
+                    <tr class="table-secondary">
+                        <th>Item</th>
+                        <th>ID</th>
+                        <th>Folio</th>
+                        <th style="width: 7%">Fecha Creación</th>
+                        <th>Tipo / Mecanismo de Compra</th>
+                        <th>Descripción</th>
+                        <th>Usuario Gestor</th>
+                        <th>Comprador</th>
+                        <th>Items</th>
+                        <th>Monto total</th>
+                        <th>Monto utilizado</th>
+                        <!-- <th>Saldo disponible</th> -->
+                        <!-- <th>Estado</th> -->
+                        <!-- <th></th>  -->
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @forelse($purchasePlan->requestForms as $key => $child)
+                        <tr @if($child->status != 'approved') class="text-muted" @endif>
+                            <td>{{ $key+1 }}</td>
+                            <td>{{ $child->id }}<br>
+                                @switch($child->getStatus())
+                                    @case('Pendiente')
+                                    <i class="fas fa-clock"></i>
+                                    @break
+
+                                    @case('Aprobado')
+                                    <span style="color: green;">
+            <i class="fas fa-check-circle" title="{{ $child->getStatus() }}"></i>
+            </span>
+                                    @break
+
+                                    @case('Rechazado')
+                                    <a href="">
+            <span style="color: Tomato;">
+                <i class="fas fa-times-circle" title="{{ $child->getStatus() }}"></i>
+            </span>
+                                    </a>
+                                    @break
+
+                                @endswitch
+                            </td>
+                            <td>@if($child->status == 'approved')
+                                    <a href="{{ route('request_forms.show', $child) }}">{{ $child->folio }}</a>
+                                @else
+                                    {{ $child->folio }}
+                                @endif<br>
+                            <td>{{ $child->created_at->format('d-m-Y H:i') }}</td>
+                            <td>{{ ($child->purchaseMechanism) ? $child->purchaseMechanism->PurchaseMechanismValue : '' }}
+                                <br>
+                                {{ $child->SubtypeValue }}
+                            </td>
+                            <td>{{ $child->name }}</td>
+                            <td>{{ $child->user ? $child->user->FullName : 'Usuario eliminado' }}<br>
+                                {{ $child->userOrganizationalUnit ? $child->userOrganizationalUnit->name : 'Usuario eliminado' }}
+                            </td>
+                            <td>{{ $child->purchasers->first()->FullName ?? 'No asignado' }}</td>
+                            <td align="center">{{ $child->quantityOfItems() }}</td>
+                            <td align="right">{{$child->symbol_currency}}{{ number_format($child->estimated_expense,$child->precision_currency,",",".") }}</td>
+                            <td align="right">{{ $child->purchasingProcess ? $child->symbol_currency.number_format($child->purchasingProcess->getExpense(),$child->precision_currency,",",".") : '-' }}</td>
+                            {{--<td align="right">{{ $child->purchasingProcess ? $child->symbol_currency.number_format($child->estimated_expense - $child->purchasingProcess->getExpense(),$child->precision_currency,",",".") : '-' }}</td>--}}
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="100%" class="text-center">No existen bienes y/o servicios de ejecución
+                                inmediata asociados a este formulario de requerimiento.
+                            </td>
+                        </tr>
+                    @endforelse
+                    </tbody>
+                    
+                        <tfoot>
+                        <tr>
+                            <th colspan="9" class="text-end">Totales
+                            </th>
+                            <th class="text-end">${{ number_format($purchasePlan->getTotalEstimatedExpense(),0,",",".") }}</th>
+                            <th class="text-end">${{ number_format($purchasePlan->getTotalExpense(),0,",",".") }}</th>
+                        </tr>
+                        <tr>
+                            <th colspan="10" class="text-end">Saldo disponible Compras
+                            </th>
+                            <th class="text-end">${{ number_format($purchasePlan->estimated_expense - $child->getTotalExpense(),$child->precision_currency,",",".") }}</th>
+                        </tr>
+                        </tfoot>          
+                </table>
+            </div>
+        </div>
     </div>
 @endif
 
