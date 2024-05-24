@@ -63,14 +63,9 @@ class EventController extends Controller
             if ($request->status == 'respondido') {
                 $request['to_ou_id'] = $lastEvent->from_user->organizationalUnit->id;
                 $request['to_user_id'] = $lastEvent->from_user->id;
-            } else {                
+            } else {
                 $request['to_ou_id'] = $firstEvent->from_user->organizationalUnit->id;
                 $request['to_user_id'] = $firstEvent->from_user->id;
-                    if($request->status == 'reabierto')
-                    {
-                        dd('apreté en reabierto');
-
-                    }
             }
         }
 
