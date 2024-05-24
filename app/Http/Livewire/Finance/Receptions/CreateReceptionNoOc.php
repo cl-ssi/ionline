@@ -75,7 +75,7 @@ class CreateReceptionNoOc extends Component
 
     public function render()
     {
-        app('debugbar')->log($this->items);
+        
         return view('livewire.finance.receptions.create-reception-no-oc');
     }
 
