@@ -6,33 +6,34 @@
 
 @include('welfare.nav')
 
+    <div class="row">
+        <div class="col-12 col-md-12">
+            <h3 class="mb-3">¡Bienvenidos al Módulo de Bienestar!</h3><br>
+            <li>Este módulo de iOnline permite visualizar el estado financiero en el tiempo del Servicio de Bienestar</li>
+            <li>Este módulo de iOnline permite hacer gestión sobre amipass.</li>
+            <li>Este módulo de iOnline permite solicitar beneficios a asociados.</li>
 
-<!-- <div class="row">
-    <div class="col-12 col-md-5">
-        <h3 class="mb-3">¡Bienvenidos al Módulo de Estado Financiero de Bienestar!</h3>
-        <p class="lead text-center">
-            Este módulo de iOnline permite visualizar el estado financiero en el tiempo del Servicio de Bienestar.<br>
-            Este panel de información incluye tanto gráficos de los fondos ejecutados y un resumen del balance presupuestario mes a mes del Servico de Bienestar.
-        </p>
+        </div>
+    </div>
 
-    </div>
-    <div class="col-12 col-md-7">
-        <div id="barchart" style="width: 900px; "></div>
-    </div>
-</div> -->
+    <!-- Se restringe la visualización a usuarios de bienestar y administradores -->
+    @if(auth()->user()->welfare || auth()->user()->can('be god') || auth()->user()->can('welfare: amipass') || auth()->user()->can('welfare: balance'))
+        <h5 class="text-white p-2 bg_azul_gob mt-3 text-center">
+            <i class="fas fa-file-signature"></i>
+            Reserva de cabañas - Bienestar
+        </h5>
 
-<div class="row">
-    <div class="col-12 col-md-12">
-        <h3 class="mb-3">¡Bienvenidos al Módulo de Bienestar!</h3><br>
-        <li>Este módulo de iOnline permite visualizar el estado financiero en el tiempo del Servicio de Bienestar</li>
-        <li>Este módulo de iOnline permite hacer gestión sobre amipass.</li>
-        <li>Este módulo de iOnline permite solicitar beneficios a asociados.</li>
+        <div class="mt-4 p-5 text-black rounded bg-light">
 
-    </div>
-    <div class="col-12 col-md-7">
-        <div id="barchart" style="width: 900px; "></div>
-    </div>
-</div>
+            <h6>En el siguiente video podrá visualizar como realizar una reserva de cabañas.</h6>
+            <br>
+            <div class="row">
+                <fieldset class="form-group col-12 col-md-12">
+                    <iframe src="https://drive.google.com/file/d/1YsmCsLqlfcdSqODBUwtUb3xoDdSMzljo/preview" width="100%" height="540" allow="autoplay; fullscreen" allowfullscreen></iframe>
+                </fieldset>
+            </div>
+        </div>
+    @endif
 
 @endsection
 
