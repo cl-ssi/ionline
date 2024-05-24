@@ -68,7 +68,7 @@
                     <th>Lugar</th>
                     <th>Responsable</th>
                     <th>Usuario</th>
-                    <th>Trapasar</th>
+                    <th>Traspasar</th>
                 </tr>
             </thead>
             <tbody>
