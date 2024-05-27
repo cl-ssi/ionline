@@ -41,11 +41,11 @@
 
         <div class="mt-4 p-5 text-black rounded bg-light">
 
-            <h6>En el siguiente video podrá visualizar como realizar una solicitud de beneficios al área de Bienestar.</h6>
+            <h6>En el siguiente video podrá visualizar como realizar una solicitud de beneficios al área de Bienestar. Para acceder al módulo presionar <a href="{{ route('welfare.index') }}">aquí</a>.</h6>
             <br>
             <div class="row">
                 <fieldset class="form-group col-12 col-md-12">
-                    <iframe src="https://drive.google.com/file/d/1wek1IN34UxbOSqwyeqgwdxX8vNn1X0Ok/view" width="100%" height="315" allow="autoplay; fullscreen" allowfullscreen></iframe>
+                    <iframe src="https://drive.google.com/file/d/1wek1IN34UxbOSqwyeqgwdxX8vNn1X0Ok/preview" width="100%" height="540" allow="autoplay; fullscreen" allowfullscreen></iframe>
                 </fieldset>
             </div>
         </div>

@@ -254,7 +254,7 @@
                     <br>
                     <div class="row">
                         <fieldset class="form-group col-12 col-md-12">
-                            <iframe src="https://drive.google.com/file/d/1wek1IN34UxbOSqwyeqgwdxX8vNn1X0Ok/view" width="100%" height="315" allow="autoplay; fullscreen" allowfullscreen></iframe>
+                            <iframe src="https://drive.google.com/file/d/1wek1IN34UxbOSqwyeqgwdxX8vNn1X0Ok/preview" width="100%" height="315" allow="autoplay; fullscreen" allowfullscreen></iframe>
                         </fieldset>
                     </div>
                 </div>
