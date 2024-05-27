@@ -296,18 +296,11 @@ class ContinuityResolutionController extends Controller
         $document->type_id = Type::where('name','Resolución Continuidad Convenio')->first()->id;
         $document->subject = 'Resolución prórroga automática Convenio programa '.$programa.' comuna de '.$continuityResolution->agreement->commune->name;
         $document->distribution = $municipality_emails."\n".$continuityResolution->referrer->email."\nvalentina.ortega@redsalud.gob.cl\naps.ssi@redsalud.gob.cl\nromina.garin@redsalud.gob.cl\njuridica.ssi@redsalud.gob.cl\no.partes2@redsalud.gob.cl\nblanca.galaz@redsalud.gob.cl";
-        $document->content = "<p
-        style='text-align: justify;margin-top:12.0pt;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:'Calibri',sans-serif;text-align:justify;line-height:150%;'>
-        <strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-        &nbsp; &nbsp; &nbsp;VISTOS,</strong></p>
-    <p
-        style='text-align: justify;margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:'Calibri',sans-serif;text-align:justify;line-height:115%;'>
-        <span style='font-size:13px;line-height:115%;'>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-            &nbsp;&nbsp;</span>Lo dispuesto en el Decreto con Fuerza de Ley N<span style='color:black;'>&ordm;</span>01 del
+        $document->content = "
+        <p><strong>VISTOS,</strong></p>
+    
+        <p style='text-align: justify;'>
+        Lo dispuesto en el Decreto con Fuerza de Ley N<span style='color:black;'>&ordm;</span> 01 del
         a&ntilde;o 2000, del Ministerio Secretar&iacute;a General de la Presidencia que fija el texto refundido, coordinado
         y sistematizado de la Ley N<span style='color:black;'>&ordm;</span>18.575, Org&aacute;nica Constitucional de Bases
         Generales de la Administraci&oacute;n del Estado; D.F.L. N<span style='color:black;'>&ordm;</span>01/2005, del
@@ -330,95 +323,83 @@ class ContinuityResolutionController extends Controller
         Rep&uacute;blica. Art&iacute;culo 7&deg; de la Ley N<span style='color:black;'>&ordm; 21.640 de Presupuesto para el
             sector p&uacute;blico, correspondiente al a&ntilde;o 2024.</span></p>
             
-            <p
-    style='text-align: justify;margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:'Calibri',sans-serif;text-align:justify;line-height:150%;'>
-    <strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-        &nbsp; &nbsp; &nbsp;CONSIDERANDO,</strong></p>
-<p
-    style='text-align: justify;margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:'Calibri',sans-serif;text-align:justify;line-height:115%;'>
-    <strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-        &nbsp; 1.-</strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Que, durante el a&ntilde;o presupuestario 2023, a
-    trav&eacute;s de Resoluci&oacute;n Exenta <span style='background:lime;'>N&deg;".$numResolucionConvenio."/".$yearResolucionConvenio." y ".$considerandoAddendums."</span>, entre el Municipio de <span style='background:lime;'>".$comuna."</span> y este
-    Servicio de Salud, se aprob&oacute; el convenio correspondiente <strong>al <span style='background:lime;'>PROGRAMA
-            &ldquo;".$programa." A&Ntilde;O ".$periodoConvenio."&rdquo;</span>.</strong></p>
-<p
-    style='text-align: justify;margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:'Calibri',sans-serif;text-align:justify;line-height:115%;'>
-    <strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-    &nbsp; 2.- &nbsp;
-        &nbsp; &nbsp; &nbsp; &nbsp;</strong>Que, el citado Convenio incorpora en su cl&aacute;usula D&eacute;cimo
-    Cuarta, una pr&oacute;rroga autom&aacute;tica, la que consigna <em>&ldquo;Las</em><em>&nbsp;partes acuerdan que el
-        presente convenio se prorrogar&aacute; de forma autom&aacute;tica y sucesiva, siempre que el programa a ejecutar
-        cuente con la disponibilidad presupuestaria seg&uacute;n la ley de presupuestos del sector p&uacute;blico del
-        a&ntilde;o respectivo, salvo que las partes decidan ponerle termino por motivos fundados. La pr&oacute;rroga del
-        convenio comenzar&aacute; a regir desde el 01 de enero del a&ntilde;o presupuestario siguiente y su
-        duraci&oacute;n se extender&aacute; hasta el 31 de diciembre del mismo.</em></p>
-<p
-    style='text-align: justify;margin-top:0cm;margin-right:0cm;margin-bottom:12.0pt;margin-left:0cm;font-size:11.0pt;font-family:'Calibri',sans-serif;text-align:justify;'>
-    <em>&nbsp;</em></p>
-<p
-    style='text-align: justify;margin-top:0cm;margin-right:0cm;margin-bottom:12.0pt;margin-left:0cm;font-size:11.0pt;font-family:'Calibri',sans-serif;text-align:justify;'>
-    <em>Para todos los efectos legales, la pr&oacute;rroga autom&aacute;tica da inicio a un nuevo convenio de
-        transferencia, cuyo monto a transferir se establecer&aacute; mediante Resoluci&oacute;n Exenta del
-        <strong>&ldquo;SERVICIO&rdquo;</strong>, de conformidad a lo que se disponga en la Ley de Presupuestos del
-        Sector P&uacute;blico respectiva</em>&rdquo;.</p>
-<p
-    style='text-align: justify;margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;font-size:11.0pt;font-family:'Calibri',sans-serif;text-align:justify;line-height:115%;'>
-    <strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-    &nbsp; 3.-</strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;Que, a trav&eacute;s de Resoluci&oacute;n Exenta <span
-        style='background:lime;'>N&deg;_____</span> de fecha <span style='background:lime;'>__ de _____ del a&ntilde;o 2024
-        </span> del Ministerio de Salud, se aprueba el Programa <span style='background:lime;'><strong>".$programa."</strong> para el a&ntilde;o
-    2024.</span></p>
-<p
-    style='text-align: justify;margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;font-size:11.0pt;font-family:'Calibri',sans-serif;text-align:justify;line-height:115%;'>
-    &nbsp;</p>
-<p
-    style='text-align: justify;margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;font-size:11.0pt;font-family:'Calibri',sans-serif;text-align:justify;line-height:115%;'>
-    <strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-        &nbsp; 4.-</strong>&nbsp;
-    &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;Que, a trav&eacute;s de Resoluci&oacute;n Exenta <span style='background:lime;'>N&deg;_____</span> de fecha <span
-        style='background:lime;'>__ de _____ del a&ntilde;o 2024</span> del Ministerio de Salud, se aprueban los
-    Recursos que distribuye los Recursos para el Programa<span
-        style='background:lime;'>&nbsp;<strong>".$programa."</strong> para el a&ntilde;o 2024.</span></p>
-<p
-    style='text-align: justify;margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;font-size:11.0pt;font-family:'Calibri',sans-serif;text-align:justify;line-height:115%;'>
-    &nbsp;</p>
-<p
-    style='text-align: justify;margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;font-size:11.0pt;font-family:'Calibri',sans-serif;text-align:justify;line-height:115%;'>
-    <strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-    &nbsp; <span
-            style='background:yellow;'>5.-</span></strong><span style='background:yellow;'>&nbsp; &nbsp; &nbsp; &nbsp;
-        &nbsp;&nbsp;Que, mediante de Resoluci&oacute;n Exenta N&deg;__ de fecha __ de _____ del a&ntilde;o 2024, el
-        Servicio de Salud Tarapac&aacute;, autoriz&oacute; Prorroga de Continuidad del Convenio Programa
-        <strong>".$programa."</strong> comuna de ".$comuna."<strong>&nbsp;</strong>para el a&ntilde;o 2024.</span></p><br>
+        <p><strong>CONSIDERANDO,</strong></p>
         
-        <p
-    style='text-align: justify;margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:'Calibri',sans-serif;text-align:justify;line-height:150%;'>
-    <strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-        &nbsp; &nbsp; &nbsp;RESUELVO,</strong></p>
-<p
-    style='text-align: justify;margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:'Calibri',sans-serif;text-align:justify;line-height:115%;'>
-    <strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-    &nbsp; 1.-&nbsp;
-        &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;APRU&Eacute;BASE</strong> la Pr&oacute;rroga de continuidad de convenio del Programa 
-    <span style='background:lime;'>&ldquo;<strong>".$programa."</strong><strong>&rdquo;</strong>, Comuna
-        de&nbsp;</span><span style='background:lime;'>".$comuna."</span>, para ser
-    ejecutado desde el 01 de enero del a&ntilde;o 2024 al 31 de diciembre del mismo a&ntilde;o, por lo cual se modifican las cláusulas que se indican a continuación, conforme el texto que se transcribe respecto de cada una de ellas, el que pasa a reemplazar totalmente la anterior.</p><br>
+        <p style='text-align: justify;'>
+            <strong>1.- </strong> Que, durante el a&ntilde;o presupuestario 2023, a trav&eacute;s de Resoluci&oacute;n 
+            Exenta <span style='background:lime;'>N&deg;".$numResolucionConvenio."/".$yearResolucionConvenio." y ".$considerandoAddendums."</span>, 
+            entre el Municipio de <span style='background:lime;'>".$comuna."</span> y este Servicio de Salud, 
+            se aprob&oacute; el convenio correspondiente <strong>al <span style='background:lime;'>PROGRAMA &ldquo; 
+            ".$programa." A&Ntilde;O ".$periodoConvenio."&rdquo;</span>.</strong>
+        </p>
+
+        <p style='text-align: justify;'>
+            <strong>2.- </strong> Que, el citado Convenio incorpora en su cl&aacute;usula D&eacute;cimo Cuarta, 
+            una pr&oacute;rroga autom&aacute;tica, la que consigna 
+            <em>
+            &ldquo;Las partes acuerdan que el presente convenio se prorrogar&aacute; 
+            de forma autom&aacute;tica y sucesiva, siempre que el programa a ejecutar
+            cuente con la disponibilidad presupuestaria seg&uacute;n la ley de presupuestos del sector p&uacute;blico del
+            a&ntilde;o respectivo, salvo que las partes decidan ponerle termino por motivos fundados. La pr&oacute;rroga del
+            convenio comenzar&aacute; a regir desde el 01 de enero del a&ntilde;o presupuestario siguiente y su
+            duraci&oacute;n se extender&aacute; hasta el 31 de diciembre del mismo.
+        </p>
+        <p style='text-align: justify;'>
+            <em>
+            Para todos los efectos legales, la pr&oacute;rroga autom&aacute;tica da inicio a un nuevo convenio de
+            transferencia, cuyo monto a transferir se establecer&aacute; mediante Resoluci&oacute;n Exenta del
+            <strong>&ldquo;SERVICIO&rdquo;</strong>, de conformidad a lo que se disponga en la Ley de Presupuestos del
+            Sector P&uacute;blico respectiva
+            &rdquo;.
+            </em>
+        </p>
+
+        <p style='text-align: justify;'>
+            <strong>3.- </strong> Que, a trav&eacute;s de Resoluci&oacute;n Exenta 
+            <span style='background:lime;'>N&deg;_____</span> de fecha <span style='background:lime;'>__ de _____ del a&ntilde;o 2024</span> 
+            del Ministerio de Salud, se aprueba el Programa <span style='background:lime;'><strong>".$programa."</strong> para el a&ntilde;o
+            2024.</span>
+        </p>
+
+        <p style='text-align: justify;'>
+            <strong>4.- </strong> Que, a trav&eacute;s de Resoluci&oacute;n Exenta 
+            <span style='background:lime;'>N&deg;_____</span> de fecha 
+            <span style='background:lime;'>__ de _____ del a&ntilde;o 2024</span> 
+            del Ministerio de Salud, se aprueban los Recursos que distribuye los Recursos para el Programa 
+            <span style='background:lime;'><strong> ".$programa." </strong> para el a&ntilde;o 2024.
+            </span>
+        </p>
+
+        <p style='text-align: justify;'>
+            <strong>5.- </strong> Que, de acuerdo a lo señalado en Ley de presupuesto N°21.640 para el año 2024, 
+            aprobado el 18 de diciembre del 2023, en la Partida 16, Capítulo 02, Programa 02; 
+            <em>
+                “Se podrá incorporar en estos convenios, una cláusula que permita su prórroga automática, 
+                en la medida que los programas a ejecutar cuenten con recursos disponibles según la Ley de 
+                Presupuestos del Sector Público del año respectivo. Las metas y recursos asociados a 
+                dichas prórrogas serán fijadas por el Servicio de Salud, mediante resolución y deberán 
+                estar sujetos a las instrucciones que dicte el Ministerio de Salud”.
+            </em>
+        </p>
+
+        <p style='text-align: justify;'>
+            <strong>6.- </strong> <span style='background:yellow;'> Que, través de Resoluci&oacute;n Exenta 
+            N &deg;__ de fecha __ de _____ del a&ntilde;o 2024, el Servicio de Salud Tarapac&aacute;, 
+            autoriz&oacute; Prorroga de Continuidad del Convenio Programa 
+            <strong> ".$programa." </strong> comuna de ".$comuna." para el a&ntilde;o 2024.</span>
+        </p>
+        <br>
+        
+        <p><strong>RESUELVO,</strong></p>
+
+        <p style='text-align: justify;'>
+            <strong>1.- APRU&Eacute;BASE</strong> la Pr&oacute;rroga de continuidad de convenio del Programa 
+            <span style='background:lime;'>&ldquo;<strong> ".$programa." &rdquo;</strong>, Comuna de </span>
+            <span style='background:lime;'> ".$comuna." </span>, para ser ejecutado desde el 01 de enero del a&ntilde;o 2024 
+            al 31 de diciembre del mismo a&ntilde;o, por lo cual se modifican las cláusulas que se indican a continuación, 
+            conforme el texto que se transcribe respecto de cada una de ellas, el que pasa a reemplazar totalmente la anterior.
+        </p>
+        <br>
 
 <div
     style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:'Calibri',sans-serif;'>

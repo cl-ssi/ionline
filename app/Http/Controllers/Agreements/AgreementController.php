@@ -2723,10 +2723,11 @@ $document->content .= "
         presupuestario siguiente y su duración se extenderá hasta el 31 de diciembre del mismo.</span>
 </p>
 <p style='text-align:justify;'>
-    <span>Para todos los efectos legales, la prórroga automática da inicio a un nuevo
-        convenio de transferencia, cuyo monto a transferir se establecerá mediante Resolución Exenta del
-    </span><strong><span>“SERVICIO”</span></strong><span>,
-        de conformidad a lo que se disponga en la Ley de Presupuestos del Sector Público respectiva.</span>
+        Para todos los efectos legales, la prórroga automática da inicio a un nuevo 
+        convenio de transferencia, donde el <strong>“SERVICIO”</strong> fijara nuevas metas y recursos, 
+        lo que hará por Resolución Exenta fundada sobre la base de las instrucciones 
+        que al efecto imparta el Ministerio de salud de conformidad a lo que se disponga en la Ley de Presupuesto; 
+        partida 16, capitulo 02, programa 02 del Sector Público respectivo.
 </p>
 
 <p style='text-align:justify;'>

@@ -74,7 +74,7 @@
                 <a href="#" class="nav-link text-secondary" data-toggle="modal"
                     data-target="#selectEvalOption" data-formmethod="POST"
                     data-formaction="{{ route('agreements.createDocument', $agreement )}}">
-                    <i class="fas fa-file-medical"></i> Generar borrador Conveniosss</a>
+                    <i class="fas fa-file-medical"></i> Generar borrador Convenio</a>
             </li>
             @endif
             @if($agreement->document_id != null)
