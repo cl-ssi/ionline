@@ -39,15 +39,14 @@ class AssignedProducts extends Component
         if ($isAuthority) {
             $authorities = Auth::user()->getAmIAuthorityFromOuAttribute();
             foreach ($authorities as $authority) {
-                $subrogations = Subrogation::where('subrogant_id', $userId)
-                    ->where('level', 1)
+                $subrogations = Subrogation::where('level', 1)
                     ->where('organizational_unit_id', $authority->organizational_unit_id)
+                    ->where('type', 'manager')
                     ->get();
                 
                 $subrogatedIds = $subrogations->pluck('user_id')->toArray();
                 $responsibleIds = array_merge($responsibleIds, $subrogatedIds);
             }
-
             $responsibleIds = array_unique($responsibleIds);
         }
 
