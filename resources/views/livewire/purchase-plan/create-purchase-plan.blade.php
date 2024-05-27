@@ -77,7 +77,7 @@
     <h6 class="small"><b>2. Ítems a comprar</b></h6> <br>
     
     @livewire('request-form.item.request-form-items', [
-            'savedItems'            => $purchasePlanToEdit->purchasePlanItems ?? null, 
+            'savedItems'            => $purchasePlanToEdit->purchasePlanItems ?? null,
             'savedTypeOfCurrency'   => null,
             'bootstrap'             => 'v5',
             'form'                  => 'purchase_plan'       

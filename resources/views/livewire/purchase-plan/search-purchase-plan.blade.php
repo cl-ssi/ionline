@@ -142,7 +142,7 @@
                                     <a href="{{ route('purchase_plan.show', $purchasePlan) }}"
                                         class="btn btn-outline-secondary btn-sm mb-1"><i class="fas fa-eye fa-fw"></i></a>
                                     @if($purchasePlan->canEdit() && $index == 'own')
-                                        <a href="{{ route('purchase_plan.edit', $purchasePlan->id) }}"
+                                        <a href="{{ route('purchase_plan.edit', $purchasePlan) }}"
                                             class="btn btn-outline-secondary btn-sm mb-1"><i class="fas fa-edit fa-fw"></i> </a>
                                     @endif
                                     @if($purchasePlan->canDelete())

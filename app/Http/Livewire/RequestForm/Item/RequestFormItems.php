@@ -167,7 +167,7 @@ class RequestFormItems extends Component
         $this->iteration++;
     }
 
-    public function mount($savedItems, $savedTypeOfCurrency, $purchasePlan)
+    public function mount($savedItems, $savedTypeOfCurrency, $purchasePlan = null)
     {
         $this->iteration = 0;
         $this->totalDocument          = 0;
