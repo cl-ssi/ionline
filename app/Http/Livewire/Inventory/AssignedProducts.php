@@ -6,6 +6,7 @@ use App\Models\Inv\Inventory;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithPagination;
+use App\Models\Profile\Subrogation;
 
 class AssignedProducts extends Component
 {
@@ -30,18 +31,38 @@ class AssignedProducts extends Component
     public function getInventories()
     {
         $search = "%$this->search%";
+        $userId = Auth::id();
+        $isAuthority = Auth::user()->getAmIAuthorityFromOuAttribute()->isNotEmpty();
+
+        $responsibleIds = [$userId];
+
+        if ($isAuthority) {
+            $authorities = Auth::user()->getAmIAuthorityFromOuAttribute();
+            foreach ($authorities as $authority) {
+                $subrogations = Subrogation::where('subrogant_id', $userId)
+                    ->where('level', 1)
+                    ->where('organizational_unit_id', $authority->organizational_unit_id)
+                    ->get();
+                
+                $subrogatedIds = $subrogations->pluck('user_id')->toArray();
+                $responsibleIds = array_merge($responsibleIds, $subrogatedIds);
+            }
+
+            $responsibleIds = array_unique($responsibleIds);
+        }
+
 
         $inventories = Inventory::query()
-            ->when($this->product_type == 'using', function($query) {
-                $query->whereUserUsingId(Auth::id());
+        ->when($this->product_type == 'using', function($query) use ($userId) {
+            $query->where('user_using_id', $userId);
+        })
+            ->when($this->product_type == 'responsible', function ($query) use ($responsibleIds) {
+                $query->whereIn('user_responsible_id', $responsibleIds);
             })
-            ->when($this->product_type == 'responsible', function ($query) {
-                $query->whereUserResponsibleId(Auth::id());
-            })
-            ->when($this->product_type == '', function($query) {
-                $query->where(function($query) {
-                    $query->where('user_responsible_id', Auth::id())
-                      ->orWhere('user_using_id', Auth::id());
+            ->when($this->product_type == '', function($query) use ($userId, $responsibleIds) {
+                $query->where(function($query) use ($userId, $responsibleIds) {
+                    $query->whereIn('user_responsible_id', $responsibleIds)
+                          ->orWhere('user_using_id', $userId);
                 });
             })
             ->whereHas('lastMovement', function($query) {
