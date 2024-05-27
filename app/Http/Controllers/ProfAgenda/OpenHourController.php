@@ -138,13 +138,11 @@ class OpenHourController extends Controller
         }
 
         //envía correo de confirmación
-        if (config('app.env') === 'production') {
-            if($openHour->patient){
-                if($openHour->patient->email != null){
-                    // Utilizando Notify 
-                    $openHour->patient->notify(new NewReservation($openHour));
-                } 
-            }
+        if($openHour->patient){
+            if($openHour->patient->email != null){
+                // Utilizando Notify 
+                $openHour->patient->notify(new NewReservation($openHour));
+            } 
         }
         
         session()->flash('success', 'Se guardó la información.');
@@ -222,13 +220,11 @@ class OpenHourController extends Controller
         $openHour->save();
 
         //envía correo de confirmación
-        if (config('app.env') === 'production') {
-            if($openHour->patient){
-                if($openHour->patient->email != null){
-                    // Utilizando Notify 
-                    $openHour->patient->notify(new NewReservation($openHour));
-                } 
-            }
+        if($openHour->patient){
+            if($openHour->patient->email != null){
+                // Utilizando Notify 
+                $openHour->patient->notify(new NewReservation($openHour));
+            } 
         }
         
         session()->flash('success', 'Se guardó la información.');
@@ -278,22 +274,12 @@ class OpenHourController extends Controller
         $openHour->save();
 
         //envía correo de cancelación
-        if (config('app.env') === 'production') {
-            if($openHour->patient){
-                if($openHour->patient->email != null){
-                    if (filter_var($openHour->patient->email, FILTER_VALIDATE_EMAIL)) {
-                        /*
-                        * Utilizando Notify
-                        */ 
-                        $openHour->patient->notify(new CancelReservation($openHour));
-    
-                        /*
-                        * Utilizando Mail
-                        */ 
-                        // Mail::to($openHour->patient)->send(new OpenHourCancelation($openHour));
-                    } 
-                }    
-            }
+        if($openHour->patient){
+            if($openHour->patient->email != null){
+                if (filter_var($openHour->patient->email, FILTER_VALIDATE_EMAIL)) {
+                    $openHour->patient->notify(new CancelReservation($openHour));
+                } 
+            }    
         }
         
         session()->flash('success', 'Se guardó la información.');
@@ -438,17 +424,12 @@ class OpenHourController extends Controller
                             ->get();
         foreach($openHours as $openHour){
             //envía correo de cancelación
-            if (config('app.env') === 'production') {
-                if($openHour->patient){
-                    if($openHour->patient->email != null){
-                        if (filter_var($openHour->patient->email, FILTER_VALIDATE_EMAIL)) {
-                            /*
-                            * Utilizando Notify
-                            */ 
-                            $openHour->patient->notify(new CancelReservation($openHour));
-                        } 
-                    }    
-                }
+            if($openHour->patient){
+                if($openHour->patient->email != null){
+                    if (filter_var($openHour->patient->email, FILTER_VALIDATE_EMAIL)) {
+                        $openHour->patient->notify(new CancelReservation($openHour));
+                    } 
+                }    
             }
         }
 

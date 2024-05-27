@@ -46,6 +46,7 @@ class CancelReservation extends Notification implements ShouldQueue
     {
         return (new MailMessage)
             ->level('info')
+            ->replyTo('unidadstrabajador@gmail.com')
             ->subject('Cancelación de reserva con '. $this->openHour->activityType->name . ' el ' . $this->openHour->start_date->format('Y-m-d'))
             ->greeting('Hola ' . $notifiable->shortName)
             ->line('Lamentablemente la reserva que tenía el para ' . $this->openHour->start_date->format('Y-m-d') . ' a las ' . $this->openHour->start_date->format('H:s') . ' con el profesional ' . $this->openHour->profesional->shortName . ' ha sido cancelada por fuerza mayor y no podrá ser atendido.')
