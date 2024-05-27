@@ -341,6 +341,8 @@ class CreateReceptionNoOc extends Component
 
     public function addItem()
     {
+        $exento = $this->showFacturaExentaFields;
+
         $this->items[] = [
             'producto' => '',
             'cantidad' => '',
@@ -348,7 +350,7 @@ class CreateReceptionNoOc extends Component
             'precioNeto' => '',
             'precioExento' => '',
             'total' => 0,
-            'exento' => false,
+            'exento' => $exento,
         ];
 
         $this->calculateTotal(count($this->items) - 1);
@@ -390,6 +392,15 @@ class CreateReceptionNoOc extends Component
         $this->showFacturaExentaFields = $value === 'factura_exenta';
         $this->readonly = $value !== 'boleta_electronica';
         $this->showAllFields = $value === 'guias_despacho';
+
+        if ($value === 'factura_exenta') {
+            // Marcar todos los ítems como exentos
+            foreach ($this->items as &$item) {
+                $item['exento'] = true;
+            }
+        }
+
+
         $this->loadDteData();
     }
 
