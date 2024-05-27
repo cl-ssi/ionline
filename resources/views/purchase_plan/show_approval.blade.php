@@ -10,7 +10,7 @@
     </div>
     <div class="col-6">
         @if($purchasePlan->canEdit())
-            <a href="{{ route('purchase_plan.edit', $purchasePlan->id) }}" target="_blank"
+            <a href="{{ route('purchase_plan.edit', $purchasePlan) }}" target="_blank"
                 class="btn btn-primary btn-sm mb-1"><i class="fas fa-edit fa-fw"></i> Editar</a>
         @endif
     </div>
