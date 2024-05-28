@@ -31,6 +31,14 @@
             <i class="fas fa-fw fa-ban"></i> Rechazadas</a>
     </li>
 
+    @can('be god')
+        <li class="nav-item">
+            <a class="nav-link"
+                href="#">
+                <i class="fas fa-fw fa-database"></i> Respaldos</a>
+        </li>
+    @endcan
+
     @cannot('Payments: viewer')
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">

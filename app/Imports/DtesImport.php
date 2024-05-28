@@ -124,8 +124,26 @@ class DtesImport implements ToModel, WithStartRow, WithHeadingRow
                 }
             }
         }
-        return Dte::updateOrCreate($array_clave, $array_variable);
-    }
+                // Crear o actualizar el DTE
+                $dte = Dte::updateOrCreate($array_clave, $array_variable);
+
+                // // Verificar si hay una referencia con tipo "52"
+                // if ($row['tipo_documento'] == 'factura_electronica') {
+                //     $referencias = json_decode($row['referencias'], true);
+                //     if (is_array($referencias)) {
+                //         foreach ($referencias as $referencia) {
+                //             if (isset($referencia['Tipo']) && $referencia['Tipo'] == '52') {
+                //                 $folio_gd = $referencia['Folio'];
+                //                 $this->linkGuiaDespachoToFactura($dte, $folio_gd);
+                //                 break;
+                //             }
+                //         }
+                //     }
+                // }
+
+                return $dte;
+            }
+        
 
         /**
      * Envía la notificación DteConfirmation
@@ -139,5 +157,13 @@ class DtesImport implements ToModel, WithStartRow, WithHeadingRow
         $contract_manager->notify(new DteConfirmation($dte));
     }
 
+
+    private function linkGuiaDespachoToFactura(Dte $factura, $folio_gd)
+    {
+        $guia_despacho = Dte::where('folio', $folio_gd)->where('emisor', $factura->emisor)->first();
+        if ($guia_despacho) {
+            $guia_despacho->invoices()->syncWithoutDetaching($factura->id);
+        }
+    }
 
 }
