@@ -127,19 +127,19 @@ class DtesImport implements ToModel, WithStartRow, WithHeadingRow
                 // Crear o actualizar el DTE
                 $dte = Dte::updateOrCreate($array_clave, $array_variable);
 
-                // // Verificar si hay una referencia con tipo "52"
-                // if ($row['tipo_documento'] == 'factura_electronica') {
-                //     $referencias = json_decode($row['referencias'], true);
-                //     if (is_array($referencias)) {
-                //         foreach ($referencias as $referencia) {
-                //             if (isset($referencia['Tipo']) && $referencia['Tipo'] == '52') {
-                //                 $folio_gd = $referencia['Folio'];
-                //                 $this->linkGuiaDespachoToFactura($dte, $folio_gd);
-                //                 break;
-                //             }
-                //         }
-                //     }
-                // }
+                // Verificar si hay una referencia con tipo "52"
+                if ($row['tipo_documento'] == 'factura_electronica') {
+                    $referencias = json_decode($row['referencias'], true);
+                    if (is_array($referencias)) {
+                        foreach ($referencias as $referencia) {
+                            if (isset($referencia['Tipo']) && $referencia['Tipo'] == '52') {
+                                $folio_gd = $referencia['Folio'];
+                                $this->linkGuiaDespachoToFactura($dte, $folio_gd);
+                                break;
+                            }
+                        }
+                    }
+                }
 
                 return $dte;
             }
