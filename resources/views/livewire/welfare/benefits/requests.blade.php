@@ -63,13 +63,9 @@
                             @endforeach
 
                             <div id="fileInputs">
-                                <!-- Aquí se agregarán dinámicamente los inputs file -->
-                                @foreach($files as $key => $file)
-                                    <div wire:loading wire:target="files.{{ $key }}"><i class="fas fa-spinner fa-spin"></i> <b>Cargando...</b></div>
-                                    <input type="file" wire:model="files.{{ $key }}" class="form-control mb-2" accept="application/pdf">
-                                @endforeach
+                                <div wire:loading wire:target="files"><i class="fas fa-spinner fa-spin"></i> <b>Cargando...</b></div>
+                                <input type="file" wire:model="files" class="form-control mb-2" accept="application/pdf" multiple>h
                             </div>
-                            <button wire:click.prevent="addFileInput" class="btn btn-primary btn-sm">Agregar Archivo</button>
                         </ul>
                     </td>
                 </tbody>
