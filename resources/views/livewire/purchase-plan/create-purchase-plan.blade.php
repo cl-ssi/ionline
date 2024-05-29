@@ -94,10 +94,10 @@
             </ul>
         </div>
     @endif
-    
-    <h6 class="small"><b>Historial de Rechazos</b></h6> <br>
 
-    @if($purchasePlanToEdit->trashedApprovals)
+    @if($purchasePlanToEdit && $purchasePlanToEdit->trashedApprovals)
+        <h6 class="small"><b>Historial de Rechazos</b></h6> <br>
+        
         <div class="table-responsive">
             <table class="table table-bordered table-sm small">
                 <thead>
