@@ -58,8 +58,15 @@
 
     @if($showStep3)
         <div class="text-center"> <!-- Agrega una clase para centrar el contenido -->
-            <h3>Seleccione la hora: </h3>
+            <h3>Seleccione la hora</h3>
             <h5>{{$activityType->name}}</h5>
+
+            @if($activityType->description)
+                <div class="alert alert-info" role="alert">
+                    {{$activityType->description}}
+                </div>
+            @endif
+            
         </div><br>
 
         <div class="text-center">
