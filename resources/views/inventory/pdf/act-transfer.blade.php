@@ -88,8 +88,8 @@
                     <strong>Ubicación</strong>
                 </td>
                 <td>
-                    {{ $movement->inventory->lastMovement->place->location->name }},
-                    {{ $movement->inventory->lastMovement->place->name }}
+                    {{ $movement->inventory->lastMovement?->place?->location->name }},
+                    {{ $movement->inventory->lastMovement?->place?->name }}
                 </td>
             </tr>
             <tr>
