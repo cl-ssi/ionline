@@ -2,10 +2,14 @@
 
 namespace App\Models\ProfAgenda;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Contracts\Auditable;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+
+use App\Models\User;
 
 class Proposal extends Model implements Auditable
 {
@@ -27,8 +31,9 @@ class Proposal extends Model implements Auditable
         return $this->belongsTo('App\Models\Parameters\Profession','profession_id');
     }
 
-    public function employee(){
-        return $this->belongsTo('App\Models\User','user_id')->withTrashed();
+    public function employee(): BelongsTo
+    {
+        return $this->belongsTo(User::class,'user_id')->withTrashed();
     }
 
     public function details(){

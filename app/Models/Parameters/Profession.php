@@ -7,6 +7,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
+use App\Models\ProfAgenda\Proposal;
+
 class Profession extends Model implements Auditable
 {
     use \OwenIt\Auditing\Auditable;
@@ -32,6 +37,11 @@ class Profession extends Model implements Auditable
     public function estament()
     {
         return $this->belongsTo(Estament::class);
+    }
+
+    public function agendaProposals(): HasMany
+    {
+        return $this->hasMany(Proposal::class);
     }
     
 }

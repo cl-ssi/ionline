@@ -5,7 +5,6 @@ namespace App\Http\Livewire\ProfAgenda;
 use Livewire\Component;
 
 use App\Models\ProfAgenda\OpenHour;
-use App\Models\ProfAgenda\Appointment;
 use App\Models\User;
 use App\Models\Parameters\Holiday;
 
@@ -14,35 +13,15 @@ class Agenda extends Component
     public $profession_id;
     public $profesional_id;
     public $user_id;
-    // public $first_appointment;
     
     public $events = '';
 
     // public $openHours_id;
-    protected $listeners = ['getOpenHoursId','getFirstAppointment'];
+    protected $listeners = ['getOpenHoursId'];
 
     public function getOpenHoursId($openHours_id)
     {
         // $this->openHours_id = $openHours_id;
-    }
-
-    public function getFirstAppointment($status)
-    {
-        // $this->first_appointment = $status;
-    }
-
-    public function first_appointment_change()
-    {
-        // $openHour = OpenHour::find($this->openHours_id);
-        // // se activa el appointment
-        // if($this->first_appointment){
-        //     $appointment = new Appointment();
-        //     $appointment->open_hour_id = $openHour->id;
-        //     $appointment->begin_date = now();
-        //     $appointment->save();
-        // }else{
-        //     $openHour->appointments()->delete();
-        // }
     }
 
     public function render()
@@ -53,7 +32,7 @@ class Agenda extends Component
         $openHours = OpenHour::where('profesional_id',$this->profesional_id)
                             ->where('profession_id',$this->profession_id)
                             ->whereHas('activityType')
-                            ->with('patient','activityType','appointments')
+                            ->with('patient','activityType')
                             ->get();
 
         $min_date=$openHours->min('start_date');
@@ -68,11 +47,6 @@ class Agenda extends Component
             $array[$count]['patient_name'] =  $hour->patient ? $hour->patient->shortName : '';
             $array[$count]['contact_number'] = $hour->contact_number;
             $array[$count]['gender'] = $hour->patient ? $hour->patient->getGender() : '';
-            if($hour->appointments->count() > 0){
-                $array[$count]['first_appointment'] = true;
-            }else{
-                $array[$count]['first_appointment'] = false;
-            }
             $array[$count]['start'] = $hour->start_date;
             $array[$count]['end'] = $hour->end_date;
             $array[$count]['textColor'] = "black";
@@ -130,7 +104,6 @@ class Agenda extends Component
             $array[$count]['rut'] = null;
             $array[$count]['contact_number'] = null;
             $array[$count]['gender'] = null;
-            $array[$count]['first_appointment'] = null;
             $array[$count]['start'] = $holiday->date->format('Y-m-d') . " 00:00";
             $array[$count]['end'] = $holiday->date->format('Y-m-d') . " 23:59";
             $array[$count]['color'] = '#444444'; //amarillo

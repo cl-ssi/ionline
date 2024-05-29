@@ -47,6 +47,15 @@
         <label for="for_start_date">Glosa/Descripción de la actividad</label>
         <textarea class="form-control" name="description" id="" cols="30" rows="10">{{$activityType->description}}</textarea>
     </fieldset>
+
+    <fieldset class="form-group col col-md">
+        <label for="auto_reservable">Autoreservable</label>
+        <select class="form-control" name="auto_reservable" id="auto_reservable">
+            <option value=""></option>
+            <option value="1" @selected($activityType->auto_reservable == 1)>Autoreservable</option>
+            <option value="0" @selected($activityType->auto_reservable == 0)>No autoreservable</option>
+        </select>
+    </fieldset>
 </div>
 
 <button type="submit" class="btn btn-primary">Guardar</button>

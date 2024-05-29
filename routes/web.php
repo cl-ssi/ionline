@@ -2016,7 +2016,6 @@ Route::prefix('prof_agenda')->as('prof_agenda.')->middleware(['auth'])->group(fu
         // Route::put('/update/{proposal}', [OpenHourController::class, 'update'])->name('update');
         // Route::get('/create', [OpenHourController::class, 'create'])->name('create');
         Route::post('/store', [OpenHourController::class, 'store'])->name('store');
-        Route::post('/patient_store', [OpenHourController::class, 'patient_store'])->name('patient_store');
         Route::post('/delete_reservation', [OpenHourController::class, 'delete_reservation'])->name('delete_reservation');
         Route::post('/assistance_confirmation', [OpenHourController::class, 'assistance_confirmation'])->name('assistance_confirmation');
         Route::post('/absence_confirmation', [OpenHourController::class, 'absence_confirmation'])->name('absence_confirmation');

@@ -16,7 +16,7 @@ class OpenHour extends Model implements Auditable
     //
     protected $fillable = [
         'id','proposal_detail_id','start_date','end_date','patient_id','contact_number','observation','blocked','deleted_bloqued_observation',
-        'assistance', 'absence_reason','profesional_id','profession_id','activity_type_id','deleted_at'
+        'assistance', 'absence_reason','profesional_id','profession_id','activity_type_id','reserver_id','deleted_at'
     ];
 
     protected $table = 'prof_agenda_open_hours';
@@ -44,15 +44,4 @@ class OpenHour extends Model implements Auditable
         return $this->belongsTo('App\Models\ProfAgenda\ActivityType');
     }
 
-    public function appointments(){
-        return $this->hasMany('App\Models\ProfAgenda\Appointment');
-    }
-    
-    // public function active_appointment(){
-    //     if($this->appointments()->count()>0){
-    //         return $this->appointments()->whereNull('discharged_date')->first();
-    //     }else{
-    //         return $this->appointments();
-    //     }
-    // }
 }

@@ -1,253 +1,154 @@
 <div>
-    <style>
-        #calendar-container{
-            /* width: 100%; */
-        }
-        #calendar{
-            /* padding: 10px; */
-            /* margin: 10px; */
-            /* width: 1340px; */
-            /* height: 610px; */
-            /* border:2px solid black; */
-        }
-    </style>
+    @if($showStep1)
+        <div class="text-center"> <!-- Agrega una clase para centrar el contenido -->
+            <h3>¿Qué especialidad necesitas agendar?</h3>
+        </div><br>
 
-    <div class="form-row mb-4 justify-content-end">
-        <div style="color:#CACACA">&#9632;</div>&nbsp;<p>Disponible</p>&nbsp;&nbsp; <!--plomo-->
-        <div style="color:#85C1E9">&#9632;</div>&nbsp;<p>No disponible</p>&nbsp;&nbsp; <!--plomo-->
-        <div style="color:#E7EB89">&#9632;</div>&nbsp;<p>Reservado</p>&nbsp;&nbsp; <!--amarillo-->
-        <div style="color:#444444">&#9632;</div>&nbsp;<p>Feriado</p> <!--negro-->
-    </div>
-
-    <div>
-        <div id='calendar-container' wire:ignore>
-            <div id='calendar'></div>
-        </div>
-    </div>
-
-    <!-- modal para registrar una nueva reserva -->
-    <div class="modal fade bd-example-modal-lg" id="newHour" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title modalTitle" id="">Modal title</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-
-                <div class="row" id="div_activity_type_description">
-                    <fieldset class="form-group col-12">
-                        <label for="for_users">Glosa/Descripción de la actividad</label>
-                        <textarea class="form-control activity_type_description"  disabled cols="30" rows="3"></textarea>
-                    </fieldset>
+        <div class="row">
+            @foreach($professions as $profession)
+                <div class="col-md-4 mb-4">
+                    <div class="card border-success mb-3">
+                        <div class="card-body btn-like-div" wire:click="showStep2({{ $profession->id }})">
+                            <h5 class="card-title">{{ $profession->name }}</h5>
+                        </div>
+                    </div>
                 </div>
-                
-                <form method="POST" class="form-horizontal" action="{{ route('prof_agenda.open_hour.patient_store') }}">
-                @csrf
-                @method('POST')
-
-                    <div class="row">
-                        <input class="openHours_id" type="hidden" id="" name="openHours_id">
-                        <fieldset class="form-group col-12 col-md-6">
-                            <label for="for_users">F.Inicio</label>
-                            <input class="form-control finicio" type="datetime" id="" disabled>
-                        </fieldset>
-
-                        <fieldset class="form-group col-12 col-md-6">
-                            <label for="for_profesion_id">F.Término</label>
-                            <input class="form-control ftermino" type="datetime" id="" disabled>
-                        </fieldset>
-                    </div>
-
-                    <input type="hidden" value="{{auth()->user()->id}}" name="user_id">
-
-                    <div class="row">
-                        <fieldset class="form-group col-12 col-md-12">
-                            <label for="for_observation">Motivo consulta</label>
-                            <textarea class="form-control" name="observation" id="" cols="30" rows="3"></textarea>
-                        </fieldset>
-                    </div>
-
-                    <button type="submit" class="form-control btn btn-primary">Guardar</button>
-
-                </form>
-
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-            </div>
-            </div>
+            @endforeach
         </div>
-    </div>
+    @endif
 
-    <!-- modal para eliminar una reserva -->
-    <div class="modal fade bd-example-modal-lg" id="reservedHour" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title modalTitle" id=""></h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                
-                <form method="POST" class="form-horizontal" onsubmit="return confirm('¿Está seguro de eliminar la reserva?');" action="{{ route('prof_agenda.open_hour.delete_reservation') }}">
-                @csrf
-                @method('POST')
+    @if($showStep2)
+        <div class="text-center"> <!-- Agrega una clase para centrar el contenido -->
+            <h3>¿Que tipo de atención necesitas?</h3>
+        </div><br>
 
-                    <div class="row">
-                        <input class="openHours_id" type="hidden" id="" name="openHours_id">
-                        <fieldset class="form-group col-12 col-md-6">
-                            <label for="for_users">F.Inicio</label>
-                            <input class="form-control finicio" type="datetime" id="" disabled>
-                        </fieldset>
-
-                        <fieldset class="form-group col-12 col-md-6">
-                            <label for="for_profesion_id">F.Término</label>
-                            <input class="form-control ftermino" type="datetime" id="" disabled>
-                        </fieldset>
-                    </div>
-
-                    <div class="row">
-                        <fieldset class="form-group col-12 col-md-4">
-                            <label for="for_rut">Rut</label>
-                            <div>
-                                <input type="text" class="form-control rut" id="" disabled>
+        <div class="row">
+            @if(count($activityTypes)>0)
+                @foreach($activityTypes as $activityType)
+                    <!-- no se porque se cambia a array, por eso el if (debo revisar) -->
+                    @if(!is_array($activityType))
+                        <div class="col-md-4 mb-4">
+                            <div class="card border-success mb-3">
+                                <div class="card-body btn-like-div" wire:click="showStep3({{ $activityType->id }})">
+                                    <h5 class="card-title">{{ $activityType->name }}</h5>
+                                </div>
                             </div>
-                        </fieldset>
-
-                        <fieldset class="form-group col-12 col-md-4">
-                            <label for="for_patient">Funcionario</label>
-                            <div>
-                                <input type="text" class="form-control patient" id="" disabled>
+                        </div>
+                    @else
+                        <div class="col-md-4 mb-4">
+                            <div class="card border-success mb-3">
+                                <div class="card-body btn-like-div" wire:click="showStep3({{ $activityType['id'] }})">
+                                    <h5 class="card-title">{{ $activityType['name'] }}</h5>
+                                </div>
                             </div>
-                        </fieldset>
-
-                        <fieldset class="form-group col-12 col-md-4">
-                            <label for="for_contact_number">Telefono de contacto</label>
-                            <div>
-                                <input type="text" class="form-control contact_number" disabled>
-                            </div>
-                        </fieldset>
-                    </div>
-
-                    <div class="row">
-                        <fieldset class="form-group col-12 col-md-12">
-                            <label for="for_observation">Motivo consulta</label>
-                            <textarea class="form-control observation" name="observation" id="" cols="30" rows="3" disabled></textarea>
-                        </fieldset>
-                    </div>
-
-                    <!--<hr>
-
-                    <div class="row">
-                        <fieldset class="form-group col-12 col-md-9">
-                            <label for="for_deleted_bloqued_observation">Motivo eliminación</label>
-                            <input type="text" class="form-control" name="deleted_bloqued_observation">
-                        </fieldset>
-
-                        <fieldset class="form-group col-12 col-md-3">
-                            <label for="for_profesion_id"><br></label>
-                            <button type="submit" class="form-control btn btn-warning">Eliminar reserva</button>
-                        </fieldset>
-                    </div> -->
-
-                </form>
-
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-            </div>
-            </div>
+                        </div>
+                    @endif
+                @endforeach
+            @else
+                <div class="col-md-12 mb-12 alert alert-warning" role="alert">
+                    No existen atenciones reservables en este momento.
+                </div>
+            @endif
         </div>
-    </div>
 
-    @push('scripts')
-        <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.7.0/main.min.js'></script>
-        <script>
-            document.addEventListener('livewire:load', function() {
-            // document.addEventListener('DOMContentLoaded', function() {
-                var Calendar = FullCalendar.Calendar;
-                var calendarEl = document.getElementById('calendar');
-                // var data =   @this.events;
-                var calendar = new Calendar(calendarEl, {
+        <div class="btn-like-div" wire:click="goStep1">
+            <button class="btn btn-secondary">Volver atrás</button>
+        </div>
+    @endif
 
-                    // editable: true,
-                    selectable: true,
-                    slotDuration: '00:20',
-                    
-                    eventClick: function(info) {
-                        console.info(info.event.extendedProps);
-                        $('.modalTitle').html(info.event.title);
-                        $('.patient').val(info.event.title);
-                        $('.contact_number').val(info.event.extendedProps.contact_number);
-                        $('.openHours_id').val(info.event.id);
-                        $('.finicio').val(info.event.start.toLocaleString());
-                        $('.ftermino').val(info.event.end.toLocaleString());
-                        $('.observation').val(info.event.extendedProps.observation);
+    @if($showStep3)
+        <div class="text-center"> <!-- Agrega una clase para centrar el contenido -->
+            <h3>Seleccione la hora: </h3>
+            <h5>{{$activityType->name}}</h5>
+        </div><br>
 
-                        var div = document.getElementById("div_activity_type_description");
-                        if(info.event.extendedProps.activity_type_description){
-                            div.style.display = "block";
-                            $('.activity_type_description').text(info.event.extendedProps.activity_type_description);
-                        }else{
-                            div.style.display = "none";
-                        }
+        <div class="text-center">
+            @if (session()->has('message'))
+                <div class="alert alert-warning">
+                    {{ session('message') }}
+                </div>
+            @endif
+        </div>
 
-                        // se verifica si es un bloque vacio o ya reservado
-                        if(info.event.extendedProps.status=="Disponible"){
-                            $('#newHour').modal();
-                        }else if(info.event.extendedProps.status=="Reservado"){
-                            $('.rut').val(info.event.extendedProps.rut);
-                            $('#reservedHour').modal();
-                        }
-                    },
+        <div class="row">
 
-                    initialView: 'timeGridWeek',
-                    allDaySlot: false,
-                    firstDay: 1,
-                    slotMinTime: "08:00:00",
-                    locale: 'es',
-                    displayEventTime: false,
-                    events: JSON.parse(@this.events),
+            @if(count($users_with_openhours)>0)
+                @foreach($users_with_openhours as $user)
+                    <div class="col-md-4 mb-4">
+                        <div class="card border-success mb-3" style="max-width: 18rem;">
+                        <div class="card-header">{{ $user->shortName }}</div>
+                        <div class="card-body text-success">
+                            <h5 class="card-title">Disponibles</h5>
+                            <p class="card-text">
+                                <div wire:loading>
+                                    Procesando...
+                                </div>
+                                @foreach($this->openHours as $openHour)
+                                    @if($openHour->profesional_id == $user->id)
+                                        <div wire:loading.remove>
+                                            <button type="button" class="btn btn-outline-success mb-2" wire:click="saveReservation({{$openHour->id}})">
+                                                {{$openHour->start_date}}
+                                            </button>
+                                        </div>
+                                    @endif
+                                @endforeach
+                                
+                            </p>
+                        </div>
+                        </div>
+                    </div>
+                @endforeach
+            @else
+                <div class="col-md-12 mb-12 alert alert-warning" role="alert">
+                    No existen horas disponibles.
+                </div>
+            @endif
+        </div>
 
-                });
-                
-                // console.log(@this.events),
-                calendar.render();
+        <div class="btn-like-div" wire:click="goStep2">
+            <button class="btn btn-secondary">Volver atrás</button>
+        </div>
+    @endif
 
-                @this.on('refreshCalendar', () => {
-                    // console.log(@this.events),
-                    calendar.refetchEvents()
-                    // calendar.render()
+    @if($showStep4)
+        <div class="text-center">
+            @if (session()->has('message'))
+                <div class="alert alert-success">
+                    {{ session('message') }}
+                </div>
+            @endif
+        </div>
+
+        <button class="btn btn-secondary" wire:click="goStep1">Salir</button>
+
+    @endif
+
+</div>
+
+<style>
+    .btn-like-div {
+        cursor: pointer;
+        /* Otros estilos que desees para que se vea como un botón */
+    }
+</style>
+
+<script>
+    document.addEventListener('livewire:load', function () {
+        Livewire.hook('message.sent', () => {
+            // Re-bind click event after Livewire update
+            bindClickEvent();
+        });
+
+        function bindClickEvent() {
+            let btnLikeDivs = document.querySelectorAll('.btn-like-div');
+            btnLikeDivs.forEach(btnLikeDiv => {
+                btnLikeDiv.addEventListener('click', function () {
+                    // Execute Livewire action when div is clicked
+                    this.querySelector('button').click();
                 });
             });
+        }
 
-            function padTo2Digits(num) {
-            return num.toString().padStart(2, '0');
-            }
-
-            function formatDate(date) {
-            return (
-                [
-                date.getFullYear(),
-                padTo2Digits(date.getMonth() + 1),
-                padTo2Digits(date.getDate()),
-                ].join('-') +
-                ' ' +
-                [
-                padTo2Digits(date.getHours()),
-                padTo2Digits(date.getMinutes()),
-                padTo2Digits(date.getSeconds()),
-                ].join(':')
-            );
-            }
-
-        </script>
-
-        <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.7.0/main.min.css' rel='stylesheet' />
-    @endpush
-</div>
+        bindClickEvent();
+    });
+</script>

@@ -2,52 +2,53 @@
 
 namespace App\Models;
 
-use App\Helpers\DateHelper;
-use App\Models\ClCommune;
-use App\Models\Country;
-use App\Models\Establishment;
-use App\Models\Inv\EstablishmentUser;
-use App\Models\Lobby\Meeting;
-use App\Models\Parameters\AccessLog;
-use App\Models\ProfAgenda\Proposal;
-use App\Models\Profile\Subrogation;
-use App\Models\RequestForms\RequestForm;
-
-use App\Models\Rrhh\Absenteeism;
-use App\Models\Rrhh\AmiLoad;
-use App\Models\Rrhh\CompensatoryDay;
-use App\Models\Rrhh\Contract;
-use App\Models\Rrhh\NoAttendanceRecord;
-use App\Models\Rrhh\Shift;
-use App\Models\Rrhh\UserBankAccount;
-use App\Models\ServiceRequests\ServiceRequest;
-use App\Models\Suitability\Result;
-use App\Models\Warehouse\Store;
-use App\Models\Warehouse\StoreUser;
-use App\Models\Welfare\Amipass\Charge;
-
-use App\Models\Welfare\Amipass\NewCharge;
-use App\Models\Welfare\Amipass\PendingAmount;
-use App\Models\Welfare\Amipass\Regularization;
-use App\Rrhh\Authority;
-use App\Models\Sirh\WelfareUser;
-
-use App\Rrhh\OrganizationalUnit;
 use Attribute;
 use Carbon\Carbon;
+use App\Models\Country;
+use App\Rrhh\Authority;
 use Carbon\CarbonPeriod;
-use Illuminate\Contracts\Auth\CanResetPassword;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\hasMany;
-use Illuminate\Database\Eloquent\Relations\hasOne;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-// Para resetear contraseñas
-use Illuminate\Support\Facades\Auth;
+use App\Models\ClCommune;
+use App\Models\Rrhh\Shift;
+use App\Helpers\DateHelper;
+use App\Models\Rrhh\AmiLoad;
+use App\Models\Establishment;
 
-use OwenIt\Auditing\Contracts\Auditable;
+use App\Models\Lobby\Meeting;
+use App\Models\Rrhh\Contract;
+use App\Models\Warehouse\Store;
+use App\Models\Rrhh\Absenteeism;
+use App\Models\Sirh\WelfareUser;
+use App\Rrhh\OrganizationalUnit;
+use App\Models\Suitability\Result;
+use App\Models\ProfAgenda\OpenHour;
+use App\Models\ProfAgenda\Proposal;
+use App\Models\Profile\Subrogation;
+use App\Models\Warehouse\StoreUser;
+use App\Models\Parameters\AccessLog;
+
+use App\Models\Rrhh\CompensatoryDay;
+use App\Models\Rrhh\UserBankAccount;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Inv\EstablishmentUser;
+use App\Models\Welfare\Amipass\Charge;
+
 use Spatie\Permission\Traits\HasRoles;
+use App\Models\Rrhh\NoAttendanceRecord;
+use App\Models\RequestForms\RequestForm;
+use Illuminate\Notifications\Notifiable;
+use OwenIt\Auditing\Contracts\Auditable;
+use App\Models\Welfare\Amipass\NewCharge;
+use App\Models\Welfare\Amipass\PendingAmount;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\ServiceRequests\ServiceRequest;
+use App\Models\Welfare\Amipass\Regularization;
+use Illuminate\Contracts\Auth\CanResetPassword;
+// Para resetear contraseñas
+use Illuminate\Database\Eloquent\Relations\hasOne;
+
+use Illuminate\Database\Eloquent\Relations\hasMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable implements Auditable
 {
@@ -457,6 +458,11 @@ class User extends Authenticatable implements Auditable
     {
         return $this->hasMany(Result::class, 'user_id', 'id');
         //return $this->hasMany('App\Models\Result', 'user_id', 'id');
+    }
+
+    public function employeeOpenHours(): HasMany
+    {
+        return $this->hasMany(OpenHour::class, 'profesional_id');
     }
 
     public function scopeFindByUser($query, $searchText)

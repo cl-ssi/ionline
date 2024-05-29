@@ -64,11 +64,6 @@
                                                                  'emit_name' => 'loadUserData'])
                             </div>
                         </fieldset>
-
-                        <fieldset class="form-group col-12 col-md-2">
-                            <label for="for_users"><b>Primera cita</b></label>
-                            <input class="form-control first_appointment" type="checkbox" name="first_appointment" disabled>
-                        </fieldset>
                     </div>     
 
                     @livewire('prof-agenda.employee-data')
