@@ -352,7 +352,7 @@
                     <div class="form-text">&nbsp;</div>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-2">
                 <div class="form-check form-switch form-check-inline">
                     <input class="form-check-input"
                         type="checkbox"
@@ -369,6 +369,15 @@
                 <label for="cargos">Cargos</label>
                 <input class="form-control" type="number" wire:model="reception.cargos" id="reception.cargos">
             </div>
+            {{--
+            @if($purchaseOrder->requestForm->type_form == 'pasajes aéreos')
+                <div class="col-2">
+                    <label for="cargos">IVA</label>
+                    <input class="form-control" type="number" wire:model="reception.iva" id="reception.iva">
+                </div>
+            @endif
+            --}}
+            
             @error('reception.partial_reception')
                 <span class="text-danger">{{ $message }}</span>
             @enderror
