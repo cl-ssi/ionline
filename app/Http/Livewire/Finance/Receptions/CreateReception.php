@@ -323,10 +323,15 @@ class CreateReception extends Component
                 /** 
                  * Si el total de Impuestos en la OC es 0, es una OC exenta (caso de Pasajes de Avión)
                  * Las OC de pasajes de avión son hechas automáticamente por MP y no tienen impuestos. 
+                 * 
+                 * Tebi:
+                 * Se modifica debido a solicitud y VC con Juan Toro y con Kurt, ahora podrán digitar el IVA.
+                 * 
+                 * Esto es para cuadrarlo con finanzas y no haya problema en pasar a pago el caso de Turavion
                  **/
                 if( $this->purchaseOrder->json->Listado[0]->Impuestos == 0 ) {
-                    $this->reception['iva'] = 0;
-                    $this->reception['total'] = $this->reception['subtotal'];
+                    //$this->reception['iva'] = 0;
+                    $this->reception['total'] = $this->reception['subtotal'] + $this->reception['iva'];
                 }
                 /** Aquí cae todas las demás DTEs */
                 else {
