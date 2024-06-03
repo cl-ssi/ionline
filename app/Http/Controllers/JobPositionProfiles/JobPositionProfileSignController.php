@@ -54,7 +54,6 @@ class JobPositionProfileSignController extends Controller
             return redirect()->route('job_position_profile.edit_expertise_map', $jobPositionProfile);
         }
         else{
-            dd('pasó');
             /* SE CREAN APROBACIONES PARA LOS DEPTO. DEPENDIENTES */
             $organizationalUnit = $jobPositionProfile->organizationalUnit;
             $previousApprovalId = null;
