@@ -330,8 +330,11 @@ class CreateReception extends Component
                  * Esto es para cuadrarlo con finanzas y no haya problema en pasar a pago el caso de Turavion
                  **/
                 if( $this->purchaseOrder->json->Listado[0]->Impuestos == 0 ) {
-                    //$this->reception['iva'] = 0;
-                    $this->reception['total'] = $this->reception['subtotal'] + $this->reception['iva'];
+                    if($this->purchaseOrder->requestForm && $this->purchaseOrder->requestForm->type_form != 'pasajes aéreos')
+                        {
+                            $this->reception['iva'] = 0;
+                        }
+                        $this->reception['total'] = $this->reception['subtotal'] + $this->reception['iva'];
                 }
                 /** Aquí cae todas las demás DTEs */
                 else {
