@@ -44,7 +44,8 @@ class JobPositionProfileSignController extends Controller
      */
     public function store(Request $request, JobPositionProfile $jobPositionProfile)
     {   
-        if(($jobPositionProfile->staff_decree_by_estament_id == NULL && $jobPositionProfile->general_requirement == NULL) ||
+        if((($jobPositionProfile->staff_decree_by_estament_id == NULL && $jobPositionProfile->contractual_condition_id != 2) && 
+            $jobPositionProfile->general_requirement == NULL) ||
             ($jobPositionProfile->roles->count() <= 0 && $jobPositionProfile->objective == NULL) ||
             $jobPositionProfile->working_team == NULL ||
             $jobPositionProfile->jppLiabilities->count() <= 0 ||
@@ -53,6 +54,7 @@ class JobPositionProfileSignController extends Controller
             return redirect()->route('job_position_profile.edit_expertise_map', $jobPositionProfile);
         }
         else{
+            dd('pasó');
             /* SE CREAN APROBACIONES PARA LOS DEPTO. DEPENDIENTES */
             $organizationalUnit = $jobPositionProfile->organizationalUnit;
             $previousApprovalId = null;
