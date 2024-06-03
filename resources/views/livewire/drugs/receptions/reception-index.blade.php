@@ -1,13 +1,18 @@
 <div>
     <div class="row">
-        <div class="col-8">
+        <div class="col-6">
             <h3 class="mb-3">
                 Actas de recepción
             </h3>
         </div>
+        <div class="col-2">
+            <fieldset class="form-group">
+                <input type="text" class="form-control" wire:model..debounce.700ms="nue" placeholder="nue">
+            </fieldset>
+        </div>
         <div class="col-4">
             <fieldset class="form-group">
-                <div class="input-group input-group-sm mt-2">
+                <div class="input-group input-group">
                     <div class="input-group-prepend">
                         <span class="input-group-text" id="filter-by">
                             Filtrar por
@@ -17,7 +22,7 @@
                     <select
                         id="filter-by"
                         wire:model.defer="filter"
-                        class="form-control form-control-sm"
+                        class="form-control form-control"
                     >
                         <option value="all">Todos</option>
                         <option value="">Últimos 15 días</option>
