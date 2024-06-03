@@ -212,7 +212,7 @@
                     <td style="text-align: right;">{{ $item->Cantidad }} {{ $item->Unidad }}</td>
                     <td>{{ $item->EspecificacionComprador }}</td>
                     <td>{{ $item->EspecificacionProveedor }}</td>
-                    <td style="text-align: right;">{{ money($item->PrecioNeto) }}</td>
+                    <td style="text-align: right;">{{ moneyDecimal($item->PrecioNeto) }}</td>
                     <td style="text-align: right;">{{ money($item->TotalDescuentos) }}</td>
                     <td style="text-align: right;">{{ money($item->TotalCargos) }}</td>
                     <td style="text-align: right;">{{ money($item->Cantidad * $item->PrecioNeto) }}</td>
