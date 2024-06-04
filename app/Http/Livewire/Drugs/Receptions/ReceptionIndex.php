@@ -14,6 +14,7 @@ class ReceptionIndex extends Component
 
     public $search;
     public $filter = "all";
+    public $nue = null;
 
 
     public function render()
@@ -50,7 +51,13 @@ class ReceptionIndex extends Component
             ->when($this->filter == '', function($query) {
                 $query->whereDate('created_at', '>', Carbon::today()->subDays(16));
             })
-            ->Search($this->search)
+            // when nue is not null, filter $reception->items with nue attribute
+            ->when($this->nue, function($query) {
+                $query->whereHas('items', function($query) {
+                    $query->where('nue', 'like', "%{$this->nue}%");
+                });
+            })
+            ->search($this->search)
             ->latest()
             ->paginate(100);
 

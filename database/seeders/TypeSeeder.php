@@ -69,7 +69,7 @@ class TypeSeeder extends Seeder
                 'description'      => NULL,
                 'doc_digital'      => NULL,
                 'partes_exclusive' => NULL,
-                'deleted_at'       => '2023-02-04 10:20:04',
+                'deleted_at'       => NULL,
             )
         );
         Type::create(

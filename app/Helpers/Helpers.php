@@ -17,7 +17,15 @@ function isDecimal($value) {
 
 function money($value)
 {
-    echo number_format($value ?? 0, 0, '', '.');
+    if(is_numeric($value))
+    {
+        echo number_format($value ?? 0, 0, '', '.');
+    }
+    else
+    {
+        echo '';
+    }
+    
 }
 
 function moneyDecimal($value, $decimal = 2) {

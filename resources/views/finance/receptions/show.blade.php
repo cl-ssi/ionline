@@ -163,7 +163,7 @@
                             @endif
                             
                             @if($reception->dte_type != 'boleta_honorarios')
-                            <td class="right">{{ money($item->PrecioNeto) }}</td>
+                            <td class="right">{{ moneyDecimal($item->PrecioNeto) }}</td>
                             @endif
                             
                             @if($item->TotalDescuentos)
@@ -175,7 +175,7 @@
                             @endif
 
                             @if($reception->dte_type != 'boleta_honorarios')
-                            <td class="right">{{ money($item->Total) }}</td>
+                            <td class="right">{{ moneyDecimal($item->Total) }}</td>
                             @endif
                         </tr>
                     @endif

@@ -289,7 +289,7 @@ class CreateReception extends Component
     public function calculateTotals()
     {
         /** El neto redondeado hacia abajo */
-        $this->reception['neto']             = floor(array_sum(array_column($this->receptionItems, 'Total')));
+        $this->reception['neto']             = round(array_sum(array_column($this->receptionItems, 'Total')), 0, PHP_ROUND_HALF_DOWN);
         $this->reception['subtotal']         = $this->reception['neto'] + floatval($this->reception['cargos']) - $this->reception['descuentos'];
 
         switch ($this->reception['dte_type'] ?? 'factura_electronica') {
@@ -323,10 +323,18 @@ class CreateReception extends Component
                 /** 
                  * Si el total de Impuestos en la OC es 0, es una OC exenta (caso de Pasajes de Avión)
                  * Las OC de pasajes de avión son hechas automáticamente por MP y no tienen impuestos. 
+                 * 
+                 * Tebi:
+                 * Se modifica debido a solicitud y VC con Juan Toro y con Kurt, ahora podrán digitar el IVA.
+                 * 
+                 * Esto es para cuadrarlo con finanzas y no haya problema en pasar a pago el caso de Turavion
                  **/
                 if( $this->purchaseOrder->json->Listado[0]->Impuestos == 0 ) {
-                    $this->reception['iva'] = 0;
-                    $this->reception['total'] = $this->reception['subtotal'];
+                    if($this->purchaseOrder->requestForm && $this->purchaseOrder->requestForm->type_form != 'pasajes aéreos')
+                        {
+                            $this->reception['iva'] = 0;
+                        }
+                        $this->reception['total'] = $this->reception['subtotal'] + $this->reception['iva'];
                 }
                 /** Aquí cae todas las demás DTEs */
                 else {

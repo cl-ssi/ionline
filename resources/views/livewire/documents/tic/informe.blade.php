@@ -35,10 +35,10 @@
                 <th>Repositorio</th>
                 <th>N°</th>
                 <th>Inicio</th>
-                <th>Fin</th>
+                {{-- <th>Fin</th> --}}
                 <th>Tarea</th>
                 <!-- <th>Iteración</th> -->
-                <th>Estado</th>
+                {{-- <th>Estado</th> --}}
             </tr>
         </thead>
         <tbody>
@@ -47,11 +47,11 @@
                 <td>{{ $issue['Repository'] }}</td>
                 <td>{{ $issue['URL'] }}</td>
                 <td nowrap>{{ $issue['Start at']->format('Y-m-d') }}</td>
-                <td nowrap>{{ $issue['End at']->format('Y-m-d') }}</td>
+                {{-- <td nowrap>{{ $issue['End at']->format('Y-m-d') }}</td> --}}
                 <td>{{ $issue['Title'] }}</td>
                 <!-- <td>{{ $issue['Assignees'] }}</td> -->
                 <!-- <td>{{ $issue['Iteration'] }}</td> -->
-                <td>{{ $issue['Status'] == '✅ Done' ? 'Completado' : 'En desarrollo' }}</td>
+                {{-- <td>{{ $issue['Status'] == '✅ Done' ? 'Completado' : 'En desarrollo' }}</td> --}}
             </tr>
             @endforeach
         </tbody>
