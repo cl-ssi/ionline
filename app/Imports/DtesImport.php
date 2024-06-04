@@ -164,6 +164,24 @@ class DtesImport implements ToModel, WithStartRow, WithHeadingRow
         if ($guia_despacho) {
             $guia_despacho->invoices()->syncWithoutDetaching($factura->id);
         }
+        
+        //se recepciono con factura
+        if($factura and $factura->receptions->first()  and $factura->receptions->first()->guia_id == null)
+        {
+            $factura->receptions->first()->guia_id = $guia_despacho->id;
+            $factura->receptions->first()->save();
+
+
+        }
+        //se recepciono con la guia
+        if($guia_despacho and $guia_despacho->receptions->first() and $guia_despacho->receptions->first()->dte_id == null)
+        {
+            
+            $guia_despacho->receptions->first()->dte_id = $factura->id;
+            $guia_despacho->receptions->first()->save();
+
+        }
+
     }
 
 }
