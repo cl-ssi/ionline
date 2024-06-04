@@ -48,9 +48,14 @@
 		    <input type="text" class="form-control" id="for_longitude" name="longitude" required="required">
 		</fieldset>
 
-        <fieldset class="form-group col">
+        <fieldset class="form-group col-3">
 		    <label for="for_manager_email">Correo encargado(a)</label>
-		    <input type="text" class="form-control" id="for_manager_email" name="manager_email" required="required">
+		    <input type="text" class="form-control" id="for_manager_email" name="manager_email">
+		</fieldset>
+
+        <fieldset class="form-group col-3">
+		    <label for="for_manager_phone">Teléfono encargado(a)</label>
+		    <input type="text" class="form-control" id="for_manager_phone" name="manager_phone">
 		</fieldset>
 
 	</div>
