@@ -276,25 +276,20 @@
         </div>
     </li>
 
-    <!-- @canany(['Service Request: maintainers'])
+    @canany(['Service Request: fulfillments rrhh'])
     <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle {{ active('parameters.values.report.*') }}" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-            <i class="fas fa-cog"></i> Valores Horas
+        <a class="nav-link dropdown-toggle {{ active('rrhh.service-request.organizational_unit_limits.*') }}" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+            <i class="fas fa-cog"></i> Mantenedores
         </a>
         <div class="dropdown-menu">
 
-          <a class="dropdown-item {{ active('parameters.values.index') }}"
-              href="{{ route('parameters.values.index') }}">
-              <i class="fas fa-money-bill-alt"></i> Valor Hora/Jornada
-          </a>
-
-          <a class="dropdown-item {{ active('parameters.values.index') }}"
-              href="{{ route('parameters.values.index') }}">
-              <i class="fas fa-clipboard"></i> Algo más
+          <a class="dropdown-item {{ active('rrhh.service-request.organizational_unit_limits.index') }}"
+              href="{{ route('rrhh.service-request.organizational_unit_limits.index') }}">
+              Topes por unidad
           </a>
 
         </div>
     </li>
-    @endcan -->
+    @endcan
 
 </ul>

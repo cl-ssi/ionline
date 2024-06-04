@@ -2,15 +2,18 @@
 
 namespace App\Rrhh;
 
+use App\Models\User;
+use App\Models\Establishment;
+use App\Models\Profile\Subrogation;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Requirements\Category;
+use Illuminate\Database\Eloquent\Model;
 use App\Models\RequestForms\RequestForm;
 use OwenIt\Auditing\Contracts\Auditable;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Model;
-use App\Models\User;
-use App\Models\Requirements\Category;
-use App\Models\Profile\Subrogation;
-use App\Models\Establishment;
+use App\Models\ServiceRequests\ServiceRequest;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use App\Models\ServiceRequests\OrganizationalUnitLimit;
 
 class OrganizationalUnit extends Model implements Auditable
 {
@@ -85,6 +88,11 @@ class OrganizationalUnit extends Model implements Auditable
     public function categories()
     {
         return $this->hasMany(Category::class);
+    }
+
+    public function serviceRequestLimit(): HasOne
+    {
+        return $this->hasOne(OrganizationalUnitLimit::class);
     }
 
     public function currentManager()
@@ -257,5 +265,25 @@ class OrganizationalUnit extends Model implements Auditable
     {
         if($this->level == $level) return $this;
         return $this->father->getOrganizationalUnitByLevel($level);
+    }
+
+    public function activeContractCount(){
+        // devuelve contratos cuyo proceso de visación este completado.
+        // devuelve contratos que no tengan renuncia, ni abandono de funciones.
+        // devuelve contratos que todavia no hayan terminado
+        $serviceRequests = ServiceRequest::wheredoesnthave("SignatureFlows", function($subQuery) {
+                                                $subQuery->whereNull('status')
+                                                        ->orWhere('status',0);
+                                            })
+                                            ->whereHas("fulfillments", function($q) {
+                                                $q->wheredoesnthave("FulfillmentItems", function($q) {
+                                                    $q->whereIn('type',['Renuncia voluntaria','Abandono de funciones','Término de contrato anticipado']);
+                                                });       
+                                            })
+                                            ->where('end_date','>',now())
+                                            ->where('responsability_center_ou_id',$this->id)
+                                            ->with('SignatureFlows')
+                                            ->count();
+        return $serviceRequests;
     }
 }

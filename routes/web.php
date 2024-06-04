@@ -183,7 +183,9 @@ use App\Http\Controllers\ServiceRequests\ProfileController as ProfileControllerS
 use App\Http\Controllers\ServiceRequests\ReportController;
 use App\Http\Controllers\ServiceRequests\ServiceRequestController;
 use App\Http\Controllers\ServiceRequests\SignatureFlowController;
+use App\Http\Controllers\ServiceRequests\OrganizationalUnitLimitController;
 use App\Http\Controllers\ServiceRequests\ValueController;
+
 
 //use App\Http\Controllers\RequestForms\SupplyPurchaseController;
 //use App\Http\Controllers\Suitability\ResultsController;
@@ -1131,6 +1133,15 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
             // Rutas a signature flow
             // ¿solamente tiene store?
             Route::post('/store', [SignatureFlowController::class, 'store'])->name('store');
+        });
+
+        Route::prefix('organizational_unit_limits')->name('organizational_unit_limits.')->group(function () {
+            Route::get('/', [OrganizationalUnitLimitController::class, 'index'])->name('index');
+            Route::get('/create', [OrganizationalUnitLimitController::class, 'create'])->name('create');
+            Route::post('/store', [OrganizationalUnitLimitController::class, 'store'])->name('store');
+            Route::get('/{organizationalUnitLimit}/edit', [OrganizationalUnitLimitController::class, 'edit'])->name('edit');
+            Route::put('/{organizationalUnitLimit}/update', [OrganizationalUnitLimitController::class, 'update'])->name('update');
+            Route::delete('{organizationalUnitLimit}/destroy', [OrganizationalUnitLimitController::class, 'destroy'])->name('destroy');
         });
     });
 

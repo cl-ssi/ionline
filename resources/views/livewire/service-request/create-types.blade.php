@@ -38,9 +38,9 @@
       <select class="form-control selectpicker" data-live-search="true" wire:model.lazy="subdirection_ou_id" id="subdirection_ou_id" name="subdirection_ou_id" required data-size="5" data-container="#div_subdirection_ou_id">
         <option value=""></option>
         @if($subdirections)
-        @foreach($subdirections as $key => $subdirection)
-          <option value="{{$subdirection->id}}">{{$subdirection->name}}</option>
-        @endforeach
+            @foreach($subdirections as $key => $subdirection)
+            <option value="{{$subdirection->id}}">{{$subdirection->name}}</option>
+            @endforeach
         @endif
       </select>
     </div>
@@ -49,18 +49,32 @@
   <fieldset class="form-group col-12 col-md-4">
     <label for="for_responsability_center_ou_id">Centro de Responsabilidad</label>
     <div id="div_responsability_center_ou_id" wire:ignore>
-      <select class="form-control selectpicker" data-live-search="true" name="responsability_center_ou_id" id="responsability_center_ou_id" required data-size="5" data-container="#div_responsability_center_ou_id">
+      <select class="form-control selectpicker" data-live-search="true" wire:model="responsability_center_ou_id" wire:change="change_responsability_center_ou_id" name="responsability_center_ou_id" id="responsability_center_ou_id" required data-size="5" data-container="#div_responsability_center_ou_id">
         <option value=""></option>
         @if($responsabilityCenters)
-        @foreach($responsabilityCenters as $key => $responsabilityCenter)
-          <option value="{{$responsabilityCenter->id}}">{{$responsabilityCenter->name}}</option>
-        @endforeach
+            @foreach($responsabilityCenters as $key => $responsabilityCenter)
+            <option value="{{$responsabilityCenter->id}}">{{$responsabilityCenter->name}}</option>
+            @endforeach
         @endif
       </select>
     </div>
   </fieldset>
 
+  <fieldset class="form-group col-12 col-md-4">
+    <label for="for_responsability_center_ou_id">Contratos activos (confirmar dato)</label>
+    <input class="form-control" type="text" disabled value="{{$active_contract_count}}">
+  </fieldset>
+
 </div>
+
+<div>
+    @if (session()->has('message'))
+        <div class="alert alert-warning">
+            {{ session('message') }}
+        </div>
+    @endif
+</div>
+
 <div class="row" wire:loading.remove>
   @foreach($signatures as $ou_name => $user)
     <fieldset class="form-group col-sm-4">
