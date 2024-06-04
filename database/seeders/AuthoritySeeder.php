@@ -42,32 +42,11 @@ class AuthoritySeeder extends Seeder
             Authority::create([
                 'user_id' => '12345678',
                 'date' => $date,
-                'position' => 'Director',
-                'type' => 'manager',
-                'decree' => 'resol. pendiente',
-                'organizational_unit_id' => '1',
-                'created_at' => carbon::now(),
-                'updated_at' => carbon::now()->add(1, 'day')
-            ]);
-
-            Authority::create([
-                'user_id' => '12345678',
-                'date' => $date,
                 'position' => 'Jefe',
                 'type' => 'manager',
                 'organizational_unit_id' => '2',
                 'created_at' => carbon::now(),
                 'updated_at' => carbon::now()
-            ]);
-
-            Authority::create([
-                'user_id' => '12345678',
-                'date' => $date,
-                'position' => 'Jefe',
-                'type' => 'manager',
-                'organizational_unit_id' => '2',
-                'created_at' => carbon::now(),
-                'updated_at' => carbon::now()->add(1, 'day')
             ]);
 
         }
