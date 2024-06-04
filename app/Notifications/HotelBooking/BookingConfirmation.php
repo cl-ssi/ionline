@@ -58,6 +58,7 @@ class BookingConfirmation extends Notification implements ShouldQueue
                     ->line(new HtmlString('El check-in es para el día  <b>' . $roomBooking->start_date->format('Y-m-d') . '</b> a partir de las 18:00 hrs.'))
                     ->line(new HtmlString('El check-out es para el día  <b>' . $roomBooking->end_date->format('Y-m-d') . '</b> a partir de las 17:00 hrs.'))
                     ->line(new HtmlString('Se informa que si no asiste a la reserva, solo podrá optar a una devolución del 50% del monto pactado.'))
+                    ->line(new HtmlString('Contacto de encargado del hospedaje: ' . $roomBooking->room->hotel->manager_email))
                     ->cc($cc_mails)
                     ->salutation('Saludos cordiales');
     }

@@ -6,6 +6,8 @@
 
 @include('welfare.nav')
 
+<h3>Editar Recinto</h3>
+
 <link href="{{ asset('css/bootstrap-select.min.css') }}" rel="stylesheet" type="text/css" />
 
 <form method="POST" action="{{ route('hotel_booking.hotels.update',$hotel) }}">
@@ -48,6 +50,11 @@
 		<fieldset class="form-group col-3">
 		    <label for="for_name">Longitud</label>
 		    <input type="text" class="form-control" id="for_longitude" name="longitude" required="required" value="{{ $hotel->longitude }}">
+		</fieldset>
+
+        <fieldset class="form-group col">
+		    <label for="for_manager_email">Correo encargado(a)</label>
+		    <input type="text" class="form-control" id="for_manager_email" name="manager_email" required="required" value="{{ $hotel->manager_email }}">
 		</fieldset>
 
 	</div>

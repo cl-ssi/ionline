@@ -15,7 +15,7 @@ class Hotel extends Model implements Auditable
 
     //
     protected $fillable = [
-        'id','region_id','commune_id','name','address','description','latitude','longitude'
+        'id','region_id','commune_id','name','address','description','latitude','longitude', 'manager_email'
     ];
 
     protected $table = 'hb_hotels';

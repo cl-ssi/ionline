@@ -48,6 +48,11 @@
 		    <input type="text" class="form-control" id="for_longitude" name="longitude" required="required">
 		</fieldset>
 
+        <fieldset class="form-group col">
+		    <label for="for_manager_email">Correo encargado(a)</label>
+		    <input type="text" class="form-control" id="for_manager_email" name="manager_email" required="required">
+		</fieldset>
+
 	</div>
 
 	<button type="submit" class="btn btn-primary">Crear</button>
