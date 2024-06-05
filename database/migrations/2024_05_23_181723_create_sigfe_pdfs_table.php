@@ -16,8 +16,7 @@ return new class extends Migration
         Schema::create('sigfe_pdfs', function (Blueprint $table) {
             $table->id();
             $table->foreignId('dte_id')->nullable()->constrained('fin_dtes');
-            $table->string('comprobante_pago_original')->nullable();
-            $table->string('comprobante_pago_firmado')->nullable();
+            $table->string('type')->nullable();
             $table->timestamps();
         });
     }

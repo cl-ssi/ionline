@@ -41,6 +41,7 @@ use App\Http\Controllers\Finance\CdpController;
 use App\Http\Controllers\Finance\DteController;
 use App\Http\Controllers\Finance\PaymentController;
 use App\Http\Controllers\Finance\PurchaseOrderController;
+use App\Http\Livewire\Finance\PaymentBackup;
 use App\Http\Controllers\Finance\Receptions\ReceptionController as FinReceptionController;
 use App\Http\Controllers\HealthPlan\HealthPlanController;
 use App\Http\Controllers\His\ModificationRequestController;
@@ -2227,6 +2228,7 @@ Route::prefix('finance')->as('finance.')->middleware(['auth', 'must.change.passw
         Route::get('/{dte}/paid/pdf', [PaymentController::class, 'paidPdf'])->name('paidPdf');
         //Route::get('/{dte}/compromiso/pdf', [PaymentController::class, 'compromisoPdf'])->name('compromisoPdf');
         Route::get('/{dte}/devengo/pdf', [PaymentController::class, 'devengoPdf'])->name('devengoPdf');
+        Route::get('/backup', PaymentBackup::class)->name('backup');
     });
 
     Route::prefix('purchase-orders')->as('purchase-orders.')->group(function () {
