@@ -65,7 +65,8 @@ class Fusion extends Component
         //     'fusion.old_number' => 'required',
         // ]);
 
-        app('debugbar')->log($this->fusion, $this->movements);
+        //Fix Debugbar en produccion
+        //app('debugbar')->log($this->fusion, $this->movements);
 
         // obtiene inventario de id (omite el primer caracter (A o B))
         $inventory = Inventory::find(substr($this->fusion['id'], 1));
