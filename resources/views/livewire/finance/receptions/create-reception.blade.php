@@ -373,7 +373,7 @@
             @if($purchaseOrder->requestForm && $purchaseOrder->requestForm->type_form == 'pasajes aéreos')
                 <div class="col-2">
                     <label for="cargos">IVA</label>
-                    <input class="form-control" type="number" wire:model="reception.iva" id="reception.iva">
+                    <input class="form-control" type="number" wire:model="reception.iva" id="reception.iva" wire:change="calculateItemTotal({{ $key }})">
                 </div>
             @endif
             
