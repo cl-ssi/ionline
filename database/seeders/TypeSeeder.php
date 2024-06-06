@@ -207,5 +207,14 @@ class TypeSeeder extends Seeder
                 'deleted_at'       => NULL,
             )
         );
+        Type::create(
+            array(
+                'name'             => 'Resolución afecta',
+                'description'      => 'Resolución afecta con toma de razón de CGR',
+                'doc_digital'      => 1,
+                'partes_exclusive' => NULL,
+                'deleted_at'       => NULL,
+            )
+        );
     }
 }

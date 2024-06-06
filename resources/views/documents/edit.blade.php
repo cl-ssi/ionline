@@ -238,6 +238,13 @@
         $("#forFor").removeAttr("required");
         $("#collapse").hide();
     }
+    /* Resolución */
+    if(typeVal == "23") {
+        $("#forFrom").removeAttr("required");
+        $("#forFor").removeAttr("required");
+        $("#forSubject").removeAttr("required");
+        $("#collapse").hide();
+    }
 
 $('#formType').change(
     function() {
