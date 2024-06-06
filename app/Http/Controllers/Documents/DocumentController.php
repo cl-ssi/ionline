@@ -96,7 +96,7 @@ class DocumentController extends Controller
     public function create()
     {
         $document = new Document();
-        $types = Type::whereNull('partes_exclusive')->pluck('name','id');
+        $types = Type::whereNull('partes_exclusive')->orderBy('name')->pluck('name','id');
         return view('documents.create', compact('document','types'));
     }
 
@@ -176,7 +176,7 @@ class DocumentController extends Controller
         }
         /* De lo contrario retorna para editar el documento */
         else {
-            $types = Type::whereNull('partes_exclusive')->pluck('name','id');
+            $types = Type::whereNull('partes_exclusive')->orderBy('name')->pluck('name','id');
             return view('documents.edit', compact('document','types'));
         }
     }
