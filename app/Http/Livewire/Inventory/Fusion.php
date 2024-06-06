@@ -143,7 +143,8 @@ class Fusion extends Component
                 $item = $this->item_b;
             }
 
-            app('debugbar')->log($letra, $item);
+            //Sin debugbar en prod
+            // app('debugbar')->log($letra, $item);
 
             $this->fusion['old_number'] =           $letra.$item->old_number;
             $this->fusion['unspsc_product_id'] =    $letra.$item->unspsc_product_id;
