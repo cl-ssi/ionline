@@ -154,7 +154,11 @@ class DtesImport implements ToModel, WithStartRow, WithHeadingRow
     private function sendDteNotification(Dte $dte, $requestForm)
     {
         $contract_manager = User::find($requestForm->contract_manager_id);
-        $contract_manager->notify(new DteConfirmation($dte));
+        if($contract_manager)
+        {   
+            $contract_manager->notify(new DteConfirmation($dte));
+        }
+        
     }
 
 

@@ -334,7 +334,15 @@ class CreateReception extends Component
                         {
                             $this->reception['iva'] = 0;
                         }
-                        $this->reception['total'] = $this->reception['subtotal'] + $this->reception['iva'];
+                        if(isset($this->reception['iva']))
+                        {
+                            $this->reception['total'] = $this->reception['subtotal'] + $this->reception['iva'];
+                        }
+                        else
+                        {
+                            $this->reception['total'] = $this->reception['subtotal'];
+                        }
+                        
                 }
                 /** Aquí cae todas las demás DTEs */
                 else {
