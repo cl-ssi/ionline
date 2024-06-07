@@ -89,25 +89,40 @@
     </tbody>
 </table>
 
-
-<div id="firmas">
-    <!-- <div class="center" style="width: 49%;">
-        <span class="uppercase">Encargado de bodega</span>
-    </div> -->
-    <div class="center" style="width: 49%">
-      @if(auth()->user()->pharmacies->first()->id == 2)
-        <span class="uppercase">{{auth()->user()->name}}</span><br>
-        @if(auth()->id() == 18899957 || auth()->id() == 16074423)
-          <span class="uppercase">QF Botiquín</span>
-        @else <!-- 12093932 -->
-          <span class="uppercase">Bodeguero</span>
+<div id="firmas" style="display: flex; justify-content: space-between;">
+    <div class="center" style="width: 49%; border: 1px solid #000; padding: 10px;">
+        <span class="uppercase" style="display: block; text-align: center;">
+        @if(auth()->user()->pharmacies->first()->id == 2)
+            @if(auth()->id() == 18899957 || auth()->id() == 16074423)
+                QF Botiquín
+            @else 
+                Bodeguero
+            @endif
+        @else
+            Encargado de bodega
         @endif
-      @else
-        <span class="uppercase">Encargado de bodega</span>
-      @endif
+        </span>
+        <br>
+        <span style="display: block; text-align: left;">Nombre: {{ auth()->user()->shortName }}</span>
+        <br>
+        <span style="display: block; text-align: left;">RUT: {{ auth()->user()->runFormat() }}</span>
+        <br>
+        <span style="display: block; text-align: left;">Cargo: {{ auth()->user()->position }}</span>
+        <br>
+        <span style="display: block; text-align: left;">Firma: </span>
     </div>
-    <div class="center" style="width: 49%">
-        <span class="uppercase">Funcionario que recibe</span>
+    <div class="center" style="width: 49%; border: 1px solid #000; padding: 10px;">
+        <span class="uppercase" style="display: block; text-align: center;">Funcionario que recibe</span>
+        <br>
+        <span style="display: block; text-align: left;">Nombre: </span>
+        <br>
+        <span style="display: block; text-align: left;">RUT: </span>
+        <br>
+        <span style="display: block; text-align: left;">N° de bultos: [Número de bultos]</span>
+        <br>
+        <span style="display: block; text-align: left;">Firma: </span>
     </div>
 </div>
+
+
 @endsection
