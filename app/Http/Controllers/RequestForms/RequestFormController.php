@@ -630,8 +630,8 @@ class RequestFormController extends Controller {
         $newRequestForm->folio = $requestForm->folio.'-'.($requestForm->children()->withTrashed()->count() + 1);
         $newRequestForm->request_form_id = $requestForm->id;
         $newRequestForm->name = $newRequestForm->name . ($request->month ? ' MES '.$request->month : '') . ($request->year ? ' '.$request->year : '');
-        // $newRequestForm->request_user_id = Auth::id();
-        $newRequestForm->request_user_ou_id = User::withTrashed()->find($requestForm->request_user_id)->organizational_unit_id;
+        $newRequestForm->request_user_id = Auth::id();
+        $newRequestForm->request_user_ou_id = Auth::user()->organizational_unit_id;
         $newRequestForm->contract_manager_ou_id = User::withTrashed()->find($requestForm->contract_manager_id)->organizational_unit_id;
         $newRequestForm->estimated_expense = 0;
         // $ouSearch = Parameter::where('module', 'ou')->where('parameter', 'DireccionSSI')->first()->value;
