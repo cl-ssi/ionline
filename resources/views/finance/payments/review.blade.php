@@ -19,7 +19,7 @@
                 <input type="text" class="form-control" name="folio" placeholder="folio" value="{{ old('folio') }}" autocomplete="off">
             </div>
             <div class="col-md-2">
-                <input type="text" class="form-control" name="oc" placeholder="oc" value="{{ old('oc') }}" autocomplete="off">
+                <input type="text" class="form-control" name="folio_oc" placeholder="folio_oc" value="{{ old('folio_oc') }}" autocomplete="off">
             </div>
             <div class="col-md-2">
                 <input type="text" class="form-control" name="folio_compromiso" placeholder="folio compromiso SIGFE" value="{{ old('folio_compromiso') }}" autocomplete="off">

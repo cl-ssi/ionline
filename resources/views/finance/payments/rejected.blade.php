@@ -4,6 +4,26 @@
     @include('finance.payments.partials.nav')
     <h3 class="mb-3">Bandeja de Pagos Rechazados</h3>
 
+    <form action="{{ route('finance.payments.rejected') }}" method="GET">
+        <div class="row g-2 mb-3">
+            <div class="col-md-2">
+                <input type="text" class="form-control" name="id" placeholder="id" value="{{ old('id') }}" autocomplete="off">
+            </div>
+            <div class="col-md-2">
+                <input type="text" class="form-control" name="folio" placeholder="folio" value="{{ old('folio') }}" autocomplete="off">
+            </div>
+            <div class="col-md-2">
+                <input type="text" class="form-control" name="folio_oc" placeholder="folio_oc" value="{{ old('folio_oc') }}" autocomplete="off">
+            </div>
+            <div class="col-md-1">
+                <button class="btn btn-outline-secondary" type="submit">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </div>
+    </form>
+    
+
     <table class="table table-sm table-bordered">
         <thead>
             <tr>

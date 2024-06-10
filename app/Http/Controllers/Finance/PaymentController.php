@@ -72,10 +72,10 @@ class PaymentController extends Controller
 
         if ($oc && $oc !== 'Todos') {
             switch ($oc) {
-                case 'Con OC':                    
+                case 'Con OC':
                     $query->whereNotNull('folio_oc');
                     break;
-                case 'Sin OC':                    
+                case 'Sin OC':
                     $query->whereNull('folio_oc');
                     break;
             }
@@ -190,7 +190,7 @@ class PaymentController extends Controller
          * boleta_electronica
          */
 
-        if ($request->filled('id') || $request->filled('folio') || $request->filled('oc') || $request->filled('folio_compromiso') || $request->filled('folio_devengo')) {
+        if ($request->filled('id') || $request->filled('folio') || $request->filled('oc') || $request->filled('folio_oc') || $request->filled('folio_compromiso') || $request->filled('folio_devengo')) {
             //$query = $this->search($request);
             $query = $this->search($request, $query);
         }
@@ -311,9 +311,9 @@ class PaymentController extends Controller
 
 
 
-    public function rejected()
+    public function rejected(Request $request)
     {
-        $dtes = Dte::with([
+        $query = Dte::with([
             'establishment',
             'confirmationUser',
             'purchaseOrder',
@@ -323,9 +323,14 @@ class PaymentController extends Controller
         ])
             ->whereNotNull('rejected')
             ->where('establishment_id', auth()->user()->organizationalUnit->establishment_id)
-            ->orderByDesc('fecha_recepcion_sii')
-            ->paginate(50);
-        return view('finance.payments.rejected', compact('dtes'));
+            ->orderByDesc('fecha_recepcion_sii');
+
+            if ($request->filled('id') || $request->filled('emisor')  || $request->filled('folio') || $request->filled('folio_oc') || $request->filled('oc')  || $request->filled('prov') || $request->filled('cart') || $request->filled('req') || $request->filled('rev') ) {
+                $query = $this->search($request, $query);
+            }
+        $dtes = $query->paginate(50);
+        $request->flash();
+        return view('finance.payments.rejected', compact('dtes', 'request'));
     }
 
     public function returnToReview(Dte $dte, Request $request)
