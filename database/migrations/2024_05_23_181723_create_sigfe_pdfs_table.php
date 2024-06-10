@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('dte_id')->nullable()->constrained('fin_dtes');
             $table->string('type')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

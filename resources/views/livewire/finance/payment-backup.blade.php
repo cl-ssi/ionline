@@ -30,7 +30,7 @@
                     <td class="small">
                         @include('finance.payments.partials.dte-info')
                     </td>
-                                        <td class="small">
+                    <td class="small">
                         @livewire('finance.get-purchase-order', ['dte' => $dte], key($dte->id))
                     </td>
                     <td class="small">
@@ -59,6 +59,9 @@
                     <td class="small">
                          <!-- Nuevo módulo de Recepciones -->
                         @include('finance.payments.partials.receptions-info')
+                    </td>
+                    <td>
+                        @livewire('finance.upload-pdf', ['dteId' => $dte->id, 'type' => 'comprobante_pago'], key('upload-pdf-' . $dte->id))
                     </td>
                 </tr>
             @endforeach
