@@ -98,7 +98,7 @@ class Approval extends Model
             /* Asunto de la aprobación */
             "subject" => "Nuevo registro de asistencia",
 
-            /* Nombre de la ruta que se mostrará al hacer click en el documento */
+            /* Escoger: entre document_route_name o document_pdf_path Nombre de la ruta que se mostrará al hacer click en el documento */
             "document_route_name" => "rrhh.attendance.no-records.show",
 
             /* (Opcional) Parametros que reciba esa ruta */

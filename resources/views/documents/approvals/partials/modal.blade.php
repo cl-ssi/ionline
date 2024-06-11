@@ -69,7 +69,11 @@
                                 @if($approvalSelected->digital_signature && $approvalSelected->status)
                                     href="{{ $approvalSelected->filename_link }}"
                                 @else
-                                    href="{{ route($approvalSelected->document_route_name, json_decode($approvalSelected->document_route_params, true)) }}"
+                                    @if($approvalSelected->document_pdf_path)
+                                        href="{{ route('documents.approvals.show-pdf', $approval) }}"
+                                    @else
+                                        href="{{ route($approvalSelected->document_route_name, json_decode($approvalSelected->document_route_params, true)) }}"
+                                    @endif
                                 @endif
                             >Descargar
                             </a>.
