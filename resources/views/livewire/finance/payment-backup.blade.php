@@ -63,6 +63,15 @@
                     <td>
                         @livewire('finance.upload-pdf', ['dteId' => $dte->id, 'type' => 'comprobante_pago'], key('upload-pdf-' . $dte->id))
                     </td>
+                    <td>
+                        @if($dte->comprobantePago && $dte->comprobantePago->approval && $dte->comprobantePago->approval->digital_signature && $dte->comprobantePago->approval->status)
+                            <a class="btn btn-sm btn-outline-danger" target="_blank" 
+                            href="{{ route('documents.signed.approval.pdf', $dte->comprobantePago->approval) }}"
+                            >
+                                <i class="fas fa-fw fa-file-pdf"></i>
+                            </a>
+                        @endif
+                    </td>
                 </tr>
             @endforeach
         </tbody>

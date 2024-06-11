@@ -49,17 +49,17 @@ class UploadPdf extends Component
             'type' => $this->type
         ]);
 
-        $this->pdf->store('ionline/sigfe/pago/sin_firmar', ['disk' => 'gcs']);
+        $this->pdf->store('ionline/sigfe/'.$this->type.'/sin_firmar', ['disk' => 'gcs']);
 
         $pdfBackup->approval()->create([
             'module' => 'Finance',
             'module_icon' => 'fas fa-file-pdf',
-            'subject' => 'Nuevo Comprobante de Pago',            
-            'document_pdf_path' => 'ionline/sigfe/pago/sin_firmar/' . $this->pdf->hashName(),
+            'subject' => 'Nuevo Comprobante de Pago',
+            'document_pdf_path' => 'ionline/sigfe/'.$this->type.'/sin_firmar/' . $this->pdf->hashName(),
             "sent_to_ou_id" => auth()->user()->organizational_unit_id,
             'digital_signature' => 1,
-            'filename' => 'ionline/sigfe/pago/firmado/' . $this->pdf->hashName(),
-            // probando si es valida la documentacion de opcional
+            'filename' => 'ionline/sigfe/'.$this->type.'/firmado/' . $this->pdf->hashName(),
+            // probando si es valida la documentacion de opcional Si era opcional :-)
             // "start_y" => 80,
             // "position" => "right",
         ]);

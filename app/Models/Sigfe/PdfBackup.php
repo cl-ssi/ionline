@@ -31,4 +31,10 @@ class PdfBackup extends Model
     {
         return $this->morphOne(Approval::class, 'approvable');
     }
+
+    public function dte(): BelongsTo
+    {
+        return $this->belongsTo(Dte::class, 'dte_id');
+    }
+    
 }

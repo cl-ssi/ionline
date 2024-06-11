@@ -18,6 +18,8 @@ use App\Models\Finance\ComparativeRequirement;
 use App\Models\Finance\TgrAccountingPortfolio;
 use App\Models\Establishment;
 use App\Rrhh\OrganizationalUnit;
+use App\Models\Sigfe\PdfBackup;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Dte extends Model implements Auditable
 {
@@ -268,6 +270,16 @@ class Dte extends Model implements Auditable
         return $this->hasMany(TgrAccountingPortfolio::class, 'dte_id');
     }
 
+    public function pdfBackups(): HasMany
+    {
+        return $this->hasMany(PdfBackup::class, 'dte_id');
+    }
+
+    public function comprobantePago(): HasOne
+    {
+        return $this->hasOne(PdfBackup::class, 'dte_id')->where('type', 'comprobante_pago');
+    }
+
     public function totalDebe()
     {
         return $this->tgrAccountingPortfolios()->sum('debe');
@@ -277,9 +289,6 @@ class Dte extends Model implements Auditable
     {
         return $this->tgrAccountingPortfolios()->sum('haber');
     }
-
-
-
 
     /**
      * Relación con RequestForm a través de ImmediatePurchase
