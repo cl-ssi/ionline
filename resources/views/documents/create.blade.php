@@ -111,7 +111,7 @@
     <div class="row mb-3">
         <div class="form-group" style="width: 940px;">
             <label for="contenido">Contenido*</label>
-            <textarea class="form-control" id="contenido" rows="34" name="content">{!! $document->content !!}</textarea>
+            <textarea class="form-control" id="contenido" rows="44" name="content">{!! $document->content !!}</textarea>
         </div>
     </div>
         
