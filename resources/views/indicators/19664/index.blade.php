@@ -7,6 +7,8 @@
 @include('indicators.partials.nav')
 
 <div class="col-5">
+    <li class="list-group-item"><a href="{{ route('indicators.health_goals.list', [19664, 2024]) }}">2024</a></li>
+    <li class="list-group-item"><a href="{{ route('indicators.health_goals.list', [19664, 2023]) }}">2023</a></li>
     <li class="list-group-item"><a href="{{ route('indicators.health_goals.list', [19664, 2022]) }}">2022</a></li>
     <li class="list-group-item"><a href="{{ route('indicators.health_goals.list', [19664, 2021]) }}">2021</a></li>
     <li class="list-group-item"><a href="{{ route('indicators.19664.2020.index') }}">2020</a></li>
