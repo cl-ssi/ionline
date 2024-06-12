@@ -11,9 +11,11 @@
                 <a href="{{ $pdfPath }}" target="_blank" class="btn btn-primary btn-sm">
                     <i class="fas fa-file-pdf"></i> Ver PDF
                 </a>
-                <button wire:click="delete" class="btn btn-danger btn-sm">
-                    <i class="fas fa-trash-alt"></i> Borrar PDF
-                </button>
+                @if($pdfBackup->approval->status == 0)
+                    <button wire:click="delete" class="btn btn-danger btn-sm">
+                        <i class="fas fa-trash-alt"></i> Borrar PDF
+                    </button>
+                @endif
             </div>
         </div>
     @else

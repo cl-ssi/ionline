@@ -12,7 +12,19 @@ class PaymentBackup extends Component
     {
         $query = Dte::query();
 
-        $dtes = $query->whereNull('rejected')->where('tipo_documento', 'LIKE', 'factura_%')->paginate(50);
+        // ->whereNull('rejected')
+        
+        // ->where('payment_ready', 1)
+        // //->where('check_tesoreria', false)
+        // ->where('establishment_id', auth()->user()->organizationalUnit->establishment_id);
+
+        $dtes = $query
+        ->whereNull('rejected')
+        ->where('tipo_documento', 'LIKE', 'factura_%')
+        ->where('all_receptions', 1)
+        ->where('establishment_id', auth()->user()->organizationalUnit->establishment_id)
+        ->where('payment_ready', 1)
+        ->paginate(50);
 
         return view('livewire.finance.payment-backup',
         [

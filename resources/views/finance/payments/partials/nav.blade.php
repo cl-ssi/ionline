@@ -30,14 +30,12 @@
             href="{{ route('finance.payments.rejected') }}">
             <i class="fas fa-fw fa-ban"></i> Rechazadas</a>
     </li>
-
-    @can('be god')
-        <li class="nav-item">
-            <a class="nav-link {{ active('finance.payments.backup') }}"
-                href="{{ route('finance.payments.backup') }}">
-                <i class="fas fa-fw fa-database"></i> Respaldos</a>
-        </li>
-    @endcan
+    
+    <li class="nav-item">
+        <a class="nav-link {{ active('finance.payments.backup') }}"
+            href="{{ route('finance.payments.backup') }}">
+            <i class="fas fa-fw fa-database"></i> Respaldos</a>
+    </li>    
 
     @cannot('Payments: viewer')
         <li class="nav-item dropdown">
