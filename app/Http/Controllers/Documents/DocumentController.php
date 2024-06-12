@@ -6,9 +6,7 @@ use App\Models\Agreements\Addendum;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-use Carbon\Carbon;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\User;
 use App\Rrhh\OrganizationalUnit;
@@ -289,8 +287,7 @@ class DocumentController extends Controller
     public function createFromPrevious(Request $request)
     {
         $document = Document::findOrNew($request->document_id);
-        $document->type_id = null;
-        if ($document->user_id != Auth::id()) {
+        if ($document->user_id != auth()->id()) {
             $document = new Document();
         }
         $types = Type::whereNull('partes_exclusive')->pluck('name','id');
@@ -331,7 +328,7 @@ class DocumentController extends Controller
     public function sendForSignature(Document $document)
     {
         $signature = new Signature();
-        $signature->request_date = Carbon::now();
+        $signature->request_date = now();
         $signature->subject = $document->subject;
         $signature->description = $document->antecedent;
         $signature->distribution = $document->distribution;
