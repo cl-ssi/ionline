@@ -199,6 +199,8 @@ class InventoryEdit extends Component
             'user_delete_id' => auth()->id(),
         ]);
 
+
+        $this->inventory->movements()->delete();
         $this->inventory->delete();
 
         session()->flash('success', 'El item del inventario fue eliminado definitivamente.');
