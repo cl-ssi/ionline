@@ -38,13 +38,8 @@ class Requests extends Component
     public $account_number;
     public $pay_method;
     public $user_id;
-
-    // public $files = [];
-
-    public function addFileInput()
-    {
-        $this->files[] = null; // Agregar un nuevo campo de archivo
-    }
+    public $newFile;
+    public $showFileInput = false;
 
     protected $rules = [
         // 'subsidy.percentage' => 'required',
@@ -99,6 +94,9 @@ class Requests extends Component
             $this->account_number = null;
             $this->pay_method = null;
         }
+
+        // Inicializa selectedRequestId con el ID de la primera solicitud del usuario o cualquier otro valor adecuado
+        $this->selectedRequestId = Request::where('applicant_id', auth()->user()->id)->first()->id ?? null;
     }
 
     protected $listeners = ['loadUserData' => 'loadUserData'];
@@ -253,6 +251,71 @@ class Requests extends Component
     {
         $file = File::find($requestId);
         return Storage::disk('gcs')->response($file->storage_path, mb_convert_encoding($file->name,'ASCII'));
+    }
+
+    public function showFileInput()
+    {
+        $this->showFileInput = true;
+    }
+
+    public function addFileInput()
+    {
+        $this->files[] = null; // Agregar un nuevo campo de archivo
+    }
+
+    public function saveFile()
+    {
+        $this->validate([
+            'newFile' => 'required|file|mimes:pdf|max:2048', // Maximum of 2MB
+        ]);
+
+        if ($this->newFile) {
+            $request = Request::find($this->selectedRequestId);
+
+            if (!$request) {
+                session()->flash('message', 'Solicitud no encontrada.');
+                return;
+            }
+
+            $file = new File();
+            $file->storage_path = $this->newFile->store('ionline/welfare/benefits', ['disk' => 'gcs']);
+            $file->stored = true;
+            $file->name = $this->newFile->getClientOriginalName();
+            $file->valid_types = json_encode(["pdf", "xls"]);
+            $file->max_file_size = 10;
+            $file->stored_by_id = auth()->id();
+
+            $request->files()->save($file);
+
+            // Reset the newFile input and hide the file input
+            $this->newFile = null;
+            $this->showFileInput = false;
+
+            // Update the list of requests to reflect the changes
+            $this->requests = Request::with('subsidy')->where('applicant_id', auth()->user()->id)->orderByDesc('id')->get();
+
+            session()->flash('message', 'Archivo agregado correctamente.');
+        }
+    }
+
+    public function deleteFile($fileId)
+    {
+        $file = File::find($fileId);
+        
+        if ($file) {
+            // Elimina el archivo del almacenamiento
+            Storage::disk('gcs')->delete($file->storage_path);
+            
+            // Elimina el registro de la base de datos
+            $file->delete();
+
+            // Actualiza la lista de solicitudes para reflejar los cambios
+            $this->requests = Request::with('subsidy')->where('applicant_id',auth()->user()->id)->orderByDesc('id')->get();
+
+            session()->flash('message', 'Archivo eliminado correctamente.');
+        } else {
+            session()->flash('message', 'Archivo no encontrado.');
+        }
     }
 
     public function render()

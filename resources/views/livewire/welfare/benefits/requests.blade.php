@@ -147,7 +147,7 @@
     @endif
 
     <h4>
-        Mis solicitudes 
+        Mis solicitudes
         <button wire:click="showCreateForm" class="btn btn-primary btn-sm ml-2">Crear</button>
     </h4>
 
@@ -187,14 +187,54 @@
                     <td>
                         @if($request->files->count() > 0)
                             @foreach($request->files as $file)
-                                <li>
-                                    <a href="{{ route('welfare.download', $file->id) }}" target="_blank">
+                                <div wire:key="file-{{ $file->id }}" class="d-flex align-items-center mb-2" style="margin-bottom: 5px; display: flex; align-items: center;">
+                                    <a href="{{ route('welfare.download', $file->id) }}" target="_blank" class="mr-2" style="margin-right: 5px;">
                                         <i class="fas fa-paperclip"></i>
                                     </a>
-                                </li>
+                                    @if($request->status == "En revisión")
+                                        <button wire:click.prevent="deleteFile({{ $file->id }})" class="btn btn-danger btn-sm ml-2" style="padding: 2px 5px; font-size: 12px;">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                        <div wire:loading wire:target="deleteFile({{ $file->id }})" style="margin-left: 5px;">
+                                            <i class="fas fa-spinner fa-spin"></i> <b>Eliminando...</b>
+                                        </div>
+                                    @endif
+                                </div>
                             @endforeach
                         @endif
+
+                        @if($request->status == "En revisión")
+                            <div id="fileInputs">
+                                <!-- Aquí se agregarán dinámicamente los inputs file -->
+                                @foreach($files as $key => $file)
+                                    <div wire:loading wire:target="files.{{ $key }}">
+                                        <i class="fas fa-spinner fa-spin"></i> <b>Cargando...</b>
+                                    </div>
+                                    <input type="file" wire:model="files.{{ $key }}" class="form-control mb-2" accept="application/pdf">
+                                @endforeach
+                            </div>
+                            @if($showFileInput)
+                                <div class="d-flex align-items-center mb-2" style="display: flex; align-items: center;">
+                                    <input type="file" wire:model="newFile" class="form-control mb-2" accept="application/pdf" style="margin-right: 5px;">
+                                    <div wire:loading wire:target="newFile" style="margin-left: 5px;">
+                                        <i class="fas fa-spinner fa-spin"></i> <b>Cargando...</b>
+                                    </div>
+                                    <button wire:click.prevent="saveFile" class="btn btn-primary btn-sm" style="padding: 2px 5px; font-size: 12px;" wire:loading.attr="disabled">
+                                        Agregar
+                                    </button>
+                                </div>
+                                @error('newFile') <span class="text-danger">{{ $message }}</span> @enderror
+                            @else
+                                <button wire:click.prevent="showFileInput" class="btn btn-primary btn-sm" style="padding: 2px 5px; font-size: 12px;">
+                                    Agregar Archivo
+                                </button>
+                            @endif
+                        @endif
                     </td>
+
+
+
+
                     <td>{{ $request->status }}</td>
                     <td>{{ $request->status_update_observation }}</td>
                     <!-- <td>
