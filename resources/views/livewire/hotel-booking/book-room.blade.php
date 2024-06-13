@@ -37,7 +37,7 @@
                         <label>Tipo de pago</label>
                         <select class="form-control" name="" id="payment_type_select" wire:model.defer="payment_type" required>
                             <option value=""></option>
-                            <option value="Depósito">Depósito</option>
+                            <option value="Transferencia">Transferencia</option>
                             <option value="Descuento por planilla - 1 cuota">Descuento por planilla - 1 cuota</option>
                             <option value="Descuento por planilla - 2 cuotas">Descuento por planilla - 2 cuotas</option>
                             <option value="Descuento por planilla - 3 cuotas">Descuento por planilla - 3 cuotas</option>

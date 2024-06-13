@@ -58,7 +58,7 @@ class NewBooking extends Notification implements ShouldQueue
                     ->line(new HtmlString('El check-in es para el día  <b>' . $roomBooking->start_date->format('Y-m-d') . '</b> a partir de las 18:00 hrs.'))
                     ->line(new HtmlString('El check-out es para el día  <b>' . $roomBooking->end_date->format('Y-m-d') . '</b> a partir de las 17:00 hrs.'))
                     ->line(new HtmlString('El tipo de pago seleccionado es <b>' . $roomBooking->payment_type . '</b>.'))
-                    ->line(new HtmlString('Si el tipo de pago es depósito, favor ingresar a la aplicación y subir el comprobante de transferencia.'))
+                    ->line(new HtmlString('Si el tipo de pago es transferencia, favor ingresar a la aplicación y subir el comprobante de transferencia.'))
                     ->line(new HtmlString('<br>'))
                     ->line(new HtmlString('<i>La reserva se encuentra en revisión, y sera confirmada por el área de bienestar.</i>'))
                     ->cc($cc_mails)

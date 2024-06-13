@@ -42,7 +42,7 @@
                 <td nowrap>{{ $roomBooking->status }}</td>
                 <td nowrap class="display: flex; flex-direction: row;">
                     {{ $roomBooking->payment_type }}
-                    @if($roomBooking->payment_type == "Depósito")
+                    @if($roomBooking->payment_type == "Transferencia")
                         @if($roomBooking->files->count() != 0)
                             @foreach($roomBooking->files as $key => $file) 
                                 <a href="{{ route('hotel_booking.download', $file->id) }}" target="_blank">
@@ -57,24 +57,20 @@
                 </td>
                 <td nowrap>
                     @if($roomBooking->status == "Reservado")
-                        <form method="POST" class="form-horizontal" action="{{ route('hotel_booking.booking_confirmation', $roomBooking) }}" style="display: inline;">
-                            @csrf
-                            @method('DELETE')
-                                <button class="btn btn-outline-success" type="submit"><i class="fa fa-check" aria-hidden="true"></i></button>
-                        </form>
-                        <form method="POST" class="form-horizontal" action="{{ route('hotel_booking.booking_cancelation', $roomBooking) }}" style="display: inline;">
-                            @csrf
-                            @method('DELETE')
-                                <button class="btn btn-outline-danger" type="submit"><i class="fa fa-times" aria-hidden="true"></i></button>
-                        </form> 
+                        <div class="d-inline-flex">
+                            <form method="POST" class="form-horizontal" action="{{ route('hotel_booking.booking_confirmation', $roomBooking) }}" style="display: inline;">
+                                @csrf
+                                @method('DELETE')
+                                    <button class="btn btn-outline-success" type="submit"><i class="fa fa-check" aria-hidden="true"></i></button>
+                            </form>
+                            @livewire('hotel-booking.booking-cancelation',['roomBooking' => $roomBooking])
+                        </div>
                     @endif
                     @if($roomBooking->status == "Confirmado")
-                        <button class="btn btn-success" type="button"><i class="fa fa-check" aria-hidden="true"></i></button>
-                        <form method="POST" class="form-horizontal" action="{{ route('hotel_booking.booking_cancelation', $roomBooking) }}" style="display: inline;">
-                            @csrf
-                            @method('DELETE')
-                                <button class="btn btn-outline-danger" type="submit"><i class="fa fa-times" aria-hidden="true"></i></button>
-                        </form> 
+                        <div class="d-inline-flex">
+                            <button class="btn btn-success" type="button"><i class="fa fa-check" aria-hidden="true"></i></button>
+                            @livewire('hotel-booking.booking-cancelation',['roomBooking' => $roomBooking])
+                        </div>
                     @endif
                     @if($roomBooking->status == "Cancelado")
                         <form method="POST" class="form-horizontal" action="{{ route('hotel_booking.booking_confirmation', $roomBooking) }}" style="display: inline;">
@@ -155,7 +151,7 @@ $(".uploadfilebutton").click(function(){
 
 @if($roomBookings)
     @foreach($roomBookings as $roomBooking)
-        @if($roomBooking->payment_type == "Depósito")
+        @if($roomBooking->payment_type == "Transferencia")
             @if($roomBooking->files)
                 $("#buttonfile{{$roomBooking->id}}").click(function(){
                     $("#fila{{$roomBooking->id}}").toggle();

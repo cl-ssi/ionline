@@ -102,7 +102,7 @@
 
                         <a class="dropdown-item {{ active('hotel_booking.room_booking_configuration.index') }}"
                             href="{{ route('hotel_booking.room_booking_configuration.index') }}">
-                            <i class="fas fa-clipboard-check"></i> Configuración Habitación
+                            <i class="fas fa-clipboard-check"></i> Configuración Hospedaje
                         </a>
 
                         <a class="dropdown-item {{ active('hotel_booking.services.index') }}"

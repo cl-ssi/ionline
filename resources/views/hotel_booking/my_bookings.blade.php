@@ -44,7 +44,7 @@
             </td>
             <td nowrap class="display: flex; flex-direction: row;">
                 {{ $roomBooking->payment_type }}
-                @if($roomBooking->status == "Reservado" && $roomBooking->payment_type == "Depósito")
+                @if($roomBooking->status == "Reservado" && $roomBooking->payment_type == "Transferencia")
                     @if($roomBooking->files->count() != 0)
                         @foreach($roomBooking->files as $key => $file) 
                             <a href="{{ route('hotel_booking.download', $file->id) }}" target="_blank">
@@ -106,7 +106,7 @@ $(".uploadfilebutton").click(function(){
 });
 
 @foreach($roomBookings as $roomBooking)
-    @if($roomBooking->payment_type == "Depósito")
+    @if($roomBooking->payment_type == "Transferencia")
         @if($roomBooking->files)
             $("#buttonfile{{$roomBooking->id}}").click(function(){
                 $("#fila{{$roomBooking->id}}").toggle();

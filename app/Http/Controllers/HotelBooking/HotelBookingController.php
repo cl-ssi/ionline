@@ -185,7 +185,7 @@ class HotelBookingController extends Controller
 
     public function booking_confirmation(RoomBooking $roomBooking){
         // verifica si tiene asociado archivos
-        if($roomBooking->payment_type == "Depósito"){
+        if($roomBooking->payment_type == "Transferencia"){
             if(count($roomBooking->files)==0){
                 session()->flash('warning', 'Para confirmar debe tener asociado un archivo.');
                 return redirect()->back();
