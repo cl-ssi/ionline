@@ -67,15 +67,16 @@ class RequestsAdmin extends Component
     public function saveAcceptedAmount($key){
         $request = Request::find($this->requests[$key]->id);
         
+        // 13/06/2024: se comenta por solicitud de bienestar
         // verificación no se pase monto del tope anual (solo para subsidios con tope anual)
-        if($request->subsidy->annual_cap != null){
-            $disponible_ammount = $request->subsidy->annual_cap - $request->getSubsidyUsedMoney();
+        // if($request->subsidy->annual_cap != null){
+        //     $disponible_ammount = $request->subsidy->annual_cap - $request->getSubsidyUsedMoney();
 
-            if($this->requests[$key]->accepted_amount > $disponible_ammount){
-                session()->flash('info', 'No es posible guardar el valor puesto que excede el tope anual del beneficio.');
-                return;
-            }
-        }
+        //     if($this->requests[$key]->accepted_amount > $disponible_ammount){
+        //         session()->flash('info', 'No es posible guardar el valor puesto que excede el tope anual del beneficio.');
+        //         return;
+        //     }
+        // }
 
         $request->accepted_amount_date = now();
         $request->accepted_amount_responsable_id = auth()->user()->id;

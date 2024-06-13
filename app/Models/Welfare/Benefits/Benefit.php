@@ -41,28 +41,31 @@ class Benefit extends Model
 
     public function subsidies(): HasMany
     {
+        // 13/06/2024: se comenta por solicitud de bienestar
         // la siguiente validación permite saber y excluir los beneficios que hayan alcanzado su tope anual
-        $subsidies_array = [];
-        $subsidies = Subsidy::where('benefit_id',$this->id)->where('status',1)->get();
-        foreach($subsidies as $subsidy){
-            $requests = Request::whereYear('created_at',now()->format('Y'))
-                            ->where('applicant_id', auth()->user()->id)
-                            ->where('subsidy_id', $subsidy->id)
-                            ->where('status', 'Aceptado')
-                            ->get();
+        // $subsidies_array = [];
+        // $subsidies = Subsidy::where('benefit_id',$this->id)->where('status',1)->get();
+        // foreach($subsidies as $subsidy){
+        //     $requests = Request::whereYear('created_at',now()->format('Y'))
+        //                     ->where('applicant_id', auth()->user()->id)
+        //                     ->where('subsidy_id', $subsidy->id)
+        //                     ->where('status', 'Aceptado')
+        //                     ->get();
             
-            $accepted_amount = 0;
-            foreach($requests as $request){
-                $accepted_amount += $request->accepted_amount;
-            }  
+        //     $accepted_amount = 0;
+        //     foreach($requests as $request){
+        //         $accepted_amount += $request->accepted_amount;
+        //     }  
 
-            if($subsidy->annual_cap != null && $accepted_amount == $subsidy->annual_cap){
+        //     if($subsidy->annual_cap != null && $accepted_amount == $subsidy->annual_cap){
                 
-            }else{
-                array_push($subsidies_array, $subsidy->id);
-            }
-        }
+        //     }else{
+        //         array_push($subsidies_array, $subsidy->id);
+        //     }
+        // }
 
-        return $this->hasMany(Subsidy::class)->whereIn('id',$subsidies_array);
+        // return $this->hasMany(Subsidy::class)->whereIn('id',$subsidies_array);
+
+        return $this->hasMany(Subsidy::class);
     }
 }

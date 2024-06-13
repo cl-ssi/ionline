@@ -45,11 +45,14 @@ class RequestCreate extends Notification implements ShouldQueue
     public function toMail($notifiable)
     {
         $cc_mails = explode(', ', Parameter::get('welfare: beneficios','correos solicitudes'));
+        $appUrl = config('app.url');
+
         return (new MailMessage)
                 ->level('info')
                 ->subject('Creación solicitud de beneficio')
                 ->line('Se informa creación de solicitud de beneficio: ' . $this->request->subsidy->name . '.')
                 ->line('La solicitud se encuentra en proceso de revisión')
+                ->action('Revisa tus solicitudes aquí', $appUrl . 'welfare/benefits/requests')
                 ->cc($cc_mails)
                 ->salutation('Saludos cordiales.');
     }
