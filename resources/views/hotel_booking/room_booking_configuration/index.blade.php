@@ -1,6 +1,6 @@
 @extends('layouts.bt4.app')
 
-@section('title', 'Configuración de habitaciones')
+@section('title', 'Configuración de hospedajes')
 
 @section('content')
 

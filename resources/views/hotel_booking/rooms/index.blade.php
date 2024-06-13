@@ -22,7 +22,8 @@
 			<th scope="col">Identificador</th>
             <th scope="col">Max.Días</th>
 			<th scope="col">Descripción</th>
-			<th scope="col"></th>
+            <th scope="col">Precio</th>
+			<th scope="col">Estado</th>
             <th scope="col"></th>
 		</tr>
 	</thead>
@@ -35,6 +36,7 @@
 			<td nowrap>{{ $room->identifier }}</td>
             <td nowrap>{{ $room->max_days_avaliable }}</td>
             <td>{{ $room->description }}</td>
+            <td>${{money( $room->price )}}</td>
             <td nowrap>@if($room->status) Activo @else Desactivado @endif</td>
 			<td>
 				<a href="{{ route('hotel_booking.rooms.edit', $room) }}"

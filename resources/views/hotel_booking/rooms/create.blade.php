@@ -42,7 +42,7 @@
 
         <fieldset class="form-group col">
 		    <label for="for_description">Descripción</label>
-		    <input type="text" class="form-control" id="for_description" placeholder="Agregue una breve descripción del hotel" name="description" required="required">
+		    <input type="text" class="form-control" id="for_description" placeholder="Agregue una breve descripción del recinto" name="description" required="required">
 		</fieldset>
 
         <fieldset class="form-group col">
@@ -62,6 +62,11 @@
         <fieldset class="form-group col">
 		    <label for="for_double_bed">Cantidad - Cama Doble</label>
 		    <input type="number" class="form-control" id="for_double_bed" name="double_bed">
+		</fieldset>
+
+        <fieldset class="form-group col">
+		    <label for="for_price">Precio</label>
+		    <input type="text" class="form-control" id="for_price" placeholder="Valor diario del hospedaje" name="price" required="required">
 		</fieldset>
 
         <fieldset class="form-group col">

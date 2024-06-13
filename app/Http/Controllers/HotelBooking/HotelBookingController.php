@@ -160,16 +160,23 @@ class HotelBookingController extends Controller
     public function booking_admin(Request $request){
         $room = null;
         $roomBookings = null;
+
+        // Validar si el parámetro 'status' existe en la solicitud
+        $statuses = $request->has('status') ? $request->status : ['Reservado'];
+
         if($request->room_id){
             $room = Room::find($request->room_id);
-            $roomBookings = RoomBooking::where('room_id',$request->room_id)->paginate(50);
+            $roomBookings = RoomBooking::where('room_id',$request->room_id)
+                                        ->whereIn('status',$statuses)
+                                        ->paginate(50);
         }
         
         return view('hotel_booking.bookings_admin',compact('roomBookings','room'));
     }
 
-    public function booking_cancelation(RoomBooking $roomBooking){
+    public function booking_cancelation(Request $request, RoomBooking $roomBooking){
         $roomBooking->status = "Cancelado";
+        $roomBooking->cancelation_observation = $request->cancelation_observation;
         $roomBooking->save();
 
         if($roomBooking->user){
@@ -185,9 +192,9 @@ class HotelBookingController extends Controller
 
     public function booking_confirmation(RoomBooking $roomBooking){
         // verifica si tiene asociado archivos
-        if($roomBooking->payment_type == "Depósito"){
+        if($roomBooking->payment_type == "Transferencia"){
             if(count($roomBooking->files)==0){
-                session()->flash('warning', 'Para confirmar debe tener asociado un archivo.');
+                session()->flash('warning', 'No es posible confirmar, el funcionario debe subir primero el comprobante de transferencia.');
                 return redirect()->back();
             }
         }

@@ -83,7 +83,7 @@
             <!-- <a href="#" class="btn btn-primary">Reservar</a> -->
             
             <ul class="list-group list-group-flush">
-                <li class="list-group-item"><h5>Habitaciones disponibles.</h5></li>
+                <li class="list-group-item"><h5>Hospadajes disponibles.</h5></li>
                 @foreach($hotel->rooms as $key => $room) 
                     
                         <li class="list-group-item">

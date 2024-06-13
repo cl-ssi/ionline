@@ -13,7 +13,8 @@ use App\Models\File;
 class RequestsAdmin extends Component
 {
     public $requests;
-    public $statusFilter = 'En revisión';
+    // public $statusFilter = 'En revisión';
+    public $statusFilters = ['En revisión']; // Establecer el filtro predeterminado
 
     protected $rules = [
         'requests.*.status_update_observation' => 'required',
@@ -21,6 +22,18 @@ class RequestsAdmin extends Component
         'requests.*.folio_number' => 'required',
         'requests.*.installments_number' => 'required',
     ];
+
+    public function updatedStatusFilters()
+    {
+        // Limpiar el filtro si "Todos" está seleccionado
+        if (in_array('Todos', $this->statusFilters)) {
+            $this->statusFilters = ['Todos'];
+        }
+        // Limpiar "Todos" si otros filtros están seleccionados
+        elseif (!empty($this->statusFilters) && count($this->statusFilters) > 1 && in_array('Todos', $this->statusFilters)) {
+            $this->statusFilters = array_diff($this->statusFilters, ['Todos']);
+        }
+    }
 
     public function accept($id){
         $request = Request::find($id);
@@ -115,9 +128,11 @@ class RequestsAdmin extends Component
         // Inicializar la consulta de solicitudes
         $query = Request::query();
 
-        // Aplicar el filtro si se selecciona un estado
-        if ($this->statusFilter && $this->statusFilter !== 'Todos') {
-            $query->where('status', $this->statusFilter);
+        // Aplicar el filtro si se selecciona un estado y no se selecciona "Todos"
+        if (!empty($this->statusFilters) && !in_array('Todos', $this->statusFilters)) {
+            $query->whereIn('status', $this->statusFilters);
+        } elseif (empty($this->statusFilters)) {
+            $query->where('status', null); // No mostrar nada si no hay filtros seleccionados
         }
 
         // Obtener las solicitudes filtradas

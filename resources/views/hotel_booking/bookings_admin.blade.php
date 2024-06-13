@@ -15,107 +15,133 @@
 </form>
 
 @if($roomBookings)
-<table class="table table-striped table-sm table-bordered">
-	<thead>
-		<tr>
-            <th>Recinto</th>
-            <th>Hospedaje</th>
-            <th>Reservante</th>
-			<th>Entrada</th>
-            <th>Salida</th>
-            <th>Estado</th>
-            <th>T.Pago</th>
-			<th style="width: 10%"></th>
-            <th></th>
-		</tr>
-	</thead>
-	<tbody>
-        @foreach($roomBookings as $roomBooking)
-            @if(!$roomBooking->status)
-            <tr style="background-color:#E3B4B4" class="sub-container">
-            @endif
-                <td nowrap>{{ $roomBooking->room->hotel->name}}</td>
-                <td nowrap>{{ $roomBooking->room->identifier}}</td>
-                <td nowrap>{{ $roomBooking->user->getShortNameAttribute() }}</td>
-                <td nowrap>{{ $roomBooking->start_date->format('Y-m-d') }}</td>
-                <td nowrap>{{ $roomBooking->end_date->format('Y-m-d') }}</td>
-                <td nowrap>{{ $roomBooking->status }}</td>
-                <td nowrap class="display: flex; flex-direction: row;">
-                    {{ $roomBooking->payment_type }}
-                    @if($roomBooking->payment_type == "Depósito")
-                        @if($roomBooking->files->count() != 0)
-                            @foreach($roomBooking->files as $key => $file) 
-                                <a href="{{ route('hotel_booking.download', $file->id) }}" target="_blank">
-                                    <i class="fas fa-paperclip"></i>
-                                </a>
-                            @endforeach
+
+<form method="GET" class="form-horizontal" action="{{ route('hotel_booking.booking_admin') }}" id="filter-form">
+    @foreach(request()->except('status') as $key => $value)
+        <input type="hidden" name="{{ $key }}" value="{{ $value }}">
+    @endforeach
+    <div class="row mb-3">
+        <div class="col-md-2">
+            <input type="checkbox" id="reservado" name="status[]" value="Reservado" 
+                   {{ in_array('Reservado', request('status', ['Reservado'])) ? 'checked' : '' }}
+                   onchange="document.getElementById('filter-form').submit()">
+            <label for="reservado">Reservado</label>
+        </div>
+        <div class="col-md-2">
+            <input type="checkbox" id="confirmado" name="status[]" value="Confirmado" 
+                   {{ in_array('Confirmado', request('status', [])) ? 'checked' : '' }}
+                   onchange="document.getElementById('filter-form').submit()">
+            <label for="confirmado">Confirmado</label>
+        </div>
+        <div class="col-md-2">
+            <input type="checkbox" id="cancelado" name="status[]" value="Cancelado" 
+                   {{ in_array('Cancelado', request('status', [])) ? 'checked' : '' }}
+                   onchange="document.getElementById('filter-form').submit()">
+            <label for="cancelado">Cancelado</label>
+        </div>
+    </div>
+</form>
+
+@endif
+
+<hr>
+
+@if($roomBookings)
+
+    <table class="table table-striped table-sm table-bordered">
+        <thead>
+            <tr>
+                <th>Recinto</th>
+                <th>Hospedaje</th>
+                <th>Reservante</th>
+                <th>Entrada</th>
+                <th>Salida</th>
+                <th>Estado</th>
+                <th>T.Pago</th>
+                <th style="width: 10%"></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($roomBookings as $roomBooking)
+                @if(!$roomBooking->status)
+                <tr style="background-color:#E3B4B4" class="sub-container">
+                @endif
+                    <td nowrap>{{ $roomBooking->room->hotel->name}}</td>
+                    <td nowrap>{{ $roomBooking->room->identifier}}</td>
+                    <td nowrap>{{ $roomBooking->user->getShortNameAttribute() }}</td>
+                    <td nowrap>{{ $roomBooking->start_date->format('Y-m-d') }}</td>
+                    <td nowrap>{{ $roomBooking->end_date->format('Y-m-d') }}</td>
+                    <td nowrap>{{ $roomBooking->status }}</td>
+                    <td nowrap class="display: flex; flex-direction: row;">
+                        {{ $roomBooking->payment_type }}
+                        @if($roomBooking->payment_type == "Transferencia")
+                            @if($roomBooking->files->count() != 0)
+                                @foreach($roomBooking->files as $key => $file) 
+                                    <a href="{{ route('hotel_booking.download', $file->id) }}" target="_blank">
+                                        <i class="fas fa-paperclip"></i>
+                                    </a>
+                                @endforeach
+                            @endif
+                            <button name="id" class="btn btn-sm btn-outline-secondary" id="buttonfile{{$roomBooking->id}}">
+                                <span class="fas fa-upload" aria-hidden="true"></span>
+                            </button>
                         @endif
-                        <button name="id" class="btn btn-sm btn-outline-secondary" id="buttonfile{{$roomBooking->id}}">
-                            <span class="fas fa-upload" aria-hidden="true"></span>
-                        </button>
-                    @endif
-                </td>
-                <td nowrap>
-                    @if($roomBooking->status == "Reservado")
-                        <form method="POST" class="form-horizontal" action="{{ route('hotel_booking.booking_confirmation', $roomBooking) }}" style="display: inline;">
-                            @csrf
-                            @method('DELETE')
-                                <button class="btn btn-outline-success" type="submit"><i class="fa fa-check" aria-hidden="true"></i></button>
-                        </form>
-                        <form method="POST" class="form-horizontal" action="{{ route('hotel_booking.booking_cancelation', $roomBooking) }}" style="display: inline;">
-                            @csrf
-                            @method('DELETE')
-                                <button class="btn btn-outline-danger" type="submit"><i class="fa fa-times" aria-hidden="true"></i></button>
-                        </form> 
-                    @endif
-                    @if($roomBooking->status == "Confirmado")
-                        <button class="btn btn-success" type="button"><i class="fa fa-check" aria-hidden="true"></i></button>
-                        <form method="POST" class="form-horizontal" action="{{ route('hotel_booking.booking_cancelation', $roomBooking) }}" style="display: inline;">
-                            @csrf
-                            @method('DELETE')
-                                <button class="btn btn-outline-danger" type="submit"><i class="fa fa-times" aria-hidden="true"></i></button>
-                        </form> 
-                    @endif
-                    @if($roomBooking->status == "Cancelado")
-                        <form method="POST" class="form-horizontal" action="{{ route('hotel_booking.booking_confirmation', $roomBooking) }}" style="display: inline;">
-                            @csrf
-                            @method('DELETE')
-                                <button class="btn btn-outline-success" type="submit"><i class="fa fa-check" aria-hidden="true"></i></button>
-                        </form>
-                        <button class="btn btn-danger" type="button"><i class="fa fa-times" aria-hidden="true"></i></button>
-                    @endif
-                </td>
-                <td>
-                    <a href="#" class="exploder">
-                        <span class="fa fa-info-circle exploder" aria-hidden="true"></span>
-                    </a>
-                </td>
-            </tr>
-            <tr class="explode hide">
-                <td colspan="4" style="display: none;">
-                    @include('partials.audit', ['audits' => $roomBooking->audits()] )
-                </td>
-            </tr>
-            <tr style="display: none;" id="fila{{$roomBooking->id}}">
-                <td colspan="9" style="background-color:white" >
-                    @livewire('hotel-booking.upload-file',['roomBooking' => $roomBooking])
-                </td>
-            </tr>
-        @endforeach
-	</tbody>
-</table>
+                    </td>
+                    <td nowrap>
+                        @if($roomBooking->status == "Reservado")
+                            <div class="d-inline-flex">
+                                <form method="POST" class="form-horizontal" action="{{ route('hotel_booking.booking_confirmation', $roomBooking) }}" style="display: inline;">
+                                    @csrf
+                                    @method('DELETE')
+                                        <button class="btn btn-outline-success" type="submit"><i class="fa fa-check" aria-hidden="true"></i></button>
+                                </form>
+                                @livewire('hotel-booking.booking-cancelation',['roomBooking' => $roomBooking])
+                            </div>
+                        @endif
+                        @if($roomBooking->status == "Confirmado")
+                            <div class="d-inline-flex">
+                                <button class="btn btn-success" type="button"><i class="fa fa-check" aria-hidden="true"></i></button>
+                                @livewire('hotel-booking.booking-cancelation',['roomBooking' => $roomBooking])
+                            </div>
+                        @endif
+                        @if($roomBooking->status == "Cancelado")
+                            <form method="POST" class="form-horizontal" action="{{ route('hotel_booking.booking_confirmation', $roomBooking) }}" style="display: inline;">
+                                @csrf
+                                @method('DELETE')
+                                    <button class="btn btn-outline-success" type="submit"><i class="fa fa-check" aria-hidden="true"></i></button>
+                            </form>
+                            <button class="btn btn-danger" type="button"><i class="fa fa-times" aria-hidden="true"></i></button>
+                        @endif
+                    </td>
+                    <td>
+                        <a href="#" class="exploder">
+                            <span class="fa fa-info-circle exploder" aria-hidden="true"></span>
+                        </a>
+                    </td>
+                </tr>
+                <tr class="explode hide">
+                    <td colspan="4" style="display: none;">
+                        @include('partials.audit', ['audits' => $roomBooking->audits()] )
+                    </td>
+                </tr>
+                <tr style="display: none;" id="fila{{$roomBooking->id}}">
+                    <td colspan="9" style="background-color:white" >
+                        @livewire('hotel-booking.upload-file',['roomBooking' => $roomBooking])
+                    </td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
 
 {{$roomBookings->appends(Request::input())->links()}}
 
 @endif
 
-@if($room)
-
+@if($room && in_array('Confirmado', request('status', [])))
     <hr><br>
-
     <h3>Reservas confirmadas</h3>
-    
-    @livewire('hotel-booking.calendar',['room' => $room])
+    @livewire('hotel-booking.calendar', ['room' => $room])
 @endif
 
 @endsection
@@ -155,7 +181,7 @@ $(".uploadfilebutton").click(function(){
 
 @if($roomBookings)
     @foreach($roomBookings as $roomBooking)
-        @if($roomBooking->payment_type == "Depósito")
+        @if($roomBooking->payment_type == "Transferencia")
             @if($roomBooking->files)
                 $("#buttonfile{{$roomBooking->id}}").click(function(){
                     $("#fila{{$roomBooking->id}}").toggle();

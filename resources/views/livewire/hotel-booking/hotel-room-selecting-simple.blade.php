@@ -11,9 +11,9 @@
         </fieldset>
 
         <fieldset class="form-group col-3">
-            <label for="for_room_id">Habitación</label>
+            <label for="for_room_id">Hospedaje</label>
             <select class="form-control" name="room_id" id="for_room_id" wire:model="room_id">
-                <option value="">Seleccionar habitación</option>
+                <option value="">Seleccionar hospedaje</option>
                 @foreach($rooms as $room_item)
                     <option value="{{$room_item->id}}">{{$room_item->identifier}}</option>
                 @endforeach

@@ -21,10 +21,11 @@
 <table class="table table-striped table-sm table-bordered">
 	<thead>
 		<tr>
-            <th>Hotel</th>
+            <th>Recinto</th>
             <th>Hospedaje</th>
 			<th>Entrada</th>
             <th>Salida</th>
+            <th>Valor</th>
             <th>Estado</th>
             <th>T.Pago</th>
 			<th></th>
@@ -40,11 +41,14 @@
 			<td nowrap>{{ $roomBooking->start_date->format('Y-m-d') }}</td>
             <td nowrap>{{ $roomBooking->end_date->format('Y-m-d') }}</td>
             <td nowrap>
+                ${{ money($roomBooking->start_date->diffInDays($roomBooking->end_date) * $roomBooking->room->price) }}</td>
+            </td>
+            <td nowrap>
                 {{ $roomBooking->status }}</td>
             </td>
             <td nowrap class="display: flex; flex-direction: row;">
                 {{ $roomBooking->payment_type }}
-                @if($roomBooking->status == "Reservado" && $roomBooking->payment_type == "Depósito")
+                @if($roomBooking->status == "Reservado" && $roomBooking->payment_type == "Transferencia")
                     @if($roomBooking->files->count() != 0)
                         @foreach($roomBooking->files as $key => $file) 
                             <a href="{{ route('hotel_booking.download', $file->id) }}" target="_blank">
@@ -106,7 +110,7 @@ $(".uploadfilebutton").click(function(){
 });
 
 @foreach($roomBookings as $roomBooking)
-    @if($roomBooking->payment_type == "Depósito")
+    @if($roomBooking->payment_type == "Transferencia")
         @if($roomBooking->files)
             $("#buttonfile{{$roomBooking->id}}").click(function(){
                 $("#fila{{$roomBooking->id}}").toggle();

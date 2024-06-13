@@ -20,7 +20,7 @@ class CreateHbRoomBookingsTable extends Migration
             $table->date('start_date');
             $table->date('end_date');
             $table->string('status');  //Reservado - Cancelado - Día bloqueado
-            $table->string('payment_type'); //Depósito - Descuento por planilla
+            $table->string('payment_type'); //Transferencia - Descuento por planilla
             $table->string('observation')->nullable();
             $table->timestamps();
             $table->softDeletes();

@@ -5,20 +5,20 @@
 
     <br>
     <div>
+        <!-- <label>
+            <input type="checkbox" wire:model="statusFilters" value="Todos"> Todos
+        </label> -->
         <label>
-            <input type="radio" wire:model="statusFilter" value="Todos"> Todos
+            <input type="checkbox" wire:model="statusFilters" value="En revisión"> En revisión
         </label>
         <label>
-            <input type="radio" wire:model="statusFilter" value="En revisión"> En revisión
+            <input type="checkbox" wire:model="statusFilters" value="Aceptado"> Aceptado
         </label>
         <label>
-            <input type="radio" wire:model="statusFilter" value="Aceptado"> Aceptado
+            <input type="checkbox" wire:model="statusFilters" value="Rechazado"> Rechazado
         </label>
         <label>
-            <input type="radio" wire:model="statusFilter" value="Rechazado"> Rechazado
-        </label>
-        <label>
-            <input type="radio" wire:model="statusFilter" value="Pagado"> Pagado
+            <input type="checkbox" wire:model="statusFilters" value="Pagado"> Pagado
         </label>
     </div>
     <br>

@@ -66,6 +66,11 @@
 		</fieldset>
 
         <fieldset class="form-group col">
+		    <label for="for_price">Precio</label>
+		    <input type="text" class="form-control" id="for_price" placeholder="Valor diario del hospedaje" value="{{$room->price}}" name="price" required="required">
+		</fieldset>
+
+        <fieldset class="form-group col">
 		    <label for="for_status">Estado</label>
 		    <select class="form-control" name="status" id="for_status">
                 <option value="1" @selected($room->status == 1)>Activo</option>
