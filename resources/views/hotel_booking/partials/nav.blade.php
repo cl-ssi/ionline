@@ -11,17 +11,9 @@
         <a class="nav-link {{ active('hotel_booking.my_bookings') }}"
             href="{{ route('hotel_booking.my_bookings') }}">
             <i class="fa fa-list"></i> Mis reservas
-        </a>
     </li>
 
     @canany(['welfare: hotel booking administrator'])
-
-        <li class="nav-item">
-            <a class="nav-link {{ active('hotel_booking.booking_admin') }}"
-                href="{{ route('hotel_booking.booking_admin') }}">
-                <i class="fa fa-list"></i> Gestor de reservas
-            </a>
-        </li>
 
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle {{ active([
@@ -50,6 +42,13 @@
                 </a>
 
             </div>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link {{ active('hotel_booking.booking_admin') }}"
+                href="{{ route('hotel_booking.booking_admin') }}">
+                <i class="fa fa-list"></i> Gestor de reservas
+            </a>
         </li>
 
         <li class="nav-item dropdown">

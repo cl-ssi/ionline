@@ -174,8 +174,9 @@ class HotelBookingController extends Controller
         return view('hotel_booking.bookings_admin',compact('roomBookings','room'));
     }
 
-    public function booking_cancelation(RoomBooking $roomBooking){
+    public function booking_cancelation(Request $request, RoomBooking $roomBooking){
         $roomBooking->status = "Cancelado";
+        $roomBooking->cancelation_observation = $request->cancelation_observation;
         $roomBooking->save();
 
         if($roomBooking->user){

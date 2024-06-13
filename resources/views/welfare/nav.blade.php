@@ -85,11 +85,6 @@
 
                         <div class="dropdown-divider"></div> <!-- Agregamos una línea divisora -->
 
-                        <a class="dropdown-item {{ active('hotel_booking.booking_admin') }}"
-                            href="{{ route('hotel_booking.booking_admin') }}">
-                            <i class="fa fa-list"></i> Gestor de reservas
-                        </a>
-
                         <a class="dropdown-item {{ active('hotel_booking.hotels.index') }}"
                             href="{{ route('hotel_booking.hotels.index') }}">
                             <i class="fa fa-building"></i> Recintos
@@ -108,6 +103,11 @@
                         <a class="dropdown-item {{ active('hotel_booking.services.index') }}"
                             href="{{ route('hotel_booking.services.index') }}">
                             <i class="fas fa-clipboard-check"></i> Servicios
+                        </a>
+
+                        <a class="dropdown-item {{ active('hotel_booking.booking_admin') }}"
+                            href="{{ route('hotel_booking.booking_admin') }}">
+                            <i class="fa fa-list"></i> Administrador de reservas
                         </a>
                     @endcanany
 
