@@ -41,17 +41,17 @@
                 <thead>
                     <tr>	
                         <th style="width: 40%">Descripción</th>
-                        <th style="width: 15%">Tope anual</th>
+                        <!-- <th style="width: 15%">Tope anual</th> -->
                         <th style="width: 45%">Documentos de respaldo</th>
                     </tr>
                 </thead>
                 <tbody>
                     <td><span class="valor" style="white-space: pre-wrap;">{{ $subsidy->description }}</span></td>
-                    <td class="text-end">
+                    <!-- <td class="text-end">
                         $ {{ money($subsidy->annual_cap)}}<br>
                         <span class="text-secondary">Utilizado: $ {{ money($subsidy->getSubsidyUsedMoney()) }}</span><br>
                         <span class="text-success ">Disponible: $ {{ money($subsidy->annual_cap - $subsidy->getSubsidyUsedMoney()) }}</span>
-                    </td>
+                    </td> -->
                     <td>
                         <ul>
                             @foreach($subsidy->documents as $key => $document)

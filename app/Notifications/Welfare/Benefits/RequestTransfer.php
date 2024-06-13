@@ -47,14 +47,16 @@ class RequestTransfer extends Notification implements ShouldQueue
     public function toMail($notifiable)
     {
         $cc_mails = explode(', ', Parameter::get('welfare: beneficios','correos transferido'));
-
+        $appUrl = config('app.url');
         $payed_amount = $this->payed_amount;
+        
         return (new MailMessage)
                 ->level('info')
                 ->subject('Confirmación de transferencia de beneficio')
                 ->greeting('Hola ' . $notifiable->shortName)
                 ->line('Se informa transferencia de beneficio ' . $this->request->subsidy->name . '.')
                 ->line('El monto transferido corresponde a $' . $payed_amount)
+                ->action('Revisa tus beneficios aquí', $appUrl . 'welfare/benefits/requests')
                 ->cc($cc_mails)
                 ->salutation('Saludos cordiales.');
     }

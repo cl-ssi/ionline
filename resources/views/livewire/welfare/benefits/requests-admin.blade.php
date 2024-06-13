@@ -57,8 +57,8 @@
                         <br><br>
                         @if($request->status != "En revisión")
                             <div class="input-group mb-3">
-                                <span class="input-group-text" id="">Observación</span>
-                                <input type="text" class="form-control" wire:model.defer="requests.{{$key}}.status_update_observation">
+                                <span class="input-group-text" id="" style="align-self: flex-start; height: auto;">Observación</span>
+                                <textarea class="form-control" wire:model.defer="requests.{{$key}}.status_update_observation" style="height: 100px;"></textarea>
                                 <div wire:loading wire:target="saveObservation">
                                     <i class="fas fa-spinner fa-spin"></i> Espere...
                                 </div>
@@ -66,7 +66,7 @@
                                     <button wire:click="saveObservation({{ $key }})" class="btn btn-primary" type="button">
                                         <i class="bi bi-floppy"></i>
                                     </button>
-                                </div >
+                                </div>
                             </div>
                         @endif
                     </td>
@@ -161,29 +161,31 @@
                                 </button>
                             </div>
                         @endif
+                        <!-- 13/06/2024: se comenta por solicitud de bienestar -->
                         <!-- se muestra solo si el subsidio tiene un tope anual -->
-                        @if($request->subsidy->annual_cap != null)
+                        <!-- @if($request->subsidy->annual_cap != null)
                             <span class="text-secondary">Tope anual: $ {{ money($request->subsidy->annual_cap) }}</span><br>
                             <span class="text-secondary">Utilizado: $ {{ money($request->getSubsidyUsedMoneyAll()) }}</span><br>
                             <span class="text-success ">Disponible: $ {{ money($request->subsidy->annual_cap - $request->getSubsidyUsedMoneyAll())}}</span>
                         @else
                             <span class="text-secondary">Descripción del beneficio: </span>{{$request->subsidy->description}}<br>
-                        @endif
+                        @endif -->
+                        <span class="text-secondary">Descripción del beneficio: </span>{{$request->subsidy->description}}<br>
                     </td>
                     <td>
                         @if($request->payed_date)
                             {{ $request->payed_date->format('Y-m-d')}} - <b>${{ money($request->payed_amount) }}
                         @else
-
-                            <div wire:loading wire:target="saveTransfer">
-                                <i class="fas fa-spinner fa-spin"></i> Espere...
-                            </div>
-                            <div wire:loading.remove wire:target="saveTransfer">
-                                <button wire:click="saveTransfer({{$key}})" class="btn btn-success" type="button" @disabled($request->status == "Pagado")>
-                                    <i class="bi bi-floppy"></i> Transferencia
-                            </button>
-                            </div>
-
+                            @if($request->status == "Aceptado")
+                                <div wire:loading wire:target="saveTransfer">
+                                    <i class="fas fa-spinner fa-spin"></i> Espere...
+                                </div>
+                                <div wire:loading.remove wire:target="saveTransfer">
+                                    <button wire:click="saveTransfer({{$key}})" class="btn btn-success" type="button" @disabled($request->status == "Pagado")>
+                                        <i class="bi bi-floppy"></i> Transferencia
+                                </button>
+                                </div>
+                            @endif
                         @endif
                     </td>
                 </tr>
