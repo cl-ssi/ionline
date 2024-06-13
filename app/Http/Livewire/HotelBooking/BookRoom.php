@@ -45,10 +45,10 @@ class BookRoom extends Component
         ]);
 
         $roomBookingSeach = RoomBooking::where('user_id',$this->user_id)
-                                        ->where('room_id',$this->room->id)
+                                        // ->where('room_id',$this->room->id)
                                         ->where('start_date',$this->start_date)
                                         ->where('end_date',$this->end_date)
-                                        ->where('payment_type',$this->payment_type)
+                                        // ->where('payment_type',$this->payment_type)
                                         ->count();
 
         if($roomBookingSeach > 0){

@@ -63,6 +63,14 @@
                 </tr>
                 <tr>
                     <td width="30%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 5px 10px;">
+                        Valor:
+                    </td>
+                    <td width="70%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 5px 10px;">
+                        $@if($roomBooking) <b>{{($roomBooking->start_date->diffInDays($roomBooking->end_date) * $roomBooking->room->price)}}</b> @endif
+                    </td>
+                </tr>
+                <tr>
+                    <td width="30%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 5px 10px;">
                         Tipo:
                     </td>
                     <td width="70%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 5px 10px;">
