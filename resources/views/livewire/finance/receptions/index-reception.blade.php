@@ -106,7 +106,14 @@
                             {{ $reception->id }}
                         </td>
                         <td nowrap>
-                                {{ $reception->purchase_order }}                            
+                            @if($reception->purchaseOrder)
+                                <a target="_blank"
+                                    href="{{ route('finance.purchase-orders.show', $reception->purchaseOrder) }}">
+                                    {{ $reception->purchase_order }}
+                                </a>
+                            @else
+                                {{ $reception->purchase_order }}
+                            @endif
                         </td>
                         <td>
                             @if($reception->purchaseOrder)
@@ -211,20 +218,44 @@
                                 @endif
                         </td>
                         <td>
+                            {{-- Adjuntos --}}
+                            @if($reception->dte)
+                                <a target="_blank"
+                                    @switch($reception->dte->tipo_documento)
+                                        @case('factura_electronica')
+                                        @case('factura_exenta')
+                                        @case('guias_despacho')
+                                        @case('nota_debito')
+                                        @case('nota_credito')
+                                            href="{{ $reception->dte->uri }}"
+                                            @break
+                                        @case('boleta_honorarios')
+                                                href="{{ $reception->dte->uri }}"
+                                            @break
+                                        @case('boleta_electronica')
+                                            href="{{ route('finance.dtes.downloadManualDteFile', $reception->dte) }}"
+                                            @break
+                                    @endswitch
+                                    title="{{ $reception->dte->tipoDocumentoIniciales }} {{ $reception->dte->folio }}">
+                                    <i class="bi bi-currency-dollar"></i>
+                                </a>
+                            @endif
+
                             @if($reception->supportFile)
                                 <a href="{{ route('file.download', $reception->supportFile) }}"
                                     target="_blank">
-                                    <i class="fas fa-paperclip"></i>
+                                    <i class="bi bi-paperclip"></i>
                                 </a>
                             @endif
+
                             @if($reception->noOcFile)
                                  <a href="{{ route('file.download', $reception->noOcFile) }}"
-                                            class="btn btn-outline-danger"
-                                            target="_blank">
-                                            <i class="bi bi-file-pdf-fill"></i>
+                                    target="_blank">
+                                    <i class="bi bi-file-pdf-fill"></i>
                                 </a>
                             @endif
                         </td>
+
                         <td>
                             @if($reception->rejected == false)
                                 @if(($reception->created_at->diffInDays(now()) < 365 && $reception->creator_id == auth()->id()) || (auth()->user()->can('Receptions: load file retroactive')))

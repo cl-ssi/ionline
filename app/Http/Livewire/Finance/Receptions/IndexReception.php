@@ -61,6 +61,8 @@ class IndexReception extends Component
                 'files',
                 'supportFile',
                 'signedFileLegacy',
+                'noOcFile',
+                'dte',
             ])
             //->where('creator_id', auth()->id())
             ->where('establishment_id', auth()->user()->organizationalUnit->establishment_id)
