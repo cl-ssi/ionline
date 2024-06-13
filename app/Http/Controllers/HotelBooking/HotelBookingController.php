@@ -160,9 +160,15 @@ class HotelBookingController extends Controller
     public function booking_admin(Request $request){
         $room = null;
         $roomBookings = null;
+
+        // Validar si el parámetro 'status' existe en la solicitud
+        $statuses = $request->has('status') ? $request->status : ['Reservado'];
+
         if($request->room_id){
             $room = Room::find($request->room_id);
-            $roomBookings = RoomBooking::where('room_id',$request->room_id)->paginate(50);
+            $roomBookings = RoomBooking::where('room_id',$request->room_id)
+                                        ->whereIn('status',$statuses)
+                                        ->paginate(50);
         }
         
         return view('hotel_booking.bookings_admin',compact('roomBookings','room'));
