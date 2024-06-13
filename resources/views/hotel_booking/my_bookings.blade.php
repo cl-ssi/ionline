@@ -25,6 +25,7 @@
             <th>Hospedaje</th>
 			<th>Entrada</th>
             <th>Salida</th>
+            <th>Valor</th>
             <th>Estado</th>
             <th>T.Pago</th>
 			<th></th>
@@ -39,6 +40,9 @@
             <td nowrap>{{ $roomBooking->room->identifier}}</td>
 			<td nowrap>{{ $roomBooking->start_date->format('Y-m-d') }}</td>
             <td nowrap>{{ $roomBooking->end_date->format('Y-m-d') }}</td>
+            <td nowrap>
+                ${{ money($roomBooking->start_date->diffInDays($roomBooking->end_date) * $roomBooking->room->price) }}</td>
+            </td>
             <td nowrap>
                 {{ $roomBooking->status }}</td>
             </td>

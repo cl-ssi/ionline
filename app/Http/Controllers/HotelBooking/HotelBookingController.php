@@ -194,7 +194,7 @@ class HotelBookingController extends Controller
         // verifica si tiene asociado archivos
         if($roomBooking->payment_type == "Transferencia"){
             if(count($roomBooking->files)==0){
-                session()->flash('warning', 'Para confirmar debe tener asociado un archivo.');
+                session()->flash('warning', 'No es posible confirmar, el funcionario debe subir primero el comprobante de transferencia.');
                 return redirect()->back();
             }
         }

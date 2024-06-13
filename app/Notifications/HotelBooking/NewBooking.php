@@ -56,7 +56,7 @@ class NewBooking extends Notification implements ShouldQueue
                     ->subject('Se ha realizado una nueva reserva')
                     ->greeting('Hola ' . $notifiable->shortName)
                     ->line(new HtmlString('Se ha realizado una nueva reserva en <b>' . $roomBooking->room->identifier . '</b> en el complejo <b>' . $roomBooking->room->hotel->name . '</b>.'))
-                    ->line(new HtmlString('El valor de la reserva es <b>$' . ($roomBooking->start_date->diffInDays($roomBooking->end_date) * $roomBooking->room->price) . '</b>.'))
+                    ->line(new HtmlString('El valor de la reserva es <b>$' . $roomBooking->start_date->diffInDays($roomBooking->end_date) * $roomBooking->room->price . '</b>.'))
                     ->line(new HtmlString('El check-in es para el día  <b>' . $roomBooking->start_date->format('Y-m-d') . '</b> a partir de las 18:00 hrs.'))
                     ->line(new HtmlString('El check-out es para el día  <b>' . $roomBooking->end_date->format('Y-m-d') . '</b> a partir de las 17:00 hrs.'))
                     ->line(new HtmlString('El tipo de pago seleccionado es <b>' . $roomBooking->payment_type . '</b>.'))
