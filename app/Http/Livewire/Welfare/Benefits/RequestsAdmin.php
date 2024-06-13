@@ -3,18 +3,20 @@
 namespace App\Http\Livewire\Welfare\Benefits;
 
 use Livewire\Component;
-
 use Illuminate\Support\Facades\Storage;
 use App\Models\Welfare\Benefits\Request;
-// use App\Models\Welfare\Benefits\Transfer;
 use App\Notifications\Welfare\Benefits\RequestTransfer;
+use App\Notifications\Welfare\Benefits\RequestAccept;
+use App\Notifications\Welfare\Benefits\RequestReject;
 use App\Models\File;
 
 class RequestsAdmin extends Component
 {
     public $requests;
-    // public $statusFilter = 'En revisión';
     public $statusFilters = ['En revisión']; // Establecer el filtro predeterminado
+    public $currentRequestId = null;
+    public $showTextarea = false;
+    public $observation = '';
 
     protected $rules = [
         'requests.*.status_update_observation' => 'required',
@@ -35,49 +37,64 @@ class RequestsAdmin extends Component
         }
     }
 
-    public function accept($id){
+    public function accept($id)
+    {
         $request = Request::find($id);
         $request->status = "Aceptado";
         $request->status_update_date = now();
         $request->status_update_responsable_id = auth()->user()->id;
         $request->save();
+
+        // Enviar notificación
+        if ($request->applicant && $request->applicant->email_personal != null) {
+            $request->applicant->notify(new RequestAccept($request));
+        }
+
         $this->render();
     }
 
-    public function reject($id){
-        $request = Request::find($id);
+    public function reject($id)
+    {
+        $this->currentRequestId = $id;
+        $this->showTextarea = true;
+    }
+
+    public function cancel()
+    {
+        $this->showTextarea = false;
+        $this->currentRequestId = null;
+        $this->observation = '';
+    }
+
+    public function saveObservation()
+    {
+        $request = Request::find($this->currentRequestId);
         $request->status = "Rechazado";
+        $request->status_update_observation = $this->observation;
         $request->status_update_date = now();
         $request->status_update_responsable_id = auth()->user()->id;
         $request->save();
-        $this->render();
-    }
 
-    public function saveObservation($key){
-        $this->requests[$key]->save();
+        // Enviar notificación
+        if ($request->applicant && $request->applicant->email_personal != null) {
+            $request->applicant->notify(new RequestReject($request));
+        }
+
         session()->flash('message', 'Se registró la observación.');
+        $this->showTextarea = false;
+        $this->observation = '';
+        $this->currentRequestId = null;
     }
 
-    public function saveFolio($key){
+    public function saveFolio($key)
+    {
         $this->requests[$key]->save();
         session()->flash('message', 'Se registró el folio.');
     }
 
-
-    public function saveAcceptedAmount($key){
+    public function saveAcceptedAmount($key)
+    {
         $request = Request::find($this->requests[$key]->id);
-        
-        // 13/06/2024: se comenta por solicitud de bienestar
-        // verificación no se pase monto del tope anual (solo para subsidios con tope anual)
-        // if($request->subsidy->annual_cap != null){
-        //     $disponible_ammount = $request->subsidy->annual_cap - $request->getSubsidyUsedMoney();
-
-        //     if($this->requests[$key]->accepted_amount > $disponible_ammount){
-        //         session()->flash('info', 'No es posible guardar el valor puesto que excede el tope anual del beneficio.');
-        //         return;
-        //     }
-        // }
-
         $request->accepted_amount_date = now();
         $request->accepted_amount_responsable_id = auth()->user()->id;
         $request->accepted_amount = $this->requests[$key]->accepted_amount;
@@ -86,18 +103,14 @@ class RequestsAdmin extends Component
         session()->flash('message', 'Se registró el monto aprobado.');
     }
 
-    public function saveInstallmentsNumber($key){
+    public function saveInstallmentsNumber($key)
+    {
         $this->requests[$key]->save();
-        // for ($i = 0; $i < $this->requests[$key]->installments_number; $i++) {
-        //     $transfer = new Transfer();
-        //     $transfer->request_id = $this->requests[$key]->id;
-        //     $transfer->installment_number = ($i + 1);
-        //     $transfer->save();
-        // }
         session()->flash('message', 'Se registró el número de cuotas.');
     }
 
-    public function saveTransfer($key){
+    public function saveTransfer($key)
+    {
         $request = Request::find($this->requests[$key]->id);
         $request->status = "Pagado";
         $request->payed_date = now();
@@ -107,25 +120,20 @@ class RequestsAdmin extends Component
 
         session()->flash('message', 'Se registró la transferencia.');
 
-        // envia notificación
-        if($request->applicant){
-            if($request->applicant->email_personal != null){
-                // Utilizando Notify 
-                $request->applicant->notify(new RequestTransfer($request, $request->accepted_amount));
-            } 
+        // Enviar notificación
+        if ($request->applicant && $request->applicant->email_personal != null) {
+            $request->applicant->notify(new RequestTransfer($request, $request->accepted_amount));
         }
     }
 
     public function showFile($requestId)
     {
         $file = File::find($requestId);
-        return Storage::disk('gcs')->response($file->storage_path, mb_convert_encoding($file->name,'ASCII'));
+        return Storage::disk('gcs')->response($file->storage_path, mb_convert_encoding($file->name, 'ASCII'));
     }
 
     public function render()
     {
-        $this->requests = Request::all();
-        
         // Inicializar la consulta de solicitudes
         $query = Request::query();
 
@@ -140,6 +148,5 @@ class RequestsAdmin extends Component
         $this->requests = $query->orderByDesc('id')->get();
 
         return view('livewire.welfare.benefits.requests-admin');
-        
     }
 }

@@ -5,9 +5,6 @@
 
     <br>
     <div>
-        <!-- <label>
-            <input type="checkbox" wire:model="statusFilters" value="Todos"> Todos
-        </label> -->
         <label>
             <input type="checkbox" wire:model="statusFilters" value="En revisión"> En revisión
         </label>
@@ -34,13 +31,13 @@
     <table class="table table-bordered table-sm" style="border-collapse:collapse;">
         <thead>
             <tr>
-                <th>ID</th>
-                <th style="width: 8%">F.solicitud</th>
-                <th style="width: 12%">Solicitante</th>
-                <th style="width: 25%">Beneficio</th>
-                <th style="width: 5%">Adjunto</th>
-                <th style="width: 8%">Acciones</th>
-                <th style="width: 20%">Monto aprobado</th>
+                <th >ID</th>
+                <th >F.solicitud</th>
+                <th >Solicitante</th>
+                <th >Beneficio</th>
+                <th >Adjunto</th>
+                <th >Acciones</th>
+                <th >Monto aprobado</th>
                 <th>Notificar</th>
             </tr>
         </thead>
@@ -51,7 +48,9 @@
                     <td>{{ $request->created_at->format('Y-m-d') }}</td>
                     <td>{{ $request->applicant->shortName }}</td>
                     <td>
-                        @if($request->subsidy->benefit) {{ $request->subsidy->benefit->name }} - {{ $request->subsidy->name }} @endif
+                        @if($request->subsidy->benefit) 
+                            {{ $request->subsidy->benefit->name }} - {{ $request->subsidy->name }} 
+                        @endif
                         <br>
                         Monto solicitado: <b>${{ money($request->requested_amount) }}</b>
                         <br><br>
@@ -92,13 +91,17 @@
                                     <i class="fas fa-spinner fa-spin"></i> Espere...
                                 </div>
                                 <div wire:loading.remove wire:target="accept">
-                                    <button class="btn btn-outline-success" wire:click="accept({{$request->id}})" type="button"><i class="fa fa-check" aria-hidden="true"></i></button>
+                                    <button class="btn btn-outline-success" wire:click="accept({{$request->id}})" type="button">
+                                        <i class="fa fa-check" aria-hidden="true"></i>
+                                    </button>
                                 </div>
                                 <div wire:loading wire:target="reject">
                                     <i class="fas fa-spinner fa-spin"></i> Espere...
                                 </div>
-                                <div wire:loading.remove wire:target="accept">
-                                    <button class="btn btn-outline-danger" wire:click="reject({{$request->id}})" type="button"><i class="fa fa-times" aria-hidden="true"></i></button>
+                                <div wire:loading.remove wire:target="reject">
+                                    <button class="btn btn-outline-danger" wire:click="reject({{$request->id}})" type="button">
+                                        <i class="fa fa-times" aria-hidden="true"></i>
+                                    </button>
                                 </div>
                                 
                             @endif
@@ -108,7 +111,9 @@
                                     <i class="fas fa-spinner fa-spin"></i> Espere...
                                 </div>
                                 <div wire:loading.remove wire:target="reject">
-                                    <button class="btn btn-outline-danger" wire:click="reject({{$request->id}})" type="button"><i class="fa fa-times" aria-hidden="true"></i></button>
+                                    <button class="btn btn-outline-danger" wire:click="reject({{$request->id}})" type="button">
+                                        <i class="fa fa-times" aria-hidden="true"></i>
+                                    </button>
                                 </div>
                             @endif
                             @if($request->status == "Rechazado")
@@ -116,11 +121,29 @@
                                     <i class="fas fa-spinner fa-spin"></i> Espere...
                                 </div>
                                 <div wire:loading.remove wire:target="accept">
-                                    <button class="btn btn-outline-success" wire:click="accept({{$request->id}})" type="button"><i class="fa fa-check" aria-hidden="true"></i></button>
+                                    <button class="btn btn-outline-success" wire:click="accept({{$request->id}})" type="button">
+                                        <i class="fa fa-check" aria-hidden="true"></i>
+                                    </button>
                                 </div>
-                                <button class="btn btn-danger" type="button"><i class="fa fa-times" aria-hidden="true"></i></button>
+                                <button class="btn btn-danger" wire:click="reject({{$request->id}})" type="button">
+                                    <i class="fa fa-times" aria-hidden="true"></i>
+                                </button>
                             @endif
                         </div>
+                        @if($showTextarea && $currentRequestId == $request->id)
+                            <div class="mt-2">
+                                <textarea class="form-control" wire:model.defer="observation" placeholder="Ingrese la observación"></textarea>
+                                <div wire:loading wire:target="saveObservation">
+                                    <i class="fas fa-spinner fa-spin"></i> Espere...
+                                </div>
+                                <div wire:loading.remove wire:target="saveObservation">
+                                    <div class="mt-2">
+                                        <button class="btn btn-primary" wire:click="saveObservation">Guardar</button>
+                                        <button class="btn btn-secondary" wire:click="cancel">Cancelar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
                     </td>
                     <td class="text-end">
                         <div class="input-group mb-3">
@@ -161,15 +184,6 @@
                                 </button>
                             </div>
                         @endif
-                        <!-- 13/06/2024: se comenta por solicitud de bienestar -->
-                        <!-- se muestra solo si el subsidio tiene un tope anual -->
-                        <!-- @if($request->subsidy->annual_cap != null)
-                            <span class="text-secondary">Tope anual: $ {{ money($request->subsidy->annual_cap) }}</span><br>
-                            <span class="text-secondary">Utilizado: $ {{ money($request->getSubsidyUsedMoneyAll()) }}</span><br>
-                            <span class="text-success ">Disponible: $ {{ money($request->subsidy->annual_cap - $request->getSubsidyUsedMoneyAll())}}</span>
-                        @else
-                            <span class="text-secondary">Descripción del beneficio: </span>{{$request->subsidy->description}}<br>
-                        @endif -->
                         <span class="text-secondary">Descripción del beneficio: </span>{{$request->subsidy->description}}<br>
                     </td>
                     <td>
