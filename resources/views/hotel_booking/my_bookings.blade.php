@@ -21,7 +21,7 @@
 <table class="table table-striped table-sm table-bordered">
 	<thead>
 		<tr>
-            <th>Hotel</th>
+            <th>Recinto</th>
             <th>Hospedaje</th>
 			<th>Entrada</th>
             <th>Salida</th>

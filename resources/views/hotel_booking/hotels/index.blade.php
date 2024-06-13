@@ -42,7 +42,7 @@
                     @csrf
                     @method('DELETE')
                         <button type="submit" class="btn btn-outline-danger btn-sm"
-                            onclick="return confirm('¿Está seguro que desea eliminar el hotel?')">
+                            onclick="return confirm('¿Está seguro que desea eliminar el recinto?')">
                             <i class="fas fa-trash"></i>
                         </button>
                 </form>
