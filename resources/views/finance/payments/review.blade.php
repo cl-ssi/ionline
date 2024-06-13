@@ -57,10 +57,12 @@
                     <td class="small">
                         {{ $dte->id }}
                         <br><br>
-                        <a href="{{ route('finance.payments.returnToDteInbox', ['dte' => $dte->id]) }}"
-                            class="btn btn-sm btn-outline-danger">
-                            <i class="fas fa-arrow-left"></i>
-                        </a>
+                        @canany(['be god', 'Payments: return to dte'])
+                            <a href="{{ route('finance.payments.returnToDteInbox', ['dte' => $dte->id]) }}"
+                                class="btn btn-sm btn-outline-danger">
+                                <i class="fas fa-arrow-left"></i>
+                            </a>
+                        @endcanany
 
                     </td>
                     <td class="small">{{ $dte->establishment?->alias }}</td>
