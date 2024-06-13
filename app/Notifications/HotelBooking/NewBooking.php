@@ -49,6 +49,7 @@ class NewBooking extends Notification implements ShouldQueue
     public function toMail($notifiable)
     {
         $cc_mails = explode(', ', Parameter::get('welfare: cabañas','correos solicitudes'));
+        $appUrl = config('app.url');
 
         $roomBooking = $this->roomBooking;
         return (new MailMessage)
@@ -63,6 +64,7 @@ class NewBooking extends Notification implements ShouldQueue
                     ->line(new HtmlString('Si el tipo de pago es transferencia, favor ingresar a la aplicación y subir el comprobante de transferencia.'))
                     ->line(new HtmlString('<br>'))
                     ->line(new HtmlString('<i>La reserva se encuentra en revisión, una vez subido este documento, será revisado y confirmado por el área de bienestar.</i>'))
+                    ->action('Revisa tus reservas aquí', $appUrl . 'hotel_booking/my_bookings')
                     ->cc($cc_mails)
                     ->salutation('Saludos cordiales.');
     }

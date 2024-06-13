@@ -18,25 +18,6 @@
     <form method="GET" class="form-horizontal" action="{{ route('hotel_booking.search_booking') }}">
         <div class="form-row">
 
-            <!-- <fieldset class="form-group col-3">
-                <label for="for_hotel_id">Ciudad</label>
-                <select class="form-control" name="commune_id" id="for_commune_id">
-                    <option value=""></option>
-                    @foreach($communes as $commune)
-                        <option value="{{$commune->id}}" 
-                            @if($request->commune_id) 
-                                @if($request->commune_id == $commune->id) 
-                                    selected 
-                                @endif 
-                            @else 
-                                @if($commune->id == 5) 
-                                    selected 
-                                @endif 
-                            @endif>{{$commune->name}}</option>
-                    @endforeach
-                </select>
-            </fieldset> -->
-
             <fieldset class="form-group col-3">
                 <label for="for_hotel_id">Entrando el</label>
                 <input type="date" class="form-control" required name="start_date" @if($request->start_date) value="{{$request->start_date}}" @endif>
@@ -46,11 +27,6 @@
                 <label for="for_hotel_id">Saliendo el</label>
                 <input type="date" class="form-control" required name="end_date" @if($request->end_date) value="{{$request->end_date}}" @endif>
             </fieldset>
-
-            <!-- <fieldset class="form-group col-2">
-                <label for="for_hotel_id">Cantidad de huéspedes</label>
-                <input type="numeric" class="form-control" required name="guest_number" @if($request->guest_number) value="{{$request->guest_number}}" @else value="1" @endif>
-            </fieldset> -->
 
             <fieldset class="form-group col-1">
                 <label for="for_hotel_id"><br></label>
@@ -80,7 +56,6 @@
                 @endforeach
             </div>
             <br>
-            <!-- <a href="#" class="btn btn-primary">Reservar</a> -->
             
             <ul class="list-group list-group-flush">
                 <li class="list-group-item"><h5>Hospadajes disponibles.</h5></li>
@@ -126,7 +101,6 @@
             </ul>
         </div>
         <div class="card-footer text-muted">
-            <!-- <small>Servicios ofrecidos por el hotel: </small> -->
             @foreach($hotel->rooms as $room)
                 @foreach($room->services as $service)
                     <span class='badge badge-primary'>

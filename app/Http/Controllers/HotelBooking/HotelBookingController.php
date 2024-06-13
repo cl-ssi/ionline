@@ -58,9 +58,10 @@ class HotelBookingController extends Controller
 
         $count = RoomBooking::where('user_id', $user_id)
                             ->whereYear('start_date', $start_year)
+                            ->where('status','Confirmado')
                             ->count();
 
-        // Si el número de reservas del usuario en el año es menor o igual a 2, puedes proceder.
+        // Si el número de reservas confirmadas del usuario en el año es menor o igual a 2, se permite la reserva.
         if(!(auth()->user()->can('be god') || auth()->user()->can('welfare: hotel booking administrator'))){
             if ($count >= 2) {
                 session()->flash('warning', 'Has excedido el límite de reservas para este año.');
