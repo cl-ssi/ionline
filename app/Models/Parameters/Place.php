@@ -4,7 +4,7 @@ namespace App\Models\Parameters;
 
 use App\Models\Establishment;
 use App\Models\Inv\Inventory;
-use App\Models\Inv\inventoryMovement;
+use App\Models\Inv\InventoryMovement;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
