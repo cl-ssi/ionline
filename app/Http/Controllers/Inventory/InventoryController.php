@@ -82,15 +82,7 @@ class InventoryController extends Controller
 
     public function board(Establishment $establishment, Place $place)
     {
-        $inventories = Inventory::whereHas('lastConfirmedMovement', function ($query) use ($place) {
-            $query->where('reception_confirmation', true)
-                  ->where('place_id', $place->id);
-        })->get();
-
-        // $qrCodeSvg = QrCode::format('svg')->size(200)->errorCorrection('H')->generate(route('parameters.places.board', [
-        //     'establishment' => $establishment->id,
-        //     'place' => $place->id
-        // ]));
+        $inventories = Inventory::where('place_id', $place->id)->get();
 
         $qrCodeSvg = QrCode::format('svg')->size(150)->errorCorrection('H')->generate(route('parameters.places.board', [
             'establishment' => $establishment->id,
