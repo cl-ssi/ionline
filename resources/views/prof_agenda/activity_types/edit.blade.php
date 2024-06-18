@@ -62,7 +62,7 @@
 
 </form>
 
-@include('partials.audit', ['audits' => $activityType->audits] )
+@include('prof_agenda.partials.audit', ['audits' => $activityType->audits] )
 
 @endsection
 

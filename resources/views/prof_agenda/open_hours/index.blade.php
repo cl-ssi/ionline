@@ -26,6 +26,7 @@
                 <option value="-1" @selected(!$request->assistance == -1)>Todos</option>
                 <option value="1" @selected($request->assistance == 1)>Asiste</option>
                 <option value="0" @selected($request->assistance == 0)>No asiste</option>
+                <option value="2" @selected($request->assistance == 2)>Bloqueados</option>
             </select>
         </fieldset>
     </div>
@@ -34,7 +35,13 @@
 
 <hr>
 
-<table class="table table-striped table-sm table-bordered">
+<div class="form-row mb-4 justify-content-end">
+    <div style="color:yellow">&#9632;</div>&nbsp;<p>Eliminado</p>&nbsp;&nbsp; <!--plomo-->
+    <div style="color:green">&#9632;</div>&nbsp;<p>Asiste</p>&nbsp;&nbsp; <!--amarillo-->
+    <div style="color:red">&#9632;</div>&nbsp;<p>No asiste</p>&nbsp;&nbsp; <!--verde-->
+</div>
+
+<table class="table table-sm table-bordered">
 	<thead>
 		<tr>
             <th>ID</th>
@@ -80,5 +87,8 @@
 	@endforeach
 	</tbody>
 </table>
+
+
+{{$openHours->appends(request()->query())->links()}}
 
 @endsection
