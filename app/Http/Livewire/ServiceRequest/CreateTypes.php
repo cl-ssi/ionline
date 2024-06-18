@@ -19,20 +19,26 @@ class CreateTypes extends Component
     public $users;
     public $signatures;
     public $signatureFlows = [];
-    public $active_contract_count;
+    public $active_mensual_contract_count;
+    public $active_horas_contract_count;
 
     public function change_responsability_center_ou_id(){
-        $active_contract_count = OrganizationalUnit::find($this->responsability_center_ou_id)->activeContractCount();
-        $this->active_contract_count = $active_contract_count;
-        $serviceRequestLimit = OrganizationalUnit::find($this->responsability_center_ou_id)->serviceRequestLimit;
         
-        // if($serviceRequestLimit){
-        //     $serviceRequestLimit = OrganizationalUnit::find($this->responsability_center_ou_id)->serviceRequestLimit ? OrganizationalUnit::find($this->responsability_center_ou_id)->serviceRequestLimit->max_value : 0;
-        //     if($active_contract_count >= $serviceRequestLimit){
-        //         session()->flash('message', 'Se alcanzó el máximo de solicitudes de contrato para esta unidad, contacte a RRHH.');
-        //         $this->responsability_center_ou_id = null;
-        //     }
-        // }
+        // solo para HETG se obtiene con programa 'OTROS PROGRAMAS HETG', para el resto de los casos, se obtiene con todos los programas
+        if(OrganizationalUnit::find($this->responsability_center_ou_id)->establishment_id == 1){
+            $active_mensual_contract_count  = OrganizationalUnit::find($this->responsability_center_ou_id)
+                                                            ->activeContractCount('OTROS PROGRAMAS HETG','Mensual');
+        }else{
+            $active_mensual_contract_count = OrganizationalUnit::find($this->responsability_center_ou_id)
+                                                            ->activeContractCount(null,'Mensual');
+        }
+        
+        // cant. por horas, se obtiene sin nombre de programa para todos los casos
+        $active_horas_contract_count = OrganizationalUnit::find($this->responsability_center_ou_id)
+                                                        ->activeContractCount(null,'Horas');
+                                                            
+        $this->active_mensual_contract_count = $active_mensual_contract_count;
+        $this->active_horas_contract_count = $active_horas_contract_count;
     }
 
     public function render()

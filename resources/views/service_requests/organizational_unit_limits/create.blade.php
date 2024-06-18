@@ -1,10 +1,10 @@
 @extends('layouts.bt4.app')
 
-@section('title', 'Crear tope por unidad')
+@section('title', 'Crear tope por unidad organizacional')
 
 @section('content')
 
-@include('pharmacies.nav')
+@include('service_requests.partials.nav')
 
 <h3>Nuevo tope por unidad</h3>
 

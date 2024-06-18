@@ -1,6 +1,6 @@
 @extends('layouts.bt4.app')
 
-@section('title', 'Editar tope por unidad')
+@section('title', 'Editar tope por unidad organizacional')
 
 @section('content')
 

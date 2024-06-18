@@ -464,8 +464,7 @@ class ServiceRequestController extends Controller
    */
   public function store(Request $request)
   {
-    
-    //validation existence
+    // Valida si exista una solicitud ya creada para el funcionario
     if ($request->type != "Suma alzada") {
       $serviceRequest = ServiceRequest::where('user_id', $request->user_id)
         ->where('program_contract_type', $request->program_contract_type)
@@ -475,10 +474,31 @@ class ServiceRequestController extends Controller
         ->where('working_day_type', $request->working_day_type)
         ->get();
       if ($serviceRequest->count() > 0) {
-        session()->flash('info', 'Ya existe una solicitud ingresada para este funcionario (Solicitud nro <b>' . $serviceRequest->first()->id . '</b> )');
+        session()->flash('danger', 'ATENCIÓN! Ya existe una solicitud ingresada para este funcionario (Solicitud nro <b>' . $serviceRequest->first()->id . '</b> )');
         return redirect()->back();
       }
     }
+
+    // Valida cuando se crea una solicitud en el hospital, que no se sobrepase la cantidad tope permitida en mantenedor
+    // solo para hetg se obtiene con el programa 'OTROS PROGRAMAS HETG', para el resto se obtiene con todos los programas
+    
+    // if(OrganizationalUnit::find($request->responsability_center_ou_id)->establishment_id == 1){
+    //     $active_contract_count  = OrganizationalUnit::find($request->responsability_center_ou_id)
+    //                                                     ->activeContractCount('OTROS PROGRAMAS HETG','Mensual');
+
+    //     $serviceRequestLimit = OrganizationalUnit::find($request->responsability_center_ou_id)->serviceRequestLimit;
+    //     if($serviceRequestLimit){
+    //         $serviceRequestLimit = OrganizationalUnit::find($request->responsability_center_ou_id)->serviceRequestLimit ? OrganizationalUnit::find($request->responsability_center_ou_id)->serviceRequestLimit->max_value : 0;
+    //         if($active_contract_count >= $serviceRequestLimit){
+    //             session()->flash('danger', 'ATENCIÓN! Se alcanzó el máximo de solicitudes de contrato para esta unidad, contacte a RRHH.');
+    //             return redirect()->back();
+    //         }
+    //     }
+    // }
+
+
+
+
 
     // 07/09/2023: solo para usuarios que no pertenezcan a RRHH del hospital
     // 07/09/2023: validación solicitada por samantha: en HETGH no se pueden crear más de 412 contratos (se obtienen en la consulta) suma alzada que 
@@ -498,14 +518,14 @@ class ServiceRequestController extends Controller
                                                 ->where('user_id', $request->user_id)
                                                 ->count();
             if($serviceRequestCount==0){
-                session()->flash('danger', 'No es posible crear contrato nuevo, solicitar autorización a la subdirección de gestión de RRHH.');
+                session()->flash('danger', 'ATENCIÓN! No es posible crear contrato nuevo, solicitar autorización a la subdirección de gestión de RRHH.');
                 return redirect()->back();
             }
         } 
     }
 
     if (count($request->users) <= 1) {
-      session()->flash('danger', 'Ocurrió un error al crear el flujo de firmas. Intente nuevamente, si vuelve a ocurrir contacte al área de RRHH.');
+      session()->flash('danger', 'ATENCIÓN! Ocurrió un error al crear el flujo de firmas. Intente nuevamente, si vuelve a ocurrir contacte al área de RRHH.');
       return redirect()->back();
     }
 
@@ -521,8 +541,6 @@ class ServiceRequestController extends Controller
         } else {
           $ou_id = User::find($user)->organizational_unit_id;
         }
-
-        // dd($ou_id);
 
         if ($ou_id == null) {
           session()->flash('info', User::find($user)->getFullNameAttribute() . ' no posee unidad organizacional asignada.');
@@ -554,24 +572,6 @@ class ServiceRequestController extends Controller
         'organizational_unit_id' =>  $request->responsability_center_ou_id
     ]
     );
-
-    // $user = User::find($request->user_id);
-
-    // if ($user !== null) {
-    //   //$user->update(['name' => request('name')]);
-    // } else {
-    //   $user = User::create([
-    //     'id' => $request->user_id,
-    //     'dv' => $request->dv,
-    //     'name' => $request->name,
-    //     'fathers_family' =>  $request->fathers_family,
-    //     'mothers_family' =>  $request->mothers_family,
-    //     'country_id' =>  $request->country_id,
-    //     'address' =>  $request->address,
-    //     'phone_number' =>  $request->phone_number,
-    //     'email' =>  $request->email
-    //   ]);
-    // }
 
     //crea service request
     $serviceRequest = new ServiceRequest($request->All());

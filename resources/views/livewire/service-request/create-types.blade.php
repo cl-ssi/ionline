@@ -60,9 +60,14 @@
     </div>
   </fieldset>
 
-  <fieldset class="form-group col-12 col-md-4">
-    <label for="for_responsability_center_ou_id">Contratos activos (confirmar dato)</label>
-    <input class="form-control" type="text" disabled value="{{$active_contract_count}}">
+  <fieldset class="form-group col-12 col-md-2">
+    <label for="for_responsability_center_ou_id">C.Mensuales.Activos</label>
+    <input class="form-control" type="text" disabled value="{{$active_mensual_contract_count}}">
+  </fieldset>
+
+  <fieldset class="form-group col-12 col-md-2">
+    <label for="for_responsability_center_ou_id">C.Horas.Activos</label>
+    <input class="form-control" type="text" disabled value="{{$active_horas_contract_count}}">
   </fieldset>
 
 </div>

@@ -267,7 +267,8 @@ class OrganizationalUnit extends Model implements Auditable
         return $this->father->getOrganizationalUnitByLevel($level);
     }
 
-    public function activeContractCount(){
+    public function activeContractCount($program, $program_contract_type){
+        // devuelve contratos mensuales y programa OTROS PROGRAMAS HETG
         // devuelve contratos cuyo proceso de visación este completado.
         // devuelve contratos que no tengan renuncia, ni abandono de funciones.
         // devuelve contratos que todavia no hayan terminado
@@ -282,6 +283,12 @@ class OrganizationalUnit extends Model implements Auditable
                                             })
                                             ->where('end_date','>',now())
                                             ->where('responsability_center_ou_id',$this->id)
+                                            ->when($program, function ($q) use ($program) {
+                                                $q->where('programm_name',$program);
+                                            })
+                                            ->when($program_contract_type, function ($q) use ($program_contract_type) {
+                                                $q->where('program_contract_type',$program_contract_type);
+                                            })
                                             ->with('SignatureFlows')
                                             ->count();
         return $serviceRequests;
