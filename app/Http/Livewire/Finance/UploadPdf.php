@@ -68,14 +68,14 @@ class UploadPdf extends Component
         $visadorApproval = $pdfBackup->approval()->create([
             "module" => "Finance",
             "module_icon" => 'fas fa-file-pdf',
-            "subject" => "Nuevo Comprobante de Pago - Visador",
+            "subject" => "Nuevo Comprobante de Pago",
             "document_pdf_path" => 'ionline/sigfe/'.$this->type.'/sin_firmar/' . $this->pdf->hashName(),
             "sent_to_ou_id" => auth()->user()->organizational_unit_id,
             "digital_signature" => true,
             "filename" => 'ionline/sigfe/'.$this->type.'/visado/' . $this->pdf->hashName(),
             "active" => true,
             "position" => "left",
-            "start_y" => 80,
+            "start_y" => 40,
         ]);
 
         
@@ -84,7 +84,7 @@ class UploadPdf extends Component
         $firmanteApproval = $pdfBackup->approval()->create([
             "module" => "Finance",
             "module_icon" => 'fas fa-file-pdf',
-            "subject" => "Nuevo Comprobante de Pago - Firmante",
+            "subject" => "Nuevo Comprobante de Pago",
             "document_pdf_path" => 'ionline/sigfe/'.$this->type.'/visado/' . $this->pdf->hashName(),
             "sent_to_ou_id" => auth()->user()->OrganizationalUnit->father->id,
             "digital_signature" => true,
@@ -92,7 +92,7 @@ class UploadPdf extends Component
             "previous_approval_id" => $visadorApproval->id,
             "active" => false,
             "position" => "right",
-            "start_y" => 80,
+            "start_y" => 40,
             
         ]);
 
