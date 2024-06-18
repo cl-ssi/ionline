@@ -62,8 +62,6 @@
 
 </form>
 
-@include('partials.audit', ['audits' => $activityType->audits] )
-
 @endsection
 
 @section('custom_css')

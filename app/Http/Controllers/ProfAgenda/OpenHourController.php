@@ -27,11 +27,13 @@ class OpenHourController extends Controller
         // dd($assistance_param);
 
         $openHours = OpenHour::whereNotNull('patient_id')
-                            ->where('blocked',0)
+                            ->when($assistance_param == 2, function ($q) use ($assistance_param) {
+                                return $q->where('blocked',1);
+                            })
                             ->orderBy('start_date', 'DESC')
                             ->where('profesional_id',$user_id_param)
                             ->whereHas('activityType')
-                            ->when($assistance_param!=-1, function ($q) use ($assistance_param) {
+                            ->when($assistance_param == 0 || $assistance_param == 1, function ($q) use ($assistance_param) {
                                 return $q->where('assistance',intval($assistance_param));
                             })
                             ->when($patient_id_param, function ($q) use ($patient_id_param) {
@@ -39,7 +41,7 @@ class OpenHourController extends Controller
                             })
                             ->with('profesional','activityType','patient')
                             ->withTrashed()
-                            ->get();
+                            ->paginate(50);
         return view('prof_agenda.open_hours.index',compact('openHours','request'));
     }
 
