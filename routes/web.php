@@ -283,6 +283,7 @@ use App\Http\Livewire\Inventory\RegisterInventory;
 use App\Http\Livewire\Inventory\RemovalRequestMgr;
 use App\Http\Livewire\Inventory\Transfer;
 use App\Http\Livewire\Inventory\UpdatePma;
+use App\Http\Livewire\Inventory\MassiveUpdatePma;
 use App\Http\Livewire\Lobby\MeetingMgr;
 use App\Http\Livewire\News\CreateNews;
 use App\Http\Livewire\News\SearchNews;
@@ -2099,6 +2100,7 @@ Route::prefix('inventories')->as('inventories.')->middleware(['auth', 'must.chan
     Route::get('pending-movements', PendingMovements::class)->name('pending-movements');
     Route::get('assigned-products', AssignedProducts::class)->name('assigned-products');
     Route::get('update-pma', UpdatePma::class)->name('update-pma');
+    Route::get('massive-update-pma', MassiveUpdatePma::class)->name('massive-update-pma');
     Route::get('movement/{movement}/check-transfer', CheckTransfer::class)->name('check-transfer')
         ->middleware('ensure.movement');
     Route::get('{inventory}/create-transfer', CreateTransfer::class)->name('create-transfer')

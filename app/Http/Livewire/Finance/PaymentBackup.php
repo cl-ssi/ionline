@@ -17,6 +17,8 @@ class PaymentBackup extends Component
         'id' => null,
         'emisor' => null,
         'folio_pago' => null,
+        'sin_firma' => 'Todos',
+        'firmado' => 'Todos',
     ];
 
     public function search()
@@ -29,6 +31,14 @@ class PaymentBackup extends Component
     public function render()
     {
         $query = Dte::query()
+            ->with([
+                'comprobantePago',
+                'requestForm.contractManager',
+                'contractManager',
+                'establishment',
+                'tgrPayedDte',
+                'receptions'
+            ])
             ->whereNull('rejected')
             ->where('tipo_documento', 'LIKE', 'factura_%')
             ->where('all_receptions', 1)
@@ -45,7 +55,25 @@ class PaymentBackup extends Component
         if ($this->filters['folio_pago']) {
             $query->where('paid_folio', 'LIKE', '%' . $this->filters['folio_pago'] . '%');
         }
-        // Aplica más filtros según tus necesidades
+
+        if ($this->filters['sin_firma'] == 'Subidos') {
+            $query->whereHas('comprobantePago');
+        } elseif ($this->filters['sin_firma'] == 'Sin Subir') {
+            $query->whereDoesntHave('comprobantePago');
+        }
+
+        // if ($this->filters['firmado'] == 'Firmados') {
+        //     $query->whereHas('comprobantePago.approvals', function ($q) {
+        //         $q->where('status', 1);
+        //     });
+        // } elseif ($this->filters['firmado'] == 'Pendientes') {
+        //     $query->whereDoesntHave('comprobantePago.approvals', function ($q) {
+        //         $q->where('status', 1);
+        //     });
+        // }
+        
+
+        
 
         $dtes = $query->paginate(50);
 

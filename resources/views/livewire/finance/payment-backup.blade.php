@@ -18,6 +18,25 @@
                 <label for="for-folio" class="form-label">Folio Pago</label>
                 <input type="text" class="form-control" wire:model.defer="filters.folio_pago" placeholder="folio pago">
             </div>
+
+            <div class="col-md-2">
+                <label for="for-folio" class="form-label">PDF Pago Sin Firma</label>
+                <select class="form-select" wire:model.defer="filters.sin_firma">
+                    <option value="Todos">Todos</option>
+                    <option value="Subidos">Subidos</option>
+                    <option value="Sin Subir">Sin Subir</option>
+                </select>
+            </div>
+
+            <!-- <div class="col-md-2">
+                <label for="for-folio" class="form-label">PDF Pago Firmado</label>
+                <select class="form-select" wire:model.defer="filters.firmado">
+                    <option value="Todos">Todos</option>
+                    <option value="Pendientes">Pendientes</option>
+                    <option value="Firmados">Firmados</option>
+                </select>
+            </div> -->
+
             <!-- Agrega más campos según tus necesidades -->
             <div class="col-md-1">
                 <label for="search" class="form-label">&nbsp;</label>
