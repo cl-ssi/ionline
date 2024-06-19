@@ -48,7 +48,19 @@ class OpenHourController extends Controller
     public function store(Request $request)
     {
         $openHour = OpenHour::find($request->openHours_id);
-        // dd($openHour);
+        
+        // dd($openHour->id);
+
+        // valida que el bloque no este reservado
+        if($openHour->patient_id){
+            session()->flash('warning', 'El bloque ya se encuentra reservado, intente nuevamente.');
+            return redirect()->back();
+        }
+
+        if($openHour->blocked == 1){
+            session()->flash('warning', 'El bloque no se encuentra disponible, intente nuevamente.');
+            return redirect()->back();
+        }
 
         // valida si existen del paciente con otros funcionarios en la misma hora
         $othersReservationsCount = OpenHour::where('patient_id',$request->user_id)
