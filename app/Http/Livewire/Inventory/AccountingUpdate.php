@@ -22,7 +22,7 @@ class AccountingUpdate extends Component
     public function mount()
     {     
         $this->establishment = auth()->user()->organizationalUnit->establishment;
-        $this->allAccountingCodes = AccountingCode::all();        
+        $this->allAccountingCodes = AccountingCode::all();
     }
     
     

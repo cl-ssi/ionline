@@ -176,6 +176,7 @@
                 wire:model.defer="number"
                 id="number"
                 class="form-control"
+                autocomplete="off"
             >
         </fieldset>
 
@@ -185,6 +186,49 @@
                 wire:model.defer="inv_id"
                 id="inv_id"
                 class="form-control"
+                autocomplete="off"
+            >
+        </fieldset>
+    </div>
+
+    <div class="row g-2 d-print-none mb-3">
+        <fieldset class="form-group col-md-2">
+            <label for="brand">Marca</label>
+            <input
+                wire:model.defer="brand"
+                id="brand"
+                class="form-control"
+                autocomplete="off"
+            >
+        </fieldset>
+
+        <fieldset class="form-group col-md-2">
+            <label for="model">Modelo</label>
+            <input
+                wire:model.defer="model"
+                id="model"
+                class="form-control"
+                autocomplete="off"
+            >
+        </fieldset>
+
+        <fieldset class="form-group col-md-2">
+            <label for="serial_number">Nº Serie</label>
+            <input
+                wire:model.defer="serial_number"
+                id="serial_number"
+                class="form-control"
+                autocomplete="off"
+            >
+        </fieldset>
+
+        <fieldset class="form-group col-md-4">
+            <label for="brand">Descripción</label>
+            <input
+                wire:model.defer="description"
+                id="description"
+                class="form-control"
+                autocomplete="off"
             >
         </fieldset>
 
@@ -197,6 +241,7 @@
                 <i class="fas fa-filter"></i>
             </button>
         </fieldset>
+    
     </div>
 
     <h5 class="d-print-none">
@@ -318,6 +363,7 @@
                     <th>Lugar</th>
                     <th>Código interno Arquitectura</th>
                     <th>Responsable</th>
+                    <th>Otros Campos</th>
                     <th>QR</th>
                     <th class="d-print-none"></th>
                 </tr>
@@ -379,6 +425,20 @@
                                 {{ optional($inventory->responsible)->tinny_name }}
                             @endif
                         @endif
+                    </td>
+                    <td>
+                        @if($inventory->brand)
+                            Marca:{{ $inventory->brand }}<br>
+                        @endif
+                        @if($inventory->model)
+                            Modelo:{{ $inventory->model }}<br>
+                        @endif
+                        @if($inventory->serial_number)
+                            Nº Serie:{{ $inventory->serial_number }}<br>
+                        @endif
+                        @if($inventory->description)
+                            Descripcion:{{ $inventory->description }}<br>
+                        @endif                        
                     </td>
                     <td>
                         @livewire('inventory.toggle-print',['inventory' => $inventory],key($inventory->id))

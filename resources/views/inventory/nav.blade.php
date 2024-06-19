@@ -88,6 +88,17 @@
             <i class="fas fa-dollar-sign"></i> Actualización Contable
             </a>
         </li>
+
+        @can('be god')
+            <li class="nav-item">
+                <a
+                    class="nav-link {{ active(['inventories.massive-update-pma']) }}"
+                    href="{{ route('inventories.massive-update-pma') }}"
+                >
+                <i class="fas fa-sync-alt"></i> Actualización Masiva Emplazamiento
+                </a>
+            </li>
+        @endcan 
         
         
     @endcan

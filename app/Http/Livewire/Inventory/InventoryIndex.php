@@ -45,6 +45,11 @@ class InventoryIndex extends Component
     public $pending;
     public $oc;
 
+    public $brand;
+    public $model;
+    public $serial_number;
+    public $description;
+
     public $managerInventory;
 
     public $classifications;
@@ -128,6 +133,19 @@ class InventoryIndex extends Component
             ->when($this->oc, function($query) {
                 $query->where('po_code', 'LIKE', '%'.$this->oc.'%');
             })
+            ->when($this->brand, function($query) {
+                $query->where('brand', 'LIKE', '%'.$this->brand.'%');
+            })
+            ->when($this->model, function($query) {
+                $query->where('model', 'LIKE', '%'.$this->model.'%');
+            })
+            ->when($this->serial_number, function($query) {
+                $query->where('serial_number', 'LIKE', '%'.$this->serial_number.'%');
+            })
+            ->when($this->description, function($query) {
+                $query->where('description', 'LIKE', '%'.$this->description.'%');
+            })
+
             ->whereEstablishmentId($this->establishment->id)
             ->whereNotNull('number')
             ->orderByDesc('id')

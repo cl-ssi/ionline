@@ -1,4 +1,4 @@
-<div>    
+<div>
     @include('inventory.nav', [
         'establishment' => auth()->user()->organizationalUnit->establishment->id
     ])

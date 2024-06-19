@@ -6,6 +6,7 @@ use Livewire\Component;
 use App\Models\Finance\Dte;
 use App\Models\Sigfe\PdfBackup;
 use Livewire\WithPagination;
+use Illuminate\Database\Eloquent\Builder;
 
 class PaymentBackup extends Component
 {
@@ -17,6 +18,8 @@ class PaymentBackup extends Component
         'id' => null,
         'emisor' => null,
         'folio_pago' => null,
+        'sin_firma' => 'Todos',
+        'firmado' => 'Todos',
     ];
 
     public function search()
@@ -29,6 +32,14 @@ class PaymentBackup extends Component
     public function render()
     {
         $query = Dte::query()
+            ->with([
+                'comprobantePago',
+                'requestForm.contractManager',
+                'contractManager',
+                'establishment',
+                'tgrPayedDte',
+                'receptions'
+            ])
             ->whereNull('rejected')
             ->where('tipo_documento', 'LIKE', 'factura_%')
             ->where('all_receptions', 1)
@@ -45,7 +56,23 @@ class PaymentBackup extends Component
         if ($this->filters['folio_pago']) {
             $query->where('paid_folio', 'LIKE', '%' . $this->filters['folio_pago'] . '%');
         }
-        // Aplica más filtros según tus necesidades
+
+        if ($this->filters['sin_firma'] == 'Subidos') {
+            $query->whereHas('comprobantePago');
+        } elseif ($this->filters['sin_firma'] == 'Sin Subir') {
+            $query->whereDoesntHave('comprobantePago');
+        }
+
+        // Filtrar los resultados según el estado de todas las aprobaciones
+        if ($this->filters['firmado'] == 'Firmados') {
+            $query->whereHas('comprobantePago.approvals', function (Builder $query) {
+                $query->where('status', 1);
+            }, '=', 2);
+        } elseif ($this->filters['firmado'] == 'Pendientes') {
+            $query->whereHas('comprobantePago.approvals', function (Builder $query) {
+                $query->where('status', '!=', 1);
+            });
+        }
 
         $dtes = $query->paginate(50);
 
