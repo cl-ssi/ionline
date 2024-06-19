@@ -6,6 +6,7 @@ use Livewire\Component;
 use App\Models\Finance\Dte;
 use App\Models\Sigfe\PdfBackup;
 use Livewire\WithPagination;
+use Illuminate\Database\Eloquent\Builder;
 
 class PaymentBackup extends Component
 {
@@ -62,18 +63,16 @@ class PaymentBackup extends Component
             $query->whereDoesntHave('comprobantePago');
         }
 
-        // if ($this->filters['firmado'] == 'Firmados') {
-        //     $query->whereHas('comprobantePago.approvals', function ($q) {
-        //         $q->where('status', 1);
-        //     });
-        // } elseif ($this->filters['firmado'] == 'Pendientes') {
-        //     $query->whereDoesntHave('comprobantePago.approvals', function ($q) {
-        //         $q->where('status', 1);
-        //     });
-        // }
-        
-
-        
+        // Filtrar los resultados según el estado de todas las aprobaciones
+        if ($this->filters['firmado'] == 'Firmados') {
+            $query->whereHas('comprobantePago.approvals', function (Builder $query) {
+                $query->where('status', 1);
+            }, '=', 2);
+        } elseif ($this->filters['firmado'] == 'Pendientes') {
+            $query->whereHas('comprobantePago.approvals', function (Builder $query) {
+                $query->where('status', '!=', 1);
+            });
+        }
 
         $dtes = $query->paginate(50);
 

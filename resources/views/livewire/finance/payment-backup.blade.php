@@ -28,14 +28,14 @@
                 </select>
             </div>
 
-            <!-- <div class="col-md-2">
+            <div class="col-md-2">
                 <label for="for-folio" class="form-label">PDF Pago Firmado</label>
                 <select class="form-select" wire:model.defer="filters.firmado">
                     <option value="Todos">Todos</option>
                     <option value="Pendientes">Pendientes</option>
                     <option value="Firmados">Firmados</option>
                 </select>
-            </div> -->
+            </div>
 
             <!-- Agrega más campos según tus necesidades -->
             <div class="col-md-1">
