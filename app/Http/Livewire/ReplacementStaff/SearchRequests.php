@@ -191,6 +191,8 @@ class SearchRequests extends Component
                     $j->Where('to_user_id', auth()->id())
                     ->where('status', 'assigned');
                 })
+                // ->whereDoesntHave('technicalEvaluation')
+                // ->where('request_status', ['to assign'])
                 ->latest()
                 ->search($this->selectedFormType,
                     $this->selectedStatus,

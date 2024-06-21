@@ -17,6 +17,7 @@
                 <select name="status_search" class="form-control" wire:model.debounce.500ms="selectedStatus">
                     <option value="">Seleccione...</option>
                     <option value="pending">Pendiente</option>
+                    <option value="to assign">Sin Seleccionar</option>
                     <option value="finance sign">Seleccionado</option>
                     <option value="complete">Finalizada</option>
                     <option value="rejected">Rechazada</option>
