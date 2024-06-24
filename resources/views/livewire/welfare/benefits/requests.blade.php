@@ -219,7 +219,7 @@
                                     <div wire:loading wire:target="newFile" style="margin-left: 5px;">
                                         <i class="fas fa-spinner fa-spin"></i> <b>Cargando...</b>
                                     </div>
-                                    <button wire:click.prevent="saveFile" class="btn btn-primary btn-sm" style="padding: 2px 5px; font-size: 12px;" wire:loading.attr="disabled">
+                                    <button wire:click.prevent="saveFile({{ $request->id }})" class="btn btn-primary btn-sm" style="padding: 2px 5px; font-size: 12px;" wire:loading.attr="disabled">
                                         Agregar
                                     </button>
                                 </div>

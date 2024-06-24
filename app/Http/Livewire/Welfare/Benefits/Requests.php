@@ -211,14 +211,16 @@ class Requests extends Component
 
         // Guardar archivos seleccionados
         foreach ($this->files as $key => $file) {
-            $request->files()->create([
-                'storage_path' => $file->store('ionline/welfare/benefits',['disk' => 'gcs']),
-                'stored' => true,
-                'name' => $this->subsidy->documents[$key]->name,
-                'valid_types' => json_encode(["pdf", "xls"]),
-                'max_file_size' => 10,
-                'stored_by_id' => auth()->id(),
-            ]);
+            if($file){
+                $request->files()->create([
+                    'storage_path' => $file->store('ionline/welfare/benefits',['disk' => 'gcs']),
+                    'stored' => true,
+                    'name' => $this->subsidy->documents[$key]->name,
+                    'valid_types' => json_encode(["pdf", "xls"]),
+                    'max_file_size' => 10,
+                    'stored_by_id' => auth()->id(),
+                ]);
+            }
         }
 
         // guarda email
@@ -243,7 +245,9 @@ class Requests extends Component
             } 
         }
 
-        $this->reset(['benefit_id', 'subsidy_id', 'selectedRequestId', 'showCreate']);
+        // $this->reset(['benefit_id', 'subsidy_id', 'selectedRequestId', 'showCreate', 'files', 'requested_amount', 'email', 'bank_id', 'account_number', 'pay_method', 'newFile', 'showFileInput']);
+        $this->reset(['benefit_id', 'subsidy_id', 'selectedRequestId', 'showCreate', 'files', 'requested_amount', 'newFile', 'showFileInput']);
+
         session()->flash('message', 'Estimado funcionario hemos recibido su solicitud de beneficio, en este momento se encuentra "En revisión".');
     }
 
@@ -263,14 +267,14 @@ class Requests extends Component
         $this->files[] = null; // Agregar un nuevo campo de archivo
     }
 
-    public function saveFile()
+    public function saveFile($request_id)
     {
         $this->validate([
             'newFile' => 'required|file|mimes:pdf|max:2048', // Maximum of 2MB
         ]);
 
         if ($this->newFile) {
-            $request = Request::find($this->selectedRequestId);
+            $request = Request::find($request_id);
 
             if (!$request) {
                 session()->flash('message', 'Solicitud no encontrada.');
