@@ -141,8 +141,7 @@
                         </fieldset>
                     </div>
 
-                    <button type="submit" class="btn btn-primary float-right" id="save_btn"
-                        onclick="return confirm('¿Está seguro que desea terminar el proceso de selección?')">
+                    <button type="submit" class="btn btn-primary float-right" id="save_btn">
                         <i class="fas fa-save"></i> Guardar</button>
                   </div>
                 </div>
