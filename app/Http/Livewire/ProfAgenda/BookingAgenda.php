@@ -94,9 +94,10 @@ class BookingAgenda extends Component
         $this->showStep4 = false;
     }
 
-    public function saveReservation($id){
-
+    public function saveReservation($id)
+    {
         $openHour = OpenHour::find($id);
+        dd($openHour);
 
         // valida si existen del paciente con otros funcionarios en la misma hora
         $othersReservationsCount = OpenHour::where('patient_id',auth()->user()->id)
