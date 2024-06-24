@@ -78,32 +78,35 @@
         </div>
 
         <div class="row">
-
             @if(count($users_with_openhours)>0)
                 @foreach($users_with_openhours as $user)
-                    <div class="col-md-4 mb-4">
-                        <div class="card border-success mb-3" style="max-width: 18rem;">
-                        <div class="card-header">{{ $user->shortName }}</div>
-                        <div class="card-body text-success">
-                            <h5 class="card-title">Disponibles</h5>
-                            <p class="card-text">
-                                <div wire:loading>
-                                    Procesando...
-                                </div>
-                                @foreach($this->openHours as $openHour)
-                                    @if($openHour->profesional_id == $user->id)
-                                        <div wire:loading.remove>
-                                            <button type="button" class="btn btn-outline-success mb-2" wire:click="saveReservation({{$openHour->id}})">
-                                                {{$openHour->start_date}}
-                                            </button>
-                                        </div>
-                                    @endif
-                                @endforeach
-                                
-                            </p>
+                <div class="col-md-4 mb-4" id="{{$user->id}}">
+                    <div class="card border-success mb-3" style="max-width: 18rem;">
+                        <div class="card-header" style="cursor: pointer;" data-toggle="collapse" data-target="#collapse{{ $user->id }}">
+                            {{ $user->shortName }} <i class="fas fa-caret-down"></i>
                         </div>
+                        <div id="collapse{{ $user->id }}" class="collapse">
+                            <div class="card-body text-success">
+                                <h5 class="card-title">Disponibles</h5>
+                                <p class="card-text">
+                                    <div wire:loading>
+                                        Procesando...
+                                    </div>
+                                    @foreach($openHours as $openHour)
+                                        @if($openHour->profesional_id == $user->id)
+                                            <div wire:loading.remove>
+                                                <button type="button" class="btn btn-outline-success mb-2" wire:click="saveReservation({{$openHour->id}})">
+                                                    {{$openHour->start_date->format('Y-m-d H:i')}}
+                                                </button>
+                                            </div>
+                                        @endif
+                                    @endforeach
+                                </p>
+                            </div>
                         </div>
                     </div>
+                </div>
+
                 @endforeach
             @else
                 <div class="col-md-12 mb-12 alert alert-warning" role="alert">
@@ -130,32 +133,10 @@
 
     @endif
 
-</div>
-
-<style>
-    .btn-like-div {
-        cursor: pointer;
-        /* Otros estilos que desees para que se vea como un botón */
-    }
-</style>
-
-<script>
-    document.addEventListener('livewire:load', function () {
-        Livewire.hook('message.sent', () => {
-            // Re-bind click event after Livewire update
-            bindClickEvent();
-        });
-
-        function bindClickEvent() {
-            let btnLikeDivs = document.querySelectorAll('.btn-like-div');
-            btnLikeDivs.forEach(btnLikeDiv => {
-                btnLikeDiv.addEventListener('click', function () {
-                    // Execute Livewire action when div is clicked
-                    this.querySelector('button').click();
-                });
-            });
+    <style>
+        .btn-like-div {
+            cursor: pointer;
+            /* Otros estilos que desees para que se vea como un botón */
         }
-
-        bindClickEvent();
-    });
-</script>
+    </style>
+</div>
