@@ -363,7 +363,10 @@
                     <th>Lugar</th>
                     <th>Código interno Arquitectura</th>
                     <th>Responsable</th>
-                    <th>Otros Campos</th>
+                    <th>Marca</th>
+                    <th>Modelo</th>
+                    <th>Nº Serie</th>
+                    <th>Observaciones</th>
                     <th>QR</th>
                     <th class="d-print-none"></th>
                 </tr>
@@ -428,16 +431,22 @@
                     </td>
                     <td>
                         @if($inventory->brand)
-                            Marca:{{ $inventory->brand }}<br>
+                            {{ $inventory->brand }}
                         @endif
+                    </td>
+                    <td>
                         @if($inventory->model)
-                            Modelo:{{ $inventory->model }}<br>
+                            {{ $inventory->model }}
                         @endif
+                    </td>
+                    <td>
                         @if($inventory->serial_number)
-                            Nº Serie:{{ $inventory->serial_number }}<br>
+                            {{ $inventory->serial_number }}
                         @endif
-                        @if($inventory->description)
-                            Descripcion:{{ $inventory->description }}<br>
+                    </td>
+                    <td>
+                        @if($inventory->observations)
+                            {{ $inventory->observations }}
                         @endif                        
                     </td>
                     <td>
