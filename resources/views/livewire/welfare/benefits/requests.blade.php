@@ -219,9 +219,15 @@
                                     <div wire:loading wire:target="newFile" style="margin-left: 5px;">
                                         <i class="fas fa-spinner fa-spin"></i> <b>Cargando...</b>
                                     </div>
-                                    <button wire:click.prevent="saveFile({{ $request->id }})" class="btn btn-primary btn-sm" style="padding: 2px 5px; font-size: 12px;" wire:loading.attr="disabled">
-                                        Agregar
-                                    </button>
+                                    <div wire:loading wire:target="saveFile" style="margin-left: 5px;">
+                                        <i class="fas fa-spinner fa-spin"></i> <b>Cargando...</b>
+                                    </div>
+                                    
+                                    <div wire:loading.remove>
+                                        <button wire:click.prevent="saveFile({{ $request->id }})" class="btn btn-primary btn-sm" style="padding: 2px 5px; font-size: 12px;" wire:loading.attr="disabled">
+                                            Guardar
+                                        </button>
+                                    </div>
                                 </div>
                                 @error('newFile') <span class="text-danger">{{ $message }}</span> @enderror
                             @else
