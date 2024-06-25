@@ -43,6 +43,7 @@ use App\Http\Controllers\Finance\PaymentController;
 use App\Http\Controllers\Finance\PurchaseOrderController;
 use App\Http\Livewire\Finance\PaymentBackup;
 use App\Http\Livewire\Finance\InstitutionalPayment;
+use App\Http\Livewire\Finance\ManualDtes;
 use App\Http\Controllers\Finance\Receptions\ReceptionController as FinReceptionController;
 use App\Http\Controllers\HealthPlan\HealthPlanController;
 use App\Http\Controllers\His\ModificationRequestController;
@@ -2200,6 +2201,7 @@ Route::prefix('finance')->as('finance.')->middleware(['auth', 'must.change.passw
         Route::get('upload-bhe', UploadBhe::class)->name('uploadBhe');
         Route::get('upload-tgr', UploadTgr::class)->name('uploadTgr');
         Route::get('cenabast', Cenabast::class)->name('cenabast');
+        Route::get('manual', ManualDtes::class)->name('manual');
         Route::post('{dte}/save-file', [DteController::class, 'saveFile'])->name('saveFile');
         Route::get('{dte}/store', [DteController::class, 'store'])->name('confirmation.store');
         Route::get('{dte}/confirmation-signature-file', [DteController::class, 'pdf'])->name('confirmation.pdf');

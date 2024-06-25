@@ -60,6 +60,11 @@
                         <i class="fas fa-fw fa-cloud-upload-alt"></i> Cargar BHE
                     </a>
                 </li>
+                <li>
+                    <a class="dropdown-item" href="{{ route('finance.dtes.manual') }}">
+                        <i class="fas fa-fw fa-cloud-upload-alt"></i> Cargar DTE Manual
+                    </a>
+                </li>
             </ul>
         </li>
     @endcannot

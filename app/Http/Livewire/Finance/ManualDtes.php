@@ -69,6 +69,15 @@ class ManualDtes extends Component
         $codigo_barra = $this->barCode;
         $uri_last_field = $user_id . $boleta_numero . $codigo_barra;
 
+
+        if($this->emisor)
+        {
+            $value = preg_replace('/[^0-9K]/', '', strtoupper(trim($this->emisor)));
+            $dv = substr($value, -1);
+            $id = substr($value, 0, -1);
+            $this->emisor = number_format($id, 0, '', '.').'-'.$dv;
+        }
+
         // Guardar los campos en el modelo Dte
         $dte_manual = Dte::create([
             'tipo_documento' => $this->tipoDocumento,

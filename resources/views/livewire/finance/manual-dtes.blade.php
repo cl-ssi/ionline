@@ -1,4 +1,6 @@
 <div>
+    @include('finance.payments.partials.nav')
+
     @if ($showSuccessMessage)
         <div class="alert alert-success mt-3">
             ¡El DTE manual se ha agregado exitosamente!
@@ -7,6 +9,11 @@
     @endif
 
     <h3 class="mb-3">Agregar una DTE manualmente</h3>
+
+    <div class="text-muted small">
+        Solamente cargar Facturas u documentos que por algún otro motivo el proveedor de estos no sea la empresa acepta.com ejemplo: Boleta de Agua, etc
+    </div>
+    <br>
 
     <form wire:submit.prevent="saveDte">
         <div class="row g-2">
@@ -126,6 +133,16 @@
             });
         });
     </script>
+
+    @section('custom_js')
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        <script src="{{ asset('js/jquery.rut.chileno.js') }}"></script>
+        <script type="text/javascript">
+        $(document).ready(function() {
+            $('#emisor').rut();
+        });
+        </script>
+    @endsection
 
 
 </div>
