@@ -96,23 +96,7 @@
                     <td class="small">
                         @include('finance.payments.partials.fr-files')
                         <hr>
-                        <form wire:submit.prevent="save">
-                            <div class="form-group form-inline">
-                                <input class="form-control"
-                                    type="file"
-                                    wire:model="support_file"
-                                    id="support_file" hidden/>
-                                <label
-                                    for="support_file"
-                                    style="cursor: pointer;"
-                                    class="text-light bg-secondary px-2 py-1 rounded border-1">
-                                    <i class="fas fa-file"></i>
-                                </label>
-                                <button type="submit" class="text-light bg-primary px-2 py-1 rounded border-1">
-                                    <i class="fas fa-save"></i>
-                                </button>
-                            </div>
-                        </form>
+                        @livewire('finance.upload-pdf', ['dteId' => $dte->id, 'type' => 'adjunto', 'small' => 'true'], key('upload-pdf-' . $dte->id))
                     </td>
                     <td class="small">
                          <!-- Nuevo módulo de Recepciones -->
