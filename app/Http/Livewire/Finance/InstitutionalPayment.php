@@ -14,7 +14,7 @@ class InstitutionalPayment extends Component
     use WithFileUploads;
     use WithPagination;
 
-    public $support_file;
+    public $SupportFile;
     protected $paginationTheme = 'bootstrap';
 
     public $filters = [
@@ -29,19 +29,24 @@ class InstitutionalPayment extends Component
     {
         $this->resetPage();
     }
-    public function save()
+    public function updatedSupportFile()
     {
-        $id = $this->id;
+        dd($this->SupportFile);
+    }
+
+    public function save($dte_id)
+    {
+        $id = $dte_id;
         // $this->validate();
 
         /* Documento de respaldo: Support File */
         dd("no entre al if");
-        if($this->support_file) {
+        if($this->SupportFile) {
             dd("entre al if");
             $storage_path = 'ionline/finances/institutional_payment/support_documents';
             $filename = $id.'.pdf';
 
-            $this->support_file->storeAs($storage_path, $filename, 'gcs');
+            $this->SupportFile->storeAs($storage_path, $filename, 'gcs');
 
 
             /* $institutional_payment->files()->create([

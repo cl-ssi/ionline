@@ -14,9 +14,12 @@ class UploadPdf extends Component
 
     public $dteId;
     public $pdf;
+    public $pdfNoApproval;
     public $type;
     public $pdfBackup;
     public $pdfPath;
+    public $pdfPaths= [];
+    public $small = false;
 
     protected $rules = [
         'pdf' => 'required|mimes:pdf|max:10240'
@@ -78,7 +81,7 @@ class UploadPdf extends Component
             "start_y" => 40,
         ]);
 
-        
+
 
 
         $firmanteApproval = $pdfBackup->approval()->create([
@@ -93,7 +96,7 @@ class UploadPdf extends Component
             "active" => false,
             "position" => "right",
             "start_y" => 40,
-            
+
         ]);
 
         session()->flash('message', 'PDF subido exitosamente.');
@@ -101,6 +104,33 @@ class UploadPdf extends Component
         $this->loadPdfBackup();
 
         $this->emit('pdfUploaded');
+    }
+
+/*     public function updatedPdfNoApproval(){
+        echo($this->pdfNoApproval);
+    }
+ */
+    public function savePdfNoApproval()
+    {
+        $id = $this->dteId;
+        $pdfCounter = count(array_filter($this->pdfPaths));
+        // $this->validate();
+
+        /* Documento de respaldo: Support File */
+        dd($this->pdfNoApproval);
+        if($this->pdfNoApproval) {
+            dd("entre al if");
+            $storage_path = 'ionline/finances/institutional_payment/support_documents';
+            $filename = 'adjuntos_'.$id.'_'.$pdfCounter.'.pdf';
+            $this->pdfNoApproval->storeAs($storage_path, $filename, 'gcs');
+
+            /* $institutional_payment->files()->create([
+                'storage_path' => $storage_path.'/'.$filename,
+                'stored' => true,
+                'type' => 'support_file',
+                'stored_by_id' => auth()->id(),
+            ]); */
+        }
     }
 
     public function delete()
