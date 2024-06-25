@@ -237,10 +237,6 @@
 
                     <td>{{ $request->status }}</td>
                     <td>{{ $request->status_update_observation }}</td>
-                    <!-- <td>
-                        <button wire:click="editRequest({{ $request->id }})" class="btn btn-primary btn-sm">Editar</button>
-                        <button wire:click="deleteRequest({{ $request->id }})" class="btn btn-danger btn-sm">Eliminar</button>
-                    </td> -->
                 </tr>
             @endforeach
         </tbody>

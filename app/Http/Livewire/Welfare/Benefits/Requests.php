@@ -23,7 +23,6 @@ class Requests extends Component
     public $benefits;
     public $subsidies;
     public $showCreate = false;
-    public $selectedRequestId;
     public $benefit_id = '';
     public $subsidy_id = '';
     public $subsidy;
@@ -94,9 +93,6 @@ class Requests extends Component
             $this->account_number = null;
             $this->pay_method = null;
         }
-
-        // Inicializa selectedRequestId con el ID de la primera solicitud del usuario o cualquier otro valor adecuado
-        $this->selectedRequestId = Request::where('applicant_id', auth()->user()->id)->first()->id ?? null;
     }
 
     protected $listeners = ['loadUserData' => 'loadUserData'];
@@ -151,21 +147,6 @@ class Requests extends Component
         }
     }
 
-    public function editRequest($requestId)
-    {
-        $request = Request::find($requestId);
-        $this->benefit_id = $request->benefit_id;
-        $this->subsidy_id = $request->subsidy_id;
-        $this->selectedRequestId = $requestId;
-        $this->showCreate = true;
-    }
-
-    public function deleteRequest($requestId)
-    {
-        $request = Request::find($requestId);
-        $request->delete();
-    }
-
     public function saveRequest()
     {
         $this->validate([
@@ -193,21 +174,13 @@ class Requests extends Component
         //     }
         // }
 
-        if ($this->selectedRequestId) {
-            $request = Request::find($this->selectedRequestId);
-            $request->update([
-                // 'benefit_id' => $this->benefit_id,
-                'subsidy_id' => $this->subsidy_id,
-            ]);
-        } else {
-            $request = Request::create([
-                // 'benefit_id' => $this->benefit_id,
-                'subsidy_id' => $this->subsidy_id,
-                'applicant_id' => $this->user_id,
-                'status' => 'En revisión',
-                'requested_amount' => $this->requested_amount,
-            ]);
-        }
+        $request = Request::create([
+            // 'benefit_id' => $this->benefit_id,
+            'subsidy_id' => $this->subsidy_id,
+            'applicant_id' => $this->user_id,
+            'status' => 'En revisión',
+            'requested_amount' => $this->requested_amount,
+        ]);
 
         // Guardar archivos seleccionados
         foreach ($this->files as $key => $file) {
@@ -245,8 +218,7 @@ class Requests extends Component
             } 
         }
 
-        // $this->reset(['benefit_id', 'subsidy_id', 'selectedRequestId', 'showCreate', 'files', 'requested_amount', 'email', 'bank_id', 'account_number', 'pay_method', 'newFile', 'showFileInput']);
-        $this->reset(['benefit_id', 'subsidy_id', 'selectedRequestId', 'showCreate', 'files', 'requested_amount', 'newFile', 'showFileInput']);
+        $this->reset(['benefit_id', 'subsidy_id', 'showCreate', 'files', 'requested_amount', 'newFile', 'showFileInput']);
 
         session()->flash('message', 'Estimado funcionario hemos recibido su solicitud de beneficio, en este momento se encuentra "En revisión".');
     }
