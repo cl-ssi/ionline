@@ -215,7 +215,7 @@ class Requests extends Component
                 $request->files()->create([
                     'storage_path' => $file->store('ionline/welfare/benefits',['disk' => 'gcs']),
                     'stored' => true,
-                    'name' => $this->subsidy->documents[$key]->name,
+                    'name' => $file->getClientOriginalName(),
                     'valid_types' => json_encode(["pdf", "xls"]),
                     'max_file_size' => 10,
                     'stored_by_id' => auth()->id(),
