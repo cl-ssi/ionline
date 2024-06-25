@@ -1,26 +1,28 @@
 <ul class="nav nav-tabs mb-3">
     <li class="nav-item">
-        <a class="nav-link {{ active('finance.dtes.index') }}" 
+        <a class="nav-link {{ active('finance.dtes.index') }}"
             href="{{ route('finance.dtes.index') }}">
             <i class="fas fa-fw fa-file-invoice-dollar"></i> Dtes</a>
-    </li> 
+    </li>
     <li class="nav-item">
         <a class="nav-link {{ active('finance.payments.review') }}"
             href="{{ route('finance.payments.review') }}">
             <i class="fas fa-fw fa-dollar-sign"></i> Revisión</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link {{ active('finance.payments.ready') }}" 
+        <a class="nav-link {{ active('finance.payments.ready') }}"
             href="{{ route('finance.payments.ready') }}">
             <i class="far fa-fw fa-clock"></i> Pendiente para Pagos TGR</a>
     </li>
+    @can('be god')
     <li class="nav-item">
-        <a class="nav-link" 
-            >
-            <i class="far fa-fw fa-money-bill-alt"></i> Otros Pagos no TGR</a>
+    <a class="nav-link {{ active('finance.payments.InstitutionalPayment') }}"
+    href="{{ route('finance.payments.InstitutionalPayment') }}">
+            <i class="far fa-fw fa-money-bill-alt"></i> Pagos Institucionales</a>
     </li>
+    @endcan
     <li class="nav-item">
-        <a class="nav-link {{ active('finance.payments.paid') }}" 
+        <a class="nav-link {{ active('finance.payments.paid') }}"
             href="{{ route('finance.payments.paid') }}">
             <i class="far fa-fw fa-check-circle"></i> Pagados</a>
     </li>
@@ -30,12 +32,12 @@
             href="{{ route('finance.payments.rejected') }}">
             <i class="fas fa-fw fa-ban"></i> Rechazadas</a>
     </li>
-    
+
     <li class="nav-item">
         <a class="nav-link {{ active('finance.payments.backup') }}"
             href="{{ route('finance.payments.backup') }}">
             <i class="fas fa-fw fa-database"></i> Respaldos</a>
-    </li>    
+    </li>
 
     @cannot('Payments: viewer')
         <li class="nav-item dropdown">
