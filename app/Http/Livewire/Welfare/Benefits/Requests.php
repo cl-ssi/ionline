@@ -151,12 +151,28 @@ class Requests extends Component
     {
         $this->validate([
             'requested_amount' => 'required|numeric',
-            'email' => 'required',
-            'account_number' => 'required|integer',
-            'bank_id' => 'required',
-            'pay_method' => 'required',
-            'subsidy_id' => 'required',
+            'email' => 'required|email', // Asegúrate de validar el formato del correo electrónico
+            'account_number' => 'required|regex:/^\d+$/', // Verifica que contiene solo dígitos
+            'bank_id' => 'required|integer',
+            'pay_method' => 'required|string',
+            'subsidy_id' => 'required|integer',
             'files.*' => 'nullable|file|mimes:pdf|max:2048', // Maximum of 2MB
+        ], [
+            'requested_amount.required' => 'El monto solicitado es obligatorio.',
+            'requested_amount.numeric' => 'El monto solicitado debe ser un número.',
+            'email.required' => 'El correo electrónico es obligatorio.',
+            'email.email' => 'Debe ingresar un correo electrónico válido.',
+            'account_number.required' => 'El número de cuenta es obligatorio.',
+            'account_number.regex' => 'Debe ingresar solo números en el número de cuenta, ej: 01300239397.',
+            'bank_id.required' => 'El ID del banco es obligatorio.',
+            'bank_id.integer' => 'El ID del banco debe ser un número entero.',
+            'pay_method.required' => 'El método de pago es obligatorio.',
+            'pay_method.string' => 'El método de pago debe ser una cadena de texto.',
+            'subsidy_id.required' => 'El ID del subsidio es obligatorio.',
+            'subsidy_id.integer' => 'El ID del subsidio debe ser un número entero.',
+            'files.*.file' => 'Cada archivo debe ser un archivo válido.',
+            'files.*.mimes' => 'Cada archivo debe ser un PDF.',
+            'files.*.max' => 'Cada archivo no debe ser mayor a 2MB.',
         ]);
 
         // se hace asi la validación puesto que hay documentación y requisitos. En este caso solo se consideran documentación.
