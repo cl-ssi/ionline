@@ -4,7 +4,7 @@
 
 @include('prof_agenda.partials.nav')
 
-<h3 class="mb-3">Crear tipo de actividad</h3>
+<h3 class="mb-3">Crear mensaje por especialidad</h3>
 
 <form method="POST" class="form-horizontal" action="{{ route('prof_agenda.profession_messages.store') }}">
 @csrf

@@ -4,9 +4,9 @@
 
 @include('prof_agenda.partials.nav')
 
-<h3 class="mb-3">Editar tipo de actividad</h3>
+<h3 class="mb-3">Editar mensaje por especialidad</h3>
 
-<form method="POST" class="form-horizontal" action="{{ route('prof_agenda.activity_types.update',$professionMessage) }}">
+<form method="POST" class="form-horizontal" action="{{ route('prof_agenda.profession_messages.update',$professionMessage) }}">
 @csrf
 @method('PUT')
 
