@@ -44,6 +44,8 @@ class NewReservation extends Notification implements ShouldQueue
      */
     public function toMail($notifiable)
     {
+        $appUrl = config('app.url');
+
         return (new MailMessage)
             ->level('info')
             ->replyTo('unidadstrabajador@gmail.com')
@@ -53,6 +55,7 @@ class NewReservation extends Notification implements ShouldQueue
             ->line('Con el profesional: ' . $this->openHour->profesional->shortName)
             ->line('La reserva se encuentra realizada para: ' . $this->openHour->start_date->format('Y-m-d'). ' a las: ' . $this->openHour->start_date->format('H:i'))
             ->line('Se solicita llegar puntual a su hora.')
+            ->action('Gestiona tus reservas aquí', $appUrl . 'prof_agenda/open_hour/my-bookings')
             ->line(new HtmlString('<hr>'))
             ->line(new HtmlString('<small><i>Si no puede asistir, rogamos contactar a la Unidad de Salud del Trabajador para reagendar o cancelar su hora.</i></small>'))
             ->line(new HtmlString('<small><i>N° Telefono: 575767 / +57 2 405766</i></small>'))
