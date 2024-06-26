@@ -73,6 +73,7 @@ class BookingAgenda extends Component
                             ->whereIn('profesional_id',$this->users->pluck('id'))
                             ->where('start_date','>=',now())
                             ->whereNull('patient_id')
+                            ->where('blocked',0)
                             ->get();
 
         $this->users_with_openhours = User::whereIn('id',$this->openHours->pluck('profesional_id')->unique())->get();
@@ -97,7 +98,6 @@ class BookingAgenda extends Component
     public function saveReservation($id)
     {
         $openHour = OpenHour::find($id);
-        dd($openHour);
 
         // valida si existen del paciente con otros funcionarios en la misma hora
         $othersReservationsCount = OpenHour::where('patient_id',auth()->user()->id)
@@ -149,6 +149,18 @@ class BookingAgenda extends Component
                 session()->flash('message', 'No es posible realizar la reserva, porque la configuración de este bloque acepta como máximo ' . $maximum_allowed_per_week . ' reservas a la semana.');
                 return;
             }
+        }
+
+        // valida que bloque no se encuentre reservado
+        if($openHour->patient_id){
+            session()->flash('message', 'El bloque ya se encuentra reservado, intente nuevamente.');
+            return;
+        }
+
+        // valida que bloque no este bloqueado
+        if($openHour->blocked == 1){
+            session()->flash('message', 'El bloque no se encuentra disponible, intente nuevamente.');
+            return;
         }
         
         // se registra la reserva

@@ -22,6 +22,12 @@
             <h3>¿Que tipo de atención necesitas?</h3>
         </div><br>
 
+        @if($profession->professionMessages->first())
+            <div class="alert alert-warning" role="alert">
+                Información! {{$profession->professionMessages->first()->text}}
+            </div>
+        @endif
+
         <div class="row">
             @if(count($activityTypes)>0)
                 @foreach($activityTypes as $activityType)

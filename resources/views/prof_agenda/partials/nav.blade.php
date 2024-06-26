@@ -14,6 +14,13 @@
         </a>
     </li>
 
+    <li class="nav-item">
+        <a class="nav-link {{ active('prof_agenda.open_hour.my-bookings') }}"
+            href="{{ route('prof_agenda.open_hour.my-bookings') }}">
+            <i class="fa fa-calendar"></i> Mis reservas
+        </a>
+    </li>
+
     @canany(['Agenda UST: Administrador','Agenda UST: Funcionario','Agenda UST: Secretaria'])
         <li class="nav-item">
             <a class="nav-link {{ active('prof_agenda.agenda.index') }}"
@@ -59,6 +66,11 @@
                 <a class="dropdown-item {{ active('prof_agenda.activity_types.index') }}"
                     href="{{ route('prof_agenda.activity_types.index') }}">
                     <i class="fas fa-clipboard-check"></i> Tipos de actividad
+                </a>
+
+                <a class="dropdown-item {{ active('prof_agenda.profession_messages.index') }}"
+                    href="{{ route('prof_agenda.profession_messages.index') }}">
+                    <i class="fas fa-clipboard-check"></i> Mensaje por especialidad
                 </a>
 
             </div>

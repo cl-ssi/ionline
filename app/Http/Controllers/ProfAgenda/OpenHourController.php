@@ -171,7 +171,6 @@ class OpenHourController extends Controller
     }
 
     public function delete_reservation(Request $request){
-        
         $openHour = OpenHour::find($request->openHours_id);
 
         // validación
@@ -352,5 +351,10 @@ class OpenHourController extends Controller
     public function clinicalreportusu($id){
         $openHour = OpenHour::find($id);
         return view('livewire.prof-agenda.reports.report', ['patient' => $openHour->patient]);
+    }
+
+    public function myBookings(){
+        $openHours = OpenHour::where('patient_id',auth()->user()->id)->get();
+        return view('prof_agenda.my_bookings',compact('openHours'));
     }
 }
