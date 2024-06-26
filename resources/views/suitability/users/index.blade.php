@@ -110,6 +110,7 @@
             <th>Teléfono</th>
             <th>Colegio</th>
             <th>Comuna del Colegio</th>
+            <th>Editar</th>            
             <th>Eliminar</th>
         </tr>
     </thead>
@@ -123,6 +124,11 @@
             <td>{{ $adminUser->user->phone_number ?? '' }}</td>
             <td>{{ $adminUser->school->name ?? '' }}</td>
             <td>{{ $adminUser->school->commune->name ?? '' }}</td>
+            <td>
+                <a class="btn btn-info" href="{{ route('suitability.users.editUserAdmin', $adminUser->user_external_id) }}">
+                    <i class="fas fa-edit"></i>
+                </a>
+            </td>
             <td>
                 <form method="POST" class="form-horizontal" action="{{ route('suitability.users.destroy', $adminUser->id) }}">
                     @csrf

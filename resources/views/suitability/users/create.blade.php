@@ -6,9 +6,9 @@
 
 @include('suitability.nav')
 
-<h3 class="mb-3">Nuevo Usuario Externo</h3>
+<h3 class="mb-3">Nuevo Usuario Administrador Externo</h3>
 
-<form method="POST" class="form-horizontal" action="{{ route('suitability.users.storeuser') }}">
+<form method="POST" class="form-horizontal" action="{{ route('suitability.users.storeUserAdmin') }}">
     @csrf
     @method('POST')
 
@@ -82,7 +82,6 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <script src="{{ asset('js/jquery.rut.chileno.js') }}"></script>
 <script type="text/javascript">
-            //obtiene digito verificador
             $('input[name=id]').keyup(function(e) {
                 var str = $("#for_run").val();
                 $('#for_dv').val($.rut.dv(str));
