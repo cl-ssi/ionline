@@ -174,11 +174,9 @@
                                 </a>
                             @endif
 
-                            @canany(['Agenda UST: Administrador','Agenda UST: Funcionario','Agenda UST: Secretaria'])
-                                <a class="dropdown-item {{ active('prof_agenda.home') }}" href="{{ route('prof_agenda.home') }}">
-                                    <i class="fas fa-fw fa-user"></i> Agenda UST
-                                </a>
-                            @endcanany
+                            <a class="dropdown-item {{ active('prof_agenda.home') }}" href="{{ route('prof_agenda.home') }}">
+                                <i class="fas fa-fw fa-user"></i> Agenda UST
+                            </a>
 
                             @canany([
                                 'Payments',
