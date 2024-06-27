@@ -354,7 +354,7 @@ class OpenHourController extends Controller
     }
 
     public function myBookings(){
-        $openHours = OpenHour::where('patient_id',auth()->user()->id)->get();
+        $openHours = OpenHour::where('patient_id',auth()->user()->id)->orderBy('id','DESC')->paginate(20);
         return view('prof_agenda.my_bookings',compact('openHours'));
     }
 }

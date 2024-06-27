@@ -33,7 +33,7 @@ class OpenHour extends Model implements Auditable
     }
 
     public function profesional(){
-        return $this->belongsTo('App\Models\User','profesional_id');
+        return $this->belongsTo('App\Models\User','profesional_id')->withTrashed();
     }
 
     public function profession(){
