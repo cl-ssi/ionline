@@ -352,7 +352,8 @@
                     'Replacement Staff: view requests',
                     'Job Position Profile: create',
                     'Job Position Profile: all',
-                    'Job Position Profile: review'
+                    'Job Position Profile: review',
+                    'Trainings: create'
                 ])
                 <li class="nav-item dropdown
                     {{ active(['rrhh.users.*','rrhh.organizational-units.*','rrhh.authorities.*','suitability.*','replacement_staff.request.*']) }}">
@@ -488,11 +489,12 @@
                         @endif
 
                         @endif
-                        {{--
+                        
+                        @can('Trainings: create')
                         <a class="dropdown-item {{ active('trainings.*') }}" href="{{ route('trainings.own_index') }}">
                             <i class="fas fa-chalkboard-teacher"></i> Solicitud Permiso Capacitación
                         </a>
-                        --}}
+                        @endcan
                     </ul>
 
                 </li>

@@ -485,11 +485,12 @@
                         @endif
 
                         @endif
-                        {{--
+                        
+                        @can('Trainings: create')
                         <a class="dropdown-item {{ active('trainings.*') }}" href="{{ route('trainings.own_index') }}">
                             <i class="fas fa-chalkboard-teacher fa-fw"></i> Solicitud Permiso Capacitación
                         </a>
-                        --}}
+                        @endcan
                     </div>
 
                 </li>
