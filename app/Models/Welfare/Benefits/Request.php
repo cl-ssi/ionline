@@ -52,6 +52,11 @@ class Request extends Model implements Auditable
         return $this->belongsTo(Subsidy::class);
     }
 
+    public function responsable(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'status_update_responsable_id');
+    }
+
     // public function files(): HasMany
     // {
     //     return $this->hasMany(File::class,'well_bnf_request_id');

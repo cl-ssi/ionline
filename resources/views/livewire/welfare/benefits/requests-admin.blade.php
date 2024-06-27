@@ -203,6 +203,13 @@
                         @endif
                     </td>
                 </tr>
+                @if($request->responsable)
+                    <tr>
+                        <td colspan="8">
+                            <small>Revisor: <b>{{$request->responsable->shortName}}</b></small>
+                        </td>
+                    </tr>
+                @endif
             @endforeach
         </tbody>
     </table>
