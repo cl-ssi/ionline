@@ -75,7 +75,7 @@ class SchoolUserController extends Controller
         return redirect()->back();
     }
 
-    public function storeuser(Request $request)
+    public function storeUserAdmin(Request $request)
     {
         //
         //$user = new User($request->All());
@@ -118,6 +118,7 @@ class SchoolUserController extends Controller
         //
     }
 
+
     /**
      * Update the specified resource in storage.
      *
@@ -141,8 +142,24 @@ class SchoolUserController extends Controller
         
         $schooluser = SchoolUser::find($schoolUser);
         $schooluser->delete();
-        session()->flash('success', 'Usuario Eliminado como Administrador Exitosamente');        
+        session()->flash('success', 'Usuario Eliminado como Administrador Exitosamente'); 
         return redirect()->back();
 
     }
+
+    public function editUserAdmin(UserExternal $userExternal)
+    {
+        return view('suitability.users.edit-admin', ['user' => $userExternal]);
+    }
+
+    public function updateUserAdmin(Request $request, UserExternal $userExternal)
+    {
+        $userExternal->fill($request->all());
+        $userExternal->save();
+
+        session()->flash('success', 'Usuario Externo actualizado exitosamente');
+        return redirect()->route('suitability.users.index');
+    }
+
+
 }

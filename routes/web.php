@@ -2617,7 +2617,10 @@ Route::prefix('suitability')->as('suitability.')->middleware(['auth', 'must.chan
         Route::get('/create', [SchoolUserController::class, 'create'])->name('create');
         Route::post('/store', [SchoolUserController::class, 'store'])->name('store');
         Route::delete('/{schooluser}/destroy', [SchoolUserController::class, 'destroy'])->name('destroy');
-        Route::post('/storeuser', [SchoolUserController::class, 'storeuser'])->name('storeuser');
+        Route::post('/store-user-admin', [SchoolUserController::class, 'storeUserAdmin'])->name('storeUserAdmin');
+        Route::get('{userExternal}/editUserAdmin', [SchoolUserController::class, 'editUserAdmin'])->name('editUserAdmin');
+        Route::put('/update-admin/{userExternal}', [SchoolUserController::class, 'updateUserAdmin'])->name('updateUserAdmin');
+
     });
 
     Route::prefix('reports')->as('reports.')->group(function () {
