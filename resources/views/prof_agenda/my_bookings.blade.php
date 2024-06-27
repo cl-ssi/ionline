@@ -43,7 +43,7 @@
             <td nowrap>{{ $openHour->absence_reason }}</td>
             <td nowrap>
                 @if(!$openHour->assistance)
-                    <form method="POST" class="form-horizontal" onsubmit="return confirm('¿Está seguro de eliminar la reserva?');" action="{{ route('prof_agenda.open_hour.delete_reservation') }}">
+                    <form method="POST" class="form-horizontal" onsubmit="return confirm('¿Está seguro de eliminar la reserva?');" action="{{ route('prof_agenda.open_hour.auto_delete_reservation') }}">
                     @csrf
                     @method('POST')
                         <input class="openHours_id" type="hidden" id="" name="openHours_id" value="{{$openHour->id}}">
