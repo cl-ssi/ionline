@@ -137,11 +137,25 @@ class RequestsAdmin extends Component
         // Inicializar la consulta de solicitudes
         $query = Request::query();
 
+        // si es de HAH, solo se devuelve data de ese establecimiento. Si es SST, se devuelve SST y HETG. Si no es ninguna de los 2, se devuelve esa info.
+        $establishments = [auth()->user()->establishment_id];
+        if(auth()->user()->establishment_id == 41){
+            $establishments = [41];
+        }elseif(auth()->user()->establishment_id == 38){
+            $establishments = [1,38];
+        }
+
         // Aplicar el filtro si se selecciona un estado y no se selecciona "Todos"
         if (!empty($this->statusFilters) && !in_array('Todos', $this->statusFilters)) {
-            $query->whereIn('status', $this->statusFilters);
+            $query->whereIn('status', $this->statusFilters)
+                    ->whereHas('applicant', function ($q) use ($establishments) {
+                            $q->whereIn('establishment_id',$establishments);
+                        });
         } elseif (empty($this->statusFilters)) {
-            $query->where('status', null); // No mostrar nada si no hay filtros seleccionados
+            $query->where('status', null) // No mostrar nada si no hay filtros seleccionados
+                    ->whereHas('applicant', function ($q) use ($establishments) {
+                        $q->whereIn('establishment_id',$establishments);
+                    });
         }
 
         // Obtener las solicitudes filtradas

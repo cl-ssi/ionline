@@ -175,7 +175,7 @@ class OpenHourController extends Controller
 
         // validación
         if($openHour->start_date < now()){
-            session()->flash('warning', 'No es posible eliminar una reserva de un bloque que haya trasncurrido.');
+            session()->flash('warning', 'No es posible eliminar una reserva de un bloque que haya transcurrido.');
             return redirect()->back();
         }
 
@@ -189,6 +189,33 @@ class OpenHourController extends Controller
             if($openHour->patient->email != null){
                 if (filter_var($openHour->patient->email, FILTER_VALIDATE_EMAIL)) {
                     $openHour->patient->notify(new CancelReservation($openHour));
+                } 
+            }    
+        }
+        
+        session()->flash('success', 'Se guardó la información.');
+        return redirect()->back();
+    }
+
+    public function auto_delete_reservation(Request $request){
+        $openHour = OpenHour::find($request->openHours_id);
+
+        // validación
+        if($openHour->start_date < now()){
+            session()->flash('warning', 'No es posible eliminar una reserva de un bloque que haya transcurrido.');
+            return redirect()->back();
+        }
+
+        $openHour->deleted_bloqued_observation = now() . ": Se auto-eliminó la reserva de " . $openHour->patient->shortName;
+        $openHour->patient_id = null;
+        $openHour->observation = null;
+        $openHour->save();
+
+        //envía correo de cancelación
+        if($openHour->patient){
+            if($openHour->patient->email != null){
+                if (filter_var($openHour->patient->email, FILTER_VALIDATE_EMAIL)) {
+                    $openHour->patient->notify(new AutoCancelReservation($openHour));
                 } 
             }    
         }
@@ -354,7 +381,7 @@ class OpenHourController extends Controller
     }
 
     public function myBookings(){
-        $openHours = OpenHour::where('patient_id',auth()->user()->id)->get();
+        $openHours = OpenHour::where('patient_id',auth()->user()->id)->orderBy('id','DESC')->paginate(20);
         return view('prof_agenda.my_bookings',compact('openHours'));
     }
 }
