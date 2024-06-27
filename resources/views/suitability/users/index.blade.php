@@ -49,8 +49,7 @@
 <hr>
 <hr>
 
-<form method="GET" class="form-horizontal" action="{{ route('suitability.users.index') }}">
-    @csrf
+<form method="GET" class="form-horizontal" action="{{ route('suitability.users.indexAdmin') }}">    
     <div class="form-row">
         <fieldset class="form-group col">
             <label for="for_school_id">Colegios</label>
@@ -64,12 +63,11 @@
         </fieldset>
 
         <fieldset class="form-group col">
-            <label for="for_user_external_id">Usuarios Externos</label>
-            <!-- Agrega el campo de selección de usuarios externos -->
-            <select name="user_external_id" id="for_user_external_id" class="form-control selectpicker" data-live-search="true" title="Seleccione Usuario Externo">
-                <option value="">Todos los Usuarios</option>
-                @foreach($users as $user)
-                    <option value="{{ $user->id }}" {{ request('user_external_id') == $user->id ? 'selected' : '' }}>{{ $user->fullname }}</option>
+            <label for="for_user_external_id">Usuarios Administradores</label>
+            <select name="user_external_id" id="for_user_external_id" class="form-control selectpicker" data-live-search="true" title="Seleccione Usuario">
+                <option value="">Seleccionar Administrador</option>
+                @foreach($users as $schoolUser)
+                    <option value="{{ $schoolUser->user->id }}" {{ request('user_external_id') == $schoolUser->user->id ? 'selected' : '' }}>{{ $schoolUser->user->fullname }}</option>
                 @endforeach
             </select>
         </fieldset>

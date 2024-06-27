@@ -17,7 +17,7 @@ class SchoolUserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function indexAdmin(Request $request)
     {
         $adminUsersQuery = SchoolUser::with(['user', 'school.commune'])
             ->where('admin', 1);
@@ -37,12 +37,65 @@ class SchoolUserController extends Controller
         }
     
         $adminUsers = $adminUsersQuery->get();
-        $users = UserExternal::orderBy('name')->get();
+        $users = SchoolUser::with('user')->get()->sortBy(function($schoolUser) {
+            return $schoolUser->user->name;
+        });
         $schools = School::orderBy('name')->get();
         $communes = Commune::orderBy('name')->get();
     
-        return view('suitability.users.index', compact('adminUsers', 'users', 'schools', 'communes'));
+        return view('suitability.users.index', compact('adminUsers', 'users', 'schools', 'communes', 'request'));
     }
+
+    public function indexUser(Request $request)
+    {
+        $schools = School::orderBy('name')->get();
+        $query = UserExternal::whereHas('psiRequests');
+    
+        // Aplicar filtros
+        if ($request->has('search')) {
+            $search = $request->input('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('id', 'like', "%{$search}%")
+                  ->orWhere('name', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%")
+                  ->orWhere('phone_number', 'like', "%{$search}%");
+            });
+        }
+    
+        // Filtrar por colegio si se selecciona uno
+        if ($request->filled('school_id')) {
+            $query->whereHas('psiRequests.school', function ($q) use ($request) {
+                $q->where('id', $request->input('school_id'));
+            });
+        }
+    
+        $users = $query->paginate(100);
+    
+        return view('suitability.users.index-user', compact('users', 'schools', 'request'));
+    }
+
+    public function convertAdmin(Request $request)
+    {
+        // Validación de los datos
+        $request->validate([
+            'user_external_id' => 'required|exists:users_external,id',
+            'school_id' => 'required|exists:schools,id',
+        ]);
+
+        // Creación del registro SchoolUser
+        $schoolUser = new SchoolUser();
+        $schoolUser->user_external_id = $request->user_external_id;
+        $schoolUser->school_id = $request->school_id;
+        $schoolUser->admin = 1;
+        $schoolUser->save();
+
+        session()->flash('success', 'Usuario asignado como administrador del colegio exitosamente');
+
+        return redirect()->route('suitability.users.indexAdmin');
+    }
+
+    
+    
     
     
     /**
@@ -93,7 +146,7 @@ class SchoolUserController extends Controller
         $user->save();
         session()->flash('success', 'Se Asigno al Usuario al colegio');
         }
-        return redirect()->route('suitability.users.index');
+        return redirect()->route('suitability.users.indexAdmin');
     }
 
     /**
@@ -158,7 +211,7 @@ class SchoolUserController extends Controller
         $userExternal->save();
 
         session()->flash('success', 'Usuario Externo actualizado exitosamente');
-        return redirect()->route('suitability.users.index');
+        return redirect()->route('suitability.users.indexAdmin');
     }
 
 

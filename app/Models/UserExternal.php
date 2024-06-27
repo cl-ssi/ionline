@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 use App\Models\Suitability\Result;
+use App\Models\Suitability\PsiRequest;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class UserExternal extends Authenticatable
@@ -51,4 +52,11 @@ class UserExternal extends Authenticatable
         return $this->hasMany(Result::class, 'user_id', 'id');
         //return $this->hasMany('App\Models\Result', 'user_id', 'id');
     }
+
+    public function psiRequests()
+    {
+        return $this->hasMany(PsiRequest::class, 'user_external_id', 'id');
+    }
+
+
 }

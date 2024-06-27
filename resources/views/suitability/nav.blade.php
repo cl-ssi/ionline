@@ -33,6 +33,12 @@
     </li>
 
     <li class="nav-item">
+        <a class="nav-link" href="{{ route('suitability.users.indexUser') }}">
+            <i class="fas fa-user-graduate"></i> Usuarios Colegios
+        </a>
+    </li>
+
+    <li class="nav-item">
         <a class="nav-link  dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
             aria-haspopup="true">
             <i class="fas fa-book-open"></i> Reportes
@@ -74,8 +80,8 @@
         <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
             <a class="dropdown-item" href="{{ route('suitability.schools.index') }}"><i class="fas fa-school"></i>
                 Colegios</a>
-            <a class="dropdown-item" href="{{ route('suitability.users.index') }}"><i class="fas fa-user"></i>
-                Usuarios</a>
+            <a class="dropdown-item" href="{{ route('suitability.users.indexAdmin') }}"><i class="fas fa-user"></i>
+                Administradores</a>
             <hr>
             <a class="dropdown-item" href="{{ route('suitability.categories.index') }}"><i class="fas fa-list"></i>
                 Examen</a>
