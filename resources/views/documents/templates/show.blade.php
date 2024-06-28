@@ -22,7 +22,7 @@
             
             <div class="left quince" style="padding-left: 2px; padding-bottom: 10px;">
                 <strong style="text-transform: uppercase; padding-right: 30px;">
-                    {{ optional($document->type)->name }} N°:
+                    {{ optional($document->type)->name }} {{ $document->reserved ? 'Reservado' : '' }} N°:
                 </strong> 
                 <span class="catorce negrita">{{ $document->number }}</span>
             </div>
