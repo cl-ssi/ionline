@@ -214,6 +214,11 @@ class Inventory extends Model implements Auditable
         return $this->hasOne(Computer::class);
     }
 
+    public function inventoryUsers()
+    {
+        return $this->hasMany(InventoryUser::class);
+    }
+
     public function accountingCode()
     {
         return $this->belongsTo(AccountingCode::class);

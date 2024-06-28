@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Inventory;
 
 use App\Models\Establishment;
 use App\Models\Inv\Inventory;
+use App\Models\Inv\InventoryUser;
 use App\Models\Inv\Classification;
 use App\Models\Parameters\Location;
 use App\Models\Parameters\Place;
@@ -278,6 +279,13 @@ class InventoryIndex extends Component
     public function updatedClassificationId($classification_id)
     {        
         $this->getInventories();
+    }
+
+    public function removeInventoryUser($inventoryUserId)
+    {
+        InventoryUser::where('id', $inventoryUserId)->delete();
+        session()->flash('message', 'Usuario eliminado exitosamente.');
+        $this->getUsers();
     }
 
 

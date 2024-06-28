@@ -26,6 +26,8 @@ use App\Models\Profile\Subrogation;
 use App\Models\Warehouse\StoreUser;
 use App\Models\Parameters\AccessLog;
 
+use App\Models\Inventory\inventoryUser;
+
 use App\Models\Rrhh\CompensatoryDay;
 use App\Models\Rrhh\UserBankAccount;
 use Illuminate\Support\Facades\Auth;
@@ -401,6 +403,11 @@ class User extends Authenticatable implements Auditable
     public function purchases()
     {
         return $this->hasMany('App\Models\Pharmacies\Purchase');
+    }
+
+    public function inventoryUsers()
+    {
+        return $this->hasMany(InventoryUser::class);
     }
 
     public function dispatches()

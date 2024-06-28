@@ -28,6 +28,7 @@ use App\Http\Livewire\Finance\UploadTgr;
 use App\Http\Livewire\Finance\ManualDtes;
 use App\Http\Livewire\Finance\UploadDtes;
 use App\Http\Livewire\Inventory\Transfer;
+use App\Http\Livewire\Inventory\AssignUser;
 use App\Models\WebService\MercadoPublico;
 use App\Http\Livewire\His\ModificationMgr;
 use App\Http\Livewire\His\NewModification;
@@ -2078,6 +2079,7 @@ Route::prefix('prof_agenda')->as('prof_agenda.')->middleware(['auth'])->group(fu
 Route::prefix('inventories')->as('inventories.')->middleware(['auth', 'must.change.password'])->group(function () {
     Route::get('sheet', InventorySheet::class)->name('sheet');
     Route::get('/accounting-update', AccountingUpdate::class)->name('accounting-update');
+    Route::get('/assign-user/{userType}/{inventory}', AssignUser::class)->name('assign-user');
 
     Route::prefix('establishment/{establishment}')->group(function () {
         /** Ruta para poder ver la hoja de inventario sin edición  */

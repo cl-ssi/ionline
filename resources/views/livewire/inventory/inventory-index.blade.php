@@ -313,6 +313,23 @@
 
     <h5 class="mt-3">
         Inventario
+        @if (session()->has('message'))
+            <div class="alert alert-success">
+                {{ session('message') }}
+            </div>
+        @endif
+        
+        @if (session()->has('message-success-inventory'))
+            <div class="alert alert-success">
+                {{ session('message-success-inventory') }}
+            </div>
+        @endif
+
+        @if (session()->has('message-warning-inventory'))
+            <div class="alert alert-warning">
+                {{ session('message-warning-inventory') }}
+            </div>
+        @endif
     </h5>
 
     @if($place)
@@ -363,6 +380,9 @@
                     <th>Lugar</th>
                     <th>Código interno Arquitectura</th>
                     <th>Responsable</th>
+                    @can('be god')
+                        <th>Usuario(s)</th>
+                    @endcan
                     <th>Marca</th>
                     <th>Modelo</th>
                     <th>Nº Serie</th>
@@ -429,6 +449,30 @@
                             @endif
                         @endif
                     </td>
+                    @can('be god')
+                    <td>
+                        @if($inventory->inventoryUsers)
+                            <ul>
+                                @foreach($inventory->inventoryUsers as $inventoryuser)
+                                    <li>
+                                        {{ $inventoryuser->user->tinny_name }}
+                                        <button class="btn btn-danger btn-sm" title="Eliminar Usuario" wire:click="removeInventoryUser({{ $inventoryuser->id }})">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    </li>
+                                    @if($loop->last)
+                                        <hr>
+                                    @endif
+                                @endforeach
+                            </ul>
+                        @endif
+                        <div class="text-center mt-3">
+                            <a href="{{ route('inventories.assign-user', ['userType' => 'admin', 'inventory' => $inventory->id]) }}" title="Asignar usuario a inventories." class="btn btn-primary btn-sm">
+                                <i class="fas fa-user-plus"></i>
+                            </a>
+                        </div>
+                    </td>
+                    @endcan
                     <td>
                         @if($inventory->brand)
                             {{ $inventory->brand }}
