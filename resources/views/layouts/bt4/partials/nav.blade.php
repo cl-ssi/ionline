@@ -392,7 +392,8 @@
                         </a>
                         @endcanany
 
-                        @if(auth()->user()->welfare || auth()->user()->can('be god') || auth()->user()->can('welfare: amipass') || auth()->user()->can('welfare: balance'))
+                        @if(auth()->user()->welfare || auth()->user()->can('be god') || auth()->user()->can('welfare: amipass') || auth()->user()->can('welfare: balance') || 
+                            auth()->user()->can('welfare: benefits') || auth()->user()->can('welfare: hotel booking administrator'))
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="{{ route('welfare.index') }}">
                                 <i class="fas fa-money-check"></i> Bienestar
