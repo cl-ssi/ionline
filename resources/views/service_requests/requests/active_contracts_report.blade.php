@@ -21,7 +21,7 @@
 		</div>
         <div class="form-group col">
 			<label>Profesión</label>
-			<select class="form-control" name="profession_id" data-size="5" required>
+			<select class="form-control" name="profession_id" data-size="5">
                 <option value=""></option>
                 @foreach($professions_array as $profession)
 				    <option value="{{$profession->id}}" @selected($request->profession_id == $profession->id)>{{$profession->name}}</option>

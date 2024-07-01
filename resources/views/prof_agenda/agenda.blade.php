@@ -22,6 +22,7 @@
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addBlock">Agregar bloque de horario</button>
     <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteBlocks">Eliminar bloques</button>
     <button type="button" class="btn btn-info" data-toggle="modal" data-target="#blockPeriod">Bloquear período</button>
+    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#jubilado">Reservar jubilado</button>
 
     @livewire('prof-agenda.agenda',['profession_id' => $request->profession_id, 'profesional_id' => $request->user_id])
     @stack('scripts')
@@ -136,7 +137,6 @@
     </div>
 </form>
 
-
 <!-- bloquear periodo de tiempo -->
 <form method="POST" class="form-horizontal" action="{{ route('prof_agenda.open_hour.blockPeriod') }}">
     @csrf
@@ -188,6 +188,33 @@
     </div>
 </form>
 
+<form method="POST" class="form-horizontal" action="{{ route('prof_agenda.open_hour.saveBlock') }}">
+    @csrf
+    @method('POST')
+    <input type="hidden" name="profesional_id" value="{{$request->user_id}}">
+    <input type="hidden" name="profession_id" value="{{$request->profession_id}}">
+    <div class="modal fade bd-example-modal-lg" tabindex="-1" id="jubilado" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Reservar jubilado</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            
+            @livewire('prof-agenda.select-activity-type-open-hours',['profession_id' => $request->profession_id, 'profesional_id' => $request->user_id])
+
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-primary" onclick="return confirm('¿Está seguro que desea agregar el bloque de horario?')">Guardar</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        </div>
+        </div>
+    </div>
+    </div>
+</form>
 
 @endsection
 

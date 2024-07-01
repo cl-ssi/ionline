@@ -15,7 +15,7 @@ class OpenHour extends Model implements Auditable
 
     //
     protected $fillable = [
-        'id','proposal_detail_id','start_date','end_date','patient_id','contact_number','observation','blocked','deleted_bloqued_observation',
+        'id','proposal_detail_id','start_date','end_date','patient_id','retired_user_id','contact_number','observation','blocked','deleted_bloqued_observation',
         'assistance', 'absence_reason','profesional_id','profession_id','activity_type_id','reserver_id','deleted_at'
     ];
 
@@ -29,6 +29,10 @@ class OpenHour extends Model implements Auditable
     }
 
     public function patient(){
+        return $this->belongsTo('App\Models\User','patient_id')->withTrashed();
+    }
+
+    public function retiredUser(){
         return $this->belongsTo('App\Models\User','patient_id')->withTrashed();
     }
 
