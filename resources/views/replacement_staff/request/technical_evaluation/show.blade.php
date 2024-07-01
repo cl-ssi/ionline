@@ -617,7 +617,7 @@
 <div class="row">
     <div class="col">
         @if($requestReplacementStaff->technicalEvaluation && $requestReplacementStaff->request_id == NULL &&
-            $requestReplacementStaff->form_type == 'replacement' &&
+            ($requestReplacementStaff->form_type == 'replacement' || $requestReplacementStaff->form_type == NULL) &&
             $requestReplacementStaff->end_date < now()->toDateString() &&
             $requestReplacementStaff->technicalEvaluation->date_end != null &&
             ($requestReplacementStaff->user_id == auth()->id() || 
