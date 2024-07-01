@@ -22,7 +22,7 @@
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addBlock">Agregar bloque de horario</button>
     <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteBlocks">Eliminar bloques</button>
     <button type="button" class="btn btn-info" data-toggle="modal" data-target="#blockPeriod">Bloquear período</button>
-    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#jubilado">Reservar jubilado</button>
+    <!-- <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#jubilado">Reservar jubilado</button> -->
 
     @livewire('prof-agenda.agenda',['profession_id' => $request->profession_id, 'profesional_id' => $request->user_id])
     @stack('scripts')
