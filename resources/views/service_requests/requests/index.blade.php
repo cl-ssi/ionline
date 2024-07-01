@@ -50,6 +50,13 @@
             Rechazados <b>({{$rejecedCount}})</b>
         </a>
     </li>
+
+    <li class="nav-item">
+        <a class="nav-link {{ active('rrhh.service-request.index','created') }}"
+            href="{{ route('rrhh.service-request.index','created') }}">
+            Creadas <b>({{$createdCount}})</b>
+        </a>
+    </li>
 </ul>
 
 @if($type == "pending")
@@ -60,9 +67,11 @@
     <h3>Visados</h3>
 @elseif($type == "rejected")
     <h3>Rechazados</h3>
+@elseif($type == "created")
+    <h3>Creadas</h3>
 @endif
 
-@can('Service Request: accept all requests')
+@can('Service Request: accept all requests' && $type == "pending")
     <a class="btn btn-info" href="{{ route('rrhh.service-request.accept_all_requests') }}">
         <i class="fas fa-angle-right"></i> Aceptar todo
     </a>

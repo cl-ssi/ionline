@@ -178,6 +178,7 @@ class ServiceRequestController extends Controller
     $pendingCount = 0;
     $signedCount = 0;
     $rejecedCount = 0;
+    $createdCount = 0;
 
     $serviceRequests = ServiceRequest::whereHas("SignatureFlows", function($subQuery) use($user_id){
         $subQuery->whereNull('status')
@@ -292,7 +293,12 @@ class ServiceRequestController extends Controller
                                 })->paginate(100);
     }
 
-    return view('service_requests.requests.index', compact('data','type','users','notAvailableCount','pendingCount','rejecedCount','signedCount'));
+    $createdCount = ServiceRequest::where('user_id',auth()->user()->id)->count();
+    if($type == "created"){
+        $data = ServiceRequest::where('user_id',auth()->user()->id)->paginate(100);
+    }
+
+    return view('service_requests.requests.index', compact('data','type','users','notAvailableCount','pendingCount','rejecedCount','signedCount','createdCount'));
   }
 
   public function user(Request $request)
