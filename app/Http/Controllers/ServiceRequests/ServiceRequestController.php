@@ -293,9 +293,9 @@ class ServiceRequestController extends Controller
                                 })->paginate(100);
     }
 
-    $createdCount = ServiceRequest::where('user_id',auth()->user()->id)->count();
+    $createdCount = ServiceRequest::where('creator_id',auth()->user()->id)->count();
     if($type == "created"){
-        $data = ServiceRequest::where('user_id',auth()->user()->id)->paginate(100);
+        $data = ServiceRequest::where('creator_id',auth()->user()->id)->paginate(100);
     }
 
     return view('service_requests.requests.index', compact('data','type','users','notAvailableCount','pendingCount','rejecedCount','signedCount','createdCount'));
