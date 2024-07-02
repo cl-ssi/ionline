@@ -23,7 +23,7 @@
 
                 <div class="dropdown-menu">
                     <a class="dropdown-item {{ active(['allowances.sign_index']) }}" href="{{ route('allowances.sign_index') }}">
-                        <i class="fas fa-wallet"></i> Todas los viáticos
+                        <i class="fas fa-wallet"></i> Todos los viáticos
                     </a>
                     <a class="dropdown-item {{ active(['allowances.archived_index']) }}" href="{{ route('allowances.archived_index') }}">
                         <i class="fas fa-archive"></i> Viáticos archivados
