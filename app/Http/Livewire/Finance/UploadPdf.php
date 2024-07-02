@@ -3,6 +3,8 @@
 namespace App\Http\Livewire\Finance;
 
 use Livewire\Component;
+use App\Models\File;
+use App\Models\Finance\Dte;
 use Livewire\WithFileUploads;
 use App\Models\Sigfe\PdfBackup;
 use App\Models\Documents\Approval;
@@ -18,7 +20,6 @@ class UploadPdf extends Component
     public $type;
     public $pdfBackup;
     public $pdfPath;
-    public $pdfPaths= [];
     public $small = false;
 
     protected $rules = [
@@ -30,6 +31,7 @@ class UploadPdf extends Component
         $this->dteId = $dteId;
         $this->type = $type;
         $this->loadPdfBackup();
+        // $this->loadPdfPaths();
     }
 
     public function loadPdfBackup()
@@ -106,30 +108,29 @@ class UploadPdf extends Component
         $this->emit('pdfUploaded');
     }
 
-/*     public function updatedPdfNoApproval(){
-        echo($this->pdfNoApproval);
-    }
- */
     public function savePdfNoApproval()
     {
-        $id = $this->dteId;
-        $pdfCounter = count(array_filter($this->pdfPaths));
         // $this->validate();
+        $this->type = 'attachment_file';
+        $dte = Dte::find($this->dteId);
 
         /* Documento de respaldo: Support File */
-        dd($this->pdfNoApproval);
         if($this->pdfNoApproval) {
-            dd("entre al if");
             $storage_path = 'ionline/finances/institutional_payment/support_documents';
-            $filename = 'adjuntos_'.$id.'_'.$pdfCounter.'.pdf';
+
+            $filename = trim($this->pdfNoApproval->getClientOriginalName());
+            // $pdfCounter = count(array_filter($this->pdfPaths)) + 1;
+            // $filename = 'adjuntos_'.$this->dteId.'_'.$pdfCounter.'.pdf';
             $this->pdfNoApproval->storeAs($storage_path, $filename, 'gcs');
 
-            /* $institutional_payment->files()->create([
+            $dte->filesPdf()->create([
+                'name' => $filename,
                 'storage_path' => $storage_path.'/'.$filename,
                 'stored' => true,
-                'type' => 'support_file',
+                'type' => $this->type,
                 'stored_by_id' => auth()->id(),
-            ]); */
+            ]);
+            $this->emit('pdfRefresh');
         }
     }
 

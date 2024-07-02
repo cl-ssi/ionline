@@ -3,19 +3,18 @@
 namespace App\Http\Livewire\Finance;
 
 use Livewire\Component;
-use Livewire\WithFileUploads;
 use Livewire\WithPagination;
 use App\Models\Finance\Dte;
 use App\Models\Sigfe\PdfBackup;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Builder;
 
 class InstitutionalPayment extends Component
 {
-    use WithFileUploads;
-    use WithPagination;
 
-    public $SupportFile;
-    protected $paginationTheme = 'bootstrap';
+    protected $listeners = [
+        'pdfRefresh'
+    ];
 
     public $filters = [
         'id' => null,
@@ -25,49 +24,30 @@ class InstitutionalPayment extends Component
         'firmado' => 'Todos',
     ];
 
+    public $dtes;
+
     public function search()
     {
         $this->resetPage();
     }
-    public function updatedSupportFile()
+
+
+    public function pdfRefresh()
     {
-        dd($this->SupportFile);
+        $this->render();
     }
 
-    public function save($dte_id)
-    {
-        $id = $dte_id;
-        // $this->validate();
-
-        /* Documento de respaldo: Support File */
-        dd("no entre al if");
-        if($this->SupportFile) {
-            dd("entre al if");
-            $storage_path = 'ionline/finances/institutional_payment/support_documents';
-            $filename = $id.'.pdf';
-
-            $this->SupportFile->storeAs($storage_path, $filename, 'gcs');
-
-
-            /* $institutional_payment->files()->create([
-                'storage_path' => $storage_path.'/'.$filename,
-                'stored' => true,
-                'type' => 'support_file',
-                'stored_by_id' => auth()->id(),
-            ]); */
-        }
-    }
-
-    public function render()
+    public function loadDtes()
     {
         $query = Dte::query()
             ->with([
                 'comprobantePago',
                 'requestForm.contractManager',
                 'contractManager',
-                'establishment',
-                'tgrPayedDte',
-                'receptions'
+                'establishment:id,name',
+                'tgrPayedDte:id,folio',
+                'receptions:id,dte_id,status',
+                'filesPdf'
             ])
             ->whereNull('rejected')
             ->where('tipo_documento', 'LIKE', 'factura_%')
@@ -102,10 +82,18 @@ class InstitutionalPayment extends Component
                 $query->where('status', '!=', 1);
             });
         }
+        return $query->get();
 
-        $dtes = $query->paginate(50);
+    }
+
+    public function render()
+    {
+        $this->dtes = $this->loadDtes();
+        // $this->dtes = $dtes->items();
+
         return view('livewire.finance.institutional-payment', [
-            'dtes' => $dtes,
+            'dtes' => $this->dtes
         ]);
     }
 }
+
