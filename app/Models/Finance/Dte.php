@@ -6,7 +6,9 @@ use OwenIt\Auditing\Contracts\Auditable;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use App\Models\User;
+use App\Models\File as FileModel;
 use App\Models\Warehouse\Control;
 use App\Models\RequestForms\RequestForm;
 use App\Models\RequestForms\ImmediatePurchase;
@@ -244,7 +246,7 @@ class Dte extends Model implements Auditable
         return $this->belongsToMany(Dte::class,'fin_invoice_dtes','invoice_id','dte_id')->withTimestamps();
     }
 
-    /** 
+    /**
      * Y por el contrario, una DTE de tipo guia de despacho, nota de crédito o débito
      * podría pertenecer a una o muchas facturas
      */
@@ -372,6 +374,15 @@ class Dte extends Model implements Auditable
     public function files()
     {
         return $this->hasMany(File::class, 'dte_id');
+    }
+
+    /**
+     * Get all of the files of a model.
+    */
+    public function filesPdf(): MorphMany
+    {
+        // dd('llamando filesPdf');
+        return $this->morphMany(FileModel::class, 'fileable');
     }
 
     public function establishment()
