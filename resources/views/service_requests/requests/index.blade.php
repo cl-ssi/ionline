@@ -83,10 +83,13 @@
     <h3>Total de la unidad</h3>
 @endif
 
-@can('Service Request: accept all requests' && $type == "pending")
+@can('Service Request: accept all requests')
+    @if($type == "pending")
     <a class="btn btn-info" href="{{ route('rrhh.service-request.accept_all_requests') }}">
         <i class="fas fa-angle-right"></i> Aceptar todo
     </a>
+    <br><br>
+    @endif
 @endcan
 
 <div class="table-responsive">
