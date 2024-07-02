@@ -13,12 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('prof_agenda_retired_users', function (Blueprint $table) {
+        Schema::create('prof_agenda_external_users', function (Blueprint $table) {
             $table->bigInteger('id')->unsigned()->unique();
             $table->char('dv',1);
             $table->string('name');
             $table->string('fathers_family');
             $table->string('mothers_family');
+            $table->string('gender')->nullable();
             $table->string('email')->nullable();
             $table->string('address')->nullable();
             $table->string('phone_number')->nullable();
@@ -36,6 +37,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('prof_agenda_retired_users');
+        Schema::dropIfExists('prof_agenda_external_users');
     }
 };

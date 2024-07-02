@@ -22,7 +22,7 @@
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addBlock">Agregar bloque de horario</button>
     <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteBlocks">Eliminar bloques</button>
     <button type="button" class="btn btn-info" data-toggle="modal" data-target="#blockPeriod">Bloquear período</button>
-    <!-- <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#jubilado">Reservar jubilado</button> -->
+    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#jubilado">Reservar jubilado</button>
 
     @livewire('prof-agenda.agenda',['profession_id' => $request->profession_id, 'profesional_id' => $request->user_id])
     @stack('scripts')
@@ -188,11 +188,9 @@
     </div>
 </form>
 
-<form method="POST" class="form-horizontal" action="{{ route('prof_agenda.open_hour.saveBlock') }}">
+<form method="POST" class="form-horizontal" action="{{ route('prof_agenda.open_hour.externalUserSave') }}">
     @csrf
     @method('POST')
-    <input type="hidden" name="profesional_id" value="{{$request->user_id}}">
-    <input type="hidden" name="profession_id" value="{{$request->profession_id}}">
     <div class="modal fade bd-example-modal-lg" tabindex="-1" id="jubilado" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -206,9 +204,11 @@
             
             @livewire('prof-agenda.select-activity-type-open-hours',['profession_id' => $request->profession_id, 'profesional_id' => $request->user_id])
 
+            @livewire('prof-agenda.external-employee-data')
+
         </div>
         <div class="modal-footer">
-            <button type="submit" class="btn btn-primary" onclick="return confirm('¿Está seguro que desea agregar el bloque de horario?')">Guardar</button>
+            <button type="submit" class="btn btn-primary" onclick="return confirm('¿Está seguro que desea reservar el bloque de horario?')">Guardar</button>
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
         </div>
         </div>

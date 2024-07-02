@@ -43,13 +43,33 @@ class Agenda extends Component
             
             $array[$count]['id'] = $hour->id;
             $array[$count]['observation'] = $hour->observation;
-            $array[$count]['rut'] = $hour->patient ? ($hour->patient->id . "-" . $hour->patient->dv) : '';
-            $array[$count]['patient_name'] =  $hour->patient ? $hour->patient->shortName : '';
+            // patient
+            // $array[$count]['rut'] = $hour->patient ? ($hour->patient->id . "-" . $hour->patient->dv) : '';
+            // $array[$count]['patient_name'] =  $hour->patient ? $hour->patient->shortName : '';
+            // $array[$count]['gender'] = $hour->patient ? $hour->patient->getGender() : '';
+            // // jubilados
+            // $array[$count]['rut'] = $hour->externalUser ? ($hour->externalUser->id . "-" . $hour->externalUser->dv) : '';
+            // $array[$count]['patient_name'] =  $hour->externalUser ? $hour->externalUser->shortName : '';
+            // $array[$count]['gender'] = $hour->externalUser ? $hour->externalUser->getGender() : '';
+            if($hour->patient){
+                $array[$count]['rut'] = $hour->patient->id . "-" . $hour->patient->dv;
+                $array[$count]['patient_name'] =  $hour->patient->shortName;
+                $array[$count]['gender'] = $hour->patient->getGender();
+            }elseif($hour->externalUser){
+                $array[$count]['rut'] = $hour->externalUser->id . "-" . $hour->externalUser->dv;
+                $array[$count]['patient_name'] =  $hour->externalUser->shortName;
+                $array[$count]['gender'] = $hour->externalUser->getGender();
+            }else{
+                $array[$count]['rut'] = '';
+                $array[$count]['patient_name'] =  '';
+                $array[$count]['gender'] = '';
+            }
+
             $array[$count]['contact_number'] = $hour->contact_number;
-            $array[$count]['gender'] = $hour->patient ? $hour->patient->getGender() : '';
             $array[$count]['start'] = $hour->start_date;
             $array[$count]['end'] = $hour->end_date;
             $array[$count]['textColor'] = "black";
+
             // reservado
             if($hour->patient_id){
                 // hora reservada
@@ -76,6 +96,37 @@ class Agenda extends Component
                         $array[$count]['rut'] = $hour->patient ? ($hour->patient->id . "-" . $hour->patient->dv) : '';
                         $array[$count]['color'] = "#EB9489"; // rojo
                         $array[$count]['title'] = $hour->patient->shortName;
+                        $array[$count]['status'] = "No asistió";
+                        $array[$count]['absence_reason'] = $hour->absence_reason;
+                    }
+                }
+                
+            }
+            elseif($hour->external_user_id){
+                // hora reservada
+                if($hour->assistance === null){
+                    $array[$count]['color'] = "#E7EB89"; //amarillo
+                    $array[$count]['title'] =  ($hour->externalUser ? $hour->externalUser->shortName : '') . " - " . $hour->activityType->name;
+                    $array[$count]['status'] = "Reservado";
+                }else{
+                    // paciente asistió
+                    if($hour->assistance == 1){
+                        if($hour->externalUser){
+                            $array[$count]['rut'] = $hour->externalUser->id . "-" . $hour->externalUser->dv;
+                            $array[$count]['color'] = "#C4F7BF"; // verde
+                            $array[$count]['title'] = $hour->externalUser->shortName;
+                            $array[$count]['status'] = "Asistió";
+                        }else{
+                            $array[$count]['rut'] = $hour->externalUser->id . "-" . $hour->externalUser->dv;
+                            $array[$count]['color'] = "#C4F7BF"; // verde
+                            $array[$count]['title'] = $hour->id . " - Error con paciente";
+                            $array[$count]['status'] = "Asistió";
+                        }
+                    }
+                    if($hour->assistance == 0){
+                        $array[$count]['rut'] = $hour->externalUser ? ($hour->externalUser->id . "-" . $hour->externalUser->dv) : '';
+                        $array[$count]['color'] = "#EB9489"; // rojo
+                        $array[$count]['title'] = $hour->externalUser->shortName;
                         $array[$count]['status'] = "No asistió";
                         $array[$count]['absence_reason'] = $hour->absence_reason;
                     }

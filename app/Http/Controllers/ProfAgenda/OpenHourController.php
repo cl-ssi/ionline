@@ -12,6 +12,7 @@ use App\Notifications\ProfAgenda\NewReservation;
 use App\Notifications\ProfAgenda\CancelReservation;
 
 use App\Models\ProfAgenda\OpenHour;
+use App\Models\ProfAgenda\ExternalUser;
 use App\Mail\OpenHourReservation;
 use App\Mail\OpenHourCancelation;
 use App\Http\Controllers\Controller;
@@ -26,8 +27,7 @@ class OpenHourController extends Controller
         $assistance_param = $request->assistance;
         // dd($assistance_param);
 
-        $openHours = OpenHour::whereNotNull('patient_id')
-                            ->when($assistance_param == 2, function ($q) use ($assistance_param) {
+        $openHours = OpenHour::when($assistance_param == 2, function ($q) use ($assistance_param) {
                                 return $q->where('blocked',1);
                             })
                             ->orderBy('start_date', 'DESC')
@@ -41,6 +41,8 @@ class OpenHourController extends Controller
                             })
                             ->with('profesional','activityType','patient')
                             ->withTrashed()
+                            ->whereNotNull('patient_id')
+                            ->orWhereNotNull('external_user_id')
                             ->paginate(50);
         return view('prof_agenda.open_hours.index',compact('openHours','request'));
     }
@@ -303,6 +305,73 @@ class OpenHourController extends Controller
         return redirect()->back();
     }
 
+    public function externalUserSave(Request $request){
+        $openHour = OpenHour::find($request->open_hour_id);
+
+        // valida que el bloque no este reservado
+        if($openHour->patient_id){
+            session()->flash('warning', 'El bloque ya se encuentra reservado, intente nuevamente.');
+            return redirect()->back();
+        }
+
+        if($openHour->blocked == 1){
+            session()->flash('warning', 'El bloque no se encuentra disponible, intente nuevamente.');
+            return redirect()->back();
+        }
+
+        // valida si existen del paciente con otros funcionarios en la misma hora
+        $othersReservationsCount = OpenHour::where('patient_id',$request->user_id)
+                                            ->where(function($query) use ($openHour){
+                                                $query->whereBetween('start_date',[$openHour->start_date, $openHour->end_date])
+                                                        ->orWhereBetween('end_date',[$openHour->start_date, $openHour->end_date]);
+                                            })
+                                            ->where('profesional_id','<>',$openHour->profesional_id)
+                                            ->whereHas('activityType')
+                                            ->count(); 
+        if($othersReservationsCount>0){
+            session()->flash('warning', 'No es posible realizar la reserva del paciente, porque tiene otra reserva a la misma hora con otro funcionario.');
+            return redirect()->back();
+        }
+
+        // solo si vienen parámetros del usuario, se hace modificación
+        if($request->name && $request->fathers_family){
+            // si el usuario se encuentra eliminado, se vuelve a dejar activo
+            if(ExternalUser::withTrashed()->find($request->user_id)){
+                if(ExternalUser::withTrashed()->find($request->user_id)->trashed()){
+                    ExternalUser::withTrashed()->find($request->user_id)->restore();
+                }
+            }
+
+            //devuelve user o lo crea
+            $user = ExternalUser::updateOrCreate(
+                ['id' => $request->user_id],
+                [
+                    'dv' =>  $request->dv,
+                    'name' =>  $request->name,
+                    'fathers_family' =>  $request->fathers_family,
+                    'mothers_family' =>  $request->mothers_family,
+                    'gender' => $request->gender,
+                    'email' =>  $request->email,
+                    'address' =>  $request->address,
+                    // 'commune_id' => $request->commune_id,
+                    'phone_number' =>  $request->phone_number,
+                    'birthday' => $request->birthday,
+                    'active' => true
+                ]
+            );   
+        }             
+
+        // $openHour = OpenHour::find($request->openHours_id);
+        if($request->phone_number){$openHour->contact_number = $request->phone_number;}
+        $openHour->external_user_id = $request->user_id;
+        $openHour->reserver_id = auth()->user()->id;
+        $openHour->observation = $request->observation;
+        $openHour->save();
+        
+        session()->flash('success', 'Se guardó la información.');
+        return redirect()->back();
+    }
+    
     public function deleteBlocks(Request $request){
         $date = Carbon::parse($request->date);
         $start_date = Carbon::parse($date->format('Y-m-d') . " " . $request->start_hour);

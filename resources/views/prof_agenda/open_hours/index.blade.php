@@ -64,7 +64,11 @@
             <td>{{$openHour->end_date->format('Y-m-d H:i')}}</td>
             <td>@if($openHour->profesional){{$openHour->profesional->shortName}}@endif</td>
             <td>{{$openHour->activityType->name}}</td>
-            <td>@if($openHour->patient){{$openHour->patient->shortName}}@endif</td>
+            <td>@if($openHour->patient)
+                    {{$openHour->patient->shortName}}
+                @elseif($openHour->externalUser)
+                    {{$openHour->externalUser->shortName}}
+                @endif</td>
             <td>
                 @if($openHour->deleted_at) <i class="fa fa-ban" aria-hidden="true"></i>
                 @elseif($openHour->assistance === 1) <i class="fa fa-check" aria-hidden="true"></i>

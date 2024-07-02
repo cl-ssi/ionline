@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('prof_agenda_open_hours', function (Blueprint $table) {
-            $table->foreignId('retired_user_id')->nullable()->after('patient_id')->constrained('prof_agenda_retired_users');
+            $table->foreignId('external_user_id')->nullable()->after('patient_id')->constrained('prof_agenda_external_users');
         });
     }
 
@@ -26,8 +26,8 @@ return new class extends Migration
     public function down()
     {
         Schema::table('prof_agenda_open_hours', function (Blueprint $table) {
-            $table->dropForeign(['retired_user_id']);
-            $table->dropColumn('retired_user_id');
+            $table->dropForeign(['external_user_id']);
+            $table->dropColumn('external_user_id');
         });
     }
 };
