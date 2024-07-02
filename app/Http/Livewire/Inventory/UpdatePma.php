@@ -27,12 +27,7 @@ class UpdatePma extends Component
     public function mount()
     {
         $this->selectedItems = array_fill(0, count($this->inventories), false);
-
-        //cambios solicitado por Nila ahora deben salir todos
-        $this->inventories = Inventory::whereHas('lastConfirmedMovement', function ($query) {
-            //$query->where('place_id', $this->place_id);
-            $query->where('user_responsible_id', auth()->user()->id);
-        })->get();
+        $this->inventories = Inventory::where('user_responsible_id', auth()->user()->id)->get();
     }
 
     protected $listeners = [
