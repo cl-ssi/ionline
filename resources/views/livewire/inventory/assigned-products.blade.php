@@ -67,6 +67,9 @@
             <th>Código Arquitectónico</th>
             <th>Responsable</th>
             <th>Usuario</th>
+            @can('be god')
+                <th>Usuario(s)</th>
+            @endcan
             <th></th>
         </thead>
         <tbody>
@@ -124,6 +127,35 @@
                     <td>
                         {{ optional($inventory->using)->tinny_name }}
                     </td>
+                    @can('be god')
+                    <td>
+                        @if($inventory->inventoryUsers)
+                            <ul>
+                                @foreach($inventory->inventoryUsers as $inventoryuser)
+                                    <li>
+                                        {{ $inventoryuser->user->tinny_name }}
+                                        @if($inventory->user_responsible_id == auth()->user()->id)
+                                            <button class="btn btn-danger btn-sm" title="Eliminar Usuario" wire:click="removeInventoryUser({{ $inventoryuser->id }})">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
+                                        @endif
+                                    </li>
+                                    @if($loop->last)
+                                        <hr>
+                                    @endif
+                                @endforeach
+                            </ul>
+                        @endif
+                        @if($inventory->user_responsible_id == auth()->user()->id)
+                            <div class="text-center mt-3">
+                                <a href="{{ route('inventories.assign-user', ['userType' => 'user', 'inventory' => $inventory->id]) }}" title="Asignar usuario a inventario" class="btn btn-primary btn-sm">
+                                    <i class="fas fa-user-plus"></i>
+                                </a>
+                            </div>
+                        @endif
+
+                    </td>
+                    @endcan
                     <td class="text-center" nowrap>
                         <a
                             class="btn btn-sm btn-outline-primary"
