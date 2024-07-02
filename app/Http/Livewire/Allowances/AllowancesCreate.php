@@ -100,6 +100,7 @@ class AllowancesCreate extends Component
 
     public $iterationFileClean = 0;
 
+    public $restrict = [];
 
     protected $listeners = ['emitPosition', 'emitPositionValue', 'userSelected', 'savedDestinations', 'selectedInputId',
         'searchedCommune'];
@@ -990,6 +991,9 @@ class AllowancesCreate extends Component
             $this->allowanceToReplicate = $allowanceToReplicate;
             $this->setAllowanceToReplicate();
         }
+
+        //UNIDADES ORGANIZACIONALES RESTRINGIDAS PARA VIATICOS
+        $this->restrict[] = Parameter::get('ou', 'Externos');
     }
 
     public function updatedmeansOfTransport($meansOfTransportId){

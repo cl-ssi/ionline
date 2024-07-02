@@ -22,6 +22,8 @@ class SearchSelectUser extends Component
      * Si necesitas obtener el usuario seleccionado en otro componente livewire, debes indicar el nombre del listener
      * @livewire('search-select-user', ['emit_name' => 'Nombre del listener'])
      * 
+     * Si necesitas restringir usuarios por U.O., deber usar un array precargado en el mount de tu componente
+     * @livewire('search-select-user', ['restrict' => $restrict])
      * 
      * protected $listeners = ['userSelected'];
      */
@@ -40,6 +42,8 @@ class SearchSelectUser extends Component
     public $disabled;
 
     public $selectedUsers = [];
+
+    public $restrict = [];
 
     protected function rules(){
         return [
@@ -93,6 +97,7 @@ class SearchSelectUser extends Component
     public function updatedQuery()
     {
         $this->users = User::getUsersBySearch($this->query)
+            ->whereNotIn('organizational_unit_id', $this->restrict)
             ->orderBy('name','Asc')
             ->get();
 
