@@ -57,6 +57,16 @@
             Creadas <b>({{$createdCount}})</b>
         </a>
     </li>
+
+    @if(auth()->user()->manager->count() > 0 || auth()->user()->secretary->count() > 0 || auth()->user()->delegate->count() > 0)
+        <li class="nav-item">
+            <a class="nav-link {{ active('rrhh.service-request.index','unitTotal') }}"
+                href="{{ route('rrhh.service-request.index','unitTotal') }}">
+                Total de la unidad <b>({{$unitTotal}})</b>
+            </a>
+        </li>
+    @endif
+
 </ul>
 
 @if($type == "pending")
@@ -69,6 +79,8 @@
     <h3>Rechazados</h3>
 @elseif($type == "created")
     <h3>Creadas</h3>
+@elseif($type == "unitTotal")
+    <h3>Total de la unidad</h3>
 @endif
 
 @can('Service Request: accept all requests' && $type == "pending")
@@ -119,7 +131,7 @@
     </table>
 </div>
 
-@if($type == "signed" || $type == "rejected")
+@if($type == "rejected" || $type == "signed" || $type == "created" || $type == "unitTotal")
     {{ $data->appends(request()->query())->links() }}
 @endif
 

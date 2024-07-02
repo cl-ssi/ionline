@@ -183,7 +183,8 @@ class ServiceRequestController extends Controller
     $serviceRequests = ServiceRequest::whereHas("SignatureFlows", function($subQuery) use($user_id){
         $subQuery->whereNull('status')
                 ->where( function($query) use($user_id){
-                    $query->where('responsable_id', $user_id);
+                    $query->where('responsable_id', $user_id)
+                            ->orwhere('user_id', $user_id);
                 });
     })
     ->wheredoesnthave("SignatureFlows", function($subQuery) {
@@ -298,7 +299,17 @@ class ServiceRequestController extends Controller
         $data = ServiceRequest::where('creator_id',auth()->user()->id)->paginate(100);
     }
 
-    return view('service_requests.requests.index', compact('data','type','users','notAvailableCount','pendingCount','rejecedCount','signedCount','createdCount'));
+    $unitTotal = 0;
+    // se verifica si usuario es autoridad (cualquiera)
+    if(auth()->user()->manager->count() > 0 || auth()->user()->secretary->count() > 0 || auth()->user()->delegate->count() > 0){
+        $unitTotal = ServiceRequest::where('responsability_center_ou_id',auth()->user()->organizational_unit_id)->count();
+        if($type == "unitTotal"){
+            $data = ServiceRequest::where('responsability_center_ou_id',auth()->user()->organizational_unit_id)->paginate(100);
+        }
+    }
+
+    return view('service_requests.requests.index', compact('data','type','users','notAvailableCount','pendingCount','rejecedCount',
+                                                            'signedCount','createdCount','unitTotal'));
   }
 
   public function user(Request $request)
