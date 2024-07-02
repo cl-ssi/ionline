@@ -784,15 +784,17 @@ class ServiceRequestController extends Controller
   public function edit(ServiceRequest $serviceRequest)
   {
     //validate users without permission Service Request: additional data
-    if (!auth()->user()->can('Service Request: additional data')) {
-      $user_id = auth()->id();
-      if (
-        $serviceRequest->signatureFlows->where('responsable_id', $user_id)->count() == 0 &&
-        $serviceRequest->signatureFlows->where('user_id', $user_id)->count() == 0
-      ) {
-        session()->flash('danger', 'No tiene acceso a esta solicitud');
-        return redirect()->route('rrhh.service-request.index','pending');
-      }
+    if (!auth()->user()->can('Service Request: view-all ou requests')) {
+        if (!auth()->user()->can('Service Request: additional data')) {
+        $user_id = auth()->id();
+        if (
+            $serviceRequest->signatureFlows->where('responsable_id', $user_id)->count() == 0 &&
+            $serviceRequest->signatureFlows->where('user_id', $user_id)->count() == 0
+        ) {
+            session()->flash('danger', 'No tiene acceso a esta solicitud');
+            return redirect()->route('rrhh.service-request.index','pending');
+        }
+        }
     }
 
     if($serviceRequest->SignatureFlows->isEmpty())
