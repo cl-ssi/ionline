@@ -58,14 +58,14 @@
         </a>
     </li>
 
-    @if(auth()->user()->manager->count() > 0 || auth()->user()->secretary->count() > 0 || auth()->user()->delegate->count() > 0)
+    @can('Service Request: view-all ou requests')
         <li class="nav-item">
             <a class="nav-link {{ active('rrhh.service-request.index','unitTotal') }}"
                 href="{{ route('rrhh.service-request.index','unitTotal') }}">
                 Total de la unidad <b>({{$unitTotal}})</b>
             </a>
         </li>
-    @endif
+    @endcan
 
 </ul>
 
@@ -131,8 +131,14 @@
     </table>
 </div>
 
-@if($type == "rejected" || $type == "signed" || $type == "created" || $type == "unitTotal")
+@if($type == "rejected" || $type == "signed" || $type == "created")
     {{ $data->appends(request()->query())->links() }}
+@endif
+
+@if($type == "unitTotal")
+    @can('Service Request: view-all ou requests')
+        {{ $data->appends(request()->query())->links() }}
+    @endcan
 @endif
 
 <!-- modal -->

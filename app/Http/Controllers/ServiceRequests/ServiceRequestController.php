@@ -301,7 +301,7 @@ class ServiceRequestController extends Controller
 
     $unitTotal = 0;
     // se verifica si usuario es autoridad (cualquiera)
-    if(auth()->user()->manager->count() > 0 || auth()->user()->secretary->count() > 0 || auth()->user()->delegate->count() > 0){
+    if(auth()->user()->can('Service Request: view-all ou requests')){
         $unitTotal = ServiceRequest::where('responsability_center_ou_id',auth()->user()->organizational_unit_id)->count();
         if($type == "unitTotal"){
             $data = ServiceRequest::where('responsability_center_ou_id',auth()->user()->organizational_unit_id)->paginate(100);
