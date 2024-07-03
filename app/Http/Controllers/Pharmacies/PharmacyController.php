@@ -19,8 +19,7 @@ class PharmacyController extends Controller
     public function index()
     {
         // session(['pharmacy_id' => auth()->user()->pharmacies->first()->id]);
-        // return view('pharmacies.index');
-        dd("");
+        return view('pharmacies.index');
     }
 
     public function admin_view(){
