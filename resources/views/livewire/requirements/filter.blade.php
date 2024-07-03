@@ -1,7 +1,7 @@
 <div>
     <div class="form-row mb-3">
 
-        <div class="col-2">
+        <div class="col-1">
             <input type="number"
                 wire:model.debounce.defer="req_id"
                 class="form-control"
@@ -14,6 +14,12 @@
                 placeholder="Asunto">
         </div>
         <div class="col-3">
+            <input type="text"
+                wire:model.debounce.defer="body"
+                class="form-control"
+                placeholder="Cuerpo">
+        </div>
+        <div class="col-2">
             <select wire:model.debounce.defer="label"
                 class="form-control"
                 placeholder="Etiqueta">
@@ -31,7 +37,7 @@
                 <option>Archivados</option>
             </select>
         </div>
-        <div class="col-2 text-center">
+        <div class="col-1 text-center">
             <button class="btn btn-secondary"
                 wire:click="search"
                 wire:loading.class="d-none">

@@ -20,6 +20,7 @@ class Filter extends Component
 
     public $req_id;
     public $subject;
+    public $body;
     public $label;
     public $category_id;
     public $user_involved;
@@ -61,6 +62,12 @@ class Filter extends Component
         if($this->subject)
         {
             $requirements->where('subject','LIKE','%'.$this->subject.'%');
+        }
+
+        if ($this->body) {            
+            $requirements->whereHas('events', function ($query) {
+                $query->where('body', 'LIKE', '%' . $this->body . '%');
+            });
         }
 
         if($this->label)
