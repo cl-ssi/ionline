@@ -120,5 +120,8 @@
 </ul>
 @endcan
 
-<h5 style="text-align: right;">Bodega seleccionada: <strong>{{ auth()->user()->pharmacies->firstWhere('id', session('pharmacy_id'))->name }}</strong></h5>
-
+@if(auth()->user()->pharmacies->firstWhere('id', session('pharmacy_id')))
+    <h5 style="text-align: right;">Bodega seleccionada: <strong>{{ auth()->user()->pharmacies->firstWhere('id', session('pharmacy_id'))->name }}</strong></h5>
+@else
+    <h5 style="text-align: right;">Debe seleccionar una bodega</h5>
+@endif
