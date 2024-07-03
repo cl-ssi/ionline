@@ -8,14 +8,26 @@ use App\Models\Inv\InventoryUser;
 
 class AssignUsersToInventories extends Command
 {
+    /**
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
     protected $signature = 'inventories:assign-users';
+    
+
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
     protected $description = 'Asigna el usuario usando el inventario al modelo InventoryUser basado en el último movimiento confirmado.';
 
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
+    /**
+     * Execute the console command.
+     *
+     * @return int
+     */
     public function handle()
     {
         // Obtén todos los inventarios
@@ -23,18 +35,15 @@ class AssignUsersToInventories extends Command
 
         foreach ($inventories as $inventory) {
             // Obtén el último movimiento confirmado
-            $lastConfirmedMovement = $inventory->movements()
-                                               ->whereNotNull('reception_date')
-                                               ->orderBy('reception_date', 'desc')
-                                               ->first();
+            $lastConfirmedMovement = $inventory->lastConfirmedMovement;
 
             if ($lastConfirmedMovement) {
                 $userId = $inventory->user_using_id;
 
                 // Verifica si ya está asignado
                 $existingAssignment = InventoryUser::where('inventory_id', $inventory->id)
-                                                   ->where('user_id', $userId)
-                                                   ->first();
+                                                    ->where('user_id', $userId)
+                                                    ->first();
 
                 if (!$existingAssignment) {
                     // Crea una nueva asignación
@@ -45,7 +54,7 @@ class AssignUsersToInventories extends Command
 
                     $this->info("Asignado usuario ID {$userId} al inventario ID {$inventory->id}");
                 } else {
-                    $this->info("El usuario ID {$userId} ya está asignado al inventario ID {$inventory->id}");
+                    //$this->info("El usuario ID {$userId} ya está asignado al inventario ID {$inventory->id}");
                 }
             } else {
                 $this->info("No se encontró un movimiento confirmado para el inventario ID {$inventory->id}");

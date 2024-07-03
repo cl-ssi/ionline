@@ -994,6 +994,7 @@ class AllowancesCreate extends Component
 
         //UNIDADES ORGANIZACIONALES RESTRINGIDAS PARA VIATICOS
         $this->restrict[] = Parameter::get('ou', 'Externos');
+        $this->restrict[] = Parameter::get('ou', 'ExternosAPS');
     }
 
     public function updatedmeansOfTransport($meansOfTransportId){

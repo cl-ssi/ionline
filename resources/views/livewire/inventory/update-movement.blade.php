@@ -86,11 +86,13 @@
         </div>
     </div>
 
-    @can('Inventory: edit act reception confirmation')
-        @livewire('inventory.movement-mgr', [
-            'inventoryMovement' => $movement
-        ], key($movement->id))
-    @endcan
+    @if($movement->reception_confirmation == 1)
+        @can('Inventory: edit act reception confirmation')
+            @livewire('inventory.movement-mgr', [
+                'inventoryMovement' => $movement
+            ], key($movement->id))
+        @endcan
+    @endif
 
     @endforeach
 </div>
