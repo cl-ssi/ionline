@@ -10,6 +10,8 @@
         </div>
     @endif
 
+
+
     <div class="form-row">
         <fieldset class="form-group col-12 col-md-6">
             <label for="for_user_allowance_id">Nombre Funcionario:</label>
@@ -18,13 +20,15 @@
                     'selected_id'   => 'user_allowance_id',
                     'required'      => 'required',
                     'emit_name'     => 'searchedUser',
-                    'user'          => ($allowanceToEdit) ? $allowanceToEdit->userAllowance : $allowanceToReplicate->userAllowance
+                    'user'          => ($allowanceToEdit) ? $allowanceToEdit->userAllowance : $allowanceToReplicate->userAllowance,
+                    'restrict'      => $restrict
                 ])
             @else
                 @livewire('search-select-user', [
                     'selected_id'   => 'user_allowance_id',
                     'required'      => 'required',
-                    'emit_name'     => 'searchedUser'
+                    'emit_name'     => 'searchedUser',
+                    'restrict'      => $restrict
                 ])
             @endif
         </fieldset>
