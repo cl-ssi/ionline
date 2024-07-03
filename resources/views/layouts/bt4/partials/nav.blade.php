@@ -183,7 +183,7 @@
                                 'be god',
                                 'Payments: viewer',
                             ])
-                                <a class="dropdown-item {{ active('finance.dtes.index') }}" 
+                                <a class="dropdown-item {{ active('finance.dtes.index') }}"
                                     href="{{ route('finance.dtes.index') }}">
                                     <i class="fas fa-fw fa-money-bill"></i> Estados de pago
                                 </a>
@@ -228,7 +228,7 @@
                                 @endforelse
                             @endcanany
 
-                            {{-- 
+                            {{--
                             @can('Store: add invoice')
                                 <a
                                     class="dropdown-item {{ active('warehouse.invoice-management') }}"
@@ -236,7 +236,7 @@
                                 >
                                 <i class="fas fa-fw fa-file-invoice-dollar"></i> Ingreso facturas
                             </a>
-                            @endcan 
+                            @endcan
                             --}}
 
                             @canany(['Store: warehouse manager'])
@@ -399,7 +399,7 @@
                         </a>
                         @endcanany
 
-                        @if(auth()->user()->welfare || auth()->user()->can('be god') || auth()->user()->can('welfare: amipass') || auth()->user()->can('welfare: balance') || 
+                        @if(auth()->user()->welfare || auth()->user()->can('be god') || auth()->user()->can('welfare: amipass') || auth()->user()->can('welfare: balance') ||
                             auth()->user()->can('welfare: benefits') || auth()->user()->can('welfare: hotel booking administrator'))
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="{{ route('welfare.index') }}">
@@ -444,7 +444,7 @@
                             <i class="fa fa-calendar fa-fw"></i> Modulo Turnos
                         </a>
                         @endcan
-                        
+
                         @if((auth()->user()->manager->count() > 0 ||
                             auth()->user()->can('Replacement Staff: assign request') ||
                             auth()->user()->can('Replacement Staff: create request') ||
@@ -493,7 +493,7 @@
                         @endif
 
                         @endif
-                        
+
                         @can('Trainings: create')
                         <a class="dropdown-item {{ active('trainings.*') }}" href="{{ route('trainings.own_index') }}">
                             <i class="fas fa-chalkboard-teacher fa-fw"></i> Solicitud Permiso Capacitación
@@ -800,6 +800,10 @@
                                 <i class="fas fa-fw fa-question-circle"></i> Módulo de Bienestar
                             </a>
                         @endif
+
+                        <a class="dropdown-item" href="{{ route('welfare.amipass.mi-amipass') }}">
+                            <i class="fas fa-fw fa-utensils"></i> Mi Amipass
+                        </a>
 
                         <a class="dropdown-item" href="{{ route('welfare.amipass.question-my-index') }}">
                             <i class="fas fa-fw fa-question-circle"></i> {{ __('Consultas/Sugerencia Amipass') }}

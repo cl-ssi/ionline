@@ -4,6 +4,8 @@ namespace App\Http\Livewire\Finance;
 
 use Livewire\Component;
 use Livewire\WithPagination;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use App\Models\Finance\Dte;
 use App\Models\Sigfe\PdfBackup;
 use Illuminate\Support\Facades\Storage;
@@ -11,6 +13,12 @@ use Illuminate\Database\Eloquent\Builder;
 
 class InstitutionalPayment extends Component
 {
+    use WithPagination;
+
+    protected $paginationTheme = 'bootstrap';
+
+    public $fecha;
+    public $receptor;
 
     protected $listeners = [
         'pdfRefresh'
@@ -24,7 +32,6 @@ class InstitutionalPayment extends Component
         'firmado' => 'Todos',
     ];
 
-    public $dtes;
 
     public function search()
     {
@@ -34,7 +41,31 @@ class InstitutionalPayment extends Component
 
     public function pdfRefresh()
     {
-        $this->render();
+
+        // $this->render();
+        // $this->resetPage();
+        // $this->dtes = $this->loadDtes()->items();
+        // $this->dtes = $this->loadDtes()->paginate(5)->items();
+        // dd($this->loadDtes());
+        return [];
+    }
+
+    public function save($dte_id)
+    {
+        $dte = Dte::find($dte_id);
+        if($this->fecha != null){
+            $dte->update(['fecha' => $this->fecha]);
+        }
+        if($this->receptor != null){
+            $dte->update(['receptor' => $this->receptor]);
+        }
+        // return [];
+    }
+
+    public function delete($dte_id, $key)
+    {
+        $dte = Dte::find($dte_id);
+        $dte->update([$key => null]);
     }
 
     public function loadDtes()
@@ -82,18 +113,14 @@ class InstitutionalPayment extends Component
                 $query->where('status', '!=', 1);
             });
         }
-        return $query->get();
+        // return $query->get();
+        return $query->paginate(5);
 
     }
 
-    public function render()
+    public function render(): View|Factory
     {
-        $this->dtes = $this->loadDtes();
-        // $this->dtes = $dtes->items();
-
-        return view('livewire.finance.institutional-payment', [
-            'dtes' => $this->dtes
-        ]);
+        return view('livewire.finance.institutional-payment', ['dtes' => $this->loadDtes()]);
     }
 }
 

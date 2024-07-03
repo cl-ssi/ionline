@@ -31,7 +31,6 @@ class UploadPdf extends Component
         $this->dteId = $dteId;
         $this->type = $type;
         $this->loadPdfBackup();
-        // $this->loadPdfPaths();
     }
 
     public function loadPdfBackup()
@@ -130,6 +129,7 @@ class UploadPdf extends Component
                 'type' => $this->type,
                 'stored_by_id' => auth()->id(),
             ]);
+            $this->emitTo('finance.list-pdf', 'refreshComponent');
             $this->emit('pdfRefresh');
         }
     }

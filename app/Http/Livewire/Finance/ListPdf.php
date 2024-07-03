@@ -15,9 +15,15 @@ class ListPdf extends Component
     public $fileName;
     public $file;
 
+    protected $listeners = ['refreshComponent'];
+
     public function mount(){
         $this->fileId = $this->file->id;
         $this->fileName = $this->filenameTrim($this->file->name);
+    }
+
+    public function refreshComponent(){
+        $this->fileId = null;
     }
 
     public function deletePdfNoApproval()
