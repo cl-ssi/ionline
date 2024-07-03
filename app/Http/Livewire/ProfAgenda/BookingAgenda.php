@@ -34,7 +34,6 @@ class BookingAgenda extends Component
 
     public function showStep2($professionId)
     {
-        // dd("");
         $this->showStep1 = false;
         $this->showStep2 = true;
         $this->showStep3 = false;
@@ -45,8 +44,19 @@ class BookingAgenda extends Component
                                                     ->where('end_date','>=',now());
                                         }])->first();
 
+        // si es hah, solo ve su info, de lo contrario ve toda la info.
+        $hah_flag = false;
+        if(auth()->user()->establishment_id == 41){
+            $hah_flag = true;
+        }
+
         // profesionales encontrados
-        $users = User::whereIn('id',$this->profession->agendaProposals->pluck('user_id'))->get();
+        $users = User::whereIn('id',$this->profession->agendaProposals->pluck('user_id'))
+                        ->when($hah_flag, function ($q) {
+                            return $q->where('establishment_id',41);
+                        })
+                        ->get();
+
         $this->users = $users;
 
         $uniqueActivityTypes = [];
@@ -68,12 +78,24 @@ class BookingAgenda extends Component
         $this->showStep3 = true;
         $this->showStep4 = false;
 
+        // si es hah, solo ve su info, de lo contrario ve toda la info.
+        $hah_user = false;
+        if(auth()->user()->establishment_id == 41){
+            $hah_user = true;
+        }
+
         $this->activityType = ActivityType::find($activityTypeId);
+
         $this->openHours = OpenHour::where('activity_type_id',$activityTypeId)
                             ->whereIn('profesional_id',$this->users->pluck('id'))
                             ->where('start_date','>=',now())
                             ->whereNull('patient_id')
                             ->where('blocked',0)
+                            ->when($hah_user, function ($q) {
+                                return $q->whereHas("profesional", function ($subQuery) {
+                                        $subQuery->where('establishment_id', 41);
+                                    });
+                            })
                             ->get();
 
         $this->users_with_openhours = User::whereIn('id',$this->openHours->pluck('profesional_id')->unique())->get();
