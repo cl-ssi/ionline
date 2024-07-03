@@ -20,7 +20,7 @@
     </div>
 </div> -->
 
-@if(auth()->user()->pharmacies->first()->id == 1 || auth()->user()->pharmacies->first()->id == 2)
+@if(auth()->user()->pharmacies->firstWhere('id', session('pharmacy_id'))->id == 1 || auth()->user()->pharmacies->firstWhere('id', session('pharmacy_id'))->id == 2)
     <div>
         <div style="width: 49%; display: inline-block;">
             <div class="siete" style="padding-top: 3px;">
@@ -35,7 +35,7 @@
         </div>
     </div>
 @endif
-@if(auth()->user()->pharmacies->first()->id == 3)
+@if(auth()->user()->pharmacies->firstWhere('id', session('pharmacy_id'))->id == 3)
     <div>
         <div style="width: 49%; display: inline-block;">
             <div class="siete" style="padding-top: 3px;">
@@ -53,7 +53,7 @@
         </div>
     </div>
 @endif
-@if(auth()->user()->pharmacies->first()->id == 4)
+@if(auth()->user()->pharmacies->firstWhere('id', session('pharmacy_id'))->id == 4)
     <div>
         <div style="width: 49%; display: inline-block;">
             <div class="siete" style="padding-top: 3px;">

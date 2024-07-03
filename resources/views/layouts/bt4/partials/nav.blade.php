@@ -279,10 +279,13 @@
                                 @endcanany
 
                                 @if(auth()->user()->pharmacies->count() > 0)
-                                    <a class="dropdown-item {{ active('pharmacies.index') }}" href="{{ route('pharmacies.index') }}">
-                                        <i class="fas fa-fw fa-prescription-bottle-alt"></i>
-                                        {{ auth()->user()->pharmacies->first()->name}}
-                                    </a>
+                                    <!-- se listan bodegas asignadas al usuario -->
+                                    @foreach(auth()->user()->pharmacies as $pharmacy)
+                                        <a class="dropdown-item " href="{{ route('pharmacies.change',$pharmacy) }}">
+                                            <i class="fas fa-fw fa-prescription-bottle-alt"></i>
+                                            {{$pharmacy->name}}
+                                        </a>
+                                    @endforeach 
                                 @else
                                     <a class="dropdown-item">
                                         <i class="fas fa-fw fa-exclamation-circle"></i> No tiene droguerías asignadas

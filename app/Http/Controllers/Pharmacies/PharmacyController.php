@@ -18,8 +18,9 @@ class PharmacyController extends Controller
      */
     public function index()
     {
-        session(['pharmacy_id' => auth()->user()->pharmacies->first()->id]);
-        return view('pharmacies.index');
+        // session(['pharmacy_id' => auth()->user()->pharmacies->first()->id]);
+        // return view('pharmacies.index');
+        dd("");
     }
 
     public function admin_view(){
@@ -37,10 +38,10 @@ class PharmacyController extends Controller
       $user = User::find($request->user_id);
       $pharmacy = Pharmacy::find($request->pharmacy_id);
 
-      if ($user->pharmacies->count() > 0) {
-        session()->flash('warning', 'El usuario ya tiene una farmacia asignada.');
-        return view('pharmacies.admin.pharmacy_users',compact('pharmacies'));
-      }
+    //   if ($user->pharmacies->count() > 0) {
+    //     session()->flash('warning', 'El usuario ya tiene una farmacia asignada.');
+    //     return view('pharmacies.admin.pharmacy_users',compact('pharmacies'));
+    //   }
 
       $user->pharmacies()->attach($pharmacy);
 
@@ -57,12 +58,15 @@ class PharmacyController extends Controller
     }
 
     public function change(Pharmacy $pharmacy){
-        auth()->user()->pharmacies()->detach(auth()->user()->pharmacies()->first());
-        auth()->user()->pharmacies()->attach($pharmacy);
+        // auth()->user()->pharmacies()->detach(auth()->user()->pharmacies()->first());
+        // auth()->user()->pharmacies()->attach($pharmacy);
 
-        session(['pharmacy_id' => auth()->user()->pharmacies->first()->id]);
+        // session(['pharmacy_id' => auth()->user()->pharmacies->first()->id]);
+
+        session(['pharmacy_id' => $pharmacy->id]);
         
-        return redirect()->back()->with('success', 'Se ha cambiado la farmacia.');
+        // return redirect()->back()->with('success', 'Se ha cambiado la farmacia.');
+        return view('pharmacies.index');
     }
 
     /**

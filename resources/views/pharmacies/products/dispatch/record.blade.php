@@ -6,7 +6,7 @@
 
 <?php setlocale(LC_ALL, 'es_CL.UTF-8');?>
 
-@if(auth()->user()->pharmacies->first()->id == 1 || auth()->user()->pharmacies->first()->id == 2)
+@if(auth()->user()->pharmacies->firstWhere('id', session('pharmacy_id'))->id == 1 || auth()->user()->pharmacies->firstWhere('id', session('pharmacy_id'))->id == 2)
     <div>
         <div style="width: 49%; display: inline-block;">
             <div class="siete" style="padding-top: 3px;">
@@ -21,7 +21,7 @@
         </div>
     </div>
 @endif
-@if(auth()->user()->pharmacies->first()->id == 3)
+@if(auth()->user()->pharmacies->firstWhere('id', session('pharmacy_id'))->id == 3)
     <div>
         <div style="width: 49%; display: inline-block;">
             <div class="siete" style="padding-top: 3px;">
@@ -39,7 +39,7 @@
         </div>
     </div>
 @endif
-@if(auth()->user()->pharmacies->first()->id == 4)
+@if(auth()->user()->pharmacies->firstWhere('id', session('pharmacy_id'))->id == 4)
     <div>
         <div style="width: 49%; display: inline-block;">
             <div class="siete" style="padding-top: 3px;">
@@ -92,7 +92,7 @@
 <div id="firmas" style="display: flex; justify-content: space-between;">
     <div class="center" style="width: 49%; border: 1px solid #000; padding: 10px;">
         <span class="uppercase" style="display: block; text-align: center;">
-        @if(auth()->user()->pharmacies->first()->id == 2)
+        @if(auth()->user()->pharmacies->firstWhere('id', session('pharmacy_id'))->id == 2)
             @if(auth()->id() == 18899957 || auth()->id() == 16074423)
                 QF Botiquín
             @else 
