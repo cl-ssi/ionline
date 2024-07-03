@@ -362,6 +362,10 @@
                     class="list-group-item list-group-item-action small" target="_blank">
                     Solicitud Firma Electrónica
                 </a>
+                <a href="https://drive.google.com/file/d/1aDgBnJRX4qT9vPejYcZ-4Zn4QUZHrcz0/view?usp=sharing"
+                    class="list-group-item list-group-item-action small" target="_blank">
+                    Módulo de Farmacias
+                </a>
             </ul>
 
         </div>
