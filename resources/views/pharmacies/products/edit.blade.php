@@ -96,10 +96,12 @@
     </div>
 
     <div class="form-row">
-      <fieldset class="form-group col">
-          <label for="for_storage_conditions">Condiciones de Almacenamiento</label>
-          <input type="text" class="form-control" id="for_storage_conditions" placeholder="" name="storage_conditions" value = '{{ $product->storage_conditions }}'>
-      </fieldset>
+        <fieldset class="form-group col">
+            <label for="for_storage_conditions">Condiciones de Almacenamiento</label>
+            <textarea name="storage_conditions" class="form-control" id="for_storage_conditions">
+            {{ $product->storage_conditions }}
+            </textarea>
+        </fieldset>
     </div>
 
     <button type="submit" class="btn btn-primary">Guardar</button>
