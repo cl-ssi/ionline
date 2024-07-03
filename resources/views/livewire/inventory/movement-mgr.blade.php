@@ -7,7 +7,6 @@
             <select class="form-select" wire:model.defer="inventoryMovement.reception_confirmation">
                 <option value="">Seleccionar</option>
                 <option value="1">Recepcionado</option>
-                <option value="0">Pendiente</option>
             </select>
         </div>
         <div class="col-4">

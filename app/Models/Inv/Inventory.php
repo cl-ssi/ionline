@@ -181,7 +181,8 @@ class Inventory extends Model implements Auditable
     {
         return $this->hasOne(InventoryMovement::class)
             ->where('reception_confirmation', true)
-            ->latest('reception_date');
+            ->orderBy('reception_date', 'desc')
+            ->orderBy('id', 'desc');
     }
 
     public function responsible()
