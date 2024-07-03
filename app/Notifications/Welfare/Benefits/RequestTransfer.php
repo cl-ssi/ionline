@@ -52,6 +52,7 @@ class RequestTransfer extends Notification implements ShouldQueue
         
         return (new MailMessage)
                 ->level('info')
+                ->replyTo($cc_mails)
                 ->subject('Confirmación de transferencia de beneficio')
                 ->greeting('Hola ' . $notifiable->shortName)
                 ->line('Se informa transferencia de beneficio ' . $this->request->subsidy->name . '.')

@@ -54,6 +54,7 @@ class NewBooking extends Notification implements ShouldQueue
         $roomBooking = $this->roomBooking;
         return (new MailMessage)
                     ->level('info')
+                    ->replyTo($cc_mails)
                     ->subject('Se ha realizado una nueva reserva')
                     ->greeting('Hola ' . $notifiable->shortName)
                     ->line(new HtmlString('Se ha realizado una nueva reserva en <b>' . $roomBooking->room->identifier . '</b> en el complejo <b>' . $roomBooking->room->hotel->name . '</b>.'))

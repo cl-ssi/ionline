@@ -49,6 +49,7 @@ class RequestAccept extends Notification implements ShouldQueue
 
         return (new MailMessage)
                 ->level('info')
+                ->replyTo($cc_mails)
                 ->subject('Se acepta solicitud de beneficio')
                 ->line('Se acepta solicitud de beneficio: ' . $this->request->subsidy->name . '.')
                 ->line('Una vez que se procese el pago, se informará a través de este medio.')

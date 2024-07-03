@@ -49,6 +49,7 @@ class RequestReject extends Notification implements ShouldQueue
 
         return (new MailMessage)
                 ->level('info')
+                ->replyTo($cc_mails)
                 ->subject('Se rechaza solicitud de beneficio')
                 ->line('Se rechazó la solicitud de beneficio: ' . $this->request->subsidy->name . '.')
                 ->line('Motivo: ' . $this->request->status_update_observation)

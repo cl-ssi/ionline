@@ -49,6 +49,7 @@ class RequestCreate extends Notification implements ShouldQueue
 
         return (new MailMessage)
                 ->level('info')
+                ->replyTo($cc_mails)
                 ->subject('Creación solicitud de beneficio')
                 ->line('Se informa creación de solicitud de beneficio: ' . $this->request->subsidy->name . '.')
                 ->line('La solicitud se encuentra en proceso de revisión')
