@@ -17,59 +17,38 @@ class CheckUserUsingDiscrepancies extends Command
 
     public function handle()
     {
-        $discrepancyCountDirect = 0;
-        $discrepancyCountRelation = 0;
+        $discrepancyCount = 0;
         
-        $discrepancyIdsDirect = [];
-        $discrepancyIdsRelation = [];
-
         // Obtén todos los inventarios
         $inventories = Inventory::all();
 
         foreach ($inventories as $inventory) {
-            // Primer método: consulta directa
-            $lastConfirmedMovementDirect = $inventory->movements()
-                                                    ->whereNotNull('reception_date')
-                                                    ->orderBy('reception_date', 'desc')
-                                                    ->orderBy('id', 'desc')
-                                                    ->first();
+            // Obtén el último movimiento confirmado
+            $lastConfirmedMovement = $inventory->lastConfirmedMovement;
 
-            if ($lastConfirmedMovementDirect) {
-                $inventoryUserUsingIdDirect = $inventory->user_using_id;
-                $movementUserUsingIdDirect = $lastConfirmedMovementDirect->user_using_id;
+            if ($lastConfirmedMovement) {
+                $inventoryUserUsingId = $inventory->user_using_id;
+                $movementUserUsingId = $lastConfirmedMovement->user_using_id;
 
-                if ($inventoryUserUsingIdDirect !== $movementUserUsingIdDirect) {
-                    $discrepancyIdsDirect[] = $inventory->id;
-                    $discrepancyCountDirect++;
+                // Verifica si hay discrepancia
+                if ($inventoryUserUsingId !== $movementUserUsingId) {
+                    $this->info("Discrepancia encontrada en el inventario ID {$inventory->id}: 
+                                Inventario user_using_id = {$inventoryUserUsingId}, 
+                                Movimiento user_using_id = {$movementUserUsingId}");
+                    $discrepancyCount++;
+
+                    // Mueve el valor de user_using_id del movimiento al inventario
+                    $inventory->user_using_id = $movementUserUsingId;
+                    $inventory->save();
+
+                    $this->info("Actualizado el inventario ID {$inventory->id} con user_using_id = {$movementUserUsingId}");
                 }
-            }
-
-            // Segundo método: usando la relación
-            $lastConfirmedMovementRelation = $inventory->lastConfirmedMovement;
-
-            if ($lastConfirmedMovementRelation) {
-                $inventoryUserUsingIdRelation = $inventory->user_using_id;
-                $movementUserUsingIdRelation = $lastConfirmedMovementRelation->user_using_id;
-
-                if ($inventoryUserUsingIdRelation !== $movementUserUsingIdRelation) {
-                    $discrepancyIdsRelation[] = $inventory->id;
-                    $discrepancyCountRelation++;
-                }
+            } else {
+                // $this->info("No se encontró un movimiento confirmado para el inventario ID {$inventory->id}");
             }
         }
 
-        // Comparar los IDs de discrepancia
-        $differences = array_diff($discrepancyIdsDirect, $discrepancyIdsRelation);
-
-        $this->info("Número total de discrepancias encontradas usando consulta directa: {$discrepancyCountDirect}");
-        $this->info("Número total de discrepancias encontradas usando relación: {$discrepancyCountRelation}");
-
-        if (!empty($differences)) {
-            $this->info("IDs diferentes encontrados: " . implode(', ', $differences));
-        } else {
-            $this->info("No se encontraron diferencias entre los dos métodos.");
-        }
-
+        $this->info("Número total de discrepancias encontradas: {$discrepancyCount}");
         $this->info('Proceso completado.');
     }
 }
