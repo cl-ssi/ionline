@@ -59,13 +59,16 @@ class InstitutionalPayment extends Component
         if($this->receptor != null){
             $dte->update(['receptor' => $this->receptor]);
         }
-        // return [];
+        $this->fecha == null;
+        $this->receptor == null;
+        return [];
     }
 
     public function delete($dte_id, $key)
     {
         $dte = Dte::find($dte_id);
         $dte->update([$key => null]);
+        return [];
     }
 
     public function loadDtes()
@@ -114,8 +117,7 @@ class InstitutionalPayment extends Component
             });
         }
         // return $query->get();
-        return $query->paginate(5);
-
+        return $query->paginate(20);
     }
 
     public function render(): View|Factory

@@ -1,4 +1,4 @@
-<div>    
+<div>
     @if ($archivoCompromiso !== null)
         <div class="mb-2">
             <button wire:click="downloadFile('{{ $archivoCompromiso }}')" class="btn btn-sm btn-success">
@@ -11,8 +11,12 @@
             @endif
         </div>
     @else
-        <input type="file" wire:model="file" accept=".pdf">
-        <button wire:click="uploadFile">Subir Archivo</button>
+        <div class="input-group">
+            <input class="form-control" type="file" wire:model="file" accept=".pdf">
+            <button class="btn btn-outline-primary" wire:click="uploadFile">
+                <i class="bi bi-upload"></i>
+            </button>
+        </div>
     @endif
 
     @if ($successMessage)

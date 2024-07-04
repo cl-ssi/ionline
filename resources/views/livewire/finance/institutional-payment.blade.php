@@ -47,12 +47,10 @@
         <thead>
             <tr>
                 <th scope="col">ID</th>
-                <th scope="col">Documento</th>
+                <th scope="col">Archivos Asociados</th>
                 <th scope="col">Beneficiario del pago</th>
-                <th scope="col" width="140px">Resolucion</th>
                 <th scope="col">Adjuntos</th>
                 <th scope="col">SIGFE</th>
-                <th scope="col">Comprobante bancario</th>
                 <th scope="col">Fecha de Pago</th>
                 <th scope="col">SIGFE</th>
             </tr>
@@ -64,19 +62,36 @@
                     <td class="small text-center">
                         {{ $dte->id }}
                     </td>
-                    <td class="small"  wire:ignore>
-                        @livewire('finance.upload-pdf', ['dteId' => $dte->id, 'type' => 'documento'], key('document-upload-pdf-' . rand() * $dte->id))
+                    <td class="small">
+                        <small>Documento</small>
+                        <div wire:ignore>
+                            @livewire('finance.upload-pdf', ['dteId' => $dte->id, 'type' => 'documento'], key('document-upload-pdf-' . rand() * $dte->id))
+                        </div>
+                        <hr>
+                        <small>Resolucion</small>
+                        <div wire:ignore>
+                            @livewire('finance.upload-pdf', ['dteId' => $dte->id, 'type' => 'resolucion'], key('resolucion-upload-pdf-' . rand() * $dte->id))
+                        </div>
+                        <hr>
+                        <small>Comprobante Bancario</small>
+                        <div wire:ignore>
+                            @livewire('finance.upload-pdf', ['dteId' => $dte->id, 'type' => 'comprobante_bancario'], key('bank-upload-pdf-' . rand() * $dte->id))
+                        </div>
                     </td>
                     <td class="small">
-                        @if ($dte->receptor)
-                            {{$dte->receptor}}
-                        @else
-                            <input type="text" wire:model.defer="receptor">
-                            <button type="button" class="btn btn-primary btn-sm mt-2" wire:loading.attr="disabled" wire:click="save({{$dte->id}})"><i class="fas fa-save"></i></button>
-                        @endif
-                    </td>
-                    <td class="small" wire:ignore>
-                        @livewire('finance.upload-pdf', ['dteId' => $dte->id, 'type' => 'resolucion'], key('resolucion-upload-pdf-' . rand() * $dte->id))
+                        <div wire:key="receptor_{{$dte->id}}">
+                            @if ($dte->receptor)
+                                {{$dte->receptor}}
+                                <button type="button" class="btn btn-primary btn-sm mt-2" wire:loading.attr="disabled" wire:click="delete({{$dte->id}}, 'receptor')"><i class="fa fa-trash"></i></button>
+                            @else
+                            <form class="form-inline" wire:submit.prevent="save({{$dte->id}})">
+                                <div class="input-group">
+                                    <input type="text" class="form-control fs-6" wire:model.defer="receptor" wire:loading.attr="disabled">
+                                    <button type="submit" class="btn btn-outline-primary btn-sm" wire:loading.attr="disabled"><i class="fas fa-save"></i></button>
+                                </div>
+                            </form>
+                            @endif
+                        </div>
                     </td>
                     <td class="small">
                         <div class="container">
@@ -120,25 +135,26 @@
                         ], key($dte->id))
                     </td>
                     </div>
-
                     <td class="small">
-                        @livewire('finance.upload-pdf', ['dteId' => $dte->id, 'type' => 'comprobante_bancario'], key('bank-upload-pdf-' . rand() * $dte->id))
-                    </td>
-                    <td class="small">
-                        @if ($dte->fecha)
-                            {{$dte->fecha}}
-                            <button type="button" class="btn btn-primary btn-sm mt-2" wire:loading.attr="disabled" wire:click="delete({{$dte->id}}, 'fecha')"><i class="fa fa-trash"></i></button>
-                        @else
-                            <input type="date" wire:model.defer="fecha">
-                            <button type="button" class="btn btn-primary btn-sm mt-2" wire:loading.attr="disabled" wire:click="save({{$dte->id}})"><i class="fas fa-save"></i></button>
-                        @endif
+                        <div wire:key="fecha_{{$dte->id}}">
+                            @if ($dte->fecha)
+                                {{$dte->fecha}}
+                                <button type="button" class="btn btn-primary btn-sm mt-2" wire:loading.attr="disabled" wire:click="delete({{$dte->id}}, 'fecha')"><i class="fa fa-trash"></i></button>
+                            @else
+                                <form class="form-inline" wire:submit.prevent="save({{$dte->id}})">
+                                    <div class="input-group">
+                                        <input class="form-control fs-6" type="date" wire:model.defer="fecha">
+                                        <button type="submit" class="btn btn-outline-primary btn-sm" wire:loading.attr="disabled"><i class="fas fa-save"></i></button>
+                                    </div>
+                                </form>
+                            @endif
+                        </div>
                     </td>
                     <td class="small">
                         <small>Pago</small>
-                        <br>
-                        <input type="text" class="form-control-sm" value="{{ $dte->folio_devengo_sigfe }}" disabled>
-                        <br>
-                        @livewire('finance.upload-pdf', ['dteId' => $dte->id, 'type' => 'pago'], key('pago-upload-pdf-' . rand() * $dte->id))
+                        <div wire:ignore>
+                            @livewire('finance.upload-pdf', ['dteId' => $dte->id, 'type' => 'pago'], key('pago-upload-pdf-' . rand() * $dte->id))
+                        </div>
                     </td>
                 </tr>
             @endforeach

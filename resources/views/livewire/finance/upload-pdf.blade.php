@@ -20,12 +20,14 @@
             </div>
         @else
             <form wire:submit.prevent="save">
-                <input type="file" wire:model="pdf" accept="application/pdf" wire:loading.attr="disabled">
-                @error('pdf') <span class="error">{{ $message }}</span> @enderror
-
-                <button type="submit" class="btn btn-primary btn-sm mt-2" wire:loading.attr="disabled">Subir PDF</button>
-
-                <div wire:loading wire:target="pdf"><i class="fas fa-spinner fa-spin"></i> <b>Cargando...</b></div>
+                <div class="input-group">
+                    <input class="form-control" type="file" wire:model="pdf" accept="application/pdf" wire:loading.attr="disabled">
+                    @error('pdf') <span class="error">{{ $message }}</span> @enderror
+                    <button type="submit" class="btn btn-outline-primary" wire:loading.attr="disabled">
+                        <i class="bi bi-upload"></i>
+                    </button>
+                    <div wire:loading wire:target="pdf"><i class="fas fa-spinner fa-spin"></i> <b>Cargando...</b></div>
+                </div>
             </form>
         @endif
     @else
