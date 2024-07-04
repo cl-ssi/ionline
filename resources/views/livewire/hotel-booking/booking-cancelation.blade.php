@@ -10,6 +10,7 @@
                         <option value="No cuenta con el 15% legal para descuento por planilla">No cuenta con el 15% legal para descuento por planilla.</option>
                         <option value="Por mantención de cabaña">Por mantención de cabaña.</option>
                         <option value="Por problemas externos">Por problemas externos.</option>
+                        <option value="Ya existe una reserva confirmada para ese rango de fechas">Ya existe una reserva confirmada para ese rango de fechas.</option>
                     </select>
 
                     <button class="btn btn-primary mt-2" type="submit">Guardar</button>

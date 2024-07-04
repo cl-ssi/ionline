@@ -51,6 +51,7 @@
     <table class="table table-striped table-sm table-bordered">
         <thead>
             <tr>
+                <th>ID</th>
                 <th>Recinto</th>
                 <th>Hospedaje</th>
                 <th>Reservante</th>
@@ -67,12 +68,15 @@
                 @if(!$roomBooking->status)
                 <tr style="background-color:#E3B4B4" class="sub-container">
                 @endif
+                    <td nowrap>{{ $roomBooking->id}}</td>
                     <td nowrap>{{ $roomBooking->room->hotel->name}}</td>
                     <td nowrap>{{ $roomBooking->room->identifier}}</td>
                     <td nowrap>{{ $roomBooking->user->getShortNameAttribute() }}</td>
                     <td nowrap>{{ $roomBooking->start_date->format('Y-m-d') }}</td>
                     <td nowrap>{{ $roomBooking->end_date->format('Y-m-d') }}</td>
-                    <td nowrap>{{ $roomBooking->status }}</td>
+                    <td nowrap>
+                        {{ $roomBooking->status }}
+                    </td>
                     <td nowrap class="display: flex; flex-direction: row;">
                         {{ $roomBooking->payment_type }}
                         @if($roomBooking->payment_type == "Transferencia")
@@ -120,6 +124,13 @@
                         </a>
                     </td>
                 </tr>
+                @if($roomBooking->status == "Cancelado" && $roomBooking->cancelation_observation)
+                    <tr>
+                        <td colspan="10" style="text-align: right;">
+                            Motivo cancelación: <b>{{$roomBooking->cancelation_observation}}</b>
+                        </td>
+                    </tr>       
+                @endif
                 <tr class="explode hide">
                     <td colspan="4" style="display: none;">
                         @include('partials.audit', ['audits' => $roomBooking->audits()] )
