@@ -194,16 +194,14 @@ class HotelBookingController extends Controller
     public function booking_confirmation(RoomBooking $roomBooking){
         // Verifica si ya existe otra reserva confirmada para la misma habitación en el mismo rango de fechas
         $existingBooking = RoomBooking::where('room_id', $roomBooking->room_id)
-                                        ->where('status', 'Confirmado')
-                                        ->where(function($query) use ($roomBooking) {
-                                            $query->whereBetween('start_date', [$roomBooking->start_date, $roomBooking->end_date])
-                                                ->orWhereBetween('end_date', [$roomBooking->start_date, $roomBooking->end_date])
-                                                ->orWhere(function($query) use ($roomBooking) {
-                                                    $query->where('start_date', '<=', $roomBooking->start_date)
-                                                            ->where('end_date', '>=', $roomBooking->end_date);
-                                                });
-                                        })
-                                        ->exists();
+        ->where('status', 'Confirmado')
+        ->where(function($query) use ($roomBooking) {
+            $query->where(function($query) use ($roomBooking) {
+                $query->where('start_date', '<', $roomBooking->end_date)
+                      ->where('end_date', '>', $roomBooking->start_date);
+            });
+        })
+        ->exists();
 
         if ($existingBooking) {
             session()->flash('warning', 'No es posible confirmar, ya existe otra reserva confirmada para esta habitación en el mismo rango de fechas.');
