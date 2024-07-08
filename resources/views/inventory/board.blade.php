@@ -69,8 +69,17 @@
         <th>USUARIO(S):</th>
         <td colspan="3">
             <ul>
-                @foreach($inventories->unique('lastConfirmedMovement.usingUser.id') as $inventory)
-                    <li>{{ $inventory->lastConfirmedMovement->usingUser->shortName }}</li>
+                @php
+                    $uniqueUsers = collect();
+                    foreach($inventories as $inventory) {
+                        foreach($inventory->inventoryUsers as $inventoryUser) {
+                            $uniqueUsers->push($inventoryUser->user);
+                        }
+                    }
+                    $uniqueUsers = $uniqueUsers->unique('id');
+                @endphp
+                @foreach($uniqueUsers as $user)
+                    <li>{{ $user->tinny_name }}</li>
                 @endforeach
             </ul>
         </td>
