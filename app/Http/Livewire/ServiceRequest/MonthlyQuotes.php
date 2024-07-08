@@ -254,7 +254,13 @@ class MonthlyQuotes extends Component
                     //erg: comenté la linea siguiente porque desconozco el +1 que se hace al final, estaba afectando cálculo de nataly 16/02/2022
                     // $dias_trabajados = $serviceRequest->start_date->diff($serviceRequest->start_date->lastOfMonth())->days + 1;
                     //erg: quité el +1, porque no tiene sentido sumarle uno. Se le informa esto a Samantha.
-                    $dias_trabajados = $serviceRequest->start_date->diff($serviceRequest->start_date->lastOfMonth())->days;
+                    // $dias_trabajados = $serviceRequest->start_date->diff($serviceRequest->start_date->lastOfMonth())->days;
+                    
+                    // 08/07/2024: nuevamente se deja +1, porque carbon no incluye el dia inicial en el conteo (solicitado por daniel molina)
+                    $startDate = $serviceRequest->start_date;
+                    $endOfMonth = $startDate->copy()->endOfMonth();
+                    $dias_trabajados = $startDate->diffInDays($endOfMonth) + 1;
+
                     $valor_diferente = round($dias_trabajados * ($valor_mensual / 30));
 
                     foreach ($periods as $key => $period) {
