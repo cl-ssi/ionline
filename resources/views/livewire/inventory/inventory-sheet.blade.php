@@ -34,7 +34,7 @@
             <label class="form-label">
                 &nbsp; 
             </label>
-            <button class="btn btn-primary" wire:loading.attr="disabled" wire:click="search" wire:target="search">Buscar</button>
+        <button class="btn btn-primary" wire:loading.attr="disabled" wire:click="search" wire:target="search" @if(!$place_id) disabled @endif>Buscar</button>
     </div>
 
 
@@ -76,13 +76,10 @@
     <tr class="row">
         <th class="col-md-3">USUARIO(S):</th>
         <td class="col-md-3" colspan="3">
-            <ul>@foreach($inventories as $inventory)
-                    @if($inventory->inventoryUsers)
-                        @foreach($inventory->inventoryUsers as $inventoryuser)
-                            <li>
-                                {{ $inventoryuser->user->tinny_name }}
-                            </li>
-                        @endforeach
+            <ul>
+                @foreach($uniqueUsers as $user)
+                    @if($user && isset($user->tinny_name))
+                        <li>{{ $user->tinny_name }}</li>
                     @endif
                 @endforeach
             </ul>

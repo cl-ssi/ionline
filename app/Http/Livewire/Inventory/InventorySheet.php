@@ -13,6 +13,7 @@ class InventorySheet extends Component
     public $place_id = null;
     public $inventories = [];
     public $place = null;
+    public $uniqueUsers = [];
 
 
     protected $listeners = [
@@ -24,6 +25,11 @@ class InventorySheet extends Component
         $this->place_id = $value;
     }
 
+    public function mount()
+    {
+        $this->uniqueUsers = collect();
+    }
+
 
 
     public function render()
@@ -31,15 +37,25 @@ class InventorySheet extends Component
         return view('livewire.inventory.inventory-sheet', [
             'inventories' => $this->inventories,
             'place' => $this->place,
+            'uniqueUsers' => $this->uniqueUsers,
         ]);
     }
 
     public function search()
     {
-        //Inventory::where('place_id', $place->id)->get();
-        $this->inventories = Inventory::where('place_id', $this->place_id)->get();
-    
+        
+        $this->inventories = Inventory::where('place_id', $this->place_id)->get();    
         $this->place = Place::find($this->place_id);
+
+        $users = collect();
+        foreach ($this->inventories as $inventory) {
+            if ($inventory->inventoryUsers) {
+                foreach ($inventory->inventoryUsers as $inventoryuser) {
+                    $users->push($inventoryuser->user);
+                }
+            }
+        }
+        $this->uniqueUsers = $users->unique('id');
     }
     
 }
