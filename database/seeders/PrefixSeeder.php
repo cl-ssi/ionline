@@ -95,9 +95,15 @@ class PrefixSeeder extends Seeder
         ]);
 
         Prefix::create([
-            'name' => 'Cenabat',
+            'name' => 'Cenabast',
             'prefix' => '621',
             'cenabast' => true,
+        ]);
+
+        Prefix::create([
+            'name' => 'Hospital Alto Hospicio',
+            'prefix' => '1350296',
+            'establishment_id' => 41,
         ]);
 
     }
