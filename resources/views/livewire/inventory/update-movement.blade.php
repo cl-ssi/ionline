@@ -14,6 +14,7 @@
             >
         </fieldset>
 
+        {{--
         <fieldset class="col-md-3">
             <label for="using-{{ $movement->id }}" class="form-label">
                 Usuario
@@ -26,6 +27,7 @@
                 readonly
             >
         </fieldset>
+        --}}
 
         <fieldset class="col-md-3">
             <label for="place-{{ $movement->id }}" class="form-label">

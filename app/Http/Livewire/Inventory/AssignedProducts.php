@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Inventory;
 
 use App\Models\Inv\Inventory;
+use App\Models\Inv\InventoryUser;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -53,7 +54,7 @@ class AssignedProducts extends Component
 
         $inventories = Inventory::query()
         ->when($this->product_type == 'using', function($query) use ($userId) {
-            $query->where('user_using_id', $userId);
+            $query->whereRelation('inventoryUsers', 'user_id', '=', $userId);
         })
             ->when($this->product_type == 'responsible', function ($query) use ($responsibleIds) {
                 $query->whereIn('user_responsible_id', $responsibleIds);
@@ -61,7 +62,7 @@ class AssignedProducts extends Component
             ->when($this->product_type == '', function($query) use ($userId, $responsibleIds) {
                 $query->where(function($query) use ($userId, $responsibleIds) {
                     $query->whereIn('user_responsible_id', $responsibleIds)
-                          ->orWhere('user_using_id', $userId);
+                          ->orwhereRelation('inventoryUsers', 'user_id', '=', $userId);;
                 });
             })
             ->whereHas('lastMovement', function($query) {
@@ -91,4 +92,12 @@ class AssignedProducts extends Component
 
         return $inventories;
     }
+
+    public function removeInventoryUser($inventoryUserId)
+    {
+        InventoryUser::where('id', $inventoryUserId)->delete();
+        session()->flash('message', 'Usuario eliminado exitosamente.');
+        $this->getInventories();
+    }
+
 }

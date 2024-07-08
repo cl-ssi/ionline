@@ -67,7 +67,7 @@
                     <th>Ubicación</th>
                     <th>Lugar</th>
                     <th>Responsable</th>
-                    <th>Usuario</th>
+                    <th>Usuario(s)</th>
                     <th>Traspasar</th>
                 </tr>
             </thead>
@@ -103,9 +103,18 @@
                             @endif
                         </td>
                         <td>
-                            @if($inventory->using)
+                        @if($inventory->inventoryUsers)
+                            <ul>
+                                @foreach($inventory->inventoryUsers as $inventoryuser)
+                                    <li>
+                                        {{ $inventoryuser->user->tinny_name }}
+                                    </li>
+                                @endforeach
+                            </ul>
+                        @endif
+                            <!-- @if($inventory->using)
                                 {{ $inventory->using->tinny_name }}
-                            @endif
+                            @endif -->
                         </td>
                         <td class="text-center" nowrap>
                             <input type="checkbox" wire:model="selectedInventories.{{ $inventory->id }}">
@@ -137,7 +146,7 @@
                     
                 </fieldset>
 
-                <fieldset class="col-md-3">
+                <!-- <fieldset class="col-md-3">
                     <label for="user-using-id" class="form-label">Usuario <small>(Vacio = se mantiene el Usuario)</small></label>
 
                     @livewire('users.search-user', [
@@ -158,7 +167,7 @@
                             <strong>{{ $message }}</strong>
                         </span>
                     @enderror
-                </fieldset>
+                </fieldset> -->
 
 
                 <fieldset class="col-md-3">

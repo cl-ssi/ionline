@@ -380,9 +380,7 @@
                     <th>Lugar</th>
                     <th>Código interno Arquitectura</th>
                     <th>Responsable</th>
-                    @can('be god')
-                        <th>Usuario(s)</th>
-                    @endcan
+                    <th>Usuario(s)</th>
                     <th>Marca</th>
                     <th>Modelo</th>
                     <th>Nº Serie</th>
@@ -449,7 +447,6 @@
                             @endif
                         @endif
                     </td>
-                    @can('be god')
                     <td>
                         @if($inventory->inventoryUsers)
                             <ul>
@@ -471,8 +468,7 @@
                                 <i class="fas fa-user-plus"></i>
                             </a>
                         </div>
-                    </td>
-                    @endcan
+                    </td>                    
                     <td>
                         @if($inventory->brand)
                             {{ $inventory->brand }}

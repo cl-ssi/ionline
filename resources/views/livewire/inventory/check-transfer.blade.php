@@ -102,7 +102,7 @@
                 readonly
             >
         </fieldset>
-        <fieldset class="col-md-4">
+        <!-- <fieldset class="col-md-4">
             <label for="user-reception-using" class="form-label">
                 Quién Recepciona / Usuario
             </label>
@@ -113,7 +113,7 @@
                 value="{{ optional($movement->usingUser)->short_name }}"
                 readonly
             >
-        </fieldset>
+        </fieldset> -->
     </div>
 
     <div class="row g-2 g-2 mb-2">

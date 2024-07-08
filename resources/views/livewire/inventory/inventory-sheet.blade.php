@@ -76,9 +76,14 @@
     <tr class="row">
         <th class="col-md-3">USUARIO(S):</th>
         <td class="col-md-3" colspan="3">
-            <ul>
-                @foreach($inventories->unique('lastConfirmedMovement.usingUser.id') as $inventory)
-                    <li>{{ $inventory->lastConfirmedMovement->usingUser->shortName }}</li>
+            <ul>@foreach($inventories as $inventory)
+                    @if($inventory->inventoryUsers)
+                        @foreach($inventory->inventoryUsers as $inventoryuser)
+                            <li>
+                                {{ $inventoryuser->user->tinny_name }}
+                            </li>
+                        @endforeach
+                    @endif
                 @endforeach
             </ul>
         </td>

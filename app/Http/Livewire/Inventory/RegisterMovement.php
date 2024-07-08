@@ -50,12 +50,12 @@ class RegisterMovement extends Component
     {
         $dataValidated = $this->validate();
         $userResponsible = User::find($dataValidated['user_responsible_id']);
-        $userUsing = User::find($dataValidated['user_using_id']);
+        //$userUsing = User::find($dataValidated['user_using_id']);
         $dataValidated['user_responsible_ou_id'] = optional($userResponsible->organizationalUnit)->id;
         $dataValidated['user_sender_id'] = auth()->id();
 
-        if($userUsing)
-            $dataValidated['user_using_ou_id'] = optional($userUsing->organizationalUnit)->id;
+        // if($userUsing)
+        //     $dataValidated['user_using_ou_id'] = optional($userUsing->organizationalUnit)->id;
 
         $this->inventory->movements()->create($dataValidated);
 

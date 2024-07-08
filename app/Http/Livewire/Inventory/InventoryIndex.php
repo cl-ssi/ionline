@@ -93,12 +93,13 @@ class InventoryIndex extends Component
                 'lastMovement',
                 'lastMovement.responsibleUser',
                 'lastMovement.usingUser',
+                'inventoryUsers'
             ])
             ->when($this->unspsc_product_id, function($query) {
                 $query->whereRelation('unspscProduct', 'id', '=', $this->unspsc_product_id);
             })
             ->when($this->user_using_id, function($query) {
-                $query->whereRelation('using', 'id', '=', $this->user_using_id);
+                $query->whereRelation('inventoryUsers', 'user_id', '=', $this->user_using_id);
             })
             ->when($this->user_responsible_id, function($query) {
                 $query->whereRelation('responsible', 'id', '=', $this->user_responsible_id);
@@ -157,11 +158,12 @@ class InventoryIndex extends Component
 
     public function getUsers()
     {
-        $userIds = Inventory::query()
-            ->whereEstablishmentId($this->establishment->id)
-            ->whereNotNull('user_using_id')
-            ->groupBy('user_using_id')
-            ->pluck('user_using_id');
+        $userIds = InventoryUser::query()
+        ->whereHas('inventory', function ($query) {
+            $query->whereEstablishmentId($this->establishment->id);
+        })
+        ->groupBy('user_id')
+        ->pluck('user_id');
 
         $this->users = User::withTrashed()
             ->whereIn('id', $userIds)

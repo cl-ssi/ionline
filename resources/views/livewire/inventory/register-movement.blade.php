@@ -23,6 +23,7 @@
             @enderror
         </fieldset>
 
+        {{--
         <fieldset class="col-md-3">
             <label for="user-using-id" class="form-label">Usuario</label>
 
@@ -45,6 +46,7 @@
                 </span>
             @enderror
         </fieldset>
+        --}}
 
         <fieldset class="col-md-3">
             <label for="place-id" class="form-label">

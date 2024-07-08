@@ -16,6 +16,12 @@
                     <h2>Detalles del Inventario</h2>
                 </div>
                 <div class="card-body">
+                    @if(session()->has('message-error'))
+                        <div class="alert alert-danger">
+                            {{ session('message-error') }}
+                        </div>
+                    @endif
+
                     <p><strong>Nro. Inv.:</strong> {{ $inventory->number }}</p>
                     <p><strong>Nro. Ant.:</strong> {{ $inventory->old_number }}</p>
                     <p><strong>Producto/Especie.:</strong> {{ $inventory->old_number }}</p>

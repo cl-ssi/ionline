@@ -23,6 +23,23 @@
     <p class="text-muted">
         Listado de los productos en donde ud fue asignado como usuario y/o responsable.
     </p>
+        @if (session()->has('message'))
+            <div class="alert alert-success">
+                {{ session('message') }}
+            </div>
+        @endif
+        
+        @if (session()->has('message-success-inventory'))
+            <div class="alert alert-success">
+                {{ session('message-success-inventory') }}
+            </div>
+        @endif
+
+        @if (session()->has('message-warning-inventory'))
+            <div class="alert alert-warning">
+                {{ session('message-warning-inventory') }}
+            </div>
+        @endif
     <br>
 
 
@@ -66,10 +83,8 @@
             <th>Lugar</th>
             <th>Código Arquitectónico</th>
             <th>Responsable</th>
-            <th>Usuario</th>
-            @can('be god')
-                <th>Usuario(s)</th>
-            @endcan
+            <!-- <th>Usuario</th> -->
+            <th>Usuario(s)</th>            
             <th></th>
         </thead>
         <tbody>
@@ -97,11 +112,11 @@
                         
                         <br>
 
-                        @if($inventory->user_using_id == auth()->user()->id)
+                        <!-- @if($inventory->user_using_id == auth()->user()->id)
                             <span class="badge badge-secondary">
                                 Usuario
                             </span>
-                        @endif
+                        @endif -->
 
                         @if($inventory->user_responsible_id == auth()->user()->id)
                             <span class="badge badge-secondary">
@@ -124,10 +139,9 @@
                     <td>
                         {{ optional($inventory->responsible)->tinny_name }}
                     </td>
-                    <td>
+                    <!-- <td>
                         {{ optional($inventory->using)->tinny_name }}
-                    </td>
-                    @can('be god')
+                    </td> -->
                     <td>
                         @if($inventory->inventoryUsers)
                             <ul>
@@ -153,9 +167,7 @@
                                 </a>
                             </div>
                         @endif
-
-                    </td>
-                    @endcan
+                    </td>                    
                     <td class="text-center" nowrap>
                         <a
                             class="btn btn-sm btn-outline-primary"

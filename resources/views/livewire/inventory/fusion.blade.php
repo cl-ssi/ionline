@@ -539,7 +539,7 @@
                                     value="A{{ $item_a->classification_id }}"
                                     >
                                 <label class="form-check-label"
-                                    for="for-classification_id">{{ $item_a->classification->name }}</label>
+                                    for="for-classification_id">{{ $item_a->classification?->name }}</label>
                             </div>
                         </td>
                         <td>
@@ -552,7 +552,7 @@
                                     value="B{{ $item_b->classification_id }}"
                                     >
                                 <label class="form-check-label"
-                                    for="for-classification_id">{{ $item_b->classification->name }}</label>
+                                    for="for-classification_id">{{ $item_b->classification?->name }}</label>
                             </div>
                         </td>
                     </tr>
@@ -870,7 +870,7 @@
                                     {{ $movement->id }}<br>
                                     <b>Fecha:</b> {{ $movement->reception_date }}<br>
                                     @if($movement->responsibleUser) <b>Responsable:</b> {{ $movement->responsibleUser->shortName }}<br> @endif
-                                    @if($movement->usingUser) <b>Usuario:</b> {{ $movement->usingUser->shortName }}<br> @endif
+                                    <!-- @if($movement->usingUser) <b>Usuario:</b> {{ $movement->usingUser->shortName }}<br> @endif -->
                                     <b>Lugar:</b> {{ $movement->place->name }}
                                 </label>
                             </div>
