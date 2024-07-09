@@ -41,6 +41,8 @@ class MeetingCreate extends Component
     public $searchedUser, $searchedCommitmentUser, $searchedCommitmentOu;
     protected $listeners = ['searchedUser', 'searchedCommitmentUser', 'searchedCommitmentOu'];
 
+    public $groupingInput = null;
+
     protected function messages(){
         return [
             // MENSAJES PARA MEETING
@@ -56,6 +58,7 @@ class MeetingCreate extends Component
             // MENSAJES PARA GROUPING
             'typeGrouping.required' => 'Debe ingresar Tipo de Asociaciones, Federaciones, etc.',
             'nameGrouping.required' => 'Debe ingresar Nombre de Asociaciones, Federaciones, etc.',
+            'searchedUser.required' => 'Debe ingresar un funcionario.',
 
             // MENSAJES PARA COMMITMENT
             'commitmentDescription.required'    => 'Debe ingresar Descripción del compromiso',
@@ -136,6 +139,7 @@ class MeetingCreate extends Component
         //SE GUARDA GROUPING (Asociaciones / Federaciones / Reunión Mesas y Comités de Trabajos) PARTICIPANTES
         if(!empty($this->groupings)){
             foreach($this->groupings as $grouping){
+                // dd($this->groupings, $grouping);
                 Grouping::updateOrCreate(
                     [
                         'id' => $grouping['id'] ? $grouping['id'] : null,
@@ -143,6 +147,7 @@ class MeetingCreate extends Component
                     [
                         'type'          => $grouping['type'], 
                         'name'          => $grouping['name'],
+                        'user_id'       => $grouping['user_id'],
                         'meeting_id'    => $meeting->id
                     ]
                 );
@@ -201,7 +206,8 @@ class MeetingCreate extends Component
     public function addGrouping(){
         $validatedData = $this->validate([
                 'typeGrouping' => 'required',
-                'nameGrouping' => 'required',
+                ($this->groupingInput == 'groups') ? 'nameGrouping' : 'nameGrouping'    => ($this->groupingInput == 'groups') ? 'required' : '',
+                ($this->groupingInput == 'user') ? 'searchedUser' : 'searchedUser'    => ($this->groupingInput == 'user') ? 'required' : '',
             ]
         );
 
@@ -209,6 +215,8 @@ class MeetingCreate extends Component
             'id'            => '',
             'type'          => $this->typeGrouping,
             'name'          => $this->nameGrouping,
+            'user_id'       => ($this->searchedUser) ? $this->searchedUser->id : null,
+            'user_name'     => ($this->searchedUser) ? $this->searchedUser->FullName : null,
             'meeting_id'    => ($this->meetingToEdit) ? $this->meetingToEdit->id : null,
         ];
 
@@ -218,6 +226,7 @@ class MeetingCreate extends Component
     public function cleanGrouping(){
         $this->typeGrouping = null;
         $this->nameGrouping = null;
+        $this->groupingInput = null;
     }
 
     public function setGroupings(){
@@ -227,6 +236,8 @@ class MeetingCreate extends Component
                     'id'            => $grouping->id,
                     'type'          => $grouping->type,
                     'name'          => $grouping->name,
+                    'user_id'       => $grouping->user_id,
+                    'user_name'     => ($grouping->type == "funcionario") ? $grouping->groupingUser->FullName  : null,
                     'meeting_id'    => $grouping->meeting_id
                 ];
             }
@@ -387,5 +398,14 @@ class MeetingCreate extends Component
         // dd($meetingToEdit->file);
 
         return Storage::disk('gcs')->response($meetingToEdit->file->storage_path);
+    }
+
+    public function updatedTypeGrouping($groupingInput){
+        if($groupingInput == 'funcionario'){
+            $this->groupingInput = 'user';
+        }
+        else{
+            $this->groupingInput = 'groups';
+        }
     }
 }

@@ -96,20 +96,33 @@
     <div class="row g-3 mb-5">
         <fieldset class="col-12 col-md-4">
             <label for="for-mecanism">Tipo</label>
-            <select class="form-select" wire:model.defer="typeGrouping">
+            <select class="form-select" wire:model="typeGrouping">
                 <option value="">Seleccionar</option>
                 <option value="asociaciones funcionarios">Asociaciones de Funcionarios</option>
                 <option value="federaciones regionales">Federaciones Regionales</option>
+                <option value="funcionario">Funcionario</option>
                 <option value="mesas comites de trabajo">Reunión Mesas y Comités de Trabajos</option>
             </select>
             @error('typeGrouping') <span class="text-danger error small">{{ $message }}</span> @enderror
         </fieldset>
-
-        <fieldset class="form-group col-12 col-md-4">
-            <label for="for_subject">Nombre</label>
-            <input class="form-control" type="text" autocomplete="off" wire:model.defer="nameGrouping">
-            @error('nameGrouping') <span class="text-danger error small">{{ $message }}</span> @enderror
-        </fieldset>
+        
+        @if($groupingInput == 'user')
+            <fieldset class="form-group col-12 col-md-4">
+                <label for="for_user_responsible_id">Nombre Funcionario responsable:</label>
+                @livewire('search-select-user', [
+                    'selected_id'   => 'user_grouping_id',
+                    'required'      => 'required',
+                    'emit_name'     => 'searchedUser'
+                ])
+                @error('searchedUser') <span class="text-danger error small">{{ $message }}</span> @enderror
+            </fieldset>
+        @else
+            <fieldset class="form-group col-12 col-md-4">
+                <label for="for_subject">Nombre</label>
+                <input class="form-control" type="text" autocomplete="off" wire:model.defer="nameGrouping">
+                @error('nameGrouping') <span class="text-danger error small">{{ $message }}</span> @enderror
+            </fieldset>
+        @endif
 
         <fieldset class="form-group col-12 col-md-4">
             <button wire:click="addGrouping" class="btn btn-success float-start mt-4" type="button">
@@ -147,20 +160,18 @@
                                 @case('federaciones regionales')
                                     Federaciones Regionales
                                     @break
+                                
+                                @case('funcionario')
+                                    Funcionario
+                                    @break
 
                                 @case('mesas comites de trabajo')
                                     Reunión Mesas y Comités de Trabajos
                                     @break
                             @endswitch
                         </td>
-                        <td>{{ $grouping['name'] }}</td>
+                        <td>{{ ($grouping['type'] == 'funcionario') ? $grouping['user_name'] : $grouping['name'] }}</td>
                         <td class="text-center">
-                            {{--
-                            <a
-                                class="btn btn-outline-secondary btn-sm">
-                                <i class="fas fa-edit fa-fw"></i> 
-                            </a>
-                            --}}
                             <a class="btn btn-outline-danger btn-sm"
                                 wire:click="deleteGrouping({{ $key }})">
                                 <i class="fas fa-trash-alt fa-fw"></i>
