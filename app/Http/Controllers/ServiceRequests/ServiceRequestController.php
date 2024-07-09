@@ -851,11 +851,17 @@ class ServiceRequestController extends Controller
    */
   public function update(Request $request, ServiceRequest $serviceRequest)
   {
+
+    // elimina fulfillments que queden fuera del nuevo segmento del contrato
+    foreach($serviceRequest->fulfillments->where('end_date','<',$request->start_date) as $fulfillment){
+        $fulfillment->delete();
+    }
+    foreach($serviceRequest->fulfillments->where('start_date','>',$request->end_date) as $fulfillment){
+        $fulfillment->delete();
+    }
+
     //se guarda información de la solicitud
     $serviceRequest->fill($request->all());
-    // if (isset($request->hsa_schedule_detail)) {
-    //   $serviceRequest->schedule_detail = $request->hsa_schedule_detail;
-    // }
     $serviceRequest->schedule_detail = $request->hsa_schedule_detail;
     $serviceRequest->save();
 
