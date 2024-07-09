@@ -451,18 +451,23 @@
                         @if($inventory->inventoryUsers)
                             <ul>
                                 @foreach($inventory->inventoryUsers as $inventoryuser)
-                                    <li>
-                                        {{ $inventoryuser->user->tinny_name }}
-                                        <button class="btn btn-danger btn-sm" title="Eliminar Usuario" wire:click="removeInventoryUser({{ $inventoryuser->id }})">
-                                            <i class="fas fa-trash-alt"></i>
-                                        </button>
-                                    </li>
+                                        <li>
+                                            @if($inventoryuser->user?->trashed())
+                                                <del>{{ $inventoryuser->user?->tinny_name }}</del>
+                                            @else
+                                                {{ $inventoryuser->user?->tinny_name }}
+                                            @endif
+                                            <button class="btn btn-danger btn-sm" title="Eliminar Usuario" wire:click="removeInventoryUser({{ $inventoryuser->id }})">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
+                                        </li>
                                     @if($loop->last)
                                         <hr>
                                     @endif
                                 @endforeach
                             </ul>
                         @endif
+
                         <div class="text-center mt-3">
                             <a href="{{ route('inventories.assign-user', ['userType' => 'admin', 'inventory' => $inventory->id]) }}" title="Asignar usuario a inventories." class="btn btn-primary btn-sm">
                                 <i class="fas fa-user-plus"></i>
