@@ -798,6 +798,11 @@ class RequestReplacementStaffController extends Controller
             'request', 'pending', 'complete', 'rejected', 'firstRequest', 'continuity'));
     }
 
+    public function approval_status()
+    {
+        return view('replacement_staff.reports.approvals_status');
+    }
+
     /*
     public function create_budget_availability_certificate_view(RequestReplacementStaff $requestReplacementStaff){
         $pdf = app('dompdf.wrapper');

@@ -569,6 +569,7 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->middleware(['auth'
         Route::get('/replacement_staff_historical', [ReplacementStaffController::class, 'replacement_staff_historical'])->name('replacement_staff_historical');
         Route::get('/request_by_dates', [RequestReplacementStaffController::class, 'request_by_dates'])->name('request_by_dates');
         Route::post('/search_request_by_dates', [RequestReplacementStaffController::class, 'search_request_by_dates'])->name('search_request_by_dates');
+        Route::get('/approval_status', [RequestReplacementStaffController::class, 'approval_status'])->name('approval_status');
     });
 
     Route::prefix('profile')->name('profile.')->group(function () {

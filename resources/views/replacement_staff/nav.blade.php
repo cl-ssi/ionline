@@ -106,7 +106,7 @@
     @endif
 
 
-    @canany(['Replacement Staff: manage', 'Replacement Staff: view requests'])
+    @canany(['Replacement Staff: manage', 'Replacement Staff: view requests', 'Replacement Staff: pendings approvals'])
     <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
             <i class="fas fa-file"></i> Reportes
@@ -114,6 +114,10 @@
         <div class="dropdown-menu">
             <a class="dropdown-item" href="{{ route('replacement_staff.reports.replacement_staff_historical') }}">Historico por Persona</a>
             <a class="dropdown-item" href="{{ route('replacement_staff.reports.request_by_dates') }}">Consolidado por fecha</a>
+            @can('Replacement Staff: pendings approvals')
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="{{ route('replacement_staff.reports.approval_status') }}">Estado de Aprobaciones [Beta]</a>
+            @endcan
         </div>
    </li>
    @endcan
