@@ -6,9 +6,18 @@
     @if($has_invoice_file)
         <div class="col-1"></div>
         <div class="col-1">
-            <a class="btn btn-outline-danger" wire:click="delete">
-                <i class="fas fa-trash"></i>
-            </a>
+            @canany(['Service Request: fulfillments finance','Service Request: fulfillments rrhh'])
+                <a class="btn btn-outline-danger" wire:click="delete">
+                    <i class="fas fa-trash"></i>
+                </a>
+            @else
+                @if(!$fulfillment->finances_approbation)
+                    <a class="btn btn-outline-danger" wire:click="delete">
+                        <i class="fas fa-trash"></i>
+                    </a>
+                @endif
+            @endcanany
+            
         </div>
         <div class="col-3">
             <a href="{{route('rrhh.service-request.fulfillment.download_invoice', [$fulfillment, time()]) }}"
