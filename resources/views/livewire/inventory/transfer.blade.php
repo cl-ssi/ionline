@@ -88,7 +88,7 @@
                             @endif
                         </td>
                         <td>
-                            @if($inventory->place->location)
+                            @if($inventory->place?->location)
                                 {{ $inventory->place->location->name }}
                             @endif
                         </td>
@@ -146,28 +146,30 @@
                     
                 </fieldset>
 
-                <!-- <fieldset class="col-md-3">
-                    <label for="user-using-id" class="form-label">Usuario <small>(Vacio = se mantiene el Usuario)</small></label>
+                {{-- 
+                    <fieldset class="col-md-3">
+                        <label for="user-using-id" class="form-label">Usuario <small>(Vacio = se mantiene el Usuario)</small></label>
 
-                    @livewire('users.search-user', [
-                        'smallInput' => true,
-                        'placeholder' => 'En caso de no ingresar se mantiene el Usuario anterior',
-                        'eventName' => 'myUserUsingId',
-                        'tagId' => 'user-using-id',
-                        'bt' => 5,
-                    ])
+                        @livewire('users.search-user', [
+                            'smallInput' => true,
+                            'placeholder' => 'En caso de no ingresar se mantiene el Usuario anterior',
+                            'eventName' => 'myUserUsingId',
+                            'tagId' => 'user-using-id',
+                            'bt' => 5,
+                        ])
 
-                    <input
-                        class="form-control @error('user_using_id') is-invalid @enderror"
-                        type="hidden"
-                    >
+                        <input
+                            class="form-control @error('user_using_id') is-invalid @enderror"
+                            type="hidden"
+                        >
 
-                    @error('user_using_id')
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                        </span>
-                    @enderror
-                </fieldset> -->
+                        @error('user_using_id')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </fieldset>
+                 --}}
 
 
                 <fieldset class="col-md-3">
