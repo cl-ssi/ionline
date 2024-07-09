@@ -93,7 +93,8 @@ class NoAttendanceRecordMgr extends Component
                 "document_route_name" => "rrhh.attendance.no-records.show",
                 "document_route_params" => json_encode([ "no_attendance_record_id" => $this->noAttendanceRecord->id]),
                 /** enviado a la OU del jefe guardada en authority, y no la OU seteada en el user */
-                "sent_to_ou_id" => auth()->user()->organizationalUnit->currentManager->organizational_unit_id,
+                // "sent_to_ou_id" => auth()->user()->organizationalUnit->currentManager->organizational_unit_id,
+                "sent_to_ou_id" => auth()->user()->boss->organizational_unit_id,
                 "callback_controller_method" => "App\Http\Controllers\Rrhh\NoAttendanceRecordController@approval",
                 "callback_controller_params" => json_encode([
                     //'approval_id' => xxx  <= este parámetro se agregará automáticamente al comienzo
