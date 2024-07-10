@@ -24,6 +24,7 @@ class ManualDtes extends Component
     public $storage_path = '/ionline/finances/dte/carga_manual';
     public $comprobante_liquidacion_fondo;
     public $archivoManual;
+    public $pagoManual;
     
     /*
     NOTA 
@@ -55,9 +56,10 @@ class ManualDtes extends Component
             'emisor' => 'required',
             'razonSocial' => 'required',
             'montoTotal' => 'required|numeric',
-            'folioOC' => 'required',
+            //'folioOC' => 'required',
             'emision' => 'required',
             'archivoManual' => 'file|mimes:pdf|max:4096|nullable',
+            'pagoManual' => 'nullable|boolean',
             
         ]);
 
@@ -88,7 +90,8 @@ class ManualDtes extends Component
             'folio_oc' => $this->folioOC,
             'emision' => $this->emision,
             'tipo' => $tipo,
-            // 'uri' => 'https://loa.sii.cl/cgi_IMT/TMBCOT_ConsultaBoletaPdf.cgi?origen=TERCEROS&txt_codigobarras=' . $uri_last_field,
+            'paid_manual' => $this->pagoManual ?? false,
+            'establishment_id' => auth()->user()->establishment_id
         ]);
 
 
@@ -149,8 +152,9 @@ class ManualDtes extends Component
             'emisor' => 'required',
             'razonSocial' => 'required',
             'montoTotal' => 'required|numeric',
-            'folioOC' => 'required',
-            'barCode' => 'required|size:7',
+            'emision' => 'required',
+            //'folioOC' => 'required',
+            //'barCode' => 'required|size:7',
         ]);
 
         // Generar la URL de la boleta utilizando el código de barra
