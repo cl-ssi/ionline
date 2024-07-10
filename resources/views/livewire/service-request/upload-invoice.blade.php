@@ -11,7 +11,7 @@
                     <i class="fas fa-trash"></i>
                 </a>
             @else
-                @if(!$fulfillment->finances_approbation)
+                @if(!$fulfillment->bill_number)
                     <a class="btn btn-outline-danger" wire:click="delete">
                         <i class="fas fa-trash"></i>
                     </a>
