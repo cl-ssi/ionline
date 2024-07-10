@@ -66,7 +66,13 @@ class RequestsAdmin extends Component
         $this->observation = '';
     }
 
-    public function saveObservation()
+    public function saveObservation($key)
+    {
+        $this->requests[$key]->save();
+        session()->flash('message', 'Se registró la observación.');
+    }
+
+    public function saveCancelObservation()
     {
         $request = Request::find($this->currentRequestId);
         $request->status = "Rechazado";

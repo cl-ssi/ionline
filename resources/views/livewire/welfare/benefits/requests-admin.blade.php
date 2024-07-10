@@ -46,7 +46,7 @@
                 <tr>
                     <td>{{ $request->id }}</td>
                     <td>{{ $request->created_at->format('Y-m-d') }}</td>
-                    <td>{{ $request->applicant->shortName }}</td>
+                    <td>{{ $request->applicant->shortName }}<br><b><small>{{$request->applicant->runFormat}}</small></b></td>
                     <td>
                         @if($request->subsidy->benefit) 
                             {{ $request->subsidy->benefit->name }} - {{ $request->subsidy->name }} 
@@ -57,7 +57,8 @@
                         @if($request->status != "En revisión")
                             <div class="input-group mb-3">
                                 <span class="input-group-text" id="" style="align-self: flex-start; height: auto;">Observación</span>
-                                <textarea class="form-control" wire:model.defer="requests.{{$key}}.status_update_observation" style="height: 100px;"></textarea>
+                                <textarea class="form-control" wire:model.defer="requests.{{$key}}.status_update_observation" style="height: 100px;">
+                                </textarea>
                                 <div wire:loading wire:target="saveObservation">
                                     <i class="fas fa-spinner fa-spin"></i> Espere...
                                 </div>
@@ -125,20 +126,20 @@
                                         <i class="fa fa-check" aria-hidden="true"></i>
                                     </button>
                                 </div>
-                                <button class="btn btn-danger" wire:click="reject({{$request->id}})" type="button">
+                                <button class="btn btn-danger" type="button">
                                     <i class="fa fa-times" aria-hidden="true"></i>
                                 </button>
                             @endif
                         </div>
-                        @if($showTextarea && $currentRequestId == $request->id)
+                        @if($showTextarea)
                             <div class="mt-2">
                                 <textarea class="form-control" wire:model.defer="observation" placeholder="Ingrese la observación"></textarea>
-                                <div wire:loading wire:target="saveObservation">
+                                <div wire:loading wire:target="saveCancelObservation">
                                     <i class="fas fa-spinner fa-spin"></i> Espere...
                                 </div>
-                                <div wire:loading.remove wire:target="saveObservation">
+                                <div wire:loading.remove wire:target="saveCancelObservation">
                                     <div class="mt-2">
-                                        <button class="btn btn-primary" wire:click="saveObservation">Guardar</button>
+                                        <button class="btn btn-primary" wire:click="saveCancelObservation">Guardar</button>
                                         <button class="btn btn-secondary" wire:click="cancel">Cancelar</button>
                                     </div>
                                 </div>
