@@ -7,7 +7,6 @@
 @include('meetings.partials.nav')
 
 <h5><i class="fas fa-users fa-fw"></i> Todas las reuniones</h5>
-<p>Incluye Reuniones de mi Unidad Organizacional: <b>{{ auth()->user()->organizationalUnit->name }}</b></p>
 
 <div class="col-sm">
     @livewire('meetings.search-meeting', [
