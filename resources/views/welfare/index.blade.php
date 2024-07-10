@@ -17,13 +17,23 @@
     </div>
 
     <!-- Se restringe la visualización a usuarios de bienestar y administradores -->
-    @if(auth()->user()->welfare || auth()->user()->can('be god') || auth()->user()->can('welfare: amipass') || auth()->user()->can('welfare: balance'))
+    @if(auth()->user()->welfare || auth()->user()->can('be god') || auth()->user()->can('welfare: amipass') || auth()->user()->can('welfare: balance')
+        || auth()->user()->can('welfare: benefits') || auth()->user()->can('welfare: hotel booking administrator'))
         <h5 class="text-white p-2 bg_azul_gob mt-3 text-center">
             <i class="fas fa-file-signature"></i>
             Reserva de cabañas - Bienestar
         </h5>
 
         <div class="mt-4 p-5 text-black rounded bg-light">
+
+            @if(auth()->user()->can('welfare: hotel booking administrator'))
+                <div class="d-flex justify-content-end">
+                    <button class="btn btn-warning rounded-pill px-3 d-flex align-items-center" type="button">
+                        <b>@livewire('hotel-booking.pending-requests-count')</b> 
+                        <span class="ml-2">reservas pendientes por revisar</span>
+                    </button>
+                </div>
+            @endif
 
             <h6>En el siguiente video podrá visualizar como realizar una reserva de cabañas.</h6>
             <br>
