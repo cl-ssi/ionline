@@ -74,7 +74,7 @@
                     <td nowrap>{{ $booking->start_date->format('Y-m-d') }}</td>
                     <td nowrap>{{ $booking->end_date->format('Y-m-d') }}</td>
                     <td>{{ $booking->payment_type }}</td>
-                    <td>${{ money($booking->room->price * $booking->start_date->diffInDays($booking->end_date)) }}</td>
+                    <td>${{ $booking->room->price * $booking->start_date->diffInDays($booking->end_date) }}</td>
                     <td>{{ $booking->status }}</td>
                     <td>{{ $booking->observation }}</td>
                 </tr>
