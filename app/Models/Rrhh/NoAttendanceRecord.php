@@ -53,7 +53,8 @@ class NoAttendanceRecord extends Model
     ];
 
     protected $casts = [
-        'date' => 'date:Y-m-d\TH:i:s'
+        'date' => 'date:Y-m-d\TH:i:s',
+        'created_at' => 'datetime',
     ];
 
     public function user()
