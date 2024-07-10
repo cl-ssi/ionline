@@ -31,15 +31,15 @@
             </div>
 
             <div class="form-group col-2">
-                <label for="emisor">RUT</label>
+                <label for="emisor">RUT*</label>
                 <input type="text" class="form-control" id="emisor" wire:model.defer="emisor"
                     placeholder="ej: 76.278.474-2" autocomplete="off">
                 @error('emisor')
                     <span class="text-danger">{{ $message }}</span>
                 @enderror
             </div>
-            <div class="form-group col-4">
-                <label for="razonSocial">Razón Social</label>
+            <div class="form-group col-3">
+                <label for="razonSocial">Razón Social*</label>
                 <input type="text" class="form-control" id="razonSocial" wire:model.defer="razonSocial"
                     autocomplete="off">
                 @error('razonSocial')
@@ -56,8 +56,8 @@
         </div>
 
         <div class="row g-2 mb-3">
-            <div class="form-group col-2">
-                <label for="folio">Número</label>
+            <div class="form-group col-1">
+                <label for="folio">folio*</label>
                 <input type="number" class="form-control" id="folio" wire:model.defer="folio" autocomplete="off"
                     min="1">
                 @error('folio')
@@ -65,7 +65,7 @@
                 @enderror
             </div>
             <div class="form-group col-2">
-                <label for="montoTotal">Monto Total</label>
+                <label for="montoTotal">Monto Total*</label>
                 <input type="number" class="form-control" id="montoTotal" wire:model.defer="montoTotal"
                     autocomplete="off" min="1000">
                 @error('montoTotal')
@@ -74,7 +74,7 @@
             </div>
 
             <div class="form-group col-2">
-                <label for="emision">Fecha</label>
+                <label for="emision">Fecha*</label>
                 <input type="date" class="form-control" id="emision" wire:model.defer="emision" autocomplete="off">
                 @error('emision')
                     <span class="text-danger">{{ $message }}</span>
@@ -89,8 +89,8 @@
                 @enderror
             </div>
 
-            <div class="form-group col-4">
-                <label for="barCode">7 Últimos dígitos código de barra <small>(Solo para BHE)</small></label>
+            <div class="form-group col-3">
+                <label for="barCode">7 Últimos n° código barra <small>(Solo BHE)</small></label>
                 <div class="input-group">
                     <input type="text" class="form-control" id="barCode" wire:model.defer="barCode"
                         placeholder="ej: 6A86963" maxlength="7" autocomplete="off">
@@ -102,6 +102,15 @@
                 @error('barCode')
                     <span class="text-danger">{{ $message }}</span>
                 @enderror
+            </div>
+
+            <div class="form-group col-2 d-flex align-items-center">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="pagoManual" wire:model.defer="pagoManual">
+                    <label class="form-check-label" for="pagoManual">
+                        Pago Manual
+                    </label>
+                </div>
             </div>
         </div>
 
