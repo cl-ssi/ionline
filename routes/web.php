@@ -148,6 +148,7 @@ use App\Http\Livewire\Welfare\Amipass\ReportByDates;
 use App\Http\Controllers\Agreements\SignerController;
 use App\Http\Controllers\Auth\VerificationController;
 use App\Http\Controllers\HotelBooking\RoomController;
+use App\Http\Controllers\HotelBooking\ReportController as HbReportController;
 use App\Http\Controllers\Indicators\ComgesController;
 use App\Http\Controllers\ProfAgenda\AgendaController;
 use App\Http\Controllers\Programmings\TaskController;
@@ -1998,6 +1999,10 @@ Route::prefix('hotel_booking')->as('hotel_booking.')->middleware(['auth', 'must.
         Route::get('/create', [ServiceController::class, 'create'])->name('create');
         Route::post('/store', [ServiceController::class, 'store'])->name('store');
         Route::delete('/{service}/destroy', [ServiceController::class, 'destroy'])->name('destroy');
+    });
+
+    Route::prefix('reports')->as('reports.')->middleware('auth')->group(function () {
+        Route::get('/discount_sheet', [HbReportController::class, 'DiscountSheet'])->name('discount_sheet');
     });
 });
 

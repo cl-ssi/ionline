@@ -109,6 +109,13 @@
                             href="{{ route('hotel_booking.booking_admin') }}">
                             <i class="fa fa-list"></i> Administrador de reservas
                         </a>
+
+                        <div class="dropdown-divider"></div> <!-- Línea divisora para separar los reportes -->
+                        
+                        <a class="dropdown-item {{ active('hotel_booking.reports.discount_sheet') }}"
+                            href="{{ route('hotel_booking.reports.discount_sheet') }}">
+                            <i class="fa fa-chart-bar"></i> Planilla de descuentos 
+                        </a>
                     @endcanany
 
                 </div>
