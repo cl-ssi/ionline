@@ -44,10 +44,16 @@
                 ${{ money($roomBooking->start_date->diffInDays($roomBooking->end_date) * $roomBooking->room->price) }}</td>
             </td>
             <td nowrap>
-                {{ $roomBooking->status }}</td>
+                {{ $roomBooking->status }}  
             </td>
             <td nowrap class="display: flex; flex-direction: row;">
-                {{ $roomBooking->payment_type }}
+                <!-- solo si está reservado se deja modificar el tipo de pago -->
+                @if($roomBooking->status == "Reservado")
+                    @livewire('hotel-booking.change-payment-type', ['roomBooking' => $roomBooking])
+                @else
+                    {{ $roomBooking->payment_type }}
+                @endif
+
                 @if($roomBooking->status == "Reservado" && $roomBooking->payment_type == "Transferencia")
                     @if($roomBooking->files->count() != 0)
                         @foreach($roomBooking->files as $key => $file) 
