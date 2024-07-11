@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use App\Models\User;
 use App\Notifications\ProfAgenda\NewReservation;
 use App\Notifications\ProfAgenda\CancelReservation;
+use App\Notifications\ProfAgenda\AutoCancelReservation;
 
 use App\Models\ProfAgenda\OpenHour;
 use App\Models\ProfAgenda\ExternalUser;
