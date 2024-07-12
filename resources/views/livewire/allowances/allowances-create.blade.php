@@ -32,7 +32,7 @@
                 ])
             @endif
         </fieldset>
-
+        
         <fieldset class="form-group col-12 col-md-3">
             <label for="for_contractual_condition">Calidad</label>
             <select class="form-control" wire:model="contractualConditionId" required>
@@ -56,22 +56,31 @@
     </div>
 
     <div class="form-row">
-        <fieldset class="form-group col-12 col-md-3">
-            <label for="for_allowance_value_id">Grado E.U.S.</label>
-            <select name="allowance_value_id" class="form-control" wire:model="allowanceValueId" {{ $disabledAllowanceValueId }} required>
-                <option value="">Seleccione...</option>
-                @foreach($allowanceValues as $allowanceValue)
-                    <option value="{{ $allowanceValue->id }}">{{ $allowanceValue->name }}</option>
-                @endforeach
-            </select>
-            @error('allowanceValueId') <span class="text-danger error small">{{ $message }}</span> @enderror
-        </fieldset>
-
-        <fieldset class="form-group col-12 col-md-3">
-            <label for="for_place">Grado Específico</label>
-            <input class="form-control" type="text" autocomplete="off" wire:model="grade" {{ $disabledGrade }} required>
-            @error('grade') <span class="text-danger error small">{{ $message }}</span> @enderror
-        </fieldset>
+        @if($bheFileStatus == 'active')
+            <fieldset class="form-group col-12 col-md-6">
+                <label for="for_allowance_value_id"></label>
+                <div class="alert alert-info" role="alert">
+                    No aplica selección de usuario para calidad contractual <b>Honorarios</b>
+                </div>
+            </fieldset>
+        @else
+            <fieldset class="form-group col-12 col-md-3">
+                <label for="for_allowance_value_id">Grado E.U.S.</label>
+                <select name="allowance_value_id" class="form-control" wire:model="allowanceValueId" {{ $disabledAllowanceValueId }} required>
+                    <option value="">Seleccione...</option>
+                    @foreach($allowanceValues as $allowanceValue)
+                        <option value="{{ $allowanceValue->id }}">{{ $allowanceValue->name }}</option>
+                    @endforeach
+                </select>
+                @error('allowanceValueId') <span class="text-danger error small">{{ $message }}</span> @enderror
+            </fieldset>
+        
+            <fieldset class="form-group col-12 col-md-3">
+                <label for="for_place">Grado Específico</label>
+                <input class="form-control" type="text" autocomplete="off" wire:model="grade" {{ $disabledGrade }} required>
+                @error('grade') <span class="text-danger error small">{{ $message }}</span> @enderror
+            </fieldset>
+        @endif
 
         <fieldset class="form-group col-12 col-md-3">
             <label for="for_law">Ley</label>
@@ -96,6 +105,24 @@
             @error('reason') <span class="text-danger error small">{{ $message }}</span> @enderror
         </fieldset>
     </div>
+
+    @if($messageBhe != NULL)
+        <div class="alert alert-info" role="alert">
+            {!! $messageBhe !!}
+        </div>
+    @endif
+
+    @if($bheFileStatus == 'active')
+        <div class="form-row">
+            <fieldset class="form-group col mt">
+                <div class="mb-3">
+                    <label for="forFile" class="form-label">Boleta de Honorarios Electrónica</label>
+                    <input class="form-control" type="file" wire:model.defer="bheFile">
+                    <div wire:loading wire:target="bheFile">Cargando archivo...</div>
+                </div>
+            </fieldset>
+        </div>
+    @endif
 
     <hr>
 
@@ -423,7 +450,7 @@
         </div>
     @endif
 
-    <button wire:click="saveAllowance"  class="btn btn-primary float-right" type="button" wire:loading.attr="disabled">
+    <button type="button" wire:click="saveAllowance"  class="btn btn-primary float-right"  @if($bheFileStatus == 'active' && !$bheFile) disabled @endif>
         <i class="fas fa-save"></i> Guardar
     </button>
     

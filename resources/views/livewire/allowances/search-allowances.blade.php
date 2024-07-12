@@ -167,12 +167,14 @@
                                         <br>
                                     @endif
 
+                                    {{--
                                     @if($allowance->status == 'rejected')
                                         <a href="{{ route('allowances.create_to_replicate', $allowance) }}"
                                             class="btn btn-outline-success btn-sm" title="Crear Viático"><i class="fas fa-plus fa-fw"></i>
                                         </a>
                                         <br>
                                     @endif
+                                    --}}
                                 @endif
                                 
                                 <a href="{{ route('allowances.show', $allowance) }}"

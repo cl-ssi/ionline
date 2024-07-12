@@ -102,6 +102,10 @@ class AllowancesCreate extends Component
 
     public $restrict = [];
 
+    public $bheFile = null;
+    public $bheFileStatus = null;
+    public $messageBhe = null;
+
     protected $listeners = ['emitPosition', 'emitPositionValue', 'userSelected', 'savedDestinations', 'selectedInputId',
         'searchedCommune'];
     
@@ -151,7 +155,7 @@ class AllowancesCreate extends Component
             'contractualConditionId'                                => 'required',
             'position'                                              => 'required',
             'allowanceValueId'                                      => 'required',
-            ($this->law == "19664") ? 'grade' : 'grade'             => ($this->law == "19664") ? '' : 'required',
+            ($this->law == "19664" || $this->contractualConditionId == "2") ? 'grade' : 'grade' => ($this->law == "19664" || $this->contractualConditionId == "2") ? '' : 'required',
             ($this->contractualConditionId == "2") ? 'law' : 'law'  => ($this->contractualConditionId == "2") ? '' : 'required',
             'reason'                                                => 'required',
 
@@ -215,7 +219,7 @@ class AllowancesCreate extends Component
                     'contractual_condition_id'          => $this->contractualConditionId,
                     'position'                          => $this->position,
                     'allowance_value_id'                => $this->allowanceValueId(),
-                    'grade'                             => $this->grade,
+                    'grade'                             => ($this->law != "19664" || $this->contractualConditionId != "2") ? $this->grade : null,
                     'law'                               => $this->law,
                     'establishment_id'                  => $this->userAllowance->organizationalUnit->establishment->id,
                     'organizational_unit_allowance_id'  => $this->userAllowance->organizationalUnit->id, 
@@ -260,6 +264,19 @@ class AllowancesCreate extends Component
                     'allowance_id'  => ($this->allowanceToEdit) ? $this->allowanceToEdit->id : $alw->id
                 ]
             );
+        }
+
+        //Si es Honorarios seteo el archivo
+
+        if($this->bheFileStatus == 'active' && $this->bheFile){
+            if(!is_string($this->bheFile)){
+                $this->bheFile = $this->bheFile ? $this->bheFile->storeAs('/ionline/allowances/bhe', $alw->id.'.'.$this->bheFile->extension(), 'gcs') : null;
+                $this->files[] = [
+                    'id'        => '',
+                    'fileName'  => 'bhe',
+                    'file'      => $this->bheFile
+                ];
+            }
         }
 
         /* SE GUARDAN LOS ARCHIVOS DEL VIÁTICO */
@@ -748,10 +765,25 @@ class AllowancesCreate extends Component
 
     public function updatedContractualConditionId($contractualConditionId){
         if($contractualConditionId == '2'){
+            //OPCION HONORARIOS: INHABILITO CAMPO LEY, GRADO Y DETALLE DE GRADO
             $this->disabledLaw = 'disabled';
+            $this->disabledAllowanceValueId = 'disabled';
+            $this->allowanceValueId = 9;
+            $this->grade = null;
+            $this->disabledGrade = 'disabled';
+
+            $this->bheFileStatus = 'active';
+            $this->messageBhe = "<b>Estimado Usuario</b>: Usted ha seleccionado la calidad contractual <b>Honorarios</b>, favor adjuntar
+                dicho documento.";
         }
         else{
             $this->disabledLaw = '';
+            $this->disabledAllowanceValueId = '';
+            $this->disabledGrade = '';
+            $this->allowanceValueId = null;
+
+            $this->bheFileStatus = 'disabled';
+            $this->messageBhe = null;
         }
     }
 
@@ -930,9 +962,12 @@ class AllowancesCreate extends Component
             $this->food                     =   $this->allowanceToEdit->food;
             $this->from                     =   $this->allowanceToEdit->from;
             $this->to                       =   $this->allowanceToEdit->to;
-            $this->halfDaysOnly              =   $this->allowanceToEdit->half_days_only;
+            $this->halfDaysOnly             =   $this->allowanceToEdit->half_days_only;
 
             foreach($this->allowanceToEdit->files as $file){
+                if($file->name == 'bhe'){
+                    $this->bheFile          =   $file->file;
+                }
                 $this->setFile($file);
             }
         }
@@ -986,6 +1021,19 @@ class AllowancesCreate extends Component
         if(!is_null($allowanceToEdit)){
             $this->allowanceToEdit = $allowanceToEdit;
             $this->setAllowance();
+
+            if($this->allowanceToEdit->contractual_condition_id == '2'){
+                //OPCION HONORARIOS: INHABILITO CAMPO LEY, GRADO Y DETALLE DE GRADO
+                $this->disabledLaw = 'disabled';
+                $this->disabledAllowanceValueId = 'disabled';
+                $this->allowanceValueId = 9;
+                $this->grade = null;
+                $this->disabledGrade = 'disabled';
+    
+                $this->bheFileStatus = 'active';
+                $this->messageBhe = "<b>Estimado Usuario</b>: Usted ha seleccionado la calidad contractual <b>Honorarios</b>, favor adjuntar
+                    dicho documento.";
+            }
         }
         if(!is_null($allowanceToReplicate)){
             $this->allowanceToReplicate = $allowanceToReplicate;
