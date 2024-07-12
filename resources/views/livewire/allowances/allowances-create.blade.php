@@ -60,7 +60,7 @@
             <fieldset class="form-group col-12 col-md-6">
                 <label for="for_allowance_value_id"></label>
                 <div class="alert alert-info" role="alert">
-                    No aplica selección de usuario para calidad contractual <b>Honorarios</b>
+                    No aplica selección de grado para calidad contractual <b>Honorarios</b>
                 </div>
             </fieldset>
         @else
