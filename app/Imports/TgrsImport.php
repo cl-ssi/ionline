@@ -33,6 +33,12 @@ class TgrsImport implements WithHeadingRow, ToCollection,WithChunkReading
                     case '0102 Factura Afecta Electrónica':
                         $tipo_documento = 'factura_electronica';
                         break;
+                    case '0102 033 Factura Electrónica':
+                        $tipo_documento = 'factura_electronica';
+                        break;
+                    case '0202 034 Factura Exenta Electrónica':
+                        $tipo_documento = 'factura_exenta';
+                        break;
                     case '0202 Factura Exenta Electrónica':
                         $tipo_documento = 'factura_exenta';
                         break;

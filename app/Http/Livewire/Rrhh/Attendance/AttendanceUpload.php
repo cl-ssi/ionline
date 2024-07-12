@@ -48,7 +48,7 @@ class AttendanceUpload extends Component
         }
 
         // Obtener todos los user_id existentes en un array
-        $users = User::pluck('id')->toArray();
+        $users = User::withTrashed()->pluck('id')->toArray();
 
         while ( !feof($file) ) {
             $line = fgets($file);

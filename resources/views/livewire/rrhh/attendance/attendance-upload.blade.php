@@ -6,7 +6,7 @@
     @endif
 
     <h1>Cargar Asistencia</h1>
-    <p>Exporta archivo de asistencia desde Sirh, utilizando la opción: Format "Tab-separated text"</p>
+    <p>Exporta archivo de asistencia desde Sirh, utilizando la opción: Format "Tab-separated text". Corregir febrero en el archivo de SIRH, ya que está mal escrito.</p>
     <form wire:submit.prevent="save" class="row">
         <div class="col-md-6">
             <div class="input-group">
