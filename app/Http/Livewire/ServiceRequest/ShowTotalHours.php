@@ -124,12 +124,11 @@ class ShowTotalHours extends Component
                     $this->totalHoursNight = $this->totalHoursNight + $hoursNightString;
                 }
 
-
-                $this->totalHours = $this->totalHoursDay + $this->totalHoursNight;
-                $this->totalHoursContab = floor($this->totalHoursDay + $this->totalHoursNight);
+                $this->totalHours = round($this->totalHoursDay + $this->totalHoursNight, 0, PHP_ROUND_HALF_UP);
+                $this->totalHoursContab = floor($this->totalHours);
                 $this->totalAmount = $this->totalHoursContab * $this->fulfillment->serviceRequest->gross_amount;
-                break;
 
+                break;
             case ($this->fulfillment->serviceRequest->working_day_type == 'TURNO EXTRA' &&
                   $this->fulfillment->serviceRequest->responsability_center_ou_id == 138 &&
                   (($this->fulfillment->serviceRequest->start_date >= '2021/11/01 00:00') && ($this->fulfillment->serviceRequest->end_date <= '2021/12/31 23:59:59'))):
