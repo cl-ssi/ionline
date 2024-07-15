@@ -355,6 +355,7 @@
                            "<td>" + user + "</td>" +
                            "<td><input type='checkbox' checked disabled></td>" +
                            //"<td><button type='button' id='delete-row' class='btn btn-outline-secondary btn-sm' value=" + id + "><span class='fas fa-trash-alt' aria-hidden='true'></span></button></td>" +
+                             "<td><button type='button' class='btn btn-outline-danger delete-row' data-toggle='tooltip' data-placement='top' title='Eliminar'><i class='fas fa-trash'></i></button></td>" +
                       "</tr>";
          $("#tabla_funcionarios").append(markup);
 
