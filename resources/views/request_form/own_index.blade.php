@@ -4,7 +4,7 @@
 
 <link href="{{ asset('css/bootstrap-select.min.css') }}" rel="stylesheet" type="text/css" />
 <h4 class="mb-3"><i class="fas fa-fw fa-inbox"></i> Mis Formularios</h4>
-<p>Incluye Formularios de Compras de mi Unidad Organizacional: <b>{{ auth()->user()->organizationalUnit->name }}.</p>
+<p>Incluye Formularios de Compras de mi Unidad Organizacional: <b>{{ auth()->user()->organizationalUnit->name }}</b>.</p>
 
 @include('request_form.partials.nav')
 
