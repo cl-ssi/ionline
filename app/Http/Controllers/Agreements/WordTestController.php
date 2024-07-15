@@ -542,6 +542,12 @@ class WordTestController extends Controller
 
     public function createWordDocxResProgram(ProgramResolution $program_resolution)
     {
+        // Chequear que exista el archivo public_path('word-template/convenio'.$agreements->period.'.docx')
+        if(!file_exists(public_path('word-template/resolucionprogram'.$program_resolution->date->format('Y').'.docx'))) {
+            session()->flash('danger', 'No se encontró el archivo de convenio para el periodo '. $program_resolution->date->format('Y') . ' revise que la "Fecha de resolución" esté correcta.');
+            return redirect()->back();
+        }
+
         $program_resolution->load('program', 'resolution_amounts.program_component', 'referrer', 'director_signer.user');
         $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
 
