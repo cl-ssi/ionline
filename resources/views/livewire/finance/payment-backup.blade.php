@@ -14,10 +14,21 @@
                 <label for="for-emisor" class="form-label">Rut</label>
                 <input type="text" class="form-control" wire:model.defer="filters.emisor" placeholder="rut emisor">
             </div>
+            
             <div class="col-md-2">
-                <label for="for-folio" class="form-label">Folio Pago</label>
+                <label for="for-folio" class="form-label">N° Folio Pago</label>
                 <input type="text" class="form-control" wire:model.defer="filters.folio_pago" placeholder="folio pago">
             </div>
+
+            <div class="col-md-2">
+                <label for="for-folio" class="form-label">Estado Folio Pago</label>
+                <select class="form-select" wire:model.defer="filters.estado_folio_pago">
+                    <option value="Todos">Todos</option>
+                    <option value="Sin Folio">Sin Folio</option>
+                    <option value="Con Folio">Con Folio</option>
+                </select>
+            </div>
+
 
             <div class="col-md-2">
                 <label for="for-folio" class="form-label">PDF Pago Sin Firma</label>

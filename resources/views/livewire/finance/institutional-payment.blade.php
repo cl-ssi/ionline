@@ -52,7 +52,8 @@
                 <th scope="col">Adjuntos</th>
                 <th scope="col">SIGFE</th>
                 <th scope="col">Fecha de Pago</th>
-                <th scope="col">SIGFE</th>
+                <th>Pdf Pago sin Firma</th>
+                <th>Pdf Pago con Firma</th>                
             </tr>
         </thead>
 
@@ -150,11 +151,17 @@
                             @endif
                         </div>
                     </td>
-                    <td class="small">
-                        <small>Pago</small>
-                        <div wire:ignore>
-                            @livewire('finance.upload-pdf', ['dteId' => $dte->id, 'type' => 'pago'], key('pago-upload-pdf-' . rand() * $dte->id))
-                        </div>
+                    <td>
+                        @livewire('finance.upload-pdf', ['dteId' => $dte->id, 'type' => 'comprobante_pago'], key('upload-pdf-' . $dte->id))
+                    </td>
+                    <td>
+                        @if($dte->comprobantePago && $dte->comprobantePago->allApprovalsOk() && $dte->comprobantePago->approvals->last())
+                            <a class="btn btn-sm btn-outline-danger" target="_blank" 
+                            href="{{ route('documents.signed.approval.pdf', $dte->comprobantePago->approvals->last()) }}"
+                            >
+                                <i class="fas fa-fw fa-file-pdf"></i>
+                            </a>
+                        @endif
                     </td>
                 </tr>
             @endforeach

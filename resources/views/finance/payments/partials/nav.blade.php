@@ -14,13 +14,13 @@
             href="{{ route('finance.payments.ready') }}">
             <i class="far fa-fw fa-clock"></i> Pendiente para Pagos TGR</a>
     </li>
-    @can('be god')
+    
     <li class="nav-item">
     <a class="nav-link {{ active('finance.payments.InstitutionalPayment') }}"
     href="{{ route('finance.payments.InstitutionalPayment') }}">
             <i class="far fa-fw fa-money-bill-alt"></i> Pagos Institucionales</a>
     </li>
-    @endcan
+    
     <li class="nav-item">
         <a class="nav-link {{ active('finance.payments.paid') }}"
             href="{{ route('finance.payments.paid') }}">

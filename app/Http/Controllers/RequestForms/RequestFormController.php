@@ -68,6 +68,20 @@ class RequestFormController extends Controller {
         return view('request_form.my_forms', compact('my_requests', 'my_pending_requests','my_ou'));
     }
 
+    public function own_index()
+    {
+        // $ouSearch = Parameter::where('module', 'ou')->whereIn('parameter', ['FinanzasSSI', 'RefrendacionHAH', 'FinanzasHAH'])->pluck('value')->toArray();
+        /*
+        $ouSearch = array_unique(Parameter::get('Abastecimiento',['prefinance_ou_id','finance_ou_id']));
+        if(!auth()->user()->hasPermissionTo('Request Forms: all') && !in_array(auth()->user()->organizational_unit_id, $ouSearch)){
+            session()->flash('danger', 'Estimado Usuario/a: no tiene los permisos necesarios para ver todos los formularios.');
+            return redirect()->route('request_forms.my_forms');
+        }
+        */
+
+        return view('request_form.own_index');
+    }
+
     public function all_forms()
     {
         // $ouSearch = Parameter::where('module', 'ou')->whereIn('parameter', ['FinanzasSSI', 'RefrendacionHAH', 'FinanzasHAH'])->pluck('value')->toArray();

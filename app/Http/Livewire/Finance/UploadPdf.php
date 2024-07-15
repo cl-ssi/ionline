@@ -110,7 +110,7 @@ class UploadPdf extends Component
     public function savePdfNoApproval()
     {
         // $this->validate();
-        $this->type = 'attachment_file';
+        //$this->type = 'attachment_file';
         $dte = Dte::find($this->dteId);
 
         /* Documento de respaldo: Support File */

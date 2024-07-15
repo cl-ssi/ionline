@@ -12,6 +12,7 @@
     </a>
     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
       <a class="dropdown-item" href="{{ route('request_forms.my_forms') }}"><i class="fas fa-fw fa-inbox"></i> Mis Formularios</a>
+      <a class="dropdown-item" href="{{ route('request_forms.own_index') }}"><i class="fas fa-fw fa-inbox"></i> Mis Formularios <span class="badge badge-secondary">Nueva</span></a>
       {{--@php($ouSearch = App\Models\Parameters\Parameter::where('module', 'ou')->whereIn('parameter', ['FinanzasSSI','RefrendacionHAH','FinanzasHAH'])->pluck('value')->toArray())--}}
       @php($ouSearch = App\Models\Parameters\Parameter::get('Abastecimiento',['prefinance_ou_id', 'finance_ou_id']))
       @if(auth()->user()->hasPermissionTo('Request Forms: all') || in_array(auth()->user()->organizational_unit_id, $ouSearch))

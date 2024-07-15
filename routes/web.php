@@ -2343,6 +2343,7 @@ Route::prefix('request_forms')->as('request_forms.')->middleware(['auth', 'must.
     })->name('info_circular_n75_2023');
 
     Route::get('/my_forms', [RequestFormController::class, 'my_forms'])->name('my_forms');
+    Route::get('/own_index', [RequestFormController::class, 'own_index'])->name('own_index');
     Route::get('/all_forms', [RequestFormController::class, 'all_forms'])->name('all_forms');
     Route::get('/pending_forms', [RequestFormController::class, 'pending_forms'])->name('pending_forms');
     Route::get('/contract_manager_forms', [RequestFormController::class, 'contract_manager_forms'])->name('contract_manager_forms');

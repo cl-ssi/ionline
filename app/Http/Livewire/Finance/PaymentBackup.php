@@ -18,8 +18,9 @@ class PaymentBackup extends Component
         'id' => null,
         'emisor' => null,
         'folio_pago' => null,
+        'estado_folio_pago' => 'Todos',
         'sin_firma' => 'Todos',
-        'firmado' => 'Todos',
+        'firmado' => 'Todos',        
     ];
 
     public function search()
@@ -63,7 +64,7 @@ class PaymentBackup extends Component
             $query->whereDoesntHave('comprobantePago');
         }
 
-        // Filtrar los resultados según el estado de todas las aprobaciones
+        
         if ($this->filters['firmado'] == 'Firmados') {
             $query->whereHas('comprobantePago.approvals', function (Builder $query) {
                 $query->where('status', 1);
@@ -72,6 +73,12 @@ class PaymentBackup extends Component
             $query->whereHas('comprobantePago.approvals', function (Builder $query) {
                 $query->where('status', '!=', 1);
             });
+        }
+
+        if ($this->filters['estado_folio_pago'] == 'Con Folio') {
+            $query->WhereHas('tgrPayedDte');
+        } elseif ($this->filters['estado_folio_pago'] == 'Sin Folio') {
+            $query->whereDoesntHave('tgrPayedDte');
         }
 
         $dtes = $query->paginate(50);

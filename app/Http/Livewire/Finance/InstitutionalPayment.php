@@ -54,7 +54,7 @@ class InstitutionalPayment extends Component
     {
         $dte = Dte::find($dte_id);
         if($this->fecha != null){
-            $dte->update(['fecha' => $this->fecha]);
+            $dte->update(['fecha' => $this->paid_date]);
         }
         if($this->receptor != null){
             $dte->update(['receptor' => $this->receptor]);
@@ -87,7 +87,8 @@ class InstitutionalPayment extends Component
             ->where('tipo_documento', 'LIKE', 'factura_%')
             ->where('all_receptions', 1)
             ->where('establishment_id', auth()->user()->organizationalUnit->establishment_id)
-            ->where('payment_ready', 1);
+            ->where('payment_ready', 1)
+            ->where('paid_manual',1);
 
         // Aplica filtros
         if ($this->filters['id']) {
