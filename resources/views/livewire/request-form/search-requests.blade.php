@@ -67,7 +67,7 @@
                     name="requester_search" wire:model.debounce.500ms="selectedRequester">
             </fieldset>
 
-            @if($inbox != 'own')
+            @if($this->inbox == 'all' || $inbox == 'report: form-items' || $inbox == 'purchase')
                 <fieldset class="form-group col-12 col-md-4">
                     <label for="for_requester_ou_id">U.O. Usuario Gestor</label>
                     @livewire('search-select-organizational-unit', [
@@ -77,15 +77,31 @@
                         'organizationalUnit'   => $organizationalUnit
                     ])
                 </fieldset>
+            @else
+                <fieldset class="form-group col-12 col-md-4">
+                    <label for="for_requester_ou_id">U.O. Usuario Gestor</label>
+                    <div class="alert alert-info p-1" role="alert">
+                        Parametro no disponible.
+                    </div>
+                </fieldset>
+            @endif
+            
+            @if($this->inbox == 'all' || $inbox == 'report: form-items' || $inbox == 'purchase')
+                <fieldset class="form-group col-12 col-md-2">
+                    <label for="for_requester">Administrador Contrato</label>
+                    <input class="form-control form-control-sm" type="text" autocomplete="off" placeholder="NOMBRE / APELLIDOS"
+                        name="admin_search" wire:model.debounce.500ms="selectedAdmin">
+                </fieldset>
+            @else
+                <fieldset class="form-group col-12 col-md-2">
+                    <label for="for_requester">Administrador Contrato</label>
+                    <div class="alert alert-info p-1" role="alert">
+                        Parametro no disponible.
+                    </div>
+                </fieldset>
             @endif
 
-            <fieldset class="form-group col-12 col-md-2">
-                <label for="for_requester">Administrador Contrato</label>
-                <input class="form-control form-control-sm" type="text" autocomplete="off" placeholder="NOMBRE / APELLIDOS"
-                    name="admin_search" wire:model.debounce.500ms="selectedAdmin">
-            </fieldset>
-
-            @if($inbox != 'own')
+            @if($this->inbox == 'all' || $inbox == 'report: form-items' || $inbox == 'purchase')
                 <fieldset class="form-group col-12 col-md-4">
                     <label for="for_requester_ou_id">U.O. Administrador Contrato</label>
                         @livewire('search-select-organizational-unit', [
@@ -94,6 +110,13 @@
                             'small_option'       => true,
                             'organizationalUnit' => $organizationalUnit
                         ])
+                </fieldset>
+            @else
+                <fieldset class="form-group col-12 col-md-4">
+                    <label for="for_requester">U.O. Administrador Contrato</label>
+                    <div class="alert alert-info p-1" role="alert">
+                        Parametro no disponible.
+                    </div>
                 </fieldset>
             @endif
         </div>
@@ -153,7 +176,7 @@
 
     <br>
     <!-- Todos los formularios -->
-    @if($request_forms->count() > 0 && ($inbox == 'all' || $inbox == 'own'))
+    @if($request_forms->count() > 0 && ($inbox == 'all' || $inbox == 'own' || $inbox == 'contract manager'))
         <div class="row">
             <div class="col">
                 <p class="font-weight-lighter">Total de Registros: <b>{{ $request_forms->total() }}</b></p>

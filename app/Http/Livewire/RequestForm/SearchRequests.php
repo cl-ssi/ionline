@@ -90,6 +90,10 @@ class SearchRequests extends Component
                 ->OrWhere('request_user_ou_id', auth()->user()->OrganizationalUnit->id);
         }
 
+        if($this->inbox == 'contract manager'){
+            $query->where('contract_manager_id', auth()->id());
+        }
+
         if($this->inbox == 'all' || $this->inbox == 'report: form-items'){
             // Filtro por Hospital Alto Hospicio + Unidad Puesta en marcha HAH
             // if(auth()->user()->organizationalUnit->establishment->id == Parameter::where('parameter', 'HospitalAltoHospicio')->first()->value){
