@@ -56,12 +56,24 @@
         </div>
     </div>
 
+    @if($messageNotify != NULL)
+        <div class="alert alert-info mt-2 mb-2" role="alert">
+            {!! $messageNotify !!}
+        </div>
+    @endif
+
     @if($pendings && $pendings->count() > 0)
-        <div class="row">
-            <div class="col">
+        <div class="row mt-2 mb-2">
+            <div class="col-12 col-md-8">
                 <p class="font-weight-lighter">Total de Registros: <b>{{ $pendings->count() }}</b></p>
             </div>
+            @if($this->pendingsCount > 20)
+                <div class="col-12 col-md-4">                
+                    <button type="button" class="btn btn-primary btn-sm float-right" wire:click="sendNotificaction"><i class="fas fa-bell"></i> Enviar Notificación</button>
+                </div>
+            @endif
         </div>
+
         <div class="row">
             <div class="col">
                 <table class="table table-sm table-striped table-bordered">
