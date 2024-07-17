@@ -802,7 +802,9 @@
             <td>Creador</td>
             <td>Creada</td>
             <td></td>
-            <td></td>
+            @can('Service Request: additional data rrhh')
+                <td></td>
+            @endcan
             </tr>
             <!-- aceptado o rechazado -->
             @if($serviceRequest->SignatureFlows->where('status',2)->count()==0)
@@ -836,11 +838,13 @@
                     @endif
                 </td>
                 <td>{{ $SignatureFlow->observation }}</td>
-                <td>
-                    @if($SignatureFlow->status === null)
-                        @livewire('service-request.send-notification',['signatureFlow' => $SignatureFlow])
-                    @endif
-                </td>
+                @can('Service Request: additional data rrhh')
+                    <td>
+                        @if($SignatureFlow->status === null)
+                            @livewire('service-request.send-notification',['signatureFlow' => $SignatureFlow])
+                        @endif
+                    </td>
+                @endcan
                 </tr>
 
                 @if($SignatureFlow->status === 0 && $SignatureFlow->observation != null)
@@ -873,11 +877,13 @@
                     @endif
                 </td>
                 <td>{{ $SignatureFlow->observation }}</td>
-                <td>
-                    @if($SignatureFlow->status === null)
-                        @livewire('service-request.send-notification',['serviceRequest' => $SignatureFlow->ServiceRequest])
-                    @endif
-                </td>
+                @can('Service Request: additional data rrhh')
+                    <td>
+                        @if($SignatureFlow->status === null)
+                            @livewire('service-request.send-notification',['serviceRequest' => $SignatureFlow->ServiceRequest])
+                        @endif
+                    </td>
+                @endcan
                 </tr>
 
                 @if($SignatureFlow->status === 0 && $SignatureFlow->observation != null)
