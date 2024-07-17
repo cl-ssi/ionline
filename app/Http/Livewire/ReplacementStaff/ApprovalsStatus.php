@@ -8,6 +8,9 @@ use App\Models\Parameters\Parameter;
 use App\Rrhh\OrganizationalUnit;
 use App\Models\Documents\Approval;
 use Livewire\WithPagination;
+use App\Rrhh\Authority;
+use App\Notifications\ReplacementStaff\ApprovalsStatusReport;
+use Illuminate\Support\Facades\Notification;
 
 class ApprovalsStatus extends Component
 {
@@ -17,6 +20,8 @@ class ApprovalsStatus extends Component
 
     public $selectedOuId;
     private $pendings;
+    public $pendingsCount = null;
+    public $messageNotify = null;
 
     protected $listeners = ['searchedOu'];
 
@@ -44,10 +49,26 @@ class ApprovalsStatus extends Component
             ->where('sent_to_ou_id', $this->selectedOuId)
             ->orderBy('created_at', 'ASC')
             ->get();
+        
+        $this->pendingsCount = $this->pendings->count();
+        $this->messageNotify = null;
     }
 
     public function searchedOu(OrganizationalUnit $organizationalUnit)
     {
         $this->selectedOuId = $organizationalUnit->id;
+    }
+
+    public function sendNotificaction(){
+        $authority = Authority::getAuthorityFromDate($this->selectedOuId, now(), 'manager');
+
+        if($authority){
+            $authority->user->notify(new ApprovalsStatusReport($this->pendingsCount));
+            $this->messageNotify = "<b>Estimado Usuario</b>: Se ha envíado la notificación a la unidad organizacional: ".$authority->organizationalUnit->name ;
+        }
+        else{
+            dd('no hay autoridad');
+        }
+        
     }
 }

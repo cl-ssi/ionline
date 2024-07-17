@@ -391,6 +391,34 @@
     </table>
 </div>
 
+<div class="row mt-3"> 
+    <div class="col">
+        <h6><i class="fas fa-info-circle"></i> Historial de Rechazos</h6>
+    </div>
+</div>
+<div class="table-responsive">
+    <table class="table table-bordered table-sm small">
+        <thead>
+            <tr class="text-center">
+                <th width="8%" class="table-secondary">Fecha</th>
+                <th width="" class="table-secondary">Motivo Rechazo</th>
+                <th width="20%" class="table-secondary">Usuario</th>
+                <th width="20%" class="table-secondary">Unidad Organizacional</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($jobPositionProfile->trashedApprovals as $approval)
+                <tr class="text-center">
+                    <td width="10%">{{ $approval->approver_at->format('d-m-Y H:i:s') }}</td>
+                    <td width="40%">{{ $approval->approver_observation }}</td> 
+                    <td width="25%">{{ $approval->approver->FullName }}</td>
+                    <td width="25%">{{ $approval->sentToOu->name }}</td>         
+                </tr>
+            @endforeach
+        <tbody>
+    </table>
+</div>
+
 @else
 
 <div class="table-responsive">

@@ -254,6 +254,10 @@ class RequestFormController extends Controller {
         return view('request_form.contract_manager_forms', compact('contract_manager_forms'));
     }
 
+    public function contract_manager_index()
+    {
+        return view('request_form.contract_manager_index');
+    }
 
     // public function edit(RequestForm $requestForm) {
     //     if($requestForm->request_user_id != auth()->user()->id){

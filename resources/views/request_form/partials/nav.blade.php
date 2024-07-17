@@ -25,6 +25,7 @@
         Pendientes por firmar
       </a>
       <a class="dropdown-item" href="{{ route('request_forms.contract_manager_forms') }}"><i class="fas fa-fw fa-inbox"></i> Admin. de contratos</a>
+      <a class="dropdown-item" href="{{ route('request_forms.contract_manager_index') }}"><i class="fas fa-fw fa-inbox"></i> Admin. de contratos <span class="badge badge-secondary">Nueva</span></a>
       <div class="dropdown-divider"></div>
       <a class="dropdown-item" href="{{ route('request_forms.items.create') }}"><i class="fas fa-fw fa-file-alt"></i> Bienes y/o Servicios</a>
       <a class="dropdown-item" href="{{ route('request_forms.passengers.create') }}"><i class="fas fa-fw fa-ticket-alt"></i> Pasajes Aéreos</a>

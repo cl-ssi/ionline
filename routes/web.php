@@ -2347,6 +2347,7 @@ Route::prefix('request_forms')->as('request_forms.')->middleware(['auth', 'must.
     Route::get('/all_forms', [RequestFormController::class, 'all_forms'])->name('all_forms');
     Route::get('/pending_forms', [RequestFormController::class, 'pending_forms'])->name('pending_forms');
     Route::get('/contract_manager_forms', [RequestFormController::class, 'contract_manager_forms'])->name('contract_manager_forms');
+    Route::get('/contract_manager_index', [RequestFormController::class, 'contract_manager_index'])->name('contract_manager_index');
     Route::get('/create', [RequestFormController::class, 'create'])->name('create');
     Route::post('/{requestForm}/create_provision', [RequestFormController::class, 'create_provision'])->name('create_provision');
     Route::get('/{requestForm}/sign/{eventType}', [RequestFormController::class, 'sign'])->name('sign');

@@ -72,6 +72,9 @@ class JobPositionProfile extends Model implements Auditable
     public function approvals(): MorphMany{
         return $this->morphMany(Approval::class, 'approvable');
     }
+    public function trashedApprovals(): MorphMany{
+        return $this->morphMany(Approval::class, 'approvable')->withTrashed()->where('status', 0);
+    }
 
     public function getStatusValueAttribute() {
         switch($this->status) {
