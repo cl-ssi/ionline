@@ -666,6 +666,7 @@ Route::prefix('job_position_profile')->as('job_position_profile.')->middleware([
     });
     Route::prefix('document')->name('document.')->group(function () {
         Route::get('/create_document/{jobPositionProfile}', [JobPositionProfileController::class, 'create_document'])->name('create_document');
+        Route::get('{jobPositionProfile}/download_signed_pdf', [JobPositionProfileController::class, 'download_signed_pdf'])->name('download_signed_pdf');
     });
 });
 /** Fin Perfil de Cargos */

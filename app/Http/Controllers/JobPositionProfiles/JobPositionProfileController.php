@@ -406,5 +406,14 @@ class JobPositionProfileController extends Controller
         // return view('job_position_profile.documents.chart', compact('jobPositionProfile', 'tree'));
         //return view('job_position_profile.index_to_sign');
     }
-    
+
+    public function download_signed_pdf(JobPositionProfile $jobPositionProfile)
+    {
+        if( Storage::disk('gcs')->exists($jobPositionProfile->approvals->last()->filename) ) {
+            return Storage::response($jobPositionProfile->approvals->last()->filename);
+        } 
+        else {
+            return redirect()->back()->with('warning', 'El archivo no se ha encontrado.');
+        }
+    }
 }
