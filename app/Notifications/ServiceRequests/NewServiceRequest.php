@@ -51,11 +51,11 @@ class NewServiceRequest extends Notification implements ShouldQueue
             ->line('Junto con saludar cordialmente.')
             ->line('Se informa que la solicitud de contratación de honorarios nro ' . $this->serviceRequest->id . ' se encuentra disponible para su visación.')
             ->line('Tipo: ' . $this->serviceRequest->type)
-            ->line('Fecha solicitud: ' . $this->serviceRequest->request_date->format('d-m-Y'))
             ->line('Rut: ' . $this->serviceRequest->employee->runFormat())
             ->line('Funcionario: ' . $this->serviceRequest->employee->getFullNameAttribute())
-            ->line('Fecha inicio: ' . $this->serviceRequest->start_date->format('d-m-Y'))
-            ->line('Fecha término: ' . $this->serviceRequest->end_date->format('d-m-Y'))
+            ->line('Fecha solicitud: ' . $this->serviceRequest->request_date->format('d-m-Y'))
+            ->line('Fecha inicio contrato: ' . $this->serviceRequest->start_date->format('d-m-Y'))
+            ->line('Fecha término contrato: ' . $this->serviceRequest->end_date->format('d-m-Y'))
             ->salutation('Saludos cordiales.');
 
             //Para acceder y visar la solicitud, haga click <a href="https://i.saludtarapaca.gob.cl/rrhh/service_requests/{{$this->serviceRequest->id}}/edit"><i class="far fa-hand-point-right"></i> Aquí</a>

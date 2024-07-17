@@ -776,109 +776,122 @@
 
 
 <div class="card">
-  <div class="card-header">
+<div class="card-header">
     Aprobaciones de Solicitud
-  </div>
-  <div class="card-body">
+</div>
+<div class="card-body">
     <div class="table-responsive">
-      <table class="card-table table table-sm table-bordered small">
-          <thead>
+    <table class="card-table table table-sm table-bordered small">
+        <thead>
             <tr>
-              <th scope="col">Fecha</th>
-              <th scope="col">U.Organizacional</th>
-              <th scope="col">Cargo</th>
-              <th scope="col">Usuario</th>
-              <th scope="col">Tipo</th>
-              <th scope="col">Estado</th>
-              <th scope="col">Observación</th>
+            <th scope="col">Fecha</th>
+            <th scope="col">U.Organizacional</th>
+            <th scope="col">Cargo</th>
+            <th scope="col">Usuario</th>
+            <th scope="col">Tipo</th>
+            <th scope="col">Estado</th>
+            <th scope="col">Observación</th>
             </tr>
-          </thead>
-          <tbody>
+        </thead>
+        <tbody>
             <tr>
-              <td>{{ $serviceRequest->created_at }}</td>
-              <td>{!! optional($serviceRequest->creator->organizationalUnit)->name ?? '<span class="text-danger">SIN UNIDAD ORGANIZACIONAL</span>' !!}</td>
-              <td>{{ $serviceRequest->creator->position }}</td>
-              <td>{{ $serviceRequest->creator->getFullNameAttribute() }}</td>
-              <td>Creador</td>
-              <td>Creada</td>
-              <td></td>
+            <td>{{ $serviceRequest->created_at }}</td>
+            <td>{!! optional($serviceRequest->creator->organizationalUnit)->name ?? '<span class="text-danger">SIN UNIDAD ORGANIZACIONAL</span>' !!}</td>
+            <td>{{ $serviceRequest->creator->position }}</td>
+            <td>{{ $serviceRequest->creator->getFullNameAttribute() }}</td>
+            <td>Creador</td>
+            <td>Creada</td>
+            <td></td>
+            <td></td>
             </tr>
             <!-- aceptado o rechazado -->
             @if($serviceRequest->SignatureFlows->where('status',2)->count()==0)
-              @foreach($serviceRequest->SignatureFlows->sortBy('sign_position') as $key => $SignatureFlow)
+            @foreach($serviceRequest->SignatureFlows->sortBy('sign_position') as $key => $SignatureFlow)
                 @if($SignatureFlow->status === null)
-                  <tr class="bg-light">
+                <tr class="bg-light">
                 @elseif($SignatureFlow->status === 0)
-                  <tr class="bg-danger">
+                <tr class="bg-danger">
                 @elseif($SignatureFlow->status === 1)
-                  <tr>
+                <tr>
                 @elseif($SignatureFlow->status === 2)
-                  <tr class="bg-warning">
+                <tr class="bg-warning">
                 @endif
-                   <td>{{ $SignatureFlow->signature_date}}</td>
-                   <td>{!! optional($SignatureFlow->user->organizationalUnit)->name ?? '<span class="text-danger">SIN UNIDAD ORGANIZACIONAL</span>' !!}</td>
-                   <td>{{ $SignatureFlow->user->position }}</td>
-                   <td>{{ $SignatureFlow->user->getFullNameAttribute() }}</td>
-                   @if($SignatureFlow->sign_position == 1)
+                <td>{{ $SignatureFlow->signature_date}}</td>
+                <td>{!! optional($SignatureFlow->user->organizationalUnit)->name ?? '<span class="text-danger">SIN UNIDAD ORGANIZACIONAL</span>' !!}</td>
+                <td>{{ $SignatureFlow->user->position }}</td>
+                <td>
+                    {{ $SignatureFlow->user->getFullNameAttribute() }}
+                </td>
+                @if($SignatureFlow->sign_position == 1)
                     <td>Responsable</td>
-                   @elseif($SignatureFlow->sign_position == 2)
+                @elseif($SignatureFlow->sign_position == 2)
                     <td>Supervisor</td>
-                   @else
+                @else
                     <td>{{ $SignatureFlow->type }}</td>
-                   @endif
-                   <td>@if($SignatureFlow->status === null)
-                       @elseif($SignatureFlow->status === 1) Aceptada
-                       @elseif($SignatureFlow->status === 0) Rechazada
-                       @elseif($SignatureFlow->status === 2) Devuelta
-                       @endif
-                  </td>
-                   <td>{{ $SignatureFlow->observation }}</td>
-                 </tr>
+                @endif
+                <td>@if($SignatureFlow->status === null)
+                    @elseif($SignatureFlow->status === 1) Aceptada
+                    @elseif($SignatureFlow->status === 0) Rechazada
+                    @elseif($SignatureFlow->status === 2) Devuelta
+                    @endif
+                </td>
+                <td>{{ $SignatureFlow->observation }}</td>
+                <td>
+                    @if($SignatureFlow->status === null)
+                        @livewire('service-request.send-notification',['signatureFlow' => $SignatureFlow])
+                    @endif
+                </td>
+                </tr>
 
-                 @if($SignatureFlow->status === 0 && $SignatureFlow->observation != null)
-                 <tr>
-                   <td class="text-right" colspan="6">Observación rechazo: {{$SignatureFlow->observation}}</td>
-                 </tr>
-                 @endif
-             @endforeach
+                @if($SignatureFlow->status === 0 && $SignatureFlow->observation != null)
+                <tr>
+                <td class="text-right" colspan="6">Observación rechazo: {{$SignatureFlow->observation}}</td>
+                </tr>
+                @endif
+            @endforeach
             @else
             <!-- devolucion -->
-              @foreach($serviceRequest->SignatureFlows->sortBy('sign_position') as $key => $SignatureFlow)
+            @foreach($serviceRequest->SignatureFlows->sortBy('sign_position') as $key => $SignatureFlow)
                 @if($SignatureFlow->status === null)
-                  <tr class="bg-light">
+                <tr class="bg-light">
                 @elseif($SignatureFlow->status === 0)
-                  <tr class="bg-danger">
+                <tr class="bg-danger">
                 @elseif($SignatureFlow->status === 1)
-                  <tr>
+                <tr>
                 @elseif($SignatureFlow->status === 2)
-                  <tr class="bg-warning">
+                <tr class="bg-warning">
                 @endif
-                   <td>{{ $SignatureFlow->signature_date}}</td>
-                   <td>{{ $SignatureFlow->organizationalUnit->name}}</td>
-                   <td>{{ $SignatureFlow->employee }}</td>
-                   <td>{{ $SignatureFlow->user->getFullNameAttribute() }}</td>
-                   <td>{{ $SignatureFlow->type }}</td>
-                   <td>@if($SignatureFlow->status === null)
-                       @elseif($SignatureFlow->status === 1) Aceptada
-                       @elseif($SignatureFlow->status === 0) Rechazada
-                       @elseif($SignatureFlow->status === 2) Devuelta
-                       @endif
-                  </td>
-                   <td>{{ $SignatureFlow->observation }}</td>
-                 </tr>
+                <td>{{ $SignatureFlow->signature_date}}</td>
+                <td>{{ $SignatureFlow->organizationalUnit->name}}</td>
+                <td>{{ $SignatureFlow->employee }}</td>
+                <td>{{ $SignatureFlow->user->getFullNameAttribute() }}</td>
+                <td>{{ $SignatureFlow->type }}</td>
+                <td>@if($SignatureFlow->status === null)
+                    @elseif($SignatureFlow->status === 1) Aceptada
+                    @elseif($SignatureFlow->status === 0) Rechazada
+                    @elseif($SignatureFlow->status === 2) Devuelta
+                    @endif
+                </td>
+                <td>{{ $SignatureFlow->observation }}</td>
+                <td>
+                    @if($SignatureFlow->status === null)
+                        @livewire('service-request.send-notification',['serviceRequest' => $SignatureFlow->ServiceRequest])
+                    @endif
+                </td>
+                </tr>
 
-                 @if($SignatureFlow->status === 0 && $SignatureFlow->observation != null)
-                 <tr>
-                   <td class="text-right" colspan="6">Observación rechazo: {{$SignatureFlow->observation}}</td>
-                 </tr>
-                 @endif
-             @endforeach
+                @if($SignatureFlow->status === 0 && $SignatureFlow->observation != null)
+                <tr>
+                <td class="text-right" colspan="6">Observación rechazo: {{$SignatureFlow->observation}}</td>
+                </tr>
+                @endif
+            @endforeach
             @endif
-          </tbody>
-      </table>
-      </div>
+        </tbody>
+    </table>
+    </div>
 
-      <div class="form-row">
+    <div class="form-row">
         <fieldset class="form-group col-12 col-md-3">
             <label for="for_name">Tipo</label>
             <input type="text" class="form-control" name="employee" value="{{$employee}}" readonly="readonly">
@@ -887,10 +900,10 @@
         <fieldset class="form-group col-12 col-md-3">
             <label for="for_name">Estado Solicitud</label>
             <select name="status" class="form-control">
-              <option value="">Seleccionar una opción</option>
-              <option value="1">Aceptar</option>
-              <option value="0">Rechazar</option>
-              <option value="2">Devolver</option>
+            <option value="">Seleccionar una opción</option>
+            <option value="1">Aceptar</option>
+            <option value="0">Rechazar</option>
+            <option value="2">Devolver</option>
             </select>
         </fieldset>
         <fieldset class="form-group col-12 col-md-4">
@@ -898,13 +911,13 @@
             <input type="text" class="form-control" id="for_observation" placeholder="" name="observation">
         </fieldset>
         <fieldset class="form-group col-12 col-md-2">
-          <label for="for_button"><br></label>
+        <label for="for_button"><br></label>
             <div>
             <button type="submit" id="for_button" class="btn btn-primary" @disabled(auth()->user()->godMode)>Guardar</button>
-          </div>
+        </div>
         </fieldset>
     </div>
-  </div>
+</div>
 </div>
 
 
