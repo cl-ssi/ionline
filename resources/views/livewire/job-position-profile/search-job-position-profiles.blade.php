@@ -232,20 +232,12 @@
                         </td>
                         <td class="text-center">
                             @if($jobPositionProfile->status != "saved")
-                                @if($jobPositionProfile->status == "complete")
-                                    <a href="{{ route('job_position_profile.document.download_signed_pdf', $jobPositionProfile) }}"
-                                        class="btn btn-sm btn-outline-primary " target="_blank"
-                                        title="Ver documento">
-                                        <span class="fas fa-file-pdf fa-fw" aria-hidden="true"></span>
-                                    </a>
-                                @else
-                                    <a href="{{ route('job_position_profile.document.create_document', $jobPositionProfile) }}"
-                                        class="btn btn-sm btn-outline-secondary" 
-                                        target="_blank"
-                                        title="Ver documento">
-                                        <span class="fas fa-file-pdf fa-fw" aria-hidden="true"></span>
-                                    </a>
-                                @endif
+                                <a href="{{ route('job_position_profile.document.create_document', $jobPositionProfile) }}"
+                                    class="btn btn-sm btn-outline-secondary" 
+                                    target="_blank"
+                                    title="Ver documento">
+                                    <span class="fas fa-file-pdf fa-fw" aria-hidden="true"></span>
+                                </a>
                             @else
                                 <a href=""
                                     class="btn btn-sm btn-outline-secondary disabled" 
