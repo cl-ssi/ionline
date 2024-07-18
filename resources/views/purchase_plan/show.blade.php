@@ -150,7 +150,7 @@
                 <th width="" class="table-secondary" rowspan="2">Valor U.</th>
                 <th width="" class="table-secondary" rowspan="2">Impuestos</th>
                 <th width="" class="table-secondary" rowspan="2">Total Item</th>
-                <th width="" class="table-secondary" rowspan="2"></th>
+                <th width="8%" class="table-secondary" rowspan="2"><small>Acciones / Fecha Eliminación</small></th>
             </tr>
             <tr>
                 <th class="table-secondary">Solicitados</th>
@@ -158,8 +158,8 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($purchasePlan->purchasePlanItems as $item)
-            <tr class="text-center">
+            @foreach($purchasePlan->purchasePlanItemsWithTrashed as $item)
+            <tr class="text-center {{ ($item->deleted_at != NULL) ? 'table-danger' : '' }}">
                 <td>{{ $loop->iteration }}</td>
                 <td>{{ $item->unspscProduct->name }}</td>
                 <td>{{ $item->unit_of_measurement }}</td>
@@ -171,18 +171,27 @@
                 <td>{{ $item->tax }}</td>
                 <td class="text-end">${{ number_format($item->expense, 0, ",", ".") }}</td>
                 <td>
-                    {{--
-                    <a href="{{ route('replacement_staff.request.technical_evaluation.show', $requestReplacementStaff) }}"
-                        class="btn btn-outline-secondary btn-sm"><i class="fas fa-calendar-alt"></i>
-                    --}}
-                    <!-- Button trigger modal -->
-                    <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#modal-ppl-{{ $item->id }}">
-                        <i class="fas fa-calendar-alt"></i>
-                    </button>
+                    @if($item->deleted_at == NULL)
+                        <!-- Button trigger modal -->
+                        <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#modal-ppl-{{ $item->id }}">
+                            <i class="fas fa-calendar-alt fa-fw"></i>
+                        </button>
 
-                    @include('purchase_plan.modals.detail_month', [
-                        'item' => $item
-                    ])
+                        {{--
+                        <a type="button" 
+                            class="btn btn-outline-danger btn-sm" 
+                            onclick="return confirm('¿Está seguro que desea eliminar Ítem?')"
+                            href="{{ route('purchase_plan.items.destroy', $item) }}">
+                            <i class="fas fa-trash-alt fa-fw"></i>
+                        </a>
+                        --}}
+
+                        @include('purchase_plan.modals.detail_month', [
+                            'item' => $item
+                        ])
+                    @else
+                        <small>{{ $item->deleted_at->format('d-m-Y H:i:s') }}</small>
+                    @endif
                 </td>
             </tr>
             @endforeach
@@ -207,56 +216,59 @@
 </div>
 
 @if($purchasePlan->approvals->count() > 0)
-<div class="table-responsive">
-    <table class="table table-bordered table-sm small">
-        <thead>
-            <tr class="text-center">
-                @foreach($purchasePlan->approvals as $approval)
-                <th width="" class="table-secondary">{{ $approval->sentToOu->name }}</th>
-                @endforeach
-            </tr>
-        </thead>
-        <tbody>
-            <tr class="text-center">
-                @foreach($purchasePlan->approvals as $approval)
-                <td>
-                    @switch($approval->StatusInWords)
-                        @case('Pendiente')
-                            <i class="fas fa-clock"></i> {{ $approval->StatusInWords }}
-                            @break
-                        @case('Aprobado')
-                            <span class="d-inline-block" style="color: green;">
-                                <i class="fas fa-check-circle"></i> {{ $approval->StatusInWords }}
-                            </span>
-                            @break
-                        @case('Rechazado')
-                            <span class="d-inline-block" style="color: tomato;">
-                                <i class="fas fa-times-circle"></i> {{ $approval->StatusInWords }}
-                            </span>
-                            @break
-                    @endswitch
-                    <br>
-                    @if($approval->StatusInWords == 'Aprobado' || $approval->StatusInWords == 'Rechazado')
-                        <i class="fas fa-user"></i> {{ ($approval->approver) ? $approval->approver->FullName : '' }} <br>
-                        <i class="fas fa-calendar-alt"></i> {{ ($approval->approver_at) ? $approval->approver_at->format('d-m-Y H:i:s') : '' }}
-                        @if($approval->approver_observation)
-                            <hr>
-                            {{ $approval->approver_observation }}
+    <div class="table-responsive">
+        <table class="table table-bordered table-sm small">
+            <thead>
+                <tr class="text-center">
+                    @foreach($purchasePlan->approvals as $approval)
+                    <th width="" class="table-secondary">{{ $approval->sentToOu->name }}</th>
+                    @endforeach
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="text-center">
+                    @foreach($purchasePlan->approvals as $approval)
+                    <td>
+                        @switch($approval->StatusInWords)
+                            @case('Pendiente')
+                                <i class="fas fa-clock"></i> {{ $approval->StatusInWords }}
+                                @break
+                            @case('Aprobado')
+                                <span class="d-inline-block" style="color: green;">
+                                    <i class="fas fa-check-circle"></i> {{ $approval->StatusInWords }}
+                                </span>
+                                @break
+                            @case('Rechazado')
+                                <span class="d-inline-block" style="color: tomato;">
+                                    <i class="fas fa-times-circle"></i> {{ $approval->StatusInWords }}
+                                </span>
+                                @break
+                        @endswitch
+                        <br>
+                        @if($approval->StatusInWords == 'Aprobado' || $approval->StatusInWords == 'Rechazado')
+                            <i class="fas fa-user"></i> {{ ($approval->approver) ? $approval->approver->FullName : '' }} <br>
+                            <i class="fas fa-calendar-alt"></i> {{ ($approval->approver_at) ? $approval->approver_at->format('d-m-Y H:i:s') : '' }}
+                            @if($approval->approver_observation)
+                                <hr>
+                                {{ $approval->approver_observation }}
+                            @endif
                         @endif
-                    @endif
-                </td>           
-                @endforeach
-            </tr>
-        <tbody>
-    </table>
-</div>
+                    </td>           
+                    @endforeach
+                </tr>
+            <tbody>
+        </table>
+    </div>
+    <div class="row">
+        <div class="col-12 col-md-12">                
+            <button type="button" class="btn btn-primary btn-sm float-end" wire:click="sendNotificaction"><i class="fas fa-bell"></i> </button>
+        </div>
+    </div>
 @else
-
     <div class="alert alert-info" role="alert">
         Estimado Usuario: El Plan de Compras aún no ha sido enviado para aprobaciones. Procure completar detalle de distribucion por item.  
         <a class="btn btn-sm btn-outline-success float-end pt-0" href="{{ route('purchase_plan.send', $purchasePlan) }}"><i class="fas fa-paper-plane"></i> Enviar</a>
     </div>
-
 @endif
 
 @if($purchasePlan->trashedApprovals->count() > 0)
