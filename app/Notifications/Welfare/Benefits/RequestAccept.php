@@ -44,7 +44,19 @@ class RequestAccept extends Notification implements ShouldQueue
      */
     public function toMail($notifiable)
     {
-        $cc_mails = explode(', ', Parameter::get('welfare: beneficios','correos solicitudes'));
+        // si es de HAH, solo se devuelve data de ese establecimiento. Si es SST, se devuelve SST y HETG. Si no es ninguna de los 2, se devuelve esa info.
+        $establishments = [auth()->user()->establishment_id];
+        if(auth()->user()->establishment_id == 41){
+            $establishments = [41];
+        }elseif(auth()->user()->establishment_id == 38){
+            $establishments = [1,38];
+        }
+
+        $cc_mails = explode(', ',Parameter::where('module', 'welfare: beneficios')
+                                            ->where('parameter', 'correos solicitudes')
+                                            ->whereIn('establishment_id', $establishments)
+                                            ->first()
+                                            ->value);
         $appUrl = config('app.url');
 
         return (new MailMessage)
