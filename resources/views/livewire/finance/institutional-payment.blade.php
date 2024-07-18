@@ -52,8 +52,8 @@
                 <th scope="col">Adjuntos</th>
                 <th scope="col">SIGFE</th>
                 <th scope="col">Fecha de Pago</th>
-                <th>Pdf Pago sin Firma</th>
-                <th>Pdf Pago con Firma</th>                
+                <th scope="col">Pdf Pago sin Firma</th>
+                <th scope="col">Pdf Pago con Firma</th>
             </tr>
         </thead>
 
@@ -80,19 +80,7 @@
                         </div>
                     </td>
                     <td class="small">
-                        <div wire:key="receptor_{{$dte->id}}">
-                            @if ($dte->receptor)
-                                {{$dte->receptor}}
-                                <button type="button" class="btn btn-primary btn-sm mt-2" wire:loading.attr="disabled" wire:click="delete({{$dte->id}}, 'receptor')"><i class="fa fa-trash"></i></button>
-                            @else
-                            <form class="form-inline" wire:submit.prevent="save({{$dte->id}})">
-                                <div class="input-group">
-                                    <input type="text" class="form-control fs-6" wire:model.defer="receptor" wire:loading.attr="disabled">
-                                    <button type="submit" class="btn btn-outline-primary btn-sm" wire:loading.attr="disabled"><i class="fas fa-save"></i></button>
-                                </div>
-                            </form>
-                            @endif
-                        </div>
+                        {{$dte->receptor}}
                     </td>
                     <td class="small">
                         <div class="container">
@@ -142,7 +130,7 @@
                                 {{$dte->fecha}}
                                 <button type="button" class="btn btn-primary btn-sm mt-2" wire:loading.attr="disabled" wire:click="delete({{$dte->id}}, 'fecha')"><i class="fa fa-trash"></i></button>
                             @else
-                                <form class="form-inline" wire:submit.prevent="save({{$dte->id}})">
+                                <form class="form-inline" wire:submit.prevent="save({{$dte->id}}, 'fecha')">
                                     <div class="input-group">
                                         <input class="form-control fs-6" type="date" wire:model.defer="fecha">
                                         <button type="submit" class="btn btn-outline-primary btn-sm" wire:loading.attr="disabled"><i class="fas fa-save"></i></button>
@@ -156,7 +144,7 @@
                     </td>
                     <td>
                         @if($dte->comprobantePago && $dte->comprobantePago->allApprovalsOk() && $dte->comprobantePago->approvals->last())
-                            <a class="btn btn-sm btn-outline-danger" target="_blank" 
+                            <a class="btn btn-sm btn-outline-danger" target="_blank"
                             href="{{ route('documents.signed.approval.pdf', $dte->comprobantePago->approvals->last()) }}"
                             >
                                 <i class="fas fa-fw fa-file-pdf"></i>
