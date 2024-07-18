@@ -271,12 +271,18 @@
     </div>
 @endif
 
-@if($purchasePlan->trashedApprovals->count() > 0)
-    <div class="row mt-3"> 
-        <div class="col">
-            <h6><i class="fas fa-info-circle"></i> Historial de Rechazos</h6>
-        </div>
+<div class="row mt-3"> 
+    <div class="col">
+        <h6><i class="fas fa-info-circle"></i> Historial de Ciclos de Aprobaciones</h6>
     </div>
+</div>
+{{--
+<div class="row mt-3"> 
+    <div class="col">
+        <h6><i class="fas fa-info-circle"></i> Rechazos</h6>
+    </div>
+</div>
+@if($purchasePlan->trashedApprovals->count() > 0)
     <div class="table-responsive">
         <table class="table table-bordered table-sm small">
             <thead>
@@ -289,17 +295,61 @@
             </thead>
             <tbody>
                 @foreach($purchasePlan->trashedApprovals as $approval)
-                    <tr class="text-center">
-                        <td>{{ $approval->approver_at->format('d-m-Y H:i:s') }}</td>
-                        <td>{{ $approval->approver_observation }}</td> 
-                        <td>{{ $approval->approver->FullName }}</td>
-                        <td>{{ $approval->sentToOu->name }}</td>         
-                    </tr>
+                    @if($approval->status === 0)
+                        <tr class="text-center">
+                            <td>{{ ($approval->approver_at) ?  $approval->approver_at->format('d-m-Y H:i:s') : '' }}</td>
+                            <td>{{ $approval->approver_observation }}</td> 
+                            <td>{{ ($approval->approver) ? $approval->approver->FullName : '' }}</td>
+                            <td>{{ $approval->sentToOu->name }}</td>         
+                        </tr>
+                    @endif
                 @endforeach
             <tbody>
         </table>
     </div>
+@else
+<div class="alert alert-info" role="alert">
+    <b>Estimado Usuario</b>: No existe registro de rechazos para este Plan de Compras.
+</div>
 @endif
+--}}
+
+<div class="accordion" id="accordionExample">
+    <div class="accordion-item">
+        <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                <h6><i class="fas fa-info-circle"></i> Ciclos</h6>
+            </button>
+        </h2>
+        <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+            <div class="accordion-body">
+                <table class="table table-bordered table-sm small">
+                    <thead>
+                        <tr class="text-center">
+                            <th width="" class="table-secondary">Fecha Creación</th>
+                            <th width="" class="table-secondary">Unidad Organizacional</th>
+                            <th width="" class="table-secondary">Usuario</th>
+                            <th width="" class="table-secondary">Fecha Aprobación</th>
+                            <th width="" class="table-secondary">Estado</th>
+                            <th width="" class="table-secondary">Fecha Eliminación</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($purchasePlan->trashedApprovals as $approval)
+                            <tr class="text-center table-{{ $approval->getColorAttribute() }} {{ ($approval->deleted_at != NULL) ? 'table-danger' : '' }}">
+                                <td width="9%">{{ ($approval->created_at) ?  $approval->created_at->format('d-m-Y H:i:s') : '' }}</td>
+                                <td>{{ $approval->sentToOu->name }}</td>
+                                <td>{{ ($approval->approver) ? $approval->approver->name : '' }}</td>
+                                <td width="9%">{{ ($approval->approver_at) ?  $approval->approver_at->format('d-m-Y H:i:s') : '' }}</td>
+                                <td>{{ $approval->StatusInWords }}</td>
+                                <td width="9%">{{ ($approval->deleted_at) ?  $approval->deleted_at->format('d-m-Y H:i:s') : '' }}</td>     
+                            </tr>
+                        @endforeach
+                    </tbody>
+            </div>
+        </div>
+    </div>
+</div>
 
 @if($purchasePlan->requestForms->count() > 0)
 <br>
