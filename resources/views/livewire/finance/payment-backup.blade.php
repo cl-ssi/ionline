@@ -2,7 +2,7 @@
     {{-- Do your work, then step back. --}}
     @include('finance.payments.partials.nav')
 
-    <h3>Respaldos en PDF de Sigfe</h3>
+    <h3>Pagos TGR</h3>
 
     <form wire:submit.prevent="search">
         <div class="row g-2 mb-3">
@@ -93,18 +93,18 @@
                     <td class="small">
                         @include('finance.payments.partials.fr-info')
 
-                        {{ $dte->requestForm?->contractManager?->tinnyName }} 
+                        {{ $dte->requestForm?->contractManager?->tinnyName }}
                         {{ $dte->contractManager?->tinnyName }}
                         <br>
-                        
+
                         <!-- Si tiene administrador de contrato mostrar el avion para enviar notificación -->
                         @if($dte->requestForm?->contractManager?->id OR $dte->contract_manager_id)
                             @if($dte->confirmation_send_at AND $dte->receptions->isEmpty())
-                                <i class="fas fa-paper-plane"></i> 
+                                <i class="fas fa-paper-plane"></i>
                                 {{ $dte->confirmation_send_at }}
                             @else
-                                <button type="button" 
-                                    class="btn btn-sm btn-primary" 
+                                <button type="button"
+                                    class="btn btn-sm btn-primary"
                                     wire:click="sendConfirmation({{ $dte->id }})">
                                     <i class="fas fa-fw fa-paper-plane"></i>
                                 </button>
@@ -123,7 +123,7 @@
                     </td>
                     <td>
                         @if($dte->comprobantePago && $dte->comprobantePago->allApprovalsOk() && $dte->comprobantePago->approvals->last())
-                            <a class="btn btn-sm btn-outline-danger" target="_blank" 
+                            <a class="btn btn-sm btn-outline-danger" target="_blank"
                             href="{{ route('documents.signed.approval.pdf', $dte->comprobantePago->approvals->last()) }}"
                             >
                                 <i class="fas fa-fw fa-file-pdf"></i>

@@ -5,7 +5,7 @@
                 @if(count($pendingSignaturesFlow->validationMessages) === 0)
                     Nro. OTP 
                 @else 
-                    No es posible firmar aún  46936
+                    No es posible firmar aún (Sign Flow pendiente id: {{ $pendingSignaturesFlow->id }})
                 @endif
             @else
                 No se puede firmar

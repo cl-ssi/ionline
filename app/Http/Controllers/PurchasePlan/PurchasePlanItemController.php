@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\PurchasePlan;
 
+use App\Http\Controllers\Controller;
 use App\Models\PurchasePlan\PurchasePlanItem;
 use Illuminate\Http\Request;
 
