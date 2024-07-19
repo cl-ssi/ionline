@@ -14,7 +14,7 @@
                 <label for="for-emisor" class="form-label">Rut</label>
                 <input type="text" class="form-control" wire:model.defer="filters.emisor" placeholder="rut emisor">
             </div>
-            
+
             <div class="col-md-2">
                 <label for="for-folio" class="form-label">N° Folio Pago</label>
                 <input type="text" class="form-control" wire:model.defer="filters.folio_pago" placeholder="folio pago">
@@ -69,6 +69,7 @@
                 <th width="140px">OC</th>
                 <th>FR</th>
                 <th>Recepción/Adjuntos</th>
+                <th>SIGFE</th>
                 <th>Folio Pago</th>
                 <th>Pdf Pago sin Firma</th>
                 <th>Pdf Pago con Firma</th>
@@ -116,6 +117,35 @@
                     <td class="small">
                          <!-- Nuevo módulo de Recepciones -->
                         @include('finance.payments.partials.receptions-info')
+                    </td>
+                    <td>
+                        <div wire:ignore>
+                            <!-- SIGFE Compromiso y Devengo -->
+                            <small>Compromiso</small>
+                            @livewire('finance.sigfe-folio-compromiso',
+                            [
+                                'dte' => $dte,
+                                'onlyRead' => 'true'
+                            ],
+                            key($dte->id))
+                            @livewire('finance.sigfe-archivo-compromiso',
+                            [
+                                'dte' => $dte,
+                                'onlyRead' => 'true'
+                                ], key($dte->id))
+                            <hr>
+                            <small>Devengo</small>
+                            @livewire('finance.sigfe-folio-devengo', [
+                                'dte' => $dte,
+                                'onlyRead' => 'true'
+                            ], key($dte->id))
+                            <hr>
+                            @livewire('finance.sigfe-archivo-devengo',
+                            [
+                                'dte' => $dte,
+                                'onlyRead' => 'true'
+                            ], key($dte->id))
+                        </div>
                     </td>
                     <td>{{$dte->tgrPayedDte?->folio}}</td>
                     <td>
