@@ -100,7 +100,7 @@ class PurchasePlan extends Model implements Auditable
         return $this->morphMany(Approval::class, 'approvable');
     }
     public function trashedApprovals(): MorphMany{
-        return $this->morphMany(Approval::class, 'approvable')->withTrashed()->latest();
+        return $this->morphMany(Approval::class, 'approvable')->withTrashed();
     }
 
     public function hasApprovals(){
