@@ -704,9 +704,9 @@
 
                 <li class="nav-item dropdown">
                     <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" v-pre>
-                        <i class="fas fa-bell" title="Notificaciones"></i>
+                        <i class="fas fa-bell text-warning" title="Notificaciones"></i>
                         @if(count(auth()->user()->unreadNotifications))
-                        <span class="badge badge-secondary">{{ count(auth()->user()->unreadNotifications) }}</span>
+                        <span class="badge text-bg-danger">{{ count(auth()->user()->unreadNotifications) }}</span>
                         @endif
                     </a>
 
