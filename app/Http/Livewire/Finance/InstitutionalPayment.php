@@ -41,12 +41,6 @@ class InstitutionalPayment extends Component
 
     public function pdfRefresh()
     {
-
-        // $this->render();
-        // $this->resetPage();
-        // $this->dtes = $this->loadDtes()->items();
-        // $this->dtes = $this->loadDtes()->paginate(5)->items();
-        // dd($this->loadDtes());
         return [];
     }
 
@@ -88,7 +82,7 @@ class InstitutionalPayment extends Component
             ->where('all_receptions', 1)
             ->where('establishment_id', auth()->user()->organizationalUnit->establishment_id)
             ->where('payment_ready', 1)
-            ->where('paid_manual',1);
+            ->where('paid_manual', 1);
 
         // Aplica filtros
         if ($this->filters['id']) {
@@ -117,7 +111,6 @@ class InstitutionalPayment extends Component
                 $query->where('status', '!=', 1);
             });
         }
-        // return $query->get();
         return $query->paginate(20);
     }
 

@@ -95,50 +95,6 @@
         </div>
     @endif
 
-    @if($purchasePlanToEdit && $purchasePlanToEdit->trashedApprovals)
-        <h6 class="small"><b>Historial de Rechazos</b></h6> <br>
-        
-        <div class="table-responsive">
-            <table class="table table-bordered table-sm small">
-                <thead>
-                    <tr class="text-center">
-                        <th width="8%" class="table-secondary">Fecha</th>
-                        <th width="" class="table-secondary">Motivo Rechazo</th>
-                        <th width="20%" class="table-secondary">Usuario</th>
-                        <th width="20%" class="table-secondary">Unidad Organizacional</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($purchasePlanToEdit->trashedApprovals as $approval)
-                        <tr class="text-center">
-                            <td>{{ $approval->approver_at->format('d-m-Y H:i:s') }}</td>
-                            <td>{{ $approval->approver_observation }}</td> 
-                            <td>{{ $approval->approver->FullName }}</td>
-                            <td>{{ $approval->sentToOu->name }}</td>         
-                        </tr>
-                    @endforeach
-                <tbody>
-            </table>
-        </div>
-    @endif
-    
-    {{--
-    <div class="row g-3">
-        <div class="col-12">
-            <button wire:click="savePurchasePlan('save')" class="btn btn-primary float-end" type="button">
-                @if(Route::is('purchase_plan.edit') && $purchasePlanToEdit->getStatus() == 'Rechazado')
-                    <i class="fas fa-undo"></i> Restablecer Solicitud
-                @else
-                    <i class="fas fa-save"></i> Guardar
-                @endif
-            </button>
-            <button wire:click="savePurchasePlan('sent')" class="btn btn-success float-end me-2" type="button" @if($purchasePlanToEdit && $purchasePlanToEdit->hasApprovals()) disabled @endif>
-                <i class="fas fa-paper-plane"></i> Guardar y Enviar
-            </button>
-        </div>
-    </div>
-    --}}
-
     <div class="row g-3">
         <div class="col-12">
             <button wire:click="savePurchasePlan('save')" class="btn btn-primary float-end" type="button">
@@ -149,7 +105,49 @@
             </button>--}}
         </div>
     </div>
+    
+    @if($purchasePlanToEdit && $purchasePlanToEdit->trashedApprovals)
+        <div class="row mt-3"> 
+            <div class="col">
+                <h6><i class="fas fa-info-circle"></i> Historial de Ciclos de Aprobaciones</h6>
+            </div>
+        </div>
 
-    <br>
-    <br>
+        <div class="accordion mb-5" id="accordionExample">
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                        <h6><i class="fas fa-info-circle"></i> Ciclos</h6>
+                    </button>
+                </h2>
+                <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        <table class="table table-bordered table-sm small">
+                            <thead>
+                                <tr class="text-center">
+                                    <th width="" class="table-secondary">Fecha Creación</th>
+                                    <th width="" class="table-secondary">Unidad Organizacional</th>
+                                    <th width="" class="table-secondary">Usuario</th>
+                                    <th width="" class="table-secondary">Fecha Aprobación</th>
+                                    <th width="" class="table-secondary">Estado</th>
+                                    <th width="" class="table-secondary">Fecha Eliminación</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($purchasePlanToEdit->trashedApprovals as $approval)
+                                    <tr class="text-center table-{{ $approval->getColorAttribute() }} {{ ($approval->deleted_at != NULL) ? 'table-danger' : '' }}">
+                                        <td width="9%">{{ ($approval->created_at) ?  $approval->created_at->format('d-m-Y H:i:s') : '' }}</td>
+                                        <td>{{ $approval->sentToOu->name }}</td>
+                                        <td>{{ ($approval->approver) ? $approval->approver->name : '' }}</td>
+                                        <td width="9%">{{ ($approval->approver_at) ?  $approval->approver_at->format('d-m-Y H:i:s') : '' }}</td>
+                                        <td>{{ $approval->StatusInWords }}</td>
+                                        <td width="9%">{{ ($approval->deleted_at) ?  $approval->deleted_at->format('d-m-Y H:i:s') : '' }}</td>     
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
 </div>

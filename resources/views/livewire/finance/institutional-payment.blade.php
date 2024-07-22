@@ -96,34 +96,34 @@
 
                     </td>
                     <td class="small">
-                    <div wire:ignore>
-                        <!-- SIGFE Compromiso y Devengo -->
-                        <small>Compromiso</small>
-                        @livewire('finance.sigfe-folio-compromiso',
-                        [
-                            'dte' => $dte,
-                            'onlyRead' => 'true'
-                        ],
-                        key($dte->id))
-                        @livewire('finance.sigfe-archivo-compromiso',
-                        [
-                            'dte' => $dte,
-                            'onlyRead' => 'true'
+                        <div wire:ignore>
+                            <!-- SIGFE Compromiso y Devengo -->
+                            <small>Compromiso</small>
+                            @livewire('finance.sigfe-folio-compromiso',
+                            [
+                                'dte' => $dte,
+                                'onlyRead' => 'true'
+                            ],
+                            key($dte->id))
+                            @livewire('finance.sigfe-archivo-compromiso',
+                            [
+                                'dte' => $dte,
+                                'onlyRead' => 'true'
+                                ], key($dte->id))
+                            <hr>
+                            <small>Devengo</small>
+                            @livewire('finance.sigfe-folio-devengo', [
+                                'dte' => $dte,
+                                'onlyRead' => 'true'
                             ], key($dte->id))
-                        <hr>
-                        <small>Devengo</small>
-                        @livewire('finance.sigfe-folio-devengo', [
-                            'dte' => $dte,
-                            'onlyRead' => 'true'
-                        ], key($dte->id))
-                        <hr>
-                        @livewire('finance.sigfe-archivo-devengo',
-                        [
-                            'dte' => $dte,
-                            'onlyRead' => 'true'
-                        ], key($dte->id))
+                            <hr>
+                            @livewire('finance.sigfe-archivo-devengo',
+                            [
+                                'dte' => $dte,
+                                'onlyRead' => 'true'
+                            ], key($dte->id))
+                        </div>
                     </td>
-                    </div>
                     <td class="small">
                         <div wire:key="fecha_{{$dte->id}}">
                             @if ($dte->fecha)
@@ -139,10 +139,10 @@
                             @endif
                         </div>
                     </td>
-                    <td>
+                    <td class="small">
                         @livewire('finance.upload-pdf', ['dteId' => $dte->id, 'type' => 'comprobante_pago'], key('upload-pdf-' . $dte->id))
                     </td>
-                    <td>
+                    <td class="small">
                         @if($dte->comprobantePago && $dte->comprobantePago->allApprovalsOk() && $dte->comprobantePago->approvals->last())
                             <a class="btn btn-sm btn-outline-danger" target="_blank"
                             href="{{ route('documents.signed.approval.pdf', $dte->comprobantePago->approvals->last()) }}"

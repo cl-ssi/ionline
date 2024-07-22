@@ -58,7 +58,7 @@ class PurchasePlan extends Model implements Auditable
     }
 
     public function purchasePlanItems() {
-        return $this->hasMany('App\Models\PurchasePlan\PurchasePlanItem', 'purchase_plan_id');
+        return $this->hasMany('App\Models\PurchasePlan\PurchasePlanItem', 'purchase_plan_id')->withTrashed();
     }
 
     public function purchasePlanItemsWithTrashed() {
@@ -100,7 +100,7 @@ class PurchasePlan extends Model implements Auditable
         return $this->morphMany(Approval::class, 'approvable');
     }
     public function trashedApprovals(): MorphMany{
-        return $this->morphMany(Approval::class, 'approvable')->withTrashed()->where('status', 0);
+        return $this->morphMany(Approval::class, 'approvable')->withTrashed();
     }
 
     public function hasApprovals(){
