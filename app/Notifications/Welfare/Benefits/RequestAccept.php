@@ -45,10 +45,11 @@ class RequestAccept extends Notification implements ShouldQueue
     public function toMail($notifiable)
     {
         // si es de HAH, solo se devuelve data de ese establecimiento. Si es SST, se devuelve SST y HETG. Si no es ninguna de los 2, se devuelve esa info.
-        $establishments = [auth()->user()->establishment_id];
-        if(auth()->user()->establishment_id == 41){
+        $applicant = $this->request->applicant;
+        $establishments = [$applicant->establishment_id];
+        if($applicant->establishment_id == 41){
             $establishments = [41];
-        }elseif(auth()->user()->establishment_id == 38){
+        }elseif($applicant->establishment_id == 38){
             $establishments = [1,38];
         }
 
