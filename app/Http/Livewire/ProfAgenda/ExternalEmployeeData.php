@@ -9,36 +9,36 @@ use App\Models\ProfAgenda\OpenHour;
 
 class ExternalEmployeeData extends Component
 {
-    public $user_id = 0;
+    public $externaluser_id = 0;
     public $dv;
     public $email;
     public $message;
     public $flag_more_than_3_faults = false;
 
-    protected $listeners = ['loadUserData' => 'loadUserData'];
+    protected $listeners = ['loadexternatlUserData' => 'loadexternalUserData'];
 
-    public function loadUserData(ExternalUser $User){
-        $this->user_id = $User->id;
-        $this->dv = $User->dv;
+    public function loadexternalUserData(ExternalUser $externalUser){
+        $this->externaluser_id = $externalUser->id;
+        $this->dv = $externalUser->dv;
         $this->render();
     }
 
     public function render()
     {
         $communes = ClCommune::orderBy('name', 'ASC')->get();
-        $user = new ExternalUser();
+        $externaluser = new ExternalUser();
 
         $this->message = "";
-        if ($this->user_id > 3000000) {
-            $user = ExternalUser::find($this->user_id);
+        if ($this->externaluser_id > 3000000) {
+            $externaluser = ExternalUser::find($this->externaluser_id);
             $this->emit('renderFromEmployeeData');
 
             // validación datos de usuario
-            if ($user) {
+            if ($externaluser) {
 
                 // validación para verificar funcionarios con 3 faltas consecutivas en los ultimos 2 meses
                 $twoMonthsAgo = now()->subMonths(2);
-                $openHours = OpenHour::where('external_user_id',$user->id)
+                $openHours = OpenHour::where('external_user_id',$externaluser->id)
                                     ->orderBy('start_date')
                                     ->where('start_date', '>=', $twoMonthsAgo)
                                     ->get();
@@ -55,18 +55,18 @@ class ExternalEmployeeData extends Component
                     }
                 }
 
-                $this->email = $user->email;
+                $this->email = $externaluser->email;
             }else{
                 // validación correo
                 if ($this->email != null) {
-                $user = ExternalUser::where('email',$this->email)->first();
-                if ($user != null) {
-                    $this->message = "No es posible utilizar el coreo " . $this->email . ", ya está siendo utilizado por " . $user->getFullNameUpperAttribute();
+                $externaluser = ExternalUser::where('email',$this->email)->first();
+                if ($externaluser != null) {
+                    $this->message = "No es posible utilizar el coreo " . $this->email . ", ya está siendo utilizado por " . $externaluser->getFullNameUpperAttribute();
                 }
                 }
             }
         }
 
-        return view('livewire.prof-agenda.external-employee-data',compact('user','communes'));
+        return view('livewire.prof-agenda.external-employee-data',compact('externaluser','communes'));
     }
 }
