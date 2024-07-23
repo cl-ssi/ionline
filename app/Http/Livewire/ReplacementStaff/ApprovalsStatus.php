@@ -23,6 +23,7 @@ class ApprovalsStatus extends Component
     public $pendingsCount = null;
     public $messageNotify = null;
     public $selectedOuIds = array();
+    public $selectedOuToNotify;
 
     protected $listeners = ['searchedOu'];
 
@@ -57,25 +58,31 @@ class ApprovalsStatus extends Component
         
         $this->pendingsCount = $this->pendings->count();
         $this->messageNotify = null;
-        $this->selectedOuId = null;
-        $this->selectedOuIds = null;
+        // $this->selectedOuId = null;
+        // $this->selectedOuIds = null;
     }
 
     public function searchedOu(OrganizationalUnit $organizationalUnit)
     {
         $this->selectedOuId = null;
         $this->selectedOuIds[] = $organizationalUnit->id;
+        $this->selectedOuToNotify = $organizationalUnit->id;
     }
 
     public function sendNotificaction(){
-        $authority = Authority::getAuthorityFromDate($this->selectedOuId, now(), 'manager');
+        $authority = Authority::getAuthorityFromDate($this->selectedOuToNotify, now(), 'manager');
 
         if($authority){
             $authority->user->notify(new ApprovalsStatusReport($this->pendingsCount));
             $this->messageNotify = "<b>Estimado Usuario</b>: Se ha envíado la notificación a la unidad organizacional: ".$authority->organizationalUnit->name ;
         }
         else{
-            dd('no hay autoridad');
+            
         }
+    }
+
+    public function updatedSelectedSearch(){
+        $this->selectedOuId = null;
+        $this->selectedOuIds = null;
     }
 }
