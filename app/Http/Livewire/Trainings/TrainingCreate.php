@@ -168,7 +168,7 @@ class TrainingCreate extends Component
             'place'                                                                     => 'required',
             'workingDay'                                                                => 'required',
             'technicalReasons'                                                          => 'required',
-            'permissionFile'                                                            => (auth()->guard('external')->check() == true && $this->training == null) ? 'required' : '',
+            'permissionFile'                                                            => ($this->training == null) ? 'required' : '',
             'rejoinderFile'                                                             => ($this->training == null) ? 'required' : '',
             'programFile'                                                               => ($this->training == null) ? 'required' : '',
             'municipalProfile'                                                          => (auth()->guard('external')->check() == true) ? 'required' : ''
@@ -278,7 +278,7 @@ class TrainingCreate extends Component
         }
 
         if(auth()->guard('external')->check() == true){
-            return redirect()->route('trainings.external_own_index');
+            return redirect()->route('external_trainings.external_own_index');
         }
         else{
             return redirect()->route('trainings.own_index');

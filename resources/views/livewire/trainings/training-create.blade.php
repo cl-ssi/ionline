@@ -371,38 +371,38 @@
         </fieldset>
     </div>
 
-    @if(auth()->guard('external')->check() == true)
-        <div class="row g-3 mb-3">
-            <fieldset class="form-group col-12 col-md-1 mt-5">
-                14.
-            </fieldset>
+    {{-- @if(auth()->guard('external')->check() == true) --}}
+    <div class="row g-3 mb-3">
+        <fieldset class="form-group col-12 col-md-1 mt-5">
+            14.
+        </fieldset>
 
-            <fieldset class="form-group col-12 col-md-5">
-                <label for="forPermissionFile" class="form-label">Permiso</label>
-                <input class="form-control" type="file" wire:model.defer="permissionFile" id="upload({{ $iterationFileClean }})">
-                <div wire:loading wire:target="permissionFile">Cargando archivo...</div>
-                @error('permissionFile') <span class="text-danger error small">{{ $message }}</span> @enderror
-            </fieldset>
-            
-            
+        <fieldset class="form-group col-12 col-md-5">
+            <label for="forPermissionFile" class="form-label">Permiso</label>
+            <input class="form-control" type="file" wire:model.defer="permissionFile" id="upload({{ $iterationFileClean }})">
+            <div wire:loading wire:target="permissionFile">Cargando archivo...</div>
+            @error('permissionFile') <span class="text-danger error small">{{ $message }}</span> @enderror
+        </fieldset>
+        
+        @if(Route::is('trainings.edit'))
             <fieldset class="form-group col-12 col-md-2">
-                @if(Route::is('trainings.external_edit'))
-                    <a class="btn btn-primary mt-4" href="{{ route('trainings.show_file', $training) }}" target="_blank">
-                        <i class="fas fa-paperclip fa-fw"></i> Ver adjunto
-                    </a>
-                @endif
+                <label for="for_rejoinder_file" class="form-label">&nbsp</label><br>
+                <a href="{{ route('trainings.show_file', ['training' => $training, 'type' => 'permission_file']) }}" target="_blank" class="btn btn-primary">
+                    <i class="fas fa-paperclip fa-fw"></i> Ver adjunto
+                </a>
             </fieldset>
+        @endif
             
-            <fieldset class="form-group col-12 col-md-4">
-                <label for="for_municipal_profile">Perfil de Funcionario</label>
-                <select id="for_municipal_profile" class="form-control" wire:model.defer="municipalProfile">
-                    <option value="">Seleccionar</option>
-                    <option value="edf">Médico EDF</option>
-                </select>
-                @error('municipalProfile') <span class="text-danger error small">{{ $message }}</span> @enderror
-            </fieldset>
-        </div>
-    @endif
+        <fieldset class="form-group col-12 col-md-4">
+            <label for="for_municipal_profile">Perfil de Funcionario</label>
+            <select id="for_municipal_profile" class='form-control @if(auth()->guard("external")->check() == false) mt-2 @endif' wire:model.defer="municipalProfile">
+                <option value="">Seleccionar</option>
+                <option value="edf">Médico EDF</option>
+            </select>
+            @error('municipalProfile') <span class="text-danger error small">{{ $message }}</span> @enderror
+        </fieldset>
+    </div>
+    {{-- @endif --}}
 
     <div class="row g-3 mb-3">
         <fieldset class="form-group col-12 col-md-1 mt-5">
@@ -454,6 +454,10 @@
             <button wire:click="save" wire:loading.attr="disabled" wire:target="permissionFile, rejoinderFile ,programFile" class="btn btn-primary {{ ($bootstrap == 'v4') ? 'float-right' : 'float-end' }}" type="button">
                 <i class="fas fa-save"></i> Guardar
             </button>
+            <!-- Agrega este pequeño bloque para mostrar un mensaje de carga si lo deseas -->
+            <div wire:loading wire:target="save">
+                Guardando, por favor espera...
+            </div>
 
             @if($form == 'edit' && $training->approvals->count() == 0)
                 <button wire:click="sentToApproval" wire:loading.attr="disabled" wire:target="file" class="btn btn-success {{ ($bootstrap == 'v4') ? 'float-right mr-3' : 'float-end me-3' }}" type="button">
