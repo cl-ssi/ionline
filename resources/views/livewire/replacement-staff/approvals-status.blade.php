@@ -23,22 +23,14 @@
 
             @elseif($selectedSearch == 'sub')
                 <fieldset class="form-group col">
-                    <div class="alert alert-info" role="alert">
-                        Reporte no disponible.
-                    </div>
-                </fieldset>
-
-                {{--
-                <fieldset class="form-group col">
                     <label for="for_sub_search">Subdirección</label>
-                    <select name="sub_search" class="form-control" wire:model.debounce.500ms="selectedSub">
+                    <select name="sub_search" class="form-control" wire:model.debounce.500ms="selectedOuId">
                         <option value="">Seleccione...</option>
                         @foreach($subs as $sub)
-                            <option value="{{ $sub->id }}">{{ $sub->name }}</option>
+                            <option value="{{ $sub->id }}">{{ $sub->name }} - {{ $sub->establishment->name }}</option>
                         @endforeach
                     </select>
                 </fieldset>
-                --}}
             @else
                 <fieldset class="form-group col">
                     <div class="alert alert-info" role="alert">
@@ -82,7 +74,7 @@
                             <th style="width: 3%">#</th>
                             <th style="width: 7%">N° Solicitud de Aprobación</th>
                             <th style="width: 12%">Fechas Creación</th>
-                            <th>Estado</th>
+                            <th>Estado / Unidad Organizacional</th>
                             <th>N° Solicitud</th>
                             <th>Nombre solicitud</th>
                             <th></th>
@@ -97,7 +89,10 @@
                                 {{ $pending->created_at->format('d-m-Y H:i:s') }} <br>
                                 <small><b>Días de espera: {{ $pending->created_at->diffInDays(Carbon\Carbon::now()) }} </small>
                             </td>
-                            <td>{{ $pending->StatusInWords }}</td>
+                            <td>
+                                {{ $pending->StatusInWords }} <br>
+                                <small><b>{{ $pending->sentToOu->name }}</b></small>
+                            </td>
                             <td class="text-center">{{ $pending->approvable_id }}</td>
                             <td class="text-center">{{ $pending->approvable->name }}</td>
                             <td class="text-center">
