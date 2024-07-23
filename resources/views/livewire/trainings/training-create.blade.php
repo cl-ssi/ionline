@@ -255,7 +255,8 @@
             @endif        
                     <option value="">Seleccionar</option>
                     <option value="online">Online</option>
-                    <option value="presencial">Presencial</option>			
+                    <option value="presencial">Presencial</option>	
+                    <option value="semipresencial">Semipresencial</option>			
                 </select>
                 @error('mechanism') <span class="text-danger error small">{{ $message }}</span> @enderror
         </fieldset>
