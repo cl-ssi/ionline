@@ -145,8 +145,8 @@
                                 value="A{{ $item_a->unspsc_product_id }}"
                                 required>
                             <label class="form-check-label"
-                                for="for-code">{{ $item_a->unspscProduct->code }} -
-                                {{ $item_a->unspscProduct->name }}</label>
+                                for="for-code">{{ $item_a->unspscProduct?->code }} -
+                                {{ $item_a->unspscProduct?->name }}</label>
                         </div>
                     </td>
                     <td>
@@ -159,8 +159,8 @@
                                 value="B{{ $item_b->unspsc_product_id }}"
                                 >
                             <label class="form-check-label"
-                                for="for-code">{{ $item_b->unspscProduct->code }} -
-                                {{ $item_b->unspscProduct->name }}</label>
+                                for="for-code">{{ $item_b->unspscProduct?->code }} -
+                                {{ $item_b->unspscProduct?->name }}</label>
                         </div>
                     </td>
                 </tr>
@@ -191,7 +191,7 @@
                                 value="B{{ $item_b->product_id }}"
                                 >
                             <label class="form-check-label"
-                                for="for-product">{{ $item_b->product ? $item_b->product->name : null }}</label>
+                                for="for-product">{{ $item_b->product ? $item_b->product?->name : null }}</label>
                         </div>
                     </td>
                 </tr>
