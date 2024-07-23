@@ -118,9 +118,7 @@
                 type="text"
                 class="form-control"
                 id="old_number"
-                value="{{ $inventory->old_number }}"
-                disabled
-                readonly
+                wire:model.defer="old_number"                
             >
         </fieldset>
 

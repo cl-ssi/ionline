@@ -17,6 +17,7 @@ class InventoryEdit extends Component
     public $accountingCodes;
     public $internal_description;
 
+    public $old_number;
     public $number_inventory;
     public $status;
     public $classification_id;
@@ -65,6 +66,7 @@ class InventoryEdit extends Component
         $this->accounting_code_id = $this->inventory->accounting_code_id;
         $this->classification_id = $this->inventory->classification_id;
         $this->internal_description = $inventory->internal_description ?? $inventory->description;
+        $this->old_number = $inventory->old_number;
         $this->po_code = $this->inventory->po_code;
 
         $this->accountingCodes = AccountingCode::all();
@@ -163,6 +165,7 @@ class InventoryEdit extends Component
             $dataValidated['number'] = $dataValidated['number_inventory'];
             $dataValidated['internal_description'] = $this->internal_description; ;
             $dataValidated['po_code'] = $this->po_code;
+            $dataValidated['old_number'] = $this->old_number;
             $this->inventory->update($dataValidated);
 
             /**
