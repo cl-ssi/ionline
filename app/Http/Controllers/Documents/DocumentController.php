@@ -23,6 +23,7 @@ use App\Models\Agreements\ContinuityResolution;
 use App\Models\Documents\SignaturesFlow;
 use App\Models\Parameters\Parameter;
 use App\Rrhh\Authority;
+use Illuminate\View\View;
 
 class DocumentController extends Controller
 {
@@ -91,10 +92,73 @@ class DocumentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(): View
     {
         $document = new Document();
         $types = Type::whereNull('partes_exclusive')->orderBy('name')->pluck('name','id');
+        return view('documents.create', compact('document','types'));
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function createFromTemplate($template = null): View
+    {
+        $document = new Document();
+        $types = Type::whereNull('partes_exclusive')->orderBy('name')->pluck('name','id');
+        $templates = [
+            [
+                'id' => 1,
+                'title' => 'Message received',
+                'content' => '<p dir="ltr">Hey {{usuario.nombre_completo}}!</p>
+                    <p dir="ltr">Just a quick note to say we’ve received your message, and will get back to you within 48 hours.</p>
+                    <p dir="ltr">For reference, your ticket number is: {{unidad.nombre}}</p>
+                    <p dir="ltr">Should you have any questions in the meantime, just reply to this email and it will be attached to this ticket.</p>
+                    <p><strong>&nbsp;</strong></p>
+                    <p dir="ltr">Regards,</p>
+                    <p dir="ltr">{{unidad.autoridad}}</p>'
+            ],
+            [
+                'id' => 2,
+                'title' => 'Thanks for the feedback',
+                'content' => '<p dir="ltr">Hi {{usuario.nombre_completo}},</p>
+                    <p dir="ltr">We appreciate you taking the time to provide feedback on {{unidad.nombre}}.</p>
+                    <p dir="ltr">It sounds like it wasn’t able to fully meet your expectations, for which we apologize. 
+                        Rest assured our team looks at each piece of feedback and uses it to decide what to focus on next with {{usuario.nombre_completo}}.</p>
+                    <p dir="ltr"><strong>&nbsp;</strong></p>
+                    <p dir="ltr">All the best, and let us know if there’s anything else we can do to help.</p>
+                    <p dir="ltr">-{{unidad.autoridad}}</p>'
+            ],
+            [
+                'id' => 3,
+                'title' => 'Still working on case',
+                'content' => '
+                    <p dir="ltr">Hi {{usuario.nombre_completo}},</p>
+                    <p dir="ltr">Just a quick note to let you know we’re still working on your case. 
+                        It’s taking a bit longer than we hoped, but we’re aiming to get you an answer in the next 48 hours.</p>
+                    <p dir="ltr">Stay tuned,</p>
+                    <p dir="ltr">{{unidad.autoridad}}</p>'
+            ],
+        ];
+        // Get the content of a template based on the id
+        $template = collect($templates)->firstWhere('id', $template);
+
+        $data['usuario']['nombre_completo'] = auth()->user()->full_name; 
+        $data['usuario']['run'] = auth()->user()->run;
+        $data['unidad']['nombre'] = auth()->user()->organizationalUnit->name;
+        $data['unidad']['autoridad'] = auth()->user()->boss->full_name;
+
+        $document->content = $template['content'];
+        foreach ($data as $key => $values) {
+            foreach ($values as $subKey => $value) {
+                $document->content = str_replace('{{' . $key . '.' . $subKey . '}}', $value, $document->content);
+            }
+        }
+
+        // http://localhost:8000/documents/create-from-template/1
+
         return view('documents.create', compact('document','types'));
     }
 
