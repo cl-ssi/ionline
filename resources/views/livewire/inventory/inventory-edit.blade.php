@@ -603,7 +603,7 @@
 
     <hr>
 
-    @can('be god')
+    @canAny(['be god','Inventory: manager'])
         @include('partials.audit', ['audits' => $inventory->audits()] )
     @endcan
 
