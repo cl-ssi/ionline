@@ -133,29 +133,123 @@ class DocumentController extends Controller
             ],
             [
                 'id' => 3,
-                'title' => 'Still working on case',
+                'title' => 'Template con iteración',
                 'content' => '
-                    <p dir="ltr">Hi {{usuario.nombre_completo}},</p>
-                    <p dir="ltr">Just a quick note to let you know we’re still working on your case. 
-                        It’s taking a bit longer than we hoped, but we’re aiming to get you an answer in the next 48 hours.</p>
-                    <p dir="ltr">Stay tuned,</p>
-                    <p dir="ltr">{{unidad.autoridad}}</p>'
+                    <p>Hola <strong>{{usuario.nombre_completo}}</strong></p>
+                    <p>Esta es una nota r&aacute;pida de c&oacute;mo hacer una plantilla que tiene una iteraci&oacute;n.</p>
+
+                    @if(usuario.premium)
+                        <p>¡Gracias por ser un miembro premium!</p>
+                    @else
+                        <p>Considera unirte a nuestro programa premium para obtener más beneficios.</p>
+                    @endif
+
+                    <p>Usando tablas</p>
+                    <table style="border-collapse: collapse; width: 100%;" border="1">
+                        <colgroup><col style="width: 50%;"><col style="width: 50%;"></colgroup>
+                        <tbody>
+                        <tr>
+                            <td><strong>Nombre de la cuota</strong></td>
+                            <td style="text-align: center;"><strong>Valor</strong></td>
+                        </tr>
+                        @foreach(cuotas)
+                        <tr>
+                            <td>{{cuotas.name}}</td>
+                            <td style="text-align: center;">{{cuotas.valor}}</td>
+                        </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+
+                    <p>Usando Listas</p>
+                    <ul>
+                        @foreach(cuotas)
+                            <li><b>{{cuotas.name}}</b>: {{cuotas.valor}}</li>
+                        @endforeach
+                    </ul>
+                    <p>Atentamente,</p>
+                    <p><strong>{{unidad.autoridad}}</strong><br><strong>{{unidad.nombre}}</strong></p>'
             ],
         ];
+
+        $data['usuario']['nombre_completo'] = auth()->user()->full_name;
+        $data['usuario']['premium'] = false;
+        $data['unidad']['nombre'] = auth()->user()->organizationalUnit->name;
+        $data['unidad']['autoridad'] = auth()->user()->boss->full_name;
+        $data['cuotas'] = [
+            ['name' => 'Cuota 1','valor' => 100],
+            ['name' => 'Cuota 2','valor' => 200],
+            ['name' => 'Cuota 3','valor' => 300]
+        ];
+
         // Get the content of a template based on the id
         $template = collect($templates)->firstWhere('id', $template);
 
-        $data['usuario']['nombre_completo'] = auth()->user()->full_name; 
-        $data['usuario']['run'] = auth()->user()->run;
-        $data['unidad']['nombre'] = auth()->user()->organizationalUnit->name;
-        $data['unidad']['autoridad'] = auth()->user()->boss->full_name;
-
-        $document->content = $template['content'];
-        foreach ($data as $key => $values) {
-            foreach ($values as $subKey => $value) {
-                $document->content = str_replace('{{' . $key . '.' . $subKey . '}}', $value, $document->content);
+        function replaceTemplateVariables($templateContent, $data) {
+        // Reemplazo de variables simples
+            foreach ($data as $key => $values) {
+                if (is_array($values) && isset($values[0]) && is_array($values[0])) {
+                    // Manejar iteraciones
+                    $pattern = '/@foreach\(' . $key . '\)(.*?)@endforeach/s';
+                    while (preg_match($pattern, $templateContent, $matches)) {
+                        $repeatedBlock = '';
+                        foreach ($values as $item) {
+                            $tempBlock = $matches[1];
+                            foreach ($item as $subKey => $subValue) {
+                                $tempBlock = str_replace('{{' . $key . '.' . $subKey . '}}', $subValue, $tempBlock);
+                            }
+                            $repeatedBlock .= $tempBlock;
+                        }
+                        $templateContent = str_replace($matches[0], $repeatedBlock, $templateContent);
+                    }
+                } else {
+                    // Variables simples
+                    foreach ($values as $subKey => $value) {
+                        $templateContent = str_replace('{{' . $key . '.' . $subKey . '}}', $value, $templateContent);
+                    }
+                }
             }
+            
+            // Manejar condicionales
+            $patternIf = '/@if\((.*?)\)(.*?)@else(.*?)@endif/s';
+            while (preg_match($patternIf, $templateContent, $matches)) {
+                $condition = $matches[1];
+                $ifBlock = $matches[2];
+                $elseBlock = $matches[3];
+
+                // Evaluar condición (solo booleanas)
+                $condition = str_replace(['usuario.premium'], [$data['usuario']['premium']], $condition);
+
+                if (eval("return $condition;")) {
+                    $templateContent = str_replace($matches[0], $ifBlock, $templateContent);
+                } else {
+                    $templateContent = str_replace($matches[0], $elseBlock, $templateContent);
+                }
+            }
+
+            // Manejar condicionales sin else
+            $patternIfNoElse = '/@if\((.*?)\)(.*?)@endif/s';
+            while (preg_match($patternIfNoElse, $templateContent, $matches)) {
+                $condition = $matches[1];
+                $ifBlock = $matches[2];
+
+                // Evaluar condición (solo booleanas)
+                $condition = str_replace(['usuario.premium'], [$data['usuario']['premium']], $condition);
+
+                if (eval("return $condition;")) {
+                    $templateContent = str_replace($matches[0], $ifBlock, $templateContent);
+                } else {
+                    $templateContent = str_replace($matches[0], '', $templateContent);
+                }
+            }
+            return $templateContent;
         }
+        
+        // Reemplazar las variables en el contenido del template
+        $document->content = replaceTemplateVariables($template['content'], $data);
+        // $document->content = $template['content'];
+        
+        // dd($template['content']);
 
         // http://localhost:8000/documents/create-from-template/1
 

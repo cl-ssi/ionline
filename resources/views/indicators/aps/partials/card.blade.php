@@ -5,7 +5,7 @@
 
     <ul class="list-group list-group-flush">
         <li class="list-group-item">
-            <a href="{{ route('indicators.iaps.list', 2024) }}">2024 <span class="badge badge-pill badge-warning">En Validación</span></a>
+            <a href="{{ route('indicators.iaps.list', 2024) }}">2024 <span class="badge badge-pill badge-secondary">En Desarrollo</span></a>
         </li>
         <li class="list-group-item">
             <a href="{{ route('indicators.iaps.list', 2023) }}">2023 <span class="badge badge-pill badge-warning">En Validación</span></a>
