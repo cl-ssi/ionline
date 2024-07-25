@@ -118,9 +118,7 @@
                 type="text"
                 class="form-control"
                 id="old_number"
-                value="{{ $inventory->old_number }}"
-                disabled
-                readonly
+                wire:model.defer="old_number"                
             >
         </fieldset>
 
@@ -603,7 +601,7 @@
 
     <hr>
 
-    @can('be god')
+    @canAny(['be god','Inventory: manager'])
         @include('partials.audit', ['audits' => $inventory->audits()] )
     @endcan
 

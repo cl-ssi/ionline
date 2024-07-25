@@ -22,6 +22,8 @@ class ApprovalsStatus extends Component
     private $pendings;
     public $pendingsCount = null;
     public $messageNotify = null;
+    public $selectedOuIds = array();
+    public $selectedOuToNotify;
 
     protected $listeners = ['searchedOu'];
 
@@ -43,32 +45,44 @@ class ApprovalsStatus extends Component
     }
 
     public function showReport(){
+        if($this->selectedOuId != null){
+            $this->selectedOuIds = OrganizationalUnit::find($this->selectedOuId)->getAllChilds();
+        }
+
         $this->pendings = Approval::where('module', 'Solicitudes de Contración')
             ->where('active', 1)
             ->whereNull('status')
-            ->where('sent_to_ou_id', $this->selectedOuId)
+            ->whereIn('sent_to_ou_id', $this->selectedOuIds)
             ->orderBy('created_at', 'ASC')
             ->get();
         
         $this->pendingsCount = $this->pendings->count();
         $this->messageNotify = null;
+        // $this->selectedOuId = null;
+        // $this->selectedOuIds = null;
     }
 
     public function searchedOu(OrganizationalUnit $organizationalUnit)
     {
-        $this->selectedOuId = $organizationalUnit->id;
+        $this->selectedOuId = null;
+        $this->selectedOuIds[] = $organizationalUnit->id;
+        $this->selectedOuToNotify = $organizationalUnit->id;
     }
 
     public function sendNotificaction(){
-        $authority = Authority::getAuthorityFromDate($this->selectedOuId, now(), 'manager');
+        $authority = Authority::getAuthorityFromDate($this->selectedOuToNotify, now(), 'manager');
 
         if($authority){
             $authority->user->notify(new ApprovalsStatusReport($this->pendingsCount));
             $this->messageNotify = "<b>Estimado Usuario</b>: Se ha envíado la notificación a la unidad organizacional: ".$authority->organizationalUnit->name ;
         }
         else{
-            dd('no hay autoridad');
+            
         }
-        
+    }
+
+    public function updatedSelectedSearch(){
+        $this->selectedOuId = null;
+        $this->selectedOuIds = null;
     }
 }

@@ -153,6 +153,10 @@ class Training extends Model implements Auditable
             case 'presencial':
                 return 'Presencial';
                 break;
+            
+            case 'semipresencial':
+                return 'Semipresencial';
+                break;
         }
     }
 

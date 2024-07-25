@@ -1380,6 +1380,8 @@ Route::prefix('parameters')->as('parameters.')->middleware(['auth', 'must.change
 
 Route::prefix('documents')->as('documents.')->middleware(['auth', 'must.change.password'])->group(function () {
 
+    Route::get('create-from-template/{template}', [DocumentController::class, 'createFromTemplate'])->name('create_from_template');
+
     Route::get('tic/informe', Informe::class)->name('tic.informe');
 
     Route::get('lobby', MeetingMgr::class)->name('lobby.manager');
