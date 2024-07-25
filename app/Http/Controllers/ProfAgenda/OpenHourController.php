@@ -68,13 +68,13 @@ class OpenHourController extends Controller
         // valida si existen del paciente con otros funcionarios en la misma hora
         $othersReservationsCount = OpenHour::where('patient_id',$request->user_id)
                                             ->where(function($query) use ($openHour){
-                                                $query->whereBetween('start_date',[$openHour->start_date, $openHour->end_date])
-                                                        ->orWhereBetween('end_date',[$openHour->start_date, $openHour->end_date]);
+                                                $query->where('start_date', '<', $openHour->end_date)
+                                                    ->where('end_date', '>', $openHour->start_date);
                                             })
                                             ->where('profesional_id','<>',$openHour->profesional_id)
                                             ->whereHas('activityType')
                                             ->count(); 
-        if($othersReservationsCount>0){
+        if($othersReservationsCount > 0){
             session()->flash('warning', 'No es posible realizar la reserva del paciente, porque tiene otra reserva a la misma hora con otro funcionario.');
             return redirect()->back();
         }
@@ -323,8 +323,8 @@ class OpenHourController extends Controller
         // valida si existen del paciente con otros funcionarios en la misma hora
         $othersReservationsCount = OpenHour::where('patient_id',$request->user_id)
                                             ->where(function($query) use ($openHour){
-                                                $query->whereBetween('start_date',[$openHour->start_date, $openHour->end_date])
-                                                        ->orWhereBetween('end_date',[$openHour->start_date, $openHour->end_date]);
+                                                $query->where('start_date', '<', $openHour->end_date)
+                                                    ->where('end_date', '>', $openHour->start_date);
                                             })
                                             ->where('profesional_id','<>',$openHour->profesional_id)
                                             ->whereHas('activityType')
