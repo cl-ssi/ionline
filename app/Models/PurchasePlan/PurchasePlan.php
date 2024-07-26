@@ -58,7 +58,7 @@ class PurchasePlan extends Model implements Auditable
     }
 
     public function purchasePlanItems() {
-        return $this->hasMany('App\Models\PurchasePlan\PurchasePlanItem', 'purchase_plan_id')->withTrashed();
+        return $this->hasMany('App\Models\PurchasePlan\PurchasePlanItem', 'purchase_plan_id');
     }
 
     public function purchasePlanItemsWithTrashed() {
