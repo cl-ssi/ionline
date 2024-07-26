@@ -22,7 +22,7 @@
                 <input type="text" class="form-control" name="emisor" value="{{ old('emisor') }}" placeholder="rut emisor" id="for_emisor" autocomplete="off">
             </div>
             <div class="col-md-1">
-                <label for="for-folio" class="form-label">Folio DTE</label> 
+                <label for="for-folio" class="form-label">Folio DTE</label>
                 <input type="text" class="form-control" name="folio" placeholder="folio" value="{{ old('folio') }}" autocomplete="off">
             </div>
             <div class="col-md-1">
@@ -109,7 +109,7 @@
                 <input type="text" class="form-control" name="id" placeholder="id" value="{{ old('id') }}"
                     autocomplete="off">
             </div>
-            <div class="col-md-2">            
+            <div class="col-md-2">
                 <input type="text" class="form-control" name="emisor" value="{{ old('emisor') }}" placeholder="rut emisor">
             </div>
             <div class="col-md-2">
@@ -184,13 +184,13 @@
                         </td>
                         <td class="small">
                             <small>Compromiso</small>
-                            @livewire('finance.sigfe-folio-compromiso', 
+                            @livewire('finance.sigfe-folio-compromiso',
                             [
                                 'dte' => $dte,
                                 'onlyRead' => 'true'
                             ],
                             key($dte->id))
-                            @livewire('finance.sigfe-archivo-compromiso', 
+                            @livewire('finance.sigfe-archivo-compromiso',
                             [
                                 'dte' => $dte,
                                 'onlyRead' => 'true'
@@ -202,7 +202,7 @@
                                 'onlyRead' => 'true'
                             ], key($dte->id))
                             <hr>
-                            @livewire('finance.sigfe-archivo-devengo', 
+                            @livewire('finance.sigfe-archivo-devengo',
                             [
                                 'dte' => $dte,
                                 'onlyRead' => 'true'
@@ -236,6 +236,7 @@
                         </td>
                         <td>
                             @livewire('finance.check-tesoreria', ['dte' => $dte], key($dte->id))
+                            @livewire('finance.send-institutional', ['dte' => $dte], key($dte->id))
                         </td>
                     </tr>
 
@@ -244,7 +245,7 @@
             </tbody>
         </table>
 
-        {{ $dtes->appends(request()->query())->links() }}        
+        {{ $dtes->appends(request()->query())->links() }}
 
     </div>
 @endsection
