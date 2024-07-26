@@ -198,10 +198,25 @@ class ProgrammingReportController extends Controller
     {
         $commune = $request->commune;
         $role = $request->role ?? 'Review';
+
         if($role == 'Training'){ //Perfil de capacitación
-            $users = User::doesntHave('roles')->permission('Programming: view')->permission('TrainingItem: view')->permission('TrainingItem: delete')->orderBy('name')->get();
+            $users = User::doesntHave('roles')
+                ->permission('Programming: view')
+                ->permission('TrainingItem: view')
+                ->permission('TrainingItem: delete')
+                ->orderBy('name')
+                ->get();
         }else{ // otros perfiles
-            $users = User::role('Programming: '. $role)->orderBy('name')->get();
+            
+            $excludedPermissions = [
+                'Programming: view',
+                'TrainingItem: view',
+                'TrainingItem: delete'
+            ];
+            $users = User::whereHas('permissions', function ($query) use ($excludedPermissions) {
+                $query->where('name', 'like', 'Programming:%')
+                      ->whereNotIn('name', $excludedPermissions);
+            })->orderBy('name')->get();
         }
 
         // buscar programaciones numericas por utimo año y segun comuna de ser necesario
