@@ -57,7 +57,7 @@
                     <td>{{ $allowance->created_at->format('d-m-Y') }}</td>
                     <td>{{ $allowance->userAllowance->FullName }}</td>
                     <td>{{ $allowance->organizationalUnitAllowance->name }}</td>
-                    <td style="width: 8%">{{ $allowance->from->format('d-m-Y') }}</td>
+                    <td style="width: 8%">{{ ($allowance->from) ? $allowance->from->format('d-m-Y') : '' }}</td>
                     <td style="width: 8%">{{ $allowance->to->format('d-m-Y') }}</td>
                     <td class="text-center">{{ number_format($allowance->total_days, 1, ",", ".") }}</td>
                     <td class="text-right">${{ ($allowance->total_days >= 1) ? number_format(($allowance->day_value * intval($allowance->total_days)), 0, ",", ".") : '0' }}</td>

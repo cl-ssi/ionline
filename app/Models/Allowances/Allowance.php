@@ -308,12 +308,10 @@ class Allowance extends Model implements Auditable
     //     'from', 'to', 'document_date'
     // ];
 
-    /*
     protected $casts = [
         'from'  => 'date:d-m-Y',
         'to'    => 'date:Y-m-d'
     ];
-    */
 
     protected static function boot()
     {

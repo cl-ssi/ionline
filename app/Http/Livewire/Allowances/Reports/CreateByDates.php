@@ -6,9 +6,13 @@ use Livewire\Component;
 
 use App\Models\Allowances\Allowance;
 use Carbon\Carbon;
+use Livewire\WithPagination;
 
 class CreateByDates extends Component
 {
+    use WithPagination;
+    protected $paginationTheme = 'bootstrap';
+
     public $selectedStartDate = null;
     public $selectedEndDate = null;
     public $disabled = null;
