@@ -35,10 +35,12 @@ class AllowancesExport implements FromCollection, WithHeadings, WithMapping, Sho
     {
         return [
             'N°',
+            'Estado',
             'Mes (Creación)',
             'Fecha (Creación)',
             'Nombre',
             'Unidad organizacional',
+            'Establecimiento',
             'Desde',
             'Hasta',
             'Cantidad de días',
@@ -53,11 +55,13 @@ class AllowancesExport implements FromCollection, WithHeadings, WithMapping, Sho
     public function map($allowance): array
     {
         return [
-            $allowance->id,
+            ($allowance->correlative) ? $allowance->correlative : $allowance->id,
+            $allowance->StatusValue,
             $allowance->created_at->monthName,
             $allowance->created_at->format('d-m-Y'),
             $allowance->userAllowance->FullName,
             $allowance->organizationalUnitAllowance->name,
+            $allowance->organizationalUnitAllowance->establishment->name,
             $allowance->from->format('d-m-Y'),
             $allowance->to->format('d-m-Y'),
             $allowance->total_days,
