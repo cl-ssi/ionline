@@ -1,11 +1,9 @@
 FROM php:8.2-fpm-alpine
-# FROM php:7.4.33-fpm-alpine
 
-RUN apk add --no-cache nginx wget
-
-# Install dependencies for GD and install GD with support for jpeg, png webp and freetype
-# Info about installing GD in PHP https://www.php.net/manual/en/image.installation.php
+# Install dependencies and tools
 RUN apk add --no-cache \
+        nginx \
+        wget \
         libjpeg-turbo-dev \
         libpng-dev \
         libwebp-dev \
@@ -13,36 +11,31 @@ RUN apk add --no-cache \
         libxml2-dev \
         libzip-dev \
         mdbtools-utils \
-        poppler-utils
+        poppler-utils && \
+    docker-php-ext-install mysqli pdo pdo_mysql && \
+    docker-php-ext-enable pdo_mysql && \
+    docker-php-ext-configure gd --with-jpeg --with-webp --with-freetype && \
+    docker-php-ext-install gd soap zip bcmath && \
+    mkdir -p /run/nginx /app
 
-RUN docker-php-ext-install mysqli pdo pdo_mysql
-
-RUN docker-php-ext-enable pdo_mysql
-
-# As of PHP 7.4 we don't need to add --with-png
-RUN docker-php-ext-configure gd --with-jpeg --with-webp --with-freetype
-
-RUN docker-php-ext-install gd
-
-RUN docker-php-ext-install soap
-
-RUN docker-php-ext-install zip
-
-RUN docker-php-ext-install bcmath
-
-RUN mkdir -p /run/nginx
-
+# Copy configuration files
 COPY docker/nginx.conf /etc/nginx/nginx.conf
-
 COPY docker/php.ini /usr/local/etc/php/conf.d/docker-php.ini
 
-RUN mkdir -p /app
+# Copy application files with ownership
 COPY . /app
 
-RUN sh -c "wget http://getcomposer.org/composer.phar && chmod a+x composer.phar && mv composer.phar /usr/local/bin/composer"
-RUN cd /app && \
-    /usr/local/bin/composer install --no-dev
+# Set working directory
+WORKDIR /app
 
-RUN chown -R www-data: /app
+# Install Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
+# Install PHP dependencies
+RUN composer install --no-dev
+
+# Set the ownership of the application files
+RUN chown -R www-data:www-data /app
+
+# Set the startup command
 CMD sh /app/docker/startup.sh
