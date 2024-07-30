@@ -52,7 +52,7 @@ class UploadSingleBhe extends Component
             $tipo = 69;
 
             // Expresion regular para obtener el folio
-            preg_match("/N ° (\d+)/", $this->bhe_to_text, $matches);
+            preg_match("/N\s?°?\s?(\d+)/", $this->bhe_to_text, $matches);
             $folio = $matches[1];
 
             // Expresion regular para obtener la razon social del emisor
