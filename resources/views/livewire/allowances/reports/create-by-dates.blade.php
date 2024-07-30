@@ -26,51 +26,56 @@
             </a>
         </div>
     </div>
-    
 
     @if($allowances->count() > 0)
     
-    <div class="table-responsive">
-        <table class="table table-sm table-striped table-bordered">
-            <thead class="text-center small">
-                <tr>
-                    <th>N°</th>
-                    <th>Mes (Creación)</th>
-                    <th style="width: 8%">Fecha</th>
-                    <th>Nombre</th>
-                    <th>Unidad organizacional</th>
-                    <th>Desde</th>
-                    <th>Hasta</th>
-                    <th>Cantidad de días</th>
-                    <th>Valor día</th>
-                    <th>Valor medio día</th>
-                    <th>Valor total</th>
-                    <th>Lugar</th>
-                    <th>Motivo</th>
-                </tr>
-            </thead>
-            <tbody class="small">
-                @foreach($allowances as $allowance)
-                <tr>
-                    <td>{{ $allowance->id }}</td>
-                    <td class="text-center">{{ $allowance->created_at->monthName }}</td>
-                    <td>{{ $allowance->created_at->format('d-m-Y') }}</td>
-                    <td>{{ $allowance->userAllowance->FullName }}</td>
-                    <td>{{ $allowance->organizationalUnitAllowance->name }}</td>
-                    <td style="width: 8%">{{ ($allowance->from) ? $allowance->from->format('d-m-Y') : '' }}</td>
-                    <td style="width: 8%">{{ $allowance->to->format('d-m-Y') }}</td>
-                    <td class="text-center">{{ number_format($allowance->total_days, 1, ",", ".") }}</td>
-                    <td class="text-right">${{ ($allowance->total_days >= 1) ? number_format(($allowance->day_value * intval($allowance->total_days)), 0, ",", ".") : '0' }}</td>
-                    <td class="text-right">${{ number_format($allowance->half_day_value, 0, ",", ".") }}</td>
-                    <td class="text-right">${{ number_format($allowance->total_value, 0, ",", ".") }}</td>
-                    <td>{{ $allowance->place }}</td>
-                    <td>{{ $allowance->reason }}</td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
-        {{ $allowances->links() }}
-    </div>
+        <div class="table-responsive">
+            <table class="table table-sm table-striped table-bordered">
+                <thead class="text-center small">
+                    <tr>
+                        <th>N°</th>
+                        <th>Mes (Creación)</th>
+                        <th style="width: 8%">Fecha</th>
+                        <th>Nombre</th>
+                        <th>Unidad organizacional</th>
+                        <th>Desde</th>
+                        <th>Hasta</th>
+                        <th>Cantidad de días</th>
+                        <th>Valor día</th>
+                        <th>Valor medio día</th>
+                        <th>Valor total</th>
+                        <th>Lugar</th>
+                        <th>Motivo</th>
+                    </tr>
+                </thead>
+                <tbody class="small">
+                    @foreach($allowances as $allowance)
+                    <tr>
+                        <td>
+                            {{ ($allowance->correlative) ? $allowance->correlative : $allowance->id }}<br>
+                            <span class="badge badge-{{ $allowance->StatusColor }}">{{ $allowance->StatusValue }}</span>
+                        </td>
+                        <td class="text-center">{{ $allowance->created_at->monthName }}</td>
+                        <td class="text-center" style="width: 7%">{{ $allowance->created_at->format('d-m-Y') }}</td>
+                        <td>{{ $allowance->userAllowance->FullName }}</td>
+                        <td>
+                            {{ $allowance->organizationalUnitAllowance->name }} <br><br>
+                            <small><b>{{ $allowance->organizationalUnitAllowance->establishment->name }}</b></small>
+                        </td>
+                        <td class="text-center" style="width: 7%">{{ ($allowance->from) ? $allowance->from->format('d-m-Y') : '' }}</td>
+                        <td class="text-center" style="width: 7%">{{ $allowance->to->format('d-m-Y') }}</td>
+                        <td class="text-center">{{ number_format($allowance->total_days, 1, ",", ".") }}</td>
+                        <td class="text-right">${{ ($allowance->total_days >= 1) ? number_format(($allowance->day_value * intval($allowance->total_days)), 0, ",", ".") : '0' }}</td>
+                        <td class="text-right">${{ number_format($allowance->half_day_value, 0, ",", ".") }}</td>
+                        <td class="text-right">${{ number_format($allowance->total_value, 0, ",", ".") }}</td>
+                        <td>{{ $allowance->place }}</td>
+                        <td>{{ $allowance->reason }}</td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+            {{ $allowances->links() }}
+        </div>
 
     @else
 
