@@ -2,7 +2,9 @@
 
 namespace App\Models\Agreements;
 
+use App\Models\Documents\Document;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Addendum extends Model
@@ -64,6 +66,11 @@ class Addendum extends Model
     public function director_signer()
     {
         return $this->belongsTo('App\Models\Agreements\Signer', 'director_signer_id');
+    }
+
+    public function document(): BelongsTo
+    {
+        return $this->belongsTo(Document::class);
     }
 
     public function getEndorseStateBySignPos($i)

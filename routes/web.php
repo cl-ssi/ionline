@@ -754,6 +754,7 @@ Route::prefix('agreements')->as('agreements.')->middleware(['auth', 'must.change
     Route::get('/addendum/sign/{addendum}/type/{type}', [AddendumController::class, 'sign'])->name('addendum.sign');
     Route::get('/addendum/preview/{addendum}', [AddendumController::class, 'preview'])->name('addendum.preview');
     Route::post('/addendum/createDocument/{addendum}', [AddendumController::class, 'createDocument'])->name('addendum.createDocument');
+    Route::get('/addendum/{addendum}/resolution/create', [AddendumController::class, 'createResolution'])->name('addendum.resolution.create');
 
     Route::post('/continuity/store', [ContinuityResolutionController::class, 'store'])->name('continuity.store');
     Route::put('/continuity/{continuityResolution}/update', [ContinuityResolutionController::class, 'update'])->name('continuity.update');

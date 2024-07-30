@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Agreements;
 use App\Models\Agreements\Addendum;
 use App\Models\Agreements\Signer;
 use App\Models\Documents\Document;
+use App\Models\Documents\Template;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Documents\Signature;
@@ -372,6 +373,50 @@ class AddendumController extends Controller
         $document->content = str_replace('${comuna}', $addendum->agreement->commune->name, $document->content);
         $document->content = str_replace('${comunaRut}', $addendum->agreement->commune->municipality->rut_municipality, $document->content);
 
+
+        $types = Type::whereNull('partes_exclusive')->pluck('name','id');
+        return view('documents.create', compact('document', 'types'));
+    }
+
+    public function createResolution(Addendum $addendum)
+    {
+        /** Variables a reemplazar */
+        $data['directorDecreto']         = $addendum->director_signer->decree;
+        $data['numResolucion']           = $addendum->agreement->number;
+        $data['yearResolucion']          = $addendum->agreement->resolution_date != NULL ? date('Y', strtotime($addendum->agreement->resolution_date)) : '';
+        $data['programa']                = mb_strtoupper(preg_replace('/^Programa /','',trim($addendum->agreement->program->name)));
+        $data['periodoConvenio']         = $addendum->agreement->period;
+        $data['numResourceResolucion']   = $addendum->agreement->res_resource_number;
+        $data['yearResourceResolucion']  = $addendum->agreement->res_resource_date != NULL ? date('Y', strtotime($addendum->agreement->res_resource_date)) : '';
+        $data['fechaResolucion']         = $addendum->res_date->day . ' de ' . $addendum->res_date->monthName . ' de ' . $addendum->res_date->year;
+        $data['fechaResourceResolucion'] = $addendum->agreement->res_resource_date != NULL ? date('d', strtotime($addendum->agreement->res_resource_date)) . ' de ' . date('F', strtotime($addendum->agreement->res_resource_date)) . ' de ' . date('Y', strtotime($addendum->agreement->res_resource_date)) : '';
+        $data['numResolucionConvenio']   = $addendum->agreement->res_exempt_number;
+        $data['fechaResolucionConvenio'] = $addendum->agreement->res_exempt_date->day . ' de ' . $addendum->agreement->res_exempt_date->monthName . ' de ' . $addendum->agreement->res_exempt_date->year;
+        $data['fechaConvenio']           = $addendum->agreement->date->day . ' de ' . $addendum->agreement->date->monthName . ' de ' . $addendum->agreement->date->year;
+        $data['ilustre']                 = $addendum->agreement->commune->municipality->name_municipality;
+        $data['comuna']                  = $addendum->agreement->commune->name;
+        $data['fechaAddendum']           = $addendum->date->day . ' de ' . $addendum->date->monthName . ' de ' . $addendum->date->year;
+        $data['directorApelativo']       = $addendum->director_signer->appellative;
+        $data['director']                = $addendum->director_signer->user->fullName;
+        $data['alcaldeApelativoCorto']   = Str::beforeLast($addendum->representative_appellative, ' ') . (Str::contains($addendum->representative_appellative, 'Subrogante') ? '(S)' : '');
+        $data['alcalde']                 = $addendum->representative;
+        $data['comuna']                  = $addendum->agreement->commune->name;
+
+        // Importar los templates
+        $header = Template::where('key','agreements.addendum.resolution.header.2024')->first()->toArray();
+        $footer = Template::where('key','agreements.addendum.resolution.footer.2024')->first()->toArray();
+        
+        // Importar el contenido del adendum y eliminar las útlimas 4 líneas del contenido
+        $addendum_content = implode("\n", array_slice(explode("\n", $addendum->document->content), 0, -4));
+
+        $document = new Document();
+        $document->type_id      = Type::where('name','Resolución')->first()->id;
+        $document->antecedent   = 'Convenio Rex. '. $addendum->agreement->res_exempt_number . ' del ' . $addendum->agreement->res_exempt_date;
+        $document->subject      = 'Resolución de adendum de convenio '.$addendum->agreement->program->name.' comuna de '.$addendum->agreement->commune->name;
+        $document->distribution = "APS";
+
+        $templateContent = $header['content'] . $addendum_content . $footer['content'];
+        $document->content = Document::parseTemplate($templateContent, $data);
 
         $types = Type::whereNull('partes_exclusive')->pluck('name','id');
         return view('documents.create', compact('document', 'types'));
