@@ -60,7 +60,7 @@ class UploadSingleBhe extends Component
             $razon_social_emisor = $matches[1];
 
             // Expresion regular para obtener el run del emisor
-            preg_match("/RUT: ([\d.]+−\d)/", $this->bhe_to_text, $matches);
+            preg_match("/RUT: ([\d.]+−[K\d])/", $this->bhe_to_text, $matches);
             $emisor = runFormat($matches[1]);
 
             // Expresion regular para obtener la fecha de emision
