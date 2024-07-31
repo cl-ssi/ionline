@@ -27,7 +27,7 @@ class AddProposalDetail extends Component
         // valida si existe el datalle en otras propuestas del mismo trabajador
         $proposals = Proposal::where('user_id',$this->proposal->user_id)
                             ->where('id','<>',$this->proposal->id)
-                            ->where('end_date','>=',now())
+                            ->where('end_date','>=',now()->format('Y-m-d'))
                             ->get();
 
         if($this->start_hour >= $this->end_hour){

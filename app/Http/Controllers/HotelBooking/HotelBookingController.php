@@ -34,7 +34,7 @@ class HotelBookingController extends Controller
                             'rooms' => function ($query) {
                                 $query->with([
                                     'bookingConfigurations' => function ($query) {
-                                        $query->where('end_date','>=',now());
+                                        $query->where('end_date','>=',now()->format('Y-m-d'));
                                     }
                                 ]);
                             }

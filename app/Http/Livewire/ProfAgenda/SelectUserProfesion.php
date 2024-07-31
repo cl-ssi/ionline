@@ -29,7 +29,7 @@ class SelectUserProfesion extends Component
                 $this->users = User::whereHas('agendaProposals', function($q) use ($profession_id){
                                         $q->where('profession_id',$profession_id)
                                             ->where('status','Aperturado')
-                                            ->where('end_date','>=',now());
+                                            ->where('end_date','>=',now()->format('Y-m-d'));
                                     })->get();
                                     // dd($this->users);
             }
@@ -42,7 +42,7 @@ class SelectUserProfesion extends Component
                                     $q->where('profession_id',$profession_id);
                                     $q->where('user_id',auth()->id());
                                     $q->where('status','Aperturado');
-                                    $q->where('end_date','>=',now());
+                                    $q->where('end_date','>=',now()->format('Y-m-d'));
                                 })->get();
             }
         }else{
@@ -50,7 +50,7 @@ class SelectUserProfesion extends Component
             $this->users = User::whereHas('agendaProposals', function($q) use ($profession_id){
                                     $q->where('profession_id',$profession_id)
                                         ->where('status','Aperturado')
-                                        ->where('end_date','>=',now());
+                                        ->where('end_date','>=',now()->format('Y-m-d'));
                                 })->get();
         }
     }
@@ -67,7 +67,7 @@ class SelectUserProfesion extends Component
                 $this->users = User::whereHas('agendaProposals', function($q) use ($profession_id){
                                         $q->where('profession_id',$profession_id)
                                             ->where('status','Aperturado')
-                                            ->where('end_date','>=',now());
+                                            ->where('end_date','>=',now()->format('Y-m-d'));
                                     })->get();
             }
             if(auth()->user()->can('Agenda UST: Funcionario')){
@@ -78,7 +78,7 @@ class SelectUserProfesion extends Component
                 $this->users = User::whereHas('agendaProposals', function($q) use ($profession_id){
                                     $q->where('profession_id',$profession_id);
                                     $q->where('user_id',auth()->id());
-                                    $q->where('end_date','>=',now());
+                                    $q->where('end_date','>=',now()->format('Y-m-d'));
                                 })->get();
             }
         }else{
@@ -86,7 +86,7 @@ class SelectUserProfesion extends Component
             $this->users = User::whereHas('agendaProposals', function($q) use ($profession_id){
                                     $q->where('profession_id',$profession_id)
                                         ->where('status','Aperturado')
-                                        ->where('end_date','>=',now());
+                                        ->where('end_date','>=',now()->format('Y-m-d'));
                                 })->get();
         }
     }

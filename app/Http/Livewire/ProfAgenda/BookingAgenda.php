@@ -41,7 +41,7 @@ class BookingAgenda extends Component
         $this->profession = Profession::where('id',$professionId)
                                         ->with(['agendaProposals' => function($q) { 
                                             return $q->where('status','Aperturado')
-                                                    ->where('end_date','>=',now());
+                                                    ->where('end_date','>=',now()->format('Y-m-d'));
                                         }])->first();
 
         // si es hah, solo ve su info, de lo contrario ve toda la info.
