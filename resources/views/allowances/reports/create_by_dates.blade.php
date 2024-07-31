@@ -10,7 +10,11 @@
 
 <br />
 
-@livewire('allowances.reports.create-by-dates')
+</div>
+
+<div class="container-fluid">
+    @livewire('allowances.reports.create-by-dates')
+</div>
 
 @endsection
 

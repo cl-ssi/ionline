@@ -561,8 +561,8 @@
                     <tr>
                         <td>{{ $addendum->id }}</td>
                         <td>{{ $addendum->date ? $addendum->date->format('d-m-Y') : '' }}</td>
-                        <td>{{ $addendum->referrer->fullName ?? ''}}</td>
-                        <td>{{ $addendum->director_signer->user->fullName ?? '' }}</td>
+                        <td>{{ $addendum->referrer->shortName ?? ''}}</td>
+                        <td>{{ $addendum->director_signer->user->shortName ?? '' }}</td>
                         <td>{{ $addendum->representative }}</td>
                         <td>{{ $addendum->res_date ? $addendum->res_date->format('d-m-Y') : '' }}</td>
                         <td>{{ $addendum->res_number }}
@@ -574,8 +574,11 @@
                         </td>
                         <td>
                             @if($canEdit)
-                            <button class="btn btn-sm btn-outline-secondary" data-toggle="modal" data-target="#editModalAddendum-{{$addendum->id}}">
-                            <i class="fas fa-edit"></i></button>
+                            <button class="btn btn-sm btn-outline-secondary" 
+                                data-toggle="modal" 
+                                data-target="#editModalAddendum-{{$addendum->id}}"
+                                title="Crear borrador del adendum en el generador de documentos">
+                            <i class="fas fa-fw fa-edit"></i></button>
                             @include('agreements/agreements/modal_edit_addendum')
                             
                             {{-- <a class="btn btn-sm btn-outline-secondary" href="#" data-toggle="tooltip" data-placement="top" title="Descargar borrador Addendum"
@@ -602,19 +605,30 @@
                             @endif
                             {{--@if($addendum->fileToSign && $addendum->fileToSign->HasAllFlowsSigned)--}}
                             @if($addendum->fileToEndorse && $addendum->fileToEndorse->HasAllFlowsSigned)
+                                @if($addendum->fileToSign && $addendum->fileToSign->HasAllFlowsSigned)
+                                    <a class="btn btn-sm btn-outline-secondary" href="{{route('documents.signatures.showPdf', [$addendum->file_to_sign_id, time()])}}" 
+                                        target="blank" 
+                                        data-toggle="tooltip" 
+                                        data-placement="top" 
+                                        title="Ver addendum firmado">
+                                        <i class="fas fa-fw fa-eye"></i>
+                                    </a>
+                                @endif
                                 @if($addendum->file)
-                                @if($addendum->fileToSign && $addendum->fileToSign->HasAllFlowsSigned)<a class="btn btn-sm btn-outline-secondary" href="{{route('documents.signatures.showPdf', [$addendum->file_to_sign_id, time()])}}" target="blank" data-toggle="tooltip" data-placement="top" title="Ver addendum firmado"><i class="fas fa-eye"></i></a>@endif
-                                @if($canEdit)
-                                <span data-toggle="modal" data-target="#selectSignerRes" data-formmethod="POST" data-formaction="{{ route('agreements.addendum.createWord'.($agreement->program_id == 3 ? 'Withdrawal' : ''), [$addendum, 'res'] )}}">
-                                    <a href="#" class="btn btn-sm btn-outline-secondary" data-toggle="tooltip" data-placement="top" title="Descargar borrador Resolución Addendum"><i class="fas fa-file-download"></i></a>
-                                </span>
+                                    @if($canEdit)
+                                        <span data-toggle="modal" data-target="#selectSignerRes" data-formmethod="POST" data-formaction="{{ route('agreements.addendum.createWord'.($agreement->program_id == 3 ? 'Withdrawal' : ''), [$addendum, 'res'] )}}">
+                                            <a href="#" class="btn btn-sm btn-outline-secondary" data-toggle="tooltip" data-placement="top" title="Descargar borrador Resolución Addendum"><i class="fas fa-fw fa-file-word"></i></a>
+                                        </span>
+                                    @endif
                                 @endif
-                                @else
-                                @if($canEdit)
-                                <span class="tooltip-wrapper disabled" data-title="No existe registro de archivo docx versión final del Addendum, adjuntelo para habilitar esta opción">
-                                    <a href="#" class="btn btn-sm btn-outline-secondary disabled"><i class="fas fa-file-download"></i></a>
-                                </span>
-                                @endif
+                                @if($addendum->document_id AND $canEdit)
+                                    <a href="{{ route('agreements.addendum.resolution.create', $addendum) }}" 
+                                        class="btn btn-sm btn-outline-secondary" 
+                                        data-toggle="tooltip" 
+                                        data-placement="top" 
+                                        title="Crear borrador de resolución en el generador de documentos">
+                                        <i class="fas fa-fw fa-file-alt"></i>
+                                    </a>
                                 @endif
                             @endif
                             @endcan

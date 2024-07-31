@@ -130,7 +130,48 @@ class Allowance extends Model implements Auditable
     public function archive(): MorphOne{
         return $this->morphOne(Archive::class, 'archive');
     }
-    
+
+    public function getStatusValueAttribute(){
+        switch ($this->status) {
+            case 'pending':
+                return 'Pendiente';
+                break;
+            case 'rejected':
+                return 'Rechazado';
+                break;
+            case 'complete':
+                return 'Finalizado';
+                break;
+            case 'manual':
+                return 'Manual';
+                break;
+            case '':
+                return '';
+                break;
+        }
+    }
+
+    public function getStatusColorAttribute()
+    {
+        switch ($this->status) {
+            case 'pending':
+                return 'warning';
+                break;
+            case 'rejected':
+                return 'danger';
+                break;
+            case 'complete':
+                return 'success';
+                break;
+            case 'manual':
+                return 'primary';
+                break;
+            case '':
+                return '';
+                break;
+        }
+    }
+
     public function getLawValueAttribute(){
         switch ($this->law) {
             case '18834':

@@ -27,11 +27,13 @@
                 <span class="catorce negrita">{{ $document->number }}</span>
             </div>
 
-            @if($document->date)
             <div style="padding-top:5px; padding-left: 2px;">
+            @if($document->date)
                 Iquique, {{ $document->date->day }} de {{ $document->date->monthName }} del {{ $document->date->year }}
-            </div>
+            @else
+                Iquique, (fecha consignada en firma digital)
             @endif
+            </div>
 
         </div>
 

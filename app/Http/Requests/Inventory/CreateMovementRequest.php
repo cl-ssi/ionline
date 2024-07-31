@@ -28,7 +28,8 @@ class CreateMovementRequest extends FormRequest
             'installation_date'     => 'nullable|date_format:Y-m-d',
             'place_id'              => 'nullable|exists:cfg_places,id',
             'user_responsible_id'   => 'required|exists:users,id',
-            'user_using_id'         => (auth()->user()->can('Inventory: manager')) ? 'nullable|exists:users,id' :  'required|exists:users,id',
+            //'user_using_id'         => (auth()->user()->can('Inventory: manager')) ? 'nullable|exists:users,id' :  'required|exists:users,id',
+            //'user_using_id'         => (auth()->user()->can('Inventory: manager')) ? 'nullable|exists:users,id' :  'required|exists:users,id',
         ];
     }
 }
