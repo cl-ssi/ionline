@@ -75,6 +75,7 @@ class Transfer extends Component
     public function render()
     {
         $inventories = $this->search();
+        
 
         return view('livewire.inventory.transfer', compact('inventories'));
     }
@@ -105,6 +106,7 @@ class Transfer extends Component
         }
 
         $paginateQuery = clone $inventoriesQuery;
+        $this->has_inventories = $paginateQuery->get();
         return $paginateQuery->paginate(50);
     }
 
@@ -124,18 +126,18 @@ class Transfer extends Component
                 $dataValidated['user_sender_id'] = auth()->id();
                 $dataValidated['observations'] = 'movimiento por traspaso masivo de inventario';
 
-                $userUsing = User::find($dataValidated['user_using_id']);
+                //$userUsing = User::find($dataValidated['user_using_id']);
                 $place = Place::find($dataValidated['place_id']);
 
-                if($userUsing)
-                {
-                    $dataValidated['user_using_ou_id'] = $userUsing->organizational_unit_id;
-                }
-                else
-                {
-                    $dataValidated['user_using_id'] = $inventory->lastMovement->user_using_id;
-                    $dataValidated['user_using_ou_id'] = $inventory->lastMovement->user_using_ou_id;
-                }
+                // if($userUsing)
+                // {
+                //     $dataValidated['user_using_ou_id'] = $userUsing->organizational_unit_id;
+                // }
+                // else
+                // {
+                //     $dataValidated['user_using_id'] = $inventory->lastMovement->user_using_id;
+                //     $dataValidated['user_using_ou_id'] = $inventory->lastMovement->user_using_ou_id;
+                // }
 
                 if($place)
                 {
@@ -143,7 +145,7 @@ class Transfer extends Component
                 }
                 else
                 {
-                    $dataValidated['place_id'] = $inventory->lastMovement->place_id;
+                    $dataValidated['place_id'] = $inventory->lastMovement->place_id ?? null;
                 }
 
                 $dataValidated['inventory_id'] = $inventory->id;
@@ -172,6 +174,7 @@ class Transfer extends Component
 
     public function selectAll()
     {
+        
         $this->selectedInventories = array_fill_keys($this->has_inventories->pluck('id')->toArray(), true);
     }
 
