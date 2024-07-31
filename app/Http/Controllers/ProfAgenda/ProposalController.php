@@ -239,13 +239,13 @@ class ProposalController extends Controller
         if(auth()->user()->can('Agenda UST: Administrador') || auth()->user()->can('Agenda UST: Secretaria')){
             $users = User::whereHas('agendaProposals', function($q){
                                         $q->where('status','Aperturado')
-                                            ->where('end_date','>=',now());
+                                            ->where('end_date','>=',now()->format('Y-m-d'));
                                     })->get();
                                 }
         if(auth()->user()->can('Agenda UST: Funcionario')){
             $users = User::whereHas('agendaProposals', function($q){
                                 $q->where('status','Aperturado')
-                                    ->where('end_date','>=',now());
+                                    ->where('end_date','>=',now()->format('Y-m-d'));
                             })->where('id',auth()->id())->get();
         }
 
