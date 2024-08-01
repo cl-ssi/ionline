@@ -53,11 +53,26 @@ class RequestReject extends Notification implements ShouldQueue
             $establishments = [1,38];
         }
 
-        $cc_mails = explode(', ',Parameter::where('module', 'welfare: beneficios')
-                                            ->where('parameter', 'correos solicitudes')
-                                            ->whereIn('establishment_id', $establishments)
-                                            ->first()
-                                            ->value);
+        $parameter = Parameter::where('module', 'welfare: beneficios')
+                                ->where('parameter', 'correos solicitudes')
+                                ->whereIn('establishment_id', $establishments)
+                                ->first();
+                                
+        // si encuentra el parametro, se envia como corresponde, de lo contrario, se enviará al sst
+        if($parameter){
+            $cc_mails = explode(', ',Parameter::where('module', 'welfare: beneficios')
+                                                ->where('parameter', 'correos solicitudes')
+                                                ->whereIn('establishment_id', $establishments)
+                                                ->first()
+                                                ->value);
+        }else{
+            $cc_mails = explode(', ',Parameter::where('module', 'welfare: beneficios')
+                                                ->where('parameter', 'correos solicitudes')
+                                                ->where('establishment_id', 38)
+                                                ->first()
+                                                ->value);
+        }
+        
         $appUrl = config('app.url');
 
         return (new MailMessage)
