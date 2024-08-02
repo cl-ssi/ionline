@@ -98,11 +98,17 @@ class Authority extends Model implements Auditable
     }
 
     public static function getAmIAuthorityFromOu($date, $type, $user_id) {
-        return self::with('user','organizationalUnit')
-            ->where('user_id',$user_id)
-            ->where('date',$date->startOfDay())
-            ->where('type',$type)
-            ->get();
+        $query = self::with('user', 'organizationalUnit')
+            ->where('user_id', $user_id)
+            ->where('date', $date->startOfDay());
+        
+        if (is_array($type)) {
+            $query->whereIn('type', $type);
+        } else {
+            $query->where('type', $type);
+        }
+        
+        return $query->get();
     }
 
     public static function getAmIAuthorityOfMyOu($date, $type, $user_id) {
