@@ -2878,99 +2878,78 @@ $document->content .= "
         $document->subject = 'Documento resolución de convenio de ejecución del programa '.$programa.' año '.$agreement->period.' comuna de '.$agreement->Commune->name;
         $document->distribution = $municipality_emails."\n".$emailReferrer."\nvalentina.ortega@redsalud.gob.cl\naps.ssi@redsalud.gob.cl\nromina.garin@redsalud.gob.cl\njuridica.ssi@redsalud.gob.cl\no.partes2@redsalud.gob.cl\nblanca.galaz@redsalud.gob.cl";
         
-        $document->content  = "<p style='text-align:justify;'>
-        <strong>              
-                           
-                        
-            VISTOS,</strong></p>
-    <p style='text-align:justify;'>
-        <span>         
-                           
-                         
-            </span>Lo dispuesto en el Decreto con Fuerza de Ley N<span style='color:black;'>&ordm;</span>01 del
-        a&ntilde;o 2000, del Ministerio Secretar&iacute;a General de la Presidencia que fija el texto refundido, coordinado
-        y sistematizado de la Ley N<span style='color:black;'>&ordm;</span>18.575, Org&aacute;nica Constitucional de Bases
-        Generales de la Administraci&oacute;n del Estado; D.F.L. N<span style='color:black;'>&ordm;</span>01/2005, del
-        Ministerio de Salud, que fija el texto refundido, coordinado y sistematizado del Decreto Ley N<span style='color:black;'>&ordm;</span>2.763 de 1979 y de las Leyes Nos. 18.933 y 18.469; Ley 19.937 de Autoridad
-        Sanitaria;Ley N<span style='color:black;'>&ordm;</span>19.880 que establece Bases de Procedimientos
-        Administrativos que rigen los actos de los &Oacute;rganos de la Administraci&oacute;n del Estado; Decreto
-        N&deg;140/04 del Ministerio de Salud que aprob&oacute; el Reglamento org&aacute;nico de los Servicios de
-        Salud,<span style='background:lime;'>".$directorDecreto."</span>;lo dispuesto en el art&iacute;culo 55
-        bis, 56 y 57 inciso segundo de la Ley N<span style='color:black;'>&ordm;</span>19.378; art&iacute;culo 6 del Decreto
-        Supremo N<span style='color:black;'>&ordm;</span>118 del 2007, del Ministerio de Salud;Resoluci&oacute;n
-        Exenta N<span style='color:black;'>&ordm;</span><span style='background:lime;'>".$numResolucion."/".$yearResolucion."</span> del Ministerio de Salud, que aprob&oacute; el
-        Programa de <span style='background:lime;'>".$programa."</span> a&ntilde;o <span style='background:lime;'>".$periodoConvenio."</span>, Resoluci&oacute;n Exenta N<span style='color:black;'>&ordm;</span><span style='background:lime;'>".$numResourceResolucion."/".$yearResourceResolucion."</span> del Ministerio de Salud, que
-        distribuy&oacute; los recursos del citado Programa; Resoluci&oacute;n N<span style='color:black;'>&ordm;</span>007
-        de 2019 de la Contralor&iacute;a General de la Rep&uacute;blica.</p>
+        $document->content  = "<p style='text-align:justify;'><strong> VISTOS:</strong></p>
 
-    <p style='text-align:justify;'>
-        <span>         
-                           
-                           
-              </span><strong>CONSIDERANDO,</strong></p>
-    <p style='text-align:justify;'>
-        <strong>              
-                           
-                        
-            1.-</strong>    Que, por Resoluci&oacute;n Exenta N&deg;<span style='background:lime;'>".$numResolucion."</span> de fecha <span style='background:lime;'>".$fechaResolucion."</span>, el Ministerio de Salud, sus modificaciones o aquella que la
-        reemplace, se aprueba el &quot;<strong>PROGRAMA <span style='background:lime;'>".$programa." A&Ntilde;O
-                ".$periodoConvenio."&rdquo;.</span></strong></p>
+        <p style='text-align:justify;'>
+        <span>Lo dispuesto en el Decreto con Fuerza de Ley N.&ordm; </span>01 del a&ntilde;o 2000, 
+        del Ministerio Secretar&iacute;a General de la Presidencia que fija el texto refundido, coordinado 
+        y sistematizado de la Ley N.&ordm; 18.575, Org&aacute;nica Constitucional de Bases
+        Generales de la Administraci&oacute;n del Estado; D.F.L. N.&ordm; 01/2005, del Ministerio de Salud, 
+        que fija el texto refundido, coordinado y sistematizado del Decreto Ley N.&ordm; 2.763 de 1979 y de las 
+        Leyes Nos. 18.933 y 18.469; Ley 19.937 de Autoridad Sanitaria; Ley N.&ordm; 19.880 
+        que establece Bases de Procedimientos Administrativos que rigen los actos de los &Oacute;rganos de la Administraci&oacute;n del Estado; 
+        Decreto N.&ordm; 140/04 del Ministerio de Salud que aprob&oacute; el Reglamento org&aacute;nico de los Servicios de
+        Salud, <span style='background:lime;'>".$directorDecreto."</span>; lo dispuesto en el art&iacute;culo 55 bis, 
+        56 y 57 inciso segundo de la Ley N.&ordm;  19.378; art&iacute;culo 6 del Decreto Supremo 
+        N.&ordm; 118 del 2007, del Ministerio de Salud; 
+        Resoluci&oacute;n Exenta N.&ordm; <span style='background:lime;'>".$numResolucion."/".$yearResolucion."</span> 
+        del Ministerio de Salud, que aprob&oacute; el Programa de <span style='background:lime;'>".$programa."</span> 
+        a&ntilde;o <span style='background:lime;'>".$periodoConvenio."</span>, Resoluci&oacute;n Exenta 
+        N.&ordm; <span style='background:lime;'>".$numResourceResolucion."/".$yearResourceResolucion."</span> 
+        del Ministerio de Salud, que distribuy&oacute; los recursos del citado Programa; 
+        Resoluci&oacute;n N.&ordm; 007 de 2019 de la Contralor&iacute;a General de la Rep&uacute;blica.</p>
 
-    <p style='text-align:justify;'>
-        <strong>              
-                           
-                         2.-
-               </strong>Que, por Resoluci&oacute;n Exenta N&deg;<span style='background:lime;'>".$numResourceResolucion."</span> de fecha <span style='background:lime;'>".$fechaResourceResolucion."</span>, el Ministerio de Salud, se aprueban los recursos que
-        financian el &ldquo;<strong>PROGRAMA <span style='background:lime;'>".$programa." A&Ntilde;O
-                ".$periodoConvenio."&rdquo;</span></strong>.</p>
+        <p style='text-align:justify;'><strong>CONSIDERANDO:</strong></p>
 
-    <p style='text-align:justify;'>
-        <strong>              
-                           
-                        
-            3.-</strong>    Que, mediante convenio de fecha<span style='background:lime;'>".$fechaConvenio."</span>,suscrito entre el Servicio de Salud de Tarapac&aacute; y
-        la <span style='background:yellow;'>".$ilustre."</span> Municipalidad de <span style='background:lime;'>".$comuna."</span>, el <strong>&ldquo;SERVICIO&rdquo;</strong> le asign&oacute; a la
-        Entidad Edilicia la suma de<strong><span style='background:lime;'>$".$totalConvenio."
-                (".$totalConvenioLetras.")</span></strong><strong>,</strong>para realizar las acciones de apoyo
-        relativas al &ldquo;<strong>PROGRAMA</strong><strong><span style='background:lime;'>".$programa."</span></strong><strong>A&Ntilde;O <span style='background:lime;'>".$periodoConvenio."</span>&rdquo;</strong>, de laComuna de<span style='background:lime;'>".$comuna."</span>.</p>
+        <p style='text-align:justify;'>
+        <strong>1.-</strong> Que, por Resoluci&oacute;n Exenta N.&ordm; <span style='background:lime;'>".$numResolucion."</span> 
+        de fecha <span style='background:lime;'>".$fechaResolucion."</span>, el Ministerio de Salud, sus modificaciones o 
+        aquella que la reemplace, se aprueba el &quot;<strong>PROGRAMA <span style='background:lime;'>".$programa." 
+        A&Ntilde;O ".$periodoConvenio."&rdquo;.</span></strong></p>
 
-    <p style='text-align:justify;'>
-        <strong>              
-                           
-                        
-            RESUELVO,</strong></p>
+        <p style='text-align:justify;'>
+        <strong>2.-</strong> Que, por Resoluci&oacute;n Exenta N.&ordm; <span style='background:lime;'>".$numResourceResolucion."</span> 
+        de fecha <span style='background:lime;'>".$fechaResourceResolucion."</span>, el Ministerio de Salud, se aprueban los recursos que 
+        financian el &ldquo;<strong>PROGRAMA <span style='background:lime;'>".$programa." A&Ntilde;O ".$periodoConvenio."&rdquo;</span></strong>.</p>
+
+        <p style='text-align:justify;'>
+        <strong>3.-</strong> Que, mediante convenio de fecha <span style='background:lime;'>".$fechaConvenio."</span>, 
+        suscrito entre el Servicio de Salud de Tarapac&aacute; y la <span style='background:yellow;'>".$ilustre."</span> 
+        Municipalidad de <span style='background:lime;'>".$comuna."</span>, el <strong>&ldquo;SERVICIO&rdquo;</strong> 
+        le asign&oacute; a la Entidad Edilicia la suma de 
+        <strong><span style='background:lime;'>$".$totalConvenio." (".$totalConvenioLetras."),</span></strong> 
+        para realizar las acciones de apoyo relativas al &ldquo;<strong>PROGRAMA <span style='background:lime;'>".$programa."</span> 
+        A&Ntilde;O <span style='background:lime;'>".$periodoConvenio."</span>&rdquo;</strong>, 
+        de la Comuna de <span style='background:lime;'>".$comuna."</span>.</p>
+
+        <p style='text-align:justify;'><strong>RESUELVO:</strong></p>
  
-    <p style='text-align:justify;'>
-        <strong>              
-                           
-                         1.-
-               APRU&Eacute;BASE</strong> el convenio de ejecuci&oacute;n del
-        <strong>&ldquo;PROGRAMA</strong><strong><span style='background:lime;'>".$programa."</span></strong><strong>A&Ntilde;O</strong><strong><span style='background:lime;'>".$periodoConvenio."</span></strong><strong>&rdquo;</strong>, Comuna de<span style='background:lime;'>".$comuna."</span>, de fecha<span style='background:lime;'>".$fechaConvenio."</span>,
-        suscrito entre el Servicio de Salud de Tarapac&aacute;, y la <span style='background:yellow;'>".$ilustre."</span> Municipalidad de <span style='background:lime;'>".$comuna."</span>.</p>
-    <p style='text-align:justify;'>
-        <strong>              
-                           
-                        
-            2.-</strong>     El convenio que se aprueba en virtud de este acto
-        administrativo, se pasa a transcribir:</p>";
-        
-        $document->content .= Str::beforeLast($agreement->document->content, 'Presupuesto vigente del Servicio de Salud');
-        $document->content .= 'Presupuesto vigente del Servicio de Salud Tarapacá año '.$agreement->period.'”.</strong></p>';
-        //footer
-        $document->content .= "<br><p style='text-align:justify;'>
-        <span>         
-                           
-                           
-              </span><strong>3.- IMP&Uacute;TESE</strong> el gasto total de<strong><span style='background:lime;'>$".$totalConvenio." (".$totalConvenioLetras.")</span></strong> que irrogue el presente
-        Convenio de Ejecuci&oacute;n correspondiente al <strong>&ldquo;Programa</strong><strong><span style='background:lime;'>".$programa."</span></strong><strong>a&ntilde;o <span style='background:lime;'>".$periodoConvenio."</span>&rdquo;</strong>, entre el Servicio de Salud
-        Tarapac&aacute; y la <span style='background:yellow;'>".$ilustre."</span> Municipalidad de <span style='background:lime;'>".$comuna."</span>al &iacute;tem N&deg;<span style='background:yellow;'>24-03 298-002</span> <strong>&ldquo;Reforzamiento Municipal del Presupuesto vigente
-            del Servicio de Salud Tarapac&aacute; a&ntilde;o 2024&rdquo;</strong>.</p>
+        <p style='text-align:justify;'>
+        <strong>1.- APRU&Eacute;BASE</strong> el convenio de ejecuci&oacute;n del <strong>&ldquo;PROGRAMA 
+        <span style='background:lime;'>".$programa."</span> A&Ntilde;O 
+        <span style='background:lime;'>".$periodoConvenio."</span> &rdquo;</strong>, 
+        Comuna de <span style='background:lime;'>".$comuna."</span>, de fecha <span style='background:lime;'>".$fechaConvenio."</span>, 
+        suscrito entre el Servicio de Salud de Tarapac&aacute;, y la <span style='background:yellow;'>".$ilustre."</span> 
+        Municipalidad de <span style='background:lime;'>".$comuna."</span>.</p>
 
-    <p style='text-align:justify;'>
-                       
-                       
-                    <strong>AN&Oacute;TESE,
-            COMUN&Iacute;QUESE, ARCH&Iacute;VESE.</strong></p>";
+        <p style='text-align:justify;'>
+        <strong>2.-</strong> El convenio que se aprueba en virtud de este acto administrativo, se pasa a transcribir:</p>";
+    
+        // Importar el contenido del convenio y eliminar las útlimas 4 líneas del contenido
+        $document->content .= implode("\n", array_slice(explode("\n", $agreement->document->content), 0, -5));
+
+        $document->content .= "
+        <p style='text-align:justify;'>
+        <strong>3.- IMP&Uacute;TESE</strong> el gasto total de 
+        <strong><span style='background:lime;'>$".$totalConvenio." (".$totalConvenioLetras.")</span></strong> que irrogue el presente 
+        Convenio de Ejecuci&oacute;n correspondiente al <strong>&ldquo;Programa 
+        <span style='background:lime;'>".$programa."</span> a&ntilde;o <span style='background:lime;'>".$periodoConvenio."</span>&rdquo;</strong>, 
+        entre el Servicio de Salud Tarapac&aacute; y la <span style='background:yellow;'>".$ilustre."</span> Municipalidad 
+        de <span style='background:lime;'>".$comuna."</span> al &iacute;tem N.&ordm 
+        <span style='background:yellow;'>24-03 298-002</span> <strong>&ldquo;Reforzamiento Municipal del Presupuesto vigente
+        del Servicio de Salud Tarapac&aacute; a&ntilde;o 2024&rdquo;</strong>.</p>
+
+        <p style='text-align:center;'><strong>AN&Oacute;TESE, COMUN&Iacute;QUESE, ARCH&Iacute;VESE.</strong></p>";
         
         $document->content = preg_replace('/font-size.+?;/', "", $document->content);
         $document->content = str_replace("<!-- pagebreak -->", "", $document->content);
