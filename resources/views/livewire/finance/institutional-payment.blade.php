@@ -48,7 +48,7 @@
             <tr>
                 <th scope="col">ID</th>
                 <th scope="col">Archivos Asociados</th>
-                <th scope="col">Beneficiario del pago</th>
+                <th scope="col">Receptor</th>
                 <th scope="col">Adjuntos</th>
                 <th scope="col">SIGFE</th>
                 <th scope="col">Fecha de Pago</th>
@@ -65,10 +65,14 @@
                     </td>
                     <td class="small">
                         <small>Documento</small>
-                        <div wire:ignore>
-                            @livewire('finance.upload-pdf', ['dteId' => $dte->id, 'type' => 'documento'], key('document-upload-pdf-' . rand() * $dte->id))
-                        </div>
-                        <hr>
+                            @if($dte->emisor)
+                                @include('finance.payments.partials.dte-info')
+                            @else
+                                <div wire:ignore>
+                                    @livewire('finance.upload-pdf', ['dteId' => $dte->id, 'type' => 'documento'], key('document-upload-pdf-' . rand() * $dte->id))
+                                </div>
+                                <hr>
+                            @endif
                         <small>Resolucion</small>
                         <div wire:ignore>
                             @livewire('finance.upload-pdf', ['dteId' => $dte->id, 'type' => 'resolucion'], key('resolucion-upload-pdf-' . rand() * $dte->id))
@@ -80,7 +84,13 @@
                         </div>
                     </td>
                     <td class="small">
+                        @if($dte->receptions)
+                            <div wire:ignore>
+                                @include('finance.payments.partials.receptions-info')
+                            </div>
+                        @else
                         {{$dte->receptor}}
+                        @endif
                     </td>
                     <td class="small">
                         <div class="container">
@@ -93,7 +103,6 @@
                         <div wire:ignore>
                             @livewire('finance.upload-pdf', ['dteId' => $dte->id, 'type' => 'adjunto', 'small' => 'true'], key('attachment-upload-pdf-' . rand() * $dte->id))
                         </div>
-
                     </td>
                     <td class="small">
                         <div wire:ignore>
