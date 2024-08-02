@@ -526,7 +526,13 @@ class RoleAndPermissionSeeder extends Seeder
         $role->givePermissionTo('ProgrammingItem: duplicate');
         $role->givePermissionTo('Reviews: rectify');
         $role->givePermissionTo('TrainingItem: edit');
-        
+
+        $role = Role::create(['name' => 'Programación Numérica: Capacitación', 'description' => '']);
+        $role->givePermissionTo('Programming: view');
+        $role->givePermissionTo('ProgrammingItem: edit');
+        $role->givePermissionTo('ProgrammingItem: delete');
+
+
         $role = Role::create(['name' => 'Recursos: administrador', 'description' => 'Manager de computadores, impresoras, telefonos, etc.']);
         $role->givePermissionTo('Resources: create');
         $role->givePermissionTo('Resources: edit');

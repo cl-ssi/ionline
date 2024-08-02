@@ -13,11 +13,11 @@
     <div class="form-row">
         <div class="form-group col-md-2">
             <select name="role" id="role" placeholder="Rol" class="form-control" required>
-                <option value="Review" {{ $role == 'Review' ? 'selected' : ''}}>Revisor</option>
-                <option value="Basic" {{ $role == 'Basic' ? 'selected' : ''}}>Establecimiento</option>
-                <option value="Comunal" {{ $role == 'Comunal' ? 'selected' : ''}}>Comunal</option>
-                <option value="Training" {{ $role == 'Training' ? 'selected' : ''}}>Capacitacion</option>
-                <option value="Admin" {{ $role == 'Admin' ? 'selected' : ''}}>Administrativo</option>
+                <option value="Revisor" @selected($role == 'Revisor')>Revisor</option>
+                <option value="Establecimiento" @selected($role == 'Establecimiento')>Establecimiento</option>
+                <option value="Comunal" @selected($role == 'Comunal')>Comunal</option>
+                <option value="Capacitacion" @selected($role == 'Capacitacion')>Capacitacion</option>
+                <option value="Administrativo" @selected($role == 'Administrativo')>Administrativo</option>
             </select>
         </div>
         <div class="form-group col-md-2">

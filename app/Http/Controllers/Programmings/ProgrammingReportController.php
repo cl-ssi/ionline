@@ -197,30 +197,66 @@ class ProgrammingReportController extends Controller
     public function reportUsers(request $request)
     {
         $commune = $request->commune;
-        $role = $request->role ?? 'Review';
+        $role = $request->role ?? 'Revisor';
 
-        if($role == 'Training'){ //Perfil de capacitación
-            $users = User::doesntHave('roles')
-                ->permission('Programming: view')
-                ->permission('TrainingItem: view')
-                ->permission('TrainingItem: delete')
-                ->orderBy('name')
-                ->get();
-        }else{ // otros perfiles
-            
-            $excludedPermissions = [
-                'Programming: view',
-                'TrainingItem: view',
-                'TrainingItem: delete'
-            ];
-            $users = User::whereHas('permissions', function ($query) use ($excludedPermissions) {
-                $query->where('name', 'like', 'Programming:%')
-                      ->whereNotIn('name', $excludedPermissions);
-            })->orderBy('name')->get();
+        /**
+         * Roles disponibles
+         * ========================================
+         * Programación Numérica: Administrador (Administrativo)
+         * Programación Numérica: Revisor ( Revisor )
+         * Programación Numérica: Usuario Básico ( Establecimiento )
+         * Programación Numérica: Usuario Comunal ( Comunal )
+         * Programación Numérica: Capacitación ( Capacitación )
+         */
+
+        switch($request->role){
+            case 'Administrativo':
+                $role_name = 'Programación Numérica: Administrador';
+                break;
+            case 'Revisor':
+                $role_name = 'Programación Numérica: Revisor';
+                break;
+            case 'Establecimiento':
+                $role_name = 'Programación Numérica: Usuario Básico';
+                break;
+            case 'Comunal':
+                $role_name = 'Programación Numérica: Usuario Comunal';
+                break;
+            case 'Capacitacion':
+                $role_name = 'Programación Numérica: Capacitación';
+                break;
+            default:
+                $role_name = 'Programación Numérica: Revisor';
         }
 
+        // Get all users with role
+        $users = User::role($role_name)->orderBy('name')->get();
+
+        // dd($users);
+
+        // if($role == 'Training'){ //Perfil de capacitación
+        //     $users = User::doesntHave('roles')
+        //         ->permission('Programming: view')
+        //         ->permission('TrainingItem: view')
+        //         ->permission('TrainingItem: delete')
+        //         ->orderBy('name')
+        //         ->get();
+        // }else{ // otros perfiles
+            
+        //     $excludedPermissions = [
+        //         'Programming: view',
+        //         'TrainingItem: view',
+        //         'TrainingItem: delete'
+        //     ];
+        //     $users = User::whereHas('permissions', function ($query) use ($excludedPermissions) {
+        //         $query->where('name', 'like', 'Programming:%')
+        //               ->whereNotIn('name', $excludedPermissions);
+        //     })->orderBy('name')->get();
+        // }
+
         // buscar programaciones numericas por utimo año y segun comuna de ser necesario
-        $last_year = Programming::latest()->first()->year;
+        $last_year = Programming::max('year');
+
         $last_programmings = Programming::with($commune != null ? ['establishment' => function($q) use ($commune) {
             return $q->where('commune_id', $commune);
         }] : 'establishment')->where('year', $last_year)
@@ -229,25 +265,21 @@ class ProgrammingReportController extends Controller
                 return $query->where('commune_id', $commune);
             });
         })->get();
-
-        // recorrer usuarios encontrados con cada programacion numerica de comuna para determinar que establecimientos tiene acceso
-        foreach($users as $user){
-            // $user->accessByCommune = collect();
-            $user->accessByEstablishments = collect();
-            //El usuario tiene acceso por comunas y/o establecimientos?
-            foreach($last_programmings as $programming){
-                if(Str::contains($programming->access, $user->id)){
-                    // $user->accessByCommune->push($programming->establishment->commune_id);
-                    $user->accessByEstablishments->push($programming->establishment->official_name);
-                }
-            }
-        }
-
-        // filtrar usuarios que solo tengan acceso a algun establecimiento segun comuna seleccionada
-        if($commune != null){
-            foreach ($users as $key => $user)
-                if($user->accessByEstablishments->isEmpty())
-                    unset($users[$key]);
+        
+        // Recorrer usuarios encontrados con cada programación numérica de comuna para determinar a qué establecimientos tiene acceso
+        $users = $users->map(function($user) use ($last_programmings) {
+            $user->accessByEstablishments = $last_programmings->filter(function($programming) use ($user) {
+                return Str::contains($programming->access, $user->id);
+            })->pluck('establishment.official_name');
+        
+            return $user;
+        });
+        
+        // Filtrar usuarios que solo tengan acceso a algún establecimiento según comuna seleccionada
+        if ($commune != null) {
+            $users = $users->filter(function($user) {
+                return !$user->accessByEstablishments->isEmpty();
+            });
         }
 
         // return $users;
