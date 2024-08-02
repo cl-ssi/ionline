@@ -41,32 +41,36 @@ class Requests extends Component
     public $showFileInput = false;
 
     protected $rules = [
-        // 'subsidy.percentage' => 'required',
-        // 'subsidy.type' => 'required',
-        // 'subsidy.value' => 'required',
         'subsidy.description' => 'required',
         'subsidy.annual_cap' => 'required',
         'subsidy.recipient' => 'required',
-
         'user_id' => 'required|numeric',
         'requested_amount' => 'required|numeric',
-        'email' => 'required',
-        'account_number' => 'required|integer',
-        'bank_id' => 'required',
-        'pay_method' => 'required',
+        'email' => 'required|email',
+        'account_number' => 'required|regex:/^\d+$/',
+        'bank_id' => 'required|integer',
+        'pay_method' => 'required|string',
+        'subsidy_id' => 'required|integer',
+        'files.*' => 'nullable|file|mimes:pdf|max:5120', // Maximum of 5MB
     ];
 
     protected $messages = [
-        'user_id' => 'Debe seleccionar un funcionario',
-        'requested_amount' => 'Debe ingresar un monto a solicitar',
-        'email' => 'Debe ingresar un correo electrónico',
-        'account_number.required' => 'Debe Ingresar Número de Cuenta',
-        'bank_id.required' => 'Debe Seleccionar un Banco',
-        'pay_method.required' => 'Debe Seleccionar una Forma de Pago',
-        // 'phone_number.required' => 'Debe Ingresar su Número Telefónico',
-        // 'email.required' => 'Debe Ingresar un Correo Electrónico',
-        // 'email.email' => 'El Formato del Correo Electrónico no es válido',
-        'account_number.integer' => 'Debe Ingresar solo números ej:123456789',
+        'user_id.required' => 'Debe seleccionar un funcionario',
+        'requested_amount.required' => 'Debe ingresar un monto a solicitar',
+        'requested_amount.numeric' => 'El monto solicitado debe ser un número.',
+        'email.required' => 'El correo electrónico es obligatorio.',
+        'email.email' => 'Debe ingresar un correo electrónico válido.',
+        'account_number.required' => 'El número de cuenta es obligatorio.',
+        'account_number.regex' => 'Debe ingresar solo números en el número de cuenta, ej: 01300239397.',
+        'bank_id.required' => 'El ID del banco es obligatorio.',
+        'bank_id.integer' => 'El ID del banco debe ser un número entero.',
+        'pay_method.required' => 'El método de pago es obligatorio.',
+        'pay_method.string' => 'El método de pago debe ser una cadena de texto.',
+        'subsidy_id.required' => 'El ID del subsidio es obligatorio.',
+        'subsidy_id.integer' => 'El ID del subsidio debe ser un número entero.',
+        'files.*.file' => 'Cada archivo debe ser un archivo válido.',
+        'files.*.mimes' => 'Cada archivo debe ser un PDF.',
+        'files.*.max' => 'Cada archivo no debe ser mayor a 5MB.',
     ];
 
 
@@ -156,7 +160,7 @@ class Requests extends Component
             'bank_id' => 'required|integer',
             'pay_method' => 'required|string',
             'subsidy_id' => 'required|integer',
-            'files.*' => 'nullable|file|mimes:pdf|max:2048', // Maximum of 2MB
+            'files.*' => 'nullable|file|mimes:pdf|max:5120', // Maximum of 5MB
         ], [
             'requested_amount.required' => 'El monto solicitado es obligatorio.',
             'requested_amount.numeric' => 'El monto solicitado debe ser un número.',
@@ -172,7 +176,7 @@ class Requests extends Component
             'subsidy_id.integer' => 'El ID del subsidio debe ser un número entero.',
             'files.*.file' => 'Cada archivo debe ser un archivo válido.',
             'files.*.mimes' => 'Cada archivo debe ser un PDF.',
-            'files.*.max' => 'Cada archivo no debe ser mayor a 2MB.',
+            'files.*.max' => 'Cada archivo no debe ser mayor a 5MB.',
         ]);
 
         // se hace asi la validación puesto que hay documentación y requisitos. En este caso solo se consideran documentación.
@@ -222,8 +226,8 @@ class Requests extends Component
         $userBankAccount = UserBankAccount::updateOrCreate(
             ['user_id' => $this->user_id],
             ['bank_id' => $this->bank_id,
-             'number' => $this->account_number,
-             'type' => $this->pay_method]
+            'number' => $this->account_number,
+            'type' => $this->pay_method]
         );
 
         // envia notificación
@@ -238,6 +242,7 @@ class Requests extends Component
 
         session()->flash('message', 'Estimado funcionario hemos recibido su solicitud de beneficio, en este momento se encuentra "En revisión".');
     }
+
 
     public function showFile($requestId)
     {

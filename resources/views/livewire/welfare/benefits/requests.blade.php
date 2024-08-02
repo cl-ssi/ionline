@@ -39,19 +39,13 @@
             <br>
             <table class="table table-bordered table-sm" >
                 <thead>
-                    <tr>	
+                    <tr>    
                         <th style="width: 40%">Descripción</th>
-                        <!-- <th style="width: 15%">Tope anual</th> -->
                         <th style="width: 45%">Documentos de respaldo</th>
                     </tr>
                 </thead>
                 <tbody>
                     <td><span class="valor" style="white-space: pre-wrap;">{{ $subsidy->description }}</span></td>
-                    <!-- <td class="text-end">
-                        $ {{ money($subsidy->annual_cap)}}<br>
-                        <span class="text-secondary">Utilizado: $ {{ money($subsidy->getSubsidyUsedMoney()) }}</span><br>
-                        <span class="text-success ">Disponible: $ {{ money($subsidy->annual_cap - $subsidy->getSubsidyUsedMoney()) }}</span>
-                    </td> -->
                     <td>
                         <ul>
                             @foreach($subsidy->documents as $key => $document)
@@ -63,10 +57,10 @@
                             @endforeach
 
                             <div id="fileInputs">
-                                <!-- Aquí se agregarán dinámicamente los inputs file -->
                                 @foreach($files as $key => $file)
                                     <div wire:loading wire:target="files.{{ $key }}"><i class="fas fa-spinner fa-spin"></i> <b>Cargando...</b></div>
                                     <input type="file" wire:model="files.{{ $key }}" class="form-control mb-2" accept="application/pdf">
+                                    @error('files.' . $key) <span class="text-danger">{{ $message }}</span> @enderror
                                 @endforeach
                             </div>
                             <button wire:click.prevent="addFileInput" class="btn btn-primary btn-sm">Agregar Archivo</button>
@@ -87,7 +81,7 @@
                         <input type="hidden" wire:model="user_id">
                         <input type="text" class="form-control" disabled value="{{auth()->user()->getTinnyNameAttribute()}}">
                     @endif
-                    @error('user_id') <span class="text-danger">{{ $user_id }}</span> @enderror
+                    @error('user_id') <span class="text-danger">{{ $message }}</span> @enderror
                 </div>
                 <div class="col-md-3">
                     <label>Monto solicitado</label>        
@@ -112,7 +106,6 @@
                     </select>
                     @error('bank_id') <span class="text-danger">{{ $message }}</span> @enderror
                 </div>
-                <!-- tipos de cuenta-->
                 <div class="col-md-3">
                     <label for="for_pay_method">Tipo de Cuenta</label>
                     <select wire:model.lazy="pay_method" class="form-select">
@@ -123,7 +116,6 @@
                     </select>
                     @error('pay_method') <span class="text-danger">{{ $message }}</span> @enderror
                 </div>
-                <!-- numero de cuenta-->
                 <div class="col-md-3">
                     <label>Número de Cuenta</label>
                     <input type="number" wire:model.lazy="account_number" class="form-control" required>
@@ -205,12 +197,12 @@
 
                         @if($request->status == "En revisión")
                             <div id="fileInputs">
-                                <!-- Aquí se agregarán dinámicamente los inputs file -->
                                 @foreach($files as $key => $file)
                                     <div wire:loading wire:target="files.{{ $key }}">
                                         <i class="fas fa-spinner fa-spin"></i> <b>Cargando...</b>
                                     </div>
                                     <input type="file" wire:model="files.{{ $key }}" class="form-control mb-2" accept="application/pdf">
+                                    @error('files.' . $key) <span class="text-danger">{{ $message }}</span> @enderror
                                 @endforeach
                             </div>
                             @if($showFileInput)
@@ -238,9 +230,6 @@
                         @endif
                     </td>
 
-
-
-
                     <td>{{ $request->status }}</td>
                     <td>{{ $request->status_update_observation }}</td>
                 </tr>
@@ -251,20 +240,14 @@
     <hr>
 
     <div class="jumbotron mt-3">
-
         <h3>Digitalizar documentación de respaldo</h3>
         <p>Al momento de hacer una solictud, para adjuntar los documentos de respaldo te recomendamos hacerlo de la siguiente manera.</p>
         <div class="row">
-            <fieldset class="form-group col-12 col-md-2">
-                
-            </fieldset>
+            <fieldset class="form-group col-12 col-md-2"></fieldset>
             <fieldset class="form-group col-12 col-md-8">
                 <iframe width="100%" height="315" src="https://www.youtube.com/embed/iHWq_kfOFUM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             </fieldset>
-            <fieldset class="form-group col-12 col-md-2">
-                
-            </fieldset>
+            <fieldset class="form-group col-12 col-md-2"></fieldset>
         </div>
     </div>
-
 </div>
