@@ -321,11 +321,11 @@
                             </tr>
                             <tr>
                                 <th class="table-active" style="width: 33%">RUT proveedor</th>
-                                <td>{{ number_format($detail->pivot->directDeal->supplier->run,0,",",".") }}-{{ $detail->pivot->directDeal->supplier->dv }}</td>
+                                <td>{{ ($detail->pivot->directDeal->supplier) ? number_format($detail->pivot->directDeal->supplier->run,0,",",".") : null }}-{{ ($detail->pivot->directDeal->supplier) ? $detail->pivot->directDeal->supplier->dv : null }}</td>
                             </tr>
                             <tr>
                                 <th class="table-active" style="width: 33%">Nombre proveedor</th>
-                                <td>{{ $detail->pivot->directDeal->supplier->name }}</td>
+                                <td>{{ ($detail->pivot->directDeal->supplier) ? $detail->pivot->directDeal->supplier->name : null }}</td>
                             </tr>
                             <tr>
                                 <th class="table-active" style="width: 33%">Nº Resol. de trato directo</th>
