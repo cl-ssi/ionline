@@ -10,6 +10,7 @@ use App\Models\Documents\Approval;
 use App\Models\Parameters\Parameter;
 
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Storage;
 
 class PurchasePlanController extends Controller
 {
@@ -271,6 +272,16 @@ class PurchasePlanController extends Controller
             $purchasePlan->status = 'rejected';
             $purchasePlan->save();
 
+        }
+    }
+
+    public function download_resol_pdf(PurchasePlan $purchasePlan)
+    {
+        if( Storage::disk('gcs')->exists($purchasePlan->approvals->last()->filename) ) {
+            return Storage::response($purchasePlan->approvals->last()->filename);
+        } 
+        else {
+            return redirect()->back()->with('warning', 'El archivo no se ha encontrado.');
         }
     }
 }

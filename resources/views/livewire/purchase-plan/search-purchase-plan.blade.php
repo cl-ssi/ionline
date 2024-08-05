@@ -146,7 +146,7 @@
                                             class="btn btn-outline-secondary btn-sm mb-1"><i class="fas fa-edit fa-fw"></i> </a>
                                     @endif
                                     @if($purchasePlan->canDelete() && ($index == 'all' || $index == 'own'))
-                                        <button type="button" class="btn btn-outline-secondary btn-sm mb-1 text-danger"
+                                        <button type="button" class="btn btn-outline-secondary btn-sm text-danger mb-1"
                                             onclick="confirm('¿Está seguro que desea borrar el plan de compra ID {{ $purchasePlan->id }}?') || event.stopImmediatePropagation()"
                                             wire:click="delete({{ $purchasePlan }})"><i class="fas fa-trash fa-fw"></i>
                                         </button>
@@ -174,6 +174,21 @@
                                     @if($index == 'own' && $purchasePlan->canCreateRquestForm())
                                     <a href="{{ route('request_forms.items.create', $purchasePlan) }}"
                                         class="btn btn-outline-secondary btn-sm mb-1"><i class="fas fa-file-invoice-dollar fa-fw"></i></a>
+                                    @endif
+
+                                    <!-- DOCUMENTO -->
+                                    @if(count($purchasePlan->approvals) > 0 && $purchasePlan->approvals->last()->status == 1)
+                                        <a href="{{ route('purchase_plan.documents.download_resol_pdf', $purchasePlan) }}"
+                                            class="btn btn-sm btn-outline-primary mb-1" target="_blank"
+                                            title="Ver documento">
+                                            <span class="fas fa-file-pdf fa-fw" aria-hidden="true"></span>
+                                        </a>
+                                    @else
+                                        <a href=""
+                                            class="btn btn-sm btn-outline-secondary disabled mb-1" target="_blank"
+                                            title="Ver documento">
+                                            <span class="fas fa-file-pdf fa-fw" aria-hidden="true"></span>
+                                        </a>
                                     @endif
                                 </td>
                             </tr>
