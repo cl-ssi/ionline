@@ -145,7 +145,7 @@
                                         <a href="{{ route('purchase_plan.edit', $purchasePlan) }}"
                                             class="btn btn-outline-secondary btn-sm mb-1"><i class="fas fa-edit fa-fw"></i> </a>
                                     @endif
-                                    @if($purchasePlan->canDelete())
+                                    @if($purchasePlan->canDelete() && ($index == 'all' || $index == 'own'))
                                         <button type="button" class="btn btn-outline-secondary btn-sm mb-1 text-danger"
                                             onclick="confirm('¿Está seguro que desea borrar el plan de compra ID {{ $purchasePlan->id }}?') || event.stopImmediatePropagation()"
                                             wire:click="delete({{ $purchasePlan }})"><i class="fas fa-trash fa-fw"></i>

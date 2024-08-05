@@ -116,7 +116,7 @@ class PurchasePlan extends Model implements Auditable
     }
 
     public function canDelete(){
-        return $this->status == 'save';
+        return $this->status != 'published';
     }
 
     public function canAddPurchasePlanID(){

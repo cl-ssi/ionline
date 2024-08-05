@@ -26,6 +26,19 @@ class SearchPurchasePlan extends Component
 
     public function delete(PurchasePlan $purchasePlan)
     {
+        // SE ELIMINAN LOS ITEMS.
+        if($purchasePlan->purchasePlanItems){
+            foreach($purchasePlan->purchasePlanItems as $item){
+                $item->delete(); 
+            }
+        }
+        // SE ELIMINAN LOS APROBACIONES.
+        if($purchasePlan->approvals){
+            foreach($purchasePlan->approvals as $approval){
+                $approval->delete(); 
+            }
+        }
+
         $purchasePlan->delete();
     }
 
