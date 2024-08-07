@@ -100,6 +100,7 @@
                 <li class="list-group-item text-muted"><a href="{{ route('indicators.rems.year.serie.index', [2019, 'serie_p']) }}">2019</a></li>
                 <li class="list-group-item text-muted"><a href="{{ route('indicators.rem.index', [2018, 'P']) }}">2018</a></li>
                 <li class="list-group-item text-muted"><a href="{{ route('indicators.rem.index', [2017, 'P']) }}">2017</a></li>
+                <li class="list-group-item text-muted"><a href="{{ route('indicators.rem.index', [2016, 'P']) }}">2016</a></li>
                 <!-- <li class="list-group-item text-muted"><a href="">2017</a> </li>
                 <li class="list-group-item text-muted"><a href="">2016</a> </li>
                 <li class="list-group-item text-muted"><a href="">2015</a> </li> -->
