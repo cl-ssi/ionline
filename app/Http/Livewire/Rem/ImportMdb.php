@@ -40,20 +40,29 @@ class ImportMdb extends Component
         // $this->info['mdb-export'] = shell_exec("mdb-export --version");
         //$filename = '02A20032024.mdb';
 
-        $filename = $this->file->getClientOriginalName();
-        $this->file->storeAs('rems', $filename, 'local');
+        $originalFilename = $this->file->getClientOriginalName();
+        $safeFilename = str_replace(' ', '_', $originalFilename);
+
+        $this->file->storeAs('rems', $safeFilename, 'local');
         $this->info['step1'] = 'Archivo almacenado temporalmente';
 
         $zip = new ZipArchive;
-        $res = $zip->open(storage_path('app/rems/'.$filename));
+        $res = $zip->open(storage_path("app/rems/$safeFilename"));
+
         if ($res === TRUE) {
             $zip->extractTo(storage_path('app/rems'));
             $zip->close();
             $this->info['step2'] = 'Archivo descomprimido';
 
-            // replace .zip to .mdb
-            $filename = str_replace('.zip', '.mdb', $filename);
-            $fullpath = storage_path('app/rems/'.$filename);
+            // Reemplazar .zip por .mdb y espacios por guiones bajos
+            $mdbFilename = str_replace(['.zip', ' '], ['.mdb', '_'], $originalFilename);
+            $fullpath = storage_path("app/rems/$mdbFilename");
+
+            // Renombrar el archivo descomprimido si tiene espacios
+            $oldPath = storage_path("app/rems/" . str_replace('.zip', '.mdb', $originalFilename));
+            if ($oldPath !== $fullpath) {
+                rename($oldPath, $fullpath);
+            }
 
             // check if file exists
             if (file_exists($fullpath)) {
@@ -69,12 +78,12 @@ class ImportMdb extends Component
                 $this->info['step4'] = "Serie a procesar: $serie año $year";
 
                 // $year tiene que estar entre el año actual y el anterior
-                // if ($year > date('Y') || $year < date('Y') - 1) {
-                //     $this->info['step5'] = 'Error: Año incorrecto, debe estar entre el año actual y el anterior';
-                //     session()->flash('status','danger');
-                //     return;
-                // }
-                $tabla = $year.'rems';
+                if ( $year < date('Y') - 10) {
+                    $this->info['step5'] = 'Error: Año incorrecto, debe estar entre el año actual y el anterior';
+                    session()->flash('status','danger');
+                    return;
+                }
+                $tabla = "{$year}rems";
 
                 $command = "mdb-export -I mysql $fullpath Datos | sed 's/INTO `Datos`/INTO `$tabla`/'";
                 $output = shell_exec($command);
