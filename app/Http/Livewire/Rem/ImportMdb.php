@@ -29,6 +29,14 @@ class ImportMdb extends Component
     {
         $this->validate();
 
+        /**
+         * ATENCIÓN DESARROLLADORES:
+         * ====================================================================
+         * ESTE SCRIPT UTILIZA UNA APLICACIÓN DE TERCEROS QUE DEBE SER INSTALADA
+         * Instalar MDB-TOOLS, para poder ejecutar mdb-export
+         * $ mdb-export --version 
+         */
+
         // $this->info['mdb-export'] = shell_exec("mdb-export --version");
         //$filename = '02A20032024.mdb';
 
@@ -105,7 +113,7 @@ class ImportMdb extends Component
                 session()->flash('status','danger');
             }
         } else {
-            $this->info['step2'] = 'Error: al descomprimir el archivo: '. $res;
+            $this->info['step2'] = "Error: al descomprimir el archivo: $res";
             session()->flash('status','danger');
         }
 
