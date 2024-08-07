@@ -69,7 +69,7 @@ class ImportMdb extends Component
                 $this->info['step4'] = "Serie a procesar: $serie año $year";
 
                 // $year tiene que estar entre el año actual y el anterior
-                if ($year > date('Y') || $year < date('Y') - 1) {
+                if ($year > date('Y') || $year < date('Y') - 10) {
                     $this->info['step5'] = 'Error: Año incorrecto, debe estar entre el año actual y el anterior';
                     session()->flash('status','danger');
                     return;
