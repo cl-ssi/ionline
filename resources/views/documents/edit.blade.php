@@ -10,8 +10,7 @@
 
 @if( Auth::id() == $document->user_id )
 
-<x-head.tinymce-config />
-
+<x-documents.tinymce-config />
 
 <form method="POST" class="form-horizontal" action="{{ route('documents.update', $document) }}" enctype="multipart/form-data">
     @csrf

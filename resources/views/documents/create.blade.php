@@ -23,7 +23,8 @@
 </div>
 
 <hr>
-<x-head.tinymce-config />
+
+<x-documents.tinymce-config />
 
 <form method="post" name="form" action="{{ route('documents.store') }}" onsubmit="return validate_form()">
     @csrf

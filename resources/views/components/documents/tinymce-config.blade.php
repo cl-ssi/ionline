@@ -1,5 +1,10 @@
 <script src="{{ asset('js/tinymce/tinymce.min.js') }}" referrerpolicy="origin"></script>
 <script>
+    /**
+     * Para actualizar TinyMce:
+     * 1. composer update (para actualizar los paquetes)
+     * 2. npx mix (para copiar los archivos de TinyMce a la carpeta public)
+     */
     tinymce.init({
         selector: 'textarea#contenido', // Replace this CSS selector to match the placeholder element for TinyMCE
         menu: {
