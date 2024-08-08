@@ -33,7 +33,7 @@ class AgreementController extends Controller
     /**
      * Return a listing of quota options.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Support\Collection
      */
     public function getQuotaOptions()
     {
@@ -42,14 +42,15 @@ class AgreementController extends Controller
             ['id' => 2, 'name' => '2 cuotas, 70% y 30% respectivamente', 'percentages' => '70,30', 'quotas' => 2], 
             ['id' => 3, 'name' => '3 cuotas, 50%, 20% y 30% respectivamente', 'percentages' => '50,20,30', 'quotas' => 3], 
             ['id' => 4, 'name' => '3 cuotas, 50%, 25% y 25% respectivamente', 'percentages' => '50,25,25', 'quotas' => 3],
-            ['id' => 5, 'name' => '12 cuotas', 'percentages' => null, 'quotas' => 12]
+            ['id' => 5, 'name' => '12 cuotas', 'percentages' => null, 'quotas' => 12],
+            ['id' => 6, 'name' => '4 cuotas, 25%, 25%, 25% y 25% respectivamente', 'percentages' => '25,25,25,25', 'quotas' => 4],
         ]);
      }
 
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\View
      */
     public function index(Request $request)
     {
