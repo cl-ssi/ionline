@@ -1,5 +1,5 @@
 /**
- * TinyMCE version 7.1.1 (2024-05-22)
+ * TinyMCE version 7.3.0 (2024-08-07)
  */
 
 (function () {
@@ -998,7 +998,8 @@
         previewNode.attr({
           allowfullscreen: node.attr('allowfullscreen'),
           frameborder: '0',
-          sandbox: node.attr('sandbox')
+          sandbox: node.attr('sandbox'),
+          referrerpolicy: node.attr('referrerpolicy')
         });
       } else {
         const attrs = [
