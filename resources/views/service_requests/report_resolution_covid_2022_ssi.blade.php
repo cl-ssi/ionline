@@ -322,6 +322,7 @@
           <td style="text-align:center">{{$ServiceRequest->start_date->format('d/m/Y')}}</td>
           <td style="text-align:center">{{$ServiceRequest->end_date->format('d/m/Y')}}</td>
           <td style="text-align:center">{{$ServiceRequest->responsabilityCenter->name}}</td>
+          <!-- FIXME: @sickiqq como se llama la relacion, fulfillments o Fulfillments? porque no funcionará el eager loading si no se llama igual -->
           <td style="text-align:center">${{number_format($ServiceRequest->Fulfillments->first()->total_to_pay)}}</td>
         </tr>
       </table>
