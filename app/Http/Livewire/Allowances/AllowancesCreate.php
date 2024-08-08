@@ -473,8 +473,8 @@ class AllowancesCreate extends Component
 
         //Viático sólo medios días
         if($this->halfDaysOnly != null || ($this->from == $this->to)){
-            return Carbon::parse($this->from." 00:00:00")
-                ->diffInDays(Carbon::parse($this->to." 23:59:59")->addDay()->startOfDay());
+            return Carbon::parse($this->from)
+                ->diffInDays(Carbon::parse($this->to)->addDay()->startOfDay());
         }
     }
 
