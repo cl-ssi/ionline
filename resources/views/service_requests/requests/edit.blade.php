@@ -794,105 +794,85 @@
             </tr>
         </thead>
         <tbody>
+
+            <!-- creado -->
             <tr>
-            <td>{{ $serviceRequest->created_at }}</td>
-            <td>{!! optional($serviceRequest->creator->organizationalUnit)->name ?? '<span class="text-danger">SIN UNIDAD ORGANIZACIONAL</span>' !!}</td>
-            <td>{{ $serviceRequest->creator->position }}</td>
-            <td>{{ $serviceRequest->creator->getFullNameAttribute() }}</td>
-            <td>Creador</td>
-            <td>Creada</td>
-            <td></td>
-            @can('Service Request: additional data rrhh')
+                <td>{{ $serviceRequest->created_at }}</td>
+                <td>{!! optional($serviceRequest->creator->organizationalUnit)->name ?? '<span class="text-danger">SIN UNIDAD ORGANIZACIONAL</span>' !!}</td>
+                <td>{{ $serviceRequest->creator->position }}</td>
+                <td>{{ $serviceRequest->creator->getFullNameAttribute() }}</td>
+                <td>Creador</td>
+                <td>Creada</td>
                 <td></td>
-            @endcan
+                @can('Service Request: additional data rrhh')
+                    <td></td>
+                @endcan
             </tr>
-            <!-- aceptado o rechazado -->
-            @if($serviceRequest->SignatureFlows->where('status',2)->count()==0)
-            @foreach($serviceRequest->SignatureFlows->sortBy('sign_position') as $key => $SignatureFlow)
-                @if($SignatureFlow->status === null)
-                <tr class="bg-light">
-                @elseif($SignatureFlow->status === 0)
-                <tr class="bg-danger">
-                @elseif($SignatureFlow->status === 1)
-                <tr>
-                @elseif($SignatureFlow->status === 2)
+            
+            <!-- devoluciones -->
+            @foreach($serviceRequest->SignatureFlows->where('status',2)->sortBy('sign_position') as $key => $SignatureFlow)
                 <tr class="bg-warning">
-                @endif
-                <td>{{ $SignatureFlow->signature_date}}</td>
-                <td>{!! optional($SignatureFlow->user->organizationalUnit)->name ?? '<span class="text-danger">SIN UNIDAD ORGANIZACIONAL</span>' !!}</td>
-                <td>{{ $SignatureFlow->user->position }}</td>
-                <td>
-                    {{ $SignatureFlow->user->getFullNameAttribute() }}
-                </td>
-                @if($SignatureFlow->sign_position == 1)
-                    <td>Responsable</td>
-                @elseif($SignatureFlow->sign_position == 2)
-                    <td>Supervisor</td>
-                @else
+                    <td>{{ $SignatureFlow->signature_date}}</td>
+                    <td>{{ $SignatureFlow->organizationalUnit->name}}</td>
+                    <td>{{ $SignatureFlow->employee }}</td>
+                    <td>{{ $SignatureFlow->user->getFullNameAttribute() }}</td>
                     <td>{{ $SignatureFlow->type }}</td>
-                @endif
-                <td>@if($SignatureFlow->status === null)
-                    @elseif($SignatureFlow->status === 1) Aceptada
-                    @elseif($SignatureFlow->status === 0) Rechazada
-                    @elseif($SignatureFlow->status === 2) Devuelta
-                    @endif
-                </td>
-                <td>{{ $SignatureFlow->observation }}</td>
-                @can('Service Request: additional data rrhh')
-                    <td>
-                        @if($SignatureFlow->status === null)
-                            @livewire('service-request.send-notification',['signatureFlow' => $SignatureFlow])
-                        @endif
-                    </td>
-                @endcan
+                    <td>Devuelta</td>
+                    <td>{{ $SignatureFlow->observation }}</td>
+                    @can('Service Request: additional data rrhh')
+                        <td>
+                            @if($SignatureFlow->status === null)
+                                @livewire('service-request.send-notification',['serviceRequest' => $SignatureFlow->ServiceRequest])
+                            @endif
+                        </td>
+                    @endcan
                 </tr>
-
-                @if($SignatureFlow->status === 0 && $SignatureFlow->observation != null)
-                <tr>
-                <td class="text-right" colspan="6">Observación rechazo: {{$SignatureFlow->observation}}</td>
-                </tr>
-                @endif
             @endforeach
-            @else
-            <!-- devolucion -->
-            @foreach($serviceRequest->SignatureFlows->sortBy('sign_position') as $key => $SignatureFlow)
+
+            <!-- flujos activos -->
+            @foreach($serviceRequest->SignatureFlows->where('status','<>',2)->sortBy('sign_position') as $key => $SignatureFlow)
                 @if($SignatureFlow->status === null)
                 <tr class="bg-light">
                 @elseif($SignatureFlow->status === 0)
                 <tr class="bg-danger">
                 @elseif($SignatureFlow->status === 1)
                 <tr>
-                @elseif($SignatureFlow->status === 2)
-                <tr class="bg-warning">
                 @endif
-                <td>{{ $SignatureFlow->signature_date}}</td>
-                <td>{{ $SignatureFlow->organizationalUnit->name}}</td>
-                <td>{{ $SignatureFlow->employee }}</td>
-                <td>{{ $SignatureFlow->user->getFullNameAttribute() }}</td>
-                <td>{{ $SignatureFlow->type }}</td>
-                <td>@if($SignatureFlow->status === null)
-                    @elseif($SignatureFlow->status === 1) Aceptada
-                    @elseif($SignatureFlow->status === 0) Rechazada
-                    @elseif($SignatureFlow->status === 2) Devuelta
-                    @endif
-                </td>
-                <td>{{ $SignatureFlow->observation }}</td>
-                @can('Service Request: additional data rrhh')
+                    <td>{{ $SignatureFlow->signature_date}}</td>
+                    <td>{!! optional($SignatureFlow->user->organizationalUnit)->name ?? '<span class="text-danger">SIN UNIDAD ORGANIZACIONAL</span>' !!}</td>
+                    <td>{{ $SignatureFlow->user->position }}</td>
                     <td>
-                        @if($SignatureFlow->status === null)
-                            @livewire('service-request.send-notification',['serviceRequest' => $SignatureFlow->ServiceRequest])
+                        {{ $SignatureFlow->user->getFullNameAttribute() }}
+                    </td>
+                    @if($SignatureFlow->sign_position == 1)
+                        <td>Responsable</td>
+                    @elseif($SignatureFlow->sign_position == 2)
+                        <td>Supervisor</td>
+                    @else
+                        <td>{{ $SignatureFlow->type }}</td>
+                    @endif
+                    <td>@if($SignatureFlow->status === null)
+                        @elseif($SignatureFlow->status === 1) Aceptada
+                        @elseif($SignatureFlow->status === 0) Rechazada
                         @endif
                     </td>
-                @endcan
+                    <td>{{ $SignatureFlow->observation }}</td>
+                    @can('Service Request: additional data rrhh')
+                        <td>
+                            @if($SignatureFlow->status === null)
+                                @livewire('service-request.send-notification',['signatureFlow' => $SignatureFlow])
+                            @endif
+                        </td>
+                    @endcan
                 </tr>
 
                 @if($SignatureFlow->status === 0 && $SignatureFlow->observation != null)
                 <tr>
-                <td class="text-right" colspan="6">Observación rechazo: {{$SignatureFlow->observation}}</td>
+                    <td class="text-right" colspan="6">Observación rechazo: {{$SignatureFlow->observation}}</td>
                 </tr>
                 @endif
             @endforeach
-            @endif
+
         </tbody>
     </table>
     </div>

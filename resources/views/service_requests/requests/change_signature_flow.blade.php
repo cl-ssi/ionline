@@ -25,7 +25,7 @@
     <fieldset class="form-group col-12">
       @if($serviceRequests)
         <table class="table table-sm table-bordered">
-          @foreach($serviceRequests->signatureFlows as $key => $signatureFlow)
+          @foreach($serviceRequests->signatureFlows->where('status','<>',2) as $key => $signatureFlow)
             <tr>
               <form method="POST" enctype="multipart/form-data" action="{{ route('rrhh.service-request.change_signature_flow') }}">
               @csrf
