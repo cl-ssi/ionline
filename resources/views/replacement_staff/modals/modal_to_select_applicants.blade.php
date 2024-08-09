@@ -142,7 +142,8 @@
                     </div>
 
                     <button type="submit" class="btn btn-primary float-right" id="save_btn">
-                        <i class="fas fa-save"></i> Guardar</button>
+                        <i class="fas fa-save"></i> Guardar
+                    </button>
                   </div>
                 </div>
 
@@ -171,4 +172,27 @@ function myFunction() {
     document.getElementById("save_btn").disabled = true;
   }
 }
+
+/*
+document.getElementById('save_btn').addEventListener('click', function() {
+    this.disabled = true; // Desactiva el botón
+    this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Guardando...'; // Cambia el texto del botón y añade un spinner
+});
+*/
+
+document.getElementById('save_btn').addEventListener('click', function(event) {
+    event.preventDefault(); // Previene el envío inmediato del formulario
+
+    // Desactiva el botón y muestra el spinner
+    this.disabled = true;
+    this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Guardando...';
+
+    // Enviar el formulario manualmente
+    var form = this.closest('form');
+    form.submit();
+
+    // Cierra el modal después de enviar el formulario
+    $('#exampleModal-to-select-applicants').modal('hide');
+});
+
 </script>
