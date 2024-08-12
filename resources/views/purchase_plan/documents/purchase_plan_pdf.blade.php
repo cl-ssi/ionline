@@ -200,11 +200,11 @@
     <!-- Sección de las aprobaciones -->
     <div class="signature-container">
         <div class="signature" style="padding-left: 32px; vertical-align: middle;">
-            @if($approvals = $purchasePlan->approvals->where('position', 'left'))
-                @foreach($approvals as $approval)
-                    {{ $approval->approver->getInitialsAttribute() }} @if(!$loop->last) - @endif
-                @endforeach
-            @endif
+            @foreach($purchasePlan->approvals as $approval)
+                @if($approval->digital_signature == 0)
+                    {{ $approval->approver->getInitialsAttribute() }} &nbsp;&nbsp;&nbsp;
+                @endif
+            @endforeach
         </div>
         
         <div class="signature" style="padding-left: 6px; padding-right: 6px;">
