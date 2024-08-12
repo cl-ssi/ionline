@@ -92,7 +92,7 @@
                 <strong>Serie P</strong>
             </div>
             <ul class="list-group list-group-flush">
-                <li class="list-group-item text-muted">2024</li>
+                <li class="list-group-item text-muted"><a href="{{ route('indicators.rem.index', [2024, 'P']) }}">2024</a></li>
                 <li class="list-group-item text-muted"><a href="{{ route('indicators.rem.index', [2023, 'P']) }}">2023</a></li>
                 <li class="list-group-item text-muted"><a href="{{ route('indicators.rem.index', [2022, 'P']) }}">2022</a></li>
                 <li class="list-group-item text-muted"><a href="{{ route('indicators.rem.index', [2021, 'P']) }}">2021</a></li>
@@ -103,6 +103,7 @@
                 <li class="list-group-item text-muted"><a href="{{ route('indicators.rem.index', [2016, 'P']) }}">2016</a></li>
                 <li class="list-group-item text-muted"><a href="{{ route('indicators.rem.index', [2015, 'P']) }}">2015</a></li>
                 <li class="list-group-item text-muted"><a href="{{ route('indicators.rem.index', [2014, 'P']) }}">2014</a></li>
+                <li class="list-group-item text-muted"><a href="{{ route('indicators.rem.index', [2013, 'P']) }}">2013</a></li>
                 <!-- <li class="list-group-item text-muted"><a href="">2017</a> </li>
                 <li class="list-group-item text-muted"><a href="">2016</a> </li>
                 <li class="list-group-item text-muted"><a href="">2015</a> </li> -->
