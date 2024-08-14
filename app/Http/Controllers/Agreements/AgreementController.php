@@ -2031,6 +2031,86 @@ else if($agreement->agreement_quotas->count() == 3)
         Fija Normas de Procedimiento sobre Rendición de Cuentas.</span>
 </p>";
 
+else if($agreement->agreement_quotas->count() == 4)
+    $document->content .= "<ul type='disc'>
+    <li style='text-align:justify;  '>
+        <span style=' background-color: yellow'>La primera cuota
+            de $ </span><strong><span style=' background-color: yellow'>".$arrayQuota[0]['cuotaMonto']."</span></strong><span style=' background-color: yellow'>
+        </span><strong><span style=' background-color: yellow'>(".$arrayQuota[0]['cuotaLetra']."),
+            </span></strong><span style=' background-color: yellow'>correspondiente al
+            ".$arrayQuota[0]['percentage']."% del total de los recursos del presente convenio, se transferirá una vez emitida la
+            Resolución Exenta que aprueba el presente instrumento y una vez recibidos los recursos desde el
+            Ministerio de Salud.</span>
+    </li>
+    <li style='text-align:justify;'>
+        <span style='background-color: yellow;'>La segunda cuota de $ </span><strong><span style='background-color: yellow;'>".$arrayQuota[1]['cuotaMonto']."</span></strong><span style='background-color: yellow;'> </span><strong><span style='background-color: yellow;'>(".$arrayQuota[1]['cuotaLetra']."),</span></strong><span style='background-color: yellow;'> correspondiente al ".$arrayQuota[1]['percentage']."%</span><span style='background-color: yellow;'> </span><span style='background-color: yellow;'>del total de los recursos del presente convenio,
+            se transferirá según los resultados obtenidos en la primera evaluación definida en la cláusula anterior
+            y una vez sean recibidos los recursos desde el Ministerio de Salud.</span>
+    </li>
+</ul>
+<p style='text-align:justify;'>
+    <span style='background-color: yellow;'>La entrega de la segunda cuota del programa estará
+        condicionada a dos aspectos principales:</span>
+</p>
+<p style='text-align:justify;'>
+    <strong><span style='background-color: yellow;'>1° Evaluación Técnica del
+            Programa:</span></strong><span style='background-color: yellow;'> Evaluación
+        realizada por el Referente Técnico de Atención Primaria del </span><strong><span style='background-color: yellow;'>“SERVICIO”</span></strong><span style='background-color: yellow;'>, encargado del </span><strong><span style='background-color: yellow;'>“PROGRAMA”</span></strong><span style='background-color: yellow;'>, según la cláusula séptima del presente convenio, lo
+        cual será informado por el </span><strong><span style='background-color: yellow;'>“SERVICIO”</span></strong><span style='background-color: yellow;'> a través de la plataforma habilitada para estos fines
+        a la </span><strong><span style='background-color: yellow;'>“MUNICIPALIDAD”,
+        </span></strong><span style='background-color: yellow;'>posterior a los cortes de
+        evaluación indicados en la misma cláusula.</span><span style='background-color: yellow;'> </span>
+</p>
+<p style='text-align:justify;'>
+    <strong><span style='background-color: yellow;'>2° Evaluación Financiera del
+            Programa:</span></strong><span style='background-color: yellow;'> Evaluación
+        realizada por el Departamento de Finanzas del </span><strong><span style='background-color: yellow;'>“SERVICIO”</span></strong><span style='background-color: yellow;'>, a través de la plataforma habilitada para estos
+        fines,</span><span style='background-color: yellow;'> </span><span style='background-color: yellow;'>donde la </span><strong><span style='background-color: yellow;'>“MUNICIPALIDAD”</span></strong><span style='background-color: yellow;'> debe dar cuenta de los recursos otorgados por el
+    </span><strong><span style='background-color: yellow;'>“SERVICIO”,</span></strong><span style='background-color: yellow;'> de forma mensual, según lo dispuesto en la
+    </span><strong><span style='background-color: yellow;'>Resolución N°30/2015 de Contraloría
+            General de la República, </span></strong><span style='background-color: yellow;'>que
+        Fija Normas de Procedimiento sobre Rendición de Cuentas.</span>
+</p>
+<ul type='disc'>
+    <li style='text-align:justify;'>
+        <span style='background-color: yellow;'>La tercera cuota de $
+        </span><strong><span style='background-color: yellow;'>".$arrayQuota[2]['cuotaMonto']."</span></strong><span style='background-color: yellow;'> </span><strong><span style='background-color: yellow;'>(".$arrayQuota[2]['cuotaLetra']."),</span></strong><span style='background-color: yellow;'> correspondiente al ".$arrayQuota[2]['percentage']."% del total de
+            los recursos del presente convenio, se transferirá según los resultados obtenidos en la segunda
+            evaluación definida en la cláusula anterior y una vez sean recibidos los recursos desde el Ministerio de
+            Salud.</span>
+    </li>
+    <li style='text-align:justify;'>
+        <span style='background-color: yellow;'>La cuarta cuota y final de $
+        </span><strong><span style='background-color: yellow;'>".$arrayQuota[3]['cuotaMonto']."</span></strong><span style='background-color: yellow;'> </span><strong><span style='background-color: yellow;'>(".$arrayQuota[3]['cuotaLetra']."),</span></strong><span style='background-color: yellow;'> correspondiente al ".$arrayQuota[3]['percentage']."% del total de
+            los recursos del presente convenio, se transferirá según los resultados obtenidos en la tercera
+            evaluación definida en la cláusula anterior y una vez sean recibidos los recursos desde el Ministerio de
+            Salud.</span>
+    </li>
+</ul>
+<p style='text-align:justify;'>
+    <span style='background-color: yellow;'>La entrega de la tercera y cuarta cuota del programa estará
+        condicionada a dos aspectos principales:</span>
+</p>
+<p style='text-align:justify;'>
+    <strong><span style='background-color: yellow;'>1° Evaluación Técnica del
+            Programa:</span></strong><span style='background-color: yellow;'> Evaluación
+        realizada por el Referente Técnico de Atención Primaria del </span><strong><span style='background-color: yellow;'>“SERVICIO”</span></strong><span style='background-color: yellow;'>, encargado del </span><strong><span style='background-color: yellow;'>“PROGRAMA”</span></strong><span style='background-color: yellow;'>, según la cláusula séptima del presente convenio, lo
+        cual será informado por el </span><strong><span style='background-color: yellow;'>“SERVICIO”</span></strong><span style='background-color: yellow;'> a través de los oficios correspondientes a la
+    </span><strong><span style='background-color: yellow;'>“MUNICIPALIDAD”,
+        </span></strong><span style='background-color: yellow;'>posterior a los cortes de evaluación indicados en la
+        misma cláusula.</span><span style='background-color: yellow;'> </span>
+</p>
+<p style='text-align:justify;'>
+    <strong><span style='background-color: yellow;'>2° Evaluación Financiera del
+            Programa:</span></strong><span style='background-color: yellow;'> Evaluación
+        realizada por el Departamento de Finanzas del </span><strong><span style='background-color: yellow;'>“SERVICIO”</span></strong><span style='background-color: yellow;'>, a través de la plataforma habilitada para estos
+        fines </span><strong><span style='background-color: yellow;'>“SISREC”</span></strong><span style='background-color: yellow;'>, donde la </span><strong><span style='background-color: yellow;'>“MUNICIPALIDAD”</span></strong><span style='background-color: yellow;'> debe dar cuenta de los recursos otorgados por el
+    </span><strong><span style='background-color: yellow;'>“SERVICIO”,</span></strong><span style='background-color: yellow;'> de forma mensual, según lo dispuesto en la
+    </span><strong><span style='background-color: yellow;'>Resolución N°30/2015 de Contraloría
+            General de la República, </span></strong><span style='background-color: yellow;'>que
+        Fija Normas de Procedimiento sobre Rendición de Cuentas.</span>
+</p>";
+
 elseif($agreement->agreement_quotas->count() == 1)
     $document->content .= "<ul type='disc'>
     <li style='text-align:justify;'>
