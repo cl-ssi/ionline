@@ -2,8 +2,10 @@
 
 namespace App\Models\Pharmacies;
 
+use App\Models\Establishment;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Pharmacy extends Model
 {
@@ -13,7 +15,7 @@ class Pharmacy extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'address'
+        'name', 'address','establishment_id'
     ];
 
     use SoftDeletes;
@@ -53,7 +55,11 @@ class Pharmacy extends Model
 
     public function users()
     {
-      // return $this->belongsToMany('App\Models\User');
       return $this->belongsToMany('App\Models\User', 'frm_pharmacy_user')->withTimestamps();
+    }
+
+    public function establishment(): BelongsTo
+    {
+        return $this->belongsTo(Establishment::class);
     }
 }

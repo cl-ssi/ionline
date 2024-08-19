@@ -26,26 +26,27 @@ class PharmacyController extends Controller
       return view('pharmacies.admin_view');
     }
 
-    public function pharmacy_users(){
-      $pharmacies = Pharmacy::all();
-      return view('pharmacies.admin.pharmacy_users',compact('pharmacies'));
+    public function pharmacy_users()
+    {
+        if (auth()->user()->can('be god')) $pharmacies = Pharmacy::all();
+        else $pharmacies = Pharmacy::where('establishment_id',auth()->user()->establishment_id)->get();
+
+        $pharmacies = Pharmacy::where('establishment_id',auth()->user()->establishment_id)->get();
+        return view('pharmacies.admin.pharmacy_users',compact('pharmacies'));
     }
 
-    public function user_asign_store(Request $request){
+    public function user_asign_store(Request $request)
+    {
+        if (auth()->user()->can('be god')) $pharmacies = Pharmacy::all();
+        else $pharmacies = Pharmacy::where('establishment_id',auth()->user()->establishment_id)->get();
 
-      $pharmacies = Pharmacy::all();
-      $user = User::find($request->user_id);
-      $pharmacy = Pharmacy::find($request->pharmacy_id);
+        $user = User::find($request->user_id);
+        $pharmacy = Pharmacy::find($request->pharmacy_id);
 
-    //   if ($user->pharmacies->count() > 0) {
-    //     session()->flash('warning', 'El usuario ya tiene una farmacia asignada.');
-    //     return view('pharmacies.admin.pharmacy_users',compact('pharmacies'));
-    //   }
+        $user->pharmacies()->attach($pharmacy);
 
-      $user->pharmacies()->attach($pharmacy);
-
-      session()->flash('info', 'Se ha asociado el usuario a la farmacia seleccionada.');
-      return view('pharmacies.admin.pharmacy_users',compact('pharmacies'));
+        session()->flash('info', 'Se ha asociado el usuario a la farmacia seleccionada.');
+        return view('pharmacies.admin.pharmacy_users',compact('pharmacies'));
     }
 
     public function user_asign_destroy(Pharmacy $pharmacy, User $user){
