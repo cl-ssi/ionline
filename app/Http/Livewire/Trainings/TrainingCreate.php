@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\Documents\Approval;
 use App\Models\Parameters\Parameter;
 use App\Models\Establishment;
+use App\Models\ClCommune;
 
 class TrainingCreate extends Component
 {
@@ -35,6 +36,7 @@ class TrainingCreate extends Component
     $objective,
     $activityName,
     $activityType, $otherActivityType, $disabledInputOtherActivityType = 'disabled',
+    $activityIn, $hiddenSearchedCommuneInput = 'hidden', $searchedCommune, $selectedAllowance,
     $mechanism, $onlineTypeMechanism, $onlineTypeMechanismStateInput = 'disabled', $schuduled,
     $activityDateStartAt, $activityDateEndAt, $totalHours,
     $permissionDateStartAt, $permissionDateEndAt, $place,
@@ -62,7 +64,7 @@ class TrainingCreate extends Component
     // Listeners
     public $searchedUser;
     public $disabledUserInputs = "disabled";
-    protected $listeners = ['searchedUser'];
+    protected $listeners = ['searchedUser', 'searchedCommune'];
 
     protected function messages(){
         return [
@@ -81,6 +83,9 @@ class TrainingCreate extends Component
             'objective.required'                    => 'Debe ingresar Objetivo.',
             'activityName.required'                 => 'Debe ingresar Nombre de Actividad.',
             'activityType.required'                 => 'Debe ingresar Tipo de Actividad.',
+            'activityIn.required'                   => 'Debe ingresar Tipo de Actividad en Chile o Exterior.',
+            'searchedCommune.required'              => 'Debe ingresar Comuna.',
+            'selectedAllowance.required'            => 'Debe ingresar Viático si corresponde.',
             'otherActivityType.required'            => 'Debe ingresar Otro Tipo de Actividad.',
             'mechanism.required'                    => 'Debe ingresar Modalidad de Aprendizaje.',
             'onlineTypeMechanism.required'          => 'Debe ingresar Modalidad Online de Aprendizaje.',
@@ -137,6 +142,9 @@ class TrainingCreate extends Component
             if($this->mechanism == 'online'){
                 $this->updatedMechanism($this->mechanism);
             }
+            if($this->activityIn == 'national'){
+                $this->hiddenSearchedCommuneInput = null;
+            }
         }
     }
 
@@ -156,6 +164,9 @@ class TrainingCreate extends Component
             'objective'                                                                 => 'required',
             'activityName'                                                              => 'required',
             'activityType'                                                              => 'required',
+            'activityIn'                                                                => 'required',
+            'searchedCommune'                                                           => 'required',                                                   
+            'selectedAllowance'                                                         => 'required',
             ($this->activityType == "otro") ? 'otherActivityType' : 'otherActivityType' => ($this->activityType == "otro") ? 'required' : '',
             'mechanism'                                                                 => 'required',
             'onlineTypeMechanism'                                                       => ($this->mechanism == "online") ? 'required' : '',
@@ -198,6 +209,11 @@ class TrainingCreate extends Component
                     'activity_name'             => $this->activityName,
                     'activity_type'             => $this->activityType, 
                     'other_activity_type'       => $this->otherActivityType,
+
+                    'activity_in'               => $this->activityIn, 
+                    'commune_id'                => $this->searchedCommune->id, 
+                    'allowance'                 => $this->selectedAllowance,
+
                     'mechanism'                 => $this->mechanism,
                     'online_type'               => $this->onlineTypeMechanism,
                     'work_hours'                => $this->workHours,
@@ -308,6 +324,10 @@ class TrainingCreate extends Component
             $this->activityName                 = $this->training->activity_name;
             $this->activityType                 = $this->training->activity_type;
             $this->otherActivityType            = $this->training->other_activity_type;
+
+            $this->activityIn                   = $this->training->activity_in;
+            $this->selectedAllowance            = $this->training->allowance;
+
             $this->mechanism                    = $this->training->mechanism;
             $this->onlineTypeMechanism          = $this->training->online_type;
             $this->schuduled                    = $this->training->schuduled;
@@ -517,5 +537,19 @@ class TrainingCreate extends Component
             $this->onlineTypeMechanism = null;
             $this->onlineTypeMechanismStateInput = 'disabled';
         }
+    }
+
+    public function updatedActivityIn($value){
+        if($value == "international"){
+            $this->hiddenSearchedCommuneInput = "hidden";
+        }
+        else{
+            $this->hiddenSearchedCommuneInput = null;
+        }
+    }
+
+    public function searchedCommune(ClCommune $commune)
+    {
+        $this->searchedCommune = $commune;
     }
 }
