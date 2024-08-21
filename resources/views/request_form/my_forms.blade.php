@@ -11,7 +11,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-sm-8">
+        <div class="col-sm-8 text-justify">
             <br />
             Todos los formularios de requerimientos para nuevos procesos de compra deberán emitirse a más 
             tardar el <b>30 de septiembre de 2024</b>. Es importante destacar que los formularios de requerimientos 
