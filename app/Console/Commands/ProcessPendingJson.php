@@ -86,35 +86,39 @@ class ProcessPendingJson extends Command
                 // Si no existe un registro con las mismas claves primarias, se crea uno nuevo
                 if (!$existingRecord) {
                     $modelInstance->create($attributes);
+                    $count += 1;
                 }
             }
+
+            $record->update(['procesed' => 1]); // Marcar el registro como procesado
+            $this->info($count . " datos insertados en " . $modelRoute. ".");
         });
 
         // para obtener contador
-        foreach ($jsonData as $data) {
-            $attributes = [];
-            foreach ($columnMapping as $jsonKey => $columnName) {
-                $attributes[$columnName] = $data[$jsonKey];
-            }
+        // foreach ($jsonData as $data) {
+        //     $attributes = [];
+        //     foreach ($columnMapping as $jsonKey => $columnName) {
+        //         $attributes[$columnName] = $data[$jsonKey];
+        //     }
             
-            // Verificar si ya existe un registro con las mismas claves primarias
-            $existingRecord = $modelInstance;
-            foreach ($primaryKeys as $column => $isPrimaryKey) {
-                $existingRecord = $existingRecord->where($column, $attributes[$column]);
-            }
-            $existingRecord = $existingRecord->first();
+        //     // Verificar si ya existe un registro con las mismas claves primarias
+        //     $existingRecord = $modelInstance;
+        //     foreach ($primaryKeys as $column => $isPrimaryKey) {
+        //         $existingRecord = $existingRecord->where($column, $attributes[$column]);
+        //     }
+        //     $existingRecord = $existingRecord->first();
 
-            // Si no existe un registro con las mismas claves primarias, se crea uno nuevo
-            if (!$existingRecord) {
-                $count += 1;
-            }
-        }
+        //     // Si no existe un registro con las mismas claves primarias, se crea uno nuevo
+        //     if (!$existingRecord) {
+        //         $count += 1;
+        //     }
+        // }
 
         // Finalizar la barra de progreso
         // $bar->finish();
 
-        $record->update(['procesed' => 1]); // Marcar el registro como procesado
-        $this->info($count . " datos insertados en " . $modelRoute. ".");
+        // $record->update(['procesed' => 1]); // Marcar el registro como procesado
+        // $this->info($count . " datos insertados en " . $modelRoute. ".");
     }
 
 }

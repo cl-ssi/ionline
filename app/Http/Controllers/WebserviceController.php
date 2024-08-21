@@ -91,6 +91,8 @@ class WebserviceController extends Controller
     public function pendingJsonToInsert(Request $request)
     {
         try {
+            ini_set('max_execution_time', 300); // Aumenta el tiempo de ejecución a 300 segundos (5 minutos)
+
             // Obtener la ruta del modelo y los datos del JSON
             $modelRoute = $request->input('model_route');
             $modelData = $request->input('model_data');
@@ -142,7 +144,7 @@ class WebserviceController extends Controller
                     ->notify(new PendingJsonToInsertNotification("No se han creado registros, ya existen los que se intentan registrar: " . $modelRoute ));
 
                     // Mostrar un mensaje indicando que ya existe un registro igual
-                    return response()->json(['message' => 'No se han creado registros, ya existen los que se intentan registrar'], 400);
+                    return response()->json(['message' => 'No se han creado registros, ya existen los que se intentan registrar: ' . $modelRoute], 400);
                 }
 
                 // Crear el registro si no existe uno igual
