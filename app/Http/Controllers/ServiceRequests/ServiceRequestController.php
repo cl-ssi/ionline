@@ -585,8 +585,7 @@ class ServiceRequestController extends Controller
         'commune_id' => $request->commune_id,
         'address' =>  $request->address,
         'phone_number' =>  $request->phone_number,
-        'email' =>  $request->email,
-        'organizational_unit_id' =>  $request->responsability_center_ou_id
+        'email' =>  $request->email
     ]
     );
 
