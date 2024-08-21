@@ -7,16 +7,13 @@
 <div class="alert alert-info alert-sm" role="alert">
     <div class="row">
         <div class="col-sm">
-            <i class="fas fa-info-circle"></i> <b>Fecha límite para la emisión de formularios de requerimientos para nuevos procesos de compra</b>
+            <i class="fas fa-info-circle"></i> <b>Fecha límite para la modificación de los planes de compra</b>
         </div>
     </div>
     <div class="row">
         <div class="col-sm-8 text-justify">
             <br />
-            Todos los formularios de requerimientos para nuevos procesos de compra deberán emitirse a más 
-            tardar el <b>30 de septiembre de 2024</b>. Es importante destacar que los formularios de requerimientos 
-            de suministro mensual no están sujetos a esta fecha límite, de igual que los formularios de requerimientos 
-            de presupuestos de programas o proyectos asignados posterior al 30-09-2024.
+            Todas las modificaciones o ajustes a los planes de compra deberán realizarse a más tardar el <b>30 de agosto de 2024</b>.
         </div>
         <div class="col-sm-4">
             <br />
