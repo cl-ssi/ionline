@@ -82,10 +82,13 @@ class Cdp extends Model
             'establishment_id' => auth()->user()->establishment_id,
         ]);
 
+        $url = route('request_forms.show', $requestForm->id);
+
         $cdp->approval()->create([
             "module" => "CDP",
             "module_icon" => "fas fa-file-invoice-dollar",
-            "subject" => "Certificado de Disponibilidad Presupuestaria",
+            "subject" => "Certificado de Disponibilidad Presupuestaria<br>Formulario 
+                <a href=\"$url\">#{$requestForm->folio}</a>",
             "document_route_name" => "finance.cdp.show",
             "document_route_params" => json_encode([
                 "cdp" => $cdp->id

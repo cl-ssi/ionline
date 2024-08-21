@@ -39,7 +39,7 @@
 <p class="justify" style="line-height: 1.8;">
     De conformidad al presupuesto aprobado para esta institución por la Ley N° 20.407 de Presupuestos del Sector Público {{ $cdp->date->year }},
     certifico que, a la fecha del presente documento,  la institución cuenta con el presupuesto para el financiamiento de los bienes y/o servicios 
-    indicados en formulario de requerimiento folio <b>{{ $cdp->requestForm->folio}}</b>.
+    indicados en formulario de requerimiento folio <b>{{ $cdp->requestForm->folio }}</b>.
 </p>
 
 <br><br><br>
