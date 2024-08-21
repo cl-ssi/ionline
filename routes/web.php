@@ -2343,9 +2343,9 @@ Route::prefix('request_forms'])->name('request_forms.')->group(function () {
 */
 
 Route::prefix('request_forms')->as('request_forms.')->middleware(['auth', 'must.change.password'])->group(function () {
-    Route::get('/info/info_circular_n75_2023', function () {
-        return Storage::disk('gcs')->response('ionline/request_forms/info/info_circular_n75_2023.pdf');
-    })->name('info_circular_n75_2023');
+    Route::get('/info/circular_3650_2024', function () {
+        return Storage::disk('gcs')->response('ionline/request_forms/info/circular_3650_2024.pdf');
+    })->name('circular_3650_2024');
 
     Route::get('/my_forms', [RequestFormController::class, 'my_forms'])->name('my_forms');
     Route::get('/own_index', [RequestFormController::class, 'own_index'])->name('own_index');
