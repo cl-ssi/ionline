@@ -305,16 +305,28 @@ class Approval extends Model
         return $this->morphTo();
     }
 
+    // Definir la relación 'attachments'
+    // public function attachments()
+    // {
+    //     // Verificar si el modelo 'approvable' tiene la relación 'attachments'
+    //     if (method_exists($this->approvable, 'attachments')) {
+    //         return $this->approvable->attachments();
+    //     }
+
+    //     // Si no existe la relación 'attachments', retornar null o una colección vacía
+    //     return collect(); // Puedes cambiar esto a 'null' si prefieres
+    // }
+
     /**
     * Get Color With status
     */
     public function getColorAttribute()
     {
-        switch($this->status) {
-            case '0': return 'danger'; break;
-            case '1': return 'success'; break;
-            default: return ''; break;
-        }
+        return match ($this->status) {
+            '0' => 'danger',
+            '1' => 'success',
+            default => '',
+        };
     }
 
     /**
@@ -322,11 +334,11 @@ class Approval extends Model
     */
     public function getStatusInWordsAttribute()
     {
-        switch($this->status) {
-            case '0': return 'Rechazado'; break;
-            case '1': return 'Aprobado'; break;
-            default: return 'Pendiente'; break;
-        }
+        return match ($this->status) {
+            '0' => 'Rechazado',
+            '1' => 'Aprobado',
+            default => 'Pendiente',
+        };
     }
 
     /**
@@ -334,11 +346,11 @@ class Approval extends Model
     */
     public function getIconAttribute()
     {
-        switch($this->status) {
-            case '0': return 'fa-thumbs-down'; break;
-            case '1': return 'fa-thumbs-up'; break;
-            default: return 'fa-clock'; break;
-        }
+        return match ($this->status) {
+            '0' => 'fa-thumbs-down',
+            '1' => 'fa-thumbs-up',
+            default => 'fa-clock',
+        };
     }
 
     /**
