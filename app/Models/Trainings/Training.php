@@ -36,6 +36,9 @@ class Training extends Model implements Auditable
         'activity_name',
         'activity_type',
         'other_activity_type',
+        'activity_in',
+        'commune_id',
+        'allowance',
         'mechanism',
         'online_type',
         'schuduled',
@@ -94,6 +97,10 @@ class Training extends Model implements Auditable
      */
     public function approvals(): MorphMany{
         return $this->morphMany(Approval::class, 'approvable');
+    }
+
+    public function clCommune() {
+        return $this->belongsTo('\App\Models\ClCommune', 'commune_id');
     }
 
     public function getStatusValueAttribute() {

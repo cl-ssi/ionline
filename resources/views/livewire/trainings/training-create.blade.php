@@ -240,6 +240,55 @@
             @error('otherActivityType') <span class="text-danger error small">{{ $message }}</span> @enderror
         </fieldset>
     </div>
+
+    <div class="row g-3 mb-3">
+        <fieldset class="form-group col-12 col-md-1 mt-5">
+            
+        </fieldset>
+
+        <fieldset class="form-group col-12 col-md-4">
+            <label for="for_activity_type">Nacional / Internacional</label>
+            @if($bootstrap == 'v4')
+                <select id="for_activity_type" class="form-control" wire:model="activityIn">
+            @else
+                <select id="for_activity_type" class="form-select" wire:model.debounce.500ms="activityIn">
+            @endif
+                    <option value="">Seleccione...</option>
+                    <option value="national">Nacional</option>
+                    <option value="international">Internacional</option>
+                </select>
+                @error('activityIn') <span class="text-danger error small">{{ $message }}</span> @enderror
+        </fieldset>
+        
+        @if($hiddenSearchedCommuneInput != "hidden")
+            <fieldset class="form-group col-12 col-md-3">
+                <label for="for_requester_id">Comuna:</label>
+                @livewire('search-select-commune', [
+                    'selected_id'           => 'origin_commune_id',
+                    'required'              => 'required',
+                    'commune'               => ($trainingToEdit) ? $trainingToEdit->clCommune : null
+                    
+                ])
+                @error('searchedCommune') <span class="text-danger error small">{{ $message }}</span> @enderror
+            </fieldset>
+            
+        @endif
+
+        <fieldset class="form-group col-12 col-md-3">
+            <label for="for_law">Viático</label>
+            <div class="mt-1">
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="allowance" id="for_allowance" value="1" wire:model="selectedAllowance" {{-- $lawStateOption --}}>
+                    <label class="form-check-label" for="for_allowance">Sí</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="allowance" id="for_allowance" value="0" wire:model="selectedAllowance" {{-- $lawStateOption --}}>
+                    <label class="form-check-label" for="for_allowance">No</label>
+                </div>
+            </div>
+            @error('selectedAllowance') <span class="text-danger error small">{{ $message }}</span> @enderror
+        </fieldset>
+    </div>
     
     <div class="row g-3 mb-3">
         <fieldset class="form-group col-12 col-md-1 mt-5">

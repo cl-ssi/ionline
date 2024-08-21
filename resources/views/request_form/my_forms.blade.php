@@ -7,18 +7,20 @@
 <div class="alert alert-info alert-sm" role="alert">
     <div class="row">
         <div class="col-sm">
-            <i class="fas fa-info-circle"></i> <b>Importante Módulo Abastecimiento</b>
+            <i class="fas fa-info-circle"></i> <b>Fecha límite para la emisión de formularios de requerimientos para nuevos procesos de compra</b>
         </div>
     </div>
     <div class="row">
         <div class="col-sm-8">
             <br />
-            <b>02 de octubre año 2023</b>, fecha máxima para presentar formularios de requerimiento de solicitud nueva de adquisiciones de bienes y/o servicios
-            (se eximen adquisiciones subtitulo 31 y contratos vigentes de suministro de bienes y servicios).
+            Todos los formularios de requerimientos para nuevos procesos de compra deberán emitirse a más 
+            tardar el <b>30 de septiembre de 2024</b>. Es importante destacar que los formularios de requerimientos 
+            de suministro mensual no están sujetos a esta fecha límite, de igual que los formularios de requerimientos 
+            de presupuestos de programas o proyectos asignados posterior al 30-09-2024.
         </div>
         <div class="col-sm-4">
             <br />
-            <a class="btn btn-light btn-sm float-right" href="{{ route('request_forms.info_circular_n75_2023') }}"
+            <a class="btn btn-light btn-sm float-right" href="{{ route('request_forms.circular_3650_2024') }}"
                 target="blank">
                 <i class="far fa-file-pdf"></i> Descargar circular aquí
             </a>
