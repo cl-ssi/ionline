@@ -323,8 +323,8 @@ class Approval extends Model
     public function getColorAttribute()
     {
         return match ($this->status) {
-            '0' => 'danger',
-            '1' => 'success',
+            false => 'danger',
+            true => 'success',
             default => '',
         };
     }
@@ -335,8 +335,8 @@ class Approval extends Model
     public function getStatusInWordsAttribute()
     {
         return match ($this->status) {
-            '0' => 'Rechazado',
-            '1' => 'Aprobado',
+            false => 'Rechazado',
+            true => 'Aprobado',
             default => 'Pendiente',
         };
     }
@@ -347,8 +347,8 @@ class Approval extends Model
     public function getIconAttribute()
     {
         return match ($this->status) {
-            '0' => 'fa-thumbs-down',
-            '1' => 'fa-thumbs-up',
+            false => 'fa-thumbs-down',
+            true => 'fa-thumbs-up',
             default => 'fa-clock',
         };
     }
