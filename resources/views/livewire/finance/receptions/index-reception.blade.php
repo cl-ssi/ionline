@@ -40,7 +40,7 @@
                 type="date">
         </fieldset>
 
-        <fieldset class="form-group col-md-2">
+        <fieldset class="form-group col-md-1">
             <label for="number">Número</label>
             <input wire:model.defer="filter_number"
                 id="filter_number"
@@ -49,6 +49,14 @@
         </fieldset>
 
         <fieldset class="form-group col-md-2">
+            <label for="responsable">Responsable</label>
+            <input wire:model.defer="filter_responsable"
+                id="filter_responsable"
+                class="form-control"
+                autocomplete="off">
+        </fieldset>
+
+        <fieldset class="form-group col-md-1">
             <label for="for-pending">Estado</label>
             <select class="form-select"
                 wire:model.defer="filter_pending">

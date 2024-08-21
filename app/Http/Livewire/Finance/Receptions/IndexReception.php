@@ -22,6 +22,7 @@ class IndexReception extends Component
     public $filter_date;
     public $filter_number;
     public $filter_pending;
+    public $filter_responsable; // Agregar filtro por nombre del responsable
     public $types;
     public $error_msg;
     public $mercado_publico;
@@ -81,6 +82,11 @@ class IndexReception extends Component
             })
             ->when($this->filter_date, function($query) {
                 $query->where('date', $this->filter_date);
+            })
+            ->when($this->filter_responsable, function($query) {
+                $query->whereHas('responsable', function($subQuery) {
+                    $subQuery->where('name', 'like', '%' . $this->filter_responsable . '%');
+                });
             })
             ->when($this->filter_pending, function($query) {
                 switch($this->filter_pending) {
