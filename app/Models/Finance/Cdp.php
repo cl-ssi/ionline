@@ -88,7 +88,7 @@ class Cdp extends Model
             "module" => "CDP",
             "module_icon" => "fas fa-file-invoice-dollar",
             "subject" => "Certificado de Disponibilidad Presupuestaria<br>Formulario 
-                <a href=\"$url\">#{$requestForm->folio}</a>",
+                <a target=\"_blank\" href=\"$url\">#{$requestForm->folio}</a>",
             "document_route_name" => "finance.cdp.show",
             "document_route_params" => json_encode([
                 "cdp" => $cdp->id
