@@ -31,7 +31,6 @@ class PharmacyController extends Controller
         if (auth()->user()->can('be god')) $pharmacies = Pharmacy::all();
         else $pharmacies = Pharmacy::where('establishment_id',auth()->user()->establishment_id)->get();
 
-        $pharmacies = Pharmacy::where('establishment_id',auth()->user()->establishment_id)->get();
         return view('pharmacies.admin.pharmacy_users',compact('pharmacies'));
     }
 
@@ -50,11 +49,13 @@ class PharmacyController extends Controller
     }
 
     public function user_asign_destroy(Pharmacy $pharmacy, User $user){
-      $pharmacies = Pharmacy::all();
-      $user->pharmacies()->detach($pharmacy);
+        if (auth()->user()->can('be god')) $pharmacies = Pharmacy::all();
+        else $pharmacies = Pharmacy::where('establishment_id',auth()->user()->establishment_id)->get();
 
-      session()->flash('info', 'Se ha desaociado el usuario de la farmacia seleccionada.');
-      return view('pharmacies.admin.pharmacy_users',compact('pharmacies'));
+        $user->pharmacies()->detach($pharmacy);
+
+        session()->flash('info', 'Se ha desaociado el usuario de la farmacia seleccionada.');
+        return view('pharmacies.admin.pharmacy_users',compact('pharmacies'));
     }
 
     public function change(Pharmacy $pharmacy){
