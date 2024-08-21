@@ -103,7 +103,7 @@ class WebserviceController extends Controller
             if (!is_string($modelRoute) || !is_array($modelData) || !is_array($columnMapping) || !is_array($primaryKeys)) {
 
                 Notification::route('mail', 'sistemas.sst@redsalud.gob.cl')
-                ->notify(new PendingJsonToInsertNotification("El JSON no tiene el formato correcto: " . $modelRoute ));
+                    ->notify(new PendingJsonToInsertNotification("El JSON no tiene el formato correcto: " . $modelRoute ));
 
                 return response()->json(['error' => 'El JSON no tiene el formato correcto'], 400);
             }
@@ -112,7 +112,7 @@ class WebserviceController extends Controller
             if (!class_exists($modelRoute)) {
 
                 Notification::route('mail', 'sistemas.sst@redsalud.gob.cl')
-                ->notify(new PendingJsonToInsertNotification("El modelo especificado no existe: " . $modelRoute ));
+                    ->notify(new PendingJsonToInsertNotification("El modelo especificado no existe: " . $modelRoute ));
 
                 return response()->json(['error' => 'El modelo especificado no existe'], 400);
             }
@@ -125,40 +125,41 @@ class WebserviceController extends Controller
             if (count($invalidColumns) > 0) {
 
                 Notification::route('mail', 'sistemas.sst@redsalud.gob.cl')
-                ->notify(new PendingJsonToInsertNotification("El mapeo de columnas contiene nombres de columna no validos para el modelo especificado: " . $modelRoute, $invalidColumns));
+                    ->notify(new PendingJsonToInsertNotification("El mapeo de columnas contiene nombres de columna no validos para el modelo especificado: " . $modelRoute, $invalidColumns));
 
                 return response()->json(['error' => 'El mapeo de columnas contiene nombres de columna no validos para el modelo especificado', 'invalid_columns' => $invalidColumns], 400);
             }
 
             try {
-                // Verificar si ya existe un registro con los mismos datos
-                $existingRecord = PendingJsonToInsert::where('model_route', $modelRoute)
-                    ->where('data_json', json_encode($modelData))
-                    ->where('column_mapping', json_encode($columnMapping))
-                    ->where('primary_keys', json_encode($primaryKeys))
-                    ->exists();
+                // // Verificar si ya existe un registro con los mismos datos
+                // $existingRecord = PendingJsonToInsert::where('model_route', $modelRoute)
+                //     ->where('data_json', json_encode($modelData))
+                //     ->where('column_mapping', json_encode($columnMapping))
+                //     ->where('primary_keys', json_encode($primaryKeys))
+                //     ->exists();
 
-                if ($existingRecord) {
+                // if ($existingRecord) {
 
-                    Notification::route('mail', 'sistemas.sst@redsalud.gob.cl')
-                    ->notify(new PendingJsonToInsertNotification("No se han creado registros, ya existen los que se intentan registrar: " . $modelRoute ));
+                //     Notification::route('mail', 'sistemas.sst@redsalud.gob.cl')
+                //         ->notify(new PendingJsonToInsertNotification("No se han creado registros, ya existen los que se intentan registrar: " . $modelRoute ));
 
-                    // Mostrar un mensaje indicando que ya existe un registro igual
-                    return response()->json(['message' => 'No se han creado registros, ya existen los que se intentan registrar: ' . $modelRoute], 400);
-                }
+                //     // Mostrar un mensaje indicando que ya existe un registro igual
+                //     return response()->json(['message' => 'No se han creado registros, ya existen los que se intentan registrar: ' . $modelRoute], 400);
+                // }
 
                 // Crear el registro si no existe uno igual
-                PendingJsonToInsert::create([
+                $pendingJson = PendingJsonToInsert::create([
                     'model_route' => $modelRoute,
                     'data_json' => json_encode($modelData),
                     'column_mapping' => json_encode($columnMapping),
                     'primary_keys' => json_encode($primaryKeys),
                     'procesed' => 0
                 ]);
+
             } catch (\Exception $e) {
 
                 Notification::route('mail', 'sistemas.sst@redsalud.gob.cl')
-                ->notify(new PendingJsonToInsertNotification("Error al crear o actualizar registros: " . $modelRoute . ": " . $e->getMessage()));
+                    ->notify(new PendingJsonToInsertNotification("Error al crear o actualizar registros: " . $modelRoute . ": " . $e->getMessage()));
 
                 return response()->json(['error' => 'Error al crear o actualizar registros: ' . $e->getMessage()], 500);
             }
@@ -172,6 +173,11 @@ class WebserviceController extends Controller
             // Enviar la notificación
             Notification::route('mail', 'sistemas.sst@redsalud.gob.cl')->notify(new PendingJsonToInsertNotification("Registros creados con exito", $output));
 
+            // Si la ejecución fue exitosa, eliminar los registros anteriores del mismo modelo
+            PendingJsonToInsert::where('model_route', $modelRoute)
+                ->where('id', '<>', $pendingJson->id) // Excluir el registro recién creado
+                ->delete();
+
             // Devolver una respuesta al cliente
             return response()->json(['message' => 'Registros creados con exito', 'output' => $output]);
 
@@ -180,6 +186,7 @@ class WebserviceController extends Controller
             return response()->json(['error' => 'Error: ' . $e->getMessage()], 500);
         }
     }
+
 
 
 }

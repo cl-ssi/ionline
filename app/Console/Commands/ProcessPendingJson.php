@@ -5,13 +5,12 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use App\Models\WebService\PendingJsonToInsert;
-use Symfony\Component\Console\Helper\ProgressBar;
 
 class ProcessPendingJson extends Command
 {
     protected $signature = 'process:pending-json';
 
-    protected $description = 'Process pending JSON data and insert into database';
+    protected $description = 'Process pending JSON data and insert new, delete missing entries in database';
 
     public function __construct()
     {
@@ -32,7 +31,7 @@ class ProcessPendingJson extends Command
             }
         }
 
-        // $this->info('Proceso completado.');
+        $this->info('Proceso completado.');
     }
 
     private function processRecord($record)
@@ -60,65 +59,53 @@ class ProcessPendingJson extends Command
             throw new \Exception('El mapeo de columnas contiene nombres de columna no válidos para el modelo especificado');
         }
 
-        // Obtener el total de registros
-        $totalRecords = count($jsonData);
-
-        // Crear una barra de progreso
-        // $bar = $this->output->createProgressBar($totalRecords);
-
-        // Insertar datos en la base de datos
-        $count = 0;
-        DB::transaction(function () use ($modelRoute, $jsonData, $columnMapping, $primaryKeys, $record, $totalRecords, $count) {
+        DB::transaction(function () use ($modelRoute, $jsonData, $columnMapping, $primaryKeys, $record) {
             $modelInstance = new $modelRoute;
+            $existingRecords = $modelInstance->all();
+
+            $newEntries = [];
+            $existingKeys = [];
+
             foreach ($jsonData as $data) {
                 $attributes = [];
+                $primaryKeyValues = [];
+
                 foreach ($columnMapping as $jsonKey => $columnName) {
                     $attributes[$columnName] = $data[$jsonKey];
-                }
-                
-                // Verificar si ya existe un registro con las mismas claves primarias
-                $existingRecord = $modelInstance;
-                foreach ($primaryKeys as $column => $isPrimaryKey) {
-                    $existingRecord = $existingRecord->where($column, $attributes[$column]);
-                }
-                $existingRecord = $existingRecord->first();
 
-                // Si no existe un registro con las mismas claves primarias, se crea uno nuevo
+                    // Construir las claves primarias para la búsqueda
+                    if (isset($primaryKeys[$columnName])) {
+                        $primaryKeyValues[$columnName] = $data[$jsonKey];
+                    }
+                }
+
+                // Verificar si ya existe un registro con las mismas claves primarias
+                $existingRecord = $modelInstance->where($primaryKeyValues)->first();
+
                 if (!$existingRecord) {
+                    // Crear un nuevo registro si no existe
                     $modelInstance->create($attributes);
-                    $count += 1;
+                }
+
+                // Guardar las claves primarias procesadas para su comparación posterior
+                $existingKeys[] = $primaryKeyValues;
+                $newEntries[] = $attributes;
+            }
+
+            // Eliminar registros existentes que no estén en el nuevo conjunto de datos
+            foreach ($existingRecords as $existingRecord) {
+                $recordKeyValues = [];
+                foreach ($primaryKeys as $column => $isPrimaryKey) {
+                    $recordKeyValues[$column] = $existingRecord->{$column};
+                }
+
+                if (!in_array($recordKeyValues, $existingKeys)) {
+                    $existingRecord->delete();
                 }
             }
 
             $record->update(['procesed' => 1]); // Marcar el registro como procesado
-            $this->info($count . " datos insertados en " . $modelRoute. ".");
+            $this->info(count($newEntries) . " datos insertados en " . $modelRoute . ".");
         });
-
-        // para obtener contador
-        // foreach ($jsonData as $data) {
-        //     $attributes = [];
-        //     foreach ($columnMapping as $jsonKey => $columnName) {
-        //         $attributes[$columnName] = $data[$jsonKey];
-        //     }
-            
-        //     // Verificar si ya existe un registro con las mismas claves primarias
-        //     $existingRecord = $modelInstance;
-        //     foreach ($primaryKeys as $column => $isPrimaryKey) {
-        //         $existingRecord = $existingRecord->where($column, $attributes[$column]);
-        //     }
-        //     $existingRecord = $existingRecord->first();
-
-        //     // Si no existe un registro con las mismas claves primarias, se crea uno nuevo
-        //     if (!$existingRecord) {
-        //         $count += 1;
-        //     }
-        // }
-
-        // Finalizar la barra de progreso
-        // $bar->finish();
-
-        // $record->update(['procesed' => 1]); // Marcar el registro como procesado
-        // $this->info($count . " datos insertados en " . $modelRoute. ".");
     }
-
 }
