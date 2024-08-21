@@ -66,6 +66,9 @@ class ProcessPendingJson extends Command
             $newEntries = [];
             $existingKeys = [];
 
+            $insertsCount = 0;
+            $deletesCount = 0;
+
             foreach ($jsonData as $data) {
                 $attributes = [];
                 $primaryKeyValues = [];
@@ -85,6 +88,7 @@ class ProcessPendingJson extends Command
                 if (!$existingRecord) {
                     // Crear un nuevo registro si no existe
                     $modelInstance->create($attributes);
+                    $insertsCount++;
                 }
 
                 // Guardar las claves primarias procesadas para su comparación posterior
@@ -101,11 +105,17 @@ class ProcessPendingJson extends Command
 
                 if (!in_array($recordKeyValues, $existingKeys)) {
                     $existingRecord->delete();
+                    $deletesCount++;
                 }
             }
 
             $record->update(['procesed' => 1]); // Marcar el registro como procesado
-            $this->info(count($newEntries) . " datos insertados en " . $modelRoute . ".");
+
+            if ($insertsCount > 0 || $deletesCount > 0) {
+                $this->info("$insertsCount registros insertados y $deletesCount registros eliminados en $modelRoute.");
+            } else {
+                $this->info("No hubo modificaciones en la tabla $modelRoute.");
+            }
         });
     }
 }
