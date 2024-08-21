@@ -85,7 +85,7 @@ class IndexReception extends Component
             })
             ->when($this->filter_responsable, function($query) {
                 $query->whereHas('responsable', function($subQuery) {
-                    $subQuery->where('name', 'like', '%' . $this->filter_responsable . '%');
+                    $subQuery->where('full_name', 'like', '%' . $this->filter_responsable . '%');
                 });
             })
             ->when($this->filter_pending, function($query) {
