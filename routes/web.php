@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\Rrhh\AbsenteeismController;
+use App\Http\Livewire\Rrhh\CreateAbsenteeism;
+use App\Http\Livewire\Rrhh\ListAbsenteeisms;
 use Illuminate\Http\Request;
 use App\Http\Livewire\TicResources;
 use App\Models\Pharmacies\Purchase;
@@ -899,8 +902,12 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
         Route::get('/submitted-report', SubmittedReport::class)->name('submitted_report');
         Route::get('/show/{userId}/{periodId}', [CalificationController::class, 'show'])->name('show');
     });
-
     
+    Route::prefix('absenteeisms')->name('absenteeisms.')->group(function () {
+        Route::get('/', ListAbsenteeisms::class)->name('index');
+        Route::get('/create', CreateAbsenteeism::class)->name('create');
+        Route::get('/{absenteeism}', [AbsenteeismController::class,'show'])->name('show');
+    });
 
     Route::prefix('absence-types')->name('absence-types.')->group(function () {
         Route::get('/', [AbsenteeismTypeController::class, 'index'])->name('index');

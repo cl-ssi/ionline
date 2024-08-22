@@ -177,6 +177,16 @@ class User extends Authenticatable implements Auditable
         return $this->belongsTo(Country::class);
     }
 
+    public function getAgeAttribute()
+    {
+        return $this->birthday ? Carbon::parse($this->birthday)->age : 0;
+    }
+    
+    public function getAgeMonthsAttribute()
+    {
+        return $this->birthday ? Carbon::parse($this->birthday)->diffInMonths(Carbon::now()) % 12 : 0;
+    }
+
     public function pharmacies()
     {
         /* return $this->belongsToMany('\App\Models\Pharmacies\Pharmacy'); */
