@@ -107,13 +107,25 @@
             <tr>
                 <th colspan="2" width="50%" class="table-secondary">Nombre de la Actividad</th>
                 <th width="25%" class="table-secondary">Tipo de Actividad</th>
-                <th width="25%" class="table-secondary">Nombre de la Actividad</th>
+                <th width="25%" class="table-secondary">Nombre de Otro Tipo Actividad</th>
             </tr>
             <tr>
-                <td colspan="2">{{ $training->activity_name }}</td|>
+                <td colspan="2">{{ $training->activity_name }}</td>
                 <td>{{ $training->ActivityTypeValue }}</td>
                 <td>{{ $training->other_activity_type }}</td>
             </tr>
+
+            <tr>
+                <th colspan="2" width="50%" class="table-secondary">Nacional / Internacional</th>
+                <th width="25%" class="table-secondary">Comuna</th>
+                <th width="25%" class="table-secondary">Viático</th>
+            </tr>
+            <tr>
+                <td colspan="2">{{ $training->ActivityInValue }}</td>
+                <td>{{ ($training->ClCommune) ? $training->ClCommune->name : null }}</td>
+                <td>{{ $training->AllowanceValue }}</td>
+            </tr>
+
             <tr>
                 <th colspan="2" width="50%" class="table-secondary">Modalidad de aprendizaje</th>
                 <th width="25%" class="table-secondary">Modalidad Online</th>

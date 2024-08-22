@@ -235,7 +235,7 @@
         </fieldset>
 
         <fieldset class="form-group col-12 col-md-3">
-            <label for="for_other_activity_type">Nombre de Otra Actividad</label>
+            <label for="for_other_activity_type">Nombre de Otro Tipo Actividad</label>
             <input class="form-control" type="text" autocomplete="off" wire:model="otherActivityType" {{ $disabledInputOtherActivityType }}>
             @error('otherActivityType') <span class="text-danger error small">{{ $message }}</span> @enderror
         </fieldset>
