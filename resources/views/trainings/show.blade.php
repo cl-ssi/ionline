@@ -114,7 +114,6 @@
                 <td>{{ $training->ActivityTypeValue }}</td>
                 <td>{{ $training->other_activity_type }}</td>
             </tr>
-
             <tr>
                 <th colspan="2" width="50%" class="table-secondary">Nacional / Internacional</th>
                 <th width="25%" class="table-secondary">Comuna</th>
@@ -125,7 +124,6 @@
                 <td>{{ ($training->ClCommune) ? $training->ClCommune->name : null }}</td>
                 <td>{{ $training->AllowanceValue }}</td>
             </tr>
-
             <tr>
                 <th colspan="2" width="50%" class="table-secondary">Modalidad de aprendizaje</th>
                 <th width="25%" class="table-secondary">Modalidad Online</th>
