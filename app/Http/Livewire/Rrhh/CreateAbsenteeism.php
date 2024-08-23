@@ -55,7 +55,9 @@ class CreateAbsenteeism extends Component
 
     public function render()
     {
-        $absenteeismTypes = AbsenteeismType::orderBy('name')->pluck('name', 'id');
+        $absenteeismTypes = AbsenteeismType::where('name', 'not like', 'L.M.%')
+            ->orderBy('name')
+            ->pluck('name', 'id');
         return view('livewire.rrhh.create-absenteeism', compact('absenteeismTypes'));
     }
 }

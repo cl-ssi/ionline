@@ -34,7 +34,7 @@
 
             <div class="col-3">
                 <label for="jornada" class="form-label">Jornada</label>
-                <select class="form-select" id="jornada" wire:model.defer="jornada" required>
+                <select class="form-select" id="jornada" wire:model.defer="jornada">
                     <option value="">Seleccione una jornada</option>
                     <option value="AM">AM</option>
                     <option value="PM">PM</option>

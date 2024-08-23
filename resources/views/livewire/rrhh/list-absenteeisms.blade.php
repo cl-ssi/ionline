@@ -9,24 +9,22 @@
     </div>
 
     <ul class="nav nav-tabs justify-content-center mb-3">
-        @canany(['Users: absenteeism user','Users: absenteeism admin'])
-        <li class="nav-item">
-            <a class="nav-link {{ $activeTab == 'Mis ausentismos' ? 'active' : '' }}" 
-               wire:click.prevent="setActiveTab('Mis ausentismos')" 
-               href="#">Mis ausentismos</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link {{ $activeTab == 'Ausentismos de mi unidad' ? 'active' : '' }}" 
-               wire:click.prevent="setActiveTab('Ausentismos de mi unidad')" 
-               href="#">Ausentismos de mi unidad</a>
-        </li>
+        @canany(['Users: absenteeism user', 'Users: absenteeism admin'])
+            <li class="nav-item">
+                <a class="nav-link {{ $activeTab == 'Mis ausentismos' ? 'active' : '' }}"
+                    wire:click.prevent="setActiveTab('Mis ausentismos')" href="#">Mis ausentismos</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ $activeTab == 'Ausentismos de mi unidad' ? 'active' : '' }}"
+                    wire:click.prevent="setActiveTab('Ausentismos de mi unidad')" href="#">Ausentismos de mi
+                    unidad</a>
+            </li>
         @endcan
         @can('Users: absenteeism admin')
-        <li class="nav-item">
-            <a class="nav-link {{ $activeTab == 'Todos los ausentismos' ? 'active' : '' }}" 
-               wire:click.prevent="setActiveTab('Todos los ausentismos')" 
-               href="#">Todos los ausentismos</a>
-        </li>
+            <li class="nav-item">
+                <a class="nav-link {{ $activeTab == 'Todos los ausentismos' ? 'active' : '' }}"
+                    wire:click.prevent="setActiveTab('Todos los ausentismos')" href="#">Todos los ausentismos</a>
+            </li>
         @endcan
     </ul>
 
@@ -35,7 +33,7 @@
             <label for="tipo_de_ausentismo">Tipo de Ausentismo</label>
             <select wire:model="tipo_de_ausentismo" class="form-select">
                 <option value="">Todos</option>
-                @foreach($absenteeismTypes as $id => $name)
+                @foreach ($absenteeismTypes as $id => $name)
                     <option value="{{ $id }}">{{ $name }}</option>
                 @endforeach
             </select>
@@ -58,7 +56,7 @@
                 <option value="false">Rechazada</option>
             </select>
         </div>
-        
+
     </div>
 
     <table class="table table-sm table-bordered">
@@ -72,7 +70,7 @@
                 {{-- <th>Total días</th> --}}
                 <th>Tipo de ausentismo</th>
                 <th>Aprobación</th>
-                @if($activeTab == 'Todos los ausentismos')
+                @if ($activeTab == 'Todos los ausentismos')
                     <th>Sirh</th>
                 @endif
                 <th></th>
@@ -91,18 +89,27 @@
                     <td>
                         {{ $absenteeism->approval?->statusInWords }}
                     </td>
-                    @if($activeTab == 'Todos los ausentismos')
+                    @if ($activeTab == 'Todos los ausentismos')
                         <td>
                             <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" role="switch" id="switch_{{ $absenteeism->id }}"
-                                       wire:click="updateSirhAt({{ $absenteeism->id }})"
-                                       @if($absenteeism->sirh_at) checked @endif>
+                                <input class="form-check-input" type="checkbox" role="switch"
+                                    id="switch_{{ $absenteeism->id }}"
+                                    wire:click="updateSirhAt({{ $absenteeism->id }})"
+                                    @if ($absenteeism->sirh_at) checked @endif>
                             </div>
                         </td>
                     @endif
-                    <td>
-                        @if($absenteeism->approval)
-                            <a class="link-primary" target="_blank" href="{{ route('rrhh.absenteeisms.show', $absenteeism )}}"><i class="bi bi-eye"></i> Ver</a>
+                    <td nowrap>
+                        @if ($absenteeism->approval)
+                            <a class="btn btn-primary btn-sm" target="_blank"
+                                href="{{ route('rrhh.absenteeisms.show', $absenteeism) }}"><i class="bi bi-eye"></i>
+                                </a>
+                        @endif
+                        @if ($absenteeism->approval && is_null($absenteeism->approval->status))
+                            <button class="btn btn-danger btn-sm"
+                                wire:click="deletePendingAbsenteeism({{ $absenteeism->id }})">
+                                <i class="bi bi-trash"></i>
+                            </button>
                         @endif
                     </td>
                 </tr>

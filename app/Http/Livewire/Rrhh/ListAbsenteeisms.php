@@ -21,11 +21,11 @@ class ListAbsenteeisms extends Component
 
     public function mount()
     {
-        if (!auth()->user()->canany(['Users: absenteeism user','Users: absenteeism admin'])) {
+        if ( !auth()->user()->canany(['Users: absenteeism user', 'Users: absenteeism admin']) ) {
             throw new HttpException(501, 'No tiene permisos para acceder a este módulo');
         }
 
-        if (request()->has('activeTab')) {
+        if ( request()->has('activeTab') ) {
             $this->activeTab = request()->get('activeTab');
         }
     }
@@ -39,27 +39,42 @@ class ListAbsenteeisms extends Component
     public function updateSirhAt($absenteeismId)
     {
         $absenteeism = Absenteeism::find($absenteeismId);
-    
-        if ($absenteeism) {
+
+        if ( $absenteeism ) {
             $absenteeism->sirh_at = $absenteeism->sirh_at ? null : now();
             $absenteeism->save();
         }
     }
 
+    public function deletePendingAbsenteeism($absenteeismId)
+    {
+        $absenteeism = Absenteeism::with('approval')->find($absenteeismId);
+
+        if ( $absenteeism && $absenteeism->approval && is_null($absenteeism->approval->status) ) {
+            // Eliminar la aprobación primero
+            $absenteeism->approval->delete();
+            // Luego eliminar el ausentismo
+            $absenteeism->delete();
+            session()->flash('message', 'Ausentismo y aprobación eliminados exitosamente.');
+        } else {
+            session()->flash('error', 'No se puede eliminar un ausentismo que no está pendiente.');
+        }
+    }
+
     public function render()
     {
-        
-        $absenteeisms = Absenteeism::query();
-        $absenteeisms->with('user','organizationalUnit','approval');
 
-        if ($this->activeTab === 'Mis ausentismos') {
+        $absenteeisms = Absenteeism::query();
+        $absenteeisms->with('user', 'organizationalUnit', 'approval');
+
+        if ( $this->activeTab === 'Mis ausentismos' ) {
             $absenteeisms->where('rut', auth()->id());
-        } elseif ($this->activeTab === 'Ausentismos de mi unidad') {
+        } elseif ( $this->activeTab === 'Ausentismos de mi unidad' ) {
             $absenteeisms->where('codigo_unidad', auth()->user()->organizationalUnit->sirh_ou_id);
         }
 
         // Aplicar filtro por tipo_de_ausentismo si está presente
-        if ($this->tipo_de_ausentismo) {
+        if ( $this->tipo_de_ausentismo ) {
             $absenteeisms->where('absenteeism_type_id', $this->tipo_de_ausentismo);
         }
 
@@ -73,7 +88,7 @@ class ListAbsenteeisms extends Component
         });
 
         // Aplicar filtro por estado de aprobación si está presente
-        if ($this->approval_status !== 'all') {
+        if ( $this->approval_status !== 'all' ) {
             $absenteeisms->whereHas('approval', function ($query) {
                 match ($this->approval_status) {
                     'null' => $query->whereNull('status'),
@@ -84,8 +99,9 @@ class ListAbsenteeisms extends Component
         }
 
         return view('livewire.rrhh.list-absenteeisms', [
-            'absenteeisms' => $absenteeisms->orderBy('id','desc')->paginate(50),
-            'absenteeismTypes' => AbsenteeismType::orderBy('name')->pluck('name','id'), // Obtener tipos de ausentismo
+            'absenteeisms'     => $absenteeisms->orderBy('id', 'desc')->paginate(50),
+            'absenteeismTypes' => AbsenteeismType::orderBy('name')
+                ->pluck('name', 'id'), // Obtener tipos de ausentismo
         ]);
     }
 }
