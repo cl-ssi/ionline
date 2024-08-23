@@ -573,21 +573,54 @@ class ServiceRequestController extends Controller
         }
     }
 
-    //devuelve user o lo crea
-    $user = User::updateOrCreate(
-    ['id' => $request->user_id],
-    [
-        'dv' =>  $request->dv,
-        'name' =>  $request->name,
-        'fathers_family' =>  $request->fathers_family,
-        'mothers_family' =>  $request->mothers_family,
-        'country_id' =>  $request->country_id,
-        'commune_id' => $request->commune_id,
-        'address' =>  $request->address,
-        'phone_number' =>  $request->phone_number,
-        'email' =>  $request->email
-    ]
-    );
+    // //devuelve user o lo crea
+    // $user = User::updateOrCreate(
+    // ['id' => $request->user_id],
+    // [
+    //     'dv' =>  $request->dv,
+    //     'name' =>  $request->name,
+    //     'fathers_family' =>  $request->fathers_family,
+    //     'mothers_family' =>  $request->mothers_family,
+    //     'country_id' =>  $request->country_id,
+    //     'commune_id' => $request->commune_id,
+    //     'address' =>  $request->address,
+    //     'phone_number' =>  $request->phone_number,
+    //     'organizational_unit_id' =>  $request->responsability_center_ou_id,
+    //     'email' =>  $request->email
+    // ]
+    // );
+
+    $user = User::find($request->user_id);
+    if ($user) {
+        // Si el usuario ya existe, lo actualizamos sin cambiar 'organizational_unit_id'
+        $user->update([
+            'dv' =>  $request->dv,
+            'name' =>  $request->name,
+            'fathers_family' =>  $request->fathers_family,
+            'mothers_family' =>  $request->mothers_family,
+            'country_id' =>  $request->country_id,
+            'commune_id' => $request->commune_id,
+            'address' =>  $request->address,
+            'phone_number' =>  $request->phone_number,
+            'email' =>  $request->email
+        ]);
+    } else {
+        // Si el usuario no existe, lo creamos incluyendo 'organizational_unit_id'
+        $user = User::create([
+            'id' => $request->user_id,
+            'dv' =>  $request->dv,
+            'name' =>  $request->name,
+            'fathers_family' =>  $request->fathers_family,
+            'mothers_family' =>  $request->mothers_family,
+            'country_id' =>  $request->country_id,
+            'commune_id' => $request->commune_id,
+            'address' =>  $request->address,
+            'phone_number' =>  $request->phone_number,
+            'organizational_unit_id' =>  $request->responsability_center_ou_id,
+            'email' =>  $request->email
+        ]);
+    }
+
 
     //crea service request
     $serviceRequest = new ServiceRequest($request->All());
