@@ -27,14 +27,14 @@
         Hola {{ auth()->user()->firstName }}, soy el sistema
         <i class="fas fa-cog fa-spin fa-2x"
             style="color:green"></i>
-        , quiero contarte que fui desarrollado el año 2018 por Alvaro Torres y Jorge Miranda
+        , quiero contarte que fui desarrollado el año 2018 por Álvaro Torres y Jorge Miranda
         y hoy día soy mantenido por un excelente equipo de desarrollo del Departamento TIC,
-        dónde se incorporó los Estebanes (Rojas + Miranda) y Álvaro Lupa.
+        Esteban Rojas e Ignacio Miranda.
         <br>
         El equipo de combate en terreno está formado por
-        Gabriela, Cristian, Álvaro, Victor y Miguel.
+        Gabriela, Álvaro Figueroa y Miguel.
         <br>
-        Nuestro jefe de departamento es el glorioso Don José Don Oso. <br>
+        Nuestro jefe de departamento es el glorioso Don Álvaro Lupa Huanca. <br>
         <hr>
         <pre>{{ $phrase ? $phrase->phrase : '' }}</pre>
 

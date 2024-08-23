@@ -211,6 +211,39 @@ class Training extends Model implements Auditable
         }
     }
 
+    public function getActivityInValueAttribute() {
+        switch($this->activity_in) {
+            case 'national':
+                return 'Nacional';
+                break;
+            
+            case 'international':
+                return 'Internacional';
+                break;
+        }
+    }
+
+    public function getAllowanceValueAttribute()
+    {
+        /*
+        return match ($this->allowance) {
+            false   => 'No',
+            true    => 'Sí',
+            default => '',
+        };
+        */
+
+        switch($this->allowance) {
+            case 1:
+                return 'Sí';
+                break;
+            
+            case 0:
+                return 'No';
+                break;
+        }
+    }
+
     protected $casts = [
         'activity_date_start_at'    => 'date:Y-m-d',
         'activity_date_end_at'      => 'date:Y-m-d',

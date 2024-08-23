@@ -152,38 +152,38 @@ class TrainingCreate extends Component
         $this->validateMessage = 'training';
 
         $validatedData = $this->validate([
-            'searchedUser'                                                              => 'required',
-            'selectedEstament'                                                          => 'required',
-            'selectedLaw'                                                               => 'required',
-            'degree'                                                                    => ($this->selectedLaw == "18834") ? 'required' : '',
-            'workHours'                                                                 => ($this->selectedLaw == "19664") ? 'required' : '',
-            'selectedContractualCondition'                                              => 'required',
-            'email'                                                                     => 'required',
-            'telephone'                                                                 => 'required',
-            'selectedStrategicAxis'                                                     => 'required',
-            'objective'                                                                 => 'required',
-            'activityName'                                                              => 'required',
-            'activityType'                                                              => 'required',
-            'activityIn'                                                                => 'required',
-            'searchedCommune'                                                           => 'required',                                                   
-            'selectedAllowance'                                                         => 'required',
-            ($this->activityType == "otro") ? 'otherActivityType' : 'otherActivityType' => ($this->activityType == "otro") ? 'required' : '',
-            'mechanism'                                                                 => 'required',
-            'onlineTypeMechanism'                                                       => ($this->mechanism == "online") ? 'required' : '',
-            'schuduled'                                                                 => 'required',
-            'activityDateStartAt'                                                       => 'required',
-            'activityDateEndAt'                                                         => 'required',
-            'totalHours'                                                                => 'required',
-            'permissionDateStartAt'                                                     => 'required',
-            'permissionDateEndAt'                                                       => 'required',
-            'place'                                                                     => 'required',
-            'workingDay'                                                                => 'required',
-            'technicalReasons'                                                          => 'required',
-            'permissionFile'                                                            => ($this->training == null) ? 'required' : '',
-            'rejoinderFile'                                                             => ($this->training == null) ? 'required' : '',
-            'programFile'                                                               => ($this->training == null) ? 'required' : '',
-            'municipalProfile'                                                          => (auth()->guard('external')->check() == true) ? 'required' : ''
-            // 'trainingCosts'                                                          => 'required'
+            'searchedUser'                                                                  => 'required',
+            'selectedEstament'                                                              => 'required',
+            'selectedLaw'                                                                   => 'required',
+            'degree'                                                                        => ($this->selectedLaw == "18834") ? 'required' : '',
+            'workHours'                                                                     => ($this->selectedLaw == "19664") ? 'required' : '',
+            'selectedContractualCondition'                                                  => 'required',
+            'email'                                                                         => 'required',
+            'telephone'                                                                     => 'required',
+            'selectedStrategicAxis'                                                         => 'required',
+            'objective'                                                                     => 'required',
+            'activityName'                                                                  => 'required',
+            'activityType'                                                                  => 'required',
+            'activityIn'                                                                    => 'required',
+            ($this->activityIn == "national") ? 'searchedCommune' : 'searchedCommune'       => ($this->activityIn == "national") ? 'required' : '',                                                   
+            'selectedAllowance'                                                             => 'required',
+            ($this->activityType == "otro") ? 'otherActivityType' : 'otherActivityType'     => ($this->activityType == "otro") ? 'required' : '',
+            'mechanism'                                                                     => 'required',
+            'onlineTypeMechanism'                                                           => ($this->mechanism == "online") ? 'required' : '',
+            'schuduled'                                                                     => 'required',
+            'activityDateStartAt'                                                           => 'required',
+            'activityDateEndAt'                                                             => 'required',
+            'totalHours'                                                                    => 'required',
+            'permissionDateStartAt'                                                         => 'required',
+            'permissionDateEndAt'                                                           => 'required',
+            'place'                                                                         => 'required',
+            'workingDay'                                                                    => 'required',
+            'technicalReasons'                                                              => 'required',
+            'permissionFile'                                                                => ($this->training == null) ? 'required' : '',
+            'rejoinderFile'                                                                 => ($this->training == null) ? 'required' : '',
+            'programFile'                                                                   => ($this->training == null) ? 'required' : '',
+            'municipalProfile'                                                              => (auth()->guard('external')->check() == true) ? 'required' : ''
+            // 'trainingCosts'                                                              => 'required'
         ]);
 
         // SE GUARDA REUNIÓN
@@ -211,7 +211,7 @@ class TrainingCreate extends Component
                     'other_activity_type'       => $this->otherActivityType,
 
                     'activity_in'               => $this->activityIn, 
-                    'commune_id'                => $this->searchedCommune->id, 
+                    'commune_id'                => ($this->activityIn == "national") ? $this->searchedCommune->id : null, 
                     'allowance'                 => $this->selectedAllowance,
 
                     'mechanism'                 => $this->mechanism,
@@ -327,6 +327,7 @@ class TrainingCreate extends Component
 
             $this->activityIn                   = $this->training->activity_in;
             $this->selectedAllowance            = $this->training->allowance;
+            $this->searchedCommune              = $this->training->ClCommune;
 
             $this->mechanism                    = $this->training->mechanism;
             $this->onlineTypeMechanism          = $this->training->online_type;
@@ -542,6 +543,7 @@ class TrainingCreate extends Component
     public function updatedActivityIn($value){
         if($value == "international"){
             $this->hiddenSearchedCommuneInput = "hidden";
+            $this->searchedCommune = null;
         }
         else{
             $this->hiddenSearchedCommuneInput = null;
