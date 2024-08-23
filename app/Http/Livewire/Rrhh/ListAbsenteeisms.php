@@ -61,25 +61,21 @@ class ListAbsenteeisms extends Component
         }
     }
 
-    public function render()
+    private function applyFilters($query)
     {
+        $query->with('user', 'organizationalUnit', 'approval');
 
-        $absenteeisms = Absenteeism::query();
-        $absenteeisms->with('user', 'organizationalUnit', 'approval');
-
-        if ( $this->activeTab === 'Mis ausentismos' ) {
-            $absenteeisms->where('rut', auth()->id());
-        } elseif ( $this->activeTab === 'Ausentismos de mi unidad' ) {
-            $absenteeisms->where('codigo_unidad', auth()->user()->organizationalUnit->sirh_ou_id);
+        if ($this->activeTab === 'Mis ausentismos') {
+            $query->where('rut', auth()->id());
+        } elseif ($this->activeTab === 'Ausentismos de mi unidad') {
+            $query->where('codigo_unidad', auth()->user()->organizationalUnit->sirh_ou_id);
         }
 
-        // Aplicar filtro por tipo_de_ausentismo si está presente
-        if ( $this->tipo_de_ausentismo ) {
-            $absenteeisms->where('absenteeism_type_id', $this->tipo_de_ausentismo);
+        if ($this->tipo_de_ausentismo) {
+            $query->where('absenteeism_type_id', $this->tipo_de_ausentismo);
         }
 
-        // Aplicar filtro por con_aprobacion si está presente
-        $absenteeisms->when($this->con_aprobacion, function ($query, $con_aprobacion) {
+        $query->when($this->con_aprobacion, function ($query, $con_aprobacion) {
             match ($con_aprobacion) {
                 'con' => $query->whereHas('approval'),
                 'sin' => $query->whereDoesntHave('approval'),
@@ -87,9 +83,8 @@ class ListAbsenteeisms extends Component
             };
         });
 
-        // Aplicar filtro por estado de aprobación si está presente
-        if ( $this->approval_status !== 'all' ) {
-            $absenteeisms->whereHas('approval', function ($query) {
+        if ($this->approval_status !== 'all') {
+            $query->whereHas('approval', function ($query) {
                 match ($this->approval_status) {
                     'null' => $query->whereNull('status'),
                     'true' => $query->where('status', true),
@@ -98,10 +93,57 @@ class ListAbsenteeisms extends Component
             });
         }
 
+        return $query;
+    }
+
+    public function render()
+    {
+        $absenteeisms = Absenteeism::query();
+        $absenteeisms = $this->applyFilters($absenteeisms);
+
         return view('livewire.rrhh.list-absenteeisms', [
             'absenteeisms'     => $absenteeisms->orderBy('id', 'desc')->paginate(50),
-            'absenteeismTypes' => AbsenteeismType::orderBy('name')
-                ->pluck('name', 'id'), // Obtener tipos de ausentismo
+            'absenteeismTypes' => AbsenteeismType::orderBy('name')->pluck('name', 'id'), // Obtener tipos de ausentismo
         ]);
+    }
+
+    public function export()
+    {
+        $absenteeisms = Absenteeism::query();
+        $absenteeisms = $this->applyFilters($absenteeisms);
+        $absenteeisms = $absenteeisms->whereNotNull('sirh_at')->get();
+
+        $output = '';
+
+        // Escribir encabezados
+        $output .= implode('|', [
+            'Rut',
+            'Dv',
+            'Número del cargo',
+            'F.inicio',
+            'F.término',
+            'Dias permiso',
+            'Medios dias',
+            'Nº resolución',
+            'F.resolución'
+        ]) . "\n";
+
+        // Escribir cada registro
+        foreach ( $absenteeisms as $absenteeism ) {
+            $output .= implode('|', [
+                $absenteeism->rut,
+                $absenteeism->dv,
+                1, // Número del cargo, asumiendo que es siempre 1
+                $absenteeism->finicio ? $absenteeism->finicio->format('dmY') : '',
+                $absenteeism->ftermino ? $absenteeism->ftermino->format('dmY') : '',
+                $absenteeism->total_dias_ausentismo ?? 0,
+                0, // Medios días, asumir 0 si no se tiene este dato
+                $absenteeism->n_resolucion ?? '',
+                $absenteeism->fresolucion ?? ''
+            ]) . "\n";
+        }
+
+        // Guardar el contenido para mostrarlo en la vista
+        session()->flash('exportContent', $output);
     }
 }

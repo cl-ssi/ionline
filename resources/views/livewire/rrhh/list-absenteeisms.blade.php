@@ -5,8 +5,18 @@
         </div>
         <div class="col text-end">
             <a class="btn btn-primary" href="{{ route('rrhh.absenteeisms.create') }}">Crear Ausentismo</a>
+            @if($activeTab == 'Todos los ausentismos')
+            <button class="btn btn-secondary" wire:click="export">Exportar Datos</button>
+            @endif
         </div>
     </div>
+
+    @if (session('exportContent'))
+        <div class="mb-3">
+            <h4>Formato de archivo de importación de SIRH:</h4>
+            <pre>{!! session('exportContent') !!}</pre>
+        </div>
+    @endif
 
     <ul class="nav nav-tabs justify-content-center mb-3">
         @canany(['Users: absenteeism user', 'Users: absenteeism admin'])
