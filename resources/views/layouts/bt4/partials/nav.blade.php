@@ -393,6 +393,13 @@
                         </a>
                         @endcan
 
+                        @canany(['Users: absenteeism user','Users: absenteeism admin'])
+                        <a class="dropdown-item {{ active('rrhh.absenteeisms.index') }}"
+                            href="{{ route('rrhh.absenteeisms.index') }}">
+                            <i class="fas fa-clock fa-fw"></i> Ausentismos
+                        </a>
+                        @endcanany
+
                         @canany(['Rrhh: birthday'])
                         <a class="dropdown-item {{ active('rrhh.users.birthdayGrettings') }}" href="{{ route('rrhh.users.birthdayGrettings') }}">
                             <i class="fas fa-fw fa-birthday-cake"></i> Correo cumpleaños
