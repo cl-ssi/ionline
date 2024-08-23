@@ -39,7 +39,7 @@
                     <option value="">Seleccione una jornada</option>
                     <option value="AM">AM</option>
                     <option value="PM">PM</option>
-                    <option value="TO">TO</option>
+                    <option value="TO">TODO EL DÍA</option>
                 </select>
                 <div id="jornada_help" class="form-text">Sólo para permisos administrativos.</div>
                 @error('jornada') <span class="text-danger">{{ $message }}</span> @enderror

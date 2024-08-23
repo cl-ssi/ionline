@@ -42,8 +42,8 @@
             <label for="tipo_de_ausentismo">Aprobaciones</label>
             <select wire:model="con_aprobacion" class="form-select">
                 <option value="">Todas</option>
-                <option value="con">Con aprovación</option>
-                <option value="sin">Sin aprovación</option>
+                <option value="con">Con aprobación</option>
+                <option value="sin">Sin aprobación</option>
             </select>
         </div>
 
