@@ -4,6 +4,7 @@
             <h3 class="">Crear Ausentismo</h1>
         </div>
         <div class="col text-end">
+            
         </div>
     </div>
 
@@ -51,6 +52,12 @@
             </div>
 
         </div>
+
+        <p> La solicitud será enviada para su aprobación a: <strong>{{ auth()->user()->boss->shortName }}</strong><br> 
+            <strong>Importante: </strong>
+                Si no corresponde a su jefatura, primero solicite la corrección con la secretaria de su departamento 
+                antes de crear el permiso.
+            </p>
 
         <button type="submit" class="btn btn-primary">Crear</button>
         <a href="{{ route('rrhh.absenteeisms.index') }}" class="btn btn-secondary">Cancelar</a>
