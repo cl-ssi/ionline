@@ -103,11 +103,12 @@
                         @if ($absenteeism->approval)
                             <a class="btn btn-primary btn-sm" target="_blank"
                                 href="{{ route('rrhh.absenteeisms.show', $absenteeism) }}"><i class="bi bi-eye"></i>
-                                </a>
+                            </a>
                         @endif
                         @if ($absenteeism->approval && is_null($absenteeism->approval->status))
                             <button class="btn btn-danger btn-sm"
-                                wire:click="deletePendingAbsenteeism({{ $absenteeism->id }})">
+                                wire:click="deletePendingAbsenteeism({{ $absenteeism->id }})"
+                                onclick="confirm('¿Estás seguro de que deseas eliminar este ausentismo? Esta acción no se puede deshacer.') || event.stopImmediatePropagation()">
                                 <i class="bi bi-trash"></i>
                             </button>
                         @endif
