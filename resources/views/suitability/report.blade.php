@@ -11,21 +11,19 @@
         $currentYear = $now->year;
     @endphp
 
-    <h3 class="mb-3">Reporte de Solicitudes de Idoneidad {{ $request->year ?? '' }} - {{ $request->month ?? '' }}
-    </h3>
+    <h3 class="mb-3">Reporte de Solicitudes de Idoneidad</h3>
     <form method="GET" class="form-horizontal" action="{{ route('suitability.reports.bySchool') }}">
         <div class="form-row">
             <fieldset class="form-group col-sm-2">
                 <label>Año</label>
-                <select class="form-control selectpicker show-tick" name="year" required>
-                    <option value="">Selección...</option>
+                <select class="form-control selectpicker show-tick" name="year[]" multiple required>
                     @for ($year = 2021; $year <= $currentYear; $year++)
-                        <option value="{{ $year }}" @if ($request->year == $year) selected @endif>
-                            {{ $year }}</option>
+                        <option value="{{ $year }}" @if (is_array($request->year) && in_array($year, $request->year)) selected @endif>
+                            {{ $year }}
+                        </option>
                     @endfor
                 </select>
             </fieldset>
-
             <fieldset class="form-group col-sm-2">
                 <label>Mes</label>
                 <select class="form-control selectpicker show-tick" name="month" required>
