@@ -154,6 +154,9 @@ class LogStatistics extends Component
             } elseif (preg_match('/meetings/', $log->uri)) {
                 $log->module = 'Reuniones';
                 $log->save();
+            } elseif (preg_match('/trainings/', $log->uri)) {
+                $log->module = 'Capacitaciones';
+                $log->save();
             } 
         }
 
