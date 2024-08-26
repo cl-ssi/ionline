@@ -34,7 +34,11 @@ class Telephone extends Model
      * @var array
      */
     protected $fillable = [
-        'number', 'minsal', 'mac', 'place_id'
+        'number',
+        'minsal',
+        'mac',
+        'place_id',
+        'visualization',
     ];
 
     public function users()
