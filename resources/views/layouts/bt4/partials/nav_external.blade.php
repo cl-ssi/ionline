@@ -56,7 +56,7 @@
     <span data-feather="plus-circle"></span>
     </a>
 </h6>
-
+--}}
 
 <br>
 
@@ -74,7 +74,7 @@
         </a>
     </li>
 </ul>
---}}
+
 <ul class="nav flex-column">
     <!-- <li class="nav-item">
         <a class="nav-link {{ active('patient.index') }}" href="{{ route('replacement_staff.create') }}">

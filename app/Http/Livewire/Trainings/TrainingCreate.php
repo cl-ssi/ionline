@@ -515,7 +515,7 @@ class TrainingCreate extends Component
         $this->training->save();
 
         if(auth()->guard('external')->check() == true){
-            return redirect()->route('trainings.external_own_index');
+            return redirect()->route('external_trainings.external_own_index');
         }
         else{
             return redirect()->route('trainings.own_index');

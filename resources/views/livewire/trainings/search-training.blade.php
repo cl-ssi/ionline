@@ -41,7 +41,7 @@
                     </td>
                     <td width="7%">{{ $training->created_at->format('d-m-Y H:i:s') }}</td>
                     <td width="30%">
-                        {{ (auth()->guard('external')->check() == true) ? $training->userTraining->FullName : $training->userTraining->TinnyName }} <br><br>
+                        {{ $training->userTraining->FullName }} <br><br>
                         <small><b>{{ ($training->userTrainingOu) ? $training->userTrainingOu->name : 'Funcionario Externo'}}</b></small> <br>
                         <small><b>{{ ($training->userTrainingEstablishment) ? $training->userTrainingEstablishment->name : '' }}</b></small>
                     </td>
