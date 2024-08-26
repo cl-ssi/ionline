@@ -186,6 +186,13 @@ class TrainingCreate extends Component
             // 'trainingCosts'                                                              => 'required'
         ]);
 
+        /*
+        dd('aquí',
+        $this->searchedUser->id,
+        get_class($this->searchedUser),
+        auth()->id());
+        */
+
         // SE GUARDA REUNIÓN
         $training = DB::transaction(function () {
             $training = Training::updateOrCreate(
@@ -195,6 +202,7 @@ class TrainingCreate extends Component
                 [
                     'status'                    => 'saved',
                     'user_training_id'          => $this->searchedUser->id,
+                    'user_training_type'        => get_class($this->searchedUser),
                     'estament_id'               => $this->selectedEstament,
                     'law'                       => $this->selectedLaw,
                     'degree'                    => $this->degree,
@@ -228,7 +236,7 @@ class TrainingCreate extends Component
                     'technical_reasons'         => $this->technicalReasons,
                     'feedback_type'             => $this->feedback_type,
                     'municipal_profile'         => $this->municipalProfile,
-                    'user_creator_id'           => auth()->id()
+                    'user_creator_id'           => (auth()->guard('web')->check() == true) ? auth()->id() : null
                 ]
             );
 
@@ -247,7 +255,7 @@ class TrainingCreate extends Component
                     'stored'        => true,
                     'name'          => 'permission_'.$training->id.'.pdf',
                     'type'          => 'permission_file',
-                    'stored_by_id'  => auth()->id(),
+                    'stored_by_id'  => (auth()->guard('web')->check() == true) ? auth()->id() : null,
                 ]
             );
             $training->file = $this->permissionFile->storeAs('/ionline/trainings/attachments/permission', $now.'_training_'.$training->id.'.'.$this->permissionFile->extension(), 'gcs');
@@ -267,7 +275,7 @@ class TrainingCreate extends Component
                     'stored'        => true,
                     'name'          => 'rejoinder_'.$training->id.'.pdf',
                     'type'          => 'rejoinder_file',
-                    'stored_by_id'  => auth()->id(),
+                    'stored_by_id'  => (auth()->guard('web')->check() == true) ? auth()->id() : null,
                 ]
             );
             $training->file = $this->rejoinderFile->storeAs('/ionline/trainings/attachments/rejoinder', $now.'_training_'.$training->id.'.'.$this->rejoinderFile->extension(), 'gcs');
@@ -287,7 +295,7 @@ class TrainingCreate extends Component
                     'stored'        => true,
                     'name'          => 'program_'.$training->id.'.pdf',
                     'type'          => 'program_file',
-                    'stored_by_id'  => auth()->id(),
+                    'stored_by_id'  => (auth()->guard('web')->check() == true) ? auth()->id() : null,
                 ]
             );
             $training->file = $this->programFile->storeAs('/ionline/trainings/attachments/program', $now.'_training_'.$training->id.'.'.$this->programFile->extension(), 'gcs');

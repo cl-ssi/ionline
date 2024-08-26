@@ -21,7 +21,8 @@ class Training extends Model implements Auditable
 
     protected $fillable = [
         'status', 
-        'user_training_id', 
+        'user_training_id',
+        'user_training_type', 
         'estament_id',
         'law',
         'degree',
@@ -56,13 +57,16 @@ class Training extends Model implements Auditable
     ];
 
     public function userTraining() {
+        /*
         if(auth()->guard('external')->check() == true){
             return $this->belongsTo('App\Models\UserExternal', 'user_training_id');
         }
         else{
             
             return $this->belongsTo('App\Models\User', 'user_training_id')->withTrashed();
-        }
+        }*/
+        // return $this->morphMany(User::class, 'user_training_id');
+        return $this->morphTo();
     }
 
     public function userTrainingOu() {

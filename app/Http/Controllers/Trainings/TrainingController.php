@@ -10,6 +10,8 @@ use App\Models\Parameters\Parameter;
 use App\Models\Establishment;
 use Barryvdh\DomPDF\Facade\Pdf;
 
+use App\Notifications\Trainings\EndApprovalProcess;
+
 class TrainingController extends Controller
 {
     /**
@@ -137,8 +139,20 @@ class TrainingController extends Controller
         // APRUEBA
         if($approval->status == 1){
             if($process == 'end'){
+                /*
                 $training->status = 'complete';
                 $training->save();
+                */
+
+                // dd('amtes de enviar', $approval->approvable);
+
+                $approval->approvable->userTraining->notify(new EndApprovalProcess($approval->approvable));
+
+                /*
+                Mail::to($training->email)
+                ->cc(env('APP_RYS_MAIL'))
+                ->send(new EndApprovalProcess($training));
+                */
             }
         }   
 

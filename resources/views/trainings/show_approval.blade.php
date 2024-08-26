@@ -220,7 +220,8 @@
             <tr class="text-center">
                 @foreach($training->approvals as $approval)
                     <td>
-                        {{ $approval->StatusInWords }} <br><br>
+                        <p class="text-{{ $approval->Color }}">{{ $approval->StatusInWords }}</p>
+
                         @if($approval->approver) <i class="fas fa-user"></i> @endif {{ ($approval->approver) ? $approval->approver->FullName : null }}<br> 
                         @if($approval->approver) <i class="fas fa-calendar"></i> @endif {{ ($approval->approver) ? $approval->approver_at : null }}
                         
