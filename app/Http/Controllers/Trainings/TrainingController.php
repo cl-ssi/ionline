@@ -143,16 +143,7 @@ class TrainingController extends Controller
                 $training->status = 'complete';
                 $training->save();
                 */
-
-                // dd('amtes de enviar', $approval->approvable);
-
                 $approval->approvable->userTraining->notify(new EndApprovalProcess($approval->approvable));
-
-                /*
-                Mail::to($training->email)
-                ->cc(env('APP_RYS_MAIL'))
-                ->send(new EndApprovalProcess($training));
-                */
             }
         }   
 
