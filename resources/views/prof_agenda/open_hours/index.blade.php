@@ -15,7 +15,7 @@
     <div class="row">
         <fieldset class="form-group col col-md-4">
             <label for="for_id_deis">ID</label>
-            <input type="text" class="form-control" name="id">
+            <input type="text" class="form-control" name="id" @if($request) value="{{$request->id}}" @endif>
         </fieldset>
 
         <fieldset class="form-group col col-md-4">
