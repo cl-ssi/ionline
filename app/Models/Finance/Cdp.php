@@ -68,36 +68,4 @@ class Cdp extends Model
     {
         return $this->morphOne(Numeration::class, 'numerable');
     }
-
-    public static function createCdp(RequestForm $requestForm): void 
-    {
-        $ou = Parameter::get('Finanzas','ou_id', auth()->user()->establishment_id);
-
-        $cdp = Cdp::create([
-            'date' => $requestForm->created_at,
-            'file_path' => $requestForm->file_path,
-            'request_form_id' => $requestForm->id,
-            'user_id' => null,
-            'organizational_unit_id' => $ou,
-            'establishment_id' => auth()->user()->establishment_id,
-        ]);
-
-        $url = route('request_forms.show', $requestForm->id);
-
-        $cdp->approval()->create([
-            "module" => "CDP",
-            "module_icon" => "fas fa-file-invoice-dollar",
-            "subject" => "Certificado de Disponibilidad Presupuestaria<br>Formulario 
-                <a target=\"_blank\" href=\"$url\">#{$requestForm->folio}</a>",
-            "document_route_name" => "finance.cdp.show",
-            "document_route_params" => json_encode([
-                "cdp" => $cdp->id
-            ]),
-            "sent_to_ou_id" => $ou,
-            "callback_controller_method" => "App\Http\Controllers\Finance\CdpController@approvalCallback",
-            "callback_controller_params" => json_encode([]),
-            "digital_signature" => true,
-            "filename" => "ionline/finance/cdp/".time().str()->random(30).".pdf",
-        ]);
-    }
 }
