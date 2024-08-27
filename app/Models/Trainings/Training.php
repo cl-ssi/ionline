@@ -121,10 +121,30 @@ class Training extends Model implements Auditable
                 return 'Finalizado';
                 break;
             
+            case 'pending certificate':
+                return 'Certificado Pendiente';
+                break;
+            
             case 'rejected':
                 return 'Rechazado';
                 break;
         }
+    }
+
+    public function canEdit(){
+        return in_array($this->StatusValue, ['Guardado']);
+    }
+
+    public function canUploadCertificate(){
+        return in_array($this->StatusValue, ['Certificado Pendiente']);
+    }
+
+    public function canShow(){
+        return in_array($this->StatusValue, ['Enviado', 'Certificado Pendiente', 'Finalizado']);
+    }
+
+    public function canViewSummayPdf(){
+        return in_array($this->StatusValue, ['Certificado Pendiente', 'Finalizado', 'Rechazado']);
     }
 
     public function getActivityTypeValueAttribute() {

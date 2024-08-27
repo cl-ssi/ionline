@@ -45,28 +45,18 @@ class EndApprovalProcess extends Notification
      */
     public function toMail($notifiable)
     {
-        /*
-        return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
-        */
-
-        // dd('aquí en la notification', $notifiable,  $this->training->userTraining->FullName);
-
         return (new MailMessage)
                     ->level('info')
                     ->replyTo($this->training->email)
                     ->subject('[Notificación] Adjuntar certificado final de la actividad')
-                    ->greeting('Hola ' . $this->training->userTraining->FullName)
-                    // ->line(new HtmlString('Se ha <b>CANCELADO</b> una reserva en <b>' . $roomBooking->room->identifier . '</b> en el complejo <b>' . $roomBooking->room->hotel->name . '</b>.'))
-                    ->line(new HtmlString('Espero que se encuentre bien. Le escribo para recordarle que ha finalizado el periodo de la actividad <b>'
-                    .$this->training->activity_name. '</b>, según el registro de fechas consignado en el formulario de capacitación realizado y 
-                    aprobado en nuestro sistema (inicio: '.$this->training->activity_date_start_at.' , fin: '.$this->training->activity_date_end_at.'). 
-                    Es fundamental que complete el proceso de adjuntar el certificado final de la actividad mediante el sistema i-online.'))
-                    ->line(new HtmlString('El cumplimiento de este plazo es obligatorio, ya que nos permite mantener actualizados los registros de sus capacitaciones en SIRH y su historial de actividades.'))
-                    ->line(new HtmlString('Por favor, le solicitamos que realice este procedimiento antes de transcurridos 20 días hábiles desde la fecha de término de la actividad.'))
-                    ->line(new HtmlString('Para cualquier pregunta o asistencia adicional, no dude en contactarnos.'))
+                    ->greeting('Hola, ' . $this->training->userTraining->FullName)
+                    ->line(new HtmlString('<p style="text-align: justify;">Espero que se encuentre bien. Le escribo para recordarle que ha finalizado el periodo de la actividad <b>'
+                        .$this->training->activity_name. '</b>, según el registro de fechas consignado en el formulario de capacitación realizado y 
+                        aprobado en nuestro sistema (inicio: '.$this->training->activity_date_start_at.' , fin: '.$this->training->activity_date_end_at.'). 
+                        Es fundamental que complete el proceso de adjuntar el certificado final de la actividad mediante el sistema i-online. </p>'))
+                    ->line(new HtmlString('<p style="text-align: justify;">El cumplimiento de este plazo es obligatorio, ya que nos permite mantener actualizados los registros de sus capacitaciones en SIRH y su historial de actividades.</p>'))
+                    ->line(new HtmlString('<p style="text-align: justify;">Por favor, le solicitamos que realice este procedimiento antes de transcurridos 20 días hábiles desde la fecha de término de la actividad.</p>'))
+                    ->line(new HtmlString('<p style="text-align: justify;">Para cualquier pregunta o asistencia adicional, no dude en contactarnos.</p>'))
                     ->line(new HtmlString('Unidad de Formación y Capacitación <br>
                         Departamento de Gestión y Desarrollo del Talento <br>
                         Servicio de Salud Tarapacá'))                    

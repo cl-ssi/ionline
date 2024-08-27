@@ -1,5 +1,5 @@
 <div>
-<div class="table-responsive">
+    <div class="table-responsive">
         <table class="table table-bordered table-striped table-sm small">
             <thead>
                 <tr class="text-center">
@@ -30,12 +30,16 @@
                                 <span class="{{ ($bootstrap == 'v4') ? 'badge badge-warning' : 'badge text-bg-warning' }}">{{ $training->StatusValue }}</span>
                                 @break
 
+                            @case('Certificado Pendiente')
+                                <span class="{{ ($bootstrap == 'v4') ? 'badge badge-warning' : 'badge text-bg-warning' }}">{{ $training->StatusValue }}</span>
+                                @break
+
                             @case('Rechazado')
-                                <span class="badge text-bg-danger">{{ $training->StatusValue }}</span>
+                                <span class="{{ ($bootstrap == 'v4') ? 'badge badge-danger' : 'badge text-bg-danger' }}">{{ $training->StatusValue }}</span>
                                 @break
                             
                             @case('Finalizado')
-                                <span class="badge text-bg-success">{{ $training->StatusValue }}</span>
+                                <span class="{{ ($bootstrap == 'v4') ? 'badge badge-success' : 'badge text-bg-success' }}">{{ $training->StatusValue }}</span>
                                 @break
                         @endswitch
                     </td>
@@ -52,8 +56,8 @@
                     <td class="text-center" width="7%">{{ $training->activity_date_start_at }}</td>
                     <td class="text-center" width="7%">{{ $training->activity_date_end_at }}</td>
                     <td width="8%" class="text-center">
-                        @if($training->StatusValue == 'Guardado')
-                            @if(auth()->guard('external')->check() == true)
+                        @if($training->canEdit())
+                            @if(auth()->guard('external')->check() == true )
                                 <a href="{{ route('external_trainings.external_edit', $training) }}"
                                     class="btn btn-outline-secondary btn-sm">
                                     <i class="fas fa-edit"></i> 
@@ -71,7 +75,9 @@
                                     </a>
                                 @endif
                             @endif
-                        @else
+                        @endif
+
+                        @if($training->canShow())
                             @if(auth()->guard('external')->check() == true)
                                 <a href="{{ route('external_trainings.external_show', $training) }}"
                                     class="btn btn-outline-secondary btn-sm">
@@ -85,20 +91,149 @@
                             @endif
                         @endif
 
-                        @if($training->StatusValue == 'Finalizado')
+                        @if($training->canViewSummayPdf() && auth()->guard('external')->check() != true)
+                            <a class="btn btn-outline-primary btn-sm"
+                                target="_blank"
+                                href="{{ route('trainings.show_summary_pdf', $training) }}"
+                                data-bs-toggle="tooltip" 
+                                title="Documento Resumen">
+                                <i class="fas fa-file-pdf fa-fw"></i>
+                            </a>
+                        @endif
+
+                        @if($training->canUploadCertificate())
+                            <!-- Button trigger modal -->
+                            @if(auth()->guard('external')->check())
+                                <button type="button" 
+                                    class="btn btn-outline-success btn-sm"
+                                    data-toggle="modal" 
+                                    data-target="#exampleModal">
+                                    <i class="fas fa-file-upload fa-fw"></i>
+                                </button>
+                            
+                                <!-- Modal -->
+                                @include('trainings.modals.upload_certificate', [
+                                        'external'  => 'yes',
+                                        'training'  => $training 
+                                    ]
+                                )
+                            @else
+                                @if(auth()->user()->id == $training->user_training_id)
+                                    <button type="button" 
+                                        class="btn btn-outline-success btn-sm mt-1" 
+                                        data-bs-toggle="modal"
+                                        title="Subir Certificado"
+                                        data-bs-target="#exampleModal-{{ $training->id }}">
+                                        <i class="fas fa-file-upload fa-fw"></i>
+                                    </button>
+                                @endif
+
+                                <!-- Modal -->
+                                @include('trainings.modals.upload_certificate', [
+                                        'external' => 'no',
+                                        'training'  => $training 
+                                    ]
+                                )
+                            @endif
+
+                            
+                        @endif
+
+                        {{--
+                        @if($training->StatusValue == 'Guardado' || $training->StatusValue == 'Enviado')
+                            @if(auth()->guard('external')->check() == true && $training->StatusValue == 'Guardado')
+                                <a href="{{ route('external_trainings.external_edit', $training) }}"
+                                    class="btn btn-outline-secondary btn-sm">
+                                    <i class="fas fa-edit"></i> 
+                                </a>
+                            @else
+                                @if($training->user_creator_id == auth()->id())
+                                    <a href="{{ route('trainings.edit', $training) }}"
+                                        class="btn btn-outline-secondary btn-sm">
+                                        <i class="fas fa-edit"></i> 
+                                    </a>
+                                @else
+                                    <a href="{{ route('trainings.show', $training) }}"
+                                        class="btn btn-outline-secondary btn-sm">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                @endif
+                            @endif
+                        @endif
+
+                        @if(auth()->guard('external')->check() == true)
+                            <a href="{{ route('external_trainings.external_show', $training) }}"
+                                class="btn btn-outline-secondary btn-sm">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                        @else
+                            <a href="{{ route('trainings.show', $training) }}"
+                                class="btn btn-outline-secondary btn-sm">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                        @endif
+                        
+                        <!-- ACCIONES PARA EL ESTADO ENVIADO -->
+                        @if($training->StatusValue == 'Enviado')
                             @if(auth()->guard('external')->check() == true)
                                 <a href="{{ route('external_trainings.external_show', $training) }}"
                                     class="btn btn-outline-secondary btn-sm">
                                     <i class="fas fa-eye fa-fw"></i>
                                 </a>
                             @else
-                                <a class="btn btn-outline-primary btn-sm"
-                                    target="_blank"
-                                    href="{{ route('trainings.show_summary_pdf', $training) }}">
+                                <a href="{{ route('trainings.show', $training) }}"
+                                    class="btn btn-outline-secondary btn-sm">
+                                    <i class="fas fa-eye fa-fw"></i>
+                                </a>
+                                <a class="btn btn-outline-secondary btn-sm disabled"
+                                    target="_blank">
                                     <i class="fas fa-file-pdf fa-fw"></i>
                                 </a>
                             @endif
                         @endif
+                        
+                        <!-- ACCIONES PARA EL ESTADO FINALIZADO -->
+                        @if($training->StatusValue == 'Certificado Pendiente')
+                            @if(auth()->guard('external')->check() == true)
+                                <a href="{{ route('external_trainings.external_show', $training) }}"
+                                    class="btn btn-outline-secondary btn-sm">
+                                    <i class="fas fa-eye fa-fw"></i>
+                                </a>
+                                <a href=""
+                                    class="btn btn-outline-success btn-sm"
+                                    data-bs-toggle="tooltip" 
+                                    title="Subir Certificado">
+                                    <i class="fas fa-file-upload fa-fw"></i>
+                                </a>
+                            @else
+                                <a href="{{ route('trainings.show', $training) }}"
+                                    class="btn btn-outline-secondary btn-sm">
+                                    <i class="fas fa-eye fa-fw"></i>
+                                </a>
+
+                                <a class="btn btn-outline-primary btn-sm"
+                                    target="_blank"
+                                    href="{{ route('trainings.show_summary_pdf', $training) }}"
+                                    data-bs-toggle="tooltip" 
+                                    title="Documento Resumen">
+                                    <i class="fas fa-file-pdf fa-fw"></i>
+                                </a>
+
+                                <!-- Button trigger modal -->
+                                <button type="button" 
+                                    class="btn btn-outline-success btn-sm mt-1" 
+                                    data-bs-toggle="modal"
+                                    title="Subir Certificado"
+                                    data-bs-target="#exampleModal">
+                                    <i class="fas fa-file-upload fa-fw"></i>
+                                </button>
+
+                                <!-- Modal -->
+
+                                @include('trainings.modals.upload_certificate')
+                            @endif
+                        @endif
+                        --}}
                     </td>
                 </tr>
                 @endforeach

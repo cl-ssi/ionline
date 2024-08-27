@@ -11,6 +11,12 @@
 </div>
 
 <div class="col-sm">
+    @if(session()->has('message'))
+        <div class="alert alert-success">
+            {{ session('message') }}
+        </div>
+    @endif
+
     @livewire('trainings.search-training', [
         'index'     => 'own',
         'bootstrap' => 'v4'

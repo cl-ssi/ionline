@@ -17,6 +17,10 @@
                 @case('Enviado')
                     <span class="badge text-bg-warning">{{ $training->StatusValue }}</span>
                     @break
+                
+                @case('Certificado Pendiente')
+                    <span class="badge text-bg-warning">{{ $training->StatusValue }}</span>
+                    @break
 
                 @case('Rechazado')
                     <span class="badge text-bg-danger">{{ $training->StatusValue }}</span>
