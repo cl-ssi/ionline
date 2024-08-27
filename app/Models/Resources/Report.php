@@ -6,14 +6,31 @@ use Illuminate\Database\Eloquent\Model;
 
 class Report extends Model
 {
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
     protected $fillable = [
-        'id', 'serial', 'type', 'brand', 'model', 'ip', 'mac_address', 'active_type', 'comment', 'status', 'place_id'
+        'active_type',
+        'brand',
+        'comment',
+        'id',
+        'ip',
+        'mac_address',
+        'model',
+        'place_id',
+        'serial',
+        'status',
+        'type',
     ];
 
+    /**
+     * Scope a query to search reports.
+     */
     public function scopeSearch($query, $search)
     {
-        if ($search != "")
-        {
+        if ($search != "") {
             return $query->where('serial', 'LIKE', '%' . $search . '%')
                 ->orWhere('type', 'LIKE', '%' . $search . '%')
                 ->orWhere('brand', 'LIKE', '%' . $search . '%')

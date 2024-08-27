@@ -3,7 +3,10 @@
 namespace App\Models\Resources;
 
 use App\Models\Parameters\Place;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Telephone extends Model
@@ -18,55 +21,61 @@ class Telephone extends Model
     protected $table = 'res_telephones';
 
     /**
-     * The attributes that should be mutated to dates.
-     *
-     * @var array
-     */
-
-    protected $casts = [
-        'deleted_at' => 'datetime'
-    ];
-     
-
-    /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'number',
-        'minsal',
         'mac',
+        'minsal',
+        'number',
         'place_id',
         'visualization',
     ];
 
-    public function users()
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        // Add any other attributes that need casting here
+    ];
+
+    /**
+     * Get the users associated with the telephone.
+     */
+    public function users(): BelongsToMany
     {
-        return $this->belongsToMany('\App\Models\User', 'res_telephone_user')->withTimestamps();
+        return $this->belongsToMany(User::class, 'res_telephone_user')->withTimestamps();
     }
 
+    /**
+     * Get the place associated with the telephone.
+     */
+    public function place(): BelongsTo
+    {
+        return $this->belongsTo(Place::class);
+    }
+
+    /**
+     * Scope a query to search telephones.
+     */
     public function scopeSearch($query, $field, $value)
     {
-        switch($field) {
+        switch ($field) {
             case 'minsal':
                 $query->where('number', 'LIKE', '%' . $value . '%')
                     ->orWhere('minsal', 'LIKE', '%' . $value . '%');
                 break;
             case 'establishment_id':
-                if($value) {
-                    $query->whereRelation('place','establishment_id', $value);
-                }
-                else {
+                if ($value) {
+                    $query->whereRelation('place', 'establishment_id', $value);
+                } else {
                     $query->whereDoesntHave('place.establishment');
                 }
                 break;
         }
         return $query;
-    }
-
-    public function place()
-    {
-        return $this->belongsTo(Place::class);
     }
 }

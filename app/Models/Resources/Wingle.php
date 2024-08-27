@@ -13,7 +13,26 @@ class Wingle extends Model
      */
     protected $table = 'res_wingles';
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
     protected $fillable = [
-        'brand', 'model', 'company', 'imei', 'password'
+        'brand',
+        'company',
+        'imei',
+        'model',
+        'password',
     ];
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        // Add any other attributes that need casting here
+    ];
+
 }

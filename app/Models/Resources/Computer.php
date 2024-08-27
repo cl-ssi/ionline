@@ -6,7 +6,10 @@ use App\Models\Inv\Inventory;
 use App\Models\Inv\InventoryLabel;
 use App\Models\Parameters\Place;
 use App\Models\Resources\ComputerLabel;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Contracts\Auditable;
 
@@ -22,59 +25,77 @@ class Computer extends Model implements Auditable
      */
     protected $table = 'res_computers';
 
-    protected $fillable = [
-        'id',
-        'type',
-        'brand',
-        'model',
-        'serial',
-        'hostname',
-        'domain',
-        'ip',
-        'mac_address',
-        'ip_group',
-        'rack',
-        'vlan',
-        'network_segment',
-        'operating_system',
-        'processor',
-        'ram',
-        'hard_disk',
-        'inventory_number',
-        'active_type',
-        'intesis_id',
-        'comment',
-        'status',
-        'office_serial',
-        'windows_serial',
-        'fusion_at',
-        'place_id',
-        'inventory_id',
-    ];
-
     /**
-     * The attributes that should be mutated to dates.
+     * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $dates = ['deleted_at'];
+    protected $fillable = [
+        'active_type',
+        'brand',
+        'comment',
+        'domain',
+        'fusion_at',
+        'hostname',
+        'id',
+        'intesis_id',
+        'inventory_id',
+        'inventory_number',
+        'ip',
+        'ip_group',
+        'mac_address',
+        'model',
+        'network_segment',
+        'office_serial',
+        'operating_system',
+        'place_id',
+        'processor',
+        'rack',
+        'ram',
+        'serial',
+        'status',
+        'type',
+        'vlan',
+        'windows_serial',
+    ];
 
-    public function users()
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'fusion_at' => 'datetime',
+    ];
+
+    /**
+     * Get the users associated with the computer.
+     */
+    public function users(): BelongsToMany
     {
-        return $this->belongsToMany('\App\Models\User', 'res_computer_user')->withTimestamps();
+        return $this->belongsToMany(User::class, 'res_computer_user')->withTimestamps();
     }
 
-    public function place()
+    /**
+     * Get the place associated with the computer.
+     */
+    public function place(): BelongsTo
     {
         return $this->belongsTo(Place::class);
     }
 
-    public function inventory()
+    /**
+     * Get the inventory associated with the computer.
+     */
+    public function inventory(): BelongsTo
     {
         return $this->belongsTo(Inventory::class);
     }
 
-    public function labels()
+    /**
+     * Get the labels associated with the computer.
+     */
+    public function labels(): BelongsToMany
     {
         return $this->belongsToMany(InventoryLabel::class, 'res_computer_label', 'computer_id', 'label_id')
             ->using(ComputerLabel::class)
@@ -82,15 +103,20 @@ class Computer extends Model implements Auditable
             ->withTimestamps();
     }
 
-    public function isMerged()
+    /**
+     * Check if the computer is merged.
+     */
+    public function isMerged(): bool
     {
         return $this->fusion_at != null;
     }
 
+    /**
+     * Scope a query to search computers.
+     */
     public function scopeSearch($query, $search)
     {
-        if ($search != "")
-        {
+        if ($search != "") {
             return $query->where('brand', 'LIKE', '%' . $search . '%')
                 ->orWhere('model', 'LIKE', '%' . $search . '%')
                 ->orWhere('ip', 'LIKE', '%' . $search . '%')
@@ -99,46 +125,39 @@ class Computer extends Model implements Auditable
         }
     }
 
-    public function tipo()
+    /**
+     * Get the type of the computer.
+     */
+    public function tipo(): string
     {
-        switch ($this->type)
-        {
+        switch ($this->type) {
             case 'desktop':
-                $valor = 'PC Escritorio';
-                break;
+                return 'PC Escritorio';
             case 'all-in-one':
-                $valor = 'PC all-in-one';
-                break;
+                return 'PC all-in-one';
             case 'notebook':
-                $valor = 'PC Notebook';
-                break;
+                return 'PC Notebook';
             case 'other':
-                $valor = 'PC Otro';
-                break;
+                return 'PC Otro';
             default:
-                $valor = '';
-                break;
+                return '';
         }
-        return $valor;
     }
 
-    public function tipoActivo()
+    /**
+     * Get the active type of the computer.
+     */
+    public function tipoActivo(): string
     {
-        switch ($this->active_type)
-        {
+        switch ($this->active_type) {
             case 'leased':
-                $valor = 'Arrendado';
-                break;
+                return 'Arrendado';
             case 'own':
-                $valor = 'Propio';
-                break;
+                return 'Propio';
             case 'user':
-                $valor = 'Usuario';
-                break;
+                return 'Usuario';
             default:
-                $valor = '';
-                break;
+                return '';
         }
-        return $valor;
     }
 }
