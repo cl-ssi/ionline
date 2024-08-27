@@ -2990,6 +2990,27 @@ Route::prefix('test')->as('test.')->group(function () {
         echo "</pre>";
     })->middleware('auth');
 
+    Route::get('/telefonos', function () {
+        echo "<pre>";
+        // Get all users with telephones
+        $users = User::whereHas('telephones')
+            ->orderBy('name')
+            ->get();
+
+        foreach($users as $user) {
+            echo 
+                $user->telephones->first()?->minsal.';'
+                .$user->telephones->first()?->number.';'
+                .$user->id.';'
+                .$user->dv.';'
+                .$user->shortName.';'
+                .$user->email.';'
+                .optional($user->organizationalUnit)->name.';'
+                .optional($user->establishment)->name."\n";
+        }
+        echo "</pre>";
+    })->middleware('auth');
+
     Route::get('/teams', [TestController::class, 'SendCardToTeams'])->middleware('auth');
 });
 

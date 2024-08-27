@@ -2,6 +2,7 @@
 
 namespace App\Models\RequestForms;
 
+use App\Models\Finance\Cdp;
 use OwenIt\Auditing\Contracts\Auditable;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -189,6 +190,11 @@ class RequestForm extends Model implements Auditable
     public function immediatePurchases()
     {
         return $this->hasMany(ImmediatePurchase::class);
+    }
+
+    public function cdp(): HasOne
+    {
+        return $this->hasOne(Cdp::class);
     }
 
     /**
@@ -709,6 +715,51 @@ class RequestForm extends Model implements Auditable
         return date('d-m-Y H:i', $max);
 
         // $this->approvedAt
+    }
+
+    /**
+     * Este método crea un Certificado de Disponibilidad Presupuestaria 
+     * para un Formulario de Requermiento
+     * $requestForm->createCdp();
+     * 
+     * @return void
+     */
+    public function createCdp(): void
+    {
+        $financeEvent = $this->eventRequestForms->where('event_type', 'finance_event')->first();
+
+        if ( !$financeEvent ) {
+            // log
+            logger()->error("No se pudo crear el CDP para el formulario de requerimiento {$this->id} porque no se encontró el evento finance_event");
+            return;
+        }
+
+        $cdp = Cdp::create([
+            'date'                   => $this->created_at,
+            'file_path'              => $this->file_path,
+            'request_form_id'        => $this->id,
+            'user_id'                => null,
+            'organizational_unit_id' => $financeEvent->signerOrganizationalUnit->id,
+            'establishment_id'       => $financeEvent->signerOrganizationalUnit->establishment_id,
+        ]);
+
+        $url = route('request_forms.show', $this->id);
+
+        $cdp->approval()->create([
+            "module"                     => "CDP",
+            "module_icon"                => "fas fa-file-invoice-dollar",
+            "subject"                    => "Certificado de Disponibilidad Presupuestaria<br>Formulario 
+                <a target=\"_blank\" href=\"$url\">#{$this->folio}</a>",
+            "document_route_name"        => "finance.cdp.show",
+            "document_route_params"      => json_encode([
+                "cdp" => $cdp->id
+            ]),
+            "sent_to_ou_id"              => $financeEvent->signerOrganizationalUnit->id,
+            "callback_controller_method" => "App\Http\Controllers\Finance\CdpController@approvalCallback",
+            "callback_controller_params" => json_encode([]),
+            "digital_signature"          => true,
+            "filename"                   => "ionline/finance/cdp/" . time() . str()->random(30) . ".pdf",
+        ]);
     }
 
     /******************************************************/

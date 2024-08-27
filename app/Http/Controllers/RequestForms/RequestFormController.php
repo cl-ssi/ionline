@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\RequestForms;
 
 use App\Exports\RequestForms\RequestFormsExport;
-use App\Models\Finance\Cdp;
 use App\Models\RequestForms\RequestForm;
 use App\Models\RequestForms\Item;
 use App\RequestForms\Passage;
@@ -541,7 +540,7 @@ class RequestFormController extends Controller {
             $requestForm->save();
 
             /* Crear el CDP */
-            Cdp::createCdp($requestForm);
+            $requestForm->createCdp();
 
             session()->flash('success', $message);
             return redirect()->route('request_forms.pending_forms');

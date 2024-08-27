@@ -66,7 +66,7 @@
         <tr>
             <th align="left" style="width: 50%">Monto $</th>
             <td>{{$cdp->requestForm->symbol_currency}} 
-                {{-- 
+                {{--                 
                     {{ 
                         number_format(
                             $cdp->requestForm->has_increased_expense 
