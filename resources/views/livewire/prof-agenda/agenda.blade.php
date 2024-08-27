@@ -477,7 +477,7 @@
                     
                     eventClick: function(info) {
                         // console.info(info.event.extendedProps);
-                        $('.modalTitle').html(info.event.title);
+                        $('.modalTitle').html(info.event.id + " - " + info.event.title);
                         $('.patient').val(info.event.extendedProps.patient_name);
                         $('.contact_number').val(info.event.extendedProps.contact_number);
                         $('.gender').val(info.event.extendedProps.gender);

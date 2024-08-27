@@ -13,14 +13,19 @@
     @livewire('prof-agenda.select-user-profesion',['profession_id' => $request->profession_id, 'user_id' => $request->user_id, 'profesional_ust' => true])
 
     <div class="row">
-        <fieldset class="form-group col col-md-6">
+        <fieldset class="form-group col col-md-4">
+            <label for="for_id_deis">ID</label>
+            <input type="text" class="form-control" name="id">
+        </fieldset>
+
+        <fieldset class="form-group col col-md-4">
             <label for="for_id_deis">Paciente</label>
             @livewire('search-select-user', [
                 'selected_id' => 'patient_id'
             ])
         </fieldset>
 
-        <fieldset class="form-group col col-md-6">
+        <fieldset class="form-group col col-md-4">
             <label for="for_id_deis">Asistencia</label>
             <select class="form-control" name="assistance" id="">
                 <option value="-1" @selected(!$request->assistance == -1)>Todos</option>
