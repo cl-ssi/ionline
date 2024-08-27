@@ -65,7 +65,19 @@
         </tr>
         <tr>
             <th align="left" style="width: 50%">Monto $</th>
-            <td>{{$cdp->requestForm->symbol_currency}}{{ number_format($cdp->requestForm->has_increased_expense ? $cdp->requestForm->new_estimated_expense : $cdp->requestForm->estimated_expense,$cdp->requestForm->precision_currency,",",".") }}</td>
+            <td>{{$cdp->requestForm->symbol_currency}} 
+                {{-- 
+                    {{ 
+                        number_format(
+                            $cdp->requestForm->has_increased_expense 
+                            ? $cdp->requestForm->new_estimated_expense 
+                            : $cdp->requestForm->estimated_expense,$cdp->requestForm->precision_currency
+                        ,",",".") 
+                    }} 
+                --}}
+
+                {{ number_format($cdp->requestForm->estimated_expense,$cdp->requestForm->precision_currency,",",".") }}
+            </td>
         </tr>
     </tbody>
 </table>
