@@ -3,6 +3,9 @@
 namespace App\Models\Summary;
 
 use App\Helpers\DateHelper;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
@@ -15,8 +18,18 @@ class Summary extends Model
 {
     use SoftDeletes;
 
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
     protected $table = 'sum_summaries';
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
     protected $fillable = [
         'subject',
         'name',
@@ -32,48 +45,73 @@ class Summary extends Model
         'investigator_id',
         'actuary_id',
         'creator_id',
-        'establishment_id',
+        'establishment_id'
     ];
 
     /**
-     * The attributes that should be mutated to dates.
+     * The attributes that should be cast to native types.
      *
      * @var array
      */
-    protected $dates = [
-        'resolution_date',
-        'start_date',
-        'start_at',
-        'end_date',
-        'end_at',
+    protected $casts = [
+        'resolution_date' => 'date',
+        'start_date' => 'date',
+        'start_at' => 'datetime',
+        'end_date' => 'date',
+        'end_at' => 'datetime' 
     ];
 
-    public function type()
+    /**
+     * Get the type that owns the summary.
+     *
+     * @return BelongsTo
+     */
+    public function type(): BelongsTo
     {
         return $this->belongsTo(Type::class);
     }
 
-    public function investigator()
+    /**
+     * Get the investigator that owns the summary.
+     *
+     * @return BelongsTo
+     */
+    public function investigator(): BelongsTo
     {
         return $this->belongsTo(User::class, 'investigator_id')->withTrashed();
     }
 
-    public function actuary()
+    /**
+     * Get the actuary that owns the summary.
+     *
+     * @return BelongsTo
+     */
+    public function actuary(): BelongsTo
     {
         return $this->belongsTo(User::class, 'actuary_id')->withTrashed();
     }
 
-    public function creator()
+    /**
+     * Get the creator that owns the summary.
+     *
+     * @return BelongsTo
+     */
+    public function creator(): BelongsTo
     {
         return $this->belongsTo(User::class, 'creator_id')->withTrashed();
     }
 
-    public function establishment()
+    /**
+     * Get the establishment that owns the summary.
+     *
+     * @return BelongsTo
+     */
+    public function establishment(): BelongsTo
     {
         return $this->belongsTo(Establishment::class, 'establishment_id');
     }
 
-    public function events()
+    public function events(): HasMany
     {
         return $this->hasMany(Event::class, 'summary_id')
             ->withTrashed()
@@ -84,7 +122,7 @@ class Summary extends Model
             });
     }
 
-    public function lastEvent()
+    public function lastEvent(): HasOne
     {
         return $this->hasOne(Event::class, 'summary_id')
             ->withTrashed()

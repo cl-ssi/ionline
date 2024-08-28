@@ -2,28 +2,47 @@
 
 namespace App\Models\Summary;
 
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Summary\Summary;
-use App\Models\Summary\Event;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class SummaryEventFile extends Model
 {
     use SoftDeletes;
+
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
     protected $table = 'sum_summary_event_files';
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
     protected $fillable = [
         'name',
         'file'
     ];
 
-
-    public function summary()
+    /**
+     * Get the summary that owns the summary event file.
+     *
+     * @return BelongsTo
+     */
+    public function summary(): BelongsTo
     {
         return $this->belongsTo(Summary::class, 'summary_id');
     }
 
-    public function summaryEvent()
+    /**
+     * Get the summary event that owns the summary event file.
+     *
+     * @return BelongsTo
+     */
+    public function summaryEvent(): BelongsTo
     {
         return $this->belongsTo(Event::class, 'summary_event_id');
     }

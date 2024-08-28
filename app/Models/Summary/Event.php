@@ -2,19 +2,30 @@
 
 namespace App\Models\Summary;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Summary\EventType;
 use App\Models\Summary\Summary;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Event extends Model
 {
     use SoftDeletes;
 
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
     protected $table = 'sum_summary_events';
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
     protected $fillable = [
         'event_type_id',
         'body',
@@ -23,47 +34,86 @@ class Event extends Model
         'user_id',
         'summary_id',
         'creator_id',
-        'father_event_id',
+        'father_event_id'
     ];
 
-    protected $dates = [
-        'start_date',
-        'end_date',
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'start_date' => 'date',
+        'end_date' => 'date'
     ];
 
-    public function type()
+    /**
+     * Get the event type that owns the event.
+     *
+     * @return BelongsTo
+     */
+    public function type(): BelongsTo
     {
         return $this->belongsTo(EventType::class, 'event_type_id');
     }
 
-    public function user()
+    /**
+     * Get the user that owns the event.
+     *
+     * @return BelongsTo
+     */
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class)->withTrashed();
     }
 
-    public function creator()
+    /**
+     * Get the creator of the event.
+     *
+     * @return BelongsTo
+     */
+    public function creator(): BelongsTo
     {
         return $this->belongsTo(User::class, 'creator_id')->withTrashed();
     }
 
-    public function summary()
+    /**
+     * Get the summary that owns the event.
+     *
+     * @return BelongsTo
+     */
+    public function summary(): BelongsTo
     {
         return $this->belongsTo(Summary::class, 'summary_id');
     }
 
+    /**
+     * Get the files for the event.
+     *
+     * @return HasMany
+     */
     public function files(): HasMany
     {
         return $this->hasMany(SummaryEventFile::class, 'summary_event_id');
     }
 
-    public function father()
+    /**
+     * Get the father event.
+     *
+     * @return BelongsTo
+     */
+    public function father(): BelongsTo
     {
         return $this->belongsTo(Event::class, 'father_event_id');
     }
 
-    public function childs()
+    /**
+     * Get the child events.
+     *
+     * @return HasMany
+     */
+    public function childs(): HasMany
     {
         return $this->hasMany(Event::class, 'father_event_id');
     }
-
 }
