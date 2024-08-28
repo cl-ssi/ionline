@@ -225,6 +225,22 @@
                 </div>
             </div>
 
+            <h5 class="text-white p-2 bg_azul_gob mt-3 text-center">
+                <i class="fas fa-file-signature"></i>
+                Agendar hora - Unidad Salud del Trabajador
+            </h5>
+
+            <div class="mt-4 p-5 text-black rounded bg-light">
+
+                <h6>En el siguiente video podrá visualizar como realizar un agendamiento en la unidad de salud del trabajador. Para acceder al módulo presionar <a href="{{ route('prof_agenda.home') }}">aquí</a>.</h6>
+                <br>
+                <div class="row">
+                    <fieldset class="form-group col-12 col-md-12">
+                        <iframe src="https://drive.google.com/file/d/1O7YFz0EzEI37uFQuUOoYW0OjBVCgiCBH/preview" width="100%" height="315" allow="autoplay; fullscreen" allowfullscreen></iframe>
+                    </fieldset>
+                </div>
+            </div>
+
             <!-- Se restringe la visualización a usuarios de bienestar y administradores -->
             @if(auth()->user()->welfare || auth()->user()->can('be god') || auth()->user()->can('welfare: amipass') || auth()->user()->can('welfare: balance'))
                 <h5 class="text-white p-2 bg_azul_gob mt-3 text-center">
@@ -259,22 +275,6 @@
                     </div>
                 </div>
             @endif
-
-            <h5 class="text-white p-2 bg_azul_gob mt-3 text-center">
-                <i class="fas fa-file-signature"></i>
-                Agendar hora - Unidad Salud del Trabajador
-            </h5>
-
-            <div class="mt-4 p-5 text-black rounded bg-light">
-
-                <h6>En el siguiente video podrá visualizar como realizar un agendamiento en la unidad de salud del trabajador. Para acceder al módulo presionar <a href="{{ route('prof_agenda.home') }}">aquí</a>.</h6>
-                <br>
-                <div class="row">
-                    <fieldset class="form-group col-12 col-md-12">
-                        <iframe src="https://drive.google.com/file/d/1O7YFz0EzEI37uFQuUOoYW0OjBVCgiCBH/preview" width="100%" height="315" allow="autoplay; fullscreen" allowfullscreen></iframe>
-                    </fieldset>
-                </div>
-            </div>
             
         </div>
 
