@@ -3,6 +3,7 @@
 namespace App\Models\Programmings;
 
 use App\Models\Establishment;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -16,8 +17,14 @@ class Programming extends Model implements Auditable
         'id','year', 'description', 'access', 'status'
     ];
 
-    public function user() {
-        return $this->belongsTo('App\Models\User')->withTrashed();
+    /**
+     * Get the user that owns the document.
+     *
+     * @return BelongsTo
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class)->withTrashed();
     }
 
     public function items(){
