@@ -10,13 +10,13 @@
     <h1 class="display-6">Agendamiento Unidad de Salud del Trabajador</h1>
     <p class="lead">Módulo para realizar reservas médicas. </p>
 
-    <!-- <h6>En el siguiente video podrá visualizar como realizar un agendamiento.</h6>
+    <h6>En el siguiente video podrá visualizar como realizar un agendamiento.</h6>
     <br>
     <div class="row">
         <fieldset class="form-group col-12 col-md-12">
-            <iframe src="#" width="100%" height="540" allow="autoplay; fullscreen" allowfullscreen></iframe>
+            <iframe src="https://drive.google.com/file/d/1O7YFz0EzEI37uFQuUOoYW0OjBVCgiCBH/preview" width="100%" height="540" allow="autoplay; fullscreen" allowfullscreen></iframe>
         </fieldset>
-    </div> -->
+    </div>
 </div>
 
 @endsection

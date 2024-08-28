@@ -260,7 +260,7 @@
                 </div>
             @endif
 
-            <!-- <h5 class="text-white p-2 bg_azul_gob mt-3 text-center">
+            <h5 class="text-white p-2 bg_azul_gob mt-3 text-center">
                 <i class="fas fa-file-signature"></i>
                 Agendar hora - Unidad Salud del Trabajador
             </h5>
@@ -271,10 +271,10 @@
                 <br>
                 <div class="row">
                     <fieldset class="form-group col-12 col-md-12">
-                        <iframe src="#" width="100%" height="315" allow="autoplay; fullscreen" allowfullscreen></iframe>
+                        <iframe src="https://drive.google.com/file/d/1O7YFz0EzEI37uFQuUOoYW0OjBVCgiCBH/preview" width="100%" height="315" allow="autoplay; fullscreen" allowfullscreen></iframe>
                     </fieldset>
                 </div>
-            </div> -->
+            </div>
             
         </div>
 
