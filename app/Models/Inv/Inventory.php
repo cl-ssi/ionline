@@ -2,34 +2,46 @@
 
 namespace App\Models\Inv;
 
-use SimpleSoftwareIO\QrCode\Facades\QrCode;
-use OwenIt\Auditing\Contracts\Auditable;
-use Illuminate\Support\Str;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use App\Models\User;
-use App\Models\Rrhh\OrganizationalUnit;
-use App\Models\Warehouse\Store;
-use App\Models\Warehouse\Product;
-use App\Models\Warehouse\Control;
-use App\Models\Unspsc\Product as UnspscProduct;
-use App\Models\Resources\Computer;
-use App\Models\RequestForms\RequestForm;
-use App\Models\RequestForms\PurchaseOrder;
-use App\Models\Parameters\Place;
-use App\Models\Parameters\BudgetItem;
-use App\Models\Finance\Dte;
-use App\Models\Finance\AccountingCode;
 use App\Models\Establishment;
+use App\Models\Finance\AccountingCode;
+use App\Models\Finance\Dte;
+use App\Models\Parameters\BudgetItem;
+use App\Models\Parameters\Place;
+use App\Models\RequestForms\PurchaseOrder;
+use App\Models\RequestForms\RequestForm;
+use App\Models\Resources\Computer;
+use App\Models\Rrhh\OrganizationalUnit;
+use App\Models\User;
+use App\Models\Warehouse\Control;
+use App\Models\Warehouse\Product;
+use App\Models\Warehouse\Store;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
+use OwenIt\Auditing\Contracts\Auditable;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class Inventory extends Model implements Auditable
 {
     use \OwenIt\Auditing\Auditable;
     use HasFactory, SoftDeletes;
 
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
     protected $table = 'inv_inventories';
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
     protected $fillable = [
         'number',
         'old_number',
@@ -77,107 +89,176 @@ class Inventory extends Model implements Auditable
         'removed_at',
     ];
 
-    protected $dates = [
-        'po_date',
-        'discharge_date',
-        'deliver_date',
-    ];
-
     /**
-     * TODO: cuando itero Inventory me hace una query por cada uno hacia computer
-     * Evaluar otra alternativa
+     * The attributes that should be cast to native types.
+     *
+     * @var array
      */
-    // protected $appends = [
-    //     'have_computer',
-    // ];
-
-    /**
-    * The attributes that should be cast.
-    *
-    * @var array
-    */
     protected $casts = [
         'printed' => 'boolean',
+        'po_date' => 'date',
+        'discharge_date' => 'date',
+        'deliver_date' => 'date',
     ];
 
-    /** Documentos Tributarios */
-    public function dtes()
+    /**
+     * Documentos Tributarios
+     *
+     * @return HasMany
+     */
+    public function dtes(): HasMany
     {
-        return $this->hasMany(Dte::class,'folio_oc','po_code');
+        return $this->hasMany(Dte::class, 'folio_oc', 'po_code');
     }
 
-    public function establishment()
+    /**
+     * Get the establishment that owns the inventory.
+     *
+     * @return BelongsTo
+     */
+    public function establishment(): BelongsTo
     {
         return $this->belongsTo(Establishment::class, 'establishment_id');
     }
 
-    public function classification()
+    /**
+     * Get the classification that owns the inventory.
+     *
+     * @return BelongsTo
+     */
+    public function classification(): BelongsTo
     {
         return $this->belongsTo(Classification::class);
     }
 
-    public function requestOrganizationalUnit()
+    /**
+     * Get the organizational unit that owns the inventory.
+     *
+     * @return BelongsTo
+     */
+    public function requestOrganizationalUnit(): BelongsTo
     {
         return $this->belongsTo(OrganizationalUnit::class, 'request_user_ou_id');
     }
 
-    public function requestUser()
+    /**
+     * Get the user that requested the inventory.
+     *
+     * @return BelongsTo
+     */
+    public function requestUser(): BelongsTo
     {
         return $this->belongsTo(User::class, 'request_user_id')->withTrashed();
     }
 
-    public function product()
+    /**
+     * Get the product that owns the inventory.
+     *
+     * @return BelongsTo
+     */
+    public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
     }
 
-    public function unspscProduct()
+    /**
+     * Get the UNSPSC product that owns the inventory.
+     *
+     * @return BelongsTo
+     */
+    public function unspscProduct(): BelongsTo
     {
         return $this->belongsTo(UnspscProduct::class);
     }
 
-    public function control()
+    /**
+     * Get the control that owns the inventory.
+     *
+     * @return BelongsTo
+     */
+    public function control(): BelongsTo
     {
         return $this->belongsTo(Control::class);
     }
 
-    public function store()
+    /**
+     * Get the store that owns the inventory.
+     *
+     * @return BelongsTo
+     */
+    public function store(): BelongsTo
     {
         return $this->belongsTo(Store::class);
     }
 
-    public function purchaseOrder()
+    /**
+     * Get the purchase order that owns the inventory.
+     *
+     * @return BelongsTo
+     */
+    public function purchaseOrder(): BelongsTo
     {
         return $this->belongsTo(PurchaseOrder::class, 'po_id');
     }
 
-    public function requestForm()
+    /**
+     * Get the request form that owns the inventory.
+     *
+     * @return BelongsTo
+     */
+    public function requestForm(): BelongsTo
     {
         return $this->belongsTo(RequestForm::class);
     }
 
-    public function movements()
+    /**
+     * Get the movements for the inventory.
+     *
+     * @return HasMany
+     */
+    public function movements(): HasMany
     {
         return $this->hasMany(InventoryMovement::class);
     }
 
-    public function pendingMovements()
+    /**
+     * Get the pending movements for the inventory.
+     *
+     * @return HasMany
+     */
+    public function pendingMovements(): HasMany
     {
         return $this->hasMany(InventoryMovement::class)->where('reception_confirmation', false);
     }
 
-    public function lastMovement()
+    /**
+     * Get the last movement for the inventory.
+     *
+     * @return HasOne
+     */
+    public function lastMovement(): HasOne
     {
         return $this->hasOne(InventoryMovement::class)->latest();
     }
-    public function lastMovementReceptionDate()
+
+    /**
+     * Get the last movement reception date for the inventory.
+     *
+     * @return HasOne
+     */
+    public function lastMovementReceptionDate(): HasOne
     {
         return $this->hasOne(InventoryMovement::class)
             ->latest()
             ->select('reception_date');
     }
 
-    public function lastConfirmedMovement()
+    /**
+     * Get the last confirmed movement for the inventory.
+     *
+     * @return HasOne
+     */
+    public function lastConfirmedMovement(): HasOne
     {
         return $this->hasOne(InventoryMovement::class)
             ->where('reception_confirmation', true)
@@ -185,57 +266,113 @@ class Inventory extends Model implements Auditable
             ->orderBy('id', 'desc');
     }
 
-    public function responsible()
+    /**
+     * Get the responsible user for the inventory.
+     *
+     * @return BelongsTo
+     */
+    public function responsible(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_responsible_id')->withTrashed();
     }
 
-    public function removedUser()
+    /**
+     * Get the removed user for the inventory.
+     *
+     * @return BelongsTo
+     */
+    public function removedUser(): BelongsTo
     {
         return $this->belongsTo(User::class, 'removed_user_id')->withTrashed();
     }
 
-    public function using()
+    /**
+     * Get the user using the inventory.
+     *
+     * @return BelongsTo
+     */
+    public function using(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_using_id')->withTrashed();
     }
 
-    public function place()
+    /**
+     * Get the place that owns the inventory.
+     *
+     * @return BelongsTo
+     */
+    public function place(): BelongsTo
     {
         return $this->belongsTo(Place::class);
     }
 
-    public function budgetItem()
+    /**
+     * Get the budget item that owns the inventory.
+     *
+     * @return BelongsTo
+     */
+    public function budgetItem(): BelongsTo
     {
         return $this->belongsTo(BudgetItem::class);
     }
 
-    public function computer()
+    /**
+     * Get the computer that owns the inventory.
+     *
+     * @return HasOne
+     */
+    public function computer(): HasOne
     {
         return $this->hasOne(Computer::class);
     }
 
-    public function inventoryUsers()
+    /**
+     * Get the inventory users for the inventory.
+     *
+     * @return HasMany
+     */
+    public function inventoryUsers(): HasMany
     {
         return $this->hasMany(InventoryUser::class);
     }
 
-    public function accountingCode()
+    /**
+     * Get the accounting code that owns the inventory.
+     *
+     * @return BelongsTo
+     */
+    public function accountingCode(): BelongsTo
     {
         return $this->belongsTo(AccountingCode::class);
     }
 
-    public function userDelete()
+    /**
+     * Get the user who deleted the inventory.
+     *
+     * @return BelongsTo
+     */
+    public function userDelete(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_delete_id');
     }
 
-    public function isComputer()
+    /**
+     * Check if the inventory is a computer.
+     *
+     * @return bool
+     */
+    public function isComputer(): bool
     {
         return Computer::whereInventoryNumber($this->number)->exists();
     }
 
-    public function getQrAttribute() {
+    /**
+     * Get the QR code for the inventory.
+     *
+     * @return string
+     */
+    public function getQrAttribute(): string
+    {
         return QrCode::size(150)
             ->generate(route('inventories.show', [
                 'establishment' => $this->establishment_id,
@@ -243,7 +380,13 @@ class Inventory extends Model implements Auditable
             ]));
     }
 
-    public function getQrSmallAttribute() {
+    /**
+     * Get the small QR code for the inventory.
+     *
+     * @return string
+     */
+    public function getQrSmallAttribute(): string
+    {
         return QrCode::size(74)
             ->generate(route('inventories.show', [
                 'establishment' => $this->establishment_id,
@@ -251,50 +394,91 @@ class Inventory extends Model implements Auditable
             ]));
     }
 
-    public function getMyComputerAttribute()
+    /**
+     * Get the computer associated with the inventory.
+     *
+     * @return Computer|null
+     */
+    public function getMyComputerAttribute(): ?Computer
     {
         $computer = null;
-        if($this->isComputer())
+        if ($this->isComputer()) {
             $computer = Computer::whereInventoryNumber($this->number)->first();
+        }
         return $computer;
     }
 
-    public function getHaveComputerAttribute()
+    /**
+     * Check if the inventory has a computer.
+     *
+     * @return bool
+     */
+    public function getHaveComputerAttribute(): bool
     {
         return $this->isComputer();
     }
 
-    public function getLocationAttribute()
+    /**
+     * Get the location of the inventory.
+     *
+     * @return string|null
+     */
+    public function getLocationAttribute(): ?string
     {
-        if($this->place) {
+        if ($this->place) {
             return $this->place?->name . ", " . $this->place?->location?->name;
         }
+        return null;
     }
 
-    public function getSubtitleAttribute()
+    /**
+     * Get the subtitle of the inventory.
+     *
+     * @return string|null
+     */
+    public function getSubtitleAttribute(): ?string
     {
-        if($this->budgetItem)
+        if ($this->budgetItem) {
             return Str::of($this->budgetItem->code)->substr(0, 2);
-        else
-            return null;
+        }
+        return null;
     }
 
-    public function getPriceAttribute()
+    /**
+     * Get the price of the inventory.
+     *
+     * @return string
+     */
+    public function getPriceAttribute(): string
     {
         return money($this->po_price);
     }
 
-    public function getEstadoAttribute()
+    /**
+     * Get the status of the inventory.
+     *
+     * @return string
+     */
+    public function getEstadoAttribute(): string
     {
-        switch($this->status)
-        {
-            case 1: return 'Bueno'; break;
-            case 0: return 'Regular'; break;
-            case -1: return 'Malo'; break;
+        switch ($this->status) {
+            case 1:
+                return 'Bueno';
+            case 0:
+                return 'Regular';
+            case -1:
+                return 'Malo';
+            default:
+                return 'Desconocido';
         }
     }
 
-    public function getFormatDateAttribute()
+    /**
+     * Get the formatted date of the inventory.
+     *
+     * @return string
+     */
+    public function getFormatDateAttribute(): string
     {
         return now()->day . ' de ' . now()->monthName . ' del ' . now()->year;
     }
