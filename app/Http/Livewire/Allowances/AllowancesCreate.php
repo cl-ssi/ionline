@@ -960,8 +960,8 @@ class AllowancesCreate extends Component
             $this->overnight                =   $this->allowanceToEdit->overnight;
             $this->accommodation            =   $this->allowanceToEdit->accommodation;
             $this->food                     =   $this->allowanceToEdit->food;
-            $this->from                     =   $this->allowanceToEdit->from;
-            $this->to                       =   $this->allowanceToEdit->to;
+            $this->from                     =   $this->allowanceToEdit->from->format('Y-m-d');
+            $this->to                       =   $this->allowanceToEdit->to->format('Y-m-d');
             $this->halfDaysOnly             =   $this->allowanceToEdit->half_days_only;
 
             foreach($this->allowanceToEdit->files as $file){
