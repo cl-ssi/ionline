@@ -208,7 +208,7 @@ class Establishment extends Model implements Auditable
      *
      * @return array
      */
-    public function getOuTreeWithAliasAttribute(): array
+    public function getOuTreeWithAliasAttribute(): array|null
     {
         $ous = $this->organizationalUnits()
             ->select('id', 'level', 'name', 'organizational_unit_id as father_id')
