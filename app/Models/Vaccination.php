@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Establishment;
+use App\Rrhh\OrganizationalUnit;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use OwenIt\Auditing\Contracts\Auditable;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use OwenIt\Auditing\Contracts\Auditable;
 
 class Vaccination extends Model implements Auditable
 {
@@ -19,76 +22,136 @@ class Vaccination extends Model implements Auditable
      * @var array
      */
     protected $fillable = [
-        'run','dv','name','fathers_family','mothers_family','email','personal_email',
-        'establishment_id','organizational_unit_id','organizationalUnit',
-        'inform_method','arrival_at','dome_at',
-        'first_dose','first_dose_at','second_dose','second_dose_at',
-        'fd_observation','sd_observation'
+        'run',
+        'dv',
+        'name',
+        'fathers_family',
+        'mothers_family',
+        'email',
+        'personal_email',
+        'establishment_id',
+        'organizational_unit_id',
+        'organizationalUnit',
+        'inform_method',
+        'arrival_at',
+        'dome_at',
+        'first_dose',
+        'first_dose_at',
+        'second_dose',
+        'second_dose_at',
+        'fd_observation',
+        'sd_observation'
     ];
 
-    protected $dates = [
-        'arrival_at','dome_at','first_dose','second_dose','first_dose_at','second_dose_at'
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'arrival_at' => 'datetime',
+        'dome_at' => 'datetime',
+        'first_dose' => 'datetime',
+        'second_dose' => 'datetime',
+        'first_dose_at' => 'datetime',
+        'second_dose_at' => 'datetime'
     ];
 
-    public function establishment() {
-        return $this->belongsTo('App\Models\Establishment');
+    /**
+     * Get the establishment that owns the vaccination.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function establishment(): BelongsTo
+    {
+        return $this->belongsTo(Establishment::class);
     }
 
-    public function ortanizationalUnit() {
-        return $this->belongsTo('App\Rrhh\OrganizationalUnit');
+    /**
+     * Get the organizational unit that owns the vaccination.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function organizationalUnit(): BelongsTo
+    {
+        return $this->belongsTo(OrganizationalUnit::class);
     }
 
-    public function fullName() {
-        return $this->name.' '.
-            $this->fathers_family.' '.
-            $this->mothers_family;
+    /**
+     * Get the full name of the person.
+     *
+     * @return string
+     */
+    public function fullName(): string
+    {
+        return $this->name . ' ' . $this->fathers_family . ' ' . $this->mothers_family;
     }
 
+    /**
+     * Scope a query to search for a specific term.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param string $search
+     * @return void
+     */
     public function scopeSearch($query, $search)
     {
         if ($search) {
             $array_search = explode(' ', $search);
-            foreach($array_search as $word){
-                $query->where(function($query) use($word){
-                    $query->where('name', 'LIKE', '%'.$word.'%')
-                        ->orwhere('fathers_family','LIKE', '%'.$word.'%')
-                        ->orwhere('mothers_family','LIKE', '%'.$word.'%')
-                        ->orwhere('run','LIKE', '%'.$word.'%');
+            foreach ($array_search as $word) {
+                $query->where(function ($query) use ($word) {
+                    $query->where('name', 'LIKE', '%' . $word . '%')
+                        ->orWhere('fathers_family', 'LIKE', '%' . $word . '%')
+                        ->orWhere('mothers_family', 'LIKE', '%' . $word . '%')
+                        ->orWhere('run', 'LIKE', '%' . $word . '%');
                 });
             }
         }
     }
 
-    public function getAliasEstabAttribute(){
+    /**
+     * Get the alias for the establishment.
+     *
+     * @return string
+     */
+    public function getAliasEstabAttribute(): string
+    {
         switch ($this->establishment_id) {
             case 1:
                 return 'HETG';
-                break;
-
             case 38:
                 return 'DSSI';
-                break;
+            default:
+                return '';
         }
     }
-    public function getAliasInformMethodAttribute(){
+
+    /**
+     * Get the alias for the inform method.
+     *
+     * @return string
+     */
+    public function getAliasInformMethodAttribute(): string
+    {
         switch ($this->inform_method) {
             case 1:
                 return 'Clave Única';
-                break;
-
             case 2:
                 return 'Teléfono';
-                break;
             case 3:
                 return 'Correo';
-                break;
             default:
                 return '';
-                break;
         }
     }
 
-    public function getRunFormatAttribute() {
-        return $this->run.'-'.$this->dv;
+    /**
+     * Get the formatted run.
+     *
+     * @return string
+     */
+    public function getRunFormatAttribute(): string
+    {
+        return $this->run . '-' . $this->dv;
     }
 }

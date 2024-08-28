@@ -2,14 +2,20 @@
 
 namespace App\Models;
 
-use App\User;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class CalendarEvent extends Model
 {
     use HasFactory;
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
     protected $fillable = [
         'title',
         'start',
@@ -25,12 +31,22 @@ class CalendarEvent extends Model
         'driver_id'
     ];
 
-    public function driver()
+    /**
+     * Get the driver associated with the calendar event.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function driver(): BelongsTo
     {
         return $this->belongsTo(User::class, 'driver_id');
     }
 
-    public function recipient()
+    /**
+     * Get the recipient associated with the calendar event.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function recipient(): BelongsTo
     {
         return $this->belongsTo(User::class, 'recipient_id');
     }

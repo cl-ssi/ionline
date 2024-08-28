@@ -2,10 +2,20 @@
 
 namespace App\Models;
 
+use App\Models\Establishment;
+use App\Models\Agreements\Agreement;
+use App\Models\Parameters\Locality;
+use App\Models\Parameters\Municipality;
+use App\Models\Programmings\CommuneFile;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Commune extends Model
 {
+    use HasFactory;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -14,35 +24,64 @@ class Commune extends Model
     protected $fillable = [
         'name'
     ];
-    
+
     /**
      * The attributes that should be hidden for arrays.
      *
      * @var array
      */
     protected $hidden = [
-        'created_at', 'updated_at'
+        'created_at',
+        'updated_at'
     ];
-    
-    public function agreements() {
-        return $this->hasMany('App\Agreement\Agreement');
-    }
-    
-    public function establishments() {
-        return $this->hasMany('\App\Models\Establishment');
+
+    /**
+     * Get the agreements for the commune.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function agreements(): HasMany
+    {
+        return $this->hasMany(Agreement::class);
     }
 
-    public function municipality() {
-        return $this->hasOne('\App\Models\Parameters\Municipality');
+    /**
+     * Get the establishments for the commune.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function establishments(): HasMany
+    {
+        return $this->hasMany(Establishment::class);
     }
 
-    public function communeFiles() {
-        //return $this->hasOne('\App\Models\Programmings\CommuneFile'); Original
-        return $this->hasMany('\App\Models\Programmings\CommuneFile');//Modificado por ozc
+    /**
+     * Get the municipality for the commune.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function municipality(): HasOne
+    {
+        return $this->hasOne(Municipality::class);
     }
 
-    public function localities() {
-        return $this->hasMany('\App\Models\Parameters\Locality');
+    /**
+     * Get the commune files for the commune.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function communeFiles(): HasMany
+    {
+        return $this->hasMany(CommuneFile::class);
     }
 
+    /**
+     * Get the localities for the commune.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function localities(): HasMany
+    {
+        return $this->hasMany(ClLocality::class);
+    }
 }

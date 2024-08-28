@@ -9,14 +9,23 @@ class Country extends Model
 {
     use HasFactory;
 
-
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
     protected $fillable = [
-        'id','id_minsal','name'
-    ];
-    
-    protected $casts = [
-        'deleted_at' => 'datetime'
+        'id',
+        'id_minsal',
+        'name'
     ];
 
-    
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        // Add any date attributes here if needed
+    ];
 }

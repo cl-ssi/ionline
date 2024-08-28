@@ -9,20 +9,22 @@ use Illuminate\Database\Eloquent\Model;
 class ClaveUnica extends Model
 {
     use HasFactory;
-    /**
-    * The attributes that are mass assignable.
-    *
-    * @var array
-    */
-    protected $fillable = [
-        'user_id','access_token','response',
-    ];
 
     /**
-    * The primary key associated with the table.
-    *
-    * @var string
-    */
+     * The table associated with the model.
+     *
+     * @var string
+     */
     protected $table = 'users_clave_unica';
-    
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'user_id',
+        'access_token',
+        'response'
+    ];
 }
