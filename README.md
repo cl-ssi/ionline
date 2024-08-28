@@ -96,3 +96,14 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 - Hacer modificaciones y commits
 - Crear el pull request
 - Detener issue en el que se estaba trabajando
+
+
+## Prompt para ordenar los modelos
+Ordename la clase.
+1. Incluye el comentarios
+2. Primero las variables $table, $fillable, $casts, $hidden, luego las relaciones, luego los métodos customs y al final del archivo el método boot() si lo tuviera.
+3. Los atributos de $fillable, $casts y $hidden, que queden uno debajo del otro cada atributo en vez de juntos en la misma línea.
+4. Elimina la variable $dates si es que existe, en incluye los valores que no estén presentes en la variable $casts de tipo 'datetime' por defecto.
+5. Deja todas las relaciones en formato laravel 11 y con su tipo de retorno y que hagan referencia a una clase en vez de un string, importa su clase al comienzo si no está importada.
+6. Ordena todas las clases importadas alfabéticamente y elimina los que no estén en uso.
+7. Si la clase usa SoftDeletes, elimina de $casts "deleted_at".
