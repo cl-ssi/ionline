@@ -9,27 +9,40 @@ use OwenIt\Auditing\Contracts\Auditable;
 
 class Expertise extends Model implements Auditable
 {
-    use HasFactory;
-    use softDeletes;
-    use \OwenIt\Auditing\Auditable;
+    use HasFactory, SoftDeletes, \OwenIt\Auditing\Auditable;
 
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'jpp_expertises';
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
     protected $fillable = [
-        'name'
+        'name',
     ];
 
-     /**
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        // Add any datetime casts here if needed
+    ];
+
+    /**
      * The attributes that should be hidden for arrays.
      *
      * @var array
      */
-
     protected $hidden = [
-        'created_at', 'updated_at'
+        'created_at',
+        'updated_at',
     ];
-
-    // protected $dates = [
-    //     'from', 'to', 'document_date'
-    // ];
-
-    protected $table = 'jpp_expertises';
 }

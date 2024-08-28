@@ -53,25 +53,25 @@ class UploadCertificate extends Component
             $this->certificateFile->storeAs('/ionline/trainings/attachments/certificate', $now.'_certificate_'.$this->training->id.'.'.$this->certificateFile->extension(), 'gcs');
         }
 
+        if($this->attachedFile){
+            $now = now()->format('Y_m_d_H_i_s');
+            $this->training->files()->updateOrCreate(
+                [
+                    'id' => null,
+                ],
+                [
+                    'storage_path'  => '/ionline/trainings/attachments/attached/'.$now.'_attached_'.$this->training->id.'.'.$this->attachedFile->extension(),
+                    'stored'        => true,
+                    'name'          => 'attached_'.$this->training->id.'.pdf',
+                    'type'          => 'attached_file',
+                    'stored_by_id'  => (auth()->guard('web')->check() == true) ? auth()->id() : null,
+                ]
+            );
+            $this->attachedFile->storeAs('/ionline/trainings/attachments/attached', $now.'_attached_'.$this->training->id.'.'.$this->attachedFile->extension(), 'gcs');
+        }
+
         $this->training->status = 'complete';
         $this->training->save();
-
-        /*
-        if(auth()->guard('external')->check() == true){
-            $this->emit('closeModal', 'bootstrap4');
-        }
-        else{
-            $this->emit('closeModal', 'bootstrap5', $this->training->id);
-        }
-
-        if(auth()->guard('external')->check() == true){
-            session()->flash('message', 'El Certificado se ha guardado correctamente.');
-            return redirect()->route('external_trainings.external_own_index');
-        }
-        else{
-
-        }
-        */
 
         if (auth()->guard('external')->check() == true) {
             $this->emit('closeModal', 'bootstrap4');

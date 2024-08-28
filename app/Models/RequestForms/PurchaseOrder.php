@@ -12,14 +12,38 @@ class PurchaseOrder extends Model
 {
     use HasFactory, SoftDeletes;
 
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
     protected $table = 'arq_purchase_orders';
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
     protected $fillable = [
         'code',
         'date',
         'data',
     ];
 
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'date' => 'datetime',
+    ];
+
+    /**
+     * The attributes that should be appended to the model's array form.
+     *
+     * @var array
+     */
     protected $appends = [
         'version',
         'date_creation',
@@ -38,11 +62,7 @@ class PurchaseOrder extends Model
         'supplier_contact_email',
         'supplier_address',
         'supplier_commune',
-        'items'
-    ];
-
-    protected $dates = [
-        'date'
+        'items',
     ];
 
     public function getDataObjectAttribute()
