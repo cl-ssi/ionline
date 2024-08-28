@@ -31,7 +31,7 @@ class Holidays extends Component
 
     protected function rules()
     {
-        /* FIXME: si seleccionas una fecha en el navegador y luego la borras,
+        /* // FIXME: si seleccionas una fecha en el navegador y luego la borras,
          * se pasa un string vacío para la fecha y se guarda 0000-00-00 en la BD */
         $startOfYear = now()->startOfYear()->format('Y-m-d');
 

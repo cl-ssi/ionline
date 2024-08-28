@@ -149,7 +149,7 @@ class Requirement extends Model implements Auditable
 
 
     /**
-     * FIXME: viewed hace referencia a los archivados y no a los vistos
+     * // FIXME: viewed hace referencia a los archivados y no a los vistos
      */
     /**
      * Get the archived statuses for the requirement.
@@ -172,7 +172,7 @@ class Requirement extends Model implements Auditable
     }
 
     /** 
-     * FIXME: no debería llamarse RequirementStatus, status directamente 
+     * // FIXME: no debería llamarse RequirementStatus, status directamente 
      * sin embargo esa popiedad ya existe
      */
     /**

@@ -768,7 +768,7 @@ class User extends Authenticatable implements Auditable
         return $query;
     }/* End getPatientsBySearch */
 
-    /* FIXME: @sickiqq Ordenar la indentación, evaluar si este código se puede mejorar */
+    /* // FIXME: @sickiqq Ordenar la indentación, evaluar si este código se puede mejorar */
     public function serviceRequestsMyPendingsCount()
     {
         $user_id = $this->id;
@@ -843,7 +843,7 @@ class User extends Authenticatable implements Auditable
         return count($serviceRequestsMyPendings);
     }
 
-    /* FIXME: @sickiqq Ordenar la indentación, evaluar si este código se puede mejorar */
+    /* // FIXME: @sickiqq Ordenar la indentación, evaluar si este código se puede mejorar */
     public function serviceRequestsOthersPendingsCount()
     {
         $user_id = $this->id;

@@ -241,7 +241,7 @@ class Parte extends Model
     }
 
     /**
-     * FIXME: Esto no es necesario
+     * // FIXME: Esto no es necesario
      * Get the creation parte date attribute.
      *
      * @return string

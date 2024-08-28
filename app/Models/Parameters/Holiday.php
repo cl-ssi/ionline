@@ -69,7 +69,7 @@ class Holiday extends Model
     }
 
     /**
-     * FIXME: ver si se utiliza y porqué, basta que esté en la variable $dates
+     * // FIXME: ver si se utiliza y porqué, basta que esté en la variable $dates
      * 
      * Get the formatted date attribute.
      *

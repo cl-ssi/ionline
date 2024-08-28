@@ -794,7 +794,7 @@ class RequirementController extends Controller
     //     $request->documents = explode(",",$request->documents);
 
     //     // validación existencia autoridad en ou
-    //     /* FIXME: Esto no debería estar. */
+    //     /* // FIXME: Esto no debería estar. */
     //     if (Authority::getAuthorityFromDate($request->to_ou_id, now(), 'manager') == null) {
     //       return redirect()->back()->with('warning', 'La unidad organizacional seleccionada no tiene asignada una autoridad. Favor contactar a secretaria de dicha unidad para regularizar.');
     //     }
@@ -924,11 +924,11 @@ class RequirementController extends Controller
     //             //Si algún usuario destino es autoridad, se marca el requerimiento
     //             $userModel = User::find($user);
 
-    //             /* FIXME: si no tiene manager, no puede obtener ->user_id */
+    //             /* // FIXME: si no tiene manager, no puede obtener ->user_id */
     //             /** Para saber si un usuario es autoridad de su propia unidad organizacional */
     //             $managerUserId = Authority::getAuthorityFromDate($userModel->organizationalUnit->id, now(), 'manager')->user_id;
 
-    //             /* FIXME: siempre el anyManager se basará en el último user */
+    //             /* // FIXME: siempre el anyManager se basará en el último user */
     //             $isManager = ($user == $managerUserId);
 
     //             /* TODO: Que hace el isAnyManager o cual es la diferencia con el isManager */
@@ -959,7 +959,7 @@ class RequirementController extends Controller
     //             if ($users_enCopia <> null) {
     //                 if ($flag == 0) {
     //                     $isAnyManager = false;
-    //                     /* FIXME: ambos se llaman key, deberian ser diferentes, esto está dentro de otro foreach con otro key */
+    //                     /* // FIXME: ambos se llaman key, deberian ser diferentes, esto está dentro de otro foreach con otro key */
     //                     foreach ($users_enCopia as $key => $user_) {
     //                         //Si algún usuario en copia es autoridad, se marca el requerimiento y evento
     //                         $userModel = User::find($user_);
@@ -969,7 +969,7 @@ class RequirementController extends Controller
     //                         if ($isManager) $isAnyManager = true;
     //                         //dump($user_, $isManager);
 
-    //                         /* FIXME: se carga una coleccion de user, pero, solo se usar para obtener la ou_id */
+    //                         /* // FIXME: se carga una coleccion de user, pero, solo se usar para obtener la ou_id */
     //                         $user_aux = User::where('id', $user_)->get();
     //                         $firstEvent = new Event($request->All());
     //                         $firstEvent->to_user_id = $user_;
@@ -984,7 +984,7 @@ class RequirementController extends Controller
     //                         $requirement->events()->save($firstEvent);
     //                     }
     //                     $flag = 1;
-    //                     /* FIXME: siempre quedará con el el estado del útlimo en copia */
+    //                     /* // FIXME: siempre quedará con el el estado del útlimo en copia */
     //                     $requirement->update(['to_authority' => $isAnyManager]);
     //                 }
     //             }
@@ -993,7 +993,7 @@ class RequirementController extends Controller
     //             $firstEvent = new Event($request->All());
     //             //$firstEvent->organizational_unit_id = $user_aux->first()->organizational_unit_id;
 
-    //             /* FIXME: ya está antes */
+    //             /* // FIXME: ya está antes */
     //             $user_aux = User::find($user);
     //             if ($user_aux) {
     //                 $firstEvent->to_user_id = $user_aux->id;
@@ -1010,16 +1010,16 @@ class RequirementController extends Controller
     //             $firstEvent->requirement()->associate($requirement);
     //             $firstEvent->save();
 
-    //             /* FIXME: esto obtiene el primer usuario de la BD
+    //             /* // FIXME: esto obtiene el primer usuario de la BD
     //              * Obtiene emails
     //              * */
     //             $usersEmail .= $user_aux->first()->email . ',';
 
     //             //asocia evento con documentos
-    //             /* FIXME: al parecer no es necesario la KEY y si fuese, no debería llamarse igual a la del foreach */
+    //             /* // FIXME: al parecer no es necesario la KEY y si fuese, no debería llamarse igual a la del foreach */
     //             if ($request->documents <> null) {
     //                 foreach ($request->documents as $key => $document_aux) {
-    //                     /* FIXME: no se necesita cargar el modelo documento, se puede asociar directamente el $document_aux en el attach */
+    //                     /* // FIXME: no se necesita cargar el modelo documento, se puede asociar directamente el $document_aux en el attach */
     //                     $document = Document::find($document_aux);
     //                     $firstEvent->documents()->attach($document);
     //                 }

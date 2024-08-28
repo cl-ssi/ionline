@@ -28,7 +28,7 @@ class ActPrecursorItem extends Model
     ];
 
     /**
-     * FIXME: El nombre de la relacion está mal
+     * // FIXME: El nombre de la relacion está mal
      * Get the reception item that owns the act precursor item.
      *
      * @return BelongsTo
@@ -39,7 +39,7 @@ class ActPrecursorItem extends Model
     }
 
     /**
-     * FIXME: El nombre de la relacion está mal
+     * // FIXME: El nombre de la relacion está mal
      * Get the act precursor that owns the act precursor item.
      *
      * @return BelongsTo

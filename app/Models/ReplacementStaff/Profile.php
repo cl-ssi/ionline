@@ -57,7 +57,7 @@ class Profile extends Model
 
     /**
      * Get the replacement staff that owns the profile.
-     * FIXME: This method should be named `replacementStaff` to follow the Laravel naming convention.
+     * // FIXME This method should be named `replacementStaff` to follow the Laravel naming convention.
      * @return BelongsTo
      */
     public function replacement_staff(): BelongsTo
@@ -67,7 +67,7 @@ class Profile extends Model
 
     /**
      * Get the profile manage that owns the profile.
-     * FIXME: This method should be named `profileManage` to follow the Laravel naming convention.
+     * // FIXME: This method should be named `profileManage` to follow the Laravel naming convention.
      *
      * @return BelongsTo
      */
@@ -78,7 +78,7 @@ class Profile extends Model
 
     /**
      * Get the profession manage that owns the profile.
-     * FIXME: This method should be named `professionManage` to follow the Laravel naming convention.
+     * // FIXME: This method should be named `professionManage` to follow the Laravel naming convention.
      *
      * @return BelongsTo
      */
@@ -89,7 +89,7 @@ class Profile extends Model
 
     /**
      * Get the years of degree attribute.
-     * FIXME: No necesitas pasear el degree_date a Carbon, puedes usar el método `diffInYears` directamente.
+     * // FIXME: No necesitas pasear el degree_date a Carbon, puedes usar el método `diffInYears` directamente.
      *
      * @return int
      */

@@ -100,7 +100,7 @@ class SignaturesFlow extends Model implements Auditable
     }
 
     /**
-     * FIXME: porque no usar la relación userSigner? si el usuario no existe explotará
+     * // FIXME: porque no usar la relación userSigner? si el usuario no existe explotará
      * puse un return a las relaciones para probar si todo anda bien, si no hay problemas
      * se pueden borrar y dejar entonces sólo las relaciones
      * Get the signer name attribute.

@@ -66,7 +66,7 @@ class Program extends Model implements Auditable
     }
 
     /**
-     * FIXME: pasar a minusculas
+     * // FIXME: pasar a minusculas
      * Get the subtitle that owns the program.
      *
      * @return BelongsTo
@@ -77,7 +77,7 @@ class Program extends Model implements Auditable
     }
 
     /**
-     * FIXME: pasar a minusculas
+     * // FIXME: pasar a minusculas
      * Get the budgets for the program.
      *
      * @return HasMany
