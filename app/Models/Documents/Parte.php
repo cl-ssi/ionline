@@ -2,6 +2,7 @@
 
 namespace App\Models\Documents;
 
+use App\Models\Requirements\Requirement;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
@@ -9,7 +10,6 @@ use Carbon\Carbon;
 use App\Models\Establishment;
 use App\Models\Documents\Type;
 use App\Models\Documents\Correlative;
-
 use App\Models\User;
 use App\Models\Rrhh\OrganizationalUnit;
 use App\Models\File;
@@ -64,14 +64,14 @@ class Parte extends Model
         'viewed_at' => 'datetime',
     ];
 
-    public function events()
+    /**
+     * Get the requirements for the parte.
+     *
+     * @return HasMany
+     */
+    public function requirements(): HasMany
     {
-        return $this->hasMany('\App\Models\Documents\ParteEvent');
-    }
-
-    public function requirements()
-    {
-        return $this->hasMany('\App\Models\Requirements\Requirement');
+        return $this->hasMany(Requirement::class);
     }
 
     public function files(): MorphMany
@@ -79,24 +79,24 @@ class Parte extends Model
         return $this->morphMany(File::class, 'fileable');
     }
 
-    public function establishment()
+    public function establishment(): BelongsTo
     {
         return $this->belongsTo(Establishment::class);
     }
 
-    public function type()
+    public function type(): BelongsTo
     {
         return $this->belongsTo(Type::class)->withTrashed();
     }
 
-    public function user(): belongsTo
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class)->withTrashed();
     }
 
-    public function organizationalUnit(): belongsTo
+    public function organizationalUnit(): BelongsTo
     {
-        return $this->belongsTo(organizationalUnit::class)->withTrashed();
+        return $this->belongsTo(OrganizationalUnit::class)->withTrashed();
     }
 
     public function signaturesFile(): belongsTo

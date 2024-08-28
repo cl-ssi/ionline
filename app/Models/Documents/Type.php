@@ -2,50 +2,64 @@
 
 namespace App\Models\Documents;
 
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use App\Models\Documents\Signature;
-use App\Models\Documents\Parte;
 use App\Models\Documents\Document;
-
+use App\Models\Documents\Parte;
+use App\Models\Documents\Signature;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Type extends Model
 {
     use HasFactory, SoftDeletes;
 
     /**
-    * The attributes that are mass assignable.
-    *
-    * @var array
-    */
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'doc_types';
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
     protected $fillable = [
         'name',
         'doc_digital',
         'partes_exclusive',
-        'description',
+        'description'
     ];
 
     /**
-    * The primary key associated with the table.
-    *
-    * @var string
-    */
-    protected $table = 'doc_types';
-    
-    public function documents()
+     * Get the documents for the type.
+     *
+     * @return HasMany
+     */
+    public function documents(): HasMany
     {
         return $this->hasMany(Document::class);
     }
 
-    public function partes()
+    /**
+     * Get the partes for the type.
+     *
+     * @return HasMany
+     */
+    public function partes(): HasMany
     {
         return $this->hasMany(Parte::class);
     }
 
-    public function signatures()
+    /**
+     * Get the signatures for the type.
+     *
+     * @return HasMany
+     */
+    public function signatures(): HasMany
     {
         return $this->hasMany(Signature::class);
     }
-
 }

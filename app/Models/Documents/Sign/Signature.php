@@ -8,6 +8,8 @@ use App\Models\Rrhh\OrganizationalUnit;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -68,42 +70,82 @@ class Signature extends Model
         'enumerate_at',
     ];
 
-    public function flows()
+/**
+     * Get the flows for the signature.
+     *
+     * @return HasMany
+     */
+    public function flows(): HasMany
     {
         return $this->hasMany(SignatureFlow::class);
     }
 
-    public function leftSignatures()
+    /**
+     * Get the left signatures for the signature.
+     *
+     * @return HasMany
+     */
+    public function leftSignatures(): HasMany
     {
         return $this->hasMany(SignatureFlow::class)->where('column_position', 'left')->orderby('row_position');
     }
 
-    public function centerSignatures()
+    /**
+     * Get the center signatures for the signature.
+     *
+     * @return HasMany
+     */
+    public function centerSignatures(): HasMany
     {
         return $this->hasMany(SignatureFlow::class)->where('column_position', 'center')->orderby('row_position');
     }
 
-    public function rightSignatures()
+    /**
+     * Get the right signatures for the signature.
+     *
+     * @return HasMany
+     */
+    public function rightSignatures(): HasMany
     {
         return $this->hasMany(SignatureFlow::class)->where('column_position', 'right')->orderby('row_position');
     }
 
-    public function annexes()
+    /**
+     * Get the annexes for the signature.
+     *
+     * @return HasMany
+     */
+    public function annexes(): HasMany
     {
         return $this->hasMany(SignatureAnnex::class);
     }
 
-    public function type()
+    /**
+     * Get the type that owns the signature.
+     *
+     * @return BelongsTo
+     */
+    public function type(): BelongsTo
     {
         return $this->belongsTo(Type::class);
     }
 
-    public function user()
+    /**
+     * Get the user that owns the signature.
+     *
+     * @return BelongsTo
+     */
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function organizationalUnit()
+    /**
+     * Get the organizational unit that owns the signature.
+     *
+     * @return BelongsTo
+     */
+    public function organizationalUnit(): BelongsTo
     {
         return $this->belongsTo(OrganizationalUnit::class, 'uo_id');
     }

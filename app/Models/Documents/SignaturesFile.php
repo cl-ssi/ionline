@@ -2,18 +2,27 @@
 
 namespace App\Models\Documents;
 
+use App\Models\Documents\Parte;
+use App\Models\Documents\SignaturesFlow;
+use App\Models\Documents\Signature;
+use App\Models\Documents\Document;
+use App\Models\Suitability\Result;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
-use Illuminate\Database\Eloquent\Relations\hasOne;
-use App\Models\Documents\Parte;
 
 class SignaturesFile extends Model
 {
-    use HasFactory;
-    use SoftDeletes;
+    use HasFactory, SoftDeletes;
 
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
     protected $table = 'doc_signatures_files';
 
     /**
@@ -22,65 +31,109 @@ class SignaturesFile extends Model
      * @var array
      */
     protected $fillable = [
-        'id', 'signature_id', 'file', 'file_type', 'signed_file',
+        'id',
+        'signature_id',
+        'file',
+        'file_type',
+        'signed_file'
     ];
 
-    public function signaturesFlows()
+    /**
+     * Get the signatures flows for the signatures file.
+     *
+     * @return HasMany
+     */
+    public function signaturesFlows(): HasMany
     {
-        return $this->hasMany('App\Models\Documents\SignaturesFlow', 'signatures_file_id');
+        return $this->hasMany(SignaturesFlow::class, 'signatures_file_id');
     }
 
-    public function signature(){
-        return $this->belongsTo('App\Models\Documents\Signature', 'signature_id');
-    }
-
-    public function document()
+    /**
+     * Get the signature that owns the signatures file.
+     *
+     * @return BelongsTo
+     */
+    public function signature(): BelongsTo
     {
-        return $this->hasOne('App\Models\Documents\Document', 'file_to_sign_id');
+        return $this->belongsTo(Signature::class, 'signature_id');
     }
 
-    public function suitabilityResult()
+    /**
+     * Get the document associated with the signatures file.
+     *
+     * @return HasOne
+     */
+    public function document(): HasOne
     {
-        return $this->hasOne('App\Models\Suitability\Result', 'signed_certificate_id');
+        return $this->hasOne(Document::class, 'file_to_sign_id');
     }
 
-    // public function parteFile()
-    // {
-    //     return $this->hasOne('App\Models\Documents\ParteFile', 'signature_file_id');
-    // }
+    /**
+     * Get the suitability result associated with the signatures file.
+     *
+     * @return HasOne
+     */
+    public function suitabilityResult(): HasOne
+    {
+        return $this->hasOne(Result::class, 'signed_certificate_id');
+    }
 
-    public function parte(): hasOne
+    /**
+     * Get the parte associated with the signatures file.
+     *
+     * @return HasOne
+     */
+    public function parte(): HasOne
     {
         return $this->hasOne(Parte::class);
     }
 
     /**
+     * Check if the signatures file has a signed flow.
+     *
      * @return bool
      */
-    public function getHasSignedFlowAttribute()
+    public function getHasSignedFlowAttribute(): bool
     {
         return $this->signaturesFlows()->where('status', 1)->count() > 0;
     }
 
-    public function getFileNameAttribute()
+    /**
+     * Get the file name of the signatures file.
+     *
+     * @return string
+     */
+    public function getFileNameAttribute(): string
     {
         return basename($this->file);
     }
 
-    public function getHasRejectedFlowAttribute()
+    /**
+     * Check if the signatures file has a rejected flow.
+     *
+     * @return bool
+     */
+    public function getHasRejectedFlowAttribute(): bool
     {
         return $this->signaturesFlows()->where('status', 0)->count() > 0;
     }
 
     /**
+     * Check if all flows of the signatures file are signed.
+     *
      * @return bool
      */
-    public function getHasAllFlowsSignedAttribute()
+    public function getHasAllFlowsSignedAttribute(): bool
     {
         return $this->signaturesFlows->every('status', 1);
     }
 
-    public function getHasOnePendingFlowAttribute()
+    /**
+     * Check if the signatures file has one pending flow.
+     *
+     * @return bool
+     */
+    public function getHasOnePendingFlowAttribute(): bool
     {
         return $this->signaturesFlows->whereNull('status')->count() === 1;
     }

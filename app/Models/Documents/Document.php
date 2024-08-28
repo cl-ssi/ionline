@@ -3,6 +3,10 @@
 namespace App\Models\Documents;
 
 use App\Models\Documents\Sign\Signature;
+use App\Models\Requirements\Event;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use OwenIt\Auditing\Contracts\Auditable;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -14,8 +18,14 @@ use App\Models\Documents\Type;
 
 class Document extends Model implements Auditable
 {
-    use SoftDeletes;
-    use \OwenIt\Auditing\Auditable;
+    use HasFactory, SoftDeletes, \OwenIt\Auditing\Auditable;
+
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'documents';
 
     /**
      * The attributes that are mass assignable.
@@ -40,7 +50,16 @@ class Document extends Model implements Auditable
         'organizational_unit_id',
         'establishment_id',
         'file_to_sign_id',
-        'signature_id',
+        'signature_id'
+    ];
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'date' => 'date'
     ];
 
     /**
@@ -54,46 +73,61 @@ class Document extends Model implements Auditable
     ];
 
     /**
-     * The attributes that should be mutated to dates.
+     * Get the type that owns the document.
      *
-     * @var array
+     * @return BelongsTo
      */
-    protected $dates = [
-        'deleted_at',
-        'date'
-    ];
-
-    public function type()
+    public function type(): BelongsTo
     {
-        return $this->belongsTo(Type::class)->withTrashed();
+        return $this->belongsTo(Type::class);
     }
 
-    public function user()
+    /**
+     * Get the user that owns the document.
+     *
+     * @return BelongsTo
+     */
+    public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class)->withTrashed();
+        return $this->belongsTo(User::class);
     }
 
-    public function organizationalUnit()
+    /**
+     * Get the organizational unit that owns the document.
+     *
+     * @return BelongsTo
+     */
+    public function organizationalUnit(): BelongsTo
     {
         return $this->belongsTo(OrganizationalUnit::class);
     }
 
-    public function reqEvents()
+    public function reqEvents(): BelongsToMany
     {
-        return $this->belongsToMany('App\Models\Requirements\Event','req_documents_events');
+        return $this->belongsToMany(Event::class, 'req_documents_events');
+    }
+    
+    public function fileToSign(): BelongsTo
+    {
+        return $this->belongsTo(SignaturesFile::class, 'file_to_sign_id');
     }
 
-    public function fileToSign()
-    {
-        return $this->belongsTo('App\Models\Documents\SignaturesFile', 'file_to_sign_id');
-    }
-
-    public function establishment()
+    /**
+     * Get the establishment that owns the document.
+     *
+     * @return BelongsTo
+     */
+    public function establishment(): BelongsTo
     {
         return $this->belongsTo(Establishment::class);
     }
 
-    public function signature()
+    /**
+     * Get the signature that owns the document.
+     *
+     * @return BelongsTo
+     */
+    public function signature(): BelongsTo
     {
         return $this->belongsTo(Signature::class);
     }

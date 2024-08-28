@@ -2,24 +2,29 @@
 
 namespace App\Models\Documents;
 
-use OwenIt\Auditing\Contracts\Auditable;
-use Illuminate\Support\Facades\Notification;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Documents\SignaturesFile;
+use App\Models\Rrhh\OrganizationalUnit;
+use App\Models\Documents\Type;
 use App\Models\User;
 use App\Notifications\Signatures\SignedDocument;
-use App\Models\Documents\Type;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Notification;
+use OwenIt\Auditing\Contracts\Auditable;
 
 class Signature extends Model implements Auditable
 {
-    use HasFactory;
-    use \OwenIt\Auditing\Auditable;
-    use SoftDeletes;
+    use HasFactory, SoftDeletes, \OwenIt\Auditing\Auditable;
 
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
     protected $table = 'doc_signatures';
-
-    protected $dates = ['request_date', 'rejected_at'];
 
     /**
      * The attributes that are mass assignable.
@@ -44,34 +49,70 @@ class Signature extends Model implements Auditable
         'url'
     ];
 
-    public function user()
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'request_date' => 'datetime',
+        'rejected_at' => 'datetime'
+    ];
+
+    /**
+     * Get the user that owns the signature.
+     *
+     * @return BelongsTo
+     */
+    public function user(): BelongsTo
     {
-        return $this->belongsTo('App\Models\User')->withTrashed();
+        return $this->belongsTo(User::class)->withTrashed();
     }
 
-    public function responsable()
+    /**
+     * Get the responsible user for the signature.
+     *
+     * @return BelongsTo
+     */
+    public function responsable(): BelongsTo
     {
-        return $this->belongsTo('App\Models\User','responsable_id')->withTrashed();
+        return $this->belongsTo(User::class, 'responsable_id')->withTrashed();
     }
 
-    public function organizationalUnit()
+    /**
+     * Get the organizational unit that owns the signature.
+     *
+     * @return BelongsTo
+     */
+    public function organizationalUnit(): BelongsTo
     {
-        return $this->belongsTo('App\Models\Rrhh\OrganizationalUnit','ou_id');
+        return $this->belongsTo(OrganizationalUnit::class, 'ou_id');
     }
 
-    public function signaturesFiles()
+    /**
+     * Get the signatures files for the signature.
+     *
+     * @return HasMany
+     */
+    public function signaturesFiles(): HasMany
     {
-        return $this->hasMany('App\Models\Documents\SignaturesFile', 'signature_id');
+        return $this->hasMany(SignaturesFile::class, 'signature_id');
     }
 
-    public function type()
+    /**
+     * Get the type that owns the signature.
+     *
+     * @return BelongsTo
+     */
+    public function type(): BelongsTo
     {
         return $this->belongsTo(Type::class)->withTrashed();
     }
 
-
     /**
-     * @return mixed Retorna model
+     * Get the signatures flow signer attribute.
+     *
+     * @return mixed
      */
     public function getSignaturesFlowSignerAttribute()
     {
@@ -79,13 +120,20 @@ class Signature extends Model implements Auditable
             ->signaturesFlows->where('type', 'firmante')->first();
     }
 
+    /**
+     * Get the pending signatures flows.
+     *
+     * @return mixed
+     */
     public function pendingSignaturesFlows()
-    {        
+    {
         return $this->signaturesFlows->where('status', null);
     }
 
     /**
-     * @return mixed Retorna collection
+     * Get the signatures flow visator attribute.
+     *
+     * @return collection
      */
     public function getSignaturesFlowVisatorAttribute()
     {
@@ -94,7 +142,8 @@ class Signature extends Model implements Auditable
     }
 
     /**
-     * Obtiene flows para el archivo tipo documento
+     * Get the signatures flows attribute.
+     *
      * @return mixed
      */
     public function getSignaturesFlowsAttribute()
@@ -105,42 +154,58 @@ class Signature extends Model implements Auditable
 
     /**
      * Verifica si tiene algún flow firmado o rechazado
+     *
      * @return bool
      */
-    public function getHasSignedOrRejectedFlowAttribute()
+    public function getHasSignedOrRejectedFlowAttribute(): bool
     {
         return $this->signaturesFiles->where('file_type', 'documento')->first()
                 ->signaturesFlows->whereNotNull('status')->count() > 0;
     }
 
+    /**
+     * Get the signatures file document attribute.
+     *
+     * @return mixed
+     */
     public function getSignaturesFileDocumentAttribute()
     {
         return $this->signaturesFiles->where('file_type', 'documento')->first();
     }
 
+    /**
+     * Get the signatures file anexos attribute.
+     *
+     * @return mixed
+     */
     public function getSignaturesFileAnexosAttribute()
     {
         return $this->signaturesFiles->where('file_type', 'anexo');
     }
 
-    public function getMailsToDistribute()
+    /**
+     * Get mails to distribute.
+     *
+     * @return array
+     */
+    public function getMailsToDistribute(): array
     {
         $allEmails = $this->recipients . ',' . $this->distribution;
         preg_match_all("/[\._a-zA-Z0-9-]+@[\._a-zA-Z0-9-]+/i", $allEmails, $valid_emails);
-        return $valid_emails[0] ?? array();
+        return $valid_emails[0] ?? [];
     }
 
     /**
-    * Distribute document to Recipients and Distribution
-    */
-    public function distribute()
+     * Distribute document to Recipients and Distribution.
+     */
+    public function distribute(): void
     {
         /**
          * Utilizando notify y con colas
          */
         $valid_emails = $this->getMailsToDistribute();
 
-        if( !empty($valid_emails) ) {
+        if (!empty($valid_emails)) {
             Notification::route('mail', $valid_emails)->notify(new SignedDocument($this));
         }
     }

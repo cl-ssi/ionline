@@ -2,21 +2,24 @@
 
 namespace App\Models\Documents;
 
+use App\Models\Rrhh\OrganizationalUnit;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Contracts\Auditable;
 
-class SignaturesFlow extends Model Implements Auditable
+class SignaturesFlow extends Model implements Auditable
 {
-    use HasFactory;
-    use SoftDeletes;
-    use \OwenIt\Auditing\Auditable;
+    use HasFactory, SoftDeletes, \OwenIt\Auditing\Auditable;
 
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
     protected $table = 'doc_signatures_flows';
-
-    protected $dates = ['signature_date'];
 
     /**
      * The attributes that are mass assignable.
@@ -34,64 +37,110 @@ class SignaturesFlow extends Model Implements Auditable
         'signature_date',
         'observation',
         'visator_type',
-        'real_signer_id',
+        'real_signer_id'
     ];
 
-    public function signaturesFile()
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'signature_date' => 'datetime'
+    ];
+
+    /**
+     * Get the signatures file that owns the signatures flow.
+     *
+     * @return BelongsTo
+     */
+    public function signaturesFile(): BelongsTo
     {
-        return $this->belongsTo('App\Models\Documents\SignaturesFile', 'signatures_file_id');
+        return $this->belongsTo(SignaturesFile::class, 'signatures_file_id');
     }
 
-    public function userSigner()
+    /**
+     * Get the user that owns the signatures flow.
+     *
+     * @return BelongsTo
+     */
+    public function userSigner(): BelongsTo
     {
-        return $this->belongsTo('App\Models\User', 'user_id')->withTrashed();
+        return $this->belongsTo(User::class, 'user_id')->withTrashed();
     }
 
-    public function realSigner()
+    /**
+     * Get the real signer that owns the signatures flow.
+     *
+     * @return BelongsTo
+     */
+    public function realSigner(): BelongsTo
     {
-        return $this->belongsTo('App\Models\User', 'real_signer_id')->withTrashed();
+        return $this->belongsTo(User::class, 'real_signer_id')->withTrashed();
     }
 
-    public function signature()
+    /**
+     * Get the signature that owns the signatures flow.
+     *
+     * @return BelongsTo
+     */
+    public function signature(): BelongsTo
     {
         return $this->signaturesFile->signature();
     }
 
-    public function organizationalUnit()
+    /**
+     * Get the organizational unit that owns the signatures flow.
+     *
+     * @return BelongsTo
+     */
+    public function organizationalUnit(): BelongsTo
     {
-        return $this->belongsTo('App\Models\Rrhh\OrganizationalUnit', 'ou_id')->withTrashed();
+        return $this->belongsTo(OrganizationalUnit::class, 'ou_id')->withTrashed();
     }
 
-    /* FIXME: porque no usar la relación userSigner? si el usuario no existe explotará
+    /**
+     * FIXME: porque no usar la relación userSigner? si el usuario no existe explotará
      * puse un return a las relaciones para probar si todo anda bien, si no hay problemas
      * se pueden borrar y dejar entonces sólo las relaciones
+     * Get the signer name attribute.
+     *
+     * @return string
      */
-    public function getSignerNameAttribute()
+    public function getSignerNameAttribute(): string
     {
-        //return User::find($this->user_id)->TinnyName;
         return $this->userSigner->tinnyName;
     }
 
-    public function getRealSignerNameAttribute()
+    /**
+     * Get the real signer name attribute.
+     *
+     * @return string
+     */
+    public function getRealSignerNameAttribute(): string
     {
-        // return User::find($this->real_signer_id)->fullName;
         return $this->realSigner->tinnyName;
     }
 
+    /**
+     * Get the validation messages attribute.
+     *
+     * @return array
+     */
     public function getValidationMessagesAttribute(): array
     {
-        $arrayMessages = array();
-        if ($this->signature->endorse_type === 'Visación en cadena de responsabilidad') {
+        $arrayMessages = [];
+        if ( $this->signature->endorse_type === 'Visación en cadena de responsabilidad' ) {
             $signaturesFlowsPending = $this->signaturesFile->signaturesFlows
                 ->where('type', 'visador')
                 ->whereNull('status')
-                ->when($this->type === 'visador', function ($query){
+                ->when($this->type === 'visador', function ($query) {
                     return $query->where('sign_position', '<', $this->sign_position);
                 });
 
-            if ($signaturesFlowsPending->count() > 0) {
-                foreach ($signaturesFlowsPending as $signatureFlowPending) {
-                    array_push($arrayMessages, "$signatureFlowPending->type {$signatureFlowPending->signerName} pendiente") ;
+            if ( $signaturesFlowsPending->count() > 0 ) {
+                foreach ( $signaturesFlowsPending as $signatureFlowPending ) {
+                    array_push($arrayMessages, "$signatureFlowPending->type {$signatureFlowPending->signerName} pendiente");
                 }
             }
         }
@@ -100,8 +149,8 @@ class SignaturesFlow extends Model Implements Auditable
             ->whereNotNull('status')
             ->where('status', false);
 
-        if ($signaturesFlowsRejected->count() > 0) {
-            foreach ($signaturesFlowsRejected as $signatureFlowRejected) {
+        if ( $signaturesFlowsRejected->count() > 0 ) {
+            foreach ( $signaturesFlowsRejected as $signatureFlowRejected ) {
                 array_push($arrayMessages, "Rechazado por $signatureFlowRejected->signerName: $signatureFlowRejected->observation");
             }
         }
@@ -109,7 +158,12 @@ class SignaturesFlow extends Model Implements Auditable
         return $arrayMessages;
     }
 
-    public function isSigned()
+    /**
+     * Check if the signatures flow is signed.
+     *
+     * @return bool
+     */
+    public function isSigned(): bool
     {
         return $this->status == 1;
     }
