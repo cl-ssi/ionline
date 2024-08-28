@@ -200,10 +200,16 @@
                             @case('certificate_file')
                                 Certificado
                                 @break
+                            
+                            @case('attached_file')
+                                Anexos(s)
+                                @break
                         @endswitch
                     </td>
                     <td>
-                        <a class="btn btn-{{ $file->type == 'certificate_file' ? 'success' : 'primary' }} " href="{{ route('trainings.show_file', ['training' => $training, 'type' => $file->type]) }}" target="_blank">
+                        <a class="btn btn-{{ $file->type == 'certificate_file' ? 'success' : 'primary' }} " 
+                            href="{{ route('external_trainings.show_file', ['training' => $training, 'type' => $file->type]) }}" 
+                            target="_blank">
                             @if($file->type == 'certificate_file') 
                                 <i class="fas fa-file-pdf fa-fw"></i>
                             @else    

@@ -120,7 +120,7 @@
                             </a>
                         @endif
 
-                        @if($training->canUploadCertificate())
+                        @if($training->canUploadCertificate() && (Route::is('trainings.own_index') || Route::is('external_trainings.external_own_index')))
                             <!-- Button trigger modal -->
                             @if(auth()->guard('external')->check())
                                 <button type="button" 

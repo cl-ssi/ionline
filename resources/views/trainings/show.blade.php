@@ -202,6 +202,10 @@
                             @case('certificate_file')
                                 Certificado
                                 @break
+                            
+                            @case('attached_file')
+                                Anexos(s)
+                                @break
                         @endswitch
                     </td>
                     <td>
