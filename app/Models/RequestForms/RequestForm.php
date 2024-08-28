@@ -3,6 +3,9 @@
 namespace App\Models\RequestForms;
 
 use App\Models\Finance\Cdp;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use OwenIt\Auditing\Contracts\Auditable;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -38,19 +41,322 @@ class RequestForm extends Model implements Auditable
      */
     protected $table = 'arq_request_forms';
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
     protected $fillable = [
-        'purchase_plan_id', 'request_form_id', 'estimated_expense', 'program', 'contract_manager_id',
-        'name', 'subtype', 'justification', 'superior_chief',
-        'type_form', 'bidding_number', 'request_user_id', 'program_id',
-        'request_user_ou_id', 'contract_manager_ou_id', 'status', 'sigfe',
-        'purchase_unit_id', 'purchase_type_id', 'purchase_mechanism_id', 'type_of_currency',
-        'folio', 'has_increased_expense', 'signatures_file_id', 'old_signatures_file_id', 'approved_at'
-    ];
-
-    protected $dates = [
+        'purchase_plan_id',
+        'request_form_id',
+        'estimated_expense',
+        'program',
+        'contract_manager_id',
+        'name',
+        'subtype',
+        'justification',
+        'superior_chief',
+        'type_form',
+        'bidding_number',
+        'request_user_id',
+        'program_id',
+        'request_user_ou_id',
+        'contract_manager_ou_id',
+        'status',
+        'sigfe',
+        'purchase_unit_id',
+        'purchase_type_id',
+        'purchase_mechanism_id',
+        'type_of_currency',
+        'folio',
+        'has_increased_expense',
+        'signatures_file_id',
+        'old_signatures_file_id',
         'approved_at',
     ];
 
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'approved_at' => 'datetime',
+    ];
+
+    /**
+     * Get the purchase plan that owns the request form.
+     *
+     * @return BelongsTo
+     */
+    public function purchasePlan(): BelongsTo
+    {
+        return $this->belongsTo(PurchasePlan::class, 'purchase_plan_id');
+    }
+
+    /**
+     * Get the father request form.
+     *
+     * @return BelongsTo
+     */
+    public function father(): BelongsTo
+    {
+        return $this->belongsTo(RequestForm::class, 'request_form_id');
+    }
+
+    /**
+     * Get the children request forms.
+     *
+     * @return HasMany
+     */
+    public function children(): HasMany
+    {
+        return $this->hasMany(RequestForm::class);
+    }
+
+    /**
+     * Get the user that owns the request form.
+     *
+     * @return BelongsTo
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'request_user_id')->withTrashed();
+    }
+
+    /**
+     * Get the messages for the request form.
+     *
+     * @return HasMany
+     */
+    public function messages(): HasMany
+    {
+        return $this->hasMany(RequestFormMessage::class);
+    }
+
+    /**
+     * Get the request form files.
+     *
+     * @return HasMany
+     */
+    public function requestFormFiles(): HasMany
+    {
+        return $this->hasMany(RequestFormFile::class);
+    }
+
+    /**
+     * Get the contract manager that owns the request form.
+     *
+     * @return BelongsTo
+     */
+    public function contractManager(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'contract_manager_id')->withTrashed();
+    }
+
+    /**
+     * The users that are purchasers for the request form.
+     *
+     * @return BelongsToMany
+     */
+    public function purchasers(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'arq_request_forms_users', 'request_form_id', 'purchaser_user_id')
+                    ->withTimestamps()
+                    ->withTrashed();
+    }
+
+    /**
+     * Get the supervisor that owns the request form.
+     *
+     * @return BelongsTo
+     */
+    public function supervisor(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'supervisor_user_id')->withTrashed();
+    }
+
+    /**
+     * Get the purchase unit that owns the request form.
+     *
+     * @return BelongsTo
+     */
+    public function purchaseUnit(): BelongsTo
+    {
+        return $this->belongsTo(PurchaseUnit::class, 'purchase_unit_id');
+    }
+
+    /**
+     * Get the purchase type that owns the request form.
+     *
+     * @return BelongsTo
+     */
+    public function purchaseType(): BelongsTo
+    {
+        return $this->belongsTo(PurchaseType::class, 'purchase_type_id');
+    }
+
+    /**
+     * Get the purchase mechanism that owns the request form.
+     *
+     * @return BelongsTo
+     */
+    public function purchaseMechanism(): BelongsTo
+    {
+        return $this->belongsTo(PurchaseMechanism::class, 'purchase_mechanism_id');
+    }
+
+    /**
+     * Get the signer that owns the request form.
+     *
+     * @return BelongsTo
+     */
+    public function signer(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'signer_user_id')->withTrashed();
+    }
+
+    /**
+     * Get the organizational unit of the user that owns the request form.
+     *
+     * @return BelongsTo
+     */
+    public function userOrganizationalUnit(): BelongsTo
+    {
+        return $this->belongsTo(OrganizationalUnit::class, 'request_user_ou_id')->withTrashed();
+    }
+
+    /**
+     * Get the organizational unit of the contract manager that owns the request form.
+     *
+     * @return BelongsTo
+     */
+    public function contractOrganizationalUnit(): BelongsTo
+    {
+        return $this->belongsTo(OrganizationalUnit::class, 'contract_manager_ou_id')->withTrashed();
+    }
+
+    /**
+     * Get the item request forms for the request form.
+     *
+     * @return HasMany
+     */
+    public function itemRequestForms(): HasMany
+    {
+        return $this->hasMany(ItemRequestForm::class);
+    }
+
+    /**
+     * Get the item changed request forms for the request form.
+     *
+     * @return HasMany
+     */
+    public function itemChangedRequestForms(): HasMany
+    {
+        return $this->hasMany(ItemChangedRequestForm::class);
+    }
+
+    /**
+     * Get the passengers for the request form.
+     *
+     * @return HasMany
+     */
+    public function passengers(): HasMany
+    {
+        return $this->hasMany(Passenger::class);
+    }
+
+    /**
+     * Get the event request forms for the request form.
+     *
+     * @return HasMany
+     */
+    public function eventRequestForms(): HasMany
+    {
+        return $this->hasMany(EventRequestForm::class);
+    }
+
+    /**
+     * Get the purchasing processes for the request form.
+     *
+     * @return HasMany
+     */
+    public function purchasingProcesses(): HasMany
+    {
+        return $this->hasMany(PurchasingProcess::class);
+    }
+
+    /**
+     * Get the purchasing process for the request form.
+     *
+     * @return HasOne
+     */
+    public function purchasingProcess(): HasOne
+    {
+        return $this->hasOne(PurchasingProcess::class);
+    }
+
+    /**
+     * Get the signed request form.
+     *
+     * @return BelongsTo
+     */
+    public function signedRequestForm(): BelongsTo
+    {
+        return $this->belongsTo(SignaturesFile::class, 'signatures_file_id');
+    }
+
+    /**
+     * Get the signed old request form.
+     *
+     * @return BelongsTo
+     */
+    public function signedOldRequestForm(): BelongsTo
+    {
+        return $this->belongsTo(SignaturesFile::class, 'old_signatures_file_id');
+    }
+
+    /**
+     * Get the signed old request forms.
+     *
+     * @return HasMany
+     */
+    public function signedOldRequestForms(): HasMany
+    {
+        return $this->hasMany(OldSignatureFile::class)->latest();
+    }
+
+    /**
+     * Get the associated program.
+     *
+     * @return BelongsTo
+     */
+    public function associateProgram(): BelongsTo
+    {
+        return $this->belongsTo(Program::class, 'program_id');
+    }
+
+    /**
+     * Get the immediate purchases for the request form.
+     *
+     * @return HasMany
+     */
+    public function immediatePurchases(): HasMany
+    {
+        return $this->hasMany(ImmediatePurchase::class);
+    }
+
+    /**
+     * Get the CDP for the request form.
+     *
+     * @return HasOne
+     */
+    public function cdp(): HasOne
+    {
+        return $this->hasOne(Cdp::class);
+    }
+
+    // FIXME: corregir este código
     public function isBlocked()
     {
         return in_array($this->id, [172, 173, 164, 176, 180, 181]); // FR ids con restricción de No generar suministros
@@ -59,142 +365,6 @@ class RequestForm extends Model implements Auditable
     public function getFolioAttribute($value)
     {
         return $value . ($this->has_increased_expense ? '-M' : '');
-    }
-
-    public function purchasePlan()
-    {
-        return $this->belongsTo(PurchasePlan::class, 'purchase_plan_id');
-    }
-
-    public function father()
-    {
-        return $this->belongsTo(RequestForm::class, 'request_form_id');
-    }
-
-    public function children()
-    {
-        return $this->hasMany(RequestForm::class);
-    }
-
-    public function user()
-    {
-        return $this->belongsTo(User::class, 'request_user_id')->withTrashed();
-    }
-
-    public function messages()
-    {
-        return $this->hasMany(RequestFormMessage::class);
-    }
-
-    public function requestFormFiles()
-    {
-        return $this->hasMany(RequestFormFile::class);
-    }
-
-    public function contractManager()
-    {
-        return $this->belongsTo(User::class, 'contract_manager_id')->withTrashed();
-    }
-
-    public function purchasers()
-    {
-        return $this->belongsToMany(User::class, 'arq_request_forms_users', 'request_form_id', 'purchaser_user_id')
-            ->withTimestamps()->withTrashed();
-    }
-
-    public function supervisor()
-    {
-        return $this->belongsTo(User::class, 'supervisor_user_id')->withTrashed();
-    }
-
-    public function purchaseUnit()
-    {
-        return $this->belongsTo(PurchaseUnit::class, 'purchase_unit_id');
-    }
-
-    public function purchaseType()
-    {
-        return $this->belongsTo(PurchaseType::class, 'purchase_type_id');
-    }
-
-    public function purchaseMechanism()
-    {
-        return $this->belongsTo(PurchaseMechanism::class, 'purchase_mechanism_id');
-    }
-
-    public function signer()
-    {
-        return $this->belongsTo(User::class, 'signer_user_id')->withTrashed();
-    }
-
-    public function userOrganizationalUnit()
-    {
-        return $this->belongsTo(OrganizationalUnit::class, 'request_user_ou_id')->withTrashed();
-    }
-
-    public function contractOrganizationalUnit()
-    {
-        return $this->belongsTo(OrganizationalUnit::class, 'contract_manager_ou_id')->withTrashed();
-    }
-
-    public function itemRequestForms()
-    {
-        return $this->hasMany(ItemRequestForm::class);
-    }
-
-    public function itemChangedRequestForms()
-    {
-        return $this->hasMany(ItemChangedRequestForm::class);
-    }
-
-    public function passengers()
-    {
-        return $this->hasMany(Passenger::class);
-    }
-
-    public function eventRequestForms()
-    {
-        return $this->hasMany(EventRequestForm::class);
-    }
-
-    public function purchasingProcesses()
-    {
-        return $this->hasMany(PurchasingProcess::class);
-    }
-
-    public function purchasingProcess()
-    {
-        return $this->HasOne(PurchasingProcess::class);
-    }
-
-    public function signedRequestForm()
-    {
-        return $this->belongsTo(SignaturesFile::class, 'signatures_file_id');
-    }
-
-    public function signedOldRequestForm()
-    {
-        return $this->belongsTo(SignaturesFile::class, 'old_signatures_file_id');
-    }
-
-    public function signedOldRequestForms()
-    {
-        return $this->hasMany(OldSignatureFile::class)->latest();
-    }
-
-    public function associateProgram()
-    {
-        return $this->belongsTo(Program::class, 'program_id');
-    }
-
-    public function immediatePurchases()
-    {
-        return $this->hasMany(ImmediatePurchase::class);
-    }
-
-    public function cdp(): HasOne
-    {
-        return $this->hasOne(Cdp::class);
     }
 
     /**
@@ -215,7 +385,7 @@ class RequestForm extends Model implements Auditable
     {
         return $this->hasOne(Control::class);
     }
-
+    
     public function getTotalEstimatedExpense()
     {
         $total = 0;
@@ -270,19 +440,14 @@ class RequestForm extends Model implements Auditable
         switch ($this->status) {
             case "pending":
                 return 'Pendiente';
-                break;
             case "rejected":
                 return 'Rechazado';
-                break;
             case "approved":
                 return 'Aprobado';
-                break;
             case "closed":
                 return 'Cerrado';
-                break;
             case "saved":
                 return 'Guardado';
-                break;
         }
     }
 
@@ -296,19 +461,12 @@ class RequestForm extends Model implements Auditable
         switch ($this->subtype) {
             case "bienes ejecución inmediata":
                 return 'Bienes Ejecución Inmediata';
-                break;
-
             case "bienes ejecución tiempo":
                 return 'Bienes Ejecución En Tiempo';
-                break;
-
             case "servicios ejecución inmediata":
                 return 'Servicios Ejecución Inmediata';
-                break;
-
             case "servicios ejecución tiempo":
                 return 'Servicios Ejecución En Tiempo';
-                break;
         }
     }
 
@@ -317,15 +475,10 @@ class RequestForm extends Model implements Auditable
         switch ($this->type_of_currency) {
             case "peso":
                 return 'Peso';
-                break;
-
             case "dolar":
                 return 'Dólar';
-                break;
-
             case "uf":
                 return 'Uf';
-                break;
         }
     }
 
@@ -334,15 +487,10 @@ class RequestForm extends Model implements Auditable
         switch ($this->type_of_currency) {
             case "peso":
                 return '$';
-                break;
-
             case "dolar":
                 return 'USD ';
-                break;
-
             case "uf":
                 return 'Uf ';
-                break;
         }
     }
 

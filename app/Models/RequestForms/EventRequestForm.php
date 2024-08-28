@@ -8,89 +8,135 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\RequestForms\RequestForm;
 use App\Models\Rrhh\OrganizationalUnit;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Contracts\Auditable;
 use Str;
 
 class EventRequestForm extends Model implements Auditable
 {
-    use HasFactory;
-    use SoftDeletes;
-    use \OwenIt\Auditing\Auditable;
+    use HasFactory, SoftDeletes, \OwenIt\Auditing\Auditable;
 
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'event_request_forms';
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
     protected $fillable = [
-        'signer_user_id', 'request_form_id', 'ou_signer_user', 'position_signer_user', 'cardinal_number', 'status',
-        'comment', 'signature_date', 'event_type', 'purchaser_id', 'purchaser_amount','purchaser_observation'
+        'signer_user_id',
+        'request_form_id',
+        'ou_signer_user',
+        'position_signer_user',
+        'cardinal_number',
+        'status',
+        'comment',
+        'signature_date',
+        'event_type',
+        'purchaser_id',
+        'purchaser_amount',
+        'purchaser_observation',
     ];
 
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'signature_date' => 'datetime',
+    ];
 
-    public function signerUser(){
+    /**
+     * Get the user that signed the event request form.
+     *
+     * @return BelongsTo
+     */
+    public function signerUser(): BelongsTo
+    {
         return $this->belongsTo(User::class, 'signer_user_id')->withTrashed();
     }
 
-    public function purchaser(){
+    /**
+     * Get the purchaser for the event request form.
+     *
+     * @return BelongsTo
+     */
+    public function purchaser(): BelongsTo
+    {
         return $this->belongsTo(User::class, 'purchaser_id')->withTrashed();
     }
 
-    public function signerOrganizationalUnit(){
+    /**
+     * Get the organizational unit of the signer user.
+     *
+     * @return BelongsTo
+     */
+    public function signerOrganizationalUnit(): BelongsTo
+    {
         return $this->belongsTo(OrganizationalUnit::class, 'ou_signer_user')->withTrashed();
     }
 
-    public function requestForm() {
+    /**
+     * Get the request form associated with the event request form.
+     *
+     * @return BelongsTo
+     */
+    public function requestForm(): BelongsTo
+    {
         return $this->belongsTo(RequestForm::class, 'request_form_id');
     }
 
-    public function files()
+    /**
+     * Get the files for the event request form.
+     *
+     * @return HasMany
+     */
+    public function files(): HasMany
     {
         return $this->hasMany(EventRequestFormFile::class);
     }
 
     public function getStatusValueAttribute(){
-      switch ($this->status) {
-          case "pending":
-              return 'Pendiente';
-              break;
-          case "rejected":
-              return 'Rechazado';
-              break;
-          case "approved":
-              return 'Aprobado';
-              break;
-          case "does_not_apply":
-              return 'No aplica';
-              break;
-      }
+        switch ($this->status) {
+            case "pending":
+                return 'Pendiente';
+            case "rejected":
+                return 'Rechazado';
+            case "approved":
+                return 'Aprobado';
+            case "does_not_apply":
+                return 'No aplica';
+        }
     }
 
     public function getEventTypeValueAttribute(){
         switch ($this->event_type) {
             case "technical_review_event":
                 return 'Evaluación Técnica';
-                break;
             case "leader_ship_event":
                 return 'Jefatura Directa';
-                break;
             case "superior_leader_ship_event":
                 return 'Jefatura Superior';
-                break;
             case "pre_finance_event":
                 return 'Refrendación Presupuestaria';
-                break;
             case "finance_event":
                 return 'Finanzas';
-                break;
             case "supply_event":
                 return 'Abastecimiento';
-                break;
             case "pre_budget_event":
                 return 'Solicitud Nuevo Presupuesto';
-                break;
             case "pre_finance_budget_event":
                 return 'Solicitud Nuevo Presupuesto';
-                break;
             case "budget_event":
                 return 'Solicitud Nuevo Presupuesto';
-                break;
         }
     }
 
@@ -341,10 +387,4 @@ class EventRequestForm extends Model implements Auditable
         return ($eventQuantity === $this->cardinal_number);
     }
 
-    protected $dates = [
-        'signature_date',
-    ];
-
-
-    protected $table = 'arq_event_request_forms';
 }
