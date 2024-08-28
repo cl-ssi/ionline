@@ -6,6 +6,7 @@ use App\Models\Documents\Document;
 use App\Models\Documents\SignaturesFile;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ContinuityResolution extends Model
