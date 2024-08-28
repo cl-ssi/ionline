@@ -24,6 +24,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 use OwenIt\Auditing\Contracts\Auditable;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use App\Models\Unspsc\Product as UnspscProduct;
 
 class Inventory extends Model implements Auditable
 {
