@@ -68,14 +68,14 @@
                 @endif
             </td>
             <td nowrap>
-                <!-- solo se puede cancelar si el estado es reservado -->
+                <!-- solo se puede anular si el estado es reservado -->
                 @if($roomBooking->status == "Reservado") 
                 <form method="POST" class="form-horizontal" action="{{ route('hotel_booking.booking_cancelation', $roomBooking) }}">
                     @csrf
                     @method('DELETE')
                         <button type="submit" class="btn btn-outline-danger btn-sm"
-                            onclick="return confirm('¿Está seguro que desea cancelar la reserva?')">
-                            Cancelar
+                            onclick="return confirm('¿Está seguro que desea anular la reserva?')">
+                            Anular
                         </button>
                 </form> 
                 @else 

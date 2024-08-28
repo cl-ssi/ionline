@@ -37,7 +37,7 @@
             <input type="checkbox" id="cancelado" name="status[]" value="Cancelado" 
                    {{ in_array('Cancelado', request('status', [])) ? 'checked' : '' }}
                    onchange="document.getElementById('filter-form').submit()">
-            <label for="cancelado">Cancelado</label>
+            <label for="cancelado">Anulado</label>
         </div>
     </div>
 </form>
@@ -75,7 +75,7 @@
                     <td nowrap>{{ $roomBooking->start_date->format('Y-m-d') }}</td>
                     <td nowrap>{{ $roomBooking->end_date->format('Y-m-d') }}</td>
                     <td nowrap>
-                        {{ $roomBooking->status }}
+                        {{ $roomBooking->status != "Cancelado" ? $roomBooking->status : "Anulado" }}
                     </td>
                     <td nowrap class="display: flex; flex-direction: row;">
                         {{ $roomBooking->payment_type }}
@@ -127,7 +127,7 @@
                 @if($roomBooking->status == "Cancelado" && $roomBooking->cancelation_observation)
                     <tr>
                         <td colspan="10" style="text-align: right;">
-                            Motivo cancelación: <b>{{$roomBooking->cancelation_observation}}</b>
+                            Motivo anulación: <b>{{$roomBooking->cancelation_observation}}</b>
                         </td>
                     </tr>       
                 @endif
