@@ -2,6 +2,9 @@
 
 namespace App\Models\Finance;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use OwenIt\Auditing\Contracts\Auditable;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Model;
@@ -161,31 +164,28 @@ class Dte extends Model implements Auditable
         'check_tesoreria',
     ];
 
+
     /**
-     * The attributes that should be mutated to dates.
+     * The attributes that should be cast to native types.
      *
      * @var array
      */
-    protected $dates = [
-        'publicacion',
-        // 'emision',
-        'fecha_nar',
-        'fecha_arm',
-        'fecha_vencimiento',
-        'fecha_recepcion_sii',
-        'fecha_reclamo',
-        'fecha_ingreso_oc',
-        'fecha_ingreso_rc',
-        'fecha_ingreso',
-        'fecha_aceptacion',
-        'fecha',
-        'payer_at',
-        'confirmation_at',
-    ];
-
     protected $casts = [
-        'all_receptions_at'=> 'datetime',
+        'all_receptions_at' => 'datetime',
         'emision' => 'date:Y-m-d',
+        'publicacion' => 'date:Y-m-d',
+        'fecha_nar' => 'date:Y-m-d',
+        'fecha_arm' => 'date:Y-m-d',
+        'fecha_vencimiento' => 'date:Y-m-d',
+        'fecha_recepcion_sii' => 'date:Y-m-d',
+        'fecha_reclamo' => 'date:Y-m-d',
+        'fecha_ingreso_oc' => 'date:Y-m-d',
+        'fecha_ingreso_rc' => 'date:Y-m-d',
+        'fecha_ingreso' => 'date:Y-m-d',
+        'fecha_aceptacion' => 'date:Y-m-d',
+        'fecha' => 'date:Y-m-d',
+        'payer_at' => 'datetime',
+        'confirmation_at' => 'datetime',
     ];
 
     /**
@@ -199,49 +199,52 @@ class Dte extends Model implements Auditable
      * boleta_honorarios
      * boleta_electronica
      */
-
-    public function purchaseOrder()
+    
+    /**
+     * Get the purchase order associated with the DTE.
+     *
+     * @return BelongsTo
+     */
+    public function purchaseOrder(): BelongsTo
     {
         return $this->belongsTo(PurchaseOrder::class, 'folio_oc', 'code');
     }
-
-    /** Control(ingresos) de Warehouse */
-    public function controls()
+    
+    /**
+     * Control (ingresos) de Warehouse.
+     *
+     * @return HasMany
+     */
+    public function controls(): HasMany
     {
         return $this->hasMany(Control::class, 'po_code', 'folio_oc');
     }
 
-    /** Tiene muchos receptions */
-    public function receptions()
-    {
-        if($this->tipo_documento =='guias_despacho')
-        {
-            return $this->hasMany(Reception::class,'guia_id', 'id');
-        }
-        else{
-            return $this->hasMany(Reception::class);
-        }
-    }
-
-
-    public function receptionsGuia()
+    /**
+     * Get the receptions associated with the guia.
+     *
+     * @return HasMany
+     */
+    public function receptionsGuia(): HasMany
     {
         return $this->hasMany(Reception::class, 'guia_id');
     }
 
-
-    public function receptionsDte()
+    /**
+     * Get the receptions associated with the DTE.
+     *
+     * @return HasMany
+     */
+    public function receptionsDte(): HasMany
     {
         return $this->hasMany(Reception::class, 'dte_id');
     }
-
-
 
     /**
      * Una factura puede tener muchas dtes
      * y las DTES deberían ser del tipo guia, notas de crédito o débito
      */
-    public function dtes()
+    public function dtes(): BelongsToMany
     {
         return $this->belongsToMany(Dte::class,'fin_invoice_dtes','invoice_id','dte_id')->withTimestamps();
     }
@@ -250,47 +253,153 @@ class Dte extends Model implements Auditable
      * Y por el contrario, una DTE de tipo guia de despacho, nota de crédito o débito
      * podría pertenecer a una o muchas facturas
      */
-    public function invoices()
+    /**
+     * Get the invoices associated with the DTE.
+     *
+     * @return BelongsToMany
+     */
+    public function invoices(): BelongsToMany
     {
-        return $this->belongsToMany(Dte::class,'fin_invoice_dtes','dte_id','invoice_id')->withTimestamps();
+        return $this->belongsToMany(Dte::class, 'fin_invoice_dtes', 'dte_id', 'invoice_id')->withTimestamps();
     }
-
-
-    public function comparativeRequirement()
+    
+    /**
+     * Get the comparative requirement associated with the DTE.
+     *
+     * @return HasOne
+     */
+    public function comparativeRequirement(): HasOne
     {
         return $this->hasOne(ComparativeRequirement::class, 'dte_id');
     }
-
-
-    public function tgrPayedDte()
+    
+    /**
+     * Get the TGR payed DTE associated with the DTE.
+     *
+     * @return HasOne
+     */
+    public function tgrPayedDte(): HasOne
     {
         return $this->hasOne(TgrPayedDte::class);
     }
-
-    public function tgrAccountingPortfolios()
+    
+    /**
+     * Get the TGR accounting portfolios associated with the DTE.
+     *
+     * @return HasMany
+     */
+    public function tgrAccountingPortfolios(): HasMany
     {
         return $this->hasMany(TgrAccountingPortfolio::class, 'dte_id');
     }
-
+    
+    /**
+     * Get the PDF backups associated with the DTE.
+     *
+     * @return HasMany
+     */
     public function pdfBackups(): HasMany
     {
         return $this->hasMany(PdfBackup::class, 'dte_id');
     }
 
+    /**
+     * Get the comprobante de pago associated with the DTE.
+     *
+     * @return HasOne
+     */
     public function comprobantePago(): HasOne
     {
         return $this->hasOne(PdfBackup::class, 'dte_id')->where('type', 'comprobante_pago');
     }
 
-    public function totalDebe()
+    /**
+     * Get the payment flows for the DTE.
+     *
+     * @return HasMany
+     */
+    public function paymentFlows(): HasMany
     {
-        return $this->tgrAccountingPortfolios()->sum('debe');
+        return $this->hasMany(PaymentFlow::class, 'dte_id');
+    }
+    
+    /**
+     * Get the files for the DTE.
+     *
+     * @return HasMany
+     */
+    public function files(): HasMany
+    {
+        return $this->hasMany(File::class, 'dte_id');
     }
 
-    public function totalHaber()
+    
+    /**
+     * Get all of the files of a model.
+     *
+     * @return MorphMany
+     */
+    public function filesPdf(): MorphMany
     {
-        return $this->tgrAccountingPortfolios()->sum('haber');
+        return $this->morphMany(FileModel::class, 'fileable');
     }
+    
+    /**
+     * Get the establishment that owns the DTE.
+     *
+     * @return BelongsTo
+     */
+    public function establishment(): BelongsTo
+    {
+        return $this->belongsTo(Establishment::class, 'establishment_id');
+    }
+    
+    /**
+     * Get the user that confirmed the DTE.
+     *
+     * @return BelongsTo
+     */
+    public function confirmationUser(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'confirmation_user_id');
+    }
+
+    /** Fue cambiada por contract manager, borrar más adelante */
+    // public function uploadUser()
+    // {
+    //     return $this->belongsTo(User::class, 'upload_user_id');
+    // }
+
+    /**
+     * Get the contract manager that owns the DTE.
+     *
+     * @return BelongsTo
+     */
+    public function contractManager(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'contract_manager_id')->withTrashed();
+    }
+    
+    /**
+     * Get the user for all receptions of the DTE.
+     *
+     * @return BelongsTo
+     */
+    public function allReceptionsUser(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'all_receptions_user_id');
+    }
+    
+    /**
+     * Get the organizational unit for all receptions of the DTE.
+     *
+     * @return BelongsTo
+     */
+    public function allReceptionsOU(): BelongsTo
+    {
+        return $this->belongsTo(OrganizationalUnit::class, 'all_receptions_ou_id');
+    }
+
 
     /**
      * Relación con RequestForm a través de ImmediatePurchase
@@ -305,6 +414,19 @@ class Dte extends Model implements Auditable
             'folio_oc', // Local key on the Dte table...
             'request_form_id', // Local key on the ImmediatePurchase table...
         );
+    }
+
+    
+    /** Tiene muchos receptions */
+    public function receptions()
+    {
+        if($this->tipo_documento =='guias_despacho')
+        {
+            return $this->hasMany(Reception::class,'guia_id', 'id');
+        }
+        else{
+            return $this->hasMany(Reception::class);
+        }
     }
 
     /** Compras Inmediatas */
@@ -366,54 +488,14 @@ class Dte extends Model implements Auditable
         return $this->receptions()->where('rejected', true)->exists();
     }
 
-    public function paymentFlows()
+    public function totalDebe()
     {
-        return $this->hasMany(PaymentFlow::class, 'dte_id');
+        return $this->tgrAccountingPortfolios()->sum('debe');
     }
 
-    public function files()
+    public function totalHaber()
     {
-        return $this->hasMany(File::class, 'dte_id');
-    }
-
-    /**
-     * Get all of the files of a model.
-    */
-    public function filesPdf(): MorphMany
-    {
-        // dd('llamando filesPdf');
-        return $this->morphMany(FileModel::class, 'fileable');
-    }
-
-    public function establishment()
-    {
-        return $this->belongsTo(Establishment::class, 'establishment_id');
-    }
-
-    public function confirmationUser()
-    {
-        return $this->belongsTo(User::class, 'confirmation_user_id');
-    }
-
-    /** Fue cambiada por contract manager, borrar más adelante */
-    // public function uploadUser()
-    // {
-    //     return $this->belongsTo(User::class, 'upload_user_id');
-    // }
-
-    public function contractManager()
-    {
-        return $this->belongsTo(User::class, 'contract_manager_id')->withTrashed();
-    }
-
-    public function allReceptionsUser()
-    {
-        return $this->belongsTo(User::class, 'all_receptions_user_id');
-    }
-
-    public function allReceptionsOU()
-    {
-        return $this->belongsTo(OrganizationalUnit::class, 'all_receptions_ou_id');
+        return $this->tgrAccountingPortfolios()->sum('haber');
     }
 
     public function getTipoDocumentoInicialesAttribute()
