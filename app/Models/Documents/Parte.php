@@ -2,25 +2,32 @@
 
 namespace App\Models\Documents;
 
-use App\Models\Requirements\Requirement;
-use Illuminate\Http\Request;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Model;
-use Carbon\Carbon;
-use App\Models\Establishment;
-use App\Models\Documents\Type;
 use App\Models\Documents\Correlative;
-use App\Models\User;
-use App\Models\Rrhh\OrganizationalUnit;
-use App\Models\File;
 use App\Models\Documents\SignaturesFile;
+use App\Models\Documents\Type;
+use App\Models\Establishment;
+use App\Models\File;
+use App\Models\Requirements\Requirement;
+use App\Models\Rrhh\OrganizationalUnit;
+use App\Models\User;
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
-use Illuminate\Database\Eloquent\Relations\hasMany;
-use Illuminate\Database\Eloquent\Relations\belongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Http\Request;
 
 class Parte extends Model
 {
     use SoftDeletes;
+
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'partes';
 
     /**
      * The attributes that are mass assignable.
@@ -48,19 +55,12 @@ class Parte extends Model
     ];
 
     /**
-     * The attributes that should be mutated to dates.
+     * The attributes that should be cast to native types.
      *
      * @var array
      */
-    // protected $dates = [
-    //     'date',
-    //     'deleted_at',
-    //     'viewed_at',
-    // ];
-
     protected $casts = [
         'date' => 'date:Y-m-d',
-        'deleted_at' => 'datetime',
         'viewed_at' => 'datetime',
     ];
 
@@ -74,37 +74,72 @@ class Parte extends Model
         return $this->hasMany(Requirement::class);
     }
 
+    /**
+     * Get the files for the parte.
+     *
+     * @return MorphMany
+     */
     public function files(): MorphMany
     {
         return $this->morphMany(File::class, 'fileable');
     }
 
+    /**
+     * Get the establishment that owns the parte.
+     *
+     * @return BelongsTo
+     */
     public function establishment(): BelongsTo
     {
         return $this->belongsTo(Establishment::class);
     }
 
+    /**
+     * Get the type that owns the parte.
+     *
+     * @return BelongsTo
+     */
     public function type(): BelongsTo
     {
         return $this->belongsTo(Type::class)->withTrashed();
     }
 
+    /**
+     * Get the user that owns the parte.
+     *
+     * @return BelongsTo
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class)->withTrashed();
     }
 
+    /**
+     * Get the organizational unit that owns the parte.
+     *
+     * @return BelongsTo
+     */
     public function organizationalUnit(): BelongsTo
     {
         return $this->belongsTo(OrganizationalUnit::class)->withTrashed();
     }
 
-    public function signaturesFile(): belongsTo
+    /**
+     * Get the signatures file that owns the parte.
+     *
+     * @return BelongsTo
+     */
+    public function signaturesFile(): BelongsTo
     {
         return $this->belongsTo(SignaturesFile::class)->withTrashed();
     }
 
-    public function setCorrelative()
+    /**
+     * Set the correlative for the parte.
+     *
+     * @return void
+     */
+    public function setCorrelative(): void
     {
         abort_if(!isset($this->establishment_id), 501, 'El parte no tiene establecimiento asociado');
 
@@ -132,8 +167,14 @@ class Parte extends Model
         $this->correlative = $number;
     }
 
-
-    public static function createPartesForDirectors($destinatarios, SignaturesFlow $signaturesFlow)
+    /**
+     * Create partes for directors.
+     *
+     * @param array $destinatarios
+     * @param SignaturesFlow $signaturesFlow
+     * @return void
+     */
+    public static function createPartesForDirectors(array $destinatarios, SignaturesFlow $signaturesFlow): void
     {
         // Limpiar los espacios en blanco alrededor de cada dirección de correo electrónico en el array de destinatarios
         $destinatarios = array_map('trim', explode(',', $destinatarios));
@@ -155,8 +196,6 @@ class Parte extends Model
             return collect($mail_director_arr)->pluck('mail_director')->flatten()->contains($value);
         });
 
-
-
         // Buscar los establecimientos que tienen los correos electrónicos en la variable $coincidencias
         $ids_establecimientos = [];
         if (!empty($coincidencias)) {
@@ -168,7 +207,6 @@ class Parte extends Model
         }
 
         foreach ($ids_establecimientos as $id) {
-
             $document = SignaturesFile::where('signature_id', $signaturesFlow->signature->id)
                 ->where('file_type', 'documento')
                 ->first();
@@ -188,8 +226,8 @@ class Parte extends Model
             $parte->save();
 
             $signaturesFiles = SignaturesFile::where('signature_id', $signaturesFlow->signature->id)
-            ->where('file_type', 'anexo')
-            ->get();
+                ->where('file_type', 'anexo')
+                ->get();
 
             foreach ($signaturesFiles as $key => $sf) {
                 $parte->files()->create([
@@ -202,15 +240,25 @@ class Parte extends Model
         }
     }
 
-
-
-
-    /* FIXME: Esto no es necesario */
-    public function getCreationParteDateAttribute()
+    /**
+     * FIXME: Esto no es necesario
+     * Get the creation parte date attribute.
+     *
+     * @return string
+     */
+    public function getCreationParteDateAttribute(): string
     {
         return Carbon::parse($this->date)->format('d-m-Y');
     }
 
+    /**
+     * Scope a query to filter results.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param string $column
+     * @param mixed $value
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
     public function scopeFilter($query, $column, $value)
     {
         if (!empty($value)) {
@@ -218,7 +266,7 @@ class Parte extends Model
                 case 'origin':
                 case 'subject':
                     $query->where($column, 'LIKE', '%' . $value . '%');
-                    break;                
+                    break;
                 case 'correlative':
                 case 'number':
                 case 'type_id':
@@ -235,6 +283,13 @@ class Parte extends Model
         }
     }
 
+    /**
+     * Scope a query to search results.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
     public function scopeSearch($query, Request $request)
     {
         if ($request->input('id') != "") {
@@ -265,7 +320,13 @@ class Parte extends Model
         return $query;
     }
 
-    /* FIXME: cambiar nombre */
+    /**
+     * Scope a query to search results.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param string $request
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
     public function scopeSearch2($query, $request)
     {
         if ($request != "") {
