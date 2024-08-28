@@ -267,7 +267,7 @@
 
             <div class="mt-4 p-5 text-black rounded bg-light">
 
-                <h6>En el siguiente video podrá visualizar como realizar un agendamiento en la unidad de salud al trabajador. Para acceder al módulo presionar <a href="{{ route('prof_agenda.home') }}">aquí</a>.</h6>
+                <h6>En el siguiente video podrá visualizar como realizar un agendamiento en la unidad de salud del trabajador. Para acceder al módulo presionar <a href="{{ route('prof_agenda.home') }}">aquí</a>.</h6>
                 <br>
                 <div class="row">
                     <fieldset class="form-group col-12 col-md-12">
