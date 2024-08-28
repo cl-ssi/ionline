@@ -2,14 +2,32 @@
 
 namespace App\Models\Requirements;
 
+use App\Models\Documents\Document;
+use App\Models\Requirements\EventStatus;
+use App\Models\Requirements\File;
+use App\Models\Requirements\Requirement;
 use App\Models\Rrhh\Authority;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\Rrhh\OrganizationalUnit;
+use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Event extends Model
 {
-    use SoftDeletes;
+    use HasFactory, SoftDeletes;
+
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'req_events';
 
     /**
      * The attributes that are mass assignable.
@@ -17,7 +35,7 @@ class Event extends Model
      * @var array
      */
     protected $fillable = [
-        'body', 
+        'body',
         'status',
         'from_user_id',
         'from_ou_id',
@@ -28,54 +46,121 @@ class Event extends Model
         'to_authority'
     ];
 
-    public function getCreationDateAttribute()
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'limit_at' => 'date',
+    ];
+
+    /**
+     * Get the user that sent the event.
+     *
+     * @return BelongsTo
+     */
+    public function fromUser(): BelongsTo
     {
-      return Carbon::parse($this->created_at)->format('d-m-Y');
+        return $this->belongsTo(User::class, 'from_user_id')->withTrashed();
     }
 
-    public function from_user() {
-        return $this->belongsTo('App\Models\User', 'from_user_id')->withTrashed();
+    /**
+     * Get the organizational unit that sent the event.
+     *
+     * @return BelongsTo
+     */
+    public function fromOu(): BelongsTo
+    {
+        return $this->belongsTo(OrganizationalUnit::class, 'from_ou_id')->withTrashed();
     }
 
-    public function from_ou() {
-        return $this->belongsTo('App\Models\Rrhh\OrganizationalUnit', 'from_ou_id')->withTrashed();
+    /**
+     * Get the user that received the event.
+     *
+     * @return BelongsTo
+     */
+    public function toUser(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'to_user_id')->withTrashed();
     }
 
-    public function to_user() {
-        return $this->belongsTo('App\Models\User', 'to_user_id')->withTrashed();
+    /**
+     * Get the organizational unit that received the event.
+     *
+     * @return BelongsTo
+     */
+    public function toOu(): BelongsTo
+    {
+        return $this->belongsTo(OrganizationalUnit::class, 'to_ou_id')->withTrashed();
     }
 
-    public function to_ou() {
-        return $this->belongsTo('App\Models\Rrhh\OrganizationalUnit', 'to_ou_id')->withTrashed();
+    /**
+     * Get the requirement that owns the event.
+     *
+     * @return BelongsTo
+     */
+    public function requirement(): BelongsTo
+    {
+        return $this->belongsTo(Requirement::class);
     }
 
-    public function requirement() {
-        return $this->belongsTo('App\Models\Requirements\Requirement');
+    /**
+     * Get the files for the event.
+     *
+     * @return HasMany
+     */
+    public function files(): HasMany
+    {
+        return $this->hasMany(File::class);
     }
 
-    public function files() {
-        return $this->hasMany('App\Models\Requirements\File');
+    /**
+     * Get the event statuses for the event.
+     *
+     * @return HasMany
+     */
+    public function eventStatus(): HasMany
+    {
+        return $this->hasMany(EventStatus::class);
     }
 
-    public function eventStatus() {
-        return $this->hasMany('App\Models\Requirements\EventStatus');
+    /**
+     * Get the viewed status for the event.
+     *
+     * @return HasOne
+     */
+    public function viewed(): HasOne
+    {
+        return $this->hasOne(EventStatus::class)->where('user_id', auth()->id());
     }
 
-    public function viewed() {
-        return $this->hasOne('App\Models\Requirements\EventStatus')->where('user_id',auth()->id());
+    /**
+     * Get the documents for the event.
+     *
+     * @return BelongsToMany
+     */
+    public function documents(): BelongsToMany
+    {
+        return $this->belongsToMany(Document::class, 'req_documents_events');
     }
-    // public function documents() {
-    //     return $this->belongsToMany('App\Models\Requirements\EventDocument');
-    // }
-    public function documents() {
-        return $this->belongsToMany('App\Models\Documents\Document','req_documents_events');
+
+    /**
+     * Get the creation date of the event.
+     *
+     * @return string
+     */
+    public function getCreationDateAttribute(): string
+    {
+        return Carbon::parse($this->created_at)->format('d-m-Y');
     }
 
     /**
      * Revisa si el evento fue enviado a una autoridad tipo manager de la ou de destino
+     *
      * @return bool
      */
-    public function isSentToAuthority() :bool
+    public function isSentToAuthority(): bool
     {
         $authorities = Authority::getAmIAuthorityFromOu($this->created_at, 'manager', $this->to_user_id);
 
@@ -87,18 +172,4 @@ class Event extends Model
 
         return false;
     }
-
-    /**
-     * The attributes that should be mutated to dates.
-     *
-     * @var array
-     */
-    protected $dates = ['deleted_at', 'limit_at'];
-
-    /**
-    * The table associated with the model.
-    *
-    * @var string
-    */
-    protected $table = 'req_events';
 }

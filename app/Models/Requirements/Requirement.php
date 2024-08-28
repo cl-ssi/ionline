@@ -2,30 +2,39 @@
 
 namespace App\Models\Requirements;
 
-use OwenIt\Auditing\Contracts\Auditable;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Model;
-use Carbon\Carbon;
-use App\Models\Rrhh\Authority;
-use App\Models\Requirements\LabelRequirement;
-use App\Models\Requirements\EventStatus;
-use App\Models\Requirements\Event;
+use App\Models\Documents\Parte;
 use App\Models\Requirements\Category;
-
+use App\Models\Requirements\Event;
+use App\Models\Requirements\EventStatus;
+use App\Models\Requirements\Label;
+use App\Models\Requirements\LabelRequirement;
+use App\Models\Requirements\RequirementStatus;
+use App\Models\User;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use OwenIt\Auditing\Contracts\Auditable;
 
 class Requirement extends Model implements Auditable
 {
-    use SoftDeletes;
-    use \OwenIt\Auditing\Auditable;
+    use HasFactory, SoftDeletes, \OwenIt\Auditing\Auditable;
+
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'req_requirements';
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-
     protected $fillable = [
         'id',
         'subject',
@@ -39,43 +48,141 @@ class Requirement extends Model implements Auditable
         'category_id'
     ];
 
-    public function events() {
-        return $this->hasMany('App\Models\Requirements\Event');
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'limit_at' => 'date',
+    ];
+
+    /**
+     * Get the events for the requirement.
+     *
+     * @return HasMany
+     */
+    public function events(): HasMany
+    {
+        return $this->hasMany(Event::class);
     }
 
-    public function eventsWithoutCC() {
-        return $this->hasMany('App\Models\Requirements\Event')->where('status','<>','en copia');
+    /**
+     * Get the events without CC for the requirement.
+     *
+     * @return HasMany
+     */
+    public function eventsWithoutCC(): HasMany
+    {
+        return $this->hasMany(Event::class)->where('status', '<>', 'en copia');
     }
 
-    public function ccEvents() {
-        return $this->hasMany('App\Models\Requirements\Event')->where('status','en copia');
+    /**
+     * Get the CC events for the requirement.
+     *
+     * @return HasMany
+     */
+    public function ccEvents(): HasMany
+    {
+        return $this->hasMany(Event::class)->where('status', 'en copia');
     }
 
-    public function user() {
-        return $this->belongsTo('App\Models\User')->withTrashed();
+    /**
+     * Get the user that owns the requirement.
+     *
+     * @return BelongsTo
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class)->withTrashed();
     }
 
-    public function parte() {
-        return $this->belongsTo('App\Models\Documents\Parte');
+    /**
+     * Get the parte that owns the requirement.
+     *
+     * @return BelongsTo
+     */
+    public function parte(): BelongsTo
+    {
+        return $this->belongsTo(Parte::class);
     }
 
-    public function labels() {
-        return $this->belongsToMany('App\Models\Requirements\Label','req_labels_requirements');
+    /**
+     * Get the labels for the requirement.
+     *
+     * @return BelongsToMany
+     */
+    public function labels(): BelongsToMany
+    {
+        return $this->belongsToMany(Label::class, 'req_labels_requirements');
     }
 
-    public function category()
+    /**
+     * Get the category that owns the requirement.
+     *
+     * @return BelongsTo
+     */
+    public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
     }
 
-
-    public function firstEvent()
+    /**
+     * Get the first event for the requirement.
+     *
+     * @return HasOne
+     */
+    public function firstEvent(): HasOne
     {
-        return $this->hasOne(Event::class)->where('status','creado');
+        return $this->hasOne(Event::class)->where('status', 'creado');
     }
 
-    public function eventsViewed() {
-        return $this->hasMany('App\Models\Requirements\EventStatus')->where('user_id',auth()->id());
+    /**
+     * Get the viewed events for the requirement.
+     *
+     * @return HasMany
+     */
+    public function eventsViewed(): HasMany
+    {
+        return $this->hasMany(EventStatus::class)->where('user_id', auth()->id());
+    }
+
+
+    /**
+     * FIXME: viewed hace referencia a los archivados y no a los vistos
+     */
+    /**
+     * Get the archived statuses for the requirement.
+     *
+     * @return HasMany
+     */
+    public function archived(): HasMany
+    {
+        return $this->hasMany(RequirementStatus::class)->where('status', 'viewed');
+    }
+
+    public function scopeSearch($query, $request) {
+
+        if($request != "") {
+            $query->where('id','LIKE','%'.$request.'%')
+                  ->OrWhere('subject','LIKE','%'.$request.'%');
+        }
+
+        return $query;
+    }
+
+    /** 
+     * FIXME: no debería llamarse RequirementStatus, status directamente 
+     * sin embargo esa popiedad ya existe
+     */
+    /**
+     * Get the requirement statuses for the requirement.
+     *
+     * @return HasMany
+     */
+    public function requirementStatus(): HasMany
+    {
+        return $this->hasMany(RequirementStatus::class);
     }
 
     public static function getNextGroupNumber() {
@@ -125,30 +232,6 @@ class Requirement extends Model implements Auditable
     public function getUnreadedEventsAttribute(){
         $ct = $this->eventsWithoutCC->count() - $this->eventsViewed->count();
         return ($ct > 0) ? $ct : null;
-    }
-
-    /* FIXME: viewed hace referencia a los archivados y no a los vistos
-     */
-    public function archived() {
-        return $this->hasMany('App\Models\Requirements\RequirementStatus')
-            ->where('status','viewed');
-    }
-
-    public function scopeSearch($query, $request) {
-
-        if($request != "") {
-            $query->where('id','LIKE','%'.$request.'%')
-                  ->OrWhere('subject','LIKE','%'.$request.'%');
-        }
-
-        return $query;
-    }
-
-    /* FIXME: no debería llamarse RequirementStatus, status directamente 
-     * sin embargo esa popiedad ya existe
-     */
-    public function requirementStatus() {
-        return $this->hasMany('App\Models\Requirements\RequirementStatus');
     }
 
     /**
@@ -211,18 +294,4 @@ class Requirement extends Model implements Auditable
             return $total;
         }
     }
-
-    /**
-     * The attributes that should be mutated to dates.
-     *
-     * @var array
-     */
-    protected $dates = ['deleted_at', 'limit_at'];
-
-    /**
-    * The table associated with the model.
-    *
-    * @var string
-    */
-    protected $table = 'req_requirements';
 }

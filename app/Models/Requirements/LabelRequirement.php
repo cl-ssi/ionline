@@ -2,40 +2,59 @@
 
 namespace App\Models\Requirements;
 
+use App\Models\Requirements\Label;
+use App\Models\Requirements\Requirement;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class LabelRequirement extends Model
 {
-  /**
-   * The attributes that are mass assignable.
-   *
-   * @var array
-   */
-  protected $fillable = [
-      'requirement_id',
-      'label_id'
-  ];
+    use SoftDeletes;
 
-  public function labels() {
-      return $this->belongsToMany('App\Models\Requirements\Label');
-  }
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'req_labels_requirements';
 
-  public function requirements() {
-      return $this->belongsToMany('App\Models\Requirements\Requirement');
-  }
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'requirement_id',        
+        'label_id'
+    ];
 
-  /**
-   * The attributes that should be mutated to dates.
-   *
-   * @var array
-   */
-  protected $dates = ['deleted_at', 'limit_at'];
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'limit_at' => 'date',
+    ];
 
-  /**
-  * The table associated with the model.
-  *
-  * @var string
-  */
-  protected $table = 'req_labels_requirements';
+    /**
+     * Get the labels for the label requirement.
+     *
+     * @return BelongsToMany
+     */
+    public function labels(): BelongsToMany
+    {
+        return $this->belongsToMany(Label::class);
+    }
+
+    /**
+     * Get the requirements for the label requirement.
+     *
+     * @return BelongsToMany
+     */
+    public function requirements(): BelongsToMany
+    {
+        return $this->belongsToMany(Requirement::class);
+    }
 }
