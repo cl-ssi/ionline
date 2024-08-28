@@ -2,6 +2,7 @@
 
 namespace App\Notifications\Signatures;
 
+use App\Models\Documents\Numeration;
 use Illuminate\Notifications\Notification;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Mail\Attachment;
@@ -11,6 +12,8 @@ use Illuminate\Bus\Queueable;
 class NumerateAndDistribute extends Notification implements ShouldQueue
 {
     use Queueable;
+
+    public $numeration;
 
     /**
      * Create a new notification instance.
@@ -45,7 +48,7 @@ class NumerateAndDistribute extends Notification implements ShouldQueue
          * Documento a distribuir
          */
         $document = Attachment::fromStorage($this->numeration->file_path)
-            ->as('documento_' . $this->correlative . '.pdf')
+            ->as('documento_' . $this->id . '.pdf')
             ->withMime('application/pdf');
 
         return (new MailMessage)
