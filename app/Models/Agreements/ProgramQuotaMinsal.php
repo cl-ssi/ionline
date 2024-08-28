@@ -3,28 +3,46 @@
 namespace App\Models\Agreements;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Models\Agreements\Program;
 
 class ProgramQuotaMinsal extends Model
 {
-    public function program() {
-        return $this->belongsTo('App\Models\Agreements\Program');
-    }
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'agr_quotas_minsal';
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'description', 'percentage', 'amount', 'transfer_at', 'voucher_number'
+        'description',
+        'percentage',
+        'amount',
+        'transfer_at',
+        'voucher_number'
     ];
 
     /**
-     * The attributes that should be mutated to dates.
+     * The attributes that should be cast to native types.
      *
      * @var array
      */
-    protected $dates = ['transfer_at'];
-    protected $casts = ['percentage' => 'integer'];
+    protected $casts = [
+        'percentage' => 'integer',
+        'transfer_at' => 'datetime'
+    ];
 
-    protected $table = 'agr_quotas_minsal';
+    /**
+     * Get the program that owns the quota.
+     */
+    public function program(): BelongsTo
+    {
+        return $this->belongsTo(Program::class);
+    }
 }

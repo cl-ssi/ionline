@@ -3,16 +3,16 @@
 namespace App\Models\Agreements;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ProgramResolutionAmount extends Model
 {
-    public function program_resolution() {
-        return $this->belongsTo('App\Models\Agreements\ProgramResolution');
-    }
-
-    public function program_component() {
-        return $this->belongsTo('App\Models\Agreements\ProgramComponent')->withTrashed();
-    }
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'agr_amounts';
 
     /**
      * The attributes that are mass assignable.
@@ -20,8 +20,29 @@ class ProgramResolutionAmount extends Model
      * @var array
      */
     protected $fillable = [
-        'amount', 'subtitle', 'program_component_id', 'program_resolution_id'
+        'amount',
+        'subtitle',
+        'program_component_id',
+        'program_resolution_id'
     ];
 
-    protected $table = 'agr_amounts';
+    /**
+     * Get the program resolution that owns the amount.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function program_resolution(): BelongsTo
+    {
+        return $this->belongsTo(ProgramResolution::class);
+    }
+
+    /**
+     * Get the program component that owns the amount.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function program_component(): BelongsTo
+    {
+        return $this->belongsTo(ProgramComponent::class)->withTrashed();
+    }
 }

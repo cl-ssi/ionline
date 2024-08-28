@@ -3,35 +3,54 @@
 namespace App\Models\Agreements;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Accountability extends Model
 {
+    use SoftDeletes;
+
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'agr_accountabilities';
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'month', 'document', 'date'
+        'date',
+        'document',
+        'month',
     ];
 
-    public function agreement() {
-        return $this->belongsTo('App\Models\Agreements\Agreement');
-    }
-
-    public function details() {
-        return $this->hasMany('App\Models\Agreements\AccountabilityDetail');
-    }
-
-    use SoftDeletes;
-
     /**
-     * The attributes that should be mutated to dates.
+     * The attributes that should be cast to native types.
      *
      * @var array
      */
-    protected $dates = ['deleted_at', 'date'];
+    protected $casts = [
+        'date' => 'date',
+    ];
 
-    protected $table = 'agr_accountabilities';
+    /**
+     * Get the agreement that owns the accountability.
+     */
+    public function agreement(): BelongsTo
+    {
+        return $this->belongsTo(Agreement::class);
+    }
+
+    /**
+     * Get the details for the accountability.
+     */
+    public function details(): HasMany
+    {
+        return $this->hasMany(AccountabilityDetail::class);
+    }
 }

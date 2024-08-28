@@ -12,68 +12,7 @@ class ContinuityResolution extends Model
 {
     use SoftDeletes;
 
-    public function agreement() {
-        return $this->belongsTo(Agreement::class);
-    }
-
-    public function fileToEndorse() {
-        return $this->belongsTo(SignaturesFile::class, 'file_to_endorse_id');
-    }
-
-    public function document() {
-        return $this->belongsTo(Document::class, 'document_id');
-    }
-
-    // public function fileToSign() {
-    //     return $this->belongsTo(SignaturesFile::class, 'file_to_sign_id');
-    // }
-
-    public function referrer() {
-        return $this->belongsTo(User::class, 'referrer_id')->withTrashed();
-    }
-
-    public function director_signer() {
-        return $this->belongsTo(Signer::class, 'director_signer_id');
-    }
-
-    public function getEndorseStateBySignPos($i){
-        if($this->fileToEndorse)
-            foreach($this->fileToEndorse->signaturesFlows as $signatureFlow)
-                if($signatureFlow->sign_position == $i)
-                    return ($signatureFlow->status === 0) ? 'fa-times text-danger' : ( ($signatureFlow->status === 1) ? 'fa-check text-success' : 'fa-check text-warning' );
-        return 'fa-ellipsis-h';
-    }
-
-    public function getEndorseObservationBySignPos($i){
-        if($this->fileToEndorse)
-            foreach($this->fileToEndorse->signaturesFlows as $signatureFlow)
-                if($signatureFlow->sign_position == $i)
-                    return ($signatureFlow->status === 0) ? 'Motivo del rechazo: '.$signatureFlow->observation : ( ($signatureFlow->status === 1) ? 'Aceptado el '.$signatureFlow->signature_date->format('d-m-Y H:i') : 'Visación actual' );
-        return 'En espera';
-    }
-
-    public function isEndorsePendingBySignPos($i){
-        if($this->fileToEndorse)
-            foreach($this->fileToEndorse->signaturesFlows as $signatureFlow)
-                if($signatureFlow->sign_position == $i) return $signatureFlow->status == null;
-        return false;
-    }
-
-    // public function getSignObservation(){
-    //     if($this->fileToSign)
-    //         foreach($this->fileToSign->signaturesFlows as $signatureFlow)
-    //             if($signatureFlow->sign_position == 0)
-    //                 return ($signatureFlow->status === 0) ? 'Motivo del rechazo: '.$signatureFlow->observation : ( ($signatureFlow->status === 1) ? 'Aceptado el '.$signatureFlow->signature_date->format('d-m-Y H:i') : 'Visación actual' );
-    //     return 'En espera';
-    // }
-
-    // public function getSignState(){
-    //     if($this->fileToSign)
-    //         foreach($this->fileToSign->signaturesFlows as $signatureFlow)
-    //             if($signatureFlow->sign_position == 0)
-    //                 return ($signatureFlow->status === 0) ? 'fa-times text-danger' : ( ($signatureFlow->status === 1) ? 'fa-check text-success' : 'fa-check text-warning' );
-    //     return 'fa-ellipsis-h';
-    // }
+    protected $table = 'agr_continuity_resolutions';
 
     /**
      * The attributes that are mass assignable.
@@ -81,15 +20,134 @@ class ContinuityResolution extends Model
      * @var array
      */
     protected $fillable = [
-        'date', 'file', 'res_number', 'res_date', 'res_file', 'agreement_id', 'file_to_endorse_id', 'file_to_sign_id', 'referrer_id', 'director_signer_id', 'amount', 'document_id'
+        'date',
+        'file',
+        'res_number',
+        'res_date',
+        'res_file',
+        'agreement_id',
+        'file_to_endorse_id',
+        'file_to_sign_id',
+        'referrer_id',
+        'director_signer_id',
+        'amount',
+        'document_id'
     ];
 
     /**
-     * The attributes that should be mutated to dates.
+     * The attributes that should be cast to native types.
      *
      * @var array
      */
-    protected $dates = ['date', 'res_date'];
+    protected $casts = [
+        'date' => 'date',
+        'res_date' => 'date',
+    ];
 
-    protected $table = 'agr_continuity_resolutions';
+    /**
+     * Get the agreement.
+     */
+    public function agreement(): BelongsTo
+    {
+        return $this->belongsTo(Agreement::class);
+    }
+
+    /**
+     * Get the file to endorse.
+     */
+    public function fileToEndorse(): BelongsTo
+    {
+        return $this->belongsTo(SignaturesFile::class, 'file_to_endorse_id');
+    }
+
+    /**
+     * Get the document.
+     */
+    public function document(): BelongsTo
+    {
+        return $this->belongsTo(Document::class, 'document_id');
+    }
+
+    // /**
+    //  * Get the file to sign.
+    //  */
+    // public function fileToSign(): BelongsTo
+    // {
+    //     return $this->belongsTo(SignaturesFile::class, 'file_to_sign_id');
+    // }
+
+    /**
+     * Get the referrer.
+     */
+    public function referrer(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'referrer_id')->withTrashed();
+    }
+
+    /**
+     * Get the director signer.
+     */
+    public function director_signer(): BelongsTo
+    {
+        return $this->belongsTo(Signer::class, 'director_signer_id');
+    }
+
+    /**
+     * Get the endorse state by sign position.
+     */
+    public function getEndorseStateBySignPos($i)
+    {
+        if ($this->fileToEndorse)
+            foreach ($this->fileToEndorse->signaturesFlows as $signatureFlow)
+                if ($signatureFlow->sign_position == $i)
+                    return ($signatureFlow->status === 0) ? 'fa-times text-danger' : (($signatureFlow->status === 1) ? 'fa-check text-success' : 'fa-check text-warning');
+        return 'fa-ellipsis-h';
+    }
+
+    /**
+     * Get the endorse observation by sign position.
+     */
+    public function getEndorseObservationBySignPos($i)
+    {
+        if ($this->fileToEndorse)
+            foreach ($this->fileToEndorse->signaturesFlows as $signatureFlow)
+                if ($signatureFlow->sign_position == $i)
+                    return ($signatureFlow->status === 0) ? 'Motivo del rechazo: ' . $signatureFlow->observation : (($signatureFlow->status === 1) ? 'Aceptado el ' . $signatureFlow->signature_date->format('d-m-Y H:i') : 'Visación actual');
+        return 'En espera';
+    }
+
+    /**
+     * Check if endorse is pending by sign position.
+     */
+    public function isEndorsePendingBySignPos($i)
+    {
+        if ($this->fileToEndorse)
+            foreach ($this->fileToEndorse->signaturesFlows as $signatureFlow)
+                if ($signatureFlow->sign_position == $i) return $signatureFlow->status == null;
+        return false;
+    }
+
+    // /**
+    //  * Get the sign observation.
+    //  */
+    // public function getSignObservation()
+    // {
+    //     if ($this->fileToSign)
+    //         foreach ($this->fileToSign->signaturesFlows as $signatureFlow)
+    //             if ($signatureFlow->sign_position == 0)
+    //                 return ($signatureFlow->status === 0) ? 'Motivo del rechazo: ' . $signatureFlow->observation : (($signatureFlow->status === 1) ? 'Aceptado el ' . $signatureFlow->signature_date->format('d-m-Y H:i') : 'Visación actual');
+    //     return 'En espera';
+    // }
+
+    // /**
+    //  * Get the sign state.
+    //  */
+    // public function getSignState()
+    // {
+    //     if ($this->fileToSign)
+    //         foreach ($this->fileToSign->signaturesFlows as $signatureFlow)
+    //             if ($signatureFlow->sign_position == 0)
+    //                 return ($signatureFlow->status === 0) ? 'fa-times text-danger' : (($signatureFlow->status === 1) ? 'fa-check text-success' : 'fa-check text-warning');
+    //     return 'fa-ellipsis-h';
+    // }
 }

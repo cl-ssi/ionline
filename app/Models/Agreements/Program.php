@@ -10,37 +10,13 @@ class Program extends Model
 {
     use SoftDeletes;
 
-    public function agreements() {
-        return $this->hasMany('App\Models\Agreements\Agreement');
-    }
-
-    public function resolutions() {
-        return $this->hasMany('App\Models\Agreements\ProgramResolution')->orderBy('created_at','desc');
-    }
-
-    public function quotas_minsal() {
-        return $this->hasMany('App\Models\Agreements\ProgramQuotaMinsal');
-    }
-
     /**
-     * Get all of the budget_availabilities for the Program
+     * The table associated with the model.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @var string
      */
-    public function budget_availabilities(): HasMany
-    {
-        return $this->hasMany(BudgetAvailability::class);
-    }
+    protected $table = 'agr_programs';
 
-    /**
-     * Get the ProgramComponent for the model.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function components()
-    {
-        return $this->hasMany('App\Models\Agreements\ProgramComponent');
-    }
     /**
      * The attributes that are mass assignable.
      *
@@ -51,11 +27,61 @@ class Program extends Model
     ];
 
     /**
-     * The attributes that should be mutated to dates.
+     * The attributes that should be cast to native types.
      *
      * @var array
      */
-    protected $dates = ['deleted_at'];
+    protected $casts = [
+        //
+    ];
 
-    protected $table = 'agr_programs';
+    /**
+     * Get all of the agreements for the Program.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function agreements(): HasMany
+    {
+        return $this->hasMany(Agreement::class);
+    }
+
+    /**
+     * Get all of the resolutions for the Program.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function resolutions(): HasMany
+    {
+        return $this->hasMany(ProgramResolution::class)->orderBy('created_at', 'desc');
+    }
+
+    /**
+     * Get all of the quotas_minsal for the Program.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function quotas_minsal(): HasMany
+    {
+        return $this->hasMany(ProgramQuotaMinsal::class);
+    }
+
+    /**
+     * Get all of the budget_availabilities for the Program.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function budget_availabilities(): HasMany
+    {
+        return $this->hasMany(BudgetAvailability::class);
+    }
+
+    /**
+     * Get all of the components for the Program.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function components(): HasMany
+    {
+        return $this->hasMany(ProgramComponent::class);
+    }
 }

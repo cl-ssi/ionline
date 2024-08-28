@@ -3,32 +3,51 @@
 namespace App\Models\Agreements;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class AccountabilityDetail extends Model
 {
+    use SoftDeletes;
+
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'agr_accountability_details';
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'type', 'egressNumber','egressDate','docNumber','docType','docProvider',
-        'description','paymentType','amount'
+        'amount',
+        'description',
+        'docNumber',
+        'docProvider',
+        'docType',
+        'egressDate',
+        'egressNumber',
+        'paymentType',
+        'type',
     ];
 
-    public function accountability() {
-        return $this->belongsTo('App\Models\Agreements\Accountability');
-    }
-
-    use SoftDeletes;
-
     /**
-     * The attributes that should be mutated to dates.
+     * The attributes that should be cast to native types.
      *
      * @var array
      */
-    protected $dates = ['deleted_at', 'egressDate'];
+    protected $casts = [
+        'egressDate' => 'date',
+    ];
 
-    protected $table = 'agr_accountability_details';
+    /**
+     * Get the accountability that owns the accountability detail.
+     */
+    public function accountability(): BelongsTo
+    {
+        return $this->belongsTo(Accountability::class);
+    }
 }

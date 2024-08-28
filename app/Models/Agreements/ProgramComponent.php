@@ -3,6 +3,7 @@
 namespace App\Models\Agreements;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ProgramComponent extends Model
@@ -10,18 +11,11 @@ class ProgramComponent extends Model
     use SoftDeletes;
 
     /**
-     * Get the Agreement that owns the model.
+     * The table associated with the model.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @var string
      */
-    public function program()
-    {
-        return $this->belongsTo('App\Models\Agreements\Program');
-    }
-
-    // public function amount() {
-    //     return $this->hasOne('App\Models\Agreements\ResolutionAmount');
-    // }
+    protected $table = 'agr_program_components';
 
     /**
      * The attributes that are mass assignable.
@@ -33,12 +27,31 @@ class ProgramComponent extends Model
     ];
 
     /**
-     * The attributes that should be mutated to dates.
+     * The attributes that should be cast to native types.
      *
      * @var array
      */
-    protected $dates = ['deleted_at'];
+    protected $casts = [
+        //
+    ];
 
-    protected $table = 'agr_program_components';
+    /**
+     * Get the Program that owns the model.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function program(): BelongsTo
+    {
+        return $this->belongsTo(Program::class);
+    }
 
+    // /**
+    //  * Get the ResolutionAmount associated with the ProgramComponent.
+    //  *
+    //  * @return \Illuminate\Database\Eloquent\Relations\HasOne
+    //  */
+    // public function amount(): HasOne
+    // {
+    //     return $this->hasOne(ResolutionAmount::class);
+    // }
 }
