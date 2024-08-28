@@ -56,11 +56,12 @@ class Event extends Model
     ];
 
     /**
+     * // FIXME: la relacion fromUser no deberia ser from_user
      * Get the user that sent the event.
      *
      * @return BelongsTo
      */
-    public function fromUser(): BelongsTo
+    public function from_user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'from_user_id')->withTrashed();
     }
@@ -70,7 +71,7 @@ class Event extends Model
      *
      * @return BelongsTo
      */
-    public function fromOu(): BelongsTo
+    public function from_ou(): BelongsTo
     {
         return $this->belongsTo(OrganizationalUnit::class, 'from_ou_id')->withTrashed();
     }
@@ -80,7 +81,7 @@ class Event extends Model
      *
      * @return BelongsTo
      */
-    public function toUser(): BelongsTo
+    public function to_user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'to_user_id')->withTrashed();
     }
@@ -90,7 +91,7 @@ class Event extends Model
      *
      * @return BelongsTo
      */
-    public function toOu(): BelongsTo
+    public function to_ou(): BelongsTo
     {
         return $this->belongsTo(OrganizationalUnit::class, 'to_ou_id')->withTrashed();
     }
