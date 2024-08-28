@@ -2,9 +2,11 @@
 
 namespace App\Models\Documents\Sign;
 
+use App\Models\Documents\Signature;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class SignatureFlow extends Model
@@ -44,34 +46,54 @@ class SignatureFlow extends Model
         'rejected_observation',
         'signer_id',
         'original_signer_id',
-        'signature_id',
+        'signature_id'
     ];
 
     /**
-     * The attributes that should be mutated to dates.
+     * The attributes that should be cast to native types.
      *
      * @var array
      */
-    protected $dates = [
-        'status_at',
+    protected $casts = [
+        'status_at' => 'datetime'
     ];
 
-    public function signer()
+    /**
+     * Get the signer that owns the signature flow.
+     *
+     * @return BelongsTo
+     */
+    public function signer(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function originalSigner()
+    /**
+     * Get the original signer that owns the signature flow.
+     *
+     * @return BelongsTo
+     */
+    public function originalSigner(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function signature()
+    /**
+     * Get the signature that owns the signature flow.
+     *
+     * @return BelongsTo
+     */
+    public function signature(): BelongsTo
     {
         return $this->belongsTo(Signature::class);
     }
 
-    public function getStatusColorAttribute()
+    /**
+     * Get the status color attribute.
+     *
+     * @return string
+     */
+    public function getStatusColorAttribute(): string
     {
         switch ($this->status) {
             case 'pending':
@@ -93,7 +115,12 @@ class SignatureFlow extends Model
         return $statusColor;
     }
 
-    public function getStatusColorTextAttribute()
+    /**
+     * Get the status color text attribute.
+     *
+     * @return string
+     */
+    public function getStatusColorTextAttribute(): string
     {
         switch ($this->status) {
             case 'pending':
@@ -115,17 +142,26 @@ class SignatureFlow extends Model
         return $statusColor;
     }
 
-    public function getYAttribute()
+    /**
+     * Get the Y attribute.
+     *
+     * @return int
+     */
+    public function getYAttribute(): int
     {
         $padding = ($this->is_visator == true) ? 15 : SignatureFlow::PADDING;
 
-        return SignatureFlow::START_Y + (($this->row_position) * $padding) ; // punto de inicio + (ancho de linea * posicion)
+        return SignatureFlow::START_Y + (($this->row_position) * $padding); // punto de inicio + (ancho de linea * posicion)
     }
 
-    public function getXAttribute()
+    /**
+     * Get the X attribute.
+     *
+     * @return int
+     */
+    public function getXAttribute(): int
     {
-        switch ($this->column_position)
-        {
+        switch ($this->column_position) {
             case 'left':
                 $x = 33;
                 break;
@@ -134,6 +170,9 @@ class SignatureFlow extends Model
                 break;
             case 'right':
                 $x = 397;
+                break;
+            default:
+                $x = 0;
                 break;
         }
 
