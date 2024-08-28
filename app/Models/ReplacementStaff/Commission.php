@@ -16,7 +16,7 @@ class Commission extends Model
     ];
 
     public function organizationalUnit() {
-        return $this->belongsTo('App\Rrhh\OrganizationalUnit');
+        return $this->belongsTo('App\Models\Rrhh\OrganizationalUnit');
     }
 
     public function user() {

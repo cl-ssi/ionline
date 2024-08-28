@@ -17,7 +17,7 @@ use App\Models\JobPositionProfiles\Expertise;
 use App\Models\JobPositionProfiles\ExpertiseProfile;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\JobPositionProfiles\WorkTeam;
-use App\Rrhh\Authority;
+use App\Models\Rrhh\Authority;
 
 class JobPositionProfileController extends Controller
 {

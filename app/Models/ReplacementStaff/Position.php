@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
-use App\Rrhh\Authority;
+use App\Models\Rrhh\Authority;
 use Carbon\Carbon;
 use OwenIt\Auditing\Contracts\Auditable;
 

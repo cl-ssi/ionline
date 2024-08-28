@@ -8,7 +8,7 @@ use App\Models\Allowances\Allowance;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
-use App\Rrhh\Authority;
+use App\Models\Rrhh\Authority;
 use App\Notifications\Allowances\NewAllowance;
 use App\Notifications\Allowances\EndAllowance;
 use App\Notifications\Allowances\RejectedAllowance;

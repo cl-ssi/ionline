@@ -422,7 +422,7 @@
               <tr>
                   <th align="left" style="width: 50%">Nombre</th>
                   @if(request()->has_increased_expense == 11)
-                  @php($currentFinanceManager = App\Rrhh\OrganizationalUnit::find($requestForm->eventSigner('finance_event', 'pending')->ou_signer_user)->currentManager)
+                  @php($currentFinanceManager = App\Models\Rrhh\OrganizationalUnit::find($requestForm->eventSigner('finance_event', 'pending')->ou_signer_user)->currentManager)
                   <td>{{ $currentFinanceManager->user->FullName }}</td>
                   @else
                   <td>{{ auth()->user()->FullName }}</td>
@@ -435,8 +435,8 @@
                       {{ $currentFinanceManager->organizationalUnit->name }}
                   </td>
                   @else
-                  <td>{{ App\Rrhh\Authority::getAmIAuthorityFromOu(Carbon\Carbon::now(), 'manager', auth()->id())[0]->position }}
-                      {{ App\Rrhh\Authority::getAmIAuthorityFromOu(Carbon\Carbon::now(), 'manager', auth()->id())[0]->organizationalUnit->name }}
+                  <td>{{ App\Models\Rrhh\Authority::getAmIAuthorityFromOu(Carbon\Carbon::now(), 'manager', auth()->id())[0]->position }}
+                      {{ App\Models\Rrhh\Authority::getAmIAuthorityFromOu(Carbon\Carbon::now(), 'manager', auth()->id())[0]->organizationalUnit->name }}
                   </td>
                   @endif
               </tr>

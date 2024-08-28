@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Rrhh\OrganizationalUnit;
+use App\Models\Rrhh\OrganizationalUnit;
 use Illuminate\Console\Command;
 
 class SirhOus extends Command

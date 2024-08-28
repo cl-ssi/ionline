@@ -19,7 +19,7 @@ use App\Models\Finance\TgrPayedDte;
 use App\Models\Finance\ComparativeRequirement;
 use App\Models\Finance\TgrAccountingPortfolio;
 use App\Models\Establishment;
-use App\Rrhh\OrganizationalUnit;
+use App\Models\Rrhh\OrganizationalUnit;
 use App\Models\Sigfe\PdfBackup;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 

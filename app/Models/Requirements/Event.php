@@ -2,7 +2,7 @@
 
 namespace App\Models\Requirements;
 
-use App\Rrhh\Authority;
+use App\Models\Rrhh\Authority;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Carbon\Carbon;
@@ -38,7 +38,7 @@ class Event extends Model
     }
 
     public function from_ou() {
-        return $this->belongsTo('App\Rrhh\OrganizationalUnit', 'from_ou_id')->withTrashed();
+        return $this->belongsTo('App\Models\Rrhh\OrganizationalUnit', 'from_ou_id')->withTrashed();
     }
 
     public function to_user() {
@@ -46,7 +46,7 @@ class Event extends Model
     }
 
     public function to_ou() {
-        return $this->belongsTo('App\Rrhh\OrganizationalUnit', 'to_ou_id')->withTrashed();
+        return $this->belongsTo('App\Models\Rrhh\OrganizationalUnit', 'to_ou_id')->withTrashed();
     }
 
     public function requirement() {

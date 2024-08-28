@@ -4,8 +4,8 @@ namespace App\Http\Livewire;
 
 use Livewire\Component;
 
-use App\Rrhh\OrganizationalUnit;
-use App\Rrhh\Authority;
+use App\Models\Rrhh\OrganizationalUnit;
+use App\Models\Rrhh\Authority;
 use App\Models\User;
 use Carbon\Carbon;
 

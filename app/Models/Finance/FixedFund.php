@@ -2,7 +2,7 @@
 
 namespace App\Models\Finance;
 
-use App\Rrhh\OrganizationalUnit;
+use App\Models\Rrhh\OrganizationalUnit;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;

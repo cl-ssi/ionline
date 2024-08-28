@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use App\Models\Parameters\Parameter;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
-use App\Rrhh\Authority;
+use App\Models\Rrhh\Authority;
 use App\Notifications\JobPositionProfile\EndSigningProcess;
 use App\Notifications\JobPositionProfile\Sign;
 use App\Models\Documents\Approval;

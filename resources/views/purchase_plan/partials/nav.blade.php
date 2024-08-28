@@ -15,7 +15,7 @@
     @php
         $ouSearch = App\Models\Parameters\Parameter::get('Abastecimiento',['purchaser_ou_id']);
         $iAmAuthoritiesIn = array();
-        foreach(App\Rrhh\Authority::getAmIAuthorityFromOu(Carbon\Carbon::now(), 'manager', auth()->user()->id) as $authority){
+        foreach(App\Models\Rrhh\Authority::getAmIAuthorityFromOu(Carbon\Carbon::now(), 'manager', auth()->user()->id) as $authority){
             array_push($iAmAuthoritiesIn, $authority->organizational_unit_id);
         }
     @endphp

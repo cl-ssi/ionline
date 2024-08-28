@@ -241,7 +241,7 @@
                                         @method('PUT')
                 
                                         @if($requestSign->ou_alias == 'uni_per' 
-                                            && (auth()->user()->can('Replacement Staff: personal sign') || auth()->id() == App\Rrhh\Authority::getTodayAuthorityManagerFromDate(auth()->user()->organizational_unit_id)->user_id)
+                                            && (auth()->user()->can('Replacement Staff: personal sign') || auth()->id() == App\Models\Rrhh\Authority::getTodayAuthorityManagerFromDate(auth()->user()->organizational_unit_id)->user_id)
                                             && ($requestReplacementStaff->legalQualityManage && ($requestReplacementStaff->legalQualityManage->NameValue == 'Contrata' ||
                                             $requestReplacementStaff->legalQualityManage->NameValue == 'Titular')))
                                             <fieldset class="form-group">

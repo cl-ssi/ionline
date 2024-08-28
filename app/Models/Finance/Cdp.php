@@ -8,7 +8,7 @@ use App\Models\Establishment;
 use App\Models\Parameters\Parameter;
 use App\Models\RequestForms\RequestForm;
 use App\Models\User;
-use App\Rrhh\OrganizationalUnit;
+use App\Models\Rrhh\OrganizationalUnit;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;

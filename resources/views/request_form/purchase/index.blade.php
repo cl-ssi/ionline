@@ -176,7 +176,7 @@
                         </span>
                         @endif
 
-                        @if(App\Rrhh\Authority::getAmIAuthorityFromOu(Carbon\Carbon::now(), 'manager', auth()->user()->id) ||
+                        @if(App\Models\Rrhh\Authority::getAmIAuthorityFromOu(Carbon\Carbon::now(), 'manager', auth()->user()->id) ||
                         auth()->user()->hasPermissionTo('Request Forms: boss'))
 
                         @if($requestForm->signatures_file_id)

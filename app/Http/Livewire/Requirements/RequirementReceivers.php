@@ -5,9 +5,9 @@ namespace App\Http\Livewire\Requirements;
 use Livewire\Component;
 use Illuminate\Support\Collection;
 
-use App\Rrhh\OrganizationalUnit;
+use App\Models\Rrhh\OrganizationalUnit;
 use App\Models\Establishment;
-use App\Rrhh\Authority;
+use App\Models\Rrhh\Authority;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;

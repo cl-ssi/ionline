@@ -5,7 +5,7 @@ namespace App\Http\Livewire\Allowances;
 use Livewire\Component;
 use App\Models\Allowances\Allowance;
 use Livewire\WithPagination;
-use App\Rrhh\Authority;
+use App\Models\Rrhh\Authority;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use App\Models\Parameters\Parameter;

@@ -4,8 +4,8 @@ namespace App\Http\Livewire\ServiceRequest;
 
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
-use App\Rrhh\Authority;
-use App\Rrhh\OrganizationalUnit;
+use App\Models\Rrhh\Authority;
+use App\Models\Rrhh\OrganizationalUnit;
 use App\Models\User;
 
 class CreateTypes extends Component

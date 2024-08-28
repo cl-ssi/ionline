@@ -10,7 +10,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Livewire\WithPagination;
 use Maatwebsite\Excel\Facades\Excel;
-use App\Rrhh\OrganizationalUnit;
+use App\Models\Rrhh\OrganizationalUnit;
 use Illuminate\Support\Facades\Auth;
 
 // use App\Models\RequestForms\ItemRequestForm;

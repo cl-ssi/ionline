@@ -10,7 +10,7 @@ use App\Imports\EmployeeInformationImport;
 use Maatwebsite\Excel\Facades\Excel;
 use Carbon\Carbon;
 use App\Models\User;
-use App\Rrhh\OrganizationalUnit;
+use App\Models\Rrhh\OrganizationalUnit;
 use App\Http\Controllers\WebserviceController;
 use App\Models\WebService\Fonasa;
 use App\Models\Rrhh\SirhActiveUser;

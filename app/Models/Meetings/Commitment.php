@@ -4,7 +4,7 @@ namespace App\Models\Meetings;
 
 use App\Models\Requirements\Requirement;
 use App\Models\User;
-use App\Rrhh\OrganizationalUnit;
+use App\Models\Rrhh\OrganizationalUnit;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;

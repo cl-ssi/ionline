@@ -112,11 +112,11 @@ class ServiceRequest extends Model implements Auditable
     // }
 
     public function subdirection() {
-    		return $this->belongsTo('\App\Rrhh\OrganizationalUnit','subdirection_ou_id');
+    		return $this->belongsTo('\App\Models\Rrhh\OrganizationalUnit','subdirection_ou_id');
     }
 
     public function responsabilityCenter() {
-        return $this->belongsTo('\App\Rrhh\OrganizationalUnit','responsability_center_ou_id')->withTrashed();
+        return $this->belongsTo('\App\Models\Rrhh\OrganizationalUnit','responsability_center_ou_id')->withTrashed();
     }
 
     public function shiftControls() {

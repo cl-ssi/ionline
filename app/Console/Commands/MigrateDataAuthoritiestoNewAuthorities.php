@@ -3,8 +3,8 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\Rrhh\Authority;
-use App\Rrhh\NewAuthority;
+use App\Models\Rrhh\Authority;
+use App\Models\Rrhh\NewAuthority;
 use Carbon\Carbon;
 
 

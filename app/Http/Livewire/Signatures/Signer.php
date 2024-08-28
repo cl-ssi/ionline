@@ -3,7 +3,7 @@
 namespace App\Http\Livewire\Signatures;
 
 use Livewire\Component;
-use App\Rrhh\OrganizationalUnit;
+use App\Models\Rrhh\OrganizationalUnit;
 
 class Signer extends Component
 {

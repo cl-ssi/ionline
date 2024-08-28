@@ -7,7 +7,7 @@ use Livewire\Component;
 use App\Models\PurchasePlan\PurchasePlan;
 use Livewire\WithPagination;
 use Illuminate\Support\Facades\Auth;
-use App\Rrhh\OrganizationalUnit;
+use App\Models\Rrhh\OrganizationalUnit;
 
 class SearchPurchasePlan extends Component
 {

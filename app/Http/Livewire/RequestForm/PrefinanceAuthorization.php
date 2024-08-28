@@ -6,7 +6,7 @@ use Livewire\Component;
 use App\Models\RequestForms\RequestForm;
 use App\Models\RequestForms\EventRequestForm;
 use App\Models\Parameters\BudgetItem;
-use App\Rrhh\Authority;
+use App\Models\Rrhh\Authority;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\RequestFormSignNotification;

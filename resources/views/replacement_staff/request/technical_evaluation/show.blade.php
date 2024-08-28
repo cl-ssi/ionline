@@ -72,7 +72,7 @@
                 <td style="width: 33%">{{ $requestReplacementStaff->profile_manage->name }}</td>
                 <td style="width: 33%">
                     {{ ($requestReplacementStaff->law) ? 'Ley N° '.number_format($requestReplacementStaff->law, 0, ",", ".").' -' : '' }} {{ ($requestReplacementStaff->degree) ? $requestReplacementStaff->degree : 'Sin especificar grado' }}
-                    @if(auth()->id() == App\Rrhh\Authority::getTodayAuthorityManagerFromDate(App\Models\Parameters\Parameter::get('ou','SubRRHH'))->user_id && $requestReplacementStaff->degree)
+                    @if(auth()->id() == App\Models\Rrhh\Authority::getTodayAuthorityManagerFromDate(App\Models\Parameters\Parameter::get('ou','SubRRHH'))->user_id && $requestReplacementStaff->degree)
                         <a class="btn btn-link btn-sm small"
                             data-toggle="modal"
                             title="Cambio Grado"
@@ -738,7 +738,7 @@
                         @else
                             @if((auth()->user()->hasPermissionTo('Replacement Staff: view requests') ||
                               auth()->user()->can('Replacement Staff: admin') ||
-                              App\Rrhh\Authority::getAuthorityFromDate(46, Carbon\Carbon::now(), 'manager')->user_id == auth()->id()) &&
+                              App\Models\Rrhh\Authority::getAuthorityFromDate(46, Carbon\Carbon::now(), 'manager')->user_id == auth()->id()) &&
                               $applicant->selected == 1 && $applicant->desist == NULL)
                                 <!-- Button trigger modal -->
                                 <button type="button" class="btn btn-outline-secondary btn-sm" data-toggle="modal"

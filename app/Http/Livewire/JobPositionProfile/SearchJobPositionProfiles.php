@@ -8,9 +8,9 @@ use App\Models\JobPositionProfiles\JobPositionProfile;
 use Illuminate\Support\Facades\Auth;
 use Livewire\WithPagination;
 
-use App\Rrhh\Authority;
+use App\Models\Rrhh\Authority;
 use App\Models\Parameters\Estament;
-use App\Rrhh\OrganizationalUnit;
+use App\Models\Rrhh\OrganizationalUnit;
 use App\Models\Parameters\Parameter;
 
 class SearchJobPositionProfiles extends Component

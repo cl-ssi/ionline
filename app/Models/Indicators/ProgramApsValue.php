@@ -35,11 +35,13 @@ class ProgramApsValue extends Model
     use SoftDeletes;
 
     /**
-     * The attributes that should be mutated to dates.
+     * The attributes that should be cast to native types.
      *
      * @var array
      */
-    protected $dates = ['deleted_at'];
+    protected $casts = [
+        //
+    ];
 
     protected $table = 'ind_program_aps_values';
 }

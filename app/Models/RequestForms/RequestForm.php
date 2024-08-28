@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
 use App\Models\User;
-use App\Rrhh\OrganizationalUnit;
+use App\Models\Rrhh\OrganizationalUnit;
 use App\Models\RequestForms\PurchasingProcess;
 use App\Models\RequestForms\PaymentDoc;
 use App\Models\RequestForms\ItemRequestForm;

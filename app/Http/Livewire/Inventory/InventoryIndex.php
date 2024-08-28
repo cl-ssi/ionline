@@ -11,7 +11,7 @@ use App\Models\Parameters\Place;
 use App\Models\Unspsc\Product as UnspscProduct;
 use App\Models\User;
 use App\Models\Parameters\Parameter;
-use App\Rrhh\Authority;
+use App\Models\Rrhh\Authority;
 use Livewire\Component;
 use Livewire\WithPagination;
 

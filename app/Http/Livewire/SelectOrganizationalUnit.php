@@ -2,7 +2,7 @@
 
 namespace App\Http\Livewire;
 
-use App\Rrhh\OrganizationalUnit;
+use App\Models\Rrhh\OrganizationalUnit;
 use App\Models\Establishment;
 use Livewire\Component;
 

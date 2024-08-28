@@ -9,7 +9,7 @@ use App\Models\Finance\Dte;
 use App\Models\Finance\Receptions\Reception;
 use App\Models\Finance\Receptions\ReceptionItem;
 use App\Models\User;
-use App\Rrhh\OrganizationalUnit;
+use App\Models\Rrhh\OrganizationalUnit;
 
 class CreateReceptionNoOc extends Component
 {

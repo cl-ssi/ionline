@@ -7,11 +7,11 @@ use App\Http\Controllers\Controller;
 use Illuminate\Database\Eloquent\Builder;
 use App\Models\Documents\Resolution;
 use App\Models\ServiceRequests\SignatureFlow;
-use App\Rrhh\OrganizationalUnit;
+use App\Models\Rrhh\OrganizationalUnit;
 use App\Models\User;
 
 use Illuminate\Support\Facades\Auth;
-use App\Rrhh\Authority;
+use App\Models\Rrhh\Authority;
 use Carbon\Carbon;
 
 class ResolutionController extends Controller

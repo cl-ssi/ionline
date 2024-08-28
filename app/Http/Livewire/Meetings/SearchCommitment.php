@@ -5,7 +5,7 @@ namespace App\Http\Livewire\Meetings;
 use Livewire\Component;
 
 use App\Models\Meetings\Commitment;
-use App\Rrhh\Authority;
+use App\Models\Rrhh\Authority;
 
 class SearchCommitment extends Component
 {

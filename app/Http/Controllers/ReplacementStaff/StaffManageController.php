@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\ReplacementStaff\StaffManage;
 use Illuminate\Http\Request;
 
-use App\Rrhh\OrganizationalUnit;
+use App\Models\Rrhh\OrganizationalUnit;
 
 class StaffManageController extends Controller
 {

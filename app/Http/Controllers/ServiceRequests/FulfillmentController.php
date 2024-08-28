@@ -10,7 +10,7 @@ use App\Models\ServiceRequests\Fulfillment;
 use App\Models\ServiceRequests\FulfillmentItem;
 use App\Models\ServiceRequests\ShiftControl;
 use App\Models\Parameters\Profession;
-use App\Rrhh\OrganizationalUnit;
+use App\Models\Rrhh\OrganizationalUnit;
 use DateTime;
 use DatePeriod;
 use DateInterval;
@@ -20,7 +20,7 @@ use App\Models\Documents\Approval;
 use App\Models\Documents\SignaturesFile;
 
 use Illuminate\Support\Facades\Auth;
-use App\Rrhh\Authority;
+use App\Models\Rrhh\Authority;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 

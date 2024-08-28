@@ -33,7 +33,7 @@ class Mammography extends Model implements Auditable
     }
 
     public function ortanizationalUnit() {
-        return $this->belongsTo('App\Rrhh\OrganizationalUnit');
+        return $this->belongsTo('App\Models\Rrhh\OrganizationalUnit');
     }
 
     public function fullName() {

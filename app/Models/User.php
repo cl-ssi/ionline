@@ -2,10 +2,18 @@
 
 namespace App\Models;
 
+use App\Models\Documents\Document;
+use App\Models\Documents\DocumentEvent;
+use App\Models\Pharmacies\Pharmacy;
+use App\Models\RequestForms\EventRequestForm;
+use App\Models\Resources\Computer;
+use App\Models\Resources\Mobile;
+use App\Models\Resources\Printer;
+use App\Models\Resources\Telephone;
 use Attribute;
 use Carbon\Carbon;
 use App\Models\Country;
-use App\Rrhh\Authority;
+use App\Models\Rrhh\Authority;
 use Carbon\CarbonPeriod;
 use App\Models\ClCommune;
 use App\Models\Rrhh\Shift;
@@ -18,7 +26,7 @@ use App\Models\Rrhh\Contract;
 use App\Models\Warehouse\Store;
 use App\Models\Rrhh\Absenteeism;
 use App\Models\Sirh\WelfareUser;
-use App\Rrhh\OrganizationalUnit;
+use App\Models\Rrhh\OrganizationalUnit;
 use App\Models\Suitability\Result;
 use App\Models\ProfAgenda\OpenHour;
 use App\Models\ProfAgenda\Proposal;
@@ -30,6 +38,8 @@ use App\Models\Inventory\inventoryUser;
 
 use App\Models\Rrhh\CompensatoryDay;
 use App\Models\Rrhh\UserBankAccount;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Inv\EstablishmentUser;
 use App\Models\Welfare\Amipass\Charge;
@@ -114,18 +124,7 @@ class User extends Authenticatable implements Auditable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'birthday' => 'date:Y-m-d',
-        'deleted_at' => 'datetime',
     ];
-
-    /**
-     * The attributes that should be mutated to dates.
-     *
-     * @var array
-     */
-    // protected $dates = [
-    //     'deleted_at',
-    //     'birthday',
-    // ];
 
     /**
      * Attributes to exclude from the Audit.
@@ -137,148 +136,497 @@ class User extends Authenticatable implements Auditable
         'password',
     ];
 
-    public function establishment()
+    /**
+     * Get the establishment that owns the user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function establishment(): BelongsTo
     {
         return $this->belongsTo(Establishment::class);
     }
 
-    public function organizationalUnit()
+    /**
+     * Get the organizational unit that owns the user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function organizationalUnit(): BelongsTo
     {
         return $this->belongsTo(OrganizationalUnit::class)->withTrashed();
     }
 
-    public function telephones()
+    /**
+     * Get the telephones for the user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function telephones(): BelongsToMany
     {
-        return $this->belongsToMany('\App\Models\Resources\Telephone', 'res_telephone_user')->withTimestamps();
+        return $this->belongsToMany(Telephone::class, 'res_telephone_user')->withTimestamps();
     }
 
-    public function computers()
+    /**
+     * Get the computers for the user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function computers(): BelongsToMany
     {
-        return $this->belongsToMany('\App\Models\Resources\Computer', 'res_computer_user')->withTimestamps();
+        return $this->belongsToMany(Computer::class, 'res_computer_user')->withTimestamps();
     }
 
-    public function printers()
+    /**
+     * Get the printers for the user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function printers(): BelongsToMany
     {
-        return $this->belongsToMany('\App\Models\Resources\Printer', 'res_printer_user')->withTimestamps();
+        return $this->belongsToMany(Printer::class, 'res_printer_user')->withTimestamps();
     }
 
-    public function mobile()
+    /**
+     * Get the mobile for the user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function mobile(): HasOne
     {
-        return $this->hasOne(Resources\Mobile::class);
+        return $this->hasOne(Mobile::class);
     }
 
-    public function commune()
+    /**
+     * Get the commune that owns the user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function commune(): BelongsTo
     {
         return $this->belongsTo(ClCommune::class);
     }
-    
-    public function country()
+
+    /**
+     * Get the country that owns the user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function country(): BelongsTo
     {
         return $this->belongsTo(Country::class);
     }
 
-    public function getAgeAttribute()
+    /**
+     * Get the pharmacies for the user.
+     *
+     * @return BelongsToMany
+     */
+    public function pharmacies(): BelongsToMany
     {
-        return $this->birthday ? Carbon::parse($this->birthday)->age : 0;
-    }
-    
-    public function getAgeMonthsAttribute()
-    {
-        return $this->birthday ? Carbon::parse($this->birthday)->diffInMonths(Carbon::now()) % 12 : 0;
-    }
-
-    public function pharmacies()
-    {
-        /* return $this->belongsToMany('\App\Models\Pharmacies\Pharmacy'); */
-        return$this->belongsToMany('\App\Models\Pharmacies\Pharmacy', 'frm_pharmacy_user')->withTimestamps();
+        return $this->belongsToMany(Pharmacy::class, 'frm_pharmacy_user')->withTimestamps();
     }
 
-    public function bankAccount()
+    /**
+     * Get the bank account for the user.
+     *
+     * @return HasOne
+     */
+    public function bankAccount(): HasOne
     {
-        return $this->hasOne(UserBankAccount::class,'user_id');
+        return $this->hasOne(UserBankAccount::class, 'user_id');
     }
 
-    public function requestForms()
+    /**
+     * Get the request forms for the user.
+     *
+     * @return BelongsToMany
+     */
+    public function requestForms(): BelongsToMany
     {
         return $this->belongsToMany(RequestForm::class, 'arq_request_forms_users', 'purchaser_user_id', 'request_form_id')
             ->withTimestamps();
     }
 
-    public function supervisorRequestForms()
+    /**
+     * Get the supervisor request forms for the user.
+     *
+     * @return HasMany
+     */
+    public function supervisorRequestForms(): HasMany
     {
         return $this->hasMany(RequestForm::class, 'supervisor_user_id');
     }
 
-    public function eventRequestForms()
+    /**
+     * Get the event request forms for the user.
+     *
+     * @return HasMany
+     */
+    public function eventRequestForms(): HasMany
     {
         return $this->hasMany(EventRequestForm::class, 'signer_user_id');
     }
 
-    public function subrogations()
+    /**
+     * Get the subrogations for the user.
+     *
+     * @return HasMany
+     */
+    public function subrogations(): HasMany
     {
         return $this->hasMany(Subrogation::class)->orderBy('level');
     }
 
-    public function accessLogs()
+    /**
+     * Get the access logs for the user.
+     *
+     * @return HasMany
+     */
+    public function accessLogs(): HasMany
     {
         return $this->hasMany(AccessLog::class);
     }
 
-    public function switchLogs()
+    /**
+     * Get the switch logs for the user.
+     *
+     * @return HasMany
+     */
+    public function switchLogs(): HasMany
     {
-        return $this->hasMany(AccessLog::class,'switch_id');
+        return $this->hasMany(AccessLog::class, 'switch_id');
     }
 
-    public function contracts()
+    /**
+     * Get the contracts for the user.
+     *
+     * @return HasMany
+     */
+    public function contracts(): HasMany
     {
-        return $this->hasMany(Contract::class,'rut');
+        return $this->hasMany(Contract::class, 'rut');
     }
 
-    public function absenteeisms()
+    /**
+     * Get the absenteeisms for the user.
+     *
+     * @return HasMany
+     */
+    public function absenteeisms(): HasMany
     {
-        return $this->hasMany(Absenteeism::class,'rut');
+        return $this->hasMany(Absenteeism::class, 'rut');
     }
 
-    public function amiLoads()
+    /**
+     * Get the ami loads for the user.
+     *
+     * @return HasMany
+     */
+    public function amiLoads(): HasMany
     {
-        return $this->hasMany(AmiLoad::class,'run');
+        return $this->hasMany(AmiLoad::class, 'run');
     }
 
-    public function charges()
+    /**
+     * Get the charges for the user.
+     *
+     * @return HasMany
+     */
+    public function charges(): HasMany
     {
-        return $this->hasMany(Charge::class,'rut');
+        return $this->hasMany(Charge::class, 'rut');
     }
 
-    public function newCharges()
+    /**
+     * Get the new charges for the user.
+     *
+     * @return HasMany
+     */
+    public function newCharges(): HasMany
     {
-        return $this->hasMany(NewCharge::class,'rut');
+        return $this->hasMany(NewCharge::class, 'rut');
     }
 
-    public function regularizations()
+    /**
+     * Get the regularizations for the user.
+     *
+     * @return HasMany
+     */
+    public function regularizations(): HasMany
     {
-        return $this->hasMany(Regularization::class,'rut');
+        return $this->hasMany(Regularization::class, 'rut');
     }
 
+    /**
+     * Get the shifts for the user.
+     *
+     * @return HasMany
+     */
     public function shifts(): HasMany
     {
-        return $this->hasMany(Shift::class,'user_id');
+        return $this->hasMany(Shift::class, 'user_id');
     }
-
+    
+    /**
+     * Get the compensatory days for the user.
+     *
+     * @return HasMany
+     */
     public function compensatoryDays(): HasMany
     {
-        return $this->hasMany(CompensatoryDay::class,'user_id');
+        return $this->hasMany(CompensatoryDay::class, 'user_id');
     }
 
+    /**
+     * Get the pending amounts for the user.
+     *
+     * @return HasMany
+     */
     public function pendingAmounts(): HasMany
     {
-        return $this->hasMany(PendingAmount::class,'user_id');
+        return $this->hasMany(PendingAmount::class, 'user_id');
     }
 
+    /**
+     * Get the welfare for the user.
+     *
+     * @return HasOne
+     */
     public function welfare(): HasOne
     {
-        return $this->hasOne(WelfareUser::class,'rut');
+        return $this->hasOne(WelfareUser::class, 'rut');
     }
 
+    /**
+     * Authority relation: Is Manager from ou.
+     *
+     * @return HasMany
+     */
+    public function manager(): HasMany
+    {
+        return $this->hasMany(Authority::class)
+            ->where('type', 'manager')
+            ->where('date', today());
+    }
+    
+    /**
+     * Authority relation: Is Secretary from ou.
+     *
+     * @return HasMany
+     */
+    public function secretary(): HasMany
+    {
+        return $this->hasMany(Authority::class)
+            ->where('type', 'secretary')
+            ->where('date', today());
+    }
+    
+    /**
+     * Authority relation: Is Delegate from ou.
+     *
+     * @return HasMany
+     */
+    public function delegate(): HasMany
+    {
+        return $this->hasMany(Authority::class)
+            ->where('type', 'delegate')
+            ->where('date', today());
+    }
+
+    /**
+     * Get the service requests for the user.
+     *
+     * @return HasMany
+     */
+    public function serviceRequests(): HasMany
+    {
+        return $this->hasMany(ServiceRequest::class);
+    }
+    
+    /**
+     * Get the document events for the user.
+     *
+     * @return HasMany
+     */
+    public function documentEvents(): HasMany
+    {
+        return $this->hasMany(DocumentEvent::class);
+    }
+    
+    /**
+     * Get the agenda proposals for the user.
+     *
+     * @return HasMany
+     */
+    public function agendaProposals(): HasMany
+    {
+        return $this->hasMany(Proposal::class);
+    }
+    
+    /**
+     * Get the documents for the user.
+     *
+     * @return HasMany
+     */
+    public function documents(): HasMany
+    {
+        return $this->hasMany(Document::class);
+    }
+    
+    /**
+     * Get the requirement labels for the user.
+     *
+     * @return HasMany
+     */
+    public function reqLabels(): HasMany
+    {
+        return $this->hasMany(Label::class);
+    }
+    
+    /**
+     * Get the requirement statuses for the user.
+     *
+     * @return HasMany
+     */
+    public function requirementStatus(): HasMany
+    {
+        return $this->hasMany(RequirementStatus::class);
+    }
+    
+    /**
+     * Get the requirements for the user.
+     *
+     * @return HasMany
+     */
+    public function requirements(): HasMany
+    {
+        return $this->hasMany(Requirement::class);
+    }
+    
+    /**
+     * Get the requirement events from the user.
+     *
+     * @return HasMany
+     */
+    public function requirementsEventsFrom(): HasMany
+    {
+        return $this->hasMany(Event::class, 'from_user_id');
+    }
+    
+    /**
+     * Get the requirement events to the user.
+     *
+     * @return HasMany
+     */
+    public function requirementsEventsTo(): HasMany
+    {
+        return $this->hasMany(Event::class, 'to_user_id');
+    }
+    
+    /**
+     * Get the purchases for the user.
+     *
+     * @return HasMany
+     */
+    public function purchases(): HasMany
+    {
+        return $this->hasMany(Purchase::class);
+    }
+    
+    /**
+     * Get the inventory users for the user.
+     *
+     * @return HasMany
+     */
+    public function inventoryUsers(): HasMany
+    {
+        return $this->hasMany(InventoryUser::class);
+    }
+    
+    /**
+     * Get the dispatches for the user.
+     *
+     * @return HasMany
+     */
+    public function dispatches(): HasMany
+    {
+        return $this->hasMany(Dispatch::class);
+    }
+    
+    /**
+     * Get the receivings for the user.
+     *
+     * @return HasMany
+     */
+    public function receivings(): HasMany
+    {
+        return $this->hasMany(Receiving::class);
+    }
+    
+    /**
+     * Get the establishments for the user.
+     *
+     * @return BelongsToMany
+     */
+    public function establishments(): BelongsToMany
+    {
+        return $this->belongsToMany(Establishment::class, 'frm_establishments_users')
+                    ->withTimestamps();
+    }
+    
+    /**
+     * Get the requests for the user.
+     *
+     * @return HasMany
+     */
+    public function requests(): HasMany
+    {
+        return $this->hasMany(RequestReplacementStaff::class);
+    }
+
+    public function remEstablishments()
+    {
+        return $this->hasMany('App\Models\Rem\UserRem');
+    }
+
+    public function lobbyMeetings()
+    {
+        return $this->belongsToMany(Meeting::class, 'lobby_meeting_user');
+    }
+
+    public function noAttendanceRecords()
+    {
+        return $this->hasMany(NoAttendanceRecord::class);
+    }
+
+    public function stores()
+    {
+        return $this->belongsToMany(Store::class, 'wre_store_user')
+           ->using(StoreUser::class)
+           ->withPivot(['role_id', 'status'])
+           ->withTimestamps();
+    }
+
+    public function establishmentInventories()
+    {
+        return $this->belongsToMany(Establishment::class, 'inv_establishment_user')
+            ->using(EstablishmentUser::class)
+            ->withTimestamps();
+    }
+
+    public function userResults()
+    {
+        return $this->hasMany(Result::class, 'user_id', 'id');
+        //return $this->hasMany('App\Models\Result', 'user_id', 'id');
+    }
+
+    public function employeeOpenHours(): HasMany
+    {
+        return $this->hasMany(OpenHour::class, 'profesional_id');
+    }
+
+
+    
     /**
      * Un mutador para 'organizational_unit_id' que también actualiza 'establishment_id'.
      *
@@ -292,31 +640,6 @@ class User extends Authenticatable implements Auditable
                 return $value;
             },
         );
-    }
-
-
-    /* Authority relation: Is Manager from ou */
-    public function manager()
-    {
-        return $this->hasMany(Authority::class)
-            ->where('type','manager')
-            ->where('date',today());
-    }
-
-    /* Authority relation: Is Secretary from ou */
-    public function secretary()
-    {
-        return $this->hasMany(Authority::class)
-            ->where('type','secretary')
-            ->where('date',today());
-    }
-
-    /* Authority relation: Is Delegate from ou */
-    public function delegate()
-    {
-        return $this->hasMany(Authority::class)
-            ->where('type','delegate')
-            ->where('date',today());
     }
 
     public function boss()
@@ -365,121 +688,14 @@ class User extends Authenticatable implements Auditable
         }
     }
 
-    public function serviceRequests()
+    public function getAgeAttribute()
     {
-        return $this->hasMany('\App\Models\ServiceRequests\ServiceRequest');
+        return $this->birthday ? Carbon::parse($this->birthday)->age : 0;
     }
-
-    public function documentEvents()
+    
+    public function getAgeMonthsAttribute()
     {
-        return $this->hasMany('\App\Models\Documents\DocumentEvent');
-    }
-
-    public function agendaProposals()
-    {
-        return $this->hasMany(Proposal::class);
-    }
-
-    public function documents()
-    {
-        return $this->hasMany('App\Models\Documents\Document');
-    }
-
-    public function reqLabels()
-    {
-        return $this->hasMany('App\Models\Requirements\Label');
-    }
-
-    public function requirementStatus()
-    {
-        return $this->hasMany('App\Models\Requirements\RequirementStatus');
-    }
-
-    public function requirements()
-    {
-        return $this->hasMany('App\Models\Requirements\Requirement');
-    }
-
-    public function requirementsEventsFrom()
-    {
-        return $this->hasMany('App\Models\Requirements\Event','from_user_id');
-    }
-
-    public function requirementsEventsTo()
-    {
-        return $this->hasMany('App\Models\Requirements\Event','to_user_id');
-    }
-
-    public function purchases()
-    {
-        return $this->hasMany('App\Models\Pharmacies\Purchase');
-    }
-
-    public function inventoryUsers()
-    {
-        return $this->hasMany(InventoryUser::class);
-    }
-
-    public function dispatches()
-    {
-        return $this->hasMany('App\Models\Pharmacies\Dipatch');
-    }
-
-    public function receivings()
-    {
-        return $this->hasMany('App\Models\Pharmacies\Receiving');
-    }
-
-    public function establishments()
-    {
-        return $this->belongsToMany('\App\Models\Pharmacies\Establishment', 'frm_establishments_users')
-                    ->withTimestamps();
-    }
-
-    public function requests()
-    {
-        return $this->hasMany('App\Models\ReplacementStaff\RequestReplacementStaff');
-    }
-
-    public function remEstablishments()
-    {
-        return $this->hasMany('App\Models\Rem\UserRem');
-    }
-
-    public function lobbyMeetings()
-    {
-        return $this->belongsToMany(Meeting::class, 'lobby_meeting_user');
-    }
-
-    public function noAttendanceRecords()
-    {
-        return $this->hasMany(NoAttendanceRecord::class);
-    }
-
-    public function stores()
-    {
-        return $this->belongsToMany(Store::class, 'wre_store_user')
-           ->using(StoreUser::class)
-           ->withPivot(['role_id', 'status'])
-           ->withTimestamps();
-    }
-
-    public function establishmentInventories()
-    {
-        return $this->belongsToMany(Establishment::class, 'inv_establishment_user')
-            ->using(EstablishmentUser::class)
-            ->withTimestamps();
-    }
-
-    public function userResults()
-    {
-        return $this->hasMany(Result::class, 'user_id', 'id');
-        //return $this->hasMany('App\Models\Result', 'user_id', 'id');
-    }
-
-    public function employeeOpenHours(): HasMany
-    {
-        return $this->hasMany(OpenHour::class, 'profesional_id');
+        return $this->birthday ? Carbon::parse($this->birthday)->diffInMonths(Carbon::now()) % 12 : 0;
     }
 
     public function scopeFindByUser($query, $searchText)

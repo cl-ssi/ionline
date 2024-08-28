@@ -4,7 +4,7 @@ namespace App\Http\Controllers\ReplacementStaff;
 
 use App\Models\ReplacementStaff\Commission;
 use App\Models\ReplacementStaff\TechnicalEvaluation;
-use App\Rrhh\Authority;
+use App\Models\Rrhh\Authority;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;

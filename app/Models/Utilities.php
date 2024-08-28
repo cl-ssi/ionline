@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use App\Ticket\Ticket;
-use App\Rrhh\Authority;
+use App\Models\Rrhh\Authority;
 use App\Models\RequestForms\RequestForm;
 use App\RequestForms\RequestFormEvent;
 use Carbon\Carbon;

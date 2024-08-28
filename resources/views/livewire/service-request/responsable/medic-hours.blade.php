@@ -143,7 +143,7 @@
         </div>
         <div class="col-3 text-right">
             @can('Service Request: fulfillments responsable')
-                @if(auth()->id() == $fulfillment->serviceRequest->signatureFlows->where('sign_position',2)->first()->responsable_id or App\Rrhh\Authority::getAmIAuthorityFromOu(now(),['manager'],auth()->id()))
+                @if(auth()->id() == $fulfillment->serviceRequest->signatureFlows->where('sign_position',2)->first()->responsable_id or App\Models\Rrhh\Authority::getAmIAuthorityFromOu(now(),['manager'],auth()->id()))
                     @if($fulfillment->responsable_approver_id == NULL)
                     <a type="button" class="btn btn-danger" onclick="return confirm('Una vez confirmado, no podrá modificar la información. ¿Está seguro de rechazar?');" href="{{ route('rrhh.service-request.fulfillment.refuse-Fulfillment',$fulfillment) }}">
                         Rechazar

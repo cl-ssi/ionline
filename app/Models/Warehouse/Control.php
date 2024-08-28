@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\User;
 use App\Models\Documents\Approval;
-use App\Rrhh\OrganizationalUnit;
+use App\Models\Rrhh\OrganizationalUnit;
 use App\Models\RequestForms\RequestForm;
 use App\Models\RequestForms\PurchaseOrder;
 use App\Models\RequestForms\Invoice;

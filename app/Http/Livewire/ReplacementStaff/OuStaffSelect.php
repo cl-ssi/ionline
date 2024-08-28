@@ -3,7 +3,7 @@
 namespace App\Http\Livewire\ReplacementStaff;
 
 use Livewire\Component;
-use App\Rrhh\OrganizationalUnit;
+use App\Models\Rrhh\OrganizationalUnit;
 use Illuminate\Support\Facades\Auth;
 use App\Models\ReplacementStaff\StaffManage;
 

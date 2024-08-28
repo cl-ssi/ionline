@@ -30,7 +30,7 @@ class Applicant extends Model implements Auditable
     }
 
     public function ouPerformance() {
-        return $this->belongsTo('App\Rrhh\OrganizationalUnit', 'ou_of_performance_id');
+        return $this->belongsTo('App\Models\Rrhh\OrganizationalUnit', 'ou_of_performance_id');
     }
 
     /*

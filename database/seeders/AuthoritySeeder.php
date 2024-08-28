@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Rrhh\Authority;
+use App\Models\Rrhh\Authority;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 

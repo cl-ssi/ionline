@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Rrhh;
+namespace App\Models\Rrhh;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
-use App\Rrhh\OrganizationalUnit;
+use App\Models\Rrhh\OrganizationalUnit;
 use App\Models\Agreements\Agreement;
 use OwenIt\Auditing\Contracts\Auditable;
 

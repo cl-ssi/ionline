@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
-use App\Rrhh\Authority;
+use App\Models\Rrhh\Authority;
 use Carbon\Carbon;
 use OwenIt\Auditing\Contracts\Auditable;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
@@ -59,7 +59,7 @@ class RequestReplacementStaff extends Model implements Auditable
     }
 
     public function organizationalUnit() {
-        return $this->belongsTo('App\Rrhh\OrganizationalUnit')->withTrashed();
+        return $this->belongsTo('App\Models\Rrhh\OrganizationalUnit')->withTrashed();
     }
 
     public function establishment() {
@@ -71,7 +71,7 @@ class RequestReplacementStaff extends Model implements Auditable
     }
 
     public function ouPerformance() {
-        return $this->belongsTo('App\Rrhh\OrganizationalUnit', 'ou_of_performance_id')->withTrashed();
+        return $this->belongsTo('App\Models\Rrhh\OrganizationalUnit', 'ou_of_performance_id')->withTrashed();
     }
 
     public function replacementStaff() {

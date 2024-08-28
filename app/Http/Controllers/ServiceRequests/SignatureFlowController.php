@@ -11,7 +11,7 @@ use App\Mail\ServiceRequestNotification;
 use Illuminate\Support\Facades\Mail;
 
 use Illuminate\Support\Facades\Auth;
-use App\Rrhh\Authority;
+use App\Models\Rrhh\Authority;
 use Carbon\Carbon;
 
 class SignatureFlowController extends Controller

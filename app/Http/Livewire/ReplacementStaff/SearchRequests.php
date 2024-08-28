@@ -9,7 +9,7 @@ use App\Models\ReplacementStaff\RequestReplacementStaff;
 use Illuminate\Support\Facades\Auth;
 use Livewire\WithPagination;
 use App\Models\User;
-use App\Rrhh\OrganizationalUnit;
+use App\Models\Rrhh\OrganizationalUnit;
 use App\Models\Parameters\Parameter;
 
 use App\Models\ReplacementStaff\AssignEvaluation;

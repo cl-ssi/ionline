@@ -34,7 +34,7 @@ class Resolution extends Model implements Auditable
     }
 
     public function organizationalUnit(){
-        return $this->belongsTo('App\Rrhh\organizationalUnit','ou_id');
+        return $this->belongsTo('App\Models\Rrhh\organizationalUnit','ou_id');
     }
 
     protected $table = 'doc_resolutions';

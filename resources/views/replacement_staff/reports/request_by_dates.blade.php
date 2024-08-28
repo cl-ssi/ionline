@@ -48,7 +48,7 @@
         <h5>
             1-. Total de Solicitudes por Estado: 
             @if($request->organizational_unit_id_search != null) 
-                {{ App\Rrhh\OrganizationalUnit::find($request->organizational_unit_id_search)->name }}
+                {{ App\Models\Rrhh\OrganizationalUnit::find($request->organizational_unit_id_search)->name }}
             @else 
                 Todas las Unidades Organizacionales 
             @endif
@@ -102,7 +102,7 @@
         <h5>
             2-. Total por Tipo de Solicitudes (Primera Solicitud o Continuidad)
             @if($request->organizational_unit_id_search != null) 
-                {{ App\Rrhh\OrganizationalUnit::find($request->organizational_unit_id_search)->name }}
+                {{ App\Models\Rrhh\OrganizationalUnit::find($request->organizational_unit_id_search)->name }}
             @else 
                 Todas las Unidades Organizacionales 
             @endif

@@ -9,7 +9,7 @@ use App\Models\RequestForms\PurchasingProcess;
 use App\Models\Parameters\PurchaseUnit;
 use App\Models\Parameters\PurchaseType;
 use App\Models\Parameters\PurchaseMechanism;
-use App\Rrhh\Authority;
+use App\Models\Rrhh\Authority;
 use Carbon\Carbon;
 use App\Models\User;
 use Illuminate\Support\Facades\Mail;
@@ -20,7 +20,7 @@ use App\Models\Parameters\Parameter;
 use App\Models\Parameters\Program;
 use App\Models\RequestForms\OldSignatureFile;
 use App\Models\RequestForms\RequestFormFile;
-use App\Rrhh\OrganizationalUnit;
+use App\Models\Rrhh\OrganizationalUnit;
 use Illuminate\Support\Facades\Auth;
 use Livewire\WithFileUploads;
 

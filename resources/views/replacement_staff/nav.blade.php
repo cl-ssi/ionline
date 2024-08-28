@@ -26,7 +26,7 @@
 
     @if(auth()->user()->hasPermissionTo('Replacement Staff: create request') ||
         auth()->user()->hasPermissionTo('Replacement Staff: technical evaluation') ||
-        App\Rrhh\Authority::getAmIAuthorityFromOu(Carbon\Carbon::now(), 'manager', auth()->user()->id)->count() > 0 ||
+        App\Models\Rrhh\Authority::getAmIAuthorityFromOu(Carbon\Carbon::now(), 'manager', auth()->user()->id)->count() > 0 ||
         auth()->user()->can('Replacement Staff: personal sign'))
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
@@ -44,7 +44,7 @@
                     <a class="dropdown-item" href="{{ route('replacement_staff.request.create_announcement') }}"><i class="fas fa-plus"></i> Formulario de Convocatorias</a>
                 @endif
                 
-                @if(App\Rrhh\Authority::getAmIAuthorityFromOu(Carbon\Carbon::today(), 'manager', auth()->user()->id)->count() > 0 ||
+                @if(App\Models\Rrhh\Authority::getAmIAuthorityFromOu(Carbon\Carbon::today(), 'manager', auth()->user()->id)->count() > 0 ||
                     auth()->user()->can('Replacement Staff: personal sign'))
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="{{ route('replacement_staff.request.to_sign_index') }}">
@@ -57,7 +57,7 @@
     @endif
 
     <!-- SDGP -->
-    @if(auth()->id() == App\Rrhh\Authority::getTodayAuthorityManagerFromDate(App\Models\Parameters\Parameter::get('ou','SubRRHH'))->user_id)
+    @if(auth()->id() == App\Models\Rrhh\Authority::getTodayAuthorityManagerFromDate(App\Models\Parameters\Parameter::get('ou','SubRRHH'))->user_id)
     <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
             <i class="fas fa-users"></i> SDGP
@@ -88,7 +88,7 @@
 
     @if(auth()->user()->hasPermissionTo('Replacement Staff: view requests') ||
         auth()->user()->hasPermissionTo('Replacement Staff: personal sign') ||
-        App\Rrhh\Authority::getAuthorityFromDate(46, Carbon\Carbon::now(), 'manager')->user_id == auth()->id())
+        App\Models\Rrhh\Authority::getAuthorityFromDate(46, Carbon\Carbon::now(), 'manager')->user_id == auth()->id())
     <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
             <i class="fas fa-users"></i> Personal y Ciclo de Vida laboral

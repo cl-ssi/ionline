@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
-use App\Rrhh\Authority;
+use App\Models\Rrhh\Authority;
 use Illuminate\Support\Facades\Mail;
 // use App\Mail\NotificationSign;
 use App\Notifications\ReplacementStaff\NotificationSign;

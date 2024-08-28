@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Support\Facades\Storage;
-use App\Rrhh\Authority;
+use App\Models\Rrhh\Authority;
 use App\Notifications\Allowances\NewAllowance;
 use App\Models\Parameters\Parameter;
 use App\Models\User;

@@ -4,7 +4,7 @@ namespace App\Models\Documents\Sign;
 
 use App\Models\Documents\Sign\SignatureAnnex;
 use App\Models\Documents\Type;
-use App\Rrhh\OrganizationalUnit;
+use App\Models\Rrhh\OrganizationalUnit;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;

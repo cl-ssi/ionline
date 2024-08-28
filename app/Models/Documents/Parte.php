@@ -11,7 +11,7 @@ use App\Models\Documents\Type;
 use App\Models\Documents\Correlative;
 
 use App\Models\User;
-use App\Rrhh\OrganizationalUnit;
+use App\Models\Rrhh\OrganizationalUnit;
 use App\Models\File;
 use App\Models\Documents\SignaturesFile;
 use Illuminate\Database\Eloquent\Relations\MorphMany;

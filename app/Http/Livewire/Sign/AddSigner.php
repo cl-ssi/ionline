@@ -3,7 +3,7 @@
 namespace App\Http\Livewire\Sign;
 
 use App\Models\Establishment;
-use App\Rrhh\OrganizationalUnit;
+use App\Models\Rrhh\OrganizationalUnit;
 use App\Models\User;
 use Livewire\Component;
 

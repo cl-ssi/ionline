@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
-use App\Rrhh\Authority;
+use App\Models\Rrhh\Authority;
 use App\Models\Requirements\LabelRequirement;
 use App\Models\Requirements\EventStatus;
 use App\Models\Requirements\Event;

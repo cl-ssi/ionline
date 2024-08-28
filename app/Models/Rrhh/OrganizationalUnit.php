@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Rrhh;
+namespace App\Models\Rrhh;
 
 use App\Models\User;
 use App\Models\Establishment;
@@ -43,7 +43,7 @@ class OrganizationalUnit extends Model implements Auditable
      *
      * @var array
      */
-    
+
 
     public function users()
     {
@@ -52,17 +52,17 @@ class OrganizationalUnit extends Model implements Auditable
 
     public function father()
     {
-        return $this->belongsTo('\App\Rrhh\OrganizationalUnit', 'organizational_unit_id');
+        return $this->belongsTo('\App\Models\Rrhh\OrganizationalUnit', 'organizational_unit_id');
     }
 
     public function childs()
     {
-        return $this->hasMany('\App\Rrhh\OrganizationalUnit', 'organizational_unit_id');
+        return $this->hasMany('\App\Models\Rrhh\OrganizationalUnit', 'organizational_unit_id');
     }
 
     public function authorities()
     {
-        return $this->hasMany('\App\Rrhh\Authority');
+        return $this->hasMany('\App\Models\Rrhh\Authority');
     }
 
     public function documents()
@@ -82,7 +82,7 @@ class OrganizationalUnit extends Model implements Auditable
 
     public function requestForms()
     {
-      return $this->hasMany(RequestForm::class, 'applicant_ou_id');
+        return $this->hasMany(RequestForm::class, 'applicant_ou_id');
     }
 
     public function categories()
@@ -99,51 +99,54 @@ class OrganizationalUnit extends Model implements Auditable
     {
         return $this->hasOne(Authority::class)
             ->with('user')
-            ->where('date',today())
-            ->where('type','manager');
+            ->where('date', today())
+            ->where('type', 'manager');
     }
 
     public function currentDelegate()
     {
         return $this->hasOne(Authority::class)
             ->with('user')
-            ->where('date',today())
-            ->where('type','delegate');
+            ->where('date', today())
+            ->where('type', 'delegate');
     }
 
     public function currentSecretary()
     {
         return $this->hasOne(Authority::class)
             ->with('user')
-            ->where('date',today())
-            ->where('type','secretary');
+            ->where('date', today())
+            ->where('type', 'secretary');
     }
 
     public function subrogationsManager()
     {
         return $this->hasMany(Subrogation::class)
-            ->where('type','manager');
+            ->where('type', 'manager');
     }
 
     public function scopeSearch($query, $name)
     {
-        if($name != "")
-        {
-            return $query->where('name', 'LIKE', '%'.$name.'%');
+        if ( $name != "" ) {
+            return $query->where('name', 'LIKE', '%' . $name . '%');
         }
     }
 
     public function getInitialsAttribute()
     {
-        $words = explode(' ', preg_replace('/\s+/', ' ', $this->name));
+        $words    = explode(' ', preg_replace('/\s+/', ' ', $this->name));
         $initials = '';
-        foreach ($words as $word) {
-            if ($word != 'de' && $word != 'y' && $word != 'la' && $word != 'e' && $word != 'las' && $word != 'del'
-                && $word != 'al' && $word != 'en' && $word != 'el') {
-                if ($word === 'Subdirección') {
+        foreach ( $words as $word ) {
+            if (
+                $word != 'de' && $word != 'y' && $word != 'la' && $word != 'e' && $word != 'las' && $word != 'del'
+                && $word != 'al' && $word != 'en' && $word != 'el'
+            ) {
+                if ( $word === 'Subdirección' ) {
                     $initials .= 'SD';
-                } elseif ($word === 'S.A.M.U.' || $word === 'P.E.S.P.I.' || $word === 'P.R.A.I.S.' || $word === 'O.I.R.S.' ||
-                    $word === 'GES/PPV') {
+                } elseif (
+                    $word === 'S.A.M.U.' || $word === 'P.E.S.P.I.' || $word === 'P.R.A.I.S.' || $word === 'O.I.R.S.' ||
+                    $word === 'GES/PPV'
+                ) {
                     $initials .= $word;
                 } else {
                     $initials .= $word[0];
@@ -159,15 +162,11 @@ class OrganizationalUnit extends Model implements Auditable
         $tree = collect([]);
         $root = $this;
 
-        for($i = 1; $i <= $this->level; $i++)
-        {
-            if($this->id == $root->id)
-            {
+        for ( $i = 1; $i <= $this->level; $i++ ) {
+            if ( $this->id == $root->id ) {
                 $info['v'] = $root->name;
                 $info['f'] = "{$root->name}<div style='color:red; font-style:italic'>Funcionario</div>";
-            }
-            else
-            {
+            } else {
                 $info = $root->name;
             }
 
@@ -177,19 +176,15 @@ class OrganizationalUnit extends Model implements Auditable
             $root = $root->father;
         }
 
-        if($this->father && $getBrothers)
-        {
-            foreach($this->father->childs as $child)
-            {
+        if ( $this->father && $getBrothers ) {
+            foreach ( $this->father->childs as $child ) {
                 $sheet = [$child->name, $child->father->name ?? '', ''];
                 $tree->push($sheet);
             }
         }
 
-        if($getChilds)
-        {
-            foreach($this->childs as $child)
-            {
+        if ( $getChilds ) {
+            foreach ( $this->childs as $child ) {
                 $sheet = [$child->name, $child->father->name ?? '', ''];
                 $tree->push($sheet);
             }
@@ -200,21 +195,20 @@ class OrganizationalUnit extends Model implements Auditable
 
     public function getTreeDocPdf()
     {
-        $root = $this;
+        $root         = $this;
         $tree_doc_pdf = array();
 
-        for($i = 1; $i <= $this->level; $i++)
-        {
+        for ( $i = 1; $i <= $this->level; $i++ ) {
             $info_doc_pdf['level'] = $root->level;
-            $info_doc_pdf['name'] = $root->name;
-            $tree_doc_pdf[] = $info_doc_pdf;
-            $root = $root->father;
+            $info_doc_pdf['name']  = $root->name;
+            $tree_doc_pdf[]        = $info_doc_pdf;
+            $root                  = $root->father;
         }
 
         $print = array_multisort(array_column($tree_doc_pdf, "level"), SORT_ASC, $tree_doc_pdf);
 
-        $col = array_column( $tree_doc_pdf, "level" );
-        array_multisort( $col, SORT_ASC, $tree_doc_pdf );
+        $col = array_column($tree_doc_pdf, "level");
+        array_multisort($col, SORT_ASC, $tree_doc_pdf);
 
         return $tree_doc_pdf;
     }
@@ -234,13 +228,14 @@ class OrganizationalUnit extends Model implements Auditable
         return $this->getTree(false, true);
     }
 
-    public function getAllChilds(){
-        $root = $this;
+    public function getAllChilds()
+    {
+        $root     = $this;
         $ouChilds = array();
 
-        foreach($root->childs as $child){
+        foreach ( $root->childs as $child ) {
             $ouChilds[] = $child->id;
-            foreach($child->childs as $child){
+            foreach ( $child->childs as $child ) {
                 $ouChilds[] = $child->id;
             }
         }
@@ -250,11 +245,11 @@ class OrganizationalUnit extends Model implements Auditable
     public static function getOrganizationalUnitsBySearch($searchText)
     {
         $organizationalUnits = OrganizationalUnit::query();
-        $array_search = explode(' ', $searchText);
-        foreach($array_search as $word){
-            $organizationalUnits->where(function($q) use($word){
-                $q->where('name', 'LIKE', '%'.$word.'%')
-                ->where('establishment_id', auth()->user()->organizationalUnit->establishment_id);
+        $array_search        = explode(' ', $searchText);
+        foreach ( $array_search as $word ) {
+            $organizationalUnits->where(function ($q) use ($word) {
+                $q->where('name', 'LIKE', '%' . $word . '%')
+                    ->where('establishment_id', auth()->user()->organizationalUnit->establishment_id);
             });
         }
 
@@ -263,34 +258,36 @@ class OrganizationalUnit extends Model implements Auditable
 
     public function getOrganizationalUnitByLevel($level)
     {
-        if($this->level == $level) return $this;
+        if ( $this->level == $level )
+            return $this;
         return $this->father->getOrganizationalUnitByLevel($level);
     }
 
-    public function activeContractCount($program, $program_contract_type){
+    public function activeContractCount($program, $program_contract_type)
+    {
         // devuelve contratos mensuales y programa OTROS PROGRAMAS HETG
         // devuelve contratos cuyo proceso de visación este completado.
         // devuelve contratos que no tengan renuncia, ni abandono de funciones.
         // devuelve contratos que todavia no hayan terminado
-        $serviceRequests = ServiceRequest::wheredoesnthave("SignatureFlows", function($subQuery) {
-                                                $subQuery->whereNull('status')
-                                                        ->orWhere('status',0);
-                                            })
-                                            ->whereHas("fulfillments", function($q) {
-                                                $q->wheredoesnthave("FulfillmentItems", function($q) {
-                                                    $q->whereIn('type',['Renuncia voluntaria','Abandono de funciones','Término de contrato anticipado']);
-                                                });       
-                                            })
-                                            ->where('end_date','>',now())
-                                            ->where('responsability_center_ou_id',$this->id)
-                                            ->when($program, function ($q) use ($program) {
-                                                $q->where('programm_name',$program);
-                                            })
-                                            ->when($program_contract_type, function ($q) use ($program_contract_type) {
-                                                $q->where('program_contract_type',$program_contract_type);
-                                            })
-                                            ->with('SignatureFlows')
-                                            ->count();
+        $serviceRequests = ServiceRequest::wheredoesnthave("SignatureFlows", function ($subQuery) {
+            $subQuery->whereNull('status')
+                ->orWhere('status', 0);
+        })
+            ->whereHas("fulfillments", function ($q) {
+                $q->wheredoesnthave("FulfillmentItems", function ($q) {
+                    $q->whereIn('type', ['Renuncia voluntaria', 'Abandono de funciones', 'Término de contrato anticipado']);
+                });
+            })
+            ->where('end_date', '>', now())
+            ->where('responsability_center_ou_id', $this->id)
+            ->when($program, function ($q) use ($program) {
+                $q->where('programm_name', $program);
+            })
+            ->when($program_contract_type, function ($q) use ($program_contract_type) {
+                $q->where('program_contract_type', $program_contract_type);
+            })
+            ->with('SignatureFlows')
+            ->count();
         return $serviceRequests;
     }
 }

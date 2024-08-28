@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Rrhh;
 
-use App\Rrhh\OrganizationalUnit;
+use App\Models\Rrhh\OrganizationalUnit;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Parameters\OrganizationalUnit\StoreOrganizationalUnitRequest;
 use App\Http\Requests\Parameters\OrganizationalUnit\UpdateOrganizationalUnitRequest;

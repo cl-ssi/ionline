@@ -14,7 +14,7 @@ use App\Models\Parameters\ContractualCondition;
 use App\Models\ClCommune;
 use App\Models\User;
 use App\Notifications\Allowances\NewAllowance;
-use App\Rrhh\Authority;
+use App\Models\Rrhh\Authority;
 use App\Models\Parameters\Parameter;
 use App\Models\ClLocality;
 

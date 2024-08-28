@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\ServiceRequests;
 
 use Illuminate\Http\Request;
-use App\Rrhh\OrganizationalUnit;
+use App\Models\Rrhh\OrganizationalUnit;
 use App\Http\Controllers\Controller;
 use App\Models\ServiceRequests\OrganizationalUnitLimit;
 

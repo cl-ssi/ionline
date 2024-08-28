@@ -6,7 +6,7 @@ use Livewire\Component;
 use \Illuminate\Session\SessionManager;
 use App\Models\Rrhh\ShiftUser;
 use Carbon\Carbon;
-use App\Rrhh\OrganizationalUnit;
+use App\Models\Rrhh\OrganizationalUnit;
 use Session;
 
 class ListOfShifts extends Component

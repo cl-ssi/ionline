@@ -6,7 +6,7 @@ use Livewire\Component;
 use App\Models\ServiceRequests\FulfillmentItem;
 use App\Models\ServiceRequests\Fulfillment;
 use Illuminate\Support\Facades\Auth;
-use App\Rrhh\Authority;
+use App\Models\Rrhh\Authority;
 use Carbon\Carbon;
 
 class FulfillmentAbsences extends Component

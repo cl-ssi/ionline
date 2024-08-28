@@ -11,7 +11,7 @@ use App\Models\Establishment;
 
 use App\Models\Inv\Inventory;
 use App\Models\WebService\MercadoPublico;
-use App\Rrhh\OrganizationalUnit;
+use App\Models\Rrhh\OrganizationalUnit;
 use App\Services\ImageService;
 use App\Models\User;
 use Carbon\Carbon;

@@ -5,8 +5,8 @@ namespace App\Http\Livewire\Authorities;
 use Livewire\Component;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
-use App\Rrhh\OrganizationalUnit;
-use App\Rrhh\Authority;
+use App\Models\Rrhh\OrganizationalUnit;
+use App\Models\Rrhh\Authority;
 use App\Models\Parameters\Holiday;
 use App\Models\Profile\Subrogation;
 

@@ -4,7 +4,7 @@ namespace App\Http\Livewire\His;
 
 use Livewire\WithPagination;
 use Livewire\Component;
-use App\Rrhh\OrganizationalUnit;
+use App\Models\Rrhh\OrganizationalUnit;
 use App\Models\Parameters\Parameter;
 use App\Models\His\ModificationRequest;
 use App\Models\Documents\Approval;

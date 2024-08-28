@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Rrhh;
 
-use App\Rrhh\Authority;
+use App\Models\Rrhh\Authority;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Rrhh\OrganizationalUnit;
+use App\Models\Rrhh\OrganizationalUnit;
 use App\Models\Parameters\Holiday;
 use App\Models\Profile\Subrogation;
 use Carbon\Carbon;

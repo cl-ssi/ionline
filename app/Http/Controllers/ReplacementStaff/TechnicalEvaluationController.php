@@ -6,7 +6,7 @@ use App\Models\ReplacementStaff\TechnicalEvaluation;
 use App\Models\ReplacementStaff\RequestReplacementStaff;
 use App\Models\ReplacementStaff\ReplacementStaff;
 use App\Models\ReplacementStaff\AssignEvaluation;
-use App\Rrhh\OrganizationalUnit;
+use App\Models\Rrhh\OrganizationalUnit;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -14,7 +14,7 @@ use Carbon\Carbon;
 use App\Models\User;
 use Illuminate\Support\Facades\Redirect;
 
-use App\Rrhh\Authority;
+use App\Models\Rrhh\Authority;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\EndSelectionNotification;
 

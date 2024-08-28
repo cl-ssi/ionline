@@ -5,10 +5,10 @@ namespace App\Http\Livewire\ReplacementStaff;
 use Livewire\Component;
 
 use App\Models\Parameters\Parameter;
-use App\Rrhh\OrganizationalUnit;
+use App\Models\Rrhh\OrganizationalUnit;
 use App\Models\Documents\Approval;
 use Livewire\WithPagination;
-use App\Rrhh\Authority;
+use App\Models\Rrhh\Authority;
 use App\Notifications\ReplacementStaff\ApprovalsStatusReport;
 use Illuminate\Support\Facades\Notification;
 

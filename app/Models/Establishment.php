@@ -5,7 +5,7 @@ namespace App\Models;
 use App\Models\Commune;
 use App\Models\Inv\EstablishmentUser;
 use App\Models\Parameters\EstablishmentType;
-use App\Rrhh\OrganizationalUnit;
+use App\Models\Rrhh\OrganizationalUnit;
 use App\Models\User;
 use App\Models\Warehouse\Store;
 use Illuminate\Database\Eloquent\Model;

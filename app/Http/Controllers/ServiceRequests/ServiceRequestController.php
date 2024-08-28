@@ -23,7 +23,7 @@ use App\Mail\ServiceRequestNotification;
 use App\Mail\DerivationNotification;
 use App\Notifications\ServiceRequests\NewServiceRequest;
 use Illuminate\Support\Facades\Mail;
-use App\Rrhh\OrganizationalUnit;
+use App\Models\Rrhh\OrganizationalUnit;
 use App\Models\Establishment;
 use App\Models\User;
 use DB;
@@ -33,7 +33,7 @@ use App\Exports\ConsolidatedMasterDataExport;
 use Maatwebsite\Excel\Facades\Excel;
 
 use Illuminate\Support\Facades\Auth;
-use App\Rrhh\Authority;
+use App\Models\Rrhh\Authority;
 use Carbon\Carbon;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\StreamedResponse;

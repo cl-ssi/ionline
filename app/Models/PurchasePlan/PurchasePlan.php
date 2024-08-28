@@ -49,7 +49,7 @@ class PurchasePlan extends Model implements Auditable
     }
 
     public function organizationalUnit() {
-        return $this->belongsTo('App\Rrhh\OrganizationalUnit', 'organizational_unit_id')->withTrashed();
+        return $this->belongsTo('App\Models\Rrhh\OrganizationalUnit', 'organizational_unit_id')->withTrashed();
     }
 
     public function programName()

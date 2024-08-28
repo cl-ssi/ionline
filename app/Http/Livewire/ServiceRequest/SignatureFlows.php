@@ -3,7 +3,7 @@
 namespace App\Http\Livewire\ServiceRequest;
 
 use Illuminate\Support\Facades\Auth;
-use App\Rrhh\Authority;
+use App\Models\Rrhh\Authority;
 use App\Models\User;
 
 use Livewire\Component;

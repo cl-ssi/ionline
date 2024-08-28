@@ -70,7 +70,7 @@ class Training extends Model implements Auditable
     }
 
     public function userTrainingOu() {
-        return $this->belongsTo('App\Rrhh\OrganizationalUnit', 'organizational_unit_id')->withTrashed();
+        return $this->belongsTo('App\Models\Rrhh\OrganizationalUnit', 'organizational_unit_id')->withTrashed();
     }
 
     public function userTrainingEstablishment() {

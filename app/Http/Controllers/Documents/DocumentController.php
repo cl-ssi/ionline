@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\User;
-use App\Rrhh\OrganizationalUnit;
+use App\Models\Rrhh\OrganizationalUnit;
 use App\Models\Documents\Type;
 use App\Models\Documents\SignaturesFile;
 use App\Models\Documents\Signature;
@@ -22,7 +22,7 @@ use App\Models\Agreements\BudgetAvailability;
 use App\Models\Agreements\ContinuityResolution;
 use App\Models\Documents\SignaturesFlow;
 use App\Models\Parameters\Parameter;
-use App\Rrhh\Authority;
+use App\Models\Rrhh\Authority;
 use Illuminate\View\View;
 
 class DocumentController extends Controller

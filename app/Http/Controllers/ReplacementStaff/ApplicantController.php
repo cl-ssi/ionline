@@ -5,7 +5,7 @@ namespace App\Http\Controllers\ReplacementStaff;
 use App\Models\ReplacementStaff\Applicant;
 use App\Models\ReplacementStaff\TechnicalEvaluation;
 use App\Models\ReplacementStaff\RequestReplacementStaff;
-use App\Rrhh\Authority;
+use App\Models\Rrhh\Authority;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
