@@ -263,6 +263,7 @@
 				<option value="5" @if($serviceRequest->weekly_hours == 5) selected @endif>5</option>
 				<option value="4" @if($serviceRequest->weekly_hours == 4) selected @endif>4</option>
 				<option value="3" @if($serviceRequest->weekly_hours == 3) selected @endif>3</option>
+                <option value="2" @if($serviceRequest->weekly_hours == 2) selected @endif>2</option>
 			</select>
 		</fieldset>
 
