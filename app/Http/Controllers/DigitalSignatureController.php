@@ -226,7 +226,8 @@ class DigitalSignatureController extends Controller
                 //     $dest_vec[0] = $destinatarios;
                 // }
 
-                $parte = Parte::createPartesForDirectors($destinatarios, $signaturesFlow);
+                // Crear parte para los directores
+                Parte::createPartesForDirectors($destinatarios, $signaturesFlow);
 
                 //TODO dejar que sea con el 38, consultar que ocurre cuando entre en 2 sistemas de parte
                 // $establishment = Establishment::find(38);
