@@ -4,8 +4,16 @@ namespace App\Models;
 
 use App\Models\Documents\Document;
 use App\Models\Documents\DocumentEvent;
+use App\Models\Pharmacies\Dispatch;
 use App\Models\Pharmacies\Pharmacy;
+use App\Models\Pharmacies\Purchase;
+use App\Models\Pharmacies\Receiving;
+use App\Models\ReplacementStaff\RequestReplacementStaff;
 use App\Models\RequestForms\EventRequestForm;
+use App\Models\Requirements\Event;
+use App\Models\Requirements\Label;
+use App\Models\Requirements\Requirement;
+use App\Models\Requirements\RequirementStatus;
 use App\Models\Resources\Computer;
 use App\Models\Resources\Mobile;
 use App\Models\Resources\Printer;
@@ -34,7 +42,7 @@ use App\Models\Profile\Subrogation;
 use App\Models\Warehouse\StoreUser;
 use App\Models\Parameters\AccessLog;
 
-use App\Models\Inventory\inventoryUser;
+use App\Models\Inv\InventoryUser;
 
 use App\Models\Rrhh\CompensatoryDay;
 use App\Models\Rrhh\UserBankAccount;
@@ -443,15 +451,15 @@ class User extends Authenticatable implements Auditable
         return $this->hasMany(ServiceRequest::class);
     }
     
-    /**
-     * Get the document events for the user.
-     *
-     * @return HasMany
-     */
-    public function documentEvents(): HasMany
-    {
-        return $this->hasMany(DocumentEvent::class);
-    }
+    // /**
+    //  * Get the document events for the user.
+    //  *
+    //  * @return HasMany
+    //  */
+    // public function documentEvents(): HasMany
+    // {
+    //     return $this->hasMany(DocumentEvent::class);
+    // }
     
     /**
      * Get the agenda proposals for the user.
@@ -742,7 +750,7 @@ class User extends Authenticatable implements Auditable
     /**
      * Retorna Usuarios según contenido en $searchText
      * Busqueda realizada en: nombres, apellidos, rut.
-     * @return Patient[]|Builder[]|Collection
+     * @return ?
      */
     public static function scopeFullSearch($query, $searchText)
     {
@@ -936,7 +944,7 @@ class User extends Authenticatable implements Auditable
     /**
      * Retorna Usuarios según contenido en $searchText
      * Busqueda realizada en: nombres, apellidos, rut.
-     * @return Patient[]|Builder[]|Collection
+     * @return ??
      */
     public static function getUsersBySearch($searchText)
     {
