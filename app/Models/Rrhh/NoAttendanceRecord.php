@@ -2,24 +2,31 @@
 
 namespace App\Models\Rrhh;
 
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Relations\MorphOne;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use App\Models\User;
-use App\Models\Rrhh\Attendance\Reason;
 use App\Models\Documents\Approval;
+use App\Models\Rrhh\Attendance\Reason;
+use App\Models\User;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class NoAttendanceRecord extends Model
 {
-    use HasFactory;
-    use SoftDeletes;
+    use HasFactory, SoftDeletes;
 
     /**
-    * The attributes that are mass assignable.
-    *
-    * @var array
-    */
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'rrhh_no_attendance_records';
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
     protected $fillable = [
         'date',
         'user_id',
@@ -37,43 +44,50 @@ class NoAttendanceRecord extends Model
     ];
 
     /**
-    * The primary key associated with the table.
-    *
-    * @var string
-    */
-    protected $table = 'rrhh_no_attendance_records';
-
-    /**
-    * The attributes that should be mutated to dates.
-    *
-    * @var array
-    */
-    protected $dates = [
-        'rrhh_at',
-    ];
-
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
     protected $casts = [
+        'rrhh_at' => 'datetime',
         'date' => 'date:Y-m-d\TH:i:s',
         'created_at' => 'datetime',
     ];
 
-    public function user()
+    /**
+     * Get the user that owns the no attendance record.
+     *
+     * @return BelongsTo
+     */
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class)->withTrashed();
     }
 
-    public function reason()
+    /**
+     * Get the reason that owns the no attendance record.
+     *
+     * @return BelongsTo
+     */
+    public function reason(): BelongsTo
     {
         return $this->belongsTo(Reason::class);
     }
 
-    public function authority()
+    /**
+     * Get the authority that owns the no attendance record.
+     *
+     * @return BelongsTo
+     */
+    public function authority(): BelongsTo
     {
         return $this->belongsTo(User::class)->withTrashed();
     }
 
     /**
      * Get the approval model.
+     *
+     * @return MorphOne
      */
     public function approval(): MorphOne
     {
@@ -81,9 +95,21 @@ class NoAttendanceRecord extends Model
     }
 
     /**
-     * Simular un approval model.
+     * Get the rrhh user that owns the no attendance record.
+     *
+     * @return BelongsTo
      */
-    public function getApprovalLegacyAttribute()
+    public function rrhhUser(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'rrhh_user_id')->withTrashed();
+    }
+
+    /**
+     * Simulate an approval model.
+     *
+     * @return Approval
+     */
+    public function getApprovalLegacyAttribute(): Approval
     {
         $approval = new Approval();
         $approval->status = $this->status;
@@ -93,10 +119,4 @@ class NoAttendanceRecord extends Model
         $approval->approver_observation = $this->authority_observation;
         return $approval;
     }
-
-    public function rrhhUser()
-    {
-        return $this->belongsTo(User::class,'rrhh_user_id')->withTrashed();
-    }
-
 }
