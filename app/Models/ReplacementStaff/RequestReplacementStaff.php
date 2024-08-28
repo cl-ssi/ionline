@@ -2,8 +2,10 @@
 
 namespace App\Models\ReplacementStaff;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Rrhh\Authority;
@@ -54,8 +56,14 @@ class RequestReplacementStaff extends Model implements Auditable
     }
     
     //user_id ORIGINALMENTE QUIEN REGISTRA SOLICITUD
-    public function user() {
-        return $this->belongsTo('App\Models\User')->withTrashed();
+    /**
+     * Get the user that owns the document.
+     *
+     * @return BelongsTo
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class)->withTrashed();
     }
 
     public function organizationalUnit() {
