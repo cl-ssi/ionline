@@ -13,6 +13,11 @@ use App\Models\File;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use App\Models\Documents\Approval;
 
+use Carbon\Carbon;
+use Carbon\CarbonPeriod;
+use App\Models\Parameters\Holiday;
+
+
 class Training extends Model implements Auditable
 {
     use HasFactory;
@@ -57,15 +62,6 @@ class Training extends Model implements Auditable
     ];
 
     public function userTraining() {
-        /*
-        if(auth()->guard('external')->check() == true){
-            return $this->belongsTo('App\Models\UserExternal', 'user_training_id');
-        }
-        else{
-            
-            return $this->belongsTo('App\Models\User', 'user_training_id')->withTrashed();
-        }*/
-        // return $this->morphMany(User::class, 'user_training_id');
         return $this->morphTo();
     }
 
@@ -270,6 +266,33 @@ class Training extends Model implements Auditable
                 return 'No';
                 break;
         }
+    }
+
+    public function addBusinessDays($fechaInicial, $diasHabiles)
+    {
+        // Define la fecha inicial
+        $fecha = Carbon::parse($fechaInicial);
+        
+        // Consulta para obtener todos los feriados desde la fecha seleccionada en adelante
+        $feriadosDesdeFecha = Holiday::where('date', '>=', $fecha)->pluck('date')->toArray();
+        
+        // Convierte las fechas a formato Y-m-d para añadir al array de festivos
+        $festivosChile = array_map(function($date) {
+            return Carbon::parse($date)->format('Y-m-d');
+        }, $feriadosDesdeFecha);
+        
+        $diasSumados = 0;
+
+        while ($diasSumados < $diasHabiles) {
+            $fecha->addDay();
+            
+            // Si no es fin de semana y no es un día festivo, cuenta como día hábil
+            if (!$fecha->isWeekend() && !in_array($fecha->format('Y-m-d'), $festivosChile)) {
+                $diasSumados++;
+            }
+        }
+
+        return $fecha;
     }
 
     protected $casts = [
