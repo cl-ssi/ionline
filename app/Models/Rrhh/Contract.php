@@ -2,20 +2,27 @@
 
 namespace App\Models\Rrhh;
 
-use App\Models\User;
 use App\Models\Rrhh\OrganizationalUnit;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class Contract extends Model
 {
     use HasFactory;
 
     /**
-    * The attributes that are mass assignable.
-    *
-    * @var array
-    */
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'rrhh_contracts';
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
     protected $fillable = [
         'rut',
         'dv',
@@ -94,44 +101,34 @@ class Contract extends Model
     ];
 
     /**
-    * Reemplazado por $casts 
-    * The attributes that should be mutated to dates.
-    *
-    * @var array
-    */
-    // protected $dates = [
-    //     'fecha_inicio_contrato',
-    //     'fecha_termino_contrato',
-    //     'fecha_alejamiento',
-    // ];
-
-    /**
-    * The attributes that should be cast.
-    *
-    * @var array
-    */
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
     protected $casts = [
         'fecha_inicio_contrato' => 'datetime:Y-m-d',
         'fecha_termino_contrato' => 'datetime:Y-m-d',
         'fecha_alejamiento' => 'datetime:Y-m-d',
-        'shift' => 'boolean'
+        'shift' => 'boolean',
     ];
 
     /**
-    * The primary key associated with the table.
-    *
-    * @var string
-    */
-    protected $table = 'rrhh_contracts';
-
-    public function user()
+     * Get the user that owns the contract.
+     *
+     * @return BelongsTo
+     */
+    public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class,'rut');
+        return $this->belongsTo(User::class, 'rut');
     }
 
-    public function organizationalUnit()
+    /**
+     * Get the organizational unit that owns the contract.
+     *
+     * @return BelongsTo
+     */
+    public function organizationalUnit(): BelongsTo
     {
-        return $this->belongsTo(OrganizationalUnit::class,'codigo_unidad','sirh_ou_id');
+        return $this->belongsTo(OrganizationalUnit::class, 'codigo_unidad', 'sirh_ou_id');
     }
-
 }
