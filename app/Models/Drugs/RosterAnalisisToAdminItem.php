@@ -2,7 +2,11 @@
 
 namespace App\Models\Drugs;
 
+use App\Models\Drugs\Reception;
+use App\Models\Drugs\RosterAnalisisToAdmin;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class RosterAnalisisToAdminItem extends Model
@@ -10,21 +14,21 @@ class RosterAnalisisToAdminItem extends Model
     use SoftDeletes;
 
     /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'drg_roster_analisis_to_admin_items';
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'roster_id','reception_id'
+        'roster_id',
+        'reception_id'
     ];
-
-    public function roster() {
-        return $this->belongsTo('App\Models\Drugs\RosterAnalisisToAdmin', 'roster_id', 'drg_roster_analisis_to_admins');
-    }
-
-    public function receptions() {
-        return $this->hasMany('App\Models\Drugs\Reception', 'reception_id', 'drg_receptions');
-    }
 
     /**
      * The attributes that should be cast to native types.
@@ -32,8 +36,26 @@ class RosterAnalisisToAdminItem extends Model
      * @var array
      */
     protected $casts = [
-        //
+        // No attributes to cast
     ];
 
-    protected $table = 'drg_roster_analisis_to_admin_items';
+    /**
+     * Get the roster that owns the RosterAnalisisToAdminItem.
+     *
+     * @return BelongsTo
+     */
+    public function roster(): BelongsTo
+    {
+        return $this->belongsTo(RosterAnalisisToAdmin::class, 'roster_id');
+    }
+
+    /**
+     * Get the receptions for the RosterAnalisisToAdminItem.
+     *
+     * @return HasMany
+     */
+    public function receptions(): HasMany
+    {
+        return $this->hasMany(Reception::class, 'reception_id');
+    }
 }

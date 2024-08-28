@@ -3,9 +3,17 @@
 namespace App\Models\Drugs;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class PoliceUnit extends Model
 {
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'drg_police_units';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -14,17 +22,15 @@ class PoliceUnit extends Model
     protected $fillable = [
         'code',
         'name',
-        'status',
+        'status'
     ];
 
     /**
-     * The table associated with the model.
+     * Get the receptions for the police unit.
      *
-     * @var string
+     * @return HasMany
      */
-    protected $table = 'drg_police_units';
-
-    public function Receptions()
+    public function receptions(): HasMany
     {
         return $this->hasMany(Reception::class);
     }

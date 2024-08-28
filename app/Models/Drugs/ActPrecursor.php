@@ -3,12 +3,15 @@
 namespace App\Models\Drugs;
 
 use App\Models\User;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ActPrecursor extends Model
 {
-    use SoftDeletes;
+    use HasFactory, SoftDeletes;
 
     /**
      * The table associated with the model.
@@ -27,29 +30,44 @@ class ActPrecursor extends Model
         'full_name_receiving',
         'run_receiving',
         'note',
-        'delivery_id',
+        'delivery_id'
     ];
 
     /**
-     * The attributes that should be mutated to dates.
+     * The attributes that should be cast to native types.
      *
      * @var array
      */
-    protected $dates = [
-        'date'
+    protected $casts = [
+        'date' => 'datetime'
     ];
 
-    public function delivery()
+    /**
+     * Get the delivery user that owns the act precursor.
+     *
+     * @return BelongsTo
+     */
+    public function delivery(): BelongsTo
     {
         return $this->belongsTo(User::class)->withTrashed();
     }
 
-    public function precursors()
+    /**
+     * Get the precursors for the act precursor.
+     *
+     * @return HasMany
+     */
+    public function precursors(): HasMany
     {
         return $this->hasMany(ActPrecursorItem::class);
     }
 
-    public function getFormatDateAttribute()
+    /**
+     * Get the formatted date attribute.
+     *
+     * @return string
+     */
+    public function getFormatDateAttribute(): string
     {
         return $this->date->day . ' de ' . $this->date->monthName . ' del ' . $this->date->year;
     }

@@ -4,6 +4,9 @@ namespace App\Models\Drugs;
 
 use App\Models\Drugs\ActPrecursorItem;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Contracts\Auditable;
 
@@ -11,6 +14,13 @@ class ReceptionItem extends Model implements Auditable
 {
     use SoftDeletes;
     use \OwenIt\Auditing\Auditable;
+
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'drg_reception_items';
 
     /**
      * The attributes that are mass assignable.
@@ -34,48 +44,77 @@ class ReceptionItem extends Model implements Auditable
         'result_number',
         'result_date',
         'result_substance_id',
-        'dispose_precursor',
+        'dispose_precursor'
     ];
 
     /**
-     * The attributes that should be mutated to dates.
+     * The attributes that should be cast to native types.
      *
      * @var array
      */
-    protected $dates = ['result_date', 'deleted_at'];
-
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'drg_reception_items';
-
     protected $casts = [
-        'dispose_precursor' => 'boolean',
+        'result_date' => 'date',
+        'dispose_precursor' => 'boolean'
     ];
 
-    public function reception()
+    /**
+     * Get the reception that owns the reception item.
+     *
+     * @return BelongsTo
+     */
+    public function reception(): BelongsTo
     {
         return $this->belongsTo(Reception::class);
     }
 
-    public function substance()
+    /**
+     * Get the substance that owns the reception item.
+     *
+     * @return BelongsTo
+     */
+    public function substance(): BelongsTo
     {
         return $this->belongsTo(Substance::class);
     }
 
-    public function resultSubstance()
+    /**
+     * Get the result substance that owns the reception item.
+     *
+     * @return BelongsTo
+     */
+    public function resultSubstance(): BelongsTo
     {
         return $this->belongsTo(Substance::class, 'result_substance_id');
     }
 
-    public function protocols()
+    /**
+     * Get the protocols for the reception item.
+     *
+     * @return HasMany
+     */
+    public function protocols(): HasMany
     {
         return $this->hasMany(Protocol::class);
     }
 
-    public function getLetterFormPosition($position) {
+    /**
+     * Get the act precursor item for the reception item.
+     *
+     * @return HasOne
+     */
+    public function actPrecursorItem(): HasOne
+    {
+        return $this->hasOne(ActPrecursorItem::class);
+    }
+
+    /**
+     * Get the letter form position.
+     *
+     * @param int $position
+     * @return string
+     */
+    public function getLetterFormPosition(int $position): string
+    {
         $letras = [];
 
         // Genera las letras de la 'a' a la 'z'
@@ -92,119 +131,14 @@ class ReceptionItem extends Model implements Auditable
         return $letras[--$position];
     }
 
-    public function getLetterAttribute()
+    /**
+     * Get the letter attribute.
+     *
+     * @return string
+     */
+    public function getLetterAttribute(): string
     {
-        $position = "";
         $position = $this->reception->items()->where('id', '<=', $this->id)->count();
         return $this->getLetterFormPosition($position);
     }
-
-    //Relacion con ActPrecursorItem
-    public function actPrecursorItem()
-    {
-        return $this->hasOne(ActPrecursorItem::class);
-    }
-
-    // public function getLetterAttribute()
-    // {
-    //     $position = "";
-    //     $position = $this->reception->items->search(function($receptionItem) {
-    //         return $receptionItem->id == $this->id;
-    //     });
-    //     return $this->position($position + 1);
-    // }
-
-    // public function position($position)
-    // {
-    //     $letter = "";
-    //     switch($position) {
-    //         case 1:
-    //             $letter = "a";
-    //             break;
-    //         case 2:
-    //             $letter = "b";
-    //             break;
-    //         case 3:
-    //             $letter = "c";
-    //             break;
-    //         case 4:
-    //             $letter = "d";
-    //             break;
-    //         case 5:
-    //             $letter = "e";
-    //             break;
-    //         case 6:
-    //             $letter = "f";
-    //             break;
-    //         case 7:
-    //             $letter = "g";
-    //             break;
-    //         case 8:
-    //             $letter = "h";
-    //             break;
-    //         case 9:
-    //             $letter = "i";
-    //             break;
-    //         case 10:
-    //             $letter = "j";
-    //             break;
-    //         case 11:
-    //             $letter = "k";
-    //             break;
-    //         case 12:
-    //             $letter = "l";
-    //             break;
-    //         case 13:
-    //             $letter = "m";
-    //             break;
-    //         case 14:
-    //             $letter = "n";
-    //             break;
-    //         case 15:
-    //             $letter = "o";
-    //             break;
-    //         case 16:
-    //             $letter = "p";
-    //             break;
-    //         case 17:
-    //             $letter = "q";
-    //             break;
-    //         case 18:
-    //             $letter = "r";
-    //             break;
-    //         case 19:
-    //             $letter = "s";
-    //             break;
-    //         case 20:
-    //             $letter = "t";
-    //             break;
-    //         case 21:
-    //             $letter = "u";
-    //             break;
-    //         case 22:
-    //             $letter = "v";
-    //             break;
-    //         case 23:
-    //             $letter = "w";
-    //             break;
-    //         case 24:
-    //             $letter = "x";
-    //             break;
-    //         case 25:
-    //             $letter = "y";
-    //             break;
-    //         case 26:
-    //             $letter = "z";
-    //             break;
-    //     }
-
-    //     if($position <= 26)
-    //     {
-    //         return $letter;
-    //     }
-    //     else
-    //     {
-    //         return $this->position((int)($position / 26)).$this->position($position % 26);
-    //     }
-    // }
 }

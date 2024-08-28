@@ -3,9 +3,17 @@
 namespace App\Models\Drugs;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Court extends Model
 {
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'drg_courts';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -16,17 +24,15 @@ class Court extends Model
         'emails',
         'address',
         'commune',
-        'status',
+        'status'
     ];
 
     /**
-     * The table associated with the model.
+     * Get the receptions for the court.
      *
-     * @var string
+     * @return HasMany
      */
-    protected $table = 'drg_courts';
-
-    public function Receptions()
+    public function receptions(): HasMany
     {
         return $this->hasMany(Reception::class);
     }

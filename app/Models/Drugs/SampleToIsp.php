@@ -2,13 +2,21 @@
 
 namespace App\Models\Drugs;
 
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class SampleToIsp extends Model
 {
     use SoftDeletes;
+
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'drg_sample_to_isps';
 
     /**
      * The attributes that are mass assignable.
@@ -16,41 +24,61 @@ class SampleToIsp extends Model
      * @var array
      */
     protected $fillable = [
-        'number', 
-        'document_date', 
-        'envelope_weight', 
+        'number',
+        'document_date',
+        'envelope_weight',
         'observation',
-        'reception_id', 
-        'user_id', 
-        'manager_id', 
-        'lawyer_id',
+        'reception_id',
+        'user_id',
+        'manager_id',
+        'lawyer_id'
     ];
 
     /**
-     * The attributes that should be mutated to dates.
+     * The attributes that should be cast to native types.
      *
      * @var array
      */
-    protected $dates = ['document_date', 'deleted_at'];
+    protected $casts = [
+        'document_date' => 'date'
+    ];
 
-    protected $table = 'drg_sample_to_isps';
-
-    public function reception()
+    /**
+     * Get the reception that owns the sample to ISP.
+     *
+     * @return BelongsTo
+     */
+    public function reception(): BelongsTo
     {
         return $this->belongsTo(Reception::class);
     }
 
-    public function user()
+    /**
+     * Get the user that owns the sample to ISP.
+     *
+     * @return BelongsTo
+     */
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function manager()
+    /**
+     * Get the manager that owns the sample to ISP.
+     *
+     * @return BelongsTo
+     */
+    public function manager(): BelongsTo
     {
         return $this->belongsTo(User::class, 'manager_id');
     }
 
-    public function lawyer()
+    /**
+     * Get the lawyer that owns the sample to ISP.
+     *
+     * @return BelongsTo
+     */
+    public function lawyer(): BelongsTo
     {
         return $this->belongsTo(User::class, 'lawyer_id');
     }

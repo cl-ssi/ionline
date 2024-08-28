@@ -2,13 +2,21 @@
 
 namespace App\Models\Drugs;
 
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class RecordToCourt extends Model
 {
     use SoftDeletes;
+
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'drg_record_to_court';
 
     /**
      * The attributes that are mass assignable.
@@ -16,42 +24,61 @@ class RecordToCourt extends Model
      * @var array
      */
     protected $fillable = [
-        'number', 
-        'document_date', 
+        'number',
+        'document_date',
         'observation',
-        'reception_id', 
-        'user_id', 
-        'manager_id', 
-        'lawyer_id',
+        'reception_id',
+        'user_id',
+        'manager_id',
+        'lawyer_id'
     ];
 
     /**
-     * The attributes that should be mutated to dates.
+     * The attributes that should be cast to native types.
      *
      * @var array
      */
-    protected $dates = ['document_date', 'deleted_at'];
+    protected $casts = [
+        'document_date' => 'date'
+    ];
 
-    protected $table = 'drg_record_to_court';
-
-    public function reception()
+    /**
+     * Get the reception that owns the record to court.
+     *
+     * @return BelongsTo
+     */
+    public function reception(): BelongsTo
     {
         return $this->belongsTo(Reception::class);
     }
 
-    public function user()
+    /**
+     * Get the user that owns the record to court.
+     *
+     * @return BelongsTo
+     */
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function manager()
+    /**
+     * Get the manager that owns the record to court.
+     *
+     * @return BelongsTo
+     */
+    public function manager(): BelongsTo
     {
         return $this->belongsTo(User::class, 'manager_id');
     }
 
-    public function lawyer()
+    /**
+     * Get the lawyer that owns the record to court.
+     *
+     * @return BelongsTo
+     */
+    public function lawyer(): BelongsTo
     {
         return $this->belongsTo(User::class, 'lawyer_id');
     }
-
 }

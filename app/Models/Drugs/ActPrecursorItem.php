@@ -3,6 +3,7 @@
 namespace App\Models\Drugs;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ActPrecursorItem extends Model
@@ -23,15 +24,27 @@ class ActPrecursorItem extends Model
      */
     protected $fillable = [
         'reception_item_id',
-        'act_precursor_id',
+        'act_precursor_id'
     ];
 
-    public function reception_item()
+    /**
+     * FIXME: El nombre de la relacion está mal
+     * Get the reception item that owns the act precursor item.
+     *
+     * @return BelongsTo
+     */
+    public function reception_item(): BelongsTo
     {
         return $this->belongsTo(ReceptionItem::class);
     }
 
-    public function act_precursor()
+    /**
+     * FIXME: El nombre de la relacion está mal
+     * Get the act precursor that owns the act precursor item.
+     *
+     * @return BelongsTo
+     */
+    public function act_precursor(): BelongsTo
     {
         return $this->belongsTo(ActPrecursor::class);
     }

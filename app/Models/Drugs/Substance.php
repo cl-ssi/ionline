@@ -3,9 +3,17 @@
 namespace App\Models\Drugs;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Substance extends Model
 {
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'drg_substances';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -17,17 +25,15 @@ class Substance extends Model
         'unit',
         'laboratory',
         'isp',
-        'presumed',
+        'presumed'
     ];
 
     /**
-     * The table associated with the model.
+     * Get the items for the substance.
      *
-     * @var string
+     * @return HasMany
      */
-    protected $table = 'drg_substances';
-
-    public function items()
+    public function items(): HasMany
     {
         return $this->hasMany(ReceptionItem::class);
     }

@@ -4,12 +4,20 @@ namespace App\Models\Drugs;
 
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Contracts\Auditable;
 
 class Destruction extends Model implements Auditable
 {
     use SoftDeletes, \OwenIt\Auditing\Auditable;
+
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'drg_destructions';
 
     /**
      * The attributes that are mass assignable.
@@ -20,54 +28,75 @@ class Destruction extends Model implements Auditable
         'reception_id',
         'police',
         'destructed_at',
-        'user_id',
+        'user_id'
     ];
 
     /**
-     * The attributes that should be mutated to dates.
+     * The attributes that should be cast to native types.
      *
      * @var array
      */
-    protected $dates = [
-        'destructed_at',
-        'deleted_at',
+    protected $casts = [
+        'destructed_at' => 'date'
     ];
 
     /**
-     * The table associated with the model.
+     * Get the reception that owns the destruction.
      *
-     * @var string
+     * @return BelongsTo
      */
-    protected $table = 'drg_destructions';
-
-    public function reception()
+    public function reception(): BelongsTo
     {
         return $this->belongsTo(Reception::class);
     }
 
-    public function user()
+    /**
+     * Get the user that owns the destruction.
+     *
+     * @return BelongsTo
+     */
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function manager()
+    /**
+     * Get the manager that owns the destruction.
+     *
+     * @return BelongsTo
+     */
+    public function manager(): BelongsTo
     {
         return $this->belongsTo(User::class, 'manager_id');
     }
 
-    public function lawyer()
+    /**
+     * Get the lawyer that owns the destruction.
+     *
+     * @return BelongsTo
+     */
+    public function lawyer(): BelongsTo
     {
         return $this->belongsTo(User::class, 'lawyer_id');
     }
 
-    public function observer()
+    /**
+     * Get the observer that owns the destruction.
+     *
+     * @return BelongsTo
+     */
+    public function observer(): BelongsTo
     {
         return $this->belongsTo(User::class, 'observer_id');
     }
 
-    public function lawyer_observer()
+    /**
+     * Get the lawyer observer that owns the destruction.
+     *
+     * @return BelongsTo
+     */
+    public function lawyerObserver(): BelongsTo
     {
         return $this->belongsTo(User::class, 'lawyer_observer_id');
     }
-
 }

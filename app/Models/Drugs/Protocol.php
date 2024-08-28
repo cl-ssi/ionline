@@ -3,15 +3,19 @@
 namespace App\Models\Drugs;
 
 use App\Models\Documents\Approval;
-use App\Models\Drugs\ReceptionItem;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Protocol extends Model
 {
-    use SoftDeletes;
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'drg_protocols';
 
     /**
      * The attributes that are mass assignable.
@@ -22,7 +26,7 @@ class Protocol extends Model
         'sample',
         'result',
         'user_id',
-        'reception_item_id',
+        'reception_item_id'
     ];
 
     /**
@@ -31,28 +35,33 @@ class Protocol extends Model
      * @var array
      */
     protected $casts = [
-        //
+        // No attributes to cast
     ];
 
     /**
-     * The table associated with the model.
+     * Get the reception item that owns the protocol.
      *
-     * @var string
+     * @return BelongsTo
      */
-    protected $table = 'drg_protocols';
-
-    public function receptionItem()
+    public function receptionItem(): BelongsTo
     {
         return $this->belongsTo(ReceptionItem::class);
     }
 
-    public function user()
+    /**
+     * Get the user that owns the protocol.
+     *
+     * @return BelongsTo
+     */
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class)->withTrashed();
     }
 
     /**
      * Get the approval model.
+     *
+     * @return MorphOne
      */
     public function approval(): MorphOne
     {

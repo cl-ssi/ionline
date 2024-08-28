@@ -4,6 +4,9 @@ namespace App\Models\Drugs;
 
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Contracts\Auditable;
 
@@ -40,99 +43,172 @@ class Reception extends Model implements Auditable
         'observation',
         'reservado_isp_number',
         'reservado_isp_date',
-        'date',
-        //'user_id', 'manager_id', 'lawyer_id'
+        'date'
     ];
 
     /**
-     * The attributes that should be mutated to dates.
+     * The attributes that should be cast to native types.
      *
      * @var array
      */
-    protected $dates = [
-        'date',
-        'deleted_at',
-        'document_date',
-        'reservado_isp_date',
-    ];
     protected $casts = [
-        'imputed'=> 'encrypted',
-        'imputed_run' => 'encrypted',
+        'date'               => 'datetime',
+        'document_date'      => 'date',
+        'reservado_isp_date' => 'date',
+        'imputed'            => 'encrypted',
+        'imputed_run'        => 'encrypted'
     ];
-    
-    public function items()
+
+    /**
+     * Get the items for the reception.
+     *
+     * @return HasMany
+     */
+    public function items(): HasMany
     {
         return $this->hasMany(ReceptionItem::class);
     }
 
-    public function itemsWithoutPrecursors()
+    /**
+     * Get the items without precursors for the reception.
+     *
+     * @return HasMany
+     */
+    public function itemsWithoutPrecursors(): HasMany
     {
         return $this->hasMany(ReceptionItem::class)->whereNull('dispose_precursor');
     }
 
-    public function court()
+    /**
+     * Get the court that owns the reception.
+     *
+     * @return BelongsTo
+     */
+    public function court(): BelongsTo
     {
         return $this->belongsTo(Court::class);
     }
 
-    public function partePoliceUnit()
+    /**
+     * Get the police unit for the parte.
+     *
+     * @return BelongsTo
+     */
+    public function partePoliceUnit(): BelongsTo
     {
         return $this->belongsTo(PoliceUnit::class, 'parte_police_unit_id');
     }
 
-    public function documentPoliceUnit()
+    /**
+     * Get the police unit for the document.
+     *
+     * @return BelongsTo
+     */
+    public function documentPoliceUnit(): BelongsTo
     {
         return $this->belongsTo(PoliceUnit::class, 'document_police_unit_id');
     }
 
-    public function user()
+    /**
+     * Get the user that owns the reception.
+     *
+     * @return BelongsTo
+     */
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class)->withTrashed();
     }
 
-    public function manager()
+    /**
+     * Get the manager that owns the reception.
+     *
+     * @return BelongsTo
+     */
+    public function manager(): BelongsTo
     {
         return $this->belongsTo(User::class, 'manager_id')->withTrashed();
     }
 
-    public function lawyer()
+    /**
+     * Get the lawyer that owns the reception.
+     *
+     * @return BelongsTo
+     */
+    public function lawyer(): BelongsTo
     {
         return $this->belongsTo(User::class, 'lawyer_id')->withTrashed();
     }
 
-    public function destruction()
+    /**
+     * Get the destruction for the reception.
+     *
+     * @return HasOne
+     */
+    public function destruction(): HasOne
     {
         return $this->hasOne(Destruction::class);
     }
 
-    public function sampleToIsp()
+    /**
+     * Get the sample to ISP for the reception.
+     *
+     * @return HasOne
+     */
+    public function sampleToIsp(): HasOne
     {
         return $this->hasOne(SampleToIsp::class);
     }
 
-    public function recordToCourt()
+    /**
+     * Get the record to court for the reception.
+     *
+     * @return HasOne
+     */
+    public function recordToCourt(): HasOne
     {
         return $this->hasOne(RecordToCourt::class);
     }
 
-    public function wasDestructed()
+    /**
+     * Check if the reception was destructed.
+     *
+     * @return bool
+     */
+    public function wasDestructed(): bool
     {
         return isset($this->destruction);
     }
 
-    public function haveItemsForDestruction()
+    /**
+     * Check if the reception has items for destruction.
+     *
+     * @return HasMany
+     */
+    public function haveItemsForDestruction(): HasMany
     {
         return $this->hasMany(ReceptionItem::class)->where('destruct', '>', 0);
     }
 
-    public function haveItems()
+    /**
+     * Check if the reception has items.
+     *
+     * @return bool
+     */
+    public function haveItems(): bool
     {
         return count($this->items) > 0;
     }
 
+    /**
+     * Scope a query to search receptions by ID or sample number.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param string $id
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
     public function scopeSearch($query, $id)
     {
-        if ($id != "") {
+        if ( $id != "" ) {
             return $query->where('id', $id)->orWhereHas('sampleToISP', function ($q) use ($id) {
                 $q->where('number', $id);
             });

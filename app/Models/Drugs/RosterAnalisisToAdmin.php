@@ -2,12 +2,22 @@
 
 namespace App\Models\Drugs;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class RosterAnalisisToAdmin extends Model
 {
     use SoftDeletes;
+
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'drg_roster_analisis_to_admins';
 
     /**
      * The attributes that are mass assignable.
@@ -18,23 +28,32 @@ class RosterAnalisisToAdmin extends Model
         'user_id'
     ];
 
-
-    public function user() {
-        return $this->belongsTo('App\Models\User');
-    }
-
-    public function items() {
-        return $this->hasMany('App\Models\Drugs\RosterAnalisisToAdminItem');
-    }
-
     /**
      * The attributes that should be cast to native types.
      *
      * @var array
      */
     protected $casts = [
-        //
+        // No attributes to cast
     ];
 
-    protected $table = 'drg_roster_analisis_to_admins';
+    /**
+     * Get the user that owns the roster analysis to admin.
+     *
+     * @return BelongsTo
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Get the items for the roster analysis to admin.
+     *
+     * @return HasMany
+     */
+    public function items(): HasMany
+    {
+        return $this->hasMany(RosterAnalisisToAdminItem::class);
+    }
 }
