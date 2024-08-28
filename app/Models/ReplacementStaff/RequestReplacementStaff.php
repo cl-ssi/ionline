@@ -2,62 +2,92 @@
 
 namespace App\Models\ReplacementStaff;
 
+use App\Models\Documents\Approval;
+use App\Models\Establishment;
+use App\Models\Parameters\BudgetItem;
+use App\Models\ReplacementStaff\AssignEvaluation;
+use App\Models\ReplacementStaff\FundamentDetailManage;
+use App\Models\ReplacementStaff\LegalQualityManage;
+use App\Models\ReplacementStaff\Position;
+use App\Models\ReplacementStaff\ProfileManage;
+use App\Models\ReplacementStaff\RequestSign;
+use App\Models\ReplacementStaff\RstFundamentManage;
+use App\Models\ReplacementStaff\TechnicalEvaluation;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\Auth;
-use App\Models\Rrhh\Authority;
-use Carbon\Carbon;
-use OwenIt\Auditing\Contracts\Auditable;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
-use Illuminate\Database\Eloquent\Relations\MorphOne;
-use App\Models\Documents\Approval;
-
-use App\Models\Establishment;
-
+use Illuminate\Database\Eloquent\SoftDeletes;
+use OwenIt\Auditing\Contracts\Auditable;
 
 class RequestReplacementStaff extends Model implements Auditable
 {
-    use HasFactory;
-    use softDeletes;
-    use \OwenIt\Auditing\Auditable;
+    use HasFactory, SoftDeletes, \OwenIt\Auditing\Auditable;
 
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'rst_request_replacement_staff';
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
     protected $fillable = [
-        'form_type', 'name', 'profile_manage_id', 'law', 'degree', 'start_date', 'end_date',
-        'legal_quality_manage_id', 'salary', 'fundament_manage_id', 'fundament_detail_manage_id',
-        'name_to_replace', 'run', 'dv', 'other_fundament', 'work_day', 'other_work_day',
-        'charges_number','job_profile_file', 'request_verification_file',
-        'ou_of_performance_id', 'replacement_staff_id', 'user_id'
+        'form_type',
+        'name',
+        'profile_manage_id',
+        'law',
+        'degree',
+        'start_date',
+        'end_date',
+        'legal_quality_manage_id',
+        'salary',
+        'fundament_manage_id',
+        'fundament_detail_manage_id',
+        'name_to_replace',
+        'run',
+        'dv',
+        'other_fundament',
+        'work_day',
+        'other_work_day',
+        'charges_number',
+        'job_profile_file',
+        'request_verification_file',
+        'ou_of_performance_id',
+        'replacement_staff_id',
+        'user_id'
     ];
 
-    public function requestFather() {
-        return $this->belongsTo('App\Models\ReplacementStaff\RequestReplacementStaff', 'request_id');
-    }
-    public function requestChilds() {
-        return $this->hasMany('App\Models\ReplacementStaff\RequestReplacementStaff', 'request_id');
-    }
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'created_at',
+        'updated_at'
+    ];
 
-    public function profile_manage() {
-        return $this->belongsTo('App\Models\ReplacementStaff\ProfileManage');
-    }
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'start_date' => 'date',
+        'end_date' => 'date'
+    ];
 
-    public function legalQualityManage() {
-        return $this->belongsTo('App\Models\ReplacementStaff\LegalQualityManage');
-    }
-
-    public function fundamentManage() {
-        return $this->belongsTo('App\Models\ReplacementStaff\RstFundamentManage')->withTrashed();
-    }
-
-    public function fundamentDetailManage() {
-        return $this->belongsTo('App\Models\ReplacementStaff\FundamentDetailManage');
-    }
-    
-    //user_id ORIGINALMENTE QUIEN REGISTRA SOLICITUD
     /**
      * Get the user that owns the document.
+     * //user_id ORIGINALMENTE QUIEN REGISTRA SOLICITUD
      *
      * @return BelongsTo
      */
@@ -66,159 +96,264 @@ class RequestReplacementStaff extends Model implements Auditable
         return $this->belongsTo(User::class)->withTrashed();
     }
 
-    public function organizationalUnit() {
-        return $this->belongsTo('App\Models\Rrhh\OrganizationalUnit')->withTrashed();
+    /**
+     * Get the profile manage that owns the request.
+     * FIXME: This method should be named `profileManage` to follow the Laravel naming convention.
+     * @return BelongsTo
+     */
+    public function profile_manage(): BelongsTo
+    {
+        return $this->belongsTo(ProfileManage::class);
     }
 
-    public function establishment() {
+    /**
+     * Get the legal quality manage that owns the request.
+     *
+     * @return BelongsTo
+     */
+    public function legalQualityManage(): BelongsTo
+    {
+        return $this->belongsTo(LegalQualityManage::class);
+    }
+
+    /**
+     * Get the fundament manage that owns the request.
+     *
+     * @return BelongsTo
+     */
+    public function fundamentManage(): BelongsTo
+    {
+        return $this->belongsTo(RstFundamentManage::class)->withTrashed();
+    }
+
+    /**
+     * Get the fundament detail manage that owns the request.
+     *
+     * @return BelongsTo
+     */
+    public function fundamentDetailManage(): BelongsTo
+    {
+        return $this->belongsTo(FundamentDetailManage::class);
+    }
+
+    /**
+     * Get the organizational unit that owns the request.
+     *
+     * @return BelongsTo
+     */
+    public function organizationalUnit(): BelongsTo
+    {
+        return $this->belongsTo(\App\Models\Rrhh\OrganizationalUnit::class)->withTrashed();
+    }
+
+    /**
+     * Get the establishment that owns the request.
+     *
+     * @return BelongsTo
+     */
+    public function establishment(): BelongsTo
+    {
         return $this->belongsTo(Establishment::class);
     }
 
-    public function requesterUser() {
-        return $this->belongsTo('App\Models\User', 'requester_id')->withTrashed();
+    /**
+     * Get the requester user that owns the request.
+     *
+     * @return BelongsTo
+     */
+    public function requesterUser(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'requester_id')->withTrashed();
     }
 
-    public function ouPerformance() {
-        return $this->belongsTo('App\Models\Rrhh\OrganizationalUnit', 'ou_of_performance_id')->withTrashed();
+    /**
+     * Get the organizational unit of performance.
+     *
+     * @return BelongsTo
+     */
+    public function ouPerformance(): BelongsTo
+    {
+        return $this->belongsTo(\App\Models\Rrhh\OrganizationalUnit::class, 'ou_of_performance_id')->withTrashed();
     }
 
-    public function replacementStaff() {
-        return $this->belongsTo('App\Models\ReplacementStaff\ReplacementStaff');
+    /**
+     * Get the replacement staff that owns the request.
+     *
+     * @return BelongsTo
+     */
+    public function replacementStaff(): BelongsTo
+    {
+        return $this->belongsTo(ReplacementStaff::class);
     }
 
-    public function requestSign() {
-        return $this->hasMany('App\Models\ReplacementStaff\RequestSign');
+    /**
+     * Get the request signs for the request.
+     *
+     * @return HasMany
+     */
+    public function requestSign(): HasMany
+    {
+        return $this->hasMany(RequestSign::class);
     }
 
-    public function technicalEvaluation() {
-        return $this->hasOne('App\Models\ReplacementStaff\TechnicalEvaluation');
+    /**
+     * Get the technical evaluation for the request.
+     *
+     * @return HasOne
+     */
+    public function technicalEvaluation(): HasOne
+    {
+        return $this->hasOne(TechnicalEvaluation::class);
     }
 
-    public function assignEvaluations() {
-        return $this->hasMany('App\Models\ReplacementStaff\AssignEvaluation');
+    /**
+     * Get the assign evaluations for the request.
+     *
+     * @return HasMany
+     */
+    public function assignEvaluations(): HasMany
+    {
+        return $this->hasMany(AssignEvaluation::class);
     }
 
-    public function positions(){
-        return $this->hasMany('App\Models\ReplacementStaff\Position');
+    /**
+     * Get the positions for the request.
+     *
+     * @return HasMany
+     */
+    public function positions(): HasMany
+    {
+        return $this->hasMany(Position::class);
     }
 
-    public function budgetItem() {
-        return $this->belongsTo('App\Models\Parameters\BudgetItem');
+    /**
+     * Get the budget item that owns the request.
+     *
+     * @return BelongsTo
+     */
+    public function budgetItem(): BelongsTo
+    {
+        return $this->belongsTo(BudgetItem::class);
     }
 
-    public function signaturesFile(){
-        return $this->belongsTo('App\Models\Documents\SignaturesFile');
+    /**
+     * Get the signatures file that owns the request.
+     *
+     * @return BelongsTo
+     */
+    public function signaturesFile(): BelongsTo
+    {
+        return $this->belongsTo(\App\Models\Documents\SignaturesFile::class);
     }
 
     /**
      * Get all of the ModificationRequest's approvations.
+     *
+     * @return MorphMany
      */
-    public function approvals(): MorphMany{
+    public function approvals(): MorphMany
+    {
         return $this->morphMany(Approval::class, 'approvable');
     }
 
-    public function getLegalQualityValueAttribute() {
-        switch($this->legal_quality) {
-          case 'to hire':
-            return 'Contrata';
-            break;
-          case 'fee':
-            return 'Honorarios';
-            break;
+    public function getLegalQualityValueAttribute()
+    {
+        switch ($this->legal_quality) {
+            case 'to hire':
+                return 'Contrata';
+            case 'fee':
+                return 'Honorarios';
+            default:
+                return '';
         }
     }
 
-    public function getWorkDayValueAttribute() {
-        switch($this->work_day) {
-          case 'diurnal':
-            return 'Diurno';
-            break;
-          case 'third shift':
-            return 'Tercer Turno';
-            break;
-          case 'fourth shift':
-            return 'Cuarto Turno';
-            break;
-          case 'other':
-            return 'Otro';
-            break;
+    public function getWorkDayValueAttribute()
+    {
+        switch ($this->work_day) {
+            case 'diurnal':
+                return 'Diurno';
+            case 'third shift':
+                return 'Tercer Turno';
+            case 'fourth shift':
+                return 'Cuarto Turno';
+            case 'other':
+                return 'Otro';
+            default:
+                return '';
         }
     }
 
-    public function getFundamentValueAttribute() {
-        switch($this->fundament) {
-          case 'replacement':
-            return 'Reemplazo o Suplencia';
-            break;
-          case 'quit':
-            return 'Renuncia';
-            break;
-          case 'allowance without payment':
-            return 'Permiso sin goce de sueldo';
-            break;
-          case 'regularization work position':
-            return 'Regulación de cargos';
-            break;
-          case 'expand work position':
-            return 'Cargo expansión';
-            break;
-          case 'vacations':
-            return 'Feriado legal';
-            break;
-          case 'other':
-            return 'Otro';
-            break;
+    public function getFundamentValueAttribute()
+    {
+        switch ($this->fundament) {
+            case 'replacement':
+                return 'Reemplazo o Suplencia';
+            case 'quit':
+                return 'Renuncia';
+            case 'allowance without payment':
+                return 'Permiso sin goce de sueldo';
+            case 'regularization work position':
+                return 'Regulación de cargos';
+            case 'expand work position':
+                return 'Cargo expansión';
+            case 'vacations':
+                return 'Feriado legal';
+            case 'other':
+                return 'Otro';
+            default:
+                return '';
         }
     }
 
-    public function getStatusValueAttribute() {
-        switch($this->request_status) {
+    public function getStatusValueAttribute()
+    {
+        switch ($this->request_status) {
             case 'pending':
                 return 'Pendiente';
-                break;
             case 'complete':
                 return 'Finalizada';
-                break;
             case 'rejected':
                 return 'Rechazada';
-                break;
             case 'to assign':
                 return 'Pendiente';
-                break;
             case 'finance sign':
                 return 'Pendiente';
-                break;
+            default:
+                return '';
         }
     }
 
-    public function getFormTypeValueAttribute() {
-        switch($this->form_type) {
-          case 'replacement':
-            return 'Reemplazo';
-            break;
-          case 'announcement':
-            return 'Convocatoria';
-            break;
+    public function getFormTypeValueAttribute()
+    {
+        switch ($this->form_type) {
+            case 'replacement':
+                return 'Reemplazo';
+            case 'announcement':
+                return 'Convocatoria';
+            default:
+                return '';
         }
     }
 
-    public function getNumberOfDays() {
+    public function getNumberOfDays()
+    {
         $numberDays = 1 + $this->end_date->diff($this->start_date)->format("%a");
         return $numberDays;
     }
 
-    public static function getCurrentContinuity($requestReplacementStaff) {
-        if($requestReplacementStaff->requestChilds->count() > 0){
-            if($requestReplacementStaff->requestChilds->last()->request_status == 'complete' &&
-                $requestReplacementStaff->requestChilds->last()->end_date < now()->toDateString()){
-                return  $currentContinuity = 'no current';
+    public static function getCurrentContinuity($requestReplacementStaff)
+    {
+        if ($requestReplacementStaff->requestChilds->count() > 0) {
+            if ($requestReplacementStaff->requestChilds->last()->request_status == 'complete' &&
+                $requestReplacementStaff->requestChilds->last()->end_date < now()->toDateString()) {
+                return 'no current';
             }
-            if($requestReplacementStaff->requestChilds->last()->request_status == 'rejected'){
-                return  $currentContinuity = 'no current';
+            if ($requestReplacementStaff->requestChilds->last()->request_status == 'rejected') {
+                return 'no current';
             }
-        }
-        else{
-            return  $currentContinuity = 'no childs';
+        } else {
+            return 'no childs';
         }
     }
 
@@ -226,70 +361,54 @@ class RequestReplacementStaff extends Model implements Auditable
         $end_date_search, $name_search, $fundament_search, $fundament_detail_search, $name_to_replace_search,
         $sub_search)
     {
-        if ($form_type_search OR $status_search OR $id_search OR $start_date_search OR $end_date_search OR $name_search OR 
-            $fundament_search OR $fundament_detail_search OR $name_to_replace_search OR $sub_search) {
-            if($form_type_search != ''){
-                $query->where(function($q) use($form_type_search){
+        if ($form_type_search || $status_search || $id_search || $start_date_search || $end_date_search || $name_search || 
+            $fundament_search || $fundament_detail_search || $name_to_replace_search || $sub_search) {
+            if ($form_type_search != '') {
+                $query->where(function($q) use($form_type_search) {
                     $q->where('form_type', $form_type_search);
                 });
             }
-            if($status_search != ''){
-                $query->where(function($q) use($status_search){
+            if ($status_search != '') {
+                $query->where(function($q) use($status_search) {
                     $q->where('request_status', $status_search);
                 });
             }
-            if($id_search != ''){
-                $query->where(function($q) use($id_search){
+            if ($id_search != '') {
+                $query->where(function($q) use($id_search) {
                     $q->where('id', 'LIKE', '%'.$id_search.'%');
                 });
             }
-            if($start_date_search != '' && $end_date_search != ''){
-                $query->where(function($q) use($start_date_search, $end_date_search){
+            if ($start_date_search != '' && $end_date_search != '') {
+                $query->where(function($q) use($start_date_search, $end_date_search) {
                     $q->whereBetween('created_at', [$start_date_search, $end_date_search." 23:59:59"])->get();
                 });
             }
-            if($name_search != ''){
-                $query->where(function($q) use($name_search){
+            if ($name_search != '') {
+                $query->where(function($q) use($name_search) {
                     $q->where('name', 'LIKE', '%'.$name_search.'%');
                 });
             }
-            if($fundament_search != 0){
-                $query->whereHas('fundamentManage', function($q) use ($fundament_search){
+            if ($fundament_search != 0) {
+                $query->whereHas('fundamentManage', function($q) use ($fundament_search) {
                     $q->Where('fundament_manage_id', $fundament_search);
                 });
             }
-            if($fundament_detail_search != 0){
-                $query->whereHas('fundamentDetailManage', function($q) use ($fundament_detail_search){
+            if ($fundament_detail_search != 0) {
+                $query->whereHas('fundamentDetailManage', function($q) use ($fundament_detail_search) {
                     $q->Where('fundament_detail_manage_id', $fundament_detail_search);
                 });
             }
-            if($name_to_replace_search != ''){
-                $query->where(function($q) use($name_to_replace_search){
+            if ($name_to_replace_search != '') {
+                $query->where(function($q) use($name_to_replace_search) {
                     $q->where('name_to_replace', 'LIKE', '%'.$name_to_replace_search.'%')
-                    ->orwhere('run','LIKE', '%'.$name_to_replace_search.'%');
+                        ->orwhere('run','LIKE', '%'.$name_to_replace_search.'%');
                 });
             }
-            if(!empty($sub_search)){
-                $query->where(function($q) use($sub_search){
+            if (!empty($sub_search)) {
+                $query->where(function($q) use($sub_search) {
                     $q->whereIn('organizational_unit_id', $sub_search);
                 });
             }
         }
     }
-
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-
-    protected $hidden = [
-        'created_at', 'updated_at'
-    ];
-
-    protected $dates = [
-        'start_date','end_date'
-    ];
-
-    protected $table = 'rst_request_replacement_staff';
 }
