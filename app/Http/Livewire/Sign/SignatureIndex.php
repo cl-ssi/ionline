@@ -82,7 +82,7 @@ class SignatureIndex extends Component
              */
             $base64Image = app(ImageService::class)->createSignature($user);
 
-            dispatch(function () use ($signature, $signatureFlow, $user, $base64Image) {
+            dispatch_sync(function () use ($signature, $signatureFlow, $user, $base64Image) {
 
                 /**
                  * Parsing link signed_file a base64

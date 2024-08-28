@@ -1,42 +1,43 @@
 <?php
 namespace App\Logging;
-// use Illuminate\Log\Logger;
 use DB;
 use Monolog\Logger;
 use Monolog\Handler\AbstractProcessingHandler;
 
-class DatabaseHandler extends AbstractProcessingHandler {
+class DatabaseHandler extends AbstractProcessingHandler
+{
     public $table;
-/**
- *
- * Reference:
- * https://github.com/markhilton/monolog-mysql/blob/master/src/Logger/Monolog/Handler/MysqlHandler.php
- */
-    public function __construct($level = Logger::DEBUG, $bubble = true) {
+    /**
+     * Reference:
+     * https://github.com/markhilton/monolog-mysql/blob/master/src/Logger/Monolog/Handler/MysqlHandler.php
+     */
+    public function __construct($level = Logger::DEBUG, $bubble = true)
+    {
         $this->table = 'logs';
         parent::__construct($level, $bubble);
     }
-    protected function write(array $record):void
+
+    protected function write($record): void
     {
-       $data = array(
-           'user_id'       => (auth()->guard('web')->check() == true) ? auth()->user()->id : null,
-           'message'       => $record['message'],
-           'uri'           => $_SERVER['REQUEST_URI'] ?? '',
-           'formatted'     => $record['formatted'],
+        $data = array(
+            'user_id'         => (auth()->guard('web')->check() == true) ? auth()->user()->id : null,
+            'message'         => $record['message'],
+            'uri'             => $_SERVER['REQUEST_URI'] ?? '',
+            'formatted'       => $record['formatted'],
 
-           'context'       => json_encode($record['context']),
-           'level'         => $record['level'],
-           'level_name'    => $record['level_name'],
-           'channel'       => $record['channel'],
-           
-           'extra'         => json_encode($record['extra']),
-           'remote_addr'   => $_SERVER['HTTP_X_FORWARDED_FOR'] ?? $_SERVER['REMOTE_ADDR'] ?? null,
-           'user_agent'    => $_SERVER['HTTP_USER_AGENT'] ?? '',
-           'record_datetime' => $record['datetime']->format('Y-m-d H:i:s'),
-           'created_at'    => date("Y-m-d H:i:s"),
-       );
-       DB::connection()->table($this->table)->insert($data);
+            'context'         => json_encode($record['context']),
+            'level'           => $record['level'],
+            'level_name'      => $record['level_name'],
+            'channel'         => $record['channel'],
 
-       //dd($record);
+            'extra'           => json_encode($record['extra']),
+            'remote_addr'     => $_SERVER['HTTP_X_FORWARDED_FOR'] ?? $_SERVER['REMOTE_ADDR'] ?? null,
+            'user_agent'      => $_SERVER['HTTP_USER_AGENT'] ?? '',
+            'record_datetime' => $record['datetime']->format('Y-m-d H:i:s'),
+            'created_at'      => date("Y-m-d H:i:s"),
+        );
+        DB::connection()->table($this->table)->insert($data);
+
+        //dd($record);
     }
 }

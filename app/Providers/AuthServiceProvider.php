@@ -24,7 +24,8 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->registerPolicies();
+        /** Update laravel 10, ya no es necesario */
+        // $this->registerPolicies();
  
         /** Update to laravel 9.0 */
         // if (! $this->app->routesAreCached()) {
