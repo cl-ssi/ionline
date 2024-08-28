@@ -2,51 +2,91 @@
 
 namespace App\Models\ProfAgenda;
 
-use App\Models\ProfAgenda\OpenHour;
-use Illuminate\Database\Eloquent\Model;
-use OwenIt\Auditing\Contracts\Auditable;
-
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
+use OwenIt\Auditing\Auditable;
 
-class ExternalUser extends Model implements Auditable
+class ExternalUser extends Model implements AuditableContract
 {
-    use HasFactory;
-    use softDeletes;
-    use \OwenIt\Auditing\Auditable;
+    use HasFactory, SoftDeletes, Auditable;
 
-    protected $fillable = [
-        'id','dv','name','fathers_family','mothers_family','gender','email','address','phone_number', 'birthday','active'
-    ];
-
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
     protected $table = 'prof_agenda_external_users';
 
-    protected $dates = ['birthday'];
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'id',
+        'dv',
+        'name',
+        'fathers_family',
+        'mothers_family',
+        'gender',
+        'email',
+        'address',
+        'phone_number',
+        'birthday',
+        'active',
+    ];
 
-    public function getShortNameAttribute()
-    {
-        return implode(' ', array(
-            $this->name,
-            mb_convert_case($this->fathers_family,MB_CASE_TITLE, 'UTF-8'),
-            mb_convert_case($this->mothers_family,MB_CASE_TITLE, 'UTF-8')
-        ));
-    }
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'birthday' => 'date',
+    ];
 
-    public function getGender()
-    {
-        if(is_null($this->gender)) {
-            return "";
-        } else {
-            if($this->gender == "male"){ return "Masculino"; }
-            elseif($this->gender == "female"){ return "Femenino"; }
-            else{ return "Otro"; }
-        }
-    }
-
+    /**
+     * Get the open hours associated with the external user.
+     *
+     * @return HasMany
+     */
     public function openHours(): HasMany
     {
         return $this->hasMany(OpenHour::class);
+    }
+
+    /**
+     * Get the short name attribute for the external user.
+     *
+     * @return string
+     */
+    public function getShortNameAttribute(): string
+    {
+        return implode(' ', [
+            $this->name,
+            mb_convert_case($this->fathers_family, MB_CASE_TITLE, 'UTF-8'),
+            mb_convert_case($this->mothers_family, MB_CASE_TITLE, 'UTF-8')
+        ]);
+    }
+
+    /**
+     * Get the gender description for the external user.
+     *
+     * @return string
+     */
+    public function getGender(): string
+    {
+        if (is_null($this->gender)) {
+            return "";
+        } else {
+            return match($this->gender) {
+                "male" => "Masculino",
+                "female" => "Femenino",
+                default => "Otro",
+            };
+        }
     }
 }

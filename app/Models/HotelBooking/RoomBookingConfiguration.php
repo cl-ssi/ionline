@@ -4,38 +4,92 @@ namespace App\Models\HotelBooking;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use OwenIt\Auditing\Contracts\Auditable;
+use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
+use OwenIt\Auditing\Auditable;
 
-class RoomBookingConfiguration extends Model implements Auditable
+class RoomBookingConfiguration extends Model implements AuditableContract
 {
-    use HasFactory;
-    use softDeletes;
-    use \OwenIt\Auditing\Auditable;
+    use HasFactory, SoftDeletes, Auditable;
 
-    //
-    protected $fillable = [
-        'id','room_id','start_date','end_date','monday','tuesday','wednesday','thursday','friday','saturday','sunday','price','status'
-    ];
-
-    public function room()
-    {
-        return $this->belongsTo('App\Models\HotelBooking\Room');
-    }
-
-    public function day_array(){
-        $array = [];
-        if($this->monday){$array[1] = 1;}
-        if($this->tuesday){$array[2] = 1;}
-        if($this->wednesday){$array[3] = 1;}
-        if($this->thursday){$array[4] = 1;}
-        if($this->friday){$array[5] = 1;}
-        if($this->saturday){$array[6] = 1;}
-        if($this->sunday){$array[7] = 1;}
-        return $array;
-    }
-
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
     protected $table = 'hb_room_booking_configurations';
 
-    protected $dates = ['start_date','end_date'];
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'id',
+        'room_id',
+        'start_date',
+        'end_date',
+        'monday',
+        'tuesday',
+        'wednesday',
+        'thursday',
+        'friday',
+        'saturday',
+        'sunday',
+        'price',
+        'status',
+    ];
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'start_date' => 'date',
+        'end_date'   => 'date',
+    ];
+
+    /**
+     * Get the room that owns the booking configuration.
+     *
+     * @return BelongsTo
+     */
+    public function room(): BelongsTo
+    {
+        return $this->belongsTo(Room::class);
+    }
+
+    /**
+     * Generate an array of active days for the booking configuration.
+     *
+     * @return array
+     */
+    public function day_array(): array
+    {
+        $array = [];
+        if ($this->monday) {
+            $array[1] = 1;
+        }
+        if ($this->tuesday) {
+            $array[2] = 1;
+        }
+        if ($this->wednesday) {
+            $array[3] = 1;
+        }
+        if ($this->thursday) {
+            $array[4] = 1;
+        }
+        if ($this->friday) {
+            $array[5] = 1;
+        }
+        if ($this->saturday) {
+            $array[6] = 1;
+        }
+        if ($this->sunday) {
+            $array[7] = 1;
+        }
+        return $array;
+    }
 }

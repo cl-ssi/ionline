@@ -9,9 +9,32 @@ class BirthdayEmailConfiguration extends Model
 {
     use HasFactory;
 
-    protected $fillable = [ 'id', 'subject', 'tittle', 'message', 'status'];
-
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
     protected $table = 'rrhh_birthday_email_configuration';
 
-    protected $dates = ['timestamp'];
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'id',
+        'subject',
+        'tittle',
+        'message',
+        'status',
+    ];
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'timestamp' => 'datetime',
+    ];
 }

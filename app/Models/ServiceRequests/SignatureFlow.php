@@ -2,17 +2,25 @@
 
 namespace App\Models\ServiceRequests;
 
+use App\Models\Documents\Signature;
+use App\Models\Rrhh\OrganizationalUnit;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use OwenIt\Auditing\Contracts\Auditable;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
+use OwenIt\Auditing\Auditable;
 
-class SignatureFlow extends Model implements Auditable
+class SignatureFlow extends Model implements AuditableContract
 {
-    use \OwenIt\Auditing\Auditable;
-    use HasFactory;
-    use SoftDeletes;
-    
+    use Auditable, HasFactory, SoftDeletes;
+
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
     protected $table = 'doc_signature_flow';
 
     /**
@@ -21,33 +29,67 @@ class SignatureFlow extends Model implements Auditable
      * @var array
      */
     protected $fillable = [
-        'id', 'ou_id', 'derive_date','responsable_id','user_id','service_request_id','resolution_id', 'sign_position', 'type', 'employee', 'observation', 'signature_date', 'status'
+        'id',
+        'ou_id',
+        'derive_date',
+        'responsable_id',
+        'user_id',
+        'service_request_id',
+        'resolution_id',
+        'sign_position',
+        'type',
+        'employee',
+        'observation',
+        'signature_date',
+        'status',
     ];
 
     /**
-     * The attributes that should be mutated to dates.
+     * The attributes that should be cast to native types.
      *
      * @var array
      */
-    protected $dates = ['signature_date'];
+    protected $casts = [
+        'signature_date' => 'datetime',
+    ];
 
-    public function user()
+    /**
+     * Get the user responsible for this signature flow.
+     *
+     * @return BelongsTo
+     */
+    public function user(): BelongsTo
     {
-        return $this->belongsTo('App\Models\User','responsable_id')->withTrashed();
+        return $this->belongsTo(User::class, 'responsable_id')->withTrashed();
     }
 
-    public function serviceRequest()
+    /**
+     * Get the service request associated with this signature flow.
+     *
+     * @return BelongsTo
+     */
+    public function serviceRequest(): BelongsTo
     {
-        return $this->belongsTo('\App\Models\ServiceRequests\ServiceRequest');
+        return $this->belongsTo(ServiceRequest::class);
     }
 
-    public function resolution()
+    /**
+     * Get the resolution associated with this signature flow.
+     *
+     * @return BelongsTo
+     */
+    public function resolution(): BelongsTo
     {
-        return $this->belongsTo('App\Models\Documents\Signature');
+        return $this->belongsTo(Signature::class);
     }
 
-    public function organizationalUnit()
+    /**
+     * Get the organizational unit associated with this signature flow.
+     *
+     * @return BelongsTo
+     */
+    public function organizationalUnit(): BelongsTo
     {
-        return $this->belongsTo('App\Models\Rrhh\OrganizationalUnit','ou_id')->withTrashed();
+        return $this->belongsTo(OrganizationalUnit::class, 'ou_id')->withTrashed();
     }
 }

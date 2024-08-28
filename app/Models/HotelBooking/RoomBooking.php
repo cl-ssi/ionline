@@ -2,57 +2,108 @@
 
 namespace App\Models\HotelBooking;
 
+use App\Models\HotelBooking\Room;
+use App\Models\HotelBooking\RoomBookingFile;
+use App\Models\User;
+use Carbon\CarbonPeriod;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use OwenIt\Auditing\Contracts\Auditable;
+use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
+use OwenIt\Auditing\Auditable;
 
-use Carbon\CarbonPeriod;
-
-class RoomBooking extends Model implements Auditable
+class RoomBooking extends Model implements AuditableContract
 {
-    use HasFactory;
-    use softDeletes;
-    use \OwenIt\Auditing\Auditable;
+    use HasFactory, SoftDeletes, Auditable;
 
-    //
-    protected $fillable = [
-        'id','user_id','room_id','start_date','end_date','payment_type', 'status','cancelation_observation','observation'
-    ];
-
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
     protected $table = 'hb_room_bookings';
 
-    protected $dates = ['start_date','end_date'];
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'id',
+        'user_id',
+        'room_id',
+        'start_date',
+        'end_date',
+        'payment_type',
+        'status',
+        'cancelation_observation',
+        'observation',
+    ];
 
-    // relaciones
-    public function room()
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'start_date' => 'date',
+        'end_date'   => 'date',
+    ];
+
+    /**
+     * Get the room that owns the booking.
+     *
+     * @return BelongsTo
+     */
+    public function room(): BelongsTo
     {
-        return $this->belongsTo('App\Models\HotelBooking\Room');
+        return $this->belongsTo(Room::class);
     }
 
-    public function user()
+    /**
+     * Get the user that owns the booking.
+     *
+     * @return BelongsTo
+     */
+    public function user(): BelongsTo
     {
-        return $this->belongsTo('App\Models\User')->withTrashed();
+        return $this->belongsTo(User::class)->withTrashed();
     }
 
-    public function day_array(){
+    /**
+     * Get the files associated with the booking.
+     *
+     * @return HasMany
+     */
+    public function files(): HasMany
+    {
+        return $this->hasMany(RoomBookingFile::class);
+    }
+
+    /**
+     * Generate an array of days for the booking period.
+     *
+     * @return array
+     */
+    public function day_array(): array
+    {
         $array = [];
         $diff = $this->start_date->diffInDays($this->end_date);
-        if($this->start_date == $this->end_date){
+        if ($this->start_date == $this->end_date) {
             $array[$this->start_date->format('Y-m-d')] = "M";
-        }else{
+        } else {
             foreach (CarbonPeriod::create($this->start_date, '1 day', $this->end_date) as $position => $day) {
                 $array[$day->format('Y-m-d')] = "M";
-                if($position==0){$array[$day->format('Y-m-d')] = "I";}
-                if($position==$diff){$array[$day->format('Y-m-d')] = "T";}
+                if ($position == 0) {
+                    $array[$day->format('Y-m-d')] = "I";
+                }
+                if ($position == $diff) {
+                    $array[$day->format('Y-m-d')] = "T";
+                }
             }
         }
-        // dd($array);
         return $array;
-    }
-
-    public function files()
-    {
-        return $this->hasMany('App\Models\HotelBooking\RoomBookingFile');
     }
 }

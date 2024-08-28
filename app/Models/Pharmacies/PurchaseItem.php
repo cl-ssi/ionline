@@ -3,42 +3,67 @@
 namespace App\Models\Pharmacies;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class PurchaseItem extends Model
 {
-  /**
-   * The attributes that are mass assignable.
-   *
-   * @var array
-   */
-  protected $fillable = [
-      'id', 'barcode', 'purchase_id', 'product_id', 'amount', 'unity', 'unit_cost', 'due_date',
-      'establishments_id',
-      //'serial_number' ,
-      'batch','batch_id','created_at'
-  ];
+    use SoftDeletes;
 
-  use SoftDeletes;
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'frm_purchases_items';
 
-  protected $table = 'frm_purchases_items';
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'id',
+        'barcode',
+        'purchase_id',
+        'product_id',
+        'amount',
+        'unity',
+        'unit_cost',
+        'due_date',
+        'establishments_id',
+        //'serial_number',
+        'batch',
+        'batch_id',
+        'created_at',
+    ];
 
-  //relaciones
-  public function purchase()
-  {
-    return $this->belongsTo('App\Models\Pharmacies\Purchase');
-  }
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'due_date' => 'datetime',
+    ];
 
-  public function product()
-  {
-    return $this->belongsTo('App\Models\Pharmacies\Product')->withTrashed();
-  }
+    /**
+     * Get the purchase that owns the purchase item.
+     *
+     * @return BelongsTo
+     */
+    public function purchase(): BelongsTo
+    {
+        return $this->belongsTo(Purchase::class);
+    }
 
-  /**
-   * The attributes that should be mutated to dates.
-   *
-   * @var array
-   */
-  protected $dates = ['due_date'];
-
+    /**
+     * Get the product that owns the purchase item.
+     *
+     * @return BelongsTo
+     */
+    public function product(): BelongsTo
+    {
+        return $this->belongsTo(Product::class)->withTrashed();
+    }
 }
