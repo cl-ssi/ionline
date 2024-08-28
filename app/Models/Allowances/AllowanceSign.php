@@ -2,19 +2,17 @@
 
 namespace App\Models\Allowances;
 
-use App\Models\User;
 use App\Models\Rrhh\OrganizationalUnit;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Contracts\Auditable;
 
 class AllowanceSign extends Model implements Auditable
 {
-    use HasFactory;
-    use SoftDeletes;
-    use \OwenIt\Auditing\Auditable;
+    use HasFactory, SoftDeletes, \OwenIt\Auditing\Auditable;
 
     /**
      * The table associated with the model.
@@ -58,6 +56,8 @@ class AllowanceSign extends Model implements Auditable
 
     /**
      * Get the user that owns the allowance sign.
+     *
+     * @return BelongsTo
      */
     public function user(): BelongsTo
     {
@@ -66,6 +66,8 @@ class AllowanceSign extends Model implements Auditable
 
     /**
      * Get the organizational unit that owns the allowance sign.
+     *
+     * @return BelongsTo
      */
     public function organizationalUnit(): BelongsTo
     {
@@ -74,6 +76,8 @@ class AllowanceSign extends Model implements Auditable
 
     /**
      * Get the allowance that owns the allowance sign.
+     *
+     * @return BelongsTo
      */
     public function allowance(): BelongsTo
     {
@@ -82,28 +86,28 @@ class AllowanceSign extends Model implements Auditable
 
     /**
      * Get the next sign.
+     *
+     * @return AllowanceSign|null
      */
-    public function getNextSign()
+    public function getNextSign(): ?AllowanceSign
     {
-        $nextSign = AllowanceSign::where('allowance_id', $this->allowance_id)
+        return AllowanceSign::where('allowance_id', $this->allowance_id)
             ->where('position', $this->position + 1)
             ->first();
-
-        return $nextSign;
     }
 
     /**
      * Get the status value attribute.
+     *
+     * @return string
      */
-    public function getStatusValueAttribute()
+    public function getStatusValueAttribute(): string
     {
-        switch ($this->status) {
-            case 'pending':
-                return 'Pendiente de Aprobación';
-            case 'accepted':
-                return 'Aceptada';
-            case 'rejected':
-                return 'Rechazada';
-        }
+        return match ($this->status) {
+            'pending' => 'Pendiente de Aprobación',
+            'accepted' => 'Aceptada',
+            'rejected' => 'Rechazada',
+            default => 'Desconocido',
+        };
     }
 }
