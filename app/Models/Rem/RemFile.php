@@ -2,8 +2,10 @@
 
 namespace App\Models\Rem;
 
+use App\Models\Establishment;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 
@@ -34,8 +36,14 @@ class RemFile extends Model
         'period' => 'date:Y-m-d',
     ];
 
-    public function establishment() {
-        return $this->belongsTo('App\Models\Establishment');
+    /**
+     * Get the establishment that owns the place.
+     *
+     * @return BelongsTo
+     */
+    public function establishment(): BelongsTo
+    {
+        return $this->belongsTo(Establishment::class);
     }
 
     public function periodSerie() {

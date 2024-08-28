@@ -44,8 +44,6 @@ class ProposalDetail extends Model implements Auditable
         }
       }
 
-    // protected $dates = [''];
-
     // relaciones
     // public function commune()
     // {

@@ -2,8 +2,10 @@
 
 namespace App\Models\Programmings;
 
+use App\Models\Establishment;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use OwenIt\Auditing\Contracts\Auditable;
 
 class Programming extends Model implements Auditable
@@ -34,8 +36,14 @@ class Programming extends Model implements Auditable
         return $this->hasMany('App\Models\Programmings\ProfessionalHour');
     }
 
-    public function establishment() {
-        return $this->belongsTo('App\Models\Establishment');
+    /**
+     * Get the establishment that owns the place.
+     *
+     * @return BelongsTo
+     */
+    public function establishment(): BelongsTo
+    {
+        return $this->belongsTo(Establishment::class);
     }
 
     public function pendingItems(){

@@ -2,8 +2,11 @@
 
 namespace App\Models\Mammography;
 
+use App\Models\Establishment;
+use App\Models\Rrhh\OrganizationalUnit;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use OwenIt\Auditing\Contracts\Auditable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -28,12 +31,24 @@ class Mammography extends Model implements Auditable
         'arrival_at','dome_at', 'exam_date'
     ];
 
-    public function establishment() {
-        return $this->belongsTo('App\Models\Establishment');
+    /**
+     * Get the establishment that owns the place.
+     *
+     * @return BelongsTo
+     */
+    public function establishment(): BelongsTo
+    {
+        return $this->belongsTo(Establishment::class);
     }
 
-    public function ortanizationalUnit() {
-        return $this->belongsTo('App\Models\Rrhh\OrganizationalUnit');
+    /**
+     * Get the organizational unit that owns the document.
+     *
+     * @return BelongsTo
+     */
+    public function organizationalUnit(): BelongsTo
+    {
+        return $this->belongsTo(OrganizationalUnit::class);
     }
 
     public function fullName() {
