@@ -35,7 +35,6 @@ class Signature extends Model
     protected $fillable = [
         'document_number',
         'number',
-        'enumerate_at',
         'type_id',
         'reserved',
         'subject',
@@ -60,17 +59,16 @@ class Signature extends Model
     ];
 
     /**
-     * The attributes that should be mutated to dates.
+     * The attributes that should be cast to native types.
      *
      * @var array
      */
-    protected $dates = [
-        'status_at',
-        'document_number',
-        'enumerate_at',
+    protected $casts = [
+        'status_at'       => 'datetime',
+        'document_number' => 'datetime',
     ];
 
-/**
+    /**
      * Get the flows for the signature.
      *
      * @return HasMany
@@ -157,7 +155,7 @@ class Signature extends Model
 
     public function getStatusTranslateAttribute()
     {
-        switch ($this->status) {
+        switch ( $this->status ) {
             case 'pending':
                 $statusColor = 'pendiente';
                 break;
@@ -178,7 +176,7 @@ class Signature extends Model
 
     public function getStatusColorAttribute()
     {
-        switch ($this->status) {
+        switch ( $this->status ) {
             case 'pending':
                 $statusColor = 'warning';
                 break;
@@ -198,7 +196,7 @@ class Signature extends Model
 
     public function getStatusColorTextAttribute()
     {
-        switch ($this->status) {
+        switch ( $this->status ) {
             case 'pending':
                 $statusColor = 'dark';
                 break;
@@ -219,41 +217,33 @@ class Signature extends Model
 
     public function getSignaturesAttribute()
     {
-        $leftSignatures = $this->leftSignatures->sortBy('row_position');
+        $leftSignatures   = $this->leftSignatures->sortBy('row_position');
         $centerSignatures = $this->centerSignatures->sortBy('row_position');
-        $rightSignatures = $this->rightSignatures->sortBy('row_position');
+        $rightSignatures  = $this->rightSignatures->sortBy('row_position');
 
         return $leftSignatures->merge($centerSignatures)->merge($rightSignatures);
     }
 
     public function canSign($signatureFlow)
     {
-        if($this->typeByColumn($signatureFlow->column_position) == 'Opcional')
-        {
-            if($signatureFlow->status == 'signed') {
+        if ( $this->typeByColumn($signatureFlow->column_position) == 'Opcional' ) {
+            if ( $signatureFlow->status == 'signed' ) {
                 $can = false;
             } else {
                 $can = true;
             }
-        }
-        elseif($this->typeByColumn($signatureFlow->column_position) == 'Obligatorio sin Cadena de Responsabilidad')
-        {
-            if($signatureFlow->status == 'signed') {
+        } elseif ( $this->typeByColumn($signatureFlow->column_position) == 'Obligatorio sin Cadena de Responsabilidad' ) {
+            if ( $signatureFlow->status == 'signed' ) {
                 $can = false;
             } else {
                 $can = true;
             }
-        }
-        elseif($this->typeByColumn($signatureFlow->column_position) == 'Obligatorio en Cadena de Responsabilidad')
-        {
+        } elseif ( $this->typeByColumn($signatureFlow->column_position) == 'Obligatorio en Cadena de Responsabilidad' ) {
             $signers = $this->signersByColumn($signatureFlow->column_position);
 
-            if($signatureFlow->row_position == 0)
-            {
+            if ( $signatureFlow->row_position == 0 ) {
                 $can = $signatureFlow->status == 'pending' ? true : false;
-            }
-            else
-            {
+            } else {
                 $signerPrevious = $signers->firstWhere('row_position', $signatureFlow->row_position - 1);
 
                 $can = (isset($signerPrevious) && $signerPrevious->status == 'signed' && $signatureFlow->status == 'pending') ? true : false;
@@ -267,8 +257,7 @@ class Signature extends Model
     {
         $statusByColumn = collect();
 
-        foreach($this->columnAvailable as $column)
-        {
+        foreach ( $this->columnAvailable as $column ) {
             $status = $this->allSignedByColumn($column);
             $statusByColumn->push($status);
         }
@@ -301,35 +290,30 @@ class Signature extends Model
         /**
          * Si la columna es Opcional, puede firmar sin importa el orden del flujo
          */
-        if(isset($canSigner) && isset($typeFlow)) {
-            if($typeFlow == 'Opcional') {
+        if ( isset($canSigner) && isset($typeFlow) ) {
+            if ( $typeFlow == 'Opcional' ) {
                 return true;
             }
         }
 
         $signatureFlow = $signaturesFlows->where('status', 'pending')->firstWhere('signer_id', $signer);
 
-        if(!isset($signatureFlow) && isset($signer))
-        {
+        if ( !isset($signatureFlow) && isset($signer) ) {
             $signatureFlow = $signaturesFlows->where('status', 'pending')->firstWhere('signer_id', $signer);
         }
 
         $position = 0;
 
-        if(isset($signatureFlow)) {
-            $position = $this->columnAvailable->search(function ($column) use($signatureFlow) {
+        if ( isset($signatureFlow) ) {
+            $position = $this->columnAvailable->search(function ($column) use ($signatureFlow) {
                 return $column == $signatureFlow->column_position;
             });
         }
 
-        if($position == 0)
-        {
+        if ( $position == 0 ) {
             return $signatureFlow ? $this->canSign($signatureFlow) : false;
-        }
-        else
-        {
-            if($this->columnAvailable->count() > 0)
-            {
+        } else {
+            if ( $this->columnAvailable->count() > 0 ) {
                 $previous = $this->allSignedByColumn($this->columnAvailable->get($position - 1));
             }
 
@@ -339,17 +323,12 @@ class Signature extends Model
 
     public function typeByColumn($columnPosition)
     {
-        if($columnPosition == 'left')
-        {
+        if ( $columnPosition == 'left' ) {
             $type = $this->column_left_endorse;
-        }
-        elseif($columnPosition == 'center')
-        {
+        } elseif ( $columnPosition == 'center' ) {
             $type = $this->column_center_endorse;
 
-        }
-        elseif($columnPosition == 'right')
-        {
+        } elseif ( $columnPosition == 'right' ) {
             $type = $this->column_right_endorse;
         }
 
@@ -358,17 +337,12 @@ class Signature extends Model
 
     public function signersByColumn($columnPosition)
     {
-        if($columnPosition == 'left')
-        {
+        if ( $columnPosition == 'left' ) {
             $signers = $this->leftSignatures;
-        }
-        elseif($columnPosition == 'center')
-        {
+        } elseif ( $columnPosition == 'center' ) {
             $signers = $this->centerSignatures;
 
-        }
-        elseif($columnPosition == 'right')
-        {
+        } elseif ( $columnPosition == 'right' ) {
             $signers = $this->rightSignatures;
         }
 
@@ -377,16 +351,11 @@ class Signature extends Model
 
     public function allSignedByColumn($columnPosition)
     {
-        if($columnPosition == 'left')
-        {
+        if ( $columnPosition == 'left' ) {
             $allSigned = $this->leftAllSigned;
-        }
-        elseif($columnPosition == 'center')
-        {
+        } elseif ( $columnPosition == 'center' ) {
             $allSigned = $this->centerAllSigned;
-        }
-        elseif($columnPosition == 'right')
-        {
+        } elseif ( $columnPosition == 'right' ) {
             $allSigned = $this->rightAllSigned;
         }
 
@@ -401,42 +370,34 @@ class Signature extends Model
 
         $columnPosition = $this->columnBySignature;
 
-        if($columnPosition == 'left')
-        {
-            $type = $this->column_left_endorse;
+        if ( $columnPosition == 'left' ) {
+            $type    = $this->column_left_endorse;
             $signers = $this->leftSignatures;
-        }
-        elseif($columnPosition == 'center')
-        {
-            $type = $this->column_center_endorse;
+        } elseif ( $columnPosition == 'center' ) {
+            $type    = $this->column_center_endorse;
             $signers = $this->centerSignatures;
 
-        }
-        elseif($columnPosition == 'right')
-        {
-            $type = $this->column_right_endorse;
+        } elseif ( $columnPosition == 'right' ) {
+            $type    = $this->column_right_endorse;
             $signers = $this->rightSignatures;
         }
 
         $statusByColum = $this->getStatusColumn($columnPosition);
 
-        if($type == 'Opcional' OR $type == 'Obligatorio sin Cadena de Responsabilidad')
-        {
+        if ( $type == 'Opcional' or $type == 'Obligatorio sin Cadena de Responsabilidad' ) {
             $canSign = $statusByColum;
-        }
-        elseif($type == 'Obligatorio en Cadena de Responsabilidad')
-        {
+        } elseif ( $type == 'Obligatorio en Cadena de Responsabilidad' ) {
             $signer = $signers->firstWhere('signer_id', auth()->id());
 
-            if(!isset($signer))
+            if ( !isset($signer) )
                 $canSign = false;
 
-            if($signer->row_position == 0 && $signer->status == 'pending' && $statusByColum && $this->columnAvailable->first() )
+            if ( $signer->row_position == 0 && $signer->status == 'pending' && $statusByColum && $this->columnAvailable->first() )
                 $canSign = true;
             else {
                 $signerPrevious = $signers->firstWhere('row_position', $signer->row_position - 1);
 
-                if(isset($signerPrevious) && $signerPrevious->status == 'signed' && $signer->status == 'pending') {
+                if ( isset($signerPrevious) && $signerPrevious->status == 'signed' && $signer->status == 'pending' ) {
                     $canSign = true;
                 } else {
                     $canSign = false;
@@ -451,12 +412,9 @@ class Signature extends Model
     {
         $signedForMe = $this->flows->firstWhere('signer_id', auth()->id());
 
-        if(isset($signedForMe) && $signedForMe->status == 'pending')
-        {
+        if ( isset($signedForMe) && $signedForMe->status == 'pending' ) {
             return true;
-        }
-        else
-        {
+        } else {
             return false;
         }
     }
@@ -465,16 +423,11 @@ class Signature extends Model
     {
         $last = $this->columnAvailable->last();
 
-        if($last == 'left')
-        {
+        if ( $last == 'left' ) {
             $isReady = $this->leftAllSigned;
-        }
-        elseif($last == 'center')
-        {
+        } elseif ( $last == 'center' ) {
             $isReady = $this->centerAllSigned;
-        }
-        elseif($last == 'right')
-        {
+        } elseif ( $last == 'right' ) {
             $isReady = $this->rightAllSigned;
         }
 
@@ -489,8 +442,7 @@ class Signature extends Model
     public function getLinkSignedFileAttribute()
     {
         $link = null;
-        if(Storage::disk('gcs')->exists($this->signed_file))
-        {
+        if ( Storage::disk('gcs')->exists($this->signed_file) ) {
             $link = Storage::disk('gcs')->url($this->signed_file);
         }
 
@@ -500,8 +452,7 @@ class Signature extends Model
     public function getLinkFileAttribute()
     {
         $link = null;
-        if(Storage::disk('gcs')->exists($this->file))
-        {
+        if ( Storage::disk('gcs')->exists($this->file) ) {
             $link = Storage::disk('gcs')->url($this->file);
         }
 
@@ -527,18 +478,15 @@ class Signature extends Model
     {
         $available = collect();
 
-        if($this->leftSignatures->count() > 0)
-        {
+        if ( $this->leftSignatures->count() > 0 ) {
             $available->push('left');
         }
 
-        if($this->centerSignatures->count() > 0)
-        {
+        if ( $this->centerSignatures->count() > 0 ) {
             $available->push('center');
         }
 
-        if($this->rightSignatures->count() > 0)
-        {
+        if ( $this->rightSignatures->count() > 0 ) {
             $available->push('right');
         }
 
@@ -566,15 +514,12 @@ class Signature extends Model
             return $column == $columParameter;
         });
 
-        if($position == 0)
-        {
+        if ( $position == 0 ) {
             $available = true;
-        }
-        else
-        {
+        } else {
             $columnAvailable = $this->columnAvailable->toArray();
 
-            switch ($columnAvailable[$position - 1]) {
+            switch ( $columnAvailable[$position - 1] ) {
                 case 'left':
                     $available = $this->leftAllSigned;
                     break;
@@ -598,8 +543,7 @@ class Signature extends Model
 
     public function getLeftAllSignedAttribute()
     {
-        if($this->column_left_endorse == 'Opcional')
-        {
+        if ( $this->column_left_endorse == 'Opcional' ) {
             return true;
         }
 
@@ -608,8 +552,7 @@ class Signature extends Model
 
     public function getCenterAllSignedAttribute()
     {
-        if($this->column_center_endorse == 'Opcional')
-        {
+        if ( $this->column_center_endorse == 'Opcional' ) {
             return true;
         }
 
@@ -618,8 +561,7 @@ class Signature extends Model
 
     public function getRightAllSignedAttribute()
     {
-        if($this->column_right_endorse == 'Opcional')
-        {
+        if ( $this->column_right_endorse == 'Opcional' ) {
             return true;
         }
 
@@ -630,22 +572,19 @@ class Signature extends Model
     {
         $signedByColumn = collect();
 
-        if($this->leftSignatures->count() > 0)
-        {
+        if ( $this->leftSignatures->count() > 0 ) {
             $signedByColumn->push($this->allSignedByColumn('left'));
         }
 
-        if($this->centerSignatures->count() > 0)
-        {
+        if ( $this->centerSignatures->count() > 0 ) {
             $signedByColumn->push($this->allSignedByColumn('center'));
         }
 
-        if($this->rightSignatures->count() > 0)
-        {
+        if ( $this->rightSignatures->count() > 0 ) {
             $signedByColumn->push($this->allSignedByColumn('right'));
         }
 
-        return $signedByColumn->every(function($item) {
+        return $signedByColumn->every(function ($item) {
             return $item == true;
         });
     }
@@ -703,8 +642,7 @@ class Signature extends Model
 
         $columnPosition = null;
 
-        if(isset($signerFlow))
-        {
+        if ( isset($signerFlow) ) {
             $columnPosition = $signerFlow->column_position;
         }
 
@@ -717,8 +655,7 @@ class Signature extends Model
 
         $rowPosition = null;
 
-        if(isset($signerFlow))
-        {
+        if ( isset($signerFlow) ) {
             $rowPosition = $signerFlow->row_position;
         }
 
@@ -727,7 +664,7 @@ class Signature extends Model
 
     public function endorseBorderColumn($endorse)
     {
-        switch ($endorse) {
+        switch ( $endorse ) {
             case 'Obligatorio en Cadena de Responsabilidad':
                 return 'border-en-cadena';
                 break;
@@ -788,15 +725,15 @@ class Signature extends Model
          * Obtiene el ancho y largo del pdf
          */
         $fileContent = file_get_contents($linkDocument);
-        $pdf = new Fpdi('P', 'mm');
+        $pdf         = new Fpdi('P', 'mm');
         $pdf->setSourceFile(StreamReader::createByString($fileContent));
         $firstPage = $pdf->importPage(1);
-        $size = $pdf->getTemplateSize($firstPage);
+        $size      = $pdf->getTemplateSize($firstPage);
 
         /**
          * Calculo de milimetros a centimetros
          */
-        $widthFile = $size['width'] / 10;
+        $widthFile  = $size['width'] / 10;
         $heightFile = $size['height'] / 10;
 
         /**
@@ -818,13 +755,12 @@ class Signature extends Model
     {
         $padding = ($isVisator == true) ? 15 : SignatureFlow::PADDING;
 
-        return ($startY ?? SignatureFlow::START_Y) + (($position - 1) * $padding) ; // punto de inicio + (ancho de linea * posicion)
+        return ($startY ?? SignatureFlow::START_Y) + (($position - 1) * $padding); // punto de inicio + (ancho de linea * posicion)
     }
 
     public function calculateColumn($position)
     {
-        switch ($position)
-        {
+        switch ( $position ) {
             case 'left':
                 $x = 33;
                 break;
@@ -866,8 +802,7 @@ class Signature extends Model
 
     public function getUrl($modo)
     {
-        switch ($modo)
-        {
+        switch ( $modo ) {
             case Signature::modoDesatendidoTest():
                 $url = 'https://api.firma.test.digital.gob.cl/firma/v2/files/tickets';
                 break;
@@ -889,8 +824,7 @@ class Signature extends Model
 
     public function getEntity($modo)
     {
-        switch ($modo)
-        {
+        switch ( $modo ) {
             case Signature::modoDesatendidoTest():
                 $entity = 'Subsecretaría General de La Presidencia';
                 $entity = env('FIRMA_ENTITY');
@@ -914,8 +848,7 @@ class Signature extends Model
 
     public function getPurpose($modo)
     {
-        switch ($modo)
-        {
+        switch ( $modo ) {
             case Signature::modoDesatendidoTest():
                 $purpose = 'Desatendido';
                 break;
@@ -938,8 +871,7 @@ class Signature extends Model
 
     public function getRun($modo, $runParameter)
     {
-        switch ($modo)
-        {
+        switch ( $modo ) {
             case Signature::modoDesatendidoTest():
                 $run = 22222222;
                 $run = 15287582;
@@ -964,13 +896,13 @@ class Signature extends Model
     public function getPayload($modo, $run)
     {
         $purpose = app(Signature::class)->getPurpose($modo);
-        $entity = app(Signature::class)->getEntity($modo);
-        $run = app(Signature::class)->getRun($modo, $run);
+        $entity  = app(Signature::class)->getEntity($modo);
+        $run     = app(Signature::class)->getRun($modo, $run);
 
         $payload = [
-            "purpose" => $purpose,
-            "entity" => $entity,
-            "run" => $run,
+            "purpose"    => $purpose,
+            "entity"     => $entity,
+            "run"        => $run,
             "expiration" => now()->add(30, 'minutes')->format('Y-m-d\TH:i:s'),
         ];
 
@@ -981,26 +913,26 @@ class Signature extends Model
     {
         $checkSumPdf = md5($documentBase64);
 
-        $width = $isEnumerate ? 260 : 175;
+        $width  = $isEnumerate ? 260 : 175;
         $height = $isEnumerate ? 100 : 35;
 
         return [
             'api_token_key' => $apiToken,
-            'token' => $jwt,
-            'files' => [
+            'token'         => $jwt,
+            'files'         => [
                 [
                     'content-type' => 'application/pdf',
-                    'content' => $documentBase64,
-                    'description' => 'str',
-                    'checksum' => $checkSumPdf,
-                    'layout' => "
+                    'content'      => $documentBase64,
+                    'description'  => 'str',
+                    'checksum'     => $checkSumPdf,
+                    'layout'       => "
                         <AgileSignerConfig>
                             <Application id=\"THIS-CONFIG\">
                                 <pdfPassword/>
                                 <Signature>
                                     <Visible active=\"true\" layer2=\"false\" label=\"true\" pos=\"2\">
-                                        <llx>" . ($xCoordinate). "</llx>
-                                        <lly>" . ($yCoordinate). "</lly>
+                                        <llx>" . ($xCoordinate) . "</llx>
+                                        <lly>" . ($yCoordinate) . "</lly>
                                         <urx>" . ($xCoordinate + $width) . "</urx>
                                         <ury>" . ($yCoordinate + $height) . "</ury>
                                         <page>" . $page . "</page>
