@@ -124,6 +124,12 @@ class Cdp extends Model
             return;
         }
 
+        // Si ya existe un numerado, no se puede volver a numerar
+        if ($this->numeration) {
+            logger()->error('El documento ya ha sido numerado');
+            return;
+        }
+
         $this->numeration()->create([
             'automatic'              => true,
             'correlative'            => null, // sólo enviar si automatic es falso, para numeros custom
