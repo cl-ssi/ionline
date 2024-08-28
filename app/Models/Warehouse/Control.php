@@ -2,6 +2,8 @@
 
 namespace App\Models\Warehouse;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
@@ -23,8 +25,18 @@ class Control extends Model
 {
     use HasFactory, SoftDeletes;
 
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
     protected $table = 'wre_controls';
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
     protected $fillable = [
         'type',
         'date',
@@ -73,90 +85,174 @@ class Control extends Model
         'reception_id'
     ];
 
-    protected $dates = [
-        'date'
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'date' => 'date',
     ];
 
-    public function store()
+    /**
+     * Get the store that owns the control.
+     *
+     * @return BelongsTo
+     */
+    public function store(): BelongsTo
     {
         return $this->belongsTo(Store::class);
     }
 
-    public function program()
+    /**
+     * Get the program that owns the control.
+     *
+     * @return BelongsTo
+     */
+    public function program(): BelongsTo
     {
         return $this->belongsTo(Program::class);
     }
 
-    public function supplier()
+    /**
+     * Get the supplier that owns the control.
+     *
+     * @return BelongsTo
+     */
+    public function supplier(): BelongsTo
     {
         return $this->belongsTo(Supplier::class);
     }
 
-    public function purchaseOrder()
+    /**
+     * Get the purchase order that owns the control.
+     *
+     * @return BelongsTo
+     */
+    public function purchaseOrder(): BelongsTo
     {
         return $this->belongsTo(PurchaseOrder::class, 'po_id');
     }
 
-    public function requestForm()
+    /**
+     * Get the request form that owns the control.
+     *
+     * @return BelongsTo
+     */
+    public function requestForm(): BelongsTo
     {
         return $this->belongsTo(RequestForm::class);
     }
 
-    public function origin()
+    /**
+     * Get the origin that owns the control.
+     *
+     * @return BelongsTo
+     */
+    public function origin(): BelongsTo
     {
         return $this->belongsTo(Origin::class);
     }
 
-    public function destination()
+    /**
+     * Get the destination that owns the control.
+     *
+     * @return BelongsTo
+     */
+    public function destination(): BelongsTo
     {
         return $this->belongsTo(Destination::class);
     }
 
-    public function items()
+    /**
+     * Get the items for the control.
+     *
+     * @return HasMany
+     */
+    public function items(): HasMany
     {
         return $this->hasMany(ControlItem::class, 'control_id');
     }
 
-    public function typeDispatch()
+    /**
+     * Get the type dispatch that owns the control.
+     *
+     * @return BelongsTo
+     */
+    public function typeDispatch(): BelongsTo
     {
         return $this->belongsTo(TypeDispatch::class);
     }
 
-    public function typeReception()
+    /**
+     * Get the type reception that owns the control.
+     *
+     * @return BelongsTo
+     */
+    public function typeReception(): BelongsTo
     {
         return $this->belongsTo(TypeReception::class);
     }
 
-    public function destinationStore()
+    /**
+     * Get the destination store that owns the control.
+     *
+     * @return BelongsTo
+     */
+    public function destinationStore(): BelongsTo
     {
         return $this->belongsTo(Store::class, 'store_destination_id');
     }
 
-    public function originStore()
+    /**
+     * Get the origin store that owns the control.
+     *
+     * @return BelongsTo
+     */
+    public function originStore(): BelongsTo
     {
         return $this->belongsTo(Store::class, 'store_origin_id');
     }
 
-    public function invoices()
+    /**
+     * Get the invoices for the control.
+     *
+     * @return HasMany
+     */
+    public function invoices(): HasMany
     {
         return $this->hasMany(Invoice::class);
     }
 
-    public function organizationalUnit()
+    /**
+     * Get the organizational unit that owns the control.
+     *
+     * @return BelongsTo
+     */
+    public function organizationalUnit(): BelongsTo
     {
         return $this->belongsTo(OrganizationalUnit::class);
     }
 
-    /** Documentos Tributarios */
-    public function dtes()
+    /**
+     * Get the dtes for the control.
+     *
+     * @return HasMany
+     */
+    public function dtes(): HasMany
     {
-        return $this->hasMany(Dte::class,'folio_oc','po_code');
+        return $this->hasMany(Dte::class, 'folio_oc', 'po_code');
     }
 
     /**
      * Recepción Técnica: Usuario Firmante
      */
-    public function technicalSigner()
+    /**
+     * Get the technical signer that owns the control.
+     *
+     * @return BelongsTo
+     */
+    public function technicalSigner(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
@@ -164,7 +260,7 @@ class Control extends Model
     /**
      * Recepción Técnica: Firma Digital
      */
-    public function technicalSignature()
+    public function technicalSignature(): BelongsTo
     {
         return $this->belongsTo(Signature::class);
     }
@@ -172,15 +268,36 @@ class Control extends Model
     /**
      * Recepción Digital: Usuario que da Ingreso a Bodega (visador de la bodega)
      */
-    public function receptionVisator()
+        /**
+     * Get the reception visator that owns the control.
+     *
+     * @return BelongsTo
+     */
+    public function receptionVisator(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function reception()
+    /**
+     * Get the reception that owns the control.
+     *
+     * @return BelongsTo
+     */
+    public function reception(): BelongsTo
     {
         return $this->belongsTo(Reception::class);
     }
+
+    /**
+     * Get the approvals for the control.
+     *
+     * @return MorphMany
+     */
+    public function approvals(): MorphMany
+    {
+        return $this->morphMany(Approval::class, 'approvable');
+    }
+
 
     public function isReceiving()
     {
@@ -294,12 +411,6 @@ class Control extends Model
     public function getTotalAttribute()
     {
         return $this->net_total + $this->total_tax;
-    }
-
-        
-    public function approvals(): MorphMany
-    {
-        return $this->morphMany(Approval::class, 'approvable');
     }
 
     public function getFormatDateAttribute()
