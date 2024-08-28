@@ -43,14 +43,14 @@ class UploadCertificate extends Component
                     'id' => null,
                 ],
                 [
-                    'storage_path'  => '/ionline/trainings/attachments/certificate/'.$now.'_training_'.$this->training->id.'.'.$this->certificateFile->extension(),
+                    'storage_path'  => '/ionline/trainings/attachments/certificate/'.$now.'_certificate_'.$this->training->id.'.'.$this->certificateFile->extension(),
                     'stored'        => true,
                     'name'          => 'certificate_'.$this->training->id.'.pdf',
                     'type'          => 'certificate_file',
                     'stored_by_id'  => (auth()->guard('web')->check() == true) ? auth()->id() : null,
                 ]
             );
-            $this->certificateFile->storeAs('/ionline/trainings/attachments/training', $now.'_training_'.$this->training->id.'.'.$this->certificateFile->extension(), 'gcs');
+            $this->certificateFile->storeAs('/ionline/trainings/attachments/certificate', $now.'_certificate_'.$this->training->id.'.'.$this->certificateFile->extension(), 'gcs');
         }
 
         $this->training->status = 'complete';

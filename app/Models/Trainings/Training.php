@@ -147,6 +147,10 @@ class Training extends Model implements Auditable
         return in_array($this->StatusValue, ['Certificado Pendiente', 'Finalizado', 'Rechazado']);
     }
 
+    public function canViewCerticatePdf(){
+        return in_array($this->StatusValue, ['Finalizado']);
+    }
+
     public function getActivityTypeValueAttribute() {
         switch($this->activity_type) {
             case 'curso':

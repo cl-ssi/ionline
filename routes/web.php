@@ -2936,9 +2936,9 @@ Route::group(['middleware' => 'auth:external'], function () {
     Route::prefix('external_trainings')->as('external_trainings.')->group(function () {
         Route::get('/external_own_index', [TngTrainingController::class, 'external_own_index'])->name('external_own_index');
         Route::get('/external_create', [TngTrainingController::class, 'external_create'])->name('external_create');
-        Route::get('{training}/external_edit', [TngTrainingController::class, 'external_edit'])->name('external_edit');
-        Route::get('/{training}/show_file', [TrainingCreate::class, 'show_file'])->name('show_file');
-        Route::get('{training}/external_show', [TngTrainingController::class, 'external_show'])->name('external_show');
+        Route::get('/{training}/external_edit', [TngTrainingController::class, 'external_edit'])->name('external_edit');
+        Route::get('/{training}/show_file/{type}', [TrainingCreate::class, 'show_file'])->name('show_file');
+        Route::get('/{training}/external_show', [TngTrainingController::class, 'external_show'])->name('external_show');
     });
 });
 
