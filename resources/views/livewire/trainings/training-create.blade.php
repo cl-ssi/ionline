@@ -442,6 +442,14 @@
                 </a>
             </fieldset>
         @endif
+        @if(Route::is('external_trainings.external_edit'))
+            <fieldset class="form-group col-12 col-md-2">
+                <label for="for_rejoinder_file" class="form-label">&nbsp</label><br>
+                <a href="{{ route('external_trainings.show_file', ['training' => $training, 'type' => 'permission_file']) }}" target="_blank" class="btn btn-primary">
+                    <i class="fas fa-paperclip fa-fw"></i> Ver adjunto
+                </a>
+            </fieldset>
+        @endif
             
         <fieldset class="form-group col-12 col-md-4">
             <label for="for_municipal_profile">Perfil de Funcionario</label>
@@ -474,6 +482,14 @@
                 </a>
             </fieldset>
         @endif
+        @if(Route::is('external_trainings.external_edit'))
+            <fieldset class="form-group col-12 col-md-2">
+                <label for="for_rejoinder_file" class="form-label">&nbsp</label><br>
+                <a href="{{ route('external_trainings.show_file', ['training' => $training, 'type' => 'rejoinder_file']) }}" target="_blank" class="btn btn-primary">
+                    <i class="fas fa-paperclip fa-fw"></i> Ver adjunto
+                </a>
+            </fieldset>
+        @endif
     </div>
 
     <div class="row g-3 mb-3">
@@ -493,6 +509,12 @@
             @if(Route::is('trainings.edit'))
                 <label for="for_rejoinder_file" class="form-label">&nbsp</label><br>
                 <a class="btn btn-primary" href="{{ route('trainings.show_file', ['training' => $training, 'type' => 'program_file']) }}" target="_blank">
+                    <i class="fas fa-paperclip fa-fw"></i> Ver adjunto
+                </a>
+            @endif
+            @if(Route::is('external_trainings.external_edit'))
+                <label for="for_rejoinder_file" class="form-label">&nbsp</label><br>
+                <a class="btn btn-primary" href="{{ route('external_trainings.show_file', ['training' => $training, 'type' => 'program_file']) }}" target="_blank">
                     <i class="fas fa-paperclip fa-fw"></i> Ver adjunto
                 </a>
             @endif

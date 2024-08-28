@@ -111,6 +111,11 @@ class Cdp extends Model
 
     public function createNumeration(): void
     {
+        /**
+         * Este método no se está ocupando
+         * En el CdpController debería cambiarse para ocupar este método
+         * No he tenido tiempo de hacerlo
+         */
         $documentType = Type::where('name','Certificado disponibilidad presupuestaria')->first();
 
         // Si no existe el tipo de documento, no se puede numerar
@@ -126,7 +131,7 @@ class Cdp extends Model
 
         // Si ya existe un numerado, no se puede volver a numerar
         if ($this->numeration) {
-            logger()->error('El documento ya ha sido numerado');
+            logger()->error('El documento ya contiene un modelo numeration');
             return;
         }
 
@@ -141,18 +146,19 @@ class Cdp extends Model
             'establishment_id'       => $this->establishment_id,
         ]);
 
-        /* Numerar */
-        $user = User::find(Parameter::get('partes','numerador', $this->establishment_id));
+        /**
+         * El proceso de Numerar se hace en el módulo de partes en el menú numerar y distribuir
+         */
+        // $user = User::find(Parameter::get('partes','numerador', $this->establishment_id));
+        // $status = $this->numeration->numerate($user);
 
-        $status = $this->numeration->numerate($user);
-
-        if ($status === true) {
-            /** Fue numerado con éxito */
-            logger()->info('Numerado con éxito');
-        } 
-        else {
-            /** En caso de error al numerar */
-            logger()->error('Error al numerar');
-        }
+        // if ($status === true) {
+        //     /** Fue numerado con éxito */
+        //     logger()->info('Numerado con éxito');
+        // } 
+        // else {
+        //     /** En caso de error al numerar */
+        //     logger()->error('Error al numerar');
+        // }
     }
 }

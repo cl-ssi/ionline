@@ -139,7 +139,7 @@
                             @else
                                 @if(auth()->user()->id == $training->user_training_id)
                                     <button type="button" 
-                                        class="btn btn-outline-success btn-sm mt-1" 
+                                        class="btn btn-outline-success btn-sm" 
                                         data-bs-toggle="modal"
                                         title="Subir Certificado"
                                         data-bs-target="#exampleModal-{{ $training->id }}">

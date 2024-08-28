@@ -251,14 +251,14 @@ class TrainingCreate extends Component
                     'id' => ($training->file) ? $training->file->id : null,
                 ],
                 [
-                    'storage_path'  => '/ionline/trainings/attachments/permission/'.$now.'_training_'.$training->id.'.'.$this->permissionFile->extension(),
+                    'storage_path'  => '/ionline/trainings/attachments/permission/'.$now.'_permission_'.$training->id.'.'.$this->permissionFile->extension(),
                     'stored'        => true,
                     'name'          => 'permission_'.$training->id.'.pdf',
                     'type'          => 'permission_file',
                     'stored_by_id'  => (auth()->guard('web')->check() == true) ? auth()->id() : null,
                 ]
             );
-            $training->file = $this->permissionFile->storeAs('/ionline/trainings/attachments/permission', $now.'_training_'.$training->id.'.'.$this->permissionFile->extension(), 'gcs');
+            $training->file = $this->permissionFile->storeAs('/ionline/trainings/attachments/permission', $now.'_permission_'.$training->id.'.'.$this->permissionFile->extension(), 'gcs');
         }
 
         // CREAR O ACTUALIZAR ARCHIVO REPLICA
@@ -271,14 +271,14 @@ class TrainingCreate extends Component
                     'id' => ($rejoinder->isNotEmpty()) ? $rejoinder->id : null,
                 ],
                 [
-                    'storage_path'  => '/ionline/trainings/attachments/rejoinder/'.$now.'_training_'.$training->id.'.'.$this->rejoinderFile->extension(),
+                    'storage_path'  => '/ionline/trainings/attachments/rejoinder/'.$now.'_rejoinder_'.$training->id.'.'.$this->rejoinderFile->extension(),
                     'stored'        => true,
                     'name'          => 'rejoinder_'.$training->id.'.pdf',
                     'type'          => 'rejoinder_file',
                     'stored_by_id'  => (auth()->guard('web')->check() == true) ? auth()->id() : null,
                 ]
             );
-            $training->file = $this->rejoinderFile->storeAs('/ionline/trainings/attachments/rejoinder', $now.'_training_'.$training->id.'.'.$this->rejoinderFile->extension(), 'gcs');
+            $training->file = $this->rejoinderFile->storeAs('/ionline/trainings/attachments/rejoinder', $now.'_rejoinder_'.$training->id.'.'.$this->rejoinderFile->extension(), 'gcs');
         }
 
         // CREAR O ACTUALIZAR PROGRAMA
@@ -291,14 +291,14 @@ class TrainingCreate extends Component
                     'id' => ($program->isNotEmpty()) ? $program->id : null,
                 ],
                 [
-                    'storage_path'  => '/ionline/trainings/attachments/program/'.$now.'_training_'.$training->id.'.'.$this->programFile->extension(),
+                    'storage_path'  => '/ionline/trainings/attachments/program/'.$now.'_program_'.$training->id.'.'.$this->programFile->extension(),
                     'stored'        => true,
                     'name'          => 'program_'.$training->id.'.pdf',
                     'type'          => 'program_file',
                     'stored_by_id'  => (auth()->guard('web')->check() == true) ? auth()->id() : null,
                 ]
             );
-            $training->file = $this->programFile->storeAs('/ionline/trainings/attachments/program', $now.'_training_'.$training->id.'.'.$this->programFile->extension(), 'gcs');
+            $training->file = $this->programFile->storeAs('/ionline/trainings/attachments/program', $now.'_program_'.$training->id.'.'.$this->programFile->extension(), 'gcs');
         }
 
         if(auth()->guard('external')->check() == true){
