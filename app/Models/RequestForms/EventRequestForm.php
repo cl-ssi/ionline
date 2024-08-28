@@ -23,7 +23,7 @@ class EventRequestForm extends Model implements Auditable
      *
      * @var string
      */
-    protected $table = 'event_request_forms';
+    protected $table = 'arq_event_request_forms';
 
     /**
      * The attributes that are mass assignable.
