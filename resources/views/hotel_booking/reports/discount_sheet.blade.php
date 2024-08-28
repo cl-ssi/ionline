@@ -35,7 +35,7 @@
             <select class="form-control" id="for_status" name="status">
                 <option value="" @selected(request('status') == "")>Todos</option>
                 <option value="Reservado" @selected(request('status') == "Reservado")>Reservado</option>
-                <option value="Cancelado" @selected(request('status') == "Cancelado")>Cancelado</option>
+                <option value="Cancelado" @selected(request('status') == "Cancelado")>Anulado</option>
                 <option value="Confirmado" @selected(request('status') == "Confirmado")>Confirmado</option>
             </select>
         </div>
@@ -75,7 +75,7 @@
                     <td nowrap>{{ $booking->end_date->format('Y-m-d') }}</td>
                     <td>{{ $booking->payment_type }}</td>
                     <td>${{ $booking->room->price * $booking->start_date->diffInDays($booking->end_date) }}</td>
-                    <td>{{ $booking->status }}</td>
+                    <td>{{ $booking->status != "Cancelado" ? $booking->status : "Anulado" }}</td>
                     <td>{{ $booking->observation }}</td>
                 </tr>
             @endforeach

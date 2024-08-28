@@ -2,18 +2,23 @@
 
 namespace App\Models\ServiceRequests;
 
-use App\Models\Documents\SignaturesFile;
+use App\Models\User;
+use App\Models\Establishment;
+use OwenIt\Auditing\Auditable;
 use App\Models\Parameters\Bank;
 use App\Models\Parameters\Profession;
 use App\Models\Rrhh\OrganizationalUnit;
-use App\Models\User;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Models\Documents\SignaturesFile;
+use App\Models\ServiceRequests\Fulfillment;
+use App\Models\ServiceRequests\ShiftControl;
+use App\Models\ServiceRequests\SignatureFlow;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\ServiceRequests\ServiceRequest;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
-use OwenIt\Auditing\Auditable;
 
 class ServiceRequest extends Model implements AuditableContract
 {

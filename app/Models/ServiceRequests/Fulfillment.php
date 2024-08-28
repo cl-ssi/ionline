@@ -62,7 +62,7 @@ class Fulfillment extends Model implements AuditableContract
         'bill_number',
         'total_hours_to_pay',
         'total_to_pay',
-        'total_to_pay_add_date',
+        'total_to_pay_at',
         'total_hours_paid',
         'total_paid',
         'payment_date',
@@ -72,6 +72,7 @@ class Fulfillment extends Model implements AuditableContract
         'leave_of_absence',
         'assistance',
         'backup_assistance',
+        'signatures_file_id'
     ];
 
     /**
@@ -86,7 +87,8 @@ class Fulfillment extends Model implements AuditableContract
         'has_invoice_file_at' => 'datetime',
         'responsable_approbation_date' => 'datetime',
         'rrhh_approbation_date' => 'datetime',
-        'finances_approbation_date' => 'datetime'
+        'finances_approbation_date' => 'datetime',
+        'total_to_pay_at' => 'datetime'
     ];
 
     /**

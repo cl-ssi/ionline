@@ -139,22 +139,26 @@ class BookingAgenda extends Component
 
         $allow_consecutive_days = $openHour->activityType->allow_consecutive_days;
         $maximum_allowed_per_week = $openHour->activityType->maximum_allowed_per_week;
-        
-        // cuando no permite dias consecutivos
-        if($allow_consecutive_days == 0){
-            $search_days = [$openHour->start_date->day - 1, $openHour->start_date->day, $openHour->start_date->day + 1];
-            foreach($search_days as $search_day){
-                $consecutiveReservations = OpenHour::where('patient_id',auth()->user()->id)
-                                                    ->whereDay('start_date',$search_day)
-                                                    ->whereHas('activityType')
-                                                    ->where('id','<>',$openHour->id)
-                                                    ->where('profesional_id',$openHour->profesional_id)
-                                                    ->count();
 
-                if($consecutiveReservations > 0){
-                    session()->flash('message', 'No es posible realizar la reserva, porque este bloque está configurado para no ser reservado días consecutivos.');
-                    return;
-                }
+        // cuando no permite dias consecutivos
+        if ($allow_consecutive_days == 0) {
+            $previousDay = $openHour->start_date->copy()->subDay();
+            $nextDay = $openHour->start_date->copy()->addDay();
+            
+            $consecutiveReservations = OpenHour::where('patient_id', auth()->user()->id)
+                ->where(function ($query) use ($previousDay, $nextDay, $openHour) {
+                    $query->whereDate('start_date', $previousDay)
+                        ->orWhereDate('start_date', $openHour->start_date)
+                        ->orWhereDate('start_date', $nextDay);
+                })
+                ->whereHas('activityType')
+                ->where('id', '<>', $openHour->id)
+                ->where('profesional_id', $openHour->profesional_id)
+                ->count();
+    
+            if ($consecutiveReservations > 0) {
+                session()->flash('message', 'No es posible realizar la reserva, porque este bloque está configurado para no ser reservado días consecutivos.');
+                return;
             }
         }
         

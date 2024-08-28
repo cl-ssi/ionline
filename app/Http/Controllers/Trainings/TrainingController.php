@@ -139,10 +139,11 @@ class TrainingController extends Controller
         // APRUEBA
         if($approval->status == 1){
             if($process == 'end'){
+                // dd($approval->addBusinessDays($approval->approver_at, 20));
                 $training->status = 'pending certificate';
                 $training->save();
                 
-                $approval->approvable->userTraining->notify(new EndApprovalProcess($approval->approvable));
+                $approval->approvable->userTraining->notify(new EndApprovalProcess($training));
             }
         }   
 

@@ -197,6 +197,17 @@ class RequestReplacementStaff extends Model implements Auditable
     }
 
     /**
+     * Get the request signs for the request.
+     *
+     * @return HasMany
+     */
+    public function requestChilds(): HasMany
+    {
+        return $this->hasMany(RequestReplacementStaff::class, 'request_id');
+        // return $this->hasMany('App\Models\ReplacementStaff\RequestReplacementStaff', 'request_id');
+    }
+
+    /**
      * Get the technical evaluation for the request.
      *
      * @return HasOne
