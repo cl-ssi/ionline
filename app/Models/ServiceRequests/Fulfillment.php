@@ -2,22 +2,27 @@
 
 namespace App\Models\ServiceRequests;
 
-use App\Models\Documents\Approval;
-use App\Models\ServiceRequests\DenominationFormula;
-use App\Models\ServiceRequests\Denomination1121;
-use App\Models\User;
-use Carbon\Carbon;
-use DateInterval;
 use DatePeriod;
+use DateInterval;
+use Carbon\Carbon;
+use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use OwenIt\Auditing\Auditable;
+use App\Models\Documents\Approval;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Models\Documents\SignaturesFile;
+use App\Models\ServiceRequests\Attachment;
+use App\Models\ServiceRequests\ShiftControl;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\ServiceRequests\ServiceRequest;
+use App\Models\ServiceRequests\FulfillmentItem;
+use App\Models\ServiceRequests\Denomination1121;
+use App\Models\ServiceRequests\DenominationFormula;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
-use OwenIt\Auditing\Auditable;
 
 class Fulfillment extends Model implements AuditableContract
 {

@@ -845,11 +845,11 @@ class FulfillmentController extends Controller
 
     public function signedCertificatePDF(Fulfillment $fulfillment)
     {
-        return Storage::disk('gcs')->response($fulfillment->signedCertificate->signed_file);
-//        header('Content-Type: application/pdf');
-//        if (isset($fulfillment->signedCertificate)) {
-//            echo base64_decode($fulfillment->signedCertificate->signed_file);
-//        }
+        try {
+            return Storage::disk('gcs')->response($fulfillment->signedCertificate->signed_file);
+        } catch (\Exception $e) {
+            dd('No se pudo obtener el certificado firmado: ' .  $e);
+        }
     }
 
     public function deletesignedCertificatePDF(Fulfillment $fulfillment)
