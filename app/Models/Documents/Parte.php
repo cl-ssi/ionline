@@ -170,11 +170,11 @@ class Parte extends Model
     /**
      * Create partes for directors.
      *
-     * @param array $destinatarios
+     * @param string $destinatarios
      * @param SignaturesFlow $signaturesFlow
      * @return void
      */
-    public static function createPartesForDirectors(array $destinatarios, SignaturesFlow $signaturesFlow): void
+    public static function createPartesForDirectors($destinatarios, SignaturesFlow $signaturesFlow): void
     {
         // Limpiar los espacios en blanco alrededor de cada dirección de correo electrónico en el array de destinatarios
         $destinatarios = array_map('trim', explode(',', $destinatarios));
