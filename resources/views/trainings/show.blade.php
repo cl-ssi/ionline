@@ -199,13 +199,19 @@
                                 Programa
                                 @break
                         
-                            @default
-                                Default case...
+                            @case('certificate_file')
+                                Certificado
+                                @break
                         @endswitch
                     </td>
                     <td>
-                        <a class="btn btn-primary" href="{{ route('trainings.show_file', ['training' => $training, 'type' => $file->type]) }}" target="_blank">
-                            <i class="fas fa-paperclip fa-fw"></i> Ver adjunto
+                        <a class="btn btn-{{ $file->type == 'certificate_file' ? 'success' : 'primary' }} " href="{{ route('trainings.show_file', ['training' => $training, 'type' => $file->type]) }}" target="_blank">
+                            @if($file->type == 'certificate_file') 
+                                <i class="fas fa-file-pdf fa-fw"></i>
+                            @else    
+                                <i class="fas fa-paperclip fa-fw"></i> 
+                            @endif
+                            Ver adjunto
                         </a>
                     </td>
                 </tr>
@@ -230,7 +236,7 @@
                 <tr class="text-center">
                     @foreach($training->approvals as $approval)
                         <td>
-                            {{ $approval->StatusInWords }} <br><br>
+                            <p class="text-{{ $approval->Color }}">{{ $approval->StatusInWords }}</p>
                             @if($approval->approver) <i class="fas fa-user"></i> @endif {{ ($approval->approver) ? $approval->approver->FullName : null }}<br> 
                             @if($approval->approver) <i class="fas fa-calendar"></i> @endif {{ ($approval->approver) ? $approval->approver_at : null }}
                             

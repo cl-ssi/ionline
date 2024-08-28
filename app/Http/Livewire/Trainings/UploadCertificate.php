@@ -56,7 +56,13 @@ class UploadCertificate extends Component
         $this->training->status = 'complete';
         $this->training->save();
 
-        $this->emit('closeModal');
+        /*
+        if(auth()->guard('external')->check() == true){
+            $this->emit('closeModal', 'bootstrap4');
+        }
+        else{
+            $this->emit('closeModal', 'bootstrap5', $this->training->id);
+        }
 
         if(auth()->guard('external')->check() == true){
             session()->flash('message', 'El Certificado se ha guardado correctamente.');
@@ -65,5 +71,16 @@ class UploadCertificate extends Component
         else{
 
         }
+        */
+
+        if (auth()->guard('external')->check() == true) {
+            $this->emit('closeModal', 'bootstrap4');
+            $this->emit('redirectTo', route('external_trainings.external_own_index'));
+        } else {
+            $this->emit('closeModal', 'bootstrap5', $this->training->id);
+            $this->emit('redirectTo', route('trainings.own_index')); // Asegúrate de reemplazar 'your_route_name_here' con tu ruta real
+        }
+    
+        session()->flash('message', 'El Certificado se ha guardado correctamente.');
     }
 }
