@@ -2,9 +2,11 @@
 
 namespace App\Models\Parameters;
 
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Model;
 use App\Models\Establishment;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Location extends Model
 {
@@ -25,24 +27,34 @@ class Location extends Model
     protected $fillable = [
         'name',
         'address',
-        'establishment_id',
+        'establishment_id'
     ];
 
     /**
-     * The attributes that should be mutated to dates.
+     * The attributes that should be cast to native types.
      *
      * @var array
      */
-    protected $dates = [
-        'deleted_at',
+    protected $casts = [
+        //
     ];
 
-    public function places()
+    /**
+     * Get the places for the location.
+     *
+     * @return HasMany
+     */
+    public function places(): HasMany
     {
         return $this->hasMany(Place::class);
     }
 
-    public function establishment()
+    /**
+     * Get the establishment that owns the location.
+     *
+     * @return BelongsTo
+     */
+    public function establishment(): BelongsTo
     {
         return $this->belongsTo(Establishment::class);
     }

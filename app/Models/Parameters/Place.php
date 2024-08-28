@@ -6,6 +6,8 @@ use App\Models\Establishment;
 use App\Models\Inv\Inventory;
 use App\Models\Inv\InventoryMovement;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
@@ -13,6 +15,11 @@ class Place extends Model
 {
     use SoftDeletes;
 
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
     protected $table = 'cfg_places';
 
     /**
@@ -26,44 +33,75 @@ class Place extends Model
         'architectural_design_code',
         'location_id',
         'establishment_id',
-        'floor_number',
+        'floor_number'
     ];
 
     /**
-     * The attributes that should be mutated to dates.
+     * The attributes that should be cast to native types.
      *
      * @var array
      */
-    protected $dates = [
-        'deleted_at',
+    protected $casts = [
+        //
     ];
 
-    public function location()
+    /**
+     * Get the location that owns the place.
+     *
+     * @return BelongsTo
+     */
+    public function location(): BelongsTo
     {
         return $this->belongsTo(Location::class);
     }
 
-    public function computers()
-    {
-        return $this->hasMany('App\Models\Resources\Computer');
-    }
-
-    public function establishment()
+    /**
+     * Get the establishment that owns the place.
+     *
+     * @return BelongsTo
+     */
+    public function establishment(): BelongsTo
     {
         return $this->belongsTo(Establishment::class);
     }
 
-    public function inventories()
+    /**
+     * Get the computers for the place.
+     *
+     * @return HasMany
+     */
+    public function computers(): HasMany
+    {
+        return $this->hasMany(\App\Models\Resources\Computer::class);
+    }
+
+    /**
+     * Get the inventories for the place.
+     *
+     * @return HasMany
+     */
+    public function inventories(): HasMany
     {
         return $this->hasMany(Inventory::class, 'place_id');
     }
 
-    public function inventoryMovements()
+    /**
+     * Get the inventory movements for the place.
+     *
+     * @return HasMany
+     */
+    public function inventoryMovements(): HasMany
     {
         return $this->hasMany(InventoryMovement::class, 'place_id');
     }
 
-    public function getQrAttribute() {
+    /**
+     * Get the QR code attribute.
+     *
+     * @return string
+     */
+    public function getQrAttribute(): string
+    {
         return QrCode::size(150)
             ->generate(route('parameters.places.board', [
                 'establishment' => $this->establishment_id,
@@ -71,13 +109,17 @@ class Place extends Model
             ]));
     }
 
-    public function getQrSmallAttribute() {
+    /**
+     * Get the small QR code attribute.
+     *
+     * @return string
+     */
+    public function getQrSmallAttribute(): string
+    {
         return QrCode::size(74)
             ->generate(route('parameters.places.board', [
                 'establishment' => $this->establishment_id,
                 'place' => $this->id
             ]));
     }
-
-
 }

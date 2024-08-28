@@ -9,17 +9,31 @@ use OwenIt\Auditing\Contracts\Auditable;
 
 class StaffDecree extends Model implements Auditable
 {
-    use HasFactory;
-    use softDeletes;
-    use \OwenIt\Auditing\Auditable;
+    use HasFactory, SoftDeletes, \OwenIt\Auditing\Auditable;
 
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'cfg_staff_decrees';
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
     protected $fillable = [
-        'name', 'year'
-    ];
-
-    protected $dates = [
+        'name',
         'year'
     ];
 
-    protected $table = 'cfg_staff_decrees';
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'year' => 'integer'
+    ];
 }

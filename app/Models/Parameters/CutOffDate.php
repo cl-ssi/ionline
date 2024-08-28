@@ -8,16 +8,34 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class CutOffDate extends Model
 {
-    use HasFactory;
-    use SoftDeletes;
+    use HasFactory, SoftDeletes;
 
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
     protected $table = 'cfg_cut_off_dates';
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
     protected $fillable = [
-        'id', 'year', 'number', 'date'
+        'id',
+        'year',
+        'number',
+        'date'
     ];
 
-    protected $dates = [
-        'date'
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'year' => 'integer',
+        'date' => 'date'
     ];
 }
