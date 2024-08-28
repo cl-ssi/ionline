@@ -90,8 +90,8 @@ class Allowance extends Model implements Auditable
      * @var array
      */
     protected $casts = [
-        'from'  => 'date:d-m-Y',
-        'to'    => 'date:Y-m-d',
+        'from'  => 'date',
+        'to'    => 'date',
         'document_date' => 'date'
     ];
 
