@@ -6,11 +6,11 @@ use App\Models\Requirements\Requirement;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\SoftDeletes;
+// use Illuminate\Database\Eloquent\SoftDeletes;
 
 class RequirementStatus extends Model
 {
-    use SoftDeletes;
+    // use SoftDeletes;
 
     /**
      * The table associated with the model.
