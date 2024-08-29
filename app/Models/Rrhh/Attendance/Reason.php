@@ -5,10 +5,12 @@ namespace App\Models\Rrhh\Attendance;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\Rrhh\NoAttendanceRecord;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Reason extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     /**
     * The attributes that are mass assignable.
@@ -28,7 +30,7 @@ class Reason extends Model
     protected $table = 'rrhh_no_attendance_reasons';
     
 
-    public function noAttendanceRecords()
+    public function noAttendanceRecords(): HasMany
     {
         return $this->hasMany(NoAttendanceRecord::class);
     }
