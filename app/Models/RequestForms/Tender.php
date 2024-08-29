@@ -28,6 +28,26 @@ class Tender extends Model implements Auditable
         'start_date', 'guarantee_ticket_exp_date', 'creation_date', 'closing_date', 'initial_date', 'final_date', 'pub_answers_date', 'opening_act_date', 'pub_date', 'estimated_grant_date', 'grant_date', 'field_visit_date'
     ];
 
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'start_date'                => 'date',
+        'guarantee_ticket_exp_date' => 'date',
+        'creation_date'             => 'date',
+        'closing_date'              => 'date',
+        'initial_date'              => 'date', 
+        'final_date'                => 'date', 
+        'pub_answers_date'          => 'date',
+        'opening_act_date'          => 'date', 
+        'pub_date'                  => 'date', 
+        'estimated_grant_date'      => 'date', 
+        'grant_date'                => 'date', 
+        'field_visit_date'          => 'date'
+    ];
+
     public function purchaseType()
     {
         return $this->belongsTo(PurchaseType::class, 'purchase_type_id');
