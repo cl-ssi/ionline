@@ -71,7 +71,7 @@ class NoAttendanceRecord extends Model
      */
     public function reason(): BelongsTo
     {
-        return $this->belongsTo(Reason::class);
+        return $this->belongsTo(Reason::class)->withTrashed();
     }
 
     /**
