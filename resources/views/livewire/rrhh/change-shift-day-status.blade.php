@@ -22,7 +22,7 @@
 	@endif
 
 	<script>
-        document.addEventListener('livewire:load', function () {
+        document.addEventListener('livewire:init', function () {
             var color = "{{ $actuallyColor }}";
             document.getElementById('{{$shiftDay->id}}').style.background = color;
 

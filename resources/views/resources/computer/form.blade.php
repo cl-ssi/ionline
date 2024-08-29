@@ -93,7 +93,7 @@
             type="text"
             class="form-control @error('number_inventory') is-invalid @enderror"
             id="number-inventory"
-            wire:model.debounce.1500ms="number_inventory"
+            wire:model.live.debounce.1500ms="number_inventory"
         >
         @error('number_inventory')
             <span class="invalid-feedback" role="alert">
@@ -109,7 +109,7 @@
         <select
             class="form-control @error('status') is-invalid @enderror"
             id="status"
-            wire:model.debounce.1500ms="status"
+            wire:model.live.debounce.1500ms="status"
         >
             <option value="">Seleccione un estado</option>
             <option value="1">Bueno</option>
@@ -131,7 +131,7 @@
             type="text"
             class="form-control @error('observations') is-invalid @enderror"
             id="observations"
-            wire:model.debounce.1500ms="observations"
+            wire:model.live.debounce.1500ms="observations"
         >
         @error('observations')
             <span class="invalid-feedback" role="alert">
@@ -150,7 +150,7 @@
             type="text"
             class="form-control @if($computer && !$computer->isMerged()) is-valid @endif @error('inventory_brand') is-invalid @enderror"
             id="i-brand"
-            wire:model.debounce.1500ms="inventory_brand"
+            wire:model.live.debounce.1500ms="inventory_brand"
         >
         @error('inventory_brand')
             <span class="invalid-feedback" role="alert">
@@ -167,7 +167,7 @@
             type="text"
             class="form-control @if($computer && !$computer->isMerged()) is-valid @endif @error('inventory_model') is-invalid @enderror"
             id="i-model"
-            wire:model.debounce.1500ms="inventory_model"
+            wire:model.live.debounce.1500ms="inventory_model"
         >
         @error('inventory_model')
             <span class="invalid-feedback" role="alert">
@@ -184,7 +184,7 @@
             type="text"
             class="form-control @if($computer && !$computer->isMerged()) is-valid @endif @error('inventory_serial_number') is-invalid @enderror"
             id="i-serial-number"
-            wire:model.debounce.1500ms="inventory_serial_number"
+            wire:model.live.debounce.1500ms="inventory_serial_number"
         >
         @error('inventory_serial_number')
             <span class="invalid-feedback" role="alert">
@@ -206,7 +206,7 @@
                 type="text"
                 class="form-control is-invalid @error('computer_brand') is-invalid @enderror"
                 id="c-brand"
-                wire:model.debounce.1500ms="computer_brand"
+                wire:model.live.debounce.1500ms="computer_brand"
             >
             @error('computer_brand')
                 <span class="invalid-feedback" role="alert">
@@ -221,7 +221,7 @@
                 type="text"
                 class="form-control is-invalid @error('computer_model') is-invalid @enderror"
                 id="c-model"
-                wire:model.debounce.1500ms="computer_model"
+                wire:model.live.debounce.1500ms="computer_model"
             >
             @error('computer_model')
                 <span class="invalid-feedback" role="alert">
@@ -236,7 +236,7 @@
                 type="text"
                 class="form-control is-invalid @error('computer_serial_number') is-invalid @enderror"
                 id="c-serial-number"
-                wire:model.debounce.1500ms="computer_serial_number"
+                wire:model.live.debounce.1500ms="computer_serial_number"
             >
             @error('computer_serial_number')
                 <span class="invalid-feedback" role="alert">
@@ -254,7 +254,7 @@
             type="text"
             class="form-control @error('hostname') is-invalid @enderror"
             id="for-hostname"
-            wire:model.debounce.1500ms="hostname"
+            wire:model.live.debounce.1500ms="hostname"
         >
         @error('hostname')
             <span class="invalid-feedback" role="alert">
@@ -269,7 +269,7 @@
             type="text"
             class="form-control @error('domain') is-invalid @enderror"
             id="domain"
-            wire:model.debounce.1500ms="domain"
+            wire:model.live.debounce.1500ms="domain"
         >
         @error('domain')
             <span class="invalid-feedback" role="alert">
@@ -285,7 +285,7 @@
             class="form-control @error('ip') is-invalid @enderror"
             id="ip"
             placeholder="10.x.x.x"
-            wire:model.debounce.1500ms="ip"
+            wire:model.live.debounce.1500ms="ip"
         >
         @error('ip')
             <span class="invalid-feedback" role="alert">
@@ -301,7 +301,7 @@
             class="form-control @error('mac_address') is-invalid @enderror"
             id="mac-address"
             placeholder="00:1B:2C:3D:xx:xx"
-            wire:model.debounce.1500ms="mac_address"
+            wire:model.live.debounce.1500ms="mac_address"
         >
         @error('mac_address')
             <span class="invalid-feedback" role="alert">
@@ -318,7 +318,7 @@
             name="ip_group"
             id="ip-group"
             class="form-control @error('ip_group') is-invalid @enderror"
-            wire:model.debounce.1500ms="ip_group"
+            wire:model.live.debounce.1500ms="ip_group"
         >
             <option value="">Seleccione un grupo</option>
             <option value="standard">
@@ -344,7 +344,7 @@
             type="text"
             class="form-control @error('rack') is-invalid @enderror"
             id="rack"
-            wire:model.debounce.1500ms="rack"
+            wire:model.live.debounce.1500ms="rack"
         >
         @error('rack')
             <span class="invalid-feedback" role="alert">
@@ -359,7 +359,7 @@
             type="IP"
             class="form-control @error('vlan') is-invalid @enderror"
             id="vlan"
-            wire:model.debounce.1500ms="vlan"
+            wire:model.live.debounce.1500ms="vlan"
         >
         @error('vlan')
             <span class="invalid-feedback" role="alert">
@@ -375,7 +375,7 @@
             class="form-control @error('network_segment') is-invalid @enderror"
             id="network-segment"
             placeholder="x.x.x.0"
-            wire:model.debounce.1500ms="network_segment"
+            wire:model.live.debounce.1500ms="network_segment"
         >
         @error('network_segment')
             <span class="invalid-feedback" role="alert">
@@ -393,7 +393,7 @@
             class="form-control @error('operating_system') is-invalid @enderror"
             id="operating-system"
             placeholder="Ej: Windows 7, Windows 10, Linux, etc."
-            wire:model.debounce.1500ms="operating_system"
+            wire:model.live.debounce.1500ms="operating_system"
         >
         @error('operating_system')
             <span class="invalid-feedback" role="alert">
@@ -409,7 +409,7 @@
             class="form-control @error('processor') is-invalid @enderror"
             id="processor"
             placeholder="Ej: I7 3.6GHz"
-            wire:model.debounce.1500ms="processor"
+            wire:model.live.debounce.1500ms="processor"
         >
         @error('processor')
             <span class="invalid-feedback" role="alert">
@@ -425,7 +425,7 @@
             class="form-control @error('ram') is-invalid @enderror"
             id="ram"
             placeholder="Ej: 8GB"
-            wire:model.debounce.1500ms="ram"
+            wire:model.live.debounce.1500ms="ram"
         >
         @error('ram')
             <span class="invalid-feedback" role="alert">
@@ -441,7 +441,7 @@
             class="form-control @error('hard_disk') is-invalid @enderror"
             id="hard-disk"
             placeholder="Ej: 1TB"
-            wire:model.debounce.1500ms="hard_disk"
+            wire:model.live.debounce.1500ms="hard_disk"
         >
         @error('hard_disk')
             <span class="invalid-feedback" role="alert">
@@ -458,7 +458,7 @@
             type="text"
             class="form-control @error('intesis_id') is-invalid @enderror"
             id="intesis-id"
-            wire:model.debounce.1500ms="intesis_id"
+            wire:model.live.debounce.1500ms="intesis_id"
         >
         @error('intesis_id')
             <span class="invalid-feedback" role="alert">
@@ -473,7 +473,7 @@
             type="text"
             class="form-control @error('comment') is-invalid @enderror"
             id="comment"
-            wire:model.debounce.1500ms="comment"
+            wire:model.live.debounce.1500ms="comment"
         >
         @error('comment')
             <span class="invalid-feedback" role="alert">
@@ -487,7 +487,7 @@
         <select
             class="form-control @error('active_type') is-invalid @enderror"
             id="active-type"
-            wire:model.debounce.1500ms="active_type"
+            wire:model.live.debounce.1500ms="active_type"
         >
             <option value="">Seleccione un tipo</option>
             <option value="leased">
@@ -515,7 +515,7 @@
             type="text"
             class="form-control @error('office_serial') is-invalid @enderror"
             id="office-serial"
-            wire:model.debounce.1500ms="office_serial"
+            wire:model.live.debounce.1500ms="office_serial"
         >
         @error('office_serial')
             <span class="invalid-feedback" role="alert">
@@ -530,7 +530,7 @@
             type="text"
             class="form-control @error('windows_serial') is-invalid @enderror"
             id="windows-serial"
-            wire:model.debounce.1500ms="windows_serial"
+            wire:model.live.debounce.1500ms="windows_serial"
         >
         @error('windows_serial')
             <span class="invalid-feedback" role="alert">

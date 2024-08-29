@@ -13,7 +13,7 @@
             </div>
             <div class="col-md-2">
                 <label class="form-label">Año</label>
-                <select class="form-control" wire:model="year" required>
+                <select class="form-control" wire:model.live="year" required>
                     <option value=""></option>
                     <option value="2023">2023</option>
                     <option value="2024">2024</option>
@@ -24,7 +24,7 @@
             </div>
             <div class="col-md-2">
                 <label class="form-label">Mes</label>
-                <select class="form-control" wire:model="month" required>
+                <select class="form-control" wire:model.live="month" required>
                     <option value=""></option>
                     <option value="1">Enero</option>
                     <option value="2">Febrero</option>
@@ -43,12 +43,12 @@
             </div>
             <div class="col">
                 <label class="form-label">Cantidad</label>
-                <input type="text" class="form-control" wire:model="quantity" required>
+                <input type="text" class="form-control" wire:model.live="quantity" required>
                 @error('quantity') <span class="error">{{ $message }}</span> @enderror
             </div>
             <div class="col">
                 <labe class="form-label">Observación</label>
-                <input type="text" class="form-control" wire:model="observation">
+                <input type="text" class="form-control" wire:model.live="observation">
                 @error('observation') <span class="error">{{ $message }}</span> @enderror
             </div>
             <div class="col-1">

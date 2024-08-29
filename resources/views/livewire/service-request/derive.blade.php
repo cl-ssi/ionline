@@ -4,7 +4,7 @@
         <fieldset class="form-group col">
             <label for="for_type">Tipo</label>
             <div id="for-picker-t">
-                <select class="form-control" wire:model="type" required>
+                <select class="form-control" wire:model.live="type" required>
                     <option value=""></option>
                     <option value="Responsable">Responsable</option>
                     <option value="Supervisor">Supervisor</option>

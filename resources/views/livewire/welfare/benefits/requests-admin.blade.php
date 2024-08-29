@@ -6,16 +6,16 @@
     <br>
     <div>
         <label>
-            <input type="checkbox" wire:model="statusFilters" value="En revisión"> En revisión
+            <input type="checkbox" wire:model.live="statusFilters" value="En revisión"> En revisión
         </label>
         <label>
-            <input type="checkbox" wire:model="statusFilters" value="Aceptado"> Aceptado
+            <input type="checkbox" wire:model.live="statusFilters" value="Aceptado"> Aceptado
         </label>
         <label>
-            <input type="checkbox" wire:model="statusFilters" value="Rechazado"> Rechazado
+            <input type="checkbox" wire:model.live="statusFilters" value="Rechazado"> Rechazado
         </label>
         <label>
-            <input type="checkbox" wire:model="statusFilters" value="Pagado"> Pagado
+            <input type="checkbox" wire:model.live="statusFilters" value="Pagado"> Pagado
         </label>
     </div>
     <br>
@@ -57,7 +57,7 @@
                         @if($request->status != "En revisión")
                             <div class="input-group mb-3">
                                 <span class="input-group-text" id="" style="align-self: flex-start; height: auto;">Observación</span>
-                                <textarea class="form-control" wire:model.defer="requests.{{$key}}.status_update_observation" style="height: 100px;">
+                                <textarea class="form-control" wire:model="requests.{{$key}}.status_update_observation" style="height: 100px;">
                                 </textarea>
                                 <div wire:loading wire:target="saveObservation">
                                     <i class="fas fa-spinner fa-spin"></i> Espere...
@@ -133,7 +133,7 @@
                         </div>
                         @if($showTextarea)
                             <div class="mt-2">
-                                <textarea class="form-control" wire:model.defer="observation" placeholder="Ingrese la observación"></textarea>
+                                <textarea class="form-control" wire:model="observation" placeholder="Ingrese la observación"></textarea>
                                 <div wire:loading wire:target="saveCancelObservation">
                                     <i class="fas fa-spinner fa-spin"></i> Espere...
                                 </div>
@@ -149,7 +149,7 @@
                     <td class="text-end">
                         <div class="input-group mb-3">
                             <span class="input-group-text" id="">$</span>
-                            <input type="number" class="form-control" wire:model.defer="requests.{{$key}}.accepted_amount" @disabled($request->status != "Aceptado")>
+                            <input type="number" class="form-control" wire:model="requests.{{$key}}.accepted_amount" @disabled($request->status != "Aceptado")>
                             
                             <div wire:loading wire:target="saveAcceptedAmount">
                                 <i class="fas fa-spinner fa-spin"></i> Espere...
@@ -163,7 +163,7 @@
                         </div>
                         <div class="input-group mb-3">
                             <span class="input-group-text" id="">Folio</span>
-                            <input type="text" class="form-control" wire:model.defer="requests.{{$key}}.folio_number" @disabled($request->status != "Aceptado")>
+                            <input type="text" class="form-control" wire:model="requests.{{$key}}.folio_number" @disabled($request->status != "Aceptado")>
                             
                             <div wire:loading wire:target="saveFolio">
                                 <i class="fas fa-spinner fa-spin"></i> Espere...
@@ -179,7 +179,7 @@
                         @if($request->accepted_amount != null && $request->subsidy->payment_in_installments)
                             <div class="input-group mb-3">
                                 <span class="input-group-text" id="">N°Cuotas</span>
-                                <input type="number" class="form-control" wire:model.defer="requests.{{$key}}.installments_number" @disabled($request->status != "Aceptado")>
+                                <input type="number" class="form-control" wire:model="requests.{{$key}}.installments_number" @disabled($request->status != "Aceptado")>
                                 <button wire:click="saveInstallmentsNumber({{ $key }})" class="btn btn-primary" type="button" @disabled($request->status != "Aceptado")>
                                     <i class="bi bi-floppy"></i>
                                 </button>

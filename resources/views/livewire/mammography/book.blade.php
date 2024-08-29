@@ -34,12 +34,12 @@
                             <li class="list-group-item">
                                 <i class="fas fa-clock"></i> {{ $slot->start_at->format('H:i') }}
                                 @if($slot->available > $slot->used)
-                                    <form wire:submit.prevent="booking({{ $slot->id }})" method="POST">
+                                    <form wire:submit="booking({{ $slot->id }})" method="POST">
                                         <div class="form-row col-md-4">
                                           <label for="for_legal_quality" >Teléfono</label>
                                           <div class="input-group">
                                               <input type="text" class="form-control" name="telephone" id="for_telephone"  placeholder="+569xxxxxxxx"
-                                                  wire:model="telephone" required>
+                                                  wire:model.live="telephone" required>
                                               <button class="btn btn-sm btn-primary ml-3">Reservar</button>
                                           </div>
                                         </div>

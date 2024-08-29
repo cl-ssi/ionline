@@ -21,7 +21,7 @@
           </fieldset>
           <fieldset class="form-group col mt">
               <label for="for_profile_manage_id">Estamento</label>
-              <select name="profile_manage_id" class="form-control" wire:model="profileSelected" required>
+              <select name="profile_manage_id" class="form-control" wire:model.live="profileSelected" required>
                   <option value="">Seleccione</option>
                   @foreach($profiles as $profile)
                       <option value="{{ $profile->id }}">{{ $profile->name }}</option>

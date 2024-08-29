@@ -7,7 +7,7 @@
                 class="form-control"
                 id="search-store-product"
                 placeholder="Búsqueda por código de barra o nombre"
-                wire:model.debounce.1500ms="search_store_product"
+                wire:model.live.debounce.1500ms="search_store_product"
             >
         </fieldset>
     </div>
@@ -36,7 +36,7 @@
                 </div>
                 <select
                     class="form-control @error('control_item_id') is-invalid @enderror"
-                    wire:model.debounce.1500ms="control_item_id"
+                    wire:model.live.debounce.1500ms="control_item_id"
                     id="product-search"
                 >
                     <option value="">Selecciona un producto o servicio</option>
@@ -78,7 +78,7 @@
                 class="form-control @error('quantity') is-invalid @enderror"
                 min="1"
                 max="{{ $max }}"
-                wire:model.debounce.1500ms="quantity"
+                wire:model.live.debounce.1500ms="quantity"
                 id="quantity"
             >
             <small id="quantity" class="form-text text-muted">

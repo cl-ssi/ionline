@@ -55,7 +55,7 @@
 
 @section('custom_js')
 <script>
-    document.addEventListener('livewire:load', function () {
+    document.addEventListener('livewire:init', function () {
         var organizational_unit_id = @this.organizational_unit_id;
         var establishment_id = @this.establishment_id;
 

@@ -23,13 +23,13 @@
 
         <fieldset class="form-group col-12 col-md-3">
             <label>Número de Teléfono</label>
-            <input type="text" wire:model.lazy="phone_number" class="form-control" required>
+            <input type="text" wire:model.blur="phone_number" class="form-control" required>
             @error('phone_number') <span class="text-danger">{{ $message }}</span> @enderror
         </fieldset>
 
         <fieldset class="form-group col-12 col-md-4">
             <label>E-mail</label>
-            <input type="email" wire:model.lazy="email" class="form-control" required>
+            <input type="email" wire:model.blur="email" class="form-control" required>
             @error('email') <span class="text-danger">{{ $message }}</span> @enderror
         </fieldset>
     </div>
@@ -39,7 +39,7 @@
     <div class="form-row">
         <fieldset class="form-group col-12 col-md-5">
             <label>Banco</label>        
-            <select wire:model.lazy="bank_id" class="form-control" required>
+            <select wire:model.blur="bank_id" class="form-control" required>
             <option value="">Seleccionar Banco</option>
             @foreach($banks as $bank)
             <option value="{{$bank->id}}">{{$bank->name}}</option>
@@ -51,13 +51,13 @@
 
         <fieldset class="form-group col-12 col-md-3">
             <label>Número de Cuenta</label>
-            <input type="number" wire:model.lazy="account_number" class="form-control" required>
+            <input type="number" wire:model.blur="account_number" class="form-control" required>
             @error('account_number') <span class="text-danger">{{ $message }}</span> @enderror
         </fieldset>
         
         <fieldset class="form-group col-12 col-md-4">
             <label for="for_pay_method">Tipo de Pago</label>
-            <select wire:model.lazy="pay_method" class="form-control">
+            <select wire:model.blur="pay_method" class="form-control">
             <option value="">Seleccionar Forma de Pago</option>
             <option value="01">CTA CORRIENTE / CTA VISTA</option>
             <option value="02">CTA AHORRO</option>

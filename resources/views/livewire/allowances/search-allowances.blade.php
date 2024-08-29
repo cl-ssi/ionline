@@ -5,7 +5,7 @@
         <div class="form-row">
             <fieldset class="form-group col-12 col-md-2">
                 <label for="for_status_search">Estado Viático</label>
-                <select name="status_search" class="form-control form-control-sm" wire:model.debounce.500ms="selectedStatus">
+                <select name="status_search" class="form-control form-control-sm" wire:model.live.debounce.500ms="selectedStatus">
                     <option value="">Seleccione...</option>
                     <option value="pending">Pendiente</option>
                     <option value="completed">Finalizado</option>
@@ -16,19 +16,19 @@
             <fieldset class="form-group col-12 col-md-1">
                 <label for="for_id">ID</label>
                 <input class="form-control form-control-sm" type="number" name="id_search" autocomplete="off" 
-                    placeholder="001" wire:model.debounce.500ms="selectedId">
+                    placeholder="001" wire:model.live.debounce.500ms="selectedId">
             </fieldset>
 
             <fieldset class="form-group col-12 col-md-3">
                 <label for="for_requester">Funcionario</label>
                 <input class="form-control form-control-sm" type="text" autocomplete="off" placeholder="NOMBRE / APELLIDOS"
-                    name="user_allowance_search" wire:model.debounce.500ms="selectedUserAllowance">
+                    name="user_allowance_search" wire:model.live.debounce.500ms="selectedUserAllowance">
             </fieldset>
 
             @if($index == 'sign' && auth()->user()->hasPermissionTo('Allowances: sirh'))
                 <fieldset class="form-group col-12 col-md-2">
                     <label for="for_status_search">Estado Revisión SIRH</label>
-                    <select name="status_sirh_search" class="form-control form-control-sm" wire:model.debounce.500ms="selectedStatusSirh">
+                    <select name="status_sirh_search" class="form-control form-control-sm" wire:model.live.debounce.500ms="selectedStatusSirh">
                         <option value="">Seleccione...</option>
                         <option value="pending">Pendiente</option>
                         <option value="accepted">Aprobado</option>
@@ -40,7 +40,7 @@
             @if(auth()->user()->hasPermissionTo('Allowances: all establishment') && $index == 'all')
                 <fieldset class="form-group col-12 col-md-2">
                     <label for="for_status_search">Establecimiento</label>
-                    <select name="establishment_search" class="form-control form-control-sm" wire:model.debounce.500ms="selectedEstablishment">
+                    <select name="establishment_search" class="form-control form-control-sm" wire:model.live.debounce.500ms="selectedEstablishment">
                         <option value="">Seleccione...</option>
                         <option value="{{ App\Models\Parameters\Parameter::get('establishment', 'SSTarapaca') }}">Servicio de Salud Tarápaca</option>
                         <option value="{{ App\Models\Parameters\Parameter::get('establishment', 'HospitalAltoHospicio') }}">Hospital Alto Hospicio</option>

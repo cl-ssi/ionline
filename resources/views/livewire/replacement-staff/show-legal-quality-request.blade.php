@@ -2,7 +2,7 @@
 <fieldset class="form-group col">
     <label for="for_legal_quality_manage_id" > /  /  / </label>
     <div class="input-group">
-        <select name="legal_quality_manage_id" id="for_legal_quality_manage_id" class="form-control" wire:model="selectedLegalQuality" required>
+        <select name="legal_quality_manage_id" id="for_legal_quality_manage_id" class="form-control" wire:model.live="selectedLegalQuality" required>
           <option value="">Seleccione...</option>
           @foreach($legal_qualities as $legal_quality)
               <option value="{{ $legal_quality->id }}" @if($requestReplacementStaff) {{ ($requestReplacementStaff->legal_quality_manage_id == $legalQualitySelected) ? 'selected' : '' }} @endif>{{ $legal_quality->NameValue }}</option>
@@ -12,7 +12,7 @@
         <input type="number" class="form-control" name="salary"
             id="for_salary" placeholder="$" {{ $salaryStateInput }} @if($requestReplacementStaff) value="{{ $requestReplacementStaff->salary }}" @endif>
 
-        <select name="fundament_manage_id" id="for_fundament_manage_id" class="form-control" wire:model="selectedFundament" required>
+        <select name="fundament_manage_id" id="for_fundament_manage_id" class="form-control" wire:model.live="selectedFundament" required>
             <option value="">Seleccione...</option>
             @if(!is_null($fundamentLegalQualities))
             @foreach($fundamentLegalQualities as $fundamentLegalQuality)
@@ -24,7 +24,7 @@
             @endif
         </select>
 
-        <select name="fundament_detail_manage_id" id="for_fundament_detail_manage_id" class="form-control" wire:model="selectedFundamentDetail" onchange="remoteWorking()">
+        <select name="fundament_detail_manage_id" id="for_fundament_detail_manage_id" class="form-control" wire:model.live="selectedFundamentDetail" onchange="remoteWorking()">
             <option value="">Seleccione...</option>
             @if(!is_null($detailFundaments))
             @foreach($detailFundaments as $detailFundament)
@@ -45,7 +45,7 @@
     <div class="form-row">
         <fieldset class="form-group col-12 col-md-3">
             <label for="for_user_id">Calidad Jurídica</label>
-            <select name="legal_quality_manage_id" id="for_legal_quality_manage_id" class="form-control" wire:model="selectedLegalQuality" required {{ $isDisabled }}>
+            <select name="legal_quality_manage_id" id="for_legal_quality_manage_id" class="form-control" wire:model.live="selectedLegalQuality" required {{ $isDisabled }}>
                 <option value="">Seleccione...</option>
                 @foreach($legal_qualities as $legal_quality)
                     <option value="{{ $legal_quality->id }}" @if($requestReplacementStaff) {{ ($requestReplacementStaff->legal_quality_manage_id == $legalQualitySelected) ? 'selected' : '' }} @endif>{{ $legal_quality->NameValue }}</option>
@@ -61,7 +61,7 @@
 
         <fieldset class="form-group col-12 col-md-3">
             <label for="for_user_id">Fundamento</label>
-            <select name="fundament_manage_id" id="for_fundament_manage_id" class="form-control" wire:model="selectedFundament" required {{ $isDisabled }}>
+            <select name="fundament_manage_id" id="for_fundament_manage_id" class="form-control" wire:model.live="selectedFundament" required {{ $isDisabled }}>
                 <option value="">Seleccione...</option>
                 @if(!is_null($fundamentLegalQualities))
                 @foreach($fundamentLegalQualities as $fundamentLegalQuality)
@@ -76,7 +76,7 @@
 
         <fieldset class="form-group col-12 col-md-3">
             <label for="for_user_id">Detalle Fundamento</label>
-            <select name="fundament_detail_manage_id" id="for_fundament_detail_manage_id" class="form-control" wire:model="selectedFundamentDetail" onchange="remoteWorking()" @if($selectedLegalQuality == 1 && $formType == 'announcement') disabled @endif {{ $isDisabledDetailFundament }} required>
+            <select name="fundament_detail_manage_id" id="for_fundament_detail_manage_id" class="form-control" wire:model.live="selectedFundamentDetail" onchange="remoteWorking()" @if($selectedLegalQuality == 1 && $formType == 'announcement') disabled @endif {{ $isDisabledDetailFundament }} required>
                 <option value="">Seleccione...</option>
                 @if(!is_null($detailFundaments))
                 @foreach($detailFundaments as $detailFundament)
@@ -96,7 +96,7 @@
 
         <fieldset class="form-group col-12 col-md-3">
             <label for="profiles">Estamento</label>
-            <select name="profile_manage_id" id="for_profile_manage_id" class="form-control" wire:model="selectedProfile" required {{ $isDisabled }}>
+            <select name="profile_manage_id" id="for_profile_manage_id" class="form-control" wire:model.live="selectedProfile" required {{ $isDisabled }}>
                 <option value="">Seleccione...</option>
                 @foreach($profiles as $profile)
                     <option value="{{ $profile->id }}" @if($requestReplacementStaff) {{ ($requestReplacementStaff->profile_manage_id == $profileSelected) ? 'selected' : '' }} @endif >{{ $profile->name }}</option>
@@ -108,11 +108,11 @@
             <label for="for_law">Ley</label>
             <div class="mt-1">
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="law" id="for_law" value="18834" wire:model.debounce.500ms="selectedLaw" required>
+                    <input class="form-check-input" type="radio" name="law" id="for_law" value="18834" wire:model.live.debounce.500ms="selectedLaw" required>
                     <label class="form-check-label" for="for_law">N° 18.834</label>
                 </div>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="law" id="for_law" value="19664" wire:model.debounce.500ms="selectedLaw" required>
+                    <input class="form-check-input" type="radio" name="law" id="for_law" value="19664" wire:model.live.debounce.500ms="selectedLaw" required>
                     <label class="form-check-label" for="for_law">N° 19.664</label>
                 </div>
             </div>

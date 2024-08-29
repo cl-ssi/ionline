@@ -5,7 +5,7 @@
                 @csrf
                 @method('DELETE')
 
-                    <select wire:model="cancelationReason" name="cancelation_observation" class="form-control">
+                    <select wire:model.live="cancelationReason" name="cancelation_observation" class="form-control">
                         <option value="">Seleccione un motivo</option>
                         <option value="No cuenta con el 15% legal para descuento por planilla">No cuenta con el 15% legal para descuento por planilla.</option>
                         <option value="Por mantención de cabaña">Por mantención de cabaña.</option>

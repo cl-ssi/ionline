@@ -2,20 +2,20 @@
     <div class="col-6 col-md-3">
         <label for="responsible">Responsable</label>
         <input type="text"
-            wire:model.defer="filter.responsible"
+            wire:model="filter.responsible"
             class="form-control">
     </div>
 
     <div class="col-6 col-md-3">
         <label for="subject">Asunto</label>
         <input type="text"
-            wire:model.defer="filter.subject"
+            wire:model="filter.subject"
             class="form-control">
     </div>
 
     <div class="col-6 col-md-2">
         <label for="status">Estado</label>
-        <select wire:model.defer="filter.status"
+        <select wire:model="filter.status"
             class="form-select">
             <option value=""></option>
             <option value="1">Terminado</option>

@@ -5,7 +5,7 @@
             <div wire:ignore id="for-bootstrap-select">
                 <!-- <select class="form-control" data-container="#for-bootstrap-select"> -->
                 <select class="form-control selectpicker" data-live-search="true" id="ou" name="to_ou_id" 
-                        required data-size="5" wire:model.lazy="to_ou_id" data-container="#for-bootstrap-select">
+                        required data-size="5" wire:model.blur="to_ou_id" data-container="#for-bootstrap-select">
                         <option value=""></option>
                         @if($ouRoots)
                             @foreach($ouRoots as $ou)
@@ -20,7 +20,7 @@
         <fieldset class="form-group @if($parte_id <> 0) col-12 @else col-6 @endif">
             <label for="for_origin">Destinatario</label>
             <div class="input-group">
-                <select class="form-control" name="to_user_id" id="user" required="" wire:model.defer="to_user_id" >
+                <select class="form-control" name="to_user_id" id="user" required="" wire:model="to_user_id" >
                     @if($users)
                         @foreach($users as $user)
                             <option value="{{$user->id}}">@if($this->authority != null && $this->authority->user_id == $user->id)👑@endif {{ $user->tinnyName }}</option>

@@ -1,7 +1,7 @@
 <div>
 
     @if ($editing)
-        <input class="form-control-sm" wire:model.defer="nuevoFolioDevengo" type="text" placeholder="Ingrese el folio devengo sigfe">
+        <input class="form-control-sm" wire:model="nuevoFolioDevengo" type="text" placeholder="Ingrese el folio devengo sigfe">
         @if(!$onlyRead)
             <button class="btn btn-sm btn-primary" 
                 wire:click="guardarFolioDevengo">

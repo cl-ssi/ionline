@@ -13,7 +13,7 @@
                 for="for-input_item_a">Item A</label>
 
             <input type="text"
-                wire:model.defer="input_item_a"
+                wire:model="input_item_a"
                 class="form-control @error('input_item_a') is-invalid @enderror"
                 id="for-input_item_a"
                 placeholder="Nro.Inv. A">
@@ -32,7 +32,7 @@
                 for="for-input_item_b">Item B</label>
 
             <input type="text"
-                wire:model.defer="input_item_b"
+                wire:model="input_item_b"
                 class="form-control @error('input_item_b') is-invalid @enderror"
                 id="for-input_item_b"
                 placeholder="Nro.Inv. B">
@@ -75,7 +75,7 @@
                                 type="radio"
                                 name="for-id"
                                 id="for-id"
-                                wire:model="fusion.id"
+                                wire:model.live="fusion.id"
                                 value="A{{ $item_a->id }}"
                                 required>
                             <label class="form-check-label"
@@ -88,7 +88,7 @@
                                 type="radio"
                                 name="for-id"
                                 id="for-id"
-                                wire:model="fusion.id"
+                                wire:model.live="fusion.id"
                                 value="B{{ $item_b->id }}">
                             <label class="form-check-label"
                                 for="for-id">{{ $item_b->number }}</label>
@@ -108,7 +108,7 @@
                                 type="radio"
                                 name="for-old_number"
                                 id="for-old_number"
-                                wire:model.defer="fusion.old_number"
+                                wire:model="fusion.old_number"
                                 value="A{{ $item_a->old_number }}"
                                 >
                             <label class="form-check-label"
@@ -120,7 +120,7 @@
                             <input class="form-check-input @error('fusion.old_number') is-invalid @enderror"
                                 type="radio"
                                 name="for-old_number"
-                                wire:model.defer="fusion.old_number"
+                                wire:model="fusion.old_number"
                                 value="B{{ $item_a->old_number }}"
                                 >
                             <label class="form-check-label"
@@ -141,7 +141,7 @@
                                 type="radio"
                                 name="for-code"
                                 id="for-code"
-                                wire:model.defer="fusion.unspsc_product_id"
+                                wire:model="fusion.unspsc_product_id"
                                 value="A{{ $item_a->unspsc_product_id }}"
                                 required>
                             <label class="form-check-label"
@@ -155,7 +155,7 @@
                                 type="radio"
                                 name="for-code"
                                 id="for-code"
-                                wire:model.defer="fusion.unspsc_product_id"
+                                wire:model="fusion.unspsc_product_id"
                                 value="B{{ $item_b->unspsc_product_id }}"
                                 >
                             <label class="form-check-label"
@@ -174,7 +174,7 @@
                                 type="radio"
                                 name="for-product"
                                 id="for-product"
-                                wire:model.defer="fusion.product_id"
+                                wire:model="fusion.product_id"
                                 value="A{{ $item_a->product_id }}"
                                 required>
                             <label class="form-check-label"
@@ -187,7 +187,7 @@
                                 type="radio"
                                 name="for-product"
                                 id="for-product"
-                                wire:model.defer="fusion.product_id"
+                                wire:model="fusion.product_id"
                                 value="B{{ $item_b->product_id }}"
                                 >
                             <label class="form-check-label"
@@ -205,7 +205,7 @@
                                 type="radio"
                                 name="for-description"
                                 id="for-description"
-                                wire:model.defer="fusion.description"
+                                wire:model="fusion.description"
                                 value="A{{ $item_a->description }}"
                                 required>
                             <label class="form-check-label"
@@ -218,7 +218,7 @@
                                 type="radio"
                                 name="for-description"
                                 id="for-description"
-                                wire:model.defer="fusion.description"
+                                wire:model="fusion.description"
                                 value="B{{ $item_b->description }}"
                                 >
                             <label class="form-check-label"
@@ -240,7 +240,7 @@
                                 type="radio"
                                 name="for-internal_description"
                                 id="for-internal_description"
-                                wire:model.defer="fusion.internal_description"
+                                wire:model="fusion.internal_description"
                                 value="A{{ $item_a->internal_description }}"
                                 >
                             <label class="form-check-label"
@@ -253,7 +253,7 @@
                                 type="radio"
                                 name="for-internal_description"
                                 id="for-internal_description"
-                                wire:model.defer="fusion.internal_description"
+                                wire:model="fusion.internal_description"
                                 value="B{{ $item_b->internal_description }}"
                                 >
                             <label class="form-check-label"
@@ -272,7 +272,7 @@
                                 type="radio"
                                 name="for-brand"
                                 id="for-brand"
-                                wire:model.defer="fusion.brand"
+                                wire:model="fusion.brand"
                                 value="A{{ $item_a->brand }}"
                                 >
                             <label class="form-check-label"
@@ -285,7 +285,7 @@
                                 type="radio"
                                 name="for-brand"
                                 id="for-brand"
-                                wire:model.defer="fusion.brand"
+                                wire:model="fusion.brand"
                                 value="B{{ $item_b->brand }}"
                                 >
                             <label class="form-check-label"
@@ -304,7 +304,7 @@
                                 type="radio"
                                 name="for-model"
                                 id="for-model"
-                                wire:model.defer="fusion.model"
+                                wire:model="fusion.model"
                                 value="A{{ $item_a->model }}"
                                 >
                             <label class="form-check-label"
@@ -317,7 +317,7 @@
                                 type="radio"
                                 name="for-model"
                                 id="for-model"
-                                wire:model.defer="fusion.model"
+                                wire:model="fusion.model"
                                 value="B{{ $item_b->model }}"
                                 >
                             <label class="form-check-label"
@@ -336,7 +336,7 @@
                                 type="radio"
                                 name="for-serial_number"
                                 id="for-serial_number"
-                                wire:model.defer="fusion.serial_number"
+                                wire:model="fusion.serial_number"
                                 value="A{{ $item_a->serial_number }}"
                                 >
                             <label class="form-check-label"
@@ -349,7 +349,7 @@
                                 type="radio"
                                 name="for-serial_number"
                                 id="for-serial_number"
-                                wire:model.defer="fusion.serial_number"
+                                wire:model="fusion.serial_number"
                                 value="B{{ $item_b->serial_number }}"
                                 >
                             <label class="form-check-label"
@@ -370,7 +370,7 @@
                                 type="radio"
                                 name="for-accounting_code_id"
                                 id="for-accounting_code_id"
-                                wire:model.defer="fusion.accounting_code_id"
+                                wire:model="fusion.accounting_code_id"
                                 value="A{{ $item_a->accounting_code_id }}"
                                 >
                             <label class="form-check-label"
@@ -383,7 +383,7 @@
                                 type="radio"
                                 name="for-accounting_code_id"
                                 id="for-accounting_code_id"
-                                wire:model.defer="fusion.accounting_code_id"
+                                wire:model="fusion.accounting_code_id"
                                 value="B{{ $item_b->accounting_code_id }}"
                                 >
                             <label class="form-check-label"
@@ -402,7 +402,7 @@
                                 type="radio"
                                 name="for-status"
                                 id="for-status"
-                                wire:model.defer="fusion.status"
+                                wire:model="fusion.status"
                                 value="A{{ $item_a->status }}"
                                 >
                             <label class="form-check-label"
@@ -415,7 +415,7 @@
                                 type="radio"
                                 name="for-status"
                                 id="for-status"
-                                wire:model.defer="fusion.status"
+                                wire:model="fusion.status"
                                 value="B{{ $item_b->status }}"
                                 >
                             <label class="form-check-label"
@@ -434,7 +434,7 @@
                                 type="radio"
                                 name="for-useful_life"
                                 id="for-useful_life"
-                                wire:model.defer="fusion.useful_life"
+                                wire:model="fusion.useful_life"
                                 value="A{{ $item_a->useful_life }}"
                                 >
                             <label class="form-check-label"
@@ -447,7 +447,7 @@
                                 type="radio"
                                 name="for-useful_life"
                                 id="for-useful_life"
-                                wire:model.defer="fusion.useful_life"
+                                wire:model="fusion.useful_life"
                                 value="B{{ $item_b->useful_life }}"
                                 >
                             <label class="form-check-label"
@@ -466,7 +466,7 @@
                                 type="radio"
                                 name="for-depreciation"
                                 id="for-depreciation"
-                                wire:model.defer="fusion.depreciation"
+                                wire:model="fusion.depreciation"
                                 value="A{{ $item_a->depreciation }}"
                                 >
                             <label class="form-check-label"
@@ -479,7 +479,7 @@
                                 type="radio"
                                 name="for-depreciation"
                                 id="for-depreciation"
-                                wire:model.defer="fusion.depreciation"
+                                wire:model="fusion.depreciation"
                                 value="B{{ $item_b->depreciation }}"
                                 >
                             <label class="form-check-label"
@@ -498,7 +498,7 @@
                                 type="radio"
                                 name="for-store_id"
                                 id="for-store_id"
-                                wire:model.defer="fusion.store_id"
+                                wire:model="fusion.store_id"
                                 value="A{{ $item_a->store_id }}"
                                 >
                             <label class="form-check-label"
@@ -513,7 +513,7 @@
                                 type="radio"
                                 name="for-store_id"
                                 id="for-store_id"
-                                wire:model.defer="fusion.store_id"
+                                wire:model="fusion.store_id"
                                 value="B{{ $item_b->store_id }}"
                                 >
                             <label class="form-check-label"
@@ -535,7 +535,7 @@
                                     type="radio"
                                     name="for-classification_id"
                                     id="for-classification_id"
-                                    wire:model.defer="fusion.classification_id"
+                                    wire:model="fusion.classification_id"
                                     value="A{{ $item_a->classification_id }}"
                                     >
                                 <label class="form-check-label"
@@ -548,7 +548,7 @@
                                     type="radio"
                                     name="for-classification_id"
                                     id="for-classification_id"
-                                    wire:model.defer="fusion.classification_id"
+                                    wire:model="fusion.classification_id"
                                     value="B{{ $item_b->classification_id }}"
                                     >
                                 <label class="form-check-label"
@@ -568,7 +568,7 @@
                                 type="radio"
                                 name="for-request_form_id"
                                 id="for-request_form_id"
-                                wire:model.defer="fusion.request_form_id"
+                                wire:model="fusion.request_form_id"
                                 value="A{{ $item_a->request_form_id }}"
                                 >
                             <label class="form-check-label"
@@ -582,7 +582,7 @@
                                 type="radio"
                                 name="for-request_form_id"
                                 id="for-request_form_id"
-                                wire:model.defer="fusion.request_form_id"
+                                wire:model="fusion.request_form_id"
                                 value="B{{ $item_b->request_form_id }}"
                                 >
                             <label class="form-check-label"
@@ -602,7 +602,7 @@
                                 type="radio"
                                 name="for-budget_item_id"
                                 id="for-budget_item_id"
-                                wire:model.defer="fusion.budget_item_id"
+                                wire:model="fusion.budget_item_id"
                                 value="A{{ $item_a->budget_item_id }}"
                                 >
                             <label class="form-check-label"
@@ -617,7 +617,7 @@
                                 type="radio"
                                 name="for-budget_item_id"
                                 id="for-budget_item_id"
-                                wire:model.defer="fusion.budget_item_id"
+                                wire:model="fusion.budget_item_id"
                                 value="B{{ $item_b->budget_item_id }}"
                                 >
                             <label class="form-check-label"
@@ -638,7 +638,7 @@
                                 type="radio"
                                 name="for-po_code"
                                 id="for-po_code"
-                                wire:model.defer="fusion.po_code"
+                                wire:model="fusion.po_code"
                                 value="A{{ $item_a->po_code }}"
                                 >
                             <label class="form-check-label"
@@ -651,7 +651,7 @@
                                 type="radio"
                                 name="for-po_code"
                                 id="for-po_code"
-                                wire:model.defer="fusion.po_code"
+                                wire:model="fusion.po_code"
                                 value="B{{ $item_b->po_code }}"
                                 >
                             <label class="form-check-label"
@@ -670,7 +670,7 @@
                                 type="radio"
                                 name="for-po_date"
                                 id="for-po_date"
-                                wire:model.defer="fusion.po_date"
+                                wire:model="fusion.po_date"
                                 value="A{{ $item_a->po_date }}"
                                 >
                             <label class="form-check-label"
@@ -683,7 +683,7 @@
                                 type="radio"
                                 name="for-po_date"
                                 id="for-po_date"
-                                wire:model.defer="fusion.po_date"
+                                wire:model="fusion.po_date"
                                 value="B{{ $item_b->po_date }}"
                                 >
                             <label class="form-check-label"
@@ -702,7 +702,7 @@
                                 type="radio"
                                 name="for-po_price"
                                 id="for-po_price"
-                                wire:model.defer="fusion.po_price"
+                                wire:model="fusion.po_price"
                                 value="A{{ $item_a->po_price }}"
                                 >
                             <label class="form-check-label"
@@ -715,7 +715,7 @@
                                 type="radio"
                                 name="for-po_price"
                                 id="for-po_price"
-                                wire:model.defer="fusion.po_price"
+                                wire:model="fusion.po_price"
                                 value="B{{ $item_b->po_price }}"
                                 >
                             <label class="form-check-label"
@@ -734,7 +734,7 @@
                                 type="radio"
                                 name="for-dte_number"
                                 id="for-dte_number"
-                                wire:model.defer="fusion.dte_number"
+                                wire:model="fusion.dte_number"
                                 value="A{{ $item_a->dte_number }}"
                                 >
                             <label class="form-check-label"
@@ -747,7 +747,7 @@
                                 type="radio"
                                 name="for-dte_number"
                                 id="for-dte_number"
-                                wire:model.defer="fusion.dte_number"
+                                wire:model="fusion.dte_number"
                                 value="B{{ $item_b->dte_number }}"
                                 >
                             <label class="form-check-label"
@@ -766,7 +766,7 @@
                                 type="radio"
                                 name="for-observations"
                                 id="for-observations"
-                                wire:model.defer="fusion.observations"
+                                wire:model="fusion.observations"
                                 value="A{{ $item_a->observations }}"
                                 >
                             <label class="form-check-label"
@@ -779,7 +779,7 @@
                                 type="radio"
                                 name="for-observations"
                                 id="for-observations"
-                                wire:model.defer="fusion.observations"
+                                wire:model="fusion.observations"
                                 value="B{{ $item_b->observations }}"
                                 >
                             <label class="form-check-label"
@@ -798,7 +798,7 @@
                                 type="radio"
                                 name="for-removed_user_id"
                                 id="for-removed_user_id"
-                                wire:model.defer="fusion.removed_user_id"
+                                wire:model="fusion.removed_user_id"
                                 value="A{{ $item_a->removed_user_id }}"
                                 >
                             <label class="form-check-label"
@@ -811,7 +811,7 @@
                                 type="radio"
                                 name="for-removed_user_id"
                                 id="for-removed_user_id"
-                                wire:model.defer="fusion.removed_user_id"
+                                wire:model="fusion.removed_user_id"
                                 value="B{{ $item_b->removed_user_id }}"
                                 >
                             <label class="form-check-label"
@@ -830,7 +830,7 @@
                                 type="radio"
                                 name="for-removed_at"
                                 id="for-removed_at"
-                                wire:model.defer="fusion.removed_at"
+                                wire:model="fusion.removed_at"
                                 value="A{{ $item_a->removed_at }}"
                                 >
                             <label class="form-check-label"
@@ -843,7 +843,7 @@
                                 type="radio"
                                 name="for-removed_at"
                                 id="for-removed_at"
-                                wire:model.defer="fusion.removed_at"
+                                wire:model="fusion.removed_at"
                                 value="B{{ $item_b->removed_at }}"
                                 >
                             <label class="form-check-label"
@@ -862,7 +862,7 @@
                                     type="checkbox"
                                     name="for-observations"
                                     id="for-observations"
-                                    wire:model.defer="movements"
+                                    wire:model="movements"
                                     value="A{{ $movement->id }}"
                                     >
                                 <label class="form-check-label"
@@ -884,7 +884,7 @@
                                     type="checkbox"
                                     name="for-observations"
                                     id="for-observations"
-                                    wire:model.defer="movements"
+                                    wire:model="movements"
                                     value="B{{ $movement->id }}"
                                     >
                                 <label class="form-check-label"

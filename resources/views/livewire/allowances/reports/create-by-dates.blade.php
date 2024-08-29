@@ -6,8 +6,8 @@
             <fieldset class="form-group col-sm">
                 <label for="regiones">Fecha de comienzo de Viático</label>
                 <div class="input-group">
-                    <input type="date" class="form-control" name="start_date_search" wire:model.debounce.500ms="selectedStartDate" required>
-                    <input type="date" class="form-control" name="end_date_search" wire:model.debounce.500ms="selectedEndDate" required>
+                    <input type="date" class="form-control" name="start_date_search" wire:model.live.debounce.500ms="selectedStartDate" required>
+                    <input type="date" class="form-control" name="end_date_search" wire:model.live.debounce.500ms="selectedEndDate" required>
                 </div>
             </fieldset>
         </div>

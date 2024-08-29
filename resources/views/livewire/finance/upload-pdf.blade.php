@@ -19,9 +19,9 @@
                 </div>
             </div>
         @else
-            <form wire:submit.prevent="save">
+            <form wire:submit="save">
                 <div class="input-group">
-                    <input class="form-control" type="file" wire:model="pdf" accept="application/pdf" wire:loading.attr="disabled">
+                    <input class="form-control" type="file" wire:model.live="pdf" accept="application/pdf" wire:loading.attr="disabled">
                     @error('pdf') <span class="error">{{ $message }}</span> @enderror
                     <button type="submit" class="btn btn-outline-primary" wire:loading.attr="disabled">
                         <i class="bi bi-upload"></i>
@@ -31,12 +31,12 @@
             </form>
         @endif
     @else
-        <form wire:submit.prevent="savePdfNoApproval">
+        <form wire:submit="savePdfNoApproval">
             <div class="form-group form-inline text-center">
                 <input class="form-control d-none"
                     type="file"
                     accept="application/pdf"
-                    wire:model="pdfNoApproval"
+                    wire:model.live="pdfNoApproval"
                     wire:loading.attr="disabled"
                     id="pdf_{{$this->id}}"
                 />

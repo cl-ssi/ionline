@@ -2,7 +2,7 @@
 <div class="row">
   <fieldset class="form-group col-2">
       <label for="for_text">Id solicitud</label>
-      <input type="text" class="form-control" wire:model="service_request_id">
+      <input type="text" class="form-control" wire:model.live="service_request_id">
   </fieldset>
   <fieldset class="form-group col-2">
       <label for="for_button"><br/></label>
@@ -12,7 +12,7 @@
 <div class="row">
 
   <div id="for-picker" wire:ignore>
-      <select wire:model.lazy="user_to_id" class="form-control selectpicker" data-live-search="true" data-size="5" required data-container="#for-picker">
+      <select wire:model.blur="user_to_id" class="form-control selectpicker" data-live-search="true" data-size="5" required data-container="#for-picker">
           <option value=""></option>
           @foreach($users as $key => $user)
           <option value="{{$user->id}}">{{$user->getFullNameAttribute()}}</option>
@@ -21,7 +21,7 @@
   </div>
 
   <div id="for-picker" wire:ignore>
-      <select wire:model.lazy="user_to_id" class="form-control selectpicker" data-live-search="true" data-size="5" required data-container="#for-picker">
+      <select wire:model.blur="user_to_id" class="form-control selectpicker" data-live-search="true" data-size="5" required data-container="#for-picker">
           <option value=""></option>
           @foreach($users as $key => $user)
           <option value="{{$user->id}}">{{$user->getFullNameAttribute()}}</option>

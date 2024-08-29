@@ -1,7 +1,7 @@
 <fieldset class="form-group col-sm">
     <label for="regiones">Unidad Organizacional / Staff</label>
     <div class="input-group">
-        <select class="form-control" id="for_ou_of_performance_id" name="ou_of_performance_id" wire:model="selectedOu" required>
+        <select class="form-control" id="for_ou_of_performance_id" name="ou_of_performance_id" wire:model.live="selectedOu" required>
         <option value="">Seleccione...</option>
         @foreach($organizationalUnits as $organizationalUnit)
           @if($organizationalUnit->father && $organizationalUnit->father->level >= 3 )
@@ -14,7 +14,7 @@
         @endforeach
         </select>
 
-        <select class="form-control" id="for_replacement_staff_id" name="replacement_staff_id" data-live-search="true" wire:model.defer="selectedReplacementStaff">
+        <select class="form-control" id="for_replacement_staff_id" name="replacement_staff_id" data-live-search="true" wire:model="selectedReplacementStaff">
             <option value="">Seleccione...</option>
               @if(!is_null($staffManageByOu))
                 @foreach($staffManageByOu as $ou)

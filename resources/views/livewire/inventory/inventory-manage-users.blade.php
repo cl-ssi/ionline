@@ -38,7 +38,7 @@
                             <label for="role-id">Rol</label>
                             <select
                                 class="form-control form-control-sm @error('role_id') is-invalid @enderror"
-                                wire:model.debounce.1500ms="role_id"
+                                wire:model.live.debounce.1500ms="role_id"
                                 id="role-id"
                             >
                                 <option value="">Selecciona un rol</option>
@@ -77,7 +77,7 @@
                 <input
                     type="text"
                     class="form-control"
-                    wire:model.debounce.600ms="search_user"
+                    wire:model.live.debounce.600ms="search_user"
                     placeholder="Buscar en usuarios"
                 >
                 <div class="input-group-append">

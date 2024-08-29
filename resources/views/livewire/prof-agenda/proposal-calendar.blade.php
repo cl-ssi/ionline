@@ -24,7 +24,7 @@
     @push('scripts')
         <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.7.0/main.min.js'></script>
         <script>
-            document.addEventListener('livewire:load', function() {
+            document.addEventListener('livewire:init', function() {
             // document.addEventListener('DOMContentLoaded', function() {
                 var Calendar = FullCalendar.Calendar;
                 var calendarEl = document.getElementById('calendar');

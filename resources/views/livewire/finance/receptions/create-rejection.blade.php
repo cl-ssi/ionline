@@ -14,7 +14,7 @@
                     placeholder="Orden de compra"
                     aria-label="Orden de compra"
                     aria-describedby="purchase-order"
-                    wire:model.defer="purchaseOrderCode">
+                    wire:model="purchaseOrderCode">
                 <button class="btn btn-primary"
                     wire:click="getPurchaseOrder"
                     wire:loading.attr="disabled">
@@ -82,7 +82,7 @@
                             <div class="form-check">
                                 <input class="form-check-input @error('selectedDteId') is-invalid @enderror"
                                     type="radio"
-                                    wire:model="selectedDteId"
+                                    wire:model.live="selectedDteId"
                                     name="selectedDte"
                                     value="{{ $dte->id }}"
                                     {{ $dte->rejectedReception ? 'disabled' : '' }}
@@ -101,7 +101,7 @@
                         <div class="form-check">
                             <input class="form-check-input @error('selectedDteId') is-invalid @enderror"
                                 type="radio"
-                                wire:model="selectedDteId"
+                                wire:model.live="selectedDteId"
                                 name="selectedDte"
                                 value="0">
                             <label>
@@ -134,7 +134,7 @@
                     <label for="reception-date">Tipo de documento*</label>
                     <select id="document_type"
                         class="form-select @error('reception.dte_type') is-invalid @enderror"
-                        wire:model="reception.dte_type">
+                        wire:model.live="reception.dte_type">
                         <option></option>
                         <option value ="guias_despacho">Guía de despacho</option>
                         <option value ="factura_electronica">Factura Electronica Afecta</option>
@@ -151,7 +151,7 @@
                     <label for="reception-date">Número de documento</label>
                     <input type="text"
                         class="form-control"
-                        wire:model.debounce.defer="reception.dte_number">
+                        wire:model.live.debounce.defer="reception.dte_number">
                 </div>
             </div>
             <div class="col-md-2">
@@ -159,7 +159,7 @@
                     <label for="reception-date">Fecha de documento</label>
                     <input type="date"
                         class="form-control"
-                        wire:model="reception.dte_date">
+                        wire:model.live="reception.dte_date">
                 </div>
             </div>
         </div>
@@ -181,7 +181,7 @@
                     <label for="reception-date">Fecha acta*</label>
                     <input type="date"
                         class="form-control @error('reception.date') is-invalid @enderror"
-                        wire:model="reception.date">
+                        wire:model.live="reception.date">
                     @error('reception.date')
                         <span class="text-danger">{{ $message }}</span>
                     @enderror
@@ -190,7 +190,7 @@
             <div class="form-group col-md-2">
                 <label for="form-reception-type">Tipo de acta*</label>
                 <select class="form-select @error('reception.reception_type_id') is-invalid @enderror"
-                    wire:model="reception.reception_type_id">
+                    wire:model.live="reception.reception_type_id">
                     <option value=""></option>
                     @foreach ($types as $id => $type)
                         <option value="{{ $id }}">{{ $type }}</option>
@@ -207,7 +207,7 @@
                     <input type="text"
                         class="form-control"
                         placeholder="opcional"
-                        wire:model="reception.internal_number">
+                        wire:model.live="reception.internal_number">
                     <div class="form-text">En caso que la unidad tenga su propio correlativo</div>
                 </div>
             </div>
@@ -223,7 +223,7 @@
                         id="for-rejected_notes"
                         rows="6"
                         class="form-control"
-                        wire:model.defer="reception.rejected_notes"></textarea>
+                        wire:model="reception.rejected_notes"></textarea>
                     @error('reception.rejected_notes')
                         <span class="text-danger">{{ $message }}</span>
                     @enderror

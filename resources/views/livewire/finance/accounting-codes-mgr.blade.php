@@ -13,13 +13,13 @@
         <div class="row g-2">
             <fieldset class="col-12 col-md-2">
                 <label for="for-id">Código*</label>
-                <input type="text" wire:model.defer="accountingCode.id" class="form-control">
+                <input type="text" wire:model="accountingCode.id" class="form-control">
                 @error('accountingCode.id') <span class="text-danger">{{ $message }}</span> @enderror
             </fieldset>
 
             <fieldset class="col-12 col-md-4">
                 <label for="for-date">Descripción*</label>
-                <input type="text" wire:model.defer="accountingCode.description" class="form-control">
+                <input type="text" wire:model="accountingCode.description" class="form-control">
                 @error('accountingCode.description') <span class="text-danger">{{ $message }}</span> @enderror
             </fieldset>
         </div>

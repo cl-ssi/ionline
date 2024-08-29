@@ -2,7 +2,7 @@
     <div class="row g-3 mb-3">
         <fieldset class="form-group col-12 col-md-12">
             <label for="forRejoinderFile" class="form-label">Certificado</label>
-            <input class="form-control" type="file" wire:model.defer="certificateFile" id="upload({{ $iterationFileClean }})">
+            <input class="form-control" type="file" wire:model="certificateFile" id="upload({{ $iterationFileClean }})">
             <div wire:loading wire:target="certificateFile">Cargando archivo...</div>
             @error('certificateFile') <span class="text-danger error small">{{ $message }}</span> @enderror
         </fieldset>
@@ -14,7 +14,7 @@
                 <b>Estimado usuario</b>: Si va a adjuntar documentos anexos, por favor consolídelos en un solo archivo PDF.
             </div>
             <label for="forRejoinderFile" class="form-label">Anexo</label>
-            <input class="form-control" type="file" wire:model.defer="attachedFile" id="upload({{ $iterationFileClean }})">
+            <input class="form-control" type="file" wire:model="attachedFile" id="upload({{ $iterationFileClean }})">
             <div wire:loading wire:target="attachedFile">Cargando archivo...</div>
             @error('attachedFile') <span class="text-danger error small">{{ $message }}</span> @enderror
         </fieldset>
@@ -34,7 +34,7 @@
     </div>
 
     <script>
-        document.addEventListener('livewire:load', function () {
+        document.addEventListener('livewire:init', function () {
             // Capturar el evento emitido desde Livewire
             Livewire.on('closeModal', (bootstrapVersion, trainingId) => {
                 if (bootstrapVersion === 'bootstrap5') {

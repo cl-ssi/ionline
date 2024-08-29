@@ -7,7 +7,7 @@
             <div class="form-row">
                 <fieldset class="form-group col-2">
                     <label for="for_passengerType">Pasajero</label>
-                    <select wire:model="passengerType" name="passengerType" class="form-control" disabled>
+                    <select wire:model.live="passengerType" name="passengerType" class="form-control" disabled>
                         <option value="">Seleccione...</option>
                         <option value="internal">SSI</option>
                         <option value="external">Externo</option>
@@ -26,36 +26,36 @@
 
           <h6>Datos de Pasajero</h6>
 
-          <!-- <form wire:submit.prevent="submit"> -->
+          <!-- <form wire:submit="submit"> -->
 
               <div class="form-row">
                     <fieldset class="form-group col-sm-3">
                         <label for="forName">Run</label>
-                        <input wire:model="run" name="name" class="form-control form-control-sm" type="text"
+                        <input wire:model.live="run" name="name" class="form-control form-control-sm" type="text"
                           value="{{ $run }}" readonly>
                     </fieldset>
 
                     <fieldset class="form-group col-sm-1">
                         <label for="forRut">DV</label>
-                        <input wire:model="dv" name="dv" class="form-control form-control-sm" type="text"
+                        <input wire:model.live="dv" name="dv" class="form-control form-control-sm" type="text"
                           value="{{ $dv }}" readonly>
                     </fieldset>
 
                     <fieldset class="form-group col-sm-4">
                         <label for="forRut">Nombres</label>
-                        <input wire:model="name" name="name" class="form-control form-control-sm" type="text"
+                        <input wire:model.live="name" name="name" class="form-control form-control-sm" type="text"
                           value="{{ $name }}" readonly>
                     </fieldset>
 
                     <fieldset class="form-group col-sm-2">
                         <label for="forRut">Apellido Paterno</label>
-                        <input wire:model="fathers_family" name="fathers_family" class="form-control form-control-sm" type="text"
+                        <input wire:model.live="fathers_family" name="fathers_family" class="form-control form-control-sm" type="text"
                           value="{{ $fathers_family }}" readonly>
                     </fieldset>
 
                     <fieldset class="form-group col-sm-2">
                         <label for="forRut">Apellido Materno</label>
-                        <input wire:model="mothers_family" name="mothers_family" class="form-control form-control-sm" type="text"
+                        <input wire:model.live="mothers_family" name="mothers_family" class="form-control form-control-sm" type="text"
                           value="{{ $mothers_family }}" readonly>
                     </fieldset>
                 </div>
@@ -63,24 +63,24 @@
                 <div class="form-row">
                     <fieldset class="form-group col-sm-4">
                         <label for="forRut">Fecha de Nacimiento</label>
-                        <input wire:model.defer="birthday" name="birthday" class="form-control form-control-sm" type="date" value="{{ $birthday ? $birthday : '' }}">
+                        <input wire:model="birthday" name="birthday" class="form-control form-control-sm" type="date" value="{{ $birthday ? $birthday : '' }}">
                     </fieldset>
 
                     <fieldset class="form-group col-sm-4">
                         <label for="for_telephone">Teléfono</label>
-                        <input wire:model.defer="phone_number" name="phone_number" class="form-control form-control-sm" type="text" value="{{ $phone_number ? $phone_number : '' }}">
+                        <input wire:model="phone_number" name="phone_number" class="form-control form-control-sm" type="text" value="{{ $phone_number ? $phone_number : '' }}">
                     </fieldset>
 
                     <fieldset class="form-group col-sm-4">
                         <label for="for_telephone">E-Mail</label>
-                        <input wire:model.defer="email" name="email" class="form-control form-control-sm" type="text" placeholder="correo@redsalud.gob.cl" value="{{ $email ? $email : '' }}">
+                        <input wire:model="email" name="email" class="form-control form-control-sm" type="text" placeholder="correo@redsalud.gob.cl" value="{{ $email ? $email : '' }}">
                     </fieldset>
                 </div>
 
                 <div class="form-row">
                     <fieldset class="form-group col-sm-4">
                         <label for="round_trip">Tipo de Viaje</label>
-                        <select wire:model="round_trip" name="round_trip" class="form-control form-control-sm">
+                        <select wire:model.live="round_trip" name="round_trip" class="form-control form-control-sm">
                             <option value="" selected>Seleccione...</option>
                             <option value="round trip">Ida y Vuelta</option>
                             <option value="one-way only">Solo Ida</option>
@@ -89,29 +89,29 @@
 
                     <fieldset class="form-group col-sm-4">
                         <label for="for_origin">Origen</label>
-                        <input wire:model.defer="origin" name="origin" class="form-control form-control-sm" type="text">
+                        <input wire:model="origin" name="origin" class="form-control form-control-sm" type="text">
                     </fieldset>
 
                     <fieldset class="form-group col-sm-4">
                         <label for="for_destination">Destino</label>
-                        <input wire:model.defer="destination" name="destination" class="form-control form-control-sm" type="text">
+                        <input wire:model="destination" name="destination" class="form-control form-control-sm" type="text">
                     </fieldset>
                 </div>
 
                 <div class="form-row">
                     <fieldset class="form-group col-sm-3">
                         <label for="for_departure_date">Fecha/Hora Ida</label>
-                        <input wire:model.defer="departure_date" name="departure_date" class="form-control form-control-sm" type="datetime-local">
+                        <input wire:model="departure_date" name="departure_date" class="form-control form-control-sm" type="datetime-local">
                     </fieldset>
 
                     <fieldset class="form-group col-sm-3">
                         <label for="for_return_date">Fecha/Hora Vuelta</label>
-                        <input wire:model.defer="return_date" name="return_date" class="form-control form-control-sm" type="datetime-local" {{$round_trip == 'one-way only' ? 'disabled' : ''}}>
+                        <input wire:model="return_date" name="return_date" class="form-control form-control-sm" type="datetime-local" {{$round_trip == 'one-way only' ? 'disabled' : ''}}>
                     </fieldset>
 
                     <fieldset class="form-group col-sm-3">
                         <label for="for_baggage">Tipo de Viaje</label>
-                        <select wire:model="baggage" name="baggage" class="form-control form-control-sm">
+                        <select wire:model.live="baggage" name="baggage" class="form-control form-control-sm">
                           <option value="" selected>Seleccione...</option>
                           <option value="handbag">Bolso de Mano</option>
                           <option value="hand luggage">Equipaje de Cabina</option>
@@ -122,7 +122,7 @@
 
                     <fieldset class="form-group col-sm-3">
                         <label for="for_origin">Valor Estimado</label>
-                        <input wire:model.defer="unitValue" name="unit_value" class="form-control form-control-sm" type="number">
+                        <input wire:model="unitValue" name="unit_value" class="form-control form-control-sm" type="number">
                     </fieldset>
                 </div>
 

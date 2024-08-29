@@ -9,7 +9,7 @@
             <form class="row g-3">
                 <fieldset class="form-group col-sm-4">
                     <label class="form-label" for="product-search">Buscar Producto o Servicio</label>
-                    <input wire:model.debounce.500ms="search_product" id="product-search" class="form-control form-control-sm" type="text">
+                    <input wire:model.live.debounce.500ms="search_product" id="product-search" class="form-control form-control-sm" type="text">
                 </fieldset>
 
                 <fieldset class="form-group col-sm-8">
@@ -24,7 +24,7 @@
                 <div class="col-md-6">
                     <fieldset class="form-group col-12">
                         <label class="form-label" for="technicalSpecifications" >Especificaciones Técnicas</label>
-                        <textarea class="form-control form-control-sm" wire:model.defer="technicalSpecifications" name="technicalSpecifications" rows="4"></textarea>
+                        <textarea class="form-control form-control-sm" wire:model="technicalSpecifications" name="technicalSpecifications" rows="4"></textarea>
                     </fieldset>
                 </div>
 
@@ -32,7 +32,7 @@
                     <div class="row g-3">
                         <fieldset class="form-group col-4 mb-2">
                             <label class="form-label">Unidad de Medida</label>
-                            <select wire:model.defer="unitOfMeasurement" name="unitOfMeasurement" class="form-select form-select-sm" required>
+                            <select wire:model="unitOfMeasurement" name="unitOfMeasurement" class="form-select form-select-sm" required>
                                 <option value="">Seleccione...</option>
                                 @foreach($lstUnitOfMeasurement as $val)
                                     <option value="{{$val->name}}">{{$val->name}}</option>
@@ -42,19 +42,19 @@
 
                         <fieldset class="form-group col-4">
                             <label class="form-label" for="forRut">Cantidad</label>
-                            <input wire:model.defer="quantity" name="quantity" class="form-control form-control-sm" type="text">
+                            <input wire:model="quantity" name="quantity" class="form-control form-control-sm" type="text">
                         </fieldset>
 
                         <fieldset class="form-group col-4">
                             <label class="form-label" for="for_unit_value">Valor Unitario Neto</label>
-                            <input wire:model.defer="unitValue" name="unitValue" class="form-control form-control-sm" type="text">
+                            <input wire:model="unitValue" name="unitValue" class="form-control form-control-sm" type="text">
                         </fieldset>
                     </div>
 
                     <div class="row g-3">
                         <fieldset class="form-group col-4">
                             <label class="form-label">Tipo de Impuestos</label>
-                            <select wire:model.defer="taxes" name="taxes" class="form-select form-select-sm" required>
+                            <select wire:model="taxes" name="taxes" class="form-select form-select-sm" required>
                                 <option value="">Seleccione...</option>
                                 <option value="iva">I.V.A. 19%</option>
                                 <option value="bh">Boleta de Honorarios {{isset($this->withholding_tax[date('Y')]) ? $this->withholding_tax[date('Y')] * 100 : end($this->withholding_tax) * 100 }}%</option>
@@ -70,7 +70,7 @@
                                 <a class="text-info" href="#items" wire:click="deleteFile({{$key}})">Borrar <i class="fas fa-paperclip"></i></a>
                                 @endif
                             </label>
-                            <input class="form-control form-control-sm" type="file" style="padding:2px 0px 0px 2px;" wire:model.defer="articleFile" name="articleFile" id="upload{{ $iteration }}" @if($savedArticleFile) disabled @endif>
+                            <input class="form-control form-control-sm" type="file" style="padding:2px 0px 0px 2px;" wire:model="articleFile" name="articleFile" id="upload{{ $iteration }}" @if($savedArticleFile) disabled @endif>
                             <div wire:loading wire:target="articleFile">Cargando archivo...</div>
                         </fieldset>
                         @endif
@@ -99,7 +99,7 @@
                 {{-- dd($savedItems) --}}
                 <fieldset class="form-group col-sm-4">
                     <label for="product-search">Buscar Producto o Servicio</label>
-                    <input wire:model.debounce.500ms="search_product" id="product-search" class="form-control form-control-sm" type="text">
+                    <input wire:model.live.debounce.500ms="search_product" id="product-search" class="form-control form-control-sm" type="text">
                 </fieldset>
 
                 <fieldset class="form-group col-sm-8">
@@ -113,7 +113,7 @@
                     <div class="form-row">
                         <fieldset class="form-group col-sm-12">
                             <label for="technicalSpecifications" class="form-label">Especificaciones Técnicas:</label>
-                            <textarea wire:model.defer="technicalSpecifications" name="technicalSpecifications" class="form-control form-control-sm" rows="5"></textarea>
+                            <textarea wire:model="technicalSpecifications" name="technicalSpecifications" class="form-control form-control-sm" rows="5"></textarea>
                         </fieldset>
                     </div>
                 </div>
@@ -123,7 +123,7 @@
                     <div class="form-row">
                         <fieldset class="form-group col-sm-4">
                             <label>Unidad de Medida:</label><br>
-                            <select wire:model.defer="unitOfMeasurement" name="unitOfMeasurement" class="form-control form-control-sm" required>
+                            <select wire:model="unitOfMeasurement" name="unitOfMeasurement" class="form-control form-control-sm" required>
                                 <option value="">Seleccione...</option>
                                 @foreach($lstUnitOfMeasurement as $val)
                                     <option value="{{$val->name}}">{{$val->name}}</option>
@@ -133,12 +133,12 @@
 
                         <fieldset class="form-group col-sm-3">
                             <label for="forRut">Cantidad:</label>
-                            <input wire:model.defer="quantity" name="quantity" class="form-control form-control-sm" type="text">
+                            <input wire:model="quantity" name="quantity" class="form-control form-control-sm" type="text">
                         </fieldset>
 
                         <!-- <fieldset class="form-group col-sm-2">
                             <label for="for_type_of_currency">Tipo de Moneda:</label>
-                            <select wire:model.defer="typeOfCurrency" name="typeOfCurrency" class="form-control form-control-sm" required>
+                            <select wire:model="typeOfCurrency" name="typeOfCurrency" class="form-control form-control-sm" required>
                                 <option value="">Seleccione...</option>
                                 <option value="peso">Peso</option>
                                 <option value="dolar">Dolar</option>
@@ -148,14 +148,14 @@
 
                         <fieldset class="form-group col-sm-5">
                             <label for="for_unit_value">Valor Unitario Neto:</label>
-                            <input wire:model.defer="unitValue" name="unitValue" class="form-control form-control-sm" type="text">
+                            <input wire:model="unitValue" name="unitValue" class="form-control form-control-sm" type="text">
                         </fieldset>
                     </div>
                     <div class="form-row">
 
                         <fieldset class="form-group col-sm-4">
                             <label>Tipo de Impuestos:</label><br>
-                            <select wire:model.defer="taxes" name="taxes" class="form-control form-control-sm" required>
+                            <select wire:model="taxes" name="taxes" class="form-control form-control-sm" required>
                             <option value="">Seleccione...</option>
                             <option value="iva">I.V.A. 19%</option>
                             <option value="bh">Boleta de Honorarios {{isset($this->withholding_tax[date('Y')]) ? $this->withholding_tax[date('Y')] * 100 : end($this->withholding_tax) * 100 }}%</option>
@@ -171,7 +171,7 @@
                                 <a class="text-info" href="#items" wire:click="deleteFile({{$key}})">Borrar <i class="fas fa-paperclip"></i></a>
                                 @endif
                             </label>
-                            <input class="form-control form-control-sm" type="file" style="padding:2px 0px 0px 2px;" wire:model.defer="articleFile" name="articleFile" id="upload{{ $iteration }}" @if($savedArticleFile) disabled @endif>
+                            <input class="form-control form-control-sm" type="file" style="padding:2px 0px 0px 2px;" wire:model="articleFile" name="articleFile" id="upload{{ $iteration }}" @if($savedArticleFile) disabled @endif>
                             <div wire:loading wire:target="articleFile">Cargando archivo...</div>
                         </fieldset>
 

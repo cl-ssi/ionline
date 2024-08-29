@@ -119,7 +119,7 @@ trait SingleSignature
                 app()->call($callbackControllerMethods,
                 json_decode($callbackControllerParams, true));
 
-                $this->emit($dispatchEvent, $dispatchParams);
+                $this->dispatch($dispatchEvent, $dispatchParams);
             }
         }
     }

@@ -4,25 +4,25 @@
 
     <h3>Pagos TGR</h3>
 
-    <form wire:submit.prevent="search">
+    <form wire:submit="search">
         <div class="row g-2 mb-3">
             <div class="col-md-1">
                 <label for="for-id" class="form-label">ID</label>
-                <input type="text" class="form-control" wire:model.defer="filters.id" placeholder="id">
+                <input type="text" class="form-control" wire:model="filters.id" placeholder="id">
             </div>
             <div class="col-md-2">
                 <label for="for-emisor" class="form-label">Rut</label>
-                <input type="text" class="form-control" wire:model.defer="filters.emisor" placeholder="rut emisor">
+                <input type="text" class="form-control" wire:model="filters.emisor" placeholder="rut emisor">
             </div>
 
             <div class="col-md-2">
                 <label for="for-folio" class="form-label">N° Folio Pago</label>
-                <input type="text" class="form-control" wire:model.defer="filters.folio_pago" placeholder="folio pago">
+                <input type="text" class="form-control" wire:model="filters.folio_pago" placeholder="folio pago">
             </div>
 
             <div class="col-md-2">
                 <label for="for-folio" class="form-label">Estado Folio Pago</label>
-                <select class="form-select" wire:model.defer="filters.estado_folio_pago">
+                <select class="form-select" wire:model="filters.estado_folio_pago">
                     <option value="Todos">Todos</option>
                     <option value="Sin Folio">Sin Folio</option>
                     <option value="Con Folio">Con Folio</option>
@@ -32,7 +32,7 @@
 
             <div class="col-md-2">
                 <label for="for-folio" class="form-label">PDF Pago Sin Firma</label>
-                <select class="form-select" wire:model.defer="filters.sin_firma">
+                <select class="form-select" wire:model="filters.sin_firma">
                     <option value="Todos">Todos</option>
                     <option value="Subidos">Subidos</option>
                     <option value="Sin Subir">Sin Subir</option>
@@ -41,7 +41,7 @@
 
             <div class="col-md-2">
                 <label for="for-folio" class="form-label">PDF Pago Firmado</label>
-                <select class="form-select" wire:model.defer="filters.firmado">
+                <select class="form-select" wire:model="filters.firmado">
                     <option value="Todos">Todos</option>
                     <option value="Pendientes">Pendientes</option>
                     <option value="Firmados">Firmados</option>

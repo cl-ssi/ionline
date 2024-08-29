@@ -10,7 +10,7 @@
         <div class="col-md-6">
             <div class="form-group">
                 <label for="selectedBenefitId">Categoría:</label>
-                <select wire:model="selectedBenefitId" class="form-select" id="selectedBenefitId">
+                <select wire:model.live="selectedBenefitId" class="form-select" id="selectedBenefitId">
                     <option value="">Seleccionar categoría</option>
                     @foreach($benefits as $benefit)
                         <option value="{{ $benefit->id }}">{{ $benefit->name }}</option>
@@ -19,27 +19,27 @@
             </div>
             <div class="form-group">
                 <label for="newSubsidyName">Nombre del Subsidio:</label>
-                <input wire:model="newSubsidyName" type="text" class="form-control" id="newSubsidyName">
+                <input wire:model.live="newSubsidyName" type="text" class="form-control" id="newSubsidyName">
                 @error('newSubsidyName') <p class="text-danger">{{ $message }}</p> @enderror
             </div>
             <div class="form-group">
                 <label for="value">Descripción:</label>
-                <!-- <input wire:model="description" type="text" class="form-control" id="description"> -->
-                <textarea wire:model="description" id="description" class="form-control" cols="30" rows="5"></textarea>
+                <!-- <input wire:model.live="description" type="text" class="form-control" id="description"> -->
+                <textarea wire:model.live="description" id="description" class="form-control" cols="30" rows="5"></textarea>
                 @error('description') <p class="text-danger">{{ $message }}</p> @enderror
             </div>
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
                         <label for="value">Tope anual:</label>
-                        <input wire:model="annual_cap" type="number" class="form-control" id="annual_cap">
+                        <input wire:model.live="annual_cap" type="number" class="form-control" id="annual_cap">
                         @error('annual_cap') <p class="text-danger">{{ $message }}</p> @enderror
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
                         <label for="value">Tipo de pago:</label>
-                        <select wire:model="payment_in_installments" class="form-select" id="payment_in_installments" required>
+                        <select wire:model.live="payment_in_installments" class="form-select" id="payment_in_installments" required>
                             <option value="1">Con cuotas</option>
                             <option value="0">Sin cuotas</option>
                         </select>
@@ -51,14 +51,14 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label for="recipient">Beneficiario:</label>
-                        <input wire:model="recipient" type="text" class="form-control" id="recipient">
+                        <input wire:model.live="recipient" type="text" class="form-control" id="recipient">
                         @error('recipient') <p class="text-danger">{{ $message }}</p> @enderror
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
                         <label for="value">Estado:</label>
-                        <select wire:model="status" class="form-select" id="status" required>
+                        <select wire:model.live="status" class="form-select" id="status" required>
                             <option value="1">Activo</option>
                             <option value="0">Desactivado</option>
                         </select>
@@ -79,7 +79,7 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label for="newDocumentName">Nombre del Documento:</label>
-                        <input wire:model="newDocumentName" type="text" class="form-control" id="newDocumentName">
+                        <input wire:model.live="newDocumentName" type="text" class="form-control" id="newDocumentName">
                         @error('newDocumentName') <p class="text-danger">{{ $message }}</p> @enderror
                     </div>
                 </div>

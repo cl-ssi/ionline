@@ -4,27 +4,27 @@
         <div class="form-row">
             <fieldset class="form-group col-6 col-md-2">
                 <label for="for_bill_number">N° Boleta</label>
-                <input type="text" class="form-control" wire:model.defer="fulfillment.bill_number">
+                <input type="text" class="form-control" wire:model="fulfillment.bill_number">
                 @error('fulfillment.bill_number') <span class="danger">{{ $message }}</span> @enderror
             </fieldset>
             <fieldset class="form-group col-6 col-md-2">
                 <label for="for_total_hours_paid">Tot. hrs a pagar</label>
-                <input type="text" class="form-control" wire:model.defer="fulfillment.total_hours_paid">
+                <input type="text" class="form-control" wire:model="fulfillment.total_hours_paid">
                 @error('fulfillment.total_hours_paid') <span class="danger">{{ $message }}</span> @enderror
             </fieldset>
             <fieldset class="form-group col-6 col-md-2">
                 <label for="for_total_paid">Total a pagar</label>
-                <input type="text" class="form-control" wire:model.defer="fulfillment.total_paid">
+                <input type="text" class="form-control" wire:model="fulfillment.total_paid">
                 @error('fulfillment.total_paid') <span class="danger">{{ $message }}</span> @enderror
             </fieldset>
             <fieldset class="form-group col-6 col-md-2">
                 <label for="for_payment_date">Fecha pago*</label>
-                <input type="date" class="form-control" wire:model.defer="fulfillment.payment_date">
+                <input type="date" class="form-control" wire:model="fulfillment.payment_date">
                 @error('fulfillment.payment_date') <span class="danger">{{ $message }}</span> @enderror
             </fieldset>
             <fieldset class="form-group col-6 col-md-3">
                 <label for="for_contable_month">Mes contable pago*</label>
-                <select class="form-control" wire:model.defer="fulfillment.contable_month">
+                <select class="form-control" wire:model="fulfillment.contable_month">
                     <option value=""></option>
                     <option value="1" @selected($fulfillment->month == 1)>Enero</option>
                     <option value="2" @selected($fulfillment->month == 2)>Febrero</option>

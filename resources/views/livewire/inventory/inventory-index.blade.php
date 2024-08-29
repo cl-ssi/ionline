@@ -30,7 +30,7 @@
         <fieldset class="form-group col-md-2">
             <label for="locations">Ubicaciones</label>
             <select
-                wire:model="location_id"
+                wire:model.live="location_id"
                 id="locations"
                 class="form-control form-select"
             >
@@ -46,7 +46,7 @@
         <fieldset class="form-group col-md-3">
             <label for="places">Lugares</label>
             <select
-                wire:model="place_id"
+                wire:model.live="place_id"
                 id="places"
                 class="form-select"
             >
@@ -64,7 +64,7 @@
         <fieldset class="form-group col-md-1">
             <label for="pending">En Traspaso</label>
             <select
-                wire:model.defer="pending"
+                wire:model="pending"
                 wire:change="updateResponsible"
                 id="pending"
                 class="form-select"
@@ -77,7 +77,7 @@
         <fieldset class="form-group col-md-2">
             <label for="number">Cod. Int. Arq.</label>
             <input
-                wire:model.defer="architectural_design_code"
+                wire:model="architectural_design_code"
                 id="architectural_design_code"
                 class="form-control"
             >
@@ -86,7 +86,7 @@
         <fieldset class="form-group col-md-2">
             <label for="oc">OC</label>
             <input
-                wire:model.defer="oc"
+                wire:model="oc"
                 id="oc"
                 class="form-control"
             >
@@ -95,7 +95,7 @@
         <fieldset class="form-group col-md-1">
             <label for="classifications">Clasificación</label>
             <select
-                wire:model="classification_id"
+                wire:model.live="classification_id"
                 id="classifications"
                 class="form-control form-select"
             >
@@ -114,7 +114,7 @@
         <fieldset class="form-group col-md-4">
             <label for="products">Productos</label>
             <select
-                wire:model="unspsc_product_id"
+                wire:model.live="unspsc_product_id"
                 id="products"
                 class="form-control form-select"
             >
@@ -132,7 +132,7 @@
         <fieldset class="form-group col-md-2">
             <label for="responsibles">Responsables</label>
             <select
-                wire:model="user_responsible_id"
+                wire:model.live="user_responsible_id"
                 id="responsibles"
                 class="form-control form-control-sm form-select"
             >
@@ -153,7 +153,7 @@
         <fieldset class="form-group col-md-2">
             <label for="users">Usuarios</label>
             <select
-                wire:model="user_using_id"
+                wire:model.live="user_using_id"
                 id="users"
                 class="form-control form-control-sm form-select"
             >
@@ -173,7 +173,7 @@
         <fieldset class="form-group col-md-2">
             <label for="number">Nro. Invt<small> (ant o nuevo)</small></label>
             <input
-                wire:model.defer="number"
+                wire:model="number"
                 id="number"
                 class="form-control"
                 autocomplete="off"
@@ -183,7 +183,7 @@
         <fieldset class="form-group col-md-1">
             <label for="inv_id">ID</label>
             <input
-                wire:model.defer="inv_id"
+                wire:model="inv_id"
                 id="inv_id"
                 class="form-control"
                 autocomplete="off"
@@ -195,7 +195,7 @@
         <fieldset class="form-group col-md-2">
             <label for="brand">Marca</label>
             <input
-                wire:model.defer="brand"
+                wire:model="brand"
                 id="brand"
                 class="form-control"
                 autocomplete="off"
@@ -205,7 +205,7 @@
         <fieldset class="form-group col-md-2">
             <label for="model">Modelo</label>
             <input
-                wire:model.defer="model"
+                wire:model="model"
                 id="model"
                 class="form-control"
                 autocomplete="off"
@@ -215,7 +215,7 @@
         <fieldset class="form-group col-md-2">
             <label for="serial_number">Nº Serie</label>
             <input
-                wire:model.defer="serial_number"
+                wire:model="serial_number"
                 id="serial_number"
                 class="form-control"
                 autocomplete="off"
@@ -225,7 +225,7 @@
         <fieldset class="form-group col-md-4">
             <label for="brand">Descripción</label>
             <input
-                wire:model.defer="description"
+                wire:model="description"
                 id="description"
                 class="form-control"
                 autocomplete="off"

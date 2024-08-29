@@ -18,7 +18,7 @@
     <div class="row g-2 mb-3">
         <fieldset class="form-group col-md-3">
             <label for="type-reception-id">Tipo de Ingreso</label>
-            <select wire:model="type_reception_id" id="type-reception-id" class="form-select">
+            <select wire:model.live="type_reception_id" id="type-reception-id" class="form-select">
                 <option value="">Todos</option>
                 <option value="{{ App\Models\Warehouse\TypeReception::receiving() }}">
                     Ingreso Normal
@@ -36,7 +36,7 @@
                 type="text"
                 id="search"
                 placeholder="Ingresa la orden de compra, origen, código de producto, producto o descripción técnica"
-                wire:model.debounce.1500ms="search"
+                wire:model.live.debounce.1500ms="search"
             >
         </fieldset>
     </div>

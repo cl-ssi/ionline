@@ -5,7 +5,7 @@
         <div class="form-row">
             <fieldset class="form-group col-12 col-md-6">
                 <label for="for_sub_search">Buscar por:</label>
-                <select name="sub_search" class="form-control" wire:model.debounce.500ms="selectedSearch">
+                <select name="sub_search" class="form-control" wire:model.live.debounce.500ms="selectedSearch">
                     <option value="">Seleccione...</option>
                     <option value="ou">Unidad Organizacional</option>
                     <option value="sub">Subdirección</option>
@@ -24,7 +24,7 @@
             @elseif($selectedSearch == 'sub')
                 <fieldset class="form-group col">
                     <label for="for_sub_search">Subdirección</label>
-                    <select name="sub_search" class="form-control" wire:model.debounce.500ms="selectedOuId">
+                    <select name="sub_search" class="form-control" wire:model.live.debounce.500ms="selectedOuId">
                         <option value="">Seleccione...</option>
                         @foreach($subs as $sub)
                             <option value="{{ $sub->id }}">{{ $sub->name }} - {{ $sub->establishment->name }}</option>

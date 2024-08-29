@@ -21,7 +21,7 @@
         <div class="col-md-7">
             <label>Resolución</label>
             <div class="custom-file">
-                <input type="file" class="custom-file-input @error('resolutionFile') is-invalid @enderror" wire:model="resolutionFile" required>
+                <input type="file" class="custom-file-input @error('resolutionFile') is-invalid @enderror" wire:model.live="resolutionFile" required>
                 <label class="custom-file-label" (for="customFileLangHTML" data-browse="Examinar">{{ optional($resolutionFile)->getClientOriginalName() }}</label>
                 @error('resolutionFile') 
                 <div class="invalid-feedback">{{ $message }}</div>

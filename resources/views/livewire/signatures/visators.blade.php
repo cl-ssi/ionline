@@ -77,7 +77,7 @@
         </div>
         <div class="form-row">
             <fieldset class="form-group col-12 col-md-5">
-               <select name="ou_id_visator[]" wire:model="organizationalUnit.{{ $value }}" class="form-control" {{$requiredVisator}} >
+               <select name="ou_id_visator[]" wire:model.live="organizationalUnit.{{ $value }}" class="form-control" {{$requiredVisator}} >
                     <option value=''></option>
 
                     @foreach($ouRoots as $ouRoot)
@@ -114,7 +114,7 @@
             </fieldset>
             <fieldset class="form-group col-12 col-md-5">
                 @if(array_key_exists($value,$users))
-                   <select name="user_visator[]" wire:model="user.{{$value}}" class="form-control" {{$requiredVisator}}>
+                   <select name="user_visator[]" wire:model.live="user.{{$value}}" class="form-control" {{$requiredVisator}}>
                         <option value=''></option>
                         @foreach($users[$value] as $user)
                             <option value={{ $user->id }}>{{ $user->fullName }}</option>

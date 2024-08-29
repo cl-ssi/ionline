@@ -6,7 +6,7 @@
     <h3 class="mb-3">Cargar archivo de TGR con reporte de Pagos a Proveedores</h3>
     <a href="{{ asset('upload-template/formato_pago_proveedores.xls') }}" target="_blank">Descargar formato del archivo de Pagos a Proveedores</a> 
     <br><br>
-    <form wire:submit.prevent="upload">
+    <form wire:submit="upload">
         <div>
             @if (session()->has('message'))
                 <div class="alert alert-success" role="alert">
@@ -16,7 +16,7 @@
         </div>
 
         <div class="input-group mb-3">
-            <input type="file" class="form-control" id="dte_file" wire:model="tgrs" accept=".xls">
+            <input type="file" class="form-control" id="dte_file" wire:model.live="tgrs" accept=".xls">
             <button class="btn btn-primary" type="submit" wire:loading.attr="disabled">
                 <i class="fas fa-fw fa-cloud-upload-alt"></i> Cargar Archivo
             </button>
@@ -29,7 +29,7 @@
     <h3 class="mb-3">Cargar archivo de SIGFE con Cartera Financiera Contable</h3>
     <a href="{{ asset('upload-template/formato_cartera_financiera_contable.xls') }}" target="_blank">Descargar formato del archivo de Cartera Financiera Contable</a> 
     <br><br>
-    <form wire:submit.prevent="uploadAccountingPortfolio">
+    <form wire:submit="uploadAccountingPortfolio">
         <div>
             @if (session()->has('message'))
                 <div class="alert alert-success" role="alert">
@@ -38,7 +38,7 @@
             @endif
         </div>
         <div class="input-group mb-3">
-            <input type="file" class="form-control" id="dte_file" wire:model="portfolios" accept=".xls,.xlsx">
+            <input type="file" class="form-control" id="dte_file" wire:model.live="portfolios" accept=".xls,.xlsx">
             <button class="btn btn-primary" type="submit" wire:loading.attr="disabled">
                 <i class="fas fa-fw fa-cloud-upload-alt"></i> Cargar Archivo
             </button>
@@ -53,7 +53,7 @@
     <a href="{{ asset('upload-template/formato_comparativo_de_requerimientos.xlsx') }}" target="_blank">Descargar formato del archivo SIGFE Comparativo de Requerimientos</a> 
     <br><br>
 
-    <form wire:submit.prevent="uploadComparativeRequirement">
+    <form wire:submit="uploadComparativeRequirement">
         <div>
             @if (session()->has('message'))
                 <div class="alert alert-success" role="alert">
@@ -62,7 +62,7 @@
             @endif
         </div>
         <div class="input-group mb-3">
-            <input type="file" class="form-control" id="dte_file" wire:model="requirements" accept=".xls,.xlsx">
+            <input type="file" class="form-control" id="dte_file" wire:model.live="requirements" accept=".xls,.xlsx">
             <button class="btn btn-primary" type="submit" wire:loading.attr="disabled">
                 <i class="fas fa-fw fa-cloud-upload-alt"></i> Cargar Archivo
             </button>

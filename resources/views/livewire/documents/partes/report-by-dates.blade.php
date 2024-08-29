@@ -12,7 +12,7 @@
                     {{ __('Fecha Inicio') }}
                 </label>
 
-                <input wire:model.defer="start_at" type="date" id="start_at"
+                <input wire:model="start_at" type="date" id="start_at"
                     class="form-control @error('start_at') is-invalid @enderror"
                     value="{{ old('start_at')}}"
                     autocomplete="start_at" required>
@@ -29,7 +29,7 @@
                     {{ __('Fecha Término') }}
                 </label>
 
-                <input wire:model.defer="end_at" type="date" id="end_at"
+                <input wire:model="end_at" type="date" id="end_at"
                     class="form-control @error('end_at') is-invalid @enderror"
                     value="{{ old('end_at') }}"
                     autocomplete="end_at" required>

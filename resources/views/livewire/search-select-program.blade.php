@@ -7,10 +7,10 @@
             aria-label="Nombre"
             wire:keydown.escape="resetx"
             @if(!$program)
-                wire:model.debounce.1000ms="query"
+                wire:model.live.debounce.1000ms="query"
                 {{ $required }}
             @else
-                wire:model.debounce.1000ms="selectedProgramName"
+                wire:model.live.debounce.1000ms="selectedProgramName"
                 disabled readonly
             @endif
         />

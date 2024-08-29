@@ -25,7 +25,7 @@
                             @else
                             <div class="form-row">
                                 <fieldset class="form-group col-md">
-                                    <input type="text" class="form-control" name="description" id="for_description" wire:model="description" required>
+                                    <input type="text" class="form-control" name="description" id="for_description" wire:model.live="description" required>
                                 </fieldset>
                                 <fieldset class="form-group col-md-1">
                                     <a class="btn btn-primary" wire:click="saveEditRole({{$role}})"><i class="fas fa-save"></i></a>

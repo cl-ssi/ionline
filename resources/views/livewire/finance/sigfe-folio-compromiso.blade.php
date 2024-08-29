@@ -1,6 +1,6 @@
 <div>
     @if ($editing)
-            <input wire:model.defer="nuevoFolioCompromiso" 
+            <input wire:model="nuevoFolioCompromiso" 
                 type="text" 
                 placeholder="Ingrese el folio compromiso sigfe"
                 class="form-control-sm">

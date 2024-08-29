@@ -9,7 +9,7 @@
     <h3 class="mb-3">Informe de desempeño realizados</h3>
     <div class="mb-3">
         <label class="form-label" for="newField">Periodo</label>
-        <select class="form-select" id="year" wire:model="year" required autocomplete="off">
+        <select class="form-select" id="year" wire:model.live="year" required autocomplete="off">
             @for ($i = now()->year; $i >= 2024; $i--)
                 <option value="{{ $i }}">{{ $i }}</option>
             @endfor
@@ -68,7 +68,7 @@
 
     @if($selectedUser)
         <h4 class="mb-3">Informe de desempeño</h4>
-        <form wire:submit.prevent="saveReport">
+        <form wire:submit="saveReport">
             <div class="row mb-3">
                 <label class="col-sm-3 col-form-label">Periodo</label>
                 <div class="col-sm-9">
@@ -91,14 +91,14 @@
             <div class="row mb-3">
                 <label for="inputEmail3" class="col-sm-3 col-form-label">Cantidad de trabajo</label>
                 <div class="col-sm-9">
-                    <textarea class="form-control" rows="2" wire:model.defer="cantidad_de_trabajo"></textarea>
+                    <textarea class="form-control" rows="2" wire:model="cantidad_de_trabajo"></textarea>
                 </div>
                 @error('cantidad_de_trabajo') <span class="text-danger error small">{{ $message }}</span> @enderror
             </div>
             <div class="row mb-3">
                 <label for="inputEmail3" class="col-sm-3 col-form-label">Calidad del trabajo</label>
                 <div class="col-sm-9">
-                    <textarea class="form-control" rows="2" wire:model.defer="calidad_del_trabajo"></textarea>
+                    <textarea class="form-control" rows="2" wire:model="calidad_del_trabajo"></textarea>
                 </div>
                 @error('calidad_del_trabajo') <span class="text-danger error small">{{ $message }}</span> @enderror
             </div>
@@ -106,21 +106,21 @@
             <div class="row mb-3">
                 <label for="inputEmail3" class="col-sm-3 col-form-label">Conocimiento del trabajo*</label>
                 <div class="col-sm-9">
-                    <textarea class="form-control" rows="2" wire:model.defer="conocimiento_del_trabajo"></textarea>
+                    <textarea class="form-control" rows="2" wire:model="conocimiento_del_trabajo"></textarea>
                 </div>
                 @error('conocimiento_del_trabajo') <span class="text-danger error small">{{ $message }}</span> @enderror
             </div>
             <div class="row mb-3">
                 <label for="inputEmail3" class="col-sm-3 col-form-label">Interés por el trabajo*</label>
                 <div class="col-sm-9">
-                    <textarea class="form-control" rows="2" wire:model.defer="interes_por_el_trabajo"></textarea>
+                    <textarea class="form-control" rows="2" wire:model="interes_por_el_trabajo"></textarea>
                 </div>
                 @error('interes_por_el_trabajo') <span class="text-danger error small">{{ $message }}</span> @enderror
             </div>
             <div class="row mb-3">
                 <label for="inputEmail3" class="col-sm-3 col-form-label">Capacidad trabajo en grupo*</label>
                 <div class="col-sm-9">
-                    <textarea class="form-control" rows="2" wire:model.defer="capacidad_trabajo_en_grupo"></textarea>
+                    <textarea class="form-control" rows="2" wire:model="capacidad_trabajo_en_grupo"></textarea>
                 </div>
                 @error('capacidad_trabajo_en_grupo') <span class="text-danger error small">{{ $message }}</span> @enderror
             </div>
@@ -128,21 +128,21 @@
             <div class="row mb-3">
                 <label for="inputEmail3" class="col-sm-3 col-form-label">Asistencia*</label>
                 <div class="col-sm-9">
-                    <textarea class="form-control" rows="2" wire:model.defer="asistencia"></textarea>
+                    <textarea class="form-control" rows="2" wire:model="asistencia"></textarea>
                 </div>
                 @error('asistencia') <span class="text-danger error small">{{ $message }}</span> @enderror
             </div>
             <div class="row mb-3">
                 <label for="inputEmail3" class="col-sm-3 col-form-label">Puntualidad*</label>
                 <div class="col-sm-9">
-                    <textarea class="form-control" rows="2" wire:model.defer="puntualidad"></textarea>
+                    <textarea class="form-control" rows="2" wire:model="puntualidad"></textarea>
                 </div>
                 @error('puntualidad') <span class="text-danger error small">{{ $message }}</span> @enderror
             </div>
             <div class="row mb-3">
                 <label for="inputEmail3" class="col-sm-3 col-form-label">Cumplimiento normas e instrucciones*</label>
                 <div class="col-sm-9">
-                    <textarea class="form-control" rows="2" wire:model.defer="cumplimiento_normas_e_instrucciones"></textarea>
+                    <textarea class="form-control" rows="2" wire:model="cumplimiento_normas_e_instrucciones"></textarea>
                 </div>
                 @error('cumplimiento_normas_e_instrucciones') <span class="text-danger error small">{{ $message }}</span> @enderror
             </div>
@@ -151,7 +151,7 @@
             <div class="row mb-3">
                 <label for="inputEmail3" class="col-sm-3 col-form-label">Observación <small>(opcional)</small></label>
                 <div class="col-sm-9">
-                    <textarea class="form-control" rows="2" wire:model.defer="creator_user_observation"></textarea>
+                    <textarea class="form-control" rows="2" wire:model="creator_user_observation"></textarea>
                 </div>
             </div>
             <div class="d-grid">

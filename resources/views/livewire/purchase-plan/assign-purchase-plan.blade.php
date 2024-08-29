@@ -11,7 +11,7 @@
             </div>
             <div class="modal-body">
                 <label>Comprador</label>
-                <select class="form-select" aria-label="Default select example" wire:model.defer="assignUserId">
+                <select class="form-select" aria-label="Default select example" wire:model="assignUserId">
                     <option value="">Selecione...</option>
                     @foreach($purchasers as $purchaser)
                         <option value="{{ $purchaser->id }}">{{ $purchaser->FullName }}</option>

@@ -35,7 +35,7 @@
         
         <fieldset class="form-group col-12 col-md-3">
             <label for="for_contractual_condition">Calidad</label>
-            <select class="form-control" wire:model="contractualConditionId" required>
+            <select class="form-control" wire:model.live="contractualConditionId" required>
                 <option value="">Seleccione...</option>
                 @foreach($contractualConditions as $contractualCondition)
                     <option value="{{ $contractualCondition->id }}">{{ $contractualCondition->name }}</option>
@@ -66,7 +66,7 @@
         @else
             <fieldset class="form-group col-12 col-md-3">
                 <label for="for_allowance_value_id">Grado E.U.S.</label>
-                <select name="allowance_value_id" class="form-control" wire:model="allowanceValueId" {{ $disabledAllowanceValueId }} required>
+                <select name="allowance_value_id" class="form-control" wire:model.live="allowanceValueId" {{ $disabledAllowanceValueId }} required>
                     <option value="">Seleccione...</option>
                     @foreach($allowanceValues as $allowanceValue)
                         <option value="{{ $allowanceValue->id }}">{{ $allowanceValue->name }}</option>
@@ -77,7 +77,7 @@
         
             <fieldset class="form-group col-12 col-md-3">
                 <label for="for_place">Grado Específico</label>
-                <input class="form-control" type="text" autocomplete="off" wire:model="grade" {{ $disabledGrade }} required>
+                <input class="form-control" type="text" autocomplete="off" wire:model.live="grade" {{ $disabledGrade }} required>
                 @error('grade') <span class="text-danger error small">{{ $message }}</span> @enderror
             </fieldset>
         @endif
@@ -86,11 +86,11 @@
             <label for="for_law">Ley</label>
             <div class="mt-1">
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" id="for_law" value="18834" wire:model="law" {{ $disabledLaw }}>
+                    <input class="form-check-input" type="radio" id="for_law" value="18834" wire:model.live="law" {{ $disabledLaw }}>
                     <label class="form-check-label" for="for_law">N° 18.834</label>
                 </div>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" id="for_law" value="19664" wire:model="law" {{ $disabledLaw }}>
+                    <input class="form-check-input" type="radio" id="for_law" value="19664" wire:model.live="law" {{ $disabledLaw }}>
                     <label class="form-check-label" for="for_law">N° 19.664</label>
                 </div>
             </div>
@@ -101,7 +101,7 @@
     <div class="form-row">
         <fieldset class="form-group col-12 col-md-6">
             <label for="for_reason">Motivo</label>
-            <input class="form-control" type="text" autocomplete="off" wire:model="reason" required>
+            <input class="form-control" type="text" autocomplete="off" wire:model.live="reason" required>
             @error('reason') <span class="text-danger error small">{{ $message }}</span> @enderror
         </fieldset>
     </div>
@@ -117,7 +117,7 @@
             <fieldset class="form-group col mt">
                 <div class="mb-3">
                     <label for="forFile" class="form-label">Boleta de Honorarios Electrónica</label>
-                    <input class="form-control" type="file" wire:model.defer="bheFile">
+                    <input class="form-control" type="file" wire:model="bheFile">
                     <div wire:loading wire:target="bheFile">Cargando archivo...</div>
                 </div>
             </fieldset>
@@ -157,7 +157,7 @@
 
         <fieldset class="form-group col-12 col-md-3">
             <label for="for_locality_id">Localidad</label>
-            <select name="locality_id[]" class="form-control" wire:model="selectedLocality" id="for_selected_locality_{{$i}}" required>
+            <select name="locality_id[]" class="form-control" wire:model.live="selectedLocality" id="for_selected_locality_{{$i}}" required>
                 <option value="">Seleccione...</option>
                 @if($localities)
                     @foreach($localities as $locality)
@@ -169,7 +169,7 @@
 
         <fieldset class="form-group col-12 col-md-2">
             <label for="for_place">Descripción Lugar</label>
-            <input class="form-control" type="text" autocomplete="off" wire:model="description" required>
+            <input class="form-control" type="text" autocomplete="off" wire:model.live="description" required>
         </fieldset>
 
         <div class="form-group col-12 col-md-1">
@@ -236,7 +236,7 @@
     <div class="form-row">
         <fieldset class="form-group col-12 col-md-4">
             <label for="for_round_trip">Medio de Transporte</label>
-            <select wire:model="meansOfTransport" class="form-control" required>
+            <select wire:model.live="meansOfTransport" class="form-control" required>
                 <option value="">Seleccione...</option>
                 <option value="ambulance">Ambulancia</option>
                 <option value="plane">Avión</option>
@@ -249,7 +249,7 @@
 
         <fieldset class="form-group col-12 col-md-4">
             <label for="for_round_trip">Itinerario</label>
-            <select wire:model="roundTrip" class="form-control" required>
+            <select wire:model.live="roundTrip" class="form-control" required>
                 <option value="">Seleccione...</option>
                 <option value="round trip">Ida, vuelta</option>
                 <option value="one-way only">Sólo ida</option>
@@ -261,11 +261,11 @@
             <label for="for_overnight">Derecho de Pasaje</label>
             <div class="mt-1">
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" id="for_passage_yes" wire:model="passage" value="1" required>
+                    <input class="form-check-input" type="radio" id="for_passage_yes" wire:model.live="passage" value="1" required>
                     <label class="form-check-label" for="for_passage_yes">Si</label>
                 </div>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" id="for_passage_no" wire:model="passage" value="0" required>
+                    <input class="form-check-input" type="radio" id="for_passage_no" wire:model.live="passage" value="0" required>
                     <label class="form-check-label" for="for_passage_no">No</label>
                 </div>
             </div>
@@ -278,11 +278,11 @@
             <label for="for_overnight">Pernocta fuera de residencia</label>
             <div class="mt-1 text-center">
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" id="for_overnight_yes" wire:model="overnight" value="1" required>
+                    <input class="form-check-input" type="radio" id="for_overnight_yes" wire:model.live="overnight" value="1" required>
                     <label class="form-check-label" for="for_overnight_no">Si</label>
                 </div>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" id="for_overnight_no" wire:model="overnight" value="0" required>
+                    <input class="form-check-input" type="radio" id="for_overnight_no" wire:model.live="overnight" value="0" required>
                     <label class="form-check-label" for="for_overnight_no">No</label>
                 </div>
             </div>
@@ -293,11 +293,11 @@
             <label for="for_accommodation">Alojamiento (Incluída en cometido o actividad)</label>
             <div class="mt-1 text-center">
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" id="for_accommodation_yes" wire:model="accommodation" value="1" required>
+                    <input class="form-check-input" type="radio" id="for_accommodation_yes" wire:model.live="accommodation" value="1" required>
                     <label class="form-check-label" for="for_accommodation_yes">Si</label>
                 </div>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" id="for_overnight_no" wire:model="accommodation" value="0" required>
+                    <input class="form-check-input" type="radio" id="for_overnight_no" wire:model.live="accommodation" value="0" required>
                     <label class="form-check-label" for="for_accommodation_no">No</label>
                 </div>
             </div>
@@ -308,11 +308,11 @@
             <label for="for_food">Alimentación (Incluída en cometido o actividad)</label>
             <div class="mt-1">
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" id="for_food_yes" wire:model="food" value="1" required>
+                    <input class="form-check-input" type="radio" id="for_food_yes" wire:model.live="food" value="1" required>
                     <label class="form-check-label" for="for_food_yes">Si</label>
                 </div>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" id="for_food_no" wire:model="food" value="0" required>
+                    <input class="form-check-input" type="radio" id="for_food_no" wire:model.live="food" value="0" required>
                     <label class="form-check-label" for="for_food_no">No</label>
                 </div>
             </div>
@@ -323,13 +323,13 @@
     <div class="form-row">
         <fieldset class="form-group col-12 col-sm-4">
             <label for="for_start_date">Desde</label>
-            <input type="date" class="form-control" wire:model.defer="from" id="for_from">
+            <input type="date" class="form-control" wire:model="from" id="for_from">
             @error('from') <span class="text-danger error small">{{ $message }}</span> @enderror
         </fieldset>
 
         <fieldset class="form-group col-12 col-sm-4">
             <label for="for_end_date">Hasta</label>
-            <input type="date" class="form-control" wire:model.defer="to" id="for_to">
+            <input type="date" class="form-control" wire:model="to" id="for_to">
             @error('to') <span class="text-danger error small">{{ $message }}</span> @enderror
         </fieldset>
 
@@ -337,7 +337,7 @@
             <label for="name" class="col-form-label">Solo medios días (Inclusive):</label>
             <br>
             <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" value="1" id="for_half_days_only" wire:model.defer="halfDaysOnly" {{-- $disabledHalfDayOnly }} {{ $halfDaysOnly == 1 ? 'checked' : '' --}} >
+                <input class="form-check-input" type="checkbox" value="1" id="for_half_days_only" wire:model="halfDaysOnly" {{-- $disabledHalfDayOnly }} {{ $halfDaysOnly == 1 ? 'checked' : '' --}} >
                 <label class="form-check-label" for="for_yes">
                     Si
                 </label>
@@ -363,18 +363,18 @@
     <h6><i class="fas fa-paperclip"></i> Archivos Adjuntos</h6>
     <br>
     
-    <form wire:submit.prevent="addFile">
+    <form wire:submit="addFile">
         <div class="form-row">
         
             <fieldset class="form-group col mt">
                 <label for="for_name">Nombre Archivo</label>
-                <input type="text" class="form-control" wire:model="fileName" required>
+                <input type="text" class="form-control" wire:model.live="fileName" required>
             </fieldset>
                 
             <fieldset class="form-group col mt">
                 <div class="mb-3">
                     <label for="forFile" class="form-label"><br></label>
-                    <input class="form-control" type="file" wire:model.defer="fileAttached" id="upload({{ $iterationFileClean }})" required>
+                    <input class="form-control" type="file" wire:model="fileAttached" id="upload({{ $iterationFileClean }})" required>
                     <div wire:loading wire:target="fileAttached">Cargando archivo...</div>
                 </div>
             </fieldset>

@@ -5,7 +5,7 @@
             type="text"
             class="form-control @error('name') is-invalid @enderror"
             id="name"
-            wire:model.debounce.1500ms="name"
+            wire:model.live.debounce.1500ms="name"
             placeholder="Ingresa el nombre"
             value="{{ old('name', optional($store)->name) }}"
             required
@@ -24,7 +24,7 @@
             type="text"
             class="form-control @error('address') is-invalid @enderror"
             id="address"
-            wire:model.debounce.1500ms="address"
+            wire:model.live.debounce.1500ms="address"
             placeholder="Ingresa la dirección"
             value="{{ old('address', optional($store)->address) }}"
             required
@@ -41,7 +41,7 @@
         <select
             id="commune-id"
             class="form-control @error('commune_id') is-invalid @enderror"
-            wire:model.debounce.1500ms="commune_id"
+            wire:model.live.debounce.1500ms="commune_id"
             required
         >
             <option value="">Selecciona la comuna</option>
@@ -66,7 +66,7 @@
         <select
             id="establishment-id"
             class="form-control @error('establishment_id') is-invalid @enderror"
-            wire:model.debounce.1500ms="establishment_id"
+            wire:model.live.debounce.1500ms="establishment_id"
             required
         >
             <option value="">

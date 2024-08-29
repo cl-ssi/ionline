@@ -22,7 +22,7 @@
                                 <input
                                     class="form-control form-control-sm @error('barcode') is-invalid @enderror"
                                     type="text"
-                                    wire:model.debounce.1500ms="barcode"
+                                    wire:model.live.debounce.1500ms="barcode"
                                     id="barcode"
                                     readonly
                                 >
@@ -48,7 +48,7 @@
                                         Tipo de Producto
                                     </label>
                                     <select
-                                        wire:model.debounce.1500ms="type_wre_product"
+                                        wire:model.live.debounce.1500ms="type_wre_product"
                                         id="type-product"
                                         class="form-control form-control-sm"
                                     >
@@ -70,7 +70,7 @@
                                     <select
                                         class="form-control form-control-sm @error('selected_wre_product_id') is-invalid @enderror"
                                         id="wre-product-id"
-                                        wire:model.debounce.1500ms="selected_wre_product_id"
+                                        wire:model.live.debounce.1500ms="selected_wre_product_id"
                                     >
                                         <option value="">Selecciona un producto</option>
                                         @foreach($wre_products as $product)
@@ -95,7 +95,7 @@
                                         class="form-control form-control-sm"
                                         type="text"
                                         id="search-product"
-                                        wire:model.debounce.1500ms="search_product"
+                                        wire:model.live.debounce.1500ms="search_product"
                                     >
                                 </fieldset>
 
@@ -120,7 +120,7 @@
                                     <input
                                         class="form-control form-control-sm @error('description') is-invalid @enderror"
                                         type="text"
-                                        wire:model.debounce.1500ms="description"
+                                        wire:model.live.debounce.1500ms="description"
                                         id="description"
                                     >
                                     @error('description')
@@ -177,7 +177,7 @@
                                 <input
                                     class="form-control form-control-sm @error('quantity_received') is-invalid @enderror"
                                     type="number"
-                                    wire:model.debounce.1500ms="quantity_received"
+                                    wire:model.live.debounce.1500ms="quantity_received"
                                     id="quantity-received"
                                 >
                                 @error('quantity_received')
@@ -291,7 +291,7 @@
                 <input
                     class="form-control @error('return_note') is-invalid @enderror"
                     type="text"
-                    wire:model.debounce.1500ms="return_note"
+                    wire:model.live.debounce.1500ms="return_note"
                     id="return-note"
                 >
                 @error('return_note')

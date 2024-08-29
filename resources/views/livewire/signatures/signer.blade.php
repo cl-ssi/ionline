@@ -1,7 +1,7 @@
 <div class="form-row">
     <fieldset class="form-group col-12 col-md-6">
         <label>{{ $selectedDocumentType === 'Protocolo' ? 'Aprobador' : 'Firmante' }} - Unidad Organizacional</label>
-        <select name="ou_id_signer" id="for_ou_id_signer" wire:model="organizationalUnit" class="form-control "
+        <select name="ou_id_signer" id="for_ou_id_signer" wire:model.live="organizationalUnit" class="form-control "
             data-live-search="true" data-size="5">
             <option value=''></option>
 
@@ -52,7 +52,7 @@
     @if (count($users) > 0)
         <fieldset class="form-group col-12 col-md-6">
             <label>{{ $selectedDocumentType === 'Protocolo' ? 'Aprobador' : 'Firmante' }} - Usuario</label>
-            <select name="user_signer" id="for_user_signer" wire:model="user" class="form-control" {{ $userRequired }}>
+            <select name="user_signer" id="for_user_signer" wire:model.live="user" class="form-control" {{ $userRequired }}>
                 <option value=''></option>
                 @foreach ($users as $user)
                     <option value={{ $user->id }}>{{ $user->fullName }}</option>

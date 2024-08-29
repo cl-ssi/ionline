@@ -58,10 +58,10 @@
             @if ($form)
                 <tr>
                     <td>
-                        <input type="text" class="form-control" wire:model="name">
+                        <input type="text" class="form-control" wire:model.live="name">
                     </td>
                     <td>
-                        <input type="text" class="form-control" wire:model="description">
+                        <input type="text" class="form-control" wire:model.live="description">
                     </td>
                     <td class="text-right">
                         <button type="button" class="btn btn-sm btn-primary" wire:click="save">

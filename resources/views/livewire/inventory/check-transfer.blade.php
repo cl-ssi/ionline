@@ -124,7 +124,7 @@
             <select
                 class="form-control @error('status') is-invalid @enderror"
                 id="status"
-                wire:model.debounce.1500ms="status"
+                wire:model.live.debounce.1500ms="status"
             >
                 <option value="">Seleccione un estado</option>
                 <option value="1">Bueno</option>
@@ -146,7 +146,7 @@
                 type="text"
                 class="form-control @error('observations') is-invalid @enderror"
                 id="observations"
-                wire:model.debounce.1500ms="observations"
+                wire:model.live.debounce.1500ms="observations"
             >
 
             @error('observations')

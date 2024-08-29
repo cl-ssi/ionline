@@ -3,7 +3,7 @@
         {{ $dte->observation }} 
     </div>
     <textarea
-        wire:model.defer="observation" 
+        wire:model="observation" 
         class="form-control"
         rows="{{ isset($rows) ? $rows : 12 }}" 
         cols="{{ isset($cols) ? $cols : 50 }}"

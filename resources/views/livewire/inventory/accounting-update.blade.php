@@ -7,7 +7,7 @@
     <div class="row g-2 mb-3">
         <div class="col-md-4">
             <label for="for-folio_oc" class="form-label">Folio OC</label>
-            <input type="text" class="form-control" wire:model.defer="oc" placeholder="folio oc">
+            <input type="text" class="form-control" wire:model="oc" placeholder="folio oc">
         </div>
         <div class="col-md-1">
             <label for="search" class="form-label">&nbsp;</label>
@@ -85,13 +85,13 @@
                         </small>
                     </td>
                     <td class="text-center text-nowrap" style="max-width: 150px;">
-                        <input type="number" class="form-control" wire:model.defer="usefulLife.{{ $inventory->id }}">
+                        <input type="number" class="form-control" wire:model="usefulLife.{{ $inventory->id }}">
                     </td>
                     <td class="text-center text-nowrap" >
-                        <input type="number" class="form-control" wire:model.defer="poPrice.{{ $inventory->id }}" step="0.01" style="width: 120px;" >
+                        <input type="number" class="form-control" wire:model="poPrice.{{ $inventory->id }}" step="0.01" style="width: 120px;" >
                     </td>
                     <td>
-                        <select class="form-select" wire:model.defer="accountingCodes.{{ $inventory->id }}">
+                        <select class="form-select" wire:model="accountingCodes.{{ $inventory->id }}">
                             <option value="">Seleccione cuenta contable</option>
                             @foreach($allAccountingCodes as $accountingCode)
                                 <option value="{{ $accountingCode->id }}" @if($accountingCode->id == $inventory->accounting_code_id) selected @endif>

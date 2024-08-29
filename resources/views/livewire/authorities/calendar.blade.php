@@ -8,7 +8,7 @@
             </h5>
         </div>
         <div class="col-6 col-md-3">
-            <input class="form-control" type="month" wire:model="monthSelection">
+            <input class="form-control" type="month" wire:model.live="monthSelection">
         </div>
     </div>
 
@@ -25,7 +25,7 @@
                 <div class="col-12 col-md-4 mt-3">
                     <div class="form-group">
                         <label for="for_user_id">Usuario*</label>
-                        <select wire:model="user_id" class="form-select" required>
+                        <select wire:model.live="user_id" class="form-select" required>
                             <option value=""></option>
                             @foreach($subrogations as $subrogation)
                             <option value="{{ $subrogation->user_id }}">{{ $subrogation->user->shortName }}</option>
@@ -38,7 +38,7 @@
                 <div class="col-4 col-md-3 mt-3">
                     <div class="form-group">
                         <label for="Cargo">Cargo*</label>
-                        <select wire:model="position" id="for_position" class="form-select" required>
+                        <select wire:model.live="position" id="for_position" class="form-select" required>
                             <option value=""></option>
                             <option>Director</option>
                             <option>Directora</option>
@@ -69,7 +69,7 @@
                 <div class="col-4 col-md-2 mt-3">
                     <div class="form-group">
                         <label for="">Desde*</label>
-                        <input type="date" wire:model="startDate" class="form-control" disabled required>
+                        <input type="date" wire:model.live="startDate" class="form-control" disabled required>
                         @error('startDate') <span class="text-danger">{{ $message }}</span> @enderror
                     </div>
                 </div>
@@ -77,7 +77,7 @@
                 <div class="col-4 col-md-2 mt-3">
                     <div class="form-group">
                         <label for="">Hasta*</label>
-                        <input type="date" wire:model="endDate" class="form-control" required>
+                        <input type="date" wire:model.live="endDate" class="form-control" required>
                         @error('endDate') <span class="text-danger">{{ $message }}</span> @enderror
                     </div>
                 </div>
@@ -85,7 +85,7 @@
                 <div class="col-12 col-md-7 mt-3">
                     <div class="form-group">
                         <label for="for_decree">Decreto (opcional)</label>
-                        <input type="text" class="form-control" wire:model="decree">
+                        <input type="text" class="form-control" wire:model.live="decree">
                     </div>
                 </div>
 

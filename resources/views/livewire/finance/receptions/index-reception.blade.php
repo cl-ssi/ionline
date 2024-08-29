@@ -7,7 +7,7 @@
     <div class="row g-2 d-print-none mb-3">
         <fieldset class="form-group col-md-1">
             <label for="number">ID</label>
-            <input wire:model.defer="filter_id"
+            <input wire:model="filter_id"
                 id="filter_id"
                 class="form-control"
                 autocomplete="off">
@@ -15,7 +15,7 @@
 
         <fieldset class="form-group col-md-2">
             <label for="oc">OC</label>
-            <input wire:model.defer="filter_purchase_order"
+            <input wire:model="filter_purchase_order"
                 id="filter_purchase_order"
                 class="form-control"
                 autocomplete="off">
@@ -24,7 +24,7 @@
         <fieldset class="form-group col-md-2">
             <label for="receptionType">Tipo</label>
             <select class="form-select"
-                wire:model="filter_reception_type_id">
+                wire:model.live="filter_reception_type_id">
                 <option value=""></option>
                 @foreach ($types as $id => $type)
                     <option value="{{ $id }}">{{ $type }}</option>
@@ -34,7 +34,7 @@
 
         <fieldset class="form-group col-md-2">
             <label for="number">Fecha Recepción</label>
-            <input wire:model.defer="filter_date"
+            <input wire:model="filter_date"
                 id="date"
                 class="form-control"
                 type="date">
@@ -42,7 +42,7 @@
 
         <fieldset class="form-group col-md-1">
             <label for="number">Número</label>
-            <input wire:model.defer="filter_number"
+            <input wire:model="filter_number"
                 id="filter_number"
                 class="form-control"
                 autocomplete="off">
@@ -50,7 +50,7 @@
 
         <fieldset class="form-group col-md-2">
             <label for="responsable">Responsable</label>
-            <input wire:model.defer="filter_responsable"
+            <input wire:model="filter_responsable"
                 id="filter_responsable"
                 class="form-control"
                 autocomplete="off">
@@ -59,7 +59,7 @@
         <fieldset class="form-group col-md-1">
             <label for="for-pending">Estado</label>
             <select class="form-select"
-                wire:model.defer="filter_pending">
+                wire:model="filter_pending">
                 <option value="all">Todas</option>
                 <option value="pending">Pendiente Aprobación</option>
                 <option value="without_number">Sin Numerar</option>

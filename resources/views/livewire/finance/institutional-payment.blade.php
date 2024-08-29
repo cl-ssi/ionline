@@ -4,31 +4,31 @@
 
     <h3>Pagos Institucionales</h3>
 
-    <form wire:submit.prevent="search">
+    <form wire:submit="search">
         <div class="row g-2 mb-3">
             <div class="col-md-1">
                 <label for="for-id" class="form-label">ID</label>
-                <input type="text" class="form-control" wire:model.defer="filters.id" placeholder="id">
+                <input type="text" class="form-control" wire:model="filters.id" placeholder="id">
             </div>
             <div class="col-md-2">
                 <label for="for-emisor" class="form-label">Rut</label>
-                <input type="text" class="form-control" wire:model.defer="filters.emisor" placeholder="rut emisor">
+                <input type="text" class="form-control" wire:model="filters.emisor" placeholder="rut emisor">
             </div>
             <div class="col-md-1">
                 <label for="for-folio" class="form-label">Folio DTE</label>
-                <input type="text" class="form-control" wire:model.defer="filters.folio" placeholder="folio">
+                <input type="text" class="form-control" wire:model="filters.folio" placeholder="folio">
             </div>
             <div class="col-md-2">
                 <label for="for-folio" class="form-label">Folio Comp</label>
-                <input type="text" class="form-control" wire:model.defer="filters.folio_compromiso" placeholder="compromiso">
+                <input type="text" class="form-control" wire:model="filters.folio_compromiso" placeholder="compromiso">
             </div>
             <div class="col-md-2">
                 <label for="for-folio" class="form-label">Folio Dev</label>
-                <input type="text" class="form-control" wire:model.defer="filters.folio_devengo"  placeholder="devengo">
+                <input type="text" class="form-control" wire:model="filters.folio_devengo"  placeholder="devengo">
             </div>
             <div class="col-md-2">
                 <label for="for-folio" class="form-label">Folio Pago</label>
-                <input type="text" class="form-control" wire:model.defer="filters.folio_pago" placeholder="folio pago">
+                <input type="text" class="form-control" wire:model="filters.folio_pago" placeholder="folio pago">
             </div>
 
             <!-- Agrega más campos según tus necesidades -->
@@ -139,9 +139,9 @@
                                 {{$dte->fecha}}
                                 <button type="button" class="btn btn-primary btn-sm mt-2" wire:loading.attr="disabled" wire:click="delete({{$dte->id}}, 'fecha')"><i class="fa fa-trash"></i></button>
                             @else
-                                <form class="form-inline" wire:submit.prevent="save({{$dte->id}}, 'fecha')">
+                                <form class="form-inline" wire:submit="save({{$dte->id}}, 'fecha')">
                                     <div class="input-group">
-                                        <input class="form-control fs-6" type="date" wire:model.defer="fecha">
+                                        <input class="form-control fs-6" type="date" wire:model="fecha">
                                         <button type="submit" class="btn btn-outline-primary btn-sm" wire:loading.attr="disabled"><i class="fas fa-save"></i></button>
                                     </div>
                                 </form>

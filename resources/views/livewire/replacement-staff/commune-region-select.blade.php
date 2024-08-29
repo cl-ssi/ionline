@@ -2,14 +2,14 @@
     <label for="regiones">Región / Comuna *</label>
     <div class="input-group">
 
-        <select name="region_id" id="for_region_id" class="form-control" wire:model="selectedRegion" required>
+        <select name="region_id" id="for_region_id" class="form-control" wire:model.live="selectedRegion" required>
             <option value="">Seleccione...</option>
             @foreach($regions as $region)
               <option value="{{ $region->id }}" @if($replacementStaff) {{ ($replacementStaff->region_id == $regionSelected) ? 'selected' : '' }} @endif>{{ $region->name }}</option>
             @endforeach
         </select>
 
-        <select name="commune_id" id="for_commune_id" class="form-control" wire:model="selectedCommune" required>
+        <select name="commune_id" id="for_commune_id" class="form-control" wire:model.live="selectedCommune" required>
             <option value="">Seleccione...</option>
               @if(!is_null($communes) || $replacementStaff)
                 @foreach($communes as $commune)

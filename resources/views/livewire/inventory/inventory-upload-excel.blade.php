@@ -9,7 +9,7 @@
 
     @include('layouts.bt5.partials.flash_message')
 
-    <form wire:submit.prevent="processExcel"
+    <form wire:submit="processExcel"
         enctype="multipart/form-data">
 
         <div class="mb-3">
@@ -20,7 +20,7 @@
                 <input type="file"
                     class="form-control @error('excelFile') is-invalid @enderror"
                     id="excelFile"
-                    wire:model="excelFile"
+                    wire:model.live="excelFile"
                     accept=".xlsx,.xls"
                     required>
 

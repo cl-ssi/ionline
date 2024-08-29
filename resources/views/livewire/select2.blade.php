@@ -19,7 +19,7 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-globe-asia text-primary"></i></span>
                     </div>
-                    <select class="form-control rounded-0 " wire:change="$emit('classChanged', $event.target.value)" style="width: 100%;" tabindex="-1" aria-hidden="true">
+                    <select class="form-control rounded-0 " wire:change="$dispatch('classChanged', $event.target.value)" style="width: 100%;" tabindex="-1" aria-hidden="true">
                     <option>white</option>
             <option>purple</option>
             <option>sadf</option>

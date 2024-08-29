@@ -16,7 +16,7 @@
     </h3>
 
     <div wire:ignore class="mb-2">
-        <textarea class="form-control" wire:model="tabla" name="message" id="message" cols="30" rows="15"></textarea>
+        <textarea class="form-control" wire:model.live="tabla" name="message" id="message" cols="30" rows="15"></textarea>
     </div>
 
     <center>
@@ -31,19 +31,19 @@
 
     <div class="mb-3">
         <label for="for-cols" class="form-label">BD Cols</label>
-        <input type="text" class="form-control " id="cols" wire:model="seccion.cols" disabled>
+        <input type="text" class="form-control " id="cols" wire:model.live="seccion.cols" disabled>
     </div>
     <div class="mb-3">
         <label for="for-cols" class="form-label">Cols</label>
-        <input type="text" class="form-control {{ $seccion->cols == $cols ? 'is-valid' : 'is-invalid' }}" id="cols" wire:model="cols">
+        <input type="text" class="form-control {{ $seccion->cols == $cols ? 'is-valid' : 'is-invalid' }}" id="cols" wire:model.live="cols">
     </div>
     <div class="mb-3">
         <label for="for-cols" class="form-label">BD Cods</label>
-        <input type="text" class="form-control " id="cols" wire:model="seccion.cods" disabled>
+        <input type="text" class="form-control " id="cols" wire:model.live="seccion.cods" disabled>
     </div>
     <div class="mb-3">
         <label for="for-cod" class="form-label">Cods</label>
-        <input type="text" class="form-control {{ $seccion->cods == $cods ? 'is-valid' : 'is-invalid' }}" id="cods" wire:model="cods">
+        <input type="text" class="form-control {{ $seccion->cods == $cods ? 'is-valid' : 'is-invalid' }}" id="cods" wire:model.live="cods">
     </div>
 
     <hr>
@@ -53,40 +53,40 @@
         <div class="col-md-10">
             <div class="mb-3">
                 <label for="for-supergroups" class="form-label">Supergroups</label>
-                <input type="text" class="form-control" id="supergroups" wire:model="seccion.supergroups">
+                <input type="text" class="form-control" id="supergroups" wire:model.live="seccion.supergroups">
             </div>
         </div>
         <div class="col-md-2">
             <div class="form-check form-switch">
                 </br>
-                <input class="form-check-input" type="checkbox" role="switch" id="for-supergroups_inline" wire:model="seccion.supergroups_inline">
+                <input class="form-check-input" type="checkbox" role="switch" id="for-supergroups_inline" wire:model.live="seccion.supergroups_inline">
                 <label class="form-check-label" for="for-supergroups_inline">Supergroups Inline</label>
             </div>
         </div>
     </div>
 
     <div class="form-check form-switch">
-        <input class="form-check-input" type="checkbox" role="switch" id="for-discard_group" wire:model="seccion.discard_group">
+        <input class="form-check-input" type="checkbox" role="switch" id="for-discard_group" wire:model.live="seccion.discard_group">
         <label class="form-check-label" for="for-discard_group">Discard Group</label>
     </div>
 
     <div class="form-check form-switch">
-        <input class="form-check-input" type="checkbox" role="switch" id="for-totals" wire:model="seccion.totals">
+        <input class="form-check-input" type="checkbox" role="switch" id="for-totals" wire:model.live="seccion.totals">
         <label class="form-check-label" for="for-totals">Totales</label>
     </div>
 
     <div class="mb-3">
         <label for="for-supergroups" class="form-label">Totals_by_prestacion</label>
-        <input type="text" class="form-control" id="supergroups" wire:model="seccion.totals_by_prestacion">
+        <input type="text" class="form-control" id="supergroups" wire:model.live="seccion.totals_by_prestacion">
     </div>
 
     <div class="mb-3">
         <label for="for-supergroups" class="form-label">Totals_by_group</label>
-        <input type="text" class="form-control" id="supergroups" wire:model="seccion.totals_by_group">
+        <input type="text" class="form-control" id="supergroups" wire:model.live="seccion.totals_by_group">
     </div>
 
     <div class="form-check form-switch">
-        <input class="form-check-input" type="checkbox" role="switch" id="for-totals_first" wire:model="seccion.totals_first">
+        <input class="form-check-input" type="checkbox" role="switch" id="for-totals_first" wire:model.live="seccion.totals_first">
         <label class="form-check-label" for="for-totals_first">Totales Primero</label>
     </div>
 
@@ -94,13 +94,13 @@
         <div class="col-md-10">
             <div class="mb-3">
                 <label class="form-label" for="for-subtotals">Subtotales</label>
-                <input class="form-control" type="text" id="for-subtotals" wire:model="seccion.subtotals">
+                <input class="form-control" type="text" id="for-subtotals" wire:model.live="seccion.subtotals">
             </div>
         </div>
         <div class="col-md-2">
             <div class="form-check form-switch">
                 <br>
-                <input class="form-check-input" type="checkbox" role="switch" id="for-subtotals_first" wire:model="seccion.subtotals_first">
+                <input class="form-check-input" type="checkbox" role="switch" id="for-subtotals_first" wire:model.live="seccion.subtotals_first">
                 <label class="form-check-label" for="for-subtotals_first">Subtotales Primero</label>
             </div>
         </div>
@@ -109,7 +109,7 @@
 
     <div class="mb-3">
         <label for="for-tfoot" class="form-label">Tfoot</label>
-        <textarea class="form-control" id="for-tfoot" wire:model="seccion.tfoot" rows="6"></textarea>
+        <textarea class="form-control" id="for-tfoot" wire:model.live="seccion.tfoot" rows="6"></textarea>
     </div>
 
     <table class="mb-3 table-bordered border-secondary">
@@ -126,10 +126,10 @@
 
         <div class="row mb-3">
             <div class="col">
-                <textarea class="form-control" id="" cols="50" rows="20" wire:model="seccion.thead" disabled></textarea>
+                <textarea class="form-control" id="" cols="50" rows="20" wire:model.live="seccion.thead" disabled></textarea>
             </div>
             <div class="col">
-                <textarea class="form-control {{ $seccion->thead == $thead ? 'is-valid' : 'is-invalid' }}" id="" cols="50" rows="20" wire:model="thead"></textarea>
+                <textarea class="form-control {{ $seccion->thead == $thead ? 'is-valid' : 'is-invalid' }}" id="" cols="50" rows="20" wire:model.live="thead"></textarea>
             </div>
         </div>
 

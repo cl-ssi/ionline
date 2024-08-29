@@ -5,12 +5,12 @@
 
         <fieldset class="form-group col-2">
             <label for="for_hotel_id">F.Desde</label>
-            <input type="date" class="form-control" id="for_start_date" name="start_date" wire:model="start_date">
+            <input type="date" class="form-control" id="for_start_date" name="start_date" wire:model.live="start_date">
         </fieldset>
 
         <fieldset class="form-group col-2">
             <label for="for_hotel_id">F.Hasta</label>
-            <input type="date" class="form-control" id="for_end_date" name="end_date" wire:model="end_date">
+            <input type="date" class="form-control" id="for_end_date" name="end_date" wire:model.live="end_date">
         </fieldset>
 
         <fieldset class="form-group col-1">

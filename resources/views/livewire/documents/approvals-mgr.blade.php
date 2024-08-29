@@ -8,7 +8,7 @@
     <div class="row g-2 mb-3">
         <div class="form-group col-md-2">
             <label for="inputState">Estado</label>
-            <select id="inputState" class="form-select" wire:model.defer="filter.status">
+            <select id="inputState" class="form-select" wire:model="filter.status">
                 <option value="?">Pendientes</option>
                 <option value="1">Aprobados</option>
                 <option value="0">Rechazados</option>
@@ -17,7 +17,7 @@
         </div>
         <div class="form-group col-md-3">
             <label for="inputModule">Módulo</label>
-            <select id="inputModule" class="form-select" wire:model.defer="filter.module">
+            <select id="inputModule" class="form-select" wire:model="filter.module">
                 <option value="">Todos</option>
                 @foreach($modules as $module)
                 <option value="{{ $module }}">{{ $module }}</option>
@@ -60,7 +60,7 @@
                         style="scale: 1.4;"
                         type="checkbox"
                         id="ids.{{$approval->id}}"
-                        wire:model.defer="ids.{{$approval->id}}">
+                        wire:model="ids.{{$approval->id}}">
                     @endif
                 </td>
                 <td class="text-center">
@@ -123,7 +123,7 @@
                 <input type="text" 
                     placeholder="OTP" 
                     class="form-control"
-                    wire:model.defer="otp">
+                    wire:model="otp">
                 <button class="btn btn-success" wire:click="bulkProcess(true)" wire:loading.attr="disabled">
                     <i class="fa fa-spinner fa-spin" wire:loading></i>
                     <i class="fas fa-thumbs-up" wire:loading.class="d-none"></i> 

@@ -25,7 +25,7 @@
                   <td class="text-center">{{$item->id}}</td>
                   <td>
                     <div wire:ignore id="for-bootstrap-select-{{$item->id}}" wire:key="{{ $item->id }}">
-                      <select  wire:model.defer="arrayItemRequest.{{ $item->id }}.budgetId" wire:click="resetError" data-container="#for-bootstrap-select-{{$item->id}}"
+                      <select  wire:model="arrayItemRequest.{{ $item->id }}.budgetId" wire:click="resetError" data-container="#for-bootstrap-select-{{$item->id}}"
                         class="form-control form-control-sm selectpicker" data-size="5" data-live-search="true" title="Seleccione..." required>
                           @foreach($lstBudgetItem as $val)
                             <option value="{{$val->id}}">{{$val->code.' - '.$val->name}}</option>
@@ -100,7 +100,7 @@
                         <td>{{ $passenger->email }}</td>
                         <td>
                           <div wire:ignore id="for-bootstrap-select-{{$passenger->id}}" wire:key="{{ $passenger->id }}">
-                            <select  wire:model.defer="arrayItemRequest.{{ $passenger->id }}.budgetId"  wire:click="resetError" data-container="#for-bootstrap-select-{{$passenger->id}}"
+                            <select  wire:model="arrayItemRequest.{{ $passenger->id }}.budgetId"  wire:click="resetError" data-container="#for-bootstrap-select-{{$passenger->id}}"
                               class="form-control form-control-sm selectpicker" data-size="5" data-live-search="true" title="Seleccione..." required>
                                 @foreach($lstBudgetItem as $val)
                                   <option value="{{$val->id}}">{{$val->code.' - '.$val->name}}</option>
@@ -136,35 +136,35 @@
                 <div class="form-row">
                     <fieldset class="form-group col-sm-5">
                         <label for="forRut">Responsable:</label>
-                        <input wire:model="userAuthority" name="userAuthority" class="form-control form-control-sm" type="text" readonly>
+                        <input wire:model.live="userAuthority" name="userAuthority" class="form-control form-control-sm" type="text" readonly>
                     </fieldset>
 
                     <fieldset class="form-group col-sm-2">
                         <label>Cargo:</label><br>
-                        <input wire:model="position" name="position" class="form-control form-control-sm" type="text" readonly>
+                        <input wire:model.live="position" name="position" class="form-control form-control-sm" type="text" readonly>
                     </fieldset>
 
                     <fieldset class="form-group col-sm-5">
                         <label for="forRut">Unidad Organizacional:</label>
-                        <input wire:model="organizationalUnit" name="organizationalUnit" class="form-control form-control-sm" type="text" readonly>
+                        <input wire:model.live="organizationalUnit" name="organizationalUnit" class="form-control form-control-sm" type="text" readonly>
                     </fieldset>
                 </div>
                 <div class="form-row">
                     {{--<fieldset class="form-group col-sm-4">
                         <label for="forRut">Folio Requerimiento SIGFE:</label>
-                        <input wire:model.defer="sigfe" name="sigfe" wire:click="resetError" class="form-control form-control-sm" type="text">
+                        <input wire:model="sigfe" name="sigfe" wire:click="resetError" class="form-control form-control-sm" type="text">
                         @error('sigfe') <span class="error text-danger">{{ $message }}</span> @enderror
                     </fieldset>
 
                     <fieldset class="form-group col-sm-4">
                       <label>Programa Asociado:</label><br>
-                      <input wire:model.defer="program" name="program" wire:click="resetError" class="form-control form-control-sm" type="text">
+                      <input wire:model="program" name="program" wire:click="resetError" class="form-control form-control-sm" type="text">
                       @error('program') <span class="error text-danger">{{ $message }}</span> @enderror
                     </fieldset>--}}
 
                     <fieldset class="form-group col-sm-5">
                       <label>Programa Asociado: @if($program) <span class="badge badge-secondary">{{$program}}</span> @endif</label><br>
-                      <select wire:model="program_id" name="program_id" class="form-control form-control-sm " required>
+                      <select wire:model.live="program_id" name="program_id" class="form-control form-control-sm " required>
                           <option value="">Seleccione...</option>
                           @foreach($lstProgram as $val)
                               <option value="{{$val->id}}">{{$val->alias_finance}} {{$val->period}} - Subtítulo {{$val->Subtitle->name}}</option>
@@ -175,12 +175,12 @@
 
                     <fieldset class="form-group col-sm-2">
                         <label for="forRut">Folio SIGFE:</label>
-                        <input wire:model="sigfe" name="sigfe" wire:click="resetError" class="form-control form-control-sm" type="text" readonly>
+                        <input wire:model.live="sigfe" name="sigfe" wire:click="resetError" class="form-control form-control-sm" type="text" readonly>
                     </fieldset>
 
                     <fieldset class="form-group col-sm-2">
                         <label for="forRut">Financiamiento</label>
-                        <input wire:model="financial_type" name="financial_type" wire:click="resetError" class="form-control form-control-sm" type="text" readonly>
+                        <input wire:model.live="financial_type" name="financial_type" wire:click="resetError" class="form-control form-control-sm" type="text" readonly>
                     </fieldset>
                 </div>
 
@@ -189,7 +189,7 @@
                 <div class="form-row">
                     <fieldset class="form-group col-sm-12">
                         <label for="for_comment">Observación:</label>
-                        <textarea wire:model.defer="comment" wire:click="resetError" name="comment" class="form-control form-control-sm" rows="3"></textarea>
+                        <textarea wire:model="comment" wire:click="resetError" name="comment" class="form-control form-control-sm" rows="3"></textarea>
                         @error('comment') <span class="error text-danger">{{ $message }}</span> @enderror
                         </fieldset>
                 </div>

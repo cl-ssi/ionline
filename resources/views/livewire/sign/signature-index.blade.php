@@ -22,7 +22,7 @@
             <select
                 class="form-control"
                 id="document-type"
-                wire:model="filterBy"
+                wire:model.live="filterBy"
             >
                 <option value="all">Todas</option>
                 <option value="pending">Pendientes</option>
@@ -35,8 +35,8 @@
                 type="text"
                 class="form-control"
                 id="search"
-                wire:model.debounce="search"
-                wire:model.debounce.1500ms="search"
+                wire:model.live.debounce="search"
+                wire:model.live.debounce.1500ms="search"
                 placeholder="Ingresa una materia o una descripción"
             >
         </div>

@@ -26,11 +26,11 @@
         </div>
     @endif
 
-    <form wire:submit.prevent="save">
+    <form wire:submit="save">
         <div class="row">
             <div class="col-md-8">
                 <div class="input-group mb-3 @error('file') is-invalid @enderror">
-                    <input class="form-control" type="file" id="formFile" wire:model="file">
+                    <input class="form-control" type="file" id="formFile" wire:model.live="file">
                     <button wire:click="save" class="btn btn-primary" wire:loading.attr="disabled" @disabled(!$file)>
                         <i class="bi bi-upload" wire:loading.remove></i>
                         <div wire:loading class="spinner-border spinner-border-sm "></div>

@@ -3,7 +3,7 @@
         class="custom-select form-select"
         id="establishment_id"
         name="establishment_id"
-        wire:model="establishment_id"
+        wire:model.live="establishment_id"
         wire:change="loadOus"
         required
         {{ $readonlyEstablishment ? 'disabled' : '' }}
@@ -20,7 +20,7 @@
         class="form-control form-select {{ $selectpicker ? 'selectpicker' : '' }}"
         id="{{ $selected_id }}"
         name="{{ $selected_id }}"
-        wire:model="organizational_unit_id"
+        wire:model.live="organizational_unit_id"
         style="font-family:monospace;"
         data-live-search="true"
         id="ou"
@@ -41,7 +41,7 @@
             type="text"
             class="form-control"
             placeholder="Filtrar listado de unidades"
-            wire:model.lazy="filter"
+            wire:model.blur="filter"
         >
     @endif
 </div>

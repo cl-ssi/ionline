@@ -25,7 +25,7 @@
 
                     <div class="form-group">
 
-                        <input type="hidden" wire:model="user_id">
+                        <input type="hidden" wire:model.live="user_id">
 
                         <label for="exampleFormControlInput1"><i class="fa fa-info"></i> INFORMACIÓN {{--$varLog--}} ID <b>#</b>{{ ( isset($shiftUserDay) && $shiftUserDay->ShiftUser ) ? $shiftUserDay->id : '' }}</label>
                        <div  class="table-responsive">
@@ -110,12 +110,12 @@
 
                     <div class="form-group">
 
-                        <input type="hidden" wire:model="user_id">
+                        <input type="hidden" wire:model.live="user_id">
 
                         <label for="exampleFormControlInput1"><i class="fa fa-cog"></i> ACCION </label>
 
 
-                        <select class="form-control" name="slcAction" wire:model="action" wire:change="changeAction">
+                        <select class="form-control" name="slcAction" wire:model.live="action" wire:change="changeAction">
                             <option value="0"> <b> </b> - - - </option>
                             <option value="1"> <b> </b>1 - Intercambiar Turno con </option>
                             <option value="7"> 2 - <b style="color:">Cambiar Tipo de Jornada Por</b> </option>
@@ -147,7 +147,7 @@
 
                         <label for="exampleFormControlInput1"><i class="fa fa-user"></i> PERSONAL </label>
 
-                         <select class="selectpickerx  form-control" wire:model="userIdtoChange" wire:change="findAvailableExternalDaysToChange">
+                         <select class="selectpickerx  form-control" wire:model.live="userIdtoChange" wire:change="findAvailableExternalDaysToChange">
                             <option value="0" >0 - Dejar disponible </option>
                             @if( isset($users) )
                                 @foreach($users as $u)
@@ -162,7 +162,7 @@
                     <div class="form-group" style="display: {{$changeDayType}}">
 
                         <label for="exampleFormControlInput1"><i class="fa fa-sun-o"></i> Tipo de Jornada </label>
-                         <select class="form-control" wire:model="newWorkingDay" name="slcAction">
+                         <select class="form-control" wire:model.live="newWorkingDay" name="slcAction">
                             @foreach( $tiposJornada as $index=>$tj )
                                 <option value="{{$index}}">
                                 {{$index}} - {{strtoupper($tj)}}
@@ -173,14 +173,14 @@
 
                     <div class="form-group" style="display: {{$addHours}}">
                         <label for="exampleFormControlInput1"><i class="fa fa-time"></i> CANT. HORAS </label>
-                        <input type="time" class="form-control" wire:model="cantNewHours">
+                        <input type="time" class="form-control" wire:model.live="cantNewHours">
                     </div>
 
                     <div class="form-group " style="display: {{$usersSelect2}}">
                         <div class="row">
                         <div class="col-md-6">
                              <label for="exampleFormControlInput1"><i class="fa fa-user"></i> REMPLAZAR CON </label>
-                         <select class="form-control selectpickerx" wire:model="userIdtoChange2" name="slcAction">
+                         <select class="form-control selectpickerx" wire:model.live="userIdtoChange2" name="slcAction">
                             <option value="0" >0 - Dejar disponible </option>
                             @if( isset($users) )
                                 @foreach($users as $u)
@@ -194,7 +194,7 @@
                         <div class="col-md-6">
                             <label for="exampleFormControlInput1">  Es suplente</label>
                             <br>
-                        <input type="checkbox"   wire:model="chkSuplente">
+                        <input type="checkbox"   wire:model.live="chkSuplente">
                         </div>
                         </div>
 
@@ -204,14 +204,14 @@
                     <div class="form-group" style="display: {{$repeatAction}}">
 
                         <label for="exampleFormControlInput1"><i class="fa fa-calendar"></i> Repetir acción hasta </label>
-                         <input type="date" name="toDate" class="form-control" wire:model="repeatToDate">
+                         <input type="date" name="toDate" class="form-control" wire:model.live="repeatToDate">
                     </div>
                     @if($availableOwnDaysToChangeVisible == "visible")
                     <div class="form-group" style="display: {{$availableOwnDaysToChangeVisible}}">
 
                         <label for="exampleFormControlInput1"><i class="fa fa-calendar"></i> Cambiar día por</label>
                         {{--sizeof($availableOwnDaysToChange)--}}
-                        <select class="form-control" wire:model.defer="dayToToChange2" name="slcAction">
+                        <select class="form-control" wire:model="dayToToChange2" name="slcAction">
                             @foreach( $availableOwnDaysToChange as $day )
                             @if(isset($day) && isset($day->id))
                                 <option value="{{$day->id}}">
@@ -235,7 +235,7 @@
                     @endif
                     <div class="form-group" style="display: {{$availableExternalDaysToChangeVisible}}">
                         <label for="exampleFormControlInput1"><i class="fa fa-calendar"></i> Cambiar día por</label>
-                        <select class="form-control" wire:model.defer="dayToToChange">
+                        <select class="form-control" wire:model="dayToToChange">
                             <option value="0"> 0 - No intercambiar por otro día</option>
                             @foreach( $availableExternalDaysToChange as $day )
                                 @if ( isset(  $day->working_day ) && substr( $day->working_day,0, 1) != "+" )
@@ -252,7 +252,7 @@
 
                     <div class="form-group" style="overflow-y:auto;height: 200px;">
 
-                        <input type="hidden" wire:model="user_id">
+                        <input type="hidden" wire:model.live="user_id">
 
                         <label for="exampleFormControlInput1"><i class="fa fa-history "></i> HISTORIAL DE MODIFICACIONES </label>
                             @if( isset($shiftUserDay) && $shiftUserDay->ShiftUser )

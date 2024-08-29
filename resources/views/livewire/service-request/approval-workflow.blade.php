@@ -60,7 +60,7 @@
                         && $SignatureFlow->responsable_id == auth()->id())
 
                         <td>
-                            <select class="form-control-sm" wire:model.defer="status" >
+                            <select class="form-control-sm" wire:model="status" >
                                 <option value="">Seleccionar Estado</option>
                                 <option value="1">Aceptar</option>
                                 <option value="0">Rechazar</option>
@@ -69,7 +69,7 @@
                         </td>
                         <td>
                             <input type="text" class="form-control-sm"
-                            value="{{ $SignatureFlow->observation }}" wire:model.defer="observation">
+                            value="{{ $SignatureFlow->observation }}" wire:model="observation">
                         </td>
                         <td>
                             <button class="btn btn-sm btn-primary" @disabled(auth()->user()->godMode) wire:click="saveSignatureFlow({{ $SignatureFlow->id }})">Guardar</button>
@@ -127,7 +127,7 @@
                     @livewire('search-select-user',['user' => $edit_user])
                 </td>
                 <td>
-                    <select class="form-control" wire:model.defer="edit_status" >
+                    <select class="form-control" wire:model="edit_status" >
                         <option value="">Seleccionar Estado</option>
                         <option value="1" @selected($edit_status == 1)>Aceptar</option>
                         <option value="0" @selected($edit_status == 0)>Rechazar</option>
@@ -136,7 +136,7 @@
                 </td>
                 <td>
                     <input type="text" class="form-control"
-                    value="{{ $SignatureFlow->observation }}" wire:model.defer="edit_observation">
+                    value="{{ $SignatureFlow->observation }}" wire:model="edit_observation">
                 </td>
                 <td>
                     <button class="btn btn-sm btn-outline-primary" wire:click="save()" @disabled(auth()->user()->godMode)>Guardar</button>

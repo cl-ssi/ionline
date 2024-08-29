@@ -21,7 +21,7 @@
 
     <div class="form-group">
         <label for="for_type">Tipo de solicitud</label>
-        <select class="form-select" id="for_type" wire:model.defer="modificationRequestType">
+        <select class="form-select" id="for_type" wire:model="modificationRequestType">
             <option></option>
             @foreach($types as $type)
                 <option>{{ $type }}</option>
@@ -31,17 +31,17 @@
 
     <div class="form-group">
         <label for="for_subject">Asunto de la solicitud</label>
-        <input type="text" class="form-control" id="for_subject" wire:model.defer="modificationRequestSubject">
+        <input type="text" class="form-control" id="for_subject" wire:model="modificationRequestSubject">
     </div>
     
     <div class="form-group">
         <label for="for_body">Detalle de la solicitud</label>
-        <textarea class="form-control" id="for_body" rows="5" wire:model.defer="modificationRequestBody"></textarea>
+        <textarea class="form-control" id="for_body" rows="5" wire:model="modificationRequestBody"></textarea>
     </div>
 
     <div class="form-group">
         <label for="for_files">Adjuntar archivos opcional (ej: norma)</label>
-        <input type="file" class="form-control" id="for_files" wire:model="files" multiple>
+        <input type="file" class="form-control" id="for_files" wire:model.live="files" multiple>
         @error('files.*') <span class="error">{{ $message }}</span> @enderror
     </div>
 

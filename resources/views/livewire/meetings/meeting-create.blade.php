@@ -16,13 +16,13 @@
 
         <fieldset class="form-group col-12 col-sm-2">
             <label for="for_date">Fecha Reunión</label>
-            <input type="date" class="form-control" wire:model.defer="date" id="for_date">
+            <input type="date" class="form-control" wire:model="date" id="for_date">
             @error('date') <span class="text-danger error small">{{ $message }}</span> @enderror
         </fieldset>
 
         <fieldset class="form-group col-12 col-md-2">
             <label for="for_type">Tipo</label>
-            <select class="form-select" wire:model.defer="type">
+            <select class="form-select" wire:model="type">
                 <option value="">Seleccione</option>
                 <option value="extraordinaria">Extraordinaria</option>
                 <option value="no extraordinaria">No extraordinaria</option>
@@ -33,7 +33,7 @@
 
         <fieldset class="form-group col-12 col-md-8">
             <label for="for_subject">Asunto</label>
-            <input class="form-control" type="text" autocomplete="off" wire:model.defer="subject">
+            <input class="form-control" type="text" autocomplete="off" wire:model="subject">
             @error('subject') <span class="text-danger error small">{{ $message }}</span> @enderror
         </fieldset>
     </div>
@@ -41,7 +41,7 @@
     <div class="row g-3 mb-3">
         <fieldset class="form-group col-12 col-md-12">
             <label for="for_description">Descripción</label>
-            <textarea class="form-control" rows="3" wire:model.defer="description"></textarea>
+            <textarea class="form-control" rows="3" wire:model="description"></textarea>
             @error('description') <span class="text-danger error small">{{ $message }}</span> @enderror
         </fieldset>
     </div>
@@ -49,7 +49,7 @@
     <div class="row g-3 mb-3">
         <fieldset class="col-12 col-md-4">
             <label for="for-mecanism">Medio</label>
-            <select class="form-select" wire:model.defer="mechanism" required>
+            <select class="form-select" wire:model="mechanism" required>
                 <option value="">Seleccionar</option>
                 <option value="videoconferencia">Videoconferencia</option>
                 <option value="presencial">Presencial</option>
@@ -59,13 +59,13 @@
 
         <fieldset class="col-12 col-md-2">
             <label for="for-start_at">Hora inicio</label>
-            <input type="time" class="form-control" wire:model.defer="start_at" >
+            <input type="time" class="form-control" wire:model="start_at" >
             @error('start_at') <span class="text-danger error small">{{ $message }}</span> @enderror
         </fieldset>
 
         <fieldset class="col-12 col-md-2">
             <label for="for-end_at">Hora término</label>
-            <input type="time" class="form-control" wire:model.defer="end_at">
+            <input type="time" class="form-control" wire:model="end_at">
             @error('end_at') <span class="text-danger error small">{{ $message }}</span> @enderror
         </fieldset>
 
@@ -75,7 +75,7 @@
     <div class="row g-3 mb-3">
         <fieldset class="form-group col-12 col-sm-4">
             <label for="forFileAttached" class="form-label"></label>
-            <input class="form-control" type="file" wire:model.defer="file" id="upload({{ $iterationFileClean }})">
+            <input class="form-control" type="file" wire:model="file" id="upload({{ $iterationFileClean }})">
             <div wire:loading wire:target="file">Cargando archivo...</div>
             @error('file') <span class="text-danger error small">{{ $message }}</span> @enderror
         </fieldset>
@@ -96,7 +96,7 @@
     <div class="row g-3 mb-5">
         <fieldset class="col-12 col-md-4">
             <label for="for-mecanism">Tipo</label>
-            <select class="form-select" wire:model="typeGrouping">
+            <select class="form-select" wire:model.live="typeGrouping">
                 <option value="">Seleccionar</option>
                 <option value="asociaciones funcionarios">Asociaciones de Funcionarios</option>
                 <option value="federaciones regionales">Federaciones Regionales</option>
@@ -119,7 +119,7 @@
         @else
             <fieldset class="form-group col-12 col-md-4">
                 <label for="for_subject">Nombre</label>
-                <input class="form-control" type="text" autocomplete="off" wire:model.defer="nameGrouping">
+                <input class="form-control" type="text" autocomplete="off" wire:model="nameGrouping">
                 @error('nameGrouping') <span class="text-danger error small">{{ $message }}</span> @enderror
             </fieldset>
         @endif
@@ -240,7 +240,7 @@
         <div class="row g-3 mb-3">
             <fieldset class="form-group col-12 col-md-12">
                 <label for="for_commitment_description">Descripción</label>
-                <textarea class="form-control" rows="3" wire:model.defer="commitmentDescription"></textarea>
+                <textarea class="form-control" rows="3" wire:model="commitmentDescription"></textarea>
                 @error('commitmentDescription') <span class="text-danger error small">{{ $message }}</span> @enderror
             </fieldset>
         </div>
@@ -248,7 +248,7 @@
         <div class="row g-3 mb-3">
             <fieldset class="col-12 col-md-4">
                 <label for="for-mecanism">Tipo</label>
-                <select class="form-select" wire:model="typeResponsible">
+                <select class="form-select" wire:model.live="typeResponsible">
                     <option value="">Seleccionar</option>
                     <option value="individual">Personal</option>
                     <option value="ou">Unidad Organizacional</option>
@@ -288,7 +288,7 @@
 
             <fieldset class="col-12 col-md-2">
                 <label for="for-mecanism">Prioridad</label>
-                <select class="form-select" wire:model="priority">
+                <select class="form-select" wire:model.live="priority">
                     <option value="">Seleccionar</option>
                     <option value="normal">Normal</option>
                     <option value="urgente">Urgente</option>
@@ -298,7 +298,7 @@
 
             <fieldset class="col-12 col-sm-2">
                 <label for="for_closing_date">Fecha Límite</label>
-                <input type="date" class="form-control" wire:model.defer="closingDate">
+                <input type="date" class="form-control" wire:model="closingDate">
             </fieldset>
         </div>
         

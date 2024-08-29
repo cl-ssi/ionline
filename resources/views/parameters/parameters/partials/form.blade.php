@@ -5,7 +5,7 @@
             type="text"
             class="form-control @error('module') is-invalid @enderror"
             id="module"
-            wire:model.debounce.1500ms="module"
+            wire:model.live.debounce.1500ms="module"
             placeholder="Ingresa el módulo"
             required
         >
@@ -22,7 +22,7 @@
             type="text"
             class="form-control @error('parameter_field') is-invalid @enderror"
             id="parameter"
-            wire:model.debounce.1500ms="parameter_field"
+            wire:model.live.debounce.1500ms="parameter_field"
             placeholder="Ingresa el parámetro"
             required
         >
@@ -39,7 +39,7 @@
             type="text"
             class="form-control @error('value') is-invalid @enderror"
             id="value"
-            wire:model.debounce.1500ms="value"
+            wire:model.live.debounce.1500ms="value"
             placeholder="Ingresa el valor"
             required
         >
@@ -59,11 +59,11 @@
             type="text"
             class="form-control @error('establishment_id') is-invalid @enderror"
             id="establishment_id"
-            wire:model.debounce.1500ms="establishment_id"
+            wire:model.live.debounce.1500ms="establishment_id"
             placeholder="Selecciona el establecimiento"
             required
         > -->
-        <select class="form-control" wire:model.defer="establishment_id">
+        <select class="form-control" wire:model="establishment_id">
             @foreach($establishments as $establishment)
                 <option value="{{$establishment->id}}" @selected($establishment->id == $establishment_id) required>{{$establishment->name}}</option>
             @endforeach
@@ -81,7 +81,7 @@
             type="text"
             class="form-control @error('description') is-invalid @enderror"
             id="description"
-            wire:model.debounce.1500ms="description"
+            wire:model.live.debounce.1500ms="description"
             placeholder="Ingresa el descripción"
             required
         >

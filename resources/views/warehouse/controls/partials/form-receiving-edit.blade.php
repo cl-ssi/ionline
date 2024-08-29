@@ -17,7 +17,7 @@
             id="date"
             class="form-control form-control-sm @error('date') is-invalid @enderror"
             value="{{ old('date', optional($control)->date) }}"
-            wire:model.debounce.1500ms="date"
+            wire:model.live.debounce.1500ms="date"
             required
         >
         @error('date')
@@ -121,7 +121,7 @@
                 id="note"
                 class="form-control form-control-sm @error('note') is-invalid @enderror"
                 value="{{ $control->note }}"
-                wire:model.debounce.1500ms="note"
+                wire:model.live.debounce.1500ms="note"
             >
             @error('note')
                 <span class="invalid-feedback" role="alert">
@@ -137,7 +137,7 @@
         <fieldset class="form-group col-md-2">
             <label for="document-type">Tipo Documento</label>
             <select
-                wire:model.debounce.1500ms="document_type"
+                wire:model.live.debounce.1500ms="document_type"
                 id="document-type"
                 class="form-control form-control-sm @error('document_type') is-invalid @enderror"
             >
@@ -158,7 +158,7 @@
                 type="date"
                 id="document-date"
                 class="form-control form-control-sm @error('document_date') is-invalid @enderror"
-                wire:model.debounce.1500ms="document_date"
+                wire:model.live.debounce.1500ms="document_date"
             >
             @error('document_date')
                 <span class="invalid-feedback" role="alert">
@@ -173,7 +173,7 @@
                 type="text"
                 id="document-number"
                 class="form-control form-control-sm @error('document_number') is-invalid @enderror"
-                wire:model.debounce.1500ms="document_number"
+                wire:model.live.debounce.1500ms="document_number"
             >
             @error('document_number')
                 <span class="invalid-feedback" role="alert">
@@ -200,7 +200,7 @@
                 id="note"
                 class="form-control form-control-sm @error('note') is-invalid @enderror"
                 value="{{ $control->note }}"
-                wire:model.debounce.1500ms="note"
+                wire:model.live.debounce.1500ms="note"
             >
             @error('note')
                 <span class="invalid-feedback" role="alert">

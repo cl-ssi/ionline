@@ -256,7 +256,7 @@
 
             let canEditContent = false;
 
-            document.addEventListener('livewire:load', function() {
+            document.addEventListener('livewire:init', function() {
                 $.ajaxSetup({
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

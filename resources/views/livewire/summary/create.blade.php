@@ -5,11 +5,11 @@
                 <h5 class="modal-title" id="exampleModalLabel">{{ $type_id ? 'Editar Tipo' : 'Crear Tipo' }}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form wire:submit.prevent="store">
+            <form wire:submit="store">
                 <div class="modal-body">
                     <div class="mb-3">
                         <label for="name" class="col-form-label">Nombre:</label>
-                        <input type="text" class="form-control" id="name" wire:model="name">
+                        <input type="text" class="form-control" id="name" wire:model.live="name">
                         @error('name') <span class="error text-danger">{{ $message }}</span> @enderror
                     </div>
                 </div>

@@ -4,13 +4,13 @@
             <strong class="text-danger">Utilizar con precaución</strong>
         </div>
         <div class="col-2">
-            <select class="form-select" wire:model.defer="inventoryMovement.reception_confirmation">
+            <select class="form-select" wire:model="inventoryMovement.reception_confirmation">
                 <option value="">Seleccionar</option>
                 <option value="1">Recepcionado</option>
             </select>
         </div>
         <div class="col-4">
-            <input type="datetime-local" class="form-control" wire:model.defer="inventoryMovement.reception_date">
+            <input type="datetime-local" class="form-control" wire:model="inventoryMovement.reception_date">
         </div>
         <div class="col-2">
             <button class="btn btn-danger" wire:click="save">Guardar</button>

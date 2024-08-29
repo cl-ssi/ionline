@@ -20,7 +20,7 @@
         @else
             <div class="input-group">
                 <div class="custom-file">
-                    <input type="file" wire:model="file" class="custom-file-input" id="for-file" required>
+                    <input type="file" wire:model.live="file" class="custom-file-input" id="for-file" required>
                     <label class="custom-file-label" for="for-file" data-browse="Examinar">
                         <div wire:loading wire:target="file"><strong>Cargando</strong></div>
                         {{ optional($file)->getClientOriginalName() ?? 'Archivo' }}

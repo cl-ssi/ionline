@@ -16,7 +16,7 @@
         
         <br>
         <label>Tipo de jornada a agregar:</label>
-        <select class="form-control" wire:model="journalType">
+        <select class="form-control" wire:model.live="journalType">
             <option value="L">L - Largo</option>
             <option value="N">N - Noche</option>
             <option value="D">D - Diurno</option>

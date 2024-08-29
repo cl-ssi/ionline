@@ -31,7 +31,7 @@
                                                     placeholder="OTP"
                                                     aria-label="OTP"
                                                     aria-describedby="button-addon2"
-                                                    wire:model.defer="otp"
+                                                    wire:model="otp"
                                                     wire:keydown.enter="signDocument"
                                                     autofocus
                                                     autocomplete="off"

@@ -23,7 +23,7 @@
             <input type="text"
                 id="{{ $tagId }}"
                 class="form-control @if ($smallInput) form-control-sm @endif"
-                wire:model.debounce.1500ms="search"
+                wire:model.live.debounce.1500ms="search"
                 placeholder="{{ $placeholder }}"
                 @if ($user_id) disabled @endif
                 autocomplete="off">
@@ -84,7 +84,7 @@
             <input type="text"
                 id="{{ $tagId }}"
                 class="form-control @if ($smallInput) form-control-sm @endif"
-                wire:model.debounce.1500ms="search"
+                wire:model.live.debounce.1500ms="search"
                 placeholder="{{ $placeholder }}"
                 @if ($user_id) disabled @endif>
             <div class="input-group-append">

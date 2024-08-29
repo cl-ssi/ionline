@@ -3,7 +3,7 @@
     <!-- <div wire:ignore id="for-bootstrap-select"> -->
       <div class="input-group">
         <!-- <div wire:ignore id="for-bootstrap-select"> -->
-          <select class="form-control selectpicker show-tick" id="for_year_id" name="year" wire:model="selectedYear" required>
+          <select class="form-control selectpicker show-tick" id="for_year_id" name="year" wire:model.live="selectedYear" required>
               <option value="">Selección...</option>
               <option value="2024">2024</option>
               <option value="2023">2023</option>
@@ -15,7 +15,7 @@
 
         <!-- <div id="for-picker" wire:ignore> -->
           <!--  -->
-            <select class="form-control selectpicker" id="for_establishment_id" name="establishment_id[]" data-live-search="true" data-actions-box="true" multiple wire:model.defer="selectedEstablishment" required>
+            <select class="form-control selectpicker" id="for_establishment_id" name="establishment_id[]" data-live-search="true" data-actions-box="true" multiple wire:model="selectedEstablishment" required>
                 {{-- @foreach($establishments as $estab)
                   <option value="{{ $estab->Codigo }}">{{ $estab->alias_estab }}</option>
                 @endforeach --}}

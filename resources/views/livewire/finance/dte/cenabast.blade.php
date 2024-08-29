@@ -11,7 +11,7 @@
         <div class="col-md-3">
             <div class="form-group">
                 <label for="establishment">Establecimiento</label>
-                <select class="form-select" id="establishment" wire:model.defer="establishment_id">
+                <select class="form-select" id="establishment" wire:model="establishment_id">
                     <option value="">Todos</option>
                     <option value="Sin">Sin establecimiento</option>
                     @foreach($establishments as $establishment)
@@ -24,14 +24,14 @@
         <div class="col-md-3">
             <div class="form-group">
                 <label for="folio_oc">Folio OC</label>
-                <input type="text" class="form-control" id="folio_oc" wire:model.defer="folio_oc">
+                <input type="text" class="form-control" id="folio_oc" wire:model="folio_oc">
             </div>
         </div>
         <!-- filtro por folio -->
         <div class="col-md-3">
             <div class="form-group">
                 <label for="folio">Folio</label>
-                <input type="text" class="form-control" id="folio" wire:model.defer="folio">
+                <input type="text" class="form-control" id="folio" wire:model="folio">
             </div>
         </div>
         <div class="col-md-1">
@@ -49,14 +49,14 @@
         <!-- filtro sin receptiones -->
         <div class="col-md-2">
             <div class="form-group">
-                <input type="checkbox" class="form-check-input" style="width: 34px; height: 34px;" id="folio" wire:model.defer="without_reception">
+                <input type="checkbox" class="form-check-input" style="width: 34px; height: 34px;" id="folio" wire:model="without_reception">
                 <label class="form-label pt-2" for="folio">Sin recepción</label>
             </div>
         </div>
         <!-- filtro sin administrador de contrato -->
         <div class="col-md-3">
             <div class="form-group">
-                <input type="checkbox" class="form-check-input" style="width: 34px; height: 34px;" id="folio" wire:model.defer="without_contract_manager">
+                <input type="checkbox" class="form-check-input" style="width: 34px; height: 34px;" id="folio" wire:model="without_contract_manager">
                 <label class="form-label pt-2" for="folio" >Sin administrador de contrato</label>
             </div>
         </div>

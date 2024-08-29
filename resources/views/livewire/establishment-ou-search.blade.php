@@ -6,7 +6,7 @@
             <select
                 class="form-control selectpicker"
                 id="for_establishment_id"
-                wire:model="establishment_id"
+                wire:model.live="establishment_id"
                 wire:change="change"
                 data-live-search="true"
                 data-size="5"
@@ -32,10 +32,10 @@
                 aria-label="Nombre"
                 wire:keydown.escape="resetx"
             @if(!$ou)
-                wire:model.debounce.1000ms="query"
+                wire:model.live.debounce.1000ms="query"
                 required
             @else
-                wire:model.debounce.1000ms="selectedName"
+                wire:model.live.debounce.1000ms="selectedName"
                 disabled readonly
             @endif
             />

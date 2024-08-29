@@ -5,7 +5,7 @@
     <div class="mb-3 col-md-6">
         <label for="formFile" class="form-label">Boleta de honorario electrónica</label>
         <div class="input-group">
-            <input class="form-control" type="file" id="formFile" wire:model="bhe">
+            <input class="form-control" type="file" id="formFile" wire:model.live="bhe">
             <span class="input-group-text" id="bhe-file-loading">
                 <i class="bi bi-upload" wire:loading.remove></i>
                 <div wire:loading class="spinner-border spinner-border-sm"></div>
@@ -24,13 +24,13 @@
         <div class="row g-2 mb-3">
             <div class="form-group col-2">
                 <label for="tipo_documento">Tipo de documento</label>
-                <input type="text" class="form-control" id="emisor" wire:model.defer="dte.tipo_documento" disabled>
+                <input type="text" class="form-control" id="emisor" wire:model="dte.tipo_documento" disabled>
             </div>
 
             <div class="form-group col-2">
                 <label for="folio">Número (folio)</label>
                 <div class="input-group">
-                    <input type="number" class="form-control" id="folio" wire:model.defer="dte.folio" min="1" 
+                    <input type="number" class="form-control" id="folio" wire:model="dte.folio" min="1" 
                         autocomplete="off">
                     @error('dte.folio') <span class="text-danger">{{ $message }}</span> @enderror
                     @if(isset($dte->id))
@@ -47,7 +47,7 @@
 
             <div class="form-group col-2">
                 <label for="emision">Fecha</label>
-                <input type="date" class="form-control" id="emision" wire:model.defer="dte.emision" autocomplete="off">
+                <input type="date" class="form-control" id="emision" wire:model="dte.emision" autocomplete="off">
                 <div id="emision-helper" class="form-text">
                     @if($dte->isDirty('emision'))
                         {{ $dte->getOriginal('emision') }}
@@ -57,7 +57,7 @@
 
             <div class="form-group col-2">
                 <label for="monto_total">Monto Total*</label>
-                <input type="text" class="form-control" id="montoTotal" wire:model.defer="dte.monto_total"
+                <input type="text" class="form-control" id="montoTotal" wire:model="dte.monto_total"
                     autocomplete="off" min="1">
                 @error('dte.monto_total') <span class="text-danger">{{ $message }}</span> @enderror
                 <div id="monto_total-helper" class="form-text">
@@ -78,7 +78,7 @@
         <div class="row g-2 mb-3">
             <div class="form-group col-2">
                 <label for="emisor">RUT Emisor</label>
-                <input type="text" class="form-control" id="emisor" wire:model.defer="dte.emisor"
+                <input type="text" class="form-control" id="emisor" wire:model="dte.emisor"
                     autocomplete="off">
                 @error('dte.emisor') <span class="text-danger">{{ $message }}</span> @enderror
                 <div id="emisor-helper" class="form-text">
@@ -90,7 +90,7 @@
 
             <div class="form-group col-6">
                 <label for="razonSocial">Razón Social</label>
-                <input type="text" class="form-control" id="razon_social_emisor" wire:model.defer="dte.razon_social_emisor"
+                <input type="text" class="form-control" id="razon_social_emisor" wire:model="dte.razon_social_emisor"
                     autocomplete="off">
                 <div id="razon_social_emisor-helper" class="form-text">
                     @if($dte->isDirty('razon_social_emisor'))
@@ -101,7 +101,7 @@
 
             <div class="form-group col-2">
                 <label for="receptor">Receptor</label>
-                <input type="text" class="form-control" id="folioOC" wire:model.defer="dte.receptor" autocomplete="off">
+                <input type="text" class="form-control" id="folioOC" wire:model="dte.receptor" autocomplete="off">
                 @error('dte.receptor') <span class="text-danger">{{ $message }}</span> @enderror
                 <div id="receptor-helper" class="form-text">
                     @if($dte->isDirty('receptor'))
@@ -112,7 +112,7 @@
 
             <div class="form-group col-2">
                 <label for="folio_oc">Orden de Compra*</label>
-                <input type="text" class="form-control" id="folioOC" wire:model.defer="dte.folio_oc" autocomplete="off">
+                <input type="text" class="form-control" id="folioOC" wire:model="dte.folio_oc" autocomplete="off">
                 @error('dte.folio_oc') <span class="text-danger">{{ $message }}</span> @enderror
             </div>
 

@@ -32,7 +32,7 @@
             {{-- Muestra el campo de carga de archivo --}}
             <div class="input-group" style="display: flex; align-items: center;">
                 <div class="custom-file" style="margin-right: 10px;">
-                    <input type="file" wire:model="file" id="for-file" accept=".xlsx,.xls,.xlsm" required>
+                    <input type="file" wire:model.live="file" id="for-file" accept=".xlsx,.xls,.xlsm" required>
                     <div wire:loading wire:target="file"><strong>Cargando</strong></div>
                     </label>
                 </div>
@@ -53,7 +53,7 @@
         {{-- Muestra el campo de carga de archivo --}}
         <div class="input-group">
             <div class="custom-file">
-                <input type="file" wire:model="file" id="for-file" class="custom-file-input" accept=".xlsx,.xls"
+                <input type="file" wire:model.live="file" id="for-file" class="custom-file-input" accept=".xlsx,.xls"
                     required>
                 <label class="custom-file-label form-control-sm" for="for-file" data-browse="Examinar"
                     style="white-space: nowrap;">

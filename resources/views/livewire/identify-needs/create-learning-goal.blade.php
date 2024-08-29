@@ -25,7 +25,7 @@
                             <div class="row">
                                 <!-- <div class="col"> -->
                                 <fieldset class="form-group col-md-8">
-                                    <input type="text" class="form-control form-control-sm" name="description" id="for_description" wire:model="description" required>
+                                    <input type="text" class="form-control form-control-sm" name="description" id="for_description" wire:model.live="description" required>
                                 </fieldset>
                                 <fieldset class="form-group col-md-2">
                                     <a class="btn btn-primary btn-sm" wire:click="saveEditRole({{ $learningGoal }})"><i class="fas fa-save"></i></a>
@@ -60,7 +60,7 @@
     @foreach($inputs as $key => $value)
         <div class="row mt-3">
             <div class="col-md-10 col-12">
-                <input type="text" class="form-control" wire:model.debounce.700ms="learningGoalsDescriptions.{{ $key }}" id="for_description" wire:key="value-{{ $value }}" placeholder="" required>
+                <input type="text" class="form-control" wire:model.live.debounce.700ms="learningGoalsDescriptions.{{ $key }}" id="for_description" wire:key="value-{{ $value }}" placeholder="" required>
             </div>
             <div class="col-md-2 col-12">
                 <button class="btn btn-danger" wire:click.prevent="remove({{$key}})">Eliminar</button>

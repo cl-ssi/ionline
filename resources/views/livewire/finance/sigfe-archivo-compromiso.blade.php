@@ -12,7 +12,7 @@
         </div>
     @else
         <div class="input-group">
-            <input class="form-control" type="file" wire:model="file" accept=".pdf">
+            <input class="form-control" type="file" wire:model.live="file" accept=".pdf">
             <button class="btn btn-outline-primary" wire:click="uploadFile">
                 <i class="bi bi-upload"></i>
             </button>

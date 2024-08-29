@@ -35,14 +35,14 @@
                         </td>
                         <td class="text-center"> 
                             <fieldset class="form-group col-12">
-                                <input class="form-control form-control-sm" type="number" autocomplete="off" wire:model="totalDays">
+                                <input class="form-control form-control-sm" type="number" autocomplete="off" wire:model.live="totalDays">
                                 {{-- @error('reason') <span class="text-danger error small">{{ $message }}</span> @enderror --}}
                             </fieldset>
                         </td>
                         <td class="text-right">
                             {{-- ($allowance->total_days >= 1) ? number_format(($allowance->day_value * intval($allowance->total_days)), 0, ",", ".") : '0' --}}
                             <fieldset class="form-group col-12">
-                                <input class="form-control form-control-sm" type="number" autocomplete="off" wire:model="totalDaysValue" {{ $editDisabled }}>
+                                <input class="form-control form-control-sm" type="number" autocomplete="off" wire:model.live="totalDaysValue" {{ $editDisabled }}>
                                 {{-- @error('reason') <span class="text-danger error small">{{ $message }}</span> @enderror --}}
                             </fieldset>
                         </td>
@@ -76,12 +76,12 @@
                         </td>
                         <td class="text-center">
                             <fieldset class="form-group col-12">
-                                <input class="form-control form-control-sm" type="number" autocomplete="off" wire:model="fiftyPercentTotalDays">
+                                <input class="form-control form-control-sm" type="number" autocomplete="off" wire:model.live="fiftyPercentTotalDays">
                             </fieldset>
                         </td>
                         <td class="text-right">
                             <fieldset class="form-group col-12">
-                                <input class="form-control form-control-sm" type="number" autocomplete="off" wire:model="fiftyPercentTotalDaysValue" {{ $editDisabled }}>
+                                <input class="form-control form-control-sm" type="number" autocomplete="off" wire:model.live="fiftyPercentTotalDaysValue" {{ $editDisabled }}>
                             </fieldset>
                         </td>
                     </tr>
@@ -93,12 +93,12 @@
                         </td>
                         <td class="text-center">
                             <fieldset class="form-group col-12">
-                                <input class="form-control form-control-sm" type="number" autocomplete="off" wire:model="sixtyPercentTotalDays">
+                                <input class="form-control form-control-sm" type="number" autocomplete="off" wire:model.live="sixtyPercentTotalDays">
                             </fieldset>
                         </td>
                         <td class="text-right">
                             <fieldset class="form-group col-12">
-                                <input class="form-control form-control-sm" type="number" autocomplete="off" wire:model="sixtyPercentTotalDaysValue" {{ $editDisabled }}>
+                                <input class="form-control form-control-sm" type="number" autocomplete="off" wire:model.live="sixtyPercentTotalDaysValue" {{ $editDisabled }}>
                             </fieldset>
                         </td>
                     </tr>
@@ -138,7 +138,7 @@
         <div class="form-row">
             <fieldset class="form-group col-12 col-md-12">
                 <label for="for_reason">Motivo</label>
-                <textarea class="form-control" id="for_reason" wire:model="reason" rows="3"></textarea>
+                <textarea class="form-control" id="for_reason" wire:model.live="reason" rows="3"></textarea>
                 @error('reason') <span class="text-danger error small">{{ $message }}</span> @enderror
             </fieldset>
         </div>

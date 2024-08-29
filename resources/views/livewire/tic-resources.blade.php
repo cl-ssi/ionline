@@ -10,7 +10,7 @@
     <fieldset class="form-group col-md-3">
         <label for="type-resource">Tipo Recurso</label>
         <select
-            wire:model.debounce.1500ms="type_resource"
+            wire:model.live.debounce.1500ms="type_resource"
             id="type-resource"
             class="form-control"
         >
@@ -29,7 +29,7 @@
             type="text"
             class="form-control"
             id="search"
-            wire:model.debounce.1500ms="search"
+            wire:model.live.debounce.1500ms="search"
             placeholder="Ingrese una marca, modelo, número de inventario o serial"
         >
     </fieldset>

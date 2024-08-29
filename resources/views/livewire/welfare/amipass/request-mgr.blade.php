@@ -17,7 +17,7 @@
 
     <div class="row mb-3">
         <div class="col-lg-6">
-            <input type="text" wire:model.defer="filter" class="form-control" placeholder="Buscar por RUN o nombre">
+            <input type="text" wire:model="filter" class="form-control" placeholder="Buscar por RUN o nombre">
         </div>
         <div class="col-lg-1">
             <button class="btn btn-primary" wire:click="searchBeneficiary">

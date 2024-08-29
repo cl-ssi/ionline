@@ -200,7 +200,7 @@
                 Buscar Producto o Servicio
             </label>
             <input
-                wire:model.debounce.500ms="search_product"
+                wire:model.live.debounce.500ms="search_product"
                 id="product-search"
                 class="form-control"
                 type="text"
@@ -232,7 +232,7 @@
                 Descripción <small>(especificaciones técnicas)</small>
             </label>
             <input
-                wire:model.debounce.500ms="description"
+                wire:model.live.debounce.500ms="description"
                 type="text"
                 class="form-control @error('description') is-invalid @enderror"
                 id="description"
@@ -253,7 +253,7 @@
                 *Nro. de Inventario
             </label>
             <input
-                wire:model.debounce.500ms="number_inventory"
+                wire:model.live.debounce.500ms="number_inventory"
                 type="text"
                 class="form-control @error('number_inventory') is-invalid @enderror"
                 id="number-inventory"
@@ -286,7 +286,7 @@
                 Marca
             </label>
             <input
-                wire:model.debounce.500ms="brand"
+                wire:model.live.debounce.500ms="brand"
                 type="text"
                 class="form-control @error('brand') is-invalid @enderror"
                 id="brand"
@@ -305,7 +305,7 @@
                 Modelo
             </label>
             <input
-                wire:model.debounce.500ms="model"
+                wire:model.live.debounce.500ms="model"
                 type="text"
                 class="form-control @error('model') is-invalid @enderror"
                 id="model"
@@ -324,7 +324,7 @@
                 Número de Serial
             </label>
             <input
-                wire:model.debounce.500ms="serial_number"
+                wire:model.live.debounce.500ms="serial_number"
                 type="text"
                 class="form-control @error('serial_number') is-invalid @enderror"
                 id="serial-number"
@@ -353,7 +353,7 @@
             <select
                 class="form-control @error('status') is-invalid @enderror"
                 id="status"
-                wire:model.debounce.500ms="status"
+                wire:model.live.debounce.500ms="status"
             >
                 <option value="">Seleccione un estado</option>
                 <option value="1">Bueno</option>
@@ -372,7 +372,7 @@
                 Observaciones
             </label>
             <input
-                wire:model.debounce.500ms="observations"
+                wire:model.live.debounce.500ms="observations"
                 type="text"
                 class="form-control @error('observations') is-invalid @enderror"
                 id="observations"
@@ -394,7 +394,7 @@
                 <input
                     class="form-check-input"
                     type="radio"
-                    wire:model="type"
+                    wire:model.live="type"
                     id="option-type-1"
                     value="1"
                 >
@@ -406,7 +406,7 @@
                 <input
                     class="form-check-input"
                     type="radio"
-                    wire:model="type"
+                    wire:model.live="type"
                     id="option-type-2"
                     value="2"
                 >
@@ -418,7 +418,7 @@
                 <input
                     class="form-check-input"
                     type="radio"
-                    wire:model="type"
+                    wire:model.live="type"
                     id="option-type-3"
                     value="3"
                 >
@@ -431,7 +431,7 @@
                 <input
                     class="form-check-input"
                     type="radio"
-                    wire:model="type"
+                    wire:model.live="type"
                     id="option-type-4"
                     value="4"
                 >
@@ -593,7 +593,7 @@
                         type="text"
                         id="po-search"
                         placeholder="Ingresa el código"
-                        wire:model.debounce.500ms="po_search"
+                        wire:model.live.debounce.500ms="po_search"
                     >
                     <div class="input-group-append">
                         <button
@@ -650,7 +650,7 @@
                     Fecha de OC
                 </label>
                 <input
-                    wire:model.debounce.500ms="po_date"
+                    wire:model.live.debounce.500ms="po_date"
                     type="text"
                     class="form-control @error('po_date') is-invalid @enderror"
                     id="po-date"
@@ -685,7 +685,7 @@
                     Vida útil
                 </label>
                 <input
-                    wire:model.debounce.500ms="useful_life"
+                    wire:model.live.debounce.500ms="useful_life"
                     type="number"
                     class="form-control @error('useful_life') is-invalid @enderror"
                     id="useful-life"
@@ -706,7 +706,7 @@
                     type="text"
                     class="form-control @error('depreciation') is-invalid @enderror"
                     id="depreciation"
-                    wire:model.defer="depreciation"
+                    wire:model="depreciation"
                     autocomplete="off"
                 >
                 @error('depreciation')
@@ -724,7 +724,7 @@
                     type="text"
                     class="form-control @error('accounting_code_id') is-invalid @enderror"
                     id="cost-center"
-                    wire:model="accounting_code_id"
+                    wire:model.live="accounting_code_id"
                 >
                     <option value="">Seleccione cuenta contable</option>
                     @foreach($accountingCodes as $accountingCode)
@@ -745,7 +745,7 @@
                     Precio del Producto
                 </label>
                 <input
-                    wire:model.debounce.500ms="po_price"
+                    wire:model.live.debounce.500ms="po_price"
                     type="text"
                     class="form-control @error('po_price') is-invalid @enderror"
                     id="po-price"
@@ -764,7 +764,7 @@
                     Fecha de Entrega
                 </label>
                 <input
-                    wire:model.debounce.500ms="deliver_date"
+                    wire:model.live.debounce.500ms="deliver_date"
                     type="date"
                     class="form-control @error('deliver_date') is-invalid @enderror"
                     id="deliver-date"

@@ -11,7 +11,7 @@
             </button>
         </div>
     @else
-        <input type="file" wire:model="file" accept=".pdf">
+        <input type="file" wire:model.live="file" accept=".pdf">
         <button wire:click="uploadFile">Subir Archivo</button>
     @endif
 

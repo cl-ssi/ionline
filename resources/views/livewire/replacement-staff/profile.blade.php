@@ -14,7 +14,7 @@
             <div class="form-row">
                 <fieldset class="form-group col mt">
                     <label for="for_profile">Estamento</label>
-                    <select name="profile" class="form-control" wire:model="profileSelected" required>
+                    <select name="profile" class="form-control" wire:model.live="profileSelected" required>
                         <option value="">Seleccione</option>
                         @foreach($profiles as $profile)
                             <option value="{{ $profile->id }}">{{ $profile->name }}</option>
@@ -84,7 +84,7 @@
     <div class="form-row">
         <fieldset class="form-group col mt">
             <label for="for_profile">Estamento</label>
-            <select name="profile" class="form-control" wire:model="profileSelected" required>
+            <select name="profile" class="form-control" wire:model.live="profileSelected" required>
                 <option value="">Seleccione</option>
                 @foreach($profiles as $profile)
                     <option value="{{ $profile->id }}">{{ $profile->name }}</option>

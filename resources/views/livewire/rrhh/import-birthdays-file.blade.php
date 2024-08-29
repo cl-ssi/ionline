@@ -5,7 +5,7 @@
     <div class="form-row">
         <fieldset class="form-group col-6">
             <label>Archivo</label>
-            <input type="file" class="form-control" wire:model="file">
+            <input type="file" class="form-control" wire:model.live="file">
         </fieldset>
     </div>
 

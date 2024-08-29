@@ -3,7 +3,7 @@
 
     <fieldset class="form-group col-6">
         <label>Archivo</label>
-        <input class="form-control form-control-sm" type="file" style="padding:2px 0px 0px 2px;" wire:model="imgFile">
+        <input class="form-control form-control-sm" type="file" style="padding:2px 0px 0px 2px;" wire:model.live="imgFile">
         <button type="button" wire:click="addItem" class="btn btn-primary btn-sm float-right" wire:target="imgFile" wire:loading.attr="disabled">Agregar</button>
         <div wire:loading wire:target="imgFile">Cargando archivo...</div>
         @error('imgFile') <span class="error">{{ $message }}</span> @enderror

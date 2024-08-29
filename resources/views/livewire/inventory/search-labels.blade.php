@@ -14,7 +14,7 @@
             type="text"
             id="{{ $tagId }}"
             class="form-control @if($smallInput) form-control-sm @endif"
-            wire:model.debounce.1500ms="search"
+            wire:model.live.debounce.1500ms="search"
             placeholder="{{ $placeholder }}"
         >
         <div class="input-group-append">
@@ -72,7 +72,7 @@
 
 @section('custom_js')
 <script>
-    document.addEventListener('livewire:load', function () {
+    document.addEventListener('livewire:init', function () {
         var labelsId = @this.labelsId;
         var eventName = @this.eventName;
 

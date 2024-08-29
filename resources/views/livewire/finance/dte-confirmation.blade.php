@@ -90,7 +90,7 @@
     @if (is_null($dte->confirmation_status))
         <div class="form-group">
             <label for="confirmation_observation">Observación (obligatoria al reclamar)</label>
-            <input type="text" class="form-control" wire:model="confirmation_observation">
+            <input type="text" class="form-control" wire:model.live="confirmation_observation">
         </div>
 
         @if (count($existingFiles) > 0)
@@ -131,9 +131,9 @@
                                     <small>({{ $paymentDoc->description }})</small>
                                 @endif
                             </p>
-                            <form wire:submit.prevent="uploadFile({{ $paymentDoc->id }})"
+                            <form wire:submit="uploadFile({{ $paymentDoc->id }})"
                                 enctype="multipart/form-data">
-                                <input type="file" wire:model="files.{{ $paymentDoc->id }}">
+                                <input type="file" wire:model.live="files.{{ $paymentDoc->id }}">
                                 <button type="submit">Cargar</button>
                             </form>
                             @if ($uploadSuccess)

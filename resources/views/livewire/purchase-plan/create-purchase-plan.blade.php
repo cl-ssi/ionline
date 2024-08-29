@@ -15,24 +15,24 @@
 
         <fieldset class="form-group col-2">
             <label for="for_telephone">Teléfono</label>
-            <input class="form-control" type="text" autocomplete="off" wire:model.defer="telephone" {{$disabled}}>
+            <input class="form-control" type="text" autocomplete="off" wire:model="telephone" {{$disabled}}>
         </fieldset>
 
         <fieldset class="form-group col-3">
             <label for="for_email">Correo Electrónico</label>
-            <input class="form-control" type="text" autocomplete="off" wire:model.defer="email" {{$disabled}}>
+            <input class="form-control" type="text" autocomplete="off" wire:model="email" {{$disabled}}>
         </fieldset>
 
         <fieldset class="form-group col-3">
             <label for="for_position">Cargo / Función</label>
-            <input class="form-control" type="text" autocomplete="off" wire:model.defer="position" {{$disabled}}>
+            <input class="form-control" type="text" autocomplete="off" wire:model="position" {{$disabled}}>
         </fieldset>
     </div>
 
     <div class="row g-3 mb-3">
         <fieldset class="form-group col-6">
             <label for="for_user_allowance_id">Unidad Organizacional</label>
-            <input class="form-control" type="text" autocomplete="off" wire:model.defer="organizationalUnit" {{ $readonly }} {{$disabled}} >
+            <input class="form-control" type="text" autocomplete="off" wire:model="organizationalUnit" {{ $readonly }} {{$disabled}} >
         </fieldset>
 
         <fieldset class="form-group col-6">
@@ -48,11 +48,11 @@
     <div class="row g-3 mb-3">
         <fieldset class="form-group col-6">
             <label for="for_user_allowance_id">Asunto</label>
-            <input class="form-control" type="text" autocomplete="off" wire:model.defer="subject" {{$disabled}}>
+            <input class="form-control" type="text" autocomplete="off" wire:model="subject" {{$disabled}}>
         </fieldset>
         <fieldset class="form-group col-3">
             <label for="for_period">Periodo</label>
-            <select class="form-select" wire:model.defer="period" {{$disabled}}>
+            <select class="form-select" wire:model="period" {{$disabled}}>
                 <option value="0">Seleccione</option>
                 <option value="2023" disabled>2023</option>
                 <option value="2024">2024</option>
@@ -63,11 +63,11 @@
     <div class="row g-3">
         <div class="form-group col-6">
             <label for="for_description">Descripción general del proyecto o adquisición</label>
-            <textarea class="form-control" rows="3" autocomplete="off" wire:model.defer="description" {{$disabled}}></textarea>
+            <textarea class="form-control" rows="3" autocomplete="off" wire:model="description" {{$disabled}}></textarea>
         </div>
         <div class="form-group col-6">
             <label for="for_purpose">Propósito general del proyecto o adquisición</label>
-            <textarea class="form-control" rows="3" autocomplete="off" wire:model.defer="purpose" {{$disabled}}></textarea>
+            <textarea class="form-control" rows="3" autocomplete="off" wire:model="purpose" {{$disabled}}></textarea>
         </div>
     </div>
     

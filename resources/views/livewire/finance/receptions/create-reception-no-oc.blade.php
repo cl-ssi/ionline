@@ -30,7 +30,7 @@
                 placeholder="Archivo Digitalizado DTE"
                 aria-label="Archivo Digitalizado DTE"
                 aria-describedby="digital-invoice"
-                wire:model.defer="digitalInvoiceFile">
+                wire:model="digitalInvoiceFile">
             </div>
             @error('digitalInvoiceFile')
                     <span class="text-danger">{{ $message }}</span>
@@ -44,7 +44,7 @@
 
         <div class="form-group col-2">
             <label for="emisor">RUT*</label>
-            <input type="text" class="form-control" id="emisor" wire:model="emisor"
+            <input type="text" class="form-control" id="emisor" wire:model.live="emisor"
                 autocomplete="off"
                 wire:loading.attr="disabled"
                 wire:target="digitalInvoiceFile"
@@ -60,7 +60,7 @@
                 <label for="reception-date">Tipo de documento*</label>
                 <select id="document_type"
                     class="form-select @error('reception.dte_type') is-invalid @enderror"
-                    wire:model="reception.dte_type"
+                    wire:model.live="reception.dte_type"
                     wire:loading.attr="disabled"
                     wire:target="digitalInvoiceFile"
                     wire:change="toggleFacturaElectronicaFields($event.target.value)"
@@ -80,7 +80,7 @@
 
         <div class="form-group col-2">
             <label for="folio">Folio*</label>
-            <input type="number" class="form-control" id="folio" wire:model="folio" autocomplete="off"
+            <input type="number" class="form-control" id="folio" wire:model.live="folio" autocomplete="off"
                 min="1" 
                 wire:loading.attr="disabled"
                 wire:target="digitalInvoiceFile"
@@ -100,7 +100,7 @@
 
         <div class="form-group col-4">
             <label for="razonSocial">Razón Social*</label>
-            <input type="text" class="form-control" id="razonSocial" wire:model="razonSocial"
+            <input type="text" class="form-control" id="razonSocial" wire:model.live="razonSocial"
                 autocomplete="off" wire:loading.attr="disabled"
                     wire:target="digitalInvoiceFile">
             @error('razonSocial')
@@ -118,7 +118,7 @@
         
         <div class="form-group col-2">
             <label for="montoNeto">Monto Neto</label>
-            <input type="number" class="form-control" id="montoNeto" wire:model.defer="montoNeto"
+            <input type="number" class="form-control" id="montoNeto" wire:model="montoNeto"
                 autocomplete="off" min="1000"
                 wire:loading.attr="disabled"
                 wire:target="digitalInvoiceFile"
@@ -132,7 +132,7 @@
         
         <div class="form-group col-2" >
             <label for="montoIva">Iva</label>
-            <input type="number" class="form-control" id="montoIva" wire:model.defer="montoIva"
+            <input type="number" class="form-control" id="montoIva" wire:model="montoIva"
                 autocomplete="off" min="1000"
                 wire:loading.attr="disabled"
                 wire:target="digitalInvoiceFile"
@@ -152,7 +152,7 @@
     --}}
         <div class="form-group col-2">
             <label for="montoExento">Monto Exento</label>
-            <input type="number" class="form-control" id="montoExento" wire:model.defer="montoExento"
+            <input type="number" class="form-control" id="montoExento" wire:model="montoExento"
                 autocomplete="off" min="1000"
                 wire:loading.attr="disabled"
                 wire:target="digitalInvoiceFile"
@@ -168,7 +168,7 @@
 
         <div class="form-group col-2">
             <label for="montoTotal">Monto Total</label>
-            <input type="number" class="form-control" id="montoTotal" wire:model.defer="montoTotal"
+            <input type="number" class="form-control" id="montoTotal" wire:model="montoTotal"
                 @if($readonly) readonly @endif
                 autocomplete="off" min="1000" 
                 wire:loading.attr="disabled"
@@ -184,7 +184,7 @@
                 <label for="dte_date">Fecha de documento*</label>
                 <input type="date"
                     class="form-control @error('reception.dte_date') is-invalid @enderror"
-                    wire:model.defer="reception.dte_date" 
+                    wire:model="reception.dte_date" 
                     wire:loading.attr="disabled"
                     wire:target="digitalInvoiceFile">
             </div>
@@ -216,7 +216,7 @@
                 <label for="reception-date">Fecha acta*</label>
                 <input type="date"
                     class="form-control @error('reception.date') is-invalid @enderror"
-                    wire:model.defer="reception.date" wire:loading.attr="disabled" wire:target="digitalInvoiceFile">
+                    wire:model="reception.date" wire:loading.attr="disabled" wire:target="digitalInvoiceFile">
                 @error('reception.date')
                     <span class="text-danger">{{ $message }}</span>
                 @enderror
@@ -225,7 +225,7 @@
         <div class="form-group col-md-2">
             <label for="form-reception-type">Tipo de acta*</label>
             <select class="form-select @error('reception.reception_type_id') is-invalid @enderror"
-                wire:model.defer="reception.reception_type_id" wire:loading.attr="disabled"
+                wire:model="reception.reception_type_id" wire:loading.attr="disabled"
                 wire:target="digitalInvoiceFile">
                 <option value=""></option>
                 @foreach ($types as $id => $type)
@@ -243,7 +243,7 @@
                 <input type="text"
                     class="form-control"
                     placeholder="opcional"
-                    wire:model.defer="reception.internal_number" wire:loading.attr="disabled">
+                    wire:model="reception.internal_number" wire:loading.attr="disabled">
                 <div class="form-text">En caso que la unidad tenga su propio correlativo</div>
             </div>
         </div>
@@ -257,7 +257,7 @@
                     id="for-header_notes"
                     rows="6"
                     class="form-control"
-                    wire:model.defer="reception.header_notes"></textarea>
+                    wire:model="reception.header_notes"></textarea>
 
                 <div>
                     @livewire(
@@ -298,7 +298,7 @@
                             </div>
                         
                             <div class="col-md-2">
-                                <input type="text" class="form-control" wire:model.defer="items.{{ $index }}.producto" placeholder="ej: bolsa de basura">
+                                <input type="text" class="form-control" wire:model="items.{{ $index }}.producto" placeholder="ej: bolsa de basura">
                                 @error("items.$index.producto")
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
@@ -306,13 +306,13 @@
                             
 
                             <div class="col-md-1">
-                                <input type="text" class="form-control" wire:model.defer="items.{{ $index }}.unidad" placeholder="ej: cm">
+                                <input type="text" class="form-control" wire:model="items.{{ $index }}.unidad" placeholder="ej: cm">
                                 @error("items.$index.unidad")
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
                             <div class="col-md-1">
-                                <input type="number" class="form-control" wire:model.defer="items.{{ $index }}.cantidad" placeholder="Cant" wire:change="calculateTotal({{ $index }})">
+                                <input type="number" class="form-control" wire:model="items.{{ $index }}.cantidad" placeholder="Cant" wire:change="calculateTotal({{ $index }})">
                                 @error("items.$index.cantidad")
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
@@ -320,7 +320,7 @@
 
                             @if($item['exento'])
                                 <div class="form-group col-2">
-                                    <input type="number" class="form-control" wire:model="items.{{ $index }}.precioExento"
+                                    <input type="number" class="form-control" wire:model.live="items.{{ $index }}.precioExento"
                                         autocomplete="off" wire:change="calculateTotal({{ $index }})" placeholder="monto exento"
                                     >
                                     @error("items.$index.precioExento")
@@ -329,7 +329,7 @@
                                 </div>
                             @else
                                 <div class="form-group col-2">
-                                    <input type="number" class="form-control" wire:model="items.{{ $index }}.precioNeto"
+                                    <input type="number" class="form-control" wire:model.live="items.{{ $index }}.precioNeto"
                                         autocomplete="off"
                                         wire:change="calculateTotal({{ $index }})"
                                         placeholder="monto neto"
@@ -341,7 +341,7 @@
                             @endif
 
                             <div class="col-md-2">
-                                <input type="number" class="form-control" wire:model="items.{{ $index }}.total" readonly>
+                                <input type="number" class="form-control" wire:model.live="items.{{ $index }}.total" readonly>
                                 @error("items.$index.total")
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror

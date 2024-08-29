@@ -14,7 +14,7 @@
                     placeholder="Orden de compra"
                     aria-label="Orden de compra"
                     aria-describedby="purchase-order"
-                    wire:model.defer="purchaseOrderCode">
+                    wire:model="purchaseOrderCode">
                 <button class="btn btn-primary"
                     wire:click="getPurchaseOrder"
                     wire:loading.attr="disabled">
@@ -81,7 +81,7 @@
                             <div class="form-check">
                                 <input class="form-check-input @error('selectedDteId') is-invalid @enderror"
                                     type="radio"
-                                    wire:model="selectedDteId"
+                                    wire:model.live="selectedDteId"
                                     name="selectedDte"
                                     value="{{ $dte->id }}">
                                 <label>
@@ -114,7 +114,7 @@
                         <div class="form-check">
                             <input class="form-check-input @error('selectedDteId') is-invalid @enderror"
                                 type="radio"
-                                wire:model="selectedDteId"
+                                wire:model.live="selectedDteId"
                                 name="selectedDte"
                                 value="0">
                             <label>
@@ -149,7 +149,7 @@
                     <label for="reception-date">Tipo de documento*</label>
                     <select id="document_type"
                         class="form-select @error('reception.dte_type') is-invalid @enderror"
-                        wire:model="reception.dte_type">
+                        wire:model.live="reception.dte_type">
                         <option></option>
                         <option value ="guias_despacho">Guía de despacho</option>
                         <option value ="factura_electronica">Factura Electronica Afecta</option>
@@ -166,7 +166,7 @@
                     <label for="reception-date">Número de documento</label>
                     <input type="text"
                         class="form-control"
-                        wire:model.debounce.defer="reception.dte_number">
+                        wire:model.live.debounce.defer="reception.dte_number">
                 </div>
             </div>
             <div class="col-md-2">
@@ -174,7 +174,7 @@
                     <label for="reception-date">Fecha de documento</label>
                     <input type="date"
                         class="form-control"
-                        wire:model="reception.dte_date">
+                        wire:model.live="reception.dte_date">
                 </div>
             </div>
         </div>
@@ -196,7 +196,7 @@
                     <label for="reception-date">Fecha acta*</label>
                     <input type="date"
                         class="form-control @error('reception.date') is-invalid @enderror"
-                        wire:model="reception.date">
+                        wire:model.live="reception.date">
                     @error('reception.date')
                         <span class="text-danger">{{ $message }}</span>
                     @enderror
@@ -205,7 +205,7 @@
             <div class="form-group col-md-2">
                 <label for="form-reception-type">Tipo de acta*</label>
                 <select class="form-select @error('reception.reception_type_id') is-invalid @enderror"
-                    wire:model="reception.reception_type_id">
+                    wire:model.live="reception.reception_type_id">
                     <option value=""></option>
                     @foreach ($types as $id => $type)
                         <option value="{{ $id }}">{{ $type }}</option>
@@ -222,7 +222,7 @@
                     <input type="text"
                         class="form-control"
                         placeholder="opcional"
-                        wire:model="reception.internal_number">
+                        wire:model.live="reception.internal_number">
                     <div class="form-text">En caso que la unidad tenga su propio correlativo</div>
                 </div>
             </div>
@@ -238,7 +238,7 @@
                         id="for-header_notes"
                         rows="6"
                         class="form-control"
-                        wire:model.defer="reception.header_notes"></textarea>
+                        wire:model="reception.header_notes"></textarea>
 
                     <div>
                         @livewire(
@@ -280,7 +280,7 @@
                             <input type="number"
                                 class="form-control @error('receptionItems.' . $key . '.Cantidad') is-invalid @enderror"
                                 id="quantity"
-                                wire:model.debounce.500ms="receptionItems.{{ $key }}.Cantidad"
+                                wire:model.live.debounce.500ms="receptionItems.{{ $key }}.Cantidad"
                                 min="1"
                                 max="{{ $maxItemQuantity[$key] }}"
                                 wire:change="calculateItemTotal({{ $key }})"
@@ -329,7 +329,7 @@
                 <div class="form-check form-check-inline">
                     <input class="form-check-input @error('reception.partial_reception') is-invalid @enderror"
                         type="radio"
-                        wire:model.defer="reception.partial_reception"
+                        wire:model="reception.partial_reception"
                         id="partial_reception_partial"
                         name="partial_reception"
                         value="1">
@@ -343,7 +343,7 @@
                     <input class="form-check-input @error('reception.partial_reception') is-invalid @enderror"
                         type="radio"
                         name="partial_reception"
-                        wire:model.defer="reception.partial_reception"
+                        wire:model="reception.partial_reception"
                         id="partial_reception_complete"
                         wire:change="setPurchaseOrderCompleted"
                         value="0">
@@ -367,13 +367,13 @@
             </div>
             <div class="col-2">
                 <label for="cargos">Cargos</label>
-                <input class="form-control" type="number" wire:model="reception.cargos" id="reception.cargos">
+                <input class="form-control" type="number" wire:model.live="reception.cargos" id="reception.cargos">
             </div>
              
             @if($purchaseOrder->requestForm && $purchaseOrder->requestForm->type_form == 'pasajes aéreos')
                 <div class="col-2">
                     <label for="cargos">IVA</label>
-                    <input class="form-control" type="number" wire:model="reception.iva" id="reception.iva" wire:change="calculateItemTotal({{ $key }})">
+                    <input class="form-control" type="number" wire:model.live="reception.iva" id="reception.iva" wire:change="calculateItemTotal({{ $key }})">
                 </div>
             @endif
             
@@ -392,7 +392,7 @@
                         id="for-footer_notes"
                         rows="6"
                         class="form-control"
-                        wire:model.defer="reception.footer_notes"></textarea>
+                        wire:model="reception.footer_notes"></textarea>
                     @livewire(
                         'text-templates.controls-text-template',
                         [
@@ -581,7 +581,7 @@
                 class="form-label">Documento de respaldo (opcional)</label>
             <input class="form-control" 
                 type="file"
-                wire:model="support_file"
+                wire:model.live="support_file"
                 id="support_file">
         </div>
 
@@ -600,7 +600,7 @@
                         class="form-label">Subir acta firmada</label>
                     <input class="form-control"
                         type="file"
-                        wire:model="file_signed"
+                        wire:model.live="file_signed"
                         id="file_signed">
                 </div>
                 @error('file_signed')

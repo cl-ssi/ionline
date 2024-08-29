@@ -7,7 +7,7 @@
         <input
             type="text"
             class="form-control"
-            wire:model.defer="number"
+            wire:model="number"
             id="number"
             placeholder="META N: Ej: 1"
         />
@@ -17,7 +17,7 @@
         <input
             type="text"
             class="form-control"
-            wire:model.defer="name"
+            wire:model="name"
             id="name"
             placeholder="INDICADOR"
         />
@@ -27,7 +27,7 @@
         <input
             type="text"
             class="form-control"
-            wire:model.defer="numerator"
+            wire:model="numerator"
             id="numerator"
             placeholder="FORMULA NUMERADOR"
         />
@@ -37,7 +37,7 @@
         <input
             type="text"
             class="form-control"
-            wire:model.defer="denominator"
+            wire:model="denominator"
             id="denominator"
             placeholder="FORMULA NUMERADOR"
         />
@@ -47,7 +47,7 @@
         <input
             type="text"
             class="form-control"
-            wire:model.defer="numerator_source"
+            wire:model="numerator_source"
             id="numerator_source"
             placeholder="EJ: REM A03, sección A.2 Celdas J25 + K25 + L25 + M25 + J27 + K27 + L27 + M27"
         />
@@ -57,7 +57,7 @@
         <input
             type="text"
             class="form-control"
-            wire:model.defer="denominator_source"
+            wire:model="denominator_source"
             id="denominator_source"
             placeholder="VERIFICADOR DENOMINADOR EJ: REM A03, Sección A.2 Celdas (J22 + K22 + L22 + M22) - (J36 + K36 + L36 + M36) - (J39 - K39 - L39 - M39)"
         />
@@ -67,7 +67,7 @@
         <input
             type="text"
             class="form-control"
-            wire:model.defer="numerator_cods"
+            wire:model="numerator_cods"
             id="numerator_cods"
             placeholder="CODIGOS DEL VERIFICADOR EJ: 02010420,03500366"
         />
@@ -77,7 +77,7 @@
         <input
             type="text"
             class="form-control"
-            wire:model.defer="denominator_cods"
+            wire:model="denominator_cods"
             id="denominator_cods"
             placeholder="CODIGOS DEL DENOMINADOR. EJ: 02010321,-03500334,-03500331"
         />
@@ -89,7 +89,7 @@
         <input
             type="text"
             class="form-control"
-            wire:model.defer="numerator_cols"
+            wire:model="numerator_cols"
             id="numerator_cols"
             placeholder="COLUMNAS DEL NUMERADOR EJ: Col08,Col09,Col10,Col11"
         />
@@ -99,7 +99,7 @@
         <input
             type="text"
             class="form-control"
-            wire:model.defer="denominator_cols"
+            wire:model="denominator_cols"
             id="denominator_cols"
             placeholder="COLUMNAS DEL DENOMINADOR EJ: Col08,Col09,Col10,Col11"
         />
@@ -109,7 +109,7 @@
         <input
             type="text"
             class="form-control"
-            wire:model.defer="goal"
+            wire:model="goal"
             id="goal"
             placeholder="Por coumunas EJ: 60%,60%,55%,50%,70%,60%,40%"
         />

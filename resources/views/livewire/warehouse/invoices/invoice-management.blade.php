@@ -11,7 +11,7 @@
             <div class="input-group">
                 <input
                     type="text"
-                    wire:model.debounce.1500ms="search"
+                    wire:model.live.debounce.1500ms="search"
                     id="search"
                     class="form-control"
                     placeholder="Ingresa el número de la OC"
@@ -87,7 +87,7 @@
                                 <input
                                     class="form-check-input"
                                     type="checkbox"
-                                    wire:model.debounce.9000ms="selected_controls"
+                                    wire:model.live.debounce.9000ms="selected_controls"
                                     value={{ $control->id }}
                                     id="option-{{ $control->id }}"
                                 >
@@ -203,7 +203,7 @@
             <input
                 class="form-control @error('number') is-invalid @enderror"
                 id="invoice-number"
-                wire:model.defer="number"
+                wire:model="number"
                 type="text"
             >
             @error('number')
@@ -218,7 +218,7 @@
             <input
                 class="form-control @error('date') is-invalid @enderror"
                 id="invoice-date"
-                wire:model.defer="date"
+                wire:model="date"
                 type="date"
             >
             @error('date')
@@ -233,7 +233,7 @@
             <input
                 class="form-control @error('amount') is-invalid @enderror"
                 id="invoice-amount"
-                wire:model.defer="amount"
+                wire:model="amount"
                 type="text"
             >
             @error('amount')
@@ -248,7 +248,7 @@
             <input
                 class="form-control form-control-file @error('file') is-invalid @enderror"
                 type="file"
-                wire:model.defer="file"
+                wire:model="file"
                 id="invoice-{{ $iteration }}"
             >
             @error('file')

@@ -28,7 +28,7 @@
             </tr>
         </table>
         <label for="exampleFormControlTextarea1" class="form-label">Pegar diccionario glosa directo desde el excel, solo las columnas según ejemplo de arriba</label>
-        <textarea wire:model.defer="prestaciones" class="form-control" id="exampleFormControlTextarea1" rows="10"></textarea>
+        <textarea wire:model="prestaciones" class="form-control" id="exampleFormControlTextarea1" rows="10"></textarea>
     </div>
     <button type="submit" class="btn btn-primary" wire:click="process">Procesar</button>
 

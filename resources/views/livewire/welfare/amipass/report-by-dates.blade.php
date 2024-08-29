@@ -6,7 +6,7 @@
     <div class="form-row">
         <div class="form-group col-3">
             <label for="text12">Periodo</label>
-            <input type="month" class="form-control" wire:model.defer="search_date" required/>
+            <input type="month" class="form-control" wire:model="search_date" required/>
             @error('search_date') <span class="error">{{ $message }}</span> @enderror
         </div>
         <div class="form-group">

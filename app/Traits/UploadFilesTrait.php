@@ -33,6 +33,6 @@ trait UploadFilesTrait
      */
     public function restoreComponent()
     {
-        $this->emit('resetAllFiles');
+        $this->dispatch('resetAllFiles');
     }
 }

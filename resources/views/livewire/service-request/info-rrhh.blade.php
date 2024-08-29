@@ -10,26 +10,26 @@
     <div class="form-row mb-3">
         <div class="col-md-2">
             <label for="validationCustom01">Nº resolución</label>
-            <input type="text" class="form-control" id="validationCustom01" wire:model.defer="resolutionNumber">
+            <input type="text" class="form-control" id="validationCustom01" wire:model="resolutionNumber">
             <div class="valid-feedback">
                 Looks good!
             </div>
         </div>
         <div class="col-md-2">
             <label for="validationCustom02">Fecha Resolución</label>
-            <input type="date" class="form-control" id="validationCustom02" wire:model.defer="resolutionDate">
+            <input type="date" class="form-control" id="validationCustom02" wire:model="resolutionDate">
         </div>
         <div class="col-md-2">
             <label for="validationCustom03">Monto mensualizado</label>
-            <input type="text" class="form-control" id="validationCustom03" wire:model.defer="netAmount">
+            <input type="text" class="form-control" id="validationCustom03" wire:model="netAmount">
         </div>
         <div class="col-md-2">
             <label for="validationCustom03">Bruto/Valor Hora</label>
-            <input type="text" class="form-control" id="validationCustom03" wire:model.defer="grossAmount">
+            <input type="text" class="form-control" id="validationCustom03" wire:model="grossAmount">
         </div>
         <div class="col-md-1">
             <label for="validationCustom04">SirH</label>
-            <select class="custom-select" id="validationCustom04" required wire:model.defer="sirhContractRegistration">
+            <select class="custom-select" id="validationCustom04" required wire:model="sirhContractRegistration">
                 <option value="1">Sí</option>
                 <option value="0">No</option>
             </select>

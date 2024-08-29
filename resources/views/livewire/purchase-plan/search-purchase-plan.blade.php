@@ -6,12 +6,12 @@
                 <fieldset class="form-group col-12 col-md-1">
                     <label for="for_id">ID</label>
                     <input class="form-control form-control-sm" type="number" name="id_search" autocomplete="off" 
-                        placeholder="001" wire:model.debounce.500ms="selectedId">
+                        placeholder="001" wire:model.live.debounce.500ms="selectedId">
                 </fieldset>
                 
                 <fieldset class="form-group col-12 col-md-2">
                     <label for="for_status_search">Estado Formulario</label>
-                    <select name="status_search" class="form-select form-select-sm" wire:model.debounce.500ms="selectedStatus">
+                    <select name="status_search" class="form-select form-select-sm" wire:model.live.debounce.500ms="selectedStatus">
                         <option value="">Seleccione...</option>
                         <option value="save">Guardado</option>
                         <option value="sent">Enviado</option>
@@ -24,21 +24,21 @@
                 <fieldset class="form-group col-12 col-md-3">
                     <label for="for_subject">Asunto</label>
                     <input class="form-control form-control-sm" type="text" autocomplete="off" name="subject_search" 
-                        wire:model.debounce.500ms="selectedSubject">
+                        wire:model.live.debounce.500ms="selectedSubject">
                 </fieldset>
 
                 <fieldset class="form-group col-12 col-md-3">
                     <label for="regiones">Periodo de Creación</label>
                     <div class="input-group">
-                        <input type="date" class="form-control form-control-sm" name="start_date_search" wire:model.debounce.500ms="selectedStartDate">
-                        <input type="date" class="form-control form-control-sm" name="end_date_search" wire:model.debounce.500ms="selectedEndDate">
+                        <input type="date" class="form-control form-control-sm" name="start_date_search" wire:model.live.debounce.500ms="selectedStartDate">
+                        <input type="date" class="form-control form-control-sm" name="end_date_search" wire:model.live.debounce.500ms="selectedEndDate">
                     </div>
                 </fieldset>
 
                 <fieldset class="form-group col-12 col-md-3">
                     <label for="for_user_creator">Usuario Creador</label>
                     <input class="form-control form-control-sm" type="text" autocomplete="off" placeholder="NOMBRE / APELLIDOS"
-                        name="user_creator_search" wire:model.debounce.500ms="selectedUserCreator">
+                        name="user_creator_search" wire:model.live.debounce.500ms="selectedUserCreator">
                 </fieldset>
             </div>
 
@@ -46,7 +46,7 @@
                 <fieldset class="form-group col-12 col-md-3">
                     <label for="for_user_responsible">Usuario Responsable</label>
                     <input class="form-control form-control-sm" type="text" autocomplete="off" placeholder="NOMBRE / APELLIDOS"
-                        name="user_responsible_search" wire:model.debounce.500ms="selectedUserResponsible">
+                        name="user_responsible_search" wire:model.live.debounce.500ms="selectedUserResponsible">
                 </fieldset>
 
                 <fieldset class="form-group col-12 col-md-3">
@@ -61,7 +61,7 @@
 
                 <fieldset class="form-group col-12 col-md-3">
                     <label for="for_program">Programa</label>
-                    <input class="form-control form-control-sm" type="text" autocomplete="off" name="program_search" wire:model.debounce.500ms="selectedProgram">
+                    <input class="form-control form-control-sm" type="text" autocomplete="off" name="program_search" wire:model.live.debounce.500ms="selectedProgram">
                 </fieldset>
             </div>
         </div>

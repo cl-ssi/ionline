@@ -32,7 +32,7 @@
                                 <label for="input">{{ $input->label }}*</label>
                                 @switch($input->type)
                                     @case('select')
-                                        <select class="form-select" wire:model.defer="callback_feedback_inputs.{{$input->name}}" required>
+                                        <select class="form-select" wire:model="callback_feedback_inputs.{{$input->name}}" required>
                                             <option value=""></option>
                                             @foreach($input->options as $key => $option)
                                                 <option value="{{ $key }}">{{ $option }}</option>
@@ -40,7 +40,7 @@
                                         </select>
                                     @break
                                     @case('text')
-                                        <input type="text" class="form-control" wire:model.defer="callback_feedback_inputs.{{$input->name}}" required>
+                                        <input type="text" class="form-control" wire:model="callback_feedback_inputs.{{$input->name}}" required>
                                     @break
                                 @endswitch
                             </div>
@@ -92,7 +92,7 @@
                                     placeholder="Motivo rechazo"
                                     aria-label="Motivo de rechazo"
                                     aria-describedby="button-addon"
-                                    wire:model.defer="approver_observation"
+                                    wire:model="approver_observation"
                                     value="{{ $approvalSelected->approver_observation }}"
                                 >
                                 <button
@@ -121,7 +121,7 @@
                                         placeholder="OTP"
                                         aria-label="OTP"
                                         aria-describedby="button-addon"
-                                        wire:model.defer="otp"
+                                        wire:model="otp"
                                         @disabled( !$approvalSelected->digital_signature)
                                     >
                                     <button

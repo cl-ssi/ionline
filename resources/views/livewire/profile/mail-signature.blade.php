@@ -21,11 +21,11 @@
     <div class="row g-2 mb-3">
         <div class="form-group col-6">
             <label for="pronom">Pronombres y artículo</label>
-            <input type="text" class="form-control" id="pronom" wire:model.debounce.500ms="pronom" aria-describedby="pronom">
+            <input type="text" class="form-control" id="pronom" wire:model.live.debounce.500ms="pronom" aria-describedby="pronom">
         </div>
         <div class="form-group col-6">
             <label for="personalPhone">Teléfono personal</label>
-            <input type="text" class="form-control" id="personalPhone" wire:model.debounce.500ms="personalPhone" aria-describedby="personalPhone">
+            <input type="text" class="form-control" id="personalPhone" wire:model.live.debounce.500ms="personalPhone" aria-describedby="personalPhone">
         </div>
     </div>
 

@@ -4,7 +4,7 @@
         <div class="form-row">
             <fieldset class="form-group col-12 col-md-2">
                 <label for="for_status_search">Estado Formulario</label>
-                <select name="status_search" class="form-control form-control-sm" wire:model.debounce.500ms="selectedStatus" @if($inbox == 'purchase') disabled @endif>
+                <select name="status_search" class="form-control form-control-sm" wire:model.live.debounce.500ms="selectedStatus" @if($inbox == 'purchase') disabled @endif>
                     <option value="">Seleccione...</option>
                     <option value="saved">Guardado</option>
                     <option value="pending">Pendiente</option>
@@ -15,7 +15,7 @@
 
             <fieldset class="form-group col-12 col-md-2">
                 <label for="for_status_purchase_search">Estado Proceso Compra</label>
-                <select name="status_purchase_search" class="form-control form-control-sm" wire:model.debounce.500ms="selectedStatusPurchase">
+                <select name="status_purchase_search" class="form-control form-control-sm" wire:model.live.debounce.500ms="selectedStatusPurchase">
                     <option value="">Seleccione...</option>
                     <option value="canceled">Anulado</option>
                     <option value="finalized">Finalizado</option>
@@ -27,18 +27,18 @@
             <fieldset class="form-group col-12 col-md-1">
                 <label for="for_id">ID</label>
                 <input class="form-control form-control-sm" type="number" name="id_search" autocomplete="off" 
-                    placeholder="001" wire:model.debounce.500ms="selectedId">
+                    placeholder="001" wire:model.live.debounce.500ms="selectedId">
             </fieldset>
 
             <fieldset class="form-group col-12 col-md-1">
                 <label for="for_folio">Folio</label>
                 <input class="form-control form-control-sm" type="text" name="folio_search" autocomplete="off" 
-                    placeholder="2022-17" wire:model.debounce.500ms="selectedFolio">
+                    placeholder="2022-17" wire:model.live.debounce.500ms="selectedFolio">
             </fieldset>
 
             <fieldset class="form-group col-12 col-md-1">
                 <label for="for_mecanism">Tipo de Compra</label>
-                <select name="subtype_search" class="form-control form-control-sm" wire:model.debounce.500ms="selectedSubtype">
+                <select name="subtype_search" class="form-control form-control-sm" wire:model.live.debounce.500ms="selectedSubtype">
                     <option value="">Todos</option>
                     <option value="bienes">Bienes</option>
                     <option value="servicios">Servicios</option>                    
@@ -48,14 +48,14 @@
             <fieldset class="form-group col-12 col-md-2">
                 <label for="for_name">Descripción</label>
                 <input class="form-control form-control-sm" type="text" autocomplete="off"
-                    name="name_search" wire:model.debounce.500ms="selectedName">
+                    name="name_search" wire:model.live.debounce.500ms="selectedName">
             </fieldset>
 
             <fieldset class="form-group col-12 col-md-3">
                 <label for="regiones">Periodo de Creación</label>
                 <div class="input-group">
-                    <input type="date" class="form-control form-control-sm" name="start_date_search" wire:model.debounce.500ms="selectedStartDate">
-                    <input type="date" class="form-control form-control-sm" name="end_date_search" wire:model.debounce.500ms="selectedEndDate">
+                    <input type="date" class="form-control form-control-sm" name="start_date_search" wire:model.live.debounce.500ms="selectedStartDate">
+                    <input type="date" class="form-control form-control-sm" name="end_date_search" wire:model.live.debounce.500ms="selectedEndDate">
                 </div>
             </fieldset>
         </div>
@@ -64,7 +64,7 @@
             <fieldset class="form-group col-12 col-md-2">
                 <label for="for_requester">Usuario Gestor</label>
                 <input class="form-control form-control-sm" type="text" autocomplete="off" placeholder="NOMBRE / APELLIDOS"
-                    name="requester_search" wire:model.debounce.500ms="selectedRequester">
+                    name="requester_search" wire:model.live.debounce.500ms="selectedRequester">
             </fieldset>
 
             @if($this->inbox == 'all' || $inbox == 'report: form-items' || $inbox == 'purchase')
@@ -90,7 +90,7 @@
                 <fieldset class="form-group col-12 col-md-2">
                     <label for="for_requester">Administrador Contrato</label>
                     <input class="form-control form-control-sm" type="text" autocomplete="off" placeholder="NOMBRE / APELLIDOS"
-                        name="admin_search" wire:model.debounce.500ms="selectedAdmin">
+                        name="admin_search" wire:model.live.debounce.500ms="selectedAdmin">
                 </fieldset>
             @else
                 <fieldset class="form-group col-12 col-md-2">
@@ -125,28 +125,28 @@
             <fieldset class="form-group col-12 col-md-2">
                 <label for="for_purchaser">Comprador</label>
                 <input class="form-control form-control-sm" type="text" autocomplete="off" placeholder="NOMBRE / APELLIDOS"
-                    name="purchaser_search" wire:model.debounce.500ms="selectedPurchaser" @if($inbox == 'purchase') disabled @endif>
+                    name="purchaser_search" wire:model.live.debounce.500ms="selectedPurchaser" @if($inbox == 'purchase') disabled @endif>
             </fieldset>
             <fieldset class="form-group col-12 col-md-2">
                 <label for="for_purchaser">Programa</label>
                 <input class="form-control form-control-sm" type="text" autocomplete="off" placeholder=""
-                    name="program_search" wire:model.debounce.500ms="selectedProgram">
+                    name="program_search" wire:model.live.debounce.500ms="selectedProgram">
             </fieldset>
             @if($inbox == 'purchase' || $inbox == 'report: form-items')
             <fieldset class="form-group col-12 col-md-2">
                 <label for="for_purchaser">N° O.C.</label>
                 <input class="form-control form-control-sm" type="text" autocomplete="off" placeholder=""
-                    name="purchase_order_search" wire:model.debounce.500ms="selectedPo">
+                    name="purchase_order_search" wire:model.live.debounce.500ms="selectedPo">
             </fieldset>
             <fieldset class="form-group col-12 col-md-2">
                 <label for="for_purchaser">N° Licitación.</label>
                 <input class="form-control form-control-sm" type="text" autocomplete="off" placeholder=""
-                    name="tender_search" wire:model.debounce.500ms="selectedTender">
+                    name="tender_search" wire:model.live.debounce.500ms="selectedTender">
             </fieldset>
             <fieldset class="form-group col-12 col-md-4">
                 <label for="for_supplier">Proveedor</label>
                 <input class="form-control form-control-sm" type="text" autocomplete="off" placeholder="NOMBRE"
-                    name="supplier_search" wire:model.debounce.500ms="selectedSupplier">
+                    name="supplier_search" wire:model.live.debounce.500ms="selectedSupplier">
             </fieldset>
             @endif
         </div>
@@ -155,7 +155,7 @@
             <div class="form-row">
                 <fieldset class="form-group col-sm-2">
                     <label>Mecanismo de Compra:</label><br>
-                    <select wire:model.debounce.500ms="selectedPurchaseMechanism" name="purchase_mechanism_search" class="form-control form-control-sm ">
+                    <select wire:model.live.debounce.500ms="selectedPurchaseMechanism" name="purchase_mechanism_search" class="form-control form-control-sm ">
                         <option value="">Seleccione...</option>
                         @foreach($lstPurchaseMechanism as $val)
                             <option value="{{$val->id}}">{{$val->name}}</option>

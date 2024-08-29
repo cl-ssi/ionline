@@ -49,7 +49,7 @@
         <fieldset class="form-group col-md-3">
             <label for="product-type" class="form-label">Productos donde</label>
             <select
-                wire:model.debounce.1500ms="product_type"
+                wire:model.live.debounce.1500ms="product_type"
                 id="product-type"
                 class="form-select"
             >
@@ -66,7 +66,7 @@
                 id="search"
                 class="form-control"
                 placeholder="Ingresa un número inventario (nuevo o antiguo) o nombre de producto o nombre unspc o ubicación o Código Arquitectónico"
-                wire:model.debounce.1500ms="search"
+                wire:model.live.debounce.1500ms="search"
                 autocomplete="off"
             >
         </fieldset>

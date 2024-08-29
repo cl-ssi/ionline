@@ -35,7 +35,7 @@
                                 <td>{{$openHour->start_date->format('Y-m-d H:i')}}</td>
                                 <td>
                                     @if(array_key_exists($openHour->id, $openHours) && $openHours[$openHour->id]['showSelect'])
-                                        <select wire:change="updateAssistance({{$openHour->id}}, $event.target.value)" wire:model="openHours.{{$openHour->id}}.selectedAssistance">
+                                        <select wire:change="updateAssistance({{$openHour->id}}, $event.target.value)" wire:model.live="openHours.{{$openHour->id}}.selectedAssistance">
                                             <option value=""></option>
                                             <option value="0">No asistió</option>
                                             <option value="1">Asistió</option>

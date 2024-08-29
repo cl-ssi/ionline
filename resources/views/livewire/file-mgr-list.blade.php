@@ -19,7 +19,7 @@
                 <input
                     type="file"
                     class="form-control"
-                    wire:model="file"
+                    wire:model.live="file"
                 >
             @endif
 

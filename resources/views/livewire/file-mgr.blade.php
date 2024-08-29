@@ -11,7 +11,7 @@
             type="file"
             id="formFile-{{ $countFile }}"
             accept="{{ $accept }}"
-            wire:model="file"
+            wire:model.live="file"
             wire:loading.attr="disabled"
             wire:target="file, saveFile"
 

@@ -3,7 +3,7 @@
 
     <div class="mb-3">
         <label for="issues" class="form-label">Archivo TSV de Github</label>
-        <textarea class="form-control" wire:model="github_input" id="issues" rows="8"></textarea>
+        <textarea class="form-control" wire:model.live="github_input" id="issues" rows="8"></textarea>
     </div>
 
     <div class="row">
@@ -22,7 +22,7 @@
                 <input
                     type="month"
                     class="form-control"
-                    wire:model="period"
+                    wire:model.live="period"
                 />
             </div>
         </div>

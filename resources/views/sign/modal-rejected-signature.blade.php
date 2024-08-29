@@ -1,6 +1,6 @@
 <!-- Modal -->
 <div
-    wire:model
+    wire:model.live
     class="modal fade"
     id="rejected-signature-to-{{ $signature->id }}"
     tabindex="-1"
@@ -36,7 +36,7 @@
                             type="text"
                             class="form-control @error('observation') is-invalid @enderror"
                             id="observation"
-                            wire:model.defer="observation"
+                            wire:model="observation"
                         >
                         @error('observation')
                             <span class="invalid-feedback" role="alert">

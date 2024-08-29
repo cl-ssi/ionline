@@ -1,7 +1,7 @@
 <div class="row">
     <fieldset class="form-group col col-md-5">
         <label for="for_type">Profesión</label>
-        <select class="form-control" name="profession_id" wire:model="profession_id" wire:change="change">
+        <select class="form-control" name="profession_id" wire:model.live="profession_id" wire:change="change">
             <option value=""></option>
             @foreach($professions as $profession)
                 <option value="{{$profession->id}}" @selected($profession_id == $profession->id)>{{$profession->name}}</option>

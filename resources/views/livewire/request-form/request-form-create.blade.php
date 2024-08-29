@@ -7,14 +7,14 @@
             <div class="form-row">
                 <fieldset class="form-group col-sm-4">
                     <label for="forRut">Nombre de Formulario:</label>
-                    <input wire:model.defer="name" name="name" class="form-control form-control-sm" type="text" placeholder="EJ: ADIQUISICIÓN DE MOBILIARIO PARA OFICINA..." value="">
+                    <input wire:model="name" name="name" class="form-control form-control-sm" type="text" placeholder="EJ: ADIQUISICIÓN DE MOBILIARIO PARA OFICINA..." value="">
                     @error('name') <span class="text-danger small">{{ $message }}</span> @enderror
                 </fieldset>
 
                 {{--<fieldset class="form-group col-sm-4">
                     <label>Administrador de Contrato:</label><br>
                     <div wire:ignore id="for-bootstrap-select">
-                      <select wire:model.defer="contractManagerId" name="contractManagerId" data-container="#for-bootstrap-select"
+                      <select wire:model="contractManagerId" name="contractManagerId" data-container="#for-bootstrap-select"
                         class="form-control form-control-sm selectpicker show-tick" data-live-search="true" data-size="5" {{ $editRF ? 'disabled' : 'required' }} >
                         <option>Seleccione...</option>
                         @foreach($users as $user)
@@ -39,7 +39,7 @@
                 <fieldset class="form-group col-sm">
                     {{-- <label>Programa @if($program_id != 'other')Asociado:@endif</label><br> --}}
                     <label>Programa Asociado</label><br>
-                    <select wire:model="program_id" name="program_id" class="form-control form-control-sm " required>
+                    <select wire:model.live="program_id" name="program_id" class="form-control form-control-sm " required>
                         <option value="">Seleccione...</option>
                         @foreach($lstProgram as $val)
                         <option value="{{$val->id}}">{{$val->alias_finance}} {{$val->period}} - Subtítulo {{$val->Subtitle->name}}</option>
@@ -52,7 +52,7 @@
                 @if($program_id == 'other')
                 <fieldset class="form-group col-sm-3">
                     <label for="forRut">&nbsp;</label>
-                    <input wire:model.defer="program" name="program" class="form-control form-control-sm" type="text" placeholder="Nombre del programa asociado">
+                    <input wire:model="program" name="program" class="form-control form-control-sm" type="text" placeholder="Nombre del programa asociado">
                     @error('program') <span class="text-danger small">{{ $message }}</span> @enderror
                 </fieldset>
                 @endif
@@ -62,7 +62,7 @@
             <div class="form-row">
                 <fieldset class="form-group col-sm-4">
                     <label>Mecanismo de Compra:</label><br>
-                    <select wire:model="purchaseMechanism" name="purchaseMechanism" class="form-control form-control-sm " required>
+                    <select wire:model.live="purchaseMechanism" name="purchaseMechanism" class="form-control form-control-sm " required>
                         <option value="">Seleccione...</option>
                         @foreach($lstPurchaseMechanism as $val)
                             <option value="{{$val->id}}">{{$val->name}}</option>
@@ -73,7 +73,7 @@
 
                 <fieldset class="form-group col-sm-4">
                     <label>Tipo:</label><br>
-                    <select wire:model.defer="subtype" name="subtype" class="form-control form-control-sm" required>
+                    <select wire:model="subtype" name="subtype" class="form-control form-control-sm" required>
                         <option value="">Seleccione...</option>
                         <option value="bienes ejecución inmediata">Bienes Ejecución Inmediata</option>
                         <option value="bienes ejecución tiempo">Bienes Ejecución En Tiempo</option>
@@ -85,7 +85,7 @@
 
                 <fieldset class="form-group col-sm-4">
                     <label for="for_type_of_currency">Tipo de Moneda:</label>
-                    <select wire:model.defer="typeOfCurrency" name="typeOfCurrency" class="form-control form-control-sm" required>
+                    <select wire:model="typeOfCurrency" name="typeOfCurrency" class="form-control form-control-sm" required>
                         <option value="">Seleccione...</option>
                         <option value="peso">Peso</option>
                         <option value="dolar">Dolar</option>
@@ -99,7 +99,7 @@
                 <fieldset class="form-group col-sm-4">
                     <label for="for_calidad_juridica">Autoriza Jefatura Superior</label>
                     <div class="mt-1 ml-4">
-                        <input class="form-check-input" type="checkbox" value="1" wire:model="superiorChief" name="superiorChief">
+                        <input class="form-check-input" type="checkbox" value="1" wire:model.live="superiorChief" name="superiorChief">
                         <label class="form-check-label" for="flexCheckDefault">
                             Sí
                         </label>
@@ -108,7 +108,7 @@
 
                 <fieldset class="form-group col-sm-4">
                     <label for="for_fileRequests" class="form-label">Documento(s) de Respaldo:</label>
-                    <input class="form-control form-control-sm" wire:model.defer="fileRequests" id="for_fileRequests" type="file" style="padding:2px 0px 0px 2px;" name="fileRequests[]" multiple>
+                    <input class="form-control form-control-sm" wire:model="fileRequests" id="for_fileRequests" type="file" style="padding:2px 0px 0px 2px;" name="fileRequests[]" multiple>
                     <div wire:loading wire:target="fileRequests">Cargando archivo(s)...</div>
                 </fieldset>
 
@@ -131,7 +131,7 @@
             <div class="form-row">
                 <fieldset class="form-group col-sm">
                     <label for="exampleFormControlTextarea1" class="form-label">Justificación de Adquisición:</label>
-                    <textarea wire:model.defer="justify" name="justify" class="form-control form-control-sm" rows="3"></textarea>
+                    <textarea wire:model="justify" name="justify" class="form-control form-control-sm" rows="3"></textarea>
                     @error('justify') <span class="text-danger small">{{ $message }}</span> @enderror
                 </fieldset>
             </div>

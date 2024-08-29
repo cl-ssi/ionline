@@ -32,7 +32,7 @@
                     @if ($report->received_user_observation)
                         <input type="text" class="form-control" value="{{ $report->received_user_observation }}" readonly>
                     @elseif ($report->latest_approval_date && $report->latest_approval_date->diffInDays(now()) < 5)
-                        <input wire:model.defer="observation" type="text" class="form-control" placeholder="Observación" aria-label="Recipient's username" aria-describedby="button-addon2">
+                        <input wire:model="observation" type="text" class="form-control" placeholder="Observación" aria-label="Recipient's username" aria-describedby="button-addon2">
                         <button wire:click="saveObservation({{ $report->id }})" class="btn btn-primary" type="button" id="button-addon2">
                             <i class="bi bi-floppy"></i>
                         </button>

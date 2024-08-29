@@ -9,7 +9,7 @@
         <div class="form-row mb-3">
             <fieldset class="col-12 col-md-6">
                 <label for="for-name">Nombre*</label>
-                <input type="text" wire:model.defer="category.name" class="form-control">
+                <input type="text" wire:model="category.name" class="form-control">
                 @error('category.name') <span class="text-danger">{{ $message }}</span> @enderror
             </fieldset>
         </div>

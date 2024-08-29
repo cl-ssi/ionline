@@ -38,7 +38,7 @@
 
     @push('scripts')
         <script>
-            document.addEventListener('livewire:load', function() {
+            document.addEventListener('livewire:init', function() {
                 window.livewire.on('openModal', () => {
                     var myModal = new bootstrap.Modal(document.getElementById('formModal'), {
                         keyboard: false // Desactiva cerrar el modal con la tecla Esc

@@ -16,7 +16,7 @@
                 type="date"
                 class="form-control @error('document_number') is-invalid @enderror"
                 id="document-number"
-                wire:model="document_number"
+                wire:model.live="document_number"
             >
             @error('document_number')
                 <span class="invalid-feedback" role="alert">
@@ -31,7 +31,7 @@
                 class="form-control @error('type_id') is-invalid @enderror"
                 id="document-type"
                 required
-                wire:model='type_id'
+                wire:model.live='type_id'
             >
                 <option value="">Seleccion un tipo</option>
                 @foreach($documentTypes as $id => $type)
@@ -51,7 +51,7 @@
                 type="text"
                 class="form-control @error('subject') is-invalid @enderror"
                 id="subject"
-                wire:model.debounce.1500ms="subject"
+                wire:model.live.debounce.1500ms="subject"
                 required
             >
             @error('subject')
@@ -75,7 +75,7 @@
                     type="file"
                     class="form-control @error('document_to_sign') is-invalid @enderror"
                     id="document-{{ $iterationDocument }}"
-                    wire:model.defer="document_to_sign"
+                    wire:model="document_to_sign"
                 >
                 @error('document_to_sign')
                     <span class="invalid-feedback" role="alert">
@@ -91,7 +91,7 @@
                 type="text"
                 class="form-control @error('description') is-invalid @enderror"
                 id="description"
-                wire:model.debounce.1500ms="description"
+                wire:model.live.debounce.1500ms="description"
                 required
             >
             @error('description')
@@ -113,7 +113,7 @@
                 type="file"
                 class="form-control @error('annex_file') is-invalid @enderror"
                 id="file-{{ $iterationAnnex }}"
-                wire:model.debounce.900ms="annex_file"
+                wire:model.live.debounce.900ms="annex_file"
                 accept=".pdf,.xls,.xlsx,.doc,.docx"
                 multiple
             >
@@ -131,7 +131,7 @@
                 class="form-control @error('annex_link') is-invalid @enderror"
                 id="link"
                 placeholder="Ingrese un enlace"
-                wire:model.debounce.1500ms="annex_link"
+                wire:model.live.debounce.1500ms="annex_link"
             >
             @error('annex_link')
                 <span class="invalid-feedback" role="alert">
@@ -277,7 +277,7 @@
                     <select
                         class="custom-select custom-select-sm @error('column_left_endorse') is-invalid @enderror"
                         id="left-endorse"
-                        wire:model.debounce.1000ms="column_left_endorse"
+                        wire:model.live.debounce.1000ms="column_left_endorse"
                     >
                         <option value="">Selecione Tipo Firma</option>
                         <option value="Opcional">Opcional</option>
@@ -316,7 +316,7 @@
                 <input
                     class="form-check-input"
                     type="checkbox"
-                    wire:model="column_left_visator"
+                    wire:model.live="column_left_visator"
                     id="left-visator"
                 >
                 <label class="form-check-label" for="left-visator">
@@ -349,7 +349,7 @@
                     <select
                         class="custom-select custom-select-sm @error('column_center_endorse') is-invalid @enderror"
                         id="center-endorse"
-                        wire:model.debounce.1000ms="column_center_endorse"
+                        wire:model.live.debounce.1000ms="column_center_endorse"
                     >
                         <option value="">Selecione Tipo Firma</option>
                         <option value="Opcional">Opcional</option>
@@ -388,7 +388,7 @@
                 <input
                     class="form-check-input"
                     type="checkbox"
-                    wire:model="column_center_visator"
+                    wire:model.live="column_center_visator"
                     id="center-visator"
                     disabled
                 >
@@ -422,7 +422,7 @@
                     <select
                         class="custom-select custom-select-sm @error('column_right_endorse') is-invalid @enderror"
                         id="right-endorse"
-                        wire:model.debounce.1000ms="column_right_endorse"
+                        wire:model.live.debounce.1000ms="column_right_endorse"
                     >
                         <option value="">Selecione Tipo Firma</option>
                         <option value="Opcional">Opcional</option>
@@ -461,7 +461,7 @@
                 <input
                     class="form-check-input"
                     type="checkbox"
-                    wire:model="column_right_visator"
+                    wire:model.live="column_right_visator"
                     id="right-visator"
                     disabled
                 >
@@ -511,7 +511,7 @@
                     class="form-control"
                     name="page"
                     required
-                    wire:model='page'
+                    wire:model.live='page'
                     required
                 >
                     <option value="last">Última Pagina</option>

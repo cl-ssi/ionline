@@ -1,7 +1,7 @@
 <div>
     <div class="form-row">
         <div class="col-10">
-            <select class="form-control {{ $bg_color }}" name="payment_ready" wire:model="payment_ready">
+            <select class="form-control {{ $bg_color }}" name="payment_ready" wire:model.live="payment_ready">
                 <option value="0">Rechazado</option>
                 <option value="null">Pendiente</option>
             </select>
@@ -15,7 +15,7 @@
 
     <div class="form-row"{{ $payment_ready == '1' ? 'hidden' : '' }}>
         <div class="col-12">
-            <input class="form-control" type="text" name="rejection_detail_input" wire:model="rejection_detail_input" placeholder="Ingrese motivo">
+            <input class="form-control" type="text" name="rejection_detail_input" wire:model.live="rejection_detail_input" placeholder="Ingrese motivo">
         </div>
     </div>
 

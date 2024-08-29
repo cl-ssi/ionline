@@ -1,4 +1,4 @@
-<form wire:submit.prevent="upload">
+<form wire:submit="upload">
 
     @include('finance.payments.partials.nav')
 
@@ -13,7 +13,7 @@
     </div>
 
     <div class="input-group mb-3">
-        <input class="form-control" type="file" id="dte_file" wire:model="dtes">
+        <input class="form-control" type="file" id="dte_file" wire:model.live="dtes">
         <button class="btn btn-primary" type="submit" wire:loading.attr="disabled"> <i class="fas fa-fw fa-upload"></i> Cargar Archivo</button>
     </div>
     <small id="emailHelp" class="form-text text-muted">Archivo xls de reporte de acepta, máximo 2mb.</small>

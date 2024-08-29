@@ -16,7 +16,7 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="benefit_id">Categoría:</label>
-                    <select wire:model="benefit_id" class="form-select" id="benefit_id">
+                    <select wire:model.live="benefit_id" class="form-select" id="benefit_id">
                         <option value="">Selecciona una categoría</option>
                         @foreach($benefits as $benefit)
                             <option value="{{ $benefit->id }}">{{ $benefit->name }}</option>
@@ -25,7 +25,7 @@
                 </div>
                 <div class="form-group">
                     <label for="subsidy_id">Beneficio:</label>
-                    <select wire:model="subsidy_id" class="form-select" id="subsidy_id">
+                    <select wire:model.live="subsidy_id" class="form-select" id="subsidy_id">
                         <option value="">Selecciona un beneficio</option>
                         @foreach($subsidies as $subsidy_item)
                             <option value="{{ $subsidy_item->id }}">{{ $subsidy_item->name }}</option>
@@ -59,7 +59,7 @@
                             <div id="fileInputs">
                                 @foreach($files as $key => $file)
                                     <div wire:loading wire:target="files.{{ $key }}"><i class="fas fa-spinner fa-spin"></i> <b>Cargando...</b></div>
-                                    <input type="file" wire:model="files.{{ $key }}" class="form-control mb-2" accept="application/pdf">
+                                    <input type="file" wire:model.live="files.{{ $key }}" class="form-control mb-2" accept="application/pdf">
                                     @error('files.' . $key) <span class="text-danger">{{ $message }}</span> @enderror
                                 @endforeach
                             </div>
@@ -78,14 +78,14 @@
                                                          'required' => 'required',
                                                          'user' => auth()->user()])
                     @else
-                        <input type="hidden" wire:model="user_id">
+                        <input type="hidden" wire:model.live="user_id">
                         <input type="text" class="form-control" disabled value="{{auth()->user()->getTinnyNameAttribute()}}">
                     @endif
                     @error('user_id') <span class="text-danger">{{ $message }}</span> @enderror
                 </div>
                 <div class="col-md-3">
                     <label>Monto solicitado</label>        
-                    <input type="number" wire:model.lazy="requested_amount" class="form-control" required>
+                    <input type="number" wire:model.blur="requested_amount" class="form-control" required>
                     @error('requested_amount') <span class="text-danger">{{ $message }}</span> @enderror
                 </div>
             </div>
@@ -93,12 +93,12 @@
             <div class="row g-2 mb-3">
                 <div class="col-md-3">
                     <label>Correo electrónico</label>
-                    <input type="text" wire:model.lazy="email" class="form-control" required>
+                    <input type="text" wire:model.blur="email" class="form-control" required>
                     @error('email') <span class="text-danger">{{ $message }}</span> @enderror
                 </div>
                 <div class="col-md-3">
                     <label>Banco</label>        
-                    <select wire:model.lazy="bank_id" class="form-select" required>
+                    <select wire:model.blur="bank_id" class="form-select" required>
                     <option value="">Seleccionar Banco</option>
                     @foreach($banks as $bank)
                     <option value="{{$bank->id}}">{{$bank->name}}</option>
@@ -108,7 +108,7 @@
                 </div>
                 <div class="col-md-3">
                     <label for="for_pay_method">Tipo de Cuenta</label>
-                    <select wire:model.lazy="pay_method" class="form-select">
+                    <select wire:model.blur="pay_method" class="form-select">
                     <option value="">Seleccionar Forma de Pago</option>
                     <option value="01">CTA CORRIENTE / CTA VISTA</option>
                     <option value="02">CTA AHORRO</option>
@@ -118,7 +118,7 @@
                 </div>
                 <div class="col-md-3">
                     <label>Número de Cuenta</label>
-                    <input type="number" wire:model.lazy="account_number" class="form-control" required>
+                    <input type="number" wire:model.blur="account_number" class="form-control" required>
                     @error('account_number') <span class="text-danger">{{ $message }}</span> @enderror
                 </div>
             </div>
@@ -201,13 +201,13 @@
                                     <div wire:loading wire:target="files.{{ $key }}">
                                         <i class="fas fa-spinner fa-spin"></i> <b>Cargando...</b>
                                     </div>
-                                    <input type="file" wire:model="files.{{ $key }}" class="form-control mb-2" accept="application/pdf">
+                                    <input type="file" wire:model.live="files.{{ $key }}" class="form-control mb-2" accept="application/pdf">
                                     @error('files.' . $key) <span class="text-danger">{{ $message }}</span> @enderror
                                 @endforeach
                             </div>
                             @if($showFileInput)
                                 <div class="d-flex align-items-center mb-2" style="display: flex; align-items: center;">
-                                    <input type="file" wire:model="newFile" class="form-control mb-2" accept="application/pdf" style="margin-right: 5px;">
+                                    <input type="file" wire:model.live="newFile" class="form-control mb-2" accept="application/pdf" style="margin-right: 5px;">
                                     <div wire:loading wire:target="newFile" style="margin-left: 5px;">
                                         <i class="fas fa-spinner fa-spin"></i> <b>Cargando...</b>
                                     </div>

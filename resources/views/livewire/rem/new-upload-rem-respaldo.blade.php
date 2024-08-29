@@ -26,7 +26,7 @@
     @if (request()->is('*/rem_correccion'))
     <div class="input-group">
         <div class="custom-file">
-            <input type="file" wire:model="file" id="for-file" class="custom-file-input" required>
+            <input type="file" wire:model.live="file" id="for-file" class="custom-file-input" required>
             <label class="custom-file-label form-control-sm" for="for-file" data-browse="Examinar" style="white-space: nowrap;">
                 <div wire:loading wire:target="file"><strong>Cargando</strong></div>
             </label>

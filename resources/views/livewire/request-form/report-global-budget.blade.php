@@ -9,11 +9,11 @@
     </div>
 
     <div>
-        <form class="form-horizontal" wire:submit.prevent="submit">
+        <form class="form-horizontal" wire:submit="submit">
             <div class="form-row">
                 <fieldset class="form-group col-sm-4">
                     <label for="year">Año</label>
-                    <select class="form-control" id="for_year" name="year" wire:model.debounce.500ms="selectedYear"
+                    <select class="form-control" id="for_year" name="year" wire:model.live.debounce.500ms="selectedYear"
                         required>
                         <option value="">Selección...</option>
                         @foreach (range(now()->year, 2022) as $period)

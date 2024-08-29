@@ -15,7 +15,7 @@
         </div>
         <select
             id="product-id"
-            wire:model.debounce.1500ms="product_id"
+            wire:model.live.debounce.1500ms="product_id"
             class="form-control @if($smallInput) form-control-sm @endif"
             wire:loading.attr="disabled"
             wire:target="updatedSearch"

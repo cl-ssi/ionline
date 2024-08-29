@@ -8,7 +8,7 @@
                     </td>
                     <td>
                         <fieldset class="form-group col-md-12 col-12 ms-2">
-                            <input class="form-control" type="text" autocomplete="off" wire:model.debounce.700ms="subject" placeholder="Nombre del Proceso">
+                            <input class="form-control" type="text" autocomplete="off" wire:model.live.debounce.700ms="subject" placeholder="Nombre del Proceso">
                         </fieldset>
                     </td>
                 <tr>
@@ -18,7 +18,7 @@
                     </td>
                     <td>
                         <fieldset class="form-group ms-2">
-                            <textarea class="form-control" id="for_body" rows="3" wire:model.debounce.700ms="reason">{{ $reason }}</textarea>
+                            <textarea class="form-control" id="for_body" rows="3" wire:model.live.debounce.700ms="reason">{{ $reason }}</textarea>
                         </fieldset>
                     </td>
                 </tr>
@@ -29,7 +29,7 @@
                     </td>
                     <td>
                         <fieldset class="form-group ms-2">
-                            <textarea class="form-control" id="for_body" rows="3" wire:model.debounce.700ms="behaviors">{{ $behaviors }}</textarea>
+                            <textarea class="form-control" id="for_body" rows="3" wire:model.live.debounce.700ms="behaviors">{{ $behaviors }}</textarea>
                         </fieldset>
                     </td>
                 </tr>
@@ -39,37 +39,37 @@
                     </td>
                     <td>
                         <div class="form-check ms-2">
-                            <input class="form-check-input" type="checkbox" value="1" id="for_performance_evaluation" wire:model.debounce.700ms="performanceEvaluation">
+                            <input class="form-check-input" type="checkbox" value="1" id="for_performance_evaluation" wire:model.live.debounce.700ms="performanceEvaluation">
                             <label class="form-check-label" for="flexCheckDefault">
                                 Observación directa del desempeño (brechas de competencias detectadas)												
                             </label>
                         </div>
                         <div class="form-check ms-2">
-                            <input class="form-check-input" type="checkbox" value="1" id="for_observation_of_performance" wire:model.debounce.700ms="observationOfPerformance">
+                            <input class="form-check-input" type="checkbox" value="1" id="for_observation_of_performance" wire:model.live.debounce.700ms="observationOfPerformance">
                             <label class="form-check-label" for="flexCheckDefault">
                                 Evaluación de desempeño (brechas de competencias informadas)												
                             </label>
                         </div>
                         <div class="form-check ms-2">
-                            <input class="form-check-input" type="checkbox" value="1" id="for_report_from_other_users" wire:model.debounce.700ms="reportFromOtherUsers">
+                            <input class="form-check-input" type="checkbox" value="1" id="for_report_from_other_users" wire:model.live.debounce.700ms="reportFromOtherUsers">
                             <label class="form-check-label" for="flexCheckDefault">
                                 Reporte de otros usuarios, colaboradores                                        												    											
                             </label>
                         </div>
                         <div class="form-check ms-2">
-                            <input class="form-check-input" type="checkbox" value="1" id="for_organizational_unit_indicators" wire:model.debounce.700ms="organizationalUnitIndicators">
+                            <input class="form-check-input" type="checkbox" value="1" id="for_organizational_unit_indicators" wire:model.live.debounce.700ms="organizationalUnitIndicators">
                             <label class="form-check-label" for="flexCheckDefault">
                                 Indicadores de la Unidad                               																					
                             </label>
                         </div>
                         <div class="form-check ms-2">
-                            <input class="form-check-input" type="checkbox" value="" id="for_other" wire:model.debounce.300ms="other">
+                            <input class="form-check-input" type="checkbox" value="" id="for_other" wire:model.live.debounce.300ms="other">
                             <label class="form-check-label" for="flexCheckDefault">
                                 Otras (especifique, ejemplo cumplimiento normativa n°X)																				
                             </label>
                         </div>
                         <fieldset class="form-group col-md-12 col-12 ms-2">
-                            <input class="form-control" type="text" autocomplete="off" wire:model.debounce.700ms="otherDetail" {{ $otherDetailInputStatus }} placeholder="Detalle">
+                            <input class="form-control" type="text" autocomplete="off" wire:model.live.debounce.700ms="otherDetail" {{ $otherDetailInputStatus }} placeholder="Detalle">
                         </fieldset>
                     </td>
                 </tr>
@@ -80,7 +80,7 @@
                     </td>
                     <td>
                         <fieldset class="form-group ms-2">
-                            <textarea class="form-control" id="for_body" rows="3" wire:model.debounce.700ms="goal">{{ $goal }}</textarea>
+                            <textarea class="form-control" id="for_body" rows="3" wire:model.live.debounce.700ms="goal">{{ $goal }}</textarea>
                         </fieldset>
                     </td>
                 </tr>
@@ -92,7 +92,7 @@
                     </td>
                     <td>
                         <fieldset class="form-group ms-2">
-                            <textarea class="form-control" id="for_body" rows="3" wire:model.debounce.700ms="expectedResults">{{ $expectedResults }}</textarea>
+                            <textarea class="form-control" id="for_body" rows="3" wire:model.live.debounce.700ms="expectedResults">{{ $expectedResults }}</textarea>
                         </fieldset>
                     </td>
                 </tr>
@@ -103,7 +103,7 @@
                     </td>
                     <td>
                         <fieldset class="form-group ms-2">
-                            <textarea class="form-control" id="for_body" rows="3" wire:model.debounce.700ms="longtermImpact">{{ $longtermImpact }}</textarea>
+                            <textarea class="form-control" id="for_body" rows="3" wire:model.live.debounce.700ms="longtermImpact">{{ $longtermImpact }}</textarea>
                         </fieldset>
                     </td>
                 </tr>
@@ -114,7 +114,7 @@
                     </td>
                     <td>
                         <fieldset class="form-group ms-2">
-                            <textarea class="form-control" id="for_body" rows="3" wire:model.debounce.700ms="immediateResults">{{ $immediateResults }}</textarea>
+                            <textarea class="form-control" id="for_body" rows="3" wire:model.live.debounce.700ms="immediateResults">{{ $immediateResults }}</textarea>
                         </fieldset>
                     </td>
                 </tr>
@@ -124,7 +124,7 @@
                     </td>
                     <td>
                         <fieldset class="form-group ms-2">
-                            <textarea class="form-control" id="for_body" rows="3" wire:model.debounce.700ms="performanceGoals">{{ $performanceGoals }}</textarea>
+                            <textarea class="form-control" id="for_body" rows="3" wire:model.live.debounce.700ms="performanceGoals">{{ $performanceGoals }}</textarea>
                         </fieldset>
                     </td>
                 </tr>
@@ -162,7 +162,7 @@
                                                     <div class="row">
                                                         <!-- <div class="col"> -->
                                                             <fieldset class="form-group col-md-8">
-                                                                <input type="text" class="form-control form-control-sm" name="description" id="for_description" wire:model="description" required>
+                                                                <input type="text" class="form-control form-control-sm" name="description" id="for_description" wire:model.live="description" required>
                                                             </fieldset>
                                                             <fieldset class="form-group col-md-2">
                                                                 <a class="btn btn-primary btn-sm" wire:click="saveEditRole({{ $learningGoal }})"><i class="fas fa-save"></i></a>
@@ -221,7 +221,7 @@
                                                 @else
                                                     <div class="row">
                                                         <fieldset class="form-group col-md-8">
-                                                            <input type="text" class="form-control form-control-sm" name="description" id="for_description" wire:model="description" required>
+                                                            <input type="text" class="form-control form-control-sm" name="description" id="for_description" wire:model.live="description" required>
                                                         </fieldset>
                                                         <fieldset class="form-group col-md-2">
                                                             <a class="btn btn-primary btn-sm" wire:click="saveEditRole({{ $learningGoal }})"><i class="fas fa-save"></i></a>
@@ -261,7 +261,7 @@
                         @foreach($inputs as $key => $value)
                             <div class="row mt-3">
                                 <div class="col-md-10 col-12">
-                                    <input type="text" class="form-control" wire:model="learningGoalsDescriptions.{{ $key }}" id="for_description" wire:key="value-{{ $value }}" placeholder="" required>
+                                    <input type="text" class="form-control" wire:model.live="learningGoalsDescriptions.{{ $key }}" id="for_description" wire:key="value-{{ $value }}" placeholder="" required>
                                 </div>
                                 <div class="col-md-2 col-12">
                                     <button class="btn btn-danger" wire:click.prevent="remove({{$key}})">Eliminar</button>
@@ -293,7 +293,7 @@
                     </td>
                     <td class="text-center">
                         <fieldset class="form-group ms-2">
-                            <select class="form-select" wire:model="currentTrainingLevel">
+                            <select class="form-select" wire:model.live="currentTrainingLevel">
                                 <option value="">Seleccione</option>
                                 <option value="insufficient">Insuficiente</option>
                                 <option value="basic">Básico</option>
@@ -309,7 +309,7 @@
                     </td>
                     <td class="text-center">
                         <fieldset class="form-group ms-2">
-                            <select class="form-select" wire:model="needTrainingLevel">
+                            <select class="form-select" wire:model.live="needTrainingLevel">
                                 <option value="">Seleccione</option>
                                 <option value="personal">Personal</option>
                                 <option value="departamento">Para el equipo de trabajo (Departamento)</option>
@@ -328,7 +328,7 @@
                     </td>
                     <td class="text-center">
                         <fieldset class="form-group ms-2">
-                            <select class="form-select" wire:model="expertiseRequired">
+                            <select class="form-select" wire:model.live="expertiseRequired">
                                 <option value="">Seleccione</option>
                                 <option value="planta">Requerimiento de capacitación por planta</option>
                                 <option value="desarrollo organizacional">Requerimiento de capacitación para el desarrollo organizacional</option>
@@ -343,7 +343,7 @@
                     </td>
                     <td>
                         <fieldset class="form-group ms-2">
-                            <textarea class="form-control" id="for_body" rows="3" wire:model.debounce.700ms="justification">{{ $justification }}</textarea>
+                            <textarea class="form-control" id="for_body" rows="3" wire:model.live.debounce.700ms="justification">{{ $justification }}</textarea>
                         </fieldset>
                     </td>
                 </tr>
@@ -354,7 +354,7 @@
                     </td>
                     <td>
                         <fieldset class="form-group ms-2">
-                            <textarea class="form-control" id="for_body" rows="3" wire:model.debounce.700ms="canSolveTheNeed">{{ $canSolveTheNeed }}</textarea>
+                            <textarea class="form-control" id="for_body" rows="3" wire:model.live.debounce.700ms="canSolveTheNeed">{{ $canSolveTheNeed }}</textarea>
                         </fieldset>
                     </td>
                 </tr>

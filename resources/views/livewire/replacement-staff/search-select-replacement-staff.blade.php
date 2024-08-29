@@ -4,12 +4,12 @@
             <fieldset class="form-group col-5">
                 <label for="for_name">Nombres / Identificación</label>
                 <input class="form-control" type="text" name="search" autocomplete="off" style="text-transform: uppercase;"
-                  placeholder="RUN (sin dígito verificador) / NOMBRE" wire:model="selectedSearch">
+                  placeholder="RUN (sin dígito verificador) / NOMBRE" wire:model.live="selectedSearch">
             </fieldset>
 
             <fieldset class="form-group col-2">
                 <label for="for_profile_search">Estamento</label>
-                <select name="profile_search" class="form-control" wire:model="selectedProfile">
+                <select name="profile_search" class="form-control" wire:model.live="selectedProfile">
                     <option value="0">Seleccione...</option>
                     @foreach($profileManage as $profile)
                         <option value="{{ $profile->id }}">{{ $profile->name }}</option>
@@ -19,7 +19,7 @@
 
             <fieldset class="form-group col-5">
                 <label for="for_profession_search">Profesión</label>
-                <select name="profession_search" class="form-control" wire:model="selectedProfession">
+                <select name="profession_search" class="form-control" wire:model.live="selectedProfession">
                     <option value="0">Seleccione...</option>
                     @if(!is_null($professionManage))
                     @foreach($professionManage as $profession)

@@ -62,7 +62,7 @@
                                         <input type="file" name="acta_{{ $dte->id }}" class="custom-file-input"
                                             id="for-file-{{ $dte->id }}" accept=".pdf">
                                         <label class="custom-file-label" for="for-file"
-                                            wire:model.defer="formFile.{{ $dte->id }}" data-browse="Examinar"></label>
+                                            wire:model="formFile.{{ $dte->id }}" data-browse="Examinar"></label>
                                     </div>
                                     <div class="input-group-append">
                                         <button class="btn btn-outline-secondary" type="submit" id="for-upload-button">

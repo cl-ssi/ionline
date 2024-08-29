@@ -26,7 +26,7 @@
             type="text"
             id="{{ $tagId }}"
             class="form-control @if($smallInput) form-control-sm @endif"
-            wire:model.debounce.1500ms="search"
+            wire:model.live.debounce.1500ms="search"
             placeholder="{{ $placeholder }}"
             @if($organizational_unit_id) disabled @endif
         >

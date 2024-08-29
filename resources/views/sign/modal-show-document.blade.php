@@ -27,7 +27,7 @@
                                             placeholder="Ingrese el OTP"
                                             aria-label="Ingrese el OTP"
                                             aria-describedby="button-addon2"
-                                            wire:model.defer="otp"
+                                            wire:model="otp"
                                             wire:keydown.enter="signDocument"
                                             autofocus
                                             autocomplete="off"

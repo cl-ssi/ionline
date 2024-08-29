@@ -2,7 +2,7 @@
 
     <fieldset class="form-group col col-md">
         <label for="for_activity_type_id">T.actividad (*)</label>
-        <select name="activity_type_id" wire:model="activity_type_id" class="form-control" id="" required>
+        <select name="activity_type_id" wire:model.live="activity_type_id" class="form-control" id="" required>
             <option value=""></option>
             @foreach($activityTypes as $activityType)
                 <option value="{{$activityType->id}}">{{$activityType->name}}</option>

@@ -5,7 +5,7 @@
         <label for="for_doc_id">Asociar documentos</label>
         <div class="input-group @if($message) is-invalid @endif">
 
-            <input type="number" class="form-control" id="for_doc_id" wire:model="doc_id" placeholder="número interno">
+            <input type="number" class="form-control" id="for_doc_id" wire:model.live="doc_id" placeholder="número interno">
             
             <div class="input-group-append">
                 <button type="button" class="btn btn-primary" wire:click="setDocument()">
@@ -20,7 +20,7 @@
 
     <fieldset class="form-group col-6">
         <label for="for_documents">&nbsp;</label>
-        <input readonly class="form-control-plaintext" type='text' name="documents" wire:model='documents'>
+        <input readonly class="form-control-plaintext" type='text' name="documents" wire:model.live='documents'>
     </fieldset>
 </div>
 
@@ -31,7 +31,7 @@
                 <label for="for_doc_id">Asociar documentos</label>
                 <div class="input-group @if($message) is-invalid @endif">
 
-                    <input type="number" class="form-control" id="for_doc_id" wire:model="doc_id" placeholder="número interno">
+                    <input type="number" class="form-control" id="for_doc_id" wire:model.live="doc_id" placeholder="número interno">
                     
                     <div class="input-group-append">
                         <button type="button" class="btn btn-primary" wire:click="setDocument()">
@@ -46,7 +46,7 @@
 
             <fieldset class="form-group col-12 col-md-6">
                 <label for="for_documents">&nbsp;</label>
-                <input readonly class="form-control-plaintext" type='text' name="documents" wire:model='documents'>
+                <input readonly class="form-control-plaintext" type='text' name="documents" wire:model.live='documents'>
             </fieldset>
         </div>
     </div>

@@ -37,7 +37,7 @@
         <div class="col-2"></div>
         <div class="col-5">
             <div class="custom-file">
-                <input type="file" class="custom-file-input" wire:model="invoiceFile">
+                <input type="file" class="custom-file-input" wire:model.live="invoiceFile">
                 <label class="custom-file-label" for="customFileLangHTML" data-browse="Examinar">{{ optional($invoiceFile)->getClientOriginalName() }}</label>
                 @error('invoiceFile') <span class="error">{{ $message }}</span> @enderror
                 <small id="emailHelp" class="form-text text-muted">

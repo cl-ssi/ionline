@@ -17,7 +17,7 @@
         "guzzlehttp/guzzle": "^7.7",
         "laminas/laminas-escaper": "^2.7",
         "laravel/framework": "^10.0",
-        "livewire/livewire": "^2.10",
+        "livewire/livewire": "^3.0",
         "laravel/passport": "^11.8",
         "laravel/tinker": "^2.0",
         "laravel/ui": "^4.0",

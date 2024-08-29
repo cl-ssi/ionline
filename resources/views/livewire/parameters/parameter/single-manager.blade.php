@@ -3,7 +3,7 @@
     <div class="row g-2">
         <div class="form-group col-12 col-md-3">
             <input type="text" class="form-control" 
-                wire:model.defer="parameter.parameter"
+                wire:model="parameter.parameter"
                 disabled>
         </div>
 
@@ -12,7 +12,7 @@
                 @livewire('search-select-user',['user' => $user])
             @else
                 <input type="text" class="form-control" 
-                    wire:model.defer="parameter.value">
+                    wire:model="parameter.value">
             @endif
             <p class="form-text text-muted">{{ optional($parameter)->description }}</p>
         </div>

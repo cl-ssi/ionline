@@ -50,7 +50,7 @@
                 Eliminar días desde:  
             </div>
             <div class="col-md-6">
-                <input type="date" wire:model="startdate" wire:change="changeDate" class="form-control">
+                <input type="date" wire:model.live="startdate" wire:change="changeDate" class="form-control">
             </div>
            
         </div>
@@ -59,7 +59,7 @@
             Eliminar días hasta:
             </div>
             <div class="col-md-6">
-                <input type="date" wire:model="enddate" wire:change="changeDate" class="form-control">
+                <input type="date" wire:model.live="enddate" wire:change="changeDate" class="form-control">
                 
             </div>
         </div>
@@ -69,7 +69,7 @@
                 Eliminar turno completo
             </div>
             <div class="col-md-6">
-                <input type="checkbox" wire:model="deleteAll" wire:change="changeDate" >
+                <input type="checkbox" wire:model.live="deleteAll" wire:change="changeDate" >
             </div>
         </div>
         <div class="row">

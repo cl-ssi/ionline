@@ -9,29 +9,29 @@
             <div class="form-row">
                 <fieldset class="form-group col-6">
                     <label>Descripción</label>
-                    <input type="text" class="form-control" wire:model="description">
+                    <input type="text" class="form-control" wire:model.live="description">
                 </fieldset>
 
                 <fieldset class="form-group col-3">
                     <label>Porcentaje</label>
-                    <input type="number" class="form-control" wire:model="percentage">
+                    <input type="number" class="form-control" wire:model.live="percentage">
                 </fieldset>
 
                 <fieldset class="form-group col-3">
                     <label>Valor</label>
-                    <input type="number" class="form-control" wire:model="amount">
+                    <input type="number" class="form-control" wire:model.live="amount">
                 </fieldset>
             </div>
 
             <div class="form-row">
                 <fieldset class="form-group col-3">
                     <label>Fecha de transferencia</label>
-                    <input type="date" class="form-control" wire:model="transfer_at">
+                    <input type="date" class="form-control" wire:model.live="transfer_at">
                 </fieldset>
 
                 <fieldset class="form-group col-3">
                     <label>N° voucher</label>
-                    <input type="text" class="form-control" wire:model="voucher_number">
+                    <input type="text" class="form-control" wire:model.live="voucher_number">
                 </fieldset>
             </div>
             

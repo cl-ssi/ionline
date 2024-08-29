@@ -16,7 +16,7 @@
         @if(is_null($noAttendanceRecord->status))
         <div class="form-row">
             <div class="input-group col-8 mb-3">
-                <input type="text" class="form-control" wire:model="noAttendanceRecord.authority_observation" placeholder="Fundamento del rechazo" aria-label="Fundamento del rechazo">
+                <input type="text" class="form-control" wire:model.live="noAttendanceRecord.authority_observation" placeholder="Fundamento del rechazo" aria-label="Fundamento del rechazo">
                 <div class="input-group-append">
                     <button class="btn btn-danger" type="button" wire:click="confirmation(false)">
                         <i class="fas fa-thumbs-down"></i> Rechazar

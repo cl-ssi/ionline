@@ -73,7 +73,7 @@
                             {{--                            <a class="text-info" href="#items" wire:click="deleteFile({{$key}})">Borrar <i class="fas fa-paperclip"></i></a>--}}
                             {{--                        @endif--}}
                         </label>
-                        {{--                    <input class="form-control form-control-sm" type="file" style="padding:2px 0px 0px 2px;" wire:model.defer="articleFile" name="articleFile" id="upload{{ $iteration }}" @if($savedArticleFile) disabled @endif>--}}
+                        {{--                    <input class="form-control form-control-sm" type="file" style="padding:2px 0px 0px 2px;" wire:model="articleFile" name="articleFile" id="upload{{ $iteration }}" @if($savedArticleFile) disabled @endif>--}}
                     </fieldset>
                     <fieldset>
                         <button type="submit" class="btn btn-primary">Editar</button>

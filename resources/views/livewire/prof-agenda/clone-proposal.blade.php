@@ -40,7 +40,7 @@
         <div class="row">
             <fieldset class="form-group col-4">
                 <label for="for_users">Propuesta</label>
-                <select class="form-control" wire:model.defer="selectedProposal" required>
+                <select class="form-control" wire:model="selectedProposal" required>
                     <option value=""></option>
                     @foreach($proposals as $proposal)
                         <option value="{{$proposal->id}}">{{$proposal->id}} - {{$proposal->employee->shortName}}</option>

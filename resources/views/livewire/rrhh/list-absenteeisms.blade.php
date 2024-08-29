@@ -41,7 +41,7 @@
     <div class="row g-2 mb-3">
         <div class="col-md-4">
             <label for="tipo_de_ausentismo">Tipo de Ausentismo</label>
-            <select wire:model="tipo_de_ausentismo" class="form-select">
+            <select wire:model.live="tipo_de_ausentismo" class="form-select">
                 <option value="">Todos</option>
                 @foreach ($absenteeismTypes as $id => $name)
                     <option value="{{ $id }}">{{ $name }}</option>
@@ -50,7 +50,7 @@
         </div>
         <div class="col-md-3">
             <label for="tipo_de_ausentismo">Aprobaciones</label>
-            <select wire:model="con_aprobacion" class="form-select">
+            <select wire:model.live="con_aprobacion" class="form-select">
                 <option value="">Todas</option>
                 <option value="con">Con aprobación</option>
                 <option value="sin">Sin aprobación</option>
@@ -59,7 +59,7 @@
 
         <div class="col-md-3">
             <label for="approval_status">Estado de aprobación</label>
-            <select wire:model="approval_status" class="form-select">
+            <select wire:model.live="approval_status" class="form-select">
                 <option value="all">Todas</option>
                 <option value="null">Pendiente</option>
                 <option value="true">Aprobada</option>

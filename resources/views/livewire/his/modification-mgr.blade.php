@@ -22,7 +22,7 @@
 
         <div class="form-group">
             <label for="for_type">Tipo de solicitud</label>
-            <select class="form-select" id="for_type" wire:model.defer="modificationRequestType">
+            <select class="form-select" id="for_type" wire:model="modificationRequestType">
                 <option></option>
                 @foreach ($param_types as $type)
                     <option>{{ $type }}</option>
@@ -32,7 +32,7 @@
 
         <div class="form-group">
             <label for="for_subject">Asunto de la solicitud</label>
-            <input type="text" class="form-control" id="for_subject" wire:model.defer="modificationRequestSubject">
+            <input type="text" class="form-control" id="for_subject" wire:model="modificationRequestSubject">
             @error('modificationRequestSubject')
                 <span class="text-danger">{{ $message }}</span>
             @enderror
@@ -40,7 +40,7 @@
 
         <div class="form-group">
             <label for="for_body">Detalle de la solicitud</label>
-            <textarea class="form-control" id="for_body" rows="5" wire:model.defer="modificationRequestBody"></textarea>
+            <textarea class="form-control" id="for_body" rows="5" wire:model="modificationRequestBody"></textarea>
             @error('modificationRequestBody')
                 <span class="text-danger">{{ $message }}</span>
             @enderror
@@ -65,7 +65,7 @@
                     @foreach ($ous as $ou)
                         <div class="custom-control custom-switch">
                             <input type="checkbox" class="custom-control-input" id="for_switch_{{ $ou->id }}"
-                                wire:model.defer="vb.{{ $ou->id }}">
+                                wire:model="vb.{{ $ou->id }}">
                             <label class="custom-control-label" for="for_switch_{{ $ou->id }}">
                                 {{ $ou->name }}
                                 ({{ $ou->currentManager?->user->shortName }})
@@ -107,7 +107,7 @@
 
         <div class="form-group mt-3">
             <label for="for_observation">Observacion interna</label>
-            <textarea class="form-control" id="for_observation" rows="5" wire:model.defer="modificationRequestObservation"></textarea>
+            <textarea class="form-control" id="for_observation" rows="5" wire:model="modificationRequestObservation"></textarea>
             @error('modificationRequestObservation')
                 <span class="text-danger">{{ $message }}</span>
             @enderror
@@ -116,7 +116,7 @@
         <div class="row mt-3">
             <div class="form-group col-3">
                 <label for="for_status">Estado de la solicitud</label>
-                <select class="form-select" id="for_status" wire:model.defer="modificationRequestStatus">
+                <select class="form-select" id="for_status" wire:model="modificationRequestStatus">
                     <option value="">Pendiente VBs</option>
                     <option value="1">Realizado</option>
                     <option value="0">Rechazada</option>

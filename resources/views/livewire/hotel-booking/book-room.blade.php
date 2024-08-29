@@ -18,7 +18,7 @@
                                                              'required' => 'required',
                                                              'user' => auth()->user()])
                         @else
-                            <input type="hidden" wire:model="user_id">
+                            <input type="hidden" wire:model.live="user_id">
                             <input type="text" class="form-control" disabled value="{{auth()->user()->getTinnyNameAttribute()}}">
                         @endif
                     </fieldset>
@@ -35,7 +35,7 @@
 
                     <fieldset class="form-group col-3">
                         <label>Tipo de pago</label>
-                        <select class="form-control" name="" id="payment_type_select" wire:model.defer="payment_type" required>
+                        <select class="form-control" name="" id="payment_type_select" wire:model="payment_type" required>
                             <option value=""></option>
                             <option value="Transferencia">Transferencia</option>
                             <option value="Descuento por planilla - 1 cuota">Descuento por planilla - 1 cuota</option>

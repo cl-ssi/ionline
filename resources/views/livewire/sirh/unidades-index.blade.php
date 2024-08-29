@@ -19,7 +19,7 @@
         <div class="col-md-3">
             <label for="establecimiento">Establecimiento</label>
             <div class="input-group">
-                <select class="form-select" wire:model="establishment">
+                <select class="form-select" wire:model.live="establishment">
                     <option value="125">SST</option>
                     <option value="130">HETG</option>
                     <option value="127">HAH</option>

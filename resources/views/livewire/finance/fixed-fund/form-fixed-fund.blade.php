@@ -7,7 +7,7 @@
         <div class="col-md-3">
             <label for="for-concept">Concepto*</label>
             <!-- select with two options: movilización, fondo_fijo -->
-            <select class="form-select" wire:model.defer="fixedFund.concept">
+            <select class="form-select" wire:model="fixedFund.concept">
                 <option value="">Seleccione...</option>
                 <option value="Transporte">Transporte</option>
                 <option value="Gastos Menores">Gastos Menores</option>
@@ -25,12 +25,12 @@
         </div>
         <div class="col-md-2">
             <label for="for-period">Periodo*</label>
-            <input type="month" class="form-control" wire:model="fixedFund.period">
+            <input type="month" class="form-control" wire:model.live="fixedFund.period">
             @error('fixedFund.period') <span class="text-danger">{{ $message }}</span> @enderror
         </div>
         <div class="col-md-2">
             <label for="for-total">Total*</label>
-            <input type="number" class="form-control" wire:model.defer="fixedFund.total">
+            <input type="number" class="form-control" wire:model="fixedFund.total">
             @error('fixedFund.total') <span class="text-danger">{{ $message }}</span> @enderror
         </div>
     </div>
@@ -38,17 +38,17 @@
     <div class="row mb-3 g-2">
         <div class="col-md-2">
             <label for="for-res_number">Nº Reso.</label>
-            <input type="text" class="form-control" wire:model.defer="fixedFund.res_number">
+            <input type="text" class="form-control" wire:model="fixedFund.res_number">
             @error('fixedFund.res_number') <span class="text-danger">{{ $message }}</span> @enderror
         </div>
         <div class="col-md-3">
             <label for="for-delivery_date">Fecha de Entrega</label>
-            <input type="date" class="form-control" wire:model.defer="fixedFund.delivery_date">
+            <input type="date" class="form-control" wire:model="fixedFund.delivery_date">
             @error('fixedFund.delivery_date') <span class="text-danger">{{ $message }}</span> @enderror
         </div>
         <div class="col-md-3">
             <label for="for-rendition_date">Fecha de Rendición</label>
-            <input type="date" class="form-control" wire:model.defer="fixedFund.rendition_date">
+            <input type="date" class="form-control" wire:model="fixedFund.rendition_date">
             @error('fixedFund.rendition_date') <span class="text-danger">{{ $message }}</span> @enderror
         </div>
 
@@ -56,7 +56,7 @@
     <div class="row g-2 mb-3">
         <div class="col-md-12">
             <label for="for-observations">Observación</label>
-            <textarea class="form-control" wire:model.defer="fixedFund.observations"></textarea>
+            <textarea class="form-control" wire:model="fixedFund.observations"></textarea>
             @error('fixedFund.observations') <span class="text-danger">{{ $message }}</span> @enderror
         </div>
     </div>

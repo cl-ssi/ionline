@@ -6,7 +6,7 @@
     <div class="row">
         <div class="group col-3">
             <label for="text11">Año</label>
-            <select class="form-control" wire:model.defer="year" id="">
+            <select class="form-control" wire:model="year" id="">
                 <option value=""></option>
                 <option value="2023" >2023</option>
                 <option value="2024" >2024</option>

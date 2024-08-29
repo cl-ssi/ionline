@@ -10,7 +10,7 @@
         <form class="row mt-3 g-2">
             <div class="form-group col-md-1">
                 <label for="type">Tipo</label>
-                <select class="form-select" wire:model.defer="noAttendanceRecord.type">
+                <select class="form-select" wire:model="noAttendanceRecord.type">
                     <option value=""></option>
                     <option value="1">Entrada</option>
                     <option value="0">Salida</option>
@@ -19,12 +19,12 @@
             </div>
             <div class="form-group col-md-3">
                 <label for="date">Fecha y hora a justificar</label>
-                <input type="datetime-local" class="form-control" wire:model.defer="noAttendanceRecord.date" max ="{{ date('Y-m-d\T23:59') }}">
+                <input type="datetime-local" class="form-control" wire:model="noAttendanceRecord.date" max ="{{ date('Y-m-d\T23:59') }}">
                 @error('noAttendanceRecord.date') <span class="text-danger">{{ $message }}</span> @enderror
             </div>
             <div class="form-group col-md-3">
                 <label for="reason">Motivo</label>
-                <select class="form-select" wire:model.defer="noAttendanceRecord.reason_id">
+                <select class="form-select" wire:model="noAttendanceRecord.reason_id">
                     <option></option>
                     @foreach($reasons as $reason)
                         <option value="{{ $reason->id }}">{{ $reason->name }}</option>
@@ -34,7 +34,7 @@
             </div>
             <div class="form-group col-md-5">
                 <label for="observation">Fundamente (otro)</label>
-                <input type="text" class="form-control" wire:model.defer="noAttendanceRecord.observation">
+                <input type="text" class="form-control" wire:model="noAttendanceRecord.observation">
                 @error('noAttendanceRecord.observation') <span class="text-danger">{{ $message }}</span> @enderror
             </div>
         </form>

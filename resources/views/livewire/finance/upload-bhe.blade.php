@@ -2,7 +2,7 @@
     @include('finance.payments.partials.nav')
     <h3 class="mb-3">Cargar archivo de SII con reporte de BHE recibidas</h3>
 
-    <form wire:submit.prevent="upload">
+    <form wire:submit="upload">
 
     <div>
         @if (session()->has('message'))
@@ -23,7 +23,7 @@
 
     <div class="input-group mb-3">
         <div class="custom-file">
-            <input type="file" class="custom-file-input" id="bhe_file" wire:model="bhe">
+            <input type="file" class="custom-file-input" id="bhe_file" wire:model.live="bhe">
             <label class="custom-file-label" for="bhe_file" data-browse="Examinar">{{ optional($bhe)->getClientOriginalName() }}</label>
             <small id="Help" class="form-text text-muted">Archivo xls de reporte de acepta, máximo 2mb.</small>
         </div>

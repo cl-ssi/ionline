@@ -1,7 +1,7 @@
 <div class="col col-md">
     <label for="for-email">Email Personal</label>
     <div class="input-group">
-        <input type="text" class="form-control" name="email_personal" placeholder="Email personal" wire:model.defer="user.email_personal" @disabled($user->hasVerifiedEmail())>
+        <input type="text" class="form-control" name="email_personal" placeholder="Email personal" wire:model="user.email_personal" @disabled($user->hasVerifiedEmail())>
         @can('Users: send mail verification')
             @if(!$user->hasVerifiedEmail())
                 @if($user->email_personal)

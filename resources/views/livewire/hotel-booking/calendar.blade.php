@@ -15,7 +15,7 @@
             </h5>
         </div>
         <div class="col-6 col-md-3">
-            <input type="month" wire:model="monthSelection" wire:change="MonthUpdate()">
+            <input type="month" wire:model.live="monthSelection" wire:change="MonthUpdate()">
         </div>
     </div>
 

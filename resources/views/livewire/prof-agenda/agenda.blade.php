@@ -131,7 +131,7 @@
                 @method('POST')
 
                     <div class="row">
-                        <!-- wire:model="openHours_id" -->
+                        <!-- wire:model.live="openHours_id" -->
                         <input class="openHours_id" type="hidden" id="" name="openHours_id">
                         <fieldset class="form-group col-12 col-md-5">
                             <label for="for_users">F.Inicio</label>
@@ -466,7 +466,7 @@
     @push('scripts')
         <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.7.0/main.min.js'></script>
         <script>
-            document.addEventListener('livewire:load', function() {
+            document.addEventListener('livewire:init', function() {
                 var Calendar = FullCalendar.Calendar;
                 var calendarEl = document.getElementById('calendar');
                 var calendar = new Calendar(calendarEl, {

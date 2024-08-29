@@ -20,7 +20,7 @@
         <input
             class="form-control"
             type="text"
-            wire:model.debounce.1500ms="search"
+            wire:model.live.debounce.1500ms="search"
             placeholder="Buscar por nombre"
         >
     </div>

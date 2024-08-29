@@ -3,7 +3,7 @@
         <fieldset class="form-group col">
             <label for="for_origin">Destinatario</label>
             <div class="input-group">
-                <select class="form-control" name="to_user_id" id="user" required="" wire:model.defer="to_user_id" >
+                <select class="form-control" name="to_user_id" id="user" required="" wire:model="to_user_id" >
                     @if($users)
                         @foreach($users as $user)
                             <option value="{{$user->id}}">@if($this->authority != null && $this->authority->user_id == $user->id)👑@endif {{ $user->shortName }}</option>

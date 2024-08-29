@@ -3,27 +3,27 @@
 
         <fieldset class="form-group col col-md">
             <label for="for_bill_number">N° Boleta</label>
-            <input type="text" class="form-control" name="bill_number" wire:model="bill_number">
+            <input type="text" class="form-control" name="bill_number" wire:model.live="bill_number">
         </fieldset>
 
         <fieldset class="form-group col col-md">
             <label for="for_total_hours_paid">Tot. hrs pagadas per.</label>
-            <input type="text" class="form-control" name="total_hours_paid" wire:model="total_hours_paid">
+            <input type="text" class="form-control" name="total_hours_paid" wire:model.live="total_hours_paid">
         </fieldset>
 
         <fieldset class="form-group col col-md">
             <label for="for_total_paid">Total pagado</label>
-            <input type="text" class="form-control" name="total_paid" wire:model="total_paid">
+            <input type="text" class="form-control" name="total_paid" wire:model.live="total_paid">
         </fieldset>
 
         <fieldset class="form-group col col-md-3">
             <label for="for_payment_date">Fecha pago</label>
-            <input type="date" class="form-control" name="payment_date" required wire:model="payment_date">
+            <input type="date" class="form-control" name="payment_date" required wire:model.live="payment_date">
         </fieldset>
 
         <fieldset class="form-group col col-md">
             <label for="for_contable_month">Mes contable pago</label>
-            <select name="contable_month" class="form-control" required wire:model="contable_month">
+            <select name="contable_month" class="form-control" required wire:model.live="contable_month">
                 <option value=""></option>
                 <option value="1">Enero</option>
                 <option value="2">Febrero</option>

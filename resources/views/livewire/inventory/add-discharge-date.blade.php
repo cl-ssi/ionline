@@ -17,7 +17,7 @@
                     type="date"
                     class="form-control @error('discharge_date') is-invalid @enderror"
                     id="discharge-date"
-                    wire:model.debounce.1500ms="discharge_date"
+                    wire:model.live.debounce.1500ms="discharge_date"
                 >
                 @error('discharge_date')
                     <span class="invalid-feedback" role="alert">
@@ -44,7 +44,7 @@
                     type="text"
                     class="form-control @error('act_number') is-invalid @enderror"
                     id="act-number"
-                    wire:model.debounce.1500ms="act_number"
+                    wire:model.live.debounce.1500ms="act_number"
                 >
                 @error('act_number')
                     <span class="invalid-feedback" role="alert">

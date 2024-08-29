@@ -79,7 +79,7 @@
             </div>
             <!-- <div class="col-md-2">
                 <label for="for-tipo_documento" class="form-label">Tipo Documento</label>
-                <select class="form-select" wire:model.defer="filter.tipo_documento">
+                <select class="form-select" wire:model="filter.tipo_documento">
                     <option value="">Todas</option>
                     <option value="factura_electronica">FE: Factura Electrónica</option>
                     <option value="factura_exenta">FE: Factura Exenta</option>

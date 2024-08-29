@@ -4,7 +4,7 @@
 
         <fieldset class="form-group col col-md">
             <label for="for_id_deis">Día</label>
-            <select class="form-control" name="day" wire:model="day" required>
+            <select class="form-control" name="day" wire:model.live="day" required>
                 <option value=""></option>
                 <option value="1">Lunes</option>
                 <option value="2">Martes</option>
@@ -18,17 +18,17 @@
 
         <fieldset class="form-group col col-md">
             <label for="for_id_deis">Hora de inicio</label>
-            <input type="time" class="form-control" name="start_hour" wire:model="start_hour" value="" step="3600000" required>
+            <input type="time" class="form-control" name="start_hour" wire:model.live="start_hour" value="" step="3600000" required>
         </fieldset>
 
         <fieldset class="form-group col col-md">
             <label for="for_id_deis">Hora de término</label>
-            <input type="time" class="form-control" name="end_hour" wire:model="end_hour" value="" step="3600000" required>
+            <input type="time" class="form-control" name="end_hour" wire:model.live="end_hour" value="" step="3600000" required>
         </fieldset>
 
         <fieldset class="form-group col col-md">
             <label for="for_duration">Duración</label>
-            <select name="duration" wire:model="duration" class="form-control" id="" required>
+            <select name="duration" wire:model.live="duration" class="form-control" id="" required>
                 <option value=""></option>
                 <option value="60">60</option>
                 <option value="40">40</option>
@@ -39,7 +39,7 @@
 
         <fieldset class="form-group col col-md">
             <label for="for_activity_type_id">Tipo de actividad</label>
-            <select name="activity_type_id" wire:model="activity_type_id" class="form-control" id="" required>
+            <select name="activity_type_id" wire:model.live="activity_type_id" class="form-control" id="" required>
                 <option value=""></option>
                 @foreach($activity_types as $activity_type)
                     <option value="{{$activity_type->id}}">{{$activity_type->name}}</option>

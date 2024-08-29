@@ -27,7 +27,7 @@
         @include('documents.signatures.partials.sign_file')
         
         {{--@if(auth()->user()->OrganizationalUnit->establishment_id == App\Models\Parameters\Parameter::where('parameter', 'SSTarapaca')->first()->value)
-        <input type="file" wire:model.defer="docSigned" name="docSigned" id="docSigned" wire:click="resetError">
+        <input type="file" wire:model="docSigned" name="docSigned" id="docSigned" wire:click="resetError">
         <div wire:loading wire:target="docSigned">Cargando archivo...</div>
         @error('docSigned') <span class="error text-danger">{{ $message }}</span> @enderror
         <button type="button" wire:click="acceptRequestFormByFinance" class="btn btn-primary btn-sm float-right" wire:loading.attr="disabled">Autorizar</button>

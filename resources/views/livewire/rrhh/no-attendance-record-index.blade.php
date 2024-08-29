@@ -9,14 +9,14 @@
         </div>
     </div>
 
-    <form wire:submit.prevent="searchFuncionary">
+    <form wire:submit="searchFuncionary">
         <div class="row mb-3 g-2">
             <div class="form-group col-md-4">
                 <div class="form-group">
                     <label for="number">Nombre o Apellido</label>
                     <input type="text"
                         class="form-control"
-                        wire:model.defer="name"
+                        wire:model="name"
                         placeholder="Buscar por Nombre o Apellido">
                 </div>
             </div>
@@ -25,7 +25,7 @@
                     <label for="reception-date">Fecha Desde Registro</label>
                     <input type="date"
                         class="form-control"
-                        wire:model.defer="from">
+                        wire:model="from">
                 </div>
             </div>
             <div class="col-md-2">
@@ -33,7 +33,7 @@
                     <label for="reception-date">Fecha Hasta Registro</label>
                     <input type="date"
                         class="form-control"
-                        wire:model.defer="to">
+                        wire:model="to">
                 </div>
             </div>
             <div class="col-md-1">
@@ -41,7 +41,7 @@
                     <label for="rrhh_at">SIRH</label>
                     <select
                         class="form-select"
-                        wire:model.defer="rrhh_at">
+                        wire:model="rrhh_at">
                         <option value="">Todos</option>
                         <option value="Si">Si</option>
                         <option value="No">No</option>
@@ -53,7 +53,7 @@
                     <label for="establishment_id">Establecimiento</label>
                     <select
                         class="form-select"
-                        wire:model.defer="establishment_id">
+                        wire:model="establishment_id">
                         <option value="">Todos</option>
                         @foreach ($establishments as $id => $name)
                             <option value="{{ $id }}">{{ $name }}</option>
@@ -94,7 +94,7 @@
 
 
             <div class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" role="switch" wire:model="simplified" id="simplified">
+                <input class="form-check-input" type="checkbox" role="switch" wire:model.live="simplified" id="simplified">
                 <label class="form-check-label" for="simplified">Formato simplificado de carga</label>
             </div>
 
@@ -163,7 +163,7 @@
                         <tr>
                             <td colspan="8">
                                 <div class="input-group">
-                                    <input type="text" class="form-control" wire:model.defer="rrhh_observation"
+                                    <input type="text" class="form-control" wire:model="rrhh_observation"
                                         placeholder="Mensaje de rechazo del registro">
                                     <div class="input-group-append" id="button-rejected">
                                         <button class="btn btn-outline-primary" title="Guardar" type="button"
@@ -253,7 +253,7 @@
                                 <div class="form-check">
                                     <input class="form-check-input" 
                                         type="checkbox"
-                                        wire:model="checkToOk"
+                                        wire:model.live="checkToOk"
                                         value="{{ $record->id }}"
                                         id="for_ok_id"
                                     />
@@ -269,7 +269,7 @@
                         <tr>
                             <td colspan="8">
                                 <div class="input-group">
-                                    <input type="text" class="form-control" wire:model.defer="rrhh_observation"
+                                    <input type="text" class="form-control" wire:model="rrhh_observation"
                                         placeholder="Mensaje de rechazo del registro">
                                     <div class="input-group-append" id="button-rejected">
                                         <button class="btn btn-outline-primary" title="Guardar" type="button"

@@ -8,23 +8,23 @@
         <div class="form-row">
           <fieldset class="form-group col-3">
               <label for="for_shift_start_date">Entrada</label>
-              <input type="date" class="form-control" wire:model="shift_start_date" id="shift_start_date" min="2021-01-01" max="{{Carbon\Carbon::now()->toDateString()}}">
+              <input type="date" class="form-control" wire:model.live="shift_start_date" id="shift_start_date" min="2021-01-01" max="{{Carbon\Carbon::now()->toDateString()}}">
           </fieldset>
           <fieldset class="form-group col">
               <label for="for_start_hour">Hora</label>
-              <input type="time" class="form-control" wire:model="start_hour" id="start_hour">
+              <input type="time" class="form-control" wire:model.live="start_hour" id="start_hour">
           </fieldset>
           <fieldset class="form-group col-3">
               <label for="for_shift_end_date">Salida</label>
-              <input type="date" class="form-control" wire:model="shift_end_date" id="shift_end_date" min="2021-01-01" max="{{Carbon\Carbon::now()->toDateString()}}">
+              <input type="date" class="form-control" wire:model.live="shift_end_date" id="shift_end_date" min="2021-01-01" max="{{Carbon\Carbon::now()->toDateString()}}">
           </fieldset>
           <fieldset class="form-group col">
               <label for="for_end_hour">Hora</label>
-              <input type="time" class="form-control" wire:model="end_hour" id="end_hour">
+              <input type="time" class="form-control" wire:model.live="end_hour" id="end_hour">
           </fieldset>
           <fieldset class="form-group col">
               <label for="for_observation">Observación</label>
-              <input type="text" class="form-control" wire:model="observation" id="observation">
+              <input type="text" class="form-control" wire:model.live="observation" id="observation">
           </fieldset>
           <fieldset class="form-group col">
               <label for="for_label"><br/></label>

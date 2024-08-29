@@ -10,12 +10,12 @@
     @endif
 
     @if (!$rejected)
-        <select class="form-control @error('rechazar.'.$dteId) is-invalid @enderror" wire:model.defer="rechazar.{{ $dteId }}">
+        <select class="form-control @error('rechazar.'.$dteId) is-invalid @enderror" wire:model="rechazar.{{ $dteId }}">
             <option value=""></option>
             <option value="1">Rechazar</option>
         </select>
 
-        <textarea type="text" class="form-control @error('motivo_rechazo.'.$dteId) is-invalid @enderror" placeholder="motivo rechazo" wire:model.defer="motivo_rechazo.{{ $dteId }}"></textarea>
+        <textarea type="text" class="form-control @error('motivo_rechazo.'.$dteId) is-invalid @enderror" placeholder="motivo rechazo" wire:model="motivo_rechazo.{{ $dteId }}"></textarea>
 
         <button class="btn btn-primary" type="button" wire:click="rechazarDTE">Rechazar</button>
 

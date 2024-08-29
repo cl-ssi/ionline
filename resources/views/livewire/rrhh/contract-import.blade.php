@@ -5,7 +5,7 @@
     <div class="form-row">
         <fieldset class="form-group col-6">
             <label>Archivo (Descargar de sirh en formato txt)</label>
-            <input type="file" class="form-control" wire:model="file">
+            <input type="file" class="form-control" wire:model.live="file">
         </fieldset>
     </div>
     @error('file') <span class="error">{{ $message }}</span> @enderror

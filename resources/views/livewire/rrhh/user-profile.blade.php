@@ -12,21 +12,21 @@
         </div>
         <div class="form-group col-md-3">
             <label for="name">Nombres*</label>
-            <input type="text" class="form-control" wire:model.defer="user.name">
+            <input type="text" class="form-control" wire:model="user.name">
             @error('user.name')
                 <span class="text-danger">{{ $message }}</span>
             @enderror
         </div>
         <div class="form-group col-md-2">
             <label for="name">Apellido Paterno*</label>
-            <input type="text" class="form-control" wire:model.defer="user.fathers_family">
+            <input type="text" class="form-control" wire:model="user.fathers_family">
             @error('user.fathers_family')
                 <span class="text-danger">{{ $message }}</span>
             @enderror
         </div>
         <div class="form-group col-md-2">
             <label for="name">Apellido Materno*</label>
-            <input type="text" class="form-control" wire:model.defer="user.mothers_family">
+            <input type="text" class="form-control" wire:model="user.mothers_family">
             @error('user.mothers_family')
                 <span class="text-danger">{{ $message }}</span>
             @enderror
@@ -34,7 +34,7 @@
 
         <div class="form-group col-md-1">
             <label for="name">Sexo</label>
-            <select class="form-select" wire:model.defer="user.gender">
+            <select class="form-select" wire:model="user.gender">
                 <option value=""></option>
                 <option value="male">Masculino</option>
                 <option value="female">Femenino</option>
@@ -46,7 +46,7 @@
 
         <fieldset class="form-group col-md-2">
             <label for="forbirthday">Fecha Nacimiento</label>
-            <input type="date" class="form-control" id="forbirthday" wire:model.defer="user.birthday">
+            <input type="date" class="form-control" id="forbirthday" wire:model="user.birthday">
             @error('user.birthday')
                 <span class="text-danger">{{ $message }}</span>
             @enderror
@@ -72,7 +72,7 @@
         <fieldset class="form-group col-12 col-md-6">
             <label for="forPosition">Función que desempeña</label>
             <input type="text" class="form-control" id="forPosition"
-                placeholder="Subdirector(S), Enfermera, Referente..., Jefe." wire:model.defer="user.position">
+                placeholder="Subdirector(S), Enfermera, Referente..., Jefe." wire:model="user.position">
             @error('user.position')
                 <span class="text-danger">{{ $message }}</span>
             @enderror
@@ -80,7 +80,7 @@
 
         <div class="form-group col-12 col-md-4">
             <label for="email">Email Institucional</label>
-            <input type="email" class="form-control" wire:model.defer="user.email">
+            <input type="email" class="form-control" wire:model="user.email">
             @error('user.email')
                 <span class="text-danger">{{ $message }}</span>
             @enderror
@@ -93,14 +93,14 @@
     <div class="row g-2 mb-3">
         <div class="form-group col-11 col-md-4">
             <label for="for-address">Dirección</label>
-            <input type="text" class="form-control" wire:model.defer="user.address">
+            <input type="text" class="form-control" wire:model="user.address">
             @error('user.address')
                 <span class="text-danger">{{ $message }}</span>
             @enderror
         </div>
         <div class="form-group col-11 col-md-2">
             <label for="for-commune_id">Comuna</label>
-            <select class="form-select" wire:model.defer="user.commune_id">
+            <select class="form-select" wire:model="user.commune_id">
                 <option value=""></option>
                 @foreach ($communes->sort() as $id => $name)
                     <option value="{{ $id }}">{{ $name }}</option>
@@ -112,7 +112,7 @@
         </div>
         <div class="form-group col-11 col-md-2">
             <label for="for-phone_number">Número de teléfono</label>
-            <input type="text" class="form-control" wire:model.defer="user.phone_number">
+            <input type="text" class="form-control" wire:model="user.phone_number">
             @error('user.phone_number')
                 <span class="text-danger">{{ $message }}</span>
             @enderror
@@ -127,7 +127,7 @@
     <div class="row g-2 mb-3"> <!--Start Row -->
         <fieldset class="col-12 col-md-5">
             <label>Banco</label>
-            <select wire:model.defer="bankAccount.bank_id" class="form-select">
+            <select wire:model="bankAccount.bank_id" class="form-select">
                 <option value="">Seleccionar Banco</option>
                 @foreach ($banks->sort() as $id => $bank)
                     <option value="{{ $id }}">{{ $bank }}</option>
@@ -140,7 +140,7 @@
 
         <fieldset class="form-group col-12 col-md-3">
             <label>Número de Cuenta</label>
-            <input type="number" wire:model.defer="bankAccount.number" class="form-control">
+            <input type="number" wire:model="bankAccount.number" class="form-control">
             @error('bankAccount.number')
                 <span class="text-danger">{{ $message }}</span>
             @enderror
@@ -148,7 +148,7 @@
 
         <fieldset class="form-group col-12 col-md-4">
             <label for="for_pay_method">Tipo de cuenta</label>
-            <select wire:model.defer="bankAccount.type" class="form-select">
+            <select wire:model="bankAccount.type" class="form-select">
                 <option value="">Seleccionar Forma de Pago</option>
                 <option value="01">CTA CORRIENTE / CTA VISTA</option>
                 <option value="02">CTA AHORRO</option>

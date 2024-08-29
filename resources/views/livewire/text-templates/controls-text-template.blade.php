@@ -68,7 +68,7 @@
                                         type="text"
                                         autocomplete="off"
                                         placeholder="Titulo de tu plantilla"
-                                        wire:model="textTemplate.title"
+                                        wire:model.live="textTemplate.title"
                                         maxlength="25">
                                     @error('textTemplate.title') <span class="text-danger">{{ $message }}</span> @enderror
                                 </fieldset>
@@ -78,7 +78,7 @@
                                         id="for_template"
                                         rows="15"
                                         placeholder="Copia aquí contenido de tu plantilla"
-                                        wire:model="textTemplate.template"></textarea>
+                                        wire:model.live="textTemplate.template"></textarea>
                                     @error('textTemplate.template') <span class="text-danger">{{ $message }}</span> @enderror
                                 </fieldset>
                             </div>

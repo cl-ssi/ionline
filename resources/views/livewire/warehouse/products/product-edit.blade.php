@@ -38,7 +38,7 @@
 
 @section('custom_js')
 <script>
-    document.addEventListener('livewire:load', function () {
+    document.addEventListener('livewire:init', function () {
         var searchUnspscProduct = @this.search_unspsc_product;
         var unspscId = @this.unspsc_product_id;
 

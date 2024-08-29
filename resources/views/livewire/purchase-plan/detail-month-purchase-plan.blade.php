@@ -92,32 +92,32 @@
         <div class="col-3">
             <fieldset class="form-group">
                 <label for="for_user_allowance_id"></label>
-                <input class="form-control form-control-sm" type="number" autocomplete="off" wire:model="january">
+                <input class="form-control form-control-sm" type="number" autocomplete="off" wire:model.live="january">
             </fieldset>
 
             <fieldset class="form-group">
                 <label for="for_user_allowance_id"></label>
-                <input class="form-control form-control-sm" type="number" autocomplete="off" wire:model="february">
+                <input class="form-control form-control-sm" type="number" autocomplete="off" wire:model.live="february">
             </fieldset>
 
             <fieldset class="form-group">
                 <label for="for_user_allowance_id"></label>
-                <input class="form-control form-control-sm" type="number" autocomplete="off" wire:model="march">
+                <input class="form-control form-control-sm" type="number" autocomplete="off" wire:model.live="march">
             </fieldset>
 
             <fieldset class="form-group">
                 <label for="for_user_allowance_id"></label>
-                <input class="form-control form-control-sm" type="number" autocomplete="off" wire:model="april">
+                <input class="form-control form-control-sm" type="number" autocomplete="off" wire:model.live="april">
             </fieldset>
 
             <fieldset class="form-group">
                 <label for="for_user_allowance_id"></label>
-                <input class="form-control form-control-sm" type="number" autocomplete="off" wire:model="may">
+                <input class="form-control form-control-sm" type="number" autocomplete="off" wire:model.live="may">
             </fieldset>
 
             <fieldset class="form-group">
                 <label for="for_user_allowance_id"></label>
-                <input class="form-control form-control-sm" type="number" autocomplete="off" wire:model="june">
+                <input class="form-control form-control-sm" type="number" autocomplete="off" wire:model.live="june">
             </fieldset>
         </div>
 
@@ -156,32 +156,32 @@
         <div class="col-3">
             <fieldset class="form-group">
                 <label for="for_user_allowance_id"></label>
-                <input class="form-control form-control-sm" type="number" autocomplete="off" wire:model="july">
+                <input class="form-control form-control-sm" type="number" autocomplete="off" wire:model.live="july">
             </fieldset>
 
             <fieldset class="form-group">
                 <label for="for_user_allowance_id"></label>
-                <input class="form-control form-control-sm" type="number" autocomplete="off" wire:model="august">
+                <input class="form-control form-control-sm" type="number" autocomplete="off" wire:model.live="august">
             </fieldset>
 
             <fieldset class="form-group">
                 <label for="for_user_allowance_id"></label>
-                <input class="form-control form-control-sm" type="number" autocomplete="off" wire:model="september">
+                <input class="form-control form-control-sm" type="number" autocomplete="off" wire:model.live="september">
             </fieldset>
 
             <fieldset class="form-group">
                 <label for="for_user_allowance_id"></label>
-                <input class="form-control form-control-sm" type="number" autocomplete="off" wire:model="october">
+                <input class="form-control form-control-sm" type="number" autocomplete="off" wire:model.live="october">
             </fieldset>
 
             <fieldset class="form-group">
                 <label for="for_user_allowance_id"></label>
-                <input class="form-control form-control-sm" type="number" autocomplete="off" wire:model="november">
+                <input class="form-control form-control-sm" type="number" autocomplete="off" wire:model.live="november">
             </fieldset>
 
             <fieldset class="form-group">
                 <label for="for_user_allowance_id"></label>
-                <input class="form-control form-control-sm" type="number" autocomplete="off" wire:model="december">
+                <input class="form-control form-control-sm" type="number" autocomplete="off" wire:model.live="december">
             </fieldset>
         </div>
     </div>

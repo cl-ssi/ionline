@@ -2,7 +2,7 @@
     <div class="form-row">
         <fieldset class="form-group col-2">
             <label for="for_barcode">Código de Barra</label>
-            <input type="text" class="form-control" id="for_barcode" placeholder="" name="barcode" wire:keydown.enter="foo" wire:model="barcode" >
+            <input type="text" class="form-control" id="for_barcode" placeholder="" name="barcode" wire:keydown.enter="foo" wire:model.live="barcode" >
         </fieldset>
 
         <input type="hidden" name="dispatch_id" value="{{$dispatch->id}}" />
@@ -17,10 +17,10 @@
                 aria-label="Nombre"
                 wire:keydown.escape="resetx"
             @if(!$product)
-                wire:model.debounce.1000ms="query"
+                wire:model.live.debounce.1000ms="query"
                 required
             @else
-                wire:model.debounce.1000ms="selectedName"
+                wire:model.live.debounce.1000ms="selectedName"
                 disabled readonly
             @endif
             />
@@ -32,7 +32,7 @@
         </div>
         
         @if($product)
-            <input type="text" value="{{ $product->id }}"  style="display:none;" wire:model.lazy="product_id">
+            <input type="text" value="{{ $product->id }}"  style="display:none;" wire:model.blur="product_id">
             <input type="hidden" name="product_id" value="{{$product->id}}"> 
         @endif
         
@@ -66,7 +66,7 @@
 
         <fieldset class="form-group col-10">
             <label for="for_serie">F. Vencimiento - Lote</label>
-            <select id="for_due_date" name="due_date_batch" class="form-control " required="" wire:model.lazy="due_date_batch">
+            <select id="for_due_date" name="due_date_batch" class="form-control " required="" wire:model.blur="due_date_batch">
                 <option></option>
                 @foreach($array as $key => $value)
                     <option>{{$key}}</option>

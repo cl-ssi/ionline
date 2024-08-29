@@ -8,13 +8,13 @@
         <div class="form-row mb-3">
             <fieldset class="col-12 col-md-4">
                 <label for="for-name">Nombre*</label>
-                <input type="text" wire:model.defer="healthService.name" class="form-control">
+                <input type="text" wire:model="healthService.name" class="form-control">
                 @error('healthService.name') <span class="text-danger">{{ $message }}</span> @enderror
             </fieldset>
 
             <fieldset class="col-12 col-md-4">
                 <label for="for-date">Región</label>
-                <select class="form-control" wire:model.defer="healthService.region_id" required>
+                <select class="form-control" wire:model="healthService.region_id" required>
                     <option value=""></option>
                     @foreach($regions->sort() as $id => $name)
                         <option value="{{ $id }}">{{ $name }}</option>

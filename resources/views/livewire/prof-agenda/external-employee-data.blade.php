@@ -3,7 +3,7 @@
 
         <fieldset class="form-group col-5 col-md-2">
             <label for="for_run">Run (sin DV)</label>
-            <input type="number" min="1" max="50000000" class="form-control" id="for_user_id" name="user_id" wire:model.lazy="externaluser_id" required>
+            <input type="number" min="1" max="50000000" class="form-control" id="for_user_id" name="user_id" wire:model.blur="externaluser_id" required>
         </fieldset>
 
         <fieldset class="form-group col-3 col-md-1">
@@ -63,7 +63,7 @@
 
         <fieldset class="form-group col-12 col-md-3">
             <label for="for_email">Email institucional*</label>
-            <input type="email" class="form-control" id="for_email" wire:model.defer="email"
+            <input type="email" class="form-control" id="for_email" wire:model="email"
                 name="email" @if($externaluser) value="{{$externaluser->email}}" @endif>
         </fieldset>
 

@@ -44,7 +44,7 @@
             
             <fieldset class="form-group col-12 col-md-3">
                 <label for="for_charges_number">Estamento</label>
-                <select name="estament_id" id="for_estament_id" class="form-control" wire:model.debounce.500ms="selectedEstament" @if($jobPositionProfile) readonly @endif required>
+                <select name="estament_id" id="for_estament_id" class="form-control" wire:model.live.debounce.500ms="selectedEstament" @if($jobPositionProfile) readonly @endif required>
                     <option value="">Seleccione...</option>
                     @foreach($estaments as $estament)
                         <option value="{{ $estament->id }}" {{-- ($jobPositionProfile && $jobPositionProfile->estament_id == $estament->id) ? 'selected' : '' --}}>{{ $estament->name }}</option>
@@ -54,7 +54,7 @@
 
             <fieldset class="form-group col-12 col-md-3">
                 <label for="for_charges_number">Familia del Cargo</label>
-                <select name="area_id" id="for_area_id" class="form-control" wire:model.debounce.500ms="selectedArea" required>
+                <select name="area_id" id="for_area_id" class="form-control" wire:model.live.debounce.500ms="selectedArea" required>
                     <option value="">Seleccione...</option>
                     @if(!is_null($areas))
                     @foreach($areas as $area)
@@ -84,7 +84,7 @@
         <div class="form-row">
             <fieldset class="form-group col-12 col-md-3">
                 <label for="for_contractual_condition_id">Calidad Contractual</label>
-                <select name="contractual_condition_id" id="for_contractual_condition_id" class="form-control" wire:model.debounce.500ms="selectedContractualCondition" required>
+                <select name="contractual_condition_id" id="for_contractual_condition_id" class="form-control" wire:model.live.debounce.500ms="selectedContractualCondition" required>
                     <option value="">Seleccione...</option>
                     @foreach($contractualConditions as $contractualCondition)
                         <option value="{{ $contractualCondition->id }}" >{{ $contractualCondition->name }}</option>
@@ -96,11 +96,11 @@
                 <label for="for_law">Ley</label>
                 <div class="mt-1">
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="law" id="for_law" value="18834" wire:model.debounce.500ms="selectedLaw" {{ $lawStateOption }}>
+                        <input class="form-check-input" type="radio" name="law" id="for_law" value="18834" wire:model.live.debounce.500ms="selectedLaw" {{ $lawStateOption }}>
                         <label class="form-check-label" for="for_law">N° 18.834</label>
                     </div>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="law" id="for_law" value="19664" wire:model.debounce.500ms="selectedLaw" {{ $lawStateOption }}>
+                        <input class="form-check-input" type="radio" name="law" id="for_law" value="19664" wire:model.live.debounce.500ms="selectedLaw" {{ $lawStateOption }}>
                         <label class="form-check-label" for="for_law">N° 19.664</label>
                     </div>
                 </div>

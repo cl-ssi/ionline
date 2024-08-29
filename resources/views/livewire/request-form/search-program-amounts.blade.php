@@ -1,9 +1,9 @@
 <div>
-    <form class="form-horizontal" wire:submit.prevent="submit">
+    <form class="form-horizontal" wire:submit="submit">
     <div class="form-row">
         <fieldset class="form-group col-sm-2">
             <label for="year">Año</label>
-            <select class="form-control selectpicker show-tick" id="for_year" name="year" wire:model.debounce.500ms="selectedYear" required>
+            <select class="form-control selectpicker show-tick" id="for_year" name="year" wire:model.live.debounce.500ms="selectedYear" required>
                 <option value="">Selección...</option>
                 @foreach(range(now()->year, 2022) as $period)
                 <option value="{{$period}}">{{$period}}</option>
@@ -13,7 +13,7 @@
         </fieldset>
         <fieldset class="form-group col-sm-7">
             <label for="program">Programa</label>
-            <select class="form-control selectpicker" id="for_program" name="program" data-live-search="true" data-actions-box="true" wire:model.debounce.500ms="selectedProgram" required>
+            <select class="form-control selectpicker" id="for_program" name="program" data-live-search="true" data-actions-box="true" wire:model.live.debounce.500ms="selectedProgram" required>
                 <option style="font-size:70%;" value="">Selección...</option>
                 @foreach($programs as $program)
                 <option style="font-size:70%;" value="{{ $program->id }}">{{ $program->alias_finance }} - Folio {{ $program->folio }} - Subtítulo {{$program->Subtitle->name}}</option>

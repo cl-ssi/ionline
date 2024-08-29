@@ -7,7 +7,7 @@
                         <i class="fas fa-copyright"></i>
                     </span>
                 </div>
-                <select wire:model="category_id" wire:change="setCategory" class="form-control">
+                <select wire:model.live="category_id" wire:change="setCategory" class="form-control">
                     <option value="">Seleccione una categoría</option>
                     @foreach(auth()->user()->organizationalUnit->categories->sortBy('name') as $category)
                         <option value="{{ $category->id }}">{{ $category->name }}</option>

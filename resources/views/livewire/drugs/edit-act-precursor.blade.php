@@ -23,7 +23,7 @@
                 type="date"
                 class="form-control @error('date') is-invalid @enderror"
                 id="act-date"
-                wire:model.defer="date"
+                wire:model="date"
                 autocomplete="off"
             >
             @error('date')
@@ -41,7 +41,7 @@
                 type="text"
                 class="form-control @error('run_receiving') is-invalid @enderror"
                 id="run-receiving"
-                wire:model.defer="run_receiving"
+                wire:model="run_receiving"
                 autocomplete="off"
             >
             @error('run_receiving')
@@ -57,7 +57,7 @@
                 type="text"
                 class="form-control @error('full_name_receiving') is-invalid @enderror"
                 id="act-receiving"
-                wire:model.defer="full_name_receiving"
+                wire:model="full_name_receiving"
                 autocomplete="off"
             >
             @error('full_name_receiving')
@@ -87,7 +87,7 @@
                 type="text"
                 class="form-control @error('note') is-invalid @enderror"
                 id="note"
-                wire:model.defer="note"
+                wire:model="note"
                 autocomplete="off"
             >
             @error('note')
@@ -129,7 +129,7 @@
                             <input
                                 class="form-check-input"
                                 type="checkbox"
-                                wire:model.debounce.1200ms="selected_precursors"
+                                wire:model.live.debounce.1200ms="selected_precursors"
                                 value={{ $precursor->id }}
                                 id="option-{{ $precursor->id }}"
                             >

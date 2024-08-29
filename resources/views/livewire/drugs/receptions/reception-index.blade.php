@@ -7,7 +7,7 @@
         </div>
         <div class="col-2">
             <fieldset class="form-group">
-                <input type="text" class="form-control" wire:model..debounce.700ms="nue" placeholder="nue">
+                <input type="text" class="form-control" wire:model.live..debounce.700ms="nue" placeholder="nue">
             </fieldset>
         </div>
         <div class="col-4">
@@ -21,7 +21,7 @@
 
                     <select
                         id="filter-by"
-                        wire:model.defer="filter"
+                        wire:model="filter"
                         class="form-control form-control"
                     >
                         <option value="all">Todos</option>
@@ -51,7 +51,7 @@
 
         <input
             type="text"
-            wire:model.defer="search"
+            wire:model="search"
             class="form-control"
             id="for-search"
             onkeyup="filter(0)"

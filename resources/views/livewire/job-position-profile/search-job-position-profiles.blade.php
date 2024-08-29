@@ -6,7 +6,7 @@
         <div class="form-row">
             <fieldset class="form-group col-12 col-md-2">
                 <label for="for_profile_search">Estado</label>
-                <select name="status_search" class="form-control" wire:model.debounce.500ms="selectedStatus">
+                <select name="status_search" class="form-control" wire:model.live.debounce.500ms="selectedStatus">
                     <option value="">Seleccione...</option>
                     <option value="saved">Guardado</option>
                     <option value="sent">Enviado</option>
@@ -19,7 +19,7 @@
 
             <fieldset class="form-group col-12 col-md-2">
                 <label for="for_profile_search">Estamento</label>
-                <select name="estament_search" id="for_estament_id" class="form-control" wire:model.debounce.500ms="selectedEstament" required>
+                <select name="estament_search" id="for_estament_id" class="form-control" wire:model.live.debounce.500ms="selectedEstament" required>
                     <option value="">Seleccione...</option>
                         @foreach($estaments as $estament) 
                             <option value="{{ $estament->id }}">
@@ -32,25 +32,25 @@
             <fieldset class="form-group col-12 col-md-1">
                 <label for="for_name">ID</label>
                 <input class="form-control" type="number" name="id_search" autocomplete="off" 
-                    placeholder="001" wire:model.debounce.500ms="selectedId">
+                    placeholder="001" wire:model.live.debounce.500ms="selectedId">
             </fieldset>
 
             <fieldset class="form-group col-12 col-md-2">
                 <label for="for_requester">Nombre Perfil de Cargo</label>
                 <input class="form-control" type="text" autocomplete="off"
-                    name="name_search" wire:model.debounce.500ms="selectedName">
+                    name="name_search" wire:model.live.debounce.500ms="selectedName">
             </fieldset>
 
             <fieldset class="form-group col-12 col-md-2">
                 <label for="for_requester">Usuario Creador</label>
                 <input class="form-control" type="text" autocomplete="off" placeholder="NOMBRE / APELLIDOS"
-                    name="user_creator_search" wire:model.debounce.500ms="selectedUserCreator">
+                    name="user_creator_search" wire:model.live.debounce.500ms="selectedUserCreator">
             </fieldset>
 
             @if($index == 'all')
             <fieldset class="form-group col-12 col-md-3">
                 <label for="for_sub_search">Subdirección</label>
-                <select name="sub_search" class="form-control" wire:model.debounce.500ms="selectedSub">
+                <select name="sub_search" class="form-control" wire:model.live.debounce.500ms="selectedSub">
                     <option value="">Seleccione...</option>
                     @foreach($subs as $sub)
                         <option value="{{ $sub->id }}">{{ $sub->name }}</option>

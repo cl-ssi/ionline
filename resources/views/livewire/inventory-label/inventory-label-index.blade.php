@@ -23,7 +23,7 @@
                 id="search"
                 class="form-control"
                 placeholder="Ingresa el nombre de una etiqueta"
-                wire:model.debounce.1500ms="search"
+                wire:model.live.debounce.1500ms="search"
             >
         </fieldset>
     </div>

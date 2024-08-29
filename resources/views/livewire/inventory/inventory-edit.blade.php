@@ -21,7 +21,7 @@
                         type="text"
                         class="form-control form-control-sm @error('observation_delete') is-invalid @enderror"
                         placeholder="Observación de eliminación"
-                        wire:model.debounce.1500ms="observation_delete"
+                        wire:model.live.debounce.1500ms="observation_delete"
                     >
                     <button
                         class="btn btn-sm btn-danger"
@@ -118,7 +118,7 @@
                 type="text"
                 class="form-control"
                 id="old_number"
-                wire:model.defer="old_number"                
+                wire:model="old_number"                
             >
         </fieldset>
 
@@ -130,7 +130,7 @@
                 type="text"
                 class="form-control @error('internal_description') is-invalid @enderror"
                 id="internal_description"
-                wire:model.defer="internal_description"
+                wire:model="internal_description"
                 autocomplete="off"
             >
         </fieldset>
@@ -147,7 +147,7 @@
                     type="text"
                     class="form-control @error('number_inventory') is-invalid @enderror"
                     id="number-inventory"
-                    wire:model="number_inventory"
+                    wire:model.live="number_inventory"
                     autocomplete="off"
                 >
                 <button
@@ -202,7 +202,7 @@
                 type="text"
                 class="form-control @error('brand') is-invalid @enderror"
                 id="brand"
-                wire:model.defer="brand"
+                wire:model="brand"
                 wire:target="searchFusion"
                 wire:loading.attr="disabled"
                 autocomplete="off"
@@ -222,7 +222,7 @@
                 type="text"
                 class="form-control @error('model') is-invalid @enderror"
                 id="model"
-                wire:model.defer="model"
+                wire:model="model"
                 autocomplete="off"
             >
             @error('model')
@@ -240,7 +240,7 @@
                 type="text"
                 class="form-control @error('serial_number') is-invalid @enderror"
                 id="serial-number"
-                wire:model.defer="serial_number"
+                wire:model="serial_number"
                 autocomplete="off"
             >
             @error('serial_number')
@@ -263,7 +263,7 @@
                 type="text"
                 class="form-select @error('accounting_code_id') is-invalid @enderror"
                 id="cost-center"
-                wire:model="accounting_code_id"
+                wire:model.live="accounting_code_id"
             >
                 <option value="">Seleccione cuenta contable</option>
                 @foreach($accountingCodes as $accountingCode)
@@ -286,7 +286,7 @@
             <select
                 class="form-select @error('status') is-invalid @enderror"
                 id="status"
-                wire:model="status"
+                wire:model.live="status"
             >
                 <option value="">Seleccione un estado</option>
                 <option value="1">Bueno</option>
@@ -309,7 +309,7 @@
                 type="text"
                 class="form-control @error('useful_life') is-invalid @enderror"
                 id="useful-life"
-                wire:model.defer="useful_life"
+                wire:model="useful_life"
                 autocomplete="off"
             >
             @error('useful_life')
@@ -327,7 +327,7 @@
                 type="text"
                 class="form-control @error('depreciation') is-invalid @enderror"
                 id="depreciation"
-                wire:model.defer="depreciation"
+                wire:model="depreciation"
                 autocomplete="off"
             >
             @error('depreciation')
@@ -344,7 +344,7 @@
               <select
                 class="form-select @error('classification_id') is-invalid @enderror"
                 id="classification"
-                wire:model="classification_id"
+                wire:model.live="classification_id"
                 >
                     <option value="">Seleccione una clasificación</option>
                 @foreach($classifications as $classification)
@@ -485,7 +485,7 @@
                 type="text"
                 class="form-control"
                 id="po_code"
-                wire:model.defer="po_code"
+                wire:model="po_code"
             >
         </fieldset>
 
@@ -539,7 +539,7 @@
                 cols="30"
                 rows="4"
                 class="form-control @error('observations') is-invalid @enderror"
-                wire:model.debounce.1500ms="observations"
+                wire:model.live.debounce.1500ms="observations"
             >
             </textarea>
             @error('observations')

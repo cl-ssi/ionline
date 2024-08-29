@@ -6,12 +6,12 @@
     <form class="row g-3">
         <div class="col-md-3">
             <label for="inputEmail4" class="form-label">Inicio</label>
-            <input type="date" class="form-control" wire:model.defer="finicio" required>
+            <input type="date" class="form-control" wire:model="finicio" required>
             @error('finicio') <span class="error">{{ $message }}</span> @enderror
         </div>
         <div class="col-md-3">
             <label for="inputPassword4" class="form-label">Término</label>
-            <input type="date" class="form-control" wire:model.defer="ftermino" required>
+            <input type="date" class="form-control" wire:model="ftermino" required>
             @error('ftermino') <span class="error">{{ $message }}</span> @enderror
         </div>
         <div class="col-3">

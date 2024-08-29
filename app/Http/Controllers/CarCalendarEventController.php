@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Livewire\CalendarEvent;
+use App\Livewire\CalendarEvent;
 use App\Models\CarCalendarEvent;
 use Illuminate\Http\Request;
 

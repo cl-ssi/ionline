@@ -45,16 +45,16 @@
     @else 
     ¿Crear nuevo cargo? 
     <div class="form-check form-check-inline">
-        <input class="form-check-input" type="radio" wire:model="createNewPosition" name="create_new_position" id="inlineRadio1" value="yes">
+        <input class="form-check-input" type="radio" wire:model.live="createNewPosition" name="create_new_position" id="inlineRadio1" value="yes">
         <label class="form-check-label" for="inlineRadio1">Sí</label>
     </div>
     <div class="form-check form-check-inline">
-        <input class="form-check-input" type="radio" wire:model="createNewPosition" name="create_new_position" id="inlineRadio2" value="no">
+        <input class="form-check-input" type="radio" wire:model.live="createNewPosition" name="create_new_position" id="inlineRadio2" value="no">
         <label class="form-check-label" for="inlineRadio2">No</label>
     </div>
     @endif</b></label><br>
 
-    <input type="hidden" name="position_id" wire:model="position_id">
+    <input type="hidden" name="position_id" wire:model.live="position_id">
 
     @livewire('replacement-staff.show-legal-quality-request', [
         'formType'  => 'announcement',

@@ -7,10 +7,10 @@
             aria-label="Nombre"
             wire:keydown.escape="resetx"
         @if(!$user)
-            wire:model.debounce.1000ms="query"
+            wire:model.live.debounce.1000ms="query"
             {{ $required }}
         @else
-            wire:model.debounce.1000ms="selectedName"
+            wire:model.live.debounce.1000ms="selectedName"
             disabled readonly
         @endif
         onkeydown="return event.key != 'Enter';"

@@ -25,14 +25,14 @@
         <div class="form-row">
             <fieldset class="form-group col-6">
                 <label>Asunto</label>
-                <input type="text" class="form-control" wire:model="subject">
+                <input type="text" class="form-control" wire:model.live="subject">
             </fieldset>
         </div>
 
         <div class="form-row">
             <fieldset class="form-group col-6">
                 <label>Título</label>
-                <input type="text" class="form-control" wire:model="tittle">
+                <input type="text" class="form-control" wire:model.live="tittle">
             </fieldset>
         </div>
 
@@ -43,7 +43,7 @@
                 <div wire:ignore>
                     <div class="form-group pt-1" style="width: 940px;">
                         <label for="contenido">Contenido*</label>
-                        <textarea class="form-control" id="message" cols="30" rows="18" wire:model.lazy="message">
+                        <textarea class="form-control" id="message" cols="30" rows="18" wire:model.blur="message">
                         </textarea>
                     </div>
                 </div>

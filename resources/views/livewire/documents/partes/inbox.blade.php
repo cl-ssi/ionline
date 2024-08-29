@@ -9,12 +9,12 @@
 
         <fieldset class="form-group col-6 col-md-2">
             <label for="for_correlative">Correlativo</label>
-            <input type="number" class="form-control" id="for_correlative" wire:model.defer="parte_correlative" autocomplete="off">
+            <input type="number" class="form-control" id="for_correlative" wire:model="parte_correlative" autocomplete="off">
         </fieldset>
 
         <fieldset class="form-group col-6 col-md-2">
             <label for="for_type_id">Tipo</label>
-            <select wire:model.defer="parte_type_id" id="for_type_id" class="form-control">
+            <select wire:model="parte_type_id" id="for_type_id" class="form-control">
                 <option></option>
                 @foreach($types as $id => $type)
                     <option value="{{ $id }}">{{ $type }}</option>
@@ -25,17 +25,17 @@
 
         <fieldset class="form-group col-6 col-md-2">
             <label for="for_number">Número</label>
-            <input type="number" class="form-control" id="for_number" wire:model.defer="parte_number" autocomplete="off">
+            <input type="number" class="form-control" id="for_number" wire:model="parte_number" autocomplete="off">
         </fieldset>
 
         <fieldset class="form-group col-12 col-md-2">
             <label for="for_origin">Origen {{ session('parte_origin') }}</label>
-            <input type="text" class="form-control" id="for_origin" wire:model.defer="parte_origin">
+            <input type="text" class="form-control" id="for_origin" wire:model="parte_origin">
         </fieldset>
 
         <fieldset class="form-group col-12 col-md-3">
             <label for="for_subject">Asunto</label>
-            <input type="text" class="form-control" id="for_subject" wire:model.defer="parte_subject">
+            <input type="text" class="form-control" id="for_subject" wire:model="parte_subject">
         </fieldset>
 
         <fieldset>
@@ -49,13 +49,13 @@
     <div class="form-row">
         <div class="form-check">
             <label class="form-check-label">&nbsp;</label>
-            <input type="checkbox" class="form-check-input" wire:model.defer="parte_without_sgr">
+            <input type="checkbox" class="form-check-input" wire:model="parte_without_sgr">
             Solo aquellos sin derivación
         </div>
 
         <div class="form-check">
             <label class="form-check-label">&nbsp;</label>
-            <input type="checkbox" class="form-check-input" wire:model.defer="parte_important">
+            <input type="checkbox" class="form-check-input" wire:model="parte_important">
             Marcados como urgentes
         </div>
     </div>

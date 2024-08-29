@@ -4,7 +4,7 @@
             <label for="type-resource">Tipo Recurso</label>
             <select
                 class="custom-select"
-                wire:model.debouce.1500ms="type_resource"
+                wire:model.live.debouce.1500ms="type_resource"
                 id="type-resource"
             >
                 <option value="">Todos</option>
@@ -18,7 +18,7 @@
                 type="text"
                 class="form-control"
                 id="search"
-                wire:model.debounce.1500ms="search"
+                wire:model.live.debounce.1500ms="search"
                 placeholder="Ingrese una marca, modelo, IP, número de inventario o serial"
             >
         </fieldset>

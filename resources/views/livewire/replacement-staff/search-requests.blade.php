@@ -5,7 +5,7 @@
         <div class="form-row">
             <fieldset class="form-group col-12 col-md-3">
                 <label for="for_profile_search">Tipo de Solicitud</label>
-                <select name="status_search" class="form-control" wire:model.debounce.500ms="selectedFormType">
+                <select name="status_search" class="form-control" wire:model.live.debounce.500ms="selectedFormType">
                     <option value="">Seleccione...</option>
                     <option value="replacement">Reemplazo</option>
                     <option value="announcement">Convocatoria</option>
@@ -14,7 +14,7 @@
 
             <fieldset class="form-group col-12 col-md-2">
                 <label for="for_profile_search">Estado</label>
-                <select name="status_search" class="form-control" wire:model.debounce.500ms="selectedStatus">
+                <select name="status_search" class="form-control" wire:model.live.debounce.500ms="selectedStatus">
                     <option value="">Seleccione...</option>
                     <option value="pending">Pendiente</option>
                     <option value="to assign">Sin Seleccionar</option>
@@ -27,21 +27,21 @@
             <fieldset class="form-group col-12 col-md-1">
                 <label for="for_name">ID</label>
                 <input class="form-control" type="number" name="id_search" autocomplete="off" 
-                    placeholder="001" wire:model.debounce.500ms="selectedId">
+                    placeholder="001" wire:model.live.debounce.500ms="selectedId">
             </fieldset>
 
             <fieldset class="form-group col-sm">
                 <label for="regiones">Periodo de Creación</label>
                 <div class="input-group">
-                    <input type="date" class="form-control" name="start_date_search" wire:model.debounce.500ms="selectedStartDate" required>
-                    <input type="date" class="form-control" name="end_date_search" wire:model.debounce.500ms="selectedEndDate" required>
+                    <input type="date" class="form-control" name="start_date_search" wire:model.live.debounce.500ms="selectedStartDate" required>
+                    <input type="date" class="form-control" name="end_date_search" wire:model.live.debounce.500ms="selectedEndDate" required>
                 </div>
             </fieldset>
 
             <fieldset class="form-group col-sm">
                 <label for="for_name">Nombre de Solicitud</label>
                 <input class="form-control" type="text" autocomplete="off"
-                    name="name_search" wire:model.debounce.500ms="selectedName">
+                    name="name_search" wire:model.live.debounce.500ms="selectedName">
             </fieldset>
         </div>
         
@@ -49,7 +49,7 @@
             <fieldset class="form-group col-12 col-md-3">
                 <label for="for_legal_quality_manage_id" >Fundamento / Detalle Fundamento</label>
                 <div class="input-group">
-                    <select name="fundament_search" id="for_fundament_manage_id" class="form-control" wire:model.debounce.500ms="selectedFundament" {{ $selectedFundamentInputStatus }}  required>
+                    <select name="fundament_search" id="for_fundament_manage_id" class="form-control" wire:model.live.debounce.500ms="selectedFundament" {{ $selectedFundamentInputStatus }}  required>
                         <option value="">Seleccione...</option>
                         @foreach($fundaments as $fundament)
                             <option value="{{ $fundament->id }}"
@@ -59,7 +59,7 @@
                         @endforeach
                     </select>
 
-                    <select name="fundament_detail_search" id="for_fundament_detail_manage_id" class="form-control" wire:model.debounce.500ms="selectedFundamentDetail" onchange="remoteWorking()" {{ $selectedFundamentDetailInputStatus }}>
+                    <select name="fundament_detail_search" id="for_fundament_detail_manage_id" class="form-control" wire:model.live.debounce.500ms="selectedFundamentDetail" onchange="remoteWorking()" {{ $selectedFundamentDetailInputStatus }}>
                         <option value="">Seleccione...</option>
                         @if(!is_null($fundamentsDetail))
                         @foreach($fundamentsDetail as $fundamentDetail)
@@ -76,13 +76,13 @@
             <fieldset class="form-group col-12 col-md-3">
                 <label for="for_name">Funcionario a Reemplazar</label>
                 <input class="form-control" type="text" autocomplete="off" placeholder="RUN o NOMBRE"
-                    name="name_to_replace_search" wire:model="selectedNameToReplace">
+                    name="name_to_replace_search" wire:model.live="selectedNameToReplace">
             </fieldset>
 
             @if($typeIndex == 'assign' || $typeIndex == 'personal' || $typeIndex == 'assigned_to')
             <fieldset class="form-group col-12 col-md-3">
                 <label for="for_sub_search">Subdirección</label>
-                <select name="sub_search" class="form-control" wire:model.debounce.500ms="selectedSub">
+                <select name="sub_search" class="form-control" wire:model.live.debounce.500ms="selectedSub">
                     <option value="">Seleccione...</option>
                     @foreach($subs as $sub)
                         <option value="{{ $sub->id }}">{{ $sub->name }}</option>
@@ -94,7 +94,7 @@
             @if($typeIndex == 'assign')
             <fieldset class="form-group col-12 col-md-3">
                 <label for="for_sub_search">Asignado</label>
-                <select name="sub_search" class="form-control" wire:model.debounce.500ms="selectedAssigned">
+                <select name="sub_search" class="form-control" wire:model.live.debounce.500ms="selectedAssigned">
                     <option value="">Seleccione...</option>
                     <option value="no">Sin asignar</option>
                 </select>
@@ -429,7 +429,7 @@
                                 <div class="form-check">
                                     <input class="form-check-input" 
                                         type="checkbox"
-                                        wire:model.defer="checkToAssign"
+                                        wire:model="checkToAssign"
                                         value="{{ $requestReplacementStaff->id }}"
                                         id="for_sign_id">
                                 </div>
@@ -496,7 +496,7 @@
                                     <div class="form-check">
                                         <input class="form-check-input" 
                                             type="checkbox"
-                                            wire:model.defer="checkToAssign"
+                                            wire:model="checkToAssign"
                                             value="{{ $requestReplacementStaff->id }}"
                                             id="for_sign_id">
                                     </div>
@@ -556,7 +556,7 @@
 
             <fieldset class="form-group">
                 <label for="for_to_user_id">Funcionario</label>
-                <select wire:model="userToAssign" id="for_to_user_id" class="form-control">
+                <select wire:model.live="userToAssign" id="for_to_user_id" class="form-control">
                     <option value="">Seleccione...</option>
                     @foreach($users_rys as $user_rys)
                         <option value="{{ $user_rys->id }}">{{ $user_rys->FullName }}</option>

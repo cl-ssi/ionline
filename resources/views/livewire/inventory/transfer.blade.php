@@ -52,7 +52,7 @@
             <label for="searchTerm" class="form-label">Buscar:</label>
         </div>
         <div class="col-10">
-            <input type="text" class="form-control" wire:model="searchTerm" id="searchTerm" placeholder="Ingrese término de búsqueda">
+            <input type="text" class="form-control" wire:model.live="searchTerm" id="searchTerm" placeholder="Ingrese término de búsqueda">
         </div>
     </div>
     <br>
@@ -117,7 +117,7 @@
                             @endif -->
                         </td>
                         <td class="text-center" nowrap>
-                            <input type="checkbox" wire:model="selectedInventories.{{ $inventory->id }}">
+                            <input type="checkbox" wire:model.live="selectedInventories.{{ $inventory->id }}">
                         </td>
                     </tr>
                     @empty

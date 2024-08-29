@@ -1,51 +1,51 @@
 <div>
     <div class="form-row">
 
-        <input type="hidden" wire:model="room_id">
+        <input type="hidden" wire:model.live="room_id">
 
         <fieldset class="form-group col-2">
             <label for="for_hotel_id">F.Desde</label>
-            <input type="date" class="form-control" id="for_start_date" name="start_date" wire:model="start_date">
+            <input type="date" class="form-control" id="for_start_date" name="start_date" wire:model.live="start_date">
         </fieldset>
 
         <fieldset class="form-group col-2">
             <label for="for_hotel_id">F.Hasta</label>
-            <input type="date" class="form-control" id="for_end_date" name="end_date" wire:model="end_date">
+            <input type="date" class="form-control" id="for_end_date" name="end_date" wire:model.live="end_date">
         </fieldset>
 
         <fieldset class="form-group col-1">
             <label for="for_hotel_id">Lu</label>
-            <input type="checkbox" class="form-control" id="for_monday" name="monday" wire:model.defer="monday">
+            <input type="checkbox" class="form-control" id="for_monday" name="monday" wire:model="monday">
         </fieldset>
 
         <fieldset class="form-group col-1">
             <label for="for_hotel_id">Ma</label>
-            <input type="checkbox" class="form-control" id="for_tuesday" name="tuesday" wire:model.defer="tuesday">
+            <input type="checkbox" class="form-control" id="for_tuesday" name="tuesday" wire:model="tuesday">
         </fieldset>
 
         <fieldset class="form-group col-1">
             <label for="for_hotel_id">Mi</label>
-            <input type="checkbox" class="form-control" id="for_wednesday" name="wednesday" wire:model.defer="wednesday">
+            <input type="checkbox" class="form-control" id="for_wednesday" name="wednesday" wire:model="wednesday">
         </fieldset>
 
         <fieldset class="form-group col-1">
             <label for="for_hotel_id">Ju</label>
-            <input type="checkbox" class="form-control" id="for_thursday" name="thursday" wire:model.defer="thursday">
+            <input type="checkbox" class="form-control" id="for_thursday" name="thursday" wire:model="thursday">
         </fieldset>
 
         <fieldset class="form-group col-1">
             <label for="for_hotel_id">Vi</label>
-            <input type="checkbox" class="form-control" id="for_friday" name="friday" wire:model.defer="friday">
+            <input type="checkbox" class="form-control" id="for_friday" name="friday" wire:model="friday">
         </fieldset>
 
         <fieldset class="form-group col-1">
             <label for="for_hotel_id">Sa</label>
-            <input type="checkbox" class="form-control" id="for_saturday" name="saturday" wire:model.defer="saturday">
+            <input type="checkbox" class="form-control" id="for_saturday" name="saturday" wire:model="saturday">
         </fieldset>
 
         <fieldset class="form-group col-1">
             <label for="for_hotel_id">Do</label>
-            <input type="checkbox" class="form-control" id="for_sunday" name="sunday" wire:model.defer="sunday">
+            <input type="checkbox" class="form-control" id="for_sunday" name="sunday" wire:model="sunday">
         </fieldset>
 
         <!-- solo si viene el parametro 'configuration' se realiza esa carga -->

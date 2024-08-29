@@ -2,7 +2,7 @@
     <div class="px-4 space-y-4 mt-8">
         <form method="get">
             <input class="border-solid border border-gray-300 p-2 w-full md:w-1/4" 
-                type="text" placeholder="Search Users" wire:model="term"/>
+                type="text" placeholder="Search Users" wire:model.live="term"/>
         </form>
         <div wire:loading>Buscando usuario...</div>
         <div wire:loading.remove>

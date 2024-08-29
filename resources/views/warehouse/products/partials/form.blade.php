@@ -15,7 +15,7 @@
         <input
             class="form-control"
             type="text"
-            wire:model.debounce.1500ms="search_unspsc_product"
+            wire:model.live.debounce.1500ms="search_unspsc_product"
             id="product-search"
         >
     </fieldset>
@@ -42,7 +42,7 @@
             class="form-control @error('name') is-invalid @enderror"
             type="text"
             id="name"
-            wire:model.debounce.1500ms="name"
+            wire:model.live.debounce.1500ms="name"
             placeholder="Ingresa el nombre"
             value="{{ old('name', optional($product)->name) }}"
             required
@@ -60,7 +60,7 @@
             class="form-control @error('barcode') is-invalid @enderror"
             type="text"
             id="barcode"
-            wire:model.debounce.1500ms="barcode"
+            wire:model.live.debounce.1500ms="barcode"
             placeholder="Ingresa el código de barra"
             value="{{ old('barcode', optional($product)->barcode) }}"
         >
@@ -76,7 +76,7 @@
         <select
             class="form-control @error('category_id') is-invalid @enderror"
             id="category-id"
-            wire:model.debounce.1500ms="category_id"
+            wire:model.live.debounce.1500ms="category_id"
             required
         >
             <option value="">Selecciona la categoría</option>

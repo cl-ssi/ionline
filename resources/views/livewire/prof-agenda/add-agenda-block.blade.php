@@ -3,23 +3,23 @@
 
     <fieldset class="form-group col col-md">
         <label for="for_id_deis">Día</label>
-        <input type="date" class="form-control" wire:model.defer="date" required>
+        <input type="date" class="form-control" wire:model="date" required>
         @error('date') <span class="text-danger">{{ $message }}</span> @enderror
     </fieldset>
 
     <fieldset class="form-group col col-md">
         <label for="for_id_deis">Hora de inicio</label>
-        <input type="time" class="form-control" wire:model.defer="start_hour" value="" step="3600000" required>
+        <input type="time" class="form-control" wire:model="start_hour" value="" step="3600000" required>
     </fieldset>
 
     <fieldset class="form-group col col-md">
         <label for="for_id_deis">Hora de término</label>
-        <input type="time" class="form-control" wire:model.defer="end_hour" value="" step="3600000" required>
+        <input type="time" class="form-control" wire:model="end_hour" value="" step="3600000" required>
     </fieldset>
 
     <fieldset class="form-group col col-md">
         <label for="for_duration">Duración</label>
-        <select name="duration" wire:model.defer="duration" class="form-control" id="" required>
+        <select name="duration" wire:model="duration" class="form-control" id="" required>
             <option value=""></option>
             <option value="60">60</option>
             <option value="40">40</option>
@@ -30,7 +30,7 @@
 
     <fieldset class="form-group col col-md">
         <label for="for_activity_type_id">Tipo de actividad</label>
-        <select wire:model.defer="activity_type_id" class="form-control" id="" required>
+        <select wire:model="activity_type_id" class="form-control" id="" required>
             <option value=""></option>
             @foreach($activity_types as $activity_type)
                 <option value="{{$activity_type->id}}">{{$activity_type->name}}</option>

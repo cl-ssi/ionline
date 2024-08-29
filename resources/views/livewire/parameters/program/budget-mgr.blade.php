@@ -7,7 +7,7 @@
         <div class="form-row mb-3">
             <fieldset class="col-12 col-md-2">
                 <label for="for-year">Año</label>
-                <select class="form-control" wire:model="year" wire:change="updatePrograms">
+                <select class="form-control" wire:model.live="year" wire:change="updatePrograms">
                     <option value="">Seleccionar Año</option>
                     <option value="{{ now()->year }}">{{ now()->year }}</option>
                     <option value="{{ now()->year - 1 }}">{{ now()->year - 1 }}</option>
@@ -16,7 +16,7 @@
 
             <fieldset class="col-12 col-md-2">
                 <label for="for-subtitle">Subtítulo</label>
-                <select class="form-control" wire:model="selectedSubtitle" wire:change="updatePrograms">
+                <select class="form-control" wire:model.live="selectedSubtitle" wire:change="updatePrograms">
                     <option value="">Seleccionar Subt</option>
                     @foreach ($subtitles as $id => $name)
                         <option value="{{ $id }}">{{ $name }}</option>
@@ -26,7 +26,7 @@
 
             <fieldset class="col-12 col-md-4">
                 <label for="for-program">Programa*</label>
-                <select class="form-control" wire:model="program">
+                <select class="form-control" wire:model.live="program">
                     <option value="">Seleccionar Programa</option>
                     @foreach ($programs as $id => $name)
                         <option value="{{ $id }}">{{ $name }}</option>
@@ -36,7 +36,7 @@
 
             <fieldset class="col-12 col-md-3">
                 <label for="for-ammount">Monto*</label> <small class="text-muted">Valor aumentar/disminuir (negativo)</small>
-                <input type="number" wire:model.defer="ammount" class="form-control">
+                <input type="number" wire:model="ammount" class="form-control">
                 @error('ammount')
                     <span class="text-danger">{{ $message }}</span>
                 @enderror

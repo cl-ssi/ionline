@@ -14,7 +14,7 @@
     <div class="row g-2 mb-3">
         <div class="form-group col-4">
             <label for="estab">Establecimiento</label>
-            <select wire:model.defer="establishment_id" class="form-select">
+            <select wire:model="establishment_id" class="form-select">
                 <option value="todos">Todos los establecimientos</option>
                 <option value="">Sin Establecimiento</option>
                 @foreach ($establishments as $est)
@@ -25,7 +25,7 @@
 
         <div class="form-group col-2">
             <label for="form-anexo">Anexo</label>
-            <input type="text" class="form-control" wire:model.defer="filter">
+            <input type="text" class="form-control" wire:model="filter">
         </div>
 
         <div class="form-group col-1">

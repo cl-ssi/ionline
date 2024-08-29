@@ -29,7 +29,7 @@
                 <input
                     type="text"
                     class="form-control"
-                    wire:model.defer="otp"
+                    wire:model="otp"
                     id="otp"
                 >
             </div>

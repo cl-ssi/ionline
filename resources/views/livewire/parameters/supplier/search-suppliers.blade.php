@@ -5,7 +5,7 @@
             <fieldset class="form-group col-12 col-md-3">
                 <label for="for_name">Nombres / Identificación</label>
                 <input class="form-control" type="text" name="name_search" autocomplete="off" style="text-transform: uppercase;"
-                    placeholder="RUN (sin DV) / NOMBRE" wire:model.debounce.500ms="selectedName">
+                    placeholder="RUN (sin DV) / NOMBRE" wire:model.live.debounce.500ms="selectedName">
             </fieldset>
         </div>
     </div>

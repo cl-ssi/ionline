@@ -10,19 +10,19 @@
                 </div>
                 <div class="col-md-3">
                     <label for="for-name">Nombres</label>
-                    <input type="text" class="form-control" id="for-name" wire:model.defer="user.name">
+                    <input type="text" class="form-control" id="for-name" wire:model="user.name">
                 </div>
                 <div class="col-md-2">
                     <label for="for-fathers_family">Apellido P.</label>
-                    <input type="text" class="form-control" id="for-fathers_family" wire:model.defer="user.fathers_family">
+                    <input type="text" class="form-control" id="for-fathers_family" wire:model="user.fathers_family">
                 </div>
                 <div class="col-md-2">
                     <label for="for-mothers_family">Apellido M.</label>
-                    <input type="text" class="form-control" id="for-mothers_family" wire:model.defer="user.mothers_family">
+                    <input type="text" class="form-control" id="for-mothers_family" wire:model="user.mothers_family">
                 </div>
                 <div class="col-md-2">
                     <label for="for-commune_id">Nacionalidad</label>
-                    <select wire:model.defer="user.country_id" class="form-control">
+                    <select wire:model="user.country_id" class="form-control">
                         <option value=""></option>
                         @foreach($countries->sort() as $key => $name)
                             <option value="{{ $key }}">{{ $name }}</option>
@@ -39,11 +39,11 @@
             <div class="form-row mb-3">
                 <div class="col-md-4">
                     <label for="for-address">Dirección </label>
-                    <input type="text" class="form-control" id="for-address" wire:model.defer="user.address">
+                    <input type="text" class="form-control" id="for-address" wire:model="user.address">
                 </div>
                 <div class="col-md-2">
                     <label for="for-commune_id">Comuna</label>
-                    <select wire:model.defer="user.commune_id" class="form-control">
+                    <select wire:model="user.commune_id" class="form-control">
                         <option value=""></option>
                         @foreach($communes->sort() as $key => $name)
                             <option value="{{ $key }}">{{ $name }}</option>
@@ -52,7 +52,7 @@
                 </div>
                 <div class="col-md-2">
                     <label for="for-phone_number">Telefono</label>
-                    <input type="text" class="form-control" id="for-phone_number" wire:model.defer="user.phone_number">
+                    <input type="text" class="form-control" id="for-phone_number" wire:model="user.phone_number">
                 </div>
                 @livewire('rrhh.personal-email-input',['user' => $user])
             </div>

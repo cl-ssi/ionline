@@ -21,7 +21,7 @@
             class="form-control"
             type="text"
             placeholder="Buscar por código de barra, nombre o descripción del producto o código de producto"
-            wire:model.debounce.1500ms="search"
+            wire:model.live.debounce.1500ms="search"
         >
     </div>
 

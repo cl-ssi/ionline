@@ -36,7 +36,7 @@
                                     type="text"
                                     id="search"
                                     class="form-control form-control-sm @error('user_id') is-invalid @enderror"
-                                    wire:model.debounce.500ms="search"
+                                    wire:model.live.debounce.500ms="search"
                                     placeholder="{{ $selectedName }}"
                                     value="{{ $selectedName }}"
                                     @if($user_id) disabled @endif
@@ -75,7 +75,7 @@
                             <label for="role-id">Rol</label>
                             <select
                                 class="form-control form-control-sm @error('role_id') is-invalid @enderror"
-                                wire:model.debounce.1500ms="role_id"
+                                wire:model.live.debounce.1500ms="role_id"
                                 id="role-id"
                             >
                                 <option value="">Selecciona un rol</option>
@@ -110,7 +110,7 @@
                 <input
                     type="text"
                     class="form-control"
-                    wire:model.debounce.600ms="search_user"
+                    wire:model.live.debounce.600ms="search_user"
                     placeholder="Buscar en usuarios de la bodega"
                 >
                 <div class="input-group-append">

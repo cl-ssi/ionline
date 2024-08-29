@@ -4,28 +4,28 @@
         <div class="form-row mb-3">
             <div class="col-md-2">
                 <label for="for_total_hours_to_pay">Total de horas a pagar</label>
-                <input type="text" class="form-control" wire:model.defer="fulfillment.total_hours_to_pay">
+                <input type="text" class="form-control" wire:model="fulfillment.total_hours_to_pay">
                 @error('fulfillment.total_hours_to_pay') <span class="text-danger">{{ $message }}</span> @enderror
             </div>
             <div class="col-md-2">
                 <label for="for_total_to_pay">Total a pagar</label>
-                <input type="text" class="form-control" wire:model.defer="fulfillment.total_to_pay">
+                <input type="text" class="form-control" wire:model="fulfillment.total_to_pay">
                 @error('fulfillment.total_to_pay') <span class="text-danger">{{ $message }}</span> @enderror
             </div>
             <div class="col-md-2">
                 <div class="form-check form-check">
                     <!-- <input type="hidden" name="illness_leave" value="0"> -->
-                    <input class="form-check-input" type="checkbox" wire:model.defer="fulfillment.illness_leave">
+                    <input class="form-check-input" type="checkbox" wire:model="fulfillment.illness_leave">
                     <label class="form-check-label" for="for_illness_leave">Licencias</label>
                 </div>
                 <div class="form-check form-check">
                     <!-- <input type="hidden" name="leave_of_absence" value="0"> -->
-                    <input class="form-check-input" type="checkbox" wire:model.defer="fulfillment.leave_of_absence">
+                    <input class="form-check-input" type="checkbox" wire:model="fulfillment.leave_of_absence">
                     <label class="form-check-label" for="permisos">Permisos</label>
                 </div>
                 <div class="form-check form-check">
                     <!-- <input type="hidden" name="assistance" value="0"> -->
-                    <input class="form-check-input" type="checkbox" wire:model.defer="fulfillment.assistance">
+                    <input class="form-check-input" type="checkbox" wire:model="fulfillment.assistance">
                     <label class="form-check-label" for="asistencia">Asistencia</label>
                 </div>
             </div>

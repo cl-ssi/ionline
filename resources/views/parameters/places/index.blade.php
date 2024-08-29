@@ -1,8 +1,8 @@
-<form wire:submit.prevent="searchPlace">
+<form wire:submit="searchPlace">
     <div class="row mb-3">
         <div class="col-lg-9">
             <input type="text"
-                wire:model.defer="filter"
+                wire:model="filter"
                 class="form-control"
                 placeholder="Buscar por nombre/descripción/ubicación/codigointerno/establecimiento"
                 autocomplete="off">
