@@ -483,4 +483,15 @@ class Inventory extends Model implements Auditable
     {
         return now()->day . ' de ' . now()->monthName . ' del ' . now()->year;
     }
+
+    public function generateInventoryNumber()
+    {
+        if ($this->unspscProduct) {
+            return $this->unspscProduct->code . '-' . $this->id;
+        }
+        return null;
+    }
+
+
+
 }
