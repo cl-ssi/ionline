@@ -214,7 +214,7 @@ class ProductController extends Controller
                                 })
                                 ->where('notes','LIKE',"%$notes%")
                                 ->when($product, function ($q, $product) {
-                                return $q->whereHas('purchaseItems', function ($query) use ($product) {
+                                return $q->whereHas('receivingItems', function ($query) use ($product) {
                                                 return $query->whereHas('product', function ($query) use ($product) {
                                                                 return $query->where('name','LIKE',"%$product%");
                                                             });
@@ -239,7 +239,7 @@ class ProductController extends Controller
                                    })
                                 ->where('notes','LIKE',"%$notes%")
                                 ->when($product, function ($q, $product) {
-                                    return $q->whereHas('purchaseItems', function ($query) use ($product) {
+                                    return $q->whereHas('dispatchItems', function ($query) use ($product) {
                                                     return $query->whereHas('product', function ($query) use ($product) {
                                                                     return $query->where('name','LIKE',"%$product%");
                                                                 });
