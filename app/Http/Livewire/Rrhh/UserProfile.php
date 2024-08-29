@@ -87,7 +87,7 @@ class UserProfile extends Component
             $this->user->bankAccount()->delete();
         } else {
             // Save the bankAccount data
-            $this->user->bankAccount()->updateOrCreate([], $this->bankAccount);
+            $this->user->bankAccount()->updateOrCreate([], $this->bankAccount->toArray());
         }
 
 
