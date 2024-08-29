@@ -4,6 +4,7 @@ namespace App\Livewire\RequestForm;
 
 use App\Exports\RequestForms\RequestFormsExport;
 use App\Models\Parameters\Parameter;
+use Livewire\Attributes\On;
 use Livewire\Component;
 use App\Models\RequestForms\RequestForm;
 use App\Models\User;
@@ -57,8 +58,6 @@ class SearchRequests extends Component
     // public $activeSearch = false;
     public $lstPurchaseMechanism;
     public $selectedPurchaseMechanism = null;
-
-    protected $listeners = ['searchedRequesterOu', 'clearRequesterOu','searchedAdminOu', 'clearAdminOu'];
 
     protected $queryString = ['selectedStatus', 'selectedStatusPurchase', 'selectedId', 'selectedFolio',
         'selectedName', 'selectedStartDate', 'selectedEndDate', 'selectedRequester', 'selectedRequesterOuName',
@@ -251,18 +250,25 @@ class SearchRequests extends Component
     //     }
     // }
 
+    #[On('searchedRequesterOu')]
     public function searchedRequesterOu(OrganizationalUnit $organizationalUnit){
         $this->selectedRequesterOuName = $organizationalUnit->id;
     }
 
+    #[On('clearRequesterOu')]
     public function clearRequesterOu(){
         $this->selectedRequesterOuName = null;
     }
 
+    /**
+     * Listener
+     */
+    #[On('searchedAdminOu')]
     public function searchedAdminOu(OrganizationalUnit $organizationalUnit){
         $this->selectedAdminOuName = $organizationalUnit->id;
     }
 
+    #[On('clearAdminOu')]
     public function clearAdminOu(){
         $this->selectedAdminOuName = null;
     }

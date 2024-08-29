@@ -2,8 +2,8 @@
 
 namespace App\Livewire\ProfAgenda\Reports;
 
+use Livewire\Attributes\On;
 use Livewire\Component;
-
 use App\Models\User;
 use App\Models\ProfAgenda\OpenHour;
 
@@ -12,8 +12,6 @@ class ClinicalRecordReport extends Component
     public $patient;
     public $passedOpenHours = [];
     public $nextOpenHours = [];
-
-    protected $listeners = ['get_user' => 'get_user'];
 
     public $showSelect = false;
     public $selectedAssistance;
@@ -53,11 +51,10 @@ class ClinicalRecordReport extends Component
         $this->hideSelect($openHourId);
     }
 
-    
- 
-    public function get_user(User $user)
+    #[On('get_user')]
+    public function get_user($userId)
     {
-        $this->patient = $user;
+        $this->patient = User::find($userId);
     }
 
     public function search()

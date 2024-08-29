@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Finance\Receptions;
 
+use Livewire\Attributes\On;
 use Livewire\WithFileUploads;
 use Livewire\Component;
 use App\Models\User;
@@ -42,8 +43,6 @@ class CreateReception extends Component
 
     public $receptionItemsWithCantidad; //para validación
     // public $message;
-
-    protected $listeners = ['userSelected', 'ouSelected', 'setTemplate'];
 
     /**
      * TODO:
@@ -210,9 +209,6 @@ class CreateReception extends Component
 
     }
 
-    public function setTemplate($input, $template){
-        $this->$input = $template;
-    }
 
     /**
     * Get Purchase Order
@@ -445,17 +441,24 @@ class CreateReception extends Component
         unset($this->approvals[$position]);
     }
 
-    /**
-    * Setea el signer_id
-    */
-    public function userSelected($user_id)
-    {
-        $this->signer_id = $user_id;
+    #[On('setTemplate')]
+    public function setTemplate($input, $template){
+        $this->$input = $template;
     }
 
     /**
     * Setea el signer_id
     */
+    #[On('userSelected')]
+    public function userSelected($userId)
+    {
+        $this->signer_id = $userId;
+    }
+
+    /**
+    * Setea el signer_id
+    */
+    #[On('ouSelected')]
     public function ouSelected($ou_id)
     {
         if($ou_id) {

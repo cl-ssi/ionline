@@ -2,12 +2,11 @@
 
 namespace App\Livewire\ServiceRequest;
 
+use Livewire\Attributes\On;
 use Livewire\Component;
 use App\Models\ServiceRequests\SignatureFlow;
 use Illuminate\Support\Facades\Session;
-
 use App\Models\User;
-use Illuminate\Support\Facades\Auth;
 
 class ApprovalWorkflow extends Component
 {
@@ -22,8 +21,6 @@ class ApprovalWorkflow extends Component
     public $edit_status;
     public $edit_observation;
     public $edit_user;
-
-    protected $listeners = ['userSelected'];
 
     protected $rules = [
         'status'  => 'required',
@@ -50,9 +47,10 @@ class ApprovalWorkflow extends Component
         $this->edit_user = $signatureFlow->user;
     }
 
-    public function userSelected($user_id)
+    #[On('userSelected')]
+    public function userSelected($userId)
     {
-        $this->edit_user = User::find($user_id);
+        $this->edit_user = User::find($userId);
     }
 
     public function save(){

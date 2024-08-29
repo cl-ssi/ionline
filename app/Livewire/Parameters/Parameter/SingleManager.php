@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Parameters\Parameter;
 
+use Livewire\Attributes\On;
 use Livewire\Component;
 use App\Models\User;
 use App\Models\Parameters\Parameter;
@@ -34,8 +35,6 @@ class SingleManager extends Component
 
     public $parameter;
 
-    protected $listeners = ['userSelected' => 'userSelected'];
-
     public function mount($module, $parameterName, $type, $parameterDescription = null)
     {
         $this->parameter = Parameter::firstOrCreate([
@@ -56,9 +55,10 @@ class SingleManager extends Component
     }
 
     /** Listener del componente de seleccionar usuarios */
-    public function userSelected(User $user)
+    #[On('userSelected')]
+    public function userSelected($userId)
     {
-        $this->parameter->value = $user->id;
+        $this->parameter->value = $userId;
     }
 
     protected $rules = [

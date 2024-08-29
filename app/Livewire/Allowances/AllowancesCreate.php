@@ -4,30 +4,21 @@ namespace App\Livewire\Allowances;
 
 use Livewire\Attributes\On;
 use Livewire\Component;
-
 use App\Models\Allowances\Allowance;
 use App\Models\Allowances\Destination;
 use App\Models\Allowances\AllowanceFile;
 use App\Models\Allowances\AllowanceSign;
-
 use App\Models\Parameters\AllowanceValue;
 use App\Models\Parameters\ContractualCondition;
 use App\Models\ClCommune;
 use App\Models\User;
 use App\Notifications\Allowances\NewAllowance;
-use App\Models\Rrhh\Authority;
 use App\Models\Parameters\Parameter;
 use App\Models\ClLocality;
-
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
-use Illuminate\Support\Facades\Storage;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\RedirectResponse;
-
-use App\Models\Documents\Approval;
 
 class AllowancesCreate extends Component
 {
@@ -106,8 +97,6 @@ class AllowancesCreate extends Component
     public $bheFile = null;
     public $bheFileStatus = null;
     public $messageBhe = null;
-
-    protected $listeners = ['emitPosition', 'emitPositionValue', 'userSelected', 'savedDestinations'];
     
     protected function messages(){
         return [
@@ -313,9 +302,10 @@ class AllowancesCreate extends Component
     }
 
     /* Listeners */
-    public function userSelected($userAllowance)
+    #[On('userSelected')]
+    public function userSelected($userId)
     {
-        $this->userAllowance = User::find($userAllowance);
+        $this->userAllowance = User::find($userId);
             
         if($this->userAllowance){
             //  Buscar si los viáticos del usuario no exceden 90 días en el presente año 
@@ -354,11 +344,13 @@ class AllowancesCreate extends Component
         
     }
 
+    #[On('emitPosition')]
     public function emitPosition($emitPosition)
     {
         $this->position = $emitPosition;
     }
 
+    #[On('emitPositionValue')]
     public function emitPositionValue($emitPositionValue)
     {
         $this->position = $emitPositionValue;
@@ -801,6 +793,7 @@ class AllowancesCreate extends Component
         }
     }
 
+    #[On('savedDestinations')]
     public function savedDestinations($destinations)
     {
         $this->destinations = $destinations; 

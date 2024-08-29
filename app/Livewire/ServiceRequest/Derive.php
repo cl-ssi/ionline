@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use App\Mail\ServiceRequestNotification;
 use App\Mail\DerivationNotification;
 use Illuminate\Support\Facades\Mail;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class Derive extends Component
@@ -26,12 +27,6 @@ class Derive extends Component
     public $userToSelected;
 
     public $type;
-    
-
-    protected $listeners = ['userFromSelected', 'userToSelected'];
-
-
-    //protected $listeners = ['userSelected'];
 
     public function derivar()
     {
@@ -172,14 +167,16 @@ class Derive extends Component
         return view('livewire.service-request.derive');
     }
 
-    public function userFromSelected(User $user_from)
+    #[On('userFromSelected')]
+    public function userFromSelected($userId)
     {
-        $this->user_from_id = $user_from->id;
+        $this->user_from_id = $userId;
     }
 
-    public function userToSelected(User $user_to)
+    #[On('userToSelected')]
+    public function userToSelected($userId)
     {
-        $this->user_to_id = $user_to->id;
+        $this->user_to_id = $userId;
     }
 
 }

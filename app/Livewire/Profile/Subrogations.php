@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Profile;
 
+use Livewire\Attributes\On;
 use Livewire\Component;
 use App\Models\Profile\Subrogation;
 use Illuminate\Support\Facades\Auth;
@@ -21,16 +22,16 @@ class Subrogations extends Component
 
     public $organizationalUnit = null;
 
-    protected $listeners = ['searchedUser', 'ouSelected'];
-
-    public function ouSelected($ou_id)
+    #[On('ouSelected')]
+    public function ouSelected($ouId)
     {
-        $this->organizational_unit_id = $ou_id;
+        $this->organizational_unit_id = $ouId;
     }
 
-    public function searchedUser($searchedUser)
+    #[On('searchedUser')]
+    public function searchedUser($userId)
     {
-        $this->subrogant_id = $searchedUser['id'];
+        $this->subrogant_id = $userId;
     }
 
     protected function rules()

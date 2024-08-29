@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Meetings;
 
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 use Illuminate\Support\Facades\DB;
@@ -39,7 +40,6 @@ class MeetingCreate extends Component
 
     // Listeners
     public $searchedUser, $searchedCommitmentUser, $searchedCommitmentOu;
-    protected $listeners = ['searchedUser', 'searchedCommitmentUser', 'searchedCommitmentOu'];
 
     public $groupingInput = null;
 
@@ -168,7 +168,6 @@ class MeetingCreate extends Component
                         'commitment_ou_id'      => $commitment['commitment_ou_id'],
                         'priority'              => $commitment['priority'],
                         'closing_date'          => $commitment['closing_date'],
-                        'priority'              => $commitment['priority'],
                         'meeting_id'            => $meeting->id,
                         'user_id'               => $commitment['user_id']
                     ]
@@ -199,8 +198,9 @@ class MeetingCreate extends Component
         }
     }
 
-    public function searchedUser(User $user){
-        $this->searchedUser = $user;
+    #[On('searchedUser')]
+    public function searchedUser($userId){
+        $this->searchedUser = User::find($userId);
     }
 
     public function addGrouping(){
@@ -386,10 +386,12 @@ class MeetingCreate extends Component
         return redirect()->route('meetings.show', $this->meetingToEdit);
     }
 
+    #[On('searchedCommitmentUser')]
     public function searchedCommitmentUser(User $user){
         $this->searchedCommitmentUser = $user;
     }
 
+    #[On('searchedCommitmentOu')]
     public function searchedCommitmentOu(OrganizationalUnit $organizationalUnit){
         $this->searchedCommitmentOu = $organizationalUnit;
     }

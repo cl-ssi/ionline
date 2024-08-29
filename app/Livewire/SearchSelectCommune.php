@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use Livewire\Attributes\On;
 use Livewire\Component;
 use App\Models\ClCommune;
 
@@ -31,8 +32,6 @@ class SearchSelectCommune extends Component
     public $required = '';
     public $small_option = false;
 
-    protected $listeners = ['onClearUserSearch'];
-    
     public function updatedQuery()
     {
         $this->communes = ClCommune::getCommunesBySearch($this->query)
@@ -88,6 +87,7 @@ class SearchSelectCommune extends Component
         $this->selectedCommuneName = null;
     }
 
+    #[On('onClearUserSearch')]
     public function onClearUserSearch(){
         if($this->selected_id == 'destination_commune_id'){
             $this->resetx();

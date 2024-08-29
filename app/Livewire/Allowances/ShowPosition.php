@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Allowances;
 
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 use App\Models\User;
@@ -11,8 +12,6 @@ class ShowPosition extends Component
     public $position;
 
     public $searchedUser;
-
-    protected $listeners = ['searchedUser'];
 
     protected $rules = [
         'position'  => 'required'
@@ -38,7 +37,9 @@ class ShowPosition extends Component
         return view('livewire.allowances.show-position');
     }
 
-    public function searchedUser(User $user){
+    #[On('searchedUser')]
+    public function searchedUser($userId) {
+        $user = User::find($userId);
         $this->searchedUser = $user;
         $this->position = $this->searchedUser->position;
         

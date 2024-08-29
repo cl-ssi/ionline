@@ -13,6 +13,7 @@ use App\Helpers\DateHelper;
 use App\Models\Rrhh\AbsenteeismType;
 use App\Models\Parameters\Holiday;
 
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 // use App\Models\Rrhh\CompensatoryDay
@@ -26,15 +27,14 @@ class ReportByEmployee extends Component
     public $calculatedData = [];
     public $year;
 
-    protected $listeners = ['reportByEmployeeEmit', 'reportByEmployeeEmit'];
-
     public function mount(){
         $this->year = now()->format('Y');
     }
 
-    public function reportByEmployeeEmit(User $user_id)
+    #[On('reportByEmployeeEmit')]
+    public function reportByEmployeeEmit($userId)
     {
-        $this->user_id = $user_id->id;
+        $this->user_id = $userId;
     }
 
     public function search(){

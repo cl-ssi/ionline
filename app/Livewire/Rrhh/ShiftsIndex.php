@@ -2,8 +2,8 @@
 
 namespace App\Livewire\Rrhh;
 
+use Livewire\Attributes\On;
 use Livewire\Component;
-
 use App\Models\Rrhh\Shift;
 use App\Models\User;
 
@@ -17,11 +17,11 @@ class ShiftsIndex extends Component
     public $quantity;
     public $observation;
 
-    protected $listeners = ['emit_user_id'];
  
-    public function emit_user_id(User $user)
+    #[On('emit_user_id')]
+    public function emit_user_id($userId)
     {
-        $this->user = $user;
+        $this->user = User::find($userId);
     }
 
     protected $rules = [

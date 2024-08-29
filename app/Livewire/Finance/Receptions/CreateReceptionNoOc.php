@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Finance\Receptions;
 
+use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use App\Models\Finance\Receptions\ReceptionType;
@@ -68,9 +69,6 @@ class CreateReceptionNoOc extends Component
 
         //hacer un distinct o algo para buscar los demas o buscar en la documentacion del SII
     ];
-
-    protected $listeners = ['userSelected', 'ouSelected', 'setTemplate'];
-
 
 
     public function render()
@@ -309,11 +307,13 @@ class CreateReceptionNoOc extends Component
         }
     }
 
+    #[On('setTemplate')]
     public function setTemplate($input, $template)
     {
         $this->$input = $template;
     }
 
+    #[On('ouSelected')]
     public function ouSelected($ou_id)
     {
         if($ou_id) {
@@ -329,9 +329,10 @@ class CreateReceptionNoOc extends Component
         }
     }
 
-    public function userSelected($user_id)
+    #[On('userSelected')]
+    public function userSelected($userId)
     {
-        $this->signer_id = $user_id;
+        $this->signer_id = $userId;
     }
 
     public function removeApproval($position)

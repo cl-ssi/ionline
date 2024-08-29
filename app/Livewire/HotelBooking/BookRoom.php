@@ -2,13 +2,9 @@
 
 namespace App\Livewire\HotelBooking;
 
+use Livewire\Attributes\On;
 use Livewire\Component;
-use Carbon\Carbon;
-
-use App\Models\User;
-use App\Models\HotelBooking\Room;
 use App\Models\HotelBooking\RoomBooking;
-
 use App\Notifications\HotelBooking\NewBooking;
 
 class BookRoom extends Component
@@ -32,10 +28,10 @@ class BookRoom extends Component
         $this->user_id = auth()->user()->id;
     }
 
-    protected $listeners = ['loadUserData' => 'loadUserData'];
 
-    public function loadUserData(User $User){
-        $this->user_id = $User->id;
+    #[On('loadUserData')]
+    public function loadUserData($userId){
+        $this->user_id = $userId;
     }
 
     public function confirm_reservation(){

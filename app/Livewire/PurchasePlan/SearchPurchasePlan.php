@@ -3,6 +3,7 @@
 namespace App\Livewire\PurchasePlan;
 
 use App\Models\Parameters\Parameter;
+use Livewire\Attributes\On;
 use Livewire\Component;
 use App\Models\PurchasePlan\PurchasePlan;
 use Livewire\WithPagination;
@@ -18,8 +19,6 @@ class SearchPurchasePlan extends Component
         $selectedResponsibleOuName, $selectedProgram;
 
     public $index;
-
-    protected $listeners = ['searchedResponsibleOu', 'clearResponsibleOu'];
 
     protected $queryString = ['selectedId', 'selectedStatus', 'selectedSubject', 'selectedStartDate', 'selectedEndDate', 'selectedUserCreator',
         'selectedUserResponsible', 'selectedResponsibleOuName', 'selectedProgram'];
@@ -168,10 +167,12 @@ class SearchPurchasePlan extends Component
         return view('livewire.purchase-plan.search-purchase-plan', compact('purchasePlans'));
     }
 
+    #[On('searchedResponsibleOu')]
     public function searchedResponsibleOu(OrganizationalUnit $organizationalUnit){
         $this->selectedResponsibleOuName = $organizationalUnit->id;
     }
 
+    #[On('clearResponsibleOu')]
     public function clearResponsibleOu(){
         $this->selectedResponsibleOuName = null;
     }

@@ -5,6 +5,7 @@ namespace App\Livewire\Inventory;
 use App\Models\Establishment;
 use App\Models\Inv\EstablishmentUser;
 use App\Models\User;
+use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Spatie\Permission\Models\Role;
@@ -19,10 +20,6 @@ class InventoryManageUsers extends Component
     public $user_id;
     public $role_id;
     public $roles;
-
-    protected $listeners = [
-        'myUserId'
-    ];
 
     public $rules = [
         'role_id' => 'required|exists:roles,id',
@@ -41,9 +38,10 @@ class InventoryManageUsers extends Component
         ]);
     }
 
-    public function myUserId($value)
+    #[On('myUserId')]
+    public function myUserId($userId)
     {
-        $this->user_id = $value;
+        $this->user_id = $userId;
     }
 
     public function addUser()

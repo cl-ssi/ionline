@@ -65,7 +65,6 @@ class TrainingCreate extends Component
     // Listeners
     public $searchedUser;
     public $disabledUserInputs = "disabled";
-    protected $listeners = ['searchedUser'];
 
     protected function messages(){
         return [
@@ -225,7 +224,6 @@ class TrainingCreate extends Component
 
                     'mechanism'                 => $this->mechanism,
                     'online_type'               => $this->onlineTypeMechanism,
-                    'work_hours'                => $this->workHours,
                     'schuduled'                 => $this->schuduled,
                     'activity_date_start_at'    => $this->activityDateStartAt, 
                     'activity_date_end_at'      => $this->activityDateEndAt, 
@@ -390,7 +388,9 @@ class TrainingCreate extends Component
         */
     }
 
-    public function searchedUser(User $user){
+    #[On('searchedUser')]
+    public function searchedUser($userId){
+        $user = User::find($userId);
         $this->searchedUser = $user;
         
         $this->run = $this->searchedUser->id;

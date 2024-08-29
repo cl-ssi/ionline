@@ -2,6 +2,7 @@
 
 namespace App\Livewire\RequestForm\Passenger;
 
+use Livewire\Attributes\On;
 use Livewire\Component;
 use App\Models\User;
 use App\Models\Parameters\PurchaseMechanism;
@@ -31,8 +32,6 @@ class PassengerRequest extends Component
     public $passengers, $key, $editRF, $savedPassengers, $deletedPassengers;
 
     public $totalValue = 0 , $precision_currency;
-
-    protected $listeners = ['searchedPassenger', 'savedTypeOfCurrency'];
 
     //Para Validar
 
@@ -132,26 +131,26 @@ class PassengerRequest extends Component
     }
 
     public function editPassenger($key){
-      $this->resetErrorBag();
-      $this->edit                     = true;
+        $this->resetErrorBag();
+        $this->edit                     = true;
 
-      $this->run            = $this->passengers[$key]['run'];
-      $this->dv             = $this->passengers[$key]['dv'];
-      $this->name           = $this->passengers[$key]['name'];
-      $this->fathers_family = $this->passengers[$key]['fathers_family'];
-      $this->mothers_family = $this->passengers[$key]['mothers_family'];
-      $this->birthday       = $this->passengers[$key]['birthday'];
-      $this->phone_number   = $this->passengers[$key]['phone_number'];
-      $this->email          = $this->passengers[$key]['email'];
-      $this->round_trip     = $this->passengers[$key]['round_trip'];
-      $this->origin         = $this->passengers[$key]['origin'];
-      $this->destination    = $this->passengers[$key]['destination'];
-      $this->departure_date = $this->passengers[$key]['departure_date'];
-      $this->return_date    = $this->passengers[$key]['return_date'];
-      $this->baggage        = $this->passengers[$key]['baggage'];
-      $this->unitValue      = $this->passengers[$key]['unitValue'];
+        $this->run            = $this->passengers[$key]['run'];
+        $this->dv             = $this->passengers[$key]['dv'];
+        $this->name           = $this->passengers[$key]['name'];
+        $this->fathers_family = $this->passengers[$key]['fathers_family'];
+        $this->mothers_family = $this->passengers[$key]['mothers_family'];
+        $this->birthday       = $this->passengers[$key]['birthday'];
+        $this->phone_number   = $this->passengers[$key]['phone_number'];
+        $this->email          = $this->passengers[$key]['email'];
+        $this->round_trip     = $this->passengers[$key]['round_trip'];
+        $this->origin         = $this->passengers[$key]['origin'];
+        $this->destination    = $this->passengers[$key]['destination'];
+        $this->departure_date = $this->passengers[$key]['departure_date'];
+        $this->return_date    = $this->passengers[$key]['return_date'];
+        $this->baggage        = $this->passengers[$key]['baggage'];
+        $this->unitValue      = $this->passengers[$key]['unitValue'];
 
-      $this->key                      = $key;
+        $this->key                      = $key;
     }
 
     public function updatePassenger(){
@@ -187,17 +186,17 @@ class PassengerRequest extends Component
 
     public function mount($savedPassengers, $savedTypeOfCurrency)
     {
-      $this->passengers             = array();
-      $this->lstPurchaseMechanism   = PurchaseMechanism::all();
-      $this->editRF                 = false;
-      if(!is_null($savedPassengers)){
-        $this->editRF = true;
-        $this->savedPassengers = $savedPassengers;
-        $this->setSavedPassengers();
-      }
-      if(!is_null($savedTypeOfCurrency)){
-        $this->precision_currency = $savedTypeOfCurrency == 'peso' ? 0 : 2;
-      }
+        $this->passengers             = array();
+        $this->lstPurchaseMechanism   = PurchaseMechanism::all();
+        $this->editRF                 = false;
+        if(!is_null($savedPassengers)){
+            $this->editRF = true;
+            $this->savedPassengers = $savedPassengers;
+            $this->setSavedPassengers();
+        }
+        if(!is_null($savedTypeOfCurrency)){
+            $this->precision_currency = $savedTypeOfCurrency == 'peso' ? 0 : 2;
+        }
     }
 
     private function setSavedPassengers()
@@ -227,9 +226,10 @@ class PassengerRequest extends Component
         }
     }
 
-    public function searchedPassenger(User $user)
+    #[On('searchedPassenger')]
+    public function searchedPassenger($userId)
     {
-        $this->searchedPassenger = $user;
+        $this->searchedPassenger = User::find($userId);
 
         $this->run = $this->searchedPassenger->id;
         $this->dv = $this->searchedPassenger->dv;
@@ -247,6 +247,7 @@ class PassengerRequest extends Component
         return view('livewire.request-form.passenger.passenger-request', compact('users'));
     }
 
+    #[On('savedTypeOfCurrency')]
     public function savedTypeOfCurrency($typeOfCurrency)
     {
       $this->precision_currency = $typeOfCurrency == 'peso' ? 0 : 2;

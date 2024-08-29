@@ -5,6 +5,7 @@ namespace App\Livewire\Finance\Dte;
 use App\Models\Establishment;
 use App\Models\Finance\Dte;
 use App\Models\Finance\PurchaseOrder\Prefix;
+use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -21,16 +22,15 @@ class Cenabast extends Component
     public $contract_manager_id = null;
     public $without_contract_manager = false;
 
-    protected $listeners = ['userSelected'];
-
     public function search()
     {
         $this->resetPage();
     }
 
-    public function userSelected($user)
+    #[On('userSelected')]
+    public function userSelected($userId)
     {
-        $this->contract_manager_id = $user;
+        $this->contract_manager_id = $userId;
     }
 
     public function setContractManager(Dte $dte) {

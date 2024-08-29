@@ -7,6 +7,7 @@ use App\Models\Finance\Dte;
 use App\Models\Finance\Receptions\Reception;
 use App\Notifications\Finance\DteConfirmation;
 use App\Models\Parameters\Subtitle;
+use Livewire\Attributes\On;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\DtesExport;
 use Livewire\Component;
@@ -16,8 +17,6 @@ use Livewire\WithPagination;
 class IndexDtes extends Component
 {
     use WithPagination;
-
-    protected $listeners = ['setContractManager'];
 
     protected $paginationTheme = 'bootstrap';
 
@@ -377,9 +376,10 @@ class IndexDtes extends Component
         $this->refresh();
     }
 
-    public function setContractManager($contractManager)
+    #[On('setContractManager')]
+    public function setContractManager($userId)
     {
-        $this->contract_manager_id = $contractManager['id'];
+        $this->contract_manager_id = $userId;
     }
 
     public function exportToExcel()

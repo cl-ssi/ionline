@@ -5,12 +5,11 @@ namespace App\Livewire\Finance\FixedFund;
 use App\Models\Finance\FixedFund;
 use App\Models\User;
 use Carbon\Carbon;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class FormFixedFund extends Component
 {
-    protected $listeners = ['userSelected'];
-
     public FixedFund $fixedFund;
 
     protected $rules = [
@@ -25,9 +24,10 @@ class FormFixedFund extends Component
         'fixedFund.res_number' => 'nullable',
     ];
 
-    public function userSelected($user_id)
+    #[On('userSelected')]
+    public function userSelected($userId)
     {
-        $user = User::find($user_id);
+        $user = User::find($userId);
         $this->fixedFund->user_id = $user->id;
         $this->fixedFund->organizational_unit_id = $user->organizational_unit_id;
     }

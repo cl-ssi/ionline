@@ -2,24 +2,14 @@
 
 namespace App\Livewire\PurchasePlan;
 
+use Livewire\Attributes\On;
 use Livewire\Component;
-
 use App\Models\User;
 use App\Models\Parameters\Program;
 use App\Models\PurchasePlan\PurchasePlan;
 use App\Models\PurchasePlan\PurchasePlanItem;
-
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
-use App\Models\Rrhh\Authority;
-// @mirandaljorge TODO: Para que importar Carbon?
-use Carbon\Carbon;
-
-use App\Models\Documents\Approval;
 use App\Models\Parameters\Parameter;
-use App\Models\Rrhh\OrganizationalUnit;
-
-use Illuminate\Support\Facades\Route;
 
 class CreatePurchasePlan extends Component
 {
@@ -39,7 +29,6 @@ class CreatePurchasePlan extends Component
 
     /* Listeners */
     public $searchedUser, $searchedProgram, $items, $deletedItems;
-    protected $listeners = ['searchedUser', 'searchedProgram', 'savedItems', 'deletedItems'];
 
     public $readonly = "readonly";
 
@@ -69,9 +58,9 @@ class CreatePurchasePlan extends Component
         return view('livewire.purchase-plan.create-purchase-plan');
     }
 
-    public function searchedUser(User $user){
-
-        $this->searchedUser = $user;
+    #[On('searchedUser')]
+    public function searchedUser($userId){
+        $this->searchedUser = User::find($userId);
 
         $this->userResponsibleId = $this->searchedUser->id;
         $this->position = $this->searchedUser->position;
@@ -81,20 +70,23 @@ class CreatePurchasePlan extends Component
         $this->organizationalUnit = $this->searchedUser->organizationalUnit->name;
     }
 
+    #[On('searchedProgram')]
     public function searchedProgram(Program $program){
         $this->searchedProgram = $program;
         $this->program_id = $program->id;
         $this->period = $program->period;
     }
 
+    #[On('savedItems')]
     public function savedItems($items)
     {
       $this->items = $items;
     }
 
+    #[On('deletedItems')]
     public function deletedItems($items)
     {
-      $this->deletedItems = $items;
+        $this->deletedItems = $items;
     }
 
     private function setItems($item){

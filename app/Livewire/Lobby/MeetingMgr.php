@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Lobby;
 
+use Livewire\Attributes\On;
 use Livewire\WithPagination;
 use Livewire\Component;
 use App\Models\User;
@@ -31,15 +32,6 @@ class MeetingMgr extends Component
 
     public $userResponsible;
     public $addParticipant;
-    
-
-
-    protected $listeners = [
-        'userSelected',
-        //'addUser' => 'addParticipant',
-        'addParticipant',
-        'userResponsible'
-    ];
 
 
     /**
@@ -69,11 +61,13 @@ class MeetingMgr extends Component
         'meeting.date.required' => 'La fecha desde es requerida',
     ];
 
-    public function userSelected($userSelected)
+    #[On('userSelected')]
+    public function userSelected($userId)
     {
-        $this->meeting->responsible_id = $userSelected;
+        $this->meeting->responsible_id = $userId;
     }
 
+    #[On('addParticipant')]
     public function addParticipant(User $user)
     {
         $this->participants[] = [
@@ -179,8 +173,9 @@ class MeetingMgr extends Component
         $this->resetPage();
     }
 
-    public function userResponsible(User $user_responsible)
+    #[On('userResponsible')]
+    public function userResponsible($userId)
     {
-        $this->responsable_id =  $user_responsible->id;
+        $this->responsable_id =  $userId;
     }
 }

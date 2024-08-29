@@ -66,7 +66,7 @@ class SearchSelectProgram extends Component
 
     public function addSearchedProgram($programId){
         $this->searchedProgram = $programId;
-        $this->dispatch($this->emit_name ?? 'searchedProgram', $this->searchedProgram);
+        $this->dispatch($this->emit_name ?? 'searchedProgram', program: $this->searchedProgram);
     }
 
     public function mount()

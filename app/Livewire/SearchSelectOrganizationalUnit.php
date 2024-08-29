@@ -69,7 +69,7 @@ class SearchSelectOrganizationalUnit extends Component
 
     public function addSearchedOrganizationalUnit($organizationalUnitId){
         $this->searchedOrganizationalUnit = $organizationalUnitId;
-        $this->dispatch($this->emit_name ?? 'searchedOrganizationalUnit', $this->searchedOrganizationalUnit);
+        $this->dispatch($this->emit_name ?? 'searchedOrganizationalUnit', organizationalUnit: $this->searchedOrganizationalUnit);
     }
 
     public function mount()

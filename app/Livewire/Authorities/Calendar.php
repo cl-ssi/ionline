@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Authorities;
 
+use Livewire\Attributes\On;
 use Livewire\Component;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
@@ -9,8 +10,6 @@ use App\Models\Rrhh\OrganizationalUnit;
 use App\Models\Rrhh\Authority;
 use App\Models\Parameters\Holiday;
 use App\Models\Profile\Subrogation;
-
-
 
 class Calendar extends Component
 {
@@ -26,8 +25,6 @@ class Calendar extends Component
     public $position;
     public $decree;
     public $representation_id;
-
-    protected $listeners = ['userSelected'];
 
 
     /** Input selector de mes */
@@ -191,8 +188,9 @@ class Calendar extends Component
         $this->representation_id = null;
     }
 
-    public function userSelected($user_id)
+    #[On('userSelected')]
+    public function userSelected($userId)
     {
-        $this->representation_id = $user_id;
+        $this->representation_id = $userId;
     }
 }

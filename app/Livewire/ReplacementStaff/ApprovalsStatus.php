@@ -2,6 +2,7 @@
 
 namespace App\Livewire\ReplacementStaff;
 
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 use App\Models\Parameters\Parameter;
@@ -25,14 +26,10 @@ class ApprovalsStatus extends Component
     public $selectedOuIds = array();
     public $selectedOuToNotify;
 
-    protected $listeners = ['searchedOu'];
-
     public function render()
     {
-        $subParams = Parameter::
-            select('value')
-            ->whereIn('parameter', ['SubRRHH', 'SDASSI', 'SubSDGA'])
-            ->get()
+        $subParams = Parameter::whereIn('parameter', ['SubRRHH', 'SDASSI', 'SubSDGA'])
+            ->pluck('value')
             ->toArray();
 
         $subs = OrganizationalUnit::whereIn('id', $subParams)->get();
@@ -62,6 +59,7 @@ class ApprovalsStatus extends Component
         // $this->selectedOuIds = null;
     }
 
+    #[On('searchedOu')]
     public function searchedOu(OrganizationalUnit $organizationalUnit)
     {
         $this->selectedOuId = null;

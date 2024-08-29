@@ -2,6 +2,7 @@
 
 namespace App\Livewire\ProfAgenda;
 
+use Livewire\Attributes\On;
 use Livewire\Component;
 use App\Models\ClCommune;
 use App\Models\User;
@@ -19,11 +20,11 @@ class EmployeeData extends Component
     //     dd($this->user_id);
     // }
 
-    protected $listeners = ['loadUserData' => 'loadUserData'];
-
-    public function loadUserData(User $User){
-        $this->user_id = $User->id;
-        $this->dv = $User->dv;
+    #[On('loadUserData')]
+    public function loadUserData($userId){
+        $user = User::find($userId);
+        $this->user_id = $user->id;
+        $this->dv = $user->dv;
         $this->render();
     }
 
