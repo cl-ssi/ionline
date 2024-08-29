@@ -143,13 +143,15 @@ class RequirementReceivers extends Component
             }
         }
 
-        // se agrega para que deje todos los objetos del array del tipo User
+        // $users_array siempre esté inicializado como un array
+        $this->users_array = $this->users_array ?? [];
+
+        // Existencia del índice antes de acceder a él
         foreach($this->users_array as $key => $item){
-            if(!$item instanceof Collection) {
-                if(array_key_exists($key,$this->users_array)){
+            if(!is_null($item) && !$item instanceof Collection) {
+                if(isset($this->users_array[$key])){
                     $this->users_array[$key] = User::find($item['id']);
                 }
-                  
             }
         }
         
@@ -161,38 +163,4 @@ class RequirementReceivers extends Component
         unset($this->users_array[$key]);
         unset($this->enCopia[$key]);
     }
-
-
-    // function stripAccents($str) {
-    //     return strtr(utf8_decode($str), utf8_decode('àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ'), 'aaaaaceeeeiiiinooooouuuuyyAAAAACEEEEIIIINOOOOOUUUUY');
-    // }
-
-    // /**
-    //  * @param array $flatList - a flat list of tree nodes; a node is an array with keys: id, parentID, name.
-    //  */
-    // function buildTree(array $flatList)
-    // {
-    //     $grouped = [];
-    //     foreach ($flatList as $node){
-    //         if(!$node['father_id']) {
-    //             $node['father_id'] = 0;
-    //         }
-    //         $grouped[$node['father_id']][] = $node;
-    //     }
-
-    //     $fnBuilder = function($siblings) use (&$fnBuilder, $grouped) {
-    //         foreach ($siblings as $k => $sibling) {
-    //             $id = $sibling['id'];
-    //             // $this->options[$id] = str_repeat("- ", $sibling['level']).OrganizationalUnit::find($sibling['id'])->establishment->alias.'-'.$sibling['name'];
-    //             $this->options[$id] = str_repeat("- ", $sibling['level']).$sibling['name'];
-    //             if(isset($grouped[$id])) {
-    //                 $sibling['children'] = $fnBuilder($grouped[$id]);
-    //             }
-    //             $siblings[$k] = $sibling;
-    //         }
-    //         return $siblings;
-    //     };
-
-    //     return $fnBuilder($grouped[0]);
-    // }
 }
