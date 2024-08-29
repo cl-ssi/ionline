@@ -14,7 +14,7 @@ class ChangeShiftDayStatus extends Component
 	public $filered="off";
 	// public $id;
     public $actuallyColor;
-    protected $listeners = ['renderShiftDay' => '$refresh','changeColor' =>'setActuallyColor'];
+    protected $listeners = ['renderShiftDay' => '$refresh'];
     private $colors = array(
             1 => "lightblue",
             2 => "#2471a3",
@@ -50,6 +50,8 @@ class ChangeShiftDayStatus extends Component
     {
         // $this->count++;
     }
+
+    #[On('changeColor')]
     public function setActuallyColor($color){
         $this->actuallyColor = $color;
     }
@@ -57,7 +59,7 @@ class ChangeShiftDayStatus extends Component
 
 		// $this->dispatch('clearModal', $this->shiftDay->id);
     	// $this->filered ="on";
-		$this->dispatch('setshiftUserDay', $this->shiftDay->id);
+		$this->dispatch('setshiftUserDay', sUDId: $this->shiftDay->id);
 
 
     	// $this->shiftDay = ShiftUserDay::find($id);

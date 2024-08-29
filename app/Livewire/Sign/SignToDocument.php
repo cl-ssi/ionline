@@ -258,12 +258,17 @@ class SignToDocument extends Component
             /**
              * Ejecuta dispatch, definido en callbackControllerMethods y emit al dispatchEvent
              */
+
+            /*
+            No Se usa
+
             if(isset($this->dispatchEvent) && isset($this->callbackControllerMethods)) {
                 app()->call($this->callbackControllerMethods,
                 json_decode($this->callbackControllerParams, true));
 
                 $this->dispatch($this->dispatchEvent, $this->dispatchParams);
             }
+            */
 
             /**
              * Setea los inputs

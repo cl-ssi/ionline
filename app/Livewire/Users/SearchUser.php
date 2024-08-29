@@ -4,6 +4,7 @@ namespace App\Livewire\Users;
 
 use App\Models\User;
 use Livewire\Component;
+use Livewire\Attributes\On;
 
 class SearchUser extends Component
 {
@@ -18,18 +19,19 @@ class SearchUser extends Component
     public $idsExceptUsers = [];
     public $bt = '5';
 
-    protected $listeners = [
-        'clearSearchUser' => 'clearSearch',
-        'userId',
-        'idsExceptUsers',
-        'render'
-    ];
+    // protected $listeners = [
+    //     'clearSearchUser' => 'clearSearch',
+    //     'userId',
+    //     'idsExceptUsers',
+    //     'render'
+    // ];
 
     public function mount()
     {
         $this->users = collect([]);
     }
 
+    #[On('render')]
     public function render()
     {
         return view('livewire.users.search-user');
@@ -51,10 +53,10 @@ class SearchUser extends Component
                 ->limit(5)
                 ->get();
         }
-        
+
     }
 
-
+    #[On('handleSearchedUser')]
     public function handleSearchedUser($userId)
     {
         $user = User::withTrashed()->find($userId);
@@ -69,7 +71,7 @@ class SearchUser extends Component
 
 
     public function addSearchedUser(User $user)
-    {        
+    {
         $this->showResult = false;
         $this->search = $user->full_name;
         $this->user_id = $user->id;
@@ -78,6 +80,7 @@ class SearchUser extends Component
         $this->dispatch($this->eventName, $this->user_id);
     }
 
+    #[On('clearSearchUser')]
     public function clearSearch($emitEvent = true)
     {
         if($emitEvent)
@@ -94,6 +97,7 @@ class SearchUser extends Component
         $this->user_id = $user_id;
     }
 
+    #[On('idsExceptUsers')]
     public function idsExceptUsers($idsExceptUsers)
     {
         $this->idsExceptUsers = $idsExceptUsers;

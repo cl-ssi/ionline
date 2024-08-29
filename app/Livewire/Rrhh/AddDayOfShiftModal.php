@@ -6,13 +6,15 @@ use Livewire\Component;
 use App\Models\Rrhh\ShiftUser;
 use App\Models\Rrhh\ShiftUserDay;
 
+use Livewire\Attributes\On;
+
 class AddDayOfShiftModal extends Component
-{   
+{
     public $shiftDay;
     public $journalType = "L";
     public $day;
 
-    protected $listeners = ['setAddModalValue' => "setValue"];
+    // protected $listeners = ['setAddModalValue' => "setValue"];
 
     public function render()
     {
@@ -26,7 +28,7 @@ class AddDayOfShiftModal extends Component
 
         // dd($this->journalType);
         $nShiftUserDay = new ShiftUserDay;
-        
+
         $nShiftUserDay->day = $this->day;
         $nShiftUserDay->commentary = "Agregado por necesidad en servicio";
         $nShiftUserDay->status = 3;
@@ -35,8 +37,10 @@ class AddDayOfShiftModal extends Component
         $nShiftUserDay->save();
 
         session()->flash('success', 'Se agregó el dia '.$this->day.' a <b>'.$this->shiftDay->user->name.' '.$this->shiftDay->user->fathers_family.'</b>');
-        return redirect()->route('rrhh.shiftManag.index'); 
+        return redirect()->route('rrhh.shiftManag.index');
     }
+
+    #[On('setAddModalValue')]
     public function setValue($s,$d){
         // dd($d);
         $this->shiftDay = ShiftUser::find($s["id"]);

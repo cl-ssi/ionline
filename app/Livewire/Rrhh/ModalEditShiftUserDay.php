@@ -3,6 +3,7 @@
 namespace App\Livewire\Rrhh;
 
 use Livewire\Component;
+use Livewire\Attributes\On;
 use App\Models\Rrhh\ShiftUserDay;
 use App\Models\User;
 use App\Models\Rrhh\ShiftUser;
@@ -88,7 +89,7 @@ class ModalEditShiftUserDay extends Component
             16  => "lightbrown",
             17  => "lightred",
     );
-    protected $listeners = ['setshiftUserDay','clearModal','ChangeWorkingDay'=>'enableChangeTypeOfWorkingDay','findAvailableOwnDaysToChange'];
+    // protected $listeners = ['ChangeWorkingDay'=>'enableChangeTypeOfWorkingDay','findAvailableOwnDaysToChange'];
     // public function mount(array $headers){
     public function mount(){
 
@@ -101,11 +102,15 @@ class ModalEditShiftUserDay extends Component
 		// $this->dayToToChange = 0;
 		// $this->newWorkingDay = "F";
     }
+
+    #[On('clearModal')]
     public function clearModal(){ // limpia los valores del livewire
     	// unset($this->shiftUserDay);
     	 $this->reset();
 		// $this->dispatch('setshiftUserDay', $this->shiftDay->id);
     }
+
+    #[On('setshiftUserDay')]
 	public function setshiftUserDay($sUDId){
 
     	// $this->reset();//
@@ -338,7 +343,7 @@ class ModalEditShiftUserDay extends Component
 			$this->addHours = "none" ;
 			$this->availableExternalDaysToChangeVisible = "none";
 			$this->availableOwnDaysToChangeVisible  = "visible";
-			$this->dispatch('findAvailableOwnDaysToChange',$this->shiftUserDay->ShiftUser->user_id);
+			$this->dispatch('findAvailableOwnDaysToChange', user_id: $this->shiftUserDay->ShiftUser->user_id);
 
 		}elseif($this->action ==17 ){ // abandono funciones
 			$this->newStatus = 17;
@@ -358,6 +363,8 @@ class ModalEditShiftUserDay extends Component
 			$this->usersSelect ="none";
 		}
 	}
+
+    #[On('findAvailableOwnDaysToChange')]
 	public function findAvailableOwnDaysToChange($user_id){ // funcion que se activa cuando cambio la jornada de un usuario, esta funcion busca todos los dias que tiene asignado ese usuario $user_id, y los almacean en un arreglo para posteriormente mostrarlos en el select
 		$this->dayToToChange2 = 0;
 		$this->availableOwnDaysToChange =  array();
@@ -410,6 +417,7 @@ class ModalEditShiftUserDay extends Component
 
 		// habilitar aqui campos para crear el anuncio de dia de turno disponble
 	}
+    #[On('ChangeWorkingDay')]
 	public function enableChangeTypeOfWorkingDay(){
 
 			$this->changeDayType ="visible";
@@ -807,7 +815,7 @@ class ModalEditShiftUserDay extends Component
 		}
 		$this->emitUp('refreshListOfShifts');
 		// $this->dispatch('renderShiftDay')->self();
-		$this->dispatch('changeColor',["color"=>$this->colors[$this->shiftUserDay->status]])->self();
+		$this->dispatch('changeColor', color:$this->colors[$this->shiftUserDay->status])->self();
 		 $this->reset();
 		    return redirect('/rrhh/shift-management/'.(( Session::has('groupname') && Session::get('groupname') != ""  )?Session::get('groupname'):""));
 	}

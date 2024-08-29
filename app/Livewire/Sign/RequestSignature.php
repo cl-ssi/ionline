@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Livewire\Component;
+use Livewire\Attributes\On;
 use Livewire\WithFileUploads;
 
 class RequestSignature extends Component
@@ -62,13 +63,13 @@ class RequestSignature extends Component
     public $iterationDocument;
     public $iterationAnnex;
 
-    protected $listeners = [
-        'setEmailRecipients',
-        'setEmailDistributions',
-        'addLeftSignature',
-        'addCenterSignature',
-        'addRightSignature',
-    ];
+    // protected $listeners = [
+    //     'setEmailRecipients',
+    //     'setEmailDistributions',
+    //     'addLeftSignature',
+    //     'addCenterSignature',
+    //     'addRightSignature',
+    // ];
 
     public function mount()
     {
@@ -372,16 +373,18 @@ class RequestSignature extends Component
         $this->columnAvailable = collect(['left' => 0, 'center' => 0, 'right' => 0]);
     }
 
+    #[On('setEmailRecipients')]
     public function setEmailRecipients($emails)
     {
         $this->recipients = $emails;
     }
-
+    #[On('setEmailDistributions')]
     public function setEmailDistributions($emails)
     {
         $this->distribution = $emails;
     }
 
+    #[On('addLeftSignature')]
     public function addLeftSignature($userId)
     {
         if(isset($userId) && ! $this->left_signatures->contains($userId))
@@ -400,6 +403,7 @@ class RequestSignature extends Component
         }
     }
 
+    #[On('addCenterSignature')]
     public function addCenterSignature($userId)
     {
         if(isset($userId) && ! $this->center_signatures->contains($userId))
@@ -418,6 +422,7 @@ class RequestSignature extends Component
         }
     }
 
+    #[On('addRightSignature')]
     public function addRightSignature($userId)
     {
         if(isset($userId) && ! $this->right_signatures->contains($userId))

@@ -5,6 +5,7 @@ namespace App\Livewire\Signatures;
 use Livewire\Component;
 use App\Models\Rrhh\OrganizationalUnit;
 use App\Models\User;
+use Livewire\Attributes\On;
 
 class Visators extends Component
 {
@@ -18,7 +19,7 @@ class Visators extends Component
     public $requiredVisator = '';
     public $selectedDocumentType;
 
-    protected $listeners = ['documentTypeChanged' => 'configureDocumentType'];
+    // protected $listeners = ['documentTypeChanged' => 'configureDocumentType'];
 
     public function mount()
     {
@@ -48,7 +49,7 @@ class Visators extends Component
             }
         }
     }
-
+    #[On('documentTypeChanged')]
     public function configureDocumentType($type_id)
     {
         $this->selectedDocumentType = $type_id;

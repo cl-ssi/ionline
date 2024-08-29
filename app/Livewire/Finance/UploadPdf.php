@@ -14,6 +14,7 @@ class UploadPdf extends Component
 {
     use WithFileUploads;
 
+    public $id;
     public $dteId;
     public $pdf;
     public $pdfNoApproval;

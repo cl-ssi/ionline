@@ -4,6 +4,7 @@ namespace App\Livewire\Finance;
 
 use Livewire\Component;
 use Livewire\WithPagination;
+use Livewire\Attributes\On;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use App\Models\Finance\Dte;
@@ -20,9 +21,7 @@ class InstitutionalPayment extends Component
     public $fecha;
     public $receptor;
 
-    protected $listeners = [
-        'pdfRefresh'
-    ];
+    // protected $listeners = ['pdfRefresh'];
 
     public $filters = [
         'id' => null,
@@ -38,7 +37,7 @@ class InstitutionalPayment extends Component
         $this->resetPage();
     }
 
-
+    #[On('pdfRefresh')]
     public function pdfRefresh()
     {
         return [];
