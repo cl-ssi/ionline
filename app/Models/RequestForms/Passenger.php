@@ -106,8 +106,8 @@ class Passenger extends Model implements Auditable
      * @var array
      */
     protected $casts = [
-        'departure_date'  => 'date',
-        'return_date'     => 'date',
+        'departure_date'  => 'datetime',
+        'return_date'     => 'datetime',
         'birthday'        => 'date'
     ];
 }
