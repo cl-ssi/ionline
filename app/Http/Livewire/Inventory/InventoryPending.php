@@ -131,10 +131,13 @@ class InventoryPending extends Component
             ->orderByDesc('id')
             ->get(); 
             
-        foreach ($inventories as $inventory) {
-            $number = $inventory->generateInventoryNumber();
-            $inventory->update(['number' => $number]);
-        }
+            foreach ($inventories as $inventory) {
+                $number = $inventory->generateInventoryNumber();
+                $inventory->update([
+                    'number' => $number,
+                    'status' => 1
+                ]);
+            }
     
         session()->flash('message', 'Códigos generados para todos los inventarios pendientes.');
     }
