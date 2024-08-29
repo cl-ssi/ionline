@@ -141,6 +141,8 @@
                                     <button type="button" 
                                         class="btn btn-outline-success btn-sm" 
                                         data-bs-toggle="modal"
+                                        data-bs-toggle="tooltip"   
+                                        data-bs-placement="top"
                                         title="Subir Certificado"
                                         data-bs-target="#exampleModal-{{ $training->id }}">
                                         <i class="fas fa-file-upload fa-fw"></i>
@@ -153,7 +155,12 @@
                                         'training'  => $training 
                                     ]
                                 )
-                            @endif                            
+                            @endif  
+                            
+                            <span class="{{ ($bootstrap == 'v4') ? 'badge badge-warning' : 'badge text-bg-warning' }} mt-2">
+                                Cargar Certificado Hasta <br>
+                                {{ $training->addBusinessDays($training->activity_date_end_at, 20)->format('d-m-Y') }}
+                            </span>
                         @endif
                     </td>
                 </tr>
