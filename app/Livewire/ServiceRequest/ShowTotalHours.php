@@ -62,7 +62,7 @@ class ShowTotalHours extends Component
             case 'TURNO DE REEMPLAZO':
 
                 if (!$this->fulfillment) {
-                    return view('');
+                    return view('livewire.service-request.show-total-hours');
                 }
 
                 foreach ($this->fulfillment->shiftControls as $keyFulfillment => $shiftControl) {
@@ -716,6 +716,6 @@ class ShowTotalHours extends Component
                 $this->totalAmount = ($totalAmountNight - $totalAmountDayRefund);
                 break;
         }
-        return view('');
+        return view('livewire.service-request.show-total-hours');
     }
 }

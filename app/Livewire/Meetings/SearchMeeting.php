@@ -20,7 +20,7 @@ class SearchMeeting extends Component
             ]);
         }
         if($this->index == 'all'){
-            return view('', [
+            return view('livewire.meetings.search-meeting', [
                 'meetings' => Meeting::latest()
                     ->paginate(50)
             ]);

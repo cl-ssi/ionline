@@ -52,7 +52,7 @@ class AddServices extends Component
         $this->roomServices = $this->room->services;
         $this->roomServicesArray = $this->roomServices->pluck('id')->toArray();
 
-        return view('');
+        return view('livewire.hotel-booking.add-services');
     }
 
     

@@ -6,6 +6,7 @@ use Livewire\Component;
 
 use App\Models\ClCommune;
 use App\Models\ClLocality;
+use Livewire\Attributes\On;
 
 class SelectDestinationLocalities extends Component
 {
@@ -46,9 +47,10 @@ class SelectDestinationLocalities extends Component
     }
 
     /*
-    public function searchedCommune(ClCommune $commune)
+    #[On('searchedCommune')] 
+    public function searchedCommune(ClCommune $comuneId)
     {
-        $this->searchedCommune = $commune;
+        $this->searchedCommune = $comuneId;
         
         $this->localities = ClLocality::
             where('commune_id', $this->searchedCommune->id)

@@ -22,7 +22,7 @@ class AbsencesIndex extends Component
                     ->paginate(50),
             ]);
         }else{
-            return view('', [
+            return view('livewire.welfare.amipass.absences-index', [
                 'records' => Absenteeism::where('rut', auth()->id())->whereYear('finicio',2023)
                     ->paginate(50),
             ]);

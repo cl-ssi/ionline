@@ -20,7 +20,7 @@ class SearchNews extends Component
         }
         if(Route::current()->uri == 'news/own_index'){
             $newsList = News::where('user_id', auth()->id())->paginate(20);
-            return view('', compact('newsList'));
+            return view('livewire.news.search-news', compact('newsList'));
         }
     }
 

@@ -21,7 +21,7 @@ class SearchCommitment extends Component
                 array_push($iAmAuthoritiesIn, $authority->organizational_unit_id);
             }
 
-            return view('', [
+            return view('livewire.meetings.search-commitment', [
                 'commitments' => Commitment::
                     orderBy('created_at', 'DESC')
                     ->where('commitment_user_id', auth()->id())
@@ -31,7 +31,7 @@ class SearchCommitment extends Component
         }
 
         if($this->index == 'all'){
-            return view('', [
+            return view('livewire.meetings.search-commitment', [
                 'commitments' => Commitment::
                     orderBy('created_at', 'DESC')
                     // ->orWhere('commitment_ou_id', auth()->user()->organizationalUnit->id)

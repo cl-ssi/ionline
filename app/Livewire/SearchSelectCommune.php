@@ -72,13 +72,12 @@ class SearchSelectCommune extends Component
             VIATICO: destination_commune_id
         */
 
-        $this->dispatch('searchedCommune', $this->commune->id);
-        $this->dispatch('selectedInputId', $this->selected_id);
+        $this->dispatch('searchedCommune', comuneId: $this->commune->id);
+        $this->dispatch('selectedInputId', comuneId: $this->selected_id);
     }
 
     public function addSearchedCommune($communeId){
         $this->searchedCommune = $communeId;
-        // $this->dispatch($this->emit_name ?? 'searchedOrganizationalUnit', $this->searchedOrganizationalUnit);
     }
 
     public function resetx()

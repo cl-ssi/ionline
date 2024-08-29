@@ -168,7 +168,7 @@ class MonthlyQuotes extends Component
                     if ($item->start_date == null) {
                       return false;
                       // $this->msg = "Falta fecha de inicio";
-                      // return view('');
+                      // return view('livewire.service-request.monthly-quotes');
                     }
                   case 'Renuncia voluntaria':
                   case 'Término de contrato anticipado':
@@ -303,7 +303,7 @@ class MonthlyQuotes extends Component
         }
 
         $this->valores = $string;
-        return view('');
+        return view('livewire.service-request.monthly-quotes');
     }
 
     public function aguinaldopatrias($serviceRequest)

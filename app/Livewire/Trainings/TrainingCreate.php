@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Trainings;
 
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 use App\Models\Trainings\Training;
@@ -64,7 +65,7 @@ class TrainingCreate extends Component
     // Listeners
     public $searchedUser;
     public $disabledUserInputs = "disabled";
-    protected $listeners = ['searchedUser', 'searchedCommune'];
+    protected $listeners = ['searchedUser'];
 
     protected function messages(){
         return [
@@ -558,6 +559,7 @@ class TrainingCreate extends Component
         }
     }
 
+    #[On('searchedCommune')] 
     public function searchedCommune(ClCommune $commune)
     {
         $this->searchedCommune = $commune;

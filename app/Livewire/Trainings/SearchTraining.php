@@ -27,7 +27,7 @@ class SearchTraining extends Component
         }
         else{
             if($this->index == 'own'){
-                return view('', [
+                return view('livewire.trainings.search-training', [
                     'trainings' => Training::latest()
                     ->where('user_training_id', auth()->id())
                     ->orWhere('user_creator_id', auth()->id())
@@ -36,7 +36,7 @@ class SearchTraining extends Component
                 ]);
             }
             if($this->index == 'all'){
-                return view('', [
+                return view('livewire.trainings.search-training', [
                     'trainings' => Training::latest()
                     ->paginate(50)
                 ]);

@@ -165,7 +165,7 @@ class SearchPurchasePlan extends Component
                 ->paginate(150);
         }
 
-        return view('', compact('purchasePlans'));
+        return view('livewire.purchase-plan.search-purchase-plan', compact('purchasePlans'));
     }
 
     public function searchedResponsibleOu(OrganizationalUnit $organizationalUnit){

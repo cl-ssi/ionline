@@ -53,7 +53,7 @@ class SearchJobPositionProfiles extends Component
         }
 
         if($this->index == 'review'){
-            return view('', [
+            return view('livewire.job-position-profile.search-job-position-profiles', [
                 'jobPositionProfiles' => JobPositionProfile::
                     latest()
                     ->Where('status', 'review')
@@ -70,7 +70,7 @@ class SearchJobPositionProfiles extends Component
                 $iam_authorities_in[] = $authority->organizational_unit_id;
             }
 
-            return view('', [
+            return view('livewire.job-position-profile.search-job-position-profiles', [
                 'jobPositionProfiles' => JobPositionProfile::
                     with('organizationalUnit', 'jobPositionProfileSigns', 'jobPositionProfileSigns.organizationalUnit',
                         'user', 'estament', 'area', 'contractualCondition')
@@ -100,7 +100,7 @@ class SearchJobPositionProfiles extends Component
                 ->get()
                 ->toArray();
 
-            return view('', [
+            return view('livewire.job-position-profile.search-job-position-profiles', [
                 'jobPositionProfiles' => JobPositionProfile::
                     with('organizationalUnit', 'jobPositionProfileSigns', 'jobPositionProfileSigns.organizationalUnit',
                     'user', 'estament', 'area', 'contractualCondition')

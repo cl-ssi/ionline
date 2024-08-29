@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Allowances;
 
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 use App\Models\Allowances\Allowance;
@@ -106,8 +107,7 @@ class AllowancesCreate extends Component
     public $bheFileStatus = null;
     public $messageBhe = null;
 
-    protected $listeners = ['emitPosition', 'emitPositionValue', 'userSelected', 'savedDestinations', 'selectedInputId',
-        'searchedCommune'];
+    protected $listeners = ['emitPosition', 'emitPositionValue', 'userSelected', 'savedDestinations'];
     
     protected function messages(){
         return [
@@ -789,9 +789,10 @@ class AllowancesCreate extends Component
 
     /*  Metodos para Destino */
 
-    public function selectedInputId($communeInputId)
+    #[On('selectedInputId')]
+    public function selectedInputId($comuneId)
     {
-        $this->communeInputId = $communeInputId;
+        $this->communeInputId = $comuneId;
         if($this->communeInputId == 'origin_commune_id'){
             $this->originCommune = $this->searchedCommune;
         }
@@ -805,9 +806,10 @@ class AllowancesCreate extends Component
         $this->destinations = $destinations; 
     }
 
-    public function searchedCommune(ClCommune $commune)
+    #[On('searchedCommune')] 
+    public function searchedCommune(ClCommune $comuneId)
     {
-        $this->searchedCommune = $commune;
+        $this->searchedCommune = $comuneId;
         
         $this->localities = ClLocality::
             where('commune_id', $this->searchedCommune->id)

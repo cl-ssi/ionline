@@ -112,7 +112,7 @@ class ChargeIndex extends Component
                 
             }
 
-            return view('');
+            return view('livewire.welfare.amipass.charge-index');
         }
         
     }

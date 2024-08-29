@@ -137,7 +137,7 @@ class FileMgr extends Component
         /**
          * Emit to save the files
          */
-        $this->dispatch('storeFiles', $this->files);
+        $this->dispatch('storeFiles', files: $this->files);
 
         /**
          * Increase the count to reset the input

@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Allowances;
 
+use App\Models\User;
 use Livewire\Component;
 use App\Models\Allowances\Allowance;
 use Livewire\WithPagination;
@@ -65,7 +66,7 @@ class SearchAllowances extends Component
 
         if($this->index == 'contabilidad'){
             if(auth()->user()->hasPermissionTo('Allowances: contabilidad')){
-                return view('', [
+                return view('livewire.allowances.search-allowances', [
                     'allowances' => Allowance::with([
                             'userCreator',
                             'userAllowance',
@@ -97,7 +98,7 @@ class SearchAllowances extends Component
 
         if($this->index == 'archived'){
             if(auth()->user()->hasPermissionTo('Allowances: sirh')){
-                return view('', [
+                return view('livewire.allowances.search-allowances', [
                     'allowances' => Allowance::with([
                             'userCreator',
                             'userAllowance',
@@ -125,7 +126,7 @@ class SearchAllowances extends Component
 
         if($this->index == 'own'){
             //CREADOS, MIOS Y DE MI U.O.
-            return view('', [
+            return view('livewire.allowances.search-allowances', [
                     'allowances' => Allowance::with([
                         'userCreator',
                         'userAllowance',
@@ -152,7 +153,7 @@ class SearchAllowances extends Component
 
         if($this->index == 'all'){
             if(auth()->user()->hasPermissionTo('Allowances: all establishment')){
-                return view('', [
+                return view('livewire.allowances.search-allowances', [
                         'allowances' => Allowance::with([
                             'userCreator',
                             'userAllowance',
@@ -174,7 +175,7 @@ class SearchAllowances extends Component
                 ]);
             }
             if(auth()->user()->hasPermissionTo('Allowances: all')){
-                return view('', [
+                return view('livewire.allowances.search-allowances', [
                     'allowances' => Allowance::with([
                         'userCreator',
                         'userAllowance',
@@ -201,7 +202,7 @@ class SearchAllowances extends Component
 
         //INDEX CON VIÁTICOS PARA FIRMA DE DIRECCIÓN
         if($this->index == 'director'){
-            return view('', [
+            return view('livewire.allowances.search-allowances', [
                 'allowances' => Allowance::
                     with([
                         'userCreator',

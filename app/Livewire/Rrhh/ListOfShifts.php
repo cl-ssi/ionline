@@ -54,7 +54,7 @@ class ListOfShifts extends Component
     public function render()
     {
         return view('livewire.rrhh.list-of-shifts',["statusColors"=>$this->colors,"actuallyShift"=>$this->actuallyShift]);
-        // return view('',[compact($this- >staffInShift,$this->days),'actuallyMonth'=>$this->actuallyMonth,'actuallyYear'=>$this->actuallyYear]);
+        // return view('livewire.rrhh.list-of-shifts',[compact($this- >staffInShift,$this->days),'actuallyMonth'=>$this->actuallyMonth,'actuallyYear'=>$this->actuallyYear]);
     }
 
     public function mount($actuallyShift=null,$staffInShift=null)
