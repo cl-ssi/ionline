@@ -370,7 +370,7 @@
                     class="list-group-item list-group-item-action small" target="_blank">
                     Bienestar - Reserva de cabañas.
                 </a>
-                <a href="https://docs.google.com/document/d/13-mHAWRwlk4IdIzKVLIGycIF0v6WaG6Z/edit?usp=sharing&ouid=114284222513106267165&rtpof=true&sd=true"
+                <a href="https://docs.google.com/document/d/1Mqx_1KxClnLT-7JGbrxD6lfdPWXuNBcH/edit?usp=sharing&ouid=100875180090664492720&rtpof=true&sd=true"
                     class="list-group-item list-group-item-action small" target="_blank">
                     Creación de formularios de requerimiento.
                 </a>
@@ -381,6 +381,14 @@
                 <a href="https://drive.google.com/file/d/1aDgBnJRX4qT9vPejYcZ-4Zn4QUZHrcz0/view?usp=sharing"
                     class="list-group-item list-group-item-action small" target="_blank">
                     Módulo de Farmacias
+                </a>
+                <a href="https://docs.google.com/document/d/1r6zJhOMQYL8JiFlDJL2PtXeyu_bvggKCmLBomKjc24g/edit"
+                    class="list-group-item list-group-item-action small" target="_blank">
+                    Solicitud de Firmas iOnline
+                </a>
+                <a href="https://docs.google.com/document/d/1kW7ujIVKe_MF23HSjxfiHlIUEi7eWk6-QzyzhClrXw0/edit?usp=sharing"
+                    class="list-group-item list-group-item-action small" target="_blank">
+                    Generador de Documentos
                 </a>
             </ul>
 
