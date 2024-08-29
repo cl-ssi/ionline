@@ -119,6 +119,16 @@
                 <td style="text-align: center">{{ $training->other_activity_type }}</td>
             </tr>
             <tr>
+                <th colspan="2" width="50%" style="background-color:#EEEEEE;">Nacional / Internacional</th>
+                <th width="25%" style="background-color:#EEEEEE;">Comuna</th>
+                <th width="25%" style="background-color:#EEEEEE;">Viático</th>
+            </tr>
+            <tr>
+                <td colspan="2" style="text-align: center">{{ $training->ActivityInValue }}</td>
+                <td style="text-align: center">{{ ($training->ClCommune) ? $training->ClCommune->name : null }}</td>
+                <td style="text-align: center">{{ $training->AllowanceValue }}</td>
+            </tr>
+            <tr>
                 <th colspan="2" width="50%" style="background-color:#EEEEEE;">Modalidad de aprendizaje</th>
                 <th width="25%" style="background-color:#EEEEEE;">Modalidad Online</th>
                 <th width="25%" style="background-color:#EEEEEE;">Actividad Programada</th>
@@ -159,7 +169,7 @@
         </tbody>
     </table>
 
-    <h4 class="mt-3"><b>Aprobaciones.</b></h4>
+    <h4 class="mt-3"><b>III. Aprobaciones.</b></h4>
     @php
         $width = 100 / $training->approvals->count();
     @endphp

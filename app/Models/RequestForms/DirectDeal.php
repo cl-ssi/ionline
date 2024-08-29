@@ -22,8 +22,13 @@ class DirectDeal extends Model implements Auditable
         'purchase_type_id' ,'description', 'is_lower_amount', 'resol_direct_deal', 'resol_contract', 'guarantee_ticket', 'guarantee_ticket_exp_date', 'supplier_id'
     ];
 
-    public $dates = [
-        'guarantee_ticket_exp_date'
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'guarantee_ticket_exp_date' => 'date'
     ];
 
     public function purchaseType()

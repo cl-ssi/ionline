@@ -29,8 +29,17 @@ class ImmediatePurchase extends Model implements Auditable
         'request_form_id'
     ];
 
-    public $dates = [
-        'po_date', 'po_sent_date', 'po_accepted_date', 'po_with_confirmed_receipt_date', 'estimated_delivery_date'
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'po_date'                           => 'date', 
+        'po_sent_date'                      => 'date', 
+        'po_accepted_date'                  => 'date', 
+        'po_with_confirmed_receipt_date'    => 'date', 
+        'estimated_delivery_date'           => 'date'
     ];
 
     protected $table = 'arq_immediate_purchases';

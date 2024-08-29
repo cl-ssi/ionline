@@ -24,8 +24,24 @@ class Tender extends Model implements Auditable
         'opening_act_date', 'pub_date', 'grant_date', 'estimated_grant_date', 'field_visit_date', 'n_suppliers'
     ];
 
-    public $dates = [
-        'start_date', 'guarantee_ticket_exp_date', 'creation_date', 'closing_date', 'initial_date', 'final_date', 'pub_answers_date', 'opening_act_date', 'pub_date', 'estimated_grant_date', 'grant_date', 'field_visit_date'
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'start_date'                => 'date',
+        'guarantee_ticket_exp_date' => 'date',
+        'creation_date'             => 'datetime',
+        'closing_date'              => 'datetime',
+        'initial_date'              => 'datetime', 
+        'final_date'                => 'datetime', 
+        'pub_answers_date'          => 'datetime',
+        'opening_act_date'          => 'datetime', 
+        'pub_date'                  => 'datetime', 
+        'estimated_grant_date'      => 'datetime', 
+        'grant_date'                => 'datetime', 
+        'field_visit_date'          => 'datetime'
     ];
 
     public function purchaseType()

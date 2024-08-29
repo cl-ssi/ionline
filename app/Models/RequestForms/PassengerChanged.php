@@ -85,5 +85,14 @@ class PassengerChanged extends Model
 
   public $table = "arq_passengers_changed";
 
-  public $dates = ['departure_date', 'return_date', 'birthday'];
+  /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+      'departure_date'  => 'date', 
+      'return_date'     => 'datetime', 
+      'birthday'        => 'datetime'
+  ];
 }
