@@ -100,5 +100,16 @@ class Passenger extends Model implements Auditable
 
     public $table = "arq_passengers";
 
-    public $dates = ['departure_date', 'return_date', 'birthday'];
+    // public $dates = ['departure_date', 'return_date', 'birthday'];
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+      'departure_date'  => 'date',
+      'return_date'     => 'date',
+      'birthday'        => 'date'
+  ];
 }
