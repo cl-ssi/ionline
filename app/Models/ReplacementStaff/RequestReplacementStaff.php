@@ -204,7 +204,11 @@ class RequestReplacementStaff extends Model implements Auditable
     public function requestChilds(): HasMany
     {
         return $this->hasMany(RequestReplacementStaff::class, 'request_id');
-        // return $this->hasMany('App\Models\ReplacementStaff\RequestReplacementStaff', 'request_id');
+    }
+
+    public function requestFather(): BelongsTo 
+    {
+        return $this->belongsTo(RequestReplacementStaff::class, 'request_id');
     }
 
     /**
