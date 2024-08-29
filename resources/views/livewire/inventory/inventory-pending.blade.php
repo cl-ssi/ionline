@@ -9,6 +9,12 @@
         {{ $establishment->name }}: Pendientes de Inventariar
     </h4>
 
+    <div class="mb-3">
+        <button class="btn btn-success" wire:click="generateCodesForAll">
+            Generar Código de Inventario Masivamente
+        </button>
+    </div>
+
     <div class="row g-2 mb-3">
         <fieldset class="form-group col-md-3">
             <label for="type-reception-id">Tipo de Ingreso</label>
