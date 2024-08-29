@@ -144,6 +144,4 @@ class InventoryPending extends Component
     
         session()->flash('message', 'Códigos generados para todos los inventarios pendientes.');
     }
-    
-
 }
