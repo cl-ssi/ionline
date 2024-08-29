@@ -135,7 +135,10 @@ class InventoryPending extends Component
 
         foreach ($inventories as $inventory) {
             $number = $inventory->generateInventoryNumber();
-            $inventory->update(['number' => $number]);
+            $inventory->update([
+                'number' => $number,
+                'status' => 1,
+            ]);
         }
 
         session()->flash('message', 'Códigos generados para todos los inventarios pendientes.');
