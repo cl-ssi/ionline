@@ -84,9 +84,10 @@ class InventoryPending extends Component
         return $inventories;
     }
 
+
     public function generateCodesForAll()
     {
-
+        
         $inventories = Inventory::query()
             ->with([
                 'control',
@@ -95,52 +96,51 @@ class InventoryPending extends Component
                 'product.product',
                 'control.typeReception',
             ])
-            ->when($this->type_reception_id != '', function ($query) {
+            ->when($this->type_reception_id != '', function($query) {
                 $query->whereHas('control', function ($query) {
                     $query->whereTypeReceptionId($this->type_reception_id);
                 });
             })
             ->when($this->search, function ($query) {
                 $search = "%$this->search%";
-                $query->when($this->type_reception_id == TypeReception::receiving(), function ($query) use ($search) {
-                    $query->whereHas('control', function ($query) use ($search) {
-                        $query->whereHas('origin', function ($query) use ($search) {
+                $query->when($this->type_reception_id == TypeReception::receiving(), function($query) use($search) {
+                    $query->whereHas('control', function($query) use($search) {
+                        $query->whereHas('origin', function($query) use($search) {
                             $query->where('name', 'like', $search);
                         });
                     });
                 })
-                    ->when($this->type_reception_id == TypeReception::purchaseOrder(), function ($query) use ($search) {
-                        $query->whereHas('control', function ($query) use ($search) {
-                            $query->where('po_code', 'like', $search);
-                        });
-                    })
-                    ->orWhereHas('place', function ($query) use ($search) {
-                        $query->where('name', 'like', $search);
-                    })
-                    ->orWhereHas('place', function ($query) use ($search) {
-                        $query->where('architectural_design_code', 'like', $search);
-                    })
-                    ->orWhereHas('product', function ($query) use ($search) {
-                        $query->where('name', 'like', $search)
-                            ->orWhereHas('product', function ($query) use ($search) {
-                                $query->where('name', 'like', $search)
-                                    ->orWhere('code', 'like', $search);
-                            });
+                ->when($this->type_reception_id == TypeReception::purchaseOrder(), function($query) use($search) {
+                    $query->whereHas('control', function($query) use($search) {
+                        $query->where('po_code', 'like', $search);
                     });
+                })
+                ->orWhereHas('place', function ($query) use ($search) {
+                    $query->where('name', 'like', $search);
+                })
+                ->orWhereHas('place', function ($query) use ($search) {
+                    $query->where('architectural_design_code', 'like', $search); 
+                })
+                ->orWhereHas('product', function ($query) use($search) {
+                    $query->where('name', 'like', $search)
+                        ->orWhereHas('product', function($query) use($search) {
+                            $query->where('name', 'like', $search)
+                                ->orWhere('code', 'like', $search);
+                        });
+                });
             })
             ->whereEstablishmentId($this->establishment->id)
             ->whereNull('number')
             ->orderByDesc('id')
-            ->get();
-
+            ->get(); 
+            
         foreach ($inventories as $inventory) {
             $number = $inventory->generateInventoryNumber();
-            $inventory->update([
-                'number' => $number,
-                'status' => 1,
-            ]);
+            $inventory->update(['number' => $number]);
         }
-
+    
         session()->flash('message', 'Códigos generados para todos los inventarios pendientes.');
     }
+    
+
 }
