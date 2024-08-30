@@ -33,12 +33,13 @@ class PositionFormEdit extends Component
         $this->editMode = true;
         $this->positionEdit = Position::findorFail($id);
         $this->position_id = $id;
-        $this->dispatch('setPosition', $this->positionEdit);
+        $this->dispatch('setPosition', position: $this->positionEdit);
     }
 
     public function updatedcreateNewPosition($value)
     {
-        $this->dispatch('setIsDisabled', $value == 'no' ? 'disabled' : '');
+        $parameter = $value == 'no' ? 'disabled' : '';
+        $this->dispatch('setIsDisabled', value: $parameter);
     }
 
     public function mount()

@@ -12,6 +12,7 @@ use App\Services\PurchaseOrderService;
 use App\Models\User;
 use App\Notifications\InventoryNewItem;
 use Illuminate\Support\Facades\Auth;
+use Livewire\Attributes\On; 
 use Livewire\Component;
 use App\Models\Unspsc\Product as UnspscProduct;
 
@@ -52,12 +53,12 @@ class RegisterInventory extends Component
     public $collapse;
     public $unspscProduct;
 
-    protected $listeners = [
-        'myUserUsingId',
-        'myUserResponsibleId',
-        'myPlaceId',
-        'myProductId',
-    ];
+    // protected $listeners = [
+    //     // 'myUserUsingId',
+    //     // 'myUserResponsibleId',
+    //     // 'myPlaceId',
+    //     // 'myProductId',
+    // ];
 
     public function mount(Establishment $establishment)
     {
@@ -92,7 +93,7 @@ class RegisterInventory extends Component
 
     public function updatedSearchProduct()
     {
-        $this->dispatch('searchProduct', $this->search_product);
+        $this->dispatch('searchProduct', value: $this->search_product);
     }
 
     public function updatedType($type)
@@ -122,21 +123,25 @@ class RegisterInventory extends Component
         }
     }
 
+    #[On('myUserUsingId')] 
     public function myUserUsingId($value)
     {
         $this->user_using_id = $value;
     }
 
+    #[On('myUserResponsibleId')] 
     public function myUserResponsibleId($value)
     {
         $this->user_responsible_id = $value;
     }
 
+    #[On('myPlaceId')] 
     public function myPlaceId($value)
     {
         $this->place_id = $value;
     }
 
+    #[On('myProductId')] 
     public function myProductId($value)
     {
         $this->unspsc_product_id = $value;
@@ -218,7 +223,7 @@ class RegisterInventory extends Component
         $this->dispatch('clearSearchUser');
         $this->dispatch('clearSearchPlace');
         $this->dispatch('onClearSearch');
-        $this->dispatch('productId', null);
+        $this->dispatch('productId', value: null);
 
         $this->reset(['po_search']);
         $this->clearInputProduct();

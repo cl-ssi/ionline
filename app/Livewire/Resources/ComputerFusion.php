@@ -5,6 +5,7 @@ namespace App\Livewire\Resources;
 use App\Http\Requests\Resources\ComputerFusionRequest;
 use App\Models\Inv\Inventory;
 use App\Models\Resources\Computer;
+use Livewire\Attributes\On; 
 use Livewire\Component;
 
 class ComputerFusion extends Component
@@ -38,9 +39,9 @@ class ComputerFusion extends Component
     public $windows_serial;
     public $labels;
 
-    protected $listeners = [
-        'myLabelId'
-    ];
+    // protected $listeners = [
+    //     // 'myLabelId'
+    // ];
 
     public function mount(Computer $computer, Inventory $inventory)
     {
@@ -119,6 +120,7 @@ class ComputerFusion extends Component
         return redirect()->route($route);
     }
 
+    #[On('myLabelId')] 
     public function myLabelId($values)
     {
         $this->labels = $values;

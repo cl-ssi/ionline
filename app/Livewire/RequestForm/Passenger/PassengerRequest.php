@@ -105,7 +105,7 @@ class PassengerRequest extends Component
         $this->totalValue();
         $this->cleanPassenger();
 
-        $this->dispatch('savedPassengers', $this->passengers);
+        $this->dispatch('savedPassengers', passengers: $this->passengers);
     }
 
     public function cleanPassenger()
@@ -127,7 +127,7 @@ class PassengerRequest extends Component
         unset($this->passengers[$key]);
         $this->totalValue();
         $this->cleanPassenger();
-        $this->dispatch('savedPassengers', $this->passengers);
+        $this->dispatch('savedPassengers', passengers: $this->passengers);
     }
 
     public function editPassenger($key){
@@ -173,7 +173,7 @@ class PassengerRequest extends Component
         $this->passengers[$this->key]['unitValue']      = $this->unitValue;
         $this->totalValue();
         $this->cleanPassenger();
-        $this->dispatch('savedPassengers', $this->passengers);
+        $this->dispatch('savedPassengers', passengers: $this->passengers);
     }
 
     public function totalValue()

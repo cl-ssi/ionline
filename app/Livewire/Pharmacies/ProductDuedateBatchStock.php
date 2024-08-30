@@ -104,12 +104,7 @@ class ProductDuedateBatchStock extends Component
 
     public function addSearchedProduct($productId){
         $this->searchedProduct= $productId;
-        $this->dispatch('searchedProduct', $this->searchedProduct);
     }
-
-
-
-
 
     public function mount()
     {

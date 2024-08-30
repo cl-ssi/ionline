@@ -4,6 +4,7 @@ namespace App\Livewire\Places;
 
 use App\Models\Establishment;
 use App\Models\Parameters\Place;
+use Livewire\Attributes\On; 
 use Livewire\Component;
 
 class FindPlace extends Component
@@ -20,9 +21,9 @@ class FindPlace extends Component
     public $selectedPlace;
     public $key = null;
 
-    protected $listeners = [
-        'clearSearchPlace' => 'clearSearch',
-    ];
+    // protected $listeners = [
+    //     // 'clearSearchPlace' => 'clearSearch',
+    // ];
 
     public function mount(Establishment $establishment)
     {
@@ -65,12 +66,13 @@ class FindPlace extends Component
         $this->places = collect([]);
         $this->selectedPlace = $place;
 
-        $this->dispatch('myPlaceId', $this->place_id, $this->key);
+        $this->dispatch('myPlaceId', value: $this->place_id, key: $this->key);
     }
 
+    #[On('clearSearchPlace')] 
     public function clearSearch()
     {
-        $this->dispatch('myPlaceId', null, null);
+        $this->dispatch('myPlaceId', value: null, key: null);
 
         $this->showResult = false;
         $this->places = collect([]);

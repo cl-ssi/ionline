@@ -7,6 +7,7 @@ use App\Models\Inv\Inventory;
 use App\Models\Inv\InventoryMovement;
 use App\Models\Parameters\Place;
 use Livewire\WithPagination;
+use Livewire\Attributes\On; 
 
 class UpdatePma extends Component
 {
@@ -31,9 +32,10 @@ class UpdatePma extends Component
     }
 
     protected $listeners = [
-        'myPlaceId',
+        // 'myPlaceId',
     ];
 
+    #[On('myPlaceId')] 
     public function myPlaceId($value, $key)
     {
         if ($key === 'old') {

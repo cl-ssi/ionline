@@ -3,6 +3,7 @@
 namespace App\Livewire\ProfAgenda;
 
 use Livewire\Component;
+use Livewire\Attributes\On;
 
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
@@ -14,24 +15,13 @@ class ProposalCalendar extends Component
     public $events = '';
     public $proposal;
 
-    protected $listeners = ['update_calendar' => 'update_calendar'];
+    // protected $listeners = ['update_calendar' => 'update_calendar'];
  
+    #[On('update_calendar')] 
     public function update_calendar(Proposal $proposal)
     {
-        // dd("");
-        // $this->proposal = $proposal;
-        // $this->proposal->refresh();
-        // $this->proposal->refresh();
-        // $this->events;
-        // $this->events = '';
-        // $this->dispatch('refreshCalendar');
-        // $this->mount();
         $this->render();
     }
-
-    // public function mount(){
-        
-    // }
 
     public function render()
     {

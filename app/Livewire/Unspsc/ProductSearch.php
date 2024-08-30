@@ -3,6 +3,7 @@
 namespace App\Livewire\Unspsc;
 
 use App\Services\UnspscService;
+use Livewire\Attributes\On; 
 use Livewire\Component;
 
 class ProductSearch extends Component
@@ -13,11 +14,11 @@ class ProductSearch extends Component
     public $showCode = false;
     public $smallInput = false;
 
-    protected $listeners = [
-        'searchProduct',
-        'productId',
-        'onClearSearch',
-    ];
+    // protected $listeners = [
+    //     // 'searchProduct',
+    //     // 'productId',
+    //     // 'onClearSearch',
+    // ];
 
     public function mount()
     {
@@ -29,16 +30,19 @@ class ProductSearch extends Component
         return view('livewire.unspsc.product-search');
     }
 
+    #[On('onClearSearch')] 
     public function onClearSearch()
     {
         $this->results = collect([]);
     }
 
+    #[On('productId')] 
     public function productId($value)
     {
         $this->product_id = $value;
     }
 
+    #[On('searchProduct')] 
     public function searchProduct($value)
     {
         $this->search = $value;
@@ -51,6 +55,7 @@ class ProductSearch extends Component
         $this->results = $results;
     }
 
+    #[On('updatedProductId')] 
     public function updatedProductId($value)
     {
         $this->dispatch('myProductId', $value);

@@ -120,7 +120,7 @@ class InventoryEdit extends Component
             $this->data_preview['control']['store'] = isset($this->oldItemInventory->control) ? $this->oldItemInventory->control->store : null;
             $this->data_preview['control']['isConfirmed'] = isset($this->oldItemInventory->control) ? $this->oldItemInventory->control->isConfirmed() : false;
 
-            $this->dispatch('updateDataPreview', $this->data_preview);
+            $this->dispatch('updateDataPreview', data_preview: $this->data_preview);
         }
         else
         {

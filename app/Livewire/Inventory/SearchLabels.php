@@ -67,7 +67,7 @@ class SearchLabels extends Component
         $this->labelsId = $this->labelsId->unique();
         $this->selectedLabels = InventoryLabel::whereIn('id', $this->labelsId)->get();
         $this->foundLabels = collect([]);
-        $this->dispatch($this->eventName, $this->labelsId);
+        $this->dispatch($this->eventName, values: $this->labelsId);
     }
 
     public function clearSearch()
@@ -80,7 +80,7 @@ class SearchLabels extends Component
     public function deleteLabel($index)
     {
         $this->labelsId = $this->labelsId->forget($index)->values();
-        $this->dispatch($this->eventName, $this->labelsId);
+        $this->dispatch($this->eventName, values: $this->labelsId);
         $this->selectedLabels = InventoryLabel::whereIn('id', $this->labelsId)->get();
     }
 }

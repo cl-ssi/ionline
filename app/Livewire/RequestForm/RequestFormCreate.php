@@ -604,7 +604,7 @@ class RequestFormCreate extends Component
         }
 
         public function updatedTypeOfCurrency($value){
-            $this->dispatch('savedTypeOfCurrency', $value);
+            $this->dispatch('savedTypeOfCurrency', typeOfCurrency: $value);
         }
 
         #[On('searchedContractManager')]

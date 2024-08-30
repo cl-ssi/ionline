@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\Inv\InventoryMovement;
 use App\Models\Parameters\Place;
 use Livewire\WithPagination;
+use Livewire\Attributes\On; 
 use Illuminate\Database\Eloquent\Builder;
 
 
@@ -33,7 +34,7 @@ class Transfer extends Component
 
 
     protected $listeners = [
-        'myUserResponsibleId',
+        // 'myUserResponsibleId',
         'myNewUserResponsibleId',
         'myOldUserResponsibleId',
         'myUserUsingId',
@@ -45,7 +46,7 @@ class Transfer extends Component
         $this->old_user_responsible_id = $value;
     }
     
-    
+    #[On('myUserResponsibleId')] 
     public function myUserResponsibleId($value)
     {
         $this->user_responsible_id = $value;

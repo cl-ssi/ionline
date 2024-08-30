@@ -2,6 +2,7 @@
 
 namespace App\Livewire\ReplacementStaff;
 
+use Livewire\Attributes\On; 
 use Livewire\Component;
 use App\Models\ReplacementStaff\LegalQualityManage;
 use App\Models\ReplacementStaff\FundamentLegalQuality;
@@ -49,7 +50,7 @@ class ShowLegalQualityRequest extends Component
     public $editModePosition = false;
     public $isDisabledDetailFundament = '';
 
-    protected $listeners = ['setPosition', 'setIsDisabled'];
+    // protected $listeners = ['setPosition', 'setIsDisabled'];
 
     public $disabledNameToReplace = ''; 
 
@@ -205,6 +206,7 @@ class ShowLegalQualityRequest extends Component
             }
     }
 
+    #[On('setPosition')] 
     public function setPosition($position)
     {
         $this->isDisabled = '';
@@ -215,6 +217,7 @@ class ShowLegalQualityRequest extends Component
         $this->setInputsRequestReplacementStaff();
     }
 
+    #[On('setIsDisabled')] 
     public function setIsDisabled($value)
     {
         $this->isDisabled = $value;
