@@ -19,13 +19,6 @@ class SearchUser extends Component
     public $idsExceptUsers = [];
     public $bt = '5';
 
-    // protected $listeners = [
-    //     'clearSearchUser' => 'clearSearch',
-    //     'userId',
-    //     'idsExceptUsers',
-    //     'render'
-    // ];
-
     public function mount()
     {
         $this->users = collect([]);
