@@ -4,7 +4,6 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use Livewire\Attributes\On; 
-
 use App\Models\Rrhh\OrganizationalUnit;
 use App\Models\Rrhh\Authority;
 use App\Models\User;

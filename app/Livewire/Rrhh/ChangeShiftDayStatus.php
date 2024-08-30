@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Rrhh;
 
+use Livewire\Attributes\On;
 use Livewire\Component;
 use App\Models\Rrhh\ShiftUserDay;
 

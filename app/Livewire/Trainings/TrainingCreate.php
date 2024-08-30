@@ -4,22 +4,18 @@ namespace App\Livewire\Trainings;
 
 use Livewire\Attributes\On;
 use Livewire\Component;
-
 use App\Models\Trainings\Training;
 use App\Models\Parameters\Estament;
 use App\Models\Parameters\ContractualCondition;
 use App\Models\User;
 use App\Models\Trainings\StrategicAxes;
 use App\Models\Trainings\TrainingCost;
-
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
-
 use Livewire\WithFileUploads;
 use App\Models\UserExternal;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
-
 use App\Models\Documents\Approval;
 use App\Models\Parameters\Parameter;
 use App\Models\Establishment;

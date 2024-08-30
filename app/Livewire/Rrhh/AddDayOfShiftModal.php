@@ -5,7 +5,6 @@ namespace App\Livewire\Rrhh;
 use Livewire\Component;
 use App\Models\Rrhh\ShiftUser;
 use App\Models\Rrhh\ShiftUserDay;
-
 use Livewire\Attributes\On;
 
 class AddDayOfShiftModal extends Component

@@ -6,13 +6,11 @@ use App\Models\Welfare\Amipass\Charge;
 use App\Models\Welfare\Amipass\NewCharge;
 use App\Models\Welfare\Amipass\Regularization;
 use App\Models\User;
-
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use App\Helpers\DateHelper;
 use App\Models\Rrhh\AbsenteeismType;
 use App\Models\Parameters\Holiday;
-
 use Livewire\Attributes\On;
 use Livewire\Component;
 

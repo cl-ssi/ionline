@@ -4,10 +4,8 @@ namespace App\Livewire\Meetings;
 
 use Livewire\Attributes\On;
 use Livewire\Component;
-
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
-
 use App\Models\Meetings\Meeting;
 use App\Models\Meetings\Grouping;
 use App\Models\Meetings\Commitment;
@@ -16,9 +14,7 @@ use App\Models\Rrhh\OrganizationalUnit;
 use App\Models\Rrhh\Authority;
 use App\Models\Requirements\Requirement;
 use App\Models\Requirements\Event;
-
 use App\Notifications\Requirements\NewSgr;
-
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Storage;
 

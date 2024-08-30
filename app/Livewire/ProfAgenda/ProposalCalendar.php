@@ -4,7 +4,6 @@ namespace App\Livewire\ProfAgenda;
 
 use Livewire\Component;
 use Livewire\Attributes\On;
-
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 

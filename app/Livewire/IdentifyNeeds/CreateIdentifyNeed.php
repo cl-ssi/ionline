@@ -2,8 +2,8 @@
 
 namespace App\Livewire\IdentifyNeeds;
 
+use Livewire\Attributes\On;
 use Livewire\Component;
-
 use App\Models\IdentifyNeeds\IdentifyNeed;
 use App\Models\IdentifyNeeds\LearningGoal;
 
@@ -184,13 +184,13 @@ class CreateIdentifyNeed extends Component
         }
     }
 
-    /*
-    #[On('learningGoalsDescriptions')]
-    public function learningGoalsDescriptions($learningGoalsDescriptions)
-    {
-        $this->learningGoalsDescriptions = $learningGoalsDescriptions;
-    }
-    */
+
+    // #[On('learningGoalsDescriptions')]
+    // public function learningGoalsDescriptions($learningGoalsDescriptions)
+    // {
+    //     $this->learningGoalsDescriptions = $learningGoalsDescriptions;
+    // }
+    
 
     /* AGREGAR, ELIMINAR OBJETIVOS DE APRENDIZAJES */
 
