@@ -14,8 +14,6 @@ class ProposalCalendar extends Component
 {
     public $events = '';
     public $proposal;
-
-    // protected $listeners = ['update_calendar' => 'update_calendar'];
  
     #[On('update_calendar')] 
     public function update_calendar(Proposal $proposal)

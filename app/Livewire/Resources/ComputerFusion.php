@@ -39,10 +39,6 @@ class ComputerFusion extends Component
     public $windows_serial;
     public $labels;
 
-    // protected $listeners = [
-    //     // 'myLabelId'
-    // ];
-
     public function mount(Computer $computer, Inventory $inventory)
     {
         $this->number_inventory = $inventory->number;

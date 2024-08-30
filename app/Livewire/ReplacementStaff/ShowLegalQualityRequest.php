@@ -50,8 +50,6 @@ class ShowLegalQualityRequest extends Component
     public $editModePosition = false;
     public $isDisabledDetailFundament = '';
 
-    // protected $listeners = ['setPosition', 'setIsDisabled'];
-
     public $disabledNameToReplace = ''; 
 
     public function setInputsRequestReplacementStaff()

@@ -6,6 +6,7 @@ use App\Http\Requests\Resources\ComputerCreateRequest;
 use App\Models\Inv\Inventory;
 use App\Models\Resources\Computer;
 use Livewire\Component;
+use Livewire\Attributes\On; 
 
 class ComputerCreate extends Component
 {
@@ -36,10 +37,6 @@ class ComputerCreate extends Component
     public $office_serial;
     public $windows_serial;
     public $labels;
-
-    protected $listeners = [
-        'myLabelId'
-    ];
 
     public function mount(Inventory $inventory)
     {
@@ -90,6 +87,7 @@ class ComputerCreate extends Component
         return redirect()->route('resources.tic');
     }
 
+    #[On('myLabelId')] 
     public function myLabelId($values)
     {
         $this->labels = $values;

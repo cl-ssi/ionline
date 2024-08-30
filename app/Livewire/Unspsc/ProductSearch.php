@@ -52,6 +52,6 @@ class ProductSearch extends Component
     #[On('updatedProductId')] 
     public function updatedProductId($value)
     {
-        $this->dispatch('myProductId', $value);
+        $this->dispatch('myProductId', value: $value);
     }
 }
