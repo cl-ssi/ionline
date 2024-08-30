@@ -2,6 +2,7 @@
 
 namespace App\Livewire\ProfAgenda;
 
+use Livewire\Attributes\On; 
 use Livewire\Component;
 use App\Models\ClCommune;
 use App\Models\ProfAgenda\ExternalUser;
@@ -15,8 +16,7 @@ class ExternalEmployeeData extends Component
     public $message;
     public $flag_more_than_3_faults = false;
 
-    protected $listeners = ['loadexternatlUserData' => 'loadexternalUserData'];
-
+    #[On('loadexternatlUserData')] 
     public function loadexternalUserData(ExternalUser $externalUser){
         $this->externaluser_id = $externalUser->id;
         $this->dv = $externalUser->dv;

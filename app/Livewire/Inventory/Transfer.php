@@ -15,7 +15,6 @@ use Illuminate\Database\Eloquent\Builder;
 
 class Transfer extends Component
 {
-
     use WithPagination;
 	protected $paginationTheme = 'bootstrap';
     public $inventory;
@@ -30,17 +29,8 @@ class Transfer extends Component
     public $selectedInventories = [];
     public $selectAllText = 'Seleccionar todos';
     public $searchTerm = '';
-    
 
-
-    protected $listeners = [
-        // 'myUserResponsibleId',
-        'myNewUserResponsibleId',
-        'myOldUserResponsibleId',
-        'myUserUsingId',
-        // 'myPlaceId',
-    ];
-
+    #[On('myOldUserResponsibleId')] 
     public function myOldUserResponsibleId($value)
     {        
         $this->old_user_responsible_id = $value;
@@ -52,12 +42,13 @@ class Transfer extends Component
         $this->user_responsible_id = $value;
     }
 
-
+    #[On('myNewUserResponsibleId')] 
     public function myNewUserResponsibleId($value)
     {
         $this->new_user_responsible_id = $value;
     }
 
+    #[On('myUserUsingId')] 
     public function myUserUsingId($value)
     {
         $this->user_using_id = $value;

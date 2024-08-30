@@ -11,11 +11,6 @@ class MovementIndex extends Component
 
     public $data_preview;
 
-    // protected $listeners = [
-    //     'updateMovementIndex' => 'onUpdateMovementIndex'
-    //     // 'updateDataPreview'
-    // ];
-
     public function render()
     {
         return view('livewire.inventory.movement-index');

@@ -4,14 +4,11 @@ namespace App\Livewire\Inventory;
 
 use App\Models\Inv\InventoryMovement;
 use Livewire\Component;
+use Livewire\Attributes\On; 
 
 class UpdateMovement extends Component
 {
     public $inventory;
-
-    protected $listeners = [
-        'updateMovement' => 'onUpdateMovement'
-    ];
 
     public function render()
     {
@@ -36,6 +33,7 @@ class UpdateMovement extends Component
         $this->onUpdateMovement();
     }
 
+    #[On('updateMovement')] 
     public function onUpdateMovement()
     {
         $this->inventory->refresh();

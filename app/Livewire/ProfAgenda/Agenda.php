@@ -3,7 +3,7 @@
 namespace App\Livewire\ProfAgenda;
 
 use Livewire\Component;
-
+use Livewire\Attributes\On; 
 use App\Models\ProfAgenda\OpenHour;
 use App\Models\User;
 use App\Models\Parameters\Holiday;
@@ -13,12 +13,9 @@ class Agenda extends Component
     public $profession_id;
     public $profesional_id;
     public $user_id;
-    
     public $events = '';
 
-    // public $openHours_id;
-    protected $listeners = ['getOpenHoursId'];
-
+    #[On('getOpenHoursId')] 
     public function getOpenHoursId($openHours_id)
     {
         // $this->openHours_id = $openHours_id;

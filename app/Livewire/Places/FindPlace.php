@@ -21,10 +21,6 @@ class FindPlace extends Component
     public $selectedPlace;
     public $key = null;
 
-    // protected $listeners = [
-    //     // 'clearSearchPlace' => 'clearSearch',
-    // ];
-
     public function mount(Establishment $establishment)
     {
         $this->places = collect([]);
