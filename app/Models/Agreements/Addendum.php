@@ -88,7 +88,7 @@ class Addendum extends Model
     /**
      * Get the director signer.
      */
-    public function directorSigner(): BelongsTo
+    public function director_signer(): BelongsTo
     {
         return $this->belongsTo(Signer::class, 'director_signer_id');
     }
