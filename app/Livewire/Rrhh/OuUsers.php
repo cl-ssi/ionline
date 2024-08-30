@@ -3,13 +3,13 @@
 namespace App\Livewire\Rrhh;
 
 use App\Models\Rrhh\OrganizationalUnit;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class OuUsers extends Component
 {
     public $users = [];
     public $authority_id = null;
-    public $listeners = ["getOuId" => "getUsersFromOu"];
     public $required = true;
     public $ou_id = null;
 
@@ -23,6 +23,7 @@ class OuUsers extends Component
         return view('livewire.rrhh.ou-users');
     }
 
+    #[On('getOuId')]
     public function getUsersFromOu($organizationalUnitId = null)
     {
         if(isset($organizationalUnitId) && $organizationalUnitId != '') {

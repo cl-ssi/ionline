@@ -28,13 +28,6 @@ class ShowTotalHours extends Component
     public $totalHoursNightString;
     //public $flag = null;
 
-    //    protected $listeners = ['listener_shift_control'];
-    //
-    //    public function listener_shift_control()
-    //    {
-    //      $this->fulfillment = Fulfillment::find($this->fulfillment->id);
-    //    }
-
     public function render()
     {
         /* TODO: HORA MÉDICA ya no obtiene el valor hora de value */

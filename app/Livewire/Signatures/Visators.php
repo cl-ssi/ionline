@@ -19,8 +19,6 @@ class Visators extends Component
     public $requiredVisator = '';
     public $selectedDocumentType;
 
-    // protected $listeners = ['documentTypeChanged' => 'configureDocumentType'];
-
     public function mount()
     {
         //Agrega inputs según cantidad de flows de visator al editar

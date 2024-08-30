@@ -86,6 +86,7 @@ class SearchUser extends Component
         $this->search     = null;
     }
 
+    #[On('userId')]
     public function userId($user_id)
     {
         $this->user_id = $user_id;

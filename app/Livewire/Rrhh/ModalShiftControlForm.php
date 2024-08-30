@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Rrhh;
 
+use Livewire\Attributes\On;
 use Livewire\Component;
 use Carbon\Carbon;
 use App\Models\User;
@@ -42,8 +43,6 @@ class ModalShiftControlForm extends Component
      );
      
 
-     
- 	public $listeners = ["setValueToShiftForm"=>"setModalValue"];
     public function mount(){
 
     	$userModal = 0;
@@ -77,11 +76,13 @@ class ModalShiftControlForm extends Component
     	// }, 'invoice.pdf'); 
 
 	}
+
+    #[On('setValueToShiftForm')]
 	public function setModalValue($actuallyYears,$actuallyMonth,$usr,$days){
 		
 		$this->actuallyYears = $actuallyYears;
 		$this->actuallyMonth = $actuallyMonth;
-		$this->userModal = $userModal;
+		$this->userModal = $usr;
 
 
 		$dateFiltered = Carbon::createFromFormat('Y-m-d',  $this->actuallyYears."-".$this->actuallyMonth."-01", 'Europe/London');

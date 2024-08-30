@@ -11,6 +11,7 @@ use Firebase\JWT\JWT;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
+use Livewire\Attributes\On;
 use Livewire\Component;
 use Illuminate\Support\Str;
 class EnumerateSignature extends Component
@@ -22,10 +23,7 @@ class EnumerateSignature extends Component
         return view('livewire.sign.enumerate-signature');
     }
 
-    protected $listeners = [
-        'enumerate'
-    ];
-
+    #[On('enumerate')]
     public function enumerate()
     {
         /**

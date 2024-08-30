@@ -14,12 +14,6 @@ class ProductSearch extends Component
     public $showCode = false;
     public $smallInput = false;
 
-    // protected $listeners = [
-    //     // 'searchProduct',
-    //     // 'productId',
-    //     // 'onClearSearch',
-    // ];
-
     public function mount()
     {
         $this->results = collect([]);

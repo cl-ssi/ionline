@@ -5,6 +5,7 @@ namespace App\Livewire\Rrhh;
 use App\Models\ClCommune;
 use App\Models\Parameters\Bank;
 use App\Models\User;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class UserProfile extends Component
@@ -13,8 +14,6 @@ class UserProfile extends Component
     public $bankAccount;
     public $communes;
     public $banks;
-
-    protected $listeners = ['setOrganizationalUnit'];
 
     protected $rules = [
         'user.name' => 'required',
@@ -59,6 +58,7 @@ class UserProfile extends Component
         $this->bankAccount = $this->user->bankAccount;
     }
 
+    #[On('setOrganizationalUnit')]
     public function setOrganizationalUnit($ou_id)
     {
         $this->user->organizational_unit_id = $ou_id;

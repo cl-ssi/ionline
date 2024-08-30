@@ -32,8 +32,8 @@ class ControlsTextTemplate extends Component
 
     * INTRUCTIVO DE USO (LW) *
 
-    * AGREGAR EL LISTENER EN EL COMPONENTE QUE RECIBIRÁ EL TEMPLATE *
-    protected $listeners = ['setTemplate'];
+    * AGREGAR EL LISTENER EN LA FUNCION DEL COMPONENTE QUE RECIBIRÁ EL TEMPLATE *
+    #[On('setTemplate')]
 
     * AGREGAR EL NOMBRE DE VARIABLE QUE SE DEIFINIÓ EN EL INPUT *
     public $nombreCampo;
