@@ -5,8 +5,8 @@ namespace App\Livewire\Resources;
 use App\Http\Requests\Resources\ComputerCreateRequest;
 use App\Models\Inv\Inventory;
 use App\Models\Resources\Computer;
+use Livewire\Attributes\On;
 use Livewire\Component;
-use Livewire\Attributes\On; 
 
 class ComputerCreate extends Component
 {
@@ -87,7 +87,7 @@ class ComputerCreate extends Component
         return redirect()->route('resources.tic');
     }
 
-    #[On('myLabelId')] 
+    #[On('myLabelId')]
     public function myLabelId($values)
     {
         $this->labels = $values;
