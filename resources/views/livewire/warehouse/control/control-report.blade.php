@@ -35,7 +35,7 @@
             </select>
         </fieldset>
 
-        <fieldset class="form-group col-md-2">
+        <fieldset class="form-group col-md-1">
             <label for="program-id">Tipo</label>
             <select wire:model.debounce.1500ms="type" id="type" class="form-control">
                 <option value="">Todos</option>
@@ -45,6 +45,12 @@
         </fieldset>
 
         <fieldset class="form-group col-md-2">
+            <label for="oc">Orden de Compra</label>
+            <input class="form-control" type="text" wire:model.debounce.1500ms="oc" id="oc" autocomplete="off">
+        </fieldset>
+        
+
+        <fieldset class="form-group col-md-1">
             <label for="type-control">
                 &nbsp;
                 @if($type === "1")
@@ -97,7 +103,7 @@
                             <small>
                                 @if($controlItem->control->isDispatch())
                                     {{ optional($controlItem->control->typeDispatch)->name }}
-                                @else
+                                @else                                    
                                     {{ optional($controlItem->control->typeReception)->name }}
                                 @endif
                             </small>

@@ -19,6 +19,7 @@ class ControlReport extends Component
     public $program_id;
     public $start_date;
     public $end_date;
+    public $oc;
     public $type;
     public $type_control;
     public $typesControl;
@@ -72,6 +73,9 @@ class ControlReport extends Component
                 }, function ($subquery) {
                     $subquery->where('program_id', '=', $this->program_id);
                 });
+            })
+            ->when($this->oc, function ($query) {
+                $query->whereRelation('control', 'po_code', 'like', '%' . $this->oc . '%');
             })
             ->when($this->product_id, function ($query) {
                 $query->where('product_id', $this->product_id);
