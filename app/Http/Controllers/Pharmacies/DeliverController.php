@@ -64,7 +64,7 @@ class DeliverController extends Controller
         } else {
 
             if (auth()->user()->establishments->count()==0) {
-              session()->flash('warning', 'El usuario no tiene asignado establecimiento. Contacte a secretaría de informática.');
+              session()->flash('warning', 'El usuario no tiene asignado destino/establecimiento. Contacte a secretaría de informática.');
               return redirect()->route('pharmacies.index');
             }
 
@@ -111,7 +111,7 @@ class DeliverController extends Controller
     {
 
         if (auth()->user()->establishments->count()==0) {
-          session()->flash('warning', 'El usuario no tiene asignado establecimiento. Contacte a secretaría de informática.');
+          session()->flash('warning', 'El usuario no tiene asignado destino/establecimiento. Contacte a secretaría de informática.');
           return redirect()->route('pharmacies.index');
         }
 
