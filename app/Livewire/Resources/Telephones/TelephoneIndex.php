@@ -6,6 +6,7 @@ use App\Models\Establishment;
 use App\Models\Parameters\Location;
 use App\Models\Parameters\Place;
 use App\Models\Resources\Telephone;
+use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -13,8 +14,6 @@ class TelephoneIndex extends Component
 {
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
-
-    protected $listeners = ['placeSelected'];
 
     public $filter;
     public $establishments;
@@ -74,6 +73,7 @@ class TelephoneIndex extends Component
     /**
     * placeSelected
     */
+    #[On('placeSelected')]
     public function placeSelected(Establishment $establishment, Location $location, Place $place)
     {
         $this->establishment = $establishment;

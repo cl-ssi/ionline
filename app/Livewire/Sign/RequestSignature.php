@@ -63,14 +63,6 @@ class RequestSignature extends Component
     public $iterationDocument;
     public $iterationAnnex;
 
-    // protected $listeners = [
-    //     'setEmailRecipients',
-    //     'setEmailDistributions',
-    //     'addLeftSignature',
-    //     'addCenterSignature',
-    //     'addRightSignature',
-    // ];
-
     public function mount()
     {
         $this->iterationDocument = 1;

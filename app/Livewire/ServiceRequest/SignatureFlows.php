@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Rrhh\Authority;
 use App\Models\User;
 
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class SignatureFlows extends Component
@@ -15,8 +16,7 @@ class SignatureFlows extends Component
     public $signatureFlows = [];
     public $a;
 
-    protected $listeners = ['listener'];
-
+    #[On('listener')]
     public function listener($program_contract_type = NULL, $type = NULL)
     {
         $this->signatureFlows = NULL;

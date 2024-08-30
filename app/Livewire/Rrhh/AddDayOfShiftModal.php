@@ -14,8 +14,6 @@ class AddDayOfShiftModal extends Component
     public $journalType = "L";
     public $day;
 
-    // protected $listeners = ['setAddModalValue' => "setValue"];
-
     public function render()
     {
         return view('livewire.rrhh.add-day-of-shift-modal');

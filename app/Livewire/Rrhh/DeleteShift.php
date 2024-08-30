@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Rrhh;
 
+use Livewire\Attributes\On;
 use Livewire\Component;
 use App\Models\Rrhh\ShiftUserDay;
 use App\Models\Rrhh\ShiftUser;
@@ -10,8 +11,7 @@ use Carbon\Carbon;
 
 
 class DeleteShift extends Component
-{   
-    protected $listeners = ['setDataToDeleteModal' => 'setValues'];
+{
     public $startdate;
     public $enddate;
     public $ShiftUserDay;
@@ -32,6 +32,8 @@ class DeleteShift extends Component
        $this->cantDaysToDelete = 0;
        // $this->deleteAll = 1;
     }
+
+    #[On('setDataToDeleteModal')]
     public function setValues($actuallyShiftDay){
         // $this->clearDeleteModal();
         // dd($actuallyShiftDay[0]["id"]);
