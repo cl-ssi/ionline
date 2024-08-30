@@ -39,17 +39,16 @@ class ShowPosition extends Component
 
     #[On('searchedUser')]
     public function searchedUser($userId) {
-        $user = User::find($userId);
-        $this->searchedUser = $user;
+        $this->searchedUser = User::find($userId);
         $this->position = $this->searchedUser->position;
         
         /* Se emite position a Allowance */
-        $this->dispatch('emitPosition', $this->position);
+        $this->dispatch('emitPosition', position: $this->position);
     }
 
     public function updatedPosition($positionValue)
     {
         /* Se emite position a Allowance */
-        $this->dispatch('emitPositionValue', $positionValue);
+        $this->dispatch('emitPositionValue', position: $positionValue);
     }
 }

@@ -2,19 +2,16 @@
 
 namespace App\Livewire\HotelBooking;
 
+use Livewire\Attributes\On;
 use Livewire\Component;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
-
 use App\Models\Parameters\Holiday;
-use App\Models\HotelBooking\RoomBookingConfiguration;
 use App\Models\HotelBooking\Room;
 use App\Models\HotelBooking\RoomBooking;
 
 class Calendar extends Component
 {
-
-    protected $listeners = ['ExecRender' => 'ExecRender'];
 
     public $date = null;
     public $type = null;
@@ -62,6 +59,7 @@ class Calendar extends Component
         $this->endOfMonth = $this->startOfMonth->copy()->endOfMonth();
     }
 
+    #[On('ExecRender')]
     public function ExecRender($room){
         // si se guarda uno nuevo, se busca y se guarda en variable local
         if($room){

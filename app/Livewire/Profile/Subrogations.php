@@ -23,9 +23,9 @@ class Subrogations extends Component
     public $organizationalUnit = null;
 
     #[On('ouSelected')]
-    public function ouSelected($ouId)
+    public function ouSelected($organizationalUnitId)
     {
-        $this->organizational_unit_id = $ouId;
+        $this->organizational_unit_id = $organizationalUnitId;
     }
 
     #[On('searchedUser')]

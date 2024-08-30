@@ -278,7 +278,7 @@ class CreateReceptionNoOc extends Component
 
 
         session()->flash('success', 'Su acta sin OC fue creada exitosamente.');
-        $this->dispatch('documentTypeChanged', $this->reception['dte_type']);
+        // $this->dispatch('documentTypeChanged', dte_type: $this->reception['dte_type']);
         return redirect()->route('finance.receptions.index');
 
     }
@@ -314,13 +314,13 @@ class CreateReceptionNoOc extends Component
     }
 
     #[On('ouSelected')]
-    public function ouSelected($ou_id)
+    public function ouSelected($organizationalUnitId)
     {
-        if($ou_id) {
-            $ou = OrganizationalUnit::find($ou_id);
+        if($organizationalUnitId) {
+            $ou = OrganizationalUnit::find($organizationalUnitId);
             if($ou->currentManager) {
                 $this->authority = $ou->currentManager->user->shortName;
-                $this->signer_ou_id = $ou_id;
+                $this->signer_ou_id = $organizationalUnitId;
             }
             else {
                 $this->signer_ou_id = null;

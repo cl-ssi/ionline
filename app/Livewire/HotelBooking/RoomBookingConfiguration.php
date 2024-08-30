@@ -2,10 +2,8 @@
 
 namespace App\Livewire\HotelBooking;
 
+use Livewire\Attributes\On;
 use Livewire\Component;
-use Carbon\Carbon;
-
-use App\Models\HotelBooking\Hotel;
 use App\Models\HotelBooking\Room;
 use App\Models\HotelBooking\RoomBookingConfiguration as RoomBookingConfigurationModel;
 
@@ -13,7 +11,6 @@ class RoomBookingConfiguration extends Component
 {
     public $configuration;
     public $room;
-
     public $start_date;
     public $end_date;
     public $monday;
@@ -23,8 +20,6 @@ class RoomBookingConfiguration extends Component
     public $friday;
     public $saturday;
     public $sunday;
-
-    protected $listeners = ['getRoom' => 'getRoom'];
 
     public function mount(){
         // solo si viene el parametro 'configuration' se realiza esa carga
@@ -96,16 +91,17 @@ class RoomBookingConfiguration extends Component
 
         $configuration->save();
 
-        $this->dispatch('ExecRender', null);
+        $this->dispatch('ExecRender', room: null);
 
         /** Agrega un mensaje de éxito */
         session()->flash('info', 'Se ha modificado la configuración.');
     }
 
-    public function getRoom($room_id){
+    #[On('getRoom')]
+    public function getRoom($roomId){
         // si se guarda uno nuevo, se busca y se guarda en variable local
-        if($room_id){
-            $this->room = Room::find($room_id);
+        if($roomId){
+            $this->room = Room::find($roomId);
         }
         
         $this->render();
@@ -140,7 +136,7 @@ class RoomBookingConfiguration extends Component
         $roomBookingConfigurationModel->status = "Reservado";
         $roomBookingConfigurationModel->save();
 
-        $this->dispatch('ExecRender', $this->room);
+        $this->dispatch('ExecRender', room: $this->room);
 
         $this->reset();
 

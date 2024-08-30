@@ -377,7 +377,7 @@ class CreateReception extends Component
     * Create an Array of items from OC itmes
     */
     public function createArrayItemsFromOC()
-    {        
+    {
         foreach( $this->purchaseOrder->json->Listado[0]->Items->Listado as $key => $item ){
             $this->receptionItems[$key] = [
                 'item_position'             => $key,
@@ -459,13 +459,13 @@ class CreateReception extends Component
     * Setea el signer_id
     */
     #[On('ouSelected')]
-    public function ouSelected($ou_id)
+    public function ouSelected($organizationalUnitId)
     {
-        if($ou_id) {
-            $ou = OrganizationalUnit::find($ou_id);
+        if($organizationalUnitId) {
+            $ou = OrganizationalUnit::find($organizationalUnitId);
             if($ou->currentManager) {
                 $this->authority = $ou->currentManager->user->shortName;
-                $this->signer_ou_id = $ou_id;
+                $this->signer_ou_id = $organizationalUnitId;
             }
             else {
                 $this->signer_ou_id = null;

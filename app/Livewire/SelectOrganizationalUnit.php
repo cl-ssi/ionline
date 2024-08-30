@@ -93,14 +93,14 @@ class SelectOrganizationalUnit extends Component
             ->toArray();
 
         if(!empty($ous)) {
-            $this->buildTree($ous, 'father_id', 'id');
+            $this->buildTree($ous);
         }
 
         /**
          * Necesito formar este array poque sino livewire me los ordena por key los options y me quedan desordenados
          */
         foreach($this->options as $id => $option) {
-            $this->ous[] = array('id'=> $id, 'name' => $option);
+            $this->ous[] = ['id' => $id, 'name' => $option];
         }
 
         /**
@@ -116,7 +116,7 @@ class SelectOrganizationalUnit extends Component
          * Si se seteo por parametro un listener, entonces le enviamos a ese listener la ou_id
          */
         if(isset($this->emitToListener)) {
-            $this->dispatch($this->emitToListener, $this->organizational_unit_id);
+            $this->dispatch($this->emitToListener, organizationalUnitId: $this->organizational_unit_id);
         }
 
         /**

@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Signatures;
 
+use Livewire\Attributes\On;
 use Livewire\Component;
 use App\Models\Rrhh\OrganizationalUnit;
 
@@ -13,8 +14,6 @@ class Signer extends Component
     public $signaturesFlowSigner;
     public $userRequired;
     public $selectedDocumentType;
-
-    protected $listeners = ['documentTypeChanged' => 'configureDocumentType'];
 
     public function mount()
     {
@@ -30,6 +29,7 @@ class Signer extends Component
         }
     }
 
+    #[On('documentTypeChanged')]
     public function configureDocumentType($documentType)
     {
         $this->selectedDocumentType = $documentType;

@@ -38,7 +38,7 @@ class HotelRoomLock extends Component
 
         session()->flash('info', 'Se ha bloqueado el período seleccionado.');
 
-        $this->dispatch('ExecRender', null);
+        $this->dispatch('ExecRender', room: null);
     }
 
     public function render()

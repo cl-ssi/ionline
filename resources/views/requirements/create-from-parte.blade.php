@@ -37,6 +37,7 @@
             <div class="form-row">
                 <fieldset class="form-group col-12">
                     <label for="for_organizationalUnit">Establecimiento / Unidad Organizacional</label>
+                    {{-- // FIXME: el emitToListener apunt a un metodo selectUser ? --}}
                     @livewire('select-organizational-unit', [
                         'establishment_id' => auth()->user()->organizationalUnit->establishment->id,
                         'mobile' => true,
