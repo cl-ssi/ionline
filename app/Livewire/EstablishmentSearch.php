@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Establishment;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class EstablishmentSearch extends Component
@@ -15,10 +16,6 @@ class EstablishmentSearch extends Component
     public $tagId;
     public $smallInput;
     public $placeholder;
-
-    protected $listeners = [
-        'addEstablishment',
-    ];
 
     public function render()
     {
@@ -54,6 +51,7 @@ class EstablishmentSearch extends Component
         }
     }
 
+    #[On('addEstablishment')]
     public function addEstablishment(Establishment $establishment)
     {
         $this->showResult = false;

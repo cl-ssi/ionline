@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class CalculateDv extends Component
@@ -14,9 +15,6 @@ class CalculateDv extends Component
     /* Para editar y precargar los select */
     public $runSelected = null;
     public $dvSelected = null;
-
-    protected $listeners = ['disabledRunDv', 'enableRunDv'];
-
     public $disabled = null;
 
     public function mount() {
@@ -43,10 +41,12 @@ class CalculateDv extends Component
         return view('livewire.calculate-dv');
     }
 
+    #[On('disabledRunDv')]
     public function disabledRunDv(){
         $this->disabled = 'disabled';
     }
 
+    #[On('enableRunDv')]
     public function enableRunDv(){
         $this->disabled = '';
     }

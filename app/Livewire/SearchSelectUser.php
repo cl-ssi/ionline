@@ -25,7 +25,10 @@ class SearchSelectUser extends Component
      * Si necesitas restringir usuarios por U.O., deber usar un array precargado en el mount de tu componente
      * @livewire('search-select-user', ['restrict' => $restrict])
      * 
-     * protected $listeners = ['userSelected'];
+     * #[On('userSelected')]
+     * public function userSelected($userId) {
+     *    ...
+     * }
      */
     public $query;
     public $users;

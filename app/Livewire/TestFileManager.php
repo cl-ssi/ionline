@@ -21,12 +21,6 @@ class TestFileManager extends Component
      */
     public $filesAll;
 
-
-    protected $listeners = [
-        'storeFiles',
-        'updateFiles',
-    ];
-
     public function mount()
     {
         $this->filesAll = collect();

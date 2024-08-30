@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Rrhh\OrganizationalUnit;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class OrganizationalUnitSearch extends Component
@@ -20,11 +21,6 @@ class OrganizationalUnitSearch extends Component
     public $component;
     public $event;
 
-    protected $listeners = [
-        'addOrganizationalUnit',
-        'establishmentId',
-        'clear'
-    ];
 
     public function render()
     {
@@ -36,6 +32,7 @@ class OrganizationalUnitSearch extends Component
         $this->organizationalUnits = collect([]);
     }
 
+    #[On('clear')]
     public function clear()
     {
         $this->showResult = false;
@@ -62,6 +59,7 @@ class OrganizationalUnitSearch extends Component
         }
     }
 
+    #[On('addOrganizationalUnit')]
     public function addOrganizationalUnit(OrganizationalUnit $organizational_unit)
     {
         $this->showResult = false;
@@ -72,6 +70,7 @@ class OrganizationalUnitSearch extends Component
         $this->emitTo($this->component, $this->event, $this->organizational_unit_id);
     }
 
+    #[On('establishmentId')]
     public function establishmentId($value)
     {
         $this->establishment_id = $value;

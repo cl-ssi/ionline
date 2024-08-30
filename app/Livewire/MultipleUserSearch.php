@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\User;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class MultipleUserSearch extends Component
@@ -10,10 +11,6 @@ class MultipleUserSearch extends Component
     public $users;
     public $listUsers;
     public $nameInput;
-
-    protected $listeners = [
-        'myUserUsingId'
-    ];
 
     public function mount($myUsers)
     {
@@ -26,6 +23,7 @@ class MultipleUserSearch extends Component
         return view('livewire.multiple-user-search');
     }
 
+    #[On('myUserUsingId')]
     public function myUserUsingId($value)
     {
         if($value != null)

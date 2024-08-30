@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Validation\Rules\File;
@@ -9,10 +10,6 @@ use Illuminate\Validation\Rules\File;
 class FileMgr extends Component
 {
     use WithFileUploads;
-
-    protected $listeners = [
-        'resetAllFiles',
-    ];
 
     /**
      * Flag to indicate if there are multiple files
@@ -174,6 +171,7 @@ class FileMgr extends Component
      *
      * @return void
      */
+    #[On('resetAllFiles')]
     public function resetAllFiles()
     {
         $this->files = collect();
