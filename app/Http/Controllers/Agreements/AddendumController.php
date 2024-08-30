@@ -2,23 +2,22 @@
 
 namespace App\Http\Controllers\Agreements;
 
+use App\Http\Controllers\Controller;
 use App\Models\Agreements\Addendum;
 use App\Models\Agreements\Signer;
 use App\Models\Documents\Document;
-use App\Models\Documents\Template;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use App\Models\Documents\Signature;
 use App\Models\Documents\SignaturesFile;
 use App\Models\Documents\SignaturesFlow;
+use App\Models\Documents\Template;
 use App\Models\Documents\Type;
 use App\Models\Parameters\Municipality;
 use App\Models\Rrhh\OrganizationalUnit;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Luecano\NumeroALetras\NumeroALetras;
 
 class AddendumController extends Controller
 {
@@ -37,29 +36,25 @@ class AddendumController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-
-    }
+    public function create() {}
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
         $addendum = new Addendum($request->all());
         $municipality = Municipality::where('name_representative', $request->representative)->first();
-        if($municipality != null){ // es alcalde
+        if ($municipality != null) { // es alcalde
             $addendum->representative = $municipality->name_representative;
             $addendum->representative_appellative = $municipality->appellative_representative;
             $addendum->representative_rut = $municipality->rut_representative;
             $addendum->representative_decree = $municipality->decree_representative;
         }
         $municipality = Municipality::where('name_representative_surrogate', $request->representative)->first();
-        if($municipality != null){ // es alcalde subrogante
+        if ($municipality != null) { // es alcalde subrogante
             $addendum->representative = $municipality->name_representative_surrogate;
             $addendum->representative_appellative = $municipality->appellative_representative_surrogate;
             $addendum->representative_rut = $municipality->rut_representative_surrogate;
@@ -84,39 +79,39 @@ class AddendumController extends Controller
         // ]);
         $addendum->update($request->All());
         $municipality = Municipality::where('name_representative', $request->representative)->first();
-        if($municipality != null){ // es alcalde
+        if ($municipality != null) { // es alcalde
             $addendum->representative = $municipality->name_representative;
             $addendum->representative_appellative = $municipality->appellative_representative;
             $addendum->representative_rut = $municipality->rut_representative;
             $addendum->representative_decree = $municipality->decree_representative;
         }
         $municipality = Municipality::where('name_representative_surrogate', $request->representative)->first();
-        if($municipality != null){ // es alcalde subrogante
+        if ($municipality != null) { // es alcalde subrogante
             $addendum->representative = $municipality->name_representative_surrogate;
             $addendum->representative_appellative = $municipality->appellative_representative_surrogate;
             $addendum->representative_rut = $municipality->rut_representative_surrogate;
             $addendum->representative_decree = $municipality->decree_representative_surrogate;
         }
-        
-        if($request->hasFile('file')){
+
+        if ($request->hasFile('file')) {
             Storage::disk('gcs')->delete($addendum->file);
             $addendum->file = $request->file('file')->store('ionline/agreements/addendum', ['disk' => 'gcs']);
         }
 
-        if($request->hasFile('res_file')){
+        if ($request->hasFile('res_file')) {
             Storage::disk('gcs')->delete($addendum->res_file);
             $addendum->res_file = $request->file('res_file')->store('ionline/agreements/addendum_res', ['disk' => 'gcs']);
         }
         $addendum->save();
 
         session()->flash('info', 'El addendum #'.$addendum->id.' ha sido actualizado.');
+
         return redirect()->back();
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Agreements\Addendum  $addendum
      * @return \Illuminate\Http\Response
      */
     public function show(Addendum $addendum)
@@ -127,7 +122,6 @@ class AddendumController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Agreements\Addendum  $addendum
      * @return \Illuminate\Http\Response
      */
     public function edit(Addendum $addendum)
@@ -139,14 +133,12 @@ class AddendumController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Agreements\Addendum  $addendum
      * @return \Illuminate\Http\Response
      */
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Agreements\Addendum  $addendum
      * @return \Illuminate\Http\Response
      */
     public function destroy(Addendum $addendum)
@@ -156,34 +148,38 @@ class AddendumController extends Controller
 
     public function download(Addendum $addendum)
     {
-        return Storage::disk('gcs')->response($addendum->file, mb_convert_encoding($addendum->name,'ASCII'));
+        return Storage::disk('gcs')->response($addendum->file, mb_convert_encoding($addendum->name, 'ASCII'));
     }
 
     public function downloadRes(Addendum $addendum)
     {
-        return Storage::disk('gcs')->response($addendum->res_file, mb_convert_encoding($addendum->name,'ASCII'));
+        return Storage::disk('gcs')->response($addendum->res_file, mb_convert_encoding($addendum->name, 'ASCII'));
     }
 
     public function preview(Addendum $addendum)
     {
         $filename = 'tmp_files/'.$addendum->file;
-        if(!Storage::disk('public')->exists($filename))
+        if (! Storage::disk('public')->exists($filename)) {
             Storage::disk('public')->put($filename, Storage::disk('gcs')->get($addendum->file));
+        }
+
         return Redirect::away('https://view.officeapps.live.com/op/embed.aspx?src='.asset('storage/'.$filename));
     }
 
     public function sign(Addendum $addendum, $type)
     {
-        if(!in_array($type, array('visators', 'signer'))) abort(404);
+        if (! in_array($type, ['visators', 'signer'])) {
+            abort(404);
+        }
 
-        $addendum->load('agreement.commune.municipality','agreement.program','referrer', 'director_signer.user');
-        $municipio = (!Str::contains($addendum->agreement->commune->municipality->name_municipality, 'ALTO HOSPICIO') ? 'Ilustre ' : '').'Municipalidad de '.$addendum->agreement->commune->name;
-        $first_word = explode(' ',trim($addendum->agreement->program->name))[0];
-        $programa = $first_word == 'Programa' ? substr(strstr($addendum->agreement->program->name," "), 1) : $addendum->agreement->program->name;
+        $addendum->load('agreement.commune.municipality', 'agreement.program', 'referrer', 'director_signer.user');
+        $municipio = (! Str::contains($addendum->agreement->commune->municipality->name_municipality, 'ALTO HOSPICIO') ? 'Ilustre ' : '').'Municipalidad de '.$addendum->agreement->commune->name;
+        $first_word = explode(' ', trim($addendum->agreement->program->name))[0];
+        $programa = $first_word == 'Programa' ? substr(strstr($addendum->agreement->program->name, ' '), 1) : $addendum->agreement->program->name;
 
-        $signature = new Signature();
+        $signature = new Signature;
         $signature->request_date = $addendum->date;
-        $signature->type_id = Type::where('name','Convenio')->first()->id;
+        $signature->type_id = Type::where('name', 'Convenio')->first()->id;
         $signature->type = $type;
         $signature->addendum_id = $addendum->id;
         $signature->subject = 'Addendum Convenio programa '.$programa.' comuna de '.$addendum->agreement->commune->name;
@@ -192,18 +188,20 @@ class AddendumController extends Controller
         $signature->recipients = 'sdga.ssi@redsalud.gov.cl,jurídica.ssi@redsalud.gov.cl,cxhenriquez@gmail.com,'.$addendum->referrer->email.',natalia.rivera.a@redsalud.gob.cl,apoyo.convenioaps@redsalud.gob.cl,pablo.morenor@redsalud.gob.cl,finanzas.ssi@redsalud.gov.cl,jaime.abarzua@redsalud.gov.cl,aps.ssi@redsalud.gob.cl';
         $signature->distribution = 'División de Atención Primaria MINSAL,Oficina de Partes SSI,'.$municipio;
 
-        $signaturesFile = new SignaturesFile();
+        $signaturesFile = new SignaturesFile;
         $signaturesFile->file_type = 'documento';
 
-        if($type == 'signer'){
-            $signaturesFlow = new SignaturesFlow();
+        if ($type == 'signer') {
+            $signaturesFlow = new SignaturesFlow;
             $signaturesFlow->type = 'firmante';
-            $signaturesFlow->ou_id = $addendum->director_signer->user->organizational_unit_id;
-            $signaturesFlow->user_id = $addendum->director_signer->user->id;            
+            // $signaturesFlow->ou_id = $addendum->director_signer->user->organizational_unit_id;
+            // $signaturesFlow->user_id = $addendum->director_signer->user->id;
+            $signaturesFlow->ou_id = $addendum->directorSigner->user->organizational_unit_id;
+            $signaturesFlow->user_id = $addendum->directorSigner->user->id;
             $signaturesFile->signaturesFlows->add($signaturesFlow);
         }
 
-        if($type == 'visators'){
+        if ($type == 'visators') {
             //visadores por cadena de responsabilidad en orden parte primero por el referente tecnico
             // $visadores = collect([
             //                 ['ou_id' => 12, 'user_id' => 15005047] // DEPTO. ATENCION PRIMARIA DE SALUD - ANA MARIA MUJICA
@@ -212,11 +210,12 @@ class AddendumController extends Controller
             //                 ['ou_id' => 2, 'user_id' => 14104369], // SUBDIRECCION GESTION ASISTENCIAL - CARLOS CALVO
             //             ]);
             $visadores = collect([$addendum->referrer]); //referente tecnico
-            foreach(array(15005047, 12834358, 17432199, 14104369) as $user_id) //resto de visadores por cadena de responsabilidad
+            foreach ([15005047, 12834358, 17432199, 14104369] as $user_id) { //resto de visadores por cadena de responsabilidad
                 $visadores->add(User::find($user_id));
-            
-            foreach($visadores as $key => $visador){
-                $signaturesFlow = new SignaturesFlow();
+            }
+
+            foreach ($visadores as $key => $visador) {
+                $signaturesFlow = new SignaturesFlow;
                 $signaturesFlow->type = 'visador';
                 $signaturesFlow->ou_id = $visador->organizational_unit_id;
                 $signaturesFlow->user_id = $visador->id;
@@ -226,18 +225,18 @@ class AddendumController extends Controller
         }
 
         $signature->signaturesFiles->add($signaturesFile);
-        
+
         // $users = User::orderBy('name', 'ASC')->get();
         // $organizationalUnits = OrganizationalUnit::orderBy('id', 'asc')->get();
         return view('documents.signatures.create', compact('signature'));
     }
 
-    public function createDocument(Addendum $addendum) 
+    public function createDocument(Addendum $addendum)
     {
-        $document = new Document();
+        $document = new Document;
         $document->addendum_id = $addendum->id;
-        $document->type_id = Type::where('name','Convenio')->first()->id;
-        $document->antecedent = 'Convenio Rex. '. $addendum->agreement->res_exempt_number . ' del ' . $addendum->agreement->res_exempt_date;
+        $document->type_id = Type::where('name', 'Convenio')->first()->id;
+        $document->antecedent = 'Convenio Rex. '.$addendum->agreement->res_exempt_number.' del '.$addendum->agreement->res_exempt_date;
         $document->subject = 'Adendum de convenio '.$addendum->agreement->program->name.' comuna de '.$addendum->agreement->commune->name;
         $document->distribution = "\nvalentina.ortega@redsalud.gob.cl\naps.ssi@redsalud.gob.cl\nromina.garin@redsalud.gob.cl\njuridica.ssi@redsalud.gob.cl\no.partes2@redsalud.gob.cl\nblanca.galaz@redsalud.gob.cl";
         $document->content = '
@@ -348,12 +347,11 @@ class AddendumController extends Controller
             <p style="text-align: center;"><span style="background-color: yellow;"><strong>${alcaldeApelativoFirma}</strong></span></p>
             <p style="text-align: center;"><span style="background-color: yellow;"><strong>${ilustreTitulo} ${municipalidad}</strong></span></p>';
 
-
         // Buscar y reemplazar en $document->content las variables ${...} por los valores correspondientes
-        $document->content = str_replace('${programaTitulo}', mb_strtoupper(preg_replace('/^Programa /','',trim($addendum->agreement->program->name))), $document->content);
-        $document->content = str_replace('${fechaAddendum}', $addendum->date->day . ' de ' . $addendum->date->monthName . ' de ' . $addendum->date->year, $document->content);
-        $document->content = str_replace('${fechaConvenio}', $addendum->agreement->date->day . ' de ' . $addendum->agreement->date->monthName . ' de ' . $addendum->agreement->date->year, $document->content);
-        $document->content = str_replace('${fechaResolucionConvenio}', $addendum->agreement->res_exempt_date->day . ' de ' . $addendum->agreement->res_exempt_date->monthName . ' de ' . $addendum->agreement->res_exempt_date->year, $document->content);
+        $document->content = str_replace('${programaTitulo}', mb_strtoupper(preg_replace('/^Programa /', '', trim($addendum->agreement->program->name))), $document->content);
+        $document->content = str_replace('${fechaAddendum}', $addendum->date->day.' de '.$addendum->date->monthName.' de '.$addendum->date->year, $document->content);
+        $document->content = str_replace('${fechaConvenio}', $addendum->agreement->date->day.' de '.$addendum->agreement->date->monthName.' de '.$addendum->agreement->date->year, $document->content);
+        $document->content = str_replace('${fechaResolucionConvenio}', $addendum->agreement->res_exempt_date->day.' de '.$addendum->agreement->res_exempt_date->monthName.' de '.$addendum->agreement->res_exempt_date->year, $document->content);
         $document->content = str_replace('${periodoConvenio}', $addendum->agreement->period, $document->content);
         $document->content = str_replace('${numResolucionConvenio}', $addendum->agreement->res_exempt_number, $document->content);
         $document->content = str_replace('${director}', mb_strtoupper($addendum->director_signer->user->fullName), $document->content);
@@ -361,64 +359,65 @@ class AddendumController extends Controller
         $document->content = str_replace('${directorApelativo}', $addendum->director_signer->appellative, $document->content);
         $document->content = str_replace('${directorNationality}', Str::contains($addendum->director_signer->appellative, 'a') ? 'chilena' : 'chileno', $document->content);
         $document->content = str_replace('${directorDecreto}', $addendum->director_signer->decree, $document->content);
-        $document->content = str_replace('${ilustreTitulo}', !Str::contains($addendum->agreement->commune->municipality->name_municipality, 'ALTO HOSPICIO') ? 'ILUSTRE': null, $document->content);
+        $document->content = str_replace('${ilustreTitulo}', ! Str::contains($addendum->agreement->commune->municipality->name_municipality, 'ALTO HOSPICIO') ? 'ILUSTRE' : null, $document->content);
         $document->content = str_replace('${municipalidad}', $addendum->agreement->commune->municipality->name_municipality, $document->content);
         $document->content = str_replace('${alcalde}', $addendum->representative, $document->content);
         $document->content = str_replace('${alcaldeRut}', $addendum->representative_rut, $document->content);
         $document->content = str_replace('${alcaldeDecreto}', $addendum->representative_decree, $document->content);
         $document->content = str_replace('${alcaldeNationality}', Str::endsWith($addendum->representative_appellative, 'a') ? 'chilena' : 'chileno', $document->content);
         $document->content = str_replace('${alcaldeApelativo}', $addendum->representative_appellative, $document->content);
-        $document->content = str_replace('${alcaldeApelativoFirma}', Str::beforeLast($addendum->representative_appellative, ' ') . (Str::contains($addendum->representative_appellative, 'Subrogante') ? '(S)' : ''), $document->content);
+        $document->content = str_replace('${alcaldeApelativoFirma}', Str::beforeLast($addendum->representative_appellative, ' ').(Str::contains($addendum->representative_appellative, 'Subrogante') ? '(S)' : ''), $document->content);
         $document->content = str_replace('${municipalidadDirec}', $addendum->agreement->commune->municipality->address, $document->content);
         $document->content = str_replace('${comuna}', $addendum->agreement->commune->name, $document->content);
         $document->content = str_replace('${comunaRut}', $addendum->agreement->commune->municipality->rut_municipality, $document->content);
 
+        $types = Type::whereNull('partes_exclusive')->pluck('name', 'id');
 
-        $types = Type::whereNull('partes_exclusive')->pluck('name','id');
         return view('documents.create', compact('document', 'types'));
     }
 
     public function createResolution(Addendum $addendum)
     {
         /** Variables a reemplazar */
-        $data['directorDecreto']         = $addendum->director_signer->decree;
-        $data['numResolucion']           = $addendum->agreement->number;
-        $data['yearResolucion']          = $addendum->agreement->resolution_date != NULL ? date('Y', strtotime($addendum->agreement->resolution_date)) : '';
-        $data['programa']                = mb_strtoupper(preg_replace('/^Programa /','',trim($addendum->agreement->program->name)));
-        $data['periodoConvenio']         = $addendum->agreement->period;
-        $data['numResourceResolucion']   = $addendum->agreement->res_resource_number;
-        $data['yearResourceResolucion']  = $addendum->agreement->res_resource_date != NULL ? date('Y', strtotime($addendum->agreement->res_resource_date)) : '';
-        $data['fechaResolucion']         = $addendum->res_date->day . ' de ' . $addendum->res_date->monthName . ' de ' . $addendum->res_date->year;
-        $data['fechaResourceResolucion'] = $addendum->agreement->res_resource_date != NULL ? date('d', strtotime($addendum->agreement->res_resource_date)) . ' de ' . date('F', strtotime($addendum->agreement->res_resource_date)) . ' de ' . date('Y', strtotime($addendum->agreement->res_resource_date)) : '';
-        $data['numResolucionConvenio']   = $addendum->agreement->res_exempt_number;
-        $data['fechaResolucionConvenio'] = $addendum->agreement->res_exempt_date->day . ' de ' . $addendum->agreement->res_exempt_date->monthName . ' de ' . $addendum->agreement->res_exempt_date->year;
-        $data['fechaConvenio']           = $addendum->agreement->date->day . ' de ' . $addendum->agreement->date->monthName . ' de ' . $addendum->agreement->date->year;
-        $data['ilustre']                 = $addendum->agreement->commune->municipality->name_municipality;
-        $data['comuna']                  = $addendum->agreement->commune->name;
-        $data['fechaAddendum']           = $addendum->date->day . ' de ' . $addendum->date->monthName . ' de ' . $addendum->date->year;
-        $data['directorApelativo']       = $addendum->director_signer->appellative;
-        $data['director']                = $addendum->director_signer->user->fullName;
-        $data['alcaldeApelativoCorto']   = Str::beforeLast($addendum->representative_appellative, ' ') . (Str::contains($addendum->representative_appellative, 'Subrogante') ? '(S)' : '');
-        $data['alcalde']                 = $addendum->representative;
-        $data['comuna']                  = $addendum->agreement->commune->name;
+        $data['directorDecreto'] = $addendum->director_signer->decree;
+        $data['numResolucion'] = $addendum->agreement->number;
+        $data['yearResolucion'] = $addendum->agreement->resolution_date != null ? date('Y', strtotime($addendum->agreement->resolution_date)) : '';
+        $data['programa'] = mb_strtoupper(preg_replace('/^Programa /', '', trim($addendum->agreement->program->name)));
+        $data['periodoConvenio'] = $addendum->agreement->period;
+        $data['numResourceResolucion'] = $addendum->agreement->res_resource_number;
+        $data['yearResourceResolucion'] = $addendum->agreement->res_resource_date != null ? date('Y', strtotime($addendum->agreement->res_resource_date)) : '';
+        $data['fechaResolucion'] = $addendum->res_date->day.' de '.$addendum->res_date->monthName.' de '.$addendum->res_date->year;
+        $data['fechaResourceResolucion'] = $addendum->agreement->res_resource_date != null ? date('d', strtotime($addendum->agreement->res_resource_date)).' de '.date('F', strtotime($addendum->agreement->res_resource_date)).' de '.date('Y', strtotime($addendum->agreement->res_resource_date)) : '';
+        $data['numResolucionConvenio'] = $addendum->agreement->res_exempt_number;
+        $data['fechaResolucionConvenio'] = $addendum->agreement->res_exempt_date->day.' de '.$addendum->agreement->res_exempt_date->monthName.' de '.$addendum->agreement->res_exempt_date->year;
+        $data['fechaConvenio'] = $addendum->agreement->date->day.' de '.$addendum->agreement->date->monthName.' de '.$addendum->agreement->date->year;
+        $data['ilustre'] = $addendum->agreement->commune->municipality->name_municipality;
+        $data['comuna'] = $addendum->agreement->commune->name;
+        $data['fechaAddendum'] = $addendum->date->day.' de '.$addendum->date->monthName.' de '.$addendum->date->year;
+        $data['directorApelativo'] = $addendum->director_signer->appellative;
+        $data['director'] = $addendum->director_signer->user->fullName;
+        $data['alcaldeApelativoCorto'] = Str::beforeLast($addendum->representative_appellative, ' ').(Str::contains($addendum->representative_appellative, 'Subrogante') ? '(S)' : '');
+        $data['alcalde'] = $addendum->representative;
+        $data['comuna'] = $addendum->agreement->commune->name;
 
         // Importar los templates
-        $header = Template::where('key','agreements.addendum.resolution.header.2024')->first()->toArray();
-        $footer = Template::where('key','agreements.addendum.resolution.footer.2024')->first()->toArray();
-        
+        $header = Template::where('key', 'agreements.addendum.resolution.header.2024')->first()->toArray();
+        $footer = Template::where('key', 'agreements.addendum.resolution.footer.2024')->first()->toArray();
+
         // Importar el contenido del adendum y eliminar las útlimas 4 líneas del contenido
         $addendum_content = implode("\n", array_slice(explode("\n", $addendum->document->content), 0, -4));
 
-        $document = new Document();
-        $document->type_id      = Type::where('name','Resolución')->first()->id;
-        $document->antecedent   = 'Convenio Rex. '. $addendum->agreement->res_exempt_number . ' del ' . $addendum->agreement->res_exempt_date;
-        $document->subject      = 'Resolución de adendum de convenio '.$addendum->agreement->program->name.' comuna de '.$addendum->agreement->commune->name;
-        $document->distribution = "APS";
+        $document = new Document;
+        $document->type_id = Type::where('name', 'Resolución')->first()->id;
+        $document->antecedent = 'Convenio Rex. '.$addendum->agreement->res_exempt_number.' del '.$addendum->agreement->res_exempt_date;
+        $document->subject = 'Resolución de adendum de convenio '.$addendum->agreement->program->name.' comuna de '.$addendum->agreement->commune->name;
+        $document->distribution = 'APS';
 
-        $templateContent = $header['content'] . $addendum_content . $footer['content'];
+        $templateContent = $header['content'].$addendum_content.$footer['content'];
         $document->content = Document::parseTemplate($templateContent, $data);
 
-        $types = Type::whereNull('partes_exclusive')->pluck('name','id');
+        $types = Type::whereNull('partes_exclusive')->pluck('name', 'id');
+
         return view('documents.create', compact('document', 'types'));
     }
 }
