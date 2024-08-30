@@ -31,10 +31,6 @@ class UpdatePma extends Component
         $this->inventories = Inventory::where('user_responsible_id', auth()->user()->id)->get();
     }
 
-    protected $listeners = [
-        // 'myPlaceId',
-    ];
-
     #[On('myPlaceId')] 
     public function myPlaceId($value, $key)
     {

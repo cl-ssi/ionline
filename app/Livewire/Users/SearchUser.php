@@ -71,14 +71,14 @@ class SearchUser extends Component
         $this->user_id    = $user->id;
         $this->users      = collect([]);
 
-        $this->dispatch($this->eventName, $this->user_id);
+        $this->dispatch($this->eventName, value: $this->user_id);
     }
 
     #[On('clearSearchUser')]
     public function clearSearch($emitEvent = true)
     {
         if ( $emitEvent )
-            $this->dispatch($this->eventName, null);
+            $this->dispatch($this->eventName, value: null);
 
         $this->showResult = false;
         $this->users      = collect([]);

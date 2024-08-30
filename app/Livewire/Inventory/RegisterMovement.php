@@ -6,6 +6,7 @@ use App\Http\Requests\Inventory\CreateMovementRequest;
 use App\Models\Inv\InventoryMovement;
 use App\Models\User;
 use Livewire\Component;
+use Livewire\Attributes\On; 
 
 class RegisterMovement extends Component
 {
@@ -14,12 +15,6 @@ class RegisterMovement extends Component
     public $user_responsible_id;
     public $place_id;
     public $installation_date;
-
-    protected $listeners = [
-        'myUserUsingId',
-        'myUserResponsibleId',
-        'myPlaceId',
-    ];
 
     public function render()
     {
@@ -31,16 +26,19 @@ class RegisterMovement extends Component
         return (new CreateMovementRequest())->rules();
     }
 
+    #[On('myUserUsingId')] 
     public function myUserUsingId($value)
     {
         $this->user_using_id = $value;
     }
 
+    #[On('myUserResponsibleId')] 
     public function myUserResponsibleId($value)
     {
         $this->user_responsible_id = $value;
     }
 
+    #[On('myPlaceId')] 
     public function myPlaceId($value)
     {
         $this->place_id = $value;

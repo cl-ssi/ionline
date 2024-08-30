@@ -2,19 +2,17 @@
 
 namespace App\Livewire\Inventory;
 
+use Livewire\Attributes\On; 
 use Livewire\Component;
 use App\Models\Inv\Inventory;
 use App\Models\Inv\InventoryUser;
 
 class AssignUser extends Component
 {
-
     public $userType;
     public $inventory;
     public $user_id;
     public $establishment;
-
-    protected $listeners = ['myUserUsingId' => 'setUserId'];
 
     public function mount($userType, Inventory $inventory)
     {
@@ -23,6 +21,7 @@ class AssignUser extends Component
         $this->establishment = auth()->user()->establishment;
     }
 
+    #[On('setUserId')] 
     public function setUserId($userId)
     {
         $this->user_id = $userId;

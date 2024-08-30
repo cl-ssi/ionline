@@ -3,6 +3,7 @@
 namespace App\Livewire\Inventory;
 
 use Livewire\Component;
+use Livewire\Attributes\On; 
 use App\Models\Inv\Inventory;
 use App\Models\Inv\InventoryMovement;
 use App\Models\Parameters\Place;
@@ -15,11 +16,7 @@ class InventorySheet extends Component
     public $place = null;
     public $uniqueUsers = [];
 
-
-    protected $listeners = [
-        'myPlaceId',
-    ];
-
+    #[On('myPlaceId')] 
     public function myPlaceId($value)
     {
         $this->place_id = $value;

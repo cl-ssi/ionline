@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use Livewire\Component;
+use Livewire\Attributes\On; 
 
 use App\Models\Rrhh\OrganizationalUnit;
 use App\Models\Rrhh\Authority;
@@ -11,8 +12,6 @@ use Carbon\Carbon;
 
 class SelectUser extends Component
 {
-    protected $listeners = ['selectUser'];
-
     public $to_ou_id;
     
     public $users;
@@ -23,6 +22,7 @@ class SelectUser extends Component
     public $parte_id;
     public $enCopia = [];
  
+    #[On('selectUser')] 
     public function selectUser($organizational_unit_id)
     {
         $this->to_ou_id = $organizational_unit_id;

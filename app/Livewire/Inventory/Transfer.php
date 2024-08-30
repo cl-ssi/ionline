@@ -38,7 +38,7 @@ class Transfer extends Component
         'myNewUserResponsibleId',
         'myOldUserResponsibleId',
         'myUserUsingId',
-        'myPlaceId',
+        // 'myPlaceId',
     ];
 
     public function myOldUserResponsibleId($value)
@@ -63,6 +63,7 @@ class Transfer extends Component
         $this->user_using_id = $value;
     }
 
+    #[On('myPlaceId')] 
     public function myPlaceId($value)
     {
         $this->place_id = $value;

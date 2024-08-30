@@ -53,13 +53,6 @@ class RegisterInventory extends Component
     public $collapse;
     public $unspscProduct;
 
-    // protected $listeners = [
-    //     // 'myUserUsingId',
-    //     // 'myUserResponsibleId',
-    //     // 'myPlaceId',
-    //     // 'myProductId',
-    // ];
-
     public function mount(Establishment $establishment)
     {
         $this->collapse = false;
