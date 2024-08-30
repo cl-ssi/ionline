@@ -198,8 +198,10 @@ class AddendumController extends Controller
         if($type == 'signer'){
             $signaturesFlow = new SignaturesFlow();
             $signaturesFlow->type = 'firmante';
-            $signaturesFlow->ou_id = $addendum->director_signer->user->organizational_unit_id;
-            $signaturesFlow->user_id = $addendum->director_signer->user->id;
+            // $signaturesFlow->ou_id = $addendum->director_signer->user->organizational_unit_id;
+            // $signaturesFlow->user_id = $addendum->director_signer->user->id;
+            $signaturesFlow->ou_id = $addendum->directorSigner->user->organizational_unit_id;
+            $signaturesFlow->user_id = $addendum->directorSigner->user->id;
             $signaturesFile->signaturesFlows->add($signaturesFlow);
         }
 
