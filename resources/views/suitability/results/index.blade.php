@@ -81,7 +81,7 @@
                 <td>{{ $result->psirequest?->created_at}}</td>
                 <td>{{ $result->psirequest->school->name ?? ''  }}</td>                
                 <td>{{ $result->user->fullName ?? ''  }}</td>
-                <td nowrap>{{ $result->user->runFormat() ?? ''  }}</td>
+                <td nowrap>{{ $result->user->runFormat ?? ''  }}</td>
                 <td>{{ $result->psirequest->job ?? ''  }}</td>
                 <td>{{ $result->total_points ?? '' }}</td>
                 <td>{{ $result->updated_at ?? '' }}</td>

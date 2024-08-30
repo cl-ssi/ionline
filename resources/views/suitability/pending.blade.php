@@ -48,7 +48,7 @@
         <tr>
             <td>{{$psirequest->id ?? ''}}</td>
             <td>{{ $psirequest->school->name ?? ''  }}</td>
-            <td>{{$psirequest->user->runFormat() ?? ''}}</td>
+            <td>{{$psirequest->user?->runFormat ?? ''}}</td>
             <td>{{$psirequest->user->fullName ?? ''}}</td>
             <td>{{$psirequest->job ?? ''}}</td>
             <td>{{$psirequest->user->email ?? ''}}</td>
