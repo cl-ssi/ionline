@@ -3,6 +3,7 @@
 namespace App\Livewire\Warehouse\Products;
 
 use App\Http\Requests\Warehouse\Product\EditProductRequest;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class ProductEdit extends Component
@@ -17,10 +18,6 @@ class ProductEdit extends Component
     public $unspsc_product_id;
     public $search_unspsc_product;
     public $nav;
-
-    protected $listeners = [
-        'myProductId'
-    ];
 
     public function rules()
     {
@@ -43,6 +40,7 @@ class ProductEdit extends Component
         $this->search_unspsc_product = $this->product->product->name;
     }
 
+    #[On('myProductId')]
     public function myProductId($value)
     {
         $this->unspsc_product_id = $value;

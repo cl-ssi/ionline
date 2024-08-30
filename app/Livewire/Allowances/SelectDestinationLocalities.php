@@ -20,8 +20,6 @@ class SelectDestinationLocalities extends Component
 
     public $selectedLocality, $selectedLocalityName, $description;
 
-    // protected $listeners = ['searchedCommune'];
-
     public $localities;
 
     public $key, $destinations;

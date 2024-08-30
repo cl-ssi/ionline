@@ -11,17 +11,13 @@ class RejectedDte extends Component
     public $rejected;
     public $rechazar = [];
     public $motivo_rechazo = [];
+
     protected $listeners = ['refresh' => '$refresh'];
-
-    
-
 
     protected $rules = [
         'rechazar'  => 'required',
         'motivo_rechazo'=>'required',
     ];
-
-
 
     public function rechazarDTE()
     {
@@ -35,16 +31,13 @@ class RejectedDte extends Component
                 'rejected_at' => now(),
             ]);
         }
-
         session()->flash('message', 'El Dte ha sido rechazado');        
     }
-
 
     public function render()
     {
         return view('livewire.finance.rejected-dte', [
             'rejected' => $this->rejected,
         ]);
-    
     }
 }

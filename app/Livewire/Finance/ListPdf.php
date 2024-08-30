@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Finance;
 
+use Livewire\Attributes\On;
 use Livewire\Component;
 use App\Models\File;
 use App\Models\Finance\Dte;
@@ -15,13 +16,12 @@ class ListPdf extends Component
     public $fileName;
     public $file;
 
-    protected $listeners = ['refreshComponent'];
-
     public function mount(){
         $this->fileId = $this->file->id;
         $this->fileName = $this->filenameTrim($this->file->name);
     }
 
+    #[On('refreshComponent')]
     public function refreshComponent(){
         $this->fileId = null;
     }

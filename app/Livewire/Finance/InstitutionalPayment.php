@@ -21,8 +21,6 @@ class InstitutionalPayment extends Component
     public $fecha;
     public $receptor;
 
-    // protected $listeners = ['pdfRefresh'];
-
     public $filters = [
         'id' => null,
         'emisor' => null,

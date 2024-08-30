@@ -53,12 +53,6 @@ class CreateIdentifyNeed extends Component
 
     public $identifyNeedToEdit;
 
-    /*
-    protected $listeners = [
-        'learningGoalsDescriptions'
-    ];
-    */
-
     public $value;
     
     public function render()
@@ -191,6 +185,7 @@ class CreateIdentifyNeed extends Component
     }
 
     /*
+    #[On('learningGoalsDescriptions')]
     public function learningGoalsDescriptions($learningGoalsDescriptions)
     {
         $this->learningGoalsDescriptions = $learningGoalsDescriptions;
