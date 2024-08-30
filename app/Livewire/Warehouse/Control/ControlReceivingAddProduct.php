@@ -5,6 +5,7 @@ namespace App\Livewire\Warehouse\Control;
 use App\Models\Warehouse\ControlItem;
 use App\Models\Warehouse\Product;
 use Illuminate\Validation\Rule;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class ControlReceivingAddProduct extends Component
@@ -23,10 +24,6 @@ class ControlReceivingAddProduct extends Component
     public $search_store_product;
     public $store_products;
     public $categories;
-
-    protected $listeners = [
-        'myProductId'
-    ];
 
     public function rules()
     {
@@ -166,6 +163,7 @@ class ControlReceivingAddProduct extends Component
         $this->search_unspsc_product = null;
     }
 
+    #[On('myProductId')]
     public function myProductId($value)
     {
         $this->unspsc_product_id = $value;

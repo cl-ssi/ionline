@@ -8,6 +8,7 @@ use App\Models\Warehouse\Control;
 use App\Models\Warehouse\ControlItem;
 use App\Models\Warehouse\Product;
 use App\Models\Warehouse\TypeReception;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class ControlReviewProduct extends Component
@@ -35,10 +36,6 @@ class ControlReviewProduct extends Component
     public $wre_products;
     public $items;
     public $nav;
-
-    protected $listeners = [
-        'myProductId'
-    ];
 
     public function mount()
     {
@@ -229,6 +226,7 @@ class ControlReviewProduct extends Component
         $this->dispatch('searchProduct', $this->search_product);
     }
 
+    #[On('myProductId')]
     public function myProductId($value)
     {
         $this->unspsc_product_id = $value;

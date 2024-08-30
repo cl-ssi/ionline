@@ -3,6 +3,7 @@
 namespace App\Livewire\Warehouse\Control;
 
 use App\Models\Warehouse\Store;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class ControlEdit extends Component
@@ -26,10 +27,6 @@ class ControlEdit extends Component
 
     public $organizational_unit_id;
     public $establishment_id;
-
-    protected $listeners = [
-        'organizationalId'
-    ];
 
     public $rulesReceiving = [
         'date'              => 'required|date_format:Y-m-d',
@@ -106,6 +103,7 @@ class ControlEdit extends Component
         ]);
     }
 
+    #[On('organizationalId')]
     public function organizationalId($value)
     {
         $this->organizational_unit_id = $value;

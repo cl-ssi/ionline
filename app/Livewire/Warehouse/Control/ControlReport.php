@@ -24,10 +24,6 @@ class ControlReport extends Component
     public $type_control;
     public $typesControl;
 
-    protected $listeners = [
-        'myProductId'
-    ];
-
     public function mount()
     {
         $idsPrograms = Control::query()

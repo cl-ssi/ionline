@@ -7,6 +7,7 @@ use App\Models\Warehouse\Control;
 use App\Models\Warehouse\Store;
 use App\Models\Warehouse\TypeDispatch;
 use App\Models\Warehouse\TypeReception;
+use Livewire\Attributes\On;
 use Livewire\Component;
 use App\Models\Documents\Approval;
 
@@ -31,11 +32,6 @@ class ControlCreate extends Component
     public $typeReceptions;
     public $nav;
     public $require_contract_manager_visation = false;
-
-    protected $listeners = [
-        'organizationalId',
-        'technicalSignerId',
-    ];
 
     public $rulesReceiving = [
         'date'              => 'required|date_format:Y-m-d',
@@ -173,11 +169,13 @@ class ControlCreate extends Component
         ]);
     }
 
+    #[On('organizationalId')]
     public function organizationalId($value)
     {
         $this->organizational_unit_id = $value;
     }
 
+    #[On('technicalSignerId')]
     public function technicalSignerId($value)
     {
         $this->technical_signer_id = $value;

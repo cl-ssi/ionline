@@ -4,6 +4,7 @@ namespace App\Livewire\Warehouse\Products;
 
 use App\Http\Requests\Warehouse\Product\CreateProductRequest;
 use App\Models\Warehouse\Product;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class ProductCreate extends Component
@@ -18,10 +19,6 @@ class ProductCreate extends Component
     public $unspsc_product_id;
     public $search_unspsc_product;
     public $nav;
-
-    protected $listeners = [
-        'myProductId'
-    ];
 
     public function rules()
     {
@@ -60,6 +57,7 @@ class ProductCreate extends Component
         $this->dispatch('searchProduct', $this->search_unspsc_product);
     }
 
+    #[On('myProductId')]
     public function myProductId($value)
     {
         $this->unspsc_product_id = $value;

@@ -6,6 +6,7 @@ use App\Models\Warehouse\Control;
 use App\Models\Warehouse\ControlItem;
 use App\Models\Warehouse\Product;
 use App\Models\Warehouse\TypeReception;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class ControlProductList extends Component
@@ -15,10 +16,7 @@ class ControlProductList extends Component
     public $controlItems;
     public $nav;
 
-    protected $listeners = [
-        'refreshControlProductList' => 'mount'
-    ];
-
+    #[On('refreshControlProductList')]
     public function mount()
     {
         $this->controlItems = $this->control->items->sortByDesc('created_at');
