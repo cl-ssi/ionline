@@ -10,12 +10,21 @@ use OwenIt\Auditing\Contracts\Auditable;
 class AllowanceValue extends Model implements Auditable
 {
     use HasFactory;
-    use softDeletes;
     use \OwenIt\Auditing\Auditable;
+    use softDeletes;
 
-    protected $fillable = [
-        'level', 'description', 'value', 'year'
-    ];
-
+    /**
+     * The table associated with the model.
+     */
     protected $table = 'cfg_allowance_values';
+
+    /**
+     * The attributes that are mass assignable.
+     */
+    protected $fillable = [
+        'level',
+        'description',
+        'value',
+        'year',
+    ];
 }

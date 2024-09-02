@@ -2,42 +2,39 @@
 
 namespace App\Models\Parameters;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-/* TODO: Eliminar cuando se mueva el modelo User a App\Models */
-use App\Models\User;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class AccessLog extends Model
 {
     use HasFactory;
 
     /**
-    * The attributes that are mass assignable.
-    *
-    * @var array
-    */
+     * The attributes that are mass assignable.
+     */
     protected $fillable = [
         'user_id',
         'type',
         'switch_id',
-        'enviroment'
+        'enviroment',
     ];
 
     /**
-    * The primary key associated with the table.
-    *
-    * @var string
-    */
+     * The primary key associated with the table.
+     *
+     * @var string
+     */
     protected $table = 'cfg_access_logs';
-    
-    public function user()
+
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class)->withTrashed();
     }
-    
-    public function switchUser()
+
+    public function switchUser(): BelongsTo
     {
         return $this->belongsTo(User::class, 'switch_id')->withTrashed();
     }
-    
 }

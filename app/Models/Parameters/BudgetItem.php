@@ -2,9 +2,10 @@
 
 namespace App\Models\Parameters;
 
+use App\Models\RequestForms\ItemRequestForm;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\RequestForm\ItemRequestForm;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class BudgetItem extends Model
@@ -20,7 +21,7 @@ class BudgetItem extends Model
         'name',
     ];
 
-    public function itemRequestForms()
+    public function itemRequestForms(): HasMany
     {
         return $this->hasMany(ItemRequestForm::class, 'budget_item_id');
     }
