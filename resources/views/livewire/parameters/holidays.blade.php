@@ -1,20 +1,21 @@
 <div>
+    
 
     @section('title', 'Lista de Feriados')
 
     @if ($form)
-        <h3>{{ $holiday->id ? 'Editar' : 'Crear' }} Feriado</h3>
+        <h3>{{ $holidayId ? 'Editar' : 'Crear' }} Feriado</h3>
         
         @include('parameters.holidays.form')
         
-        <div class="form-row">
+        <div class="row">
             <div class="mt-3 col-12">
                 <button type="button" class="btn btn-success" wire:click="save()">Guardar</button>
                 <button type="button" class="btn btn-outline-secondary" wire:click="index()">Cancelar</button>
             </div>
         </div>
     @else
-        <div class="form-row">
+        <div class="row">
             <div class="col">
                 <h3 class="mb-3">Listado de Feriados</h3>
             </div>

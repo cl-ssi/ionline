@@ -15,9 +15,10 @@ class Holidays extends Component
 
     /** Mostrar o no el form, tanto para crear como para editar */
     public $form = false;
-
-    public $holiday;
-
+    public $holidayId;
+    public $holidayDate;
+    public $holidayName;
+    public $holidayRegionId;
     /** Listado de regiones */
     public $regions;
 
@@ -26,7 +27,7 @@ class Holidays extends Component
     */
     public function mount()
     {
-        $this->regions = ClRegion::pluck('name','id');
+        $this->regions = ClRegion::pluck('name', 'id');
     }
 
     protected function rules()
@@ -36,33 +37,48 @@ class Holidays extends Component
         $startOfYear = now()->startOfYear()->format('Y-m-d');
 
         return [
-            'holiday.date' => 'required|date_format:Y-m-d|after_or_equal:' . $startOfYear,
-            'holiday.name' => 'required|min:4',
-            'holiday.region_id' => 'nullable',
+            'holidayDate'     => 'required|date_format:Y-m-d|after_or_equal:' . $startOfYear,
+            'holidayName'     => 'required|min:4',
+            'holidayRegionId' => 'nullable',
         ];
     }
 
     protected $messages = [
-        'holiday.date.required' => 'La fecha desde es requerida.',
-        'holiday.name.required' => 'El nombre es requerido.',
+        'holidayDate.required' => 'La fecha desde es requerida.',
+        'holidayName.required' => 'El nombre es requerido.',
     ];
 
     public function index()
     {
         $this->resetErrorBag();
         $this->form = false;
+        $this->reset(['holidayId', 'holidayDate', 'holidayName', 'holidayRegionId']);
     }
 
-    public function form(Holiday $holiday)
+    public function edit(Holiday $holiday)
     {
-        $this->holiday = Holiday::firstOrNew([ 'id' => $holiday->id]);
+        // dd($holiday->date);
+        $this->holidayId       = $holiday->id;
+        $this->holidayDate     = $holiday->date->format('Y-m-d');
+        $this->holidayName     = $holiday->name;
+        $this->holidayRegionId = $holiday->region_id;
+
         $this->form = true;
     }
 
     public function save()
     {
         $this->validate();
-        $this->holiday->save();
+
+        Holiday::updateOrCreate(
+            ['id' => $this->holidayId],
+            [
+                'date'      => $this->holidayDate,
+                'name'      => $this->holidayName,
+                'region_id' => $this->holidayRegionId,
+            ]
+        );
+
         $this->index();
     }
 
@@ -76,6 +92,6 @@ class Holidays extends Component
         $holidays = Holiday::orderByDesc('date')->paginate(25);
         return view('livewire.parameters.holidays', [
             'holidays' => $holidays,
-        ])->extends('layouts.bt4.app');
+        ]);
     }
 }

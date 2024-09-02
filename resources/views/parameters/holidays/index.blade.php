@@ -12,8 +12,8 @@
         @foreach($holidays as $holiday)
             <tr>
                 <td>
-                    <button type="button" class="btn btn-sm btn-primary" 
-                        wire:click="form({{$holiday}})"><i class="fas fa-edit"></i></button>
+                    <button class="btn btn-sm btn-primary" 
+                        wire:click="edit({{$holiday}})"><i class="fas fa-edit"></i></button>
                 </td>
                 <td>{{ $holiday->date->format('Y-m-d') }}</td>
                 <td>{{ $holiday->name }}</td>
