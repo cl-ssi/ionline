@@ -4,7 +4,6 @@ namespace App\Models\His;
 
 use App\Models\Documents\Approval;
 use App\Models\User;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -32,16 +31,8 @@ class ModificationRequest extends Model
         'type',
         'subject',
         'body',
-        'status',
         'creator_id',
         'observation',
-    ];
-
-    /**
-     * The attributes that should be cast.
-     */
-    protected $casts = [
-        'status' => 'boolean',
     ];
 
     public function creator(): BelongsTo
@@ -63,16 +54,14 @@ class ModificationRequest extends Model
     }
 
     /**
-     * Get the color attribute based on the status.
+     * Get Color With status
      */
-    protected function color(): Attribute
+    public function getColorAttribute()
     {
-        return Attribute::get(
-            fn () => match ($this->status) {
-                false => 'danger',
-                true => 'success',
-                default => '',
-            }
-        );
+        return match ($this->status) {
+            '0' => 'danger',
+            '1' => 'success',
+            default => '',
+        };
     }
 }
