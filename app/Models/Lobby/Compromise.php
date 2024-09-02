@@ -2,20 +2,17 @@
 
 namespace App\Models\Lobby;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use App\Models\Lobby\Meeting;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Compromise extends Model
 {
     use HasFactory;
 
     /**
-    * The attributes that are mass assignable.
-    *
-    * @var array
-    */
-
+     * The attributes that are mass assignable.
+     */
     protected $fillable = [
         'id',
         'meeting_id',
@@ -25,32 +22,31 @@ class Compromise extends Model
     ];
 
     /**
-    * The primary key associated with the table.
-    *
-    * @var string
-    */
+     * The primary key associated with the table.
+     */
     protected $table = 'lobby_compromises';
 
     /**
-    * The attributes that should be cast.
-    *
-    * @var array
-    */
+     * The attributes that should be cast.
+     */
     protected $casts = [
         'date' => 'datetime',
     ];
 
-    public function meeting()
+    public function meeting(): BelongsTo
     {
         return $this->belongsTo(Meeting::class);
     }
 
     public function getStatusIconAttribute()
     {
-        switch($this->status) {
-            case 'pendiente': echo 'bi bi-hourglass'; break;
-            case 'en curso': echo 'bi bi-hourglass-bottom'; break;
-            case 'terminado': echo 'bi bi-check'; break;
+        switch ($this->status) {
+            case 'pendiente': echo 'bi bi-hourglass';
+                break;
+            case 'en curso': echo 'bi bi-hourglass-bottom';
+                break;
+            case 'terminado': echo 'bi bi-check';
+                break;
         }
     }
 }
