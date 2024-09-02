@@ -460,15 +460,21 @@
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
             </div>
             </div>
+            
         </div>
     </div>
 
     @push('scripts')
         <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.7.0/main.min.js'></script>
         <script>
+            
+
             document.addEventListener('livewire:init', function() {
+                
                 var Calendar = FullCalendar.Calendar;
                 var calendarEl = document.getElementById('calendar');
+                var events = JSON.parse(@json($events)); // Convierte la propiedad Livewire en JSON
+                
                 var calendar = new Calendar(calendarEl, {
 
                     editable: true,
@@ -552,11 +558,10 @@
                     slotMinTime: "08:00:00",
                     locale: 'es',
                     displayEventTime: false,
-                    events: JSON.parse(@this.events),
+                    events: events,
 
                 });
                 
-                // console.log(@this.events),
                 calendar.render();
                 
             });
