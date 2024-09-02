@@ -18,16 +18,21 @@ class NewModification extends Component
     public $storage_path = '/ionline/his/files';
     public $files = [];
 
+    public $modificationRequestType;
+    public $modificationRequestSubject;
+    public $modificationRequestBody;
+    public $modificationRequestStatus = null;
+
     protected $rules = [
-        'modrequest.type' => 'required',
-        'modrequest.subject' => 'required|min:4',
-        'modrequest.body' => 'nullable',
-        'modrequest.status' => 'nullable',
+        'modificationRequestType' => 'required',
+        'modificationRequestSubject' => 'required|min:4',
+        'modificationRequestBody' => 'nullable',
+        'modificationRequestStatus' => 'nullable',
     ];
 
     protected $messages = [
-        'modrequest.type.required' => 'El tipo es obligatorio.',
-        'modrequest.subject.required' => 'El asunto es obligatorio.',
+        'modificationRequestType.required' => 'El tipo es obligatorio.',
+        'modificationRequestSubject.required' => 'El asunto es obligatorio.',
     ];
 
     /**
@@ -48,10 +53,13 @@ class NewModification extends Component
         ]);
         
         $this->validate();
-        $modrequest = ModificationRequest::make($this->modrequest);
-        $modrequest->creator_id = auth()->id();
-
-        $modrequest->save();
+        $modrequest = ModificationRequest::create([
+            'type' => $this->modificationRequestType,
+            'subject' => $this->modificationRequestSubject,
+            'body' => $this->modificationRequestBody,
+            'status' => $this->modificationRequestStatus,
+            'creator_id' => auth()->id(),
+        ]);
 
         foreach($this->files as $file){
             $filename = $file->getClientOriginalName();
@@ -69,6 +77,6 @@ class NewModification extends Component
 
     public function render()
     {
-        return view('livewire.his.new-modification')->extends('layouts.bt4.app');
+        return view('livewire.his.new-modification');
     }
 }

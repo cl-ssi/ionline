@@ -4,7 +4,7 @@
 
     <h3 class="mb-3">Nueva solicitud Rayen</h3>
 
-    <div class="form-row">
+    <div class="row g-2">
 
         <div class="form-group col">
             <label for="for_creator_id">Solicitante</label>
@@ -21,7 +21,7 @@
 
     <div class="form-group">
         <label for="for_type">Tipo de solicitud</label>
-        <select class="form-control" id="for_type" wire:model.defer="modrequest.type">
+        <select class="form-select" id="for_type" wire:model.defer="modificationRequestType">
             <option></option>
             @foreach($types as $type)
                 <option>{{ $type }}</option>
@@ -31,12 +31,12 @@
 
     <div class="form-group">
         <label for="for_subject">Asunto de la solicitud</label>
-        <input type="text" class="form-control" id="for_subject" wire:model.defer="modrequest.subject">
+        <input type="text" class="form-control" id="for_subject" wire:model.defer="modificationRequestSubject">
     </div>
     
     <div class="form-group">
         <label for="for_body">Detalle de la solicitud</label>
-        <textarea class="form-control" id="for_body" rows="5" wire:model.defer="modrequest.body"></textarea>
+        <textarea class="form-control" id="for_body" rows="5" wire:model.defer="modificationRequestBody"></textarea>
     </div>
 
     <div class="form-group">
@@ -45,7 +45,7 @@
         @error('files.*') <span class="error">{{ $message }}</span> @enderror
     </div>
 
-    @include('layouts.bt4.partials.flash_message')
+    @include('layouts.bt5.partials.flash_message')
     
-    <button class="btn btn-primary" wire:click="save">Crear</button>
+    <button class="btn btn-primary" wire:click="save" wire:loading.attr="disabled">Crear</button>
 </div>
