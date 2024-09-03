@@ -103,18 +103,15 @@
   <div class="form-row">
 
     @foreach($serviceRequest->SignatureFlows->where('sign_position','>',2)->where('status','!=',2)->sortBy('sign_position') as $key => $signatureFlows)
-
-      <fieldset class="form-group col-sm-4">
-  				<label for="for_users">{{$signatureFlows->employee}}</label>
-  				<select name="users[]" id="users" class="form-control selectpicker" data-live-search="true" required="" data-size="5" disabled>
-  					@foreach($users as $key => $user)
-  						<option value="{{$user->id}}" @if($user->id == $signatureFlows->responsable_id) selected @endif >{{$user->getFullNameAttribute()}}</option>
-  					@endforeach
-  				</select>
-  		</fieldset>
-
+        <fieldset class="form-group col-sm-4">
+                <label for="for_users">{{$signatureFlows->user->position}}</label>
+                <select name="users[]" id="users" class="form-control selectpicker" data-live-search="true" required="" data-size="5" disabled>
+                    @foreach($users as $key => $user)
+                        <option value="{{$user->id}}" @if($user->id == $signatureFlows->responsable_id) selected @endif >{{$user->getFullNameAttribute()}}</option>
+                    @endforeach
+                </select>
+        </fieldset>
     @endforeach
-
   </div>
 
   <br>

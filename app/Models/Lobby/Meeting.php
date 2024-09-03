@@ -2,21 +2,19 @@
 
 namespace App\Models\Lobby;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\User;
-use App\Models\Lobby\MeetingUser;
-use App\Models\Lobby\Compromise;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class Meeting extends Model
 {
     use HasFactory;
 
     /**
-    * The attributes that are mass assignable.
-    *
-    * @var array
-    */
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
     protected $fillable = [
         'responsible_id',
         'petitioner',
@@ -34,15 +32,22 @@ class Meeting extends Model
     ];
 
     /**
-    * The primary key associated with the table.
-    *
-    * @var string
-    */
+     * The primary key associated with the table.
+     *
+     * @var string
+     */
     protected $table = 'lobby_meetings';
-    
+
+    protected $casts = [
+        'start_at' => 'datetime:H:i',
+        'end_at' => 'datetime:H:i',
+        'status' => 'boolean',
+        'date' => 'date',
+    ];
+
     public function responsible()
     {
-        return $this->belongsTo(User::class,'responsible_id');
+        return $this->belongsTo(User::class, 'responsible_id');
     }
 
     public function participants()
@@ -57,35 +62,26 @@ class Meeting extends Model
 
     public function scopeFilter($query, $filter)
     {
-        foreach($filter as $type => $value) {
-            switch($type) {
+        foreach ($filter as $type => $value) {
+            switch ($type) {
                 case 'subject':
-                    $query->where('subject','LIKE','%'.$value.'%');
+                    $query->where('subject', 'LIKE', '%'.$value.'%');
                     break;
                 case 'responsible':
                     $array_search = explode(' ', $value);
-                    foreach($array_search as $word)
-                    {
-                        $query->whereRelation('responsible',function($q) use($word) {
+                    foreach ($array_search as $word) {
+                        $query->whereRelation('responsible', function ($q) use ($word) {
                             $q->where('name', 'LIKE', '%'.$word.'%')
-                            ->orwhere('fathers_family','LIKE', '%'.$word.'%')
-                            ->orwhere('mothers_family','LIKE', '%'.$word.'%')
-                            ->orwhere('id','LIKE', '%'.$word.'%');
+                                ->orwhere('fathers_family', 'LIKE', '%'.$word.'%')
+                                ->orwhere('mothers_family', 'LIKE', '%'.$word.'%')
+                                ->orwhere('id', 'LIKE', '%'.$word.'%');
                         });
                     }
                     break;
                 case 'status':
-                    $query->where('status',$value);
+                    $query->where('status', $value);
                     break;
             }
         }
     }
-
-    protected $casts = [
-        'start_at' => 'datetime:H:i',
-        'end_at' => 'datetime:H:i',
-        'status' => 'boolean',
-        'date' => 'date'
-    ];
-    
 }

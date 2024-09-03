@@ -4,22 +4,40 @@ namespace App\Models\Parameters;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Contracts\Auditable;
 
 class ContractualCondition extends Model implements Auditable
 {
     use HasFactory;
-    use softDeletes;
     use \OwenIt\Auditing\Auditable;
+    use softDeletes;
 
+    /**
+     * The table associated with the model.
+     */
+    protected $table = 'cfg_contractual_conditions';
+
+    /**
+     * The attributes that are mass assignable.
+     */
     protected $fillable = [
-        'name'
+        'name',
     ];
 
-    public function contractualCondition(){
-        return $this->belongsTo('App\Models\Parameters\ContractualCondition');
-    }
+    /**
+     * The attributes that should be cast.
+     */
+    protected $casts = [
+        //
+    ];
 
-    protected $table = 'cfg_contractual_conditions';
+    /**
+     * Get the contractual condition that owns the model.
+     */
+    public function contractualCondition(): BelongsTo
+    {
+        return $this->belongsTo(ContractualCondition::class);
+    }
 }
