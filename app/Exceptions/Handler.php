@@ -36,6 +36,12 @@ class Handler extends ExceptionHandler
      */
     public function report(Throwable $exception)
     {
+        // FIXME: This is a temporary fix for the "The resource owner or authorization server denied the request." 
+        // source: https://laracasts.com/discuss/channels/laravel/error-log-problems-when-using-laravel-passport-for-user-login-authentication?page=1#reply=389574
+        // Kill reporting if this is an "access denied" (code 9) OAuthServerException.
+        if ($exception instanceof \League\OAuth2\Server\Exception\OAuthServerException && $exception->getCode() == 9) {
+            return;
+        }
         parent::report($exception);
     }
 
