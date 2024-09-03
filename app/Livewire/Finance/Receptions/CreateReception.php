@@ -443,7 +443,7 @@ class CreateReception extends Component
 
     #[On('setTemplate')]
     public function setTemplate($input, $template){
-        $this->$input = $template;
+        $this->reception[$input] = $template;
     }
 
     /**

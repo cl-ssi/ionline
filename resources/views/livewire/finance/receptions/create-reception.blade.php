@@ -245,7 +245,7 @@
                             'text-templates.controls-text-template',
                             [
                                 'module' => 'Receptions',
-                                'input' => 'reception.header_notes',
+                                'input' => 'header_notes',
                             ],
                             key('head_notes')
                         )
@@ -397,7 +397,7 @@
                         'text-templates.controls-text-template',
                         [
                             'module' => 'Receptions',
-                            'input' => 'reception.footer_notes',
+                            'input' => 'footer_notes',
                         ],
                         key('footer_notes')
                     )
