@@ -105,6 +105,12 @@ class ItemRequestFormController extends Controller
 
     public function show_item_file(ItemRequestForm $itemRequestForm)
     {
-        return Storage::disk('gcs')->response($itemRequestForm->article_file);
+        if( Storage::disk('gcs')->exists($itemRequestForm->article_file) ) {
+            return Storage::disk('gcs')->response($itemRequestForm->article_file);
+
+        } 
+        else {
+            return redirect()->back()->with('warning', 'El archivo no se ha encontrado. considera cargar nuevamente el archivos');
+        }
     }
 }
