@@ -110,7 +110,7 @@ class ItemRequestFormController extends Controller
 
         } 
         else {
-            return redirect()->back()->with('warning', 'El archivo no se ha encontrado. considera cargar nuevamente el archivos');
+            return redirect()->back()->with('warning', 'El archivo no se ha encontrado, considerar cargar nuevamente el archivo.');
         }
     }
 }
