@@ -50,14 +50,17 @@ class ControlsTextTemplate extends Component
 
     public $textTemplate;
 
+    public $textTemplateTitle;
+    public $textTemplateTemplate;
+
     protected $rules = [
-        'textTemplate.title'    => 'required',
-        'textTemplate.template' => 'required',
+        'textTemplateTitle'    => 'required',
+        'textTemplateTemplate' => 'required',
     ];
 
     protected $messages = [
-        'textTemplate.title.required'    => "El título es obligatorio",
-        'textTemplate.template.required' => "El contenido de la plantilla es obligatoria",
+        'textTemplateTitle.required'    => "El título es obligatorio",
+        'textTemplateTemplate.required' => "El contenido de la plantilla es obligatoria",
     ];
 
     public function mount()
@@ -83,6 +86,8 @@ class ControlsTextTemplate extends Component
         $this->textTemplate->module = $this->module;
         $this->textTemplate->input = $this->input;
         $this->textTemplate->user_id = auth()->id();
+        $this->textTemplate->title = $this->textTemplateTitle;
+        $this->textTemplate->template = $this->textTemplateTemplate;
         $this->textTemplate->save();
 
         $this->textTemplate = new TextTemplate();
