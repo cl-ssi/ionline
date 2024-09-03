@@ -559,9 +559,9 @@
 
         <!-- Si tiene otros documentos necesarios para la recepción -->
         @if ($purchaseOrder->requestForm)
-            @if ($purchaseOrder->requestForm->paymentDocs)
+            @if ($purchaseOrder->requestForm->paymentDocs->exist())
                 <div class="row mb-4">
-                    <h4>Adjuntar otros documentos</h4>
+                    <h4>Adjuntar otros documentos Asociado al Pago (Desde FR)</h4>
                     @foreach ($purchaseOrder->requestForm->paymentDocs as $doc)
                         <div class="col-12">
                             <div class="form-group">
@@ -579,7 +579,7 @@
         <div class="mb-3">
             <label for="support_file"
                 class="form-label">Documento de respaldo (opcional)</label>
-            <input class="form-control"
+            <input class="form-control" 
                 type="file"
                 wire:model="support_file"
                 id="support_file">
