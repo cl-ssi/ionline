@@ -163,6 +163,7 @@ class RequestFormItems extends Component
         $this->article = $this->technicalSpecifications = $this->quantity = $this->unitValue = "";
         $this->taxes = $this->budget_item_id = $this->unitOfMeasurement = "";
         $this->articleFile = null;
+        $this->savedArticleFile = null;
         $this->search_product = null;
         $this->iteration++;
     }
