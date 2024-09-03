@@ -17,7 +17,18 @@ class LinkController extends Controller
      */
     public function index()
     {
-        $summaryTypes = Type::with(['eventTypes'])->where('establishment_id', auth()->user()->establishment_id)->get();
+        $summaryTypes = Type::with([
+            'eventTypes',
+            'eventTypes.actor',
+            'eventTypes.linksBefore',
+            'eventTypes.linksBefore.beforeEvent',
+            'eventTypes.linksBefore.beforeEvent.actor',
+            'eventTypes.linksAfter',
+            'eventTypes.linksAfter.afterEvent',
+            'eventTypes.linksAfter.afterEvent.actor',
+        ])
+            ->where('establishment_id', auth()->user()->establishment_id)
+            ->get();
 
         return view('summary.links.index', compact('summaryTypes'));
     }
