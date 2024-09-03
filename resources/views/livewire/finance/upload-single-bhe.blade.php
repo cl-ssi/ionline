@@ -24,15 +24,15 @@
         <div class="row g-2 mb-3">
             <div class="form-group col-2">
                 <label for="tipo_documento">Tipo de documento</label>
-                <input type="text" class="form-control" id="emisor" wire:model="dte.tipo_documento" disabled>
+                <input type="text" class="form-control" id="emisor" wire:model="dteTipo_documento" disabled>
             </div>
 
             <div class="form-group col-2">
                 <label for="folio">Número (folio)</label>
                 <div class="input-group">
-                    <input type="number" class="form-control" id="folio" wire:model="dte.folio" min="1" 
+                    <input type="number" class="form-control" id="folio" wire:model="dteFolio" min="1" 
                         autocomplete="off">
-                    @error('dte.folio') <span class="text-danger">{{ $message }}</span> @enderror
+                    @error('dteFolio') <span class="text-danger">{{ $message }}</span> @enderror
                     @if(isset($dte->id))
                         <span class="input-group-text text-success" id="exist" title="Existe el registro en la BD">
                             <i class="bi bi-database-check"></i>
@@ -47,7 +47,7 @@
 
             <div class="form-group col-2">
                 <label for="emision">Fecha</label>
-                <input type="date" class="form-control" id="emision" wire:model="dte.emision" autocomplete="off">
+                <input type="date" class="form-control" id="emision" wire:model="dteEmision" autocomplete="off">
                 <div id="emision-helper" class="form-text">
                     @if($dte->isDirty('emision'))
                         {{ $dte->getOriginal('emision') }}
@@ -57,9 +57,9 @@
 
             <div class="form-group col-2">
                 <label for="monto_total">Monto Total*</label>
-                <input type="text" class="form-control" id="montoTotal" wire:model="dte.monto_total"
+                <input type="text" class="form-control" id="montoTotal" wire:model="dteMonto_total"
                     autocomplete="off" min="1">
-                @error('dte.monto_total') <span class="text-danger">{{ $message }}</span> @enderror
+                @error('dteMonto_total') <span class="text-danger">{{ $message }}</span> @enderror
                 <div id="monto_total-helper" class="form-text">
                     @if($dte->isDirty('monto_total'))
                         {{ $dte->getOriginal('monto_total') }}
@@ -78,9 +78,9 @@
         <div class="row g-2 mb-3">
             <div class="form-group col-2">
                 <label for="emisor">RUT Emisor</label>
-                <input type="text" class="form-control" id="emisor" wire:model="dte.emisor"
+                <input type="text" class="form-control" id="emisor" wire:model="dteEmisor"
                     autocomplete="off">
-                @error('dte.emisor') <span class="text-danger">{{ $message }}</span> @enderror
+                @error('dteEmisor') <span class="text-danger">{{ $message }}</span> @enderror
                 <div id="emisor-helper" class="form-text">
                     @if($dte->isDirty('emisor'))
                         {{ $dte->getOriginal('emisor') }}
@@ -90,7 +90,7 @@
 
             <div class="form-group col-6">
                 <label for="razonSocial">Razón Social</label>
-                <input type="text" class="form-control" id="razon_social_emisor" wire:model="dte.razon_social_emisor"
+                <input type="text" class="form-control" id="razon_social_emisor" wire:model="dteRazon_social_emisor"
                     autocomplete="off">
                 <div id="razon_social_emisor-helper" class="form-text">
                     @if($dte->isDirty('razon_social_emisor'))
@@ -101,8 +101,8 @@
 
             <div class="form-group col-2">
                 <label for="receptor">Receptor</label>
-                <input type="text" class="form-control" id="folioOC" wire:model="dte.receptor" autocomplete="off">
-                @error('dte.receptor') <span class="text-danger">{{ $message }}</span> @enderror
+                <input type="text" class="form-control" id="folioOC" wire:model="dteReceptor" autocomplete="off">
+                @error('dteReceptor') <span class="text-danger">{{ $message }}</span> @enderror
                 <div id="receptor-helper" class="form-text">
                     @if($dte->isDirty('receptor'))
                         {{ $dte->getOriginal('receptor') }}
@@ -112,8 +112,8 @@
 
             <div class="form-group col-2">
                 <label for="folio_oc">Orden de Compra*</label>
-                <input type="text" class="form-control" id="folioOC" wire:model="dte.folio_oc" autocomplete="off">
-                @error('dte.folio_oc') <span class="text-danger">{{ $message }}</span> @enderror
+                <input type="text" class="form-control" id="folioOC" wire:model="dteFolio_oc" autocomplete="off">
+                @error('dteFolio_oc') <span class="text-danger">{{ $message }}</span> @enderror
             </div>
 
         </div>

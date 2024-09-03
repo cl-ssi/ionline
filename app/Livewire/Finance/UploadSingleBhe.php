@@ -17,18 +17,30 @@ class UploadSingleBhe extends Component
     public $dte;
     public $message = null;
 
+    public $dteTipo;
+    public $dteTipo_documento;
+    public $dteFolio;
+    public $dteEmisor;
+    public $dteRazon_social_emisor;
+    public $dteReceptor;
+    public $dteEmision;
+    public $dteMonto_total;
+    public $dteUri;
+    public $dteFolio_oc;
+    public $dteEstablishment_id;
+
     protected $rules = [
-        'dte.tipo'              => 'required',
-        'dte.tipo_documento'    => 'required',
-        'dte.folio'             => 'required',
-        'dte.emisor'            => 'required',
-        'dte.razon_social_emisor' => 'required',
-        'dte.receptor'          => 'required',
-        'dte.emision'           => 'required|date',
-        'dte.monto_total'       => 'required',
-        'dte.uri'               => 'required',
-        'dte.folio_oc'          => 'required',
-        'dte.establishment_id'  => 'required',
+        'dteTipo'              => 'required',
+        'dteTipo_documento'    => 'required',
+        'dteFolio'             => 'required',
+        'dteEmisor'            => 'required',
+        'dteRazon_social_emisor' => 'required',
+        'dteReceptor'          => 'required',
+        'dteEmision'           => 'required|date',
+        'dteMonto_total'       => 'required',
+        'dteUri'               => 'required',
+        'dteFolio_oc'          => 'required',
+        'dteEstablishment_id'  => 'required',
     ];
 
     public function updatedBhe()
@@ -48,12 +60,12 @@ class UploadSingleBhe extends Component
 
         // Si la primera línea es "BOLETA DE HONORARIOS"
         if($lineas[0] == 'BOLETA DE HONORARIOS') {
-            $tipo_documento = 'boleta_honorarios';
-            $tipo = 69;
+            $dteTipo_documento = 'boleta_honorarios';
+            $dteTipo = 69;
 
             // Expresion regular para obtener el folio
             preg_match("/N\s?°?\s?(\d+)/", $this->bhe_to_text, $matches);
-            $folio = $matches[1];
+            $dteFolio = $matches[1];
 
             // Expresion regular para obtener la razon social del emisor
             preg_match("/\n\n(.+)\n\nN/", $this->bhe_to_text, $matches);
@@ -61,7 +73,7 @@ class UploadSingleBhe extends Component
 
             // Expresion regular para obtener el run del emisor
             preg_match("/RUT: ([\d.]+−[K\d])/", $this->bhe_to_text, $matches);
-            $emisor = runFormat($matches[1]);
+            $dteEmisor = runFormat($matches[1]);
 
             // Expresion regular para obtener la fecha de emision
             preg_match("/Fecha: (\d+ de .+ de \d+)/", $this->bhe_to_text, $matches);
@@ -123,18 +135,23 @@ class UploadSingleBhe extends Component
             $establishment_id = auth()->user()->organizationalUnit->establishment_id;
 
             $this->dte = Dte::firstOrNew([
-                'tipo'      => $tipo,
-                'folio'     => $folio,
-                'emisor'    => $emisor,
+                'tipo'      => $dteTipo,
+                'folio'     => $dteFolio,
+                'emisor'    => $dteEmisor,
             ]);
 
-            $this->dte->tipo_documento      = $tipo_documento;
-            $this->dte->razon_social_emisor = $razon_social_emisor;
-            $this->dte->receptor            = $receptor;
-            $this->dte->emision             = $emision;
-            $this->dte->monto_total         = $monto_total;
-            $this->dte->uri                 = $uri;
-            $this->dte->establishment_id    = $establishment_id;        
+            $this->dteTipo                = $dteTipo;
+            $this->dteFolio               = $dteFolio;
+            $this->dteEmisor              = $dteEmisor;
+            $this->dteTipo_documento      = $dteTipo_documento;
+            $this->dteRazon_social_emisor = $razon_social_emisor;
+            $this->dteReceptor            = $receptor;
+            $this->dteEmision             = $emision;
+            $this->dteMonto_total         = $monto_total;
+            $this->dteUri                 = $uri;
+            $this->dteEstablishment_id    = $establishment_id;
+
+            // app('debugbar')->log($this->dte);
         }
         else {
             $this->bhe_to_text = "NO ES UNA BOLETA DE HONORARIOS";
@@ -144,6 +161,18 @@ class UploadSingleBhe extends Component
     public function save()
     {
         $this->validate();
+
+        $this->dte->tipo                = $this->dteTipo;
+        $this->dte->folio               = $this->dteFolio;
+        $this->dte->emisor              = $this->dteEmisor;
+        $this->dte->tipo_documento      = $this->dteTipo_documento;
+        $this->dte->razon_social_emisor = $this->dteRazon_social_emisor;
+        $this->dte->receptor            = $this->dteReceptor;
+        $this->dte->emision             = $this->dteEmision;
+        $this->dte->monto_total         = $this->dteMonto_total;
+        $this->dte->uri                 = $this->dteUri;
+        $this->dte->establishment_id    = $this->dteEstablishment_id;
+        $this->dte->folio_oc            = $this->dteFolio_oc;
 
         $this->dte->save();
 
