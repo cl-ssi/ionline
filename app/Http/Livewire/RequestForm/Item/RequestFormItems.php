@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use Livewire\WithFileUploads;
+use App\Models\RequestForms\ItemRequestForm;
 
 class RequestFormItems extends Component
 {
@@ -240,10 +241,19 @@ class RequestFormItems extends Component
 
     public function deleteFile($key)
     {
+        $fileDeleteRecord = ItemRequestForm::find($this->items[$key]['id']);
+
         Storage::disk('gcs')->delete($this->items[$key]['articleFile']);
         $this->items[$key]['articleFile'] = null;
         $this->articleFile = $this->savedArticleFile = null;
         $this->iteration++;
+
+        /* NO SE ESTABA ACTUALIZANDO EL OBJETO */
+        $fileDeleteRecord               = ItemRequestForm::find($this->items[$key]['id']);
+        $fileDeleteRecord->article_file = null;
+        $fileDeleteRecord->save();
+        $this->cleanItem();
+         /* *********************************** */
     }
 
     public function updatedSearchProduct()
