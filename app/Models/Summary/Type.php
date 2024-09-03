@@ -35,7 +35,7 @@ class Type extends Model
     public function eventTypes(): HasMany
     {
         return $this->hasMany(EventType::class, 'summary_type_id')
-            ->where('establishment_id', auth()->user()->organizationalUnit->establishment_id)
+            ->where('establishment_id', auth()->user()->establishment_id)
             ->orderBy('summary_actor_id')
             ->orderBy('name');
     }

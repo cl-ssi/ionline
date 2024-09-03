@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Summary;
 
-use Illuminate\Http\Request;
-use App\Models\Summary\Type;
-use App\Models\Summary\Link;
 use App\Http\Controllers\Controller;
+use App\Models\Summary\EventType;
+use App\Models\Summary\Link;
+use App\Models\Summary\Type;
+use Illuminate\Http\Request;
 
 class LinkController extends Controller
 {
@@ -16,9 +17,8 @@ class LinkController extends Controller
      */
     public function index()
     {
-        $summaryTypes = Type::where('establishment_id',auth()->user()->establishment_id)->with(['eventTypes' => function ($query) {
-            $query->where('establishment_id', auth()->user()->organizationalUnit->establishment->id);
-        }])->get();
+        $summaryTypes = Type::with(['eventTypes'])->where('establishment_id', auth()->user()->establishment_id)->get();
+
         return view('summary.links.index', compact('summaryTypes'));
     }
 
@@ -31,19 +31,20 @@ class LinkController extends Controller
     {
         //
         $events = EventType::all();
+
         return view('summary.links.create', compact('events'));
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
         Link::create($request->all());
         session()->flash('success', 'Se ha añadido el Vinculo correctamente.');
+
         return redirect()->route('summary.links.index');
     }
 
@@ -72,7 +73,6 @@ class LinkController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */

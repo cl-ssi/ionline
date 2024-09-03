@@ -35,20 +35,22 @@
                             <td>
                                 <ul>
                                     @foreach ($eventType->linksBefore as $linkBefore)
-                                        <li>
-                                            @if($linkBefore->beforeEvent->start)
-                                                <i class="fas fa-caret-right"></i>
-                                            @endif
+                                        @if($linkBefore->beforeEvent)
+                                            <li>
+                                                @if($linkBefore->beforeEvent->start)
+                                                    <i class="fas fa-caret-right"></i>
+                                                @endif
 
-                                            <a class="text-link" href="{{ route('summary.event-types.edit', $linkBefore->beforeEvent) }}">
-                                            [{{ $linkBefore->beforeEvent->actor->name }}] 
-                                            {{ $linkBefore->beforeEvent->name ?? '' }}
-                                            </a>
+                                                <a class="text-link" href="{{ route('summary.event-types.edit', $linkBefore->beforeEvent) }}">
+                                                [{{ $linkBefore->beforeEvent->actor->name }}] 
+                                                {{ $linkBefore->beforeEvent->name ?? '' }}
+                                                </a>
 
-                                            @if($linkBefore->beforeEvent->end)
-                                                <i class="fas fa-caret-left"></i>
-                                            @endif
-                                        </li>
+                                                @if($linkBefore->beforeEvent->end)
+                                                    <i class="fas fa-caret-left"></i>
+                                                @endif
+                                            </li>
+                                        @endif
                                     @endforeach
                                 </ul>
                             </td>
@@ -70,18 +72,20 @@
                                 <ul>
                                     @foreach ($eventType->linksAfter as $linkAfter)
                                         <li>
-                                            @if($linkAfter->afterEvent->start)
-                                                <i class="fas fa-caret-right"></i>
-                                            @endif
+                                            @if($linkAfter->afterEvent)
+                                                @if($linkAfter->afterEvent?->start)
+                                                    <i class="fas fa-caret-right"></i>
+                                                @endif
 
-                                            @if($linkAfter->afterEvent->sub_event) &nbsp;&nbsp; @endif
-                                            <a class="text-link" href="{{ route('summary.event-types.edit', $linkAfter->afterEvent) }}">
-                                            [{{ $linkAfter->afterEvent->actor->name }}] 
-                                            {{ $linkAfter->afterEvent->name ?? '' }}
-                                            </a>
+                                                @if($linkAfter->afterEvent?->sub_event) &nbsp;&nbsp; @endif
+                                                <a class="text-link" href="{{ route('summary.event-types.edit', $linkAfter->afterEvent) }}">
+                                                [{{ $linkAfter->afterEvent->actor->name }}] 
+                                                {{ $linkAfter->afterEvent->name ?? '' }}
+                                                </a>
 
-                                            @if($linkAfter->afterEvent->end)
-                                                <i class="fas fa-caret-left"></i>
+                                                @if($linkAfter->afterEvent->end)
+                                                    <i class="fas fa-caret-left"></i>
+                                                @endif
                                             @endif
                                         </li>
                                     @endforeach

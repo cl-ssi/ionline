@@ -7,6 +7,7 @@ use App\Models\Summary\Actor;
 use App\Models\Summary\Link;
 use App\Models\Summary\Template;
 use App\Models\Summary\Type;
+use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -196,10 +197,8 @@ class EventType extends Model
 
     /**
      * Get the business days attribute.
-     *
-     * @return array
      */
-    public function getBusinessDaysAttribute(): array
+    public function getBusinessDaysAttribute(): Collection
     {
         if (isset($this->duration)) {
             $businessDays = DateHelper::getBusinessDaysByDuration($this->created_at, $this->duration);
