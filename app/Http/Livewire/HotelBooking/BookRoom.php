@@ -48,6 +48,7 @@ class BookRoom extends Component
                                         ->where('start_date',$this->start_date)
                                         ->where('end_date',$this->end_date)
                                         ->where('room_id', $this->room->id)
+                                        ->where('status','<>','Cancelado')
                                         ->count();
 
         if($roomBookingSeach > 0){
