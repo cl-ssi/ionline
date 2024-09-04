@@ -3,9 +3,6 @@
 namespace App\Models\Parameters;
 
 use App\Models\Establishment;
-use App\Models\Parameters\ProgramBudget;
-use App\Models\Parameters\Subtitle;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -15,7 +12,7 @@ use OwenIt\Auditing\Contracts\Auditable;
 
 class Program extends Model implements Auditable
 {
-    use HasFactory, SoftDeletes, \OwenIt\Auditing\Auditable;
+    use HasFactory, \OwenIt\Auditing\Auditable, SoftDeletes;
 
     /**
      * The table associated with the model.
@@ -42,7 +39,7 @@ class Program extends Model implements Auditable
         'end_date',
         'description',
         'is_program',
-        'establishment_id'
+        'establishment_id',
     ];
 
     /**
@@ -52,13 +49,11 @@ class Program extends Model implements Auditable
      */
     protected $casts = [
         'start_date' => 'date',
-        'end_date' => 'date'
+        'end_date' => 'date',
     ];
 
     /**
      * Get the establishment that owns the program.
-     *
-     * @return BelongsTo
      */
     public function establishment(): BelongsTo
     {
@@ -68,19 +63,15 @@ class Program extends Model implements Auditable
     /**
      * // FIXME: pasar a minusculas
      * Get the subtitle that owns the program.
-     *
-     * @return BelongsTo
      */
     public function Subtitle(): BelongsTo
     {
         return $this->belongsTo(Subtitle::class);
     }
 
+    // FIXME: pasar a minusculas
     /**
-     * // FIXME: pasar a minusculas
      * Get the budgets for the program.
-     *
-     * @return HasMany
      */
     public function Budgets(): HasMany
     {
@@ -89,8 +80,6 @@ class Program extends Model implements Auditable
 
     /**
      * Get the formatted start date attribute.
-     *
-     * @return string
      */
     public function getStartDateFormatAttribute(): string
     {
@@ -99,8 +88,6 @@ class Program extends Model implements Auditable
 
     /**
      * Get the formatted end date attribute.
-     *
-     * @return string
      */
     public function getEndDateFormatAttribute(): string
     {
@@ -109,8 +96,6 @@ class Program extends Model implements Auditable
 
     /**
      * Get the financing attribute.
-     *
-     * @return string
      */
     public function getFinancingAttribute(): string
     {
@@ -120,7 +105,7 @@ class Program extends Model implements Auditable
     /**
      * Scope a query to only include valid programs.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeOnlyValid($query)
@@ -131,7 +116,6 @@ class Program extends Model implements Auditable
     /**
      * Get programs by search text.
      *
-     * @param string $searchText
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public static function getProgramsBySearch(string $searchText)
@@ -140,7 +124,7 @@ class Program extends Model implements Auditable
         $array_search = explode(' ', $searchText);
         foreach ($array_search as $word) {
             $programs->where(function ($q) use ($word) {
-                $q->where('name', 'LIKE', '%' . $word . '%');
+                $q->where('name', 'LIKE', '%'.$word.'%');
             });
         }
 

@@ -27,7 +27,7 @@ class Location extends Model
     protected $fillable = [
         'name',
         'address',
-        'establishment_id'
+        'establishment_id',
     ];
 
     /**
@@ -41,8 +41,6 @@ class Location extends Model
 
     /**
      * Get the places for the location.
-     *
-     * @return HasMany
      */
     public function places(): HasMany
     {
@@ -51,8 +49,6 @@ class Location extends Model
 
     /**
      * Get the establishment that owns the location.
-     *
-     * @return BelongsTo
      */
     public function establishment(): BelongsTo
     {

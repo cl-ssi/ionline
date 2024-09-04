@@ -26,7 +26,7 @@ class CutOffDate extends Model
         'id',
         'year',
         'number',
-        'date'
+        'date',
     ];
 
     /**
@@ -36,6 +36,6 @@ class CutOffDate extends Model
      */
     protected $casts = [
         'year' => 'integer',
-        'date' => 'date'
+        'date' => 'date',
     ];
 }

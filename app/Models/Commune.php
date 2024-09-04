@@ -2,9 +2,7 @@
 
 namespace App\Models;
 
-use App\Models\Establishment;
 use App\Models\Agreements\Agreement;
-use App\Models\Parameters\Locality;
 use App\Models\Parameters\Municipality;
 use App\Models\Programmings\CommuneFile;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -22,7 +20,7 @@ class Commune extends Model
      * @var array
      */
     protected $fillable = [
-        'name'
+        'name',
     ];
 
     /**
@@ -32,13 +30,11 @@ class Commune extends Model
      */
     protected $hidden = [
         'created_at',
-        'updated_at'
+        'updated_at',
     ];
 
     /**
      * Get the agreements for the commune.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function agreements(): HasMany
     {
@@ -47,8 +43,6 @@ class Commune extends Model
 
     /**
      * Get the establishments for the commune.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function establishments(): HasMany
     {
@@ -57,8 +51,6 @@ class Commune extends Model
 
     /**
      * Get the municipality for the commune.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
     public function municipality(): HasOne
     {
@@ -67,8 +59,6 @@ class Commune extends Model
 
     /**
      * Get the commune files for the commune.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function communeFiles(): HasMany
     {
@@ -77,8 +67,6 @@ class Commune extends Model
 
     /**
      * Get the localities for the commune.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function localities(): HasMany
     {

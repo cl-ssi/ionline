@@ -31,8 +31,6 @@ class Label extends Model
 
     /**
      * Get the organizational unit that owns the label.
-     *
-     * @return BelongsTo
      */
     public function organizationalUnit(): BelongsTo
     {

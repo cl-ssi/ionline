@@ -2,16 +2,14 @@
 
 namespace App\Models;
 
-use App\Models\Commune;
 use App\Models\Inv\EstablishmentUser;
 use App\Models\Parameters\EstablishmentType;
 use App\Models\Rrhh\OrganizationalUnit;
-use App\Models\User;
 use App\Models\Warehouse\Store;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use OwenIt\Auditing\Contracts\Auditable;
 
 class Establishment extends Model implements Auditable
@@ -59,7 +57,7 @@ class Establishment extends Model implements Auditable
         'level_of_complexity',
         'provider_type_health_system',
         'mail_director',
-        'father_organizational_unit_id'
+        'father_organizational_unit_id',
     ];
 
     /**
@@ -70,13 +68,11 @@ class Establishment extends Model implements Auditable
     protected $hidden = [
         'created_at',
         'updated_at',
-        'commune_id'
+        'commune_id',
     ];
 
     /**
      * Get the commune that owns the establishment.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function commune(): BelongsTo
     {
@@ -85,8 +81,6 @@ class Establishment extends Model implements Auditable
 
     /**
      * Get the establishment type that owns the establishment.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function establishmentType(): BelongsTo
     {
@@ -95,8 +89,6 @@ class Establishment extends Model implements Auditable
 
     /**
      * Get the organizational units for the establishment.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function organizationalUnits(): HasMany
     {
@@ -105,8 +97,6 @@ class Establishment extends Model implements Auditable
 
     /**
      * Get the stores for the establishment.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function stores(): HasMany
     {
@@ -115,8 +105,6 @@ class Establishment extends Model implements Auditable
 
     /**
      * Get the mother establishment.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function mother(): BelongsTo
     {
@@ -125,8 +113,6 @@ class Establishment extends Model implements Auditable
 
     /**
      * Get the father organizational unit for the establishment.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function ouFather(): BelongsTo
     {
@@ -135,8 +121,6 @@ class Establishment extends Model implements Auditable
 
     /**
      * Get the users inventories for the establishment.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function usersInventories(): BelongsToMany
     {
@@ -147,8 +131,6 @@ class Establishment extends Model implements Auditable
 
     /**
      * Organizational Unit tree for google charts
-     *
-     * @return string
      */
     public function getTreeGoogleChartAttribute(): string
     {
@@ -159,13 +141,12 @@ class Establishment extends Model implements Auditable
         foreach ($ous as $ou) {
             $array[] = [$ou->name, $ou->father->name ?? '', ''];
         }
+
         return json_encode($array);
     }
 
     /**
      * Organizational Unit tree array
-     *
-     * @return array
      */
     public function getTreeArrayAttribute(): array
     {
@@ -177,16 +158,15 @@ class Establishment extends Model implements Auditable
 
         $array[0]['id'] = null;
         $array[0]['name'] = null;
-        if (!empty($ous)) {
+        if (! empty($ous)) {
             $array = $this->buildTree($ous, 'father_id', 'id');
         }
+
         return $array[0];
     }
 
     /**
      * ouTree
-     *
-     * @return array
      */
     public function getOuTreeAttribute(): array
     {
@@ -196,7 +176,7 @@ class Establishment extends Model implements Auditable
             ->get()
             ->toArray();
 
-        if (!empty($ous)) {
+        if (! empty($ous)) {
             $this->buildTree($ous, 'father_id', 'id');
         }
 
@@ -205,10 +185,8 @@ class Establishment extends Model implements Auditable
 
     /**
      * Get the organizational unit tree with alias.
-     *
-     * @return array
      */
-    public function getOuTreeWithAliasAttribute(): array|null
+    public function getOuTreeWithAliasAttribute(): ?array
     {
         $ous = $this->organizationalUnits()
             ->select('id', 'level', 'name', 'organizational_unit_id as father_id')
@@ -216,20 +194,18 @@ class Establishment extends Model implements Auditable
             ->get()
             ->toArray();
 
-        if (!empty($ous)) {
+        if (! empty($ous)) {
             $this->buildTree($ous);
         }
         foreach ((array) $this->options as $key => $option) {
-            $this->options[$key] = $this->alias . ' ' . $option;
+            $this->options[$key] = $this->alias.' '.$option;
         }
+
         return $this->options;
     }
 
     /**
      * Get the organizational unit tree with alias by level.
-     *
-     * @param int $level
-     * @return array
      */
     public function getOuTreeWithAliasByLevelAttribute(int $level): array
     {
@@ -246,13 +222,12 @@ class Establishment extends Model implements Auditable
         foreach ($ous as $key => $ou) {
             $this->options[$ou['id']] = $ou['name'];
         }
+
         return $this->options;
     }
 
     /**
      * Get the new DEIS without the first character.
-     *
-     * @return string
      */
     public function getNewDeisWithoutFirstCharacterAttribute(): string
     {
@@ -261,25 +236,22 @@ class Establishment extends Model implements Auditable
 
     /**
      * Get the full address.
-     *
-     * @return string
      */
     public function getFullAddressAttribute(): string
     {
-        return $this->street_type . ' ' . $this->address . ' ' . $this->street_number;
+        return $this->street_type.' '.$this->address.' '.$this->street_number;
     }
 
     /**
      * Build a tree from a flat list.
      *
-     * @param array $flatList - a flat list of tree nodes; a node is an array with keys: id, parentID, name.
-     * @return array
+     * @param  array  $flatList  - a flat list of tree nodes; a node is an array with keys: id, parentID, name.
      */
-    function buildTree(array $flatList): array
+    public function buildTree(array $flatList): array
     {
         $grouped = [];
         foreach ($flatList as $node) {
-            if (!$node['father_id']) {
+            if (! $node['father_id']) {
                 $node['father_id'] = 0;
             }
             $grouped[$node['father_id']][] = $node;
@@ -288,21 +260,21 @@ class Establishment extends Model implements Auditable
         $fnBuilder = function ($siblings) use (&$fnBuilder, $grouped) {
             foreach ($siblings as $k => $sibling) {
                 $id = $sibling['id'];
-                $this->options[$id] = str_repeat("- ", $sibling['level']) . $sibling['name'];
+                $this->options[$id] = str_repeat('- ', $sibling['level']).$sibling['name'];
                 if (isset($grouped[$id])) {
                     $sibling['children'] = $fnBuilder($grouped[$id]);
                 }
                 $siblings[$k] = $sibling;
             }
+
             return $siblings;
         };
+
         return $fnBuilder($grouped[0]);
     }
 
     /**
      * Get Establishment Logo public path
-     *
-     * @return string
      */
     public function getLogoPublicPathAttribute(): string
     {
@@ -311,17 +283,17 @@ class Establishment extends Model implements Auditable
          * EJ:
          * '/images/logo_rgb_SSI.png'
          * '/images/logo_pluma_SSI_HAH.png'
-         *
          */
         $logo = '/images/logo_';
 
         $logo .= 'rgb_';
 
         if ($this->mother) {
-            $logo .= $this->mother->alias . '_';
+            $logo .= $this->mother->alias.'_';
         }
 
-        $logo .= $this->alias . '.png';
+        $logo .= $this->alias.'.png';
+
         return public_path($logo);
     }
 }

@@ -24,7 +24,7 @@ class Holiday extends Model
     protected $fillable = [
         'date',
         'name',
-        'region_id'
+        'region_id',
     ];
 
     /**
@@ -33,7 +33,7 @@ class Holiday extends Model
      * @var array
      */
     protected $casts = [
-        'date' => 'date:Y-m-d'
+        'date' => 'date:Y-m-d',
     ];
 
     /**
@@ -43,13 +43,11 @@ class Holiday extends Model
      */
     protected $hidden = [
         'created_at',
-        'updated_at'
+        'updated_at',
     ];
 
     /**
      * Get the region that owns the holiday.
-     *
-     * @return BelongsTo
      */
     public function region(): BelongsTo
     {
@@ -58,9 +56,6 @@ class Holiday extends Model
 
     /**
      * Check if the given date is a holiday or a Sunday.
-     *
-     * @param string $date
-     * @return bool
      */
     public static function checkDate(string $date): bool
     {
@@ -70,10 +65,8 @@ class Holiday extends Model
 
     /**
      * // FIXME: ver si se utiliza y porqué, basta que esté en la variable $dates
-     * 
-     * Get the formatted date attribute.
      *
-     * @return Carbon
+     * Get the formatted date attribute.
      */
     public function getFormattedDateAttribute(): Carbon
     {

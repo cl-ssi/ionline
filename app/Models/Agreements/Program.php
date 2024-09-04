@@ -23,7 +23,7 @@ class Program extends Model
      * @var array
      */
     protected $fillable = [
-        'name'
+        'name',
     ];
 
     /**
@@ -37,8 +37,6 @@ class Program extends Model
 
     /**
      * Get all of the agreements for the Program.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function agreements(): HasMany
     {
@@ -47,8 +45,6 @@ class Program extends Model
 
     /**
      * Get all of the resolutions for the Program.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function resolutions(): HasMany
     {
@@ -57,8 +53,6 @@ class Program extends Model
 
     /**
      * Get all of the quotas_minsal for the Program.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function quotas_minsal(): HasMany
     {
@@ -67,8 +61,6 @@ class Program extends Model
 
     /**
      * Get all of the budget_availabilities for the Program.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function budget_availabilities(): HasMany
     {
@@ -77,8 +69,6 @@ class Program extends Model
 
     /**
      * Get all of the components for the Program.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function components(): HasMany
     {

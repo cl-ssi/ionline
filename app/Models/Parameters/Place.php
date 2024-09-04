@@ -33,7 +33,7 @@ class Place extends Model
         'architectural_design_code',
         'location_id',
         'establishment_id',
-        'floor_number'
+        'floor_number',
     ];
 
     /**
@@ -47,8 +47,6 @@ class Place extends Model
 
     /**
      * Get the location that owns the place.
-     *
-     * @return BelongsTo
      */
     public function location(): BelongsTo
     {
@@ -57,8 +55,6 @@ class Place extends Model
 
     /**
      * Get the establishment that owns the place.
-     *
-     * @return BelongsTo
      */
     public function establishment(): BelongsTo
     {
@@ -67,8 +63,6 @@ class Place extends Model
 
     /**
      * Get the computers for the place.
-     *
-     * @return HasMany
      */
     public function computers(): HasMany
     {
@@ -77,8 +71,6 @@ class Place extends Model
 
     /**
      * Get the inventories for the place.
-     *
-     * @return HasMany
      */
     public function inventories(): HasMany
     {
@@ -87,8 +79,6 @@ class Place extends Model
 
     /**
      * Get the inventory movements for the place.
-     *
-     * @return HasMany
      */
     public function inventoryMovements(): HasMany
     {
@@ -97,29 +87,25 @@ class Place extends Model
 
     /**
      * Get the QR code attribute.
-     *
-     * @return string
      */
     public function getQrAttribute(): string
     {
         return QrCode::size(150)
             ->generate(route('parameters.places.board', [
                 'establishment' => $this->establishment_id,
-                'place' => $this->id
+                'place' => $this->id,
             ]));
     }
 
     /**
      * Get the small QR code attribute.
-     *
-     * @return string
      */
     public function getQrSmallAttribute(): string
     {
         return QrCode::size(74)
             ->generate(route('parameters.places.board', [
                 'establishment' => $this->establishment_id,
-                'place' => $this->id
+                'place' => $this->id,
             ]));
     }
 }

@@ -2,11 +2,9 @@
 
 namespace App\Models\Rrhh;
 
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
-// use App\Models\Rrhh\AbsenteeismDiscountCondition;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class AbsenteeismType extends Model
 {
@@ -20,7 +18,7 @@ class AbsenteeismType extends Model
         'half_day',
         'count_business_days',
         'over',
-        'from'
+        'from',
     ];
 
     // public function type(): BelongsTo
