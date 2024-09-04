@@ -47,7 +47,6 @@ class SearchUser extends Component
         }
     }
 
-    #[On('handleSearchedUser')]
     public function handleSearchedUser($userId)
     {
         $user = User::withTrashed()->find($userId);
