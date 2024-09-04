@@ -133,7 +133,7 @@
     </div>
 
     <div class="center" style="width: 33%">
-        @if($destruction->observer AND $destruction->observer != $destruction->lawyer_observer)
+        @if($destruction->observer AND $destruction->observer != $destruction->lawyerObserver)
         {{ $destruction->observer->fullName }}<br>
         Ministro de Fe<br>
         {{ env('APP_SS') }}
@@ -141,8 +141,8 @@
     </div>
 
     <div class="center" style="width: 32%;">
-        @if($destruction->lawyer_observer)
-        {{ $destruction->lawyer_observer->fullName }}<br>
+        @if($destruction->lawyerObserver)
+        {{ $destruction->lawyerObserver->fullName }}<br>
         Departamento de Asesoría Jurídica<br>
         {{ env('APP_SS') }}<br>
         @endif
