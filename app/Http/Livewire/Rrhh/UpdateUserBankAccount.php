@@ -57,7 +57,7 @@ class UpdateUserBankAccount extends Component
 
     public function render()
     {
-        $this->banks = Bank::all();
+        $this->banks = Bank::where('active_agreement',true)->get();
         return view('livewire.rrhh.update-user-bank-account');
     }
 }

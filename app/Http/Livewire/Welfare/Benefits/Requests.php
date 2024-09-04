@@ -104,7 +104,7 @@ class Requests extends Component
     public function loadUserData(User $User){
         $this->user_id = $User->id;
 
-        $this->banks = Bank::all();
+        $this->banks = Bank::where('active_agreement',true)->get();
         $this->bankaccount = $User->bankAccount;
 
         $this->email = $User->email;

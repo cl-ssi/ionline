@@ -857,7 +857,7 @@ class ServiceRequestController extends Controller
       $employee = $authorities[0]->position . " - " . $authorities[0]->organizationalUnit->name;
     }
 
-    $banks = Bank::all();
+    $banks = Bank::where('active_agreement',true)->get();
 
     return view('service_requests.requests.edit', compact(
       'serviceRequest',
@@ -926,12 +926,6 @@ class ServiceRequestController extends Controller
       $serviceRequest->signature_page_break = 0;
     }
     $serviceRequest->save();
-
-    //devuelve UserBankAccount o crea
-    // $userBankAccount = UserBankAccount::updateOrCreate(
-    //   ['user_id' => $serviceRequest->employee->id],
-    //   $request->All()
-    // );
 
     session()->flash('info', 'La solicitud ' . $serviceRequest->id . ' ha sido modificada.');
     return redirect()->route('rrhh.service-request.aditional_data_list');

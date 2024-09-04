@@ -55,9 +55,7 @@ class UserProfile extends Component
         }
 
         $this->communes = ClCommune::pluck('name','id');
-        $this->banks = Bank::pluck('name','id');
-        // $this->user->load('bankAccount');
-        // $this->user->bankAccount;
+        $this->banks = Bank::where('active_agreement',true)->pluck('name','id');
         $this->bankAccount = $this->user->bankAccount;
     }
 

@@ -97,7 +97,7 @@ class UpdateAccount extends Component
     public function render()
     {
         //if($this->bankaccount){
-        $this->banks = Bank::all();
+        $this->banks = Bank::where('active_agreement',true)->get();
         return view('livewire.service-request.update-account');
         //}
         // else{
