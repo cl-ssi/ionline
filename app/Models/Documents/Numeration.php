@@ -2,21 +2,18 @@
 
 namespace App\Models\Documents;
 
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Notification;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Database\Eloquent\Relations\MorphTo;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use App\Models\User;
-use App\Models\Rrhh\OrganizationalUnit;
-use App\Notifications\Signatures\NumerateAndDistribute;
 use App\Models\Establishment;
-use App\Models\Documents\Type;
-use App\Models\Documents\DigitalSignature;
-use App\Models\Documents\Correlative;
+use App\Models\Rrhh\OrganizationalUnit;
+use App\Models\User;
+use App\Notifications\Signatures\NumerateAndDistribute;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Storage;
 
 class Numeration extends Model
 {
@@ -31,7 +28,6 @@ class Numeration extends Model
     // {
     //     return $this->morphOne(Numeration::class, 'numerable');
     // }
-
 
     // $modelo->numeration()->create([
     //     'automatic' => true,
@@ -50,18 +46,16 @@ class Numeration extends Model
 
     // if ($status === true) {
     //     /** Fue numerado con éxito */
-    // } 
+    // }
     // else {
     //     /** En caso de error al numerar */
     // }
 
-
-
     /**
-    * The attributes that are mass assignable.
-    *
-    * @var array
-    */
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
     protected $fillable = [
         'automatic',
         'number',
@@ -76,30 +70,30 @@ class Numeration extends Model
         'organizational_unit_id',
         'establishment_id',
         'numerable_type',
-        'numerable_id'
+        'numerable_id',
     ];
 
     /**
-    * The attributes that should be cast.
-    *
-    * @var array
-    */
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
     protected $casts = [
         'automatic' => 'boolean',
         'date' => 'datetime',
     ];
 
     /**
-    * The table associated with the model.
-    *
-    * @var string
-    */
+     * The table associated with the model.
+     *
+     * @var string
+     */
     protected $table = 'doc_numerations';
 
     /**
      * Get the parent numerable model
      * - Finance/Reception
-     * - 
+     * -
      */
     public function numerable(): MorphTo
     {
@@ -108,12 +102,12 @@ class Numeration extends Model
 
     public function type(): BelongsTo
     {
-        return $this->belongsTo(Type::class,'doc_type_id');
+        return $this->belongsTo(Type::class, 'doc_type_id');
     }
 
     public function numerator(): BelongsTo
     {
-        return $this->belongsTo(User::class,'numerator_id')->withTrashed();
+        return $this->belongsTo(User::class, 'numerator_id')->withTrashed();
     }
 
     public function user(): BelongsTo
@@ -132,16 +126,16 @@ class Numeration extends Model
     }
 
     /**
-    * File path and name
-    */
+     * File path and name
+     */
     public function getStorageFilePathAttribute()
     {
         return 'ionline/documents/numeration/'.$this->id.'.pdf';
     }
 
     /**
-    * Numerate
-    */
+     * Numerate
+     */
     public function numerate(User $user)
     {
         // $modelo->numeration()->create([
@@ -160,20 +154,20 @@ class Numeration extends Model
             /* Chequear que el correlativo exista, si no, crearlo */
             $correlative = Correlative::firstOrCreate([
                 'type_id' => $this->doc_type_id,
-                'establishment_id' => $this->establishment_id
-            ],[
-                'correlative' => 1
+                'establishment_id' => $this->establishment_id,
+            ], [
+                'correlative' => 1,
             ]);
 
             $file = Storage::get($this->file_path);
-            /* Generar el codigo de verificacion ej: ej: '000123-sbK5np' */ 
-            $verificationCode = str_pad($this->id, 6, "0", STR_PAD_LEFT) . '-' . str()->random(6);
+            /* Generar el codigo de verificacion ej: ej: '000123-sbK5np' */
+            $verificationCode = str_pad($this->id, 6, '0', STR_PAD_LEFT).'-'.str()->random(6);
             $number = $correlative->correlative;
 
-            $digitalSignature = new DigitalSignature();
+            $digitalSignature = new DigitalSignature;
             $success = $digitalSignature->numerate($user, $file, $verificationCode, $number);
 
-            if($success) {
+            if ($success) {
                 /* Aumentar el correlativo y guardarlo */
                 $correlative->correlative += 1;
                 $correlative->save();
@@ -185,17 +179,17 @@ class Numeration extends Model
                 $this->date = now();
                 $this->save();
                 $this->status = true;
-            }
-            else {
+            } else {
                 $this->status = $digitalSignature->error;
             }
         });
+
         return $this->status;
     }
 
     /**
-    * Distribuir el documento numerado
-    */
+     * Distribuir el documento numerado
+     */
     public function distribute($users)
     {
         Notification::route('mail', $users)->notify(new NumerateAndDistribute($this));
