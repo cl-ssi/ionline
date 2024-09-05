@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Profile;
 
+use App\Models\User;
 use Livewire\Attributes\On;
 use Livewire\Component;
 use App\Models\Profile\Subrogation;
@@ -29,9 +30,9 @@ class Subrogations extends Component
     }
 
     #[On('searchedUser')]
-    public function searchedUser($userId)
+    public function searchedUser(User $user)
     {
-        $this->subrogant_id = $userId;
+        $this->subrogant_id = $user->id;
     }
 
     protected function rules()

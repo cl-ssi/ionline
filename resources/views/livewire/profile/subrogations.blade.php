@@ -28,7 +28,7 @@
             <h5 class="mb-3">Crear nueva subrogancia @if($type)de tipo {{$type}} @endif</h5>
             @include('profile.subrogation.form')
             <button type="button" class="btn btn-primary"
-                wire:click="store">Crear</button>
+                wire:click="store" @disabled(is_null($subrogant_id))>Crear</button>
             <button type="button" class="btn btn-outline-secondary"
                 wire:click="index">Cancelar</button>
             @break
