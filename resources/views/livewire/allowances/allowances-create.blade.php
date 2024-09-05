@@ -48,9 +48,9 @@
             @if($allowanceToEdit || $allowanceToReplicate)
                 @livewire('allowances.show-position', [
                     'position' => ($allowanceToEdit) ? $allowanceToEdit->position : $allowanceToReplicate->position
-                ])
+                ], key('edit'))
             @else
-                @livewire('allowances.show-position')
+                @livewire('allowances.show-position', key('new'))
             @endif
         </fieldset>
     </div>

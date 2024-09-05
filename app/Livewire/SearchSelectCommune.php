@@ -72,7 +72,7 @@ class SearchSelectCommune extends Component
         */
 
         $this->dispatch('searchedCommune', commune: $this->commune);
-        $this->dispatch('selectedInputId', communeId: $this->selected_id);
+        $this->dispatch('selectedInputId', communeInputId: $this->selected_id);
     }
 
     public function addSearchedCommune($communeId){

@@ -115,7 +115,7 @@ class SearchSelectUser extends Component
         }
     }
 
-    public function addSearchedUser($user){
+    public function addSearchedUser(User $user){
         $this->searchedUser= $user;
         $this->dispatch($this->emit_name ?? 'searchedUser', user: $this->searchedUser);
     }

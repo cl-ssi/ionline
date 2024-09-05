@@ -39,11 +39,16 @@ class ShowPosition extends Component
 
     #[On('searchedUser')]
     public function searchedUser(User $user) {
+<<<<<<< HEAD
         $this->searchedUser = $user;
         $this->position = $this->searchedUser->position;
         
+=======
+        $this->position = $user->position;
+
+>>>>>>> ea952b412 (Víaticos: Fix LW usuarios comunas)
         /* Se emite position a Allowance */
-        $this->dispatch('emitPosition', position: $this->position);
+        $this->dispatch('emitPosition', position: $user->position);
     }
 
     public function updatedPosition($positionValue)

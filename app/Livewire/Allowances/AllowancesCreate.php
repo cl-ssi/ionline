@@ -60,7 +60,7 @@ class AllowancesCreate extends Component
     public $localities;
     public $selectedLocality;
     public $description;
-    public $validateMessages;
+    public $validateMessage;
     public $destinationCommune;
     public $deleteDestinationMessage;
 
@@ -75,6 +75,8 @@ class AllowancesCreate extends Component
 
     /* Total dias completos en el año */
     public $totalCurrentAllowancesDaysByUser = 0;
+    /* Total dias completos en el mes */
+    public $totalCurrentMonthAllowancesDaysByUser = 0;
     /* Total días disponibles */
     public $allowancesAvailableDays = 0;
     /* Total días disponibles */
@@ -306,7 +308,7 @@ class AllowancesCreate extends Component
     public function userSelected($userId)
     {
         $this->userAllowance = User::find($userId);
-            
+        
         if($this->userAllowance){
             //  Buscar si los viáticos del usuario no exceden 90 días en el presente año 
             $this->totalCurrentAllowancesDaysByUser = 0;
@@ -345,9 +347,9 @@ class AllowancesCreate extends Component
     }
 
     #[On('emitPosition')]
-    public function emitPosition($emitPosition)
+    public function emitPosition($position)
     {
-        $this->position = $emitPosition;
+        $this->position = $position;
     }
 
     #[On('emitPositionValue')]
@@ -780,11 +782,10 @@ class AllowancesCreate extends Component
     }
 
     /*  Metodos para Destino */
-
     #[On('selectedInputId')]
-    public function selectedInputId($comuneId)
+    public function selectedInputId($communeInputId)
     {
-        $this->communeInputId = $comuneId;
+        $this->communeInputId = $communeInputId;
         if($this->communeInputId == 'origin_commune_id'){
             $this->originCommune = $this->searchedCommune;
         }
@@ -800,9 +801,9 @@ class AllowancesCreate extends Component
     }
 
     #[On('searchedCommune')] 
-    public function searchedCommune(ClCommune $comuneId)
+    public function searchedCommune(ClCommune $commune)
     {
-        $this->searchedCommune = $comuneId;
+        $this->searchedCommune = $commune;
         
         $this->localities = ClLocality::
             where('commune_id', $this->searchedCommune->id)
