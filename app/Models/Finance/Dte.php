@@ -418,6 +418,7 @@ class Dte extends Model implements Auditable
 
     
     /** Tiene muchos receptions */
+    //FIXME: no se puede utilizar esta relación con with para evitar el n+1 query
     public function receptions()
     {
         if($this->tipo_documento =='guias_despacho')

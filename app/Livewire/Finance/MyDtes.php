@@ -15,14 +15,22 @@ class MyDtes extends Component
                 'purchaseOrder',
                 'purchaseOrder.receptions',
                 'purchaseOrder.rejections',
+                'receptions',
+                'receptions.signedFileLegacy',
+                'receptions.supportFile',
+                'receptions.noOcFile',
+                'receptions.numeration',
                 'establishment',
                 'controls',
                 'requestForm',
+                'requestForm.requestFormFiles',
+                'requestForm.signedOldRequestForms',
                 'requestForm.contractManager',
                 'dtes',
                 'invoices',
                 'receptions',
-                'contractManager'
+                'contractManager',
+                'tgrPayedDte',
             ])
             ->whereRelation('requestForm.contractManager', 'id', auth()->id())
             ->orWhere('contract_manager_id', auth()->id())
