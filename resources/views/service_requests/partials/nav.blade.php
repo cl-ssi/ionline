@@ -109,20 +109,22 @@
 
     <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle {{
-            active('rrhh.service-request.report.consolidated_data'),
-            active('rrhh.service-request.report.export_sirh'),
-            active('rrhh.service-request.pending-requests'),
-            active('rrhh.service-request.report.to-pay'),
-            active('rrhh.service-request.report.payed'),
-            active('rrhh.service-request.report.compliance'),
-            active('rrhh.service-request.report.pay-rejected'),
-            active('rrhh.service-request.report.with-bank-details'),
-            active('rrhh.service-request.report.pending-resolutions'),
-            active('rrhh.service-request.report.contract'),
-            active('rrhh.service-request.report.duplicate-contracts'),
-            active('rrhh.service-request.report.with-resolution-file'),
-            active('rrhh.service-request.report.without-resolution-file'),
-            active('rrhh.service-request.report.service-request-continuity')
+            active(
+                'rrhh.service-request.pending-requests',
+                'rrhh.service-request.report.consolidated_data',
+                'rrhh.service-request.report.export_sirh',
+                'rrhh.service-request.report.to-pay',
+                'rrhh.service-request.report.payed',
+                'rrhh.service-request.report.compliance',
+                'rrhh.service-request.report.pay-rejected',
+                'rrhh.service-request.report.with-bank-details',
+                'rrhh.service-request.report.pending-resolutions',
+                'rrhh.service-request.report.contract',
+                'rrhh.service-request.report.duplicate-contracts',
+                'rrhh.service-request.report.with-resolution-file',
+                'rrhh.service-request.report.without-resolution-file',
+                'rrhh.service-request.report.service-request-continuity'
+            )
         }}"
         data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
             <i class="fas fa-archive"></i> Reportes
