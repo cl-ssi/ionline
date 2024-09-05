@@ -97,9 +97,47 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 - Crear el pull request
 - Detener issue en el que se estaba trabajando
 
-## Update livewire 3
-- Merge
+## Update laravel 11
 
+# "require":
+"php": "^8.2",
+"ext-gd": "*",
+"actived/microsoft-teams-notifier": "^1.3",
+"barryvdh/laravel-dompdf": "^3.0", // upgrade de version
+"firebase/php-jwt": "^6.10",
+"guzzlehttp/guzzle": "^7.9",
+"laminas/laminas-escaper": "^2.13",
+"laravel/framework": "^11.0", // upgrade de version
+"laravel/passport": "^12.3", // upgrade de version
+"laravel/tinker": "^2.9",
+"laravel/ui": "^4.0",
+"livewire/livewire": "^3.4",
+"luecano/numero-a-letras": "^3.0", // upgrade de version
+"maatwebsite/excel": "^3.1",
+"owen-it/laravel-auditing": "^13.6",
+"phpoffice/phpword": "^1.3",
+"setasign/fpdf": "^1.8",
+"setasign/fpdi": "^2.6",
+"simplesoftwareio/simple-qrcode"
+"spatie/laravel-google-cloud-storage": "^2.3",
+"spatie/laravel-permission": "^6.9", // upgrade de version
+"spatie/pdf-to-text": "^1.53",
+"stackkit/laravel-google-cloud-scheduler": "^3.0", // upgrade de version
+"stackkit/laravel-google-cloud-tasks-queue": "^4.2", // upgrade de version
+"tinymce/tinymce": "^7.1"
+
+
+# "require-dev"
+"barryvdh/laravel-debugbar": "^3.13",
+"barryvdh/laravel-ide-helper": "^3.1",
+"fakerphp/faker": "^1.23",
+"kitloong/laravel-migrations-generator": "^7.0", // upgrade de version
+"laravel/pint": "^1.17",
+"laravel/sail": "^1.31",
+"mockery/mockery": "^1.6",
+"nunomaduro/collision": "^8.4", // upgrade de version
+"phpunit/phpunit": "^11.3", // upgrade de version
+"spatie/laravel-ignition": "^2.8"
 
 ## Prompt para ordenar los modelos
 Ordename la clase.
