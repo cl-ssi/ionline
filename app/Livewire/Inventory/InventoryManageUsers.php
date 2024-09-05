@@ -38,10 +38,11 @@ class InventoryManageUsers extends Component
         ]);
     }
 
+    //$userId has to be value
     #[On('myUserId')]
-    public function myUserId($userId)
+    public function myUserId($value)
     {
-        $this->user_id = $userId;
+        $this->user_id = $value;
     }
 
     public function addUser()
@@ -53,7 +54,7 @@ class InventoryManageUsers extends Component
 
         $this->establishment->refresh();
 
-        $this->dispatch('idsExceptUsers', $this->establishment->usersInventories->pluck('id'))->to('users.search-user');
+        $this->dispatch('idsExceptUsers', idsExceptUsers: $this->establishment->usersInventories->pluck('id'))->to('users.search-user');
         $this->dispatch('clearSearchUser');
         $this->role_id = null;
     }
@@ -84,6 +85,6 @@ class InventoryManageUsers extends Component
     {
         $this->establishment->usersInventories()->detach($user->id);
         $this->establishment->refresh();
-        $this->dispatch('idsExceptUsers', $this->establishment->usersInventories->pluck('id'))->to('users.search-user');
+        $this->dispatch('idsExceptUsers', idsExceptUsers: $this->establishment->usersInventories->pluck('id'))->to('users.search-user');
     }
 }
