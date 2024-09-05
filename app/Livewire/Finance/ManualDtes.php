@@ -123,7 +123,7 @@ class ManualDtes extends Component
     public function hideForm()
     {
         // Ocultar el formulario
-        $this->emitUp('dteAdded');
+        $this->dispatch('dteAdded');
     }
 
     public function getDistinctTipoDocumento()
