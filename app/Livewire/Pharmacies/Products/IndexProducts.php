@@ -30,12 +30,10 @@ class IndexProducts extends Component
     {
         $products = Product::where('pharmacy_id',session('pharmacy_id'))
             ->with('category','program')
-            // Cuando filtername no sea vacio se filtra por nombre
             ->when($this->filterName, function ($query) {
                 $query->where('name', 'LIKE', "%$this->filterName%");
             })
             ->orderBy('name', 'ASC')
-            // ->get();
             ->paginate(100);
 
         return view('livewire.pharmacies.products.index-products', compact('products'));

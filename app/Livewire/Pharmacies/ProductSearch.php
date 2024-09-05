@@ -44,8 +44,6 @@ class ProductSearch extends Component
             // $this->barcode = $product->barcode;
             $this->experto_id = $product->experto_id;
         }
-
-        
     }
 
     public function change(){
@@ -64,10 +62,8 @@ class ProductSearch extends Component
                                 ->where('name', 'like', '%'.$this->filtro_producto.'%')
                                 ->orderBy('name','ASC')
                                 ->get();
-                                // dd($this->products);4
 
-                                $this->render();
-
+        $this->render();
     }
 
     public function render()

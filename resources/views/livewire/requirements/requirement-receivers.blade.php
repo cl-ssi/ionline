@@ -63,8 +63,8 @@
             </thead>
             <tbody>
                 @foreach($users_array as $key => $user_key)
-                    <tr><input type='hidden' name='users[]' class='users' value='{{$user_key->id}}'>
-                        <input type='hidden' name='enCopia[]' value='{{$enCopia[$key]}}'>
+                    <tr><input style="display:none" name='users[]' class='users' value='{{$user_key->id}}'>
+                        <input style="display:none" name='enCopia[]' value='{{$enCopia[$key]}}'>
                         <td>{{ $user_key->organizationalUnit->name }}</td>
                         <td>{{ $user_key->tinnyName }}</td>
                         <td>

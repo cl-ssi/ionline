@@ -36,7 +36,7 @@
             <input type="text" class="form-control" placeholder="" wire:model.live="filtro_producto">
         </fieldset>
 
-        <input type="hidden" id="for_unity" name="unity" wire:model="unity"/>
+        <input style="display:none" id="for_unity" name="unity" wire:model="unity"/>
     </div>
 
     <div style="{{ $showSecondDiv ? '' : 'display: none' }};" class="form-row">

@@ -8,7 +8,7 @@
         <div class="col">
             <div class="input-group mb-3">
                 <input type="text" class="form-control" wire:model="filterName">
-                <button class="btn btn-outline-secondary" type="button" id="search" wire:click="render">Buscar</button>
+                <button class="btn btn-outline-secondary" type="button" id="search" wire:click="$refresh">Buscar</button>
             </div>
         </div>
 
