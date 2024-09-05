@@ -159,7 +159,7 @@ class Establishment extends Model implements Auditable
         $array[0]['id'] = null;
         $array[0]['name'] = null;
         if (! empty($ous)) {
-            $array = $this->buildTree($ous, 'father_id', 'id');
+            $array = $this->buildTree($ous);
         }
 
         return $array[0];
@@ -177,7 +177,7 @@ class Establishment extends Model implements Auditable
             ->toArray();
 
         if (! empty($ous)) {
-            $this->buildTree($ous, 'father_id', 'id');
+            $this->buildTree($ous);
         }
 
         return $this->options;
