@@ -59,8 +59,8 @@ class CreatePurchasePlan extends Component
     }
 
     #[On('searchedUser')]
-    public function searchedUser($userId){
-        $this->searchedUser = User::find($userId);
+    public function searchedUser(User $user){
+        $this->searchedUser = $user;
 
         $this->userResponsibleId = $this->searchedUser->id;
         $this->position = $this->searchedUser->position;
