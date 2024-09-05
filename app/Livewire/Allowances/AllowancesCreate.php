@@ -305,9 +305,9 @@ class AllowancesCreate extends Component
 
     /* Listeners */
     #[On('userSelected')]
-    public function userSelected($userId)
+    public function userSelected(User $user)
     {
-        $this->userAllowance = User::find($userId);
+        $this->userAllowance = $user;
         
         if($this->userAllowance){
             //  Buscar si los viáticos del usuario no exceden 90 días en el presente año 
