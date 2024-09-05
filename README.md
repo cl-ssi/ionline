@@ -98,6 +98,7 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 - Detener issue en el que se estaba trabajando
 
 ## Update livewire 3
+- Merge
 
 
 ## Prompt para ordenar los modelos
