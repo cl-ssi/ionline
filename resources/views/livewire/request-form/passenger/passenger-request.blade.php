@@ -17,7 +17,8 @@
                 <fieldset class="form-group col-6">
                     <label for="for_user_id">Funcionario*</label>
                     @livewire('search-select-user', [
-                        'emit_name' => 'searchedPassenger'])
+                        'emit_name' => 'searchedPassenger']
+                    )
                 </fieldset>
           </div>
 

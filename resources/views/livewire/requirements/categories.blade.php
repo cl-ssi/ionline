@@ -4,13 +4,13 @@
     @section('title', 'Categorías')
 
     @if ($form)
-        <h3>{{ $category->id ? 'Editar' : 'Crear' }} Categoría</h3>
+        <h3>{{ $categoryName ? 'Editar' : 'Crear' }} Categoría</h3>
         
         <div class="form-row mb-3">
             <fieldset class="col-12 col-md-6">
                 <label for="for-name">Nombre*</label>
-                <input type="text" wire:model="category.name" class="form-control">
-                @error('category.name') <span class="text-danger">{{ $message }}</span> @enderror
+                <input type="text" wire:model="categoryName" class="form-control">
+                @error('categoryName') <span class="text-danger">{{ $message }}</span> @enderror
             </fieldset>
         </div>
         
@@ -36,7 +36,7 @@
                 <h3>Categorías de: <small> {{ auth()->user()->organizationalUnit->name }}</small></h3>
             </div>
             <div class="col-12 col-md-3 text-end">
-                <button class="btn btn-success float-right" wire:click="form()">
+                <button class="btn btn-success float-right" wire:click="editForm()">
                     <i class="fas fa-plus"></i> Nueva categoría
                 </button>
             </div>
@@ -64,7 +64,7 @@
                     </td>
                     <td>
                         <button type="button" class="btn btn-sm btn-outline-primary" 
-                            wire:click="form({{$category}})"><i class="fas fa-edit"></i></button>
+                            wire:click="editForm({{$category}})"><i class="fas fa-edit"></i></button>
                     </td>
                 </tr>
                 @endforeach

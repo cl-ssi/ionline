@@ -11,6 +11,7 @@ class Categories extends Component
     public $form = false;
 
     public $category;
+    public $categoryName;
 
     /** Listado de categorías */
     public $categories;
@@ -26,12 +27,12 @@ class Categories extends Component
     protected function rules()
     {
         return [
-            'category.name' => 'required|min:4',
+            'categoryName' => 'required|min:4',
         ];
     }
 
     protected $messages = [
-        'category.name.required' => 'El nombre es requerido.',
+        'categoryName.required' => 'El nombre es requerido.',
     ];
 
     public function index()
@@ -41,9 +42,10 @@ class Categories extends Component
         $this->mount();
     }
 
-    public function form(Category $category)
+    public function editForm(Category $category)
     {
-        $this->category = Category::firstOrNew([ 'id' => $category->id ]);
+        $this->category = $category;
+        $this->categoryName = $category->name;
         $this->form = true;
     }
 
@@ -51,6 +53,7 @@ class Categories extends Component
     {
         $this->validate();
         $this->category->organizational_unit_id = auth()->user()->organizational_unit_id;
+        $this->category->name = $this->categoryName;
         $this->category->save();
         $this->index();
     }

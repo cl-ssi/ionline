@@ -26,9 +26,7 @@ class RequirementReceivers extends Component
     public $options;
 
     public function mount()
-    {
-        // dd(Authority::where('id',1));
-        
+    {   
         $this->ouRoots = array();
         $establishments_ids = explode(',',env('APP_SS_ESTABLISHMENTS'));
         // dd($establishments_ids);

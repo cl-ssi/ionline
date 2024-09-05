@@ -122,7 +122,7 @@ class PassengerRequest extends Component
         if($this->editRF && array_key_exists('id',$this->passengers[$key])){
             $this->deletedPassengers[]=$this->passengers[$key]['id'];
             $this->emitUp('deletedPassengers', $this->deletedPassengers);
-            }
+        }
         unset($this->passengers[$key]);
         $this->totalValue();
         $this->cleanPassenger();
@@ -172,6 +172,7 @@ class PassengerRequest extends Component
         $this->passengers[$this->key]['unitValue']      = $this->unitValue;
         $this->totalValue();
         $this->cleanPassenger();
+        dd($this->passengers);
         $this->dispatch('savedPassengers', passengers: $this->passengers);
     }
 
@@ -226,9 +227,9 @@ class PassengerRequest extends Component
     }
 
     #[On('searchedPassenger')]
-    public function searchedPassenger($userId)
+    public function searchedPassenger(User $user)
     {
-        $this->searchedPassenger = User::find($userId);
+        $this->searchedPassenger = $user;
 
         $this->run = $this->searchedPassenger->id;
         $this->dv = $this->searchedPassenger->dv;
