@@ -12,7 +12,7 @@ RUN apk add --no-cache \
         libzip-dev \
         mdbtools-utils \
         poppler-utils && \
-    docker-php-ext-install mysqli pdo pdo_mysql && \
+    docker-php-ext-install mysqli pdo pdo_mysql ctype && \
     docker-php-ext-enable pdo_mysql && \
     docker-php-ext-configure gd --with-jpeg --with-webp --with-freetype && \
     docker-php-ext-install gd soap zip bcmath && \
