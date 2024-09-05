@@ -48,13 +48,8 @@
                     slotDuration: '00:20',
 
                 });
-                ,
+                
                 calendar.render();
-
-                @this.on('refreshCalendar', () => {
-                    calendar.refetchEvents(),
-                    calendar.render()
-                });
                 
             });
 

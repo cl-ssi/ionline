@@ -54,14 +54,7 @@ class ProposalCalendar extends Component
             }
         }
 
-        // dd($array);
         $this->events = json_encode($array);
-        // $this->dispatch('refreshCalendar');
-        // $this->events = null;
-        // $this->dispatch('refreshCalendar');
-
-        // $this->clearCache();
-        // $this->dispatch('refreshCalendar');
 
         return view('livewire.prof-agenda.proposal-calendar');
     }
