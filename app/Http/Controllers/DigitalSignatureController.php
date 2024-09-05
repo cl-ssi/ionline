@@ -613,7 +613,7 @@ class DigitalSignatureController extends Controller
             return [
                 'statusOk' => false,
                 'content' => '',
-                'errorMsg' => 'FirmaGob está presentando inestabilidad - ' . array_key_exists('error', $response) ? $response['error'] : 'Error desconocido',
+                'errorMsg' => 'FirmaGob está presentando inestabilidad - ' . (array_key_exists('error', $response) ? $response['error'] : 'Error desconocido'),
             ];
         }
 

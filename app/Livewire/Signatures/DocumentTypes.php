@@ -8,6 +8,7 @@ use App\Models\Documents\Type;
 class DocumentTypes extends Component
 {
     public $type_id;
+    public $types;
 
     public function changeDocumentType(){
         $this->dispatch('documentTypeChanged', type_id: $this->type_id);
