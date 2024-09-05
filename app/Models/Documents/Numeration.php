@@ -2,6 +2,7 @@
 
 namespace App\Models\Documents;
 
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\DB;
@@ -19,7 +20,7 @@ use App\Models\Documents\Correlative;
 
 class Numeration extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $status;
 
