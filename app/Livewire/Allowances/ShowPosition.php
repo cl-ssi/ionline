@@ -38,8 +38,8 @@ class ShowPosition extends Component
     }
 
     #[On('searchedUser')]
-    public function searchedUser($userId) {
-        $this->searchedUser = User::find($userId);
+    public function searchedUser(User $user) {
+        $this->searchedUser = $user;
         $this->position = $this->searchedUser->position;
         
         /* Se emite position a Allowance */

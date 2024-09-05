@@ -1,14 +1,14 @@
 <div id="{{$room->id}}">
-    <a href="#" class="btn btn-primary reservar" data-value="{{$room->id}}" wire:click="show()">Reservar</a>
+    <a href="#" class="btn btn-primary reservar" data-value="{{$room->id}}" wire:click="toggleVisibility">Reservar</a>
     <br><br>
-    <div class="card text-left" @if(!$show) hidden @endif>
-            <div class="card-header">
-                Reserva de Hospedaje
-            </div>
-            <div class="card-body">
-                {{--@livewire('hotel-booking.calendar',['room' => $room, 'start_date' => $start_date, 'end_date' => $end_date])--}}
+    <div class="card text-left" @if(!$isVisible) hidden @endif>
+        <div class="card-header">
+            Reserva de Hospedaje
+        </div>
+        <div class="card-body">
+            {{--@livewire('hotel-booking.calendar',['room' => $room, 'start_date' => $start_date, 'end_date' => $end_date])--}}
 
-                <div class="form-row">
+            <div class="form-row">
 
                     <fieldset class="form-group col-3">
                         <label>Nombre</label>
@@ -60,7 +60,6 @@
 
                 <!-- Mensaje de éxito -->
                 @include('layouts.bt4.partials.flash_message')
-            </div>
-
         </div>
+    </div>
 </div>

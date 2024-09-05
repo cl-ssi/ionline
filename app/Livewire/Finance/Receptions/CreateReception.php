@@ -450,9 +450,9 @@ class CreateReception extends Component
     * Setea el signer_id
     */
     #[On('userSelected')]
-    public function userSelected($userId)
+    public function userSelected(User $user)
     {
-        $this->signer_id = $userId;
+        $this->signer_id = $user;
     }
 
     /**

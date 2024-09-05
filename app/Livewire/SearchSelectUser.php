@@ -86,14 +86,14 @@ class SearchSelectUser extends Component
         $this->user = $user;
         $this->selectedName = $user->fullName;
         /** Emite a cualquier otro componente que user_id seleccionó */
-        $this->dispatch('userSelected', userId: $user->id);
+        $this->dispatch('userSelected', user: $user);
     }
 
     public function addUser()
     {
         /** Emite a cualquier otro componente que user_id seleccionó */
         $this->selectedUsers[] = $this->user;
-        $this->dispatch('addUser', userId: $this->user);
+        $this->dispatch('addUser', user: $this->user);
         $this->resetx();
     }
 
@@ -115,9 +115,9 @@ class SearchSelectUser extends Component
         }
     }
 
-    public function addSearchedUser($userId){
-        $this->searchedUser= $userId;
-        $this->dispatch($this->emit_name ?? 'searchedUser', userId: $this->searchedUser);
+    public function addSearchedUser($user){
+        $this->searchedUser= $user;
+        $this->dispatch($this->emit_name ?? 'searchedUser', user: $this->searchedUser);
     }
 
     public function render()

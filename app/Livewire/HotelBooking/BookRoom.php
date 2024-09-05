@@ -2,36 +2,32 @@
 
 namespace App\Livewire\HotelBooking;
 
-use Livewire\Attributes\On;
+use App\Models\User;
 use Livewire\Component;
+use Livewire\Attributes\On;
 use App\Models\HotelBooking\RoomBooking;
 use App\Notifications\HotelBooking\NewBooking;
 
 class BookRoom extends Component
 {
-    public $show = false;
+    public $isVisible = false; // Cambio de nombre aquí
     public $room;
     public $start_date;
     public $end_date;
     public $payment_type;
     public $user_id;
 
-    public function show(){
-        if($this->show){
-            $this->show = false;
-        }else{
-            $this->show = true;
-        }
+    public function toggleVisibility(){
+        $this->isVisible = !$this->isVisible;
     }
 
     public function mount(){
         $this->user_id = auth()->user()->id;
     }
 
-
     #[On('loadUserData')]
-    public function loadUserData($userId){
-        $this->user_id = $userId;
+    public function loadUserData(User $user){
+        $this->user_id = $user->id;
     }
 
     public function confirm_reservation(){
@@ -40,9 +36,9 @@ class BookRoom extends Component
             'payment_type' => 'required'
         ]);
 
-        $roomBookingSeach = RoomBooking::where('user_id',$this->user_id)
-                                        ->where('start_date',$this->start_date)
-                                        ->where('end_date',$this->end_date)
+        $roomBookingSeach = RoomBooking::where('user_id', $this->user_id)
+                                        ->where('start_date', $this->start_date)
+                                        ->where('end_date', $this->end_date)
                                         ->where('room_id', $this->room->id)
                                         ->where('status','<>','Cancelado')
                                         ->count();
@@ -66,7 +62,7 @@ class BookRoom extends Component
                 } 
             }
 
-            return redirect()->route('hotel_booking.confirmation_page')->with( ['roomBooking' => $roomBooking] );
+            return redirect()->route('hotel_booking.confirmation_page')->with(['roomBooking' => $roomBooking]);
         }
     }
 

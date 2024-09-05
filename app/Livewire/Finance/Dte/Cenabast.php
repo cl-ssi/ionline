@@ -2,12 +2,13 @@
 
 namespace App\Livewire\Finance\Dte;
 
-use App\Models\Establishment;
-use App\Models\Finance\Dte;
-use App\Models\Finance\PurchaseOrder\Prefix;
-use Livewire\Attributes\On;
+use App\Models\User;
 use Livewire\Component;
+use App\Models\Finance\Dte;
+use Livewire\Attributes\On;
 use Livewire\WithPagination;
+use App\Models\Establishment;
+use App\Models\Finance\PurchaseOrder\Prefix;
 
 class Cenabast extends Component
 {
@@ -28,9 +29,9 @@ class Cenabast extends Component
     }
 
     #[On('userSelected')]
-    public function userSelected($userId)
+    public function userSelected(User $user)
     {
-        $this->contract_manager_id = $userId;
+        $this->contract_manager_id = $user;
     }
 
     public function setContractManager(Dte $dte) {

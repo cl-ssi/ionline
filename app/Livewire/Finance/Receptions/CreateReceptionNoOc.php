@@ -330,9 +330,9 @@ class CreateReceptionNoOc extends Component
     }
 
     #[On('userSelected')]
-    public function userSelected($userId)
+    public function userSelected(User $user)
     {
-        $this->signer_id = $userId;
+        $this->signer_id = $user;
     }
 
     public function removeApproval($position)

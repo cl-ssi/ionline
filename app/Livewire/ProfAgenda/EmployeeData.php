@@ -16,13 +16,8 @@ class EmployeeData extends Component
     public $message;
     public $flag_more_than_3_faults = false;
 
-    // public function mount(){
-    //     dd($this->user_id);
-    // }
-
     #[On('loadUserData')]
-    public function loadUserData($userId){
-        $user = User::find($userId);
+    public function loadUserData(User $user){
         $this->user_id = $user->id;
         $this->dv = $user->dv;
         $this->render();

@@ -25,9 +25,8 @@ class FormFixedFund extends Component
     ];
 
     #[On('userSelected')]
-    public function userSelected($userId)
+    public function userSelected(User $user)
     {
-        $user = User::find($userId);
         $this->fixedFund->user_id = $user->id;
         $this->fixedFund->organizational_unit_id = $user->organizational_unit_id;
     }

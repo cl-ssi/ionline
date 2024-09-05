@@ -56,9 +56,9 @@ class SingleManager extends Component
 
     /** Listener del componente de seleccionar usuarios */
     #[On('userSelected')]
-    public function userSelected($userId)
+    public function userSelected(User $user)
     {
-        $this->parameter->value = $userId;
+        $this->parameter->value = $user->id;
     }
 
     protected $rules = [

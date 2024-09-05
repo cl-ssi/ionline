@@ -62,9 +62,9 @@ class MeetingMgr extends Component
     ];
 
     #[On('userSelected')]
-    public function userSelected($userId)
+    public function userSelected(User $user)
     {
-        $this->meeting->responsible_id = $userId;
+        $this->meeting->responsible_id = $user->id;
     }
 
     #[On('addParticipant')]

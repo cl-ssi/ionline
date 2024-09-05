@@ -48,9 +48,9 @@ class ApprovalWorkflow extends Component
     }
 
     #[On('userSelected')]
-    public function userSelected($userId)
+    public function userSelected(User $user)
     {
-        $this->edit_user = User::find($userId);
+        $this->edit_user = $user;
     }
 
     public function save(){
