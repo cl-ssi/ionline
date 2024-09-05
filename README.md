@@ -118,7 +118,7 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 "phpoffice/phpword": "^1.3",
 "setasign/fpdf": "^1.8",
 "setasign/fpdi": "^2.6",
-"simplesoftwareio/simple-qrcode"
+"simplesoftwareio/simple-qrcode": "^4.2",
 "spatie/laravel-google-cloud-storage": "^2.3",
 "spatie/laravel-permission": "^6.9", // upgrade de version
 "spatie/pdf-to-text": "^1.53",
