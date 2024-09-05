@@ -24,7 +24,8 @@ class ShowTemplate extends Component
 
     ];
 
-    public function generate(){
+    public function generate() {
+        // FIXME: esto se podría ejecutar con $refresh desde la vsita
         // No hace nada, es para gatillar los .defer
     }
 

@@ -151,7 +151,7 @@
                     <label for="reception-date">Número de documento</label>
                     <input type="text"
                         class="form-control"
-                        wire:model.live.debounce.defer="reception.dte_number">
+                        wire:model="reception.dte_number">
                 </div>
             </div>
             <div class="col-md-2">

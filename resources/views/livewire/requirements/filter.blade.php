@@ -3,24 +3,24 @@
 
         <div class="col-1">
             <input type="number"
-                wire:model.live.debounce.defer="req_id"
+                wire:model="req_id"
                 class="form-control"
                 placeholder="N°">
         </div>
         <div class="col-3">
             <input type="text"
-                wire:model.live.debounce.defer="subject"
+                wire:model="subject"
                 class="form-control"
                 placeholder="Asunto">
         </div>
         <div class="col-3">
             <input type="text"
-                wire:model.live.debounce.defer="body"
+                wire:model="body"
                 class="form-control"
                 placeholder="Cuerpo">
         </div>
         <div class="col-2">
-            <select wire:model.live.debounce.defer="label"
+            <select wire:model="label"
                 class="form-control"
                 placeholder="Etiqueta">
                 <option value="">[Seleccione una etiqueta]</option>
@@ -30,7 +30,7 @@
             </select>
         </div>
         <div class="col-2">
-        <select wire:model.live.debounce.defer="status"
+        <select wire:model="status"
                 class="form-control">
                 <option>Todos</option>
                 <option>Pendientes</option>
@@ -54,19 +54,19 @@
     <div class="form-row mb-3">
         <div class="col-2">
             <input type="text"
-                wire:model.live.debounce.defer="parte"
+                wire:model="parte"
                 class="form-control"
                 placeholder="Origen, N°Origen">
         </div>
         <div class="col-3">
         <input type="text"
-                wire:model.live.debounce.defer="user_involved"
+                wire:model="user_involved"
                 class="form-control"
                 placeholder="Usuario involucrado">
         </div>
 
         <div class="col-3">
-            <select wire:model.live.debounce.defer="category_id"
+            <select wire:model="category_id"
                 class="form-control">
                 <option value="">[Seleccione una categoría]</option>
                 @foreach(auth()->user()->organizationalUnit->categories->sortBy('name') as $category)
@@ -76,7 +76,7 @@
         </div>
 
         <div class="col-2">
-            <select wire:model.live.debounce.defer="readedStatus"
+            <select wire:model="readedStatus"
                 class="form-control">
                 <option>Todos</option>
                 <option>Sin leer</option>

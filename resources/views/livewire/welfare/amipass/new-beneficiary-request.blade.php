@@ -58,13 +58,13 @@
                 <div class="form-group col">
                     <label for="text">Nombre de la Jefatura *</label>
                     <input id="text" name="text" type="text" class="form-control"
-                        value="{{ auth()->user()->name }}" required="required" wire:model.defer="jefatura">
+                        value="{{ auth()->user()->name }}" required="required" wire:model="jefatura">
                 </div>
 
                 <div class="form-group col">
                     <label for="text2">Correo electrónico solicitante *</label>
                     <input id="text2" name="text2" type="text" class="form-control" required="required"
-                        wire:model.defer="correoElectronico">
+                        wire:model="correoElectronico">
                 </div>
             </div>
 

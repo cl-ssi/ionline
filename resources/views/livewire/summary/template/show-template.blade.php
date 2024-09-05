@@ -7,7 +7,7 @@
             <input type="text" 
             class="form-control" 
             id="for-{{$name}}"
-            wire:model.live.debounce.defer="template.{{$name}}">
+            wire:model="template.{{$name}}">
         </div>
         @endforeach
         <button class="btn btn-secondary" wire:click="generate" >Generar</button>
