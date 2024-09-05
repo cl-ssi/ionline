@@ -76,7 +76,7 @@ class RequestFormItems extends Component
 
         $this->estimateExpense();
         $this->cleanItem();
-        $this->emitUp('savedItems', $this->items);
+        $this->dispatch('savedItems', items: $this->items);
         $this->dispatch('onClearSearch');
     }
 
@@ -131,7 +131,7 @@ class RequestFormItems extends Component
         }
         $this->estimateExpense();
         $this->cleanItem();
-        $this->emitUp('savedItems', $this->items);
+        $this->dispatch('savedItems', items: $this->items);
         $this->dispatch('onClearSearch');
     }
 
@@ -140,13 +140,13 @@ class RequestFormItems extends Component
         if($this->editRF && array_key_exists('id',$this->items[$key]))
         {
             $this->deletedItems[]=$this->items[$key]['id'];
-            $this->emitUp('deletedItems', $this->deletedItems);
+            $this->dispatch('deletedItems', items: $this->deletedItems);
         }
         if($this->items[$key]['articleFile']) $this->deleteFile($key);
         unset($this->items[$key]);
         $this->estimateExpense();
         $this->cleanItem();
-        $this->emitUp('savedItems', $this->items);
+        $this->dispatch('savedItems', items: $this->items);
     }
 
     public function estimateExpense()

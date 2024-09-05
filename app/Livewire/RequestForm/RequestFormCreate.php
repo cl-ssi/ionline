@@ -122,7 +122,7 @@ class RequestFormCreate extends Component
 
         #[On('savedItems')]
         public function savedItems($items)
-        {
+        {   
             $this->items = $items;
         }
 
@@ -608,8 +608,7 @@ class RequestFormCreate extends Component
         }
 
         #[On('searchedContractManager')]
-        public function searchedContractManager($userId) {
-            $user = User::find($userId);
+        public function searchedContractManager(User $user) {
             $this->contractManagerId = $user->id;
             $this->contractManagerOuId = $user->organizational_unit_id;
         }
