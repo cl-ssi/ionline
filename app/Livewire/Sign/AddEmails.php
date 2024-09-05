@@ -44,7 +44,7 @@ class AddEmails extends Component
 
         $this->destination = null;
 
-        $this->emitUp($this->eventName, $this->destinations);
+        $this->dispatch($this->eventName, emails: $this->destinations);
 
         $this->typeDestination = "email";
 
