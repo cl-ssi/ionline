@@ -6,12 +6,9 @@ use App\Models\Requirements\Label;
 use App\Models\Requirements\Requirement;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class LabelRequirement extends Model
 {
-    use SoftDeletes;
-
     /**
      * The table associated with the model.
      *
