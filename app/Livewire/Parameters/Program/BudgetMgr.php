@@ -15,7 +15,7 @@ class BudgetMgr extends Component
     protected $paginationTheme = 'bootstrap';
 
     /** Mostrar o no el form, tanto para crear como para editar */
-    public $form = false;
+    public $formActive = false;
 
     public $budget;
 
@@ -57,13 +57,13 @@ class BudgetMgr extends Component
     public function index()
     {
         $this->resetErrorBag();
-        $this->form = false;
+        $this->formActive = false;
     }
 
-    public function form(ProgramBudget $budget)
+    public function showForm(ProgramBudget $budget)
     {
         $this->budget = ProgramBudget::firstOrNew(['id' => $budget->id]);
-        $this->form = true;
+        $this->formActive = true;
     }
 
     public function save()

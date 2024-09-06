@@ -9,7 +9,7 @@ class ReasonMgr extends Component
 {
 
     /** Mostrar o no el form, tanto para crear como para editar */
-    public $form = false;
+    public $formActive = false;
 
     public $reason;
 
@@ -28,13 +28,13 @@ class ReasonMgr extends Component
     public function index()
     {
         $this->resetErrorBag();
-        $this->form = false;
+        $this->formActive = false;
     }
 
-    public function form(Reason $reason)
+    public function showForm(Reason $reason)
     {
         $this->reason = Reason::firstOrNew([ 'id' => $reason->id]);
-        $this->form = true;
+        $this->formActive = true;
     }
 
     public function save()

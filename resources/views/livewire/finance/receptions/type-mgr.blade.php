@@ -1,9 +1,9 @@
-<div>    
+<div>
     @section('title', 'Tipo de Actas')
 
 
     @include('finance.receptions.partials.nav')
-    
+
     @if (session()->has('message'))
         <div class="alert alert-danger">
             {{ session('message') }}
@@ -15,7 +15,7 @@
 
 
 
-    @if ($form)
+    @if ($formActive )
         <h3>{{ $type->id ? 'Editar' : 'Crear' }} Tipo de Acta</h3>
         @include('finance.receptions.type.form')
         <div class="form-row">
@@ -32,7 +32,7 @@
                 <h3 class="mb-3">Listado de Tipo de Acta</h3>
             </div>
             <div class="col text-end">
-                <button class="btn btn-success float-right" wire:click="form()">
+                <button class="btn btn-success float-right" wire:click="showForm()">
                     <i class="fas fa-plus"></i> Nuevo Tipo de Acta
                 </button>
             </div>

@@ -14,7 +14,7 @@ class Holidays extends Component
     protected $paginationTheme = 'bootstrap';
 
     /** Mostrar o no el form, tanto para crear como para editar */
-    public $form = false;
+    public $formActive = false;
     public $holidayId;
     public $holidayDate;
     public $holidayName;
@@ -48,10 +48,15 @@ class Holidays extends Component
         'holidayName.required' => 'El nombre es requerido.',
     ];
 
+    public function showForm()
+    {
+        $this->formActive = true;
+    }
+
     public function index()
     {
         $this->resetErrorBag();
-        $this->form = false;
+        $this->formActive = false;
         $this->reset(['holidayId', 'holidayDate', 'holidayName', 'holidayRegionId']);
     }
 
@@ -63,7 +68,7 @@ class Holidays extends Component
         $this->holidayName     = $holiday->name;
         $this->holidayRegionId = $holiday->region_id;
 
-        $this->form = true;
+        $this->formActive = true;
     }
 
     public function save()

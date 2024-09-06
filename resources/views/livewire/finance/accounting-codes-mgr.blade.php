@@ -7,9 +7,9 @@
     ])
 
 
-    @if ($form)
+    @if ($formActive)
         <h3>{{ $accountingCode->id ? 'Editar' : 'Crear' }} Cuenta contable</h3>
-        
+
         <div class="row g-2">
             <fieldset class="col-12 col-md-2">
                 <label for="for-id">Código*</label>
@@ -23,7 +23,7 @@
                 @error('accountingCode.description') <span class="text-danger">{{ $message }}</span> @enderror
             </fieldset>
         </div>
-        
+
         <div class="form-row">
             <div class="mt-3 col-12">
                 <button type="button" class="btn btn-success" wire:click="save()">Guardar</button>
@@ -36,7 +36,7 @@
                 <h3 class="mb-3">Listado de Cuentas Contables</h3>
             </div>
             <div class="col text-end">
-                <button class="btn btn-success text-end" wire:click="form()">
+                <button class="btn btn-success text-end" wire:click="showForm()">
                     <i class="bi bi-plus-circle"></i> Nueva Cuenta Contable
                 </button>
             </div>
@@ -55,16 +55,16 @@
                 @foreach($accountingCodes as $accountingCode)
                     <tr>
                         <td>
-                            <button type="button" class="btn btn-sm btn-primary" 
-                                wire:click="form({{$accountingCode}})">
+                            <button type="button" class="btn btn-sm btn-primary"
+                                wire:click="showForm({{$accountingCode}})">
                                 <i class="bi bi-pencil-square"></i>
                             </button>
                         </td>
                         <td>{{ $accountingCode->id }}</td>
                         <td>{{ $accountingCode->description }}</td>
                         <td>
-                            <button type="button" class="btn btn-sm btn-danger" 
-                                onclick="confirm('¿Está seguro que desea borrar la cuenta contable {{ $accountingCode->description }}?') || event.stopImmediatePropagation()" 
+                            <button type="button" class="btn btn-sm btn-danger"
+                                onclick="confirm('¿Está seguro que desea borrar la cuenta contable {{ $accountingCode->description }}?') || event.stopImmediatePropagation()"
                                 wire:click="delete({{$accountingCode}})">
                                 <i class="bi bi-trash"></i>
                             </button>

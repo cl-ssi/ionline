@@ -18,7 +18,7 @@ class ClassificationMgr extends Component
     protected function rules()
     {
         return [
-            
+
             'classification.name' => 'required|min:4',
         ];
     }
@@ -56,6 +56,6 @@ class ClassificationMgr extends Component
         return view('livewire.inventory.classification-mgr', [
             'classifications' => $classifications,
         ])->extends('layouts.bt4.app');
-        
+
     }
 }
