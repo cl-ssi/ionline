@@ -559,29 +559,34 @@ class DispatchController extends Controller
 
     public function storePrivateVerification(Dispatch $dispatch){
 
-      if($dispatch->establishment->email == null ){
-        session()->flash('warning', 'El establecimiento no tiene correo electrónico asignado.');
+        if($dispatch->establishment == null ){
+            session()->flash('warning', 'La entrega no tiene asignada establecimiento.');
+            return redirect()->back();
+        }
+
+        if($dispatch->establishment->email == null ){
+            session()->flash('warning', 'El establecimiento no tiene correo electrónico asignado.');
+            return redirect()->back();
+        }
+
+        foreach($dispatch->verificationMailings->where('status','Pendiente') as $verificationMailing){
+            $verificationMailing->status = "Verificación cancelada.";
+            $verificationMailing->sender_observation = "Se ha creado nueva verificación.";
+            $verificationMailing->save();
+        }
+
+        $dispatchVerificationMailing = new DispatchVerificationMailing();
+        $dispatchVerificationMailing->dispatch_id = $dispatch->id;
+        $dispatchVerificationMailing->status = "Pendiente";
+        $dispatchVerificationMailing->sender_observation = null;
+        $dispatchVerificationMailing->delivery_date = Carbon::now();
+        $dispatchVerificationMailing->status = "Recepción conforme por origen";
+        $dispatchVerificationMailing->receiver_observation = "Sin observaciones";
+        $dispatchVerificationMailing->confirmation_date = Carbon::now();
+        $dispatchVerificationMailing->save();
+
+        session()->flash('success', 'La recepción fué ingresada.');
         return redirect()->back();
-      }
-
-      foreach($dispatch->verificationMailings->where('status','Pendiente') as $verificationMailing){
-        $verificationMailing->status = "Verificación cancelada.";
-        $verificationMailing->sender_observation = "Se ha creado nueva verificación.";
-        $verificationMailing->save();
-      }
-
-      $dispatchVerificationMailing = new DispatchVerificationMailing();
-      $dispatchVerificationMailing->dispatch_id = $dispatch->id;
-      $dispatchVerificationMailing->status = "Pendiente";
-      $dispatchVerificationMailing->sender_observation = null;
-      $dispatchVerificationMailing->delivery_date = Carbon::now();
-      $dispatchVerificationMailing->status = "Recepción conforme por origen";
-      $dispatchVerificationMailing->receiver_observation = "Sin observaciones";
-      $dispatchVerificationMailing->confirmation_date = Carbon::now();
-      $dispatchVerificationMailing->save();
-
-      session()->flash('success', 'La recepción fué ingresada.');
-      return redirect()->back();
     }
 
     public function dispatchingProductsWs(Request $request){
