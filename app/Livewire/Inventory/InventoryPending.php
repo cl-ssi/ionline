@@ -12,13 +12,13 @@ class InventoryPending extends Component
 {
     use WithPagination;
 
-    protected $paginationTheme = 'bootstrap';
-
     public $establishment;
 
     public $search;
 
     public $type_reception_id;
+
+    protected $paginationTheme = 'bootstrap';
 
     public function render()
     {
