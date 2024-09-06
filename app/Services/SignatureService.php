@@ -111,7 +111,7 @@ class SignatureService
         $signaturesFile->update(['file' => $filePath]);
         if(config('app.env') === 'production' || config('app.env') === 'local')
         {
-            Storage::disk('gcs')->put($filePath, $pdf);
+            Storage::put($filePath, $pdf);
         }
         else
         {

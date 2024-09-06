@@ -423,7 +423,7 @@ class DispatchController extends Controller
     {
         if ($dispatch->files && $dispatch->files->isNotEmpty()) {
             $file = $dispatch->files->first();
-            return Storage::disk('gcs')->response($file->file, mb_convert_encoding($file->name, 'ASCII'));
+            return Storage::response($file->file, mb_convert_encoding($file->name, 'ASCII'));
         } else {
             session()->flash('warning', 'No existe el archivo.');
             return redirect()->back();

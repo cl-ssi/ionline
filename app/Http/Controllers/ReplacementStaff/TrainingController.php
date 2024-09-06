@@ -104,7 +104,7 @@ class TrainingController extends Controller
     public function destroy(Training $training)
     {
         $training->delete();
-        Storage::disk('gcs')->delete($training->file);
+        Storage::delete($training->file);
 
         session()->flash('danger', 'Su Capacitación ha sido eliminada.');
         return redirect()->back();
@@ -112,11 +112,11 @@ class TrainingController extends Controller
 
     public function download(Training $training)
     {
-        return Storage::disk('gcs')->download($training->file);
+        return Storage::download($training->file);
     }
 
     public function show_file(Training $training)
     {
-        return Storage::disk('gcs')->response($training->file);
+        return Storage::response($training->file);
     }
 }

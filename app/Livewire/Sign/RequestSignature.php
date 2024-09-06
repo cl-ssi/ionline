@@ -194,7 +194,7 @@ class RequestSignature extends Component
             $image = base64_encode(file_get_contents(public_path('/images/logo_rgb.png')));
             $documentFile = \PDF::loadView('documents.templates.'.$document->viewName, compact('document','image'));
             $base64 = base64_encode($documentFile->stream());
-            Storage::disk('gcs')->put($file, base64_decode($base64));
+            Storage::put($file, base64_decode($base64));
 
         }
         else

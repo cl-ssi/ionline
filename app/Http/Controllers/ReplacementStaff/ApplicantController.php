@@ -351,7 +351,7 @@ class ApplicantController extends Controller
     {
         $approval = Approval::find($applicant->approval_id);
 
-        if( Storage::disk('gcs')->exists($approval->filename) ) {
+        if( Storage::exists($approval->filename) ) {
             return Storage::response($approval->filename);
         } 
         else {

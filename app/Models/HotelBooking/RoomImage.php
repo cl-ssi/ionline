@@ -30,7 +30,7 @@ class RoomImage extends Model
     protected $table = 'hb_room_images';
 
     public function base64image(){
-        $file = base64_encode(Storage::disk('gcs')->get($this->file));
+        $file = base64_encode(Storage::get($this->file));
         return $file;
     }
 }

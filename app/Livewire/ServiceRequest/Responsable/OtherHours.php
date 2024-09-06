@@ -13,7 +13,7 @@ class OtherHours extends Component
     public $serviceRequest;
 
     public function deleteSignedCertificate(Fulfillment $fulfillment){
-        Storage::disk('gcs')->delete($fulfillment->signedCertificate->signed_file);
+        Storage::delete($fulfillment->signedCertificate->signed_file);
         $fulfillment->signatures_file_id = null;
         $fulfillment->save();
         session()->flash('success', 'Se ha borrado exitosamente el certificado de cumplimiento.');
@@ -22,7 +22,7 @@ class OtherHours extends Component
 
     public function deleteAttachment(Attachment $attachment){
         $attachment->delete();
-        Storage::disk('gcs')->delete($attachment->file);
+        Storage::delete($attachment->file);
         session()->flash("message", "Su Archivo adjunto ha sido eliminado.");
         $this->serviceRequest->refresh();
     }

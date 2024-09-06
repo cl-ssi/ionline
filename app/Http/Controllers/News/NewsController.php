@@ -92,7 +92,7 @@ class NewsController extends Controller
     public function view_image(News $news)
     {
         if(isset($news->image)) {
-            $image = Storage::disk('gcs')->get($news->image);
+            $image = Storage::get($news->image);
             return response($image)->header('Content-Type', 'image/png');
         }
     }

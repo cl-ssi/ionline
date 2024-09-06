@@ -72,6 +72,6 @@ class AddPurchasePlan extends Component
     }
 
     public function show_file(PurchasePlanPublication $purchasePlanPublication){
-        return Storage::disk('gcs')->response($purchasePlanPublication->file);
+        return Storage::response($purchasePlanPublication->file);
     }
 }

@@ -180,7 +180,7 @@ class SignDocument extends Component
         $file = $filename.".pdf";
         $contentFile = base64_decode($json['files'][0]['content']);
 
-        Storage::disk('gcs')->put($file, $contentFile, ['CacheControl' => 'no-store']);
+        Storage::put($file, $contentFile, ['CacheControl' => 'no-store']);
 
         session()->flash('success', 'El documento fue firmado exitosamente');
         return redirect()->route($this->route, $this->routeParams);

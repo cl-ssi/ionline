@@ -141,7 +141,7 @@ class EnumerateSignature extends Component
         $file = $filename.".pdf";
         $contents = base64_decode($json['files'][0]['content']);
 
-        Storage::disk('gcs')->put($file, $contents);
+        Storage::put($file, $contents);
 
         /**
          * Actualiza el link del documento

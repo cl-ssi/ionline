@@ -147,7 +147,7 @@ class ReplacementStaffController extends Controller
         if($request->hasFile('cv_file'))
         {
             //DELETE LAST CV
-            Storage::disk('gcs')->delete($replacementStaff->cv_file);
+            Storage::delete($replacementStaff->cv_file);
 
             $replacementStaff->fill($request->all());
             $now = Carbon::now()->format('Y_m_d_H_i_s');
@@ -171,12 +171,12 @@ class ReplacementStaffController extends Controller
 
     public function show_file(ReplacementStaff $replacementStaff)
     {
-        return Storage::disk('gcs')->response($replacementStaff->cv_file);
+        return Storage::response($replacementStaff->cv_file);
     }
 
     public function download(ReplacementStaff $replacementStaff)
     {
-        return Storage::disk('gcs')->download($replacementStaff->cv_file);
+        return Storage::download($replacementStaff->cv_file);
     }
 
     public function show_replacement_staff(ReplacementStaff $replacementStaff){

@@ -135,7 +135,7 @@ class RequestsAdmin extends Component
     public function showFile($requestId)
     {
         $file = File::find($requestId);
-        return Storage::disk('gcs')->response($file->storage_path, mb_convert_encoding($file->name, 'ASCII'));
+        return Storage::response($file->storage_path, mb_convert_encoding($file->name, 'ASCII'));
     }
 
     public function render()

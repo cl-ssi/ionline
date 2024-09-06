@@ -246,7 +246,7 @@ class SignToDocument extends Component
             /**
              * Guarda el archivo en el storage
              */
-            Storage::disk('gcs')->put($file, $contentFile, ['CacheControl' => 'no-store']);
+            Storage::put($file, $contentFile, ['CacheControl' => 'no-store']);
 
             /**
              * Redirige a la route, definida en callbackRoute

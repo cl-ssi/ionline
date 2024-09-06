@@ -104,7 +104,7 @@ class TechnicalEvaluationFileController extends Controller
     public function destroy(TechnicalEvaluationFile $technicalEvaluationFile)
     {
         $technicalEvaluationFile->delete();
-        Storage::disk('gcs')->delete($technicalEvaluationFile->file);
+        Storage::delete($technicalEvaluationFile->file);
 
         return redirect()
             ->to(route('replacement_staff.request.technical_evaluation.edit', $technicalEvaluationFile->technicalEvaluation->requestReplacementStaff).'#file')
@@ -113,11 +113,11 @@ class TechnicalEvaluationFileController extends Controller
 
     public function download(TechnicalEvaluationFile $technicalEvaluationFile)
     {
-        return Storage::disk('gcs')->download($technicalEvaluationFile->file);
+        return Storage::download($technicalEvaluationFile->file);
     }
 
     public function show_file(TechnicalEvaluationFile $technicalEvaluationFile)
     {
-        return Storage::disk('gcs')->response($technicalEvaluationFile->file);
+        return Storage::response($technicalEvaluationFile->file);
     }
 }

@@ -175,7 +175,7 @@ class ParteController extends Controller
         if($parte->requirements->count() == 0)
         {
             foreach($parte->files as $file) {
-                Storage::disk('gcs')->delete($file->storage_path);
+                Storage::delete($file->storage_path);
                 $file->delete();
             }
 
@@ -211,9 +211,9 @@ class ParteController extends Controller
     public function download(File $file)
     {
 
-        if(Storage::disk('gcs')->exists($file->storage_path))
+        if(Storage::exists($file->storage_path))
         {
-            return Storage::disk('gcs')->response($file->storage_path, mb_convert_encoding($file->name,'ASCII'));
+            return Storage::response($file->storage_path, mb_convert_encoding($file->name,'ASCII'));
         }
         else
         {
@@ -229,7 +229,7 @@ class ParteController extends Controller
     }
 
     public function fileDestroy(File $file){
-        Storage::disk('gcs')->delete($file->storage_path);
+        Storage::delete($file->storage_path);
         $file->delete();
         session()->flash('success', 'El archivo ha sido eliminado');
         return back();

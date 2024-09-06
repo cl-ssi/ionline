@@ -679,10 +679,10 @@ class RequestReplacementStaffController extends Controller
             $file_name = $requestReplacementStaff->id.'_'.$now.'_job_profile';
             if($requestReplacementStaff->form_type == 'announcement'){
                 //DELETE LAST
-                Storage::disk('gcs')->delete($position->job_profile_file);
+                Storage::delete($position->job_profile_file);
                 $position->job_profile_file = $file->storeAs('/ionline/replacement_staff/request_job_profile/', $file_name.'.'.$file->extension(), 'gcs');
             }else{
-                Storage::disk('gcs')->delete($requestReplacementStaff->job_profile_file);
+                Storage::delete($requestReplacementStaff->job_profile_file);
                 $requestReplacementStaff->job_profile_file = $file->storeAs('/ionline/replacement_staff/request_job_profile/', $file_name.'.'.$file->extension(), 'gcs');
             }
         }
@@ -690,7 +690,7 @@ class RequestReplacementStaffController extends Controller
         if($request->hasFile('request_verification_file')){
             $file_verification = $request->file('request_verification_file');
             $file_name_verification = $requestReplacementStaff->id.'_'.$now.'_request_verification';
-            Storage::disk('gcs')->delete($requestReplacementStaff->request_verification_file);
+            Storage::delete($requestReplacementStaff->request_verification_file);
             $requestReplacementStaff->request_verification_file = $file_verification->storeAs('/ionline/replacement_staff/request_verification_file/', $file_name_verification.'.'.$file_verification->extension(), 'gcs');
         }
 
@@ -714,13 +714,13 @@ class RequestReplacementStaffController extends Controller
 
     public function show_file(RequestReplacementStaff $requestReplacementStaff)
     {
-        return Storage::disk('gcs')->response($requestReplacementStaff->job_profile_file);
+        return Storage::response($requestReplacementStaff->job_profile_file);
     }
 
     public function show_file_position(Position $position)
     {
         if($position->job_profile_file){
-            return Storage::disk('gcs')->response($position->job_profile_file);
+            return Storage::response($position->job_profile_file);
         }
         else{
             return redirect()->back()->with('danger', 'Estimado Usuario: El archivo no se encuentra disponible.');
@@ -729,17 +729,17 @@ class RequestReplacementStaffController extends Controller
 
     public function download(RequestReplacementStaff $requestReplacementStaff)
     {
-        return Storage::disk('gcs')->download($requestReplacementStaff->job_profile_file);
+        return Storage::download($requestReplacementStaff->job_profile_file);
     }
 
     public function show_verification_file(RequestReplacementStaff $requestReplacementStaff)
     {
-        return Storage::disk('gcs')->response($requestReplacementStaff->request_verification_file);
+        return Storage::response($requestReplacementStaff->request_verification_file);
     }
 
     public function download_verification(RequestReplacementStaff $requestReplacementStaff)
     {
-        return Storage::disk('gcs')->download($requestReplacementStaff->request_verification_file);
+        return Storage::download($requestReplacementStaff->request_verification_file);
     }
 
     public function request_by_dates(Request $request){
@@ -877,7 +877,7 @@ class RequestReplacementStaffController extends Controller
 
     public function show_budget_availability_certificate_signed(RequestReplacementStaff $requestReplacementStaff)
     {
-        return Storage::disk('gcs')->response($requestReplacementStaff->signaturesFile->signed_file);
+        return Storage::response($requestReplacementStaff->signaturesFile->signed_file);
     }
 
     public function approvalCallback($approval_id, $request_replacement_staff_id, $process, $applicant_id){

@@ -46,7 +46,7 @@ class UploadImagen extends Component
     }
 
     public function deleteItem($file){
-        Storage::disk('gcs')->delete($file['file']);
+        Storage::delete($file['file']);
         if($this->hotel){
             $file = HotelImage::where('file',$file['file'])->first();
             $file->delete();

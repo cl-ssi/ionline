@@ -157,7 +157,7 @@ class PurchaseController extends Controller
 
     public function signedRecordPdf(Purchase $purchase)
     {
-      return Storage::disk('gcs')->response($purchase->signedRecord->signed_file);
+      return Storage::response($purchase->signedRecord->signed_file);
     }
 
     public function callbackFirmaRecord($message, $modelId, SignaturesFile $signaturesFile = null)

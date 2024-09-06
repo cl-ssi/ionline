@@ -277,7 +277,7 @@ class PurchasePlanController extends Controller
 
     public function download_resol_pdf(PurchasePlan $purchasePlan)
     {
-        if( Storage::disk('gcs')->exists($purchasePlan->approvals->last()->filename) ) {
+        if( Storage::exists($purchasePlan->approvals->last()->filename) ) {
             return Storage::response($purchasePlan->approvals->last()->filename);
         } 
         else {

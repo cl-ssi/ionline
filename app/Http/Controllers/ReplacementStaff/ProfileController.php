@@ -34,18 +34,18 @@ class ProfileController extends Controller
 
     public function download(Profile $profile)
     {
-        return Storage::disk('gcs')->download($profile->file);
+        return Storage::download($profile->file);
     }
 
     public function show_file(Profile $profile)
     {
-        return Storage::disk('gcs')->response($profile->file);
+        return Storage::response($profile->file);
     }
 
     public function destroy(Profile $profile)
     {
         $profile->delete();
-        Storage::disk('gcs')->delete($profile->file);
+        Storage::delete($profile->file);
 
         session()->flash('danger', 'Su perfil profesional ha sido eliminado.');
         return redirect()->back();

@@ -395,7 +395,7 @@ class MeetingCreate extends Component
     public function show_file(Meeting $meetingToEdit){
         // dd($meetingToEdit->file);
 
-        return Storage::disk('gcs')->response($meetingToEdit->file->storage_path);
+        return Storage::response($meetingToEdit->file->storage_path);
     }
 
     public function updatedTypeGrouping($groupingInput){

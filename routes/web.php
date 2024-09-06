@@ -639,7 +639,7 @@ Route::prefix('job_position_profile')->as('job_position_profile.')->middleware([
     Route::get('/all_index', [JobPositionProfileController::class, 'all_index'])->name('all_index')->middleware('permission:Job Position Profile: all');
     Route::get('/create', [JobPositionProfileController::class, 'create'])->name('create');
     Route::get('/info/instructivo_2023', function () {
-        return Storage::disk('gcs')->response('ionline/job_position_profile/info/instructivo_2023.pdf');
+        return Storage::response('ionline/job_position_profile/info/instructivo_2023.pdf');
     })->name('instructivo_2023');
     Route::post('/store', [JobPositionProfileController::class, 'store'])->name('store');
     Route::get('{jobPositionProfile}/show', [JobPositionProfileController::class, 'show'])->name('show');
@@ -1521,7 +1521,7 @@ Route::prefix('indicators')->as('indicators.')->group(function () {
     Route::resource('single_parameter', SingleParameterController::class)->middleware('auth');
     Route::post('/population/export', [SingleParameterController::class, 'export'])->name('population.export');
     Route::get('/population/percapita/{year}', function ($year) {
-        return Storage::disk('gcs')->response('ionline/population/percapita_preliminar_' . $year . '.xlsx');
+        return Storage::response('ionline/population/percapita_preliminar_' . $year . '.xlsx');
     })->name('population.percapita');
 
     Route::prefix('rni_db')->as('rni_db.')->group(function () {
@@ -2351,7 +2351,7 @@ Route::prefix('request_forms'])->name('request_forms.')->group(function () {
 
 Route::prefix('request_forms')->as('request_forms.')->middleware(['auth', 'must.change.password'])->group(function () {
     Route::get('/info/circular_3650_2024', function () {
-        return Storage::disk('gcs')->response('ionline/request_forms/info/circular_3650_2024.pdf');
+        return Storage::response('ionline/request_forms/info/circular_3650_2024.pdf');
     })->name('circular_3650_2024');
 
     Route::get('/my_forms', [RequestFormController::class, 'my_forms'])->name('my_forms');

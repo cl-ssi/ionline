@@ -419,7 +419,7 @@ class TrainingCreate extends Component
     }
 
     public function show_file(Training $training, $type){
-        return Storage::disk('gcs')->response($training->files->where('type', $type)->first()->storage_path);
+        return Storage::response($training->files->where('type', $type)->first()->storage_path);
     }
 
     public function sentToApproval(){

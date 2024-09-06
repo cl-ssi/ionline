@@ -34,7 +34,7 @@ class UploadInvoice extends Component
     }
 
     public function delete() {
-        Storage::disk('gcs')->delete($this->storage_path.$this->fulfillment->id.'.pdf');
+        Storage::delete($this->storage_path.$this->fulfillment->id.'.pdf');
         $this->fulfillment->update(['has_invoice_file' => false, 'has_invoice_file_at' => null]);
     }
 

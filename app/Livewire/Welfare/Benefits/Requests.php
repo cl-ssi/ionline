@@ -246,7 +246,7 @@ class Requests extends Component
     public function showFile($requestId)
     {
         $file = File::find($requestId);
-        return Storage::disk('gcs')->response($file->storage_path, mb_convert_encoding($file->name,'ASCII'));
+        return Storage::response($file->storage_path, mb_convert_encoding($file->name,'ASCII'));
     }
 
     public function showFileInput()
@@ -300,7 +300,7 @@ class Requests extends Component
         
         if ($file) {
             // Elimina el archivo del almacenamiento
-            Storage::disk('gcs')->delete($file->storage_path);
+            Storage::delete($file->storage_path);
             
             // Elimina el registro de la base de datos
             $file->delete();
