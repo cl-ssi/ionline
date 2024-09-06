@@ -90,7 +90,7 @@ post_max_size = 66M
 
 # "require-dev"
 "barryvdh/laravel-debugbar": "^3.13",
-"barryvdh/laravel-ide-helper": "^3.1",
+"barryvdh/laravel-ide-helper": "^3.1", // upgrade de version
 "fakerphp/faker": "^1.23",
 "kitloong/laravel-migrations-generator": "^7.0", // upgrade de version
 "laravel/pint": "^1.17",
