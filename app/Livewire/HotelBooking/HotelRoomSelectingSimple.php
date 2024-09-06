@@ -8,7 +8,9 @@ use App\Models\HotelBooking\Room;
 
 class HotelRoomSelectingSimple extends Component
 {
+    public $hotels;
     public $hotel_id;
+    public $room;
     public $room_id;
 
     public function mount($room = null)

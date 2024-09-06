@@ -12,9 +12,8 @@
         </fieldset>
 
         <fieldset class="form-group col-1">
-            {{$monday}}
             <label for="for_hotel_id">Lu</label>
-            <input type="checkbox" class="form-control" id="for_monday" name="monday" wire:model="monday">
+            <input type="checkbox" class="form-control" id="for_monday" name="monday" wire:model.live="monday">
         </fieldset>
 
         <fieldset class="form-group col-1">
