@@ -168,15 +168,15 @@ class Derive extends Component
     }
 
     #[On('userFromSelected')]
-    public function userFromSelected($userId)
+    public function userFromSelected(User $user)
     {
-        $this->user_from_id = $userId;
+        $this->user_from_id = $user->id;
     }
 
     #[On('userToSelected')]
-    public function userToSelected($userId)
+    public function userToSelected(User $user)
     {
-        $this->user_to_id = $userId;
+        $this->user_to_id = $user->id;
     }
 
 }
