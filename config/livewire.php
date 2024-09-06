@@ -168,4 +168,7 @@ return [
 
     'pagination_theme' => 'tailwind',
 
+
+    'legacy_model_binding' => true,
+
 ];
