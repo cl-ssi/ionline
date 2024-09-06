@@ -278,7 +278,7 @@ class AllowanceController extends Controller
             return 0.5;
         }
         else{
-            return Carbon::parse($request->from)->diffInDays(Carbon::parse($request->to)) + 0.5;
+            return Carbon::parse($request->from)->diffInWeekDays(Carbon::parse($request->to)) + 0.5;
         }
     }
 
