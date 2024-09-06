@@ -1,8 +1,6 @@
 <div>
     <div class="form-row">
 
-        <input type="hidden" wire:model.live="room_id">
-
         <fieldset class="form-group col-2">
             <label for="for_hotel_id">F.Desde</label>
             <input type="date" class="form-control" id="for_start_date" name="start_date" wire:model.live="start_date">
@@ -14,38 +12,39 @@
         </fieldset>
 
         <fieldset class="form-group col-1">
+            {{$monday}}
             <label for="for_hotel_id">Lu</label>
             <input type="checkbox" class="form-control" id="for_monday" name="monday" wire:model="monday">
         </fieldset>
 
         <fieldset class="form-group col-1">
             <label for="for_hotel_id">Ma</label>
-            <input type="checkbox" class="form-control" id="for_tuesday" name="tuesday" wire:model="tuesday">
+            <input type="checkbox" class="form-control" id="for_tuesday" name="tuesday" wire:model.live="tuesday">
         </fieldset>
 
         <fieldset class="form-group col-1">
             <label for="for_hotel_id">Mi</label>
-            <input type="checkbox" class="form-control" id="for_wednesday" name="wednesday" wire:model="wednesday">
+            <input type="checkbox" class="form-control" id="for_wednesday" name="wednesday" wire:model.live="wednesday">
         </fieldset>
 
         <fieldset class="form-group col-1">
             <label for="for_hotel_id">Ju</label>
-            <input type="checkbox" class="form-control" id="for_thursday" name="thursday" wire:model="thursday">
+            <input type="checkbox" class="form-control" id="for_thursday" name="thursday" wire:model.live="thursday">
         </fieldset>
 
         <fieldset class="form-group col-1">
             <label for="for_hotel_id">Vi</label>
-            <input type="checkbox" class="form-control" id="for_friday" name="friday" wire:model="friday">
+            <input type="checkbox" class="form-control" id="for_friday" name="friday" wire:model.live="friday">
         </fieldset>
 
         <fieldset class="form-group col-1">
             <label for="for_hotel_id">Sa</label>
-            <input type="checkbox" class="form-control" id="for_saturday" name="saturday" wire:model="saturday">
+            <input type="checkbox" class="form-control" id="for_saturday" name="saturday" wire:model.live="saturday">
         </fieldset>
 
         <fieldset class="form-group col-1">
             <label for="for_hotel_id">Do</label>
-            <input type="checkbox" class="form-control" id="for_sunday" name="sunday" wire:model="sunday">
+            <input type="checkbox" class="form-control" id="for_sunday" name="sunday" wire:model.live="sunday">
         </fieldset>
 
         <!-- solo si viene el parametro 'configuration' se realiza esa carga -->

@@ -49,6 +49,14 @@ class RoomBookingConfiguration extends Model implements AuditableContract
     protected $casts = [
         'start_date' => 'date',
         'end_date'   => 'date',
+
+        'monday' => 'boolean',
+        'tuesday' => 'boolean',
+        'wednesday' => 'boolean',
+        'thursday' => 'boolean',
+        'friday' => 'boolean',
+        'saturday' => 'boolean',
+        'sunday' => 'boolean'
     ];
 
     /**
