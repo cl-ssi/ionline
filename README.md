@@ -126,7 +126,6 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 "stackkit/laravel-google-cloud-tasks-queue": "^4.2", // upgrade de version
 "tinymce/tinymce": "^7.1"
 
-
 # "require-dev"
 "barryvdh/laravel-debugbar": "^3.13",
 "barryvdh/laravel-ide-helper": "^3.1",
