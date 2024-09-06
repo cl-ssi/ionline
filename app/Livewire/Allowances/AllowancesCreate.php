@@ -374,9 +374,9 @@ class AllowancesCreate extends Component
                 //  SE CALCULA LOS DIAS DISPONIBLES 
                 $this->allowancesAvailableDays = $allowanceMaxValue - $this->totalCurrentAllowancesDaysByUser;
 
-                if(Carbon::parse($this->from)->diffInDays(Carbon::parse($this->to)) > $this->allowancesAvailableDays){
+                if(Carbon::parse($this->from)->diffInWeekDays(Carbon::parse($this->to)) > $this->allowancesAvailableDays){
                     if($this->allowancesAvailableDays > 0){
-                        $this->allowancesExceededDays = Carbon::parse($this->from)->diffInDays(Carbon::parse($this->to)) - $this->allowancesAvailableDays;
+                        $this->allowancesExceededDays = Carbon::parse($this->from)->diffInWeekDays(Carbon::parse($this->to)) - $this->allowancesAvailableDays;
                         return $this->allowancesAvailableDays;
                     }
                     else{
@@ -384,7 +384,7 @@ class AllowancesCreate extends Component
                     }
                 }
                 else{
-                    return Carbon::parse($this->from)->diffInDays(Carbon::parse($this->to));
+                    return Carbon::parse($this->from)->diffInWeekDays(Carbon::parse($this->to));
                 }
             }
         }*/
@@ -412,12 +412,12 @@ class AllowancesCreate extends Component
             }
             // OPCION: NO
             else{
-                // dd(Carbon::parse($this->from)->diffInDays(Carbon::parse($this->to)));
+                // dd(Carbon::parse($this->from)->diffInWeekDays(Carbon::parse($this->to)));
 
                 if(Carbon::parse($this->from)->diffInWeekDays(Carbon::parse($this->to)) > 10){
                     $this->MaxDaysStraight = 10;
                     $this->allowancesExceededDays = Carbon::parse($this->from)->diffInWeekDays(Carbon::parse($this->to)) - $this->MaxDaysStraight;
-                    // dd(Carbon::parse($this->from)->diffInDays(Carbon::parse($this->to)), $this->MaxDaysStraight, $this->allowancesExceededDays);
+                    // dd(Carbon::parse($this->from)->diffInWeekDays(Carbon::parse($this->to)), $this->MaxDaysStraight, $this->allowancesExceededDays);
                     return $this->MaxDaysStraight;
                 }
                 else{

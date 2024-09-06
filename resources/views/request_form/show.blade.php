@@ -87,8 +87,8 @@
                         @if($requestForm->eventRequestForms->last()->signature_date and $requestForm->eventRequestForms->last()->StatusValue == 'Aprobado')
                             <tr>
                                 <th class="table-active" colspan="2" scope="row">Vencimiento</th>
-                                <td @if($requestForm->purchaseType->supply_continuous_day <= $requestForm->eventRequestForms->last()->signature_date->diffInDays(Carbon\Carbon::now())) class="text-danger" @endif>
-                                    {{ $requestForm->eventRequestForms->last()->signature_date->diffInDays(now()) }}
+                                <td @if($requestForm->purchaseType->supply_continuous_day <= $requestForm->eventRequestForms->last()->signature_date->diffInWeekDays(Carbon\Carbon::now())) class="text-danger" @endif>
+                                    {{ $requestForm->eventRequestForms->last()->signature_date->diffInWeekDays(now()) }}
                                     ({{$requestForm->purchaseType->supply_continuous_day}})
                                 </td>
                             </tr>
