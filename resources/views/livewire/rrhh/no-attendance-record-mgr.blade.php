@@ -1,7 +1,7 @@
 <div>
     @section('title', 'Registro de justificación de asistencias')
 
-    @if ($form)
+    @if ($formActive)
         <h3 class="mb-3">Ingresar justificación de ausencia de registro de asistencia</h3>
         <h4>La autoridad que tiene usted asignada es: <strong>{{ optional($authority)->shortName }}</strong></h4>
         <small class="mb-3">Nota: Si su autoridad asignada no corresponde, por favor solicitar la corrección con su secretaria antes de hacer el registro</small>
@@ -58,7 +58,7 @@
             </div>
             <div class="col-3 text-end">
                 @if($checkAuthority)
-                <button class="btn btn-success float-right" wire:click="form()">
+                <button class="btn btn-success float-right" wire:click="formShow()">
                     <i class="fas fa-plus"></i> Nueva justificación
                 </button>
                 @else
@@ -87,8 +87,8 @@
                         <tr>
                             <td>
                                 @if(is_null($record->status))
-                                <!-- <button type="button" class="btn btn-sm btn-danger" 
-                                    onclick="confirm('¿Está seguro que desea borrar el feriado {{ $record->date }}?') || event.stopImmediatePropagation()" 
+                                <!-- <button type="button" class="btn btn-sm btn-danger"
+                                    onclick="confirm('¿Está seguro que desea borrar el feriado {{ $record->date }}?') || event.stopImmediatePropagation()"
                                     wire:click="delete({{$record}})"><i class="fas fa-trash"></i>
                                 </button> -->
                                 @endif
@@ -126,8 +126,8 @@
                             <td>{{ $record->authority_at }}</td>
                             <td>
                                 @if(is_null($record->status))
-                                <button type="button" class="btn btn-sm btn-primary" 
-                                    wire:click="form({{$record}})"><i class="fas fa-fw fa-edit"></i></button>
+                                <button type="button" class="btn btn-sm btn-primary"
+                                    wire:click="formShow({{$record}})"><i class="fas fa-fw fa-edit"></i></button>
                                 @elseif($record->status == TRUE)
                                     <a class="btn btn-sm btn-outline-success" target="_blank" href="{{ route('rrhh.attendance.no-records.show',$record) }}">
                                         <i class="fas fa-fw fa-file"></i>
@@ -188,8 +188,8 @@
                         <td>{{ $authorityRecord->authority_at }}</td>
                         <td>
                             @if(is_null($authorityRecord->status))
-                            <a class="btn btn-sm btn-outline-primary" 
-                                href="{{ route('rrhh.attendance.no-records.confirmation',$authorityRecord) }}"> 
+                            <a class="btn btn-sm btn-outline-primary"
+                                href="{{ route('rrhh.attendance.no-records.confirmation',$authorityRecord) }}">
                                 <i class="fas fa-eye"></i>
                             </a>
                             @endif

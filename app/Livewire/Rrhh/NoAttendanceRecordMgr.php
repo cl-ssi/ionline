@@ -15,7 +15,7 @@ class NoAttendanceRecordMgr extends Component
     protected $paginationTheme = 'bootstrap';
 
     /** Mostrar o no el form, tanto para crear como para editar */
-    public $form = false;
+    public $formActive = false;
 
     public $noAttendanceRecord;
 
@@ -56,13 +56,13 @@ class NoAttendanceRecordMgr extends Component
     public function index()
     {
         $this->resetErrorBag();
-        $this->form = false;
+        $this->formActive = false;
     }
 
-    public function form(NoAttendanceRecord $noAttendanceRecord)
+    public function showForm(NoAttendanceRecord $noAttendanceRecord)
     {
         $this->noAttendanceRecord = NoAttendanceRecord::firstOrNew([ 'id' => $noAttendanceRecord->id]);
-        $this->form = true;
+        $this->formActive = true;
     }
 
     /**
