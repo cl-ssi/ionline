@@ -613,7 +613,7 @@ class RequestForm extends Model implements Auditable
     /* TIEMPO TRANSCURRIDO DEL TICKET */
     public function getElapsedTime()
     {
-        $day = Carbon::now()->diffInDays($this->created_at);
+        $day = Carbon::now()->diffInWeekDays($this->created_at);
         if ($day <= 1)
             return $day . ' día.';
         else
@@ -831,7 +831,7 @@ class RequestForm extends Model implements Auditable
             return 0;
         }
 
-        return $this->getExpireAtAttribute()->diffInDays(now());
+        return $this->getExpireAtAttribute()->diffInWeekDays(now());
     }
 
     /**
