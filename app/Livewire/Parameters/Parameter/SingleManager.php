@@ -13,9 +13,9 @@ class SingleManager extends Component
      *  
      * @livewire('parameters.parameter.single-manager',[
      *      'module' => 'drugs',
-     *      'parameterName' => 'Jefe',
+     *      'paramete' => 'Jefe',
      *      'type' => 'user', // user or text
-     *      'parameterDescription' => 'bla bla bla'
+     *      'description' => 'bla bla bla'
      * ])
      * 
      * Type puede ser de tipo User o Value
@@ -24,9 +24,13 @@ class SingleManager extends Component
      * $value = Parameter::get('module','parameter','establishment_id' [opcional]);
      */
 
-    public $module;
-    public $parameterName;
+
+    public $parameterModule;
+    public $parameterParameter;
+    public $parameterValue;
     public $parameterDescription;
+
+    public $parameterName;
     public $type;
     
     public $save = false;
@@ -35,15 +39,21 @@ class SingleManager extends Component
 
     public $parameter;
 
-    public function mount($module, $parameterName, $type, $parameterDescription = null)
+    public function mount($module, $parameter, $type, $description = null)
     {
+        
         $this->parameter = Parameter::firstOrCreate([
             'module' => $module,
-            'parameter' => $parameterName,
+            'parameter' => $parameter,
             'establishment_id' => auth()->user()->organizationalUnit->establishment->id
         ],[
-            'description' => $parameterDescription,
+            'description' => $description ?? null,
         ]);
+
+        $this->parameterModule = $module;
+        $this->parameterParameter = $parameter;
+        $this->parameterValue = $this->parameter->value;
+        $this->parameterDescription = $this->parameter->description;
 
         $this->type = $type;
 
@@ -58,23 +68,29 @@ class SingleManager extends Component
     #[On('userSelected')]
     public function userSelected(User $user)
     {
-        $this->parameter->value = $user->id;
+        if($this->type == 'user') 
+        {
+            $this->parameterValue = $user->id;
+        }
     }
 
     protected $rules = [
-        'parameter.module' => 'required',
-        'parameter.parameter' => 'required',
-        'parameter.value' => 'required',
-        'parameter.description' => 'nullable',
+        // 'parameterModule' => 'required',
+        // 'parameterParameter' => 'required',
+        'parameterValue' => 'required',
+        // 'parameterDescription' => 'nullable',
     ];
 
     /**
     * Save
     */
-    public function save()
+    public function saveParameter()
     {
         $this->validate();
+ 
+        $this->parameter->value = $this->parameterValue;
         $this->parameter->save();
+    
         $this->save = 'spin';
         $this->save = true;
     }

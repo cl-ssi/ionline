@@ -21,7 +21,7 @@
     {{--
     @livewire('parameters.parameter.single-manager',[
         'module' => 'inventory',
-        'parameterName' => 'Encargado de inventario',
+        'parameter' => 'Encargado de inventario',
         'type' => 'user'
     ])
     --}}

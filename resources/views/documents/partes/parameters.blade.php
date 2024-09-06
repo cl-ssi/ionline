@@ -12,9 +12,9 @@
 
 @livewire('parameters.parameter.single-manager',[
     'module' => 'partes',
-    'parameterName' => 'numerador',
+    'parameter' => 'numerador',
     'type' => 'user',
-    'parameterDescription' => 'ingresar el RUN sin dv de la persona que generara el numero de parte de manera automática en el módulo recepción'
+    'description' => 'ingresar el RUN sin dv de la persona que generara el numero de parte de manera automática en el módulo recepción'
 ])
 
 

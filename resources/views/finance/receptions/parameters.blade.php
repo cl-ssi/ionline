@@ -11,9 +11,9 @@
 
 @livewire('parameters.parameter.single-manager',[
     'module' => 'Receptions',
-    'parameterName' => 'emails_notification',
+    'parameter' => 'emails_notification',
     'type' => 'text',
-    'parameterDescription' => 'Correos electrónicos de notificación de cada recepción firmada, separados por coma',
+    'description' => 'Correos electrónicos de notificación de cada recepción firmada, separados por coma',
 ], key('email_notification'))
 
 
