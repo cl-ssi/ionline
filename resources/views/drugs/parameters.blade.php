@@ -10,37 +10,37 @@
 
 @livewire('parameters.parameter.single-manager',[
     'module' => 'drugs',
-    'parameterName' => 'Jefe',
+    'parameter' => 'Jefe',
     'type' => 'user'
 ], key('Jefe'))
 
 @livewire('parameters.parameter.single-manager',[
     'module'=>'drugs',
-    'parameterName' => 'CargoJefe',
+    'parameter' => 'CargoJefe',
     'type' => 'value'
-], key('Jefe'))
+], key('CargoJefe'))
 
 @livewire('parameters.parameter.single-manager',[
     'module'=>'drugs',
-    'parameterName'=>'MinistroDeFe',
+    'parameter'=>'MinistroDeFe',
     'type' => 'user'
 ], key('MinistroDeFe'))
 
 @livewire('parameters.parameter.single-manager',[
     'module'=>'drugs',
-    'parameterName'=>'MinistroDeFeJuridico',
+    'parameter'=>'MinistroDeFeJuridico',
     'type' => 'user'
 ], key('MinistroDeFeJuridico'))
 
 @livewire('parameters.parameter.single-manager',[
     'module'=>'drugs',
-    'parameterName'=>'Mandatado',
+    'parameter'=>'Mandatado',
     'type' => 'user'
 ], key('Mandatado'))
 
 @livewire('parameters.parameter.single-manager',[
     'module'=>'drugs',
-    'parameterName'=>'MandatadoResolucion',
+    'parameter'=>'MandatadoResolucion',
     'type' => 'value'
 ], key('MandatadoResolucion'))
 

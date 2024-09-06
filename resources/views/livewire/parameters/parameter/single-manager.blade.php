@@ -3,7 +3,7 @@
     <div class="row g-2">
         <div class="form-group col-12 col-md-3">
             <input type="text" class="form-control" 
-                wire:model="parameter.parameter"
+                wire:model="parameterParameter"
                 disabled>
         </div>
 
@@ -12,13 +12,13 @@
                 @livewire('search-select-user',['user' => $user])
             @else
                 <input type="text" class="form-control" 
-                    wire:model="parameter.value">
+                    wire:model="parameterValue">
             @endif
-            <p class="form-text text-muted">{{ optional($parameter)->description }}</p>
+            <p class="form-text text-muted">{{ $parameterDescription }}</p>
         </div>
 
         <div class="form-group col-2 col-md-1">
-            <button type="button" wire:click="save()" class="btn btn-primary">Guardar</button>
+            <button type="button" wire:click="saveParameter" class="btn btn-primary">Guardar</button>
             <p class="form-text text-success">
             @if($save == 'spin') <i class="fas fa-cog fa-spin"></i>@endif
             {{ ($save) ? 'Ok' : '' }}

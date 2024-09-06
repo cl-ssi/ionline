@@ -11,14 +11,14 @@
 
 @livewire('parameters.parameter.single-manager',[
     'module'=>'his_modifications',
-    'parameterName' => 'tipos_de_solicitudes',
+    'parameter' => 'tipos_de_solicitudes',
     'type' => 'value'
 ])
 
 <label for="for-unidades">Ids de las unidades que van a dar VB</label>
 @livewire('parameters.parameter.single-manager',[
     'module'=>'his_modifications',
-    'parameterName' => 'ids_unidades_vb',
+    'parameter' => 'ids_unidades_vb',
     'type' => 'value'
 ])
 
