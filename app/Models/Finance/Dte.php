@@ -460,7 +460,7 @@ class Dte extends Model implements Auditable
     public function getRowClassAttribute()
     {
         $rowClass = '';
-        $daysDifference = $this->fecha_recepcion_sii ? $this->fecha_recepcion_sii->diffInDays(now()) : null;
+        $daysDifference = $this->fecha_recepcion_sii ? $this->fecha_recepcion_sii->diffInWeekDays(now()) : null;
         if ( !is_null($daysDifference )) {
             switch($daysDifference) {
                 case 1:

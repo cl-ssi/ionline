@@ -126,7 +126,7 @@
                         data-original-title="{{ $file->name }}">
                         <i class="fas fa-paperclip"></i>
                     </a>
-                    @if($parte->created_at->diffInDays('now') <= 7)
+                    @if($parte->created_at->diffInWeekdays(now()) <= 7)
 
 
                     <form method="POST" style="display:inline-block;"
@@ -148,7 +148,7 @@
             <fieldset class="form-group col-2">
                 <label for="for_delete">&nbsp;</label>
                 <div>
-                    @if($parte->created_at->diffInDays('now') <= 5)
+                    @if($parte->created_at->diffInWeekDays(now()) <= 5)
                     <form method="POST" style="display:inline-block;"
                         action="{{ route('documents.partes.destroy', $parte) }}">
                         @csrf

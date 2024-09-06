@@ -78,7 +78,7 @@
                             {{ $summary->daysPassed }} día(s) hábil(es)
                         @endif
                     </td>
-                    <td>{{ $summary->start_at->diffInDays(now()) }}</td>
+                    <td>{{ $summary->start_at->diffInWeekDays(now()) }}</td>
                     <td>{{ optional($summary->investigator)->tinnyName }}</td>
                     <td>{{ optional($summary->actuary)->tinnyName }}</td>
                     --}}

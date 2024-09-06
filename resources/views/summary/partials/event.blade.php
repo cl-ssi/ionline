@@ -110,7 +110,7 @@
                     {{ $event->creator->shortName ?? '' }} -
                     {{ $event->start_date }} -
                     @if ($event->end_date)
-                        {{ $event->end_date }} - {{ $event->end_date->diffInDays($event->start_date) }} dias
+                        {{ $event->end_date }} - {{ $event->end_date->diffInWeekDays($event->start_date) }} dias
                     @else
                         Transcurridos {{ $event->type->daysPassed }} día(s) hábil(es)
                         @if(isset($event->type->totalDays))

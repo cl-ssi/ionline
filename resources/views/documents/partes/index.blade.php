@@ -103,7 +103,7 @@
             <td>{{ $parte->origin }}</td>
             <td nowrap class="text-right">
                 @can('Partes: oficina')
-                    @if($parte->created_at->diffInDays('now') <= 7)
+                    @if($parte->created_at->diffInWeekdays(now()) <= 5)
                     <a class="btn btn-sm btn-primary" href="{{ route('documents.partes.edit', $parte) }}"
                         data-toggle="tooltip" data-placement="top"
                         data-original-title="Editar">
