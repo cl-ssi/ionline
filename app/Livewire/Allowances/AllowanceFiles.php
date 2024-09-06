@@ -8,7 +8,7 @@ class AllowanceFiles extends Component
 {
     public function showFile($key)
     {
-        return Storage::disk('gcs')->response($this->files[$key]['file']);
+        return Storage::response($this->files[$key]['file']);
     }
 
     // public function render()
@@ -23,7 +23,7 @@ class AllowanceFiles extends Component
 
     public function destroy(AllowanceFile $file){
         $file->delete();
-        Storage::disk('gcs')->delete($file->file);
+        Storage::delete($file->file);
 
         return redirect()
             ->to(route('allowances.edit', $this->allowance))

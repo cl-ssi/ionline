@@ -2,46 +2,43 @@
 
 namespace App\Http\Controllers\Documents;
 
-use Throwable;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Response;
-use Illuminate\Http\Request;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Contracts\View\View;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Contracts\Foundation\Application;
-use Exception;
-use Carbon\Carbon;
-use App\Models\User;
-use App\Rules\CommaSeparatedEmails;
-use App\Models\Rrhh\OrganizationalUnit;
-use App\Models\Rrhh\Authority;
-use App\Notifications\Signatures\NewSignatureRequest;
-use App\Models\ServiceRequests\SignatureFlow;
-use App\Models\ServiceRequests\Fulfillment;
-use App\Models\Documents\SignaturesFlow;
-use App\Models\Documents\SignaturesFile;
-use App\Models\Documents\Signature;
-// use App\Models\Documents\ParteFile;
-use App\Models\File;
-use App\Models\Documents\Parte;
-use App\Models\Documents\Document;
-use App\Models\Agreements\Agreement;
-use App\Models\Agreements\Addendum;
 use App\Http\Controllers\Controller;
+use App\Models\Agreements\Addendum;
+use App\Models\Agreements\Agreement;
 use App\Models\Agreements\ContinuityResolution;
+use App\Models\Documents\Document;
+use App\Models\Documents\Parte;
+use App\Models\Documents\Signature;
+use App\Models\Documents\SignaturesFile;
+use App\Models\Documents\SignaturesFlow;
+use App\Models\File;
+use App\Models\Rrhh\Authority;
+use App\Models\Rrhh\OrganizationalUnit;
+use App\Models\ServiceRequests\Fulfillment;
+use App\Models\User;
 use App\Notifications\Documents\PendingSign;
+use App\Notifications\Signatures\NewSignatureRequest;
+use App\Rules\CommaSeparatedEmails;
+use Carbon\Carbon;
+use Exception;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+// use App\Models\Documents\ParteFile;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
+use Throwable;
 
 class SignatureController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @param $tab
      * @return Application|Factory|View|Response
      */
     public function index(Request $request, string $tab)
@@ -52,8 +49,8 @@ class SignatureController extends Controller
         $pendingSignaturesFlows = null;
         $users[0] = auth()->id();
 
-        if(auth()->user()->iAmSubrogantOf->count() > 0){
-            foreach(auth()->user()->getIAmSubrogantOfAttribute() as $surrogacy){
+        if (auth()->user()->iAmSubrogantOf->count() > 0) {
+            foreach (auth()->user()->getIAmSubrogantOfAttribute() as $surrogacy) {
                 array_push($users, $surrogacy->id);
             }
         }
@@ -61,7 +58,7 @@ class SignatureController extends Controller
         $myAuthorities = collect();
         $ous_secretary = Authority::getAmIAuthorityFromOu(today(), 'secretary', auth()->id());
         foreach ($ous_secretary as $secretary) {
-            if($secretary->OrganizationalUnit) {
+            if ($secretary->OrganizationalUnit) {
                 $users[] = Authority::getAuthorityFromDate($secretary->OrganizationalUnit->id, today(), 'manager')->user_id;
                 $allTimeAuthorities = Authority::getAuthorityFromAllTime($secretary->OrganizationalUnit->id, 'manager');
             }
@@ -79,21 +76,21 @@ class SignatureController extends Controller
             //Firmas del usuario y del manager actual de ou
             $mySignatures = Signature::with('signaturesFiles')
                 ->whereIn('responsable_id', $users)
-                ->where(function($query) use ($request) {
+                ->where(function ($query) use ($request) {
                     $query->where('subject', 'LIKE', '%'.$request->search.'%')
-                        ->orWhere('id','=', $request->search)
-                        ->orWhere('description','LIKE', '%'.$request->search.'%');
+                        ->orWhere('id', '=', $request->search)
+                        ->orWhere('description', 'LIKE', '%'.$request->search.'%');
                 });
 
             //Firmas de managers anteriores de la ou
-            foreach ($myAuthorities as $myAuthority){
+            foreach ($myAuthorities as $myAuthority) {
                 $authoritiesSignatures = Signature::where('responsable_id', $myAuthority->user_id)
-                ->whereBetween('created_at', [$myAuthority->from, $myAuthority->to])
-                ->where(function($query) use ($request) {
-                    $query->where('subject', 'like', $search)
-                        ->orWhere('id','=', $request->search)
-                        ->orWhere('description', 'like', $search);
-                });
+                    ->whereBetween('created_at', [$myAuthority->from, $myAuthority->to])
+                    ->where(function ($query) use ($request) {
+                        $query->where('subject', 'like', $search)
+                            ->orWhere('id', '=', $request->search)
+                            ->orWhere('description', 'like', $search);
+                    });
 
                 $mySignatures = $mySignatures->unionAll($authoritiesSignatures);
             }
@@ -109,30 +106,29 @@ class SignatureController extends Controller
                     $q->whereNull('rejected_at');
                 })
 
-                ->when($request->search, function($query) use($search, $request) {
-                    $query->whereHas('signaturesFile.signature', function ($query) use($search, $request) {
+                ->when($request->search, function ($query) use ($search, $request) {
+                    $query->whereHas('signaturesFile.signature', function ($query) use ($search, $request) {
                         $query->where('subject', 'like', $search)
-                            ->orWhere('id','=', $request->search)
+                            ->orWhere('id', '=', $request->search)
                             ->orWhere('description', 'like', $search);
                     });
                 });
 
             //Firmas de managers anteriores de la ou
-            foreach ($myAuthorities as $myAuthority)
-            {
+            foreach ($myAuthorities as $myAuthority) {
                 $authoritiesPendingSignaturesFlows = SignaturesFlow::where('user_id', $myAuthority->user_id)
                     ->whereNull('status')
                     ->whereHas('signaturesFile.signature', function ($q) {
                         $q->whereNull('rejected_at');
                     })
                     ->whereBetween('signature_date', [$myAuthority->from, $myAuthority->to])
-                    ->whereHas('signaturesFile.signature', function ($q) use ($request){
+                    ->whereHas('signaturesFile.signature', function ($q) use ($request) {
                         $q->where('subject', 'LIKE', '%'.$request->search.'%')
-                            ->orWhere('id','=', $request->search)
-                            ->orWhere('description','LIKE', '%'.$request->search.'%');
+                            ->orWhere('id', '=', $request->search)
+                            ->orWhere('description', 'LIKE', '%'.$request->search.'%');
                     });
 
-                    $pendingSignaturesFlows = $pendingSignaturesFlows->unionAll($authoritiesPendingSignaturesFlows);
+                $pendingSignaturesFlows = $pendingSignaturesFlows->unionAll($authoritiesPendingSignaturesFlows);
             }
 
             $pendingSignaturesFlows = $pendingSignaturesFlows->get();
@@ -147,37 +143,37 @@ class SignatureController extends Controller
                             $q->whereNotNull('rejected_at');
                         });
                 })
-                ->when($request->search, function($query) use($search, $request) {
-                    $query->whereHas('signaturesFile.signature', function ($query) use($search, $request) {
+                ->when($request->search, function ($query) use ($search, $request) {
+                    $query->whereHas('signaturesFile.signature', function ($query) use ($search, $request) {
                         $query->where('subject', 'like', $search)
-                            ->orWhere('id','=', $request->search)
+                            ->orWhere('id', '=', $request->search)
                             ->orWhere('description', 'like', $search);
                     });
                 });
 
             //Firmas de managers anteriores de la ou
-            foreach ($myAuthorities as $myAuthority){
+            foreach ($myAuthorities as $myAuthority) {
                 $authoritiesSignedSignaturesFlows = SignaturesFlow::where('user_id', $myAuthority->user_id)
-                ->where(function ($q) {
-                    $q->whereNotNull('status')
-                        ->orWhereHas('signaturesFile.signature', function ($q) {
-                            $q->whereNotNull('rejected_at');
-                        });
-                })
-                ->whereBetween('signature_date', [$myAuthority->from, $myAuthority->to])
-                ->whereHas('signaturesFile.signature', function ($q) use ($request){
-                    $q->where('subject', 'LIKE', '%'.$request->search.'%')
-                        ->orWhere('id','=', $request->search)
-                        ->orWhere('description','LIKE', '%'.$request->search.'%');
-                });
+                    ->where(function ($q) {
+                        $q->whereNotNull('status')
+                            ->orWhereHas('signaturesFile.signature', function ($q) {
+                                $q->whereNotNull('rejected_at');
+                            });
+                    })
+                    ->whereBetween('signature_date', [$myAuthority->from, $myAuthority->to])
+                    ->whereHas('signaturesFile.signature', function ($q) use ($request) {
+                        $q->where('subject', 'LIKE', '%'.$request->search.'%')
+                            ->orWhere('id', '=', $request->search)
+                            ->orWhere('description', 'LIKE', '%'.$request->search.'%');
+                    });
 
                 $signedSignaturesFlows = $signedSignaturesFlows->unionAll($authoritiesSignedSignaturesFlows);
             }
 
-            $signedSignaturesFlows = $signedSignaturesFlows->when($request->search, function($query) use($search, $request) {
-                $query->whereHas('signaturesFile.signature', function ($query) use($search, $request) {
+            $signedSignaturesFlows = $signedSignaturesFlows->when($request->search, function ($query) use ($search, $request) {
+                $query->whereHas('signaturesFile.signature', function ($query) use ($search, $request) {
                     $query->where('subject', 'like', $search)
-                        ->orWhere('id','=', $request->search)
+                        ->orWhere('id', '=', $request->search)
                         ->orWhere('description', 'like', $search);
                 });
             });
@@ -202,20 +198,18 @@ class SignatureController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param Request $request
-     * @return RedirectResponse
      * @throws Throwable
      */
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
             'distribution' => ['nullable', new CommaSeparatedEmails],
-            'recipients' => ['nullable', new CommaSeparatedEmails]
+            'recipients' => ['nullable', new CommaSeparatedEmails],
         ]);
 
         DB::beginTransaction();
 
-        try {            
+        try {
             $signature = new Signature($request->All());
             $signature->status = 'pending';
             $signature->user_id = Auth::id();
@@ -224,7 +218,7 @@ class SignatureController extends Controller
             $signature->reserved = $request->input('reserved') == 'on' ? 1 : null;
             $signature->save();
 
-            $signaturesFile = new SignaturesFile();
+            $signaturesFile = new SignaturesFile;
             $signaturesFile->signature_id = $signature->id;
 
             if ($request->file_base_64) {
@@ -239,13 +233,13 @@ class SignatureController extends Controller
             $signaturesFile->save();
             $signaturesFileDocumentId = $signaturesFile->id;
 
-            $filePath = 'ionline/signatures/original/' . $signaturesFileDocumentId . '.pdf';
-            $signaturesFile->update(['file' => $filePath,]);
+            $filePath = 'ionline/signatures/original/'.$signaturesFileDocumentId.'.pdf';
+            $signaturesFile->update(['file' => $filePath]);
             Storage::disk('gcs')->put($filePath, $documentFile);
 
             if ($request->annexed) {
                 foreach ($request->annexed as $key => $annexed) {
-                    $signaturesFile = new SignaturesFile();
+                    $signaturesFile = new SignaturesFile;
                     $signaturesFile->signature_id = $signature->id;
                     $documentFile = $annexed;
 
@@ -254,21 +248,21 @@ class SignatureController extends Controller
 
                     $documentFile = $annexed->openFile()->fread($documentFile->getSize());
                     //$filePath = 'ionline/signatures/original/' . $signaturesFile->id . '.pdf';
-                    $filePath = 'ionline/signatures/original/' . $signaturesFile->id . '.' . $annexed->extension();
-                    $signaturesFile->update(['file' => $filePath,]);
+                    $filePath = 'ionline/signatures/original/'.$signaturesFile->id.'.'.$annexed->extension();
+                    $signaturesFile->update(['file' => $filePath]);
                     Storage::disk('gcs')->put($filePath, $documentFile);
                 }
             }
 
             $visatorTypes = null;
-            if($request->has('visator_types')){
+            if ($request->has('visator_types')) {
                 $visatorTypes = unserialize($request->visator_types);
                 $elaboradorCount = 0;
                 $revisadorCount = 0;
             }
 
             if ($request->ou_id_signer != null) {
-                $signaturesFlow = new SignaturesFlow();
+                $signaturesFlow = new SignaturesFlow;
                 $signaturesFlow->signatures_file_id = $signaturesFileDocumentId;
                 $signaturesFlow->type = 'firmante';
                 $signaturesFlow->ou_id = $request->ou_id_signer;
@@ -281,23 +275,21 @@ class SignatureController extends Controller
                 $signaturesFlow->save();
             }
 
-            if ($request->has('ou_id_visator'))
-            {
+            if ($request->has('ou_id_visator')) {
                 foreach ($request->ou_id_visator as $key => $ou_id_visator) {
-                    $signaturesFlow = new SignaturesFlow();
+                    $signaturesFlow = new SignaturesFlow;
                     $signaturesFlow->signatures_file_id = $signaturesFileDocumentId;
                     $signaturesFlow->type = 'visador';
                     $signaturesFlow->ou_id = $ou_id_visator;
                     $signaturesFlow->user_id = $request->user_visator[$key];
                     $signaturesFlow->sign_position = $key + 1;
-                    if($visatorTypes != null) {
+                    if ($visatorTypes != null) {
                         $signaturesFlow->visator_type = $visatorTypes[$key];
-                        if($visatorTypes[$key] === 'elaborador') {
-                            $elaboradorCount = $elaboradorCount +1;
+                        if ($visatorTypes[$key] === 'elaborador') {
+                            $elaboradorCount = $elaboradorCount + 1;
                             $signaturesFlow->position_visator_type = $elaboradorCount;
-                        }
-                        else{
-                            $revisadorCount = $revisadorCount +1;
+                        } else {
+                            $revisadorCount = $revisadorCount + 1;
                             $signaturesFlow->position_visator_type = $revisadorCount;
                         }
                     }
@@ -402,14 +394,14 @@ class SignatureController extends Controller
         //     }
         // }
 
-        session()->flash('info', 'La solicitud de firma ' . $signature->id . ' ha sido creada.');
+        session()->flash('info', 'La solicitud de firma '.$signature->id.' ha sido creada.');
+
         return redirect()->route('documents.signatures.index', ['mis_documentos']);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param Signature $signature
      * @return Response
      */
     public function show(Signature $signature)
@@ -420,7 +412,6 @@ class SignatureController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param Signature $signature
      * @return Application|Factory|View|Response
      */
     public function edit(Signature $signature)
@@ -431,16 +422,13 @@ class SignatureController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param Request $request
-     * @param Signature $signature
-     * @return RedirectResponse
      * @throws Exception
      */
     public function update(Request $request, Signature $signature): RedirectResponse
     {
         $request->validate([
             'distribution' => ['nullable', new CommaSeparatedEmails],
-            'recipients' => ['nullable', new CommaSeparatedEmails]
+            'recipients' => ['nullable', new CommaSeparatedEmails],
         ]);
 
         $signature->fill($request->all());
@@ -453,7 +441,7 @@ class SignatureController extends Controller
 
             Storage::disk('gcs')->delete($signatureFileDocumento->file);
             $documentFile = file_get_contents($request->file('document')->getRealPath());
-            $filePath = 'ionline/signatures/original/' . $signatureFileDocumento->id . '.pdf';
+            $filePath = 'ionline/signatures/original/'.$signatureFileDocumento->id.'.pdf';
             Storage::disk('gcs')->put($filePath, $documentFile);
 
             $signatureFileDocumento->save();
@@ -468,7 +456,7 @@ class SignatureController extends Controller
             }
 
             foreach ($request->annexed as $key => $annexed) {
-                $signaturesFile = new SignaturesFile();
+                $signaturesFile = new SignaturesFile;
                 $signaturesFile->signature_id = $signature->id;
                 $documentFile = $annexed;
 
@@ -477,8 +465,8 @@ class SignatureController extends Controller
 
                 $documentFile = $annexed->openFile()->fread($documentFile->getSize());
                 //$filePath = 'ionline/signatures/original/' . $signaturesFile->id . '.pdf';
-                $filePath = 'ionline/signatures/original/' . $signaturesFile->id . '.' . $annexed->extension();
-                $signaturesFile->update(['file' => $filePath,]);
+                $filePath = 'ionline/signatures/original/'.$signaturesFile->id.'.'.$annexed->extension();
+                $signaturesFile->update(['file' => $filePath]);
                 Storage::disk('gcs')->put($filePath, $documentFile);
             }
         }
@@ -488,7 +476,7 @@ class SignatureController extends Controller
         $signatureFileDocumento->signaturesFlows()->delete();
 
         if ($request->ou_id_signer != null) {
-            $signaturesFlow = new SignaturesFlow();
+            $signaturesFlow = new SignaturesFlow;
             $signaturesFlow->signatures_file_id = $signatureFileDocumento->id;
             $signaturesFlow->type = 'firmante';
             $signaturesFlow->ou_id = $request->ou_id_signer;
@@ -498,7 +486,7 @@ class SignatureController extends Controller
 
         if ($request->has('ou_id_visator')) {
             foreach ($request->ou_id_visator as $key => $ou_id_visator) {
-                $signaturesFlow = new SignaturesFlow();
+                $signaturesFlow = new SignaturesFlow;
                 $signaturesFlow->signatures_file_id = $signatureFileDocumento->id;
                 $signaturesFlow->type = 'visador';
                 $signaturesFlow->ou_id = $ou_id_visator;
@@ -511,14 +499,13 @@ class SignatureController extends Controller
         $signatureFileDocumento->update(['signed_file' => null]);
 
         session()->flash('info', "Los datos de la firma $signature->id han sido actualizados.");
+
         return redirect()->route('documents.signatures.index', ['mis_documentos']);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param Signature $signature
-     * @return RedirectResponse
      * @throws Exception
      * @throws Throwable
      */
@@ -552,17 +539,17 @@ class SignatureController extends Controller
                 }
 
                 // borro files asociados
-                if($signaturesFile->parte){
-                    if($signaturesFile->parte->files){
+                if ($signaturesFile->parte) {
+                    if ($signaturesFile->parte->files) {
                         $signaturesFile->parte->files()->delete();
                     }
 
                     // si no tiene sgr asociado, se permite la eliminación del parte.
-                    if($signaturesFile->parte->requirements->isEmpty()){
+                    if ($signaturesFile->parte->requirements->isEmpty()) {
                         $signaturesFile->parte->delete();
                     }
                 }
-                
+
                 $signaturesFile->delete();
 
             }
@@ -575,6 +562,7 @@ class SignatureController extends Controller
         }
 
         session()->flash('info', "La solicitud de firma $signature->id ha sido eliminada.");
+
         return redirect()->route('documents.signatures.index', ['mis_documentos']);
     }
 
@@ -582,10 +570,9 @@ class SignatureController extends Controller
     {
         if ($signaturesFile->file_type == 'documento') {
             if ($signaturesFile->signed_file) {
-                if(Storage::disk('gcs')->exists($signaturesFile->signed_file)) {
+                if (Storage::disk('gcs')->exists($signaturesFile->signed_file)) {
                     return Storage::disk('gcs')->response($signaturesFile->signed_file);
-                }
-                else {
+                } else {
                     return "El archivo de la solicitud de firma {$signaturesFile->signature->id} fue borrado.<br>
                     Es posible que <b>{$signaturesFile->signature->user->shortName} </b>
                     deba crear una nueva solicitud.";
@@ -614,7 +601,6 @@ class SignatureController extends Controller
         return Storage::disk('gcs')->download($anexo->file);
     }
 
-
     public function verify(Request $request)
     {
         if ($request->id && $request->verification_code) {
@@ -623,6 +609,7 @@ class SignatureController extends Controller
                 return Storage::disk('gcs')->response($signaturesFile->signed_file);
             } else {
                 session()->flash('warning', 'El código de verificación no corresponde con el documento.');
+
                 return view('documents.signatures.verify');
             }
 
@@ -631,28 +618,29 @@ class SignatureController extends Controller
         }
     }
 
-    public function callbackFirma($message, $modelId, SignaturesFile $signaturesFile = null)
+    public function callbackFirma($message, $modelId, ?SignaturesFile $signaturesFile = null)
     {
         $fulfillment = Fulfillment::find($modelId);
 
-        if (!$signaturesFile) {
+        if (! $signaturesFile) {
             session()->flash('danger', $message);
+
             return redirect()->route('rrhh.service-request.fulfillment.edit', $fulfillment->serviceRequest->id);
         }
 
         $fulfillment->signatures_file_id = $signaturesFile->id;
         $fulfillment->save();
         session()->flash('success', $message);
+
         return redirect()->route('rrhh.service-request.fulfillment.edit', $fulfillment->serviceRequest->id);
     }
 
     public function rejectSignature(Request $request, $idSignatureFlow)
     {
         $signatureFlow = SignaturesFlow::withTrashed()->find($idSignatureFlow);
-        if($signatureFlow->trashed()) {
-            session()->flash('danger', "No se pudo rechazar la solicitud de firma, el creador la eliminó");
-        }
-        else {
+        if ($signatureFlow->trashed()) {
+            session()->flash('danger', 'No se pudo rechazar la solicitud de firma, el creador la eliminó');
+        } else {
             $user_signer_id = $signatureFlow->user_id;
             $signatureFlow->update([
                 'status' => 0,
@@ -660,27 +648,29 @@ class SignatureController extends Controller
                 'real_signer_id' => (auth()->id() == $user_signer_id) ? null : auth()->id(),
             ]);
             $signatureFlow->signature()->update([
-                'status'        => 'rejected',
-                'rejected_at'   => now()
+                'status' => 'rejected',
+                'rejected_at' => now(),
             ]);
         }
 
-        session()->flash('success', "La solicitud ha sido rechazada");
+        session()->flash('success', 'La solicitud ha sido rechazada');
+
         return redirect()->route('documents.signatures.index', ['pendientes']);
     }
 
     public function signatureFlows($signatureID)
     {
         $signatureFlowsModal = Signature::find($signatureID)->signaturesFlows;
+
         return view('documents.signatures.partials.flows_modal_body', compact('signatureFlowsModal'));
     }
 
     public function signModal($pendingSignaturesFlowId)
     {
         $pendingSignaturesFlow = SignaturesFlow::find($pendingSignaturesFlowId);
+
         return view('documents.signatures.partials.sign_modal_content', compact('pendingSignaturesFlow'));
     }
-
 
     public function massSignModal($pendingSignaturesFlowIds)
     {
@@ -692,17 +682,17 @@ class SignatureController extends Controller
 
     public function notificationPending($signatureId)
     {
-        
+
         $signature = Signature::findOrFail($signatureId);
 
         $pendingFlows = $signature->pendingSignaturesFlows();
-        
+
         foreach ($pendingFlows as $pendingFlow) {
             $user = $pendingFlow->userSigner;
             $user->notify(new PendingSign($signature));
         }
-        return redirect()->route('documents.signatures.index', ['pendientes'])
-                        ->with('success', 'Notificación enviada correctamente');
-    }
 
+        return redirect()->route('documents.signatures.index', ['pendientes'])
+            ->with('success', 'Notificación enviada correctamente');
+    }
 }

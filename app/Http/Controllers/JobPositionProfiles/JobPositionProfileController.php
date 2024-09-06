@@ -409,7 +409,7 @@ class JobPositionProfileController extends Controller
 
     public function download_signed_pdf(JobPositionProfile $jobPositionProfile)
     {
-        if( Storage::disk('gcs')->exists($jobPositionProfile->approvals->last()->filename) ) {
+        if( Storage::exists($jobPositionProfile->approvals->last()->filename) ) {
             return Storage::response($jobPositionProfile->approvals->last()->filename);
         } 
         else {
