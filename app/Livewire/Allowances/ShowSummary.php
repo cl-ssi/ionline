@@ -17,7 +17,8 @@ class ShowSummary extends Component
 
     public $editDisabled = null;
 
-    public $totalDays, $totalDaysValue, 
+    public $halfDayValue,
+    $totalDays, $totalDaysValue, 
     $fiftyPercentTotalDays, $fiftyPercentTotalDaysValue,
     $sixtyPercentTotalDays, $sixtyPercentTotalDaysValue;
 
@@ -59,7 +60,7 @@ class ShowSummary extends Component
         $this->totalEditSummaryDaysValue = $this->totalDaysValue + $this->halfDayValue + $this->fiftyPercentTotalDaysValue + $this->sixtyPercentTotalDaysValue;
     }
 
-    public function editForm($action){
+    public function editFormSummary($action){
         if($action == 'edit'){
             $this->editForm     = 'edit';
             $this->editDisabled = 'disabled';

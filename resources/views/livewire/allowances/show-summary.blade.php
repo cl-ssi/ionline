@@ -5,10 +5,10 @@
         </div>
         <div class="col-12 col-sm-10">
             @if($allowance->HalfDaysOnlyValue == 'No' && ($allowance->creator_user_id == auth()->id() || $allowance->user_allowance_id == auth()->id()))
-                <button type="button" class="btn btn-outline-primary btn-sm" wire:click="editForm('edit')" {{ $editDisabled }}><i class="fas fa-edit"></i> Editar</button>
+                <button type="button" class="btn btn-outline-primary btn-sm" wire:click="editFormSummary('edit')" {{ $editDisabled }}><i class="fas fa-edit"></i> Editar</button>
             @endif 
             @if($editForm == 'edit')
-                <button type="button" class="btn btn-outline-danger btn-sm" wire:click="editForm('cancel')"><i class="far fa-window-close"></i> Cancelar</button>
+                <button type="button" class="btn btn-outline-danger btn-sm" wire:click="editFormSummary('cancel')"><i class="far fa-window-close"></i> Cancelar</button>
             @endif        
         </div>
     </div>
