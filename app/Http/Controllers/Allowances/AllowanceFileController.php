@@ -48,7 +48,7 @@ class AllowanceFileController extends Controller
      */
     public function show(AllowanceFile $allowanceFile)
     {
-        return Storage::disk('gcs')->response($allowanceFile->file);
+        return Storage::response($allowanceFile->file);
     }
 
     /**
@@ -82,6 +82,6 @@ class AllowanceFileController extends Controller
      */
     public function destroy(AllowanceFile $allowanceFile)
     {
-        //Storage::disk('gcs')->delete($requestReplacementStaff->request_verification_file);
+        //Storage::delete($requestReplacementStaff->request_verification_file);
     }
 }

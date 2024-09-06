@@ -33,7 +33,7 @@ class UploadFile extends Component
     }
 
     public function deleteItem($file){
-        Storage::disk('gcs')->delete($file['file']);
+        Storage::delete($file['file']);
         if($this->roomBooking){
             $file = RoomBookingFile::where('file',$file['file'])->first();
             $file->delete();

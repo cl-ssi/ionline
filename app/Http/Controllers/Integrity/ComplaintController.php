@@ -112,7 +112,7 @@ class ComplaintController extends Controller
      */
     public function download(Complaint $complaint)
     {
-        return Storage::disk('gcs')->download($complaint->file);
+        return Storage::download($complaint->file);
     }
 
     /**

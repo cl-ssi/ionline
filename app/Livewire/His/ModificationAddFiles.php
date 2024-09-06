@@ -34,7 +34,7 @@ class ModificationAddFiles extends Component
 
     // public function deleteAttachment(Attachment $attachment){
     //     $attachment->delete();
-    //     Storage::disk('gcs')->delete($attachment->file);
+    //     Storage::delete($attachment->file);
     //     session()->flash("message", "Su Archivo adjunto ha sido eliminado.");
     //     $this->fulfillment->refresh();
     // }

@@ -20,8 +20,8 @@ class ModificationRequestController extends Controller
 
     public function download(ModificationRequestFile $file)
     {
-        if(Storage::disk('gcs')->exists($file->file)){
-            return Storage::disk('gcs')->response($file->file, mb_convert_encoding($file->name,'ASCII'));
+        if(Storage::exists($file->file)){
+            return Storage::response($file->file, mb_convert_encoding($file->name,'ASCII'));
         }else{
             return redirect()->back()->with('warning', 'El archivo no se ha encontrado.');
         }

@@ -343,7 +343,7 @@ class AllowanceController extends Controller
 
     public function download_resol_pdf(Allowance $allowance)
     {
-        if( Storage::disk('gcs')->exists($allowance->approvals->last()->filename) ) {
+        if( Storage::exists($allowance->approvals->last()->filename) ) {
             return Storage::response($allowance->approvals->last()->filename);
         } 
         else {
@@ -432,7 +432,7 @@ class AllowanceController extends Controller
 
     public function show_file(Allowance $allowance)
     {
-        return Storage::disk('gcs')->response($allowance->signedAllowance->signed_file);
+        return Storage::response($allowance->signedAllowance->signed_file);
     }
 
     //REPORTS

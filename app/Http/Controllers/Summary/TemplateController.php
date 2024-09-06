@@ -67,6 +67,6 @@ class TemplateController extends Controller
 
     public function download(Template $file)
     {
-        return Storage::disk('gcs')->download($file->file);
+        return Storage::download($file->file);
     }
 }

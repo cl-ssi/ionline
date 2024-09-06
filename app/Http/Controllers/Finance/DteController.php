@@ -31,13 +31,13 @@ class DteController extends Controller
 
     public function pdf(Dte $dte)
     {
-        return Storage::disk('gcs')->download($dte->confirmation_signature_file);
+        return Storage::download($dte->confirmation_signature_file);
     }
 
 
     public function downloadManualDteFile(Dte $dte)
     {
-        return Storage::disk('gcs')->download($dte->archivo_carga_manual);
+        return Storage::download($dte->archivo_carga_manual);
     }
 
     public function saveFile(Request $request, $dte)
