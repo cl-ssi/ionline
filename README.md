@@ -8,7 +8,7 @@ sistemas.sst@redsalud.gob.cl
 
 # Instalacion
 
-> Este proyecto está desarrollado en Laravel 9
+> Este proyecto está desarrollado en Laravel 10
 
 > Incluye Bootstrap 5 jQuery y Font Awesome
 
@@ -17,7 +17,7 @@ sistemas.sst@redsalud.gob.cl
 -   git
 -   composer
 -   php >= 8.2
--   php extensions: fileinfo, gd, sodium, zip, mbstring, pdo_mysql
+-   php extensions: fileinfo, openssl, gd, sodium, zip, mbstring, pdo_mysql
 
 ## Ejecutar en un terminal los siguientes comandos
 
@@ -52,44 +52,6 @@ memory_limit = 128M
 upload_max_filesize = 64M
 post_max_size = 66M
 ```
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
-
-# Update to Laravel 9.0
-
-- composer update
-
-- composer remove and require after update:
-
-- barryvdh/laravel-dompdf
-- firebase/php-jwt
-- guzzlehttp/guzzle
-- maatwebsite/excel
-- owen-it/laravel-auditing
-- phpoffice/phpword
-- setasign/fpdf
-- setasign/fpdi
-- simplesoftwareio/simple-qrcode
-- spatie/laravel-permission
-- stackkit/laravel-google-cloud-scheduler
-- laravel/passport
-
-- stackkit/laravel-google-cloud-tasks-queue:\* depende de monolog 3
-
-- /\*_ Actualizar archivo filesystem.php _/
-- superbalist/laravel-google-cloud-storage => spatie/laravel-google-cloud-storage
-
-- actived/microsoft-teams-notifier:\*
-
-- --dev
-- barryvdh/laravel-debugbar
-- barryvdh/laravel-ide-helper
-
-- composer remove fruitcake/laravel-cors
-- composer remove fideloper/proxy
-- Update archivo Kernel.php, TrustProxies y AuthServiceProvider
 
 ## Contribuir
 - Seleccionar issue
