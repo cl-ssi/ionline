@@ -249,7 +249,7 @@ class Requests extends Component
         return Storage::response($file->storage_path, mb_convert_encoding($file->name,'ASCII'));
     }
 
-    public function showFileInput()
+    public function enableFileInput()
     {
         $this->showFileInput = true;
     }

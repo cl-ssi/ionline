@@ -223,7 +223,7 @@
                                 </div>
                                 @error('newFile') <span class="text-danger">{{ $message }}</span> @enderror
                             @else
-                                <button wire:click.prevent="showFileInput" class="btn btn-primary btn-sm" style="padding: 2px 5px; font-size: 12px;">
+                                <button wire:click.prevent="enableFileInput" class="btn btn-primary btn-sm" style="padding: 2px 5px; font-size: 12px;">
                                     Agregar Archivo
                                 </button>
                             @endif
