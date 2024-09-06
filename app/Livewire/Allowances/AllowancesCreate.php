@@ -404,9 +404,9 @@ class AllowancesCreate extends Component
 
             // DIAS SOLICITADOS ES MAYOR A LOS DISPONIBLES? 
             // OPCION: SI
-            if(Carbon::parse($this->from)->diffInDays(Carbon::parse($this->to)) > $this->allowancesAvailableDays){
+            if(Carbon::parse($this->from)->diffInWeekDays(Carbon::parse($this->to)) > $this->allowancesAvailableDays){
                 if($this->allowancesAvailableDays > 0){
-                    $this->allowancesExceededDays = Carbon::parse($this->from)->diffInDays(Carbon::parse($this->to)) - $this->allowancesAvailableDays;
+                    $this->allowancesExceededDays = Carbon::parse($this->from)->diffInWeekDays(Carbon::parse($this->to)) - $this->allowancesAvailableDays;
                     return $this->allowancesAvailableDays;
                 }
             }
@@ -414,16 +414,16 @@ class AllowancesCreate extends Component
             else{
                 // dd(Carbon::parse($this->from)->diffInDays(Carbon::parse($this->to)));
 
-                if(Carbon::parse($this->from)->diffInDays(Carbon::parse($this->to)) > 10){
+                if(Carbon::parse($this->from)->diffInWeekDays(Carbon::parse($this->to)) > 10){
                     $this->MaxDaysStraight = 10;
-                    $this->allowancesExceededDays = Carbon::parse($this->from)->diffInDays(Carbon::parse($this->to)) - $this->MaxDaysStraight;
+                    $this->allowancesExceededDays = Carbon::parse($this->from)->diffInWeekDays(Carbon::parse($this->to)) - $this->MaxDaysStraight;
                     // dd(Carbon::parse($this->from)->diffInDays(Carbon::parse($this->to)), $this->MaxDaysStraight, $this->allowancesExceededDays);
                     return $this->MaxDaysStraight;
                 }
                 else{
-                    // COMETIDO O ACTIVIDA NO INCLUYE NI ALOJAMIENTO NI ALIMENTACIÓN
+                    // COMETIDO O ACTIVIDAD NO INCLUYE NI ALOJAMIENTO NI ALIMENTACIÓN
                     if($this->accommodation == 0 && $this->food == 0){
-                        return Carbon::parse($this->from)->diffInDays(Carbon::parse($this->to)) - $this->MaxDaysStraight;
+                        return Carbon::parse($this->from)->diffInWeekDays(Carbon::parse($this->to)) - $this->MaxDaysStraight;
                     }
                     // COMETIDO INCLUYE SOLO ALOJAMIENTO
                     if($this->accommodation == 1 && $this->food == 0){
@@ -454,7 +454,7 @@ class AllowancesCreate extends Component
             $this->accommodation == 1 && 
             $this->food == 0){
                 return Carbon::parse($this->from." 00:00:00")
-                    ->diffInDays(Carbon::parse($this->to." 23:59:59")->addDay()->startOfDay());
+                    ->diffInWeekDays(Carbon::parse($this->to." 23:59:59")->addDay()->startOfDay());
         }
 
         //Viático sólo alimentacion
@@ -468,7 +468,7 @@ class AllowancesCreate extends Component
         //Viático sólo medios días
         if($this->halfDaysOnly != null || ($this->from == $this->to)){
             return Carbon::parse($this->from)
-                ->diffInDays(Carbon::parse($this->to)->addDay()->startOfDay());
+                ->diffInWeekDays(Carbon::parse($this->to)->addDay()->startOfDay());
         }
     }
 
@@ -479,7 +479,7 @@ class AllowancesCreate extends Component
 
     public function totalSixtyPercentDays(){
         if($this->accommodation == 0 && $this->food == 1){
-            return Carbon::parse($this->from." 00:00:00")->diffInDays(Carbon::parse($this->to." 23:59:59")->startOfDay());
+            return Carbon::parse($this->from." 00:00:00")->diffInWeekDays(Carbon::parse($this->to." 23:59:59")->startOfDay());
         }
     }
 

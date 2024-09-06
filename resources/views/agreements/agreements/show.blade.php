@@ -750,7 +750,7 @@
     $(function () {
         $('[data-toggle="tooltip"]').tooltip()
         $('.tooltip-wrapper').tooltip({position: "bottom"})
-        //var jobs = JSON.parse("{{!! json_encode($establishment_list) !!}}");
+
         var jobs =  @json($establishment_list);
         //console.log(jobs);
         $('select').selectpicker();

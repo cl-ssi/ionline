@@ -418,6 +418,7 @@ class Dte extends Model implements Auditable
 
     
     /** Tiene muchos receptions */
+    //FIXME: no se puede utilizar esta relación con with para evitar el n+1 query
     public function receptions()
     {
         if($this->tipo_documento =='guias_despacho')
@@ -459,7 +460,7 @@ class Dte extends Model implements Auditable
     public function getRowClassAttribute()
     {
         $rowClass = '';
-        $daysDifference = $this->fecha_recepcion_sii ? $this->fecha_recepcion_sii->diffInDays(now()) : null;
+        $daysDifference = $this->fecha_recepcion_sii ? $this->fecha_recepcion_sii->diffInWeekDays(now()) : null;
         if ( !is_null($daysDifference )) {
             switch($daysDifference) {
                 case 1:

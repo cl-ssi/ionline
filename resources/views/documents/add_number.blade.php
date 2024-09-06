@@ -56,7 +56,7 @@
         <strong>Fecha:</strong> {{ $document->date ? $document->date->format('d-m-Y'):'' }} -
         <strong>Archivo:</strong>
             @if($document->file)
-                @if($document->updated_at->diffInDays('now') <= 7)
+                @if($document->updated_at->diffInWeekDays('now') <= 7)
                     <a href="{{ route('documents.download', $document) }}" target="_blank">
                         <i class="fas fa-file-pdf fa-lg"></i>
                     </a>

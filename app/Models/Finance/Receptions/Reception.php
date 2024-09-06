@@ -39,7 +39,7 @@ class Reception extends Model implements Auditable
     * @var array
     */
     protected $fillable = [
-        'number',
+        'number', // FIXME: no se está ocupando, quizá la idea era almacenar el numero de la relacion numerate
         'internal_number',
         'date',
         'reception_type_id',

@@ -2,27 +2,23 @@
 
 namespace App\Models\ServiceRequests;
 
-use App\Models\User;
+use App\Models\Documents\SignaturesFile;
 use App\Models\Establishment;
-use OwenIt\Auditing\Auditable;
 use App\Models\Parameters\Bank;
 use App\Models\Parameters\Profession;
 use App\Models\Rrhh\OrganizationalUnit;
-use Illuminate\Database\Eloquent\Model;
-use App\Models\Documents\SignaturesFile;
-use App\Models\ServiceRequests\Fulfillment;
-use App\Models\ServiceRequests\ShiftControl;
-use App\Models\ServiceRequests\SignatureFlow;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Models\ServiceRequests\ServiceRequest;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class ServiceRequest extends Model implements AuditableContract
+class ServiceRequest extends Model implements Auditable
 {
-    use Auditable, HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes;
+    use \OwenIt\Auditing\Auditable;
 
     /**
      * The table associated with the model.
@@ -117,8 +113,6 @@ class ServiceRequest extends Model implements AuditableContract
 
     /**
      * Get the profession associated with the service request.
-     *
-     * @return BelongsTo
      */
     public function profession(): BelongsTo
     {
@@ -127,8 +121,6 @@ class ServiceRequest extends Model implements AuditableContract
 
     /**
      * Get the responsible user associated with the service request.
-     *
-     * @return BelongsTo
      */
     public function responsable(): BelongsTo
     {
@@ -137,8 +129,6 @@ class ServiceRequest extends Model implements AuditableContract
 
     /**
      * Get the employee associated with the service request.
-     *
-     * @return BelongsTo
      */
     public function employee(): BelongsTo
     {
@@ -147,8 +137,6 @@ class ServiceRequest extends Model implements AuditableContract
 
     /**
      * Get the creator associated with the service request.
-     *
-     * @return BelongsTo
      */
     public function creator(): BelongsTo
     {
@@ -157,8 +145,6 @@ class ServiceRequest extends Model implements AuditableContract
 
     /**
      * Get the signature flows associated with the service request.
-     *
-     * @return HasMany
      */
     public function SignatureFlows(): HasMany
     {
@@ -167,8 +153,6 @@ class ServiceRequest extends Model implements AuditableContract
 
     /**
      * Get the establishment associated with the service request.
-     *
-     * @return BelongsTo
      */
     public function establishment(): BelongsTo
     {
@@ -177,8 +161,6 @@ class ServiceRequest extends Model implements AuditableContract
 
     /**
      * Get the subdirection associated with the service request.
-     *
-     * @return BelongsTo
      */
     public function subdirection(): BelongsTo
     {
@@ -187,8 +169,6 @@ class ServiceRequest extends Model implements AuditableContract
 
     /**
      * Get the responsibility center associated with the service request.
-     *
-     * @return BelongsTo
      */
     public function responsabilityCenter(): BelongsTo
     {
@@ -197,8 +177,6 @@ class ServiceRequest extends Model implements AuditableContract
 
     /**
      * Get the shift controls associated with the service request.
-     *
-     * @return HasMany
      */
     public function shiftControls(): HasMany
     {
@@ -207,8 +185,6 @@ class ServiceRequest extends Model implements AuditableContract
 
     /**
      * Get the fulfillments associated with the service request.
-     *
-     * @return HasMany
      */
     public function fulfillments(): HasMany
     {
@@ -217,8 +193,6 @@ class ServiceRequest extends Model implements AuditableContract
 
     /**
      * Get the bank associated with the service request.
-     *
-     * @return BelongsTo
      */
     public function bank(): BelongsTo
     {
@@ -227,8 +201,6 @@ class ServiceRequest extends Model implements AuditableContract
 
     /**
      * Get the signed budget availability certificate associated with the service request.
-     *
-     * @return BelongsTo
      */
     public function signedBudgetAvailabilityCert(): BelongsTo
     {
@@ -241,18 +213,18 @@ class ServiceRequest extends Model implements AuditableContract
     {
         if ($this->payment_date) {
             return match ($this->payment_date->format('m')) {
-                1 => "Enero",
-                2 => "Febrero",
-                3 => "Marzo",
-                4 => "Abril",
-                5 => "Mayo",
-                6 => "Junio",
-                7 => "Julio",
-                8 => "Agosto",
-                9 => "Septiembre",
-                10 => "Octubre",
-                11 => "Noviembre",
-                12 => "Diciembre",
+                1 => 'Enero',
+                2 => 'Febrero',
+                3 => 'Marzo',
+                4 => 'Abril',
+                5 => 'Mayo',
+                6 => 'Junio',
+                7 => 'Julio',
+                8 => 'Agosto',
+                9 => 'Septiembre',
+                10 => 'Octubre',
+                11 => 'Noviembre',
+                12 => 'Diciembre',
                 default => null,
             };
         }
@@ -261,16 +233,16 @@ class ServiceRequest extends Model implements AuditableContract
     public function programm_name_id()
     {
         if (str_contains($this->programm_name, 'No médico')) {
-            dd("no médico");
+            dd('no médico');
         }
     }
 
     public function working_day_type_description()
     {
         return match ($this->working_day_type) {
-            "DIURNO" => "un largo de 08:00 a 20:00 hrs., una noche de 20:00 a 08:00 hrs. y dos días libres",
-            "TERCER TURNO" => "dos largos de 08:00 a 20:00 hrs., dos noches de 20:00 a 08:00 hrs. y dos días libres",
-            "CUARTO TURNO" => "horario diurno",
+            'DIURNO' => 'un largo de 08:00 a 20:00 hrs., una noche de 20:00 a 08:00 hrs. y dos días libres',
+            'TERCER TURNO' => 'dos largos de 08:00 a 20:00 hrs., dos noches de 20:00 a 08:00 hrs. y dos días libres',
+            'CUARTO TURNO' => 'horario diurno',
             default => null,
         };
     }
@@ -279,13 +251,13 @@ class ServiceRequest extends Model implements AuditableContract
     {
         $count = 0;
         $user_id = auth()->id();
-        $serviceRequests = ServiceRequest::whereHas("SignatureFlows", function ($subQuery) use ($user_id) {
+        $serviceRequests = ServiceRequest::whereHas('SignatureFlows', function ($subQuery) use ($user_id) {
             $subQuery->whereNull('status')
                 ->where(function ($query) use ($user_id) {
                     $query->where('responsable_id', $user_id);
                 });
         })
-            ->wheredoesnthave("SignatureFlows", function ($subQuery) {
+            ->wheredoesnthave('SignatureFlows', function ($subQuery) {
                 $subQuery->where('status', 0);
             })
             ->with('SignatureFlows')
@@ -310,11 +282,11 @@ class ServiceRequest extends Model implements AuditableContract
     public function status()
     {
         if ($this->SignatureFlows->where('status', '===', 0)->count() > 0) {
-            return "Rechazada";
+            return 'Rechazada';
         } elseif ($this->SignatureFlows->whereNull('status')->count() > 0) {
-            return "Pendiente";
+            return 'Pendiente';
         } else {
-            return "Finalizada";
+            return 'Finalizada';
         }
     }
 }

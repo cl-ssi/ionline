@@ -1,7 +1,7 @@
 
 <header class="left" style="float: left;">
 
-    @php 
+    {{--
         /**
          * Parámetros del include:
          **/
@@ -13,8 +13,6 @@
         //   'linea3' => 'Ej: Nº Interno: '. $document->internal_number : '') // opcional,
         // ]);
 
-
-
         /** Confeccionar URL pública del logo */
         /** 
          * El código está acá para poder reutilizar este include en otro documento
@@ -22,6 +20,9 @@
          * '/images/logo_rgb_SSI.png'
          * '/images/logo_pluma_SSI_HAH.png'
          **/
+    --}}
+
+    @php
         $logo = '/images/logo_';
 
         if(isset($logo_pluma)) {

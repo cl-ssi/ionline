@@ -335,3 +335,125 @@ Factor
 
 
 [ ] Video usuarios y autoridades
+
+
+
+
+
+
+## Convenios
+- Descargas en Word
+- Formato con el editor de documentos
+- Dificultades en dos áreas
+  - Cambios de formato Jurídicos
+  - 
+
+Flexibilidad en los formatos.
+
+Procesos de convenios, son 5
+ Convenio nuevo
+   - modificación
+   - prorrogas
+   - resoluciones de continuidad
+
+
+Articulado 
+Subtitulo 24 presupuesto de las municipalidades
+
+La plataforma si permite hacer la 21 y 22. 
+Se puede generar una resolución de los convenios en otra opción.
+(Natalia)
+
+Resolución y convenios en una misma pantalla.
+
+Plataforma que sea interacción con las comunas.
+
+
+Subir documentos, descargar documentos.
+
+Trabajar en el visto bueno de la comuna.
+(como hacer para dos cambios al mismo tiempo, comuna y sst)
+
+
+Seguimiento del proceso del convenio. (ej 3 meses)
+
+
+No tanta pestaña
+
+
+Requerimientos:
+====================================================
+Primer hito (adjuntar) con fecha de anexamiento 
+- Resolución aprobatoria del programa
+- Resolución de distribución de recursos del programa
+
+Planear distribución local que es igual al CDP.
+(40 días corridos COMGES)
+
+Revisión de Natalia respecto de la revisión de la distribución.
+
+Justificación técnica si es monto de ejecución es menor.
+
+
+Convenios con comunas y sub 21 y 22.
+- Convenio nuevo (Sub 24 tranf a terceros)
+- Resolución de prorroga de convenio
+- Reso sub 21 (programas -> nueva resolución) (no pasa por la comuna)
+- Reso sub 22 (No pasa por la comuna)
+
+
+
+Resolución modificatoria
+
+
+Monto por componente
+Calculo automático de valor de las cuotas
+Previsualizar el convenio.
+Modificar y terminarlo y referente indicar que está listo para revisón de la comuna (marca de tiempo)
+
+Comuna, debería ingresar y realizar el visto bueno u observaciones, rechazado, etc. Aquí viene un pinponeo entre 
+
+
+Mandar a visar el convenio. (mostrar firmas)
+Firma alcalde
+Firma directora (doc digital)
+
+
+Avanzar con la resolución.
+Toda se gestiona a través de DocDigital.
+
+Oficina de partes, numeración resolución.
+Resolución Final se va a la dipres. (ingresar fecha de carga a dipres)
+
+Un mismo programa tiene distribuido los montos por item, podría salir un convenio y resoluciones de 21 y 22
+en el seguimiento puede ser comuna o establecimiento.
+con eso se sabe si es sub 21 o 22 para el caso de establecimiento.
+
+
+Prorrogas 
+(Resolución de prorroga) No lleva firma del alcalde
+=========
+Cargar los dos primeros hitos.
+Base en el ultimo convenio.
+
+¿Qué pasa cuando supera las 5.000 UTM para las prorrogas?
+
+Resolución modificatoria para resolución de prorroga
+Modificación de convenio, adendum.
+
+Adendum tiene el mismo flujo de un convenio
+
+
+
+Descargar Excel de seguimiento.
+Informe de las platas (Ej, cuanto plata se le entregó a Pica por programa)
+
+Finanzas incorporar transferencias realizadas.
+
+
+Enero 2025.
+
+Word.
+
+Perfiles. (Comuna, Referente, Admin de convenios (eliminar))
+Alertas de que necesitan realizar una acción

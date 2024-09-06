@@ -123,7 +123,7 @@
                             </a>
                         @else
                             <span class="badge badge-secondary" title="Dias restantes para su destrucción">
-                                {{ $reception->date->diffInDays(Carbon\Carbon::now()) -15 }}
+                                {{ $reception->date->diffInWeekDays(now()) -15 }}
                             </span>
                         @endif
                     @endif

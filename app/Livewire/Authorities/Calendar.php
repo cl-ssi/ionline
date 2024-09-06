@@ -192,6 +192,6 @@ class Calendar extends Component
     #[On('userSelected')]
     public function userSelected(User $user)
     {
-        $this->representation_id = $user;
+        $this->representation_id = $user->id;
     }
 }
