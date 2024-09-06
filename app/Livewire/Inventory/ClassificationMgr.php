@@ -39,8 +39,7 @@ class ClassificationMgr extends Component
         $this->index();
     }
 
-
-    public function form(Classification $classification)
+    public function formMethod(Classification $classification)
     {
         $this->classification = Classification::firstOrNew([ 'id' => $classification->id]);
         $this->form = true;
