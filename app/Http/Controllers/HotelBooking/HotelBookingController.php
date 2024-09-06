@@ -50,7 +50,7 @@ class HotelBookingController extends Controller
         // $commune_id = $request->commune_id;
         $start_date = Carbon::parse($request->start_date);
         $end_date = Carbon::parse($request->end_date);
-        $diff = $start_date->diffInDays($end_date);
+        $diff = $start_date->diffInWeekDays($end_date);
 
         // se valida que no haya excedido el limite de reservas en el año
         $user_id = auth()->user()->id;

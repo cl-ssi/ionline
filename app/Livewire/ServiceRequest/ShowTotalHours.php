@@ -620,7 +620,7 @@ class ShowTotalHours extends Component
                 // $businessDays = $businessDays+1;
                 // dd($businessDays);
 
-                //$prueba = $this->fulfillment->serviceRequest->start_date->diffInDays()
+                //$prueba = $this->fulfillment->serviceRequest->start_date->diffInWeekDays()
 
                 $daysInMonth = $this->fulfillment->serviceRequest->start_date->daysInMonth;
 
@@ -630,7 +630,7 @@ class ShowTotalHours extends Component
                 $fulfilmentitems = FulfillmentItem::where('fulfillment_id', $this->fulfillment->id)->get();
                 $daysnotworking = 0;
                 foreach ($fulfilmentitems as $fulfilmentitem) {
-                    $daysnotworking = ($daysnotworking + $fulfilmentitem->start_date->diffInDays($fulfilmentitem->end_date) + 1);
+                    $daysnotworking = ($daysnotworking + $fulfilmentitem->start_date->diffInWeekDays($fulfilmentitem->end_date) + 1);
                 }
 
                 $totalpermisos = $fulfilmentitems->count();

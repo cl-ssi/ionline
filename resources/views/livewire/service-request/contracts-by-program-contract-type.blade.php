@@ -5,7 +5,7 @@
 
     @foreach ($serviceRequests as $index => $serviceRequest)
         @php
-            $hasNotContinuity = $index > 0 && $serviceRequest->start_date->diffInDays($serviceRequests[$index - 1]->end_date) > 1;
+            $hasNotContinuity = $index > 0 && $serviceRequest->start_date->diffInWeekDays($serviceRequests[$index - 1]->end_date) > 1;
             $isCurrentContract = $serviceRequest->start_date <= now() && now() <= $serviceRequest->end_date;
             
             $dates[] = $serviceRequest->start_date->format('Y-m-d');

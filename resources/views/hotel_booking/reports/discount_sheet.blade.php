@@ -70,11 +70,11 @@
                     <td nowrap>{{ $booking->user->runFormat }}</td>
                     <td>{{ $booking->user->shortName }}</td>
                     <td>{{ $booking->room->hotel->name}} {{$booking->room->identifier }}</td>
-                    <td>{{ $booking->start_date->diffInDays($booking->end_date) }}</td>
+                    <td>{{ $booking->start_date->diffInWeekDays($booking->end_date) }}</td>
                     <td nowrap>{{ $booking->start_date->format('Y-m-d') }}</td>
                     <td nowrap>{{ $booking->end_date->format('Y-m-d') }}</td>
                     <td>{{ $booking->payment_type }}</td>
-                    <td>${{ $booking->room->price * $booking->start_date->diffInDays($booking->end_date) }}</td>
+                    <td>${{ $booking->room->price * $booking->start_date->diffInWeekDays($booking->end_date) }}</td>
                     <td>{{ $booking->status != "Cancelado" ? $booking->status : "Anulado" }}</td>
                     <td>{{ $booking->observation }}</td>
                 </tr>
