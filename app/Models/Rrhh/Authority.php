@@ -100,7 +100,7 @@ class Authority extends Model implements Auditable
     public static function getAmIAuthorityFromOu($date, $type, $user_id) {
         $query = self::with('user', 'organizationalUnit')
             ->where('user_id', $user_id)
-            ->where('date', $date->startOfDay());
+            ->where('date', $date->toDateString());
         
         if (is_array($type)) {
             $query->whereIn('type', $type);
@@ -117,7 +117,7 @@ class Authority extends Model implements Auditable
         if($user AND $user->organizational_unit_id != null) {
             return self::with('user','organizationalUnit')
                 ->where('user_id',$user_id)
-                ->where('date',$date->startOfDay())
+                ->where('date',$date->toDateString())
                 ->where('type',$type)
                 ->where('organizational_unit_id',$user->organizational_unit_id)
                 ->exists();
