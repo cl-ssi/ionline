@@ -159,7 +159,7 @@
                 </tr>
             </thead>
             <tbody>
-                @if(count($calculatedData) > 0)
+                @if(is_countable($calculatedData) && count($calculatedData) > 0)
                     @foreach ($calculatedData as $ct => $user)
                         @if($user->shifts->count() == 0)
                             

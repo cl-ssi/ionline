@@ -18,7 +18,7 @@ class ClassificationMgr extends Component
     protected function rules()
     {
         return [
-            
+
             'classification.name' => 'required|min:4',
         ];
     }
@@ -39,8 +39,7 @@ class ClassificationMgr extends Component
         $this->index();
     }
 
-
-    public function form(Classification $classification)
+    public function formMethod(Classification $classification)
     {
         $this->classification = Classification::firstOrNew([ 'id' => $classification->id]);
         $this->form = true;
@@ -57,6 +56,6 @@ class ClassificationMgr extends Component
         return view('livewire.inventory.classification-mgr', [
             'classifications' => $classifications,
         ])->extends('layouts.bt4.app');
-        
+
     }
 }

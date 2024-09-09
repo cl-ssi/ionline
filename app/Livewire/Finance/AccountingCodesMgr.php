@@ -13,7 +13,7 @@ class AccountingCodesMgr extends Component
     protected $paginationTheme = 'bootstrap';
 
     /** Mostrar o no el form, tanto para crear como para editar */
-    public $form = false;
+    public $formActive = false;
 
     public $accountingCode;
 
@@ -34,13 +34,13 @@ class AccountingCodesMgr extends Component
     public function index()
     {
         $this->resetErrorBag();
-        $this->form = false;
+        $this->formActive = false;
     }
 
-    public function form(AccountingCode $accountingCode)
+    public function showForm(AccountingCode $accountingCode)
     {
         $this->accountingCode = AccountingCode::firstOrNew([ 'id' => $accountingCode->id]);
-        $this->form = true;
+        $this->formActive = true;
     }
 
     public function save()

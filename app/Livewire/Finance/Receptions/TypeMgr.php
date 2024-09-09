@@ -7,8 +7,8 @@ use App\Models\Finance\Receptions\ReceptionType;
 
 class TypeMgr extends Component
 {
-    
-    public $form = false;
+
+    public $formActive = false;
 
     public $type;
 
@@ -16,7 +16,7 @@ class TypeMgr extends Component
     protected function rules()
     {
         return [
-            
+
             'type.name' => 'required|min:4',
             'type.title' => 'required|min:4',
         ];
@@ -25,7 +25,7 @@ class TypeMgr extends Component
     public function index()
     {
         $this->resetErrorBag();
-        $this->form = false;
+        $this->formActive = false;
     }
 
 
@@ -38,10 +38,10 @@ class TypeMgr extends Component
     }
 
 
-    public function form(ReceptionType $type)
+    public function showForm(ReceptionType $type)
     {
         $this->type = ReceptionType::firstOrNew([ 'id' => $type->id]);
-        $this->form = true;
+        $this->formActive = true;
     }
 
     public function render()
@@ -53,7 +53,7 @@ class TypeMgr extends Component
         return view('livewire.finance.receptions.type-mgr', ['types' => $types]);
     }
 
-    
+
     public function delete(ReceptionType $type)
     {
         if ($type->receptions()->count() === 0) {

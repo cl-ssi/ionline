@@ -2,7 +2,7 @@
 
     @section('title', 'Lista de motivos de no registro de marca')
 
-    @if ($form)
+    @if ($formActive)
         <h3>{{ $reason->id ? 'Editar' : 'Crear' }} Feriado</h3>
 
         <div class="row mb-3 gx-2">
@@ -35,7 +35,7 @@
                 <h3 class="mb-3">Listado de Motivos de no registro de marca</h3>
             </div>
             <div class="col-4 text-end">
-                <button class="btn btn-success float-right" wire:click="form()">
+                <button class="btn btn-success float-right" wire:click="showForm()">
                     <i class="fas fa-plus"></i> Nuevo Motivo
                 </button>
             </div>
@@ -70,7 +70,7 @@
                         <td>{{ $reason->description }}</td>
                         <td>
                             <button type="button" class="btn btn-sm btn-primary"
-                                wire:click="form({{ $reason }})"><i class="fas fa-edit"></i></button>
+                                wire:click="showForm({{ $reason }})"><i class="fas fa-edit"></i></button>
                         </td>
                     </tr>
                 @endforeach

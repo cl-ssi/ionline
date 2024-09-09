@@ -16,7 +16,7 @@ class MeetingMgr extends Component
     protected $paginationTheme = 'bootstrap';
 
     /** Mostrar o no el form, tanto para crear como para editar */
-    public $form = false;
+    public $formActive = false;
 
     public $meeting;
     public $meeting_id;
@@ -104,13 +104,13 @@ class MeetingMgr extends Component
     public function index()
     {
         $this->resetErrorBag();
-        $this->form = false;
+        $this->formActive = false;
     }
 
-    public function form(Meeting $meeting)
+    public function showForm(Meeting $meeting)
     {
         $this->meeting = Meeting::firstOrNew(['id' => $meeting->id]);
-        $this->responsable = $this->meeting->responsible;        
+        $this->responsable = $this->meeting->responsible;
         $this->compromises = $this->meeting->compromises->toArray();
         $this->participants = $meeting->participants->map(function ($participant) {
             return [
@@ -121,7 +121,7 @@ class MeetingMgr extends Component
                 'establishment' => $participant->organizationalUnit->establishment->alias,
             ];
         })->toArray();
-        $this->form = true;
+        $this->formActive = true;
     }
 
     public function save()

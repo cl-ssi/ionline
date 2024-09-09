@@ -1,13 +1,13 @@
 <div>
-    
+
 
     @section('title', 'Lista de Feriados')
 
-    @if ($form)
+    @if ($formActive)
         <h3>{{ $holidayId ? 'Editar' : 'Crear' }} Feriado</h3>
-        
+
         @include('parameters.holidays.form')
-        
+
         <div class="row">
             <div class="mt-3 col-12">
                 <button type="button" class="btn btn-success" wire:click="save()">Guardar</button>
@@ -20,7 +20,7 @@
                 <h3 class="mb-3">Listado de Feriados</h3>
             </div>
             <div class="col text-end">
-                <button class="btn btn-success float-right" wire:click="form()">
+                <button class="btn btn-success float-right" wire:click="showForm()">
                     <i class="fas fa-plus"></i> Nuevo Feriado
                 </button>
             </div>
@@ -30,5 +30,5 @@
 
         {{ $holidays->links() }}
     @endif
-    
+
 </div>

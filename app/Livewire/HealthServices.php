@@ -9,7 +9,7 @@ use App\Models\ClRegion;
 class HealthServices extends Component
 {
     /** Mostrar o no el form, tanto para crear como para editar */
-    public $form = false;
+    public $formActive = false;
 
     public $healthService;
 
@@ -37,13 +37,13 @@ class HealthServices extends Component
     public function index()
     {
         $this->resetErrorBag();
-        $this->form = false;
+        $this->formActive = false;
     }
 
-    public function form(HealthService $healthService)
+    public function showForm(HealthService $healthService)
     {
         $this->healthService = HealthService::firstOrNew([ 'id' => $healthService->id]);
-        $this->form = true;
+        $this->formActive = true;
     }
 
     public function save()
@@ -64,6 +64,6 @@ class HealthServices extends Component
         $healthServices = HealthService::with('region')->get();
         return view('livewire.health-services', [
             'healthServices' => $healthServices,
-        ])->extends('layouts.bt4.app');
+        ]);
     }
 }

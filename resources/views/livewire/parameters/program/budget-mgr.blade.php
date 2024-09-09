@@ -1,7 +1,7 @@
 <div>
     @section('title', 'Lista de Presupuestos')
 
-    @if ($form)
+    @if ($formActive)
         <h3>{{ $budget->id ? 'Editar' : 'Crear' }} Presupuesto</h3>
 
         <div class="form-row mb-3">
@@ -55,7 +55,7 @@
                 <h3 class="mb-3">Listado de Presupuestos</h3>
             </div>
             <div class="col text-end">
-                <button class="btn btn-success float-right" wire:click="form()">
+                <button class="btn btn-success float-right" wire:click="showForm()">
                     <i class="fas fa-plus"></i> Nuevo presupuesto
                 </button>
             </div>
@@ -76,7 +76,7 @@
                     <tr>
                         <td>
                             <button type="button" class="btn btn-sm btn-primary"
-                                wire:click="form({{ $budget }})"><i class="fas fa-edit"></i></button>
+                                wire:click="showForm({{ $budget }})"><i class="fas fa-edit"></i></button>
                         </td>
                         <td>{{ $budget->program->name }}</td>
                         <td>{{ $budget->ammount }}</td>
