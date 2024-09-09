@@ -70,7 +70,7 @@ class Authority extends Model implements Auditable
     public static function getAuthorityFromDate($ou_id, $date, $type) {
         return self::with('user','organizationalUnit')
             ->where('organizational_unit_id', $ou_id)
-            ->where('date',$date->startOfDay())
+            ->where('date',$date->toDateString())
             ->where('type',$type)
             ->first();
         
