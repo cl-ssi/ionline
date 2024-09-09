@@ -831,7 +831,7 @@
                         </a>
 
                         @can('dev')
-                        <a class="dropdown-item bg-dark text-white" href="{{ route('ionline-plus') }}">
+                        <a class="dropdown-item bg-dark text-white" href="{{ route('filament.intranet.pages.dashboard') }}">
                             <i class="bi icon-logo-ionline-white"></i> iOnline <span class="text-danger">Plus</span>
                         </a>
                         @endcan
