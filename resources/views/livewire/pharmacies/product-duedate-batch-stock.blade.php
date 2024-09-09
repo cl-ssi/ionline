@@ -66,7 +66,7 @@
 
         <fieldset class="form-group col-10">
             <label for="for_serie">F. Vencimiento - Lote</label>
-            <select id="for_due_date" name="due_date_batch" class="form-control " required="" wire:model.blur="due_date_batch">
+            <select id="for_due_date" name="due_date_batch" class="form-control " required="" wire:model.change="due_date_batch">
                 <option></option>
                 @foreach($array as $key => $value)
                     <option>{{$key}}</option>
