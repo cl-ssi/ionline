@@ -736,7 +736,7 @@ Route::prefix('agreements')->as('agreements.')->middleware(['auth', 'must.change
     Route::get('/{agreement}/accountability/{accountability}/create', [AccountabilityDetailController::class, 'create'])->name('accountability.detail.create');
     Route::post('/{agreement}/accountability/{accountability}', [AccountabilityDetailController::class, 'store'])->name('accountability.detail.store');
 
-    // Route::delete('/agreements', [AgreementController::class, 'destroy'])->name('destroy');
+    Route::delete('/agreements', [AgreementController::class, 'destroy'])->name('destroy');
 
 
     Route::post('stage', [StageController::class, 'store'])->name('stage.store');
@@ -877,7 +877,7 @@ Route::middleware(['auth', 'must.change.password'])->group(function () {
 //End Programación Númerica APS
 
 
-Route::resource('agreements', AgreementController::class)->middleware('auth');
+Route::resource('agreements', AgreementController::class)->except(['destroy'])->middleware('auth');
 
 /** assigments */
 Route::resource('assigment', AssigmentController::class)->middleware('auth');
@@ -931,7 +931,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
 
 
         Route::get('/closeshift', [App\Http\Controllers\Rrhh\ShiftManagementController::class, 'closeShift'])->name('shiftManag.closeShift')->middleware('auth');
-        Route::post('/closeshift', [App\Http\Controllers\Rrhh\ShiftManagementController::class, 'closeShift'])->name('shiftManag.closeShift')->middleware('auth');
+        Route::post('/closeshift', [App\Http\Controllers\Rrhh\ShiftManagementController::class, 'closeShift'])->name('shiftManag.closeShiftPost')->middleware('auth');
         Route::get('/closeshift/download/{id}', [App\Http\Controllers\Rrhh\ShiftManagementController::class, 'downloadCloseInXls'])->name('shiftManag.closeShift.download')->middleware('auth');
 
         Route::post('/closeshift/first', [App\Http\Controllers\Rrhh\ShiftManagementController::class, 'firstConfirmation'])->name('shiftManag.closeShift.firstConfirmation')->middleware('auth');
