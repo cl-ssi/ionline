@@ -198,7 +198,7 @@ class AllowancesCreate extends Component
 
         /* SET NUMERO DE VIATICOS PARA PRUEBAS */
         // $this->totalCurrentAllowancesDaysByUser = $this->totalCurrentAllowancesDaysByUser + 87;
-        
+
         $alw = DB::transaction(function () {
             $alw = Allowance::updateOrCreate(
                 [
@@ -220,7 +220,7 @@ class AllowancesCreate extends Component
                     'food'                              => $this->food,
                     'passage'                           => $this->passage, 
                     'means_of_transport'                => $this->meansOfTransport, 
-                    'origin_commune_id'                 => ($this->allowanceToEdit || $this->allowanceToReplicate) ? $this->originCommune : $this->originCommune->id,
+                    'origin_commune_id'                 => $this->originCommune->id,
                     'round_trip'                        => $this->roundTrip,
                     'from'                              => $this->from, 
                     'to'                                => $this->to,
@@ -374,9 +374,9 @@ class AllowancesCreate extends Component
                 //  SE CALCULA LOS DIAS DISPONIBLES 
                 $this->allowancesAvailableDays = $allowanceMaxValue - $this->totalCurrentAllowancesDaysByUser;
 
-                if(Carbon::parse($this->from)->diffInWeekDays(Carbon::parse($this->to)) > $this->allowancesAvailableDays){
+                if(Carbon::parse($this->from)->diffInDays(Carbon::parse($this->to)) > $this->allowancesAvailableDays){
                     if($this->allowancesAvailableDays > 0){
-                        $this->allowancesExceededDays = Carbon::parse($this->from)->diffInWeekDays(Carbon::parse($this->to)) - $this->allowancesAvailableDays;
+                        $this->allowancesExceededDays = Carbon::parse($this->from)->diffInDays(Carbon::parse($this->to)) - $this->allowancesAvailableDays;
                         return $this->allowancesAvailableDays;
                     }
                     else{
@@ -384,7 +384,7 @@ class AllowancesCreate extends Component
                     }
                 }
                 else{
-                    return Carbon::parse($this->from)->diffInWeekDays(Carbon::parse($this->to));
+                    return Carbon::parse($this->from)->diffInDays(Carbon::parse($this->to));
                 }
             }
         }*/
@@ -404,26 +404,26 @@ class AllowancesCreate extends Component
 
             // DIAS SOLICITADOS ES MAYOR A LOS DISPONIBLES? 
             // OPCION: SI
-            if(Carbon::parse($this->from)->diffInWeekDays(Carbon::parse($this->to)) > $this->allowancesAvailableDays){
+            if(Carbon::parse($this->from)->diffInDays(Carbon::parse($this->to)) > $this->allowancesAvailableDays){
                 if($this->allowancesAvailableDays > 0){
-                    $this->allowancesExceededDays = Carbon::parse($this->from)->diffInWeekDays(Carbon::parse($this->to)) - $this->allowancesAvailableDays;
+                    $this->allowancesExceededDays = Carbon::parse($this->from)->diffInDays(Carbon::parse($this->to)) - $this->allowancesAvailableDays;
                     return $this->allowancesAvailableDays;
                 }
             }
             // OPCION: NO
             else{
-                // dd(Carbon::parse($this->from)->diffInWeekDays(Carbon::parse($this->to)));
+                // dd(Carbon::parse($this->from)->diffInDays(Carbon::parse($this->to)));
 
-                if(Carbon::parse($this->from)->diffInWeekDays(Carbon::parse($this->to)) > 10){
+                if(Carbon::parse($this->from)->diffInDays(Carbon::parse($this->to)) > 10){
                     $this->MaxDaysStraight = 10;
-                    $this->allowancesExceededDays = Carbon::parse($this->from)->diffInWeekDays(Carbon::parse($this->to)) - $this->MaxDaysStraight;
-                    // dd(Carbon::parse($this->from)->diffInWeekDays(Carbon::parse($this->to)), $this->MaxDaysStraight, $this->allowancesExceededDays);
+                    $this->allowancesExceededDays = Carbon::parse($this->from)->diffInDays(Carbon::parse($this->to)) - $this->MaxDaysStraight;
+                    // dd(Carbon::parse($this->from)->diffInDays(Carbon::parse($this->to)), $this->MaxDaysStraight, $this->allowancesExceededDays);
                     return $this->MaxDaysStraight;
                 }
                 else{
                     // COMETIDO O ACTIVIDAD NO INCLUYE NI ALOJAMIENTO NI ALIMENTACIÓN
                     if($this->accommodation == 0 && $this->food == 0){
-                        return Carbon::parse($this->from)->diffInWeekDays(Carbon::parse($this->to)) - $this->MaxDaysStraight;
+                        return Carbon::parse($this->from)->diffInDays(Carbon::parse($this->to)) - $this->MaxDaysStraight;
                     }
                     // COMETIDO INCLUYE SOLO ALOJAMIENTO
                     if($this->accommodation == 1 && $this->food == 0){
@@ -454,7 +454,7 @@ class AllowancesCreate extends Component
             $this->accommodation == 1 && 
             $this->food == 0){
                 return Carbon::parse($this->from." 00:00:00")
-                    ->diffInWeekDays(Carbon::parse($this->to." 23:59:59")->addDay()->startOfDay());
+                    ->diffInDays(Carbon::parse($this->to." 23:59:59")->addDay()->startOfDay());
         }
 
         //Viático sólo alimentacion
@@ -468,7 +468,7 @@ class AllowancesCreate extends Component
         //Viático sólo medios días
         if($this->halfDaysOnly != null || ($this->from == $this->to)){
             return Carbon::parse($this->from)
-                ->diffInWeekDays(Carbon::parse($this->to)->addDay()->startOfDay());
+                ->diffInDays(Carbon::parse($this->to)->addDay()->startOfDay());
         }
     }
 
@@ -479,7 +479,7 @@ class AllowancesCreate extends Component
 
     public function totalSixtyPercentDays(){
         if($this->accommodation == 0 && $this->food == 1){
-            return Carbon::parse($this->from." 00:00:00")->diffInWeekDays(Carbon::parse($this->to." 23:59:59")->startOfDay());
+            return Carbon::parse($this->from." 00:00:00")->diffInDays(Carbon::parse($this->to." 23:59:59")->startOfDay());
         }
     }
 
