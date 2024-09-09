@@ -1703,9 +1703,9 @@ Route::prefix('indicators')->as('indicators.')->group(function () {
             Route::put('/{programApsValue}', [App\Http\Controllers\Indicators\_2019\ProgramApsValueController::class, 'update'])->name('update')->middleware('auth');
         });
         Route::prefix('2020')->as('2020.')->group(function () {
-            Route::get('/', function () {
-                return redirect()->route('indicators.program_aps.2020.index', 6);
-            })->name('index');
+            // Route::get('/', function () {
+            //     return redirect()->route('indicators.program_aps.2020.index', 6);
+            // })->name('index');
             Route::get('/{commune}', [App\Http\Controllers\Indicators\_2020\ProgramApsValueController::class, 'index'])->name('index');
             Route::get('/{commune}/create', [App\Http\Controllers\Indicators\_2020\ProgramApsValueController::class, 'create'])->name('create')->middleware('auth');
             Route::post('/', [App\Http\Controllers\Indicators\_2020\ProgramApsValueController::class, 'store'])->name('store')->middleware('auth');
