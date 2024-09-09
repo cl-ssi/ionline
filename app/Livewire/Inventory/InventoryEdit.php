@@ -36,7 +36,7 @@ class InventoryEdit extends Component
 
     public $observation_delete;
 
-    public $poc_code;
+    public $po_code;
 
     public function render()
     {
