@@ -942,7 +942,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
         Route::post('/shiftupdate', [App\Http\Controllers\Rrhh\ShiftManagementController::class, 'changeShiftUserCommentary'])->name('shiftManag.shiftupdate')->middleware('auth');
 
         Route::get('/shiftreports', [App\Http\Controllers\Rrhh\ShiftManagementController::class, 'shiftReports'])->name('shiftManag.shiftReports')->middleware('auth');
-        Route::post('/shiftreports', [App\Http\Controllers\Rrhh\ShiftManagementController::class, 'shiftReports'])->name('shiftManag.shiftReports')->middleware('auth');
+        Route::post('/shiftreports', [App\Http\Controllers\Rrhh\ShiftManagementController::class, 'shiftReports'])->name('shiftManag.shiftReportsPost')->middleware('auth');
         Route::get('/shiftreports/XLSdownload', [App\Http\Controllers\Rrhh\ShiftManagementController::class, 'shiftReportsXLSDownload'])->name('shiftManag.shiftReportsXLSdownload')->middleware('auth');
 
         Route::get('/shiftdashboard', [App\Http\Controllers\Rrhh\ShiftManagementController::class, 'shiftDashboard'])->name('shiftManag.shiftDashboard')->middleware('auth');

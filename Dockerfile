@@ -9,6 +9,8 @@ RUN apk add --no-cache nginx wget \
         libxml2-dev \
         icu-dev \
         libzip-dev \
+        mdbtools-utils \
+        poppler-utils \
     && docker-php-ext-configure gd --with-jpeg --with-webp --with-freetype \
     && docker-php-ext-configure intl \
     && docker-php-ext-install -j$(nproc) \
@@ -20,6 +22,7 @@ RUN apk add --no-cache nginx wget \
         bcmath \
         intl \
         opcache \
+        ctype \
     && docker-php-ext-enable pdo_mysql intl \
     && mkdir -p /run/nginx /app \
     && chown -R www-data:www-data /app
