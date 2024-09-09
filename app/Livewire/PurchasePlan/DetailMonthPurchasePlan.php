@@ -11,6 +11,8 @@ class DetailMonthPurchasePlan extends Component
 {
     public $item;
 
+    public $quantity;
+
     public $quantityDetail, $quantityAcum = 0;
     
     public $january=0, $february=0, $march=0, $april=0, $may=0, $june=0, 
