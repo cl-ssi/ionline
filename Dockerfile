@@ -15,7 +15,8 @@ RUN apk add --no-cache \
     docker-php-ext-install mysqli pdo pdo_mysql ctype && \
     docker-php-ext-enable pdo_mysql && \
     docker-php-ext-configure gd --with-jpeg --with-webp --with-freetype && \
-    docker-php-ext-install gd soap zip bcmath && \
+    docker-php-ext-configure intl \
+    docker-php-ext-install gd soap zip bcmath intl && \
     mkdir -p /run/nginx /app
 
 # Copy configuration files
