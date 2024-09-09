@@ -40,7 +40,7 @@ class OrganizationalUnitSearch extends Component
         $this->organizational_unit_id = null;
         $this->organizationalUnits = collect([]);
 
-        $this->emitTo($this->component, $this->event, null);
+        $this->dispatch($this->event, value: null);
     }
 
     public function updatedSearch()
@@ -67,7 +67,7 @@ class OrganizationalUnitSearch extends Component
         $this->organizational_unit_id  = $organizational_unit->id;
         $this->organizationalUnits = collect([]);
 
-        $this->emitTo($this->component, $this->event, $this->organizational_unit_id);
+        $this->dispatch($this->event, value: $this->organizational_unit_id);
     }
 
     #[On('establishmentId')]
