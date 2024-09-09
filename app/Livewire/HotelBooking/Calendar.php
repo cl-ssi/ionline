@@ -51,7 +51,7 @@ class Calendar extends Component
             $this->monthSelection = $start_date->format('Y-m');
         }
         $this->today = now()->format('Y-m-d');
-        $this->configurations = Room::find($this->room->id)->bookingConfigurations;
+        $this->configurations = Room::find($this->room->id)->bookingConfigurations->where('end_date','>=',now());
 
         $string = $this->monthSelection;
         $monthSelection = Carbon::createFromFormat('Y-m-d', $this->monthSelection."-15");
@@ -99,7 +99,7 @@ class Calendar extends Component
         }
 
         foreach($this->configurations as $configuration){
-            foreach (CarbonPeriod::create($configuration->start_date, '1 day', $configuration->end_date) as $day) {
+            foreach (CarbonPeriod::create($configuration->start_date, '1 day', $configuration->end_date->endOfDay()) as $day) {
                 // marca los disponibles para hospedar
                 if(( $configuration->sunday && $day->dayOfWeek==0) || ($configuration->monday && $day->dayOfWeek==1) || 
                     ($configuration->tuesday && $day->dayOfWeek==2) || ($configuration->wednesday && $day->dayOfWeek==3) || 
