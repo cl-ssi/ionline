@@ -2,12 +2,10 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\Blade;
-use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
-use Carbon\Carbon;
-
+use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -28,10 +26,19 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        if(config('app.env') === 'production' OR config('app.env') === 'testing') {
+        /** Para que los Policies tengan la misma estructura de los modelos */
+        Gate::guessPolicyNamesUsing(function ($modelClass) {
+            // Reemplaza 'App\Models' por 'App\Policies' y añade 'Policy' al final del nombre de la clase
+            $policyClass = str_replace('App\Models', 'App\Policies', $modelClass).'Policy';
+
+            return $policyClass;
+        });
+
+        // FIXME: esto ya no debería ser necesario, se utiliza ASSET_URL en .env
+        if (config('app.env') === 'production' or config('app.env') === 'testing') {
             \URL::forceScheme('https');
         }
-        
+
         Blade::directive('datetime', function ($expression) {
             return "<?php echo ($expression)?($expression)->format('Y-m-d H:i:s'):''; ?>";
         });
