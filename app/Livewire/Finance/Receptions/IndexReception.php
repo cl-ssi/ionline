@@ -76,9 +76,9 @@ class IndexReception extends Component
             ->when($this->filter_reception_type_id, function($query) {
                 $query->where('reception_type_id', $this->filter_reception_type_id);
             })
-            ->whereHas('numeration', function($query) {
-                $query->where('number', $this->filter_number);
-            })
+            // ->whereHas('numeration', function($query) {
+            //     $query->where('number', $this->filter_number);
+            // })
             ->when($this->filter_date, function($query) {
                 $query->where('date', $this->filter_date);
             })
