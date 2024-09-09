@@ -64,7 +64,7 @@
             <div class="col-md-3">
                 <div class="mb-3">
                     <label for="formFile" class="form-label">Eliminar Documento</label> <br>
-                    @if ($document->file)
+                    @if (!$document->file)
                         @if ($document->updated_at->diffInWeekDays(now()) <= 14)
                             <button class="btn btn-danger" wire:click="deleteDocument">
                                 <i class="bi bi-trash"></i>
