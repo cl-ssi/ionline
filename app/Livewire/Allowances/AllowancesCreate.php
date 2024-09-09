@@ -353,9 +353,9 @@ class AllowancesCreate extends Component
     }
 
     #[On('emitPositionValue')]
-    public function emitPositionValue($emitPositionValue)
+    public function emitPositionValue($positionValue)
     {
-        $this->position = $emitPositionValue;
+        $this->position = $positionValue;
     }
 
     /* Cálculo de días completos */

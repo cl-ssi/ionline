@@ -48,6 +48,6 @@ class ShowPosition extends Component
     public function updatedPosition($positionValue)
     {
         /* Se emite position a Allowance */
-        $this->dispatch('emitPositionValue', position: $positionValue);
+        $this->dispatch('emitPositionValue', positionValue: $positionValue);
     }
 }
