@@ -39,14 +39,14 @@
     @push('scripts')
         <script>
             document.addEventListener('livewire:init', function() {
-                window.livewire.on('openModal', () => {
+                Livewire.on('openModal', () => {
                     var myModal = new bootstrap.Modal(document.getElementById('formModal'), {
                         keyboard: false // Desactiva cerrar el modal con la tecla Esc
                     });
                     myModal.show();
                 });
 
-                window.livewire.on('closeModal', () => {
+                Livewire.on('closeModal', () => {
                     var myModalEl = document.getElementById('formModal');
                     var modal = bootstrap.Modal.getInstance(myModalEl);
                     if (modal) {
