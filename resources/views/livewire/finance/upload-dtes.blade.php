@@ -1,4 +1,4 @@
-<form wire:submit="upload">
+<form wire:submit="subir">
 
     @include('finance.payments.partials.nav')
 
