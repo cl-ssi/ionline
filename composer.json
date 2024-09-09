@@ -2,10 +2,7 @@
     "name": "laravel/laravel",
     "type": "project",
     "description": "The Laravel Framework.",
-    "keywords": [
-        "framework",
-        "laravel"
-    ],
+    "keywords": ["framework", "laravel"],
     "license": "MIT",
     "require": {
         "php": "^8.2",
@@ -13,14 +10,15 @@
         "actived/microsoft-teams-notifier": "^1.2",
         "barryvdh/laravel-dompdf": "^2.0",
         "doctrine/dbal": "^3.0",
+        "filament/filament": "^3.2",
         "firebase/php-jwt": "^6.8",
         "guzzlehttp/guzzle": "^7.7",
         "laminas/laminas-escaper": "^2.7",
         "laravel/framework": "^10.0",
-        "livewire/livewire": "^3.0",
         "laravel/passport": "^11.8",
         "laravel/tinker": "^2.0",
         "laravel/ui": "^4.0",
+        "livewire/livewire": "^3.0",
         "luecano/numero-a-letras": "^2.2",
         "maatwebsite/excel": "^3.1",
         "owen-it/laravel-auditing": "^13.5",
@@ -78,7 +76,8 @@
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi",
-            "@php artisan vendor:publish --force --tag=livewire:assets --ansi"
+            "@php artisan vendor:publish --force --tag=livewire:assets --ansi",
+            "@php artisan filament:upgrade"
         ],
         "post-root-package-install": [
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""

@@ -47,6 +47,8 @@ use App\Models\Inv\InventoryUser;
 
 use App\Models\Rrhh\CompensatoryDay;
 use App\Models\Rrhh\UserBankAccount;
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Panel;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Facades\Auth;
@@ -71,7 +73,7 @@ use Illuminate\Database\Eloquent\Relations\hasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends Authenticatable implements Auditable
+class User extends Authenticatable implements Auditable, FilamentUser
 {
     use \OwenIt\Auditing\Auditable;
     use Notifiable, HasRoles, SoftDeletes, HasFactory;
@@ -144,6 +146,11 @@ class User extends Authenticatable implements Auditable
         'remember_token',
         'password',
     ];
+
+    public function canAccessPanel(Panel $panel): bool
+    {
+        return $this->can('be god');
+    }
 
     /**
      * Get the establishment that owns the user.

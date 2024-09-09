@@ -17,8 +17,9 @@ class UploadDtes extends Component
     /**
     * upload
     */
-    public function upload()
+    public function subir()
     {
+        
         $this->validate([
             'dtes' => 'required|mimes:xlx,xls,xlsx|max:2048'
         ]);
