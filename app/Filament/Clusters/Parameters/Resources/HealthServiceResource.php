@@ -81,4 +81,14 @@ class HealthServiceResource extends Resource
             'edit' => Pages\EditHealthService::route('/{record}/edit'),
         ];
     }
+
+    public static function getLabel(): string
+    {
+        return 'Servicio de Salud';
+    }
+
+    public static function getPluralLabel(): string
+    {
+        return 'Servicios de Salud';
+    }
 }
