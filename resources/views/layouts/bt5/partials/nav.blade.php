@@ -599,10 +599,13 @@
                             <i class="fas fa-fw fa-map"></i> Comunas
                         </a>
 
-                        <a class="dropdown-item {{ active('parameters.establishments.index') }}" href="{{ route('parameters.establishments.index') }}">
-                            <i class="fas fa-fw fa-hospital"></i> Establecimientos
+                        <a class="dropdown-item {{ active('parameters.establishments.index') }}" href="{{ route('filament.intranet.parameters.resources.health-services.index') }}">
+                            <i class="fas fa-fw fa-hospital"></i> Servicios de Salud
                         </a>
 
+                        <a class="dropdown-item {{ active('parameters.establishments.index') }}" href="{{ route('filament.intranet.parameters.resources.establishments.index') }}">
+                            <i class="fas fa-fw fa-hospital"></i> Establecimientos
+                        </a>
 
                         <a class="dropdown-item {{ active('parameters.establishment_types.index') }}" href="{{ route('parameters.establishment_types.index') }}">
                             <i class="fas fa-th-list"></i> Tipos de Establecimientos
@@ -650,7 +653,7 @@
                         @endcanany
 
                         @canany(['be god','Parameters: holidays'])
-                        <a class="dropdown-item {{active('parameters.holidays.*')}}" href="{{ route('parameters.holidays') }}">
+                        <a class="dropdown-item {{active('parameters.holidays.*')}}" href="{{ route('filament.intranet.parameters.resources.holidays.index') }}">
                             <i class="fas fa-fw fa-suitcase"></i> Feriados
                         </a>
                         @endcanany
