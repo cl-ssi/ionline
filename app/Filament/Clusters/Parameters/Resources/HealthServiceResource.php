@@ -3,9 +3,9 @@
 namespace App\Filament\Clusters\Parameters\Resources;
 
 use App\Filament\Clusters\Parameters;
-use App\Filament\Clusters\Parameters\Resources\HolidayResource\Pages;
-use App\Filament\Clusters\Parameters\Resources\HolidayResource\RelationManagers;
-use App\Models\Parameters\Holiday;
+use App\Filament\Clusters\Parameters\Resources\HealthServiceResource\Pages;
+use App\Filament\Clusters\Parameters\Resources\HealthServiceResource\RelationManagers;
+use App\Models\HealthService;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -14,9 +14,9 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class HolidayResource extends Resource
+class HealthServiceResource extends Resource
 {
-    protected static ?string $model = Holiday::class;
+    protected static ?string $model = HealthService::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
@@ -26,14 +26,12 @@ class HolidayResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\DatePicker::make('date')
-                    ->required(),
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
                 Forms\Components\Select::make('region_id')
                     ->relationship('region', 'name')
-                    ->default(null),
+                    ->required(),
             ]);
     }
 
@@ -41,9 +39,6 @@ class HolidayResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('date')
-                    ->date()
-                    ->sortable(),
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('region.name')
@@ -81,19 +76,9 @@ class HolidayResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListHolidays::route('/'),
-            'create' => Pages\CreateHoliday::route('/create'),
-            'edit' => Pages\EditHoliday::route('/{record}/edit'),
+            'index' => Pages\ListHealthServices::route('/'),
+            'create' => Pages\CreateHealthService::route('/create'),
+            'edit' => Pages\EditHealthService::route('/{record}/edit'),
         ];
-    }
-
-    public static function getLabel(): string
-    {
-        return 'Feriado';
-    }
-
-    public static function getPluralLabel(): string
-    {
-        return 'Feriados';
     }
 }
