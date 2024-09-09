@@ -9,19 +9,19 @@ use Livewire\Attributes\On;
 
 class Visators extends Component
 {
-    public $organizationalUnit;
+    public $organizationalUnit = [];
     public $users = [];
     public $inputs = [];
     public $visatorType = [];
     public $i = 0;
-    public $user;
+    public $user = [];
     public $signature;
     public $requiredVisator = '';
     public $selectedDocumentType;
 
     public function mount()
     {
-        //Agrega inputs según cantidad de flows de visator al editar
+        // Agrega inputs según cantidad de flows de visator al editar
         if ($this->signature && $this->signature->signaturesFlowVisator->count() > 0) {
             for ($i = 0; $i < $this->signature->signaturesFlowVisator->count(); $i++) {
                 $this->add($this->i);
@@ -31,22 +31,22 @@ class Visators extends Component
         // Agrega unidad organizacional al editar
         if ($this->signature && $this->signature->signaturesFlowVisator->count() > 0) {
             foreach ($this->inputs as $key => $value) {
-                $this->organizationalUnit[$value] = $this->signature->signaturesFlowVisator->slice($key, 1)->first()->ou_id;
+                $this->organizationalUnit[$value] = $this->signature->signaturesFlowVisator->slice($key, 1)->first()->ou_id ?? null;
             }
         }
 
-        //Agrega los usuarios según unidad organizacional, si se está editando, selecciona el usuario
+        // Agrega los usuarios según unidad organizacional, si se está editando, selecciona el usuario
         foreach ($this->inputs as $key => $value) {
             if (!empty($this->organizationalUnit[$value])) {
-                $this->users[$value] = OrganizationalUnit::find($this->organizationalUnit[$value])->users;
-                //Si se está editando
+                $this->users[$value] = OrganizationalUnit::find($this->organizationalUnit[$value])->users ?? collect();
+                // Si se está editando
                 if ($this->signature) {
-                    $this->user[$value] = $this->signature->signaturesFlowVisator->slice($key, 1)->first()->user_id;
+                    $this->user[$value] = $this->signature->signaturesFlowVisator->slice($key, 1)->first()->user_id ?? null;
                 }
-
             }
         }
     }
+
     #[On('documentTypeChanged')]
     public function configureDocumentType($type_id)
     {
@@ -69,32 +69,28 @@ class Visators extends Component
 
     public function render()
     {
+        $establishments_ids = explode(',', env('APP_SS_ESTABLISHMENTS'));
 
-        $establishments_ids = explode(',',env('APP_SS_ESTABLISHMENTS'));
-
-
-
-        if($this->inputs){
+        if ($this->inputs) {
             $this->requiredVisator = 'required';
         }
 
-        //Agrega los usuarios según unidad organizacional
+        // Agrega los usuarios según unidad organizacional
         foreach ($this->inputs as $key => $value) {
             if (!empty($this->organizationalUnit[$value])) {
-                $this->users[$value] = OrganizationalUnit::find($this->organizationalUnit[$value])->users->sortBy('name')->values();
-            }
-            else{
-                $this->users[$value] = [];
+                $this->users[$value] = OrganizationalUnit::find($this->organizationalUnit[$value])->users->sortBy('name')->values() ?? collect();
+            } else {
+                $this->users[$value] = collect();
                 $this->user[$value] = null;
             }
         }
 
         $ouRoots = OrganizationalUnit::with([
-                'childs',
-                'childs.childs',
-                'childs.childs.childs',
-                'childs.childs.childs.childs',
-            ])
+            'childs',
+            'childs.childs',
+            'childs.childs.childs',
+            'childs.childs.childs.childs',
+        ])
             ->where('level', 1)
             ->whereIn('establishment_id', $establishments_ids)
             ->get();

@@ -113,11 +113,11 @@
                 </select>
             </fieldset>
             <fieldset class="form-group col-12 col-md-5">
-                @if(array_key_exists($value,$users))
-                   <select name="user_visator[]" wire:model.live="user.{{$value}}" class="form-control" {{$requiredVisator}}>
+                @if(array_key_exists($value, $users) && $users[$value]->isNotEmpty())
+                    <select name="user_visator[]" wire:model.live="user.{{$value}}" class="form-control" {{$requiredVisator}}>
                         <option value=''></option>
                         @foreach($users[$value] as $user)
-                            <option value={{ $user->id }}>{{ $user->fullName }}</option>
+                            <option value="{{ $user->id }}">{{ $user->fullName }}</option>
                         @endforeach
                     </select>
                 @endif
