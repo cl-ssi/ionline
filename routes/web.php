@@ -736,7 +736,7 @@ Route::prefix('agreements')->as('agreements.')->middleware(['auth', 'must.change
     Route::get('/{agreement}/accountability/{accountability}/create', [AccountabilityDetailController::class, 'create'])->name('accountability.detail.create');
     Route::post('/{agreement}/accountability/{accountability}', [AccountabilityDetailController::class, 'store'])->name('accountability.detail.store');
 
-    Route::delete('/agreements', [AgreementController::class, 'destroy'])->name('destroy');
+    // Route::delete('/agreements', [AgreementController::class, 'destroy'])->name('destroy');
 
 
     Route::post('stage', [StageController::class, 'store'])->name('stage.store');
