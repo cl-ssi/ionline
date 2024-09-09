@@ -595,7 +595,11 @@
                             <i class="fas fa-fw fa-map"></i> Comunas
                         </a>
 
-                        <a class="dropdown-item {{ active('parameters.establishments.index') }}" href="{{ route('parameters.establishments.index') }}">
+                        <a class="dropdown-item {{ active('parameters.health-services.index') }}" href="{{ route('filament.intranet.parameters.resources.health-services.index') }}">
+                            <i class="fas fa-fw fa-hospital"></i> Servicios de Salud
+                        </a>
+
+                        <a class="dropdown-item {{ active('parameters.establishments.index') }}" href="{{ route('filament.intranet.parameters.resources.establishments.index') }}">
                             <i class="fas fa-fw fa-hospital"></i> Establecimientos
                         </a>
 
@@ -646,7 +650,7 @@
                         @endcanany
 
                         @canany(['be god','Parameters: holidays'])
-                        <a class="dropdown-item {{active('parameters.holidays.*')}}" href="{{ route('parameters.holidays') }}">
+                        <a class="dropdown-item {{active('parameters.holidays.*')}}" href="{{ route('filament.intranet.parameters.resources.holidays.index') }}">
                             <i class="fas fa-fw fa-suitcase"></i> Feriados
                         </a>
                         @endcanany
@@ -831,7 +835,7 @@
                         </a>
 
                         @can('dev')
-                        <a class="dropdown-item bg-dark text-white" href="{{ route('ionline-plus') }}">
+                        <a class="dropdown-item bg-dark text-white" href="{{ route('filament.intranet.pages.dashboard') }}">
                             <i class="bi icon-logo-ionline-white"></i> iOnline <span class="text-danger">Plus</span>
                         </a>
                         @endcan

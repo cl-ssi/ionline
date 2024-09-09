@@ -71,6 +71,11 @@ class Establishment extends Model implements Auditable
         'commune_id',
     ];
 
+    public function healthService(): BelongsTo
+    {
+        return $this->belongsTo(HealthService::class);
+    }
+
     /**
      * Get the commune that owns the establishment.
      */

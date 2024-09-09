@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
-use App\Models\ClRegion;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class HealthService extends Model
 {
@@ -18,16 +18,22 @@ class HealthService extends Model
      */
     protected $fillable = [
         'name',
-        'region_id'
+        'region_id',
     ];
 
     /**
      * Get the region that owns the health service.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function region(): BelongsTo
     {
         return $this->belongsTo(ClRegion::class);
+    }
+
+    /**
+     * Get the establishments for the health service.
+     */
+    public function establishments(): HasMany
+    {
+        return $this->hasMany(Establishment::class);
     }
 }
