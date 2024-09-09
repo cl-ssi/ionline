@@ -66,6 +66,7 @@ post_max_size = 66M
 "ext-gd": "*",
 "actived/microsoft-teams-notifier": "^1.3",
 "barryvdh/laravel-dompdf": "^3.0", // upgrade de version
+"filament/filament": "^3.2", // new
 "firebase/php-jwt": "^6.10",
 "guzzlehttp/guzzle": "^7.9",
 "laminas/laminas-escaper": "^2.13",
