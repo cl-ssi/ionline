@@ -16,6 +16,7 @@ use Livewire\Component;
 class ChargeIndex extends Component
 {
     public $year;
+    public $calculatedData;
 
     public function mount(){
         $this->year = now()->format('Y');
