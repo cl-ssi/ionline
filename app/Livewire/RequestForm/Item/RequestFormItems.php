@@ -137,10 +137,6 @@ class RequestFormItems extends Component
 
     public function deleteItem($key)
     {
-        // Intento de solución a error de eliminación de items
-        logger()->info($key);
-        logger()->info(json_encode($this->items));
-
         if($this->editRF && array_key_exists('id',$this->items[$key]))
         {
             $this->deletedItems[]=$this->items[$key]['id'];
