@@ -86,7 +86,7 @@ post_max_size = 66M
 "spatie/laravel-google-cloud-storage": "^2.3",
 "spatie/laravel-permission": "^6.0",
 "spatie/pdf-to-text": "^1.53",
-"stackkit/laravel-google-cloud-scheduler": "^3.0", // upgrade de version
+"stackkit/laravel-google-cloud-scheduler": "^3.0",
 "stackkit/laravel-google-cloud-tasks-queue": "^4.2", // upgrade de version
 "tinymce/tinymce": "^7.1"
 
