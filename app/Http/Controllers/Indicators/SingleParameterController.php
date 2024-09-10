@@ -127,8 +127,6 @@ class SingleParameterController extends Controller
     }
 
     public function population(Request $request){
-        dd($request);
-        
         $establishments = Establecimiento::year(now()->format('Y'))
             ->where('tablero_poblacion', 1)
             ->orderBy('comuna')
