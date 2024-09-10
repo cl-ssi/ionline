@@ -11,6 +11,9 @@ class NewsWidget extends Widget
 
     public function getNews()
     {
-        return News::latest()->take(5)->get();
+        return News::where('until_at', '>=', now())
+            ->latest()
+            ->take(5)
+            ->get();
     }
 }
