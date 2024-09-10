@@ -31,18 +31,22 @@ class NewsResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('title')
+                    ->label('Título')
                     ->maxLength(255)
                     ->default(null)
                     ->required(),
+                Forms\Components\DateTimePicker::make('until_at')
+                    ->label('Fecha de expiración'),
                 Forms\Components\Textarea::make('body')
-                    ->columnSpanFull(),
+                    ->label('Cuerpo')
+                    ->rows(13),
                 Forms\Components\FileUpload::make('image')
+                    ->label('Imagen')
                     ->image() // restringe que sea solo de tipo imagen
                     ->directory('ionline/news')
-                    ->imagePreviewHeight('400')
+                    ->imagePreviewHeight('310')
                     ->helperText('IMPORTANTE: Tamaño de la imagen 766x400')
                     ->rules(['dimensions:min_width=766,min_height=400,max_width=766,max_height=400']),
-                Forms\Components\DateTimePicker::make('until_at'),
             ]);
     }
 
@@ -51,12 +55,16 @@ class NewsResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('title')
+                    ->label('Título')
                     ->searchable(),
-                Tables\Columns\ImageColumn::make('image'),
+                Tables\Columns\ImageColumn::make('image')
+                    ->label('Imagen'),
                 Tables\Columns\TextColumn::make('until_at')
+                    ->label('Fecha de expiración')
                     ->dateTime()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('user.name')
+                Tables\Columns\TextColumn::make('user.shortName')
+                    ->label('Creador')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')

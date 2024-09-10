@@ -14,19 +14,6 @@ class EditNews extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\Action::make('deleteImage')
-                ->label('Borrar imágen')
-                ->action(function () {
-                    $record = $this->record;
-                    if (Storage::exists($record->image)) {
-                        Storage::delete($record->image);
-                    }
-                    $record->image = null;
-                    $record->save();
-                })
-                ->requiresConfirmation()
-                ->color('danger')
-                ->icon('heroicon-o-trash'),
             Actions\DeleteAction::make(),
         ];
     }
