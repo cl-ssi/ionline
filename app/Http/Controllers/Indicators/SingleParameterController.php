@@ -127,6 +127,13 @@ class SingleParameterController extends Controller
     }
 
     public function population(Request $request){
+        dd($request);
+        
+        $establishments = Establecimiento::year(now()->format('Y'))
+            ->where('tablero_poblacion', 1)
+            ->orderBy('comuna')
+            ->get();
+
         $total_pob = null;
 
         set_time_limit(3600);
@@ -221,7 +228,8 @@ class SingleParameterController extends Controller
 
         return view('indicators.population', compact(
             'total_pob',
-            'request'
+            'request',
+            'establishments'
         ));
     }
 

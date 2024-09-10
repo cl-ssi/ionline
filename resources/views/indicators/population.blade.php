@@ -30,46 +30,76 @@
 @endauth
 
 <div class="card">
-	  <div class="card-body">
-				<form method="GET" class="form-horizontal" action="{{ route('indicators.population') }}">
+	<div class="card-body">
+		<form method="GET" class="form-horizontal" action="{{ route('indicators.population') }}">
 
-				<div class="form-row">
-						<fieldset class="form-group col-sm-2">
-								<label>Fuente</label>
-								<select class="form-control selectpicker show-tick" name="type" required>
-										<option value="">Selección...</option>
-										<option value="Definitivo" @if($request->type == "Definitivo") selected @endif>Definitivo</option>
-										<option value="Preliminar"@if($request->type == "Preliminar") selected @endif>Preliminar</option>
-								</select>
-						</fieldset>
+			<div class="form-row">
+				<fieldset class="form-group col-sm-2">
+					<label>Fuente</label>
+					<select class="form-control selectpicker show-tick" name="type" required>
+							<option value="">Selección...</option>
+							<option value="Definitivo" @if($request->type == "Definitivo") selected @endif>Definitivo</option>
+							<option value="Preliminar"@if($request->type == "Preliminar") selected @endif>Preliminar</option>
+					</select>
+				</fieldset>
 
-	    			@livewire('indicators.dashboard.population-search-form', ['request' => $request])
+				{{--
+				@livewire('indicators.dashboard.population-search-form', ['request' => $request])
+				--}}
+				
+				<fieldset class="form-group col-sm-6">
+					<label for="regiones">Año / Establecimiento *</label>
+					<div class="input-group">
+						<select class="form-control selectpicker show-tick" id="for_year_id" name="year" required>
+							<option value="">Selección...</option>
+							<option value="2024" @if($request->year == '2024') selected @endif>2024</option>
+							<option value="2023" @if($request->year == '2023') selected @endif>2023</option>
+							<option value="2022" @if($request->year == '2022') selected @endif>2022</option>
+							<option value="2021" @if($request->year == '2021') selected @endif>2021</option>
+							<option value="2020" @if($request->year == '2020') selected @endif>2020</option>
+						</select>
 
-						<fieldset class="form-group col-sm-2">
-			        <label>Sexo</label>
-			        <select class="form-control selectpicker" name="gender_id[]" data-actions-box="true" multiple required>
-			          	<option value="M" @if($request->type!= NULL && in_array('M', $request->gender_id)) selected @endif>Masculino</option>
-			          	<option value="F" @if($request->type!= NULL && in_array('F', $request->gender_id)) selected @endif>Femenino</option>
+						<select class="form-control selectpicker" id="for_establishment_id" name="establishment_id[]" data-live-search="true" data-actions-box="true" multiple wire:model="selectedEstablishment" required>
+							{{-- @foreach($establishments as $estab)
+							<option value="{{ $estab->Codigo }}">{{ $estab->alias_estab }}</option>
+							@endforeach --}}
+
+							@php($temp = null)
+							@foreach($establishments as $estab)
+								@if($estab->comuna != $temp) <optgroup label="{{$estab->comuna}}"> @endif
+								<option value="{{ $estab->Codigo }}" @if (isset($establecimiento) && in_array($estab->Codigo, $establecimiento)) selected @endif>{{ $estab->alias_estab }}</option>
+								@php($temp = $estab->comuna)
+								@if($estab->comuna != $temp) </optgroup> @endif
+							@endforeach
+						</select>
+					</div>
+				</fieldset>
+
+				<fieldset class="form-group col-sm-2">
+					<label>Sexo</label>
+					<select class="form-control selectpicker" name="gender_id[]" data-actions-box="true" multiple required>
+						<option value="M" @if($request->type!= NULL && in_array('M', $request->gender_id)) selected @endif>Masculino</option>
+						<option value="F" @if($request->type!= NULL && in_array('F', $request->gender_id)) selected @endif>Femenino</option>
 						<option value="I" @if($request->type!= NULL && in_array('I', $request->gender_id)) selected @endif>Otro</option>
-			        </select>
-			      </fieldset>
+					</select>
+				</fieldset>
 
-						<fieldset class="form-group col-9 col-md-2">
-				        <label>Grupos etários</label>
-				        <select class="form-control selectpicker" name="etario_id[]" data-actions-box="true" title="Seleccione..." multiple required>
-										@foreach(range(0, 99) as $edad) {
-										    <option value="{{ $edad }}" @if($request->type!= NULL && in_array($edad, $request->etario_id)) selected @endif>{{$edad}}</option>
-										@endforeach
-										<option value=">=100" @if($request->type!= NULL && in_array('>=100', $request->etario_id)) selected @endif>100 y más</option>
-										<option value="Sin. Info." @if($request->type!= NULL && in_array('s.i.', $request->etario_id)) selected @endif>Sin. Info.</option>
-				        </select>
-			      </fieldset>
-				</div>
+				<fieldset class="form-group col-9 col-md-2">
+					<label>Grupos etários</label>
+					<select class="form-control selectpicker" name="etario_id[]" data-actions-box="true" title="Seleccione..." multiple required>
+						@foreach(range(0, 99) as $edad) {
+							<option value="{{ $edad }}" @if($request->type!= NULL && in_array($edad, $request->etario_id)) selected @endif>{{$edad}}</option>
+						@endforeach
+						<option value=">=100" @if($request->type!= NULL && in_array('>=100', $request->etario_id)) selected @endif>100 y más</option>
+						<option value="Sin. Info." @if($request->type!= NULL && in_array('s.i.', $request->etario_id)) selected @endif>Sin. Info.</option>
+					</select>
+				</fieldset>
+			</div>
 
-				<button type="submit" class="btn btn-primary float-right"><i class="fas fa-chart-pie"></i> Consultar</button>
+			<button type="submit" class="btn btn-primary float-right"><i class="fas fa-chart-pie"></i> Consultar</button>
 
-				</form>
-	  </div>
+		</form>
+	</div>
 </div>
 
 <br>
