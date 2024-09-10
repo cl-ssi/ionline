@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a7b8816a12264cb7d642f28c89919fe2",
+    "content-hash": "a6ddee59206ceb9613f5055044fb7c84",
     "packages": [
         {
             "name": "actived/microsoft-teams-notifier",
@@ -3304,16 +3304,16 @@
         },
         {
             "name": "kirschbaum-development/eloquent-power-joins",
-            "version": "3.5.7",
+            "version": "3.5.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kirschbaum-development/eloquent-power-joins.git",
-                "reference": "3f57b398117d97bae4dfd5c37ea0f8f48f296c97"
+                "reference": "397ef08f15ceff48111fd7f57d9f1fd41bf1a453"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kirschbaum-development/eloquent-power-joins/zipball/3f57b398117d97bae4dfd5c37ea0f8f48f296c97",
-                "reference": "3f57b398117d97bae4dfd5c37ea0f8f48f296c97",
+                "url": "https://api.github.com/repos/kirschbaum-development/eloquent-power-joins/zipball/397ef08f15ceff48111fd7f57d9f1fd41bf1a453",
+                "reference": "397ef08f15ceff48111fd7f57d9f1fd41bf1a453",
                 "shasum": ""
             },
             "require": {
@@ -3360,9 +3360,9 @@
             ],
             "support": {
                 "issues": "https://github.com/kirschbaum-development/eloquent-power-joins/issues",
-                "source": "https://github.com/kirschbaum-development/eloquent-power-joins/tree/3.5.7"
+                "source": "https://github.com/kirschbaum-development/eloquent-power-joins/tree/3.5.8"
             },
-            "time": "2024-06-26T13:09:29+00:00"
+            "time": "2024-09-10T10:28:05+00:00"
         },
         {
             "name": "laminas/laminas-escaper",
@@ -8355,27 +8355,32 @@
         },
         {
             "name": "stackkit/laravel-google-cloud-scheduler",
-            "version": "v2.0.5",
+            "version": "v3.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/stackkit/laravel-google-cloud-scheduler.git",
-                "reference": "0ce466a7b8f747e972eb2ff65a32e00211130d6a"
+                "reference": "95a2457a8e37c77d5a2055044c82900106fb3c6a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stackkit/laravel-google-cloud-scheduler/zipball/0ce466a7b8f747e972eb2ff65a32e00211130d6a",
-                "reference": "0ce466a7b8f747e972eb2ff65a32e00211130d6a",
+                "url": "https://api.github.com/repos/stackkit/laravel-google-cloud-scheduler/zipball/95a2457a8e37c77d5a2055044c82900106fb3c6a",
+                "reference": "95a2457a8e37c77d5a2055044c82900106fb3c6a",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
                 "google/auth": "^v1.29.1",
                 "google/cloud-scheduler": "^1.6",
-                "phpseclib/phpseclib": "^3.0"
+                "laravel/framework": "^10.0|^11.0",
+                "php": "^8.1",
+                "phpseclib/phpseclib": "^3.0",
+                "symfony/cache": "^6.4"
             },
             "require-dev": {
+                "laravel/pint": "^1.14",
                 "mockery/mockery": "^1.5",
-                "orchestra/testbench": "^4.0 || ^5.0 || ^6.0 || ^7.0 || ^8.0"
+                "nunomaduro/collision": "^7.0|^8.0",
+                "orchestra/testbench": "^8.0|^9.0"
             },
             "type": "library",
             "extra": {
@@ -8402,9 +8407,15 @@
             ],
             "support": {
                 "issues": "https://github.com/stackkit/laravel-google-cloud-scheduler/issues",
-                "source": "https://github.com/stackkit/laravel-google-cloud-scheduler/tree/v2.0.5"
+                "source": "https://github.com/stackkit/laravel-google-cloud-scheduler/tree/v3.0.1"
             },
-            "time": "2023-12-28T08:56:23+00:00"
+            "funding": [
+                {
+                    "url": "https://github.com/marickvantuil",
+                    "type": "github"
+                }
+            ],
+            "time": "2024-03-27T21:47:25+00:00"
         },
         {
             "name": "stackkit/laravel-google-cloud-tasks-queue",
@@ -8461,6 +8472,178 @@
                 "source": "https://github.com/stackkit/laravel-google-cloud-tasks-queue/tree/v3.7.0"
             },
             "time": "2024-02-13T21:39:58+00:00"
+        },
+        {
+            "name": "symfony/cache",
+            "version": "v6.4.11",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/cache.git",
+                "reference": "36daef8fce88fe0b9a4f8cf4c342ced5c05616dc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/cache/zipball/36daef8fce88fe0b9a4f8cf4c342ced5c05616dc",
+                "reference": "36daef8fce88fe0b9a4f8cf4c342ced5c05616dc",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.1",
+                "psr/cache": "^2.0|^3.0",
+                "psr/log": "^1.1|^2|^3",
+                "symfony/cache-contracts": "^2.5|^3",
+                "symfony/service-contracts": "^2.5|^3",
+                "symfony/var-exporter": "^6.3.6|^7.0"
+            },
+            "conflict": {
+                "doctrine/dbal": "<2.13.1",
+                "symfony/dependency-injection": "<5.4",
+                "symfony/http-kernel": "<5.4",
+                "symfony/var-dumper": "<5.4"
+            },
+            "provide": {
+                "psr/cache-implementation": "2.0|3.0",
+                "psr/simple-cache-implementation": "1.0|2.0|3.0",
+                "symfony/cache-implementation": "1.1|2.0|3.0"
+            },
+            "require-dev": {
+                "cache/integration-tests": "dev-master",
+                "doctrine/dbal": "^2.13.1|^3|^4",
+                "predis/predis": "^1.1|^2.0",
+                "psr/simple-cache": "^1.0|^2.0|^3.0",
+                "symfony/config": "^5.4|^6.0|^7.0",
+                "symfony/dependency-injection": "^5.4|^6.0|^7.0",
+                "symfony/filesystem": "^5.4|^6.0|^7.0",
+                "symfony/http-kernel": "^5.4|^6.0|^7.0",
+                "symfony/messenger": "^5.4|^6.0|^7.0",
+                "symfony/var-dumper": "^5.4|^6.0|^7.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Cache\\": ""
+                },
+                "classmap": [
+                    "Traits/ValueWrapper.php"
+                ],
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nicolas Grekas",
+                    "email": "p@tchwork.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Provides extended PSR-6, PSR-16 (and tags) implementations",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "caching",
+                "psr6"
+            ],
+            "support": {
+                "source": "https://github.com/symfony/cache/tree/v6.4.11"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2024-08-05T07:40:31+00:00"
+        },
+        {
+            "name": "symfony/cache-contracts",
+            "version": "v3.5.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/cache-contracts.git",
+                "reference": "df6a1a44c890faded49a5fca33c2d5c5fd3c2197"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/cache-contracts/zipball/df6a1a44c890faded49a5fca33c2d5c5fd3c2197",
+                "reference": "df6a1a44c890faded49a5fca33c2d5c5fd3c2197",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.1",
+                "psr/cache": "^3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "3.5-dev"
+                },
+                "thanks": {
+                    "name": "symfony/contracts",
+                    "url": "https://github.com/symfony/contracts"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Contracts\\Cache\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nicolas Grekas",
+                    "email": "p@tchwork.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Generic abstractions related to caching",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "abstractions",
+                "contracts",
+                "decoupling",
+                "interfaces",
+                "interoperability",
+                "standards"
+            ],
+            "support": {
+                "source": "https://github.com/symfony/cache-contracts/tree/v3.5.0"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2024-04-18T09:32:20+00:00"
         },
         {
             "name": "symfony/console",
@@ -10778,6 +10961,82 @@
                 }
             ],
             "time": "2024-08-30T16:03:21+00:00"
+        },
+        {
+            "name": "symfony/var-exporter",
+            "version": "v7.1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/var-exporter.git",
+                "reference": "b80a669a2264609f07f1667f891dbfca25eba44c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/var-exporter/zipball/b80a669a2264609f07f1667f891dbfca25eba44c",
+                "reference": "b80a669a2264609f07f1667f891dbfca25eba44c",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.2"
+            },
+            "require-dev": {
+                "symfony/property-access": "^6.4|^7.0",
+                "symfony/serializer": "^6.4|^7.0",
+                "symfony/var-dumper": "^6.4|^7.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\VarExporter\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nicolas Grekas",
+                    "email": "p@tchwork.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Allows exporting any serializable PHP data structure to plain PHP code",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "clone",
+                "construct",
+                "export",
+                "hydrate",
+                "instantiate",
+                "lazy-loading",
+                "proxy",
+                "serialize"
+            ],
+            "support": {
+                "source": "https://github.com/symfony/var-exporter/tree/v7.1.2"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2024-06-28T08:00:31+00:00"
         },
         {
             "name": "thecodingmachine/safe",
