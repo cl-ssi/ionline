@@ -13,7 +13,6 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-
 class HolidayResource extends Resource
 {
     protected static ?string $model = Holiday::class;
@@ -21,6 +20,10 @@ class HolidayResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?string $cluster = Parameters::class;
+
+    protected static ?string $modelLabel = 'feriado';
+
+    protected static ?string $pluralModelLabel = 'feriados';
 
     public static function form(Form $form): Form
     {
@@ -85,15 +88,5 @@ class HolidayResource extends Resource
             'create' => Pages\CreateHoliday::route('/create'),
             'edit' => Pages\EditHoliday::route('/{record}/edit'),
         ];
-    }
-
-    public static function getLabel(): string
-    {
-        return 'Feriado';
-    }
-
-    public static function getPluralLabel(): string
-    {
-        return 'Feriados';
     }
 }

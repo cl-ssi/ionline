@@ -13,7 +13,6 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-
 class HealthServiceResource extends Resource
 {
     protected static ?string $model = HealthService::class;
@@ -21,6 +20,10 @@ class HealthServiceResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?string $cluster = Parameters::class;
+
+    protected static ?string $modelLabel = 'servicio de salud';
+
+    protected static ?string $pluralModelLabel = 'servicios de salud';
 
     public static function form(Form $form): Form
     {
@@ -80,15 +83,5 @@ class HealthServiceResource extends Resource
             'create' => Pages\CreateHealthService::route('/create'),
             'edit' => Pages\EditHealthService::route('/{record}/edit'),
         ];
-    }
-
-    public static function getLabel(): string
-    {
-        return 'Servicio de Salud';
-    }
-
-    public static function getPluralLabel(): string
-    {
-        return 'Servicios de Salud';
     }
 }

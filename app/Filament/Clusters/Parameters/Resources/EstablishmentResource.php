@@ -22,6 +22,10 @@ class EstablishmentResource extends Resource
 
     protected static ?string $cluster = Parameters::class;
 
+    protected static ?string $modelLabel = 'establecimiento';
+
+    protected static ?string $pluralModelLabel = 'establecimientos';
+
     public static function form(Form $form): Form
     {
         return $form
@@ -210,15 +214,5 @@ class EstablishmentResource extends Resource
             'create' => Pages\CreateEstablishment::route('/create'),
             'edit' => Pages\EditEstablishment::route('/{record}/edit'),
         ];
-    }
-
-    public static function getLabel(): string
-    {
-        return 'Establecimiento';
-    }
-
-    public static function getPluralLabel(): string
-    {
-        return 'Establecimientos';
     }
 }
