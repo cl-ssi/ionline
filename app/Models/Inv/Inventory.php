@@ -11,6 +11,7 @@ use App\Models\RequestForms\PurchaseOrder;
 use App\Models\RequestForms\RequestForm;
 use App\Models\Resources\Computer;
 use App\Models\Rrhh\OrganizationalUnit;
+use App\Models\Unspsc\Product as UnspscProduct;
 use App\Models\User;
 use App\Models\Warehouse\Control;
 use App\Models\Warehouse\Product;
@@ -24,12 +25,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 use OwenIt\Auditing\Contracts\Auditable;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
-use App\Models\Unspsc\Product as UnspscProduct;
 
 class Inventory extends Model implements Auditable
 {
-    use \OwenIt\Auditing\Auditable;
     use HasFactory, SoftDeletes;
+    use \OwenIt\Auditing\Auditable;
 
     /**
      * The table associated with the model.
@@ -104,8 +104,6 @@ class Inventory extends Model implements Auditable
 
     /**
      * Documentos Tributarios
-     *
-     * @return HasMany
      */
     public function dtes(): HasMany
     {
@@ -114,8 +112,6 @@ class Inventory extends Model implements Auditable
 
     /**
      * Get the establishment that owns the inventory.
-     *
-     * @return BelongsTo
      */
     public function establishment(): BelongsTo
     {
@@ -124,8 +120,6 @@ class Inventory extends Model implements Auditable
 
     /**
      * Get the classification that owns the inventory.
-     *
-     * @return BelongsTo
      */
     public function classification(): BelongsTo
     {
@@ -134,8 +128,6 @@ class Inventory extends Model implements Auditable
 
     /**
      * Get the organizational unit that owns the inventory.
-     *
-     * @return BelongsTo
      */
     public function requestOrganizationalUnit(): BelongsTo
     {
@@ -144,8 +136,6 @@ class Inventory extends Model implements Auditable
 
     /**
      * Get the user that requested the inventory.
-     *
-     * @return BelongsTo
      */
     public function requestUser(): BelongsTo
     {
@@ -154,8 +144,6 @@ class Inventory extends Model implements Auditable
 
     /**
      * Get the product that owns the inventory.
-     *
-     * @return BelongsTo
      */
     public function product(): BelongsTo
     {
@@ -164,8 +152,6 @@ class Inventory extends Model implements Auditable
 
     /**
      * Get the UNSPSC product that owns the inventory.
-     *
-     * @return BelongsTo
      */
     public function unspscProduct(): BelongsTo
     {
@@ -174,8 +160,6 @@ class Inventory extends Model implements Auditable
 
     /**
      * Get the control that owns the inventory.
-     *
-     * @return BelongsTo
      */
     public function control(): BelongsTo
     {
@@ -184,8 +168,6 @@ class Inventory extends Model implements Auditable
 
     /**
      * Get the store that owns the inventory.
-     *
-     * @return BelongsTo
      */
     public function store(): BelongsTo
     {
@@ -194,8 +176,6 @@ class Inventory extends Model implements Auditable
 
     /**
      * Get the purchase order that owns the inventory.
-     *
-     * @return BelongsTo
      */
     public function purchaseOrder(): BelongsTo
     {
@@ -204,8 +184,6 @@ class Inventory extends Model implements Auditable
 
     /**
      * Get the request form that owns the inventory.
-     *
-     * @return BelongsTo
      */
     public function requestForm(): BelongsTo
     {
@@ -214,8 +192,6 @@ class Inventory extends Model implements Auditable
 
     /**
      * Get the movements for the inventory.
-     *
-     * @return HasMany
      */
     public function movements(): HasMany
     {
@@ -224,8 +200,6 @@ class Inventory extends Model implements Auditable
 
     /**
      * Get the pending movements for the inventory.
-     *
-     * @return HasMany
      */
     public function pendingMovements(): HasMany
     {
@@ -234,8 +208,6 @@ class Inventory extends Model implements Auditable
 
     /**
      * Get the last movement for the inventory.
-     *
-     * @return HasOne
      */
     public function lastMovement(): HasOne
     {
@@ -244,8 +216,6 @@ class Inventory extends Model implements Auditable
 
     /**
      * Get the last movement reception date for the inventory.
-     *
-     * @return HasOne
      */
     public function lastMovementReceptionDate(): HasOne
     {
@@ -256,8 +226,6 @@ class Inventory extends Model implements Auditable
 
     /**
      * Get the last confirmed movement for the inventory.
-     *
-     * @return HasOne
      */
     public function lastConfirmedMovement(): HasOne
     {
@@ -269,8 +237,6 @@ class Inventory extends Model implements Auditable
 
     /**
      * Get the responsible user for the inventory.
-     *
-     * @return BelongsTo
      */
     public function responsible(): BelongsTo
     {
@@ -279,8 +245,6 @@ class Inventory extends Model implements Auditable
 
     /**
      * Get the removed user for the inventory.
-     *
-     * @return BelongsTo
      */
     public function removedUser(): BelongsTo
     {
@@ -289,8 +253,6 @@ class Inventory extends Model implements Auditable
 
     /**
      * Get the user using the inventory.
-     *
-     * @return BelongsTo
      */
     public function using(): BelongsTo
     {
@@ -299,8 +261,6 @@ class Inventory extends Model implements Auditable
 
     /**
      * Get the place that owns the inventory.
-     *
-     * @return BelongsTo
      */
     public function place(): BelongsTo
     {
@@ -309,8 +269,6 @@ class Inventory extends Model implements Auditable
 
     /**
      * Get the budget item that owns the inventory.
-     *
-     * @return BelongsTo
      */
     public function budgetItem(): BelongsTo
     {
@@ -319,8 +277,6 @@ class Inventory extends Model implements Auditable
 
     /**
      * Get the computer that owns the inventory.
-     *
-     * @return HasOne
      */
     public function computer(): HasOne
     {
@@ -329,8 +285,6 @@ class Inventory extends Model implements Auditable
 
     /**
      * Get the inventory users for the inventory.
-     *
-     * @return HasMany
      */
     public function inventoryUsers(): HasMany
     {
@@ -339,8 +293,6 @@ class Inventory extends Model implements Auditable
 
     /**
      * Get the accounting code that owns the inventory.
-     *
-     * @return BelongsTo
      */
     public function accountingCode(): BelongsTo
     {
@@ -349,8 +301,6 @@ class Inventory extends Model implements Auditable
 
     /**
      * Get the user who deleted the inventory.
-     *
-     * @return BelongsTo
      */
     public function userDelete(): BelongsTo
     {
@@ -359,8 +309,6 @@ class Inventory extends Model implements Auditable
 
     /**
      * Check if the inventory is a computer.
-     *
-     * @return bool
      */
     public function isComputer(): bool
     {
@@ -369,36 +317,30 @@ class Inventory extends Model implements Auditable
 
     /**
      * Get the QR code for the inventory.
-     *
-     * @return string
      */
     public function getQrAttribute(): string
     {
         return QrCode::size(150)
             ->generate(route('inventories.show', [
                 'establishment' => $this->establishment_id,
-                'number' => $this->number
+                'number' => $this->number,
             ]));
     }
 
     /**
      * Get the small QR code for the inventory.
-     *
-     * @return string
      */
     public function getQrSmallAttribute(): string
     {
         return QrCode::size(74)
             ->generate(route('inventories.show', [
                 'establishment' => $this->establishment_id,
-                'number' => $this->number
+                'number' => $this->number,
             ]));
     }
 
     /**
      * Get the computer associated with the inventory.
-     *
-     * @return Computer|null
      */
     public function getMyComputerAttribute(): ?Computer
     {
@@ -406,13 +348,12 @@ class Inventory extends Model implements Auditable
         if ($this->isComputer()) {
             $computer = Computer::whereInventoryNumber($this->number)->first();
         }
+
         return $computer;
     }
 
     /**
      * Check if the inventory has a computer.
-     *
-     * @return bool
      */
     public function getHaveComputerAttribute(): bool
     {
@@ -421,34 +362,30 @@ class Inventory extends Model implements Auditable
 
     /**
      * Get the location of the inventory.
-     *
-     * @return string|null
      */
     public function getLocationAttribute(): ?string
     {
         if ($this->place) {
-            return $this->place?->name . ", " . $this->place?->location?->name;
+            return $this->place?->name.', '.$this->place?->location?->name;
         }
+
         return null;
     }
 
     /**
      * Get the subtitle of the inventory.
-     *
-     * @return string|null
      */
     public function getSubtitleAttribute(): ?string
     {
         if ($this->budgetItem) {
             return Str::of($this->budgetItem->code)->substr(0, 2);
         }
+
         return null;
     }
 
     /**
      * Get the price of the inventory.
-     *
-     * @return string
      */
     public function getPriceAttribute(): string
     {
@@ -457,8 +394,6 @@ class Inventory extends Model implements Auditable
 
     /**
      * Get the status of the inventory.
-     *
-     * @return string
      */
     public function getEstadoAttribute(): string
     {
@@ -476,22 +411,18 @@ class Inventory extends Model implements Auditable
 
     /**
      * Get the formatted date of the inventory.
-     *
-     * @return string
      */
     public function getFormatDateAttribute(): string
     {
-        return now()->day . ' de ' . now()->monthName . ' del ' . now()->year;
+        return now()->day.' de '.now()->monthName.' del '.now()->year;
     }
 
     public function generateInventoryNumber()
     {
         if ($this->unspscProduct) {
-            return $this->unspscProduct->code . '-' . $this->id;
+            return $this->unspscProduct->code.'-'.$this->id;
         }
+
         return null;
     }
-
-
-
 }
