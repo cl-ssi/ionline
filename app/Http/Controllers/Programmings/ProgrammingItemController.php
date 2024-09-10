@@ -112,7 +112,7 @@ class ProgrammingItemController extends Controller
         $year = Programming::find($request->programming_id)->year;
         $program_id = ActivityProgram::where('year', $year)->first() ? ActivityProgram::where('year', $year)->first()->id : null;
         if(!$program_id){
-            session()->flash('warning', 'No existe programa para el año seleccionado.');
+            session()->flash('warning', 'No se ha iniciado la parametrización trazadoras para este año.');
             return redirect()->back();
         }
         $activityItems = ActivityItem::where('activity_id', $program_id)->orderByRaw('-int_code DESC')->get();
