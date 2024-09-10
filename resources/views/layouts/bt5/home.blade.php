@@ -89,9 +89,11 @@
                     <div class="carousel-inner">
                         @foreach ($allNews as $news)
                         <div class="carousel-item @if ($loop->index == 0) active @endif">
+                            @if($news->image)
                                 <img src="{{ Storage::url($news->image) }}"
                                     class="d-block w-100"
                                     alt="{{ $news->title }}">
+                            @endif
                             <strong>{{ $news->created_at }} - {{ $news->title }}</strong>
                             <p>{{ $news->body }}</p>
                             <br>
