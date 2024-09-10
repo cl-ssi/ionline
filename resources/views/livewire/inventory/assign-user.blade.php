@@ -8,7 +8,7 @@
             @endif
         </div>
     </div>
-    
+
     <div class="row mt-4">
         <div class="col-md-8">
             <div class="card">
@@ -44,8 +44,7 @@
                         @livewire('users.search-user', [
                             'smallInput' => true,
                             'placeholder' => 'Ingrese un nombre',
-                            'eventName' => 'myUserUsingId',
-                            'tagId' => 'user-using-id',
+                            'eventName' => 'setUserId',
                             'bt' => 5,
                         ])
 

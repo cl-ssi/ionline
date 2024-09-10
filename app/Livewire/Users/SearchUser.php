@@ -11,7 +11,7 @@ class SearchUser extends Component
     public $users;
     public $user_id;
     public $search;
-    public $tagId;
+    public $tagId; //ya no se usa
     public $showResult;
     public $eventName;
     public $smallInput = false;
