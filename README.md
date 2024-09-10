@@ -14,6 +14,7 @@ sistemas.sst@redsalud.gob.cl
 
 ## Prerequisitos
 
+
 -   git
 -   composer
 -   php >= 8.2
