@@ -247,10 +247,17 @@
                     <td>{{$item['taxes']}}</td>
                     <td align="right">{{ number_format($item['totalValue'],$precision_currency,",",".") }}</td>
                     <td align="center" class="brd-l brd-b">
-                        <a href="#items" class="text-info" title="Editar" wire:click="editItem({{ $key }})"><i class="fas fa-pencil-alt"></i></a>
+                        <a href="#items" class="btn btn-info btn-sm" title="Editar" wire:click="editItem({{ $key }})"><i class="fas fa-pencil-alt"></i></a>
                     </td>
                     <td class="brd-r brd-b" align="center">
-                        <a href="#items" class="text-danger" title="Eliminar" wire:click="deleteItem({{ $key }})"><i class="fas fa-trash-alt"></i></a>
+                        <button 
+                            class="btn btn-danger btn-sm" 
+                            title="Eliminar" 
+                            wire:click.prevent="deleteItem({{ $key }})"
+                            wire:loading.attr="disabled"
+                            wire:target="deleteItem({{ $key }})">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
                     </td>
                 </tr>
               @endforeach
