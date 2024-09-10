@@ -110,7 +110,11 @@ class ProgrammingItemController extends Controller
     public function create(Request $request)
     {  
         $year = Programming::find($request->programming_id)->year;
-        $program_id = ActivityProgram::where('year', $year)->first()->id;
+        $program_id = ActivityProgram::where('year', $year)->first() ? ActivityProgram::where('year', $year)->first()->id : null;
+        if(!$program_id){
+            session()->flash('warning', 'No existe programa para el año seleccionado.');
+            return redirect()->back();
+        }
         $activityItems = ActivityItem::where('activity_id', $program_id)->orderByRaw('-int_code DESC')->get();
         $activityItemsSelect = $request->activity_search_id ? ActivityItem::where('id',(int)$request->activity_search_id)->first() : null;
         $programmingDays = ProgrammingDay::where('programming_id',$request->programming_id)->first();
