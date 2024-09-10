@@ -104,7 +104,7 @@
 
     <br><br><br>
 
-    <!--
+    {{--
     <strong>Ejemplo de firma 1</strong>
 
     <address class="border p-2 mb-3">
@@ -178,7 +178,7 @@
     <br><br><br>
 
 
-    -->
+    --}}
 
     <strong>Formato SST</strong>
     <address class="border p-2 mb-3">
