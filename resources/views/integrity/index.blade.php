@@ -10,7 +10,7 @@
 
 @livewire('parameters.parameter.single-manager',[
     'module' => 'integrity',
-    'paramete' => 'email',
+    'parameter' => 'email',
     'type' => 'value'
 ])
 

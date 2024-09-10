@@ -1845,7 +1845,7 @@ Route::prefix('indicators')->as('indicators.')->group(function () {
 
         Route::get('/{year}/{serie}', [App\Http\Controllers\Indicators\Rems\RemController::class, 'index_serie_year'])->name('year.serie.index');
 
-        Route::get('/{year}/{serie}/{nserie}', [App\Http\Controllers\Indicators\Rems\RemController::class, 'a01'])->name('year.serie.nserie.index');
+        // Route::get('/{year}/{serie}/{nserie}', [App\Http\Controllers\Indicators\Rems\RemController::class, 'a01'])->name('year.serie.nserie.index');
         Route::post('/{year}/{serie}/{nserie}', [App\Http\Controllers\Indicators\Rems\RemController::class, 'show'])->name('year.serie.nserie.index');
     });
 });
@@ -2581,7 +2581,7 @@ Route::prefix('invoice')->as('invoice.')->group(function () {
 
 
 Route::prefix('suitability')->as('suitability.')->middleware(['auth', 'must.change.password'])->group(function () {
-    Route::get('/', [SuitabilityController::class, 'indexOwn'])->name('own');
+    // Route::get('/', [SuitabilityController::class, 'indexOwn'])->name('own');
     Route::post('/emergency/{psirequest}', [SuitabilityController::class, 'emergency'])->name('emergency');
     Route::get('/report/all/request', [SuitabilityController::class, 'reportAllRequest'])->name('reportAllRequest');
     //Route::get('/report', [SuitabilityController::class, 'report'])->name('report');

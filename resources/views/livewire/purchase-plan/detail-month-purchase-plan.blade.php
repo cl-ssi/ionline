@@ -33,7 +33,7 @@
                     Solicitados
                 </div>
                 <div class="card-body">
-                    <h5 class="card-title">{{ $this->quantity }}</h5>
+                    <h5 class="card-title">{{ $quantity }}</h5>
                 </div>
             </div>
         </div>
@@ -44,8 +44,8 @@
                 </div>
                 <div class="card-body">
                     <h5 class="card-title">
-                        @if($this->quantityDetail >= 0)
-                            {{ $this->quantityDetail }}
+                        @if($quantityDetail >= 0)
+                            {{ $quantityDetail }}
                         @else
                             0
                         @endif

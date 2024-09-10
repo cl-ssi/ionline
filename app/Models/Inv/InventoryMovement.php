@@ -14,8 +14,8 @@ use OwenIt\Auditing\Contracts\Auditable;
 
 class InventoryMovement extends Model implements Auditable
 {
-    use \OwenIt\Auditing\Auditable;
     use HasFactory, SoftDeletes;
+    use \OwenIt\Auditing\Auditable;
 
     /**
      * The table associated with the model.
@@ -40,7 +40,7 @@ class InventoryMovement extends Model implements Auditable
         'user_responsible_id',
         'user_using_ou_id',
         'user_using_id',
-        'user_sender_id'
+        'user_sender_id',
     ];
 
     /**
@@ -50,13 +50,11 @@ class InventoryMovement extends Model implements Auditable
      */
     protected $casts = [
         'reception_date' => 'date:Y-m-d H:i:s',
-        'installation_date' => 'date'
+        'installation_date' => 'date',
     ];
 
     /**
      * Get the inventory that owns the inventory movement.
-     *
-     * @return BelongsTo
      */
     public function inventory(): BelongsTo
     {
@@ -65,8 +63,6 @@ class InventoryMovement extends Model implements Auditable
 
     /**
      * Get the place that owns the inventory movement.
-     *
-     * @return BelongsTo
      */
     public function place(): BelongsTo
     {
@@ -75,8 +71,6 @@ class InventoryMovement extends Model implements Auditable
 
     /**
      * Get the responsible organizational unit that owns the inventory movement.
-     *
-     * @return BelongsTo
      */
     public function responsibleOrganizationalUnit(): BelongsTo
     {
@@ -85,8 +79,6 @@ class InventoryMovement extends Model implements Auditable
 
     /**
      * Get the responsible user that owns the inventory movement.
-     *
-     * @return BelongsTo
      */
     public function responsibleUser(): BelongsTo
     {
@@ -95,8 +87,6 @@ class InventoryMovement extends Model implements Auditable
 
     /**
      * Get the using organizational unit that owns the inventory movement.
-     *
-     * @return BelongsTo
      */
     public function usingOrganizationalUnit(): BelongsTo
     {
@@ -105,8 +95,6 @@ class InventoryMovement extends Model implements Auditable
 
     /**
      * Get the using user that owns the inventory movement.
-     *
-     * @return BelongsTo
      */
     public function usingUser(): BelongsTo
     {
@@ -115,8 +103,6 @@ class InventoryMovement extends Model implements Auditable
 
     /**
      * Get the sender user that owns the inventory movement.
-     *
-     * @return BelongsTo
      */
     public function senderUser(): BelongsTo
     {
