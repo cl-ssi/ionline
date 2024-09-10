@@ -2,10 +2,8 @@
 
 namespace App\Http\Middleware\Inventory;
 
-use App\Models\Inv\InventoryMovement;
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class EnsureMovement
 {
@@ -18,9 +16,9 @@ class EnsureMovement
      */
     public function handle(Request $request, Closure $next)
     {
-        $movement = InventoryMovement::find($request->route('movement'));
+        $movement = $request->route('movement');
 
-        if($movement->responsibleUser->id == Auth::id())
+        if($movement->responsibleUser->id == auth()->id())
             return $next($request);
 
         session()->flash('danger', 'Ud. no posee los permisos para ver los detalles del movimiento.');
