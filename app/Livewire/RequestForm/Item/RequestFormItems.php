@@ -243,17 +243,22 @@ class RequestFormItems extends Component
     {
         $fileDeleteRecord = ItemRequestForm::find($this->items[$key]['id']);
 
-        Storage::disk('gcs')->delete($this->items[$key]['articleFile']);
-        $this->items[$key]['articleFile'] = null;
-        $this->articleFile = $this->savedArticleFile = null;
-        $this->iteration++;
+        if ($fileDeleteRecord) {
+            // Elimina el archivo del almacenamiento
+            Storage::disk('gcs')->delete($this->items[$key]['articleFile']);
+            $this->items[$key]['articleFile'] = null;
+            $this->articleFile = $this->savedArticleFile = null;
+            $this->iteration++;
 
-        /* NO SE ESTABA ACTUALIZANDO EL OBJETO */
-        $fileDeleteRecord               = ItemRequestForm::find($this->items[$key]['id']);
-        $fileDeleteRecord->article_file = null;
-        $fileDeleteRecord->save();
+            // Actualiza el registro en la base de datos
+            $fileDeleteRecord->article_file = null;
+            $fileDeleteRecord->save();
+        } else {
+            // Opcional: manejo del caso en que no se encuentra el registro
+            session()->flash('error', 'El artículo no se encontró en la base de datos.');
+        }
+
         $this->cleanItem();
-         /* *********************************** */
     }
 
     public function updatedSearchProduct()
