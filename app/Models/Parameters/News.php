@@ -1,24 +1,27 @@
 <?php
 
-namespace App\Models\News;
+namespace App\Models\Parameters;
 
 use App\Models\User;
+use App\Observers\Parameters\NewsObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Contracts\Auditable;
 
+#[ObservedBy([NewsObserver::class])]
 class News extends Model implements Auditable
 {
-    use HasFactory, SoftDeletes, \OwenIt\Auditing\Auditable;
+    use HasFactory, \OwenIt\Auditing\Auditable, SoftDeletes;
 
     /**
      * The table associated with the model.
      *
      * @var string
      */
-    protected $table = 'news';
+    protected $table = 'cfg_news';
 
     /**
      * The attributes that are mass assignable.
@@ -26,15 +29,11 @@ class News extends Model implements Auditable
      * @var array
      */
     protected $fillable = [
-        'type',
         'title',
-        'subtitle',
-        'image',
-        'lead',
         'body',
-        'publication_date_at',
+        'image',
         'until_at',
-        'user_id'
+        'user_id',
     ];
 
     /**
@@ -43,9 +42,7 @@ class News extends Model implements Auditable
      * @var array
      */
     protected $casts = [
-        'created_at'          => 'datetime',
-        'publication_date_at' => 'datetime',
-        'until_at'            => 'datetime'
+        'until_at' => 'datetime',
     ];
 
     /**
@@ -55,13 +52,11 @@ class News extends Model implements Auditable
      */
     protected $hidden = [
         'created_at',
-        'updated_at'
+        'updated_at',
     ];
 
     /**
      * Get the user that owns the document.
-     *
-     * @return BelongsTo
      */
     public function user(): BelongsTo
     {

@@ -99,7 +99,7 @@ class RoleAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Meetings: create', 'description' => 'Permite crear una reunión']);
         Permission::create(['name' => 'Meetings: all meetings', 'description' => 'Permite visualizar todas las reuniones']);
         Permission::create(['name' => 'Meetings: all commitments', 'description' => 'Permite visualizar todos los compromisos']);
-        Permission::create(['name' => 'News: create', 'description' => 'Permite crear noticias']);
+        Permission::create(['name' => 'News: viewAny', 'description' => 'Permite ver el aministrador de noticias']);
         Permission::create(['name' => 'OrganizationalUnits: create', 'description' => '']);
         Permission::create(['name' => 'OrganizationalUnits: delete', 'description' => '']);
         Permission::create(['name' => 'OrganizationalUnits: edit', 'description' => '']);
@@ -655,7 +655,7 @@ class RoleAndPermissionSeeder extends Seeder
         $role->givePermissionTo('Purchase Plan: create');
         $role->givePermissionTo('Receptions: user');
         $role->givePermissionTo('Receptions: load support file');
-        $role->givePermissionTo('News: create');
+        $role->givePermissionTo('News: viewAny');
         $role->givePermissionTo('Users: assign roles');
         $role->givePermissionTo('Documents: admin');
         

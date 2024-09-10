@@ -764,13 +764,13 @@
                             </a>
                         @endcan
 
-                        @can('News: create')
-                            <a class="dropdown-item" href="{{ route('news.create') }}">
+                        @can('News: viewAny')
+                            <a class="dropdown-item" href="{{ route('filament.intranet.parameters.resources.news.index' )}}">
                                 <i class="far fa-newspaper"></i> Noticias
                             </a>
                         @endcan
 
-                        @canany(['be god','dev','News: create'])
+                        @canany(['be god','dev'])
                             <div class="dropdown-divider"></div>
                         @endcanany
 

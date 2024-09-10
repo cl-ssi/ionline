@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Parameters\News;
 use App\Models\Parameters\PhraseOfTheDay;
-use App\Models\News\News;
 
 class HomeController extends Controller
 {

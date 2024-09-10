@@ -28,15 +28,13 @@
             <div class="carousel-inner">
                 @foreach($allNews as $news)
                     <div class="carousel-item @if($loop->index == 0) active @endif">
-                        <a href="{{ route('news.show',$news) }}"> 
-                            <img src="{{ route('news.view_image', $news) }}" 
-                                class="d-block w-100 img-thumbnail mb-3" 
-                                alt="...">
-                            <div class="carousel-caption d-none d-md-block img-thumbnail mb-3" style="background-color: #8A8A8A;">
-                                <h5 style="color: #FFFFFF">{{ $news->title }}</h5>
-                                <p style="color: #FFFFFF">{{ $news->subtitle }}</p>
-                            </div>
-                        </a>
+                        <img src="{{ Storage::url($news->image) }}" 
+                            class="d-block w-100 img-thumbnail mb-3" 
+                            alt="...">
+                        <div class="carousel-caption d-none d-md-block img-thumbnail mb-3" style="background-color: #8A8A8A;">
+                            <h5 style="color: #FFFFFF">{{ $news->title }}</h5>
+                            <p style="color: #FFFFFF">{{ $news->body }}</p>
+                        </div>
                     </div>
                 @endforeach
             </div>
@@ -206,11 +204,10 @@
         
         <ul class="list-group">
             @foreach($allNews as $news)
-                <a href="{{ route('news.show',$news) }}" 
-                    class="list-group-item list-group-item-action small">
-                    <small><i class="fas fa-calendar-alt"></i> {{ $news->publication_date_at->format('d-m-Y H:i:s') }}</small> <br>
+                <p class="list-group-item list-group-item-action small">
+                    <small><i class="fas fa-calendar-alt"></i> {{ $news->created_at->format('d-m-Y H:i:s') }}</small> <br>
                     <b>{{ $news->title }}</b>
-                </a>
+                </p>
              @endforeach  
         </ul>
         

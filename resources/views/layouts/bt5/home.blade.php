@@ -89,12 +89,10 @@
                     <div class="carousel-inner">
                         @foreach ($allNews as $news)
                         <div class="carousel-item @if ($loop->index == 0) active @endif">
-                            <a href="{{ route('news.show', $news) }}">
-                                <img src="{{ route('news.view_image', $news) }}"
+                                <img src="{{ Storage::url($news->image) }}"
                                     class="d-block w-100"
-                                    alt="...">
-                            </a>
-                            <p>{{ $news->publication_date_at }} - {{ $news->title }}</p>
+                                    alt="{{ $news->title }}">
+                            <strong>{{ $news->created_at }} - {{ $news->title }}</strong>
                             <p>{{ $news->body }}</p>
                             <br>
                         </div>
@@ -348,12 +346,11 @@
 
             <ul class="list-group">
                 @foreach ($allNews as $news)
-                    <a href="{{ route('news.show', $news) }}"
-                        class="list-group-item list-group-item-action small">
+                    <p class="list-group-item list-group-item-action small">
                         <small><i class="fas fa-calendar-alt"></i>
-                            {{ $news->publication_date_at->format('d-m-Y H:i:s') }}</small> <br>
+                            {{ $news->created_at->format('d-m-Y H:i:s') }}</small> <br>
                         <b>{{ $news->title }}</b>
-                    </a>
+                    </p>
                 @endforeach
             </ul>
 

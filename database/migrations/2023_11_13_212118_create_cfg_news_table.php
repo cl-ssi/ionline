@@ -13,20 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('news', function (Blueprint $table) {
+        Schema::create('cfg_news', function (Blueprint $table) {
             $table->id();
-
-            $table->string('type')->nullable();
-            $table->string('title')->nullable();
-            $table->string('subtitle')->nullable();
-            $table->longText('lead')->nullable();
+            $table->string('title');
             $table->longText('body')->nullable();
             $table->string('image')->nullable();
-            $table->datetime('publication_date_at')->nullable();
             $table->datetime('until_at')->nullable();
-
-            $table->foreignId('user_id')->nullable()->constrained('users');
-
+            $table->foreignId('user_id')->constrained();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -39,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('news');
+        Schema::dropIfExists('cfg_news');
     }
 };

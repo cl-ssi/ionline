@@ -1282,9 +1282,6 @@ Route::prefix('parameters')->as('parameters.')->middleware(['auth', 'must.change
         Route::put('/{establishmentType}/update', [EstablishmentTypeController::class, 'update'])->name('update');
     });
 
-    Route::get('/holidays', Holidays::class)->name('holidays');
-    Route::get('/health-services', HealthServices::class)->name('health-services');
-
     Route::prefix('establishment/{establishment}/locations')->as('locations.')->group(function () {
         Route::get('/', [LocationController::class, 'index'])->name('index');
         Route::get('/create', [LocationController::class, 'create'])->name('create');
@@ -2871,17 +2868,6 @@ Route::prefix('his')->as('his.')->middleware('auth')->group(function () {
         });
 
     });
-});
-
-Route::prefix('news')->as('news.')->middleware(['auth', 'must.change.password'])->group(function () {
-    //Route::get('/create', CreateNews::class)->name('create');
-    Route::get('/index', SearchNews::class)->name('index');
-    Route::get('/own_index', SearchNews::class)->name('own_index')->middleware(['permission:News: create']);
-    // Route::get('/edit_news/{news_id}', CreateNews::class)->name('edit_news');
-    Route::get('/create', [NewsController::class, 'create'])->name('create')->middleware(['permission:News: create']);
-    Route::get('/show/{news}', [NewsController::class, 'show'])->name('show');
-    Route::get('/edit/{news}', [NewsController::class, 'edit'])->name('edit')->middleware(['permission:News: create']);
-    Route::get('/view_image/{news}', [NewsController::class, 'view_image'])->name('view_image');
 });
 
 Route::prefix('identify_need')->as('identify_need.')->middleware(['auth', 'must.change.password'])->group(function () {
