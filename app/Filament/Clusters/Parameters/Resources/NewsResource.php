@@ -32,14 +32,16 @@ class NewsResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('title')
                     ->maxLength(255)
-                    ->default(null),
+                    ->default(null)
+                    ->required(),
                 Forms\Components\Textarea::make('body')
                     ->columnSpanFull(),
                 Forms\Components\FileUpload::make('image')
                     ->image() // restringe que sea solo de tipo imagen
                     ->directory('ionline/news')
-                    ->required()
-                    ->helperText('IMPORTANTE: Tamaño de la imagen 766x400'),
+                    ->imagePreviewHeight('400')
+                    ->helperText('IMPORTANTE: Tamaño de la imagen 766x400')
+                    ->rules(['dimensions:min_width=766,min_height=400,max_width=766,max_height=400']),
                 Forms\Components\DateTimePicker::make('until_at'),
             ]);
     }
