@@ -43,7 +43,7 @@ RUN composer install --no-dev --optimize-autoloader \
     && php artisan icons:cache \
     && php artisan filament:cache-components \
     && php artisan route:cache \
-    # && php artisan view:cache \
+    && php artisan view:cache \
     && php artisan event:cache
     # && php artisan config:cache
     # && php artisan optimize \
