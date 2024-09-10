@@ -21,7 +21,6 @@
                 <th>Lugar</th>
                 <th>Código Arquitectónico</th>
                 <th>Responsable</th>
-                <!-- <th>Usuario</th> -->
                 <th></th>
             </tr>
         </thead>
@@ -72,12 +71,7 @@
                         @if($movement->reception_date == null)
                             {{ optional($movement->responsibleUser)->tinny_name }}
                         @endif
-                    </td>
-                    <!-- <td>
-                        @if($movement->reception_date == null)
-                            {{ optional($movement->usingUser)->tinny_name }}
-                        @endif
-                    </td> -->
+                    </td>                    
                     <td class="text-center" nowrap>
                         <a
                             class="btn btn-outline-primary"

@@ -102,18 +102,6 @@
                 readonly
             >
         </fieldset>
-        <!-- <fieldset class="col-md-4">
-            <label for="user-reception-using" class="form-label">
-                Quién Recepciona / Usuario
-            </label>
-            <input
-                type="text"
-                class="form-control"
-                id="user-reception-using"
-                value="{{ optional($movement->usingUser)->short_name }}"
-                readonly
-            >
-        </fieldset> -->
     </div>
 
     <div class="row g-2 g-2 mb-2">
@@ -122,9 +110,9 @@
                 Estado
             </label>
             <select
-                class="form-control @error('status') is-invalid @enderror"
+                class="form-select @error('status') is-invalid @enderror"
                 id="status"
-                wire:model.live.debounce.1500ms="status"
+                wire:model.live.debounce.1500ms="status"                
             >
                 <option value="">Seleccione un estado</option>
                 <option value="1">Bueno</option>

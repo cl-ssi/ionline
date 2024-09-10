@@ -112,12 +112,6 @@
                         
                         <br>
 
-                        <!-- @if($inventory->user_using_id == auth()->user()->id)
-                            <span class="badge badge-secondary">
-                                Usuario
-                            </span>
-                        @endif -->
-
                         @if($inventory->user_responsible_id == auth()->user()->id)
                             <span class="badge badge-secondary">
                                 Responsable
@@ -139,9 +133,6 @@
                     <td>
                         {{ optional($inventory->responsible)->tinny_name }}
                     </td>
-                    <!-- <td>
-                        {{ optional($inventory->using)->tinny_name }}
-                    </td> -->
                     <td>
                         @if($inventory->inventoryUsers)
                             <ul>
