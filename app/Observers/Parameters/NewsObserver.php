@@ -20,7 +20,12 @@ class NewsObserver
      */
     public function updated(News $news): void
     {
-        //
+        if ($news->isDirty('image')) {
+            $originalPath = $news->getOriginal('image');
+            if (Storage::exists($originalPath)) {
+                Storage::delete($originalPath);
+            }
+        }
     }
 
     /**
