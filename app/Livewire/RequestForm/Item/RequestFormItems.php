@@ -16,7 +16,7 @@ class RequestFormItems extends Component
 
     public $article, $unitOfMeasurement, $technicalSpecifications, $quantity, $articleFile, $savedArticleFile, $editRF, $savedItems, $deletedItems, $iteration,
             $unitValue, $taxes, $fileItem, $totalValue, $lstUnitOfMeasurement, $title, $edit, $key, $items, $totalDocument, $withholding_tax, $precision_currency,
-                $product_id, $product_name, $search_product;
+                $product_id, $product_name, $search_product, $budget_item_id, $results;
     
     public $bootstrap, $form;
 
@@ -137,6 +137,10 @@ class RequestFormItems extends Component
 
     public function deleteItem($key)
     {
+        // Intento de solución a error de eliminación de items
+        logger()->info($key);
+        logger()->info(json_encode($this->items));
+
         if($this->editRF && array_key_exists('id',$this->items[$key]))
         {
             $this->deletedItems[]=$this->items[$key]['id'];
