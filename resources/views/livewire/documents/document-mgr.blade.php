@@ -50,7 +50,7 @@
                 <div class="mb-3">
                     <label for="formFile" class="form-label">Archivo cargado</label> <br>
                     @if ($document->file)
-                        @if ($document->updated_at->diffInWeekDays(now()) <= 14)
+                        @if ((int) $document->updated_at->diffInDays(now()) <= 14)
                             <button class="btn btn-outline-danger" wire:click="deleteUploadedFile">
                                 <i class="bi bi-trash"></i>
                             </button>
@@ -65,7 +65,7 @@
                 <div class="mb-3">
                     <label for="formFile" class="form-label">Eliminar Documento</label> <br>
                     @if (!$document->file)
-                        @if ($document->updated_at->diffInWeekDays(now()) <= 14)
+                        @if ((int) $document->updated_at->diffInDays(now()) <= 14)
                             <button class="btn btn-danger" wire:click="deleteDocument">
                                 <i class="bi bi-trash"></i>
                             </button>

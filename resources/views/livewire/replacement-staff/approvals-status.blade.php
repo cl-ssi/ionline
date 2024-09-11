@@ -87,7 +87,7 @@
                             <td class="text-center">{{ $pending->id }}</td>
                             <td class="text-center">
                                 {{ $pending->created_at->format('d-m-Y H:i:s') }} <br>
-                                <small><b>Días de espera: {{ $pending->created_at->diffInWeekDays(Carbon\Carbon::now()) }} </small>
+                                <small><b>Días de espera: {{ (int) $pending->created_at->diffInDays(Carbon\Carbon::now()) }} </small>
                             </td>
                             <td>
                                 {{ $pending->StatusInWords }} <br>

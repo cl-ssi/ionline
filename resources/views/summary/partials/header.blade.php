@@ -3,7 +3,7 @@
         <tr>
             <th>Estado</th>
             <td>
-                {{ $summary->lastEvent?->type->name }} ({{ $summary->start_at->diffInWeekDays(now()) }} días)</td>
+                {{ $summary->lastEvent?->type->name }} ({{ (int) $summary->start_at->diffInDays(now()) }} días)</td>
             </td>
         </tr>
         <tr>

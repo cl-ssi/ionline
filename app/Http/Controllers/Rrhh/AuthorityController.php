@@ -134,7 +134,7 @@ class AuthorityController extends Controller
             return redirect()->back();
         }
 
-        $days = $to->diffInWeekDays($from) + 1;
+        $days = (int) $to->diffInDays($from) + 1;
 
         for ($i = 0; $i < $days; $i++) {
             $date = $from->copy()->addDays($i);

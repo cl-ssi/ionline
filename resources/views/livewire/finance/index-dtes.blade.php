@@ -194,7 +194,7 @@
 
                     <td class="small">
                         {{ $dte->fecha_recepcion_sii ?? '' }} <br>
-                        ({{ $dte->fecha_recepcion_sii ? $dte->fecha_recepcion_sii->diffInWeekDays(now()) : '' }} días)
+                        ({{ $dte->fecha_recepcion_sii ? (int) $dte->fecha_recepcion_sii->diffInDays(now()) : '' }} días)
                     </td>
                     <td class="small">
                         {{$dte->allReceptionsUser?->shortName}}<br>
