@@ -21,6 +21,7 @@
         <tbody>
             @foreach($requirements as $req)
 
+                <tr>
                 @switch($req->status)
                     @case('creado')
                         <tr class="alert-light"> @break

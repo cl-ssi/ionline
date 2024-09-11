@@ -112,6 +112,11 @@ class Filter extends Component
                 $query->whereIn('user_id', [$this->user->id, $this->auth_user->id]);
             });
         }
+        else if($this->status == 'Expirados')
+        {
+            $requirements->where('limit_at', '<', now()) // Requerimientos cuya fecha límite haya pasado
+                        ->where('status', '<>', 'cerrado'); // Que no estén cerrados
+        }
 
         if($this->readedStatus == 'Sin leer')
         {

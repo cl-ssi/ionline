@@ -35,6 +35,7 @@
                 <option>Todos</option>
                 <option>Pendientes</option>
                 <option>Archivados</option>
+                <option>Expirados</option>
             </select>
         </div>
         <div class="col-1 text-center">
@@ -96,7 +97,6 @@
 
 
     </div>
-
 
     @if ($requirements->isNotEmpty())
         @include('requirements.partials.list')
