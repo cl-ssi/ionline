@@ -412,12 +412,9 @@ class AllowancesCreate extends Component
             }
             // OPCION: NO
             else{
-                // dd(Carbon::parse($this->from)->diffInDays(Carbon::parse($this->to)));
-
                 if(Carbon::parse($this->from)->diffInDays(Carbon::parse($this->to)) > 10){
                     $this->MaxDaysStraight = 10;
                     $this->allowancesExceededDays = Carbon::parse($this->from)->diffInDays(Carbon::parse($this->to)) - $this->MaxDaysStraight;
-                    // dd(Carbon::parse($this->from)->diffInDays(Carbon::parse($this->to)), $this->MaxDaysStraight, $this->allowancesExceededDays);
                     return $this->MaxDaysStraight;
                 }
                 else{
