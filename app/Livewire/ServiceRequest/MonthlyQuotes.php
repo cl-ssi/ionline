@@ -259,7 +259,7 @@ class MonthlyQuotes extends Component
                     // 08/07/2024: nuevamente se deja +1, porque carbon no incluye el dia inicial en el conteo (solicitado por daniel molina)
                     $startDate = $serviceRequest->start_date;
                     $endOfMonth = $startDate->copy()->endOfMonth();
-                    $dias_trabajados = $startDate->diffInWeekDays($endOfMonth) + 1;
+                    $dias_trabajados = (int) $startDate->diffInDays($endOfMonth) + 1;
 
                     $valor_diferente = round($dias_trabajados * ($valor_mensual / 30));
 

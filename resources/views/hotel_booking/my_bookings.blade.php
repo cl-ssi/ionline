@@ -41,7 +41,7 @@
 			<td nowrap>{{ $roomBooking->start_date->format('Y-m-d') }}</td>
             <td nowrap>{{ $roomBooking->end_date->format('Y-m-d') }}</td>
             <td nowrap>
-                ${{ money($roomBooking->start_date->diffInWeekDays($roomBooking->end_date) * $roomBooking->room->price) }}</td>
+                ${{ money((int) $roomBooking->start_date->diffInDays($roomBooking->end_date) * $roomBooking->room->price) }}</td>
             </td>
             <td nowrap>
                 {{ $roomBooking->status }}  

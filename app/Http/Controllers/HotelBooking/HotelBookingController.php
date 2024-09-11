@@ -45,12 +45,12 @@ class HotelBookingController extends Controller
         return view('hotel_booking.home',compact('communes','hotels','request'));
     }
 
-    public function search_booking(Request $request){
-        
+    public function search_booking(Request $request)
+    {
         // $commune_id = $request->commune_id;
         $start_date = Carbon::parse($request->start_date);
         $end_date = Carbon::parse($request->end_date);
-        $diff = $start_date->diffInWeekDays($end_date);
+        $diff = (int) $start_date->diffInDays($end_date);
 
         // se valida que no haya excedido el limite de reservas en el año
         $user_id = auth()->user()->id;

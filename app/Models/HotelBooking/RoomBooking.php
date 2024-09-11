@@ -90,7 +90,7 @@ class RoomBooking extends Model implements AuditableContract
     public function day_array(): array
     {
         $array = [];
-        $diff = $this->start_date->diffInWeekDays($this->end_date);
+        $diff = (int) $this->start_date->diffInDays($this->end_date);
         if ($this->start_date == $this->end_date) {
             $array[$this->start_date->format('Y-m-d')] = "M";
         } else {
