@@ -57,7 +57,8 @@ class Absenteeism extends Model
         'saldo_dias_no_reemplazados',
         'tipo_de_contrato',
         'jornada',
-        'observacion'
+        'observacion',
+        'sirh_at',
     ];
 
     /**
@@ -67,7 +68,9 @@ class Absenteeism extends Model
      */
     protected $casts = [
         'finicio'  => 'date',
-        'ftermino' => 'date'
+        'ftermino' => 'date',
+        'fresolucion' => 'date',
+        'sirh_at'  => 'datetime',
     ];
 
     /**
