@@ -8,8 +8,8 @@
         </tr>
         <tr>
             <th>Resolución</th>
-            <td> 
-                {{ $summary->resolution_number }} / 
+            <td>
+                {{ $summary->resolution_number }} /
                 {{ optional($summary->resolution_date)->format('Y-m-d') }}</td>
         </tr>
         <tr>
@@ -31,7 +31,7 @@
         <tr>
             <th>Observaciones</th>
             <td>
-                @livewire('summary.update-observation',['summary' => $summary])
+                @livewire('summary.update-observation', ['summary' => $summary])
             </td>
         </tr>
     </tbody>
