@@ -3,9 +3,11 @@
         <div class="col">
             <h3 class="mb-3">Justificaciones de "asistencia no registrada"</h3>
         </div>
-        <div class="col-3 text-end">
-            <a href="{{ route('rrhh.attendance.reason.mgr') }}" class="btn btn-info"> <i class="fas fa-cog"></i> Mantenedor
-                de Motivos </a>
+        <div class="col-4 text-end">
+            <a href="{{ route('rrhh.attendance.upload') }}" class="btn btn-outline-secondary">Subir asistencia</a>
+            <a href="{{ route('rrhh.attendance.reason.mgr') }}" class="btn btn-info">
+                <i class="fas fa-cog"></i> Mantenedor de Motivos
+            </a>
         </div>
     </div>
 
@@ -14,34 +16,26 @@
             <div class="form-group col-md-4">
                 <div class="form-group">
                     <label for="number">Nombre o Apellido</label>
-                    <input type="text"
-                        class="form-control"
-                        wire:model="name"
+                    <input type="text" class="form-control" wire:model="name"
                         placeholder="Buscar por Nombre o Apellido">
                 </div>
             </div>
             <div class="col-md-2">
                 <div class="form-group">
                     <label for="reception-date">Fecha Desde Registro</label>
-                    <input type="date"
-                        class="form-control"
-                        wire:model="from">
+                    <input type="date" class="form-control" wire:model="from">
                 </div>
             </div>
             <div class="col-md-2">
                 <div class="form-group">
                     <label for="reception-date">Fecha Hasta Registro</label>
-                    <input type="date"
-                        class="form-control"
-                        wire:model="to">
+                    <input type="date" class="form-control" wire:model="to">
                 </div>
             </div>
             <div class="col-md-1">
                 <div class="form-group">
                     <label for="rrhh_at">SIRH</label>
-                    <select
-                        class="form-select"
-                        wire:model="rrhh_at">
+                    <select class="form-select" wire:model="rrhh_at">
                         <option value="">Todos</option>
                         <option value="Si">Si</option>
                         <option value="No">No</option>
@@ -51,9 +45,7 @@
             <div class="col-md-2">
                 <div class="form-group">
                     <label for="establishment_id">Establecimiento</label>
-                    <select
-                        class="form-select"
-                        wire:model="establishment_id">
+                    <select class="form-select" wire:model="establishment_id">
                         <option value="">Todos</option>
                         @foreach ($establishments as $id => $name)
                             <option value="{{ $id }}">{{ $name }}</option>
@@ -64,18 +56,14 @@
             <div class="col-md-1">
                 <div class="form-group">
                     <label for="search">&nbsp;</label>
-                    <input type="submit"
-                        class="form-control btn btn-primary"
-                        value ="Buscar"
-                        >
+                    <input type="submit" class="form-control btn btn-primary" value ="Buscar">
                 </div>
             </div>
 
-            @if($period)
+            @if ($period)
                 <div class="col-md-1">
                     <div class="form-group">
-                        <button class="btn btn-success mt-4"
-                            wire:click="setOkMassive()">
+                        <button class="btn btn-success mt-4" wire:click="setOkMassive()">
                             <i class="fas fa-check"></i> Todas
                         </button>
                     </div>
@@ -94,21 +82,22 @@
 
 
             <div class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" role="switch" wire:model.live="simplified" id="simplified">
+                <input class="form-check-input" type="checkbox" role="switch" wire:model.live="simplified"
+                    id="simplified">
                 <label class="form-check-label" for="simplified">Formato simplificado de carga</label>
             </div>
 
-            @if($simplified)
-            <div class="form-input">
-                <button class="btn btn-outline-success btn-sm mb-3" wire:click="export">Descargar en Excel</button>
-            </div>
+            @if ($simplified)
+                <div class="form-input">
+                    <button class="btn btn-outline-success btn-sm mb-3" wire:click="export">Descargar en Excel</button>
+                </div>
             @endif
         </div>
     </form>
 
 
 
-    @if($simplified)
+    @if ($simplified)
         <table class="table table-sm table-bordered" id="tabla">
             <thead>
                 <tr>
@@ -157,7 +146,7 @@
                                 </button>
                             @endif
                         </td>
-                        
+
                     </tr>
                     @if ($rejectForm == $record->id)
                         <tr>
@@ -244,26 +233,22 @@
                                     <i class="fas fa-ban"></i>
                                 </button>
                             @endif
-                            
-                            @if($period && is_null($record->status_sirh) && $record->status != false && $record->rrhh_at == null)
+
+                            @if ($period && is_null($record->status_sirh) && $record->status != false && $record->rrhh_at == null)
                                 @php
                                     array_push($this->checkToOk, $record->id);
                                 @endphp
 
                                 <div class="form-check">
-                                    <input class="form-check-input" 
-                                        type="checkbox"
-                                        wire:model.live="checkToOk"
-                                        value="{{ $record->id }}"
-                                        id="for_ok_id"
-                                    />
+                                    <input class="form-check-input" type="checkbox" wire:model.live="checkToOk"
+                                        value="{{ $record->id }}" id="for_ok_id" />
                                 </div>
                             @endif
                         </td>
                         <td>
                             {{ $record->created_at }}
                         </td>
-                        
+
                     </tr>
                     @if ($rejectForm == $record->id)
                         <tr>
@@ -293,32 +278,30 @@
     {{ $records->links() }}
 
     @section('custom_js')
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script type="text/javascript">
+            let date = new Date()
+            let day = date.getDate()
+            let month = date.getMonth() + 1
+            let year = date.getFullYear()
+            let hour = date.getHours()
+            let minute = date.getMinutes()
 
-    <script type="text/javascript">
-        let date = new Date()
-        let day = date.getDate()
-        let month = date.getMonth() + 1
-        let year = date.getFullYear()
-        let hour = date.getHours()
-        let minute = date.getMinutes()
-
-        function exportF(elem) {
-            var table = document.getElementById("tabla");
-            var html = table.outerHTML;
-            var html_no_links = html.replace(/<a[^>]*>|<\/a>/g, ""); //remove if u want links in your table
-            var url = 'data:application/vnd.ms-excel,' + escape(html_no_links); // Set your html table into url
-            elem.setAttribute("href", url);
-            elem.setAttribute("download", "justificacionaciones_de_asistencia_no_registrada_" + day + "_" + month + "_" + year + "_" + hour + "_" + minute + ".xls"); // Choose the file name
-            return false;
-        }
-    </script>
-
-
+            function exportF(elem) {
+                var table = document.getElementById("tabla");
+                var html = table.outerHTML;
+                var html_no_links = html.replace(/<a[^>]*>|<\/a>/g, ""); //remove if u want links in your table
+                var url = 'data:application/vnd.ms-excel,' + escape(html_no_links); // Set your html table into url
+                elem.setAttribute("href", url);
+                elem.setAttribute("download", "justificacionaciones_de_asistencia_no_registrada_" + day + "_" + month + "_" +
+                    year + "_" + hour + "_" + minute + ".xls"); // Choose the file name
+                return false;
+            }
+        </script>
     @endsection
 
-    
+
 
 
 
