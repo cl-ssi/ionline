@@ -43,7 +43,7 @@
             </th>
         </tr>
         <tr><td><b>[user_id] = </b>{{ $log->user_id }} - {{ optional($log->user)->fullName }}</td></tr>
-        <tr><td><b>[module] = </b> {{ $log->module }}</td></tr>
+        <tr><td><b>[module] = </b> {{ $log->logModule?->name }}</td></tr>
         <tr><td><b>[uri] = </b> <a target="_blank" href="{{ $log->uri }}">{{ $log->uri }}</a></td></tr>
         <tr><td><b>[message] = </b>{{ $log->message }}</td></tr>
         <tr><td><b>[formatted] = </b><pre>{{ substr($log->formatted, 0,1000) }}...</pre></td></tr>

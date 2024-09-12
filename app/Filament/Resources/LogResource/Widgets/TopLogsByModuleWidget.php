@@ -1,20 +1,20 @@
 <?php
 
-namespace App\Livewire\Parameters;
+namespace App\Filament\Resources\LogResource\Widgets;
 
-use Livewire\Component;
-use Illuminate\Support\Facades\DB;
 use App\Models\Parameters\Log;
+use Filament\Widgets\ChartWidget;
 
-class LogStatistics extends Component
+class TopLogsByModuleWidget extends ChartWidget
 {
-    public function render()
+    protected static ?string $heading = 'Top Logs por Módulo';
+
+    protected int | string | array $columnSpan = 'full';
+
+    protected static ?string $maxHeight = '200px';
+
+    protected function getData(): array
     {
-        // Realiza la eliminación de registros superiores a un mes
-        Log::where('created_at', '<', now()->subMonth())->delete();
-
-        Log::whereNull('log_module_id')->get()->each->classify();
-
         // Obtener la cantidad de logs agrupados por la relación logModule
         $logsByModule = Log::with('logModule')
             ->select('log_module_id', \DB::raw('count(*) as count'))
@@ -29,7 +29,7 @@ class LogStatistics extends Component
 
         $data = $logsByModule->pluck('count')->toArray();
 
-        $group = [
+        return [
             'datasets' => [
                 [
                     'label'           => 'Logs por Módulo',
@@ -38,19 +38,10 @@ class LogStatistics extends Component
             ],
             'labels' => $labels, // Nombres de los módulos
         ];
+    }
 
-        $logsByDay = Log::selectRaw('DATE(created_at) as log_date, COUNT(*) as log_count')
-            ->groupBy('log_date')
-            ->get();
-        
-        $logsChart = null;
-        foreach($logsByDay as $day) {
-            $logsChart .= "['{$day->log_date}',{$day->log_count}],";
-        }
-    
-        return view('livewire.parameters.log-statistics', [
-            'group' => $group,
-            'logsChart' => $logsChart,
-        ]);
+    protected function getType(): string
+    {
+        return 'bar';
     }
 }

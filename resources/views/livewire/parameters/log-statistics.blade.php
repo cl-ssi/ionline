@@ -40,20 +40,20 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($group as $module)
+            @foreach($group['labels'] as $index => $module)
             <tr>
                 <td>
-                    @if($module->module)
-                        <a href="{{ route('parameters.logs.index', ['module' => $module->module]) }}">
-                            {{ $module->module }}
+                    @if($module !== 'Sin módulo')
+                        <a href="{{ route('parameters.logs.index', ['module' => $module]) }}">
+                            {{ $module }}
                         </a>
                     @else
                         <a href="{{ route('parameters.logs.index', ['module' => 'unknown']) }}">
-                            [ Modulo desconocido ]
+                            [ Módulo desconocido ]
                         </a>
                     @endif
                 </td>
-                <td>{{ $module->total }}</td>
+                <td>{{ $group['datasets'][0]['data'][$index] }}</td>
             </tr>
             @endforeach
             <tr>
@@ -66,6 +66,7 @@
             </tr>
         </tbody>
     </table>
+    
 
  <!--Div that will hold the pie chart-->
  <div id="chart_div"></div>
