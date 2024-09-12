@@ -2,8 +2,6 @@
 
 namespace App\Models\Summary;
 
-use App\Models\Summary\EventType;
-use App\Models\Summary\Summary;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -34,7 +32,7 @@ class Event extends Model
         'user_id',
         'summary_id',
         'creator_id',
-        'father_event_id'
+        'father_event_id',
     ];
 
     /**
@@ -44,13 +42,11 @@ class Event extends Model
      */
     protected $casts = [
         'start_date' => 'date',
-        'end_date' => 'date'
+        'end_date'   => 'date',
     ];
 
     /**
      * Get the event type that owns the event.
-     *
-     * @return BelongsTo
      */
     public function type(): BelongsTo
     {
@@ -59,8 +55,6 @@ class Event extends Model
 
     /**
      * Get the user that owns the event.
-     *
-     * @return BelongsTo
      */
     public function user(): BelongsTo
     {
@@ -69,8 +63,6 @@ class Event extends Model
 
     /**
      * Get the creator of the event.
-     *
-     * @return BelongsTo
      */
     public function creator(): BelongsTo
     {
@@ -79,8 +71,6 @@ class Event extends Model
 
     /**
      * Get the summary that owns the event.
-     *
-     * @return BelongsTo
      */
     public function summary(): BelongsTo
     {
@@ -89,8 +79,6 @@ class Event extends Model
 
     /**
      * Get the files for the event.
-     *
-     * @return HasMany
      */
     public function files(): HasMany
     {
@@ -99,8 +87,6 @@ class Event extends Model
 
     /**
      * Get the father event.
-     *
-     * @return BelongsTo
      */
     public function father(): BelongsTo
     {
@@ -109,8 +95,6 @@ class Event extends Model
 
     /**
      * Get the child events.
-     *
-     * @return HasMany
      */
     public function childs(): HasMany
     {

@@ -3,17 +3,13 @@
 namespace App\Models\Summary;
 
 use App\Helpers\DateHelper;
-use App\Models\Summary\Actor;
-use App\Models\Summary\Link;
-use App\Models\Summary\Template;
-use App\Models\Summary\Type;
-use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 
 class EventType extends Model
 {
@@ -49,13 +45,11 @@ class EventType extends Model
         'summary_type_id',
         'num_repeat',
         'summary_actor_id',
-        'establishment_id'
+        'establishment_id',
     ];
 
     /**
      * Get the summary type that owns the event type.
-     *
-     * @return BelongsTo
      */
     public function summaryType(): BelongsTo
     {
@@ -64,8 +58,6 @@ class EventType extends Model
 
     /**
      * Get the templates for the event type.
-     *
-     * @return HasMany
      */
     public function templates(): HasMany
     {
@@ -74,8 +66,6 @@ class EventType extends Model
 
     /**
      * Get the actor that owns the event type.
-     *
-     * @return BelongsTo
      */
     public function actor(): BelongsTo
     {
@@ -85,8 +75,6 @@ class EventType extends Model
     /**
      * Cuál es la utilidad del link before?
      * Get the links for the event type where it is the before event.
-     *
-     * @return HasMany
      */
     public function linksEvents(): HasMany
     {
@@ -96,8 +84,6 @@ class EventType extends Model
 
     /**
      * Get the links for the event type where it is the before sub-event.
-     *
-     * @return HasMany
      */
     public function linksSubEvents(): HasMany
     {
@@ -107,8 +93,6 @@ class EventType extends Model
 
     /**
      * Get the links for the event type where it is the after event.
-     *
-     * @return HasMany
      */
     public function linksBefore(): HasMany
     {
@@ -117,8 +101,6 @@ class EventType extends Model
 
     /**
      * Get the links for the event type where it is the before event.
-     *
-     * @return HasMany
      */
     public function linksAfter(): HasMany
     {
@@ -127,8 +109,6 @@ class EventType extends Model
 
     /**
      * Get the user text attribute.
-     *
-     * @return string
      */
     public function getUserTextAttribute(): string
     {
@@ -137,8 +117,6 @@ class EventType extends Model
 
     /**
      * Get the file text attribute.
-     *
-     * @return string
      */
     public function getFileTextAttribute(): string
     {
@@ -147,8 +125,6 @@ class EventType extends Model
 
     /**
      * Get the start text attribute.
-     *
-     * @return string
      */
     public function getStartTextAttribute(): string
     {
@@ -157,8 +133,6 @@ class EventType extends Model
 
     /**
      * Get the end text attribute.
-     *
-     * @return string
      */
     public function getEndTextAttribute(): string
     {
@@ -167,8 +141,6 @@ class EventType extends Model
 
     /**
      * Get the investigator text attribute.
-     *
-     * @return string
      */
     public function getInvestigatorTextAttribute(): string
     {
@@ -177,8 +149,6 @@ class EventType extends Model
 
     /**
      * Get the actuary text attribute.
-     *
-     * @return string
      */
     public function getActuaryTextAttribute(): string
     {
@@ -187,8 +157,6 @@ class EventType extends Model
 
     /**
      * Get the repeat text attribute.
-     *
-     * @return string
      */
     public function getRepeatTextAttribute(): string
     {
@@ -211,15 +179,13 @@ class EventType extends Model
 
     /**
      * Get the days passed attribute.
-     *
-     * @return int
      */
     public function getDaysPassedAttribute(): int
     {
         $businessDays = $this->businessDays;
-        $endDate = now();
-        $index = 0;
-        $found = 0;
+        $endDate      = now();
+        $index        = 0;
+        $found        = 0;
         while ($index < $businessDays->count()) {
             $date = Carbon::parse($businessDays[$index]);
             if ($endDate->gt($date)) {
@@ -233,37 +199,34 @@ class EventType extends Model
 
     /**
      * Get the left days attribute.
-     *
-     * @return int
      */
     public function getLeftDaysAttribute(): int
     {
         $leftDays = $this->totalDays - $this->daysPassed;
+
         return $leftDays;
     }
 
     /**
      * Get the total days attribute.
-     *
-     * @return int|null
      */
     public function getTotalDaysAttribute(): ?int
     {
         if (isset($this->duration)) {
             return $this->businessDays->count();
         }
+
         return null;
     }
 
     /**
      * Get the progress percentage attribute.
-     *
-     * @return int
      */
     public function getProgressPercentageAttribute(): int
     {
-        $total = $this->businessDays->count();
+        $total      = $this->businessDays->count();
         $percentage = ($this->daysPassed * 100) / $total;
+
         return intval($percentage);
     }
 }

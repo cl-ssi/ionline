@@ -2,7 +2,6 @@
 
 namespace App\Models\Summary;
 
-use App\Models\Summary\EventType;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -28,7 +27,7 @@ class Template extends Model
         'description',
         'fields',
         'file',
-        'event_type_id'
+        'event_type_id',
     ];
 
     /**
@@ -37,13 +36,11 @@ class Template extends Model
      * @var array
      */
     protected $casts = [
-        'fields' => 'array'
+        'fields' => 'array',
     ];
 
     /**
      * Get the event type that owns the template.
-     *
-     * @return BelongsTo
      */
     public function eventType(): BelongsTo
     {

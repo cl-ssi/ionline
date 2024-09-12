@@ -24,13 +24,11 @@ class SummaryEventFile extends Model
      */
     protected $fillable = [
         'name',
-        'file'
+        'file',
     ];
 
     /**
      * Get the summary that owns the summary event file.
-     *
-     * @return BelongsTo
      */
     public function summary(): BelongsTo
     {
@@ -39,8 +37,6 @@ class SummaryEventFile extends Model
 
     /**
      * Get the summary event that owns the summary event file.
-     *
-     * @return BelongsTo
      */
     public function summaryEvent(): BelongsTo
     {

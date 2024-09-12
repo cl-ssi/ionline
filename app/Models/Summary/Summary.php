@@ -3,15 +3,13 @@
 namespace App\Models\Summary;
 
 use App\Helpers\DateHelper;
+use App\Models\Establishment;
+use App\Models\User;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Model;
-use App\Models\User;
-use App\Models\Summary\Type;
-use App\Models\Summary\Event;
-use App\Models\Establishment;
 use Illuminate\Support\Carbon;
 
 class Summary extends Model
@@ -45,7 +43,7 @@ class Summary extends Model
         'investigator_id',
         'actuary_id',
         'creator_id',
-        'establishment_id'
+        'establishment_id',
     ];
 
     /**
@@ -55,16 +53,14 @@ class Summary extends Model
      */
     protected $casts = [
         'resolution_date' => 'date',
-        'start_date' => 'date',
-        'start_at' => 'datetime',
-        'end_date' => 'date',
-        'end_at' => 'datetime' 
+        'start_date'      => 'date',
+        'start_at'        => 'datetime',
+        'end_date'        => 'date',
+        'end_at'          => 'datetime',
     ];
 
     /**
      * Get the type that owns the summary.
-     *
-     * @return BelongsTo
      */
     public function type(): BelongsTo
     {
@@ -73,8 +69,6 @@ class Summary extends Model
 
     /**
      * Get the investigator that owns the summary.
-     *
-     * @return BelongsTo
      */
     public function investigator(): BelongsTo
     {
@@ -83,8 +77,6 @@ class Summary extends Model
 
     /**
      * Get the actuary that owns the summary.
-     *
-     * @return BelongsTo
      */
     public function actuary(): BelongsTo
     {
@@ -93,8 +85,6 @@ class Summary extends Model
 
     /**
      * Get the creator that owns the summary.
-     *
-     * @return BelongsTo
      */
     public function creator(): BelongsTo
     {
@@ -103,8 +93,6 @@ class Summary extends Model
 
     /**
      * Get the establishment that owns the summary.
-     *
-     * @return BelongsTo
      */
     public function establishment(): BelongsTo
     {
@@ -151,12 +139,10 @@ class Summary extends Model
 
         $found = 0;
 
-        while($index < $businessDays->count())
-        {
+        while ($index < $businessDays->count()) {
             $date = Carbon::parse($businessDays[$index]);
 
-            if($endDate->gt($date))
-            {
+            if ($endDate->gt($date)) {
                 $found++;
             }
             $index++;

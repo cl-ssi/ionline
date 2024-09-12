@@ -24,13 +24,11 @@ class Type extends Model
      */
     protected $fillable = [
         'name',
-        'establishment_id'
+        'establishment_id',
     ];
 
     /**
      * Get the event types for the type.
-     *
-     * @return HasMany
      */
     public function eventTypes(): HasMany
     {
