@@ -24,13 +24,11 @@ class Court extends Model
         'emails',
         'address',
         'commune',
-        'status'
+        'status',
     ];
 
     /**
      * Get the receptions for the court.
-     *
-     * @return HasMany
      */
     public function receptions(): HasMany
     {

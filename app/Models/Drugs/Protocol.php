@@ -26,7 +26,7 @@ class Protocol extends Model
         'sample',
         'result',
         'user_id',
-        'reception_item_id'
+        'reception_item_id',
     ];
 
     /**
@@ -40,8 +40,6 @@ class Protocol extends Model
 
     /**
      * Get the reception item that owns the protocol.
-     *
-     * @return BelongsTo
      */
     public function receptionItem(): BelongsTo
     {
@@ -50,8 +48,6 @@ class Protocol extends Model
 
     /**
      * Get the user that owns the protocol.
-     *
-     * @return BelongsTo
      */
     public function user(): BelongsTo
     {
@@ -60,8 +56,6 @@ class Protocol extends Model
 
     /**
      * Get the approval model.
-     *
-     * @return MorphOne
      */
     public function approval(): MorphOne
     {

@@ -10,7 +10,7 @@ use OwenIt\Auditing\Contracts\Auditable;
 
 class Destruction extends Model implements Auditable
 {
-    use SoftDeletes, \OwenIt\Auditing\Auditable;
+    use \OwenIt\Auditing\Auditable, SoftDeletes;
 
     /**
      * The table associated with the model.
@@ -28,7 +28,7 @@ class Destruction extends Model implements Auditable
         'reception_id',
         'police',
         'destructed_at',
-        'user_id'
+        'user_id',
     ];
 
     /**
@@ -37,13 +37,11 @@ class Destruction extends Model implements Auditable
      * @var array
      */
     protected $casts = [
-        'destructed_at' => 'date'
+        'destructed_at' => 'date',
     ];
 
     /**
      * Get the reception that owns the destruction.
-     *
-     * @return BelongsTo
      */
     public function reception(): BelongsTo
     {
@@ -52,8 +50,6 @@ class Destruction extends Model implements Auditable
 
     /**
      * Get the user that owns the destruction.
-     *
-     * @return BelongsTo
      */
     public function user(): BelongsTo
     {
@@ -62,8 +58,6 @@ class Destruction extends Model implements Auditable
 
     /**
      * Get the manager that owns the destruction.
-     *
-     * @return BelongsTo
      */
     public function manager(): BelongsTo
     {
@@ -72,8 +66,6 @@ class Destruction extends Model implements Auditable
 
     /**
      * Get the lawyer that owns the destruction.
-     *
-     * @return BelongsTo
      */
     public function lawyer(): BelongsTo
     {
@@ -82,8 +74,6 @@ class Destruction extends Model implements Auditable
 
     /**
      * Get the observer that owns the destruction.
-     *
-     * @return BelongsTo
      */
     public function observer(): BelongsTo
     {
@@ -92,8 +82,6 @@ class Destruction extends Model implements Auditable
 
     /**
      * Get the lawyer observer that owns the destruction.
-     *
-     * @return BelongsTo
      */
     public function lawyerObserver(): BelongsTo
     {

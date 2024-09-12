@@ -31,7 +31,7 @@ class SampleToIsp extends Model
         'reception_id',
         'user_id',
         'manager_id',
-        'lawyer_id'
+        'lawyer_id',
     ];
 
     /**
@@ -40,13 +40,11 @@ class SampleToIsp extends Model
      * @var array
      */
     protected $casts = [
-        'document_date' => 'date'
+        'document_date' => 'date',
     ];
 
     /**
      * Get the reception that owns the sample to ISP.
-     *
-     * @return BelongsTo
      */
     public function reception(): BelongsTo
     {
@@ -55,8 +53,6 @@ class SampleToIsp extends Model
 
     /**
      * Get the user that owns the sample to ISP.
-     *
-     * @return BelongsTo
      */
     public function user(): BelongsTo
     {
@@ -65,8 +61,6 @@ class SampleToIsp extends Model
 
     /**
      * Get the manager that owns the sample to ISP.
-     *
-     * @return BelongsTo
      */
     public function manager(): BelongsTo
     {
@@ -75,8 +69,6 @@ class SampleToIsp extends Model
 
     /**
      * Get the lawyer that owns the sample to ISP.
-     *
-     * @return BelongsTo
      */
     public function lawyer(): BelongsTo
     {

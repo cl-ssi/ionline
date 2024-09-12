@@ -30,7 +30,7 @@ class RecordToCourt extends Model
         'reception_id',
         'user_id',
         'manager_id',
-        'lawyer_id'
+        'lawyer_id',
     ];
 
     /**
@@ -39,13 +39,11 @@ class RecordToCourt extends Model
      * @var array
      */
     protected $casts = [
-        'document_date' => 'date'
+        'document_date' => 'date',
     ];
 
     /**
      * Get the reception that owns the record to court.
-     *
-     * @return BelongsTo
      */
     public function reception(): BelongsTo
     {
@@ -54,8 +52,6 @@ class RecordToCourt extends Model
 
     /**
      * Get the user that owns the record to court.
-     *
-     * @return BelongsTo
      */
     public function user(): BelongsTo
     {
@@ -64,8 +60,6 @@ class RecordToCourt extends Model
 
     /**
      * Get the manager that owns the record to court.
-     *
-     * @return BelongsTo
      */
     public function manager(): BelongsTo
     {
@@ -74,8 +68,6 @@ class RecordToCourt extends Model
 
     /**
      * Get the lawyer that owns the record to court.
-     *
-     * @return BelongsTo
      */
     public function lawyer(): BelongsTo
     {

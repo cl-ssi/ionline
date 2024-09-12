@@ -2,8 +2,6 @@
 
 namespace App\Models\Drugs;
 
-use App\Models\Drugs\Reception;
-use App\Models\Drugs\RosterAnalisisToAdmin;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -27,7 +25,7 @@ class RosterAnalisisToAdminItem extends Model
      */
     protected $fillable = [
         'roster_id',
-        'reception_id'
+        'reception_id',
     ];
 
     /**
@@ -41,8 +39,6 @@ class RosterAnalisisToAdminItem extends Model
 
     /**
      * Get the roster that owns the RosterAnalisisToAdminItem.
-     *
-     * @return BelongsTo
      */
     public function roster(): BelongsTo
     {
@@ -51,8 +47,6 @@ class RosterAnalisisToAdminItem extends Model
 
     /**
      * Get the receptions for the RosterAnalisisToAdminItem.
-     *
-     * @return HasMany
      */
     public function receptions(): HasMany
     {

@@ -12,8 +12,8 @@ use OwenIt\Auditing\Contracts\Auditable;
 
 class Reception extends Model implements Auditable
 {
-    use SoftDeletes;
     use \OwenIt\Auditing\Auditable;
+    use SoftDeletes;
 
     /**
      * The table associated with the model.
@@ -43,7 +43,7 @@ class Reception extends Model implements Auditable
         'observation',
         'reservado_isp_number',
         'reservado_isp_date',
-        'date'
+        'date',
     ];
 
     /**
@@ -52,17 +52,15 @@ class Reception extends Model implements Auditable
      * @var array
      */
     protected $casts = [
-        'date'               => 'datetime',
-        'document_date'      => 'date',
+        'date' => 'datetime',
+        'document_date' => 'date',
         'reservado_isp_date' => 'date',
-        'imputed'            => 'encrypted',
-        'imputed_run'        => 'encrypted'
+        'imputed' => 'encrypted',
+        'imputed_run' => 'encrypted',
     ];
 
     /**
      * Get the items for the reception.
-     *
-     * @return HasMany
      */
     public function items(): HasMany
     {
@@ -71,8 +69,6 @@ class Reception extends Model implements Auditable
 
     /**
      * Get the items without precursors for the reception.
-     *
-     * @return HasMany
      */
     public function itemsWithoutPrecursors(): HasMany
     {
@@ -81,8 +77,6 @@ class Reception extends Model implements Auditable
 
     /**
      * Get the court that owns the reception.
-     *
-     * @return BelongsTo
      */
     public function court(): BelongsTo
     {
@@ -91,8 +85,6 @@ class Reception extends Model implements Auditable
 
     /**
      * Get the police unit for the parte.
-     *
-     * @return BelongsTo
      */
     public function partePoliceUnit(): BelongsTo
     {
@@ -101,8 +93,6 @@ class Reception extends Model implements Auditable
 
     /**
      * Get the police unit for the document.
-     *
-     * @return BelongsTo
      */
     public function documentPoliceUnit(): BelongsTo
     {
@@ -111,8 +101,6 @@ class Reception extends Model implements Auditable
 
     /**
      * Get the user that owns the reception.
-     *
-     * @return BelongsTo
      */
     public function user(): BelongsTo
     {
@@ -121,8 +109,6 @@ class Reception extends Model implements Auditable
 
     /**
      * Get the manager that owns the reception.
-     *
-     * @return BelongsTo
      */
     public function manager(): BelongsTo
     {
@@ -131,8 +117,6 @@ class Reception extends Model implements Auditable
 
     /**
      * Get the lawyer that owns the reception.
-     *
-     * @return BelongsTo
      */
     public function lawyer(): BelongsTo
     {
@@ -141,8 +125,6 @@ class Reception extends Model implements Auditable
 
     /**
      * Get the destruction for the reception.
-     *
-     * @return HasOne
      */
     public function destruction(): HasOne
     {
@@ -151,8 +133,6 @@ class Reception extends Model implements Auditable
 
     /**
      * Get the sample to ISP for the reception.
-     *
-     * @return HasOne
      */
     public function sampleToIsp(): HasOne
     {
@@ -161,8 +141,6 @@ class Reception extends Model implements Auditable
 
     /**
      * Get the record to court for the reception.
-     *
-     * @return HasOne
      */
     public function recordToCourt(): HasOne
     {
@@ -171,8 +149,6 @@ class Reception extends Model implements Auditable
 
     /**
      * Check if the reception was destructed.
-     *
-     * @return bool
      */
     public function wasDestructed(): bool
     {
@@ -181,8 +157,6 @@ class Reception extends Model implements Auditable
 
     /**
      * Check if the reception has items for destruction.
-     *
-     * @return HasMany
      */
     public function haveItemsForDestruction(): HasMany
     {
@@ -191,8 +165,6 @@ class Reception extends Model implements Auditable
 
     /**
      * Check if the reception has items.
-     *
-     * @return bool
      */
     public function haveItems(): bool
     {
@@ -202,13 +174,13 @@ class Reception extends Model implements Auditable
     /**
      * Scope a query to search receptions by ID or sample number.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param string $id
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  string  $id
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeSearch($query, $id)
     {
-        if ( $id != "" ) {
+        if ($id != '') {
             return $query->where('id', $id)->orWhereHas('sampleToISP', function ($q) use ($id) {
                 $q->where('number', $id);
             });

@@ -25,13 +25,11 @@ class Substance extends Model
         'unit',
         'laboratory',
         'isp',
-        'presumed'
+        'presumed',
     ];
 
     /**
      * Get the items for the substance.
-     *
-     * @return HasMany
      */
     public function items(): HasMany
     {

@@ -25,7 +25,7 @@ class RosterAnalisisToAdmin extends Model
      * @var array
      */
     protected $fillable = [
-        'user_id'
+        'user_id',
     ];
 
     /**
@@ -39,8 +39,6 @@ class RosterAnalisisToAdmin extends Model
 
     /**
      * Get the user that owns the roster analysis to admin.
-     *
-     * @return BelongsTo
      */
     public function user(): BelongsTo
     {
@@ -49,8 +47,6 @@ class RosterAnalisisToAdmin extends Model
 
     /**
      * Get the items for the roster analysis to admin.
-     *
-     * @return HasMany
      */
     public function items(): HasMany
     {

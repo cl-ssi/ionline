@@ -30,7 +30,7 @@ class ActPrecursor extends Model
         'full_name_receiving',
         'run_receiving',
         'note',
-        'delivery_id'
+        'delivery_id',
     ];
 
     /**
@@ -39,13 +39,11 @@ class ActPrecursor extends Model
      * @var array
      */
     protected $casts = [
-        'date' => 'datetime'
+        'date' => 'datetime',
     ];
 
     /**
      * Get the delivery user that owns the act precursor.
-     *
-     * @return BelongsTo
      */
     public function delivery(): BelongsTo
     {
@@ -54,8 +52,6 @@ class ActPrecursor extends Model
 
     /**
      * Get the precursors for the act precursor.
-     *
-     * @return HasMany
      */
     public function precursors(): HasMany
     {
@@ -64,11 +60,9 @@ class ActPrecursor extends Model
 
     /**
      * Get the formatted date attribute.
-     *
-     * @return string
      */
     public function getFormatDateAttribute(): string
     {
-        return $this->date->day . ' de ' . $this->date->monthName . ' del ' . $this->date->year;
+        return $this->date->day.' de '.$this->date->monthName.' del '.$this->date->year;
     }
 }

@@ -2,7 +2,6 @@
 
 namespace App\Models\Drugs;
 
-use App\Models\Drugs\ActPrecursorItem;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -12,8 +11,8 @@ use OwenIt\Auditing\Contracts\Auditable;
 
 class ReceptionItem extends Model implements Auditable
 {
-    use SoftDeletes;
     use \OwenIt\Auditing\Auditable;
+    use SoftDeletes;
 
     /**
      * The table associated with the model.
@@ -44,7 +43,7 @@ class ReceptionItem extends Model implements Auditable
         'result_number',
         'result_date',
         'result_substance_id',
-        'dispose_precursor'
+        'dispose_precursor',
     ];
 
     /**
@@ -54,13 +53,11 @@ class ReceptionItem extends Model implements Auditable
      */
     protected $casts = [
         'result_date' => 'date',
-        'dispose_precursor' => 'boolean'
+        'dispose_precursor' => 'boolean',
     ];
 
     /**
      * Get the reception that owns the reception item.
-     *
-     * @return BelongsTo
      */
     public function reception(): BelongsTo
     {
@@ -69,8 +66,6 @@ class ReceptionItem extends Model implements Auditable
 
     /**
      * Get the substance that owns the reception item.
-     *
-     * @return BelongsTo
      */
     public function substance(): BelongsTo
     {
@@ -79,8 +74,6 @@ class ReceptionItem extends Model implements Auditable
 
     /**
      * Get the result substance that owns the reception item.
-     *
-     * @return BelongsTo
      */
     public function resultSubstance(): BelongsTo
     {
@@ -89,8 +82,6 @@ class ReceptionItem extends Model implements Auditable
 
     /**
      * Get the protocols for the reception item.
-     *
-     * @return HasMany
      */
     public function protocols(): HasMany
     {
@@ -99,8 +90,6 @@ class ReceptionItem extends Model implements Auditable
 
     /**
      * Get the act precursor item for the reception item.
-     *
-     * @return HasOne
      */
     public function actPrecursorItem(): HasOne
     {
@@ -109,9 +98,6 @@ class ReceptionItem extends Model implements Auditable
 
     /**
      * Get the letter form position.
-     *
-     * @param int $position
-     * @return string
      */
     public function getLetterFormPosition(int $position): string
     {
@@ -125,20 +111,20 @@ class ReceptionItem extends Model implements Auditable
         // Genera las letras de 'aa' a 'zz'
         for ($i = ord('a'); $i <= ord('z'); $i++) {
             for ($j = ord('a'); $j <= ord('z'); $j++) {
-                $letras[] = chr($i) . chr($j);
+                $letras[] = chr($i).chr($j);
             }
         }
+
         return $letras[--$position];
     }
 
     /**
      * Get the letter attribute.
-     *
-     * @return string
      */
     public function getLetterAttribute(): string
     {
         $position = $this->reception->items()->where('id', '<=', $this->id)->count();
+
         return $this->getLetterFormPosition($position);
     }
 }

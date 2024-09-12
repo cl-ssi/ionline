@@ -22,13 +22,11 @@ class PoliceUnit extends Model
     protected $fillable = [
         'code',
         'name',
-        'status'
+        'status',
     ];
 
     /**
      * Get the receptions for the police unit.
-     *
-     * @return HasMany
      */
     public function receptions(): HasMany
     {
