@@ -37,7 +37,7 @@ class Printer extends Model
         'active_type',
         'comment',
         'status',
-        'place_id'
+        'place_id',
     ];
 
     public function users()
@@ -52,21 +52,20 @@ class Printer extends Model
 
     public function scopeSearch($query, $search)
     {
-        if ($search != "") {
-            return $query->where('serial', 'LIKE', '%' . $search . '%')
-                ->orWhere('type', 'LIKE', '%' . $search . '%')
-                ->orWhere('brand', 'LIKE', '%' . $search . '%')
-                ->orWhere('model', 'LIKE', '%' . $search . '%')
-                ->orWhere('ip', 'LIKE', '%' . $search . '%')
-                ->orWhere('mac_address', 'LIKE', '%' . $search . '%')
-                ->orWhere('active_type', 'LIKE', '%' . $search . '%');
+        if ($search != '') {
+            return $query->where('serial', 'LIKE', '%'.$search.'%')
+                ->orWhere('type', 'LIKE', '%'.$search.'%')
+                ->orWhere('brand', 'LIKE', '%'.$search.'%')
+                ->orWhere('model', 'LIKE', '%'.$search.'%')
+                ->orWhere('ip', 'LIKE', '%'.$search.'%')
+                ->orWhere('mac_address', 'LIKE', '%'.$search.'%')
+                ->orWhere('active_type', 'LIKE', '%'.$search.'%');
         }
     }
 
     public function tipo()
     {
-        switch ($this->type)
-        {
+        switch ($this->type) {
             case 'printer':
                 $valor = 'Impresora';
                 break;
@@ -83,13 +82,13 @@ class Printer extends Model
                 $valor = '';
                 break;
         }
+
         return $valor;
     }
 
     public function tipoActivo()
     {
-        switch ($this->active_type)
-        {
+        switch ($this->active_type) {
             case 'leased':
                 $valor = 'Arrendado';
                 break;
@@ -103,6 +102,7 @@ class Printer extends Model
                 $valor = '';
                 break;
         }
+
         return $valor;
     }
 }

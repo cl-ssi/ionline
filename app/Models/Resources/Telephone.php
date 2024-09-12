@@ -65,8 +65,8 @@ class Telephone extends Model
     {
         switch ($field) {
             case 'minsal':
-                $query->where('number', 'LIKE', '%' . $value . '%')
-                    ->orWhere('minsal', 'LIKE', '%' . $value . '%');
+                $query->where('number', 'LIKE', '%'.$value.'%')
+                    ->orWhere('minsal', 'LIKE', '%'.$value.'%');
                 break;
             case 'establishment_id':
                 if ($value) {
@@ -76,6 +76,7 @@ class Telephone extends Model
                 }
                 break;
         }
+
         return $query;
     }
 }

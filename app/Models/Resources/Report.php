@@ -30,14 +30,14 @@ class Report extends Model
      */
     public function scopeSearch($query, $search)
     {
-        if ($search != "") {
-            return $query->where('serial', 'LIKE', '%' . $search . '%')
-                ->orWhere('type', 'LIKE', '%' . $search . '%')
-                ->orWhere('brand', 'LIKE', '%' . $search . '%')
-                ->orWhere('model', 'LIKE', '%' . $search . '%')
-                ->orWhere('ip', 'LIKE', '%' . $search . '%')
-                ->orWhere('mac_address', 'LIKE', '%' . $search . '%')
-                ->orWhere('active_type', 'LIKE', '%' . $search . '%');
+        if ($search != '') {
+            return $query->where('serial', 'LIKE', '%'.$search.'%')
+                ->orWhere('type', 'LIKE', '%'.$search.'%')
+                ->orWhere('brand', 'LIKE', '%'.$search.'%')
+                ->orWhere('model', 'LIKE', '%'.$search.'%')
+                ->orWhere('ip', 'LIKE', '%'.$search.'%')
+                ->orWhere('mac_address', 'LIKE', '%'.$search.'%')
+                ->orWhere('active_type', 'LIKE', '%'.$search.'%');
         }
     }
 }

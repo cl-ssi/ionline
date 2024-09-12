@@ -34,5 +34,4 @@ class Wingle extends Model
     protected $casts = [
         // Add any other attributes that need casting here
     ];
-
 }

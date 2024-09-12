@@ -5,7 +5,6 @@ namespace App\Models\Resources;
 use App\Models\Inv\Inventory;
 use App\Models\Inv\InventoryLabel;
 use App\Models\Parameters\Place;
-use App\Models\Resources\ComputerLabel;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -15,8 +14,8 @@ use OwenIt\Auditing\Contracts\Auditable;
 
 class Computer extends Model implements Auditable
 {
-    use SoftDeletes;
     use \OwenIt\Auditing\Auditable;
+    use SoftDeletes;
 
     /**
      * The table associated with the model.
@@ -116,12 +115,12 @@ class Computer extends Model implements Auditable
      */
     public function scopeSearch($query, $search)
     {
-        if ($search != "") {
-            return $query->where('brand', 'LIKE', '%' . $search . '%')
-                ->orWhere('model', 'LIKE', '%' . $search . '%')
-                ->orWhere('ip', 'LIKE', '%' . $search . '%')
-                ->orWhere('serial', 'LIKE', '%' . $search . '%')
-                ->orWhere('inventory_number', 'LIKE', '%' . $search . '%');
+        if ($search != '') {
+            return $query->where('brand', 'LIKE', '%'.$search.'%')
+                ->orWhere('model', 'LIKE', '%'.$search.'%')
+                ->orWhere('ip', 'LIKE', '%'.$search.'%')
+                ->orWhere('serial', 'LIKE', '%'.$search.'%')
+                ->orWhere('inventory_number', 'LIKE', '%'.$search.'%');
         }
     }
 

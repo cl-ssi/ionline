@@ -53,9 +53,9 @@ class Mobile extends Model
      */
     public function scopeSearch($query, $search)
     {
-        if ($search != "") {
-            return $query->where('number', 'LIKE', '%' . $search . '%')
-                ->orWhere('brand', 'LIKE', '%' . $search . '%');
+        if ($search != '') {
+            return $query->where('number', 'LIKE', '%'.$search.'%')
+                ->orWhere('brand', 'LIKE', '%'.$search.'%');
         }
     }
 }
