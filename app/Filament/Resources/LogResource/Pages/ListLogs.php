@@ -28,7 +28,7 @@ class ListLogs extends ListRecords
                 ->action(function () {
                     Log::where('created_at', '<', now()->subMonth())->delete();
                     Log::whereNull('log_module_id')->get()->each->classify();
-        
+
                     // Enviar una notificación de éxito
                     Notification::make()
                         ->title('Clasificación completada')
