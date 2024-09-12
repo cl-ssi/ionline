@@ -83,7 +83,7 @@ class EventController extends Controller
         //cuando no se agregó derivación a tabla temporal
         if ($request->users == null) {
             //Si el usuario destino es autoridad, se marca el requerimiento
-            $managerUserId = Authority::getAuthorityFromDate($request->to_ou_id, now(), 'manager')->user_id;
+            $managerUserId = Authority::getAuthorityFromDate($request->to_ou_id, now(), 'manager')->user_id ?? null;
             $isManager = ($request->to_user_id == $managerUserId);
 
             //guarda evento.
@@ -178,7 +178,7 @@ class EventController extends Controller
                 foreach ($users_req as $key => $user_) {
                     //Si algún usuario destino es autoridad, se marca el requerimiento
                     $userModel = User::find($user_);
-                    $managerUserId = Authority::getAuthorityFromDate($userModel->organizationalUnit->id, now(), 'manager')->user_id;
+                    $managerUserId = Authority::getAuthorityFromDate($userModel->organizationalUnit->id, now(), 'manager')->user_id ?? null;
                     $isManager = ($user_ == $managerUserId);
                     if ($isManager) $isAnyManager = true;
 
