@@ -2,49 +2,24 @@
 
 namespace App\Http\Controllers\Requirements;
 
-use App\Models\Documents\Document;
+use App\Http\Controllers\Controller;
 use App\Mail\RequirementEventNotification;
-use App\Mail\RequirementNotification;
-use App\Models\Requirements\Requirement;
+use App\Models\Documents\Document;
 use App\Models\Requirements\Event;
 use App\Models\Requirements\File;
+use App\Models\Requirements\Requirement;
 use App\Models\Rrhh\Authority;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use App\Models\Rrhh\OrganizationalUnit;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Http\UploadedFile;
 use App\Models\User;
 use App\Notifications\Requirements\NewSgr;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 
 class EventController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
@@ -77,7 +52,7 @@ class EventController extends Controller
          * o se cae la creación completa del Req? */
         // validación existencia autoridad en ou
         if (Authority::getAuthorityFromDate($request->to_ou_id, now(), 'manager') == null) {
-          return redirect()->back()->with('warning', 'La unidad organizacional seleccionada no tiene asignada una autoridad. Favor contactar a secretaria de dicha unidad para regularizar.');
+            return redirect()->back()->with('warning', 'La unidad organizacional seleccionada no tiene asignada una autoridad. Favor contactar a secretaria de dicha unidad para regularizar.');
         }
 
         //cuando no se agregó derivación a tabla temporal
@@ -96,7 +71,7 @@ class EventController extends Controller
             /* Asocia documentos al evento */
             if ($request->has('documents')) {
                 $array_documents = explode(',', $request->input('documents'));
-                foreach($array_documents as $doc_id) {
+                foreach ($array_documents as $doc_id) {
                     $requirementEvent->documents()->attach(Document::find($doc_id));
                 }
             }
@@ -105,14 +80,15 @@ class EventController extends Controller
             $requirement = Requirement::find($request->requirement_id);
             //$requirement->user_id = auth()->id();
             $requirement->status = $request->status;
-            
+
             // Si es un reabierto gatilla un mail a los responsables
-            if($request->status == 'reabierto')
-                    {
-                        $toUser = User::find($requirementEvent->to_user_id);
-                        $toUser->notify(new NewSgr($requirement, $requirementEvent));
-                    }
-            if(!$requirement->to_authority) $requirement->to_authority = $isManager;
+            if ($request->status == 'reabierto') {
+                $toUser = User::find($requirementEvent->to_user_id);
+                $toUser->notify(new NewSgr($requirement, $requirementEvent));
+            }
+            if (! $requirement->to_authority) {
+                $requirement->to_authority = $isManager;
+            }
             $requirement->save();
 
             //guarda archivos
@@ -121,7 +97,7 @@ class EventController extends Controller
                     $filename = $file->getClientOriginalName();
                     $fileModel = new File;
                     // $fileModel->file = $file->store('requirements');
-                    $fileModel->file = $file->store('ionline/requirements',['disk' => 'gcs']);
+                    $fileModel->file = $file->store('ionline/requirements', ['disk' => 'gcs']);
                     $fileModel->name = $filename;
                     $fileModel->event_id = $requirementEvent->id;
                     //$fileModel->ticket()->associate($ticket);
@@ -146,7 +122,7 @@ class EventController extends Controller
 
             //guarda eventos en copia
             $isAnyManager = false;
-            if ($users_enCopia <> null) {
+            if ($users_enCopia != null) {
                 foreach ($users_enCopia as $key => $user_) {
                     //Si algún usuario destino es autoridad, se marca el requerimiento
                     $userModel = User::find($user_);
@@ -154,17 +130,19 @@ class EventController extends Controller
                     /** Hice esta modificación para que no se caiga si no tienen manager la OU */
                     $manager = Authority::getAuthorityFromDate($userModel->organizationalUnit->id, now(), 'manager');
                     $isManager = null;
-                    if($manager) {
+                    if ($manager) {
                         $isManager = ($user_ == $manager->user_id);
                     }
-                    if ($isManager) $isAnyManager = true;
+                    if ($isManager) {
+                        $isAnyManager = true;
+                    }
 
                     //guarda evento.
                     $user_aux = User::where('id', $user_)->get();
                     $requirementEvent = new Event($request->All());
                     $requirementEvent->to_ou_id = $user_aux->first()->organizational_unit_id;
                     $requirementEvent->to_user_id = $user_;
-                    $requirementEvent->status = "en copia";
+                    $requirementEvent->status = 'en copia';
                     $requirementEvent->from_user()->associate(auth()->user());
                     $requirementEvent->from_ou_id = auth()->user()->organizationalUnit->id;
                     $requirementEvent->to_authority = $isManager;
@@ -180,7 +158,9 @@ class EventController extends Controller
                     $userModel = User::find($user_);
                     $managerUserId = Authority::getAuthorityFromDate($userModel->organizationalUnit->id, now(), 'manager')->user_id ?? null;
                     $isManager = ($user_ == $managerUserId);
-                    if ($isManager) $isAnyManager = true;
+                    if ($isManager) {
+                        $isAnyManager = true;
+                    }
 
                     //guarda evento.
                     $user_aux = User::where('id', $user_)->get();
@@ -196,7 +176,7 @@ class EventController extends Controller
                     /* Asocia documentos al evento */
                     if ($request->has('documents')) {
                         $array_documents = explode(',', $request->input('documents'));
-                        foreach($array_documents as $doc_id) {
+                        foreach ($array_documents as $doc_id) {
                             $requirementEvent->documents()->attach(Document::find($doc_id));
                         }
                     }
@@ -212,7 +192,7 @@ class EventController extends Controller
                             $filename = $file->getClientOriginalName();
                             $fileModel = new File;
                             // $fileModel->file = $file->store('requirements');
-                            $fileModel->file = $file->store('ionline/requirements',['disk' => 'gcs']);
+                            $fileModel->file = $file->store('ionline/requirements', ['disk' => 'gcs']);
                             $fileModel->name = $filename;
                             $fileModel->event_id = $requirementEvent->id;
                             //$fileModel->ticket()->associate($ticket);
@@ -234,53 +214,9 @@ class EventController extends Controller
         //session()->flash('info', 'El evento ' . $requirementEvent->id . ' ha sido ingresado.');
         //return redirect()->route('requirements.show', $requirementEvent->requirement);
         //requerimiento de Mariela Romero
-        session()->flash('info', 'El evento ' . $requirementEvent->id . ' ha sido ingresado.');
+        session()->flash('info', 'El evento '.$requirementEvent->id.' ha sido ingresado.');
+
         return redirect()->route('requirements.inbox');
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param \App\Models\Requirements\RequirementEvent $requirementEvent
-     * @return \Illuminate\Http\Response
-     */
-    public function show(RequirementEvent $requirementEvent)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param \App\Models\Requirements\RequirementEvent $requirementEvent
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(RequirementEvent $requirementEvent)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Models\Requirements\RequirementEvent $requirementEvent
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, RequirementEvent $requirementEvent)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param \App\Models\Requirements\RequirementEvent $requirementEvent
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(RequirementEvent $requirementEvent)
-    {
-        //
     }
 
     public function download(File $file)
@@ -288,21 +224,23 @@ class EventController extends Controller
         // dd($file);
         // return Storage::response($file->file, mb_convert_encoding($file->name, 'ASCII'));
         // $file = $dispatch->files->first();
-        
-        if(Storage::disk('gcs')->exists($file->file)){
-            return Storage::disk('gcs')->response($file->file, mb_convert_encoding($file->name,'ASCII'));
-        }else{
+
+        if (Storage::exists($file->file)) {
+            return Storage::response($file->file, mb_convert_encoding($file->name, 'ASCII'));
+        } else {
             return redirect()->back()->with('warning', 'El archivo no se ha encontrado.');
         }
 
         // return Storage::disk('gcs')->response($file->file, mb_convert_encoding($file->name,'ASCII'));
-        
+
     }
 
-    public function deleteFile(File $file){
-        Storage::disk('gcs')->delete($file);
+    public function deleteFile(File $file)
+    {
+        Storage::delete($file);
 
         $file->delete();
+
         return redirect()->back()->with('success', 'Se eliminó el archivo adjunto.');
     }
 }

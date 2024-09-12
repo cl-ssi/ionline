@@ -2,39 +2,37 @@
 
 namespace App\Http\Controllers\Requirements;
 
-use Redirect;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
-use Carbon\Carbon;
-use App\Models\User;
-use App\Models\Rrhh\OrganizationalUnit;
-use App\Models\Rrhh\Authority;
-use App\Notifications\Requirements\NewSgr;
-use App\Models\Requirements\RequirementStatus;
-use App\Models\Requirements\RequirementCategory;
-use App\Models\Requirements\Requirement;
-use App\Models\Requirements\LabelRequirement;
-use App\Models\Requirements\Label;
-use App\Models\Requirements\File;
-use App\Models\Requirements\EventStatus;
-use App\Models\Requirements\EventDocument;
-use App\Models\Requirements\Event;
-use App\Models\Requirements\Category;
-use App\Models\Documents\Parte;
-use App\Models\Documents\Document;
-use App\Mail\RequirementNotification;
 use App\Http\Controllers\Controller;
+use App\Mail\RequirementNotification;
+use App\Models\Documents\Document;
+use App\Models\Documents\Parte;
+use App\Models\Requirements\Category;
+use App\Models\Requirements\Event;
+use App\Models\Requirements\EventStatus;
+use App\Models\Requirements\File;
+use App\Models\Requirements\Label;
+use App\Models\Requirements\Requirement;
+use App\Models\Requirements\RequirementCategory;
+use App\Models\Requirements\RequirementStatus;
+use App\Models\Rrhh\Authority;
+use App\Models\Rrhh\OrganizationalUnit;
+use App\Models\User;
+use App\Notifications\Requirements\NewSgr;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\View\View;
+use Redirect;
 
 class RequirementController extends Controller
 {
-
     public function __constructor()
     {
         Carbon::setLocale('es');
     }
 
-    public function inbox(Request $request, User $user = null)
+    public function inbox(Request $request, ?User $user = null)
     {
         /** Hay dos usuarios, el logeado "$auth_user" y al que voy a mostrar los sgr "$user" */
         $auth_user = auth()->user();
@@ -44,40 +42,36 @@ class RequirementController extends Controller
         $authority_secretary = Authority::getAmIAuthorityFromOu(now(), 'secretary', $auth_user->id);
 
         /** Si soy secretary entonces obtengo la(s) autoridad(es) en $allowed_users */
-        if($authority_secretary->isNotEmpty())
-        {
-            foreach($authority_secretary as $authority)
-            {
+        if ($authority_secretary->isNotEmpty()) {
+            foreach ($authority_secretary as $authority) {
                 $authority_chief = Authority::getAuthorityFromDate($authority->organizational_unit_id, now(), 'manager');
-                if($authority_chief){
+                if ($authority_chief) {
                     $allowed_users->push($authority_chief->user);
 
-                    /** Esto permite ver también la bandeja del "representa" 
+                    /** Esto permite ver también la bandeja del "representa"
                      * que se puede agregar al crear una autoridad
                      */
-                    if($authority_chief->represents)
-                    {
+                    if ($authority_chief->represents) {
                         $allowed_users->push($authority_chief->represents);
                     }
                     // 0 => 14104369 Carlos Calvo
                     // 1 => 10278387 José Donoso
                 }
-                
-                
+
             }
         }
 
-        /** 
+        /**
          * Caso de estudio, sobre la comparación entre objetos
          * $user1 == $user2 es falso, si se llama a alguna relacion
          * de cualquiera de los dos objetos
          * en el caso de abajo, al llamar a $auth_user->delegate
          * ya pasan a ser diferentes los resultados.
-        */
+         */
         // app('debugbar')->log($user !== $auth_user);
 
         /** Es delegado de una OU (quiere decir que puede ver los SGR del manager) */
-        foreach($auth_user->delegate as $delegate) {
+        foreach ($auth_user->delegate as $delegate) {
             $allowed_users->push($delegate->organizationalUnit->currentManager->user);
         }
 
@@ -86,17 +80,16 @@ class RequirementController extends Controller
         // return true;
 
         /** Si no pasó ningún usuario por parametro o
-         * si el usuario es distinto al user logeado ($auth_user) y 
+         * si el usuario es distinto al user logeado ($auth_user) y
          * si el $user no existe en los permitidos entonces mostramos su bandeja personal */
-        if(is_null($user) OR ($user->id != $auth_user->id AND !$allowed_users->contains($user) ))
-        {
-            return redirect()->route('requirements.inbox',$auth_user);
+        if (is_null($user) or ($user->id != $auth_user->id and ! $allowed_users->contains($user))) {
+            return redirect()->route('requirements.inbox', $auth_user);
         }
 
         /** Construyo la query de requerimientos */
         $requirements_query = Requirement::query();
         $requirements_query
-            ->with('archived','labels','category','events','ccEvents','parte','eventsViewed','events.from_user','events.to_user','events.from_ou', 'events.to_ou','eventsWithoutCC','eventsViewed')
+            ->with('archived', 'labels', 'category', 'events', 'ccEvents', 'parte', 'eventsViewed', 'events.from_user', 'events.to_user', 'events.from_ou', 'events.to_ou', 'eventsWithoutCC', 'eventsViewed')
             ->whereHas('events', function ($query) use ($user) {
                 $query->where('from_user_id', $user->id)->orWhere('to_user_id', $user->id);
             });
@@ -104,10 +97,10 @@ class RequirementController extends Controller
         // obener total pendientes
         $total_pending_requirements = 0;
         $req_query = clone $requirements_query;
-        $total_pending_requirements = $req_query->whereDoesntHave('archived', function ($query) use ($user,$auth_user) {
-            $query->whereIn('user_id', [$user->id,$auth_user->id]);
+        $total_pending_requirements = $req_query->whereDoesntHave('archived', function ($query) use ($user, $auth_user) {
+            $query->whereIn('user_id', [$user->id, $auth_user->id]);
         })->count();
-        
+
         // devuelve requerimientos a bandeja
         // if($request->has('archived'))
         // {
@@ -137,35 +130,33 @@ class RequirementController extends Controller
         //     }
         // }
 
-
         /* Query para los contadores */
         $counters_query = Requirement::query();
-        
+
         $counters_query->whereHas('events', function ($query) use ($user) {
-                $query->where('from_user_id', $user->id)->orWhere('to_user_id', $user->id);
-            });
-        
+            $query->where('from_user_id', $user->id)->orWhere('to_user_id', $user->id);
+        });
+
         $counters['archived'] = $counters_query->clone()
-                ->whereHas('archived', function ($query) use ($user,$auth_user) {
-                    $query->whereIn('user_id', [$user->id,$auth_user->id]);
-                })->count();
+            ->whereHas('archived', function ($query) use ($user, $auth_user) {
+                $query->whereIn('user_id', [$user->id, $auth_user->id]);
+            })->count();
 
-        $counters_query->whereDoesntHave('archived', function ($query) use ($user,$auth_user) {
-                    $query->whereIn('user_id', [$user->id,$auth_user->id]);
-                });
+        $counters_query->whereDoesntHave('archived', function ($query) use ($user, $auth_user) {
+            $query->whereIn('user_id', [$user->id, $auth_user->id]);
+        });
 
-        $counters['created'] = $counters_query->clone()->where('status','creado')->count();
-        $counters['replyed'] = $counters_query->clone()->where('status','respondido')->count();
-        $counters['derived'] = $counters_query->clone()->where('status','derivado')->count();
-        $counters['closed'] = $counters_query->clone()->where('status','cerrado')->count();
+        $counters['created'] = $counters_query->clone()->where('status', 'creado')->count();
+        $counters['replyed'] = $counters_query->clone()->where('status', 'respondido')->count();
+        $counters['derived'] = $counters_query->clone()->where('status', 'derivado')->count();
+        $counters['closed'] = $counters_query->clone()->where('status', 'cerrado')->count();
         $counters['pending'] = $total_pending_requirements;
 
         // dd($requirements->total());
 
         /** Retorno a la vista */
-        return view('requirements.inbox', compact('user','auth_user','allowed_users','counters'));
+        return view('requirements.inbox', compact('user', 'auth_user', 'allowed_users', 'counters'));
     }
-
 
     public function outbox(Request $request)
     {
@@ -270,7 +261,7 @@ class RequirementController extends Controller
                 ->orderBy('created_at', 'DESC');
         } else {
             $created_requirements = Requirement::with('events')
-                ->where(function ($query) use ($secretaryOuIds, $userIsSecretary, $request_usu, $request, $users) {
+                ->where(function ($query) use ($secretaryOuIds, $userIsSecretary, $users) {
                     $query->whereHas('events', function ($query) use ($users) {
                         $query->whereIn('from_user_id', $users)
                             ->orWhereIn('to_user_id', $users);
@@ -322,7 +313,7 @@ class RequirementController extends Controller
 
             $flag = 0;
             foreach ($req->events as $key => $event) {
-                if ($event->status == "en copia" && $event->to_user_id == auth()->id()) {
+                if ($event->status == 'en copia' && $event->to_user_id == auth()->id()) {
                     $flag = 1;
                     break;
                 }
@@ -375,7 +366,6 @@ class RequirementController extends Controller
         // }
         //dd($legend);
 
-
         //fixme SE DEMORA MUCHO
         //ciclo para definir si requerimiento tiene todos los eventos vistos (ticket verde) o no (ticket plomo)
         //        $events_status = EventStatus::where('user_id',auth()->id())->get();
@@ -393,16 +383,15 @@ class RequirementController extends Controller
             // }
 
             // cuando la cantidad de eventos es igual a la cantidad de statusEventos (viewed)
-            if ($req->events->count() == EventStatus::where('user_id', auth()->id())->whereIn('event_id',$req->events->pluck('id')->toArray())->count()) {
-                $req->status_view = "visto";
+            if ($req->events->count() == EventStatus::where('user_id', auth()->id())->whereIn('event_id', $req->events->pluck('id')->toArray())->count()) {
+                $req->status_view = 'visto';
             } else {
-                $req->status_view = "sin revisar";
+                $req->status_view = 'sin revisar';
             }
             if ($req->status == 'creado' && $req->user_id == auth()->user()->id) {
-                $req->status_view = "visto";
+                $req->status_view = 'visto';
             }
         }
-
 
         //fixme SE DEMORA MUCHO
         foreach ($archived_requirements as $key => $req) {
@@ -415,22 +404,19 @@ class RequirementController extends Controller
             //     }
             // }
 
-            if ($req->events->count() == EventStatus::where('user_id', auth()->id())->whereIn('event_id',$req->events->pluck('id')->toArray())->count()) {
-                $req->status_view = "visto";
+            if ($req->events->count() == EventStatus::where('user_id', auth()->id())->whereIn('event_id', $req->events->pluck('id')->toArray())->count()) {
+                $req->status_view = 'visto';
             } else {
-                $req->status_view = "sin revisar";
+                $req->status_view = 'sin revisar';
             }
             if ($req->status == 'creado' && $req->user_id == auth()->user()->id) {
-                $req->status_view = "visto";
+                $req->status_view = 'visto';
             }
         }
 
         //dd($created_requirements);
         return view('requirements.outbox', compact('created_requirements', 'archived_requirements', 'legend'));
     }
-
-
-
 
     public function secretary_outbox(Request $request)
     {
@@ -441,7 +427,7 @@ class RequirementController extends Controller
         }
 
         //Si usuario actual es secretary, se muestran los requerimientos que tengan to_authority en true
-        $userIsSecretary = (count($ous_secretary) > 0); 
+        $userIsSecretary = (count($ous_secretary) > 0);
 
         //Se obtienen unidades organizacionales donde usuario es secretary
         $secretaryOuIds = [];
@@ -531,7 +517,7 @@ class RequirementController extends Controller
                 ->orderBy('created_at', 'DESC');
         } else {
             $created_requirements = Requirement::with('events')
-                ->where(function ($query) use ($secretaryOuIds, $userIsSecretary, $request_usu, $request, $users) {
+                ->where(function ($query) use ($secretaryOuIds, $userIsSecretary, $users) {
                     $query->whereHas('events', function ($query) use ($users) {
                         $query->whereIn('from_user_id', $users)
                             ->orWhereIn('to_user_id', $users);
@@ -584,7 +570,7 @@ class RequirementController extends Controller
 
             $flag = 0;
             foreach ($req->events as $key => $event) {
-                if ($event->status == "en copia" && $event->to_user_id == $users[0]) {
+                if ($event->status == 'en copia' && $event->to_user_id == $users[0]) {
                     $flag = 1;
                     break;
                 }
@@ -617,7 +603,6 @@ class RequirementController extends Controller
             }
         }
 
-
         //fixme SE DEMORA MUCHO
         //ciclo para definir si requerimiento tiene todos los eventos vistos (ticket verde) o no (ticket plomo)
         $events_status_id_event_array = EventStatus::where('user_id', $users[0])->pluck('event_id')->toArray();
@@ -632,15 +617,14 @@ class RequirementController extends Controller
                 }
             }
             if (count($req->events) == $flag) {
-                $req->status_view = "visto";
+                $req->status_view = 'visto';
             } else {
-                $req->status_view = "sin revisar";
+                $req->status_view = 'sin revisar';
             }
             if ($req->status == 'creado' && $req->user_id == auth()->user()->id) {
-                $req->status_view = "visto";
+                $req->status_view = 'visto';
             }
         }
-
 
         //fixme SE DEMORA MUCHO
         foreach ($archived_requirements as $key => $req) {
@@ -653,29 +637,22 @@ class RequirementController extends Controller
                 }
             }
             if (count($req->events) == $flag) {
-                $req->status_view = "visto";
+                $req->status_view = 'visto';
             } else {
-                $req->status_view = "sin revisar";
+                $req->status_view = 'sin revisar';
             }
             if ($req->status == 'creado' && $req->user_id == auth()->user()->id) {
-                $req->status_view = "visto";
+                $req->status_view = 'visto';
             }
         }
 
         return view('requirements.outbox', compact('created_requirements', 'archived_requirements', 'legend'));
     }
 
-
-
-
-    
-
     /**
      * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
      */
-    public function create_requirement(Parte $parte)
+    public function create_requirement(Parte $parte): View
     {
         // $documents = Document::all()->sortBy('id');
         // $ous = OrganizationalUnit::all()->sortBy('name');
@@ -688,80 +665,81 @@ class RequirementController extends Controller
         return view('requirements.create', compact('parte'));
     }
 
-    public function createFromParte(Parte $parte = null)
+    public function createFromParte(?Parte $parte = null)
     {
-        if(!$parte){
-            $parte = Parte::whereDoesntHave('requirements')->whereDate('created_at', '>=', date('Y') .'-01-01')->first();
+        if (! $parte) {
+            $parte = Parte::whereDoesntHave('requirements')->whereDate('created_at', '>=', date('Y').'-01-01')->first();
         }
 
         $previous = null;
         $next = null;
-        if($parte){
+        if ($parte) {
 
             // get previous user id
-            $previous = Parte::whereDoesntHave('requirements')->whereDate('created_at', '>=', date('Y') .'-01-01')
-            ->where('id', '<', $parte->id)
-            ->max('id');
+            $previous = Parte::whereDoesntHave('requirements')->whereDate('created_at', '>=', date('Y').'-01-01')
+                ->where('id', '<', $parte->id)
+                ->max('id');
 
             $previous = Parte::find($previous);
-            
+
             // get next user id
             $next = Parte::whereDoesntHave('requirements')
                 ->whereDate('created_at', '>=', date('Y') - 1 .'-01-01')
                 ->where('id', '>', $parte->id)
                 ->min('id');
-            
+
             $next = Parte::find($next);
         }
-        
-        $totalPending = Parte::whereDoesntHave('requirements')->whereDate('created_at', '>=', date('Y') .'-01-01')->count();
 
-        return view('requirements.create-from-parte', compact('parte','previous','next','totalPending'));
+        $totalPending = Parte::whereDoesntHave('requirements')->whereDate('created_at', '>=', date('Y').'-01-01')->count();
+
+        return view('requirements.create-from-parte', compact('parte', 'previous', 'next', 'totalPending'));
     }
 
     public function create_requirement_sin_parte()
     {
         // set_time_limit(7200);
         // ini_set('memory_limit', '2048M');
-        
+
         // $documents = Document::all()->sortBy('id');
         $parte = new Parte;
         // $ous = OrganizationalUnit::all()->sortBy('name');
-        
+
         // $ouRoots = OrganizationalUnit::where('level', 1)->get();
         // $categories = Category::where('user_id', auth()->id())->get();
         // $labels = Label::all();
-        
+
         // return view('requirements.create', compact('ous', 'ouRoots', 'parte', 'documents', 'categories', 'labels'));
         return view('requirements.create', compact('parte'));
     }
 
     public function archive_requirement(Requirement $requirement)
     {
-        $requirementStatus = new RequirementStatus();
+        $requirementStatus = new RequirementStatus;
         $requirementStatus->requirement_id = $requirement->id;
         $requirementStatus->user_id = auth()->id();
-        $requirementStatus->status = "viewed";
+        $requirementStatus->status = 'viewed';
         $requirementStatus->save();
 
         //return redirect()->route('requirements.outbox');
         return redirect()->back()->with('success', 'El requerimiento ha sido archivado');
     }
 
-    public function archive_mass(Request $request){
+    public function archive_mass(Request $request)
+    {
         $requirementIds = $request->input('archive');
-    
+
         foreach ($requirementIds as $requirementId) {
             $requirement = Requirement::find($requirementId);
-            if($requirement) {
-                $requirementStatus = new RequirementStatus();
+            if ($requirement) {
+                $requirementStatus = new RequirementStatus;
                 $requirementStatus->requirement_id = $requirement->id;
                 $requirementStatus->user_id = auth()->id();
-                $requirementStatus->status = "viewed";
+                $requirementStatus->status = 'viewed';
                 $requirementStatus->save();
             }
         }
-    
+
         return redirect()->back()->with('success', 'Los requerimientos han sido archivados');
     }
 
@@ -776,11 +754,9 @@ class RequirementController extends Controller
         return redirect()->back()->with('success', 'El requerimiento ha sido desarchivado');
     }
 
-
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     // public function store(Request $request)
@@ -803,7 +779,7 @@ class RequirementController extends Controller
     //     if(!$request->users){
     //         return redirect()->back()->with('warning', 'Debe ingresar por lo menos un usuario a quien crear el requerimiento.');
     //     }
- 
+
     //     // 30/01/2023: Atorres indica que desde ahora se deban agregar obligatoriamente los destinatarios y cc
     //     // //si solo se manda desde la vista un solo usuario, sin usar la tabla dinámica
     //     // if ($request->users == null) {
@@ -811,7 +787,6 @@ class RequirementController extends Controller
     //     //     if ($request->limit_at <> null) {
     //     //         $req['limit_at'] = Carbon::createFromFormat('Y-m-d\TH:i', $request->limit_at)->format('Y-m-d H:i:00');
     //     //     }
-
 
     //     //     $requirement = new Requirement($req);
     //     //     $requirement->user()->associate(auth()->user());
@@ -951,8 +926,8 @@ class RequirementController extends Controller
     //             /** Asigna las labels al requerimiento */
     //             $requirement->setLabels($request->input('label_id'));
 
-	// 			// /** Marca los eventos como vistos */
-	// 			// $requirement->setEventsAsViewed;
+    // 			// /** Marca los eventos como vistos */
+    // 			// $requirement->setEventsAsViewed;
 
     //             /* se ingresa una sola vez: se guardan posibles usuarios en copia. */
     //             /* Se agregan primero que otros eventos del requerimiento, para que no queden como "last()" */
@@ -1041,8 +1016,8 @@ class RequirementController extends Controller
     //             $requirement->events()->save($firstEvent);
 
     //             /** Marca los eventos como vistos */
-	// 			$requirement->setEventsAsViewed;
-                
+    // 			$requirement->setEventsAsViewed;
+
     //             //$requirement->categories()->attach($request->input('category_id'));
     //             //$requerimientos = $requerimientos + $firstEvent->id + ",";
     //         }
@@ -1063,11 +1038,12 @@ class RequirementController extends Controller
     //     return redirect()->route($return);
     // }
 
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         //dd($request->all());
 
         /*
-            $request = 
+            $request =
             [
                 "parte_id" => "13664",
                 "label_id" => [
@@ -1102,20 +1078,19 @@ class RequirementController extends Controller
         */
 
         /* obtiene nuevo array con categorias */
-        foreach($request->users as $key => $user_id) {
+        foreach ($request->users as $key => $user_id) {
             $categories[] = $request['category'.$key];
         }
 
         /* Arma dos array, con la combinación de users, enCopia y categories */
         $copias = [];
-        foreach($request->users as $key => $user_id) {
-            if($request->enCopia[$key] == 1) {
+        foreach ($request->users as $key => $user_id) {
+            if ($request->enCopia[$key] == 1) {
                 $copias[$key]['user_id'] = $user_id;
-                $copias[$key]['category'] = $categories[$key]; 
-            }
-            else {
+                $copias[$key]['category'] = $categories[$key];
+            } else {
                 $users[$key]['user_id'] = $user_id;
-                $users[$key]['category'] = $categories[$key]; 
+                $users[$key]['category'] = $categories[$key];
             }
         }
 
@@ -1145,21 +1120,20 @@ class RequirementController extends Controller
             ]
         */
 
-
         /** Tareas comunes para todos los requerimientos */
         /** Obtener el siguiente número de grupo */
         $group_number = Requirement::getNextGroupNumber();
         /** Generar un array con los id de documentos */
-        $documents_ids = ($request->documents) ? explode(",",$request->documents) : null;
+        $documents_ids = ($request->documents) ? explode(',', $request->documents) : null;
         /** Cadena vacía para armar el listado de correos */
         $emails = '';
 
-        foreach($users as $user) {
+        foreach ($users as $user) {
             /** Modelo User al que va dirigido el req */
             $toUser = User::find($user['user_id']);
 
             /** Chequea que el usuario sea autoridad de su OU */
-            $to_authority = Authority::getAmIAuthorityOfMyOu(today(),'manager',$user['user_id']);
+            $to_authority = Authority::getAmIAuthorityOfMyOu(today(), 'manager', $user['user_id']);
 
             /** Crear el requerimiento */
             $requirement = Requirement::create([
@@ -1176,11 +1150,10 @@ class RequirementController extends Controller
 
             /** Setear las categorias */
             $requirement->setLabels($request->label_id);
-            
 
-            /** No sé porque, pero ...primero hay que crear 
+            /** No sé porque, pero ...primero hay que crear
              * todos los eventos de tipo copia. */
-            foreach($copias as $copia) {
+            foreach ($copias as $copia) {
                 /** Modelo User al que va dirigido la copia */
                 $toCopia = User::find($copia['user_id']);
 
@@ -1196,7 +1169,6 @@ class RequirementController extends Controller
                 ]);
             }
 
-
             /** A continuación Crea el primer evento */
             $event = Event::create([
                 'body' => $request->body,
@@ -1210,8 +1182,8 @@ class RequirementController extends Controller
             ]);
 
             /** Asociar documentos */
-            if($documents_ids) {
-                foreach($documents_ids as $document_id) {
+            if ($documents_ids) {
+                foreach ($documents_ids as $document_id) {
                     $event->documents()->attach($document_id);
                 }
             }
@@ -1221,7 +1193,7 @@ class RequirementController extends Controller
                 foreach ($request->file('forfile') as $file) {
                     $filename = $file->getClientOriginalName();
                     $fileModel = new File;
-                    $fileModel->file = $file->store('ionline/requirements',['disk' => 'gcs']);
+                    $fileModel->file = $file->store('ionline/requirements', ['disk' => 'gcs']);
                     $fileModel->name = $filename;
                     $fileModel->event_id = $event->id;
                     $fileModel->save();
@@ -1235,9 +1207,8 @@ class RequirementController extends Controller
             $requirement->setEventsAsViewed;
         }
 
-
-        /** 
-         * Manda correos a el listado de emails 
+        /**
+         * Manda correos a el listado de emails
          * ELIMINADO; porque ahora se envían los mails con notify() y en cola
          */
         // if (env('APP_ENV') == 'production') {
@@ -1253,16 +1224,20 @@ class RequirementController extends Controller
         session()->flash('info', 'Los requerimientos han sido creados.');
 
         /* Si es un requerimiento creado desde un parte envía a inbox de parte */
-        if ($requirement->parte_id) $return = 'documents.partes.index';
-        else $return = 'requirements.inbox';
+        if ($requirement->parte_id) {
+            $return = 'documents.partes.index';
+        } else {
+            $return = 'requirements.inbox';
+        }
 
         return redirect()->route($return);
     }
 
-    public function director_store(Request $request){
+    public function director_store(Request $request)
+    {
 
         /*
-            $request = 
+            $request =
             [
                 "parte_id" => "13664",
                 "label_id" => [
@@ -1292,11 +1267,10 @@ class RequirementController extends Controller
 
         /* Arma dos array, con la combinación de users, enCopia y categories */
         $copias = [];
-        foreach($request->users as $key => $user_id) {
-            if($request->enCopia[$key] == 1) {
+        foreach ($request->users as $key => $user_id) {
+            if ($request->enCopia[$key] == 1) {
                 $copias[$key]['user_id'] = $user_id;
-            }
-            else {
+            } else {
                 $users[$key]['user_id'] = $user_id;
             }
         }
@@ -1323,21 +1297,20 @@ class RequirementController extends Controller
             ]
         */
 
-
         /** Tareas comunes para todos los requerimientos */
         /** Obtener el siguiente número de grupo */
         $group_number = Requirement::getNextGroupNumber();
         /** Generar un array con los id de documentos */
-        $documents_ids = ($request->documents) ? explode(",",$request->documents) : null;
+        $documents_ids = ($request->documents) ? explode(',', $request->documents) : null;
         /** Cadena vacía para armar el listado de correos */
         $emails = '';
 
-        foreach($users as $user) {
+        foreach ($users as $user) {
             /** Modelo User al que va dirigido el req */
             $toUser = User::find($user['user_id']);
 
             /** Chequea que el usuario sea autoridad de su OU */
-            $to_authority = Authority::getAmIAuthorityOfMyOu(today(),'manager',$user['user_id']);
+            $to_authority = Authority::getAmIAuthorityOfMyOu(today(), 'manager', $user['user_id']);
 
             /** Crear el requerimiento */
             $requirement = Requirement::create([
@@ -1353,11 +1326,10 @@ class RequirementController extends Controller
 
             /** Setear las categorias */
             $requirement->setLabels($request->label_id);
-            
 
-            /** No sé porque, pero ...primero hay que crear 
+            /** No sé porque, pero ...primero hay que crear
              * todos los eventos de tipo copia. */
-            foreach($copias as $copia) {
+            foreach ($copias as $copia) {
                 /** Modelo User al que va dirigido la copia */
                 $toCopia = User::find($copia['user_id']);
 
@@ -1373,7 +1345,6 @@ class RequirementController extends Controller
                 ]);
             }
 
-
             /** A continuación Crea el primer evento */
             $event = Event::create([
                 'body' => $request->body,
@@ -1387,8 +1358,8 @@ class RequirementController extends Controller
             ]);
 
             /** Asociar documentos */
-            if($documents_ids) {
-                foreach($documents_ids as $document_id) {
+            if ($documents_ids) {
+                foreach ($documents_ids as $document_id) {
                     $event->documents()->attach($document_id);
                 }
             }
@@ -1398,7 +1369,7 @@ class RequirementController extends Controller
                 foreach ($request->file('forfile') as $file) {
                     $filename = $file->getClientOriginalName();
                     $fileModel = new File;
-                    $fileModel->file = $file->store('ionline/requirements',['disk' => 'gcs']);
+                    $fileModel->file = $file->store('ionline/requirements', ['disk' => 'gcs']);
                     $fileModel->name = $filename;
                     $fileModel->event_id = $event->id;
                     $fileModel->save();
@@ -1420,8 +1391,8 @@ class RequirementController extends Controller
         }
 
         /**
-         * ELIMINADO: Ahora los email se envian con Notify y en cola 
-         * Manda correso a el listado de emails 
+         * ELIMINADO: Ahora los email se envian con Notify y en cola
+         * Manda correso a el listado de emails
          */
         // if (env('APP_ENV') == 'production') {
         //     preg_match_all("/[\._a-zA-Z0-9-]+@[\._a-zA-Z0-9-]+/i", $emails, $emails_validos);
@@ -1438,20 +1409,20 @@ class RequirementController extends Controller
         // get actual parte
         $parte = Parte::whereDoesntHave('requirements')->whereDate('created_at', '>=', date('Y') - 1 .'-01-01')
             ->where('id', '>', $request->parte_id)->min('id');
-            $parte = Parte::find($parte);
+        $parte = Parte::find($parte);
 
         // get previous user id
         $previous = Parte::whereDoesntHave('requirements')->whereDate('created_at', '>=', date('Y') - 1 .'-01-01')
             ->where('id', '<', $parte->id)->max('id');
-            $previous = Parte::find($previous);
+        $previous = Parte::find($previous);
 
         // get next user id
         $next = Parte::whereDoesntHave('requirements')->whereDate('created_at', '>=', date('Y') - 1 .'-01-01')
             ->where('id', '>', $parte->id)->min('id');
-            $next = Parte::find($next);
+        $next = Parte::find($next);
 
         return redirect()->route('requirements.createFromParte', $parte);
-}
+    }
 
     // public function asocia_categorias(Request $request)
     // {
@@ -1473,11 +1444,8 @@ class RequirementController extends Controller
 
     /**
      * Display the specified resource.
-     *
-     * @param \App\Models\Requirements\Requirement $requirement
-     * @return \Illuminate\Http\Response
      */
-    public function show(Requirement $requirement)
+    public function show(Requirement $requirement): View
     {
 
         $ous = OrganizationalUnit::all()->sortBy('name');
@@ -1492,7 +1460,7 @@ class RequirementController extends Controller
             'childs.childs.childs.establishment',
             'childs.childs.childs.childs.establishment',
             'childs.childs.childs.childs.childs.establishment',
-            ])->where('level', 1)->get();
+        ])->where('level', 1)->get();
 
         $lastEvent = Event::where('requirement_id', $requirement->id)
             ->where('from_user_id', '<>', auth()->id())->get()->last();
@@ -1506,7 +1474,7 @@ class RequirementController extends Controller
             //->where('from_user_id','<>',auth()->id())->get()
             ->First();
 
-       //Se busca requerimientos agrupados, estos corresponden a los req. de los otros destinatarios de la misma solicitud de req.
+        //Se busca requerimientos agrupados, estos corresponden a los req. de los otros destinatarios de la misma solicitud de req.
         $groupedRequirements = null;
         if ($requirement->group_number != null) {
             $groupedRequirements = Requirement::query()
@@ -1556,23 +1524,23 @@ class RequirementController extends Controller
 
                 foreach ($user->requirements as $key3 => $requirement) {
                     if (($requirement->created_at >= $dateFrom) && ($requirement->created_at <= $dateTo)) {
-                        if ($requirement->status == "creado") {
+                        if ($requirement->status == 'creado') {
                             $matrix[$key]['creado'] = $matrix[$key]['creado'] + 1;
                             $matrix2[$cont]['creado'] = $matrix2[$cont]['creado'] + 1;
                         }
-                        if ($requirement->status == "respondido") {
+                        if ($requirement->status == 'respondido') {
                             $matrix[$key]['respondido'] = $matrix[$key]['respondido'] + 1;
                             $matrix2[$cont]['respondido'] = $matrix2[$cont]['respondido'] + 1;
                         }
-                        if ($requirement->status == "cerrado") {
+                        if ($requirement->status == 'cerrado') {
                             $matrix[$key]['cerrado'] = $matrix[$key]['cerrado'] + 1;
                             $matrix2[$cont]['cerrado'] = $matrix2[$cont]['cerrado'] + 1;
                         }
-                        if ($requirement->status == "derivado") {
+                        if ($requirement->status == 'derivado') {
                             $matrix[$key]['derivado'] = $matrix[$key]['derivado'] + 1;
                             $matrix2[$cont]['derivado'] = $matrix2[$cont]['derivado'] + 1;
                         }
-                        if ($requirement->status == "reabierto") {
+                        if ($requirement->status == 'reabierto') {
                             $matrix[$key]['reabierto'] = $matrix[$key]['reabierto'] + 1;
                             $matrix2[$cont]['reabierto'] = $matrix2[$cont]['reabierto'] + 1;
                         }
@@ -1595,43 +1563,13 @@ class RequirementController extends Controller
         }
 
         $organizationalUnit = OrganizationalUnit::all();
+
         return view('requirements.reports.report1', compact('request', 'organizationalUnit', 'matrix', 'matrix2'));
-    }
-
-    // public function report_reqs_by_org(Request $request)
-    // {
-    //
-    // }
-
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param \App\Models\Requirements\Requirement $requirement
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Requirement $requirement)
-    {
-        //$organizationalUnit = OrganizationalUnit::First();
-        //return view('requirements.edit', compact('organizationalUnit'));
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Models\Requirements\Requirement $requirement
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Requirement $requirement)
-    {
-        //
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param \App\Models\Requirements\Requirement $requirement
      * @return \Illuminate\Http\Response
      */
     public function destroy(Requirement $requirement)
@@ -1641,8 +1579,8 @@ class RequirementController extends Controller
         $requirement->requirementStatus()->delete();
         $requirement->delete();
 
-        session()->flash('success', 'El requerimiento ' . $id . ' ha sido eliminado');
+        session()->flash('success', 'El requerimiento '.$id.' ha sido eliminado');
 
-        return redirect()->route('requirements.inbox');        
+        return redirect()->route('requirements.inbox');
     }
 }
