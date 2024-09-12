@@ -52,11 +52,11 @@ class Reception extends Model implements Auditable
      * @var array
      */
     protected $casts = [
-        'date' => 'datetime',
-        'document_date' => 'date',
+        'date'               => 'datetime',
+        'document_date'      => 'date',
         'reservado_isp_date' => 'date',
-        'imputed' => 'encrypted',
-        'imputed_run' => 'encrypted',
+        'imputed'            => 'encrypted',
+        'imputed_run'        => 'encrypted',
     ];
 
     /**

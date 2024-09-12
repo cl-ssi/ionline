@@ -52,7 +52,7 @@ class ReceptionItem extends Model implements Auditable
      * @var array
      */
     protected $casts = [
-        'result_date' => 'date',
+        'result_date'       => 'date',
         'dispose_precursor' => 'boolean',
     ];
 
