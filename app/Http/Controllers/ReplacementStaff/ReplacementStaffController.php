@@ -59,6 +59,7 @@ class ReplacementStaffController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+    /*
     public function store(Request $request)
     {
         if($request->hasFile('cv_file') && $request->hasFile('file')){
@@ -93,6 +94,48 @@ class ReplacementStaffController extends Controller
             return redirect()->route('replacement_staff.edit', $replacementStaff);
         }
         else{
+            session()->flash('danger', 'Error al cargar los archivos');
+            return redirect()->back()->withInput();
+        }
+    }
+    */
+
+    public function store(Request $request)
+    {
+        if ($request->hasFile('cv_file') && $request->hasFile('file')) {
+            // SE GUARDA O ACTUALIZA STAFF
+            $replacementStaff = ReplacementStaff::updateOrCreate(
+                ['run' => $request->run], // Condición para identificar si ya existe
+                $request->all() // Datos para insertar o actualizar
+            );
+
+            $now = Carbon::now()->format('Y_m_d_H_i_s');
+            $file_name = $now.'_cv_'.$replacementStaff->run;
+            $file = $request->file('cv_file');
+            $replacementStaff->cv_file = $file->storeAs('/ionline/replacement_staff/cv_docs/', $file_name.'.'.$file->extension(), 'gcs');
+            $replacementStaff->save();
+
+            // SE GUARDA PERFIL OBLIGATORIO
+            $profile = new Profile();
+            $profile->degree_date = $request->degree_date;
+            $profile->profile_manage_id = $request->profile;
+            $profile->profession_manage_id = $request->profession;
+            if ($request->profile == 3 || $request->profile == 4) {
+                $profile->experience = $request->experience;
+            }
+            $profile->replacement_staff()->associate($replacementStaff);
+            $file_name = $now.'_'.$replacementStaff->run;
+            $file = $request->file('file');
+            $profile->file = $file->storeAs('/ionline/replacement_staff/profile_docs/', $file_name.'.'.$file->extension(), 'gcs');
+            $profile->save();
+
+            Mail::to($replacementStaff->email)
+                ->cc(env('APP_RYS_MAIL'))
+                ->send(new NewStaffNotificationUser($replacementStaff));
+
+            session()->flash('success', 'Se ha creado el postulante exitosamente');
+            return redirect()->route('replacement_staff.edit', $replacementStaff);
+        } else {
             session()->flash('danger', 'Error al cargar los archivos');
             return redirect()->back()->withInput();
         }
