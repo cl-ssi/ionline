@@ -6,6 +6,7 @@ use App\Filament\Resources\LogResource\Pages;
 use App\Models\Parameters\Log;
 use App\Models\Parameters\LogModule;
 use Filament\Forms;
+use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -121,6 +122,18 @@ class LogResource extends Resource
                 Filter::make('no_log_module')
                     ->label('Sin Módulo')
                     ->query(fn (Builder $query) => $query->whereNull('log_module_id')),
+                Filter::make('created_at')
+                    ->label('Fecha de Creación')
+                    ->form([
+                        DatePicker::make('created_at')
+                            ->label('Fecha')
+                            ->format('Y-m-d'),
+                    ])
+                    ->query(function (Builder $query, array $data) {
+                        if (isset($data['created_at'])) {
+                            $query->whereDate('record_datetime', $data['created_at']);
+                        }
+                    }),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
