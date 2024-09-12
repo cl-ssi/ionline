@@ -66,17 +66,18 @@ post_max_size = 66M
 "php": "^8.2",
 "ext-gd": "*",
 "actived/microsoft-teams-notifier": "^1.3",
-"barryvdh/laravel-dompdf": "^3.0", // upgrade de version
-"filament/filament": "^3.2", // new
+"barryvdh/laravel-dompdf": "^3.0",
+"doctrine/dbal": "^3.0", // eliminar
+"filament/filament": "^3.2",
 "firebase/php-jwt": "^6.10",
 "guzzlehttp/guzzle": "^7.9",
 "laminas/laminas-escaper": "^2.13",
-"laravel/framework": "^11.0", // upgrade de version
-"laravel/passport": "^12.3", // upgrade de version
+"laravel/framework": "^11.0", // actualizar
+"laravel/passport": "^12.3", // actualizar
 "laravel/tinker": "^2.9",
 "laravel/ui": "^4.0",
 "livewire/livewire": "^3.4",
-"luecano/numero-a-letras": "^3.0", // upgrade de version
+"luecano/numero-a-letras": "^3.0",
 "maatwebsite/excel": "^3.1",
 "owen-it/laravel-auditing": "^13.6",
 "phpoffice/phpword": "^1.3",
@@ -87,19 +88,19 @@ post_max_size = 66M
 "spatie/laravel-permission": "^6.0",
 "spatie/pdf-to-text": "^1.53",
 "stackkit/laravel-google-cloud-scheduler": "^3.0",
-"stackkit/laravel-google-cloud-tasks-queue": "^4.2", // upgrade de version
+"stackkit/laravel-google-cloud-tasks-queue": "^4.2", // actualizar
 "tinymce/tinymce": "^7.1"
 
 # "require-dev"
 "barryvdh/laravel-debugbar": "^3.13",
-"barryvdh/laravel-ide-helper": "^3.1", // upgrade de version
+"barryvdh/laravel-ide-helper": "^3.1",
 "fakerphp/faker": "^1.23",
-"kitloong/laravel-migrations-generator": "^7.0", // upgrade de version
+"kitloong/laravel-migrations-generator": "^7.0",
 "laravel/pint": "^1.17",
 "laravel/sail": "^1.31",
 "mockery/mockery": "^1.6",
-"nunomaduro/collision": "^8.4", // upgrade de version
-"phpunit/phpunit": "^11.3", // upgrade de version
+"nunomaduro/collision": "^8.4", // actualizar
+"phpunit/phpunit": "^11.3", // actualizar
 "spatie/laravel-ignition": "^2.8"
 
 ## Prompt para ordenar los modelos
