@@ -1,12 +1,15 @@
 <?php
+
 namespace App\Logging;
-use DB;
-use Monolog\Logger;
+
+use App\Models\Parameters\Log;
 use Monolog\Handler\AbstractProcessingHandler;
+use Monolog\Logger;
 
 class DatabaseHandler extends AbstractProcessingHandler
 {
     public $table;
+
     /**
      * Reference:
      * https://github.com/markhilton/monolog-mysql/blob/master/src/Logger/Monolog/Handler/MysqlHandler.php
@@ -19,25 +22,24 @@ class DatabaseHandler extends AbstractProcessingHandler
 
     protected function write($record): void
     {
-        $data = array(
+        $data = [
             'user_id'         => (auth()->guard('web')->check() == true) ? auth()->user()->id : null,
             'message'         => $record['message'],
             'uri'             => $_SERVER['REQUEST_URI'] ?? '',
             'formatted'       => $record['formatted'],
-
             'context'         => json_encode($record['context']),
             'level'           => $record['level'],
             'level_name'      => $record['level_name'],
             'channel'         => $record['channel'],
-
             'extra'           => json_encode($record['extra']),
             'remote_addr'     => $_SERVER['HTTP_X_FORWARDED_FOR'] ?? $_SERVER['REMOTE_ADDR'] ?? null,
             'user_agent'      => $_SERVER['HTTP_USER_AGENT'] ?? '',
             'record_datetime' => $record['datetime']->format('Y-m-d H:i:s'),
-            'created_at'      => date("Y-m-d H:i:s"),
-        );
-        DB::connection()->table($this->table)->insert($data);
+            'created_at'      => date('Y-m-d H:i:s'),
+        ];
 
-        //dd($record);
+        $log = Log::create($data);
+
+        $log->classify();
     }
 }
