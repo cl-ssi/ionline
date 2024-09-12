@@ -759,8 +759,11 @@
                         @endif
 
                         @can('dev')
-                            <a class="dropdown-item" href="{{ route('parameters.logs.index') }}">
+                            <a class="dropdown-item" href="{{ route('filament.intranet.resources.logs.index') }}">
                                 <i class="fas fa-fw fa-bug"></i> Log de errores
+                            </a>
+                            <a class="dropdown-item" href="{{ route('parameters.logs.index') }}">
+                                <i class="fas fa-fw fa-network-wired"></i> Prueba de correo/colas/firmas
                             </a>
                         @endcan
 
