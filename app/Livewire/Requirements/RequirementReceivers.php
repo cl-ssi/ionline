@@ -158,7 +158,27 @@ class RequirementReceivers extends Component
 
     public function remove($key)
     {
+        // Verificar si el destinatario a eliminar no está en copia
+        if ($this->enCopia[$key] == 0) {
+            // Contar cuántos destinatarios que no están en copia quedan
+            $remainingDestinatarios = collect($this->enCopia)->filter(function ($value) {
+                return $value == 0;
+            })->count();
+
+            // Si solo queda un destinatario, impedir la eliminación
+            if ($remainingDestinatarios <= 1) {
+                $this->message = "Debe haber al menos un destinatario principal.";
+                return;
+            }
+        }
+
+        // Si pasa la validación, eliminar el destinatario
         unset($this->users_array[$key]);
         unset($this->enCopia[$key]);
+
+        // Reindexar los arrays para evitar problemas de índices
+        $this->users_array = array_values($this->users_array);
+        $this->enCopia = array_values($this->enCopia);
     }
+
 }
