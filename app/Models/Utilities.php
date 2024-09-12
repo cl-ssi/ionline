@@ -2,14 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\Auth;
-use App\Ticket\Ticket;
-use App\Models\Rrhh\Authority;
 use App\Models\RequestForms\RequestForm;
-use App\RequestForms\RequestFormEvent;
+use App\Models\Rrhh\Authority;
+use App\Ticket\Ticket;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Utilities extends Model
 {
@@ -47,10 +46,11 @@ class Utilities extends Model
     public static function getPermissionSignaureAuthorize()
     {
         $authorities = Authority::getAmIAuthorityFromOu(Carbon::today(), 'manager', auth()->id());
-        $label = array();
+        $label       = [];
         foreach ($authorities as $key => $authority) {
             $label['uo_id'] = $authority->organizational_unit_id;
         }
+
         return $label;
     }
 
@@ -70,25 +70,26 @@ class Utilities extends Model
     {
         $authorities = Authority::getAmIAuthorityFromOu(Carbon::today(), 'manager', auth()->id());
         foreach ($authorities as $key => $authority) {
-            if($authority->organizational_unit_id == 1){
-              return $authority->organizational_unit_id;
+            if ($authority->organizational_unit_id == 1) {
+                return $authority->organizational_unit_id;
             }
         }
     }
+
     public static function getPendingDirectorAuthorize()
     {
-/*
-        $rfs = RequestForm::whereDoesntHave('requestformevents', function (Builder $query) {
-                  $query->where('type', 'director');
-              })->where('type_form', 'passage')->count();
+        /*
+                $rfs = RequestForm::whereDoesntHave('requestformevents', function (Builder $query) {
+                          $query->where('type', 'director');
+                      })->where('type_form', 'passage')->count();
 
-        if($rfs> 0) {
-            return $rfs;
-        }
-        else {
-            return null;
-        }
-*/
-          return 20;
+                if($rfs> 0) {
+                    return $rfs;
+                }
+                else {
+                    return null;
+                }
+        */
+        return 20;
     }
 }

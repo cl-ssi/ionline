@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Vaccination\Vaccination;
+namespace App\Models\Vaccination;
 
 use App\Models\Establishment;
 use App\Models\Rrhh\OrganizationalUnit;
