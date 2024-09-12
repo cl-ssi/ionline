@@ -87,8 +87,8 @@
                         <option value="Suspendido" style="background-color: #6c757d; color: white" {{
                             old('edit_state_option', $event->state) == 'Suspendido' ? 'selected' : '' }}>Suspendido
                         </option>
-                        <option value="Licencia" style="background-color: #553C7B; color: white" {{
-                            old('edit_state_option', $event->state) == 'Licencia' ? 'selected' : '' }}>Licencia</option>
+                        <option value="No Operativo" style="background-color: #553C7B; color: white" {{
+                            old('edit_state_option', $event->state) == 'No Operativo' || old('edit_state_option', $event->state) == 'Licencia' ? 'selected' : '' }}>No Operativo</option>
                     </select>
                     @error('state')
                     <span class="text-danger">{{ $message }}</span>

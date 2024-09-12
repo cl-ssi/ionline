@@ -7,6 +7,7 @@
 </head> --}}
 
 <div>
+<div>
     <div>
         <div class="container">
             <div class="row">
@@ -232,6 +233,7 @@
                             <label for="create_driver_id">Conductor</label>
                             <select class="custom-select" id="create_driver_id" name='driver_id'>
                                 <option selected value="">Seleccione un conductor</option>
+                                <option value="12016188">Wladimir Cáceres Liefoc	</option>
                                 <option value="16055330">Osvaldo Díaz Vicencio</option>
                                 <option value="12321170">Rodolfo Velásquez Bahamonde</option>
                                 <option value="7229401">Juan Pastén Ruarte</option>
@@ -378,6 +380,9 @@
                         return '#6c757d';
                         break;
                     case 'No Operativo':
+                        return '#553C7B';
+                        break;
+                    case 'Licencia':
                         return '#553C7B';
                         break;
                     default:
@@ -670,6 +675,7 @@
                        <label for="create_driver_id">Conductor</label>
                        <select class="custom-select" id="create_driver_id" name='driver_id'>
                            <option selected value="">Seleccione un conductor</option>
+                           <option value="12016188">Wladimir Cáceres Liefoc	</option>
                            <option value="16055330">Osvaldo Díaz Vicencio</option>
                            <option value="12321170">Rodolfo Velásquez Bahamonde</option>
                            <option value="7229401">Juan Pastén Ruarte</option>
@@ -778,3 +784,4 @@
    </div>
 </div>
 {{-- create modal ending --}}
+</div>
