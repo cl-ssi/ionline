@@ -29,7 +29,7 @@ class LogModuleResource extends Resource
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TagsInput::make('uri_conditions')
+                Forms\Components\TagsInput::make('conditions')
                     ->columnSpanFull(),
             ]);
     }
