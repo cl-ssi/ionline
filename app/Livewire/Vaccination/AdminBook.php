@@ -5,7 +5,7 @@ namespace App\Livewire\Vaccination;
 use Livewire\Component;
 use App\Models\Vaccination\Slot;
 use App\Models\Vaccination\Day;
-use App\Models\Vaccination;
+use App\Models\Vaccination\Vaccination;
 
 class AdminBook extends Component
 {

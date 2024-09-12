@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Vaccination\Vaccination;
 
 use App\Models\Establishment;
 use App\Models\Rrhh\OrganizationalUnit;
@@ -40,7 +40,7 @@ class Vaccination extends Model implements Auditable
         'second_dose',
         'second_dose_at',
         'fd_observation',
-        'sd_observation'
+        'sd_observation',
     ];
 
     /**
@@ -49,18 +49,16 @@ class Vaccination extends Model implements Auditable
      * @var array
      */
     protected $casts = [
-        'arrival_at' => 'datetime',
-        'dome_at' => 'datetime',
-        'first_dose' => 'datetime',
-        'second_dose' => 'datetime',
-        'first_dose_at' => 'datetime',
-        'second_dose_at' => 'datetime'
+        'arrival_at'     => 'datetime',
+        'dome_at'        => 'datetime',
+        'first_dose'     => 'datetime',
+        'second_dose'    => 'datetime',
+        'first_dose_at'  => 'datetime',
+        'second_dose_at' => 'datetime',
     ];
 
     /**
      * Get the establishment that owns the vaccination.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function establishment(): BelongsTo
     {
@@ -69,8 +67,6 @@ class Vaccination extends Model implements Auditable
 
     /**
      * Get the organizational unit that owns the vaccination.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function organizationalUnit(): BelongsTo
     {
@@ -79,19 +75,17 @@ class Vaccination extends Model implements Auditable
 
     /**
      * Get the full name of the person.
-     *
-     * @return string
      */
     public function fullName(): string
     {
-        return $this->name . ' ' . $this->fathers_family . ' ' . $this->mothers_family;
+        return $this->name.' '.$this->fathers_family.' '.$this->mothers_family;
     }
 
     /**
      * Scope a query to search for a specific term.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param string $search
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  string  $search
      * @return void
      */
     public function scopeSearch($query, $search)
@@ -100,10 +94,10 @@ class Vaccination extends Model implements Auditable
             $array_search = explode(' ', $search);
             foreach ($array_search as $word) {
                 $query->where(function ($query) use ($word) {
-                    $query->where('name', 'LIKE', '%' . $word . '%')
-                        ->orWhere('fathers_family', 'LIKE', '%' . $word . '%')
-                        ->orWhere('mothers_family', 'LIKE', '%' . $word . '%')
-                        ->orWhere('run', 'LIKE', '%' . $word . '%');
+                    $query->where('name', 'LIKE', '%'.$word.'%')
+                        ->orWhere('fathers_family', 'LIKE', '%'.$word.'%')
+                        ->orWhere('mothers_family', 'LIKE', '%'.$word.'%')
+                        ->orWhere('run', 'LIKE', '%'.$word.'%');
                 });
             }
         }
@@ -111,8 +105,6 @@ class Vaccination extends Model implements Auditable
 
     /**
      * Get the alias for the establishment.
-     *
-     * @return string
      */
     public function getAliasEstabAttribute(): string
     {
@@ -128,8 +120,6 @@ class Vaccination extends Model implements Auditable
 
     /**
      * Get the alias for the inform method.
-     *
-     * @return string
      */
     public function getAliasInformMethodAttribute(): string
     {
@@ -147,11 +137,9 @@ class Vaccination extends Model implements Auditable
 
     /**
      * Get the formatted run.
-     *
-     * @return string
      */
     public function getRunFormatAttribute(): string
     {
-        return $this->run . '-' . $this->dv;
+        return $this->run.'-'.$this->dv;
     }
 }

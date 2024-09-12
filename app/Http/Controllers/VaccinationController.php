@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Vaccination;
+use App\Models\Vaccination\Vaccination;
 use App\Models\Vaccination\Slot;
 use App\Models\Vaccination\Day;
 use Illuminate\Http\Request;
