@@ -86,7 +86,7 @@ class SignatureController extends Controller
             foreach ($myAuthorities as $myAuthority) {
                 $authoritiesSignatures = Signature::where('responsable_id', $myAuthority->user_id)
                     ->whereBetween('created_at', [$myAuthority->from, $myAuthority->to])
-                    ->where(function ($query) use ($request) {
+                    ->where(function ($query) use ($request, $search) {
                         $query->where('subject', 'like', $search)
                             ->orWhere('id', '=', $request->search)
                             ->orWhere('description', 'like', $search);
