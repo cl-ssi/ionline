@@ -82,16 +82,11 @@ class LogResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('id')
+                    ->description(fn (Log $record): string => $record->logModule?->name ?? '')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('record_datetime')
+                    ->description(fn (Log $record): string => $record->user?->shortName ?? '')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('logModule.name')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('user.name')
-                    ->numeric()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
                 // Tables\Columns\TextColumn::make('module')
                 //     ->searchable(),
                 Tables\Columns\TextColumn::make('message')
