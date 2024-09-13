@@ -17,6 +17,8 @@ use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use App\Models\Parameters\Holiday;
 
+use Illuminate\Database\Eloquent\Relations\MorphTo;
+
 
 class Training extends Model implements Auditable
 {
@@ -61,7 +63,7 @@ class Training extends Model implements Auditable
         'user_creator_id'
     ];
 
-    public function userTraining() {
+    public function userTraining(): MorphTo {
         return $this->morphTo();
     }
 
