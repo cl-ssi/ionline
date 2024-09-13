@@ -12,7 +12,7 @@ sistemas.sst@redsalud.gob.cl
 
 > Incluye Bootstrap 5 jQuery y Font Awesome y Bootstrap Icons.
 
-## Prerequisitos
+## Prerequisitos.
 
 
 -   git
