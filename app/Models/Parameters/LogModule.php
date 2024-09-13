@@ -17,7 +17,7 @@ class LogModule extends Model
      */
     protected $fillable = [
         'name',
-        'uri_conditions',
+        'conditions',
     ];
 
     protected $casts = [
