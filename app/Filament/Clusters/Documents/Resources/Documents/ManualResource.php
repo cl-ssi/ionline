@@ -29,8 +29,8 @@ class ManualResource extends Resource
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\Select::make('log_module_id')
-                    ->relationship('logModule', 'name')
+                Forms\Components\Select::make('module_id')
+                    ->relationship('module', 'name')
                     ->required(),
                 Forms\Components\RichEditor::make('content')
                     ->required()
@@ -46,7 +46,7 @@ class ManualResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('logModule.name')
+                Tables\Columns\TextColumn::make('module.name')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')

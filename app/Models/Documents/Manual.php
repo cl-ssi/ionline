@@ -2,7 +2,7 @@
 
 namespace App\Models\Documents;
 
-use App\Models\Parameters\LogModule;
+use App\Models\Parameters\Module;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -13,7 +13,7 @@ class Manual extends Model
 
     protected $fillable = [
         'name',
-        'log_module_id',
+        'module_id',
         'content',
     ];
 
@@ -23,8 +23,8 @@ class Manual extends Model
 
     protected $table = 'doc_manuals';
 
-    public function logModule(): BelongsTo
+    public function module(): BelongsTo
     {
-        return $this->belongsTo(LogModule::class);
+        return $this->belongsTo(Module::class);
     }
 }

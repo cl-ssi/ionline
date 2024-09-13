@@ -15,16 +15,16 @@ class TopLogsByModuleWidget extends ChartWidget
 
     protected function getData(): array
     {
-        // Obtener la cantidad de logs agrupados por la relación logModule
-        $logsByModule = Log::with('logModule')
-            ->select('log_module_id', \DB::raw('count(*) as count'))
-            ->groupBy('log_module_id')
+        // Obtener la cantidad de logs agrupados por la relación module
+        $logsByModule = Log::with('module')
+            ->select('module_id', \DB::raw('count(*) as count'))
+            ->groupBy('module_id')
             ->orderByDesc('count')
             ->get();
 
         // Extraer los nombres de los módulos y las cantidades de logs
         $labels = $logsByModule->map(function ($log) {
-            return $log->logModule ? $log->logModule->name : 'Sin módulo'; // Si no hay módulo, colocar "Sin módulo"
+            return $log->module ? $log->module->name : 'Sin módulo'; // Si no hay módulo, colocar "Sin módulo"
         })->toArray();
 
         $data = $logsByModule->pluck('count')->toArray();

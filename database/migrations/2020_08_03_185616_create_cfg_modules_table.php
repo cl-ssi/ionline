@@ -11,10 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('log_modules', function (Blueprint $table) {
+        Schema::create('cfg_modules', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('description')->nullable();
+            $table->string('developers')->nullable();
+            $table->string('referentes')->nullable();
+            $table->dateTime('start_date')->nullable();
             $table->text('conditions')->nullable();
+            $table->enum('status', ['development', 'active', 'inactive'])->default('active');
             $table->timestamps();
         });
     }
@@ -24,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('log_modules');
+        Schema::dropIfExists('cfg_modules');
     }
 };

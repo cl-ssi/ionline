@@ -20,7 +20,7 @@ class Log extends Model
     protected $fillable = [
         'user_id',
         'message',
-        'log_module_id',
+        'module_id',
         'module',
         'uri',
         'formatted',
@@ -41,9 +41,9 @@ class Log extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function logModule(): BelongsTo
+    public function module(): BelongsTo
     {
-        return $this->belongsTo(LogModule::class);
+        return $this->belongsTo(Module::class);
     }
 
     /**
@@ -51,8 +51,8 @@ class Log extends Model
      */
     public function classify(): void
     {
-        // Recupera todos los módulos de LogModule
-        $modules = LogModule::all();
+        // Recupera todos los módulos de Module
+        $modules = Module::all();
 
         // Iterar sobre cada módulo
         foreach ($modules as $module) {
@@ -64,7 +64,7 @@ class Log extends Model
                 foreach ($conditions as $pattern) {
                     if (preg_match($pattern, $this->uri) || preg_match($pattern, $this->message) || preg_match($pattern, $this->formatted)) {
                         // Si coincide, asignar el módulo al log y salir del loop
-                        $this->logModule()->associate($module);
+                        $this->module()->associate($module);
                         $this->save();
 
                         return; // Deja de clasificar una vez que encuentra un módulo

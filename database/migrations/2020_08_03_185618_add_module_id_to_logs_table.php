@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('logs', function (Blueprint $table) {
-            $table->foreignId('log_module_id')->after('message')->nullable()->constrained('log_modules');
+            $table->foreignId('module_id')->after('message')->nullable()->constrained('cfg_modules');
         });
     }
 
@@ -22,8 +22,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('logs', function (Blueprint $table) {
-            $table->dropForeign(['log_module_id']);
-            $table->dropColumn('log_module_id');
+            $table->dropForeign(['module_id']);
+            $table->dropColumn('module_id');
         });
     }
 };

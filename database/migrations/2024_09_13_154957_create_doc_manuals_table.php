@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('doc_manuals', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->foreignId('log_module_id')->constrained();
+            $table->foreignId('module_id')->constrained('cfg_modules');
             $table->text('content');
             $table->timestamps();
             $table->softDeletes();

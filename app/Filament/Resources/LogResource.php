@@ -4,7 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\LogResource\Pages;
 use App\Models\Parameters\Log;
-use App\Models\Parameters\LogModule;
+use App\Models\Parameters\Module;
 use Filament\Forms;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Form;
@@ -31,8 +31,8 @@ class LogResource extends Resource
                     ->getOptionLabelFromRecordUsing(fn (Model $record): string => explode(' ', $record->name)[0]." {$record->fathers_family} {$record->mothers_family}")
                     ->default(null)
                     ->searchable(),
-                Forms\Components\Select::make('log_module_id')
-                    ->relationship('logModule', 'name')
+                Forms\Components\Select::make('module_id')
+                    ->relationship('module', 'name')
                     ->default(null),
                 Forms\Components\TextInput::make('record_datetime')
                     ->required()
@@ -83,7 +83,8 @@ class LogResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('id')
-                    ->description(fn (Log $record): string => $record->logModule?->name ?? '')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('module.name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('record_datetime')
                     ->description(fn (Log $record): string => $record->user?->shortName ?? '')
@@ -116,12 +117,12 @@ class LogResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                SelectFilter::make('log_module_id')
-                    ->label('Módulo')
-                    ->options(LogModule::orderBy('name')->pluck('name', 'id')->all()),
                 Filter::make('no_log_module')
                     ->label('Sin Módulo')
-                    ->query(fn (Builder $query) => $query->whereNull('log_module_id')),
+                    ->query(fn (Builder $query) => $query->whereNull('module_id')),
+                SelectFilter::make('module_id')
+                    ->label('Módulo')
+                    ->options(Module::orderBy('name')->pluck('name', 'id')->all()),
                 Filter::make('created_at')
                     ->label('Fecha de Creación')
                     ->form([

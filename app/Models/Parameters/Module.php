@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class LogModule extends Model
+class Module extends Model
 {
     use HasFactory;
 
@@ -17,12 +17,22 @@ class LogModule extends Model
      */
     protected $fillable = [
         'name',
+        'description',
+        'developers',
+        'referentes',
+        'start_date',
         'conditions',
+        'status',
     ];
 
     protected $casts = [
+        'developers' => 'array',
+        'referentes' => 'array',
         'conditions' => 'array',
+        'start_date' => 'datetime',
     ];
+
+    protected $table = 'cfg_modules';
 
     public function logs(): HasMany
     {
