@@ -64,7 +64,6 @@ class Training extends Model implements Auditable
     ];
 
     public function userTraining(): MorphTo {
-        //NUEVA REALACIÓN POLIMORFICA
         return $this->morphTo();
     }
 
