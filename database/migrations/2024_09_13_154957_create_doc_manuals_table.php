@@ -13,9 +13,12 @@ return new class extends Migration
     {
         Schema::create('doc_manuals', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->foreignId('module_id')->constrained('cfg_modules');
+            $table->foreignId('module_id')->nullable()->constrained('cfg_modules');
+            $table->foreignId('author_id')->nullable()->constrained('users');
+            $table->float('version')->default(1);
+            $table->string('title');
             $table->text('content');
+            $table->text('modifications')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

@@ -26,18 +26,27 @@ class ManualResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name')
-                    ->required()
-                    ->maxLength(255),
                 Forms\Components\Select::make('module_id')
-                    ->relationship('module', 'name')
-                    ->required(),
+                    ->relationship('module', 'name'),
+                Forms\Components\Select::make('author_id')
+                    ->relationship('author', 'full_name')
+                    ->searchable(),
+                Forms\Components\TextInput::make('version')
+                    ->numeric()
+                    ->inputMode('decimal'),
+                Forms\Components\TextInput::make('title')
+                    ->required()
+                    ->columnSpanFull()
+                    ->maxLength(255),
                 Forms\Components\RichEditor::make('content')
                     ->required()
                     ->fileAttachmentsDirectory('documents/manuals/images')
                     ->fileAttachmentsVisibility('private')
                     ->columnSpanFull(),
-            ]);
+                Forms\Components\KeyValue::make('modifications')
+                    ->columnSpanFull(),
+            ])
+            ->columns(3);
     }
 
     public static function table(Table $table): Table
