@@ -88,6 +88,13 @@ class ManualResource extends Resource
                     ->icon('heroicon-o-document-duplicate')
                     ->requiresConfirmation()
                     ->color('primary'),
+                Tables\Actions\Action::make('view')
+                    ->label('Ver')
+                    ->action(function (Manual $record) {
+                        return redirect()->route('documents.manuals.show', $record->id);
+                    })
+                    ->openUrlInNewTab()
+                    ->icon('heroicon-o-eye'),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
