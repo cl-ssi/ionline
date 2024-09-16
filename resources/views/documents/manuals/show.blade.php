@@ -52,3 +52,27 @@
     {!! $record->content !!}
 
 @endsection
+
+
+@section('before-content')
+    <!-- Sección de las aprobaciones -->
+    <div class="signature-footer">
+
+        <div class="signature">
+
+        </div>
+
+        <div class="signature">
+            @if ($record->approval)
+                @include('sign.approvation', [
+                    'approval' => $record->approval,
+                ])
+            @endif
+        </div>
+
+        <div class="signature">
+
+        </div>
+
+    </div>
+@endsection

@@ -50,6 +50,7 @@
 
     <!-- Define main for content -->
     <main>
+        @yield('before-content')
         @yield('content', $slot ?? '')
     </main>
     <!-- For approvals -->
