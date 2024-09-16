@@ -4,18 +4,15 @@ namespace App\Filament\Clusters\Parameters\Resources;
 
 use App\Filament\Clusters\Parameters;
 use App\Filament\Clusters\Parameters\Resources\PlaceResource\Pages;
-use App\Filament\Clusters\Parameters\Resources\PlaceResource\RelationManagers;
-use App\Models\Parameters\Location;
+use App\Models\Establishment;
 use App\Models\Parameters\Place;
 use Filament\Forms;
 use Filament\Forms\Form;
-use Filament\Forms\Get;
-use Filament\Forms\Set;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\HtmlString;
 
 class PlaceResource extends Resource
@@ -25,6 +22,7 @@ class PlaceResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?string $modelLabel = 'Lugar';
+
     protected static ?string $pluralModelLabel = 'Lugares';
 
     protected static ?string $cluster = Parameters::class;
@@ -43,21 +41,13 @@ class PlaceResource extends Resource
                     ->default(null),
                 Forms\Components\Select::make('location_id')
                     ->label('Edificio')
-                    ->relationship('location', 'name', fn(
+                    ->relationship('location', 'name', fn (
                         Builder $query
                     ) => $query->orderBy('id', 'asc'))
-                    ->required()
-                    ->reactive()
-                    ->afterStateUpdated(function (Get $get, Set $set) {
-                        $set('establishment_id', Location::find($get('location_id'))->establishment_id);
-                    }),
+                    ->required(),
                 Forms\Components\TextInput::make('architectural_design_code')
                     ->label('Código Diseño Arquitectura')
                     ->default(null),
-                Forms\Components\TextInput::make('establishment_id')
-                    ->numeric()
-                    ->disabled()
-                    ->dehydrated()
             ]);
     }
 
@@ -106,12 +96,11 @@ class PlaceResource extends Resource
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
-            ->modifyQueryUsing(function (Builder $query) {
-                return $query->where('establishment_id', auth()->user()->establishment_id);
-            })
             ->defaultSort('name', 'asc')
             ->filters([
-                //
+                SelectFilter::make('establishment_id')
+                    ->label('Establecimiento')
+                    ->options(Establishment::orderBy('name')->pluck('name', 'id')->all()),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
@@ -133,9 +122,9 @@ class PlaceResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListPlaces::route('/'),
+            'index'  => Pages\ListPlaces::route('/'),
             'create' => Pages\CreatePlace::route('/create'),
-            'edit' => Pages\EditPlace::route('/{record}/edit'),
+            'edit'   => Pages\EditPlace::route('/{record}/edit'),
         ];
     }
 }
