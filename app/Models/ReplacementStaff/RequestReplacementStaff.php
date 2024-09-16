@@ -353,7 +353,7 @@ class RequestReplacementStaff extends Model implements Auditable
 
     public function getNumberOfDays()
     {
-        return (int) $this->start_date->startOfDay()->diffInDays($this->end_date->startOfDay()->addDay());
+        return (int) $this->start_date->startOfDay()->diffInDays($this->end_date->endOfDay()->addDays());
     }
 
     public static function getCurrentContinuity($requestReplacementStaff)
