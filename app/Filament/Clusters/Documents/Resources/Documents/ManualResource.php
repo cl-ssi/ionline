@@ -27,23 +27,28 @@ class ManualResource extends Resource
         return $form
             ->schema([
                 Forms\Components\Select::make('module_id')
+                    ->label('Módulo')
                     ->relationship('module', 'name'),
                 Forms\Components\Select::make('author_id')
+                    ->label('Autor')
                     ->relationship('author', 'full_name')
                     ->searchable(),
                 Forms\Components\TextInput::make('version')
+                    ->label('Versión')
                     ->numeric()
                     ->inputMode('decimal'),
                 Forms\Components\TextInput::make('title')
+                    ->label('Título')
                     ->required()
                     ->columnSpanFull()
                     ->maxLength(255),
+                Forms\Components\KeyValue::make('modifications')
+                    ->label('Modificaciones')
+                    ->columnSpanFull(),
                 Forms\Components\RichEditor::make('content')
                     ->required()
                     ->fileAttachmentsDirectory('documents/manuals/images')
                     ->fileAttachmentsVisibility('private')
-                    ->columnSpanFull(),
-                Forms\Components\KeyValue::make('modifications')
                     ->columnSpanFull(),
             ])
             ->columns(3);
@@ -54,8 +59,10 @@ class ManualResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('title')
+                    ->label('Título')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('module.name')
+                    ->label('Módulo')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
