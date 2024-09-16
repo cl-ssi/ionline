@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Documents\Manual;
 use App\Models\Parameters\News;
 use App\Models\Parameters\PhraseOfTheDay;
 
@@ -32,6 +33,10 @@ class HomeController extends Controller
             ->orderBy('id', 'desc')
             ->get();
 
-        return view('layouts.bt5.home', compact('phrase', 'allNews'));
+        $manuals = Manual::where('id', '!=', 1)
+            ->orderBy('title', 'desc')
+            ->get();
+
+        return view('layouts.bt5.home', compact('phrase', 'allNews', 'manuals'));
     }
 }

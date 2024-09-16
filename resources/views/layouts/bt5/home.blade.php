@@ -361,6 +361,13 @@
             </h5>
 
             <ul class="list-group">
+                @foreach ($manuals as $manual)
+                    <a href="{{ route('documents.manuals.show', $manual) }}"
+                        class="list-group-item list-group-item-action small">
+                            {{ $manual->title }}<i> V: {{ number_format($manual->version,1,'.','') }} </i>
+                    </a>
+                @endforeach
+
                 <a href="https://docs.google.com/document/d/1FMhKIgpKiEjTcez887z_8fKOmYXGaQ21/edit?usp=sharing&ouid=100875180090664492720&rtpof=true&sd=true"
                     class="list-group-item list-group-item-action small" target="_blank">
                     Bienestar - Solicitud de beneficios.
@@ -384,10 +391,6 @@
                 <a href="https://docs.google.com/document/d/1r6zJhOMQYL8JiFlDJL2PtXeyu_bvggKCmLBomKjc24g/edit"
                     class="list-group-item list-group-item-action small" target="_blank">
                     Solicitud de Firmas iOnline
-                </a>
-                <a href="https://docs.google.com/document/d/1kW7ujIVKe_MF23HSjxfiHlIUEi7eWk6-QzyzhClrXw0/edit?usp=sharing"
-                    class="list-group-item list-group-item-action small" target="_blank">
-                    Generador de Documentos
                 </a>
             </ul>
 
