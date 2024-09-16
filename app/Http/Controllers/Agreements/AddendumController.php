@@ -185,8 +185,8 @@ class AddendumController extends Controller
         $signature->subject = 'Addendum Convenio programa '.$programa.' comuna de '.$addendum->agreement->commune->name;
         $signature->description = 'Documento addendum de convenio de ejecución del programa '.$programa.' año '.$addendum->agreement->period.' comuna de '.$addendum->agreement->commune->name;
         $signature->endorse_type = 'Visación en cadena de responsabilidad';
-        $signature->recipients = 'sdga.ssi@redsalud.gov.cl,jurídica.ssi@redsalud.gov.cl,cxhenriquez@gmail.com,'.$addendum->referrer->email.',natalia.rivera.a@redsalud.gob.cl,apoyo.convenioaps@redsalud.gob.cl,pablo.morenor@redsalud.gob.cl,finanzas.ssi@redsalud.gov.cl,jaime.abarzua@redsalud.gov.cl,aps.ssi@redsalud.gob.cl';
-        $signature->distribution = 'División de Atención Primaria MINSAL,Oficina de Partes SSI,'.$municipio;
+        $signature->recipients = ''; // 'sdga.ssi@redsalud.gov.cl,jurídica.ssi@redsalud.gov.cl,cxhenriquez@gmail.com,'.$addendum->referrer->email.',natalia.rivera.a@redsalud.gob.cl,apoyo.convenioaps@redsalud.gob.cl,pablo.morenor@redsalud.gob.cl,finanzas.ssi@redsalud.gov.cl,jaime.abarzua@redsalud.gov.cl,aps.ssi@redsalud.gob.cl';
+        $signature->distribution = 'blanca.galaz@redsalud.gob.cl' ;//'División de Atención Primaria MINSAL,Oficina de Partes SSI,'.$municipio;
 
         $signaturesFile = new SignaturesFile;
         $signaturesFile->file_type = 'documento';
@@ -202,13 +202,13 @@ class AddendumController extends Controller
         if ($type == 'visators') {
             //visadores por cadena de responsabilidad en orden parte primero por el referente tecnico
             // $visadores = collect([
-            //                 ['ou_id' => 12, 'user_id' => 15005047] // DEPTO. ATENCION PRIMARIA DE SALUD - ANA MARIA MUJICA
-            //                 ['ou_id' => 61, 'user_id' => 12834358], // DEPTO.ASESORIA JURIDICA  - LUIS MENA BUGUEÑO
-            //                 ['ou_id' => 31, 'user_id' => 17432199], // DEPTO.GESTION FINANCIERA (40) - ROMINA GARÍN
+            //                 ['ou_id' => 61, 'user_id' => 6811637], // DEPTO.ASESORIA JURIDICA  - Cármen Henriquez
+            //                 ['ou_id' => 61, 'user_id' => 17289587], // JEFE APS  - Valentina Ortiga
             //                 ['ou_id' => 2, 'user_id' => 14104369], // SUBDIRECCION GESTION ASISTENCIAL - CARLOS CALVO
+            //                 ['ou_id' => 31, 'user_id' => 17432199], // DEPTO.GESTION FINANCIERA (40) - ROMINA GARÍN
             //             ]);
             $visadores = collect([$addendum->referrer]); //referente tecnico
-            foreach ([15005047, 12834358, 17432199, 14104369] as $user_id) { //resto de visadores por cadena de responsabilidad
+            foreach ([6811637, 17289587, 14104369, 17432199] as $user_id) { //resto de visadores por cadena de responsabilidad
                 $visadores->add(User::find($user_id));
             }
 
