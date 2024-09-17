@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Filament\Resources;
+namespace App\Filament\Resources\Inventory;
 
-use App\Filament\Resources\TelephoneResource\Pages;
+use App\Filament\Resources\Inventory\TelephoneResource\Pages;
+use App\Filament\Resources\Inventory\TelephoneResource\RelationManagers;
 use App\Models\Establishment;
 use App\Models\Parameters\Location;
 use App\Models\Parameters\Place;
@@ -13,12 +14,14 @@ use Filament\Forms\Get;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class TelephoneResource extends Resource
 {
     protected static ?string $model = Telephone::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-phone';
 
     protected static ?string $modelLabel = 'Teléfono';
 
@@ -167,9 +170,9 @@ class TelephoneResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index'  => Pages\ListTelephones::route('/'),
+            'index' => Pages\ListTelephones::route('/'),
             'create' => Pages\CreateTelephone::route('/create'),
-            'edit'   => Pages\EditTelephone::route('/{record}/edit'),
+            'edit' => Pages\EditTelephone::route('/{record}/edit'),
         ];
     }
 }

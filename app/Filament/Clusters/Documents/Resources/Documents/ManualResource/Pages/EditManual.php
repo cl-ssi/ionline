@@ -35,7 +35,7 @@ class EditManual extends EditRecord
                 ->icon('heroicon-o-check-circle')
                 ->requiresConfirmation()
                 ->color('success')
-                ->visible(fn (Manual $record): bool => ! $record->approval),
+                ->visible(fn (Manual $record): bool => ! $record->approval()->exists()),
             Actions\Action::make('deleteApproval')
                 ->label('Eliminar aprobación de '.$this->record->approval->id)
                 ->action(function (Manual $record) {
@@ -55,7 +55,7 @@ class EditManual extends EditRecord
                 ->icon('heroicon-o-x-circle')
                 ->requiresConfirmation()
                 ->color('danger')
-                ->visible(fn (Manual $record): bool => $record->approval && $record->approval->status == true),
+                ->visible(fn (Manual $record): bool => $record->approval()->exists() && $record->approval->status == true),
         ];
 
     }

@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Filament\Resources\TelephoneResource\Pages;
+namespace App\Filament\Resources\Inventory\TelephoneResource\Pages;
 
-use App\Filament\Resources\TelephoneResource;
+use App\Filament\Resources\Inventory\TelephoneResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 
