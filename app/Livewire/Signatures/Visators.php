@@ -5,7 +5,10 @@ namespace App\Livewire\Signatures;
 use Livewire\Component;
 use App\Models\Rrhh\OrganizationalUnit;
 use App\Models\User;
+use App\Models\Establishment;
+use App\Models\Rrhh\Authority;
 use Livewire\Attributes\On;
+use Carbon\Carbon;
 
 class Visators extends Component
 {
@@ -19,32 +22,62 @@ class Visators extends Component
     public $requiredVisator = '';
     public $selectedDocumentType;
 
+    public $authority;
+    public $ouRoots;
+    public $to_ou_id;
+    public $users_array = [];
+    public $to_user_id = '';
+    public $message;
+    public $endorse_type;
+    public $endorse_type_enabled = "disabled";
+
+    public function updatedEndorseType($value)
+    {
+        if($value == "No requiere visación") 
+            $this->endorse_type_enabled = "disabled"; 
+        else{
+            $this->endorse_type_enabled = "enabled";
+        }
+            
+    }
+
     public function mount()
     {
-        // Agrega inputs según cantidad de flows de visator al editar
-        if ($this->signature && $this->signature->signaturesFlowVisator->count() > 0) {
-            for ($i = 0; $i < $this->signature->signaturesFlowVisator->count(); $i++) {
-                $this->add($this->i);
+        // obtiene array con datos de visadores
+        $this->updatedEndorseType("No requiere visación");
+
+        if($this->signature){
+            foreach($this->signature->signaturesFlowVisator as $signatureFlowVisator){
+                $user = User::find($signatureFlowVisator->user_id);
+                array_push($this->users_array, $user);
+                array_push($this->visatorType, $signatureFlowVisator->visator_type ? $signatureFlowVisator->visator_type : $signatureFlowVisator->type);
+            }
+
+            $this->selectedDocumentType = $this->signature->type_id;
+            $this->endorse_type = $this->signature->endorse_type;
+            $this->updatedEndorseType($this->endorse_type);
+        }
+
+        // obtiene info de select de ou
+        $this->ouRoots = array();
+        $establishments_ids = explode(',',env('APP_SS_ESTABLISHMENTS'));
+
+        // para verificar si usuario logeado es director(a) del servicio
+        $auth_user_id = auth()->id();
+        $manager_user_id = OrganizationalUnit::where('level',1)
+                                            ->where('establishment_id',38)
+                                            ->first()
+                                            ->currentManager
+                                            ->user_id;
+
+        foreach($establishments_ids as $establishment) {
+            $ouTree = Establishment::find($establishment)->ouTreeWithAlias;
+            foreach((array) $ouTree as $key => $outree){
+                $this->ouRoots[] = array('id'=> $key, 'name' => $outree);
             }
         }
 
-        // Agrega unidad organizacional al editar
-        if ($this->signature && $this->signature->signaturesFlowVisator->count() > 0) {
-            foreach ($this->inputs as $key => $value) {
-                $this->organizationalUnit[$value] = $this->signature->signaturesFlowVisator->slice($key, 1)->first()->ou_id ?? null;
-            }
-        }
-
-        // Agrega los usuarios según unidad organizacional, si se está editando, selecciona el usuario
-        foreach ($this->inputs as $key => $value) {
-            if (!empty($this->organizationalUnit[$value])) {
-                $this->users[$value] = OrganizationalUnit::find($this->organizationalUnit[$value])->users ?? collect();
-                // Si se está editando
-                if ($this->signature) {
-                    $this->user[$value] = $this->signature->signaturesFlowVisator->slice($key, 1)->first()->user_id ?? null;
-                }
-            }
-        }
+        $this->to_ou_id = '';
     }
 
     #[On('documentTypeChanged')]
@@ -55,46 +88,84 @@ class Visators extends Component
 
     public function add($i, $visatorType = 'visador')
     {
-        $i = $i + 1;
-        $this->i = $i;
-        array_push($this->inputs, $i);
+        if (!$this->to_user_id) {
+            // No permitir agregar visador si no se ha seleccionado un funcionario
+            $this->message = "Debe seleccionar un funcionario para agregar.";
+            return;
+        }
+
         array_push($this->visatorType, $visatorType);
+
+        // validación
+        $this->message = '';
+        foreach($this->users_array as $item){
+            if($this->to_user_id == $item['id']){
+                $this->message = "El usuario ya se ingresó";
+                return;
+            }
+        }
+
+        $user = User::find($this->to_user_id);
+        array_push($this->users_array, $user);
     }
 
     public function remove($i)
     {
-        unset($this->inputs[$i]);
+        // unset($this->inputs[$i]);
         unset($this->visatorType[$i]);
+
+        unset($this->users_array[$i]);
     }
 
     public function render()
     {
-        $establishments_ids = explode(',', env('APP_SS_ESTABLISHMENTS'));
+        if($this->to_ou_id){
 
-        if ($this->inputs) {
-            $this->requiredVisator = 'required';
-        }
+            //obtiene usuarios de ou
+            // $this->to_user_id = null;
 
-        // Agrega los usuarios según unidad organizacional
-        foreach ($this->inputs as $key => $value) {
-            if (!empty($this->organizationalUnit[$value])) {
-                $this->users[$value] = OrganizationalUnit::find($this->organizationalUnit[$value])->users->sortBy('name')->values() ?? collect();
-            } else {
-                $this->users[$value] = collect();
-                $this->user[$value] = null;
+            $users = User::where('organizational_unit_id', $this->to_ou_id)
+                        ->orderBy('name')
+                        ->get();
+            if($users->count()>0){
+                $this->to_user_id = $users->first()->id;
+            }else{
+                $this->to_user_id = ''; 
+            }
+            
+            $this->users = $users;
+            // dd($this->users_array);
+
+            $authority = null;
+            $current_authority = Authority::getAuthorityFromDate($this->to_ou_id,Carbon::now(),'manager');
+            if($current_authority) {
+                $authority = $current_authority->user;
+
+                if ($authority <> null) {
+                    if(!$users->find($authority)) {
+                        $users->push($authority);
+                    }
+                }
+
+                $this->authority = Authority::getAuthorityFromDate($this->to_ou_id,Carbon::now(),'manager');
+                if($this->authority!=null){
+                    $this->to_user_id = $this->authority->user_id;
+                }
             }
         }
 
-        $ouRoots = OrganizationalUnit::with([
-            'childs',
-            'childs.childs',
-            'childs.childs.childs',
-            'childs.childs.childs.childs',
-        ])
-            ->where('level', 1)
-            ->whereIn('establishment_id', $establishments_ids)
-            ->get();
+        // $users_array siempre esté inicializado como un array
+        $this->users_array = $this->users_array ?? [];
 
-        return view('livewire.signatures.visators', compact('ouRoots'));
+        // Existencia del índice antes de acceder a él
+        foreach($this->users_array as $key => $item){
+            if(!is_null($item) && !$item instanceof Collection) {
+                if(isset($this->users_array[$key])){
+                    $this->users_array[$key] = User::find($item['id']);
+                }
+            }
+        }
+
+        return view('livewire.signatures.visators');
     }
 }

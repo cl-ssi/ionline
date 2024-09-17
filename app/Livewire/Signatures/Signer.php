@@ -30,9 +30,9 @@ class Signer extends Component
     }
 
     #[On('documentTypeChanged')]
-    public function configureDocumentType($documentType)
+    public function configureDocumentType($type_id)
     {
-        $this->selectedDocumentType = $documentType;
+        $this->selectedDocumentType = $type_id;
     }
 
     public function render()
