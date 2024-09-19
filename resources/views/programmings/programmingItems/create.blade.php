@@ -770,7 +770,7 @@ Nuevo Item Programación Operativa </h4>
     
         $('#hours_required_year').val(Math.round(hours_required_year));
         $('#hours_required_day').val(hours_required_day.toFixed(2));
-        $('#direct_work_year').val(direct_work_year.toFixed(2));
+        $('#direct_work_year').val(direct_work_year.toFixed(5));
         $('#direct_work_hour').val(direct_work_hour.toFixed(5));
         
     });
@@ -811,7 +811,7 @@ Nuevo Item Programación Operativa </h4>
     
         div.find('#hours_required_year').val(Math.round(hours_required_year));
         div.find('#hours_required_day').val(hours_required_day.toFixed(2));
-        div.find('#direct_work_year').val(direct_work_year.toFixed(2));
+        div.find('#direct_work_year').val(direct_work_year.toFixed(5));
         div.find('#direct_work_hour').val(direct_work_hour.toFixed(5));
     });
 
@@ -838,7 +838,7 @@ Nuevo Item Programación Operativa </h4>
     
         div.find('#hours_required_year').val(Math.round(hours_required_year));
         div.find('#hours_required_day').val(hours_required_day.toFixed(2));
-        div.find('#direct_work_year').val(direct_work_year.toFixed(2));
+        div.find('#direct_work_year').val(direct_work_year.toFixed(5));
         div.find('#direct_work_hour').val(direct_work_hour.toFixed(5));
     });
 

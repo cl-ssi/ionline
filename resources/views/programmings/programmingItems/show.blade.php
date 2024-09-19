@@ -346,7 +346,7 @@ Editar Item Programación Operativa </h4>
             title="Jornadas Directas Año" 
             data-content="Calculo Automatico bajo fórmula que indica la cantidad de jornadas laborales que se requieren en el año programado.">
             <i class="fas fa-info-circle"></i></a>
-            <input type="input" class="form-control" id="direct_work_year" name="professionals[{{$key}}][direct_work_year]" value="{{$proHour->pivot->direct_work_year}}" form="edit-form" readonly>
+            <input type="input" class="form-control" id="direct_work_year" name="professionals[{{$key}}][direct_work_year]" value="{{$proHour->pivot->direct_work_year ? number_format($proHour->pivot->direct_work_year, 5, '.', '') : 0}}" form="edit-form" readonly>
         </div>
 
         <div class="form-group col-md-3">
@@ -355,7 +355,7 @@ Editar Item Programación Operativa </h4>
             title="Jornadas Horas Directas Diarias" 
             data-content="Calculo Automatico bajo fórmula que indica la cantidad de jornadas laborales que se requieren en un día del año programado.">
             <i class="fas fa-info-circle"></i></a>
-            <input type="input" class="form-control" id="direct_work_hour" name="professionals[{{$key}}][direct_work_hour]" value="{{$proHour->pivot->direct_work_hour ? number_format($proHour->pivot->direct_work_hour, 5, '.', '') : ''}}" form="edit-form" readonly>
+            <input type="input" class="form-control" id="direct_work_hour" name="professionals[{{$key}}][direct_work_hour]" value="{{$proHour->pivot->direct_work_hour ? number_format($proHour->pivot->direct_work_hour, 5, '.', '') : 0}}" form="edit-form" readonly>
         </div>
     </div>
     </div>
@@ -717,7 +717,7 @@ Editar Item Programación Operativa </h4>
     
         $('#hours_required_year').val(Math.round(hours_required_year));
         $('#hours_required_day').val(hours_required_day.toFixed(2));
-        $('#direct_work_year').val(direct_work_year.toFixed(2));
+        $('#direct_work_year').val(direct_work_year.toFixed(5));
         $('#direct_work_hour').val(direct_work_hour.toFixed(5));
         
     });
@@ -758,7 +758,7 @@ Editar Item Programación Operativa </h4>
     
         div.find('#hours_required_year').val(Math.round(hours_required_year));
         div.find('#hours_required_day').val(hours_required_day.toFixed(2));
-        div.find('#direct_work_year').val(direct_work_year.toFixed(2));
+        div.find('#direct_work_year').val(direct_work_year.toFixed(5));
         div.find('#direct_work_hour').val(direct_work_hour.toFixed(5));
     });
 
@@ -785,7 +785,7 @@ Editar Item Programación Operativa </h4>
     
         div.find('#hours_required_year').val(Math.round(hours_required_year));
         div.find('#hours_required_day').val(hours_required_day.toFixed(2));
-        div.find('#direct_work_year').val(direct_work_year.toFixed(2));
+        div.find('#direct_work_year').val(direct_work_year.toFixed(5));
         div.find('#direct_work_hour').val(direct_work_hour.toFixed(5));
     });
 
