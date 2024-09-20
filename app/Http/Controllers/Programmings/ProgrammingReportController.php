@@ -308,7 +308,7 @@ class ProgrammingReportController extends Controller
                     $q->whereIn('establishment_id', $establishments->pluck('id')->toArray());
                 })
                 ->get();
-        }elseif( auth()->user()->can('Reviews: edit') ){
+        }elseif( auth()->user()->can('Reviews: edit') AND auth()->user()->can('Programming: report') ){
             $programmings = Programming::with('establishment:id,type,name')->where('year', $year)->get();
             foreach($programmings as $programming)
                 $establishments->push($programming->establishment);

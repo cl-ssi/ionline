@@ -43,7 +43,7 @@
     <button onclick="tableExcel('xlsx')" class="btn btn-success mb-2 float-right btn-sm"><i class="fas fa-file-excel"></i> Exportar</button>
     <div class="table-responsive">
         <table id="tblData" class="table table-sm table-hover">
-            <thead>
+            <thead class="table-bordered sticky-top">
                 <tr class="small">
                     <th class="text-center align-middle table-dark" rowspan="3">Funcionario/a</th>
                     <th class="text-center align-middle table-dark" colspan="12">Desde lo programado</th>
@@ -64,33 +64,33 @@
                     <th class="text-center align-middle table-dark">Jornada horas directa diarias</th>
                     <th class="text-center align-middle table-dark">Horas/año</th>
                     <th class="text-center align-middle table-dark">Horas/día</th>
-                    <th class="text-center align-middle table-dark">Jornadas directa año</th>
-                    <th class="text-center align-middle table-dark">Jornada horas directa diarias</th>
+                    <th class="text-center align-middle table-dark">Jornadas indirecta año</th>
+                    <th class="text-center align-middle table-dark">Jornada horas indirecta diarias</th>
                     <th class="text-center align-middle table-dark">Horas/año</th>
                     <th class="text-center align-middle table-dark">Horas/día</th>
-                    <th class="text-center align-middle table-dark">Jornadas directa año</th>
-                    <th class="text-center align-middle table-dark">Jornada horas directa diarias</th>
+                    <th class="text-center align-middle table-dark">Jornadas año</th>
+                    <th class="text-center align-middle table-dark">Jornada horas diarias</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach($professionalHours as $professionalHour)
-                <tr class="text-right">
+                <tr class="text-right small">
                     <td>{{ $professionalHour->alias }}</td>
-                    <td>{{ number_format($programming->getValueAcumSinceScheduled('hours_required_year', $professionalHour->id, ['Directa']), 2, ",", ".")}}</td>
-                    <td>{{ number_format($programming->getValueAcumSinceScheduled('hours_required_day', $professionalHour->id, ['Directa']), 2, ",", ".")}}</td>
-                    <td>{{ number_format($programming->getValueAcumSinceScheduled('direct_work_year', $professionalHour->id, ['Directa']), 2, ",", ".")}}</td>
-                    <td>{{ number_format($programming->getValueAcumSinceScheduled('direct_work_hour', $professionalHour->id, ['Directa']), 5, ",", ".")}}</td>
-                    <td>{{ number_format($programming->getValueAcumSinceScheduled('hours_required_year', $professionalHour->id, ['Indirecta']), 2, ",", ".")}}</td>
-                    <td>{{ number_format($programming->getValueAcumSinceScheduled('hours_required_day', $professionalHour->id, ['Indirecta']), 2, ",", ".")}}</td>
-                    <td>{{ number_format($programming->getValueAcumSinceScheduled('direct_work_year', $professionalHour->id, ['Indirecta']), 2, ",", ".")}}</td>
-                    <td>{{ number_format($programming->getValueAcumSinceScheduled('direct_work_hour', $professionalHour->id, ['Indirecta']), 5, ",", ".")}}</td>
-                    <td>{{ number_format($programming->getValueAcumSinceScheduled('hours_required_year', $professionalHour->id, ['Directa','Indirecta']), 2, ",", ".")}}</td>
-                    <td>{{ number_format($programming->getValueAcumSinceScheduled('hours_required_day', $professionalHour->id, ['Directa','Indirecta']), 2, ",", ".")}}</td>
-                    <td>{{ number_format($programming->getValueAcumSinceScheduled('direct_work_year', $professionalHour->id, ['Directa','Indirecta']), 2, ",", ".")}}</td>
-                    <td>{{ number_format($programming->getValueAcumSinceScheduled('direct_work_hour', $professionalHour->id, ['Directa','Indirecta']), 5, ",", ".")}}</td>
-                    <td>$ {{ number_format($programming->getHoursYearAcumByPrapFinanced('NO', $professionalHour->id) * $professionalHour->value, 0, ",", ".")}}</td>
-                    <td>$ {{ number_format($programming->getHoursYearAcumByPrapFinanced('SI', $professionalHour->id) * $professionalHour->value, 0, ",", ".")}}</td>
-                    <td>$ {{ number_format($programming->getValueAcumSinceScheduled('hours_required_year', $professionalHour->id, ['Directa','Indirecta']) * $professionalHour->value, 0, ",", ".")}}</td>
+                    <td data-v="{{$programming->getValueAcumSinceScheduled('hours_required_year', $professionalHour->id, ['Directa'])}}">{{ number_format($programming->getValueAcumSinceScheduled('hours_required_year', $professionalHour->id, ['Directa']), 2, ",", ".")}}</td>
+                    <td data-v="{{$programming->getValueAcumSinceScheduled('hours_required_day', $professionalHour->id, ['Directa'])}}">{{ number_format($programming->getValueAcumSinceScheduled('hours_required_day', $professionalHour->id, ['Directa']), 2, ",", ".")}}</td>
+                    <td data-v="{{$programming->getValueAcumSinceScheduled('direct_work_year', $professionalHour->id, ['Directa'])}}">{{ number_format($programming->getValueAcumSinceScheduled('direct_work_year', $professionalHour->id, ['Directa']), 2, ",", ".")}}</td>
+                    <td data-v="{{$programming->getValueAcumSinceScheduled('direct_work_hour', $professionalHour->id, ['Directa'])}}">{{ number_format($programming->getValueAcumSinceScheduled('direct_work_hour', $professionalHour->id, ['Directa']), 5, ",", ".")}}</td>
+                    <td data-v="{{$programming->getValueAcumSinceScheduled('hours_required_year', $professionalHour->id, ['Indirecta'])}}">{{ number_format($programming->getValueAcumSinceScheduled('hours_required_year', $professionalHour->id, ['Indirecta']), 2, ",", ".")}}</td>
+                    <td data-v="{{$programming->getValueAcumSinceScheduled('hours_required_day', $professionalHour->id, ['Indirecta'])}}">{{ number_format($programming->getValueAcumSinceScheduled('hours_required_day', $professionalHour->id, ['Indirecta']), 2, ",", ".")}}</td>
+                    <td data-v="{{$programming->getValueAcumSinceScheduled('direct_work_year', $professionalHour->id, ['Indirecta'])}}">{{ number_format($programming->getValueAcumSinceScheduled('direct_work_year', $professionalHour->id, ['Indirecta']), 2, ",", ".")}}</td>
+                    <td data-v="{{$programming->getValueAcumSinceScheduled('direct_work_hour', $professionalHour->id, ['Indirecta'])}}">{{ number_format($programming->getValueAcumSinceScheduled('direct_work_hour', $professionalHour->id, ['Indirecta']), 5, ",", ".")}}</td>
+                    <td data-v="{{$programming->getValueAcumSinceScheduled('hours_required_year', $professionalHour->id, ['Directa','Indirecta'])}}">{{ number_format($programming->getValueAcumSinceScheduled('hours_required_year', $professionalHour->id, ['Directa','Indirecta']), 2, ",", ".")}}</td>
+                    <td data-v="{{$programming->getValueAcumSinceScheduled('hours_required_day', $professionalHour->id, ['Directa','Indirecta'])}}">{{ number_format($programming->getValueAcumSinceScheduled('hours_required_day', $professionalHour->id, ['Directa','Indirecta']), 2, ",", ".")}}</td>
+                    <td data-v="{{$programming->getValueAcumSinceScheduled('direct_work_year', $professionalHour->id, ['Directa','Indirecta'])}}">{{ number_format($programming->getValueAcumSinceScheduled('direct_work_year', $professionalHour->id, ['Directa','Indirecta']), 2, ",", ".")}}</td>
+                    <td data-v="{{$programming->getValueAcumSinceScheduled('direct_work_hour', $professionalHour->id, ['Directa','Indirecta'])}}">{{ number_format($programming->getValueAcumSinceScheduled('direct_work_hour', $professionalHour->id, ['Directa','Indirecta']), 5, ",", ".")}}</td>
+                    <td data-v="{{$programming->getHoursYearAcumByPrapFinanced('NO', $professionalHour->id) * $professionalHour->value}}">$ {{ number_format($programming->getHoursYearAcumByPrapFinanced('NO', $professionalHour->id) * $professionalHour->value, 0, ",", ".")}}</td>
+                    <td data-v="{{$programming->getHoursYearAcumByPrapFinanced('SI', $professionalHour->id) * $professionalHour->value}}">$ {{ number_format($programming->getHoursYearAcumByPrapFinanced('SI', $professionalHour->id) * $professionalHour->value, 0, ",", ".")}}</td>
+                    <td data-v="{{$programming->getValueAcumSinceScheduled('hours_required_year', $professionalHour->id, ['Directa','Indirecta']) * $professionalHour->value}}">$ {{ number_format($programming->getValueAcumSinceScheduled('hours_required_year', $professionalHour->id, ['Directa','Indirecta']) * $professionalHour->value, 0, ",", ".")}}</td>
                 </tr>
                 @endforeach
             </tbody>
