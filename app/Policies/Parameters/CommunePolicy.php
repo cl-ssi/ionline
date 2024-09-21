@@ -9,11 +9,24 @@ use Illuminate\Auth\Access\Response;
 class CommunePolicy
 {
     /**
+     * Perform pre-authorization checks.
+     * For administrative purposes, the user with the 'be god' ability can do anything.
+     * If null is returned, the authorization check will fall through to the policy method
+     */
+    public function before(User $user): ?bool
+    {
+        if ($user->can('be god')) {
+            return true;
+        }
+        return null;
+    }
+
+    /**
      * Determine whether the user can view any models.
      */
     public function viewAny(User $user): bool
     {
-        //
+        return false;
     }
 
     /**
@@ -21,7 +34,7 @@ class CommunePolicy
      */
     public function view(User $user, Commune $commune): bool
     {
-        //
+        return false;
     }
 
     /**
@@ -29,7 +42,7 @@ class CommunePolicy
      */
     public function create(User $user): bool
     {
-        //
+        return false;
     }
 
     /**
@@ -37,7 +50,7 @@ class CommunePolicy
      */
     public function update(User $user, Commune $commune): bool
     {
-        //
+        return false;
     }
 
     /**
@@ -45,7 +58,7 @@ class CommunePolicy
      */
     public function delete(User $user, Commune $commune): bool
     {
-        //
+        return false;
     }
 
     /**
@@ -53,7 +66,7 @@ class CommunePolicy
      */
     public function restore(User $user, Commune $commune): bool
     {
-        //
+        return false;
     }
 
     /**
@@ -61,6 +74,6 @@ class CommunePolicy
      */
     public function forceDelete(User $user, Commune $commune): bool
     {
-        //
+        return false;
     }
 }
