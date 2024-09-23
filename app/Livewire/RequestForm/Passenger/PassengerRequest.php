@@ -121,7 +121,7 @@ class PassengerRequest extends Component
     {
         if($this->editRF && array_key_exists('id',$this->passengers[$key])){
             $this->deletedPassengers[]=$this->passengers[$key]['id'];
-            $this->emitUp('deletedPassengers', $this->deletedPassengers);
+            $this->dispatch('deletedPassengers', $this->deletedPassengers);
         }
         unset($this->passengers[$key]);
         $this->totalValue();
