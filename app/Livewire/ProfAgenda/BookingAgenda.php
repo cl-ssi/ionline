@@ -15,6 +15,7 @@ class BookingAgenda extends Component
 {
     public $professions;
     public $profession;
+    public $professionId;
     public $showStep1 = true;
     public $showStep2 = false;
     public $showStep3 = false;
@@ -33,6 +34,7 @@ class BookingAgenda extends Component
 
     public function goToStep2($professionId)
     {
+        $this->professionId = $professionId;
         $this->showStep1 = false;
         $this->showStep2 = true;
         $this->showStep3 = false;

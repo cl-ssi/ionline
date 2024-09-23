@@ -108,7 +108,7 @@
             @endif
         </div>
 
-        <div class="btn-like-div" wire:click="goToStep2">
+        <div class="btn-like-div" wire:click="goToStep2({{$professionId}})">
             <button class="btn btn-secondary">Volver atrás</button>
         </div>
     @endif
