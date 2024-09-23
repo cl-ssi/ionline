@@ -122,14 +122,16 @@
                         <td>{{ $user_key->organizationalUnit->name }}</td>
                         <td>{{ $user_key->tinnyName }}</td>
                         <td>
-                            <label 
-                                @if($visatorType[$key] == 'elaborador')
-                                    class="text-info"
-                                @elseif($visatorType[$key] == 'revisador')
-                                    class="text-success" 
-                                @endif    
-                                for="">{{$visatorType[$key]}}
-                            </label>
+                            @if(isset($visatorType[$key]))
+                                <label 
+                                    @if($visatorType[$key] == 'elaborador')
+                                        class="text-info"
+                                    @elseif($visatorType[$key] == 'revisador')
+                                        class="text-success" 
+                                    @endif    
+                                    for="">{{$visatorType[$key]}}
+                                </label>
+                            @endif
                         </td>
                         <td>
                         <button type="button" class="btn btn-outline-danger" data-toggle="tooltip" data-placement="top" title="Eliminar" wire:click="remove({{ $key }})">
