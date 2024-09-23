@@ -37,7 +37,7 @@ class EditManual extends EditRecord
                 ->color('success')
                 ->visible(fn (Manual $record): bool => ! $record->approval()->exists()),
             Actions\Action::make('deleteApproval')
-                ->label('Eliminar aprobación de '.$this->record->approval->id)
+                ->label('Eliminar aprobación')
                 ->action(function (Manual $record) {
                     if ($record->approval) {
                         $record->approval->delete();
