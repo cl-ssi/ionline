@@ -4,6 +4,7 @@ namespace App\Models\Pharmacies;
 
 use App\Models\Pharmacies\Destiny;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Deliver extends Model
 {
