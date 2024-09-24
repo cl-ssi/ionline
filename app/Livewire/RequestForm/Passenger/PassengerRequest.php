@@ -172,7 +172,6 @@ class PassengerRequest extends Component
         $this->passengers[$this->key]['unitValue']      = $this->unitValue;
         $this->totalValue();
         $this->cleanPassenger();
-        dd($this->passengers);
         $this->dispatch('savedPassengers', passengers: $this->passengers);
     }
 
