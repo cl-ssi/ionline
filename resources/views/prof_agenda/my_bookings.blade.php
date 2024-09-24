@@ -27,7 +27,7 @@
             <td>{{ $openHour->id}}</td>
             <td nowrap>{{ $openHour->profession->name }}</td>
 			<td nowrap>@if($openHour->profesional) {{ $openHour->profesional->shortName }} @endif</td>
-            <td nowrap>{{ $openHour->activityType->name }}</td>
+            <td nowrap>@if($openHour->activityType){{ $openHour->activityType->name }}@endif</td>
             <td nowrap>{{ $openHour->start_date }}</td>
             <td nowrap>
                 @if($openHour->assistance)

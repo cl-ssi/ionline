@@ -114,6 +114,6 @@ class OpenHour extends Model implements AuditableContract
      */
     public function activityType(): BelongsTo
     {
-        return $this->belongsTo(ActivityType::class);
+        return $this->belongsTo(ActivityType::class)->withTrashed();
     }
 }
