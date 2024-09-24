@@ -69,16 +69,16 @@ class DispatchItemController extends Controller
         $product->save();
 
         if($product->program_id == 46){ //APS ORTESIS
-            $product->load('establishments');
-            $establishment_id = Dispatch::find($request->dispatch_id)->establishment_id;
+            $product->load('destines');
+            $destiny_id = Dispatch::find($request->dispatch_id)->destiny_id;
             $pass = false;
-            foreach($product->establishments as $establishment)
-            if($establishment->id == $establishment_id){
-                $establishment->pivot->increment('stock', $request->amount);
+            foreach($product->destines as $destiny)
+            if($destiny->id == $destiny_id){
+                $destiny->pivot->increment('stock', $request->amount);
                 $pass = true;
             }
             if(!$pass){
-            $product->establishments()->attach($establishment_id, ['stock' => $request->amount]);
+            $product->destines()->attach($destiny_id, ['stock' => $request->amount]);
             }
         }
 
@@ -133,16 +133,16 @@ class DispatchItemController extends Controller
       $product->save();
 
       if($product->program_id == 46){ //APS ORTESIS
-        $product->load('establishments');
-        $establishment_id = Dispatch::find($dispatchItem->dispatch_id)->establishment_id;
+        $product->load('destines');
+        $destiny_id = Dispatch::find($dispatchItem->dispatch_id)->destiny_id;
         $pass = false;
-        foreach($product->establishments as $establishment)
-          if($establishment->id == $establishment_id){
-              $establishment->pivot->decrement('stock', $dispatchItem->amount);
+        foreach($product->destines as $destiny)
+          if($destiny->id == $destiny_id){
+              $destiny->pivot->decrement('stock', $dispatchItem->amount);
               $pass = true;
           }
         if(!$pass){
-          $product->establishments()->attach($establishment_id, ['stock' => -$dispatchItem->amount]);
+          $product->destines()->attach($destiny_id, ['stock' => -$dispatchItem->amount]);
         }
       }
 

@@ -40,10 +40,10 @@
 								<a href="#" id="{{$product->id}}" rel="popover" class="popover-item">{{$product->quantity}}</a>
 								<div class="popover-list-content" style="display:none;">
 									<ul class="list-group list-group-flush">
-										@foreach($product->establishments as $establishment)
-											@if($establishment->pivot->stock > 0)
+										@foreach($product->destines as $destiny)
+											@if($destiny->pivot->stock > 0)
 											<li class="list-group-item d-flex justify-content-between align-items-center">
-												{{$establishment->name}}&nbsp;<span class="badge badge-info">{{$establishment->pivot->stock}}</span>
+												{{$destiny->name}}&nbsp;<span class="badge badge-info">{{$destiny->pivot->stock}}</span>
 											</li>
 											@endif
 										@endforeach
@@ -65,15 +65,15 @@
 		<h5 class="sub-header">Búsqueda por
 		@canany(['Pharmacy: transfer view ortesis','Pharmacy: transfer view IQQ', 'Pharmacy: transfer view AHO'])
 		<form method="GET" action="{{route('pharmacies.products.transfer.index')}}" class="d-inline">
-			<select name="filter" onchange="this.form.submit()" class="selectpicker establishment" data-live-search="true" data-width="fit" data-style="btn btn-link">
-				@foreach ($establishments as $establishment)
-				<option value="{{$establishment->id}}" {{$establishment->id == $filter ? 'selected' : ''}}>{{$establishment->name}}</option>
+			<select name="filter" onchange="this.form.submit()" class="selectpicker destiny" data-live-search="true" data-width="fit" data-style="btn btn-link">
+				@foreach ($destines as $destiny)
+				<option value="{{$destiny->id}}" {{$destiny->id == $filter ? 'selected' : ''}}>{{$destiny->name}}</option>
 				@endforeach
 			</select>
 		</form>
-		@if(!$products_by_establishment->isEmpty() && auth()->user()->can('Pharmacy: transfer view ortesis'))<a class="btn btn-outline-primary" href="{{route('pharmacies.products.transfer.auth', $filter)}}" role="button"><i class="fas fa-clipboard-check"></i> Autorizar</a>@endif
+		@if(!$products_by_destiny->isEmpty() && auth()->user()->can('Pharmacy: transfer view ortesis'))<a class="btn btn-outline-primary" href="{{route('pharmacies.products.transfer.auth', $filter)}}" role="button"><i class="fas fa-clipboard-check"></i> Autorizar</a>@endif
 		@else
-			{{$establishment->name}}
+			{{$destiny->name}}
 		@endcan
 		</h5>
 		<div class="table-responsive">
@@ -85,14 +85,14 @@
 					<th class="text-right">Pendientes</th>
 				</thead>
 				<tbody>
-					@forelse($products_by_establishment as $product)
+					@forelse($products_by_destiny as $product)
 					<tr>
 						<td>@canany(['Pharmacy: transfer view ortesis']) <a href="#" id="{{$product->id}}" class="ref-product">{{$product->name}}</a> @else {{$product->name}} @endcan</td>
 						<td class="text-right">
 							{{$product->quantity}}
 						</td>
 						<td class="text-right">
-							{{$product->establishments->first()->pivot->critic_stock != null ? $product->establishments->first()->pivot->critic_stock : 0}}
+							{{$product->destines->first()->pivot->critic_stock != null ? $product->destines->first()->pivot->critic_stock : 0}}
 						</td>
 						<td class="text-right">
 							{{isset($pendings_by_product[$product->id]) ? $pendings_by_product[$product->id] : 0}}
@@ -104,7 +104,7 @@
 				</tbody>
 			</table>
 		</div>
-		{{ $products_by_establishment->appends(Request::input())->links() }}
+		{{ $products_by_destiny->appends(Request::input())->links() }}
 	</div>
 </div>
 
@@ -126,8 +126,8 @@
 		<fieldset class="form-group col">
 			<label for="from">Origen</label>
 			<select name="from" class="form-control selectpicker" data-live-search="true" required="">
-				@foreach ($establishments as $key => $establishment)
-				<option value="{{$establishment->id}}" data-content="{{$establishment->name}}"></option>
+				@foreach ($destines as $key => $destiny)
+				<option value="{{$destiny->id}}" data-content="{{$destiny->name}}"></option>
 				@endforeach
 			</select>
 		</fieldset>
@@ -135,8 +135,8 @@
 		<fieldset class="form-group col">
 			<label for="to">Destino</label>
 			<select name="to" class="form-control selectpicker" data-live-search="true" required="">
-				@foreach ($establishments as $key => $establishment)
-				<option value="{{$establishment->id}}" data-content="{{$establishment->name}}"></option>
+				@foreach ($destines as $key => $destiny)
+				<option value="{{$destiny->id}}" data-content="{{$destiny->name}}"></option>
 				@endforeach
 			</select>
 		</fieldset>
@@ -177,8 +177,8 @@
 			@foreach($transfers as $transfer)
 			<tr>
         		<td>{{$transfer->created_at->format('d/m/Y')}}</td>
-        		<td>{{$transfer->establishment_from['name']}}</td>
-        		<td>{{$transfer->establishment_to['name']}}</td>
+        		<td>{{$transfer->destine_from['name']}}</td>
+        		<td>{{$transfer->destine_to['name']}}</td>
 				<td>{{$transfer->product['name']}}</td>
 				<td>{{$transfer->quantity}}</td>
 				<td>{{$transfer->user['name']}} {{$transfer->user['fathers_family']}}</td>

@@ -61,15 +61,15 @@ class Product extends Model
       return $this->hasMany('App\Models\Pharmacies\Batch')->orderBy('due_date');
     }
 
-    public function establishments()
+    public function destines()
     {
-      return $this->belongsToMany('App\Models\Pharmacies\Establishment', 'frm_establishments_products')
+      return $this->belongsToMany('App\Models\Pharmacies\Destiny', 'frm_destines_products')
                               ->withPivot('id', 'stock', 'critic_stock', 'max_stock')
                               ->withTimestamps();
     }
 
     public function getQuantityAttribute(){
-      return $this->establishments->sum('pivot.stock');
+      return $this->destines->sum('pivot.stock');
     }
 
     public function scopeSearchBincard($query, $dateFrom, $dateTo, $product_id) {
@@ -163,7 +163,7 @@ class Product extends Model
                         $matrix[$cont]['id'] = $CollectionItem->receiving->id;
                         //$matrix[$cont]['date'] = $CollectionItem->created_at->format("Y-m-d H:i:s");
                         $matrix[$cont]['date'] = $CollectionItem->receiving->date->format("Y-m-d");
-                        $matrix[$cont]['origen_destino'] = $CollectionItem->receiving->establishment ? $CollectionItem->receiving->establishment->name : '';
+                        $matrix[$cont]['origen_destino'] = $CollectionItem->receiving->destiny ? $CollectionItem->receiving->destiny->name : '';
                         //$matrix[$cont]['ingreso'] = $CollectionItem->amount;
                         //$matrix[$cont]['salida'] = 0;
                         //$matrix[$cont]['saldo'] = $saldo;
@@ -181,7 +181,7 @@ class Product extends Model
                         $matrix[$cont]['id'] = $CollectionItem->dispatch->id;
                         //$matrix[$cont]['date'] = $CollectionItem->created_at->format("Y-m-d H:i:s");
                         $matrix[$cont]['date'] = $CollectionItem->dispatch->date->format("Y-m-d");
-                        $matrix[$cont]['origen_destino'] = ($CollectionItem->dispatch->establishment ? $CollectionItem->dispatch->establishment->name : '') . ' ' . ($CollectionItem->dispatch->receiver ? $CollectionItem->dispatch->receiver->shortName : '');
+                        $matrix[$cont]['origen_destino'] = ($CollectionItem->dispatch->destiny ? $CollectionItem->dispatch->destiny->name : '') . ' ' . ($CollectionItem->dispatch->receiver ? $CollectionItem->dispatch->receiver->shortName : '');
                         //$matrix[$cont]['ingreso'] = 0;
                         //$matrix[$cont]['salida'] = $CollectionItem->amount;
                         //$matrix[$cont]['saldo'] = $saldo;
@@ -334,7 +334,7 @@ class Product extends Model
         return strtotime($a["due_date"]) - strtotime($b["due_date"]);
     }
 
-    public function scopeSearchConsumosHistoricos($query, $year, $category_id, $program_id, $establishment_id) {
+    public function scopeSearchConsumosHistoricos($query, $year, $category_id, $program_id, $destiny_id) {
         //obtiene lista de productos
         $products = Product::where('pharmacy_id',session('pharmacy_id'))
                             ->when($category_id, function ($query, $category_id) {
@@ -347,9 +347,9 @@ class Product extends Model
                             ->get();
 
       //obtiene entregas
-      $dispatchItems= DispatchItem::whereHas('dispatch', function ($query) use ($year, $establishment_id) {
-                                             $query->when($establishment_id, function ($query, $establishment_id) {
-                                                        return $query->where('establishment_id', $establishment_id);
+      $dispatchItems= DispatchItem::whereHas('dispatch', function ($query) use ($year, $destiny_id) {
+                                             $query->when($destiny_id, function ($query, $destiny_id) {
+                                                        return $query->where('destiny_id', $destiny_id);
                                                      })->where('pharmacy_id',session('pharmacy_id'))
                                                        ->whereYear('date', $year);
                                     })

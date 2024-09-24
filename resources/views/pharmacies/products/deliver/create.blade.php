@@ -8,8 +8,6 @@
 
 <link href="{{ asset('css/bootstrap-select.min.css') }}" rel="stylesheet" type="text/css" />
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-<!-- <link href="https://afarkas.github.io/webshim/js-webshim/minified/shims/styles/shim-ext.css" rel="stylesheet">
-<link href="https://afarkas.github.io/webshim/js-webshim/minified/shims/styles/shim-ext.css" rel="stylesheet"> -->
 
 <h3>Nueva entrega ayuda técnica</h3><br>
 
@@ -19,8 +17,8 @@
 	<div class="form-row">
 		<fieldset class="form-group col">
 			<label for="from">Origen solicitud</label>
-			<input type="text" class="form-control" id="for_from" name="establishment_id" value="{{$products_by_establishment->first()->establishments->first()->name}}" disabled>
-			<input type="hidden" class="form-control" id="for_from" name="establishment_id" value="{{$products_by_establishment->first()->establishments->first()->id}}" required="">
+			<input type="text" class="form-control" id="for_from" name="destiny_id" value="{{$products_by_destiny->first()->destines->first()->name}}" disabled>
+			<input type="hidden" class="form-control" id="for_from" name="destiny_id" value="{{$products_by_destiny->first()->destines->first()->id}}" required="">
 		</fieldset>
 		<fieldset class="form-group col">
             <label for="for_invoice">Folio SIGGES</label>
@@ -63,7 +61,7 @@
 		<fieldset class="form-group col-4">
 			<label for="product">Ayuda técnica</label>
 			<select name="product_id" class="form-control selectpicker" data-live-search="true" required="">
-				@foreach($products_by_establishment as $product)
+				@foreach($products_by_destiny as $product)
 				<option value="{{$product->id}}" data-subtext="Stock: {{$product->quantity}}">{{$product->name}}</option>
 				@endforeach
 			</select>

@@ -25,10 +25,10 @@
 
         <fieldset class="form-group col">
             <label for="for_origin">Destino</label>
-            <select name="establishment_id" class="form-control selectpicker" data-live-search="true">
+            <select name="destiny_id" class="form-control selectpicker" data-live-search="true">
                 <option value=""></option>
-                @foreach ($establishments as $key => $establishment)
-                    <option value="{{$establishment->id}}">{{$establishment->name}}</option>
+                @foreach ($destines as $key => $destiny)
+                    <option value="{{$destiny->id}}">{{$destiny->name}}</option>
                 @endforeach
             </select>
         </fieldset>

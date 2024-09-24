@@ -9,7 +9,7 @@ use App\Models\Pharmacies\Category;
 use App\Models\Pharmacies\Program;
 use App\Models\Pharmacies\Unit;
 use App\Models\Pharmacies\Supplier;
-use App\Models\Pharmacies\Establishment;
+use App\Models\Pharmacies\Destiny;
 use App\Models\Pharmacies\Receiving;
 use App\Models\Pharmacies\Dispatch;
 use App\Models\Pharmacies\PurchaseItem;
@@ -174,7 +174,7 @@ class ProductController extends Controller
       $fecha_inicio = $request->get('dateFrom');
       $fecha_termino = $request->get('dateTo');
       $supplier_id = $request->get('supplier_id');
-      $establishment_id = $request->get('establishment_id');
+      $destiny_id = $request->get('destiny_id');
       $notes = $request->get('notes');
       $program = $request->get('program');
       $product = $request->get('product');
@@ -209,8 +209,8 @@ class ProductController extends Controller
       if ($tipo == 2) {
        $dataCollection = Receiving::where('pharmacy_id',session('pharmacy_id'))
                                 ->whereBetween('date', [$fecha_inicio,$fecha_termino])
-                                ->when($establishment_id, function ($q, $establishment_id) {
-                                    return $q->where('establishment_id', $establishment_id);
+                                ->when($destiny_id, function ($q, $destiny_id) {
+                                    return $q->where('destiny_id', $destiny_id);
                                 })
                                 ->where('notes','LIKE',"%$notes%")
                                 ->when($product, function ($q, $product) {
@@ -227,15 +227,15 @@ class ProductController extends Controller
                                                                 });
                                                 });
                                 })
-                                ->with('establishment')
+                                ->with('destiny')
                                 ->get();
       }
       //egresos
       if ($tipo == 3) {
        $dataCollection = Dispatch::where('pharmacy_id',session('pharmacy_id'))
                                 ->whereBetween('date', [$fecha_inicio,$fecha_termino])
-                                ->when($establishment_id, function ($q, $establishment_id) {
-                                     return $q->where('establishment_id', $establishment_id);
+                                ->when($destiny_id, function ($q, $destiny_id) {
+                                     return $q->where('destiny_id', $destiny_id);
                                    })
                                 ->where('notes','LIKE',"%$notes%")
                                 ->when($product, function ($q, $product) {
@@ -252,15 +252,15 @@ class ProductController extends Controller
                                                                 });
                                                 });
                                 })
-                                ->with('establishment')
+                                ->with('destiny')
                                 ->get();
       }
 
       $suppliers = Supplier::where('pharmacy_id',session('pharmacy_id'))
                            ->orderBy('name','ASC')->get();
-      $establishments = Establishment::where('pharmacy_id',session('pharmacy_id'))
+      $destines = Destiny::where('pharmacy_id',session('pharmacy_id'))
                                      ->orderBy('name','ASC')->get();
-      return view('pharmacies.reports.movimientos', compact('request','dataCollection','suppliers','establishments'));
+      return view('pharmacies.reports.movimientos', compact('request','dataCollection','suppliers','destines'));
     }
 
     public function repProductLastPrices(Request $request){
@@ -285,13 +285,13 @@ class ProductController extends Controller
         $matrix = Product::SearchConsumosHistoricos($request->get('year'),
                                                     $request->get('category_id'),
                                                     $request->get('program_id'),
-                                                    $request->get('establishment_id'));
+                                                    $request->get('destiny_id'));
 
         $categories = Category::orderBy('name','ASC')->get();
-        $establishments = Establishment::where('pharmacy_id',session('pharmacy_id'))
+        $destines = Destiny::where('pharmacy_id',session('pharmacy_id'))
                                      ->orderBy('name','ASC')->get();
         $programs = Program::orderBy('name','ASC')->get();
-      return view('pharmacies.reports.consume_history', compact('request','establishments','categories','matrix','programs'));
+      return view('pharmacies.reports.consume_history', compact('request','destines','categories','matrix','programs'));
     }
 
     public function repProductByBatch(Request $request){

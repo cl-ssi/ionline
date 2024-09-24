@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Pharmacies\Receiving;
 use App\Models\Pharmacies\ReceivingItem;
-use App\Models\Pharmacies\Establishment;
+use App\Models\Pharmacies\Destiny;
 use App\Models\Pharmacies\Product;
 use Illuminate\Support\Facades\Auth;
 
@@ -32,7 +32,7 @@ class ReceivingController extends Controller
     public function index()
     {
         $receivings = Receiving::where('pharmacy_id',session('pharmacy_id'))
-                                ->with('establishment')
+                                ->with('destiny')
                                 ->orderBy('id','DESC')
                                 ->paginate(200);
         return view('pharmacies.products.receiving.index', compact('receivings'));
@@ -45,9 +45,9 @@ class ReceivingController extends Controller
      */
     public function create()
     {
-        $establishments = Establishment::where('pharmacy_id',session('pharmacy_id'))
+        $destines = Destiny::where('pharmacy_id',session('pharmacy_id'))
                                        ->orderBy('name','ASC')->get();
-        return view('pharmacies.products.receiving.create',compact('establishments'));
+        return view('pharmacies.products.receiving.create',compact('destines'));
     }
 
     /**
@@ -75,11 +75,11 @@ class ReceivingController extends Controller
      */
     public function show(Receiving $receiving)
     {
-        $establishment = Establishment::where('pharmacy_id',session('pharmacy_id'))
-                                      ->find($receiving->establishment_id);
+        $destiny = Destiny::where('pharmacy_id',session('pharmacy_id'))
+                                      ->find($receiving->destiny_id);
         $products = Product::where('pharmacy_id',session('pharmacy_id'))
                            ->orderBy('name','ASC')->get();
-        return view('pharmacies.products.receiving.show',compact('establishment','receiving','products'));
+        return view('pharmacies.products.receiving.show',compact('destiny','receiving','products'));
     }
 
     /**
@@ -90,11 +90,11 @@ class ReceivingController extends Controller
      */
     public function edit(Receiving $receiving)
     {
-      $establishments = Establishment::where('pharmacy_id',session('pharmacy_id'))
+      $destines = Destiny::where('pharmacy_id',session('pharmacy_id'))
                                      ->orderBy('name','ASC')->get();
       $products = Product::where('pharmacy_id',session('pharmacy_id'))
                          ->orderBy('name','ASC')->get();
-      return view('pharmacies.products.receiving.edit', compact('establishments','receiving','products'));
+      return view('pharmacies.products.receiving.edit', compact('destines','receiving','products'));
     }
 
     /**
@@ -265,7 +265,7 @@ class ReceivingController extends Controller
 
             // se guarda encabezado del ingreso
             $receiving = new Receiving();
-            $receiving->establishment_id = 377; // Sistema experto
+            $receiving->destiny_id = 377; // Sistema experto
             $receiving->pharmacy_id = 10; //Recursos Físicos - HETG
             $receiving->user_id = 11162352;
             $receiving->date = now();

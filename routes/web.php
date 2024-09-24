@@ -183,6 +183,7 @@ use App\Http\Controllers\Documents\SignatureController;
 use App\Http\Controllers\Inventory\InventoryController;
 use App\Http\Controllers\Parameters\LocationController;
 use App\Http\Controllers\Pharmacies\PharmacyController;
+use App\Http\Controllers\Pharmacies\DestinyController;
 use App\Http\Controllers\Pharmacies\PurchaseController;
 use App\Http\Controllers\ProfAgenda\OpenHourController;
 use App\Http\Controllers\ProfAgenda\ProposalController;
@@ -2154,7 +2155,16 @@ Route::prefix('pharmacies')->as('pharmacies.')->middleware(['auth', 'must.change
     Route::delete('/{pharmacy}/{user}/user_asign_destroy', [PharmacyController::class, 'user_asign_destroy'])->name('user_asign_destroy');
 
 
-    Route::resource('establishments', App\Http\Controllers\Pharmacies\EstablishmentController::class);
+    // Route::resource('destines', DestinyController::class);
+    // Listar todos los destines
+    Route::get('destines', [DestinyController::class, 'index'])->name('destines.index');
+    Route::get('destines/create', [DestinyController::class, 'create'])->name('destines.create');
+    Route::post('destines', [DestinyController::class, 'store'])->name('destines.store');
+    Route::get('destines/{destiny}', [DestinyController::class, 'show'])->name('destines.show');
+    Route::get('destines/{destiny}/edit', [DestinyController::class, 'edit'])->name('destines.edit');
+    Route::put('destines/{destiny}', [DestinyController::class, 'update'])->name('destines.update');
+    Route::delete('destines/{destiny}', [DestinyController::class, 'destroy'])->name('destines.destroy');
+
     Route::resource('programs', App\Http\Controllers\Pharmacies\ProgramController::class);
     Route::resource('suppliers', App\Http\Controllers\Pharmacies\SupplierController::class);
 

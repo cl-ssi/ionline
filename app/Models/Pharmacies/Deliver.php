@@ -2,20 +2,26 @@
 
 namespace App\Models\Pharmacies;
 
+use App\Models\Pharmacies\Destiny;
 use Illuminate\Database\Eloquent\Model;
 
 class Deliver extends Model
 {
     protected $fillable = [
-        'establishment_id', 'product_id', 'invoice', 'request_date', 'due_date', 'patient_rut', 
+        'destiny_id', 'product_id', 'invoice', 'request_date', 'due_date', 'patient_rut', 
         'patient_name', 'age', 'request_type', 'quantity', 'diagnosis', 'doctor_name', 'remarks'
     ];
 
     protected $table = 'frm_deliveries';
 
-    public function establishment()
+    /**
+     * Get the user that created the receiving.
+     *
+     * @return BelongsTo
+     */
+    public function destiny(): BelongsTo
     {
-        return $this->belongsTo('App\Models\Pharmacies\Establishment');
+        return $this->belongsTo(Destiny::class);
     }
 
     public function product()

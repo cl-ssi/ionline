@@ -8,7 +8,7 @@ use App\Models\Pharmacies\Batch;
 use App\Models\Pharmacies\Dispatch;
 use App\Models\Pharmacies\DispatchItem;
 use App\Models\Pharmacies\DispatchVerificationMailing;
-use App\Models\Pharmacies\Establishment;
+use App\Models\Pharmacies\Destiny;
 use App\Models\Pharmacies\File;
 use App\Models\Pharmacies\Product;
 
@@ -31,35 +31,8 @@ class DispatchController extends Controller
      */
     public function index()
     {
-      // $product_id = 196;
-      // $due_date = '30/09/2023';
-      // $products = Product::where('id',$product_id)
-      //                    ->get();
-      // //dd($products);
-      // $matrix_batch = null;
-      // $cont = 0;
-      // foreach ($products as $key1 => $product) {
-      //   foreach ($product->purchaseItems as $key1 => $purchaseItem) {
-      //     if($purchaseItem->due_date == $due_date){
-      //       $matrix_batch[$cont] = $purchaseItem->batch;
-      //       $cont = $cont + 1;
-      //     }
-      //   }
-      //   foreach ($product->receivingItems as $key1 => $receivingItems) {
-      //     if($receivingItems->due_date == $due_date){
-      //       $matrix_batch[$cont] = $receivingItems->batch;
-      //       $cont = $cont + 1;
-      //     }
-      //   }
-      // }
-      // //$matrix_due_date=array_unique($matrix_due_date);
-      // $matrix_batch=array_unique($matrix_batch);
-      // dd($matrix_batch);
-      // //return $matrix_batch;
-
-
       $dispatchs = Dispatch::where('pharmacy_id',session('pharmacy_id'))
-                            ->with('establishment')
+                            ->with('destiny')
                             ->orderBy('id','DESC')
                             ->paginate(200);
                            // dd($dispatchs);
@@ -73,9 +46,9 @@ class DispatchController extends Controller
      */
     public function create()
     {
-        $establishments = Establishment::where('pharmacy_id',session('pharmacy_id'))
+        $destines = Destiny::where('pharmacy_id',session('pharmacy_id'))
                                        ->orderBy('name','ASC')->get();
-        return view('pharmacies.products.dispatch.create',compact('establishments'));
+        return view('pharmacies.products.dispatch.create',compact('destines'));
     }
 
     /**
@@ -102,51 +75,11 @@ class DispatchController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show(Dispatch $dispatch)
-    {
-      // 04/10: Esteban comenta este codigo puesto que ya se incorporó en livewire hace tiempo atrás.
-      // //obtiene fechas de vencimiento y lotes de todos los ingresos y compras de todos los productos.
-      // $products = Product::with(['purchaseItems','receivingItems'])
-      //     ->where('pharmacy_id',session('pharmacy_id'))
-      //     ->orderBy('name', 'ASC')->get();
-          
-      // $matrix_due_date = null;
-      // $cont = 0;
-      // foreach ($products as $key1 => $product) {
-      //   foreach ($product->purchaseItems as $key1 => $purchaseItem) {
-      //     $matrix_due_date[$cont] = $purchaseItem->due_date;
-      //     $cont = $cont + 1;
-      //   }
-      //   foreach ($product->receivingItems as $key1 => $receivingItems) {
-      //     $matrix_due_date[$cont] = $receivingItems->due_date;
-      //     $cont = $cont + 1;
-      //   }
-      // }
-      // $matrix_batch = null;
-      // $cont = 0;
-      // foreach ($products as $key1 => $product) {
-      //   foreach ($product->purchaseItems as $key1 => $purchaseItem) {
-      //     $matrix_batch[$cont] = $purchaseItem->batch;
-      //     $cont = $cont + 1;
-      //   }
-      //   foreach ($product->receivingItems as $key1 => $receivingItems) {
-      //     $matrix_batch[$cont] = $receivingItems->batch;
-      //     $cont = $cont + 1;
-      //   }
-      // }
-      // if($matrix_due_date){
-      //   $matrix_due_date=array_unique();
-      // }
-      
-      // if($matrix_batch){
-      //   $matrix_batch=array_unique();
-      // }
-      
-
-      $establishment = Establishment::find($dispatch->establishment_id);
+    { 
+      $destiny = Destiny::find($dispatch->destiny_id);
       $products = Product::where('pharmacy_id',session('pharmacy_id'))
                          ->orderBy('name','ASC')->get();
-      return view('pharmacies.products.dispatch.show', compact('establishment','dispatch','products'));
-      // return view('pharmacies.products.dispatch.show', compact('establishment','dispatch','products','matrix_due_date','matrix_batch'));
+      return view('pharmacies.products.dispatch.show', compact('destiny','dispatch','products'));
     }
 
     public function getFromProduct_due_date($product_id){
@@ -266,11 +199,11 @@ class DispatchController extends Controller
       //dd(array_unique($matrix_due_date));
       //dd($matrix_due_date, $matrix_batch);
 
-      $establishments = Establishment::where('pharmacy_id',session('pharmacy_id'))
+      $destines = Destiny::where('pharmacy_id',session('pharmacy_id'))
                                      ->orderBy('name','ASC')->get();
       $products = Product::where('pharmacy_id',session('pharmacy_id'))
                          ->orderBy('name','ASC')->get();
-      return view('pharmacies.products.dispatch.edit', compact('establishments','dispatch','products','matrix_due_date','matrix_batch'));
+      return view('pharmacies.products.dispatch.edit', compact('destines','dispatch','products','matrix_due_date','matrix_batch'));
     }
 
     /**
@@ -306,16 +239,16 @@ class DispatchController extends Controller
         $product->save();
 
         if($product->program_id == 46){ //APS ORTESIS
-          $product->load('establishments');
-          $establishment_id = Dispatch::find($dispatchItem->dispatch_id)->establishment_id;
+          $product->load('destines');
+          $destiny_id = Dispatch::find($dispatchItem->dispatch_id)->destiny_id;
           $pass = false;
-          foreach($product->establishments as $establishment)
-            if($establishment->id == $establishment_id){
-                $establishment->pivot->decrement('stock', $dispatchItem->amount);
+          foreach($product->destines as $destiny)
+            if($destiny->id == $destiny_id){
+                $destiny->pivot->decrement('stock', $dispatchItem->amount);
                 $pass = true;
             }
           if(!$pass){
-            $product->establishments()->attach($establishment_id, ['stock' => -$dispatchItem->amount]);
+            $product->destines()->attach($destiny_id, ['stock' => -$dispatchItem->amount]);
           }
         }
 
@@ -338,7 +271,7 @@ class DispatchController extends Controller
       //obtiene cabecera
       $array_dispatch = $dispatch->toArray();
       $array_dispatch = array_add($array_dispatch, 'pharmacy', $dispatch->pharmacy->name);
-      $array_dispatch = array_add($array_dispatch, 'establishment', $dispatch->establishment->name);
+      $array_dispatch = array_add($array_dispatch, 'destiny', $dispatch->destiny->name);
       $array_dispatch = array_add($array_dispatch, 'user', $dispatch->user->getFullNameAttribute());;
 
       //obtiene detalles
@@ -440,8 +373,8 @@ class DispatchController extends Controller
 
     public function sendEmailValidation(Dispatch $dispatch)
     {
-      if($dispatch->establishment->email == null ){
-        session()->flash('warning', 'El establecimiento no tiene correo electrónico asignado.');
+      if($dispatch->destiny->email == null ){
+        session()->flash('warning', 'El destino no tiene correo electrónico asignado.');
         return redirect()->back();
       }
 
@@ -461,7 +394,7 @@ class DispatchController extends Controller
       $base64encode = base64_encode($dispatch->id);
       $dispatch->base64encode = $base64encode;
 
-      Mail::to($dispatch->establishment->email)->send(new DispatchVerificationNotification($dispatch));
+      Mail::to($dispatch->destiny->email)->send(new DispatchVerificationNotification($dispatch));
 
       session()->flash('success', 'El correo ha sido enviado correctamente.');
       return redirect()->back();
@@ -559,13 +492,13 @@ class DispatchController extends Controller
 
     public function storePrivateVerification(Dispatch $dispatch){
 
-        if($dispatch->establishment == null ){
-            session()->flash('warning', 'La entrega no tiene asignada establecimiento.');
+        if($dispatch->destiny == null ){
+            session()->flash('warning', 'La entrega no tiene asignada destino.');
             return redirect()->back();
         }
 
-        if($dispatch->establishment->email == null ){
-            session()->flash('warning', 'El establecimiento no tiene correo electrónico asignado.');
+        if($dispatch->destiny->email == null ){
+            session()->flash('warning', 'El destino no tiene correo electrónico asignado.');
             return redirect()->back();
         }
 
@@ -601,8 +534,8 @@ class DispatchController extends Controller
             //     return json_encode($responseArray);
             // }
 
-            if (!isset($dataArray['dispatch']['establishment_id']) || $dataArray['dispatch']['establishment_id'] == '') {
-                $responseArray = ['status' => false, 'message' => 'Debe ingresar "establishment_id" (Destino)'];
+            if (!isset($dataArray['dispatch']['destiny_id']) || $dataArray['dispatch']['destiny_id'] == '') {
+                $responseArray = ['status' => false, 'message' => 'Debe ingresar "destiny_id" (Destino)'];
                 return json_encode($responseArray);
             }
 
@@ -669,7 +602,7 @@ class DispatchController extends Controller
             
             $dispatch->date = now();
             $dispatch->pharmacy_id = 10; //Recursos Físicos - HETG
-            $dispatch->establishment_id = $dataArray['dispatch']['establishment_id']; 
+            $dispatch->destiny_id = $dataArray['dispatch']['destiny_id']; 
             $dispatch->user_id = 11162352;
             $dispatch->notes = isset($dataArray['dispatch']['notes']) ? $dataArray['dispatch']['notes'] : null;
             $dispatch->save();

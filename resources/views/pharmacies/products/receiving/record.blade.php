@@ -61,7 +61,7 @@
 <div class="titulo">ACTA DE INGRESO N° {{ $receiving->id }}</div>
 
 <div style="padding-bottom: 8px;">
-    <strong>Recibido de:</strong> {{ $receiving->establishment->name }}<br>
+    <strong>Recibido de:</strong> {{ $receiving->destiny->name }}<br>
     <strong>Nota:</strong> {{ $receiving->notes }}<br>
     <strong>Nro. pedido:</strong> {{ $receiving->order_number }}<br>
 </div>

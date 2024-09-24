@@ -102,8 +102,8 @@
                 <i class="fas fa-pills"></i> Productos</a>
 
             <a class="dropdown-item"
-                href="{{ route('pharmacies.establishments.index') }}">
-                <i class="fas fa-clinic-medical"></i> Establecimientos</a>
+                href="{{ route('pharmacies.destines.index') }}">
+                <i class="fas fa-clinic-medical"></i> Destinos</a>
 
             <a class="dropdown-item"
                 href="{{ route('pharmacies.suppliers.index') }}">

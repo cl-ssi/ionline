@@ -1,14 +1,16 @@
 @extends('layouts.bt4.app')
 
-@section('title', 'Editar Establecimiento')
+@section('title', 'Editar destino farmacia')
 
 @section('content')
 
 @include('pharmacies.nav')
 
+<h3>Editar destino Farmacia</h3>
+
 <link href="{{ asset('css/bootstrap-select.min.css') }}" rel="stylesheet" type="text/css" />
 
-<form method="POST" action="{{ route('pharmacies.establishments.update',$establishment) }}">
+<form method="POST" action="{{ route('pharmacies.destines.update',$destiny) }}">
 	@csrf
 	@method('PUT')
 
@@ -17,13 +19,13 @@
 		<fieldset class="form-group col">
 		    <label for="for_name">Nombre</label>
 		    <input type="text" class="form-control" id="for_name"
-				value="{{ $establishment->name }}" name="name" required="required">
+				value="{{ $destiny->name }}" name="name" required="required">
 		</fieldset>
 
 		<fieldset class="form-group col">
 		    <label for="for_name">Correo electrónico</label>
 		    <input type="text" class="form-control" id="for_email"
-				value="{{ $establishment->email }}" name="email" required="required">
+				value="{{ $destiny->email }}" name="email" required="required">
 		</fieldset>
 	</div>
 	<div class="form-row">

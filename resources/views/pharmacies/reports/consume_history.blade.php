@@ -50,15 +50,15 @@
     </div>
     <div class="input-group mb-3">
     	<div class="input-group-prepend">
-    		<span class="input-group-text">Establecimientos</span>
+    		<span class="input-group-text">Destinos</span>
     	</div>
-    	<select name="establishment_id" class="form-control">
+    	<select name="destiny_id" class="form-control">
     		<option value="0">Todos</option>
-    		@foreach ($establishments as $key => $establishment)
-    		<option value="{{$establishment->id}}"
-                @if ($establishment->id == $request->get('establishment_id'))
+    		@foreach ($destines as $key => $destiny)
+    		<option value="{{$destiny->id}}"
+                @if ($destiny->id == $request->get('destiny_id'))
     		          selected
-    		    @endif >{{$establishment->name}}</option>
+    		    @endif >{{$destiny->name}}</option>
     		@endforeach
     	</select>
     	<div class="input-group-append">

@@ -5,7 +5,7 @@ namespace App\Models\Pharmacies;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Establishment extends Model
+class Destiny extends Model
 {
     /**
      * The attributes that are mass assignable.
@@ -18,7 +18,7 @@ class Establishment extends Model
 
     use SoftDeletes;
 
-    protected $table = 'frm_establishments';
+    protected $table = 'frm_destines';
 
     //relaciones
     public function pharmacy()
@@ -33,13 +33,13 @@ class Establishment extends Model
 
     public function products()
     {
-      return $this->belongsToMany('App\Models\Pharmacies\Product', 'frm_establishments_products')
+      return $this->belongsToMany('App\Models\Pharmacies\Product', 'frm_destines_products')
                               ->withPivot('id', 'stock', 'critic_stock', 'max_stock')
                               ->withTimestamps();
     }
 
     public function users() {
-      return $this->belongsToMany('\App\Models\User', 'frm_establishments_users')
+      return $this->belongsToMany('\App\Models\User', 'frm_destines_users')
                   ->withTimestamps();
   }
 }

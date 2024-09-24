@@ -42,15 +42,15 @@
 
     <div class="input-group mb-3">
       <div class="input-group-prepend">
-          <span class="input-group-text">Establecimientos</span>
+          <span class="input-group-text">Destinos</span>
       </div>
 
-        <select id="establishment_id" name="establishment_id" class="form-control selectpicker" for="for_$establishment" >
+        <select id="destiny_id" name="destiny_id" class="form-control selectpicker" for="for_$destiny" >
           <option value="0">Todos</option>
-          @foreach ($establishments as $key => $establishment)
-            <option value="{{$establishment->id}}" @if ($establishment->id == $request->get('establishment_id'))
+          @foreach ($destines as $key => $destiny)
+            <option value="{{$destiny->id}}" @if ($destiny->id == $request->get('destiny_id'))
               selected
-            @endif>{{$establishment->name}}</option>
+            @endif>{{$destiny->name}}</option>
           @endforeach
         </select>
     </div>
@@ -161,7 +161,7 @@
                     <tr>
                         <td>{{$data->id}}</td>
                         <td>{{$data->date->format('d/m/Y')}}</td>
-                        <td>{{$data->establishment ? $data->establishment->name : ''}} {{$data->receiver ? $data->receiver->shortName : ''}}</td>
+                        <td>{{$data->destiny ? $data->destiny->name : ''}} {{$data->receiver ? $data->receiver->shortName : ''}}</td>
                         <td>{{$data->notes}}</td>
                     </tr>
                 @endforeach
@@ -191,7 +191,7 @@
                 <tr>
                     <td>{{$data->id}}</td>
                     <td>{{$data->date->format('d/m/Y')}}</td>
-                    <td>{{$data->establishment ? $data->establishment->name : ''}} {{$data->receiver ? $data->receiver->shortName : ''}}</td>
+                    <td>{{$data->destiny ? $data->destiny->name : ''}} {{$data->receiver ? $data->receiver->shortName : ''}}</td>
                     <td>{{$data->notes}}</td>
                     <td><a href="{{ route('pharmacies.products.dispatch.edit', $data) }}" class="btn btn-outline-secondary btn-sm">
 					<span class="fas fa-edit" aria-hidden="true"></span></a></td>

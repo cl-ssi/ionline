@@ -10,10 +10,10 @@
 	@canany(['Pharmacy: transfer view ortesis', 'Pharmacy: transfer view IQQ', 'Pharmacy: transfer view AHO'])
 	por 
 	<form method="GET" action="{{route('pharmacies.products.deliver.index')}}" class="d-inline">
-	<select name="filter" onchange="this.form.submit()" class="selectpicker establishment" data-live-search="true" data-width="fit" data-style="btn btn-link">
+	<select name="filter" onchange="this.form.submit()" class="selectpicker destiny" data-live-search="true" data-width="fit" data-style="btn btn-link">
 		<option value=" ">TODOS</option>
-		@foreach ($establishments as $establishment)
-		<option value="{{$establishment->id}}" {{$establishment->id == $filter ? 'selected' : ''}}>{{$establishment->name}}</option>
+		@foreach ($destinies as $destiny)
+		<option value="{{$destiny->id}}" {{$destiny->id == $filter ? 'selected' : ''}}>{{$destiny->name}}</option>
 		@endforeach
 	</select>
 	</form>
@@ -43,14 +43,14 @@
 					<th class="text-right">Pendientes</th>
 				</thead>
 				<tbody>
-					@forelse($products_by_establishment as $product)
+					@forelse($products_by_destiny as $product)
 					<tr>
 						<td>@canany(['Pharmacy: transfer view ortesis']) <a href="#" id="{{$product->id}}" class="ref-product">{{$product->name}}</a> @else {{$product->name}} @endcan</td>
 						<td class="text-right">
 							{{$product->quantity}}
 						</td>
 						<td class="text-right">
-						{{$product->establishments->first()->pivot->critic_stock != null ? $product->establishments->first()->pivot->critic_stock : 0}}
+						{{$product->destines->first()->pivot->critic_stock != null ? $product->destines->first()->pivot->critic_stock : 0}}
 						</td>
 						<td class="text-right">
 							{{isset($pendings_by_product[$product->id]) ? $pendings_by_product[$product->id] : 0}}
@@ -62,7 +62,7 @@
 				</tbody>
 			</table>
 		</div>
-		{{ $products_by_establishment->appends(Request::input())->links() }}
+		{{ $products_by_destiny->appends(Request::input())->links() }}
 	</div>
 </div>
 @endif
@@ -94,7 +94,7 @@
 		<tbody>
 			@forelse($pending_deliveries as $delivery)
 			<tr>
-				<td>{{$delivery->establishment['name']}}</td>
+				<td>{{$delivery->destiny['name']}}</td>
 				<td>{{date("d/m/Y", strtotime($delivery->request_date))}}</td>
         		<td>{{date("d/m/Y", strtotime($delivery->due_date))}}</td>
         		<td>{{$delivery->patient_rut}}</td>
@@ -108,7 +108,7 @@
 				<td>{{$delivery->remarks}}</td>
 				@if(!auth()->user()->hasAnyPermission(['Pharmacy: transfer view ortesis','Pharmacy: transfer view IQQ', 'Pharmacy: transfer view AHO']))
 				<td>
-					@foreach($products_by_establishment as $product)
+					@foreach($products_by_destiny as $product)
 						@if($product->id == $delivery->product_id && $product->quantity >= $delivery->quantity)
 							<form method="POST" action="{{ route('pharmacies.products.deliver.confirm', $delivery) }}" class="d-inline">
 								@csrf
@@ -147,24 +147,13 @@
 					<a href="#" class="btn btn-outline-info btn-sm popover-item" id="{{$delivery->id}}" rel="popover" class="popover-item"><i class="fas fa-eye"></i></a>
 					<div class="popover-list-content" style="display:none;">
 						<ul class="list-group list-group-flush">
-							@foreach($products_by_establishment as $product)
+							@foreach($products_by_destiny as $product)
 								@if($product->id == $delivery->product_id)
 								<li class="list-group-item d-flex justify-content-between align-items-center">
 									{{$product->name}}&nbsp;<span class="badge badge-info">{{$product->stock}}</span>
 								</li>
 								@endif
 							@endforeach
-							{{--@foreach($establishments as $establishment)
-								@if($establishment->id == $delivery->establishment_id)
-									@foreach($establishment->products as $product)
-										@if($product->pivot->stock > 0)
-										<li class="list-group-item d-flex justify-content-between align-items-center">
-											{{$product->name}}&nbsp;<span class="badge badge-info">{{$product->pivot->stock}}</span>
-										</li>
-										@endif
-									@endforeach
-								@endif
-							@endforeach--}}
 						</ul>
 					</div>
 					<form method="POST" action="{{ route('pharmacies.products.deliver.destroy', $delivery) }}" class="d-inline">
@@ -212,7 +201,7 @@
 		<tbody>
 			@forelse($confirmed_deliveries as $delivery)
 			<tr>
-				<td>{{$delivery->establishment['name']}}</td>
+				<td>{{$delivery->destiny['name']}}</td>
 				<td>{{date("d/m/Y", strtotime($delivery->request_date))}}</td>
         		<td>{{date("d/m/Y", strtotime($delivery->due_date))}}</td>
         		<td>{{$delivery->patient_rut}}</td>
@@ -228,7 +217,7 @@
 				<td><form method="POST" action="{{ route('pharmacies.products.deliver.restore', $delivery) }}" class="d-inline">
 			            @csrf
 			            @method('DELETE')
-						<button type="submit" class="btn btn-outline-danger btn-sm" onclick="return confirm('Esta operación devolverá {{$delivery->quantity}} {{$delivery->product['name']}} a {{$delivery->establishment['name']}}, ¿Está seguro/a de eliminar esta confirmación de entrega?');">
+						<button type="submit" class="btn btn-outline-danger btn-sm" onclick="return confirm('Esta operación devolverá {{$delivery->quantity}} {{$delivery->product['name']}} a {{$delivery->destiny['name']}}, ¿Está seguro/a de eliminar esta confirmación de entrega?');">
 							<span class="fas fa-trash-alt" aria-hidden="true"></span>
 						</button>
 					</form>

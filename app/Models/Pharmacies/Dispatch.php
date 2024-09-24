@@ -4,7 +4,7 @@ namespace App\Models\Pharmacies;
 
 use App\Models\Pharmacies\DispatchItem;
 use App\Models\Pharmacies\DispatchVerificationMailing;
-use App\Models\Pharmacies\Establishment;
+use App\Models\Pharmacies\Destiny;
 use App\Models\Pharmacies\File;
 use App\Models\Pharmacies\InventoryAdjustment;
 use App\Models\Pharmacies\Pharmacy;
@@ -34,7 +34,7 @@ class Dispatch extends Model
         'id',
         'date',
         'pharmacy_id',
-        'establishment_id',
+        'destiny_id',
         'notes',
         'inventory_adjustment_id',
         'user_id',
@@ -73,13 +73,13 @@ class Dispatch extends Model
     }
 
     /**
-     * Get the establishment that owns the dispatch.
+     * Get the destiny that owns the dispatch.
      *
      * @return BelongsTo
      */
-    public function establishment(): BelongsTo
+    public function destiny(): BelongsTo
     {
-        return $this->belongsTo(Establishment::class);
+        return $this->belongsTo(Destiny::class);
     }
 
     /**

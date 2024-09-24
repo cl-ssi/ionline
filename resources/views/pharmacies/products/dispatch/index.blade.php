@@ -46,7 +46,7 @@
 				<td>{{ $dispatch->id }}</td>
         		<td>{{ Carbon\Carbon::parse($dispatch->date)->format('d/m/Y')}}</td>
         		<td>
-                    {{ $dispatch->establishment ? $dispatch->establishment->name : '' }}
+                    {{ $dispatch->destiny ? $dispatch->destiny->name : '' }}
                     {{ $dispatch->receiver ? " " . $dispatch->receiver->shortName : '' }}
                 </td>
         		<td>{{ $dispatch->notes }}</td>

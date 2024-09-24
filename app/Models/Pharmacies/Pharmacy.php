@@ -3,6 +3,7 @@
 namespace App\Models\Pharmacies;
 
 use App\Models\Establishment;
+use App\Models\Pharmacies\Destiny;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -38,9 +39,9 @@ class Pharmacy extends Model
       return $this->hasMany('App\Models\Pharmacies\Receiving');
     }
 
-    public function establishments()
+    public function destines(): hasMany
     {
-      return $this->hasMany('App\Models\Pharmacies\Establishment');
+      return $this->hasMany(Destiny::class);
     }
 
     public function suppliers()

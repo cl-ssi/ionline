@@ -31,7 +31,7 @@ class PurchaseItem extends Model
         'unity',
         'unit_cost',
         'due_date',
-        'establishments_id',
+        // 'destine_id',
         //'serial_number',
         'batch',
         'batch_id',

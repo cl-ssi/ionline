@@ -8,7 +8,7 @@ use App\Models\Pharmacies\Dispatch;
 use App\Models\Pharmacies\Pharmacy;
 use App\Models\Pharmacies\Purchase;
 use App\Models\Pharmacies\Receiving;
-use App\Models\Pharmacies\Establishment as Destiny;
+use App\Models\Pharmacies\Destiny;
 use App\Models\ReplacementStaff\RequestReplacementStaff;
 use App\Models\RequestForms\EventRequestForm;
 use App\Models\Requirements\Event;
@@ -584,10 +584,9 @@ class User extends Authenticatable implements Auditable, FilamentUser
      *
      * @return BelongsToMany
      */
-    // FIXME: cambair el nombre de la clase por uno más adecuado (Ej: Destiny)
-    public function establishments(): BelongsToMany
+    public function destines(): BelongsToMany
     {
-        return $this->belongsToMany(Destiny::class, 'frm_establishments_users')
+        return $this->belongsToMany(Destiny::class, 'frm_destines_users')
                     ->withTimestamps();
     }
     

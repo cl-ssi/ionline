@@ -1,14 +1,14 @@
 @extends('layouts.bt4.app')
 
-@section('title', 'Lista de Programas con Farmacia')
+@section('title', 'Lista destinos con farmacia')
 
 @section('content')
 
 @include('pharmacies.nav')
 
-<h3 class="inline">Programas
-	@can('Pharmacy: create programs')
-	<a href="{{ route('pharmacies.programs.create') }}" class="btn btn-primary">Crear</a>
+<h3 class="inline">Destinos
+	@can('Pharmacy: create establishments')
+	<a href="{{ route('pharmacies.destines.create') }}" class="btn btn-primary">Crear</a>
 	@endcan
 </h3>
 
@@ -19,15 +19,17 @@
 	<thead>
 		<tr>
 			<th scope="col">Nombre</th>
+			<th scope="col">Correo electrónico</th>
 			<th scope="col"></th>
 		</tr>
 	</thead>
 	<tbody>
-	@foreach($programs as $program)
+	@foreach($destines as $destiny)
 		<tr>
-			<td>{{ $program->name }}</td>
+			<td>{{ $destiny->name }}</td>
+			<td>{{ $destiny->email }}</td>
 			<td>
-				<a href="{{ route('pharmacies.programs.edit', $program) }}"
+				<a href="{{ route('pharmacies.destines.edit', $destiny) }}"
 					class="btn btn-sm btn-outline-secondary">
 					<span class="fas fa-edit" aria-hidden="true"></span>
 				</a>
@@ -37,7 +39,7 @@
 	</tbody>
 </table>
 
-{{ $programs->links() }}
+{{ $destines->links() }}
 
 @endsection
 

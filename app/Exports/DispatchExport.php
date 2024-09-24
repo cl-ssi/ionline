@@ -23,7 +23,7 @@ class DispatchExport implements FromCollection, WithHeadings, WithMapping, WithC
 
     public function headings(): array
     {
-        return ['id', 'fecha', 'establecimiento','notas','Estado recepción'];
+        return ['id', 'fecha', 'destino','notas','Estado recepción'];
     }
 
     public function map($dispatch): array
@@ -32,7 +32,7 @@ class DispatchExport implements FromCollection, WithHeadings, WithMapping, WithC
             return [
                 $dispatch->id,
                 Date::dateTimeToExcel($dispatch->date),
-                ($dispatch->establishment ? $dispatch->establishment->name : '') . ' ' . ($dispatch->receiver ? $dispatch->receiver->shortName : ''),
+                ($dispatch->destiny ? $dispatch->destiny->name : '') . ' ' . ($dispatch->receiver ? $dispatch->receiver->shortName : ''),
                 $dispatch->notes,
                 $dispatch->verificationMailings->last()->status,
             ];
@@ -40,7 +40,7 @@ class DispatchExport implements FromCollection, WithHeadings, WithMapping, WithC
             return [
                 $dispatch->id,
                 Date::dateTimeToExcel($dispatch->date),
-                ($dispatch->establishment ? $dispatch->establishment->name : '') . ' ' . ($dispatch->receiver ? $dispatch->receiver->shortName : ''),
+                ($dispatch->destiny ? $dispatch->destiny->name : '') . ' ' . ($dispatch->receiver ? $dispatch->receiver->shortName : ''),
                 $dispatch->notes,
                 '',
             ];

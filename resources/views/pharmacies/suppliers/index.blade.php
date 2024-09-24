@@ -13,18 +13,6 @@
 </h3>
 
 <br>
-
-<!--form class="form-inline float-right" method="GET" action="{{ route('rrhh.users.index') }}">
-	<div class="input-group mb-3">
-		<input type="text" name="name" class="form-control" placeholder="Nombre del Establecimiento" autocomplete="off">
-		<div class="input-group-append">
-			<button class="btn btn-outline-secondary" type="submit">
-				<i class="fas fa-search" aria-hidden="true"></i></button>
-		</div>
-	</div>
-</form-->
-
-
 <br>
 
 <table class="table table-striped table-sm table-bordered">

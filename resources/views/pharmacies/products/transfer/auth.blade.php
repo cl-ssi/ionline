@@ -80,7 +80,7 @@ PROGRAMA DE REHABILITACIÓN INTEGRAL </title>
 
             <p class="right">Iquique, {{\Carbon\Carbon::now()->formatLocalized('%d de %B de %Y')}}.</p>
             <p>Mediante el presente documento y en marco a los problemas de <b>salud 36, piloto GES y decreto 22</b>, y a la evaluación de información de solicitud y entrega de ayudas técnicas ingresada por su establecimiento en plataforma i.saludtarapaca.gob.cl, mediante el presente se informa a usted que las siguientes ayudas técnicas de encuentran disponible para ser retiradas en bodega del servicio de salud tarapacá:</p>
-            <p>Entrega para establecimiento <b>{{$establishment->name}}</b></p>
+            <p>Entrega para establecimiento <b>{{$destiny->name}}</b></p>
 			<table>
 				<thead>
 					<th width="200">Ayuda técnica</th>
@@ -90,7 +90,7 @@ PROGRAMA DE REHABILITACIÓN INTEGRAL </title>
 					<th>Total a entregar</th>
 				</thead>
 				<tbody>
-                    @forelse($establishment->products as $product)
+                    @forelse($destiny->products as $product)
                         @php( $pendientes = isset($pendings_by_product[$product->id]) ? $pendings_by_product[$product->id] : 0 )
                         @if($product->pivot->critic_stock + $pendientes > $product->pivot->stock)
                         <tr>

@@ -3,6 +3,7 @@
 namespace App\Models\Pharmacies;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Pharmacies\Destiny;
 
 class Transfer extends Model
 {
@@ -12,14 +13,24 @@ class Transfer extends Model
 
     protected $table = 'frm_transfers';
 
-    public function establishment_from()
+    /**
+     * Get the user that created the receiving.
+     *
+     * @return BelongsTo
+     */
+    public function destiny_from(): BelongsTo
     {
-        return $this->belongsTo('App\Models\Pharmacies\Establishment', 'from');
+        return $this->belongsTo(Destiny::class, 'from');
     }
 
-    public function establishment_to()
+    /**
+     * Get the user that created the receiving.
+     *
+     * @return BelongsTo
+     */
+    public function destiny_to(): BelongsTo
     {
-        return $this->belongsTo('App\Models\Pharmacies\Establishment', 'to');
+        return $this->belongsTo(Destiny::class, 'to');
     }
 
     public function product()

@@ -22,12 +22,12 @@
 
       <fieldset class="form-group col">
           <label for="for_origin">Destino</label>
-          <select name="establishment_id" class="form-control selectpicker" data-live-search="true">
+          <select name="destiny_id" class="form-control selectpicker" data-live-search="true">
             <option value=""></option>
-            @foreach ($establishments as $key => $establishment)
-              <option value="{{$establishment->id}}" @if ($dispatch->establishment_id == $establishment->id)
+            @foreach ($destines as $key => $destiny)
+              <option value="{{$destiny->id}}" @if ($dispatch->destiny_id == $destiny->id)
                 selected
-              @endif>{{$establishment->name}}</option>
+              @endif>{{$destiny->name}}</option>
             @endforeach
           </select>
       </fieldset>

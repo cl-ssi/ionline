@@ -1,6 +1,6 @@
 @extends('layouts.bt4.app')
 
-@section('title', 'Actualizar stock por establecimiento')
+@section('title', 'Actualizar stock por destino')
 
 @section('content')
 
@@ -9,9 +9,9 @@
 <link href="{{ asset('css/bootstrap-select.min.css') }}" rel="stylesheet" type="text/css" />
 
 <h3>Actualizar stock para <form action="{{route('pharmacies.products.transfer.edit', $filter)}}" class="d-inline">
-			<select name="filter" onchange="this.form.submit()" class="selectpicker establishment" data-live-search="true" data-width="fit" data-style="btn btn-link">
-				@foreach ($establishments as $establishment)
-				<option value="{{$establishment->id}}" {{$establishment->id == $filter ? 'selected' : ''}}>{{$establishment->name}}</option>
+			<select name="filter" onchange="this.form.submit()" class="selectpicker destiny" data-live-search="true" data-width="fit" data-style="btn btn-link">
+				@foreach ($destines as $destiny)
+				<option value="{{$destiny->id}}" {{$destiny->id == $filter ? 'selected' : ''}}>{{$destiny->name}}</option>
 				@endforeach
 			</select>
 		</form></h3><br>

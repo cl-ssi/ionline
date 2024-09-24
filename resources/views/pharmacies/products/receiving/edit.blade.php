@@ -9,27 +9,27 @@
 <h3>Editar Ingreso</h3>
 
 <form method="POST" action="{{ route('pharmacies.products.receiving.update',$receiving) }}">
-  @method('PUT')
+    @method('PUT')
 	@csrf
 
-  <div class="form-row">
-      <fieldset class="form-group col-3">
-          <label for="for_date">Fecha</label>
-          <input type="date" class="form-control" id="for_date" name="date" required="required" value="{{$receiving->date->format('Y-m-d')}}">
-      </fieldset>
+    <div class="form-row">
+        <fieldset class="form-group col-3">
+            <label for="for_date">Fecha</label>
+            <input type="date" class="form-control" id="for_date" name="date" required="required" value="{{$receiving->date->format('Y-m-d')}}">
+        </fieldset>
 
         <fieldset class="form-group col">
             <label for="for_origin">Origen</label>
-            <select name="establishment_id" class="form-control selectpicker" data-live-search="true" required="">
+            <select name="destiny_id" class="form-control selectpicker" data-live-search="true" required="">
                 <option value=""></option>
-                @foreach ($establishments as $key => $establishment)
-                <option value="{{$establishment->id}}" @if ($receiving->establishment_id == $establishment->id)@endif>
-                    {{$establishment->name}}
+                @foreach ($destines as $key => $destiny)
+                <option value="{{$destiny->id}}" @selected($receiving->destiny_id == $destiny->id) >
+                    {{$destiny->name}}
                 </option>
                 @endforeach
             </select>
         </fieldset>
-</div>
+    </div>
 
 <div class="form-row">
     <fieldset class="form-group col">

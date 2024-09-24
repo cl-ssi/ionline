@@ -3,10 +3,11 @@
 namespace App\Models\Pharmacies;
 
 use App\Models\User;
+use App\Models\Pharmacies\Destiny;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Receiving extends Model
 {
@@ -27,7 +28,7 @@ class Receiving extends Model
     protected $fillable = [
         'id',
         'date',
-        'establishment_id',
+        'destiny_id',
         'pharmacy_id',
         'notes',
         'inventory_adjustment_id',
@@ -66,13 +67,13 @@ class Receiving extends Model
     }
 
     /**
-     * Get the establishment that owns the receiving.
+     * Get the destiny that owns the receiving.
      *
      * @return BelongsTo
      */
-    public function establishment(): BelongsTo
+    public function destiny(): BelongsTo
     {
-        return $this->belongsTo(Establishment::class);
+        return $this->belongsTo(Destiny::class);
     }
 
     /**
