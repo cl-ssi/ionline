@@ -44,7 +44,7 @@
                 ${{ money((int) $roomBooking->start_date->diffInDays($roomBooking->end_date) * $roomBooking->room->price) }}</td>
             </td>
             <td nowrap>
-                {{ $roomBooking->status }}  
+                {{ $roomBooking->status == "Cancelado" ? 'Anulado' : $roomBooking->status }}  
             </td>
             <td nowrap class="display: flex; flex-direction: row;">
                 <!-- solo si está reservado se deja modificar el tipo de pago -->
