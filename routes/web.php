@@ -2248,7 +2248,7 @@ Route::prefix('finance')->as('finance.')->middleware(['auth', 'must.change.passw
         Route::get('{dte}/store', [DteController::class, 'store'])->name('confirmation.store');
         Route::get('{dte}/confirmation-signature-file', [DteController::class, 'pdf'])->name('confirmation.pdf');
         Route::get('{dte}/download', [DteController::class, 'downloadManualDteFile'])->name('downloadManualDteFile');
-        Route::get('{dte}/download', [DteController::class, 'downloadManualDteFile'])->name('downloadManualDteFile');
+        // Route::get('{dte}/download', [DteController::class, 'downloadManualDteFile'])->name('downloadManualDteFile');
         Route::get('{dte}/confirmation', DteConfirmation::class)->name('confirmation');
     });
 
