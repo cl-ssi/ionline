@@ -78,10 +78,15 @@ class RequirementReceivers extends Component
                 return;
             }
         }
-        
-        $user = User::find($this->to_user_id);
-        array_push($this->users_array, $user);
-        array_push($this->enCopia, 0);   
+
+        if($this->to_user_id){
+            $user = User::find($this->to_user_id);
+            array_push($this->users_array, $user);
+            array_push($this->enCopia, 0); 
+        }else{
+            $this->message = "Debe seleccionar un usuario";
+            return;
+        }  
     }
 
     public function add_cc()
@@ -99,9 +104,14 @@ class RequirementReceivers extends Component
             }
         }
 
-        $user = User::find($this->to_user_id);
-        array_push($this->users_array, $user);
-        array_push($this->enCopia, 1);
+        if($this->to_user_id){
+            $user = User::find($this->to_user_id);
+            array_push($this->users_array, $user);
+            array_push($this->enCopia, 1);
+        }else{
+            $this->message = "Debe seleccionar un usuario";
+            return;
+        }
     }
 
     public function render()
