@@ -35,7 +35,7 @@ class ApsController extends Controller
 
     public function show($year, $slug, $establishment_type)
     {
-        $iaps = Aps::where('year', $year)->where('slug', $slug)->firstOrFail();
+        $iaps = Aps::with('indicators')->where('year', $year)->where('slug', $slug)->firstOrFail();
 
         if($iaps->slug == 'chcc'){ //Programa Chile Crece Contigo
             // $iaps->load(['indicators' => function($q) use ($establishment_type){

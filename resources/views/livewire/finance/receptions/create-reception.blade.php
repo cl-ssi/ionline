@@ -166,7 +166,7 @@
                     <label for="reception-date">Número de documento</label>
                     <input type="text"
                         class="form-control"
-                        wire:model.live="reception.dte_number">
+                        wire:model="reception.dte_number">
                 </div>
             </div>
             <div class="col-md-2">
@@ -174,7 +174,7 @@
                     <label for="reception-date">Fecha de documento</label>
                     <input type="date"
                         class="form-control"
-                        wire:model.live="reception.dte_date">
+                        wire:model="reception.dte_date">
                 </div>
             </div>
         </div>
@@ -222,7 +222,7 @@
                     <input type="text"
                         class="form-control"
                         placeholder="opcional"
-                        wire:model.live="reception.internal_number">
+                        wire:model="reception.internal_number">
                     <div class="form-text">En caso que la unidad tenga su propio correlativo</div>
                 </div>
             </div>
@@ -280,7 +280,7 @@
                             <input type="number"
                                 class="form-control @error('receptionItems.' . $key . '.Cantidad') is-invalid @enderror"
                                 id="quantity"
-                                wire:model.live.debounce.500ms="receptionItems.{{ $key }}.Cantidad"
+                                wire:model="receptionItems.{{ $key }}.Cantidad"
                                 min="1"
                                 max="{{ $maxItemQuantity[$key] }}"
                                 wire:change="calculateItemTotal({{ $key }})"
@@ -367,13 +367,13 @@
             </div>
             <div class="col-2">
                 <label for="cargos">Cargos</label>
-                <input class="form-control" type="number" wire:model.live="reception.cargos" id="reception.cargos">
+                <input class="form-control" type="number" wire:model="reception.cargos" id="reception.cargos">
             </div>
              
             @if($purchaseOrder->requestForm && $purchaseOrder->requestForm->type_form == 'pasajes aéreos')
                 <div class="col-2">
                     <label for="cargos">IVA</label>
-                    <input class="form-control" type="number" wire:model.live="reception.iva" id="reception.iva" wire:change="calculateItemTotal({{ $key }})">
+                    <input class="form-control" type="number" wire:model="reception.iva" id="reception.iva" wire:change="calculateItemTotal({{ $key }})">
                 </div>
             @endif
             
