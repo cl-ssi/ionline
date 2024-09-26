@@ -103,7 +103,11 @@ class ManualDtes extends Component
         }
 
         if ($filePath) {
-            $dte_manual->comprobante_liquidacion_fondo = $filePath;
+            if($this->pagoManual) {
+                $dte_manual->archivo_carga_manual = $filePath;
+            } else {
+                $dte_manual->comprobante_liquidacion_fondo = $filePath;
+            }
             $dte_manual->save();
         }
 
