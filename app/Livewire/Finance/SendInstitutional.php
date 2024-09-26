@@ -22,9 +22,8 @@ class SendInstitutional extends Component
         $this->checked = $this->dte->paid_manual;
     }
 
-    public function updatingChecked($value)
+    public function updatedChecked()
     {
-        $this->checked = $value;
         $this->dte->update(['paid_manual' =>  $this->checked ? true : false]);
         return [];
     }
