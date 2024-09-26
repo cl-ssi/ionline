@@ -8,6 +8,7 @@
         "php": "^8.2",
         "ext-gd": "*",
         "actived/microsoft-teams-notifier": "^1.2",
+        "awcodes/filament-gravatar": "^2.0",
         "barryvdh/laravel-dompdf": "^3.0",
         "codewithdennis/filament-select-tree": "^3.1",
         "davidhsianturi/blade-bootstrap-icons": "^1.5",

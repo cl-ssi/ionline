@@ -3,6 +3,8 @@
 namespace App\Providers\Filament;
 
 use App\Filament\Auth\CustomLogin;
+use Awcodes\FilamentGravatar\GravatarPlugin;
+use Awcodes\FilamentGravatar\GravatarProvider;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
@@ -61,6 +63,10 @@ class IntranetPanelProvider extends PanelProvider
                 NavigationItem::make('iOnline Clásico')
                     ->url(fn(): string => route('home'))
                     ->icon('heroicon-o-link')
+            ])
+            ->defaultAvatarProvider(GravatarProvider::class)
+            ->plugins([
+                GravatarPlugin::make(),
             ]);
     }
 }
