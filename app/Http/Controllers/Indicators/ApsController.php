@@ -90,7 +90,9 @@ class ApsController extends Controller
                 if($establishment_type == 'aps'){
                     $establishment_cods = array_map('trim', explode(',',$indicator->establishment_cods));
                     $establishment_cods = array_diff($establishment_cods, $year <= 2021 ? array("102307", "102100", "102010") : array("102100", "102010")); //si es año 2021 descartar reyno, hospital y ssi caso contrario solo hospital y ssi
-                    $establishments = Establecimiento::year($last_year && $year_counter == 1 ? $last_year : $year)->whereIn('Codigo', $establishment_cods)->get(['id_establecimiento','alias_estab','comuna', 'Codigo']);
+                    $establishments = Establecimiento::year($last_year && $year_counter == 1 ? $last_year : $year)
+                        ->whereIn('Codigo', $establishment_cods)
+                        ->get(['id_establecimiento','alias_estab','comuna', 'Codigo']);
                     // $establishments = Cache::remember('ind_establishments', 60, function() use ($last_year, $year_counter, $year, $establishment_cods) {
                     //     return Establecimiento::year($last_year && $year_counter == 1 ? $last_year : $year)->whereIn('Codigo', $establishment_cods)->get(['id_establecimiento','alias_estab','comuna', 'Codigo']);
                     // });
