@@ -121,6 +121,9 @@ class CreateReception extends Component
             
             $control = Control::find($control_id);
             $this->control = $control;
+            if( !$control->po_code ) {
+                dd('La recepción en bodega no tiene número de Orden de Compra registrado, no se pude crear el acta de recepción sin OC.');
+            }
             $receptionData = [
                 'date' => $control->date,
                 'purchase_order' => $control->po_code,
@@ -378,6 +381,7 @@ class CreateReception extends Component
     */
     public function createArrayItemsFromOC()
     {
+        dd($this->control->po_code);
         foreach( $this->purchaseOrder->json->Listado[0]->Items->Listado as $key => $item ){
             $this->receptionItems[$key] = [
                 'item_position'             => $key,
