@@ -35,7 +35,7 @@
                         </td>
                         <td class="text-center"> 
                             <fieldset class="form-group col-12">
-                                <input class="form-control form-control-sm" type="number" autocomplete="off" wire:model.live="totalDays">
+                                <input class="form-control form-control-sm" type="number" autocomplete="off" wire:model.live.debounce.250ms="totalDays">
                                 {{-- @error('reason') <span class="text-danger error small">{{ $message }}</span> @enderror --}}
                             </fieldset>
                         </td>

@@ -90,18 +90,34 @@ class ShowSummary extends Component
     }
 
     public function updatedTotalDays($value){
+        // Validamos que el valor sea un número entero
+        $this->validate([
+            'totalDays' => 'required|integer|min:0',
+        ]);
+
+        // Si la validación es exitosa, realizamos el cálculo
         $this->totalDays = $value;
         $this->totalDaysValue = $this->allowance->allowanceValue->value * $this->totalDays;
         $this->totalEditSummaryDays();
     }
 
     public function updatedFiftyPercentTotalDays($value){
+        // Validamos que el valor sea un número entero
+        $this->validate([
+            'fiftyPercentTotalDays' => 'required|integer|min:0',
+        ]);
+
         $this->fiftyPercentTotalDays = $value;
         $this->fiftyPercentTotalDaysValue = $this->allowance->fifty_percent_day_value * $this->fiftyPercentTotalDays;
         $this->totalEditSummaryDays();
     }
 
     public function updatedSixtyPercentTotalDays($value){
+        // Validamos que el valor sea un número entero
+        $this->validate([
+            'sixtyPercentTotalDays' => 'required|integer|min:0',
+        ]);
+
         $this->sixtyPercentTotalDays = $value;
         $this->sixtyPercentTotalDaysValue = $this->allowance->sixty_percent_day_value * $this->sixtyPercentTotalDays;
         $this->totalEditSummaryDays();
@@ -136,6 +152,8 @@ class ShowSummary extends Component
             $this->editDisabled = null;
 
             $this->correctionMessage = 'Estimado Usuario: El viático se ha modificado correctamente.';
+            $this->summaryDaysErrorMessage = null;
+            $this->reason = null;
 
             $this->setCorrections();
         }
