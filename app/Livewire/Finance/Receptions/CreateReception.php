@@ -122,7 +122,7 @@ class CreateReception extends Component
             $control = Control::find($control_id);
             $this->control = $control;
             if( !$control->po_code ) {
-                dd('La recepción en bodega no tiene número de Orden de Compra registrado, no se pude crear el acta de recepción sin OC.');
+                abort(403, 'La recepción en bodega no tiene número de Orden de Compra registrado, no se pude crear el acta de recepción sin OC.');
             }
             $receptionData = [
                 'date' => $control->date,
