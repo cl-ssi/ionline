@@ -381,7 +381,6 @@ class CreateReception extends Component
     */
     public function createArrayItemsFromOC()
     {
-        dd($this->control->po_code);
         foreach( $this->purchaseOrder->json->Listado[0]->Items->Listado as $key => $item ){
             $this->receptionItems[$key] = [
                 'item_position'             => $key,
