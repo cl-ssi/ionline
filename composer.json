@@ -35,6 +35,7 @@
         "spatie/pdf-to-text": "^1.52",
         "stackkit/laravel-google-cloud-scheduler": "^3.0",
         "stackkit/laravel-google-cloud-tasks-queue": "^3.6",
+        "stechstudio/filament-impersonate": "^3.14",
         "tinymce/tinymce": "^7.1"
     },
     "require-dev": {

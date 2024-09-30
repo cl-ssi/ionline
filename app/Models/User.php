@@ -149,7 +149,8 @@ class User extends Authenticatable implements Auditable, FilamentUser
 
     public function canAccessPanel(Panel $panel): bool
     {
-        return $this->can('be god');
+        return true;
+        // return $this->can('be god');
     }
 
     /**

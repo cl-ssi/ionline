@@ -125,14 +125,14 @@ class TelephoneResource extends Resource
                     ->searchable()
                     ->label('Establecimiento')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('place.name')
-                    ->searchable()
-                    ->label('Lugar')
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('place.location.name')
-                    ->searchable()
-                    ->label('Edificio')
-                    ->sortable(),
+                // Tables\Columns\TextColumn::make('place.name')
+                //     ->searchable()
+                //     ->label('Lugar')
+                //     ->sortable(),
+                // Tables\Columns\TextColumn::make('place.location.name')
+                //     ->searchable()
+                //     ->label('Edificio')
+                //     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

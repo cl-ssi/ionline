@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Policies\Parameters;
+namespace App\Policies;
 
 use App\Models\Commune;
 use App\Models\User;
